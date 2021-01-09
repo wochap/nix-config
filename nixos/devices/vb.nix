@@ -1,7 +1,7 @@
 # Common configuration
 { config, pkgs, ... }:
 let
-  hostName = "nixosvb";
+  hostName = "nixos";
 in
 {
   imports =
