@@ -74,24 +74,24 @@ in
     programs.home-manager.enable = true;
 
     # services.xserver.desktopManager.xterm.enable = true;
-    xsession = {
-      enable = true;
-      windowManager.command = "bspwm";
-      windowManager.bspwm = {
-        enable = true;
-        settings = {
-          border_width = 2;
-          window_gap = 12;
-          split_ratio = 0.52;
-          borderless_monocle = true;
-          gapless_monocle = true;
-        };
-        # monitors = {
-        #   "HDMI-0" = [ "web" "terminal" "III" "IV" ];
-        #   "default" = [ "III" "IV" ];
-        # };
-      };
-    };
+    # xsession = {
+    #   enable = true;
+    #   windowManager.command = "bspwm";
+    #   windowManager.bspwm = {
+    #     enable = true;
+    #     settings = {
+    #       border_width = 2;
+    #       window_gap = 12;
+    #       split_ratio = 0.52;
+    #       borderless_monocle = true;
+    #       gapless_monocle = true;
+    #     };
+    #     # monitors = {
+    #     #   "HDMI-0" = [ "web" "terminal" "III" "IV" ];
+    #     #   "default" = [ "III" "IV" ];
+    #     # };
+    #   };
+    # };
 
     services.sxhkd = {
       enable = true;
