@@ -10,7 +10,6 @@
 
   xsession = {
     enable = true;
-    windowManager.command = "bspwm";
     windowManager.bspwm = {
       enable = true;
       settings = {
