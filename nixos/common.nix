@@ -14,6 +14,9 @@ in
     (import "${home-manager}/nixos")
   ];
 
+  # Allows proprietary or unfree package
+  nixpkgs.config.allowUnfree = true;
+
   # Set your time zone.
   time.timeZone = "America/Lima";
 
