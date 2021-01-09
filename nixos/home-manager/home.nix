@@ -20,8 +20,8 @@
         gapless_monocle = true;
       };
       monitors = {
-        "HDMI-0" = [ "web" "terminal" "III" "IV" ];
-        "default" = [ "III" "IV" ];
+        # EDITME
+        # "VMSVGA-0" = [ "web" "terminal" "III" "IV" ];
       };
     };
   };
