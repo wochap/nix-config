@@ -69,7 +69,7 @@
 
     # Apps
     firefox
-    elementary-icon-theme
+    pantheon.elementary-icon-theme
     vscode
     nix-prefetch-git
   ];
