@@ -17,6 +17,10 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     $ NIX_PATH=$NIX_PATH:nixos-config=/home/<user_name>/dev/nix-config/nixos/devices/mbp.nix sudo nixos-rebuild switch -I nixos-config=/home/<user_name>/dev/nix-config/nixos/devices/mbp.nix
     ```
     Source: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
+1. Set password for new user `gean`
+```
+$ passwd gean
+```
 
 ## Resources
 
