@@ -51,13 +51,13 @@ in
   services.xserver.windowManager.bspwm.enable = true;
 
   # Setup fonts
-  fonts = {
-    enableDefaultFonts = true;
-    fonts = with pkgs; [
-      fira-code
-      hack-font
-    ];
-  };
+  # fonts = {
+  #   enableDefaultFonts = true;
+  #   fonts = with pkgs; [
+  #     fira-code
+  #     hack-font
+  #   ];
+  # };
 
   # nix.trustedUsers = [ "root" "gean" ];
 
