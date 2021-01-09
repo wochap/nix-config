@@ -1,5 +1,5 @@
 # Common configuration
-{ config, pkgs, ... }:
+{ config, pkgs, hostName ? "unknown", ... }:
 
 let
   home-manager = builtins.fetchGit {

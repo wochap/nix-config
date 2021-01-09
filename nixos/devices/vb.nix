@@ -1,20 +1,26 @@
 # Common configuration
 { config, pkgs, ... }:
-
+let
+  hostName = "nixosvb";
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
       # Include common configuration
-      ../common.nix
+      (import ../common.nix {
+        inherit pkgs config hostName;
+      })
     ];
 
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   bot.loader.grub.device = "dev/sda";
 
-  # Define your hostname.
-  networking.hostName = "nixosvb";
+  # Set hostname.
+  networking = { 
+    inherit hostName;
+  };
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config

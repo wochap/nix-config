@@ -2,6 +2,7 @@
 { config, pkgs, ... }:
 
 let
+  hostName = "gmbp";
   nixos-hardware = builtins.fetchGit {
     url = "https://github.com/NixOS/nixos-hardware.git";
     rev = "fb1682bab43b9dd8daf43ae28f09e44541ce33a2";
@@ -19,7 +20,9 @@ in
       /etc/nixos/hardware-configuration.nix
 
       # Include common configuration
-      ../common.nix
+      (import ../common.nix {
+        inherit pkgs config hostName;
+      })
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -37,8 +40,10 @@ in
   networking.useDHCP = false;
   networking.interfaces.wlp4s0.useDHCP = true;
 
-  # Define your hostname.
-  networking.hostName = "gmbp";
+  # Set hostname.
+  networking = { 
+    inherit hostName;
+  };
 
   # Macbook fan config
   services.mbpfan.enable = true;
