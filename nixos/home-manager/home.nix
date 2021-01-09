@@ -61,7 +61,6 @@
     nitrogen # wallpaper manager
     copyq # clipboard manager
     xfce.thunar # file manager
-    kitty # terminal
 
     # Dev tools
     gnumake # make

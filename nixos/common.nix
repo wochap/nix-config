@@ -14,9 +14,6 @@ in
     (import "${home-manager}/nixos")
   ];
 
-  # Allows proprietary or unfree package
-  nixpkgs.config.allowUnfree = true;
-
   # Set your time zone.
   time.timeZone = "America/Lima";
 
@@ -46,6 +43,7 @@ in
   environment.systemPackages = with pkgs; [
     vim
     git
+    kitty
     # firefox
   ];
 
@@ -67,6 +65,40 @@ in
   home-manager.users.gean = (import ./home-manager/home.nix { 
     inherit pkgs config hostName;
   } );
+  home-manager.users.root = {
+    # Allows proprietary or unfree package
+    nixpkgs.config.allowUnfree = true;
+
+    # Let Home Manager install and manage itself.
+    programs.home-manager.enable = true;
+
+    xsession = {
+      enable = true;
+      # windowManager.command = "bspwm";
+      windowManager.bspwm = {
+        enable = true;
+        settings = {
+          border_width = 2;
+          window_gap = 12;
+          split_ratio = 0.52;
+          borderless_monocle = true;
+          gapless_monocle = true;
+        };
+        # monitors = {
+        #   "HDMI-0" = [ "web" "terminal" "III" "IV" ];
+        #   "default" = [ "III" "IV" ];
+        # };
+      };
+    };
+
+    services.sxhkd = {
+      enable = true;
+      keybindings = {
+        "super + Return" = "kitty";
+        "super + q" = "bspc node -{c, k}";
+      };
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
