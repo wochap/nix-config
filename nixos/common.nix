@@ -12,7 +12,6 @@ in
   imports = [
     # Setup home-manager
     (import "${home-manager}/nixos")
-    ./fonts.nix
   ];
 
   # Set your time zone.
