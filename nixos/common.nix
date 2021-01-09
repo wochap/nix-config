@@ -38,6 +38,9 @@ in
     # TODO: setup openssh
   };
 
+  # Allows proprietary or unfree package
+  nixpkgs.config.allowUnfree = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -65,13 +68,6 @@ in
   home-manager.users.gean = (import ./home-manager/home.nix { 
     inherit pkgs config hostName;
   } );
-  home-manager.users.root = {
-    # Let Home Manager install and manage itself.
-    programs.home-manager.enable = true;
-
-    # Allows proprietary or unfree package
-    nixpkgs.config.allowUnfree = true;
-  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
