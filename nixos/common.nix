@@ -25,19 +25,14 @@ in
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.gean = {
-    password = "123456";
-    isNormalUser = true;
-    extraGroups = [ 
-      "wheel" # Enable ‘sudo’ for the user.
-      "networkmanager"
-      "audio"
-      "docker"
-      "lxd"
-      "ipfs"
-    ];
-    # TODO: setup openssh
-  };
+  # users.extraUsers.gean = {
+  #   password = "123456";
+  #   isNormalUser = true;
+  #   extraGroups = [ 
+  #     "wheel" # Enable ‘sudo’ for the user.
+  #   ];
+  #   # TODO: setup openssh
+  # };
 
   # Allows proprietary or unfree package
   nixpkgs.config.allowUnfree = true;
@@ -53,6 +48,7 @@ in
 
   # List services that you want to enable:
   services.xserver.enable = true;
+  services.xserver.windowManager.bspwm.enable = true;
 
   # Setup fonts
   fonts = {
@@ -63,12 +59,12 @@ in
     ];
   };
 
-  nix.trustedUsers = [ "root" "gean" ];
+  # nix.trustedUsers = [ "root" "gean" ];
 
   # Setup home-manager
-  home-manager.users.gean = (import ./home-manager/home.nix { 
-    inherit pkgs config hostName;
-  } );
+  # home-manager.users.gean = (import ./home-manager/home.nix { 
+  #   inherit pkgs config hostName;
+  # } );
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
