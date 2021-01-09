@@ -49,7 +49,6 @@ in
 
   # List services that you want to enable:
   services.xserver.enable = true;
-  services.xserver.windowManager.bspwm.enable = true;
 
   # Setup fonts
   fonts = {
@@ -67,39 +66,11 @@ in
     inherit pkgs config hostName;
   } );
   home-manager.users.root = {
-    # Allows proprietary or unfree package
-    nixpkgs.config.allowUnfree = true;
-
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
 
-    # services.xserver.desktopManager.xterm.enable = true;
-    # xsession = {
-    #   enable = true;
-    #   windowManager.command = "bspwm";
-    #   windowManager.bspwm = {
-    #     enable = true;
-    #     settings = {
-    #       border_width = 2;
-    #       window_gap = 12;
-    #       split_ratio = 0.52;
-    #       borderless_monocle = true;
-    #       gapless_monocle = true;
-    #     };
-    #     # monitors = {
-    #     #   "HDMI-0" = [ "web" "terminal" "III" "IV" ];
-    #     #   "default" = [ "III" "IV" ];
-    #     # };
-    #   };
-    # };
-
-    services.sxhkd = {
-      enable = true;
-      keybindings = {
-        "super + Return" = "kitty";
-        "super + q" = "bspc node -{c, k}";
-      };
-    };
+    # Allows proprietary or unfree package
+    nixpkgs.config.allowUnfree = true;
   };
 
   # This value determines the NixOS release from which the default
