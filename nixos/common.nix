@@ -49,6 +49,7 @@ in
 
   # List services that you want to enable:
   services.xserver.enable = true;
+  # services.xserver.windowManager.bspwm.enable = true;
 
   # Setup fonts
   fonts = {
@@ -72,6 +73,7 @@ in
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
 
+    services.xserver.desktopManager.xterm.enable = true;
     xsession = {
       enable = true;
       windowManager.command = "bspwm";
