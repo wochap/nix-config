@@ -162,8 +162,8 @@
 
   services.redshift = {
     enable = true;
-    latitude = <literal>-12.051408</literal>;
-    longitude = <literal>-76.922124</literal>;
+    latitude = "-12.051408";
+    longitude = "-76.922124";
   };
 
   # This value determines the Home Manager release that your
