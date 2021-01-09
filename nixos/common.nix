@@ -49,6 +49,7 @@ in
   # List services that you want to enable:
   services.xserver.enable = true;
   # services.xserver.windowManager.bspwm.enable = true;
+  services.xserver.displayManager.lightdm.enable = false;
 
   # Setup fonts
   # fonts = {
