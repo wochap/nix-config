@@ -1,12 +1,23 @@
 # Common configuration
 { config, pkgs, ... }:
 
+let
+  nixos-hardware = builtins.fetchGit {
+    url = "https://github.com/NixOS/nixos-hardware.git";
+    rev = "fb1682bab43b9dd8daf43ae28f09e44541ce33a2";
+    ref = "master";
+  };
+in
 {
   imports =
     [ # Include nixos-hardware
-      <nixos-hardware/apple/macbook-pro/11-5>
+      (import "${nixos-hardware}/apple/macbook-pro/11-5")
+      # "${builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }}/apple/macbook-pro/11-5"
+      # <nixos-hardware/apple/macbook-pro/11-5>
+
       # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
+
       # Include common configuration
       ../common.nix
     ];
