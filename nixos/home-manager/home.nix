@@ -8,8 +8,6 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  services.xserver.windowManager.bspwm.enable = true;
-
   xsession = {
     enable = true;
     windowManager.command = "bspwm";
