@@ -6,7 +6,7 @@
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
       # Include common configuration
-      ./common.nix
+      ../common.nix
     ];
 
   # TODO: desktop config
