@@ -15,7 +15,7 @@ in
 
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
-  bot.loader.grub.device = "dev/sda";
+  boot.loader.grub.device = "dev/sda";
 
   # Set hostname.
   networking = { 
