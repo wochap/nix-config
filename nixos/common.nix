@@ -85,8 +85,11 @@ in
 
   nix.trustedUsers = [ "root" "gean" ];
 
-  # Setup home-manager
-  home-manager.users.gean = (import ./home-manager/home.nix { 
+  # Setup users
+  home-manager.users.gean = (import ./users/gean.nix { 
+    inherit pkgs config hostName;
+  } );
+  home-manager.users.root = (import ./users/root.nix { 
     inherit pkgs config hostName;
   } );
 
