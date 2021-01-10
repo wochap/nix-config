@@ -20,6 +20,7 @@
     # DE
     nitrogen # wallpaper manager
     copyq # clipboard manager
+    pywal # theme color generator
 
     # Dev tools
     gitAndTools.gh
