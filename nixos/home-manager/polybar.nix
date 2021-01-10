@@ -9,6 +9,6 @@
   services.polybar = {
     enable = true;
     script = "polybar top &";
-    config = /etc/polybar;
+    config = ../dotfiles/polybar.ini;
   };
 }
