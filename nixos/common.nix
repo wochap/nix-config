@@ -86,7 +86,6 @@ in
       font-awesome
     ];
     fontconfig = {
-      penultimate.enable = false;
       defaultFonts = {
         serif = [ "Ubuntu" ];
         sansSerif = [ "Ubuntu" ];
