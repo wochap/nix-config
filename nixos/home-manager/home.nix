@@ -8,27 +8,10 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  # Doesn't let you login :'c
-  # xsession = {
-  #   enable = true;
-  #   windowManager.bspwm = {
-  #     enable = true;
-  #     settings = {
-  #       border_width = 2;
-  #       window_gap = 12;
-  #       split_ratio = 0.52;
-  #       borderless_monocle = true;
-  #       gapless_monocle = true;
-  #     };
-  #     monitors = {
-  #       # EDITME
-  #       # "VMSVGA-0" = [ "web" "terminal" "III" "IV" ];
-  #     };
-  #   };
-  # };
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # Add config files to home folder
   home.file = {
     ".config/nixpkgs/config.nix".text = ''
       { allowUnfree = true; }
@@ -51,6 +34,7 @@
   home.username = "gean";
   home.homeDirectory = "/home/gean";
 
+  # User packages
   home.packages = with pkgs; [
     # Basic tools
     htop
@@ -77,6 +61,7 @@
     # EDITOR = "nvim";
   };
 
+  # Generates ~/.gitconfig
   programs.git = {
     package = pkgs.gitAndTools.gitFull;
     enable = true;
@@ -105,44 +90,11 @@
     };
   };
 
-  #programs.firefox = {
-  #  enable = true;
-  #  profiles = {
-  #    myprofile = {
-  #      settings = {
-  #        "general.smoothScroll" = true;
-  #      };
-  #    };
-  #  };
-  #};
-
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
     defaultCacheTtl = 1800;
   };
-
-  # Globally enabled
-  # services.picom = {
-  #   enable = true;
-  #   inactiveOpacity = "0.5";
-  #   activeOpacity = "1"; #"0.90";
-  #   #opacityRule = [ "100:class_g = 'Google-chrome'" "100:class_g = 'Alacritty'" "60:class_g = 'rofi'" ];
-  #   fade = true;
-  #   vSync = true;
-  #   shadow = true;
-  #   fadeDelta = 4 ;
-  #   fadeSteps = ["0.02" "0.02"];
-  #   blur = true;
-  #   backend = "glx";
-  #   inactiveDim = "0.2";
-  #   extraOptions = ''
-  #     frame-opacity = 1;
-  #     blur-background = true;
-  #     blur-kern = "7x7box";
-  #     blur-background-exclude = [];
-  #   '';
-  # };
 
   services.redshift = {
     enable = true;
