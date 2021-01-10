@@ -84,4 +84,6 @@ in
   # hardware = {
   #   facetimehd.enable = true;
   # };
+
+  # TODO: enable acpid?
 }

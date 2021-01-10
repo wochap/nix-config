@@ -48,6 +48,7 @@ in
     gnumake # make
     xfce.thunar # file manager
     screenfetch
+    copyq # clipboard manager
   ];
 
   # Setup bspwm and sxhkdrc for all users

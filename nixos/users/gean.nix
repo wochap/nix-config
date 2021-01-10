@@ -19,7 +19,6 @@
 
     # DE
     nitrogen # wallpaper manager
-    copyq # clipboard manager
     pywal # theme color generator
 
     # Dev tools
@@ -30,6 +29,10 @@
     pantheon.elementary-icon-theme
     vscode
     nix-prefetch-git
+    mpv # video player
+    xfce.thunar-archive-plugin
+    xfce.thunar-volman
+    lxappearance
   ];
 
   home.sessionVariables = {
