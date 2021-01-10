@@ -9,6 +9,6 @@
   services.polybar = {
     enable = true;
     script = "polybar top &";
-    config = "~/.config/polybar/config";
+    config = ../dotfiles/polybar;
   };
 }
