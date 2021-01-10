@@ -45,47 +45,35 @@ in
     kitty
     killall
     rofi # app launcher
-    # firefox
+    gnumake # make
   ];
 
-  # Setup bspwm
+  # Setup bspwm and sxhkdrc for all users
   environment = {
     etc = {
       "bspwmrc".source = ./dotfiles/bspwmrc;
       "sxhkdrc".source = ./dotfiles/sxhkdrc;
-      # "polybar".source = ./dotfiles/polybar;
     };
   };
-  services.xserver.enable = true;
-  services.xserver.windowManager.bspwm = {
+  services.xserver = {
     enable = true;
-    configFile = "/etc/bspwmrc";
-    sxhkd.configFile = "/etc/sxhkdrc";
+    windowManager.bspwm = {
+      enable = true;
+      configFile = "/etc/bspwmrc";
+      sxhkd.configFile = "/etc/sxhkdrc";
+    };
+    displayManager = {
+      defaultSession = "none+bspwm";
+    };
   };
-  services.xserver.displayManager = {
-    defaultSession = "none+bspwm";
-    # lightdm.greeters.mini = {
-    #   enable = true;
-    #   user = "gean";
-    #   extraConfig = ''
-    #     [greeter]
-    #     show-password-label = false
-    #     invalid-password-text = Access Denied
-    #     show-input-cursor = true
-    #     password-alignment = left
-    #     [greeter-theme]
-    #     font-size = 1em
-    #     background-image = ""
-    #   '';
-    # };
-  };
+
+  # Setup picom
   services.picom = {
     enable = true;
     vSync = true;
-    # settings = {};
   };
 
-  # Setup fonts
+  # Setup global fonts
   fonts = {
     enableDefaultFonts = true;
     fonts = with pkgs; [

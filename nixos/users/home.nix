@@ -47,7 +47,6 @@
     xfce.thunar # file manager
 
     # Dev tools
-    gnumake # make
     gitAndTools.gh
 
     # Apps
