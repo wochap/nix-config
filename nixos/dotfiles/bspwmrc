@@ -20,4 +20,4 @@ bspc config focus_by_distance   true
 #### AUTOSTART ####
 nitrogen --restore &
 # wal -R &
-wait
+# wait
