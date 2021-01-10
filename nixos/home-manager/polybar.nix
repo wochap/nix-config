@@ -8,7 +8,7 @@
 
   services.polybar = {
     enable = true;
-    script = "polybar top &";
+    script = "polybar mainbar-bspwm &";
     config = ../dotfiles/polybar.ini;
   };
 }
