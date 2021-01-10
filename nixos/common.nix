@@ -74,7 +74,6 @@ in
       defaultSession = "none+bspwm";
     };
   };
-  services.xserver.displayManager.lightdm.enable = false;
 
   # Setup picom
   services.picom = {
