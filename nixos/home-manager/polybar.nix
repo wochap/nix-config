@@ -9,6 +9,6 @@
   services.polybar = {
     enable = true;
     script = "polybar top &";
-    config = /home/gean/.config/polybar/config;
+    config = "~/.config/polybar/config";
   };
 }
