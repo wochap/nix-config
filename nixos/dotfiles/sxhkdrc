@@ -1,9 +1,11 @@
-super + w
+super + shift + q
   bspc quit
+
+super + w
+  bspc window -c
 
 super + q
   bspc node -{c, k}
-#	bspc window -c
 
 super + t
   thunar
