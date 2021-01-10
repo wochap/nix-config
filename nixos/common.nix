@@ -47,6 +47,7 @@ in
     rofi # app launcher
     gnumake # make
     xfce.thunar # file manager
+    screenfetch
   ];
 
   # Setup bspwm and sxhkdrc for all users
