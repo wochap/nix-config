@@ -51,18 +51,24 @@ in
   ];
 
   # Setup bspwm and sxhkdrc for all users
-  # environment = {
-  #   etc = {
-  #     "bspwmrc".source = ./dotfiles/bspwmrc;
-  #     "sxhkdrc".source = ./dotfiles/sxhkdrc;
-  #   };
-  # };
+  environment = {
+    etc = {
+      bspwmrc = {
+        source = ./dotfiles/bspwmrc;
+        mode = "0755";
+      };
+      sxhkdrc = {
+        source = ./dotfiles/sxhkdrc;
+        mode = "0755";
+      };
+    };
+  };
   services.xserver = {
     enable = true;
     windowManager.bspwm = {
       enable = true;
-      configFile = ./dotfiles/bspwmrc;
-      sxhkd.configFile = ./dotfiles/sxhkdrc;
+      configFile = "/etc/bspwmrc";
+      sxhkd.configFile = "/etc/sxhkdrc";
     };
     displayManager = {
       defaultSession = "none+bspwm";
