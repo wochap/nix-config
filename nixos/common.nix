@@ -78,10 +78,21 @@ in
   fonts = {
     enableDefaultFonts = true;
     fonts = with pkgs; [
+      ubuntu_font_family
+      fira-mono
       fira-code
+      fira-code-symbols
       hack-font
       font-awesome
     ];
+    fontconfig = {
+      penultimate.enable = false;
+      defaultFonts = {
+        serif = [ "Ubuntu" ];
+        sansSerif = [ "Ubuntu" ];
+        monospace = [ "Fira Mono" ];
+      };
+    };
   };
 
   nix.trustedUsers = [ "root" "gean" ];
