@@ -27,7 +27,7 @@ $ passwd gean
 ```
 # Show available monitors
 $ xrandr
-# Modify bspwm config
+# Modify bspwm config in dotfiles folder and rebuild
 ```
 
 ## Resources
