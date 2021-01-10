@@ -46,6 +46,7 @@ in
     killall
     rofi # app launcher
     gnumake # make
+    xfce.thunar # file manager
   ];
 
   # Setup bspwm and sxhkdrc for all users

@@ -20,7 +20,6 @@
     # DE
     nitrogen # wallpaper manager
     copyq # clipboard manager
-    xfce.thunar # file manager
 
     # Dev tools
     gitAndTools.gh
