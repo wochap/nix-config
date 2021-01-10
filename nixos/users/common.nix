@@ -25,6 +25,8 @@
       set expandtab
     '';
 
+    ".config/rofi/config.rasi".source = ../dotfiles/rofi.rasi;
+
     # ".config/kitty/kitty.conf".text = ''
     #   shell fish
     # '';

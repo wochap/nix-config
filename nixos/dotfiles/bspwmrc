@@ -1,13 +1,18 @@
 #! /bin/sh
 
+# source the colors.
+. "${HOME}/.cache/wal/colors.sh"
+
+# Setup theme
+bspc config normal_border_color "$color1"
+bspc config active_border_color "$color2"
+bspc config focused_border_color "$color15"
+bspc config urgent_border_color  \#dc322f
+bspc config presel_feedback_color "$color1"
+
+# Config
 bspc config border_width 2
 bspc config window_gap   20
-
-bspc config focused_border_color \#268bd2
-bspc config active_border_color  \#93a1a1
-bspc config normal_border_color  \#586e75
-bspc config urgent_border_color  \#dc322f
-
 bspc config split_ratio         0.5
 bspc config borderless_monocle  true
 bspc config gapless_monocle     true
