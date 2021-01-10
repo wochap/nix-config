@@ -1,9 +1,8 @@
-
+#!/usr/bin/env sh
 
 #### AUTOSTART ####
 nitrogen --restore &
 # wal -R &
-# wait
 
 #### BSPWM coloring ####
 # source the colors.
