@@ -1,4 +1,9 @@
-#!/usr/bin/env bash
+
+
+#### AUTOSTART ####
+nitrogen --restore &
+# wal -R &
+# wait
 
 #### BSPWM coloring ####
 # source the colors.
@@ -17,7 +22,3 @@ bspc config borderless_monocle  true
 bspc config gapless_monocle     true
 bspc config focus_by_distance   true
 
-#### AUTOSTART ####
-nitrogen --restore &
-# wal -R &
-# wait
