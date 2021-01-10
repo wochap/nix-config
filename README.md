@@ -20,21 +20,44 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     ```
     Source: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
 1. Set password for new user `gean`
-```
-$ passwd gean
-```
-1. Setup `bspwm` worspaces
-```
-# Show available monitors
-$ xrandr
-# Modify bspwm config in dotfiles folder and rebuild
-```
+    ```
+    $ passwd gean
+    ```
+1. Setup `bspwm` worspaces (optional)
+    ```
+    # Show available monitors
+    $ xrandr
+    # Modify bspwm config in dotfiles folder and rebuild
+    ```
+
+## Keybindings (defined by sxhkd)
+
+The keybindings for bspwm are controlled by another program called sxhkd.
+
+The MODKEY is set to the Super key (aka the Windows key).
+
+| Keybinding | Action |
+| :--- | :--- |
+| `ALT + Space` | opens run launcher (rofi) |
+| `MODKEY + Enter` | opens terminal (kitty) |
+| `MODKEY + SHIFT + c` | closes window with focus |
+| `MODKEY + Esc` | quits bspwm |
+| `MODKEY + j` | switches focus between windows in the stack, going down |
+| `MODKEY + k` | switches focus between windows in the stack, going up |
+| `MODKEY + SHIFT + j` | rotates the windows in the stack, going down|
+| `MODKEY + SHIFT + k` | rotates the windows in the stack, going up |
+| `MODKEY + t` | set window state to tiled |
+| `MODKEY + s` | set window state to pseudo-tiled |
+| `MODKEY + f` | set window state to floating |
+| `MODKEY + 1-9` | switch focus to workspace (1-9) |
+| `MODKEY + SHIFT + 1-9` | sends focused window to workspace (1-9) |
 
 ## Resources
 
 * [Learn nix](https://nixcloud.io/tour/?id=3)
 * https://nixos.wiki/wiki/Home_Manager
 * https://superuser.com/questions/603528/how-to-get-the-current-monitor-resolution-or-monitor-name-lvds-vga1-etc
+* https://gitlab.com/dwt1/dotfiles
 
 ## TODO
 
