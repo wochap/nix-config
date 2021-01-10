@@ -8,23 +8,24 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  xsession = {
-    enable = true;
-    windowManager.bspwm = {
-      enable = true;
-      settings = {
-        border_width = 2;
-        window_gap = 12;
-        split_ratio = 0.52;
-        borderless_monocle = true;
-        gapless_monocle = true;
-      };
-      monitors = {
-        # EDITME
-        # "VMSVGA-0" = [ "web" "terminal" "III" "IV" ];
-      };
-    };
-  };
+  # Doesn't let you login :'c
+  # xsession = {
+  #   enable = true;
+  #   windowManager.bspwm = {
+  #     enable = true;
+  #     settings = {
+  #       border_width = 2;
+  #       window_gap = 12;
+  #       split_ratio = 0.52;
+  #       borderless_monocle = true;
+  #       gapless_monocle = true;
+  #     };
+  #     monitors = {
+  #       # EDITME
+  #       # "VMSVGA-0" = [ "web" "terminal" "III" "IV" ];
+  #     };
+  #   };
+  # };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -63,7 +64,7 @@
 
     # Dev tools
     gnumake # make
-    # gitAndTools.gh
+    gitAndTools.gh
 
     # Apps
     firefox
@@ -77,7 +78,7 @@
   };
 
   programs.git = {
-    # package = pkgs.gitAndTools.gitFull;
+    package = pkgs.gitAndTools.gitFull;
     enable = true;
     userName = "wochap";
     userEmail = "gean.marroquin@gmail.com";
@@ -88,14 +89,8 @@
     };
     extraConfig = {
       core.editor = "vim";
-      # protocol.keybase.allow = "always";
-      # credential.helper = "store --file ~/.git-credentials";
       pull.rebase = "false";
     };
-  };
-
-  programs.rofi = {
-    enable = true;
   };
 
   programs.fish = {
@@ -104,7 +99,6 @@
   
   programs.vim = {
     enable = true;
-    # extraConfig = builtins.readFile vim/vimrc;
     settings = {
       relativenumber = true;
       number = true;
@@ -128,35 +122,27 @@
     defaultCacheTtl = 1800;
   };
 
-  services.sxhkd = {
-    enable = true;
-    keybindings = {
-      "super + Return" = "kitty";
-      "super + @space" = "rofi -show run";
-      "super + q" = "bspc node -{c, k}";
-    };
-  };
-
-  services.picom = {
-    enable = true;
-    inactiveOpacity = "0.5";
-    activeOpacity = "1"; #"0.90";
-    #opacityRule = [ "100:class_g = 'Google-chrome'" "100:class_g = 'Alacritty'" "60:class_g = 'rofi'" ];
-    fade = true;
-    vSync = true;
-    shadow = true;
-    fadeDelta = 4 ;
-    fadeSteps = ["0.02" "0.02"];
-    blur = true;
-    backend = "glx";
-    inactiveDim = "0.2";
-    extraOptions = ''
-      frame-opacity = 1;
-      blur-background = true;
-      blur-kern = "7x7box";
-      blur-background-exclude = [];
-    '';
-  };
+  # Globally enabled
+  # services.picom = {
+  #   enable = true;
+  #   inactiveOpacity = "0.5";
+  #   activeOpacity = "1"; #"0.90";
+  #   #opacityRule = [ "100:class_g = 'Google-chrome'" "100:class_g = 'Alacritty'" "60:class_g = 'rofi'" ];
+  #   fade = true;
+  #   vSync = true;
+  #   shadow = true;
+  #   fadeDelta = 4 ;
+  #   fadeSteps = ["0.02" "0.02"];
+  #   blur = true;
+  #   backend = "glx";
+  #   inactiveDim = "0.2";
+  #   extraOptions = ''
+  #     frame-opacity = 1;
+  #     blur-background = true;
+  #     blur-kern = "7x7box";
+  #     blur-background-exclude = [];
+  #   '';
+  # };
 
   services.redshift = {
     enable = true;

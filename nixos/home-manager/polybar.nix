@@ -18,7 +18,6 @@ in
     script = "polybar top &";
     config = {
       "bar/top" = {
-        #monitor = "\${env:MONITOR:HDMI-1}";
         width = "100%";
         height = 40;
         radius = 6;

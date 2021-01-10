@@ -43,13 +43,46 @@ in
     vim
     git
     kitty
+    killall
+    rofi # app launcher
     # firefox
   ];
 
-  # List services that you want to enable:
+  # Setup bspwm
+  environment = {
+    etc = {
+      "bspwmrc".source = ./dotfiles/bspwmrc;
+      "sxhkdrc".source = ./dotfiles/sxhkdrc;
+    };
+  };
   services.xserver.enable = true;
-  # services.xserver.windowManager.bspwm.enable = true;
-  services.xserver.displayManager.lightdm.enable = false;
+  services.xserver.windowManager.bspwm = {
+    enable = true;
+    configFile = "/etc/bspwmrc";
+    sxhkd.configFile = "/etc/sxhkdrc";
+  };
+  services.xserver.displayManager = {
+    defaultSession = "none+bspwm";
+    lightdm.greeters.mini = {
+      enable = true;
+      user = "gean";
+      extraConfig = ''
+        [greeter]
+        show-password-label = false
+        invalid-password-text = Access Denied
+        show-input-cursor = true
+        password-alignment = left
+        [greeter-theme]
+        font-size = 1em
+        background-image = ""
+      '';
+    };
+  };
+  services.picom = {
+    enable = true;
+    vSync = true;
+    # settings = {};
+  };
 
   # Setup fonts
   # fonts = {
@@ -60,7 +93,7 @@ in
   #   ];
   # };
 
-  # nix.trustedUsers = [ "root" "gean" ];
+  nix.trustedUsers = [ "root" "gean" ];
 
   # Setup home-manager
   home-manager.users.gean = (import ./home-manager/home.nix { 

@@ -1,0 +1,15 @@
+super + w
+  bspc quit
+
+super + q
+  bspc node -{c, k}
+#	bspc window -c
+
+super + t
+  thunar
+
+super + Return
+  kitty
+
+super + @space
+  rofi -show run
