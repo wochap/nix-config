@@ -33,6 +33,7 @@
     xfce.thunar-archive-plugin
     xfce.thunar-volman
     lxappearance
+    docker-compose
   ];
 
   home.sessionVariables = {
