@@ -29,6 +29,10 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     $ xrandr
     # Modify bspwm config in dotfiles folder and rebuild
     ```
+1. Setup wallpaper (optional)
+    ```
+    $ wal -i <path_to_wallpaper>
+    ```
 
 ## Keybindings (defined by sxhkd)
 
