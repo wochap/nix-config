@@ -3,6 +3,7 @@
 {
   imports = [
     ./polybar.nix
+    ./git.nix
   ];
 
   # Let Home Manager install and manage itself.
@@ -58,23 +59,6 @@
 
   home.sessionVariables = {
     # EDITOR = "nvim";
-  };
-
-  # Generates ~/.gitconfig
-  programs.git = {
-    package = pkgs.gitAndTools.gitFull;
-    enable = true;
-    userName = "wochap";
-    userEmail = "gean.marroquin@gmail.com";
-    aliases = {
-      co = "checkout";
-      ci = "commit";
-      st = "status";
-    };
-    extraConfig = {
-      core.editor = "vim";
-      pull.rebase = "false";
-    };
   };
 
   programs.fish = {
