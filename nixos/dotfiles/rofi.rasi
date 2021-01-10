@@ -1,5 +1,1 @@
 @import "~/.cache/wal/colors-rofi-dark"
-
-configuration {
-  show-icons: true;
-}
