@@ -63,20 +63,20 @@ in
   };
   services.xserver.displayManager = {
     defaultSession = "none+bspwm";
-    lightdm.greeters.mini = {
-      enable = true;
-      user = "gean";
-      extraConfig = ''
-        [greeter]
-        show-password-label = false
-        invalid-password-text = Access Denied
-        show-input-cursor = true
-        password-alignment = left
-        [greeter-theme]
-        font-size = 1em
-        background-image = ""
-      '';
-    };
+    # lightdm.greeters.mini = {
+    #   enable = true;
+    #   user = "gean";
+    #   extraConfig = ''
+    #     [greeter]
+    #     show-password-label = false
+    #     invalid-password-text = Access Denied
+    #     show-input-cursor = true
+    #     password-alignment = left
+    #     [greeter-theme]
+    #     font-size = 1em
+    #     background-image = ""
+    #   '';
+    # };
   };
   services.picom = {
     enable = true;
