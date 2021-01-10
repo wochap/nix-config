@@ -86,13 +86,14 @@ in
   };
 
   # Setup fonts
-  # fonts = {
-  #   enableDefaultFonts = true;
-  #   fonts = with pkgs; [
-  #     fira-code
-  #     hack-font
-  #   ];
-  # };
+  fonts = {
+    enableDefaultFonts = true;
+    fonts = with pkgs; [
+      fira-code
+      hack-font
+      font-awesome
+    ];
+  };
 
   nix.trustedUsers = [ "root" "gean" ];
 
