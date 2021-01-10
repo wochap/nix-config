@@ -53,6 +53,7 @@ in
     etc = {
       "bspwmrc".source = ./dotfiles/bspwmrc;
       "sxhkdrc".source = ./dotfiles/sxhkdrc;
+      "polybar".source = ./dotfiles/polybar;
     };
   };
   services.xserver.enable = true;

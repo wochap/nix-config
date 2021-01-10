@@ -2,13 +2,13 @@
 { config, pkgs, ... }:
 
 {
-  home.file = {
-    ".config/polybar/config".source = ../dotfiles/polybar;
-  };
+  # home.file = {
+  #   ".config/polybar/config".source = ../dotfiles/polybar;
+  # };
 
   services.polybar = {
     enable = true;
     script = "polybar top &";
-    config = ../dotfiles/polybar;
+    config = /etc/polybar;
   };
 }
