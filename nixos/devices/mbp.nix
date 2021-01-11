@@ -77,8 +77,9 @@ in
   hardware.opengl.driSupport32Bit = false;
 
   # Fix font size in retina display
-  services.xserver.dpi = 210;
-  fonts.fontconfig.dpi = 210;
+  hardware.video.hidpi.enable = true;
+  # services.xserver.dpi = 210;
+  # fonts.fontconfig.dpi = 210;
 
   # Update display brightness
   programs.light.enable = true;
