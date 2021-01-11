@@ -82,8 +82,6 @@ in
   # services.xserver.dpi = 220;
   # fonts.fontconfig.dpi = 220;
   services.xserver.autorun = true;
-  # mbp: 304x190
-  # mbp: 762x476
   # mbp: 762x476
   services.xserver.monitorSection = ''
     DisplaySize 508 317
