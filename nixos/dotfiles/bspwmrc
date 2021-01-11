@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 
 #### AUTOSTART ####
-# nitrogen --restore &
 wal -R &
 
 #### BSPWM coloring ####

@@ -17,8 +17,8 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     Source: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
     ```
     $ sudo su
-    $ mkdir /etc/wpa_supplicant
-    $ wpa_passphrase '<SSID>' '<PASSWORD>' > /etc/wpa_supplicant/wpa_supplicant.conf
+    $ wpa_passphrase '<SSID>' '<passphrase>' | sudo tee /etc/wpa_supplicant.conf
+    $ wpa_supplicant -c /etc/wpa_supplicant.conf -i <interface> -B
     ```
 1. Login with root user and clone into `~/dev/nix-config`
     ```

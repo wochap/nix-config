@@ -69,6 +69,9 @@ in
     # "ati_unfree"
     "ati"
   ];
+  services.xserver.deviceSection  = ''
+    Option "TearFree" "on"
+  ''
 
   # Apparently this is currently only supported by ati_unfree drivers, not ati
   hardware.opengl.driSupport32Bit = false;
