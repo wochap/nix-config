@@ -49,6 +49,7 @@ in
     xfce.thunar # file manager
     screenfetch
     copyq # clipboard manager
+    inxi # check compositor running
   ];
 
   # Setup bspwm and sxhkdrc for all users
