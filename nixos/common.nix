@@ -92,6 +92,7 @@ in
       fira-code-symbols
       hack-font
       font-awesome
+      siji
     ];
     fontconfig = {
       defaultFonts = {
