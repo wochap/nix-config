@@ -93,6 +93,8 @@ in
       hack-font
       font-awesome
       siji
+      material-icons
+      material-design-icons
     ];
     fontconfig = {
       defaultFonts = {
