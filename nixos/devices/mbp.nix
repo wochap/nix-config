@@ -81,10 +81,10 @@ in
   hardware.video.hidpi.enable = true;
   # services.xserver.dpi = 210;
   # fonts.fontconfig.dpi = 210;
-  # services.xserver.autorun = true;
-  # services.xserver.monitorSection = ''
-  #   DisplaySize 406 228
-  # '';
+  services.xserver.autorun = true;
+  services.xserver.monitorSection = ''
+    DisplaySize 304 190
+  '';
 
   # Update display brightness
   programs.light.enable = true;
