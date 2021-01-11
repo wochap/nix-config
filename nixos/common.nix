@@ -50,6 +50,7 @@ in
     screenfetch
     copyq # clipboard manager
     inxi # check compositor running
+    xorg.xdpyinfo
   ];
 
   # Setup bspwm and sxhkdrc for all users
@@ -96,6 +97,7 @@ in
       siji
       material-icons
       material-design-icons
+      corefonts
     ];
     fontconfig = {
       defaultFonts = {

@@ -72,6 +72,7 @@ in
   services.xserver.deviceSection = ''
     Option "TearFree" "on"
   '';
+  services.xserver.useGlamor = true;
 
   # Apparently this is currently only supported by ati_unfree drivers, not ati
   hardware.opengl.driSupport32Bit = false;
@@ -80,6 +81,10 @@ in
   hardware.video.hidpi.enable = true;
   # services.xserver.dpi = 210;
   # fonts.fontconfig.dpi = 210;
+  # services.xserver.autorun = true;
+  # services.xserver.monitorSection = ''
+  #   DisplaySize 406 228
+  # '';
 
   # Update display brightness
   programs.light.enable = true;
