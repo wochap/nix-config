@@ -80,7 +80,7 @@ in
   # Fix font size in retina display
   hardware.video.hidpi.enable = true;
   services.xserver.dpi = 220;
-  # fonts.fontconfig.dpi = 220;
+  fonts.fontconfig.dpi = 220;
   services.xserver.autorun = true;
   # mbp: 762x476
   services.xserver.monitorSection = ''
