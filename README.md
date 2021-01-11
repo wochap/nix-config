@@ -8,7 +8,19 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
 ## Setup NixOS
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation)
-1. Clone into `~/dev/nix-config`
+1. Reboot and connect to wifi/eth
+    ```
+    $ sudo su
+    $ vim /etc/resolv.conf
+    # add `nameserver 8.8.8.8` to `/etc/resolv.conf`
+    ```
+    Source: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
+    ```
+    $ sudo su
+    $ mkdir /etc/wpa_supplicant
+    $ wpa_passphrase '<SSID>' '<PASSWORD>' > /etc/wpa_supplicant/wpa_supplicant.conf
+    ```
+1. Login with root user and clone into `~/dev/nix-config`
     ```
     $ git clone https://github.com/wochap/nix-config.git ~/dev/nix-config
     ```
@@ -16,7 +28,6 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     ```
     $ NIXOS_CONFIG=/root/nix-config/nixos/devices/vb.nix nixos-rebuild switch
     ```
-    Source: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
 1. Set password for new user `gean`
     ```
     $ passwd gean
@@ -27,8 +38,9 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     $ xrandr
     # Modify bspwm config in dotfiles folder and rebuild
     ```
-1. Setup wallpaper (optional)
+1. Setup wallpaper (required)
     ```
+    $ git clone https://github.com/elementary/wallpapers.git
     $ wal -i <path_to_wallpaper>
     ```
 
@@ -69,3 +81,11 @@ The MODKEY is set to the Super key (aka the Windows key).
 * Setup theme for rofi, polybar, bspwm
 * Setup sxhkd
 * Setup web development (docker)    
+
+## Troubleshooting
+
+* Check if picom is running
+
+```
+$ inxi -Gxx | grep compositor
+```
