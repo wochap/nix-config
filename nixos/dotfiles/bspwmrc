@@ -22,4 +22,4 @@ bspc config split_ratio         0.50
 # bspc config focus_by_distance   true
 
 #### BSPWM workspaces ####
-bspc monitor -d I II III
+bspc monitor -d 1 2 3 4
