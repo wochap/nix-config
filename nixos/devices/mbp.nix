@@ -82,9 +82,9 @@ in
   # services.xserver.dpi = 192;
   # fonts.fontconfig.dpi = 210;
   services.xserver.autorun = true;
-  services.xserver.monitorSection = ''
-    DisplaySize 304 190
-  '';
+  # services.xserver.monitorSection = ''
+  #   DisplaySize 304 190
+  # '';
 
   # Update display brightness
   programs.light.enable = true;
