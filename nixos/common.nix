@@ -33,6 +33,9 @@ in
     isNormalUser = true;
     extraGroups = [ 
       "wheel" # Enable ‘sudo’ for the user.
+      "docker"
+      "video"
+      "audio"
     ];
     # TODO: setup openssh
   };
