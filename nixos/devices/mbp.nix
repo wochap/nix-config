@@ -89,7 +89,7 @@ in
   #   DisplaySize 508 317
   # '';
   services.xserver.extraDisplaySettings = ''
-    Virtual 1280 800
+    Virtual 1920 1200
   '';
 
   # Update display brightness
