@@ -35,6 +35,7 @@
     lxappearance
     docker-compose
     docker
+    slack
   ];
 
   home.sessionVariables = {
