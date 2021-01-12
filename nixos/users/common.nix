@@ -27,8 +27,6 @@
 
     ".config/rofi/config.rasi".source = ../dotfiles/rofi.rasi;
     
-    ".config/picom.conf".source = ../dotfiles/picom.conf;
-
     ".bashrc" = lib.mkIf config.programs.fish.enable {
       text = ''
         exec ${config.programs.fish.package}/bin/fish

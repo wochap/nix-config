@@ -87,6 +87,10 @@ in
   services.picom = {
     enable = true;
     vSync = true;
+    backend = "glx";
+    opacityRules = [
+      "90:class_g = 'kitty'"
+    ];
   };
 
   # Setup global fonts
