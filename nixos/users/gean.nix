@@ -37,6 +37,7 @@
     docker
     slack
     mysql-workbench
+    brave
   ];
 
   home.sessionVariables = {
