@@ -34,6 +34,7 @@
     xfce.thunar-volman
     lxappearance
     docker-compose
+    docker
   ];
 
   home.sessionVariables = {
