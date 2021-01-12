@@ -109,4 +109,4 @@ XF86MonBrightness{Down,Up}
   light {-U 10,-A 10}
 
 #XF86Audio{Mute,LowerVolume,RaiseVolume}
-#  pamixer set Master {toggle,5%-,5%+}
+  amixer set Master {toggle,5%-,5%+}
