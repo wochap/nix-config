@@ -28,8 +28,8 @@
     ".config/rofi/config.rasi".source = ../dotfiles/rofi.rasi;
     
     ".bashrc" = lib.mkIf config.programs.fish.enable {
+      # exec ${pkgs.pywal}/bin/wal -R
       text = ''
-        exec ${pkgs.pywal}/bin/wal -R
         exec ${config.programs.fish.package}/bin/fish
       '';
     };
