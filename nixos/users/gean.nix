@@ -36,6 +36,7 @@
     docker-compose
     docker
     slack
+    mysql-workbench
   ];
 
   home.sessionVariables = {
