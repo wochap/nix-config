@@ -33,6 +33,8 @@ in
 
   # Enables wireless support via wpa_supplicant.
   networking.wireless.enable = true;
+  # networking.networkmanager.enable = true;
+  # programs.nm-applet.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
