@@ -16,6 +16,8 @@
     htop
     wget
     radeontop # like htop for gpu
+    scrot # screenshoot
+    pamixer # control audio
 
     # DE
     nitrogen # wallpaper manager
@@ -23,23 +25,23 @@
 
     # Dev tools
     gitAndTools.gh
+    docker-compose
+    docker
+    mysql-workbench
+    postman
+    vscode
 
     # Apps
     firefox
+    brave
+    google-chrome
     pantheon.elementary-icon-theme
-    vscode
     nix-prefetch-git
     mpv # video player
     xfce.thunar-archive-plugin
     xfce.thunar-volman
     lxappearance
-    docker-compose
-    docker
     slack
-    mysql-workbench
-    brave
-    google-chrome
-    postman
   ];
 
   home.sessionVariables = {
