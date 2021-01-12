@@ -86,6 +86,9 @@ in
   services.xserver.monitorSection = ''
     DisplaySize 508 317
   '';
+  services.xserver.extraDisplaySettings = ''
+    Virtual 1280 800
+  '';
 
   # Update display brightness
   programs.light.enable = true;
