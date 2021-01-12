@@ -54,7 +54,7 @@
           sha256 = "0c5i7sdrsp0q3vbziqzdyqn4fmp235ax4mn4zslrswvn8g3fvdyh";
         };
       }
-    ]
+    ];
   };
   
   programs.vim = {
