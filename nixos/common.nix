@@ -51,6 +51,8 @@ in
     copyq # clipboard manager
     inxi # check compositor running
     xorg.xdpyinfo
+    unzip
+    zip
   ];
 
   # Setup bspwm and sxhkdrc for all users
@@ -98,8 +100,6 @@ in
       material-icons
       material-design-icons
       corefonts
-      unzip
-      zip
     ];
     fontconfig = {
       defaultFonts = {
