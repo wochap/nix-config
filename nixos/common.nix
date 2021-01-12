@@ -91,6 +91,7 @@ in
     opacityRules = [
       "90:class_g = 'kitty'"
     ];
+    shadow = true;
   };
 
   # Setup global fonts
