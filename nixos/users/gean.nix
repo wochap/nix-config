@@ -38,6 +38,8 @@
     slack
     mysql-workbench
     brave
+    google-chrome
+    postman
   ];
 
   home.sessionVariables = {
