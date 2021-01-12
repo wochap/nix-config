@@ -29,6 +29,7 @@
     
     ".bashrc" = lib.mkIf config.programs.fish.enable {
       text = ''
+        exec ${pkgs.pywal}/bin/wal -R
         exec ${config.programs.fish.package}/bin/fish
       '';
     };
