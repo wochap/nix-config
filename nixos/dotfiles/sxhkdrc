@@ -100,9 +100,9 @@ super + Return
 super + space
   rofi -show run
 
-super + shift + 4
-  scrot -u -z '%Y-%m-%d_%H:%M:%S_$wx$h$n.png' -e 'mv $f ~/Desktop'
-super + shift + 3
+# super + shift + 4
+#   scrot -u -z '%Y-%m-%d_%H:%M:%S_$wx$h$n.png' -e 'mv $f ~/Desktop'
+super + shift + s
   scrot -z '%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'mv $f ~/Desktop'
 
 XF86MonBrightness{Down,Up}
