@@ -22,6 +22,11 @@
     # DE
     nitrogen # wallpaper manager
     pywal # theme color generator
+    volumeicon
+    arc-theme
+    xfce.thunar-archive-plugin
+    xfce.thunar-volman
+    lxappearance
 
     # Dev tools
     gitAndTools.gh
@@ -38,9 +43,6 @@
     pantheon.elementary-icon-theme
     nix-prefetch-git
     mpv # video player
-    xfce.thunar-archive-plugin
-    xfce.thunar-volman
-    lxappearance
     slack
   ];
 

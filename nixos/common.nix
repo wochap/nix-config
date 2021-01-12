@@ -36,6 +36,7 @@ in
       "docker"
       "video"
       "audio"
+      "networkmanager"
     ];
     # TODO: setup openssh
   };
