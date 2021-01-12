@@ -98,6 +98,8 @@ in
       material-icons
       material-design-icons
       corefonts
+      unzip
+      zip
     ];
     fontconfig = {
       defaultFonts = {
