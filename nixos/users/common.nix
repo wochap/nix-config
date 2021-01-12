@@ -1,4 +1,4 @@
-{ config, pkgs, hostName ? "unknown", ... }:
+{ config, pkgs, hostName ? "unknown", lib, ... }:
 
 {
   imports = [
@@ -26,6 +26,12 @@
     '';
 
     ".config/rofi/config.rasi".source = ../dotfiles/rofi.rasi;
+
+    ".bashrc" = lib.mkIf config.programs.fish.enable {
+      text = ''
+        exec ${config.programs.fish.package}/bin/fish
+      '';
+    };
 
     # ".config/kitty/kitty.conf".text = ''
     #   shell fish
