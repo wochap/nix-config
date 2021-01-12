@@ -85,9 +85,9 @@ in
   fonts.fontconfig.dpi = 220;
   services.xserver.autorun = true;
   # mbp: 762x476
-  services.xserver.monitorSection = ''
-    DisplaySize 508 317
-  '';
+  # services.xserver.monitorSection = ''
+  #   DisplaySize 508 317
+  # '';
   services.xserver.extraDisplaySettings = ''
     Virtual 1280 800
   '';
