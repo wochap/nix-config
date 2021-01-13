@@ -74,9 +74,9 @@ in
     "radeon"
   ];
   # Option "TearFree" "on"
-  services.xserver.deviceSection = ''
-    Option "TearFree" "true"
-  '';
+  # services.xserver.deviceSection = ''
+  #   Option "TearFree" "true"
+  # '';
   services.xserver.useGlamor = true;
 
   # Apparently this is currently only supported by ati_unfree drivers, not ati
