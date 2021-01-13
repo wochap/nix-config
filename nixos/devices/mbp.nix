@@ -23,7 +23,7 @@ in
       (import ../common.nix {
         inherit pkgs config hostName;
       })
-    ];r
+    ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.grub.enable = false;
