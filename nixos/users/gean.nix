@@ -27,6 +27,7 @@
     xfce.thunar-archive-plugin
     xfce.thunar-volman
     lxappearance
+    xorg.xcursorthemes
 
     # Dev tools
     gitAndTools.gh

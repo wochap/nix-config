@@ -69,10 +69,13 @@ in
   # GPU drivers
   services.xserver.videoDrivers = [ 
     # "ati_unfree"
-    "ati"
+    # "ati"
+    "amdgpu"
+    "radeon"
   ];
+  # Option "TearFree" "on"
   services.xserver.deviceSection = ''
-    Option "TearFree" "on"
+    Option "TearFree" "true"
   '';
   services.xserver.useGlamor = true;
 
@@ -88,9 +91,12 @@ in
   # services.xserver.monitorSection = ''
   #   DisplaySize 508 317
   # '';
-  services.xserver.extraDisplaySettings = ''
-    Virtual 1920 1200
-  '';
+  # services.xserver.monitorSection = ''
+  #   DisplaySize 331 207
+  # '';
+  # services.xserver.extraDisplaySettings = ''
+  #   Virtual 1920 1200
+  # '';
 
   # Update display brightness
   programs.light.enable = true;
