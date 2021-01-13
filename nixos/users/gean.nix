@@ -14,6 +14,7 @@
   home.packages = with pkgs; [
     # Basic tools
     htop
+    gotop
     wget
     radeontop # like htop for gpu
     scrot # screenshoot
