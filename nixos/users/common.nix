@@ -27,6 +27,8 @@
 
     ".config/rofi/config.rasi".source = ../dotfiles/rofi.rasi;
     
+    ".config/kitty/kitty.conf".source = ../dotfiles/kitty.conf;
+    
     ".bashrc" = lib.mkIf config.programs.fish.enable {
       # exec ${pkgs.pywal}/bin/wal -R
       text = ''
