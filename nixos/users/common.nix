@@ -31,7 +31,7 @@
     
     ".bashrc".text = ''
       exec ${pkgs.pywal.outPath}/bin/wal -R
-      exec ${config.programs.fish.package}/bin/fish
+      # exec ${config.programs.fish.package}/bin/fish
     '';
 
     # ".config/kitty/kitty.conf".text = ''
