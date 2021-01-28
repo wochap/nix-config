@@ -30,7 +30,7 @@
     # ".config/kitty/kitty.conf".source = ../dotfiles/kitty.conf;
     
     ".bashrc".text = ''
-      exec ${pkgs.pywal.outPath}/bin/wal -R
+      exec ${nixpkgs.pywal.outPath}/bin/wal -R
       exec ${config.programs.fish.package}/bin/fish
     '';
 
