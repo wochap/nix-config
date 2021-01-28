@@ -27,7 +27,7 @@
 
     ".config/rofi/config.rasi".source = ../dotfiles/rofi.rasi;
     
-    ".config/kitty/kitty.conf".source = ../dotfiles/kitty.conf;
+    # ".config/kitty/kitty.conf".source = ../dotfiles/kitty.conf;
     
     ".bashrc".text = ''
       exec ${pkgs.pywal.outPath}/bin/wal -R
