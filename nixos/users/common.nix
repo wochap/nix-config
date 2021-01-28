@@ -29,12 +29,10 @@
     
     ".config/kitty/kitty.conf".source = ../dotfiles/kitty.conf;
     
-    ".bashrc" = lib.mkIf config.programs.fish.enable {
-      # exec ${pkgs.pywal}/bin/wal -R
-      text = ''
-        exec ${config.programs.fish.package}/bin/fish
-      '';
-    };
+    ".bashrc".text = ''
+      exec ${pkgs.pywal}/bin/wal -R
+      exec ${config.programs.fish.package}/bin/fish
+    '';
 
     # ".config/kitty/kitty.conf".text = ''
     #   shell fish
