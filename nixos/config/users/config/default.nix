@@ -43,42 +43,42 @@
       ];
 
       # # Environment variables to always set at login.
-      # home.sessionVariables = {
-      #   # Force GTK to use wayland
-      #   GDK_BACKEND = "wayland";
-      #   CLUTTER_BACKEND = "wayland";
+      home.sessionVariables = {
+        # Force GTK to use wayland
+        GDK_BACKEND = "wayland";
+        CLUTTER_BACKEND = "wayland";
 
-      #   # Force firefox to use wayland
-      #   MOZ_ENABLE_WAYLAND = "1";
+        # Force firefox to use wayland
+        MOZ_ENABLE_WAYLAND = "1";
 
-      #   BROWSER = "firefox";
-      #   TERMINAL = "kitty";
-      # };
+        BROWSER = "firefox";
+        TERMINAL = "kitty";
+      };
       # home.sessionVariables = lib.mkIf (config.networking.hostName == "vb") {
       #   # Fix wayfire blackscreen
       #   WLR_NO_HARDWARE_CURSORS = "1";
       # };
 
       # Environment variables to always set at login.
-      home.sessionVariables = lib.mkMerge [
-        {
-          # Force GTK to use wayland
-          GDK_BACKEND = "wayland";
-          CLUTTER_BACKEND = "wayland";
+      # home.sessionVariables = lib.mkMerge [
+      #   {
+      #     # Force GTK to use wayland
+      #     GDK_BACKEND = "wayland";
+      #     CLUTTER_BACKEND = "wayland";
 
-          # Force firefox to use wayland
-          MOZ_ENABLE_WAYLAND = "1";
+      #     # Force firefox to use wayland
+      #     MOZ_ENABLE_WAYLAND = "1";
 
-          BROWSER = "firefox";
-          TERMINAL = "kitty";
-          MY_TEST_KHE = "NANI";
-          MY_TEST = "${config.networking.hostName}_NANI";
-        }
-        (lib.mkIf (config.networking.hostName == "vb") {
-          # Fix wayfire blackscreen
-          WLR_NO_HARDWARE_CURSORS = "1";
-        })
-      ];
+      #     BROWSER = "firefox";
+      #     TERMINAL = "kitty";
+      #     MY_TEST_KHE = "NANI";
+      #     MY_TEST = "${config.networking.hostName}_NANI";
+      #   }
+      #   (lib.mkIf (config.networking.hostName == "vb") {
+      #     # Fix wayfire blackscreen
+      #     WLR_NO_HARDWARE_CURSORS = "1";
+      #   })
+      # ];
 
       # Add config files to home folder
       home.file = {
