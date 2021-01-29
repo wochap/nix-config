@@ -6,11 +6,17 @@ let
     rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
     ref = "release-20.09";
   };
+  waylandOverlay = (import (builtins.fetchTarball "https://github.com/colemickens/nixpkgs-wayland/archive/master.tar.gz"));
 in
 {
   imports = [
     # Install home-manager
     (import "${home-manager}/nixos")
+  ];
+
+  nixpkgs.overlays = [
+    # Install nixpkgs-wayland
+    waylandOverlay
   ];
 
   # Allows proprietary or unfree package
@@ -22,7 +28,9 @@ in
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
-    font = "Lat2-Terminus16";
+    # font = "Lat2-Terminus16";
+    earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
+    font = "ter-v32n";
     keyMap = "us";
   };
 
@@ -44,39 +52,58 @@ in
     unzip
     zip
 
+    # wayland
+    clipman
+    wofi
+    wayfire
+    waybar
+    mako
+    swaylock
+
     lxappearance
     gtk-engine-murrine
     gtk_engines
     gsettings-desktop-schemas
     arc-theme
     pantheon.elementary-icon-theme
+    capitaine-cursors
   ];
 
   # Setup global fonts
   fonts = {
     enableDefaultFonts = true;
     fonts = with pkgs; [
-      ubuntu_font_family
-      fira-mono
+      cascadia-code
+      corefonts
       fira-code
       fira-code-symbols
-      hack-font
+      fira-mono
       font-awesome
-      siji
-      material-icons
+      gelasio
+      hack-font
+      iosevka
+      jetbrains-mono
       material-design-icons
-      corefonts
+      material-icons
+      noto-fonts noto-fonts-cjk noto-fonts-emoji
+      siji
+      source-code-pro
+      ttf_bitstream_vera
+      ubuntu_font_family
     ];
     fontconfig = {
       defaultFonts = {
         serif = [ "Ubuntu" ];
         sansSerif = [ "Ubuntu" ];
         monospace = [ "Fira Mono" ];
+        emoji = [ "Noto Color Emoji" ];
       };
     };
   };
 
-  nix.trustedUsers = [ "root" "gean" ];
+  nix.trustedUsers = [ "@wheel" "root" ];
+
+  security.sudo.wheelNeedsPassword = false;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.gean = {

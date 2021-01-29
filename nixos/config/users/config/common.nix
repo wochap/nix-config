@@ -37,6 +37,7 @@
     nix-prefetch-git
     mpv # video player
     slack
+    pulsemixer
   ];
 
   # Environment variables to always set at login.
@@ -47,13 +48,16 @@
 
     # Force firefox to use wayland
     MOZ_ENABLE_WAYLAND = "1";
+
+    BROWSER = "firefox";
+    TERMINAL = "kitty";
   };
 
   # Add config files to home folder
   home.file = {
     ".vimrc".source = ../../dotfiles/.vimrc;
     ".config/rofi/config.rasi".source = ../../dotfiles/rofi.rasi;
-    ".config/kitty/kitty.conf".source = ../../dotfiles/kitty.conf;
+    # ".config/kitty/kitty.conf".source = ../../dotfiles/kitty.conf;
     ".bashrc".text = ''
       exec ${config.programs.fish.package}/bin/fish
     '';
@@ -74,6 +78,10 @@
     ];
   };
 
+  programs.bash = {
+    enable = true;
+  };
+
   programs.vim = {
     enable = true;
     settings = {
@@ -88,11 +96,11 @@
     defaultCacheTtl = 1800;
   };
 
-  services.redshift = {
-    enable = true;
-    latitude = "-12.051408";
-    longitude = "-76.922124";
-  };
+  # services.redshift = {
+  #   enable = true;
+  #   latitude = "-12.051408";
+  #   longitude = "-76.922124";
+  # };
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
