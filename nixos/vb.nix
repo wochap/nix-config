@@ -9,9 +9,7 @@ in
       /etc/nixos/hardware-configuration.nix
 
       # Include configuration
-      (import ./config/default.nix {
-        inherit config pkgs hostName;
-      })
+      ./config/default.nix
     ];
 
   boot.loader.grub.enable = true;

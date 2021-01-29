@@ -1,4 +1,4 @@
-{ config, pkgs, hostName ? "unknown", ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [

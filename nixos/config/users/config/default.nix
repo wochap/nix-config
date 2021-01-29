@@ -1,4 +1,4 @@
-{ config, pkgs, hostName ? "unknown", lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -48,6 +48,9 @@
 
     # Force firefox to use wayland
     MOZ_ENABLE_WAYLAND = "1";
+
+    # Fix
+    WLR_NO_HARDWARE_CURSORS = lib.mkIf (config.networking.hostName == "vb") "1";
 
     BROWSER = "firefox";
     TERMINAL = "kitty";

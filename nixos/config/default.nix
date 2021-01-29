@@ -1,4 +1,4 @@
-{ config, pkgs, hostName ? "unknown", ... }:
+{ config, pkgs, ... }:
 
 let
   home-manager = builtins.fetchGit {
@@ -121,9 +121,7 @@ in
     ];
   };
   # Setup users config
-  home-manager.users.gean = (import ./users/gean.nix {
-    inherit pkgs config hostName;
-  } );
+  home-manager.users.gean = import ./users/gean.nix;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

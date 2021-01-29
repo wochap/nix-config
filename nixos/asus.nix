@@ -10,9 +10,7 @@ in
       /etc/nixos/hardware-configuration.nix
 
       # Include common configuration
-      (import ./config/default.nix {
-        inherit pkgs config hostName;
-      })
+      ./config/default.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
