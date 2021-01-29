@@ -84,7 +84,7 @@
         ".vimrc".source = ../../dotfiles/.vimrc;
         # ".config/kitty/kitty.conf".source = ../../dotfiles/kitty.conf;
         ".bashrc".text = ''
-          exec ${config.programs.fish.package}/bin/fish
+          exec ${config.home-manager.programs.fish.package}/bin/fish
         '';
       };
 
