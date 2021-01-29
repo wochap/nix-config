@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ./config/common.nix
+    # Include configuration
+    ./config/default.nix
   ];
 
   # Home Manager needs a bit of information about you and the

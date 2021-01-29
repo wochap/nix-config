@@ -8,8 +8,8 @@ in
       # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
 
-      # Include common configuration
-      (import ./config/common.nix {
+      # Include configuration
+      (import ./config/default.nix {
         inherit config pkgs hostName;
       })
     ];
