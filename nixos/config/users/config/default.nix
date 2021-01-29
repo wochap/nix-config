@@ -49,11 +49,12 @@
     # Force firefox to use wayland
     MOZ_ENABLE_WAYLAND = "1";
 
-    # Fix
-    # WLR_NO_HARDWARE_CURSORS = lib.mkIf (config.networking.hostName == "vb") "1";
-
     BROWSER = "firefox";
     TERMINAL = "kitty";
+  };
+  home.sessionVariables = lib.mkIf (config.networking.hostName == "vb") {
+    # Fix wayfire blackscreen
+    WLR_NO_HARDWARE_CURSORS = "1";
   };
 
   # Add config files to home folder
