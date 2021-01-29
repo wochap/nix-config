@@ -50,7 +50,7 @@
     MOZ_ENABLE_WAYLAND = "1";
 
     # Fix
-    WLR_NO_HARDWARE_CURSORS = lib.mkIf (config.networking.hostName == "vb") "1";
+    # WLR_NO_HARDWARE_CURSORS = lib.mkIf (config.networking.hostName == "vb") "1";
 
     BROWSER = "firefox";
     TERMINAL = "kitty";
