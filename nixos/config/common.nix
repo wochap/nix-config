@@ -54,12 +54,12 @@ in
     zip
 
     # wayland
-    clipman
-    wofi
+    # clipman
+    # wofi
     wayfire
-    waybar
-    mako
-    swaylock
+    # waybar
+    # mako
+    # swaylock
 
     lxappearance
     gtk-engine-murrine

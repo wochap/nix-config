@@ -43,11 +43,11 @@
   # Environment variables to always set at login.
   home.sessionVariables = {
     # Force GTK to use wayland
-    # GDK_BACKEND = "wayland";
-    # CLUTTER_BACKEND = "wayland";
+    GDK_BACKEND = "wayland";
+    CLUTTER_BACKEND = "wayland";
 
     # Force firefox to use wayland
-    # MOZ_ENABLE_WAYLAND = "1";
+    MOZ_ENABLE_WAYLAND = "1";
 
     BROWSER = "firefox";
     TERMINAL = "kitty";
