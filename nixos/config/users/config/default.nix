@@ -85,9 +85,10 @@
         ".config/wayfire.ini".source = ../../dotfiles/wayfire.ini;
         ".vimrc".source = ../../dotfiles/.vimrc;
         # ".config/kitty/kitty.conf".source = ../../dotfiles/kitty.conf;
-        ".bashrc".text = ''
-          exec ${config.home-manager.users.gean.programs.fish.package}/bin/fish
-        '';
+        # ".bashrc".text = ''
+        #   . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+        #   exec ${config.home-manager.users.gean.programs.fish.package}/bin/fish
+        # '';
       };
 
       programs.fish = {
