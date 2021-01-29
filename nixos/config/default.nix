@@ -56,6 +56,7 @@ in
     # wayland
     # clipman
     # wofi
+    elogind
     wayland
     wayfire
     # waybar
