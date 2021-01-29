@@ -35,8 +35,9 @@ in
   };
 
   # Enable wayland
-  # services.xserver.displayManager.gdm.nvidiaWayland = true;
   services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.wayland = true;
+  # services.xserver.displayManager.gdm.nvidiaWayland = true;
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
