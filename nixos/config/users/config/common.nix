@@ -56,7 +56,7 @@
   # Add config files to home folder
   home.file = {
     ".vimrc".source = ../../dotfiles/.vimrc;
-    ".config/rofi/config.rasi".source = ../../dotfiles/rofi.rasi;
+    # ".config/rofi/config.rasi".source = ../../dotfiles/rofi.rasi;
     # ".config/kitty/kitty.conf".source = ../../dotfiles/kitty.conf;
     ".bashrc".text = ''
       exec ${config.programs.fish.package}/bin/fish
