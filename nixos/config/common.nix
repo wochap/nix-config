@@ -28,9 +28,9 @@ in
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
-    # font = "Lat2-Terminus16";
+    font = "Lat2-Terminus16";
     earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
-    font = "ter-v32n";
+    # font = "ter-v32n";
     keyMap = "us";
   };
 
