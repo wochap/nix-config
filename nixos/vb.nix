@@ -16,10 +16,12 @@ in
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  # Set hostname.
-  networking = {
-    inherit hostName;
-  };
+  config = {
+    # Set hostname.
+    networking = {
+      inherit hostName;
+    };
+  }
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
