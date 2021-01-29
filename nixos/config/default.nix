@@ -12,6 +12,8 @@ in
   imports = [
     # Install home-manager
     (import "${home-manager}/nixos")
+
+    ./users/gean.nix
   ];
 
   config = {
@@ -121,8 +123,6 @@ in
         "networkmanager"
       ];
     };
-    # Setup users config
-    home-manager.users.gean = import ./users/gean.nix;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
