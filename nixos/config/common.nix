@@ -36,7 +36,7 @@ in
 
   # Enable wayland
   # services.xserver.displayManager.gdm.nvidiaWayland = true;
-  # services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
@@ -53,12 +53,12 @@ in
     zip
 
     # wayland
-    # clipman
-    # wofi
-    # wayfire
-    # waybar
-    # mako
-    # swaylock
+    clipman
+    wofi
+    wayfire
+    waybar
+    mako
+    swaylock
 
     lxappearance
     gtk-engine-murrine
