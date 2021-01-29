@@ -55,6 +55,7 @@
 
   # Add config files to home folder
   home.file = {
+    ".config/wayfire.ini".source = ../../dotfiles/wayfire.ini;
     ".vimrc".source = ../../dotfiles/.vimrc;
     # ".config/kitty/kitty.conf".source = ../../dotfiles/kitty.conf;
     ".bashrc".text = ''
