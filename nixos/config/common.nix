@@ -56,6 +56,7 @@ in
     # wayland
     # clipman
     # wofi
+    wayland
     wayfire
     # waybar
     # mako
