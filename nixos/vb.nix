@@ -31,4 +31,9 @@ in
 
   # Enable sound.
   sound.enable = true;
+
+  hardware.opengl.enable = true;
+  services.xserver.videoDrivers = [
+    "nouveau"
+  ];
 }
