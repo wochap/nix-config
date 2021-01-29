@@ -60,13 +60,13 @@ in
     # mako
     # swaylock
 
-    # lxappearance
-    # gtk-engine-murrine
-    # gtk_engines
-    # gsettings-desktop-schemas
-    # arc-theme
-    # pantheon.elementary-icon-theme
-    # capitaine-cursors
+    lxappearance
+    gtk-engine-murrine
+    gtk_engines
+    gsettings-desktop-schemas
+    arc-theme
+    pantheon.elementary-icon-theme
+    capitaine-cursors
   ];
 
   # Setup global fonts
