@@ -71,7 +71,7 @@
 
           BROWSER = "firefox";
           TERMINAL = "kitty";
-          MY_TEST = config.networking.hostName || "NANI";
+          MY_TEST = "${config.networking.hostName} NANI";
         }
         (lib.mkIf (config.networking.hostName == "vb") {
           # Fix wayfire blackscreen
