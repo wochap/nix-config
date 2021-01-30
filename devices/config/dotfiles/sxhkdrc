@@ -47,7 +47,8 @@ super + {_,shift + }n
 	bspc node -f {next,prev}.local
 
 # focus the next/previous desktop in the current monitor
-super + bracket{left,right}
+# super + bracket{left,right}
+super + {Left,Right}
 	bspc desktop -f {prev,next}.local
 
 # focus the last node/desktop
@@ -64,6 +65,10 @@ super + {o,i}
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} focused:'^{1-9,10}'
 
+# send and follow to given desktop
+super + ctrl + shift + {1-9}
+    id=$(bspc query -N -n); bspc node -d ^{1-9}; bspc node -f ${id}
+
 
 # MOVE/RESIZE
 
@@ -76,8 +81,8 @@ ctrl + alt + shift + {h,j,k,l}
 	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
 # move a floating window
-super + {Left,Down,Up,Right}
-	bspc node -v {-20 0,0 20,0 -20,20 0}
+# super + {Left,Down,Up,Right}
+# 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
 
 # APPLICATION KEYBINDINGS (Super + Alt + Key)
@@ -91,8 +96,20 @@ super + Return
   kitty
 
 # open app launcher
-super + @space
+# NOTE `@` means until key is released
+super + space
   rofi -show run
+
+# super + shift + 4
+#   scrot -u -z '%Y-%m-%d_%H:%M:%S_$wx$h$n.png' -e 'mv $f ~/Desktop'
+super + shift + s
+  scrot -z '%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'mv $f ~/Desktop'
+
+XF86MonBrightness{Down,Up}
+  light {-U 10,-A 10}
+
+#XF86Audio{Mute,LowerVolume,RaiseVolume}
+  amixer set Master {toggle,5%-,5%+}
 
 # Show clipmenu
 alt + v

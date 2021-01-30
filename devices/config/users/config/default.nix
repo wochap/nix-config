@@ -44,11 +44,11 @@
 
         # Apps
         firefox
+        brave
         google-chrome
         nix-prefetch-git
         mpv # video player
         slack
-        pulsemixer
       ];
 
       # Environment variables to always set at login.

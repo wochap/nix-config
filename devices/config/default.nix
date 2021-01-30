@@ -40,20 +40,24 @@ in
 
     # List packages installed in system profile.
     environment.systemPackages = with pkgs; [
-      vim
       git
-      kitty
-      killall
       gnumake # make
+      gotop
+      htop
+      inxi # check compositor running
+      killall
+      kitty
+      pamixer # control audio
+      pywal
+      screenfetch
+      unzip
+      vim
+      wget
       xfce.thunar # file manager
       xfce.thunar-archive-plugin
       xfce.thunar-volman
-      screenfetch
-      unzip
+      xorg.xdpyinfo
       zip
-      htop
-      gotop
-      wget
 
       # Theme
       lxappearance
