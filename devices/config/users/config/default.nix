@@ -28,6 +28,7 @@
         # DE apps
         pywal # theme color generator
         volumeicon
+        alttab
 
         # Dev tools
         gitAndTools.gh
