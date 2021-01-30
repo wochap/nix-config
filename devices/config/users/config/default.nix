@@ -58,9 +58,9 @@
 
       # Add config files to home folder
       home.file = {
-        ".config/kitty/kitty.conf".source = ../dotfiles/kitty.conf;
-        ".vimrc".source = ../dotfiles/.vimrc;
-        ".config/rofi/config.rasi".source = ../dotfiles/rofi.rasi;
+        ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
+        ".vimrc".source = ./dotfiles/.vimrc;
+        ".config/rofi/config.rasi".source = ./dotfiles/rofi.rasi;
         ".config/nixpkgs/config.nix".text = ''
           { allowUnfree = true; }
         '';
