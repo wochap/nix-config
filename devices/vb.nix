@@ -35,10 +35,16 @@ in
       opengl.enable = true;
     };
 
-    services.xserver.videoDrivers = [
-      "nv"
-      "nvidia"
-      "nouveau"
-    ];
+    services.xserver = {
+      videoDrivers = [
+        "nv"
+        "nvidia"
+        "nouveau"
+      ];
+
+      # Configure keymap in X11
+      layout = "us";
+      xkbOptions = "eurosign:e";
+    };
   };
 }

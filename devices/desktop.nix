@@ -19,7 +19,7 @@ in
 
     networking = {
       hostName = hostName;
-      
+
       # Enables wireless support via wpa_supplicant.
       wireless.enable = true;
 
@@ -29,7 +29,7 @@ in
       useDHCP = false;
       interfaces.enp0s3.useDHCP = true;
     };
-    
+
     sound.enable = true;
 
     hardware = {
@@ -38,10 +38,16 @@ in
       # video.hidpi.enable = true;
     };
 
-    services.xserver.videoDrivers = [
-      "nv"
-      "nvidia"  
-      "nouveau"
-    ];
+    services.xserver = {
+      videoDrivers = [
+        "nv"
+        "nvidia"
+        "nouveau"
+      ];
+
+      # Configure keymap in X11
+      layout = "us";
+      xkbOptions = "eurosign:e";
+    };
   };
 }
