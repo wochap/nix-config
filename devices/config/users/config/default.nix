@@ -3,6 +3,7 @@
 {
   imports = [
     ./git.nix
+    ./polybar.nix
   ];
 
   config = {
