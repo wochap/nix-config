@@ -124,6 +124,10 @@ in
           source = ./dotfiles/sxhkdrc;
           mode = "0755";
         };
+        sxhkd-help = {
+          source = ./dotfiles/sxhkd-help.sh;
+          mode = "0755";
+        };
       };
     };
     services.xserver = {

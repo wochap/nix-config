@@ -31,7 +31,8 @@
         volumeicon
         alttab
         nitrogen # wallpaper manager
-        copyq # clipboard manager
+        # copyq # clipboard manager
+        clipmenu
 
         # Dev tools
         gitAndTools.gh

@@ -93,3 +93,17 @@ super + Return
 # open app launcher
 super + @space
   rofi -show run
+
+# Show clipmenu
+alt + v
+  CM_LAUNCHER=rofi clipmenu \
+    -location 1 \
+    -m -3 \
+    -no-show-icons \
+    -theme-str '* \{ font: 10px; \}' \
+    -theme-str 'listview \{ spacing: 0; \}' \
+    -theme-str 'window \{ width: 20em; \}'
+
+# Show help
+super + slash
+  /etc/sxhkd-help.sh
