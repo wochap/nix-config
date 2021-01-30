@@ -112,5 +112,34 @@ in
         "networkmanager"
       ];
     };
+
+    # Setup DE bspwm and sxhkdrc
+    environment = {
+      etc = {
+        bspwmrc = {
+          source = ./dotfiles/bspwmrc;
+          mode = "0755";
+        };
+        sxhkdrc = {
+          source = ./dotfiles/sxhkdrc;
+          mode = "0755";
+        };
+      };
+    };
+    services.xserver = {
+      enable = true;
+      windowManager.bspwm = {
+        enable = true;
+        configFile = "/etc/bspwmrc";
+        sxhkd.configFile = "/etc/sxhkdrc";
+      };
+      displayManager = {
+        defaultSession = "none+bspwm";
+      };
+    };
+    services.picom = {
+      enable = true;
+      vSync = true;
+    };
   };
 }
