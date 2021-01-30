@@ -7,54 +7,57 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
 
 ## Setup NixOS
 
-1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation)
-1. Clone into `~/dev/nix-config`
+1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
+
+    **NOTE:** Run `nixos-install` without sudo
+
+1. Clone into `~/nix-config`
     ```
-    $ git clone https://github.com/wochap/nix-config.git ~/dev/nix-config
+    $ git clone https://github.com/wochap/nix-config.git ~/nix-config
     ```
-1. Rebuild nixos with the machine's specific config, for example, heres's a rebuild for `vb` and `mbp`
+1. Rebuild nixos with the machine's specific config, for example, heres's a rebuild for `vb` and `desktop`
     ```
-    $ NIXOS_CONFIG=/root/nix-config/nixos/devices/vb.nix nixos-rebuild switch
+    $ NIXOS_CONFIG=~/nix-config/devices/vb.nix nixos-rebuild switch
+
     # or
-    $ NIX_PATH=$NIX_PATH:nixos-config=/home/<user_name>/dev/nix-config/nixos/devices/mbp.nix sudo nixos-rebuild switch -I nixos-config=/home/<user_name>/dev/nix-config/nixos/devices/mbp.nix
+
+    $ NIXOS_CONFIG=/root/nix-config/devices/desktop.nix nixos-rebuild switch
     ```
-    Source: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
+    Addional notes: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
 1. Set password for new user `gean`
     ```
     $ passwd gean
+    ```
+1. Setup wallpaper
+    ```
+    $ wal -i <path_to_wallpaper>
     ```
 1. Setup `bspwm` worspaces (optional)
     ```
     # Show available monitors
     $ xrandr
-    # Modify bspwm config in dotfiles folder and rebuild
-    ```
-1. Setup wallpaper (optional)
-    ```
-    $ wal -i <path_to_wallpaper>
+    # Modify bspwm config in `nix-config`
     ```
 
 ## Keybindings (defined by sxhkd)
 
 The keybindings for bspwm are controlled by another program called sxhkd.
 
-The MODKEY is set to the Super key (aka the Windows key).
-
 | Keybinding | Action |
 | :--- | :--- |
-| `ALT + Space` | opens run launcher (rofi) |
-| `MODKEY + Enter` | opens terminal (kitty) |
-| `MODKEY + SHIFT + c` | closes window with focus |
-| `MODKEY + Esc` | quits bspwm |
-| `MODKEY + j` | switches focus between windows in the stack, going down |
-| `MODKEY + k` | switches focus between windows in the stack, going up |
-| `MODKEY + SHIFT + j` | rotates the windows in the stack, going down|
-| `MODKEY + SHIFT + k` | rotates the windows in the stack, going up |
-| `MODKEY + t` | set window state to tiled |
-| `MODKEY + s` | set window state to pseudo-tiled |
-| `MODKEY + f` | set window state to floating |
-| `MODKEY + 1-9` | switch focus to workspace (1-9) |
-| `MODKEY + SHIFT + 1-9` | sends focused window to workspace (1-9) |
+| <kbd>Alt</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
+| <kbd>Super</kbd> + <kbd>Enter</kbd> | Opens terminal (kitty) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>c</kbd> | Closes window with focus |
+| <kbd>Super</kbd> + <kbd>Esc</kbd> | Quits bspwm |
+| <kbd>Super</kbd> + <kbd>j</kbd> | Switches focus between windows in the stack, going down |
+| <kbd>Super</kbd> + <kbd>k</kbd> | Switches focus between windows in the stack, going up |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>j</kbd> | Rotates the windows in the stack, going down|
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd> | Rotates the windows in the stack, going up |
+| <kbd>Super</kbd> + <kbd>t</kbd> | Set window state to tiled |
+| <kbd>Super</kbd> + <kbd>s</kbd> | Set window state to pseudo-tiled |
+| <kbd>Super</kbd> + <kbd>f</kbd> | Set window state to floating |
+| <kbd>Super</kbd> + <kbd>1-9</kbd> | Switch focus to workspace (1-9) |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>1-9</kbd> | Sends focused window to workspace (1-9) |
 
 ## Resources
 
@@ -65,9 +68,5 @@ The MODKEY is set to the Super key (aka the Windows key).
 
 ## TODO
 
-* Setup ssh github
-* Setup vscode + plugins
-* Setup firefox + profile
+* Setup SSH github
 * Setup theme for rofi, polybar, bspwm
-* Setup sxhkd
-* Setup web development (docker)    
