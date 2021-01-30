@@ -29,6 +29,8 @@
         pywal # theme color generator
         volumeicon
         alttab
+        nitrogen # wallpaper manager
+        copyq # clipboard manager
 
         # Dev tools
         gitAndTools.gh
@@ -57,6 +59,10 @@
       home.file = {
         ".config/kitty/kitty.conf".source = ../dotfiles/kitty.conf;
         ".vimrc".source = ../dotfiles/.vimrc;
+        ".config/rofi/config.rasi".source = ../dotfiles/rofi.rasi;
+        ".config/nixpkgs/config.nix".text = ''
+          { allowUnfree = true; }
+        '';
       };
 
       programs.fish = {
