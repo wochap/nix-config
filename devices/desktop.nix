@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  hostName = "nixos";
+  hostName = "gdesktop";
 in
 {
   imports = [
