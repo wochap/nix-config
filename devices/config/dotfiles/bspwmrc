@@ -2,7 +2,7 @@
 
 #### AUTOSTART ####
 wal -R &
-alttab &
+alttab -w 1 &
 
 #### BSPWM coloring ####
 # source the colors.
