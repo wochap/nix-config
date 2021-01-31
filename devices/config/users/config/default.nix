@@ -27,7 +27,6 @@
       # User packages
       home.packages = with pkgs; [
         # DE apps
-        volumeicon
         nitrogen # wallpaper manager
         # copyq # clipboard manager
         clipmenu
