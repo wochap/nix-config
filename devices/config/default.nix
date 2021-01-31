@@ -156,8 +156,8 @@ in
 
     networking.networkmanager.enable = true;
     programs.nm-applet.enable = true;
-    networking.networkmanager.unmanaged = [
-      "*" "except:type:wwan" "except:type:gsm"
-    ];
+    # networking.networkmanager.unmanaged = [
+    #   "*" "except:type:wwan" "except:type:gsm"
+    # ];
   };
 }
