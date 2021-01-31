@@ -62,6 +62,8 @@ in
       pywal # theme color generator
       alttab
       kitty
+      blueberry
+      blueman
 
       # Theme
       lxappearance
@@ -161,5 +163,8 @@ in
       networkmanager.enable = true;
     };
     programs.nm-applet.enable = true;
+
+    # Enable bluetooth tray
+    hardware.bluetooth.enable = true;
   };
 }
