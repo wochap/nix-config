@@ -54,6 +54,7 @@ in
       unzip
       vim
       wget
+      xarchiver
       xfce.thunar # file manager
       xfce.thunar-archive-plugin
       xfce.thunar-volman
