@@ -46,10 +46,10 @@ in
     services.xserver = {
       libinput.enable = true;
 
-      videoDrivers = [
-        "nouveau"
-        "nvidia"
-      ];
+      # videoDrivers = [
+      #   "nouveau"
+      #   "nvidia"
+      # ];
 
       # Configure keymap in X11
       layout = "us";
