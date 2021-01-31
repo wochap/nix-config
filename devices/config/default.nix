@@ -27,6 +27,9 @@ in
     boot.plymouth = {
       enable = true;
     };
+    boot.extraModprobeConfig = ''
+      options hid_apple fnmode=2
+    '';
 
     # Allows proprietary or unfree package
     nixpkgs.config.allowUnfree = true;
@@ -167,8 +170,8 @@ in
       };
       displayManager = {
         defaultSession = "none+bspwm";
-        lightdm.greeters.pantheon.enable = true;
-        lightdm.enable = true;
+        # lightdm.greeters.pantheon.enable = true;
+        # lightdm.enable = true;
       };
     };
     services.picom = {
