@@ -28,7 +28,7 @@ in
       enable = true;
     };
     boot.extraModprobeConfig = ''
-      options hid_apple fnmode=2
+      options hid_apple fnmode=0
     '';
     boot.kernelModules = [ "hid-apple" ];
 
@@ -65,6 +65,7 @@ in
       xfce.gvfs
       xorg.xdpyinfo
       zip
+      evtest
 
       # DE
       gvfs
