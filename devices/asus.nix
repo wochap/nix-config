@@ -47,9 +47,8 @@ in
       libinput.enable = true;
 
       videoDrivers = [
-        "nv"
-        "nvidia"
         "nouveau"
+        "nvidia"
       ];
 
       # Configure keymap in X11
