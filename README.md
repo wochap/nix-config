@@ -79,6 +79,14 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 $ inxi -Gxx | grep compositor
 ```
 
+* Setup ssh
+
+```
+$ eval $(ssh-agent)
+$ ssh-add ~/.ssh/id_rsa
+$ ssh-add -K
+```
+
 ## TODO
 
 * Setup SSH github
