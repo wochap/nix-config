@@ -58,6 +58,7 @@ in
       zip
 
       # DE
+      gvfs
       pywal # theme color generator
       alttab
       kitty
@@ -68,6 +69,7 @@ in
       nomacs # image viewer/editor
 
       # Theme
+      gnome3.gnome-tweaks
       qt5ct
       lxappearance
       gtk-engine-murrine
@@ -131,6 +133,7 @@ in
     environment = {
       sessionVariables = {
         QT_QPA_PLATFORMTHEME = "qt5ct";
+        ELECTRON_TRASH="gvfs";
       };
       etc = {
         bspwmrc = {
