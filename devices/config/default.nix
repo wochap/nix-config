@@ -152,5 +152,11 @@ in
       enable = true;
       vSync = true;
     };
+    
+    networking.networkmanager.enable = true;
+    programs.nm-applet.enable = true;
+    networking.networkmanager.unmanaged = [
+      "*" "except:type:wwan" "except:type:gsm"
+    ];
   };
 }
