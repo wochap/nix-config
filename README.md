@@ -9,29 +9,34 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
-    **NOTE:** Run `nixos-install` without sudo
-
-1. Clone into `~/nix-config`
+    **NOTE:** Run `sudo nixos-install` without root user (sudo su)
+1. Reboot and connect to wifi/eth
+    ```
+    $ vim /etc/resolv.conf
+    # add `nameserver 8.8.8.8` to `/etc/resolv.conf`
+    ```
+    Source: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
+    ```
+    $ wpa_passphrase '<SSID>' '<passphrase>' | tee /etc/wpa_supplicant.conf
+    $ wpa_supplicant -c /etc/wpa_supplicant.conf -i <interface> -B
+    ```
+1. Login with root user and clone into `~/nix-config`
     ```
     $ git clone https://github.com/wochap/nix-config.git ~/nix-config
     ```
-1. Rebuild nixos with the machine's specific config, for example, heres's a rebuild for `vb` and `desktop`
+1. Rebuild nixos with the machine's specific config, for example, heres's a rebuild for `vb`
     ```
     $ NIXOS_CONFIG=~/nix-config/devices/vb.nix nixos-rebuild switch
-
-    # or
-
-    $ NIXOS_CONFIG=/root/nix-config/devices/desktop.nix nixos-rebuild switch
     ```
     Addional notes: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
 1. Set password for new user `gean`
     ```
     $ passwd gean
     ```
-1. Setup wallpaper
+1. Setup wallpaper (required)
     ```
+    $ git clone https://github.com/elementary/wallpapers.git
     $ wal -i <path_to_wallpaper>
-    ```
 1. Setup `bspwm` worspaces (optional)
     ```
     # Show available monitors
@@ -65,6 +70,14 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 * https://nixos.wiki/wiki/Home_Manager
 * https://superuser.com/questions/603528/how-to-get-the-current-monitor-resolution-or-monitor-name-lvds-vga1-etc
 * https://gitlab.com/dwt1/dotfiles
+
+## Troubleshooting
+
+* Check if picom is running
+
+```
+$ inxi -Gxx | grep compositor
+```
 
 ## TODO
 
