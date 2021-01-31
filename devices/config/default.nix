@@ -68,6 +68,7 @@ in
       nomacs # image viewer/editor
 
       # Theme
+      qt5ct
       lxappearance
       gtk-engine-murrine
       gtk_engines
