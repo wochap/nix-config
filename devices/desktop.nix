@@ -45,7 +45,8 @@ in
       ];
 
       screenSection = ''
-        Option "MetaModes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+        Option "metamodes" "1920x1080_144 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
+        # Option "MetaModes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
         Option "AllowIndirectGLXProtocol" "off"
         Option "TripleBuffer" "on"
       '';
