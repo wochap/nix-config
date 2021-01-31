@@ -3,6 +3,7 @@
 #### AUTOSTART ####
 wal -R &
 alttab -w 1 &
+volumeicon &
 
 #### BSPWM coloring ####
 # source the colors.

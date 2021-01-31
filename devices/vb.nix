@@ -28,10 +28,7 @@ in
       interfaces.enp0s3.useDHCP = true;
     };
 
-    sound.enable = true;
-
     hardware = {
-      pulseaudio.enable = true;
       opengl.enable = true;
     };
 

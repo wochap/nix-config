@@ -46,7 +46,6 @@ in
       htop
       inxi # check compositor running
       killall
-      pamixer # control audio
       screenfetch
       unzip
       vim
@@ -63,6 +62,9 @@ in
       alttab
       kitty
       blueberry
+      paprefs
+      pavucontrol
+      pamixer # control audio
 
       # Theme
       lxappearance
@@ -165,5 +167,9 @@ in
 
     # Enable bluetooth tray
     hardware.bluetooth.enable = true;
+
+    # Enable audio
+    sound.enable = true;
+    hardware.pulseaudio.enable = true;
   };
 }

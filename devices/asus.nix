@@ -32,10 +32,7 @@ in
       interfaces.wlp3s0.useDHCP = true;
     };
 
-    sound.enable = true;
-
     hardware = {
-      pulseaudio.enable = true;
       opengl.enable = true;
       # video.hidpi.enable = true;
     };

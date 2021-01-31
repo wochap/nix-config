@@ -29,10 +29,7 @@ in
       interfaces.wlp39s0.useDHCP = true;
     };
 
-    sound.enable = true;
-
     hardware = {
-      pulseaudio.enable = true;
       opengl.enable = true;
       opengl.driSupport32Bit = false;
       # video.hidpi.enable = true;
@@ -46,7 +43,6 @@ in
 
       screenSection = ''
         Option "metamodes" "1920x1080_144 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
-        # Option "MetaModes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
         Option "AllowIndirectGLXProtocol" "off"
         Option "TripleBuffer" "on"
       '';
