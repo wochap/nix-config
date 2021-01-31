@@ -58,6 +58,9 @@
 
       # Add config files to home folder
       home.file = {
+        ".cache/wal/colors-kitty.conf".source = ./dotfiles/pywal/colors-kitty.conf;
+        ".cache/wal/colors-rofi-dark".source = ./dotfiles/pywal/colors-rofi-dark;
+        ".cache/wal/colors.sh".source = ./dotfiles/pywal/colors.sh;
         ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
         ".vimrc".source = ./dotfiles/.vimrc;
         ".config/rofi/config.rasi".source = ./dotfiles/rofi.rasi;
