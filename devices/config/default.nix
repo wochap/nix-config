@@ -63,7 +63,6 @@ in
       alttab
       kitty
       blueberry
-      blueman
 
       # Theme
       lxappearance
