@@ -27,7 +27,8 @@ in
       # Per-interface useDHCP will be mandatory in the future, so this generated config
       # replicates the default behaviour.
       useDHCP = false;
-      interfaces.enp0s3.useDHCP = true;
+      interfaces.enp40s0.useDHCP = true;
+      interfaces.wlp39s0.useDHCP = true;
     };
 
     sound.enable = true;
