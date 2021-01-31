@@ -24,6 +24,10 @@ in
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "20.09"; # Did you read the comment?
 
+    boot.plymouth = {
+      enable = true;
+    };
+
     # Allows proprietary or unfree package
     nixpkgs.config.allowUnfree = true;
 
