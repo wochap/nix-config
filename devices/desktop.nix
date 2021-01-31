@@ -37,6 +37,7 @@ in
     hardware = {
       pulseaudio.enable = true;
       opengl.enable = true;
+      opengl.driSupport32Bit = true;
       # video.hidpi.enable = true;
     };
 
