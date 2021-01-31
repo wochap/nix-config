@@ -30,6 +30,7 @@ in
     boot.extraModprobeConfig = ''
       options hid_apple fnmode=2
     '';
+    boot.kernelModules = [ "hid-apple" ];
 
     # Allows proprietary or unfree package
     nixpkgs.config.allowUnfree = true;
