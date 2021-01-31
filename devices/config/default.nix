@@ -55,7 +55,7 @@ in
       xfce.thunar-archive-plugin
       xfce.thunar-volman
       xfce.gvfs
-      gvfs
+      # gvfs
       xorg.xdpyinfo
       zip
 
@@ -156,10 +156,11 @@ in
     };
     services.gvfs.enable = true;
 
-    networking.networkmanager.enable = true;
+    # Enable wifi tray
+    networking = {
+      wireless.enable = false;
+      networkmanager.enable = true;
+    };
     programs.nm-applet.enable = true;
-    # networking.networkmanager.unmanaged = [
-    #   "*" "except:type:wwan" "except:type:gsm"
-    # ];
   };
 }
