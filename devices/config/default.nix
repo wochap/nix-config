@@ -65,6 +65,7 @@ in
       pavucontrol # audio gui
       pamixer # control audio
       volumeicon # audio tray + gui
+      nomacs # image viewer/editor
 
       # Theme
       lxappearance
