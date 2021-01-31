@@ -60,9 +60,9 @@
         ".config/polybar/main.ini".source = ./dotfiles/polybar/main.ini;
         ".config/polybar/example.ini".source = ./dotfiles/polybar/example.ini;
         ".config/Thunar/thunarrc".source = ./dotfiles/thunarrc;
-        ".cache/wal/colors-kitty.conf".source = ./dotfiles/pywal/colors-kitty.conf;
-        ".cache/wal/colors-rofi-dark.rasi".source = ./dotfiles/pywal/colors-rofi-dark;
-        ".cache/wal/colors.sh".source = ./dotfiles/pywal/colors.sh;
+        # ".cache/wal/colors-kitty.conf".source = ./dotfiles/pywal/colors-kitty.conf;
+        # ".cache/wal/colors-rofi-dark.rasi".source = ./dotfiles/pywal/colors-rofi-dark;
+        # ".cache/wal/colors.sh".source = ./dotfiles/pywal/colors.sh;
         ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
         ".vimrc".source = ./dotfiles/.vimrc;
         ".config/rofi/config.rasi".source = ./dotfiles/rofi.rasi;
