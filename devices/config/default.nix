@@ -129,6 +129,9 @@ in
 
     # Setup DE bspwm and sxhkdrc
     environment = {
+      sessionVariables = {
+        QT_QPA_PLATFORMTHEME = "qt5ct";
+      };
       etc = {
         bspwmrc = {
           source = ./dotfiles/bspwmrc;
