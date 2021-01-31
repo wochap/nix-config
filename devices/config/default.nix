@@ -167,6 +167,8 @@ in
       };
       displayManager = {
         defaultSession = "none+bspwm";
+        lightdm.greeters.pantheon.enable = true;
+        lightdm.enable = true;
       };
     };
     services.picom = {
