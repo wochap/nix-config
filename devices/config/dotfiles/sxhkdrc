@@ -123,4 +123,4 @@ alt + v
 
 # Show help
 super + slash
-  /etc/sxhkd-help.sh
+  /etc/sxhkd-help
