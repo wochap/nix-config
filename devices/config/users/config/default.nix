@@ -57,6 +57,7 @@
 
       # Add config files to home folder
       home.file = {
+        ".config/Thunar/thunarrc".source = ./dotfiles/thunarrc;
         ".cache/wal/colors-kitty.conf".source = ./dotfiles/pywal/colors-kitty.conf;
         ".cache/wal/colors-rofi-dark.rasi".source = ./dotfiles/pywal/colors-rofi-dark;
         ".cache/wal/colors.sh".source = ./dotfiles/pywal/colors.sh;
@@ -110,6 +111,8 @@
       services.dunst = {
         enable = true;
       };
+
+      services.flameshot.enable = true;
     };
   };
 }
