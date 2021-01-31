@@ -153,6 +153,7 @@ in
       enable = true;
       vSync = true;
     };
+    services.gvfs.enable = true;
 
     networking.networkmanager.enable = true;
     programs.nm-applet.enable = true;
