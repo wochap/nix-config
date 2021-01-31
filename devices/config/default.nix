@@ -27,9 +27,14 @@ in
     boot.plymouth = {
       enable = true;
     };
+
+    # Fix fn keys
     boot.extraModprobeConfig = ''
       options hid_apple fnmode=0
     '';
+    boot.kernelParams = [
+      "hid_apple.fnmode=0"
+    ];
     boot.kernelModules = [ "hid-apple" ];
 
     # Allows proprietary or unfree package
