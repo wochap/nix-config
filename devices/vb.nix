@@ -37,7 +37,6 @@ in
 
     services.xserver = {
       videoDrivers = [
-        "nv"
         "nvidia"
         "nouveau"
       ];
