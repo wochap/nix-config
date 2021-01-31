@@ -74,6 +74,7 @@ in
       arc-theme
       pantheon.elementary-icon-theme
       capitaine-cursors
+      arc-icon-theme
     ];
 
     fonts = {
