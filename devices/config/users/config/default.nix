@@ -57,7 +57,8 @@
 
       # Add config files to home folder
       home.file = {
-        ".config/polybar".source = ./dotfiles/polybar;
+        ".config/polybar/main.ini".source = ./dotfiles/polybar/main.ini;
+        ".config/polybar/example.ini".source = ./dotfiles/polybar/example.ini;
         ".config/Thunar/thunarrc".source = ./dotfiles/thunarrc;
         ".cache/wal/colors-kitty.conf".source = ./dotfiles/pywal/colors-kitty.conf;
         ".cache/wal/colors-rofi-dark.rasi".source = ./dotfiles/pywal/colors-rofi-dark;
