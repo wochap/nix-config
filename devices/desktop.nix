@@ -46,6 +46,25 @@ in
         Option "AllowIndirectGLXProtocol" "off"
         Option "TripleBuffer" "on"
       '';
+      serverLayout = ''
+        Screen 1 "Screen1" RightOf "Screen0"
+      '';
+      extraConfig = ''
+        Section "Screen"
+          Identifier     "Screen1"
+          Device         "Device1"
+          Monitor        "Monitor1"
+          DefaultDepth    24
+          Option         "Stereo" "0"
+          Option         "metamodes" "HDMI-0: nvidia-auto-select +0+0 {viewportin=2560x1600, viewportout=3456x2160+192+0, AllowGSYNC=Off}"
+          Option         "SLI" "Off"
+          Option         "MultiGPU" "Off"
+          Option         "BaseMosaic" "off"
+          SubSection     "Display"
+            Depth       24
+          EndSubSection
+        EndSection
+      '';
 
       # Configure keymap in X11
       layout = "us";
