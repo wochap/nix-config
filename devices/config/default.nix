@@ -55,7 +55,6 @@ in
       xfce.thunar-archive-plugin
       xfce.thunar-volman
       xfce.gvfs
-      # gvfs
       xorg.xdpyinfo
       zip
 
