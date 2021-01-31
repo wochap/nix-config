@@ -41,6 +41,7 @@
         mysql-workbench
         postman
         vscode
+        rofi # app launcher
 
         # Apps
         firefox
@@ -104,6 +105,10 @@
         enable = true;
         latitude = "-12.051408";
         longitude = "-76.922124";
+      };
+
+      services.dunst = {
+        enable = true;
       };
     };
   };
