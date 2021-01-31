@@ -129,7 +129,7 @@ in
           mode = "0755";
         };
         sxhkd-help = {
-          source = ./dotfiles/sxhkd-help.sh;
+          source = ./scripts/sxhkd-help.sh;
           mode = "0755";
         };
       };
