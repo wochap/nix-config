@@ -54,6 +54,7 @@ in
       xfce.thunar # file manager
       xfce.thunar-archive-plugin
       xfce.thunar-volman
+      xfce.gvfs
       xorg.xdpyinfo
       zip
 
@@ -152,7 +153,7 @@ in
       enable = true;
       vSync = true;
     };
-    
+
     networking.networkmanager.enable = true;
     programs.nm-applet.enable = true;
     networking.networkmanager.unmanaged = [
