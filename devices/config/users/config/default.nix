@@ -27,9 +27,7 @@
       # User packages
       home.packages = with pkgs; [
         # DE apps
-        pywal # theme color generator
         volumeicon
-        alttab
         nitrogen # wallpaper manager
         # copyq # clipboard manager
         clipmenu

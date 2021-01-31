@@ -46,9 +46,7 @@ in
       htop
       inxi # check compositor running
       killall
-      kitty
       pamixer # control audio
-      pywal
       screenfetch
       unzip
       vim
@@ -58,6 +56,11 @@ in
       xfce.thunar-volman
       xorg.xdpyinfo
       zip
+
+      # DE
+      pywal # theme color generator
+      alttab
+      kitty
 
       # Theme
       lxappearance
