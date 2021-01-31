@@ -62,9 +62,9 @@ in
       alttab
       kitty
       blueberry
-      paprefs
       pavucontrol
       pamixer # control audio
+      pasystray
 
       # Theme
       lxappearance
