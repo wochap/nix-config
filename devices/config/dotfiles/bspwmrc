@@ -4,6 +4,7 @@
 wal -R &
 alttab -w 1 &
 volumeicon &
+blueberry-tray &
 
 #### BSPWM coloring ####
 # source the colors.
