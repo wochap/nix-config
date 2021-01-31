@@ -46,7 +46,7 @@ in
         Option "AllowIndirectGLXProtocol" "off"
         Option "TripleBuffer" "on"
       '';
-      serverLayout = ''
+      serverLayoutSection = ''
         Screen 1 "Screen1" RightOf "Screen0"
       '';
       extraConfig = ''
