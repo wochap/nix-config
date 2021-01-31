@@ -46,6 +46,7 @@ in
 
       screenSection = ''
         Option "MetaModes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+        Option "AllowIndirectGLXProtocol" "off"
         Option "TripleBuffer" "on"
       '';
 
