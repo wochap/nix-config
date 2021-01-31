@@ -67,6 +67,7 @@ in
       pamixer # control audio
       volumeicon # audio tray + gui
       nomacs # image viewer/editor
+      networkmanager_dmenu
 
       # Theme
       gnome3.gnome-tweaks
@@ -85,6 +86,7 @@ in
       enableDefaultFonts = true;
       fonts = with pkgs; [
         nerdfonts
+        noto-fonts
         cascadia-code
         corefonts
         fira-code
