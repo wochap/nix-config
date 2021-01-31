@@ -7,6 +7,8 @@ super + Escape
 # Close window with focus
 super + shift + c
 	bspc node -c
+alt + f4
+	bspc node -c
 
 # Alternate between the tiled and monocle layout
 super + m
