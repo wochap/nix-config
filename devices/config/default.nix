@@ -84,6 +84,7 @@ in
     fonts = {
       enableDefaultFonts = true;
       fonts = with pkgs; [
+        nerdfonts
         cascadia-code
         corefonts
         fira-code
