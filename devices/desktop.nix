@@ -44,6 +44,11 @@ in
         "nouveau"
       ];
 
+      screenSection = ''
+        Option "MetaModes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+        Option "TripleBuffer" "on"
+      '';
+
       # Configure keymap in X11
       layout = "us";
       xkbOptions = "eurosign:e";
