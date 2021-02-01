@@ -5,6 +5,7 @@ wal -R &
 alttab -w 1 &
 blueberry-tray &
 volumeicon &
+clipmenud &
 
 #### BSPWM coloring ####
 # source the colors.
