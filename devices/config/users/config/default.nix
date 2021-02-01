@@ -41,6 +41,7 @@
         rofi # app launcher
 
         # Apps
+        obs-studio
         firefox
         brave
         google-chrome
