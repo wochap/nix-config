@@ -112,6 +112,7 @@
 
       services.dunst = {
         enable = true;
+        settings = (import ./dotfiles/dunstrc.nix);
       };
 
       services.flameshot.enable = true;
