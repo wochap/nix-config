@@ -38,7 +38,7 @@ in
     services.xserver = {
       videoDrivers = [
         "nvidia"
-        "nouveau"
+        # "nouveau"
       ];
 
       screenSection = ''
@@ -47,32 +47,22 @@ in
         Option "TripleBuffer" "on"
       '';
       # serverLayoutSection = ''
-      #   Screen 1 "Screen1" RightOf "Screen0"
+      #   Screen 1 "Screen-nvidia[0]" RightOf "Screen-nvidia[1]"
       # '';
       # extraConfig = ''
       #   Section "Monitor"
-      #     # HorizSync source: edid, VertRefresh source: edid
-      #     Identifier     "Monitor1"
-      #     VendorName     "Unknown"
-      #     ModelName      "LG Electronics LG HDR 4K"
-      #     HorizSync       30.0 - 135.0
-      #     VertRefresh     40.0 - 61.0
-      #     Option         "DPMS"
+      #     Identifier     "Monitor[1]"
       #   EndSection
 
       #   Section "Device"
-      #     Identifier     "Device1"
+      #     Identifier     "Device-nvidia[1]"
       #     Driver         "nvidia"
-      #     VendorName     "NVIDIA Corporation"
-      #     BoardName      "GeForce GTX 1650 SUPER"
-      #     BusID          "PCI:43:0:0"
-      #     Screen          1
       #   EndSection
 
       #   Section "Screen"
-      #     Identifier     "Screen1"
-      #     Device         "Device1"
-      #     Monitor        "Monitor1"
+      #     Identifier     "Screen-nvidia[1]"
+      #     Device         "Device-nvidia[1]"
+      #     Monitor        "Monitor[1]"
       #     DefaultDepth    24
       #     Option         "Stereo" "0"
       #     Option         "metamodes" "HDMI-0: nvidia-auto-select +0+0 {viewportin=2560x1600, viewportout=3456x2160+192+0, AllowGSYNC=Off}"
