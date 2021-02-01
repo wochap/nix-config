@@ -1,5 +1,7 @@
 # My NixOS configuration
 
+![](https://i.imgur.com/UDOGx6L.jpg)
+
 Hardware drivers are managed by [NixOS](https://nixos.org/) config files.
 Apps and dotfiles are manager by [home-manager](https://github.com/nix-community/home-manager).
 
@@ -127,6 +129,10 @@ $ eval $(ssh-agent)
 $ ssh-add ~/.ssh/id_rsa
 $ ssh-add -K
 ```
+
+* [Fix firefox right click](https://www.reddit.com/r/i3wm/comments/88k0yt/right_mouse_btn_instantly_clicks_first_option_in/)
+
+  Add padding to menu.
 
 ## TODO
 
