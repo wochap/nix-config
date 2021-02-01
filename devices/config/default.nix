@@ -183,10 +183,20 @@ in
         configFile = "/etc/bspwmrc";
         sxhkd.configFile = "/etc/sxhkdrc";
       };
+      desktopManager.xterm.enable = true;
       displayManager = {
         defaultSession = "none+bspwm";
-        lightdm.enable = true;
-        lightdm.background = ./wallpapers/default.jpeg;
+        lightdm = {
+          enable = true;
+          background = ./wallpapers/default.jpeg;
+          greeters.gtk.enable = true;
+          greeters.gtk.cursorTheme.name = "Capitaine Cursors";
+          greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
+          greeters.gtk.iconTheme.name = "Arc";
+          greeters.gtk.iconTheme.package = pkgs.arc-icon-theme;
+          greeters.gtk.theme.name = "Arc-Dark";
+          greeters.gtk.theme.package = pkgs.arc-theme;
+        };
       };
     };
     services.picom = {
