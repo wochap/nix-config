@@ -55,6 +55,7 @@ in
     environment.systemPackages = with pkgs; [
       git
       gnumake # make
+      nvtop
       gotop
       htop
       inxi # check compositor running
