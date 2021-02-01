@@ -71,6 +71,8 @@ in
       xorg.xdpyinfo
       zip
       evtest
+      arandr # xrandr gui
+      notify-desktop # test notifications
 
       # DE
       gvfs
@@ -83,6 +85,8 @@ in
       volumeicon # audio tray + gui
       nomacs # image viewer/editor
       networkmanager_dmenu
+      pick-colour-picker
+      screenkey
 
       # Theme
       gnome3.gnome-tweaks
@@ -95,6 +99,7 @@ in
       pantheon.elementary-icon-theme
       capitaine-cursors
       arc-icon-theme
+      hicolor-icon-theme
     ];
 
     fonts = {
