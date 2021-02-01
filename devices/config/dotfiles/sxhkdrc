@@ -119,7 +119,6 @@ XF86MonBrightness{Down,Up}
 # Show clipmenu
 alt + v
   CM_LAUNCHER=rofi clipmenu \
-    -location 1 \
     -m -3 \
     -no-show-icons \
     -theme-str '* \{ font: 10px; \}' \
@@ -129,3 +128,7 @@ alt + v
 # Show help
 super + slash
   /etc/sxhkd-help
+
+# Show color picker
+super + alt + c
+  pick-colour-picker
