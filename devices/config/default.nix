@@ -126,6 +126,7 @@ in
         ubuntu_font_family
       ];
       fontconfig = {
+        allowBitmaps = true;
         defaultFonts = {
           serif = [ "Ubuntu" ];
           sansSerif = [ "Ubuntu" ];
