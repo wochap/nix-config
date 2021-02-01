@@ -103,12 +103,8 @@ super + space
   rofi -show run
 
 # Take screenshoot
-super + shift + 3
-  flameshot
-# super + shift + 4
-#   scrot -u -z '%Y-%m-%d_%H:%M:%S_$wx$h$n.png' -e 'mv $f ~/Desktop'
-# super + shift + s
-#   scrot -z '%Y-%m-%d_%H:%M:%S_$wx$h.png' -e 'mv $f ~/Desktop'
+super + alt + s
+  flameshot gui
 
 XF86MonBrightness{Down,Up}
   light {-U 10,-A 10}
@@ -129,6 +125,10 @@ alt + v
 super + slash
   /etc/sxhkd-help
 
-# Show color picker
+# Open color picker
 super + alt + c
   pick-colour-picker
+
+# Open Firefox
+super + alt + b
+  firefox

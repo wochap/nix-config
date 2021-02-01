@@ -101,7 +101,8 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>e</kbd> | Opens file manager (thunar) |
 | <kbd>Super</kbd> + <kbd>Enter</kbd> | Opens terminal (kitty) |
 | <kbd>Super</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>3</kbd> | Takes screenshoot (flameshot) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>s</kbd> | Takes screenshoot (flameshot) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> | Open firefox |
 
 ## Resources
 
