@@ -41,6 +41,7 @@
         rofi # app launcher
 
         # Apps
+        openshot-qt
         obs-studio
         firefox
         brave
