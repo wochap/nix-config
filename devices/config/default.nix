@@ -186,6 +186,7 @@ in
       displayManager = {
         defaultSession = "none+bspwm";
         lightdm.enable = true;
+        lightdm.background = ./wallpapers/default.jpeg;
       };
     };
     services.picom = {
