@@ -196,6 +196,9 @@ in
           greeters.gtk.iconTheme.package = pkgs.arc-icon-theme;
           greeters.gtk.theme.name = "Arc-Dark";
           greeters.gtk.theme.package = pkgs.arc-theme;
+          greeters.gtk.extraConfig = ''
+            greeter-hide-users=false
+          '';
         };
       };
     };
