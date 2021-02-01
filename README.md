@@ -122,6 +122,7 @@ $ inxi -Gxx | grep compositor
 * Setup ssh
 
 ```
+$ sudo chmod 600 ~/.ssh
 $ eval $(ssh-agent)
 $ ssh-add ~/.ssh/id_rsa
 $ ssh-add -K
