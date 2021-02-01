@@ -52,54 +52,68 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Super</kbd> + <kbd>Left Click</kbd> | Move window |
-| <kbd>Super</kbd> + <kbd>Right Click</kbd> | Resize window |
-
 | <kbd>Super</kbd> + <kbd>Esc</kbd> | Quits bspwm |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>c</kbd> | Closes window with focus |
 | <kbd>Super</kbd> + <kbd>m</kbd> | Alternate between the tiled and monocle layout |
-| <kbd>Super</kbd> + <kbd>y</kbd> | Send the newest marked node to the newest preselected node |
 
+Window state and flags
+
+| Keybinding | Action |
+| :--- | :--- |
+| <kbd>Super</kbd> + <kbd>y</kbd> | Send the newest marked node to the newest preselected node |
 | <kbd>Super</kbd> + <kbd>t</kbd> | Set window state to tiled |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>t</kbd> | Set window state to pseudo-tiled |
 | <kbd>Super</kbd> + <kbd>s</kbd> | Set window state to floating |
 | <kbd>Super</kbd> + <kbd>f</kbd> | Set window state to fullscreen |
-
 | <kbd>Super</kbd> + <kbd>m</kbd> | Set window flag to marked |
 | <kbd>Super</kbd> + <kbd>x</kbd> | Set window flag to locked |
 | <kbd>Super</kbd> + <kbd>y</kbd> | Set window flag to sticky |
 | <kbd>Super</kbd> + <kbd>z</kbd> | Set window flag to private |
 
+Focus and swap
+
+| Keybinding | Action |
+| :--- | :--- |
 | <kbd>Super</kbd> + <kbd>j</kbd> | Switches focus between windows in the stack, going down |
 | <kbd>Super</kbd> + <kbd>k</kbd> | Switches focus between windows in the stack, going up |
 | <kbd>Super</kbd> + <kbd>h</kbd> | Switches focus between windows in the stack, going left |
 | <kbd>Super</kbd> + <kbd>l</kbd> | Switches focus between windows in the stack, going right |
-
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>j</kbd> | Rotates the windows in the stack, going down|
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd> | Rotates the windows in the stack, going up |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>h</kbd> | Rotates the windows in the stack, going left |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>l</kbd> | Rotates the windows in the stack, going right |
 
+Workspaces
+
+| Keybinding | Action |
+| :--- | :--- |
 | <kbd>Super</kbd> + <kbd>Left</kbd> | Switches to left workspace |
 | <kbd>Super</kbd> + <kbd>Right</kbd> | Switches to right workspace |
-
 | <kbd>Super</kbd> + <kbd>o</kbd> | Focus older window in the focus history |
 | <kbd>Super</kbd> + <kbd>i</kbd> | Focus newer window in the focus history |
-
 | <kbd>Super</kbd> + <kbd>1-9</kbd> | Switch focus to workspace (1-9) |
 | <kbd>Super</kbd> + <kbd>shift</kbd> + <kbd>1-9</kbd> | Send focused window to workspace (1-9) |
 | <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>shift</kbd> + <kbd>1-9</kbd> | Send window and switch to workspace (1-9) |
 
+Resize windows
+
+| Keybinding | Action |
+| :--- | :--- |
+| <kbd>Super</kbd> + <kbd>Left Click</kbd> | Move window |
+| <kbd>Super</kbd> + <kbd>Right Click</kbd> | Resize window |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>j</kbd> | Expand window, going down |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>k</kbd> | Expand window, going up |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>h</kbd> | Expand window, going left |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>l</kbd> | Expand window, going right |
-
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>j</kbd> | Contract window, going down |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd> | Contract window, going up |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>h</kbd> | Contract window, going left |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>l</kbd> | Contract window, going right |
 
+Apps
+
+| Keybinding | Action |
+| :--- | :--- |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>e</kbd> | Opens file manager (thunar) |
 | <kbd>Super</kbd> + <kbd>Enter</kbd> | Opens terminal (kitty) |
 | <kbd>Super</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
