@@ -136,6 +136,7 @@ in
       };
     };
 
+    nix.autoOptimiseStore = true;
     nix.trustedUsers = [ "@wheel" "root" ];
     security.sudo.wheelNeedsPassword = false;
 
