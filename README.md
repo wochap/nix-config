@@ -50,6 +50,9 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 
 | Keybinding | Action |
 | :--- | :--- |
+| <kbd>Super</kbd> + <kbd>Left Click</kbd> | Move window |
+| <kbd>Super</kbd> + <kbd>Right Click</kbd> | Resize window |
+
 | <kbd>Super</kbd> + <kbd>Esc</kbd> | Quits bspwm |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>c</kbd> | Closes window with focus |
 | <kbd>Super</kbd> + <kbd>m</kbd> | Alternate between the tiled and monocle layout |
