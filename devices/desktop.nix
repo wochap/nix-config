@@ -32,7 +32,7 @@ in
     hardware = {
       opengl.enable = true;
       opengl.driSupport32Bit = false;
-      # video.hidpi.enable = true;
+      video.hidpi.enable = true;
     };
 
     services.xserver = {
