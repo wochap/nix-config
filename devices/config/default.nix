@@ -74,6 +74,8 @@ in
       evtest
       arandr # xrandr gui
       notify-desktop # test notifications
+      dconf
+      xlayoutdisplay
 
       # DE
       gvfs
