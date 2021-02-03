@@ -56,6 +56,7 @@ in
       git
       gnumake # make
       nvtop
+      radeontop
       gotop
       htop
       inxi # check compositor running
