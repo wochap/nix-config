@@ -148,6 +148,10 @@ $ ssh-add -K
 
   Add padding to menu.
 
+* Firefox doesnt load some websites
+
+Enable DNS over HTTPS
+
 ## TODO
 
 * Setup SSH github

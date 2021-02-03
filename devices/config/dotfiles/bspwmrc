@@ -6,6 +6,7 @@ alttab -w 1 &
 blueberry-tray &
 volumeicon &
 clipmenud &
+xsetroot -cursor_name left_ptr & # fix cursor in bspwm desktop
 
 #### BSPWM coloring ####
 # source the colors.

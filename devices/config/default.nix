@@ -76,6 +76,7 @@ in
       notify-desktop # test notifications
       dconf
       xlayoutdisplay
+      bc
 
       # DE
       gvfs
