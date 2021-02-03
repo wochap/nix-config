@@ -88,10 +88,13 @@ in
       pavucontrol # audio gui
       pamixer # audio cli
       volumeicon # audio tray + gui
-      nomacs # image viewer/editor
       networkmanager_dmenu # for rofi
       pick-colour-picker # color picker gui
+
+      # Apps
+      nomacs # image viewer/editor
       screenkey # show key pressed
+      etcher # create booteable usbs
 
       # Theme
       gnome3.gnome-tweaks
@@ -110,7 +113,7 @@ in
     fonts = {
       enableDefaultFonts = true;
       fonts = with pkgs; [
-        nerdfonts
+        # nerdfonts
         noto-fonts
         cascadia-code
         corefonts
