@@ -115,6 +115,7 @@ in
       enableDefaultFonts = true;
       fonts = with pkgs; [
         # nerdfonts # requires nvidia?
+        slock
         noto-fonts
         cascadia-code
         corefonts
@@ -150,7 +151,10 @@ in
 
     nix.autoOptimiseStore = true;
     nix.trustedUsers = [ "@wheel" "root" ];
-    security.sudo.wheelNeedsPassword = false;
+    security.sudo = {
+      enable = true;
+      wheelNeedsPassword = false;
+    };
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.extraUsers.gean = {
