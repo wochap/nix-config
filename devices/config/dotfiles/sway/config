@@ -1,7 +1,3 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
 # Read `man 5 sway` for a complete reference.
 
 ### Variables
@@ -35,14 +31,28 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec --
 #
 # Example configuration:
 #
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-#          before-sleep 'swaylock -f -c 000000'
+exec swayidle -w \
+         timeout 300 'swaylock -f -c 000000' \
+         timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+         before-sleep 'swaylock -f -c 000000'
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
+exec blueberry-tray
+exec volumeicon
+
+### Configuration
+default_border pixel
+gaps inner 16
+gaps outer 16
+focus_follows_mouse no
+default_border pixel 4
+client.focused #4DD0E1 #285577 #ffffff #2e9ef4 #285577
+# client.focused_inactive #4DD0E1
+# client.placeholder #4DD0E1
+client.unfocused #00000000 #222222 #888888 #292D2E #222222
+client.urgent #DC322F #900000 #ffffff #900000 #900000
 
 ### Input configuration
 #
@@ -145,10 +155,10 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec --
     bindsym $mod+Shift+space floating toggle
 
     # Swap focus between the tiling area and the floating area
-    bindsym $mod+space focus mode_toggle
+    # bindsym $mod+space focus mode_toggle
 
     # Move focus to the parent container
-    bindsym $mod+a focus parent
+    # bindsym $mod+a focus parent
 #
 # Scratchpad:
 #

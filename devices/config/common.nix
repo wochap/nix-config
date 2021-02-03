@@ -79,6 +79,7 @@ in
       xlayoutdisplay # fix dpi
       ffmpeg-full
       bc # calculator cli
+      xorg.xeyes # check if app is running on wayland
 
       # DE
       pywal # theme color generator
