@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  ifXorg = lib.mkIf config.networking.hostName != "gmbp";
+in
 {
   imports = [
     ./git.nix
@@ -28,8 +31,8 @@
       home.packages = with pkgs; [
         # DE apps
         nitrogen # wallpaper manager
-        # copyq # clipboard manager
-        clipmenu
+        clipmenu # clipboard manager
+        rofi # app launcher
 
         # Dev tools
         gitAndTools.gh
@@ -38,9 +41,9 @@
         mysql-workbench
         postman
         vscode
-        rofi # app launcher
 
         # Apps
+        kdeApplications.kdenlive
         openshot-qt
         obs-studio
         firefox
@@ -113,7 +116,7 @@
         longitude = "-76.922124";
       };
 
-      services.dunst = {
+      services.dunst = lib.mkIf ifXorg {
         enable = true;
         settings = (import ./dotfiles/dunstrc.nix);
       };

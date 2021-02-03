@@ -187,6 +187,7 @@ in
     # Enable audio
     sound.enable = true;
     hardware.pulseaudio.enable = true;
+    hardware.pulseaudio.support32Bit = true;
 
     # better timesync for unstable internet connections
     # services.chrony.enable = true;
