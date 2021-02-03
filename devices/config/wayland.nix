@@ -109,5 +109,10 @@
         Restart = "always";
       };
     };
+
+    services.xserver.enable = true;
+    services.xserver.displayManager.defaultSession = "sway";
+    services.xserver.displayManager.sddm.enable = true;
+    services.xserver.libinput.enable = true;
   };
 }
