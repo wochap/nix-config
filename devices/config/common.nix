@@ -115,7 +115,6 @@ in
       enableDefaultFonts = true;
       fonts = with pkgs; [
         # nerdfonts # requires nvidia?
-        slock
         noto-fonts
         cascadia-code
         corefonts
