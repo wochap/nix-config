@@ -184,7 +184,8 @@ mode "resize" {
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-# bar {
+bar {
+    swaybar_command waybar
 #     position top
 #
 #     # When the status_command prints a new line to stdout, swaybar updates.
@@ -196,6 +197,6 @@ mode "resize" {
 #         background #323232
 #         inactive_workspace #32323200 #32323200 #5c5c5c
 #     }
-# }
+}
 
 include @sysconfdir@/sway/config.d/*
