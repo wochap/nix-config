@@ -34,7 +34,16 @@ in
 
     hardware = {
       opengl.enable = true;
-      # video.hidpi.enable = true;
+      opengl.driSupport = true;
+      opengl.driSupport32Bit = true;
+
+      # Dual gpu
+      bumblebee = {
+        enable = false;
+        driver = "nvidia";
+        pmMethod = "none";
+        connectDisplay = true;
+      };
     };
 
     services.xserver = {
