@@ -53,6 +53,7 @@ in
 
     # List packages installed in system profile.
     environment.systemPackages = with pkgs; [
+      pciutils # lspci and others commands
       git
       gnumake # make
       nvtop
@@ -75,23 +76,22 @@ in
       evtest
       arandr # xrandr gui
       notify-desktop # test notifications
-      dconf
-      xlayoutdisplay
-      bc
+      xlayoutdisplay # fix dpi
+      ffmpeg-full
+      bc # calculator cli
 
       # DE
-      gvfs
       pywal # theme color generator
       alttab
-      kitty
-      blueberry
+      kitty # terminal
+      blueberry # bluetooth tray
       pavucontrol # audio gui
-      pamixer # control audio
+      pamixer # audio cli
       volumeicon # audio tray + gui
       nomacs # image viewer/editor
-      networkmanager_dmenu
-      pick-colour-picker
-      screenkey
+      networkmanager_dmenu # for rofi
+      pick-colour-picker # color picker gui
+      screenkey # show key pressed
 
       # Theme
       gnome3.gnome-tweaks
@@ -141,6 +141,9 @@ in
       };
     };
 
+    # links /libexec from derivations to /run/current-system/sw
+    environment.pathsToLink = [ "/libexec" ];
+
     nix.autoOptimiseStore = true;
     nix.trustedUsers = [ "@wheel" "root" ];
     security.sudo.wheelNeedsPassword = false;
@@ -159,58 +162,11 @@ in
       ];
     };
 
-    # Setup DE bspwm and sxhkdrc
-    environment = {
-      sessionVariables = {
-        QT_QPA_PLATFORMTHEME = "qt5ct";
-        ELECTRON_TRASH="gvfs";
-      };
-      etc = {
-        bspwmrc = {
-          source = ./dotfiles/bspwmrc;
-          mode = "0755";
-        };
-        sxhkdrc = {
-          source = ./dotfiles/sxhkdrc;
-          mode = "0755";
-        };
-        sxhkd-help = {
-          source = ./scripts/sxhkd-help.sh;
-          mode = "0755";
-        };
-      };
-    };
-    services.xserver = {
-      enable = true;
-      windowManager.bspwm = {
-        enable = true;
-        configFile = "/etc/bspwmrc";
-        sxhkd.configFile = "/etc/sxhkdrc";
-      };
-      desktopManager.xterm.enable = true;
-      displayManager = {
-        defaultSession = "none+bspwm";
-        lightdm = {
-          enable = true;
-          background = ./wallpapers/default.jpeg;
-          greeters.gtk.enable = true;
-          greeters.gtk.cursorTheme.name = "Capitaine Cursors";
-          greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
-          greeters.gtk.iconTheme.name = "Arc";
-          greeters.gtk.iconTheme.package = pkgs.arc-icon-theme;
-          greeters.gtk.theme.name = "Arc-Dark";
-          greeters.gtk.theme.package = pkgs.arc-theme;
-          greeters.gtk.extraConfig = ''
-            greeter-hide-users=false
-          '';
-        };
-      };
-    };
-    services.picom = {
-      enable = true;
-      vSync = true;
-    };
+    # Required by thunar
     services.gvfs.enable = true;
+
+    # Generate login wallpapers
+    services.fractalart.enable = true;
 
     # Enable wifi tray
     networking = {
@@ -225,8 +181,15 @@ in
     # Enable bluetooth tray
     hardware.bluetooth.enable = true;
 
+    hardware.opengl.enable = true;
+    hardware.opengl.driSupport = true;
+
     # Enable audio
     sound.enable = true;
     hardware.pulseaudio.enable = true;
+
+    # better timesync for unstable internet connections
+    # services.chrony.enable = true;
+    # services.timesyncd.enable = false;
   };
 }

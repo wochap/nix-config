@@ -59,6 +59,7 @@
 
       # Add config files to home folder
       home.file = {
+        ".background-image".source = ../../wallpapers/default.jpeg
         ".config/polybar/main.ini".source = ./dotfiles/polybar/main.ini;
         ".config/polybar/modules.ini".source = ./dotfiles/polybar/modules.ini;
         ".config/Thunar/thunarrc".source = ./dotfiles/thunarrc;
