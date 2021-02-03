@@ -113,7 +113,7 @@ in
     fonts = {
       enableDefaultFonts = true;
       fonts = with pkgs; [
-        # nerdfonts
+        # nerdfonts # requires nvidia?
         noto-fonts
         cascadia-code
         corefonts

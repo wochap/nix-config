@@ -144,6 +144,10 @@ $ ssh-add ~/.ssh/id_rsa
 $ ssh-add -K
 ```
 
+* Macbook Pro wifi
+
+Create wpa conf before rebuild switch.
+
 * [Fix firefox right click](https://www.reddit.com/r/i3wm/comments/88k0yt/right_mouse_btn_instantly_clicks_first_option_in/)
 
   Add padding to menu.
@@ -151,6 +155,14 @@ $ ssh-add -K
 * Firefox doesnt load some websites
 
 Enable DNS over HTTPS
+
+* Change partition flags
+
+```
+$ parted /dev/sda
+$ p
+$ set 3 boot
+```
 
 ## TODO
 
