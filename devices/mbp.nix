@@ -65,15 +65,15 @@ in
   #   # Option "TearFree" "on"
   #   Option "TearFree" "true"
   # '';
-  services.xserver.useGlamor = true;
+  # services.xserver.useGlamor = true;
 
   # Apparently this is currently only supported by ati_unfree drivers, not ati
-  hardware.opengl.driSupport32Bit = false;
+  # hardware.opengl.driSupport32Bit = false;
 
   # Fix font size in retina display
-  hardware.video.hidpi.enable = true;
-  services.xserver.dpi = 192;
-  fonts.fontconfig.dpi = 192;
+  # hardware.video.hidpi.enable = true;
+  # services.xserver.dpi = 192;
+  # fonts.fontconfig.dpi = 192;
 
   # Update display brightness
   programs.light.enable = true;
