@@ -54,17 +54,17 @@ in
   services.xserver.libinput.naturalScrolling = true;
 
   # GPU drivers
-  services.xserver.videoDrivers = [
-    # "ati_unfree"
-    # "ati"
-    "amdgpu"
-    "radeon"
-    "ati"
-  ];
-  services.xserver.deviceSection = ''
-    # Option "TearFree" "on"
-    Option "TearFree" "true"
-  '';
+  # services.xserver.videoDrivers = [
+  #   # "ati_unfree"
+  #   # "ati"
+  #   "amdgpu"
+  #   "radeon"
+  #   "ati"
+  # ];
+  # services.xserver.deviceSection = ''
+  #   # Option "TearFree" "on"
+  #   Option "TearFree" "true"
+  # '';
   services.xserver.useGlamor = true;
 
   # Apparently this is currently only supported by ati_unfree drivers, not ati
