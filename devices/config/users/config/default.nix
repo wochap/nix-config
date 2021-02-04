@@ -76,7 +76,7 @@ in
       xdg.mimeApps.associations.added = {
         "image/png" = [ "org.nomacs.ImageLounge.desktop" ];
         "image/jpeg" = [ "org.nomacs.ImageLounge.desktop" ];
-      }
+      };
 
       # Edit linked files
       xdg.configFile = {
