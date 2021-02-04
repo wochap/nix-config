@@ -178,6 +178,7 @@ $ set 3 boot
 ## To learn
 
 * https://www.secjuice.com/wayland-vs-xorg/
+* https://discourse.nixos.org/t/how-to-set-the-xdg-mime-default/3560
 
 ## Rice resources
 
