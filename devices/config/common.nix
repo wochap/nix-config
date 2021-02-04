@@ -118,6 +118,7 @@ in
       capitaine-cursors
       hicolor-icon-theme
       pantheon.elementary-icon-theme
+      papirus-icon-theme
       qt5ct
 
       gsettings-desktop-schemas

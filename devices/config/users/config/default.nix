@@ -64,6 +64,20 @@ in
         TERMINAL = "kitty";
       };
 
+      xdg.mimeApps.enable = true;
+      xdg.mimeApps.defaultApplications = {
+        "inode/directory" = [ "thunar.desktop" ];
+        "text/html" = [ "firefox.desktop" ];
+        "x-scheme-handler/http" = [ "firefox.desktop" ];
+        "x-scheme-handler/https" = [ "firefox.desktop" ];
+        "x-scheme-handler/about" = [ "firefox.desktop" ];
+        "x-scheme-handler/unknown" = [ "firefox.desktop" ];
+      };
+      xdg.mimeApps.associations.added = {
+        "image/png" = [ "org.nomacs.ImageLounge.desktop" ];
+        "image/jpeg" = [ "org.nomacs.ImageLounge.desktop" ];
+      }
+
       # Edit linked files
       xdg.configFile = {
         # HACK: Load fish theme
