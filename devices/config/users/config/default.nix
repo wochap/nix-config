@@ -72,6 +72,10 @@ in
             source $f
           end
         '';
+
+        "fish/config.fish".text = lib.mkAfter ''
+          set fish_greeting
+        '';
       };
 
       # Add config files to home folder
