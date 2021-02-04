@@ -178,3 +178,7 @@ $ set 3 boot
 ## To learn
 
 * https://www.secjuice.com/wayland-vs-xorg/
+
+## Rice resources
+
+* https://fontawesome.com/cheatsheet

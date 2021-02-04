@@ -91,7 +91,9 @@ in
           DefaultDepth    24
           Option         "Stereo" "0"
           Option         "nvidiaXineramaInfoOrder" "DFP-0"
-          Option         "metamodes" "DP-0: 3840x2160_60 +1920+0 {AllowGSYNCCompatible=On}, DP-2: 1920x1080_144 +0+0 {AllowGSYNCCompatible=On}"
+          # Switch between multiple monitor setup
+          # Option         "metamodes" "DP-0: 3840x2160_60 +1920+0 {AllowGSYNCCompatible=On}, DP-2: 1920x1080_144 +0+0 {AllowGSYNCCompatible=On}"
+          Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {AllowGSYNCCompatible=On}"
           Option         "SLI" "Off"
           Option         "MultiGPU" "Off"
           Option         "BaseMosaic" "off"

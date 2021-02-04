@@ -72,6 +72,8 @@ in
       htop
       inxi # check compositor running
       killall
+      mpd
+      mpd_clientlib # mpd module
       notify-desktop # test notifications
       nvtop
       pciutils # lspci and others commands
@@ -82,6 +84,7 @@ in
       vim
       wget
       xarchiver # required by thunar
+      xclip
       xfce.gvfs
       xfce.thunar # file manager
       xfce.thunar-archive-plugin
