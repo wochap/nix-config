@@ -64,6 +64,16 @@ in
         TERMINAL = "kitty";
       };
 
+      # Edit linked files
+      xdg.configFile = {
+        # HACK: Load fish theme
+        "fish/conf.d/plugin-eclm.fish".text = lib.mkAfter ''
+          for f in $plugin_dir/*.fish
+            source $f
+          end
+        '';
+      };
+
       # Add config files to home folder
       home.file = {
         ".background-image".source = ../../wallpapers/default.jpeg;
@@ -90,7 +100,19 @@ in
               owner = "jethrokuan";
               repo = "z";
               rev = "ddeb28a7b6a1f0ec6dae40c636e5ca4908ad160a";
+              # get sha256 with:
+              # shasum -a 256 fragbuilder-1.0.1.tar.gz
+              # nix-hash --flat --base32 --type sha256 https://github.com/ipatch/theme-neolambda/archive/7dc83a021ac8b3fa3c10f7ebf20156c0da931170.tar.gz
               sha256 = "0c5i7sdrsp0q3vbziqzdyqn4fmp235ax4mn4zslrswvn8g3fvdyh";
+            };
+          }
+          {
+            name = "eclm";
+            src = pkgs.fetchFromGitHub {
+              owner = "oh-my-fish";
+              repo = "theme-eclm";
+              rev = "bd9abe5c5d0490a0b16f2aa303838a2b2cc98844";
+              sha256 = "051wzwn4wr53mq27j1hra7y84y3gyqxgdgg2rwbc5npvbgvdkr09";
             };
           }
         ];

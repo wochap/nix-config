@@ -53,10 +53,10 @@ in
 
     fonts.fontconfig.dpi = dpi;
     services.xserver = {
-      # dpi = dpi;
+      dpi = dpi;
 
       videoDrivers = [
-        "modesetting"
+        # "modesetting"
         # "nvidiaBeta"
         "nvidia"
       ];
@@ -100,8 +100,8 @@ in
           SubSection     "Display"
               Depth       24
           EndSubSection
-          Option         "UseEdidDpi" "FALSE"
-          Option         "DPI" "144 x 144"
+          # Option         "UseEdidDpi" "FALSE"
+          # Option         "DPI" "144 x 144"
         EndSection
       '';
 
