@@ -1,7 +1,0 @@
-configuration {
-  show-icons: true;
-}
-
-@import "~/.cache/wal/colors-rofi-dark"
-
-/* vim:ft=css
