@@ -103,6 +103,7 @@ in
       pavucontrol # audio gui
       pywal # theme color generator cli
       volumeicon # audio tray + gui
+      systemd
 
       # Apps
       etcher # create booteable usbs

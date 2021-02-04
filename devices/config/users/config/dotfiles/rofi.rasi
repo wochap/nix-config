@@ -1,7 +1,10 @@
 configuration {
+  dpi: 0;
+  font: "Hack 14";
+  icon-theme: "Papirus";
   show-icons: true;
 }
 
-@import "~/.cache/wal/colors-rofi-dark"
+/* @import "~/.cache/wal/colors-rofi-dark" */
 
 /* vim:ft=css
