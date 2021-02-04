@@ -200,6 +200,7 @@ in
 
     # Required by thunar
     services.gvfs.enable = true;
+    services.tumbler.enable = true;
 
     # Generate login wallpapers
     services.fractalart.enable = true;
