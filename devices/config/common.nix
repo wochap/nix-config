@@ -55,7 +55,7 @@ in
     environment = {
       sessionVariables = {
         QT_QPA_PLATFORMTHEME = "qt5ct";
-        ELECTRON_TRASH="gvfs";
+        ELECTRON_TRASH="trash-cli"; # fix vscode delete
       };
     };
 
@@ -77,6 +77,7 @@ in
       pciutils # lspci and others commands
       radeontop
       screenfetch # show system info
+      trash-cli # required by vscode
       unzip
       vim
       wget

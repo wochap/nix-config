@@ -8,7 +8,15 @@ in
     home-manager.users.gean = {
       services.polybar = lib.mkIf isXorg {
         enable = true;
-        script = "polybar mainbar-bspwm &";
+        script = ''
+          if type "xrandr"; then
+            for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+              MONITOR=$m polybar --reload mainbar-bspwm &
+            done
+          else
+            polybar --reload mainbar-bspwm &
+          fi
+        '';
         config = ./dotfiles/polybar/config.ini;
       };
     };
