@@ -44,14 +44,12 @@ in
       dpi = dpi;
 
       videoDrivers = [
-        "nvidiaBeta"
-        # "nvidia"
+        # "nvidiaBeta"
+        "nvidia"
       ];
 
       screenSection = ''
-        # Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=Off}"
-        # Option "metamodes" "3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-        # Option "TripleBuffer" "on"
+        Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
       '';
       # serverFlagsSection = ''
       #   Option "DefaultServerLayout" "Layout0"
