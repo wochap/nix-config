@@ -24,11 +24,12 @@ in
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "20.09"; # Did you read the comment?
 
+    # Show nixos logo on boot/shutdown
     boot.plymouth = {
       enable = true;
     };
 
-    # Fix fn keys
+    # Fix fn keys keychron
     boot.extraModprobeConfig = ''
       options hid_apple fnmode=0
     '';
@@ -37,7 +38,7 @@ in
     ];
     boot.kernelModules = [ "hid-apple" ];
 
-    # Allows proprietary or unfree package
+    # Allows proprietary or unfree packages
     nixpkgs.config.allowUnfree = true;
 
     # Set your time zone.
@@ -51,71 +52,78 @@ in
       keyMap = "us";
     };
 
+    environment = {
+      sessionVariables = {
+        QT_QPA_PLATFORMTHEME = "qt5ct";
+        ELECTRON_TRASH="gvfs";
+      };
+    };
+
     # List packages installed in system profile.
     environment.systemPackages = with pkgs; [
-      pciutils # lspci and others commands
+      # Tools
+      arandr # xrandr gui
+      bc # calculator cli
+      evtest
+      ffmpeg-full # video codecs?
       git
       gnumake # make
-      nvtop
-      radeontop
       gotop
       htop
       inxi # check compositor running
       killall
-      screenfetch
+      notify-desktop # test notifications
+      nvtop
+      pciutils # lspci and others commands
+      radeontop
+      screenfetch # show system info
       unzip
       vim
       wget
-      xarchiver
+      xarchiver # required by thunar
+      xfce.gvfs
       xfce.thunar # file manager
       xfce.thunar-archive-plugin
       xfce.thunar-volman
-      xfce.gvfs
-      xorg.xdpyinfo
-      zip
-      evtest
-      arandr # xrandr gui
-      notify-desktop # test notifications
       xlayoutdisplay # fix dpi
-      ffmpeg-full
-      bc # calculator cli
+      xorg.xdpyinfo # show monitor info
       xorg.xeyes # check if app is running on wayland
+      zip
 
       # DE
-      pywal # theme color generator
-      alttab
-      kitty # terminal
+      alttab # windows like alt + tab
       blueberry # bluetooth tray
-      pavucontrol # audio gui
+      kitty # terminal
+      networkmanager_dmenu # network manager cli
       pamixer # audio cli
+      pavucontrol # audio gui
+      pywal # theme color generator cli
       volumeicon # audio tray + gui
-      networkmanager_dmenu # for rofi
-      pick-colour-picker # color picker gui
 
       # Apps
-      nomacs # image viewer/editor
-      screenkey # show key pressed
       etcher # create booteable usbs
+      nomacs # image viewer/editor
+      pick-colour-picker # color picker gui
+      screenkey # show key pressed
 
       # Theme
-      gnome3.gnome-tweaks
+      arc-icon-theme
+      arc-theme
+      capitaine-cursors
+      hicolor-icon-theme
+      pantheon.elementary-icon-theme
       qt5ct
-      lxappearance
+
+      gsettings-desktop-schemas
       gtk-engine-murrine
       gtk_engines
-      gsettings-desktop-schemas
-      arc-theme
-      pantheon.elementary-icon-theme
-      capitaine-cursors
-      arc-icon-theme
-      hicolor-icon-theme
+      lxappearance
     ];
 
     fonts = {
       enableDefaultFonts = true;
       fonts = with pkgs; [
         # nerdfonts # requires nvidia?
-        noto-fonts
         cascadia-code
         corefonts
         fira-code
@@ -128,6 +136,7 @@ in
         jetbrains-mono
         material-design-icons
         material-icons
+        noto-fonts
         noto-fonts noto-fonts-cjk noto-fonts-emoji
         siji
         source-code-pro
@@ -145,11 +154,16 @@ in
       };
     };
 
-    # links /libexec from derivations to /run/current-system/sw
+    # Links /libexec from derivations to /run/current-system/sw
     environment.pathsToLink = [ "/libexec" ];
 
-    nix.autoOptimiseStore = true;
-    nix.trustedUsers = [ "@wheel" "root" ];
+    nix = {
+      trustedUsers = [ "@wheel" "root" ];
+
+      # Clear nixos store
+      autoOptimiseStore = true;
+    };
+
     security.sudo = {
       enable = true;
       wheelNeedsPassword = false;
@@ -175,7 +189,7 @@ in
     # Generate login wallpapers
     services.fractalart.enable = true;
 
-    # Enable wifi tray
+    # Enable network manager
     networking = {
       wireless.enable = false;
       networkmanager.enable = true;
@@ -183,13 +197,17 @@ in
         "8.8.8.8"
       ];
     };
+
+    # Enable wifi tray
     programs.nm-applet.enable = true;
 
     # Enable bluetooth tray
     hardware.bluetooth.enable = true;
 
+    # Fix tearing?
     hardware.opengl.enable = true;
     hardware.opengl.driSupport = true;
+    hardware.opengl.driSupport32Bit = true;
 
     # Enable audio
     sound.enable = true;
@@ -199,5 +217,10 @@ in
     # better timesync for unstable internet connections
     # services.chrony.enable = true;
     # services.timesyncd.enable = false;
+
+    services.xserver = {
+      layout = "us";
+      xkbOptions = "eurosign:e";
+    };
   };
 }

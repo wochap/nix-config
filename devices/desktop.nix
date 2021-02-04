@@ -33,26 +33,22 @@ in
     };
 
     hardware = {
-      opengl.enable = true;
-      opengl.driSupport32Bit = false;
       video.hidpi.enable = true;
     };
 
-    # fonts.fontconfig.dpi = dpi;
+    fonts.fontconfig.dpi = dpi;
     services.xserver = {
-      # dpi = dpi;
+      dpi = dpi;
 
       videoDrivers = [
-        "nvidia"
+        "nvidiaBeta"
+        # "nvidia"
       ];
 
       screenSection = ''
         # Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=Off}"
-        # Option "UBB" "False"
-        # Option "metamodes" "3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-        # Option "AllowIndirectGLXProtocol" "off"
-        # Option "TripleBuffer" "on"
-        # Option "nvidiaXineramaInfo"  "false"
+        Option "metamodes" "3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
+        Option "TripleBuffer" "on"
       '';
       # serverFlagsSection = ''
       #   Option "DefaultServerLayout" "Layout0"
@@ -146,10 +142,6 @@ in
       #     EndSubSection
       #   EndSection
       # '';
-
-      # Configure keymap in X11
-      layout = "us";
-      xkbOptions = "eurosign:e";
     };
   };
 }

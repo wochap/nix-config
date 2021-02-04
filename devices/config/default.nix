@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 
+let
+  isDesktop = config.networking.hostName == "gdesktop";
+in
 {
   imports = [
     ./common.nix
@@ -8,10 +11,6 @@
   config = {
     # Setup DE bspwm and sxhkdrc
     environment = {
-      sessionVariables = {
-        QT_QPA_PLATFORMTHEME = "qt5ct";
-        ELECTRON_TRASH="gvfs";
-      };
       etc = {
         bspwmrc = {
           source = ./dotfiles/bspwmrc;
@@ -39,9 +38,9 @@
         defaultSession = "none+bspwm";
         lightdm = {
           enable = true;
-          # background = ./wallpapers/default.jpeg;
+          background = ./wallpapers/default.jpeg;
           greeters.gtk.enable = true;
-          greeters.gtk.cursorTheme.name = "Capitaine Cursors";
+          greeters.gtk.cursorTheme.name = "Capitaine Cursors"; #FIXME
           greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
           greeters.gtk.iconTheme.name = "Arc";
           greeters.gtk.iconTheme.package = pkgs.arc-icon-theme;
@@ -53,11 +52,22 @@
         };
       };
     };
-    services.picom = {
+
+    services.picom = if isDesktop then {
       enable = true;
-      vSync = true;
+      vSync = false;
+      # backend = "xr_glx_hybrid";
+    } else {
+      enable = true;
+      vSync = "opengl";
     };
-    # Hide cursor on typing
+
+    # Hide cursor automatically
+    services.unclutter = {
+      enable = true;
+    };
+
+    # Hide cursor when typing
     services.xbanish.enable = true;
   };
 }

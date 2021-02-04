@@ -6,8 +6,10 @@
   ];
 
   config = {
+    programs.waybar.enable = true;
+
     programs.qt5ct.enable = true;
-    environment.pathsToLink = [ "/libexec" ];
+
     programs.sway = {
       enable = true;
       wrapperFeatures.gtk = true; # so that gtk works properly
@@ -34,15 +36,10 @@
       };
     };
 
-    # Here we but a shell script into path, which lets us start sway.service (after importing the environment of the login shell).
+    # Here we put a shell script into path, which lets us start sway.service (after importing the environment of the login shell).
     environment.systemPackages = with pkgs; [
       brightnessctl
       polkit_gnome
-
-      gtk-engine-murrine
-      gtk_engines
-      gsettings-desktop-schemas
-      lxappearance
 
       (
         pkgs.writeTextFile {
@@ -89,13 +86,6 @@
       };
     };
 
-    services.redshift = {
-      # Redshift with wayland support isn't present in nixos-19.09 atm. You have to cherry-pick the commit from https://github.com/NixOS/nixpkgs/pull/68285 to do that.
-      package = pkgs.redshift-wlr;
-    };
-
-    programs.waybar.enable = true;
-
     systemd.user.services.kanshi = {
       description = "Kanshi output autoconfig ";
       wantedBy = [ "graphical-session.target" ];
@@ -111,9 +101,15 @@
       };
     };
 
+    services.redshift = {
+      # Redshift with wayland support isn't present in nixos-19.09 atm. You have to cherry-pick the commit from https://github.com/NixOS/nixpkgs/pull/68285 to do that.
+      package = pkgs.redshift-wlr;
+    };
+
     services.xserver.enable = true;
     services.xserver.displayManager.defaultSession = "sway";
     services.xserver.displayManager.sddm.enable = true;
+    # TODO: apply sddm theme
     services.xserver.libinput.enable = true;
   };
 }
