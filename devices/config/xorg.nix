@@ -9,6 +9,8 @@ in
   ];
 
   config = {
+    _displayServer = "xorg";
+
     # Setup DE bspwm and sxhkdrc
     environment = {
       etc = {

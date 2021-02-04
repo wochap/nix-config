@@ -6,6 +6,8 @@
   ];
 
   config = {
+    _displayServer = "wayland";
+
     programs.waybar.enable = true;
 
     programs.qt5ct.enable = true;

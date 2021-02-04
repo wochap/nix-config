@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   hostName = "gdesktop";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
@@ -13,6 +13,18 @@ in
     # Include configuration
     ./config/xorg.nix
   ];
+
+  # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
+  # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
+  # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
+  options = {
+    _displayServer = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      example = "xorg"; # xorg, wayland
+      description = "Display server type, used by common config files.";
+    };
+  };
 
   config = {
     boot = {

@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  ifXorg = lib.mkIf config.networking.hostName != "gmbp";
+  isXorg = config._displayServer == "xorg";
 in
 {
   imports = [
@@ -116,12 +116,12 @@ in
         longitude = "-76.922124";
       };
 
-      services.dunst = lib.mkIf ifXorg {
+      services.dunst = lib.mkIf isXorg {
         enable = true;
         settings = (import ./dotfiles/dunstrc.nix);
       };
 
-      services.flameshot.enable = true;
+      services.flameshot.enable = isXorg;
     };
   };
 }
