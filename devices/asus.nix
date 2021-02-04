@@ -8,7 +8,7 @@ in
     /etc/nixos/hardware-configuration.nix
 
     # Include configuration
-    ./config/default.nix
+    ./config/xorg.nix
   ];
 
   config = {
@@ -33,10 +33,6 @@ in
     };
 
     hardware = {
-      opengl.enable = true;
-      opengl.driSupport = true;
-      opengl.driSupport32Bit = true;
-
       # Dual gpu
       bumblebee = {
         enable = false;
@@ -53,10 +49,6 @@ in
       #   "nouveau"
       #   "nvidia"
       # ];
-
-      # Configure keymap in X11
-      layout = "us";
-      xkbOptions = "eurosign:e";
     };
   };
 }

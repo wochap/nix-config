@@ -21,12 +21,14 @@ in
     ./config/wayland.nix
   ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.grub.useOSProber = true;
-  boot.loader.grub.enable = false;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.cleanTmpDir = true;
+  boot = {
+    loader = {
+      grub.enable = false;
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    cleanTmpDir = true;
+  };
 
   networking = {
     hostName = hostName;
@@ -45,9 +47,7 @@ in
   services.mbpfan.maxFanSpeed = 6000;
 
   # Configure keymap in X11
-  services.xserver.layout = "us";
   services.xserver.xkbVariant = "mac";
-  services.xserver.xkbOptions = "eurosign:e";
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;

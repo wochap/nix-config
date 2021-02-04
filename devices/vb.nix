@@ -8,7 +8,7 @@ in
     /etc/nixos/hardware-configuration.nix
 
     # Include configuration
-    ./config/default.nix
+    ./config/xorg.nix
   ];
 
   config = {
@@ -28,19 +28,11 @@ in
       interfaces.enp0s3.useDHCP = true;
     };
 
-    hardware = {
-      opengl.enable = true;
-    };
-
     services.xserver = {
       videoDrivers = [
         "nvidia"
         "nouveau"
       ];
-
-      # Configure keymap in X11
-      layout = "us";
-      xkbOptions = "eurosign:e";
     };
   };
 }

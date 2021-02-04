@@ -11,15 +11,18 @@ in
     /etc/nixos/hardware-configuration.nix
 
     # Include configuration
-    ./config/default.nix
+    ./config/xorg.nix
   ];
 
   config = {
-    boot.loader.grub.useOSProber = true;
-    boot.loader.grub.enable = false;
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
-    boot.cleanTmpDir = true;
+    boot = {
+      loader = {
+        grub.enable = false;
+        systemd-boot.enable = true;
+        efi.canTouchEfiVariables = true;
+      };
+      cleanTmpDir = true;
+    };
 
     networking = {
       hostName = hostName;
@@ -47,8 +50,8 @@ in
 
       screenSection = ''
         # Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=Off}"
-        Option "metamodes" "3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-        Option "TripleBuffer" "on"
+        # Option "metamodes" "3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
+        # Option "TripleBuffer" "on"
       '';
       # serverFlagsSection = ''
       #   Option "DefaultServerLayout" "Layout0"
