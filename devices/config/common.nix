@@ -106,6 +106,8 @@ in
       nomacs # image viewer/editor
       pick-colour-picker # color picker gui
       screenkey # show key pressed
+      filelight # view disk usage
+      deluge # torrent client
 
       # Theme
       arc-icon-theme
@@ -131,6 +133,7 @@ in
         fira-code-symbols
         fira-mono
         font-awesome
+        font-awesome_4
         gelasio
         hack-font
         iosevka
@@ -144,12 +147,13 @@ in
         terminus_font
         ttf_bitstream_vera
         ubuntu_font_family
+        work-sans
       ];
       fontconfig = {
         allowBitmaps = true;
         defaultFonts = {
-          serif = [ "Ubuntu" ];
-          sansSerif = [ "Ubuntu" ];
+          serif = [ "Work Sans" ];
+          sansSerif = [ "Work Sans" ];
           monospace = [ "Fira Mono" ];
           emoji = [ "Noto Color Emoji" ];
         };
@@ -174,6 +178,7 @@ in
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.extraUsers.gean = {
       shell = pkgs.fish;
+      uid = 1000;
       password = "123456";
       isNormalUser = true;
       extraGroups = [

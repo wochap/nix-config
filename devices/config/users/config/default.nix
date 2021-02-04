@@ -41,6 +41,10 @@ in
         mysql-workbench
         postman
         vscode
+        nodejs
+        # To lookup packages for nix, use the following code:
+        # nix-env -qaPA 'nixos.nodePackages' | grep -i <npm module>
+        nodePackages.vue-cli
 
         # Apps
         kdeApplications.kdenlive

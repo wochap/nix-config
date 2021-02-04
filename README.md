@@ -174,3 +174,7 @@ $ set 3 boot
 * https://github.com/JorelAli/nixos
 * https://github.com/nrdxp/nixflk/tree/template
 * https://github.com/kampka/nix-packages
+
+## To learn
+
+* https://www.secjuice.com/wayland-vs-xorg/

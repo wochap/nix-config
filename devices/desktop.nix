@@ -53,100 +53,136 @@ in
 
     fonts.fontconfig.dpi = dpi;
     services.xserver = {
-      dpi = dpi;
+      # dpi = dpi;
 
       videoDrivers = [
+        "modesetting"
         # "nvidiaBeta"
         "nvidia"
       ];
 
-      screenSection = ''
-        Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
+      # Test 1
+      serverLayoutSection = ''
+        Screen      0  "Screen0" 0 0
+        Option         "Xinerama" "0"
       '';
+      extraConfig = ''
+        Section "Monitor"
+          # HorizSync source: edid, VertRefresh source: edid
+          Identifier     "Monitor0"
+          VendorName     "Unknown"
+          ModelName      "LG Electronics LG HDR 4K"
+          HorizSync       135.0 - 135.0
+          VertRefresh     40.0 - 61.0
+          Option         "DPMS"
+        EndSection
+
+        Section "Device"
+          Identifier     "Device0"
+          Driver         "nvidia"
+          VendorName     "NVIDIA Corporation"
+          BoardName      "GeForce GTX 1650 SUPER"
+        EndSection
+
+        Section "Screen"
+          Identifier     "Screen0"
+          Device         "Device0"
+          Monitor        "Monitor0"
+          DefaultDepth    24
+          Option         "Stereo" "0"
+          Option         "nvidiaXineramaInfoOrder" "DFP-0"
+          Option         "metamodes" "DP-0: 3840x2160_60 +1920+0 {AllowGSYNCCompatible=On}, DP-2: 1920x1080_144 +0+0 {AllowGSYNCCompatible=On}"
+          Option         "SLI" "Off"
+          Option         "MultiGPU" "Off"
+          Option         "BaseMosaic" "off"
+          SubSection     "Display"
+              Depth       24
+          EndSubSection
+          Option         "UseEdidDpi" "FALSE"
+          Option         "DPI" "144 x 144"
+        EndSection
+      '';
+
+      # # Test 2
+      # serverLayoutSection = ''
+      #   Screen      0  "Screen0" 0 0
+      #   Screen      1  "Screen1" RightOf "Screen0"
+      #   Option         "Xinerama" "0"
+      # '';
       # serverFlagsSection = ''
       #   Option "DefaultServerLayout" "Layout0"
       # '';
       # extraConfig = ''
       #   Section "ServerLayout"
-      #       Identifier     "Layout0"
-      #       Screen      0  "Screen0" 0 0
-      #       Option         "Xinerama" "0"
+      #     Identifier     "Layout0"
+      #     Screen      0  "Screen0" 0 0
+      #     Screen      1  "Screen1" LeftOf "Screen0"
+      #     Option         "Xinerama" "0"
       #   EndSection
 
       #   Section "Monitor"
-      #       # HorizSync source: edid, VertRefresh source: edid
-      #       Identifier     "Monitor0"
-      #       VendorName     "Unknown"
-      #       ModelName      "LG Electronics LG HDR 4K"
-      #       HorizSync       135.0 - 135.0
-      #       VertRefresh     40.0 - 61.0
-      #       Option         "DPMS"
-      #   EndSection
-
-      #   Section "Device"nb
-      #       Identifier     "Device0"
-      #       Driver         "nvidia"
-      #       VendorName     "NVIDIA Corporation"
-      #       BoardName      "GeForce GTX 1650 SUPER"
-      #   EndSection
-
-      #   Section "Screen"
-      #       Identifier     "Screen0"
-      #       Device         "Device0"
-      #       Monitor        "Monitor0"
-      #       DefaultDepth    24
-      #       Option         "Stereo" "0"
-      #       Option         "nvidiaXineramaInfoOrder" "DFP-2"
-      #       Option         "metamodes" "3840x2160_60 +0+0; 1920x1080 +0+0 {viewportin=3840x2160, ForceCompositionPipeline=On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
-      #       Option         "SLI" "Off"
-      #       Option         "MultiGPU" "Off"
-      #       Option         "BaseMosaic" "off"
-      #       SubSection     "Display"
-      #           Depth       24
-      #       EndSubSection
-      #       Option         "AllowIndirectGLXProtocol" "off"
-      #       Option         "TripleBuffer" "on"
-      #       Option         "DPI" "144 x 144"
-      #   EndSection
-      # '';
-      # screenSection = ''
-      #   Option "metamodes" "1920x1080_144 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
-      #   Option "AllowIndirectGLXProtocol" "off"
-      #   Option "TripleBuffer" "on"
-      # '';
-      # serverLayoutSection = ''
-      #   Screen "Screen-nvidia[0]" RightOf "Screen-nvidia[1]"
-      # '';
-      # extraConfig = ''
-      #   Section "ServerLayout"
-      #       Identifier     "Layout0"
-      #       Screen         "Screen-nvidia[1]"
-      #   EndSection
-
-      #   Section "Monitor"
-      #     Identifier     "Monitor[1]"
+      #     # HorizSync source: edid, VertRefresh source: edid
+      #     Identifier     "Monitor0"
       #     VendorName     "Unknown"
       #     ModelName      "LG Electronics LG HDR 4K"
-      #     HorizSync       30.0 - 135.0
+      #     HorizSync       135.0 - 135.0
       #     VertRefresh     40.0 - 61.0
       #     Option         "DPMS"
       #   EndSection
 
+      #   Section "Monitor"
+      #     # HorizSync source: edid, VertRefresh source: edid
+      #     Identifier     "Monitor1"
+      #     VendorName     "Unknown"
+      #     ModelName      "AUS ASUS VP249"
+      #     HorizSync       180.0 - 180.0
+      #     VertRefresh     48.0 - 144.0
+      #     Option         "DPMS"
+      #   EndSection
+
       #   Section "Device"
-      #     Identifier     "Device-nvidia[1]"
-      #     Driver         "nvidia"
-      #     VendorName     "NVIDIA Corporation"
-      #     BoardName      "GeForce GTX 1650 SUPER"
+      #       Identifier     "Device0"
+      #       Driver         "nvidia"
+      #       VendorName     "NVIDIA Corporation"
+      #       BoardName      "GeForce GTX 1650 SUPER"
+      #       BusID          "PCI:43:0:0"
+      #       Screen          0
+      #   EndSection
+
+      #   Section "Device"
+      #       Identifier     "Device1"
+      #       Driver         "nvidia"
+      #       VendorName     "NVIDIA Corporation"
+      #       BoardName      "GeForce GTX 1650 SUPER"
+      #       BusID          "PCI:43:0:0"
+      #       Screen          1
       #   EndSection
 
       #   Section "Screen"
-      #     Identifier     "Screen-nvidia[1]"
-      #     Device         "Device-nvidia[1]"
-      #     Monitor        "Monitor[1]"
+      #     Identifier     "Screen0"
+      #     Device         "Device0"
+      #     Monitor        "Monitor0"
       #     DefaultDepth    24
       #     Option         "Stereo" "0"
-      #     Option         "nvidiaXineramaInfoOrder" "DFP-4"
-      #     Option         "metamodes" "HDMI-0: nvidia-auto-select +0+0 {viewportin=2560x1600, viewportout=3456x2160+192+0, ForceCompositionPipeline=On, AllowGSYNC=Off}"
+      #     Option         "nvidiaXineramaInfoOrder" "DFP-0"
+      #     Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {AllowGSYNCCompatible=On}"
+      #     Option         "SLI" "Off"
+      #     Option         "MultiGPU" "Off"
+      #     Option         "BaseMosaic" "off"
+      #     SubSection     "Display"
+      #         Depth       24
+      #     EndSubSection
+      #     Option         "UseEdidDpi" "FALSE"
+      #     Option         "DPI" "144 x 144"
+      #   EndSection
+
+      #   Section "Screen"
+      #     Identifier     "Screen1"
+      #     Device         "Device1"
+      #     Monitor        "Monitor1"
+      #     DefaultDepth    24
+      #     Option         "Stereo" "0"
+      #     Option         "metamodes" "DP-2: 1920x1080_144 +0+0 {AllowGSYNC=Off, AllowGSYNCCompatible=On}"
       #     Option         "SLI" "Off"
       #     Option         "MultiGPU" "Off"
       #     Option         "BaseMosaic" "off"

@@ -30,6 +30,7 @@ in
     };
     services.xserver = {
       enable = true;
+      exportConfiguration = true;
       windowManager.bspwm = {
         enable = true;
         configFile = "/etc/bspwmrc";
