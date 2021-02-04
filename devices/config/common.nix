@@ -241,5 +241,8 @@ in
       layout = "us";
       xkbOptions = "eurosign:e";
     };
+
+    # Fix https://github.com/NixOS/nixpkgs/issues/30866
+    programs.dconf.enable = true;
   };
 }
