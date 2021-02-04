@@ -35,7 +35,7 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     ```
     $ passwd gean
     ```
-1. Setup wallpaper (required)
+1. Setup wallpaper (required for xorg config)
     ```
     $ git clone https://github.com/elementary/wallpapers.git
     $ wal -i <path_to_wallpaper>
@@ -168,3 +168,8 @@ $ set 3 boot
 
 * Setup SSH github
 * Setup theme for rofi, polybar, bspwm
+
+## Inspiration
+
+* https://github.com/JorelAli/nixos
+* https://github.com/nrdxp/nixflk/tree/template
