@@ -72,5 +72,7 @@ in
 
     # Hide cursor when typing
     services.xbanish.enable = true;
+
+    services.xserver.useGlamor = true;
   };
 }

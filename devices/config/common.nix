@@ -141,6 +141,7 @@ in
         noto-fonts noto-fonts-cjk noto-fonts-emoji
         siji
         source-code-pro
+        terminus_font
         ttf_bitstream_vera
         ubuntu_font_family
       ];
