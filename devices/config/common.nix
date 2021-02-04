@@ -193,6 +193,9 @@ in
         "audio"
         "networkmanager"
       ];
+      openssh.authorizedKeys.keyFiles = [
+        "~/.ssh/id_rsa.pub"
+      ];
     };
 
     # Required by thunar
@@ -209,6 +212,9 @@ in
         "8.8.8.8"
       ];
     };
+
+    # Remember private keys
+    programs.ssh.startAgent = true;
 
     # Enable wifi tray
     programs.nm-applet.enable = true;
