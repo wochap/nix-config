@@ -100,7 +100,7 @@ super + Return
 # open app launcher
 # NOTE `@` means until key is released
 super + space
-  rofi -show run
+  rofi -show drun
 
 # Take screenshoot
 super + alt + s
