@@ -19,8 +19,16 @@
           source = ./dotfiles/sxhkdrc;
           mode = "0755";
         };
+        "powermenu.rasi" = {
+          source = ./dotfiles/powermenu.rasi;
+          mode = "0755";
+        };
         sxhkd-help = {
           source = ./scripts/sxhkd-help.sh;
+          mode = "0755";
+        };
+        powermenu = {
+          source = ./scripts/powermenu.sh;
           mode = "0755";
         };
       };

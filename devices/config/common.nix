@@ -117,6 +117,7 @@ in
       pywal # theme color generator cli
       volumeicon # audio tray + gui
       systemd
+      playerctl # media player cli
 
       # Apps
       etcher # create booteable usbs

@@ -132,3 +132,20 @@ super + alt + c
 # Open Firefox
 super + alt + b
   firefox
+
+# Print
+#   flameshot full -p /home/fhilipe/Imagens/Screenshots/
+
+# Media keys
+XF86AudioNext
+	playerctl next
+XF86AudioStop
+	playerctl pause
+XF86AudioPlay
+	playerctl play-pause
+XF86AudioPrev
+	playerctl previous
+
+# power menu
+super + ctrl + Escape
+	/etc/powermenu
