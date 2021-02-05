@@ -174,6 +174,7 @@ $ set 3 boot
 * https://github.com/JorelAli/nixos
 * https://github.com/nrdxp/nixflk/tree/template
 * https://github.com/kampka/nix-packages
+* https://github.com/sgraf812/.nixpkgs
 
 ## To learn
 
