@@ -225,6 +225,17 @@ in
       nameservers = [
         "8.8.8.8"
       ];
+      firewall = {
+        enable = true;
+        # allowedTCPPortRanges = [
+        #   { from = 8080; to = 8090 }
+        # ];
+        allowedTCPPorts = [
+          8080
+          80
+          22
+        ];
+      };
     };
 
     # Remember private keys
