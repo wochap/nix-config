@@ -53,6 +53,7 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
 1. Fix screen tearing on nvidia cards
     - Buy AMD GPU
     - FYI: ForceFullCompositionPipeline fix tearing but increase latency
+1. [Fix firefox insta right click](https://gist.github.com/AntonFriberg/15bcd0dbfe7506a08e55fb2163644cc9)
 
 ## Keybindings (defined by sxhkd)
 
@@ -128,13 +129,6 @@ Apps
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>s</kbd> | Takes screenshoot (flameshot) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> | Open firefox |
 
-## Resources
-
-* [Learn nix](https://nixcloud.io/tour/?id=3)
-* https://nixos.wiki/wiki/Home_Manager
-* https://superuser.com/questions/603528/how-to-get-the-current-monitor-resolution-or-monitor-name-lvds-vga1-etc
-* https://gitlab.com/dwt1/dotfiles
-
 ## Troubleshooting
 
 * Check if picom is running
@@ -156,10 +150,6 @@ $ ssh-add -K
 
 Create wpa conf before rebuild switch.
 
-* [Fix firefox right click](https://www.reddit.com/r/i3wm/comments/88k0yt/right_mouse_btn_instantly_clicks_first_option_in/)
-
-  Add padding to menu.
-
 * Firefox doesnt load some websites
 
 Enable DNS over HTTPS
@@ -172,23 +162,27 @@ $ p
 $ set 3 boot
 ```
 
-## TODO
+## Resources
 
-* Setup SSH github
-* Setup theme for rofi, polybar, bspwm
+### Inspiration
 
-## Inspiration
-
+* https://gitlab.com/dwt1/dotfiles
 * https://github.com/JorelAli/nixos
 * https://github.com/nrdxp/nixflk/tree/template
 * https://github.com/kampka/nix-packages
 * https://github.com/sgraf812/.nixpkgs
 
-## To learn
+### To learn
 
 * https://www.secjuice.com/wayland-vs-xorg/
 * https://discourse.nixos.org/t/how-to-set-the-xdg-mime-default/3560
 
-## Rice resources
+### Rice resources
 
 * https://fontawesome.com/cheatsheet
+
+### Others
+
+* [Learn nix](https://nixcloud.io/tour/?id=3)
+* https://nixos.wiki/wiki/Home_Manager
+* https://superuser.com/questions/603528/how-to-get-the-current-monitor-resolution-or-monitor-name-lvds-vga1-etc
