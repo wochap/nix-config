@@ -207,12 +207,10 @@ in
         ];
         fade = true;
         shadow = true;
-        # blur-strength = 5;
         extraOptions = ''
           blur-method = "gaussian";
-          blur-size = 20;
+          blur-size = 2;
           blur-deviation = 5.0;
-          menu-opacity = 0.5;
         '';
       };
     };

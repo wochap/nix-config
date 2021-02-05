@@ -105,6 +105,7 @@ in
       xorg.xdpyinfo # show monitor info
       xorg.xeyes # check if app is running on wayland
       zip
+      neofetch
 
       # DE
       alttab # windows like alt + tab
