@@ -256,5 +256,8 @@ in
 
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
     programs.dconf.enable = true;
+
+    # Apply trim to SSDs
+    services.fstrim.enable = true;
   };
 }

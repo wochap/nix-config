@@ -75,6 +75,14 @@ in
         enable = true;
         dataFile = {
           "icons/hicolor/128x128/apps/code.png".source = ./icons/vscode/icon-128.png;
+          "icons/hicolor/128x128/apps/d3lphin.png".source = ./icons/system-file-manager/icon-128.png;
+          "icons/hicolor/128x128/apps/dde-file-manager.png".source = ./icons/system-file-manager/icon-128.png;
+          "icons/hicolor/128x128/apps/kitty.png".source = ./icons/terminal/icon-128.png;
+          "icons/hicolor/128x128/apps/org.xfce.filemanager.png".source = ./icons/system-file-manager/icon-128.png;
+          "icons/hicolor/128x128/apps/system-file-manager.png".source = ./icons/system-file-manager/icon-128.png;
+          "icons/hicolor/128x128/apps/thunar.png".source = ./icons/system-file-manager/icon-128.png;
+          "icons/hicolor/128x128/apps/xarchiver.png".source = ./icons/ark/icon-128.png;
+          "icons/hicolor/128x128/apps/xfce-filemanager.png".source = ./icons/system-file-manager/icon-128.png;
         };
 
         # Control default apps
@@ -90,6 +98,7 @@ in
         mimeApps.associations.added = {
           "image/png" = [ "org.nomacs.ImageLounge.desktop" ];
           "image/jpeg" = [ "org.nomacs.ImageLounge.desktop" ];
+          "image/svg+xml" = [ "org.nomacs.ImageLounge.desktop" ];
         };
 
         # Edit linked files
@@ -173,6 +182,10 @@ in
         enable = true;
         latitude = "-12.051408";
         longitude = "-76.922124";
+        temperature = {
+          day = 4000;
+          night = 3700;
+        };
       };
 
       services.dunst = lib.mkIf isXorg {
