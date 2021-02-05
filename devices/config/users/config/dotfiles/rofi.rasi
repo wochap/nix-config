@@ -87,6 +87,7 @@ window {
   border-color: #4dd0e1;
   border: 4;
   transparency: "real";
+  width: 25em;
 }
 
 /* @import "~/.cache/wal/colors-rofi-dark" */
