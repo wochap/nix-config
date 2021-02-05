@@ -85,7 +85,7 @@ prompt {
 
 window {
   border-color: #4dd0e1;
-  border: 4;
+  border: 4px;
   transparency: "real";
   width: 25em;
 }
