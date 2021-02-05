@@ -1,12 +1,11 @@
 #!/usr/bin/env sh
 
 #### AUTOSTART ####
-wal -R &
 alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#21252b" -fg "#979eae" -frame "#4dd0e1" -font "xft:Work Sans-11" &
 blueberry-tray &
 volumeicon &
 clipmenud &
-xsetroot -cursor_name left_ptr & # fix cursor in bspwm desktop
+xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 
 #### BSPWM coloring ####
 # source the colors.

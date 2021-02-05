@@ -1,8 +1,5 @@
 { config, pkgs, ... }:
 
-let
-  isDesktop = config.networking.hostName == "gdesktop";
-in
 {
   imports = [
     ./common.nix
@@ -54,16 +51,6 @@ in
           '';
         };
       };
-    };
-
-    services.picom = if isDesktop then {
-      # Reduces screen tearing
-      enable = true;
-      vSync = "opengl";
-      backend = "xr_glx_hybrid";
-    } else {
-      enable = true;
-      vSync = "opengl";
     };
 
     # Hide cursor automatically

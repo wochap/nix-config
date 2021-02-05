@@ -119,15 +119,12 @@ in
       # Add config files to home folder
       home.file = {
         ".background-image".source = ../../wallpapers/default.jpeg;
-        ".config/polybar/main.ini".source = ./dotfiles/polybar/main.ini;
-        ".config/polybar/modules.ini".source = ./dotfiles/polybar/modules.ini;
+        ".config/polybar/main.ini".source = lib.mkIf isXorg ./dotfiles/polybar/main.ini;
+        ".config/polybar/modules.ini".source = lib.mkIf isXorg ./dotfiles/polybar/modules.ini;
         ".config/Thunar/thunarrc".source = ./dotfiles/thunarrc;
-        # ".cache/wal/colors-kitty.conf".source = ./dotfiles/pywal/colors-kitty.conf;
-        # ".cache/wal/colors-rofi-dark.rasi".source = ./dotfiles/pywal/colors-rofi-dark;
-        # ".cache/wal/colors.sh".source = ./dotfiles/pywal/colors.sh;
         ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
         ".vimrc".source = ./dotfiles/.vimrc;
-        ".config/rofi/config.rasi".source = ./dotfiles/rofi.rasi;
+        ".config/rofi/config.rasi".source = lib.mkIf isXorg ./dotfiles/rofi.rasi;
         ".config/nixpkgs/config.nix".text = ''
           { allowUnfree = true; }
         '';
@@ -160,9 +157,7 @@ in
         ];
       };
 
-      programs.bash = {
-        enable = true;
-      };
+      programs.bash.enable = true;
 
       programs.vim = {
         enable = true;
@@ -194,6 +189,32 @@ in
       };
 
       services.flameshot.enable = isXorg;
+
+      services.picom = lib.mkIf isXorg {
+        # Reduces screen tearing
+        enable = true;
+        blur = true;
+        blurExclude = [];
+        experimentalBackends = true;
+        vSync = true;
+        backend = "glx";
+        refreshRate = 60;
+        shadowExclude = [];
+        fadeExclude = [
+          "name ~= 'polybar'"
+          "name ~= 'alttab'"
+          "name ~= 'rofi'"
+        ];
+        fade = true;
+        shadow = true;
+        # blur-strength = 5;
+        extraOptions = ''
+          blur-method = "gaussian";
+          blur-size = 20;
+          blur-deviation = 5.0;
+          menu-opacity = 0.5;
+        '';
+      };
     };
   };
 }
