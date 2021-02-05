@@ -6,6 +6,7 @@ in
 {
   imports = [
     ./git.nix
+    ./gtk.nix
     ./polybar.nix
   ];
 
@@ -26,6 +27,12 @@ in
 
       # Allow unfree packages
       nixpkgs.config.allowUnfree = true;
+
+      home.extraProfileCommands = ''
+        if [[ -d "$out/share/applications" ]] ; then
+          ${pkgs.desktop-file-utils}/bin/update-desktop-database $out/share/applications
+        fi
+      '';
 
       # User packages
       home.packages = with pkgs; [
@@ -58,38 +65,46 @@ in
         slack
       ];
 
-      # Environment variables to always set at login.
       home.sessionVariables = {
         BROWSER = "firefox";
         TERMINAL = "kitty";
       };
 
-      xdg.mimeApps.enable = true;
-      xdg.mimeApps.defaultApplications = {
-        "inode/directory" = [ "thunar.desktop" ];
-        "text/html" = [ "firefox.desktop" ];
-        "x-scheme-handler/http" = [ "firefox.desktop" ];
-        "x-scheme-handler/https" = [ "firefox.desktop" ];
-        "x-scheme-handler/about" = [ "firefox.desktop" ];
-        "x-scheme-handler/unknown" = [ "firefox.desktop" ];
-      };
-      xdg.mimeApps.associations.added = {
-        "image/png" = [ "org.nomacs.ImageLounge.desktop" ];
-        "image/jpeg" = [ "org.nomacs.ImageLounge.desktop" ];
-      };
+      # Edit home files
+      xdg = {
+        enable = true;
+        dataFile = {
+          "icons/hicolor/128x128/apps/code.png".source = ./icons/vscode/icon-128.png;
+        };
 
-      # Edit linked files
-      xdg.configFile = {
-        # HACK: Load fish theme
-        "fish/conf.d/plugin-eclm.fish".text = lib.mkAfter ''
-          for f in $plugin_dir/*.fish
-            source $f
-          end
-        '';
+        # Control default apps
+        mimeApps.enable = true;
+        mimeApps.defaultApplications = {
+          "inode/directory" = [ "thunar.desktop" ];
+          "text/html" = [ "firefox.desktop" ];
+          "x-scheme-handler/http" = [ "firefox.desktop" ];
+          "x-scheme-handler/https" = [ "firefox.desktop" ];
+          "x-scheme-handler/about" = [ "firefox.desktop" ];
+          "x-scheme-handler/unknown" = [ "firefox.desktop" ];
+        };
+        mimeApps.associations.added = {
+          "image/png" = [ "org.nomacs.ImageLounge.desktop" ];
+          "image/jpeg" = [ "org.nomacs.ImageLounge.desktop" ];
+        };
 
-        "fish/config.fish".text = lib.mkAfter ''
-          set fish_greeting
-        '';
+        # Edit linked files
+        configFile = {
+          # HACK: Load fish theme
+          "fish/conf.d/plugin-eclm.fish".text = lib.mkAfter ''
+            for f in $plugin_dir/*.fish
+              source $f
+            end
+          '';
+
+          "fish/config.fish".text = lib.mkAfter ''
+            set fish_greeting
+          '';
+        };
       };
 
       # Add config files to home folder
