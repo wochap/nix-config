@@ -41,12 +41,14 @@ in
   };
 
   # Macbook fan config
-  services.mbpfan.enable = true;
-  services.mbpfan.minFanSpeed = 4000;
-  services.mbpfan.lowTemp = 35;
-  services.mbpfan.maxFanSpeed = 6000;
+  services.mbpfan = {
+    enable = true;
+    minFanSpeed = 4000;
+    lowTemp = 35;
+    maxFanSpeed = 6000;
+  };
 
-  # Configure keymap in X11
+  # Macbook keyboard
   services.xserver.xkbVariant = "mac";
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -65,15 +67,6 @@ in
   #   # Option "TearFree" "on"
   #   Option "TearFree" "true"
   # '';
-  # services.xserver.useGlamor = true;
-
-  # Apparently this is currently only supported by ati_unfree drivers, not ati
-  # hardware.opengl.driSupport32Bit = false;
-
-  # Fix font size in retina display
-  # hardware.video.hidpi.enable = true;
-  # services.xserver.dpi = 192;
-  # fonts.fontconfig.dpi = 192;
 
   # Update display brightness
   programs.light.enable = true;

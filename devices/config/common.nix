@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   home-manager = builtins.fetchGit {
@@ -14,6 +14,18 @@ in
 
     ./users/gean.nix
   ];
+
+  # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
+  # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
+  # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
+  options = {
+    _displayServer = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      example = "xorg"; # xorg, wayland
+      description = "Display server type, used by common config files.";
+    };
+  };
 
   config = {
     # This value determines the NixOS release from which the default

@@ -14,18 +14,6 @@ in
     ./config/xorg.nix
   ];
 
-  # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
-  # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
-  # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
-  options = {
-    _displayServer = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      example = "xorg"; # xorg, wayland
-      description = "Display server type, used by common config files.";
-    };
-  };
-
   config = {
     boot = {
       loader = {
@@ -101,7 +89,7 @@ in
               Depth       24
           EndSubSection
           # Option         "UseEdidDpi" "FALSE"
-          # Option         "DPI" "144 x 144"
+          # Option         "DPI" "${toString dpi} x ${toString dpi}"
         EndSection
       '';
 
