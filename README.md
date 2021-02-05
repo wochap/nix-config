@@ -55,7 +55,7 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     - FYI: ForceFullCompositionPipeline fix tearing but increase latency
 1. [Fix firefox insta right click](https://gist.github.com/AntonFriberg/15bcd0dbfe7506a08e55fb2163644cc9)
 
-## Keybindings (defined by sxhkd)
+## Keybindings
 
 The keybindings for bspwm are controlled by another program called sxhkd.
 
@@ -63,6 +63,7 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 | :--- | :--- |
 | <kbd>Super</kbd> + <kbd>Esc</kbd> | Quits bspwm |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>c</kbd> | Closes window with focus |
+| <kbd>Alt</kbd> + <kbd>F4</kbd> | Closes window with focus |
 | <kbd>Super</kbd> + <kbd>m</kbd> | Alternate between the tiled and monocle layout |
 
 Window state and flags
@@ -83,6 +84,7 @@ Focus and swap
 
 | Keybinding | Action |
 | :--- | :--- |
+| <kbd>Super</kbd> + <kbd>Left Click</kbd> | Swap window |
 | <kbd>Super</kbd> + <kbd>j</kbd> | Switches focus between windows in the stack, going down |
 | <kbd>Super</kbd> + <kbd>k</kbd> | Switches focus between windows in the stack, going up |
 | <kbd>Super</kbd> + <kbd>h</kbd> | Switches focus between windows in the stack, going left |
@@ -108,7 +110,6 @@ Resize windows
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Super</kbd> + <kbd>Left Click</kbd> | Move window |
 | <kbd>Super</kbd> + <kbd>Right Click</kbd> | Resize window |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>j</kbd> | Expand window, going down |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>k</kbd> | Expand window, going up |

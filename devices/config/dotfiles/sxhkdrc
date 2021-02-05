@@ -8,7 +8,7 @@ super + Escape
 super + shift + c
 	bspc node -c
 
-alt + f4
+alt + F4
 	bspc node -c
 
 # Alternate between the tiled and monocle layout
@@ -67,7 +67,7 @@ super + {o,i}
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} focused:'^{1-9,10}'
 
-# send and follow to given desktop
+# Send and follow to given desktop
 super + ctrl + shift + {1-9}
   id=$(bspc query -N -n); bspc node -d ^{1-9}; bspc node -f ${id}
 
