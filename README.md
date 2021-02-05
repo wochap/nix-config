@@ -35,6 +35,7 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     ```
     $ passwd gean
     ```
+1. Copy `.ssh` folder
 1. Setup wallpaper (required for xorg config)
     ```
     $ git clone https://github.com/elementary/wallpapers.git
@@ -45,6 +46,13 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     $ xrandr
     # Modify bspwm config in `nix-config`
     ```
+1. Fix flickering on nvidia cards
+    - Open `Nvidia X Server Settings`.
+    - In `OpenGL Settings` uncheck `Allow Flipping`.
+    - In `X Server XVideo Settings` select your monitor.
+1. Fix screen tearing on nvidia cards
+    - Buy AMD GPU
+    - FYI: ForceFullCompositionPipeline fix tearing but increase latency
 
 ## Keybindings (defined by sxhkd)
 

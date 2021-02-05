@@ -57,7 +57,7 @@ in
     };
 
     services.picom = if isDesktop then {
-      # Fix tearing on nvidia 1650 super
+      # Reduces screen tearing
       enable = true;
       vSync = "opengl";
       backend = "xr_glx_hybrid";
