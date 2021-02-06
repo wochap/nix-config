@@ -122,6 +122,7 @@ in
 
       # Add config files to home folder
       home.file = {
+        ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
         ".background-image".source = ../../wallpapers/default.jpeg;
         ".config/polybar/main.ini".source = lib.mkIf isXorg ./dotfiles/polybar/main.ini;
         ".config/polybar/modules.ini".source = lib.mkIf isXorg ./dotfiles/polybar/modules.ini;

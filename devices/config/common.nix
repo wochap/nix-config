@@ -109,6 +109,7 @@ in
       scrot # screen capture
       mpc_cli
       betterlockscreen # screen locker
+      feh # image viewer
 
       # DE
       alttab # windows like alt + tab
