@@ -6,6 +6,7 @@ let
     rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
     ref = "release-20.09";
   };
+  isMbp = config.networking.hostName == "gmbp";
 in
 {
   imports = [
@@ -255,7 +256,7 @@ in
     # Fix tearing?
     hardware.opengl.enable = true;
     hardware.opengl.driSupport = true;
-    hardware.opengl.driSupport32Bit = true;
+    hardware.opengl.driSupport32Bit = !isMbp;
 
     # Enable audio
     sound.enable = true;
