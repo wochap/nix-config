@@ -167,6 +167,10 @@ $ p
 $ set 3 boot
 ```
 
+* (Wifi keeps connecting and disconnecting)[https://unix.stackexchange.com/questions/588333/networkmanager-keeps-connecting-and-disconnecting-how-can-i-fix-this]
+
+Disable ipv6 connection.
+
 ## Resources
 
 ### Inspiration
