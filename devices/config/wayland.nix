@@ -110,6 +110,7 @@
     services.xserver.enable = true;
     services.xserver.displayManager.defaultSession = "sway";
     services.xserver.displayManager.sddm.enable = true;
+    services.xserver.displayManager.sddm.enableHidpi = true;
     # TODO: apply sddm theme
     services.xserver.libinput.enable = true;
   };
