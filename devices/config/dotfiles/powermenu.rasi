@@ -16,6 +16,15 @@ configuration {
   icon-theme: "Papirus";
   show-icons: false;
   sidebar-mode: false;
+  kb-select-1: "";
+  kb-select-2: "";
+  kb-select-3: "";
+  kb-select-4: "";
+  kb-select-5: "";
+  kb-select-6: "";
+  kb-select-7: "";
+  kb-select-8: "";
+  kb-select-9: "";
 }
 
 * {
