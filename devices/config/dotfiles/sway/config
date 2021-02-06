@@ -45,7 +45,7 @@ exec volumeicon
 ### Configuration
 default_border pixel
 gaps inner 16
-gaps outer 16
+gaps outer 0
 focus_follows_mouse no
 default_border pixel 4
 client.focused #4DD0E1 #285577 #ffffff #2e9ef4 #285577

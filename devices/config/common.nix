@@ -7,6 +7,7 @@ let
     ref = "release-20.09";
   };
   isMbp = config.networking.hostName == "gmbp";
+  isWayland = config._displayServer == "wayland";
 in
 {
   imports = [
@@ -66,10 +67,20 @@ in
     };
 
     environment = {
-      sessionVariables = {
-        QT_QPA_PLATFORMTHEME = "qt5ct";
-        ELECTRON_TRASH="trash-cli"; # fix vscode delete
-      };
+      sessionVariables = lib.mkMerge [
+        {
+          QT_QPA_PLATFORMTHEME = "qt5ct";
+          ELECTRON_TRASH="trash-cli"; # fix vscode delete
+        }
+        (lib.mkIf isWayland {
+          # Force GTK to use wayland
+          GDK_BACKEND = "wayland";
+          CLUTTER_BACKEND = "wayland";
+
+          # Force firefox to use wayland
+          MOZ_ENABLE_WAYLAND = "1";
+        })
+      ];
     };
 
     # List packages installed in system profile.
