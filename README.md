@@ -146,9 +146,9 @@ $ inxi -Gxx | grep compositor
 
 ```
 $ sudo chmod 600 ~/.ssh
-$ eval $(ssh-agent)
-$ ssh-add ~/.ssh/id_rsa
-$ ssh-add -K
+# $ eval $(ssh-agent)
+# $ ssh-add ~/.ssh/id_rsa
+$ ssh-add
 ```
 
 * Macbook Pro wifi
