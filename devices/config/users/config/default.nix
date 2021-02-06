@@ -74,6 +74,7 @@ in
       xdg = {
         enable = true;
         dataFile = {
+          # xprop to get app name
           "icons/hicolor/128x128/apps/code.png".source = ./icons/vscode/icon-128.png;
           "icons/hicolor/128x128/apps/d3lphin.png".source = ./icons/system-file-manager/icon-128.png;
           "icons/hicolor/128x128/apps/dde-file-manager.png".source = ./icons/system-file-manager/icon-128.png;
@@ -81,6 +82,9 @@ in
           "icons/hicolor/128x128/apps/org.xfce.filemanager.png".source = ./icons/system-file-manager/icon-128.png;
           "icons/hicolor/128x128/apps/system-file-manager.png".source = ./icons/system-file-manager/icon-128.png;
           "icons/hicolor/128x128/apps/thunar.png".source = ./icons/system-file-manager/icon-128.png;
+          "icons/hicolor/128x128/apps/org.xfce.Thunar.png".source = ./icons/system-file-manager/icon-128.png;
+          "icons/hicolor/128x128/apps/xfce-thunar.png".source = ./icons/system-file-manager/icon-128.png;
+          "icons/hicolor/128x128/apps/org-xfce-thunar.png".source = ./icons/system-file-manager/icon-128.png;
           "icons/hicolor/128x128/apps/xarchiver.png".source = ./icons/ark/icon-128.png;
           "icons/hicolor/128x128/apps/xfce-filemanager.png".source = ./icons/system-file-manager/icon-128.png;
         };
@@ -124,7 +128,7 @@ in
         ".config/Thunar/thunarrc".source = ./dotfiles/thunarrc;
         ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
         ".vimrc".source = ./dotfiles/.vimrc;
-        ".config/rofi/config.rasi".source = lib.mkIf isXorg ./dotfiles/rofi.rasi;
+        ".config/rofi-theme.rasi".source = lib.mkIf isXorg ./dotfiles/rofi-theme.rasi;
         ".config/nixpkgs/config.nix".text = ''
           { allowUnfree = true; }
         '';

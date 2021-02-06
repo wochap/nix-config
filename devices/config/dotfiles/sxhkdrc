@@ -1,8 +1,8 @@
 ### BSPWM HOTKEYS
 
-# Exit bspwm
+# Open power menu
 super + Escape
-  bspc quit
+	/etc/powermenu
 
 # Close window with focus
 super + shift + c
@@ -100,7 +100,7 @@ super + Return
 # open app launcher
 # NOTE `@` means until key is released
 super + space
-  rofi -show drun
+  rofi -theme ~/.config/rofi-theme.rasi -show drun
 
 # Take screenshoot
 super + alt + s
@@ -114,12 +114,12 @@ XF86MonBrightness{Down,Up}
 
 # Show clipmenu
 alt + v
-  CM_LAUNCHER=rofi clipmenu \
-    -m -3 \
+  CM_LAUNCHER=rofi \
+    clipmenu \
     -no-show-icons \
-    -theme-str '* \{ font: 10px; \}' \
+    -theme ~/.config/rofi-theme.rasi
     -theme-str 'listview \{ spacing: 0; \}' \
-    -theme-str 'window \{ width: 20em; \}'
+    -theme-str 'window \{ width: 30em; \}'
 
 # Show help
 super + slash
@@ -145,7 +145,3 @@ XF86AudioPlay
 	playerctl play-pause
 XF86AudioPrev
 	playerctl previous
-
-# power menu
-super + ctrl + Escape
-	/etc/powermenu

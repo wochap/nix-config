@@ -106,6 +106,9 @@ in
       xorg.xeyes # check if app is running on wayland
       zip
       neofetch
+      scrot # screen capture
+      mpc_cli
+      betterlockscreen # screen locker
 
       # DE
       alttab # windows like alt + tab

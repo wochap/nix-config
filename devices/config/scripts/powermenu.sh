@@ -1,43 +1,68 @@
 #!/usr/bin/env bash
 
-## Author : Aditya Shakya (adi1090x)
-## Mail : adi1090x@gmail.com
-## Github : @adi1090x
-## Reddit : @adi1090x
+#
+# Powermenu for Rofi
+#
+# Author : Lucero Alvarado
+# Github : @lu0
+#
 
-rofi_command="rofi -m 0 -theme /etc/powermenu.rasi"
+# Options as characters
+# Copied from decoded unicodes (private use of "Feather" font)
+shutdown="";        # "\uE9C0"
+reboot="";          # "\uE9C4"
+sleep="";           # "\uE9A3"
+logout="";          # "\uE991"
+lock="";            # "\uE98F"
+options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 
-uptime=$(uptime -p | sed -e 's/up //g')
+# Fake blurred background
+SS_PATH="$HOME/.config/rofi/screenshot"
+rm -f "${SS_PATH}.jpg" && scrot -z "${SS_PATH}.jpg"                 # screenshot
+convert "${SS_PATH}.jpg" -blur 0x10 -auto-level "${SS_PATH}.jpg"    # blur
+convert "${SS_PATH}.jpg" "${SS_PATH}.png"                           # rofi reads png images
 
-# Options
-shutdown=" Shutdown"
-reboot=" Reboot"
-# lock=" Bloquear"
-# suspend=" Hibernar"
-logout=" Logout"
+# Font size according to screen dimensions
+DEFAULT_WIDTH=1920
+WIDTH=$(xdpyinfo | grep dimensions | awk '{print $2}' | cut -d 'x' -f 1 )
+DEFAULT_FONTSIZE=60
+FONTSIZE=$(echo "$WIDTH/$DEFAULT_WIDTH*$DEFAULT_FONTSIZE" | bc -l)
 
-# Variable passed to rofi
-options="$logout\n$reboot\n$shutdown"
-# options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
+while getopts "lp" OPT; do
+  case "$OPT" in
+    p) PRESELECTION=0 ;;
+    l) PRESELECTION=3 ;;
+    *) PRESELECTION=4 ;;
+  esac
+done
+if (( $OPTIND == 1 )); then
+  PRESELECTION=4
+fi
 
-chosen="$(echo -e "$options" | $rofi_command -p "UP - $uptime" -dmenu -selected-row 0)"
-case $chosen in
-    $shutdown)
-        systemctl poweroff
-        ;;
-    $reboot)
-        systemctl reboot
-        ;;
-    # $lock)
-    #     /home/fhilipe/.config/polybar/scripts/lock.sh
-    #     ;;
-    # $suspend)
-    #     mpc -q pause
-    #     amixer set Master mute
-    #     systemctl suspend
-    #     ;;
-    $logout)
-        bspc quit
-        ;;
+selected="$(echo -e "$options" |
+            rofi -theme /etc/powermenu.rasi \
+              -fake-background ${SS_PATH}.png \
+              -fake-transparency \
+              -font "Work Sans, $FONTSIZE" \
+              -p "See you later, ${LOGNAME^}!" \
+              -dmenu -selected-row ${PRESELECTION})"
+
+case $selected in
+  $shutdown)
+    systemctl poweroff
+    ;;
+  $reboot)
+    systemctl reboot
+    ;;
+  $sleep)
+    mpc -q pause
+    amixer set Master mute
+    systemctl suspend
+    ;;
+  $logout)
+    bspc quit
+    ;;
+  $lock)
+    betterlockscreen -l
+    ;;
 esac
-

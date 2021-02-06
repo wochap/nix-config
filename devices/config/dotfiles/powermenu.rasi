@@ -1,163 +1,75 @@
 /*
  *
- * Author : Aditya Shakya (adi1090x)
- * Mail : adi1090x@gmail.com
- * Github : @adi1090x
- * Reddit : @adi1090x
+ *  Rofi theme for fullscreen powermenu
  *
- */
+ *  Inspiration:
+ *  https://github.com/adi1090x/rofi/blob/master/1080p/powermenu/full_square.rasi
+ *  https://github.com/lu0/rofi-blurry-powermenu/blob/master/powermenu_theme.rasi
+ *
+*/
 
 configuration {
-    font:                           "Work Sans 10";
-    show-icons:                     false;
-	  icon-theme: 					"Papirus";
-    display-drun: 					":";
-    drun-display-format:            "{name}";
-    threads:                        0;
-    scroll-method:                  0;
-    disable-history:                false;
-    fullscreen:                     false;
-	  hide-scrollbar: 				true;
-	  sidebar-mode: 					false;
-    location:                       7;
+  disable-history: false;
+  drun-display-format: "{name}";
+  fullscreen: true;
+  hide-scrollbar: true;
+  icon-theme: "Papirus";
+  show-icons: false;
+  sidebar-mode: false;
 }
 
-/* @import "colors_dark.rasi" */
-/* Color-Scheme For All Themes*/
 * {
-    background:    #292828;
-    background-alt:    #000000ff;
-    foreground:    #808080ff;
-    border:    #5895DCff;
-    selected:    #5895DCff;
-    urgent:    #EC407Aff;
-	  logo:    #EC407Aff;
-	  on:    #61C766ff;
-	  off:    #EC7875ff;
+  selected-bg-color: rgba(100, 100, 100, 0.4);
+  selected-text-color: #FFFFFF;
+  unselected-bg-color: rgba(100, 100, 100, 0.05);
+  unselected-text-color: #FFFFFF;
 }
 
-window {
-    transparency:                   "real";
-    background-color:               @background;
-    text-color:                     @foreground;
-    border-radius:                  20px;
-    height:                         30%;
-    width:                          17%;
-    x-offset:                       21;
-    y-offset:                       -470;
+#window {
+  background-color: rgba(15, 15, 15, 0.7);
+  border: 0;
 }
 
-prompt {
-    enabled: 						true;
-	  padding: 						4px 4px 6px 6px;
-	  background-color: 				@background;
-	  text-color: 					@foreground;
+#mainbox {
+  background-color: transparent;
+  children: [ inputbar, listview ];
+  padding: 35% 0% 0% 21.5%;
+  spacing: 5%;
 }
 
-textbox-prompt-colon {
-	expand: 						false;
-	str: 							"";
-    background-color:               @background;
-    text-color:                     @logo;
-    padding:                        5px 0px 0px 10px;
-	font:							"feather 10";
+#inputbar {
+  background-color: transparent;
+  children: [ prompt ];
 }
 
-inputbar {
-	children: 						[ textbox-prompt-colon, prompt ];
-    background-color:               @background;
-    text-color:                     @foreground;
-    expand:                         false;
-    border:                  		0px 0px 1px 0px;
-    border-radius:                  20px;
-    border-color:                  	@border;
-    margin:                         0px 0px 0px 0px;
-    padding:                        0px 0px 0px 0px;
-    position:                       center;
+#prompt {
+  background-color: transparent;
+  font: inherit;
+  text-color: @selected-text-color;
+  padding: 0% 0% 0% 1.65em;
 }
 
-
-entry {
-    background-color:               @background;
-    text-color:                     @foreground;
-    placeholder-color:              @foreground;
-    expand:                         true;
-    horizontal-align:               0;
-    placeholder:                    "Search";
-    blink:                          true;
-    padding:                        4px 0px 0px 0px;
+#horibox {
+  background-color: transparent;
+  children: [ listview ];
 }
 
-case-indicator {
-    background-color:               @background;
-    text-color:                     @foreground;
-    spacing:                        0;
+#listview {
+  background-color: transparent;
+  cycle: true;
+  dynamic: true;
+  layout: horizontal;
+  margin: 0% 0% 0% 0%;
+  spacing: 3%;
 }
 
-
-listview {
-    background-color:               @background;
-    columns:                        1;
-    spacing:                        4px;
-    cycle:                          true;
-    dynamic:                        true;
-    layout:                         vertical;
+#element {
+  background-color: @unselected-bg-color;
+  padding: 0.5em 0.5em 0.45em 0.5em;
+  text-color: @unselected-text-color;
 }
 
-mainbox {
-    background-color:               @background;
-    children:                       [ inputbar, listview ];
-    spacing:                       	5px;
-    padding:                        5px 5px 5px 5px;
-}
-
-element {
-    background-color:               @background;
-    text-color:                     @foreground;
-    orientation:                    horizontal;
-    border-radius:                  4px;
-    padding:                        6px 6px 6px 6px;
-}
-
-element-icon {
-    size:                           24px;
-    border:                         0px;
-}
-
-element-text {
-    expand:                         true;
-    horizontal-align:               0;
-    vertical-align:                 0;
-    margin:                         2px 0px 2px 2px;
-}
-
-element normal.urgent,
-element alternate.urgent {
-    background-color:               @urgent;
-    text-color:                     @foreground;
-    border-radius:                  9px;
-}
-
-element normal.active,
-element alternate.active {
-    background-color:               @background-alt;
-    text-color:                     @foreground;
-}
-
-element selected {
-    background-color:               @selected;
-    text-color:                     @background;
-    border:                  		0px;
-    border-radius:                  20px;
-    border-color:                  	@border;
-}
-
-element selected.urgent {
-    background-color:               @urgent;
-    text-color:                     @foreground;
-}
-
-element selected.active {
-    background-color:               @background-alt;
-    color:                          @foreground;
+#element.selected {
+  background-color: @selected-bg-color;
+  text-color: @selected-text-color;
 }

@@ -61,7 +61,7 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Super</kbd> + <kbd>Esc</kbd> | Quits bspwm |
+| <kbd>Super</kbd> + <kbd>Esc</kbd> | Opens power menu |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>c</kbd> | Closes window with focus |
 | <kbd>Alt</kbd> + <kbd>F4</kbd> | Closes window with focus |
 | <kbd>Super</kbd> + <kbd>m</kbd> | Alternate between the tiled and monocle layout |
