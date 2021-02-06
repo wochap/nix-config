@@ -121,19 +121,23 @@ in
       };
 
       # Add config files to home folder
-      home.file = {
-        ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
-        ".background-image".source = ../../wallpapers/default.jpeg;
-        ".config/polybar/main.ini".source = lib.mkIf isXorg ./dotfiles/polybar/main.ini;
-        ".config/polybar/modules.ini".source = lib.mkIf isXorg ./dotfiles/polybar/modules.ini;
-        ".config/Thunar/thunarrc".source = ./dotfiles/thunarrc;
-        ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
-        ".vimrc".source = ./dotfiles/.vimrc;
-        ".config/rofi-theme.rasi".source = lib.mkIf isXorg ./dotfiles/rofi-theme.rasi;
-        ".config/nixpkgs/config.nix".text = ''
-          { allowUnfree = true; }
-        '';
-      };
+      home.file = lib.mkMerge [
+        {
+          ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
+          ".background-image".source = ../../wallpapers/default.jpeg;
+          ".config/Thunar/thunarrc".source = ./dotfiles/thunarrc;
+          ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
+          ".vimrc".source = ./dotfiles/.vimrc;
+          ".config/nixpkgs/config.nix".text = ''
+            { allowUnfree = true; }
+          '';
+        }
+        (lib.mkIf isXorg {
+          ".config/polybar/main.ini".source = ./dotfiles/polybar/main.ini;
+          ".config/polybar/modules.ini".source = ./dotfiles/polybar/modules.ini;
+          ".config/rofi-theme.rasi".source = ./dotfiles/rofi-theme.rasi;
+        })
+      ];
 
       programs.fish = {
         enable = true;
