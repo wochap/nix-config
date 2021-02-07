@@ -1,11 +1,11 @@
 configuration {
-  dpi: 0;
-  font: "Hack 14";
-  icon-theme: "Papirus";
-  show-icons: true;
   display-drun: "  ";
+  dpi: 0;
   drun-display-format: "{icon} {name}";
+  font: "Iosevka Bold 11";
+  icon-theme: "Papirus";
   modi: "window,run,drun";
+  show-icons: true;
   kb-select-1: "";
   kb-select-2: "";
   kb-select-3: "";
@@ -18,78 +18,112 @@ configuration {
 }
 
 * {
-  polar-1: #2E3440;
-  polar-2: #3B4252;
-  polar-3: #434C5E;
-  polar-4: #4C566A;
+  backgroundcolor: #1C1E27;
+  bg1: #1C1E27;
+  backgroundcoloralternate: #1C1E27;
+  separatorcolor: #1C1E27;
+  scrollbarcolor: #1C1E27;
+  foregroundcolor: #cacacc;
+  foregroundcolorinverse: #1C1E27;// #839496;
+  selectioncolor: #4dd0e1; // #3b4252
 
-  snow-1: #D8DEE9;
-  snow-2: #E5E9F0;
-  snow-3: #ECEFF4;
-
-  frost-1: #8FBCBB;
-  frost-2: #88C0D0;
-  frost-3: #81A1C1;
-  frost-4: #5E81AC;
-
-  aurora-1: #BF616A;
-  aurora-2: #D08770;
-  aurora-3: #EBCB8B;
-  aurora-4: #A3BE8C;
-  aurora-5: #B48EAD;
-
-  background-color: @polar-1;
-
-  border: 0;
+  font-size: 1px;
+  border-color: @separatorcolor;
+  background-color: @backgroundcolor;
+  text-color: @foregroundcolor;
   margin: 0;
-  padding: 0;
+  margin-bottom: 0;
+  margin-top: 0;
   spacing: 0;
 }
 
-element {
-  padding: 12;
-  orientation: vertical;
-  text-color: @frost-3;
+#listview {
+  spacing: 0;
+  scrollbar: true;
+  margin: 0;
+  dynamic: true;
 }
 
-element selected {
-  text-color: @aurora-3;
+#window {
+  background-color: @backgroundcolor;
+  border-color: @separatorcolor;
+  border: 1;
+  border-radius: 2px;
 }
 
-entry {
-  background-color: @polar-2;
-  padding: 12 0 12 3;
-  text-color: @frost-1;
+#mainbox {
+  border: 0;
+  padding: 8;
+  background-color: @backgroundcoloralternate;
 }
 
-inputbar {
-  children: [prompt, entry];
+#element {
+  padding: 8;
+  border: 0 0 1 0;
+  border-color: @separatorcolor;
+  background-color: @backgroundcoloralternate;
 }
 
-listview {
-  columns: 1;
-  lines: 8;
+#element.selected.normal {
+  background-color: @selectioncolor;
+  text-color: @foregroundcolorinverse;
+  border-radius: 0px;
+
+  border: 0 0 1 0;
+  border-color: @separatorcolor;
 }
 
-mainbox {
-  children: [inputbar, listview];
+#element.alternate.normal {
+  background-color: @backgroundcoloralternate;
 }
 
-prompt {
-  background-color: @polar-2;
-  enabled: true;
-  font: "FontAwesome 12";
-  padding: 12 0 0 12;
-  text-color: @frost-1;
+#element.normal.active {
+  background-color: #434c5e;
 }
 
-window {
-  border-color: #4dd0e1;
-  border: 4px;
-  transparency: "real";
-  width: 25em;
+#element.alternate.active {
+  background-color: #434c5e;
 }
 
-/* @import "~/.cache/wal/colors-rofi-dark" */
+#element.selected.active {
+  background-color: @selectioncolor;
+  text-color: @foregroundcolorinverse;
+  border-radius: 0px;
 
-/* vim:ft=css
+  border: 0 0 1 0;
+  border-color: @separatorcolor;
+}
+
+#inputbar {
+  border: 0 solid 0 solid 1 solid 0 solid;
+  margin: 0;
+  spacing: 0;
+  border-color: @separatorcolor;
+}
+
+#prompt {
+  padding: 8;
+  background-color: @backgroundcoloralternate;
+  border: 0 1 0 0;
+}
+
+#entry {
+  padding: 8;
+}
+
+#scrollbar {
+  border: 0;
+  width: 8px;
+  handle-color: @scrollbarcolor;
+  handle-width: 8px;
+  background-color: @backgroundcoloralternate;
+}
+
+#scrollbar handle {
+  border: 1px;
+  border-color: #ff0000;
+}
+
+element-icon {
+  size: 2.8ch;
+}

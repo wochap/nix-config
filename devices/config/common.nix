@@ -122,6 +122,7 @@ in
       mpc_cli
       betterlockscreen # screen locker
       feh # image viewer
+      fzf # fuzzy search
 
       # DE
       alttab # windows like alt + tab
@@ -174,18 +175,23 @@ in
         font-awesome_4
         gelasio
         hack-font
-        iosevka
         jetbrains-mono
         material-design-icons
         material-icons
         noto-fonts
-        noto-fonts noto-fonts-cjk noto-fonts-emoji
+        noto-fonts
+        noto-fonts-cjk
+        noto-fonts-emoji
         siji
         source-code-pro
         terminus_font
         ttf_bitstream_vera
         ubuntu_font_family
         work-sans
+
+        # Horizon theme
+        inconsolata
+        iosevka
       ];
       fontconfig = {
         allowBitmaps = true;

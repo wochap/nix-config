@@ -126,7 +126,8 @@ in
         {
           ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
           ".background-image".source = ../../wallpapers/default.jpeg;
-          ".config/Thunar/thunarrc".source = ./dotfiles/thunarrc;
+          ".config/Thunar/thunarrc".source = ./dotfiles/Thunar/thunarrc;
+          ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
           ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
           ".vimrc".source = ./dotfiles/.vimrc;
           ".config/nixpkgs/config.nix".text = ''
