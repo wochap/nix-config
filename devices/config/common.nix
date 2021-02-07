@@ -89,6 +89,7 @@ in
     # List packages installed in system profile.
     environment.systemPackages = with pkgs; [
       # Tools
+      # base-devel
       arandr # xrandr gui
       bc # calculator cli
       evtest

@@ -17,10 +17,10 @@ lock="";            # "\uE98F"
 options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 
 # Fake blurred background
-SS_PATH="$HOME/.config/rofi/screenshot"
-rm -f "${SS_PATH}.jpg" && scrot -z "${SS_PATH}.jpg"                 # screenshot
-convert "${SS_PATH}.jpg" -blur 0x10 -auto-level "${SS_PATH}.jpg"    # blur
-convert "${SS_PATH}.jpg" "${SS_PATH}.png"                           # rofi reads png images
+# SS_PATH="$HOME/.config/rofi/screenshot"
+# rm -f "${SS_PATH}.jpg" && scrot -z "${SS_PATH}.jpg"                 # screenshot
+# convert "${SS_PATH}.jpg" -blur 0x10 -auto-level "${SS_PATH}.jpg"    # blur
+# convert "${SS_PATH}.jpg" "${SS_PATH}.png"                           # rofi reads png images
 
 # Font size according to screen dimensions
 DEFAULT_WIDTH=1920
@@ -39,10 +39,10 @@ if (( $OPTIND == 1 )); then
   PRESELECTION=4
 fi
 
+# -fake-background ${SS_PATH}.png \
+# -fake-transparency \
 selected="$(echo -e "$options" |
             rofi -theme /etc/powermenu.rasi \
-              -fake-background ${SS_PATH}.png \
-              -fake-transparency \
               -font "Work Sans, $FONTSIZE" \
               -p "See you later, ${LOGNAME^}!" \
               -dmenu -selected-row ${PRESELECTION})"
