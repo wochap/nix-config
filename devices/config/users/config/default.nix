@@ -79,17 +79,17 @@ in
         dataFile = {
           # xprop to get app name
           "icons/hicolor/128x128/apps/code.png".source = ./icons/vscode/icon-128.png;
-          "icons/hicolor/128x128/apps/d3lphin.png".source = ./icons/system-file-manager/icon-128.png;
-          "icons/hicolor/128x128/apps/dde-file-manager.png".source = ./icons/system-file-manager/icon-128.png;
+          # "icons/hicolor/128x128/apps/d3lphin.png".source = ./icons/system-file-manager/icon-128.png;
+          # "icons/hicolor/128x128/apps/dde-file-manager.png".source = ./icons/system-file-manager/icon-128.png;
           "icons/hicolor/128x128/apps/kitty.png".source = ./icons/terminal/icon-128.png;
-          "icons/hicolor/128x128/apps/org.xfce.filemanager.png".source = ./icons/system-file-manager/icon-128.png;
-          "icons/hicolor/128x128/apps/system-file-manager.png".source = ./icons/system-file-manager/icon-128.png;
-          "icons/hicolor/128x128/apps/thunar.png".source = ./icons/system-file-manager/icon-128.png;
-          "icons/hicolor/128x128/apps/org.xfce.Thunar.png".source = ./icons/system-file-manager/icon-128.png;
-          "icons/hicolor/128x128/apps/xfce-thunar.png".source = ./icons/system-file-manager/icon-128.png;
-          "icons/hicolor/128x128/apps/org-xfce-thunar.png".source = ./icons/system-file-manager/icon-128.png;
+          # "icons/hicolor/128x128/apps/org.xfce.filemanager.png".source = ./icons/system-file-manager/icon-128.png;
+          # "icons/hicolor/128x128/apps/system-file-manager.png".source = ./icons/system-file-manager/icon-128.png;
+          # "icons/hicolor/128x128/apps/thunar.png".source = ./icons/system-file-manager/icon-128.png;
+          # "icons/hicolor/128x128/apps/org.xfce.Thunar.png".source = ./icons/system-file-manager/icon-128.png;
+          # "icons/hicolor/128x128/apps/xfce-thunar.png".source = ./icons/system-file-manager/icon-128.png;
+          # "icons/hicolor/128x128/apps/org-xfce-thunar.png".source = ./icons/system-file-manager/icon-128.png;
           "icons/hicolor/128x128/apps/xarchiver.png".source = ./icons/ark/icon-128.png;
-          "icons/hicolor/128x128/apps/xfce-filemanager.png".source = ./icons/system-file-manager/icon-128.png;
+          # "icons/hicolor/128x128/apps/xfce-filemanager.png".source = ./icons/system-file-manager/icon-128.png;
         };
 
         # Control default apps
@@ -173,6 +173,7 @@ in
       # Add config files to home folder
       home.file = lib.mkMerge [
         {
+          ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
           ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
           ".background-image".source = ../../wallpapers/default.jpeg;
           ".config/Thunar/thunarrc".source = ./dotfiles/Thunar/thunarrc;

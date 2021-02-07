@@ -1,0 +1,55 @@
+set notification-error-bg       "#282828" # bg
+set notification-error-fg       "#fb4934" # bright:red
+set notification-warning-bg     "#282828" # bg
+set notification-warning-fg     "#fabd2f" # bright:yellow
+set notification-bg             "#282828" # bg
+set notification-fg             "#b8bb26" # bright:green
+
+set completion-bg               "#504945" # bg2
+set completion-fg               "#ebdbb2" # fg
+set completion-group-bg         "#3c3836" # bg1
+set completion-group-fg         "#928374" # gray
+set completion-highlight-bg     "#83a598" # bright:blue
+set completion-highlight-fg     "#504945" # bg2
+
+# Define the color in index mode
+set index-bg                    "#504945" # bg2
+set index-fg                    "#ebdbb2" # fg
+set index-active-bg             "#83a598" # bright:blue
+set index-active-fg             "#504945" # bg2
+
+set inputbar-bg                 "#b16286" # bg
+set inputbar-fg                 "#000000" # fg
+
+set statusbar-bg                "#B9979C" # bg2
+set statusbar-fg                "#000000" # fg
+
+set highlight-color             "#fabd2f" # bright:yellow
+set highlight-active-color      "#fe8019" # bright:orange
+
+set default-bg                  "#000000" # bg
+set default-fg                  "#B4B9B9" # fg
+set render-loading              true
+set render-loading-bg           "#000000" # bg
+set render-loading-fg           "#B4B9B9" # fg
+
+# Recolor book content's color
+set recolor-lightcolor          "#000000" # bg
+set recolor-darkcolor           "#B4B9B9" # fg
+
+set statusbar-v-padding  15
+set statusbar-h-padding  75
+set selection-clipboard clipboard
+set font "mononoki Nerd Font 11"
+set recolor                     true
+set pages-per-row 1
+set statusbar-basename          true
+set page-padding 1
+set sandbox none
+map u scroll half-up
+map d scroll half-down
+map D toggle_page_mode
+map r reload
+map R rotate
+map K zoom in
+map J zoom out
