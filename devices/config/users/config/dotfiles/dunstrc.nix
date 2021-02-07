@@ -4,7 +4,15 @@
     class = "Dunst";
     monitor = 0;
     follow = "mouse";
-    geometry = "300x6-30+60";
+
+    # The geometry of the window. Format: [{width}]x{height}[+/-{x}+/-{y}]
+    # The height = number of notifications, all other variables are px
+    # Omit width, provide height for full-screen width notifications
+    # If width is 0, window will fit to longest message
+    # Positive x value is measured from the left of the screen, negative x is measured from the right
+    # Positive y value is measured from the top of the screen
+    geometry = "350x6-16+84";
+
     indicate_hidden = "yes";
     shrink = "yes";
 
@@ -16,7 +24,7 @@
     frame_color = "#1C1E27";
     separator_color = "#404859";
 
-    font = "Inconsolata Bold 10";
+    font = "Inconsolata Bold 11";
 
     line_height = 0;
     markup = "full";
