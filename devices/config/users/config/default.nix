@@ -8,6 +8,7 @@ in
     ./git.nix
     ./gtk.nix
     ./polybar.nix
+    ./picom.nix
   ];
 
   config = {
@@ -198,30 +199,6 @@ in
       };
 
       services.flameshot.enable = isXorg;
-
-      services.picom = lib.mkIf isXorg {
-        # Reduces screen tearing
-        enable = true;
-        blur = true;
-        blurExclude = [];
-        experimentalBackends = true;
-        vSync = true;
-        backend = "glx";
-        refreshRate = 60;
-        shadowExclude = [];
-        fadeExclude = [
-          "name ~= 'polybar'"
-          "name ~= 'alttab'"
-          "name ~= 'rofi'"
-        ];
-        fade = true;
-        shadow = true;
-        extraOptions = ''
-          blur-method = "gaussian";
-          blur-size = 2;
-          blur-deviation = 5.0;
-        '';
-      };
     };
   };
 }

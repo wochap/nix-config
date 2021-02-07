@@ -50,13 +50,10 @@
           greeters.gtk.enable = true;
           greeters.gtk.cursorTheme.name = "Capitaine Cursors"; #FIXME
           greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
-          greeters.gtk.iconTheme.name = "Arc";
-          greeters.gtk.iconTheme.package = pkgs.arc-icon-theme;
-          greeters.gtk.theme.name = "Arc-Dark";
-          greeters.gtk.theme.package = pkgs.arc-theme;
-          greeters.gtk.extraConfig = ''
-            greeter-hide-users=false
-          '';
+          greeters.gtk.iconTheme.name = "Papirus";
+          greeters.gtk.iconTheme.package = pkgs.papirus-icon-theme;
+          greeters.gtk.theme.name = "Nordic";
+          greeters.gtk.theme.package = pkgs.nordic;
         };
       };
     };

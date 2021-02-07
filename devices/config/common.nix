@@ -148,6 +148,7 @@ in
       arc-theme
       capitaine-cursors
       hicolor-icon-theme
+      nordic
       pantheon.elementary-icon-theme
       papirus-icon-theme
       qt5ct
@@ -159,6 +160,8 @@ in
     ];
 
     fonts = {
+      enableFontDir = true;
+      enableGhostscriptFonts = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
         # nerdfonts # requires nvidia?

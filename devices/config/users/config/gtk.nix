@@ -10,11 +10,11 @@
           package = pkgs.papirus-icon-theme;
         };
         theme = {
-          name = "Arc-Dark";
-          package = pkgs.arc-theme;
+          name = "Nordic";
+          package = pkgs.nordic;
         };
         font = {
-          name = "Work Sans 10";
+          name = "Work Sans 11";
           package = pkgs.work-sans;
         };
         # gtk3.extraCss

@@ -180,6 +180,7 @@ Disable ipv6 connection.
 * https://github.com/nrdxp/nixflk/tree/template
 * https://github.com/kampka/nix-packages
 * https://github.com/sgraf812/.nixpkgs
+* https://www.reddit.com/r/NixOS/comments/k7e9sg/newbie_desktop_nixos_setup_for_developer/
 
 ### To learn
 
