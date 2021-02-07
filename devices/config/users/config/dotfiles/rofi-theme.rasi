@@ -25,7 +25,7 @@ configuration {
   scrollbarcolor: #1C1E27;
   foregroundcolor: #cacacc;
   foregroundcolorinverse: #1C1E27;// #839496;
-  selectioncolor: #4dd0e1; // #3b4252
+  selectioncolor: #E95678;
 
   font-size: 1px;
   border-color: @separatorcolor;
