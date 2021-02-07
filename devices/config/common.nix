@@ -165,6 +165,7 @@ in
       enableGhostscriptFonts = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
+        # material-design-icons
         cascadia-code
         corefonts
         fira-code
@@ -175,7 +176,7 @@ in
         gelasio
         hack-font
         jetbrains-mono
-        # material-design-icons
+        mononoki
         noto-fonts
         noto-fonts
         noto-fonts-cjk
@@ -188,10 +189,11 @@ in
         work-sans
 
         # Horizon theme
+        (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
+        cantarell_fonts
         inconsolata
         iosevka
         material-icons
-        (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
       ] ;
       fontconfig = {
         allowBitmaps = true;
