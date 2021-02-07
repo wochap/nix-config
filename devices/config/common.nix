@@ -165,7 +165,6 @@ in
       enableGhostscriptFonts = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
-        # material-design-icons
         cascadia-code
         corefonts
         fira-code
