@@ -11,10 +11,10 @@ in
         enable = true;
         # TODO: try https://github.com/polybar/polybar/issues/763
         script = if isDesktop then ''
-          MONITOR=DP-0 BAR_HEIGHT=52 polybar --reload mainbar-bspwm &
-          MONITOR=DP-2 BAR_HEIGHT=36 polybar --reload mainbar-bspwm &
+          MONITOR=DP-0 polybar main &
+          MONITOR=DP-2 polybar main &
         '' else ''
-          polybar --reload mainbar-bspwm &
+          polybar main &
         '';
         config = ./dotfiles/polybar/config.ini;
       };

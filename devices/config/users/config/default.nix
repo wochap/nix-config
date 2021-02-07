@@ -137,7 +137,6 @@ in
         }
         (lib.mkIf isXorg {
           ".config/polybar/main.ini".source = ./dotfiles/polybar/main.ini;
-          ".config/polybar/modules.ini".source = ./dotfiles/polybar/modules.ini;
           ".config/rofi-theme.rasi".source = ./dotfiles/rofi-theme.rasi;
         })
       ];

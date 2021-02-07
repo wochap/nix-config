@@ -171,6 +171,20 @@ $ set 3 boot
 
 Disable ipv6 connection.
 
+* Test polybar themes
+
+```
+$ killall polybar
+$ polybar main --config=/home/gean/nix-config/devices/config/users/config/dotfiles/polybar/main.ini -r
+```
+
+* Copy installed icons unicode
+
+`E8E4` is the unicode.
+```
+$ echo -ne "\uE8E4" | xclip -selection clipboard
+```
+
 ## Resources
 
 ### Inspiration
@@ -190,6 +204,7 @@ Disable ipv6 connection.
 ### Rice resources
 
 * https://fontawesome.com/cheatsheet
+* https://fontdrop.info/
 
 ### Others
 
