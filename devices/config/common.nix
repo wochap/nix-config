@@ -146,6 +146,7 @@ in
       screenkey # show key pressed
       filelight # view disk usage
       deluge # torrent client
+      zathura # PDF viewer
 
       # Theme
       arc-icon-theme
