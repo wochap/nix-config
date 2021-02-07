@@ -29,7 +29,7 @@ in
           gtk-enable-animations = true;
           gtk-enable-event-sounds = 1;
           gtk-enable-input-feedback-sounds = 1;
-          gtk-font-name = "Cantarell 11";
+          gtk-font-name = "Cantarell 9";
           gtk-menu-images = 1;
           gtk-primary-button-warps-slider = true;
           gtk-toolbar-icon-size = "GTK_ICON_SIZE_LARGE_TOOLBAR";
