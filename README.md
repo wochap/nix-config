@@ -189,6 +189,7 @@ $ echo -ne "\uE8E4" | xclip -selection clipboard
 
 ### Inspiration
 
+* https://github.com/phenax/nixos-dotfiles
 * https://gitlab.com/dwt1/dotfiles
 * https://github.com/JorelAli/nixos
 * https://github.com/nrdxp/nixflk/tree/template
@@ -205,6 +206,8 @@ $ echo -ne "\uE8E4" | xclip -selection clipboard
 
 * https://fontawesome.com/cheatsheet
 * https://fontdrop.info/
+* https://coderwall.com/p/dedqca/argb-colors-in-android
+* https://github.com/zodd18/Horizon
 
 ### Others
 
