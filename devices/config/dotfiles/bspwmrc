@@ -1,5 +1,12 @@
 #!/usr/bin/env sh
 
+screenheight=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $4}')
+screenwidth=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $3}')
+windowwidth=$(("$screenwidth"/2))
+windowheight=$(("$screenheight"/2))
+windowx=$(("$screenwidth"/2-"$windowwidth"/2))
+windowy=$(("$screenheight"/2-"$windowheight"/2))
+
 #### AUTOSTART ####
 # wal -R
 nitrogen --restore &
@@ -13,7 +20,8 @@ xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 # source the colors.
 # . "${HOME}/.cache/wal/colors.sh"
 bspc config normal_border_color \#282e3a
-bspc config active_border_color \#2C4E9C
+# bspc config active_border_color \#2C4E9C
+bspc config active_border_color \#E95678
 bspc config focused_border_color \#4dd0e1
 bspc config urgent_border_color  \#dc322f
 bspc config presel_feedback_color \#18348D
@@ -28,6 +36,7 @@ bspc config borderless_monocle  true
 
 bspc rule -a mpv state=floating sticky=on
 bspc rule -a pick-colour-picker state=floating sticky=on
+bspc rule -a Thunar state=floating rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
