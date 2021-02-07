@@ -49,7 +49,7 @@ configuration {
   border-color: @separatorcolor;
   border-radius: 2px;
   border: 1;
-  width: 25em;
+  width: 26em;
 }
 
 #mainbox {

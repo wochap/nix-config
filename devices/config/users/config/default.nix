@@ -41,6 +41,7 @@ in
         nitrogen # wallpaper manager
         clipmenu # clipboard manager
         rofi # app launcher
+        rofi-calc
 
         # Dev tools
         gitAndTools.gh
