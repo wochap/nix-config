@@ -55,6 +55,9 @@ in
     # Allows proprietary or unfree packages
     nixpkgs.config.allowUnfree = true;
 
+    # Explicit PulseAudio support in applications
+    nixpkgs.config.pulseaudio = true;
+
     # Set your time zone.
     time.timeZone = "America/Lima";
 

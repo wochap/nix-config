@@ -27,6 +27,7 @@ bspc config borderless_monocle  true
 # bspc config focus_by_distance   true
 
 bspc rule -a mpv state=floating sticky=on
+bspc rule -a pick-colour-picker state=floating sticky=on
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
