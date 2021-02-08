@@ -5,7 +5,7 @@ super + Escape
 	/etc/powermenu
 
 # Close and kill
-super + {_,shift + }q
+super + {w,shift + q}
 	bspc node -{c,k}
 
 # Alternate between the tiled and monocle layout

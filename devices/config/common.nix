@@ -8,6 +8,7 @@ let
   };
   isMbp = config.networking.hostName == "gmbp";
   isWayland = config._displayServer == "wayland";
+  localPkgs = import ./packages { pkgs = pkgs; };
 in
 {
   imports = [
@@ -120,6 +121,7 @@ in
       wget
       xarchiver # archive manager required by thunar
       xclip
+      xdotool # Fake keyboard/mouse input
       xlayoutdisplay # fix dpi
       xorg.xdpyinfo # show monitor info
       xorg.xeyes # check if app is running on wayland
@@ -169,7 +171,7 @@ in
       gtk-engine-murrine
       gtk_engines
       lxappearance
-    ];
+    ] ++ [ localPkgs.eww ];
 
     fonts = {
       enableFontDir = true;
