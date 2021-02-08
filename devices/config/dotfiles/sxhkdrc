@@ -133,8 +133,8 @@ super + alt + c
 super + alt + b
   firefox
 
-# Print
-#   flameshot full -p /home/fhilipe/Imagens/Screenshots/
+Print
+  flameshot full -p ~/Pictures/Screenshots/
 
 # Media keys
 XF86AudioNext
