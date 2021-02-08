@@ -124,7 +124,7 @@ in
       # Add config files to home folder
       home.file = lib.mkMerge [
         {
-          ".config/eww".source = ./dotfiles/ewww;
+          ".config/eww".source = ./dotfiles/eww;
           ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
           ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
           ".background-image".source = ../../wallpapers/default.jpeg;
