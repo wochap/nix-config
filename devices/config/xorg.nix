@@ -39,7 +39,7 @@
           source = ./scripts/sxhkd-help.sh;
           mode = "0755";
         };
-        powermenu = {
+        "powermenu.sh" = {
           source = ./scripts/powermenu.sh;
           mode = "0755";
         };

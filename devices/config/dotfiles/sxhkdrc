@@ -2,7 +2,7 @@
 
 # Open power menu
 super + Escape
-	/etc/powermenu
+	/etc/powermenu.sh
 
 # Close and kill
 super + {w,shift + q}
