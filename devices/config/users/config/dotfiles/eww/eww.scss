@@ -1,0 +1,78 @@
+// general
+* {
+  all: unset;
+}
+
+window {
+  background-color: #2e3440;
+  color: #e5e9f0;
+  font-family: monospace;
+}
+
+button {
+  all: unset;
+  padding: 20px;
+}
+
+.main_box {
+  border-width: 3px;
+  border-style: solid;
+  border-color: #3b4252;
+  border-radius: 12px;
+}
+
+.vol {
+  border-width: 3px;
+  border-style: solid;
+  border-color: #3b4252;
+  // border-radius: 12px;
+}
+
+//vol
+.vol scale trough highlight {
+  all: unset;
+	background-color: #e95678;
+	color: #000000;
+	border-radius: 100px;
+}
+
+.vol scale trough {
+	all: unset;
+	background-color: #434c5e;
+	border-radius: 50px;
+	min-height: 35px;
+  min-width: 250px;
+  margin: 30px;
+}
+
+.vol-icon {
+  font-family: "Font Awesome 5 Free";
+  font-size: 96px;
+  margin-top: 80px;
+  color: #e95678;
+}
+
+//bright
+.bright scale trough highlight {
+  all: unset;
+	background-color: #ebcb8b;
+	color: #000000;
+	border-radius: 100px;
+}
+
+.bright scale trough {
+	all: unset;
+	background-color: #434c5e;
+	border-radius: 50px;
+	min-height: 35px;
+  min-width: 250px;
+  margin: 30px;
+}
+
+.bright-icon {
+  font-family: icons;
+  font-size: 96px;
+  margin-top: 80px;
+  //margin-right: 9px;
+  color: #ebcb8b;
+}

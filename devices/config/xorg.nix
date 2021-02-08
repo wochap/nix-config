@@ -11,6 +11,18 @@
     # Setup DE bspwm and sxhkdrc
     environment = {
       etc = {
+        "eww_bright.sh" = {
+          source = ./scripts/eww_bright.sh;
+          mode = "0755";
+        };
+        "eww_vol_icon.sh" = {
+          source = ./scripts/eww_vol_icon.sh;
+          mode = "0755";
+        };
+        "eww_vol.sh" = {
+          source = ./scripts/eww_vol.sh;
+          mode = "0755";
+        };
         bspwmrc = {
           source = ./dotfiles/bspwmrc;
           mode = "0755";

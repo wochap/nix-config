@@ -111,6 +111,7 @@ in
       notify-desktop # test notifications
       nvtop
       pciutils # lspci and others commands
+      pulsemixer
       radeontop
       ranger # file manager cli
       screenfetch # show system info

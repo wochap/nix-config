@@ -100,7 +100,7 @@ super + Return
 super + space
   rofi -theme ~/.config/rofi-theme.rasi -show drun
 
-# Take screenshoot
+# Open screenshoot utility
 super + alt + s
   flameshot gui
 
@@ -131,15 +131,34 @@ super + alt + c
 super + alt + b
   firefox
 
+# Take fullscreen screenshoot
 super + Print
   flameshot full -p ~/Pictures/Screenshots/
 
-# Media keys
+# Play next media
 XF86AudioNext
 	playerctl next
+
+# Pause media
 XF86AudioStop
 	playerctl pause
+
+# Play media
 XF86AudioPlay
 	playerctl play-pause
+
+# Play previous media
 XF86AudioPrev
 	playerctl previous
+
+# Increase volume
+XF86AudioRaiseVolume
+  /etc/eww_vol.sh up
+
+# Decrease volume
+XF86AudioLowerVolume
+  /etc/eww_vol.sh down
+
+# Toggle mute
+XF86AudioMute
+  /etc/eww_vol.sh mute

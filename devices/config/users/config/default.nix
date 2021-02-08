@@ -95,7 +95,7 @@ in
         # Control default apps
         mimeApps.enable = true;
         mimeApps.defaultApplications = {
-          "inode/directory" = [ "thunar.desktop" ];
+          "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
           "text/html" = [ "firefox.desktop" ];
           "x-scheme-handler/http" = [ "firefox.desktop" ];
           "x-scheme-handler/https" = [ "firefox.desktop" ];
@@ -124,6 +124,7 @@ in
       # Add config files to home folder
       home.file = lib.mkMerge [
         {
+          ".config/eww".source = ./dotfiles/ewww;
           ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
           ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
           ".background-image".source = ../../wallpapers/default.jpeg;
