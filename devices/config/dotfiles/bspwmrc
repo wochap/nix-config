@@ -35,7 +35,8 @@ bspc config borderless_monocle  true
 # bspc config focus_by_distance   true
 
 bspc rule -a mpv state=floating sticky=on
-bspc rule -a pick-colour-picker state=floating sticky=on
+bspc rule -a ".pick-colour-picker-wrapped" state=floating sticky=on
+bspc rule -a flameshot state=floating sticky=on
 bspc rule -a Thunar state=floating rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
 
 #### BSPWM workspaces ####
