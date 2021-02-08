@@ -23,6 +23,14 @@ in
       # changes in each release.
       home.stateVersion = "21.03";
 
+      # Open GTK inspector with Ctrl + Shift + D
+      # GTK_DEBUG=interactive <app>
+      dconf.settings = {
+        "org/gtk/Settings/Debug" = {
+          enable-inspector-keybinding = true;
+        };
+      };
+
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
 
