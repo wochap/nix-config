@@ -39,6 +39,9 @@ bspc rule -a mpv state=floating sticky=on
 bspc rule -a ".pick-colour-picker-wrapped" state=floating sticky=on
 bspc rule -a flameshot state=floating sticky=on
 bspc rule -a Thunar state=floating rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
+bspc rule -a Org.gnome.Nautilus state=floating rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
+bspc rule -a gnome-calculator state=floating
+bspc rule -a gnome-font-viewer state=floating
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do

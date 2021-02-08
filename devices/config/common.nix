@@ -92,41 +92,38 @@ in
       # base-devel
       arandr # xrandr gui
       bc # calculator cli
+      betterlockscreen # screen locker
       evtest
+      feh # image viewer
       ffmpeg-full # video codecs?
+      fzf # fuzzy search
       git
       gnumake # make
       gotop
       htop
       inxi # check compositor running
       killall
+      mpc_cli
       mpd
       mpd_clientlib # mpd module
+      neofetch
       notify-desktop # test notifications
       nvtop
       pciutils # lspci and others commands
       radeontop
+      ranger # file manager cli
       screenfetch # show system info
+      scrot # screen capture
       trash-cli # required by vscode
       unzip
       vim
       wget
-      xarchiver # required by thunar
+      xarchiver # archive manager required by thunar
       xclip
-      xfce.gvfs
-      xfce.thunar # file manager
-      xfce.thunar-archive-plugin
-      xfce.thunar-volman
       xlayoutdisplay # fix dpi
       xorg.xdpyinfo # show monitor info
       xorg.xeyes # check if app is running on wayland
       zip
-      neofetch
-      scrot # screen capture
-      mpc_cli
-      betterlockscreen # screen locker
-      feh # image viewer
-      fzf # fuzzy search
 
       # DE
       alttab # windows like alt + tab
@@ -135,18 +132,27 @@ in
       networkmanager_dmenu # network manager cli
       pamixer # audio cli
       pavucontrol # audio gui
-      pywal # theme color generator cli
-      volumeicon # audio tray + gui
-      systemd
       playerctl # media player cli
+      pywal # theme color generator cli
+      systemd
+      volumeicon # audio tray + gui
 
       # Apps
+      deluge # torrent client
       etcher # create booteable usbs
+      filelight # view disk usage
+      # gnome3.gnome-disk-utility
+      # gnome3.gnome-system-monitor
+      gnome3.file-roller # archive manager
+      gnome3.gnome-calculator
+      gnome3.gnome-font-viewer
+      gnome3.nautilus
       nomacs # image viewer/editor
       pick-colour-picker # color picker gui
       screenkey # show key pressed
-      filelight # view disk usage
-      deluge # torrent client
+      xfce.thunar # file manager
+      xfce.thunar-archive-plugin
+      xfce.thunar-volman
       zathura # PDF viewer
 
       # Theme

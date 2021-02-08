@@ -4,12 +4,9 @@
 super + Escape
 	/etc/powermenu
 
-# Close window with focus
-super + shift + c
-	bspc node -c
-
-alt + F4
-	bspc node -c
+# Close and kill
+super + {_,shift + }q
+	bspc node -{c,k}
 
 # Alternate between the tiled and monocle layout
 super + m
@@ -91,7 +88,8 @@ ctrl + alt + shift + {h,j,k,l}
 
 # open file manager
 super + alt + e
-  thunar
+  nautilus
+  # thunar
 
 # open termina
 super + Return
@@ -133,7 +131,7 @@ super + alt + c
 super + alt + b
   firefox
 
-Print
+super + Print
   flameshot full -p ~/Pictures/Screenshots/
 
 # Media keys

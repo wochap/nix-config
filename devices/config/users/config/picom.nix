@@ -12,6 +12,10 @@ in
         # Disabling experimentalBackends, removes corners artifact with shadows
         experimentalBackends = true;
 
+        # opacityRule = [
+        #   "90:class_i ?= 'thunar'"
+        # ];
+
         vSync = true;
         backend = "glx";
         extraOptions = (builtins.readFile ./dotfiles/picom.conf);
