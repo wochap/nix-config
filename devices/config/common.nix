@@ -94,6 +94,7 @@ in
       arandr # xrandr gui
       bc # calculator cli
       betterlockscreen # screen locker
+      dos2unix
       evtest
       feh # image viewer
       ffmpeg-full # video codecs?
