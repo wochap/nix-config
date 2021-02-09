@@ -84,14 +84,6 @@ in
       # Edit home files
       xdg = {
         enable = true;
-        dataFile = {
-          # xprop to get app class name
-          "icons/hicolor/128x128/apps/code.png".source = ./icons/vscode/icon-128.png;
-          "icons/hicolor/128x128/apps/kitty.png".source = ./icons/terminal/icon-128.png;
-          "icons/hicolor/128x128/apps/org.gnome.Nautilus.png".source = ./icons/system-file-manager/icon-128.png;
-          "icons/hicolor/128x128/apps/thunar.png".source = ./icons/system-file-manager/icon-128.png;
-          "icons/hicolor/128x128/apps/xarchiver.png".source = ./icons/ark/icon-128.png;
-        };
 
         # Control default apps
         mimeApps.enable = true;
@@ -205,6 +197,12 @@ in
       };
 
       services.flameshot.enable = isXorg;
+
+      # services.random-background = {
+      #   enable = true;
+      #   imageDirectory = "%h/Pictures/backgrounds";
+      #   interval = "30m";
+      # };
     };
   };
 }

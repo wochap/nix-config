@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "whitesur-dark-icons";
     owner = "wochap";
-    rev = "6b472c0abe4b05041e35fc9674e916b6315a60fb";
-    sha256 = "10aacmrd3y6mfs6k7kn65vxbmlc8i79ip3sfb5ski7kwr1jw33b5";
+    rev = "d9dcf8e627a671ddaa0679d6ba87cf983d774019";
+    sha256 = "1bdxdbz9ziw4k6rkd23axi6kff4g74qa936ib04qj8wbiyjybp8q";
   };
 
   sourceRoot = ".";
