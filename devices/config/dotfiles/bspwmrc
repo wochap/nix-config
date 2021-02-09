@@ -10,7 +10,7 @@ windowy=$(echo "$screenheight"/2-"$windowheight"/2 | bc)
 #### AUTOSTART ####
 # wal -R
 nitrogen --restore &
-alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 1 -bg "#21252b" -fg "#979eae" -frame "#E95678" -font "xft:Cantarell-11" -theme "WhiteSur-dark" &
+alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#21252b" -fg "#979eae" -frame "#E95678" -font "xft:Cantarell-11" -theme "WhiteSur-dark" &
 blueberry-tray &
 # volumeicon &
 clipmenud &
