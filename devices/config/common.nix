@@ -157,6 +157,7 @@ in
       xfce.thunar-archive-plugin
       xfce.thunar-volman
       zathura # PDF viewer
+      zoom-us
 
       # Theme
       arc-icon-theme
