@@ -14,13 +14,8 @@ in
           mpdSupport = true;
           pulseSupport = true;
         };
-        # TODO: try https://github.com/polybar/polybar/issues/763
-        script = if isDesktop then ''
-          MONITOR=DP-0 polybar main &
-          MONITOR=DP-2 polybar main &
-        '' else ''
-          polybar main &
-        '';
+        # Fixes: https://github.com/nix-community/home-manager/issues/1616
+        script = "";
         config = ./dotfiles/polybar/config.ini;
       };
     };

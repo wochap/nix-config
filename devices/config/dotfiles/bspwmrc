@@ -18,6 +18,14 @@ xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
 echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
 exec /etc/eww_vol_icon.sh mute &
+# TODO: try https://github.com/polybar/polybar/issues/763
+# script = if isDesktop then ''
+#   MONITOR=DP-0 polybar main &
+#   MONITOR=DP-2 polybar main &
+# '' else ''
+#   polybar main &
+# '';
+polybar main &
 
 #### BSPWM coloring ####
 # source the colors.
