@@ -153,9 +153,11 @@ in
       nomacs # image viewer/editor
       pick-colour-picker # color picker gui
       screenkey # show key pressed
+      xfce.exo
       xfce.thunar # file manager
       xfce.thunar-archive-plugin
       xfce.thunar-volman
+      xfce.xfconf
       zathura # PDF viewer
       zoom-us
 

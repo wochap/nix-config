@@ -53,7 +53,9 @@
         configFile = "/etc/bspwmrc";
         sxhkd.configFile = "/etc/sxhkdrc";
       };
-      desktopManager.xterm.enable = false;
+      desktopManager = {
+        xterm.enable = false;
+      };
       displayManager = {
         defaultSession = "none+bspwm";
         lightdm = {

@@ -88,8 +88,7 @@ ctrl + alt + shift + {h,j,k,l}
 
 # open file manager
 super + alt + e
-  nautilus
-  # thunar
+  thunar
 
 # open termina
 super + Return

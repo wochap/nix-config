@@ -16,9 +16,8 @@ blueberry-tray &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
-mkfifo /tmp/vol && echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
-/etc/eww_vol_icon.sh mute &
-# mkfifo /tmp/vol-icon && /etc/eww_vol_icon.sh mute &
+echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
+exec /etc/eww_vol_icon.sh mute &
 
 #### BSPWM coloring ####
 # source the colors.

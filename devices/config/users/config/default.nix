@@ -89,13 +89,14 @@ in
           "icons/hicolor/128x128/apps/code.png".source = ./icons/vscode/icon-128.png;
           "icons/hicolor/128x128/apps/kitty.png".source = ./icons/terminal/icon-128.png;
           "icons/hicolor/128x128/apps/org.gnome.Nautilus.png".source = ./icons/system-file-manager/icon-128.png;
+          "icons/hicolor/128x128/apps/thunar.png".source = ./icons/system-file-manager/icon-128.png;
           "icons/hicolor/128x128/apps/xarchiver.png".source = ./icons/ark/icon-128.png;
         };
 
         # Control default apps
         mimeApps.enable = true;
         mimeApps.defaultApplications = {
-          "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
+          "inode/directory" = [ "thunar.desktop" ];
           "text/html" = [ "firefox.desktop" ];
           "x-scheme-handler/http" = [ "firefox.desktop" ];
           "x-scheme-handler/https" = [ "firefox.desktop" ];
@@ -127,8 +128,7 @@ in
           ".config/eww".source = ./dotfiles/eww;
           ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
           ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
-          ".background-image".source = ../../wallpapers/default.jpeg;
-          ".config/Thunar/thunarrc".source = ./dotfiles/Thunar/thunarrc;
+          "Pictures/backgrounds/default.jpeg".source = ../../wallpapers/default.jpeg;
           ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
           ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
           ".vimrc".source = ./dotfiles/.vimrc;
