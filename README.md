@@ -208,6 +208,7 @@ $ echo -ne "\uE8E4" | xclip -selection clipboard
 * https://fontdrop.info/
 * https://coderwall.com/p/dedqca/argb-colors-in-android
 * https://github.com/zodd18/Horizon
+* https://www.iconfinder.com/search/?q=F028
 
 ### Others
 
