@@ -1,9 +1,9 @@
 configuration {
-  display-drun: "  ";
+  display-drun: "";
   dpi: 0;
   drun-display-format: "{icon} {name}";
-  font: "Iosevka Bold 11";
-  icon-theme: "Papirus";
+  font: "Cantarell Bold 11";
+  icon-theme: "WhiteSur-dark";
   modi: "window,run,drun";
   show-icons: true;
   kb-select-1: "";

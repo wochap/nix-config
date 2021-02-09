@@ -9,12 +9,12 @@ in
       gtk = {
         enable = true;
         iconTheme = {
-          name = "horizon-icons";
-          package = localPkgs.horizon-icons;
+          name = "WhiteSur-dark";
+          package = localPkgs.whitesur-dark-icons;
         };
         theme = {
-          name = "horizon-theme";
-          package = localPkgs.horizon-theme;
+          name = "WhiteSur-dark";
+          package = localPkgs.whitesur-dark-theme;
         };
         font = {
           name = "Cantarell 9";

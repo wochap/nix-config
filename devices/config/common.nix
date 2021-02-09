@@ -175,13 +175,17 @@ in
       gtk-engine-murrine
       gtk_engines
       lxappearance
-    ] ++ [ localPkgs.eww ];
+    ] ++ [
+      localPkgs.eww
+      localPkgs.whitesur-dark-icons
+    ];
 
     fonts = {
       enableFontDir = true;
       enableGhostscriptFonts = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
+        cantarell_fonts
         cascadia-code
         corefonts
         fira-code
@@ -206,9 +210,8 @@ in
 
         # Horizon theme
         (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
-        cantarell_fonts
-        inconsolata
-        iosevka
+        # inconsolata-nerdfont
+        # iosevka
         material-icons
       ] ;
       fontconfig = {

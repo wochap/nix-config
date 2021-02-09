@@ -11,7 +11,7 @@
     # If width is 0, window will fit to longest message
     # Positive x value is measured from the left of the screen, negative x is measured from the right
     # Positive y value is measured from the top of the screen
-    geometry = "350x6-16+84";
+    geometry = "450x6-16+84";
 
     indicate_hidden = "yes";
     shrink = "yes";
@@ -24,11 +24,11 @@
     frame_color = "#1C1E27";
     separator_color = "#404859";
 
-    font = "Inconsolata Bold 11";
+    font = "Cantarell Bold 11";
 
     line_height = 0;
     markup = "full";
-    format = "<span size='x-large' font_desc='Inconsolata 11' weight='bold' foreground='#B367CF'>%s</span>\n\n%b";
+    format = "<span size='x-large' font_desc='Cantarell 11' weight='bold' foreground='#B367CF'>%s</span>\n\n%b";
     alignment = "center";
 
     idle_threshold = 120;
@@ -45,9 +45,6 @@
     corner_radius = 0;
     icon_position = "left";
     max_icon_size = 96;
-
-    # icon_path = /usr/share/icons/Papirus-Dark-Custom/48x48/actions/:/usr/share/icons/Papirus-Dark-Custom/48x48/apps/:/usr/share/icons/Papirus-Dark-Custom/48x48/devices/:/usr/share/icons/Papirus-Dark-Custom/48x48/emblems/:/usr/share/icons/Papirus-Dark-Custom/48x48/emotes/:/usr/share/icons/Papirus-Dark-Custom/48x48/mimetypes/:/usr/share/icons/Papirus-Dark-Custom/48x48/places/:/usr/share/icons/Papirus-Dark-Custom/48x48/status/;
-    # icon_path = "${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark-Custom/48x48/actions/";
 
     browser = "firefox";
 

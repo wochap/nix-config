@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 
+let
+  localPkgs = import ./packages { pkgs = pkgs; };
+in
 {
   imports = [
     ./common.nix
@@ -62,12 +65,12 @@
           enable = true;
           background = ./wallpapers/default.jpeg;
           greeters.gtk.enable = true;
-          greeters.gtk.cursorTheme.name = "Capitaine Cursors"; #FIXME
+          greeters.gtk.cursorTheme.name = "capitaine-cursors";
           greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
-          greeters.gtk.iconTheme.name = "Papirus";
-          greeters.gtk.iconTheme.package = pkgs.papirus-icon-theme;
-          greeters.gtk.theme.name = "Nordic";
-          greeters.gtk.theme.package = pkgs.nordic;
+          greeters.gtk.iconTheme.name = "WhiteSur-dark";
+          greeters.gtk.iconTheme.package = localPkgs.whitesur-dark-icons;
+          greeters.gtk.theme.name = "WhiteSur-dark";
+          greeters.gtk.theme.package = localPkgs.whitesur-dark-theme;
         };
       };
     };
