@@ -185,6 +185,25 @@ $ polybar main --config=/home/gean/nix-config/devices/config/users/config/dotfil
 $ echo -ne "\uE8E4" | xclip -selection clipboard
 ```
 
+* Transform svg icons to png
+
+```
+$ for file in *.svg; do inkscape $file -o ${file%svg}png -h 128; done
+```
+
+```
+#!/usr/bin/env bash
+
+symlinks=$(find ./ -lname "*.svg");
+
+for file in $symlinks; do
+  linkpath=$(readlink $file);
+  newlinkcontent=${linkpath/svg/png};
+  newlinkpath=${file/svg/png};
+  ln -sf $newlinkcontent $newlinkpath;
+done
+```
+
 ## Resources
 
 ### Inspiration
