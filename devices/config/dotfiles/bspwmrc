@@ -2,10 +2,10 @@
 
 screenheight=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $4}')
 screenwidth=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $3}')
-windowwidth=$(("$screenwidth"/2))
-windowheight=$(("$screenheight"/2))
-windowx=$(("$screenwidth"/2-"$windowwidth"/2))
-windowy=$(("$screenheight"/2-"$windowheight"/2))
+windowwidth=$(echo "$screenwidth"/2.5 | bc)
+windowheight=$(echo "$screenheight"/2.5 | bc)
+windowx=$(echo "$screenwidth"/2-"$windowwidth"/2 | bc)
+windowy=$(echo "$screenheight"/2-"$windowheight"/2 | bc)
 
 #### AUTOSTART ####
 # wal -R
@@ -17,7 +17,8 @@ clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
 mkfifo /tmp/vol && echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
-mkfifo /tmp/vol-icon && ~/.config/qtile/eww_vol_icon.sh mute &
+/etc/eww_vol_icon.sh mute &
+# mkfifo /tmp/vol-icon && /etc/eww_vol_icon.sh mute &
 
 #### BSPWM coloring ####
 # source the colors.
