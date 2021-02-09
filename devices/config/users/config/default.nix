@@ -197,6 +197,10 @@ in
 
       services.dunst = lib.mkIf isXorg {
         enable = true;
+        iconTheme = {
+          package = pkgs.papirus-icon-theme;
+          name = "Papirus";
+        };
         settings = (import ./dotfiles/dunstrc.nix);
       };
 
