@@ -12,7 +12,7 @@ windowy=$(("$screenheight"/2-"$windowheight"/2))
 nitrogen --restore &
 alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#21252b" -fg "#979eae" -frame "#E95678" -font "xft:Work Sans-11" &
 blueberry-tray &
-volumeicon &
+# volumeicon &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
