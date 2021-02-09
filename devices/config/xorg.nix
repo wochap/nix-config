@@ -71,6 +71,21 @@ in
           greeters.gtk.iconTheme.package = localPkgs.whitesur-dark-icons;
           greeters.gtk.theme.name = "WhiteSur-dark";
           greeters.gtk.theme.package = localPkgs.whitesur-dark-theme;
+          greeters.gtk.cursorTheme.size = 24;
+          greeters.gtk.extraConfig = ''
+            font-name=Cantarell 9
+            xft-dpi=144
+          '';
+          greeters.gtk.indicators = [
+            "~host"
+            "~spacer"
+            "~clock"
+            "~spacer"
+            "~session"
+            "~language"
+            "~a11y"
+            "~power"
+          ];
         };
       };
     };
