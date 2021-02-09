@@ -234,3 +234,4 @@ done
 * [Learn nix](https://nixcloud.io/tour/?id=3)
 * https://nixos.wiki/wiki/Home_Manager
 * https://superuser.com/questions/603528/how-to-get-the-current-monitor-resolution-or-monitor-name-lvds-vga1-etc
+* https://nixos.org/manual/nix/stable/#use-as-a-interpreter
