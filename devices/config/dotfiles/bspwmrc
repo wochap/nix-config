@@ -56,6 +56,7 @@ bspc rule -a Gnome-calculator state=floating
 bspc rule -a Gnome-font-viewer state=floating
 bspc rule -a pavucontrol state=floating
 bspc rule -a File-roller state=floating
+bspc rule -a "Image Lounge" state=floating
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
