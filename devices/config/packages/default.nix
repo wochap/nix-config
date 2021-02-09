@@ -6,4 +6,5 @@
   horizon-theme = pkgs.callPackage ./horizon-theme {};
   whitesur-dark-theme = pkgs.callPackage ./whitesur-dark-theme {};
   whitesur-dark-icons = pkgs.callPackage ./whitesur-dark-icons {};
+  zscroll = pkgs.callPackage ./zscroll {};
 }

@@ -150,6 +150,7 @@ in
       gnome3.gnome-calculator
       gnome3.gnome-font-viewer
       gnome3.nautilus
+      inkscape
       nomacs # image viewer/editor
       pick-colour-picker # color picker gui
       screenkey # show key pressed
@@ -178,6 +179,7 @@ in
     ] ++ [
       localPkgs.eww
       localPkgs.whitesur-dark-icons
+      localPkgs.zscroll # scroll text in shells
     ];
 
     fonts = {

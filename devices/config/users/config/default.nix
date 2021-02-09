@@ -52,16 +52,18 @@ in
         rofi-calc
 
         # Dev tools
-        gitAndTools.gh
-        docker-compose
         docker
+        docker-compose
+        gitAndTools.gh
         mysql-workbench
+        nodejs
         postman
         vscode
-        nodejs
+        # python3
         # To lookup packages for nix, use the following code:
         # nix-env -qaPA 'nixos.nodePackages' | grep -i <npm module>
-        nodePackages.vue-cli
+        # nodePackages.vue-cli
+        # python3Packages.dbus-python
 
         # Apps
         kdeApplications.kdenlive
@@ -130,6 +132,8 @@ in
         }
         (lib.mkIf isXorg {
           ".config/polybar/main.ini".source = ./dotfiles/polybar/main.ini;
+          ".config/polybar/scripts/get_spotify_status.sh".source = ./dotfiles/polybar/scripts/get_spotify_status.sh;
+          ".config/polybar/scripts/scroll_spotify_status.sh".source = ./dotfiles/polybar/scripts/scroll_spotify_status.sh;
           ".config/rofi-theme.rasi".source = ./dotfiles/rofi-theme.rasi;
         })
       ];
