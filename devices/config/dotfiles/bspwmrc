@@ -2,7 +2,7 @@
 
 screenheight=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $4}')
 screenwidth=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $3}')
-windowwidth=$(echo "$screenwidth"/2.5 | bc)
+windowwidth=$(echo "$screenwidth"/2.75 | bc)
 windowheight=$(echo "$screenheight"/2.5 | bc)
 windowx=$(echo "$screenwidth"/2-"$windowwidth"/2 | bc)
 windowy=$(echo "$screenheight"/2-"$windowheight"/2 | bc)
@@ -47,6 +47,7 @@ bspc rule -a Pavucontrol state=floating
 bspc rule -a gnome-calculator state=floating
 bspc rule -a Gnome-font-viewer state=floating
 bspc rule -a pavucontrol state=floating
+bspc rule -a File-roller state=floating
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do

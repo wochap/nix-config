@@ -214,8 +214,8 @@ in
       fontconfig = {
         allowBitmaps = true;
         defaultFonts = {
-          serif = [ "Work Sans" ];
-          sansSerif = [ "Work Sans" ];
+          serif = [ "Cantarell" ];
+          sansSerif = [ "NotoSerif Nerd Font" ];
           monospace = [ "Fira Mono" ];
           emoji = [ "Noto Color Emoji" ];
         };
