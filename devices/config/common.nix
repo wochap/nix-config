@@ -258,7 +258,7 @@ in
     services.tumbler.enable = true;
 
     # Generate login wallpapers
-    services.fractalart.enable = true;
+    # services.fractalart.enable = true;
 
     # Enable network manager
     networking = {

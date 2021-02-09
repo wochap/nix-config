@@ -56,7 +56,7 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
 1. [Fix firefox insta right click](https://gist.github.com/AntonFriberg/15bcd0dbfe7506a08e55fb2163644cc9)
 1. Setup betterlockscreen (required for xorg config)
     ```
-    $ betterlockscreen -u ~/.background-image
+    $ betterlockscreen -u ~/Pictures/wallpapers/default.jpeg
     ```
 
 ## Keybindings
