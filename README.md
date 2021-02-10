@@ -3,21 +3,22 @@
 ![](https://i.imgur.com/BksSGBg.jpg)
 
 Hardware drivers are managed by [NixOS](https://nixos.org/) config files.
-Apps and dotfiles are manager by [home-manager](https://github.com/nix-community/home-manager).
+Apps and dotfiles are managed by [home-manager](https://github.com/nix-community/home-manager).
 
 `NixOS` and `home-manager` config files are merged.
 
-## Setup NixOS
+## Install NixOS
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
     **NOTE:** Run `sudo nixos-install` without root user (sudo su)
-1. Reboot and connect to wifi/eth
+1. Reboot and connect to wifi/ethernet
+    If `ping google.com` doesn't work, try updating your DNS
     ```
     $ vim /etc/resolv.conf
     # add `nameserver 8.8.8.8` to `/etc/resolv.conf`
     ```
-    Source: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
+    Next commands will work if you enabled `networking.wireless.enable = true;`
     ```
     $ wpa_passphrase '<SSID>' '<passphrase>' | tee /etc/wpa_supplicant.conf
     $ wpa_supplicant -c /etc/wpa_supplicant.conf -i <interface> -B
@@ -26,38 +27,54 @@ Apps and dotfiles are manager by [home-manager](https://github.com/nix-community
     ```
     $ git clone https://github.com/wochap/nix-config.git ~/nix-config
     ```
-1. Rebuild nixos with the machine's specific config, for example, heres's a rebuild for `vb`
+1. Rebuild nixos with the machine's specific config, for example, heres's a rebuild for my `desktop`
     ```
-    $ NIXOS_CONFIG=~/nix-config/devices/vb.nix nixos-rebuild switch
+    $ NIXOS_CONFIG=~/nix-config/devices/desktop.nix nixos-rebuild switch
     ```
     Addional notes: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
 1. Set password for new user `gean`
     ```
     $ passwd gean
     ```
-1. Copy `.ssh` folder
 1. Setup wallpaper (required for xorg config)
     ```
     $ git clone https://github.com/elementary/wallpapers.git
     $ wal -i <path_to_wallpaper>
+1. [Fix firefox insta right click](https://gist.github.com/AntonFriberg/15bcd0dbfe7506a08e55fb2163644cc9)
+1. Setup betterlockscreen (required for xorg config)
+    ```
+    $ betterlockscreen -u ~/Pictures/wallpapers/default.jpeg
+    ```
+1. `desktop` config is optimized for 4k displays, for other sizes, you should update:
+    For XORG:
+
+    - fonts.fontconfig.dpi
+    - services.xserver.dpi
+    - Polybar bar variables (height, font size, etc)
+    - BSPWM gaps?
+    - Dunst styles?
+    - Rofi styles?
+    - Alttab args?
+    - Powermenu styles?
+    - Eww widgets styles?
+
+    For Wayland:
+    - WIP
+
+## Setup NixOS
+
+1. Copy `.ssh` folder to `/home/gean/.ssh`
 1. Setup `bspwm` worspaces (optional)
     ```
     # Show available monitors
     $ xrandr
     # Modify bspwm config in `nix-config`
     ```
-1. Fix flickering on nvidia cards
-    - Open `Nvidia X Server Settings`.
-    - In `OpenGL Settings` uncheck `Allow Flipping`.
-    - In `X Server XVideo Settings` select your monitor.
-1. Fix screen tearing on nvidia cards
-    - Buy AMD GPU
-    - FYI: ForceFullCompositionPipeline fix tearing but increase latency
-1. [Fix firefox insta right click](https://gist.github.com/AntonFriberg/15bcd0dbfe7506a08e55fb2163644cc9)
-1. Setup betterlockscreen (required for xorg config)
-    ```
-    $ betterlockscreen -u ~/Pictures/wallpapers/default.jpeg
-    ```
+1. Run https://github.com/bluezio/ipwebcam-gst
+
+```
+$ run-videochat -i <ip> -v
+```
 
 ## Keybindings
 
@@ -135,6 +152,15 @@ Apps
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> | Open firefox |
 
 ## Troubleshooting
+
+1. Fix flickering on nvidia cards
+    - Open `Nvidia X Server Settings`.
+    - In `OpenGL Settings` uncheck `Allow Flipping`.
+    - In `XScreen0` > `X Server XVideo Settings` > `Sync to this display device` select your monitor.
+
+1. Fix screen tearing on nvidia cards
+    - Buy AMD GPU
+    - FYI: ForceFullCompositionPipeline fix tearing but increase latency
 
 * Check if picom is running
 
