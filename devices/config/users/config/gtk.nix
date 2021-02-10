@@ -17,8 +17,8 @@ in
           package = localPkgs.whitesur-dark-theme;
         };
         font = {
-          name = "Cantarell 9";
-          package = pkgs.cantarell_fonts;
+          name = "Roboto 9";
+          package = pkgs.roboto;
         };
         gtk3.extraCss = (builtins.readFile ./dotfiles/gtk3.css);
         gtk3.extraConfig = {

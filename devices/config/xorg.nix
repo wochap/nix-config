@@ -73,8 +73,7 @@ in
           greeters.gtk.theme.package = localPkgs.whitesur-dark-theme;
           greeters.gtk.cursorTheme.size = 24;
           greeters.gtk.extraConfig = ''
-            font-name=Cantarell 9
-            xft-dpi=144
+            font-name=Roboto 9
           '';
           greeters.gtk.indicators = [
             "~host"

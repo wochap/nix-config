@@ -24,11 +24,11 @@
     frame_color = "#1C1E27";
     separator_color = "#404859";
 
-    font = "Cantarell Bold 11";
+    font = "Roboto Bold 11";
 
     line_height = 0;
     markup = "full";
-    format = "<span size='x-large' font_desc='Cantarell 11' weight='bold' foreground='#B367CF'>%s</span>\n\n%b";
+    format = "<span size='x-large' font_desc='Roboto 11' weight='bold' foreground='#B367CF'>%s</span>\n\n%b";
     alignment = "center";
 
     idle_threshold = 120;
@@ -45,6 +45,7 @@
     corner_radius = 0;
     icon_position = "left";
     max_icon_size = 96;
+    min_icon_size = 64;
 
     browser = "firefox";
 

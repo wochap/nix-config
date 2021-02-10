@@ -169,10 +169,12 @@ in
       filelight # view disk usage
       # gnome3.gnome-disk-utility
       # gnome3.gnome-system-monitor
+      # gnome3.bijiben
       gnome3.cheese
       gnome3.file-roller # archive manager
       gnome3.gnome-calculator
       gnome3.gnome-font-viewer
+      gnome3.gnome-sound-recorder
       gnome3.nautilus
       inkscape
       nomacs # image viewer/editor
@@ -227,12 +229,14 @@ in
         noto-fonts
         noto-fonts-cjk
         noto-fonts-emoji
+        open-sans
+        roboto
+        roboto-slab
         siji
         source-code-pro
         terminus_font
         ttf_bitstream_vera
         ubuntu_font_family
-        work-sans
 
         # Horizon theme
         (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
@@ -243,8 +247,8 @@ in
       fontconfig = {
         allowBitmaps = true;
         defaultFonts = {
-          serif = [ "Cantarell" ];
-          sansSerif = [ "NotoSerif Nerd Font" ];
+          serif = [ "Roboto Slab" ];
+          sansSerif = [ "Roboto" ];
           monospace = [ "Fira Mono" ];
           emoji = [ "Noto Color Emoji" ];
         };

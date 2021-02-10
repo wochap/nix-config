@@ -10,7 +10,7 @@ windowy=$(echo "$screenheight"/2-"$windowheight"/2 | bc)
 #### AUTOSTART ####
 # wal -R
 nitrogen --restore &
-alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#21252b" -fg "#979eae" -frame "#E95678" -font "xft:Cantarell-11" -theme "WhiteSur-dark" &
+alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#1C1E27" -fg "#cacacc" -frame "#E95678" -font "xft:Roboto:weight=bold:size=11" -theme "WhiteSur-dark" &
 blueberry-tray &
 # volumeicon &
 clipmenud &
@@ -58,6 +58,8 @@ bspc rule -a File-roller state=floating
 bspc rule -a "Image Lounge" state=floating
 bspc rule -a "Nitrogen" state=pseudo_tiled
 bspc rule -a "Cheese" state=pseudo_tiled
+bspc rule -a "Blueberry.py" state=pseudo_tiled
+bspc rule -a "Gnome-sound-recorder" state=pseudo_tiled
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do

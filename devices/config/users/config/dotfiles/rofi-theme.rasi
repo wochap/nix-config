@@ -2,7 +2,7 @@ configuration {
   display-drun: "";
   dpi: 0;
   drun-display-format: "{icon} {name}";
-  font: "Cantarell Bold 11";
+  font: "Roboto Bold 11";
   icon-theme: "WhiteSur-dark";
   modi: "window,run,drun";
   show-icons: true;
