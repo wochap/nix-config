@@ -105,6 +105,7 @@ in
       htop
       inxi # check compositor running
       killall
+      libqalculate
       mpc_cli
       mpd
       mpd_clientlib # mpd module

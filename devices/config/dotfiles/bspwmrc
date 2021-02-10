@@ -51,12 +51,12 @@ bspc rule -a ".pick-colour-picker-wrapped" state=floating sticky=on
 bspc rule -a flameshot state=floating sticky=on
 bspc rule -a Thunar state=floating rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
 bspc rule -a Org.gnome.Nautilus state=floating rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
-bspc rule -a Pavucontrol state=floating
+bspc rule -a Pavucontrol state=pseudo_tiled
 bspc rule -a Gnome-calculator state=floating
 bspc rule -a Gnome-font-viewer state=floating
-bspc rule -a pavucontrol state=floating
 bspc rule -a File-roller state=floating
 bspc rule -a "Image Lounge" state=floating
+bspc rule -a "Nitrogen" state=pseudo_tiled
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
