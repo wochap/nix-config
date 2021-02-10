@@ -57,6 +57,7 @@ bspc rule -a Gnome-font-viewer state=floating
 bspc rule -a File-roller state=floating
 bspc rule -a "Image Lounge" state=floating
 bspc rule -a "Nitrogen" state=pseudo_tiled
+bspc rule -a "Cheese" state=pseudo_tiled
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do

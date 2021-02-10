@@ -9,6 +9,7 @@ let
   isMbp = config.networking.hostName == "gmbp";
   isWayland = config._displayServer == "wayland";
   localPkgs = import ./packages { pkgs = pkgs; };
+  run-videochat = pkgs.writeScriptBin "run-videochat" (builtins.readFile ./scripts/run-videochat.sh);
 in
 {
   imports = [
@@ -39,19 +40,30 @@ in
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "20.09"; # Did you read the comment?
 
-    # Show nixos logo on boot/shutdown
-    boot.plymouth = {
-      enable = true;
+    boot = {
+      # Show nixos logo on boot/shutdown
+      plymouth = {
+        enable = true;
+      };
+      extraModprobeConfig = ''
+        # Fix fn keys keychron
+        options hid_apple fnmode=0
+        # Enable IP Webcam
+        options v4l2loopback devices=1 exclusive_caps=1
+      '';
+      kernelParams = [
+        "hid_apple.fnmode=0"
+      ];
+      kernelModules = [
+        "hid-apple"
+        # Required for IP Webcam
+        "v4l2loopback"
+      ];
+      extraModulePackages = [
+        # Required for IP Webcam
+        config.boot.kernelPackages.v4l2loopback
+      ];
     };
-
-    # Fix fn keys keychron
-    boot.extraModprobeConfig = ''
-      options hid_apple fnmode=0
-    '';
-    boot.kernelParams = [
-      "hid_apple.fnmode=0"
-    ];
-    boot.kernelModules = [ "hid-apple" ];
 
     # Allows proprietary or unfree packages
     nixpkgs.config.allowUnfree = true;
@@ -130,6 +142,15 @@ in
       xorg.xeyes # check if app is running on wayland
       zip
 
+      # IP Webcam related
+      gnome3.zenity
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      gst_all_1.gstreamer
+      gst_all_1.gstreamer.dev
+      run-videochat
+      v4l-utils
+
       # DE
       alttab # windows like alt + tab
       blueberry # bluetooth tray
@@ -148,6 +169,7 @@ in
       filelight # view disk usage
       # gnome3.gnome-disk-utility
       # gnome3.gnome-system-monitor
+      gnome3.cheese
       gnome3.file-roller # archive manager
       gnome3.gnome-calculator
       gnome3.gnome-font-viewer
