@@ -101,8 +101,8 @@ in
       fzf # fuzzy search
       git
       gnumake # make
-      gotop
-      htop
+      gotop # monitor system
+      htop # monitor system
       inxi # check compositor running
       killall
       libqalculate
@@ -111,10 +111,10 @@ in
       mpd_clientlib # mpd module
       neofetch
       notify-desktop # test notifications
-      nvtop
+      nvtop # monitor system
       pciutils # lspci and others commands
       pulsemixer
-      radeontop
+      radeontop # monitor system
       ranger # file manager cli
       screenfetch # show system info
       scrot # screen capture
@@ -140,7 +140,7 @@ in
       playerctl # media player cli
       pywal # theme color generator cli
       systemd
-      volumeicon # audio tray + gui
+      # volumeicon # audio tray + gui
 
       # Apps
       deluge # torrent client

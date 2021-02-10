@@ -48,7 +48,6 @@ in
         # DE apps
         nitrogen # wallpaper manager
         clipmenu # clipboard manager
-        rofi # app launcher
         rofi-calc
 
         # Dev tools
@@ -96,6 +95,8 @@ in
           "x-scheme-handler/https" = [ "firefox.desktop" ];
           "x-scheme-handler/about" = [ "firefox.desktop" ];
           "x-scheme-handler/unknown" = [ "firefox.desktop" ];
+          "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
+          "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
         };
         mimeApps.associations.added = {
           "image/png" = [ "org.nomacs.ImageLounge.desktop" ];
@@ -166,6 +167,10 @@ in
       };
 
       programs.bash.enable = true;
+
+      programs.rofi = {
+        enable = true;
+      };
 
       programs.vim = {
         enable = true;
