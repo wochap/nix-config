@@ -12,20 +12,14 @@ windowy=$(echo "$screenheight"/2-"$windowheight"/2 | bc)
 nitrogen --restore &
 alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#1C1E27" -fg "#cacacc" -frame "#E95678" -font "xft:Roboto:weight=bold:size=11" -theme "WhiteSur-dark" &
 blueberry-tray &
-# volumeicon &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
 echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
 exec /etc/eww_vol_icon.sh mute &
-# TODO: try https://github.com/polybar/polybar/issues/763
-# script = if isDesktop then ''
-#   MONITOR=DP-0 polybar main &
-#   MONITOR=DP-2 polybar main &
-# '' else ''
-#   polybar main &
-# '';
-polybar main &
+for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+  MONITOR=$m polybar main &
+done
 
 #### BSPWM coloring ####
 # source the colors.
@@ -46,15 +40,15 @@ bspc config focus_follows_pointer true
 # bspc config gapless_monocle     true
 # bspc config focus_by_distance   true
 
-bspc rule -a mpv state=floating sticky=on
+bspc rule -a "mpv" state=floating sticky=on
 bspc rule -a ".pick-colour-picker-wrapped" state=floating sticky=on
-bspc rule -a flameshot state=floating sticky=on
-bspc rule -a Thunar state=floating rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
-bspc rule -a Org.gnome.Nautilus state=floating rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
-bspc rule -a Pavucontrol state=pseudo_tiled
-bspc rule -a Gnome-calculator state=floating
-bspc rule -a Gnome-font-viewer state=floating
-bspc rule -a File-roller state=floating
+bspc rule -a "flameshot" state=floating sticky=on
+bspc rule -a "Thunar" state=pseudo_tiled rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
+bspc rule -a "Org.gnome.Nautilus" state=pseudo_tiled rectangle="$windowwidth"x"$windowheight"+"$windowx"+$windowy
+bspc rule -a "Pavucontrol" state=pseudo_tiled
+bspc rule -a "Gnome-calculator" state=floating
+bspc rule -a "Gnome-font-viewer" state=floating
+bspc rule -a "File-roller" state=floating
 bspc rule -a "Image Lounge" state=floating
 bspc rule -a "Nitrogen" state=pseudo_tiled
 bspc rule -a "Cheese" state=pseudo_tiled

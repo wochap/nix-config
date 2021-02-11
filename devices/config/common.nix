@@ -161,7 +161,6 @@ in
       playerctl # media player cli
       pywal # theme color generator cli
       systemd
-      # volumeicon # audio tray + gui
 
       # Apps
       deluge # torrent client

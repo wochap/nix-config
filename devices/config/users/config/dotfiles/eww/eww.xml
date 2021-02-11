@@ -1,16 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <eww>
   <definitions>
     <def name="vol">
-      <box orientation="v" space-evenly="true" class="vol">
-        <box class="vol-icon">{{vol-icon}}</box>
-        <scale min="0" max="100" active="false" value="{{current-vol}}"/>
-      </box>
-    </def>
-    <def name="bright">
-      <box orientation="v" space-evenly="true" class="bright">
-        <box class="bright-icon"></box>
-        <scale min="0" max="100" active="false" value="{{current-bright}}"/>
+      <box class="vol" orientation="v" space-evenly="false" spacing="{{vol-spacing}}" style="padding-top: {{vol-spacing}}px;">
+        <box class="vol-icon" valign="start">{{vol-icon}}</box>
+        <scale class="vol-bar" valign="start" min="0" max="100" active="false" value="{{current-vol}}"/>
       </box>
     </def>
   </definitions>
@@ -18,20 +11,15 @@
     <!--Vol vars -->
     <script-var name="vol-icon">tail -F /tmp/vol-icon</script-var>
     <script-var name="current-vol">tail -F /tmp/vol</script-var>
+    <script-var name="vol-spacing">echo "(325-128-10-40)/2" | bc</script-var>
     <!--Bright vars -->
-    <script-var name="current-bright">tail -F /tmp/bright</script-var>
+    <!-- <script-var name="current-bright">tail -F /tmp/bright</script-var> -->
   </variables>
   <windows>
-    <window name="vol">
-      <geometry height="16%" y="18%" anchor="center"/>
+    <window name="vol" stacking="fg" focusable="false">
+      <geometry width="325px" height="325px" anchor="center" y="650px" />
       <widget>
         <vol/>
-      </widget>
-    </window>
-    <window name="bright">
-      <geometry height="16%" y="18%" anchor="center"/>
-      <widget>
-        <bright/>
       </widget>
     </window>
   </windows>
