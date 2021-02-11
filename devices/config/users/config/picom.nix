@@ -16,6 +16,7 @@ in
         #   "90:class_i ?= 'thunar'"
         # ];
 
+        noDockShadow = false;
         vSync = true;
         backend = "glx";
         extraOptions = (builtins.readFile ./dotfiles/picom.conf);
