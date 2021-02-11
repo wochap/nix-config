@@ -170,6 +170,7 @@ in
       # gnome3.gnome-system-monitor
       # gnome3.bijiben
       gnome3.cheese
+      gnome3.eog
       gnome3.file-roller # archive manager
       gnome3.gnome-calculator
       gnome3.gnome-font-viewer

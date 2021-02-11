@@ -91,17 +91,17 @@ in
         mimeApps.defaultApplications = {
           "inode/directory" = [ "thunar.desktop" ];
           "text/html" = [ "firefox.desktop" ];
+          "x-scheme-handler/about" = [ "firefox.desktop" ];
           "x-scheme-handler/http" = [ "firefox.desktop" ];
           "x-scheme-handler/https" = [ "firefox.desktop" ];
-          "x-scheme-handler/about" = [ "firefox.desktop" ];
+          "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
           "x-scheme-handler/unknown" = [ "firefox.desktop" ];
           "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
-          "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
         };
         mimeApps.associations.added = {
-          "image/png" = [ "org.nomacs.ImageLounge.desktop" ];
-          "image/jpeg" = [ "org.nomacs.ImageLounge.desktop" ];
-          "image/svg+xml" = [ "org.nomacs.ImageLounge.desktop" ];
+          "image/png" = [ "org.gnome.eog.desktop" ];
+          "image/jpeg" = [ "org.gnome.eog.desktop" ];
+          "image/svg+xml" = [ "org.gnome.eog.desktop" ];
         };
 
         # Edit linked files
