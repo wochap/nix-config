@@ -54,6 +54,7 @@ bspc rule -a "Nitrogen" state=pseudo_tiled
 bspc rule -a "Cheese" state=pseudo_tiled
 bspc rule -a "Blueberry.py" state=pseudo_tiled
 bspc rule -a "Gnome-sound-recorder" state=pseudo_tiled
+bspc rule -a "Thunderbird" state=pseudo_tiled
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
