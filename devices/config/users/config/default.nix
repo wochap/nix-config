@@ -166,6 +166,17 @@ in
         ];
       };
 
+      programs.zsh = {
+        enable = true;
+        enableCompletion = true;
+        autosuggestions.enable = true;
+        # syntaxHighlighting.enable = true;
+        ohMyZsh = {
+          enable = true;
+          theme = "robbyrussell";
+        };
+      };
+
       programs.bash.enable = true;
 
       programs.rofi = {
