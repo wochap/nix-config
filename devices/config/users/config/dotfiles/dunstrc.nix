@@ -80,4 +80,8 @@
     foreground = "#cacacc";
     timeout = 120;
   };
+  play_sound = {
+    summary = "*";
+    script = "/etc/play_notification.sh";
+  };
 }

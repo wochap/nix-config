@@ -14,6 +14,14 @@ in
     # Setup DE bspwm and sxhkdrc
     environment = {
       etc = {
+        "play_notification.sh" = {
+          source = ./scripts/play_notification.sh;
+          mode = "0755";
+        };
+        "notification.flac" = {
+          source = ./assets/notification.flac;
+          mode = "0755";
+        };
         "eww_bright.sh" = {
           source = ./scripts/eww_bright.sh;
           mode = "0755";

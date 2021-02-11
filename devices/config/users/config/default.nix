@@ -97,11 +97,14 @@ in
           "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
           "x-scheme-handler/unknown" = [ "firefox.desktop" ];
           "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
+          "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
         };
         mimeApps.associations.added = {
           "image/png" = [ "org.gnome.eog.desktop" ];
           "image/jpeg" = [ "org.gnome.eog.desktop" ];
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];
+          "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
+          "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
         };
 
         # Edit linked files
@@ -169,9 +172,8 @@ in
       programs.zsh = {
         enable = true;
         enableCompletion = true;
-        autosuggestions.enable = true;
-        # syntaxHighlighting.enable = true;
-        ohMyZsh = {
+        enableAutosuggestions = true;
+        oh-my-zsh = {
           enable = true;
           theme = "robbyrussell";
         };

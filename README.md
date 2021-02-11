@@ -63,6 +63,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 
 ## Setup NixOS
 
+1. [Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)
 1. Copy `.ssh` folder to `/home/gean/.ssh`
 1. Setup `bspwm` worspaces (optional)
     ```
@@ -106,6 +107,11 @@ Focus and swap
 | Keybinding | Action |
 | :--- | :--- |
 | <kbd>Super</kbd> + <kbd>Left Click</kbd> | Swap window |
+| <kbd>Super</kbd> + <kbd>`</kbd> | Rotate focused windows |
+| <kbd>Super</kbd> + <kbd>p</kbd> | Focus parent window |
+| <kbd>Super</kbd> + <kbd>b</kbd> | Focus brother window |
+| <kbd>Super</kbd> + <kbd>,</kbd> | Focus first window |
+| <kbd>Super</kbd> + <kbd>.</kbd> | Focus second window |
 | <kbd>Super</kbd> + <kbd>j</kbd> | Switches focus between windows in the stack, going down |
 | <kbd>Super</kbd> + <kbd>k</kbd> | Switches focus between windows in the stack, going up |
 | <kbd>Super</kbd> + <kbd>h</kbd> | Switches focus between windows in the stack, going left |
@@ -150,6 +156,16 @@ Apps
 | <kbd>Super</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>s</kbd> | Takes screenshoot (flameshot) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> | Open firefox |
+
+Kitty
+
+| Keybinding | Action |
+| :--- | :--- |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Enter</kbd> | Opens new terminal |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>l</kbd> | Cycle layouts (change layout) |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> | Cycle focused terminal (swap) |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>[</kbd> | Focus next terminal |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>]</kbd> | Focus previous terminal |
 
 ## Troubleshooting
 

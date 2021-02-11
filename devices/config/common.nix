@@ -106,6 +106,7 @@ in
       arandr # xrandr gui
       bc # calculator cli
       betterlockscreen # screen locker
+      dex # execute DesktopEntry files
       dos2unix
       evtest
       feh # image viewer
@@ -180,6 +181,7 @@ in
       nomacs # image viewer/editor
       pick-colour-picker # color picker gui
       screenkey # show key pressed
+      thunderbird
       xfce.exo
       xfce.thunar # file manager
       xfce.thunar-archive-plugin
@@ -297,6 +299,7 @@ in
 
     # Enable network manager
     networking = {
+      enableIPv6 = false;
       wireless.enable = false;
       networkmanager.enable = true;
       nameservers = [
