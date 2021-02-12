@@ -104,7 +104,7 @@ ctrl + alt + shift + {h,j,k,l}
 
 # move a floating window
 # super + {Left,Down,Up,Right}
-# 	bspc node -v {-20 0,0 20,0 -20,20 0}
+#   bspc node -v {-20 0,0 20,0 -20,20 0}
 
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)

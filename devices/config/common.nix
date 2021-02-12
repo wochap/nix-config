@@ -174,10 +174,12 @@ in
       gnome3.cheese
       gnome3.eog
       gnome3.file-roller # archive manager
+      gnome3.geary
       gnome3.gnome-calculator
+      gnome3.gnome-calendar
+      gnome3.gnome-control-center # add google account
       gnome3.gnome-font-viewer
       gnome3.gnome-sound-recorder
-      gnome3.nautilus
       inkscape
       nomacs # image viewer/editor
       pick-colour-picker # color picker gui
@@ -353,5 +355,10 @@ in
 
     # Apply trim to SSDs
     services.fstrim.enable = true;
+
+    # Required for gnome calendar and geary
+    services.gnome3.evolution-data-server.enable = true;
+    services.gnome3.gnome-online-accounts.enable = true;
+    services.gnome3.gnome-keyring.enable = true;
   };
 }

@@ -56,6 +56,7 @@ bspc rule -a "Cheese" state=pseudo_tiled
 bspc rule -a "Blueberry.py" state=pseudo_tiled
 bspc rule -a "Gnome-sound-recorder" state=pseudo_tiled
 bspc rule -a "Thunderbird" state=pseudo_tiled
+bspc rule -a "zoom" state=pseudo_tiled
 
 bspc rule -a "Thunderbird" desktop=^4
 bspc rule -a "Slack" desktop=^4
