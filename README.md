@@ -102,6 +102,15 @@ Window state and flags
 | <kbd>Super</kbd> + <kbd>y</kbd> | Set window flag to sticky |
 | <kbd>Super</kbd> + <kbd>z</kbd> | Set window flag to private |
 
+Preselection
+
+| Keybinding | Action |
+| :--- | :--- |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>h|j|k|l</kbd> | Preselect left|bottom|top|right positions for new window. |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>1-9</kbd> | Preselect the ratio for new window. |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Space</kbd> | Cancel preselection for the focused window. |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> | Cancel preselection for the focused desktop. |
+
 Focus and swap
 
 | Keybinding | Action |
