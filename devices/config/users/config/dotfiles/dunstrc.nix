@@ -15,7 +15,7 @@
     corner_radius = 0;
     follow = "mouse";
     font = "Roboto Bold 11";
-    format = "<span size='large' font_desc='Roboto 11' weight='bold' foreground='#E95678'>%s</span>\\n%b";
+    format = "<span size='large' font_desc='Roboto 11' weight='bold' foreground='#a0c3ff'>%s</span>\\n%b";
     frame_color = "#1C1E27";
     frame_width = 8;
     hide_duplicate_count = true;

@@ -10,7 +10,7 @@ windowy=$(echo "$screenheight"/2-"$windowheight"/2 | bc)
 #### AUTOSTART ####
 # wal -R
 nitrogen --restore &
-alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#1C1E27" -fg "#cacacc" -frame "#E95678" -font "xft:Roboto:weight=bold:size=11" -theme "WhiteSur-dark" &
+alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#1C1E27" -fg "#cacacc" -frame "#a0c3ff" -font "xft:Roboto:weight=bold:size=11" -theme "WhiteSur-dark" &
 blueberry-tray &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
@@ -28,7 +28,7 @@ done
 # . "${HOME}/.cache/wal/colors.sh"
 bspc config normal_border_color \#282e3a
 bspc config active_border_color \#2C4E9C
-bspc config focused_border_color \#E95678
+bspc config focused_border_color \#a0c3ff
 bspc config urgent_border_color  \#dc322f
 bspc config presel_feedback_color \#18348D
 
