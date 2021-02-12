@@ -292,3 +292,5 @@ $ xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5,
 * https://nixos.wiki/wiki/Home_Manager
 * https://superuser.com/questions/603528/how-to-get-the-current-monitor-resolution-or-monitor-name-lvds-vga1-etc
 * https://nixos.org/manual/nix/stable/#use-as-a-interpreter
+
+pkill -USR1 -x sxhkd
