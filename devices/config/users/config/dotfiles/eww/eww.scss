@@ -27,13 +27,15 @@ window {
 }
 
 .vol-bar highlight {
-  all: unset;
 	background-color: #cacacc;
 	color: #000000;
+  all: unset;
+  border-radius: 100px;
 }
 
 .vol-bar trough {
 	all: unset;
 	background-color: #434c5e;
 	min-height: 10px;
+  border-radius: 100px;
 }
