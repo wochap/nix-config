@@ -15,6 +15,7 @@ blueberry-tray &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
+thunderbird &
 echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
 exec /etc/eww_vol_icon.sh mute &
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
@@ -26,7 +27,6 @@ done
 # . "${HOME}/.cache/wal/colors.sh"
 bspc config normal_border_color \#282e3a
 bspc config active_border_color \#2C4E9C
-# bspc config focused_border_color \#4dd0e1
 bspc config focused_border_color \#E95678
 bspc config urgent_border_color  \#dc322f
 bspc config presel_feedback_color \#18348D
@@ -55,6 +55,8 @@ bspc rule -a "Cheese" state=pseudo_tiled
 bspc rule -a "Blueberry.py" state=pseudo_tiled
 bspc rule -a "Gnome-sound-recorder" state=pseudo_tiled
 bspc rule -a "Thunderbird" state=pseudo_tiled
+
+bspc rule -a "Thunderbird" desktop=^4
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
