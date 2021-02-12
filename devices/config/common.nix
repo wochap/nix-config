@@ -182,6 +182,7 @@ in
       nomacs # image viewer/editor
       pick-colour-picker # color picker gui
       screenkey # show key pressed
+      simplenote
       thunderbird
       xfce.exo
       xfce.thunar # file manager
