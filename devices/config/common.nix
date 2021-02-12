@@ -140,6 +140,7 @@ in
       xdotool # Fake keyboard/mouse input
       xlayoutdisplay # fix dpi
       xorg.xdpyinfo # show monitor info
+      xorg.xev # get key actual name
       xorg.xeyes # check if app is running on wayland
       zip
 

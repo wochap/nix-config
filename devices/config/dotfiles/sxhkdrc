@@ -43,7 +43,7 @@ super + {p,b,comma,period}
   bspc node -f @{parent,brother,first,second}
 
 # Rotate focused nodes
-super + `
+super + grave
   bspc node -R 90
 
 # focus the next/previous node in the current desktop
