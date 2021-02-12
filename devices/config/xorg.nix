@@ -15,7 +15,10 @@ in
     environment = {
       etc = {
         "play_notification.sh" = {
-          source = ./scripts/play_notification.sh;
+          text = ''
+            #! ${pkgs.bash}/bin/bash
+            ${pkgs.pulseaudio}/bin/paplay /etc/notification.flac
+          '';
           mode = "0755";
         };
         "notification.flac" = {

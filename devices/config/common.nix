@@ -110,7 +110,7 @@ in
       dos2unix
       evtest
       feh # image viewer
-      ffmpeg-full # video codecs?
+      ffmpeg-full # music/video codecs?
       fzf # fuzzy search
       git
       gnumake # make
