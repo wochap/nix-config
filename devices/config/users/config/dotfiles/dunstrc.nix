@@ -8,14 +8,14 @@
     # Positive y value is measured from the top of the screen
     geometry = "500x6-16+72";
 
-    alignment = "center";
+    alignment = "left";
     always_run_script = true;
     browser = "firefox";
     class = "Dunst";
     corner_radius = 0;
     follow = "mouse";
     font = "Roboto Bold 11";
-    format = "<span size='x-large' font_desc='Roboto 11' weight='bold' foreground='#B367CF'>%s</span>%b";
+    format = "<span size='x-large' font_desc='Roboto 11' weight='bold' foreground='#E95678'>%s</span>\\n%b";
     frame_color = "#1C1E27";
     frame_width = 8;
     hide_duplicate_count = true;
@@ -50,10 +50,10 @@
     script = "/etc/play_notification.sh";
     summary = "*";
   };
-  # espeak = {
-  #   script = "/etc/play_notification.sh";
-  #   summary = "*";
-  # };
+  espeak = {
+    script = "/etc/play_notification.sh";
+    summary = "*";
+  };
   shortcuts = {
     close = "ctrl+space";
     close_all = "ctrl+shift+space";

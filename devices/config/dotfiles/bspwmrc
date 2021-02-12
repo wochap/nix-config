@@ -16,6 +16,7 @@ clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
 thunderbird &
+slack &
 echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
 exec /etc/eww_vol_icon.sh mute &
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
@@ -57,6 +58,7 @@ bspc rule -a "Gnome-sound-recorder" state=pseudo_tiled
 bspc rule -a "Thunderbird" state=pseudo_tiled
 
 bspc rule -a "Thunderbird" desktop=^4
+bspc rule -a "Slack" desktop=^4
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
