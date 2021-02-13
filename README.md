@@ -38,6 +38,10 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     ```
     $ passwd gean
     ```
+
+## Setup NixOS
+
+1. Disable IPv6 in the NetworkManager Applet/Tray icon
 1. [Fix firefox insta right click](https://gist.github.com/AntonFriberg/15bcd0dbfe7506a08e55fb2163644cc9)
 1. Setup betterlockscreen (required for xorg config)
     ```
@@ -59,9 +63,6 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 
     For Wayland:
     - WIP
-
-## Setup NixOS
-
 1. [Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)
 1. Copy `.ssh` folder to `/home/gean/.ssh`
     ```
