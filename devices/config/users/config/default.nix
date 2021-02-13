@@ -220,8 +220,11 @@ in
       services.dunst = lib.mkIf isXorg {
         enable = true;
         iconTheme = {
-          name = "WhiteSur-dark";
-          package = localPkgs.whitesur-dark-icons;
+          name = "Papirus";
+          package = pkgs.papirus-icon-theme;
+          # TODO: add missing icons to WhiteSur-dark
+          # name = "WhiteSur-dark";
+          # package = localPkgs.whitesur-dark-icons;
         };
         settings = (import ./dotfiles/dunstrc.nix);
       };
