@@ -56,7 +56,7 @@ in
         docker-compose
         gitAndTools.gh
         mysql-workbench
-        nodejs
+        # nodejs
         postman
         vscode
         # python3
