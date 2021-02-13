@@ -10,7 +10,8 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 ## Install NixOS
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
-    Add `git` `videoDrivers` `desktopManager.xterm.enable`
+
+    The minimun config is to have: `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
 
     **NOTE:** Run `sudo nixos-install` without root user (sudo su)
 1. Reboot and connect to wifi/ethernet
@@ -37,15 +38,12 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     ```
     $ passwd gean
     ```
-1. Setup wallpaper (required for xorg config)
-    ```
-    $ git clone https://github.com/elementary/wallpapers.git
-    $ wal -i <path_to_wallpaper>
 1. [Fix firefox insta right click](https://gist.github.com/AntonFriberg/15bcd0dbfe7506a08e55fb2163644cc9)
 1. Setup betterlockscreen (required for xorg config)
     ```
-    $ betterlockscreen -u ~/Pictures/wallpapers/default.jpeg
+    $ betterlockscreen -u ~/Pictures/backgrounds/default.jpeg
     ```
+1. Sync `vscode`, `firefox`, `chrome`
 1. `desktop` config is optimized for 4k displays, for other sizes, you should update:
     For XORG:
 
@@ -66,17 +64,17 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 
 1. [Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)
 1. Copy `.ssh` folder to `/home/gean/.ssh`
-1. Setup `bspwm` worspaces (optional)
     ```
-    # Show available monitors
-    $ xrandr
-    # Modify bspwm config in `nix-config`
+    $ chmod 600 ~/.ssh/*
+    $ ssh-add
     ```
-1. Run https://github.com/bluezio/ipwebcam-gst
 
-```
-$ run-videochat -i <ip> -v
-```
+## Whats out of the box
+
+1. Script for using phone webcam
+    ```
+    $ run-videochat -i <ip> -v
+    ```
 
 ## Keybindings
 
@@ -192,15 +190,6 @@ Kitty
 
 ```
 $ inxi -Gxx | grep compositor
-```
-
-* Setup ssh
-
-```
-$ sudo chmod 600 ~/.ssh
-# $ eval $(ssh-agent)
-# $ ssh-add ~/.ssh/id_rsa
-$ ssh-add
 ```
 
 * Macbook Pro wifi
