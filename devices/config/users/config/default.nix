@@ -127,7 +127,7 @@ in
           ".config/eww".source = ./dotfiles/eww;
           ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
           ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
-          "Pictures/backgrounds/default.jpeg".source = ../../wallpapers/default.jpeg;
+          "Pictures/backgrounds/default.jpeg".source = ../../assets/wallpaper.jpg;
           ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
           ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
           ".vimrc".source = ./dotfiles/.vimrc;

@@ -74,7 +74,7 @@ in
         defaultSession = "none+bspwm";
         lightdm = {
           enable = true;
-          background = ./wallpapers/default.jpeg;
+          background = ./assets/wallpaper.jpg;
           greeters.gtk.enable = true;
           greeters.gtk.cursorTheme.name = "capitaine-cursors";
           greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
