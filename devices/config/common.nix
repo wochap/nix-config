@@ -105,7 +105,6 @@ in
       # base-devel
       arandr # xrandr gui
       bc # calculator cli
-      betterlockscreen # screen locker
       dex # execute DesktopEntry files
       dos2unix
       evtest
@@ -122,7 +121,7 @@ in
       mpc_cli
       mpd
       mpd_clientlib # mpd module
-      neofetch
+      neofetch # print computer info
       notify-desktop # test notifications
       nvtop # monitor system
       pciutils # lspci and others commands
@@ -135,9 +134,8 @@ in
       unzip
       vim
       wget
-      xarchiver # archive manager required by thunar
-      xclip
-      xdotool # Fake keyboard/mouse input
+      xclip # clipboard cli
+      xdotool # fake keyboard/mouse input
       xlayoutdisplay # fix dpi
       xorg.xdpyinfo # show monitor info
       xorg.xev # get key actual name
@@ -155,13 +153,14 @@ in
 
       # DE
       alttab # windows like alt + tab
+      betterlockscreen # screen locker
       blueberry # bluetooth tray
       kitty # terminal
-      networkmanager_dmenu # network manager cli
+      # networkmanager_dmenu # network manager cli
       pamixer # audio cli
-      pavucontrol # audio gui
+      pavucontrol # audio settings gui
       playerctl # media player cli
-      pywal # theme color generator cli
+      # pywal # theme color generator cli
       systemd
 
       # Apps
@@ -171,45 +170,41 @@ in
       # gnome3.gnome-disk-utility
       # gnome3.gnome-system-monitor
       # gnome3.bijiben
-      gnome3.cheese
-      gnome3.eog
+      gnome3.cheese # test webcam
+      gnome3.eog # image viewer
       gnome3.file-roller # archive manager
-      gnome3.geary
+      gnome3.geary # email client
       gnome3.gnome-calculator
       gnome3.gnome-calendar
-      gnome3.gnome-control-center # add google account
+      gnome3.gnome-control-center # add google account for geary and calendar
       gnome3.gnome-font-viewer
-      gnome3.gnome-sound-recorder
-      inkscape
+      gnome3.gnome-sound-recorder # test microphone
+      inkscape # photo editor cli/gui
       nomacs # image viewer/editor
       pick-colour-picker # color picker gui
       screenkey # show key pressed
       simplenote
-      thunderbird
+      thunderbird # email client
       xfce.exo
       xfce.thunar # file manager
       xfce.thunar-archive-plugin
-      xfce.thunar-volman
-      xfce.xfconf
+      xfce.thunar-volman # auto mont devices
+      xfce.xfconf # where thunar settings are saved
       zathura # PDF viewer
       zoom-us
 
-      # Theme
-      arc-icon-theme
-      arc-theme
+      # Themes
       capitaine-cursors
-      hicolor-icon-theme
-      nordic
-      pantheon.elementary-icon-theme
       papirus-icon-theme
-      qt5ct
 
-      gsettings-desktop-schemas
+      # Themes settings
+      gnome3.gsettings-desktop-schemas
       gtk-engine-murrine
       gtk_engines
       lxappearance
+      qt5ct
     ] ++ [
-      localPkgs.eww
+      localPkgs.eww # custom widgets daemon
       localPkgs.whitesur-dark-icons
       localPkgs.zscroll # scroll text in shells
     ];
@@ -219,19 +214,16 @@ in
       enableGhostscriptFonts = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
-        cantarell_fonts
-        cascadia-code
-        corefonts
+        # inconsolata-nerdfont
+        # iosevka
+        corefonts # basic fonts for office
         fira-code
         fira-code-symbols
         fira-mono
         font-awesome
         font-awesome_4
-        gelasio
         hack-font
-        jetbrains-mono
-        mononoki
-        noto-fonts
+        material-icons
         noto-fonts
         noto-fonts-cjk
         noto-fonts-emoji
@@ -239,16 +231,10 @@ in
         roboto
         roboto-slab
         siji
-        source-code-pro
         terminus_font
-        ttf_bitstream_vera
-        ubuntu_font_family
 
         # Horizon theme
         (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
-        # inconsolata-nerdfont
-        # iosevka
-        material-icons
       ] ;
       fontconfig = {
         allowBitmaps = true;
@@ -298,9 +284,6 @@ in
     services.gvfs.enable = true;
     services.tumbler.enable = true;
 
-    # Generate login wallpapers
-    # services.fractalart.enable = true;
-
     # Enable network manager
     networking = {
       enableIPv6 = false;
@@ -325,10 +308,10 @@ in
     # Remember private keys
     programs.ssh.startAgent = true;
 
-    # Enable wifi tray
+    # Add wifi tray
     programs.nm-applet.enable = true;
 
-    # Enable bluetooth tray
+    # Enable bluetooth
     hardware.bluetooth.enable = true;
 
     # Fix tearing?
@@ -340,10 +323,6 @@ in
     sound.enable = true;
     hardware.pulseaudio.enable = true;
     hardware.pulseaudio.support32Bit = true;
-
-    # better timesync for unstable internet connections
-    # services.chrony.enable = true;
-    # services.timesyncd.enable = false;
 
     services.xserver = {
       layout = "us";

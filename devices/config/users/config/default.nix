@@ -2,6 +2,7 @@
 
 let
   isXorg = config._displayServer == "xorg";
+  localPkgs = import ../../packages { pkgs = pkgs; };
 in
 {
   imports = [
@@ -23,6 +24,9 @@ in
       # changes in each release.
       home.stateVersion = "21.03";
 
+      # Let Home Manager install and manage itself.
+      programs.home-manager.enable = true;
+
       # Open GTK inspector with Ctrl + Shift + D
       # GTK_DEBUG=interactive <app>
       dconf.settings = {
@@ -30,9 +34,6 @@ in
           enable-inspector-keybinding = true;
         };
       };
-
-      # Let Home Manager install and manage itself.
-      programs.home-manager.enable = true;
 
       # Allow unfree packages
       nixpkgs.config.allowUnfree = true;
@@ -65,9 +66,9 @@ in
         # python3Packages.dbus-python
 
         # Apps
-        kdeApplications.kdenlive
-        openshot-qt
-        obs-studio
+        kdeApplications.kdenlive # video editor
+        openshot-qt # video editor
+        obs-studio # video capture
         firefox
         brave
         google-chrome
@@ -209,15 +210,17 @@ in
         };
       };
 
+      # notifications
       services.dunst = lib.mkIf isXorg {
         enable = true;
         iconTheme = {
-          package = pkgs.papirus-icon-theme;
-          name = "Papirus";
+          name = "WhiteSur-dark";
+          package = localPkgs.whitesur-dark-icons;
         };
         settings = (import ./dotfiles/dunstrc.nix);
       };
 
+      # screenshot utility
       services.flameshot.enable = isXorg;
 
       # services.random-background = {

@@ -13,7 +13,6 @@ configuration {
   drun-display-format: "{name}";
   fullscreen: true;
   hide-scrollbar: true;
-  icon-theme: "Papirus";
   show-icons: false;
   sidebar-mode: false;
   kb-select-1: "";

@@ -209,7 +209,7 @@ Kitty
     $ set 3 boot
     ```
 
-* (Wifi keeps connecting and disconnecting)[https://unix.stackexchange.com/questions/588333/networkmanager-keeps-connecting-and-disconnecting-how-can-i-fix-this]
+* [Wifi keeps connecting and disconnecting](https://unix.stackexchange.com/questions/588333/networkmanager-keeps-connecting-and-disconnecting-how-can-i-fix-this)
 
     Disable ipv6 connection.
 
@@ -223,7 +223,9 @@ Kitty
 * Copy installed icons unicode
 
     `E8E4` is the unicode.
+
     ```
+    $ bash
     $ echo -ne "\uE8E4" | xclip -selection clipboard
     ```
 

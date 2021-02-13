@@ -9,11 +9,16 @@
 
 # Options as characters
 # Copied from decoded unicodes (private use of "Feather" font)
-shutdown="";        # "\uE9C0"
-reboot="";          # "\uE9C4"
-sleep="";           # "\uE9A3"
-logout="";          # "\uE991"
-lock="";            # "\uE98F"
+shutdown="襤";        # "\uf924"
+reboot="ﰇ";          # "\ufc07"
+sleep="鈴";           # "\uf9b1"
+logout="";          # "\uf842"
+lock="";            # "\uf840"
+# shutdown="";        # "\uE9C0"
+# reboot="";          # "\uE9C4"
+# sleep="";           # "\uE9A3"
+# logout="";          # "\uE991"
+# lock="";            # "\uE98F"
 options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 
 # Fake blurred background
