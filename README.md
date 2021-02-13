@@ -276,6 +276,7 @@ $ xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5,
 * https://coderwall.com/p/dedqca/argb-colors-in-android
 * https://github.com/zodd18/Horizon
 * https://www.iconfinder.com/search/?q=F028
+* https://www.online-toolz.com/tools/text-unicode-entities-convertor.php
 
 ### Others
 
