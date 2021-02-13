@@ -106,7 +106,7 @@ Preselection
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>h|j|k|l</kbd> | Preselect left|bottom|top|right positions for new window. |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>h-j-k-l</kbd> | Preselect left|bottom|top|right positions for new window. |
 | <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>1-9</kbd> | Preselect the ratio for new window. |
 | <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Space</kbd> | Cancel preselection for the focused window. |
 | <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd> | Cancel preselection for the focused desktop. |
