@@ -7,20 +7,20 @@
     # Positive x value is measured from the left of the screen, negative x is measured from the right
     # Positive y value is measured from the top of the screen
     geometry = "500x6-16+72";
-
+    background = "#1C1E2780"; #RRGGBBAA
     alignment = "left";
     always_run_script = true;
     browser = "firefox";
     class = "Dunst";
     corner_radius = 0;
     follow = "mouse";
-    font = "Roboto Bold 11";
-    format = "<span size='large' font_desc='Roboto 11' weight='bold' foreground='#a0c3ff'>%s</span>\\n%b";
+    font = "Roboto 11";
+    format = "<span weight='300' foreground='#cacacc'>%a</span>\\n<span weight='600'>%s</span>\\n<span>%b</span>";
     frame_color = "#1C1E27";
-    frame_width = 8;
+    frame_width = 1;
     hide_duplicate_count = true;
     history_length = 20;
-    horizontal_padding = 13;
+    horizontal_padding = 16;
     icon_position = "left";
     idle_threshold = 120;
     ignore_newline = false;
@@ -33,7 +33,7 @@
     mouse_left_click = "close_current";
     mouse_middle_click = "do_action";
     mouse_right_click = "close_all";
-    padding = 8;
+    padding = 16;
     separator_color = "#404859";
     separator_height = 2;
     show_age_threshold = 60;
@@ -51,24 +51,24 @@
     summary = "*";
   };
   shortcuts = {
-    close = "ctrl+space";
-    close_all = "ctrl+shift+space";
-    context = "ctrl+shift+period";
+    # close = "ctrl+space";
+    # close_all = "ctrl+shift+space";
+    # context = "ctrl+shift+period";
     history = "ctrl+Escape";
   };
   urgency_low = {
-    background = "#1C1E27";
-    foreground = "#cacacc";
+    background = "#1C1E2780";
+    foreground = "#eaeaea";
     timeout = 5;
   };
   urgency_normal = {
-    background = "#1C1E27";
-    foreground = "#cacacc";
+    background = "#1C1E2780";
+    foreground = "#eaeaea";
     timeout = 5;
   };
   urgency_critical = {
-    background = "#1C1E27";
-    foreground = "#cacacc";
+    background = "#1C1E2780";
+    foreground = "#eaeaea";
     timeout = 120;
   };
 }

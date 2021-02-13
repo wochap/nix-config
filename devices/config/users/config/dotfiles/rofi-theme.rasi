@@ -18,18 +18,15 @@ configuration {
 }
 
 * {
-  backgroundcolor: #1C1E27;
-  bg1: #1C1E27;
-  backgroundcoloralternate: #1C1E27;
-  separatorcolor: #1C1E27;
-  scrollbarcolor: #1C1E27;
+  separatorcolor: transparent;
+  scrollbarcolor: #cacacc;
   foregroundcolor: #cacacc;
-  foregroundcolorinverse: #1C1E27;// #839496;
+  foregroundcolorinverse: #1C1E27;
   selectioncolor: #a0c3ff;
 
   font-size: 1px;
-  border-color: @separatorcolor;
-  background-color: @backgroundcolor;
+  border-color: transparent;
+  background-color: transparent;
   text-color: @foregroundcolor;
   margin: 0;
   margin-bottom: 0;
@@ -45,38 +42,33 @@ configuration {
 }
 
 #window {
-  background-color: @backgroundcolor;
-  border-color: @separatorcolor;
+  background-color: rgba(28, 30, 39, 0.5);
+  border-color: #282e3a;
   border-radius: 2px;
-  border: 1;
+  border: 1px;
   width: 26em;
 }
 
 #mainbox {
   border: 0;
   padding: 8;
-  background-color: @backgroundcoloralternate;
 }
 
 #element {
   padding: 8;
   border: 0 0 1 0;
   border-color: @separatorcolor;
-  background-color: @backgroundcoloralternate;
 }
 
 #element.selected.normal {
   background-color: @selectioncolor;
-  text-color: @foregroundcolorinverse;
-  border-radius: 0px;
-
-  border: 0 0 1 0;
   border-color: @separatorcolor;
+  border-radius: 0px;
+  border: 0 0 1 0;
+  text-color: @foregroundcolorinverse;
 }
 
-#element.alternate.normal {
-  background-color: @backgroundcoloralternate;
-}
+#element.alternate.normal {}
 
 #element.normal.active {
   background-color: #434c5e;
@@ -88,23 +80,21 @@ configuration {
 
 #element.selected.active {
   background-color: @selectioncolor;
-  text-color: @foregroundcolorinverse;
-  border-radius: 0px;
-
-  border: 0 0 1 0;
   border-color: @separatorcolor;
+  border-radius: 0px;
+  border: 0 0 1 0;
+  text-color: @foregroundcolorinverse;
 }
 
 #inputbar {
+  border-color: @separatorcolor;
   border: 0 solid 0 solid 1 solid 0 solid;
   margin: 0;
   spacing: 0;
-  border-color: @separatorcolor;
 }
 
 #prompt {
   padding: 8;
-  background-color: @backgroundcoloralternate;
   border: 0 1 0 0;
 }
 
@@ -113,11 +103,11 @@ configuration {
 }
 
 #scrollbar {
+  background-color: transparent;
   border: 0;
-  width: 8px;
   handle-color: @scrollbarcolor;
   handle-width: 8px;
-  background-color: @backgroundcoloralternate;
+  width: 8px;
 }
 
 #scrollbar handle {
