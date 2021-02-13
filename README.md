@@ -10,6 +10,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 ## Install NixOS
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
+    Add `git` `videoDrivers` `desktopManager.xterm.enable`
 
     **NOTE:** Run `sudo nixos-install` without root user (sudo su)
 1. Reboot and connect to wifi/ethernet
