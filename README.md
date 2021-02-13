@@ -189,68 +189,68 @@ Kitty
 
 * Check if picom is running
 
-```
-$ inxi -Gxx | grep compositor
-```
+    ```
+    $ inxi -Gxx | grep compositor
+    ```
 
 * Macbook Pro wifi
 
-Create wpa conf before rebuild switch.
+    Create wpa conf before rebuild switch.
 
 * Firefox doesnt load some websites
 
-Enable DNS over HTTPS
+    Enable DNS over HTTPS
 
 * Change partition flags
 
-```
-$ parted /dev/sda
-$ p
-$ set 3 boot
-```
+    ```
+    $ parted /dev/sda
+    $ p
+    $ set 3 boot
+    ```
 
 * (Wifi keeps connecting and disconnecting)[https://unix.stackexchange.com/questions/588333/networkmanager-keeps-connecting-and-disconnecting-how-can-i-fix-this]
 
-Disable ipv6 connection.
+    Disable ipv6 connection.
 
 * Test polybar themes
 
-```
-$ killall polybar
-$ polybar main --config=/home/gean/nix-config/devices/config/users/config/dotfiles/polybar/main.ini -r
-```
+    ```
+    $ killall polybar
+    $ polybar main --config=/home/gean/nix-config/devices/config/users/config/dotfiles/polybar/main.ini -r
+    ```
 
 * Copy installed icons unicode
 
-`E8E4` is the unicode.
-```
-$ echo -ne "\uE8E4" | xclip -selection clipboard
-```
+    `E8E4` is the unicode.
+    ```
+    $ echo -ne "\uE8E4" | xclip -selection clipboard
+    ```
 
 * Transform svg icons to png
 
-```
-$ for file in *.svg; do inkscape $file -o ${file%svg}png -h 128; done
-```
+    ```
+    $ for file in *.svg; do inkscape $file -o ${file%svg}png -h 128; done
+    ```
 
-```
-#!/usr/bin/env bash
+    ```
+    #!/usr/bin/env bash
 
-symlinks=$(find ./ -lname "*.svg");
+    symlinks=$(find ./ -lname "*.svg");
 
-for file in $symlinks; do
-  linkpath=$(readlink $file);
-  newlinkcontent=${linkpath/svg/png};
-  newlinkpath=${file/svg/png};
-  ln -sf $newlinkcontent $newlinkpath;
-done
-```
+    for file in $symlinks; do
+      linkpath=$(readlink $file);
+      newlinkcontent=${linkpath/svg/png};
+      newlinkpath=${file/svg/png};
+      ln -sf $newlinkcontent $newlinkpath;
+    done
+    ```
 
 * Get key actual name
 
-```
-$ xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
-```
+    ```
+    $ xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
+    ```
 
 ## Resources
 
