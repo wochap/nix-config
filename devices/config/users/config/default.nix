@@ -81,6 +81,7 @@ in
         BROWSER = "firefox";
         TERMINAL = "kitty";
         QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+        QT_FONT_DPI = "96";
       };
 
       # Edit home files

@@ -74,6 +74,31 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ ssh-add
     ```
 
+1. [Monitor setup](https://http.download.nvidia.com/XFree86/Linux-x86/325.15/README/xconfigoptions.html) for nvidia cards
+
+    ```
+    # Show external monitor
+    $ nvidia-settings --assign "CurrentMetaMode=DP-0: 3840x2160_60 @3840x2160 +2880+0 {ViewPortIn=3840x2160, ViewPortOut=3840x2160+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}, DP-2: 1920x1080_144 @1920x1080 +0+0 {ViewPortIn=2880x1620, ViewPortOut=2880x1620+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}"
+
+    # Show only primary monitor
+    $ nvidia-settings --assign "CurrentMetaMode=DP-0: 3840x2160_60 @3840x2160 +0+0 {ViewPortIn=3840x2160, ViewPortOut=3840x2160+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}"
+    ```
+
+1. Monitor setup with [xrandr](https://wiki.archlinux.org/index.php/HiDPI#Side_display)
+
+    If panning is incorrect and you have NVIDIA, try toggling [adding 1px to the panning width](https://askubuntu.com/questions/853048/xrandr-adds-weird-virtual-screen-size-and-panning).
+
+    ```
+    # Show external monitor
+    xrandr --dpi 144 \
+      --output DP-0 --mode 3840x2160 --rate 60 --pos 2880x0 --primary \
+      --output DP-2 --mode 1920x1080 --rate 144 --pos 0x0 --scale 1.5x1.5 --panning 2880x1620
+
+    xrandr --dpi 144 \
+      --output DP-0 --mode 3840x2160 --rate 60 --pos 2880x0 --primary \
+      --output DP-2 --off
+    ```
+
 ## Whats out of the box
 
 1. Script for using phone webcam

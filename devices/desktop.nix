@@ -44,12 +44,9 @@ in
       dpi = dpi;
 
       videoDrivers = [
-        # "modesetting"
-        # "nvidiaBeta"
         "nvidia"
       ];
 
-      # Test 1
       serverLayoutSection = ''
         Screen      0  "Screen0" 0 0
         Option         "Xinerama" "0"
@@ -89,10 +86,9 @@ in
           Monitor        "Monitor0"
           DefaultDepth    24
           Option         "Stereo" "0"
+          # Select primary monitor
           Option         "nvidiaXineramaInfoOrder" "DFP-0"
-          # Switch between multiple monitor setup
-          # Option         "metamodes" "DP-0: 3840x2160_60 +1920+0 {AllowGSYNCCompatible=On}, DP-2: 1920x1080_144 +0+0 {AllowGSYNCCompatible=On}"
-          # ForceCompositionPipeline=On, ForceFullCompositionPipeline=On,
+          # Default multiple monitor setup
           Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
           Option         "SLI" "Off"
           Option         "MultiGPU" "Off"
@@ -100,99 +96,11 @@ in
           SubSection     "Display"
               Depth       24
           EndSubSection
+          # DPI with NVIDIA
           # Option         "UseEdidDpi" "FALSE"
           # Option         "DPI" "${toString dpi} x ${toString dpi}"
         EndSection
       '';
-
-      # # Test 2
-      # serverLayoutSection = ''
-      #   Screen      0  "Screen0" 0 0
-      #   Screen      1  "Screen1" RightOf "Screen0"
-      #   Option         "Xinerama" "0"
-      # '';
-      # serverFlagsSection = ''
-      #   Option "DefaultServerLayout" "Layout0"
-      # '';
-      # extraConfig = ''
-      #   Section "ServerLayout"
-      #     Identifier     "Layout0"
-      #     Screen      0  "Screen0" 0 0
-      #     Screen      1  "Screen1" LeftOf "Screen0"
-      #     Option         "Xinerama" "0"
-      #   EndSection
-
-      #   Section "Monitor"
-      #     # HorizSync source: edid, VertRefresh source: edid
-      #     Identifier     "Monitor0"
-      #     VendorName     "Unknown"
-      #     ModelName      "LG Electronics LG HDR 4K"
-      #     HorizSync       135.0 - 135.0
-      #     VertRefresh     40.0 - 61.0
-      #     Option         "DPMS"
-      #   EndSection
-
-      #   Section "Monitor"
-      #     # HorizSync source: edid, VertRefresh source: edid
-      #     Identifier     "Monitor1"
-      #     VendorName     "Unknown"
-      #     ModelName      "AUS ASUS VP249"
-      #     HorizSync       180.0 - 180.0
-      #     VertRefresh     48.0 - 144.0
-      #     Option         "DPMS"
-      #   EndSection
-
-      #   Section "Device"
-      #       Identifier     "Device0"
-      #       Driver         "nvidia"
-      #       VendorName     "NVIDIA Corporation"
-      #       BoardName      "GeForce GTX 1650 SUPER"
-      #       BusID          "PCI:43:0:0"
-      #       Screen          0
-      #   EndSection
-
-      #   Section "Device"
-      #       Identifier     "Device1"
-      #       Driver         "nvidia"
-      #       VendorName     "NVIDIA Corporation"
-      #       BoardName      "GeForce GTX 1650 SUPER"
-      #       BusID          "PCI:43:0:0"
-      #       Screen          1
-      #   EndSection
-
-      #   Section "Screen"
-      #     Identifier     "Screen0"
-      #     Device         "Device0"
-      #     Monitor        "Monitor0"
-      #     DefaultDepth    24
-      #     Option         "Stereo" "0"
-      #     Option         "nvidiaXineramaInfoOrder" "DFP-0"
-      #     Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {AllowGSYNCCompatible=On}"
-      #     Option         "SLI" "Off"
-      #     Option         "MultiGPU" "Off"
-      #     Option         "BaseMosaic" "off"
-      #     SubSection     "Display"
-      #         Depth       24
-      #     EndSubSection
-      #     Option         "UseEdidDpi" "FALSE"
-      #     Option         "DPI" "144 x 144"
-      #   EndSection
-
-      #   Section "Screen"
-      #     Identifier     "Screen1"
-      #     Device         "Device1"
-      #     Monitor        "Monitor1"
-      #     DefaultDepth    24
-      #     Option         "Stereo" "0"
-      #     Option         "metamodes" "DP-2: 1920x1080_144 +0+0 {AllowGSYNC=Off, AllowGSYNCCompatible=On}"
-      #     Option         "SLI" "Off"
-      #     Option         "MultiGPU" "Off"
-      #     Option         "BaseMosaic" "off"
-      #     SubSection     "Display"
-      #         Depth       24
-      #     EndSubSection
-      #   EndSection
-      # '';
     };
   };
 }
