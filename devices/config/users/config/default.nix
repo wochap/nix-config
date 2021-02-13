@@ -131,6 +131,11 @@ in
           ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
           ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
           ".vimrc".source = ./dotfiles/.vimrc;
+          # Fix cursor theme
+          ".icons/default/index.theme".text = ''
+            [icon theme]
+            Inherits=capitaine-cursors
+          '';
           ".config/nixpkgs/config.nix".text = ''
             { allowUnfree = true; }
           '';
