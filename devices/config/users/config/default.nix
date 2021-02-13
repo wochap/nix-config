@@ -52,8 +52,8 @@ in
         rofi-calc
 
         # Dev tools
-        docker
-        docker-compose
+        # docker
+        # docker-compose
         gitAndTools.gh
         mysql-workbench
         # nodejs

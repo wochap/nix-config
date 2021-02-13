@@ -184,7 +184,6 @@ in
       pick-colour-picker # color picker gui
       screenkey # show key pressed
       simplenote
-      thunderbird # email client
       xfce.exo
       xfce.thunar # file manager
       xfce.thunar-archive-plugin
@@ -339,5 +338,7 @@ in
     services.gnome3.evolution-data-server.enable = true;
     services.gnome3.gnome-online-accounts.enable = true;
     services.gnome3.gnome-keyring.enable = true;
+
+    virtualisation.docker.enable = true;
   };
 }

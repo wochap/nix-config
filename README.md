@@ -63,7 +63,11 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 
     For Wayland:
     - WIP
-1. [Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)
+1. Setup gnome calendar and geary
+    ```
+    $ env WEBKIT_DISABLE_COMPOSITING_MODE=1 gnome-control-center online-accounts
+    ```
+1. ~[Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)~
 1. Copy `.ssh` folder to `/home/gean/.ssh`
     ```
     $ chmod 600 ~/.ssh/*
@@ -253,6 +257,8 @@ Kitty
     ```
     $ xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
     ```
+
+* [Cannot add google account in gnome > online accounts](https://github.com/NixOS/nixpkgs/issues/32580)
 
 ## Resources
 
