@@ -38,7 +38,7 @@
     separator_height = 2;
     show_age_threshold = 60;
     show_indicators = false;
-    shrink = true;
+    shrink = false;
     sort = false;
     stack_duplicates = false;
     sticky_history = false;
