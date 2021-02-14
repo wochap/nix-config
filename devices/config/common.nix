@@ -340,5 +340,10 @@ in
     services.gnome3.gnome-keyring.enable = true;
 
     virtualisation.docker.enable = true;
+
+    # Required for polybar docker script
+    security.sudo.configFile = ''
+      user ALL=(ALL) NOPASSWD: ${pkgs.docker}/bin/docker ps -qf status=running
+    '';
   };
 }

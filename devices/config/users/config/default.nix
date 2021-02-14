@@ -143,7 +143,10 @@ in
         }
         (lib.mkIf isXorg {
           ".config/polybar/main.ini".source = ./dotfiles/polybar/main.ini;
+          ".config/polybar/scripts/docker_info.sh".source = ./dotfiles/polybar/scripts/docker_info.sh;
+          ".config/polybar/scripts/get_gpu_status.sh".source = ./dotfiles/polybar/scripts/get_gpu_status.sh;
           ".config/polybar/scripts/get_spotify_status.sh".source = ./dotfiles/polybar/scripts/get_spotify_status.sh;
+          ".config/polybar/scripts/get_vram_status.sh".source = ./dotfiles/polybar/scripts/get_vram_status.sh;
           ".config/polybar/scripts/scroll_spotify_status.sh".source = ./dotfiles/polybar/scripts/scroll_spotify_status.sh;
           ".config/rofi-theme.rasi".source = ./dotfiles/rofi-theme.rasi;
         })
