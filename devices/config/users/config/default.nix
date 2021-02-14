@@ -53,7 +53,7 @@ in
 
         # Dev tools
         # docker
-        # docker-compose
+        docker-compose
         gitAndTools.gh
         mysql-workbench
         # nodejs
