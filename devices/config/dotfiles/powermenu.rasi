@@ -41,7 +41,7 @@ configuration {
 #mainbox {
   background-color: transparent;
   children: [ inputbar, listview ];
-  padding: 35% 0% 0% 21.5%;
+  padding: 35% 0% 0% 25%;
   spacing: 5%;
 }
 
@@ -54,7 +54,7 @@ configuration {
   background-color: transparent;
   font: inherit;
   text-color: @unselected-text-color;
-  padding: 0% 0% 0% 1.65em;
+  padding: 0% 0% 0% 1.25em;
 }
 
 #horibox {
