@@ -106,6 +106,7 @@ in
       arandr # xrandr gui
       bc # calculator cli
       dex # execute DesktopEntry files
+      docker-compose
       dos2unix
       evtest
       feh # image viewer
