@@ -73,7 +73,13 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ chmod 600 ~/.ssh/*
     $ ssh-add
     ```
-
+1. Fish setup
+    ```
+    # install fisher
+    $ curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+    $ fisher install edouard-lopez/ayu-theme.fish
+    $ set --universal ayu_variant mirage && ayu_load_theme
+    ```
 1. [Monitor setup](https://http.download.nvidia.com/XFree86/Linux-x86/325.15/README/xconfigoptions.html) for nvidia cards
 
     ```
