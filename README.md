@@ -131,7 +131,7 @@ Window state and flags
 | <kbd>Super</kbd> + <kbd>t</kbd> | Set window state to tiled |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>t</kbd> | Set window state to pseudo-tiled |
 | <kbd>Super</kbd> + <kbd>s</kbd> | Set window state to floating |
-| <kbd>Super</kbd> + <kbd>f</kbd> | Set window state to fullscreen |
+| <kbd>Super</kbd> + <kbd>f</kbd> | Toggle window fullscreen state |
 | <kbd>Super</kbd> + <kbd>m</kbd> | Set window flag to marked |
 | <kbd>Super</kbd> + <kbd>x</kbd> | Set window flag to locked |
 | <kbd>Super</kbd> + <kbd>y</kbd> | Set window flag to sticky |
@@ -195,11 +195,12 @@ Apps
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>e</kbd> | Opens file manager (thunar) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>f</kbd> | Opens file manager (thunar) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>s</kbd> | Takes screenshoot (flameshot) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>f</kbd> | Open firefox |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>c</kbd> | Open chrome |
 | <kbd>Super</kbd> + <kbd>Enter</kbd> | Opens terminal (kitty) |
 | <kbd>Super</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>s</kbd> | Takes screenshoot (flameshot) |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> | Open firefox |
 
 Kitty
 
@@ -323,5 +324,3 @@ Kitty
 * https://nixos.wiki/wiki/Home_Manager
 * https://superuser.com/questions/603528/how-to-get-the-current-monitor-resolution-or-monitor-name-lvds-vga1-etc
 * https://nixos.org/manual/nix/stable/#use-as-a-interpreter
-
-pkill -USR1 -x sxhkd

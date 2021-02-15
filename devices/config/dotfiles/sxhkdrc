@@ -1,5 +1,9 @@
 ### BSPWM HOTKEYS
 
+# Reload keybindings
+super + F1
+  pkill -USR1 -x sxhkd
+
 # Open power menu
 super + Escape
 	/etc/powermenu.sh
@@ -24,8 +28,12 @@ super + y
 ### STATE/FLAGS
 
 # Set the window state
-super + {t,shift + t,s,f}
-	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+super + {t,shift + t,s}
+	bspc node -t {tiled,pseudo_tiled,floating}
+
+# Toggle fullscreen
+super + f
+  bspc node -t \~fullscreen
 
 # Set the node flags
 super + ctrl + {m,x,y,z}
@@ -109,31 +117,36 @@ ctrl + alt + shift + {h,j,k,l}
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
-# open file manager
-super + alt + e
+# Open file manager
+super + alt + f
   thunar
-
-# open termina
-super + Return
-  kitty
-
-# open app launcher
-# NOTE `@` means until key is released
-super + space
-  rofi -theme ~/.config/rofi-theme.rasi -show drun
 
 # Open screenshoot utility
 super + alt + s
   flameshot gui
 
-XF86MonBrightness{Down,Up}
-  light {-U 10,-A 10}
+# Open color picker
+super + alt + c
+  pick-colour-picker
 
-# XF86Audio{Mute,LowerVolume,RaiseVolume}
-#   amixer set Master {toggle,5%-,5%+}
+# Open Browser
+super + alt + b ; {f,c}
+    {firefox,google-chrome-stable}
+
+# Open terminal
+super + Return
+  kitty
+
+# Take fullscreen screenshoot
+super + Print
+  flameshot full -p ~/Pictures/Screenshots/
+
+# Open app launcher
+super + space
+  rofi -theme ~/.config/rofi-theme.rasi -show drun
 
 # Show clipmenu
-alt + v
+super + v
   CM_LAUNCHER=rofi \
     clipmenu \
     -no-show-icons \
@@ -145,17 +158,14 @@ alt + v
 super + slash
   /etc/sxhkd-help
 
-# Open color picker
-super + alt + c
-  pick-colour-picker
 
-# Open Firefox
-super + alt + b
-  firefox
+### MEDIA KEYBINDINGS
 
-# Take fullscreen screenshoot
-super + Print
-  flameshot full -p ~/Pictures/Screenshots/
+# XF86MonBrightness{Down,Up}
+#   light {-U 10,-A 10}
+
+# XF86Audio{Mute,LowerVolume,RaiseVolume}
+#   amixer set Master {toggle,5%-,5%+}
 
 # Play next media
 XF86AudioNext
