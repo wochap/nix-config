@@ -74,7 +74,7 @@ in
       lowTemp = 35;
       maxFanSpeed = 6000;
       minFanSpeed = 4000;
-    }
+    };
   };
 
   # Update display brightness
