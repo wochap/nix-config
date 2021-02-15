@@ -3,6 +3,7 @@
 
 let
   hostName = "gmbp";
+  dpi = 192;
   nixos-hardware = builtins.fetchGit {
     url = "https://github.com/NixOS/nixos-hardware.git";
     rev = "fb1682bab43b9dd8daf43ae28f09e44541ce33a2";
@@ -18,7 +19,8 @@ in
     /etc/nixos/hardware-configuration.nix
 
     # Include configuration
-    ./config/wayland.nix
+    # ./config/wayland.nix
+    ./config/xorg.nix
   ];
 
   boot = {
@@ -40,33 +42,40 @@ in
     interfaces.wlp4s0.useDHCP = true;
   };
 
-  # Macbook fan config
-  services.mbpfan = {
-    enable = true;
-    minFanSpeed = 4000;
-    lowTemp = 35;
-    maxFanSpeed = 6000;
+  hardware = {
+    video.hidpi.enable = true;
   };
 
-  # Macbook keyboard
-  services.xserver.xkbVariant = "mac";
+  fonts.fontconfig.dpi = dpi;
+  services = {
+    xserver = {
+      dpi = dpi;
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
-  services.xserver.libinput.naturalScrolling = true;
+      # Macbook keyboard
+      xkbVariant = "mac";
 
-  # GPU drivers
-  # services.xserver.videoDrivers = [
-  #   # "ati_unfree"
-  #   # "ati"
-  #   "amdgpu"
-  #   "radeon"
-  #   "ati"
-  # ];
-  # services.xserver.deviceSection = ''
-  #   # Option "TearFree" "on"
-  #   Option "TearFree" "true"
-  # '';
+      # Enable touchpad support (enabled default in most desktopManager).
+      libinput.enable = true;
+      libinput.naturalScrolling = true;
+
+      # GPU drivers
+      videoDrivers = [
+        "amdgpu"
+      ];
+      # Fix tearing
+      deviceSection = ''
+        Option "TearFree" "true"
+      '';
+    };
+
+    # Macbook fan config
+    mbpfan = {
+      enable = true;
+      lowTemp = 35;
+      maxFanSpeed = 6000;
+      minFanSpeed = 4000;
+    }
+  };
 
   # Update display brightness
   programs.light.enable = true;
