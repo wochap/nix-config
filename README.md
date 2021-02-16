@@ -42,7 +42,6 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 ## Setup NixOS
 
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
-1. [Fix firefox insta right click](https://gist.github.com/AntonFriberg/15bcd0dbfe7506a08e55fb2163644cc9)
 1. Setup betterlockscreen (required for xorg config)
     ```
     $ betterlockscreen -u ~/Pictures/backgrounds/default.jpeg
@@ -202,7 +201,7 @@ Apps
 | <kbd>Super</kbd> + <kbd>Enter</kbd> | Opens terminal (kitty) |
 | <kbd>Super</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
 
-Kitty
+Kitty keybindings
 
 | Keybinding | Action |
 | :--- | :--- |
@@ -211,6 +210,12 @@ Kitty
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> | Cycle focused terminal (swap) |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>[</kbd> | Focus next terminal |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>]</kbd> | Focus previous terminal |
+
+Firefox keybindings
+
+| Keybinding | Action |
+| :--- | :--- |
+| <kbd>Ctrl</kbd> + <kbd>.</kbd> ; <kbd>1</kbd> | Open google container |
 
 ## Troubleshooting
 

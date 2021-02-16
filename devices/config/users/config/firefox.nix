@@ -24,6 +24,7 @@ in
             name = "default";
             isDefault = true;
             settings = {
+              "ui.context_menus.after_mouseup" = true;
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
               "layers.acceleration.force-enabled" = true;
             };
