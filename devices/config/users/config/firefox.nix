@@ -13,7 +13,8 @@ in
   config = {
     home-manager.users.gean = {
       home.file = {
-        ".mozilla/firefox/default/chrome".source = "${firefox-theme}/chrome";
+        ".mozilla/firefox/default/chrome/userChrome.css".source = "${firefox-theme}/chrome/userChrome.css";
+        ".mozilla/firefox/default/chrome/WhiteSur".source = "${firefox-theme}/chrome/WhiteSur";
       };
       programs.firefox = {
         enable = true;
