@@ -7,6 +7,7 @@ in
 {
   imports = [
     ./firefox.nix
+    ./fish.nix
     ./git.nix
     ./gtk.nix
     ./picom.nix
@@ -53,17 +54,10 @@ in
         rofi-calc
 
         # Dev tools
-        # docker
         gitAndTools.gh
         mysql-workbench
-        # nodejs
         postman
         vscode
-        # python3
-        # To lookup packages for nix, use the following code:
-        # nix-env -qaPA 'nixos.nodePackages' | grep -i <npm module>
-        # nodePackages.vue-cli
-        # python3Packages.dbus-python
 
         # Apps
         kdeApplications.kdenlive # video editor
@@ -107,11 +101,6 @@ in
           "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
         };
-
-        # Edit linked files
-        configFile = {
-          "fish/config.fish".text = lib.mkAfter (builtins.readFile ./dotfiles/config.fish);
-        };
       };
 
       # Add config files to home folder
@@ -134,48 +123,9 @@ in
           '';
         }
         (lib.mkIf isXorg {
-          ".config/polybar/main.ini".source = ./dotfiles/polybar/main.ini;
-          ".config/polybar/scripts/docker_info.sh".source = ./dotfiles/polybar/scripts/docker_info.sh;
-          ".config/polybar/scripts/get_gpu_status.sh".source = ./dotfiles/polybar/scripts/get_gpu_status.sh;
-          ".config/polybar/scripts/get_spotify_status.sh".source = ./dotfiles/polybar/scripts/get_spotify_status.sh;
-          ".config/polybar/scripts/get_vram_status.sh".source = ./dotfiles/polybar/scripts/get_vram_status.sh;
-          ".config/polybar/scripts/scroll_spotify_status.sh".source = ./dotfiles/polybar/scripts/scroll_spotify_status.sh;
           ".config/rofi-theme.rasi".source = ./dotfiles/rofi-theme.rasi;
         })
       ];
-
-      programs.fish = {
-        enable = true;
-        plugins = [
-          {
-            name = "z";
-            src = pkgs.fetchFromGitHub {
-              owner = "jethrokuan";
-              repo = "z";
-              rev = "ddeb28a7b6a1f0ec6dae40c636e5ca4908ad160a";
-              sha256 = "0c5i7sdrsp0q3vbziqzdyqn4fmp235ax4mn4zslrswvn8g3fvdyh";
-            };
-          }
-          # {
-          #   name = "eclm";
-          #   src = pkgs.fetchFromGitHub {
-          #     owner = "oh-my-fish";
-          #     repo = "theme-eclm";
-          #     rev = "bd9abe5c5d0490a0b16f2aa303838a2b2cc98844";
-          #     sha256 = "051wzwn4wr53mq27j1hra7y84y3gyqxgdgg2rwbc5npvbgvdkr09";
-          #   };
-          # }
-          {
-            name = "pure";
-            src = pkgs.fetchFromGitHub {
-              owner = "pure-fish";
-              repo = "pure";
-              rev = "081f81cd6c32a44f92c0c98cc93d64d035f5dddd";
-              sha256 = "0405paylqjf0nw6hcd3bbpazb5w851111w5bxx41y22a3b0639fc";
-            };
-          }
-        ];
-      };
 
       programs.zsh = {
         enable = true;
