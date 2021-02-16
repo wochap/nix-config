@@ -327,8 +327,7 @@ in
     # Setup keychron
     services.xserver = {
       layout = "us";
-      model = "pc104";
-      layout = "us";
+      xkbModel = "pc104";
       xkbVariant = "altgr-intl";
     };
 
