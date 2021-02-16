@@ -324,9 +324,12 @@ in
     hardware.pulseaudio.enable = true;
     hardware.pulseaudio.support32Bit = true;
 
+    # Setup keychron
     services.xserver = {
       layout = "us";
-      xkbOptions = "eurosign:e";
+      model = "pc104";
+      layout = "us";
+      xkbVariant = "altgr-intl";
     };
 
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
