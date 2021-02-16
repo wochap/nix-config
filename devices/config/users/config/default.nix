@@ -6,10 +6,11 @@ let
 in
 {
   imports = [
+    ./firefox.nix
     ./git.nix
     ./gtk.nix
-    ./polybar.nix
     ./picom.nix
+    ./polybar.nix
   ];
 
   config = {
@@ -68,7 +69,6 @@ in
         kdeApplications.kdenlive # video editor
         openshot-qt # video editor
         obs-studio # video capture
-        firefox
         brave
         google-chrome
         nix-prefetch-git
