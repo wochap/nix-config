@@ -12,23 +12,21 @@ in
 {
   config = {
     home-manager.users.gean = {
+      home.file = {
+        ".mozilla/firefox/default/chrome".source = "${firefox-theme}/chrome";
+      };
       programs.firefox = {
         enable = true;
         profiles = {
-          gean = {
-            # user.js
-            # extraConfig = (import "${home-manager}/nixos");
-            # extraConfig = (builtins.readFile ./dotfiles/config.fish);
+          default = {
             extraConfig = (builtins.readFile "${firefox-theme}/user.js");
-            id = 1000;
+            id = 0;
+            name = "default";
             isDefault = true;
-            name = "gean";
             settings = {
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
               "layers.acceleration.force-enabled" = true;
             };
-            userChrome = ".userChrome {}";
-            userContent = ".userContent {}";
           };
         };
       };
