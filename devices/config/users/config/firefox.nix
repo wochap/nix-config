@@ -5,7 +5,7 @@
 let
   firefox-theme = builtins.fetchGit {
     url = "https://github.com/wochap/firefox-theme.git";
-    rev = "d465fdf350b2a5b11719de932c9ab42f2671e43f";
+    rev = "d5528ff0315b10d256eeb651caadbaac667fea67";
     ref = "main";
   };
 in
