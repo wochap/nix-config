@@ -61,6 +61,7 @@ bspc rule -a "Geary" state=pseudo_tiled
 bspc rule -a "Gnome-calendar" state=pseudo_tiled
 bspc rule -a "zoom" state=pseudo_tiled
 bspc rule -a "Mysql-workbench-bin" state=pseudo_tiled
+bspc rule -a "Simplenote" state=pseudo_tiled
 
 bspc rule -a "Geary" desktop=^4
 bspc rule -a "Gnome-calendar" desktop=^4
