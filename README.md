@@ -210,6 +210,9 @@ Kitty keybindings
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> | Cycle focused terminal (swap) |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>[</kbd> | Focus next terminal |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>]</kbd> | Focus previous terminal |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd> | Reset terminal |
+| <kbd>Ctrl</kbd> + <kbd>k</kbd> | Clear terminal |
+| <kbd>Ctrl</kbd> + <kbd>f</kbd> | Search |
 
 Firefox keybindings
 
