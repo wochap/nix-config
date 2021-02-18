@@ -15,8 +15,9 @@ blueberry-tray &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
-geary &
-gnome-calendar &
+evolution &
+# geary &
+# gnome-calendar &
 slack &
 echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
 exec /etc/eww_vol_icon.sh mute &
@@ -62,7 +63,9 @@ bspc rule -a "Gnome-calendar" state=pseudo_tiled
 bspc rule -a "zoom" state=pseudo_tiled
 bspc rule -a "Mysql-workbench-bin" state=pseudo_tiled
 bspc rule -a "Simplenote" state=pseudo_tiled
+# bspc rule -a "Evolution" state=pseudo_tiled
 
+bspc rule -a "Evolution" desktop=^4
 bspc rule -a "Geary" desktop=^4
 bspc rule -a "Gnome-calendar" desktop=^4
 bspc rule -a "Slack" desktop=^4
