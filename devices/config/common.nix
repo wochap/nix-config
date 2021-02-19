@@ -296,11 +296,12 @@ in
       ];
       firewall = {
         enable = true;
-        # allowedTCPPortRanges = [
-        #   { from = 8080; to = 8090 }
-        # ];
+        allowedTCPPortRanges = [
+          { from = 8080; to = 8090; }
+          { from = 3000; to = 3010; }
+        ];
         allowedTCPPorts = [
-          8080
+          8000
           80
           22
         ];
