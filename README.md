@@ -69,7 +69,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 1. ~[Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)~
 1. Copy `.ssh` folder to `/home/gean/.ssh`
     ```
-    $ ssh-keygen -t rsa -b 4096 -C "email@email.com"
+    $ ssh-keygen -m PEM -t rsa -b 4096 -C "email@email.com"
     $ chmod 600 ~/.ssh/*
     $ ssh-add
     ```
