@@ -98,7 +98,7 @@ in
           "image/png" = [ "org.gnome.eog.desktop" ];
           "image/jpeg" = [ "org.gnome.eog.desktop" ];
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];
-          "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
+          "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" "userapp-Evolution-S7FTY0.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
         };
       };
