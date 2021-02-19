@@ -173,6 +173,7 @@ in
       # gnome3.bijiben
       gnome3.cheese # test webcam
       gnome3.eog # image viewer
+      gnome3.evolution
       gnome3.file-roller # archive manager
       gnome3.geary # email client
       gnome3.gnome-calculator
@@ -277,6 +278,7 @@ in
       ];
       openssh.authorizedKeys.keyFiles = [
         "~/.ssh/id_rsa.pub"
+        "~/.ssh/id_rsaboc.pub"
       ];
     };
 
@@ -343,6 +345,7 @@ in
     services.gnome3.gnome-keyring.enable = true;
 
     virtualisation.docker.enable = true;
+    virtualisation.anbox.enable = true;
 
     # Required for polybar docker script
     security.sudo.configFile = ''
