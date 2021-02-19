@@ -301,6 +301,7 @@ in
           { from = 3000; to = 3010; }
         ];
         allowedTCPPorts = [
+          3333
           8000
           80
           22
