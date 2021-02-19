@@ -278,7 +278,7 @@ in
       ];
       openssh.authorizedKeys.keyFiles = [
         "~/.ssh/id_rsa.pub"
-        "~/.ssh/id_rsaboc.pub"
+        "~/.ssh/id_rsa_boc.pub"
       ];
     };
 
