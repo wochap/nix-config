@@ -71,7 +71,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     ```
     $ ssh-keygen -m PEM -t rsa -b 4096 -C "email@email.com"
     $ chmod 600 ~/.ssh/*
-    $ ssh-add
+    $ ssh-add <PATH_TO_PRIVATE_KEY>
     ```
 1. Fish setup
     ```
