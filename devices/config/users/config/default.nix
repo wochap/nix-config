@@ -49,8 +49,8 @@ in
       # User packages
       home.packages = with pkgs; [
         # DE apps
-        nitrogen # wallpaper manager
         clipmenu # clipboard manager
+        nitrogen # wallpaper manager
         rofi-calc
 
         # Dev tools
@@ -60,13 +60,14 @@ in
         vscode
 
         # Apps
-        kdeApplications.kdenlive # video editor
-        openshot-qt # video editor
-        obs-studio # video capture
         brave
         google-chrome
-        nix-prefetch-git
+        kdeApplications.kdenlive # video editor
         mpv # video player
+        nix-prefetch-git
+        obs-studio # video capture
+        olive-editor
+        openshot-qt # video editor
         slack
       ];
 

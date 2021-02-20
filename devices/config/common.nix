@@ -85,6 +85,7 @@ in
     environment = {
       sessionVariables = lib.mkMerge [
         {
+          GTK_USE_PORTAL = "1";
           QT_QPA_PLATFORMTHEME = "qt5ct";
           ELECTRON_TRASH="trash-cli"; # fix vscode delete
         }
@@ -136,6 +137,8 @@ in
       vim
       wget
       xclip # clipboard cli
+      xdg-desktop-portal # consistent file dialog
+      xdg-desktop-portal-kde # consistent file dialog
       xdotool # fake keyboard/mouse input
       xlayoutdisplay # fix dpi
       xorg.xdpyinfo # show monitor info
@@ -197,6 +200,7 @@ in
       # Themes
       capitaine-cursors
       papirus-icon-theme
+      adwaita-qt
 
       # Themes settings
       gnome3.gsettings-desktop-schemas

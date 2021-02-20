@@ -1,4 +1,6 @@
 set fish_greeting
+set -U fish_color_command blue
+set -U fish_color_autosuggestion brblack
 
 function print_fish_colors --description 'Shows the various fish colors being used'
   set -l clr_list (set -n | grep fish | grep color | grep -v __)
