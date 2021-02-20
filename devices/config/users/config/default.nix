@@ -73,6 +73,7 @@ in
       home.sessionVariables = {
         BROWSER = "firefox";
         TERMINAL = "kitty";
+        READER = "zathura";
         QT_AUTO_SCREEN_SCALE_FACTOR = "1";
         QT_FONT_DPI = "96";
       };
@@ -134,6 +135,7 @@ in
         oh-my-zsh = {
           enable = true;
           theme = "robbyrussell";
+          plugins = [];
         };
       };
 
