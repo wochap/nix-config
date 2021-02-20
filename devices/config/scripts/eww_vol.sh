@@ -42,9 +42,11 @@ case $1 in
     else
       pulsemixer --change-volume +"$value"
     fi
+    paplay /etc/blop.wav
   ;;
   down)
     pulsemixer --change-volume -"$value"
+    paplay /etc/blop.wav
   ;;
   mute)
     muted=$(pulsemixer --get-mute)

@@ -25,6 +25,10 @@ in
           source = ./assets/notification.flac;
           mode = "0755";
         };
+        "blop.wav" = {
+          source = ./assets/blop.wav;
+          mode = "0755";
+        };
         "eww_bright.sh" = {
           source = ./scripts/eww_bright.sh;
           mode = "0755";
