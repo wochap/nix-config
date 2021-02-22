@@ -8,6 +8,10 @@ super + F1
 super + Escape
 	/etc/powermenu.sh
 
+# Lock screen
+super + l
+  betterlockscreen -l
+
 # Close and kill
 super + {w,shift + q}
 	bspc node -{c,k}

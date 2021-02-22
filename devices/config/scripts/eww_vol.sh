@@ -70,4 +70,3 @@ while [ -n "$eww_wid" ]; do
   fi
   sleep 0.2
 done
-

@@ -181,9 +181,14 @@ in
       gnome3.geary # email client
       gnome3.gnome-calculator
       gnome3.gnome-calendar
+      gnome3.gnome-clocks
       gnome3.gnome-control-center # add google account for geary and calendar
       gnome3.gnome-font-viewer
       gnome3.gnome-sound-recorder # test microphone
+      gnome3.gnome-system-monitor
+      gnome3.gnome-todo
+      gnome3.pomodoro
+      gtimelog
       inkscape # photo editor cli/gui
       nomacs # image viewer/editor
       pick-colour-picker # color picker gui
