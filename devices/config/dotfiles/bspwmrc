@@ -15,10 +15,13 @@ blueberry-tray &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
+slack &
 evolution &
+simplenote &
+gnome-todo &
+gnome-clocks &
 # geary &
 # gnome-calendar &
-slack &
 echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
 exec /etc/eww_vol_icon.sh mute &
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
@@ -73,6 +76,9 @@ bspc rule -a "Evolution" desktop=^4
 bspc rule -a "Geary" desktop=^4
 bspc rule -a "Gnome-calendar" desktop=^4
 bspc rule -a "Slack" desktop=^4
+bspc rule -a "Gnome-todo" desktop=^4
+bspc rule -a "Simplenote" desktop=^4
+bspc rule -a "Org.gnome.clocks" desktop=^4
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
