@@ -15,11 +15,10 @@ blueberry-tray &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
-slack &
-evolution &
-simplenote &
 gnome-todo &
 gnome-clocks &
+slack &
+evolution &
 # geary &
 # gnome-calendar &
 echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
