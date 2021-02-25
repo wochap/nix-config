@@ -73,6 +73,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ chmod 600 ~/.ssh/*
     $ ssh-add <PATH_TO_PRIVATE_KEY>
     ```
+    https://www.freecodecamp.org/news/how-to-manage-multiple-ssh-keys/
 1. Fish setup
     ```
     # install fisher
