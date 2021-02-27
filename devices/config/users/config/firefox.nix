@@ -25,6 +25,7 @@ in
             name = "default";
             isDefault = true;
             settings = {
+              "browser.tabs.tabMinWidth" = 5;
               "ui.context_menus.after_mouseup" = true;
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
               "layers.acceleration.force-enabled" = true;
