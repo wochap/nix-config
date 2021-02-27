@@ -25,6 +25,7 @@ in
             # # No blur, aceptable fix for screen tearing but... artifacts++
             # repo = "picom";
             # owner = "yshui";
+            # # next branch
             # rev = "3680d323f5edf2ef5f21ab70a272358708c87a22";
             # sha256 = "0wp91y6y2klbpcg8dn4h8bmbns759hak4r3paifgia5b3mmn4lr9";
 
