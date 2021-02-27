@@ -83,6 +83,10 @@ in
     };
 
     environment = {
+      shellAliases = {
+        ll = "ls -la";
+        ns = "nix-shell --run fish";
+      };
       sessionVariables = lib.mkMerge [
         {
           GTK_USE_PORTAL = "1";

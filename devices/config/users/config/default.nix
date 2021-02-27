@@ -12,6 +12,7 @@ in
     ./gtk.nix
     ./picom.nix
     ./polybar.nix
+    ./zsh.nix
   ];
 
   config = {
@@ -129,17 +130,6 @@ in
           ".config/rofi-theme.rasi".source = ./dotfiles/rofi-theme.rasi;
         })
       ];
-
-      programs.zsh = {
-        enable = true;
-        enableCompletion = true;
-        enableAutosuggestions = true;
-        oh-my-zsh = {
-          enable = true;
-          theme = "robbyrussell";
-          plugins = [];
-        };
-      };
 
       programs.bash.enable = true;
 
