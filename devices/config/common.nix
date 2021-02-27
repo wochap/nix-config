@@ -278,7 +278,7 @@ in
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.extraUsers.gean = {
-      shell = pkgs.fish;
+      shell = pkgs.zsh;
       uid = 1000;
       password = "123456";
       isNormalUser = true;
