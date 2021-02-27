@@ -45,6 +45,12 @@
           #   };
           # }
         ];
+        shellAliases = lib.mkMerge [
+          config.environment.shellAliases
+          {
+            ns = "nix-shell --run fish";
+          }
+        ];
       };
     };
   };
