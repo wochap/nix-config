@@ -42,7 +42,7 @@ configuration {
 }
 
 #window {
-  background-color: rgba(28, 30, 39, 0.5);
+  background-color: rgba(28, 30, 39, 0.8);
   border-color: #282e3a;
   border-radius: 2px;
   border: 1px;

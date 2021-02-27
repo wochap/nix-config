@@ -29,7 +29,8 @@ options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 
 # Font size according to screen dimensions
 DEFAULT_WIDTH=1920
-WIDTH=$(xdpyinfo | grep dimensions | awk '{print $2}' | cut -d 'x' -f 1 )
+WIDTH=$(xrandr | grep primary | awk '{print $4}' | cut -d 'x' -f 1)
+# WIDTH=$(xdpyinfo | grep dimensions | awk '{print $2}' | cut -d 'x' -f 1 )
 DEFAULT_FONTSIZE=60
 FONTSIZE=$(echo "$WIDTH/$DEFAULT_WIDTH*$DEFAULT_FONTSIZE" | bc -l)
 
@@ -50,6 +51,7 @@ selected="$(echo -e "$options" |
             rofi -theme /etc/powermenu.rasi \
               -font "Roboto, $FONTSIZE" \
               -p "See you later, ${LOGNAME^}!" \
+              -m "primary" \
               -dmenu -selected-row ${PRESELECTION})"
 
 case $selected in

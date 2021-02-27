@@ -7,7 +7,7 @@
     # Positive x value is measured from the left of the screen, negative x is measured from the right
     # Positive y value is measured from the top of the screen
     geometry = "500x6-16+72";
-    background = "#1C1E2780"; #RRGGBBAA
+    background = "#1C1E27CC"; #RRGGBBAA
     alignment = "left";
     always_run_script = true;
     browser = "firefox";
@@ -15,7 +15,7 @@
     corner_radius = 0;
     follow = "mouse";
     font = "Roboto 11";
-    format = "<span weight='300' foreground='#cacacc'>%a</span>\\n<span weight='600'>%s</span>\\n<span>%b</span>";
+    format = "<span weight='600'>%s</span>\\n<span>%b</span>";
     frame_color = "#1C1E27";
     frame_width = 1;
     hide_duplicate_count = true;
@@ -57,17 +57,17 @@
     history = "ctrl+Escape";
   };
   urgency_low = {
-    background = "#1C1E2780";
+    background = "#1C1E27CC";
     foreground = "#eaeaea";
     timeout = 5;
   };
   urgency_normal = {
-    background = "#1C1E2780";
+    background = "#1C1E27CC";
     foreground = "#eaeaea";
     timeout = 5;
   };
   urgency_critical = {
-    background = "#1C1E2780";
+    background = "#1C1E27CC";
     foreground = "#eaeaea";
     timeout = 120;
   };
