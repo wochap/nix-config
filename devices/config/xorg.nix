@@ -2,9 +2,13 @@
 
 let
   localPkgs = import ./packages { pkgs = pkgs; };
+  nur = import (fetchTarball "https://github.com/nix-community/NUR/archive/1dac356bd823d83dd58917eae0e208d2183f3d4e.zip") {};
+  # nur = import (fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {};
 in
 {
   imports = [
+    # nur.repos.metadark.modules.lightdm-webkit2-greeter,
+    nur.repos.metadark.modules.services.x11.display-managers.lightdm-greeters.webkit2,
     ./common.nix
   ];
 
@@ -79,7 +83,14 @@ in
         lightdm = {
           enable = true;
           background = ./assets/wallpaper.jpg;
-          greeters.gtk.enable = true;
+          greeters.webkit2 = {
+            enable = true;
+            # webkitTheme = fetchTarball {
+            #   url = "https://github.com/Litarvan/lightdm-webkit-theme-litarvan/releases/download/v3.0.0/lightdm-webkit-theme-litarvan-3.0.0.tar.gz";
+            #   sha256 = "0q0r040vxg1nl51wb3z3r0pl7ymhyhp1lbn2ggg7v3pa563m4rrv";
+            # };
+          };
+          greeters.gtk.enable = false;
           greeters.gtk.cursorTheme.name = "capitaine-cursors";
           greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
           greeters.gtk.iconTheme.name = "WhiteSur-dark";
