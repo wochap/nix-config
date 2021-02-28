@@ -1,8 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs ? import <nixpkhs> {}, ... }:
 
 with lib;
 let
-  lightdm-webkit2-greeter = pkgs.callPackage ../../packages/lightdm-webkit2-greeter { inherit pkgs; };
+  localPkgs = import ../../packages { pkgs = pkgs; };
   dmcfg = config.services.xserver.displayManager;
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.webkit2;
@@ -133,13 +133,13 @@ in
 
   config = mkIf (ldmcfg.enable && cfg.enable) {
     # Install package, for manpages and the ability to run the greeter while logged in
-    environment.systemPackages = [ lightdm-webkit2-greeter ];
+    environment.systemPackages = [ localPkgs.lightdm-webkit2-greeter ];
 
     services = {
       xserver.displayManager.lightdm = {
         greeters.gtk.enable = false;
         greeter = mkDefault {
-          package = lightdm-webkit2-greeter.xgreeters;
+          package = localPkgs.lightdm-webkit2-greeter.xgreeters;
           name = "lightdm-webkit2-greeter";
         };
       };

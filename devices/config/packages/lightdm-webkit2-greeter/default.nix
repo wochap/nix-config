@@ -10,7 +10,6 @@
 , lightdm
 , webkitgtk
 , linkFarm
-, lightdm-webkit2-greeter
 }:
 
 stdenv.mkDerivation rec {
@@ -65,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.xgreeters = linkFarm "lightdm-webkit2-greeter-xgreeters" [{
-    path = "${lightdm-webkit2-greeter}/share/xgreeters/lightdm-webkit2-greeter.desktop";
+    path = "$out/share/xgreeters/lightdm-webkit2-greeter.desktop";
     name = "lightdm-webkit2-greeter.desktop";
   }];
 

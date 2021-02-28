@@ -5,7 +5,7 @@ let
 in
 {
   imports = [
-    import ./modules/lightdm-webkit2-greeter
+    ./modules/lightdm-webkit2-greeter
     ./common.nix
   ];
 
@@ -79,35 +79,36 @@ in
         defaultSession = "none+bspwm";
         lightdm = {
           enable = true;
-          background = ./assets/wallpaper.jpg;
+          # background = ./assets/wallpaper.jpg;
           greeters.webkit2 = {
-            enable = true;
+            enable = false;
+            webkitTheme = "simple";
             # webkitTheme = fetchTarball {
             #   url = "https://github.com/Litarvan/lightdm-webkit-theme-litarvan/releases/download/v3.0.0/lightdm-webkit-theme-litarvan-3.0.0.tar.gz";
             #   sha256 = "0q0r040vxg1nl51wb3z3r0pl7ymhyhp1lbn2ggg7v3pa563m4rrv";
             # };
           };
-          greeters.gtk.enable = false;
-          greeters.gtk.cursorTheme.name = "capitaine-cursors";
-          greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
-          greeters.gtk.iconTheme.name = "WhiteSur-dark";
-          greeters.gtk.iconTheme.package = localPkgs.whitesur-dark-icons;
-          greeters.gtk.theme.name = "WhiteSur-dark";
-          greeters.gtk.theme.package = localPkgs.whitesur-dark-theme;
-          greeters.gtk.cursorTheme.size = 24;
-          greeters.gtk.extraConfig = ''
-            font-name=Roboto 9
-          '';
-          greeters.gtk.indicators = [
-            "~host"
-            "~spacer"
-            "~clock"
-            "~spacer"
-            "~session"
-            "~language"
-            "~a11y"
-            "~power"
-          ];
+          # greeters.gtk.enable = false;
+          # greeters.gtk.cursorTheme.name = "capitaine-cursors";
+          # greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
+          # greeters.gtk.iconTheme.name = "WhiteSur-dark";
+          # greeters.gtk.iconTheme.package = localPkgs.whitesur-dark-icons;
+          # greeters.gtk.theme.name = "WhiteSur-dark";
+          # greeters.gtk.theme.package = localPkgs.whitesur-dark-theme;
+          # greeters.gtk.cursorTheme.size = 24;
+          # greeters.gtk.extraConfig = ''
+          #   font-name=Roboto 9
+          # '';
+          # greeters.gtk.indicators = [
+          #   "~host"
+          #   "~spacer"
+          #   "~clock"
+          #   "~spacer"
+          #   "~session"
+          #   "~language"
+          #   "~a11y"
+          #   "~power"
+          # ];
         };
       };
     };
