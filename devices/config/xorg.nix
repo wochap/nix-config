@@ -2,13 +2,10 @@
 
 let
   localPkgs = import ./packages { pkgs = pkgs; };
-  nur = import (fetchTarball "https://github.com/nix-community/NUR/archive/1dac356bd823d83dd58917eae0e208d2183f3d4e.zip") {};
-  # nur = import (fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {};
 in
 {
   imports = [
-    # nur.repos.metadark.modules.lightdm-webkit2-greeter,
-    nur.repos.metadark.modules.services.x11.display-managers.lightdm-greeters.webkit2,
+    import ./modules/lightdm-webkit2-greeter
     ./common.nix
   ];
 
