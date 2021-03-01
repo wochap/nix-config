@@ -45,6 +45,10 @@ in
           source = ./dotfiles/bspwmrc;
           mode = "0755";
         };
+        "bspwm_external_rules.sh" = {
+          source = ./dotfiles/bspwm_external_rules.sh;
+          mode = "0755";
+        };
         sxhkdrc = {
           source = ./dotfiles/sxhkdrc;
           mode = "0755";
