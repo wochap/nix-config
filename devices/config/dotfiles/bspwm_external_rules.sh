@@ -9,7 +9,8 @@ instance=$(echo ${3} | xargs)
 # echo "$wid $class $instance" > /tmp/bspc-external-rules
 
 screenheight=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $4}')
-screenwidth=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $3}')
+# screenwidth=$(xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $3}')
+screenwidth=$(xrandr | grep primary | awk '{print $4}' | cut -d 'x' -f 1)
 windowwidth=$(echo "$screenwidth"/2.75 | bc)
 windowheight=$(echo "$screenheight"/2.5 | bc)
 windowx=$(echo "$screenwidth"/2-"$windowwidth"/2 | bc)
