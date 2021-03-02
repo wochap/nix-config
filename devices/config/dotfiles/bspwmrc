@@ -2,6 +2,7 @@
 
 #### AUTOSTART ####
 /etc/autostart.sh
+/etc/restart_goa_daemon.sh
 
 #### BSPWM coloring ####
 bspc config normal_border_color \#282e3a
