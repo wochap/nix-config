@@ -298,6 +298,7 @@ Firefox keybindings
     ```
 
 * [Cannot add google account in gnome > online accounts](https://github.com/NixOS/nixpkgs/issues/32580)
+  In gmail settings, enable IMAP
 
 ## Resources
 
