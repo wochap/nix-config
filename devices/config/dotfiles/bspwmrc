@@ -61,5 +61,6 @@ kitty --name=desktop2 &
 
 # workspace 1
 bspc node @1:/ -i
-bspc rule -a "Navigator" -o node=@1:/
+bspc rule -a "Firefox" -o node=@1:/
+sleep 1 &
 firefox &
