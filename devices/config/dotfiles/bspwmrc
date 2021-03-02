@@ -1,38 +1,8 @@
 #!/usr/bin/env sh
 
 #### AUTOSTART ####
-nitrogen --restore &
-alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#1C1E27" -fg "#cacacc" -frame "#a0c3ff" -font "xft:Roboto:weight=bold:size=11" -theme "WhiteSur-dark" &
-blueberry-tray &
-clipmenud &
-xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
-eww daemon &
-
-echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
-exec /etc/eww_vol_icon.sh mute &
-for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
-  MONITOR=$m polybar main &
-done
-
-# desktop 4
-# source: https://www.reddit.com/r/bspwm/comments/ggtwxa/guide_to_creating_startup_layout_using_receptacles/
-bspc node @4:/ -i &
-bspc node @4:/ -p east -i &
-bspc node @4:/1 -p south -i &
-bspc node @4:/2 -p south -i &
-bspc node @4:/2/2 -p east -i &
-bspc rule -a "Slack" -o node=@4:/1/1 &
-bspc rule -a "Simplenote" -o node=@4:/1/2 &
-bspc rule -a "Evolution" -o node=@4:/2/1 &
-bspc rule -a "Gnome-todo" -o node=@4:/2/2/1 &
-bspc rule -a "Org.gnome.clocks" -o node=@4:/2/2/2 &
-slack &
-simplenote &
-evolution &
-gnome-todo &
-gnome-clocks &
-# geary &
-# gnome-calendar &
+/etc/autostart.sh
+/etc/desktop_4.sh
 
 #### BSPWM coloring ####
 bspc config normal_border_color \#282e3a

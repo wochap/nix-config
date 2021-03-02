@@ -46,7 +46,15 @@ in
           mode = "0755";
         };
         "bspwm_external_rules.sh" = {
-          source = ./dotfiles/bspwm_external_rules.sh;
+          source = ./scripts/bspwm_external_rules.sh;
+          mode = "0755";
+        };
+        "autostart.sh" = {
+          source = ./scripts/autostart.sh;
+          mode = "0755";
+        };
+        "desktop_4.sh" = {
+          source = ./scripts/desktop_4.sh;
           mode = "0755";
         };
         sxhkdrc = {
