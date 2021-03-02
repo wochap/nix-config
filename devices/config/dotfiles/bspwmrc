@@ -51,4 +51,15 @@ for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
   bspc monitor $m -d 1 2 3 4 5 6 7 8
 done
 
+# workspace 4
 /etc/desktop_4.sh
+
+# workspace 2
+bspc node @2:/ -i
+bspc rule -a "kitty:desktop2" -o node=@2:/
+kitty --name=desktop2 &
+
+# workspace 1
+bspc node @1:/ -i
+bspc rule -a "Navigator" -o node=@1:/
+firefox &
