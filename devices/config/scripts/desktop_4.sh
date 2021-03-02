@@ -19,9 +19,8 @@ bspc rule -a "Evolution" -o node=@4:/2/1
 bspc rule -a "Gnome-todo" -o node=@4:/2/2/1
 bspc rule -a "Org.gnome.clocks" -o node=@4:/2/2/2
 
-sleep 1 &
 run slack &
 run simplenote &
-run evolution &
 run gnome-todo &
 run gnome-clocks &
+evolution &

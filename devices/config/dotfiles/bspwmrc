@@ -2,7 +2,6 @@
 
 #### AUTOSTART ####
 /etc/autostart.sh
-/etc/desktop_4.sh
 
 #### BSPWM coloring ####
 bspc config normal_border_color \#282e3a
@@ -51,3 +50,5 @@ bspc rule -a "Gnome-calendar" desktop=^4
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
   bspc monitor $m -d 1 2 3 4 5 6 7 8
 done
+
+/etc/desktop_4.sh
