@@ -20,6 +20,10 @@ super + space
 super + slash
   /etc/sxhkd-help
 
+# Open terminal
+super + Return
+  kitty
+
 # Close and kill
 super + {w,shift + q}
 	bspc node -{c,k}

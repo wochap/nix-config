@@ -8,7 +8,7 @@ function run {
 }
 
 nitrogen --restore &
-alttab -w 1 -d 1 -sc 0 -i 199x64 -t 200x200 -s 3 -bg "#1C1E27" -fg "#cacacc" -frame "#a0c3ff" -font "xft:Roboto:weight=bold:size=11" -theme "WhiteSur-dark" &
+alttab -w 1 -d 1 -sc 1 -i 199x64 -t 200x200 -s 3 -bg "#0d1117" -fg "#c9d1d9" -frame "#58a6ff" -font "xft:Roboto:weight=bold:size=11" -theme "WhiteSur-dark" &
 blueberry-tray &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display

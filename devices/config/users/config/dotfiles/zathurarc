@@ -21,27 +21,27 @@ set index-active-fg             "#504945" # bg2
 set inputbar-bg                 "#b16286" # bg
 set inputbar-fg                 "#000000" # fg
 
-set statusbar-bg                "#B9979C" # bg2
-set statusbar-fg                "#000000" # fg
+set statusbar-bg                "#58a6ff" # bg2
+set statusbar-fg                "#0d1117" # fg
 
 set highlight-color             "#fabd2f" # bright:yellow
 set highlight-active-color      "#fe8019" # bright:orange
 
-set default-bg                  "#000000" # bg
-set default-fg                  "#B4B9B9" # fg
+set default-bg                  "#0d1117" # bg
+# set default-fg                  "#B4B9B9" # fg
 set render-loading              true
 set render-loading-bg           "#000000" # bg
 set render-loading-fg           "#B4B9B9" # fg
 
 # Recolor book content's color
-set recolor-lightcolor          "#000000" # bg
-set recolor-darkcolor           "#B4B9B9" # fg
+# set recolor-lightcolor          "#000000" # bg
+# set recolor-darkcolor           "#B4B9B9" # fg
 
 set statusbar-v-padding  15
 set statusbar-h-padding  75
 set selection-clipboard clipboard
-set font "mononoki Nerd Font 11"
-set recolor                     true
+# set font "mononoki Nerd Font 11"
+# set recolor                     true
 set pages-per-row 1
 set statusbar-basename          true
 set page-padding 1
