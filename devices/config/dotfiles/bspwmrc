@@ -44,8 +44,8 @@ bspc rule -a "Gnome-pomodoro" state=pseudo_tiled
 bspc rule -a "Gnome-system-monitor" state=floating
 bspc rule -a "Eog" state=floating
 
-bspc rule -a "Geary" desktop=^4
-bspc rule -a "Gnome-calendar" desktop=^4
+# bspc rule -a "Geary" desktop=^4
+# bspc rule -a "Gnome-calendar" desktop=^4
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
