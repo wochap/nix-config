@@ -266,8 +266,12 @@ in
       };
     };
 
-    # Links /libexec from derivations to /run/current-system/sw
-    environment.pathsToLink = [ "/libexec" ];
+    environment.pathsToLink = [
+      "/share/zsh"
+
+      # Links /libexec from derivations to /run/current-system/sw
+      "/libexec"
+    ];
 
     nix = {
       trustedUsers = [ "@wheel" "root" ];
