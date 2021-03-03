@@ -16,8 +16,8 @@
     follow = "mouse";
     font = "Roboto 11";
     format = "<span weight='600'>%s</span>\\n<span>%b</span>";
-    frame_color = "#1C1E27";
-    frame_width = 1;
+    frame_color = "#282e3a";
+    frame_width = 2;
     hide_duplicate_count = true;
     history_length = 20;
     horizontal_padding = 16;
@@ -34,7 +34,7 @@
     mouse_middle_click = "do_action";
     mouse_right_click = "close_all";
     padding = 16;
-    separator_color = "#404859";
+    separator_color = "#282e3a";
     separator_height = 2;
     show_age_threshold = 60;
     show_indicators = false;
