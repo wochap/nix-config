@@ -213,6 +213,12 @@ Kitty keybindings
 | <kbd>Ctrl</kbd> + <kbd>k</kbd> | Clear terminal |
 | <kbd>Ctrl</kbd> + <kbd>f</kbd> | Search |
 
+Dunst keybindings
+
+| Keybinding | Action |
+| :--- | :--- |
+| <kbd>Ctrl</kbd> + <kbd>Esc</kbd> | Show previous notification |
+
 Firefox keybindings
 
 | Keybinding | Action |
