@@ -14,7 +14,7 @@
     class = "Dunst";
     corner_radius = 0;
     follow = "mouse";
-    font = "Roboto 11";
+    font = "Iosevka 11";
     format = "<span weight='600'>%s</span>\\n<span>%b</span>";
     frame_color = "#282e3a";
     frame_width = 2;
