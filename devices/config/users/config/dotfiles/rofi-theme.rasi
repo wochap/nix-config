@@ -53,7 +53,7 @@ configuration {
 
 #mainbox {
   border: 0;
-  padding: 8;
+  padding: 16;
 }
 
 #element {
