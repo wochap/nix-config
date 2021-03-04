@@ -1,10 +1,11 @@
 configuration {
   display-drun: "";
+  display-calc: "";
   dpi: 0;
   drun-display-format: "{icon} {name}";
-  font: "Roboto Bold 11";
+  font: "Iosevka Bold 12";
   icon-theme: "WhiteSur-dark";
-  modi: "window,run,drun";
+  modi: "drun";
   show-icons: true;
   kb-select-1: "";
   kb-select-2: "";
@@ -35,10 +36,11 @@ configuration {
 }
 
 #listview {
-  spacing: 0;
-  scrollbar: true;
-  margin: 0;
   dynamic: true;
+  lines: 10;
+  margin: 0;
+  scrollbar: true;
+  spacing: 0;
 }
 
 #window {
@@ -46,7 +48,7 @@ configuration {
   border-color: #282e3a;
   border-radius: 2px;
   border: 1px;
-  width: 26em;
+  width: 30em;
 }
 
 #mainbox {
@@ -115,6 +117,6 @@ configuration {
   border-color: #ff0000;
 }
 
-element-icon {
+#element-icon {
   size: 2.8ch;
 }

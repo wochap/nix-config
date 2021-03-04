@@ -14,11 +14,24 @@ super + Print
 
 # Open app launcher
 super + space
-  rofi -theme ~/.config/rofi-theme.rasi -show drun
+  /etc/sxhkd-launcher
+
+# Open calc
+super + c
+  /etc/sxhkd-calc
 
 # Show help
 super + slash
   /etc/sxhkd-help
+
+# Show clipmenu
+super + v
+  CM_LAUNCHER=rofi \
+    clipmenu \
+    -no-show-icons \
+    -theme ~/.config/rofi-theme.rasi \
+    -theme-str 'listview \{ spacing: 0; \}' \
+    -theme-str 'window \{ width: 30em; \}'
 
 # Open terminal
 super + Return
@@ -151,20 +164,11 @@ super + alt + c
 
 # Open Browser
 super + alt + b ; {f,c}
-    {firefox,google-chrome-stable}
+  {firefox,google-chrome-stable}
 
 # Open terminal
 super + alt + t
   kitty
-
-# Show clipmenu
-super + alt + v
-  CM_LAUNCHER=rofi \
-    clipmenu \
-    -no-show-icons \
-    -theme ~/.config/rofi-theme.rasi \
-    -theme-str 'listview \{ spacing: 0; \}' \
-    -theme-str 'window \{ width: 35em; \}'
 
 
 ### MEDIA KEYBINDINGS

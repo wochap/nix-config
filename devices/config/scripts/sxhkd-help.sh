@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-awk '/^[a-z]/ && last {print "<small>",$0,"\t",last,"</small>"} {last=""} /^#/{last=$0}' /etc/sxhkdrc |
+awk '/^[a-z]/ && last {print "<span>",$0,"\t",last,"</span>"} {last=""} /^#/{last=$0}' /etc/sxhkdrc |
   column -t -s $'\t' | \
   rofi \
     -dmenu \
@@ -8,6 +8,6 @@ awk '/^[a-z]/ && last {print "<small>",$0,"\t",last,"</small>"} {last=""} /^#/{l
     -markup-rows \
     -no-show-icons \
     -theme /home/gean/.config/rofi-theme.rasi \
+    -plugin-path $ROFI_PLUGIN_PATH \
     -theme-str 'window { width: 35em; }' \
-    -lines 15 \
-    -yoffset 40
+    -theme-str 'listview { lines: 15; }'

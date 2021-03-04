@@ -69,6 +69,28 @@ in
           source = ./scripts/sxhkd-help.sh;
           mode = "0755";
         };
+        sxhkd-calc = {
+          text = ''
+            #!/usr/bin/env bash
+
+            rofi \
+              -theme ~/.config/rofi-theme.rasi \
+              -modi calc \
+              -show calc \
+              -plugin-path ${pkgs.rofi-calc}/lib/rofi \
+              -theme-str 'listview { columns: 1; lines: 8; }' \
+              -theme-str 'window { width: 15em; }' \
+              -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }' \
+              -no-show-match \
+              -no-sort \
+              -calc-command "echo -n '{result}' | xclip"
+          '';
+          mode = "0755";
+        };
+        sxhkd-launcher = {
+          source = ./scripts/sxhkd-launcher.sh;
+          mode = "0755";
+        };
         "powermenu.sh" = {
           source = ./scripts/powermenu.sh;
           mode = "0755";
