@@ -145,6 +145,7 @@ in
       unzip
       vim
       wget
+      wmutils-core
       xclip # clipboard cli
       xdg-desktop-portal # consistent file dialog
       xdg-desktop-portal-kde # consistent file dialog

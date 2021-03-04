@@ -47,6 +47,10 @@ super + m
 
 # Send the newest marked node to the newest preselected node
 super + y
+	bspc node newest.marked -n newest.!automatic
+
+# Send the newest marked node to the newest preselected node in current desktop
+super + u
 	bspc node newest.marked.local -n newest.!automatic.local
 
 # swap the current node and the biggest node
@@ -56,7 +60,7 @@ super + y
 
 ### STATE/FLAGS
 
-# Set the window state
+# Set the window state (tiled|pseudo_tiled|floating)
 super + {t,shift + t,s}
 	bspc node -t {tiled,pseudo_tiled,floating}
 
@@ -64,7 +68,7 @@ super + {t,shift + t,s}
 super + f
   bspc node -t \~fullscreen
 
-# Set the node flags
+# Set the node flags (marked|locked|sticky|private)
 super + ctrl + {m,x,y,z}
 	bspc node -g {marked,locked,sticky,private}
 
@@ -94,7 +98,7 @@ super + ctrl + shift + space
 super + {_,shift + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 
-# Focus the node for the given path jump
+# Focus the node for the given path jump (parent|brother|first|second)
 super + {p,b,comma,period}
   bspc node -f @{parent,brother,first,second}
 
@@ -102,11 +106,11 @@ super + {p,b,comma,period}
 super + grave
   bspc node -R 90
 
-# focus the next/previous node in the current desktop
+# Focus the next|previous node in the current desktop
 # super + {_,shift + }n
 #   bspc node -f {next,prev}.local
 
-# Focus the next/previous workspace in the current monitor
+# Focus the next|previous workspace in the current monitor
 super + {Left,Right}
 	bspc desktop -f {prev,next}.local
 
