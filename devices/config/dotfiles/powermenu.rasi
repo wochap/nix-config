@@ -54,7 +54,7 @@ configuration {
   background-color: transparent;
   font: inherit;
   text-color: @unselected-text-color;
-  padding: 0% 0% 0% 1.25em;
+  padding: 0% 0% 0% 1.20em;
 }
 
 #horibox {
