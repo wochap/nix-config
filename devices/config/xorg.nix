@@ -46,6 +46,18 @@ in
           source = ./dotfiles/bspwmrc;
           mode = "0755";
         };
+        "bspwm_external_rules.sh" = {
+          source = ./scripts/bspwm_external_rules.sh;
+          mode = "0755";
+        };
+        "autostart.sh" = {
+          source = ./scripts/autostart.sh;
+          mode = "0755";
+        };
+        "desktop_4.sh" = {
+          source = ./scripts/desktop_4.sh;
+          mode = "0755";
+        };
         sxhkdrc = {
           source = ./dotfiles/sxhkdrc;
           mode = "0755";
@@ -56,6 +68,28 @@ in
         };
         sxhkd-help = {
           source = ./scripts/sxhkd-help.sh;
+          mode = "0755";
+        };
+        sxhkd-calc = {
+          text = ''
+            #!/usr/bin/env bash
+
+            rofi \
+              -theme ~/.config/rofi-theme.rasi \
+              -modi calc \
+              -show calc \
+              -plugin-path ${pkgs.rofi-calc}/lib/rofi \
+              -theme-str 'listview { columns: 1; lines: 8; }' \
+              -theme-str 'window { width: 15em; }' \
+              -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }' \
+              -no-show-match \
+              -no-sort \
+              -calc-command "echo -n '{result}' | xclip"
+          '';
+          mode = "0755";
+        };
+        sxhkd-launcher = {
+          source = ./scripts/sxhkd-launcher.sh;
           mode = "0755";
         };
         "powermenu.sh" = {

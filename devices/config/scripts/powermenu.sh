@@ -11,7 +11,7 @@
 # Copied from decoded unicodes (private use of "Feather" font)
 shutdown="襤";        # "\uf924"
 reboot="ﰇ";          # "\ufc07"
-sleep="鈴";           # "\uf9b1"
+sleep="";           # "\uf186"
 logout="";          # "\uf842"
 lock="";            # "\uf840"
 # shutdown="";        # "\uE9C0"

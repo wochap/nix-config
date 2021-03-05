@@ -74,10 +74,10 @@ in
 
       home.sessionVariables = {
         BROWSER = "firefox";
-        TERMINAL = "kitty";
-        READER = "zathura";
         QT_AUTO_SCREEN_SCALE_FACTOR = "1";
         QT_FONT_DPI = "96";
+        READER = "zathura";
+        TERMINAL = "kitty";
       };
 
       # Edit home files
@@ -96,6 +96,7 @@ in
           "x-scheme-handler/unknown" = [ "firefox.desktop" ];
           "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
+          "application/pdf" = [ "org.pwmt.zathura.desktop" ];
         };
         mimeApps.associations.added = {
           "image/png" = [ "org.gnome.eog.desktop" ];
@@ -103,6 +104,7 @@ in
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];
           "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" "userapp-Evolution-S7FTY0.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
+          "application/pdf" = [ "org.pwmt.zathura.desktop" ];
         };
       };
 

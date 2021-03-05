@@ -28,7 +28,7 @@ configuration {
 
 * {
   selected-bg-color: rgba(100, 100, 100, 0);
-  selected-text-color: #a0c3ff;
+  selected-text-color: #58a6ff;
   unselected-bg-color: rgba(100, 100, 100, 0);
   unselected-text-color: #FFFFFF;
 }

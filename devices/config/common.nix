@@ -83,6 +83,12 @@ in
     };
 
     environment = {
+      etc = {
+        "restart_goa_daemon.sh" = {
+          source = ./scripts/restart_goa_daemon.sh;
+          mode = "0755";
+        };
+      };
       shellAliases = {
         ll = "ls -la";
       };
@@ -260,8 +266,12 @@ in
       };
     };
 
-    # Links /libexec from derivations to /run/current-system/sw
-    environment.pathsToLink = [ "/libexec" ];
+    environment.pathsToLink = [
+      "/share/zsh"
+
+      # Links /libexec from derivations to /run/current-system/sw
+      "/libexec"
+    ];
 
     nix = {
       trustedUsers = [ "@wheel" "root" ];

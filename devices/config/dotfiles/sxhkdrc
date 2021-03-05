@@ -8,9 +8,34 @@ super + F1
 super + Escape
 	/etc/powermenu.sh
 
-# Lock screen
-super + l
-  betterlockscreen -l
+# Take fullscreen screenshoot
+super + Print
+  flameshot full -p ~/Pictures/screenshots/
+
+# Open app launcher
+super + space
+  /etc/sxhkd-launcher
+
+# Open calc
+super + c
+  /etc/sxhkd-calc
+
+# Show help
+super + slash
+  /etc/sxhkd-help
+
+# Show clipmenu
+super + v
+  CM_LAUNCHER=rofi \
+    clipmenu \
+    -no-show-icons \
+    -theme ~/.config/rofi-theme.rasi \
+    -theme-str 'listview \{ spacing: 0; \}' \
+    -theme-str 'window \{ width: 30em; \}'
+
+# Open terminal
+super + Return
+  kitty
 
 # Close and kill
 super + {w,shift + q}
@@ -89,37 +114,41 @@ super + {Left,Right}
 # super + {grave,Tab}
 # 	bspc {node,desktop} -f last
 
-# Focus the older or newer node in the focus history
-super + {o,i}
-	bspc wm -h off; \
-	bspc node {older,newer} -f; \
-	bspc wm -h on
+# # Focus the older or newer node in the focus history
+# super + {o,i}
+# 	bspc wm -h off; \
+# 	bspc node {older,newer} -f; \
+# 	bspc wm -h on
 
 # Focus or send to the given desktop
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} focused:'^{1-9,10}'
 
-# Send and follow to given desktop
-super + ctrl + shift + {1-9}
-  id=$(bspc query -N -n); bspc node -d ^{1-9}; bspc node -f ${id}
+# # Send and follow to given desktop
+# super + ctrl + shift + {1-9}
+#   id=$(bspc query -N -n); bspc node -d ^{1-9}; bspc node -f ${id}
 
 
 ### MOVE/RESIZE
 
-# Expand a window by moving one of its side outward
-ctrl + alt + {h,j,k,l}
-	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+# # Expand a window by moving one of its side outward
+# ctrl + alt + {h,j,k,l}
+# 	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 
-# Contract a window by moving one of its side inward
-ctrl + alt + shift + {h,j,k,l}
-	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+# # Contract a window by moving one of its side inward
+# ctrl + alt + shift + {h,j,k,l}
+# 	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
-# move a floating window
+# # move a floating window
 # super + {Left,Down,Up,Right}
 #   bspc node -v {-20 0,0 20,0 -20,20 0}
 
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
+
+# Lock screen
+super + alt + l
+  betterlockscreen -l
 
 # Open file manager
 super + alt + f
@@ -135,32 +164,11 @@ super + alt + c
 
 # Open Browser
 super + alt + b ; {f,c}
-    {firefox,google-chrome-stable}
+  {firefox,google-chrome-stable}
 
 # Open terminal
-super + Return
+super + alt + t
   kitty
-
-# Take fullscreen screenshoot
-super + Print
-  flameshot full -p ~/Pictures/Screenshots/
-
-# Open app launcher
-super + space
-  rofi -theme ~/.config/rofi-theme.rasi -show drun
-
-# Show clipmenu
-super + v
-  CM_LAUNCHER=rofi \
-    clipmenu \
-    -no-show-icons \
-    -theme ~/.config/rofi-theme.rasi \
-    -theme-str 'listview \{ spacing: 0; \}' \
-    -theme-str 'window \{ width: 35em; \}'
-
-# Show help
-super + slash
-  /etc/sxhkd-help
 
 
 ### MEDIA KEYBINDINGS

@@ -119,10 +119,14 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 
 | Keybinding | Action |
 | :--- | :--- |
+| <kbd>Super</kbd> + <kbd>F1</kbd> | Reloads sxhkd |
 | <kbd>Super</kbd> + <kbd>Esc</kbd> | Opens power menu |
+| <kbd>Super</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
+| <kbd>Super</kbd> + <kbd>Print</kbd> | Take fullscreen screenshoot |
 | <kbd>Super</kbd> + <kbd>q</kbd> | Closes window with focus |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>q</kbd> | Kills window with focus |
 | <kbd>Super</kbd> + <kbd>m</kbd> | Alternate between the tiled and monocle layout |
+| <kbd>Super</kbd> + <kbd>/</kbd> | Show available keybindings |
 
 Window state and flags
 
@@ -183,25 +187,18 @@ Resize windows
 | Keybinding | Action |
 | :--- | :--- |
 | <kbd>Super</kbd> + <kbd>Right Click</kbd> | Resize window |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>j</kbd> | Expand window, going down |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>k</kbd> | Expand window, going up |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>h</kbd> | Expand window, going left |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>l</kbd> | Expand window, going right |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>j</kbd> | Contract window, going down |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd> | Contract window, going up |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>h</kbd> | Contract window, going left |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>l</kbd> | Contract window, going right |
 
 Apps
 
 | Keybinding | Action |
 | :--- | :--- |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>v</kbd> | Show clipboard |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>l</kbd> | Lock screen |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>f</kbd> | Opens file manager (thunar) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>s</kbd> | Takes screenshoot (flameshot) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>f</kbd> | Open firefox |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>c</kbd> | Open chrome |
-| <kbd>Super</kbd> + <kbd>Enter</kbd> | Opens terminal (kitty) |
-| <kbd>Super</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>t</kbd> | Opens terminal (kitty) |
 
 Kitty keybindings
 
@@ -215,6 +212,12 @@ Kitty keybindings
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd> | Reset terminal |
 | <kbd>Ctrl</kbd> + <kbd>k</kbd> | Clear terminal |
 | <kbd>Ctrl</kbd> + <kbd>f</kbd> | Search |
+
+Dunst keybindings
+
+| Keybinding | Action |
+| :--- | :--- |
+| <kbd>Ctrl</kbd> + <kbd>Esc</kbd> | Show previous notification |
 
 Firefox keybindings
 
@@ -301,6 +304,7 @@ Firefox keybindings
     ```
 
 * [Cannot add google account in gnome > online accounts](https://github.com/NixOS/nixpkgs/issues/32580)
+  In gmail settings, enable IMAP
 
 ## Resources
 
