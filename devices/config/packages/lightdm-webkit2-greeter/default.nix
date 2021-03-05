@@ -59,14 +59,15 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    substituteInPlace $out/share/xgreeters/lightdm-webkit2-greeter.desktop \
-      --replace "Exec=lightdm-webkit2-greeter" "Exec=$out/bin/lightdm-webkit2-greeter"
+    substituteInPlace ${placeholder "out"}/share/xgreeters/lightdm-webkit2-greeter.desktop \
+      --replace "Exec=lightdm-webkit2-greeter" "Exec=${placeholder "out"}/bin/lightdm-webkit2-greeter"
   '';
 
-  passthru.xgreeters = linkFarm "lightdm-webkit2-greeter-xgreeters" [{
-    path = "$out/share/xgreeters/lightdm-webkit2-greeter.desktop";
-    name = "lightdm-webkit2-greeter.desktop";
-  }];
+  # $out is not replaced with the correct placeholder
+  # passthru.xgreeters = linkFarm "lightdm-webkit2-greeter-xgreeters" [{
+  #   path = "$out/share/xgreeters/lightdm-webkit2-greeter.desktop";
+  #   name = "lightdm-webkit2-greeter.desktop";
+  # }];
 
   meta = with lib; {
     description = "A modern, visually appealing greeter for LightDM";

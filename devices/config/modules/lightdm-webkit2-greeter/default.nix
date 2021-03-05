@@ -139,8 +139,14 @@ in
       xserver.displayManager.lightdm = {
         greeters.gtk.enable = false;
         greeter = mkDefault {
-          package = localPkgs.lightdm-webkit2-greeter.xgreeters;
+          package = pkgs.linkFarm "lightdm-webkit2-greeter-xgreeters" [{
+            path = "${localPkgs.lightdm-webkit2-greeter}/share/xgreeters/lightdm-webkit2-greeter.desktop";
+            name = "lightdm-webkit2-greeter.desktop";
+          }];
           name = "lightdm-webkit2-greeter";
+
+          # TODO: fix localPkgs.lightdm-webkit2-greeter.xgreeters;
+          # package = localPkgs.lightdm-webkit2-greeter.xgreeters;
         };
       };
 
