@@ -94,7 +94,6 @@ in
       };
       sessionVariables = lib.mkMerge [
         {
-          GTK_USE_PORTAL = "1";
           QT_QPA_PLATFORMTHEME = "qt5ct";
           ELECTRON_TRASH="trash-cli"; # fix vscode delete
         }
@@ -148,8 +147,6 @@ in
       wget
       wmutils-core
       xclip # clipboard cli
-      xdg-desktop-portal # consistent file dialog
-      xdg-desktop-portal-kde # consistent file dialog
       xdotool # fake keyboard/mouse input
       xlayoutdisplay # fix dpi
       xorg.xdpyinfo # show monitor info
@@ -378,6 +375,8 @@ in
     services.gnome3.gnome-online-accounts.enable = true;
     services.gnome3.gnome-keyring.enable = true;
 
+    services.flatpak.enable = true;
+
     virtualisation.docker.enable = true;
     virtualisation.anbox.enable = true;
 
@@ -385,5 +384,15 @@ in
     security.sudo.configFile = ''
       user ALL=(ALL) NOPASSWD: ${pkgs.docker}/bin/docker ps -qf status=running
     '';
+
+    # consistent file dialog
+    xdg.portal = {
+      enable = true;
+      gtkUsePortal = true;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-gtk
+        # pkgs.xdg-desktop-portal-kde
+      ];
+    };
   };
 }
