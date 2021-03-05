@@ -23,3 +23,6 @@ function print_fish_colors --description 'Shows the various fish colors being us
     echo '|________________________________________|________________________________________|'\n
   end
 end
+
+# Auto run nix-shell
+>direnv hook fish | source

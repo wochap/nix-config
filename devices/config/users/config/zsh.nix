@@ -26,6 +26,9 @@
 
           RPROMPT=""
 
+          # Auto run nix-shell
+          eval "$(direnv hook zsh)"
+
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
         '';
         enableCompletion = true;

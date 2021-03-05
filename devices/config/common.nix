@@ -116,6 +116,7 @@ in
       arandr # xrandr gui
       bc # calculator cli
       dex # execute DesktopEntry files
+      direnv # auto run nix-shell
       docker-compose
       dos2unix
       evtest
@@ -355,6 +356,9 @@ in
     sound.enable = true;
     hardware.pulseaudio.enable = true;
     hardware.pulseaudio.support32Bit = true;
+
+    # Auto run nix-shell
+    services.lorri.enable = true;
 
     # Setup keychron
     services.xserver = {
