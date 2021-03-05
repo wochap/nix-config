@@ -24,6 +24,8 @@
           zstyle :bracketed-paste-magic paste-finish pastefinish
           ### Fix slowness of pastes
 
+          RPROMPT=""
+
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
         '';
         enableCompletion = true;
