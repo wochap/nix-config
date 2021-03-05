@@ -13,6 +13,8 @@
           co = "checkout";
           ci = "commit";
           st = "status";
+          glo = "pull origin";
+          gpo = "push origin";
         };
         extraConfig = {
           core.editor = "vim";
