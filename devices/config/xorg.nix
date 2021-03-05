@@ -81,12 +81,18 @@ in
           enable = true;
           # background = ./assets/wallpaper.jpg;
           greeters.webkit2 = {
-            enable = false;
-            webkitTheme = "simple";
+            enable = true;
+            detectThemeErrors = false;
+            debugMode = true;
             # webkitTheme = fetchTarball {
             #   url = "https://github.com/Litarvan/lightdm-webkit-theme-litarvan/releases/download/v3.0.0/lightdm-webkit-theme-litarvan-3.0.0.tar.gz";
             #   sha256 = "0q0r040vxg1nl51wb3z3r0pl7ymhyhp1lbn2ggg7v3pa563m4rrv";
             # };
+            webkitTheme = pkgs.fetchzip {
+              stripRoot = false;
+              url = "https://github.com/manilarome/lightdm-webkit2-theme-glorious/releases/download/v2.0.5/lightdm-webkit2-theme-glorious-2.0.5.tar.gz";
+              sha256 = "1y2jln72dabhzisrdb7fi0rkqv54paa8h9q0r8h7g9050ahp9bsf";
+            };
           };
           # greeters.gtk.enable = false;
           # greeters.gtk.cursorTheme.name = "capitaine-cursors";
