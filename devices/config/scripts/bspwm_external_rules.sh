@@ -22,7 +22,7 @@ case "$class" in
       *_NET_WM_WINDOW_TYPE_NORMAL* )
         echo state=pseudo_tiled rectangle="$windowwidth"x"$windowheight"+"$windowx"+"$windowy";;
     esac;;
-  Nitrogen | zoom )
+  Nitrogen | zoom | Org.gnome.clocks | Gnome-pomodoro )
     case "$(xprop -id "$wid" _NET_WM_WINDOW_TYPE)" in
       *_NET_WM_WINDOW_TYPE_NORMAL* )
         echo state=pseudo_tiled;;

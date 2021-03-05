@@ -38,9 +38,7 @@ bspc rule -a "Geary" state=pseudo_tiled
 bspc rule -a "Gnome-calendar" state=pseudo_tiled
 bspc rule -a "Mysql-workbench-bin" state=pseudo_tiled
 bspc rule -a "Simplenote" state=pseudo_tiled
-bspc rule -a "Org.gnome.clocks" state=pseudo_tiled
 bspc rule -a "Gnome-todo" state=pseudo_tiled
-bspc rule -a "Gnome-pomodoro" state=pseudo_tiled
 bspc rule -a "Gnome-system-monitor" state=floating
 bspc rule -a "Eog" state=floating
 
