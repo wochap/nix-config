@@ -95,7 +95,7 @@ in
           #   };
           # };
           greeters.gtk = {
-            enable = false;
+            enable = true;
             cursorTheme.name = "capitaine-cursors";
             cursorTheme.package = pkgs.capitaine-cursors;
             iconTheme.name = "WhiteSur-dark";
