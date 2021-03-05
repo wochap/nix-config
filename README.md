@@ -81,6 +81,11 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ fisher install edouard-lopez/ayu-theme.fish
     $ set --universal ayu_variant mirage && ayu_load_theme
     ```
+1. Setup [Flatpak](https://flatpak.org/setup/NixOS/)
+1. Setup [Lorri](https://github.com/target/lorri)
+    ```
+    $ direnv allow
+    ```
 1. [Monitor setup](https://http.download.nvidia.com/XFree86/Linux-x86/325.15/README/xconfigoptions.html) for nvidia cards
 
     ```
