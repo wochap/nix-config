@@ -79,42 +79,44 @@ in
         defaultSession = "none+bspwm";
         lightdm = {
           enable = true;
-          # background = ./assets/wallpaper.jpg;
-          greeters.webkit2 = {
-            enable = true;
-            detectThemeErrors = false;
-            debugMode = true;
-            # webkitTheme = fetchTarball {
-            #   url = "https://github.com/Litarvan/lightdm-webkit-theme-litarvan/releases/download/v3.0.0/lightdm-webkit-theme-litarvan-3.0.0.tar.gz";
-            #   sha256 = "0q0r040vxg1nl51wb3z3r0pl7ymhyhp1lbn2ggg7v3pa563m4rrv";
-            # };
-            webkitTheme = pkgs.fetchzip {
-              stripRoot = false;
-              url = "https://github.com/manilarome/lightdm-webkit2-theme-glorious/releases/download/v2.0.5/lightdm-webkit2-theme-glorious-2.0.5.tar.gz";
-              sha256 = "1y2jln72dabhzisrdb7fi0rkqv54paa8h9q0r8h7g9050ahp9bsf";
-            };
+          background = ./assets/wallpaper.jpg;
+          # greeters.webkit2 = {
+          #   enable = true;
+          #   detectThemeErrors = false;
+          #   debugMode = true;
+          #   # webkitTheme = fetchTarball {
+          #   #   url = "https://github.com/Litarvan/lightdm-webkit-theme-litarvan/releases/download/v3.0.0/lightdm-webkit-theme-litarvan-3.0.0.tar.gz";
+          #   #   sha256 = "0q0r040vxg1nl51wb3z3r0pl7ymhyhp1lbn2ggg7v3pa563m4rrv";
+          #   # };
+          #   webkitTheme = pkgs.fetchzip {
+          #     stripRoot = false;
+          #     url = "https://github.com/manilarome/lightdm-webkit2-theme-glorious/releases/download/v2.0.5/lightdm-webkit2-theme-glorious-2.0.5.tar.gz";
+          #     sha256 = "1y2jln72dabhzisrdb7fi0rkqv54paa8h9q0r8h7g9050ahp9bsf";
+          #   };
+          # };
+          greeters.gtk = {
+            enable = false;
+            cursorTheme.name = "capitaine-cursors";
+            cursorTheme.package = pkgs.capitaine-cursors;
+            iconTheme.name = "WhiteSur-dark";
+            iconTheme.package = localPkgs.whitesur-dark-icons;
+            theme.name = "WhiteSur-dark";
+            theme.package = localPkgs.whitesur-dark-theme;
+            cursorTheme.size = 24;
+            extraConfig = ''
+              font-name=Roboto 9
+            '';
+            indicators = [
+              "~host"
+              "~spacer"
+              "~clock"
+              "~spacer"
+              "~session"
+              "~language"
+              "~a11y"
+              "~power"
+            ];
           };
-          # greeters.gtk.enable = false;
-          # greeters.gtk.cursorTheme.name = "capitaine-cursors";
-          # greeters.gtk.cursorTheme.package = pkgs.capitaine-cursors;
-          # greeters.gtk.iconTheme.name = "WhiteSur-dark";
-          # greeters.gtk.iconTheme.package = localPkgs.whitesur-dark-icons;
-          # greeters.gtk.theme.name = "WhiteSur-dark";
-          # greeters.gtk.theme.package = localPkgs.whitesur-dark-theme;
-          # greeters.gtk.cursorTheme.size = 24;
-          # greeters.gtk.extraConfig = ''
-          #   font-name=Roboto 9
-          # '';
-          # greeters.gtk.indicators = [
-          #   "~host"
-          #   "~spacer"
-          #   "~clock"
-          #   "~spacer"
-          #   "~session"
-          #   "~language"
-          #   "~a11y"
-          #   "~power"
-          # ];
         };
       };
     };
