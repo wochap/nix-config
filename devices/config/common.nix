@@ -291,6 +291,7 @@ in
       shell = pkgs.zsh;
       uid = 1000;
       password = "123456";
+      home = "/home/gean";
       isNormalUser = true;
       extraGroups = [
         "wheel"
