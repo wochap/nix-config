@@ -65,3 +65,5 @@ bspc node @1:/ -i
 bspc rule -a "Firefox" -o node=@1:/
 sleep 1 &
 firefox &
+
+/etc/bspwm_subscribe.sh

@@ -50,6 +50,10 @@ in
           source = ./scripts/bspwm_external_rules.sh;
           mode = "0755";
         };
+        "bspwm_subscribe.sh" = {
+          source = ./scripts/bspwm_subscribe.sh;
+          mode = "0755";
+        };
         "autostart.sh" = {
           source = ./scripts/autostart.sh;
           mode = "0755";

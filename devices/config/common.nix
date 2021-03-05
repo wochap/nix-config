@@ -145,6 +145,7 @@ in
       unzip
       vim
       wget
+      wmutils-core
       xclip # clipboard cli
       xdg-desktop-portal # consistent file dialog
       xdg-desktop-portal-kde # consistent file dialog
@@ -290,6 +291,7 @@ in
       shell = pkgs.zsh;
       uid = 1000;
       password = "123456";
+      home = "/home/gean";
       isNormalUser = true;
       extraGroups = [
         "wheel"
@@ -330,6 +332,10 @@ in
         ];
       };
     };
+
+    # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
+    programs.zsh.enable = true;
+    programs.fish.enable = true;
 
     # Remember private keys
     programs.ssh.startAgent = true;
