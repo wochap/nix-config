@@ -42,7 +42,7 @@ in
         gtk3.bookmarks = [
           "file:///home/gean/Downloads"
           "file:///home/gean/Pictures"
-          "file:///home/gean/projects"
+          "file:///home/gean/Projects"
         ];
         gtk2.extraConfig = ''
           gtk-button-images = 1
