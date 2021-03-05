@@ -123,7 +123,7 @@ in
             detectThemeErrors = false;
             debugMode = true;
             webkitTheme = pkgs.fetchzip {
-              stripRoot = false;
+              stripRoot = true;
               url = "https://github.com/wochap/lightdm-webkit2-theme-glorious/archive/7ce9c6c04a5676481fff03d585efa6c97bd40ad2.zip";
               sha256 = "0zl1fcbwfhlpjxn2zq50bffsvgkp49ch0k2djyhkbnih2fbqdykm";
             };
