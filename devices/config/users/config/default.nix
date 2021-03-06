@@ -71,10 +71,15 @@ in
 
       home.sessionVariables = {
         BROWSER = "firefox";
+        CM_MAX_CLIPS = "30";
+        CM_OWN_CLIPBOARD = "1";
+        CM_SELECTIONS = "primary clipboard";
+        OPENER = "xdg-open";
         QT_AUTO_SCREEN_SCALE_FACTOR = "1";
         QT_FONT_DPI = "96";
         READER = "zathura";
         TERMINAL = "kitty";
+        VIDEO = "mpv";
       };
 
       # Edit home files
