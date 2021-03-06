@@ -94,8 +94,13 @@ in
       };
       sessionVariables = lib.mkMerge [
         {
-          QT_QPA_PLATFORMTHEME = "qt5ct";
+          CM_MAX_CLIPS = "30";
+          CM_OWN_CLIPBOARD = "1";
+          CM_SELECTIONS = "primary clipboard";
           ELECTRON_TRASH="trash-cli"; # fix vscode delete
+          QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+          QT_FONT_DPI = "96";
+          QT_QPA_PLATFORMTHEME = "qt5ct";
         }
         (lib.mkIf isWayland {
           # Force GTK to use wayland
