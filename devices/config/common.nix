@@ -108,6 +108,7 @@ in
         };
       };
       shellAliases = {
+        open = "xdg-open";
         ll = "ls -la";
       };
       sessionVariables = lib.mkMerge [
