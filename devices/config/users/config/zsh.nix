@@ -27,6 +27,7 @@
           RPROMPT=""
 
           # Auto run nix-shell
+          export DIRENV_LOG_FORMAT=
           eval "$(direnv hook zsh)"
 
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

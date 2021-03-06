@@ -111,6 +111,15 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
       --output DP-2 --off
     ```
 
+## Development Workflow
+
+```
+# Create shell.nix
+
+$ lorri init
+$ direnv allow
+```
+
 ## Whats out of the box
 
 1. Script for using phone webcam
