@@ -87,12 +87,12 @@ in
           "application/pdf" = [ "org.pwmt.zathura.desktop" ];
           "inode/directory" = [ "thunar.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
-          "text/html" = [ "firefox.desktop" ];
-          "x-scheme-handler/about" = [ "firefox.desktop" ];
+          "text/html" = [ "google-chrome.desktop" ];
+          "video/x-matroska" = [ "mpv.desktop" ];
           "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
-          "x-scheme-handler/unknown" = [ "firefox.desktop" ];
+          "x-scheme-handler/unknown" = [ "google-chrome.desktop" ];
           "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
         };
         mimeApps.associations.added = {
@@ -101,6 +101,7 @@ in
           "image/png" = [ "org.gnome.eog.desktop" ];
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
+          "video/x-matroska" = [ "mpv.desktop" ];
           "x-scheme-handler/http" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
           "x-scheme-handler/https" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
           "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" "userapp-Evolution-S7FTY0.desktop" ];
@@ -114,6 +115,7 @@ in
           ".config/eww".source = ./dotfiles/eww;
           ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
           ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
+          ".config/mpv/mpv.conf".source = ./dotfiles/mpv.conf;
           "Pictures/backgrounds/default.jpeg".source = ../../assets/wallpaper.jpg;
           ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
           ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
