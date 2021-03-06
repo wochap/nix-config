@@ -21,6 +21,8 @@ script_name="eww_vol.sh"
 for pid in $(pgrep -f $script_name); do
   if [ $pid != $$ ]; then
     kill -9 $pid
+    echo $(pulsemixer --get-volume | awk '{print $1}') > /tmp/vol
+    /etc/eww_vol_icon.sh mute
   fi
 done
 
