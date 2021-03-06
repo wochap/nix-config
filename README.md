@@ -125,10 +125,13 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 | Keybinding | Action |
 | :--- | :--- |
 | <kbd>Super</kbd> + <kbd>F1</kbd> | Reloads sxhkd |
+| <kbd>Super</kbd> + <kbd>v</kbd> | Show clipboard |
+| <kbd>Super</kbd> + <kbd>c</kbd> | Show calculator |
+| <kbd>Super</kbd> + <kbd>Enter</kbd> | Opens terminal (kitty) |
 | <kbd>Super</kbd> + <kbd>Esc</kbd> | Opens power menu |
 | <kbd>Super</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
 | <kbd>Super</kbd> + <kbd>Print</kbd> | Take fullscreen screenshoot |
-| <kbd>Super</kbd> + <kbd>q</kbd> | Closes window with focus |
+| <kbd>Super</kbd> + <kbd>w</kbd> | Closes window with focus |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>q</kbd> | Kills window with focus |
 | <kbd>Super</kbd> + <kbd>m</kbd> | Alternate between the tiled and monocle layout |
 | <kbd>Super</kbd> + <kbd>/</kbd> | Show available keybindings |
@@ -197,8 +200,8 @@ Apps
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>v</kbd> | Show clipboard |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>l</kbd> | Lock screen |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>c</kbd> | Color picker |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>f</kbd> | Opens file manager (thunar) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>s</kbd> | Takes screenshoot (flameshot) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>f</kbd> | Open firefox |
@@ -209,13 +212,13 @@ Kitty keybindings
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Enter</kbd> | Opens new terminal |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Enter</kbd> | Opens new window |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>l</kbd> | Cycle layouts (change layout) |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> | Cycle focused terminal (swap) |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>[</kbd> | Focus next terminal |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>]</kbd> | Focus previous terminal |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd> | Reset terminal |
-| <kbd>Ctrl</kbd> + <kbd>k</kbd> | Clear terminal |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> | Cycle focused window (swap) |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>[</kbd> | Focus next window |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>]</kbd> | Focus previous window |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd> | Reset window |
+| <kbd>Ctrl</kbd> + <kbd>k</kbd> | Clear window |
 | <kbd>Ctrl</kbd> + <kbd>f</kbd> | Search |
 
 Dunst keybindings

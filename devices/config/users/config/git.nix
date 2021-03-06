@@ -15,6 +15,7 @@
           st = "status";
           glo = "pull origin";
           gpo = "push origin";
+          gc = "clone";
         };
         extraConfig = {
           core.editor = "vim";

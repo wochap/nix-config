@@ -116,31 +116,21 @@ in
       bc # calculator cli
       dex # execute DesktopEntry files
       direnv # auto run nix-shell
-      docker-compose
       dos2unix
       evtest
-      feh # image viewer
       ffmpeg-full # music/video codecs?
       fzf # fuzzy search
       git
       gnumake # make
-      gotop # monitor system
-      htop # monitor system
       inxi # check compositor running
       killall
       libqalculate
       mpc_cli
       mpd
       mpd_clientlib # mpd module
-      neofetch # print computer info
       notify-desktop # test notifications
-      nvtop # monitor system
       pciutils # lspci and others commands
       pulsemixer
-      radeontop # monitor system
-      ranger # file manager cli
-      screenfetch # show system info
-      scrot # screen capture
       trash-cli # required by vscode
       unzip
       vim
@@ -154,6 +144,18 @@ in
       xorg.xeyes # check if app is running on wayland
       zip
 
+      # Apps CLI
+      docker-compose
+      feh # image viewer
+      gotop # monitor system
+      htop # monitor system
+      neofetch # print computer info
+      nvtop # monitor system nvidia
+      radeontop # monitor system amd
+      ranger # file manager cli
+      screenfetch # show system info
+      scrot # screen capture
+
       # IP Webcam related
       gnome3.zenity
       gst_all_1.gst-plugins-base
@@ -164,15 +166,17 @@ in
       v4l-utils
 
       # DE
+      # pywal # theme color generator cli
       alttab # windows like alt + tab
       betterlockscreen # screen locker
       blueberry # bluetooth tray
+      clipmenu # clipboard manager
       kitty # terminal
-      # networkmanager_dmenu # network manager cli
+      mpv # video player
+      nitrogen # wallpaper manager
       pamixer # audio cli
       pavucontrol # audio settings gui
       playerctl # media player cli
-      # pywal # theme color generator cli
       systemd
 
       # Apps
@@ -211,9 +215,11 @@ in
       zoom-us
 
       # Themes
-      capitaine-cursors
-      papirus-icon-theme
       adwaita-qt
+      capitaine-cursors
+      gnome3.adwaita-icon-theme
+      hicolor-icon-theme
+      papirus-icon-theme
 
       # Themes settings
       gnome3.gsettings-desktop-schemas

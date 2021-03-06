@@ -50,26 +50,23 @@ in
       # User packages
       home.packages = with pkgs; [
         # DE apps
-        clipmenu # clipboard manager
-        nitrogen # wallpaper manager
         rofi-calc
 
         # Dev tools
         gitAndTools.gh
-        mysql-workbench
-        postman
-        vscode
 
         # Apps
         brave
         google-chrome
         kdeApplications.kdenlive # video editor
-        mpv # video player
+        mysql-workbench
         nix-prefetch-git
         obs-studio # video capture
         olive-editor
         openshot-qt # video editor
+        postman
         slack
+        vscode
       ];
 
       home.sessionVariables = {
