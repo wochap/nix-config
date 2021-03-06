@@ -1,4 +1,5 @@
 configuration {
+  display-run: "";
   display-drun: "";
   display-calc: "";
   dpi: 0;

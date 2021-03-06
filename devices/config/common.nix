@@ -375,6 +375,7 @@ in
     services.gnome3.gnome-online-accounts.enable = true;
     services.gnome3.gnome-keyring.enable = true;
 
+    # Change flatpak env vars https://github.com/flatpak/flatpak/issues/2980
     services.flatpak.enable = true;
 
     virtualisation.docker.enable = true;
