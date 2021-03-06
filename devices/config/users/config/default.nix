@@ -84,24 +84,26 @@ in
         # Control default apps
         mimeApps.enable = true;
         mimeApps.defaultApplications = {
+          "application/pdf" = [ "org.pwmt.zathura.desktop" ];
           "inode/directory" = [ "thunar.desktop" ];
+          "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
           "text/html" = [ "firefox.desktop" ];
           "x-scheme-handler/about" = [ "firefox.desktop" ];
-          "x-scheme-handler/http" = [ "firefox.desktop" ];
-          "x-scheme-handler/https" = [ "firefox.desktop" ];
+          "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
           "x-scheme-handler/unknown" = [ "firefox.desktop" ];
           "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
-          "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
-          "application/pdf" = [ "org.pwmt.zathura.desktop" ];
         };
         mimeApps.associations.added = {
-          "image/png" = [ "org.gnome.eog.desktop" ];
-          "image/jpeg" = [ "org.gnome.eog.desktop" ];
-          "image/svg+xml" = [ "org.gnome.eog.desktop" ];
-          "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" "userapp-Evolution-S7FTY0.desktop" ];
-          "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
           "application/pdf" = [ "org.pwmt.zathura.desktop" ];
+          "image/jpeg" = [ "org.gnome.eog.desktop" ];
+          "image/png" = [ "org.gnome.eog.desktop" ];
+          "image/svg+xml" = [ "org.gnome.eog.desktop" ];
+          "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
+          "x-scheme-handler/http" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
+          "x-scheme-handler/https" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
+          "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" "userapp-Evolution-S7FTY0.desktop" ];
         };
       };
 

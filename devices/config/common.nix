@@ -10,6 +10,20 @@ let
   isWayland = config._displayServer == "wayland";
   localPkgs = import ./packages { pkgs = pkgs; };
   run-videochat = pkgs.writeScriptBin "run-videochat" (builtins.readFile ./scripts/run-videochat.sh);
+  http-url-handler = pkgs.makeDesktopItem {
+    name = "http-url-handler";
+    desktopName = "HTTP URL handler";
+    comment = "Open an HTTP/HTTPS URL with a particular browser";
+    exec = "/etc/open_url.py %u";
+    type = "Application";
+    terminal = "false";
+    extraEntries = ''
+      TryExec=/etc/open_url.py
+      X-MultipleArgs=false
+      NoDisplay=true
+      MimeType=x-scheme-handler/http;x-scheme-handler/https
+    '';
+  };
 in
 {
   imports = [
@@ -88,6 +102,10 @@ in
           source = ./scripts/restart_goa_daemon.sh;
           mode = "0755";
         };
+        "open_url.py" = {
+          source = ./scripts/open_url.py;
+          mode = "0755";
+        };
       };
       shellAliases = {
         ll = "ls -la";
@@ -126,6 +144,7 @@ in
       ffmpeg-full # music/video codecs?
       fzf # fuzzy search
       git
+      glib # gio
       gnumake # make
       inxi # check compositor running
       killall
@@ -236,6 +255,7 @@ in
       localPkgs.eww # custom widgets daemon
       localPkgs.whitesur-dark-icons
       localPkgs.zscroll # scroll text in shells
+      http-url-handler
     ];
 
     fonts = {
