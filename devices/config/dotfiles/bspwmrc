@@ -22,25 +22,26 @@ bspc config focus_follows_pointer true
 bspc config bspc config click_to_focus none
 # bspc config focus_by_distance   true
 
-bspc rule -a "mpv" state=floating sticky=on
+bspc rule -a ".caffeine-wrapped" state=floating
 bspc rule -a ".pick-colour-picker-wrapped" state=floating sticky=on
-bspc rule -a "flameshot" state=floating sticky=on
-bspc rule -a "Pavucontrol" state=pseudo_tiled
-bspc rule -a "Gnome-calculator" state=floating
-bspc rule -a "Gnome-font-viewer" state=floating
-bspc rule -a "File-roller" state=floating
-bspc rule -a "Image Lounge" state=floating
-bspc rule -a "Nm-connection-editor" state=floating
-bspc rule -a "Cheese" state=pseudo_tiled
 bspc rule -a "Blueberry.py" state=floating
-bspc rule -a "Gnome-sound-recorder" state=pseudo_tiled
-bspc rule -a "Geary" state=pseudo_tiled
-bspc rule -a "Gnome-calendar" state=pseudo_tiled
-bspc rule -a "Mysql-workbench-bin" state=pseudo_tiled
-bspc rule -a "Simplenote" state=pseudo_tiled
-bspc rule -a "Gnome-todo" state=pseudo_tiled
-bspc rule -a "Gnome-system-monitor" state=floating
+bspc rule -a "Cheese" state=pseudo_tiled
 bspc rule -a "Eog" state=floating
+bspc rule -a "File-roller" state=floating
+bspc rule -a "Geary" state=pseudo_tiled
+bspc rule -a "Gnome-calculator" state=floating
+bspc rule -a "Gnome-calendar" state=pseudo_tiled
+bspc rule -a "Gnome-font-viewer" state=floating
+bspc rule -a "Gnome-sound-recorder" state=pseudo_tiled
+bspc rule -a "Gnome-system-monitor" state=floating
+bspc rule -a "Gnome-todo" state=pseudo_tiled
+bspc rule -a "Image Lounge" state=floating
+bspc rule -a "Mysql-workbench-bin" state=pseudo_tiled
+bspc rule -a "Nm-connection-editor" state=floating
+bspc rule -a "Pavucontrol" state=pseudo_tiled
+bspc rule -a "Simplenote" state=pseudo_tiled
+bspc rule -a "flameshot" state=floating sticky=on
+bspc rule -a "mpv" state=floating sticky=on
 
 # bspc rule -a "Geary" desktop=^4
 # bspc rule -a "Gnome-calendar" desktop=^4
