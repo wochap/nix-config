@@ -249,6 +249,12 @@ Firefox keybindings
 
 ## Troubleshooting
 
+1. [Check packages size](https://nixos.wiki/wiki/Nix_command/path-info)
+
+    ```
+    $ nix path-info -rSh /run/current-system | sort -nk2
+    ```
+
 1. Fix flickering on nvidia cards
     - Open `Nvidia X Server Settings`.
     - In `OpenGL Settings` uncheck `Allow Flipping`.
@@ -353,6 +359,7 @@ Firefox keybindings
 * https://github.com/zodd18/Horizon
 * https://www.iconfinder.com/search/?q=F028
 * https://www.online-toolz.com/tools/text-unicode-entities-convertor.php
+* https://www.reddit.com/r/firefox/comments/786dr7/how_do_i_identify_firefox_ui_elements/
 
 ### Others
 
