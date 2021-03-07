@@ -117,8 +117,9 @@ in
           CM_OWN_CLIPBOARD = "1";
           CM_SELECTIONS = "primary clipboard";
           ELECTRON_TRASH="trash-cli"; # fix vscode delete
-          QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-          QT_FONT_DPI = "96";
+          QT_AUTO_SCREEN_SCALE_FACTOR = "0";
+          QT_SCALE_FACTOR = "1.5";
+          QT_FONT_DPI = "144";
           QT_QPA_PLATFORMTHEME = "qt5ct";
         }
         (lib.mkIf isWayland {
@@ -195,6 +196,7 @@ in
       alttab # windows like alt + tab
       betterlockscreen # screen locker
       blueberry # bluetooth tray
+      caffeine-ng
       clipmenu # clipboard manager
       kitty # terminal
       mpv # video player
@@ -411,7 +413,7 @@ in
     services.flatpak.enable = true;
 
     virtualisation.docker.enable = true;
-    virtualisation.anbox.enable = true;
+    # virtualisation.anbox.enable = true;
 
     # Required for polybar docker script
     security.sudo.configFile = ''
