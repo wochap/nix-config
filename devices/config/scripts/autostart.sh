@@ -13,6 +13,7 @@ blueberry-tray &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor size for 4k display
 eww daemon &
+caffeine &
 polybar main -r &
 
 echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
