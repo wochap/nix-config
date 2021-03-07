@@ -26,4 +26,4 @@ end
 
 # Auto run nix-shell
 set -x DIRENV_LOG_FORMAT ""
->direnv hook fish | source
+direnv hook fish | source
