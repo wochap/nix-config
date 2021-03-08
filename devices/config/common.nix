@@ -109,7 +109,7 @@ in
       };
       shellAliases = {
         open = "xdg-open";
-        ll = "ls -la";
+        ll = "ls -l";
       };
       sessionVariables = lib.mkMerge [
         {
@@ -207,6 +207,7 @@ in
       systemd
 
       # Apps
+      anki
       deluge # torrent client
       etcher # create booteable usbs
       filelight # view disk usage
@@ -285,7 +286,7 @@ in
         siji
         terminus_font
 
-        # Horizon theme
+        # This thing is 2GB
         (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
       ] ;
       fontconfig = {
