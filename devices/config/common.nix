@@ -151,6 +151,7 @@ in
       inxi # check compositor running
       killall
       libqalculate
+      manpages
       mpc_cli
       mpd
       mpd_clientlib # mpd module
@@ -430,5 +431,8 @@ in
         # pkgs.xdg-desktop-portal-kde
       ];
     };
+
+    documentation.man.generateCaches = true;
+    documentation.dev.enable = true;
   };
 }

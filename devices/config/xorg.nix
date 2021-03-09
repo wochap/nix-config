@@ -159,9 +159,7 @@ in
     };
 
     # Hide cursor automatically
-    services.unclutter = {
-      enable = true;
-    };
+    services.unclutter.enable = true;
 
     # Hide cursor when typing
     services.xbanish.enable = true;
