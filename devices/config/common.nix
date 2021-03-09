@@ -115,7 +115,7 @@ in
         {
           CM_MAX_CLIPS = "30";
           CM_OWN_CLIPBOARD = "1";
-          CM_SELECTIONS = "primary clipboard";
+          CM_SELECTIONS = "clipboard";
           ELECTRON_TRASH="trash-cli"; # fix vscode delete
           QT_AUTO_SCREEN_SCALE_FACTOR = "0";
           QT_SCALE_FACTOR = "1.5";
