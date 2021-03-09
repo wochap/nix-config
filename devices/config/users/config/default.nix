@@ -89,6 +89,7 @@ in
           "inode/directory" = [ "thunar.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
           "text/html" = [ "google-chrome.desktop" ];
+          "video/mp4" = [ "mpv.desktop" ];
           "video/x-matroska" = [ "mpv.desktop" ];
           "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
@@ -102,6 +103,7 @@ in
           "image/png" = [ "org.gnome.eog.desktop" ];
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
+          "video/mp4" = [ "mpv.desktop" ];
           "video/x-matroska" = [ "mpv.desktop" ];
           "x-scheme-handler/http" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
           "x-scheme-handler/https" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
