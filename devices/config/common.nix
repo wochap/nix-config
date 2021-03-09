@@ -295,7 +295,7 @@ in
         defaultFonts = {
           serif = [ "Roboto Slab" ];
           sansSerif = [ "Roboto" ];
-          monospace = [ "Fira Mono" ];
+          monospace = [ "FiraCode Nerd Font Mono" ];
           emoji = [ "Noto Color Emoji" ];
         };
       };
