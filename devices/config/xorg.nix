@@ -163,6 +163,7 @@ in
 
     # Hide cursor when typing
     services.xbanish.enable = true;
+    services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
 
     services.xserver.useGlamor = true;
   };
