@@ -1,7 +1,7 @@
 ### BSPWM HOTKEYS
 
 # Reload keybindings
-super + F1
+super + alt + F1
   pkill -USR1 -x sxhkd
 
 # Open power menu
@@ -127,6 +127,14 @@ super + {Left,Right}
 # Focus or send to the given desktop
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} focused:'^{1-9,10}'
+super + {_, shift +}F1
+  bspc {desktop -f,node -d} focused:'^5'
+super + {_, shift +}F2
+  bspc {desktop -f,node -d} focused:'^6'
+super + {_, shift +}F3
+  bspc {desktop -f,node -d} focused:'^7'
+super + {_, shift +}F4
+  bspc {desktop -f,node -d} focused:'^8'
 
 # # Send and follow to given desktop
 # super + ctrl + shift + {1-9}

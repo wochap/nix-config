@@ -34,7 +34,6 @@ bspc rule -a "Gnome-calendar" state=pseudo_tiled
 bspc rule -a "Gnome-font-viewer" state=floating
 bspc rule -a "Gnome-sound-recorder" state=pseudo_tiled
 bspc rule -a "Gnome-system-monitor" state=floating
-bspc rule -a "Gnome-todo" state=pseudo_tiled
 bspc rule -a "Image Lounge" state=floating
 bspc rule -a "Mysql-workbench-bin" state=pseudo_tiled
 bspc rule -a "Nm-connection-editor" state=floating
