@@ -169,6 +169,7 @@ in
       xorg.xdpyinfo # show monitor info
       xorg.xev # get key actual name
       xorg.xeyes # check if app is running on wayland
+      xorg.xkbcomp
       zip
 
       # Apps CLI

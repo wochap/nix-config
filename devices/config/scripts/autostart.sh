@@ -18,3 +18,5 @@ polybar main -r &
 
 echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
 /etc/eww_vol_icon.sh mute
+
+/etc/fix_caps_lock_delay.sh

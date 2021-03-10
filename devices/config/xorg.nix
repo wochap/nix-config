@@ -42,6 +42,10 @@ in
           source = ./scripts/eww_vol.sh;
           mode = "0755";
         };
+        "fix_caps_lock_delay.sh" = {
+          source = ./scripts/fix_caps_lock_delay.sh;
+          mode = "0755";
+        };
         bspwmrc = {
           source = ./dotfiles/bspwmrc;
           mode = "0755";
