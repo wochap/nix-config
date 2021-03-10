@@ -1,6 +1,6 @@
 # My NixOS configuration
 
-![](https://i.imgur.com/n1vpgqw.jpg)
+![](https://i.imgur.com/vYt3wyj.jpg)
 
 Hardware drivers are managed by [NixOS](https://nixos.org/) config files.
 Apps and dotfiles are managed by [home-manager](https://github.com/nix-community/home-manager).
