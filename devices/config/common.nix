@@ -201,12 +201,15 @@ in
       caffeine-ng
       clipmenu # clipboard manager
       kitty # terminal
+      kmag # magnifying glass
       mpv # video player
       nitrogen # wallpaper manager
       pamixer # audio cli
       pavucontrol # audio settings gui
       playerctl # media player cli
       systemd
+      # xzoom # magnifying glass
+      # xmagnify # magnifying glass
 
       # Apps
       anki
@@ -233,6 +236,7 @@ in
       gtimelog
       inkscape # photo editor cli/gui
       nomacs # image viewer/editor
+      notejot # simple note app
       pick-colour-picker # color picker gui
       screenkey # show key pressed
       simplenote

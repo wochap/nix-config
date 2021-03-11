@@ -26,6 +26,7 @@ bspc rule -a ".caffeine-wrapped" state=floating
 bspc rule -a ".pick-colour-picker-wrapped" state=floating sticky=on
 bspc rule -a "Blueberry.py" state=floating
 bspc rule -a "Cheese" state=pseudo_tiled
+bspc rule -a "Com.github.lainsce.notejot" state=floating sticky=on
 bspc rule -a "Eog" state=floating
 bspc rule -a "File-roller" state=floating
 bspc rule -a "Geary" state=pseudo_tiled
@@ -40,6 +41,7 @@ bspc rule -a "Nm-connection-editor" state=floating
 bspc rule -a "Pavucontrol" state=pseudo_tiled
 bspc rule -a "Simplenote" state=pseudo_tiled
 bspc rule -a "flameshot" state=floating sticky=on
+bspc rule -a "kmag" state=floating sticky=on
 bspc rule -a "mpv" state=floating sticky=on
 
 # bspc rule -a "Geary" desktop=^4

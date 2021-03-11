@@ -182,6 +182,14 @@ super + alt + b ; {f,c}
 super + alt + t
   kitty
 
+# Open magnifying glass
+super + alt + z
+  kmag
+
+# Open quick note app
+super + alt + n
+  com.github.lainsce.notejot
+
 
 ### MEDIA KEYBINDINGS
 
