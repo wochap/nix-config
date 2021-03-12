@@ -32,11 +32,11 @@ in
             name = "default";
             isDefault = true;
             settings = {
-              "gfx.webrender.all" = true;
               "browser.tabs.tabMinWidth" = 5;
-              "ui.context_menus.after_mouseup" = true;
-              "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+              "gfx.webrender.all" = true;
               "layers.acceleration.force-enabled" = true;
+              "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+              "ui.context_menus.after_mouseup" = true;
             };
           };
         };

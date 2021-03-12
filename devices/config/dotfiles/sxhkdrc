@@ -188,7 +188,8 @@ super + alt + z
 
 # Open quick note app
 super + alt + n
-  com.github.lainsce.notejot
+  subl
+#  com.github.lainsce.notejot
 
 
 ### MEDIA KEYBINDINGS

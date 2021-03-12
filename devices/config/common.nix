@@ -240,6 +240,7 @@ in
       pick-colour-picker # color picker gui
       screenkey # show key pressed
       simplenote
+      sublime3 # text editor
       xfce.exo
       xfce.thunar # file manager
       xfce.thunar-archive-plugin

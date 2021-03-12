@@ -40,6 +40,7 @@ bspc rule -a "Mysql-workbench-bin" state=pseudo_tiled
 bspc rule -a "Nm-connection-editor" state=floating
 bspc rule -a "Pavucontrol" state=pseudo_tiled
 bspc rule -a "Simplenote" state=pseudo_tiled
+bspc rule -a "Sublime_text" state=floating sticky=on
 bspc rule -a "flameshot" state=floating sticky=on
 bspc rule -a "kmag" state=floating sticky=on
 bspc rule -a "mpv" state=floating sticky=on
