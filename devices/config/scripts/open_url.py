@@ -54,7 +54,7 @@ if __name__ == '__main__':
   logging.basicConfig(level=args.loglevel)
   logging.debug("args.url = '{}'".format(args.url))
   parsed = urlparse(args.url)
-  if parsed.hostname == 'localhost':
+  if parsed.hostname == 'localhost' or parsed.hostname == 'www.figma.com':
     browser = 'google-chrome-stable'
   else:
     browser = os.environ['BROWSER']
