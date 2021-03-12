@@ -274,15 +274,9 @@ in
       enableGhostscriptFonts = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
-        # inconsolata-nerdfont
-        # iosevka
         corefonts # basic fonts for office
-        fira-code
-        fira-code-symbols
-        fira-mono
         font-awesome
         font-awesome_4
-        hack-font
         material-icons
         noto-fonts
         noto-fonts-cjk
@@ -293,8 +287,15 @@ in
         siji
         terminus_font
 
-        # This thing is 2GB
-        (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
+        # (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
+        (nerdfonts.override {
+          fonts = [
+            "FiraCode"
+            "FiraMono"
+            "Hack"
+            "Iosevka"
+          ];
+        })
       ] ;
       fontconfig = {
         allowBitmaps = true;

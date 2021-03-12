@@ -10,11 +10,10 @@
 
 configuration {
   disable-history: false;
+  dpi: 0;
   drun-display-format: "{name}";
   fullscreen: true;
   hide-scrollbar: true;
-  show-icons: false;
-  sidebar-mode: false;
   kb-select-1: "";
   kb-select-2: "";
   kb-select-3: "";
@@ -24,6 +23,8 @@ configuration {
   kb-select-7: "";
   kb-select-8: "";
   kb-select-9: "";
+  show-icons: false;
+  sidebar-mode: false;
 }
 
 * {
@@ -41,7 +42,7 @@ configuration {
 #mainbox {
   background-color: transparent;
   children: [ inputbar, listview ];
-  padding: 35% 0% 0% 25%;
+  padding: 29% 0% 0% 17%;
   spacing: 5%;
 }
 
@@ -54,7 +55,7 @@ configuration {
   background-color: transparent;
   font: inherit;
   text-color: @unselected-text-color;
-  padding: 0% 0% 0% 1.20em;
+  padding: 0% 0% 0% 0.35em;
 }
 
 #horibox {

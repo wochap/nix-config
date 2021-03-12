@@ -49,7 +49,7 @@ fi
 # -fake-transparency \
 selected="$(echo -e "$options" |
             rofi -theme /etc/powermenu.rasi \
-              -font "Roboto, $FONTSIZE" \
+              -font "Iosevka, $FONTSIZE" \
               -p "See you later, ${LOGNAME^}!" \
               -m "primary" \
               -dmenu -selected-row ${PRESELECTION})"
