@@ -275,6 +275,7 @@ in
       enableDefaultFonts = true;
       fonts = with pkgs; [
         corefonts # basic fonts for office
+        fira-code
         font-awesome
         font-awesome_4
         material-icons
