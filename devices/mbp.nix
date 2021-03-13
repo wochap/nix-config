@@ -46,6 +46,12 @@ in
     video.hidpi.enable = true;
   };
 
+  environment = {
+    sessionVariables = {
+      GDK_SCALE = "2";
+    }
+  };
+
   fonts.fontconfig.dpi = dpi;
   services = {
     xserver = {
