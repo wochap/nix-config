@@ -124,6 +124,18 @@ in
       };
       displayManager = {
         defaultSession = "none+bspwm";
+        setupCommands = ''
+          export GDK_SCALE=2
+        '';
+        sddm = {
+          enable = false;
+          enableHidpi = false;
+          theme = "sugar-dark";
+          extraConfig = ''
+            [X11]
+            ServerArguments=-dpi 144
+          '';
+        };
         lightdm = {
           enable = true;
           background = ./assets/wallpaper.jpg;
@@ -144,11 +156,11 @@ in
             enable = true;
             cursorTheme.name = "capitaine-cursors";
             cursorTheme.package = pkgs.capitaine-cursors;
+            cursorTheme.size = 40;
             iconTheme.name = "WhiteSur-dark";
             iconTheme.package = localPkgs.whitesur-dark-icons;
             theme.name = "WhiteSur-dark";
             theme.package = localPkgs.whitesur-dark-theme;
-            cursorTheme.size = 24;
             extraConfig = ''
               font-name=Roboto 9
             '';

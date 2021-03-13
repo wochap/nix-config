@@ -118,9 +118,10 @@ in
           CM_SELECTIONS = "clipboard";
           ELECTRON_TRASH="trash-cli"; # fix vscode delete
           QT_AUTO_SCREEN_SCALE_FACTOR = "0";
-          QT_SCALE_FACTOR = "1.5";
           QT_FONT_DPI = "144";
           QT_QPA_PLATFORMTHEME = "qt5ct";
+          QT_SCALE_FACTOR = "1.5";
+          XCURSOR_SIZE = "40";
         }
         (lib.mkIf isWayland {
           # Force GTK to use wayland
@@ -202,6 +203,8 @@ in
       blueberry # bluetooth tray
       caffeine-ng
       clipmenu # clipboard manager
+      hunspell # dictionary for document programs
+      hunspellDicts.en-us
       kitty # terminal
       kmag # magnifying glass
       mpv # video player
@@ -263,9 +266,12 @@ in
       gtk-engine-murrine
       gtk_engines
       lxappearance
+      qt5.qtgraphicaleffects
       qt5ct
     ] ++ [
       localPkgs.eww # custom widgets daemon
+      localPkgs.sddm-sugar-dark-greeter
+      localPkgs.sddm-whitesur-greeter
       localPkgs.whitesur-dark-icons
       localPkgs.zscroll # scroll text in shells
       http-url-handler
@@ -338,11 +344,13 @@ in
       home = "/home/gean";
       isNormalUser = true;
       extraGroups = [
-        "wheel"
-        "docker"
-        "video"
         "audio"
+        "disk"
+        "docker"
         "networkmanager"
+        "storage"
+        "video"
+        "wheel"
       ];
       openssh.authorizedKeys.keyFiles = [
         "~/.ssh/id_rsa.pub"
@@ -421,6 +429,9 @@ in
     services.gnome3.gnome-online-accounts.enable = true;
     services.gnome3.gnome-keyring.enable = true;
 
+    # Fix gnome-keyring when sddm is enabled
+    security.pam.services.sddm.enableGnomeKeyring = true;
+
     # Change flatpak env vars https://github.com/flatpak/flatpak/issues/2980
     services.flatpak.enable = true;
 
@@ -438,7 +449,7 @@ in
       gtkUsePortal = true;
       extraPortals = [
         pkgs.xdg-desktop-portal-gtk
-        # pkgs.xdg-desktop-portal-kde
+        pkgs.xdg-desktop-portal-kde
       ];
     };
 
