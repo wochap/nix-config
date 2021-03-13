@@ -94,6 +94,11 @@ in
       font = "Lat2-Terminus16";
       earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
       keyMap = "us";
+      packages = with pkgs.kbdKeymaps; [
+        dvp
+        neo
+        terminus_font
+      ];
     };
 
     environment = {
