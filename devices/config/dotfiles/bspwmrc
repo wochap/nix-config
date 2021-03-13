@@ -54,7 +54,7 @@ for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
 done
 
 # workspace 4
-/etc/desktop_4.sh
+/etc/bspwm_desktop_4.sh
 
 # workspace 2
 bspc node @2:/ -i

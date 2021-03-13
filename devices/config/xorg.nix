@@ -62,8 +62,8 @@ in
           source = ./scripts/autostart.sh;
           mode = "0755";
         };
-        "desktop_4.sh" = {
-          source = ./scripts/desktop_4.sh;
+        "bspwm_desktop_4.sh" = {
+          source = ./scripts/bspwm_desktop_4.sh;
           mode = "0755";
         };
         sxhkdrc = {
