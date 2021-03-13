@@ -57,6 +57,9 @@ super + u
 # super + g
 #	 bspc node -s biggest
 
+# Kinda of `MacOS alt + grave` like
+alt + grave
+  bspc node last.same_class.local -f
 
 ### STATE/FLAGS
 

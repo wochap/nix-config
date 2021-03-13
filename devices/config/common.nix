@@ -162,8 +162,10 @@ in
       unzip
       vim
       wget
+      wmctrl # perform actions on windows
       wmutils-core
       xclip # clipboard cli
+      xdo # perform actions on windows
       xdotool # fake keyboard/mouse input
       xlayoutdisplay # fix dpi
       xorg.xdpyinfo # show monitor info
