@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 #### AUTOSTART ####
-/etc/autostart.sh
+/etc/bspwm_autostart.sh
 /etc/restart_goa_daemon.sh
 
 #### BSPWM coloring ####

@@ -14,15 +14,15 @@ super + Print
 
 # Open app launcher
 super + space
-  /etc/sxhkd-launcher
+  /etc/sxhkd_launcher.sh
 
 # Open calc
 super + c
-  /etc/sxhkd-calc
+  /etc/sxhkd_calc.sh
 
 # Show help
 super + slash
-  /etc/sxhkd-help
+  /etc/sxhkd_help.sh
 
 # Show clipmenu
 super + v

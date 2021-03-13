@@ -15,13 +15,6 @@ in
     # Setup DE bspwm and sxhkdrc
     environment = {
       etc = {
-        "play_notification.sh" = {
-          text = ''
-            #! ${pkgs.bash}/bin/bash
-            ${pkgs.pulseaudio}/bin/paplay /etc/notification.flac
-          '';
-          mode = "0755";
-        };
         "notification.flac" = {
           source = ./assets/notification.flac;
           mode = "0755";
@@ -30,10 +23,23 @@ in
           source = ./assets/blop.wav;
           mode = "0755";
         };
-        "eww_bright.sh" = {
-          source = ./scripts/eww_bright.sh;
+
+        "fix_caps_lock_delay.sh" = {
+          source = ./scripts/fix_caps_lock_delay.sh;
           mode = "0755";
         };
+        "play_notification.sh" = {
+          text = ''
+            #! ${pkgs.bash}/bin/bash
+            ${pkgs.pulseaudio}/bin/paplay /etc/notification.flac
+          '';
+          mode = "0755";
+        };
+
+        # "eww_bright.sh" = {
+        #   source = ./scripts/eww_bright.sh;
+        #   mode = "0755";
+        # };
         "eww_vol_icon.sh" = {
           source = ./scripts/eww_vol_icon.sh;
           mode = "0755";
@@ -42,10 +48,7 @@ in
           source = ./scripts/eww_vol.sh;
           mode = "0755";
         };
-        "fix_caps_lock_delay.sh" = {
-          source = ./scripts/fix_caps_lock_delay.sh;
-          mode = "0755";
-        };
+
         bspwmrc = {
           source = ./dotfiles/bspwmrc;
           mode = "0755";
@@ -58,27 +61,24 @@ in
           source = ./scripts/bspwm_subscribe.sh;
           mode = "0755";
         };
-        "autostart.sh" = {
-          source = ./scripts/autostart.sh;
+        "bspwm_autostart.sh" = {
+          source = ./scripts/bspwm_autostart.sh;
           mode = "0755";
         };
         "bspwm_desktop_4.sh" = {
           source = ./scripts/bspwm_desktop_4.sh;
           mode = "0755";
         };
+
         sxhkdrc = {
           source = ./dotfiles/sxhkdrc;
           mode = "0755";
         };
-        "powermenu.rasi" = {
-          source = ./dotfiles/powermenu.rasi;
+        "sxhkd_help.sh" = {
+          source = ./scripts/sxhkd_help.sh;
           mode = "0755";
         };
-        sxhkd-help = {
-          source = ./scripts/sxhkd-help.sh;
-          mode = "0755";
-        };
-        sxhkd-calc = {
+        "sxhkd_calc.sh" = {
           text = ''
             #!/usr/bin/env bash
 
@@ -96,12 +96,17 @@ in
           '';
           mode = "0755";
         };
-        sxhkd-launcher = {
-          source = ./scripts/sxhkd-launcher.sh;
+        "sxhkd_launcher.sh" = {
+          source = ./scripts/sxhkd_launcher.sh;
           mode = "0755";
         };
+
         "powermenu.sh" = {
           source = ./scripts/powermenu.sh;
+          mode = "0755";
+        };
+        "powermenu.rasi" = {
+          source = ./dotfiles/powermenu.rasi;
           mode = "0755";
         };
       };
