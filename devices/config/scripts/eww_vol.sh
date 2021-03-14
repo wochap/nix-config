@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 
 mute () {
@@ -9,7 +10,6 @@ mute () {
     echo "" > /tmp/vol-icon
   fi
 }
-
 if [ -p /tmp/vol ] && [ -p /tmp/vol-icon ]; then
   true
 else
@@ -17,23 +17,17 @@ else
   mkfifo /tmp/vol-icon && mute
 fi
 
-script_name="eww_vol.sh"
+script_name="eww_vol_close.sh"
 for pid in $(pgrep -f $script_name); do
-  if [ $pid != $$ ]; then
-    kill -9 $pid
-    echo $(pulsemixer --get-volume | awk '{print $1}') > /tmp/vol
-    /etc/eww_vol_icon.sh mute
-  fi
+  kill -9 $pid
 done
 
-start=$SECONDS
+# start=$SECONDS
 value=5
 
 eww_wid="$(xdotool search --name 'Eww - vol' || true)"
-
 if [ ! -n "$eww_wid" ]; then
   eww open vol
-  eww_wid="$(xdotool search --name 'Eww - vol' || true)"
 fi
 
 case $1 in
@@ -44,10 +38,12 @@ case $1 in
     else
       pulsemixer --change-volume +"$value"
     fi
+    echo $(pulsemixer --get-volume | awk '{print $1}') > /tmp/vol
     paplay /etc/blop.wav
   ;;
   down)
     pulsemixer --change-volume -"$value"
+    echo $(pulsemixer --get-volume | awk '{print $1}') > /tmp/vol
     paplay /etc/blop.wav
   ;;
   mute)
@@ -62,13 +58,4 @@ case $1 in
   ;;
 esac
 
-echo $(pulsemixer --get-volume | awk '{print $1}') > /tmp/vol
-
-while [ -n "$eww_wid" ]; do
-  duration=$(( SECONDS - start ))
-  if [[ $duration -gt 1 ]]; then
-    eww close vol
-    eww_wid="$(xdotool search --name 'Eww - vol' || true)"
-  fi
-  sleep 0.2
-done
+/etc/eww_vol_close.sh

@@ -48,6 +48,10 @@ in
           source = ./scripts/eww_vol.sh;
           mode = "0755";
         };
+        "eww_vol_close.sh" = {
+          source = ./scripts/eww_vol_close.sh;
+          mode = "0755";
+        };
 
         bspwmrc = {
           source = ./dotfiles/bspwmrc;
