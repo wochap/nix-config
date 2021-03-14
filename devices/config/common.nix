@@ -94,10 +94,10 @@ in
       font = "Lat2-Terminus16";
       earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
       keyMap = "us";
-      packages = with pkgs.kbdKeymaps; [
-        dvp
-        neo
-        terminus_font
+      packages = [
+        pkgs.kbdKeymaps.dvp
+        pkgs.kbdKeymaps.neo
+        pkgs.terminus_font
       ];
     };
 
@@ -203,6 +203,7 @@ in
 
       # DE
       # pywal # theme color generator cli
+      alacritty # terminal
       alttab # windows like alt + tab
       betterlockscreen # screen locker
       blueberry # bluetooth tray
@@ -218,12 +219,14 @@ in
       pavucontrol # audio settings gui
       playerctl # media player cli
       systemd
+      tmux # terminal multiplexer
       # xzoom # magnifying glass
       # xmagnify # magnifying glass
 
       # Apps
       anki
       deluge # torrent client
+      discord
       etcher # create booteable usbs
       filelight # view disk usage
       # gnome3.gnome-disk-utility

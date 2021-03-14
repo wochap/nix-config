@@ -1,5 +1,5 @@
 window {
-  background-color: rgba(28, 30, 39, 0.8);
+  background-color: rgba(32, 32, 32, 0.8);
 }
 
 //vol
@@ -14,31 +14,34 @@ window {
 }
 
 .vol-icon {
-  color: #cacacc;
+  color: rgba(156, 156, 156, 0.8);
   font-family: "Font Awesome 5 Free";
   font-size: 128px;
 }
 
 .vol-bar {
   all: unset;
+
+  background-color: transparent;
 }
 
 .vol-bar slider {
   all: unset;
+
+  background-color: transparent;
 }
 
 .vol-bar highlight {
   all: unset;
 
-	background-color: #cacacc;
-	color: #000000;
+  background-color: rgba(156, 156, 156, 0.8);
   border-radius: 100px;
 }
 
 .vol-bar trough {
 	all: unset;
 
-	background-color: #434c5e;
+  background-color: rgba(0, 0, 0, 0.5);
 	min-height: 10px;
   border-radius: 100px;
 }
