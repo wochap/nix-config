@@ -21,6 +21,11 @@ in
           .tabbrowser-tab:focus:not([aria-activedescendant]) > .tab-stack > .tab-content {
             outline: 0 !important;
           }
+
+          /* Remove Findbar transition */
+          .findbar {
+            transition: none !important;
+          }
         '';
       };
       programs.firefox = {
@@ -34,7 +39,7 @@ in
             settings = {
               "browser.tabs.tabMinWidth" = 5;
               "gfx.webrender.all" = true;
-              "layers.acceleration.force-enabled" = true;
+              "layers.acceleration.force-enabled" = false;
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
               "ui.context_menus.after_mouseup" = true;
             };
