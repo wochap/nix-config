@@ -10,11 +10,15 @@ mute () {
     echo "" > /tmp/vol-icon
   fi
 }
-if [ -p /tmp/vol ] && [ -p /tmp/vol-icon ]; then
+if [ -p /tmp/vol ]; then
   true
 else
-  mkfifo /tmp/vol && echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol
-  mkfifo /tmp/vol-icon && mute
+  mkfifo /tmp/vol && echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
+fi
+if [ -p /tmp/vol-icon ]; then
+  true
+else
+  mkfifo /tmp/vol-icon && mute &
 fi
 
 script_name="eww_vol_close.sh"
