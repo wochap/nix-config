@@ -6,8 +6,8 @@
     # If width is 0, window will fit to longest message
     # Positive x value is measured from the left of the screen, negative x is measured from the right
     # Positive y value is measured from the top of the screen
-    geometry = "500x6-16+72";
-    background = "#1C1E27CC"; #RRGGBBAA
+    geometry = "500x6-16+80";
+    background = "#202020FF"; #RRGGBBAA
     alignment = "left";
     always_run_script = true;
     browser = "firefox";
@@ -51,24 +51,24 @@
     summary = "*";
   };
   shortcuts = {
-    # close = "ctrl+space";
+    close = "ctrl+space";
     # close_all = "ctrl+shift+space";
     # context = "ctrl+shift+period";
     history = "ctrl+Escape";
   };
   urgency_low = {
-    background = "#1C1E27CC";
-    foreground = "#eaeaea";
+    background = "#202020FF";
+    foreground = "#e9e8e9";
     timeout = 5;
   };
   urgency_normal = {
-    background = "#1C1E27CC";
-    foreground = "#eaeaea";
+    background = "#202020FF";
+    foreground = "#e9e8e9";
     timeout = 5;
   };
   urgency_critical = {
-    background = "#1C1E27CC";
-    foreground = "#eaeaea";
+    background = "#202020FF";
+    foreground = "#e9e8e9";
     timeout = 120;
   };
 }
