@@ -26,6 +26,10 @@ in
           .findbar {
             transition: none !important;
           }
+
+          menupopup {
+            border-radius: 0 !important;
+          }
         '';
       };
       programs.firefox = {
