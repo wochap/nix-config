@@ -40,10 +40,6 @@ in
         #   source = ./scripts/eww_bright.sh;
         #   mode = "0755";
         # };
-        "eww_vol_icon.sh" = {
-          source = ./scripts/eww_vol_icon.sh;
-          mode = "0755";
-        };
         "eww_vol.sh" = {
           source = ./scripts/eww_vol.sh;
           mode = "0755";
