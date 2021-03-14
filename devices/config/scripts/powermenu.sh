@@ -31,7 +31,7 @@ options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 DEFAULT_WIDTH=1920
 WIDTH=$(xrandr | grep primary | awk '{print $4}' | cut -d 'x' -f 1)
 # WIDTH=$(xdpyinfo | grep dimensions | awk '{print $2}' | cut -d 'x' -f 1 )
-DEFAULT_FONTSIZE=60
+DEFAULT_FONTSIZE=50
 FONTSIZE=$(echo "$WIDTH/$DEFAULT_WIDTH*$DEFAULT_FONTSIZE" | bc -l)
 
 while getopts "lp" OPT; do
