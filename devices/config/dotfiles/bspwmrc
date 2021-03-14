@@ -50,7 +50,7 @@ bspc rule -a "mpv" state=floating sticky=on
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
-  bspc monitor $m -d 1 2 3 4 5 6 7 8
+  bspc monitor $m -d 1 2 3 4 F1 F2 F3 F4
 done
 
 # workspace 4
