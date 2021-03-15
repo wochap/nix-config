@@ -59,17 +59,22 @@ in
       plymouth = {
         enable = true;
       };
+
       extraModprobeConfig = ''
         # Fix fn keys keychron
         options hid_apple fnmode=0
+
         # Enable IP Webcam
         options v4l2loopback devices=1 exclusive_caps=1
       '';
       kernelParams = [
+        # Fix fn keys keychron
         "hid_apple.fnmode=0"
       ];
       kernelModules = [
+        # Fix fn keys keychron
         "hid-apple"
+
         # Required for IP Webcam
         "v4l2loopback"
       ];
@@ -92,7 +97,7 @@ in
     i18n.defaultLocale = "en_US.UTF-8";
     console = {
       font = "Lat2-Terminus16";
-      earlySetup = true; # hidpi + luks-open  # TODO : STILL NEEDED?
+      earlySetup = true;
       keyMap = "us";
       packages = [
         pkgs.kbdKeymaps.dvp
@@ -113,15 +118,22 @@ in
         };
       };
       shellAliases = {
-        open = "xdg-open";
+        gc = "git clone";
+        glo = "git pull origin";
+        gpo = "git push origin";
         ll = "ls -l";
+        open = "xdg-open";
       };
       sessionVariables = lib.mkMerge [
         {
+          # Setup clipboard manager
           CM_MAX_CLIPS = "30";
           CM_OWN_CLIPBOARD = "1";
           CM_SELECTIONS = "clipboard";
-          ELECTRON_TRASH="trash-cli"; # fix vscode delete
+
+          # Fix vscode delete
+          ELECTRON_TRASH="trash-cli";
+
           QT_AUTO_SCREEN_SCALE_FACTOR = "0";
           QT_FONT_DPI = "144";
           QT_QPA_PLATFORMTHEME = "qt5ct";
@@ -143,7 +155,6 @@ in
     environment.systemPackages = with pkgs; [
       # Tools
       # base-devel
-      arandr # xrandr gui
       bc # calculator cli
       dex # execute DesktopEntry files
       direnv # auto run nix-shell
@@ -177,7 +188,7 @@ in
       xorg.xdpyinfo # show monitor info
       xorg.xev # get key actual name
       xorg.xeyes # check if app is running on wayland
-      xorg.xkbcomp
+      xorg.xkbcomp # print keymap
       zip
 
       # Apps CLI
@@ -205,6 +216,7 @@ in
       # pywal # theme color generator cli
       alacritty # terminal
       alttab # windows like alt + tab
+      arandr # xrandr gui
       betterlockscreen # screen locker
       blueberry # bluetooth tray
       caffeine-ng
@@ -224,7 +236,7 @@ in
       # xmagnify # magnifying glass
 
       # Apps
-      anki
+      anki # mnemonic tool
       deluge # torrent client
       discord
       etcher # create booteable usbs
@@ -234,13 +246,13 @@ in
       # gnome3.bijiben
       gnome3.cheese # test webcam
       gnome3.eog # image viewer
-      gnome3.evolution
+      gnome3.evolution # email/calendar client
       gnome3.file-roller # archive manager
       gnome3.geary # email client
       gnome3.gnome-calculator
       gnome3.gnome-calendar
       gnome3.gnome-clocks
-      gnome3.gnome-control-center # add google account for geary and calendar
+      gnome3.gnome-control-center # add google account for gnome apps
       gnome3.gnome-font-viewer
       gnome3.gnome-sound-recorder # test microphone
       gnome3.gnome-system-monitor
@@ -249,7 +261,6 @@ in
       gtimelog
       inkscape # photo editor cli/gui
       nomacs # image viewer/editor
-      notejot # simple note app
       pick-colour-picker # color picker gui
       screenkey # show key pressed
       simplenote
@@ -274,7 +285,7 @@ in
       gtk-engine-murrine
       gtk_engines
       lxappearance
-      qt5.qtgraphicaleffects
+      qt5.qtgraphicaleffects # required by gddm themes
       qt5ct
     ] ++ [
       localPkgs.eww # custom widgets daemon
@@ -325,10 +336,9 @@ in
       };
     };
 
+    # Links those paths from derivations to /run/current-system/sw
     environment.pathsToLink = [
       "/share/zsh"
-
-      # Links /libexec from derivations to /run/current-system/sw
       "/libexec"
     ];
 
@@ -376,7 +386,10 @@ in
       wireless.enable = false;
       networkmanager.enable = true;
       nameservers = [
+        "1.1.1.1"
+        "1.0.0.1"
         "8.8.8.8"
+        "8.8.4.4"
       ];
       firewall = {
         enable = true;
@@ -385,10 +398,17 @@ in
           { from = 3000; to = 3010; }
         ];
         allowedTCPPorts = [
+          # 20 # FTP (File Transfer Protocol)
+          # 22 # Secure Shell (SSH)
+          # 25 # Simple Mail Transfer Protocol (SMTP)
+          # 53 #  Domain Name System (DNS)
+          80 # Hypertext Transfer Protocol (HTTP)
+          # 110 # Post Office Protocol (POP3)
+          # 143 # Internet Message Access Protocol (IMAP)
+          # 443 #  HTTP Secure (HTTPS)
+
           3333
           8000
-          80
-          22
         ];
       };
     };
@@ -406,15 +426,15 @@ in
     # Enable bluetooth
     hardware.bluetooth.enable = true;
 
-    # Fix tearing?
+    # Enable OpenGL
     hardware.opengl.enable = true;
     hardware.opengl.driSupport = true;
-    hardware.opengl.driSupport32Bit = !isMbp;
+    # hardware.opengl.driSupport32Bit = !isMbp;
 
     # Enable audio
     sound.enable = true;
     hardware.pulseaudio.enable = true;
-    hardware.pulseaudio.support32Bit = true;
+    # hardware.pulseaudio.support32Bit = true;
 
     # Auto run nix-shell
     services.lorri.enable = true;
@@ -446,12 +466,12 @@ in
     virtualisation.docker.enable = true;
     # virtualisation.anbox.enable = true;
 
-    # Required for polybar docker script
+    # Required for polybar `docker module` script
     security.sudo.configFile = ''
       user ALL=(ALL) NOPASSWD: ${pkgs.docker}/bin/docker ps -qf status=running
     '';
 
-    # consistent file dialog
+    # Consistent file dialog
     xdg.portal = {
       enable = true;
       gtkUsePortal = true;

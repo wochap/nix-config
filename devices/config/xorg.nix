@@ -92,7 +92,7 @@ in
               -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }' \
               -no-show-match \
               -no-sort \
-              -calc-command "echo -n '{result}' | xclip"
+              -calc-command "echo -n '{result}' | xclip -selection clipboard"
           '';
           mode = "0755";
         };
@@ -185,7 +185,5 @@ in
     # Hide cursor when typing
     services.xbanish.enable = true;
     services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
-
-    services.xserver.useGlamor = true;
   };
 }
