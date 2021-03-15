@@ -24,6 +24,9 @@ function print_fish_colors --description 'Shows the various fish colors being us
   end
 end
 
+# Completion for kitty¶
+kitty + complete setup fish | source
+
 # Auto run nix-shell
 set -x DIRENV_LOG_FORMAT ""
 direnv hook fish | source

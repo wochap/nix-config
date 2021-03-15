@@ -53,6 +53,15 @@ in
         # Default multiple monitor setup
         Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
       '';
+      deviceSection = ''
+        # does it fix screen tearing? NO
+        Option         "NoLogo" "1"
+        Option         "RenderAccel" "1"
+        Option         "TripleBuffer" "true"
+        Option         "MigrationHeuristic" "greedy"
+        Option         "AccelMethod" "sna"
+        Option         "TearFree"    "true"
+      '';
 
       # services.xserver.useGlamor = true;
 

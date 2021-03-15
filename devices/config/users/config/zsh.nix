@@ -26,6 +26,9 @@
 
           RPROMPT=""
 
+          # Completion for kitty
+          kitty + complete setup zsh | source /dev/stdin
+
           # Auto run nix-shell
           export DIRENV_LOG_FORMAT=
           eval "$(direnv hook zsh)"
