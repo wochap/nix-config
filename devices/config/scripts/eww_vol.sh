@@ -43,11 +43,13 @@ case $1 in
       pulsemixer --change-volume +"$value"
     fi
     echo $(pulsemixer --get-volume | awk '{print $1}') > /tmp/vol
+    mute
     paplay /etc/blop.wav
   ;;
   down)
     pulsemixer --change-volume -"$value"
     echo $(pulsemixer --get-volume | awk '{print $1}') > /tmp/vol
+    mute
     paplay /etc/blop.wav
   ;;
   mute)

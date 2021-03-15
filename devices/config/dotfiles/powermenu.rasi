@@ -31,11 +31,11 @@ configuration {
   selected-bg-color: rgba(100, 100, 100, 0);
   selected-text-color: #58a6ff;
   unselected-bg-color: rgba(100, 100, 100, 0);
-  unselected-text-color: #FFFFFF;
+  unselected-text-color: #e9e8e9;
 }
 
 #window {
-  background-color: rgba(28, 30, 39, 0.5);
+  background-color: rgba(32, 32, 32, 0.5);
   border: 0;
 }
 
