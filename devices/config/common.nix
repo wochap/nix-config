@@ -168,6 +168,7 @@ in
       inxi # check compositor running
       killall
       libqalculate
+      libva-utils # verifying VA-API
       manpages
       mpc_cli
       mpd
@@ -177,6 +178,7 @@ in
       pulsemixer
       trash-cli # required by vscode
       unzip
+      vdpauinfo # verifying VDPAU
       vim
       wget
       wmctrl # perform actions on windows
@@ -429,6 +431,11 @@ in
     # Enable OpenGL
     hardware.opengl.enable = true;
     hardware.opengl.driSupport = true;
+    # Hardware video acceleration
+    hardware.opengl.extraPackages = with pkgs; [
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
     # hardware.opengl.driSupport32Bit = !isMbp;
 
     # Enable audio

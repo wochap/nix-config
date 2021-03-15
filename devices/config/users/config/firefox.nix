@@ -42,10 +42,20 @@ in
             isDefault = true;
             settings = {
               "browser.tabs.tabMinWidth" = 5;
-              "gfx.webrender.all" = true;
+
+              # Force webrender
+              "gfx.webrender.all" = false;
+
+              # Force opengl
               "layers.acceleration.force-enabled" = false;
+
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
               "ui.context_menus.after_mouseup" = true;
+
+              # Enable video hardware acceleration
+              "media.ffmpeg.vaapi.enabled" = true;
+              "media.ffvpx.enabled" = false;
+              "media.rdd-vpx.enabled" = false;
             };
           };
         };
