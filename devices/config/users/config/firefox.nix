@@ -23,7 +23,7 @@ in
           }
 
           /* Remove Findbar transition */
-          .findbar {
+          findbar {
             transition: none !important;
           }
 
