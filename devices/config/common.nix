@@ -164,6 +164,7 @@ in
       fzf # fuzzy search
       git
       glib # gio
+      glxinfo
       gnumake # make
       inxi # check compositor running
       killall
