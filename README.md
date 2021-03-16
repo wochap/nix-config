@@ -226,11 +226,11 @@ Kitty keybindings
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Enter</kbd> | Opens new window |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>l</kbd> | Cycle layouts (change layout) |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> | Cycle focused window (swap) |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>[</kbd> | Focus next window |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>]</kbd> | Focus previous window |
+| <kbd>Ctrl</kbd> + <kbd>Enter</kbd> | Opens new window |
+| <kbd>Ctrl</kbd> + <kbd>l</kbd> | Cycle layouts (change layout) |
+| <kbd>Ctrl</kbd> + <kbd>`</kbd> | Cycle focused window (swap) |
+| <kbd>Ctrl</kbd> + <kbd>[</kbd> | Focus next window |
+| <kbd>Ctrl</kbd> + <kbd>]</kbd> | Focus previous window |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd> | Reset window |
 | <kbd>Ctrl</kbd> + <kbd>k</kbd> | Clear window |
 | <kbd>Ctrl</kbd> + <kbd>f</kbd> | Search |
