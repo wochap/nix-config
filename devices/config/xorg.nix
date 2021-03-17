@@ -2,6 +2,7 @@
 
 let
   localPkgs = import ./packages { pkgs = pkgs; };
+  isHidpi = config._isHidpi;
 in
 {
   imports = [
@@ -156,7 +157,7 @@ in
             enable = true;
             cursorTheme.name = "capitaine-cursors";
             cursorTheme.package = pkgs.capitaine-cursors;
-            cursorTheme.size = 40;
+            cursorTheme.size = if isHidpi then 40 else 16;
             iconTheme.name = "WhiteSur-dark";
             iconTheme.package = localPkgs.whitesur-dark-icons;
             theme.name = "WhiteSur-dark";
