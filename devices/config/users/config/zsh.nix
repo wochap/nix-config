@@ -10,6 +10,10 @@
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
+          function desktop4() {
+            /etc/bspwm_desktop_4.sh
+          }
+
           ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
           ### https://github.com/zsh-users/zsh-autosuggestions/issues/238
           pasteinit() {

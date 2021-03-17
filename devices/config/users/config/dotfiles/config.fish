@@ -24,6 +24,10 @@ function print_fish_colors --description 'Shows the various fish colors being us
   end
 end
 
+function desktop4 --description 'Start workspace 4 apps'
+  /etc/bspwm_desktop_4.sh
+end
+
 # Completion for kitty¶
 kitty + complete setup fish | source
 
