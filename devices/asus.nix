@@ -46,7 +46,7 @@ in
       libinput.enable = true;
 
       # Setup keyboard
-      layout = "us";
+      layout = "latam";
       xkbModel = "pc104";
       xkbVariant = "altgr-intl";
 
