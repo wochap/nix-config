@@ -15,6 +15,8 @@ in
   ];
 
   config = {
+    _isHidpi = true;
+
     boot = {
       loader = {
         grub.enable = false;
@@ -42,6 +44,11 @@ in
     fonts.fontconfig.dpi = dpi;
     services.xserver = {
       dpi = dpi;
+
+      # Setup keyboard
+      layout = "us";
+      xkbModel = "pc104";
+      xkbVariant = "altgr-intl";
 
       videoDrivers = [
         "nvidia"

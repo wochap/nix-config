@@ -57,8 +57,12 @@ in
     xserver = {
       dpi = dpi;
 
+      # Setup keyboard
+      layout = "us";
+      xkbModel = "pc104";
+      xkbVariant = "altgr-intl";
       # Macbook keyboard
-      xkbVariant = "mac";
+      # xkbVariant = "mac";
 
       # Enable touchpad support (enabled default in most desktopManager).
       libinput.enable = true;

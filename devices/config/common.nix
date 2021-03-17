@@ -6,6 +6,7 @@ let
     rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
     ref = "release-20.09";
   };
+  isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
   isWayland = config._displayServer == "wayland";
   localPkgs = import ./packages { pkgs = pkgs; };
@@ -42,6 +43,12 @@ in
       default = "";
       example = "xorg"; # xorg, wayland
       description = "Display server type, used by common config files.";
+    };
+    _isHidpi = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = "Flag for hidpi displays.";
     };
   };
 
@@ -96,9 +103,12 @@ in
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";
     console = {
-      font = "Lat2-Terminus16";
+      font = if isHidpi then "latarcyrheb-sun32" else "Lat2-Terminus16";
       earlySetup = true;
+
+      # TODO: make keyMap customizable
       keyMap = "us";
+
       packages = [
         pkgs.kbdKeymaps.dvp
         pkgs.kbdKeymaps.neo
@@ -134,11 +144,7 @@ in
           # Fix vscode delete
           ELECTRON_TRASH="trash-cli";
 
-          QT_AUTO_SCREEN_SCALE_FACTOR = "0";
-          QT_FONT_DPI = "144";
           QT_QPA_PLATFORMTHEME = "qt5ct";
-          QT_SCALE_FACTOR = "1.5";
-          XCURSOR_SIZE = "40";
         }
         (lib.mkIf isWayland {
           # Force GTK to use wayland
@@ -148,10 +154,17 @@ in
           # Force firefox to use wayland
           MOZ_ENABLE_WAYLAND = "1";
         })
+        (lib.mkIf isHidpi {
+          QT_AUTO_SCREEN_SCALE_FACTOR = "0";
+          QT_FONT_DPI = "144";
+          QT_SCALE_FACTOR = "1.5";
+          XCURSOR_SIZE = "40";
+        })
       ];
     };
 
     # List packages installed in system profile.
+    # TODO: remove xorg packages if wayland is enabled
     environment.systemPackages = with pkgs; [
       # Tools
       # base-devel
@@ -446,13 +459,6 @@ in
 
     # Auto run nix-shell
     services.lorri.enable = true;
-
-    # Setup keychron
-    services.xserver = {
-      layout = "us";
-      xkbModel = "pc104";
-      xkbVariant = "altgr-intl";
-    };
 
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
     programs.dconf.enable = true;

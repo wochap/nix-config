@@ -45,6 +45,11 @@ in
     services.xserver = {
       libinput.enable = true;
 
+      # Setup keyboard
+      layout = "us";
+      xkbModel = "pc104";
+      xkbVariant = "altgr-intl";
+
       # videoDrivers = [
       #   "nouveau"
       #   "nvidia"

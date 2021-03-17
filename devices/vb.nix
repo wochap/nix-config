@@ -29,6 +29,11 @@ in
     };
 
     services.xserver = {
+      # Setup keyboard
+      layout = "us";
+      xkbModel = "pc104";
+      xkbVariant = "altgr-intl";
+
       videoDrivers = [
         "nvidia"
         "nouveau"
