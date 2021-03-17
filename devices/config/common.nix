@@ -282,8 +282,12 @@ in
       simplenote
       sublime3 # text editor
       xfce.exo
+      (xfce.thunar.override {
+        thunarPlugins = [
+          xfce.thunar-archive-plugin
+        ];
+      })
       xfce.thunar # file manager
-      xfce.thunar-archive-plugin
       xfce.thunar-volman # auto mont devices
       xfce.xfconf # where thunar settings are saved
       zathura # PDF viewer
@@ -393,7 +397,9 @@ in
     };
 
     # Required by thunar
+    # services.udisks2.enable = true;
     services.gvfs.enable = true;
+    services.gvfs.package = pkgs.xfce.gvfs;
     services.tumbler.enable = true;
 
     # Enable network manager

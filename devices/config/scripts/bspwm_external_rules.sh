@@ -17,7 +17,7 @@ windowx=$(echo "$screenwidth"/2-"$windowwidth"/2 | bc)
 windowy=$(echo "$screenheight"/2-"$windowheight"/2 | bc)
 
 case "$class" in
-  Thunar )
+  .thunar-wrapped_ )
     case "$(xprop -id "$wid" _NET_WM_WINDOW_TYPE)" in
       *_NET_WM_WINDOW_TYPE_NORMAL* )
         echo state=pseudo_tiled rectangle="$windowwidth"x"$windowheight"+"$windowx"+"$windowy";;
