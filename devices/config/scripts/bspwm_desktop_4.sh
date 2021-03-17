@@ -7,6 +7,11 @@ function run {
   fi
 }
 
+function removeReceptacles {
+  sleep 3
+  for win in $(bspc query -N -n .leaf.\!window) ; do bspc node $win -k ; done ;
+}
+
 # source: https://www.reddit.com/r/bspwm/comments/ggtwxa/guide_to_creating_startup_layout_using_receptacles/
 bspc node @4:/ -i
 bspc node @4:/ -p east -i
