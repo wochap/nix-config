@@ -28,6 +28,7 @@ bspc rule -a "Blueberry.py" state=floating
 bspc rule -a "Cheese" state=pseudo_tiled
 bspc rule -a "Com.github.lainsce.notejot" state=floating sticky=on
 bspc rule -a "Eog" state=floating
+bspc rule -a "Evolution-alarm-notify" state=floating sticky=on
 bspc rule -a "File-roller" state=floating
 bspc rule -a "Geary" state=pseudo_tiled
 bspc rule -a "Gnome-calculator" state=floating
