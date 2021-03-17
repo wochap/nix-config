@@ -17,7 +17,7 @@
   </variables>
   <windows>
     <window name="vol" stacking="fg" focusable="false">
-      <geometry width="325px" height="325px" anchor="center" y="650px" />
+      <geometry width="325px" height="325px" anchor="bottom center" y="-15%" />
       <widget>
         <vol/>
       </widget>
