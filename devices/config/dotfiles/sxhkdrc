@@ -178,8 +178,8 @@ super + alt + c
   pick-colour-picker --pick
 
 # Open Browser
-super + alt + b ; {f,c}
-  {firefox,google-chrome-stable}
+super + alt + b ; {f,c,b}
+  {firefox,google-chrome-stable,brave}
 
 # Open terminal
 super + alt + t
