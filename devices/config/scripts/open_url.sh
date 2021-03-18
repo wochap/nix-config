@@ -43,7 +43,7 @@ path=$(echo "$url_no_protocol" | grep "/" | cut -d"/" -f2-)
 if [[
     $host =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ||
     $port ||
-    $host == "localhost" ||
+    $host == *"localhost"* ||
     $host == *"figma"*
   ]];
 then
