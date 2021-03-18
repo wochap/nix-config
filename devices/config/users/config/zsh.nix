@@ -29,6 +29,7 @@
           ### Fix slowness of pastes
 
           RPROMPT=""
+          ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$fg[red]%}"
 
           # Completion for kitty
           kitty + complete setup zsh | source /dev/stdin
