@@ -15,11 +15,11 @@ let
     name = "http-url-handler";
     desktopName = "HTTP URL handler";
     comment = "Open an HTTP/HTTPS URL with a particular browser";
-    exec = "/etc/open_url.py %u";
+    exec = "/etc/open_url.sh %u";
     type = "Application";
     terminal = "false";
     extraEntries = ''
-      TryExec=/etc/open_url.py
+      TryExec=/etc/open_url.sh
       X-MultipleArgs=false
       NoDisplay=true
       MimeType=x-scheme-handler/http;x-scheme-handler/https
@@ -122,8 +122,8 @@ in
           source = ./scripts/restart_goa_daemon.sh;
           mode = "0755";
         };
-        "open_url.py" = {
-          source = ./scripts/open_url.py;
+        "open_url.sh" = {
+          source = ./scripts/open_url.sh;
           mode = "0755";
         };
       };
