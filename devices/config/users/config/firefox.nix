@@ -31,6 +31,13 @@ in
             border-radius: 0 !important;
           }
         '';
+        ".mozilla/firefox/default/chrome/userContent.css".text = ''
+          /* Custom scrollbar */
+          * {
+            scrollbar-width: auto;
+            scrollbar-color: #58a6ff transparent;
+          }
+        '';
       };
       programs.firefox = {
         enable = true;
@@ -56,6 +63,10 @@ in
               "media.ffmpeg.vaapi.enabled" = true;
               "media.ffvpx.enabled" = false;
               "media.rdd-vpx.enabled" = false;
+
+              # https://wiki.archlinux.org/index.php/Firefox/Tweaks#Performance
+              "browser.preferences.defaultPerformanceSettings.enabled" = false;
+              "dom.ipc.processCount" = 8;
             };
           };
         };
