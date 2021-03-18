@@ -27,6 +27,13 @@ in
       # changes in each release.
       home.stateVersion = "21.03";
 
+      # https://github.com/rycee/home-manager/blob/master/modules/targets/generic-linux.nix#blob-path
+      targets.genericLinux.enable = true;
+      targets.genericLinux.extraXdgDataDirs = [
+        "/usr/share"
+        "/usr/local/share"
+      ];
+
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
 
@@ -123,6 +130,7 @@ in
           "Pictures/backgrounds/default.jpeg".source = ../../assets/wallpaper.jpg;
           ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
           ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
+          # ".config/kitty/kitty-session-tripper.conf".source = ./dotfiles/kitty-session-tripper.conf;
           ".vimrc".source = ./dotfiles/.vimrc;
           # Fix cursor theme
           ".icons/default/index.theme".text = ''
