@@ -17,6 +17,9 @@
         extraConfig = {
           core.editor = "vim";
           pull.rebase = "false";
+          init = {
+            defaultBranch = "main";
+          };
         };
       };
     };
