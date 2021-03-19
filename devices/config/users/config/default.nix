@@ -77,7 +77,7 @@ in
       ];
 
       home.sessionVariables = {
-        BROWSER = "firefox";
+        # BROWSER = "/etc/open_url.sh";
         NIXOS_CONFIG = "/home/gean/nix-config/devices/desktop.nix";
         OPENER = "xdg-open";
         READER = "zathura";

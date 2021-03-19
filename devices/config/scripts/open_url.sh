@@ -49,5 +49,14 @@ if [[
 then
   google-chrome-stable $url
 else
-  $BROWSER $url
+  if [[
+    $host == *"TNB3000"*
+  ]];
+  then
+    # requires `Open external links in a container` addon
+    # firefox "ext+container:name=Work&url=$url"
+    firefox $url
+  else
+    firefox $url
+  fi
 fi

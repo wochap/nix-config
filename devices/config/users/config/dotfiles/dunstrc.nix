@@ -10,7 +10,7 @@
     background = "#202020FF"; #RRGGBBAA
     alignment = "left";
     always_run_script = true;
-    browser = "firefox";
+    # browser = "/etc/open_url.sh";
     class = "Dunst";
     corner_radius = 0;
     follow = "mouse";
