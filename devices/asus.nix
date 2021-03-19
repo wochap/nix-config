@@ -48,7 +48,7 @@ in
       # Setup keyboard
       layout = "latam";
       xkbModel = "pc104";
-      xkbVariant = "altgr-intl";
+      # xkbVariant = "altgr-intl";
 
       # videoDrivers = [
       #   "nouveau"
