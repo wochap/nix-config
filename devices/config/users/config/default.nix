@@ -101,7 +101,6 @@ in
           "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
-          "x-scheme-handler/unknown" = [ "google-chrome.desktop" ];
           "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
         };
         mimeApps.associations.added = {
@@ -110,6 +109,7 @@ in
           "image/png" = [ "org.gnome.eog.desktop" ];
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
+          "text/html" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
           "video/mp4" = [ "mpv.desktop" ];
           "video/x-matroska" = [ "mpv.desktop" ];
           "x-scheme-handler/http" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
