@@ -133,10 +133,7 @@ in
           # ".config/kitty/kitty-session-tripper.conf".source = ./dotfiles/kitty-session-tripper.conf;
           ".vimrc".source = ./dotfiles/.vimrc;
           # Fix cursor theme
-          ".icons/default/index.theme".text = ''
-            [icon theme]
-            Inherits=capitaine-cursors
-          '';
+          ".icons/default".source = "${pkgs.capitaine-cursors}/share/icons/capitaine-cursors";
           ".config/nixpkgs/config.nix".text = ''
             { allowUnfree = true; }
           '';
