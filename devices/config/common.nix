@@ -61,6 +61,8 @@ in
         options v4l2loopback devices=1 exclusive_caps=1
       '';
       kernelParams = [
+        "nouveau.modeset=0"
+
         # Fix fn keys keychron
         "hid_apple.fnmode=0"
       ];
@@ -441,6 +443,7 @@ in
     hardware.opengl.driSupport = true;
     # Hardware video acceleration
     hardware.opengl.extraPackages = with pkgs; [
+      libvdpau
       vaapiVdpau
       libvdpau-va-gl
     ];
