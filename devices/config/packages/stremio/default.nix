@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}, ... }:
+{ stdenv, pkgs ? import <nixpkgs> {}, ... }:
 
 # source: https://gist.githubusercontent.com/jasonwhite/d32f5806921471c857148276bfd32806/raw/b4692118746f8dfa40ffeb1968760e444ad75a83/stremio.nix
 # source: https://github.com/alexandru-balan/Stremio-Install-Scripts/blob/master/installStremioArch.sh
@@ -56,5 +56,14 @@ pkgs.qt5.mkDerivation rec {
 
   installPhase = ''
     make -f release.makefile install PREFIX="$out/"
+    mkdir -p "$out/bin"
+    ln -s "$out/opt/stremio/stremio" "$out/bin/stremio"
   '';
+
+  meta = with stdenv.lib; {
+    description = "Stremio";
+    homepage = "https://github.com/Stremio/stremio-shell";
+    license = licenses.bsd2;
+    platforms = platforms.all;
+  };
 }
