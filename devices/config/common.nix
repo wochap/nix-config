@@ -334,7 +334,7 @@ in
             "Iosevka"
           ];
         })
-      ] ;
+      ];
       fontconfig = {
         allowBitmaps = true;
         defaultFonts = {
