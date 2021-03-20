@@ -86,6 +86,8 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ sudo flatpak override com.stremio.Stremio --env=QT_AUTO_SCREEN_SCALE_FACTOR=0
     $ sudo flatpak override com.stremio.Stremio --env=QT_SCALE_FACTOR=1.5
     $ sudo flatpak override com.stremio.Stremio --env=QT_FONT_DPI=144
+    $ sudo flatpak override com.stremio.Stremio --env=XCURSOR_SIZE=40
+    $ sudo flatpak --user override com.stremio.Stremio --filesystem=/home/gean/.icons/:ro
     ```
 1. Setup [Lorri](https://github.com/target/lorri)
     ```
