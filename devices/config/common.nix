@@ -296,11 +296,12 @@ in
       qt5ct
     ] ++ [
       localPkgs.eww # custom widgets daemon
+      localPkgs.http-url-handler
       localPkgs.sddm-sugar-dark-greeter
       localPkgs.sddm-whitesur-greeter
+      # localPkgs.stremio # custom widgets daemon
       localPkgs.whitesur-dark-icons
       localPkgs.zscroll # scroll text in shells
-      localPkgs.http-url-handler
     ];
 
     fonts = {
