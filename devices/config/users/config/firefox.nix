@@ -49,14 +49,15 @@ in
             isDefault = true;
             settings = {
               "browser.tabs.tabMinWidth" = 5;
+              "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
               # Force webrender
-              "gfx.webrender.all" = false;
+              # "gfx.webrender.all" = true;
 
               # Force opengl
-              "layers.acceleration.force-enabled" = false;
+              # "layers.acceleration.force-enabled" = true;
 
-              "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+              # Fix right click
               "ui.context_menus.after_mouseup" = true;
 
               # Enable video hardware acceleration
@@ -67,6 +68,10 @@ in
               # https://wiki.archlinux.org/index.php/Firefox/Tweaks#Performance
               "browser.preferences.defaultPerformanceSettings.enabled" = false;
               "dom.ipc.processCount" = 8;
+
+              # Workaround for when xdg.portal is enabled? set to false
+              # https://bugzilla.mozilla.org/show_bug.cgi?id=1618094
+              # "network.protocol-handler.external-default" = false;
             };
           };
         };
