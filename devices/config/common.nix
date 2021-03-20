@@ -301,7 +301,7 @@ in
       localPkgs.http-url-handler
       localPkgs.sddm-sugar-dark-greeter
       localPkgs.sddm-whitesur-greeter
-      # localPkgs.stremio # custom widgets daemon
+      localPkgs.stremio
       localPkgs.whitesur-dark-icons
       localPkgs.zscroll # scroll text in shells
     ];
@@ -447,7 +447,7 @@ in
       vaapiVdpau
       libvdpau-va-gl
     ];
-    # hardware.opengl.driSupport32Bit = !isMbp;
+    hardware.opengl.driSupport32Bit = !isMbp;
 
     # Enable audio
     sound.enable = true;
@@ -472,7 +472,7 @@ in
     security.pam.services.sddm.enableGnomeKeyring = true;
 
     # Change flatpak env vars https://github.com/flatpak/flatpak/issues/2980
-    services.flatpak.enable = true;
+    # services.flatpak.enable = true;
 
     virtualisation.docker.enable = true;
     # virtualisation.anbox.enable = true;
