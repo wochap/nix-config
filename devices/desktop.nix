@@ -37,6 +37,9 @@ in
       interfaces.wlp39s0.useDHCP = true;
     };
 
+    # Fix windows dualboot clock
+    time.hardwareClockInLocalTime = true;
+
     hardware = {
       video.hidpi.enable = true;
     };
