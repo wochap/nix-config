@@ -45,7 +45,8 @@ in
     ];
 
     environment.variables = {
-      TERM = "kitty";
+      TERM = "xterm-kitty";
+      TERMINFO_DIRS = "${pkgs.kitty.terminfo.outPath}/share/terminfo";
     };
 
     # XXX: Copied verbatim from https://github.com/iknow/nix-channel/blob/7bf3584e0bef531836050b60a9bbd29024a1af81/darwin-modules/lorri.nix
