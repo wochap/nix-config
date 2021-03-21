@@ -113,5 +113,22 @@ in
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
     programs.zsh.enable = true;
     programs.fish.enable = true;
+
+    services.yabai = {
+      enable = true;
+      package = pkgs.yabai;
+      enableScriptingAddition = true;
+      config = {
+
+      };
+      extraConfig = ''
+      '';
+    };
+
+    services.skhd = {
+      enable = true;
+      skhdConfig = ''
+      '';
+    };
   };
 }
