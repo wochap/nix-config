@@ -28,7 +28,7 @@
       home.file = lib.mkMerge [
         {
           ".ssh/config".source = ./dotfiles/ssh-config;
-          ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
+          ".config/kitty/kitty.conf".source = ./dotfiles/kitty-darwin.conf;
           ".vimrc".source = ./dotfiles/.vimrc;
           ".config/nixpkgs/config.nix".text = ''
             { allowUnfree = true; }
