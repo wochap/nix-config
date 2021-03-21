@@ -45,9 +45,6 @@ in
         };
       };
 
-      # Allow unfree packages
-      nixpkgs.config.allowUnfree = true;
-
       home.extraProfileCommands = ''
         if [[ -d "$out/share/applications" ]] ; then
           ${pkgs.desktop-file-utils}/bin/update-desktop-database $out/share/applications
@@ -67,7 +64,7 @@ in
         google-chrome
         kdeApplications.kdenlive # video editor
         mysql-workbench
-        nix-prefetch-git
+        nix-prefetch-git # get fetchgit hashes
         obs-studio # video capture
         olive-editor
         openshot-qt # video editor
