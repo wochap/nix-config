@@ -1,9 +1,8 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
-    # Include configuration
-    ./config/default.nix
+    ./config/default-darwin.nix
   ];
 
   config = {

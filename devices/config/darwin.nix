@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  localPkgs = import ./packages { pkgs = pkgs; };
+  # localPkgs = import ./packages { pkgs = pkgs; };
   home-manager = builtins.fetchGit {
     url = "https://github.com/nix-community/home-manager.git";
     rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
@@ -11,9 +11,9 @@ in
 {
   imports = [
     # Install home-manager
-    (import "${home-manager}/nixos")
+    (import "${home-manager}/nix-darwin")
 
-    ./users/gean.nix
+    ./users/gean-darwin.nix
   ];
 
   # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
@@ -26,22 +26,22 @@ in
       example = "xorg"; # xorg, wayland
       description = "Display server type, used by common config files.";
     };
-    _isHidpi = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      example = true;
-      description = "Flag for hidpi displays.";
-    };
   };
 
   config = {
     _displayServer = "darwin";
 
+    # Used for backwards compatibility, please read the changelog before changing.
+    # $ darwin-rebuild changelog
+    system.stateVersion = 4;
+
+    # Allow unfree packages
+    nixpkgs.config.allowUnfree = true;
+
     environment = {
       etc = {
         "open_url.sh" = {
           source = ./scripts/open_url.sh;
-          mode = "0755";
         };
       };
       shellAliases = {
@@ -56,19 +56,7 @@ in
     fonts = {
       enableFontDir = true;
       fonts = with pkgs; [
-        corefonts # basic fonts for office
         fira-code
-        font-awesome
-        font-awesome_4
-        material-icons
-        noto-fonts
-        noto-fonts-cjk
-        noto-fonts-emoji
-        open-sans
-        roboto
-        roboto-slab
-        siji
-        terminus_font
 
         (nerdfonts.override {
           fonts = [

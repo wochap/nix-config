@@ -5,8 +5,8 @@
   imports = [
     # ./firefox.nix
     # ./fish.nix
-    ./git.nix
-    ./zsh.nix
+    # ./git.nix
+    # ./zsh.nix
   ];
 
   config = {
@@ -24,12 +24,8 @@
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
 
-
-      # Allow unfree packages
-      nixpkgs.config.allowUnfree = true;
-
       home.sessionVariables = {
-        NIXOS_CONFIG = "/home/gean/nix-config/devices/desktop.nix";
+        # NIXOS_CONFIG = "/home/gean/nix-config/devices/desktop.nix";
       };
 
       # Add config files to home folder
