@@ -12,9 +12,13 @@ in
   imports = [
     # Install home-manager
     (import "${home-manager}/nixos")
+
+    ./users/gean.nix
   ];
 
   config = {
+    _displayServer = "darwin";
+
     environment = {
       etc = {
         "open_url.sh" = {

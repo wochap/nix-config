@@ -1,9 +1,12 @@
 { config, pkgs, ... }:
 
+let
+  isDarwin = config._displayServer == "darwin";
+in
 {
   imports = [
     # Include configuration
-    ./config/default.nix
+    if isDarwin then ./config/default-darwin.nix else ./config/default.nix
   ];
 
   config = {
