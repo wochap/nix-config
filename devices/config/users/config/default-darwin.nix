@@ -5,8 +5,8 @@
   imports = [
     # ./firefox.nix
     # ./fish.nix
-    # ./git.nix
-    # ./zsh.nix
+    ./git.nix
+    ./zsh.nix
   ];
 
   config = {
