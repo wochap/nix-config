@@ -40,7 +40,13 @@ in
 
     environment.systemPackages = with pkgs; [
       lorri
+      direnv
+      fzf
     ];
+
+    environment.variables = {
+      TERM = "kitty";
+    };
 
     # XXX: Copied verbatim from https://github.com/iknow/nix-channel/blob/7bf3584e0bef531836050b60a9bbd29024a1af81/darwin-modules/lorri.nix
     launchd.user.agents = {
@@ -97,11 +103,10 @@ in
       "/libexec"
     ];
 
-    # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.gean = {
       shell = pkgs.zsh;
       uid = 1000;
-      home = "/home/gean";
+      home = "/Users/gean";
     };
 
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619

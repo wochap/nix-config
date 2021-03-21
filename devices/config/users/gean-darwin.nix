@@ -10,7 +10,7 @@
       # Home Manager needs a bit of information about you and the
       # paths it should manage.
       home.username = "gean";
-      home.homeDirectory = "/home/gean";
+      home.homeDirectory = "/Users/gean";
     };
   };
 }

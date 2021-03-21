@@ -24,10 +24,6 @@
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
 
-      home.sessionVariables = {
-        # NIXOS_CONFIG = "/home/gean/nix-config/devices/desktop.nix";
-      };
-
       # Add config files to home folder
       home.file = lib.mkMerge [
         {
