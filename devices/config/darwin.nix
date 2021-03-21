@@ -127,8 +127,8 @@ in
         yabai -m config window_shadow float
         yabai -m config window_border on
         yabai -m config window_border_width 2
-        yabai -m config active_window_border_color \#2C4E9C
-        yabai -m config normal_window_border_color \#282e3a
+        yabai -m config active_window_border_color 0xFFADBF8A
+        yabai -m config normal_window_border_color 0xFF555555
         yabai -m config split_ratio 0.50
         yabai -m config mouse_modifier cmd
         yabai -m config mouse_action1 move
@@ -141,10 +141,10 @@ in
       enable = true;
       skhdConfig = ''
         # Focus desktop
-        cmd - 1  : yabai -m display --focus 1
-        cmd - 2  : yabai -m display --focus 2
-        cmd - 3  : yabai -m display --focus 3
-        cmd - 4  : yabai -m display --focus 4
+        cmd + 1  : yabai -m display --focus 1
+        cmd + 2  : yabai -m display --focus 2
+        cmd + 3  : yabai -m display --focus 3
+        cmd + 4  : yabai -m display --focus 4
 
         # Send window to desktop
         cmd + shift - 1  : yabai -m window --space 1
