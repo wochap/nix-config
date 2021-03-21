@@ -45,7 +45,7 @@ in
     ];
 
     environment.variables = {
-      TERM = "xterm-kitty";
+      # TERM = "xterm-kitty";
       TERMINFO_DIRS = "${pkgs.kitty.terminfo.outPath}/share/terminfo";
     };
 
@@ -115,9 +115,9 @@ in
     programs.fish.enable = true;
 
     services.yabai = {
-      enable = true;
+      enable = false;
       package = pkgs.yabai;
-      enableScriptingAddition = true;
+      enableScriptingAddition = false;
       config = {
 
       };
@@ -138,7 +138,7 @@ in
     };
 
     services.skhd = {
-      enable = true;
+      enable = false;
       skhdConfig = ''
         # Focus desktop
         cmd + 1  : yabai -m display --focus 1
@@ -152,7 +152,7 @@ in
         cmd + shift - 3  : yabai -m window --space 3
         cmd + shift - 4  : yabai -m window --space 4
 
-        cmd - f : yabai -m window --toggle zoom-fullscreen
+        fn + cmd - f : yabai -m window --toggle zoom-fullscreen
       '';
     };
   };
