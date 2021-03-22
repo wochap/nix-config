@@ -28,7 +28,7 @@ ctrl + alt - y : yabai -m window --toggle sticky
 ### FOCUS/SWAP
 
 # Rotate
-alt + grave : yabai -m window --toggle split
+alt - 0x32 : yabai -m window --toggle split
 
 ### FOCUS/SWAP
 
@@ -54,4 +54,12 @@ alt + shift - f8: yabai -m window --space 8
 
 ### APPLICATION KEYBINDINGS
 
-# alt + cmd - b, f :
+# Register browser mode
+:: browser
+# Activate browser mode on pressing
+alt + cmd - b; browser
+# Exit browser mode on pressing
+browser < escape; default
+browser < f : /Applications/Firefox.app/Contents/MacOS/firefox
+browser < c : /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
+alt + cmd - f : open -R ~/
