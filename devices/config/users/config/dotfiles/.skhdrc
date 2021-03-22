@@ -52,4 +52,6 @@ alt + shift - f8: yabai -m window --space 8
 
 ### APPLICATION KEYBINDINGS
 
-# alt + cmd - b, f :
+alt + cmd - b, f : /Applications/Firefox.app/Contents/MacOS/firefox
+alt + cmd - b, c : /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
+alt + cmd - f : open -R ~/
