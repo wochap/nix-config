@@ -1,5 +1,7 @@
 ### YABAI HOTKEYS
 
+# source: https://github.com/nikhgupta/dotfiles/blob/osx/user/.config/skhd/skhdrc
+
 # Open terminal
 cmd - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
 
