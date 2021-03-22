@@ -3,10 +3,10 @@ alt - 1 : yabai -m space --focus 1
 alt - 2 : yabai -m space --focus 2
 alt - 3 : yabai -m space --focus 3
 alt - 4 : yabai -m space --focus 4
-alt - F1 : yabai -m space --focus 5
-alt - F2 : yabai -m space --focus 6
-alt - F3 : yabai -m space --focus 7
-alt - F4 : yabai -m space --focus 8
+alt - f1 : yabai -m space --focus 5
+alt - f2 : yabai -m space --focus 6
+alt - f3 : yabai -m space --focus 7
+alt - f4 : yabai -m space --focus 8
 
 # Send window to desktop
 alt + shift - 1 : yabai -m window --space 1
