@@ -2,11 +2,13 @@
 
 # source: https://github.com/nikhgupta/dotfiles/blob/osx/user/.config/skhd/skhdrc
 
+alt - w : yabai -m window --close
+
 # Open terminal
 alt - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
 
 # Toggle window fullscreen zoom
-shift + alt - f : yabai -m window --toggle zoom-fullscreen
+alt + shift - f : yabai -m window --toggle zoom-fullscreen
 
 # Toggle window native fullscreen
 alt - f : yabai -m window --toggle native-fullscreen
@@ -60,6 +62,6 @@ alt + shift - f8: yabai -m window --space 8
 alt + cmd - b; browser
 # Exit browser mode on pressing
 browser < escape; default
-browser < f : /Applications/Firefox.app/Contents/MacOS/firefox
-browser < c : /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome
+browser < f : /Applications/Firefox.app/Contents/MacOS/firefox; default
+browser < c : /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome; default
 alt + cmd - f : open -R ~/
