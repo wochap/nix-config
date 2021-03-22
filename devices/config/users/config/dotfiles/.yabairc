@@ -23,4 +23,4 @@ yabai -m config window_topmost on
 yabai -m config layout bsp
 
 # window rules
-yabai -m rule --add app="*" manage=off
+# yabai -m rule --add app="*" manage=off
