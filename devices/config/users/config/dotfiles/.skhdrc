@@ -1,8 +1,8 @@
 # Focus desktop
 fn + cmd - 1 : yabai -m space --focus 1
-fn + cmd - 2 : yabai -m space --focus 2
-fn + cmd - 3 : yabai -m space --focus 3
-fn + cmd - 4 : yabai -m space --focus 4
+alt - 2 : yabai -m space --focus 2
+alt - 3 : yabai -m space --focus 3
+alt - 4 : yabai -m space --focus 4
 
 # Send window to desktop
 cmd + shift - 1 : yabai -m window --space 1
@@ -19,3 +19,7 @@ alt + cmd - f : yabai -m space --layout float
 
 # Apps
 cmd - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
+
+
+# toggle window fullscreen zoom
+# alt - f : yabai -m window --toggle zoom-fullscreen
