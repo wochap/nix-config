@@ -1,3 +1,35 @@
+### YABAI HOTKEYS
+
+# Open terminal
+cmd - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
+
+# Toggle window fullscreen zoom
+shift + alt - f : yabai -m window --toggle zoom-fullscreen
+
+# Toggle window native fullscreen
+alt - f : yabai -m window --toggle native-fullscreen
+
+# Alternate between the tiled and monocle layout
+alt - m : yabai -m space --layout $(yabai -m query --spaces --space | jq -r 'if .type == "bsp" then "stack" else "bsp" end')
+
+# Change to float layout
+alt - l : yabai -m space --layout float
+
+### STATE/FLAGS
+
+# Toggle bsp and float
+alt - s : yabai -m window --toggle float
+
+# Toggle sticky
+ctrl + alt - y : yabai -m window --toggle sticky
+
+### FOCUS/SWAP
+
+# Rotate
+alt + grave : yabai -m window --toggle split
+
+### FOCUS/SWAP
+
 # Focus desktop
 alt - 1 : yabai -m space --focus 1
 alt - 2 : yabai -m space --focus 2
@@ -13,17 +45,11 @@ alt + shift - 1 : yabai -m window --space 1
 alt + shift - 2 : yabai -m window --space 2
 alt + shift - 3 : yabai -m window --space 3
 alt + shift - 4 : yabai -m window --space 4
+alt + shift - f5 : yabai -m window --space 5
+alt + shift - f6 : yabai -m window --space 6
+alt + shift - f7 : yabai -m window --space 7
+alt + shift - f8: yabai -m window --space 8
 
-# Change layout of desktop
-# alt - b : yabai -m space --layout bsp
-alt - m : yabai -m space --layout next
-# alt - f : yabai -m space --layout float
+### APPLICATION KEYBINDINGS
 
-alt - f : yabai -m window --toggle zoom-fullscreen
-
-# Apps
-cmd - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
-
-
-# toggle window fullscreen zoom
-# alt - f : yabai -m window --toggle zoom-fullscreen
+# alt + cmd - b, f :
