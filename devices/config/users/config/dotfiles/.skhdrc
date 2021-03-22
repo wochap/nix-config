@@ -20,7 +20,7 @@ alt - l : yabai -m space --layout float
 ### STATE/FLAGS
 
 # Toggle bsp and float
-alt - s : yabai -m window --toggle float
+alt - s : yabai -m window --toggle float; yabai -m window --grid 5:5:1:1:3:3
 
 # Toggle sticky
 ctrl + alt - y : yabai -m window --toggle sticky
