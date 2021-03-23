@@ -249,5 +249,17 @@ super + shift + Right
 super + shift + Left
   xdotool keyup Left key --clearmodifiers Shift+Home
 
+super + ctrl + Right
+  xdotool keyup Right key --clearmodifiers Control_L+End
+
+super + ctrl + Left
+  xdotool keyup Left key --clearmodifiers Control_L+Home
+
+super + ctrl + shift + Right
+  xdotool keyup Right key --clearmodifiers Control_L+Shift+End
+
+super + ctrl + shift + Left
+  xdotool keyup Left key --clearmodifiers Control_L+Shift+Home
+
 super + d
   xdotool keyup d key --clearmodifiers Delete
