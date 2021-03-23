@@ -114,8 +114,8 @@ super + grave
 #   bspc node -f {next,prev}.local
 
 # Focus the next|previous workspace in the current monitor
-super + {Left,Right}
-	bspc desktop -f {prev,next}.local
+# super + {Left,Right}
+# 	bspc desktop -f {prev,next}.local
 
 # focus the last node/desktop
 # super + {grave,Tab}
@@ -230,3 +230,20 @@ XF86AudioLowerVolume
 # Toggle mute
 XF86AudioMute
   /etc/eww_vol.sh mute
+
+### Remap
+
+# https://askubuntu.com/questions/863537/xdotool-how-do-i-select-text-using-shifthome-or-shiftend
+# https://github.com/baskerville/sxhkd/issues/86
+
+super + Right
+  xdotool keyup Right key --clearmodifiers End
+
+super + Left
+  xdotool keyup Left key --clearmodifiers Home
+
+super + shift + Right
+  xdotool keyup Shift+Right key --clearmodifiers Shift+End
+
+super + shift + Left
+  xdotool keyup Shift+Left key --clearmodifiers Shift+Home

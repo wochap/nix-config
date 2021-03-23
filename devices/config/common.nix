@@ -185,6 +185,7 @@ in
       wget
       wmctrl # perform actions on windows
       wmutils-core
+      xautomation # simulate key press
       xclip # clipboard cli
       xdo # perform actions on windows
       xdotool # fake keyboard/mouse input
