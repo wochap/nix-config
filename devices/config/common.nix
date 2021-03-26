@@ -18,6 +18,7 @@ in
     ./mixins/keychron.nix
     ./mixins/apps-gnome.nix
     ./mixins/apps-xfce.nix
+    ./mixins/docker.nix
     ./users/gean.nix
   ];
 
@@ -143,7 +144,6 @@ in
     # Change flatpak env vars https://github.com/flatpak/flatpak/issues/2980
     # services.flatpak.enable = true;
 
-    virtualisation.docker.enable = true;
     # virtualisation.anbox.enable = true;
 
     # Required for polybar `docker module` script

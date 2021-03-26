@@ -38,7 +38,6 @@ in
       zip
 
       # APPS CLI
-      docker-compose
       gotop # monitor system
       htop # monitor system
       neofetch # print computer info
