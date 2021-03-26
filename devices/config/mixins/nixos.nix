@@ -44,6 +44,28 @@ in
       wheelNeedsPassword = false;
     };
 
+    # Enable bluetooth
+    hardware.bluetooth.enable = true;
+
+    # Enable OpenGL
+    hardware.opengl.enable = true;
+    hardware.opengl.driSupport = true;
+    # Hardware video acceleration
+    hardware.opengl.extraPackages = with pkgs; [
+      libvdpau
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+    hardware.opengl.driSupport32Bit = !isMbp;
+
+    # Enable audio
+    sound.enable = true;
+    hardware.pulseaudio.enable = true;
+    # hardware.pulseaudio.support32Bit = true;
+
+    # Apply trim to SSDs
+    services.fstrim.enable = true;
+
     documentation.man.generateCaches = true;
     documentation.dev.enable = true;
   };

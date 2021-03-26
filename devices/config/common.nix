@@ -116,35 +116,11 @@ in
     # Add wifi tray
     programs.nm-applet.enable = true;
 
-    # Enable bluetooth
-    hardware.bluetooth.enable = true;
-
-    # Enable OpenGL
-    hardware.opengl.enable = true;
-    hardware.opengl.driSupport = true;
-    # Hardware video acceleration
-    hardware.opengl.extraPackages = with pkgs; [
-      libvdpau
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-    hardware.opengl.driSupport32Bit = !isMbp;
-
-    # Enable audio
-    sound.enable = true;
-    hardware.pulseaudio.enable = true;
-    # hardware.pulseaudio.support32Bit = true;
-
     # Auto run nix-shell
     services.lorri.enable = true;
 
-    # Apply trim to SSDs
-    services.fstrim.enable = true;
-
     # Change flatpak env vars https://github.com/flatpak/flatpak/issues/2980
     # services.flatpak.enable = true;
-
-    # virtualisation.anbox.enable = true;
 
     # Required for polybar `docker module` script
     security.sudo.configFile = ''
