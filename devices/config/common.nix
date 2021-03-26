@@ -11,6 +11,8 @@ in
   imports = [
     ./mixins/nixos.nix
     ./mixins/overlays.nix
+    ./mixins/tools.nix
+    ./mixins/tools-xorg.nix
     ./users/gean.nix
   ];
 
@@ -123,48 +125,6 @@ in
     # List packages installed in system profile.
     # TODO: remove xorg packages if wayland is enabled
     environment.systemPackages = with pkgs; [
-      # Tools
-      # base-devel
-      bc # calculator cli
-      dex # execute DesktopEntry files
-      direnv # auto run nix-shell
-      dos2unix
-      evtest
-      ffmpeg-full # music/video codecs?
-      fzf # fuzzy search
-      git
-      glib # gio
-      glxinfo
-      gnumake # make
-      inxi # check compositor running
-      killall
-      libqalculate
-      libva-utils # verifying VA-API
-      manpages
-      mpc_cli
-      mpd
-      mpd_clientlib # mpd module
-      notify-desktop # test notifications
-      pciutils # lspci and others commands
-      pulsemixer
-      trash-cli # required by vscode
-      unzip
-      vdpauinfo # verifying VDPAU
-      vim
-      wget
-      wmctrl # perform actions on windows
-      wmutils-core
-      xautomation # simulate key press
-      xclip # clipboard cli
-      xdo # perform actions on windows
-      xdotool # fake keyboard/mouse input
-      xlayoutdisplay # fix dpi
-      xorg.xdpyinfo # show monitor info
-      xorg.xev # get key actual name
-      xorg.xeyes # check if app is running on wayland
-      xorg.xkbcomp # print keymap
-      zip
-
       # Apps CLI
       docker-compose
       feh # image viewer
