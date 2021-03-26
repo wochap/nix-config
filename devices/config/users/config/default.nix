@@ -51,26 +51,8 @@ in
         fi
       '';
 
-      # User packages
       home.packages = with pkgs; [
-        # DE apps
         rofi-calc
-
-        # Dev tools
-        gitAndTools.gh
-
-        # Apps
-        brave
-        google-chrome
-        kdeApplications.kdenlive # video editor
-        mysql-workbench
-        nix-prefetch-git # get fetchgit hashes
-        obs-studio # video capture
-        olive-editor
-        openshot-qt # video editor
-        postman
-        slack
-        vscode
       ];
 
       home.sessionVariables = {

@@ -26,6 +26,7 @@ in
       mpc_cli
       mpd
       mpd_clientlib # mpd module
+      nix-prefetch-git # get fetchgit hashes
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer
@@ -37,6 +38,7 @@ in
       zip
 
       # APPS CLI
+      gitAndTools.gh
       gotop # monitor system
       htop # monitor system
       neofetch # print computer info
@@ -57,17 +59,29 @@ in
 
       # APPS
       anki # mnemonic tool
+      brave
       deluge # torrent client
       discord
       etcher # create booteable usbs
       filelight # view disk usage
-      inkscape # photo editor cli/gui
-      nomacs # image viewer/editor
+      google-chrome
+      mysql-workbench
+      postman
       screenkey # show key pressed
       simplenote
+      slack
       sublime3 # text editor
+      vscode
       zathura # PDF viewer
       zoom-us
+
+      # APPS MEDIA
+      inkscape # photo editor cli/gui
+      kdeApplications.kdenlive # video editor
+      nomacs # image viewer/editor
+      obs-studio # video capture
+      olive-editor
+      openshot-qt # video editor
 
       # Themes
       adwaita-qt
