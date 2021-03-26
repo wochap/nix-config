@@ -17,7 +17,7 @@ in
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
     ./mixins/apps-gnome.nix
-    # ./mixins/apps-xfce.nix
+    ./mixins/apps-xfce.nix
     ./users/gean.nix
   ];
 
@@ -104,12 +104,6 @@ in
       "/share/zsh"
       "/libexec"
     ];
-
-    # Required by thunar
-    # services.udisks2.enable = true;
-    services.gvfs.enable = true;
-    services.gvfs.package = pkgs.xfce.gvfs;
-    services.tumbler.enable = true;
 
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
     programs.zsh.enable = true;

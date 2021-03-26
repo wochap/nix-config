@@ -17,7 +17,6 @@ in
       ffmpeg-full # music/video codecs?
       fzf # fuzzy search
       git
-      glib # gio
       glxinfo # opengl utils
       gnumake # make
       inxi # check compositor running
@@ -69,15 +68,6 @@ in
       screenkey # show key pressed
       simplenote
       sublime3 # text editor
-      xfce.exo
-      (xfce.thunar.override {
-        thunarPlugins = [
-          xfce.thunar-archive-plugin
-        ];
-      })
-      xfce.thunar # file manager
-      xfce.thunar-volman # auto mont devices
-      xfce.xfconf # where thunar settings are saved
       zathura # PDF viewer
       zoom-us
 
