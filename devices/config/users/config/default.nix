@@ -6,13 +6,13 @@ let
 in
 {
   imports = [
-    ./firefox.nix
-    ./fish.nix
-    ./git.nix
-    ./gtk.nix
-    ./picom.nix
-    ./polybar.nix
-    ./zsh.nix
+    ./mixins/firefox.nix
+    ./mixins/fish.nix
+    ./mixins/git.nix
+    ./mixins/gtk.nix
+    ./mixins/picom.nix
+    ./mixins/polybar.nix
+    ./mixins/zsh.nix
   ];
 
   config = {

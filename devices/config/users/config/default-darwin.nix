@@ -3,10 +3,8 @@
 
 {
   imports = [
-    # ./firefox.nix
-    # ./fish.nix
-    ./git.nix
-    ./zsh.nix
+    ./mixins/git.nix
+    ./mixins/zsh.nix
   ];
 
   config = {
