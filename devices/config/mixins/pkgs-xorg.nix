@@ -16,6 +16,9 @@
       xorg.xeyes # check if app is running on wayland
       xorg.xkbcomp # print keymap
 
+      # APPS CLI
+      scrot # screen capture
+
       # DE
       # pywal # theme color generator cli
       # xmagnify # magnifying glass

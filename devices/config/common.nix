@@ -16,6 +16,8 @@ in
     ./mixins/ipwebcam.nix
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
+    ./mixins/apps-gnome.nix
+    # ./mixins/apps-xfce.nix
     ./users/gean.nix
   ];
 
@@ -55,10 +57,6 @@ in
 
     environment = {
       etc = {
-        "restart_goa_daemon.sh" = {
-          source = ./scripts/restart_goa_daemon.sh;
-          mode = "0755";
-        };
         "open_url.sh" = {
           source = ./scripts/open_url.sh;
           mode = "0755";
@@ -145,19 +143,8 @@ in
     # Auto run nix-shell
     services.lorri.enable = true;
 
-    # Fix https://github.com/NixOS/nixpkgs/issues/30866
-    programs.dconf.enable = true;
-
     # Apply trim to SSDs
     services.fstrim.enable = true;
-
-    # Required for gnome calendar and geary
-    services.gnome3.evolution-data-server.enable = true;
-    services.gnome3.gnome-online-accounts.enable = true;
-    services.gnome3.gnome-keyring.enable = true;
-
-    # Fix gnome-keyring when sddm is enabled
-    security.pam.services.sddm.enableGnomeKeyring = true;
 
     # Change flatpak env vars https://github.com/flatpak/flatpak/issues/2980
     # services.flatpak.enable = true;
