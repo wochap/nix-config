@@ -66,7 +66,7 @@ in
       };
 
       # Edit home files
-      xdg.enable true;
+      xdg.enable = true;
 
       # Setup dotfiles
       home.file = lib.mkMerge [
