@@ -19,6 +19,7 @@ in
     ./mixins/apps-gnome.nix
     ./mixins/apps-xfce.nix
     ./mixins/docker.nix
+    ./mixins/lorri.nix
     ./users/gean.nix
   ];
 
@@ -112,12 +113,6 @@ in
 
     # Remember private keys
     programs.ssh.startAgent = true;
-
-    # Add wifi tray
-    programs.nm-applet.enable = true;
-
-    # Auto run nix-shell
-    services.lorri.enable = true;
 
     # Change flatpak env vars https://github.com/flatpak/flatpak/issues/2980
     # services.flatpak.enable = true;

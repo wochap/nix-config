@@ -11,7 +11,6 @@ in
       # base-devel
       bc # calculator cli
       dex # execute DesktopEntry files
-      direnv # auto run nix-shell
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
       ffmpeg-full # music/video codecs?
