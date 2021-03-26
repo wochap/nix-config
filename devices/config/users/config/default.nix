@@ -68,7 +68,7 @@ in
       # Edit home files
       xdg.enable true;
 
-      # Add config files to home folder
+      # Setup dotfiles
       home.file = lib.mkMerge [
         {
           ".config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ./dotfiles/linux.sublime-keymap.json;
@@ -82,11 +82,13 @@ in
           ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
           # ".config/kitty/kitty-session-tripper.conf".source = ./dotfiles/kitty-session-tripper.conf;
           ".vimrc".source = ./dotfiles/.vimrc;
-          # Fix cursor theme
-          ".icons/default".source = "${pkgs.capitaine-cursors}/share/icons/capitaine-cursors";
           ".config/nixpkgs/config.nix".text = ''
             { allowUnfree = true; }
           '';
+
+          # Fix cursor theme
+          ".icons/default".source = "${pkgs.capitaine-cursors}/share/icons/capitaine-cursors";
+
         }
         (lib.mkIf isXorg {
           ".config/rofi-theme.rasi".source = ./dotfiles/rofi-theme.rasi;
@@ -95,7 +97,7 @@ in
 
       programs.bash.enable = true;
 
-      programs.rofi = {
+      programs.rofi = lib.mkIf isXorg {
         enable = true;
       };
 
@@ -113,7 +115,7 @@ in
         defaultCacheTtl = 1800;
       };
 
-      services.redshift = {
+      services.redshift = lib.mkIf isXorg {
         enable = true;
         latitude = "-12.051408";
         longitude = "-76.922124";
@@ -123,7 +125,6 @@ in
         };
       };
 
-      # notifications
       services.dunst = lib.mkIf isXorg {
         enable = true;
         iconTheme = {
