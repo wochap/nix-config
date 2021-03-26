@@ -4,7 +4,6 @@ let
   localPkgs = import ../packages { pkgs = pkgs; };
 in
 {
-
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
@@ -93,7 +92,6 @@ in
       qt5.qtgraphicaleffects # required by gddm themes
       qt5ct
     ] ++ [
-      localPkgs.eww # custom widgets daemon
       localPkgs.http-url-handler
       localPkgs.sddm-sugar-dark-greeter
       localPkgs.sddm-whitesur-greeter
