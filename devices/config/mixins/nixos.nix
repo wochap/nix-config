@@ -7,6 +7,7 @@ let
     ref = "release-20.09";
   };
   isHidpi = config._isHidpi;
+  isMbp = config.networking.hostName == "gmbp";
 in
 {
   imports = [

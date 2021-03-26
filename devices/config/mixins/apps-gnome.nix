@@ -8,7 +8,7 @@ in
     environment = {
       etc = {
         "restart_goa_daemon.sh" = {
-          source = ./scripts/restart_goa_daemon.sh;
+          source = ../scripts/restart_goa_daemon.sh;
           mode = "0755";
         };
       };

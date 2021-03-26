@@ -19,7 +19,7 @@ in
         noDockShadow = false;
         vSync = true;
         backend = "glx";
-        extraOptions = (builtins.readFile ./dotfiles/picom.conf);
+        extraOptions = (builtins.readFile ../dotfiles/picom.conf);
         package = pkgs.picom.overrideAttrs(o: {
           src = pkgs.fetchFromGitHub {
             # # No blur, aceptable fix for screen tearing but... artifacts++

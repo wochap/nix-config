@@ -5,7 +5,7 @@
     home-manager.users.gean = {
       # Edit linked files
       xdg.configFile = {
-        "fish/config.fish".text = lib.mkAfter (builtins.readFile ./dotfiles/config.fish);
+        "fish/config.fish".text = lib.mkAfter (builtins.readFile ../dotfiles/config.fish);
 
         # HACK: Load fish theme
         "fish/conf.d/plugin-eclm.fish".text = lib.mkAfter ''
