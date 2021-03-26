@@ -125,9 +125,6 @@ in
       };
       displayManager = {
         defaultSession = "none+bspwm";
-        setupCommands = ''
-          export GDK_SCALE=2
-        '';
         sddm = {
           enable = false;
           enableHidpi = false;
