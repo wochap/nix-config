@@ -15,6 +15,7 @@ in
     ./mixins/fonts.nix
     ./mixins/ipwebcam.nix
     ./mixins/nixos-networking.nix
+    ./mixins/keychron.nix
     ./users/gean.nix
   ];
 
@@ -50,19 +51,6 @@ in
       plymouth = {
         enable = true;
       };
-
-      extraModprobeConfig = ''
-        # Fix fn keys keychron
-        options hid_apple fnmode=0
-      '';
-      kernelParams = [
-        # Fix fn keys keychron
-        "hid_apple.fnmode=0"
-      ];
-      kernelModules = [
-        # Fix fn keys keychron
-        "hid-apple"
-      ];
     };
 
     environment = {
