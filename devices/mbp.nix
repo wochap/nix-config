@@ -32,6 +32,10 @@ in
     cleanTmpDir = true;
   };
 
+  environment.systemPackages = with pkgs; [
+    radeontop # monitor system amd
+  ];
+
   networking = {
     hostName = hostName;
 
