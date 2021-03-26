@@ -99,13 +99,13 @@ in
           XCURSOR_SIZE = "40";
         })
       ];
-    };
 
-    # Links those paths from derivations to /run/current-system/sw
-    environment.pathsToLink = [
-      "/share/zsh"
-      "/libexec"
-    ];
+      # Links those paths from derivations to /run/current-system/sw
+      pathsToLink = [
+        "/share/zsh"
+        "/libexec"
+      ];
+    };
 
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
     programs.zsh.enable = true;
