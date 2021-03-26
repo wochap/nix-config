@@ -4,6 +4,7 @@ let
   isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
   isWayland = config._displayServer == "wayland";
+  isXorg = config._displayServer == "xorg";
 in
 {
   imports = [
@@ -84,16 +85,17 @@ in
       };
       sessionVariables = lib.mkMerge [
         {
-          # Setup clipboard manager
-          CM_MAX_CLIPS = "30";
-          CM_OWN_CLIPBOARD = "1";
-          CM_SELECTIONS = "clipboard";
-
           # Fix vscode delete
           ELECTRON_TRASH="trash-cli";
 
           QT_QPA_PLATFORMTHEME = "qt5ct";
         }
+        (lib.mkIf isXorg {
+          # Setup clipboard manager
+          CM_MAX_CLIPS = "30";
+          CM_OWN_CLIPBOARD = "1";
+          CM_SELECTIONS = "clipboard";
+        })
         (lib.mkIf isWayland {
           # Force GTK to use wayland
           GDK_BACKEND = "wayland";
@@ -116,28 +118,6 @@ in
       "/share/zsh"
       "/libexec"
     ];
-
-    # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.extraUsers.gean = {
-      shell = pkgs.zsh;
-      uid = 1000;
-      password = "123456";
-      home = "/home/gean";
-      isNormalUser = true;
-      extraGroups = [
-        "audio"
-        "disk"
-        "docker"
-        "networkmanager"
-        "storage"
-        "video"
-        "wheel"
-      ];
-      openssh.authorizedKeys.keyFiles = [
-        "~/.ssh/id_rsa.pub"
-        "~/.ssh/id_rsa_boc.pub"
-      ];
-    };
 
     # Required by thunar
     # services.udisks2.enable = true;
