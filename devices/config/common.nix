@@ -4,8 +4,6 @@ let
   isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
   isWayland = config._displayServer == "wayland";
-  localPkgs = import ./packages { pkgs = pkgs; };
-  run-videochat = pkgs.writeScriptBin "run-videochat" (builtins.readFile ./scripts/run-videochat.sh);
 in
 {
   imports = [
@@ -14,6 +12,7 @@ in
     ./mixins/pkgs.nix
     ./mixins/pkgs-xorg.nix
     ./mixins/fonts.nix
+    ./mixins/ipwebcam.nix
     ./users/gean.nix
   ];
 
@@ -53,9 +52,6 @@ in
       extraModprobeConfig = ''
         # Fix fn keys keychron
         options hid_apple fnmode=0
-
-        # Enable IP Webcam
-        options v4l2loopback devices=1 exclusive_caps=1
       '';
       kernelParams = [
         "nouveau.modeset=0"
@@ -66,13 +62,6 @@ in
       kernelModules = [
         # Fix fn keys keychron
         "hid-apple"
-
-        # Required for IP Webcam
-        "v4l2loopback"
-      ];
-      extraModulePackages = [
-        # Required for IP Webcam
-        config.boot.kernelPackages.v4l2loopback
       ];
     };
 
@@ -122,17 +111,6 @@ in
         })
       ];
     };
-
-    environment.systemPackages = with pkgs; [
-      # IP Webcam related
-      gnome3.zenity
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gstreamer
-      gst_all_1.gstreamer.dev
-      run-videochat
-      v4l-utils
-    ];
 
     # Links those paths from derivations to /run/current-system/sw
     environment.pathsToLink = [
