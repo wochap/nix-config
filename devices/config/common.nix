@@ -13,6 +13,7 @@ in
     ./mixins/pkgs-xorg.nix
     ./mixins/fonts.nix
     ./mixins/ipwebcam.nix
+    ./mixins/nixos-networking.nix
     ./users/gean.nix
   ];
 
@@ -54,8 +55,6 @@ in
         options hid_apple fnmode=0
       '';
       kernelParams = [
-        "nouveau.modeset=0"
-
         # Fix fn keys keychron
         "hid_apple.fnmode=0"
       ];
@@ -145,39 +144,6 @@ in
     services.gvfs.enable = true;
     services.gvfs.package = pkgs.xfce.gvfs;
     services.tumbler.enable = true;
-
-    # Enable network manager
-    networking = {
-      enableIPv6 = false;
-      wireless.enable = false;
-      networkmanager.enable = true;
-      nameservers = [
-        "1.1.1.1"
-        "1.0.0.1"
-        "8.8.8.8"
-        "8.8.4.4"
-      ];
-      firewall = {
-        enable = true;
-        allowedTCPPortRanges = [
-          { from = 8080; to = 8090; }
-          { from = 3000; to = 3010; }
-        ];
-        allowedTCPPorts = [
-          # 20 # FTP (File Transfer Protocol)
-          # 22 # Secure Shell (SSH)
-          # 25 # Simple Mail Transfer Protocol (SMTP)
-          # 53 #  Domain Name System (DNS)
-          80 # Hypertext Transfer Protocol (HTTP)
-          # 110 # Post Office Protocol (POP3)
-          # 143 # Internet Message Access Protocol (IMAP)
-          # 443 #  HTTP Secure (HTTPS)
-
-          3333
-          8000
-        ];
-      };
-    };
 
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
     programs.zsh.enable = true;
