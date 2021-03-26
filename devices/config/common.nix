@@ -13,6 +13,7 @@ in
     ./mixins/overlays.nix
     ./mixins/pkgs.nix
     ./mixins/pkgs-xorg.nix
+    ./mixins/fonts.nix
     ./users/gean.nix
   ];
 
@@ -132,46 +133,6 @@ in
       run-videochat
       v4l-utils
     ];
-
-    fonts = {
-      enableFontDir = true;
-      enableGhostscriptFonts = true;
-      enableDefaultFonts = true;
-      fonts = with pkgs; [
-        corefonts # basic fonts for office
-        fira-code
-        font-awesome
-        font-awesome_4
-        material-icons
-        noto-fonts
-        noto-fonts-cjk
-        noto-fonts-emoji
-        open-sans
-        roboto
-        roboto-slab
-        siji
-        terminus_font
-
-        # (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
-        (nerdfonts.override {
-          fonts = [
-            "FiraCode"
-            "FiraMono"
-            "Hack"
-            "Iosevka"
-          ];
-        })
-      ];
-      fontconfig = {
-        allowBitmaps = true;
-        defaultFonts = {
-          serif = [ "Roboto Slab" ];
-          sansSerif = [ "Roboto" ];
-          monospace = [ "FiraCode Nerd Font Mono" ];
-          emoji = [ "Noto Color Emoji" ];
-        };
-      };
-    };
 
     # Links those paths from derivations to /run/current-system/sw
     environment.pathsToLink = [
