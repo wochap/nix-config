@@ -1,11 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  home-manager = builtins.fetchGit {
-    url = "https://github.com/nix-community/home-manager.git";
-    rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
-    ref = "release-20.09";
-  };
   isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
   isWayland = config._displayServer == "wayland";
@@ -14,9 +9,7 @@ let
 in
 {
   imports = [
-    # Install home-manager
-    (import "${home-manager}/nixos")
-
+    ./mixins/nixos.nix
     ./users/gean.nix
   ];
 
@@ -79,12 +72,6 @@ in
       ];
     };
 
-    # Allows proprietary or unfree packages
-    nixpkgs.config.allowUnfree = true;
-
-    # Explicit PulseAudio support in applications
-    nixpkgs.config.pulseaudio = true;
-
     # Update discord to latest version
     # https://nixos.wiki/wiki/Discord
     nixpkgs.overlays = [
@@ -99,25 +86,6 @@ in
         );
       })
     ];
-
-    # Set your time zone.
-    time.timeZone = "America/Lima";
-
-    # Select internationalisation properties.
-    i18n.defaultLocale = "en_US.UTF-8";
-    console = {
-      font = if isHidpi then "latarcyrheb-sun32" else "Lat2-Terminus16";
-      earlySetup = true;
-
-      # TODO: make keyMap customizable
-      keyMap = "us";
-
-      packages = [
-        pkgs.kbdKeymaps.dvp
-        pkgs.kbdKeymaps.neo
-        pkgs.terminus_font
-      ];
-    };
 
     environment = {
       etc = {
@@ -368,18 +336,6 @@ in
       "/libexec"
     ];
 
-    nix = {
-      trustedUsers = [ "@wheel" "root" ];
-
-      # Clear nixos store
-      autoOptimiseStore = true;
-    };
-
-    security.sudo = {
-      enable = true;
-      wheelNeedsPassword = false;
-    };
-
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.extraUsers.gean = {
       shell = pkgs.zsh;
@@ -507,8 +463,5 @@ in
         pkgs.xdg-desktop-portal-kde
       ];
     };
-
-    documentation.man.generateCaches = true;
-    documentation.dev.enable = true;
   };
 }
