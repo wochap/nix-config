@@ -19,7 +19,6 @@ in
       gnumake # make
       inxi # check compositor running
       killall
-      libqalculate # rofi-calc dependency
       libva-utils # verifying VA-API
       manpages
       mpc_cli

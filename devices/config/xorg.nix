@@ -21,15 +21,6 @@ in
         source = ./scripts/fix_caps_lock_delay.sh;
         mode = "0755";
       };
-
-      "powermenu.sh" = {
-        source = ./scripts/powermenu.sh;
-        mode = "0755";
-      };
-      "powermenu.rasi" = {
-        source = ./dotfiles/powermenu.rasi;
-        mode = "0755";
-      };
     };
     services.xserver = {
       enable = true;
@@ -42,7 +33,7 @@ in
           enable = false;
           enableHidpi = false;
           theme = "sugar-dark";
-          extraConfig = ''
+          extraConfig = lib.mkIf isHidpi ''
             [X11]
             ServerArguments=-dpi 144
           '';
