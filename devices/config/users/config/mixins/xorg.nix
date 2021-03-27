@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  localPkgs = import ../../packages { pkgs = pkgs; };
+  localPkgs = import ../../../packages { pkgs = pkgs; };
 in
 {
   config = {
@@ -12,7 +12,7 @@ in
 
       # Setup dotfiles
       home.file = {
-        ".config/rofi-theme.rasi".source = ./dotfiles/rofi-theme.rasi;
+        ".config/rofi-theme.rasi".source = ../dotfiles/rofi-theme.rasi;
       };
 
       programs.rofi = {
@@ -28,7 +28,7 @@ in
           # name = "WhiteSur-dark";
           # package = localPkgs.whitesur-dark-icons;
         };
-        settings = (import ./dotfiles/dunstrc.nix);
+        settings = (import ../dotfiles/dunstrc.nix);
       };
 
       services.redshift = {
