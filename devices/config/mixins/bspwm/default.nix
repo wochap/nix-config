@@ -37,7 +37,7 @@
           #!/usr/bin/env bash
 
           rofi \
-            -theme ~/.config/rofi-theme.rasi \
+            -theme /etc/rofi-theme.rasi \
             -modi calc \
             -show calc \
             -plugin-path ${pkgs.rofi-calc}/lib/rofi \

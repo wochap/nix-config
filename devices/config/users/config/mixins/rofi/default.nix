@@ -12,8 +12,13 @@
           source = ./scripts/powermenu.sh;
           mode = "0755";
         };
+
         "powermenu.rasi" = {
           source = ./dotfiles/powermenu.rasi;
+          mode = "0755";
+        };
+        "rofi-theme.rasi" = {
+          source = ./dotfiles/rofi-theme.rasi;
           mode = "0755";
         };
       };

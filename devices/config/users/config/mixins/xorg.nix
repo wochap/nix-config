@@ -11,11 +11,6 @@ in
 
   config = {
     home-manager.users.gean = {
-      # Setup dotfiles
-      home.file = {
-        ".config/rofi-theme.rasi".source = ../dotfiles/rofi-theme.rasi;
-      };
-
       xresources.properties = lib.mkIf isHidpi {
         "Xft.dpi" = 144;
         "Xcursor.size" = 40;

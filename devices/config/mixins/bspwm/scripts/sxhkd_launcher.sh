@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 rofi \
-  -theme ~/.config/rofi-theme.rasi \
+  -theme /etc/rofi-theme.rasi \
   -show drun \
   -modi drun,run \
   -plugin-path $ROFI_PLUGIN_PATH \

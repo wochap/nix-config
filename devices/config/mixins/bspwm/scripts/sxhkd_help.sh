@@ -7,7 +7,7 @@ awk '/^[a-z]/ && last {print "<span>",$0,"\t",last,"</span>"} {last=""} /^#/{las
     -i \
     -markup-rows \
     -no-show-icons \
-    -theme /home/gean/.config/rofi-theme.rasi \
+    -theme /etc/rofi-theme.rasi \
     -plugin-path $ROFI_PLUGIN_PATH \
     -theme-str 'window { width: 35em; }' \
     -theme-str 'listview { lines: 15; }'
