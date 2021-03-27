@@ -20,10 +20,6 @@ in
         source = ./assets/notification.flac;
         mode = "0755";
       };
-      "blop.wav" = {
-        source = ./assets/blop.wav;
-        mode = "0755";
-      };
 
       "fix_caps_lock_delay.sh" = {
         source = ./scripts/fix_caps_lock_delay.sh;
