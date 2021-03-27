@@ -11,7 +11,6 @@
           xfce.thunar-archive-plugin
         ];
       })
-      xfce.thunar # file manager
       xfce.thunar-volman # auto mont devices
       xfce.xfconf # where thunar settings are saved
     ];
