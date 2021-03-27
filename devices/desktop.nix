@@ -60,7 +60,7 @@ in
         Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
       '';
       deviceSection = ''
-        # does it fix screen tearing? NO
+        # does it fix screen tearing? maybe...
         Option         "NoLogo" "1"
         Option         "RenderAccel" "1"
         Option         "TripleBuffer" "true"
