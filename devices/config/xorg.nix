@@ -15,7 +15,6 @@ in
   config = {
     _displayServer = "xorg";
 
-    # Setup DE bspwm and sxhkdrc
     environment.etc = {
       "fix_caps_lock_delay.sh" = {
         source = ./scripts/fix_caps_lock_delay.sh;
