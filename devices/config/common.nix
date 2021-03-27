@@ -13,7 +13,7 @@ in
     ./mixins/pkgs.nix
     ./mixins/pkgs-xorg.nix
     ./mixins/fonts.nix
-    ./mixins/ipwebcam.nix
+    ./mixins/ipwebcam
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
     ./mixins/apps-gnome.nix

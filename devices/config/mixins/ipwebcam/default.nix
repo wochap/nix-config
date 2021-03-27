@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  run-videochat = pkgs.writeScriptBin "run-videochat" (builtins.readFile ../scripts/run-videochat.sh);
+  run-videochat = pkgs.writeScriptBin "run-videochat" (builtins.readFile ./scripts/run-videochat.sh);
 in
 {
   config = {
