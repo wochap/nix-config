@@ -43,8 +43,8 @@
           mode = "0755";
         };
 
-        "rofi-powermenu.rasi" = {
-          source = ./dotfiles/rofi-powermenu.rasi;
+        "rofi-powermenu-theme.rasi" = {
+          source = ./dotfiles/rofi-powermenu-theme.rasi;
           mode = "0755";
         };
         "rofi-theme.rasi" = {

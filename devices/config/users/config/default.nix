@@ -6,14 +6,15 @@ in
 {
   imports = [
     ./mixins/firefox.nix
-    ./mixins/fish.nix
+    ./mixins/fish
     ./mixins/git.nix
     ./mixins/gtk.nix
-    ./mixins/picom.nix
+    ./mixins/picom
     ./mixins/polybar.nix
     ./mixins/zsh.nix
     ./mixins/mime-apps.nix
     ./mixins/xorg.nix
+    ./mixins/vim
   ];
 
   config = {
@@ -76,7 +77,6 @@ in
         ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
         ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
         # ".config/kitty/kitty-session-tripper.conf".source = ./dotfiles/kitty-session-tripper.conf;
-        ".vimrc".source = ./dotfiles/.vimrc;
         ".config/nixpkgs/config.nix".text = ''
           { allowUnfree = true; }
         '';
@@ -86,14 +86,6 @@ in
       };
 
       programs.bash.enable = true;
-
-      programs.vim = {
-        enable = true;
-        settings = {
-          relativenumber = true;
-          number = true;
-        };
-      };
 
       services.gpg-agent = {
         enable = true;
