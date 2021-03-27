@@ -30,5 +30,11 @@ in
         };
       };
     };
+
+    home-manager.users.gean = {
+      home.file = {
+        ".config/eww".source = ./dotfiles/eww;
+      };
+    };
   };
 }

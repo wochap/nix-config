@@ -15,6 +15,7 @@ in
     ./mixins/mime-apps.nix
     ./mixins/xorg.nix
     ./mixins/vim
+    ./mixins/eww
   ];
 
   config = {
@@ -69,7 +70,6 @@ in
       home.file = {
         ".config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ./dotfiles/linux.sublime-keymap.json;
         ".ssh/config".source = ./dotfiles/ssh-config;
-        ".config/eww".source = ./dotfiles/eww;
         ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
         ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
         ".config/mpv/mpv.conf".source = ./dotfiles/mpv.conf;
