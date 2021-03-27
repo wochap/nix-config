@@ -17,20 +17,8 @@ in
 
     # Setup DE bspwm and sxhkdrc
     environment.etc = {
-      "notification.flac" = {
-        source = ./assets/notification.flac;
-        mode = "0755";
-      };
-
       "fix_caps_lock_delay.sh" = {
         source = ./scripts/fix_caps_lock_delay.sh;
-        mode = "0755";
-      };
-      "play_notification.sh" = {
-        text = ''
-          #! ${pkgs.bash}/bin/bash
-          ${pkgs.pulseaudio}/bin/paplay /etc/notification.flac
-        '';
         mode = "0755";
       };
 

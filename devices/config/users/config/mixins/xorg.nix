@@ -5,6 +5,10 @@ let
   isHidpi = config._isHidpi;
 in
 {
+  imports = [
+    ./dunst
+  ];
+
   config = {
     home-manager.users.gean = {
       home.packages = with pkgs; [
@@ -23,18 +27,6 @@ in
 
       programs.rofi = {
         enable = true;
-      };
-
-      services.dunst = {
-        enable = true;
-        iconTheme = {
-          name = "Papirus";
-          package = pkgs.papirus-icon-theme;
-          # TODO: add missing icons to WhiteSur-dark
-          # name = "WhiteSur-dark";
-          # package = localPkgs.whitesur-dark-icons;
-        };
-        settings = (import ../dotfiles/dunstrc.nix);
       };
 
       services.redshift = {
