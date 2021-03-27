@@ -7,7 +7,7 @@ in
 {
   imports = [
     ./modules/lightdm-webkit2-greeter
-    ./mixins/eww.nix
+    ./mixins/eww
     ./common.nix
   ];
 

@@ -2,6 +2,7 @@
 
 let
   localPkgs = import ../../../packages { pkgs = pkgs; };
+  isHidpi = config._isHidpi;
 in
 {
   config = {
@@ -13,6 +14,11 @@ in
       # Setup dotfiles
       home.file = {
         ".config/rofi-theme.rasi".source = ../dotfiles/rofi-theme.rasi;
+      };
+
+      xresources.properties = lib.mkIf isHidpi {
+        "Xft.dpi" = 144;
+        "Xcursor.size" = 40;
       };
 
       programs.rofi = {

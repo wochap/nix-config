@@ -28,9 +28,12 @@ in
     i18n.defaultLocale = "en_US.UTF-8";
 
     console = {
-      font = if isHidpi then "latarcyrheb-sun32" else "Lat2-Terminus16";
+      font = if isHidpi then "ter-132n" else "Lat2-Terminus16";
       earlySetup = true;
       keyMap = "us";
+      packages = [
+        pkgs.terminus_font
+      ];
     };
 
     nix = {
