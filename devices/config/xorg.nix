@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   localPkgs = import ./packages { pkgs = pkgs; };
