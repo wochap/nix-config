@@ -19,6 +19,14 @@ in
         source = ./scripts/fix_caps_lock_delay.sh;
         mode = "0755";
       };
+      "scrcap.sh" = {
+        source = ./scripts/scrcap.sh;
+        mode = "0755";
+      };
+      "scrrec.sh" = {
+        source = ./scripts/scrrec.sh;
+        mode = "0755";
+      };
     };
     services.xserver = {
       enable = true;

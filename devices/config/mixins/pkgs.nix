@@ -9,6 +9,7 @@ in
       # TOOLS
       # base-devel
       bc # calculator cli
+      cached-nix-shell # fast nix-shell scripts
       dex # execute DesktopEntry files
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging

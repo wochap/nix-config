@@ -164,6 +164,10 @@ super + alt + l
 super + alt + f
   thunar
 
+# Screencast region to mp4
+super + alt + r
+  /etc/scrrec.sh -s ~/Recordings/$(date +%F-%T).mp4
+
 # Open screenshoot utility
 super + alt + s
   flameshot gui
