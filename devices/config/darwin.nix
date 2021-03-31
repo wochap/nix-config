@@ -104,12 +104,6 @@ in
       "/libexec"
     ];
 
-    users.users.gean = {
-      shell = pkgs.zsh;
-      uid = 1000;
-      home = "/Users/gean";
-    };
-
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
     programs.zsh.enable = true;
     programs.fish.enable = true;

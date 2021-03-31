@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  localPkgs = import ../../packages { pkgs = pkgs; };
+  localPkgs = import ../../../packages { pkgs = pkgs; };
 in
 {
   config = {
@@ -20,7 +20,6 @@ in
           name = "Roboto 9";
           package = pkgs.roboto;
         };
-        gtk3.extraCss = (builtins.readFile ./dotfiles/gtk3.css);
         gtk3.extraConfig = {
           gtk-application-prefer-dark-theme = true;
           gtk-button-images = 1;

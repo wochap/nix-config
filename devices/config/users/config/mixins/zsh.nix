@@ -3,7 +3,7 @@
 {
   config = {
     environment.systemPackages = with pkgs; [
-      zsh-syntax-highlighting
+      zsh-fast-syntax-highlighting
     ];
     home-manager.users.gean = {
       programs.zsh = {
@@ -38,7 +38,7 @@
           export DIRENV_LOG_FORMAT=
           eval "$(direnv hook zsh)"
 
-          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          source ${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
         '';
         enableCompletion = true;
         enableAutosuggestions = true;

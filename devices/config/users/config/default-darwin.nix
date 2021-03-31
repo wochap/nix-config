@@ -3,10 +3,8 @@
 
 {
   imports = [
-    # ./firefox.nix
-    # ./fish.nix
-    ./git.nix
-    ./zsh.nix
+    ./mixins/git.nix
+    ./mixins/zsh.nix
   ];
 
   config = {
@@ -31,7 +29,7 @@
           ".yabairc".source = ./dotfiles/.yabairc;
           ".ssh/config".source = ./dotfiles/ssh-config;
           ".config/kitty/kitty.conf".source = ./dotfiles/kitty-darwin.conf;
-          ".vimrc".source = ./dotfiles/.vimrc;
+          ".vimrc".source = ./mixins/vim/dotfiles/.vimrc;
           ".config/nixpkgs/config.nix".text = ''
             { allowUnfree = true; }
           '';

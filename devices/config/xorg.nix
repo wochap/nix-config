@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   localPkgs = import ./packages { pkgs = pkgs; };
@@ -7,132 +7,39 @@ in
 {
   imports = [
     ./modules/lightdm-webkit2-greeter
+    ./mixins/bspwm
     ./common.nix
   ];
 
   config = {
     _displayServer = "xorg";
 
-    # Setup DE bspwm and sxhkdrc
-    environment = {
-      etc = {
-        "notification.flac" = {
-          source = ./assets/notification.flac;
-          mode = "0755";
-        };
-        "blop.wav" = {
-          source = ./assets/blop.wav;
-          mode = "0755";
-        };
-
-        "fix_caps_lock_delay.sh" = {
-          source = ./scripts/fix_caps_lock_delay.sh;
-          mode = "0755";
-        };
-        "play_notification.sh" = {
-          text = ''
-            #! ${pkgs.bash}/bin/bash
-            ${pkgs.pulseaudio}/bin/paplay /etc/notification.flac
-          '';
-          mode = "0755";
-        };
-
-        # "eww_bright.sh" = {
-        #   source = ./scripts/eww_bright.sh;
-        #   mode = "0755";
-        # };
-        "eww_vol.sh" = {
-          source = ./scripts/eww_vol.sh;
-          mode = "0755";
-        };
-        "eww_vol_close.sh" = {
-          source = ./scripts/eww_vol_close.sh;
-          mode = "0755";
-        };
-
-        bspwmrc = {
-          source = ./dotfiles/bspwmrc;
-          mode = "0755";
-        };
-        "bspwm_external_rules.sh" = {
-          source = ./scripts/bspwm_external_rules.sh;
-          mode = "0755";
-        };
-        "bspwm_subscribe.sh" = {
-          source = ./scripts/bspwm_subscribe.sh;
-          mode = "0755";
-        };
-        "bspwm_autostart.sh" = {
-          source = ./scripts/bspwm_autostart.sh;
-          mode = "0755";
-        };
-        "bspwm_desktop_4.sh" = {
-          source = ./scripts/bspwm_desktop_4.sh;
-          mode = "0755";
-        };
-
-        sxhkdrc = {
-          source = ./dotfiles/sxhkdrc;
-          mode = "0755";
-        };
-        "sxhkd_help.sh" = {
-          source = ./scripts/sxhkd_help.sh;
-          mode = "0755";
-        };
-        "sxhkd_calc.sh" = {
-          text = ''
-            #!/usr/bin/env bash
-
-            rofi \
-              -theme ~/.config/rofi-theme.rasi \
-              -modi calc \
-              -show calc \
-              -plugin-path ${pkgs.rofi-calc}/lib/rofi \
-              -theme-str 'listview { columns: 1; lines: 8; }' \
-              -theme-str 'window { width: 15em; }' \
-              -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }' \
-              -no-show-match \
-              -no-sort \
-              -calc-command "echo -n '{result}' | xclip -selection clipboard"
-          '';
-          mode = "0755";
-        };
-        "sxhkd_launcher.sh" = {
-          source = ./scripts/sxhkd_launcher.sh;
-          mode = "0755";
-        };
-
-        "powermenu.sh" = {
-          source = ./scripts/powermenu.sh;
-          mode = "0755";
-        };
-        "powermenu.rasi" = {
-          source = ./dotfiles/powermenu.rasi;
-          mode = "0755";
-        };
+    environment.etc = {
+      "fix_caps_lock_delay.sh" = {
+        source = ./scripts/fix_caps_lock_delay.sh;
+        mode = "0755";
+      };
+      "scrcap.sh" = {
+        source = ./scripts/scrcap.sh;
+        mode = "0755";
+      };
+      "scrrec.sh" = {
+        source = ./scripts/scrrec.sh;
+        mode = "0755";
       };
     };
     services.xserver = {
       enable = true;
       exportConfiguration = true;
-      windowManager.bspwm = {
-        enable = true;
-        configFile = "/etc/bspwmrc";
-        sxhkd.configFile = "/etc/sxhkdrc";
-      };
       desktopManager = {
         xterm.enable = false;
       };
       displayManager = {
-        defaultSession = "none+bspwm";
-        setupCommands = ''
-          export GDK_SCALE=2
-        '';
         sddm = {
           enable = false;
           enableHidpi = false;
           theme = "sugar-dark";
-          extraConfig = ''
+          extraConfig = lib.mkIf isHidpi ''
             [X11]
             ServerArguments=-dpi 144
           '';
@@ -186,5 +93,8 @@ in
     # Hide cursor when typing
     services.xbanish.enable = true;
     services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
+
+    # Add wifi tray
+    programs.nm-applet.enable = true;
   };
 }

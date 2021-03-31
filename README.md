@@ -352,6 +352,7 @@ Firefox keybindings
 
 * https://www.secjuice.com/wayland-vs-xorg/
 * https://discourse.nixos.org/t/how-to-set-the-xdg-mime-default/3560
+* https://awesomeopensource.com/projects/nixos
 
 ### Rice resources
 

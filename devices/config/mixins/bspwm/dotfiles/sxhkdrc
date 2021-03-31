@@ -6,7 +6,7 @@ super + alt + F1
 
 # Open power menu
 super + Escape
-	/etc/powermenu.sh
+	/etc/rofi-powermenu.sh
 
 # Take fullscreen screenshoot
 super + Print
@@ -14,24 +14,19 @@ super + Print
 
 # Open app launcher
 super + space
-  /etc/sxhkd_launcher.sh
+  /etc/rofi-launcher.sh
 
 # Open calc
 super + c
-  /etc/sxhkd_calc.sh
+  /etc/rofi-calc.sh
 
 # Show help
 super + slash
-  /etc/sxhkd_help.sh
+  /etc/rofi-help.sh
 
-# Show clipmenu
+# Show clipboard
 super + v
-  CM_LAUNCHER=rofi \
-    clipmenu \
-    -no-show-icons \
-    -theme ~/.config/rofi-theme.rasi \
-    -theme-str 'listview \{ spacing: 0; \}' \
-    -theme-str 'window \{ width: 30em; \}'
+  /etc/rofi-clipboard.sh
 
 # Open terminal
 super + Return
@@ -168,6 +163,10 @@ super + alt + l
 # Open file manager
 super + alt + f
   thunar
+
+# Screencast region to mp4
+super + alt + r
+  /etc/scrrec.sh -s ~/Recordings/$(date +%F-%T).mp4
 
 # Open screenshoot utility
 super + alt + s
