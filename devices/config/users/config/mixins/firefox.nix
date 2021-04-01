@@ -8,9 +8,14 @@ let
     rev = "d5528ff0315b10d256eeb651caadbaac667fea67";
     ref = "main";
   };
+  moz-rev = "8c007b60731c07dd7a052cce508de3bb1ae849b4";
+  moz-url = builtins.fetchTarball { url = "https://github.com/mozilla/nixpkgs-mozilla/archive/${moz-rev}.tar.gz";};
+  nightlyOverlay = (import "${moz-url}/firefox-overlay.nix");
 in
 {
   config = {
+    nixpkgs.overlays = [ nightlyOverlay ];
+
     home-manager.users.gean = {
       home.file = {
         ".mozilla/firefox/default/chrome/userChrome.css".source = "${firefox-theme}/chrome/userChrome.css";
@@ -41,6 +46,7 @@ in
       };
       programs.firefox = {
         enable = true;
+        package = pkgs.latest.firefox-beta-bin;
         profiles = {
           default = {
             extraConfig = (builtins.readFile "${firefox-theme}/user.js");
@@ -50,6 +56,15 @@ in
             settings = {
               "browser.tabs.tabMinWidth" = 5;
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+
+              # Use OS window border
+              "browser.tabs.drawInTitlebar" = false;
+
+              # Density compact
+              "browser.uidensity" = 1;
+
+              # Disable thumbnail preview ctrl + tab
+              "browser.ctrlTab.recentlyUsedOrder" = false;
 
               # Force webrender
               # "gfx.webrender.all" = true;
