@@ -20,6 +20,7 @@
           "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
           "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
+          "x-scheme-handler/postman" = [ "Postman.desktop" ];
         };
         associations.added = {
           "application/pdf" = [ "org.pwmt.zathura.desktop" ];
@@ -33,6 +34,7 @@
           "x-scheme-handler/http" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
           "x-scheme-handler/https" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
           "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" "userapp-Evolution-S7FTY0.desktop" ];
+          "x-scheme-handler/postman" = [ "Postman.desktop" ];
         };
       };
     };
