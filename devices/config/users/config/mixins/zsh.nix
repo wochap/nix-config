@@ -2,9 +2,14 @@
 
 {
   config = {
-    environment.systemPackages = with pkgs; [
-      zsh-fast-syntax-highlighting
-    ];
+    environment = {
+      systemPackages = with pkgs; [
+        zsh-fast-syntax-highlighting
+      ];
+      pathsToLink = [
+        "/share/zsh"
+      ];
+    };
     home-manager.users.gean = {
       programs.zsh = {
         enable = true;

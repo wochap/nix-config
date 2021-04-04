@@ -102,7 +102,6 @@ in
 
       # Links those paths from derivations to /run/current-system/sw
       pathsToLink = [
-        "/share/zsh"
         "/libexec"
       ];
     };
