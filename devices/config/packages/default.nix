@@ -1,6 +1,7 @@
 { pkgs }:
 
 {
+  bigsur-cursors = pkgs.callPackage ./bigsur-cursors {};
   horizon-icons = pkgs.callPackage ./horizon-icons {};
   horizon-theme = pkgs.callPackage ./horizon-theme {};
   lightdm-webkit2-greeter = pkgs.callPackage ./lightdm-webkit2-greeter {};
