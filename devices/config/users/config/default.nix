@@ -2,6 +2,7 @@
 
 let
   isXorg = config._displayServer == "xorg";
+  localPkgs = import ../../packages { pkgs = pkgs; };
 in
 {
   imports = [
@@ -82,7 +83,7 @@ in
         '';
 
         # Fix cursor theme
-        ".icons/default".source = "${pkgs.capitaine-cursors}/share/icons/capitaine-cursors";
+        ".icons/default".source = "${localPkgs.bigsur-cursors}/share/icons/bigsur-cursors";
       };
 
       programs.bash.enable = true;

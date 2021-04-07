@@ -12,7 +12,6 @@ in
   config = {
     home-manager.users.gean = {
       xresources.properties = lib.mkIf isHidpi {
-        "Xft.dpi" = 144;
         "Xcursor.size" = 40;
       };
 

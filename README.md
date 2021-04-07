@@ -218,7 +218,7 @@ Apps
 | :--- | :--- |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>l</kbd> | Lock screen |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>c</kbd> | Color picker |
-| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>f</kbd> | Opens file manager (thunar) |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>f</kbd> | Opens file manager |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>s</kbd> | Takes screenshoot (flameshot) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>f</kbd> | Open firefox |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>c</kbd> | Open chrome |

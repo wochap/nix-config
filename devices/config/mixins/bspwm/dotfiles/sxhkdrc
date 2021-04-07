@@ -162,7 +162,7 @@ super + alt + l
 
 # Open file manager
 super + alt + f
-  thunar
+  nautilus
 
 # Screencast region to mp4
 super + alt + r

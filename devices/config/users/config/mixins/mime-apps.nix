@@ -11,7 +11,7 @@
           "image/jpeg" = [ "org.gnome.eog.desktop" ];
           "image/png" = [ "org.gnome.eog.desktop" ];
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];
-          "inode/directory" = [ "thunar.desktop" ];
+          "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
           "text/html" = [ "google-chrome.desktop" ];
           "video/mp4" = [ "mpv.desktop" ];
@@ -27,7 +27,7 @@
           "image/jpeg" = [ "org.gnome.eog.desktop" "org.nomacs.ImageLounge.desktop" ];
           "image/png" = [ "org.gnome.eog.desktop" "org.nomacs.ImageLounge.desktop" ];
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];
-          "inode/directory" = [ "thunar.desktop" ];
+          "inode/directory" = [ "thunar.desktop" "org.gnome.Nautilus.desktop" ];
           "message/rfc822" = [ "userapp-Thunderbird-LAA0Y0.desktop" ];
           "text/html" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
           "video/mp4" = [ "mpv.desktop" ];

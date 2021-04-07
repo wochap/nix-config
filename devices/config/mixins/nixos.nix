@@ -37,6 +37,8 @@ in
     };
 
     nix = {
+      gc.automatic = true;
+
       trustedUsers = [ "@wheel" "root" ];
 
       # Clear nixos store

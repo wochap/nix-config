@@ -62,8 +62,8 @@ in
           };
           greeters.gtk = {
             enable = true;
-            cursorTheme.name = "capitaine-cursors";
-            cursorTheme.package = pkgs.capitaine-cursors;
+            cursorTheme.name = "bigsur-cursors";
+            cursorTheme.package = localPkgs.bigsur-cursors;
             cursorTheme.size = if isHidpi then 40 else 16;
             iconTheme.name = "WhiteSur-dark";
             iconTheme.package = localPkgs.whitesur-dark-icons;
@@ -88,11 +88,11 @@ in
     };
 
     # Hide cursor automatically
-    services.unclutter.enable = true;
+    # services.unclutter.enable = true;
 
     # Hide cursor when typing
-    services.xbanish.enable = true;
-    services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
+    # services.xbanish.enable = true;
+    # services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
 
     # Add wifi tray
     programs.nm-applet.enable = true;

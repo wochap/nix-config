@@ -58,12 +58,14 @@ in
 
       # APPS
       anki # mnemonic tool
+      bitwarden
       brave
       deluge # torrent client
       discord
       etcher # create booteable usbs
       filelight # view disk usage
       google-chrome
+      gparted
       mysql-workbench
       postman
       screenkey # show key pressed
@@ -92,6 +94,7 @@ in
       qt5.qtgraphicaleffects # required by gddm themes
       qt5ct
     ] ++ [
+      localPkgs.bigsur-cursors
       localPkgs.http-url-handler
       localPkgs.sddm-sugar-dark-greeter
       localPkgs.sddm-whitesur-greeter

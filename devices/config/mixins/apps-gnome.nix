@@ -15,7 +15,6 @@ in
       systemPackages = with pkgs; [
         # APPS
         # gnome3.bijiben
-        # gnome3.gnome-disk-utility
         gnome3.cheese # test webcam
         gnome3.eog # image viewer
         gnome3.evolution # email/calendar client
@@ -29,6 +28,7 @@ in
         gnome3.gnome-sound-recorder # test microphone
         gnome3.gnome-system-monitor
         gnome3.gnome-todo
+        gnome3.nautilus
         gnome3.pomodoro
         gtimelog
 

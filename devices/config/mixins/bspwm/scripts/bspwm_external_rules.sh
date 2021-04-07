@@ -22,9 +22,14 @@ case "$class" in
       *_NET_WM_WINDOW_TYPE_NORMAL* )
         echo state=pseudo_tiled rectangle="$windowwidth"x"$windowheight"+"$windowx"+"$windowy";;
     esac;;
-  Nitrogen | zoom | Org.gnome.clocks | Gnome-pomodoro | Gnome-todo )
+  Nitrogen | zoom | Org.gnome.clocks | Gnome-pomodoro | Gnome-todo | Org.gnome.Nautilus )
     case "$(xprop -id "$wid" _NET_WM_WINDOW_TYPE)" in
       *_NET_WM_WINDOW_TYPE_NORMAL* )
         echo state=pseudo_tiled;;
+    esac;;
+  Firefox )
+    case "$(xprop -id "$wid" WM_WINDOW_ROLE)" in
+      *PictureInPicture* )
+        echo state=floating sticky=on;;
     esac;;
 esac
