@@ -44,6 +44,7 @@ in
       ranger # file manager cli
 
       # DE
+      feh # wallpaper manager
       hunspell # dictionary for document programs
       hunspellDicts.en-us
       kitty # terminal
