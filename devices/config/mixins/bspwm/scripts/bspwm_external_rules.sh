@@ -31,5 +31,7 @@ case "$class" in
     case "$(xprop -id "$wid" WM_WINDOW_ROLE)" in
       *PictureInPicture* )
         echo state=floating sticky=on;;
+      *About* )
+        echo state=floating;;
     esac;;
 esac

@@ -19,8 +19,8 @@
           "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
-          "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
           "x-scheme-handler/postman" = [ "Postman.desktop" ];
+          "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
         };
         associations.added = {
           "application/pdf" = [ "org.pwmt.zathura.desktop" ];

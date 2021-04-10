@@ -94,11 +94,11 @@ in
         defaultCacheTtl = 1800;
       };
 
-      # services.random-background = {
-      #   enable = true;
-      #   imageDirectory = "%h/Pictures/backgrounds";
-      #   interval = "30m";
-      # };
+      services.random-background = {
+        enable = true;
+        imageDirectory = "%h/Pictures/backgrounds";
+        interval = "30m";
+      };
     };
   };
 }
