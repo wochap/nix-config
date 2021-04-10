@@ -46,6 +46,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     ```
     $ betterlockscreen -u ~/Pictures/backgrounds/default.jpeg
     ```
+1. Add wallpapers to `~/Pictures/backgrounds/`
 1. Sync `vscode`, `firefox`, `chrome`
 1. `desktop` config is optimized for 4k displays, for other sizes, you should update:
     For XORG:
