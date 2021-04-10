@@ -2,9 +2,6 @@
 
 let
   isHidpi = config._isHidpi;
-  isMbp = config.networking.hostName == "gmbp";
-  isWayland = config._displayServer == "wayland";
-  isXorg = config._displayServer == "xorg";
 in
 {
   imports = [
@@ -78,20 +75,6 @@ in
 
           QT_QPA_PLATFORMTHEME = "qt5ct";
         }
-        (lib.mkIf isXorg {
-          # Setup clipboard manager
-          CM_MAX_CLIPS = "30";
-          CM_OWN_CLIPBOARD = "1";
-          CM_SELECTIONS = "clipboard";
-        })
-        (lib.mkIf isWayland {
-          # Force GTK to use wayland
-          GDK_BACKEND = "wayland";
-          CLUTTER_BACKEND = "wayland";
-
-          # Force firefox to use wayland
-          MOZ_ENABLE_WAYLAND = "1";
-        })
         (lib.mkIf isHidpi {
           QT_AUTO_SCREEN_SCALE_FACTOR = "0";
           QT_FONT_DPI = "144";

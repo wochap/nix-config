@@ -14,18 +14,26 @@ in
   config = {
     _displayServer = "xorg";
 
-    environment.etc = {
-      "fix_caps_lock_delay.sh" = {
-        source = ./scripts/fix_caps_lock_delay.sh;
-        mode = "0755";
+    environment = {
+      sessionVariables = {
+        # Setup clipboard manager (clipmenu)
+        CM_MAX_CLIPS = "30";
+        CM_OWN_CLIPBOARD = "1";
+        CM_SELECTIONS = "clipboard";
       };
-      "scrcap.sh" = {
-        source = ./scripts/scrcap.sh;
-        mode = "0755";
-      };
-      "scrrec.sh" = {
-        source = ./scripts/scrrec.sh;
-        mode = "0755";
+      etc = {
+        "fix_caps_lock_delay.sh" = {
+          source = ./scripts/fix_caps_lock_delay.sh;
+          mode = "0755";
+        };
+        "scrcap.sh" = {
+          source = ./scripts/scrcap.sh;
+          mode = "0755";
+        };
+        "scrrec.sh" = {
+          source = ./scripts/scrrec.sh;
+          mode = "0755";
+        };
       };
     };
     services.xserver = {

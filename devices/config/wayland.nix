@@ -38,26 +38,36 @@
     };
 
     # Here we put a shell script into path, which lets us start sway.service (after importing the environment of the login shell).
-    environment.systemPackages = with pkgs; [
-      brightnessctl
-      polkit_gnome
+    environment = {
+      systemPackages = with pkgs; [
+        brightnessctl
+        polkit_gnome
 
-      (
-        pkgs.writeTextFile {
-          name = "startsway";
-          destination = "/bin/startsway";
-          executable = true;
-          text = ''
-            #! ${pkgs.bash}/bin/bash
+        (
+          pkgs.writeTextFile {
+            name = "startsway";
+            destination = "/bin/startsway";
+            executable = true;
+            text = ''
+              #! ${pkgs.bash}/bin/bash
 
-            # first import environment variables from the login manager
-            systemctl --user import-environment
-            # then start the service
-            exec systemctl --user start sway.service
-          '';
-        }
-      )
-    ];
+              # first import environment variables from the login manager
+              systemctl --user import-environment
+              # then start the service
+              exec systemctl --user start sway.service
+            '';
+          }
+        )
+      ];
+      sessionVariables = {
+        # Force GTK to use wayland
+        GDK_BACKEND = "wayland";
+        CLUTTER_BACKEND = "wayland";
+
+        # Force firefox to use wayland
+        MOZ_ENABLE_WAYLAND = "1";
+      };
+    };
 
     systemd.user.targets.sway-session = {
       description = "Sway compositor session";

@@ -46,6 +46,7 @@ in
       ];
     };
 
+    # Required for some apps (gtk3 applications, firefox)
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
     programs.dconf.enable = true;
 
