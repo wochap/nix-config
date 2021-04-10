@@ -78,7 +78,6 @@ in
         glo = "git pull origin";
         gpo = "git push origin";
         ll = "ls -l";
-        open = "xdg-open";
       };
     };
 
