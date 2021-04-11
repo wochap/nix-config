@@ -50,10 +50,21 @@ in
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
     programs.dconf.enable = true;
 
-    # Required for gnome calendar and geary
-    services.gnome3.evolution-data-server.enable = true;
-    services.gnome3.gnome-online-accounts.enable = true;
-    services.gnome3.gnome-keyring.enable = true;
+    services = {
+      # Required for gnome calendar and geary
+      gnome3 = {
+        evolution-data-server.enable = true;
+        gnome-online-accounts.enable = true;
+        gnome-keyring.enable = true;
+      };
+
+      # Required by pinentry-gnome3
+      dbus = {
+        enable = true;
+        packages = [ pkgs.gcr ];
+      };
+    };
+
 
     # Fix gnome-keyring when sddm is enabled
     security.pam.services.sddm.enableGnomeKeyring = true;

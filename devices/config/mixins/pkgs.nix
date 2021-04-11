@@ -55,7 +55,6 @@ in
       pavucontrol # audio settings gui
       playerctl # media player cli
       systemd
-      ulauncher
 
       # APPS
       anki # mnemonic tool
