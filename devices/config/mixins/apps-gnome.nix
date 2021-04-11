@@ -30,6 +30,7 @@ in
         gnome3.gnome-todo
         gnome3.nautilus
         gnome3.pomodoro
+        gnome3.seahorse # manage GnomeKeyring
         gtimelog
 
         # Themes
@@ -51,7 +52,7 @@ in
     programs.dconf.enable = true;
 
     services = {
-      # Required for gnome calendar and geary
+      # Required for gnome `Online Accounts`, Calendar and Geary
       gnome3 = {
         evolution-data-server.enable = true;
         gnome-online-accounts.enable = true;
