@@ -26,6 +26,7 @@
       home.file = lib.mkMerge [
         {
           ".skhdrc".source = ./dotfiles/.skhdrc;
+          ".finicky.js".source = ./dotfiles/.finicky.js;
           ".yabairc".source = ./dotfiles/.yabairc;
           ".ssh/config".source = ./dotfiles/ssh-config;
           ".config/kitty/kitty.conf".source = ./dotfiles/kitty-darwin.conf;
