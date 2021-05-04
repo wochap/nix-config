@@ -1,13 +1,6 @@
-
-
 { config, pkgs, ... }:
 
 let
-  firefox-theme = builtins.fetchGit {
-    url = "https://github.com/wochap/firefox-theme.git";
-    rev = "d5528ff0315b10d256eeb651caadbaac667fea67";
-    ref = "main";
-  };
   moz-rev = "8c007b60731c07dd7a052cce508de3bb1ae849b4";
   moz-url = builtins.fetchTarball { url = "https://github.com/mozilla/nixpkgs-mozilla/archive/${moz-rev}.tar.gz";};
   nightlyOverlay = (import "${moz-url}/firefox-overlay.nix");
@@ -18,8 +11,9 @@ in
 
     home-manager.users.gean = {
       home.file = {
-        ".mozilla/firefox/default/chrome/userChrome.css".source = "${firefox-theme}/chrome/userChrome.css";
-        ".mozilla/firefox/default/chrome/WhiteSur".source = "${firefox-theme}/chrome/WhiteSur";
+        ".mozilla/firefox/default/chrome/userChrome.css".text = ''
+          @import "customChrome.css";
+        '';
         ".mozilla/firefox/default/chrome/customChrome.css".text = ''
           /* Remove Tab outline */
           .keyboard-focused-tab > .tab-stack > .tab-content,
@@ -32,6 +26,7 @@ in
             transition: none !important;
           }
 
+          /* Remove round borders of menus/dropdowns */
           menupopup {
             border-radius: 0 !important;
           }
@@ -49,12 +44,13 @@ in
         package = pkgs.latest.firefox-beta-bin;
         profiles = {
           default = {
-            extraConfig = (builtins.readFile "${firefox-theme}/user.js");
             id = 0;
             name = "default";
             isDefault = true;
             settings = {
               "browser.tabs.tabMinWidth" = 5;
+
+              # Allow customChrome.css
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
               # Use OS window border
