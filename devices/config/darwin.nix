@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  # localPkgs = import ./packages { pkgs = pkgs; };
   home-manager = builtins.fetchGit {
     url = "https://github.com/nix-community/home-manager.git";
     rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
@@ -54,7 +53,7 @@ in
       "lorri" = {
         serviceConfig = {
           WorkingDirectory = (builtins.getEnv "HOME");
-          EnvironmentVariables = { };
+          EnvironmentVariables = {};
           KeepAlive = true;
           RunAtLoad = true;
           StandardOutPath = "/var/tmp/lorri.log";
