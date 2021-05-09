@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  isDarwin = config._displayServer == "darwin";
+in
 {
   config = {
     fonts = {
@@ -7,8 +10,19 @@
       enableGhostscriptFonts = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
-        corefonts # basic fonts for office
         fira-code
+
+        # TODO: requires nvidia?
+        (nerdfonts.override {
+          fonts = [
+            "FiraCode"
+            "FiraMono"
+            "Hack"
+            "Iosevka"
+          ];
+        })
+      ] ++ (if (!isDarwin) then [
+        corefonts # basic fonts for office
         font-awesome
         font-awesome_4
         material-icons
@@ -20,18 +34,8 @@
         roboto-slab
         siji
         terminus_font
-
-        # (lib.mkIf (!isMbp) nerdfonts) # requires nvidia?
-        (nerdfonts.override {
-          fonts = [
-            "FiraCode"
-            "FiraMono"
-            "Hack"
-            "Iosevka"
-          ];
-        })
-      ];
-      fontconfig = {
+      ] else []);
+      fontconfig = lib.mkIf (!isDarwin) {
         allowBitmaps = true;
         defaultFonts = {
           serif = [ "Roboto Slab" ];
