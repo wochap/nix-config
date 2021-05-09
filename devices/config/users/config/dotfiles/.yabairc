@@ -7,7 +7,7 @@ yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
 # global settings
 yabai -m config active_window_border_color 0xFF58a6ff
-yabai -m config focus_follows_mouse autofocus
+# yabai -m config focus_follows_mouse autofocus
 yabai -m config mouse_action1 move
 yabai -m config mouse_action2 resize
 yabai -m config mouse_drop_action swap
@@ -30,3 +30,7 @@ yabai -m config window_gap 10
 
 # window rules
 # yabai -m rule --add app="*" manage=off
+# yabai -m rule --add app="kitty" manage=on
+# yabai -m rule --add app="vscode" manage=on
+# yabai -m rule --add app="finder" manage=on
+
