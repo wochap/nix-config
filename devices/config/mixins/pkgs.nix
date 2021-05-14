@@ -11,6 +11,7 @@ in
       bc # calculator cli
       cached-nix-shell # fast nix-shell scripts
       dex # execute DesktopEntry files
+      dnsutils # test dns
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
       ffmpeg-full # music/video codecs?
@@ -36,12 +37,19 @@ in
       wget
       zip
 
+      # 7w7
+      nmap
+      tightvnc
+      metasploit
+      teamviewer
+
       # APPS CLI
       gitAndTools.gh
       gotop # monitor system
       htop # monitor system
       neofetch # print computer info
       ranger # file manager cli
+      dogecoin
 
       # DE
       feh # wallpaper manager
