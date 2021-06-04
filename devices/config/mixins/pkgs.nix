@@ -22,7 +22,9 @@ in
       inxi # check compositor running
       killall
       libva-utils # verifying VA-API
+      lsof # print port process
       manpages
+      mkcert # create certificates (HTTPS)
       mpc_cli
       mpd
       mpd_clientlib # mpd module
@@ -38,6 +40,7 @@ in
       zip
 
       # 7w7
+      teamviewer
       nmap
       tightvnc
       metasploit
