@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  moz-rev = "8c007b60731c07dd7a052cce508de3bb1ae849b4";
+  moz-rev = "3f3fba4e2066f28a1ad7ac60e86a688a92eb5b5f";
   moz-url = builtins.fetchTarball { url = "https://github.com/mozilla/nixpkgs-mozilla/archive/${moz-rev}.tar.gz";};
   nightlyOverlay = (import "${moz-url}/firefox-overlay.nix");
 in
