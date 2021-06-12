@@ -39,9 +39,12 @@ in
           gtk-xft-rgba = "rgb";
         };
         gtk3.bookmarks = [
+          "file:///home/gean/Documents"
           "file:///home/gean/Downloads"
           "file:///home/gean/Pictures"
           "file:///home/gean/Projects"
+          "file:///home/gean/Recordings"
+          "file:///home/gean/Videos"
         ];
         gtk2.extraConfig = ''
           gtk-button-images = 1

@@ -2,12 +2,13 @@ configuration {
   display-run: "";
   display-drun: "";
   display-calc: "";
+  display-emoji: "";
   dpi: 0;
   drun-display-format: "{icon} {name}";
   font: "Iosevka Bold 12";
   icon-theme: "WhiteSur-dark";
   modi: "drun";
-  show-icons: true;
+  show-icons: false;
   kb-select-1: "";
   kb-select-2: "";
   kb-select-3: "";

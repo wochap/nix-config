@@ -1,7 +1,7 @@
 ### BSPWM HOTKEYS
 
 # Reload keybindings
-super + alt + F1
+super + ctrl + Escape
   pkill -USR1 -x sxhkd
 
 # Open power menu
@@ -28,9 +28,13 @@ super + slash
 super + v
   /etc/rofi-clipboard.sh
 
+# Show emojis
+super + e
+  /etc/rofi-emojis.sh
+
 # Open terminal
 super + Return
-  kitty
+  kitty --listen-on unix:/tmp/kitty-default
 
 # Close and kill
 super + {w,shift + q}

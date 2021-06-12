@@ -6,6 +6,7 @@
       systemPackages = with pkgs; [
         libqalculate # rofi-calc dependency
         rofi-calc
+        rofi-emoji
       ];
       etc = {
         "rofi-clipboard.sh" = {
@@ -34,6 +35,21 @@
           '';
           mode = "0755";
         };
+        "rofi-emoji.sh" = {
+          text = ''
+            #!/usr/bin/env bash
+
+            rofi \
+              -theme /etc/rofi-theme.rasi \
+              -modi emoji \
+              -show emoji \
+              -plugin-path ${pkgs.rofi-emoji}/lib/rofi \
+              -theme-str 'listview { columns: 2; lines: 15; }' \
+              -theme-str 'window { width: 35em; }' \
+              -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }'
+          '';
+          mode = "0755";
+        };
         "rofi-launcher.sh" = {
           source = ./scripts/rofi-launcher.sh;
           mode = "0755";
@@ -52,6 +68,9 @@
           mode = "0755";
         };
       };
+      pathsToLink = [
+        "/share/rofi-emoji"
+      ];
     };
     home-manager.users.gean = {
       programs.rofi.enable = true;

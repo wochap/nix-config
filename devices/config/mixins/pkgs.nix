@@ -28,6 +28,7 @@ in
       mpc_cli
       mpd
       mpd_clientlib # mpd module
+      ngrok # expose web server
       nix-prefetch-git # get fetchgit hashes
       notify-desktop # test notifications
       pciutils # lspci and others commands
@@ -58,10 +59,12 @@ in
       feh # wallpaper manager
       hunspell # dictionary for document programs
       hunspellDicts.en-us
+      hyper
       kitty # terminal
       kmag # magnifying glass
       mpv # video player
       nitrogen # wallpaper manager
+      nnn # terminal file manager
       pamixer # audio cli
       pavucontrol # audio settings gui
       playerctl # media player cli

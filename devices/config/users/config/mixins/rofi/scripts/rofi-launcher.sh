@@ -6,4 +6,5 @@ rofi \
   -modi drun,run \
   -plugin-path $ROFI_PLUGIN_PATH \
   -theme-str 'listview { columns: 2; lines: 15; }' \
-  -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }'
+  -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }' \
+  -theme-str 'configuration { show-icons: true; }'
