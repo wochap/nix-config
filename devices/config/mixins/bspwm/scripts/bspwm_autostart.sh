@@ -15,4 +15,4 @@ xsetroot -cursor_name left_ptr & # fix cursor icon
 eww daemon &
 caffeine &
 polybar main -r &
-/etc/fix_caps_lock_delay.sh
+sh /etc/fix_caps_lock_delay.sh &

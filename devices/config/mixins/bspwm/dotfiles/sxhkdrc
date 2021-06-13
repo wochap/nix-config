@@ -30,7 +30,7 @@ super + v
 
 # Show emojis
 super + e
-  /etc/rofi-emojis.sh
+  /etc/rofi-emoji.sh
 
 # Open terminal
 super + Return
@@ -159,6 +159,14 @@ super + {_, shift +}F4
 
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
+
+# Show polybar
+super + alt + p
+  /etc/scripts/polybar-show.sh
+
+# Hide polybar
+super + shift + alt + p
+  /etc/scripts/polybar-hide.sh
 
 # Lock screen
 super + alt + l

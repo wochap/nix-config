@@ -2,31 +2,36 @@
 
 {
   config = {
-    environment.etc = {
-      bspwmrc = {
-        source = ./dotfiles/bspwmrc;
-        mode = "0755";
+    environment = {
+      sessionVariables = {
+        BSPWM_WINDOW_GAP = "16";
       };
-      "bspwm_external_rules.sh" = {
-        source = ./scripts/bspwm_external_rules.sh;
-        mode = "0755";
-      };
-      "bspwm_subscribe.sh" = {
-        source = ./scripts/bspwm_subscribe.sh;
-        mode = "0755";
-      };
-      "bspwm_autostart.sh" = {
-        source = ./scripts/bspwm_autostart.sh;
-        mode = "0755";
-      };
-      "bspwm_desktop_4.sh" = {
-        source = ./scripts/bspwm_desktop_4.sh;
-        mode = "0755";
-      };
+      etc = {
+        bspwmrc = {
+          source = ./dotfiles/bspwmrc;
+          mode = "0755";
+        };
+        "bspwm_external_rules.sh" = {
+          source = ./scripts/bspwm_external_rules.sh;
+          mode = "0755";
+        };
+        "bspwm_subscribe.sh" = {
+          source = ./scripts/bspwm_subscribe.sh;
+          mode = "0755";
+        };
+        "bspwm_autostart.sh" = {
+          source = ./scripts/bspwm_autostart.sh;
+          mode = "0755";
+        };
+        "bspwm_desktop_4.sh" = {
+          source = ./scripts/bspwm_desktop_4.sh;
+          mode = "0755";
+        };
 
-      sxhkdrc = {
-        source = ./dotfiles/sxhkdrc;
-        mode = "0755";
+        sxhkdrc = {
+          source = ./dotfiles/sxhkdrc;
+          mode = "0755";
+        };
       };
     };
     services.xserver = {

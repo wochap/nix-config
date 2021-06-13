@@ -6,7 +6,7 @@
     # If width is 0, window will fit to longest message
     # Positive x value is measured from the left of the screen, negative x is measured from the right
     # Positive y value is measured from the top of the screen
-    geometry = "500x6-16+80";
+    geometry = "500x6-16-16";
     background = "#202020FF"; #RRGGBBAA
     alignment = "left";
     always_run_script = true;

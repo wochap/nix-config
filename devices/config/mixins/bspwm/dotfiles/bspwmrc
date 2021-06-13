@@ -17,9 +17,9 @@ bspc config presel_feedback_color \#18348D
 #### BSPWM configuration ####
 bspc config external_rules_command /etc/bspwm_external_rules.sh
 bspc config border_width 2
-bspc config window_gap   16
-bspc config split_ratio         0.5
-bspc config borderless_monocle  true
+bspc config window_gap $BSPWM_WINDOW_GAP
+bspc config split_ratio 0.5
+bspc config borderless_monocle true
 bspc config swallow_first_click false
 bspc config focus_follows_pointer true
 bspc config bspc config click_to_focus none

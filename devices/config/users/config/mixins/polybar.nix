@@ -5,6 +5,31 @@ let
 in
 {
   config = {
+    environment = {
+      sessionVariables = {
+        POLYBAR_HEIGHT = "48";
+      };
+      etc = {
+        "scripts/polybar-show.sh" = {
+          text = ''
+            #!/usr/bin/env bash
+
+            polybar-msg cmd show
+            bspc config -m focused top_padding $(($POLYBAR_HEIGHT + $BSPWM_WINDOW_GAP))
+          '';
+          mode = "0755";
+        };
+        "scripts/polybar-hide.sh" = {
+          text = ''
+            #!/usr/bin/env bash
+
+            polybar-msg cmd hide
+            bspc config -m focused top_padding 0
+          '';
+          mode = "0755";
+        };
+      };
+    };
     home-manager.users.gean = lib.mkIf isXorg {
       home.file = {
         ".config/polybar/main.ini".source = ../dotfiles/polybar/main.ini;
