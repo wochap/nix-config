@@ -34,7 +34,8 @@ super + e
 
 # Open terminal
 super + Return
-  kitty --listen-on unix:/tmp/kitty-default
+  kitty
+#  kitty --listen-on unix:/tmp/kitty-default
 
 # Close and kill
 super + {w,shift + q}
