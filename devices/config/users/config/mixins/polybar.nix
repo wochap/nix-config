@@ -38,6 +38,10 @@ in
         ".config/polybar/scripts/get_spotify_status.sh".source = ../dotfiles/polybar/scripts/get_spotify_status.sh;
         ".config/polybar/scripts/get_vram_status.sh".source = ../dotfiles/polybar/scripts/get_vram_status.sh;
         ".config/polybar/scripts/scroll_spotify_status.sh".source = ../dotfiles/polybar/scripts/scroll_spotify_status.sh;
+        ".config/polybar/scripts/bspwm_monocle_windows.sh" = {
+          source = ../dotfiles/polybar/scripts/bspwm_monocle_windows.sh;
+          executable = true;
+        };
       };
       services.polybar = {
         enable = true;

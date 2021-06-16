@@ -4,9 +4,6 @@
 /etc/bspwm_autostart.sh
 /etc/restart_goa_daemon.sh
 
-#### Clear rules ####
-# bspc rule -r "*"
-
 #### BSPWM coloring ####
 bspc config normal_border_color \#282e3a
 bspc config active_border_color \#2C4E9C
@@ -24,15 +21,15 @@ bspc config swallow_first_click false
 bspc config focus_follows_pointer true
 bspc config bspc config click_to_focus none
 bspc config ignore_ewmh_focus true
-bspc config single_monocle true
-# bspc config focus_by_distance   true
+bspc config single_monocle false
 
+#### BSPWM rules ####
+bspc rule -r "*" # clear rules
 # bspc rule -a *:* state=tiled
 bspc rule -a ".caffeine-wrapped" state=floating
 bspc rule -a ".pick-colour-picker-wrapped" state=floating sticky=on
 bspc rule -a "Blueberry.py" state=floating
 bspc rule -a "Cheese" state=pseudo_tiled
-bspc rule -a "Com.github.lainsce.notejot" state=floating sticky=on
 bspc rule -a "Eog" state=floating
 bspc rule -a "Evolution-alarm-notify" state=floating sticky=on
 bspc rule -a "File-roller" state=floating
@@ -46,7 +43,7 @@ bspc rule -a "Image Lounge" state=floating
 bspc rule -a "Mysql-workbench-bin" state=pseudo_tiled
 bspc rule -a "Nm-connection-editor" state=floating
 bspc rule -a "Pavucontrol" state=pseudo_tiled
-bspc rule -a "Simplenote" state=pseudo_tiled
+bspc rule -a "Simplenote" state=tiled
 bspc rule -a "Sublime_text" state=floating sticky=on
 bspc rule -a "flameshot" state=floating sticky=on
 bspc rule -a "kmag" state=floating sticky=on
@@ -71,4 +68,5 @@ bspc rule -a "Firefox" -o node=@1:/
 sleep 1 &
 firefox &
 
-/etc/bspwm_subscribe.sh
+/etc/bspwm_subscribe.sh &
+/etc/bspwm_subscribe_polybar.sh &
