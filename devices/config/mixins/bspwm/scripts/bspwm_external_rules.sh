@@ -32,6 +32,11 @@ case "$class" in
       *PictureInPicture* )
         echo state=floating sticky=on;;
       *About* )
-        echo state=floating;;
+        echo state=floating center=true;;
     esac;;
 esac
+
+case "$(xprop -id "$wid" _NET_WM_WINDOW_TYPE)" in
+  *_NET_WM_WINDOW_TYPE_DIALOG* )
+    echo state=floating center=true;;
+esac;;
