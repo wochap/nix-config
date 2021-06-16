@@ -24,6 +24,7 @@ in
       glxinfo # opengl utils
       gnumake # make
       inxi # check compositor running
+      jq # JSON
       killall
       libva-utils # verifying VA-API
       lsof # print port process
