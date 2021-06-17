@@ -1,6 +1,7 @@
 { pkgs }:
 
 {
+  ptsh = pkgs.callPackage ./ptsh {};
   bigsur-cursors = pkgs.callPackage ./bigsur-cursors {};
   horizon-icons = pkgs.callPackage ./horizon-icons {};
   horizon-theme = pkgs.callPackage ./horizon-theme {};

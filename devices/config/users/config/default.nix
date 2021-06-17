@@ -17,6 +17,7 @@ in
     ./mixins/xorg.nix
     ./mixins/vim
     ./mixins/eww
+    ./mixins/ptsh
   ];
 
   config = {
