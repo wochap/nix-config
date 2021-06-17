@@ -9,6 +9,10 @@
         rofi-emoji
       ];
       etc = {
+        "rofi-update-gaps.sh" = {
+          source = ./scripts/rofi-update-gaps.sh;
+          mode = "0755";
+        };
         "rofi-clipboard.sh" = {
           source = ./scripts/rofi-clipboard.sh;
           mode = "0755";
