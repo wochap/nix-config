@@ -1,16 +1,34 @@
 #!/usr/bin/env sh
 
+function stop {
+  if ! pgrep $1 ;
+    pgrep $1 | xargs kill
+    while pgrep -u $UID -x $1 >/dev/null; do sleep 1; done
+  then
+    echo "$1 stopped"
+  fi
+}
+
 function run {
   if ! pgrep $1 ;
+    stop $1
   then
-    $@ &
+    coproc ($@ > /dev/null 2>&1)
+    echo "$1 started"
   fi
 }
 
 function removeReceptacles {
-  sleep 3
   for win in $(bspc query -N -n .leaf.\!window) ; do bspc node $win -k ; done ;
 }
+
+removeReceptacles
+
+stop slack
+stop simplenote
+stop gnome-todo
+stop gnome-clocks
+stop evolution
 
 # source: https://www.reddit.com/r/bspwm/comments/ggtwxa/guide_to_creating_startup_layout_using_receptacles/
 bspc node @4:/ -i
@@ -28,4 +46,4 @@ run slack -s
 run simplenote
 run gnome-todo
 run gnome-clocks
-evolution &
+run evolution
