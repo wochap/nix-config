@@ -70,3 +70,4 @@ firefox &
 
 /etc/bspwm_subscribe.sh &
 /etc/bspwm_subscribe_polybar.sh &
+/etc/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &
