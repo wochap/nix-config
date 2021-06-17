@@ -5,6 +5,7 @@
     environment = {
       systemPackages = with pkgs; [
         zsh-fast-syntax-highlighting
+        starship
       ];
       pathsToLink = [
         "/share/zsh"
@@ -15,6 +16,9 @@
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
+          # Setup starship theme
+          eval "$(starship init zsh)"
+
           function desktop4() {
             /etc/bspwm_desktop_4.sh
           }
@@ -33,8 +37,8 @@
           zstyle :bracketed-paste-magic paste-finish pastefinish
           ### Fix slowness of pastes
 
+          # Clear right promt
           RPROMPT=""
-          ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$fg[red]%}"
 
           # Completion for kitty
           kitty + complete setup zsh | source /dev/stdin
@@ -49,13 +53,21 @@
         enableAutosuggestions = true;
         oh-my-zsh = {
           enable = true;
-          theme = "robbyrussell";
           plugins = [];
         };
         shellAliases = lib.mkMerge [
           config.environment.shellAliases
           {
             ns = "nix-shell --run zsh";
+            f = "nnn";
+
+            # Setup ptSh
+            ls = lib.mkForce "ptls";
+            pwd = "ptpwd";
+            mkdir = "ptmkdir";
+            touch = "pttouch";
+            cp = "ptcp";
+            rm = "ptrm";
           }
         ];
       };
