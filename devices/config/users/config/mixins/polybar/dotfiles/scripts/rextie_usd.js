@@ -46,9 +46,13 @@ async function post(url, data) {
 }
 
 const main = async () => {
-  const dataJSON = await post("https://app.rextie.com/api/v1/fxrates/rate/?origin=home", {})
-  const data = JSON.parse(dataJSON)
-  console.log(data.fx_rate_buy);
+  try {
+    const dataJSON = await post("https://app.rextie.com/api/v1/fxrates/rate/?origin=home", {})
+    const data = JSON.parse(dataJSON)
+    console.log(data.fx_rate_buy);
+  } catch (e) {
+    console.log("ERROR");
+  }
 }
 
 main()
