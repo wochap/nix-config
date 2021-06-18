@@ -62,6 +62,7 @@ in
       #dogecoin
 
       # DE
+      alacritty # terminal fallback
       feh # wallpaper manager
       hunspell # dictionary for document programs
       hunspellDicts.en-us
