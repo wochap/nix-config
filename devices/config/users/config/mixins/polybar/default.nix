@@ -42,6 +42,10 @@ in
           source = ./dotfiles/scripts/bspwm_monocle_windows.sh;
           executable = true;
         };
+        ".config/polybar/scripts/rextie_usd.js" = {
+          source = ./dotfiles/scripts/rextie_usd.js;
+          executable = true;
+        };
       };
       services.polybar = {
         enable = true;
