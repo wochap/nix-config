@@ -49,25 +49,22 @@ bspc rule -a "flameshot" state=floating sticky=on
 bspc rule -a "kmag" state=floating sticky=on
 bspc rule -a "mpv" state=floating sticky=on
 
-# bspc rule -a "Geary" desktop=^4
-# bspc rule -a "Gnome-calendar" desktop=^4
-
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
   bspc monitor $m -d 1 2 3 4 F1 F2 F3 F4
 done
+
+/etc/bspwm_subscribe.sh &
+/etc/bspwm_subscribe_polybar.sh &
+/etc/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &
 
 # workspace 2
 bspc node @2:/ -i
 bspc rule -a "kitty:desktop2" -o node=@2:/
 kitty --name=desktop2 &
 
-# workspace 1
-bspc node @1:/ -i
-bspc rule -a "Firefox" -o node=@1:/
+# workspace 5
+bspc node @5:/ -i
+bspc rule -a "Firefox" -o node=@5:/
 sleep 1 &
 firefox &
-
-/etc/bspwm_subscribe.sh &
-/etc/bspwm_subscribe_polybar.sh &
-/etc/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &

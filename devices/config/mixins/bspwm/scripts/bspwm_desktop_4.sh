@@ -18,11 +18,11 @@ function run {
   fi
 }
 
-function removeReceptacles {
+function removeEmptyReceptacles {
   for win in $(bspc query -N -n .leaf.\!window) ; do bspc node $win -k ; done ;
 }
 
-removeReceptacles
+removeEmptyReceptacles
 
 stop slack
 stop simplenote
