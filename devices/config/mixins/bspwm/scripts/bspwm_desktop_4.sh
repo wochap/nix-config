@@ -41,6 +41,7 @@ bspc rule -a "Simplenote" -o node=@4:/1/2
 bspc rule -a "Evolution" -o node=@4:/2/1
 bspc rule -a "Gnome-todo" -o node=@4:/2/2/1
 bspc rule -a "Org.gnome.clocks" -o node=@4:/2/2/2
+bspc desktop -f 4
 
 run slack -s
 run simplenote
