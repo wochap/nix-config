@@ -25,11 +25,11 @@
       # Add config files to home folder
       home.file = lib.mkMerge [
         {
-          ".skhdrc".source = ./dotfiles/.skhdrc;
-          ".finicky.js".source = ./dotfiles/.finicky.js;
-          ".yabairc".source = ./dotfiles/.yabairc;
+          ".skhdrc".source = ./dotfiles-darwin/.skhdrc;
+          ".finicky.js".source = ./dotfiles-darwin/.finicky.js;
+          ".yabairc".source = ./dotfiles-darwin/.yabairc;
           ".ssh/config".source = ./dotfiles/ssh-config;
-          ".config/kitty/kitty.conf".source = ./dotfiles/kitty-darwin.conf;
+          ".config/kitty/kitty.conf".source = ./dotfiles-darwin/kitty-darwin.conf;
           ".vimrc".source = ./mixins/vim/dotfiles/.vimrc;
           ".config/nixpkgs/config.nix".text = ''
             { allowUnfree = true; }

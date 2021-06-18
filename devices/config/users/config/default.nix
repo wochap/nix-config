@@ -64,7 +64,6 @@ in
         NIXOS_CONFIG = "/home/gean/nix-config/devices/desktop.nix";
         OPENER = "xdg-open";
         READER = "zathura";
-        TERMINAL = "kitty";
         VIDEO = "mpv";
       };
 
@@ -77,8 +76,6 @@ in
         ".config/mpv/mpv.conf".source = ./dotfiles/mpv.conf;
         "Pictures/backgrounds/default.jpeg".source = ../../assets/wallpaper.jpg;
         ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
-        ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
-        # ".config/kitty/kitty-session-tripper.conf".source = ./dotfiles/kitty-session-tripper.conf;
         ".config/nixpkgs/config.nix".text = ''
           { allowUnfree = true; }
         '';
