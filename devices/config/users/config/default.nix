@@ -18,6 +18,7 @@ in
     ./mixins/vim
     ./mixins/eww
     ./mixins/ptsh
+    ./mixins/kitty
   ];
 
   config = {
