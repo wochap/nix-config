@@ -11,7 +11,7 @@ in
     ./mixins/git.nix
     ./mixins/gtk.nix
     ./mixins/picom
-    ./mixins/polybar.nix
+    ./mixins/polybar
     ./mixins/zsh.nix
     ./mixins/mime-apps.nix
     ./mixins/xorg.nix
