@@ -21,6 +21,7 @@
         "storage"
         "video"
         "wheel"
+        "adbusers"
       ];
       openssh.authorizedKeys.keyFiles = [
         "~/.ssh/id_rsa.pub"
