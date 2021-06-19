@@ -31,14 +31,6 @@
           source = ./scripts/bspwm_autostart.sh;
           mode = "0755";
         };
-        "bspwm_desktop_2_booker.sh" = {
-          source = ./scripts/bspwm_desktop_2_booker.sh;
-          mode = "0755";
-        };
-        "bspwm_desktop_2_tripper.sh" = {
-          source = ./scripts/bspwm_desktop_2_tripper.sh;
-          mode = "0755";
-        };
         "bspwm_desktop_4.sh" = {
           source = ./scripts/bspwm_desktop_4.sh;
           mode = "0755";

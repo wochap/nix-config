@@ -4,48 +4,101 @@ function run {
   coproc ($@ > /dev/null 2>&1)
 }
 
+#Update rofi promt icon
 echo -en "\x00prompt\x1f\n"
 
-if [[ "$*" == *"Workspace"* ]]
+#Retrieve first selection
+first_selection=$(cat /tmp/rofi-custom-options)
+
+if [[ "$first_selection" && -z "$@" ]]
 then
-  workspace=$(echo "$*" | awk -F\  '{print $2}')
-  bspc rule -a "kitty" -o desktop=^$workspace
-  run kitty --session /etc/kitty-session-nix-config.conf
-  bspc desktop -f $workspace
+  first_selection=""
+fi
+
+#Clear first selection
+echo "" > /tmp/rofi-custom-options
+
+if [[ "$first_selection" == *"Change BSPWM gaps"* ]]
+then
+  export BSPWM_WINDOW_GAP=$1
+  killall -q polybar
+  if [[ $1 == 16 ]]; then
+    coproc (polybar main -r > /dev/null 2>&1)
+  else
+    coproc (polybar secondary -r > /dev/null 2>&1)
+  fi
+  bspc config window_gap $1
   exit 0
 fi
 
-if [ "$*" = "Open nix-config" ]
+if [[ "$*" == *"Workspace"* ]]
 then
-  workspaces=(2 3 6 7 8)
+  focused_workspace=$(bspc query --desktops --desktop focused --names)
+  workspace_selected=$(echo "$*" | awk -F\  '{print $2}')
+  ws=$([ "$workspace_selected" == "current" ] && echo "$focused_workspace" || echo "$workspace_selected")
+
+  if [[ "$first_selection" == *"Open nix-config"* ]]
+  then
+    bspc rule -a "kitty" -o desktop=^$ws
+    bspc desktop -f $ws
+    run kitty --session /etc/kitty-session-nix-config.conf
+    exit 0
+  fi
+
+  if [[ "$first_selection" == *"Open booker project"* ]]
+  then
+    # bspc desktop $ws -l monocle
+    bspc rule -a "kitty" -o desktop=^$ws
+    bspc desktop -f $ws
+    run kitty --session /etc/kitty-session-booker.conf
+    exit 0
+  fi
+
+  if [[ "$first_selection" == *"Open tripper project"* ]]
+  then
+    # bspc desktop $ws -l monocle
+    bspc rule -a "kitty" -o desktop=^$ws
+    bspc desktop -f $ws
+    run kitty --session /etc/kitty-session-tripper.conf
+    exit 0
+  fi
+fi
+
+if [[ "$*" = "Open nix-config" || "$*" = "Open booker project" || "$*" = "Open tripper project" ]]
+then
+  #Save selection
+  echo "$*" > /tmp/rofi-custom-options
+
+  #Show list label
+  echo -en "\0markup-rows\x1ftrue\n"
+  echo -en "\0message\x1f<b>Select workspace</b>\n"
+
+  #Show options
+  echo "Workspace current"
+  workspaces=(2 3 F2 F3 F4)
   for w in ${workspaces[@]}
   do
-    echo -en "\0markup-rows\x1ftrue\n"
-    echo -en "\0message\x1f<b>Open nix-config in</b>\n"
     echo "Workspace $w"
   done
+
   exit 0
 fi
 
 if [ "$*" = "Change BSPWM gaps" ]
 then
+  #Save selection
+  echo "$*" > /tmp/rofi-custom-options
+
+  #Show list label
   echo -en "\0markup-rows\x1ftrue\n"
   echo -en "\0message\x1f<b>Select BSPWM gap size</b>\n"
+
+  #Show options
+  echo 0
   echo 16
   echo 32
   echo 64
-  exit 0
-fi
 
-if [ "$*" = "Desktop 2 Booker" ]
-then
-  coproc (/etc/bspwm_desktop_2_booker.sh > /dev/null 2>&1)
-  exit 0
-fi
-
-if [ "$*" = "Desktop 2 Tripper" ]
-then
-  coproc (/etc/bspwm_desktop_2_tripper.sh > /dev/null 2>&1)
   exit 0
 fi
 
@@ -56,19 +109,11 @@ then
 fi
 
 if [[ -z "$@" ]]; then
-  echo -en "Change BSPWM gaps\0icon\x1fterminal\n"
-  echo -en "Desktop 2 Booker\0icon\x1fterminal\n"
-  echo -en "Desktop 2 Tripper\0icon\x1fterminal\n"
-  echo -en "Desktop 4\0icon\x1fterminal\n"
+  echo -en "Open booker project\0icon\x1fterminal\n"
+  echo -en "Open tripper project\0icon\x1fterminal\n"
   echo -en "Open nix-config\0icon\x1fterminal\n"
+  echo -en "Desktop 4\0icon\x1fterminal\n"
+  echo -en "Change BSPWM gaps\0icon\x1fterminal\n"
 else
-  export BSPWM_WINDOW_GAP=$1
-  killall -q polybar
-  if [[ $1 == 16 ]]; then
-    coproc (polybar main -r > /dev/null 2>&1)
-  else
-    coproc (polybar secondary -r > /dev/null 2>&1)
-  fi
-  bspc config window_gap $1
   exit 0
 fi
