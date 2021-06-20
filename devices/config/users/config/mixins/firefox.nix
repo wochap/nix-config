@@ -7,7 +7,10 @@ let
 in
 {
   config = {
-    nixpkgs.overlays = [ nightlyOverlay ];
+    # Install nightly firefox version
+    nixpkgs.overlays = [
+      nightlyOverlay
+    ];
 
     home-manager.users.gean = {
       home.file = {
