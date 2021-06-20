@@ -15,7 +15,7 @@ in
             #!/usr/bin/env bash
 
             polybar-msg cmd show
-            bspc config -m focused top_padding $POLYBAR_HEIGHT
+            bspc config top_padding $POLYBAR_HEIGHT
           '';
           mode = "0755";
         };
@@ -24,7 +24,7 @@ in
             #!/usr/bin/env bash
 
             polybar-msg cmd hide
-            bspc config -m focused top_padding 0
+            bspc config top_padding 0
           '';
           mode = "0755";
         };
