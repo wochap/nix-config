@@ -15,7 +15,7 @@ in
             #!/usr/bin/env bash
 
             polybar-msg cmd show
-            bspc config -m focused top_padding $(($POLYBAR_HEIGHT + $BSPWM_WINDOW_GAP))
+            bspc config -m focused top_padding $POLYBAR_HEIGHT
           '';
           mode = "0755";
         };
