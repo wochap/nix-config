@@ -8,6 +8,7 @@ in
     environment.systemPackages = with pkgs; [
       # TOOLS
       # base-devel
+      usbutils # lsusb, for android development
       bc # calculator cli
       cached-nix-shell # fast nix-shell scripts
       dex # execute DesktopEntry files
