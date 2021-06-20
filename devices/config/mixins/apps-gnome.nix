@@ -14,30 +14,30 @@ in
       };
       systemPackages = with pkgs; [
         # APPS
-        # gnome3.bijiben
-        gnome3.cheese # test webcam
-        gnome3.eog # image viewer
-        gnome3.evolution # email/calendar client
-        gnome3.file-roller # archive manager
-        gnome3.geary # email client
-        gnome3.gnome-calculator
-        gnome3.gnome-calendar
-        gnome3.gnome-clocks
-        gnome3.gnome-control-center # add google account for gnome apps
-        gnome3.gnome-font-viewer
-        gnome3.gnome-sound-recorder # test microphone
-        gnome3.gnome-system-monitor
-        gnome3.gnome-todo
-        gnome3.nautilus
-        gnome3.pomodoro
-        gnome3.seahorse # manage GnomeKeyring
+        # gnome.bijiben
+        gnome.cheese # test webcam
+        gnome.eog # image viewer
+        evolution # email/calendar client
+        gnome.file-roller # archive manager
+        gnome.geary # email client
+        gnome.gnome-calculator
+        gnome.gnome-calendar
+        gnome.gnome-clocks
+        gnome.gnome-control-center # add google account for gnome apps
+        gnome.gnome-font-viewer
+        gnome.gnome-sound-recorder # test microphone
+        gnome.gnome-system-monitor
+        gnome.gnome-todo
+        gnome.nautilus
+        gnome.pomodoro
+        gnome.seahorse # manage GnomeKeyring
         gtimelog
 
         # Themes
-        gnome3.adwaita-icon-theme
+        gnome.adwaita-icon-theme
 
         # Themes settings
-        gnome3.gsettings-desktop-schemas
+        gnome.gsettings-desktop-schemas
         gtk-engine-murrine
         gtk_engines
         lxappearance
@@ -53,7 +53,7 @@ in
 
     services = {
       # Required for gnome `Online Accounts`, Calendar and Geary
-      gnome3 = {
+      gnome = {
         evolution-data-server.enable = true;
         gnome-online-accounts.enable = true;
         gnome-keyring.enable = true;

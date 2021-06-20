@@ -6,7 +6,7 @@ in
 {
   config = {
     fonts = {
-      enableFontDir = true;
+      fontDir.enable = true;
       enableGhostscriptFonts = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [

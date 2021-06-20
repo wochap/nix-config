@@ -3,8 +3,8 @@
 let
   home-manager = builtins.fetchGit {
     url = "https://github.com/nix-community/home-manager.git";
-    rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
-    ref = "release-20.09";
+    rev = "148d85ee8303444fb0116943787aa0b1b25f94df";
+    ref = "release-21.05";
   };
   isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";

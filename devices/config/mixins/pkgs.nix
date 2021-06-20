@@ -97,7 +97,7 @@ in
 
       # APPS MEDIA
       inkscape # photo editor cli/gui
-      kdeApplications.kdenlive # video editor
+      # kdeApplications.kdenlive # video editor
       nomacs # image viewer/editor
       obs-studio # video capture
       olive-editor
