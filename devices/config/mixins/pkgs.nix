@@ -1,10 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  unstablePkgs = import (builtins.fetchTarball {
-    url = https://github.com/nixos/nixpkgs/archive/2c2b33c326a3faf5dc86e373dfafe0dcf3eb5136.tar.gz;
-    sha256 = "0wpfllarf1s0bbs85f9pa4nihf94hscpzvk5af4a1zxgq2l9c8r6";
-  }) { config = config.nixpkgs.config; };
   localPkgs = import ../packages { pkgs = pkgs; };
 in
 {
@@ -39,7 +35,7 @@ in
       pciutils # lspci and others commands
       pulsemixer
       trash-cli # required by vscode
-      unstablePkgs.devour # swallow
+      unstable.devour # swallow
       unzip
       vdpauinfo # verifying VDPAU
       vim
@@ -85,14 +81,14 @@ in
       discord
       etcher # create booteable usbs
       filelight # view disk usage
-      google-chrome
+      unstable.google-chrome
       gparted
       mysql-workbench
       postman
       screenkey # show key pressed
       simplenote
       slack
-      sublime3 # text editor
+      unstable.sublime3 # text editor
       sxiv # simple image viewer
       vscode
       zathura # PDF viewer
