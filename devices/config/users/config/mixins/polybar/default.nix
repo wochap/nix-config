@@ -46,6 +46,14 @@ in
           source = ./dotfiles/scripts/rextie_usd.js;
           executable = true;
         };
+        ".config/polybar/scripts/btc_usd.js" = {
+          source = ./dotfiles/scripts/btc_usd.js;
+          executable = true;
+        };
+        ".config/polybar/scripts/doge_usd.js" = {
+          source = ./dotfiles/scripts/doge_usd.js;
+          executable = true;
+        };
       };
       services.polybar = {
         enable = true;
