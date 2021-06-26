@@ -24,6 +24,12 @@ in
         # to ensure `allowUnfree = true;` is propagated:
         config = config.nixpkgs.config;
       };
+      prevstable = import (builtins.fetchTarball {
+        url = https://github.com/nixos/nixpkgs/archive/cd63096d6d887d689543a0b97743d28995bc9bc3.tar.gz;
+        sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
+      }) {
+        config = config.nixpkgs.config;
+      };
       android = import (builtins.fetchTarball {
         url = https://github.com/tadfisher/android-nixpkgs/archive/0c4e5a01dbd4c8c894f2186a7c582abf55a43c5e.tar.gz;
         sha256 = "0x56nh4nxx5hvpi7aq66v7xm9mzn4b2gs50z60w8c3ciimjlpip8";

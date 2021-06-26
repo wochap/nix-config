@@ -27,7 +27,7 @@ in
         gnome.gnome-font-viewer
         gnome.gnome-sound-recorder # test microphone
         gnome.gnome-system-monitor
-        gnome.gnome-todo
+        prevstable.gnome3.gnome-todo
         gnome.nautilus
         gnome.pomodoro
         gnome.seahorse # manage GnomeKeyring
