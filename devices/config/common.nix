@@ -17,7 +17,6 @@ in
     ./mixins/apps-xfce.nix
     ./mixins/docker.nix
     ./mixins/lorri.nix
-    ./mixins/android.nix
     ./users/gean.nix
   ];
 

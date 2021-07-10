@@ -29,15 +29,16 @@ echo "" > /tmp/rofi-custom-options
 
 if [[ "$first_selection" == *"Change BSPWM gaps"* ]]
 then
-  export BSPWM_WINDOW_GAP=$1
   stop polybar > /dev/null 2>&1
+  bspc config window_gap $1
+  bspc config top_padding $POLYBAR_HEIGHT
+  export BSPWM_WINDOW_GAP=$1
   if [[ $1 == 16 ]]; then
+    bspc config top_padding $(($POLYBAR_HEIGHT + $1))
     coproc (polybar main -r > /dev/null 2>&1)
-    bspc config top_padding $1
   else
     coproc (polybar secondary -r > /dev/null 2>&1)
   fi
-  bspc config window_gap $1
   exit 0
 fi
 

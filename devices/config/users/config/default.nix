@@ -19,6 +19,7 @@ in
     ./mixins/eww
     ./mixins/ptsh
     ./mixins/kitty
+    ./mixins/android.nix
   ];
 
   config = {
