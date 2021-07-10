@@ -59,16 +59,16 @@
   urgency_low = {
     background = "#202020FF";
     foreground = "#e9e8e9";
-    timeout = 5;
+    timeout = 60000;
   };
   urgency_normal = {
     background = "#202020FF";
     foreground = "#e9e8e9";
-    timeout = 5;
+    timeout = 60000;
   };
   urgency_critical = {
     background = "#202020FF";
     foreground = "#e9e8e9";
-    timeout = 120;
+    timeout = 60000;
   };
 }
