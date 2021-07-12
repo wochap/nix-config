@@ -52,6 +52,9 @@ in
       plymouth = {
         enable = true;
       };
+
+      #Enable ntfs
+      supportedFilesystems = [ "ntfs" ];
     };
 
     environment = {
