@@ -11,7 +11,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
-    The minimun config is to have: `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
+    The minimun config must have: `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
 
     **NOTE:** Run `sudo nixos-install` without root user (sudo su)
 1. Reboot and connect to wifi/ethernet
