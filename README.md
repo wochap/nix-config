@@ -91,10 +91,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ sudo flatpak override com.stremio.Stremio --env=XCURSOR_SIZE=40
     $ sudo flatpak --user override com.stremio.Stremio --filesystem=/home/gean/.icons/:ro
     ```
-1. Setup [Lorri](https://github.com/target/lorri)
-    ```
-    $ direnv allow
-    ```
+
 1. [Monitor setup](https://http.download.nvidia.com/XFree86/Linux-x86/325.15/README/xconfigoptions.html) for nvidia cards
 
     ```
@@ -122,12 +119,13 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 
 ## Development Workflow
 
-```
-# Create shell.nix
+1. Setup [Lorri](https://github.com/target/lorri)
+    ```
+    # Create shell.nix
 
-$ lorri init
-$ direnv allow
-```
+    $ lorri init
+    $ direnv allow
+    ```
 
 ## Whats out of the box
 
