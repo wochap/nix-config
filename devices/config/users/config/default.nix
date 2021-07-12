@@ -19,6 +19,7 @@ in
     ./mixins/eww
     ./mixins/ptsh
     ./mixins/kitty
+    ./mixins/android.nix
   ];
 
   config = {
@@ -36,13 +37,6 @@ in
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
 
-      # https://github.com/rycee/home-manager/blob/master/modules/targets/generic-linux.nix#blob-path
-      targets.genericLinux.enable = true;
-      targets.genericLinux.extraXdgDataDirs = [
-        "/usr/share"
-        "/usr/local/share"
-      ];
-
       # Open GTK inspector with Ctrl + Shift + D
       # GTK_DEBUG=interactive <app>
       dconf.settings = {
@@ -53,6 +47,10 @@ in
 
       # Edit home files
       xdg.enable = true;
+      xdg.systemDirs.data = [
+        "/usr/share"
+        "/usr/local/share"
+      ];
 
       home.extraProfileCommands = ''
         if [[ -d "$out/share/applications" ]] ; then

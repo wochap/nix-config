@@ -11,7 +11,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
-    The minimun config is to have: `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
+    The minimun config must have: `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
 
     **NOTE:** Run `sudo nixos-install` without root user (sudo su)
 1. Reboot and connect to wifi/ethernet
@@ -30,6 +30,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ git clone https://github.com/wochap/nix-config.git ~/nix-config
     ```
 1. Rebuild nixos with the machine's specific config, for example, heres's a rebuild for my `desktop`
+    **WARNING:** `nixos-rebuild` can take several hours
     ```
     $ NIXOS_CONFIG=~/nix-config/devices/desktop.nix nixos-rebuild switch
     ```
@@ -90,10 +91,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ sudo flatpak override com.stremio.Stremio --env=XCURSOR_SIZE=40
     $ sudo flatpak --user override com.stremio.Stremio --filesystem=/home/gean/.icons/:ro
     ```
-1. Setup [Lorri](https://github.com/target/lorri)
-    ```
-    $ direnv allow
-    ```
+
 1. [Monitor setup](https://http.download.nvidia.com/XFree86/Linux-x86/325.15/README/xconfigoptions.html) for nvidia cards
 
     ```
@@ -121,12 +119,13 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 
 ## Development Workflow
 
-```
-# Create shell.nix
+1. Setup [Lorri](https://github.com/nix-community/lorri)
+    ```
+    # Create shell.nix
 
-$ lorri init
-$ direnv allow
-```
+    $ lorri init
+    $ direnv allow
+    ```
 
 ## Whats out of the box
 

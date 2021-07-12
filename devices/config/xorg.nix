@@ -43,15 +43,15 @@ in
         xterm.enable = false;
       };
       displayManager = {
-        sddm = {
-          enable = false;
-          enableHidpi = false;
-          theme = "sugar-dark";
-          extraConfig = lib.mkIf isHidpi ''
-            [X11]
-            ServerArguments=-dpi 144
-          '';
-        };
+        # sddm = {
+        #   enable = false;
+        #   enableHidpi = false;
+        #   theme = "sugar-dark";
+        #   extraConfig = lib.mkIf isHidpi ''
+        #     [X11]
+        #     ServerArguments=-dpi 144
+        #   '';
+        # };
         lightdm = {
           enable = true;
           background = ./assets/wallpaper.jpg;

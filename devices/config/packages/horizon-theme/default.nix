@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk-engine-murrine }:
+{ stdenv, lib, fetchFromGitHub, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "horizon-theme";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp -a ./source/.themes/horizon-theme $out/share/themes
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Horizon theme";
     homepage = "https://github.com/zodd18/Horizon";
   };

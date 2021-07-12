@@ -14,9 +14,6 @@ in
         backend = "glx";
         # Disabling experimentalBackends, removes corners artifact with shadows
         experimentalBackends = true;
-        # opacityRule = [
-        #   "90:class_i ?= 'thunar'"
-        # ];
 
         extraOptions = (builtins.readFile ./dotfiles/picom.conf);
         package = pkgs.picom.overrideAttrs(o: {
@@ -25,7 +22,7 @@ in
             repo = "picom";
             owner = "yshui";
             # next branch
-            rev = "7ba87598c177092a775d5e8e4393cb68518edaac";
+            rev = "fd381dacff5c755b43effba441fb5706a0f378a4";
             sha256 = "0za3ywdn27dzp7140cpg1imbqpbflpzgarr76xaqmijz97rv1909";
 
             # # Stable picom
@@ -46,8 +43,8 @@ in
             # repo = "picom";
             # owner = "ibhagwan";
             # # next-rebase branch
-            # rev = "6d87428f78a46bea295e0a21d23c4b56133aadc3";
-            # sha256 = "0b5yjgwrndg01l1v2d76b96176k9n6638v73kfr9453crzizzyli";
+            # rev = "60eb00ce1b52aee46d343481d0530d5013ab850b";
+            # sha256 = "1m17znhl42sa6ry31yiy05j5ql6razajzd6s3k2wz4c63rc2fd1w";
           };
         });
       };

@@ -18,7 +18,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      gnome3.zenity
+      gnome.zenity
       gst_all_1.gst-plugins-base
       gst_all_1.gst-plugins-good
       gst_all_1.gstreamer

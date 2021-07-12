@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk-engine-murrine }:
+{ stdenv, lib, fetchFromGitHub, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "whitesur-dark-theme";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     mv $out/share/themes/source $out/share/themes/WhiteSur-dark
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WhiteSur dark theme.";
     homepage = "https://github.com/wochap/WhiteSur-dark";
   };

@@ -14,8 +14,8 @@ in
           text = ''
             #!/usr/bin/env bash
 
+            bspc config top_padding $POLYBAR_HEIGHT
             polybar-msg cmd show
-            bspc config -m focused top_padding $(($POLYBAR_HEIGHT + $BSPWM_WINDOW_GAP))
           '';
           mode = "0755";
         };
@@ -23,8 +23,8 @@ in
           text = ''
             #!/usr/bin/env bash
 
+            bspc config top_padding 0
             polybar-msg cmd hide
-            bspc config -m focused top_padding 0
           '';
           mode = "0755";
         };
@@ -44,6 +44,14 @@ in
         };
         ".config/polybar/scripts/rextie_usd.js" = {
           source = ./dotfiles/scripts/rextie_usd.js;
+          executable = true;
+        };
+        ".config/polybar/scripts/btc_usd.js" = {
+          source = ./dotfiles/scripts/btc_usd.js;
+          executable = true;
+        };
+        ".config/polybar/scripts/doge_usd.js" = {
+          source = ./dotfiles/scripts/doge_usd.js;
           executable = true;
         };
       };

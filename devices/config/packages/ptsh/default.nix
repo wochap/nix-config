@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}, ... }:
+{ lib, pkgs ? import <nixpkgs> {}, ... }:
 
 pkgs.stdenv.mkDerivation rec {
   pname = "ptsh";
@@ -41,7 +41,7 @@ pkgs.stdenv.mkDerivation rec {
     # $out/bin/ptsh
   '';
 
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     description = "ptSh";
     homepage = "https://github.com/jszczerbinsky/ptSh";
   };
