@@ -30,6 +30,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ git clone https://github.com/wochap/nix-config.git ~/nix-config
     ```
 1. Rebuild nixos with the machine's specific config, for example, heres's a rebuild for my `desktop`
+    **WARNING:** `nixos-rebuild` can take several hours
     ```
     $ NIXOS_CONFIG=~/nix-config/devices/desktop.nix nixos-rebuild switch
     ```
