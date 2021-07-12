@@ -119,7 +119,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 
 ## Development Workflow
 
-1. Setup [Lorri](https://github.com/target/lorri)
+1. Setup [Lorri](https://github.com/nix-community/lorri)
     ```
     # Create shell.nix
 
