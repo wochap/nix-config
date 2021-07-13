@@ -1,16 +1,16 @@
 { config, pkgs, ... }:
 
 let
-  moz-rev = "3f3fba4e2066f28a1ad7ac60e86a688a92eb5b5f";
-  moz-url = builtins.fetchTarball { url = "https://github.com/mozilla/nixpkgs-mozilla/archive/${moz-rev}.tar.gz";};
-  nightlyOverlay = (import "${moz-url}/firefox-overlay.nix");
+  # moz-rev = "3f3fba4e2066f28a1ad7ac60e86a688a92eb5b5f";
+  # moz-url = builtins.fetchTarball { url = "https://github.com/mozilla/nixpkgs-mozilla/archive/${moz-rev}.tar.gz";};
+  # nightlyOverlay = (import "${moz-url}/firefox-overlay.nix");
 in
 {
   config = {
     # Install nightly firefox version
-    nixpkgs.overlays = [
-      nightlyOverlay
-    ];
+    # nixpkgs.overlays = [
+    #   nightlyOverlay
+    # ];
 
     home-manager.users.gean = {
       home.file = {
@@ -44,7 +44,7 @@ in
       };
       programs.firefox = {
         enable = true;
-        package = pkgs.latest.firefox-beta-bin;
+        # package = pkgs.latest.firefox-beta-bin;
         profiles = {
           default = {
             id = 0;

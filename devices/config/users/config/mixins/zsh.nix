@@ -39,9 +39,12 @@
           # Completion for kitty
           kitty + complete setup zsh | source /dev/stdin
 
-          # Auto run nix-shell
+          # Setup lorri/direnv
           export DIRENV_LOG_FORMAT=
           eval "$(direnv hook zsh)"
+
+          # ZSH settings
+          setopt no_share_history
 
           source ${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
         '';
