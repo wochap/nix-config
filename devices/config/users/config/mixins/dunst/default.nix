@@ -30,7 +30,7 @@ in
           # name = "WhiteSur-dark";
           # package = localPkgs.whitesur-dark-icons;
         };
-        settings = (import ./dotfiles/dunstrc.nix);
+        settings = (import ./dotfiles/dunstrc.nix { pkgs = pkgs; });
       };
     };
   };
