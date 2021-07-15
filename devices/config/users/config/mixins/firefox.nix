@@ -51,6 +51,7 @@ in
             name = "default";
             isDefault = true;
             settings = {
+              "browser.quitShortcut.disabled" =  true;
               "browser.tabs.tabMinWidth" = 5;
 
               # Allow customChrome.css
