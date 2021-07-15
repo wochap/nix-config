@@ -81,7 +81,7 @@ in
         (lib.mkIf isHidpi {
           QT_AUTO_SCREEN_SCALE_FACTOR = "0";
           QT_FONT_DPI = "96";
-          QT_SCALE_FACTOR = "1.25";
+          QT_SCALE_FACTOR = "1.5";
         })
       ];
 
