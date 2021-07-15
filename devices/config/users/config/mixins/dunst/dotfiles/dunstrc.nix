@@ -1,3 +1,12 @@
+{ pkgs, ... }:
+
+let
+  localPkgs = import ../../../../../packages { pkgs = pkgs; };
+  background = "#fdd800"; #RRGGBBAA
+  border = "#fccb00";
+  borderWidth = 4;
+  foreground = "#212224";
+in
 {
   global = {
     # The geometry of the window. Format: [{width}]x{height}[+/-{x}+/-{y}]
@@ -7,35 +16,20 @@
     # Positive x value is measured from the left of the screen, negative x is measured from the right
     # Positive y value is measured from the top of the screen
     geometry = "500x6-16-16";
-    background = "#202020FF"; #RRGGBBAA
-    alignment = "left";
-    always_run_script = true;
     # browser = "/etc/open_url.sh";
+    always_run_script = true;
     class = "Dunst";
-    corner_radius = 0;
     follow = "mouse";
-    font = "Iosevka 11";
-    format = "<span weight='600'>%s</span>\\n<span>%b</span>";
-    frame_color = "#282e3a";
-    frame_width = 2;
     hide_duplicate_count = true;
     history_length = 20;
-    horizontal_padding = 16;
-    icon_position = "left";
-    idle_threshold = 120;
+    idle_threshold = 60000;
     ignore_newline = false;
     indicate_hidden = true;
-    line_height = 0;
     markup = "full";
-    max_icon_size = 96;
-    min_icon_size = 64;
     monitor = 0;
     mouse_left_click = "close_current";
     mouse_middle_click = "do_action";
     mouse_right_click = "close_all";
-    padding = 16;
-    separator_color = "#282e3a";
-    separator_height = 2;
     show_age_threshold = 60;
     show_indicators = false;
     shrink = false;
@@ -43,32 +37,53 @@
     stack_duplicates = false;
     sticky_history = false;
     title = "Dunst";
-    transparency = 0;
     word_wrap = true;
+
+    # Theme settings
+    alignment = "left";
+    background = background;
+    # corner_radius = 20;
+    font = "Inter 11";
+    format = "<span weight='600'>%s</span>\\n<span>%b</span>";
+    frame_color = border;
+    frame_width = borderWidth;
+    horizontal_padding = 16;
+    icon_position = "left";
+    line_height = "1.5";
+    max_icon_size = 80;
+    min_icon_size = 80;
+    padding = 16;
+    separator_color = border;
+    separator_height = borderWidth;
+    transparency = 0;
   };
   play_sound = {
     script = "/etc/play_notification.sh";
     summary = "*";
   };
   shortcuts = {
-    close = "ctrl+space";
     # close_all = "ctrl+shift+space";
     # context = "ctrl+shift+period";
+    close = "ctrl+space";
     history = "ctrl+Escape";
   };
   urgency_low = {
-    background = "#202020FF";
-    foreground = "#e9e8e9";
+    background = background;
+    foreground = foreground;
     timeout = 60000;
   };
   urgency_normal = {
-    background = "#202020FF";
-    foreground = "#e9e8e9";
+    background = background;
+    foreground = foreground;
     timeout = 60000;
   };
   urgency_critical = {
-    background = "#202020FF";
-    foreground = "#e9e8e9";
+    background = background;
+    foreground = foreground;
     timeout = 60000;
+  };
+  slack = {
+    appname = "Slack";
+    new_icon = "${localPkgs.whitesur-dark-icons}/share/icons/WhiteSur-dark/256x256/apps/slack.png";
   };
 }
