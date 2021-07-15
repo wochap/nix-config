@@ -1,20 +1,19 @@
 window {
-  background-color: rgba(32, 32, 32, 0.8);
+  background-color: #fdd800;
 }
 
 //vol
 .vol {
-  border-color: #282e3a;
+  border-color: #fccb00;
   border-radius: 0;
-  // border-radius: 8px;
   border-style: solid;
-  border-width: 1px;
+  border-width: 4px;
   padding-left: 40px;
   padding-right: 40px;
 }
 
 .vol-icon {
-  color: rgba(156, 156, 156, 0.8);
+  color: #212224;
   font-family: "Font Awesome 5 Free";
   font-size: 128px;
 }
@@ -34,14 +33,14 @@ window {
 .vol-bar highlight {
   all: unset;
 
-  background-color: rgba(156, 156, 156, 0.8);
+  background-color: #212224;
   border-radius: 100px;
 }
 
 .vol-bar trough {
   all: unset;
 
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(#212224, 0.5);
   min-height: 10px;
   border-radius: 100px;
 }
