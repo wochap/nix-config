@@ -42,7 +42,7 @@ in
     # Theme settings
     alignment = "left";
     background = background;
-    # corner_radius = 20;
+    corner_radius = 20;
     font = "Inter 11";
     format = "<span weight='600'>%s</span>\\n<span>%b</span>";
     frame_color = border;

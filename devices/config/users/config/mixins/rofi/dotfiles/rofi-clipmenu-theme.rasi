@@ -22,6 +22,7 @@ window {
   location: center;
   transparency: "real";
   width: 30em;
+  border-radius: 20px;
 }
 
 mainbox {
@@ -34,7 +35,7 @@ listview {
   cycle: false;
   dynamic: true;
   layout: vertical;
-  lines: 15;
+  lines: 10;
   padding: 0.35em;
   spacing: 0.1em;
 }
@@ -62,6 +63,8 @@ element {
   children: [element-text];
   padding: 0.5em 0.35em;
   text-color: #5C6370;
+  // border: 3px;
+  // border-color: @var-window-bg;
 }
 
 element-text {
@@ -72,6 +75,9 @@ element-text {
 }
 
 element selected {
+  // background-color: #ff1901;
+  // text-color: #2e0301;
+  // border-color: #cb1401;
   background-color: #282c34;
   text-color: #ABB2BF;
 }
