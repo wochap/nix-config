@@ -2,10 +2,10 @@
 
 let
   localPkgs = import ../../../../../packages { pkgs = pkgs; };
-  background = "#FFE033"; #RRGGBBAA
-  border = "#fccb00";
-  borderWidth = 4;
-  foreground = "#212224";
+  background = "#ff1901"; #RRGGBBAA
+  border = "#cb1401";
+  borderWidth = 3;
+  foreground = "#2e0301";
 in
 {
   global = {
@@ -30,7 +30,7 @@ in
     mouse_left_click = "close_current";
     mouse_middle_click = "do_action";
     mouse_right_click = "close_all";
-    show_age_threshold = 60;
+    show_age_threshold = -1;
     show_indicators = false;
     shrink = false;
     sort = false;

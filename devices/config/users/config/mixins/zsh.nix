@@ -5,7 +5,6 @@
     environment = {
       systemPackages = with pkgs; [
         zsh-fast-syntax-highlighting
-        starship
       ];
       pathsToLink = [
         "/share/zsh"
@@ -16,9 +15,6 @@
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
-          # Setup starship theme
-          eval "$(starship init zsh)"
-
           ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
           ### https://github.com/zsh-users/zsh-autosuggestions/issues/238
           pasteinit() {
@@ -44,7 +40,8 @@
           eval "$(direnv hook zsh)"
 
           # ZSH settings
-          setopt no_share_history
+          unsetopt inc_append_history
+          unsetopt share_history
 
           source ${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
         '';
@@ -69,6 +66,18 @@
             rm = "ptrm";
           }
         ];
+      };
+
+      programs.starship = {
+        enable = true;
+        enableZshIntegration = true;
+        settings = {
+          add_newline = true;
+          character = {
+            success_symbol = "[➜](bold green)";
+            error_symbol = "[➜](bold red)";
+          };
+        };
       };
     };
   };

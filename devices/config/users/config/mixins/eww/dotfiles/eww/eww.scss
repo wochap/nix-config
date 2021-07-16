@@ -1,19 +1,19 @@
 window {
-  background-color: #FFE033;
+  background-color: #ff1901;
 }
 
 //vol
 .vol {
-  border-color: #fccb00;
+  border-color: #cb1401;
   border-radius: 0;
   border-style: solid;
-  border-width: 4px;
+  border-width: 3px;
   padding-left: 40px;
   padding-right: 40px;
 }
 
 .vol-icon {
-  color: #212224;
+  color: #2e0301;
   font-family: "Font Awesome 5 Free";
   font-size: 128px;
 }
@@ -33,14 +33,14 @@ window {
 .vol-bar highlight {
   all: unset;
 
-  background-color: #212224;
+  background-color: #2e0301;
   border-radius: 100px;
 }
 
 .vol-bar trough {
   all: unset;
 
-  background-color: rgba(#212224, 0.5);
+  background-color: rgba(#2e0301, 0.5);
   min-height: 10px;
   border-radius: 100px;
 }

@@ -67,6 +67,10 @@
           source = ./dotfiles/rofi-powermenu-theme.rasi;
           mode = "0755";
         };
+        "rofi-clipmenu-theme.rasi" = {
+          source = ./dotfiles/rofi-clipmenu-theme.rasi;
+          mode = "0755";
+        };
         "rofi-theme.rasi" = {
           source = ./dotfiles/rofi-theme.rasi;
           mode = "0755";

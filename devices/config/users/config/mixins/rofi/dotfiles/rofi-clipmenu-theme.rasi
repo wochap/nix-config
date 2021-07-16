@@ -1,0 +1,77 @@
+configuration {
+	sidebar-mode: false;
+  dpi: 0;
+  font: "Inter 11";
+  fullscreen: false;
+  hide-scrollbar: false;
+}
+
+* {
+  var-window-bg: #1e2127;
+  var-window-border-color: #282e3a;
+
+  font: inherit;
+  background-color: inherit;
+  text-color: inherit;
+}
+
+window {
+  background-color: @var-window-bg;
+  border-color: @var-window-border-color;
+  border: 3px;
+  location: center;
+  transparency: "real";
+  width: 30em;
+}
+
+mainbox {
+  background-color: inherit;
+  children: [ inputbar, listview ];
+}
+
+listview {
+  columns: 1;
+  cycle: false;
+  dynamic: true;
+  layout: vertical;
+  lines: 15;
+  padding: 0.35em;
+  spacing: 0.1em;
+}
+
+inputbar {
+	children: [ entry ];
+  expand: false;
+  margin: 0;
+  padding: 0.4em 0.35em 0.35em;
+}
+
+entry {
+  blink: true;
+  expand: true;
+  font: "Inter semibold 14";
+  horizontal-align: 0;
+  padding: 0.5em 0.35em;
+  placeholder-color: #5C6370;
+  placeholder: "Search";
+  text-color: #ABB2BF;
+}
+
+element {
+  border-radius: 0.25em;
+  children: [element-text];
+  padding: 0.5em 0.35em;
+  text-color: #5C6370;
+}
+
+element-text {
+  expand: true;
+  highlight: inherit;
+  horizontal-align: 0;
+  vertical-align: 0.5;
+}
+
+element selected {
+  background-color: #282c34;
+  text-color: #ABB2BF;
+}
