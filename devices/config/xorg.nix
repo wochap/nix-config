@@ -99,8 +99,8 @@ in
     # services.unclutter.enable = true;
 
     # Hide cursor when typing
-    # services.xbanish.enable = true;
-    # services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
+    services.xbanish.enable = true;
+    services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
 
     # Add wifi tray
     programs.nm-applet.enable = true;
