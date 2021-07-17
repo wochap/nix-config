@@ -5,6 +5,7 @@
     environment = {
       systemPackages = with pkgs; [
         zsh-fast-syntax-highlighting
+        exa
       ];
       pathsToLink = [
         "/share/zsh"
@@ -57,8 +58,10 @@
             ns = "nix-shell --run zsh";
             f = "nnn";
 
+            # Setup exa
+            ls = lib.mkForce "exa --icons --group-directories-first --across";
+            la = lib.mkForce "exa --icons --group-directories-first --all --long";
             # Setup ptSh
-            ls = lib.mkForce "ptls";
             pwd = "ptpwd";
             mkdir = "ptmkdir";
             touch = "pttouch";
@@ -72,10 +75,13 @@
         enable = true;
         enableZshIntegration = true;
         settings = {
-          add_newline = true;
+          add_newline = false;
           character = {
             success_symbol = "[➜](bold green)";
             error_symbol = "[➜](bold red)";
+          };
+          nix_shell = {
+            format = "via [$symbol$state]($style) ";
           };
         };
       };
