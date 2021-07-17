@@ -4,7 +4,7 @@
   config = {
     environment = {
       sessionVariables = {
-        BSPWM_WINDOW_GAP = "16";
+        BSPWM_WINDOW_GAP = "25";
       };
       etc = {
         bspwmrc = {
