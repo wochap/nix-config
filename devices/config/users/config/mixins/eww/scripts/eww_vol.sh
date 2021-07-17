@@ -1,67 +1,76 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+getIsMuted() {
+  isMuted=$(pulsemixer --get-mute)
+  echo $isMuted
+}
 
-mute () {
-  muted=$(pulsemixer --get-mute)
-  if [[ "$muted" == "0" ]]; then
+getCurrentVolume() {
+  echo "$(pulsemixer --get-volume | awk '{print $1}')"
+}
+
+writeIcon() {
+  isMuted="$1"
+  if [[ "$isMuted" == "0" ]]; then
     echo "" > /tmp/vol-icon
   else
     echo "" > /tmp/vol-icon
   fi
 }
+
+# Create pipes for eww_vol widget values
+# Update icon and volume value
 if [ -p /tmp/vol ]; then
   true
 else
-  mkfifo /tmp/vol && echo "$(pulsemixer --get-volume | awk '{print $1}')" > /tmp/vol &
+  coproc (mkfifo /tmp/vol > /dev/null 2>&1)
+  currentVolume=$(getCurrentVolume)
+  echo "$currentVolume" > /tmp/vol &
 fi
 if [ -p /tmp/vol-icon ]; then
   true
 else
-  mkfifo /tmp/vol-icon && mute &
+  coproc (mkfifo /tmp/vol-icon > /dev/null 2>&1)
+  isMuted=$(getIsMuted)
+  writeIcon $isMuted &
 fi
 
+# Cancel timeout to close eww_vol
 script_name="eww_vol_close.sh"
 for pid in $(pgrep -f $script_name); do
   kill -9 $pid
 done
 
-# start=$SECONDS
-value=5
+incrementValue=5
 
+# Show eww_vol widget
 eww_wid="$(xdotool search --name 'Eww - vol' || true)"
 if [ ! -n "$eww_wid" ]; then
-  eww open vol
+  coproc (eww open vol > /dev/null 2>&1)
 fi
 
 case $1 in
   up)
-    currentVolume=$(pulsemixer --get-volume | awk '{print $1}')
-    if [[ "$currentVolume" -ge "100" ]]; then
-      pulsemixer --max-volume 100
-    else
-      pulsemixer --change-volume +"$value"
-    fi
-    echo $(pulsemixer --get-volume | awk '{print $1}') > /tmp/vol
-    mute
-    paplay /etc/blop.wav
+    # Update volume value
+    pulsemixer --max-volume 100 --change-volume +"$incrementValue"
+    paplay /etc/blop.wav &
+    currentVolume=$(getCurrentVolume)
+    echo "$currentVolume" > /tmp/vol
   ;;
   down)
-    pulsemixer --change-volume -"$value"
-    echo $(pulsemixer --get-volume | awk '{print $1}') > /tmp/vol
-    mute
-    paplay /etc/blop.wav
+    # Update volume value
+    pulsemixer --change-volume -"$incrementValue"
+    paplay /etc/blop.wav &
+    currentVolume=$(getCurrentVolume)
+    echo $currentVolume > /tmp/vol
   ;;
   mute)
-    muted=$(pulsemixer --get-mute)
-    if [[ "$muted" == "0" ]]; then
-      pulsemixer --toggle-mute
-      echo "" > /tmp/vol-icon
-    else
-      pulsemixer --toggle-mute
-      echo "" > /tmp/vol-icon
-    fi
+    # Update icon
+    pulsemixer --toggle-mute
+    isMuted=$(getIsMuted)
+    writeIcon $isMuted
   ;;
 esac
 
-/etc/eww_vol_close.sh
+# Start timeout to close eww_vol
+/etc/eww_vol_close.sh &
