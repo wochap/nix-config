@@ -14,10 +14,5 @@ clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor icon
 eww daemon &
 caffeine &
-polybar powermenu -q -r &
-polybar workspaces -q -r &
-polybar tray -q -r &
-polybar right -q -r &
-polybar xkeyboard -q -r &
-polybar monocle-indicator -q -r &
+sh /etc/scripts/polybar-start.sh &
 sh /etc/fix_caps_lock_delay.sh &

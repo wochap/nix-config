@@ -10,6 +10,10 @@ in
         POLYBAR_HEIGHT = "48";
       };
       etc = {
+        "scripts/polybar-start.sh" = {
+          source = ./dotfiles/scripts/polybar-start.sh;
+          mode = "0755";
+        };
         "scripts/polybar-show.sh" = {
           text = ''
             #!/usr/bin/env bash
