@@ -19,5 +19,5 @@ polybar workspaces -q -r &
 polybar tray -q -r &
 polybar right -q -r &
 polybar xkeyboard -q -r &
-polybar monocle -q-indicator -r &
+polybar monocle-indicator -q -r &
 sh /etc/fix_caps_lock_delay.sh &

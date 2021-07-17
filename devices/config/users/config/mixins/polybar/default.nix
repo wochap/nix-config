@@ -14,7 +14,7 @@ in
           text = ''
             #!/usr/bin/env bash
 
-            bspc config top_padding $POLYBAR_HEIGHT
+            bspc config top_padding $(($POLYBAR_HEIGHT + 25))
             polybar-msg cmd show
           '';
           mode = "0755";

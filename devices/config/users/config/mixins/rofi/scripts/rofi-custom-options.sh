@@ -31,14 +31,13 @@ if [[ "$first_selection" == *"Change BSPWM gaps"* ]]
 then
   stop polybar > /dev/null 2>&1
   bspc config window_gap $1
-  bspc config top_padding $POLYBAR_HEIGHT
-  export BSPWM_WINDOW_GAP=$1
-  if [[ $1 == 16 ]]; then
-    bspc config top_padding $(($POLYBAR_HEIGHT + $1))
-    coproc (polybar main -r > /dev/null 2>&1)
-  else
-    coproc (polybar secondary -r > /dev/null 2>&1)
-  fi
+  bspc config top_padding $(($POLYBAR_HEIGHT + 25))
+  coproc (polybar powermenu -q -r > /dev/null 2>&1)
+  coproc (polybar workspaces -q -r > /dev/null 2>&1)
+  coproc (polybar tray -q -r > /dev/null 2>&1)
+  coproc (polybar right -q -r > /dev/null 2>&1)
+  coproc (polybar xkeyboard -q -r > /dev/null 2>&1)
+  coproc (polybar monocle-indicator -q -r > /dev/null 2>&1)
   exit 0
 fi
 
