@@ -2,7 +2,7 @@
 
 let
   localPkgs = import ../../../../../packages { pkgs = pkgs; };
-  background = "#ff1901"; #RRGGBBAA
+  background = "#FF5C57"; #RRGGBBAA
   border = "#cb1401";
   borderWidth = 3;
   foreground = "#2e0301";
