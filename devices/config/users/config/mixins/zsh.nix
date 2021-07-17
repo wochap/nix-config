@@ -40,7 +40,7 @@
           eval "$(direnv hook zsh)"
 
           # ZSH settings
-          unsetopt inc_append_history
+          setopt inc_append_history
           unsetopt share_history
 
           source ${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
