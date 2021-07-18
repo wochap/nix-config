@@ -56,6 +56,7 @@ in
       htop # monitor system
       neofetch # print computer info
       ranger # file manager cli
+      stripe-cli
       #dogecoin
 
       # DE
