@@ -32,12 +32,7 @@ then
   stop polybar > /dev/null 2>&1
   bspc config window_gap $1
   bspc config top_padding $(($POLYBAR_HEIGHT + 25))
-  coproc (polybar powermenu -q -r > /dev/null 2>&1)
-  coproc (polybar workspaces -q -r > /dev/null 2>&1)
-  coproc (polybar tray -q -r > /dev/null 2>&1)
-  coproc (polybar right -q -r > /dev/null 2>&1)
-  coproc (polybar xkeyboard -q -r > /dev/null 2>&1)
-  coproc (polybar monocle-indicator -q -r > /dev/null 2>&1)
+  coproc (/etc/scripts/polybar-start.sh > /dev/null 2>&1)
   exit 0
 fi
 
