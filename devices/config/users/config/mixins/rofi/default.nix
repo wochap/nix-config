@@ -21,6 +21,10 @@
           source = ./scripts/rofi-help.sh;
           mode = "0755";
         };
+        "rofi-wifi.sh" = {
+          source = ./scripts/rofi-wifi.sh;
+          mode = "0755";
+        };
         "rofi-calc.sh" = {
           text = ''
             #!/usr/bin/env bash

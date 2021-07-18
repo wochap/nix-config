@@ -13,6 +13,6 @@ blueberry-tray &
 clipmenud &
 xsetroot -cursor_name left_ptr & # fix cursor icon
 eww daemon &
-caffeine &
+caffeine -a &
 sh /etc/scripts/polybar-start.sh &
 sh /etc/fix_caps_lock_delay.sh &
