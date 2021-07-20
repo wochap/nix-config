@@ -1,14 +1,14 @@
 { config, pkgs, lib, ... }:
 
 let
-  localPkgs = import ../packages { pkgs = pkgs; };
+  localPkgs = import ../../packages { pkgs = pkgs; };
 in
 {
   config = {
     environment = {
       etc = {
         "scripts/restart_goa_daemon.sh" = {
-          source = ../scripts/restart_goa_daemon.sh;
+          source = ./scripts/restart_goa_daemon.sh;
           mode = "0755";
         };
       };
@@ -65,7 +65,6 @@ in
         packages = [ pkgs.gcr ];
       };
     };
-
 
     # Fix gnome-keyring when sddm is enabled
     security.pam.services.sddm.enableGnomeKeyring = true;

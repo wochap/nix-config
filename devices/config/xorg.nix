@@ -6,7 +6,6 @@ let
 in
 {
   imports = [
-    # ./modules/lightdm-webkit2-greeter
     ./mixins/bspwm
     ./common.nix
   ];
