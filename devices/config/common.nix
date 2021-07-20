@@ -13,9 +13,9 @@ in
     ./mixins/ipwebcam
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
-    ./mixins/apps-gnome.nix
-    ./mixins/apps-xfce.nix
-    ./mixins/docker.nix
+    ./mixins/apps-gnome.nix # Comment on first install
+    ./mixins/apps-xfce.nix # Comment on first install
+    ./mixins/docker.nix # Comment on first install
     ./mixins/lorri.nix
     ./users/gean.nix
   ];
@@ -39,27 +39,19 @@ in
   };
 
   config = {
-    # This value determines the NixOS release from which the default
-    # settings for stateful data, like file locations and database versions
-    # on your system were taken. It‘s perfectly fine and recommended to leave
-    # this value at the release version of the first install of this system.
-    # Before changing this value read the documentation for this option
-    # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-    system.stateVersion = "20.09"; # Did you read the comment?
-
     boot = {
       # Show nixos logo on boot/shutdown
       plymouth = {
         enable = true;
       };
 
-      #Enable ntfs
+      # Enable ntfs disks
       supportedFilesystems = [ "ntfs" ];
     };
 
     environment = {
       etc = {
-        "open_url.sh" = {
+        "/scripts/open_url.sh" = {
           source = ./scripts/open_url.sh;
           mode = "0755";
         };
@@ -101,19 +93,14 @@ in
     # Change flatpak env vars https://github.com/flatpak/flatpak/issues/2980
     # services.flatpak.enable = true;
 
-    # Required for polybar `docker module` script
-    security.sudo.configFile = ''
-      user ALL=(ALL) NOPASSWD: ${pkgs.docker}/bin/docker ps -qf status=running
-    '';
-
-    # Consistent file dialog
-    xdg.portal = {
-      enable = true;
-      gtkUsePortal = true;
-      extraPortals = [
-        pkgs.xdg-desktop-portal-gtk
-        pkgs.xdg-desktop-portal-kde
-      ];
-    };
+    # Consistent file dialog for flatpak apps?
+    # xdg.portal = {
+    #   enable = true;
+    #   gtkUsePortal = true;
+    #   extraPortals = [
+    #     pkgs.xdg-desktop-portal-gtk
+    #     pkgs.xdg-desktop-portal-kde
+    #   ];
+    # };
   };
 }

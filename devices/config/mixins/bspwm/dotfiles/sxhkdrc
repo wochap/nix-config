@@ -177,9 +177,9 @@ super + alt + l
 super + alt + f
   nautilus
 
-# Screencast region to mp4
+# Screencast/record region to mp4
 super + alt + r
-  /etc/scrrec.sh -s ~/Recordings/$(date +%F-%T).mp4
+  /etc/scripts/scrrec.sh -s ~/Recordings/$(date +%F-%T).mp4
 
 # Open screenshoot utility
 super + alt + s

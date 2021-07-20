@@ -48,34 +48,36 @@ in
       nmap
       tightvnc
       metasploit
-      teamviewer
-
-      # APPS CLI
-      gitAndTools.gh
-      gotop # monitor system
-      htop # monitor system
-      neofetch # print computer info
-      ranger # file manager cli
-      stripe-cli
-      #dogecoin
 
       # DE
       alacritty # terminal fallback
       feh # wallpaper manager
       hunspell # dictionary for document programs
       hunspellDicts.en-us
-      hyper
+      hyper # terminal
       kitty # terminal
-      kmag # magnifying glass
+      lxqt.pcmanfm-qt # file manager with better scaling
       mpv # video player
       nitrogen # wallpaper manager
-      nnn # terminal file manager
-      pamixer # audio cli
       pavucontrol # audio settings gui
+      zathura # PDF viewer
+
+      # DE CLI
+      gitAndTools.gh
+      gotop # monitor system
+      htop # monitor system
+      neofetch # print computer info
+      nnn # file manager CLI
+      pamixer # audio cli
       playerctl # media player cli
+      ranger # file manager CLI
       systemd
 
-      # APPS
+      # APPS CLI
+      stripe-cli
+      #dogecoin
+
+      # APPS (Comment on first install)
       anki # mnemonic tool
       bitwarden
       brave
@@ -83,20 +85,19 @@ in
       discord
       etcher # create booteable usbs
       filelight # view disk usage
-      unstable.google-chrome
       gparted
       mysql-workbench
       postman
       screenkey # show key pressed
       simplenote
       slack
-      unstable.sublime3 # text editor
       sxiv # simple image viewer
+      unstable.google-chrome
+      unstable.sublime3 # text editor
       vscode
-      zathura # PDF viewer
       zoom-us
 
-      # APPS MEDIA
+      # APPS MEDIA (Comment on first install)
       inkscape # photo editor cli/gui
       # kdeApplications.kdenlive # video editor
       nomacs # image viewer/editor

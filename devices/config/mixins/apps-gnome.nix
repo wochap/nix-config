@@ -7,7 +7,7 @@ in
   config = {
     environment = {
       etc = {
-        "restart_goa_daemon.sh" = {
+        "scripts/restart_goa_daemon.sh" = {
           source = ../scripts/restart_goa_daemon.sh;
           mode = "0755";
         };
@@ -15,9 +15,10 @@ in
       systemPackages = with pkgs; [
         # APPS
         # gnome.bijiben
+        # gtimelog
+        evolution # email/calendar client
         gnome.cheese # test webcam
         gnome.eog # image viewer
-        evolution # email/calendar client
         gnome.file-roller # archive manager
         gnome.geary # email client
         gnome.gnome-calculator
@@ -27,11 +28,10 @@ in
         gnome.gnome-font-viewer
         gnome.gnome-sound-recorder # test microphone
         gnome.gnome-system-monitor
-        prevstable.gnome3.gnome-todo
-        gnome.nautilus
+        gnome.nautilus # file manager
         gnome.pomodoro
         gnome.seahorse # manage GnomeKeyring
-        gtimelog
+        prevstable.gnome3.gnome-todo
 
         # Themes
         gnome.adwaita-icon-theme

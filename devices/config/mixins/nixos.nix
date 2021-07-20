@@ -11,6 +11,7 @@ let
 in
 {
   imports = [
+    # Install home manager
     (import "${home-manager}/nixos")
   ];
 
@@ -45,7 +46,7 @@ in
     nixpkgs.config.pulseaudio = true;
 
     # Set your time zone.
-    time.timeZone = "America/Lima";
+    time.timeZone = "America/Panama";
 
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";
@@ -79,7 +80,8 @@ in
     # Enable OpenGL
     hardware.opengl.enable = true;
     hardware.opengl.driSupport = true;
-    # Hardware video acceleration
+
+    # Hardware video acceleration?
     hardware.opengl.extraPackages = with pkgs; [
       libvdpau
       vaapiVdpau

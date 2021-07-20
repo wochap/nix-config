@@ -109,7 +109,7 @@ fi
 
 if [ "$*" = "Desktop 4" ]
 then
-  coproc (/etc/bspwm_desktop_4.sh > /dev/null 2>&1)
+  coproc (/etc/scripts/bspwm_desktop_4.sh > /dev/null 2>&1)
   exit 0
 fi
 

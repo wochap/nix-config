@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+# Fix gnome apps sync with google accounts
 # source https://github.com/NixOS/nixpkgs/issues/15531
 gnome_online_accounts_path=$(nix eval nixpkgs.gnome.gnome_online_accounts.outPath)
 # remove double quotes
