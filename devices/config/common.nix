@@ -13,7 +13,7 @@ in
     ./mixins/ipwebcam
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
-    ./mixins/apps-gnome.nix # Comment on first install
+    ./mixins/apps-gnome # Comment on first install
     ./mixins/apps-xfce.nix # Comment on first install
     ./mixins/docker.nix # Comment on first install
     ./mixins/lorri.nix
