@@ -42,9 +42,9 @@ in
     # Theme settings
     alignment = "left";
     background = background;
-    corner_radius = 20;
+    corner_radius = 10;
     font = "Inter 11";
-    format = "<span weight='600'>%s</span>\\n<span>%b</span>";
+    format = "<span weight='400'>%s</span>\\n<span weight='300'>%b</span>";
     frame_color = border;
     frame_width = borderWidth;
     horizontal_padding = 16;
