@@ -43,6 +43,11 @@ in
         "org/gtk/Settings/Debug" = {
           enable-inspector-keybinding = true;
         };
+        # Disable horrible evolution calendar popup window
+        # source: https://askubuntu.com/questions/1238826/turn-off-calendar-notifications-ubuntu-20-04
+        "org/gnome/evolution-data-server/calendar" = {
+          notify-with-tray = true;
+        };
       };
 
       # Edit home files
