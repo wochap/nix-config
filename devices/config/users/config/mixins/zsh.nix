@@ -1,10 +1,18 @@
 { config, pkgs, lib,  ... }:
 
+let
+  dracula-zsh-syntax-highlighting = pkgs.fetchFromGitHub {
+    owner = "dracula";
+    repo = "zsh-syntax-highlighting";
+    rev = "47ba26d2d4912a1b8de066e589633ff1963c5621";
+    sha256 = "1rhvbaz2v8kcggvh3flj6ri2jry4wdz6xx5br91i36f5alc2vk1i";
+  };
+in
 {
   config = {
     environment = {
       systemPackages = with pkgs; [
-        zsh-fast-syntax-highlighting
+        zsh-syntax-highlighting
         exa
       ];
       pathsToLink = [
@@ -44,7 +52,8 @@
           setopt inc_append_history
           unsetopt share_history
 
-          source ${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
+          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          source ${dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
         '';
         enableCompletion = true;
         enableAutosuggestions = true;
