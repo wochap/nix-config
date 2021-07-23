@@ -3,9 +3,6 @@
 {
   config = {
     environment = {
-      sessionVariables = {
-        BSPWM_WINDOW_GAP = "25";
-      };
       etc = {
         "config/sxhkdrc" = {
           source = ./dotfiles/sxhkdrc;

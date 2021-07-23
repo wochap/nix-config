@@ -9,16 +9,17 @@ in
       gtk = {
         enable = true;
         iconTheme = {
-          name = "WhiteSur-dark";
-          package = localPkgs.whitesur-dark-icons;
+          name = "Dracula";
+          # TODO: add Dracula icon theme package
+          # package = localPkgs.whitesur-dark-icons;
         };
         theme = {
           name = "WhiteSur-dark";
-          package = localPkgs.whitesur-dark-theme;
+          package = pkgs.dracula-theme;
         };
         font = {
-          name = "Roboto 9";
-          package = pkgs.roboto;
+          name = "Inter Light 9";
+          package = pkgs.inter;
         };
         gtk3.extraConfig = {
           gtk-application-prefer-dark-theme = true;

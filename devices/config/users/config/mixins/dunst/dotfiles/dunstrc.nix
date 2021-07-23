@@ -2,10 +2,9 @@
 
 let
   localPkgs = import ../../../../../packages { pkgs = pkgs; };
-  background = "#FF5C57"; #RRGGBBAA
-  border = "#cb1401";
+  border = "#44475a";
   borderWidth = 3;
-  foreground = "#2e0301";
+  timeout = 60000;
 in
 {
   global = {
@@ -22,7 +21,7 @@ in
     follow = "mouse";
     hide_duplicate_count = true;
     history_length = 20;
-    idle_threshold = 60000;
+    idle_threshold = timeout;
     ignore_newline = false;
     indicate_hidden = true;
     markup = "full";
@@ -41,7 +40,6 @@ in
 
     # Theme settings
     alignment = "left";
-    background = background;
     corner_radius = 10;
     font = "Inter 11";
     format = "<span weight='400'>%s</span>\\n<span weight='300'>%b</span>";
@@ -57,6 +55,7 @@ in
     separator_height = borderWidth;
     transparency = 0;
   };
+
   play_sound = {
     script = "/etc/play_notification.sh";
     summary = "*";
@@ -67,28 +66,31 @@ in
     close = "ctrl+space";
     history = "ctrl+Escape";
   };
+
   urgency_low = {
-    background = background;
-    foreground = foreground;
-    timeout = 60000;
+    background = "#282a36";
+    foreground = "#6272a4";
+    timeout = timeout;
   };
   urgency_normal = {
-    background = background;
-    foreground = foreground;
-    timeout = 60000;
+    background = "#282a36";
+    foreground = "#bd93f9";
+    timeout = timeout;
     icon = "${localPkgs.whitesur-dark-icons}/share/icons/WhiteSur-dark/256x256/apps/userinfo.png";
   };
   urgency_critical = {
-    background = background;
-    foreground = foreground;
-    timeout = 60000;
+    background = "#ff5555";
+    foreground = "#f8f8f2";
+    timeout = timeout;
   };
+
   slack = {
     appname = "Slack";
     new_icon = "${localPkgs.whitesur-dark-icons}/share/icons/WhiteSur-dark/256x256/apps/slack.png";
   };
-  # evolution = {
-  #   appname = "Evolution";
-  #   new_icon = "${localPkgs.whitesur-dark-icons}/share/icons/WhiteSur-dark/256x256/apps/slack.png";
-  # };
+  evolution = {
+    appname = "Evolution";
+    timeout = timeout;
+    set_transient = false;
+  };
 }

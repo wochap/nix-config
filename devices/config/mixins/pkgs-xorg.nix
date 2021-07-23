@@ -15,6 +15,7 @@
       xorg.xev # get key actual name
       xorg.xeyes # check if app is running on wayland
       xorg.xkbcomp # print keymap
+      xorg.xwininfo # print window info
 
       # APPS CLI
       scrot # screen capture

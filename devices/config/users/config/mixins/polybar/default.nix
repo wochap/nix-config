@@ -7,7 +7,8 @@ in
   config = {
     environment = {
       sessionVariables = {
-        POLYBAR_HEIGHT = "48";
+        POLYBAR_HEIGHT = "54";
+        POLYBAR_MARGIN = "25";
       };
       etc = {
         "scripts/polybar-start.sh" = {

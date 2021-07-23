@@ -1,11 +1,15 @@
+$foreground: #bd93f9;
+$background: #282a36;
+$border-color: #44475a;
+
 window {
-  background-color: #FF5C57;
+  background-color: $background;
 }
 
 //vol
 .vol {
-  border-color: #cb1401;
-  border-radius: 20px;
+  border-color: $border-color;
+  border-radius: 10px;
   border-style: solid;
   border-width: 3px;
   padding-left: 40px;
@@ -13,7 +17,7 @@ window {
 }
 
 .vol-icon {
-  color: #2e0301;
+  color: $foreground;
   font-family: "Font Awesome 5 Free";
   font-size: 128px;
 }
@@ -33,14 +37,14 @@ window {
 .vol-bar highlight {
   all: unset;
 
-  background-color: #2e0301;
+  background-color: $foreground;
   border-radius: 100px;
 }
 
 .vol-bar trough {
   all: unset;
 
-  background-color: rgba(#2e0301, 0.5);
+  background-color: rgba($foreground, 0.5);
   min-height: 10px;
   border-radius: 100px;
 }
