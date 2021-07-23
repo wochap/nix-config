@@ -49,6 +49,8 @@ bspc rule -a "Sublime_text" state=floating sticky=on
 bspc rule -a "flameshot" state=floating sticky=on
 bspc rule -a "kmag" state=floating sticky=on
 bspc rule -a "mpv" state=floating sticky=on
+bspc rule -a "Firefox" desktop=^5
+bspc rule -a "Google-chrome" desktop=^1
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
@@ -60,6 +62,4 @@ done
 /etc/scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &
 
 # workspace 5
-bspc node @5:/ -i
-bspc rule -a "Firefox" -o node=@5:/
 firefox &
