@@ -23,6 +23,9 @@ in
           .tabbrowser-tab:focus:not([aria-activedescendant]) > .tab-stack > .tab-content {
             outline: 0 !important;
           }
+          tabs#tabbrowser-tabs {
+            --tab-line-color: #44475a !important;
+          }
 
           /* Remove Findbar transition */
           findbar {
@@ -38,7 +41,7 @@ in
           /* Custom scrollbar */
           * {
             scrollbar-width: auto;
-            scrollbar-color: #58a6ff transparent;
+            scrollbar-color: #bd93f9 #282a36;
           }
         '';
       };

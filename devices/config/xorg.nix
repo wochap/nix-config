@@ -50,7 +50,7 @@ in
       displayManager = {
         lightdm = {
           enable = true;
-          background = ./assets/wallpaper.jpg;
+          background = ./assets/wallpaper.jpeg;
           greeters.gtk = {
             enable = true;
             cursorTheme.name = "bigsur-cursors";
