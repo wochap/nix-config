@@ -78,7 +78,7 @@ in
         ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
         ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
         ".config/mpv/mpv.conf".source = ./dotfiles/mpv.conf;
-        "Pictures/backgrounds/default.jpeg".source = ../../assets/wallpaper.jpg;
+        "Pictures/backgrounds/default.jpeg".source = ../../assets/wallpaper.jpeg;
         ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
         ".config/nixpkgs/config.nix".text = ''
           { allowUnfree = true; }
@@ -96,12 +96,6 @@ in
         enableSshSupport = true;
         defaultCacheTtl = 1800;
         pinentryFlavor = "gnome3";
-      };
-
-      services.random-background = {
-        enable = true;
-        imageDirectory = "%h/Pictures/backgrounds";
-        interval = "30m";
       };
     };
   };
