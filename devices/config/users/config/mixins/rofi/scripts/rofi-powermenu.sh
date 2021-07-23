@@ -48,7 +48,7 @@ fi
 # -fake-background ${SS_PATH}.png \
 # -fake-transparency \
 selected="$(echo -e "$options" |
-            rofi -theme /etc/rofi-powermenu-theme.rasi \
+            rofi -theme /etc/config/rofi-powermenu-theme.rasi \
               -font "Iosevka, $FONTSIZE" \
               -p "See you later, ${LOGNAME^}!" \
               -m "primary" \

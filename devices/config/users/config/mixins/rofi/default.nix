@@ -9,28 +9,28 @@
         rofi-emoji
       ];
       etc = {
-        "rofi-custom-options.sh" = {
+        "scripts/rofi-custom-options.sh" = {
           source = ./scripts/rofi-custom-options.sh;
           mode = "0755";
         };
-        "rofi-clipboard.sh" = {
+        "scripts/rofi-clipboard.sh" = {
           source = ./scripts/rofi-clipboard.sh;
           mode = "0755";
         };
-        "rofi-help.sh" = {
+        "scripts/rofi-help.sh" = {
           source = ./scripts/rofi-help.sh;
           mode = "0755";
         };
-        "rofi-wifi.sh" = {
+        "scripts/rofi-wifi.sh" = {
           source = ./scripts/rofi-wifi.sh;
           mode = "0755";
         };
-        "rofi-calc.sh" = {
+        "scripts/rofi-calc.sh" = {
           text = ''
             #!/usr/bin/env bash
 
             rofi \
-              -theme /etc/rofi-theme.rasi \
+              -theme /etc/config/rofi-theme.rasi \
               -modi calc \
               -show calc \
               -plugin-path ${pkgs.rofi-calc}/lib/rofi \
@@ -43,39 +43,40 @@
           '';
           mode = "0755";
         };
-        "rofi-emoji.sh" = {
+        "scripts/rofi-emoji.sh" = {
           text = ''
             #!/usr/bin/env bash
 
             rofi \
-              -theme /etc/rofi-theme.rasi \
+              -theme /etc/config/rofi-emoji-theme.rasi \
               -modi emoji \
               -show emoji \
-              -plugin-path ${pkgs.rofi-emoji}/lib/rofi \
-              -theme-str 'listview { columns: 2; lines: 15; }' \
-              -theme-str 'window { width: 35em; }' \
-              -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }'
+              -plugin-path ${pkgs.rofi-emoji}/lib/rofi
           '';
           mode = "0755";
         };
-        "rofi-launcher.sh" = {
+        "scripts/rofi-launcher.sh" = {
           source = ./scripts/rofi-launcher.sh;
           mode = "0755";
         };
-        "rofi-powermenu.sh" = {
+        "scripts/rofi-powermenu.sh" = {
           source = ./scripts/rofi-powermenu.sh;
           mode = "0755";
         };
 
-        "rofi-powermenu-theme.rasi" = {
+        "config/rofi-powermenu-theme.rasi" = {
           source = ./dotfiles/rofi-powermenu-theme.rasi;
           mode = "0755";
         };
-        "rofi-clipmenu-theme.rasi" = {
-          source = ./dotfiles/rofi-clipmenu-theme.rasi;
+        "config/rofi-emoji-theme.rasi" = {
+          source = ./dotfiles/rofi-emoji-theme.rasi;
           mode = "0755";
         };
-        "rofi-theme.rasi" = {
+        "config/rofi-clipboard-theme.rasi" = {
+          source = ./dotfiles/rofi-clipboard-theme.rasi;
+          mode = "0755";
+        };
+        "config/rofi-theme.rasi" = {
           source = ./dotfiles/rofi-theme.rasi;
           mode = "0755";
         };

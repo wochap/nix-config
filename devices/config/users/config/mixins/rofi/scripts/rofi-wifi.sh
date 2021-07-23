@@ -10,7 +10,7 @@ POSITION=0
 YOFF=0
 XOFF=0
 FONT="DejaVu Sans Mono 8"
-THEME_PATH="/etc/rofi-theme.rasi"
+THEME_PATH="/etc/config/rofi-theme.rasi"
 
 if [ -r "$DIR/config" ]; then
 	source "$DIR/config"

@@ -1,5 +1,6 @@
 configuration {
 	sidebar-mode: false;
+  display-emoji: "";
   dpi: 0;
   font: "Inter Regular 12";
   fullscreen: false;
@@ -14,7 +15,6 @@ configuration {
   var-fg: #f8f8f2;
   var-bg-selection: #44475a;
   var-fg-selection: #bd93f9;
-  var-input-placeholder-color: #6272a4;
   var-primary-color: #8be9fd;
   var-window-border-color: #44475a;
 
@@ -24,14 +24,16 @@ configuration {
 }
 
 window {
+  anchor: north;
   background-color: @var-bg;
   border-color: @var-window-border-color;
-  text-color: @var-fg;
-  border: 3px;
-  location: center;
-  transparency: "real";
-  width: 30em;
   border-radius: 10px;
+  border: 3px;
+  location: north;
+  text-color: @var-fg;
+  transparency: "real";
+  width: 680px;
+  y-offset: 30%;
 }
 
 mainbox {
@@ -39,50 +41,71 @@ mainbox {
 }
 
 listview {
-  columns: 1;
+  columns: 9;
   cycle: false;
-  dynamic: true;
   layout: vertical;
-  lines: 6;
-  padding: 0;
-  spacing: 0;
+  lines: 8;
+  padding: 0 10px 10px;
+  spacing: 10px;
+
+  // Dynamic window height
+  dynamic: true;
+  fixed-height: false;
 }
 
 inputbar {
-	children: [ entry ];
+	children: [ prompt, entry ];
   expand: false;
   margin: 0;
-  padding: 0;
+  padding: 0 22px;
+}
+
+prompt {
+	font: "Noto Sans 33";
+	vertical-align: 0.5;
+	padding: 0;
+  margin: 5px 0 0 0;
+
 }
 
 entry {
   blink: true;
   expand: true;
-  horizontal-align: 0;
   font: "Inter Regular 22";
-  padding: 1em 40px 1.7em;
-  placeholder-color: @var-input-placeholder-color;
+  horizontal-align: 0;
+  padding: 1em 0 1.7em;
+  margin: 0 0 0 22px;
   placeholder: "";
 }
 
 element {
+  border-radius: 10px;
   children: [element-text];
-  padding: 0.6em 40px;
-  font: "Noto Sans 11";
+  expand: false;
+  text-color: @var-bg;
+  text-color: @var-bg;
+
+  // HACK: align emoji ⬇️
+  padding: 10px 0px 19px 9px;
 }
 
 element-text {
-  expand: false;
-  font: "Noto Color Emoji 27";
+  font: "Noto Color Emoji 16";
   highlight: none;
-  horizontal-align: 1;
-  margin: 0px 0px 0px 5px;
-  padding: 1px 0px 16px;
-  vertical-align: 0.5;
+  text-color: inherit;
+
+  // HACK: hide text ⬇️
+  expand: false;
+  horizontal-align: 0;
+  padding: 0;
+  vertical-align: 0;
   width: 1px;
+
+  // HACK: show emoji
+  margin: 0px 0px 0px 2px;
 }
 
-element selected {
+element.selected {
   background-color: @var-bg-selection;
-  text-color: @var-fg-selection;
+  text-color: @var-bg-selection;
 }

@@ -23,12 +23,16 @@ configuration {
 window {
   background-color: @var-bg;
   border-color: @var-window-border-color;
-  text-color: @var-fg;
+  border-radius: 10px;
   border: 3px;
-  location: center;
+  text-color: @var-fg;
   transparency: "real";
   width: 30em;
-  border-radius: 10px;
+
+  // Window position
+  anchor: north;
+  location: north;
+  y-offset: 30%;
 }
 
 mainbox {
@@ -38,11 +42,14 @@ mainbox {
 listview {
   columns: 1;
   cycle: false;
-  dynamic: true;
   layout: vertical;
-  lines: 6;
+  lines: 9;
   padding: 0;
   spacing: 0;
+
+  // Dynamic window height
+  dynamic: true;
+  fixed-height: false;
 }
 
 inputbar {
