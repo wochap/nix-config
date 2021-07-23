@@ -4,6 +4,9 @@ configuration {
   font: "Inter Regular 12";
   fullscreen: false;
   hide-scrollbar: false;
+  me-accept-entry: "MousePrimary";
+  me-select-entry: "";
+  show-icons: false;
 }
 
 * {
@@ -65,13 +68,18 @@ entry {
 element {
   children: [element-text];
   padding: 0.6em 40px;
+  font: "Noto Sans 11";
 }
 
 element-text {
-  expand: true;
-  highlight: none #8be9fd;
-  horizontal-align: 0;
+  expand: false;
+  font: "Noto Color Emoji 27";
+  highlight: none;
+  horizontal-align: 1;
+  margin: 0px 0px 0px 5px;
+  padding: 1px 0px 16px;
   vertical-align: 0.5;
+  width: 1px;
 }
 
 element selected {
