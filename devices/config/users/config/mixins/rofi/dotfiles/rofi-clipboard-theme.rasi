@@ -53,10 +53,17 @@ listview {
 }
 
 inputbar {
-	children: [ entry ];
+	children: [ entry, prompt ];
   expand: false;
   margin: 0;
-  padding: 0;
+  padding: 0 40px;
+}
+
+prompt {
+	font: "Noto Sans 33";
+	vertical-align: 0.5;
+	padding: 0;
+  margin: 5px 0 0 0;
 }
 
 entry {
@@ -64,7 +71,8 @@ entry {
   expand: true;
   horizontal-align: 0;
   font: "Inter Regular 22";
-  padding: 1em 40px 1.7em;
+  padding: 1em 0 1.7em;
+  margin: 0 19px 0 0;
   placeholder-color: @var-input-placeholder-color;
   placeholder: "";
 }
