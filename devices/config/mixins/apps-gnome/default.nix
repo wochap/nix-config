@@ -16,8 +16,10 @@ in
         # APPS
         # gnome.bijiben
         # gtimelog
+        deluge # torrent client
         evolution # email/calendar client
         gnome.cheese # test webcam
+        gnome.dconf-editor
         gnome.eog # image viewer
         gnome.file-roller # archive manager
         gnome.geary # email client
@@ -28,6 +30,8 @@ in
         gnome.gnome-font-viewer
         gnome.gnome-sound-recorder # test microphone
         gnome.gnome-system-monitor
+        gnome.gsettings-desktop-schemas
+        gnome.gucharmap # special char selector
         gnome.nautilus # file manager
         gnome.pomodoro
         gnome.seahorse # manage GnomeKeyring
@@ -35,9 +39,9 @@ in
 
         # Themes
         gnome.adwaita-icon-theme
+        dracula-theme
 
         # Themes settings
-        gnome.gsettings-desktop-schemas
         gtk-engine-murrine
         gtk_engines
         lxappearance
