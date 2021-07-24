@@ -7,7 +7,7 @@ in
   config = {
     environment = {
       etc = {
-        "/scripts/open_url.sh" = {
+        "scripts/open_url.sh" = {
           source = ./scripts/open_url.sh;
           mode = "0755";
         };

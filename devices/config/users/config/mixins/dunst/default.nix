@@ -10,15 +10,15 @@ in
         dunst
       ];
       etc = {
-        "notification.flac" = {
+        "assets/notification.flac" = {
           source = ./assets/notification.flac;
           mode = "0755";
         };
 
-        "play_notification.sh" = {
+        "scripts/play_notification.sh" = {
           text = ''
             #! ${pkgs.bash}/bin/bash
-            ${pkgs.pulseaudio}/bin/paplay /etc/notification.flac
+            ${pkgs.pulseaudio}/bin/paplay /etc/assets/notification.flac
           '';
           mode = "0755";
         };

@@ -58,7 +58,7 @@ in
   };
 
   play_sound = {
-    script = "/etc/play_notification.sh";
+    script = "/etc/scripts/play_notification.sh";
     summary = "*";
   };
   shortcuts = {
