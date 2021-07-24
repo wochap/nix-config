@@ -23,6 +23,8 @@ in
     ./config/xorg.nix
   ];
 
+  # TODO: add missing stateVersion
+
   boot = {
     loader = {
       grub.enable = false;
