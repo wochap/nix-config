@@ -46,6 +46,7 @@ in
         gtk_engines
         lxappearance
       ] ++ [
+        localPkgs.dracula-icons
         localPkgs.whitesur-dark-icons
         localPkgs.whitesur-dark-theme
       ];

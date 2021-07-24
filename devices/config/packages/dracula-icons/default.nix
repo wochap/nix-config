@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
+{ stdenv, lib, fetchFromGitHub, gtk3, papirus-icon-theme, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  pname = "whitesur-dark-icons";
+  pname = "dracula-icons";
   version = "1.0.0";
 
   src = fetchFromGitHub {
-    repo = "whitesur-dark-icons";
+    repo = "dracula-icons";
     owner = "wochap";
-    rev = "1d38b66f710db7cded600259b544249ce7d84f20";
-    sha256 = "181smsqgiyr3d35bkbxb8sbcqb424l920c27q4yp4qpxspjgsy3k";
+    rev = "1716ed75a78489560d45dc2b3e0116c051f18355";
+    sha256 = "1fqa5j7axrr5l13sigbry64smhrfrwqxqc4v30j1ipkqk9wah7sj";
   };
 
   sourceRoot = ".";
@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    pantheon.elementary-icon-theme
+    papirus-icon-theme
     breeze-icons
+    pantheon.elementary-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
   ];
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "WhiteSur dark icons.";
-    homepage = "https://github.com/wochap/whitesur-dark-icons";
+    description = "WhiteSur dark icon theme.";
+    homepage = "https://github.com/wochap/dracula-icons";
   };
 }

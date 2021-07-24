@@ -10,11 +10,10 @@ in
         enable = true;
         iconTheme = {
           name = "Dracula";
-          # TODO: add Dracula icon theme package
-          # package = localPkgs.whitesur-dark-icons;
+          package = localPkgs.dracula-icons;
         };
         theme = {
-          name = "WhiteSur-dark";
+          name = "Dracula";
           package = pkgs.dracula-theme;
         };
         font = {
