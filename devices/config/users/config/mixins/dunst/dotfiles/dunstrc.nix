@@ -40,6 +40,7 @@ in
 
     # Theme settings
     alignment = "left";
+    vertical_alignment = "top";
     corner_radius = 10;
     font = "Inter 11";
     format = "<span weight='400'>%s</span>\\n<span weight='300'>%b</span>";
