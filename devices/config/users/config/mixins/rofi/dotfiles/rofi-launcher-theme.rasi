@@ -74,7 +74,7 @@ inputbar {
 }
 
 prompt {
-	font: "Iosevka Bold 38";
+	font: "Iosevka Bold 34";
 	vertical-align: 0.5;
 	padding: 0;
   margin: 5px 0 0 0;

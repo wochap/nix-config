@@ -1,9 +1,12 @@
 configuration {
 	sidebar-mode: false;
+  display-calc: "";
   dpi: 0;
   font: "Inter Regular 12";
   fullscreen: false;
   hide-scrollbar: false;
+  show-match: false;
+  sort: false;
 }
 
 * {
@@ -27,7 +30,7 @@ window {
   border: 3px;
   text-color: @var-fg;
   transparency: "real";
-  width: 30em;
+  width: 680px;
 
   // Window position
   anchor: north;
@@ -43,7 +46,7 @@ listview {
   columns: 1;
   cycle: false;
   layout: vertical;
-  lines: 9;
+  lines: 10;
   padding: 0;
   spacing: 0;
 
@@ -60,7 +63,7 @@ inputbar {
 }
 
 prompt {
-	font: "Noto Sans 33";
+	font: "Iosevka Bold 33";
 	vertical-align: 0.5;
 	padding: 0;
   margin: 5px 0 0 0;

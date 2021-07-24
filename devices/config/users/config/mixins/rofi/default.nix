@@ -30,15 +30,10 @@
             #!/usr/bin/env bash
 
             rofi \
-              -theme /etc/config/rofi-theme.rasi \
+              -theme /etc/config/rofi-calc-theme.rasi \
               -modi calc \
               -show calc \
               -plugin-path ${pkgs.rofi-calc}/lib/rofi \
-              -theme-str 'listview { columns: 1; lines: 8; }' \
-              -theme-str 'window { width: 15em; }' \
-              -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }' \
-              -no-show-match \
-              -no-sort \
               -calc-command "echo -n '{result}' | xclip -selection clipboard"
           '';
           mode = "0755";
@@ -70,6 +65,10 @@
         };
         "config/rofi-launcher-theme.rasi" = {
           source = ./dotfiles/rofi-launcher-theme.rasi;
+          mode = "0755";
+        };
+        "config/rofi-calc-theme.rasi" = {
+          source = ./dotfiles/rofi-calc-theme.rasi;
           mode = "0755";
         };
         "config/rofi-emoji-theme.rasi" = {
