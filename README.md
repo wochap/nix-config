@@ -377,26 +377,3 @@ Firefox keybindings
 * https://nixos.wiki/wiki/Home_Manager
 * https://superuser.com/questions/603528/how-to-get-the-current-monitor-resolution-or-monitor-name-lvds-vga1-etc
 * https://nixos.org/manual/nix/stable/#use-as-a-interpreter
-
-
-systemd.services.dconf-update = {
-serviceConfig.Type = "oneshot";
-wantedBy = "multi-user.target";
-path = [ pkgs.dconf ];
-script = ''
-dconf update
-'';
-};
-
-
-
-https://github.com/NixOS/nixpkgs/issues/72282
-
- export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-
-
-//
-
-https://gitlab.gnome.org/GNOME/evolution-data-server/-/issues/60
-
-https://askubuntu.com/questions/1238826/turn-off-calendar-notifications-ubuntu-20-04
