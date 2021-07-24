@@ -3,18 +3,21 @@
 ![](https://i.imgur.com/vYt3wyj.jpg)
 
 Hardware drivers are managed by [NixOS](https://nixos.org/) config files.
-Apps and dotfiles are managed by [home-manager](https://github.com/nix-community/home-manager).
+Dotfiles are managed by [home-manager](https://github.com/nix-community/home-manager).
 
 `NixOS` and `home-manager` config files are merged.
 
-## Install NixOS
+## Install vanilla NixOS
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
-    The minimun config must have: `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
+    The initial config must have: `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
 
     **NOTE:** Run `sudo nixos-install` without root user (sudo su)
-1. Reboot and connect to wifi/ethernet
+
+## Install device config
+
+1. Reboot into vanilla NixOS and connect to wifi/ethernet
     If `ping google.com` doesn't work, try updating your DNS
     ```
     $ vim /etc/resolv.conf
@@ -29,8 +32,9 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     ```
     $ git clone https://github.com/wochap/nix-config.git ~/nix-config
     ```
-1. Rebuild nixos with the machine's specific config, for example, heres's a rebuild for my `desktop`
-    **WARNING:** `nixos-rebuild` can take several hours
+1. Rebuild nixos with the device's specific config, for example, heres's a rebuild for my `desktop`
+
+    **WARNING:** First `nixos-rebuild` with device config can take several hours 😢
     ```
     $ NIXOS_CONFIG=~/nix-config/devices/desktop.nix nixos-rebuild switch
     ```
@@ -50,8 +54,8 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 1. Add wallpapers to `~/Pictures/backgrounds/`
 1. Sync `vscode`, `firefox`, `chrome`
 1. `desktop` config is optimized for 4k displays, for other sizes, you should update:
-    For XORG:
 
+    For XORG:
     - fonts.fontconfig.dpi
     - services.xserver.dpi
     - Polybar bar variables (height, font size, etc)
@@ -59,7 +63,6 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     - Dunst styles?
     - Rofi styles?
     - Alttab args?
-    - Powermenu styles?
     - Eww widgets styles?
 
     For Wayland:
@@ -68,22 +71,22 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     ```
     $ env WEBKIT_DISABLE_COMPOSITING_MODE=1 gnome-control-center online-accounts
     ```
-1. ~[Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)~
-1. Copy `.ssh` folder to `/home/gean/.ssh`
+1. ~~[Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)~~
+1. Copy `.ssh` backup folder to `/home/gean/.ssh`
     ```
     $ ssh-keygen -m PEM -t rsa -b 4096 -C "email@email.com"
     $ chmod 600 ~/.ssh/*
     $ ssh-add <PATH_TO_PRIVATE_KEY>
     ```
     https://www.freecodecamp.org/news/how-to-manage-multiple-ssh-keys/
-1. Fish setup
+1. ~~Fish setup~~
     ```
     # install fisher
     $ curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
     $ fisher install edouard-lopez/ayu-theme.fish
     $ set --universal ayu_variant mirage && ayu_load_theme
     ```
-1. Setup [Flatpak](https://flatpak.org/setup/NixOS/)
+1. ~~Setup [Flatpak](https://flatpak.org/setup/NixOS/)~~
     ```
     $ sudo flatpak override com.stremio.Stremio --env=QT_AUTO_SCREEN_SCALE_FACTOR=0
     $ sudo flatpak override com.stremio.Stremio --env=QT_SCALE_FACTOR=1.5
@@ -120,6 +123,8 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
 ## Development Workflow
 
 1. Setup [Lorri](https://github.com/nix-community/lorri)
+
+    In the project folder:
     ```
     # Create shell.nix
 
@@ -127,7 +132,7 @@ Apps and dotfiles are managed by [home-manager](https://github.com/nix-community
     $ direnv allow
     ```
 
-## Whats out of the box
+## Tools
 
 1. Script for using phone webcam
     ```
@@ -140,17 +145,17 @@ The keybindings for bspwm are controlled by another program called sxhkd.
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Super</kbd> + <kbd>F1</kbd> | Reloads sxhkd |
-| <kbd>Super</kbd> + <kbd>v</kbd> | Show clipboard |
-| <kbd>Super</kbd> + <kbd>c</kbd> | Show calculator |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>Esc</kbd> | Reloads sxhkd |
+| <kbd>Super</kbd> + <kbd>v</kbd> | Show clipboard (rofi) |
+| <kbd>Super</kbd> + <kbd>c</kbd> | Show calculator (rofi) |
 | <kbd>Super</kbd> + <kbd>Enter</kbd> | Opens terminal (kitty) |
-| <kbd>Super</kbd> + <kbd>Esc</kbd> | Opens power menu |
-| <kbd>Super</kbd> + <kbd>Space</kbd> | Opens run launcher (rofi) |
-| <kbd>Super</kbd> + <kbd>Print</kbd> | Take fullscreen screenshoot |
+| <kbd>Super</kbd> + <kbd>Esc</kbd> | Opens power menu (rofi) |
+| <kbd>Super</kbd> + <kbd>Space</kbd> | Opens launcher (rofi) |
+| <kbd>Super</kbd> + <kbd>Print</kbd> | Take fullscreen screenshoot (flameshot) |
 | <kbd>Super</kbd> + <kbd>w</kbd> | Closes window with focus |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>q</kbd> | Kills window with focus |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>q</kbd> | Kills window with focus (some times it also kills the session 😐) |
 | <kbd>Super</kbd> + <kbd>m</kbd> | Alternate between the tiled and monocle layout |
-| <kbd>Super</kbd> + <kbd>/</kbd> | Show available keybindings |
+| <kbd>Super</kbd> + <kbd>/</kbd> | Show available keybindings (rofi) |
 
 Window state and flags
 
@@ -161,10 +166,10 @@ Window state and flags
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>t</kbd> | Set window state to pseudo-tiled |
 | <kbd>Super</kbd> + <kbd>s</kbd> | Set window state to floating |
 | <kbd>Super</kbd> + <kbd>f</kbd> | Toggle window fullscreen state |
-| <kbd>Super</kbd> + <kbd>m</kbd> | Set window flag to marked |
-| <kbd>Super</kbd> + <kbd>x</kbd> | Set window flag to locked |
-| <kbd>Super</kbd> + <kbd>y</kbd> | Set window flag to sticky |
-| <kbd>Super</kbd> + <kbd>z</kbd> | Set window flag to private |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>m</kbd> | Toggle window flag: "marked" |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>x</kbd> | Toggle window flag: "locked" |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>y</kbd> | Toggle window flag: "sticky" |
+| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>z</kbd> | Toggle window flag: "private" |
 
 Preselection
 
@@ -180,7 +185,7 @@ Focus and swap
 | Keybinding | Action |
 | :--- | :--- |
 | <kbd>Super</kbd> + <kbd>Left Click</kbd> | Swap window |
-| <kbd>Super</kbd> + <kbd>`</kbd> | Rotate focused windows |
+| <kbd>Super</kbd> + <kbd>`</kbd> | TODO: change, Rotate focused windows |
 | <kbd>Super</kbd> + <kbd>p</kbd> | Focus parent window |
 | <kbd>Super</kbd> + <kbd>b</kbd> | Focus brother window |
 | <kbd>Super</kbd> + <kbd>,</kbd> | Focus first window |
@@ -204,7 +209,6 @@ Workspaces
 | <kbd>Super</kbd> + <kbd>i</kbd> | Focus newer window in the focus history |
 | <kbd>Super</kbd> + <kbd>1-9</kbd> | Switch focus to workspace (1-9) |
 | <kbd>Super</kbd> + <kbd>shift</kbd> + <kbd>1-9</kbd> | Send focused window to workspace (1-9) |
-| <kbd>Super</kbd> + <kbd>Ctrl</kbd> + <kbd>shift</kbd> + <kbd>1-9</kbd> | Send window and switch to workspace (1-9) |
 
 Resize windows
 
@@ -222,13 +226,14 @@ Apps
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>s</kbd> | Takes screenshoot (flameshot) |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>f</kbd> | Open firefox |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>c</kbd> | Open chrome |
+| <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>b</kbd> ; <kbd>b</kbd> | Open brave |
 | <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>t</kbd> | Opens terminal (kitty) |
 
 Kitty keybindings
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Ctrl</kbd> + <kbd>Enter</kbd> | Opens new window |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Enter</kbd> | Opens new window |
 | <kbd>Ctrl</kbd> + <kbd>l</kbd> | Cycle layouts (change layout) |
 | <kbd>Ctrl</kbd> + <kbd>`</kbd> | Cycle focused window (swap) |
 | <kbd>Ctrl</kbd> + <kbd>[</kbd> | Focus next window |
@@ -242,12 +247,14 @@ Dunst keybindings
 | Keybinding | Action |
 | :--- | :--- |
 | <kbd>Ctrl</kbd> + <kbd>Esc</kbd> | Show previous notification |
+| <kbd>Ctrl</kbd> + <kbd>Space</kbd> | Close notification |
 
 Firefox keybindings
 
 | Keybinding | Action |
 | :--- | :--- |
-| <kbd>Ctrl</kbd> + <kbd>.</kbd> ; <kbd>1</kbd> | Open google container |
+| <kbd>Ctrl</kbd> + <kbd>shift</kbd> + <kbd>1</kbd> | Open google container |
+| <kbd>Ctrl</kbd> + <kbd>shift</kbd> + <kbd>2</kbd> | Open work container |
 
 ## Troubleshooting
 
@@ -257,7 +264,7 @@ Firefox keybindings
     $ nix path-info -rSh /run/current-system | sort -nk2
     ```
 
-1. Fix flickering on nvidia cards
+1. Fix flickering on nvidia cards?
     - Open `Nvidia X Server Settings`.
     - In `OpenGL Settings` uncheck `Allow Flipping`.
     - In `XScreen0` > `X Server XVideo Settings` > `Sync to this display device` select your monitor.
