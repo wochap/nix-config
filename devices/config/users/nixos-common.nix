@@ -1,18 +1,18 @@
 { config, pkgs, ... }:
 
+let
+  homeDirectory = "/home/gean";
+in
 {
   imports = [
-    # ./config/wayland.nix
     ./config/xorg.nix
   ];
 
   config = {
     # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.extraUsers.gean = {
-      shell = pkgs.zsh;
-      uid = 1000;
+    users.users.gean = {
       password = "123456";
-      home = "/home/gean";
+      home = homeDirectory;
       isNormalUser = true;
       extraGroups = [
         "audio"
@@ -34,7 +34,7 @@
       # Home Manager needs a bit of information about you and the
       # paths it should manage.
       home.username = "gean";
-      home.homeDirectory = "/home/gean";
+      home.homeDirectory = homeDirectory;
     };
   };
 }

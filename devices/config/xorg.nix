@@ -23,7 +23,7 @@ in
     ./mixins/docker.nix # Comment on first install
     ./mixins/lorri.nix
     ./mixins/vscode.nix
-    ./users/gean.nix
+    ./users/gean-xorg.nix
   ];
 
   config = {

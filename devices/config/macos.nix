@@ -71,11 +71,6 @@
       ];
     };
 
-    # Links those paths from derivations to /run/current-system/sw
-    environment.pathsToLink = [
-      "/share/zsh"
-    ];
-
     services.yabai = {
       enable = false;
       package = pkgs.yabai;

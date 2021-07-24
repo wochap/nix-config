@@ -2,13 +2,12 @@
 
 {
   imports = [
+    ./nix-common.nix
     ./config/macos.nix
   ];
 
   config = {
     users.users.gean = {
-      shell = pkgs.zsh;
-      uid = 1000;
       home = "/Users/gean";
     };
 
