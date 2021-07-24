@@ -62,6 +62,7 @@ in
       xkbModel = "pc104";
       xkbVariant = "altgr-intl";
 
+      # Setup monitors
       screenSection = ''
         # Select primary monitor
         Option         "nvidiaXineramaInfoOrder" "DFP-0"
@@ -78,7 +79,5 @@ in
         Option         "TearFree"    "true"
       '';
     };
-
-    # services.xserver.useGlamor = true;
   };
 }

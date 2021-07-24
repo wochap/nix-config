@@ -7,7 +7,6 @@ in
   config = {
     fonts = {
       fontDir.enable = true;
-      enableGhostscriptFonts = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
         fira-code

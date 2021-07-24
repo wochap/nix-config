@@ -21,18 +21,17 @@
       scrot # screen capture
 
       # DE
-      # pywal # theme color generator cli
-      # xmagnify # magnifying glass
-      # xzoom # magnifying glass
       alttab # windows like alt + tab
       arandr # xrandr gui
       betterlockscreen # screen locker
       blueberry # bluetooth tray
       caffeine-ng
       clipmenu # clipboard manager
+      feh # wallpaper manager
       kmag # magnifying glass
       nitrogen # wallpaper manager
       pick-colour-picker # color picker gui
+      pywal # theme color generator cli
     ];
   };
 }

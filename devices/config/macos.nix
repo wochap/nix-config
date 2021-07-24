@@ -1,41 +1,14 @@
 { config, lib, pkgs, ... }:
 
-let
-  home-manager = builtins.fetchGit {
-    url = "https://github.com/nix-community/home-manager.git";
-    rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
-    ref = "release-20.09";
-  };
-in
 {
   imports = [
-    # Install home-manager
-    (import "${home-manager}/nix-darwin")
-
+    ./mixins/nix-common.nix
+    ./mixins/darwin.nix
     ./users/gean-darwin.nix
   ];
 
-  # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
-  # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
-  # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
-  options = {
-    _displayServer = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      example = "xorg"; # xorg, wayland
-      description = "Display server type, used by common config files.";
-    };
-  };
-
   config = {
     _displayServer = "darwin";
-
-    # Used for backwards compatibility, please read the changelog before changing.
-    # $ darwin-rebuild changelog
-    system.stateVersion = 4;
-
-    # Allow unfree packages
-    nixpkgs.config.allowUnfree = true;
 
     environment.systemPackages = with pkgs; [
       lorri
@@ -80,12 +53,6 @@ in
 
         '';
       };
-      shellAliases = {
-        gc = "git clone";
-        glo = "git pull origin";
-        gpo = "git push origin";
-        ll = "ls -l";
-      };
     };
 
     fonts = {
@@ -107,12 +74,7 @@ in
     # Links those paths from derivations to /run/current-system/sw
     environment.pathsToLink = [
       "/share/zsh"
-      "/libexec"
     ];
-
-    # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
-    programs.zsh.enable = true;
-    programs.fish.enable = true;
 
     services.yabai = {
       enable = false;

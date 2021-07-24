@@ -7,8 +7,6 @@ in
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
-      # base-devel
-      usbutils # lsusb, for android development
       bc # calculator cli
       cached-nix-shell # fast nix-shell scripts
       dex # execute DesktopEntry files
@@ -35,30 +33,26 @@ in
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer
-      trash-cli # required by vscode
       unstable.devour # swallow
       unzip
+      usbutils # lsusb, for android development
       vdpauinfo # verifying VDPAU
       vim
       wget
       zip
+      # base-devel
 
       # 7w7
-      teamviewer
+      metasploit
       nmap
       tightvnc
-      metasploit
 
       # DE
       alacritty # terminal fallback
-      feh # wallpaper manager
       hunspell # dictionary for document programs
       hunspellDicts.en-us
-      hyper # terminal
       kitty # terminal
-      lxqt.pcmanfm-qt # file manager with better scaling
       mpv # video player
-      nitrogen # wallpaper manager
       pavucontrol # audio settings gui
       zathura # PDF viewer
 
@@ -77,49 +71,29 @@ in
       stripe-cli
       #dogecoin
 
-      # APPS (Comment on first install)
-      anki # mnemonic tool
+      # APPS
       bitwarden
       brave
-      deluge # torrent client
       discord
-      etcher # create booteable usbs
       filelight # view disk usage
       gparted
-      mysql-workbench
+      nitrogen # wallpaper manager
       postman
       screenkey # show key pressed
       simplenote
       slack
-      sxiv # simple image viewer
       unstable.google-chrome
       unstable.sublime3 # text editor
-      vscode
       zoom-us
-
-      # APPS MEDIA (Comment on first install)
-      inkscape # photo editor cli/gui
-      # kdeApplications.kdenlive # video editor
-      nomacs # image viewer/editor
-      obs-studio # video capture
-      olive-editor
-      openshot-qt # video editor
+      # teamviewer
+      # mysql-workbench
 
       # Themes
-      adwaita-qt
       capitaine-cursors
       hicolor-icon-theme
       papirus-icon-theme
-
-      # Themes settings
-      qt5.qtgraphicaleffects # required by gddm themes
-      qt5ct
     ] ++ [
       localPkgs.bigsur-cursors
-      localPkgs.http-url-handler
-      localPkgs.sddm-sugar-dark-greeter
-      localPkgs.sddm-whitesur-greeter
-      localPkgs.stremio
       localPkgs.zscroll # scroll text in shells
     ];
   };

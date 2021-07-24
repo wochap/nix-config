@@ -39,14 +39,25 @@ in
       };
     };
 
-    # Allows proprietary or unfree packages
-    nixpkgs.config.allowUnfree = true;
+    environment.shellAliases = {
+      open = "xdg-open";
+    };
+
+    # Remember private keys?
+    programs.ssh.startAgent = true;
 
     # Explicit PulseAudio support in applications
     nixpkgs.config.pulseaudio = true;
 
-    # Set your time zone.
-    time.timeZone = "America/Panama";
+    boot = {
+      # Show nixos logo on boot/shutdown
+      plymouth = {
+        enable = true;
+      };
+
+      # Enable ntfs disks
+      supportedFilesystems = [ "ntfs" ];
+    };
 
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";
@@ -60,14 +71,8 @@ in
       ];
     };
 
-    nix = {
-      gc.automatic = true;
-
-      trustedUsers = [ "@wheel" "root" ];
-
-      # Clear nixos store
-      autoOptimiseStore = true;
-    };
+    # Clear nixos store
+    nix.autoOptimiseStore = true;
 
     security.sudo = {
       enable = true;

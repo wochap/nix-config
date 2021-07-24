@@ -91,6 +91,7 @@ in
   };
   evolution = {
     appname = "Evolution";
+    new_icon = "${localPkgs.whitesur-dark-icons}/share/icons/WhiteSur-dark/256x256/apps/slack.png";
     timeout = timeout;
     set_transient = false;
   };
