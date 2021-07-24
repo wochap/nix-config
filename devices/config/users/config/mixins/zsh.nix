@@ -90,7 +90,8 @@ in
             error_symbol = "[➜](bold red)";
           };
           nix_shell = {
-            format = "via [$symbol$state]($style) ";
+            symbol = "❄️ lorri ";
+            format = "via [$symbol]($style) ";
           };
         };
       };
