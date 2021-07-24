@@ -37,10 +37,10 @@
 
       # Setup dotfiles
       home.file = {
-        ".config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ../dotfiles/linux.sublime-keymap.json;
-        ".config/zathura/zathurarc".source = ../dotfiles/zathurarc;
-        ".config/mpv/mpv.conf".source = ../dotfiles/mpv.conf;
-        ".config/Thunar/uca.xml".source = ../dotfiles/Thunar/uca.xml;
+        ".config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ./dotfiles/linux.sublime-keymap.json;
+        ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
+        ".config/mpv/mpv.conf".source = ./dotfiles/mpv.conf;
+        ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
       };
 
       programs.gpg.enable = true;
