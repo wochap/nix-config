@@ -3,10 +3,11 @@
 
 {
   imports = [
-    ./mixins/nix-common.nix
+    ./mixins/nix-common
     ./mixins/git.nix
     ./mixins/zsh.nix
     ./mixins/vim.nix
+    ./mixins/kitty
   ];
 
   config = {
@@ -26,8 +27,6 @@
         ".skhdrc".source = ./dotfiles-darwin/.skhdrc;
         ".finicky.js".source = ./dotfiles-darwin/.finicky.js;
         ".yabairc".source = ./dotfiles-darwin/.yabairc;
-        # TODO: merge kitty conf with nixos
-        ".config/kitty/kitty.conf".source = ./dotfiles-darwin/kitty-darwin.conf;
       };
     };
   };

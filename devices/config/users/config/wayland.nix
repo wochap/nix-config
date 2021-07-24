@@ -2,8 +2,8 @@
 
 {
   imports = [
-    ./mixins/nix-common.nix
-    ./mixins/nixos.nix
+    ./mixins/nix-common
+    ./mixins/nixos
     ./mixins/firefox.nix
     ./mixins/fish
     ./mixins/git.nix
