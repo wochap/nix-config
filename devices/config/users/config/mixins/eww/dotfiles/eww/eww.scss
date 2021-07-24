@@ -1,20 +1,23 @@
+$foreground: #bd93f9;
+$background: #282a36;
+$border-color: #44475a;
+
 window {
-  background-color: rgba(32, 32, 32, 0.8);
+  background-color: $background;
 }
 
 //vol
 .vol {
-  border-color: #282e3a;
-  border-radius: 0;
-  // border-radius: 8px;
+  border-color: $border-color;
+  border-radius: 10px;
   border-style: solid;
-  border-width: 1px;
+  border-width: 3px;
   padding-left: 40px;
   padding-right: 40px;
 }
 
 .vol-icon {
-  color: rgba(156, 156, 156, 0.8);
+  color: $foreground;
   font-family: "Font Awesome 5 Free";
   font-size: 128px;
 }
@@ -34,14 +37,14 @@ window {
 .vol-bar highlight {
   all: unset;
 
-  background-color: rgba(156, 156, 156, 0.8);
+  background-color: $foreground;
   border-radius: 100px;
 }
 
 .vol-bar trough {
   all: unset;
 
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba($foreground, 0.5);
   min-height: 10px;
   border-radius: 100px;
 }

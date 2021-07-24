@@ -6,7 +6,7 @@ super + ctrl + Escape
 
 # Open power menu
 super + Escape
-	/etc/rofi-powermenu.sh
+	/etc/scripts/rofi-powermenu.sh
 
 # Take fullscreen screenshoot
 super + Print
@@ -14,23 +14,23 @@ super + Print
 
 # Open app launcher
 super + space
-  /etc/rofi-launcher.sh
+  /etc/scripts/rofi-launcher.sh
 
 # Open calc
 super + c
-  /etc/rofi-calc.sh
+  /etc/scripts/rofi-calc.sh
 
 # Show help
 super + slash
-  /etc/rofi-help.sh
+  /etc/scripts/rofi-help.sh
 
 # Show clipboard
 super + v
-  /etc/rofi-clipboard.sh
+  /etc/scripts/rofi-clipboard.sh
 
 # Show emojis
 super + e
-  /etc/rofi-emoji.sh
+  /etc/scripts/rofi-emoji.sh
 
 # Open terminal
 super + Return
@@ -58,7 +58,7 @@ super + u
 #	 bspc node -s biggest
 
 # Kinda of `MacOS alt + grave` like
-alt + grave
+super + grave
   bspc node last.same_class.local -f
 
 ### STATE/FLAGS
@@ -177,9 +177,9 @@ super + alt + l
 super + alt + f
   nautilus
 
-# Screencast region to mp4
+# Screencast/record region to mp4
 super + alt + r
-  /etc/scrrec.sh -s ~/Recordings/$(date +%F-%T).mp4
+  /etc/scripts/scrrec.sh -s ~/Recordings/$(date +%F-%T).mp4
 
 # Open screenshoot utility
 super + alt + s

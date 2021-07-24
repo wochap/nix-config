@@ -6,6 +6,12 @@ let
 in
 {
   imports = [
-    ./config/darwin.nix
+    ./config/macos.nix
   ];
+
+  config = {
+    # Used for backwards compatibility, please read the changelog before changing.
+    # $ darwin-rebuild changelog
+    system.stateVersion = 4;
+  };
 }

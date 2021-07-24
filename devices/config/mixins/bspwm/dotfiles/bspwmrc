@@ -1,22 +1,23 @@
 #!/usr/bin/env sh
 
 #### AUTOSTART ####
-/etc/bspwm_autostart.sh
-/etc/restart_goa_daemon.sh
+/etc/scripts/bspwm_autostart.sh &
+/etc/scripts/restart_goa_daemon.sh &
 
 #### BSPWM coloring ####
-bspc config normal_border_color \#282e3a
-bspc config active_border_color \#2C4E9C
-bspc config focused_border_color \#58a6ff
-bspc config urgent_border_color  \#f85149
-bspc config presel_feedback_color \#18348D
+bspc config active_border_color "#bd93f9"
+bspc config focused_border_color "#ff79c6"
+bspc config normal_border_color "#44475a"
+bspc config presel_feedback_color "#6272a4"
+bspc config urgent_border_color "#f85149"
 
 #### BSPWM configuration ####
-bspc config external_rules_command /etc/bspwm_external_rules.sh
-bspc config border_width 2
-bspc config window_gap $BSPWM_WINDOW_GAP
+bspc config external_rules_command /etc/scripts/bspwm_external_rules.sh
+bspc config border_width 3
+bspc config window_gap 64
+bspc config top_padding $(($POLYBAR_HEIGHT + $POLYBAR_MARGIN))
 bspc config split_ratio 0.5
-bspc config borderless_monocle true
+bspc config borderless_monocle false
 bspc config swallow_first_click false
 bspc config focus_follows_pointer true
 bspc config bspc config click_to_focus none
@@ -48,23 +49,17 @@ bspc rule -a "Sublime_text" state=floating sticky=on
 bspc rule -a "flameshot" state=floating sticky=on
 bspc rule -a "kmag" state=floating sticky=on
 bspc rule -a "mpv" state=floating sticky=on
+bspc rule -a "Firefox" desktop=^5
+bspc rule -a "Google-chrome" desktop=^1
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
   bspc monitor $m -d 1 2 3 4 F1 F2 F3 F4
 done
 
-/etc/bspwm_subscribe.sh &
-/etc/bspwm_subscribe_polybar.sh &
-/etc/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &
-
-# workspace 2
-bspc node @2:/ -i
-bspc rule -a "kitty:desktop2" -o node=@2:/
-kitty --name=desktop2 &
+/etc/scripts/bspwm_subscribe.sh &
+/etc/scripts/bspwm_subscribe_polybar.sh &
+/etc/scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &
 
 # workspace 5
-bspc node @5:/ -i
-bspc rule -a "Firefox" -o node=@5:/
-sleep 1 &
 firefox &

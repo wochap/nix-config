@@ -6,9 +6,24 @@ let
 in
 {
   imports = [
-    ./modules/lightdm-webkit2-greeter
     ./mixins/bspwm
-    ./common.nix
+    ./mixins/pkgs-xorg.nix
+    ./mixins/nix-common.nix
+    ./mixins/nixos.nix
+    ./mixins/overlays.nix
+    ./mixins/pkgs.nix
+    ./mixins/fonts.nix
+    ./mixins/ipwebcam
+    ./mixins/nixos-networking.nix
+    ./mixins/keychron.nix
+    ./mixins/default-browser
+    ./mixins/apps-gnome # Comment on first install
+    ./mixins/apps-kde.nix # Comment on first install
+    ./mixins/apps-xfce.nix # Comment on first install
+    ./mixins/docker.nix # Comment on first install
+    ./mixins/lorri.nix
+    ./mixins/vscode.nix
+    ./users/gean.nix
   ];
 
   config = {
@@ -22,15 +37,19 @@ in
         CM_SELECTIONS = "clipboard";
       };
       etc = {
-        "fix_caps_lock_delay.sh" = {
+        "scripts/fix_caps_lock_delay.sh" = {
           source = ./scripts/fix_caps_lock_delay.sh;
           mode = "0755";
         };
-        "scrcap.sh" = {
+
+        # Install script for screenshoot
+        "scripts/scrcap.sh" = {
           source = ./scripts/scrcap.sh;
           mode = "0755";
         };
-        "scrrec.sh" = {
+
+        # Install script for recording
+        "scripts/scrrec.sh" = {
           source = ./scripts/scrrec.sh;
           mode = "0755";
         };
@@ -42,32 +61,12 @@ in
       desktopManager = {
         xterm.enable = false;
       };
+
+      # Setup login screen
       displayManager = {
-        sddm = {
-          enable = false;
-          enableHidpi = false;
-          theme = "sugar-dark";
-          extraConfig = lib.mkIf isHidpi ''
-            [X11]
-            ServerArguments=-dpi 144
-          '';
-        };
         lightdm = {
           enable = true;
-          background = ./assets/wallpaper.jpg;
-          greeters.webkit2 = {
-            enable = false;
-            detectThemeErrors = false;
-            debugMode = true;
-            webkitTheme = pkgs.fetchzip {
-              stripRoot = true;
-              url = "https://github.com/wochap/lightdm-webkit2-theme-glorious/archive/7ce9c6c04a5676481fff03d585efa6c97bd40ad2.zip";
-              sha256 = "0zl1fcbwfhlpjxn2zq50bffsvgkp49ch0k2djyhkbnih2fbqdykm";
-            };
-            branding = {
-              userImage = ./assets/profile.jpg;
-            };
-          };
+          background = ./assets/wallpaper.jpeg;
           greeters.gtk = {
             enable = true;
             cursorTheme.name = "bigsur-cursors";
@@ -78,7 +77,7 @@ in
             theme.name = "WhiteSur-dark";
             theme.package = localPkgs.whitesur-dark-theme;
             extraConfig = ''
-              font-name=Roboto 9
+              font-name=Inter 9
             '';
             indicators = [
               "~host"
@@ -99,8 +98,8 @@ in
     # services.unclutter.enable = true;
 
     # Hide cursor when typing
-    # services.xbanish.enable = true;
-    # services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
+    services.xbanish.enable = true;
+    services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
 
     # Add wifi tray
     programs.nm-applet.enable = true;

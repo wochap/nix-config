@@ -17,7 +17,7 @@
     # Required by thunar
     # services.udisks2.enable = true;
     services.gvfs.enable = true;
-    services.gvfs.package = lib.mkForce pkgs.gnome3.gvfs;
+    services.gvfs.package = lib.mkForce pkgs.gnome.gvfs;
     services.tumbler.enable = true;
   };
 }

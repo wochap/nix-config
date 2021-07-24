@@ -7,8 +7,6 @@ in
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
-      # base-devel
-      usbutils # lsusb, for android development
       bc # calculator cli
       cached-nix-shell # fast nix-shell scripts
       dex # execute DesktopEntry files
@@ -35,89 +33,67 @@ in
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer
-      trash-cli # required by vscode
       unstable.devour # swallow
       unzip
+      usbutils # lsusb, for android development
       vdpauinfo # verifying VDPAU
       vim
       wget
       zip
+      # base-devel
 
       # 7w7
-      teamviewer
+      metasploit
       nmap
       tightvnc
-      metasploit
-      teamviewer
 
-      # APPS CLI
+      # DE
+      alacritty # terminal fallback
+      hunspell # dictionary for document programs
+      hunspellDicts.en-us
+      kitty # terminal
+      mpv # video player
+      pavucontrol # audio settings gui
+      zathura # PDF viewer
+
+      # DE CLI
       gitAndTools.gh
       gotop # monitor system
       htop # monitor system
       neofetch # print computer info
-      ranger # file manager cli
-      #dogecoin
-
-      # DE
-      alacritty # terminal fallback
-      feh # wallpaper manager
-      hunspell # dictionary for document programs
-      hunspellDicts.en-us
-      hyper
-      kitty # terminal
-      kmag # magnifying glass
-      mpv # video player
-      nitrogen # wallpaper manager
-      nnn # terminal file manager
+      nnn # file manager CLI
       pamixer # audio cli
-      pavucontrol # audio settings gui
       playerctl # media player cli
+      ranger # file manager CLI
       systemd
 
+      # APPS CLI
+      stripe-cli
+      #dogecoin
+
       # APPS
-      anki # mnemonic tool
       bitwarden
       brave
-      deluge # torrent client
       discord
-      etcher # create booteable usbs
       filelight # view disk usage
-      unstable.google-chrome
       gparted
-      mysql-workbench
+      nitrogen # wallpaper manager
       postman
       screenkey # show key pressed
       simplenote
       slack
+      unstable.google-chrome
       unstable.sublime3 # text editor
-      sxiv # simple image viewer
-      vscode
-      zathura # PDF viewer
       zoom-us
-
-      # APPS MEDIA
-      inkscape # photo editor cli/gui
-      kdeApplications.kdenlive # video editor
-      nomacs # image viewer/editor
-      obs-studio # video capture
-      olive-editor
-      openshot-qt # video editor
+      # teamviewer
+      # mysql-workbench
 
       # Themes
-      adwaita-qt
       capitaine-cursors
       hicolor-icon-theme
       papirus-icon-theme
-
-      # Themes settings
-      qt5.qtgraphicaleffects # required by gddm themes
-      qt5ct
     ] ++ [
       localPkgs.bigsur-cursors
-      localPkgs.http-url-handler
-      localPkgs.sddm-sugar-dark-greeter
-      localPkgs.sddm-whitesur-greeter
-      localPkgs.stremio
       localPkgs.zscroll # scroll text in shells
     ];
   };

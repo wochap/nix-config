@@ -5,18 +5,23 @@ let
 in
 {
   config = {
-    environment.etc = {
-      "notification.flac" = {
-        source = ./assets/notification.flac;
-        mode = "0755";
-      };
+    environment = {
+      systemPackages = with pkgs; [
+        dunst
+      ];
+      etc = {
+        "assets/notification.flac" = {
+          source = ./assets/notification.flac;
+          mode = "0755";
+        };
 
-      "play_notification.sh" = {
-        text = ''
-          #! ${pkgs.bash}/bin/bash
-          ${pkgs.pulseaudio}/bin/paplay /etc/notification.flac
-        '';
-        mode = "0755";
+        "scripts/play_notification.sh" = {
+          text = ''
+            #! ${pkgs.bash}/bin/bash
+            ${pkgs.pulseaudio}/bin/paplay /etc/assets/notification.flac
+          '';
+          mode = "0755";
+        };
       };
     };
 
@@ -26,11 +31,8 @@ in
         iconTheme = {
           name = "Papirus";
           package = pkgs.papirus-icon-theme;
-          # TODO: add missing icons to WhiteSur-dark
-          # name = "WhiteSur-dark";
-          # package = localPkgs.whitesur-dark-icons;
         };
-        settings = (import ./dotfiles/dunstrc.nix);
+        settings = (import ./dotfiles/dunstrc.nix { pkgs = pkgs; });
       };
     };
   };

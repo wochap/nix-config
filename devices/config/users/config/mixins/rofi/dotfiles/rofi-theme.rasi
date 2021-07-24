@@ -48,7 +48,7 @@ configuration {
 #window {
   background-color: rgba(28, 30, 39, 0.8);
   border-color: #282e3a;
-  border-radius: 2px;
+  border-radius: 20px;
   border: 1px;
   width: 30em;
 }
@@ -62,12 +62,13 @@ configuration {
   padding: 8;
   border: 0 0 1 0;
   border-color: @separatorcolor;
+  border-radius: 0.25em;
 }
 
 #element.selected.normal {
   background-color: @selectioncolor;
   border-color: @separatorcolor;
-  border-radius: 0px;
+  border-radius: 0.25em;
   border: 0 0 1 0;
   text-color: @foregroundcolorinverse;
 }
@@ -85,7 +86,7 @@ configuration {
 #element.selected.active {
   background-color: @selectioncolor;
   border-color: @separatorcolor;
-  border-radius: 0px;
+  border-radius: 0.25em;
   border: 0 0 1 0;
   text-color: @foregroundcolorinverse;
 }

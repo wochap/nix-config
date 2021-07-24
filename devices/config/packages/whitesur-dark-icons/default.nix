@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
+{ stdenv, lib, fetchFromGitHub, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "whitesur-dark-icons";
@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "whitesur-dark-icons";
     owner = "wochap";
-    rev = "3818a683791fa770b29d5b539389fd8857c1d608";
-    sha256 = "14s9as2dgv5f6x1qjj763zdycv3mxm81879077i2bnhhjwhbxxbs";
+    rev = "1d38b66f710db7cded600259b544249ce7d84f20";
+    sha256 = "181smsqgiyr3d35bkbxb8sbcqb424l920c27q4yp4qpxspjgsy3k";
   };
 
   sourceRoot = ".";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WhiteSur dark icon theme.";
     homepage = "https://github.com/wochap/whitesur-dark-icon-theme";
   };

@@ -16,11 +16,11 @@
     name = "http-url-handler";
     desktopName = "HTTP URL handler";
     comment = "Open an HTTP/HTTPS URL with a particular browser";
-    exec = "/etc/open_url.sh %u";
+    exec = "/etc/scripts/open_url.sh %u";
     type = "Application";
     terminal = "false";
     extraEntries = ''
-      TryExec=/etc/open_url.sh
+      TryExec=/etc/scripts/open_url.sh
       X-MultipleArgs=false
       NoDisplay=true
       MimeType=x-scheme-handler/http;x-scheme-handler/https

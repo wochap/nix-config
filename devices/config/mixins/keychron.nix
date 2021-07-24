@@ -2,6 +2,7 @@
 
 {
   config = {
+    # Enable fn keys on Keychron
     boot = {
       extraModprobeConfig = ''
         options hid_apple fnmode=0

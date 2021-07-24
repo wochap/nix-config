@@ -3,14 +3,15 @@
 let
   home-manager = builtins.fetchGit {
     url = "https://github.com/nix-community/home-manager.git";
-    rev = "22f6736e628958f05222ddaadd7df7818fe8f59d";
-    ref = "release-20.09";
+    rev = "148d85ee8303444fb0116943787aa0b1b25f94df";
+    ref = "release-21.05";
   };
   isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
 in
 {
   imports = [
+    # Install home manager
     (import "${home-manager}/nixos")
   ];
 
@@ -24,6 +25,12 @@ in
         # to ensure `allowUnfree = true;` is propagated:
         config = config.nixpkgs.config;
       };
+      prevstable = import (builtins.fetchTarball {
+        url = https://github.com/nixos/nixpkgs/archive/cd63096d6d887d689543a0b97743d28995bc9bc3.tar.gz;
+        sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
+      }) {
+        config = config.nixpkgs.config;
+      };
       android = import (builtins.fetchTarball {
         url = https://github.com/tadfisher/android-nixpkgs/archive/0c4e5a01dbd4c8c894f2186a7c582abf55a43c5e.tar.gz;
         sha256 = "0x56nh4nxx5hvpi7aq66v7xm9mzn4b2gs50z60w8c3ciimjlpip8";
@@ -32,14 +39,25 @@ in
       };
     };
 
-    # Allows proprietary or unfree packages
-    nixpkgs.config.allowUnfree = true;
+    environment.shellAliases = {
+      open = "xdg-open";
+    };
+
+    # Remember private keys?
+    programs.ssh.startAgent = true;
 
     # Explicit PulseAudio support in applications
     nixpkgs.config.pulseaudio = true;
 
-    # Set your time zone.
-    time.timeZone = "America/Lima";
+    boot = {
+      # Show nixos logo on boot/shutdown
+      plymouth = {
+        enable = true;
+      };
+
+      # Enable ntfs disks
+      supportedFilesystems = [ "ntfs" ];
+    };
 
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";
@@ -53,14 +71,8 @@ in
       ];
     };
 
-    nix = {
-      gc.automatic = true;
-
-      trustedUsers = [ "@wheel" "root" ];
-
-      # Clear nixos store
-      autoOptimiseStore = true;
-    };
+    # Clear nixos store
+    nix.autoOptimiseStore = true;
 
     security.sudo = {
       enable = true;
@@ -73,7 +85,8 @@ in
     # Enable OpenGL
     hardware.opengl.enable = true;
     hardware.opengl.driSupport = true;
-    # Hardware video acceleration
+
+    # Hardware video acceleration?
     hardware.opengl.extraPackages = with pkgs; [
       libvdpau
       vaapiVdpau

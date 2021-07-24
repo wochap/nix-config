@@ -16,6 +16,7 @@
           "text/html" = [ "google-chrome.desktop" ];
           "video/mp4" = [ "mpv.desktop" ];
           "video/x-matroska" = [ "mpv.desktop" ];
+          "default-web-browser" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];

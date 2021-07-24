@@ -6,11 +6,11 @@ in
 {
   config = {
     fonts = {
-      enableFontDir = true;
-      enableGhostscriptFonts = true;
+      fontDir.enable = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
         fira-code
+        inter
 
         # TODO: requires nvidia?
         (nerdfonts.override {
@@ -39,7 +39,7 @@ in
         allowBitmaps = true;
         defaultFonts = {
           serif = [ "Roboto Slab" ];
-          sansSerif = [ "Roboto" ];
+          sansSerif = [ "Inter" ];
           monospace = [ "FiraCode Nerd Font Mono" ];
           emoji = [ "Noto Color Emoji" ];
         };

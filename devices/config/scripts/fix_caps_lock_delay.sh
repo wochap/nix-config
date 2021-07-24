@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Simulate windows/macos CAPS LOCK behavior
+# Disable CAPS LOCK on key PRESS
 xkbcomp -xkb "$DISPLAY" - | sed 's#key <CAPS>.*#key <CAPS> {\
     repeat=no,\
     type[group1]="ALPHABETIC",\

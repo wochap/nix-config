@@ -19,6 +19,7 @@ in
     ./mixins/eww
     ./mixins/ptsh
     ./mixins/kitty
+    ./mixins/android.nix
   ];
 
   config = {
@@ -36,23 +37,25 @@ in
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
 
-      # https://github.com/rycee/home-manager/blob/master/modules/targets/generic-linux.nix#blob-path
-      targets.genericLinux.enable = true;
-      targets.genericLinux.extraXdgDataDirs = [
-        "/usr/share"
-        "/usr/local/share"
-      ];
-
       # Open GTK inspector with Ctrl + Shift + D
       # GTK_DEBUG=interactive <app>
       dconf.settings = {
         "org/gtk/Settings/Debug" = {
           enable-inspector-keybinding = true;
         };
+        # Disable horrible evolution calendar popup window
+        # source: https://askubuntu.com/questions/1238826/turn-off-calendar-notifications-ubuntu-20-04
+        "org/gnome/evolution-data-server/calendar" = {
+          notify-with-tray = true;
+        };
       };
 
       # Edit home files
       xdg.enable = true;
+      xdg.systemDirs.data = [
+        "/usr/share"
+        "/usr/local/share"
+      ];
 
       home.extraProfileCommands = ''
         if [[ -d "$out/share/applications" ]] ; then
@@ -61,7 +64,6 @@ in
       '';
 
       home.sessionVariables = {
-        # BROWSER = "/etc/open_url.sh";
         NIXOS_CONFIG = "/home/gean/nix-config/devices/desktop.nix";
         OPENER = "xdg-open";
         READER = "zathura";
@@ -75,7 +77,7 @@ in
         ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
         ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
         ".config/mpv/mpv.conf".source = ./dotfiles/mpv.conf;
-        "Pictures/backgrounds/default.jpeg".source = ../../assets/wallpaper.jpg;
+        "Pictures/backgrounds/default.jpeg".source = ../../assets/wallpaper.jpeg;
         ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
         ".config/nixpkgs/config.nix".text = ''
           { allowUnfree = true; }
@@ -93,12 +95,6 @@ in
         enableSshSupport = true;
         defaultCacheTtl = 1800;
         pinentryFlavor = "gnome3";
-      };
-
-      services.random-background = {
-        enable = true;
-        imageDirectory = "%h/Pictures/backgrounds";
-        interval = "30m";
       };
     };
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ stdenv, lib, fetchzip }:
 
 stdenv.mkDerivation rec {
   pname = "bigsur-cursors";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp -pr index.theme $out/share/icons/bigsur-cursors/index.theme
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BigSur cursors";
     homepage = "https://github.com/ful1e5/apple_cursor";
   };
