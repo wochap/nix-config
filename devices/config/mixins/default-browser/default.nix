@@ -13,7 +13,7 @@ in
         };
       };
       sessionVariables = {
-        BROWSER = "http-url-handler.desktop";
+        # BROWSER = "http-url-handler.desktop";
       };
       systemPackages = [
         localPkgs.http-url-handler

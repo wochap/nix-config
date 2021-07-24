@@ -29,8 +29,8 @@ in
       services.dunst = {
         enable = true;
         iconTheme = {
-          name = "WhiteSur-dark";
-          package = localPkgs.whitesur-dark-icons;
+          name = "Papirus";
+          package = pkgs.papirus-icon-theme;
         };
         settings = (import ./dotfiles/dunstrc.nix { pkgs = pkgs; });
       };
