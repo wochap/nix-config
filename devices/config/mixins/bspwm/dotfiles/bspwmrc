@@ -62,7 +62,7 @@ done
 /etc/scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &
 
 # workspace 5
-firefox &
+coproc (firefox > /dev/null 2>&1)
 
 # workspace 1
-google-chrome-stable &
+coproc (google-chrome-stable > /dev/null 2>&1)
