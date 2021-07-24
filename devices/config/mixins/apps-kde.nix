@@ -2,6 +2,7 @@
 
 let
   localPkgs = import ../packages { pkgs = pkgs; };
+  isHidpi = config._isHidpi;
 in
 {
   config = {
