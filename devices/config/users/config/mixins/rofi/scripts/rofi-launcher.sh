@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
 rofi \
-  -theme /etc/config/rofi-theme.rasi \
-  -show drun \
-  -modi drun,run,bin:/etc/scripts/rofi-custom-options.sh \
-  -plugin-path $ROFI_PLUGIN_PATH \
-  -theme-str 'listview { columns: 2; lines: 15; }' \
-  -theme-str 'prompt { font: "Iosevka 20"; margin: -10px 0 0 0; }' \
-  -theme-str 'configuration { show-icons: true; }'
+  -theme /etc/config/rofi-launcher-theme.rasi \
+  -combi-modi drun,run \
+  -modi combi,bin:/etc/scripts/rofi-custom-options.sh \
+  -show combi \
+  -plugin-path $ROFI_PLUGIN_PATH

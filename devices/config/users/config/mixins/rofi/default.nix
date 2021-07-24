@@ -68,6 +68,10 @@
           source = ./dotfiles/rofi-powermenu-theme.rasi;
           mode = "0755";
         };
+        "config/rofi-launcher-theme.rasi" = {
+          source = ./dotfiles/rofi-launcher-theme.rasi;
+          mode = "0755";
+        };
         "config/rofi-emoji-theme.rasi" = {
           source = ./dotfiles/rofi-emoji-theme.rasi;
           mode = "0755";
