@@ -1,9 +1,23 @@
 configuration {
+  display-combi: "";
+  display-run: "";
+  display-drun: "";
 	sidebar-mode: false;
   dpi: 0;
-  font: "Inter Regular 12";
+  font: "Inter Medium 12";
   fullscreen: false;
   hide-scrollbar: false;
+  icon-theme: "WhiteSur-dark";
+  show-icons: true;
+  kb-select-1: "";
+  kb-select-2: "";
+  kb-select-3: "";
+  kb-select-4: "";
+  kb-select-5: "";
+  kb-select-6: "";
+  kb-select-7: "";
+  kb-select-8: "";
+  kb-select-9: "";
 }
 
 * {
@@ -60,7 +74,7 @@ inputbar {
 }
 
 prompt {
-	font: "Noto Sans 33";
+	font: "Iosevka Bold 38";
 	vertical-align: 0.5;
 	padding: 0;
   margin: 5px 0 0 0;
@@ -78,8 +92,12 @@ entry {
 }
 
 element {
-  children: [element-text];
-  padding: 0.6em 40px;
+  children: [element-icon, element-text];
+  padding: 0.3em 40px;
+}
+
+element-icon {
+  size: 60px;
 }
 
 element-text {
@@ -87,6 +105,7 @@ element-text {
   highlight: none #8be9fd;
   horizontal-align: 0;
   vertical-align: 0.5;
+  margin: 0 0 0 5px;
 }
 
 element selected {
