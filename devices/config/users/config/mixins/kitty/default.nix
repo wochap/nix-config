@@ -1,5 +1,11 @@
 { config, pkgs, lib, ... }:
 
+let
+  isDarwin = config._displayServer == "darwin";
+  commonConfig = builtins.readFile ./dotfiles/kitty-common.conf;
+  macosConfig = builtins.readFile ./dotfiles/kitty-macos.conf;
+  linuxConfig = builtins.readFile ./dotfiles/kitty-linux.conf;
+in
 {
   config = {
     environment = {
@@ -11,11 +17,15 @@
     };
     home-manager.users.gean = {
       home.sessionVariables = {
+        # TODO: test on darwin ⬇
         TERMINAL = "kitty";
       };
 
       home.file = {
-        ".config/kitty/kitty.conf".source = ./dotfiles/kitty.conf;
+        ".config/kitty/kitty.conf".text = ''
+          ${if isDarwin then macosConfig else linuxConfig}
+          ${commonConfig}
+        '';
       };
     };
   };
