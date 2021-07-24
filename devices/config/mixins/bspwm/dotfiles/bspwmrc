@@ -63,3 +63,6 @@ done
 
 # workspace 5
 firefox &
+
+# workspace 1
+google-chrome-stable &
