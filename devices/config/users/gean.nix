@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ./config/default.nix
+    # ./config/wayland.nix
+    ./config/xorg.nix
   ];
 
   config = {

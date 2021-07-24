@@ -7,6 +7,7 @@ in
   config = {
     environment = {
       sessionVariables = {
+        # POLYBAR_HEIGHT = 48 + 3 * 2
         POLYBAR_HEIGHT = "54";
         POLYBAR_MARGIN = "25";
       };
@@ -19,7 +20,7 @@ in
           text = ''
             #!/usr/bin/env bash
 
-            bspc config top_padding $(($POLYBAR_HEIGHT + 25))
+            bspc config top_padding $(($POLYBAR_HEIGHT + $POLYBAR_MARGIN))
             polybar-msg cmd show
           '';
           mode = "0755";

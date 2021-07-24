@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./config/default-darwin.nix
+    ./config/macos.nix
   ];
 
   config = {
