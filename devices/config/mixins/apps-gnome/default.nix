@@ -30,7 +30,6 @@ in
         gnome.gnome-font-viewer
         gnome.gnome-sound-recorder # test microphone
         gnome.gnome-system-monitor
-        gnome.gsettings-desktop-schemas
         gnome.gucharmap # special char selector
         gnome.nautilus # file manager
         gnome.pomodoro
@@ -42,6 +41,7 @@ in
         dracula-theme
 
         # Themes settings
+        gnome.gsettings-desktop-schemas
         gtk-engine-murrine
         gtk_engines
         lxappearance
