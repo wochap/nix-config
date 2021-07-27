@@ -5,10 +5,10 @@
     environment.gnome.excludePackages = with pkgs; [
       baobab
       epiphany
+      gnome-tour
       gnome.gnome-contacts
       gnome.gnome-maps
       gnome.gnome-music
-      gnome.gnome-tour
       gnome.simple-scan
     ];
 
