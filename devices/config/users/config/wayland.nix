@@ -11,7 +11,6 @@
     ./mixins/zsh.nix
     ./mixins/mime-apps.nix
     ./mixins/vim
-    ./mixins/eww
     ./mixins/ptsh
     ./mixins/kitty
     ./mixins/android.nix

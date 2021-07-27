@@ -31,12 +31,6 @@ in
       }) {
         config = config.nixpkgs.config;
       };
-      android = import (builtins.fetchTarball {
-        url = https://github.com/tadfisher/android-nixpkgs/archive/0c4e5a01dbd4c8c894f2186a7c582abf55a43c5e.tar.gz;
-        sha256 = "0x56nh4nxx5hvpi7aq66v7xm9mzn4b2gs50z60w8c3ciimjlpip8";
-      }) {
-        channel = "stable";
-      };
     };
 
     environment.shellAliases = {
@@ -84,15 +78,15 @@ in
 
     # Enable OpenGL
     hardware.opengl.enable = true;
-    hardware.opengl.driSupport = true;
+    # hardware.opengl.driSupport = true;
 
     # Hardware video acceleration?
-    hardware.opengl.extraPackages = with pkgs; [
-      libvdpau
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-    hardware.opengl.driSupport32Bit = !isMbp;
+    # hardware.opengl.extraPackages = with pkgs; [
+    #   libvdpau
+    #   vaapiVdpau
+    #   libvdpau-va-gl
+    # ];
+    # hardware.opengl.driSupport32Bit = !isMbp;
 
     # Enable audio
     sound.enable = true;
