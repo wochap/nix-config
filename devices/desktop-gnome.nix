@@ -60,32 +60,28 @@ in
       video.hidpi.enable = true;
     };
 
-    fonts.fontconfig.dpi = dpi;
-
     services.xserver = {
-      dpi = dpi;
-
       # Setup keyboard
       layout = "us";
       xkbModel = "pc104";
       xkbVariant = "altgr-intl";
 
       # Setup monitors
-      screenSection = ''
-        # Select primary monitor
-        Option         "nvidiaXineramaInfoOrder" "DFP-0"
-        # Default multiple monitor setup
-        Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-      '';
-      deviceSection = ''
-        # does it fix screen tearing? maybe...
-        Option         "NoLogo" "1"
-        Option         "RenderAccel" "1"
-        Option         "TripleBuffer" "true"
-        Option         "MigrationHeuristic" "greedy"
-        Option         "AccelMethod" "sna"
-        Option         "TearFree"    "true"
-      '';
+      # screenSection = ''
+      #   # Select primary monitor
+      #   Option         "nvidiaXineramaInfoOrder" "DFP-0"
+      #   # Default multiple monitor setup
+      #   Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
+      # '';
+      # deviceSection = ''
+      #   # does it fix screen tearing? maybe...
+      #   Option         "NoLogo" "1"
+      #   Option         "RenderAccel" "1"
+      #   Option         "TripleBuffer" "true"
+      #   Option         "MigrationHeuristic" "greedy"
+      #   Option         "AccelMethod" "sna"
+      #   Option         "TearFree"    "true"
+      # '';
     };
   };
 }
