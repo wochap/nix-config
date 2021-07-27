@@ -10,6 +10,15 @@ let
     channel = "stable";
   };
   android-hm = (import "${android-repo}/hm-module.nix");
+  finalPackage = android-pkgs.sdk (sdk: with sdk; [
+    build-tools-29-0-2
+    build-tools-30-0-3
+    cmdline-tools-latest
+    emulator
+    platform-tools
+    platforms-android-29
+  ]);
+  path = "Android/Sdk";
 in
 {
   config = {
@@ -22,11 +31,15 @@ in
     environment = {
       systemPackages = with pkgs; [
         jdk8
+        jdk11
         android-studio
       ];
       sessionVariables = {
-        JAVA_HOME = pkgs.jdk8.home;
-        # GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${androidSdk}/share/android-sdk/build-tools/30.0.3/aapt2";
+        # TODO: use android-studio jre path?
+        JAVA_HOME = pkgs.jdk11.home;
+
+        # Fix react native aapt2 errors
+        GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${finalPackage}/share/android-sdk/build-tools/30.0.3/aapt2";
       };
     };
 
@@ -35,17 +48,17 @@ in
         android-hm
       ];
 
-      android-sdk = {
-        enable = false;
-        path = "/home/gean/.local/share/android";
-        packages = android-pkgs.sdk (sdk: with sdk; [
-          android.build-tools-29-0-2
-          android.build-tools-30-0-3
-          android.cmdline-tools-latest
-          android.emulator
-          android.platform-tools
-          android.platforms-android-29
-        ]);
+      # TODO: use android hm options
+      # Fine, I'll do it myself
+      android-sdk.enable = false;
+      android-sdk.finalPackage = finalPackage;
+      home = {
+        file.${path}.source = "${finalPackage}/share/android-sdk";
+        packages = [ finalPackage ];
+        sessionVariables = {
+          ANDROID_HOME = "/home/gean/${path}";
+          ANDROID_SDK_ROOT = "/home/gean/${path}";
+        };
       };
     };
   };
