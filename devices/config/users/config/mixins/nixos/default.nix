@@ -6,6 +6,7 @@ in
 {
   config = {
     home-manager.users.gean = {
+      # TODO: move out
       # Open GTK inspector with Ctrl + Shift + D
       # GTK_DEBUG=interactive <app>
       dconf.settings = {

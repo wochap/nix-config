@@ -19,20 +19,21 @@ in
       ];
       systemPackages = with pkgs; [
         anki # mnemonic tool
-        lxqt.pcmanfm-qt # file manager with better scaling
 
         # APPS MEDIA (Comment on first install)
         inkscape # photo editor cli/gui
         # kdeApplications.kdenlive # video editor
-        nomacs # image viewer/editor
+        # nomacs # image viewer/editor
         obs-studio # video capture
-        olive-editor
-        openshot-qt # video editor
+        # olive-editor # video editor
+        # openshot-qt # video editor
 
         # Themes
         adwaita-qt
 
         # Themes settings
+        libsForQt5.qtstyleplugins
+        qgnomeplatform
         qt5.qtgraphicaleffects # required by gddm themes
         qt5ct
       ] ++ [

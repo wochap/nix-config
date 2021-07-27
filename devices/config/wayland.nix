@@ -2,8 +2,10 @@
 
 {
   imports = [
-    ./mixins/sway
-    ./mixins/waybar
+    ./mixins/gnome-de.nix
+    # ./mixins/sway
+    # ./mixins/waybar
+    # ./mixins/wayland-tiling.nix
     ./mixins/nix-common.nix
     ./mixins/nixos.nix
     ./mixins/overlays.nix
@@ -29,16 +31,6 @@
     programs.xwayland.enable = true;
 
     environment = {
-      systemPackages = with pkgs; [
-        # sway-alttab
-        # brightnessctl
-        mako # notification daemon
-        # pactl # control a running PulseAudio sound server
-        polkit_gnome
-        swaylock
-        swaylock # lockscreen
-        wl-clipboard
-      ];
       sessionVariables = {
         # Force GTK to use wayland
         GDK_BACKEND = "wayland";
@@ -52,14 +44,10 @@
     services.xserver = {
       enable = true;
       displayManager = {
-        # gdm = {
-        #   enable = true;
-        #   nvidiaWayland = true;
-        #   wayland = true;
-        # };
-        sddm = {
+        gdm = {
           enable = true;
-          enableHidpi = true;
+          nvidiaWayland = true;
+          wayland = true;
         };
       };
     };
