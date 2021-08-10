@@ -46,16 +46,24 @@ then
   then
     bspc rule -a "kitty" -o desktop=^$ws
     bspc desktop -f $ws
-    run kitty --session /etc/kitty-session-nix-config.conf
+    run kitty --session /etc/config/kitty-session-nix-config.conf
     exit 0
   fi
 
   if [[ "$first_selection" == *"Open booker project"* ]]
   then
+    bspc rule -a "kitty" -o desktop=^$ws
+    bspc desktop -f $ws
+    run kitty --session /etc/config/kitty-session-booker.conf
+    exit 0
+  fi
+
+  if [[ "$first_selection" == *"Open cinefest project"* ]]
+  then
     # bspc desktop $ws -l monocle
     bspc rule -a "kitty" -o desktop=^$ws
     bspc desktop -f $ws
-    run kitty --session /etc/kitty-session-booker.conf
+    run kitty --session /etc/config/kitty-session-cinefest.conf
     exit 0
   fi
 
@@ -64,12 +72,12 @@ then
     # bspc desktop $ws -l monocle
     bspc rule -a "kitty" -o desktop=^$ws
     bspc desktop -f $ws
-    run kitty --session /etc/kitty-session-tripper.conf
+    run kitty --session /etc/config/kitty-session-tripper.conf
     exit 0
   fi
 fi
 
-if [[ "$*" = "Open nix-config" || "$*" = "Open booker project" || "$*" = "Open tripper project" ]]
+if [[ "$*" = "Open nix-config" || "$*" = "Open booker project" || "$*" = "Open cinefest project" || "$*" = "Open tripper project" ]]
 then
   #Save selection
   echo "$*" > /tmp/rofi-custom-options
@@ -116,6 +124,7 @@ fi
 if [[ -z "$@" ]]; then
   echo -en "Open booker project\0icon\x1fterminal\n"
   echo -en "Open tripper project\0icon\x1fterminal\n"
+  echo -en "Open cinefest project\0icon\x1fterminal\n"
   echo -en "Open nix-config\0icon\x1fterminal\n"
   echo -en "Desktop 4\0icon\x1fterminal\n"
   echo -en "Change BSPWM gaps\0icon\x1fterminal\n"
