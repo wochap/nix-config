@@ -9,10 +9,15 @@ in
 {
   config = {
     environment = {
+      shellAliases = {
+        # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
+        ssh = "kitty +kitten ssh";
+      };
       etc = {
-        "kitty-session-tripper.conf".source = ./dotfiles/kitty-session-tripper.conf;
-        "kitty-session-booker.conf".source = ./dotfiles/kitty-session-booker.conf;
-        "kitty-session-nix-config.conf".source = ./dotfiles/kitty-session-nix-config.conf;
+        "config/kitty-session-tripper.conf".source = ./dotfiles/kitty-session-tripper.conf;
+        "config/kitty-session-booker.conf".source = ./dotfiles/kitty-session-booker.conf;
+        "config/kitty-session-cinefest.conf".source = ./dotfiles/kitty-session-cinefest.conf;
+        "config/kitty-session-nix-config.conf".source = ./dotfiles/kitty-session-nix-config.conf;
       };
     };
     home-manager.users.gean = {
