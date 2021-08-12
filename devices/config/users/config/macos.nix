@@ -6,7 +6,7 @@
     ./mixins/nix-common
     ./mixins/git.nix
     ./mixins/zsh.nix
-    ./mixins/vim.nix
+    ./mixins/vim
     ./mixins/kitty
   ];
 
@@ -18,6 +18,14 @@
         ".finicky.js".source = ./dotfiles-darwin/.finicky.js;
         ".yabairc".source = ./dotfiles-darwin/.yabairc;
       };
+
+      programs.bash.bashrcExtra = ''
+        export ANDROID_HOME=$HOME/Library/Android/sdk
+        export PATH=$PATH:$ANDROID_HOME/emulator
+        export PATH=$PATH:$ANDROID_HOME/tools
+        export PATH=$PATH:$ANDROID_HOME/tools/bin
+        export PATH=$PATH:$ANDROID_HOME/platform-tools
+      '';
     };
   };
 }

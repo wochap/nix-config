@@ -7,6 +7,8 @@
   ];
 
   config = {
+    nix.gc.user = "gean";
+
     users.users.gean = {
       home = "/Users/gean";
     };

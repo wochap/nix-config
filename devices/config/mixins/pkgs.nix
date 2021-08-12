@@ -51,7 +51,6 @@ in
       alacritty # terminal fallback
       hunspell # dictionary for document programs
       hunspellDicts.en-us
-      kitty # terminal
       mpv # video player
       pavucontrol # audio settings gui
       zathura # PDF viewer
