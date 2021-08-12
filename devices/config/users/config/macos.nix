@@ -8,6 +8,7 @@
     ./mixins/zsh.nix
     ./mixins/vim
     ./mixins/kitty
+    ./mixins/ptsh
   ];
 
   config = {
