@@ -19,6 +19,9 @@ in
         "config/kitty-session-cinefest.conf".source = ./dotfiles/kitty-session-cinefest.conf;
         "config/kitty-session-nix-config.conf".source = ./dotfiles/kitty-session-nix-config.conf;
       };
+      systemPackages = with pkgs; [
+        kitty # terminal
+      ];
     };
     home-manager.users.gean = {
       home.sessionVariables = {

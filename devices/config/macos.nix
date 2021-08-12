@@ -41,9 +41,6 @@
 
     environment = {
       etc = {
-        "open_url.sh" = {
-          source = ./scripts/open_url.sh;
-        };
         "sudoers.d/10-nix-commands".text = ''
           %admin ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild, \
                                         /run/current-system/sw/bin/nix*, \
