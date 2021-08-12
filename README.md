@@ -120,6 +120,13 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
       --output DP-2 --off
     ```
 
+## Upgrating NixOS
+
+```
+$ nix-channel --update
+$ NIXOS_CONFIG=/home/gean/nix-config/devices/desktop.nix nixos-rebuild switch --upgrade
+```
+
 ## Development Workflow
 
 1. Setup [Lorri](https://github.com/nix-community/lorri)
@@ -131,6 +138,8 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
     $ lorri init
     $ direnv allow
     ```
+
+    [Fix XDG_DATA_DIRS reset](https://github.com/target/lorri/issues/496)
 
 ## Tools
 
