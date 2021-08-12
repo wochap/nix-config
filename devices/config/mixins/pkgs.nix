@@ -5,6 +5,9 @@ let
 in
 {
   config = {
+    environment.sessionVariables = {
+      NNN_TRASH = "1";
+    };
     environment.systemPackages = with pkgs; [
       # TOOLS
       bc # calculator cli
@@ -85,6 +88,7 @@ in
       unstable.google-chrome
       unstable.sublime3 # text editor
       zoom-us
+      # antimicroX
       # teamviewer
       # mysql-workbench
 
