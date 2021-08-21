@@ -91,7 +91,8 @@ element {
 element-text {
   font: "Noto Color Emoji 16";
   highlight: none;
-  text-color: inherit;
+  // HACK: hide only text
+  text-color: #00000003;
 
   // HACK: hide text ⬇️
   expand: false;
