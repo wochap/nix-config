@@ -11,7 +11,7 @@ in
     environment = {
       shellAliases = {
         # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
-        ssh = "kitty +kitten ssh";
+        sshk = "kitty +kitten ssh";
       };
       etc = {
         "config/kitty-session-tripper.conf".source = ./dotfiles/kitty-session-tripper.conf;
