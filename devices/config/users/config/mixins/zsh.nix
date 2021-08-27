@@ -49,14 +49,24 @@ in
           eval "$(direnv hook zsh)"
 
           # ZSH settings
-          setopt inc_append_history
-          unsetopt share_history
+          unsetopt SHARE_HISTORY
+          unsetopt INC_APPEND_HISTORY
+          setopt INC_APPEND_HISTORY_TIME
+          setopt HIST_IGNORE_ALL_DUPS
+          setopt HIST_FIND_NO_DUPS
 
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
           source ${dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
         '';
         enableCompletion = true;
         enableAutosuggestions = true;
+        history = {
+          extended = true;
+          ignoreSpace = true;
+          save = 1000000000;
+          size = 1000000000;
+          share = false;
+        };
         oh-my-zsh = {
           enable = true;
           plugins = [];
