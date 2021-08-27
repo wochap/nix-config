@@ -33,8 +33,9 @@
     environment = {
       sessionVariables = {
         # Force GTK to use wayland
-        GDK_BACKEND = "wayland";
-        CLUTTER_BACKEND = "wayland";
+        # doesn't work with nvidia?
+        # GDK_BACKEND = "wayland";
+        # CLUTTER_BACKEND = "wayland";
 
         # Force firefox to use wayland
         MOZ_ENABLE_WAYLAND = "1";
