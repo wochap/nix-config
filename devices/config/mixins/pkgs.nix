@@ -71,6 +71,7 @@ in
 
       # APPS CLI
       stripe-cli
+      speedread
       #dogecoin
 
       # APPS
