@@ -9,16 +9,12 @@ in
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Dracula";
-          package = localPkgs.dracula-icons;
+          name = "elementary";
+          package = pantheon.elementary-icon-theme;
         };
         theme = {
-          name = "Dracula";
-          package = pkgs.dracula-theme;
-        };
-        font = {
-          name = "Inter Light 9";
-          package = pkgs.inter;
+          name = "Adementary";
+          package = pkgs.adementary-theme;
         };
         gtk3.extraConfig = {
           gtk-application-prefer-dark-theme = true;

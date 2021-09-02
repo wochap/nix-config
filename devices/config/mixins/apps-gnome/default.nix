@@ -39,6 +39,7 @@ in
         # Themes
         gnome.adwaita-icon-theme
         dracula-theme
+        adementary-theme
 
         # Themes settings
         gnome.gsettings-desktop-schemas
