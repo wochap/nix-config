@@ -32,6 +32,10 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
     ```
     $ git clone https://github.com/wochap/nix-config.git ~/nix-config
     ```
+1. Setup cachix
+    ```
+    $ sudo cachix use nix-community
+    ```
 1. Rebuild nixos with the device's specific config, for example, heres's a rebuild for my `desktop`
 
     **WARNING:** First `nixos-rebuild` with device config can take several hours 😢
@@ -67,6 +71,7 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 
     For Wayland:
     - WIP
+    - --enable-features=UseOzonePlatform --ozone-platform=wayland
 1. Setup gnome calendar and geary
     ```
     $ env WEBKIT_DISABLE_COMPOSITING_MODE=1 gnome-control-center online-accounts
