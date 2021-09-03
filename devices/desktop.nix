@@ -9,6 +9,8 @@ in
   imports = [
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
+    # Cachix required by doom-emacs
+    /etc/nixos/cachix.nix
 
     ./config/mixins/nvidia.nix
     ./config/xorg.nix
