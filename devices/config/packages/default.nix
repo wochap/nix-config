@@ -1,6 +1,7 @@
 { pkgs }:
 
 {
+  interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock {};
   bigsur-cursors = pkgs.callPackage ./bigsur-cursors {};
   dracula-icons = pkgs.callPackage ./dracula-icons {};
   horizon-icons = pkgs.callPackage ./horizon-icons {};
