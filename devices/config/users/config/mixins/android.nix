@@ -3,20 +3,29 @@
 let
   phoneId = "04e8";
   android-repo = builtins.fetchTarball {
-    url = https://github.com/tadfisher/android-nixpkgs/archive/0c4e5a01dbd4c8c894f2186a7c582abf55a43c5e.tar.gz;
-    sha256 = "0x56nh4nxx5hvpi7aq66v7xm9mzn4b2gs50z60w8c3ciimjlpip8";
+    url = https://github.com/tadfisher/android-nixpkgs/archive/14306de794ed518c548d20c9c16dbe12a305b9e6.tar.gz;
+    sha256 = "10rvcm8yhz0c4y5hr3di5i5bbhjclb63r77sm1bdhg67ri9zzj4j";
   };
   android-pkgs = (import "${android-repo}/default.nix") {
     channel = "stable";
   };
   android-hm = (import "${android-repo}/hm-module.nix");
   finalPackage = android-pkgs.sdk (sdk: with sdk; [
+    # Required by react-native/flutter
     build-tools-29-0-2
     build-tools-30-0-3
     cmdline-tools-latest
     emulator
     platform-tools
     platforms-android-29
+
+    # Required to create emulator
+    build-tools-31-0-0
+    platforms-android-30
+    platforms-android-31
+    sources-android-30
+    system-images-android-30-google-apis-playstore-x86
+    system-images-android-30-google-apis-x86
   ]);
   path = "Android/Sdk";
 in
