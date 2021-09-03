@@ -24,6 +24,7 @@ in
     ./mixins/dunst
     ./mixins/rofi
     ./mixins/android.nix
+    ./mixins/doom-emacs
   ];
 
   config = {
