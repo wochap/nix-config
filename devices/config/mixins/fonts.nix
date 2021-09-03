@@ -9,7 +9,6 @@ in
       fontDir.enable = true;
       enableDefaultFonts = true;
       fonts = with pkgs; [
-        fira-code
         inter
 
         # TODO: requires nvidia?
