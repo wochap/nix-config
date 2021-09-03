@@ -11,7 +11,7 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
-    The initial config must have: `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
+    The initial config must have: `cachix` `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
 
     **NOTE:** Run `sudo nixos-install` without root user (sudo su)
 
