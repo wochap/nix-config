@@ -21,13 +21,13 @@ in
     services.interception-tools = {
       enable = true;
       udevmonConfig = ''
-        - JOB: "intercept -g $DEVNODE | both-shift-capslock | uinput -d $DEVNODE"
+        - JOB: "intercept -g $DEVNODE | caps2esc -m 1 | both-shift-capslock | uinput -d $DEVNODE"
           DEVICE:
             EVENTS:
-              EV_KEY: [KEY_LEFTSHIFT, KEY_RIGHTSHIFT]
+              EV_KEY: [KEY_CAPSLOCK, KEY_LEFTSHIFT, KEY_RIGHTSHIFT]
       '';
       plugins = [
-        # pkgs.interception-tools-plugins.caps2esc
+        pkgs.interception-tools-plugins.caps2esc
         localPkgs.interception-both-shift-capslock
       ];
     };
