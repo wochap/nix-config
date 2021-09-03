@@ -10,7 +10,7 @@ in
         enable = true;
         iconTheme = {
           name = "elementary";
-          package = pantheon.elementary-icon-theme;
+          package = pkgs.pantheon.elementary-icon-theme;
         };
         theme = {
           name = "Adementary";
