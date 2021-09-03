@@ -27,7 +27,7 @@ in
               EV_KEY: [KEY_CAPSLOCK, KEY_LEFTSHIFT, KEY_RIGHTSHIFT]
       '';
       plugins = [
-        pkgs.interception-tools-plugins.caps2esc
+        localPkgs.interception-caps2esc
         localPkgs.interception-both-shift-capslock
       ];
     };
