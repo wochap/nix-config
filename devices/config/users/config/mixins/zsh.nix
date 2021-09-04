@@ -82,7 +82,7 @@ in
             ls = lib.mkForce "exa --icons --group-directories-first --across";
             la = lib.mkForce "exa --icons --group-directories-first --all --long";
             # Setup ptSh
-            pwd = "ptpwd";
+            pwdd = "ptpwd";
             mkdir = "ptmkdir";
             touch = "pttouch";
             cp = "ptcp";
