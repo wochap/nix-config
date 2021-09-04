@@ -9,9 +9,9 @@ in
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
     # Cachix required by doom-emacs
-    # /etc/nixos/cachix.nix
+    /etc/nixos/cachix.nix
 
-    /config/wayland.nix
+    ./config/wayland.nix
   ];
 
   config = {
