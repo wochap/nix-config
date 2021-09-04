@@ -7,6 +7,10 @@ configuration {
   hide-scrollbar: false;
   show-match: false;
   sort: false;
+  kb-row-up: "Up,Control+k,Shift+Tab";
+  kb-row-down: "Down,Control+j";
+  kb-accept-entry: "Control+m,Return,KP_Enter";
+  kb-remove-to-eol: "Control+Shift+e";
 }
 
 * {
