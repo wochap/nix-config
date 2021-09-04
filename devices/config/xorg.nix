@@ -16,7 +16,6 @@ in
     ./mixins/ipwebcam
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
-    ./mixins/default-browser
     ./mixins/apps-gnome # Comment on first install
     ./mixins/apps-kde.nix # Comment on first install
     ./mixins/apps-xfce.nix # Comment on first install

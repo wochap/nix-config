@@ -17,6 +17,7 @@ in
     ./mixins/ptsh
     ./mixins/kitty
     ./mixins/android.nix
+    ./mixins/default-browser
   ];
 
   config = {

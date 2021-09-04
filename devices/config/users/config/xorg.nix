@@ -26,6 +26,7 @@ in
     ./mixins/rofi
     ./mixins/android.nix
     ./mixins/doom-emacs
+    ./mixins/default-browser
   ];
 
   config = {
