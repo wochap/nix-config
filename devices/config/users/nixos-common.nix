@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 
 let
-  homeDirectory = "/home/gean";
+  userName = config._userName;
+  homeDirectory = "/home/${userName}";
 in
 {
   imports = [
@@ -10,7 +11,7 @@ in
 
   config = {
     # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.gean = {
+    users.users.${userName} = {
       password = "123456";
       home = homeDirectory;
       isNormalUser = true;
@@ -30,10 +31,10 @@ in
       ];
     };
 
-    home-manager.users.gean = {
+    home-manager.users.userName = {
       # Home Manager needs a bit of information about you and the
       # paths it should manage.
-      home.username = "gean";
+      home.username = userName;
       home.homeDirectory = homeDirectory;
     };
   };

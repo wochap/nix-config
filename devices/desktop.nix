@@ -4,6 +4,7 @@ let
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
   # xlayoutdisplay throws 156
   dpi = 144;
+  userName = "gean";
 in
 {
   imports = [
@@ -17,6 +18,7 @@ in
   ];
 
   config = {
+    _userName = userName;
     _isHidpi = true;
 
     # This value determines the NixOS release from which the default
@@ -35,7 +37,7 @@ in
     # You can update Home Manager without changing this value. See
     # the Home Manager release notes for a list of state version
     # changes in each release.
-    home-manager.users.gean.home.stateVersion = "21.03";
+    home-manager.users.${userName}.home.stateVersion = "21.03";
 
     boot = {
       loader = {

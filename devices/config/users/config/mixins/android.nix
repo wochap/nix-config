@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  userName = config._userName;
   phoneId = "04e8";
   android-repo = builtins.fetchTarball {
     url = https://github.com/tadfisher/android-nixpkgs/archive/14306de794ed518c548d20c9c16dbe12a305b9e6.tar.gz;
@@ -52,7 +53,7 @@ in
       };
     };
 
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       imports = [
         android-hm
       ];
@@ -65,8 +66,8 @@ in
         file.${path}.source = "${finalPackage}/share/android-sdk";
         packages = [ finalPackage ];
         sessionVariables = {
-          ANDROID_HOME = "/home/gean/${path}";
-          ANDROID_SDK_ROOT = "/home/gean/${path}";
+          ANDROID_HOME = "/home/${userName}/${path}";
+          ANDROID_SDK_ROOT = "/home/${userName}/${path}";
         };
       };
     };

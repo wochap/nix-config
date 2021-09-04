@@ -1,6 +1,7 @@
 { config, pkgs, lib,  ... }:
 
 let
+  userName = config._userName;
   isXorg = config._displayServer == "xorg";
 in
 {
@@ -36,7 +37,7 @@ in
         };
       };
     };
-    home-manager.users.gean = lib.mkIf isXorg {
+    home-manager.users.${userName} = lib.mkIf isXorg {
       home.file = {
         ".config/polybar/main.ini".source = ./dotfiles/main.ini;
         ".config/polybar/scripts/docker_info.sh".source = ./dotfiles/scripts/docker_info.sh;

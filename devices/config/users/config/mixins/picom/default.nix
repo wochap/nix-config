@@ -1,11 +1,12 @@
 { config, pkgs, lib, ... }:
 
 let
+  userName = config._userName;
   isXorg = config._displayServer == "xorg";
 in
 {
   config = {
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       services.picom = lib.mkIf isXorg {
         enable = true;
 

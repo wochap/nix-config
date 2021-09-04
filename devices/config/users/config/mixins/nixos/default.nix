@@ -2,10 +2,11 @@
 
 let
   isWayland = config._displayServer == "wayland";
+  userName = config._userName;
 in
 {
   config = {
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       # TODO: move out
       # Open GTK inspector with Ctrl + Shift + D
       # GTK_DEBUG=interactive <app>
@@ -34,7 +35,7 @@ in
       '';
 
       home.sessionVariables = {
-        NIXOS_CONFIG = "/home/gean/nix-config/devices/desktop.nix";
+        NIXOS_CONFIG = "/home/${userName}/nix-config/devices/desktop.nix";
         READER = "zathura";
         VIDEO = "mpv";
       };

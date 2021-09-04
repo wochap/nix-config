@@ -1,11 +1,12 @@
 { config, pkgs, ... }:
 
 let
+  userName = config._userName;
   localPkgs = import ../../../packages { pkgs = pkgs; };
 in
 {
   config = {
-    home-manager.users.gean = {
+    home-manager.users.${useName} = {
       gtk = {
         enable = true;
         iconTheme = {
@@ -35,12 +36,12 @@ in
           gtk-xft-rgba = "rgb";
         };
         gtk3.bookmarks = [
-          "file:///home/gean/Documents"
-          "file:///home/gean/Downloads"
-          "file:///home/gean/Pictures"
-          "file:///home/gean/Projects"
-          "file:///home/gean/Recordings"
-          "file:///home/gean/Videos"
+          "file:///home/${userName}/Documents"
+          "file:///home/${userName}/Downloads"
+          "file:///home/${userName}/Pictures"
+          "file:///home/${userName}/Projects"
+          "file:///home/${userName}/Recordings"
+          "file:///home/${userName}/Videos"
         ];
         gtk2.extraConfig = ''
           gtk-button-images = 1

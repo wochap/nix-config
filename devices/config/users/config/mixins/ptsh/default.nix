@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  userName = config._userName;
   localPkgs = import ../../../../packages { pkgs = pkgs; };
   ptsh-repo = builtins.fetchGit {
     url = "https://github.com/jszczerbinsky/ptSh";
@@ -16,7 +17,7 @@ in
       ];
     };
 
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       home.file = {
         ".local/share/ptSh/logo.txt".source = "${ptsh-repo}/src/logo.txt";
         ".local/share/ptSh/LICENSE".source = "${ptsh-repo}/LICENSE";

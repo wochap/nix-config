@@ -21,6 +21,12 @@ in
       example = true;
       description = "Flag for hidpi displays.";
     };
+    _userName = lib.mkOption {
+      type = lib.types.str;
+      default = "gean";
+      example = "gean";
+      description = "Default user name";
+    };
   };
 
   config = {

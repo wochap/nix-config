@@ -1,6 +1,7 @@
 { config, pkgs, lib,  ... }:
 
 let
+  userName = config._userName;
   dracula-zsh-syntax-highlighting = pkgs.fetchFromGitHub {
     owner = "dracula";
     repo = "zsh-syntax-highlighting";
@@ -19,7 +20,7 @@ in
         "/share/zsh"
       ];
     };
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       programs.zsh = {
         enable = true;
         dotDir = ".config/zsh";

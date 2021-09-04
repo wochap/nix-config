@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  userName = config._userName;
   doom-emacs-src = builtins.fetchTarball {
     # master branch
     url = https://github.com/vlaci/nix-doom-emacs/archive/fee14d217b7a911aad507679dafbeaa8c1ebf5ff.tar.gz;
@@ -33,7 +34,7 @@ in
       ];
     };
 
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       # home.packages = [
       #   doom-emacs
       # ];

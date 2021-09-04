@@ -1,6 +1,9 @@
 
 { config, pkgs, lib, ... }:
 
+let
+  userName = config._userName;
+in
 {
   imports = [
     ./mixins/nix-common
@@ -12,7 +15,7 @@
   ];
 
   config = {
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       # Add config files to home folder
       home.file = {
         ".skhdrc".source = ./dotfiles-darwin/.skhdrc;

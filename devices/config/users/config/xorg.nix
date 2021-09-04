@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  userName = config._userName;
   isXorg = config._displayServer == "xorg";
   isHidpi = config._isHidpi;
   localPkgs = import ../../packages { pkgs = pkgs; };
@@ -28,7 +29,7 @@ in
   ];
 
   config = {
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       # Setup dotfiles
       home.file = {
         ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;

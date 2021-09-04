@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+let
+  userName = config._userName;
+in
 {
   config = {
     environment = {
@@ -92,7 +95,7 @@
         "/share/rofi-emoji"
       ];
     };
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       programs.rofi.enable = true;
     };
   };

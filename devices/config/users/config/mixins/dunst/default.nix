@@ -2,6 +2,7 @@
 
 let
   localPkgs = import ../../../../packages { pkgs = pkgs; };
+  userName = config._userName;
 in
 {
   config = {
@@ -25,7 +26,7 @@ in
       };
     };
 
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       services.dunst = {
         enable = true;
         iconTheme = {

@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+let
+  userName = config._userName;
+in
 {
   imports = [
     ./nix-common.nix
@@ -7,17 +10,17 @@
   ];
 
   config = {
-    nix.gc.user = "gean";
+    nix.gc.user = userName;
 
-    users.users.gean = {
-      home = "/Users/gean";
+    users.users.${userName} {
+      home = "/Users/${userName}";
     };
 
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       # Home Manager needs a bit of information about you and the
       # paths it should manage.
-      home.username = "gean";
-      home.homeDirectory = "/Users/gean";
+      home.username = userName;
+      home.homeDirectory = "/Users/${userName}";
     };
   };
 }

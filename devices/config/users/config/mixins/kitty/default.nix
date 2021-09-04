@@ -5,6 +5,7 @@ let
   commonConfig = builtins.readFile ./dotfiles/kitty-common.conf;
   macosConfig = builtins.readFile ./dotfiles/kitty-macos.conf;
   linuxConfig = builtins.readFile ./dotfiles/kitty-linux.conf;
+  userName = config._userName;
 in
 {
   config = {
@@ -23,7 +24,7 @@ in
         kitty # terminal
       ];
     };
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       home.sessionVariables = {
         # TODO: test on darwin ⬇
         TERMINAL = "kitty";
