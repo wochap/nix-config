@@ -19,9 +19,6 @@ in
           "text/html" = [ "google-chrome.desktop" ];
           "video/mp4" = [ "mpv.desktop" ];
           "video/x-matroska" = [ "mpv.desktop" ];
-          "default-web-browser" = [ "http-url-handler.desktop" ];
-          "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
-          "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/mailto" = [ "exo-mail-reader.desktop" ];
           "x-scheme-handler/postman" = [ "Postman.desktop" ];
           "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
@@ -36,8 +33,8 @@ in
           "text/html" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
           "video/mp4" = [ "mpv.desktop" ];
           "video/x-matroska" = [ "mpv.desktop" ];
-          "x-scheme-handler/http" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
-          "x-scheme-handler/https" = [ "http-url-handler.desktop" "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
+          "x-scheme-handler/http" = [ "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
+          "x-scheme-handler/https" = [ "firefox.desktop" "google-chrome.desktop" "brave-browser.desktop" ];
           "x-scheme-handler/mailto" = [ "userapp-Thunderbird-LAA0Y0.desktop" "userapp-Evolution-S7FTY0.desktop" ];
           "x-scheme-handler/postman" = [ "Postman.desktop" ];
         };

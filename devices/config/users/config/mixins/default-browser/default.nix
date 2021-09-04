@@ -31,5 +31,20 @@ in
         http-url-handler
       ];
     };
+
+    home-manager.users.${userName} = {
+      xdg.mimeApps = {
+        defaultApplications = {
+          "default-web-browser" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
+        };
+        associations.added = {
+          "text/html" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
+        };
+      };
+    };
   };
 }
