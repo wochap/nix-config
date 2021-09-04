@@ -28,22 +28,14 @@ in
         "/usr/local/share"
       ];
 
-      home.extraProfileCommands = ''
-        if [[ -d "$out/share/applications" ]] ; then
-          ${pkgs.desktop-file-utils}/bin/update-desktop-database $out/share/applications
-        fi
-      '';
-
       home.sessionVariables = {
         NIXOS_CONFIG = "/home/${userName}/nix-config/devices/desktop.nix";
-        READER = "zathura";
         VIDEO = "mpv";
       };
 
       # Setup dotfiles
       home.file = {
         ".config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ./dotfiles/linux.sublime-keymap.json;
-        ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
         ".config/mpv/mpv.conf".source = ./dotfiles/mpv.conf;
         ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
       };

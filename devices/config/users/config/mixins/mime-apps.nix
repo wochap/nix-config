@@ -10,7 +10,6 @@ in
       xdg.mimeApps = {
         enable = true;
         defaultApplications = {
-          "application/pdf" = [ "org.pwmt.zathura.desktop" ];
           "image/jpeg" = [ "org.gnome.eog.desktop" ];
           "image/png" = [ "org.gnome.eog.desktop" ];
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];
@@ -24,7 +23,6 @@ in
           "x-scheme-handler/webcal" = [ "google-chrome.desktop" ];
         };
         associations.added = {
-          "application/pdf" = [ "org.pwmt.zathura.desktop" ];
           "image/jpeg" = [ "org.gnome.eog.desktop" "org.nomacs.ImageLounge.desktop" ];
           "image/png" = [ "org.gnome.eog.desktop" "org.nomacs.ImageLounge.desktop" ];
           "image/svg+xml" = [ "org.gnome.eog.desktop" ];

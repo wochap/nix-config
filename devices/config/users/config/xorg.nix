@@ -27,6 +27,7 @@ in
     ./mixins/android.nix
     ./mixins/doom-emacs
     ./mixins/default-browser
+    ./mixins/zathura
   ];
 
   config = {

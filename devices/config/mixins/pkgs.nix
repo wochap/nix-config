@@ -17,7 +17,6 @@ in
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
       ffmpeg-full # music/video codecs?
-      fzf # fuzzy search
       git
       glxinfo # opengl utils
       gnumake # make
@@ -56,7 +55,6 @@ in
       hunspellDicts.en-us
       mpv # video player
       pavucontrol # audio settings gui
-      zathura # PDF viewer
 
       # DE CLI
       gitAndTools.gh

@@ -18,6 +18,7 @@ in
     ./mixins/kitty
     ./mixins/android.nix
     ./mixins/default-browser
+    ./mixins/zathura
   ];
 
   config = {
