@@ -6,7 +6,7 @@ let
 in
 {
   config = {
-    home-manager.users.${useName} = {
+    home-manager.users.${userName} = {
       gtk = {
         enable = true;
         iconTheme = {
