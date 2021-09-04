@@ -3,10 +3,14 @@
 let
   userName = config._userName;
   isXorg = config._displayServer == "xorg";
+  localPkgs = import ../../../../packages { pkgs = pkgs; };
 in
 {
   config = {
     environment = {
+      systemPackages = with pkgs; [
+        localPkgs.zscroll # scroll text in shells
+      ];
       sessionVariables = {
         # POLYBAR_HEIGHT = 48 + 3 * 2
         POLYBAR_HEIGHT = "54";

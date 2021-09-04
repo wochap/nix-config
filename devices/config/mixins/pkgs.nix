@@ -97,7 +97,6 @@ in
       papirus-icon-theme
     ] ++ [
       localPkgs.bigsur-cursors
-      localPkgs.zscroll # scroll text in shells
     ];
   };
 }
