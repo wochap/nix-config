@@ -82,6 +82,7 @@ in
       gparted
       nitrogen # wallpaper manager
       postman
+      qbittorrent
       screenkey # show key pressed
       simplenote
       slack
