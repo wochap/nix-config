@@ -1,4 +1,5 @@
 { config, pkgs, lib, ... }:
+
 let
   hostName = "gdesktop";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
