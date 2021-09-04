@@ -4,7 +4,7 @@
   imports = [
     ./mixins/nix-common.nix
     ./mixins/darwin.nix
-    ./users/gean-darwin.nix
+    ./users/user-darwin.nix
   ];
 
   config = {

@@ -21,7 +21,7 @@
     ./mixins/docker.nix # Comment on first install
     ./mixins/lorri.nix
     ./mixins/vscode.nix
-    ./users/gean-wayland.nix
+    ./users/user-wayland.nix
   ];
 
   config = {
