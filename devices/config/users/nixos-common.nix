@@ -31,7 +31,7 @@ in
       ];
     };
 
-    home-manager.users.userName = {
+    home-manager.users.${userName} = {
       # Home Manager needs a bit of information about you and the
       # paths it should manage.
       home.username = userName;
