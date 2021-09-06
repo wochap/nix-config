@@ -16,9 +16,11 @@ in
     ./mixins/ipwebcam
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
-    ./mixins/apps-gnome # Comment on first install
-    ./mixins/apps-kde.nix # Comment on first install
-    ./mixins/apps-xfce.nix # Comment on first install
+    ./mixins/gnome-pkgs.nix # Comment on first install
+    ./mixins/gnome-minimal-wm # Comment on first install
+    ./mixins/kde-pkgs.nix # Comment on first install
+    ./mixins/kde-minimal-wm.nix # Comment on first install
+    ./mixins/thunar.nix
     ./mixins/docker.nix # Comment on first install
     ./mixins/lorri.nix
     ./mixins/vscode.nix

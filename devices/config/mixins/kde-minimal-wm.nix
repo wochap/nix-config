@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  localPkgs = import ../packages { pkgs = pkgs; };
   isHidpi = config._isHidpi;
 in
 {
@@ -18,16 +17,6 @@ in
         })
       ];
       systemPackages = with pkgs; [
-        anki # mnemonic tool
-
-        # APPS MEDIA (Comment on first install)
-        inkscape # photo editor cli/gui
-        # kdeApplications.kdenlive # video editor
-        # nomacs # image viewer/editor
-        obs-studio # video capture
-        # olive-editor # video editor
-        # openshot-qt # video editor
-
         # Themes
         adwaita-qt
 
@@ -36,8 +25,6 @@ in
         qgnomeplatform
         qt5.qtgraphicaleffects # required by gddm themes
         qt5ct
-      ] ++ [
-        localPkgs.stremio
       ];
     };
   };

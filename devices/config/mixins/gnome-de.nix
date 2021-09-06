@@ -8,7 +8,6 @@
       gnome-tour
       gnome.gnome-contacts
       gnome.gnome-maps
-      gnome.gnome-music
       gnome.simple-scan
     ];
 

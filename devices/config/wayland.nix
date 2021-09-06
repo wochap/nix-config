@@ -3,9 +3,6 @@
 {
   imports = [
     ./mixins/gnome-de.nix
-    # ./mixins/sway
-    # ./mixins/waybar
-    # ./mixins/wayland-tiling.nix
     ./mixins/nix-common.nix
     ./mixins/nixos.nix
     ./mixins/overlays.nix
@@ -14,9 +11,9 @@
     ./mixins/ipwebcam
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
-    ./mixins/apps-gnome # Comment on first install
-    ./mixins/apps-kde.nix # Comment on first install
-    ./mixins/apps-xfce.nix # Comment on first install
+    ./mixins/gnome-pkgs # Comment on first install
+    ./mixins/kde-pkgs.nix # Comment on first install
+    ./mixins/thunar.nix # Comment on first install
     ./mixins/docker.nix # Comment on first install
     ./mixins/lorri.nix
     ./mixins/vscode.nix

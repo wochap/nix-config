@@ -3,9 +3,9 @@
 {
   config = {
     environment = {
-      sessionVariables = {
-        OPENER = "exo-open";
-      };
+      # sessionVariables = {
+      #   OPENER = "exo-open";
+      # };
       systemPackages = with pkgs; [
         glib # for gsettings?
         xfce.exo # opener exo-open

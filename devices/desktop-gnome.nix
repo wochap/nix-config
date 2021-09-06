@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 let
   hostName = "gdesktop";
-  dpi = 96;
   userName = "gean";
 in
 {
