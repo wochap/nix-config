@@ -6,6 +6,25 @@ let
 in
 {
   config = {
+    environment = {
+      systemPackages = with pkgs; [
+        # Themes
+        gnome.adwaita-icon-theme
+        dracula-theme
+        adementary-theme
+
+        # Themes settings
+        gnome.gsettings-desktop-schemas
+        gtk-engine-murrine
+        gtk_engines
+        lxappearance
+      ] ++ [
+        localPkgs.dracula-icons
+        localPkgs.whitesur-dark-icons
+        localPkgs.whitesur-dark-theme
+      ];
+    };
+
     home-manager.users.${userName} = {
       gtk = {
         enable = true;
