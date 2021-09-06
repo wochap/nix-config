@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  isWayland = config._displayServer == "wayland";
   userName = config._userName;
 in
 {
@@ -17,6 +18,11 @@ in
         # source: https://askubuntu.com/questions/1238826/turn-off-calendar-notifications-ubuntu-20-04
         "org/gnome/evolution-data-server/calendar" = {
           notify-with-tray = true;
+        };
+
+        # Enable fractional scaling on gnome wayland
+        "org/gnome/mutter" = {
+          experimental-features = if isWayland then "['scale-monitor-framebuffer']" else "[]";
         };
       };
 
