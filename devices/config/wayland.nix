@@ -11,7 +11,7 @@
     ./mixins/ipwebcam
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
-    ./mixins/gnome-pkgs # Comment on first install
+    ./mixins/gnome-pkgs.nix # Comment on first install
     ./mixins/kde-pkgs.nix # Comment on first install
     ./mixins/thunar.nix # Comment on first install
     ./mixins/docker.nix # Comment on first install
