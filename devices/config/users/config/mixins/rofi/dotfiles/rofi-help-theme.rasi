@@ -8,7 +8,7 @@ configuration {
   kb-row-up: "Up,Control+k,Shift+Tab";
   kb-row-down: "Down,Control+j";
   kb-accept-entry: "Control+m,Return,KP_Enter";
-  kb-remove-to-eol: "Control+Shift+e"
+  kb-remove-to-eol: "Control+Shift+e";
 }
 
 * {
@@ -64,7 +64,7 @@ prompt {
 	font: "Iosevka Bold 34";
 	vertical-align: 0.5;
 	padding: 0;
-  margin: 5px 0 0 0;
+  margin: 0;
 }
 
 entry {
@@ -72,7 +72,7 @@ entry {
   expand: true;
   horizontal-align: 0;
   font: "Iosevka 22";
-  padding: 1em 0 1.7em;
+  padding: 1em 0 1em;
   margin: 0 19px 0 0;
   placeholder-color: @var-input-placeholder-color;
   placeholder: "";

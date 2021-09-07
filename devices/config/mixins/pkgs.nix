@@ -45,7 +45,7 @@ in
       # base-devel
 
       # 7w7
-      metasploit
+      # metasploit
       nmap
       tightvnc
 

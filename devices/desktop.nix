@@ -67,8 +67,6 @@ in
       video.hidpi.enable = true;
     };
 
-    fonts.fontconfig.dpi = dpi;
-
     services.xserver = {
       dpi = dpi;
 

@@ -26,7 +26,7 @@ in
     ./mixins/dunst
     ./mixins/rofi
     ./mixins/android.nix
-    ./mixins/doom-emacs
+    # ./mixins/doom-emacs
     ./mixins/default-browser
     ./mixins/zathura
   ];
@@ -42,6 +42,7 @@ in
       };
 
       xresources.properties = lib.mkIf isHidpi {
+        "Xft.dpi" = 144;
         "Xcursor.size" = 40;
       };
 

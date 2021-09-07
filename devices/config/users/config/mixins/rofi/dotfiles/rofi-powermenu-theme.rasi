@@ -12,7 +12,6 @@ configuration {
   disable-history: false;
   dpi: 0;
   drun-display-format: "{name}";
-  fullscreen: true;
   hide-scrollbar: true;
   kb-select-1: "";
   kb-select-2: "";
@@ -39,6 +38,7 @@ configuration {
 }
 
 #window {
+  fullscreen: true;
   background-color: rgba(32, 32, 32, 0.5);
   border: 0;
 }
@@ -85,4 +85,9 @@ configuration {
 #element.selected {
   background-color: @selected-bg-color;
   text-color: @selected-text-color;
+}
+
+#element-text {
+  background-color: inherit;
+  text-color: inherit;
 }

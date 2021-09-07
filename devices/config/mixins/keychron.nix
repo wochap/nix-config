@@ -21,7 +21,7 @@ in
     services.interception-tools = {
       enable = true;
       udevmonConfig = ''
-        - JOB: "intercept -g $DEVNODE | caps2esc -m 1 | both-shift-capslock | uinput -d $DEVNODE"
+        - JOB: "${pkgs.interception-tools}/bin/intercept -g $DEVNODE | ${localPkgs.interception-caps2esc}/bin/caps2esc -m 1 | ${localPkgs.interception-both-shift-capslock}/bin/both-shift-capslock | ${pkgs.interception-tools}/bin/uinput -d $DEVNODE"
           DEVICE:
             EVENTS:
               EV_KEY: [KEY_CAPSLOCK, KEY_LEFTSHIFT, KEY_RIGHTSHIFT]

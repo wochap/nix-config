@@ -68,7 +68,7 @@ prompt {
 	font: "Noto Sans 33";
 	vertical-align: 0.5;
 	padding: 0;
-  margin: 5px 0 0 0;
+  margin: 0;
 }
 
 entry {
@@ -76,7 +76,7 @@ entry {
   expand: true;
   font: "Inter Medium 22";
   horizontal-align: 0;
-  padding: 1em 0 1.7em;
+  padding: 1em 0 1em;
   margin: 0 19px 0 0;
   placeholder: "";
 }
@@ -89,7 +89,7 @@ element {
   text-color: @var-bg;
 
   // HACK: align emoji ⬇️
-  padding: 10px 0px 19px 9px;
+  padding: 10px 0px 10px 10px;
 }
 
 element-text {
