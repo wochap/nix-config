@@ -128,8 +128,8 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 ## Upgrating NixOS
 
 ```
-$ nix-channel --update
-$ NIXOS_CONFIG=/home/gean/nix-config/devices/desktop.nix nixos-rebuild switch --upgrade
+$ sudo nix-channel --update
+$ sudo NIXOS_CONFIG=/home/gean/nix-config/devices/desktop.nix nixos-rebuild switch --upgrade
 ```
 
 ## Development Workflow
