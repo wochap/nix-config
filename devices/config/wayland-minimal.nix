@@ -2,10 +2,9 @@
 
 {
   imports = [
-    ./mixins/gnome-de.nix
-    # ./mixins/sway
-    # ./mixins/waybar
-    # ./mixins/wayland-tiling.nix
+    ./mixins/sway
+    ./mixins/waybar
+    ./mixins/wayland-tiling.nix
     ./mixins/nix-common.nix
     ./mixins/nixos.nix
     ./mixins/overlays.nix
@@ -48,7 +47,7 @@
       displayManager = {
         gdm = {
           enable = true;
-          # nvidiaWayland = true;
+          nvidiaWayland = true;
           wayland = true;
         };
       };

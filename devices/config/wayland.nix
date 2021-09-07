@@ -43,7 +43,7 @@
       displayManager = {
         gdm = {
           enable = true;
-          # nvidiaWayland = true;
+          nvidiaWayland = true;
           wayland = true;
         };
       };
