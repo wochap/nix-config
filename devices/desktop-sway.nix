@@ -1,10 +1,6 @@
 { config, pkgs, lib, ... }:
-
 let
   hostName = "gdesktop";
-  # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
-  # xlayoutdisplay throws 156
-  dpi = 144;
   userName = "gean";
 in
 {
@@ -14,13 +10,12 @@ in
     # Cachix required by doom-emacs
     /etc/nixos/cachix.nix
 
-    ./config/mixins/nvidia.nix
-    ./config/xorg.nix
+    ./config/wayland-minimal.nix
   ];
 
   config = {
     _userName = userName;
-    _isHidpi = true;
+    _isHidpi = false;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
@@ -39,12 +34,6 @@ in
     # the Home Manager release notes for a list of state version
     # changes in each release.
     home-manager.users.${userName}.home.stateVersion = "21.03";
-
-    home-manager.users.${userName} = {
-      xresources.properties = {
-        "Xft.dpi" = dpi;
-      };
-    };
 
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
@@ -75,29 +64,13 @@ in
     };
 
     services.xserver = {
-      dpi = dpi;
-
+      videoDrivers = [
+        "nouveau"
+      ];
       # Setup keyboard
       layout = "us";
       xkbModel = "pc104";
       xkbVariant = "altgr-intl";
-
-      # Setup monitors
-      screenSection = ''
-        # Select primary monitor
-        Option         "nvidiaXineramaInfoOrder" "DFP-0"
-        # Default multiple monitor setup
-        Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-      '';
-      deviceSection = ''
-        # does it fix screen tearing? maybe...
-        Option         "NoLogo" "1"
-        Option         "RenderAccel" "1"
-        Option         "TripleBuffer" "true"
-        Option         "MigrationHeuristic" "greedy"
-        Option         "AccelMethod" "sna"
-        Option         "TearFree"    "true"
-      '';
     };
   };
 }

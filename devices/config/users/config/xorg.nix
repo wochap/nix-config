@@ -42,7 +42,6 @@ in
       };
 
       xresources.properties = lib.mkIf isHidpi {
-        "Xft.dpi" = 144;
         "Xcursor.size" = 40;
       };
 

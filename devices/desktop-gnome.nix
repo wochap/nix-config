@@ -7,6 +7,8 @@ in
   imports = [
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
+    # Cachix required by doom-emacs
+    /etc/nixos/cachix.nix
 
     ./config/mixins/nvidia.nix
     ./config/wayland.nix
@@ -35,6 +37,7 @@ in
     home-manager.users.${userName}.home.stateVersion = "21.03";
 
     boot = {
+      kernelPackages = pkgs.linuxPackages_latest;
       loader = {
         grub.enable = false;
         systemd-boot.enable = true;
@@ -66,23 +69,6 @@ in
       layout = "us";
       xkbModel = "pc104";
       xkbVariant = "altgr-intl";
-
-      # Setup monitors
-      # screenSection = ''
-      #   # Select primary monitor
-      #   Option         "nvidiaXineramaInfoOrder" "DFP-0"
-      #   # Default multiple monitor setup
-      #   Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-      # '';
-      # deviceSection = ''
-      #   # does it fix screen tearing? maybe...
-      #   Option         "NoLogo" "1"
-      #   Option         "RenderAccel" "1"
-      #   Option         "TripleBuffer" "true"
-      #   Option         "MigrationHeuristic" "greedy"
-      #   Option         "AccelMethod" "sna"
-      #   Option         "TearFree"    "true"
-      # '';
     };
   };
 }
