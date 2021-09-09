@@ -145,6 +145,11 @@ $ sudo NIXOS_CONFIG=/home/gean/nix-config/devices/desktop.nix nixos-rebuild swit
     ```
 
     [Fix XDG_DATA_DIRS reset](https://github.com/target/lorri/issues/496)
+    Debug initialization
+    ```
+    $ lorri shell
+    $ nix-shell
+    ```
 
 ## Tools
 
