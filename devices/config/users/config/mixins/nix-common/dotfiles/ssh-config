@@ -26,3 +26,9 @@ Host 192.168.1.102
   User gean
   IdentitiesOnly yes
   IdentityFile ~/.ssh/id_rsa
+
+Host 134.122.13.201
+  HostName 134.122.13.201
+  User root
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/id_rsa_boc
