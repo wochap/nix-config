@@ -39,7 +39,7 @@ set render-loading-fg           "#B4B9B9" # fg
 set statusbar-v-padding  15
 set statusbar-h-padding  75
 set selection-clipboard clipboard
-set font "Inter 10"
+set font "FiraCode Nerd Font 10"
 # set recolor                     true
 set pages-per-row 1
 set statusbar-basename          true
