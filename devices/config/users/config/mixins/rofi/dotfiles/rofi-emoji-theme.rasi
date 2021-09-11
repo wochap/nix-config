@@ -46,7 +46,7 @@ mainbox {
 
 listview {
   columns: 9;
-  cycle: false;
+  cycle: true;
   layout: vertical;
   lines: 8;
   padding: 0 10px 10px;

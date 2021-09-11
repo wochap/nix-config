@@ -25,6 +25,10 @@ in
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
+          function killport {
+            kill $(lsof -t -i:"$1")
+          }
+
           ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
           ### https://github.com/zsh-users/zsh-autosuggestions/issues/238
           pasteinit() {

@@ -59,7 +59,7 @@ mainbox {
 
 listview {
   columns: 1;
-  cycle: false;
+  cycle: true;
   layout: vertical;
   lines: 9;
   padding: 0;

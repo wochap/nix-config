@@ -11,6 +11,7 @@ in
     environment.systemPackages = with pkgs; [
       # TOOLS
       bc # calculator cli
+      busybox
       cached-nix-shell # fast nix-shell scripts
       dex # execute DesktopEntry files
       dnsutils # test dns
@@ -81,6 +82,7 @@ in
       nitrogen # wallpaper manager
       postman
       qbittorrent
+      robo3t
       screenkey # show key pressed
       simplenote
       slack

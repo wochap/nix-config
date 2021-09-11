@@ -109,6 +109,7 @@ then
   #Show options
   echo 0
   echo 16
+  echo 25
   echo 32
   echo 64
 
