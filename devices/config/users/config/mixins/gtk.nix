@@ -39,8 +39,6 @@ in
         gtk3.extraConfig = {
           gtk-application-prefer-dark-theme = true;
           gtk-button-images = 1;
-          gtk-cursor-theme-name = "bigsur-cursors";
-          gtk-cursor-theme-size = 0;
           gtk-decoration-layout = "";
           gtk-enable-animations = true;
           gtk-enable-event-sounds = 1;
@@ -64,8 +62,6 @@ in
         ];
         gtk2.extraConfig = ''
           gtk-button-images = 1
-          gtk-cursor-theme-name = "bigsur-cursors"
-          gtk-cursor-theme-size = 0
           gtk-enable-event-sounds = 1
           gtk-enable-input-feedback-sounds = 1
           gtk-menu-images = 1

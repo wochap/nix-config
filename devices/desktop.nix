@@ -15,6 +15,7 @@ in
     /etc/nixos/cachix.nix
 
     ./config/mixins/nvidia.nix
+    ./config/mixins/kmonad
     ./config/xorg.nix
   ];
 

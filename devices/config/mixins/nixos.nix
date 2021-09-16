@@ -78,7 +78,7 @@ in
 
     # Enable OpenGL
     hardware.opengl.enable = true;
-    # hardware.opengl.driSupport = true;
+    hardware.opengl.driSupport = true;
 
     # Hardware video acceleration?
     # hardware.opengl.extraPackages = with pkgs; [
@@ -86,7 +86,7 @@ in
     #   vaapiVdpau
     #   libvdpau-va-gl
     # ];
-    # hardware.opengl.driSupport32Bit = !isMbp;
+    hardware.opengl.driSupport32Bit = !isMbp;
 
     # Enable audio
     sound.enable = true;

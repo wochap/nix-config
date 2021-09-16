@@ -29,6 +29,7 @@ in
     ./mixins/doom-emacs
     ./mixins/default-browser
     ./mixins/zathura
+    ./mixins/nnn
   ];
 
   config = {
@@ -41,8 +42,11 @@ in
         ".icons/default".source = "${localPkgs.bigsur-cursors}/share/icons/bigsur-cursors";
       };
 
-      xresources.properties = lib.mkIf isHidpi {
-        "Xcursor.size" = 40;
+      xsession.pointerCursor = {
+        package = localPkgs.bigsur-cursors;
+        defaultCursor = "left_ptr";
+        name = "bigsur-cursors";
+        size = if isHidpi then 40 else 32;
       };
 
       # screenshot utility

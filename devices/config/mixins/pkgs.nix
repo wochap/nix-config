@@ -62,7 +62,6 @@ in
       gotop # monitor system
       htop # monitor system
       neofetch # print computer info
-      nnn # file manager CLI
       pamixer # audio cli
       playerctl # media player cli
       ranger # file manager CLI

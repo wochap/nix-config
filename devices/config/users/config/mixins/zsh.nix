@@ -80,7 +80,6 @@ in
           config.environment.shellAliases
           {
             ns = "nix-shell --run zsh";
-            f = "nnn";
 
             # Setup exa
             ls = lib.mkForce "exa --icons --group-directories-first --across";
