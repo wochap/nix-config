@@ -18,6 +18,7 @@ in
             "FiraMono"
             "Hack"
             "Iosevka"
+            "JetBrainsMono"
           ];
         })
       ] ++ (if (!isDarwin) then [

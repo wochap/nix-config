@@ -78,6 +78,7 @@ in
       discord
       filelight # view disk usage
       gparted
+      insomnia
       nitrogen # wallpaper manager
       postman
       qbittorrent
