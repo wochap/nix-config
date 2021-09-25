@@ -9,6 +9,12 @@ Host github.com-boc
   IdentitiesOnly yes
   IdentityFile ~/.ssh/id_rsa_boc
 
+Host bitbucket.org-boc
+  HostName bitbucket.org
+  User git
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/id_rsa_boc
+
 Host github.com
   HostName github.com
   User git
