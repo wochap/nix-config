@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  userName = config._userName;
   isXorg = config._displayServer == "xorg";
   isHidpi = config._isHidpi;
   localPkgs = import ../../packages { pkgs = pkgs; };
@@ -9,6 +10,7 @@ in
   imports = [
     ./mixins/nix-common
     ./mixins/nixos
+    ./mixins/nixos-minimal-wm.nix
     ./mixins/firefox.nix
     ./mixins/fish
     ./mixins/git.nix
@@ -24,10 +26,15 @@ in
     ./mixins/dunst
     ./mixins/rofi
     ./mixins/android.nix
+    ./mixins/doom-emacs
+    ./mixins/default-browser
+    ./mixins/zathura
+    ./mixins/nnn
+    ./mixins/xob
   ];
 
   config = {
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       # Setup dotfiles
       home.file = {
         ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
@@ -36,8 +43,11 @@ in
         ".icons/default".source = "${localPkgs.bigsur-cursors}/share/icons/bigsur-cursors";
       };
 
-      xresources.properties = lib.mkIf isHidpi {
-        "Xcursor.size" = 40;
+      xsession.pointerCursor = {
+        package = localPkgs.bigsur-cursors;
+        defaultCursor = "left_ptr";
+        name = "bigsur-cursors";
+        size = if isHidpi then 40 else 32;
       };
 
       # screenshot utility

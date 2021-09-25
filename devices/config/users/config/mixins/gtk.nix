@@ -1,30 +1,44 @@
 { config, pkgs, ... }:
 
 let
+  userName = config._userName;
   localPkgs = import ../../../packages { pkgs = pkgs; };
 in
 {
   config = {
-    home-manager.users.gean = {
+    environment = {
+      systemPackages = with pkgs; [
+        # Themes
+        gnome.adwaita-icon-theme
+        dracula-theme
+        adementary-theme
+
+        # Themes settings
+        gnome.gsettings-desktop-schemas
+        gtk-engine-murrine
+        gtk_engines
+        lxappearance
+      ] ++ [
+        localPkgs.dracula-icons
+        localPkgs.whitesur-dark-icons
+        localPkgs.whitesur-dark-theme
+      ];
+    };
+
+    home-manager.users.${userName} = {
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Dracula";
-          package = localPkgs.dracula-icons;
+          name = "elementary";
+          package = pkgs.pantheon.elementary-icon-theme;
         };
         theme = {
-          name = "Dracula";
-          package = pkgs.dracula-theme;
-        };
-        font = {
-          name = "Inter Light 9";
-          package = pkgs.inter;
+          name = "Adementary";
+          package = pkgs.adementary-theme;
         };
         gtk3.extraConfig = {
           gtk-application-prefer-dark-theme = true;
           gtk-button-images = 1;
-          gtk-cursor-theme-name = "bigsur-cursors";
-          gtk-cursor-theme-size = 0;
           gtk-decoration-layout = "";
           gtk-enable-animations = true;
           gtk-enable-event-sounds = 1;
@@ -39,17 +53,15 @@ in
           gtk-xft-rgba = "rgb";
         };
         gtk3.bookmarks = [
-          "file:///home/gean/Documents"
-          "file:///home/gean/Downloads"
-          "file:///home/gean/Pictures"
-          "file:///home/gean/Projects"
-          "file:///home/gean/Recordings"
-          "file:///home/gean/Videos"
+          "file:///home/${userName}/Documents"
+          "file:///home/${userName}/Downloads"
+          "file:///home/${userName}/Pictures"
+          "file:///home/${userName}/Projects"
+          "file:///home/${userName}/Recordings"
+          "file:///home/${userName}/Videos"
         ];
         gtk2.extraConfig = ''
           gtk-button-images = 1
-          gtk-cursor-theme-name = "bigsur-cursors"
-          gtk-cursor-theme-size = 0
           gtk-enable-event-sounds = 1
           gtk-enable-input-feedback-sounds = 1
           gtk-menu-images = 1

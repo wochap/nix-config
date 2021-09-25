@@ -9,6 +9,12 @@ Host github.com-boc
   IdentitiesOnly yes
   IdentityFile ~/.ssh/id_rsa_boc
 
+Host bitbucket.org-boc
+  HostName bitbucket.org
+  User git
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/id_rsa_boc
+
 Host github.com
   HostName github.com
   User git
@@ -20,3 +26,15 @@ Host 192.168.0.7
   User gean
   IdentitiesOnly yes
   IdentityFile ~/.ssh/id_rsa
+
+Host 192.168.1.102
+  HostName 192.168.1.102
+  User gean
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/id_rsa
+
+Host 134.122.13.201
+  HostName 134.122.13.201
+  User root
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/id_rsa_boc

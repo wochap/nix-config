@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  userName = config._userName;
+in
 {
   imports = [
     ./mixins/nix-common
@@ -11,13 +14,14 @@
     ./mixins/zsh.nix
     ./mixins/mime-apps.nix
     ./mixins/vim
-    ./mixins/eww
     ./mixins/ptsh
     ./mixins/kitty
     ./mixins/android.nix
+    ./mixins/default-browser
+    ./mixins/zathura
   ];
 
   config = {
-    home-manager.users.gean = {};
+    home-manager.users.${userName} = {};
   };
 }

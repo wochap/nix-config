@@ -3,6 +3,7 @@
 
 let
   hostName = "gmbp";
+  userName = "gean";
 in
 {
   imports = [
@@ -10,6 +11,8 @@ in
   ];
 
   config = {
+    _userName = userName;
+
     # Used for backwards compatibility, please read the changelog before changing.
     # $ darwin-rebuild changelog
     system.stateVersion = 4;
@@ -22,6 +25,6 @@ in
     # You can update Home Manager without changing this value. See
     # the Home Manager release notes for a list of state version
     # changes in each release.
-    home-manager.users.gean.home.stateVersion = "21.03";
+    home-manager.users.${userName}.home.stateVersion = "21.03";
   };
 }

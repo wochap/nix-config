@@ -12,7 +12,6 @@ configuration {
   disable-history: false;
   dpi: 0;
   drun-display-format: "{name}";
-  fullscreen: true;
   hide-scrollbar: true;
   kb-select-1: "";
   kb-select-2: "";
@@ -25,37 +24,30 @@ configuration {
   kb-select-9: "";
   show-icons: false;
   sidebar-mode: false;
+  kb-row-up: "Up,Control+k,Shift+Tab";
+  kb-row-down: "Down,Control+j";
+  kb-accept-entry: "Control+m,Return,KP_Enter";
+  kb-remove-to-eol: "Control+Shift+e";
 }
 
 * {
-  selected-bg-color: rgba(100, 100, 100, 0);
-  selected-text-color: #58a6ff;
+  selected-bg-color: #bd93f9;
+  selected-text-color: #21222C;
   unselected-bg-color: rgba(100, 100, 100, 0);
   unselected-text-color: #e9e8e9;
 }
 
 #window {
+  fullscreen: true;
   background-color: rgba(32, 32, 32, 0.5);
   border: 0;
 }
 
 #mainbox {
   background-color: transparent;
-  children: [ inputbar, listview ];
-  padding: 33% 0% 0% 21.5%;
+  children: [ listview ];
+  padding: 43% 0% 0% 21.5%;
   spacing: 5%;
-}
-
-#inputbar {
-  background-color: transparent;
-  children: [ prompt ];
-}
-
-#prompt {
-  background-color: transparent;
-  font: inherit;
-  text-color: @unselected-text-color;
-  padding: 0% 0% 0% 0.5em;
 }
 
 #horibox {
@@ -68,17 +60,26 @@ configuration {
   cycle: true;
   dynamic: true;
   layout: horizontal;
-  margin: 0% 0% 0% 0%;
-  spacing: 3%;
+  margin: 0;
+  spacing: 5.5%;
 }
 
 #element {
   background-color: @unselected-bg-color;
-  padding: 0.5em 0.5em 0.45em 0.5em;
+  padding: 0;
   text-color: @unselected-text-color;
+  children: [element-text];
+  border-radius: 10px;
+  expand: false;
 }
 
 #element.selected {
   background-color: @selected-bg-color;
   text-color: @selected-text-color;
+}
+
+#element-text {
+  background-color: inherit;
+  text-color: inherit;
+  padding: 0.05em 0.325em;
 }

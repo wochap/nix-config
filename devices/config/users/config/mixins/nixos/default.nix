@@ -2,10 +2,12 @@
 
 let
   isWayland = config._displayServer == "wayland";
+  userName = config._userName;
 in
 {
   config = {
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
+      # TODO: move out
       # Open GTK inspector with Ctrl + Shift + D
       # GTK_DEBUG=interactive <app>
       dconf.settings = {
@@ -17,6 +19,11 @@ in
         "org/gnome/evolution-data-server/calendar" = {
           notify-with-tray = true;
         };
+
+        # Enable fractional scaling on gnome wayland
+        "org/gnome/mutter" = {
+          experimental-features = if isWayland then "['scale-monitor-framebuffer']" else "[]";
+        };
       };
 
       # Edit home files
@@ -26,22 +33,14 @@ in
         "/usr/local/share"
       ];
 
-      home.extraProfileCommands = ''
-        if [[ -d "$out/share/applications" ]] ; then
-          ${pkgs.desktop-file-utils}/bin/update-desktop-database $out/share/applications
-        fi
-      '';
-
       home.sessionVariables = {
-        NIXOS_CONFIG = "/home/gean/nix-config/devices/desktop.nix";
-        READER = "zathura";
+        NIXOS_CONFIG = "/home/${userName}/nix-config/devices/desktop.nix";
         VIDEO = "mpv";
       };
 
       # Setup dotfiles
       home.file = {
         ".config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ./dotfiles/linux.sublime-keymap.json;
-        ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
         ".config/mpv/mpv.conf".source = ./dotfiles/mpv.conf;
         ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
       };
@@ -52,17 +51,6 @@ in
         enableSshSupport = true;
         defaultCacheTtl = 1800;
         pinentryFlavor = "gnome3";
-      };
-
-      services.redshift = {
-        enable = true;
-        package = if isWayland then pkgs.redshift-wlr else pkgs.redshift;
-        latitude = "-12.051408";
-        longitude = "-76.922124";
-        temperature = {
-          day = 4000;
-          night = 3700;
-        };
       };
     };
   };

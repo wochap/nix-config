@@ -35,7 +35,6 @@ fi
 selected="$(echo -e "$options" |
   rofi -theme /etc/config/rofi-powermenu-theme.rasi \
     -font "Iosevka, $FONTSIZE" \
-    -p "See you later, ${LOGNAME^}!" \
     -m "primary" \
     -dmenu -selected-row ${PRESELECTION})"
 

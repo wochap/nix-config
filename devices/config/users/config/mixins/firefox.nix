@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
 let
+  userName = config._userName;
   # moz-rev = "3f3fba4e2066f28a1ad7ac60e86a688a92eb5b5f";
   # moz-url = builtins.fetchTarball { url = "https://github.com/mozilla/nixpkgs-mozilla/archive/${moz-rev}.tar.gz";};
   # nightlyOverlay = (import "${moz-url}/firefox-overlay.nix");
@@ -12,7 +13,7 @@ in
     #   nightlyOverlay
     # ];
 
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       home.file = {
         ".mozilla/firefox/default/chrome/userChrome.css".text = ''
           @import "customChrome.css";

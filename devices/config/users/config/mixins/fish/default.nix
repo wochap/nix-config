@@ -1,8 +1,11 @@
 { config, pkgs, lib,  ... }:
 
+let
+  userName = config._userName;
+in
 {
   config = {
-    home-manager.users.gean = {
+    home-manager.users.${userName}= {
       # Edit linked files
       xdg.configFile = {
         "fish/config.fish".text = lib.mkAfter (builtins.readFile ./dotfiles/config.fish);

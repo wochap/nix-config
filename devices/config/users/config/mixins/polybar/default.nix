@@ -1,11 +1,16 @@
 { config, pkgs, lib,  ... }:
 
 let
+  userName = config._userName;
   isXorg = config._displayServer == "xorg";
+  localPkgs = import ../../../../packages { pkgs = pkgs; };
 in
 {
   config = {
     environment = {
+      systemPackages = with pkgs; [
+        localPkgs.zscroll # scroll text in shells
+      ];
       sessionVariables = {
         # POLYBAR_HEIGHT = 48 + 3 * 2
         POLYBAR_HEIGHT = "54";
@@ -36,7 +41,7 @@ in
         };
       };
     };
-    home-manager.users.gean = lib.mkIf isXorg {
+    home-manager.users.${userName} = lib.mkIf isXorg {
       home.file = {
         ".config/polybar/main.ini".source = ./dotfiles/main.ini;
         ".config/polybar/scripts/docker_info.sh".source = ./dotfiles/scripts/docker_info.sh;

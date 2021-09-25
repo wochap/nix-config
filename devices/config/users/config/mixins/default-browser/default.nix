@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  userName = config._userName;
   localPkgs = import ../../packages { pkgs = pkgs; };
   http-url-handler = pkgs.makeDesktopItem {
     name = "http-url-handler";
@@ -29,6 +30,21 @@ in
       systemPackages = [
         http-url-handler
       ];
+    };
+
+    home-manager.users.${userName} = {
+      xdg.mimeApps = {
+        defaultApplications = {
+          "default-web-browser" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
+        };
+        associations.added = {
+          "text/html" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
+        };
+      };
     };
   };
 }

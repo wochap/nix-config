@@ -5,16 +5,19 @@ let
 in
 {
   config = {
+    environment.sessionVariables = {
+      NNN_TRASH = "1";
+    };
     environment.systemPackages = with pkgs; [
       # TOOLS
       bc # calculator cli
+      busybox
       cached-nix-shell # fast nix-shell scripts
       dex # execute DesktopEntry files
       dnsutils # test dns
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
       ffmpeg-full # music/video codecs?
-      fzf # fuzzy search
       git
       glxinfo # opengl utils
       gnumake # make
@@ -43,7 +46,7 @@ in
       # base-devel
 
       # 7w7
-      metasploit
+      # metasploit
       nmap
       tightvnc
 
@@ -51,17 +54,14 @@ in
       alacritty # terminal fallback
       hunspell # dictionary for document programs
       hunspellDicts.en-us
-      kitty # terminal
       mpv # video player
       pavucontrol # audio settings gui
-      zathura # PDF viewer
 
       # DE CLI
       gitAndTools.gh
       gotop # monitor system
       htop # monitor system
       neofetch # print computer info
-      nnn # file manager CLI
       pamixer # audio cli
       playerctl # media player cli
       ranger # file manager CLI
@@ -69,6 +69,7 @@ in
 
       # APPS CLI
       stripe-cli
+      speedread
       #dogecoin
 
       # APPS
@@ -77,14 +78,18 @@ in
       discord
       filelight # view disk usage
       gparted
+      insomnia
       nitrogen # wallpaper manager
       postman
+      qbittorrent
+      robo3t
       screenkey # show key pressed
       simplenote
       slack
       unstable.google-chrome
       unstable.sublime3 # text editor
       zoom-us
+      # antimicroX
       # teamviewer
       # mysql-workbench
 
@@ -94,7 +99,6 @@ in
       papirus-icon-theme
     ] ++ [
       localPkgs.bigsur-cursors
-      localPkgs.zscroll # scroll text in shells
     ];
   };
 }

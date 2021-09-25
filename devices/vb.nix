@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 let
   hostName = "nixos";
+  userName = "gean";
 in
 {
   imports = [
@@ -12,6 +13,8 @@ in
   ];
 
   config = {
+    _userName = userName;
+
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
     # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -28,7 +31,7 @@ in
     # You can update Home Manager without changing this value. See
     # the Home Manager release notes for a list of state version
     # changes in each release.
-    home-manager.users.gean.home.stateVersion = "21.03";
+    home-manager.users.${userName}.home.stateVersion = "21.03";
 
     boot.loader.grub = {
       enable = true;

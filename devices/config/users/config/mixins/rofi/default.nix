@@ -1,5 +1,8 @@
 { config, lib, pkgs, ... }:
 
+let
+  userName = config._userName;
+in
 {
   config = {
     environment = {
@@ -75,6 +78,10 @@
           source = ./dotfiles/rofi-emoji-theme.rasi;
           mode = "0755";
         };
+        "config/rofi-help-theme.rasi" = {
+          source = ./dotfiles/rofi-help-theme.rasi;
+          mode = "0755";
+        };
         "config/rofi-clipboard-theme.rasi" = {
           source = ./dotfiles/rofi-clipboard-theme.rasi;
           mode = "0755";
@@ -88,7 +95,7 @@
         "/share/rofi-emoji"
       ];
     };
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       programs.rofi.enable = true;
     };
   };

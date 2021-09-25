@@ -1,6 +1,7 @@
 { config, pkgs, lib,  ... }:
 
 let
+  userName = config._userName;
   dracula-zsh-syntax-highlighting = pkgs.fetchFromGitHub {
     owner = "dracula";
     repo = "zsh-syntax-highlighting";
@@ -19,11 +20,15 @@ in
         "/share/zsh"
       ];
     };
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       programs.zsh = {
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
+          function killport {
+            kill $(lsof -t -i:"$1")
+          }
+
           ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
           ### https://github.com/zsh-users/zsh-autosuggestions/issues/238
           pasteinit() {
@@ -49,14 +54,24 @@ in
           eval "$(direnv hook zsh)"
 
           # ZSH settings
-          setopt inc_append_history
-          unsetopt share_history
+          unsetopt SHARE_HISTORY
+          unsetopt INC_APPEND_HISTORY
+          setopt INC_APPEND_HISTORY_TIME
+          setopt HIST_IGNORE_ALL_DUPS
+          setopt HIST_FIND_NO_DUPS
 
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
           source ${dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
         '';
         enableCompletion = true;
         enableAutosuggestions = true;
+        history = {
+          extended = true;
+          ignoreSpace = true;
+          save = 1000000000;
+          size = 1000000000;
+          share = false;
+        };
         oh-my-zsh = {
           enable = true;
           plugins = [];
@@ -65,13 +80,12 @@ in
           config.environment.shellAliases
           {
             ns = "nix-shell --run zsh";
-            f = "nnn";
 
             # Setup exa
             ls = lib.mkForce "exa --icons --group-directories-first --across";
             la = lib.mkForce "exa --icons --group-directories-first --all --long";
             # Setup ptSh
-            pwd = "ptpwd";
+            pwdd = "ptpwd";
             mkdir = "ptmkdir";
             touch = "pttouch";
             cp = "ptcp";

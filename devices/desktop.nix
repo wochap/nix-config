@@ -1,20 +1,26 @@
 { config, pkgs, lib, ... }:
+
 let
   hostName = "gdesktop";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
   # xlayoutdisplay throws 156
   dpi = 144;
+  userName = "gean";
 in
 {
   imports = [
     # Include the results of the hardware scan.
     /etc/nixos/hardware-configuration.nix
+    # Cachix required by doom-emacs
+    /etc/nixos/cachix.nix
 
     ./config/mixins/nvidia.nix
+    ./config/mixins/kmonad
     ./config/xorg.nix
   ];
 
   config = {
+    _userName = userName;
     _isHidpi = true;
 
     # This value determines the NixOS release from which the default
@@ -25,17 +31,24 @@ in
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "20.09"; # Did you read the comment?
 
-    # This value determines the Home Manager release that your
-    # configuration is compatible with. This helps avoid breakage
-    # when a new Home Manager release introduces backwards
-    # incompatible changes.
-    #
-    # You can update Home Manager without changing this value. See
-    # the Home Manager release notes for a list of state version
-    # changes in each release.
-    home-manager.users.gean.home.stateVersion = "21.03";
+    home-manager.users.${userName} = {
+      # This value determines the Home Manager release that your
+      # configuration is compatible with. This helps avoid breakage
+      # when a new Home Manager release introduces backwards
+      # incompatible changes.
+      #
+      # You can update Home Manager without changing this value. See
+      # the Home Manager release notes for a list of state version
+      # changes in each release.
+      home.stateVersion = "21.03";
+
+      xresources.properties = {
+        "Xft.dpi" = dpi;
+      };
+    };
 
     boot = {
+      kernelPackages = pkgs.linuxPackages_latest;
       loader = {
         grub.enable = false;
         systemd-boot.enable = true;
@@ -61,8 +74,6 @@ in
     hardware = {
       video.hidpi.enable = true;
     };
-
-    fonts.fontconfig.dpi = dpi;
 
     services.xserver = {
       dpi = dpi;

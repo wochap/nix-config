@@ -2,6 +2,7 @@
 
 let
   localPkgs = import ./packages { pkgs = pkgs; };
+  userName = config._userName;
 in
 {
   config = {
@@ -31,7 +32,7 @@ in
       };
     };
 
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       home.file = {
         ".config/eww".source = ./dotfiles/eww;
       };

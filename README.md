@@ -11,7 +11,7 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
-    The initial config must have: `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
+    The initial config must have: `cachix` `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
 
     **NOTE:** Run `sudo nixos-install` without root user (sudo su)
 
@@ -31,6 +31,10 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 1. Login with root user and clone into `~/nix-config`
     ```
     $ git clone https://github.com/wochap/nix-config.git ~/nix-config
+    ```
+1. Setup cachix
+    ```
+    $ sudo cachix use nix-community
     ```
 1. Rebuild nixos with the device's specific config, for example, heres's a rebuild for my `desktop`
 
@@ -67,6 +71,7 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 
     For Wayland:
     - WIP
+    - --enable-features=UseOzonePlatform --ozone-platform=wayland
 1. Setup gnome calendar and geary
     ```
     $ env WEBKIT_DISABLE_COMPOSITING_MODE=1 gnome-control-center online-accounts
@@ -120,6 +125,13 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
       --output DP-2 --off
     ```
 
+## Upgrating NixOS
+
+```
+$ sudo nix-channel --update
+$ sudo NIXOS_CONFIG=/home/gean/nix-config/devices/desktop.nix nixos-rebuild switch --upgrade
+```
+
 ## Development Workflow
 
 1. Setup [Lorri](https://github.com/nix-community/lorri)
@@ -130,6 +142,13 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 
     $ lorri init
     $ direnv allow
+    ```
+
+    [Fix XDG_DATA_DIRS reset](https://github.com/target/lorri/issues/496)
+    Debug initialization
+    ```
+    $ lorri shell
+    $ nix-shell
     ```
 
 ## Tools

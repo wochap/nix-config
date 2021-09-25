@@ -1,8 +1,11 @@
 { config, pkgs, ... }:
 
+let
+  userName = config._userName;
+in
 {
   config = {
-    home-manager.users.gean = {
+    home-manager.users.${userName} = {
       # Generates ~/.gitconfig
       programs.git = {
         package = pkgs.gitAndTools.gitFull;
