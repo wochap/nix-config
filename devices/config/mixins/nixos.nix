@@ -40,6 +40,8 @@ in
     # Remember private keys?
     programs.ssh.startAgent = true;
 
+    programs.ssh.askPassword = "";
+
     # Explicit PulseAudio support in applications
     nixpkgs.config.pulseaudio = true;
 
