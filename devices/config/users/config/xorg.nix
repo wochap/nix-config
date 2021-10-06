@@ -20,7 +20,7 @@ in
     ./mixins/zsh.nix
     ./mixins/mime-apps.nix
     ./mixins/vim
-    ./mixins/eww
+    # ./mixins/eww
     ./mixins/ptsh
     ./mixins/kitty
     ./mixins/dunst
