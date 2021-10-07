@@ -46,6 +46,11 @@ in
     nixpkgs.config.pulseaudio = true;
 
     boot = {
+      loader = {
+        grub.configurationLimit = 42;
+        systemd-boot.configurationLimit = 42;
+      };
+
       # Show nixos logo on boot/shutdown
       plymouth = {
         enable = true;
