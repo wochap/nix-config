@@ -12,7 +12,7 @@ in
   config = {
     nix.gc.user = userName;
 
-    users.users.${userName} {
+    users.users.${userName} = {
       home = "/Users/${userName}";
     };
 
