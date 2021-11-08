@@ -1,5 +1,12 @@
 { config, pkgs, lib, ... }:
 
+let
+  isWayland = config._displayServer == "wayland";
+  rev = "master";
+  url = "https://github.com/nix-community/nixpkgs-wayland/archive/${rev}.tar.gz";
+  waylandOverlay = (import "${builtins.fetchTarball url}/overlay.nix");
+  waylandOverlayEgl = (import "${builtins.fetchTarball url}/overlay-egl.nix");
+in
 {
   config = {
     nixpkgs.overlays = [
@@ -27,6 +34,8 @@
           }
         );
       })
-    ];
+    ] ++ (if (isWayland) then [
+      waylandOverlay
+    ] else []);
   };
 }

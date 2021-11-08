@@ -25,7 +25,7 @@ in
     ./mixins/kitty
     ./mixins/dunst
     ./mixins/rofi
-    ./mixins/android.nix
+    # ./mixins/android.nix
     ./mixins/doom-emacs
     ./mixins/default-browser
     ./mixins/zathura

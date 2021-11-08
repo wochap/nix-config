@@ -63,9 +63,11 @@ in
       video.hidpi.enable = true;
     };
 
+    hardware.nvidia.modesetting.enable = true;
+
     services.xserver = {
       videoDrivers = [
-        "nouveau"
+        "nvidia"
       ];
       # Setup keyboard
       layout = "us";

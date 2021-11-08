@@ -16,7 +16,7 @@ in
     ./mixins/vim
     ./mixins/ptsh
     ./mixins/kitty
-    ./mixins/android.nix
+    # ./mixins/android.nix
     ./mixins/default-browser
     ./mixins/zathura
   ];

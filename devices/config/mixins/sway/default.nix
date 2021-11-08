@@ -55,7 +55,7 @@ in
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          ${pkgs.dbus}/bin/dbus-run-session ${pkgs.sway}/bin/sway --my-next-gpu-wont-be-nvidia --debug
+          ${pkgs.dbus}/bin/dbus-run-session ${pkgs.sway}/bin/sway --unsupported-gpu --debug
         '';
         Restart = "on-failure";
         RestartSec = 1;
