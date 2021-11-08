@@ -7,6 +7,7 @@ in
 {
   imports = [
     ./mixins/bspwm
+    ./mixins/awesomewm
     ./mixins/pkgs-xorg.nix
     ./mixins/nix-common.nix
     ./mixins/nixos.nix
@@ -67,7 +68,7 @@ in
       displayManager = {
         lightdm = {
           enable = true;
-          background = ./assets/wallpaper.jpeg;
+          background = ./assets/wallpaper.jpg;
           greeters.gtk = {
             enable = true;
             cursorTheme.name = "bigsur-cursors";
