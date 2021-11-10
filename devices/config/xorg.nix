@@ -7,7 +7,7 @@ in
 {
   imports = [
     ./mixins/bspwm
-    ./mixins/awesomewm
+    # ./mixins/awesomewm
     ./mixins/pkgs-xorg.nix
     ./mixins/nix-common.nix
     ./mixins/nixos.nix

@@ -34,6 +34,24 @@ in
     nixpkgs.config.allowUnfree = true;
 
     nix = {
+      # Enable cachix
+      binaryCachePublicKeys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
+        "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      ];
+      binaryCaches = [
+        "https://cache.nixos.org"
+        "https://colemickens.cachix.org"
+        "https://nixpkgs-wayland.cachix.org"
+      ];
+
+      # Enable flakes
+      package = pkgs.nixFlakes;
+      extraOptions = ''
+        experimental-features = nix-command flakes ca-references recursive-nix
+      '';
+
       gc.automatic = true;
 
       trustedUsers = [ "@wheel" "root" ];

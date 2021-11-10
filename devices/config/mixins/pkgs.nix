@@ -13,6 +13,7 @@ in
       bc # calculator cli
       busybox
       cached-nix-shell # fast nix-shell scripts
+      devour # swallow
       dex # execute DesktopEntry files
       dnsutils # test dns
       dos2unix # convert line breaks DOS - mac
@@ -21,6 +22,7 @@ in
       git
       glxinfo # opengl utils
       gnumake # make
+      gpp # decrypt
       inxi # check compositor running
       jq # JSON
       killall
@@ -36,7 +38,6 @@ in
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer
-      unstable.devour # swallow
       unzip
       usbutils # lsusb, for android development
       vdpauinfo # verifying VDPAU
@@ -77,6 +78,7 @@ in
       brave
       discord
       filelight # view disk usage
+      google-chrome
       gparted
       insomnia
       nitrogen # wallpaper manager
@@ -86,8 +88,7 @@ in
       screenkey # show key pressed
       simplenote
       slack
-      unstable.google-chrome
-      unstable.sublime3 # text editor
+      sublime3 # text editor
       zoom-us
       # antimicroX
       # teamviewer
