@@ -1,15 +1,13 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   isWayland = config._displayServer == "wayland";
-  rev = "master";
-  url = "https://github.com/nix-community/nixpkgs-wayland/archive/${rev}.tar.gz";
-  waylandOverlay = (import "${builtins.fetchTarball url}/overlay.nix");
-  waylandOverlayEgl = (import "${builtins.fetchTarball url}/overlay-egl.nix");
 in
 {
   config = {
     nixpkgs.overlays = [
+      # inputs.rust-overlay.overlay
+
       # Update discord to latest version
       # https://nixos.wiki/wiki/Discord
       (self: super: {
@@ -35,7 +33,21 @@ in
         );
       })
     ] ++ (if (isWayland) then [
-      waylandOverlay
+      # inputs.nixpkgs-wayland.overlay-egl
+      # inputs.nixpkgs-wayland.overlay
+
+      # {
+      #   xwayland = prev.xwayland.overrideAttrs (old: rec {
+      #     version = "21.1.3";
+      #     src = prev.fetchFromGitLab {
+      #       domain = "gitlab.freedesktop.org";
+      #       owner = "xorg";
+      #       repo = "xserver";
+      #       rev = "21e3dc3b5a576d38b549716bda0a6b34612e1f1f";
+      #       sha256 = "sha256-i2jQY1I9JupbzqSn1VA5JDPi01nVA6m8FwVQ3ezIbnQ=";
+      #     };
+      #   });
+      # }
     ] else []);
   };
 }

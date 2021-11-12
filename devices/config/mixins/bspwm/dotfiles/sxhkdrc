@@ -212,8 +212,8 @@ super + alt + n
 XF86MonBrightness{Down,Up}
   light {-U 10,-A 10}
 
-# XF86Audio{Mute,LowerVolume,RaiseVolume}
-#   amixer set Master {toggle,5%-,5%+}
+XF86Audio{Mute,LowerVolume,RaiseVolume}
+  amixer set Master {toggle,5%-,5%+}
 
 # Play next media
 XF86AudioNext
@@ -232,16 +232,16 @@ XF86AudioPrev
 	playerctl previous
 
 # Increase volume
-XF86AudioRaiseVolume
-  /etc/eww_vol.sh up
+# XF86AudioRaiseVolume
+#   /etc/eww_vol.sh up
 
 # Decrease volume
-XF86AudioLowerVolume
-  /etc/eww_vol.sh down
+# XF86AudioLowerVolume
+#   /etc/eww_vol.sh down
 
 # Toggle mute
-XF86AudioMute
-  /etc/eww_vol.sh mute
+# XF86AudioMute
+#   /etc/eww_vol.sh mute
 
 ### Remap
 
