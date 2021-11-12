@@ -9,9 +9,9 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../../devices/config/mixins/nvidia.nix
-    ../../devices/config/mixins/kmonad
-    ../../devices/config/xorg.nix
+    ../../config/mixins/nvidia.nix
+    ../../config/mixins/kmonad
+    ../../config/xorg.nix
   ];
 
   config = {
