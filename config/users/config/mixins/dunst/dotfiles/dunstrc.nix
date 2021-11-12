@@ -14,7 +14,12 @@ in
     # If width is 0, window will fit to longest message
     # Positive x value is measured from the left of the screen, negative x is measured from the right
     # Positive y value is measured from the top of the screen
-    geometry = "500x6-25-25";
+    # geometry = "500x6-25-25";
+    width = "500";
+    # height = "6";
+    origin = "bottom-right";
+    notification_limit = "6";
+    offset = "25x25";
     # browser = "/etc/open_url.sh";
     always_run_script = true;
     class = "Dunst";
@@ -39,6 +44,7 @@ in
     word_wrap = true;
 
     # Theme settings
+    scale = 1;
     alignment = "left";
     vertical_alignment = "top";
     corner_radius = 10;
@@ -60,12 +66,6 @@ in
   play_sound = {
     script = "/etc/scripts/play_notification.sh";
     summary = "*";
-  };
-  shortcuts = {
-    # close_all = "ctrl+shift+space";
-    # context = "ctrl+shift+period";
-    close = "ctrl+space";
-    history = "ctrl+Escape";
   };
 
   urgency_low = {

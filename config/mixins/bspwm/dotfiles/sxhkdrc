@@ -275,3 +275,9 @@ super + ctrl + shift + Left
 
 super + d
   xdotool keyup d key --clearmodifiers Delete
+
+ctrl + Escape
+  dunstctl history-pop
+
+ctrl + space
+  dunstctl close
