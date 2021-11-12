@@ -2,6 +2,7 @@
 
 let
   localPkgs = import ../packages { pkgs = pkgs; };
+  isWayland = config._displayServer == "wayland";
 in
 {
   config = {
@@ -100,6 +101,8 @@ in
       papirus-icon-theme
     ] ++ [
       localPkgs.bigsur-cursors
-    ];
+    ] ++ (if (isWayland) then [
+      pkgs.egl-wayland
+    ] else []);
   };
 }

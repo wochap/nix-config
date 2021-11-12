@@ -59,7 +59,7 @@ in
           ${pkgs.dbus}/bin/dbus-run-session ${pkgs.sway}/bin/sway --unsupported-gpu --debug
         '';
         Restart = "on-failure";
-        RestartSec = 1;
+        RestartSec = 3;
         TimeoutStopSec = 10;
       };
     };

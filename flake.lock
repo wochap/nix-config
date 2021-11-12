@@ -177,7 +177,9 @@
     },
     "home-manager": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1622917919,
@@ -206,7 +208,7 @@
         "explain-pause-mode": "explain-pause-mode",
         "flake-utils": "flake-utils",
         "nix-straight": "nix-straight",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "nose": "nose",
         "ob-racket": "ob-racket",
         "org": "org",
@@ -250,15 +252,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1636565550,
-        "narHash": "sha256-q1zjPzIIMIGKKsq8Udp80OtuQY4KUHxi9qg/j+oZC8k=",
+        "lastModified": 1626852498,
+        "narHash": "sha256-lOXUJvi0FJUXHTVSiC5qsMRtEUgqM4mGZpMESLuGhmo=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6c3c8b1f80ce247be615384f38a0b3a138b4bc56",
+        "rev": "16105403bdd843540cbef9c63fc0f16c1c6eaa70",
         "type": "github"
       },
       "original": {
         "id": "nixpkgs",
+        "ref": "nixpkgs-unstable",
         "type": "indirect"
       }
     },
@@ -286,21 +289,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1626852498,
-        "narHash": "sha256-lOXUJvi0FJUXHTVSiC5qsMRtEUgqM4mGZpMESLuGhmo=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "16105403bdd843540cbef9c63fc0f16c1c6eaa70",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "ref": "nixpkgs-unstable",
-        "type": "indirect"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
         "lastModified": 1636562917,
         "narHash": "sha256-OaePkHHKOOx9nIInW5LE3yEc/ReotB47douJZNpiAgo=",
         "owner": "nixos",
@@ -315,7 +303,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1628186154,
         "narHash": "sha256-r2d0wvywFnL9z4iptztdFMhaUIAaGzrSs7kSok0PgmE=",
@@ -462,7 +450,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "nix-doom-emacs": "nix-doom-emacs",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_2",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "prevstable": "prevstable",
         "rust-overlay": "rust-overlay"
@@ -487,7 +475,7 @@
     "rust-overlay": {
       "inputs": {
         "flake-utils": "flake-utils_2",
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_3"
       },
       "locked": {
         "lastModified": 1636510510,

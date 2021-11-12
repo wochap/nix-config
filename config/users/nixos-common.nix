@@ -8,7 +8,7 @@ in
   config = {
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.${userName} = {
-      password = "123456";
+      hashedPassword = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
       home = homeDirectory;
       isNormalUser = true;
       extraGroups = [
