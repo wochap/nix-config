@@ -78,6 +78,7 @@ in
       bitwarden
       brave
       discord
+      dmenu
       filelight # view disk usage
       google-chrome
       gparted
@@ -90,6 +91,7 @@ in
       simplenote
       slack
       sublime3 # text editor
+      tty-clock
       zoom-us
       # antimicroX
       # teamviewer

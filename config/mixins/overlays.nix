@@ -34,6 +34,14 @@ in
       })
     ] ++ (if (isWayland) then [
       (final: prev: {
+        # HACK:
+        # https://forums.developer.nvidia.com/t/nvidia-495-does-not-advertise-ar24-xr24-as-shm-formats-as-required-by-wayland-wlroots/194651
+        wlroots = prev.wlroots.overrideAttrs(old: {
+          postPatch = ''
+            sed -i 's/assert(argb8888 &&/assert(true || argb8888 ||/g' 'render/wlr_renderer.c'
+          '';
+        });
+
         egl-wayland = prev.egl-wayland.overrideAttrs (old: rec {
           pname = "egl-wayland";
           version = "1.1.9.999";
@@ -60,21 +68,9 @@ in
         });
       })
 
-      # inputs.nixpkgs-wayland.overlay-egl
+      # wayland on nvidia works fine without more overlays
+      inputs.nixpkgs-wayland.overlay-egl
       # inputs.nixpkgs-wayland.overlay
-
-      # {
-      #   xwayland = prev.xwayland.overrideAttrs (old: rec {
-      #     version = "21.1.3";
-      #     src = prev.fetchFromGitLab {
-      #       domain = "gitlab.freedesktop.org";
-      #       owner = "xorg";
-      #       repo = "xserver";
-      #       rev = "21e3dc3b5a576d38b549716bda0a6b34612e1f1f";
-      #       sha256 = "sha256-i2jQY1I9JupbzqSn1VA5JDPi01nVA6m8FwVQ3ezIbnQ=";
-      #     };
-      #   });
-      # }
     ] else []);
   };
 }
