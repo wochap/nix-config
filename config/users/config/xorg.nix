@@ -38,15 +38,11 @@ in
       # Setup dotfiles
       home.file = {
         ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
-
-        # Fix cursor theme
-        ".icons/default".source = "${localPkgs.bigsur-cursors}/share/icons/bigsur-cursors";
       };
 
       xsession.pointerCursor = {
-        package = localPkgs.bigsur-cursors;
-        defaultCursor = "left_ptr";
-        name = "bigsur-cursors";
+        name = "Numix-Cursor";
+        package = pkgs.numix-cursor-theme;
         size = if isHidpi then 40 else 32;
       };
 

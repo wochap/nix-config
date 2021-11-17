@@ -38,7 +38,6 @@ in
         };
         gtk3.extraConfig = {
           gtk-application-prefer-dark-theme = true;
-          gtk-cursor-theme-size = 0;
           gtk-xft-antialias = 1;
           gtk-xft-hinting = 1;
           gtk-xft-hintstyle = "hintfull";

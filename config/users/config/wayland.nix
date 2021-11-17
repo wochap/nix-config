@@ -7,6 +7,7 @@ in
   imports = [
     ./mixins/nix-common
     ./mixins/nixos
+    ./mixins/nixos-minimal-wm.nix
     ./mixins/firefox.nix
     ./mixins/fish
     ./mixins/git.nix

@@ -71,13 +71,13 @@ in
           background = ./assets/wallpaper.jpg;
           greeters.gtk = {
             enable = true;
-            cursorTheme.name = "bigsur-cursors";
-            cursorTheme.package = localPkgs.bigsur-cursors;
-            cursorTheme.size = if isHidpi then 40 else 16;
-            iconTheme.name = "WhiteSur-dark";
-            iconTheme.package = localPkgs.whitesur-dark-icons;
-            theme.name = "WhiteSur-dark";
-            theme.package = localPkgs.whitesur-dark-theme;
+            cursorTheme.name = "Numix-Cursor";
+            cursorTheme.package = pkgs.numix-cursor-theme;
+            cursorTheme.size = if isHidpi then 40 else 32;
+            iconTheme.name = "Numix Circle";
+            iconTheme.package = pkgs.numix-icon-theme;
+            theme.name = "Arc-Dark";
+            theme.package = pkgs.arc-theme;
             extraConfig = ''
               font-name=Inter 9
             '';
@@ -100,8 +100,8 @@ in
     # services.unclutter.enable = true;
 
     # Hide cursor when typing
-    services.xbanish.enable = true;
-    services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
+    # services.xbanish.enable = true;
+    # services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
 
     # Add wifi tray
     programs.nm-applet.enable = true;
