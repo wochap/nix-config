@@ -9,6 +9,7 @@ in
     environment = {
       systemPackages = with pkgs; [
         # Themes
+        numix-icon-theme-circle
         gnome.adwaita-icon-theme
         dracula-theme
         adementary-theme

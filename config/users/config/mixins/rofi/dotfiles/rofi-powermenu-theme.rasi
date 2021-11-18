@@ -33,7 +33,7 @@ configuration {
 * {
   selected-bg-color: #bd93f9;
   selected-text-color: #21222C;
-  unselected-bg-color: rgba(100, 100, 100, 0);
+  unselected-bg-color: rgba(0, 0, 0, 0.05);
   unselected-text-color: #e9e8e9;
 }
 

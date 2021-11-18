@@ -5,6 +5,15 @@ let
 in
 {
   config = {
+    environment = {
+      shellAliases = {
+        gs= "git status";
+        gc = "git clone";
+        glo = "git pull origin";
+        gpo = "git push origin";
+      };
+    };
+
     home-manager.users.${userName} = {
       # Generates ~/.gitconfig
       programs.git = {

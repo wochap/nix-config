@@ -60,22 +60,26 @@ inputbar {
 	children: [ entry, prompt ];
   expand: false;
   margin: 0;
-  padding: 0 40px;
+  padding: 22px 40px;
 }
 
 prompt {
 	font: "Iosevka Bold 34";
 	vertical-align: 0.5;
-	padding: 0;
+	padding: 0 25px;
   margin: 0;
+  background-color: @var-fg-selection;
+  border-radius: 10px;
+  text-color: @var-bg;
 }
 
 entry {
   blink: true;
   expand: true;
   horizontal-align: 0;
+  vertical-align: 0.5;
   font: "Inter Medium 22";
-  padding: 1em 0 1em;
+  padding: 0;
   margin: 0 19px 0 0;
   placeholder-color: @var-input-placeholder-color;
   placeholder: "";

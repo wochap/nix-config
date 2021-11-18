@@ -62,9 +62,6 @@ in
 
     environment = {
       shellAliases = {
-        gc = "git clone";
-        glo = "git pull origin";
-        gpo = "git push origin";
         ll = "ls -l";
       };
 

@@ -2,7 +2,7 @@ configuration {
   click-to-exit: true;
   dpi: 0;
   drun-display-format: "{icon} {name}";
-  font: "FiraCode Nerd Font 12";
+  font: "FiraCode Nerd Font 10";
   location: 1;
   sidebar-mode: false;
   kb-row-up: "Up,Control+k,Shift+Tab";
@@ -12,7 +12,8 @@ configuration {
 }
 
 * {
-  var-bg: #282a36;
+  var-bg: rgba(0, 0, 0, 0);
+  var-bg-solid: #282a36;
   var-fg: #f8f8f2;
   var-bg-selection: #44475a;
   var-fg-selection: #bd93f9;
@@ -26,18 +27,18 @@ configuration {
 }
 
 window {
-  background-color: @var-bg;
-  border-color: @var-window-border-color;
-  border-radius: 0;
-  border: 3px;
+  fullscreen: true;
+  background-color: rgba(32, 32, 32, 0.5);
   text-color: @var-fg;
   transparency: "real";
   height: 100%;
+  padding: 25%;
   width: 35em;
 }
 
 mainbox {
   children: [ inputbar, listview ];
+  background-color: @var-bg;
 }
 
 listview {
@@ -57,22 +58,26 @@ inputbar {
 	children: [ entry, prompt ];
   expand: false;
   margin: 0;
-  padding: 0 40px;
+  padding: 22px 40px;
 }
 
 prompt {
 	font: "Iosevka Bold 34";
 	vertical-align: 0.5;
-	padding: 0;
+	padding: 0 25px;
   margin: 0;
+  background-color: @var-fg-selection;
+  border-radius: 10px;
+  text-color: @var-bg-solid;
 }
 
 entry {
   blink: true;
   expand: true;
   horizontal-align: 0;
+  vertical-align: 0.5;
   font: "Inter Medium 22";
-  padding: 1em 0 1em;
+  padding: 0;
   margin: 0 19px 0 0;
   placeholder-color: @var-input-placeholder-color;
   placeholder: "";
@@ -81,6 +86,7 @@ entry {
 element {
   children: [element-text];
   padding: 0.6em 40px;
+  border-radius: 10px;
 }
 
 element-text {

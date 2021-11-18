@@ -61,14 +61,17 @@ inputbar {
 	children: [ entry, prompt ];
   expand: false;
   margin: 0;
-  padding: 0 40px;
+  padding: 22px 40px;
 }
 
 prompt {
 	font: "Noto Sans 33";
 	vertical-align: 0.5;
-	padding: 0;
+	padding: 0 25px;
   margin: 0;
+  background-color: @var-fg-selection;
+  border-radius: 10px;
+  text-color: @var-bg;
 }
 
 entry {
@@ -76,7 +79,8 @@ entry {
   expand: true;
   font: "Inter Medium 22";
   horizontal-align: 0;
-  padding: 1em 0 1em;
+  vertical-align: 0.5;
+  padding: 0;
   margin: 0 19px 0 0;
   placeholder: "";
 }
