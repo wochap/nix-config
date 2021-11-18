@@ -8,18 +8,16 @@ in
     nixpkgs.overlays = [
       # inputs.rust-overlay.overlay
 
-      # Update discord to latest version
-      # https://nixos.wiki/wiki/Discord
       (self: super: {
+        # Update discord to latest version
+        # https://nixos.wiki/wiki/Discord
         discord = super.discord.overrideAttrs (
           _: {
             src = builtins.fetchTarball "https://discord.com/api/download?platform=linux&format=tar.gz";
           }
         );
-      })
 
-      # Update polybar to latest version
-      (self: super: {
+        # Update polybar to latest version
         polybar = super.polybar.overrideAttrs (
           _: {
             src = pkgs.fetchFromGitHub {
@@ -28,6 +26,28 @@ in
               rev = "5f3462240cddfca15a52092633f77d2d4fa55278";
               sha256 = "1vmq9bs979bmkdm7hxsq0m0ql26ab70gwl2jlxxicdb6p9k921hh";
               fetchSubmodules = true;
+            };
+          }
+        );
+
+        orchis = super.orchis.overrideAttrs (
+          _: {
+            src = super.fetchFromGitHub {
+              repo = "Orchis-theme";
+              owner = "vinceliuice";
+              rev = "a0190354f93b4acbdb8636aef83d35a9dea8e0e8";
+              sha256 = "sha256-T8qaHeMMJ0RgTJavmmxKggnKatKc7Gs7bDLYxT6b1Bg=";
+            };
+          }
+        );
+
+        tela-icon-theme = super.tela-icon-theme.overrideAttrs (
+          _: {
+            src = super.fetchFromGitHub {
+              owner = "vinceliuice";
+              repo = "Tela-icon-theme";
+              rev = "184959a91ed9726d7cbb3d55c627be09d302096f";
+              sha256 = "sha256-mvkgHBdZm6vF+/DS3CRLl1m14U0Lj4Xtz4J/vpJUTQM=";
             };
           }
         );

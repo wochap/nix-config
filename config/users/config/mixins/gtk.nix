@@ -9,14 +9,18 @@ in
     environment = {
       systemPackages = with pkgs; [
         # Themes
+        tela-icon-theme
+        orchis
         numix-icon-theme-circle
         gnome.adwaita-icon-theme
         dracula-theme
         adementary-theme
 
         # Themes settings
+        gtk3
         gnome.gsettings-desktop-schemas
         gtk-engine-murrine
+        gnome-themes-extra
         gtk_engines
         lxappearance
       ] ++ [
@@ -30,15 +34,14 @@ in
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Numix-Circle";
-          package = pkgs.numix-icon-theme-circle;
+          name = "Tela";
+          package = pkgs.tela-icon-theme;
         };
         theme = {
-          name = "Arc-Dark";
-          package = pkgs.arc-theme;
+          name = "Orchis";
+          package = pkgs.orchis;
         };
         gtk3.extraConfig = {
-          gtk-application-prefer-dark-theme = true;
           gtk-xft-antialias = 1;
           gtk-xft-hinting = 1;
           gtk-xft-hintstyle = "hintfull";
