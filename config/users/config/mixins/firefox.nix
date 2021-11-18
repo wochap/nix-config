@@ -75,6 +75,7 @@ in
               # Enable video hardware acceleration
               "media.ffmpeg.vaapi.enabled" = true;
               "media.ffvpx.enabled" = false;
+              "media.navigator.mediadatadecoder_vpx_enabled" = true;
               "media.rdd-vpx.enabled" = false;
 
               # https://wiki.archlinux.org/index.php/Firefox/Tweaks#Performance
