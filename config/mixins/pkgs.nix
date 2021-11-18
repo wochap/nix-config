@@ -56,7 +56,6 @@ in
       alacritty # terminal fallback
       hunspell # dictionary for document programs
       hunspellDicts.en-us
-      mpv # video player
       pavucontrol # audio settings gui
 
       # DE CLI
@@ -80,7 +79,6 @@ in
       discord
       dmenu
       filelight # view disk usage
-      google-chrome
       gparted
       insomnia
       nitrogen # wallpaper manager
@@ -105,6 +103,19 @@ in
       localPkgs.bigsur-cursors
     ] ++ (if (isWayland) then [
       pkgs.egl-wayland
-    ] else []);
+      (pkgs.google-chrome.override {
+        commandLineArgs = ''
+          --enable-features=UseOzonePlatform \
+          --ozone-platform=wayland \
+          --ignore-gpu-blocklist \
+          --enable-gpu-rasterization \
+          --enable-zero-copy \
+          --disable-gpu-driver-bug-workarounds \
+          --enable-features=VaapiVideoDecoder
+        '';
+      })
+    ] else [
+      google-chrome
+    ]);
   };
 }

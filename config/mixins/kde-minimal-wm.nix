@@ -2,6 +2,7 @@
 
 let
   isHidpi = config._isHidpi;
+  isWayland = config._displayServer == "wayland";
 in
 {
   config = {
@@ -25,7 +26,9 @@ in
         qgnomeplatform
         qt5.qtgraphicaleffects # required by gddm themes
         qt5ct
-      ];
+      ] ++ (if (isWayland) then [
+        qt5.qtwayland
+      ] else []);
     };
   };
 }

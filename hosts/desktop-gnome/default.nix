@@ -9,7 +9,7 @@ in
     ../desktop/hardware-configuration.nix
     ../../config/mixins/nvidia.nix
     ../../config/mixins/kmonad
-    ../../config/wayland-minimal.nix
+    ../../config/wayland.nix
   ];
 
   config = {

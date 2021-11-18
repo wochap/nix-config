@@ -3,6 +3,7 @@
 let
   isWayland = config._displayServer == "wayland";
   userName = config._userName;
+  isHidpi = config._isHidpi;
 in
 {
   config = {
@@ -41,8 +42,28 @@ in
       # Setup dotfiles
       home.file = {
         ".config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ./dotfiles/linux.sublime-keymap.json;
-        ".config/mpv/mpv.conf".source = ./dotfiles/mpv.conf;
         ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
+      };
+
+      xsession.pointerCursor = {
+        name = "Numix-Cursor";
+        package = pkgs.numix-cursor-theme;
+        size = if isHidpi then 40 else 32;
+      };
+
+      programs.mpv = {
+        enable = true;
+        config = {
+          keep-open = true;
+          pause = true;
+          autofit-larger= "75%x75%";
+          osd-font = "Iosevka";
+          video-sync = "display-resample";
+          hwdec = "vaapi";
+          vo = "gpu";
+          hwdec-codecs = "all";
+          gpu-context = lib.mkIf (isWayland) "wayland";
+        };
       };
 
       programs.gpg.enable = true;

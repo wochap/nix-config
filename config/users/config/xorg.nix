@@ -2,15 +2,13 @@
 
 let
   userName = config._userName;
-  isXorg = config._displayServer == "xorg";
-  isHidpi = config._isHidpi;
   localPkgs = import ../../packages { pkgs = pkgs; };
 in
 {
   imports = [
     ./mixins/nix-common
     ./mixins/nixos
-    ./mixins/nixos-minimal-wm.nix
+    ./mixins/redshift.nix
     ./mixins/firefox.nix
     ./mixins/fish
     ./mixins/git.nix
@@ -38,12 +36,6 @@ in
       # Setup dotfiles
       home.file = {
         ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
-      };
-
-      xsession.pointerCursor = {
-        name = "Numix-Cursor";
-        package = pkgs.numix-cursor-theme;
-        size = if isHidpi then 40 else 32;
       };
 
       # screenshot utility

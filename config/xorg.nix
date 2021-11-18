@@ -74,8 +74,8 @@ in
             cursorTheme.name = "Numix-Cursor";
             cursorTheme.package = pkgs.numix-cursor-theme;
             cursorTheme.size = if isHidpi then 40 else 32;
-            iconTheme.name = "Numix Circle";
-            iconTheme.package = pkgs.numix-icon-theme;
+            iconTheme.name = "Numix-Circle";
+            iconTheme.package = pkgs.numix-icon-theme-circle;
             theme.name = "Arc-Dark";
             theme.package = pkgs.arc-theme;
             extraConfig = ''

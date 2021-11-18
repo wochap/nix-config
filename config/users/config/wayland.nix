@@ -7,7 +7,7 @@ in
   imports = [
     ./mixins/nix-common
     ./mixins/nixos
-    ./mixins/nixos-minimal-wm.nix
+    ./mixins/redshift.nix
     ./mixins/firefox.nix
     ./mixins/fish
     ./mixins/git.nix
@@ -17,12 +17,20 @@ in
     ./mixins/vim
     ./mixins/ptsh
     ./mixins/kitty
+    ./mixins/dunst
+    ./mixins/rofi
     # ./mixins/android.nix
     ./mixins/default-browser
     ./mixins/zathura
+    # ./mixins/doom-emacs
+    # ./mixins/nnn
   ];
 
   config = {
-    home-manager.users.${userName} = {};
+    home-manager.users.${userName} = {
+      xdg.configFile = {
+        "electron-flags.conf".source = ./dotfiles/electron-flags.conf;
+      };
+    };
   };
 }

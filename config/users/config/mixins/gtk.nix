@@ -29,8 +29,8 @@ in
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Numix Circle";
-          package = pkgs.numix-icon-theme;
+          name = "Numix-Circle";
+          package = pkgs.numix-icon-theme-circle;
         };
         theme = {
           name = "Arc-Dark";

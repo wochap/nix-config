@@ -23,15 +23,18 @@ in
       enable = true;
       wrapperFeatures.gtk = true; # so that gtk works properly
       extraPackages = []; # block rxvt
+      extraOptions = [
+        "--unsupported-gpu"
+      ];
     };
 
     environment = {
-      etc = {
-        "sway/config".source = ./dotfiles/config;
-      };
       systemPackages = with pkgs; [
         startsway
       ];
+      etc = {
+        "sway/config".source = ./dotfiles/config;
+      };
     };
 
     services.xserver.displayManager.defaultSession = "sway";

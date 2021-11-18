@@ -1,12 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?rev=5f012c0855a3e465a9c960d1fb7ef3f5debb0288";
+    nixpkgs.url = "github:nixos/nixpkgs?rev=80e6ae766ae5d928da056dee74b747660f6c1178";
     prevstable.url = "github:nixos/nixpkgs?rev=cd63096d6d887d689543a0b97743d28995bc9bc3";
     home-manager.url = "github:nix-community/home-manager?rev=5559ef002306dde0093f3d329725259cada9ed41";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
-    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=51930bd55223f3d9e4428f6750e4ff80cca2815d";
+    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=c12dee11e4975052975db37584ce49534877be7f";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
   };
 
@@ -23,13 +23,7 @@
       nixosConfigurations = {
         desktop = mkSystem inputs.nixpkgs "x86_64-linux" "desktop";
         desktop-sway = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-sway";
-        # newsway = inputs.nixpkgs.lib.nixosSystem {
-        #   system = "x86_64-linux";
-        #   modules = [
-        #     (./. + "/sway/configuration.nix")
-        #   ];
-        #   specialArgs = { inherit inputs; };
-        # };
+        desktop-gnome = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
       };
     };
 }

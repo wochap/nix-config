@@ -2,6 +2,7 @@
 
 let
   userName = config._userName;
+  isWayland = config._displayServer == "wayland";
 in
 {
   config = {
@@ -40,7 +41,7 @@ in
       };
       programs.firefox = {
         enable = true;
-        package = pkgs.firefox-bin;
+        package = if isWayland then pkgs.firefox-bin else pkgs.firefox-wayland;
         profiles = {
           default = {
             id = 0;
