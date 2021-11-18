@@ -35,8 +35,8 @@ in
     };
 
     home-manager.users.${userName} = {
-      home.file = {
-        ".config/xob/styles.cfg".source = ./dotfiles/styles.cfg;
+      xdg.configFile = {
+        "xob/styles.cfg".source = ./dotfiles/styles.cfg;
       };
     };
   };

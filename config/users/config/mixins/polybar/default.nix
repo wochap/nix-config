@@ -42,26 +42,26 @@ in
       };
     };
     home-manager.users.${userName} = lib.mkIf isXorg {
-      home.file = {
-        ".config/polybar/main.ini".source = ./dotfiles/main.ini;
-        ".config/polybar/scripts/docker_info.sh".source = ./dotfiles/scripts/docker_info.sh;
-        ".config/polybar/scripts/get_gpu_status.sh".source = ./dotfiles/scripts/get_gpu_status.sh;
-        ".config/polybar/scripts/get_spotify_status.sh".source = ./dotfiles/scripts/get_spotify_status.sh;
-        ".config/polybar/scripts/get_vram_status.sh".source = ./dotfiles/scripts/get_vram_status.sh;
-        ".config/polybar/scripts/scroll_spotify_status.sh".source = ./dotfiles/scripts/scroll_spotify_status.sh;
-        ".config/polybar/scripts/bspwm_monocle_windows.sh" = {
+      xdg.configFile = {
+        "polybar/main.ini".source = ./dotfiles/main.ini;
+        "polybar/scripts/docker_info.sh".source = ./dotfiles/scripts/docker_info.sh;
+        "polybar/scripts/get_gpu_status.sh".source = ./dotfiles/scripts/get_gpu_status.sh;
+        "polybar/scripts/get_spotify_status.sh".source = ./dotfiles/scripts/get_spotify_status.sh;
+        "polybar/scripts/get_vram_status.sh".source = ./dotfiles/scripts/get_vram_status.sh;
+        "polybar/scripts/scroll_spotify_status.sh".source = ./dotfiles/scripts/scroll_spotify_status.sh;
+        "polybar/scripts/bspwm_monocle_windows.sh" = {
           source = ./dotfiles/scripts/bspwm_monocle_windows.sh;
           executable = true;
         };
-        ".config/polybar/scripts/rextie_usd.js" = {
+        "polybar/scripts/rextie_usd.js" = {
           source = ./dotfiles/scripts/rextie_usd.js;
           executable = true;
         };
-        ".config/polybar/scripts/btc_usd.js" = {
+        "polybar/scripts/btc_usd.js" = {
           source = ./dotfiles/scripts/btc_usd.js;
           executable = true;
         };
-        ".config/polybar/scripts/doge_usd.js" = {
+        "polybar/scripts/doge_usd.js" = {
           source = ./dotfiles/scripts/doge_usd.js;
           executable = true;
         };

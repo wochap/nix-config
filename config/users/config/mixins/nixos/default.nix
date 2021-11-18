@@ -40,9 +40,9 @@ in
       };
 
       # Setup dotfiles
-      home.file = {
-        ".config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ./dotfiles/linux.sublime-keymap.json;
-        ".config/Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
+      xdg.configFile = {
+        "sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ./dotfiles/linux.sublime-keymap.json;
+        "Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
       };
 
       xsession.pointerCursor = {

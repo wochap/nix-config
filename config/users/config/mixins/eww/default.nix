@@ -33,8 +33,8 @@ in
     };
 
     home-manager.users.${userName} = {
-      home.file = {
-        ".config/eww".source = ./dotfiles/eww;
+      xdg.configFile = {
+        "eww".source = ./dotfiles/eww;
       };
     };
   };

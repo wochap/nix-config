@@ -30,8 +30,8 @@ in
         TERMINAL = "kitty";
       };
 
-      home.file = {
-        ".config/kitty/kitty.conf".text = ''
+      xdg.configFile = {
+        "kitty/kitty.conf".text = ''
           ${if isDarwin then macosConfig else linuxConfig}
           ${commonConfig}
         '';

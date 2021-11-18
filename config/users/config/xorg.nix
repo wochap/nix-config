@@ -34,8 +34,8 @@ in
   config = {
     home-manager.users.${userName} = {
       # Setup dotfiles
-      home.file = {
-        ".config/betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
+      xdg.configFile = {
+        "betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
       };
 
       # screenshot utility

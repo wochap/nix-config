@@ -29,8 +29,8 @@ in
     };
 
     home-manager.users.${userName} = {
-      home.file = {
-        ".config/nnn/plugins".source = "${nnn-repo}/plugins";
+      xdg.configFile = {
+        "nnn/plugins".source = "${nnn-repo}/plugins";
       };
     };
   };

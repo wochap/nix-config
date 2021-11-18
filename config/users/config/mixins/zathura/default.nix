@@ -14,8 +14,8 @@ in
         READER = "zathura";
       };
 
-      home.file = {
-        ".config/zathura/zathurarc".source = ./dotfiles/zathurarc;
+      xdg.configFile = {
+        "zathura/zathurarc".source = ./dotfiles/zathurarc;
       };
 
       xdg.mimeApps = {
