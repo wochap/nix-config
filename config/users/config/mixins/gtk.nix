@@ -38,7 +38,7 @@ in
           package = pkgs.tela-icon-theme;
         };
         theme = {
-          name = "Orchis";
+          name = "Orchis-dark";
           package = pkgs.orchis;
         };
         gtk3.extraConfig = {
