@@ -8,26 +8,17 @@ let
 in
 {
   global = {
-    # The geometry of the window. Format: [{width}]x{height}[+/-{x}+/-{y}]
-    # The height = number of notifications, all other variables are px
-    # Omit width, provide height for full-screen width notifications
-    # If width is 0, window will fit to longest message
-    # Positive x value is measured from the left of the screen, negative x is measured from the right
-    # Positive y value is measured from the top of the screen
-    # geometry = "500x6-25-25";
-    width = "500";
-    # height = "6";
-    origin = "bottom-right";
-    notification_limit = "6";
-    offset = "25x25";
-    # browser = "/etc/open_url.sh";
+    origin = "top-right";
+    # offset top === 25 + 25 + 54
+    offset = "25x104";
+    browser = "xdg-open";
+    notification_limit = "4";
     always_run_script = true;
     class = "Dunst";
     follow = "mouse";
     hide_duplicate_count = true;
     history_length = 20;
     idle_threshold = timeout;
-    ignore_newline = false;
     indicate_hidden = true;
     markup = "full";
     monitor = 0;
@@ -41,15 +32,18 @@ in
     stack_duplicates = false;
     sticky_history = false;
     title = "Dunst";
-    word_wrap = true;
 
     # Theme settings
+    width = "500";
+    height = "130";
+    word_wrap = true;
+    ellipsize = "end";
     scale = 1;
     alignment = "left";
-    vertical_alignment = "top";
+    vertical_alignment = "center";
     corner_radius = 10;
     font = "Inter 11";
-    format = "<span weight='400'>%s</span>\\n<span weight='300'>%b</span>";
+    format = "<span weight='400'>%s</span><span weight='300'>%b</span>";
     frame_color = border;
     frame_width = borderWidth;
     horizontal_padding = 16;
