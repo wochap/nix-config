@@ -1,0 +1,52 @@
+(deflisten vol-icon `tail -F /tmp/vol-icon`)
+(deflisten vol-val `tail -F /tmp/vol`)
+
+(defwindow example
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "20px"
+                      :width "90%"
+                      :height "30px"
+                      :anchor "top center")
+  :stacking "fg"
+  :reserve (struts :distance "40px" :side "top")
+  :windowtype "dock"
+  :wm-ignore false
+"example content")
+
+(defwindow vol :monitor 0
+               :geometry (geometry :x "0%"
+                                   :y "-15%"
+                                   :width "325px"
+                                   :height "325px"
+                                   :anchor "bottom center"
+               )
+               :stacking "fg"
+               :windowtype "dock"
+               :wm-ignore false
+               :focusable false
+  (minibox :icon vol-icon
+           :val vol-val
+  )
+)
+
+(defvar minibox-spacing "${round(((325-128-10-40)/2), 0)}")
+(defwidget minibox [?icon ?val]
+  (box :class "minibox"
+       :orientation "v"
+       :space-evenly false
+       :spacing minibox-spacing
+       :style "padding-top: ${minibox-spacing}px;"
+    (box :class "minibox-icon"
+         :valign "start"
+      icon
+    )
+    (scale :class "minibox-bar"
+           :valign "start"
+           :min 0
+           :max 100
+           :active false
+           :value val
+    )
+  )
+)

@@ -1,31 +1,37 @@
 { config, pkgs, lib, ... }:
 
 let
-  localPkgs = import ./packages { pkgs = pkgs; };
+  isWayland = config._displayServer == "wayland";
   userName = config._userName;
 in
 {
   config = {
     environment = {
-      systemPackages = [
-        localPkgs.eww # custom widgets daemon
+      systemPackages = with pkgs; if (isWayland) then [
+        eww-wayland
+      ] else [
+        eww
       ];
 
       etc = {
-        "blop.wav" = {
+        "assets/blop.wav" = {
           source = ./assets/blop.wav;
           mode = "0755";
         };
 
-        # "eww_bright.sh" = {
+        # "scripts/eww_bright.sh" = {
         #   source = ./scripts/eww_bright.sh;
         #   mode = "0755";
         # };
-        "eww_vol.sh" = {
-          source = ./scripts/eww_vol.sh;
+        # "scripts/eww_vol.sh" = {
+        #   source = ./scripts/eww_vol.sh;
+        #   mode = "0755";
+        # };
+        "scripts/eww_vol_listen.sh" = {
+          source = ./scripts/eww_vol_listen.sh;
           mode = "0755";
         };
-        "eww_vol_close.sh" = {
+        "scripts/eww_vol_close.sh" = {
           source = ./scripts/eww_vol_close.sh;
           mode = "0755";
         };

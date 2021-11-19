@@ -218,8 +218,11 @@ ctrl + space
 XF86MonBrightness{Down,Up}
   light {-U 10,-A 10}
 
-XF86Audio{Mute,LowerVolume,RaiseVolume}
-  amixer set Master {toggle,5%-,5%+}
+XF86Audio{LowerVolume,RaiseVolume}
+  pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%}; paplay /etc/assets/blop.wav
+
+XF86AudioMute
+  pactl set-sink-mute @DEFAULT_SINK@ toggle; paplay /etc/assets/blop.wav
 
 # Play next media
 XF86AudioNext

@@ -6,8 +6,8 @@ window {
   background-color: $background;
 }
 
-//vol
-.vol {
+//minibox
+.minibox {
   border-color: $border-color;
   border-radius: 10px;
   border-style: solid;
@@ -16,32 +16,32 @@ window {
   padding-right: 40px;
 }
 
-.vol-icon {
+.minibox-icon {
   color: $foreground;
   font-family: "Font Awesome 5 Free";
   font-size: 128px;
 }
 
-.vol-bar {
+.minibox-bar {
   all: unset;
 
   background-color: transparent;
 }
 
-.vol-bar slider {
+.minibox-bar slider {
   all: unset;
 
   background-color: transparent;
 }
 
-.vol-bar highlight {
+.minibox-bar highlight {
   all: unset;
 
   background-color: $foreground;
   border-radius: 100px;
 }
 
-.vol-bar trough {
+.minibox-bar trough {
   all: unset;
 
   background-color: rgba($foreground, 0.5);
