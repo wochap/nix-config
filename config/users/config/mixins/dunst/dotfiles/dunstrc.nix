@@ -42,8 +42,8 @@ in
     alignment = "left";
     vertical_alignment = "center";
     corner_radius = 10;
-    font = "Inter 11";
-    format = "<span weight='400'>%s</span><span weight='300'>%b</span>";
+    font = "FiraCode Nerd Font Mono 10";
+    format = "<span weight='500'>%s\\n</span><span weight='300'>%b</span>";
     frame_color = border;
     frame_width = borderWidth;
     horizontal_padding = 16;
