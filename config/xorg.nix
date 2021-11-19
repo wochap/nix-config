@@ -71,13 +71,19 @@ in
           background = ./assets/wallpaper.jpg;
           greeters.gtk = {
             enable = true;
-            cursorTheme.name = "Numix-Cursor";
-            cursorTheme.package = pkgs.numix-cursor-theme;
-            cursorTheme.size = if isHidpi then 40 else 32;
-            iconTheme.name = "Numix-Circle";
-            iconTheme.package = pkgs.numix-icon-theme-circle;
-            theme.name = "Arc-Dark";
-            theme.package = pkgs.arc-theme;
+            cursorTheme = {
+              name = "Numix-Cursor";
+              package = pkgs.numix-cursor-theme;
+              size = if isHidpi then 40 else 32;
+            };
+            iconTheme = {
+              name = "Tela";
+              package = pkgs.tela-icon-theme;
+            };
+            theme = {
+              name = "Orchis-dark";
+              package = pkgs.orchis;
+            };
             extraConfig = ''
               font-name=Inter 9
             '';
