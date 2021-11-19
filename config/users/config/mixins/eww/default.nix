@@ -27,6 +27,10 @@ in
         #   source = ./scripts/eww_vol.sh;
         #   mode = "0755";
         # };
+        "scripts/eww_start.sh" = {
+          source = ./scripts/eww_start.sh;
+          mode = "0755";
+        };
         "scripts/eww_vol_listen.sh" = {
           source = ./scripts/eww_vol_listen.sh;
           mode = "0755";

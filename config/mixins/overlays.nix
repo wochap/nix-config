@@ -9,14 +9,6 @@ in
       # inputs.rust-overlay.overlay
 
       (self: super: {
-        # Update discord to latest version
-        # https://nixos.wiki/wiki/Discord
-        discord = super.discord.overrideAttrs (
-          _: {
-            src = builtins.fetchTarball "https://discord.com/api/download?platform=linux&format=tar.gz";
-          }
-        );
-
         # Update polybar to latest version
         polybar = super.polybar.overrideAttrs (
           _: {

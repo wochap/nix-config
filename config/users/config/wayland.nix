@@ -30,6 +30,7 @@ in
     home-manager.users.${userName} = {
       xdg.configFile = {
         "electron-flags.conf".source = ./dotfiles/electron-flags.conf;
+        "discord/settings.json".source = ./dotfiles/discord-settings.json;
       };
     };
   };

@@ -77,6 +77,7 @@ in
       bitwarden
       brave
       discord
+      betterdiscordctl
       dmenu
       filelight # view disk usage
       gparted

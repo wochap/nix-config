@@ -16,4 +16,5 @@ clipmenud &
 caffeine -a &
 sh /etc/scripts/polybar-start.sh &
 sh /etc/scripts/fix_caps_lock_delay.sh &
-/etc/scripts/volume.py | xob -s vol &
+# /etc/scripts/volume.py | xob -s vol &
+# /etc/script/eww_start.sh &
