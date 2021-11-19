@@ -1,0 +1,122 @@
+configuration {
+  display-combi: "";
+  display-run: "";
+  display-drun: "";
+	sidebar-mode: false;
+  dpi: 0;
+  font: "Inter Medium 12";
+  fullscreen: false;
+  hide-scrollbar: false;
+  icon-theme: "Numix-Circle";
+  show-icons: true;
+  kb-select-1: "";
+  kb-select-2: "";
+  kb-select-3: "";
+  kb-select-4: "";
+  kb-select-5: "";
+  kb-select-6: "";
+  kb-select-7: "";
+  kb-select-8: "";
+  kb-select-9: "";
+  kb-row-up: "Up,Control+k,Shift+Tab";
+  kb-row-down: "Down,Control+j";
+  kb-accept-entry: "Control+m,Return,KP_Enter";
+  kb-remove-to-eol: "Control+Shift+e";
+}
+
+* {
+  var-bg: #282a36;
+  var-fg: #f8f8f2;
+  var-bg-selection: #44475a;
+  var-fg-selection: #bd93f9;
+  var-input-placeholder-color: #6272a4;
+  var-primary-color: #8be9fd;
+  var-window-border-color: #44475a;
+
+  font: inherit;
+  background-color: inherit;
+  text-color: inherit;
+}
+
+window {
+  background-color: @var-bg;
+  border-color: @var-window-border-color;
+  border-radius: 10px;
+  border: 3px;
+  text-color: @var-fg;
+  transparency: "real";
+  width: 30em;
+
+  // Window position
+  anchor: north;
+  location: north;
+  y-offset: 30%;
+}
+
+mainbox {
+  children: [ inputbar, listview ];
+}
+
+listview {
+  columns: 1;
+  cycle: true;
+  layout: vertical;
+  lines: 9;
+  padding: 0;
+  spacing: 0;
+
+  // Dynamic window height
+  dynamic: true;
+  fixed-height: false;
+}
+
+inputbar {
+	children: [ entry, prompt ];
+  expand: false;
+  margin: 0;
+  padding: 22px 40px;
+}
+
+prompt {
+	font: "Iosevka Bold 34";
+	vertical-align: 0.5;
+	padding: 0 25px;
+  margin: 0;
+  background-color: @var-fg-selection;
+  border-radius: 10px;
+  text-color: @var-bg;
+}
+
+entry {
+  blink: true;
+  expand: true;
+  horizontal-align: 0;
+  vertical-align: 0.5;
+  font: "Inter Medium 22";
+  padding: 0;
+  margin: 0 19px 0 0;
+  placeholder-color: @var-input-placeholder-color;
+  placeholder: "";
+}
+
+element {
+  children: [element-icon, element-text];
+  padding: 0.3em 40px;
+}
+
+element-icon {
+  size: 60px;
+}
+
+element-text {
+  expand: true;
+  highlight: none #8be9fd;
+  horizontal-align: 0;
+  vertical-align: 0.5;
+  margin: 0 0 0 5px;
+}
+
+element selected {
+  background-color: @var-bg-selection;
+  text-color: @var-fg-selection;
+}

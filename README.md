@@ -1,6 +1,6 @@
 # My NixOS configuration
 
-![](https://i.imgur.com/0MO5vsP.jpg)
+![](https://i.imgur.com/vTfwt46.jpg)
 
 Hardware drivers are managed by [NixOS](https://nixos.org/) config files.
 Dotfiles are managed by [home-manager](https://github.com/nix-community/home-manager).
@@ -11,9 +11,14 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
-    The initial config must have: `cachix` `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
+    The initial config must have: `flakes`, `cachix`, `git`, `gpp`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
 
     **NOTE:** Run `sudo nixos-install` without root user (sudo su)
+
+    Initial `configuration.nix` example:
+
+    ```nix
+    ```
 
 ## Install device config
 
@@ -32,17 +37,15 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
     ```
     $ git clone https://github.com/wochap/nix-config.git ~/nix-config
     ```
-1. Setup cachix
-    ```
-    $ sudo cachix use nix-community
-    ```
 1. Rebuild nixos with the device's specific config, for example, heres's a rebuild for my `desktop`
 
     **WARNING:** First `nixos-rebuild` with device config can take several hours 😢
     ```
-    $ NIXOS_CONFIG=~/nix-config/devices/desktop.nix nixos-rebuild switch
+    # Go to nix-config folder
+    $ cd /home/gean/nix-config
+    $ sudo nixos-rebuild switch --flake .#desktop --impure
+    # $ sudo nixos-rebuild boot -p sway --flake .#desktop-sway --impure
     ```
-    Addional notes: https://www.reddit.com/r/NixOS/comments/ec3je7/managing_configurationnix_and_homenix/
 1. Set password for new user `gean`
     ```
     $ passwd gean
@@ -51,6 +54,10 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 ## Setup NixOS
 
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
+1. Setup betterdiscord
+    ```
+    $ betterdiscordctl install
+    ```
 1. Setup betterlockscreen (required for xorg config)
     ```
     $ betterlockscreen -u ~/Pictures/backgrounds/default.jpeg
@@ -127,9 +134,10 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 
 ## Upgrating NixOS
 
+Update inputs on `flake.nix`, then:
 ```
-$ sudo nix-channel --update
-$ sudo NIXOS_CONFIG=/home/gean/nix-config/devices/desktop.nix nixos-rebuild switch --upgrade
+$ nix flake update --recreate-lock-file
+$ sudo nixos-rebuild switch --impure --flake ~/nix-config#dekstop
 ```
 
 ## Development Workflow

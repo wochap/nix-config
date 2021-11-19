@@ -1,0 +1,85 @@
+/*
+ *
+ *  Rofi theme for fullscreen powermenu
+ *
+ *  Inspiration:
+ *  https://github.com/adi1090x/rofi/blob/master/1080p/powermenu/full_square.rasi
+ *  https://github.com/lu0/rofi-blurry-powermenu/blob/master/powermenu_theme.rasi
+ *
+*/
+
+configuration {
+  disable-history: false;
+  dpi: 0;
+  drun-display-format: "{name}";
+  hide-scrollbar: true;
+  kb-select-1: "";
+  kb-select-2: "";
+  kb-select-3: "";
+  kb-select-4: "";
+  kb-select-5: "";
+  kb-select-6: "";
+  kb-select-7: "";
+  kb-select-8: "";
+  kb-select-9: "";
+  show-icons: false;
+  sidebar-mode: false;
+  kb-row-up: "Up,Control+k,Shift+Tab";
+  kb-row-down: "Down,Control+j";
+  kb-accept-entry: "Control+m,Return,KP_Enter";
+  kb-remove-to-eol: "Control+Shift+e";
+}
+
+* {
+  selected-bg-color: #bd93f9;
+  selected-text-color: #21222C;
+  unselected-bg-color: rgba(0, 0, 0, 0.05);
+  unselected-text-color: #e9e8e9;
+}
+
+#window {
+  fullscreen: true;
+  background-color: rgba(32, 32, 32, 0.5);
+  border: 0;
+}
+
+#mainbox {
+  background-color: transparent;
+  children: [ listview ];
+  padding: 43% 0% 0% 21.5%;
+  spacing: 5%;
+}
+
+#horibox {
+  background-color: transparent;
+  children: [ listview ];
+}
+
+#listview {
+  background-color: transparent;
+  cycle: true;
+  dynamic: true;
+  layout: horizontal;
+  margin: 0;
+  spacing: 5.5%;
+}
+
+#element {
+  background-color: @unselected-bg-color;
+  padding: 0;
+  text-color: @unselected-text-color;
+  children: [element-text];
+  border-radius: 10px;
+  expand: false;
+}
+
+#element.selected {
+  background-color: @selected-bg-color;
+  text-color: @selected-text-color;
+}
+
+#element-text {
+  background-color: inherit;
+  text-color: inherit;
+  padding: 0.05em 0.325em;
+}
