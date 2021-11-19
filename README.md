@@ -41,7 +41,10 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 
     **WARNING:** First `nixos-rebuild` with device config can take several hours 😢
     ```
-    $ nixos-rebuild switch --impure --flake ~/nix-config#dekstop
+    # Go to nix-config folder
+    $ cd /home/gean/nix-config
+    $ sudo nixos-rebuild switch --flake .#desktop --impure
+    # $ sudo nixos-rebuild boot -p sway --flake .#desktop-sway --impure
     ```
 1. Set password for new user `gean`
     ```
@@ -51,6 +54,10 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 ## Setup NixOS
 
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
+1. Setup betterdiscord
+    ```
+    $ betterdiscordctl install
+    ```
 1. Setup betterlockscreen (required for xorg config)
     ```
     $ betterlockscreen -u ~/Pictures/backgrounds/default.jpeg
@@ -129,8 +136,8 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
 
 Update inputs on `flake.nix`, then:
 ```
-$ nix flake update
-$ nixos-rebuild switch --impure --flake ~/nix-config#dekstop
+$ nix flake update --recreate-lock-file
+$ sudo nixos-rebuild switch --impure --flake ~/nix-config#dekstop
 ```
 
 ## Development Workflow
