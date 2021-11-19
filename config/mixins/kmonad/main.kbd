@@ -5,42 +5,56 @@
   cmp-seq ralt
   cmp-seq-delay 5
   fallthrough true
-  allow-cmd true
+  allow-cmd false
 )
 
 (defsrc
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  caps a    s    d    f    g    h    j    k    l    ;    '    ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt cmp  rctl
-)
-
-(deflayer colemak
-  grv      1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab      q    w    f    p    b    j    l    u    y    ;    [    ]    \
-  @esclalt a    r    s    t    g    m    n    e    i    o    '    ret
-  lsft     z    x    c    d    v    k    h    ,    .    /    rsft
-  @spc     ralt lctl           spc            lmet cmp  rctl
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10   f11  f12
+  grv  1    2    3    4    5    6    7    8    9    0     -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p     [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;     '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /     rsft up
+  lctl lmet lalt           spc            ralt cmp  rctl  left down right
 )
 
 (deflayer qwerty
+  esc       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
   grv       1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab       q    w    e    r    t    y    u    i    o    p    [    ]    \
   @esclctrl a    s    d    f    g    h    j    k    l    ;    '    ret
-  lsft      z    x    c    v    b    n    m    ,    .    /    rsft
-  lctrl     lmet lalt           spc            @spc cmp  rctl
+  lsft      z    x    c    v    b    n    m    ,    .    /    rsft up
+  lctrl     @sup lalt           spc            @spc cmp  rctl left down right
+)
+
+(deflayer colemak
+  esc      f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+  grv      1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab      q    w    f    p    b    j    l    u    y    ;    [    ]    \
+  @esclalt a    r    s    t    g    m    n    e    i    o    '    ret
+  lsft     z    x    c    d    v    k    h    ,    .    /    rsft up
+  @spc     ralt lctl           spc            lmet cmp  rctl left down right
 )
 
 (deflayer special
+  _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    @col _    _    @qwe _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _              _              _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _    _    _    _
+)
+
+(deflayer super
+  M-esc     M-f1   M-f2    M-f3   M-f4   M-f5   M-f6   M-f7   M-f8   M-f9   M-f10  M-f11  f12
+  M-grv     M-1    M-2     M-3    M-4    M-5    M-6    M-7    M-8    M-9    M-0    _      M-=    M-bspc
+  #(M-tab)  M-q    M-w     M-e    M-r    M-t    M-y    M-u    M-i    M-o    M-p    M-[    M-]    M-\
+  _         M-a    M-s     del    M-f    M-g    M-h    M-j    M-k    M-l    M-;    M-'    M-ret
+  M-lsft    M-z    M-x     M-c    M-v    M-b    M-n    M-m    M-,    M-.    M-/    M-rsft home
+  M-lctrl   lmet   M-lalt                M-spc                _      M-cmp  M-rctl home   end    end
 )
 
 (defalias
+  sup (layer-toggle super)
   esclalt (tap-next esc lalt)
   esclctrl (tap-next esc lctrl)
   spc (layer-toggle special)

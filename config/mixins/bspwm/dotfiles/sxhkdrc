@@ -206,6 +206,12 @@ super + alt + n
   subl
 #  com.github.lainsce.notejot
 
+ctrl + Escape
+  dunstctl history-pop
+
+ctrl + space
+  dunstctl close
+
 
 ### MEDIA KEYBINDINGS
 
@@ -249,35 +255,29 @@ XF86AudioPrev
 # https://github.com/baskerville/sxhkd/issues/86
 # https://unix.stackexchange.com/questions/65434/map-superleftright-to-home-end/65923#65923
 
-super + Right
-  xdotool keyup Right key --clearmodifiers End
+# super + Right
+#   xdotool keyup Right key --clearmodifiers End
 
-super + Left
-  xdotool keyup Left key --clearmodifiers Home
+# super + Left
+#   xdotool keyup Left key --clearmodifiers Home
 
-super + shift + Right
-  xdotool keyup Right key --clearmodifiers Shift+End
+# super + shift + Right
+#   xdotool keyup Right key --clearmodifiers Shift+End
 
-super + shift + Left
-  xdotool keyup Left key --clearmodifiers Shift+Home
+# super + shift + Left
+#   xdotool keyup Left key --clearmodifiers Shift+Home
 
-super + ctrl + Right
-  xdotool keyup Right key --clearmodifiers Control_L+End
+# super + ctrl + Right
+#   xdotool keyup Right key --clearmodifiers Control_L+End
 
-super + ctrl + Left
-  xdotool keyup Left key --clearmodifiers Control_L+Home
+# super + ctrl + Left
+#   xdotool keyup Left key --clearmodifiers Control_L+Home
 
-super + ctrl + shift + Right
-  xdotool keyup Right key --clearmodifiers Control_L+Shift+End
+# super + ctrl + shift + Right
+#   xdotool keyup Right key --clearmodifiers Control_L+Shift+End
 
-super + ctrl + shift + Left
-  xdotool keyup Left key --clearmodifiers Control_L+Shift+Home
+# super + ctrl + shift + Left
+#   xdotool keyup Left key --clearmodifiers Control_L+Shift+Home
 
-super + d
-  xdotool keyup d key --clearmodifiers Delete
-
-ctrl + Escape
-  dunstctl history-pop
-
-ctrl + space
-  dunstctl close
+# super + d
+#   xdotool keyup d key --clearmodifiers Delete
