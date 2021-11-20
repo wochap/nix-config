@@ -54,6 +54,6 @@ case $selected in
     bspc quit
     ;;
   $lock)
-    betterlockscreen -l
+    /etc/scripts/lock.sh
     ;;
 esac

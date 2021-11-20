@@ -35,7 +35,6 @@ in
     home-manager.users.${userName} = {
       # Setup dotfiles
       xdg.configFile = {
-        "betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
         "discord/settings.json".source = ./dotfiles/discord-settings.json;
       };
 

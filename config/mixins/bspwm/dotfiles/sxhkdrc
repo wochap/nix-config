@@ -171,7 +171,7 @@ super + shift + alt + p
 
 # Lock screen
 super + alt + l
-  betterlockscreen -l
+  /etc/scripts/lock.sh
 
 # Open file manager
 super + alt + f

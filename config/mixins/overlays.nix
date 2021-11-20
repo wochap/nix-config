@@ -43,6 +43,17 @@ in
             };
           }
         );
+
+        i3lock-color = super.i3lock-color.overrideAttrs (
+          _: {
+            src = super.fetchFromGitHub {
+              owner = "PandorasFox";
+              repo = "i3lock-color";
+              rev = "995f58dc7323d53095f1687ae157bfade1d00542";
+              sha256 = "sha256-2ojaIRtQpGzgPUwvhX1KsStMdCHuYSaZt3ndP1EBHmE=";
+            };
+          }
+        );
       })
     ] ++ (if (isWayland) then [
       (final: prev: {
