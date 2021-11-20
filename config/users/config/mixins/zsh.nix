@@ -104,6 +104,7 @@ in
             error_symbol = "[➜](bold red)";
           };
           nix_shell = {
+            disabled = true;
             symbol = "❄️ lorri ";
             format = "via [$symbol]($style) ";
           };
