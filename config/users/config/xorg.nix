@@ -21,6 +21,7 @@ in
     ./mixins/eww
     ./mixins/ptsh
     ./mixins/kitty
+    ./mixins/alacritty
     ./mixins/dunst
     ./mixins/rofi
     # ./mixins/android.nix

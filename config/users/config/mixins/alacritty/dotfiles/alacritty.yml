@@ -1,0 +1,79 @@
+# Terminal Emulator Settings
+window:
+  padding:
+    x: 8
+    y: 8
+  scrolling:
+    history: 15
+
+# Setting zsh as the default shell
+# shell:
+#   program: /bin/zsh
+
+env:
+  # TERM variable
+  #
+  # This value is used to set the `$TERM` environment variable for
+  # each instance of Alacritty. If it is not present, alacritty will
+  # check the local terminfo database and use `alacritty` if it is
+  # available, otherwise `xterm-256color` is used.
+  TERM: alacritty
+
+# Font
+font:
+  normal:
+    family: FiraCode Nerd Font
+    style: Retina
+
+  bold:
+    family: FiraCode Nerd Font
+    style: Bold
+
+  italic:
+    family: FiraCode Nerd Font
+    style: Italic
+
+  bold_italic:
+    family: FiraCode Nerd Font
+    style: Bold Italic
+
+  size: 10
+
+  offset:
+    x: 0
+    y: 4
+
+# Colors (One Dark)
+colors:
+  # Default colors
+  primary:
+    # background: '#282c34'
+    background: '#1e222a'
+    foreground: '#abb2bf'
+
+  # Normal colors
+  normal:
+    # NOTE: Use '#131613' for the `black` color if you'd like to see
+    # black text on the background.
+    black:   '#282c34'
+    red:     '#e06c75'
+    green:   '#98c379'
+    yellow:  '#d19a66'
+    blue:    '#61afef'
+    magenta: '#c678dd'
+    cyan:    '#56b6c2'
+    white:   '#abb2bf'
+
+  # Bright colors
+  bright:
+    black:   '#5c6370'
+    red:     '#e06c75'
+    green:   '#98c379'
+    yellow:  '#d19a66'
+    blue:    '#61afef'
+    magenta: '#c678dd'
+    cyan:    '#56b6c2'
+    white:   '#ffffff'
+
+# Apply Settings without relaunching
+live_config_reload: true

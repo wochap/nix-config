@@ -53,7 +53,6 @@ in
       tightvnc
 
       # DE
-      alacritty # terminal fallback
       hunspell # dictionary for document programs
       hunspellDicts.en-us
       pavucontrol # audio settings gui
