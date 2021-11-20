@@ -2,9 +2,16 @@
 
 let
   isWayland = config._displayServer == "wayland";
+  userName = config._userName;
 in
 {
   config = {
+    home-manager.users.${userName} = {
+      nixpkgs.overlays = [
+        inputs.neovim-nightly-overlay.overlay
+      ];
+    };
+
     nixpkgs.overlays = [
       # inputs.rust-overlay.overlay
 
