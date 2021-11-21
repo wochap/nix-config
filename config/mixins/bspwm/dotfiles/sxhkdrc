@@ -219,10 +219,10 @@ XF86MonBrightness{Down,Up}
   light {-U 10,-A 10}
 
 XF86Audio{LowerVolume,RaiseVolume}
-  pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%}; paplay /etc/assets/blop.wav
+  pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%}
 
 XF86AudioMute
-  pactl set-sink-mute @DEFAULT_SINK@ toggle; paplay /etc/assets/blop.wav
+  pactl set-sink-mute @DEFAULT_SINK@ toggle
 
 # Play next media
 XF86AudioNext
