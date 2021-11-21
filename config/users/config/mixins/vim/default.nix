@@ -17,6 +17,17 @@ in
           number = true;
         };
       };
+
+      programs.neovim = {
+        enable = true;
+        coc = {
+          enable = true;
+          settings = {};
+        };
+        extraPackages = [];
+        extraConfig = '''';
+        plugins = with pkgs.vimPlugins; [];
+      };
     };
   };
 }
