@@ -37,6 +37,8 @@ in
     boot = {
       loader = {
         grub.configurationLimit = 42;
+        grub.efiSupport = true;
+        grub.useOSProber = true;
         systemd-boot.configurationLimit = 42;
       };
 

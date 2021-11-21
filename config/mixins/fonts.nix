@@ -10,6 +10,7 @@ in
       enableDefaultFonts = true;
       fonts = with pkgs; [
         inter
+        unifont
 
         # TODO: requires nvidia?
         (nerdfonts.override {

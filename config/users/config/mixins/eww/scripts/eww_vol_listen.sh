@@ -36,14 +36,20 @@ fi
 if [ -p /tmp/vol ]; then
   true
 else
-  coproc (mkfifo /tmp/vol > /dev/null 2>&1)
-  echo "$currentVolume" > /tmp/vol &
+  if [ -f /tmp/vol ]; then
+    rm /tmp/vol
+  fi
+  mkfifo /tmp/vol > /dev/null 2>&1
+  echo "$currentVolume" > /tmp/vol
 fi
 if [ -p /tmp/vol-icon ]; then
   true
 else
-  coproc (mkfifo /tmp/vol-icon > /dev/null 2>&1)
-  writeIcon $isMuted &
+  if [ -f /tmp/vol-icon ]; then
+    rm /tmp/vol-icon
+  fi
+  mkfifo /tmp/vol-icon > /dev/null 2>&1
+  writeIcon $isMuted
 fi
 
 # Cancel timeout to close eww_vol
@@ -55,19 +61,19 @@ done
 # Show eww_vol widget
 eww_wid="$(xdotool search --name 'Eww - vol' || true)"
 if [ ! -n "$eww_wid" ]; then
-  coproc (eww open vol > /dev/null 2>&1)
+  eww open vol > /dev/null 2>&1
 fi
 
 # Write eww variables
 writeIcon $isMuted &
-echo "$currentVolume" > /tmp/vol
-echo "$isMuted" > /tmp/vol-isMuted
-echo "$currentVolume" > /tmp/vol-currentVolume
+echo "$currentVolume" > /tmp/vol &
+echo "$isMuted" > /tmp/vol-isMuted &
+echo "$currentVolume" > /tmp/vol-currentVolume &
 
 # Play sound
 # TODO: add delay between
 # paplay triggers `change sink` event
-# paplay /etc/assets/blop.wav &
+paplay /etc/assets/blop.wav &
 
 # Start timeout to close eww_vol
 /etc/scripts/eww_vol_close.sh &

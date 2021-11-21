@@ -53,7 +53,6 @@ in
       tightvnc
 
       # DE
-      alacritty # terminal fallback
       hunspell # dictionary for document programs
       hunspellDicts.en-us
       pavucontrol # audio settings gui
@@ -62,7 +61,6 @@ in
       gitAndTools.gh
       gotop # monitor system
       htop # monitor system
-      neofetch # print computer info
       pamixer # audio cli
       playerctl # media player cli
       ranger # file manager CLI

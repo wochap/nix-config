@@ -2,9 +2,16 @@
 
 let
   isWayland = config._displayServer == "wayland";
+  userName = config._userName;
 in
 {
   config = {
+    home-manager.users.${userName} = {
+      nixpkgs.overlays = [
+        inputs.neovim-nightly-overlay.overlay
+      ];
+    };
+
     nixpkgs.overlays = [
       # inputs.rust-overlay.overlay
 
@@ -40,6 +47,17 @@ in
               repo = "Tela-icon-theme";
               rev = "184959a91ed9726d7cbb3d55c627be09d302096f";
               sha256 = "sha256-mvkgHBdZm6vF+/DS3CRLl1m14U0Lj4Xtz4J/vpJUTQM=";
+            };
+          }
+        );
+
+        i3lock-color = super.i3lock-color.overrideAttrs (
+          _: {
+            src = super.fetchFromGitHub {
+              owner = "PandorasFox";
+              repo = "i3lock-color";
+              rev = "995f58dc7323d53095f1687ae157bfade1d00542";
+              sha256 = "sha256-2ojaIRtQpGzgPUwvhX1KsStMdCHuYSaZt3ndP1EBHmE=";
             };
           }
         );

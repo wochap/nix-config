@@ -13,6 +13,11 @@
           mode = "0755";
         };
 
+        "scripts/lock.sh" = {
+          source = ./scripts/lock.sh;
+          mode = "0755";
+        };
+
         "scripts/bspwm_external_rules.sh" = {
           source = ./scripts/bspwm_external_rules.sh;
           mode = "0755";

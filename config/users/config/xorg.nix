@@ -21,8 +21,10 @@ in
     ./mixins/eww
     ./mixins/ptsh
     ./mixins/kitty
+    ./mixins/alacritty
     ./mixins/dunst
     ./mixins/rofi
+    ./mixins/neofetch
     # ./mixins/android.nix
     ./mixins/doom-emacs
     ./mixins/default-browser
@@ -35,7 +37,6 @@ in
     home-manager.users.${userName} = {
       # Setup dotfiles
       xdg.configFile = {
-        "betterlockscreenrc".source = ./dotfiles/betterlockscreenrc;
         "discord/settings.json".source = ./dotfiles/discord-settings.json;
       };
 

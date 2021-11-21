@@ -23,7 +23,7 @@
       # DE
       alttab # windows like alt + tab
       arandr # xrandr gui
-      betterlockscreen # screen locker
+      i3lock-color
       blueberry # bluetooth tray
       caffeine-ng
       clipmenu # clipboard manager
