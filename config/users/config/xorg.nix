@@ -24,6 +24,7 @@ in
     ./mixins/alacritty
     ./mixins/dunst
     ./mixins/rofi
+    ./mixins/neofetch
     # ./mixins/android.nix
     ./mixins/doom-emacs
     ./mixins/default-browser

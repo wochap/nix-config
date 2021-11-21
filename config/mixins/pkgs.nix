@@ -61,7 +61,6 @@ in
       gitAndTools.gh
       gotop # monitor system
       htop # monitor system
-      neofetch # print computer info
       pamixer # audio cli
       playerctl # media player cli
       ranger # file manager CLI
