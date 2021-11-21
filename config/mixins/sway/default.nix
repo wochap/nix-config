@@ -34,6 +34,8 @@ in
       ];
       etc = {
         "sway/config".source = ./dotfiles/config;
+        "sway/borders".source = ./assets/borders;
+        "scripts/sway-lock.sh".source = ./scripts/sway-lock.sh;
       };
     };
 
