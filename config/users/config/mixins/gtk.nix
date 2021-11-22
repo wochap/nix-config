@@ -28,6 +28,10 @@ in
         localPkgs.whitesur-dark-icons
         localPkgs.whitesur-dark-theme
       ];
+      variables = {
+        # Hide dbus errors
+        "NO_AT_BRIDGE" = "1";
+      };
     };
 
     home-manager.users.${userName} = {
@@ -42,6 +46,8 @@ in
           package = pkgs.orchis;
         };
         gtk3.extraConfig = {
+          # Hide minimize and maximize buttons
+          gtk-decoration-layout = "menu:";
           gtk-xft-antialias = 1;
           gtk-xft-hinting = 1;
           gtk-xft-hintstyle = "hintfull";
