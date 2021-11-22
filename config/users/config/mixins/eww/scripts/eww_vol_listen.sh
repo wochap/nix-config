@@ -21,8 +21,8 @@ fi
 
 isMuted=$(pulsemixer --get-mute)
 currentVolume="$(pulsemixer --get-volume | awk '{print $1}')"
-prevIsMuted=$([[ -f /tmp/vol-isMuted ]] && cat /tmp/vol-isMuted)
-prevCurrentVolume=$([[ -f /tmp/vol-currentVolume ]] && cat /tmp/vol-currentVolume)
+prevIsMuted=$([[ -f /tmp/vol-isMuted ]] && cat /tmp/vol-isMuted || echo "")
+prevCurrentVolume=$([[ -f /tmp/vol-currentVolume ]] && cat /tmp/vol-currentVolume || echo "")
 
 # Exit if state didn't change
 if [[ "$prevIsMuted" == "$isMuted" ]] && [[ "$prevCurrentVolume" == "$currentVolume" ]]; then
