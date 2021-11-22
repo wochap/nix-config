@@ -25,6 +25,7 @@
         desktop = mkSystem inputs.nixpkgs "x86_64-linux" "desktop";
         desktop-sway = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-sway";
         desktop-gnome = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
+        asus-vivobook = mkSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
       };
     };
 }

@@ -58,9 +58,9 @@ Dotfiles are managed by [home-manager](https://github.com/nix-community/home-man
     ```
     $ betterdiscordctl install
     ```
-1. Setup betterlockscreen (required for xorg config)
+1. Setup lock wallpaper (required for xorg config)
     ```
-    $ betterlockscreen -u ~/Pictures/backgrounds/default.jpeg
+    $ convert -resize $(xdpyinfo | grep dimensions | cut -d\  -f7 | cut -dx -f1) ~/Pictures/backgrounds/default.jpg ~/Pictures/backgrounds/lockscreen.jpg
     ```
 1. Add wallpapers to `~/Pictures/backgrounds/`
 1. Sync `vscode`, `firefox`, `chrome`
