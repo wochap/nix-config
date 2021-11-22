@@ -9,6 +9,9 @@
       gnome.gnome-contacts
       gnome.gnome-maps
       gnome.simple-scan
+      gnome.gnome-shell-extensions
+      gnomeExtensions.blur-my-shell
+      gnome.gnome-tweaks
     ];
 
     services.xserver.desktopManager.gnome.enable = true;
