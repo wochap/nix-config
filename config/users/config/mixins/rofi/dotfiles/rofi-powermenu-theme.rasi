@@ -81,5 +81,5 @@ configuration {
 #element-text {
   background-color: inherit;
   text-color: inherit;
-  padding: 0.05em 0.325em;
+  padding: 0.3em 0.325em 0.15em;
 }

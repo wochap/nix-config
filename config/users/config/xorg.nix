@@ -40,6 +40,10 @@ in
         "discord/settings.json".source = ./dotfiles/discord-settings.json;
       };
 
+      home.file = {
+        ".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
+      };
+
       # screenshot utility
       services.flameshot.enable = true;
     };

@@ -30,7 +30,9 @@
   )
 )
 
-(defvar minibox-spacing "${round(((325-128-10-40)/2), 0)}")
+(defvar icon-size 160)
+; TODO: replace 160 with icon-size var ⬇
+(defvar minibox-spacing {round(((325 - 160 - 10 - 40) / 2), 0)})
 (defwidget minibox [?icon ?val]
   (box :class "minibox"
        :orientation "v"
@@ -39,6 +41,7 @@
        :style "padding-top: ${minibox-spacing}px;"
     (box :class "minibox-icon"
          :valign "start"
+         :style "font-size: ${icon-size}px;"
       icon
     )
     (scale :class "minibox-bar"

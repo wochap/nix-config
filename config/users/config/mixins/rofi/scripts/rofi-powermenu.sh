@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 
-shutdown="襤"; # "\uf924"
-reboot="ﰇ"; # "\ufc07"
-sleep=""; # "\uf186"
-hibernate=""; # "\uf186"
-logout=""; # "\uf842"
-lock=""; # "\uf840"
+shutdown="";
+reboot="";
+sleep="";
+hibernate="";
+logout="";
+lock="";
 options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 
 # Font size according to screen dimensions
 DEFAULT_WIDTH=1920
 WIDTH=$(xrandr | grep primary | awk '{print $4}' | cut -d 'x' -f 1)
-DEFAULT_FONTSIZE=50
+DEFAULT_FONTSIZE=39
 FONTSIZE=$(echo "$WIDTH/$DEFAULT_WIDTH*$DEFAULT_FONTSIZE" | bc -l)
 PRESELECTION=4
 
 selected="$(echo -e "$options" | rofi -theme /etc/config/rofi-powermenu-theme.rasi \
-                                  -font "Iosevka, $FONTSIZE" \
+                                  -font "woos, $FONTSIZE" \
                                   -m "primary" \
                                   -dmenu -selected-row ${PRESELECTION})"
 
