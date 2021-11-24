@@ -1,0 +1,224 @@
+@font-face {
+  font-family: 'woos';
+  src:
+    url('fonts/woos.ttf?1q4oyu') format('truetype'),
+    url('fonts/woos.woff?1q4oyu') format('woff'),
+    url('fonts/woos.svg?1q4oyu#woos') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'woos' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.window:before {
+  content: "\e900";
+}
+.mozillafirefox:before {
+  content: "\e440";
+}
+.brave:before {
+  content: "\e441";
+}
+.radio-unchecked:before {
+  content: "\e442";
+}
+.radio-button:before {
+  content: "\e442";
+}
+.circle1:before {
+  content: "\e442";
+}
+.radio-checked:before {
+  content: "\e443";
+}
+.radio-button1:before {
+  content: "\e443";
+}
+.radio-checked1:before {
+  content: "\e444";
+}
+.radio-button2:before {
+  content: "\e444";
+}
+.nixos:before {
+  content: "\e445";
+}
+.battery:before {
+  content: "\e90a";
+}
+.battery-charging:before {
+  content: "\e90b";
+}
+.bell:before {
+  content: "\e90c";
+}
+.bell-off:before {
+  content: "\e90d";
+}
+.bluetooth:before {
+  content: "\e90e";
+}
+.chrome:before {
+  content: "\e90f";
+}
+.circle11:before {
+  content: "\e910";
+}
+.clipboard:before {
+  content: "\e911";
+}
+.clock:before {
+  content: "\e912";
+}
+.cloud:before {
+  content: "\e913";
+}
+.cloud-drizzle:before {
+  content: "\e914";
+}
+.cloud-lightning:before {
+  content: "\e915";
+}
+.cloud-off:before {
+  content: "\e916";
+}
+.cloud-rain:before {
+  content: "\e917";
+}
+.cloud-snow:before {
+  content: "\e918";
+}
+.code:before {
+  content: "\e919";
+}
+.coffee:before {
+  content: "\e91a";
+}
+.compass:before {
+  content: "\e91b";
+}
+.copy:before {
+  content: "\e91c";
+}
+.cpu:before {
+  content: "\e91d";
+}
+.crop:before {
+  content: "\e91e";
+}
+.database:before {
+  content: "\e91f";
+}
+.disc:before {
+  content: "\e920";
+}
+.dollar-sign:before {
+  content: "\e921";
+}
+.download:before {
+  content: "\e922";
+}
+.figma:before {
+  content: "\e93f";
+}
+.github:before {
+  content: "\e923";
+}
+.globe:before {
+  content: "\e924";
+}
+.grid:before {
+  content: "\e925";
+}
+.hard-drive:before {
+  content: "\e926";
+}
+.headphones:before {
+  content: "\e940";
+}
+.help-circle:before {
+  content: "\e927";
+}
+.lock:before {
+  content: "\e928";
+}
+.log-in:before {
+  content: "\e941";
+}
+.log-out:before {
+  content: "\e929";
+}
+.mic:before {
+  content: "\e92a";
+}
+.mic-off:before {
+  content: "\e92b";
+}
+.minus-circle:before {
+  content: "\e92c";
+}
+.moon:before {
+  content: "\e92d";
+}
+.music:before {
+  content: "\e92e";
+}
+.power:before {
+  content: "\e92f";
+}
+.rotate-ccw:before {
+  content: "\e930";
+}
+.search:before {
+  content: "\e931";
+}
+.slack:before {
+  content: "\e932";
+}
+.smile:before {
+  content: "\e933";
+}
+.sun:before {
+  content: "\e934";
+}
+.terminal:before {
+  content: "\e935";
+}
+.thermometer:before {
+  content: "\e936";
+}
+.upload:before {
+  content: "\e937";
+}
+.volume:before {
+  content: "\e938";
+}
+.volume-1:before {
+  content: "\e939";
+}
+.volume-2:before {
+  content: "\e93a";
+}
+.volume-x:before {
+  content: "\e93b";
+}
+.wifi:before {
+  content: "\e93c";
+}
+.wifi-off:before {
+  content: "\e93d";
+}
