@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 
+muteIcon=""
+notMuteIcon=""
+# muteIcon=""
+# notMuteIcon=""
+
 writeIcon() {
   isMuted="$1"
   if [[ "$isMuted" == "0" ]]; then
-    echo "" > /tmp/vol-icon
+    echo "$notMuteIcon" > /tmp/vol-icon &
   else
-    echo "" > /tmp/vol-icon
+    echo "$muteIcon" > /tmp/vol-icon &
   fi
 }
 
@@ -40,7 +45,7 @@ else
     rm /tmp/vol
   fi
   mkfifo /tmp/vol > /dev/null 2>&1
-  echo "$currentVolume" > /tmp/vol
+  echo "$currentVolume" > /tmp/vol &
 fi
 if [ -p /tmp/vol-icon ]; then
   true
@@ -58,12 +63,6 @@ for pid in $(pgrep -f $script_name); do
   kill -9 $pid
 done
 
-# Show eww_vol widget
-eww_wid="$(xdotool search --name 'Eww - vol' || true)"
-if [ ! -n "$eww_wid" ]; then
-  eww open vol > /dev/null 2>&1
-fi
-
 # Write eww variables
 writeIcon $isMuted &
 echo "$currentVolume" > /tmp/vol &
@@ -74,6 +73,12 @@ echo "$currentVolume" > /tmp/vol-currentVolume &
 # TODO: add delay between
 # paplay triggers `change sink` event
 paplay /etc/assets/blop.wav &
+
+# Show eww_vol widget
+eww_wid="$(xdotool search --name 'Eww - vol' || true)"
+if [ ! -n "$eww_wid" ]; then
+  eww open vol > /dev/null 2>&1
+fi
 
 # Start timeout to close eww_vol
 /etc/scripts/eww_vol_close.sh &
