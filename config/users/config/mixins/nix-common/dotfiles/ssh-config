@@ -38,3 +38,9 @@ Host 134.122.13.201
   User root
   IdentitiesOnly yes
   IdentityFile ~/.ssh/id_rsa_boc
+
+Host 159.203.66.206
+  HostName 159.203.66.206
+  User root
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/id_rsa_boc
