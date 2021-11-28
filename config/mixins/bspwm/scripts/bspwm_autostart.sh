@@ -14,4 +14,4 @@ clipmenud &
 caffeine -a &
 sh /etc/scripts/polybar-start.sh &
 sh /etc/scripts/fix_caps_lock_delay.sh &
-/etc/script/eww_start.sh &
+sh /etc/scripts/eww_start.sh &
