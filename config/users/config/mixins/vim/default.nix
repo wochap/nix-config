@@ -5,6 +5,10 @@ let
 in
 {
   config = {
+    environment.systemPackages = with pkgs; [
+      neovim
+    ];
+
     home-manager.users.${userName} = {
       home.file = {
         ".vimrc".source = ./dotfiles/.vimrc;
@@ -16,17 +20,6 @@ in
           relativenumber = true;
           number = true;
         };
-      };
-
-      programs.neovim = {
-        enable = true;
-        coc = {
-          enable = true;
-          settings = {};
-        };
-        extraPackages = [];
-        extraConfig = '''';
-        plugins = with pkgs.vimPlugins; [];
       };
     };
   };
