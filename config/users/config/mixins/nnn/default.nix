@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  isDarwin = config._displayServer == "darwin";
   userName = config._userName;
   nnn-repo = pkgs.fetchFromGitHub {
     owner = "jarun";
@@ -12,25 +13,34 @@ in
 {
   config = {
     environment = {
-      systemPackages = with pkgs; [
-        nnn # file manager CLI
-      ];
-
       sessionVariables = {
         NNN_FIFO = "/tmp/nnn.fifo";
-        NNN_PLUG = "p:preview-tui";
         SPLIT = "v";
         KITTY_LISTEN_ON = ''unix:''${TMPDIR-/tmp}/kitty'';
       };
-
       shellAliases = {
         f = "nnn";
       };
     };
 
     home-manager.users.${userName} = {
-      xdg.configFile = {
-        "nnn/plugins".source = "${nnn-repo}/plugins";
+      programs.nnn = {
+        enable = true;
+        package = pkgs.nnn.override ({
+          withNerdIcons = true;
+        });
+        extraPackages = with pkgs; [
+          mediainfo
+        ] ++ lib.optionals (!isDarwin) [
+          ffmpegthumbnailer
+          sxiv
+        ];
+        plugins = {
+          mappings = {
+            p = "preview-tui";
+          };
+          src = "${nnn-repo}/plugins";
+        };
       };
     };
   };
