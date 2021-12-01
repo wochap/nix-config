@@ -63,7 +63,6 @@ in
       htop # monitor system
       pamixer # audio cli
       playerctl # media player cli
-      ranger # file manager CLI
       systemd
 
       # APPS CLI
@@ -90,6 +89,7 @@ in
       sublime3 # text editor
       tty-clock
       zoom-us
+      skypeforlinux
       # antimicroX
       # teamviewer
       # mysql-workbench
