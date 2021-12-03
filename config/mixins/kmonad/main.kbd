@@ -18,8 +18,8 @@
 )
 
 (deflayer qwerty
-  esc       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
-  grv       1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  _         _    _    _    _    _    _    _    _    _    _    _    _
+  _         _    _    _    _    _    _    _    _    _    _    _    _    _
   tab       q    w    e    r    t    y    u    i    o    p    [    ]    \
   @esclctrl a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft      z    x    c    v    b    n    m    ,    .    /    rsft up
@@ -27,12 +27,30 @@
 )
 
 (deflayer colemak
-  esc      f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
-  grv      1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab      q    w    f    p    b    j    l    u    y    ;    [    ]    \
-  @esclalt a    r    s    t    g    m    n    e    i    o    '    ret
-  lsft     z    x    c    d    v    k    h    ,    .    /    rsft up
-  @spc     ralt lctl           spc            lmet cmp  rctl left down right
+  _        _    _    _    _    _    _    _    _    _    _    _    _
+  _        _    _    _    _    _    _    _    _    _    _    _    _    _
+  _        q    w    f    p    b    j    l    u    y    ;    _    _    _
+  @esclalt @a   @r   @s   @t   g    m    @n   @e   @i   @o   _    ret
+  _        z    x    c    d    v    k    h    ,    .    /    _    _
+  @spc     _    @nums           spc           bspc _    _    _    _    _
+)
+
+(deflayer nums
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    1    2    3    4    5    6    7    8    9    0    _    _    _
+  _    $    +    \(   \)   @    \\   -    =    \_   *    _    _
+  _    !    #    _    '    `    &    [    ]    %    ^    _    _
+  _    _    _              _              @nav _    _    _    _    _
+)
+
+(deflayer nav
+  _    _    _    _    _    _    _    _    _    _     _    _    _
+  _    _    _    _    _    _    _    _    _    _     _    _    _    _
+  _    f1   f2   f3   f4   f5   f6   f7   f8   f9    f10  _    _    _
+  _    f11  home pgup pgdn end  left down up   right f12  _    _
+  _    _    _    _    _    _    _    _    _    _     _    _    _
+  _    _    _              _              _    _     _    _    _    _
 )
 
 (deflayer special
@@ -49,11 +67,14 @@
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    home
-  _    _    _              _              _    _    _    home end  end
+  _    _    _    _    _    _    _    _    _    _    _    _    pgup
+  _    _    _              _              _    _    _    home pgdn end
 )
 
 #|
+TODO: add delete
+TODO: add esc
+a (tap-hold-next-release 1000 a lctrl)
 (deflayer super
   M-esc     M-f1   M-f2    M-f3   M-f4   M-f5   M-f6   M-f7   M-f8   M-f9   M-f10  M-f11  f12
   M-grv     M-1    M-2     M-3    M-4    M-5    M-6    M-7    M-8    M-9    M-0    _      M-=    M-bspc
@@ -65,6 +86,16 @@
 |#
 
 (defalias
+  nav (layer-toggle nav)
+  nums (tap-next tab (layer-toggle nums))
+  a (tap-hold 200 a lctrl)
+  r (tap-hold 200 r lmet)
+  s (tap-hold 200 s lalt)
+  t (tap-hold 200 t lsft)
+  o (tap-hold 200 o rctrl)
+  i (tap-hold 200 i rmet)
+  e (tap-hold 200 e ralt)
+  n (tap-hold 200 n rsft)
   sup (around lmet (layer-toggle super))
   esclalt (tap-next esc lalt)
   esclctrl (tap-next esc lctrl)
