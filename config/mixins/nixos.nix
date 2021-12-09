@@ -31,9 +31,6 @@ in
 
     programs.ssh.askPassword = "";
 
-    # Explicit PulseAudio support in applications
-    nixpkgs.config.pulseaudio = true;
-
     boot = {
       loader = {
         grub.configurationLimit = 42;
@@ -90,9 +87,20 @@ in
     hardware.opengl.driSupport32Bit = !isMbp;
 
     # Enable audio
-    sound.enable = true;
-    hardware.pulseaudio.enable = true;
+    # sound.enable = true;
+    # Explicit PulseAudio support in applications
+    # nixpkgs.config.pulseaudio = true;
+    # hardware.pulseaudio.enable = true;
     # hardware.pulseaudio.support32Bit = true;
+    security.rtkit.enable = true;
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      # If you want to use JACK applications, uncomment this
+      #jack.enable = true;
+    };
 
     # Apply trim to SSDs
     services.fstrim.enable = true;

@@ -53,9 +53,11 @@ in
       tightvnc
 
       # DE
+      flashfocus
       hunspell # dictionary for document programs
       hunspellDicts.en-us
       pavucontrol # audio settings gui
+      pulseaudio
 
       # DE CLI
       gitAndTools.gh
