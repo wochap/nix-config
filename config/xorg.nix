@@ -25,6 +25,7 @@ in
     ./mixins/docker.nix # Comment on first install
     ./mixins/lorri.nix
     ./mixins/vscode.nix
+    ./mixins/mongodb.nix
     ./users/user-xorg.nix
   ];
 
