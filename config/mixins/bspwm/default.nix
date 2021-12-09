@@ -18,6 +18,10 @@
           mode = "0755";
         };
 
+        "scripts/bspwm_borders.sh" = {
+          source = ./scripts/bspwm_borders.sh;
+          mode = "0755";
+        };
         "scripts/bspwm_external_rules.sh" = {
           source = ./scripts/bspwm_external_rules.sh;
           mode = "0755";

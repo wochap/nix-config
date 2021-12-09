@@ -6,6 +6,7 @@
       # TOOLS
       wmctrl # perform actions on windows
       wmutils-core
+      wmutils-opt # required by borders script
       xautomation # simulate key press
       xclip # clipboard cli
       xdo # perform actions on windows

@@ -6,9 +6,11 @@ _trigger_polybar_windows_number() {
   [[ $desktop_layout == "monocle" ]] && {
     (polybar-msg hook bspwm_monocle_nb_windows 1) &>/dev/null
     (polybar-msg hook bspwm_monocle_nb_windows_sep 1) &>/dev/null
+    # TODO: hide polybar?
   } || {
     (polybar-msg hook bspwm_monocle_nb_windows 2) &>/dev/null
     (polybar-msg hook bspwm_monocle_nb_windows_sep 2) &>/dev/null
+    # TODO: show polybar?
   }
 }
 while read -a line; do
