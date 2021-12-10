@@ -5,9 +5,15 @@ let
 in
 {
   config = {
-    environment.systemPackages = with pkgs; [
-      neovim
-    ];
+    environment = {
+      systemPackages = with pkgs; [
+        neovim
+        ripgrep # required by Telescope
+      ];
+      shellAliases = {
+        nv = "nvim";
+      };
+    };
 
     home-manager.users.${userName} = {
       home.file = {
