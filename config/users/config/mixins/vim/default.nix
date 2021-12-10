@@ -9,6 +9,7 @@ in
       systemPackages = with pkgs; [
         neovim
         ripgrep # required by Telescope
+        shellcheck
       ];
       shellAliases = {
         nv = "nvim";
