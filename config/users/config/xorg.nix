@@ -26,7 +26,7 @@ in
     ./mixins/rofi
     ./mixins/neofetch
     # ./mixins/android.nix
-    ./mixins/doom-emacs
+    # ./mixins/doom-emacs
     ./mixins/default-browser
     ./mixins/zathura
     ./mixins/nnn
