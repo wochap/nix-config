@@ -32,8 +32,8 @@ in
 
       xdg.configFile = {
         "kitty/kitty.conf".text = ''
-          ${if isDarwin then macosConfig else linuxConfig}
           ${commonConfig}
+          ${if isDarwin then macosConfig else linuxConfig}
         '';
       };
 
