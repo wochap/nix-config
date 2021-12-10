@@ -25,6 +25,7 @@ in
             name = "home";
             buildInputs = with pkgs; [
               python3
+              nodePackages.http-server
               nodePackages.nodemon
               nodePackages.typescript
               nodePackages.typescript-language-server
