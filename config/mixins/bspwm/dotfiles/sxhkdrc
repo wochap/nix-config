@@ -38,7 +38,7 @@ super + Return
 #  kitty --listen-on unix:/tmp/kitty-default
 
 # Close and kill
-super + {w,shift + q}
+super + shift + {w,q}
 	bspc node -{c,k}
 
 # Alternate between the tiled and monocle layout
@@ -82,6 +82,9 @@ super + ctrl + {m,x,y,z}
 super + ctrl + {h,j,k,l}
 	bspc node -p {west,south,north,east}
 
+super + ctrl + {Left,Down,Up,Right}
+	bspc node -p {west,south,north,east}
+
 # preselect the ratio
 super + ctrl + {1-9}
 	bspc node -o 0.{1-9}
@@ -99,6 +102,9 @@ super + ctrl + shift + space
 
 # Focus or switch the node in the given direction
 super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
+
+super + {_,shift + }{Left,Down,Up,Right}
 	bspc node -{f,s} {west,south,north,east}
 
 # Focus the node for the given path jump (parent|brother|first|second)
