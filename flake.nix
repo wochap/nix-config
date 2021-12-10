@@ -1,8 +1,8 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?rev=80e6ae766ae5d928da056dee74b747660f6c1178";
+    nixpkgs.url = "github:nixos/nixpkgs?rev=b6bf1ca717b0ead86769102c2e94d591cc45ee9b";
     prevstable.url = "github:nixos/nixpkgs?rev=cd63096d6d887d689543a0b97743d28995bc9bc3";
-    home-manager.url = "github:nix-community/home-manager?rev=5559ef002306dde0093f3d329725259cada9ed41";
+    home-manager.url = "github:nix-community/home-manager?rev=829e89a16f4f96428d1b94e68d4c06107b5491c0";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
