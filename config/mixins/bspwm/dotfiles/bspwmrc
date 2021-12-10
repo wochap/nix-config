@@ -35,6 +35,8 @@ bspc rule -a "Eog" state=floating
 bspc rule -a "Evolution-alarm-notify" state=floating sticky=on
 bspc rule -a "File-roller" state=floating
 bspc rule -a "Geary" state=pseudo_tiled
+bspc rule -a "Org.gnome.Nautilus" state=floating
+bspc rule -a ".thunar-wrapped_" state=floating
 bspc rule -a "Gnome-calculator" state=floating
 bspc rule -a "Gnome-calendar" state=pseudo_tiled
 bspc rule -a "Gnome-font-viewer" state=floating
