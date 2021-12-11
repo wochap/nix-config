@@ -27,8 +27,6 @@ in
               python3
               nodePackages.http-server
               nodePackages.nodemon
-              nodePackages.typescript
-              nodePackages.typescript-language-server
               nodejs-14_x
               (yarn.override { nodejs = nodejs-14_x; })
             ];

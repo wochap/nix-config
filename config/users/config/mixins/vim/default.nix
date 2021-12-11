@@ -8,8 +8,21 @@ in
     environment = {
       systemPackages = with pkgs; [
         neovim
-        ripgrep # required by Telescope
+        neovim-qt # better fractional scaling support
         shellcheck
+
+        # required by telescope
+        ripgrep
+        fd
+
+        # required by null-ls
+        nodePackages.eslint_d
+        nodePackages.vscode-css-languageserver-bin
+        nodePackages.vscode-html-languageserver-bin
+
+        # required by LSP
+        nodePackages.typescript
+        nodePackages.typescript-language-server
       ];
       shellAliases = {
         nv = "nvim";
