@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   userName = config._userName;
-  localPkgs = import ../../../packages { pkgs = pkgs; };
+  localPkgs = import ../../../packages { pkgs = pkgs; lib = lib; };
 in
 {
   config = {

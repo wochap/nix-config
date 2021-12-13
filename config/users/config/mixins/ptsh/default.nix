@@ -2,7 +2,7 @@
 
 let
   userName = config._userName;
-  localPkgs = import ../../../../packages { pkgs = pkgs; };
+  localPkgs = import ../../../../packages { pkgs = pkgs; lib = lib; };
   ptsh-repo = builtins.fetchGit {
     url = "https://github.com/jszczerbinsky/ptSh";
     rev = "737685cf64dcd00572d3997a6f2b514219156288";

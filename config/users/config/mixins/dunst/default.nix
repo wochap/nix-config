@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  localPkgs = import ../../../../packages { pkgs = pkgs; };
+  localPkgs = import ../../../../packages { pkgs = pkgs; lib = lib; };
   userName = config._userName;
 in
 {
@@ -33,7 +33,7 @@ in
           name = "Papirus";
           package = pkgs.papirus-icon-theme;
         };
-        settings = (import ./dotfiles/dunstrc.nix { pkgs = pkgs; });
+        settings = (import ./dotfiles/dunstrc.nix { pkgs = pkgs; lib = lib; });
       };
     };
   };

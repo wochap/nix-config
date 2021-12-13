@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  localPkgs = import ../packages { pkgs = pkgs; };
+  localPkgs = import ../packages { pkgs = pkgs; lib = lib; };
   isWayland = config._displayServer == "wayland";
 in
 {
@@ -36,6 +36,7 @@ in
       mpd_clientlib # mpd module
       ngrok # expose web server
       nix-prefetch-git # get fetchgit hashes
+      nodePackages.node2nix
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer

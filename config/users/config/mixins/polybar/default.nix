@@ -3,7 +3,7 @@
 let
   userName = config._userName;
   isXorg = config._displayServer == "xorg";
-  localPkgs = import ../../../../packages { pkgs = pkgs; };
+  localPkgs = import ../../../../packages { pkgs = pkgs; lib = lib; };
 in
 {
   config = {

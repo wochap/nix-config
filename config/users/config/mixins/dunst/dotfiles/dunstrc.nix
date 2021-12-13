@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
-  localPkgs = import ../../../../../packages { pkgs = pkgs; };
+  localPkgs = import ../../../../../packages { pkgs = pkgs; lib = lib; };
   border = "#44475a";
   borderWidth = 3;
   timeout = 60000;

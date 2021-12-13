@@ -2,7 +2,7 @@
 
 let
   userName = config._userName;
-  localPkgs = import ../../packages { pkgs = pkgs; };
+  localPkgs = import ../../packages { pkgs = pkgs; lib = lib; };
   http-url-handler = pkgs.makeDesktopItem {
     name = "http-url-handler";
     desktopName = "HTTP URL handler";

@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  localPkgs = import ../../packages { pkgs = pkgs; };
+  localPkgs = import ../../packages { pkgs = pkgs; lib = lib; };
 in
 {
   config = {

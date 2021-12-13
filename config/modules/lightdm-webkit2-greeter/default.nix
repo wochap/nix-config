@@ -2,7 +2,7 @@
 
 with lib;
 let
-  localPkgs = import ../../packages { pkgs = pkgs; };
+  localPkgs = import ../../packages { pkgs = pkgs; lib = lib; };
   dmcfg = config.services.xserver.displayManager;
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.webkit2;
