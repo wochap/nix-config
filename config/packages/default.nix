@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, lib }:
 
 {
   interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock {};
@@ -15,4 +15,7 @@
   whitesur-dark-icons = pkgs.callPackage ./whitesur-dark-icons {};
   whitesur-dark-theme = pkgs.callPackage ./whitesur-dark-theme {};
   zscroll = pkgs.callPackage ./zscroll {};
+  customNodePackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./custom-node-packages {
+    nodejs = pkgs.nodejs-14_x;
+  });
 }
