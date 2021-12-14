@@ -14,6 +14,7 @@ in
   config = {
     environment = {
       sessionVariables = {
+        NNN_TRASH = "1";
         NNN_FIFO = "/tmp/nnn.fifo";
         SPLIT = "v";
         KITTY_LISTEN_ON = ''unix:''${TMPDIR-/tmp}/kitty'';

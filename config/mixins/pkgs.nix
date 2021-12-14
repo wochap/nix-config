@@ -6,9 +6,6 @@ let
 in
 {
   config = {
-    environment.sessionVariables = {
-      NNN_TRASH = "1";
-    };
     environment.systemPackages = with pkgs; [
       # TOOLS
       bc # calculator cli
