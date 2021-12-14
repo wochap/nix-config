@@ -2,27 +2,47 @@
 
 let
   userName = config._userName;
+  localPkgs = import ../../../../packages { pkgs = pkgs; lib = lib; };
+  # extraPackages = with pkgs; [
+  #   localPkgs.customNodePackages.typescript
+  #   localPkgs.customNodePackages.typescript-language-server
+  # ];
+  # extraMakeWrapperArgs = ''--suffix PATH : "${lib.makeBinPath extraPackages}"'';
 in
 {
   config = {
     environment = {
       systemPackages = with pkgs; [
-        neovim
-        neovim-qt # better fractional scaling support
-        shellcheck
+        # oni2
+        # neovim-qt # better fractional scaling support
+        neovim # TODO: passextraMakeWrapperArgs?
+
+        # required by treesitter
+        tree-sitter
 
         # required by telescope
         ripgrep
         fd
 
         # required by null-ls
+        localPkgs.customNodePackages."@fsouza/prettierd"
+        localPkgs.customNodePackages.markdownlint
+        localPkgs.customNodePackages.stylelint
+        lua51Packages.luacheck
         nodePackages.eslint_d
-        nodePackages.vscode-css-languageserver-bin
-        nodePackages.vscode-html-languageserver-bin
+        python39Packages.pylint
+        shellcheck
+        shfmt
+        stylua
 
-        # required by LSP
-        nodePackages.typescript
-        nodePackages.typescript-language-server
+        # required by lspconfig
+        localPkgs.customNodePackages."@tailwindcss/language-server"
+        localPkgs.customNodePackages.emmet-ls
+        # npm i typescript typescript-language-server -g
+        # localPkgs.customNodePackages.typescript
+        # localPkgs.customNodePackages.typescript-language-server
+        nodePackages.svelte-language-server
+        nodePackages.vscode-langservers-extracted
       ];
       shellAliases = {
         nv = "nvim";

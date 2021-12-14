@@ -1,3 +1,9 @@
 [
-  "@fsouza/prettierd"
+  "@fsouza/prettierd",
+  "@tailwindcss/language-server",
+  "typescript-language-server",
+  "typescript",
+  "emmet-ls",
+  "markdownlint",
+  "stylelint"
 ]
