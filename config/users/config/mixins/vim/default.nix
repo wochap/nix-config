@@ -41,8 +41,10 @@ in
         # npm i typescript typescript-language-server -g
         # localPkgs.customNodePackages.typescript
         # localPkgs.customNodePackages.typescript-language-server
+        nodePackages.bash-language-server
         nodePackages.svelte-language-server
         nodePackages.vscode-langservers-extracted
+        sumneko-lua-language-server
       ];
       shellAliases = {
         nv = "nvim";

@@ -108,6 +108,9 @@ in
             symbol = "❄️ lorri ";
             format = "via [$symbol]($style) ";
           };
+          package = {
+            disabled = true;
+          };
         };
       };
     };

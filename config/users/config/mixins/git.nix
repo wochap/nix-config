@@ -27,6 +27,7 @@ in
           st = "status";
         };
         extraConfig = {
+          color.ui = "auto";
           core.editor = "vim";
           pull.rebase = "false";
           init = {

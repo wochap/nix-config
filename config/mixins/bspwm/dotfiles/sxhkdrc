@@ -200,8 +200,8 @@ super + alt + b ; {f,c,b}
   {firefox,google-chrome-stable,brave}
 
 # Open terminal
-super + alt + t
-  kitty
+super + alt + t ; {k,a}
+  {kitty,alacritty}
 
 # Open magnifying glass
 super + alt + z
