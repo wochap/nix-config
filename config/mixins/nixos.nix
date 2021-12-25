@@ -48,6 +48,10 @@ in
       supportedFilesystems = [ "ntfs" ];
     };
 
+    systemd.extraConfig = ''
+      DefaultTimeoutStopSec=25s
+    '';
+
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";
 
