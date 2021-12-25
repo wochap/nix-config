@@ -37,6 +37,7 @@ in
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer
+      unrar
       unzip
       usbutils # lsusb, for android development
       vdpauinfo # verifying VDPAU
