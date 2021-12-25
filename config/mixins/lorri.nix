@@ -25,6 +25,7 @@ in
             name = "home";
             buildInputs = with pkgs; [
               python3
+              nodePackages.gulp
               nodePackages.http-server
               nodePackages.nodemon
               nodejs-14_x
