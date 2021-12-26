@@ -3,11 +3,12 @@ $background: #282a36;
 $border-color: #44475a;
 
 window {
-  background-color: $background;
+  background-color: transparent;
 }
 
 //minibox
 .minibox {
+  background: $background;
   border-color: $border-color;
   border-radius: 10px;
   border-style: solid;
@@ -47,3 +48,12 @@ window {
   min-height: 10px;
   border-radius: 100px;
 }
+
+.border {
+  background-color: transparent;
+  border-color: #6272a4;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 6px;
+}
+
