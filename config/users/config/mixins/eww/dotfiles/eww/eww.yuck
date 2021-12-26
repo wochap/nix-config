@@ -10,7 +10,7 @@
                   )
                   :wm-ignore false
                   :stacking "bg"
-                  :windowtype "dialog"
+                  :windowtype "normal"
                   :class "border-window"
                   :focusable false
   (box :class "border")

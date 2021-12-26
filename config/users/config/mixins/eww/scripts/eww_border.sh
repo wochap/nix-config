@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-getBWindowyId() {
-  result=$(xdo id -N eww-border) 
-  echo "${result^^}"
-}
+# getBWindowyId() {
+#   result=$(xdo id -N eww-border) 
+#   echo "${result^^}"
+# }
 
 closeBWindow() {
   # wait for it to close
@@ -46,15 +46,16 @@ openBWindow() {
   echo "$wid"
   closeBWindow
 
-  # choose where the border will render
+  # render border behind focused window
+  # BSPWM specific
   floating_wids=$(bspc query --nodes --node .floating.focused)
   if [[ -n $floating_wids ]]; then
-    bspc rule -a "eww-border" layer=normal state=floating hidden=on
+    bspc rule -a "eww-border" layer=normal state=floating hidden=on focus=off
   else
-    bspc rule -a "eww-border" layer=below state=floating hidden=on
+    bspc rule -a "eww-border" layer=below state=floating hidden=on focus=off
   fi
 
-  borderW="6"
+  borderW="3"
   eww open border -p "$((focusedX - borderW))x$((focusedY - borderW))" -s "$((focusedW + borderW * 2))x$((focusedH + borderW * 2))" > /dev/null 2>&1
   sleep 0.1
 
@@ -65,13 +66,6 @@ openBWindow() {
 
   bspc node "$(xdo id -N eww-border)" --flag hidden=off
 }
-
-# sub to focus, rezise, workspace window
-  # if no window focus
-    # hide
-  # if window focus, rezise
-    # if border open close
-    # show on focused window position, lower
 
 bspc subscribe node_focus node_geometry node_remove node_state pointer_action desktop_focus | while read -r _ _ _ node; do
   if [ "$(atomx WM_CLASS $node)" == "eww-border" ]; then

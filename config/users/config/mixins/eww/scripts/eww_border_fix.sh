@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# useful when WM ignores border window
+# render border behind focused window
 wew | while read -r evwid; do
   ev=$(echo "$evwid" | cut -d ':' -f 1)
   wid=$(echo "$evwid" | cut -d ':' -f 2)
@@ -8,6 +10,7 @@ wew | while read -r evwid; do
     wclass=$(xprop -id "$wid" WM_CLASS | awk '{print $4}' | sed -e 's/^"//' -e 's/"$//')
     if [[ "$wclass" == "eww-border" ]]; then
       # eww border window has been opened
+
       # echo "$evwid"
       # echo "$ev"
       echo "wid $wid"
@@ -33,7 +36,6 @@ wew | while read -r evwid; do
         # chwso -l "$wid"
       fi
       # xdo below -t "$focusedWid" "$wid"
-
     fi
   fi
 done
