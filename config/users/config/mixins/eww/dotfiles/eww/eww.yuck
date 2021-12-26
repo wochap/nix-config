@@ -10,7 +10,7 @@
                   )
                   :wm-ignore false
                   :stacking "bg"
-                  :windowtype "dock"
+                  :windowtype "dialog"
                   :class "border-window"
                   :focusable false
   (box :class "border")

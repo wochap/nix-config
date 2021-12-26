@@ -29,6 +29,17 @@ in
           }
         );
 
+        wmutils-core = super.wmutils-core.overrideAttrs (
+          _: {
+            src = pkgs.fetchFromGitHub {
+              owner = "wmutils";
+              repo = "core";
+              rev = "d989db82b83cf457a3fb9bcd87637cf29770f9a4";
+              sha256 = "sha256-ha6YCXk6/p21DAin2zwuOuqXCDjs2Bi5IHFRiVaIE3E=";
+            };
+          }
+        );
+
         orchis = super.orchis.overrideAttrs (
           _: {
             src = super.fetchFromGitHub {
