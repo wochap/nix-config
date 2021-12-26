@@ -35,7 +35,7 @@ in
           /* Custom scrollbar */
           * {
             scrollbar-width: auto;
-            scrollbar-color: #bd93f9 #282a36;
+            scrollbar-color: #424242 #686868;
           }
         '';
       };
