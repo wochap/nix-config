@@ -76,7 +76,7 @@ in
       # Setup keyboard
       layout = "us";
       xkbModel = "pc104";
-      xkbVariant = "altgr-intl";
+      # xkbVariant = "altgr-intl";
 
       # Setup monitors
       screenSection = ''
