@@ -13,7 +13,7 @@ bspc config urgent_border_color "#f85149"
 
 #### BSPWM configuration ####
 bspc config external_rules_command /etc/scripts/bspwm_external_rules.sh
-bspc config border_width 0
+bspc config border_width 2
 bspc config window_gap 64
 bspc config top_padding $(($POLYBAR_HEIGHT + $POLYBAR_MARGIN))
 bspc config split_ratio 0.5
@@ -50,7 +50,7 @@ bspc rule -a "Simplenote" state=tiled
 bspc rule -a "Sublime_text" state=floating sticky=on
 bspc rule -a "flameshot" state=floating sticky=on
 bspc rule -a "kmag" state=floating sticky=on
-bspc rule -a "mpv" state=floating sticky=on
+bspc rule -a "mpv" state=floating 
 bspc rule -a "Firefox" desktop=^5
 bspc rule -a "Google-chrome" desktop=^1
 
