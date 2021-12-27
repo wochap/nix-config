@@ -16,6 +16,27 @@
         "type": "github"
       }
     },
+    "darwin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-darwin"
+        ]
+      },
+      "locked": {
+        "lastModified": 1640117230,
+        "narHash": "sha256-W7LXeJavyIzNfNaoEsK65sEaCGqE9MVWvK0xSzNR4ls=",
+        "owner": "lnl7",
+        "repo": "nix-darwin",
+        "rev": "5851d9613edf8b2279746c7e5b9faac55ff17e8a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lnl7",
+        "repo": "nix-darwin",
+        "rev": "5851d9613edf8b2279746c7e5b9faac55ff17e8a",
+        "type": "github"
+      }
+    },
     "doom-emacs": {
       "flake": false,
       "locked": {
@@ -342,6 +363,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-darwin": {
+      "locked": {
+        "lastModified": 1640568342,
+        "narHash": "sha256-0zPl9HDcvIYAd5iT7b4OIjNKGPEPLPR7DZ0QJw/o6rA=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "3960078a2007e3662fc9c93637ee043ccdc7285e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "3960078a2007e3662fc9c93637ee043ccdc7285e",
+        "type": "github"
+      }
+    },
     "nixpkgs-wayland": {
       "inputs": {
         "cachix": "cachix",
@@ -541,10 +578,12 @@
     },
     "root": {
       "inputs": {
+        "darwin": "darwin",
         "home-manager": "home-manager",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-doom-emacs": "nix-doom-emacs",
         "nixpkgs": "nixpkgs_3",
+        "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-wayland": "nixpkgs-wayland",
         "prevstable": "prevstable",
         "rust-overlay": "rust-overlay"

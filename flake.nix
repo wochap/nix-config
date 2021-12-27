@@ -9,6 +9,9 @@
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=c12dee11e4975052975db37584ce49534877be7f";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=24daa13d67d41887f47db0e17262b244cd5b1afe";
+    nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
+    darwin.url = "github:lnl7/nix-darwin?rev=5851d9613edf8b2279746c7e5b9faac55ff17e8a";
+    darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
   };
 
   outputs = inputs:
@@ -26,6 +29,11 @@
         desktop-sway = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-sway";
         desktop-gnome = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
         asus-vivobook = mkSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
+      };
+      darwinConfigurations."mbp-darwin" = inputs.darwin.lib.darwinSystem {
+        system = "x86_64-darwin";
+        modules = [ ./hosts/mbp-darwin ];
+        specialArgs = { inherit inputs; nixpkgs = inputs.darwin; };
       };
     };
 }
