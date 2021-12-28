@@ -8,6 +8,8 @@ in
   config = {
     environment = {
       systemPackages = with pkgs; [
+        awf # widget factory
+
         # Themes
         tela-icon-theme
         orchis
@@ -18,9 +20,10 @@ in
 
         # Themes settings
         gtk3
+        gtk4
         gnome.gsettings-desktop-schemas
         gtk-engine-murrine
-        gnome-themes-extra
+        gnome.gnome-themes-extra
         gtk_engines
         lxappearance
       ] ++ [
@@ -31,6 +34,9 @@ in
       variables = {
         # Hide dbus errors
         "NO_AT_BRIDGE" = "1";
+      };
+      sessionVariables = {
+        "XDG_DATA_DIRS" = [ "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS" ];
       };
     };
 
@@ -60,6 +66,23 @@ in
           "file:///home/${userName}/Recordings"
           "file:///home/${userName}/Videos"
         ];
+        gtk3.extraCss = ''
+          /** Some apps use titlebar class and some window */
+          .titlebar,
+          window {
+            border-radius: 0;
+            box-shadow: none;
+          }
+
+          /** also remove shaddows */
+          decoration {
+            box-shadow: none;
+          }
+
+          decoration:backdrop {
+            box-shadow: none;
+          }
+        '';
       };
     };
   };
