@@ -24,6 +24,7 @@ in
         })
       ] ++ (if (!isDarwin) then [
         corefonts # basic fonts for office
+        symbola
         font-awesome
         font-awesome_4
         material-icons
