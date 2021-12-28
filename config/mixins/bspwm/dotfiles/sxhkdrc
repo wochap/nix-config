@@ -218,6 +218,8 @@ super + ctrl + n
 super + ctrl + shift + n
   dunstctl close
 
+super + ctrl + shift + Escape
+  dunstctl close-all
 
 ### MEDIA KEYBINDINGS
 
