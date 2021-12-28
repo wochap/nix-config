@@ -29,6 +29,9 @@ in
             kill $(lsof -t -i:"$1")
           }
 
+          # case-insensitive completion
+          zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
           ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
           ### https://github.com/zsh-users/zsh-autosuggestions/issues/238
           pasteinit() {
@@ -73,8 +76,7 @@ in
           share = false;
         };
         oh-my-zsh = {
-          enable = true;
-          plugins = [];
+          enable = false;
         };
         shellAliases = lib.mkMerge [
           config.environment.shellAliases
@@ -84,6 +86,7 @@ in
             # Setup exa
             ls = lib.mkForce "exa --icons --group-directories-first --across";
             la = lib.mkForce "exa --icons --group-directories-first --all --long";
+
             # Setup ptSh
             pwdd = "ptpwd";
             mkdir = "ptmkdir";
