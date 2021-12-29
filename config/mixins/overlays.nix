@@ -15,6 +15,8 @@ in
     nixpkgs.overlays = [
       # inputs.rust-overlay.overlay
 
+      inputs.neovim-nightly-overlay.overlay
+
       (self: super: {
         # Update polybar to latest version
         polybar = super.polybar.overrideAttrs (
