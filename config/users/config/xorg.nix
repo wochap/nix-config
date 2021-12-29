@@ -15,7 +15,7 @@ in
     ./mixins/gtk.nix
     ./mixins/picom
     ./mixins/polybar
-    ./mixins/zsh.nix
+    ./mixins/zsh
     ./mixins/mime-apps.nix
     ./mixins/vim
     ./mixins/eww

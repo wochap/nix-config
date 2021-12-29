@@ -8,7 +8,7 @@ in
   imports = [
     ./mixins/nix-common
     ./mixins/git.nix
-    ./mixins/zsh.nix
+    ./mixins/zsh
     ./mixins/vim
     ./mixins/kitty
     ./mixins/ptsh
