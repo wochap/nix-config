@@ -14,8 +14,12 @@ in
     environment = {
       systemPackages = with pkgs; [
         # oni2
+        # neovide
         # neovim-qt # better fractional scaling support
-        neovim # TODO: passextraMakeWrapperArgs?
+        # uivonim
+
+        # neovim # TODO: passextraMakeWrapperArgs?
+        neovim-nightly
 
         # required by treesitter
         tree-sitter
