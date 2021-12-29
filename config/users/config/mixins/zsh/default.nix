@@ -115,6 +115,8 @@ in
           source ${zsh-vim-mode}/zsh-vim-mode.plugin.zsh
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
           source ${dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
+
+          ${builtins.readFile ./awesome.zsh}
         '';
         enableCompletion = true;
         enableAutosuggestions = true;
