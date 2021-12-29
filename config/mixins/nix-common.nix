@@ -49,7 +49,7 @@ in
       # Enable flakes
       package = pkgs.nixUnstable;
       extraOptions = ''
-        experimental-features = nix-command flakes ca-references recursive-nix
+        experimental-features = nix-command flakes recursive-nix
       '';
 
       gc.automatic = true;
