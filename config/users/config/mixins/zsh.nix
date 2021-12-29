@@ -25,12 +25,43 @@ in
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
+          key=(
+            BackSpace  "''${terminfo[kbs]}"
+            Home       "''${terminfo[khome]}"
+            End        "''${terminfo[kend]}"
+            Insert     "''${terminfo[kich1]}"
+            Delete     "''${terminfo[kdch1]}"
+            Up         "''${terminfo[kcuu1]}"
+            Down       "''${terminfo[kcud1]}"
+            Left       "''${terminfo[kcub1]}"
+            Right      "''${terminfo[kcuf1]}"
+            PageUp     "''${terminfo[kpp]}"
+            PageDown   "''${terminfo[knp]}"
+          )
+
           function killport {
             kill $(lsof -t -i:"$1")
           }
 
+          # Allow changing directories without `cd`.
+          setopt AUTOCD
+
+          # Allow shift-tab in ZSH suggestions
+          bindkey '^[[Z' reverse-menu-complete
+
           # case-insensitive completion
           zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+          # highlight selection
+          zstyle ':completion:*' menu select
+
+          # better up arrow history
+          autoload -U up-line-or-beginning-search
+          autoload -U down-line-or-beginning-search
+          zle -N up-line-or-beginning-search
+          zle -N down-line-or-beginning-search
+          bindkey "$key[Up]" up-line-or-beginning-search # Up
+          bindkey "$key[Down]" down-line-or-beginning-search # Down
 
           ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
           ### https://github.com/zsh-users/zsh-autosuggestions/issues/238
@@ -56,12 +87,19 @@ in
           export DIRENV_LOG_FORMAT=
           eval "$(direnv hook zsh)"
 
-          # ZSH settings
-          unsetopt SHARE_HISTORY
-          unsetopt INC_APPEND_HISTORY
-          setopt INC_APPEND_HISTORY_TIME
-          setopt HIST_IGNORE_ALL_DUPS
+          # Remove superfluous blanks being added to history.
+          setopt HIST_REDUCE_BLANKS
+
+          # Don't display duplicates when searching the history with Ctrl+R.
           setopt HIST_FIND_NO_DUPS
+
+          # Don't enter _any_ repeating commands into the history.
+          setopt HIST_IGNORE_ALL_DUPS
+          # Ignore duplicates when writing history file.
+          setopt HIST_SAVE_NO_DUPS
+
+          # Sessions append to the history list in the order they exit.
+          setopt APPEND_HISTORY
 
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
           source ${dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
@@ -69,11 +107,14 @@ in
         enableCompletion = true;
         enableAutosuggestions = true;
         history = {
+          ignoreDups = false;
+          expireDuplicatesFirst = true;
           extended = true;
           ignoreSpace = true;
           save = 1000000000;
           size = 1000000000;
-          share = false;
+          # Shares current history file between all sessions as soon as shell closes
+          share = true;
         };
         oh-my-zsh = {
           enable = false;

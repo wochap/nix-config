@@ -7,6 +7,7 @@ in
 {
   config = {
     # environment.systemPackages = with pkgs; [
+    #   wl-gammactl
     #   gammastep
     #   redshift-wlr
     # ];
