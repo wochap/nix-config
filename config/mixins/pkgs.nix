@@ -49,7 +49,7 @@ in
       # 7w7
       # metasploit
       nmap
-      tightvnc
+      # tightvnc
 
       # DE
       flashfocus

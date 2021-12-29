@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # getBWindowyId() {
-#   result=$(xdo id -N eww-border) 
+#   result=$(xdo id -N eww-border)
 #   echo "${result^^}"
 # }
 
@@ -65,6 +65,10 @@ openBWindow() {
   fi
 
   bspc node "$(xdo id -N eww-border)" --flag hidden=off
+  # xdotool set_window --overrideredirect 1 "$(xdo id -N eww-border)"
+  # xdo hide "$(xdo id -N eww-border)"
+  # xdo show "$(xdo id -N eww-border)"
+  # xdo below -t "$(pfw)" "$(xdo id -N eww-border)"
 }
 
 bspc subscribe node_focus node_geometry node_remove node_state pointer_action desktop_focus | while read -r _ _ _ node; do

@@ -1,14 +1,14 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?rev=b6bf1ca717b0ead86769102c2e94d591cc45ee9b";
+    nixpkgs.url = "github:nixos/nixpkgs?rev=a0bf6b28dff054b4d95f28ff7e2d7b99b60aa027";
     prevstable.url = "github:nixos/nixpkgs?rev=cd63096d6d887d689543a0b97743d28995bc9bc3";
-    home-manager.url = "github:nix-community/home-manager?rev=829e89a16f4f96428d1b94e68d4c06107b5491c0";
+    home-manager.url = "github:nix-community/home-manager?rev=0b197562ab7bf114dd5f6716f41d4b5be6ccd357";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=c12dee11e4975052975db37584ce49534877be7f";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=24daa13d67d41887f47db0e17262b244cd5b1afe";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=c25636a6800b5b9d5da7282d9c0c61f87343b67c";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
     darwin.url = "github:lnl7/nix-darwin?rev=5851d9613edf8b2279746c7e5b9faac55ff17e8a";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
