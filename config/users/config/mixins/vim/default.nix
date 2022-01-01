@@ -33,22 +33,27 @@ in
         localPkgs.customNodePackages.markdownlint
         localPkgs.customNodePackages.stylelint
         lua51Packages.luacheck
+        nixfmt
         nodePackages.eslint_d
         python39Packages.pylint
         shellcheck
         shfmt
+        statix
         stylua
 
         # required by lspconfig
+        flow
         localPkgs.customNodePackages."@tailwindcss/language-server"
+        localPkgs.customNodePackages.cssmodules-language-server
         localPkgs.customNodePackages.emmet-ls
-        # npm i typescript typescript-language-server -g
-        # localPkgs.customNodePackages.typescript
-        # localPkgs.customNodePackages.typescript-language-server
         nodePackages.bash-language-server
         nodePackages.svelte-language-server
         nodePackages.vscode-langservers-extracted
+        rnix-lsp
         sumneko-lua-language-server
+        # localPkgs.customNodePackages.typescript
+        # localPkgs.customNodePackages.typescript-language-server
+        # npm i typescript typescript-language-server -g
       ];
       shellAliases = {
         nv = "nvim";
