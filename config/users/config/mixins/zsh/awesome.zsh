@@ -8,7 +8,7 @@ function pro() {
 }
 
 # run npm script (requires jq)
-fns() {
+function fns() {
   local script
   script=$(cat package.json | jq -r '.scripts | keys[] ' | sort | fzf) && npm run $(echo "$script")
 }
