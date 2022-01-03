@@ -73,10 +73,10 @@ in
       #dogecoin
 
       # APPS
+      betterdiscordctl
       bitwarden
       brave
       discord
-      betterdiscordctl
       dmenu
       filelight # view disk usage
       gparted
@@ -87,11 +87,11 @@ in
       robo3t
       screenkey # show key pressed
       simplenote
+      skypeforlinux
       slack
       sublime3 # text editor
       tty-clock
       zoom-us
-      skypeforlinux
       # antimicroX
       # teamviewer
       # mysql-workbench
