@@ -46,6 +46,10 @@
           source = ./scripts/bspwm_desktop_4.sh;
           mode = "0755";
         };
+        "scripts/bspwm_toggle_visibility.sh" = {
+          source = ./scripts/bspwm_toggle_visibility.sh;
+          mode = "0755";
+        };
       };
     };
     services.xserver = {
