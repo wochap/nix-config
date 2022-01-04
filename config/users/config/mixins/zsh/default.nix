@@ -84,8 +84,6 @@ in
           };
           nix_shell = {
             disabled = true;
-            symbol = "❄️ lorri ";
-            format = "via [$symbol]($style) ";
           };
           package = {
             disabled = true;
