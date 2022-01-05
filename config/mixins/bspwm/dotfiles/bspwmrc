@@ -27,6 +27,7 @@ bspc config single_monocle false
 #### BSPWM rules ####
 bspc rule -r "*" # clear rules
 # bspc rule -a *:* state=tiled
+bspc rule -a sun-awt-X11-XDialogPeer state=floating # java gui fixes
 bspc rule -a ".caffeine-wrapped" state=floating
 bspc rule -a ".pick-colour-picker-wrapped" state=floating sticky=on
 bspc rule -a "Blueberry.py" state=floating
@@ -50,7 +51,7 @@ bspc rule -a "Simplenote" state=tiled
 bspc rule -a "Sublime_text" state=floating sticky=on
 bspc rule -a "flameshot" state=floating sticky=on
 bspc rule -a "kmag" state=floating sticky=on
-bspc rule -a "mpv" state=floating 
+bspc rule -a "mpv" state=floating
 bspc rule -a "Firefox" desktop=^5
 bspc rule -a "Google-chrome" desktop=^1
 
