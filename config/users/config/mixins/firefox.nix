@@ -32,11 +32,6 @@ in
           }
         '';
         ".mozilla/firefox/default/chrome/userContent.css".text = ''
-          /* Custom scrollbar */
-          * {
-            scrollbar-width: auto;
-            scrollbar-color: #424242 #686868;
-          }
         '';
       };
       programs.firefox = {
@@ -50,6 +45,9 @@ in
             settings = {
               "browser.quitShortcut.disabled" =  true;
               "browser.tabs.tabMinWidth" = 5;
+
+              # custom scrollbar
+              "widget.non-native-theme.scrollbar.size" = 24;
 
               # Allow customChrome.css
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
