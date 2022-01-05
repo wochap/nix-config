@@ -3,6 +3,7 @@
 let
   hostName = "gdesktop";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
+  isHidpi = true;
   dpi = 144;
   userName = "gean";
 in
@@ -16,7 +17,7 @@ in
 
   config = {
     _userName = userName;
-    _isHidpi = true;
+    _isHidpi = isHidpi;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
@@ -37,7 +38,7 @@ in
       # changes in each release.
       home.stateVersion = "21.03";
 
-      xresources.properties = {
+      xresources.properties = lib.mkIf (isHidpi) {
         "Xft.dpi" = dpi;
       };
     };
@@ -71,7 +72,7 @@ in
     };
 
     services.xserver = {
-      dpi = dpi;
+      dpi = lib.mkIf (isHidpi) dpi;
 
       # Setup keyboard
       layout = "us";

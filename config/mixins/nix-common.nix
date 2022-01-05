@@ -1,9 +1,6 @@
 # Used by darwin|wayland|xorg config
 { config, pkgs, lib, ... }:
 
-let
-  isHidpi = config._isHidpi;
-in
 {
   # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4

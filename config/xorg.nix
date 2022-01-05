@@ -27,18 +27,13 @@ in
     ./mixins/vscode.nix
     ./mixins/mongodb.nix
     ./users/user-xorg.nix
+    ./mixins/clipmenu.nix
   ];
 
   config = {
     _displayServer = "xorg";
 
     environment = {
-      sessionVariables = {
-        # Setup clipboard manager (clipmenu)
-        CM_MAX_CLIPS = "30";
-        CM_OWN_CLIPBOARD = "1";
-        CM_SELECTIONS = "clipboard";
-      };
       etc = {
         "scripts/fix_caps_lock_delay.sh" = {
           source = ./scripts/fix_caps_lock_delay.sh;

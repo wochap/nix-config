@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  isHidpi = config._isHidpi;
   startsway = pkgs.writeTextFile {
     name = "startsway";
     destination = "/bin/startsway";
