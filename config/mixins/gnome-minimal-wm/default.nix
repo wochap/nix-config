@@ -1,9 +1,11 @@
 { config, pkgs, lib, ... }:
 
 let
-  localPkgs = import ../../packages { pkgs = pkgs; lib = lib; };
-in
-{
+  localPkgs = import ../../packages {
+    pkgs = pkgs;
+    lib = lib;
+  };
+in {
   config = {
     environment = {
       etc = {
@@ -19,11 +21,15 @@ in
     programs.dconf.enable = true;
 
     services = {
-      # Required for gnome `Online Accounts`, Calendar and Geary
       gnome = {
+        # Required for gnome `Online Accounts`, Calendar and Geary
         evolution-data-server.enable = true;
         gnome-online-accounts.enable = true;
         gnome-keyring.enable = true;
+
+        # Required by nautilus
+        tracker-miners.enable = true;
+        tracker.enable = true;
       };
 
       # Required by pinentry-gnome3
