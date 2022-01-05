@@ -35,7 +35,6 @@ super + e
 # Open terminal
 super + Return
   kitty
-#  kitty --listen-on unix:/tmp/kitty-default
 
 # Close and kill
 super + shift + {w,q}
@@ -52,6 +51,10 @@ super + y
 # Send the newest marked node to the newest preselected node in current desktop
 super + u
 	bspc node newest.marked.local -n newest.!automatic.local
+
+# Send current node to the newest preselected node
+super + shift + m
+  bspc node -n last.!automatic
 
 # swap the current node and the biggest node
 super + g
@@ -71,17 +74,14 @@ super + {t,shift + t,s}
 super + f
   bspc node -t \~fullscreen
 
-# Set the node flags (marked|locked|sticky|private)
-super + ctrl + {m,x,y,z}
-	bspc node -g {marked,locked,sticky,private}
+# Set the node flags (marked|locked|sticky|private|hidden)
+super + ctrl + {m,x,y,z,h}
+	bspc node -g {marked,locked,sticky,private,hidden}
 
 
 ### PRESELECT
 
 # preselect the direction
-super + ctrl + {h,j,k,l}
-	bspc node -p {west,south,north,east}
-
 super + ctrl + {Left,Down,Up,Right}
 	bspc node -p {west,south,north,east}
 
@@ -101,9 +101,6 @@ super + ctrl + shift + space
 ### FOCUS/SWAP
 
 # Focus or switch the node in the given direction
-super + {_,shift + }{h,j,k,l}
-	bspc node -{f,s} {west,south,north,east}
-
 super + {_,shift + }{Left,Down,Up,Right}
 	bspc node -{f,s} {west,south,north,east}
 
@@ -115,16 +112,12 @@ super + {p,b,comma,period}
 # super + grave
 #   bspc node -R 90
 
-# Move current window to a pre-selected space
-super + shift + m
-  bspc node -n last.!automatic
-
 # Rotate tree
 super + shift + {d,a}
   bspc node @/ -C {forward,backward}
 
 # Expand/contract a window by moving one of its side outward/inward
-super + s : {Left,Down,Up,Right}
+super + r : {Left,Down,Up,Right}
   STEP=40; SELECTION={1,2,3,4}; \
   bspc node -z $(echo "left -$STEP 0,bottom 0 $STEP,top 0 -$STEP,right $STEP 0" | cut -d',' -f$SELECTION) || \
   bspc node -z $(echo "right -$STEP 0,top 0 $STEP,bottom 0 -$STEP,left $STEP 0" | cut -d',' -f$SELECTION)
@@ -138,8 +131,8 @@ super + s : {Left,Down,Up,Right}
 # 	bspc desktop -f {prev,next}.local
 
 # focus the last node/desktop
-# super + {grave,Tab}
-# 	bspc {node,desktop} -f last
+super + {grave,Tab}
+	bspc {node,desktop} -f last
 
 # # Focus the older or newer node in the focus history
 # super + {o,i}
@@ -150,12 +143,16 @@ super + s : {Left,Down,Up,Right}
 # Focus or send to the given desktop
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} focused:'^{1-9,10}'
+
 super + {_, shift +}F1
   bspc {desktop -f,node -d} focused:'^5'
+
 super + {_, shift +}F2
   bspc {desktop -f,node -d} focused:'^6'
+
 super + {_, shift +}F3
   bspc {desktop -f,node -d} focused:'^7'
+
 super + {_, shift +}F4
   bspc {desktop -f,node -d} focused:'^8'
 
@@ -195,7 +192,7 @@ super + alt + l
 
 # Open file manager
 super + alt + f
-  nautilus
+  /etc/scripts/bspwm_toggle_visibility.sh Org.gnome.Nautilus nautilus
 
 # Screencast/record region to mp4
 super + alt + r
@@ -224,7 +221,6 @@ super + alt + z
 # Open quick note app
 super + alt + n
   subl
-#  com.github.lainsce.notejot
 
 super + ctrl + n
   dunstctl history-pop
@@ -274,35 +270,3 @@ XF86AudioPrev
 # XF86AudioMute
 #   /etc/eww_vol.sh mute
 
-### Remap
-
-# https://askubuntu.com/questions/863537/xdotool-how-do-i-select-text-using-shifthome-or-shiftend
-# https://github.com/baskerville/sxhkd/issues/86
-# https://unix.stackexchange.com/questions/65434/map-superleftright-to-home-end/65923#65923
-
-# super + Right
-#   xdotool keyup Right key --clearmodifiers End
-
-# super + Left
-#   xdotool keyup Left key --clearmodifiers Home
-
-# super + shift + Right
-#   xdotool keyup Right key --clearmodifiers Shift+End
-
-# super + shift + Left
-#   xdotool keyup Left key --clearmodifiers Shift+Home
-
-# super + ctrl + Right
-#   xdotool keyup Right key --clearmodifiers Control_L+End
-
-# super + ctrl + Left
-#   xdotool keyup Left key --clearmodifiers Control_L+Home
-
-# super + ctrl + shift + Right
-#   xdotool keyup Right key --clearmodifiers Control_L+Shift+End
-
-# super + ctrl + shift + Left
-#   xdotool keyup Left key --clearmodifiers Control_L+Shift+Home
-
-# super + d
-#   xdotool keyup d key --clearmodifiers Delete
