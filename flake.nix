@@ -12,6 +12,8 @@
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
     darwin.url = "github:lnl7/nix-darwin?rev=5851d9613edf8b2279746c7e5b9faac55ff17e8a";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
+    home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
+    home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
   };
 
   outputs = inputs:
