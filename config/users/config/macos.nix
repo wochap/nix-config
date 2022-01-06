@@ -12,6 +12,7 @@ in
     ./mixins/vim
     ./mixins/kitty
     ./mixins/ptsh
+    ./mixins/nnn
   ];
 
   config = {
