@@ -33,7 +33,7 @@
       darwinConfigurations."mbp-darwin" = inputs.darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [ ./hosts/mbp-darwin ];
-        specialArgs = { inherit inputs; nixpkgs = inputs.darwin; };
+        specialArgs = { inherit inputs; nixpkgs = inputs.nixpkgs-darwin; };
       };
     };
 }
