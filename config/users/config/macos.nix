@@ -11,8 +11,10 @@ in
     ./mixins/zsh
     ./mixins/vim
     ./mixins/kitty
+    ./mixins/alacritty
     ./mixins/ptsh
     ./mixins/nnn
+    ./mixins/neofetch
   ];
 
   config = {
