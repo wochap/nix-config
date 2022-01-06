@@ -13,18 +13,19 @@ in
 {
   config = {
     environment = {
-      sessionVariables = {
-        NNN_TRASH = "1";
-        NNN_FIFO = "/tmp/nnn.fifo";
-        SPLIT = "v";
-        KITTY_LISTEN_ON = ''unix:''${TMPDIR-/tmp}/kitty'';
-      };
       shellAliases = {
         f = "nnn";
       };
     };
 
     home-manager.users.${userName} = {
+      home.sessionVariables = {
+        NNN_TRASH = "1";
+        NNN_FIFO = "/tmp/nnn.fifo";
+        SPLIT = "v";
+        KITTY_LISTEN_ON = ''unix:''${TMPDIR-/tmp}/kitty'';
+      };
+
       programs.nnn = {
         enable = true;
         package = pkgs.nnn.override ({
