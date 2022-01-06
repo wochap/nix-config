@@ -22,7 +22,7 @@
         pkgs.lib.nixosSystem {
           system = system;
           modules = [(./. + "/hosts/${hostname}")];
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs; nixpkgs = inputs.nixpkgs; };
         };
     in
     {
