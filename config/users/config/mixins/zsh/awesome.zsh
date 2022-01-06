@@ -1,7 +1,9 @@
 # cd into git repository
 function pro() {
   projects=$(find ~/.config -maxdepth 1 -type d -execdir test -d {}/.git \; -print -prune)
+  projects+="\n"
   projects+=$(find ~/Projects -maxdepth 2 -type d -execdir test -d {}/.git \; -print -prune)
+  projects+="\n"
   projects+=$(find ~/ -maxdepth 1 -type d -execdir test -d {}/.git \; -print -prune)
 
   cd $(echo "$projects" | fzf)
