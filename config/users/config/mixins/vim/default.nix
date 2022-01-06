@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  isDarwin = config._displayServer == "darwin";
   userName = config._userName;
   localPkgs = import ../../../../packages { pkgs = pkgs; lib = lib; };
   # extraPackages = with pkgs; [
@@ -50,11 +51,12 @@ in
         nodePackages.svelte-language-server
         nodePackages.vscode-langservers-extracted
         rnix-lsp
-        sumneko-lua-language-server
         # localPkgs.customNodePackages.typescript
         # localPkgs.customNodePackages.typescript-language-server
         # npm i typescript typescript-language-server -g
-      ];
+      ] ++ (if (!isDarwin) then [
+        sumneko-lua-language-server
+      ] else []);
       shellAliases = {
         nv = "nvim";
       };
