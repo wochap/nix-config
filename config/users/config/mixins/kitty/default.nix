@@ -10,6 +10,10 @@ in
 {
   config = {
     environment = {
+      variables = lib.mkIf (isDarwin) {
+        # TERM = "xterm-kitty";
+        TERMINFO_DIRS = "${pkgs.kitty.terminfo.outPath}/share/terminfo:$TERMINFO_DIRS";
+      };
       shellAliases = {
         # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
         sshk = "kitty +kitten ssh";

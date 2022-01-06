@@ -4,25 +4,14 @@
   imports = [
     ./mixins/nix-common.nix
     ./mixins/darwin.nix
-    ./users/user-darwin.nix
     ./mixins/fonts.nix
     ./mixins/overlays.nix
     ./mixins/lorri.nix
+    ./users/user-darwin.nix
   ];
 
   config = {
     _displayServer = "darwin";
-
-    environment.systemPackages = with pkgs; [
-      lorri
-      direnv
-      fzf
-    ];
-
-    environment.variables = {
-      # TERM = "xterm-kitty";
-      TERMINFO_DIRS = "${pkgs.kitty.terminfo.outPath}/share/terminfo:$TERMINFO_DIRS";
-    };
 
     environment = {
       etc = {
