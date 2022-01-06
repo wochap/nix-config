@@ -1,17 +1,3 @@
-key=(
-  BackSpace  "${terminfo[kbs]}"
-  Home       "${terminfo[khome]}"
-  End        "${terminfo[kend]}"
-  Insert     "${terminfo[kich1]}"
-  Delete     "${terminfo[kdch1]}"
-  Up         "${terminfo[kcuu1]}"
-  Down       "${terminfo[kcud1]}"
-  Left       "${terminfo[kcub1]}"
-  Right      "${terminfo[kcuf1]}"
-  PageUp     "${terminfo[kpp]}"
-  PageDown   "${terminfo[knp]}"
-)
-
 # setup https://draculatheme.com/fzf
 export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
 
@@ -39,14 +25,6 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 # highlight selection
 zstyle ':completion:*' menu select
-
-# better up arrow history
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey "$key[Up]" up-line-or-beginning-search # Up
-bindkey "$key[Down]" down-line-or-beginning-search # Down
 
 ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
 ### https://github.com/zsh-users/zsh-autosuggestions/issues/238

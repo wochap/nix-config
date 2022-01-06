@@ -1,6 +1,7 @@
 { config, pkgs, lib,  ... }:
 
 let
+  isDarwin = config._displayServer == "darwin";
   userName = config._userName;
   dracula-zsh-syntax-highlighting = pkgs.fetchFromGitHub {
     owner = "dracula";
@@ -14,6 +15,20 @@ let
     rev = "1f9953b7d6f2f0a8d2cb8e8977baa48278a31eab";
     sha256 = "sha256-a+6EWMRY1c1HQpNtJf5InCzU7/RphZjimLdXIXbO6cQ=";
   };
+  zshExtra = if (isDarwin) then "" else ''
+    key=(
+      Up "''${terminfo[kcuu1]}"
+      Down "''${terminfo[kcud1]}"
+    )
+
+    # better up arrow history
+    autoload -U up-line-or-beginning-search
+    autoload -U down-line-or-beginning-search
+    zle -N up-line-or-beginning-search
+    zle -N down-line-or-beginning-search
+    bindkey "$key[Up]" up-line-or-beginning-search # Up
+    bindkey "$key[Down]" down-line-or-beginning-search # Down
+  '';
 in
 {
   config = {
@@ -31,7 +46,9 @@ in
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
-           ${builtins.readFile ./.zshrc.zsh}
+          ${builtins.readFile ./.zshrc.zsh}
+
+          ${zshExtra}
 
           # source ${zsh-vim-mode}/zsh-vim-mode.plugin.zsh
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
