@@ -123,8 +123,8 @@ super + r : {Left,Down,Up,Right}
   bspc node -z $(echo "right -$STEP 0,top 0 $STEP,bottom 0 -$STEP,left $STEP 0" | cut -d',' -f$SELECTION)
 
 # Focus the next|previous node in the current desktop
-# super + {_,shift + }n
-#   bspc node -f {next,prev}.local
+super + {_,shift + }n
+  bspc node -f {next,prev}.local.window
 
 # Focus the next|previous workspace in the current monitor
 # super + {Left,Right}

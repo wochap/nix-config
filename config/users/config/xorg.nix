@@ -30,7 +30,7 @@ in
     ./mixins/default-browser
     ./mixins/zathura
     ./mixins/nnn
-    ./mixins/xob
+    # ./mixins/xob
   ];
 
   config = {

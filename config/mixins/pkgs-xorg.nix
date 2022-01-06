@@ -17,9 +17,11 @@
       xorg.xeyes # check if app is running on wayland
       xorg.xkbcomp # print keymap
       xorg.xwininfo # print window info
+      xtitle
 
       # APPS CLI
       scrot # screen capture
+      autorandr
 
       # DE
       alttab # windows like alt + tab
