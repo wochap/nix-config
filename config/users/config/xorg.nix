@@ -7,6 +7,7 @@ in
 {
   imports = [
     ./mixins/bspwm
+    ./mixins/clipmenu.nix
     ./mixins/nix-common
     ./mixins/nixos
     ./mixins/redshift.nix

@@ -29,7 +29,6 @@
       i3lock-color
       blueberry # bluetooth tray
       caffeine-ng
-      clipmenu # clipboard manager
       feh # wallpaper manager
       kmag # magnifying glass
       nitrogen # wallpaper manager

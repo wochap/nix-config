@@ -1,9 +1,14 @@
 { config, pkgs, lib, ... }:
 
-{
+let userName = config._userName;
+in {
   config = {
-    environment = {
-      sessionVariables = {
+    environment.systemPackages = with pkgs; [ clipmenu ];
+
+    home-manager.users.${userName} = {
+      services.clipmenu.enable = true;
+
+      home.sessionVariables = {
         # Setup clipboard manager (clipmenu)
         CM_MAX_CLIPS = "30";
         CM_OWN_CLIPBOARD = "1";

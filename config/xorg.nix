@@ -26,7 +26,6 @@ in
     ./mixins/vscode.nix
     ./mixins/mongodb.nix
     ./users/user-xorg.nix
-    ./mixins/clipmenu.nix
   ];
 
   config = {
