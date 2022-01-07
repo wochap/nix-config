@@ -55,15 +55,6 @@ in {
       };
     };
 
-    services.xserver.displayManager = {
-      # defaultSession = "none+hm";
-      session = [{
-        manage = "desktop";
-        name = "hm";
-        start = "";
-      }];
-    };
-
     home-manager.users.${userName} = {
       xsession = {
         initExtra = "";

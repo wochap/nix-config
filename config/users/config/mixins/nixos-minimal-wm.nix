@@ -7,7 +7,16 @@ in
 {
   config = {
     home-manager.users.${userName} = {
-      # TODO: add common config between minimal wm?
+
+      # HACK: let home-manager xsession do the rest
+      services.xserver.displayManager = {
+        defaultSession = "none+hm";
+        session = [{
+          manage = "window";
+          name = "hm";
+          start = "";
+        }];
+      };
     };
   };
 }
