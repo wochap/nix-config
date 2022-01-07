@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
-{
+let userName = config._userName;
+in {
   config = {
     environment = {
       etc = {
@@ -31,7 +32,8 @@
           mode = "0755";
         };
         "scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh" = {
-          source = ./scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh;
+          source =
+            ./scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh;
           mode = "0755";
         };
         "scripts/bspwm_subscribe_polybar.sh" = {
@@ -52,14 +54,29 @@
         };
       };
     };
-    services.xserver = {
-      windowManager.bspwm = {
+
+    services.xserver.displayManager = {
+      # defaultSession = "none+hm";
+      session = [{
+        manage = "desktop";
+        name = "hm";
+        start = "";
+      }];
+    };
+
+    home-manager.users.${userName} = {
+      xsession = {
+        initExtra = "";
         enable = true;
-        configFile = "/etc/config/bspwmrc";
-        sxhkd.configFile = "/etc/config/sxhkdrc";
+        windowManager.bspwm = {
+          enable = true;
+          extraConfig = builtins.readFile ./dotfiles/bspwmrc;
+        };
       };
-      displayManager = {
-        defaultSession = "none+bspwm";
+
+      services.sxhkd = {
+        enable = true;
+        extraConfig = builtins.readFile ./dotfiles/sxhkdrc;
       };
     };
   };

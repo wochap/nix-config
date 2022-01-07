@@ -6,7 +6,6 @@ let
 in
 {
   imports = [
-    ./mixins/bspwm
     # ./mixins/awesomewm
     ./mixins/pkgs-xorg.nix
     ./mixins/nix-common.nix

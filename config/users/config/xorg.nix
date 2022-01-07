@@ -6,6 +6,7 @@ let
 in
 {
   imports = [
+    ./mixins/bspwm
     ./mixins/nix-common
     ./mixins/nixos
     ./mixins/redshift.nix
