@@ -61,6 +61,10 @@ in
           source = ./scripts/rofi-powermenu.sh;
           mode = "0755";
         };
+        "scripts/rofi-hidden-windows.sh" = {
+          source = ./scripts/rofi-hidden-windows.sh;
+          mode = "0755";
+        };
 
         "config/rofi-powermenu-theme.rasi" = {
           source = ./dotfiles/rofi-powermenu-theme.rasi;
@@ -80,10 +84,6 @@ in
         };
         "config/rofi-help-theme.rasi" = {
           source = ./dotfiles/rofi-help-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-hidden-windows.sh" = {
-          source = ./scripts/rofi-hidden-windows.sh;
           mode = "0755";
         };
         "config/rofi-clipboard-theme.rasi" = {

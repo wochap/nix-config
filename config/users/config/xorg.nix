@@ -6,6 +6,7 @@ let
 in
 {
   imports = [
+    ./mixins/nixos-minimal-wm.nix
     ./mixins/bspwm
     ./mixins/clipmenu.nix
     ./mixins/nix-common
