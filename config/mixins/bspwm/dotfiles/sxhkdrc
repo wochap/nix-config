@@ -61,8 +61,8 @@ super + g
   bspc node -s biggest
 
 # Kinda of `MacOS alt + grave` like
-super + grave
-  bspc node last.same_class.local -f
+# super + grave
+#   bspc node last.same_class.local -f
 
 ### STATE/FLAGS
 
@@ -133,6 +133,10 @@ super + {_,shift + }n
 # focus the last node/desktop
 super + {grave,Tab}
 	bspc {node,desktop} -f last
+
+# Open hidden windows
+super + alt + Tab
+  /etc/scripts/rofi-hidden-windows.sh
 
 # # Focus the older or newer node in the focus history
 # super + {o,i}

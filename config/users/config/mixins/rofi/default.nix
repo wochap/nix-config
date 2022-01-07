@@ -82,6 +82,10 @@ in
           source = ./dotfiles/rofi-help-theme.rasi;
           mode = "0755";
         };
+        "config/rofi-hidden-windows.sh" = {
+          source = ./scripts/rofi-hidden-windows.sh;
+          mode = "0755";
+        };
         "config/rofi-clipboard-theme.rasi" = {
           source = ./dotfiles/rofi-clipboard-theme.rasi;
           mode = "0755";
