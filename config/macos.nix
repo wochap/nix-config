@@ -6,7 +6,7 @@
     ./mixins/darwin.nix
     ./mixins/fonts.nix
     ./mixins/overlays.nix
-    ./mixins/lorri.nix
+    ./mixins/lorri
     ./users/user-darwin.nix
   ];
 

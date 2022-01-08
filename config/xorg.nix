@@ -21,7 +21,7 @@ in
     ./mixins/kde-pkgs.nix # Comment on first install
     ./mixins/thunar.nix
     ./mixins/docker.nix # Comment on first install
-    ./mixins/lorri.nix
+    ./mixins/lorri
     ./mixins/vscode.nix
     ./mixins/mongodb.nix
     ./users/user-xorg.nix

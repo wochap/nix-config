@@ -15,7 +15,7 @@
     ./mixins/kde-pkgs.nix # Comment on first install
     ./mixins/thunar.nix # Comment on first install
     ./mixins/docker.nix # Comment on first install
-    ./mixins/lorri.nix
+    ./mixins/lorri
     ./mixins/vscode.nix
     ./users/user-wayland.nix
   ];
