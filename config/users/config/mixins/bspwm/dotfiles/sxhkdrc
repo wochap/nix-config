@@ -232,7 +232,7 @@ super + alt + n
 
 # Open monitor
 super + alt + m
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-htop 'kitty --class kitty-htop -e htop'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-htop 'kitty --class kitty-htop --title htop -e htop'
 
 super + ctrl + n
   dunstctl history-pop
