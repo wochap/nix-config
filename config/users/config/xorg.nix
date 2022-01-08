@@ -16,6 +16,7 @@ in
     ./mixins/fish
     ./mixins/git.nix
     ./mixins/gtk.nix
+    ./mixins/qt.nix
     ./mixins/picom
     ./mixins/polybar
     ./mixins/zsh

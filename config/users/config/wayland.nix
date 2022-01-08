@@ -12,6 +12,7 @@ in
     ./mixins/fish
     ./mixins/git.nix
     ./mixins/gtk.nix
+    # ./mixins/qt.nix
     ./mixins/zsh
     ./mixins/mime-apps.nix
     ./mixins/vim
