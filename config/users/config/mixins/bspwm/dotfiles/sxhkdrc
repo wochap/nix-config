@@ -124,7 +124,7 @@ super + r : {Left,Down,Up,Right}
 
 # Focus the next|previous node in the current desktop
 super + {_,shift + }n
-  bspc node -f {next,prev}.local.window
+  bspc node -f {next,prev}.local.window.!hidden
 
 # Focus the next|previous workspace in the current monitor
 # super + {Left,Right}
