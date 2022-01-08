@@ -2,6 +2,9 @@
 
 let
   userName = config._userName;
+  hmConfig = config.home-manager.users.${userName};
+  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  currentDirectory = builtins.toString ./.;
 in
 {
   config = {
@@ -13,26 +16,8 @@ in
 
     home-manager.users.${userName} = {
       home.file = {
-        ".envrc".text = ''
-          HOST_XDG_DATA_DIRS="''${XDG_DATA_DIRS:-}"
-          eval "$(lorri direnv)"
-          export XDG_DATA_DIRS="''${XDG_DATA_DIRS}:''${HOST_XDG_DATA_DIRS}"
-        '';
-        "shell.nix".text = ''
-          let
-            pkgs = import <nixpkgs> {};
-          in pkgs.mkShell rec {
-            name = "home";
-            buildInputs = with pkgs; [
-              python3
-              nodePackages.gulp
-              nodePackages.http-server
-              nodePackages.nodemon
-              nodejs-14_x
-              (yarn.override { nodejs = nodejs-14_x; })
-            ];
-          }
-        '';
+        ".envrc".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/.envrc";
+        "shell.nix".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/shell.nix";
       };
     };
   };
