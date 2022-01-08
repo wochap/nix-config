@@ -1,9 +1,12 @@
 { config, pkgs, lib,  ... }:
 
 let
+  localPkgs = import ../../../../packages { pkgs = pkgs; lib = lib; };
   userName = config._userName;
   isXorg = config._displayServer == "xorg";
-  localPkgs = import ../../../../packages { pkgs = pkgs; lib = lib; };
+  hmConfig = config.home-manager.users.${userName};
+  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  currentDirectory = builtins.toString ./.;
 in
 {
   config = {
@@ -43,7 +46,7 @@ in
     };
     home-manager.users.${userName} = lib.mkIf isXorg {
       xdg.configFile = {
-        "polybar/main.ini".source = ./dotfiles/main.ini;
+        "polybar/main.ini".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/main.ini";
         "polybar/scripts/docker_info.sh".source = ./dotfiles/scripts/docker_info.sh;
         "polybar/scripts/get_gpu_status.sh".source = ./dotfiles/scripts/get_gpu_status.sh;
         "polybar/scripts/get_spotify_status.sh".source = ./dotfiles/scripts/get_spotify_status.sh;

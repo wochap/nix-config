@@ -3,6 +3,9 @@
 let
   isWayland = config._displayServer == "wayland";
   userName = config._userName;
+  hmConfig = config.home-manager.users.${userName};
+  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  currentDirectory = builtins.toString ./.;
 in
 {
   config = {
@@ -44,7 +47,7 @@ in
 
     home-manager.users.${userName} = {
       xdg.configFile = {
-        "eww".source = ./dotfiles/eww;
+        "eww".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/eww";
       };
     };
   };
