@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 
-nodes=$(bspc query -N -n .hidden.local.window)
+nodesArray=( $(bspc query -N -n .hidden.local.window) )
 rows=""
-while read -r instance; do
+
+for instance in "${nodesArray[@]}"
+do
   title=$(xtitle "$instance")
   class=$(xprop -id "$instance" WM_CLASS | awk -F '"' '{print $4}')
   tab=$'\t'
-  rows+="${class}${tab}${title}"
-done <<<"${nodes}"
+  nl=$'\n'
+  rows+="${class}${tab}${title}${nl}"
+done
 
-s=$(echo "$rows" | column -t -s $'\t' | rofi -dmenu -format -i -p  -markup-rows -theme /etc/config/rofi-clipboard-theme.rasi)
+s=$(echo "$rows" | column -t -s $'\t' | rofi -dmenu -format i -p  -markup-rows -theme /etc/config/rofi-clipboard-theme.rasi)
 
 if [[ -n "$s" ]]; then
-  bspc node "${nodes[$s]}" -n focused -g hidden=off -f
+  node="${nodesArray[$s]}"
+  bspc node "$node" -n focused -g hidden=off -f
 fi
-

@@ -53,6 +53,10 @@ in
           source = ./dotfiles/scripts/bspwm_monocle_windows.sh;
           executable = true;
         };
+        "polybar/scripts/bspwm_hidden_windows.sh" = {
+          source = ./dotfiles/scripts/bspwm_hidden_windows.sh;
+          executable = true;
+        };
         "polybar/scripts/rextie_usd.js" = {
           source = ./dotfiles/scripts/rextie_usd.js;
           executable = true;
