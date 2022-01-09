@@ -6,7 +6,8 @@ let
   isXorg = config._displayServer == "xorg";
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
-  currentDirectory = builtins.toString ./.;
+  configDirectory = config._configDirectory;
+  currentDirectory = "${configDirectory}/config/users/config/mixins/polybar";
 in
 {
   config = {

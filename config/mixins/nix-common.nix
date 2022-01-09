@@ -24,6 +24,12 @@
       example = "gean";
       description = "Default user name";
     };
+    _configDirectory = lib.mkOption {
+      type = lib.types.str;
+      default = "/home/gean/nix-config";
+      example = "/home/gean/nix-config";
+      description = "Path of config folder";
+    };
   };
 
   config = {

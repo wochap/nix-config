@@ -6,6 +6,8 @@ let
   isHidpi = true;
   dpi = 144;
   userName = "gean";
+  hmConfig = config.home-manager.users.${userName};
+  configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
 in
 {
   imports = [
@@ -18,6 +20,7 @@ in
   config = {
     _userName = userName;
     _isHidpi = isHidpi;
+    _configDirectory = configDirectory;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
