@@ -514,6 +514,23 @@
         "type": "github"
       }
     },
+    "ohmyzsh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641668612,
+        "narHash": "sha256-JCH5IWYKetJkAUsd0OEw4jhfo0CoRHqWexjLh03Nvsc=",
+        "owner": "ohmyzsh",
+        "repo": "ohmyzsh",
+        "rev": "c6e7f8905fb61b927f12f43fb57f8c514cd48a67",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ohmyzsh",
+        "repo": "ohmyzsh",
+        "rev": "c6e7f8905fb61b927f12f43fb57f8c514cd48a67",
+        "type": "github"
+      }
+    },
     "org": {
       "flake": false,
       "locked": {
@@ -620,6 +637,7 @@
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-wayland": "nixpkgs-wayland",
+        "ohmyzsh": "ohmyzsh",
         "prevstable": "prevstable",
         "rust-overlay": "rust-overlay"
       }

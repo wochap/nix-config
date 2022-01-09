@@ -14,6 +14,9 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
     home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
     home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
+
+    ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
+    ohmyzsh.flake = false;
   };
 
   outputs = inputs:
@@ -22,7 +25,7 @@
         pkgs.lib.nixosSystem {
           system = system;
           modules = [(./. + "/hosts/${hostname}")];
-          specialArgs = { inherit inputs; nixpkgs = inputs.nixpkgs; };
+          specialArgs = { inherit inputs; nixpkgs = pkgs; };
         };
     in
     {
