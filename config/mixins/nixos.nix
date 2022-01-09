@@ -22,8 +22,15 @@ in
 
     # TODO: install cachix?
 
-    environment.shellAliases = {
-      open = "xdg-open";
+    environment = {
+      systemPackages = with pkgs; [
+        shared-mime-info
+        xdg-user-dirs
+      ];
+
+      shellAliases = {
+        open = "xdg-open";
+      };
     };
 
     # Remember private keys?
@@ -111,5 +118,10 @@ in
 
     documentation.man.generateCaches = true;
     documentation.dev.enable = true;
+
+    # Shell integration for VTE terminals
+    # Required for some gtk apps
+    programs.bash.vteIntegration = lib.mkDefault true;
+    programs.zsh.vteIntegration = lib.mkDefault true;
   };
 }
