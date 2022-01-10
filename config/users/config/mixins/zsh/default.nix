@@ -56,6 +56,7 @@ in
           source ${inputs.ohmyzsh}/plugins/web-search/web-search.plugin.zsh
           source ${inputs.ohmyzsh}/plugins/copydir/copydir.plugin.zsh
           source ${inputs.ohmyzsh}/plugins/copyfile/copyfile.plugin.zsh
+          source ${inputs.ohmyzsh}/plugins/dirhistory/dirhistory.plugin.zsh
 
           ${builtins.readFile ./awesome.zsh}
         '';
