@@ -16,5 +16,5 @@ s=$(echo "$rows" | column -t -s $'\t' | rofi -dmenu -format i -p  -markup-row
 
 if [[ -n "$s" ]]; then
   node="${nodesArray[$s]}"
-  bspc node "$node" -n focused -g hidden=off -f
+  bspc node "$node" --flag hidden=off --to-monitor focused --to-desktop focused --to-node focused --focus
 fi

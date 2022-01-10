@@ -216,7 +216,7 @@ super + alt + c
 
 # Open Browser
 super + alt + b ; {f,c,b}
-  {firefox,google-chrome-stable,brave}
+  /etc/scripts/bspwm_open_or_focus.sh {firefox,google-chrome-stable,brave}
 
 # Open terminal
 super + alt + t ; {k,a}

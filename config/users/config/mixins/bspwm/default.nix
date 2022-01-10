@@ -52,6 +52,10 @@ in {
           source = ./scripts/bspwm_toggle_visibility.sh;
           mode = "0755";
         };
+        "scripts/bspwm_open_or_focus.sh" = {
+          source = ./scripts/bspwm_open_or_focus.sh;
+          mode = "0755";
+        };
       };
     };
 

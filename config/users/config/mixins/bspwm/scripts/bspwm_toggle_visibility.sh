@@ -32,6 +32,6 @@ if [ -z "${id}" ]; then
   coproc $executable
 else
   while read -r instance; do
-    bspc node "${instance}" --flag hidden --to-monitor focused --focus
+    bspc node "${instance}" --flag hidden --to-monitor focused --to-desktop focused --to-node focused --focus
   done <<<"${id}"
 fi
