@@ -9,6 +9,12 @@ function pro() {
   cd $(echo "$projects" | fzf)
 }
 
+function scripts() {
+  scripts=$(find /etc/scripts -type f -name "*.sh")
+
+  $(echo "$scripts" | fzf)
+}
+
 # run npm script (requires jq)
 function fns() {
   local script
