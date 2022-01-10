@@ -66,7 +66,7 @@ in
       displayManager = {
         lightdm = {
           enable = true;
-          background = ./assets/wallpaper.jpg;
+          background = lib.mkForce ./assets/wallpaper.jpg;
           greeters.gtk = {
             enable = true;
             cursorTheme = {
@@ -91,8 +91,6 @@ in
               "~clock"
               "~spacer"
               "~session"
-              "~language"
-              "~a11y"
               "~power"
             ];
           };
