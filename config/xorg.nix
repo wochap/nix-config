@@ -48,6 +48,11 @@ in
           source = ./scripts/scrrec.sh;
           mode = "0755";
         };
+
+        "scripts/random-bg.sh" = {
+          source = ./scripts/random-bg.sh;
+          mode = "0755";
+        };
       };
     };
     services.xserver = {
