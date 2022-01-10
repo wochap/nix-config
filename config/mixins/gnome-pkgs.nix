@@ -4,6 +4,8 @@
   config = {
     environment = {
       systemPackages = with pkgs; [
+        gnome-menus
+
         # APPS
         # gnome.bijiben
         # gtimelog
@@ -12,7 +14,6 @@
         gnome.cheese # test webcam
         gnome.dconf-editor
         gnome.eog # image viewer
-        gnome.file-roller # archive manager
         gnome.geary # email client
         gnome.gnome-calculator
         gnome.gnome-calendar

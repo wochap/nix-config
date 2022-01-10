@@ -11,6 +11,7 @@
         xfce.exo # opener exo-open
         xfce.thunar-volman # auto mont devices
         xfce.xfconf # where thunar settings are saved
+        xfce.xfce4-settings
         (xfce.thunar.override {
           thunarPlugins = [
             xfce.thunar-archive-plugin

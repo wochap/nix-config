@@ -70,6 +70,7 @@
 
       # Links those paths from derivations to /run/current-system/sw
       pathsToLink = [
+        "/share"
         "/libexec"
       ];
     };
@@ -77,5 +78,9 @@
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
     programs.zsh.enable = true;
     programs.fish.enable = true;
+
+    # home-manager options
+    home-manager.useGlobalPkgs = true;
+    home-manager.useUserPackages = false;
   };
 }

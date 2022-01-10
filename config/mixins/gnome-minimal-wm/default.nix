@@ -15,6 +15,9 @@
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
     programs.dconf.enable = true;
 
+    # Required for gnome file managers
+    programs.file-roller.enable = true;
+
     services = {
       gnome = {
         # Required for gnome `Online Accounts`, Calendar and Geary
@@ -32,9 +35,14 @@
         enable = true;
         packages = [ pkgs.gcr ];
       };
+
+      # Required to manipulate storage devices
+      udisks2.enable = true;
     };
 
     # Fix gnome-keyring when sddm is enabled
     security.pam.services.sddm.enableGnomeKeyring = true;
+
+    services.gnome.gnome-settings-daemon.enable = true;
   };
 }
