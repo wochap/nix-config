@@ -62,7 +62,6 @@ in
       # DE CLI
       gitAndTools.gh
       gotop # monitor system
-      htop # monitor system
       pamixer # audio cli
       playerctl # media player cli
       systemd
