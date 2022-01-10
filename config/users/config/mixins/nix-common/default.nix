@@ -12,7 +12,6 @@ in
       # Setup dotfiles
       home.file = {
         ".ssh/config".source = ./dotfiles/ssh-config;
-        "Pictures/backgrounds/default.jpg".source = ../../../../assets/wallpaper.jpg;
         ".config/nixpkgs/config.nix".text = ''
           { allowUnfree = true; }
         '';
