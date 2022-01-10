@@ -28,6 +28,10 @@ super + slash
 super + v
   /etc/scripts/rofi-clipboard.sh
 
+# Clear clipboard
+super + shift + v
+  clipdel -d ".*"
+
 # Show emojis
 super + e
   /etc/scripts/rofi-emoji.sh
