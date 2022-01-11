@@ -56,6 +56,7 @@ bspc rule -a "Firefox" desktop=^5
 bspc rule -a "Google-chrome" desktop=^1
 bspc rule -a 'kitty-htop' state=floating sticky=on center=on border=off rectangle=1500x1200+0+0
 bspc rule -a 'kitty-scratch' state=floating sticky=on center=on border=off rectangle=1500x1200+0+0
+bspc rule -a 'kitty-neorg' state=floating sticky=on center=on border=off rectangle=1500x1200+0+0
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
