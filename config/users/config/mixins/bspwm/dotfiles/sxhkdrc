@@ -232,7 +232,7 @@ super + alt + z
 
 # Open quick note app
 super + alt + n
-  subl
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-neorg "kitty --class kitty-neorg --title neorg -e /etc/scripts/start-neorg.sh"
 
 # Open monitor
 super + alt + m

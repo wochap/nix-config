@@ -53,6 +53,11 @@ in
           source = ./scripts/random-bg.sh;
           mode = "0755";
         };
+
+        "scripts/start-neorg.sh" = {
+          source = ./scripts/start-neorg.sh;
+          mode = "0755";
+        };
       };
     };
     services.xserver = {
