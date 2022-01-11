@@ -34,6 +34,7 @@ in
     ./mixins/default-browser
     ./mixins/zathura
     ./mixins/nnn
+    ./mixins/bat.nix
     ./mixins/htop.nix
     # ./mixins/xob
   ];

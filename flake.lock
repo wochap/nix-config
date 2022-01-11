@@ -70,6 +70,23 @@
         "type": "github"
       }
     },
+    "dracula-sublime": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631389861,
+        "narHash": "sha256-cUzPozktzJcLJxux/R99dKCRSexqjxBnFc8ekDdj3wc=",
+        "owner": "dracula",
+        "repo": "sublime",
+        "rev": "09faa29057c3c39e9a45f3a51a5e262375e3bf9f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "sublime",
+        "rev": "09faa29057c3c39e9a45f3a51a5e262375e3bf9f",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "flake": false,
       "locked": {
@@ -482,6 +499,23 @@
         "type": "github"
       }
     },
+    "nnn": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641725197,
+        "narHash": "sha256-+W8fSzE1QzFkJjIlI+N5V7BJSl+LMvQZ55NEdsdVyTM=",
+        "owner": "jarun",
+        "repo": "nnn",
+        "rev": "b8b0bab4266a635519f605c2e3e193e392674273",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jarun",
+        "repo": "nnn",
+        "rev": "b8b0bab4266a635519f605c2e3e193e392674273",
+        "type": "github"
+      }
+    },
     "nose": {
       "flake": false,
       "locked": {
@@ -611,6 +645,23 @@
         "type": "github"
       }
     },
+    "ranger": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1639429745,
+        "narHash": "sha256-fyhzypHTXLthplOrO9ykn6zqBCxSory4FSGky07Rhw4=",
+        "owner": "ranger",
+        "repo": "ranger",
+        "rev": "7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ranger",
+        "repo": "ranger",
+        "rev": "7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6",
+        "type": "github"
+      }
+    },
     "revealjs": {
       "flake": false,
       "locked": {
@@ -630,6 +681,7 @@
     "root": {
       "inputs": {
         "darwin": "darwin",
+        "dracula-sublime": "dracula-sublime",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
@@ -637,8 +689,10 @@
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-wayland": "nixpkgs-wayland",
+        "nnn": "nnn",
         "ohmyzsh": "ohmyzsh",
         "prevstable": "prevstable",
+        "ranger": "ranger",
         "rust-overlay": "rust-overlay"
       }
     },

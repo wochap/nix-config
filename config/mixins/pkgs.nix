@@ -8,7 +8,6 @@ in
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
-      bat
       bc # calculator cli
       busybox
       cached-nix-shell # fast nix-shell scripts
