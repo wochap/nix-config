@@ -12,7 +12,7 @@ in
     ./mixins/nix-common
     ./mixins/nixos
     ./mixins/redshift.nix
-    ./mixins/firefox.nix
+    ./mixins/firefox
     ./mixins/fish
     ./mixins/git.nix
     ./mixins/gtk.nix

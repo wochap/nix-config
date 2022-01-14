@@ -32,6 +32,7 @@ in
           }
         '';
         ".mozilla/firefox/default/chrome/userContent.css".text = ''
+          ${builtins.readFile ./assets/jira.css}
         '';
       };
       programs.firefox = {
