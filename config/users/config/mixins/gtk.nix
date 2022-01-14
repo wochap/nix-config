@@ -54,10 +54,11 @@ in {
           package = pkgs.tela-icon-theme;
         };
         theme = {
-          name = "Orchis-dark";
+          name = "Orchis";
           package = pkgs.orchis;
         };
         gtk3.extraConfig = {
+          gtk-application-prefer-dark-theme = true;
           gtk-fallback-icon-theme = "gnome";
 
           # Hide minimize and maximize buttons
