@@ -8,7 +8,7 @@
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=c12dee11e4975052975db37584ce49534877be7f";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=c25636a6800b5b9d5da7282d9c0c61f87343b67c";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=b8308a5693b3b027d75a16ea65dca8d98619027b";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
     darwin.url = "github:lnl7/nix-darwin?rev=5851d9613edf8b2279746c7e5b9faac55ff17e8a";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -24,6 +24,8 @@
     nnn.flake = false;
     dracula-sublime.url = "github:dracula/sublime?rev=09faa29057c3c39e9a45f3a51a5e262375e3bf9f";
     dracula-sublime.flake = false;
+    dracula-xresources.url = "github:dracula/xresources?rev=49765e34adeebca381db1c3e5516b856ff149c93";
+    dracula-xresources.flake = false;
   };
 
   outputs = inputs:

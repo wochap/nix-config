@@ -87,6 +87,23 @@
         "type": "github"
       }
     },
+    "dracula-xresources": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631388950,
+        "narHash": "sha256-PoYRTnmMN6O7wVTHlvDRvBJSmrhPeH2gaiJwAaNLrRM=",
+        "owner": "dracula",
+        "repo": "xresources",
+        "rev": "49765e34adeebca381db1c3e5516b856ff149c93",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "xresources",
+        "rev": "49765e34adeebca381db1c3e5516b856ff149c93",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "flake": false,
       "locked": {
@@ -314,17 +331,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1640679301,
-        "narHash": "sha256-SE5VYGmDyjkyoSKAhNU8JiAJCUuxxv9s+hbspl+wPcg=",
+        "lastModified": 1641975288,
+        "narHash": "sha256-TPo1DPDOfV77EpZAyavyUE1dkKjpoCNf2SoUJi68jak=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "c25636a6800b5b9d5da7282d9c0c61f87343b67c",
+        "rev": "b8308a5693b3b027d75a16ea65dca8d98619027b",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "c25636a6800b5b9d5da7282d9c0c61f87343b67c",
+        "rev": "b8308a5693b3b027d75a16ea65dca8d98619027b",
         "type": "github"
       }
     },
@@ -384,11 +401,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1640540585,
-        "narHash": "sha256-cCmknKFjWgam9jq+58wSd0Z4REia8mjBP65kXcL3ki8=",
+        "lastModified": 1641887635,
+        "narHash": "sha256-kDGpufwzVaiGe5e1sBUBPo9f1YN+nYHJlYqCaVpZTQQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ac169ec6371f0d835542db654a65e0f2feb07838",
+        "rev": "b2737d4980a17cc2b7d600d7d0b32fd7333aca88",
         "type": "github"
       },
       "original": {
@@ -682,6 +699,7 @@
       "inputs": {
         "darwin": "darwin",
         "dracula-sublime": "dracula-sublime",
+        "dracula-xresources": "dracula-xresources",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
