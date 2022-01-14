@@ -274,15 +274,3 @@ XF86AudioPlay
 XF86AudioPrev
 	playerctl previous
 
-# Increase volume
-# XF86AudioRaiseVolume
-#   /etc/eww_vol.sh up
-
-# Decrease volume
-# XF86AudioLowerVolume
-#   /etc/eww_vol.sh down
-
-# Toggle mute
-# XF86AudioMute
-#   /etc/eww_vol.sh mute
-
