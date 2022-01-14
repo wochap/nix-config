@@ -53,6 +53,7 @@ in
           # source ${zsh-vim-mode}/zsh-vim-mode.plugin.zsh
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
           source ${dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
+          source ${inputs.ohmyzsh}/lib/clipboard.zsh
           source ${inputs.ohmyzsh}/plugins/web-search/web-search.plugin.zsh
           source ${inputs.ohmyzsh}/plugins/copydir/copydir.plugin.zsh
           source ${inputs.ohmyzsh}/plugins/copyfile/copyfile.plugin.zsh
