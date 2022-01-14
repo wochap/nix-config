@@ -43,6 +43,7 @@ in
         stylua
 
         # required by lspconfig
+        clang-tools
         flow
         localPkgs.customNodePackages."@tailwindcss/language-server"
         localPkgs.customNodePackages.cssmodules-language-server
