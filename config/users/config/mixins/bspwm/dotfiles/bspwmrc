@@ -69,10 +69,10 @@ done
 # /etc/scripts/bspwm_borders.sh &
 
 # workspace 5
-coproc (firefox > /dev/null 2>&1)
+firefox > /dev/null 2>&1 &
 
 # workspace 1
-coproc (google-chrome-stable > /dev/null 2>&1)
+google-chrome-stable > /dev/null 2>&1 &
 
 bspc config ignore_ewmh_focus false
 
