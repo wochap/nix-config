@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
-nvim +'cd ~/neorg' +'NeorgStart'
-
+nvim +'cd ~/neorg'
 
