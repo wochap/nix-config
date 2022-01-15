@@ -4,7 +4,7 @@ let
   hostName = "gdesktop";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
   isHidpi = true;
-  dpi = 144;
+  dpi = 144; # let xfce scale the windows
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
@@ -42,8 +42,16 @@ in
 
       xresources.properties = lib.mkIf (isHidpi) {
         "Xft.dpi" = dpi;
+        "Xft.antialias" = 1;
+        "Xft.rgba" = "rgb";
       };
     };
+
+    # environment = {
+    #   sessionVariables = {
+    #     GDK_DPI_SCALE = "0.5";
+    #   };
+    # };
 
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;

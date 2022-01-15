@@ -15,7 +15,7 @@ in
     environment = {
       systemPackages = with pkgs; [
         # oni2
-        # neovide
+        neovide
         # neovim-qt # better fractional scaling support
         # uivonim
 

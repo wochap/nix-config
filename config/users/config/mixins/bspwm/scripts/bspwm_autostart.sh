@@ -13,8 +13,8 @@ picom --experimental-backends &
 blueberry-tray &
 caffeine -a &
 sh /etc/scripts/polybar-start.sh &
-sh /etc/scripts/random-bg.sh &
 sh /etc/scripts/start-minimal-xfce4.sh &
+sh /etc/scripts/random-bg.sh &
 # TODO: add evolution
 # sh /etc/scripts/fix_caps_lock_delay.sh &
 # sh /etc/scripts/eww_start.sh &

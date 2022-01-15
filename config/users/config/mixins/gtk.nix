@@ -42,7 +42,7 @@ in {
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Tela dark";
+          name = "Tela-dark";
           package = pkgs.tela-icon-theme;
         };
         theme = {
