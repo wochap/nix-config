@@ -104,6 +104,23 @@
         "type": "github"
       }
     },
+    "dracula-zsh-syntax-highlighting": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1626822724,
+        "narHash": "sha256-McwtGFXFmRFDyqv0bn7jxGcpYjaSugH3e2yiLb5aG+Y=",
+        "owner": "dracula",
+        "repo": "zsh-syntax-highlighting",
+        "rev": "47ba26d2d4912a1b8de066e589633ff1963c5621",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "zsh-syntax-highlighting",
+        "rev": "47ba26d2d4912a1b8de066e589633ff1963c5621",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "flake": false,
       "locked": {
@@ -700,6 +717,7 @@
         "darwin": "darwin",
         "dracula-sublime": "dracula-sublime",
         "dracula-xresources": "dracula-xresources",
+        "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
         "neovim-nightly-overlay": "neovim-nightly-overlay",

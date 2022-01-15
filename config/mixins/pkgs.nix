@@ -69,10 +69,8 @@ in
       #dogecoin
 
       # APPS
-      betterdiscordctl
       bitwarden
       brave
-      discord
       dmenu
       filelight # view disk usage
       gparted

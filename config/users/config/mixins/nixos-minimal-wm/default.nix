@@ -17,6 +17,10 @@ in {
       }];
     };
 
-    home-manager.users.${userName} = { };
+    home-manager.users.${userName} = {
+      home.file = {
+        ".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
+      };
+    };
   };
 }

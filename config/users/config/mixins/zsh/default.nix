@@ -3,18 +3,6 @@
 let
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
-  dracula-zsh-syntax-highlighting = pkgs.fetchFromGitHub {
-    owner = "dracula";
-    repo = "zsh-syntax-highlighting";
-    rev = "47ba26d2d4912a1b8de066e589633ff1963c5621";
-    sha256 = "1rhvbaz2v8kcggvh3flj6ri2jry4wdz6xx5br91i36f5alc2vk1i";
-  };
-  zsh-vim-mode = pkgs.fetchFromGitHub {
-    owner = "softmoth";
-    repo = "zsh-vim-mode";
-    rev = "1f9953b7d6f2f0a8d2cb8e8977baa48278a31eab";
-    sha256 = "sha256-a+6EWMRY1c1HQpNtJf5InCzU7/RphZjimLdXIXbO6cQ=";
-  };
   zshExtra = if (isDarwin) then "" else ''
     key=(
       Up "''${terminfo[kcuu1]}"
@@ -50,9 +38,8 @@ in
 
           ${zshExtra}
 
-          # source ${zsh-vim-mode}/zsh-vim-mode.plugin.zsh
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-          source ${dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
+          source ${inputs.dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
           source ${inputs.ohmyzsh}/lib/clipboard.zsh
           source ${inputs.ohmyzsh}/plugins/web-search/web-search.plugin.zsh
           source ${inputs.ohmyzsh}/plugins/copydir/copydir.plugin.zsh

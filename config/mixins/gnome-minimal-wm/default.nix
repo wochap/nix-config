@@ -22,6 +22,8 @@
     # manage GnomeKeyring
     programs.seahorse.enable = true;
 
+    programs.evolution.enable = true;
+
     services = {
       gnome = {
         # Required for gnome `Online Accounts`, Calendar and Geary

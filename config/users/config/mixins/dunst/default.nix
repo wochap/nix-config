@@ -29,6 +29,8 @@ in
     home-manager.users.${userName} = {
       services.dunst = {
         enable = true;
+        # TODO: add WAYLAND_DISPLAY
+        # waylandDisplay = "";
         iconTheme = {
           name = "Papirus";
           package = pkgs.papirus-icon-theme;

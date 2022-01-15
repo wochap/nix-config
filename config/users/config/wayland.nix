@@ -32,17 +32,6 @@ in
     home-manager.users.${userName} = {
       xdg.configFile = {
         "electron-flags.conf".source = ./dotfiles/electron-flags.conf;
-        "discord/settings.json".source = ./dotfiles/discord-settings.json;
-      };
-
-      home.sessionVariables = {
-        PATH = "$HOME/.npm-packages/bin:$PATH";
-        NODE_PATH = "$HOME/.npm-packages/lib/node_modules";
-      };
-
-      home.file = {
-        ".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
-        ".npmrc".source = ./dotfiles/.npmrc;
       };
     };
   };

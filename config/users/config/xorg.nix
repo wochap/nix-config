@@ -6,14 +6,15 @@ let
 in
 {
   imports = [
-    ./mixins/nixos-minimal-wm.nix
+    ./mixins/nixos-minimal-wm
     ./mixins/bspwm
     ./mixins/clipmenu.nix
     ./mixins/nix-common
     ./mixins/nixos
     ./mixins/redshift.nix
     ./mixins/firefox
-    ./mixins/fish
+    ./mixins/thunar
+    ./mixins/discord
     ./mixins/git.nix
     ./mixins/gtk.nix
     ./mixins/qt.nix
@@ -36,25 +37,10 @@ in
     ./mixins/nnn
     ./mixins/bat.nix
     ./mixins/htop.nix
-    # ./mixins/xob
   ];
 
   config = {
     home-manager.users.${userName} = {
-      # Setup dotfiles
-      xdg.configFile = {
-        "discord/settings.json".source = ./dotfiles/discord-settings.json;
-      };
-
-      home.sessionVariables = {
-        PATH = "$HOME/.npm-packages/bin:$PATH";
-        NODE_PATH = "$HOME/.npm-packages/lib/node_modules";
-      };
-
-      home.file = {
-        ".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
-        ".npmrc".source = ./dotfiles/.npmrc;
-      };
 
       # screenshot utility
       services.flameshot.enable = true;

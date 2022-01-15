@@ -2,7 +2,6 @@
 
 let
   localPkgs = import ./packages { pkgs = pkgs; lib = lib; };
-  isHidpi = config._isHidpi;
 in
 {
   imports = [
@@ -20,7 +19,6 @@ in
     ./mixins/gnome-pkgs.nix # Comment on first install
     ./mixins/gnome-minimal-wm # Comment on first install
     ./mixins/kde-pkgs.nix # Comment on first install
-    ./mixins/thunar.nix
     ./mixins/docker.nix # Comment on first install
     ./mixins/lorri
     ./mixins/vscode.nix

@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  isHidpi = config._isHidpi;
+  # isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
 in
 {

@@ -48,13 +48,12 @@ in
       # Setup dotfiles
       xdg.configFile = {
         "sublime-text-3/Packages/User/Default (Linux).sublime-keymap".source = ./dotfiles/linux.sublime-keymap.json;
-        "Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
       };
 
       xsession.pointerCursor = {
         name = "Numix-Cursor";
         package = pkgs.numix-cursor-theme;
-        size = if isHidpi then 40 else 32;
+        size = if isHidpi then 64 else 32;
       };
 
       programs.mpv = {

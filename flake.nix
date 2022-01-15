@@ -26,6 +26,8 @@
     dracula-sublime.flake = false;
     dracula-xresources.url = "github:dracula/xresources?rev=49765e34adeebca381db1c3e5516b856ff149c93";
     dracula-xresources.flake = false;
+    dracula-zsh-syntax-highlighting.url = "github:dracula/zsh-syntax-highlighting?rev=47ba26d2d4912a1b8de066e589633ff1963c5621";
+    dracula-zsh-syntax-highlighting.flake = false;
   };
 
   outputs = inputs:
