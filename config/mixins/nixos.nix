@@ -104,6 +104,12 @@ in
       #jack.enable = true;
     };
 
+    services.xserver = {
+      enable = true;
+      exportConfiguration = true;
+      desktopManager = { xterm.enable = false; };
+    };
+
     # Apply trim to SSDs
     services.fstrim.enable = true;
 

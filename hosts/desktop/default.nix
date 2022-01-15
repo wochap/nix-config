@@ -13,7 +13,6 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../config/mixins/nvidia.nix
-    ../../config/mixins/kmonad
     ../../config/xorg.nix
   ];
 
