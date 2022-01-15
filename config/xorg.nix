@@ -6,6 +6,7 @@ let
 in
 {
   imports = [
+    ./mixins/xfce-minimal-wm
     ./mixins/lightdm
     ./mixins/pkgs-xorg.nix
     ./mixins/nix-common.nix
@@ -13,7 +14,7 @@ in
     ./mixins/overlays.nix
     ./mixins/pkgs.nix
     ./mixins/fonts.nix
-    ./mixins/ipwebcam
+    # ./mixins/ipwebcam
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
     ./mixins/gnome-pkgs.nix # Comment on first install

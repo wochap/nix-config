@@ -1,5 +1,6 @@
 { config, pkgs, lib, ... }:
 
+# NOTE: this file requires xfce-minimal-wm/defaul.nix
 {
   config = {
     environment = {
@@ -18,6 +19,9 @@
     # Required for gnome file managers
     programs.file-roller.enable = true;
 
+    # manage GnomeKeyring
+    programs.seahorse.enable = true;
+
     services = {
       gnome = {
         # Required for gnome `Online Accounts`, Calendar and Geary
@@ -29,15 +33,6 @@
         tracker-miners.enable = true;
         tracker.enable = true;
       };
-
-      # Required by pinentry-gnome3
-      dbus = {
-        enable = true;
-        packages = [ pkgs.gcr ];
-      };
-
-      # Required to manipulate storage devices
-      udisks2.enable = true;
     };
 
     # Fix gnome-keyring when sddm is enabled

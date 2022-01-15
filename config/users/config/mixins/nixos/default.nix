@@ -7,6 +7,12 @@ let
 in
 {
   config = {
+    # Required by pinentry-gnome3
+    services.dbus = {
+      enable = true;
+      packages = [ pkgs.gcr ];
+    };
+
     home-manager.users.${userName} = {
       # TODO: move out
       # Open GTK inspector with Ctrl + Shift + D

@@ -1,28 +1,19 @@
 { config, pkgs, lib, ... }:
 
-{
+let
+  customThunar = pkgs.xfce.thunar.override {
+    thunarPlugins = [ pkgs.xfce.thunar-archive-plugin ];
+  };
+in {
   config = {
     environment = {
-      # sessionVariables = {
-      #   OPENER = "exo-open";
-      # };
       systemPackages = with pkgs; [
-        glib # for gsettings?
-        xfce.exo # opener exo-open
         xfce.thunar-volman # auto mont devices
-        xfce.xfconf # where thunar settings are saved
-        xfce.xfce4-settings
-        (xfce.thunar.override {
-          thunarPlugins = [
-            xfce.thunar-archive-plugin
-          ];
-        })
+        customThunar
       ];
     };
 
-    # Required by thunar
-    services.gvfs.enable = true;
-    services.gvfs.package = lib.mkForce pkgs.gnome.gvfs;
-    services.tumbler.enable = true;
+    # Systemd services
+    systemd.packages = [ customThunar ];
   };
 }

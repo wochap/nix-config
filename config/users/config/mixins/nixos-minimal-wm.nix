@@ -3,20 +3,20 @@
 let
   isWayland = config._displayServer == "wayland";
   userName = config._userName;
-in
-{
+in {
   config = {
-    # HACK: let home-manager xsession do the rest
     services.xserver.displayManager = {
       defaultSession = "none+hm";
       session = [{
         manage = "window";
         name = "hm";
-        start = "";
+        start = ''
+          $HOME/.xsession-hm &
+          waitPID=$!
+        '';
       }];
     };
 
-    home-manager.users.${userName} = {
-    };
+    home-manager.users.${userName} = { };
   };
 }

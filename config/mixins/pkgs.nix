@@ -12,7 +12,7 @@ in
       busybox
       cached-nix-shell # fast nix-shell scripts
       devour # swallow
-      dex # execute DesktopEntry files
+      dex # execute DesktopEntry files (xdg/autostart)
       dnsutils # test dns
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
@@ -52,16 +52,14 @@ in
       # tightvnc
 
       # DE
-      flashfocus
       hunspell # dictionary for document programs
       hunspellDicts.en-us
-      pavucontrol # audio settings gui
-      pulseaudio
+      # pulseaudio
 
       # DE CLI
       gitAndTools.gh
       gotop # monitor system
-      pamixer # audio cli
+      # pamixer # audio cli
       playerctl # media player cli
       systemd
 
@@ -96,10 +94,10 @@ in
 
       # Themes
       capitaine-cursors
-      hicolor-icon-theme
-      papirus-icon-theme
+      # hicolor-icon-theme
+      # papirus-icon-theme
     ] ++ [
-      localPkgs.bigsur-cursors
+      # localPkgs.bigsur-cursors
     ] ++ (if (isWayland) then [
       pkgs.egl-wayland
       (pkgs.google-chrome.override {

@@ -20,14 +20,7 @@ in
       };
     };
 
-    # TODO: install cachix?
-
     environment = {
-      systemPackages = with pkgs; [
-        shared-mime-info
-        xdg-user-dirs
-      ];
-
       shellAliases = {
         open = "xdg-open";
       };
@@ -36,7 +29,7 @@ in
     # Remember private keys?
     programs.ssh.startAgent = true;
 
-    programs.ssh.askPassword = "";
+    # programs.ssh.askPassword = "";
 
     boot = {
       loader = {
@@ -107,7 +100,7 @@ in
     services.xserver = {
       enable = true;
       exportConfiguration = true;
-      desktopManager = { xterm.enable = false; };
+      desktopManager = { xterm.enable = true; };
     };
 
     # Apply trim to SSDs

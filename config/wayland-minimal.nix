@@ -10,7 +10,6 @@
     ./mixins/overlays.nix
     ./mixins/pkgs.nix
     ./mixins/fonts.nix
-    ./mixins/ipwebcam
     ./mixins/nixos-networking.nix
     ./mixins/keychron.nix
     ./mixins/gnome-pkgs.nix # Comment on first install
