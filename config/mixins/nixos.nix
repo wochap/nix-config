@@ -77,7 +77,7 @@ in
 
     # Enable OpenGL
     hardware.opengl.enable = true;
-    hardware.opengl.driSupport = true;
+    hardware.opengl.driSupport = !isMbp;
 
     hardware.opengl.driSupport32Bit = !isMbp;
 

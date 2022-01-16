@@ -59,6 +59,8 @@ in {
     environment.sessionVariables = {
       GDK_DPI_SCALE = "0.5";
       GDK_SCALE = "2";
+      WIFI_DEVICE = "wlp4s0";
+      BSPWM_GAP = "32";
     };
 
     environment.systemPackages = with pkgs;
@@ -99,11 +101,11 @@ in {
 
         deviceSection = ''
           # does it fix screen tearing? maybe...
-          Option         "NoLogo" "1"
-          Option         "RenderAccel" "1"
-          Option         "TripleBuffer" "true"
-          Option         "MigrationHeuristic" "greedy"
-          Option         "AccelMethod" "sna"
+          # Option         "NoLogo" "1"
+          # Option         "RenderAccel" "1"
+          # Option         "TripleBuffer" "true"
+          # Option         "MigrationHeuristic" "greedy"
+          # Option         "AccelMethod" "sna"
           Option         "TearFree"    "true"
         '';
       };
