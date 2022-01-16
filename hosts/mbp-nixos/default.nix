@@ -60,7 +60,7 @@ in {
       GDK_DPI_SCALE = "0.5";
       GDK_SCALE = "2";
       WIFI_DEVICE = "wlp4s0";
-      BSPWM_GAP = "32";
+      BSPWM_GAP = "25";
     };
 
     environment.systemPackages = with pkgs;
