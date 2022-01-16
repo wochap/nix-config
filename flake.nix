@@ -1,5 +1,6 @@
 {
   inputs = {
+    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=fb1682bab43b9dd8daf43ae28f09e44541ce33a2";
     nixpkgs.url = "github:nixos/nixpkgs?rev=a0bf6b28dff054b4d95f28ff7e2d7b99b60aa027";
     prevstable.url = "github:nixos/nixpkgs?rev=cd63096d6d887d689543a0b97743d28995bc9bc3";
     home-manager.url = "github:nix-community/home-manager?rev=0b197562ab7bf114dd5f6716f41d4b5be6ccd357";
@@ -45,6 +46,7 @@
         desktop-sway = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-sway";
         desktop-gnome = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
         asus-vivobook = mkSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
+        mbp-nixos = mkSystem inputs.nixpkgs "x86_64-linux" "mbp-nixos";
       };
       darwinConfigurations."mbp-darwin" = inputs.darwin.lib.darwinSystem {
         system = "x86_64-darwin";
