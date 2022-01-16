@@ -54,7 +54,7 @@ in
       # DE
       hunspell # dictionary for document programs
       hunspellDicts.en-us
-      # pulseaudio
+      pulseaudio
 
       # DE CLI
       gitAndTools.gh
