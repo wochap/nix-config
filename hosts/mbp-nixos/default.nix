@@ -56,6 +56,11 @@ in {
       cleanTmpDir = true;
     };
 
+    environment.sessionVariables = {
+      GDK_DPI_SCALE = "0.5";
+      GDK_SCALE = "2";
+    };
+
     environment.systemPackages = with pkgs;
       [
         radeontop # monitor system amd
@@ -82,11 +87,12 @@ in {
         xkbModel = "pc104";
         # xkbVariant = "altgr-intl";
         # Macbook keyboard
-        # xkbVariant = "mac";
+        xkbVariant = "mac";
 
         # Enable touchpad support (enabled default in most desktopManager).
         libinput.enable = true;
-        libinput.naturalScrolling = true;
+        libinput.touchpad.naturalScrolling = true;
+        libinput.touchpad.tapping = false;
 
         # GPU drivers
         videoDrivers = [ "amdgpu" ];
@@ -105,7 +111,7 @@ in {
       # Macbook fan config
       mbpfan = {
         enable = true;
-        lowTemp = 40;
+        lowTemp = 30;
         maxFanSpeed = 5500;
         minFanSpeed = 4000;
       };

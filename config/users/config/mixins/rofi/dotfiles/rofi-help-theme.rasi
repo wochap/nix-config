@@ -1,6 +1,6 @@
 configuration {
   click-to-exit: true;
-  dpi: 0;
+  dpi: 144;
   drun-display-format: "{icon} {name}";
   font: "FiraCode Nerd Font Mono 10";
   location: 1;

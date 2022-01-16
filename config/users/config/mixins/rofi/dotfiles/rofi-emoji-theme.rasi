@@ -1,7 +1,7 @@
 configuration {
 	sidebar-mode: false;
   display-emoji: "";
-  dpi: 0;
+  dpi: 144;
   font: "Inter Regular 12";
   fullscreen: false;
   hide-scrollbar: false;

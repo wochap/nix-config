@@ -3,7 +3,7 @@ configuration {
   display-run: "";
   display-drun: "";
 	sidebar-mode: false;
-  dpi: 0;
+  dpi: 144;
   font: "Inter Medium 12";
   fullscreen: false;
   hide-scrollbar: false;
