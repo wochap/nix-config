@@ -11,15 +11,11 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
-    The initial config must have: `flakes`, `cachix`, `git`, `gpp`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
+    The initial config must have: `flakes`, `cachix`, `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
 
     **NOTE:** Run `sudo nixos-install` (don't use `sudo su`?)
 
-    Initial `configuration.nix` example:
-
-    ```nix
-    # TODO
-    ```
+    Initial [configuration.nix](configuration-example.nix) example
 
 ## Install device config
 
@@ -40,11 +36,13 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
     ```
 1. Rebuild nixos with the device's specific config, for example, heres's a rebuild for my `desktop`
 
-    **WARNING:** First `nixos-rebuild` with device config can take several hours 😢
+    **NOTE:** Env vars are required on first install https://github.com/NixOS/nixpkgs/issues/97433#issuecomment-689554709
+    **WARNING:** First `nixos-rebuild` with device config can take several hours
     ```
     # Go to nix-config folder
     $ cd /home/gean/nix-config
-    $ sudo nixos-rebuild switch --flake .#desktop --impure
+    $ NIXOS_INSTALL_BOOTLOADER=1 sudo --preserve-env=NIXOS_INSTALL_BOOTLOADER nixos-rebuild boot --flake .#desktop --impure
+    # Reboot
     # $ sudo nixos-rebuild boot -p sway --flake .#desktop-sway --impure
     ```
 1. Set password for new user `gean`
