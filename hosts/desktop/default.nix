@@ -63,6 +63,8 @@ in
       cleanTmpDir = true;
     };
 
+    powerManagement.cpuFreqGovernor = "schedutil";
+
     networking = {
       hostName = hostName;
 
