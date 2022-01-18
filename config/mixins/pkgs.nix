@@ -13,6 +13,7 @@ in
       cached-nix-shell # fast nix-shell scripts
       devour # swallow
       dex # execute DesktopEntry files (xdg/autostart)
+      dmidecode
       dnsutils # test dns
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
