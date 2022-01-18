@@ -64,7 +64,7 @@ You probably want to press `Ctrl + Alt + F1`
    $ ssh-add <PATH_TO_PRIVATE_KEY>
    ```
    https://www.freecodecamp.org/news/how-to-manage-multiple-ssh-keys/
-1. Clone https://github.com/wochap/nvim on `~/.config/nvim`
+1. Setup [NeoVim](https://github.com/wochap/nvim)
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
 1. Setup betterdiscord
    ```
@@ -76,7 +76,7 @@ You probably want to press `Ctrl + Alt + F1`
    ```
 1. Add wallpapers to `~/Pictures/backgrounds/`
 1. Sync `vscode`, `firefox`, `chrome`
-1. `desktop` config is optimized for 4k displays, for other sizes, you should update:
+1. `desktop` config is optimized for 4k displays (150% scale), for other sizes, you should update:
 
    For XORG:
 
@@ -96,13 +96,6 @@ You probably want to press `Ctrl + Alt + F1`
    $ env WEBKIT_DISABLE_COMPOSITING_MODE=1 gnome-control-center online-accounts
    ```
 1. ~~[Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)~~
-1. ~~Fish setup~~
-   ```
-   # install fisher
-   $ curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
-   $ fisher install edouard-lopez/ayu-theme.fish
-   $ set --universal ayu_variant mirage && ayu_load_theme
-   ```
 1. ~~Setup [Flatpak](https://flatpak.org/setup/NixOS/)~~
 
    ```
@@ -178,91 +171,92 @@ $ sudo nixos-rebuild switch --flake .#dekstop --impure
 
 ## Troubleshooting
 
-1. [Check packages size](https://nixos.wiki/wiki/Nix_command/path-info)
+* [Check packages size](https://nixos.wiki/wiki/Nix_command/path-info)
 
    ```
    $ nix path-info -rSh /run/current-system | sort -nk2
    ```
 
-1. Fix flickering on nvidia cards?
+* Fix flickering on nvidia cards?
 
    - Open `Nvidia X Server Settings`.
    - In `OpenGL Settings` uncheck `Allow Flipping`.
    - In `XScreen0` > `X Server XVideo Settings` > `Sync to this display device` select your monitor.
 
-1. Fix screen tearing on nvidia cards
+* Fix screen tearing on nvidia cards
+
    - Buy AMD GPU
    - FYI: ForceFullCompositionPipeline fix tearing but increase latency
 
-- Check if picom is running
+* Check if picom is running
 
-  ```
-  $ inxi -Gxx | grep compositor
-  ```
+   ```
+   $ inxi -Gxx | grep compositor
+   ```
 
-- Macbook Pro wifi
+* Macbook Pro wifi
 
-  Create wpa conf before rebuild switch.
+   Create wpa conf before rebuild switch.
 
-- Firefox doesnt load some websites
+* Firefox doesnt load some websites
 
-  Enable DNS over HTTPS
+   Enable DNS over HTTPS
 
-- Change partition flags
+* Change partition flags
 
-  ```
-  $ parted /dev/sda
-  $ p
-  $ set 3 boot
-  ```
+   ```
+   $ parted /dev/sda
+   $ p
+   $ set 3 boot
+   ```
 
-- [Wifi keeps connecting and disconnecting](https://unix.stackexchange.com/questions/588333/networkmanager-keeps-connecting-and-disconnecting-how-can-i-fix-this)
+* [Wifi keeps connecting and disconnecting](https://unix.stackexchange.com/questions/588333/networkmanager-keeps-connecting-and-disconnecting-how-can-i-fix-this)
 
-  Disable ipv6 connection.
+   Disable ipv6 connection.
 
-- Test polybar themes
+* Test polybar themes
 
-  ```
-  $ killall polybar
-  $ polybar main --config=/home/gean/nix-config/devices/config/users/config/dotfiles/polybar/main.ini -r
-  ```
+   ```
+   $ killall polybar
+   $ polybar main --config=/home/gean/nix-config/devices/config/users/config/dotfiles/polybar/main.ini -r
+   ```
 
-- Copy installed icons unicode
+* Copy installed icons unicode
 
-  `E8E4` is the unicode.
+   `E8E4` is the unicode.
 
-  ```
-  $ bash
-  $ echo -ne "\uE8E4" | xclip -selection clipboard
-  ```
+   ```
+   $ bash
+   $ echo -ne "\uE8E4" | xclip -selection clipboard
+   ```
 
-- Transform svg icons to png
+* Transform svg icons to png
 
-  ```
-  $ for file in *.svg; do inkscape $file -o ${file%svg}png -h 128; done
-  ```
+   ```
+   $ for file in *.svg; do inkscape $file -o ${file%svg}png -h 128; done
+   ```
 
-  ```
-  #!/usr/bin/env bash
+   ```
+   #!/usr/bin/env bash
 
-  symlinks=$(find ./ -lname "*.svg");
+   symlinks=$(find ./ -lname "*.svg");
 
-  for file in $symlinks; do
-    linkpath=$(readlink $file);
-    newlinkcontent=${linkpath/svg/png};
-    newlinkpath=${file/svg/png};
-    ln -sf $newlinkcontent $newlinkpath;
-  done
-  ```
+   for file in $symlinks; do
+     linkpath=$(readlink $file);
+     newlinkcontent=${linkpath/svg/png};
+     newlinkpath=${file/svg/png};
+     ln -sf $newlinkcontent $newlinkpath;
+   done
+   ```
 
-- Get key actual name
+* Get key actual name
 
-  ```
-  $ xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
-  ```
+   ```
+   $ xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
+   ```
 
-- [Cannot add google account in gnome > online accounts](https://github.com/NixOS/nixpkgs/issues/32580)
-  In gmail settings, enable IMAP
+* [Cannot add google account in gnome > online accounts](https://github.com/NixOS/nixpkgs/issues/32580)
+   In gmail settings, enable IMAP
 
 ## Resources
 

@@ -8,6 +8,7 @@ in
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
+      ansible
       bc # calculator cli
       busybox
       cached-nix-shell # fast nix-shell scripts
