@@ -19,6 +19,8 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
 
 ## Install device config
 
+You probably want to press `Ctrl + Alt + F1`
+
 1. Reboot into vanilla NixOS and connect to wifi/ethernet
     If `ping google.com` doesn't work, try updating your DNS
     ```

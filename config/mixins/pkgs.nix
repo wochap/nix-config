@@ -25,6 +25,7 @@ in
       jq # JSON
       killall
       libva-utils # verifying VA-API
+      lm_sensors
       lsof # print port process
       manpages
       mkcert # create certificates (HTTPS)

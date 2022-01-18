@@ -48,13 +48,26 @@ in {
     };
 
     boot = {
+      initrd.kernelModules = [
+        "amdgpu"
+      ];
+
       loader = {
         grub.enable = false;
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
       };
       cleanTmpDir = true;
+
+      # needed for suspend
+      kernelParams = [ "acpi_osi=Darwin" ];
+
+      # lm_sensors
+      kernelModules = [ "coretemp" ];
     };
+
+    # use cpupower for more info
+    powerManagement.cpuFreqGovernor = "schedutil";
 
     environment.sessionVariables = {
       GDK_DPI_SCALE = "0.5";
@@ -63,10 +76,10 @@ in {
       BSPWM_GAP = "25";
     };
 
-    environment.systemPackages = with pkgs;
-      [
-        radeontop # monitor system amd
-      ];
+    environment.systemPackages = with pkgs; [
+      radeontop # monitor system amd
+      linuxKernel.packages.linux_5_10.cpupower
+    ];
 
     networking = {
       hostName = hostName;
@@ -110,10 +123,33 @@ in {
         '';
       };
 
+      tlp = {
+        enable = true;
+        settings = {
+          CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
+          CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
+
+          # The following prevents the battery from charging fully to
+          # preserve lifetime. Run `tlp fullcharge` to temporarily force
+          # full charge.
+          # https://linrunner.de/tlp/faq/battery.html#how-to-choose-good-battery-charge-thresholds
+          START_CHARGE_THRESH_BAT0 = 40;
+          STOP_CHARGE_THRESH_BAT0 = 50;
+
+          # 100 being the maximum, limit the speed of my CPU to reduce
+          # heat and increase battery usage:
+          CPU_MAX_PERF_ON_AC = 80;
+          CPU_MAX_PERF_ON_BAT = 60;
+        };
+      };
+
       # Macbook fan config
       mbpfan = {
         enable = true;
+        verbose = true;
         lowTemp = 30;
+        highTemp = 60;
+        maxTemp = 80;
         maxFanSpeed = 5500;
         minFanSpeed = 4000;
       };
@@ -123,9 +159,6 @@ in {
     programs.light.enable = true;
 
     # Enable webcam
-    # hardware = {
-    #   facetimehd.enable = true;
-    # };
+    hardware = { facetimehd.enable = true; };
   };
-
 }

@@ -32,6 +32,9 @@ in
       efi.canTouchEfiVariables = true;
     };
     cleanTmpDir = true;
+    kernelModules = [
+      coretemp
+    ];
   };
 
   environment.systemPackages = with pkgs; [
