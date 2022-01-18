@@ -250,7 +250,7 @@ super + ctrl + shift + Escape
 ### MEDIA KEYBINDINGS
 
 XF86MonBrightness{Down,Up}
-  light {-U 10,-A 10}
+  light {-U 5,-A 5}
 
 XF86Audio{LowerVolume,RaiseVolume}
   pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%}
