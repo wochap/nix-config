@@ -76,7 +76,6 @@
     };
 
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
-    programs.bash.enable = true;
     programs.zsh.enable = true;
     programs.fish.enable = true;
 
