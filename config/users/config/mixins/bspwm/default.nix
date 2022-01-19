@@ -60,6 +60,11 @@ in {
           source = ./scripts/bspwm_kitty_scratch.sh;
           mode = "0755";
         };
+
+        "scripts/projects/bspwm_dangerp.sh" = {
+          source = ./scripts/bspwm_dangerp.sh;
+          mode = "0755";
+        };
       };
     };
 

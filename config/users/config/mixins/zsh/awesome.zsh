@@ -9,6 +9,16 @@ function pro() {
   cd $(echo "$projects" | fzf)
 }
 
+function killport {
+  kill $(lsof -t -i:"$1")
+}
+
+function opro() {
+  projects=$(find /etc/scripts/projects -type f -name "*.sh")
+
+  $(echo "$projects" | fzf)
+}
+
 function scripts() {
   scripts=$(find /etc/scripts -type f -name "*.sh")
 

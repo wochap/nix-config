@@ -10,10 +10,6 @@ zmodload -i zsh/complist
 autoload -U bashcompinit
 bashcompinit
 
-function killport {
-  kill $(lsof -t -i:"$1")
-}
-
 # Allow changing directories without `cd`.
 setopt AUTOCD
 
