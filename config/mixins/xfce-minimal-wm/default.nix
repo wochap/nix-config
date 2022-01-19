@@ -82,7 +82,7 @@ in {
           # TODO: only if it is not running
 
           # TODO: find why xfsettingsd mess up with dpi of polybar, dunst, rofi, etc
-          # ${pkgs.xfce.xfce4-settings}/bin/xfsettingsd &
+          ${pkgs.xfce.xfce4-settings}/bin/xfsettingsd &
           ${pkgs.xfce.xfce4-power-manager}/bin/xfce4-power-manager &
           ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &
           ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update &

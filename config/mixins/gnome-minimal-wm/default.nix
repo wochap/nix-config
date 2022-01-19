@@ -40,6 +40,9 @@
     # Fix gnome-keyring when sddm is enabled
     security.pam.services.sddm.enableGnomeKeyring = true;
 
+    # Fix gnome-keyring when lightdm is enabled
+    security.pam.services.lightdm.enableGnomeKeyring = true;
+
     services.gnome.gnome-settings-daemon.enable = true;
   };
 }
