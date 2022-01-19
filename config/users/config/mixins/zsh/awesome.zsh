@@ -13,6 +13,10 @@ function killport {
   kill $(lsof -t -i:"$1")
 }
 
+function killreceptacles {
+  while bspc node 'any.leaf.!window' -k; do :; done
+}
+
 function opro() {
   projects=$(find /etc/scripts/projects -type f -name "*.sh")
 
