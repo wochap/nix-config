@@ -92,12 +92,12 @@ in
       # xkbVariant = "altgr-intl";
 
       # Setup monitors
-      screenSection = ''
-        # Select primary monitor
-        Option         "nvidiaXineramaInfoOrder" "DFP-0"
-        # Default multiple monitor setup
-        Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-      '';
+      # screenSection = ''
+      #   # Select primary monitor
+      #   Option         "nvidiaXineramaInfoOrder" "DFP-0"
+      #   # Default multiple monitor setup
+      #   Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
+      # '';
       deviceSection = ''
         # does it fix screen tearing? maybe...
         Option         "NoLogo" "1"

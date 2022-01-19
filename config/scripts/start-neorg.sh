@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-nvim +'cd ~/neorg'
+kitty --class kitty-neorg --title neorg -e nvim +'cd ~/neorg'
 

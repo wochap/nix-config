@@ -87,6 +87,7 @@ in
       skypeforlinux
       slack
       sublime3 # text editor
+      tmux
       tty-clock
       zoom-us
       # antimicroX

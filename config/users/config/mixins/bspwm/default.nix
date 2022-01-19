@@ -56,6 +56,10 @@ in {
           source = ./scripts/bspwm_open_or_focus.sh;
           mode = "0755";
         };
+        "scripts/bspwm_kitty_scratch.sh" = {
+          source = ./scripts/bspwm_kitty_scratch.sh;
+          mode = "0755";
+        };
       };
     };
 
