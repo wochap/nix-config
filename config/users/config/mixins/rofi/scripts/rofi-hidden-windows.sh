@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-nodesArray=( $(bspc query -N -n .hidden.local.window) )
+query=${NODES_QUERY:-.hidden.local.window}
+nodesArray=( $(bspc query -N -n $query) )
 rows=""
 
 for instance in "${nodesArray[@]}"
@@ -12,9 +13,9 @@ do
   rows+="${class}${tab}${title}${nl}"
 done
 
-s=$(echo "$rows" | column -t -s $'\t' | rofi -dmenu -format i -p  -markup-rows -theme /etc/config/rofi-clipboard-theme.rasi)
+s=$(echo "$rows" | column -t -s $'\t' | rofi -dmenu -format i -p "" -markup-rows -theme /etc/config/rofi-clipboard-theme.rasi)
 
 if [[ -n "$s" ]]; then
   node="${nodesArray[$s]}"
-  bspc node "$node" --flag hidden=off --to-monitor focused --to-desktop focused --to-node focused --focus
+  bspc node "$node" --flag hidden=off --focus
 fi

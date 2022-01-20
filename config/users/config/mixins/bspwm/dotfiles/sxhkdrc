@@ -142,6 +142,10 @@ super + {grave,Tab}
 super + alt + Tab
   /etc/scripts/rofi-hidden-windows.sh
 
+# Open windows
+alt + Tab
+  NODES_QUERY=".!hidden.local.window" /etc/scripts/rofi-hidden-windows.sh
+
 # # Focus the older or newer node in the focus history
 # super + {o,i}
 # 	bspc wm -h off; \

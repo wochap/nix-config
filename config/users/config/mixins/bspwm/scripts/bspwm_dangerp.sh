@@ -31,6 +31,7 @@ removeEmptyReceptacles
 
 bspc node @2:/ -i
 bspc rule -a "kitty-dangerp" -o node=@2:/
+bspc desktop 2 -l monocle
 bspc desktop -f 2
 
 dangerp_session="$(cat << EOF
