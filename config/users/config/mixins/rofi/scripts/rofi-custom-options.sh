@@ -14,7 +14,7 @@ function run {
 }
 
 #Update rofi promt icon
-echo -en "\x00prompt\x1f\n"
+echo -en "\x00prompt\x1f\n"
 
 #Retrieve first selection
 first_selection=$(cat /tmp/rofi-custom-options)

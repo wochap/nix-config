@@ -64,9 +64,9 @@ inputbar {
 }
 
 prompt {
-	font: "Iosevka Bold 34";
+	font: "woos 22";
 	vertical-align: 0.5;
-	padding: 0 25px;
+	padding: 16px 19px;
   margin: 0;
   background-color: @var-fg-selection;
   border-radius: 10px;

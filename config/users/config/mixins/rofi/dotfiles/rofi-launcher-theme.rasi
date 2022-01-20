@@ -1,5 +1,5 @@
 configuration {
-  display-combi: "";
+  display-combi: "";
   display-run: "";
   display-drun: "";
 	sidebar-mode: false;
@@ -78,9 +78,9 @@ inputbar {
 }
 
 prompt {
-	font: "Iosevka Bold 34";
-	vertical-align: 0.5;
-	padding: 0 25px;
+  font: "woos 22";
+  vertical-align: 0.5;
+  padding: 16px 19px;
   margin: 0;
   background-color: @var-fg-selection;
   border-radius: 10px;

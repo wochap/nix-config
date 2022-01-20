@@ -2,6 +2,6 @@
 
 CM_LAUNCHER=rofi \
   clipmenu \
-  -p  \
+  -p "" \
   -i \
   -theme /etc/config/rofi-clipboard-theme.rasi
