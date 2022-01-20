@@ -40,6 +40,7 @@ in
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer
+      tldr
       unrar
       unzip
       usbutils # lsusb, for android development
@@ -81,7 +82,6 @@ in
       nitrogen # wallpaper manager
       postman
       qbittorrent
-      robo3t
       screenkey # show key pressed
       simplenote
       skypeforlinux

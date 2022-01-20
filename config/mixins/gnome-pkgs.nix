@@ -17,6 +17,7 @@
         gnome.gnome-control-center # add google account for gnome apps
         gnome.gnome-font-viewer
         gnome.gnome-sound-recorder # test microphone
+        gnome.gnome-system-monitor
         gnome.nautilus # file manager
         gnome.pomodoro
         prevstable.gnome3.gnome-todo
