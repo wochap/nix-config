@@ -8,8 +8,7 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
-in
-{
+in {
   imports = [
     ./hardware-configuration.nix
     ../../config/mixins/nvidia.nix
@@ -47,11 +46,12 @@ in
       };
     };
 
-    # environment = {
-    #   sessionVariables = {
-    #     GDK_DPI_SCALE = "0.5";
-    #   };
-    # };
+    environment = {
+      sessionVariables = {
+        # GDK_DPI_SCALE = "0.5";
+        BSPWM_GAP = "25";
+      };
+    };
 
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
