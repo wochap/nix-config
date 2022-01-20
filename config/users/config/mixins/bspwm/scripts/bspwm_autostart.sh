@@ -3,7 +3,7 @@
 function run {
   if ! pgrep $1 ;
   then
-    $@&
+    $@
   fi
 }
 
@@ -12,9 +12,11 @@ clipmenud &
 picom --experimental-backends &
 blueberry-tray &
 caffeine -a &
-sh /etc/scripts/polybar-start.sh &
-sh /etc/scripts/start-minimal-xfce4.sh &
-sh /etc/scripts/random-bg.sh &
-# TODO: add evolution
+/etc/scripts/polybar-start.sh &
+/etc/scripts/start-minimal-xfce4.sh &
+sleep 2
+/etc/scripts/random-bg.sh &
+# TODO: add evolution-data-server
+# evolution-data-server / libexec / evolution-data-server / evolution-alarm-notyfy
 # sh /etc/scripts/fix_caps_lock_delay.sh &
 # sh /etc/scripts/eww_start.sh &
