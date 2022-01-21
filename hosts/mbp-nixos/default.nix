@@ -100,9 +100,7 @@ in {
         # Setup keyboard
         layout = "us";
         xkbModel = "pc104";
-        # xkbVariant = "altgr-intl";
-        # Macbook keyboard
-        xkbVariant = "mac";
+        xkbVariant = "";
 
         # Enable touchpad support (enabled default in most desktopManager).
         libinput.enable = true;
@@ -148,10 +146,10 @@ in {
         enable = true;
         verbose = true;
         lowTemp = 30;
-        highTemp = 60;
+        highTemp = 50;
         maxTemp = 80;
         maxFanSpeed = 5500;
-        minFanSpeed = 4000;
+        minFanSpeed = 4500;
       };
     };
 
