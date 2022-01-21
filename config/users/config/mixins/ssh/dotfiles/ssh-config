@@ -7,7 +7,7 @@ Host github.com-boc
   HostName github.com
   User git
   IdentitiesOnly yes
-  IdentityFile ~/.ssh/id_rsa_boc
+  IdentityFile ~/.ssh/id_ed25519_boc
 
 Host bitbucket.org-boc
   HostName bitbucket.org
