@@ -278,6 +278,23 @@
         "type": "github"
       }
     },
+    "fzf-tab": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640316334,
+        "narHash": "sha256-Qf9AZ2DjO9QUyEF7QG8JtlBHjwHfINOJkrMfu7pipns=",
+        "owner": "Aloxaf",
+        "repo": "fzf-tab",
+        "rev": "e85f76a3af3b6b6b799ad3d64899047962b9ce52",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Aloxaf",
+        "repo": "fzf-tab",
+        "rev": "e85f76a3af3b6b6b799ad3d64899047962b9ce52",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -734,6 +751,7 @@
         "dracula-sublime": "dracula-sublime",
         "dracula-xresources": "dracula-xresources",
         "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",
+        "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
         "neovim-nightly-overlay": "neovim-nightly-overlay",

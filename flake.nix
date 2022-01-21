@@ -29,6 +29,8 @@
     dracula-xresources.flake = false;
     dracula-zsh-syntax-highlighting.url = "github:dracula/zsh-syntax-highlighting?rev=47ba26d2d4912a1b8de066e589633ff1963c5621";
     dracula-zsh-syntax-highlighting.flake = false;
+    fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
+    fzf-tab.flake = false;
   };
 
   outputs = inputs:
