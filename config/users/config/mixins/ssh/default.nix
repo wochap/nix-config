@@ -12,7 +12,7 @@ in {
     users.users.${userName} = {
       # TODO: use keychain?
       openssh.authorizedKeys.keyFiles =
-        [ "~/.ssh/id_rsa.pub" "~/.ssh/id_rsa_boc.pub" ];
+        [ "~/.ssh/id_ed25519.pub" "~/.ssh/id_rsa.pub" "~/.ssh/id_rsa_boc.pub" ];
     };
 
     home-manager.users.${userName} = {
