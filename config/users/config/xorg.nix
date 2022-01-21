@@ -7,6 +7,7 @@ in
 {
   imports = [
     ./mixins/nixos-minimal-wm
+    ./mixins/ssh
     ./mixins/bspwm
     ./mixins/clipmenu.nix
     ./mixins/nix-common

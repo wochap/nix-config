@@ -26,11 +26,6 @@ in
       };
     };
 
-    # Remember private keys?
-    programs.ssh.startAgent = true;
-
-    # programs.ssh.askPassword = "";
-
     boot = {
       loader = {
         grub.configurationLimit = 42;

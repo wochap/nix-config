@@ -74,7 +74,6 @@ in
       programs.gpg.enable = true;
       services.gpg-agent = {
         enable = true;
-        enableSshSupport = true;
         defaultCacheTtl = 1800;
         pinentryFlavor = "gnome3";
       };

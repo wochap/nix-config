@@ -21,12 +21,6 @@ in
         "wheel"
         "adbusers"
       ];
-
-      # TODO: use keychain?
-      openssh.authorizedKeys.keyFiles = [
-        "~/.ssh/id_rsa.pub"
-        "~/.ssh/id_rsa_boc.pub"
-      ];
     };
 
     home-manager.users.${userName} = {
