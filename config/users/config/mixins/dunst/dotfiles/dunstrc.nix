@@ -1,10 +1,11 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   localPkgs = import ../../../../../packages { pkgs = pkgs; lib = lib; };
   border = "#44475a";
   borderWidth = 3;
   timeout = 60000;
+  fontSize = if (config.services.xserver.dpi == 192) then 7.5 else 10;
 in
 {
   global = {
@@ -42,7 +43,7 @@ in
     alignment = "left";
     vertical_alignment = "center";
     corner_radius = 10;
-    font = "FiraCode Nerd Font Mono 10";
+    font = "FiraCode Nerd Font Mono ${toString fontSize}";
     format = "<span weight='500'>%s\\n</span><span weight='300'>%b</span>";
     frame_color = border;
     frame_width = borderWidth;

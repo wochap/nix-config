@@ -35,7 +35,7 @@ in
           name = "Papirus";
           package = pkgs.papirus-icon-theme;
         };
-        settings = (import ./dotfiles/dunstrc.nix { pkgs = pkgs; lib = lib; });
+        settings = (import ./dotfiles/dunstrc.nix { inherit config; pkgs = pkgs; lib = lib; });
       };
     };
   };
