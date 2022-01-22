@@ -8,11 +8,12 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
+  cpupower = config.boot.kernelPackages.cpupower;
 in {
   imports = [
     (import "${inputs.nixos-hardware}/apple/macbook-pro/11-5")
     /etc/nixos/hardware-configuration.nix
-    # ./config/wayland.nix
+    # ../../config/wayland-minimal.nix
     ../../config/xorg.nix
   ];
 
@@ -57,15 +58,25 @@ in {
       };
       cleanTmpDir = true;
 
-      # needed for suspend
-      kernelParams = [ "acpi_osi=Darwin" ];
+      kernelParams = [
+        "intel_pstate=active"
+        # needed for suspend
+        "acpi_osi=Darwin"
+      ];
 
-      # lm_sensors
-      kernelModules = [ "coretemp" ];
+      kernelModules = [
+        # lm_sensors
+        "coretemp"
+        "intel_pstate"
+      ];
     };
 
     # use cpupower for more info
-    powerManagement.cpuFreqGovernor = "schedutil";
+    # powerManagement.cpuFreqGovernor = "schedutil";
+    # powerManagement.cpuFreqGovernor = "powersave";
+    # powerManagement.powertop.enable = true;
+    powerManagement.cpufreq.min = 800000;
+    powerManagement.cpufreq.max = 2800000;
 
     environment.sessionVariables = {
       GDK_DPI_SCALE = "0.5";
@@ -76,7 +87,8 @@ in {
 
     environment.systemPackages = with pkgs; [
       radeontop # monitor system amd
-      linuxKernel.packages.linux_5_10.cpupower
+      cpupower-gui
+      cpupower
     ];
 
     networking = {
@@ -122,8 +134,8 @@ in {
       tlp = {
         enable = true;
         settings = {
-          CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
-          CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
+          # CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
+          # CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
 
           # The following prevents the battery from charging fully to
           # preserve lifetime. Run `tlp fullcharge` to temporarily force
@@ -134,8 +146,8 @@ in {
 
           # 100 being the maximum, limit the speed of my CPU to reduce
           # heat and increase battery usage:
-          CPU_MAX_PERF_ON_AC = 80;
-          CPU_MAX_PERF_ON_BAT = 60;
+          # CPU_MAX_PERF_ON_AC = 80;
+          # CPU_MAX_PERF_ON_BAT = 60;
         };
       };
 
@@ -145,7 +157,7 @@ in {
         verbose = true;
         lowTemp = 30;
         highTemp = 50;
-        maxTemp = 80;
+        maxTemp = 85;
         maxFanSpeed = 5500;
         minFanSpeed = 4500;
       };
