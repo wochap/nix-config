@@ -21,6 +21,10 @@ in {
         NODE_PATH = "$HOME/.npm-packages/lib/node_modules";
       };
 
+      xdg.configFile = {
+        "direnv/direnv.toml".source = ./dotfiles/direnv.toml;
+      };
+
       home.file = {
         ".npmrc".source = ./dotfiles/.npmrc;
         ".envrc".source =
