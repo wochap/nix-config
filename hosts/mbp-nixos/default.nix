@@ -48,9 +48,7 @@ in {
     };
 
     boot = {
-      initrd.kernelModules = [
-        "amdgpu"
-      ];
+      initrd.kernelModules = [ "amdgpu" ];
 
       loader = {
         grub.enable = false;
@@ -108,7 +106,7 @@ in {
         libinput.touchpad.tapping = false;
 
         # GPU drivers
-        videoDrivers = [ "amdgpu" ];
+        videoDrivers = [ "amdgpu" "radeon" ];
 
         deviceSection = ''
           # does it fix screen tearing? maybe...
@@ -158,5 +156,9 @@ in {
 
     # Enable webcam
     hardware = { facetimehd.enable = true; };
+
+    # Hardware video acceleration?
+    hardware.opengl.extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
+    hardware.opengl.extraPackages32 = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
   };
 }
