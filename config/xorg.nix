@@ -5,25 +5,25 @@ let
 in
 {
   imports = [
-    ./mixins/xfce-minimal-wm
+    ./mixins/docker.nix # Comment on first install
+    ./mixins/fonts.nix
+    ./mixins/gnome-minimal-wm # Comment on first install
+    ./mixins/gnome-pkgs.nix # Comment on first install
+    ./mixins/kde-pkgs.nix # Comment on first install
+    ./mixins/keychron.nix
     ./mixins/lightdm
-    ./mixins/pkgs-xorg.nix
+    ./mixins/lorri
+    ./mixins/mongodb.nix
     ./mixins/nix-common.nix
+    ./mixins/nixos-networking.nix
     ./mixins/nixos.nix
     ./mixins/overlays.nix
+    ./mixins/pkgs-xorg.nix
     ./mixins/pkgs.nix
-    ./mixins/fonts.nix
-    # ./mixins/ipwebcam
-    ./mixins/nixos-networking.nix
-    ./mixins/keychron.nix
-    ./mixins/gnome-pkgs.nix # Comment on first install
-    ./mixins/gnome-minimal-wm # Comment on first install
-    ./mixins/kde-pkgs.nix # Comment on first install
-    ./mixins/docker.nix # Comment on first install
-    ./mixins/lorri
     ./mixins/vscode.nix
-    ./mixins/mongodb.nix
+    ./mixins/xfce-minimal-wm
     ./users/user-xorg.nix
+    # ./mixins/ipwebcam
   ];
 
   config = {

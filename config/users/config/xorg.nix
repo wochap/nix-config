@@ -6,38 +6,40 @@ let
 in
 {
   imports = [
-    ./mixins/nixos-minimal-wm
-    ./mixins/ssh
+    ./mixins/alacritty
+    ./mixins/bat.nix
     ./mixins/bspwm
     ./mixins/clipmenu.nix
-    ./mixins/nix-common
-    ./mixins/nixos
-    ./mixins/redshift.nix
-    ./mixins/firefox
-    ./mixins/thunar
+    ./mixins/default-browser
     ./mixins/discord
+    ./mixins/dunst
+    ./mixins/eww
+    ./mixins/firefox
     ./mixins/git.nix
     ./mixins/gtk.nix
-    ./mixins/qt.nix
+    ./mixins/htop.nix
+    ./mixins/kitty
+    ./mixins/mime-apps.nix
+    ./mixins/neofetch
+    ./mixins/nix-common
+    ./mixins/nixos
+    ./mixins/nixos-minimal-wm
+    ./mixins/nnn
     ./mixins/picom
     ./mixins/polybar
-    ./mixins/zsh
-    ./mixins/mime-apps.nix
-    ./mixins/vim
-    ./mixins/eww
     ./mixins/ptsh
-    ./mixins/kitty
-    ./mixins/alacritty
-    ./mixins/dunst
+    ./mixins/qt.nix
+    ./mixins/redshift.nix
     ./mixins/rofi
-    ./mixins/neofetch
+    ./mixins/ssh
+    ./mixins/sway
+    ./mixins/thunar
+    ./mixins/vim
+    ./mixins/waybar
+    ./mixins/zathura
+    ./mixins/zsh
     # ./mixins/android.nix
     # ./mixins/doom-emacs
-    ./mixins/default-browser
-    ./mixins/zathura
-    ./mixins/nnn
-    ./mixins/bat.nix
-    ./mixins/htop.nix
   ];
 
   config = {

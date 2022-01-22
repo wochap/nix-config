@@ -5,27 +5,32 @@ let
 in
 {
   imports = [
-    ./mixins/nix-common
-    ./mixins/nixos
-    ./mixins/redshift.nix
+    ./mixins/alacritty
+    ./mixins/bat.nix
+    ./mixins/default-browser
+    ./mixins/discord
+    ./mixins/dunst
     ./mixins/firefox
-    ./mixins/fish
     ./mixins/git.nix
     ./mixins/gtk.nix
-    # ./mixins/qt.nix
-    ./mixins/zsh
-    ./mixins/mime-apps.nix
-    ./mixins/vim
-    ./mixins/ptsh
+    ./mixins/htop.nix
     ./mixins/kitty
-    ./mixins/alacritty
-    ./mixins/dunst
+    ./mixins/mime-apps.nix
+    ./mixins/nix-common
+    ./mixins/nixos
+    ./mixins/nixos-minimal-wm
+    ./mixins/nnn
+    ./mixins/ptsh
+    ./mixins/qt.nix
+    ./mixins/redshift.nix
     ./mixins/rofi
-    # ./mixins/android.nix
-    ./mixins/default-browser
+    ./mixins/ssh
+    ./mixins/thunar
+    ./mixins/vim
     ./mixins/zathura
+    ./mixins/zsh
+    # ./mixins/android.nix
     # ./mixins/doom-emacs
-    # ./mixins/nnn
   ];
 
   config = {

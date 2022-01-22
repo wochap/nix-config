@@ -1,0 +1,103 @@
+{
+  "height": 37, // Waybar height (to be removed for auto height)
+  "modules-left": ["sway/workspaces"],
+  "modules-center": [],
+  "modules-right": ["pulseaudio", "network", "clock", "tray"],
+
+  // Modules configuration
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "{icon}",
+    "format-icons": {
+      "1": " ",
+      "2": " ",
+      "3": " ",
+      "4": "聆 ",
+      "5": " ",
+      "6": " ",
+      "7": " ",
+      "8": " ",
+      "urgent": " ",
+      "focused": " ",
+      "default": " "
+    }
+  },
+  "sway/mode": {
+    "format": "<span style=\"italic\">{}</span>"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": " ",
+      "deactivated": " "
+    }
+  },
+  "tray": {
+    "spacing": 10
+  },
+  "clock": {
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format": "{:%H:%M}  ",
+    "format-alt": "{:%A, %B %d, %Y}  "
+  },
+  "backlight": {
+    "format": "{icon} {percent}%",
+    "format-icons": [" ", " "],
+    "on-scroll-up": "light -A 1",
+    "on-scroll-down": "light -U 1"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "tooltip-format": "{timeTo}, {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " ",
+    "format-alt": "{time} {icon}",
+    "format-icons": ["", "", "", "", ""]
+  },
+  "network": {
+    "format-wifi": "直 ",
+    "format-ethernet": "{ifname}: {ipaddr}/{cidr}  ",
+    "format-linked": "{ifname} (No IP)  ",
+    "format-disconnected": "睊 ",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format": "{essid} {signalStrength}%"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}% {format_source}",
+    "format-bluetooth": "{icon} {volume}% {format_source}",
+    "format-bluetooth-muted": "   {volume}% {format_source}",
+    "format-muted": "  {format_source}",
+    "format-source": " ",
+    "format-source-muted": " ",
+    "format-icons": {
+      "headphone": " ",
+      "hands-free": " ",
+      "headset": " ",
+      "phone": " ",
+      "portable": " ",
+      "car": " ",
+      "default": [" ", " ", " "]
+    },
+    "tooltip-format": "{desc}, {volume}%",
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+    "on-click-middle": "pavucontrol"
+  },
+  "custom/media": {
+    "format": "{icon} {}",
+    "return-type": "json",
+    "max-length": 40,
+    "format-icons": {
+      "spotify": " ",
+      "default": " "
+    },
+    "escape": true,
+    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null",
+    "on-click": "playerctl play-pause"
+  }
+}
