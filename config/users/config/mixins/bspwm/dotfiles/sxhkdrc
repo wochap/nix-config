@@ -45,8 +45,12 @@ super + shift + {w,q}
 	bspc node -{c,k}
 
 # Alternate between the tiled and monocle layout
-super + l ; m
-	bspc desktop -l next
+super + l ; {m,s,t,w}
+  bsp-layout set { monocle, stack, tall, wide }
+
+# Center floating window
+super + l ; c
+  /etc/scripts/bspwm_center_window.sh
 
 # Send the newest marked node to the newest preselected node
 super + y
@@ -62,7 +66,7 @@ super + shift + m
 
 # swap the current node and the biggest node
 super + g
-  bspc node -s biggest
+  bspc node -s biggest.local
 
 # Kinda of `MacOS alt + grave` like
 # super + grave
