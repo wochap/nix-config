@@ -8,12 +8,10 @@ for instance in "${nodesArray[@]}"
 do
   title=$(xtitle "$instance")
   class=$(xprop -id "$instance" WM_CLASS | awk -F '"' '{print $4}')
-  tab=$'\t'
-  nl=$'\n'
-  rows+="${class}${tab}${title}${nl}"
+  rows+="<span>${class}\t${title}</span>\n"
 done
 
-s=$(echo "$rows" | column -t -s $'\t' | rofi -dmenu -format i -p "" -markup-rows -theme /etc/config/rofi-clipboard-theme.rasi)
+s=$(printf "$rows" | column -t -s "$(printf '\t')" | rofi -dmenu -i -p "" -markup-rows -theme /home/gean/nix-config/config/users/config/mixins/rofi/dotfiles/rofi-clipboard-theme.rasi)
 
 if [[ -n "$s" ]]; then
   node="${nodesArray[$s]}"
