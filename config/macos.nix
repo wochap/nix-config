@@ -2,11 +2,11 @@
 
 {
   imports = [
-    ./mixins/nix-common.nix
     ./mixins/darwin.nix
     ./mixins/fonts.nix
-    ./mixins/overlays.nix
     ./mixins/lorri
+    ./mixins/nix-common.nix
+    ./mixins/overlays.nix
     ./users/user-darwin.nix
   ];
 

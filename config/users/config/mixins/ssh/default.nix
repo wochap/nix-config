@@ -1,15 +1,18 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  isDarwin = config._displayServer == "darwin";
+  userName = config._userName;
 in {
   config = {
-    environment = { systemPackages = with pkgs; [ ]; };
+    programs = if (!isDarwin) then {
+      # Remember private keys?
+      ssh.startAgent = true;
 
-    # Remember private keys?
-    programs.ssh.startAgent = true;
-    # programs.ssh.askPassword = "";
+      # ssh.askPassword = "";
+    } else {};
 
-    users.users.${userName} = {
+    users.users.${userName} = lib.mkIf (!isDarwin) {
       # TODO: use keychain?
       openssh.authorizedKeys.keyFiles =
         [ "~/.ssh/id_ed25519.pub" "~/.ssh/id_rsa.pub" "~/.ssh/id_rsa_boc.pub" ];
