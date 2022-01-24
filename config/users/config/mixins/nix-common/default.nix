@@ -11,7 +11,6 @@ in
 
       # Setup dotfiles
       home.file = {
-        ".ssh/config".source = ./dotfiles/ssh-config;
         ".config/nixpkgs/config.nix".text = ''
           { allowUnfree = true; }
         '';

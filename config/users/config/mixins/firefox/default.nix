@@ -6,6 +6,11 @@ let
 in
 {
   config = {
+    environment.sessionVariables = {
+      # precise scrolling in Firefox
+      MOZ_USE_XINPUT2 = "1";
+    };
+
     home-manager.users.${userName} = {
       home.file = {
         ".mozilla/firefox/default/chrome/userChrome.css".text = ''
@@ -32,6 +37,7 @@ in
           }
         '';
         ".mozilla/firefox/default/chrome/userContent.css".text = ''
+          ${builtins.readFile ./assets/jira.css}
         '';
       };
       programs.firefox = {
@@ -90,3 +96,4 @@ in
     };
   };
 }
+

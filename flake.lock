@@ -70,6 +70,57 @@
         "type": "github"
       }
     },
+    "dracula-sublime": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631389861,
+        "narHash": "sha256-cUzPozktzJcLJxux/R99dKCRSexqjxBnFc8ekDdj3wc=",
+        "owner": "dracula",
+        "repo": "sublime",
+        "rev": "09faa29057c3c39e9a45f3a51a5e262375e3bf9f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "sublime",
+        "rev": "09faa29057c3c39e9a45f3a51a5e262375e3bf9f",
+        "type": "github"
+      }
+    },
+    "dracula-xresources": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631388950,
+        "narHash": "sha256-PoYRTnmMN6O7wVTHlvDRvBJSmrhPeH2gaiJwAaNLrRM=",
+        "owner": "dracula",
+        "repo": "xresources",
+        "rev": "49765e34adeebca381db1c3e5516b856ff149c93",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "xresources",
+        "rev": "49765e34adeebca381db1c3e5516b856ff149c93",
+        "type": "github"
+      }
+    },
+    "dracula-zsh-syntax-highlighting": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1626822724,
+        "narHash": "sha256-McwtGFXFmRFDyqv0bn7jxGcpYjaSugH3e2yiLb5aG+Y=",
+        "owner": "dracula",
+        "repo": "zsh-syntax-highlighting",
+        "rev": "47ba26d2d4912a1b8de066e589633ff1963c5621",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "zsh-syntax-highlighting",
+        "rev": "47ba26d2d4912a1b8de066e589633ff1963c5621",
+        "type": "github"
+      }
+    },
     "emacs-overlay": {
       "flake": false,
       "locked": {
@@ -227,6 +278,23 @@
         "type": "github"
       }
     },
+    "fzf-tab": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1640316334,
+        "narHash": "sha256-Qf9AZ2DjO9QUyEF7QG8JtlBHjwHfINOJkrMfu7pipns=",
+        "owner": "Aloxaf",
+        "repo": "fzf-tab",
+        "rev": "e85f76a3af3b6b6b799ad3d64899047962b9ce52",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Aloxaf",
+        "repo": "fzf-tab",
+        "rev": "e85f76a3af3b6b6b799ad3d64899047962b9ce52",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -297,17 +365,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1640679301,
-        "narHash": "sha256-SE5VYGmDyjkyoSKAhNU8JiAJCUuxxv9s+hbspl+wPcg=",
+        "lastModified": 1641975288,
+        "narHash": "sha256-TPo1DPDOfV77EpZAyavyUE1dkKjpoCNf2SoUJi68jak=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "c25636a6800b5b9d5da7282d9c0c61f87343b67c",
+        "rev": "b8308a5693b3b027d75a16ea65dca8d98619027b",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "c25636a6800b5b9d5da7282d9c0c61f87343b67c",
+        "rev": "b8308a5693b3b027d75a16ea65dca8d98619027b",
         "type": "github"
       }
     },
@@ -365,13 +433,29 @@
         "type": "github"
       }
     },
+    "nixos-hardware": {
+      "locked": {
+        "lastModified": 1609915993,
+        "narHash": "sha256-lQYxrkVy7I5YZN+Ojv3hrdQFohRpLWa8XR6gr0r8HsY=",
+        "owner": "NixOS",
+        "repo": "nixos-hardware",
+        "rev": "fb1682bab43b9dd8daf43ae28f09e44541ce33a2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixos-hardware",
+        "rev": "fb1682bab43b9dd8daf43ae28f09e44541ce33a2",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1640540585,
-        "narHash": "sha256-cCmknKFjWgam9jq+58wSd0Z4REia8mjBP65kXcL3ki8=",
+        "lastModified": 1641887635,
+        "narHash": "sha256-kDGpufwzVaiGe5e1sBUBPo9f1YN+nYHJlYqCaVpZTQQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ac169ec6371f0d835542db654a65e0f2feb07838",
+        "rev": "b2737d4980a17cc2b7d600d7d0b32fd7333aca88",
         "type": "github"
       },
       "original": {
@@ -479,6 +563,23 @@
         "owner": "NixOS",
         "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nnn": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641725197,
+        "narHash": "sha256-+W8fSzE1QzFkJjIlI+N5V7BJSl+LMvQZ55NEdsdVyTM=",
+        "owner": "jarun",
+        "repo": "nnn",
+        "rev": "b8b0bab4266a635519f605c2e3e193e392674273",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jarun",
+        "repo": "nnn",
+        "rev": "b8b0bab4266a635519f605c2e3e193e392674273",
         "type": "github"
       }
     },
@@ -611,6 +712,23 @@
         "type": "github"
       }
     },
+    "ranger": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1639429745,
+        "narHash": "sha256-fyhzypHTXLthplOrO9ykn6zqBCxSory4FSGky07Rhw4=",
+        "owner": "ranger",
+        "repo": "ranger",
+        "rev": "7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ranger",
+        "repo": "ranger",
+        "rev": "7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6",
+        "type": "github"
+      }
+    },
     "revealjs": {
       "flake": false,
       "locked": {
@@ -630,15 +748,22 @@
     "root": {
       "inputs": {
         "darwin": "darwin",
+        "dracula-sublime": "dracula-sublime",
+        "dracula-xresources": "dracula-xresources",
+        "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",
+        "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-doom-emacs": "nix-doom-emacs",
+        "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-wayland": "nixpkgs-wayland",
+        "nnn": "nnn",
         "ohmyzsh": "ohmyzsh",
         "prevstable": "prevstable",
+        "ranger": "ranger",
         "rust-overlay": "rust-overlay"
       }
     },

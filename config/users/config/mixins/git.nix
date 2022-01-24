@@ -15,6 +15,7 @@ in
     };
 
     home-manager.users.${userName} = {
+      # TODO: setup gh signature verification
       # Generates ~/.gitconfig
       programs.git = {
         package = pkgs.gitAndTools.gitFull;

@@ -56,13 +56,23 @@ in {
           source = ./scripts/bspwm_open_or_focus.sh;
           mode = "0755";
         };
+        "scripts/bspwm_kitty_scratch.sh" = {
+          source = ./scripts/bspwm_kitty_scratch.sh;
+          mode = "0755";
+        };
+
+        "scripts/projects/bspwm_dangerp.sh" = {
+          source = ./scripts/bspwm_dangerp.sh;
+          mode = "0755";
+        };
       };
     };
 
     home-manager.users.${userName} = {
       xsession = {
-        initExtra = "";
         enable = true;
+        scriptPath = ".xsession-hm";
+        initExtra = "";
         windowManager.bspwm = {
           enable = true;
           extraConfig = builtins.readFile ./dotfiles/bspwmrc;

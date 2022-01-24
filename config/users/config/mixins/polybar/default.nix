@@ -3,16 +3,21 @@
 let
   localPkgs = import ../../../../packages { pkgs = pkgs; lib = lib; };
   userName = config._userName;
-  isXorg = config._displayServer == "xorg";
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/config/users/config/mixins/polybar";
+  customPolybar = pkgs.polybar.override {
+    alsaSupport = true;
+    mpdSupport = true;
+    pulseSupport = true;
+  };
 in
 {
   config = {
     environment = {
       systemPackages = with pkgs; [
+        customPolybar
         localPkgs.zscroll # scroll text in shells
       ];
       sessionVariables = {
@@ -45,8 +50,10 @@ in
         };
       };
     };
-    home-manager.users.${userName} = lib.mkIf isXorg {
+
+    home-manager.users.${userName} = {
       xdg.configFile = {
+        "polybar/config.ini".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.ini";
         "polybar/main.ini".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/main.ini";
         "polybar/scripts/docker_info.sh".source = ./dotfiles/scripts/docker_info.sh;
         "polybar/scripts/get_gpu_status.sh".source = ./dotfiles/scripts/get_gpu_status.sh;
@@ -72,17 +79,6 @@ in
         "polybar/scripts/doge_usd.js" = {
           source = ./dotfiles/scripts/doge_usd.js;
           executable = true;
-        };
-      };
-      services.polybar = {
-        enable = true;
-        config = ./dotfiles/config.ini;
-        # Fixes: https://github.com/nix-community/home-manager/issues/1616
-        script = "";
-        package = pkgs.polybar.override {
-          alsaSupport = true;
-          mpdSupport = true;
-          pulseSupport = true;
         };
       };
     };

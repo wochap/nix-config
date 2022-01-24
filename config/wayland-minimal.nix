@@ -2,25 +2,25 @@
 
 {
   imports = [
-    ./mixins/sway
-    ./mixins/waybar
-    ./mixins/wayland-tiling.nix
+    ./mixins/lightdm
+    ./mixins/docker.nix # Comment on first install
+    ./mixins/fonts.nix
+    ./mixins/gnome-minimal-wm # Comment on first install
+    ./mixins/gnome-pkgs.nix # Comment on first install
+    ./mixins/kde-pkgs.nix # Comment on first install
+    ./mixins/keychron.nix
+    ./mixins/lorri
     ./mixins/nix-common.nix
+    ./mixins/nixos-networking.nix
     ./mixins/nixos.nix
     ./mixins/overlays.nix
     ./mixins/pkgs.nix
-    ./mixins/fonts.nix
-    ./mixins/ipwebcam
-    ./mixins/nixos-networking.nix
-    ./mixins/keychron.nix
-    ./mixins/gnome-pkgs.nix # Comment on first install
-    ./mixins/gnome-minimal-wm # Comment on first install
-    ./mixins/kde-pkgs.nix # Comment on first install
-    ./mixins/thunar.nix
-    ./mixins/docker.nix # Comment on first install
-    ./mixins/lorri
     ./mixins/vscode.nix
+    ./mixins/wayland-tiling.nix
+    # ./mixins/xfce-minimal-wm
     ./users/user-wayland.nix
+    # ./mixins/sway
+    # ./mixins/waybar
   ];
 
   config = {
@@ -45,8 +45,8 @@
       enable = true;
       displayManager = {
         gdm = {
-          enable = true;
-          nvidiaWayland = true;
+          enable = false;
+          # nvidiaWayland = true;
           wayland = true;
         };
       };

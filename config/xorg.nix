@@ -2,29 +2,28 @@
 
 let
   localPkgs = import ./packages { pkgs = pkgs; lib = lib; };
-  isHidpi = config._isHidpi;
 in
 {
   imports = [
-    # ./mixins/awesomewm
-    ./mixins/pkgs-xorg.nix
+    ./mixins/docker.nix # Comment on first install
+    ./mixins/fonts.nix
+    ./mixins/gnome-minimal-wm # Comment on first install
+    ./mixins/gnome-pkgs.nix # Comment on first install
+    ./mixins/kde-pkgs.nix # Comment on first install
+    ./mixins/keychron.nix
+    ./mixins/lightdm
+    ./mixins/lorri
+    ./mixins/mongodb.nix
     ./mixins/nix-common.nix
+    ./mixins/nixos-networking.nix
     ./mixins/nixos.nix
     ./mixins/overlays.nix
+    ./mixins/pkgs-xorg.nix
     ./mixins/pkgs.nix
-    ./mixins/fonts.nix
-    ./mixins/ipwebcam
-    ./mixins/nixos-networking.nix
-    ./mixins/keychron.nix
-    ./mixins/gnome-pkgs.nix # Comment on first install
-    ./mixins/gnome-minimal-wm # Comment on first install
-    ./mixins/kde-pkgs.nix # Comment on first install
-    ./mixins/thunar.nix
-    ./mixins/docker.nix # Comment on first install
-    ./mixins/lorri
     ./mixins/vscode.nix
-    ./mixins/mongodb.nix
+    ./mixins/xfce-minimal-wm
     ./users/user-xorg.nix
+    # ./mixins/ipwebcam
   ];
 
   config = {
@@ -53,57 +52,13 @@ in
           source = ./scripts/random-bg.sh;
           mode = "0755";
         };
-      };
-    };
-    services.xserver = {
-      enable = true;
-      exportConfiguration = true;
-      desktopManager = {
-        xterm.enable = false;
-      };
 
-      # Setup login screen
-      displayManager = {
-        lightdm = {
-          enable = true;
-          background = lib.mkForce ./assets/wallpaper.jpg;
-          greeters.gtk = {
-            enable = true;
-            cursorTheme = {
-              name = "Numix-Cursor";
-              package = pkgs.numix-cursor-theme;
-              size = if isHidpi then 40 else 32;
-            };
-            iconTheme = {
-              name = "Tela";
-              package = pkgs.tela-icon-theme;
-            };
-            theme = {
-              name = "Orchis-dark";
-              package = pkgs.orchis;
-            };
-            extraConfig = ''
-              font-name=Inter 9
-            '';
-            indicators = [
-              "~host"
-              "~spacer"
-              "~clock"
-              "~spacer"
-              "~session"
-              "~power"
-            ];
-          };
+        "scripts/start-neorg.sh" = {
+          source = ./scripts/start-neorg.sh;
+          mode = "0755";
         };
       };
     };
-
-    # Hide cursor automatically
-    # services.unclutter.enable = true;
-
-    # Hide cursor when typing
-    # services.xbanish.enable = true;
-    # services.xbanish.arguments = "-i shift -i control -i super -i alt -i space";
 
     # Add wifi tray
     programs.nm-applet.enable = true;

@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  isHidpi = config._isHidpi;
+  # isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
 in
 {
@@ -20,23 +20,11 @@ in
       };
     };
 
-    # TODO: install cachix?
-
     environment = {
-      systemPackages = with pkgs; [
-        shared-mime-info
-        xdg-user-dirs
-      ];
-
       shellAliases = {
         open = "xdg-open";
       };
     };
-
-    # Remember private keys?
-    programs.ssh.startAgent = true;
-
-    programs.ssh.askPassword = "";
 
     boot = {
       loader = {
@@ -84,17 +72,8 @@ in
 
     # Enable OpenGL
     hardware.opengl.enable = true;
-    hardware.opengl.driSupport = true;
+    hardware.opengl.driSupport = !isMbp;
 
-    # Hardware video acceleration?
-    hardware.opengl.extraPackages = with pkgs; [
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-    hardware.opengl.extraPackages32 = with pkgs; [
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
     hardware.opengl.driSupport32Bit = !isMbp;
 
     # Enable audio
@@ -111,6 +90,12 @@ in
       pulse.enable = true;
       # If you want to use JACK applications, uncomment this
       #jack.enable = true;
+    };
+
+    services.xserver = {
+      enable = true;
+      exportConfiguration = true;
+      desktopManager = { xterm.enable = true; };
     };
 
     # Apply trim to SSDs

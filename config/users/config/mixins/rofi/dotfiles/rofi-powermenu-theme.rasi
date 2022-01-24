@@ -10,7 +10,7 @@
 
 configuration {
   disable-history: false;
-  dpi: 0;
+  dpi: 144;
   drun-display-format: "{name}";
   hide-scrollbar: true;
   kb-select-1: "";

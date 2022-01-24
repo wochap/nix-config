@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 let
   userName = config._userName;
@@ -21,10 +21,6 @@ in
         "wheel"
         "adbusers"
       ];
-      openssh.authorizedKeys.keyFiles = [
-        "~/.ssh/id_rsa.pub"
-        "~/.ssh/id_rsa_boc.pub"
-      ];
     };
 
     home-manager.users.${userName} = {
@@ -32,6 +28,10 @@ in
       # paths it should manage.
       home.username = userName;
       home.homeDirectory = homeDirectory;
+
+      xresources.extraConfig = ''
+        ${builtins.readFile "${inputs.dracula-xresources}/Xresources"}
+      '';
     };
   };
 }

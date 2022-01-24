@@ -112,7 +112,7 @@ in
         rofi = prev.rofi.overrideAttrs (old: rec {
           src = prev.fetchurl {
             url = "https://github.com/lbonn/rofi/archive/70efa84f9bdf46593ee9d1a11acfe0a6e1c899a7.tar.gz";
-            sha256 = "04glljqbf9ckkc6x6fv4x1gqmy468n1agya0kd8rxdvz24wzf7c5";
+            sha256 = "sha256-lTwH2ChbU9NRYkHHhzE6vEd6ww/gw78tf5WvaC0iEyY=";
           };
         });
 

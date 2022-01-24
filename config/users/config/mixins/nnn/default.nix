@@ -1,47 +1,45 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
-  nnn-repo = pkgs.fetchFromGitHub {
-    owner = "jarun";
-    repo = "nnn";
-    rev = "aea97cf3a7e2f2cfd1ae607363c89be17b8e8dc7";
-    sha256 = "1b9x7vqgpmyid9f0fklnjyrn9z9rqi2jbclp9v43cyz8iqh3w27x";
-  };
-in
-{
+in {
   config = {
     environment = {
-      shellAliases = {
-        f = "nnn";
-      };
-    };
-
-    home-manager.users.${userName} = {
-      home.sessionVariables = {
+      sessionVariables = {
         NNN_TRASH = "1";
         NNN_FIFO = "/tmp/nnn.fifo";
         SPLIT = "v";
-        KITTY_LISTEN_ON = ''unix:''${TMPDIR-/tmp}/kitty'';
+        KITTY_LISTEN_ON = "unix:/tmp/kitty";
       };
+      shellAliases = { f = "nnn"; };
+    };
 
+    home-manager.users.${userName} = {
       programs.nnn = {
         enable = true;
-        package = pkgs.nnn.override ({
-          withNerdIcons = true;
-        });
-        extraPackages = with pkgs; [
-          mediainfo
-        ] ++ lib.optionals (!isDarwin) [
-          ffmpegthumbnailer
-          sxiv
-        ];
+        package = pkgs.nnn.override ({ withNerdIcons = true; });
+        extraPackages = with pkgs;
+          [
+            (writeShellScriptBin "scope.sh"
+              (builtins.readFile "${inputs.ranger}/ranger/data/scope.sh"))
+            libarchive
+            fontpreview
+            bat
+            exa
+            fzf
+            mediainfo
+          ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer sxiv ];
         plugins = {
           mappings = {
+            c = "fzcd";
+            f = "finder";
+            o = "fzopen";
             p = "preview-tui";
+            t = "nmount";
+            v = "imgview";
           };
-          src = "${nnn-repo}/plugins";
+          src = "${inputs.nnn}/plugins";
         };
       };
     };

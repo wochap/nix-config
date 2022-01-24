@@ -4,16 +4,14 @@ let
   hostName = "gdesktop";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
   isHidpi = true;
-  dpi = 144;
+  dpi = 144; # let xfce scale the windows
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
-in
-{
+in {
   imports = [
     ./hardware-configuration.nix
     ../../config/mixins/nvidia.nix
-    ../../config/mixins/kmonad
     ../../config/xorg.nix
   ];
 
@@ -43,6 +41,15 @@ in
 
       xresources.properties = lib.mkIf (isHidpi) {
         "Xft.dpi" = dpi;
+        "Xft.antialias" = 1;
+        "Xft.rgba" = "rgb";
+      };
+    };
+
+    environment = {
+      sessionVariables = {
+        # GDK_DPI_SCALE = "0.5";
+        BSPWM_GAP = "25";
       };
     };
 
@@ -55,6 +62,8 @@ in
       };
       cleanTmpDir = true;
     };
+
+    powerManagement.cpuFreqGovernor = "schedutil";
 
     networking = {
       hostName = hostName;
@@ -83,12 +92,12 @@ in
       # xkbVariant = "altgr-intl";
 
       # Setup monitors
-      screenSection = ''
-        # Select primary monitor
-        Option         "nvidiaXineramaInfoOrder" "DFP-0"
-        # Default multiple monitor setup
-        Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-      '';
+      # screenSection = ''
+      #   # Select primary monitor
+      #   Option         "nvidiaXineramaInfoOrder" "DFP-0"
+      #   # Default multiple monitor setup
+      #   Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
+      # '';
       deviceSection = ''
         # does it fix screen tearing? maybe...
         Option         "NoLogo" "1"

@@ -45,7 +45,7 @@ super + shift + {w,q}
 	bspc node -{c,k}
 
 # Alternate between the tiled and monocle layout
-super + m
+super + l ; m
 	bspc desktop -l next
 
 # Send the newest marked node to the newest preselected node
@@ -120,12 +120,6 @@ super + {p,b,comma,period}
 super + shift + {d,a}
   bspc node @/ -C {forward,backward}
 
-# Expand/contract a window by moving one of its side outward/inward
-super + r : {Left,Down,Up,Right}
-  STEP=40; SELECTION={1,2,3,4}; \
-  bspc node -z $(echo "left -$STEP 0,bottom 0 $STEP,top 0 -$STEP,right $STEP 0" | cut -d',' -f$SELECTION) || \
-  bspc node -z $(echo "right -$STEP 0,top 0 $STEP,bottom 0 -$STEP,left $STEP 0" | cut -d',' -f$SELECTION)
-
 # Focus the next|previous node in the current desktop
 super + {_,shift + }n
   bspc node -f {next,prev}.local.window.!hidden
@@ -141,6 +135,10 @@ super + {grave,Tab}
 # Open hidden windows
 super + alt + Tab
   /etc/scripts/rofi-hidden-windows.sh
+
+# Open windows
+alt + Tab
+  NODES_QUERY=".!hidden.local.window" /etc/scripts/rofi-hidden-windows.sh
 
 # # Focus the older or newer node in the focus history
 # super + {o,i}
@@ -171,17 +169,17 @@ super + {_, shift +}F4
 
 ### MOVE/RESIZE
 
-# # Expand a window by moving one of its side outward
-# ctrl + alt + {h,j,k,l}
-# 	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+# Expand a window by moving one of its side outward
+super + r : {Left,Down,Up,Right}
+  bspc node -z {left -40 0,bottom 0 40,top 0 -40,right 40 0}
 
-# # Contract a window by moving one of its side inward
-# ctrl + alt + shift + {h,j,k,l}
-# 	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+# Contract a window by moving one of its side inward
+super + shift + r : {Left,Down,Up,Right}
+  bspc node -z {right -40 0,top 0 40,bottom 0 -40,left 40 0}
 
-# # move a floating window
-# super + {Left,Down,Up,Right}
-#   bspc node -v {-20 0,0 20,0 -20,20 0}
+# move a floating window
+super + m : {Left,Down,Up,Right}
+  bspc node -v {-40 0,0 40,0 -40,40 0}
 
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
@@ -224,7 +222,7 @@ super + alt + t ; {k,a}
 
 # Open scratch terminal
 super + alt + t ; s
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-scratch 'kitty --class kitty-scratch'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-scratch '/etc/scripts/bspwm_kitty_scratch.sh'
 
 # Open magnifying glass
 super + alt + z
@@ -232,7 +230,7 @@ super + alt + z
 
 # Open quick note app
 super + alt + n
-  subl
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-neorg "/etc/scripts/start-neorg.sh"
 
 # Open monitor
 super + alt + m
@@ -250,7 +248,7 @@ super + ctrl + shift + Escape
 ### MEDIA KEYBINDINGS
 
 XF86MonBrightness{Down,Up}
-  light {-U 10,-A 10}
+  light {-U 5,-A 5}
 
 XF86Audio{LowerVolume,RaiseVolume}
   pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%}
@@ -273,16 +271,4 @@ XF86AudioPlay
 # Play previous media
 XF86AudioPrev
 	playerctl previous
-
-# Increase volume
-# XF86AudioRaiseVolume
-#   /etc/eww_vol.sh up
-
-# Decrease volume
-# XF86AudioLowerVolume
-#   /etc/eww_vol.sh down
-
-# Toggle mute
-# XF86AudioMute
-#   /etc/eww_vol.sh mute
 

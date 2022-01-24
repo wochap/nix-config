@@ -1,0 +1,4 @@
+[global]
+skip_dotenv = true
+[whitelist]
+exact = [ "/home/gean/.envrc" ]

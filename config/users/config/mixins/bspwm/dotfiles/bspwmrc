@@ -14,7 +14,7 @@ bspc config urgent_border_color "#f85149"
 #### BSPWM configuration ####
 bspc config external_rules_command /etc/scripts/bspwm_external_rules.sh
 bspc config border_width 2
-bspc config window_gap 64
+bspc config window_gap "${BSPWM_GAP:-64}"
 bspc config top_padding $(($POLYBAR_HEIGHT + $POLYBAR_MARGIN))
 bspc config split_ratio 0.5
 bspc config borderless_monocle true
@@ -36,7 +36,7 @@ bspc rule -a "Eog" state=floating
 bspc rule -a "Evolution-alarm-notify" state=floating sticky=on
 bspc rule -a "File-roller" state=floating
 bspc rule -a "Geary" state=pseudo_tiled
-bspc rule -a "Org.gnome.Nautilus" state=floating
+bspc rule -a "Org.gnome.Nautilus" state=floating sticky=on center=on border=on
 bspc rule -a ".thunar-wrapped_" state=floating
 bspc rule -a "Gnome-calculator" state=floating
 bspc rule -a "Gnome-calendar" state=pseudo_tiled
@@ -54,8 +54,9 @@ bspc rule -a "kmag" state=floating sticky=on
 bspc rule -a "mpv" state=floating
 bspc rule -a "Firefox" desktop=^5
 bspc rule -a "Google-chrome" desktop=^1
-bspc rule -a 'kitty-htop' state=floating sticky=on center=on border=off rectangle=1500x1200+0+0
-bspc rule -a 'kitty-scratch' state=floating sticky=on center=on border=off rectangle=1500x1200+0+0
+bspc rule -a 'kitty-htop' state=floating sticky=on center=on border=on rectangle=1500x1200+0+0
+bspc rule -a 'kitty-scratch' state=floating sticky=on center=on border=on rectangle=1500x1200+0+0
+bspc rule -a 'kitty-neorg' state=floating sticky=on center=on border=on rectangle=1500x1200+0+0
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
@@ -68,10 +69,10 @@ done
 # /etc/scripts/bspwm_borders.sh &
 
 # workspace 5
-coproc (firefox > /dev/null 2>&1)
+firefox > /dev/null 2>&1 &
 
 # workspace 1
-coproc (google-chrome-stable > /dev/null 2>&1)
+google-chrome-stable > /dev/null 2>&1 &
 
 bspc config ignore_ewmh_focus false
 

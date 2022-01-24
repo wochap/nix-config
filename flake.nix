@@ -1,5 +1,6 @@
 {
   inputs = {
+    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=fb1682bab43b9dd8daf43ae28f09e44541ce33a2";
     nixpkgs.url = "github:nixos/nixpkgs?rev=a0bf6b28dff054b4d95f28ff7e2d7b99b60aa027";
     prevstable.url = "github:nixos/nixpkgs?rev=cd63096d6d887d689543a0b97743d28995bc9bc3";
     home-manager.url = "github:nix-community/home-manager?rev=0b197562ab7bf114dd5f6716f41d4b5be6ccd357";
@@ -8,7 +9,7 @@
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=c12dee11e4975052975db37584ce49534877be7f";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=c25636a6800b5b9d5da7282d9c0c61f87343b67c";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=b8308a5693b3b027d75a16ea65dca8d98619027b";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
     darwin.url = "github:lnl7/nix-darwin?rev=5851d9613edf8b2279746c7e5b9faac55ff17e8a";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -17,6 +18,19 @@
 
     ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
     ohmyzsh.flake = false;
+
+    ranger.url = "github:ranger/ranger?rev=7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6";
+    ranger.flake = false;
+    nnn.url = "github:jarun/nnn?rev=b8b0bab4266a635519f605c2e3e193e392674273";
+    nnn.flake = false;
+    dracula-sublime.url = "github:dracula/sublime?rev=09faa29057c3c39e9a45f3a51a5e262375e3bf9f";
+    dracula-sublime.flake = false;
+    dracula-xresources.url = "github:dracula/xresources?rev=49765e34adeebca381db1c3e5516b856ff149c93";
+    dracula-xresources.flake = false;
+    dracula-zsh-syntax-highlighting.url = "github:dracula/zsh-syntax-highlighting?rev=47ba26d2d4912a1b8de066e589633ff1963c5621";
+    dracula-zsh-syntax-highlighting.flake = false;
+    fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
+    fzf-tab.flake = false;
   };
 
   outputs = inputs:
@@ -34,6 +48,7 @@
         desktop-sway = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-sway";
         desktop-gnome = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
         asus-vivobook = mkSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
+        mbp-nixos = mkSystem inputs.nixpkgs "x86_64-linux" "mbp-nixos";
       };
       darwinConfigurations."mbp-darwin" = inputs.darwin.lib.darwinSystem {
         system = "x86_64-darwin";

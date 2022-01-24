@@ -12,6 +12,8 @@ in {
           show_program_path = false;
           tree_view = true;
           vim_mode = true;
+          hide_userland_threads = true;
+          highlight_base_name = true;
         };
       };
     };

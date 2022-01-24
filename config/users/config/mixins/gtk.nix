@@ -14,23 +14,15 @@ in {
           tela-icon-theme
           orchis
           numix-icon-theme-circle
-          gnome.adwaita-icon-theme
           dracula-theme
           adementary-theme
 
           # Themes settings
-          gtk3.out
-          gtk3
-          gtk4
           gnome.gsettings-desktop-schemas
           gtk-engine-murrine
-          gnome.gnome-themes-extra
           gtk_engines
-          lxappearance
         ] ++ [
           localPkgs.dracula-icons
-          localPkgs.whitesur-dark-icons
-          localPkgs.whitesur-dark-theme
         ];
       variables = {
         # Hide dbus errors
@@ -38,9 +30,9 @@ in {
       };
       sessionVariables = {
         # https://wiki.gnome.org/Initiatives/CSD
-        "GTK_CSD" = "1";
+        GTK_CSD = "1";
 
-        "XDG_DATA_DIRS" = [
+        XDG_DATA_DIRS = [
           "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS"
         ];
       };
@@ -50,14 +42,16 @@ in {
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Tela";
+          name = "Tela-dark";
           package = pkgs.tela-icon-theme;
         };
         theme = {
-          name = "Orchis-dark";
+          name = "Orchis-dark-compact";
           package = pkgs.orchis;
         };
+
         gtk3.extraConfig = {
+          gtk-application-prefer-dark-theme = true;
           gtk-fallback-icon-theme = "gnome";
 
           # Hide minimize and maximize buttons

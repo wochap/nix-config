@@ -1,7 +1,7 @@
 configuration {
 	sidebar-mode: false;
-  display-emoji: "";
-  dpi: 0;
+  display-emoji: "";
+  dpi: 144;
   font: "Inter Regular 12";
   fullscreen: false;
   hide-scrollbar: false;
@@ -65,9 +65,9 @@ inputbar {
 }
 
 prompt {
-	font: "Noto Sans 33";
-	vertical-align: 0.5;
-	padding: 0 25px;
+  font: "woos 22";
+  vertical-align: 0.5;
+  padding: 16px 19px;
   margin: 0;
   background-color: @var-fg-selection;
   border-radius: 10px;

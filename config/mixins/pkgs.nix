@@ -8,12 +8,13 @@ in
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
-      bat
+      ansible
       bc # calculator cli
       busybox
       cached-nix-shell # fast nix-shell scripts
       devour # swallow
-      dex # execute DesktopEntry files
+      dex # execute DesktopEntry files (xdg/autostart)
+      dmidecode
       dnsutils # test dns
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
@@ -26,6 +27,7 @@ in
       jq # JSON
       killall
       libva-utils # verifying VA-API
+      lm_sensors
       lsof # print port process
       manpages
       mkcert # create certificates (HTTPS)
@@ -38,6 +40,7 @@ in
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer
+      tldr
       unrar
       unzip
       usbutils # lsusb, for android development
@@ -53,16 +56,14 @@ in
       # tightvnc
 
       # DE
-      flashfocus
       hunspell # dictionary for document programs
       hunspellDicts.en-us
-      pavucontrol # audio settings gui
       pulseaudio
 
       # DE CLI
       gitAndTools.gh
       gotop # monitor system
-      pamixer # audio cli
+      # pamixer # audio cli
       playerctl # media player cli
       systemd
 
@@ -72,10 +73,8 @@ in
       #dogecoin
 
       # APPS
-      betterdiscordctl
       bitwarden
       brave
-      discord
       dmenu
       filelight # view disk usage
       gparted
@@ -83,12 +82,12 @@ in
       nitrogen # wallpaper manager
       postman
       qbittorrent
-      robo3t
       screenkey # show key pressed
       simplenote
       skypeforlinux
       slack
       sublime3 # text editor
+      tmux
       tty-clock
       zoom-us
       # antimicroX
@@ -97,10 +96,10 @@ in
 
       # Themes
       capitaine-cursors
-      hicolor-icon-theme
-      papirus-icon-theme
+      # hicolor-icon-theme
+      # papirus-icon-theme
     ] ++ [
-      localPkgs.bigsur-cursors
+      # localPkgs.bigsur-cursors
     ] ++ (if (isWayland) then [
       pkgs.egl-wayland
       (pkgs.google-chrome.override {

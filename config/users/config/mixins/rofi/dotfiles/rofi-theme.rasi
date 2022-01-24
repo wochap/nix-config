@@ -3,7 +3,7 @@ configuration {
   display-drun: "";
   display-calc: "";
   display-emoji: "";
-  dpi: 0;
+  dpi: 144;
   drun-display-format: "{icon} {name}";
   font: "Iosevka Bold 12";
   icon-theme: "WhiteSur-dark";

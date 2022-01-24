@@ -15,7 +15,7 @@ in
     environment = {
       systemPackages = with pkgs; [
         # oni2
-        # neovide
+        neovide
         # neovim-qt # better fractional scaling support
         # uivonim
 
@@ -43,6 +43,7 @@ in
         stylua
 
         # required by lspconfig
+        clang-tools
         flow
         localPkgs.customNodePackages."@tailwindcss/language-server"
         localPkgs.customNodePackages.cssmodules-language-server
