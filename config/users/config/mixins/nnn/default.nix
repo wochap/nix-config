@@ -6,7 +6,7 @@ let
 in {
   config = {
     environment = {
-      sessionVariables = {
+      variables = {
         NNN_TRASH = "1";
         NNN_FIFO = "/tmp/nnn.fifo";
         SPLIT = "v";
@@ -24,12 +24,11 @@ in {
             (writeShellScriptBin "scope.sh"
               (builtins.readFile "${inputs.ranger}/ranger/data/scope.sh"))
             libarchive
-            fontpreview
             bat
             exa
             fzf
             mediainfo
-          ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer sxiv ];
+          ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer sxiv fontpreview ];
         plugins = {
           mappings = {
             c = "fzcd";

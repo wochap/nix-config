@@ -6,15 +6,18 @@ let
 in
 {
   imports = [
-    ./mixins/nix-common
-    ./mixins/git.nix
-    ./mixins/zsh
-    ./mixins/vim
-    ./mixins/kitty
     ./mixins/alacritty
-    ./mixins/ptsh
+    ./mixins/bat.nix
+    ./mixins/git.nix
+    # ./mixins/htop.nix
+    ./mixins/kitty
+    # ./mixins/neofetch
+    ./mixins/nix-common
     ./mixins/nnn
-    ./mixins/neofetch
+    ./mixins/ptsh
+    ./mixins/ssh
+    ./mixins/vim
+    ./mixins/zsh
   ];
 
   config = {
