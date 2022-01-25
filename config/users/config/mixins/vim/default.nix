@@ -13,6 +13,10 @@ in
 {
   config = {
     environment = {
+      variables = {
+        EDITOR =  "nvim";
+      };
+
       systemPackages = with pkgs; [
         # oni2
         # neovim-qt # better fractional scaling support
