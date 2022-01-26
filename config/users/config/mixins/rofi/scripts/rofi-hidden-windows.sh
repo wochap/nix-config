@@ -11,7 +11,7 @@ do
   rows+="<span>${class}\t${title}</span>\n"
 done
 
-s=$(printf "$rows" | column -t -s "$(printf '\t')" | rofi -dmenu -i -p "" -markup-rows -theme /home/gean/nix-config/config/users/config/mixins/rofi/dotfiles/rofi-clipboard-theme.rasi)
+s=$(printf "$rows" | column -t -s "$(printf '\t')" | rofi -format i -dmenu -i -p "" -markup-rows -theme /home/gean/nix-config/config/users/config/mixins/rofi/dotfiles/rofi-clipboard-theme.rasi)
 
 if [[ -n "$s" ]]; then
   node="${nodesArray[$s]}"
