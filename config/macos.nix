@@ -15,6 +15,7 @@
 
     environment = {
       etc = {
+        # TODO: chmod 440
         "sudoers.d/10-nix-commands".text = ''
           %admin ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild, \
                                         /run/current-system/sw/bin/nix*, \
