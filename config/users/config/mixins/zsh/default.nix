@@ -3,26 +3,11 @@
 let
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
-  zshExtra = if (isDarwin) then "" else ''
-    key=(
-      Up "''${terminfo[kcuu1]}"
-      Down "''${terminfo[kcud1]}"
-    )
-
-    # better up arrow history
-    autoload -U up-line-or-beginning-search
-    autoload -U down-line-or-beginning-search
-    zle -N up-line-or-beginning-search
-    zle -N down-line-or-beginning-search
-    bindkey "$key[Up]" up-line-or-beginning-search # Up
-    bindkey "$key[Down]" down-line-or-beginning-search # Down
-  '';
 in
 {
   config = {
     environment = {
       systemPackages = with pkgs; [
-        zsh-syntax-highlighting
         exa
       ];
       pathsToLink = [
