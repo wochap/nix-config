@@ -2,25 +2,25 @@
 export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
 
 # Ctrl + left/right arrow
-bindkey "^[[1;5C" forward-word
-bindkey "^[[1;5D" backward-word
+# bindkey "^[[1;5C" forward-word
+# bindkey "^[[1;5D" backward-word
 
 # ENABLE ZSH COMPLETION SYSTEM (OMZSH USED TO DO IT FOR US)
-zmodload -i zsh/complist
-autoload -U bashcompinit
-bashcompinit
-
-# Allow changing directories without `cd`.
-setopt AUTOCD
+# zmodload -i zsh/complist
+# autoload -U bashcompinit
+# bashcompinit
 
 # Allow shift-tab in ZSH suggestions
-bindkey '^[[Z' reverse-menu-complete
-
-# case-insensitive completion
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+# bindkey '^[[Z' reverse-menu-complete
 
 # highlight selection
-zstyle ':completion:*' menu select
+# zstyle ':completion:*' menu select
+
+# case-insensitive completion
+# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# Allow changing directories without `cd`.
+# setopt AUTOCD
 
 ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
 ### https://github.com/zsh-users/zsh-autosuggestions/issues/238
@@ -54,8 +54,15 @@ setopt HIST_FIND_NO_DUPS
 
 # Don't enter _any_ repeating commands into the history.
 setopt HIST_IGNORE_ALL_DUPS
+
 # Ignore duplicates when writing history file.
 setopt HIST_SAVE_NO_DUPS
 
 # Sessions append to the history list in the order they exit.
 setopt APPEND_HISTORY
+
+# ZSH_WEB_SEARCH_ENGINES=(
+#   nixos "https://search.nixos.org/options?channel=unstable&from=0&size=50&sort=relevance&type=packages&query="
+#   nix "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query="
+# )
+ZSH_WEB_SEARCH_ENGINES=(reddit "https://www.reddit.com/search/?q=")

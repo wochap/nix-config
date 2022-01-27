@@ -34,12 +34,12 @@ in
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
+          export ZSH="${inputs.ohmyzsh}"
+          ${builtins.readFile ./ohmyzsh.zsh}
           ${builtins.readFile ./.zshrc.zsh}
 
-          ${zshExtra}
-
-          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-          source ${inputs.dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
+          source ${inputs.ohmyzsh}/lib/key-bindings.zsh
+          source ${inputs.ohmyzsh}/lib/completion.zsh
           source ${inputs.ohmyzsh}/lib/clipboard.zsh
           source ${inputs.ohmyzsh}/plugins/web-search/web-search.plugin.zsh
           source ${inputs.ohmyzsh}/plugins/copydir/copydir.plugin.zsh
@@ -47,8 +47,11 @@ in
           source ${inputs.ohmyzsh}/plugins/dirhistory/dirhistory.plugin.zsh
 
           ${builtins.readFile ./awesome.zsh}
+
+          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          source ${inputs.dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
         '';
-        enableCompletion = true;
+        enableCompletion = false;
         enableAutosuggestions = true;
         history = {
           ignoreDups = false;
@@ -59,6 +62,9 @@ in
           size = 1000000000;
           # Shares current history file between all sessions as soon as shell closes
           share = true;
+        };
+        prezto = {
+          enable = false;
         };
         oh-my-zsh = {
           enable = false;
