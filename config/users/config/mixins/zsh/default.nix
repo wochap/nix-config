@@ -36,7 +36,7 @@ in
         initExtra = ''
           export ZSH="${inputs.ohmyzsh}"
           ${builtins.readFile ./ohmyzsh.zsh}
-          ${builtins.readFile ./.zshrc.zsh}
+          ${builtins.readFile ./zshrc.zsh}
 
           source ${inputs.ohmyzsh}/lib/key-bindings.zsh
           source ${inputs.ohmyzsh}/lib/completion.zsh
