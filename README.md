@@ -17,6 +17,20 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
 
    Initial [configuration.nix](configuration-example.nix) example
 
+   Extra steps for MacBook Pro 11,5 (to enable Intel GPU)
+
+   ```sh
+   sudo mkdir -p /boot/EFI/boot/
+   sudo cp /boot/EFI/boot/bootx64.efi /boot/EFI/boot/bootx64.efi.bak
+   sudo cp "$(nix-build '<nixpkgs>' --no-out-link -A 'refind')/share/refind/refind_x64.efi" /boot/EFI/boot/bootx64.efi
+
+   cd $(nix-build '<nixpkgs>' --no-out-link -A 'refind')
+   sudo nix-shell -p efibootmgr
+   refind-install
+   ```
+
+   Install [rEFInd-minimal](https://github.com/evanpurkhiser/rEFInd-minimal)
+
 ## Install device config
 
 You probably want to press `Ctrl + Alt + F1`
