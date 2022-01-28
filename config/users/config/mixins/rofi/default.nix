@@ -12,6 +12,10 @@ in
         rofi-emoji
       ];
       etc = {
+        "scripts/rofi-nm.sh" = {
+          source = ./scripts/rofi-nm.sh;
+          mode = "0755";
+        };
         "scripts/rofi-custom-options.sh" = {
           source = ./scripts/rofi-custom-options.sh;
           mode = "0755";

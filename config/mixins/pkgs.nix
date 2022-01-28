@@ -47,6 +47,7 @@ in
       vdpauinfo # verifying VDPAU
       vim
       wget
+      wirelesstools
       zip
       # base-devel
 
