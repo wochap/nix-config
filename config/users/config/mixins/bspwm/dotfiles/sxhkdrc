@@ -10,7 +10,7 @@ super + Escape
 
 # Take fullscreen screenshoot
 super + Print
-  /etc/scripts/takeshoot.sh --now
+  /etc/scripts/takeshot.sh --now
 
 # Open app launcher
 super + space
@@ -211,7 +211,7 @@ super + alt + r
 
 # Open screenshoot utility
 super + alt + s
-  /etc/scripts/takeshoot.sh --area
+  /etc/scripts/takeshot.sh --area
 
 # Open color picker
 super + alt + c

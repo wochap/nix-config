@@ -26,6 +26,10 @@ in {
           source = ./scripts/color-pick.sh;
           mode = "0755";
         };
+        "scripts/takeshoot.sh" = {
+          source = ./scripts/takeshot.sh;
+          mode = "0755";
+        };
 
         "scripts/bspwm_borders.sh" = {
           source = ./scripts/bspwm_borders.sh;
