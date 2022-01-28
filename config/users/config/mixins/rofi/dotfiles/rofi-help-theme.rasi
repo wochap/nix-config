@@ -32,7 +32,7 @@ window {
   text-color: @var-fg;
   transparency: "real";
   height: 100%;
-  padding: 25%;
+  padding: 15% 25%;
   width: 35em;
 }
 
