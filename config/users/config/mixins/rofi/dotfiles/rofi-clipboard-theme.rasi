@@ -92,7 +92,7 @@ element {
 
 element-text {
   expand: true;
-  highlight: none #8be9fd;
+  highlight: none #ff79c6;
   horizontal-align: 0;
   vertical-align: 0.5;
 }
