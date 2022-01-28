@@ -26,29 +26,34 @@ countdown() {
 
 # take shots
 shotnow() {
-  cd ${dir} && xfce4-screenshooter --fullscreen --clipboard --save "$file" && pinta ${dir}/"$file"
+  cd ${dir} && xfce4-screenshooter --fullscreen --clipboard --save "$file"
+  pinta ${dir}/"$file" &
   notify_user
 }
 
 shot5() {
   countdown '5'
-  sleep 1 && cd ${dir} && xfce4-screenshooter --fullscreen --clipboard --save "$file" && pinta ${dir}/"$file"
+  sleep 1 && cd ${dir} && xfce4-screenshooter --fullscreen --clipboard --save "$file"
+  pinta ${dir}/"$file" &
   notify_user
 }
 
 shot10() {
   countdown '10'
-  sleep 1 && cd ${dir} && xfce4-screenshooter --fullscreen --clipboard --save "$file" && pinta ${dir}/"$file"
+  sleep 1 && cd ${dir} && xfce4-screenshooter --fullscreen --clipboard --save "$file"
+  pinta ${dir}/"$file" &
   notify_user
 }
 
 shotwin() {
-  cd ${dir} && xfce4-screenshooter --window --clipboard --save "$file" && pinta ${dir}/"$file"
+  cd ${dir} && xfce4-screenshooter --window --clipboard --save "$file"
+  pinta ${dir}/"$file" &
   notify_user
 }
 
 shotarea() {
-  cd ${dir} && xfce4-screenshooter --region --clipboard --save "$file" && pinta ${dir}/"$file"
+  cd ${dir} && xfce4-screenshooter --region --clipboard --save "$file"
+  pinta ${dir}/"$file" &
   notify_user
 }
 

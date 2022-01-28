@@ -26,7 +26,7 @@ in {
           source = ./scripts/color-pick.sh;
           mode = "0755";
         };
-        "scripts/takeshoot.sh" = {
+        "scripts/takeshot.sh" = {
           source = ./scripts/takeshot.sh;
           mode = "0755";
         };
