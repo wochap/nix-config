@@ -2,7 +2,6 @@
 
 let
   userName = config._userName;
-  isHidpi = config._isHidpi;
   isWayland = config._displayServer == "wayland";
 in {
   config = {
@@ -14,14 +13,6 @@ in {
     };
 
     home-manager.users.${userName} = {
-      home.sessionVariables = lib.mkMerge [
-        (lib.mkIf (isHidpi && !isWayland) {
-          QT_AUTO_SCREEN_SCALE_FACTOR = "0";
-          QT_FONT_DPI = "96";
-          QT_SCALE_FACTOR = "2";
-        })
-      ];
-
       qt = {
         enable = true;
         platformTheme = "gnome";
