@@ -188,13 +188,9 @@ super + m : {Left,Down,Up,Right}
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
-# Show polybar
+# Toggle polybar
 super + alt + p
-  /etc/scripts/polybar-show.sh
-
-# Hide polybar
-super + shift + alt + p
-  /etc/scripts/polybar-hide.sh
+  /etc/scripts/polybar-toggle.sh
 
 # Lock screen
 super + alt + l
