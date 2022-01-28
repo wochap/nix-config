@@ -78,6 +78,7 @@ in
       dmenu
       filelight # view disk usage
       gparted
+      gpick
       insomnia
       nitrogen # wallpaper manager
       postman

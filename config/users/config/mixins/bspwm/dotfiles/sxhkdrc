@@ -210,7 +210,7 @@ super + alt + s
 
 # Open color picker
 super + alt + c
-  pick-colour-picker --pick
+  /etc/scripts/color-pick.sh
 
 # Open Browser
 super + alt + b ; {f,c,b}

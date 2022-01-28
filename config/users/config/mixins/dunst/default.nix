@@ -9,6 +9,7 @@ in
     environment = {
       systemPackages = with pkgs; [
         dunst
+        libnotify
       ];
       etc = {
         "assets/notification.flac" = {

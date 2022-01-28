@@ -22,6 +22,10 @@ in {
           source = ./scripts/lock.sh;
           mode = "0755";
         };
+        "scripts/color-pick.sh" = {
+          source = ./scripts/color-pick.sh;
+          mode = "0755";
+        };
 
         "scripts/bspwm_borders.sh" = {
           source = ./scripts/bspwm_borders.sh;
