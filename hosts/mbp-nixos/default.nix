@@ -11,7 +11,7 @@ let
   cpupower = config.boot.kernelPackages.cpupower;
 in {
   imports = [
-    (import "${inputs.nixos-hardware}/apple/macbook-pro/11-5")
+    ./mpb-hw.nix
     /etc/nixos/hardware-configuration.nix
     # ../../config/wayland-minimal.nix
     ../../config/xorg.nix
@@ -62,18 +62,23 @@ in {
         "intel_pstate=active"
         # needed for suspend
         "acpi_osi=Darwin"
+
+        # function keys
+        "hid_apple.fnmode=2"
+        "hid_apple.swap_opt_cmd=1"
       ];
 
       kernelModules = [
         # lm_sensors
         "coretemp"
         "intel_pstate"
+        "hid-apple"
       ];
     };
 
     # use cpupower for more info
     # powerManagement.cpuFreqGovernor = "schedutil";
-    # powerManagement.cpuFreqGovernor = "powersave";
+    powerManagement.cpuFreqGovernor = "powersave";
     # powerManagement.powertop.enable = true;
     powerManagement.cpufreq.min = 800000;
     powerManagement.cpufreq.max = 2800000;
@@ -89,6 +94,10 @@ in {
       radeontop # monitor system amd
       cpupower-gui
       cpupower
+
+      gpu-switch
+
+      brightnessctl
     ];
 
     networking = {
@@ -118,7 +127,7 @@ in {
         libinput.touchpad.tapping = false;
 
         # GPU drivers
-        videoDrivers = [ "amdgpu" "radeon" ];
+        videoDrivers = [ "intel" "amdgpu" "radeon" ];
 
         deviceSection = ''
           # does it fix screen tearing? maybe...
@@ -148,6 +157,9 @@ in {
           # heat and increase battery usage:
           # CPU_MAX_PERF_ON_AC = 80;
           # CPU_MAX_PERF_ON_BAT = 60;
+
+          CPU_BOOST_ON_AC = 0;
+          CPU_BOOST_ON_BAT = 0;
         };
       };
 
@@ -167,7 +179,10 @@ in {
     programs.light.enable = true;
 
     # Enable webcam
-    hardware = { facetimehd.enable = true; };
+    hardware = {
+      facetimehd.enable = true;
+      cpu.intel.updateMicrocode = true;
+    };
 
     # Hardware video acceleration?
     hardware.opengl.extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
