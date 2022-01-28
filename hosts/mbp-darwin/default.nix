@@ -4,6 +4,8 @@
 let
   hostName = "gmbp";
   userName = "gean";
+  hmConfig = config.home-manager.users.${userName};
+  configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
 in
 {
   imports = [
@@ -12,6 +14,7 @@ in
 
   config = {
     _userName = userName;
+    _configDirectory = configDirectory;
 
     # Used for backwards compatibility, please read the changelog before changing.
     # $ darwin-rebuild changelog

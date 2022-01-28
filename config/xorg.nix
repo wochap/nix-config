@@ -31,6 +31,14 @@ in
 
     environment = {
       etc = {
+        "dotfiles/cht-languages.txt".source = ./scripts/cht-languages.txt;
+        "dotfiles/cht-commands.txt".source = ./scripts/cht-commands.txt;
+
+        "scripts/cht.sh" = {
+          source = ./scripts/cht.sh;
+          mode = "0755";
+        };
+
         "scripts/fix_caps_lock_delay.sh" = {
           source = ./scripts/fix_caps_lock_delay.sh;
           mode = "0755";

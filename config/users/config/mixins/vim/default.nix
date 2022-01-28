@@ -13,9 +13,12 @@ in
 {
   config = {
     environment = {
+      variables = {
+        EDITOR =  "nvim";
+      };
+
       systemPackages = with pkgs; [
         # oni2
-        neovide
         # neovim-qt # better fractional scaling support
         # uivonim
 
@@ -56,6 +59,8 @@ in
         # localPkgs.customNodePackages.typescript-language-server
         # npm i typescript typescript-language-server -g
       ] ++ (if (!isDarwin) then [
+        neovide
+
         sumneko-lua-language-server
       ] else []);
       shellAliases = {

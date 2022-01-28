@@ -35,6 +35,7 @@ in
       };
 
       xdg.configFile = {
+        "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/kitty.conf".text = ''
           ${commonConfig}
           ${if isDarwin then macosConfig else linuxConfig}

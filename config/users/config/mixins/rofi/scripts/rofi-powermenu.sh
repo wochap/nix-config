@@ -26,27 +26,25 @@ selected="$(echo -e "$options" | rofi -theme /etc/config/rofi-powermenu-theme.ra
 
 case $selected in
   $shutdown)
-    exec systemctl poweroff --check-inhibitors=no
+    systemctl poweroff --check-inhibitors=no
     ;;
   $reboot)
-    exec systemctl reboot
+    systemctl reboot
     ;;
   $hibernate)
     # Hold all on disk
-    exec systemctl hibernate
+    systemctl hibernate
     ;;
   $sleep)
     # Hold all on RAM
-    mpc -q pause
-    amixer set Master mute
-    exec systemctl suspend
+    systemctl suspend
     ;;
   $logout)
     # TODO: add condition for sway
     # exec swaymsg exit
-    exec bspc quit
+    bspc quit
     ;;
   $lock)
-    exec /etc/scripts/lock.sh
+    /etc/scripts/lock.sh
     ;;
 esac

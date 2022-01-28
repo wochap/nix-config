@@ -67,17 +67,19 @@ in
     background = "#282a36";
     foreground = "#6272a4";
     timeout = timeout;
+    icon = "${localPkgs.whitesur-dark-icons}/share/icons/WhiteSur-dark/256x256/apps/userinfo.png";
   };
   urgency_normal = {
     background = "#282a36";
-    foreground = "#bd93f9";
+    foreground = "#f8f8f2";
     timeout = timeout;
     icon = "${localPkgs.whitesur-dark-icons}/share/icons/WhiteSur-dark/256x256/apps/userinfo.png";
   };
   urgency_critical = {
-    background = "#ff5555";
-    foreground = "#f8f8f2";
+    background = "#282a36";
+    foreground = "#bd93f9";
     timeout = timeout;
+    icon = "${localPkgs.whitesur-dark-icons}/share/icons/WhiteSur-dark/256x256/apps/userinfo.png";
   };
 
   slack = {

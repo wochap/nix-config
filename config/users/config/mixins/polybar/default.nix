@@ -26,26 +26,12 @@ in
         POLYBAR_MARGIN = "25";
       };
       etc = {
+        "scripts/polybar-toggle.sh" = {
+          source = ./scripts/polybar-toggle.sh;
+          mode = "0755";
+        };
         "scripts/polybar-start.sh" = {
-          source = ./dotfiles/scripts/polybar-start.sh;
-          mode = "0755";
-        };
-        "scripts/polybar-show.sh" = {
-          text = ''
-            #!/usr/bin/env bash
-
-            bspc config top_padding $(($POLYBAR_HEIGHT + $POLYBAR_MARGIN))
-            polybar-msg cmd show
-          '';
-          mode = "0755";
-        };
-        "scripts/polybar-hide.sh" = {
-          text = ''
-            #!/usr/bin/env bash
-
-            bspc config top_padding 0
-            polybar-msg cmd hide
-          '';
+          source = ./scripts/polybar-start.sh;
           mode = "0755";
         };
       };

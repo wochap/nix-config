@@ -4,6 +4,10 @@ let userName = config._userName;
 in {
   config = {
     environment = {
+      systemPackages = with pkgs; [
+        bsp-layout
+      ];
+
       etc = {
         "config/sxhkdrc" = {
           source = ./dotfiles/sxhkdrc;
@@ -16,6 +20,14 @@ in {
 
         "scripts/lock.sh" = {
           source = ./scripts/lock.sh;
+          mode = "0755";
+        };
+        "scripts/color-pick.sh" = {
+          source = ./scripts/color-pick.sh;
+          mode = "0755";
+        };
+        "scripts/takeshot.sh" = {
+          source = ./scripts/takeshot.sh;
           mode = "0755";
         };
 
@@ -58,6 +70,10 @@ in {
         };
         "scripts/bspwm_kitty_scratch.sh" = {
           source = ./scripts/bspwm_kitty_scratch.sh;
+          mode = "0755";
+        };
+        "scripts/bspwm_center_window.sh" = {
+          source = ./scripts/bspwm_center_window.sh;
           mode = "0755";
         };
 

@@ -2,11 +2,11 @@
 
 {
   imports = [
-    ./mixins/nix-common.nix
     ./mixins/darwin.nix
     ./mixins/fonts.nix
-    ./mixins/overlays.nix
     ./mixins/lorri
+    ./mixins/nix-common.nix
+    ./mixins/overlays.nix
     ./users/user-darwin.nix
   ];
 
@@ -15,6 +15,7 @@
 
     environment = {
       etc = {
+        # TODO: chmod 440
         "sudoers.d/10-nix-commands".text = ''
           %admin ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild, \
                                         /run/current-system/sw/bin/nix*, \

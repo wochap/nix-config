@@ -32,7 +32,7 @@ window {
   text-color: @var-fg;
   transparency: "real";
   height: 100%;
-  padding: 25%;
+  padding: 15% 25%;
   width: 35em;
 }
 
@@ -91,7 +91,7 @@ element {
 
 element-text {
   expand: true;
-  highlight: none #8be9fd;
+  highlight: none #ff79c6;
   horizontal-align: 0;
   vertical-align: 0.5;
 }

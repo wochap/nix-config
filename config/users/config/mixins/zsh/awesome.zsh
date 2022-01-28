@@ -9,6 +9,10 @@ function pro() {
   cd $(echo "$projects" | fzf)
 }
 
+function cht() {
+  /etc/scripts/cht.sh "$@"
+}
+
 function killport {
   kill $(lsof -t -i:"$1")
 }

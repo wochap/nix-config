@@ -3,26 +3,11 @@
 let
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
-  zshExtra = if (isDarwin) then "" else ''
-    key=(
-      Up "''${terminfo[kcuu1]}"
-      Down "''${terminfo[kcud1]}"
-    )
-
-    # better up arrow history
-    autoload -U up-line-or-beginning-search
-    autoload -U down-line-or-beginning-search
-    zle -N up-line-or-beginning-search
-    zle -N down-line-or-beginning-search
-    bindkey "$key[Up]" up-line-or-beginning-search # Up
-    bindkey "$key[Down]" down-line-or-beginning-search # Down
-  '';
 in
 {
   config = {
     environment = {
       systemPackages = with pkgs; [
-        zsh-syntax-highlighting
         exa
       ];
       pathsToLink = [
@@ -34,12 +19,12 @@ in
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
-          ${builtins.readFile ./.zshrc.zsh}
+          export ZSH="${inputs.ohmyzsh}"
+          ${builtins.readFile ./ohmyzsh.zsh}
+          ${builtins.readFile ./zshrc.zsh}
 
-          ${zshExtra}
-
-          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-          source ${inputs.dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
+          source ${inputs.ohmyzsh}/lib/key-bindings.zsh
+          source ${inputs.ohmyzsh}/lib/completion.zsh
           source ${inputs.ohmyzsh}/lib/clipboard.zsh
           source ${inputs.ohmyzsh}/plugins/web-search/web-search.plugin.zsh
           source ${inputs.ohmyzsh}/plugins/copydir/copydir.plugin.zsh
@@ -47,8 +32,11 @@ in
           source ${inputs.ohmyzsh}/plugins/dirhistory/dirhistory.plugin.zsh
 
           ${builtins.readFile ./awesome.zsh}
+
+          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          source ${inputs.dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
         '';
-        enableCompletion = true;
+        enableCompletion = false;
         enableAutosuggestions = true;
         history = {
           ignoreDups = false;
@@ -59,6 +47,9 @@ in
           size = 1000000000;
           # Shares current history file between all sessions as soon as shell closes
           share = true;
+        };
+        prezto = {
+          enable = false;
         };
         oh-my-zsh = {
           enable = false;
