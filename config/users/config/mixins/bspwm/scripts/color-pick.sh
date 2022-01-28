@@ -15,11 +15,11 @@ main() {
     mkdir -p $TEMP_DIR
     HEX="${HEX_COLOR#\#}"
     FNAME="$TEMP_DIR/$HEX.png"
-    convert -size 100x100 xc:"$HEX_COLOR" "$FNAME"
+    convert -size 80x80 xc:"$HEX_COLOR" "$FNAME"
     COLOR_CODE="$HEX_COLOR"
 
     printf %s "$COLOR_CODE" | xclip -sel c
-        notify-send -a XColor "$COLOR_CODE" --icon="$FNAME" --expire-time="$EXPIRE_TIME"
+        notify-send "XColor" "$COLOR_CODE" --icon="$FNAME" --expire-time="$EXPIRE_TIME"
 }
 
 main

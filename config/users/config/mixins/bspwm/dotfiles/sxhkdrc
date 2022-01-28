@@ -10,7 +10,7 @@ super + Escape
 
 # Take fullscreen screenshoot
 super + Print
-  flameshot full -p ~/Pictures/screenshots/
+  /etc/scripts/takeshoot.sh --now
 
 # Open app launcher
 super + space
@@ -206,7 +206,7 @@ super + alt + r
 
 # Open screenshoot utility
 super + alt + s
-  flameshot gui
+  /etc/scripts/takeshoot.sh --area
 
 # Open color picker
 super + alt + c

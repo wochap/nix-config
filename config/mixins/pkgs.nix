@@ -81,6 +81,7 @@ in
       gpick
       insomnia
       nitrogen # wallpaper manager
+      pinta
       postman
       qbittorrent
       screenkey # show key pressed
