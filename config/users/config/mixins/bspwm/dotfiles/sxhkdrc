@@ -21,6 +21,10 @@ super + space
 super + c
   /etc/scripts/rofi-calc.sh
 
+# Open wifi menu
+super + w
+  /etc/scripts/rofi-nm.sh
+
 # Show help
 super + slash
   /etc/scripts/rofi-help.sh

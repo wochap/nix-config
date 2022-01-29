@@ -19,6 +19,7 @@
         gnome.gnome-sound-recorder # test microphone
         gnome.gnome-system-monitor
         gnome.nautilus # file manager
+        gnome.networkmanagerapplet
         gnome.pomodoro
         prevstable.gnome3.gnome-todo
       ];
