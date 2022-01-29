@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  theme = config._theme;
   startsway = pkgs.writeTextFile {
     name = "startsway";
     destination = "/bin/startsway";
@@ -24,11 +25,25 @@ in {
       systemPackages = with pkgs; [ startsway ];
 
       etc = {
-        "sway/config".source = ./dotfiles/config.sh;
+        "sway/config".text = ''
+          ${builtins.readFile ./dotfiles/config}
+          ${builtins.readFile ./dotfiles/keybindings}
+
+          #### SWAY theme ####
+          #                         border                bg                    text                  indicator       child_border
+          client.focused            ${theme.purple}       ${theme.purple}       ${theme.background}   ${theme.cyan}
+          client.unfocused          ${theme.background}   ${theme.background}   ${theme.foreground}   ${theme.cyan}
+          client.focused_inactive   ${theme.background}   ${theme.background}   ${theme.foreground}   ${theme.cyan}
+          client.urgent             ${theme.pink}         ${theme.pink}         ${theme.background}   ${theme.cyan}
+        '';
         "sway/borders".source = ./assets/borders;
 
         "scripts/sway-lock.sh" = {
           source = ./scripts/sway-lock.sh;
+          mode = "0755";
+        };
+        "scripts/sway-autostart.sh" = {
+          source = ./scripts/sway-autostart.sh;
           mode = "0755";
         };
       };

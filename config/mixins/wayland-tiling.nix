@@ -4,11 +4,12 @@
   config = {
     environment = {
       systemPackages = with pkgs; [
-        # sway-alttab
-        # mako # notification daemon
-        # pactl # control a running PulseAudio sound server
-        swaylock # lockscreen
+        clipman
+        mako # notification daemon
+        swaylock-effects # lockscreen
+        swaybg
         wl-clipboard
+        # sway-alttab
       ];
     };
   };
