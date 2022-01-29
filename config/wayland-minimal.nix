@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./mixins/lightdm
     ./mixins/docker.nix # Comment on first install
     ./mixins/fonts.nix
     ./mixins/gnome-minimal-wm # Comment on first install
@@ -15,12 +14,12 @@
     ./mixins/nixos.nix
     ./mixins/overlays.nix
     ./mixins/pkgs.nix
+    ./mixins/sway
     ./mixins/vscode.nix
+    ./mixins/waybar
     ./mixins/wayland-tiling.nix
-    # ./mixins/xfce-minimal-wm
+    ./mixins/xfce-minimal-wm
     ./users/user-wayland.nix
-    # ./mixins/sway
-    # ./mixins/waybar
   ];
 
   config = {
@@ -29,27 +28,9 @@
     # For legacy apps
     programs.xwayland.enable = true;
 
-    environment = {
-      sessionVariables = {
-        # Force GTK to use wayland
-        # doesn't work with nvidia?
-        # GDK_BACKEND = "wayland";
-        # CLUTTER_BACKEND = "wayland";
-
-        # Force firefox to use wayland
-        MOZ_ENABLE_WAYLAND = "1";
-      };
-    };
-
     services.xserver = {
       enable = true;
-      displayManager = {
-        gdm = {
-          enable = false;
-          # nvidiaWayland = true;
-          wayland = true;
-        };
-      };
+      displayManager.lightdm.enable = false;
     };
   };
 }

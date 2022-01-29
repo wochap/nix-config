@@ -2,7 +2,11 @@
 
 let
   userName = config._userName;
-  localPkgs = import ../../../packages { pkgs = pkgs; lib = lib; };
+  isWayland = config._displayServer == "wayland";
+  localPkgs = import ../../../packages {
+    pkgs = pkgs;
+    lib = lib;
+  };
 in {
   config = {
     environment = {
@@ -21,21 +25,27 @@ in {
           gnome.gsettings-desktop-schemas
           gtk-engine-murrine
           gtk_engines
-        ] ++ [
-          localPkgs.dracula-icons
-        ];
+        ] ++ [ localPkgs.dracula-icons ];
       variables = {
         # Hide dbus errors
         "NO_AT_BRIDGE" = "1";
       };
-      sessionVariables = {
-        # https://wiki.gnome.org/Initiatives/CSD
-        GTK_CSD = "1";
+      sessionVariables = lib.mkMerge [
+        {
+          # https://wiki.gnome.org/Initiatives/CSD
+          GTK_CSD = "1";
 
-        XDG_DATA_DIRS = [
-          "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS"
-        ];
-      };
+          XDG_DATA_DIRS = [
+            "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS"
+          ];
+        }
+        (lib.mkIf isWayland {
+          # Force GTK to use wayland
+          # doesn't work with nvidia?
+          GDK_BACKEND = "wayland";
+          CLUTTER_BACKEND = "wayland";
+        })
+      ];
     };
 
     home-manager.users.${userName} = {

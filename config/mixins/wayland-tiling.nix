@@ -5,10 +5,8 @@
     environment = {
       systemPackages = with pkgs; [
         # sway-alttab
-        # brightnessctl
         # mako # notification daemon
         # pactl # control a running PulseAudio sound server
-        polkit_gnome
         swaylock # lockscreen
         wl-clipboard
       ];

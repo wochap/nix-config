@@ -5,40 +5,34 @@ let
     name = "startsway";
     destination = "/bin/startsway";
     executable = true;
-    text = ''
-      #! ${pkgs.bash}/bin/bash
-
-      # first import environment variables from the login manager
-      systemctl --user import-environment
-
-      # then start the service
-      exec systemctl --user start sway.service
-    '';
+    text = builtins.readFile ./scripts/startsway.sh;
   };
-in
-{
+in {
   config = {
     programs.sway = {
       enable = true;
       wrapperFeatures.gtk = true; # so that gtk works properly
-      extraPackages = []; # block rxvt
-      extraOptions = [
-        "--unsupported-gpu"
-      ];
+      extraPackages = [ ]; # block rxvt
+
+      # TODO: if nvidia
+      # extraOptions = [
+      #   "--unsupported-gpu"
+      # ];
     };
 
     environment = {
-      systemPackages = with pkgs; [
-        startsway
-      ];
+      systemPackages = with pkgs; [ startsway ];
+
       etc = {
-        "sway/config".source = ./dotfiles/config;
+        "sway/config".source = ./dotfiles/config.sh;
         "sway/borders".source = ./assets/borders;
-        "scripts/sway-lock.sh".source = ./scripts/sway-lock.sh;
+
+        "scripts/sway-lock.sh" = {
+          source = ./scripts/sway-lock.sh;
+          mode = "0755";
+        };
       };
     };
-
-    services.xserver.displayManager.defaultSession = "sway";
 
     systemd.user.targets.sway-session = {
       description = "Sway compositor session";

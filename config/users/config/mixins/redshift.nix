@@ -6,11 +6,11 @@ let
 in
 {
   config = {
-    # environment.systemPackages = with pkgs; [
-    #   wl-gammactl
-    #   gammastep
-    #   redshift-wlr
-    # ];
+    environment.systemPackages = with pkgs; lib.mkIf isWayland [
+      # wl-gammactl
+      gammastep
+      # redshift-wlr
+    ];
 
     home-manager.users.${userName} = {
       services.redshift = {
@@ -29,8 +29,8 @@ in
         latitude = "-12.051408";
         longitude = "-76.922124";
         temperature = {
-          day = 2000;
-          night = 2000;
+          day = 4000;
+          night = 3700;
         };
       };
     };
