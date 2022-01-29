@@ -16,6 +16,7 @@ in
     ./mixins/mongodb.nix
     ./mixins/nix-common.nix
     ./mixins/nixos-networking.nix
+    ./mixins/nixos-shared
     ./mixins/nixos.nix
     ./mixins/overlays.nix
     ./mixins/pkgs-xorg.nix
@@ -31,14 +32,6 @@ in
 
     environment = {
       etc = {
-        "dotfiles/cht-languages.txt".source = ./scripts/cht-languages.txt;
-        "dotfiles/cht-commands.txt".source = ./scripts/cht-commands.txt;
-
-        "scripts/cht.sh" = {
-          source = ./scripts/cht.sh;
-          mode = "0755";
-        };
-
         "scripts/fix_caps_lock_delay.sh" = {
           source = ./scripts/fix_caps_lock_delay.sh;
           mode = "0755";
@@ -55,20 +48,7 @@ in
           source = ./scripts/scrrec.sh;
           mode = "0755";
         };
-
-        "scripts/random-bg.sh" = {
-          source = ./scripts/random-bg.sh;
-          mode = "0755";
-        };
-
-        "scripts/start-neorg.sh" = {
-          source = ./scripts/start-neorg.sh;
-          mode = "0755";
-        };
       };
     };
-
-    # Add wifi tray
-    programs.nm-applet.enable = true;
   };
 }

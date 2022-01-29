@@ -7,10 +7,11 @@
     ./mixins/gnome-minimal-wm # Comment on first install
     ./mixins/gnome-pkgs.nix # Comment on first install
     ./mixins/kde-pkgs.nix # Comment on first install
-    ./mixins/keychron.nix
+    # ./mixins/keychron.nix
     ./mixins/lorri
     ./mixins/nix-common.nix
     ./mixins/nixos-networking.nix
+    ./mixins/nixos-shared
     ./mixins/nixos.nix
     ./mixins/overlays.nix
     ./mixins/pkgs.nix

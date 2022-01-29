@@ -2,20 +2,21 @@
 
 {
   imports = [
+    ./mixins/docker.nix # Comment on first install
+    ./mixins/fonts.nix
     ./mixins/gnome-de.nix
+    ./mixins/gnome-pkgs.nix # Comment on first install
+    ./mixins/ipwebcam
+    ./mixins/kde-pkgs.nix # Comment on first install
+    # ./mixins/keychron.nix
+    ./mixins/lorri
     ./mixins/nix-common.nix
+    ./mixins/nixos-networking.nix
+    ./mixins/nixos-shared
     ./mixins/nixos.nix
     ./mixins/overlays.nix
     ./mixins/pkgs.nix
-    ./mixins/fonts.nix
-    ./mixins/ipwebcam
-    ./mixins/nixos-networking.nix
-    ./mixins/keychron.nix
-    ./mixins/gnome-pkgs.nix # Comment on first install
-    ./mixins/kde-pkgs.nix # Comment on first install
     ./mixins/thunar.nix # Comment on first install
-    ./mixins/docker.nix # Comment on first install
-    ./mixins/lorri
     ./mixins/vscode.nix
     ./users/user-wayland.nix
   ];
@@ -25,18 +26,6 @@
 
     # For legacy apps
     programs.xwayland.enable = true;
-
-    environment = {
-      sessionVariables = {
-        # Force GTK to use wayland
-        # doesn't work with nvidia?
-        # GDK_BACKEND = "wayland";
-        # CLUTTER_BACKEND = "wayland";
-
-        # Force firefox to use wayland
-        MOZ_ENABLE_WAYLAND = "1";
-      };
-    };
 
     services.xserver = {
       enable = true;
