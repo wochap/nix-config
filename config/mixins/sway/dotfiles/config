@@ -1,0 +1,59 @@
+# vim: syntax=sh
+
+
+#### AUTOSTART ####
+exec bash /etc/scripts/sway-autostart.sh
+
+
+#### SWAY theme ####
+seat seat0 xcursor_theme Numix-Cursor 32
+font pango:JetBrainsMono Nerd Font 10
+
+default_border pixel 2
+default_floating_border pixel 2
+for_window [class=".*"] border pixel 2
+
+gaps inner 20
+gaps outer 10
+
+# border_images.focused /etc/sway/borders/dropShadowDark.png
+# border_images.focused_inactive /etc/sway/borders/dropShadowDark.png
+# border_images.unfocused /etc/sway/borders/dropShadowDark.png
+# border_images.urgent /etc/sway/borders/dropShadowDark.png
+
+
+#### SWAY configuration ####
+
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+# TODO: make it dynamic, use kanshi
+output eDP-1 disable
+output DP-3 resolution 3840x2160 scale 1.5
+output * bg /home/gean/Pictures/backgrounds/default.png fill
+
+focus_follows_mouse yes
+
+exec swayidle -w \
+     timeout 300 'bash /etc/scripts/sway-lock.sh' \
+     timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+     before-sleep 'bash /etc/scripts/sway-lock.sh'
+
+# TODO: inputs
+# swaymsg -t get_inputs
+
+
+#### SWAY rules ####
+for_window [class="Blueberry.py"] floating enable; move position center;
+for_window [class="Eog"] floating enable; move position center;
+for_window [class="File-roller"] floating enable; move position center;
+for_window [class="Org.gnome.Nautilus"] floating enable; move position center; sticky enable;
+for_window [class=".thunar-wrapped_"] floating enable; move position center; sticky enable;
+for_window [class="Gnome-font-viewer"] floating enable; move position center;
+for_window [class="Nm-connection-editor"] floating enable; move position center;
+for_window [class="Pavucontrol"] floating enable; move position center;
+# for_window [window_role="gimp-dock"] floating enable; move position center; resize shrink width 50 px or 50ppt
+
+
+#### SWAY workspaces ####
+
+include @sysconfdir@/sway/config.d/*
+

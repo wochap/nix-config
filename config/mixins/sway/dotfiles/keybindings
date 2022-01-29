@@ -1,0 +1,211 @@
+# vim: syntax=sh
+
+# Exit sway (logs you out of your Wayland session)
+# bindsym $mod+Escape exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+#### SWAY keybindings ####
+
+set $mod Mod4
+set $left left
+set $down down
+set $up up
+set $right right
+set $term kitty
+set $menu wofi --show drun,run | args swaymsg exec --
+
+floating_modifier $mod normal
+
+# Reload the configuration file
+bindsym $mod+Ctrl+Escape reload
+
+# Open power menu
+
+# Take fullscreen screenshoot
+
+# Open app launcher
+bindsym $mod+space exec $menu
+
+# Open calc
+
+# Show help
+
+# Show clipboard
+bindsym $mod+v exec /etc/scripts/wofi-clipboard.sh
+
+# Clear clipboard
+bindsym $mod+Shift+v exec clipman clear --all
+
+# Show emojis
+
+# Open terminal
+bindsym $mod+Return exec $term
+
+# Close focused window
+bindsym $mod+Shift+w kill
+
+# Alternate between the tiled and monocle layout
+mode "layout" {
+  bindsym m layout tabbed
+  bindsym s layout default
+  bindsym c move position center
+  bindsym Escape mode "default"
+}
+bindsym $mod+l mode "layout"
+
+
+### STATE/FLAGS
+
+# Set the window state (tiled|floating)
+bindsym $mod+s floating enable
+bindsym $mod+t floating disable
+
+# Toggle fullscreen
+bindsym $mod+f fullscreen toggle
+
+# Set the node flags (sticky)
+bindsym $mod+ctrl+y sticky toggle
+
+
+### PRESELECT
+
+# preselect the direction
+bindsym $mod+ctrl+Right split horizontal
+bindsym $mod+ctrl+Down split vertical
+bindsym $mod+ctrl+space split none
+
+
+### FOCUS/SWAP
+
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+bindsym $mod+n focus next
+bindsym $mod+Shift+n focus prev
+
+# Open hidden windows
+# TODO
+
+# Open windows
+# TODO
+
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+
+### MOVE/RESIZE
+mode "resize" {
+  bindsym $left resize shrink width 40px
+  bindsym $down resize grow height 40px
+  bindsym $up resize shrink height 40px
+  bindsym $right resize grow width 40px
+  bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+mode "move" {
+  bindsym $left move left 40px
+  bindsym $down move down 40px
+  bindsym $up move up 40px
+  bindsym $right move right 40px
+  bindsym Escape mode "default"
+}
+bindsym $mod+m mode "move"
+
+
+### APPLICATION KEYBINDINGS (Super + Alt + Key)
+
+# Toggle polybar
+
+# Open file manager
+bindsym $mod+alt+f exec \
+  nautilus
+
+# Open screenshoot utility
+
+# Open Browser
+mode "browser" {
+  bindsym b exec brave
+  bindsym c exec google-chrome-stable
+  bindsym f exec firefox
+  bindsym Escape mode "default"
+}
+bindsym $mod+alt+b mode "browser"
+
+# Open terminal
+mode "terminal" {
+  bindsym a exec alacritty
+  bindsym k exec kitty
+  bindsym Escape mode "default"
+}
+bindsym $mod+alt+t mode "terminal"
+
+# Open magnifying glass
+
+# Open quick note app
+
+# Open monitor
+
+# TODO: dunst/mako
+
+
+### MEDIA KEYBINDINGS
+
+bindsym XF86MonBrightnessUp exec \
+  brightnessctl set 5%+
+  # light {-U 5,-A 5}
+
+bindsym XF86MonBrightnessDown exec \
+  brightnessctl set 5%-
+  # light {-U 5,-A 5}
+
+bindsym XF86AudioRaiseVolume exec \
+  pactl set-sink-volume @DEFAULT_SINK@ +5%
+
+bindsym XF86AudioLowerVolume exec \
+  pactl set-sink-volume @DEFAULT_SINK@ -5%
+
+bindsym XF86AudioMute exec \
+  pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Play next media
+bindsym XF86AudioNext exec \
+  playerctl next
+
+# Pause media
+bindsym XF86AudioStop exec \
+  playerctl pause
+
+# Play media
+bindsym XF86AudioPlay exec \
+  playerctl play-pause
+
+# Play previous media
+bindsym XF86AudioPrev exec \
+  playerctl previous
+
