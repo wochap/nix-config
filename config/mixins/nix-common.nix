@@ -30,6 +30,12 @@
       example = "/home/gean/nix-config";
       description = "Path of config folder";
     };
+    _theme = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
+      default = {};
+      example = "{}";
+      description = "Theme colors";
+    };
   };
 
   config = {

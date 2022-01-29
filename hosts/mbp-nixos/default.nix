@@ -9,6 +9,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
   cpupower = config.boot.kernelPackages.cpupower;
+  draculaTheme = import ../../config/mixins/dracula.nix;
 in {
   imports = [
     "${inputs.nixos-hardware}/common/pc/laptop/acpi_call.nix"
@@ -24,6 +25,7 @@ in {
     _userName = userName;
     _isHidpi = isHidpi;
     _configDirectory = configDirectory;
+    _theme = draculaTheme;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
@@ -75,6 +77,7 @@ in {
 
       systemPackages = with pkgs; [
         radeontop # monitor system amd
+
         cpupower-gui
         cpupower
 
