@@ -10,7 +10,7 @@ in
     ./mixins/gnome-minimal-wm # Comment on first install
     ./mixins/gnome-pkgs.nix # Comment on first install
     ./mixins/kde-pkgs.nix # Comment on first install
-    ./mixins/keychron.nix
+    # ./mixins/keychron.nix
     ./mixins/lightdm
     ./mixins/lorri
     ./mixins/mongodb.nix

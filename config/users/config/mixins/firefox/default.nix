@@ -7,6 +7,9 @@ in
 {
   config = {
     environment.sessionVariables = {
+      # Force firefox to use wayland
+      MOZ_ENABLE_WAYLAND = lib.mkIf isWayland "1";
+
       # precise scrolling in Firefox
       MOZ_USE_XINPUT2 = "1";
     };

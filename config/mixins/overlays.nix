@@ -140,9 +140,9 @@ in
       })
 
       # wayland on nvidia works fine without more overlays
-      inputs.nixpkgs-wayland.overlay-egl
+      # inputs.nixpkgs-wayland.overlay-egl
       # sway doesnt launch with overlay ⬇
-      # inputs.nixpkgs-wayland.overlay
+      inputs.nixpkgs-wayland.overlay
 
       # (final: prev: {
       #   sway = (prev.sway.overrideAttrs (old: rec {

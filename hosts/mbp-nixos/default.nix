@@ -3,18 +3,21 @@
 let
   hostName = "gmbp";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
-  isHidpi = true;
-  dpi = 192;
+  isHidpi = false;
+  dpi = 96;
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
   cpupower = config.boot.kernelPackages.cpupower;
 in {
   imports = [
+    "${inputs.nixos-hardware}/common/pc/laptop/acpi_call.nix"
     ./mpb-hw.nix
     /etc/nixos/hardware-configuration.nix
-    # ../../config/wayland-minimal.nix
-    ../../config/xorg.nix
+    ../../config/mixins/backlight.nix
+    ../../config/wayland-minimal.nix
+    # ../../config/xorg.nix
+    # ./xorg.nix
   ];
 
   config = {
@@ -40,12 +43,6 @@ in {
       # the Home Manager release notes for a list of state version
       # changes in each release.
       home.stateVersion = "21.03";
-
-      xresources.properties = lib.mkIf (isHidpi) {
-        "Xft.dpi" = dpi;
-        "Xft.antialias" = 1;
-        "Xft.rgba" = "rgb";
-      };
     };
 
     boot = {
@@ -59,51 +56,31 @@ in {
       cleanTmpDir = true;
 
       kernelParams = [
+        # needed for powersave
         "intel_pstate=active"
+
         # needed for suspend
         "acpi_osi=Darwin"
 
-        # function keys
+        # needed function keys
         "hid_apple.fnmode=2"
         "hid_apple.swap_opt_cmd=1"
       ];
 
-      kernelModules = [
-        # lm_sensors
-        "coretemp"
-        "intel_pstate"
-        "hid-apple"
+      kernelModules = [ "coretemp" "intel_pstate" "hid-apple" ];
+    };
+
+    environment = {
+      sessionVariables = { WIFI_DEVICE = "wlp4s0"; };
+
+      systemPackages = with pkgs; [
+        radeontop # monitor system amd
+        cpupower-gui
+        cpupower
+
+        gpu-switch
       ];
     };
-
-    # use cpupower for more info
-    # powerManagement.cpuFreqGovernor = "schedutil";
-    powerManagement.cpuFreqGovernor = "powersave";
-    # powerManagement.powertop.enable = true;
-    powerManagement.cpufreq.min = 800000;
-    powerManagement.cpufreq.max = 2800000;
-
-    environment.sessionVariables = {
-      QT_AUTO_SCREEN_SCALE_FACTOR = "0";
-      QT_FONT_DPI = "96";
-      QT_SCALE_FACTOR = "2";
-
-      GDK_DPI_SCALE = "0.5";
-      GDK_SCALE = "2";
-
-      WIFI_DEVICE = "wlp4s0";
-      BSPWM_GAP = "25";
-    };
-
-    environment.systemPackages = with pkgs; [
-      radeontop # monitor system amd
-      cpupower-gui
-      cpupower
-
-      gpu-switch
-
-      brightnessctl
-    ];
 
     networking = {
       hostName = hostName;
@@ -132,40 +109,17 @@ in {
         libinput.touchpad.tapping = false;
 
         # GPU drivers
-        videoDrivers = [ "intel" "amdgpu" "radeon" ];
+        videoDrivers = [ "intel" "amdgpu" ];
 
         deviceSection = ''
           # does it fix screen tearing? maybe...
-          # Option         "NoLogo" "1"
-          # Option         "RenderAccel" "1"
-          # Option         "TripleBuffer" "true"
-          # Option         "MigrationHeuristic" "greedy"
-          # Option         "AccelMethod" "sna"
+          Option         "NoLogo" "1"
+          Option         "RenderAccel" "1"
+          Option         "TripleBuffer" "true"
+          Option         "MigrationHeuristic" "greedy"
+          Option         "AccelMethod" "sna"
           Option         "TearFree"    "true"
         '';
-      };
-
-      tlp = {
-        enable = true;
-        settings = {
-          # CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
-          # CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
-
-          # The following prevents the battery from charging fully to
-          # preserve lifetime. Run `tlp fullcharge` to temporarily force
-          # full charge.
-          # https://linrunner.de/tlp/faq/battery.html#how-to-choose-good-battery-charge-thresholds
-          START_CHARGE_THRESH_BAT0 = 40;
-          STOP_CHARGE_THRESH_BAT0 = 50;
-
-          # 100 being the maximum, limit the speed of my CPU to reduce
-          # heat and increase battery usage:
-          # CPU_MAX_PERF_ON_AC = 80;
-          # CPU_MAX_PERF_ON_BAT = 60;
-
-          CPU_BOOST_ON_AC = 0;
-          CPU_BOOST_ON_BAT = 0;
-        };
       };
 
       # Macbook fan config
@@ -180,17 +134,42 @@ in {
       };
     };
 
-    # Update display brightness
-    programs.light.enable = true;
+    # powerManagement
+    services.tlp = {
+      enable = true;
+      settings = {
+        # The following prevents the battery from charging fully to
+        # preserve lifetime. Run `tlp fullcharge` to temporarily force
+        # full charge.
+        # https://linrunner.de/tlp/faq/battery.html#how-to-choose-good-battery-charge-thresholds
+        START_CHARGE_THRESH_BAT0 = 40;
+        STOP_CHARGE_THRESH_BAT0 = 50;
 
-    # Enable webcam
-    hardware = {
-      facetimehd.enable = true;
-      cpu.intel.updateMicrocode = true;
+        # 100 being the maximum, limit the speed of my CPU to reduce
+        # heat and increase battery usage:
+        # CPU_MAX_PERF_ON_AC = 80;
+        # CPU_MAX_PERF_ON_BAT = 60;
+
+        CPU_BOOST_ON_AC = 0;
+        CPU_BOOST_ON_BAT = 0;
+      };
+    };
+    powerManagement = {
+      cpuFreqGovernor = "powersave";
+      powertop.enable = true;
+      cpufreq.min = 800000;
+      cpufreq.max = 2800000;
     };
 
-    # Hardware video acceleration?
-    hardware.opengl.extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
-    hardware.opengl.extraPackages32 = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
+    hardware = {
+      # Enable webcam
+      facetimehd.enable = true;
+
+      cpu.intel.updateMicrocode = true;
+
+      # Hardware video acceleration?
+      opengl.extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
+      opengl.extraPackages32 = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
+    };
   };
 }
