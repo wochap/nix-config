@@ -18,6 +18,7 @@
     ./mixins/vscode.nix
     ./mixins/waybar
     ./mixins/wayland-tiling.nix
+    ./mixins/wofi
     ./mixins/xfce-minimal-wm
     ./users/user-wayland.nix
   ];
