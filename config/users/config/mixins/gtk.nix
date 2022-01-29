@@ -22,7 +22,7 @@ in {
           adementary-theme
 
           # Themes settings
-          gnome.gsettings-desktop-schemas
+          gsettings-desktop-schemas
           gtk-engine-murrine
           gtk_engines
         ] ++ [ localPkgs.dracula-icons ];
@@ -43,6 +43,7 @@ in {
           # Force GTK to use wayland
           # doesn't work with nvidia?
           GDK_BACKEND = "wayland";
+
           CLUTTER_BACKEND = "wayland";
         })
       ];

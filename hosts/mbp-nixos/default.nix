@@ -126,11 +126,13 @@ in {
       mbpfan = {
         enable = true;
         verbose = true;
-        lowTemp = 30;
-        highTemp = 50;
-        maxTemp = 85;
-        maxFanSpeed = 5500;
-        minFanSpeed = 4500;
+        settings.general = {
+          low_temp = 30;
+          high_temp = 50;
+          max_temp = 85;
+          max_fan1_speed = 5500;
+          min_fan1_speed = 4500;
+        };
       };
     };
 
@@ -155,7 +157,7 @@ in {
       };
     };
     powerManagement = {
-      cpuFreqGovernor = "powersave";
+      # cpuFreqGovernor = "powersave";
       powertop.enable = true;
       cpufreq.min = 800000;
       cpufreq.max = 2800000;

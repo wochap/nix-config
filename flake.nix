@@ -1,7 +1,7 @@
 {
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=fb1682bab43b9dd8daf43ae28f09e44541ce33a2";
-    nixpkgs.url = "github:nixos/nixpkgs?rev=a0bf6b28dff054b4d95f28ff7e2d7b99b60aa027";
+    nixpkgs.url = "github:nixos/nixpkgs?rev=e3264bbf018dac6f55307d03407d480ca0f11016";
     prevstable.url = "github:nixos/nixpkgs?rev=cd63096d6d887d689543a0b97743d28995bc9bc3";
     home-manager.url = "github:nix-community/home-manager?rev=0b197562ab7bf114dd5f6716f41d4b5be6ccd357";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -19,6 +19,10 @@
     ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
     ohmyzsh.flake = false;
 
+    # sway-borders.url = "github:fluix-dev/sway-borders";
+    # sway-borders.flake = false;
+    # wlroots-git.url = "git+https://gitlab.freedesktop.org/wlroots/wlroots";
+    # wlroots-git.flake = false;
     ranger.url = "github:ranger/ranger?rev=7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6";
     ranger.flake = false;
     nnn.url = "github:jarun/nnn?rev=b8b0bab4266a635519f605c2e3e193e392674273";
@@ -39,7 +43,7 @@
         pkgs.lib.nixosSystem {
           system = system;
           modules = [(./. + "/hosts/${hostname}")];
-          specialArgs = { inherit inputs; nixpkgs = pkgs; };
+          specialArgs = { inherit inputs; inherit system; nixpkgs = pkgs; };
         };
     in
     {
