@@ -19,7 +19,7 @@ options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 # FONTSIZE=$(echo "$WIDTH/$DEFAULT_WIDTH*$DEFAULT_FONTSIZE" | bc -l)
 PRESELECTION=4
 
-selected="$(echo -e "$options" | wofi -dmenu -selected-row ${PRESELECTION})"
+selected="$(echo -e "$options" | wofi --dmenu)"
 
 case $selected in
   $shutdown)
@@ -37,12 +37,10 @@ case $selected in
     systemctl suspend
     ;;
   $logout)
-    # TODO: add condition for sway
-    # exec swaymsg exit
-    bspc quit
+    swaymsg exit
     ;;
   $lock)
-    /etc/scripts/lock.sh
+    /etc/scripts/sway-lock.sh
     ;;
 esac
 
