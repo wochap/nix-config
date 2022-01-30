@@ -9,7 +9,8 @@ in
     ./mixins/bat.nix
     ./mixins/default-browser
     ./mixins/discord
-    ./mixins/dunst
+    # ./mixins/dunst
+    ./mixins/mako
     ./mixins/firefox
     ./mixins/git.nix
     ./mixins/gtk.nix

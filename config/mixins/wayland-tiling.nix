@@ -9,7 +9,6 @@
         libappindicator-gtk3
 
         clipman
-        mako # notification daemon
         swaylock-effects # lockscreen
         swaybg
         wl-clipboard

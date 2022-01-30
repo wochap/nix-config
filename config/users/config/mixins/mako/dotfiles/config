@@ -3,7 +3,7 @@ actions=1
 
 # Format
 font=Fira Code 8
-border-size=0
+border-size=12
 border-radius=5
 background-color=#232836
 text-color=#ffffff

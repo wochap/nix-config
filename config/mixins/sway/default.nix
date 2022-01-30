@@ -49,6 +49,17 @@ in {
       };
     };
 
+    services.xserver.displayManager = {
+      session = [{
+        name = "customsway";
+        manage = "desktop";
+        start = ''
+          ${startsway}/bin/startsway &
+          waitPID=$!
+        '';
+      }];
+    };
+
     systemd.user.targets.sway-session = {
       description = "Sway compositor session";
       documentation = [ "man:systemd.special(7)" ];
@@ -69,7 +80,7 @@ in {
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          ${pkgs.dbus}/bin/dbus-run-session ${pkgs.sway}/bin/sway --unsupported-gpu --debug
+          ${pkgs.dbus}/bin/dbus-run-session sway --unsupported-gpu --debug
         '';
         Restart = "on-failure";
         RestartSec = 3;

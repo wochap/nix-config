@@ -7,6 +7,7 @@
     ./mixins/gnome-minimal-wm # Comment on first install
     ./mixins/gnome-pkgs.nix # Comment on first install
     ./mixins/kde-pkgs.nix # Comment on first install
+    ./mixins/lightdm
     # ./mixins/keychron.nix
     ./mixins/lorri
     ./mixins/nix-common.nix
@@ -31,7 +32,7 @@
 
     services.xserver = {
       enable = true;
-      displayManager.lightdm.enable = false;
+      # displayManager.lightdm.enable = false;
     };
   };
 }
