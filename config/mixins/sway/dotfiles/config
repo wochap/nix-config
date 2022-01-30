@@ -42,14 +42,14 @@ exec swayidle -w \
 
 
 #### SWAY rules ####
-for_window [class="Blueberry.py"] floating enable; move position center;
-for_window [class="Eog"] floating enable; move position center;
-for_window [class="File-roller"] floating enable; move position center;
-for_window [class="Org.gnome.Nautilus"] floating enable; move position center; sticky enable;
-for_window [class=".thunar-wrapped_"] floating enable; move position center; sticky enable;
-for_window [class="Gnome-font-viewer"] floating enable; move position center;
-for_window [class="Nm-connection-editor"] floating enable; move position center;
-for_window [class="Pavucontrol"] floating enable; move position center;
+for_window [app_id="blueberry.py"] floating enable; move position center;
+for_window [app_id="eog"] floating enable; move position center;
+for_window [app_id="file-roller"] floating enable; move position center;
+for_window [app_id="org.gnome.Nautilus"] floating enable; move position center; sticky enable;
+for_window [app_id=".thunar-wrapped_"] floating enable; move position center; sticky enable;
+for_window [app_id="gnome-font-viewer"] floating enable; move position center;
+for_window [app_id="nm-connection-editor"] floating enable; move position center;
+for_window [app_id="pavucontrol"] floating enable; move position center;
 # for_window [window_role="gimp-dock"] floating enable; move position center; resize shrink width 50 px or 50ppt
 
 
