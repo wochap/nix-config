@@ -15,6 +15,8 @@ in
     nixpkgs.overlays = [
       # inputs.rust-overlay.overlay
 
+      inputs.nixpkgs-s2k.overlay
+
       inputs.neovim-nightly-overlay.overlay
 
       (self: super: {
@@ -139,29 +141,8 @@ in
         );
       })
 
-      # wayland on nvidia works fine without more overlays
       # inputs.nixpkgs-wayland.overlay-egl
-      # sway doesnt launch with overlay ⬇
       inputs.nixpkgs-wayland.overlay
-
-      # (final: prev: {
-      #   sway = (prev.sway.overrideAttrs (old: rec {
-      #     src = final.fetchFromGitHub {
-      #       owner = "fluix-dev";
-      #       repo = "sway-borders";
-      #       rev = "cbecc5cbaed6b30c995d2c245def458e383b4e38";
-      #       sha256 = "sha256-KbAygU48rDpHQlANJXLYuBVoykYuqhEM2OA+Z6ipfUE=";
-      #     };
-      #   }));
-      #   sway-unwrapped = (prev.sway-unwrapped.overrideAttrs (old: rec {
-      #     src = final.fetchFromGitHub {
-      #       owner = "fluix-dev";
-      #       repo = "sway-borders";
-      #       rev = "cbecc5cbaed6b30c995d2c245def458e383b4e38";
-      #       sha256 = "sha256-KbAygU48rDpHQlANJXLYuBVoykYuqhEM2OA+Z6ipfUE=";
-      #     };
-      #   }));
-      # })
     ] else []);
   };
 }

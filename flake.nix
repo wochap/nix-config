@@ -7,7 +7,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
-    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=c12dee11e4975052975db37584ce49534877be7f";
+    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=1be0382761e59978d46c4a2a6fed0193f474751f";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=b8308a5693b3b027d75a16ea65dca8d98619027b";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
@@ -19,10 +19,7 @@
     ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
     ohmyzsh.flake = false;
 
-    # sway-borders.url = "github:fluix-dev/sway-borders";
-    # sway-borders.flake = false;
-    # wlroots-git.url = "git+https://gitlab.freedesktop.org/wlroots/wlroots";
-    # wlroots-git.flake = false;
+    nixpkgs-s2k.url = "github:wochap/nixpkgs-s2k?rev=2c28f8564721673073923823f4761b0f7e34cc65";
     ranger.url = "github:ranger/ranger?rev=7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6";
     ranger.flake = false;
     nnn.url = "github:jarun/nnn?rev=b8b0bab4266a635519f605c2e3e193e392674273";

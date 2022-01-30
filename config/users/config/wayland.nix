@@ -27,6 +27,7 @@ in
     ./mixins/ssh
     ./mixins/thunar
     ./mixins/vim
+    ./mixins/wofi
     ./mixins/zathura
     ./mixins/zsh
     # ./mixins/android.nix
