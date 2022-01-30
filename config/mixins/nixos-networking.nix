@@ -5,7 +5,7 @@
     networking = {
       enableIPv6 = false;
       # Disable wpa_supplicant
-      wireless.enable = false;
+      wireless.enable = lib.mkForce false;
       # Enable NetworkManager
       networkmanager.enable = true;
       nameservers = [
