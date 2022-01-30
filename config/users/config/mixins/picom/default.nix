@@ -2,6 +2,10 @@
 
 let
   userName = config._userName;
+  hmConfig = config.home-manager.users.${userName};
+  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  configDirectory = config._configDirectory;
+  currentDirectory = "${configDirectory}/config/users/config/mixins/picom";
   customPicom = pkgs.picom.overrideAttrs(o: {
     src = pkgs.fetchFromGitHub {
       # # No blur, aceptable fix for screen tearing but... artifacts++
@@ -37,7 +41,7 @@ in
 
     home-manager.users.${userName} = {
       xdg.configFile = {
-        "picom/picom.conf".source = ./dotfiles/picom.conf;
+        "picom/picom.conf".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/picom.conf";
       };
     };
   };

@@ -2,7 +2,6 @@
 
 #### AUTOSTART ####
 /etc/scripts/bspwm_autostart.sh &
-/etc/scripts/restart_goa_daemon.sh &
 
 #### BSPWM coloring ####
 bspc config active_border_color "#ff79c6"
@@ -26,7 +25,6 @@ bspc config single_monocle false
 
 #### BSPWM rules ####
 bspc rule -r "*" # clear rules
-# bspc rule -a *:* state=tiled
 bspc rule -a sun-awt-X11-XDialogPeer state=floating # java gui fixes
 bspc rule -a ".caffeine-wrapped" state=floating
 bspc rule -a ".pick-colour-picker-wrapped" state=floating sticky=on
@@ -69,10 +67,7 @@ done
 # /etc/scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &
 # /etc/scripts/bspwm_borders.sh &
 
-# workspace 5
 firefox > /dev/null 2>&1 &
-
-# workspace 1
 google-chrome-stable > /dev/null 2>&1 &
 
 bspc config ignore_ewmh_focus false

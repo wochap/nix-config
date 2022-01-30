@@ -13,4 +13,5 @@ blueberry-tray &
 # light -S 20 &
 brightnessctl set 20%
 /etc/scripts/random-bg.sh &
+# /etc/scripts/restart_goa_daemon.sh &
 
