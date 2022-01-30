@@ -23,9 +23,6 @@
         };
       };
     };
-
-    # Add wifi tray
-    programs.nm-applet.enable = true;
   };
 }
 

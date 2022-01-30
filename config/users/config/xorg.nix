@@ -43,10 +43,5 @@ in
   ];
 
   config = {
-    home-manager.users.${userName} = {
-
-      # screenshot utility
-      services.flameshot.enable = true;
-    };
   };
 }
