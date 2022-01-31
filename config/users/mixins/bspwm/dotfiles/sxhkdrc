@@ -1,4 +1,3 @@
-# vim: syntax=sh
 ### BSPWM HOTKEYS
 
 # Reload keybindings
@@ -232,7 +231,7 @@ super + alt + t ; {k,a}
 
 # Open scratch terminal
 super + alt + t ; s
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-scratch '/etc/scripts/bspwm_kitty_scratch.sh'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-scratch '/etc/scripts/start-kitty-scratch.sh'
 
 # Open magnifying glass
 super + alt + z
@@ -281,4 +280,6 @@ XF86AudioPlay
 # Play previous media
 XF86AudioPrev
 	playerctl previous
+
+# vim: syntax=sh
 

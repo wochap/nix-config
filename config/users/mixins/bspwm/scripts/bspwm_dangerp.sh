@@ -11,7 +11,7 @@ function removeEmptyReceptacles {
 # Show scratchpad
 id=$(xdo id -N kitty-scratch)
 if [ -z "${id}" ]; then
-  /etc/scripts/bspwm_kitty_scratch.sh &
+  /etc/scripts/start-kitty-scratch.sh &
   sleep 0.5
 else
   bspc node "$id" --flag hidden=off --to-monitor focused --to-desktop focused --to-node focused --focus

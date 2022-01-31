@@ -21,6 +21,10 @@
           source = ./scripts/start-neorg.sh;
           mode = "0755";
         };
+        "scripts/start-kitty-scratch.sh" = {
+          source = ./scripts/start-kitty-scratch.sh;
+          mode = "0755";
+        };
       };
     };
   };

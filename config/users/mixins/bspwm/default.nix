@@ -31,10 +31,10 @@ in {
           mode = "0755";
         };
 
-        "scripts/bspwm_borders.sh" = {
-          source = ./scripts/bspwm_borders.sh;
-          mode = "0755";
-        };
+        # "scripts/bspwm_borders.sh" = {
+        #   source = ./scripts/bspwm_borders.sh;
+        #   mode = "0755";
+        # };
         "scripts/bspwm_external_rules.sh" = {
           source = ./scripts/bspwm_external_rules.sh;
           mode = "0755";
@@ -43,11 +43,11 @@ in {
           source = ./scripts/bspwm_subscribe.sh;
           mode = "0755";
         };
-        "scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh" = {
-          source =
-            ./scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh;
-          mode = "0755";
-        };
+        # "scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh" = {
+        #   source =
+        #     ./scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh;
+        #   mode = "0755";
+        # };
         "scripts/bspwm_subscribe_polybar.sh" = {
           source = ./scripts/bspwm_subscribe_polybar.sh;
           mode = "0755";
@@ -66,10 +66,6 @@ in {
         };
         "scripts/bspwm_open_or_focus.sh" = {
           source = ./scripts/bspwm_open_or_focus.sh;
-          mode = "0755";
-        };
-        "scripts/bspwm_kitty_scratch.sh" = {
-          source = ./scripts/bspwm_kitty_scratch.sh;
           mode = "0755";
         };
         "scripts/bspwm_center_window.sh" = {
