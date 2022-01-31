@@ -31,10 +31,8 @@ in {
     ./mixins/redshift.nix
     ./mixins/rofi
     ./mixins/ssh
-    ./mixins/sway
     ./mixins/thunar
     ./mixins/vim
-    ./mixins/waybar
     ./mixins/zathura
     ./mixins/zsh
     # ./mixins/android.nix

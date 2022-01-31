@@ -1,33 +1,20 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  theme = config._theme;
+  userName = config._userName;
+  hmConfig = config.home-manager.users.${userName};
+  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  configDirectory = config._configDirectory;
+  currentDirectory = "${configDirectory}/config/users/mixins/waybar";
 in {
   config = {
-    # environment = {
-    #   etc = {
-    #     "xdg/waybar/config".source = ./dotfiles/config;
-    #     "xdg/waybar/style.css".source = ./dotfiles/style.css;
-    #   };
-    # };
+    environment.systemPackages = with pkgs; [ waybar ];
 
     home-manager.users.${userName} = {
-      xdg.configFile."waybar/config" = {
-        source = ./dotfiles/config.json;
-        onChange = ''
-          ${pkgs.procps}/bin/pkill -u $USER -USR2 waybar || true
-        '';
-      };
-
-      xdg.configFile."waybar/style.css" = {
-        source = ./dotfiles/style.css;
-        onChange = ''
-          ${pkgs.procps}/bin/pkill -u $USER -USR2 waybar || true
-        '';
-      };
-
-      programs.waybar = {
-        enable = true;
-        systemd.enable = true;
+      xdg.configFile = {
+        "waybar/config".source = mkOutOfStoreSymlink ./dotfiles/config.json;
+        "waybar/style.css".source = mkOutOfStoreSymlink ./dotfiles/style.css;
       };
     };
   };

@@ -9,14 +9,14 @@ in
     ./mixins/bat.nix
     ./mixins/default-browser
     ./mixins/discord
-    # ./mixins/dunst
-    ./mixins/mako
     ./mixins/firefox
     ./mixins/git.nix
     ./mixins/gtk.nix
     ./mixins/htop.nix
     ./mixins/kitty
+    ./mixins/mako
     ./mixins/mime-apps.nix
+    ./mixins/neofetch
     ./mixins/nix-common
     ./mixins/nixos
     ./mixins/nixos-minimal-wm
@@ -24,15 +24,18 @@ in
     ./mixins/ptsh
     ./mixins/qt.nix
     ./mixins/redshift.nix
-    ./mixins/rofi
     ./mixins/ssh
     ./mixins/thunar
     ./mixins/user-nix.nix
+    ./mixins/user-nix.nix
+    ./mixins/user-nixos.nix
     ./mixins/user-nixos.nix
     ./mixins/vim
+    ./mixins/waybar
     ./mixins/wofi
     ./mixins/zathura
     ./mixins/zsh
+    # ./mixins/eww
     # ./mixins/android.nix
     # ./mixins/doom-emacs
   ];
