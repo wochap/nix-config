@@ -14,6 +14,7 @@ in
 
   config = {
     _userName = userName;
+    _homeDirectory = "/Users/${userName}";
     _configDirectory = configDirectory;
 
     # Used for backwards compatibility, please read the changelog before changing.

@@ -1,10 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
-let
-  userName = config._userName;
-  localPkgs = import ../../packages { pkgs = pkgs; lib = lib; };
-in
-{
+let userName = config._userName;
+in {
   imports = [
     ./mixins/alacritty
     ./mixins/bat.nix
@@ -43,5 +40,10 @@ in
   ];
 
   config = {
+    home-manager.users.${userName} = {
+      xresources.extraConfig = ''
+        ${builtins.readFile "${inputs.dracula-xresources}/Xresources"}
+      '';
+    };
   };
 }

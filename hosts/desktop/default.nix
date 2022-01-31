@@ -18,6 +18,7 @@ in {
   config = {
     _userName = userName;
     _isHidpi = isHidpi;
+    _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
 
     # This value determines the NixOS release from which the default
