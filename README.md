@@ -240,8 +240,8 @@ $ sudo nixos-rebuild switch --flake .#dekstop --impure
    `E8E4` is the unicode.
 
    ```
-   $ bash
    $ echo -ne "\uE8E4" | xclip -selection clipboard
+   $ echo -ne "\ue92a" | wl-copy
    ```
 
 * Transform svg icons to png

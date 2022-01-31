@@ -8,6 +8,11 @@
         caffeine-ng
         libappindicator-gtk3
 
+        # utilities for pick color, screenshot
+        slurp
+        grim
+        gnome.zenity
+
         clipman
         swaylock-effects # lockscreen
         swaybg

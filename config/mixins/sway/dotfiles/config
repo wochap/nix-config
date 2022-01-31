@@ -13,8 +13,8 @@ default_border pixel 2
 default_floating_border pixel 2
 for_window [class=".*"] border pixel 2
 
-gaps inner 20
-gaps outer 10
+gaps inner 15
+gaps outer 0
 
 # border_images.focused /etc/sway/borders/dropShadowDark.png
 # border_images.focused_inactive /etc/sway/borders/dropShadowDark.png

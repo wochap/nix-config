@@ -23,6 +23,7 @@ in
       glxinfo # opengl utils
       gnumake # make
       gpp # decrypt
+      inotify-tools
       inxi # check compositor running
       jq # JSON
       killall
