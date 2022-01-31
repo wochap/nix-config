@@ -1,25 +1,26 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 function stop {
-  if ! pgrep $1 ;
-    pgrep $1 | xargs kill
-    while pgrep -u $UID -x $1 >/dev/null; do sleep 1; done
-  then
-    echo "$1 stopped"
+  if pgrep "$1"; then
+    pids=$(pgrep "$1")
+    pgrep "$1" | xargs kill
+    for pid in ${pids[*]}; do
+      while pgrep -P "$pid" -x "$1" >/dev/null; do sleep 0.5; done
+    done
   fi
+  echo "$1 stopped"
 }
 
 function run {
-  if ! pgrep $1 ;
-    stop $1
-  then
-    coproc ($@ > /dev/null 2>&1)
-    echo "$1 started"
+  if pgrep "$1"; then
+    stop "$1"
   fi
+  "$@" >/dev/null 2>&1 &
+  echo "$1 started"
 }
 
 function removeEmptyReceptacles {
-  for win in $(bspc query -N -n .leaf.\!window) ; do bspc node $win -k ; done ;
+  for win in $(bspc query -N -n .leaf.\!window); do bspc node "$win" -k; done
 }
 
 removeEmptyReceptacles
