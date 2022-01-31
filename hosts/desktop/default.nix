@@ -4,7 +4,7 @@ let
   hostName = "gdesktop";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
   isHidpi = true;
-  dpi = 144; # let xfce scale the windows
+  dpi = 192;
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
@@ -51,6 +51,9 @@ in {
         QT_AUTO_SCREEN_SCALE_FACTOR = "0";
         QT_FONT_DPI = "96";
         QT_SCALE_FACTOR = "2";
+
+        GDK_DPI_SCALE = "0.5";
+        GDK_SCALE = "2";
 
         BSPWM_GAP = "25";
       };

@@ -53,12 +53,12 @@ in {
       gtk = {
         enable = true;
         iconTheme = {
-          name = "Tela-dark";
+          name = "Tela-purple-dark";
           package = pkgs.tela-icon-theme;
         };
         theme = {
-          name = "Orchis-dark-compact";
-          package = pkgs.orchis;
+          name = "Dracula";
+          package = pkgs.dracula-theme;
         };
 
         gtk3.extraConfig = {

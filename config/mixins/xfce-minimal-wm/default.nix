@@ -76,21 +76,6 @@ in {
     programs.bash.vteIntegration = lib.mkDefault true;
     programs.zsh.vteIntegration = lib.mkDefault true;
 
-    environment.etc = {
-      "scripts/start-minimal-xfce4.sh" = {
-        text = ''
-          # TODO: only if it is not running
-
-          # TODO: find why xfsettingsd mess up with dpi of polybar, dunst, rofi, etc
-          ${pkgs.xfce.xfce4-settings}/bin/xfsettingsd &
-          ${if enablePowerManagement then "${pkgs.xfce.xfce4-power-manager}/bin/xfce4-power-manager &" else ""}
-          ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1 &
-          ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update &
-        '';
-        # ${pkgs.evolution-data-server}/libexec/evolution-data-server/evolution-alarm-notify &
-        mode = "0755";
-      };
-    };
     powerManagement.enable = enablePowerManagement;
   };
 }
