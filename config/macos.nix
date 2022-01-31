@@ -7,7 +7,7 @@
     ./mixins/lorri
     ./mixins/nix-common.nix
     ./mixins/overlays.nix
-    ./users/user-darwin.nix
+    ./users/user-macos.nix
   ];
 
   config = {
