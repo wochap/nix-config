@@ -4,10 +4,11 @@ let
   hostName = "gdesktop";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
   isHidpi = true;
-  dpi = 144; # let xfce scale the windows
+  dpi = 192;
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
+  draculaTheme = import ../../config/mixins/dracula.nix;
 in {
   imports = [
     ./hardware-configuration.nix
@@ -18,7 +19,9 @@ in {
   config = {
     _userName = userName;
     _isHidpi = isHidpi;
+    _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
+    _theme = draculaTheme;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
@@ -52,6 +55,9 @@ in {
         QT_FONT_DPI = "96";
         QT_SCALE_FACTOR = "2";
 
+        GDK_DPI_SCALE = "0.5";
+        GDK_SCALE = "2";
+
         BSPWM_GAP = "25";
       };
     };
@@ -82,9 +88,7 @@ in {
     # Fix windows dualboot clock
     time.hardwareClockInLocalTime = true;
 
-    hardware = {
-      video.hidpi.enable = true;
-    };
+    hardware = { video.hidpi.enable = true; };
 
     services.xserver = {
       dpi = lib.mkIf (isHidpi) dpi;
@@ -95,20 +99,13 @@ in {
       # xkbVariant = "altgr-intl";
 
       # Setup monitors
-      # screenSection = ''
-      #   # Select primary monitor
-      #   Option         "nvidiaXineramaInfoOrder" "DFP-0"
-      #   # Default multiple monitor setup
-      #   Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-      # '';
-      deviceSection = ''
-        # does it fix screen tearing? maybe...
-        Option         "NoLogo" "1"
-        Option         "RenderAccel" "1"
-        Option         "TripleBuffer" "true"
-        Option         "MigrationHeuristic" "greedy"
-        Option         "AccelMethod" "sna"
-        Option         "TearFree"    "true"
+      screenSection = ''
+        # Select primary monitor
+        # Option         "nvidiaXineramaInfoOrder" "DFP-0"
+        # Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
+
+        Option         "AllowIndirectGLXProtocol" "off"
+        Option         "TripleBuffer" "on"
       '';
     };
   };

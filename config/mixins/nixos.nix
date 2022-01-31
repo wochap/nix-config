@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  # isHidpi = config._isHidpi;
+  isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
 in
 {
@@ -51,12 +51,12 @@ in
     i18n.defaultLocale = "en_US.UTF-8";
 
     console = {
-      # font = if isHidpi then "ter-132n" else "Lat2-Terminus16";
-      # earlySetup = true;
+      font = if isHidpi then "ter-132n" else "Lat2-Terminus16";
+      earlySetup = true;
       keyMap = "us";
-      # packages = [
-      #   pkgs.terminus_font
-      # ];
+      packages = [
+        pkgs.terminus_font
+      ];
     };
 
     # Clear nixos store
