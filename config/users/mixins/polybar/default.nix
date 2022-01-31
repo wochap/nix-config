@@ -1,6 +1,7 @@
-{ config, pkgs, lib,  ... }:
+{ config, pkgs, lib, ... }:
 
 let
+  theme = config._theme;
   localPkgs = import ../../../packages { pkgs = pkgs; lib = lib; };
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
@@ -12,8 +13,16 @@ let
     mpdSupport = true;
     pulseSupport = true;
   };
-in
-{
+  toPolybarIni = lib.generators.toINI {
+    mkKeyValue = lib.generators.mkKeyValueDefault {
+      mkValueString = v:
+        if lib.isString v then
+          ''"${v}"''
+        else
+          lib.generators.mkValueStringDefault { } v;
+    } "=";
+  };
+in {
   config = {
     environment = {
       systemPackages = with pkgs; [
@@ -39,8 +48,8 @@ in
 
     home-manager.users.${userName} = {
       xdg.configFile = {
-        "polybar/config.ini".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.ini";
-        "polybar/main.ini".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/main.ini";
+        "polybar/colors.ini".text = toPolybarIni { themeColors = theme; };
+        "polybar/config.ini".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/main.ini";
         "polybar/scripts/docker_info.sh".source = ./dotfiles/scripts/docker_info.sh;
         "polybar/scripts/get_gpu_status.sh".source = ./dotfiles/scripts/get_gpu_status.sh;
         "polybar/scripts/get_spotify_status.sh".source = ./dotfiles/scripts/get_spotify_status.sh;

@@ -8,6 +8,7 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
+  draculaTheme = import ../../config/mixins/dracula.nix;
 in {
   imports = [
     ./hardware-configuration.nix
@@ -20,6 +21,7 @@ in {
     _isHidpi = isHidpi;
     _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
+    _theme = draculaTheme;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
@@ -86,9 +88,7 @@ in {
     # Fix windows dualboot clock
     time.hardwareClockInLocalTime = true;
 
-    hardware = {
-      video.hidpi.enable = true;
-    };
+    hardware = { video.hidpi.enable = true; };
 
     services.xserver = {
       dpi = lib.mkIf (isHidpi) dpi;
