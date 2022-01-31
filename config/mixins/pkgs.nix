@@ -99,10 +99,6 @@ in
 
       # Themes
       capitaine-cursors
-      # hicolor-icon-theme
-      # papirus-icon-theme
-    ] ++ [
-      # localPkgs.bigsur-cursors
     ] ++ (if (isWayland) then [
       pkgs.egl-wayland
       (pkgs.google-chrome.override {

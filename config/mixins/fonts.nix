@@ -17,7 +17,6 @@ in
     fonts = lib.mkMerge [
       {
         fonts = with pkgs; [
-          # TODO: requires nvidia?
           customNerdFonts
         ];
       }

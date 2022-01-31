@@ -6,7 +6,6 @@
       systemPackages = with pkgs; [
         # APPS
         deluge # torrent client
-        # evolution # email/calendar client
         gnome.cheese # test webcam
         gnome.dconf-editor
         gnome.eog # image viewer

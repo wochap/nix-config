@@ -9,8 +9,6 @@ in
     ./mixins/fonts.nix
     ./mixins/gnome-minimal-wm # Comment on first install
     ./mixins/gnome-pkgs.nix # Comment on first install
-    ./mixins/kde-pkgs.nix # Comment on first install
-    # ./mixins/keychron.nix
     ./mixins/lightdm
     ./mixins/lorri
     ./mixins/mongodb.nix
@@ -21,8 +19,9 @@ in
     ./mixins/overlays.nix
     ./mixins/pkgs-xorg.nix
     ./mixins/pkgs.nix
+    ./mixins/qt-pkgs.nix # Comment on first install
     ./mixins/vscode.nix
-    ./mixins/xfce-minimal-wm
+    ./mixins/xfce-minimal-wm.nix
     ./users/user-xorg.nix
     # ./mixins/ipwebcam
   ];
@@ -34,12 +33,6 @@ in
       etc = {
         "scripts/fix_caps_lock_delay.sh" = {
           source = ./scripts/fix_caps_lock_delay.sh;
-          mode = "0755";
-        };
-
-        # Install script for screenshoot
-        "scripts/scrcap.sh" = {
-          source = ./scripts/scrcap.sh;
           mode = "0755";
         };
 

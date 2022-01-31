@@ -3,8 +3,6 @@
 let isHidpi = config._isHidpi;
 in {
   config = {
-
-    # Setup login screen
     services.xserver.displayManager = {
       lightdm = {
         enable = true;
@@ -19,20 +17,20 @@ in {
           };
 
           iconTheme = {
-            name = "Tela";
+            name = "Tela-purple-dark";
             package = pkgs.tela-icon-theme;
           };
 
           theme = {
-            name = "Orchis-dark";
-            package = pkgs.orchis;
+            name = "Dracula";
+            package = pkgs.dracula-theme;
           };
 
           extraConfig = ''
-            font-name=Inter 9
+            font-name=Inter 10
           '';
           indicators =
-            [ "~host" "~spacer" "~clock" "~spacer" "~session" "~power" ];
+            [ "~spacer" "~session" "~power" ];
         };
       };
     };

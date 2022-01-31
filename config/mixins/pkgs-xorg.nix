@@ -24,7 +24,7 @@
       autorandr
 
       # DE
-      alttab # windows like alt + tab
+      # alttab # windows like alt + tab
       arandr # xrandr gui
       i3lock-color
       blueberry # bluetooth tray

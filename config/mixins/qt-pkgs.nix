@@ -1,8 +1,5 @@
 { config, pkgs, lib, ... }:
 
-let
-  localPkgs = import ../packages { pkgs = pkgs; lib = lib; };
-in
 {
   config = {
     environment = {
@@ -16,8 +13,7 @@ in
         # nomacs # image viewer/editor
         # olive-editor # video editor
         # openshot-qt # video editor
-      ] ++ [
-        localPkgs.stremio
+        stremio
       ];
     };
   };
