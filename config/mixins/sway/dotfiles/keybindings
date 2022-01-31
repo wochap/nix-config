@@ -140,7 +140,9 @@ bindsym $mod+m mode "move"
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
-# Toggle polybar
+# Toggle waybar
+bindsym $mod+alt+p exec \
+  /etc/scripts/color-picker.sh clipboard
 
 # Open file manager
 bindsym $mod+alt+f exec \
@@ -171,7 +173,14 @@ bindsym $mod+alt+t mode "terminal"
 
 # Open monitor
 
-# TODO: dunst/mako
+bindsym $mod+ctrl+n exec \
+  makoctl restore
+
+bindsym $mod+ctrl+shift+n exec \
+  makoctl dismiss
+
+bindsym $mod+ctrl+shift+Escape exec \
+  makoctl dismiss --all
 
 
 ### MEDIA KEYBINDINGS

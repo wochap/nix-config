@@ -8,7 +8,15 @@ let
   currentDirectory = "${configDirectory}/config/users/mixins/mako";
 in {
   config = {
-    environment = { systemPackages = with pkgs; [ mako libnotify ]; };
+    environment = {
+      systemPackages = with pkgs; [ mako libnotify dunst ];
+      etc = {
+        "assets/notification.flac" = {
+          source = ../dunst/assets/notification.flac;
+          mode = "0755";
+        };
+      };
+    };
 
     home-manager.users.${userName} = {
       xdg.configFile = {

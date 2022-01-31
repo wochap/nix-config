@@ -46,6 +46,10 @@ in {
           source = ./scripts/sway-autostart.sh;
           mode = "0755";
         };
+        "scripts/color-picker.sh" = {
+          source = ./scripts/color-picker.sh;
+          mode = "0755";
+        };
       };
     };
 

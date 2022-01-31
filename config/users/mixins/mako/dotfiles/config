@@ -1,44 +1,56 @@
+# config
+max-history=20
+on-notify=exec paplay /etc/assets/notification.flac
 markup=1
 actions=1
+icons=1
+# icon-path=/usr/share/icons/Papirus-Adapta-Nokto-Maia:/usr/share/icons/Papirus-Maia:/usr/share/icons/Papirus
+icon-path=/run/current-system/sw/share/icons/Tela-purple-dark:/run/current-system/sw/share/icons/Numix-Circle:/run/current-system/sw/share/icons/Adwaita:/run/current-system/sw/share/icons/hicolor:/run/current-system/sw/share/icons/Tela-purple-dark
+max-visible=5
+layer=overlay
+anchor=bottom-right
+icon-location=left
+on-button-middle=exec makoctl menu -n "$id" dmenu -p 'Select action: '
+sort=+time
 
-# Format
-font=Fira Code 8
-border-size=12
-border-radius=5
-background-color=#232836
-text-color=#ffffff
-format=<b>%s</b> <span color="#d6b692">(%a)</span>\n%b
+# theme
+background-color=#282a36
+border-radius=4
+border-size=2
+border-color=#44475a
+font=Iosevka Nerd Font 11
+format=<b>%s</b> <span color="#8be9fd">(%a)</span>\n%b
+height=150
+margin=15,15
+max-icon-size=48
+padding=11,11
+text-color=#f8f8f2
+width=300
 
-# icons
-icon-path=/usr/share/icons/Papirus-Adapta-Nokto-Maia:/usr/share/icons/Papirus-Maia:/usr/share/icons/Papirus
-
-# Hidden format
 [hidden]
 format=Hidden: %h [%t]
 
 [urgency=low]
-text-color=#ffffff
-
-[urgency=low actionable]
-border-color=#93a1a1
-
-[urgency=normal actionable]
-border-color=#268bd2
+text-color=#6272a4
 
 [urgency=high]
-border-color=#9c2220
+background-color=#ff5555
 ignore-timeout=1
 
-[urgency=high actionable]
-border-color=#6c71c4
+[actionable]
+text-color=#bd93f9
+ignore-timeout=1
 
-[app-name=playerctl]
-max-icon-size=96
+# [app-name=playerctl]
+# max-icon-size=96
+#
+# [app-name=clementine]
+# max-icon-size=96
 
-[app-name=clementine]
-max-icon-size=96
+# [app-name=i3-hint]
+# max-icon-size=48
+# format=%s\n%b
+# width=150
 
-[app-name=i3-hint]
-max-icon-size=48
-format=%s\n%b
-width=150
+[mode=do-not-disturb]
+invisible=1
