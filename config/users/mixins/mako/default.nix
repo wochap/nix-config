@@ -15,6 +15,10 @@ in {
           source = ../dunst/assets/notification.flac;
           mode = "0755";
         };
+        "scripts/mako/mako-toggle-mode.sh" = {
+          source = ./scripts/mako-toggle-mode.sh;
+          mode = "0755";
+        };
       };
     };
 

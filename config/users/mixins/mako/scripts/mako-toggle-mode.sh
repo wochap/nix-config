@@ -8,17 +8,21 @@ toggle() {
   if [[ ! -f "$LOCK_FILE" ]]; then
     touch "$LOCK_FILE"
     makoctl set-mode do-not-disturb
+    pkill -SIGRTMIN+8 waybar
   else
     rm "$LOCK_FILE"
     makoctl set-mode default
+    pkill -SIGRTMIN+8 waybar
   fi
 }
 
 read() {
   if [[ ! -f "$LOCK_FILE" ]]; then
-    echo "$ENABLED"
+    # echo "$ENABLED"
+    printf '{ "text": "%s", "class": "enabled" }' "$ENABLED"
   else
-    echo "$DISABLED"
+    # echo "$DISABLED"
+    printf '{ "text": "%s", "class": "disabled" }' "$DISABLED"
   fi
 }
 
