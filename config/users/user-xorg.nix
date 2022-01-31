@@ -3,6 +3,8 @@
 let userName = config._userName;
 in {
   imports = [
+    ./mixins/user-nix.nix
+    ./mixins/user-nixos.nix
     ./mixins/alacritty
     ./mixins/bat.nix
     ./mixins/bspwm
@@ -31,8 +33,6 @@ in {
     ./mixins/ssh
     ./mixins/sway
     ./mixins/thunar
-    ./mixins/user-nix.nix
-    ./mixins/user-nixos.nix
     ./mixins/vim
     ./mixins/waybar
     ./mixins/zathura

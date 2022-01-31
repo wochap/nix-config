@@ -5,7 +5,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/config/mixins/wofi";
+  currentDirectory = "${configDirectory}/config/users/mixins/wofi";
 in
 {
   config = {

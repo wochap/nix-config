@@ -1,12 +1,12 @@
 { config, pkgs, lib,  ... }:
 
 let
-  localPkgs = import ../../../../packages { pkgs = pkgs; lib = lib; };
+  localPkgs = import ../../../packages { pkgs = pkgs; lib = lib; };
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/config/mixins/polybar";
+  currentDirectory = "${configDirectory}/config/users/mixins/polybar";
   customPolybar = pkgs.polybar.override {
     alsaSupport = true;
     mpdSupport = true;

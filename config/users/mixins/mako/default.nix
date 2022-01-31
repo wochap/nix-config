@@ -5,7 +5,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/config/mixins/mako";
+  currentDirectory = "${configDirectory}/config/users/mixins/mako";
 in {
   config = {
     environment = { systemPackages = with pkgs; [ mako libnotify ]; };

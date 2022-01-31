@@ -3,7 +3,7 @@
 let
   userName = config._userName;
   isWayland = config._displayServer == "wayland";
-  localPkgs = import ../../../packages {
+  localPkgs = import ../../packages {
     pkgs = pkgs;
     lib = lib;
   };
