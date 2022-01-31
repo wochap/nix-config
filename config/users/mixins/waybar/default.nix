@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, libAttr, ... }:
 
 let
   theme = config._theme;
@@ -13,8 +13,11 @@ in {
 
     home-manager.users.${userName} = {
       xdg.configFile = {
-        "waybar/config".source = mkOutOfStoreSymlink ./dotfiles/config.json;
-        "waybar/style.css".source = mkOutOfStoreSymlink ./dotfiles/style.css;
+        "waybar/config".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config";
+        "waybar/style.css".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/style.css";
+        "waybar/colors.css".text = ''
+          ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList (key: value: "@define-color ${key} ${value};") theme)}
+        '';
       };
     };
   };

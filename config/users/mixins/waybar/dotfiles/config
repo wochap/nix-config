@@ -1,0 +1,119 @@
+{
+  "height": 40, // Waybar height (to be removed for auto height)
+  "modules-left": ["custom/powermenu", "sway/workspaces", "custom/scratchpad_indicator", "keyboard-state"],
+  "modules-center": ["sway/window"],
+  "modules-right": ["tray", "idle_inhibitor", "battery", "backlight", "pulseaudio", "network", "clock"],
+  "ipc": true,
+  "id": "main",
+  "spacing": 15,
+  "margin": "15 15 0 15",
+
+  // Modules configuration
+  "custom/scratchpad_indicator": {
+    "interval": 3,
+    "exec": "swaymsg -t get_tree | jq 'recurse(.nodes[]) | first(select(.name==\"__i3_scratch\")) | .floating_nodes | length | select(. >= 1)'",
+    "format": "{} ",
+    "on-click": "swaymsg 'scratchpad show'",
+    "on-click-right": "swaymsg 'move scratchpad'"
+  },
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "persistent_workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+      "6": [],
+      "7": [],
+      "8": []
+    },
+    "format": "<span rise='-1000'>{icon}</span>",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "",
+      "5": "",
+      "6": "",
+      "7": "",
+      "8": "",
+      "urgent": "",
+      "focused": "",
+      "default": ""
+    }
+  },
+  "keyboard-state": {
+    "capslock": true,
+    "format": "{icon}",
+    "format-icons": {
+      "locked": "",
+      "unlocked": ""
+    }
+  },
+  "custom/powermenu": {
+    "format": "",
+    "on-click": "exec ~/.config/wofi/scripts/powermenu.sh"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": " ",
+      "deactivated": " "
+    }
+  },
+  "tray": {
+    "spacing": 10
+  },
+  "clock": {
+    "format": "<span rise='-1000'></span> {:%a %b %d %I:%M %p}"
+  },
+  "backlight": {
+    "format": "<span rise='-1000'>{icon}</span> {percent}%",
+    "format-icons": [""]
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 10
+    },
+    "interval": 5,
+    "format": "<span rise='-1000'>{icon}</span> {capacity}%",
+    "tooltip-format": "{timeTo}, {capacity}%",
+    "format-charging": "<span rise='-1000'></span> {capacity}%",
+    "format-icons": [""]
+  },
+  "network": {
+    "format-wifi": "",
+    "format-ethernet": "{ifname}: {ipaddr}/{cidr}  ",
+    "format-linked": "{ifname} (No IP)  ",
+    "format-disconnected": "",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format": "{essid} {signalStrength}%"
+  },
+  "pulseaudio": {
+    "format": "<span rise='-1000'>{icon}</span> {volume}% <span rise='-1000'>{format_source}</span>",
+    "format-bluetooth": "<span rise='-1000'>{icon} </span> {volume}% <span rise='-1000'>{format_source}</span>",
+    "format-bluetooth-muted": "<span rise='-1000'> </span> {volume}% <span rise='-1000'>{format_source}</span>",
+    "format-muted": " {format_source}",
+    "format-source": "",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": " ",
+      "hands-free": " ",
+      "headset": " ",
+      "phone": " ",
+      "portable": " ",
+      "car": " ",
+      "default": ["", "", ""]
+    },
+    "tooltip-format": "{desc}, {volume}%",
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+    "on-click-middle": "pavucontrol"
+  }
+}
+
+// vim: syntax=jsonc
+

@@ -1,62 +1,58 @@
-* {
-  border: none;
-  font-family: Iosevka Nerd Font, sans-serif;
-  font-size: 13px;
-}
+@import url("colors.css");
 
 window#waybar {
-  /* background-color: rgba(18, 21, 29, 0.98); */
-  background-color: #12151d;
-  /* background-color: rgba(0, 0, 0, 0); */
-  border-bottom: 3px solid #1e222a;
-  color: #abb2bf;
-  transition-property: background-color;
+  background-color: transparent;
+  color: @foreground;
+  font-family: Iosevka Nerd Font, woos, sans-serif;
+  font-size: 14px;
   transition-duration: .5s;
+  transition-property: background-color;
 }
 
 window#waybar.hidden {
-  opacity: 0.2;
+  opacity: 0;
 }
 
+#custom-powermenu,
 #workspaces,
-#mode,
-#cpu,
-#memory,
-#temperature,
-#custom-media,
-#custom-fans,
-#clock,
+#custom-scratchpad_indicator,
+#window,
 #idle_inhibitor,
-#language,
-#pulseaudio,
-#backlight,
 #battery,
+#backlight,
+#pulseaudio,
 #network,
+#clock,
 #tray {
-  background-color: #1e222a;
-  padding: 0 10px;
-  margin: 2px 4px 5px 4px;
-  border: 3px solid rgba(0, 0, 0, 0);
-  border-radius: 90px;
-  background-clip: padding-box;
+  background-color: @background;
+  padding: 0 1em;
+  margin: 0;
+  border-radius: 4px;
+  background-clip: border-box;
 }
 
+#custom-powermenu {
+  color: @red;
+}
+
+#workspaces {
+  padding: 0 calc(1em - 4px);
+}
 #workspaces button {
-  padding: 0 5px;
+  padding: 0 4px;
   min-width: 20px;
-  color: #61afef;
 }
-
 #workspaces button:hover {
   background-color: rgba(0, 0, 0, 0.2)
 }
-
 #workspaces button.focused {
-  color: #c678dd;
+  color: @purple;
 }
-
 #workspaces button.urgent {
-  color: #e06c75;
+  color: @red;
+}
+#workspaces button.persistant {
+  color: @selection;
 }
 
 #cpu {
@@ -86,66 +82,62 @@ window#waybar.hidden {
 }
 
 #clock {
-  color: #61afef;
 }
 
 #idle_inhibitor {
-  color: #abb2bf;
 }
-
 #idle_inhibitor.activated {
-  background-color: #abb2bf;
-  color: #1e222a;
-}
-
-#language {
-  color: #56b6c2;
+  background-color: @purple;
+  color: @background;
 }
 
 #pulseaudio {
-  color: #d19a66;
 }
 
 #pulseaudio.muted {
-  background-color: #e06c75;
-  color: #1e222a;
+  background-color: @red;
+  color: @background;
 }
 
 #backlight {
-  color: #61afef;
+  color: @yellow;
 }
 
 #battery {
-  color: #98c379;
+  color: @cyan;
 }
-
-#battery.charging, #battery.plugged {
-  background-color: #98c379;
-  color: #1e222a;
+#battery.charging,
+#battery.plugged {
+  background-color: @green;
+  color: @background;
 }
 
 @keyframes blink {
-    to {
-        background-color: #1e222a;
-        color: #e06c75;
-    }
+  to {
+    background-color: #1e222a;
+    color: #e06c75;
+  }
 }
 
 #battery.critical:not(.charging) {
-    background-color: #e06c75;
-    color: #1e222a;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+  background-color: @red;
+  color: @background;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 #network {
-    color: #c678dd
+  color: @cyan;
 }
 
 #network.disconnected {
-    background-color: #e06c75;
-    color: #1e222a;
+  background-color: @red;
+  color: @background;
 }
+
+/*
+vim: syntax=less
+*/
