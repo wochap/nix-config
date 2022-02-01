@@ -50,6 +50,10 @@ in {
           source = ./scripts/color-picker.sh;
           mode = "0755";
         };
+        "scripts/takeshot.sh" = {
+          source = ./scripts/takeshot.sh;
+          mode = "0755";
+        };
       };
     };
 

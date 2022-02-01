@@ -9,6 +9,7 @@
         libappindicator-gtk3
 
         # utilities for pick color, screenshot
+        swappy
         slurp
         grim
         gnome.zenity

@@ -20,7 +20,9 @@ bindsym $mod+Ctrl+Escape reload
 
 # Open power menu
 
-# Take fullscreen screenshoot
+# Take fullscreen screenshot
+bindsym $mod+Print exec \
+  /etc/scripts/takeshot.sh --now
 
 # Open app launcher
 bindsym $mod+space exec $menu
@@ -149,6 +151,9 @@ bindsym $mod+alt+f exec \
   nautilus
 
 # Open screenshoot utility
+bindsym $mod+alt+s exec \
+  /etc/scripts/takeshot.sh --area
+
 
 # Open color picker
 bindsym $mod+alt+c exec \
