@@ -151,7 +151,7 @@ bindsym $mod+alt+f exec \
 # Open screenshoot utility
 
 # Open color picker
-bindsym $mod+alt+p exec \
+bindsym $mod+alt+c exec \
   /etc/scripts/color-picker.sh clipboard
 
 # Open Browser
