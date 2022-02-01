@@ -231,7 +231,7 @@ super + alt + t ; {k,a}
 
 # Open scratch terminal
 super + alt + t ; s
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-scratch '/etc/scripts/start-kitty-scratch.sh'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-scratch '/etc/scripts/kitty-scratch.sh'
 
 # Open magnifying glass
 super + alt + z
@@ -239,11 +239,11 @@ super + alt + z
 
 # Open quick note app
 super + alt + n
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-neorg "/etc/scripts/start-neorg.sh"
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-neorg '/etc/scripts/kitty-neorg.sh'
 
 # Open monitor
 super + alt + m
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-htop 'kitty --class kitty-htop --title htop -e htop'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-htop '/etc/scripts/kitty-htop.sh'
 
 super + ctrl + n
   dunstctl history-pop
