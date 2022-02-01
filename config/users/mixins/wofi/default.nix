@@ -21,6 +21,10 @@ in {
           source = ./scripts/wofi-launcher.sh;
           mode = "0755";
         };
+        "scripts/wofi-powermenu.sh" = {
+          source = ./scripts/wofi-powermenu.sh;
+          mode = "0755";
+        };
       };
     };
 

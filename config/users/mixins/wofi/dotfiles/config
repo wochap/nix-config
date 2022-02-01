@@ -1,4 +1,4 @@
-# allow_images=true
+allow_images=true
 allow_markup=true
 dynamic_lines=true
 gtk_dark=true

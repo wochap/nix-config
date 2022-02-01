@@ -18,7 +18,8 @@ floating_modifier $mod normal
 bindsym $mod+Ctrl+Escape reload
 
 # Open power menu
-# TODO
+bindsym $mod+Esc exec \
+  swaymsg exec /etc/scripts/wofi-powermenu.sh
 
 # Take fullscreen screenshot
 bindsym $mod+Print exec \
@@ -26,7 +27,7 @@ bindsym $mod+Print exec \
 
 # Open app launcher
 bindsym $mod+space exec \
-  xargs swaymsg exec /etc/scripts/wofi-launcher.sh
+  swaymsg exec /etc/scripts/wofi-launcher.sh
 
 # Open calc
 # TODO
@@ -74,6 +75,8 @@ bindsym $mod+f fullscreen toggle
 # Set the node flags (sticky)
 bindsym $mod+ctrl+y sticky toggle
 
+bindsym $mod+ctrl+h move container to scratchpad
+
 
 ### PRESELECT
 
@@ -99,7 +102,7 @@ bindsym $mod+n focus next
 bindsym $mod+Shift+n focus prev
 
 # Open hidden windows
-# TODO
+bindsym $mod+alt+Tab scratchpad show
 
 # Open windows
 # TODO
@@ -181,13 +184,13 @@ mode "browser" {
 }
 bindsym $mod+alt+b mode "browser"
 
-# Open scratch terminal
-# TODO
 
 # Open terminal
 mode "terminal" {
   bindsym a mode "default"; exec alacritty
   bindsym k mode "default"; exec kitty
+  # Open scratch terminal
+  # TODO
   bindsym Escape mode "default"
 }
 bindsym $mod+alt+t mode "terminal"

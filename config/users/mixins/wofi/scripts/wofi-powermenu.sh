@@ -1,25 +1,24 @@
 #!/usr/bin/env bash
 
-shutdown="";
-reboot="";
-sleep="";
-hibernate="";
-logout="";
-lock="";
+# HACK: window padding mess up wofi location
+wofi_width="300"
+wofi_padding="100"
+wofi_real_width=$(echo "$wofi_width+$wofi_padding*2" | bc)
+monitor_size=$(swaymsg -t get_outputs | jq '.[] | select(.focused) | .rect.width,.rect.height')
+monitor_width=$(printf "$monitor_size" | sed -n '1p')
+monitor_height=$(printf "$monitor_size" | sed -n '2p')
+xoffset=$(echo "$monitor_width/2-$wofi_real_width/2" | bc)
+yoffset="300"
+
+shutdown=" Shutdown";
+reboot=" Reboot";
+sleep=" Sleep";
+hibernate=" Hibernate";
+logout=" Logout";
+lock=" Lock";
 options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 
-# Font size according to screen dimensions
-# FOCUSED_MONITOR=$(bspc query --monitors --monitor .focused --names)
-# DEFAULT_WIDTH=1920
-# WIDTH=$(xrandr | grep "$FOCUSED_MONITOR" | awk '{print $4}' | cut -d 'x' -f 1)
-# if [[ "$WIDTH" == "(normal" ]]; then
-#   WIDTH=$(xrandr | grep "$FOCUSED_MONITOR" | awk '{print $3}' | cut -d 'x' -f 1)
-# fi
-# DEFAULT_FONTSIZE=39
-# FONTSIZE=$(echo "$WIDTH/$DEFAULT_WIDTH*$DEFAULT_FONTSIZE" | bc -l)
-PRESELECTION=4
-
-selected="$(echo -e "$options" | wofi --dmenu)"
+selected="$(echo -e "$options" | wofi --dmenu --width "$wofi_width" --lines 7 --location top_left --yoffset "$yoffset" --xoffset "$xoffset")"
 
 case $selected in
   $shutdown)
