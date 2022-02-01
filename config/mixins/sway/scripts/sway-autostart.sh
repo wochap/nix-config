@@ -8,6 +8,8 @@ wl-copy " "
 clipman clear --all
 wl-paste --watch clipman store --primary &
 
+mako &
+gammastep -O 4000 &
 waybar &
 blueberry-tray &
 # light -S 20 &

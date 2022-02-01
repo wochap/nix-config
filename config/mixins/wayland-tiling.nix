@@ -13,6 +13,7 @@
         slurp
         grim
         gnome.zenity
+        wlr-randr
 
         clipman
         swaylock-effects # lockscreen

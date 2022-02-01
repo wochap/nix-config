@@ -1,41 +1,67 @@
-window {
-margin: 5px;
-background-color: #232836;
-color: #fff;
-border-radius: 10px;
+@import url("/home/gean/.config/wofi/colors.css");
+
+* {
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: @purple;
 }
 
-#input {
-margin: 5px;
-background: none;
-border: none;
-color: #fff;
-}
-
-#entry:selected {
-border-radius: 5px;
-border: none;
-
-}
-
-#text:selected {
-color: #d6b692;
-}
-
-
-#inner-box {
-margin: 5px;
+#window {
+  background: transparent;
 }
 
 #outer-box {
-margin: 5px;
+  background-color: @background;
+  border-radius: 4px;
+  border: 2px solid @selection;
+  color: @foreground;
+  font-family: Iosevka Nerd Font, woos, sans-serif;
+  font-size: 14px;
+
+  /* TODO: padding here requires offset */
+  padding: 60px 100px;
+  /* margin-left: -100px; */
+}
+
+#input {
+  background: @selection;
+  border-radius: 4px;
+  margin-bottom: 25px;
+  padding: 0.5em 1em;
+}
+
+#inner-box {
+  /* TODO: find workaround */
+  /* padding-top: 25px; */
 }
 
 #scroll {
-margin: 5px;
+}
+
+#entry {
+  padding: 0.5em calc(1em - 4px);
+  transition-duration: .25s;
+  transition-property: background-color;
+  transition-timing-function: ease-in-out;
+}
+
+#img {
+  margin-right: 10px;
 }
 
 #text {
-margin: 5px;
-
 }
+
+#entry:selected {
+  background: @selection;
+  border-radius: 4px;
+}
+
+#text:selected {
+}
+
+slider {
+  background: @purple;
+}
+

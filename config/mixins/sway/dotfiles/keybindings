@@ -11,7 +11,6 @@ set $down down
 set $up up
 set $right right
 set $term kitty
-set $menu wofi --show drun,run | args swaymsg exec --
 
 floating_modifier $mod normal
 
@@ -19,17 +18,24 @@ floating_modifier $mod normal
 bindsym $mod+Ctrl+Escape reload
 
 # Open power menu
+# TODO
 
 # Take fullscreen screenshot
 bindsym $mod+Print exec \
   /etc/scripts/takeshot.sh --now
 
 # Open app launcher
-bindsym $mod+space exec $menu
+bindsym $mod+space exec \
+  xargs swaymsg exec /etc/scripts/wofi-launcher.sh
 
 # Open calc
+# TODO
+
+# Open wifi menu
+# TODO
 
 # Show help
+# TODO
 
 # Show clipboard
 bindsym $mod+v exec /etc/scripts/wofi-clipboard.sh
@@ -38,6 +44,7 @@ bindsym $mod+v exec /etc/scripts/wofi-clipboard.sh
 bindsym $mod+Shift+v exec clipman clear --all
 
 # Show emojis
+# TODO
 
 # Open terminal
 bindsym $mod+Return exec $term
@@ -146,14 +153,20 @@ bindsym $mod+m mode "move"
 bindsym $mod+alt+p exec \
   /etc/scripts/waybar/waybar-toggle.sh
 
+# Lock screen
+bindsym $mod+alt+l exec \
+  /etc/scripts/sway-lock.sh
+
 # Open file manager
 bindsym $mod+alt+f exec \
   nautilus
 
+# Screencast/record region to mp4
+# TODO
+
 # Open screenshoot utility
 bindsym $mod+alt+s exec \
   /etc/scripts/takeshot.sh --area
-
 
 # Open color picker
 bindsym $mod+alt+c exec \
@@ -161,26 +174,32 @@ bindsym $mod+alt+c exec \
 
 # Open Browser
 mode "browser" {
-  bindsym b exec brave
-  bindsym c exec google-chrome-stable
-  bindsym f exec firefox
+  bindsym b mode "default"; exec brave
+  bindsym c mode "default"; exec google-chrome-stable
+  bindsym f mode "default"; exec firefox
   bindsym Escape mode "default"
 }
 bindsym $mod+alt+b mode "browser"
 
+# Open scratch terminal
+# TODO
+
 # Open terminal
 mode "terminal" {
-  bindsym a exec alacritty
-  bindsym k exec kitty
+  bindsym a mode "default"; exec alacritty
+  bindsym k mode "default"; exec kitty
   bindsym Escape mode "default"
 }
 bindsym $mod+alt+t mode "terminal"
 
 # Open magnifying glass
+# TODO
 
 # Open quick note app
+# TODO
 
 # Open monitor
+# TODO
 
 bindsym $mod+ctrl+n exec \
   makoctl restore
