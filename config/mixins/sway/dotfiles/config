@@ -45,6 +45,7 @@ exec swayidle -w \
 for_window [app_id="blueberry.py"] floating enable; move position center;
 for_window [app_id="eog"] floating enable; move position center;
 for_window [app_id="file-roller"] floating enable; move position center;
+for_window [app_id="gnome-calculator"] floating enable; move position center; sticky enable;
 for_window [app_id="org.gnome.Nautilus"] floating enable; move position center; sticky enable;
 for_window [app_id=".thunar-wrapped_"] floating enable; move position center; sticky enable;
 for_window [app_id="gnome-font-viewer"] floating enable; move position center;

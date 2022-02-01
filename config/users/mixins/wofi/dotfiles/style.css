@@ -5,6 +5,7 @@
   border: 0;
   outline: 0;
   color: @purple;
+  color: @foreground;
 }
 
 #window {
@@ -41,9 +42,9 @@
 
 #entry {
   padding: 0.5em calc(1em - 4px);
-  transition-duration: .25s;
-  transition-property: background-color;
-  transition-timing-function: ease-in-out;
+  /* transition-duration: .25s; */
+  /* transition-property: background-color; */
+  /* transition-timing-function: ease-in-out; */
 }
 
 #img {
