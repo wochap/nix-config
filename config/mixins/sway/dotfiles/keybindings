@@ -162,7 +162,7 @@ bindsym $mod+alt+l exec \
 
 # Open file manager
 bindsym $mod+alt+f exec \
-  nautilus
+  sway-focus.sh --toggle-scratchpad "org.gnome.Nautilus" nautilus
 
 # Screencast/record region to mp4
 # TODO
@@ -189,8 +189,7 @@ bindsym $mod+alt+b mode "browser"
 mode "terminal" {
   bindsym a mode "default"; exec alacritty
   bindsym k mode "default"; exec kitty
-  # Open scratch terminal
-  # TODO
+  bindsym s mode "default"; exec sway-focus.sh --toggle-scratchpad kitty-scratch /etc/scripts/kitty-scratch.sh
   bindsym Escape mode "default"
 }
 bindsym $mod+alt+t mode "terminal"
@@ -199,10 +198,12 @@ bindsym $mod+alt+t mode "terminal"
 # TODO
 
 # Open quick note app
-# TODO
+bindsym $mod+alt+n exec \
+  sway-focus.sh --toggle-scratchpad kitty-neorg /etc/scripts/kitty-neorg.sh
 
 # Open monitor
-# TODO
+bindsym $mod+alt+m exec \
+  sway-focus.sh --toggle-scratchpad kitty-htop /etc/scripts/kitty-htop.sh
 
 bindsym $mod+ctrl+n exec \
   makoctl restore

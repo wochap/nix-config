@@ -8,6 +8,10 @@ let
     executable = true;
     text = builtins.readFile ./scripts/startsway.sh;
   };
+  sway-run-or-raise = pkgs.writeShellScriptBin "sway-run-or-raise.sh"
+    (builtins.readFile ./scripts/sway-run-or-raise.sh);
+  sway-focus = pkgs.writeShellScriptBin "sway-focus.sh"
+    (builtins.readFile ./scripts/sway-focus.sh);
 in {
   config = {
     programs.sway = {
@@ -22,7 +26,7 @@ in {
     };
 
     environment = {
-      systemPackages = with pkgs; [ startsway ];
+      systemPackages = with pkgs; [ startsway sway-run-or-raise sway-focus ];
 
       etc = {
         "sway/config".text = ''

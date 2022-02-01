@@ -12,7 +12,7 @@
   "custom/scratchpad_indicator": {
     "interval": 1,
     "exec": "swaymsg -t get_tree | jq 'recurse(.nodes[]) | first(select(.name==\"__i3_scratch\")) | .floating_nodes | length | select(. >= 1)'",
-    "format": "{} ",
+    "format": "{} <span rise='-1000'></span>",
     "on-click": "swaymsg 'scratchpad show'",
     "on-click-right": "swaymsg 'move scratchpad'"
   },
