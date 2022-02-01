@@ -33,7 +33,8 @@ bindsym $mod+space exec \
 # TODO
 
 # Open wifi menu
-# TODO
+bindsym $mod+w exec \
+  swaymsg exec /etc/scripts/wofi-wifi.sh
 
 # Show help
 # TODO

@@ -13,6 +13,10 @@ in {
       systemPackages = with pkgs; [ wofi ];
 
       etc = {
+        "scripts/wofi-wifi.sh" = {
+          source = ./scripts/wofi-wifi.sh;
+          mode = "0755";
+        };
         "scripts/wofi-clipboard.sh" = {
           source = ./scripts/wofi-clipboard.sh;
           mode = "0755";
