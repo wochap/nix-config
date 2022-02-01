@@ -10,9 +10,9 @@
 
   // Modules configuration
   "custom/scratchpad_indicator": {
-    "interval": 3,
+    "interval": 1,
     "exec": "swaymsg -t get_tree | jq 'recurse(.nodes[]) | first(select(.name==\"__i3_scratch\")) | .floating_nodes | length | select(. >= 1)'",
-    "format": "{} ",
+    "format": "{} ",
     "on-click": "swaymsg 'scratchpad show'",
     "on-click-right": "swaymsg 'move scratchpad'"
   },
@@ -54,11 +54,11 @@
   },
   "custom/powermenu": {
     "format": "",
-    "on-click": "exec ~/.config/wofi/scripts/powermenu.sh"
+    "on-click": "exec /etc/scripts/wofi-powermenu.sh"
   },
   "custom/notifications": {
     "exec": "/etc/scripts/mako/mako-toggle-mode.sh --read",
-    "interval": "1",
+    "interval": 1,
     "return-type": "json",
     "format": "{icon}{}",
     "on-click": "exec /etc/scripts/mako/mako-toggle-mode.sh --toggle",

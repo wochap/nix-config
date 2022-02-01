@@ -18,7 +18,7 @@ floating_modifier $mod normal
 bindsym $mod+Ctrl+Escape reload
 
 # Open power menu
-bindsym $mod+Esc exec \
+bindsym $mod+Escape exec \
   swaymsg exec /etc/scripts/wofi-powermenu.sh
 
 # Take fullscreen screenshot
