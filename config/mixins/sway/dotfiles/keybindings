@@ -56,9 +56,9 @@ bindsym $mod+Shift+w kill
 
 # Alternate between the tiled and monocle layout
 mode "layout" {
-  bindsym m layout tabbed
-  bindsym s layout default
-  bindsym c move position center
+  bindsym m mode "default"; layout tabbed
+  bindsym s mode "default"; layout splith
+  bindsym c mode "default"; move position center
   bindsym Escape mode "default"
 }
 bindsym $mod+l mode "layout"

@@ -6,8 +6,9 @@ exec bash /etc/scripts/sway-autostart.sh
 
 
 #### SWAY theme ####
-seat seat0 xcursor_theme Numix-Cursor 32
-font pango:JetBrainsMono Nerd Font 10
+font pango:Iosevka Nerd Font 10
+titlebar_padding 12 7
+title_align center
 
 default_border pixel 2
 default_floating_border pixel 2
@@ -37,8 +38,14 @@ exec swayidle -w \
      timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
      before-sleep 'bash /etc/scripts/sway-lock.sh'
 
-# TODO: inputs
-# swaymsg -t get_inputs
+input * {
+  xkb_layout "us"
+}
+
+seat * {
+  xcursor_theme Numix-Cursor 32
+  hide_cursor when-typing enable
+}
 
 
 #### SWAY rules ####
