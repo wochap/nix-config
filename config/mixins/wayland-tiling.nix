@@ -22,6 +22,7 @@
         wl-clipboard
         # sway-alttab
       ];
+      variables = { _JAVA_AWT_WM_NONREPARENTING = "1"; };
     };
   };
 }

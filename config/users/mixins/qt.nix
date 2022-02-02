@@ -10,6 +10,10 @@ in {
         [
           qt5.qtgraphicaleffects # required by gddm themes
         ] ++ (if isWayland then [ qt5.qtwayland ] else [ ]);
+      variables = lib.mkMerge [
+        { QT_WAYLAND_DISABLE_WINDOWDECORATION = "1"; }
+        (lib.mkIf isWayland { QT_QPA_PLATFORM = "wayland"; })
+      ];
     };
 
     home-manager.users.${userName} = {

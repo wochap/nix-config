@@ -8,6 +8,7 @@ wl-copy " "
 clipman clear --all
 wl-paste --watch clipman store --primary &
 
+/etc/scripts/import-gsettings.sh &
 mako &
 gammastep -O 4000 &
 waybar &

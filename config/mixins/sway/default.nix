@@ -42,6 +42,11 @@ in {
         '';
         "sway/borders".source = ./assets/borders;
 
+        "scripts/import-gsettings.sh" = {
+          source = ./scripts/import-gsettings.sh;
+          mode = "0755";
+        };
+
         "scripts/sway-lock.sh" = {
           source = ./scripts/sway-lock.sh;
           mode = "0755";
