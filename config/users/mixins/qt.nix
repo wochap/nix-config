@@ -11,8 +11,10 @@ in {
           qt5.qtgraphicaleffects # required by gddm themes
         ] ++ (if isWayland then [ qt5.qtwayland ] else [ ]);
       variables = lib.mkMerge [
-        { QT_WAYLAND_DISABLE_WINDOWDECORATION = "1"; }
-        (lib.mkIf isWayland { QT_QPA_PLATFORM = "wayland"; })
+        (lib.mkIf isWayland {
+          QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+          QT_QPA_PLATFORM = "wayland";
+        })
       ];
     };
 
