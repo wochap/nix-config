@@ -13,6 +13,7 @@ window#waybar.hidden {
   opacity: 0;
 }
 
+#keyboard-state label.locked,
 #custom-recorder,
 #custom-notifications,
 #custom-powermenu,
@@ -33,6 +34,11 @@ window#waybar.hidden {
   background-clip: border-box;
 }
 
+#keyboard-state label.locked {
+  font-size: 1.2em;
+}
+
+#keyboard-state label.locked,
 #custom-notifications.disabled {
   background: @red;
   color: @background;

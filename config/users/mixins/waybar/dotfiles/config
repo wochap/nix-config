@@ -53,6 +53,7 @@
   },
   "keyboard-state": {
     "capslock": true,
+    "interval": 1,
     "format": "{icon}",
     "format-icons": {
       "locked": "",
