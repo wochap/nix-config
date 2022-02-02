@@ -13,6 +13,7 @@ in
     ./mixins/git.nix
     ./mixins/gtk.nix
     ./mixins/htop.nix
+    ./mixins/kanshi.nix
     ./mixins/kitty
     ./mixins/mako
     ./mixins/mime-apps.nix

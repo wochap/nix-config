@@ -17,6 +17,7 @@
         wf-recorder
 
         clipman
+        wdisplays
         swaylock-effects # lockscreen
         swaybg
         wl-clipboard

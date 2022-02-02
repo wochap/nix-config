@@ -3,6 +3,8 @@
 dex /run/current-system/sw/etc/xdg/autostart/org.gnome.Evolution-alarm-notify.desktop \
   /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop &
 
+kanshi &
+
 # clipboard
 wl-copy " "
 clipman clear --all

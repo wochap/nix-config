@@ -27,8 +27,8 @@ gaps outer 0
 
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 # TODO: make it dynamic, use kanshi
-output eDP-1 disable
-output DP-3 resolution 3840x2160 scale 1.5
+# output eDP-1 disable
+# output DP-3 resolution 3840x2160 scale 1.5
 output * bg /home/gean/Pictures/backgrounds/default.png fill
 
 focus_follows_mouse yes
@@ -49,6 +49,8 @@ seat * {
 
 
 #### SWAY rules ####
+for_window [class=".*"] border pixel 2;
+for_window [app_id=".*"] border pixel 2;
 for_window [app_id="blueberry.py"] floating enable; move position center;
 for_window [app_id="eog"] floating enable; move position center;
 for_window [app_id="file-roller"] floating enable; move position center;
