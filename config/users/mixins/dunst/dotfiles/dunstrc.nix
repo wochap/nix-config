@@ -44,7 +44,7 @@ in
     vertical_alignment = "center";
     corner_radius = 10;
     font = "FiraCode Nerd Font Mono ${toString fontSize}";
-    format = "<span weight='500'>%s\\n</span><span weight='300'>%b</span>";
+    format = ''<b>%s</b> <span color='#8be9fd'>(%a)</span>\n%b'';
     frame_color = border;
     frame_width = borderWidth;
     horizontal_padding = 16;
