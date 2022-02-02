@@ -36,7 +36,7 @@ in {
           #### SWAY theme ####
           #                         title-border         title-bg                title-text            indicator       window-border
           client.focused            ${theme.purple}      ${theme.purple}         ${theme.background}   ${theme.cyan}   ${theme.purple}
-          client.unfocused          ${theme.selection}   ${theme.srtselection}   ${theme.foreground}   ${theme.cyan}   ${theme.selection}
+          client.unfocused          ${theme.selection}   ${theme.selection}    ${theme.foreground}   ${theme.cyan}   ${theme.selection}
           client.focused_inactive   ${theme.comment}     ${theme.comment}        ${theme.foreground}   ${theme.cyan}   ${theme.comment}
           client.urgent             ${theme.pink}        ${theme.pink}           ${theme.background}   ${theme.cyan}   ${theme.pink}
         '';

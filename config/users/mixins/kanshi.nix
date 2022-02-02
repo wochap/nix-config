@@ -6,15 +6,16 @@ in {
     environment = { systemPackages = with pkgs; [ kanshi ]; };
 
     home-manager.users.${userName} = {
+      # TODO: change to way-displays
       xdg.configFile = {
         "kanshi/config".text = ''
           profile docked {
             output "eDP-1" disable
-            output "Goldstar Company Ltd LG HDR 4K 0x0000BF0C" scale 1.500000
+            output "Goldstar Company Ltd LG HDR 4K 0x0000BF0C" scale 1.5
           }
 
           profile undocked {
-            output "eDP-1" scale 2.000000
+            output "eDP-1" scale 2.0
           }
         '';
       };
