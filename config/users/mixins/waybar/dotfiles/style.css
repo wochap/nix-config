@@ -13,6 +13,7 @@ window#waybar.hidden {
   opacity: 0;
 }
 
+#custom-recorder,
 #custom-notifications,
 #custom-powermenu,
 #workspaces,
@@ -94,6 +95,11 @@ window#waybar.hidden {
 }
 #idle_inhibitor.activated {
   background-color: @purple;
+  color: @background;
+}
+
+#custom-recorder.recording {
+  background: @red;
   color: @background;
 }
 

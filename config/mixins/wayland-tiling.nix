@@ -14,6 +14,7 @@
         grim
         gnome.zenity
         wlr-randr
+        wf-recorder
 
         clipman
         swaylock-effects # lockscreen

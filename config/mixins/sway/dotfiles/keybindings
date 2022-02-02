@@ -166,7 +166,8 @@ bindsym $mod+alt+f exec \
   sway-focus.sh --toggle-scratchpad "org.gnome.Nautilus" nautilus
 
 # Screencast/record region to mp4
-# TODO
+bindsym $mod+alt+r exec \
+  /etc/scripts/recorder.sh --area
 
 # Open screenshoot utility
 bindsym $mod+alt+s exec \
