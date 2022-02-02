@@ -73,12 +73,10 @@ in {
           gtk-xft-hintstyle = "hintfull";
         };
         gtk3.bookmarks = [
-          "file:///home/${userName}/Documents"
-          "file:///home/${userName}/Downloads"
-          "file:///home/${userName}/Pictures"
           "file:///home/${userName}/Projects"
-          "file:///home/${userName}/Recordings"
-          "file:///home/${userName}/Videos"
+          "file:///home/${userName}/Projects/boc"
+          "file:///home/${userName}/Videos/Recordings"
+          "file:///home/${userName}/Pictures/Screenshots"
         ];
         gtk3.extraCss = ''
           /** Some apps use titlebar class and some window */
