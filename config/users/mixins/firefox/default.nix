@@ -3,8 +3,11 @@
 let
   userName = config._userName;
   isWayland = config._displayServer == "wayland";
-in
-{
+  hmConfig = config.home-manager.users.${userName};
+  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  configDirectory = config._configDirectory;
+  currentDirectory = "${configDirectory}/config/users/mixins/firefox";
+in {
   config = {
     environment.sessionVariables = {
       # Force firefox to use wayland
@@ -16,29 +19,10 @@ in
 
     home-manager.users.${userName} = {
       home.file = {
-        ".mozilla/firefox/default/chrome/userChrome.css".text = ''
-          @import "customChrome.css";
-        '';
-        ".mozilla/firefox/default/chrome/customChrome.css".text = ''
-          /* Remove Tab outline */
-          .keyboard-focused-tab > .tab-stack > .tab-content,
-          .tabbrowser-tab:focus:not([aria-activedescendant]) > .tab-stack > .tab-content {
-            outline: 0 !important;
-          }
-          tabs#tabbrowser-tabs {
-            --tab-line-color: #44475a !important;
-          }
-
-          /* Remove Findbar transition */
-          findbar {
-            transition: none !important;
-          }
-
-          /* Remove round borders of menus/dropdowns */
-          menupopup {
-            border-radius: 0 !important;
-          }
-        '';
+        ".mozilla/firefox/default/chrome/userChrome.css".source =
+          mkOutOfStoreSymlink "${currentDirectory}/assets/userChrome.css";
+        ".mozilla/firefox/default/chrome/customChrome.css".source =
+          mkOutOfStoreSymlink "${currentDirectory}/assets/customChrome.css";
         ".mozilla/firefox/default/chrome/userContent.css".text = ''
           ${builtins.readFile ./assets/jira.css}
         '';
@@ -52,7 +36,7 @@ in
             name = "default";
             isDefault = true;
             settings = {
-              "browser.quitShortcut.disabled" =  true;
+              "browser.quitShortcut.disabled" = true;
               "browser.tabs.tabMinWidth" = 5;
 
               # custom scrollbar
@@ -87,7 +71,7 @@ in
 
               # https://wiki.archlinux.org/index.php/Firefox/Tweaks#Performance
               "browser.preferences.defaultPerformanceSettings.enabled" = false;
-              "dom.ipc.processCount" = 8;
+              # "dom.ipc.processCount" = 8;
 
               # Workaround for when xdg.portal is enabled? set to false
               # https://bugzilla.mozilla.org/show_bug.cgi?id=1618094
