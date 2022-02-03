@@ -8,7 +8,7 @@ monitor_size=$(swaymsg -t get_outputs | jq '.[] | select(.focused) | .rect.width
 monitor_width=$(printf "$monitor_size" | sed -n '1p')
 monitor_height=$(printf "$monitor_size" | sed -n '2p')
 xoffset=$(echo "$monitor_width/2-$wofi_real_width/2" | bc)
-yoffset="300"
+yoffset=$(echo "$monitor_height*0.2" | bc)
 
 ## Get info
 IFACE="$(nmcli | grep -i interface | awk '/interface/ {print $2}')"

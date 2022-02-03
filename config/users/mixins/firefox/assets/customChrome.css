@@ -1,0 +1,19 @@
+/* Remove Tab outline */
+.keyboard-focused-tab > .tab-stack > .tab-content,
+.tabbrowser-tab:focus:not([aria-activedescendant]) > .tab-stack > .tab-content {
+  outline: 0 !important;
+}
+tabs#tabbrowser-tabs {
+  --tab-line-color: #44475a !important;
+}
+
+/* Remove Findbar transition */
+findbar {
+  transition: none !important;
+}
+
+/* Remove round borders of menus/dropdowns */
+menupopup {
+  border-radius: 0 !important;
+}
+

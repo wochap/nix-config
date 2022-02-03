@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  isXorg = config._displayServer == "xorg";
   isWayland = config._displayServer == "wayland";
   userName = config._userName;
   isHidpi = config._isHidpi;
@@ -53,7 +54,7 @@ in
       xsession.pointerCursor = {
         name = "Numix-Cursor";
         package = pkgs.numix-cursor-theme;
-        size = if isHidpi then 64 else 32;
+        size = if ( isHidpi && isXorg ) then 64 else 32;
       };
 
       programs.mpv = {

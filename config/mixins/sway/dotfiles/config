@@ -38,6 +38,10 @@ exec swayidle -w \
      timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
      before-sleep 'bash /etc/scripts/sway-lock.sh'
 
+input * {
+  natural_scroll enabled;
+}
+
 input "type:keyboard" {
   xkb_layout "us"
 }

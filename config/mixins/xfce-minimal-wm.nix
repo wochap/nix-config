@@ -3,6 +3,7 @@
 let enablePowerManagement = true;
 in {
   config = {
+    # XFCE without wm and bar
     # inspiration: https://github.com/NixOS/nixpkgs/blob/2ddc335e6f32b875e14ad9610101325b306a0add/nixos/modules/services/x11/desktop-managers/xfce.nix
     environment.systemPackages = with pkgs.xfce // pkgs;
       [
@@ -44,15 +45,15 @@ in {
       "/share/gtksourceview-4.0"
     ];
 
-    services.xserver.desktopManager.session = [{
-      name = "xfce";
-      desktopNames = [ "XFCE" ];
-      bgSupport = true;
-      start = ''
-        ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
-        waitPID=$!
-      '';
-    }];
+    # services.xserver.desktopManager.session = [{
+    #   name = "xfce";
+    #   desktopNames = [ "XFCE" ];
+    #   bgSupport = true;
+    #   start = ''
+    #     ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
+    #     waitPID=$!
+    #   '';
+    # }];
 
     services.xserver.updateDbusEnvironment = true;
     services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];

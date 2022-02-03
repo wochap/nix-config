@@ -139,6 +139,16 @@ in
             ln -sf ${prev.postman}/share $out/share
           ''
         );
+
+        robo3t = (prev.runCommandNoCC "robo3t"
+          { buildInputs = with pkgs; [ makeWrapper ]; }
+          ''
+            makeWrapper ${prev.robo3t}/bin/robo3t $out/bin/robo3t \
+              --set "QT_QPA_PLATFORM" "xcb"
+
+            ln -sf ${prev.robo3t}/share $out/share
+          ''
+        );
       })
 
       # inputs.nixpkgs-wayland.overlay-egl

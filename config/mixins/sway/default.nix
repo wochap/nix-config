@@ -34,11 +34,11 @@ in {
           ${builtins.readFile ./dotfiles/keybindings}
 
           #### SWAY theme ####
-          #                         border                bg                    text                  indicator       child_border
-          client.focused            ${theme.purple}       ${theme.purple}       ${theme.background}   ${theme.cyan}
-          client.unfocused          ${theme.background}   ${theme.background}   ${theme.foreground}   ${theme.cyan}
-          client.focused_inactive   ${theme.background}   ${theme.background}   ${theme.foreground}   ${theme.cyan}
-          client.urgent             ${theme.pink}         ${theme.pink}         ${theme.background}   ${theme.cyan}
+          #                         title-border         title-bg                title-text            indicator       window-border
+          client.focused            ${theme.purple}      ${theme.purple}         ${theme.background}   ${theme.cyan}   ${theme.purple}
+          client.unfocused          ${theme.selection}   ${theme.selection}    ${theme.foreground}   ${theme.cyan}   ${theme.selection}
+          client.focused_inactive   ${theme.comment}     ${theme.comment}        ${theme.foreground}   ${theme.cyan}   ${theme.comment}
+          client.urgent             ${theme.pink}        ${theme.pink}           ${theme.background}   ${theme.cyan}   ${theme.pink}
         '';
         "sway/borders".source = ./assets/borders;
 
@@ -65,6 +65,11 @@ in {
         };
         "scripts/recorder.sh" = {
           source = ./scripts/recorder.sh;
+          mode = "0755";
+        };
+
+        "scripts/projects/sway-dangerp.sh" = {
+          source = ./scripts/sway-dangerp.sh;
           mode = "0755";
         };
       };

@@ -10,7 +10,7 @@ let
 in {
   config = {
     environment = {
-      systemPackages = with pkgs; [ waybar ];
+      systemPackages = with pkgs; [ waybar libevdev ];
       etc = {
         "scripts/waybar/waybar-toggle.sh" = {
           source = ./scripts/waybar-toggle.sh;
