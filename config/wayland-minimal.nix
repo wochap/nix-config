@@ -7,6 +7,7 @@
     ./mixins/gnome-minimal-wm # Comment on first install
     ./mixins/gnome-pkgs.nix # Comment on first install
     ./mixins/lorri
+    ./mixins/mongodb.nix
     ./mixins/nix-common.nix
     ./mixins/nixos-networking.nix
     ./mixins/nixos-shared
