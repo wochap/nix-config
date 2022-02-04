@@ -29,7 +29,7 @@ gaps outer 0
 # TODO: make it dynamic, use kanshi
 # output eDP-1 disable
 # output DP-3 resolution 3840x2160 scale 1.5
-output * bg /home/gean/Pictures/backgrounds/default.png fill
+# output * bg /home/gean/Pictures/backgrounds/default.png fill
 
 focus_follows_mouse yes
 
@@ -44,6 +44,17 @@ input * {
 
 input "type:keyboard" {
   xkb_layout "us"
+}
+
+input "type:touchpad" {
+  accel_profile "flat"
+  pointer_accel 0
+}
+
+input "type:pointer" {
+  accel_profile "flat"
+  pointer_accel 0
+  # calibration_matrix 8 0 0 0 5 0
 }
 
 seat * {
@@ -69,6 +80,7 @@ for_window [app_id="mpv"] floating enable; move position center;
 
 assign [app_id="firefox"] workspace 5
 assign [app_id="google-chrome"] workspace 1
+assign [class="Google-chrome"] workspace 1
 assign [app_id="slack"] workspace 4
 
 for_window [app_id="kitty-htop"] floating enable; move position center; sticky enable; resize set width 1500 px height 1200 px;

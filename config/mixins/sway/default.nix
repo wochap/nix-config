@@ -19,10 +19,11 @@ in {
       wrapperFeatures.gtk = true; # so that gtk works properly
       extraPackages = [ ]; # block rxvt
 
-      # TODO: if nvidia
-      # extraOptions = [
-      #   "--unsupported-gpu"
-      # ];
+      extraOptions = [
+        "--debug"
+        # TODO: if nvidia
+        # "--unsupported-gpu"
+      ];
     };
 
     environment = {
@@ -72,6 +73,10 @@ in {
           source = ./scripts/sway-dangerp.sh;
           mode = "0755";
         };
+        "scripts/projects/sway-tas.sh" = {
+          source = ./scripts/sway-tas.sh;
+          mode = "0755";
+        };
       };
     };
 
@@ -106,7 +111,7 @@ in {
       serviceConfig = {
         Type = "simple";
         ExecStart = ''
-          ${pkgs.dbus}/bin/dbus-run-session sway --unsupported-gpu --debug
+          ${pkgs.dbus}/bin/dbus-run-session sway
         '';
         Restart = "on-failure";
         RestartSec = 3;
