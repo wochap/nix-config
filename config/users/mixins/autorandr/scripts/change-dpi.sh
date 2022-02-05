@@ -22,3 +22,6 @@ echo "Xft.dpi: $DPI" | xrdb -merge
 sed --follow-symlinks --in-place -E "/DPI/s/[0-9.]+/$DPI/" "$HOME/.config/xsettingsd/xsettingsd.conf"
 killall -HUP xsettingsd
 
+/etc/scripts/polybar-start.sh &
+/etc/scripts/dunst-start.sh &
+

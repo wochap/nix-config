@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
+killall dunst
+
 # get dpi
 DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
-
-killall dunst
 
 case "$DPI" in
 144)

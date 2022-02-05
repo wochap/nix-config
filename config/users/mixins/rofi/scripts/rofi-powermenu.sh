@@ -16,6 +16,7 @@ PRESELECTION=4
 selected="$(echo -e "$options" | rofi \
   -p "powermenu" \
   -theme-str 'window { width: 15em; }' \
+  -theme-str 'element-text {font: "woos 12";}' \
   -dpi "$DPI" \
   -dmenu \
   -selected-row ${PRESELECTION})"

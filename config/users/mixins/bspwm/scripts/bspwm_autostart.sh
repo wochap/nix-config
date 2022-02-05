@@ -11,12 +11,18 @@ dex
   # /run/current-system/sw/etc/xdg/autostart/gnome-keyring-secrets.desktop \
   # /run/current-system/sw/etc/xdg/autostart/xfsettingsd.desktop &
 
+xsettingsd &
+
+# autorandr hooks runs random-bg, polybar and dunst
+autorandr --load desktop-4k &
+# /etc/scripts/polybar-start.sh &
+# /etc/scripts/dunst-start.sh &
+# /etc/scripts/random-bg.sh &
+
 clipmenud &
 picom --experimental-backends &
 blueberry-tray &
 caffeine -a &
-/etc/scripts/polybar-start.sh &
-/etc/scripts/random-bg.sh &
 
 # light -S 20 &
 # brightnessctl set 20%
