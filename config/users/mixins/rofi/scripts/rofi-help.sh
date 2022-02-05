@@ -11,4 +11,4 @@ awk '/^[a-z]/ && last {print "<span>"$0"\t",last,"</span>"} {last=""} /^#/{last=
     -dpi "$DPI" \
     -p "help" \
     -markup-rows \
-    -theme /home/gean/nix-config/config/users/mixins/rofi/dotfiles/rofi-help-theme.rasi
+    -config "$HOME/.config/rofi/rofi-help-theme.rasi"

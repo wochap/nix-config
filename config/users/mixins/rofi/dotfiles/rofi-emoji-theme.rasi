@@ -1,4 +1,4 @@
-@import "/home/gean/nix-config/config/users/mixins/rofi/dotfiles/config.rasi"
+@import "config.rasi"
 
 configuration {
   display-emoji: "";

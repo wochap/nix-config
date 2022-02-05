@@ -35,7 +35,7 @@ window {
   border: 2px;
   text-color: @var-fg;
   transparency: "real";
-  width: 30em;
+  width: 25em;
 
   // Window position
   anchor: north;

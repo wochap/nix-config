@@ -33,10 +33,6 @@ in {
           source = ./scripts/rofi-help.sh;
           mode = "0755";
         };
-        "scripts/rofi-wifi.sh" = {
-          source = ./scripts/rofi-wifi.sh;
-          mode = "0755";
-        };
         "scripts/rofi-calc.sh" = {
           text = ''
             #!/usr/bin/env bash
@@ -62,7 +58,7 @@ in {
             DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
 
             rofi \
-              -config /etc/config/rofi-emoji-theme.rasi \
+              -config "$HOME/.config/rofi/rofi-emoji-theme.rasi" \
               -dpi "$DPI" \
               -modi emoji \
               -show emoji \
@@ -82,35 +78,6 @@ in {
           source = ./scripts/rofi-hidden-windows.sh;
           mode = "0755";
         };
-
-        "config/rofi-powermenu-theme.rasi" = {
-          source = ./dotfiles/rofi-powermenu-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-launcher-theme.rasi" = {
-          source = ./dotfiles/rofi-launcher-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-calc-theme.rasi" = {
-          source = ./dotfiles/rofi-calc-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-emoji-theme.rasi" = {
-          source = ./dotfiles/rofi-emoji-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-help-theme.rasi" = {
-          source = ./dotfiles/rofi-help-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-clipboard-theme.rasi" = {
-          source = ./dotfiles/rofi-clipboard-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-theme.rasi" = {
-          source = ./dotfiles/rofi-theme.rasi;
-          mode = "0755";
-        };
       };
       pathsToLink = [ "/share/rofi-emoji" ];
     };
@@ -126,6 +93,10 @@ in {
         '';
         "rofi/config.rasi".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.rasi";
+        "rofi/rofi-emoji-theme.rasi".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/rofi-emoji-theme.rasi";
+        "rofi/rofi-help-theme.rasi".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/rofi-help-theme.rasi";
       };
     };
   };
