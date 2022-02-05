@@ -13,6 +13,10 @@ dex
 
 xsettingsd &
 
+if [ -x "$(command -v nvidia-settings)" ]; then
+  nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
+fi
+
 # autorandr hooks runs random-bg, polybar and dunst
 autorandr --load desktop-4k &
 # /etc/scripts/polybar-start.sh &
@@ -20,7 +24,7 @@ autorandr --load desktop-4k &
 # /etc/scripts/random-bg.sh &
 
 clipmenud &
-picom --experimental-backends &
+# picom --experimental-backends &
 blueberry-tray &
 caffeine -a &
 
