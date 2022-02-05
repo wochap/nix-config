@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   userName = config._userName;
@@ -50,12 +50,13 @@ in {
     };
 
     home-manager.users.${userName} = {
+      home.file = {
+        ".icons/Dracula".source = inputs.dracula-icons-theme;
+      };
+
       gtk = {
         enable = true;
-        iconTheme = {
-          name = "Tela-purple-dark";
-          package = pkgs.tela-icon-theme;
-        };
+        iconTheme = { name = "Dracula"; };
         theme = {
           name = "Dracula";
           package = pkgs.dracula-theme;

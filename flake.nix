@@ -20,6 +20,10 @@
     ohmyzsh.flake = false;
 
     nixpkgs-s2k.url = "github:wochap/nixpkgs-s2k?rev=2c28f8564721673073923823f4761b0f7e34cc65";
+    dracula-icons-theme.url = "github:m4thewz/dracula-icons?rev=2d3c83caa8664e93d956cfa67a0f21418b5cdad8";
+    dracula-icons-theme.flake = false;
+    dracula-gtk-theme.url = "github:dracula/gtk?rev=18bb561588866e71ed2ef5176c2e4797c58f2655";
+    dracula-gtk-theme.flake = false;
     ranger.url = "github:ranger/ranger?rev=7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6";
     ranger.flake = false;
     nnn.url = "github:jarun/nnn?rev=b8b0bab4266a635519f605c2e3e193e392674273";
