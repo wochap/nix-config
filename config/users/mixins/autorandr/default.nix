@@ -9,7 +9,9 @@ in {
         hooks = {
           postswitch = {
             # TODO: reload bspwm
+            # TODO: reload polybar
             "change-background" = "/etc/scripts/random-bg.sh";
+            "change-dpi" = builtins.readFile ./scripts/change-dpi.sh;
           };
         };
         profiles = {
@@ -45,7 +47,7 @@ in {
               DP-2 = {
                 enable = true;
                 crtc = 0;
-                dpi = 144;
+                dpi = 96;
                 mode = "1920x1080";
                 position = "0x0";
                 primary = true;

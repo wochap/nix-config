@@ -19,6 +19,6 @@ echo "Xft.dpi: $DPI" | xrdb -merge
 
 # Update Xft DPI in xsettingsd which is a lightweight gnome settings daemon implementation.
 # The apps which query gsd for DPI will get updated on the fly.
-sed --follow-symlinks --in-place -E "/DPI/s/[0-9.]+/$DPI/" "$HOME/config/xsettingsd/xsettingsd.conf"
+sed --follow-symlinks --in-place -E "/DPI/s/[0-9.]+/$DPI/" "$HOME/.config/xsettingsd/xsettingsd.conf"
 killall -HUP xsettingsd
 

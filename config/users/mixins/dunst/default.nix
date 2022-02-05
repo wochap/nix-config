@@ -1,16 +1,15 @@
 { config, pkgs, lib, ... }:
 
 let
-  localPkgs = import ../../../packages { pkgs = pkgs; lib = lib; };
   userName = config._userName;
-in
-{
+  hmConfig = config.home-manager.users.${userName};
+  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  configDirectory = config._configDirectory;
+  currentDirectory = "${configDirectory}/config/users/mixins/dunst";
+in {
   config = {
     environment = {
-      systemPackages = with pkgs; [
-        dunst
-        libnotify
-      ];
+      systemPackages = with pkgs; [ dunst libnotify ];
       etc = {
         "assets/notification.flac" = {
           source = ./assets/notification.flac;
@@ -20,6 +19,7 @@ in
         "scripts/play_notification.sh" = {
           text = ''
             #! ${pkgs.bash}/bin/bash
+
             ${pkgs.pulseaudio}/bin/paplay /etc/assets/notification.flac
           '';
           mode = "0755";
@@ -28,15 +28,9 @@ in
     };
 
     home-manager.users.${userName} = {
-      services.dunst = {
-        enable = true;
-        # TODO: add WAYLAND_DISPLAY
-        # waylandDisplay = "";
-        iconTheme = {
-          name = "Papirus";
-          package = pkgs.papirus-icon-theme;
-        };
-        settings = (import ./dotfiles/dunstrc.nix { inherit config; pkgs = pkgs; lib = lib; });
+      xdg.configFile = {
+        "dunst/dunstrc".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/dunstrc";
       };
     };
   };
