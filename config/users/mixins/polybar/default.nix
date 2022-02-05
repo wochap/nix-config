@@ -27,13 +27,7 @@ in {
     environment = {
       systemPackages = with pkgs; [
         customPolybar
-        localPkgs.zscroll # scroll text in shells
       ];
-      sessionVariables = {
-        # POLYBAR_HEIGHT = 48 + 3 * 2
-        POLYBAR_HEIGHT = "54";
-        POLYBAR_MARGIN = "25";
-      };
       etc = {
         "scripts/polybar-toggle.sh" = {
           source = ./scripts/polybar-toggle.sh;
@@ -50,11 +44,8 @@ in {
       xdg.configFile = {
         "polybar/colors.ini".text = toPolybarIni { themeColors = theme; };
         "polybar/config.ini".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/main.ini";
-        "polybar/scripts/docker_info.sh".source = ./dotfiles/scripts/docker_info.sh;
-        "polybar/scripts/get_gpu_status.sh".source = ./dotfiles/scripts/get_gpu_status.sh;
-        "polybar/scripts/get_spotify_status.sh".source = ./dotfiles/scripts/get_spotify_status.sh;
-        "polybar/scripts/get_vram_status.sh".source = ./dotfiles/scripts/get_vram_status.sh;
-        "polybar/scripts/scroll_spotify_status.sh".source = ./dotfiles/scripts/scroll_spotify_status.sh;
+        "polybar/blocks.ini".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/blocks.ini";
+
         "polybar/scripts/bspwm_monocle_windows.sh" = {
           source = ./dotfiles/scripts/bspwm_monocle_windows.sh;
           executable = true;
