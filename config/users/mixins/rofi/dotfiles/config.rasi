@@ -1,0 +1,109 @@
+@theme "colors.rasi"
+
+configuration {
+  display-combi: "";
+  display-run: "";
+  display-drun: "";
+  display-calc: "";
+  display-emoji: "";
+  hide-scrollbar: false;
+  case-sensitive: false;
+  cycle: false;
+  dpi: 96;
+  font: "Iosevka Nerd Font 12";
+}
+
+* {
+  background-color: inherit;
+  font: inherit;
+  spacing: 0;
+  text-color: inherit;
+
+  var-bg: @background;
+  var-fg: @foreground;
+  var-bg-selection: @selection;
+  var-fg-selection: @foreground;
+  var-input-placeholder-color: @green;
+  var-primary-color: @purple;
+  var-window-border-color: @selection;
+}
+
+window {
+  background-color: @var-bg;
+  border-color: @var-window-border-color;
+  border-radius: 4px;
+  border: 2px;
+  text-color: @var-fg;
+  transparency: "real";
+  width: 30em;
+
+  // Window position
+  anchor: north;
+  location: north;
+  y-offset: 25%;
+}
+
+mainbox {
+  children: [ inputbar, listview ];
+}
+
+listview {
+  columns: 1;
+  cycle: false;
+  layout: vertical;
+  lines: 9;
+  padding: 0;
+  spacing: 0;
+
+  // Dynamic window height
+  dynamic: true;
+  fixed-height: false;
+}
+
+inputbar {
+  children: [ entry, prompt ];
+  expand: false;
+  margin: 0;
+  padding: 0.75em 1.25em;
+}
+
+prompt {
+  font: "woos 15";
+  vertical-align: 0.5;
+  padding: 0.35em 0.55em;
+  margin: 0;
+  background-color: @var-primary-color;
+  border-radius: 4px;
+  text-color: @var-bg;
+}
+
+entry {
+  blink: true;
+  expand: true;
+  horizontal-align: 0;
+  vertical-align: 0.5;
+  padding: 0;
+  margin: 0 0.75em 0 0;
+  placeholder-color: @var-input-placeholder-color;
+  placeholder: "";
+}
+
+element {
+  padding: 0.6em 1.25em;
+}
+
+element-icon {
+  size: 40px;
+}
+
+element-text {
+  expand: true;
+  highlight: @var-primary-color;
+  horizontal-align: 0;
+  vertical-align: 0.5;
+}
+
+element selected {
+  background-color: @var-bg-selection;
+  text-color: @var-fg-selection;
+}

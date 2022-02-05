@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# get dpi
+DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
+
 query=${NODES_QUERY:-.hidden.local.window}
 nodesArray=( $(bspc query -N -n $query) )
 rows=""
@@ -11,7 +14,7 @@ do
   rows+="<span>${class}\t${title}</span>\n"
 done
 
-s=$(printf "$rows" | column -t -s "$(printf '\t')" | rofi -font "FiraCode Nerd Font Mono 11" -format i -dmenu -i -p "" -markup-rows -theme /etc/config/rofi-clipboard-theme.rasi)
+s=$(printf "$rows" | column -t -s "$(printf '\t')" | rofi -dpi "$DPI" -format i -dmenu -i -p "" -markup-rows)
 
 if [[ -n "$s" ]]; then
   node="${nodesArray[$s]}"

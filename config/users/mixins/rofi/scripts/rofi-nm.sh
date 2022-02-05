@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# get dpi
+DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
+
 ## Get info
 IFACE="$(nmcli | grep -i interface | awk '/interface/ {print $2}')"
 STATUS="$(nmcli radio wifi)"
@@ -30,7 +33,7 @@ launch="Open Connection Editor"
 options="$connected\n$launch_cli\n$launch"
 
 ## Main
-chosen="$(echo -e "$options" | rofi -font "FiraCode Nerd Font Mono 11" -theme /etc/config/rofi-clipboard-theme.rasi -theme-str 'window { width: 20em; }' -dmenu -p "" -selected-row 1)"
+chosen="$(echo -e "$options" | rofi -dpi "$DPI" -theme-str 'window { width: 20em; }' -dmenu -p "" -selected-row 1)"
 case $chosen in
 $connected)
   if [[ $STATUS == *"enable"* ]]; then
