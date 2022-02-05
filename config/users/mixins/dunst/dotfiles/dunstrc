@@ -41,7 +41,6 @@ icon_position="left"
 line_height="1.5"
 max_icon_size=80
 min_icon_size=0
-scale=1
 separator_color="frame"
 separator_height=2
 transparency=0
@@ -49,13 +48,14 @@ vertical_alignment="center"
 word_wrap=yes
 
 # Theme dpi
-font="Iosevka Nerd Font 12"
-height="130"
-horizontal_padding=16
-padding=16
-width="500"
-max_icon_size=80
-min_icon_size=80
+scale=1
+font="Iosevka Nerd Font 11"
+height="150"
+horizontal_padding=11
+padding=11
+width="300"
+max_icon_size=48
+min_icon_size=48
 
 [play_sound]
 script="/etc/scripts/play_notification.sh"
