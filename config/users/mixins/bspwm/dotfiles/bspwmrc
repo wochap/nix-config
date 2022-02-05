@@ -66,6 +66,7 @@ done
 # /etc/scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &
 # /etc/scripts/bspwm_borders.sh &
 
+sleep 1
 firefox > /dev/null 2>&1 &
 google-chrome-stable > /dev/null 2>&1 &
 
