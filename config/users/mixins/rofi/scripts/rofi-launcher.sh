@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
+# get dpi
+DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
+
 rofi \
-  -theme /etc/config/rofi-launcher-theme.rasi \
+  -dpi "$DPI" \
   -combi-modi drun,run \
   -modi combi,bin:/etc/scripts/rofi-custom-options.sh \
   -show combi \
-  -plugin-path $ROFI_PLUGIN_PATH
+  -show-icons \
+  -theme-str 'listview { columns: 2; }' \
+  -theme-str 'window { width: 35em; }'
+

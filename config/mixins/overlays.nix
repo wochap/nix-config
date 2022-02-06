@@ -20,19 +20,6 @@ in
       inputs.neovim-nightly-overlay.overlay
 
       (self: super: {
-        # Update polybar to latest version
-        polybar = super.polybar.overrideAttrs (
-          _: {
-            src = pkgs.fetchFromGitHub {
-              owner = "polybar";
-              repo = "polybar";
-              rev = "5f3462240cddfca15a52092633f77d2d4fa55278";
-              sha256 = "1vmq9bs979bmkdm7hxsq0m0ql26ab70gwl2jlxxicdb6p9k921hh";
-              fetchSubmodules = true;
-            };
-          }
-        );
-
         wmutils-core = super.wmutils-core.overrideAttrs (
           _: {
             src = pkgs.fetchFromGitHub {
@@ -41,6 +28,12 @@ in
               rev = "d989db82b83cf457a3fb9bcd87637cf29770f9a4";
               sha256 = "sha256-ha6YCXk6/p21DAin2zwuOuqXCDjs2Bi5IHFRiVaIE3E=";
             };
+          }
+        );
+
+        dracula-theme = super.dracula-theme.overrideAttrs (
+          _: {
+            src = inputs.dracula-gtk-theme;
           }
         );
 

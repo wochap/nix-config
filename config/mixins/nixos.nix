@@ -95,7 +95,6 @@ in
     services.xserver = {
       enable = true;
       exportConfiguration = true;
-      desktopManager = { xterm.enable = true; };
     };
 
     # Apply trim to SSDs

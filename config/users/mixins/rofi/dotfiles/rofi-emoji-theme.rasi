@@ -1,88 +1,21 @@
+@import "config.rasi"
+
 configuration {
-	sidebar-mode: false;
   display-emoji: "";
-  dpi: 144;
-  font: "Inter Regular 12";
-  fullscreen: false;
   hide-scrollbar: false;
-  me-accept-entry: "MousePrimary";
-  me-select-entry: "";
   show-icons: false;
-  kb-row-up: "Up,Control+k,Shift+Tab";
-  kb-row-down: "Down,Control+j";
-  kb-accept-entry: "Control+m,Return,KP_Enter";
-  kb-remove-to-eol: "Control+Shift+e";
-}
-
-* {
-  var-bg: #282a36;
-  var-fg: #f8f8f2;
-  var-bg-selection: #44475a;
-  var-fg-selection: #bd93f9;
-  var-primary-color: #8be9fd;
-  var-window-border-color: #44475a;
-
-  font: inherit;
-  background-color: inherit;
-  text-color: inherit;
 }
 
 window {
-  anchor: north;
-  background-color: @var-bg;
-  border-color: @var-window-border-color;
-  border-radius: 10px;
-  border: 3px;
-  location: north;
-  text-color: @var-fg;
-  transparency: "real";
   width: 680px;
-  y-offset: 30%;
-}
-
-mainbox {
-  children: [ inputbar, listview ];
 }
 
 listview {
   columns: 9;
-  cycle: true;
   layout: vertical;
   lines: 8;
   padding: 0 10px 10px;
   spacing: 10px;
-
-  // Dynamic window height
-  dynamic: true;
-  fixed-height: false;
-}
-
-inputbar {
-	children: [ entry, prompt ];
-  expand: false;
-  margin: 0;
-  padding: 22px 40px;
-}
-
-prompt {
-  font: "woos 22";
-  vertical-align: 0.5;
-  padding: 16px 19px;
-  margin: 0;
-  background-color: @var-fg-selection;
-  border-radius: 10px;
-  text-color: @var-bg;
-}
-
-entry {
-  blink: true;
-  expand: true;
-  font: "Inter Medium 22";
-  horizontal-align: 0;
-  vertical-align: 0.5;
-  padding: 0;
-  margin: 0 19px 0 0;
-  placeholder: "";
 }
 
 element {

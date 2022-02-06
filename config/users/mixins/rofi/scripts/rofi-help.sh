@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
+# get dpi
+DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
+
 awk '/^[a-z]/ && last {print "<span>"$0"\t",last,"</span>"} {last=""} /^#/{last=$0}' /etc/config/sxhkdrc |
   column -t -s $'\t' | \
   rofi \
     -window-title rofi-help \
     -dmenu \
-    -i \
-    -p  \
+    -dpi "$DPI" \
+    -p "help" \
     -markup-rows \
-    -theme /etc/config/rofi-help-theme.rasi \
-    -plugin-path $ROFI_PLUGIN_PATH
+    -config "$HOME/.config/rofi/rofi-help-theme.rasi"

@@ -106,6 +106,40 @@
         "type": "github"
       }
     },
+    "dracula-gtk-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1643925540,
+        "narHash": "sha256-Rhq0c9cbKaQkLqUt2kjyE2S1imPF+W0vyU/giOXLeMQ=",
+        "owner": "dracula",
+        "repo": "gtk",
+        "rev": "18bb561588866e71ed2ef5176c2e4797c58f2655",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "gtk",
+        "rev": "18bb561588866e71ed2ef5176c2e4797c58f2655",
+        "type": "github"
+      }
+    },
+    "dracula-icons-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1627422199,
+        "narHash": "sha256-GY+XxTM22jyNq8kaB81zNfHRhfXujArFcyzDa8kjxCQ=",
+        "owner": "m4thewz",
+        "repo": "dracula-icons",
+        "rev": "2d3c83caa8664e93d956cfa67a0f21418b5cdad8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "m4thewz",
+        "repo": "dracula-icons",
+        "rev": "2d3c83caa8664e93d956cfa67a0f21418b5cdad8",
+        "type": "github"
+      }
+    },
     "dracula-sublime": {
       "flake": false,
       "locked": {
@@ -1112,6 +1146,8 @@
     "root": {
       "inputs": {
         "darwin": "darwin",
+        "dracula-gtk-theme": "dracula-gtk-theme",
+        "dracula-icons-theme": "dracula-icons-theme",
         "dracula-sublime": "dracula-sublime",
         "dracula-xresources": "dracula-xresources",
         "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",

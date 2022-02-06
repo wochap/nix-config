@@ -3,18 +3,22 @@
 let
   hostName = "gdesktop";
   userName = "gean";
+  hmConfig = config.home-manager.users.${userName};
+  configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
+  draculaTheme = import ../../config/mixins/dracula.nix;
 in
 {
   imports = [
     ../desktop/hardware-configuration.nix
     ../../config/mixins/nvidia.nix
-    ../../config/mixins/kmonad
     ../../config/wayland-minimal.nix
   ];
 
   config = {
     _userName = userName;
     _isHidpi = false;
+    _configDirectory = configDirectory;
+    _theme = draculaTheme;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions

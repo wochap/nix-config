@@ -6,6 +6,8 @@ in {
     ./mixins/user-nix.nix
     ./mixins/user-nixos.nix
     ./mixins/alacritty
+    ./mixins/xsettingsd
+    ./mixins/autorandr
     ./mixins/bat.nix
     ./mixins/bspwm
     ./mixins/clipmenu.nix

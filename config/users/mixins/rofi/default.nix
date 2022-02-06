@@ -1,13 +1,18 @@
 { config, lib, pkgs, ... }:
 
 let
+  theme = config._theme;
   userName = config._userName;
-in
-{
+  hmConfig = config.home-manager.users.${userName};
+  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  configDirectory = config._configDirectory;
+  currentDirectory = "${configDirectory}/config/users/mixins/rofi";
+in {
   config = {
     environment = {
       systemPackages = with pkgs; [
         libqalculate # rofi-calc dependency
+        rofi
         rofi-calc
         rofi-emoji
       ];
@@ -28,20 +33,20 @@ in
           source = ./scripts/rofi-help.sh;
           mode = "0755";
         };
-        "scripts/rofi-wifi.sh" = {
-          source = ./scripts/rofi-wifi.sh;
-          mode = "0755";
-        };
         "scripts/rofi-calc.sh" = {
           text = ''
             #!/usr/bin/env bash
 
+            # get dpi
+            DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
+
             rofi \
-              -theme /etc/config/rofi-calc-theme.rasi \
+              -dpi "$DPI" \
               -modi calc \
               -show calc \
               -plugin-path ${pkgs.rofi-calc}/lib/rofi \
-              -calc-command "echo -n '{result}' | xclip -selection clipboard"
+              -calc-command "echo -n '{result}' | xclip -selection clipboard" \
+              -theme-str 'window { width: 20em; }'
           '';
           mode = "0755";
         };
@@ -49,8 +54,12 @@ in
           text = ''
             #!/usr/bin/env bash
 
+            # get dpi
+            DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
+
             rofi \
-              -theme /etc/config/rofi-emoji-theme.rasi \
+              -config "$HOME/.config/rofi/rofi-emoji-theme.rasi" \
+              -dpi "$DPI" \
               -modi emoji \
               -show emoji \
               -plugin-path ${pkgs.rofi-emoji}/lib/rofi
@@ -69,42 +78,26 @@ in
           source = ./scripts/rofi-hidden-windows.sh;
           mode = "0755";
         };
-
-        "config/rofi-powermenu-theme.rasi" = {
-          source = ./dotfiles/rofi-powermenu-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-launcher-theme.rasi" = {
-          source = ./dotfiles/rofi-launcher-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-calc-theme.rasi" = {
-          source = ./dotfiles/rofi-calc-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-emoji-theme.rasi" = {
-          source = ./dotfiles/rofi-emoji-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-help-theme.rasi" = {
-          source = ./dotfiles/rofi-help-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-clipboard-theme.rasi" = {
-          source = ./dotfiles/rofi-clipboard-theme.rasi;
-          mode = "0755";
-        };
-        "config/rofi-theme.rasi" = {
-          source = ./dotfiles/rofi-theme.rasi;
-          mode = "0755";
-        };
       };
-      pathsToLink = [
-        "/share/rofi-emoji"
-      ];
+      pathsToLink = [ "/share/rofi-emoji" ];
     };
+
     home-manager.users.${userName} = {
-      programs.rofi.enable = true;
+      xdg.configFile = {
+        "rofi/colors.rasi".text = ''
+          * {
+          ${lib.concatStringsSep "\n"
+          (lib.attrsets.mapAttrsToList (key: value: "  ${key}: ${value};")
+            theme)}
+          }
+        '';
+        "rofi/config.rasi".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.rasi";
+        "rofi/rofi-emoji-theme.rasi".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/rofi-emoji-theme.rasi";
+        "rofi/rofi-help-theme.rasi".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/rofi-help-theme.rasi";
+      };
     };
   };
 }
