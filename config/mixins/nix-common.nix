@@ -38,7 +38,7 @@
     };
     _theme = lib.mkOption {
       type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
-      default = {};
+      default = { };
       example = "{}";
       description = "Theme colors";
     };
@@ -49,6 +49,19 @@
     nixpkgs.config.allowUnfree = true;
 
     nix = {
+      # Enable cachix
+      binaryCachePublicKeys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
+        "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      ];
+      binaryCaches = [
+        "https://cache.nixos.org"
+        "https://colemickens.cachix.org"
+        "https://nixpkgs-wayland.cachix.org"
+      ];
+      trustedUsers = [ "@wheel" "root" ];
+
       # Enable flakes
       package = pkgs.nixUnstable;
       extraOptions = ''
@@ -57,36 +70,31 @@
 
       gc.automatic = true;
 
-      settings = {
-        # Enable cachix
-        trusted-public-keys = [
-          "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-          "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
-          "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-        ];
-        substituters = [
-          "https://cache.nixos.org"
-          "https://colemickens.cachix.org"
-          "https://nixpkgs-wayland.cachix.org"
-        ];
-
-        trusted-users = [ "@wheel" "root" ];
-      };
+      # settings = {
+      #   # Enable cachix
+      #   trusted-public-keys = [
+      #     "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      #     "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
+      #     "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      #   ];
+      #   substituters = [
+      #     "https://cache.nixos.org"
+      #     "https://colemickens.cachix.org"
+      #     "https://nixpkgs-wayland.cachix.org"
+      #   ];
+      #
+      #   trusted-users = [ "@wheel" "root" ];
+      # };
     };
 
     # Set your time zone.
     time.timeZone = "America/Panama";
 
     environment = {
-      shellAliases = {
-        ll = "ls -l";
-      };
+      shellAliases = { ll = "ls -l"; };
 
       # Links those paths from derivations to /run/current-system/sw
-      pathsToLink = [
-        "/share"
-        "/libexec"
-      ];
+      pathsToLink = [ "/share" "/libexec" ];
     };
 
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619

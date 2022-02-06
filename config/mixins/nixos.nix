@@ -60,7 +60,7 @@ in
     };
 
     # Clear nixos store
-    nix.settings.auto-optimise-store = true;
+    # nix.settings.auto-optimise-store = true;
 
     security.sudo = {
       enable = true;

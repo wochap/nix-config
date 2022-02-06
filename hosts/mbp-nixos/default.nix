@@ -3,8 +3,8 @@
 let
   hostName = "gmbp";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
-  isHidpi = false;
-  dpi = 96;
+  isHidpi = true;
+  dpi = 144;
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
@@ -129,13 +129,18 @@ in {
       mbpfan = {
         enable = true;
         verbose = true;
-        settings.general = {
-          low_temp = 30;
-          high_temp = 50;
-          max_temp = 85;
-          max_fan1_speed = 5500;
-          min_fan1_speed = 4500;
-        };
+        lowTemp = 30;
+        highTemp = 50;
+        maxTemp = 85;
+        maxFanSpeed = 5500;
+        minFanSpeed = 4500;
+        # settings.general = {
+        #   low_temp = 30;
+        #   high_temp = 50;
+        #   max_temp = 85;
+        #   max_fan1_speed = 5500;
+        #   min_fan1_speed = 4500;
+        # };
       };
     };
 
@@ -161,6 +166,7 @@ in {
     };
     powerManagement = {
       # cpuFreqGovernor = "powersave";
+      cpuFreqGovernor = "performance";
       powertop.enable = true;
       cpufreq.min = 800000;
       cpufreq.max = 2800000;
