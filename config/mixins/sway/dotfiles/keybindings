@@ -105,6 +105,9 @@ bindsym $mod+Shift+n focus prev
 # Open hidden windows
 bindsym $mod+alt+Tab scratchpad show
 
+# Focus floating or tile windows
+bindsym alt+Tab focus mode_toggle
+
 # Open windows
 # TODO
 

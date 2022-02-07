@@ -45,16 +45,6 @@ in {
       xdg.configFile = {
         "electron-flags.conf".source = ./dotfiles/electron-flags.conf;
       };
-
-      # slack on wayland to share screen
-      xdg.portal = {
-        enable = true;
-        extraPortals = with pkgs; [
-          xdg-desktop-portal-wlr
-          xdg-desktop-portal-gtk
-        ];
-        gtkUsePortal = true;
-      };
     };
   };
 }
