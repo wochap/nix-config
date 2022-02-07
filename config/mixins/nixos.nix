@@ -13,6 +13,9 @@ in
   config = {
     # TODO: use overlay
     nixpkgs.config.packageOverrides = pkgs: rec {
+      electron-stable = import (inputs.electron-stable) {
+        config = config.nixpkgs.config;
+      };
       prevstable = import (inputs.prevstable) {
         # pass the nixpkgs config to the unstable alias
         # to ensure `allowUnfree = true;` is propagated:

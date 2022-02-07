@@ -4,6 +4,7 @@ dex /run/current-system/sw/etc/xdg/autostart/org.gnome.Evolution-alarm-notify.de
   /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop &
 
 kanshi &
+# way-displays &
 
 # clipboard
 wl-copy " "

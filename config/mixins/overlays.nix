@@ -111,27 +111,27 @@ in
           };
         });
 
-        slack = (prev.runCommandNoCC "slack"
-          { buildInputs = with pkgs; [ makeWrapper ]; }
-          ''
-            makeWrapper ${prev.slack}/bin/slack $out/bin/slack \
-              --add-flags "--enable-features=UseOzonePlatform" \
-              --add-flags "--ozone-platform=wayland"
+        # slack = (prev.runCommandNoCC "slack"
+        #   { buildInputs = with pkgs; [ makeWrapper ]; }
+        #   ''
+        #     makeWrapper ${prev.slack}/bin/slack $out/bin/slack \
+        #       --add-flags "--enable-features=UseOzonePlatform" \
+        #       --add-flags "--ozone-platform=wayland"
+        #
+        #     ln -sf ${prev.slack}/share $out/share
+        #   ''
+        # );
 
-            ln -sf ${prev.slack}/share $out/share
-          ''
-        );
-
-        postman = (prev.runCommandNoCC "postman"
-          { buildInputs = with pkgs; [ makeWrapper ]; }
-          ''
-            makeWrapper ${prev.postman}/bin/postman $out/bin/postman \
-              --add-flags "--enable-features=UseOzonePlatform" \
-              --add-flags "--ozone-platform=wayland"
-
-            ln -sf ${prev.postman}/share $out/share
-          ''
-        );
+        # postman = (prev.runCommandNoCC "postman"
+        #   { buildInputs = with pkgs; [ makeWrapper ]; }
+        #   ''
+        #     makeWrapper ${prev.postman}/bin/postman $out/bin/postman \
+        #       --add-flags "--enable-features=UseOzonePlatform" \
+        #       --add-flags "--ozone-platform=wayland"
+        #
+        #     ln -sf ${prev.postman}/share $out/share
+        #   ''
+        # );
 
         robo3t = (prev.runCommandNoCC "robo3t"
           { buildInputs = with pkgs; [ makeWrapper ]; }
@@ -145,7 +145,7 @@ in
       })
 
       # inputs.nixpkgs-wayland.overlay-egl
-      inputs.nixpkgs-wayland.overlay
+      # inputs.nixpkgs-wayland.overlay
     ] else []);
   };
 }

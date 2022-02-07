@@ -75,21 +75,15 @@ in
       #dogecoin
 
       # APPS
-      bitwarden
-      brave
       dmenu
       filelight # view disk usage
       gparted
       gpick
-      insomnia
       nitrogen # wallpaper manager
       pinta
-      postman
       qbittorrent
       screenkey # show key pressed
-      simplenote
       skypeforlinux
-      slack
       sublime3 # text editor
       tmux
       tty-clock
@@ -100,9 +94,16 @@ in
 
       # Themes
       capitaine-cursors
+
     ] ++ (if (isWayland) then [
-      pkgs.egl-wayland
-      (pkgs.google-chrome.override {
+      # Electron apps
+      electron-stable.bitwarden
+      electron-stable.brave
+      electron-stable.insomnia
+      electron-stable.postman
+      electron-stable.simplenote
+      electron-stable.slack
+      (electron-stable.google-chrome.override {
         commandLineArgs = ''
           --enable-features=UseOzonePlatform \
           --ozone-platform=wayland \
@@ -114,6 +115,13 @@ in
         '';
       })
     ] else [
+      # Electron apps
+      bitwarden
+      brave
+      insomnia
+      postman
+      simplenote
+      slack
       google-chrome
     ]);
   };

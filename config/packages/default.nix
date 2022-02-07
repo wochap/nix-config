@@ -3,6 +3,7 @@
 {
   interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock {};
   interception-caps2esc = pkgs.callPackage ./interception-caps2esc {};
+  way-displays = pkgs.callPackage ./way-displays { inherit pkgs; };
   bigsur-cursors = pkgs.callPackage ./bigsur-cursors {};
   dracula-icons = pkgs.callPackage ./dracula-icons {};
   horizon-icons = pkgs.callPackage ./horizon-icons {};
@@ -11,7 +12,7 @@
   ptsh = pkgs.callPackage ./ptsh {};
   sddm-sugar-dark-greeter = pkgs.callPackage ./sddm-sugar-dark-greeter {};
   sddm-whitesur-greeter = pkgs.callPackage ./sddm-whitesur-greeter {};
-  stremio = pkgs.callPackage ./stremio {};
+  stremio = pkgs.qt5.callPackage ./stremio {};
   whitesur-dark-icons = pkgs.callPackage ./whitesur-dark-icons {};
   whitesur-dark-theme = pkgs.callPackage ./whitesur-dark-theme {};
   zscroll = pkgs.callPackage ./zscroll {};

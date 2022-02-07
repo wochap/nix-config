@@ -17,10 +17,10 @@
         gnome.gnome-font-viewer
         gnome.gnome-sound-recorder # test microphone
         gnome.gnome-system-monitor
+        gnome.gnome-todo
         gnome.nautilus # file manager
         gnome.pomodoro
         networkmanagerapplet
-        prevstable.gnome3.gnome-todo
       ];
     };
   };

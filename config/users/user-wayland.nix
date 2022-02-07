@@ -1,11 +1,10 @@
 { config, pkgs, lib, ... }:
 
-let
-  userName = config._userName;
-in
-{
+let userName = config._userName;
+in {
   imports = [
     ./mixins/alacritty
+    ./mixins/way-displays
     ./mixins/bat.nix
     ./mixins/default-browser
     ./mixins/discord
@@ -45,6 +44,16 @@ in
     home-manager.users.${userName} = {
       xdg.configFile = {
         "electron-flags.conf".source = ./dotfiles/electron-flags.conf;
+      };
+
+      # slack on wayland to share screen
+      xdg.portal = {
+        enable = true;
+        extraPortals = with pkgs; [
+          xdg-desktop-portal-wlr
+          xdg-desktop-portal-gtk
+        ];
+        gtkUsePortal = true;
       };
     };
   };

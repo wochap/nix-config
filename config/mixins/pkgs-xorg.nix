@@ -34,6 +34,8 @@
       nitrogen # wallpaper manager
       pick-colour-picker # color picker gui
       pywal # theme color generator cli
+
+      gpick
     ];
   };
 }

@@ -1,64 +1,44 @@
-{ lib, pkgs ? import <nixpkgs> {}, ... }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, qmake, wrapQtAppsHook
+, mpv, qtwebengine, qtwebchannel, nodejs
+}:
 
-# source: https://github.com/lucasew/nixcfg/blob/339c797b63006d9f5e944c3f83b822b1bdf35ac2/packages/stremio.nix
-# source: https://gist.githubusercontent.com/jasonwhite/d32f5806921471c857148276bfd32806/raw/b4692118746f8dfa40ffeb1968760e444ad75a83/stremio.nix
-# source: https://github.com/alexandru-balan/Stremio-Install-Scripts/blob/master/installStremioArch.sh
-let
-  version = "4.4.132";
-  serverJS = pkgs.fetchurl {
+stdenv.mkDerivation rec {
+  pname = "stremio-shell";
+  version = "4.4.142";
+
+  src = fetchFromGitHub {
+    owner = "Stremio";
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-OyuTFmEIC8PH4PDzTMn8ibLUAzJoPA/fTILee0xpgQI=";
+  };
+
+  server = fetchurl {
     url = "https://s3-eu-west-1.amazonaws.com/stremio-artifacts/four/v${version}/server.js";
-    sha256 = "0pjwlk5h39kg5z8fpd6f2dmddmqszjardgazg3vrnz4569kwb1yd";
+    sha256 = "sha256-YYeD3SEbLgNQHGP5AI9WiHUU6xLkTeFAqYIuWsIsYSs=";
   };
-  pkg = pkgs.qt5.mkDerivation rec {
-    name = "stremio";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/Stremio/stremio-shell";
-      rev = "v${version}";
-      sha256 = "116148al678k4b9bm8j7gamvdb00jnvs3z48fgdpdz6a4jyawx9i";
-      fetchSubmodules = true;
-    };
+  buildInputs = [ qtwebengine mpv ];
 
-    nativeBuildInputs = with pkgs; [
-      which
-      cmake
-    ];
-    buildInputs = with pkgs; [
-      ffmpeg
-      gcc
-      librsvg
-      mpv
-      nodejs
-      openssl
-      qt5.qtbase
-      qt5.qtdeclarative
-      qt5.qtquickcontrols
-      qt5.qtquickcontrols2
-      qt5.qttools
-      qt5.qttranslations
-      qt5.qtwebchannel
-      qt5.qtwebengine
-      wget
-    ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
-    dontWrapQtApps = true;
-    postFixup = ''
-      wrapQtApp "$out/opt/stremio/stremio" --prefix PATH : "$out/opt/stremio"
-      cp ${serverJS} $out/opt/stremio/server.js
-      mkdir $out/bin -p
-      ln -s "$out/opt/stremio/stremio" "$out/bin/stremio"
-      ln -s "$(which node)" "$out/opt/stremio/node"
-    '';
+  postInstall = ''
+    mkdir -p $out/{bin,share/applications}
+    ln -s $out/opt/stremio/stremio $out/bin/stremio
+    mv $out/opt/stremio/smartcode-stremio.desktop $out/share/applications
+    ln -s ${nodejs}/bin/node $out/opt/stremio/node
+    ln -s $server $out/opt/stremio/server.js
+  '';
+
+  meta = with lib; {
+    description = "A modern media center that gives you the freedom to watch everything you want.";
+    homepage = "https://www.stremio.com/";
+    # (Server-side) web UI is closed source now, apparently they work on open-sourcing it.
+    # server.js appears to be MIT-licensed, but I can't find how they actually build it.
+    # https://www.reddit.com/r/StremioAddons/comments/n2ob04/a_summary_of_how_stremio_works_internally_and/
+    license = with licenses; [ gpl3 mit ];
+    maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
   };
-in
-pkgs.makeDesktopItem {
-  name = "Stremio";
-  exec = "${pkg}/bin/stremio %U";
-  icon = builtins.fetchurl {
-    url = "https://www.stremio.com/website/stremio-logo-small.png";
-    sha256 = "15zs8h7f8fsdkpxiqhx7wfw4aadw4a7y190v7kvay0yagsq239l6";
-  };
-  comment = "Torrent movies and TV series";
-  desktopName = "Stremio";
-  genericName = "Movies and TV Series";
 }

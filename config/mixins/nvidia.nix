@@ -15,6 +15,8 @@ in
       mesa-demos
       vulkan-tools
       glmark2
+    ] ++ lib.optionals (isWayland) [
+      pkgs.egl-wayland
     ];
 
     environment.variables = lib.mkMerge [
