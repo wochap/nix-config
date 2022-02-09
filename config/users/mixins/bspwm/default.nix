@@ -4,9 +4,7 @@ let userName = config._userName;
 in {
   config = {
     environment = {
-      systemPackages = with pkgs; [
-        bsp-layout
-      ];
+      systemPackages = with pkgs; [ bsp-layout ];
 
       etc = {
         "config/sxhkdrc" = {
@@ -83,12 +81,14 @@ in {
     home-manager.users.${userName} = {
       xsession = {
         enable = true;
-        scriptPath = ".xsession-hm";
         initExtra = "";
         windowManager.bspwm = {
           enable = true;
           extraConfig = builtins.readFile ./dotfiles/bspwmrc;
         };
+        profileExtra = ''
+          systemctl --user import-environment
+        '';
       };
 
       services.sxhkd = {
