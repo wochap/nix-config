@@ -43,9 +43,13 @@ in {
 
   config = {
     home-manager.users.${userName} = {
-      xresources.extraConfig = ''
-        ${builtins.readFile "${inputs.dracula-xresources}/Xresources"}
-      '';
+      imports = [ ./modules/symlinks.nix ];
+
+      config = {
+        xresources.extraConfig = ''
+          ${builtins.readFile "${inputs.dracula-xresources}/Xresources"}
+        '';
+      };
     };
   };
 }

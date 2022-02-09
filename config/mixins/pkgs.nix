@@ -20,6 +20,7 @@ in
       evtest # input debugging
       ffmpeg-full # music/video codecs?
       git
+      git-crypt
       glxinfo # opengl utils
       gnumake # make
       gpp # decrypt
