@@ -78,6 +78,10 @@ You probably want to press `Ctrl + Alt + F1`
    $ ssh-add <PATH_TO_PRIVATE_KEY>
    ```
    https://www.freecodecamp.org/news/how-to-manage-multiple-ssh-keys/
+1. Copy `git-crypt-key` backup, unlock secrets
+   ```
+   $ git-crypt unlock /path/to/git-crypt-key
+   ```
 1. Setup [NeoVim](https://github.com/wochap/nvim)
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
 1. Setup betterdiscord
