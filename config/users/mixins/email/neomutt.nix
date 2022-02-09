@@ -11,7 +11,7 @@ let
   mutt-display-filter =
     pkgs.writeScriptBin "mdf" (builtins.readFile ./scripts/mutt-display-filter.py);
 
-  syncthingdir = "${hmConfig.home.homeDirectory}/Syncthing";
+  syncthingdir = "${hmConfig.home.homeDirectory}/Sync";
 in {
   config = {
     home-manager.users.${userName} = {

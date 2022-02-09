@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  theme = config._theme;
+  userName = config._userName;
 in {
   config = {
     environment = {
@@ -9,6 +11,14 @@ in {
       etc = {
         "config/sxhkdrc" = {
           source = ./dotfiles/sxhkdrc;
+          mode = "0755";
+        };
+        "config/bspwm-colors.sh" = {
+          text = ''
+            ${lib.concatStringsSep "\n"
+            (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
+              theme)}
+          '';
           mode = "0755";
         };
         "config/bspwmrc" = {
