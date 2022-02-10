@@ -82,6 +82,7 @@ You probably want to press `Ctrl + Alt + F1`
    ```
    $ git-crypt unlock /path/to/git-crypt-key
    ```
+1. Setup Syncthing (http://localhost:8384)
 1. Setup [NeoVim](https://github.com/wochap/nvim)
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
 1. Setup betterdiscord
