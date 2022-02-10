@@ -8,6 +8,7 @@ awk '/^[a-z]/ && last {print "<span>"$0"\t",last,"</span>"} {last=""} /^#/{last=
   rofi \
     -window-title rofi-help \
     -dmenu \
+    -i \
     -dpi "$DPI" \
     -p "help" \
     -markup-rows \

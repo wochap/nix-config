@@ -3,10 +3,7 @@
 let userName = config._userName;
 in {
   imports = [
-    ./mixins/user-nix.nix
-    ./mixins/user-nixos.nix
     ./mixins/alacritty
-    ./mixins/xsettingsd
     ./mixins/autorandr
     ./mixins/bat.nix
     ./mixins/bspwm
@@ -14,6 +11,7 @@ in {
     ./mixins/default-browser
     ./mixins/discord
     ./mixins/dunst
+    ./mixins/email
     ./mixins/eww
     ./mixins/firefox
     ./mixins/git.nix
@@ -32,9 +30,14 @@ in {
     ./mixins/qt.nix
     ./mixins/redshift.nix
     ./mixins/rofi
+    ./mixins/secrets.nix
     ./mixins/ssh
+    ./mixins/syncthing.nix
     ./mixins/thunar
+    ./mixins/user-nix.nix
+    ./mixins/user-nixos.nix
     ./mixins/vim
+    ./mixins/xsettingsd
     ./mixins/zathura
     ./mixins/zsh
     # ./mixins/android.nix
@@ -43,9 +46,13 @@ in {
 
   config = {
     home-manager.users.${userName} = {
-      xresources.extraConfig = ''
-        ${builtins.readFile "${inputs.dracula-xresources}/Xresources"}
-      '';
+      imports = [ ./modules/symlinks.nix ];
+
+      config = {
+        xresources.extraConfig = ''
+          ${builtins.readFile "${inputs.dracula-xresources}/Xresources"}
+        '';
+      };
     };
   };
 }

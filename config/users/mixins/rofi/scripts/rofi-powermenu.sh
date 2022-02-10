@@ -19,6 +19,7 @@ selected="$(echo -e "$options" | rofi \
   -theme-str 'element-text {font: "woos 12";}' \
   -dpi "$DPI" \
   -dmenu \
+  -i \
   -selected-row ${PRESELECTION})"
 
 case $selected in

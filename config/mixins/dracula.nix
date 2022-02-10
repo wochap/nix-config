@@ -1,4 +1,5 @@
 {
+  primary = "#bd93f9";
   background = "#282a36";
   currentline = "#44475a";
   selection = "#44475a";

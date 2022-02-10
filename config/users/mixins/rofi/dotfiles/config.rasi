@@ -1,17 +1,17 @@
-@theme "colors.rasi"
-
 configuration {
   display-combi: "";
   display-run: "";
   display-drun: "";
   display-calc: "";
-  display-emoji: "";
+  display-emoji: "";
   hide-scrollbar: false;
   case-sensitive: false;
   cycle: false;
   dpi: 96;
   font: "Iosevka Nerd Font 12";
 }
+
+@theme "colors"
 
 * {
   background-color: inherit;
@@ -107,3 +107,4 @@ element selected {
   background-color: @var-bg-selection;
   text-color: @var-fg-selection;
 }
+
