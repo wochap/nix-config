@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 case "$AUTORANDR_CURRENT_PROFILE" in
+mbp)
+  DPI=192
+  ;;
 desktop-4k)
   DPI=144
   ;;

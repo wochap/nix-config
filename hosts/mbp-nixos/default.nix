@@ -16,9 +16,9 @@ in {
     ./mpb-hw.nix
     /etc/nixos/hardware-configuration.nix
     ../../config/mixins/backlight.nix
-    ../../config/wayland-minimal.nix
-    # ../../config/xorg.nix
-    # ./xorg.nix
+    # ../../config/wayland-minimal.nix
+    ../../config/xorg.nix
+    ./xorg.nix
   ];
 
   config = {

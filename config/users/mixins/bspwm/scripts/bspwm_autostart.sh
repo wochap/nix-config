@@ -27,5 +27,5 @@ picom --experimental-backends &
 blueberry-tray &
 caffeine -a &
 
-# light -S 20 &
-# brightnessctl set 20%
+light -S 20 &
+brightnessctl set 20% &
