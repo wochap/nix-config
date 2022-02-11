@@ -10,7 +10,12 @@ font0="Iosevka Nerd Font:weight=Medium:size=12;3"
 font1="woos:size=12;3"
 
 case "$DPI" in
-144 | 192)
+192)
+  font0="Iosevka Nerd Font:weight=Medium:size=12;7"
+  font1="woos:size=12;7"
+  height="80"
+  ;;
+144)
   font0="Iosevka Nerd Font:weight=Medium:size=12;5"
   font1="woos:size=12;5"
   height="60"

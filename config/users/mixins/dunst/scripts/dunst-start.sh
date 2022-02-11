@@ -6,6 +6,9 @@ killall dunst
 DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
 
 case "$DPI" in
+192)
+  SCALE=2
+  ;;
 144)
   SCALE=1.5
   ;;
