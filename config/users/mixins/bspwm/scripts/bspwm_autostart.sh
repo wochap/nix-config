@@ -23,7 +23,7 @@ autorandr --load desktop-4k &
 # /etc/scripts/random-bg.sh &
 
 clipmenud &
-# picom --experimental-backends &
+picom --experimental-backends &
 blueberry-tray &
 caffeine -a &
 
