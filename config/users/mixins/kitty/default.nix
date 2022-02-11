@@ -32,6 +32,10 @@ in {
           source = ./scripts/kitty-htop.sh;
           mode = "0755";
         };
+        "scripts/kitty-neomutt.sh" = {
+          source = ./scripts/kitty-neomutt.sh;
+          mode = "0755";
+        };
         "scripts/kitty-neorg.sh" = {
           source = ./scripts/kitty-neorg.sh;
           mode = "0755";

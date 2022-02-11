@@ -245,6 +245,10 @@ super + alt + n
 super + alt + m
   /etc/scripts/bspwm_toggle_visibility.sh kitty-htop '/etc/scripts/kitty-htop.sh'
 
+# Open neomutt
+super + alt + e
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-neomutt '/etc/scripts/kitty-neomutt.sh'
+
 super + ctrl + n
   dunstctl history-pop
 

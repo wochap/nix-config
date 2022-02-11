@@ -1,16 +1,24 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  theme = config._theme;
+  userName = config._userName;
 in {
   config = {
     environment = {
-      systemPackages = with pkgs; [
-        bsp-layout
-      ];
+      systemPackages = with pkgs; [ bsp-layout ];
 
       etc = {
         "config/sxhkdrc" = {
           source = ./dotfiles/sxhkdrc;
+          mode = "0755";
+        };
+        "config/bspwm-colors.sh" = {
+          text = ''
+            ${lib.concatStringsSep "\n"
+            (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
+              theme)}
+          '';
           mode = "0755";
         };
         "config/bspwmrc" = {
@@ -83,12 +91,14 @@ in {
     home-manager.users.${userName} = {
       xsession = {
         enable = true;
-        scriptPath = ".xsession-hm";
         initExtra = "";
         windowManager.bspwm = {
           enable = true;
           extraConfig = builtins.readFile ./dotfiles/bspwmrc;
         };
+        profileExtra = ''
+          systemctl --user import-environment
+        '';
       };
 
       services.sxhkd = {

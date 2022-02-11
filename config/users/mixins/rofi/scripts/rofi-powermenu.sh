@@ -14,11 +14,12 @@ options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 PRESELECTION=4
 
 selected="$(echo -e "$options" | rofi \
-  -p "powermenu" \
+  -p "" \
   -theme-str 'window { width: 15em; }' \
   -theme-str 'element-text {font: "woos 12";}' \
   -dpi "$DPI" \
   -dmenu \
+  -i \
   -selected-row ${PRESELECTION})"
 
 case $selected in

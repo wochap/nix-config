@@ -140,6 +140,23 @@
         "type": "github"
       }
     },
+    "dracula-mutt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1631390609,
+        "narHash": "sha256-N7t2ImhNCn+vxUEJqfYFSmaLjLSg1A0hyBwbxJ4oEQM=",
+        "owner": "dracula",
+        "repo": "mutt",
+        "rev": "8e512a73d519b2d503b4771fbc58c67f232ce7e0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "mutt",
+        "rev": "8e512a73d519b2d503b4771fbc58c67f232ce7e0",
+        "type": "github"
+      }
+    },
     "dracula-sublime": {
       "flake": false,
       "locked": {
@@ -1176,6 +1193,7 @@
         "darwin": "darwin",
         "dracula-gtk-theme": "dracula-gtk-theme",
         "dracula-icons-theme": "dracula-icons-theme",
+        "dracula-mutt": "dracula-mutt",
         "dracula-sublime": "dracula-sublime",
         "dracula-xresources": "dracula-xresources",
         "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",
