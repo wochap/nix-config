@@ -85,6 +85,10 @@ in {
           source = ./scripts/bspwm_dangerp.sh;
           mode = "0755";
         };
+        "scripts/projects/bspwm_tas.sh" = {
+          source = ./scripts/bspwm_tas.sh;
+          mode = "0755";
+        };
       };
     };
 
