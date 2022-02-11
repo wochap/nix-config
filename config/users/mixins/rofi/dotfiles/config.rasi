@@ -61,7 +61,7 @@ listview {
 }
 
 inputbar {
-  children: [ entry, prompt ];
+  children: [ prompt, entry ];
   expand: false;
   margin: 0;
   padding: 0.75em 1.25em;
@@ -70,7 +70,7 @@ inputbar {
 prompt {
   font: "woos 15";
   vertical-align: 0.5;
-  padding: 0.35em 0.55em;
+  padding: 0.35em 0.5em;
   margin: 0;
   background-color: @var-primary-color;
   border-radius: 4px;
@@ -82,7 +82,7 @@ entry {
   expand: true;
   horizontal-align: 0;
   vertical-align: 0.5;
-  padding: 0;
+  padding: 0 0 0 0.5em;
   margin: 0 0.75em 0 0;
   placeholder-color: @var-input-placeholder-color;
   placeholder: "";
