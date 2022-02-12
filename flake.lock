@@ -17,6 +17,23 @@
         "type": "github"
       }
     },
+    "ani-cli": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644686314,
+        "narHash": "sha256-QvQVZyFQlu8Xx1vtK19Akj5VPvreAICRLLLsOB5P7UM=",
+        "owner": "pystardust",
+        "repo": "ani-cli",
+        "rev": "cbbcb3463b8706c27726db3f34bccf954cd37863",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pystardust",
+        "repo": "ani-cli",
+        "rev": "cbbcb3463b8706c27726db3f34bccf954cd37863",
+        "type": "github"
+      }
+    },
     "cachix": {
       "locked": {
         "lastModified": 1642244250,
@@ -1207,6 +1224,7 @@
     },
     "root": {
       "inputs": {
+        "ani-cli": "ani-cli",
         "darwin": "darwin",
         "dracula-gtk-theme": "dracula-gtk-theme",
         "dracula-icons-theme": "dracula-icons-theme",

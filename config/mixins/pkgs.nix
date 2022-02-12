@@ -1,14 +1,17 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   localPkgs = import ../packages { pkgs = pkgs; lib = lib; };
   isWayland = config._displayServer == "wayland";
+
+  ani-cli = pkgs.writeShellScriptBin "ani-cli" ("${inputs.ani-cli}/ani-cli");
 in
 {
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
       ansible
+      aria
       bc # calculator cli
       busybox
       cached-nix-shell # fast nix-shell scripts
@@ -41,6 +44,7 @@ in
       nix-prefetch-git # get fetchgit hashes
       nodePackages.node2nix
       notify-desktop # test notifications
+      openssl
       pciutils # lspci and others commands
       pulsemixer
       tldr
@@ -75,6 +79,7 @@ in
       # pamixer # audio cli
 
       # APPS CLI
+      ani-cli
       stripe-cli
       speedread
       #dogecoin
