@@ -29,7 +29,7 @@ in {
       };
       programs.firefox = {
         enable = true;
-        package = if isWayland then pkgs.firefox-bin else pkgs.firefox-wayland;
+        package = if isWayland then pkgs.firefox-wayland else pkgs.unstable.firefox-bin;
         profiles = {
           default = {
             id = 0;

@@ -13,6 +13,9 @@ in
   config = {
     # TODO: use overlay
     nixpkgs.config.packageOverrides = pkgs: rec {
+      unstable = import (inputs.unstable) {
+        config = config.nixpkgs.config;
+      };
       electron-stable = import (inputs.electron-stable) {
         config = config.nixpkgs.config;
       };

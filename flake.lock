@@ -1249,6 +1249,7 @@
         "prevstable": "prevstable",
         "ranger": "ranger",
         "rust-overlay": "rust-overlay",
+        "unstable": "unstable",
         "zsh-vi-mode": "zsh-vi-mode"
       }
     },
@@ -1354,6 +1355,22 @@
         "owner": "fluix-dev",
         "repo": "sway-borders",
         "rev": "cbecc5cbaed6b30c995d2c245def458e383b4e38",
+        "type": "github"
+      }
+    },
+    "unstable": {
+      "locked": {
+        "lastModified": 1644707583,
+        "narHash": "sha256-e1ZURTL8V7oP005LzM1DDb6pzOADuZEmocA9eL+/+C0=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "8f011c1d102e27f334e464e5e6b71b9a428b0607",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "8f011c1d102e27f334e464e5e6b71b9a428b0607",
         "type": "github"
       }
     },
