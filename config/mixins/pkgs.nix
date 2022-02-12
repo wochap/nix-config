@@ -93,6 +93,7 @@ in
       tmux
       tty-clock
       zoom-us
+      localPkgs.nsxiv
       # antimicroX
       # teamviewer
       # mysql-workbench
