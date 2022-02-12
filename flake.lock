@@ -1212,7 +1212,8 @@
         "ohmyzsh": "ohmyzsh",
         "prevstable": "prevstable",
         "ranger": "ranger",
-        "rust-overlay": "rust-overlay"
+        "rust-overlay": "rust-overlay",
+        "zsh-vi-mode": "zsh-vi-mode"
       }
     },
     "rotate-text": {
@@ -1333,6 +1334,23 @@
       "original": {
         "owner": "swaywm",
         "repo": "wlroots",
+        "type": "github"
+      }
+    },
+    "zsh-vi-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644636235,
+        "narHash": "sha256-vQGqz6cuWlIsQDwHWoY40ef5xZA34sXIg5FjeANfCjA=",
+        "owner": "jeffreytse",
+        "repo": "zsh-vi-mode",
+        "rev": "462c032389c30a1c53226890d83c7465af92b249",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jeffreytse",
+        "repo": "zsh-vi-mode",
+        "rev": "462c032389c30a1c53226890d83c7465af92b249",
         "type": "github"
       }
     }
