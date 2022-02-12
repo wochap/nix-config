@@ -19,7 +19,7 @@ in {
     };
 
     home-manager.users.${userName} = {
-      home.file = { ".ssh/config".source = ./dotfiles/ssh-config; };
+      home.file = { ".ssh/config".source = ../../../../secrets/dotfiles/ssh-config; };
     };
   };
 }

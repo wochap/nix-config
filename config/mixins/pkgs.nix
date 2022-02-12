@@ -1,14 +1,17 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   localPkgs = import ../packages { pkgs = pkgs; lib = lib; };
   isWayland = config._displayServer == "wayland";
+
+  ani-cli = pkgs.writeShellScriptBin "ani-cli" ("${inputs.ani-cli}/ani-cli");
 in
 {
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
       ansible
+      aria
       bc # calculator cli
       busybox
       cached-nix-shell # fast nix-shell scripts
@@ -19,6 +22,7 @@ in
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
       ffmpeg-full # music/video codecs?
+      gecode
       git
       git-crypt
       glxinfo # opengl utils
@@ -40,11 +44,13 @@ in
       nix-prefetch-git # get fetchgit hashes
       nodePackages.node2nix
       notify-desktop # test notifications
+      openssl
       pciutils # lspci and others commands
       pulsemixer
       tldr
       unrar
       unzip
+      urlscan
       usbutils # lsusb, for android development
       vdpauinfo # verifying VDPAU
       vim
@@ -66,11 +72,14 @@ in
       # DE CLI
       gitAndTools.gh
       gotop # monitor system
-      # pamixer # audio cli
+      perl534Packages.WWWYoutubeViewer
       playerctl # media player cli
       systemd
+      youtube-dl
+      # pamixer # audio cli
 
       # APPS CLI
+      ani-cli
       stripe-cli
       speedread
       #dogecoin
@@ -79,16 +88,15 @@ in
       dmenu
       filelight # view disk usage
       gparted
-      gpick
-      nitrogen # wallpaper manager
+      imv
       pinta
       qbittorrent
-      screenkey # show key pressed
       skypeforlinux
       sublime3 # text editor
       tmux
       tty-clock
       zoom-us
+      # localPkgs.nsxiv
       # antimicroX
       # teamviewer
       # mysql-workbench

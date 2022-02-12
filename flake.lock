@@ -17,6 +17,23 @@
         "type": "github"
       }
     },
+    "ani-cli": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644686314,
+        "narHash": "sha256-QvQVZyFQlu8Xx1vtK19Akj5VPvreAICRLLLsOB5P7UM=",
+        "owner": "pystardust",
+        "repo": "ani-cli",
+        "rev": "cbbcb3463b8706c27726db3f34bccf954cd37863",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pystardust",
+        "repo": "ani-cli",
+        "rev": "cbbcb3463b8706c27726db3f34bccf954cd37863",
+        "type": "github"
+      }
+    },
     "cachix": {
       "locked": {
         "lastModified": 1642244250,
@@ -574,6 +591,23 @@
         "owner": "boppyt",
         "ref": "master",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "mpv-osc-morden-x": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644681087,
+        "narHash": "sha256-LHI+wt4ACGq34LXAFawDTSXf1FTouk9i/aYiOp39EEo=",
+        "owner": "cyl0",
+        "repo": "mpv-osc-morden-x",
+        "rev": "e0adf03d40403b87d106161c1f805a65bcb34738",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cyl0",
+        "repo": "mpv-osc-morden-x",
+        "rev": "e0adf03d40403b87d106161c1f805a65bcb34738",
         "type": "github"
       }
     },
@@ -1190,6 +1224,7 @@
     },
     "root": {
       "inputs": {
+        "ani-cli": "ani-cli",
         "darwin": "darwin",
         "dracula-gtk-theme": "dracula-gtk-theme",
         "dracula-icons-theme": "dracula-icons-theme",
@@ -1201,6 +1236,7 @@
         "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
+        "mpv-osc-morden-x": "mpv-osc-morden-x",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-doom-emacs": "nix-doom-emacs",
         "nixos-hardware": "nixos-hardware",
@@ -1212,7 +1248,8 @@
         "ohmyzsh": "ohmyzsh",
         "prevstable": "prevstable",
         "ranger": "ranger",
-        "rust-overlay": "rust-overlay"
+        "rust-overlay": "rust-overlay",
+        "zsh-vi-mode": "zsh-vi-mode"
       }
     },
     "rotate-text": {
@@ -1333,6 +1370,23 @@
       "original": {
         "owner": "swaywm",
         "repo": "wlroots",
+        "type": "github"
+      }
+    },
+    "zsh-vi-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644636235,
+        "narHash": "sha256-vQGqz6cuWlIsQDwHWoY40ef5xZA34sXIg5FjeANfCjA=",
+        "owner": "jeffreytse",
+        "repo": "zsh-vi-mode",
+        "rev": "462c032389c30a1c53226890d83c7465af92b249",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jeffreytse",
+        "repo": "zsh-vi-mode",
+        "rev": "462c032389c30a1c53226890d83c7465af92b249",
         "type": "github"
       }
     }

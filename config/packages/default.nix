@@ -9,6 +9,7 @@
   interception-caps2esc = pkgs.callPackage ./interception-caps2esc {};
   lightdm-webkit2-greeter = pkgs.callPackage ./lightdm-webkit2-greeter {};
   mailnotify = pkgs.callPackage ./mailnotify.nix {};
+  nsxiv = pkgs.callPackage ./nsxiv.nix {};
   offlinemsmtp = pkgs.callPackage ./offlinemsmtp.nix {};
   ptsh = pkgs.callPackage ./ptsh {};
   sddm-sugar-dark-greeter = pkgs.callPackage ./sddm-sugar-dark-greeter {};
