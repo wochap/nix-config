@@ -577,6 +577,23 @@
         "type": "github"
       }
     },
+    "mpv-osc-morden-x": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1644681087,
+        "narHash": "sha256-LHI+wt4ACGq34LXAFawDTSXf1FTouk9i/aYiOp39EEo=",
+        "owner": "cyl0",
+        "repo": "mpv-osc-morden-x",
+        "rev": "e0adf03d40403b87d106161c1f805a65bcb34738",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cyl0",
+        "repo": "mpv-osc-morden-x",
+        "rev": "e0adf03d40403b87d106161c1f805a65bcb34738",
+        "type": "github"
+      }
+    },
     "naersk": {
       "inputs": {
         "nixpkgs": "nixpkgs_7"
@@ -1201,6 +1218,7 @@
         "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
+        "mpv-osc-morden-x": "mpv-osc-morden-x",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-doom-emacs": "nix-doom-emacs",
         "nixos-hardware": "nixos-hardware",

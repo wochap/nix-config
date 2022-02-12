@@ -15,10 +15,12 @@ in {
     ./mixins/eww
     ./mixins/firefox
     ./mixins/git.nix
+    ./mixins/gpg.nix
     ./mixins/gtk.nix
     ./mixins/htop.nix
     ./mixins/kitty
     ./mixins/mime-apps.nix
+    ./mixins/mpv.nix
     ./mixins/neofetch
     ./mixins/newsboat
     ./mixins/nix-common

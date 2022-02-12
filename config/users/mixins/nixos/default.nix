@@ -38,7 +38,6 @@ in {
 
       home.sessionVariables = {
         NIXOS_CONFIG = "/home/${userName}/nix-config/devices/desktop.nix";
-        VIDEO = "mpv";
       };
 
       # Setup dotfiles
@@ -55,28 +54,6 @@ in {
         name = "Numix-Cursor";
         package = pkgs.numix-cursor-theme;
         size = if (isHidpi && isXorg) then 64 else 32;
-      };
-
-      programs.mpv = {
-        enable = true;
-        config = {
-          keep-open = true;
-          pause = true;
-          autofit-larger = "75%x75%";
-          osd-font = "Iosevka";
-          video-sync = "display-resample";
-          hwdec = "vaapi";
-          vo = "gpu";
-          hwdec-codecs = "all";
-          gpu-context = lib.mkIf (isWayland) "wayland";
-        };
-      };
-
-      programs.gpg.enable = true;
-      services.gpg-agent = {
-        enable = true;
-        defaultCacheTtl = 1800;
-        pinentryFlavor = "gnome3";
       };
     };
   };
