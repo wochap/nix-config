@@ -10,6 +10,7 @@ in
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
+      acpitool
       ansible
       aria
       bc # calculator cli
