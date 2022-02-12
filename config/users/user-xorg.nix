@@ -20,6 +20,7 @@ in {
     ./mixins/kitty
     ./mixins/mime-apps.nix
     ./mixins/neofetch
+    ./mixins/newsboat
     ./mixins/nix-common
     ./mixins/nixos
     ./mixins/nixos-minimal-wm

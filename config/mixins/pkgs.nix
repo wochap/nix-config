@@ -19,6 +19,7 @@ in
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
       ffmpeg-full # music/video codecs?
+      gecode
       git
       git-crypt
       glxinfo # opengl utils
@@ -45,6 +46,7 @@ in
       tldr
       unrar
       unzip
+      urlscan
       usbutils # lsusb, for android development
       vdpauinfo # verifying VDPAU
       vim
@@ -66,9 +68,11 @@ in
       # DE CLI
       gitAndTools.gh
       gotop # monitor system
-      # pamixer # audio cli
+      perl534Packages.WWWYoutubeViewer
       playerctl # media player cli
       systemd
+      youtube-dl
+      # pamixer # audio cli
 
       # APPS CLI
       stripe-cli
