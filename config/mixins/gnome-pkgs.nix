@@ -9,7 +9,7 @@
         gnome.cheese # test webcam
         gnome.dconf-editor
         gnome.eog # image viewer
-        gnome.geary # email client
+        # gnome.geary # email client
         gnome.gnome-calculator
         gnome.gnome-calendar
         gnome.gnome-clocks

@@ -35,7 +35,9 @@
       pick-colour-picker # color picker gui
       pywal # theme color generator cli
 
+      # APPS
       gpick
+      screenkey # show key pressed
     ];
   };
 }

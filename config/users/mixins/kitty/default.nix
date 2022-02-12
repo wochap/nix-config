@@ -71,8 +71,19 @@ in {
       programs.fzf = {
         enable = true;
         enableBashIntegration = true;
-        enableFishIntegration = true;
-        enableZshIntegration = true;
+      };
+
+      programs.starship = {
+        enable = true;
+        settings = {
+          add_newline = false;
+          character = {
+            success_symbol = "[➜](bold green)";
+            error_symbol = "[➜](bold red)";
+          };
+          nix_shell = { disabled = true; };
+          package = { disabled = true; };
+        };
       };
     };
   };
