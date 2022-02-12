@@ -83,11 +83,8 @@ in
       dmenu
       filelight # view disk usage
       gparted
-      gpick
-      nitrogen # wallpaper manager
       pinta
       qbittorrent
-      screenkey # show key pressed
       skypeforlinux
       sublime3 # text editor
       tmux
