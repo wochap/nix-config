@@ -83,6 +83,7 @@ in
       dmenu
       filelight # view disk usage
       gparted
+      imv
       pinta
       qbittorrent
       skypeforlinux
@@ -90,7 +91,7 @@ in
       tmux
       tty-clock
       zoom-us
-      localPkgs.nsxiv
+      # localPkgs.nsxiv
       # antimicroX
       # teamviewer
       # mysql-workbench

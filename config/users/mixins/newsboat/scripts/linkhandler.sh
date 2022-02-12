@@ -10,7 +10,7 @@ case "$1" in
   setsid -f mpv -quiet "$1" >/dev/null 2>&1
   ;;
 *png | *jpg | *jpe | *jpeg | *gif)
-  curl -sL "$1" >"/tmp/$(echo "$1" | sed "s/.*\///;s/%20/ /g")" && sxiv -a "/tmp/$(echo "$1" | sed "s/.*\///;s/%20/ /g")" >/dev/null 2>&1 &
+  curl -sL "$1" >"/tmp/$(echo "$1" | sed "s/.*\///;s/%20/ /g")" && imv "/tmp/$(echo "$1" | sed "s/.*\///;s/%20/ /g")" >/dev/null 2>&1 &
   ;;
 *pdf | *cbz | *cbr)
   curl -sL "$1" >"/tmp/$(echo "$1" | sed "s/.*\///;s/%20/ /g")" && zathura "/tmp/$(echo "$1" | sed "s/.*\///;s/%20/ /g")" >/dev/null 2>&1 &
