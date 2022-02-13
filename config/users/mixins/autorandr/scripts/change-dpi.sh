@@ -4,7 +4,7 @@ case "$AUTORANDR_CURRENT_PROFILE" in
 mbp | mbp-i)
   DPI=192
   ;;
-desktop-4k)
+desktop-4k | mbp-i-4k)
   DPI=144
   ;;
 desktop-1080p)
