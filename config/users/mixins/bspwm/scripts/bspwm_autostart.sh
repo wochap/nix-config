@@ -17,7 +17,7 @@ if [ -x "$(command -v nvidia-settings)" ]; then
 fi
 
 # autorandr hooks runs random-bg, polybar and dunst
-autorandr --load desktop-4k &
+autorandr --change
 # /etc/scripts/polybar-start.sh &
 # /etc/scripts/dunst-start.sh &
 # /etc/scripts/random-bg.sh &

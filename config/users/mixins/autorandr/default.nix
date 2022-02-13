@@ -50,6 +50,7 @@ in {
               };
             };
           };
+
           "mbp" = {
             fingerprint = {
               eDP =
@@ -67,6 +68,7 @@ in {
               };
             };
           };
+
           "desktop-4k" = {
             fingerprint = {
               HDMI-0 =
@@ -87,6 +89,7 @@ in {
               };
             };
           };
+
           "desktop-1080p" = {
             fingerprint = {
               HDMI-0 =
