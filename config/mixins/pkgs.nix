@@ -4,7 +4,7 @@ let
   localPkgs = import ../packages { pkgs = pkgs; lib = lib; };
   isWayland = config._displayServer == "wayland";
 
-  ani-cli = pkgs.writeShellScriptBin "ani-cli" ("${inputs.ani-cli}/ani-cli");
+  ani-cli = pkgs.writeShellScriptBin "ani-cli" (builtins.readFile "${inputs.ani-cli}/ani-cli");
 in
 {
   config = {
