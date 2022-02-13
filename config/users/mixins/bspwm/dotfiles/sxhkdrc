@@ -249,6 +249,10 @@ super + alt + m
 super + alt + e
   /etc/scripts/bspwm_toggle_visibility.sh kitty-neomutt '/etc/scripts/kitty-neomutt.sh'
 
+# Open newsboat
+super + alt + k ; r
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-newsboat '/etc/scripts/kitty-newsboat.sh'
+
 super + ctrl + n
   dunstctl history-pop
 

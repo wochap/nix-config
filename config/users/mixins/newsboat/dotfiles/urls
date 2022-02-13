@@ -1,23 +1,32 @@
+-7 "~Commits"
+https://github.com/NvChad/NvChad/commits/main.atom
+
 -1 "~The Giants"
 https://css-tricks.com/feed/ "~CSS-Tricks"
 https://dev.to/feed/ "~DEV Community"
 https://hnrss.org/frontpage "~Hacker News"
+
 -2 "~Top Front-end Bloggers"
 https://feeds.feedburner.com/brad-frosts-blog "~Brad Frost"
 https://overreacted.io/rss.xml "~Dan Abramov"
 https://feeds.feedburner.com/csswizardry "~Harry Roberts"
+
 -3 "~Libraries, Frameworks, etc."
 https://reactjs.org/feed.xml "~ReactJS"
 https://news.vuejs.org/feed.xml "~VueJS"
+
 -4 "~Company & Startup Blogs"
 https://netflixtechblog.com/feed "~Netflix TechBlog"
 https://stackoverflow.blog/feed/ "~Stackoverflow"
 https://weekly.nixos.org/feeds/all.rss.xml
+
 -5 "~Q&A Sites & Forums"
 https://stackoverflow.com/feeds/tag?tagnames=javascript&sort=newest "~Stack Overflow - JavaScript"
 https://stackoverflow.com/feeds/tag?tagnames=reactjs&sort=newest "~Stack Overflow - React"
 https://stackoverflow.com/feeds/tag?tagnames=vue.js&sort=newest "~Stack Overflow - Vue"
+
 -6 "~YouTube Channels"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA "~Luke Smith's YouTube Videos"
 https://www.youtube.com/feeds/videos.xml?channel_id=UC-8QAzbLcRglXeN_MY9blyw "~Ben Awad's YouTube Videos"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCzoVCacndDCfGDf41P-z0iA "~JSConf's YouTube Videos"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA "~Fireship's YouTube Videos"
