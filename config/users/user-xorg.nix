@@ -41,6 +41,7 @@ in {
     ./mixins/user-nixos.nix
     ./mixins/vim
     ./mixins/xsettingsd
+    ./mixins/youtube.nix
     ./mixins/zathura
     ./mixins/zsh
     # ./mixins/android.nix
