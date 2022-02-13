@@ -190,6 +190,13 @@ $ sudo nixos-rebuild switch --flake .#dekstop --impure
 
 ## Troubleshooting
 
+* Clear /nix/store
+
+   ```
+   $ nix-collect-garbage -d
+   $ sudo nix-collect-garbage -d
+   ```
+
 * [Check packages size](https://nixos.wiki/wiki/Nix_command/path-info)
 
    ```

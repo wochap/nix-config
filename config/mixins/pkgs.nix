@@ -100,9 +100,6 @@ in
       # teamviewer
       # mysql-workbench
 
-      # Themes
-      capitaine-cursors
-
     ] ++ (if (isWayland) then [
       # Electron apps
       electron-stable.bitwarden

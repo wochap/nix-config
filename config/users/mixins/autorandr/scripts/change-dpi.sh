@@ -3,22 +3,26 @@
 case "$AUTORANDR_CURRENT_PROFILE" in
 mbp | mbp-i)
   DPI=192
+  CURSOR_SIZE=64
   ;;
 desktop-4k | mbp-i-4k)
   DPI=144
-  ;;
-desktop-1080p)
-  DPI=96
+  CURSOR_SIZE=48
   ;;
 *)
-  echo "Unknown profile: $AUTORANDR_CURRENT_PROFILE"
   DPI=96
+  CURSOR_SIZE=32
   ;;
 esac
 
 # Update Xft DPI for apps that don't use gnome settings daemon.
 # Those apps will only get the new DPI when they restart.
 echo "Xft.dpi: $DPI" | xrdb -merge
+
+# Update cursor size
+echo "Xcursor.size: $CURSOR_SIZE" | xrdb -merge
+xsetroot -xcf /run/current-system/sw/share/icons/capitaine-cursors/cursors/left_ptr $CURSOR_SIZE
+sed --follow-symlinks --in-place -E "/CursorThemeSize/s/[0-9.]+/$CURSOR_SIZE/" "$HOME/.config/xsettingsd/xsettingsd.conf"
 
 # Update Xft DPI in xsettingsd which is a lightweight gnome settings daemon implementation.
 # The apps which query gsd for DPI will get updated on the fly.

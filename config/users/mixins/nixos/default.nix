@@ -7,6 +7,8 @@ let
   isHidpi = config._isHidpi;
 in {
   config = {
+    environment.systemPackages = with pkgs; [ capitaine-cursors ];
+
     # Required by pinentry-gnome3
     services.dbus = {
       enable = true;
@@ -51,8 +53,9 @@ in {
       # };
 
       xsession.pointerCursor = {
-        name = "Numix-Cursor";
-        package = pkgs.numix-cursor-theme;
+        name = "capitaine-cursors";
+        package = pkgs.capitaine-cursors;
+        # 16, 32, 48 or 64
         size = if (isHidpi && isXorg) then 64 else 32;
       };
     };
