@@ -73,10 +73,8 @@ in
       # DE CLI
       gitAndTools.gh
       gotop # monitor system
-      perl534Packages.WWWYoutubeViewer
       playerctl # media player cli
       systemd
-      youtube-dl
       # pamixer # audio cli
 
       # APPS CLI
