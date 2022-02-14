@@ -78,6 +78,7 @@ in {
           "file:///home/${userName}/Projects/boc"
           "file:///home/${userName}/Videos/Recordings"
           "file:///home/${userName}/Pictures/Screenshots"
+          "file:///home/${userName}/Sync"
         ];
         gtk3.extraCss = ''
           /** Some apps use titlebar class and some window */
