@@ -71,8 +71,10 @@ in
       pulseaudio
 
       # DE CLI
+      amfora
       gitAndTools.gh
       gotop # monitor system
+      lynx
       playerctl # media player cli
       systemd
       # pamixer # audio cli

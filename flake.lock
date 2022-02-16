@@ -123,6 +123,23 @@
         "type": "github"
       }
     },
+    "dracula-amfora": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1632340597,
+        "narHash": "sha256-2IyI0XvjtAXtWhNZNRE4MKnZg4BypE42JlI17+5DYg8=",
+        "owner": "dracula",
+        "repo": "amfora",
+        "rev": "6e3fde02006707dc0a7b4677b0d4f40f52ed6227",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "amfora",
+        "rev": "6e3fde02006707dc0a7b4677b0d4f40f52ed6227",
+        "type": "github"
+      }
+    },
     "dracula-discord": {
       "flake": false,
       "locked": {
@@ -1243,6 +1260,7 @@
       "inputs": {
         "ani-cli": "ani-cli",
         "darwin": "darwin",
+        "dracula-amfora": "dracula-amfora",
         "dracula-discord": "dracula-discord",
         "dracula-gtk-theme": "dracula-gtk-theme",
         "dracula-icons-theme": "dracula-icons-theme",

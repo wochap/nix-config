@@ -4,6 +4,7 @@ let userName = config._userName;
 in {
   imports = [
     ./mixins/alacritty
+    ./mixins/amfora.nix
     ./mixins/autorandr
     ./mixins/bat.nix
     ./mixins/bspwm
