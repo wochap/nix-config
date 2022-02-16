@@ -29,3 +29,6 @@ caffeine -a &
 
 light -S 20 &
 brightnessctl set 20% &
+
+# sudo cpupower frequency-set -g powersave
+# sudo cpupower frequency-set -r -u 800MHz

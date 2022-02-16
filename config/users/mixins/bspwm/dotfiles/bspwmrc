@@ -52,6 +52,7 @@ bspc rule -a "Sublime_text" state=floating sticky=on
 bspc rule -a "flameshot" state=floating sticky=on
 bspc rule -a "kmag" state=floating sticky=on
 bspc rule -a "mpv" state=floating
+bspc rule -a "Chromium-browser" state=floating
 bspc rule -a "Firefox" desktop=^5
 bspc rule -a "Google-chrome" desktop=^1
 bspc rule -a 'kitty-htop' state=floating sticky=on center=on border=on rectangle=1500x1200+0+0
