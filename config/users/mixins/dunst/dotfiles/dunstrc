@@ -48,12 +48,12 @@ vertical_alignment="center"
 word_wrap=yes
 
 # Theme dpi
-scale=1
+scale=1.5
 font="Iosevka Nerd Font 11"
 height="150"
 horizontal_padding=11
 padding=11
-width="300"
+width="350"
 max_icon_size=48
 min_icon_size=48
 

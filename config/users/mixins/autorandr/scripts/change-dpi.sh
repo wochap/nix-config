@@ -5,7 +5,7 @@ mbp | mbp-i)
   DPI=192
   CURSOR_SIZE=64
   ;;
-desktop-4k | mbp-i-4k)
+desktop-4k | mbp-4k | mbp-i-4k)
   DPI=144
   CURSOR_SIZE=48
   ;;
