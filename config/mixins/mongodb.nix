@@ -3,7 +3,7 @@
 {
   config = {
     environment.systemPackages = with pkgs; [
-      mongodb-compass
+      unstable.mongodb-compass
       mongodb-tools
       robo3t
     ];
