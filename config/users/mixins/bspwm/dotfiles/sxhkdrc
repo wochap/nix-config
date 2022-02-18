@@ -178,21 +178,21 @@ super + {_, shift +}F4
 ### MOVE/RESIZE
 
 # Expand a window by moving one of its side outward
-super + r : {Left,Down,Up,Right}
+super + alt + ctrl + r : {Left,Down,Up,Right}
   bspc node -z {left -40 0,bottom 0 40,top 0 -40,right 40 0}
 
 # Contract a window by moving one of its side inward
-super + r : shift + {Left,Down,Up,Right}
+super + alt + ctrl + r : shift + {Left,Down,Up,Right}
   bspc node -z {right -40 0,top 0 40,bottom 0 -40,left 40 0}
 
-super + r : Escape
+super + alt + ctrl + r : Escape
   pkill -ALRM sxhkd
 
 # Move a floating window
-super + m : {Left,Down,Up,Right}
+super + alt + ctrl + m : {Left,Down,Up,Right}
   bspc node -v {-40 0,0 40,0 -40,40 0}
 
-super + m : Escape
+super + alt + ctrl + m : Escape
   pkill -ALRM sxhkd
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
