@@ -1,14 +1,14 @@
 @import "config.rasi"
 
 window {
-  width: 680px;
+  width: 23em;
 }
 
 listview {
   columns: 9;
   layout: vertical;
   lines: 8;
-  padding: 0 10px 10px;
+  padding: 0 0.75em 0.75em 0.75em;
   spacing: 10px;
 }
 
@@ -20,7 +20,7 @@ element {
   text-color: @var-bg;
 
   // HACK: align emoji ⬇️
-  padding: 10px 0px 10px 10px;
+  padding: 15px 0px 10px 10px;
 }
 
 element-text {

@@ -78,6 +78,8 @@ in {
 
       programs.starship.enableZshIntegration = true;
 
+      programs.keychain.enableZshIntegration = true;
+
       # programs.fzf.enableZshIntegration = true;
     };
   };

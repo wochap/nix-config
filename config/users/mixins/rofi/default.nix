@@ -37,11 +37,7 @@ in {
           text = ''
             #!/usr/bin/env bash
 
-            # get dpi
-            DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
-
             rofi \
-              -dpi "$DPI" \
               -modi calc \
               -show calc \
               -plugin-path ${pkgs.rofi-calc}/lib/rofi \
@@ -54,12 +50,8 @@ in {
           text = ''
             #!/usr/bin/env bash
 
-            # get dpi
-            DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
-
             rofi \
               -config "$HOME/.config/rofi/rofi-emoji-theme.rasi" \
-              -dpi "$DPI" \
               -modi emoji \
               -show emoji \
               -plugin-path ${pkgs.rofi-emoji}/lib/rofi

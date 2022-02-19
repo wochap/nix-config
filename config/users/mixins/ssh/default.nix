@@ -5,22 +5,20 @@ let
   userName = config._userName;
 in {
   config = {
-    programs = if (!isDarwin) then {
-      # Remember private keys?
-      ssh.startAgent = true;
-
-      # ssh.askPassword = "";
-    } else {};
-
-    users.users.${userName} = lib.mkIf (!isDarwin) {
-      # TODO: use keychain?
-      openssh.authorizedKeys.keyFiles =
-        [ "~/.ssh/id_ed25519.pub" "~/.ssh/id_rsa.pub" "~/.ssh/id_rsa_boc.pub" ];
-    };
-
     home-manager.users.${userName} = {
-      home.file = { ".ssh/config".source = ../../../../secrets/dotfiles/ssh-config; };
+      home.file = {
+        ".ssh/config".source = ../../../../secrets/dotfiles/ssh-config;
+      };
+
+      # Remember passphrase of ssh keys across reboots
+      # i'm in danger ewe
+      programs.keychain = {
+        enable = true;
+        enableXsessionIntegration = true;
+        enableBashIntegration = true;
+        agents = [ "ssh" "gpg" ];
+        keys = [ "id_ed25519" "id_rsa" "id_rsa_boc" "id_ed25519_boc" ];
+      };
     };
   };
 }
-

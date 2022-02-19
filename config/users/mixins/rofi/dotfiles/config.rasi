@@ -7,7 +7,7 @@ configuration {
   hide-scrollbar: false;
   case-sensitive: false;
   cycle: false;
-  dpi: 96;
+  dpi: 144;
   font: "Iosevka Nerd Font 12";
 }
 
@@ -64,7 +64,7 @@ inputbar {
   children: [ prompt, entry ];
   expand: false;
   margin: 0;
-  padding: 0.75em 1.25em;
+  padding: 0.75em;
 }
 
 prompt {
@@ -89,7 +89,7 @@ entry {
 }
 
 element {
-  padding: 0.6em 1.25em;
+  padding: 0.6em 0.75em;
 }
 
 element-icon {
