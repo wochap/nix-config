@@ -12,7 +12,7 @@ toggle() {
     $notify "Notifications are enabled"
     ;;
   false)
-    $notify "Notifications are pausing..."
+    $notify "Notifications are being paused..."
     # the delay is here because pausing notifications immediately hides
     # the ones present on your desktop; we also run dunstctl close so
     # that the notification doesn't reappear on unpause
