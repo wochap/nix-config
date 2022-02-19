@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# get dpi
-DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
-
 query=${NODES_QUERY:-.hidden.local.window}
 nodesArray=( $(bspc query -N -n $query) )
 rows=""
@@ -14,7 +11,7 @@ do
   rows+="<span>${class}\t${title}</span>\n"
 done
 
-s=$(printf "$rows" | column -t -s "$(printf '\t')" | rofi -dpi "$DPI" -format i -dmenu -i -p "" -markup-rows)
+s=$(printf "$rows" | column -t -s "$(printf '\t')" | rofi -format i -dmenu -i -p "" -markup-rows)
 
 if [[ -n "$s" ]]; then
   node="${nodesArray[$s]}"

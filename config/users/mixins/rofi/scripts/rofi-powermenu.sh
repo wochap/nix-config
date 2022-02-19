@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# get dpi
-DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
-
 shutdown=" Shutdown";
 reboot=" Reboot";
 sleep=" Sleep";
@@ -17,7 +14,6 @@ selected="$(echo -e "$options" | rofi \
   -p "" \
   -theme-str 'window { width: 15em; }' \
   -theme-str 'element-text {font: "woos 12";}' \
-  -dpi "$DPI" \
   -dmenu \
   -i \
   -selected-row ${PRESELECTION})"
