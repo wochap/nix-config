@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-## Script to take screenshots with maim
 
 time=$(date +%Y-%m-%d-%I-%M-%S)
 dir="$(xdg-user-dir PICTURES)/Screenshots"

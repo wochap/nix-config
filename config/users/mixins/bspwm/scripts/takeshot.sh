@@ -2,18 +2,25 @@
 ## Script to take screenshots with maim
 
 time=$(date +%Y-%m-%d-%I-%M-%S)
-geometry=$(xrandr | head -n1 | cut -d',' -f2 | tr -d '[:blank:],current')
 dir="$(xdg-user-dir PICTURES)/Screenshots"
-file="Screenshot_${time}_${geometry}.jpg"
+file="Screenshot_${time}.jpg"
 EXPIRE_TIME=5000
 
 # notify
 notify_user() {
   if [[ -e "$dir/$file" ]]; then
-    dunstify -t "$EXPIRE_TIME" --replace=699 -i $dir/$file "Screen shooter" "Screenshot Saved"
+    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dir/$file" "Screen shooter" "Screenshot Saved" --action "default,Edit")
   else
-    dunstify -t "$EXPIRE_TIME" --replace=699 -i $dir/$file "Screen shooter" "Screenshot Deleted."
+    dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dir/$file" "Screen shooter" "Screenshot Deleted."
   fi
+
+  if [[ $action == "default" ]]; then
+    pinta "${dir}/$file" &
+  fi
+}
+
+copy_to_cb() {
+  xclip -selection clipboard -t image/png "$dir/$file"
 }
 
 # countdown
@@ -26,34 +33,27 @@ countdown() {
 
 # take shots
 shotnow() {
-  cd ${dir} && xfce4-screenshooter --fullscreen --clipboard --save "$file"
-  pinta ${dir}/"$file" &
+  cd "${dir}" && xfce4-screenshooter --fullscreen --save "$file"
+  copy_to_cb
   notify_user
 }
 
 shot5() {
   countdown '5'
-  sleep 1 && cd ${dir} && xfce4-screenshooter --fullscreen --clipboard --save "$file"
-  pinta ${dir}/"$file" &
-  notify_user
-}
-
-shot10() {
-  countdown '10'
-  sleep 1 && cd ${dir} && xfce4-screenshooter --fullscreen --clipboard --save "$file"
-  pinta ${dir}/"$file" &
+  sleep 1 && cd "${dir}" && xfce4-screenshooter --fullscreen --save "$file"
+  copy_to_cb
   notify_user
 }
 
 shotwin() {
-  cd ${dir} && xfce4-screenshooter --window --clipboard --save "$file"
-  pinta ${dir}/"$file" &
+  cd "${dir}" && xfce4-screenshooter --window --save "$file"
+  copy_to_cb
   notify_user
 }
 
 shotarea() {
-  cd ${dir} && xfce4-screenshooter --region --clipboard --save "$file"
-  pinta ${dir}/"$file" &
+  cd "${dir}" && xfce4-screenshooter --region --save "$file"
+  copy_to_cb
   notify_user
 }
 
@@ -65,14 +65,12 @@ if [[ "$1" == "--now" ]]; then
   shotnow
 elif [[ "$1" == "--in5" ]]; then
   shot5
-elif [[ "$1" == "--in10" ]]; then
-  shot10
 elif [[ "$1" == "--win" ]]; then
   shotwin
 elif [[ "$1" == "--area" ]]; then
   shotarea
 else
-  echo -e "Available Options : --now --in5 --in10 --win --area"
+  echo -e "Available Options : --now --in5 --win --area"
 fi
 
 exit 0

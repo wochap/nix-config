@@ -9,7 +9,7 @@ let
 in {
   config = {
     environment = {
-      systemPackages = with pkgs; [ dunst libnotify ];
+      systemPackages = with pkgs; [ dunst libnotify gnome-icon-theme ];
       etc = {
         "assets/notification.flac" = {
           source = ./assets/notification.flac;
