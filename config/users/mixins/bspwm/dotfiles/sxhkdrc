@@ -211,7 +211,7 @@ super + alt + f
 
 # Screencast/record region to mp4
 super + alt + r
-  /etc/scripts/scrrec.sh -s ~/Recordings/$(date +%F-%T).mp4
+  /etc/scripts/recorder.sh --area
 
 # Open screenshoot utility
 super + alt + s

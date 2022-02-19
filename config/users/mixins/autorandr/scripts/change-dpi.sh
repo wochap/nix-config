@@ -24,6 +24,9 @@ echo "Xcursor.size: $CURSOR_SIZE" | xrdb -merge
 xsetroot -xcf /run/current-system/sw/share/icons/capitaine-cursors/cursors/left_ptr $CURSOR_SIZE
 sed --follow-symlinks --in-place -E "/CursorThemeSize/s/[0-9.]+/$CURSOR_SIZE/" "$HOME/.config/xsettingsd/xsettingsd.conf"
 
+# Update rofi dpi
+sed --follow-symlinks --in-place -E "/dpi:/s/[0-9.]+/$DPI/" "$HOME/.config/rofi/config.rasi"
+
 # Update Xft DPI in xsettingsd which is a lightweight gnome settings daemon implementation.
 # The apps which query gsd for DPI will get updated on the fly.
 sed --follow-symlinks --in-place -E "/DPI/s/[0-9.]+/$DPI/" "$HOME/.config/xsettingsd/xsettingsd.conf"

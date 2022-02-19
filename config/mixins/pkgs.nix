@@ -23,6 +23,7 @@ in
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
       ffmpeg-full # music/video codecs?
+      file
       gecode
       git
       git-crypt
@@ -48,6 +49,7 @@ in
       openssl
       pciutils # lspci and others commands
       pulsemixer
+      slop
       tldr
       unrar
       unzip

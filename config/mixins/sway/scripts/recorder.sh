@@ -67,6 +67,7 @@ fi
 # If a recording session is already active, stop that one.
 if [[ -f "$stopfile" ]]; then
   pid=$(cat $stopfile)
+
   if [[ $(ps aux | grep "$pid" | wc -l) -eq 2 ]]; then
     # TODO: use $pid
     killall -s 2 wf-recorder

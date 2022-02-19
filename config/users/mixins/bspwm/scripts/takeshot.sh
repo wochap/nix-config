@@ -9,9 +9,10 @@ EXPIRE_TIME=5000
 # notify
 notify_user() {
   if [[ -e "$dir/$file" ]]; then
+    copy_to_cb
     action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dir/$file" "Screen shooter" "Screenshot Saved" --action "default,Edit")
   else
-    dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dir/$file" "Screen shooter" "Screenshot Deleted."
+    dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dir/$file" "Screen shooter" "Screenshot Aborted."
   fi
 
   if [[ $action == "default" ]]; then
@@ -34,26 +35,22 @@ countdown() {
 # take shots
 shotnow() {
   cd "${dir}" && xfce4-screenshooter --fullscreen --save "$file"
-  copy_to_cb
   notify_user
 }
 
 shot5() {
   countdown '5'
   sleep 1 && cd "${dir}" && xfce4-screenshooter --fullscreen --save "$file"
-  copy_to_cb
   notify_user
 }
 
 shotwin() {
   cd "${dir}" && xfce4-screenshooter --window --save "$file"
-  copy_to_cb
   notify_user
 }
 
 shotarea() {
   cd "${dir}" && xfce4-screenshooter --region --save "$file"
-  copy_to_cb
   notify_user
 }
 

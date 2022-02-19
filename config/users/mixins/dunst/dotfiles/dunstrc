@@ -67,7 +67,7 @@ foreground="#f8f8f2"
 
 [urgency_critical]
 background="#ff5555"
-foreground="#f8f8f2"
+foreground="#282a36"
 timeout=0
 
 [urgency_low]

@@ -38,6 +38,10 @@ in {
           source = ./scripts/takeshot.sh;
           mode = "0755";
         };
+        "scripts/recorder.sh" = {
+          source = ./scripts/recorder.sh;
+          mode = "0755";
+        };
 
         # "scripts/bspwm_borders.sh" = {
         #   source = ./scripts/bspwm_borders.sh;
