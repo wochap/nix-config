@@ -16,6 +16,10 @@ in {
           mode = "0755";
         };
 
+        "scripts/dunst-toggle-mode.sh" = {
+          source = ./scripts/dunst-toggle-mode.sh;
+          mode = "0755";
+        };
         "scripts/dunst-start.sh" = {
           source = ./scripts/dunst-start.sh;
           mode = "0755";
