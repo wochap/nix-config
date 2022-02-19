@@ -2,34 +2,24 @@
 
 :root {
   --mff-tab-font-family: "JetBrainsMono Nerd Font";
-  --mff-tab-font-size: 10pt;
-  --mff-tab-font-weight: 400;
   --mff-urlbar-font-family: "JetBrainsMono Nerd Font";
-  --mff-urlbar-font-size: 10pt;
-  --mff-urlbar-font-weight: 700;
   --mff-urlbar-results-font-family: "JetBrainsMono Nerd Font";
-  --mff-urlbar-results-font-size: 10pt;
-  --mff-urlbar-results-font-weight: 700;
 }
 
 .tab-text {
   font-family: var(--mff-tab-font-family);
-  font-weight: var(--mff-tab-font-weight);
 }
 
 #urlbar-results {
   font-family: var(--mff-urlbar-results-font-family);
-  font-weight: var(--mff-urlbar-results-font-weight);
 }
 
 .urlbarView-url,
 .search-panel-one-offs-container {
   font-family: var(--mff-urlbar-font-family);
-  font-weight: var(--mff-urlbar-results-font-weight);
 }
 
 #urlbar-input {
   font-family: var(--mff-urlbar-font-family) !important;
-  font-weight: var(--mff-urlbar-font-weight) !important;
 }
 
