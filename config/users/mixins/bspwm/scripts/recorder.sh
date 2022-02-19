@@ -17,9 +17,17 @@ wait_recording() {
 }
 
 notify_user() {
+
   if [[ -e "$dest" ]]; then
     copy_to_cb
-    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Saved" --action "default,Open" --action "fm,Open in file manager")
+
+    # generate thumbnail
+    thumbnail_size=500
+    thumbnail=$(mktemp --suffix .png) || exit 1
+    trap 'rm -f "$thumbnail"' exit
+    ffmpegthumbnailer -i "$dest" -o "$thumbnail" -s "$thumbnail_size"
+
+    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Video recording" "Recording Saved" --action "default,Open" --action "fm,Open in file manager")
   else
     dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Aborted"
   fi

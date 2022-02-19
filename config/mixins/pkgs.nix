@@ -23,6 +23,7 @@ in
       dos2unix # convert line breaks DOS - mac
       evtest # input debugging
       ffmpeg-full # music/video codecs?
+      ffmpegthumbnailer
       file
       gecode
       git
