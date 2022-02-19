@@ -8,13 +8,15 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
-  cpupower = config.boot.kernelPackages.cpupower;
   draculaTheme = import ../../config/mixins/dracula.nix;
 in {
   imports = [
     "${inputs.nixos-hardware}/common/pc/laptop/acpi_call.nix"
-    ./mpb-hw.nix
-    /etc/nixos/hardware-configuration.nix
+    ./mpb-hardware.nix
+    ./hardware-configuration.nix
+    ../../config/mixins/intel.nix
+    ../../config/mixins/radeon.nix
+    ../../config/mixins/powerManagement.nix
     ../../config/mixins/backlight.nix
     # ../../config/wayland-minimal.nix
     ../../config/xorg.nix
@@ -48,8 +50,6 @@ in {
     };
 
     boot = {
-      initrd.kernelModules = [ "amdgpu" ];
-
       loader = {
         grub.enable = false;
         systemd-boot.enable = true;
@@ -58,9 +58,6 @@ in {
       cleanTmpDir = true;
 
       kernelParams = [
-        # needed for powersave
-        "intel_pstate=active"
-
         # needed for suspend
         "acpi_osi=Darwin"
 
@@ -69,20 +66,18 @@ in {
         "hid_apple.swap_opt_cmd=1"
       ];
 
-      kernelModules = [ "coretemp" "intel_pstate" "hid-apple" ];
+      kernelModules = [ "hid-apple" ];
     };
 
     environment = {
       sessionVariables = { WIFI_DEVICE = "wlp4s0"; };
 
-      systemPackages = with pkgs; [
-        radeontop # monitor system amd
-
-        cpupower-gui
-        cpupower
-
-        gpu-switch
-      ];
+      systemPackages = with pkgs;
+        [
+          # requires installing rEFInd
+          # more info on https://github.com/0xbb/gpu-switch
+          gpu-switch
+        ];
     };
 
     networking = {
@@ -110,22 +105,9 @@ in {
         libinput.enable = true;
         libinput.touchpad.naturalScrolling = true;
         libinput.touchpad.tapping = false;
-
-        # GPU drivers
-        videoDrivers = [ "intel" "amdgpu" ];
-
-        deviceSection = ''
-          # does it fix screen tearing? maybe...
-          Option         "NoLogo" "1"
-          Option         "RenderAccel" "1"
-          Option         "TripleBuffer" "true"
-          Option         "MigrationHeuristic" "greedy"
-          Option         "AccelMethod" "sna"
-          Option         "TearFree"    "true"
-        '';
       };
 
-      # Macbook fan config
+      # Macbook fan config (doesn't work)
       mbpfan = {
         enable = true;
         verbose = true;
@@ -144,43 +126,7 @@ in {
       };
     };
 
-    # powerManagement
-    services.tlp = {
-      enable = true;
-      settings = {
-        # The following prevents the battery from charging fully to
-        # preserve lifetime. Run `tlp fullcharge` to temporarily force
-        # full charge.
-        # https://linrunner.de/tlp/faq/battery.html#how-to-choose-good-battery-charge-thresholds
-        START_CHARGE_THRESH_BAT0 = 40;
-        STOP_CHARGE_THRESH_BAT0 = 50;
-
-        # 100 being the maximum, limit the speed of my CPU to reduce
-        # heat and increase battery usage:
-        # CPU_MAX_PERF_ON_AC = 80;
-        # CPU_MAX_PERF_ON_BAT = 60;
-
-        CPU_BOOST_ON_AC = 0;
-        CPU_BOOST_ON_BAT = 0;
-      };
-    };
-    powerManagement = {
-      # cpuFreqGovernor = "powersave";
-      cpuFreqGovernor = "performance";
-      powertop.enable = true;
-      cpufreq.min = 800000;
-      cpufreq.max = 2800000;
-    };
-
-    hardware = {
-      # Enable webcam
-      facetimehd.enable = true;
-
-      cpu.intel.updateMicrocode = true;
-
-      # Hardware video acceleration?
-      opengl.extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
-      opengl.extraPackages32 = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
-    };
+    # Enable webcam
+    hardware.facetimehd.enable = true;
   };
 }

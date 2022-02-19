@@ -62,7 +62,7 @@ in {
     services.udisks2.enable = true;
     security.polkit.enable = true;
     services.accounts-daemon.enable = true;
-    services.upower.enable = enablePowerManagement;
+    services.upower.enable = lib.mkDefault enablePowerManagement;
     services.gnome.glib-networking.enable = true;
     services.gvfs.enable = true;
     services.tumbler.enable = true;
@@ -77,7 +77,7 @@ in {
     programs.bash.vteIntegration = lib.mkDefault true;
     programs.zsh.vteIntegration = lib.mkDefault true;
 
-    powerManagement.enable = enablePowerManagement;
+    powerManagement.enable = lib.mkDefault enablePowerManagement;
   };
 }
 
