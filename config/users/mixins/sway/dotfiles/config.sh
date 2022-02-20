@@ -1,5 +1,4 @@
 # Set sway font
-# font pango:Iosevka Nerd Font 10
 
 ### Variables
 #

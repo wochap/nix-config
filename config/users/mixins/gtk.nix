@@ -50,12 +50,13 @@ in {
     };
 
     home-manager.users.${userName} = {
-      home.file = {
-        ".icons/Dracula".source = inputs.dracula-icons-theme;
-      };
+      home.file = { ".icons/Dracula".source = inputs.dracula-icons-theme; };
 
       gtk = {
         enable = true;
+
+        # Theme
+        font = { name = "JetBrainsMono Nerd Font"; };
         iconTheme = { name = "Dracula"; };
         theme = {
           name = "Dracula";

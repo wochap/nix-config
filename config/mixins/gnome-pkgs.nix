@@ -5,6 +5,7 @@
     environment = {
       systemPackages = with pkgs; [
         # APPS
+        inkscape # photo editor cli/gui
         deluge # torrent client
         gnome.cheese # test webcam
         gnome.dconf-editor

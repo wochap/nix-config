@@ -29,7 +29,7 @@ in {
           hwdec = "vaapi";
           hwdec-codecs = "all";
           keep-open = true;
-          osd-font = "Iosevka";
+          osd-font = "JetBrainsMono";
           pause = true;
           video-sync = "display-resample";
           vo = "gpu";

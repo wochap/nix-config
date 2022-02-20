@@ -48,7 +48,7 @@ in
           allowBitmaps = true;
           defaultFonts = {
             serif = [ "Roboto Slab" ];
-            sansSerif = [ "Inter" ];
+            sansSerif = [ "JetBrainsMono Nerd Font" ];
             monospace = [ "FiraCode Nerd Font Mono" ];
             emoji = [ "Noto Color Emoji" ];
           };

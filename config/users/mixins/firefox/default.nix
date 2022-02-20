@@ -71,7 +71,7 @@ in {
 
               # https://wiki.archlinux.org/index.php/Firefox/Tweaks#Performance
               "browser.preferences.defaultPerformanceSettings.enabled" = false;
-              # "dom.ipc.processCount" = 8;
+              "dom.ipc.processCount" = 8;
 
               # Workaround for when xdg.portal is enabled? set to false
               # https://bugzilla.mozilla.org/show_bug.cgi?id=1618094

@@ -6,7 +6,7 @@ exec bash /etc/scripts/sway-autostart.sh
 
 
 #### SWAY theme ####
-font pango:Iosevka Nerd Font 10
+font pango:JetBrainsMono Nerd Font 10
 titlebar_padding 12 7
 title_align center
 
