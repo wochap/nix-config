@@ -36,26 +36,26 @@ corner_radius=4
 ellipsize="end"
 format="<b>%s</b> <span color='#8be9fd'>(%a)</span>\n%b"
 frame_color="#44475a"
-frame_width=2
 icon_position="left"
-line_height="1.5"
-max_icon_size=80
-min_icon_size=0
 separator_color="frame"
-separator_height=2
 transparency=0
 vertical_alignment="center"
 word_wrap=yes
+# line_height=1.5
+
+# Theme dpi static
+separator_height=2
+frame_width=2
+scale=1
 
 # Theme dpi
-scale=1.5
 font="Iosevka Nerd Font 11"
-height="150"
-horizontal_padding=11
-padding=11
-width="350"
-max_icon_size=48
-min_icon_size=48
+height=225
+horizontal_padding=17
+padding=17
+width=525
+max_icon_size=72
+min_icon_size=72
 
 [play_sound]
 script="/etc/scripts/play_notification.sh"

@@ -197,6 +197,15 @@ $ sudo nixos-rebuild switch --flake .#dekstop --impure
    $ sudo nix-collect-garbage -d
    ```
 
+* [Delete nixos system profile](https://www.reddit.com/r/NixOS/comments/ekryty/help_deleting_old_profiles/)
+
+   ```
+   # delete everything on
+   $ /nix/var/nix/profiles/system-profiles/*
+
+   # Clear store and rebuild
+   ```
+
 * [Check packages size](https://nixos.wiki/wiki/Nix_command/path-info)
 
    ```
