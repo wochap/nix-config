@@ -24,7 +24,7 @@ in {
             ${mailnotify}/bin/mailnotify ${hmConfig.accounts.email.maildirBasePath}
           '';
           Environment = [
-            "ICON_PATH=${pkgs.gnome-icon-theme}/share/icons/gnome/48x48/status/mail-unread.png"
+            "ICON_PATH=${pkgs.numix-icon-theme-circle}/share/icons/Numix-Circle/48@2x/apps/mail-generic.svg"
           ];
           Restart = "always";
           RestartSec = 5;
