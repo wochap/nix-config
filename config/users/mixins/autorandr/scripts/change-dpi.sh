@@ -39,6 +39,6 @@ else
 fi
 killall -HUP xsettingsd
 
-/etc/scripts/polybar-start.sh &
 /etc/scripts/dunst-start.sh &
+/etc/scripts/polybar-start.sh &
 
