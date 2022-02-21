@@ -59,6 +59,9 @@ in {
           # localPkgs.customNodePackages.typescript
           # localPkgs.customNodePackages.typescript-language-server
           # npm i typescript typescript-language-server -g
+
+          # required by nvim-dap
+          localPkgs.customNodePackages.ts-node
         ] ++ (if (!isDarwin) then [
           neovide
 

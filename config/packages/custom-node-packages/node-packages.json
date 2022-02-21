@@ -5,6 +5,7 @@
   "emmet-ls",
   "markdownlint",
   "stylelint",
-  "typescript-language-server",
-  "typescript"
+  "ts-node",
+  "typescript",
+  "typescript-language-server"
 ]
