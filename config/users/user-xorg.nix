@@ -20,6 +20,7 @@ in {
     ./mixins/gtk.nix
     ./mixins/htop.nix
     ./mixins/kitty
+    ./mixins/mangadesk
     ./mixins/mime-apps.nix
     ./mixins/mpv.nix
     ./mixins/neofetch
