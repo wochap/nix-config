@@ -84,6 +84,10 @@ in {
           source = ./scripts/bspwm_center_window.sh;
           mode = "0755";
         };
+        "scripts/bspwm-borders.sh" = {
+          source = ./scripts/bspwm-borders.sh;
+          mode = "0755";
+        };
 
         "scripts/projects/bspwm_dangerp.sh" = {
           source = ./scripts/bspwm_dangerp.sh;

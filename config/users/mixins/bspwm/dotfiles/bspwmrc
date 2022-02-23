@@ -71,6 +71,7 @@ done
 /etc/scripts/bspwm_subscribe_polybar.sh &
 # /etc/scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh &
 # /etc/scripts/bspwm_borders.sh &
+/etc/scripts/bspwm-borders.sh &
 
 sleep 1
 firefox > /dev/null 2>&1 &
