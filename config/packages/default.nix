@@ -10,6 +10,7 @@
   lightdm-webkit2-greeter = pkgs.callPackage ./lightdm-webkit2-greeter {};
   mailnotify = pkgs.callPackage ./mailnotify.nix {};
   mangadesk = pkgs.callPackage ./mangadesk.nix {};
+  neeasade-wmutils-opt = pkgs.callPackage ./neeasade-wmutils-opt.nix {};
   nsxiv = pkgs.callPackage ./nsxiv.nix {};
   offlinemsmtp = pkgs.callPackage ./offlinemsmtp.nix {};
   ptsh = pkgs.callPackage ./ptsh {};

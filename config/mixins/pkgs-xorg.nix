@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
-{
+let localPkgs = import ../packages { inherit pkgs lib; };
+in {
   config = {
     environment.systemPackages = with pkgs; [
       # TOOLS
@@ -18,6 +19,7 @@
       xorg.xkbcomp # print keymap
       xorg.xwininfo # print window info
       xtitle
+      localPkgs.neeasade-wmutils-opt
 
       # APPS CLI
       scrot # screen capture
