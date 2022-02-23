@@ -1,6 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
-let isHidpi = config._isHidpi;
+let
+  isHidpi = config._isHidpi;
+  globals = import ../globals.nix { inherit config pkgs lib inputs; };
 in {
   config = {
     services.xserver.displayManager = {
@@ -11,9 +13,9 @@ in {
           enable = true;
 
           cursorTheme = {
-            name = "Numix-Cursor";
-            package = pkgs.numix-cursor-theme;
-            size = if isHidpi then 40 else 32;
+            name = globals.cursor.name;
+            package = globals.cursor.package;
+            size = globals.cursor.size;
           };
 
           iconTheme = {
@@ -22,15 +24,14 @@ in {
           };
 
           theme = {
-            name = "Dracula";
-            package = pkgs.dracula-theme;
+            name = globals.theme.name;
+            package = globals.theme.package;
           };
 
           extraConfig = ''
-            font-name=Inter 10
+            font-name=${globals.fonts.sans} 10
           '';
-          indicators =
-            [ "~spacer" "~session" "~power" ];
+          indicators = [ "~spacer" "~session" "~power" ];
         };
       };
     };

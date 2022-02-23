@@ -3,10 +3,8 @@
 let
   userName = config._userName;
   isWayland = config._displayServer == "wayland";
-  localPkgs = import ../../packages {
-    pkgs = pkgs;
-    lib = lib;
-  };
+  globals = import ../../mixins/globals.nix { inherit config pkgs lib inputs; };
+  localPkgs = import ../../packages { inherit pkgs lib; };
 in {
   config = {
     environment = {
@@ -56,11 +54,11 @@ in {
         enable = true;
 
         # Theme
-        font = { name = "JetBrainsMono Nerd Font"; };
+        font = { name = globals.fonts.sans; };
         iconTheme = { name = "Dracula"; };
         theme = {
-          name = "Dracula";
-          package = pkgs.dracula-theme;
+          name = globals.theme.name;
+          package = globals.theme.package;
         };
 
         gtk3.extraConfig = {

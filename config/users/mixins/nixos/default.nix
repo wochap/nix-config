@@ -1,10 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
-  isXorg = config._displayServer == "xorg";
   isWayland = config._displayServer == "wayland";
   userName = config._userName;
-  isHidpi = config._isHidpi;
+  globals =
+    import ../../../mixins/globals.nix { inherit config pkgs lib inputs; };
 in {
   config = {
     environment.systemPackages = with pkgs; [ capitaine-cursors ];
@@ -49,14 +49,14 @@ in {
       };
 
       # home.file = {
-      #   ".icons/default/icons".source = "${pkgs.numix-cursor-theme}/share/icons/Numix-Cursor/cursors";
+      #   # Dracula-cursors doesn't support sizes
+      #   ".icons/Dracula-cursors".source = "${inputs.dracula-gtk-theme}/kde/cursors/Dracula-cursors";
       # };
 
       xsession.pointerCursor = {
-        name = "capitaine-cursors";
-        package = pkgs.capitaine-cursors;
-        # 16, 32, 48 or 64
-        size = if (isHidpi && isXorg) then 64 else 32;
+        name = globals.cursor.name;
+        package = globals.cursor.package;
+        size = globals.cursor.size;
       };
     };
   };
