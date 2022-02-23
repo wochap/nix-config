@@ -9,6 +9,11 @@ in {
       systemPackages = with pkgs; [ bsp-layout ];
 
       etc = {
+        "libinput-gestures.conf".text = ''
+          gesture swipe right 3 bspc desktop -f next.local
+          gesture swipe left 3 bspc desktop -f prev.local
+        '';
+
         "config/sxhkdrc" = {
           source = ./dotfiles/sxhkdrc;
           mode = "0755";

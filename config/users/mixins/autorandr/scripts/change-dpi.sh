@@ -55,3 +55,5 @@ normal_monitors=(${monitors[@]/"$primary_monitor"/})
 for monitor in $normal_monitors; do
   /etc/scripts/bspwm-move-monitors-nodes.sh "$monitor" "$primary_monitor" &
 done
+
+# TODO: ask with rofi if is all good
