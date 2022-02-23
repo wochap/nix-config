@@ -88,6 +88,10 @@ in {
           source = ./scripts/bspwm-borders.sh;
           mode = "0755";
         };
+        "scripts/bspwm-move-monitors-nodes.sh" = {
+          source = ./scripts/bspwm-move-monitors-nodes.sh;
+          mode = "0755";
+        };
 
         "scripts/projects/bspwm_dangerp.sh" = {
           source = ./scripts/bspwm_dangerp.sh;

@@ -25,7 +25,7 @@ case "$DPI" in
   ;;
 esac
 
-for monitor in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+for monitor in $(bspc query --monitors --monitor primary --names); do
   MONITOR="$monitor" DPI="$DPI" HEIGHT="$height" GAP="$gap" FONT0="$font0" FONT1="$font1" polybar main -c "$HOME/.config/polybar/blocks.ini" -r &
 done
 

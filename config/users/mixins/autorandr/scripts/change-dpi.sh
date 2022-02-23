@@ -48,3 +48,10 @@ killall -HUP xsettingsd
 /etc/scripts/dunst-start.sh &
 /etc/scripts/polybar-start.sh &
 
+# Move windows from inactive monitor to primary monitor
+monitors=$(bspc query --monitors --names)
+primary_monitor=$(bspc query --monitors --monitor primary --names)
+normal_monitors=(${monitors[@]/"$primary_monitor"/})
+for monitor in $normal_monitors; do
+  /etc/scripts/bspwm-move-monitors-nodes.sh "$monitor" "$primary_monitor" &
+done
