@@ -6,6 +6,8 @@ in
 {
   config = {
     home-manager.users.${userName} = {
+      xdg.configFile."mimeapps.list".force = true;
+
       # Control default apps
       xdg.mimeApps = {
         enable = true;

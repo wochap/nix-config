@@ -27,7 +27,7 @@ in {
           };
 
           extraConfig = ''
-            font-name=${globals.fonts.sans} 10
+            font-name=${globals.fonts.sans}
           '';
           indicators = [ "~spacer" "~session" "~power" ];
         };
