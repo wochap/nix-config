@@ -12,24 +12,18 @@
       };
     };
 
-    # Required for some apps (gtk3 applications, firefox)
+    # Required by some apps (gtk3 applications, firefox)
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
     programs.dconf.enable = true;
 
-    # Required for gnome file managers
+    # Required by gnome file managers
     programs.file-roller.enable = true;
-
-    # manage GnomeKeyring
-    programs.seahorse.enable = true;
-
-    programs.evolution.enable = true;
 
     services = {
       gnome = {
-        # Required for gnome `Online Accounts`, Calendar and Geary
+        # Required by gnome `Online Accounts`, Calendar and Geary
         evolution-data-server.enable = true;
         gnome-online-accounts.enable = true;
-        gnome-keyring.enable = true;
 
         # Required by nautilus
         tracker-miners.enable = true;
@@ -37,12 +31,7 @@
       };
     };
 
-    # Fix gnome-keyring when sddm is enabled
-    security.pam.services.sddm.enableGnomeKeyring = true;
-
-    # Fix gnome-keyring when lightdm is enabled
-    security.pam.services.lightdm.enableGnomeKeyring = true;
-
+    # On minimal wm, it doesn't do anything
     services.gnome.gnome-settings-daemon.enable = true;
   };
 }

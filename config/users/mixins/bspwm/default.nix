@@ -117,9 +117,6 @@ in {
           enable = true;
           extraConfig = builtins.readFile ./dotfiles/bspwmrc;
         };
-        profileExtra = ''
-          systemctl --user import-environment
-        '';
       };
 
       services.sxhkd = {
