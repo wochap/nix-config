@@ -1,8 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 
-let
-  isHidpi = config._isHidpi;
-  globals = import ../globals.nix { inherit config pkgs lib inputs; };
+let globals = import ../globals.nix { inherit config pkgs lib inputs; };
 in {
   config = {
     services.xserver.displayManager = {
