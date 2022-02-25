@@ -8,26 +8,26 @@ let
   currentDirectory = "${configDirectory}/config/users/mixins/picom";
   customPicom = pkgs.picom.overrideAttrs(o: {
     src = pkgs.fetchFromGitHub {
-      # # No blur, aceptable fix for screen tearing but... artifacts++
-      # repo = "picom";
-      # owner = "yshui";
-      # # next branch
-      # rev = "6555703b03fed197f6ff7fe6ddbd5a249c253ac3";
-      # sha256 = "sha256-WDx5WCND1UGszaAILbk+bU0VN9/mCLLZ9evHIbUi1B8=";
-
-      # # Stable picom
-      # repo = "picom";
-      # owner = "yshui";
-      # # v8.2 branch
-      # rev = "dac85eac10082dfc3df463aaa74b811144e22122ht";
-      # sha256 = "0gjksayz2xpmgglvw17ppsan2imrd1fijs579kbf27xwp503xgfl";
-
-      # Aceptable fix for screen tearing but... artifacts+ (WORKS)
+      # No blur?
       repo = "picom";
-      owner = "ibhagwan";
-      # next-rebase branch
-      rev = "c4107bb6cc17773fdc6c48bb2e475ef957513c7a";
-      sha256 = "sha256-1hVFBGo4Ieke2T9PqMur1w4D0bz/L3FAvfujY9Zergw=";
+      owner = "yshui";
+      # next branch
+      rev = "aa316aa3601a4f3ce9c1ca79932218ab574e61a7";
+      sha256 = "sha256-Yb69LTu45HxBWoD/T9Uj6b1lNn7hHzIEjcn73PMMEz0=";
+
+      # # Aceptable fix for screen tearing but... artifacts+ (WORKS)
+      # # Round corners with shadows
+      # repo = "picom";
+      # owner = "ibhagwan";
+      # # next-rebase branch
+      # rev = "c4107bb6cc17773fdc6c48bb2e475ef957513c7a";
+      # sha256 = "sha256-1hVFBGo4Ieke2T9PqMur1w4D0bz/L3FAvfujY9Zergw=";
+
+      # # Animations
+      # repo = "picom";
+      # owner = "jonaburg";
+      # rev = "a8445684fe18946604848efb73ace9457b29bf80";
+      # sha256 = "sha256-1hVFBGo4Ieke2T9PqMur1w4D0bz/L5FAvfujY9Zergw=";
     };
   });
 in
