@@ -16,6 +16,7 @@ in {
     ./mixins/eww
     ./mixins/firefox
     ./mixins/git.nix
+    ./mixins/gnome-keyring.nix
     ./mixins/gpg.nix
     ./mixins/gtk.nix
     ./mixins/htop.nix

@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
-{
+let userName = config._userName;
+in {
   config = {
     # GUI for gnome-keyring
     programs.seahorse.enable = true;
