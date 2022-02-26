@@ -22,6 +22,8 @@
     ohmyzsh.flake = false;
 
     nixpkgs-s2k.url = "github:wochap/nixpkgs-s2k?rev=2c28f8564721673073923823f4761b0f7e34cc65";
+    flix-tools.url = "github:ThamognyaKodi/FlixTools?rev=76640494cf7ded9ecb8a4ac11249eb86839c5501";
+    flix-tools.flake = false;
     ani-cli.url = "github:pystardust/ani-cli?rev=cbbcb3463b8706c27726db3f34bccf954cd37863";
     ani-cli.flake = false;
     mpv-osc-morden-x.url = "github:cyl0/mpv-osc-morden-x?rev=e0adf03d40403b87d106161c1f805a65bcb34738";
