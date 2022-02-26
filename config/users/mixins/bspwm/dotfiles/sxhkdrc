@@ -6,7 +6,7 @@ super + ctrl + Escape
 
 # Open power menu
 super + Escape
-	/etc/scripts/rofi-powermenu.sh
+  /etc/scripts/rofi-powermenu.sh
 
 # Take fullscreen screenshoot
 super + Print
@@ -46,7 +46,7 @@ super + Return
 
 # Close and kill
 super + shift + {w,q}
-	bspc node -{c,k}
+  bspc node -{c,k}
 
 # Alternate between the tiled and monocle layout
 super + l ; {m,s,t,w}
@@ -58,11 +58,11 @@ super + l ; c
 
 # Send the newest marked node to the newest preselected node
 super + y
-	bspc node newest.marked -n newest.!automatic
+  bspc node newest.marked -n newest.!automatic
 
 # Send the newest marked node to the newest preselected node in current desktop
 super + u
-	bspc node newest.marked.local -n newest.!automatic.local
+  bspc node newest.marked.local -n newest.!automatic.local
 
 # Send current node to the newest preselected node
 super + shift + m
@@ -80,7 +80,7 @@ super + g
 
 # Set the window state (tiled|pseudo_tiled|floating)
 super + {t,shift + t,s}
-	bspc node -t {tiled,pseudo_tiled,floating}
+  bspc node -t {tiled,pseudo_tiled,floating}
 
 # Toggle fullscreen
 super + f
@@ -88,33 +88,33 @@ super + f
 
 # Set the node flags (marked|locked|sticky|private|hidden)
 super + ctrl + {m,x,y,z,h}
-	bspc node -g {marked,locked,sticky,private,hidden}
+  bspc node -g {marked,locked,sticky,private,hidden}
 
 
 ### PRESELECT
 
 # preselect the direction
 super + ctrl + {Left,Down,Up,Right}
-	bspc node -p {west,south,north,east}
+  bspc node -p {west,south,north,east}
 
 # preselect the ratio
 super + ctrl + {1-9}
-	bspc node -o 0.{1-9}
+  bspc node -o 0.{1-9}
 
 # cancel the preselection for the focused node
 super + ctrl + space
-	bspc node -p cancel
+  bspc node -p cancel
 
 # cancel the preselection for the focused desktop
 super + ctrl + shift + space
-	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+  bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
 
 ### FOCUS/SWAP
 
 # Focus or switch the node in the given direction
 super + {_,shift + }{Left,Down,Up,Right}
-	bspc node -{f,s} {west,south,north,east}
+  bspc node -{f,s} {west,south,north,east}
 
 # Focus the node for the given path jump (parent|brother|first|second)
 super + {p,b,comma,period}
@@ -134,11 +134,11 @@ super + {_,shift + }n
 
 # Focus the next|previous workspace in the current monitor
 # super + {Left,Right}
-# 	bspc desktop -f {prev,next}.local
+#   bspc desktop -f {prev,next}.local
 
 # focus the last node/desktop
 super + {grave,Tab}
-	bspc {node,desktop} -f last
+  bspc {node,desktop} -f last
 
 # Open hidden windows
 super + alt + Tab
@@ -150,13 +150,13 @@ alt + Tab
 
 # # Focus the older or newer node in the focus history
 # super + {o,i}
-# 	bspc wm -h off; \
-# 	bspc node {older,newer} -f; \
-# 	bspc wm -h on
+#   bspc wm -h off; \
+#   bspc node {older,newer} -f; \
+#   bspc wm -h on
 
 # Focus or send to the given desktop
 super + {_,shift + }{1-9,0}
-	bspc {desktop -f,node -d} focused:'^{1-9,10}'
+  bspc {desktop -f,node -d} focused:'^{1-9,10}'
 
 super + {_, shift +}F1
   bspc {desktop -f,node -d} focused:'^5'
@@ -223,7 +223,7 @@ super + alt + c
 
 # Open Browser
 super + alt + b ; {f,c,b}
-  /etc/scripts/bspwm_open_or_focus.sh {firefox,google-chrome-stable,brave}
+  /etc/scripts/bspwm_open_or_focus.sh {Firefox firefox,Google-chrome google-chrome-stable,Brave-browser brave}
 
 # Open terminal
 super + alt + t ; {k,a}
@@ -276,19 +276,19 @@ XF86AudioMute
 
 # Play next media
 XF86AudioNext
-	playerctl next
+  playerctl next
 
 # Pause media
 XF86AudioStop
-	playerctl pause
+  playerctl pause
 
 # Play media
 XF86AudioPlay
-	playerctl play-pause
+  playerctl play-pause
 
 # Play previous media
 XF86AudioPrev
-	playerctl previous
+  playerctl previous
 
 # vim: syntax=sh
 

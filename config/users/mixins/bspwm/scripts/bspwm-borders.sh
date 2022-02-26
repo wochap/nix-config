@@ -43,22 +43,20 @@ draw_border() {
     Brave-browser | Google-chrome | Firefox)
       # HACK: don't use bspc to change colors, that would affect all windows
       # NOTE: updating border size with chwb will cause infinite recursion
-      # TODO: chwb doesn't apply solid colors
-      chwb -c "0x$nprimary" "$2"
+      chwb -c "0xff$nprimary" "$2"
       ;;
     *)
-      chwbn -b 8 -c 282a36 -c bd93f9 -b 2 -c 282a36 -b 8 "$2"
-      chwbn -b 8 -c "$nbackground" -c "$nprimary" -b 2 -c "$nbackground" -b 8 "$2"
+      chwbn -b 8 -c "0xff$nbackground" -c "0xff$nprimary" -b 2 -c "0xff$nbackground" -b 8 "$2"
       ;;
     esac
     ;;
   normal)
     case "$wm_class" in
     Brave-browser | Google-chrome | Firefox)
-      chwb -c 0x3D3D45 "$2"
+      chwb -c "0xff$nbackground" "$2"
       ;;
     *)
-      chwbn -b 8 -c "$nbackground" -c "$nselection" -b 2 -c "$nbackground" -b 8 "$2"
+      chwbn -b 8 -c "0xff$nbackground" -c "0xff$nselection" -b 2 -c "0xff$nbackground" -b 8 "$2"
       ;;
     esac
     ;;

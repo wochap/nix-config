@@ -2,6 +2,7 @@
 
 case "$AUTORANDR_CURRENT_PROFILE" in
 mbp | mbp-i)
+  # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
   DPI=192
   CURSOR_SIZE=64
   GAP=25
