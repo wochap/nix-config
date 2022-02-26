@@ -19,7 +19,7 @@ in {
       # TODO: refactor to module options
       cpuFreqGovernor = "performance";
       cpufreq.min = 800000;
-      cpufreq.max = 2800000;
+      # cpufreq.max = 3000000;
     };
 
     # required by others apps
