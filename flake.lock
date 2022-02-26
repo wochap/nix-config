@@ -191,6 +191,23 @@
         "type": "github"
       }
     },
+    "dracula-kitty": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1632017685,
+        "narHash": "sha256-3yi5e/wnLYt7b3Lkf4fhSByr18SrOzJ4zYympUQMslc=",
+        "owner": "dracula",
+        "repo": "kitty",
+        "rev": "eeaa86a730e3d38649053574dc60a74ce06a01bc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "kitty",
+        "rev": "eeaa86a730e3d38649053574dc60a74ce06a01bc",
+        "type": "github"
+      }
+    },
     "dracula-mutt": {
       "flake": false,
       "locked": {
@@ -550,6 +567,23 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flix-tools": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1645786527,
+        "narHash": "sha256-wK9SoFVN1ZG1ugax88bafHoOR6xbQAcPVv0MqjvR81Y=",
+        "owner": "ThamognyaKodi",
+        "repo": "FlixTools",
+        "rev": "76640494cf7ded9ecb8a4ac11249eb86839c5501",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ThamognyaKodi",
+        "repo": "FlixTools",
+        "rev": "76640494cf7ded9ecb8a4ac11249eb86839c5501",
         "type": "github"
       }
     },
@@ -1264,11 +1298,13 @@
         "dracula-discord": "dracula-discord",
         "dracula-gtk-theme": "dracula-gtk-theme",
         "dracula-icons-theme": "dracula-icons-theme",
+        "dracula-kitty": "dracula-kitty",
         "dracula-mutt": "dracula-mutt",
         "dracula-sublime": "dracula-sublime",
         "dracula-xresources": "dracula-xresources",
         "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",
         "electron-stable": "electron-stable",
+        "flix-tools": "flix-tools",
         "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
