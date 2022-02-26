@@ -20,7 +20,7 @@ in {
         {
           QT_QPA_PLATFORMTHEME = "qt5ct";
 
-          XDG_CURRENT_DESKTOP = "KDE";
+          # XDG_CURRENT_DESKTOP = "KDE";
           DESKTOP_SESSION = "KDE";
         }
         (lib.mkIf isWayland {
