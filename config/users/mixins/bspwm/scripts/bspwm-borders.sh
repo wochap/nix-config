@@ -46,7 +46,8 @@ draw_border() {
       chwb -c "0xff$nprimary" "$2"
       ;;
     *)
-      chwbn -b 8 -c "0xff$nbackground" -c "0xff$nprimary" -b 2 -c "0xff$nbackground" -b 8 "$2"
+      chwbn -b 2 -c "0xff$nprimary" -b 18 -c "0xff$nbackground" "$2"
+      # chwbn -b 8 -c "0xff$nbackground" -b 2 -c "0xff$nprimary" -b 8 -c "0xff$nbackground" "$2"
       ;;
     esac
     ;;
@@ -56,7 +57,8 @@ draw_border() {
       chwb -c "0xff$nbackground" "$2"
       ;;
     *)
-      chwbn -b 8 -c "0xff$nbackground" -c "0xff$nselection" -b 2 -c "0xff$nbackground" -b 8 "$2"
+      chwbn -b 2 -c "0xff$nselection" -b 18 -c "0xff$nbackground" "$2"
+      # chwbn -b 8 -c "0xff$nbackground" -b 2 -c "0xff$nselection" -b 8 -c "0xff$nbackground" "$2"
       ;;
     esac
     ;;
