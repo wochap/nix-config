@@ -1,9 +1,7 @@
 { config, pkgs, ... }:
 
-let
-  dpi = 192;
-in
-{
+let dpi = 192;
+in {
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
@@ -14,7 +12,12 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Enables wireless support via wpa_supplicant.
-  networking.wireless.enable = true;
+  # networking.wireless.enable = true;
+
+  # Enable network manager
+  networking.wireless.enable = false;
+  networking.enableIPv6 = false;
+  networking.networkmanager.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -52,6 +55,7 @@ in
     git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
+    nmtui
   ];
 
   networking.firewall.enable = false;
@@ -86,4 +90,3 @@ in
     trustedUsers = [ "@wheel" "root" ];
   };
 }
-
