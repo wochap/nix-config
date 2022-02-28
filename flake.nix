@@ -54,6 +54,8 @@
     dracula-zsh-syntax-highlighting.flake = false;
     fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
     fzf-tab.flake = false;
+    nonicons.url = "github:yamatsum/nonicons?rev=6e4984bcb18e122a5f7588a482cb07f459b55a86";
+    nonicons.flake = false;
   };
 
   outputs = inputs:
