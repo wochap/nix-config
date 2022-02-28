@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 stopfile=/tmp/_stop
 time=$(date +%Y-%m-%d-%I-%M-%S)
@@ -47,7 +47,7 @@ copy_to_cb() {
   # xclip -selection clipboard -t video/mp4 "$dest"
 }
 
-select-region() {
+select_region() {
   if [[ $geom ]]; then
     echo "${geom//[x+]/ }"
   else
@@ -73,7 +73,7 @@ countdown() {
 }
 
 shot5() {
-  read -r W H X Y < <(select-region)
+  read -r W H X Y < <(select_region)
   [[ -z "$W$H$X$Y" ]] && exit 1
 
   countdown '5'
@@ -90,7 +90,7 @@ shot5() {
 }
 
 shotarea() {
-  read -r W H X Y < <(select-region)
+  read -r W H X Y < <(select_region)
   [[ -z "$W$H$X$Y" ]] && exit 1
 
   # TODO: kill picom?
