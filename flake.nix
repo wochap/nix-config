@@ -72,6 +72,7 @@
         desktop-gnome = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
         asus-vivobook = mkSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
         mbp-nixos = mkSystem inputs.nixpkgs "x86_64-linux" "mbp-nixos";
+        asus-old = mkSystem inputs.nixpkgs "x86_64-linux" "asus-old";
       };
       darwinConfigurations."mbp-darwin" = inputs.darwin.lib.darwinSystem {
         system = "x86_64-darwin";

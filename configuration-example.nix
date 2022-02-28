@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
-let dpi = 192;
+let
+  dpi = 192;
+  userName = "gean";
 in {
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -55,7 +57,6 @@ in {
     git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
-    nmtui
   ];
 
   networking.firewall.enable = false;
@@ -88,5 +89,23 @@ in {
     '';
 
     trustedUsers = [ "@wheel" "root" ];
+  };
+
+  users.users.${userName} = {
+    home = "/home/gean";
+    shell = pkgs.zsh;
+    uid = 1000;
+    isNormalUser = true;
+    extraGroups = [
+      "input"
+      "audio"
+      "disk"
+      "docker"
+      "networkmanager"
+      "storage"
+      "video"
+      "wheel"
+      "adbusers"
+    ];
   };
 }

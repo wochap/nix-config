@@ -11,7 +11,7 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
-   The initial config must have: `flakes`, `cachix`, `git`, `videoDrivers`, `desktopManager.xterm.enable = true;`, `internet setup`
+   The initial config must have: `user config`, `flakes`, `cachix`, `git`, `videoDrivers`, `internet setup`
 
    **NOTE:** Run `sudo nixos-install` (don't use `sudo su`?)
 
@@ -45,6 +45,10 @@ You probably want to press `Ctrl + Alt + F1`
    ```
    $ wpa_passphrase '<SSID>' '<passphrase>' | tee /etc/wpa_supplicant.conf
    $ wpa_supplicant -c /etc/wpa_supplicant.conf -i <interface> -B
+   ```
+   The following commands will work if you enabled `networking.networkmanager.enable = true;`
+   ```
+   $ nmtui
    ```
 1. Login with root user and clone into `~/nix-config`
    ```

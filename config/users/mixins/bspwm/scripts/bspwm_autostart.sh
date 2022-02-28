@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
   /run/current-system/sw/etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop \
@@ -17,7 +17,12 @@ if [ -x "$(command -v nvidia-settings)" ]; then
 fi
 
 # autorandr hooks runs random-bg, polybar and dunst
-autorandr --change &
+if [[ $(autorandr | grep "detected" | wc -l) -eq 0 ]]; then
+  /etc/scripts/random-bg.sh &
+  /home/gean/.config/autorandr/postswitch.d/change-dpi &
+else
+  autorandr --change &
+fi
 # /etc/scripts/polybar-start.sh &
 # /etc/scripts/dunst-start.sh &
 # /etc/scripts/random-bg.sh &
