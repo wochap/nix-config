@@ -83,8 +83,10 @@ in {
               }
               (lib.mkIf isNvidia {
                 # Fix lag when vsync * nvidia
-                "gfx.x11-egl.force-enabled" = true;
+                "gfx.swap-interval.egl" = true;
+                "gfx.swap-interval.glx" = false;
                 "gfx.webrender.software" = false;
+                "gfx.x11-egl.force-enabled" = false;
               })
             ];
           };
