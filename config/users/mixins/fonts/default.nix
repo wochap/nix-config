@@ -11,9 +11,11 @@ in {
     fonts = lib.mkMerge [
       {
         fonts = with pkgs; [
-          fira-code
-          cascadia-code
           customNerdFonts
+
+          cascadia-code
+          fira-code
+          ibm-plex
           source-code-pro
         ];
       }
@@ -24,29 +26,30 @@ in {
         enableDefaultFonts = true;
         fonts = with pkgs; [
           inter
-          unifont
+          unifont # i18n
 
           corefonts # basic fonts for office
-          symbola
           font-awesome
           font-awesome_4
-          material-icons
           material-design-icons
+          material-icons
           noto-fonts
           noto-fonts-cjk
           noto-fonts-emoji
           open-sans
           roboto
           roboto-slab
-          siji
-          terminus_font
+          symbola # i18n
+
+          # TODO: doesn't work
+          # openmoji-color
         ];
         fontconfig = {
           allowBitmaps = true;
           defaultFonts = {
-            serif = [ "Roboto Slab" ];
-            sansSerif = [ "JetBrainsMono Nerd Font" ];
-            monospace = [ "JetBrainsMono Nerd Font" ];
+            serif = [ "IBM Plex Serif" ];
+            sansSerif = [ "IBM Plex Sans" ];
+            monospace = [ "IBM Plex Mono" ];
             emoji = [ "Noto Color Emoji" ];
           };
         };
