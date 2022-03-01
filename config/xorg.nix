@@ -6,7 +6,6 @@ in
 {
   imports = [
     ./mixins/docker.nix # Comment on first install
-    ./mixins/fonts.nix
     ./mixins/gnome-minimal-wm # Comment on first install
     ./mixins/gnome-pkgs.nix # Comment on first install
     ./mixins/lightdm
