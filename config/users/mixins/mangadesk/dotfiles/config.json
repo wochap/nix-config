@@ -1,9 +1,11 @@
 {
-  "downloadDir": "/home/gean/Downloads/mangadesk",
-  "languages": ["en"],
-  "downloadQuality": "data",
-  "explicitContent": false,
-  "forcePort443": false,
-  "asZip": false,
-  "zipType": "zip"
+	"downloadDir": "/home/gean/Downloads/mangadesk",
+	"languages": [
+		"en"
+	],
+	"downloadQuality": "data",
+	"explicitContent": false,
+	"forcePort443": false,
+	"asZip": false,
+	"zipType": "zip"
 }

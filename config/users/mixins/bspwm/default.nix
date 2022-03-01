@@ -60,11 +60,11 @@ in {
           source = ./scripts/bspwm_subscribe.sh;
           mode = "0755";
         };
-        # "scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh" = {
-        #   source =
-        #     ./scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh;
-        #   mode = "0755";
-        # };
+        "scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh" = {
+          source =
+            ./scripts/bspwm_subscribe_exclude_shadow_from_tiled_windows.sh;
+          mode = "0755";
+        };
         "scripts/bspwm_subscribe_polybar.sh" = {
           source = ./scripts/bspwm_subscribe_polybar.sh;
           mode = "0755";

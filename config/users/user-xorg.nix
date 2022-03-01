@@ -4,7 +4,7 @@ let userName = config._userName;
 in {
   imports = [
     ./mixins/alacritty
-    ./mixins/amfora.nix
+    ./mixins/amfora
     ./mixins/autorandr
     ./mixins/bat.nix
     ./mixins/bspwm
@@ -15,6 +15,7 @@ in {
     ./mixins/email
     ./mixins/eww
     ./mixins/firefox
+    ./mixins/fonts
     ./mixins/git.nix
     ./mixins/gnome-keyring.nix
     ./mixins/gpg.nix

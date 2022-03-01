@@ -2,8 +2,8 @@
 
 let
   dpi = 192;
-in
-{
+  userName = "gean";
+in {
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
@@ -14,7 +14,12 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Enables wireless support via wpa_supplicant.
-  networking.wireless.enable = true;
+  # networking.wireless.enable = true;
+
+  # Enable network manager
+  networking.wireless.enable = false;
+  networking.enableIPv6 = false;
+  networking.networkmanager.enable = true;
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -85,5 +90,22 @@ in
 
     trustedUsers = [ "@wheel" "root" ];
   };
-}
 
+  users.users.${userName} = {
+    home = "/home/gean";
+    shell = pkgs.zsh;
+    uid = 1000;
+    isNormalUser = true;
+    extraGroups = [
+      "input"
+      "audio"
+      "disk"
+      "docker"
+      "networkmanager"
+      "storage"
+      "video"
+      "wheel"
+      "adbusers"
+    ];
+  };
+}

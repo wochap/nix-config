@@ -22,6 +22,8 @@
     ohmyzsh.flake = false;
 
     nixpkgs-s2k.url = "github:wochap/nixpkgs-s2k?rev=2c28f8564721673073923823f4761b0f7e34cc65";
+    flix-tools.url = "github:ThamognyaKodi/FlixTools?rev=76640494cf7ded9ecb8a4ac11249eb86839c5501";
+    flix-tools.flake = false;
     ani-cli.url = "github:pystardust/ani-cli?rev=cbbcb3463b8706c27726db3f34bccf954cd37863";
     ani-cli.flake = false;
     mpv-osc-morden-x.url = "github:cyl0/mpv-osc-morden-x?rev=e0adf03d40403b87d106161c1f805a65bcb34738";
@@ -30,6 +32,8 @@
     zsh-vi-mode.flake = false;
     dracula-discord.url = "github:dracula/betterdiscord?rev=6e9151fc3b013ae3c3961c45f11c0cd8d934f4be";
     dracula-discord.flake = false;
+    dracula-kitty.url = "github:dracula/kitty?rev=eeaa86a730e3d38649053574dc60a74ce06a01bc";
+    dracula-kitty.flake = false;
     dracula-amfora.url = "github:dracula/amfora?rev=6e3fde02006707dc0a7b4677b0d4f40f52ed6227";
     dracula-amfora.flake = false;
     dracula-mutt.url = "github:dracula/mutt?rev=8e512a73d519b2d503b4771fbc58c67f232ce7e0";
@@ -50,6 +54,8 @@
     dracula-zsh-syntax-highlighting.flake = false;
     fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
     fzf-tab.flake = false;
+    nonicons.url = "github:yamatsum/nonicons?rev=6e4984bcb18e122a5f7588a482cb07f459b55a86";
+    nonicons.flake = false;
   };
 
   outputs = inputs:
@@ -68,6 +74,7 @@
         desktop-gnome = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
         asus-vivobook = mkSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
         mbp-nixos = mkSystem inputs.nixpkgs "x86_64-linux" "mbp-nixos";
+        asus-old = mkSystem inputs.nixpkgs "x86_64-linux" "asus-old";
       };
       darwinConfigurations."mbp-darwin" = inputs.darwin.lib.darwinSystem {
         system = "x86_64-darwin";

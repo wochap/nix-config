@@ -12,7 +12,7 @@ notify_user() {
     copy_to_cb
     action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dir/$file" "Screen shooter" "Screenshot Saved" --action "default,Edit")
   else
-    dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dir/$file" "Screen shooter" "Screenshot Aborted."
+    dunstify -t "$EXPIRE_TIME" --replace=699 -i "org.xfce.screenshooter" "Screen shooter" "Screenshot Aborted."
   fi
 
   if [[ $action == "default" ]]; then

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   isDarwin = config._displayServer == "darwin";
@@ -67,8 +67,11 @@ in {
       };
 
       xdg.configFile = {
+        "kitty/tab_bar.py".source = ./scripts/tab_bar.py;
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
+        "kitty/diff.conf".source = "${inputs.dracula-kitty}/diff.conf";
         "kitty/kitty.conf".text = ''
+          ${builtins.readFile "${inputs.dracula-kitty}/dracula.conf"}
           ${commonConfig}
           ${if isDarwin then macosConfig else linuxConfig}
         '';

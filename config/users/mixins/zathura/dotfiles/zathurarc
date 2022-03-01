@@ -41,7 +41,7 @@ set recolor-darkcolor           "#f8f8f2" # Foreground
 set statusbar-v-padding         15
 set statusbar-h-padding         75
 set selection-clipboard         clipboard
-set font                        "FiraCode Nerd Font 10"
+set font                        "Iosevka Nerd Font 10"
 set adjust-open                 width
 set recolor                     true
 set pages-per-row               1

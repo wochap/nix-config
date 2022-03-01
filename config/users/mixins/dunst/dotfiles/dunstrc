@@ -32,7 +32,7 @@ origin="bottom-right"
 
 # Theme
 alignment="left"
-corner_radius=4
+corner_radius=0
 ellipsize="end"
 format="<b>%s</b> <span color='#8be9fd'>(%a)</span>\n%b"
 frame_color="#44475a"

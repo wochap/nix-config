@@ -2,7 +2,7 @@ configuration {
   display-combi: "";
   display-run: "";
   display-drun: "";
-  display-calc: "";
+  display-calc: " ";
   display-emoji: "";
   hide-scrollbar: false;
   case-sensitive: false;
@@ -31,7 +31,6 @@ configuration {
 window {
   background-color: @var-bg;
   border-color: @var-window-border-color;
-  border-radius: 4px;
   border: 2px;
   text-color: @var-fg;
   transparency: "real";
@@ -52,7 +51,7 @@ listview {
   cycle: false;
   layout: vertical;
   lines: 9;
-  padding: 0;
+  padding: 0 0.75em 0.75em;
   spacing: 0;
 
   // Dynamic window height
@@ -104,6 +103,7 @@ element-text {
 }
 
 element selected {
+  border-radius: 4px;
   background-color: @var-bg-selection;
   text-color: @var-fg-selection;
 }

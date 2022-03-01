@@ -5,6 +5,8 @@ let
   isWayland = config._displayServer == "wayland";
 
   ani-cli = pkgs.writeShellScriptBin "ani-cli" (builtins.readFile "${inputs.ani-cli}/ani-cli");
+  mangaflix = pkgs.writeShellScriptBin "mangaflix" (builtins.readFile "${inputs.flix-tools}/ManganatoFlix/mangaflix");
+  piratebayflix = pkgs.writeShellScriptBin "piratebayflix" (builtins.readFile "${inputs.flix-tools}/PirateBayFlix/piratebayflix");
 in
 {
   config = {
@@ -49,6 +51,7 @@ in
       openssl
       pciutils # lspci and others commands
       pulsemixer
+      pup # parse html
       slop
       tldr
       unrar
@@ -83,9 +86,13 @@ in
 
       # APPS CLI
       ani-cli
-      stripe-cli
+      cbonsai
+      piratebayflix
       speedread
-      #dogecoin
+      stripe-cli
+      # mangaflix
+      # unstable.nodePackages_latest.webtorrent-cli
+      # dogecoin
 
       # APPS
       dmenu
