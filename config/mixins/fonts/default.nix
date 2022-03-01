@@ -11,6 +11,7 @@ in {
     fonts = lib.mkMerge [
       {
         fonts = with pkgs; [
+          fira-code
           cascadia-code
           customNerdFonts
           source-code-pro
@@ -54,8 +55,10 @@ in {
 
     home-manager.users.${userName} = {
       home.file = {
+        "fontconfig/conf.d/10-nerd-font-symbols-2.1.0.conf".source = ./assets/10-nerd-font-symbols.conf.conf;
+        ".local/share/fonts/Symbols-1000-em_Nerd_Font_Complete.ttf".source = ./assets/Symbols-1000-em_Nerd_Font_Complete.ttf;
+        ".local/share/fonts/Symbols-2048-em_Nerd_Font_Complete.ttf".source = ./assets/Symbols-2048-em_Nerd_Font_Complete.ttf;
         ".local/share/fonts/nonicons.ttf".source = "${inputs.nonicons}/dist/nonicons.ttf";
-        # "fontconfig/conf.d/10-nerd-font-symbols.conf".source =
       };
     };
   };
