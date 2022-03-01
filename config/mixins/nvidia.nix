@@ -5,6 +5,8 @@ let
 in
 {
   config = {
+    _isNvidia = true;
+
     hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
     hardware.nvidia.modesetting.enable = true;
 

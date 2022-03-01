@@ -194,6 +194,18 @@ $ sudo nixos-rebuild switch --flake .#dekstop --impure
 
 ## Troubleshooting
 
+* Slow firefox with nvidia drivers
+
+  Use wayland (EGL) or
+
+   ```sh
+   # Go to https://www.vsynctester.com/
+   $ __GL_HWSTATE_PER_CTX=2 __GL_yieldFunctionWaitForGpu=5 firefox
+   # or, in about:config
+   gfx.x11-egl.force-enabled true
+   gfx.webrender.software false
+   ```
+
 * Clear /nix/store
 
    ```

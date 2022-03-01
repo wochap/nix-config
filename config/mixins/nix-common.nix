@@ -42,6 +42,12 @@
       example = "{}";
       description = "Theme colors";
     };
+    _isNvidia = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = "Flag for devices with nvidia.";
+    };
   };
 
   config = {
