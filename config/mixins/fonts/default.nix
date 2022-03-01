@@ -59,6 +59,7 @@ in {
         ".local/share/fonts/Symbols-1000-em_Nerd_Font_Complete.ttf".source = ./assets/Symbols-1000-em_Nerd_Font_Complete.ttf;
         ".local/share/fonts/Symbols-2048-em_Nerd_Font_Complete.ttf".source = ./assets/Symbols-2048-em_Nerd_Font_Complete.ttf;
         ".local/share/fonts/nonicons.ttf".source = "${inputs.nonicons}/dist/nonicons.ttf";
+        ".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
       };
     };
   };
