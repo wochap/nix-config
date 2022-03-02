@@ -19,6 +19,7 @@ in
     ./mixins/pkgs-xorg.nix
     ./mixins/pkgs.nix
     ./mixins/qt-pkgs.nix # Comment on first install
+    # ./mixins/virt.nix
     ./mixins/vscode.nix
     ./mixins/xfce-minimal-wm.nix
     ./users/user-xorg.nix
