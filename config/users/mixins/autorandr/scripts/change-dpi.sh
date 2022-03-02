@@ -49,6 +49,9 @@ killall -HUP xsettingsd
 /etc/scripts/dunst-start.sh &
 /etc/scripts/polybar-start.sh &
 
+pgrep -f bspwm-borders | xargs kill -9
+/etc/scripts/bspwm-borders.sh &
+
 # Move windows from inactive monitor to primary monitor
 monitors=$(bspc query --monitors --names)
 primary_monitor=$(bspc query --monitors --monitor primary --names)
