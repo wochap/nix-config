@@ -15,7 +15,11 @@ in {
 
           cascadia-code
           fira-code
+
           ibm-plex
+
+          source-serif
+          source-sans
           source-code-pro
         ];
       }
@@ -35,11 +39,14 @@ in {
           material-icons
           noto-fonts
           noto-fonts-cjk
-          noto-fonts-emoji
           open-sans
           roboto
           roboto-slab
+
+          # emojis
+          noto-fonts-emoji
           symbola # i18n
+          twitter-color-emoji
 
           # TODO: doesn't work
           # openmoji-color
@@ -47,10 +54,13 @@ in {
         fontconfig = {
           allowBitmaps = true;
           defaultFonts = {
-            serif = [ "IBM Plex Serif" ];
-            sansSerif = [ "IBM Plex Sans" ];
-            monospace = [ "IBM Plex Mono" ];
-            emoji = [ "Noto Color Emoji" ];
+            serif = [ "Source Serif Pro" ];
+            sansSerif = [ "Source Sans Pro" ];
+            monospace = [ "Source Code Pro" ];
+            # serif = [ "IBM Plex Serif" ];
+            # sansSerif = [ "IBM Plex Sans" ];
+            # monospace = [ "IBM Plex Mono" ];
+            emoji = [ "Twemoji" "Noto Color Emoji" "Symbola" ];
           };
         };
       })
@@ -58,10 +68,14 @@ in {
 
     home-manager.users.${userName} = {
       home.file = {
-        "fontconfig/conf.d/10-nerd-font-symbols-2.1.0.conf".source = ./assets/10-nerd-font-symbols.conf.conf;
-        ".local/share/fonts/Symbols-1000-em_Nerd_Font_Complete.ttf".source = ./assets/Symbols-1000-em_Nerd_Font_Complete.ttf;
-        ".local/share/fonts/Symbols-2048-em_Nerd_Font_Complete.ttf".source = ./assets/Symbols-2048-em_Nerd_Font_Complete.ttf;
-        ".local/share/fonts/nonicons.ttf".source = "${inputs.nonicons}/dist/nonicons.ttf";
+        "fontconfig/conf.d/10-nerd-font-symbols-2.1.0.conf".source =
+          ./assets/10-nerd-font-symbols.conf.conf;
+        ".local/share/fonts/Symbols-1000-em_Nerd_Font_Complete.ttf".source =
+          ./assets/Symbols-1000-em_Nerd_Font_Complete.ttf;
+        ".local/share/fonts/Symbols-2048-em_Nerd_Font_Complete.ttf".source =
+          ./assets/Symbols-2048-em_Nerd_Font_Complete.ttf;
+        ".local/share/fonts/nonicons.ttf".source =
+          "${inputs.nonicons}/dist/nonicons.ttf";
         ".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
       };
     };
