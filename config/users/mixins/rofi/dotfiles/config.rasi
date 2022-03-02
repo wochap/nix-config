@@ -2,7 +2,7 @@ configuration {
   display-combi: "";
   display-run: "";
   display-drun: "";
-  display-calc: " ";
+  display-calc: "";
   display-emoji: "";
   hide-scrollbar: false;
   case-sensitive: false;
@@ -26,12 +26,16 @@ configuration {
   var-input-placeholder-color: @green;
   var-primary-color: @purple;
   var-window-border-color: @selection;
+
+  var-window-border-width: 3px;
+  var-inputbar-padding: 27px;
+  var-listview-padding: 0 27px 27px;
 }
 
 window {
   background-color: @var-bg;
   border-color: @var-window-border-color;
-  border: 2px;
+  border: @var-window-border-width;
   text-color: @var-fg;
   transparency: "real";
   width: 25em;
@@ -51,7 +55,7 @@ listview {
   cycle: false;
   layout: vertical;
   lines: 9;
-  padding: 0 0.75em 0.75em;
+  padding: @var-listview-padding;
   spacing: 0;
 
   // Dynamic window height
@@ -63,7 +67,7 @@ inputbar {
   children: [ prompt, entry ];
   expand: false;
   margin: 0;
-  padding: 0.75em;
+  padding: @var-inputbar-padding;
 }
 
 prompt {
