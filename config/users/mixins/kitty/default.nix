@@ -2,7 +2,6 @@
 
 let
   isDarwin = config._displayServer == "darwin";
-  commonConfig = builtins.readFile ./dotfiles/kitty-common.conf;
   macosConfig = builtins.readFile ./dotfiles/kitty-macos.conf;
   linuxConfig = builtins.readFile ./dotfiles/kitty-linux.conf;
   userName = config._userName;
@@ -70,9 +69,11 @@ in {
         "kitty/tab_bar.py".source = ./scripts/tab_bar.py;
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/diff.conf".source = "${inputs.dracula-kitty}/diff.conf";
+        "kitty/dracula.conf".source = "${inputs.dracula-kitty}/dracula.conf";
+        "kitty/common.conf".source = ./dotfiles/kitty-common.conf;
         "kitty/kitty.conf".text = ''
-          ${builtins.readFile "${inputs.dracula-kitty}/dracula.conf"}
-          ${commonConfig}
+          include ./dracula.conf
+          include ./common.conf
           ${if isDarwin then macosConfig else linuxConfig}
         '';
       };
