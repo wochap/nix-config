@@ -12,6 +12,11 @@ EXPIRE_TIME=5000
 
 main() {
   HEX_COLOR=$(gpick -pso --no-newline)
+
+  if [[ -z "$HEX_COLOR" ]]; then
+    exit 1
+  fi
+
   mkdir -p $TEMP_DIR
   HEX="${HEX_COLOR#\#}"
   FNAME="$TEMP_DIR/$HEX.png"
