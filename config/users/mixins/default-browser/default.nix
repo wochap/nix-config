@@ -36,14 +36,16 @@ in
       xdg.mimeApps = {
         defaultApplications = {
           "default-web-browser" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/chrome" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
           "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
+          "x-scheme-handler/unknown" = [ "http-url-handler.desktop" ];
         };
-        associations.added = {
-          "text/html" = [ "http-url-handler.desktop" ];
-          "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
-          "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
-        };
+        # associations.added = {
+        #   "text/html" = [ "http-url-handler.desktop" ];
+        #   "x-scheme-handler/http" = [ "http-url-handler.desktop" ];
+        #   "x-scheme-handler/https" = [ "http-url-handler.desktop" ];
+        # };
       };
     };
   };
