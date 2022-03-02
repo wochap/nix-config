@@ -13,7 +13,8 @@ case "$DPI" in
   WIDTH="700"
   MAX_ICON_SIZE="120"
   MIN_ICON_SIZE="120"
-  OFFSET="25"
+  OFFSET=32
+  BORDER_WIDTH=4
   ;;
 144)
   HEIGHT="225"
@@ -22,7 +23,8 @@ case "$DPI" in
   WIDTH="525"
   MAX_ICON_SIZE="90"
   MIN_ICON_SIZE="90"
-  OFFSET=25
+  OFFSET=24
+  BORDER_WIDTH=3
   ;;
 *)
   HEIGHT="150"
@@ -32,6 +34,7 @@ case "$DPI" in
   MAX_ICON_SIZE="60"
   MIN_ICON_SIZE="60"
   OFFSET=16
+  BORDER_WIDTH=2
   ;;
 esac
 
@@ -43,5 +46,7 @@ sed --follow-symlinks --in-place -E "/^width=/s/[0-9.]+/$WIDTH/" "$HOME/.config/
 sed --follow-symlinks --in-place -E "/^max_icon_size=/s/[0-9.]+/$MAX_ICON_SIZE/" "$HOME/.config/dunst/dunstrc"
 sed --follow-symlinks --in-place -E "/^min_icon_size=/s/[0-9.]+/$MIN_ICON_SIZE/" "$HOME/.config/dunst/dunstrc"
 sed --follow-symlinks --in-place -E "/^offset=/s/[0-9.]+/$OFFSET/g" "$HOME/.config/dunst/dunstrc"
+sed --follow-symlinks --in-place -E "/^frame_width=/s/[0-9.]+/$BORDER_WIDTH/" "$HOME/.config/dunst/dunstrc"
+sed --follow-symlinks --in-place -E "/^separator_height=/s/[0-9.]+/$BORDER_WIDTH/" "$HOME/.config/dunst/dunstrc"
 
 dunst &

@@ -7,6 +7,24 @@ nprimary=$(echo $primary | sed "s/#//")
 nbackground=$(echo $background | sed "s/#//")
 nselection=$(echo $selection | sed "s/#//")
 
+# Border sizes per dpi
+DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
+case "$DPI" in
+192)
+  border_hl_width="4"
+  border_nhl_width="36"
+  ;;
+144)
+  border_hl_width="3"
+  border_nhl_width="27"
+  ;;
+*)
+  border_hl_width="2"
+  border_nhl_width="18"
+  ;;
+esac
+border_width=$(echo "$border_nhl_width+$border_hl_width" | bc)
+
 bsp_windows() {
   case "${1:-active}" in
   active)
@@ -24,15 +42,16 @@ draw_border() {
   wm_class=$(xprop -id "$2" WM_CLASS | awk '{print $4}' | sed -e 's/^"//' -e 's/"$//')
   w_border_size=$(bspc config --node "$2" border_width)
 
+  # Update window border size one time
   case "$wm_class" in
-  Brave-browser | Google-chrome | Firefox)
-    if [[ $w_border_size -ne 2 ]]; then
-      bspc config --node "$2" border_width 2
+  Brave-browser | Google-chrome | Firefox | Zathura)
+    if [[ $w_border_size -ne $border_hl_width ]]; then
+      bspc config --node "$2" border_width "$border_hl_width"
     fi
     ;;
   *)
-    if [[ $w_border_size -ne 20 ]]; then
-      bspc config --node "$2" border_width 20
+    if [[ $w_border_size -ne $border_nhl_width ]]; then
+      bspc config --node "$2" border_width "$border_width"
     fi
     ;;
   esac
@@ -40,24 +59,40 @@ draw_border() {
   case "${1:-focused}" in
   focused)
     case "$wm_class" in
-    Brave-browser | Google-chrome | Firefox)
+    Brave-browser | Google-chrome | Firefox | Zathura)
       # HACK: don't use bspc to change colors, that would affect all windows
       # NOTE: updating border size with chwb will cause infinite recursion
       chwb -c "0xff$nprimary" "$2"
       ;;
     *)
-      chwbn -b 2 -c "0xff$nprimary" -b 18 -c "0xff$nbackground" "$2"
+      bg="$nbackground"
+
+      # case "$wm_class" in
+      # robo3t)
+      #   bg="EFEBE7"
+      #   ;;
+      # esac
+
+      chwbn -b "$border_hl_width" -c "0xff$nprimary" -b "$border_nhl_width" -c "0xff$bg" "$2"
       # chwbn -b 8 -c "0xff$nbackground" -b 2 -c "0xff$nprimary" -b 8 -c "0xff$nbackground" "$2"
       ;;
     esac
     ;;
   normal)
     case "$wm_class" in
-    Brave-browser | Google-chrome | Firefox)
+    Brave-browser | Google-chrome | Firefox | Zathura)
       chwb -c "0xff$nbackground" "$2"
       ;;
     *)
-      chwbn -b 2 -c "0xff$nselection" -b 18 -c "0xff$nbackground" "$2"
+      bg="$nbackground"
+
+      # case "$wm_class" in
+      # robo3t)
+      #   bg="EFEBE7"
+      #   ;;
+      # esac
+
+      chwbn -b "$border_hl_width" -c "0xff$nselection" -b "$border_nhl_width" -c "0xff$bg" "$2"
       # chwbn -b 8 -c "0xff$nbackground" -b 2 -c "0xff$nselection" -b 8 -c "0xff$nbackground" "$2"
       ;;
     esac
@@ -76,6 +111,7 @@ _chwb2() {
 }
 
 # HACK: hide flashing
+bspc config border_width "$border_width"
 bspc config focused_border_color "$background"
 bspc config normal_border_color "$background"
 

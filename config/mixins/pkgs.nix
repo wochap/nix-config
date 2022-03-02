@@ -98,7 +98,6 @@ in
       dmenu
       filelight # view disk usage
       gparted
-      imv
       pinta
       qbittorrent
       skypeforlinux

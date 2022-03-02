@@ -21,6 +21,7 @@ in {
     ./mixins/gpg.nix
     ./mixins/gtk.nix
     ./mixins/htop.nix
+    ./mixins/imv.nix
     ./mixins/kitty
     ./mixins/mangadesk
     ./mixins/mime-apps.nix
