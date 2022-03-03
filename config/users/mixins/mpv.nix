@@ -9,6 +9,12 @@ in {
     home-manager.users.${userName} = {
       home.sessionVariables = { VIDEO = "mpv"; };
 
+      home.packages = with pkgs;
+        [
+          subdl # cli to download subtitles
+          # python39Packages.subdownloader
+        ];
+
       xdg.configFile = {
         "mpv/scripts/mordenx.lua".source =
           "${inputs.mpv-osc-morden-x}/mordenx.lua";
