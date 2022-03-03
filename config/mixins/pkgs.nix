@@ -7,6 +7,7 @@ let
   ani-cli = pkgs.writeShellScriptBin "ani-cli" (builtins.readFile "${inputs.ani-cli}/ani-cli");
   mangaflix = pkgs.writeShellScriptBin "mangaflix" (builtins.readFile "${inputs.flix-tools}/ManganatoFlix/mangaflix");
   piratebayflix = pkgs.writeShellScriptBin "piratebayflix" (builtins.readFile "${inputs.flix-tools}/PirateBayFlix/piratebayflix");
+  fontpreview-ueberzug = pkgs.writeShellScriptBin "fontpreview-ueberzug" (builtins.readFile "${inputs.fontpreview-ueberzug}/fontpreview-ueberzug");
 in
 {
   config = {
@@ -86,6 +87,7 @@ in
       # APPS CLI
       ani-cli
       cbonsai
+      fontpreview-ueberzug
       piratebayflix
       speedread
       stripe-cli

@@ -587,6 +587,23 @@
         "type": "github"
       }
     },
+    "fontpreview-ueberzug": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1634709497,
+        "narHash": "sha256-NMK+1yjkgAO3LSzEEw0wBK8KcRw0vXOypgxyMLy5e9A=",
+        "owner": "OliverLew",
+        "repo": "fontpreview-ueberzug",
+        "rev": "77a094c0fa846badb16e50616aa2c3635867d76a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "OliverLew",
+        "repo": "fontpreview-ueberzug",
+        "rev": "77a094c0fa846badb16e50616aa2c3635867d76a",
+        "type": "github"
+      }
+    },
     "fzf-tab": {
       "flake": false,
       "locked": {
@@ -712,6 +729,23 @@
       "original": {
         "owner": "nmattia",
         "repo": "naersk",
+        "type": "github"
+      }
+    },
+    "ncmpcpp-ueberzug": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1596382682,
+        "narHash": "sha256-eqo+Zwb8qab2tNz7osaae3oxG0QDqU8XwdYoOYS3x5c=",
+        "owner": "tam-carre",
+        "repo": "ncmpcpp-ueberzug",
+        "rev": "9bd9121d9ba0ac49106b34f792c3445a07643a19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tam-carre",
+        "repo": "ncmpcpp-ueberzug",
+        "rev": "9bd9121d9ba0ac49106b34f792c3445a07643a19",
         "type": "github"
       }
     },
@@ -1322,10 +1356,12 @@
         "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",
         "electron-stable": "electron-stable",
         "flix-tools": "flix-tools",
+        "fontpreview-ueberzug": "fontpreview-ueberzug",
         "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
         "mpv-osc-morden-x": "mpv-osc-morden-x",
+        "ncmpcpp-ueberzug": "ncmpcpp-ueberzug",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-doom-emacs": "nix-doom-emacs",
         "nixos-hardware": "nixos-hardware",

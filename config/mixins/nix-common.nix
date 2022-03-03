@@ -1,7 +1,8 @@
 # Used by darwin|wayland|xorg config
 { config, pkgs, lib, ... }:
 
-{
+let theme = config._theme;
+in {
   # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
   # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
@@ -97,7 +98,16 @@
     time.timeZone = "America/Panama";
 
     environment = {
-      shellAliases = { ll = "ls -l"; };
+      shellAliases = {
+        ll = "ls -l";
+        ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"'';
+        yt =
+          "youtube-dl --extract-audio --add-metadata --xattrs --embed-thumbnail --audio-quality 0 --audio-format mp3";
+        ytv = ''
+          youtube-dl --merge-output-format mp4 -f "bestvideo+bestaudio[ext=m4a]/best" --embed-thumbnail --add-metadata'';
+        fp =
+          "fontpreview-ueberzug -b ${theme.background} -f ${theme.foreground}";
+      };
 
       # Links those paths from derivations to /run/current-system/sw
       pathsToLink = [ "/share" "/libexec" ];

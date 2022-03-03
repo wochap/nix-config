@@ -56,6 +56,10 @@
     fzf-tab.flake = false;
     nonicons.url = "github:yamatsum/nonicons?rev=6e4984bcb18e122a5f7588a482cb07f459b55a86";
     nonicons.flake = false;
+    ncmpcpp-ueberzug.url = "github:tam-carre/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";
+    ncmpcpp-ueberzug.flake = false;
+    fontpreview-ueberzug.url = "github:OliverLew/fontpreview-ueberzug?rev=77a094c0fa846badb16e50616aa2c3635867d76a";
+    fontpreview-ueberzug.flake = false;
   };
 
   outputs = inputs:
