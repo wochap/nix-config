@@ -1,23 +1,37 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
+  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  configDirectory = config._configDirectory;
+  currentDirectory = "${configDirectory}/config/users/mixins/music";
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
 in {
   config = {
-
     home-manager.users.${userName} = {
-      home.packages = with pkgs;
-        [
-          playerctl # media player cli
-        ];
+      home.packages = with pkgs; [
+        mpc_cli
+        ncmpcpp
+        ueberzug
+        sacad
+        playerctl # media player cli
+      ];
 
-      # music cli
-      programs.ncmpcpp = {
-        enable = true;
-        mpdMusicDir = musicDirectory;
-        # settings = {};
+      xdg.configFile = {
+        # ncmpcpp config
+        "ncmpcpp/config".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/ncmpcpp/config";
+        "ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh" = {
+          recursive = true;
+          executable = true;
+          source = ./dotfiles/ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh;
+        };
+        "ncmpcpp/ncmpcpp-ueberzug/ncmpcpp-ueberzug" = {
+          recursive = true;
+          executable = true;
+          source = ./dotfiles/ncmpcpp/ncmpcpp-ueberzug/ncmpcpp-ueberzug.sh;
+        };
       };
 
       # media keys
@@ -45,7 +59,7 @@ in {
       services.mpdris2 = {
         enable = true;
         multimediaKeys = true;
-        notifications = true;
+        notifications = false;
       };
     };
   };
