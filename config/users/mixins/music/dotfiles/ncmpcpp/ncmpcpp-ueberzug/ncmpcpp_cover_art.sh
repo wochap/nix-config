@@ -2,18 +2,19 @@
 # Cover art script for ncmpcpp-ueberzug
 
 # SETTINGS
+fallback_image="$HOME/.config/ncmpcpp/ncmpcpp-ueberzug/fallback.jpg"
 music_library="$HOME/Music"
-padding_top=4
-padding_bottom=-1
+padding_top=0
+padding_bottom=0
 padding_right=0
-max_width=31
-reserved_playlist_cols=31
+max_width=20
+reserved_playlist_cols=30
 reserved_cols_in_percent="false"
 force_square="true"
 
-square_alignment="top"
+square_alignment="center"
 
-left_aligned="true"
+left_aligned="false"
 padding_left=0
 
 # Only set this if the geometries are wrong or ncmpcpp shouts at you to do it.

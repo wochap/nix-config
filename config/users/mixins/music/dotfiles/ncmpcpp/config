@@ -1,4 +1,5 @@
-execute_on_song_change="~/.config/ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh"
+# Artwork
+# execute_on_song_change="~/.config/ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh"
 
 # Files
 mpd_music_dir = "~/Music"
@@ -9,45 +10,32 @@ mpd_port = "6600"
 mpd_connection_timeout = "5"
 mpd_crossfade_time = "5"
 
-# Playlist
-playlist_disable_highlight_delay = "0"
-playlist_display_mode = "columns"
-playlist_show_remaining_time = "yes"
-
-browser_display_mode = "columns"
-autocenter_mode = "yes"
-# fancy_scrolling = "yes"
-follow_now_playing_lyrics = "yes"
-# display_screens_numbers_on_start = "yes"
-ignore_leading_the = "yes"
-# lyrics_database = "1"
-song_columns_list_format = "(10)[blue]{l} (30)[green]{a} (30)[magenta]{b} (50)[yellow]{t}"
-colors_enabled = "yes"
-main_window_color = "white"
-# main_window_highlight_color =  "blue"
-header_window_color = "cyan"
-volume_color = "red"
-statusbar_color = "white"
-# active_column_color = "cyan"
-active_window_border = "blue"
-progressbar_color = "black"
-progressbar_elapsed_color = "red"
-
+# Display
 alternative_header_first_line_format = "$0$aqqu$/a {$7%a - $9}{$5%t$9}|{$8%f$9} $0$atqq$/a$9"
 alternative_header_second_line_format = "{{$6%b$9}{ [$6%y$9]}}|{%D}"
-song_list_format = "{$3%n $9}{$7%a - $9}{$5%t$9}|{$8%f$9}$R{$6  %b$9}{$3 │ %l$9}"
+now_playing_prefix = "$b$2> "
+now_playing_suffix = "$8$/b"
+song_columns_list_format = "(3)[]{}(92)[white]{t} (4)[red]{l}"
+song_list_format = "$3%n $1• $8%y $1• $5%b $8%t $R$0%A $1• $2%l"
+song_status_format = "$b $8%a $8•$3• $3%t $3•$5• $5%b $5•$2• $2%y"
 user_interface = "alternative"
-default_place_to_search_in = "database"
 
+# Playlist
+browser_playlist_prefix = "$2 ♥ $0 "
+playlist_disable_highlight_delay = "1"
+playlist_display_mode = "classic"
+playlist_show_remaining_time = "yes"
 
-# visualizer
-#visualizer_fifo_path = "/tmp/mpd.fifo"
-visualizer_output_name = "my_fifo"
-#visualizer_sync_interval = "12"
-#
-visualizer_type = "wave" (spectrum/wave)
-#visualizer_type = "spectrum" (spectrum/wave)
-visualizer_in_stereo = "yes"
+# Theme
+browser_display_mode = "columns"
+colors_enabled = "yes"
+header_window_color = "cyan"
+main_window_color = "white"
+progressbar_color = "black"
+progressbar_elapsed_color = "blue"
+progressbar_look =  "━━━"
+statusbar_color = "white"
+volume_color = "red"
 
 ## Navigation ##
 cyclic_scrolling = "yes"
@@ -55,13 +43,9 @@ header_text_scrolling = "yes"
 jump_to_now_playing_song_at_start = "yes"
 lines_scrolled = "2"
 
-## Other ##
-system_encoding = "utf-8"
-regular_expressions = "extended"
-
 ## Selected tracks ##
+discard_colors_if_item_is_selected = "yes"
 selected_item_prefix = "* "
-discard_colors_if_item_is_selected = "no"
 
 ## Seeking ##
 incremental_seeking = "yes"
@@ -72,28 +56,21 @@ header_visibility = "no"
 statusbar_visibility = "yes"
 titles_visibility = "yes"
 
-
-progressbar_look =  "━━━"
-
-
-now_playing_prefix = "󰮯 "
-song_status_format = " $2%a $4⟫$3⟫ $8%t $4⟫$3⟫ $5%b "
-# autocenter_mode = "yes"
-centered_cursor = "yes"
-
 # Misc
+centered_cursor = "yes"
+connected_message_on_startup = "no"
 display_bitrate = "no"
+empty_tag_marker = "-"
 enable_window_title = "no"
+ignore_leading_the = "yes"
+
+## Other ##
+regular_expressions = "extended"
+system_encoding = "utf-8"
+default_place_to_search_in = "database"
+
+# Lyrics
 # follow_now_playing_lyrics = "yes"
-# ignore_leading_the = "yes"
-empty_tag_marker = ""
-
-
-visualizer_look = "  "
-#visualizer_look = "▌▌"
-
-# startup_screen = visualizer
-startup_slave_screen = playlist
-startup_slave_screen_focus = yes
-locked_screen_width_part = 31
+# lyrics_database = "1"
+# follow_now_playing_lyrics = "yes"
 
