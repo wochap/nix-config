@@ -132,6 +132,7 @@ in
       })
     ] else [
       # Electron apps
+      unstable.notion-app-enhanced
       bitwarden
       brave
       insomnia
