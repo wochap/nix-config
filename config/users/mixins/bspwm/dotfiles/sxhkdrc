@@ -253,6 +253,10 @@ super + alt + e
 super + alt + k ; r
   /etc/scripts/bspwm_toggle_visibility.sh kitty-newsboat '/etc/scripts/kitty-newsboat.sh'
 
+# Open ncmpcpp
+super + alt + k ; m
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-ncmpcpp '/etc/scripts/kitty-ncmpcpp.sh'
+
 super + ctrl + n
   dunstctl history-pop
 

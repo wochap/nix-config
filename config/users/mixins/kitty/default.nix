@@ -57,6 +57,10 @@ in {
           source = ./scripts/kitty-scratch.sh;
           mode = "0755";
         };
+        "scripts/kitty-ncmpcpp.sh" = {
+          source = ./scripts/kitty-ncmpcpp.sh;
+          mode = "0755";
+        };
       };
       systemPackages = with pkgs;
         [

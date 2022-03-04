@@ -62,6 +62,7 @@ bspc rule -a 'kitty-neorg' state=floating sticky=on center=on border=on rectangl
 bspc rule -a 'kitty-nmtui' state=floating sticky=on center=on border=on rectangle=750x1200+0+0
 bspc rule -a 'kitty-neomutt' state=floating sticky=on center=on border=on rectangle=1500x1200+0+0
 bspc rule -a 'kitty-newsboat' state=floating sticky=on center=on border=on rectangle=1500x1200+0+0
+bspc rule -a 'kitty-ncmpcpp' state=floating sticky=on center=on border=on rectangle=1500x1200+0+0
 
 #### BSPWM workspaces ####
 for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
