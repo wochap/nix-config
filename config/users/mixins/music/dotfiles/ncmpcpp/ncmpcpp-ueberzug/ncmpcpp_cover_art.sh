@@ -4,15 +4,15 @@
 # SETTINGS
 fallback_image="$HOME/.config/ncmpcpp/ncmpcpp-ueberzug/fallback.jpg"
 music_library="$HOME/Music"
-padding_top=0
-padding_bottom=0
+padding_top=3
+padding_bottom=2
 padding_right=0
-max_width=20
-reserved_playlist_cols=30
+max_width=30
+reserved_playlist_cols=0
 reserved_cols_in_percent="false"
-force_square="true"
+force_square="false"
 
-square_alignment="center"
+square_alignment="top"
 
 left_aligned="false"
 padding_left=0
