@@ -110,9 +110,9 @@ local osc_param = { -- calculated by osc_init()
 }
 
 local osc_styles = {
-    TransBg = '{\\blur100\\bord150\\1c&H000000&\\3c&H000000&}',
+    TransBg = '{\\blur100\\bord150\\1c&H362A28&\\3c&H362A28&}',
     SeekbarBg = '{\\blur0\\bord0\\1c&HFFFFFF&}',
-    SeekbarFg = '{\\blur1\\bord1\\1c&HE39C42&}',
+    SeekbarFg = '{\\blur1\\bord1\\1c&HF993BD&}',
     Ctrl1 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs36\\fnmaterial-design-iconic-font}',
     Ctrl2 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs24\\fnmaterial-design-iconic-font}',
     Ctrl2Flip = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs24\\fnmaterial-design-iconic-font\\fry180',

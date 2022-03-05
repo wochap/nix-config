@@ -16,8 +16,7 @@ in {
         ];
 
       xdg.configFile = {
-        "mpv/scripts/mordenx.lua".source =
-          "${inputs.mpv-osc-morden-x}/mordenx.lua";
+        "mpv/scripts/mordenx.lua".source = ./dotfiles/mordenx.lua;
         "mpv/fonts/Material-Design-Iconic-Font.ttf".source =
           "${inputs.mpv-osc-morden-x}/Material-Design-Iconic-Font.ttf";
         "mpv/script-opts/osc.conf".text = ''
