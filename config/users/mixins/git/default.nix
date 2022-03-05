@@ -27,12 +27,38 @@ in {
           ci = "commit";
           st = "status";
         };
+
+        delta = {
+          enable = true;
+          options = {
+            features = "side-by-side line-numbers decorations";
+            syntax-theme = "Dracula";
+            plus-style = ''syntax "#003800"'';
+            minus-style = ''syntax "#3f0001"'';
+            navigate = true;
+            decorations = {
+              commit-decoration-style = "bold yellow box ul";
+              file-style = "bold yellow ul";
+              file-decoration-style = "none";
+              hunk-header-decoration-style = "cyan box ul";
+            };
+            line-numbers = {
+              line-numbers-left-style = "cyan";
+              line-numbers-right-style = "cyan";
+              line-numbers-minus-style = "124";
+              line-numbers-plus-style = "28";
+            };
+          };
+        };
+
         extraConfig = {
+          diff = { colorMoved = "default"; };
           color.ui = "auto";
-          core.editor = "vim";
           pull.rebase = "false";
           init = { defaultBranch = "main"; };
+          merge = { conflictstyle = "diff3"; };
         };
+        # includes = [{ path = ./dotfiles/gitconfig.dracula; }];
       };
     };
   };
