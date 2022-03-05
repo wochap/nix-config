@@ -15,6 +15,18 @@ in {
     home-manager.users.${userName} = {
       home.packages = with pkgs; [ commitizen ];
 
+      programs.lazygit = {
+        enable = true;
+        settings = {
+          gui = { showFileTree = false; };
+          git.paging = {
+            colorArg = "always";
+            pager = "delta --dark --paging=never";
+            # useConfig = true;
+          };
+        };
+      };
+
       # TODO: setup gh signature verification
       # Generates ~/.gitconfig
       programs.git = {

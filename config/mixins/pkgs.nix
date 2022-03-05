@@ -38,6 +38,7 @@ in
       inxi # check compositor running
       jq # JSON
       killall
+      libpwquality # pwscore
       libva-utils # verifying VA-API
       lsof # print port process
       manpages

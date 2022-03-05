@@ -69,6 +69,18 @@ in
             };
           }
         );
+
+        lazygit = super.lazygit.overrideAttrs (
+          _: {
+            src = super.fetchFromGitHub {
+              owner = "jesseduffield";
+              repo = "lazygit";
+              rev = "v0.31.4";
+              sha256 = "sha256-yze4UaSEbyHwHSyj0mM7uCzaDED+p4O3HVVlHJi/FKU=";
+            };
+          }
+        );
+
       })
     ] ++ (if (isWayland) then [
       (final: prev: {
