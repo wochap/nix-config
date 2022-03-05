@@ -10,7 +10,7 @@ EXPIRE_TIME=5000
 notify_user() {
   if [[ -e "$dir/$file" ]]; then
     copy_to_cb
-    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dir/$file" "Screen shooter" "Screenshot Saved" --action "default,Edit")
+    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dir/$file" "Screen shooter" "Screenshot Saved" --action "default,Edit" --action "open,Open")
   else
     exit 1
     # dunstify -t "$EXPIRE_TIME" --replace=699 -i "org.xfce.screenshooter" "Screen shooter" "Screenshot Aborted."
@@ -18,6 +18,8 @@ notify_user() {
 
   if [[ $action == "default" ]]; then
     pinta "${dir}/$file" &
+  elif [[ $action == "open" ]]; then
+    xdg-open "${dir}/$file" &
   fi
 }
 
