@@ -25,7 +25,7 @@ in {
     ./mixins/kitty
     ./mixins/mangadesk
     ./mixins/mime-apps.nix
-    ./mixins/mpv.nix
+    ./mixins/mpv
     ./mixins/music
     ./mixins/neofetch
     ./mixins/newsboat
