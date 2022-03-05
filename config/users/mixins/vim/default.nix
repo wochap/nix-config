@@ -15,7 +15,10 @@ let
 in {
   config = {
     environment = {
-      variables = { EDITOR = "nvim"; };
+      variables = {
+        VISUAL = "nvim";
+        EDITOR = "nvim";
+      };
 
       systemPackages = with pkgs;
         [
@@ -23,8 +26,9 @@ in {
           # neovim-qt # better fractional scaling support
           # uivonim
 
-          # neovim # TODO: passextraMakeWrapperArgs?
+          # TODO: passextraMakeWrapperArgs?
           neovim-nightly
+          neovim-remote
 
           # required by treesitter
           tree-sitter

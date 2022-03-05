@@ -66,3 +66,15 @@ setopt APPEND_HISTORY
 #   nix "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query="
 # )
 ZSH_WEB_SEARCH_ENGINES=(reddit "https://www.reddit.com/search/?q=")
+
+# Prevent nested nvim in nvim terminal
+if [[ -n "$NVIM_LISTEN_ADDRESS" ]]
+then
+  if [[ -x "$(command -v nvr)" ]]
+  then
+    alias nvim=nvr
+  else
+    alias nvim='echo "No nesting!"'
+  fi
+fi
+
