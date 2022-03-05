@@ -16,12 +16,12 @@ in {
         ];
 
       xdg.configFile = {
-        "mpv/scripts/mordenx.lua".source = ./dotfiles/mordenx.lua;
-        "mpv/fonts/Material-Design-Iconic-Font.ttf".source =
-          "${inputs.mpv-osc-morden-x}/Material-Design-Iconic-Font.ttf";
         "mpv/script-opts/osc.conf".text = ''
           windowcontrols=no
         '';
+        "mpv/scripts/mordenx.lua".source = ./dotfiles/mordenx.lua;
+        "mpv/fonts/Material-Design-Iconic-Font.ttf".source =
+          "${inputs.mpv-osc-morden-x}/Material-Design-Iconic-Font.ttf";
       };
 
       programs.mpv = {
@@ -36,7 +36,7 @@ in {
           hwdec = "vaapi";
           hwdec-codecs = "all";
           keep-open = true;
-          osd-font = "JetBrainsMono";
+          osd-font = "Iosevka Nerd Font";
           pause = true;
           video-sync = "display-resample";
           vo = "gpu";
