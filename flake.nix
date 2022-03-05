@@ -60,6 +60,8 @@
     ncmpcpp-ueberzug.flake = false;
     fontpreview-ueberzug.url = "github:OliverLew/fontpreview-ueberzug?rev=77a094c0fa846badb16e50616aa2c3635867d76a";
     fontpreview-ueberzug.flake = false;
+    dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
+    dracula-betterdiscord.flake = false;
   };
 
   outputs = inputs:

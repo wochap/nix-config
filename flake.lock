@@ -140,6 +140,23 @@
         "type": "github"
       }
     },
+    "dracula-betterdiscord": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1646106958,
+        "narHash": "sha256-rj0aDBEqKeefzs+m4ajKCb6W2SKbunBXRI6hAAnG2W0=",
+        "owner": "dracula",
+        "repo": "betterdiscord",
+        "rev": "835bc3a15aba03ae10248d6a06ea8704e9cd4382",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "betterdiscord",
+        "rev": "835bc3a15aba03ae10248d6a06ea8704e9cd4382",
+        "type": "github"
+      }
+    },
     "dracula-discord": {
       "flake": false,
       "locked": {
@@ -1346,6 +1363,7 @@
         "ani-cli": "ani-cli",
         "darwin": "darwin",
         "dracula-amfora": "dracula-amfora",
+        "dracula-betterdiscord": "dracula-betterdiscord",
         "dracula-discord": "dracula-discord",
         "dracula-gtk-theme": "dracula-gtk-theme",
         "dracula-icons-theme": "dracula-icons-theme",
