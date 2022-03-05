@@ -1,13 +1,11 @@
 { config, pkgs, ... }:
 
-let
-  userName = config._userName;
-in
-{
+let userName = config._userName;
+in {
   config = {
     environment = {
       shellAliases = {
-        gs= "git status";
+        gs = "git status";
         gc = "git clone";
         glo = "git pull origin";
         gpo = "git push origin";
@@ -15,6 +13,8 @@ in
     };
 
     home-manager.users.${userName} = {
+      home.packages = with pkgs; [ commitizen ];
+
       # TODO: setup gh signature verification
       # Generates ~/.gitconfig
       programs.git = {
@@ -31,9 +31,7 @@ in
           color.ui = "auto";
           core.editor = "vim";
           pull.rebase = "false";
-          init = {
-            defaultBranch = "main";
-          };
+          init = { defaultBranch = "main"; };
         };
       };
     };
