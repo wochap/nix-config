@@ -73,6 +73,7 @@ draw_border() {
       #   ;;
       # esac
 
+      # chwbn -b "$border_hl_width" -c "0xff$nprimary" -b "$border_hl_width" -c "0xff$bg" -b "$border_hl_width" -c "0xff$nprimary" -b 21 -c "0xff$bg" "$2"
       chwbn -b "$border_hl_width" -c "0xff$nprimary" -b "$border_nhl_width" -c "0xff$bg" "$2"
       # chwbn -b 8 -c "0xff$nbackground" -b 2 -c "0xff$nprimary" -b 8 -c "0xff$nbackground" "$2"
       ;;
@@ -92,6 +93,7 @@ draw_border() {
       #   ;;
       # esac
 
+      # chwbn -b "$border_hl_width" -c "0xff$nselection" -b "$border_hl_width" -c "0xff$bg" -b "$border_hl_width" -c "0xff$nselection" -b 21 -c "0xff$bg" "$2"
       chwbn -b "$border_hl_width" -c "0xff$nselection" -b "$border_nhl_width" -c "0xff$bg" "$2"
       # chwbn -b 8 -c "0xff$nbackground" -b 2 -c "0xff$nselection" -b 8 -c "0xff$nbackground" "$2"
       ;;
