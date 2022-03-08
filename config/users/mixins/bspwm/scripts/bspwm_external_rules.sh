@@ -38,6 +38,9 @@ case "$(xprop -id "$wid" _NET_WM_WINDOW_TYPE)" in
 esac
 
 case "$(xprop -id "$wid" _NET_WM_STATE)" in
+*_NET_WM_STATE_MODAL*)
+  echo state=floating center=true
+  ;;
 *_NET_WM_STATE_STICKY*)
   echo state=floating center=true sticky=on
   ;;
