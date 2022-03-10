@@ -7,7 +7,9 @@ in
 {
   imports = [
     ./mixins/alacritty
+    # ./mixins/amfora
     ./mixins/bat.nix
+    ./mixins/fonts
     ./mixins/git.nix
     ./mixins/kitty
     ./mixins/nix-common

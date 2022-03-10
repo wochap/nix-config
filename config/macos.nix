@@ -3,7 +3,6 @@
 {
   imports = [
     ./mixins/darwin.nix
-    ./mixins/fonts.nix
     ./mixins/lorri
     ./mixins/nix-common.nix
     ./mixins/overlays.nix
