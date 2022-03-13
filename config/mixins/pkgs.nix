@@ -49,7 +49,6 @@ in
       mpd_clientlib # mpd module
       ngrok # expose web server
       nix-prefetch-git # get fetchgit hashes
-      nodePackages.node2nix
       notify-desktop # test notifications
       openssl
       pciutils # lspci and others commands
@@ -96,7 +95,6 @@ in
       speedread
       stripe-cli
       # mangaflix
-      # unstable.nodePackages_latest.webtorrent-cli
       # dogecoin
 
       # APPS

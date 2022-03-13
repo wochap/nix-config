@@ -1,5 +1,5 @@
-#!/usr/bin/env cached-nix-shell
-#! nix-shell -i python3 -p "python3.withPackages(ps: with ps; [ html2text pytz icalendar ])"
+#!/usr/bin/env python
+
 
 import sys
 

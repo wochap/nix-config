@@ -1,5 +1,4 @@
-#!/usr/bin/env cached-nix-shell
-#! nix-shell -i python3 -p "python3.withPackages(ps: with ps; [ pulsectl ])"
+#!/usr/bin/env python
 
 from pulsectl import Pulse, PulseLoopStop
 import sys
