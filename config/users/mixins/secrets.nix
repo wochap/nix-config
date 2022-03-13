@@ -8,7 +8,9 @@ let
 in {
   config = {
     home-manager.users.${userName} = {
-      home.symlinks.".config/secrets" = "${configDirectory}/secrets";
+      xdg.configFile = {
+        "secrets".source = mkOutOfStoreSymlink "${configDirectory}/secrets";
+      };
     };
   };
 }
