@@ -9,11 +9,7 @@ in {
   config = {
     environment.systemPackages = with pkgs; [ capitaine-cursors ];
 
-    # Required by pinentry-gnome3
-    services.dbus = {
-      enable = true;
-      packages = [ pkgs.gcr ];
-    };
+    services.dbus = { enable = true; };
 
     home-manager.users.${userName} = {
       # TODO: move out
