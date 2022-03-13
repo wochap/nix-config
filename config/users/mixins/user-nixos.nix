@@ -13,7 +13,6 @@ in
         "adbusers"
         "audio"
         "disk"
-        "docker"
         "input"
         "networkmanager"
         "storage"
