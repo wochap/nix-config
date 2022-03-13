@@ -18,6 +18,7 @@ in {
       programs.lazygit = {
         enable = true;
         settings = {
+          os = { openCommand = "xdg-open {{filename}} >/dev/null"; };
           gui = { showFileTree = false; };
           git.paging = {
             colorArg = "always";
@@ -31,8 +32,7 @@ in {
       programs.git = {
         package = pkgs.gitAndTools.gitFull;
         enable = true;
-        userName = "wochap";
-        userEmail = "gean.marroquin@gmail.com";
+
         aliases = {
           co = "checkout";
           ci = "commit";
@@ -68,8 +68,30 @@ in {
           pull.rebase = "false";
           init = { defaultBranch = "main"; };
           merge = { conflictstyle = "diff3"; };
+
+          user = {
+            email = "gean.marroquin@gmail.com";
+            name = "wochap";
+            signingKey = "gean.marroquin@gmail.com";
+          };
+          commit = { gpgSign = true; };
         };
-        # includes = [{ path = ./dotfiles/gitconfig.dracula; }];
+        includes = [
+          # { path = ./dotfiles/gitconfig.dracula; }
+
+          {
+            condition = "gitdir:~/Projects/boc/**/.git";
+            contents = {
+              user = {
+                email = "geanb@bandofcoders.com";
+                name = "Gean";
+                signingKey = "geanb@bandofcoders.com";
+              };
+              commit = { gpgSign = true; };
+            };
+          }
+        ];
+
       };
     };
   };
