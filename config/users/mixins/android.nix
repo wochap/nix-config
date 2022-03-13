@@ -2,15 +2,11 @@
 
 let
   userName = config._userName;
+  hmConfig = config.home-manager.users.${userName};
   phoneId = "04e8";
-  android-repo = builtins.fetchTarball {
-    url =
-      "https://github.com/tadfisher/android-nixpkgs/archive/14306de794ed518c548d20c9c16dbe12a305b9e6.tar.gz";
-    sha256 = "10rvcm8yhz0c4y5hr3di5i5bbhjclb63r77sm1bdhg67ri9zzj4j";
-  };
-  android-pkgs = (import "${android-repo}/default.nix") { channel = "stable"; };
-  android-hm = (import "${android-repo}/hm-module.nix");
-  finalPackage = android-pkgs.sdk (sdk:
+  path = "Android/Sdk";
+
+  androidSdkPkg = pkgs.androidSdk (sdk:
     with sdk; [
       # Required by react-native/flutter
       build-tools-29-0-2
@@ -28,9 +24,10 @@ let
       system-images-android-30-google-apis-playstore-x86
       system-images-android-30-google-apis-x86
     ]);
-  path = "Android/Sdk";
 in {
   config = {
+    nixpkgs.overlays = [ inputs.android-nixpkgs.overlay ];
+
     programs.adb.enable = true;
 
     services.udev.extraRules = ''
@@ -45,24 +42,29 @@ in {
 
         # Fix react native aapt2 errors
         GRADLE_OPTS =
-          "-Dorg.gradle.project.android.aapt2FromMavenOverride=${finalPackage}/share/android-sdk/build-tools/30.0.3/aapt2";
+          "-Dorg.gradle.project.android.aapt2FromMavenOverride=${androidSdkPkg}/share/android-sdk/build-tools/30.0.3/aapt2";
       };
     };
 
     home-manager.users.${userName} = {
-      imports = [ android-hm ];
+      # imports = [ android-hm ];
+      imports = [ inputs.android-nixpkgs.hmModule ];
 
-      # TODO: use android hm options
-      # Fine, I'll do it myself
-      android-sdk.enable = false;
-      android-sdk.finalPackage = finalPackage;
-      home = {
-        file.${path}.source = "${finalPackage}/share/android-sdk";
-        packages = [ finalPackage ];
-        sessionVariables = {
-          ANDROID_HOME = "/home/${userName}/${path}";
-          ANDROID_SDK_ROOT = "/home/${userName}/${path}";
+      config = {
+        # TODO: use android hm options?
+        android-sdk.enable = false;
+
+        # Fine, I'll do it myself
+        home = {
+          file.${path}.source = "${androidSdkPkg}/share/android-sdk";
+          packages = [ androidSdkPkg ];
+
+          sessionVariables = {
+            ANDROID_HOME = "/home/${userName}/${path}";
+            ANDROID_SDK_ROOT = "/home/${userName}/${path}";
+          };
         };
+
       };
     };
   };
