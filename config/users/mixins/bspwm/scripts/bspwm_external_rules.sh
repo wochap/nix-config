@@ -3,7 +3,7 @@
 wid="$1"
 class="$2"
 instance=$(echo "${3}" | xargs)
-# title=$(xtitle "$wid")
+title=$(xtitle "$wid")
 
 # Debug
 # echo "$wid $class $instance" > /tmp/bspc-external-rules
@@ -43,5 +43,11 @@ case "$(xprop -id "$wid" _NET_WM_STATE)" in
   ;;
 *_NET_WM_STATE_STICKY*)
   echo state=floating center=true sticky=on
+  ;;
+esac
+
+case "$title" in
+*Emulator*)
+  echo state=floating
   ;;
 esac
