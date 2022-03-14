@@ -65,6 +65,7 @@ in
       wget
       wirelesstools
       zip
+      watchman # required by react native
       # base-devel
       # busybox # a lot of commands but with less options/features
       # procps

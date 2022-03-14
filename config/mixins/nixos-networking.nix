@@ -19,6 +19,7 @@
         allowedTCPPortRanges = [
           { from = 8080; to = 8090; }
           { from = 3000; to = 3010; }
+          { from = 19000; to = 19020; }
         ];
         allowedTCPPorts = [
           # 20 # FTP (File Transfer Protocol)
@@ -33,6 +34,11 @@
           3333
           4444
           8000
+
+          4000
+          9099
+          5000
+          5001
         ];
       };
     };
