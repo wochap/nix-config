@@ -6,6 +6,7 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
+  draculaTheme = import ../../config/mixins/dracula.nix;
 in
 {
   imports = [
@@ -16,6 +17,7 @@ in
     _userName = userName;
     _homeDirectory = "/Users/${userName}";
     _configDirectory = configDirectory;
+    _theme = draculaTheme;
 
     # Used for backwards compatibility, please read the changelog before changing.
     # $ darwin-rebuild changelog

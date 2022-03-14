@@ -10,7 +10,7 @@ in
     # ./mixins/amfora
     ./mixins/bat.nix
     ./mixins/fonts
-    ./mixins/git.nix
+    ./mixins/git
     ./mixins/kitty
     ./mixins/nix-common
     ./mixins/nnn
@@ -24,8 +24,9 @@ in
   ];
 
   config = {
+    nix.gc.user = userName;
+
     home-manager.users.${userName} = {
-      nix.gc.user = userName;
 
       # Add config files to home folder
       home.file = {
