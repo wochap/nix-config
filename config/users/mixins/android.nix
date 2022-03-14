@@ -1,75 +1,72 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, system, ... }:
 
 let
-  userName = config._userName;
-  phoneId = "04e8";
-  android-repo = builtins.fetchTarball {
-    url = https://github.com/tadfisher/android-nixpkgs/archive/14306de794ed518c548d20c9c16dbe12a305b9e6.tar.gz;
-    sha256 = "10rvcm8yhz0c4y5hr3di5i5bbhjclb63r77sm1bdhg67ri9zzj4j";
-  };
-  android-pkgs = (import "${android-repo}/default.nix") {
-    channel = "stable";
-  };
-  android-hm = (import "${android-repo}/hm-module.nix");
-  finalPackage = android-pkgs.sdk (sdk: with sdk; [
-    # Required by react-native/flutter
-    build-tools-29-0-2
-    build-tools-30-0-3
+userName = config._userName;
+hmConfig = config.home-manager.users.${userName};
+
+android-sdk-home-path = "Android/Sdk";
+phoneId = "04e8";
+
+android-studio-stable = pkgs.androidStudioPackages.stable;
+android-sdk = inputs.android-nixpkgs.sdk.${system} (sdkPkgs:
+    with sdkPkgs; [
     cmdline-tools-latest
     emulator
     platform-tools
-    platforms-android-29
 
-    # Required to create emulator
-    build-tools-31-0-0
+# Android 30
+    build-tools-30-0-2
     platforms-android-30
-    platforms-android-31
+
+# Required by android emulator
     sources-android-30
     system-images-android-30-google-apis-playstore-x86
     system-images-android-30-google-apis-x86
-  ]);
-  path = "Android/Sdk";
-in
-{
-  config = {
-    programs.adb.enable = true;
 
-    services.udev.extraRules = ''
-      SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", GROUP="plugdev"
-    '';
+# Android 29
+# build-tools-29-0-3
+# platforms-android-29
+# sources-android-29
+# system-images-android-29-google-apis-playstore-x86-64
+# system-images-android-29-google-apis-x86-64
+    ]);
+    in {
+      config = {
+# Enable android device debugging
+        programs.adb.enable = true;
+        services.udev.extraRules = ''
+          SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", GROUP="plugdev"
+          '';
 
-    environment = {
-      systemPackages = with pkgs; [
-        jdk8
-        jdk11
-        android-studio
-      ];
-      sessionVariables = {
-        # TODO: use android-studio jre path?
-        JAVA_HOME = pkgs.jdk11.home;
+        home-manager.users.${userName} = {
+          config = {
+            home = {
+              file.${android-sdk-home-path}.source =
+                "${android-sdk}/share/android-sdk";
 
-        # Fix react native aapt2 errors
-        GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${finalPackage}/share/android-sdk/build-tools/30.0.3/aapt2";
-      };
-    };
+              packages = with pkgs; [
+                android-sdk
+                  android-studio-stable
+                  gradle
+                  jdk11
+              ];
 
-    home-manager.users.${userName} = {
-      imports = [
-        android-hm
-      ];
+              sessionVariables = {
+# Required by android-studio on wm
+                _JAVA_AWT_WM_NONREPARENTING = "1";
 
-      # TODO: use android hm options
-      # Fine, I'll do it myself
-      android-sdk.enable = false;
-      android-sdk.finalPackage = finalPackage;
-      home = {
-        file.${path}.source = "${finalPackage}/share/android-sdk";
-        packages = [ finalPackage ];
-        sessionVariables = {
-          ANDROID_HOME = "/home/${userName}/${path}";
-          ANDROID_SDK_ROOT = "/home/${userName}/${path}";
+                JAVA_HOME = pkgs.jdk11.home;
+                ANDROID_HOME = "/home/${userName}/${android-sdk-home-path}";
+                ANDROID_SDK_ROOT = "/home/${userName}/${android-sdk-home-path}";
+
+# Fix react-native aapt2 errors
+                GRADLE_OPTS =
+                  "-Dorg.gradle.project.android.aapt2FromMavenOverride=${android-sdk}/share/android-sdk/build-tools/30.0.2/aapt2";
+              };
+            };
+
+          };
         };
       };
-    };
-  };
-}
+    }
+

@@ -19,8 +19,23 @@ in
 
       inputs.neovim-nightly-overlay.overlay
 
-      (self: super: {
-        wmutils-core = super.wmutils-core.overrideAttrs (
+      (final: prev: {
+
+        # Custom channels
+        unstable = import inputs.unstable {
+          system = prev.system;
+          config = config.nixpkgs.config;
+        };
+        electron-stable = import inputs.electron-stable {
+          system = prev.system;
+          config = config.nixpkgs.config;
+        };
+        prevstable = import inputs.prevstable {
+          system = prev.system;
+          config = config.nixpkgs.config;
+        };
+
+        wmutils-core = prev.wmutils-core.overrideAttrs (
           _: {
             src = pkgs.fetchFromGitHub {
               owner = "wmutils";
@@ -31,15 +46,15 @@ in
           }
         );
 
-        dracula-theme = super.dracula-theme.overrideAttrs (
+        dracula-theme = prev.dracula-theme.overrideAttrs (
           _: {
             src = inputs.dracula-gtk-theme;
           }
         );
 
-        orchis = super.orchis.overrideAttrs (
+        orchis = prev.orchis.overrideAttrs (
           _: {
-            src = super.fetchFromGitHub {
+            src = prev.fetchFromGitHub {
               repo = "Orchis-theme";
               owner = "vinceliuice";
               rev = "a0190354f93b4acbdb8636aef83d35a9dea8e0e8";
@@ -48,9 +63,9 @@ in
           }
         );
 
-        tela-icon-theme = super.tela-icon-theme.overrideAttrs (
+        tela-icon-theme = prev.tela-icon-theme.overrideAttrs (
           _: {
-            src = super.fetchFromGitHub {
+            src = prev.fetchFromGitHub {
               owner = "vinceliuice";
               repo = "Tela-icon-theme";
               rev = "184959a91ed9726d7cbb3d55c627be09d302096f";
@@ -59,9 +74,9 @@ in
           }
         );
 
-        i3lock-color = super.i3lock-color.overrideAttrs (
+        i3lock-color = prev.i3lock-color.overrideAttrs (
           _: {
-            src = super.fetchFromGitHub {
+            src = prev.fetchFromGitHub {
               owner = "PandorasFox";
               repo = "i3lock-color";
               rev = "995f58dc7323d53095f1687ae157bfade1d00542";
@@ -70,9 +85,9 @@ in
           }
         );
 
-        lazygit = super.lazygit.overrideAttrs (
+        lazygit = prev.lazygit.overrideAttrs (
           _: {
-            src = super.fetchFromGitHub {
+            src = prev.fetchFromGitHub {
               owner = "jesseduffield";
               repo = "lazygit";
               rev = "v0.31.4";

@@ -17,8 +17,8 @@ in
       ansible
       aria
       bc # calculator cli
-      busybox
       cached-nix-shell # fast nix-shell scripts
+      coreutils-full # a lot of commands
       devour # swallow
       dex # execute DesktopEntry files (xdg/autostart)
       dmidecode
@@ -34,6 +34,7 @@ in
       glxinfo # opengl utils
       gnumake # make
       gpp # decrypt
+      inetutils
       inotify-tools
       inxi # check compositor running
       jq # JSON
@@ -48,7 +49,6 @@ in
       mpd_clientlib # mpd module
       ngrok # expose web server
       nix-prefetch-git # get fetchgit hashes
-      nodePackages.node2nix
       notify-desktop # test notifications
       openssl
       pciutils # lspci and others commands
@@ -66,6 +66,8 @@ in
       wirelesstools
       zip
       # base-devel
+      # busybox # a lot of commands but with less options/features
+      # procps
 
       # 7w7
       # metasploit
@@ -93,15 +95,16 @@ in
       speedread
       stripe-cli
       # mangaflix
-      # unstable.nodePackages_latest.webtorrent-cli
       # dogecoin
 
       # APPS
       dmenu
       filelight # view disk usage
       gparted
+      nyxt
       pinta
       qbittorrent
+      qutebrowser
       skypeforlinux
       sublime3 # text editor
       tmux

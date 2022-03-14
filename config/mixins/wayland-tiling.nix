@@ -23,7 +23,6 @@
         wl-clipboard
         # sway-alttab
       ];
-      variables = { _JAVA_AWT_WM_NONREPARENTING = "1"; };
     };
 
     # slack on wayland to share screen

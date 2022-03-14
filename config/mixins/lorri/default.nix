@@ -41,10 +41,10 @@ in {
 
       home.file = {
         ".npmrc".source = ./dotfiles/.npmrc;
-        ".envrc".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/.envrc";
-        "shell.nix".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/shell.nix";
+        # ".envrc".source =
+        #   mkOutOfStoreSymlink "${currentDirectory}/dotfiles/.envrc";
+        # "shell.nix".source =
+        #   mkOutOfStoreSymlink "${currentDirectory}/dotfiles/shell.nix";
       };
     };
   };

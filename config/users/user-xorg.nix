@@ -5,6 +5,7 @@ in {
   imports = [
     ./mixins/alacritty
     ./mixins/amfora
+    ./mixins/android.nix
     ./mixins/autorandr
     ./mixins/bat.nix
     ./mixins/bspwm
@@ -50,7 +51,6 @@ in {
     ./mixins/youtube.nix
     ./mixins/zathura
     ./mixins/zsh
-    # ./mixins/android.nix
     # ./mixins/doom-emacs
   ];
 
