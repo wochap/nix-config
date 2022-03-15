@@ -31,7 +31,7 @@ in {
           neovim-remote
 
           # required by treesitter
-          tree-sitter
+          unstable.tree-sitter
 
           # required by telescope
           ripgrep
