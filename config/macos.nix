@@ -7,6 +7,7 @@
     ./mixins/nix-common.nix
     ./mixins/overlays.nix
     ./users/user-macos.nix
+    ./mixins/pkgs-node.nix
   ];
 
   config = {
@@ -15,14 +16,7 @@
     environment = {
       etc = {
         # TODO: chmod 440
-        "sudoers.d/10-nix-commands".text = ''
-          %admin ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild, \
-                                        /run/current-system/sw/bin/nix*, \
-                                        /run/current-system/sw/bin/ln, \
-                                        /nix/store/*/activate, \
-                                        /bin/launchctl
-
-        '';
+        "sudoers.d/10-nix-commands".source = ./dotfiles-darwin/10-nix-commands;
       };
     };
 
