@@ -1413,6 +1413,23 @@
         "type": "github"
       }
     },
+    "ptsh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1621025492,
+        "narHash": "sha256-ATJSg7J/5E49TokUUDAANGgl0FhRaLHo1m2WQraV6tc=",
+        "owner": "jszczerbinsky",
+        "repo": "ptSh",
+        "rev": "737685cf64dcd00572d3997a6f2b514219156288",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jszczerbinsky",
+        "repo": "ptSh",
+        "rev": "737685cf64dcd00572d3997a6f2b514219156288",
+        "type": "github"
+      }
+    },
     "ranger": {
       "flake": false,
       "locked": {
@@ -1480,6 +1497,7 @@
         "nonicons": "nonicons",
         "ohmyzsh": "ohmyzsh",
         "prevstable": "prevstable",
+        "ptsh": "ptsh",
         "ranger": "ranger",
         "rust-overlay": "rust-overlay",
         "unstable": "unstable",

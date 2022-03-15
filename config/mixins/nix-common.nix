@@ -99,7 +99,9 @@ in {
 
     environment = {
       shellAliases = {
-        ll = "ls -l";
+        cp = "xcp";
+        tree = "tree -a -C -L 1";
+
         ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"'';
         yt =
           "youtube-dl --extract-audio --add-metadata --xattrs --embed-thumbnail --audio-quality 0 --audio-format mp3";

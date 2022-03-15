@@ -58,14 +58,16 @@ in
       tldr
       unrar
       unzip
+      tree
       urlscan
       usbutils # lsusb, for android development
       vdpauinfo # verifying VDPAU
       vim
+      watchman # required by react native
       wget
       wirelesstools
+      xcp
       zip
-      watchman # required by react native
       # base-devel
       # busybox # a lot of commands but with less options/features
       # procps
