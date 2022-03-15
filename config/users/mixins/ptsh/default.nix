@@ -1,29 +1,32 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   userName = config._userName;
-  localPkgs = import ../../../packages { pkgs = pkgs; lib = lib; };
-  ptsh-repo = builtins.fetchGit {
-    url = "https://github.com/jszczerbinsky/ptSh";
-    rev = "737685cf64dcd00572d3997a6f2b514219156288";
-    ref = "main";
-  };
-in
-{
+  localPkgs = import ../../../packages { inherit pkgs lib; };
+  ptsh-repo = inputs.ptsh;
+in {
   config = {
-    environment = {
-      systemPackages = [
-        localPkgs.ptsh
-      ];
-    };
-
     home-manager.users.${userName} = {
-      home.file = {
-        ".local/share/ptSh/logo.txt".source = "${ptsh-repo}/src/logo.txt";
-        ".local/share/ptSh/LICENSE".source = "${ptsh-repo}/LICENSE";
-        ".local/share/ptSh/version.txt".text = "Version: cloned from v0.2-alpha";
-        ".local/share/ptSh/config".source = "${ptsh-repo}/src/config";
-        ".config/ptSh/config".source = ./dotfiles/config;
+      home = {
+        packages = [ localPkgs.ptsh ];
+
+        file = {
+          ".local/share/ptSh/logo.txt".source = "${ptsh-repo}/src/logo.txt";
+          ".local/share/ptSh/LICENSE".source = "${ptsh-repo}/LICENSE";
+          ".local/share/ptSh/version.txt".text =
+            "Version: cloned from v0.2-alpha";
+          ".local/share/ptSh/config".source = "${ptsh-repo}/src/config";
+          ".config/ptSh/config".source = ./dotfiles/config;
+        };
+
+        shellAliases = {
+          # Setup ptSh
+          pwdd = "ptpwd";
+          mkdir = "ptmkdir";
+          touch = "pttouch";
+          rm = "ptrm";
+          # cp = "ptcp";
+        };
       };
     };
   };

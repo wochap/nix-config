@@ -8,6 +8,7 @@ in {
     ./mixins/android.nix
     ./mixins/autorandr
     ./mixins/bat.nix
+    ./mixins/bottom.nix
     ./mixins/bspwm
     ./mixins/clipmenu.nix
     ./mixins/default-browser
@@ -24,6 +25,7 @@ in {
     ./mixins/htop.nix
     ./mixins/imv.nix
     ./mixins/kitty
+    ./mixins/lsd.nix
     ./mixins/mangadesk
     ./mixins/mime-apps.nix
     ./mixins/mpv
@@ -51,6 +53,7 @@ in {
     ./mixins/youtube.nix
     ./mixins/zathura
     ./mixins/zsh
+    # ./mixins/exa.nix
     # ./mixins/doom-emacs
   ];
 
