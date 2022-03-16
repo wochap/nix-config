@@ -12,17 +12,6 @@ let
 in {
   config = {
     environment = {
-      variables = lib.mkIf (isDarwin) {
-        # TERM = "xterm-kitty";
-        TERMINFO_DIRS =
-          "${pkgs.kitty.terminfo.outPath}/share/terminfo:$TERMINFO_DIRS";
-      };
-      shellAliases = {
-        # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
-        sshk = "kitty +kitten ssh";
-
-        icat = "kitty +kitten icat";
-      };
       etc = {
         "config/kitty-session-tripper.conf".source =
           ./dotfiles/kitty-session-tripper.conf;
@@ -32,45 +21,36 @@ in {
           ./dotfiles/kitty-session-cinefest.conf;
         "config/kitty-session-nix-config.conf".source =
           ./dotfiles/kitty-session-nix-config.conf;
-
-        "scripts/kitty-htop.sh" = {
-          source = ./scripts/kitty-htop.sh;
-          mode = "0755";
-        };
-        "scripts/kitty-newsboat.sh" = {
-          source = ./scripts/kitty-newsboat.sh;
-          mode = "0755";
-        };
-        "scripts/kitty-neomutt.sh" = {
-          source = ./scripts/kitty-neomutt.sh;
-          mode = "0755";
-        };
-        "scripts/kitty-neorg.sh" = {
-          source = ./scripts/kitty-neorg.sh;
-          mode = "0755";
-        };
-        "scripts/kitty-nmtui.sh" = {
-          source = ./scripts/kitty-nmtui.sh;
-          mode = "0755";
-        };
-        "scripts/kitty-scratch.sh" = {
-          source = ./scripts/kitty-scratch.sh;
-          mode = "0755";
-        };
-        "scripts/kitty-ncmpcpp.sh" = {
-          source = ./scripts/kitty-ncmpcpp.sh;
-          mode = "0755";
-        };
       };
-      systemPackages = with pkgs;
-        [
-          kitty # terminal
-        ];
     };
+
     home-manager.users.${userName} = {
-      home.sessionVariables = {
-        # TODO: test on darwin ⬇
-        TERMINAL = "kitty";
+      home = {
+        packages = with pkgs;
+          [
+            kitty # terminal
+          ];
+
+        sessionVariables = lib.mkMerge [
+          {
+            # TODO: test on darwin ⬇
+            TERMINAL = "kitty";
+          }
+          (lib.mkIf (isDarwin) {
+            # TERM = "xterm-kitty";
+            TERMINFO_DIRS =
+              "${pkgs.kitty.terminfo.outPath}/share/terminfo:$TERMINFO_DIRS";
+          })
+        ];
+
+        shellAliases = {
+          TERMINAL = "kitty";
+
+          icat = "kitty +kitten icat";
+
+          # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
+          sshk = "kitty +kitten ssh";
+        };
       };
 
       xdg.configFile = {
@@ -78,12 +58,49 @@ in {
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/diff.conf".source = "${inputs.dracula-kitty}/diff.conf";
         "kitty/dracula.conf".source = "${inputs.dracula-kitty}/dracula.conf";
-        "kitty/common.conf".source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/kitty-common.conf";
+        "kitty/common.conf".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/kitty-common.conf";
         "kitty/kitty.conf".text = ''
           include ./dracula.conf
           include ./common.conf
           ${if isDarwin then macosConfig else linuxConfig}
         '';
+
+        "kitty/scripts/kitty-htop.sh" = {
+          source = ./scripts/kitty-htop.sh;
+          recursive = true;
+          executable = true;
+        };
+        "kitty/scripts/kitty-newsboat.sh" = {
+          source = ./scripts/kitty-newsboat.sh;
+          recursive = true;
+          executable = true;
+        };
+        "kitty/scripts/kitty-neomutt.sh" = {
+          source = ./scripts/kitty-neomutt.sh;
+          recursive = true;
+          executable = true;
+        };
+        "kitty/scripts/kitty-neorg.sh" = {
+          source = ./scripts/kitty-neorg.sh;
+          recursive = true;
+          executable = true;
+        };
+        "kitty/scripts/kitty-nmtui.sh" = {
+          source = ./scripts/kitty-nmtui.sh;
+          recursive = true;
+          executable = true;
+        };
+        "kitty/scripts/kitty-scratch.sh" = {
+          source = ./scripts/kitty-scratch.sh;
+          recursive = true;
+          executable = true;
+        };
+        "kitty/scripts/kitty-ncmpcpp.sh" = {
+          source = ./scripts/kitty-ncmpcpp.sh;
+          recursive = true;
+          executable = true;
+        };
       };
 
       programs.fzf = {
