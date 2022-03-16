@@ -38,9 +38,9 @@ in
 
       # Add config files to home folder
       home.file = {
-        ".skhdrc".source = ./dotfiles-darwin/.skhdrc;
+        # ".skhdrc".source = ./dotfiles-darwin/.skhdrc;
         ".finicky.js".source = ./dotfiles-darwin/.finicky.js;
-        ".yabairc".source = ./dotfiles-darwin/.yabairc;
+        # ".yabairc".source = ./dotfiles-darwin/.yabairc;
       };
 
       programs.bash.bashrcExtra = ''

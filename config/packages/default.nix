@@ -16,6 +16,7 @@
   ptsh = pkgs.callPackage ./ptsh {};
   sddm-sugar-dark-greeter = pkgs.callPackage ./sddm-sugar-dark-greeter {};
   sddm-whitesur-greeter = pkgs.callPackage ./sddm-whitesur-greeter {};
+  sf-mono-liga-bin = pkgs.callPackage ./sf-mono-liga-bin.nix {};
   stremio = pkgs.qt5.callPackage ./stremio {};
   way-displays = pkgs.callPackage ./way-displays { inherit pkgs; };
   whitesur-dark-icons = pkgs.callPackage ./whitesur-dark-icons {};

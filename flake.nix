@@ -20,6 +20,18 @@
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
 
+    nur.url = "github:nix-community/NUR";
+    # Bar (macos)
+    spacebar = {
+      url = "github:shaunsingh/spacebar";
+      inputs.nixpkgs.follows = "unstable";
+    };
+    # WM
+    yabai-src = {
+      url = "github:koekeishiya/yabai";
+      flake = false;
+    };
+
     ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
     ohmyzsh.flake = false;
 
