@@ -83,7 +83,7 @@ assign [app_id="google-chrome"] workspace 1
 assign [class="Google-chrome"] workspace 1
 assign [app_id="slack"] workspace 4
 
-for_window [app_id="kitty-htop"] floating enable; move position center; sticky enable; resize set width 1500 px height 1200 px;
+for_window [app_id="kitty-top"] floating enable; move position center; sticky enable; resize set width 1500 px height 1200 px;
 for_window [app_id="kitty-scratch"] floating enable; move position center; sticky enable; resize set width 1500 px height 1200 px;
 for_window [app_id="kitty-neorg"] floating enable; move position center; sticky enable; resize set width 1500 px height 1200 px;
 for_window [app_id="kitty-nmtui"] floating enable; move position center; sticky enable; resize set width 750 px height 1200 px;

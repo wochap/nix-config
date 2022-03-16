@@ -66,8 +66,8 @@ in {
           ${if isDarwin then macosConfig else linuxConfig}
         '';
 
-        "kitty/scripts/kitty-htop.sh" = {
-          source = ./scripts/kitty-htop.sh;
+        "kitty/scripts/kitty-top.sh" = {
+          source = ./scripts/kitty-top.sh;
           recursive = true;
           executable = true;
         };

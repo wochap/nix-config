@@ -8,8 +8,17 @@ in {
 
       programs.bottom = {
         enable = true;
-        settings = { };
+        package = pkgs.unstable.bottom;
+        settings = {
+          flags = {
+            group_processes = true;
+            mem_as_value = true;
+            tree = true;
+            basic = true;
+          };
+        };
       };
+
     };
   };
 }

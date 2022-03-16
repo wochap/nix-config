@@ -208,7 +208,7 @@ bindsym $mod+alt+n exec \
 
 # Open monitor
 bindsym $mod+alt+m exec \
-  sway-focus.sh --toggle-scratchpad kitty-htop $HOME/.config/kitty/scripts/kitty-htop.sh
+  sway-focus.sh --toggle-scratchpad kitty-top $HOME/.config/kitty/scripts/kitty-top.sh
 
 bindsym $mod+ctrl+n exec \
   makoctl restore
