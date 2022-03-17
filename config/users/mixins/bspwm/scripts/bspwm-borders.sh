@@ -40,11 +40,14 @@ draw_border() {
   echo "draw_border $2"
 
   wm_class=$(xprop -id "$2" WM_CLASS | awk '{print $4}' | sed -e 's/^"//' -e 's/"$//')
+  wm_name=$(xprop -id "$2" _NET_WM_NAME | awk '{$1=$2="";print $0}' | sed -e 's/^"//' -e 's/"$//')
   w_border_size=$(bspc config --node "$2" border_width)
+
+  wm_class=${wm_class:-$wm_name}
 
   # Update window border size one time
   case "$wm_class" in
-  Brave-browser | Google-chrome | Firefox | Zathura)
+  Brave-browser | Google-chrome | Firefox | Zathura | *Emulator*)
     if [[ $w_border_size -ne $border_hl_width ]]; then
       bspc config --node "$2" border_width "$border_hl_width"
     fi
@@ -59,7 +62,7 @@ draw_border() {
   case "${1:-focused}" in
   focused)
     case "$wm_class" in
-    Brave-browser | Google-chrome | Firefox | Zathura)
+    Brave-browser | Google-chrome | Firefox | Zathura | *Emulator*)
       # HACK: don't use bspc to change colors, that would affect all windows
       # NOTE: updating border size with chwb will cause infinite recursion
       chwb -c "0xff$nprimary" "$2"
@@ -73,6 +76,7 @@ draw_border() {
       #   ;;
       # esac
 
+      # chwbn -b "$border_hl_width" -c "0xff$nprimary" -b "$border_hl_width" -c "0xff$bg" -b "$border_hl_width" -c "0xff$nprimary" -b 21 -c "0xff$bg" "$2"
       chwbn -b "$border_hl_width" -c "0xff$nprimary" -b "$border_nhl_width" -c "0xff$bg" "$2"
       # chwbn -b 8 -c "0xff$nbackground" -b 2 -c "0xff$nprimary" -b 8 -c "0xff$nbackground" "$2"
       ;;
@@ -80,7 +84,7 @@ draw_border() {
     ;;
   normal)
     case "$wm_class" in
-    Brave-browser | Google-chrome | Firefox | Zathura)
+    Brave-browser | Google-chrome | Firefox | Zathura | *Emulator*)
       chwb -c "0xff$nbackground" "$2"
       ;;
     *)
@@ -92,6 +96,7 @@ draw_border() {
       #   ;;
       # esac
 
+      # chwbn -b "$border_hl_width" -c "0xff$nselection" -b "$border_hl_width" -c "0xff$bg" -b "$border_hl_width" -c "0xff$nselection" -b 21 -c "0xff$bg" "$2"
       chwbn -b "$border_hl_width" -c "0xff$nselection" -b "$border_nhl_width" -c "0xff$bg" "$2"
       # chwbn -b 8 -c "0xff$nbackground" -b 2 -c "0xff$nselection" -b 8 -c "0xff$nbackground" "$2"
       ;;

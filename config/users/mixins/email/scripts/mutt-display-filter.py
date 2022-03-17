@@ -1,5 +1,5 @@
-#!/usr/bin/env cached-nix-shell
-#! nix-shell -i python3 -p "python3.withPackages(ps: with ps; [ pytz dateutil ])"
+#!/usr/bin/env python
+
 
 import os
 import pathlib

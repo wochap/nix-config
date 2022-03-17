@@ -194,7 +194,7 @@ bindsym $mod+alt+b mode "browser"
 mode "terminal" {
   bindsym a mode "default"; exec alacritty
   bindsym k mode "default"; exec kitty
-  bindsym s mode "default"; exec sway-focus.sh --toggle-scratchpad kitty-scratch /etc/scripts/kitty-scratch.sh
+  bindsym s mode "default"; exec sway-focus.sh --toggle-scratchpad kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
   bindsym Escape mode "default"
 }
 bindsym $mod+alt+t mode "terminal"
@@ -204,11 +204,11 @@ bindsym $mod+alt+t mode "terminal"
 
 # Open quick note app
 bindsym $mod+alt+n exec \
-  sway-focus.sh --toggle-scratchpad kitty-neorg /etc/scripts/kitty-neorg.sh
+  sway-focus.sh --toggle-scratchpad kitty-neorg $HOME/.config/kitty/scripts/kitty-neorg.sh
 
 # Open monitor
 bindsym $mod+alt+m exec \
-  sway-focus.sh --toggle-scratchpad kitty-htop /etc/scripts/kitty-htop.sh
+  sway-focus.sh --toggle-scratchpad kitty-top $HOME/.config/kitty/scripts/kitty-top.sh
 
 bindsym $mod+ctrl+n exec \
   makoctl restore

@@ -1,5 +1,6 @@
 # Terminal Emulator Settings
 window:
+  decorations: full
   padding:
     x: 8
     y: 8

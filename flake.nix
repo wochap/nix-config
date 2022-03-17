@@ -17,10 +17,26 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
     home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
     home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
+    android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
+    android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
+
+    nur.url = "github:nix-community/NUR";
+    # Bar (macos)
+    spacebar = {
+      url = "github:shaunsingh/spacebar";
+      inputs.nixpkgs.follows = "unstable";
+    };
+    # WM
+    yabai-src = {
+      url = "github:koekeishiya/yabai";
+      flake = false;
+    };
 
     ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
     ohmyzsh.flake = false;
 
+    ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";
+    ptsh.flake = false;
     nixpkgs-s2k.url = "github:wochap/nixpkgs-s2k?rev=2c28f8564721673073923823f4761b0f7e34cc65";
     flix-tools.url = "github:ThamognyaKodi/FlixTools?rev=76640494cf7ded9ecb8a4ac11249eb86839c5501";
     flix-tools.flake = false;
@@ -56,6 +72,12 @@
     fzf-tab.flake = false;
     nonicons.url = "github:yamatsum/nonicons?rev=6e4984bcb18e122a5f7588a482cb07f459b55a86";
     nonicons.flake = false;
+    ncmpcpp-ueberzug.url = "github:tam-carre/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";
+    ncmpcpp-ueberzug.flake = false;
+    fontpreview-ueberzug.url = "github:OliverLew/fontpreview-ueberzug?rev=77a094c0fa846badb16e50616aa2c3635867d76a";
+    fontpreview-ueberzug.flake = false;
+    dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
+    dracula-betterdiscord.flake = false;
   };
 
   outputs = inputs:

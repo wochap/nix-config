@@ -30,21 +30,15 @@ in {
     services.lorri.enable = true;
 
     home-manager.users.${userName} = {
-      home.sessionVariables = {
-        PATH = "$HOME/.npm-packages/bin:$PATH";
-        NODE_PATH = "$HOME/.npm-packages/lib/node_modules";
-      };
-
       xdg.configFile = {
         "direnv/direnv.toml".source = ./dotfiles/direnv.toml;
       };
 
       home.file = {
-        ".npmrc".source = ./dotfiles/.npmrc;
-        ".envrc".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/.envrc";
-        "shell.nix".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/shell.nix";
+        # ".envrc".source =
+        #   mkOutOfStoreSymlink "${currentDirectory}/dotfiles/.envrc";
+        # "shell.nix".source =
+        #   mkOutOfStoreSymlink "${currentDirectory}/dotfiles/shell.nix";
       };
     };
   };

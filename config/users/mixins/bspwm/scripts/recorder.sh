@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-stopfile=/tmp/_stop
+stopfile=/tmp/_stop_recorder
 time=$(date +%Y-%m-%d-%I-%M-%S)
 dir="$(xdg-user-dir VIDEOS)/Recordings"
 file="Recording_${time}.mp4"

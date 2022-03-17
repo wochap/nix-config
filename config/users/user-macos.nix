@@ -7,29 +7,40 @@ in
 {
   imports = [
     ./mixins/alacritty
+    ./mixins/amfora
     ./mixins/bat.nix
-    ./mixins/git.nix
+    ./mixins/bottom.nix
+    ./mixins/fonts
+    ./mixins/git
     ./mixins/kitty
+    ./mixins/lsd.nix
+    ./mixins/mangadesk
+    ./mixins/newsboat
     ./mixins/nix-common
     ./mixins/nnn
     ./mixins/ptsh
+    ./mixins/secrets.nix
     ./mixins/ssh
     ./mixins/user-nix.nix
     ./mixins/vim
+    ./mixins/youtube.nix
     ./mixins/zsh
     # ./mixins/htop.nix
     # ./mixins/neofetch
   ];
 
   config = {
+    nix.gc.user = userName;
+
     home-manager.users.${userName} = {
-      nix.gc.user = userName;
+
+      programs.gpg.enable = true;
 
       # Add config files to home folder
       home.file = {
-        ".skhdrc".source = ./dotfiles-darwin/.skhdrc;
+        # ".skhdrc".source = ./dotfiles-darwin/.skhdrc;
         ".finicky.js".source = ./dotfiles-darwin/.finicky.js;
-        ".yabairc".source = ./dotfiles-darwin/.yabairc;
+        # ".yabairc".source = ./dotfiles-darwin/.yabairc;
       };
 
       programs.bash.bashrcExtra = ''

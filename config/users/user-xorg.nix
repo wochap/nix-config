@@ -5,8 +5,10 @@ in {
   imports = [
     ./mixins/alacritty
     ./mixins/amfora
+    ./mixins/android.nix
     ./mixins/autorandr
     ./mixins/bat.nix
+    ./mixins/bottom.nix
     ./mixins/bspwm
     ./mixins/clipmenu.nix
     ./mixins/default-browser
@@ -16,16 +18,18 @@ in {
     ./mixins/eww
     ./mixins/firefox
     ./mixins/fonts
-    ./mixins/git.nix
+    ./mixins/git
     ./mixins/gnome-keyring.nix
     ./mixins/gpg.nix
     ./mixins/gtk.nix
     ./mixins/htop.nix
     ./mixins/imv.nix
     ./mixins/kitty
+    ./mixins/lsd.nix
     ./mixins/mangadesk
     ./mixins/mime-apps.nix
-    ./mixins/mpv.nix
+    ./mixins/mpv
+    ./mixins/music
     ./mixins/neofetch
     ./mixins/newsboat
     ./mixins/nix-common
@@ -49,7 +53,7 @@ in {
     ./mixins/youtube.nix
     ./mixins/zathura
     ./mixins/zsh
-    # ./mixins/android.nix
+    # ./mixins/exa.nix
     # ./mixins/doom-emacs
   ];
 

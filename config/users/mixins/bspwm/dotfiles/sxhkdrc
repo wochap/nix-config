@@ -211,7 +211,7 @@ super + alt + f
 
 # Screencast/record region to mp4
 super + alt + r
-  /etc/scripts/recorder.sh --area
+  exec /etc/scripts/recorder.sh --area
 
 # Open screenshoot utility
 super + alt + s
@@ -231,7 +231,7 @@ super + alt + t ; {k,a}
 
 # Open scratch terminal
 super + alt + t ; s
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-scratch '/etc/scripts/kitty-scratch.sh'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-scratch "$HOME/.config/kitty/scripts/kitty-scratch.sh"
 
 # Open magnifying glass
 super + alt + z
@@ -239,19 +239,23 @@ super + alt + z
 
 # Open quick note app
 super + alt + n
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-neorg '/etc/scripts/kitty-neorg.sh'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-neorg "$HOME/.config/kitty/scripts/kitty-neorg.sh"
 
 # Open monitor
 super + alt + m
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-htop '/etc/scripts/kitty-htop.sh'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-top "$HOME/.config/kitty/scripts/kitty-top.sh"
 
 # Open neomutt
 super + alt + e
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-neomutt '/etc/scripts/kitty-neomutt.sh'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-neomutt "$HOME/.config/kitty/scripts/kitty-neomutt.sh"
 
 # Open newsboat
 super + alt + k ; r
-  /etc/scripts/bspwm_toggle_visibility.sh kitty-newsboat '/etc/scripts/kitty-newsboat.sh'
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-newsboat "$HOME/.config/kitty/scripts/kitty-newsboat.sh"
+
+# Open ncmpcpp
+super + alt + k ; m
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-ncmpcpp "$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh"
 
 super + ctrl + n
   dunstctl history-pop

@@ -6,10 +6,7 @@ let
   hmConfig = config.home-manager.users.${userName};
 in {
   config = {
-    environment = {
-      systemPackages = with pkgs; [ exa ];
-      pathsToLink = [ "/share/zsh" ];
-    };
+    environment.pathsToLink = [ "/share/zsh" ];
 
     home-manager.users.${userName} = {
       # Make sure we create a cache directory since some plugins expect it to exist
@@ -56,30 +53,14 @@ in {
         };
         prezto = { enable = false; };
         oh-my-zsh = { enable = false; };
-        shellAliases = lib.mkMerge [
-          config.environment.shellAliases
-          {
-            ns = "nix-shell --run zsh";
-
-            # Setup exa
-            ls = lib.mkForce "exa --icons --group-directories-first --across";
-            la =
-              lib.mkForce "exa --icons --group-directories-first --all --long";
-
-            # Setup ptSh
-            pwdd = "ptpwd";
-            mkdir = "ptmkdir";
-            touch = "pttouch";
-            cp = "ptcp";
-            rm = "ptrm";
-          }
-        ];
+        shellAliases = { ns = "nix-shell --run zsh"; };
       };
 
       programs.starship.enableZshIntegration = true;
 
       programs.keychain.enableZshIntegration = true;
 
+      # Enabled on programs.zsh.initExtra
       # programs.fzf.enableZshIntegration = true;
     };
   };

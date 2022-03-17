@@ -11,21 +11,6 @@ in
   ];
 
   config = {
-    # TODO: use overlay
-    nixpkgs.config.packageOverrides = pkgs: rec {
-      unstable = import (inputs.unstable) {
-        config = config.nixpkgs.config;
-      };
-      electron-stable = import (inputs.electron-stable) {
-        config = config.nixpkgs.config;
-      };
-      prevstable = import (inputs.prevstable) {
-        # pass the nixpkgs config to the unstable alias
-        # to ensure `allowUnfree = true;` is propagated:
-        config = config.nixpkgs.config;
-      };
-    };
-
     environment = {
       shellAliases = {
         open = "xdg-open";

@@ -7,5 +7,6 @@
   "stylelint",
   "ts-node",
   "typescript",
-  "typescript-language-server"
+  "typescript-language-server",
+  "webtorrent-cli"
 ]

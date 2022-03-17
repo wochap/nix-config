@@ -1,7 +1,7 @@
 configuration {
   display-combi: "";
-  display-run: "";
-  display-drun: "";
+  display-run: "";
+  display-drun: "";
   display-calc: "";
   display-emoji: "";
   hide-scrollbar: false;

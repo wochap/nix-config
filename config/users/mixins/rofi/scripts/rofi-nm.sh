@@ -40,7 +40,7 @@ $connected)
   fi
   ;;
 $launch_cli)
-  /etc/scripts/kitty-nmtui.sh
+  $HOME/.config/kitty/scripts/kitty-nmtui.sh
   ;;
 $launch)
   nm-connection-editor

@@ -3,7 +3,7 @@
 wid="$1"
 class="$2"
 instance=$(echo "${3}" | xargs)
-# title=$(xtitle "$wid")
+title=$(xtitle "$wid")
 
 # Debug
 # echo "$wid $class $instance" > /tmp/bspc-external-rules
@@ -24,7 +24,7 @@ Firefox)
   *PictureInPicture*)
     echo state=floating sticky=on
     ;;
-  *About*)
+  *About* | *pop-up*)
     echo state=floating center=true
     ;;
   esac
@@ -38,7 +38,16 @@ case "$(xprop -id "$wid" _NET_WM_WINDOW_TYPE)" in
 esac
 
 case "$(xprop -id "$wid" _NET_WM_STATE)" in
+*_NET_WM_STATE_MODAL*)
+  echo state=floating center=true
+  ;;
 *_NET_WM_STATE_STICKY*)
   echo state=floating center=true sticky=on
+  ;;
+esac
+
+case "$title" in
+*Emulator*)
+  echo state=floating
   ;;
 esac

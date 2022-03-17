@@ -16,7 +16,6 @@
         gnome.gnome-calculator
         gnome.gnome-calendar
         gnome.gnome-clocks
-        gnome.gnome-font-viewer
         gnome.gnome-sound-recorder # test microphone
         gnome.gnome-system-monitor
         gnome.gnome-todo
@@ -24,6 +23,7 @@
         gnome.pomodoro
         # gnome.geary # email client
         # gnome.gnome-control-center # add google account for gnome apps
+        # gnome.gnome-font-viewer
       ];
     };
   };
