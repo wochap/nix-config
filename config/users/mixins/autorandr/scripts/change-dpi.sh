@@ -59,7 +59,7 @@ if [[ "$DPI" == "192" ]]; then
   sed --follow-symlinks --in-place "/UnscaledDPI/c\Gdk\/UnscaledDPI 0" "$HOME/.config/xsettingsd/xsettingsd.conf"
 else
   sed --follow-symlinks --in-place -E "/WindowScalingFactor/s/[0-9.]+/1/" "$HOME/.config/xsettingsd/xsettingsd.conf"
-  sed --follow-symlinks --in-place "/UnscaledDPI/c\# Gdk\/UnscaledDPI 0" "$HOME/.config/xsettingsd/xsettingsd.conf"
+  sed --follow-symlinks --in-place "/UnscaledDPI/c\Gdk\/UnscaledDPI \"-1\"" "$HOME/.config/xsettingsd/xsettingsd.conf"
 fi
 killall -HUP xsettingsd
 
