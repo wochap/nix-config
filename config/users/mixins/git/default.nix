@@ -19,7 +19,10 @@ in {
         enable = true;
         settings = {
           os = { openCommand = "xdg-open {{filename}} >/dev/null"; };
-          gui = { showFileTree = false; };
+          gui = {
+            showFileTree = false;
+            scrollHeight = 10;
+          };
           git.paging = {
             colorArg = "always";
             pager = "delta --paging=never";
