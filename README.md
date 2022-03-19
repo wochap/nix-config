@@ -79,6 +79,9 @@ You probably want to press `Ctrl + Alt + F1`
    ```
    # Run on local machine with nixos installed
    $ nix-serve -p 8080
+
+   # On new machine, test
+   $ curl http://192.168.x.x:8080/nix-cache-info
    ```
    On the new machine, update `nix.binaryCaches`, add `http://192.168.x.x:8080`
 
