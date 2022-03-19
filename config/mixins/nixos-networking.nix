@@ -27,6 +27,10 @@
           }
         ];
         allowedTCPPorts = [
+          # Required by samba
+          445
+          139
+
           # 20 # FTP (File Transfer Protocol)
           # 22 # Secure Shell (SSH)
           # 25 # Simple Mail Transfer Protocol (SMTP)
@@ -45,6 +49,12 @@
           5000
           5001
         ];
+        allowedUDPPorts = [
+          # Required by samba
+          137
+          138
+        ];
+
       };
     };
 
