@@ -9,8 +9,6 @@ in {
   config = {
     environment.systemPackages = with pkgs; [ capitaine-cursors ];
 
-    services.dbus = { enable = true; };
-
     home-manager.users.${userName} = {
       # TODO: move out
       # Open GTK inspector with Ctrl + Shift + D
