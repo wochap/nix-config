@@ -7,49 +7,13 @@ in {
     ./mixins/lorri
     ./mixins/nix-common.nix
     ./mixins/overlays.nix
-    ./users/user-macos.nix
     ./mixins/pkgs-node.nix
     ./mixins/pkgs-python.nix
+    ./users/user-macos.nix
   ];
 
   config = {
     _displayServer = "darwin";
-
-    nixpkgs.overlays = with inputs; [
-      nur.overlay
-      inputs.spacebar.overlay.x86_64-darwin
-      (final: prev: {
-        sf-mono-liga-bin = localPkgs.sf-mono-liga-bin;
-        # yabai is broken on macOS 12, so lets make a smol overlay to use the master version
-        yabai = let
-          version = "4.0.0";
-          buildSymlinks = prev.runCommand "build-symlinks" { } ''
-            mkdir -p $out/bin
-            ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
-          '';
-        in prev.yabai.overrideAttrs (old: {
-          inherit version;
-          src = inputs.yabai-src;
-
-          buildInputs = with prev.darwin.apple_sdk.frameworks; [
-            Carbon
-            Cocoa
-            ScriptingBridge
-            prev.xxd
-            SkyLight
-          ];
-
-          nativeBuildInputs = [ buildSymlinks ];
-        });
-      })
-    ];
-
-    # environment = {
-    #   etc = {
-    #     # TODO: chmod 440
-    #     "sudoers.d/10-nix-commands".source = ./dotfiles-darwin/10-nix-commands;
-    #   };
-    # };
 
     # sudo yabai --uninstall-sa
     # sudo yabai --install-sa
