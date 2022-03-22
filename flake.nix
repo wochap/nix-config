@@ -13,7 +13,7 @@
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=4b0fe150f81a4eb5dffa0ef2b4069748ab0c4d6c";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
-    darwin.url = "github:lnl7/nix-darwin?rev=5851d9613edf8b2279746c7e5b9faac55ff17e8a";
+    darwin.url = "github:lnl7/nix-darwin?rev=17fbc68a6110edbff67e55f7450230a697ecb17e";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
     home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
     home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -23,12 +23,12 @@
     nur.url = "github:nix-community/NUR";
     # Bar (macos)
     spacebar = {
-      url = "github:shaunsingh/spacebar";
-      inputs.nixpkgs.follows = "unstable";
+      url = "github:cmacrae/spacebar?rev=79257bae525059be5230e86df96b3b3f1a3ed0a7";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
     # WM
     yabai-src = {
-      url = "github:koekeishiya/yabai";
+      url = "github:koekeishiya/yabai?rev=a4030e771f76d4f135f5b830eedd7234592df51e";
       flake = false;
     };
 

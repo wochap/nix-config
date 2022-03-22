@@ -9,6 +9,7 @@ in {
     ./mixins/overlays.nix
     ./users/user-macos.nix
     ./mixins/pkgs-node.nix
+    ./mixins/pkgs-python.nix
   ];
 
   config = {
@@ -16,12 +17,12 @@ in {
 
     nixpkgs.overlays = with inputs; [
       nur.overlay
-      spacebar.overlay
+      inputs.spacebar.overlay.x86_64-darwin
       (final: prev: {
         sf-mono-liga-bin = localPkgs.sf-mono-liga-bin;
         # yabai is broken on macOS 12, so lets make a smol overlay to use the master version
         yabai = let
-          version = "4.0.0-dev";
+          version = "4.0.0";
           buildSymlinks = prev.runCommand "build-symlinks" { } ''
             mkdir -p $out/bin
             ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
@@ -43,18 +44,20 @@ in {
       })
     ];
 
-    environment = {
-      etc = {
-        # TODO: chmod 440
-        "sudoers.d/10-nix-commands".source = ./dotfiles-darwin/10-nix-commands;
-      };
-    };
+    # environment = {
+    #   etc = {
+    #     # TODO: chmod 440
+    #     "sudoers.d/10-nix-commands".source = ./dotfiles-darwin/10-nix-commands;
+    #   };
+    # };
 
+    # sudo yabai --uninstall-sa
+    # sudo yabai --install-sa
+    # sudo yabai --load-sa
     services.yabai = {
       enable = true;
       enableScriptingAddition = true;
       package = pkgs.yabai;
-      enableScriptingAddition = false;
       config = {
         # layout
         layout = "bsp";
@@ -63,8 +66,8 @@ in {
         window_placement = "second_child";
         # Gaps
         window_gap = 18;
-        top_padding = 18;
-        bottom_padding = 46;
+        top_padding = 46;
+        bottom_padding = 18;
         left_padding = 18;
         right_padding = 18;
         # shadows and borders
@@ -93,7 +96,7 @@ in {
       enable = true;
       package = pkgs.spacebar;
       config = {
-        position = "bottom";
+        position = "top";
         height = 28;
         title = "on";
         spaces = "on";
