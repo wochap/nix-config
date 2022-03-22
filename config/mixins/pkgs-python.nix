@@ -1,6 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let localPkgs = import ../packages { inherit pkgs lib; };
+let
+  localPkgs = import ../packages { inherit pkgs lib; };
+  isDarwin = config._displayServer == "darwin";
 in {
   config = {
     environment.systemPackages = with pkgs;
@@ -8,9 +10,6 @@ in {
         # global python
         (python3.withPackages (ps:
           with ps; [
-            # required by volume.py
-            pulsectl
-
             # required by icalview.py
             html2text
             pytz
@@ -20,6 +19,12 @@ in {
             pytz
             dateutil
           ]))
-      ];
+      ] ++ (if (!isDarwin) then
+        [
+          # required by volume.py
+          pulsectl
+        ]
+      else
+        [ ]);
   };
 }
