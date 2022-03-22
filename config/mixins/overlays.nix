@@ -4,6 +4,7 @@ let
   isWayland = config._displayServer == "wayland";
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
+  localPkgs = import ../packages { inherit pkgs lib; };
 in {
   config = {
     home-manager.users.${userName} = {
