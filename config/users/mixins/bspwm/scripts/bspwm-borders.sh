@@ -47,7 +47,7 @@ draw_border() {
 
   # Update window border size one time
   case "$wm_class" in
-  Brave-browser | Google-chrome | Firefox | Zathura | *Emulator*)
+  Brave-browser | Google-chrome | Firefox | Zathura | *Emulator* | *thunar*)
     if [[ $w_border_size -ne $border_hl_width ]]; then
       bspc config --node "$2" border_width "$border_hl_width"
     fi
@@ -62,7 +62,7 @@ draw_border() {
   case "${1:-focused}" in
   focused)
     case "$wm_class" in
-    Brave-browser | Google-chrome | Firefox | Zathura | *Emulator*)
+    Brave-browser | Google-chrome | Firefox | Zathura | *Emulator* | *thunar*)
       # HACK: don't use bspc to change colors, that would affect all windows
       # NOTE: updating border size with chwb will cause infinite recursion
       chwb -c "0xff$nprimary" "$2"
@@ -84,7 +84,7 @@ draw_border() {
     ;;
   normal)
     case "$wm_class" in
-    Brave-browser | Google-chrome | Firefox | Zathura | *Emulator*)
+    Brave-browser | Google-chrome | Firefox | Zathura | *Emulator* | *thunar*)
       chwb -c "0xff$nbackground" "$2"
       ;;
     *)

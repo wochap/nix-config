@@ -49,6 +49,7 @@ in
       mpd_clientlib # mpd module
       ngrok # expose web server
       nix-prefetch-git # get fetchgit hashes
+      nix-serve
       notify-desktop # test notifications
       openssl
       pciutils # lspci and others commands
@@ -56,9 +57,9 @@ in
       pup # parse html
       slop
       tldr
+      tree
       unrar
       unzip
-      tree
       urlscan
       usbutils # lsusb, for android development
       vdpauinfo # verifying VDPAU
@@ -101,6 +102,7 @@ in
       # dogecoin
 
       # APPS
+      dfeet
       dmenu
       filelight # view disk usage
       gparted

@@ -24,7 +24,7 @@ Firefox)
   *PictureInPicture*)
     echo state=floating sticky=on
     ;;
-  *About*)
+  *About* | *pop-up*)
     echo state=floating center=true
     ;;
   esac
@@ -47,7 +47,7 @@ case "$(xprop -id "$wid" _NET_WM_STATE)" in
 esac
 
 case "$title" in
-*Emulator*)
+*Emulator* | "View Document")
   echo state=floating
   ;;
 esac

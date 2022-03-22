@@ -27,7 +27,7 @@ in {
     # this value at the release version of the first install of this system.
     # Before changing this value read the documentation for this option
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-    system.stateVersion = "20.09"; # Did you read the comment?
+    system.stateVersion = "21.11"; # Did you read the comment?
 
     home-manager.users.${userName} = {
       # This value determines the Home Manager release that your
@@ -38,7 +38,7 @@ in {
       # You can update Home Manager without changing this value. See
       # the Home Manager release notes for a list of state version
       # changes in each release.
-      home.stateVersion = "21.03";
+      home.stateVersion = "21.11";
     };
 
     environment = {

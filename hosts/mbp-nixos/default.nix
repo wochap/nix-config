@@ -4,7 +4,6 @@ let
   hostName = "gmbp";
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
   isHidpi = true;
-  dpi = 192;
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
@@ -94,7 +93,6 @@ in {
 
     services = {
       xserver = {
-        dpi = lib.mkIf (isHidpi) dpi;
 
         # Setup keyboard
         layout = "us";

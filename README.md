@@ -75,6 +75,16 @@ You probably want to press `Ctrl + Alt + F1`
 
 ## Setup NixOS
 
+1. Use local cachix
+   ```
+   # Run on local machine with nixos installed
+   $ nix-serve -p 8080
+
+   # On new machine, test
+   $ curl http://192.168.x.x:8080/nix-cache-info
+   ```
+   On the new machine, update `nix.binaryCaches`, add `http://192.168.x.x:8080`
+
 1. Copy `.ssh` backup folder to `/home/gean/.ssh`
    ```
    $ ssh-keygen -m PEM -t rsa -b 4096 -C "email@email.com"
@@ -85,6 +95,10 @@ You probably want to press `Ctrl + Alt + F1`
 1. Copy `git-crypt-key` backup, unlock secrets
    ```
    $ git-crypt unlock /path/to/git-crypt-key
+   ```
+1. Import gpg keys
+   ```
+   $ gpg --import private.key
    ```
 1. Setup Syncthing (http://localhost:8384)
 1. Setup [NeoVim](https://github.com/wochap/nvim)

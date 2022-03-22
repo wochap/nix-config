@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 killall dunst
+killall .dunst-wrapped
 
 # get dpi
 DPI=$(xrdb -query | grep dpi | sed "s/Xft.dpi://" | xargs)
