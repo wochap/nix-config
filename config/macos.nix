@@ -9,6 +9,7 @@ in {
     ./mixins/overlays.nix
     ./mixins/pkgs-node.nix
     ./mixins/pkgs-python.nix
+    ./mixins/pkgs.nix
     ./users/user-macos.nix
   ];
 
