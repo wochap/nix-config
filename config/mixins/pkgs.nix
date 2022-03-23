@@ -17,146 +17,70 @@ let
     (builtins.readFile "${inputs.fontpreview-ueberzug}/fontpreview-ueberzug");
 in {
   config = {
-    environment.systemPackages = with pkgs;
-      [
-        # TOOLS
-        acpitool
-        ansible
-        aria
-        bc # calculator cli
-        cached-nix-shell # fast nix-shell scripts
-        coreutils-full # a lot of commands
-        devour # swallow
-        dex # execute DesktopEntry files (xdg/autostart)
-        dmidecode
-        dnsutils # test dns
-        dos2unix # convert line breaks DOS - mac
-        evtest # input debugging
-        ffmpeg-full # music/video codecs?
-        ffmpegthumbnailer
-        file
-        gecode
-        git
-        git-crypt
-        glxinfo # opengl utils
-        gnumake # make
-        gpp # decrypt
-        inetutils
-        inotify-tools
-        inxi # check compositor running
-        jq # JSON
-        killall
-        libpwquality # pwscore
-        libva-utils # verifying VA-API
-        lsof # print port process
-        manpages
-        mkcert # create certificates (HTTPS)
-        mpc_cli
-        mpd
-        mpd_clientlib # mpd module
-        ngrok # expose web server
-        nix-prefetch-git # get fetchgit hashes
-        nix-serve
-        notify-desktop # test notifications
-        openssl
-        pciutils # lspci and others commands
-        pulsemixer
-        pup # parse html
-        slop
-        tldr
-        tree
-        unrar
-        unzip
-        urlscan
-        usbutils # lsusb, for android development
-        vdpauinfo # verifying VDPAU
-        vim
-        watchman # required by react native
-        wget
-        wirelesstools
-        xcp
-        zip
-        # base-devel
-        # busybox # a lot of commands but with less options/features
-        # procps
+    environment.systemPackages = with pkgs; [
+      # TOOLS
+      ansible
+      aria
+      bc # calculator cli
+      cached-nix-shell # fast nix-shell scripts
+      dos2unix # convert line breaks DOS - mac
+      ffmpeg-full # music/video codecs?
+      ffmpegthumbnailer
+      file # print filetype
+      gecode # c++ module?
+      git
+      git-crypt
+      gnumake # make
+      gpp # c++ module?, decrypt
+      inetutils
+      jq # JSON
+      killall
+      libpwquality # pwscore
+      lsof # print port process
+      manpages
+      mkcert # create certificates (HTTPS)
+      ngrok # expose web server
+      nix-prefetch-git # get fetchgit hashes
+      nix-serve
+      openssl
+      pup # parse html
+      tldr
+      tree
+      unrar
+      unzip
+      urlscan
+      vim
+      watchman # required by react native
+      wget
+      xcp
+      zip
 
-        # 7w7
-        # metasploit
-        nmap
-        # tightvnc
+      # DE CLI
+      amfora
+      gitAndTools.gh
+      gotop # monitor system
+      lynx
 
-        # DE
-        hunspell # dictionary for document programs
-        hunspellDicts.en-us
-        pulseaudio
+      # APPS CLI
+      ani-cli
+      cbonsai
+      piratebayflix
+      speedread
+      stripe-cli
+      # mangaflix
+      # dogecoin
 
-        # DE CLI
-        amfora
-        gitAndTools.gh
-        gotop # monitor system
-        lynx
-        systemd
-        # pamixer # audio cli
+      # APPS
+      nyxt
+      qutebrowser
+      sublime3 # text editor
+      tmux
+      tty-clock
+      zoom-us
 
-        # APPS CLI
-        ani-cli
-        cbonsai
-        fontpreview-ueberzug
-        piratebayflix
-        speedread
-        stripe-cli
-        # mangaflix
-        # dogecoin
+      # teamviewer
+      # mysql-workbench
 
-        # APPS
-        dfeet
-        dmenu
-        filelight # view disk usage
-        gparted
-        nyxt
-        pinta
-        qbittorrent
-        qutebrowser
-        skypeforlinux
-        sublime3 # text editor
-        tmux
-        tty-clock
-        zoom-us
-        # localPkgs.nsxiv
-        # antimicroX
-        # teamviewer
-        # mysql-workbench
-
-      ] ++ (if (isWayland) then [
-        # Electron apps
-        electron-stable.bitwarden
-        electron-stable.brave
-        electron-stable.insomnia
-        electron-stable.postman
-        electron-stable.simplenote
-        electron-stable.slack
-        (electron-stable.google-chrome.override {
-          commandLineArgs = ''
-            --enable-features=UseOzonePlatform \
-            --ozone-platform=wayland \
-            --ignore-gpu-blocklist \
-            --enable-gpu-rasterization \
-            --enable-zero-copy \
-            --disable-gpu-driver-bug-workarounds \
-            --enable-features=VaapiVideoDecoder
-          '';
-        })
-      ] else [
-        # Electron apps
-        bitwarden
-        brave
-        google-chrome
-        insomnia
-        postman
-        simplenote
-        slack
-        unstable.notion-app-enhanced
-        whatsapp-for-linux
-      ]);
+    ];
   };
 }

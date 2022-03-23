@@ -16,6 +16,7 @@ in
     ./mixins/nixos-shared
     ./mixins/nixos.nix
     ./mixins/overlays.nix
+    ./mixins/pkgs-linux.nix
     ./mixins/pkgs-node.nix
     ./mixins/pkgs-python.nix
     ./mixins/pkgs-xorg.nix

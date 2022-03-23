@@ -9,7 +9,8 @@ in {
       [
         # global python
         (python3.withPackages (ps:
-          with ps; [
+          with ps;
+          [
             # required by icalview.py
             html2text
             pytz
@@ -18,13 +19,7 @@ in {
             # required by mutt-display-filer.py
             pytz
             dateutil
-          ]))
-      ] ++ (if (!isDarwin) then
-        [
-          # required by volume.py
-          pulsectl
-        ]
-      else
-        [ ]);
+          ] ++ (lib.optionals (!isDarwin) (with ps; [ pulsectl ]))))
+      ];
   };
 }
