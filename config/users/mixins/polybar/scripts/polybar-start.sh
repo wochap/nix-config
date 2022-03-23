@@ -15,13 +15,13 @@ case "$DPI" in
   font0="Iosevka Nerd Font:weight=Medium:size=12;7"
   font1="woos:size=12;7"
   height="80"
-  gap="25"
+  gap="32"
   ;;
 144)
   font0="Iosevka Nerd Font:weight=Medium:size=12;5"
   font1="woos:size=12;5"
   height="60"
-  gap="25"
+  gap="24"
   ;;
 esac
 
