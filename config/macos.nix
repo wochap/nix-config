@@ -16,6 +16,8 @@ in {
   config = {
     _displayServer = "darwin";
 
+    services.nix-daemon.enable = true;
+
     # sudo yabai --uninstall-sa
     # sudo yabai --install-sa
     # sudo yabai --load-sa
