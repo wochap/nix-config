@@ -44,6 +44,7 @@ in {
     ./mixins/rofi
     ./mixins/secrets.nix
     ./mixins/ssh
+    ./mixins/starship.nix
     ./mixins/syncthing.nix
     ./mixins/thunar
     ./mixins/user-nix.nix
