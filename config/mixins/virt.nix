@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  userName = config._userName;
+  localPkgs = import ../packages { inherit pkgs lib; };
 in {
   config = {
     environment.systemPackages = with pkgs; [
@@ -14,7 +16,16 @@ in {
       qemu
       virt-manager
       xorg.xhost
+
+      # required by iPhone USB -> Network style passthrough
+      localPkgs.usbfluxd
+      socat
+      usbmuxd
     ];
+
+    # required by iPhone USB -> Network style passthrough
+    services.avahi.enable = true;
+    services.usbmuxd.enable = true;
 
     # this is needed to get a bridge with DHCP enabled
     virtualisation.libvirtd = {
