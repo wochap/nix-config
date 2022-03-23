@@ -58,7 +58,6 @@ in {
       speedread
       stripe-cli
       tmux
-      tty-clock
       # mangaflix
       # dogecoin
 

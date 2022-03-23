@@ -52,6 +52,7 @@ in {
 
         # APPS CLI
         fontpreview-ueberzug
+        tty-clock
 
         # APPS GUI
         dfeet # dbus gui
