@@ -1,16 +1,14 @@
-
 { config, pkgs, lib, ... }:
 
-let
-  userName = config._userName;
-in
-{
+let userName = config._userName;
+in {
   imports = [
     ./mixins/alacritty
     ./mixins/amfora
     ./mixins/bat.nix
     ./mixins/bottom.nix
     ./mixins/fonts
+    ./mixins/fzf.nix
     ./mixins/git
     ./mixins/kitty
     ./mixins/lsd.nix
@@ -21,6 +19,7 @@ in
     ./mixins/ptsh
     ./mixins/secrets.nix
     ./mixins/ssh
+    ./mixins/starship.nix
     ./mixins/user-nix.nix
     ./mixins/vim
     ./mixins/youtube.nix
@@ -36,21 +35,15 @@ in
 
       programs.gpg.enable = true;
 
+      home.sessionVariables = { LANG = "en_US.UTF-8"; };
+
       # Add config files to home folder
       home.file = {
-        # ".skhdrc".source = ./dotfiles-darwin/.skhdrc;
         ".finicky.js".source = ./dotfiles-darwin/.finicky.js;
+        # ".skhdrc".source = ./dotfiles-darwin/.skhdrc;
         # ".yabairc".source = ./dotfiles-darwin/.yabairc;
       };
 
-      programs.bash.bashrcExtra = ''
-        export ANDROID_HOME=$HOME/Library/Android/sdk
-        export PATH=$PATH:$ANDROID_HOME/emulator
-        export PATH=$PATH:$ANDROID_HOME/tools
-        export PATH=$PATH:$ANDROID_HOME/tools/bin
-        export PATH=$PATH:$ANDROID_HOME/platform-tools
-        export LANG=en_US.UTF-8
-      '';
     };
   };
 }
