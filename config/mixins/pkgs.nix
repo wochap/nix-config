@@ -26,6 +26,7 @@ in {
       jq # JSON
       killall
       libpwquality # pwscore
+      lolcat # rainbow
       lsof # print port process
       manpages
       mkcert # create certificates (HTTPS)

@@ -12,6 +12,8 @@ in {
     ./hardware-configuration.nix
     ../../config/mixins/nvidia.nix
     ../../config/xorg.nix
+    ../../config/mixins/amd.nix
+    ../../config/mixins/temp-sensor.nix
   ];
 
   config = {
@@ -58,6 +60,8 @@ in {
 
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
+      # lm_sensors nvidia:
+      # kernelModules = [ "lm92" ];
       loader = {
         grub.enable = false;
         systemd-boot.enable = true;
@@ -100,5 +104,16 @@ in {
         Option         "TripleBuffer" "on"
       '';
     };
+
+    # fileSystems."/export/kotomi" = {
+    #   device = "/home/gean/Projects/wochap/osx_monterrey";
+    #   options = [ "bind" ];
+    # };
+    # services.nfs.server = {
+    #   exports = ''
+    #     /export         192.168.0.6(rw,fsid=0,no_subtree_check)
+    #     /export/kotomi  192.168.0.6(rw,nohide,insecure,no_subtree_check)
+    #   '';
+    # };
   };
 }

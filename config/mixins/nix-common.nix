@@ -104,11 +104,12 @@ in {
         cp = "xcp";
         tree = "tree -a -C -L 1";
 
+        weather = "curl wttr.in";
         ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"'';
         yt =
           "youtube-dl --extract-audio --add-metadata --xattrs --embed-thumbnail --audio-quality 0 --audio-format mp3";
-        ytv = ''
-          youtube-dl --merge-output-format mp4 -f "bestvideo+bestaudio[ext=m4a]/best" --embed-thumbnail --add-metadata'';
+        ytv =
+          "youtube-dl --merge-output-format mp4 -f 'bestvideo+bestaudio[ext=m4a]/best' --embed-thumbnail --add-metadata";
         fp =
           "fontpreview-ueberzug -b ${theme.background} -f ${theme.foreground}";
       };

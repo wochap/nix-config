@@ -3,19 +3,14 @@
 let
   isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
-in
-{
+in {
   imports = [
     # Install home manager
     inputs.home-manager.nixosModules.home-manager
   ];
 
   config = {
-    environment = {
-      shellAliases = {
-        open = "xdg-open";
-      };
-    };
+    environment = { shellAliases = { open = "xdg-open"; }; };
 
     boot = {
       loader = {
@@ -26,9 +21,7 @@ in
       };
 
       # Show nixos logo on boot/shutdown
-      plymouth = {
-        enable = true;
-      };
+      plymouth = { enable = true; };
 
       # Enable ntfs disks
       supportedFilesystems = [ "ntfs" ];
@@ -45,9 +38,7 @@ in
       font = if isHidpi then "ter-132n" else "Lat2-Terminus16";
       earlySetup = true;
       keyMap = "us";
-      packages = [
-        pkgs.terminus_font
-      ];
+      packages = [ pkgs.terminus_font ];
     };
 
     # Clear nixos store
@@ -90,6 +81,9 @@ in
 
     # Apply trim to SSDs
     services.fstrim.enable = true;
+
+    # minimum amount of swapping without disabling it entirely
+    boot.kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
 
     documentation.man.generateCaches = true;
     documentation.dev.enable = true;

@@ -12,16 +12,17 @@ in {
 
       # home.file = {
       #   ".gnupg/gpg-agent.conf".text = ''
-      #     default-cache-ttl 1800
-      #     pinentry-program ${pkgs.pinentry-gnome}/bin/pinentry-gnome3
+      #     default-cache-ttl 34560000
+      #     max-cache-ttl 34560000
+      #     pinentry-program ${pkgs.pinentry-gnome}/bin/pinentry
       #   '';
-      #   # pinentry-program ${pkgs.pinentry-gnome}/bin/pinentry
+      #   # pinentry-program ${pkgs.pinentry-gnome}/bin/pinentry-gnome3
       # };
 
       programs.gpg.enable = true;
       services.gpg-agent = {
         enable = true;
-        pinentryFlavor = "gnome3";
+        pinentryFlavor = "gtk2";
         enableExtraSocket = true;
         enableScDaemon = false;
         enableSshSupport = false;
