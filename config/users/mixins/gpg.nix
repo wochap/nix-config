@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  userName = config._userName;
+  pinentryFlavor = "gtk2";
 in {
   config = {
     # Required by pinentry-gnome3
@@ -10,18 +12,23 @@ in {
 
     home-manager.users.${userName} = {
 
-      # home.file = {
-      #   ".gnupg/gpg-agent.conf".text = ''
-      #     default-cache-ttl 34560000
-      #     max-cache-ttl 34560000
-      #     pinentry-program ${pkgs.pinentry-gnome}/bin/pinentry
-      #   '';
-      #   # pinentry-program ${pkgs.pinentry-gnome}/bin/pinentry-gnome3
-      # };
+      # Test with gtk2
+      home.file = {
+        ".gnupg/gpg-agent.conf".text = ''
+          default-cache-ttl 34560000
+          max-cache-ttl 34560000
+
+          pinentry-program ${pkgs.pinentry.${pinentryFlavor}}/bin/pinentry
+        '';
+        # pinentry-program ${pkgs.pinentry-gtk2}/bin/pinentry
+        # pinentry-program ${pkgs.pinentry}/bin/pinentry
+        # pinentry-program ${pkgs.pinentry-gnome}/bin/pinentry
+        # pinentry-program ${pkgs.pinentry-gnome}/bin/pinentry-gnome3
+      };
 
       programs.gpg.enable = true;
       services.gpg-agent = {
-        enable = true;
+        enable = false;
         pinentryFlavor = "gtk2";
         enableExtraSocket = true;
         enableScDaemon = false;
