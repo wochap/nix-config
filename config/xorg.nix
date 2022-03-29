@@ -9,6 +9,7 @@ in
     ./mixins/gnome-minimal-wm # Comment on first install
     ./mixins/gnome-pkgs.nix # Comment on first install
     ./mixins/lightdm
+    # ./mixins/greetd.nix
     ./mixins/lorri
     ./mixins/mongodb.nix
     ./mixins/nix-common.nix
