@@ -15,18 +15,16 @@ in {
     security.pam.services.login.enableGnomeKeyring = true;
 
     home-manager.users.${userName} = {
+      home.file.".gnupg/gpg-agent.conf".text = ''
+        pinentry-program ${pkgs.pinentry.gtk2}/bin/pinentry
+      '';
+
       # TODO: move it to shell init?
       xsession.profileExtra = ''
         systemctl --user import-environment
 
         eval $(${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)
         export SSH_AUTH_SOCK
-
-        # unix:path=/run/user/1000/bus
-        # eval $(dbus-launch)
-        # export DBUS_SESSION_BUS_ADDRESS
-        # export DBUS_SESSION_BUS_PID
-        # export DBUS_SESSION_BUS_WINDOWID
       '';
     };
   };
