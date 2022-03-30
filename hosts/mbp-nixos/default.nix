@@ -71,12 +71,15 @@ in {
     environment = {
       sessionVariables = { WIFI_DEVICE = "wlp4s0"; };
 
-      systemPackages = with pkgs;
-        [
-          # requires installing rEFInd
-          # more info on https://github.com/0xbb/gpu-switch
-          gpu-switch
-        ];
+      systemPackages = with pkgs; [
+        # change keyboard backlight level
+        # NOTE: looks like xfce4-power-manager manages it
+        kbdlight
+
+        # requires installing rEFInd
+        # more info on https://github.com/0xbb/gpu-switch
+        gpu-switch
+      ];
     };
 
     networking = {
@@ -126,5 +129,11 @@ in {
 
     # Enable webcam
     hardware.facetimehd.enable = true;
+
+    # fileSystems."/mnt/kotomi" = {
+    #   device = "192.168.0.13:/kotomi";
+    #   fsType = "nfs";
+    #   options = [ "nfsvers=4.2" ];
+    # };
   };
 }
