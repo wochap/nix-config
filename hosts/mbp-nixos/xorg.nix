@@ -9,7 +9,7 @@
       # QT_FONT_DPI = "96";
       # QT_SCALE_FACTOR = "2";
 
-      BSPWM_GAP = "25";
+      # BSPWM_GAP = "25";
     };
   };
 }
