@@ -6,8 +6,8 @@ in
 {
   imports = [
     "${inputs.nixos-hardware}/apple/macbook-pro"
-    "${inputs.nixos-hardware}/common/pc/laptop/ssd"
-    <nixpkgs/nixos/modules/hardware/network/broadcom-43xx.nix>
+    # "${inputs.nixos-hardware}/common/pc/laptop/ssd"
+    # (modulesPath + "/hardware/network/broadcom-43xx.nix")
   ];
 
   config = {
