@@ -60,6 +60,8 @@ in {
         yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
         # rules
+        yabai -m rule --add app='Finder' manage=off
+        yabai -m rule --add app='System Information' manage=off
         yabai -m rule --add app='System Preferences' manage=off
         yabai -m rule --add app='choose' manage=off
         yabai -m rule --add app='Activity Monitor' manage=off
@@ -125,6 +127,7 @@ in {
       ];
 
       casks = [
+        "syncthing"
         "alt-tab"
         "bitwarden"
         "figma"
