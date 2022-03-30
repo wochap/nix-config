@@ -31,6 +31,7 @@ clipmenud &
 picom --experimental-backends &
 blueberry-tray &
 caffeine -a &
+libinput-gestures -c /etc/libinput-gestures.conf &
 
 light -S 20 &
 brightnessctl set 20% &

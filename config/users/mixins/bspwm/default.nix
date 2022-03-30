@@ -10,8 +10,8 @@ in {
 
       etc = {
         "libinput-gestures.conf".text = ''
-          gesture swipe right 3 bspc desktop -f next.local
-          gesture swipe left 3 bspc desktop -f prev.local
+          gesture swipe left 3 bspc desktop -f next.local
+          gesture swipe right 3 bspc desktop -f prev.local
         '';
 
         "config/sxhkdrc" = {
