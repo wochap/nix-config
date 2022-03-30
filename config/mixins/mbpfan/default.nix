@@ -9,7 +9,16 @@ let
 in {
   config = {
     boot.kernelModules = [ "coretemp" "applesmc" ];
-    environment.systemPackages = with pkgs; [ mbpfan ];
+    environment = {
+      systemPackages = with pkgs; [ mbpfan ];
+
+      etc = {
+        "scripts/rofi-mbpfan.sh" = {
+          source = ./scripts/rofi-mbpfan.sh;
+          mode = "0755";
+        };
+      };
+    };
     # environment.etc."mbpfan.conf".source = ./dotfiles/mbpfan.conf;
     # environment.etc."mbpfan.conf".source =
     #   mkOutOfStoreSymlink "${configDirectory}/dotfiles/mbpfan.conf";
