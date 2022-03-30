@@ -149,6 +149,7 @@ in {
 
       brews = [
         "choose-gui"
+        "cocoapods"
         "jq"
         "lua-language-server"
         "mas"
