@@ -2,13 +2,11 @@
 
 # source: https://github.com/nikhgupta/dotfiles/blob/osx/user/.config/skhd/skhdrc
 
-alt - w : yabai -m window --close
-
 # Open terminal
 alt - return : /Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
 
-# Toggle window fullscreen zoom
-alt + shift - f : yabai -m window --toggle zoom-fullscreen
+# Close window
+alt + shift - w : yabai -m window --close
 
 # Toggle window native fullscreen
 alt - f : yabai -m window --toggle native-fullscreen
@@ -30,7 +28,8 @@ ctrl + alt - y : yabai -m window --toggle sticky
 ### FOCUS/SWAP
 
 # Rotate
-alt - 0x32 : yabai -m window --toggle split
+alt + shift - d : yabai -m window --toggle split
+# alt - 0x32 : yabai -m window --toggle split
 
 ### FOCUS/SWAP
 
@@ -39,6 +38,10 @@ alt - 1 : yabai -m space --focus 1
 alt - 2 : yabai -m space --focus 2
 alt - 3 : yabai -m space --focus 3
 alt - 4 : yabai -m space --focus 4
+alt - 5 : yabai -m space --focus 5
+alt - 6 : yabai -m space --focus 6
+alt - 7 : yabai -m space --focus 7
+alt - 8 : yabai -m space --focus 8
 alt - f1 : yabai -m space --focus 5
 alt - f2 : yabai -m space --focus 6
 alt - f3 : yabai -m space --focus 7
@@ -49,10 +52,14 @@ alt + shift - 1 : yabai -m window --space 1
 alt + shift - 2 : yabai -m window --space 2
 alt + shift - 3 : yabai -m window --space 3
 alt + shift - 4 : yabai -m window --space 4
-alt + shift - f5 : yabai -m window --space 5
-alt + shift - f6 : yabai -m window --space 6
-alt + shift - f7 : yabai -m window --space 7
-alt + shift - f8: yabai -m window --space 8
+alt + shift - 5 : yabai -m window --space 5
+alt + shift - 6 : yabai -m window --space 6
+alt + shift - 7 : yabai -m window --space 7
+alt + shift - 8 : yabai -m window --space 8
+alt + shift - f1 : yabai -m window --space 5
+alt + shift - f2 : yabai -m window --space 6
+alt + shift - f3 : yabai -m window --space 7
+alt + shift - f4: yabai -m window --space 8
 
 ### APPLICATION KEYBINDINGS
 

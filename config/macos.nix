@@ -48,7 +48,7 @@ in {
         normal_window_opacity = "1.0";
         # mouse
         focus_follows_mouse = "autofocus";
-        mouse_modifier = "alt";
+        # mouse_modifier = "alt";
         mouse_action1 = "move";
         mouse_action2 = "resize";
         mouse_drop_action = "swap";
@@ -61,8 +61,10 @@ in {
 
         # rules
         yabai -m rule --add app='System Preferences' manage=off
+        yabai -m rule --add app='choose' manage=off
         yabai -m rule --add app='Activity Monitor' manage=off
         yabai -m rule --add app='Notes' manage=off
+        yabai -m rule --add app='App Store' manage=off
         yabai -m rule --add app='Simulator' manage=off
       '';
     };
@@ -104,7 +106,7 @@ in {
     };
 
     homebrew = {
-      enable = false;
+      enable = true;
       autoUpdate = true;
       cleanup = "zap"; # uninstall
       global = {
@@ -123,37 +125,37 @@ in {
       ];
 
       casks = [
-        "robo-3t"
-        "visual-studio-code"
-        "iterm2"
-        "firefox"
-        "google-chrome"
-        "vlc"
-        "postman"
-        "insomnia"
-        "zoom"
-        "keka"
-        "figma"
         "alt-tab"
-        "finicky"
         "bitwarden"
+        "figma"
+        "finicky"
+        # "firefox"
+        "google-chrome"
+        "insomnia"
+        "iterm2"
+        "keka"
+        "postman"
+        "robo-3t"
         "smcfancontrol"
+        # "visual-studio-code"
+        "vlc"
+        "zoom"
         # "obs"
         # "streamlabs-obs" # OBS with audio?
       ];
 
       brews = [
-        "clipcopy"
-        "mongodb-database-tools"
-        "mongodb-community@5.0"
+        "choose-gui"
+        "jq"
         "lua-language-server"
         "mas"
-        "jq"
+        "mongodb-community@5.0"
+        "mongodb-database-tools"
       ];
 
       masApps = {
-        "Slack" = 803453959 ;
         "CopyClip - Clipboard History" = 595191960;
+        "Slack" = 803453959 ;
       };
 
       extraConfig = ''
