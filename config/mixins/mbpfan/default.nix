@@ -19,6 +19,21 @@ in {
         };
       };
     };
+
+    systemd.services.mbpfan = {
+      description = "A fan manager daemon for MacBook Pro";
+      wantedBy = [ "sysinit.target" ];
+      after = [ "syslog.target" "sysinit.target" ];
+      restartTriggers = [ "/etc/mbpfan.conf" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.mbpfan}/bin/mbpfan -fv";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        PIDFile = "/run/mbpfan.pid";
+        Restart = "always";
+      };
+    };
+
     # environment.etc."mbpfan.conf".source = ./dotfiles/mbpfan.conf;
     # environment.etc."mbpfan.conf".source =
     #   mkOutOfStoreSymlink "${configDirectory}/dotfiles/mbpfan.conf";
