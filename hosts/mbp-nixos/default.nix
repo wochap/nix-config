@@ -17,6 +17,7 @@ in {
     ../../config/mixins/radeon.nix
     ../../config/mixins/powerManagement.nix
     ../../config/mixins/backlight.nix
+    ../../config/mixins/mbpfan
     # ../../config/wayland-minimal.nix
     ../../config/xorg.nix
     ./xorg.nix
@@ -110,7 +111,7 @@ in {
 
       # Macbook fan config (doesn't work)
       mbpfan = {
-        enable = true;
+        enable = false;
         verbose = true;
         lowTemp = 30;
         highTemp = 50;
