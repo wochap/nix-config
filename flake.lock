@@ -335,22 +335,6 @@
         "type": "github"
       }
     },
-    "electron-stable": {
-      "locked": {
-        "lastModified": 1648690605,
-        "narHash": "sha256-qCNZyr8xMDJrtRBiXhkuefIZZTYwvz8XZXiNy3bA9jk=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "a3c2199c24b40628aeacf23bdb97862987d2c0ea",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "a3c2199c24b40628aeacf23bdb97862987d2c0ea",
-        "type": "github"
-      }
-    },
     "emacs-overlay": {
       "flake": false,
       "locked": {
@@ -1492,7 +1476,6 @@
         "dracula-sublime": "dracula-sublime",
         "dracula-xresources": "dracula-xresources",
         "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",
-        "electron-stable": "electron-stable",
         "flix-tools": "flix-tools",
         "fontpreview-ueberzug": "fontpreview-ueberzug",
         "fzf-tab": "fzf-tab",
