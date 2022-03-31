@@ -8,6 +8,8 @@ let
   currentDirectory = "${configDirectory}/config/mixins/mbpfan";
 in {
   config = {
+    services.mbpfan.enable = lib.mkForce false;
+
     boot.kernelModules = [ "coretemp" "applesmc" ];
     environment = {
       systemPackages = with pkgs; [ mbpfan ];
@@ -15,6 +17,10 @@ in {
       etc = {
         "scripts/rofi-mbpfan.sh" = {
           source = ./scripts/rofi-mbpfan.sh;
+          mode = "0755";
+        };
+        "scripts/wofi-mbpfan.sh" = {
+          source = ./scripts/wofi-mbpfan.sh;
           mode = "0755";
         };
       };

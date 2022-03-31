@@ -31,3 +31,5 @@ esac
 
 # killall mbpfan
 # sudo mbpfan -fv
+systemctl restart mbpfan.service
+# cat /sys/devices/platform/applesmc.768/fan*_output
