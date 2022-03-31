@@ -57,6 +57,8 @@ in {
 
   config = {
     home-manager.users.${userName} = {
+      imports = [ ./modules/symlinks.nix ];
+
       xdg.configFile = {
         "electron-flags.conf".source = ./dotfiles/electron-flags.conf;
       };
