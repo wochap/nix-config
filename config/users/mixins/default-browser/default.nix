@@ -17,7 +17,7 @@ let
     noDisplay = true;
     mimeTypes = [ "x-scheme-handler/http" "x-scheme-handler/https" ];
     extraConfig = {
-      X-MultipleArgs = false;
+      X-MultipleArgs = "false";
     };
   };
 in {
