@@ -7,6 +7,8 @@
   horizon-theme = pkgs.callPackage ./horizon-theme {};
   interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock {};
   interception-caps2esc = pkgs.callPackage ./interception-caps2esc {};
+  libplist = pkgs.callPackage ./libplist.nix {};
+  libplist2 = pkgs.callPackage ./libplist2.nix {};
   lightdm-webkit2-greeter = pkgs.callPackage ./lightdm-webkit2-greeter {};
   mailnotify = pkgs.callPackage ./mailnotify.nix {};
   mangadesk = pkgs.callPackage ./mangadesk.nix {};
