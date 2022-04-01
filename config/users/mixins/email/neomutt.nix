@@ -8,16 +8,17 @@ let
   aliasfile = "${hmConfig.xdg.configHome}/neomutt/aliases";
   mailboxfile = "${hmConfig.xdg.configHome}/neomutt/mailboxes";
   bindir = "${hmConfig.home.homeDirectory}/bin";
-  mutt-display-filter =
-    pkgs.writeScriptBin "mdf" (builtins.readFile ./scripts/mutt-display-filter.py);
+  mutt-display-filter = pkgs.writeScriptBin "mdf"
+    (builtins.readFile ./scripts/mutt-display-filter.py);
 
   syncthingdir = "${hmConfig.home.homeDirectory}/Sync";
 in {
   config = {
     home-manager.users.${userName} = {
-      home.symlinks."${aliasfile}" = "${syncthingdir}/.config/neomutt/aliases";
-      home.symlinks."${mailboxfile}" =
-        "${syncthingdir}/.config/neomutt/mailboxes";
+      home.symlinks = {
+        "${aliasfile}" = "${syncthingdir}/.config/neomutt/aliases";
+        "${mailboxfile}" = "${syncthingdir}/.config/neomutt/mailboxes";
+      };
 
       programs.neomutt = {
         enable = true;

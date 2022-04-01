@@ -25,14 +25,6 @@ in {
           system = prev.system;
           config = config.nixpkgs.config;
         };
-        electron-stable = import inputs.electron-stable {
-          system = prev.system;
-          config = config.nixpkgs.config;
-        };
-        prevstable = import inputs.prevstable {
-          system = prev.system;
-          config = config.nixpkgs.config;
-        };
 
         wmutils-core = prev.wmutils-core.overrideAttrs (_: {
           src = pkgs.fetchFromGitHub {

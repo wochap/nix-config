@@ -2,23 +2,25 @@
 
 let
   userName = config._userName;
-  localPkgs = import ../../packages { pkgs = pkgs; lib = lib; };
+  localPkgs = import ../../packages {
+    pkgs = pkgs;
+    lib = lib;
+  };
   http-url-handler = pkgs.makeDesktopItem {
     name = "http-url-handler";
     desktopName = "HTTP URL handler";
     comment = "Open an HTTP/HTTPS URL with a particular browser";
     exec = "/etc/scripts/open_url.sh %u";
     type = "Application";
-    terminal = "false";
-    extraEntries = ''
-      TryExec=/etc/scripts/open_url.sh
-      X-MultipleArgs=false
-      NoDisplay=true
-      MimeType=x-scheme-handler/http;x-scheme-handler/https
-    '';
+    terminal = false;
+    tryExec = "/etc/scripts/open_url.sh";
+    noDisplay = true;
+    mimeTypes = [ "x-scheme-handler/http" "x-scheme-handler/https" ];
+    extraConfig = {
+      X-MultipleArgs = "false";
+    };
   };
-in
-{
+in {
   config = {
     environment = {
       etc = {
@@ -27,9 +29,7 @@ in
           mode = "0755";
         };
       };
-      systemPackages = [
-        http-url-handler
-      ];
+      systemPackages = [ http-url-handler ];
     };
 
     home-manager.users.${userName} = {

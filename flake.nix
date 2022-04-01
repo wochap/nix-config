@@ -1,11 +1,9 @@
 {
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=fb1682bab43b9dd8daf43ae28f09e44541ce33a2";
-    electron-stable.url = "github:nixos/nixpkgs?rev=2e15415fede3883a4bfcf35ca832fc53f525f686";
-    unstable.url = "github:nixos/nixpkgs?rev=8f011c1d102e27f334e464e5e6b71b9a428b0607";
-    nixpkgs.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
-    prevstable.url = "github:nixos/nixpkgs?rev=e3264bbf018dac6f55307d03407d480ca0f11016";
-    home-manager.url = "github:nix-community/home-manager?rev=0b197562ab7bf114dd5f6716f41d4b5be6ccd357";
+    unstable.url = "github:nixos/nixpkgs?rev=a3c2199c24b40628aeacf23bdb97862987d2c0ea";
+    nixpkgs.url = "github:nixos/nixpkgs?rev=a3c2199c24b40628aeacf23bdb97862987d2c0ea";
+    home-manager.url = "github:nix-community/home-manager?rev=9580f6c42af2535dc7890edb681ead090f5105f2";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";

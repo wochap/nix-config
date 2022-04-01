@@ -28,7 +28,7 @@ in {
       libpwquality # pwscore
       lolcat # rainbow
       lsof # print port process
-      manpages
+      man-pages
       mkcert # create certificates (HTTPS)
       ngrok # expose web server
       nix-prefetch-git # get fetchgit hashes
