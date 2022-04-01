@@ -1,25 +1,21 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, avahi
-}:
+, libplist }:
 
-# let custom_libplist = libplist.override ({ enablePython = true; });
-# let custom_libplist = libplist;
-# let custom_libplist = callPackage ./libplist.nix { };
-let libplist = callPackage ./libplist2.nix { };
-in with lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "usbfluxd";
-  version = "1.9.2";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "corellium";
     repo = pname;
-    rev = "v1.0";
+    rev = "v${version}";
     sha256 = "sha256-tfAy3e2UssPlRB/8uReLS5f8N/xUUzbjs8sKNlr40T0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libplist avahi ];
-  configureFlags = [ "--with-static-libplist=${libplist}/lib/libplist-2.0.la" ];
+  configureFlags = [ "--with-static-libplist=${libplist.out}/lib/libplist-2.0.la" ];
 
   meta = {
     description =

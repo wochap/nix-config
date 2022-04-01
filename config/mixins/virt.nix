@@ -18,6 +18,7 @@ in {
       xorg.xhost
 
       # required by iPhone USB -> Network style passthrough
+      libusbmuxd
       localPkgs.usbfluxd
       socat
       usbmuxd
