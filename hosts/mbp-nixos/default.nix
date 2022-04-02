@@ -114,10 +114,13 @@ in {
     # Enable webcam
     hardware.facetimehd.enable = true;
 
-    # fileSystems."/mnt/kotomi" = {
-    #   device = "192.168.0.13:/kotomi";
-    #   fsType = "nfs";
-    #   options = [ "nfsvers=4.2" ];
-    # };
+    # Default cpu cpuFreqGovernor at startup
+    powerManagement = {
+      # TODO: refactor to module options
+      cpuFreqGovernor = "performance";
+      cpufreq.min = 800000;
+      # cpufreq.max = 3000000;
+    };
+
   };
 }
