@@ -55,6 +55,7 @@ bspc rule -a "mpv" state=floating
 bspc rule -a "imv" state=floating
 bspc rule -a "Chromium-browser" state=floating
 bspc rule -a "Firefox" desktop=^5
+bspc rule -a "firefox" desktop=^5
 bspc rule -a "Google-chrome" desktop=^1
 bspc rule -a 'kitty-top' state=floating sticky=on center=on border=on rectangle=1500x1200+0+0
 bspc rule -a 'kitty-scratch' state=floating sticky=on center=on border=on rectangle=1500x1200+0+0
