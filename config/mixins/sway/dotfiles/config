@@ -2,7 +2,10 @@
 
 
 #### AUTOSTART ####
-exec bash /etc/scripts/sway-autostart.sh
+# init gnome keyring
+# exec eval $(gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)
+# exec export SSH_AUTH_SOCK
+exec bash /etc/scripts/sway-autostart.sh &
 
 
 #### SWAY theme ####
@@ -58,9 +61,11 @@ input "type:pointer" {
 }
 
 seat * {
-  xcursor_theme Numix-Cursor 32
+  xcursor_theme capitaine-cursors 32
   hide_cursor when-typing enable
 }
+exec gsettings set org.gnome.desktop.interface cursor-theme capitaine-cursors &
+exec gsettings set org.gnome.desktop.interface cursor-size 32 &
 
 
 #### SWAY rules ####

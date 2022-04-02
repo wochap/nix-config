@@ -7,7 +7,7 @@ let
     import ../../../mixins/globals.nix { inherit config pkgs lib inputs; };
 in {
   config = {
-    environment.systemPackages = with pkgs; [ capitaine-cursors ];
+    environment.systemPackages = with pkgs; [ globals.cursor.package ];
 
     home-manager.users.${userName} = {
       # TODO: move out
@@ -47,7 +47,7 @@ in {
       #   ".icons/Dracula-cursors".source = "${inputs.dracula-gtk-theme}/kde/cursors/Dracula-cursors";
       # };
 
-      xsession.pointerCursor = {
+      xsession.pointerCursor = lib.mkIf (!isWayland) {
         name = globals.cursor.name;
         package = globals.cursor.package;
         size = globals.cursor.size;
