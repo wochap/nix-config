@@ -15,6 +15,10 @@ in {
       systemPackages = with pkgs; [ mbpfan ];
 
       etc = {
+        "scripts/mbpfan-polybar.sh" = {
+          source = ./scripts/mbpfan-polybar.sh;
+          mode = "0755";
+        };
         "scripts/rofi-mbpfan.sh" = {
           source = ./scripts/rofi-mbpfan.sh;
           mode = "0755";
