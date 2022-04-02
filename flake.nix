@@ -3,6 +3,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=fb1682bab43b9dd8daf43ae28f09e44541ce33a2";
     unstable.url = "github:nixos/nixpkgs?rev=a3c2199c24b40628aeacf23bdb97862987d2c0ea";
     nixpkgs.url = "github:nixos/nixpkgs?rev=a3c2199c24b40628aeacf23bdb97862987d2c0ea";
+    prevstable.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
     home-manager.url = "github:nix-community/home-manager?rev=9580f6c42af2535dc7890edb681ead090f5105f2";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";

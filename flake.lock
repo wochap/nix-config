@@ -1411,6 +1411,22 @@
         "type": "github"
       }
     },
+    "prevstable": {
+      "locked": {
+        "lastModified": 1644026202,
+        "narHash": "sha256-EN9MoDXNcDu+kd1cxZg5PplEtZUllSYCHY5pBmxeoP4=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419",
+        "type": "github"
+      }
+    },
     "ptsh": {
       "flake": false,
       "locked": {
@@ -1494,6 +1510,7 @@
         "nonicons": "nonicons",
         "nur": "nur",
         "ohmyzsh": "ohmyzsh",
+        "prevstable": "prevstable",
         "ptsh": "ptsh",
         "ranger": "ranger",
         "rust-overlay": "rust-overlay",

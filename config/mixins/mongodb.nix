@@ -12,7 +12,7 @@
       enable = true;
 
       # custom mongodb versions took 18m to build
-      package = pkgs.mongodb-4_2;
+      package = pkgs.prevstable.mongodb-4_2;
 
       # HACK: update the following values
       # if changing mongodb version gives errors
