@@ -16,6 +16,7 @@ https://reactjs.org/feed.xml "~ReactJS"
 https://news.vuejs.org/feed.xml "~VueJS"
 
 -4 "~Company & Startup Blogs"
+https://github.com/neovim/neovim/tags.atom "~NeoVim"
 https://netflixtechblog.com/feed "~Netflix TechBlog"
 https://stackoverflow.blog/feed/ "~Stackoverflow"
 https://weekly.nixos.org/feeds/all.rss.xml
