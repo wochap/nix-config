@@ -10,6 +10,7 @@ in {
     ./mixins/pkgs-node.nix
     ./mixins/pkgs-python.nix
     ./mixins/pkgs.nix
+    ./mixins/yabai
     ./users/user-macos.nix
   ];
 
@@ -68,6 +69,9 @@ in {
         yabai -m rule --add app='Notes' manage=off
         yabai -m rule --add app='App Store' manage=off
         yabai -m rule --add app='Simulator' manage=off
+        yabai -m rule --add app=".kitty-wrapped" title='kitty-scratch' manage=off sticky=on
+        yabai -m rule --add app=".kitty-wrapped" title='kitty-top' manage=off sticky=on
+        yabai -m rule --add app=".kitty-wrapped" title='kitty-newsboat' manage=off sticky=on
       '';
     };
 

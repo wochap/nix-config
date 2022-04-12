@@ -69,6 +69,30 @@ alt + shift - f4: yabai -m window --space 8
 alt + cmd - b; browser
 # Exit browser mode on pressing
 browser < escape; default
+
+# Open firefox
 browser < f : /Applications/Firefox.app/Contents/MacOS/firefox; default
+
+# Open chrome
 browser < c : /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome; default
+
+# Open brave
+browser < c : /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser; default
+
+# Open finder
 alt + cmd - f : open -R ~/
+
+# Register terminal mode
+:: terminal
+alt + cmd - t; terminal
+terminal < escape; default
+
+# Open scratch terminal
+terminal < s : yabai-focus.sh --toggle-scratchpad "kitty-scratch" "$HOME/.config/kitty/scripts/kitty-scratch.sh"; default
+
+# Open monitor
+terminal < m : yabai-focus.sh --toggle-scratchpad "kitty-top" "$HOME/.config/kitty/scripts/kitty-top.sh"; default
+
+# Open newsboat
+terminal < r : yabai-focus.sh --toggle-scratchpad "kitty-newsboat" "$HOME/.config/kitty/scripts/kitty-newsboat.sh"; default
+

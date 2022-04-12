@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
 
-kitty --class kitty-newsboat --title newsboat -e newsboat
+uname=$(uname)
+
+if [[ "$uname" == "Darwin" ]]; then
+  kitty --title kitty-newsboat -e newsboat
+else
+  kitty --class kitty-newsboat --title newsboat -e newsboat
+fi
 

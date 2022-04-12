@@ -18,6 +18,7 @@ in {
       ffmpeg-full # music/video codecs?
       file # print filetype
       gecode # c++ module?
+      getopt # fix macos getopt
       git
       git-crypt
       gnumake # make

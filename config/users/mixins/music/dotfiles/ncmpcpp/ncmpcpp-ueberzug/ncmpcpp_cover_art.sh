@@ -61,7 +61,7 @@ find_cover_image() {
   file="$(mpc --format %file% current)"
   album_dir="${file%/*}"
   album_dir="$music_library/$album_dir"
-  found_covers="$(find "$album_dir" -type d -exec find {} -maxdepth 1 -type f \
+  found_covers="$(find "$album_dir" -type d -exec find {} -maxdepth 1 -type lf \
     -iregex ".*/.*\(${album}\|cover\|folder\|artwork\|front\).*[.]\\(jpe?g\|png\|gif\|bmp\)" \;)"
   cover_path="$(echo "$found_covers" | head -n1)"
   if [ -n "$cover_path" ]; then
