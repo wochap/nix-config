@@ -5,21 +5,21 @@ mbp | mbp-i)
   # Common values are 96, 120 (25% higher), 144 (50% higher), 168 (75% higher), 192 (100% higher)
   DPI=192
   CURSOR_SIZE=64
-  GAP=32
+  GAP=0
   BORDER_WIDTH=4
   WINDOW_PADDING=40
   ;;
 desktop-4k | mbp-4k | mbp-i-4k)
   DPI=144
   CURSOR_SIZE=48
-  GAP=24
+  GAP=0
   BORDER_WIDTH=3
   WINDOW_PADDING=30
   ;;
 *)
   DPI=96
   CURSOR_SIZE=32
-  GAP=16
+  GAP=0
   BORDER_WIDTH=2
   WINDOW_PADDING=20
   ;;

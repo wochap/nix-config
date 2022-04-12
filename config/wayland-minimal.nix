@@ -3,7 +3,6 @@
 {
   imports = [
     ./mixins/docker.nix # Comment on first install
-    ./mixins/fonts.nix
     ./mixins/gnome-minimal-wm # Comment on first install
     ./mixins/gnome-pkgs.nix # Comment on first install
     ./mixins/lorri
@@ -13,6 +12,9 @@
     ./mixins/nixos-shared
     ./mixins/nixos.nix
     ./mixins/overlays.nix
+    ./mixins/pkgs-linux.nix
+    ./mixins/pkgs-node.nix
+    ./mixins/pkgs-python.nix
     ./mixins/pkgs.nix
     ./mixins/qt-pkgs.nix # Comment on first install
     ./mixins/sway
@@ -20,6 +22,9 @@
     ./mixins/wayland-tiling.nix
     ./mixins/xfce-minimal-wm.nix
     ./users/user-wayland.nix
+    # ./mixins/greetd.nix
+    # ./mixins/ipwebcam
+    # ./mixins/virt.nix
   ];
 
   config = {

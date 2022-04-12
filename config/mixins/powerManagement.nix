@@ -3,24 +3,7 @@
 let cpupower = config.boot.kernelPackages.cpupower;
 in {
   config = {
-    environment.systemPackages = with pkgs; [
-      cpupower-gui
-      cpupower
-
-      lm_sensors
-    ];
-
-    # required by lm_sensors
-    boot.kernelModules = [ "coretemp" ];
-
-    powerManagement = {
-      enable = true;
-
-      # TODO: refactor to module options
-      cpuFreqGovernor = "performance";
-      cpufreq.min = 800000;
-      # cpufreq.max = 3000000;
-    };
+    environment.systemPackages = with pkgs; [ cpupower-gui cpupower ];
 
     # required by others apps
     services.upower.enable = true;

@@ -1,34 +1,21 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, avahi
+, libplist }:
 
 with lib;
 stdenv.mkDerivation rec {
   pname = "usbfluxd";
   version = "1.0";
 
-  src = builtins.fetchTarball {
-    url =
-      "https://github.com/corellium/usbfluxd/releases/download/v1.0/usbfluxd-x86_64-libc6-libdbus13.tar.gz";
-    sha256 = "012m6jzn6s12wq0qrbmyy4qw1rv76gcd32nkq75l7y2qzhn63afl";
+  src = fetchFromGitHub {
+    owner = "corellium";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-tfAy3e2UssPlRB/8uReLS5f8N/xUUzbjs8sKNlr40T0=";
   };
 
-  phases = [ "installPhase" "patchPhase" ];
-  installPhase = ''
-    mkdir -p $out/bin
-    cp $src/usbfluxctl $out/bin/usbfluxctl
-    cp $src/usbfluxd $out/bin/usbfluxd
-    # chmod +x $out/bin/usbfluxctl
-    # chmod +x $out/bin/usbfluxd
-  '';
-
-  # src = fetchFromGitHub {
-  #   owner = "corellium";
-  #   repo = pname;
-  #   rev = "v${version}";
-  #   sha256 = "sha256-tfAy3e2UssPlRB/8uReLS5f8N/xUUzbjs8sKNlr40T0=";
-  # };
-
-  # nativeBuildInputs = [ autoreconfHook pkg-config ];
-  # buildInputs = [ libplist ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ libplist avahi ];
+  configureFlags = [ "--with-static-libplist=${libplist.out}/lib/libplist-2.0.la" ];
 
   meta = {
     description =

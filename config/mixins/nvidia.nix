@@ -40,7 +40,7 @@ in
     };
 
     # Hardware video acceleration?
-    hardware.opengl.extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
-    hardware.opengl.extraPackages32 = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
+    # hardware.opengl.extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
+    # hardware.opengl.extraPackages32 = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
   };
 }
