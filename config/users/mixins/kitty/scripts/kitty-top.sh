@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-# kitty --class kitty-top --title top -e htop
-kitty --class kitty-top --title top -e btm
+uname=$(uname)
 
+if [[ "$uname" == "Darwin" ]]; then
+  kitty --title kitty-top -e btm
+else
+  # kitty --class kitty-top --title top -e htop
+  kitty --class kitty-top --title top -e btm
+fi
 

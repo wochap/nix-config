@@ -22,13 +22,13 @@ function killreceptacles {
 }
 
 function opro() {
-  projects=$(find /etc/scripts/projects -type f -name "*.sh")
+  projects=$(find /etc/scripts/projects -type lf -name "*.sh")
 
   $(echo "$projects" | fzf)
 }
 
 function scripts() {
-  scripts=$(find /etc/scripts -type f -name "*.sh")
+  scripts=$(find /etc/scripts -type lf -name "*.sh")
 
   $(echo "$scripts" | fzf)
 }
