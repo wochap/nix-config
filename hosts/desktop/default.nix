@@ -10,6 +10,7 @@ let
 in {
   imports = [
     ./hardware-configuration.nix
+    ../../config/mixins/powerManagement.nix
     ../../config/mixins/nvidia.nix
     ../../config/xorg.nix
     ../../config/mixins/amd.nix
