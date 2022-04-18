@@ -1,25 +1,22 @@
 { config, pkgs, lib, ... }:
 
-let
-  isWayland = config._displayServer == "wayland";
-in
-{
+let isWayland = config._displayServer == "wayland";
+in {
   config = {
     _isNvidia = true;
 
     hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
     hardware.nvidia.modesetting.enable = true;
 
-    environment.systemPackages = with pkgs; [
-      nvtop # monitor system nvidia
+    environment.systemPackages = with pkgs;
+      [
+        nvtop # monitor system nvidia
 
-      # Tools to test HA
-      mesa-demos
-      vulkan-tools
-      glmark2
-    ] ++ lib.optionals (isWayland) [
-      pkgs.egl-wayland
-    ];
+        # Tools to test HA
+        mesa-demos
+        vulkan-tools
+        glmark2
+      ] ++ lib.optionals (isWayland) [ pkgs.egl-wayland ];
 
     environment.variables = lib.mkMerge [
       {
@@ -33,14 +30,17 @@ in
       })
     ];
 
-    services.xserver = {
-      videoDrivers = [
-        "nvidia"
-      ];
-    };
+    services.xserver = { videoDrivers = [ "nvidia" ]; };
 
     # Hardware video acceleration?
-    # hardware.opengl.extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
-    # hardware.opengl.extraPackages32 = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
+    hardware.opengl.extraPackages = with pkgs; [
+      # unstable.nvidia-vaapi-driver
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+    hardware.opengl.extraPackages32 = with pkgs; [
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
   };
 }

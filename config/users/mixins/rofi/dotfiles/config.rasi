@@ -7,7 +7,7 @@ configuration {
   hide-scrollbar: false;
   case-sensitive: false;
   cycle: false;
-  dpi: 144;
+  dpi: 96;
   font: "Iosevka Nerd Font 12";
 }
 
@@ -27,9 +27,9 @@ configuration {
   var-primary-color: @purple;
   var-window-border-color: @selection;
 
-  var-window-border-width: 3px;
-  var-inputbar-padding: 27px;
-  var-listview-padding: 0 27px 27px;
+  var-window-border-width: 2px;
+  var-inputbar-padding: 18px;
+  var-listview-padding: 0 18px 18px;
 }
 
 window {

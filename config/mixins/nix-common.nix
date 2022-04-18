@@ -64,23 +64,38 @@ in {
 
       gc.automatic = true;
 
-      settings = {
-        # Enable cachix
-        trusted-public-keys = [
-          "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-          "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
-          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-          "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-        ];
-        substituters = [
-          "https://cache.nixos.org"
-          "https://colemickens.cachix.org"
-          "https://nix-community.cachix.org"
-          "https://nixpkgs-wayland.cachix.org"
-        ];
+      # Enable cachix
+      binaryCachePublicKeys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      ];
+      binaryCaches = [
+        "https://cache.nixos.org"
+        "https://colemickens.cachix.org"
+        "https://nix-community.cachix.org"
+        "https://nixpkgs-wayland.cachix.org"
+      ];
+      trustedUsers = [ "@wheel" "root" ];
 
-        trusted-users = [ "@wheel" "root" ];
-      };
+      # settings = {
+      #   # Enable cachix
+      #   trusted-public-keys = [
+      #     "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      #     "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
+      #     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      #     "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
+      #   ];
+      #   substituters = [
+      #     "https://cache.nixos.org"
+      #     "https://colemickens.cachix.org"
+      #     "https://nix-community.cachix.org"
+      #     "https://nixpkgs-wayland.cachix.org"
+      #   ];
+      #
+      #   trusted-users = [ "@wheel" "root" ];
+      # };
     };
 
     # Set your time zone.

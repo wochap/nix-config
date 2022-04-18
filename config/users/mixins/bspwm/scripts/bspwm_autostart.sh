@@ -13,7 +13,7 @@ dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
 xsettingsd &
 
 if [ -x "$(command -v nvidia-settings)" ]; then
-  nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
+  nvidia-settings --assign CurrentMetaMode="3440x1440_144 +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
 fi
 
 # autorandr hooks runs random-bg, polybar and dunst

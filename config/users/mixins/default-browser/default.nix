@@ -6,7 +6,7 @@ let
     pkgs = pkgs;
     lib = lib;
   };
-  http-url-handler = pkgs.makeDesktopItem {
+  http-url-handler = pkgs.unstable.makeDesktopItem {
     name = "http-url-handler";
     desktopName = "HTTP URL handler";
     comment = "Open an HTTP/HTTPS URL with a particular browser";

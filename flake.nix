@@ -1,10 +1,10 @@
 {
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=fb1682bab43b9dd8daf43ae28f09e44541ce33a2";
-    unstable.url = "github:nixos/nixpkgs?rev=a3c2199c24b40628aeacf23bdb97862987d2c0ea";
-    nixpkgs.url = "github:nixos/nixpkgs?rev=a3c2199c24b40628aeacf23bdb97862987d2c0ea";
+    unstable.url = "github:nixos/nixpkgs?rev=5181d5945eda382ff6a9ca3e072ed6ea9b547fee";
+    nixpkgs.url = "github:nixos/nixpkgs?rev=2f06b87f64bc06229e05045853e0876666e1b023"; # nixos-21.11
     prevstable.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
-    home-manager.url = "github:nix-community/home-manager?rev=9580f6c42af2535dc7890edb681ead090f5105f2";
+    home-manager.url = "github:nix-community/home-manager?rev=7244c6715cb8f741f3b3e1220a9279e97b2ed8f5"; # release-21.11
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     rust-overlay.url = "github:oxalica/rust-overlay";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
