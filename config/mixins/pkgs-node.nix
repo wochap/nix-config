@@ -15,6 +15,7 @@ in {
       nodePackages.firebase-tools
       nodePackages.gulp
       nodePackages.http-server
+      nodePackages.node-gyp-build
       nodePackages.nodemon
 
       # others

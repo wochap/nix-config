@@ -11,7 +11,8 @@ in {
   imports = [
     ./hardware-configuration.nix
     ../../config/mixins/powerManagement.nix
-    ../../config/mixins/nvidia.nix
+    # ../../config/mixins/nvidia.nix
+    ../../config/mixins/radeon.nix
     ../../config/xorg.nix
     ../../config/mixins/amd.nix
     ../../config/mixins/temp-sensor.nix
@@ -94,16 +95,6 @@ in {
       layout = "us";
       xkbModel = "pc104";
       # xkbVariant = "altgr-intl";
-
-      # Setup monitors
-      screenSection = ''
-        # Select primary monitor
-        # Option         "nvidiaXineramaInfoOrder" "DFP-0"
-        # Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-
-        Option         "AllowIndirectGLXProtocol" "off"
-        Option         "TripleBuffer" "on"
-      '';
     };
 
     # fileSystems."/export/kotomi" = {

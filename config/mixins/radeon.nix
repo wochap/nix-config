@@ -3,6 +3,7 @@
 {
   config = {
     boot.initrd.kernelModules = [ "amdgpu" ];
+    boot.blacklistedKernelModules = [ "radeon" ];
 
     environment.systemPackages = [ pkgs.radeontop ];
 
@@ -10,20 +11,22 @@
       videoDrivers = [ "amdgpu" ];
 
       deviceSection = ''
-        # does it fix screen tearing? maybe...
-        Option         "NoLogo" "1"
-        Option         "RenderAccel" "1"
-        Option         "TripleBuffer" "true"
-        Option         "MigrationHeuristic" "greedy"
-        Option         "AccelMethod" "sna"
-        Option         "TearFree"    "true"
+        # fix screen tearing?
+        Option "TearFree" "true"
+
+        # enable FreeSync
+        Option "VariableRefresh" "true"
       '';
     };
 
     hardware = {
       # Hardware video acceleration?
-      opengl.extraPackages = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
-      opengl.extraPackages32 = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
+      opengl.extraPackages = with pkgs; [
+        amdvlk
+        rocm-opencl-icd
+        rocm-opencl-runtime
+      ];
+      opengl.extraPackages32 = with pkgs; [ ];
     };
   };
 }
