@@ -35,10 +35,6 @@ in {
 
       # Setup monitors
       screenSection = ''
-        # Select primary monitor
-        # Option         "nvidiaXineramaInfoOrder" "DFP-0"
-        # Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
-
         Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
 
         Option         "AllowIndirectGLXProtocol" "off"
