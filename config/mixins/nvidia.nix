@@ -30,7 +30,21 @@ in {
       })
     ];
 
-    services.xserver = { videoDrivers = [ "nvidia" ]; };
+    services.xserver = {
+      videoDrivers = [ "nvidia" ];
+
+      # Setup monitors
+      screenSection = ''
+        # Select primary monitor
+        # Option         "nvidiaXineramaInfoOrder" "DFP-0"
+        # Option         "metamodes" "DP-0: 3840x2160_60 +0+0 {ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off, AllowGSYNCCompatible=On}"
+
+        Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On, AllowGSYNCCompatible=On}"
+
+        Option         "AllowIndirectGLXProtocol" "off"
+        Option         "TripleBuffer" "on"
+      '';
+    };
 
     # Hardware video acceleration?
     hardware.opengl.extraPackages = with pkgs; [
@@ -38,9 +52,6 @@ in {
       vaapiVdpau
       libvdpau-va-gl
     ];
-    hardware.opengl.extraPackages32 = with pkgs; [
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
+    hardware.opengl.extraPackages32 = with pkgs; [ vaapiVdpau libvdpau-va-gl ];
   };
 }
