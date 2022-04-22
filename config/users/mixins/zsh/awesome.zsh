@@ -28,7 +28,7 @@ function opro() {
 }
 
 function scripts() {
-  scripts=$(find /etc/scripts -type lf -name "*.sh")
+  scripts=$(find /etc/scripts -type l,f -name "*.sh")
 
   $(echo "$scripts" | fzf)
 }
