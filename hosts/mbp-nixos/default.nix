@@ -14,7 +14,7 @@ in {
     ./mpb-hardware.nix
     ./hardware-configuration.nix
     ../../config/mixins/intel.nix
-    ../../config/mixins/radeon.nix
+    ../../config/mixins/radeon-old.nix
     ../../config/mixins/powerManagement.nix
     ../../config/mixins/backlight.nix
     ../../config/mixins/mbpfan

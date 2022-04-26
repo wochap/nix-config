@@ -79,7 +79,7 @@
     };
 
     services.nfs.server = {
-      enable = true;
+      enable = false;
 
       # fixed rpc.statd port; for firewall
       lockdPort = 4001;
