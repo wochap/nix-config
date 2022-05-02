@@ -17,6 +17,7 @@ in {
       dos2unix # convert line breaks DOS - mac
       ffmpeg-full # music/video codecs?
       file # print filetype
+      gcc
       gecode # c++ module?
       getopt # fix macos getopt
       git
