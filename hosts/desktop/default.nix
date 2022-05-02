@@ -10,10 +10,9 @@ let
 in {
   imports = [
     ./hardware-configuration.nix
+      ../../config/xorg.nix
     ../../config/mixins/powerManagement.nix
-    # ../../config/mixins/nvidia.nix
     ../../config/mixins/radeon.nix
-    ../../config/xorg.nix
     ../../config/mixins/amd.nix
     ../../config/mixins/temp-sensor.nix
   ];
@@ -33,17 +32,15 @@ in {
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "21.11"; # Did you read the comment?
 
-    home-manager.users.${userName} = {
-      # This value determines the Home Manager release that your
-      # configuration is compatible with. This helps avoid breakage
-      # when a new Home Manager release introduces backwards
-      # incompatible changes.
-      #
-      # You can update Home Manager without changing this value. See
-      # the Home Manager release notes for a list of state version
-      # changes in each release.
-      home.stateVersion = "21.11";
-    };
+    # This value determines the Home Manager release that your
+    # configuration is compatible with. This helps avoid breakage
+    # when a new Home Manager release introduces backwards
+    # incompatible changes.
+    #
+    # You can update Home Manager without changing this value. See
+    # the Home Manager release notes for a list of state version
+    # changes in each release.
+    home-manager.users.${userName}.home.stateVersion = "21.11";
 
     environment = {
       sessionVariables = {
@@ -62,8 +59,6 @@ in {
 
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
-      # lm_sensors nvidia:
-      # kernelModules = [ "lm92" ];
       loader = {
         grub.enable = false;
         systemd-boot.enable = true;

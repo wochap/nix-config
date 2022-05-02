@@ -2,21 +2,25 @@
 
 let
   hostName = "gdesktop";
+  isHidpi = false;
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
   draculaTheme = import ../../config/mixins/dracula.nix;
-in
-{
+in {
   imports = [
     ../desktop/hardware-configuration.nix
-    ../../config/mixins/nvidia.nix
     ../../config/wayland-minimal.nix
+    ../../config/mixins/powerManagement.nix
+    ../../config/mixins/radeon.nix
+    ../../config/mixins/amd.nix
+    ../../config/mixins/temp-sensor.nix
   ];
 
   config = {
     _userName = userName;
-    _isHidpi = false;
+    _isHidpi = isHidpi;
+    _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
     _theme = draculaTheme;
 
@@ -26,7 +30,7 @@ in
     # this value at the release version of the first install of this system.
     # Before changing this value read the documentation for this option
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-    system.stateVersion = "20.09"; # Did you read the comment?
+    system.stateVersion = "21.11"; # Did you read the comment?
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
@@ -36,7 +40,7 @@ in
     # You can update Home Manager without changing this value. See
     # the Home Manager release notes for a list of state version
     # changes in each release.
-    home-manager.users.${userName}.home.stateVersion = "21.03";
+    home-manager.users.${userName}.home.stateVersion = "21.11";
 
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
@@ -55,22 +59,21 @@ in
       # Per-interface useDHCP will be mandatory in the future, so this generated config
       # replicates the default behaviour.
       useDHCP = false;
-      interfaces.enp40s0.useDHCP = true;
-      interfaces.wlp39s0.useDHCP = true;
+      interfaces.enp11s0.useDHCP = true;
+      interfaces.enp42s0.useDHCP = true;
+      interfaces.wlp10s0.useDHCP = true;
     };
 
     # Fix windows dualboot clock
     time.hardwareClockInLocalTime = true;
 
-    hardware = {
-      video.hidpi.enable = true;
-    };
+    hardware = { video.hidpi.enable = true; };
 
     services.xserver = {
       # Setup keyboard
       layout = "us";
       xkbModel = "pc104";
-      xkbVariant = "altgr-intl";
+      # xkbVariant = "altgr-intl";
     };
   };
 }
