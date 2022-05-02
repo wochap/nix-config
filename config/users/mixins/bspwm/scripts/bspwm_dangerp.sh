@@ -20,9 +20,9 @@ fi
 killport 3001
 
 # Run yarn commands
-kitty @ --to unix:/tmp/kitty_scratch launch --tab-title=dangerp --type=tab --cwd ~/Projects/boc/dangerp zsh -c 'direnv allow . && export DIRENV_LOG_FORMAT="" && eval "$(direnv export zsh)" && yarn dev & zsh'
+kitty @ --to unix:/tmp/kitty_scratch launch --tab-title=dangerp --type=tab --cwd ~/Projects/boc/dangerp zsh -c 'yarn dev & zsh'
 kitty @ --to unix:/tmp/kitty_scratch launch --cwd ~/Projects/boc/dangerp zsh
-kitty @ --to unix:/tmp/kitty_scratch launch --cwd ~/Projects/boc/dangerp-backend zsh -c 'direnv allow . && export DIRENV_LOG_FORMAT="" && eval "$(direnv export zsh)" && yarn dev & zsh'
+kitty @ --to unix:/tmp/kitty_scratch launch --cwd ~/Projects/boc/dangerp-backend zsh -c 'yarn dev & zsh'
 kitty @ --to unix:/tmp/kitty_scratch launch --cwd ~/Projects/boc/dangerp-backend zsh
 kitty @ --to unix:/tmp/kitty_scratch goto-layout Grid
 
