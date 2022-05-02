@@ -81,8 +81,9 @@ in {
       # Per-interface useDHCP will be mandatory in the future, so this generated config
       # replicates the default behaviour.
       useDHCP = false;
-      interfaces.enp40s0.useDHCP = true;
-      interfaces.wlp39s0.useDHCP = true;
+      interfaces.enp11s0.useDHCP = true;
+      interfaces.enp42s0.useDHCP = true;
+      interfaces.wlp10s0.useDHCP = true;
     };
 
     # Fix windows dualboot clock
