@@ -2,12 +2,12 @@
 
 let
   theme = config._theme;
-  startsway = pkgs.writeTextFile {
-    name = "startsway";
-    destination = "/bin/startsway";
-    executable = true;
-    text = builtins.readFile ./scripts/startsway.sh;
-  };
+  # startsway = pkgs.writeTextFile {
+  #   name = "startsway";
+  #   destination = "/bin/startsway";
+  #   executable = true;
+  #   text = builtins.readFile ./scripts/startsway.sh;
+  # };
   sway-run-or-raise = pkgs.writeShellScriptBin "sway-run-or-raise.sh"
     (builtins.readFile ./scripts/sway-run-or-raise.sh);
   sway-focus = pkgs.writeShellScriptBin "sway-focus.sh"
@@ -18,16 +18,17 @@ in {
       enable = true;
       wrapperFeatures.gtk = true; # so that gtk works properly
       extraPackages = [ ]; # block rxvt
-
-      extraOptions = [
-        "--debug"
-        # TODO: if nvidia
-        # "--unsupported-gpu"
-      ];
+      extraOptions = [ "--debug" ];
     };
 
     environment = {
-      systemPackages = with pkgs; [ startsway sway-run-or-raise sway-focus ];
+      systemPackages = with pkgs; [
+        # startsway
+        sway-run-or-raise
+        sway-focus
+      ];
+
+      sessionVariables = { NIXOS_OZONE_WL = "1"; };
 
       etc = {
         "sway/config".text = ''
@@ -80,16 +81,16 @@ in {
       };
     };
 
-    services.xserver.displayManager = {
-      session = [{
-        name = "customsway";
-        manage = "desktop";
-        start = ''
-          ${startsway}/bin/startsway &
-          waitPID=$!
-        '';
-      }];
-    };
+    # services.xserver.displayManager = {
+    #   session = [{
+    #     name = "customsway";
+    #     manage = "desktop";
+    #     start = ''
+    #       ${startsway}/bin/startsway &
+    #       waitPID=$!
+    #     '';
+    #   }];
+    # };
 
     systemd.user.targets.sway-session = {
       description = "Sway compositor session";
@@ -99,24 +100,24 @@ in {
       after = [ "graphical-session-pre.target" ];
     };
 
-    systemd.user.services.sway = {
-      description = "Sway - Wayland window manager";
-      documentation = [ "man:sway(5)" ];
-      bindsTo = [ "graphical-session.target" ];
-      wants = [ "graphical-session-pre.target" ];
-      after = [ "graphical-session-pre.target" ];
-      # We explicitly unset PATH here, as we want it to be set by
-      # systemctl --user import-environment in startsway
-      environment.PATH = lib.mkForce null;
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = ''
-          ${pkgs.dbus}/bin/dbus-run-session sway
-        '';
-        Restart = "on-failure";
-        RestartSec = 3;
-        TimeoutStopSec = 10;
-      };
-    };
+    # systemd.user.services.sway = {
+    #   description = "Sway - Wayland window manager";
+    #   documentation = [ "man:sway(5)" ];
+    #   bindsTo = [ "graphical-session.target" ];
+    #   wants = [ "graphical-session-pre.target" ];
+    #   after = [ "graphical-session-pre.target" ];
+    #   # We explicitly unset PATH here, as we want it to be set by
+    #   # systemctl --user import-environment in startsway
+    #   environment.PATH = lib.mkForce null;
+    #   serviceConfig = {
+    #     Type = "simple";
+    #     ExecStart = ''
+    #       ${pkgs.dbus}/bin/dbus-run-session sway
+    #     '';
+    #     Restart = "on-failure";
+    #     RestartSec = 3;
+    #     TimeoutStopSec = 10;
+    #   };
+    # };
   };
 }

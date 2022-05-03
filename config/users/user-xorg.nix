@@ -5,7 +5,7 @@ in {
   imports = [
     ./mixins/alacritty
     ./mixins/amfora
-    ./mixins/android.nix
+    # ./mixins/android.nix
     ./mixins/autorandr
     ./mixins/bat.nix
     ./mixins/bottom.nix

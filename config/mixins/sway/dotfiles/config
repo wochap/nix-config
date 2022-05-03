@@ -1,5 +1,6 @@
 # vim: syntax=sh
 
+include /etc/sway/config.d/*
 
 #### AUTOSTART ####
 # init gnome keyring
@@ -100,5 +101,8 @@ for_window [app_id="kitty-nmtui"] floating enable; move position center; sticky 
 exec firefox > /dev/null 2>&1 &
 # exec google-chrome-stable > /dev/null 2>&1 &
 
-include @sysconfdir@/sway/config.d/*
+# include @sysconfdir@/sway/config.d/*
+
+# exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+
 
