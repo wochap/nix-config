@@ -56,6 +56,8 @@ You probably want to press `Ctrl + Alt + F1`
    ```
 1. Rebuild nixos with the device's specific config, for example, heres's a rebuild for my `desktop`
 
+   **IMPORTANT:** On clean install, update harware-configuration.nix in this repository
+
    **NOTE:** Env vars are required on first install https://github.com/NixOS/nixpkgs/issues/97433#issuecomment-689554709
 
    **WARNING:** First `nixos-rebuild` with device config can take several hours
