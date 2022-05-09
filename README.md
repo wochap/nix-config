@@ -13,7 +13,7 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
 
    The initial config must have: `user config`, `flakes`, `cachix`, `git`, `videoDrivers`, `internet setup`
 
-   **NOTE:** Run `sudo nixos-install` (don't use `sudo su`?)
+   **NOTE:** Run `sudo nixos-install`
 
    Initial [configuration.nix](configuration-example.nix) example
 
@@ -36,20 +36,20 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
 You probably want to press `Ctrl + Alt + F1`
 
 1. Reboot into vanilla NixOS and connect to wifi/ethernet
+
+   ```
+   # The following commands will work if you enabled `networking.networkmanager.enable = true;`
+   $ nmtui
+   $ ping google.com
+   ```
+
    If `ping google.com` doesn't work, try updating your DNS
+
    ```
    $ vim /etc/resolv.conf
    # add `nameserver 8.8.8.8` to `/etc/resolv.conf`
    ```
-   The following commands will work if you enabled `networking.wireless.enable = true;`
-   ```
-   $ wpa_passphrase '<SSID>' '<passphrase>' | tee /etc/wpa_supplicant.conf
-   $ wpa_supplicant -c /etc/wpa_supplicant.conf -i <interface> -B
-   ```
-   The following commands will work if you enabled `networking.networkmanager.enable = true;`
-   ```
-   $ nmtui
-   ```
+
 1. Login with root user and clone into `~/nix-config`
    ```
    $ git clone https://github.com/wochap/nix-config.git ~/nix-config
@@ -75,7 +75,7 @@ You probably want to press `Ctrl + Alt + F1`
 
 ## Setup NixOS
 
-1. Use local cachix
+1. Use local cachix (optional)
    ```
    # Run on local machine with nixos installed
    $ nix-serve -p 8080
@@ -105,34 +105,31 @@ You probably want to press `Ctrl + Alt + F1`
    $ ln -s ~/nix-config/config/mixins/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
    ```
 1. Setup Syncthing (http://localhost:8384)
-1. Setup [NeoVim](https://github.com/wochap/nvim)
+1. Setup [NeoVim](https://github.com/wochap/nvim), with ansible
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
-1. Setup betterdiscord
+1. Setup betterdiscord (optional)
    ```
    $ betterdiscordctl install
    ```
+1. Add wallpapers to `~/Pictures/backgrounds/`
 1. Setup lock wallpaper (required for xorg config)
    ```
    $ convert -resize $(xdpyinfo | grep dimensions | cut -d\  -f7 | cut -dx -f1) ~/Pictures/backgrounds/default.jpg ~/Pictures/backgrounds/lockscreen.jpg
    ```
-1. Add wallpapers to `~/Pictures/backgrounds/`
-1. Sync `vscode`, `firefox`, `chrome`
-1. `desktop` config is optimized for 4k displays (150% scale), for other sizes, you should update:
+1. Sync `vscode`, `firefox`, `chrome` (optional)
+1. Scaling
 
-   For XORG:
+   Xorg is optomized for 100%, 150%, 200%
 
-   - services.xserver.dpi
-   - Polybar bar variables (height, font size, etc)
-   - BSPWM gaps?
-   - Dunst styles?
-   - Rofi styles?
-   - Eww widgets styles?
+   - DPI is controlled by autorandr, it also restart the following apps
+     - Rofi
+     - Polybar
+     - Dunst
+     - BSPWM gaps and borders
+   - GTK apps settings are controlled by xsettingsd
+   - Non GTK apps settings are controlled by xrdb
 
-   For Wayland:
-
-   - WIP
-
-1. Setup gnome calendar and geary
+1. ~~Setup gnome calendar and geary (optional)~~
    ```
    $ env WEBKIT_DISABLE_COMPOSITING_MODE=1 gnome-control-center online-accounts
    ```
@@ -147,7 +144,7 @@ You probably want to press `Ctrl + Alt + F1`
    $ sudo flatpak --user override com.stremio.Stremio --filesystem=/home/gean/.icons/:ro
    ```
 
-1. [Monitor setup](https://http.download.nvidia.com/XFree86/Linux-x86/325.15/README/xconfigoptions.html) for nvidia cards
+1. ~~[Monitor setup](https://http.download.nvidia.com/XFree86/Linux-x86/325.15/README/xconfigoptions.html) for nvidia cards~~
 
    ```
    # Show external monitor
@@ -157,7 +154,7 @@ You probably want to press `Ctrl + Alt + F1`
    $ nvidia-settings --assign "CurrentMetaMode=DP-0: 3840x2160_60 @3840x2160 +0+0 {ViewPortIn=3840x2160, ViewPortOut=3840x2160+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}"
    ```
 
-1. Monitor setup with [xrandr](https://wiki.archlinux.org/index.php/HiDPI#Side_display)
+1. ~~Monitor setup with [xrandr](https://wiki.archlinux.org/index.php/HiDPI#Side_display)~~
 
    If panning is incorrect and you have NVIDIA, try toggling [adding 1px to the panning width](https://askubuntu.com/questions/853048/xrandr-adds-weird-virtual-screen-size-and-panning).
 
