@@ -13,7 +13,7 @@ in {
     ./hardware-configuration.nix
     ../../config/xorg.nix
     ../../config/mixins/powerManagement.nix
-    ../../config/mixins/radeon.nix
+    # ../../config/mixins/radeon.nix
     # ../../config/mixins/amd.nix
     ../../config/mixins/temp-sensor.nix
   ];
@@ -26,6 +26,7 @@ in {
     _theme = draculaTheme;
 
     _custom.amdCpu.enable = true;
+    _custom.amdGpu.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
