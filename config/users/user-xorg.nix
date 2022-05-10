@@ -9,7 +9,6 @@ in {
     ./mixins/autorandr
     ./mixins/bat.nix
     ./mixins/bottom.nix
-    ./mixins/bspwm
     ./mixins/clipmenu.nix
     ./mixins/default-browser
     ./mixins/discord

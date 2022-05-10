@@ -27,6 +27,7 @@ in {
 
     _custom.amdCpu.enable = true;
     _custom.amdGpu.enable = true;
+    _custom.bspwm.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions

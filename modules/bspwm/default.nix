@@ -1,10 +1,13 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.bspwm;
   theme = config._theme;
   userName = config._userName;
 in {
-  config = {
+  options._custom.bspwm = { enable = lib.mkEnableOption "activate BSPWM"; };
+
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [ bsp-layout ];
 
