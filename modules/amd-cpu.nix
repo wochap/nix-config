@@ -1,7 +1,10 @@
 { config, pkgs, lib, ... }:
 
-{
-  config = {
+let cfg = config._custom.amdCpu;
+in {
+  options._custom.amdCpu = { enable = lib.mkEnableOption "activate AMD CPU"; };
+
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ zenmonitor ];
 
     # Enable zenpower
