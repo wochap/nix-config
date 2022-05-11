@@ -37,6 +37,7 @@
       enable = true;
       wlr.enable = true;
       extraPortals = with pkgs; [
+        # xdg-desktop-portal-wlr # this causes a delay of 30 seconds on gtk apps
         xdg-desktop-portal-gtk
       ];
       gtkUsePortal = true;

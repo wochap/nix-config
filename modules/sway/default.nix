@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.sway;
+
   theme = config._theme;
   # startsway = pkgs.writeTextFile {
   #   name = "startsway";
@@ -44,12 +46,28 @@ let
       datadir = "${schema}/share/gsettings-schemas/${schema.name}";
     in ''
       export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
-      gnome_schema=org.gnome.desktop.interface
-      gsettings set $gnome_schema gtk-theme 'Dracula'
+
+      gnome_schema="org.gnome.desktop.interface"
+
+      gsettings set $gnome_schema cursor-theme capitaine-cursors &
+      gsettings set $gnome_schema cursor-size 32 &
+
+      # import gtk settings to gsettings
+      config="''${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
+      if [ ! -f "$config" ]; then exit 1; fi
+
+      gtk_theme="$(grep 'gtk-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+      icon_theme="$(grep 'gtk-icon-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+      font_name="$(grep 'gtk-font-name' "$config" | sed 's/.*\s*=\s*//')"
+      gsettings set "$gnome_schema" gtk-theme "$gtk_theme"
+      gsettings set "$gnome_schema" icon-theme "$icon_theme"
+      gsettings set "$gnome_schema" font-name "$font_name"
     '';
   };
 in {
-  config = {
+  options._custom.sway = { enable = lib.mkEnableOption "activate SWAY"; };
+
+  config = lib.mkIf cfg.enable {
     programs.sway = {
       enable = true;
       wrapperFeatures.gtk = true; # so that gtk works properly
@@ -65,6 +83,8 @@ in {
 
         dbus-sway-environment
         configure-gtk
+
+        gksu
       ];
 
       sessionVariables = { NIXOS_OZONE_WL = "1"; };

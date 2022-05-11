@@ -2,13 +2,6 @@
 
 include /etc/sway/config.d/*
 
-#### AUTOSTART ####
-# init gnome keyring
-# exec eval $(gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)
-# exec export SSH_AUTH_SOCK
-exec bash /etc/scripts/sway-autostart.sh &
-
-
 #### SWAY theme ####
 font pango:JetBrainsMono Nerd Font 10
 titlebar_padding 12 7
@@ -65,8 +58,8 @@ seat * {
   xcursor_theme capitaine-cursors 32
   hide_cursor when-typing enable
 }
-exec gsettings set org.gnome.desktop.interface cursor-theme capitaine-cursors &
-exec gsettings set org.gnome.desktop.interface cursor-size 32 &
+# exec gsettings set org.gnome.desktop.interface cursor-theme capitaine-cursors &
+# exec gsettings set org.gnome.desktop.interface cursor-size 32 &
 
 
 #### SWAY rules ####
@@ -98,11 +91,21 @@ for_window [app_id="kitty-nmtui"] floating enable; move position center; sticky 
 
 
 #### SWAY workspaces ####
-exec firefox > /dev/null 2>&1 &
+# exec firefox > /dev/null 2>&1 &
 # exec google-chrome-stable > /dev/null 2>&1 &
 
 # include @sysconfdir@/sway/config.d/*
 
 # exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+
+exec dbus-sway-environment
+exec configure-gtk
+
+#### AUTOSTART ####
+# init gnome keyring
+# exec eval $(gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)
+# exec export SSH_AUTH_SOCK
+exec bash /etc/scripts/sway-autostart.sh &
+
 
 
