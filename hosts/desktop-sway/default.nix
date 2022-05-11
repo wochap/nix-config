@@ -9,11 +9,10 @@ let
   draculaTheme = import ../../config/mixins/dracula.nix;
 in {
   imports = [
+    ../../modules
     ../desktop/hardware-configuration.nix
     ../../config/wayland-minimal.nix
     ../../config/mixins/powerManagement.nix
-    ../../config/mixins/radeon.nix
-    ../../config/mixins/amd.nix
     ../../config/mixins/temp-sensor.nix
   ];
 
@@ -23,6 +22,10 @@ in {
     _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
     _theme = draculaTheme;
+
+    _custom.amdCpu.enable = true;
+    _custom.amdGpu.enable = true;
+    _custom.sway.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions

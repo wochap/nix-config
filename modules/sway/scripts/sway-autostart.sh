@@ -3,6 +3,8 @@
 dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop &
   /run/current-system/sw/etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop
 
+# exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
 kanshi &
 # way-displays &
 

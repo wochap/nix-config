@@ -13,8 +13,6 @@ in {
     ./hardware-configuration.nix
     ../../config/xorg.nix
     ../../config/mixins/powerManagement.nix
-    # ../../config/mixins/radeon.nix
-    # ../../config/mixins/amd.nix
     ../../config/mixins/temp-sensor.nix
   ];
 

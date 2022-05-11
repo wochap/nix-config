@@ -17,7 +17,6 @@
     ./mixins/pkgs-python.nix
     ./mixins/pkgs.nix
     ./mixins/qt-pkgs.nix # Comment on first install
-    ./mixins/sway
     ./mixins/vscode.nix
     ./mixins/wayland-tiling.nix
     ./mixins/xfce-minimal-wm.nix
