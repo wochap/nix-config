@@ -1,5 +1,6 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [ ./amd-cpu.nix ./amd-gpu.nix ./globals.nix ./bspwm ./sway ];
+  imports =
+    [ ./amd-cpu.nix ./amd-gpu.nix ./globals.nix ./bspwm ./sway ./lightdm ];
 }

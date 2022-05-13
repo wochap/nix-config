@@ -6,6 +6,41 @@
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
   # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
   options = {
+    _custom.globals = {
+      fonts = {
+        sans = lib.mkOption {
+          type = lib.types.str;
+          default = "JetBrainsMono Nerd Font";
+        };
+      };
+
+      cursor = {
+        name = lib.mkOption {
+          type = lib.types.str;
+          default = "capitaine-cursors";
+        };
+        package = lib.mkOption {
+          type = lib.types.package;
+          default = pkgs.capitaine-cursors;
+        };
+        size = lib.mkOption {
+          type = lib.types.int;
+          default = 32;
+        };
+      };
+
+      theme = {
+        name = lib.mkOption {
+          type = lib.types.str;
+          default = "Dracula";
+        };
+        package = lib.mkOption {
+          type = lib.types.package;
+          default = pkgs.dracula-theme;
+        };
+      };
+    };
+
     _displayServer = lib.mkOption {
       type = lib.types.str;
       default = "";

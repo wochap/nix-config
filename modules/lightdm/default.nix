@@ -1,8 +1,12 @@
 { config, pkgs, lib, inputs, ... }:
 
-let globals = import ../globals.nix { inherit config pkgs lib inputs; };
+let
+  cfg = config._custom.lightdm;
+  globals = config._custom.globals;
 in {
-  config = {
+  options._custom.lightdm = { enable = lib.mkEnableOption {}; };
+
+  config = lib.mkIf cfg.enable {
     services.xserver.displayManager = {
       lightdm = {
         enable = true;
