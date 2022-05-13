@@ -7,6 +7,7 @@ in {
     ./mixins/clipmenu.nix
     ./mixins/dunst
     ./mixins/picom
+    ./mixins/polybar
     ./mixins/rofi
     ./mixins/xsettingsd
 
@@ -38,7 +39,6 @@ in {
     ./mixins/nixos
     ./mixins/nixos-minimal-wm
     ./mixins/nnn
-    ./mixins/polybar
     ./mixins/ptsh
     ./mixins/qt.nix
     ./mixins/redshift.nix
