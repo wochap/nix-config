@@ -9,7 +9,6 @@ let
   draculaTheme = import ../../config/mixins/dracula.nix;
 in {
   imports = [
-    ../../modules
     ../desktop/hardware-configuration.nix
     ../../config/wayland-minimal.nix
     ../../config/mixins/powerManagement.nix
