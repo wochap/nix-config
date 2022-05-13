@@ -3,18 +3,20 @@
 let userName = config._userName;
 in {
   imports = [
+    ./mixins/autorandr
+    ./mixins/clipmenu.nix
+    ./mixins/dunst
+    ./mixins/picom
+    ./mixins/rofi
+    ./mixins/xsettingsd
+
     ./mixins/alacritty
     ./mixins/amfora
-    # ./mixins/android.nix
-    ./mixins/autorandr
     ./mixins/bat.nix
     ./mixins/bottom.nix
-    ./mixins/clipmenu.nix
     ./mixins/default-browser
     ./mixins/discord
-    ./mixins/dunst
     ./mixins/email
-    ./mixins/eww
     ./mixins/firefox
     ./mixins/fonts
     ./mixins/fzf.nix
@@ -36,12 +38,10 @@ in {
     ./mixins/nixos
     ./mixins/nixos-minimal-wm
     ./mixins/nnn
-    ./mixins/picom
     ./mixins/polybar
     ./mixins/ptsh
     ./mixins/qt.nix
     ./mixins/redshift.nix
-    ./mixins/rofi
     ./mixins/secrets.nix
     ./mixins/ssh
     ./mixins/starship.nix
@@ -50,12 +50,13 @@ in {
     ./mixins/user-nix.nix
     ./mixins/user-nixos.nix
     ./mixins/vim
-    ./mixins/xsettingsd
     ./mixins/youtube.nix
     ./mixins/zathura
     ./mixins/zsh
-    # ./mixins/exa.nix
+    # ./mixins/android.nix
     # ./mixins/doom-emacs
+    # ./mixins/eww
+    # ./mixins/exa.nix
   ];
 
   config = {

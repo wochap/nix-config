@@ -2,9 +2,12 @@
 
 {
   imports = [
-    ./mixins/docker.nix # Comment on first install
-    ./mixins/gnome-minimal-wm # Comment on first install
-    ./mixins/gnome-pkgs.nix # Comment on first install
+    ./mixins/wayland-tiling.nix
+    ./users/user-wayland.nix
+
+    ./mixins/docker.nix
+    ./mixins/gnome-minimal-wm
+    ./mixins/gnome-pkgs.nix
     ./mixins/lorri
     ./mixins/mongodb.nix
     ./mixins/nix-common.nix
@@ -17,13 +20,11 @@
     ./mixins/pkgs-python.nix
     ./mixins/pkgs.nix
     ./mixins/qt-pkgs.nix # Comment on first install
+    ./mixins/virt.nix
     ./mixins/vscode.nix
-    ./mixins/wayland-tiling.nix
     ./mixins/xfce-minimal-wm.nix
-    ./users/user-wayland.nix
     # ./mixins/greetd.nix
     # ./mixins/ipwebcam
-    # ./mixins/virt.nix
   ];
 
   config = {

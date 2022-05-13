@@ -3,6 +3,11 @@
 let userName = config._userName;
 in {
   imports = [
+    ./mixins/mako
+    ./mixins/way-displays
+    ./mixins/waybar
+    ./mixins/wofi
+
     ./mixins/alacritty
     ./mixins/amfora
     ./mixins/bat.nix
@@ -22,7 +27,6 @@ in {
     ./mixins/kanshi.nix
     ./mixins/kitty
     ./mixins/lsd.nix
-    ./mixins/mako
     ./mixins/mangadesk
     ./mixins/mime-apps.nix
     ./mixins/mpv
@@ -44,24 +48,19 @@ in {
     ./mixins/user-nix.nix
     ./mixins/user-nixos.nix
     ./mixins/vim
-    ./mixins/way-displays
-    ./mixins/waybar
-    ./mixins/wofi
     ./mixins/youtube.nix
     ./mixins/zathura
     ./mixins/zsh
     # ./mixins/android.nix
     # ./mixins/doom-emacs
     # ./mixins/eww
+    # ./mixins/exa.nix
   ];
 
   config = {
     home-manager.users.${userName} = {
       imports = [ ./modules/symlinks.nix ];
 
-      xdg.configFile = {
-        "electron-flags.conf".source = ./dotfiles/electron-flags.conf;
-      };
     };
   };
 }
