@@ -1,6 +1,7 @@
 { config, pkgs, lib, libAttr, ... }:
 
 let
+  cfg = config._custom.xorgWm;
   localPkgs = import ../../../packages {
     pkgs = pkgs;
     lib = lib;
@@ -11,7 +12,7 @@ let
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/config/users/mixins/way-displays";
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ localPkgs.way-displays ]; };
 
     home-manager.users.${userName} = {

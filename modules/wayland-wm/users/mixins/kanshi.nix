@@ -1,8 +1,10 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.xorgWm;
+  userName = config._userName;
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ kanshi ]; };
 
     home-manager.users.${userName} = {
@@ -47,4 +49,3 @@ in {
     };
   };
 }
-

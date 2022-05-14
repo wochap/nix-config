@@ -1,13 +1,14 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.xorgWm;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/config/users/mixins/mako";
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [ mako libnotify dunst ];
       etc = {
