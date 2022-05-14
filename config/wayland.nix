@@ -2,23 +2,26 @@
 
 {
   imports = [
-    ./mixins/docker.nix # Comment on first install
-    ./mixins/fonts.nix
+    ./users/user-wayland.nix
+
     ./mixins/gnome-de.nix
-    ./mixins/gnome-pkgs.nix # Comment on first install
-    ./mixins/ipwebcam
-    ./mixins/kde-pkgs.nix # Comment on first install
-    # ./mixins/keychron.nix
+
+    ./mixins/docker.nix
+    ./mixins/gnome-pkgs.nix
     ./mixins/lorri
+    ./mixins/mongodb.nix
     ./mixins/nix-common.nix
     ./mixins/nixos-networking.nix
     ./mixins/nixos-shared
     ./mixins/nixos.nix
     ./mixins/overlays.nix
+    ./mixins/pkgs-linux.nix
+    ./mixins/pkgs-node.nix
+    ./mixins/pkgs-python.nix
     ./mixins/pkgs.nix
-    ./mixins/thunar.nix # Comment on first install
+    ./mixins/qt-pkgs.nix
     ./mixins/vscode.nix
-    ./users/user-wayland.nix
+    # ./mixins/ipwebcam
   ];
 
   config = {

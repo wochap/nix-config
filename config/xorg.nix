@@ -5,8 +5,9 @@
     ./mixins/pkgs-xorg.nix
     ./users/user-xorg.nix
 
-    ./mixins/docker.nix
     ./mixins/gnome-minimal-wm
+
+    ./mixins/docker.nix
     ./mixins/gnome-pkgs.nix
     ./mixins/lorri
     ./mixins/mongodb.nix

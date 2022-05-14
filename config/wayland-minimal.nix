@@ -5,8 +5,9 @@
     ./mixins/wayland-tiling.nix
     ./users/user-wayland.nix
 
-    ./mixins/docker.nix
     ./mixins/gnome-minimal-wm
+
+    ./mixins/docker.nix
     ./mixins/gnome-pkgs.nix
     ./mixins/lorri
     ./mixins/mongodb.nix
