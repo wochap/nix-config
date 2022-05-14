@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 
-{
-  config = {
+let cfg = config._custom.waylandWm;
+in {
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
         blueberry # bluetooth tray
@@ -36,10 +37,11 @@
     xdg.portal = {
       enable = true;
       wlr.enable = true;
-      extraPortals = with pkgs; [
-        # xdg-desktop-portal-wlr # this causes a delay of 30 seconds on gtk apps
-        xdg-desktop-portal-gtk
-      ];
+      extraPortals = with pkgs;
+        [
+          # xdg-desktop-portal-wlr # this causes a delay of 30 seconds on gtk apps
+          xdg-desktop-portal-gtk
+        ];
       gtkUsePortal = true;
     };
   };

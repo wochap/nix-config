@@ -28,10 +28,11 @@
         # Required by nautilus
         tracker-miners.enable = true;
         tracker.enable = true;
+
+        # On minimal wm, it doesn't do anything
+        gnome-settings-daemon.enable = true;
       };
     };
 
-    # On minimal wm, it doesn't do anything
-    services.gnome.gnome-settings-daemon.enable = true;
   };
 }

@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./mixins/pkgs-xorg.nix
     ./users/user-xorg.nix
 
     ./mixins/gnome-minimal-wm
@@ -27,6 +26,4 @@
     # ./mixins/greetd.nix
     # ./mixins/ipwebcam
   ];
-
-  config = { _displayServer = "xorg"; };
 }

@@ -27,16 +27,4 @@
     # ./mixins/greetd.nix
     # ./mixins/ipwebcam
   ];
-
-  config = {
-    _displayServer = "wayland";
-
-    # For legacy apps
-    programs.xwayland.enable = true;
-
-    services.xserver = {
-      enable = true;
-      displayManager.lightdm.enable = false;
-    };
-  };
 }

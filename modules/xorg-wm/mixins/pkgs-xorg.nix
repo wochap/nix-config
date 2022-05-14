@@ -1,8 +1,10 @@
 { config, pkgs, lib, ... }:
 
-let localPkgs = import ../packages { inherit pkgs lib; };
+let
+  cfg = config._custom.xorgWm;
+  localPkgs = import ../packages { inherit pkgs lib; };
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       # TOOLS
       libinput
