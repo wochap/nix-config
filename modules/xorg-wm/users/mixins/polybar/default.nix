@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.xorgWm;
   theme = config._theme;
   localPkgs = import ../../../packages { pkgs = pkgs; lib = lib; };
   userName = config._userName;
@@ -23,7 +24,7 @@ let
     } "=";
   };
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
         customPolybar

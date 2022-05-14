@@ -1,13 +1,14 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.xorgWm;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/config/users/mixins/dunst";
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [ dunst libnotify gnome-icon-theme ];
       etc = {

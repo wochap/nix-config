@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
+  cfg = config._custom.xorgWm;
   theme = config._theme;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
@@ -8,7 +9,7 @@ let
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/config/users/mixins/rofi";
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
         libqalculate # rofi-calc dependency

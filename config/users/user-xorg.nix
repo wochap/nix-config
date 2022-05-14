@@ -3,14 +3,6 @@
 let userName = config._userName;
 in {
   imports = [
-    ./mixins/autorandr
-    ./mixins/clipmenu.nix
-    ./mixins/dunst
-    ./mixins/picom
-    ./mixins/polybar
-    ./mixins/rofi
-    ./mixins/xsettingsd
-
     ./mixins/alacritty
     ./mixins/amfora
     ./mixins/bat.nix
@@ -63,11 +55,6 @@ in {
     home-manager.users.${userName} = {
       imports = [ ./modules/symlinks.nix ];
 
-      config = {
-        xresources.extraConfig = ''
-          ${builtins.readFile "${inputs.dracula-xresources}/Xresources"}
-        '';
-      };
     };
   };
 }
