@@ -10,7 +10,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/way-displays";
+  currentDirectory = "${configDirectory}/modules/wayland-wm/users/mixins/way-displays";
 in {
   config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ localPkgs.way-displays ]; };

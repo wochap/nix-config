@@ -6,7 +6,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/picom";
+  currentDirectory = "${configDirectory}/modules/xorg-wm/users/mixins/picom";
   customPicom = pkgs.picom.overrideAttrs(o: {
     src = pkgs.fetchFromGitHub {
       # No blur?

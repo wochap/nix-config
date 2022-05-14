@@ -8,7 +8,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/polybar";
+  currentDirectory = "${configDirectory}/modules/xorg-wm/users/mixins/polybar";
   customPolybar = pkgs.polybar.override {
     alsaSupport = true;
     mpdSupport = true;

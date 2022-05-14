@@ -7,7 +7,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/rofi";
+  currentDirectory = "${configDirectory}/modules/xorg-wm/users/mixins/rofi";
 in {
   config = lib.mkIf cfg.enable {
     environment = {

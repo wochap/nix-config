@@ -6,7 +6,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/xsettingsd";
+  currentDirectory = "${configDirectory}/modules/xorg-wm/users/mixins/xsettingsd";
 in {
   config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ xsettingsd ]; };
