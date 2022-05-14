@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./mixins/wayland-tiling.nix
     ./users/user-wayland.nix
 
     ./mixins/gnome-minimal-wm
