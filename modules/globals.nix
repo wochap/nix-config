@@ -40,36 +40,36 @@
         };
       };
 
-      _displayServer = lib.mkOption {
+      displayServer = lib.mkOption {
         type = lib.types.str;
         default = "";
         example = "xorg"; # xorg, wayland, darwin
         description = "Display server type, used by common config files.";
       };
-      _userName = lib.mkOption {
+      userName = lib.mkOption {
         type = lib.types.str;
         default = "gean";
         example = "gean";
         description = "Default user name";
       };
-      _homeDirectory = lib.mkOption {
+      homeDirectory = lib.mkOption {
         type = lib.types.str;
         default = "/home/gean";
         example = "/home/gean";
         description = "Path of user home folder";
       };
-      _configDirectory = lib.mkOption {
+      configDirectory = lib.mkOption {
         type = lib.types.str;
         default = "/home/gean/nix-config";
         example = "/home/gean/nix-config";
         description = "Path of config folder";
       };
-      _theme = lib.mkOption {
-        type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
-        default = { };
-        example = "{}";
-        description = "Theme colors";
-      };
+      # theme = lib.mkOption {
+      #   type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
+      #   default = { };
+      #   example = "{}";
+      #   description = "Theme colors";
+      # };
     };
 
     _displayServer = lib.mkOption {

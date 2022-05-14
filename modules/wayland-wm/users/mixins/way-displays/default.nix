@@ -1,7 +1,7 @@
 { config, pkgs, lib, libAttr, ... }:
 
 let
-  cfg = config._custom.xorgWm;
+  cfg = config._custom.waylandWm;
   localPkgs = import ../../../packages {
     pkgs = pkgs;
     lib = lib;

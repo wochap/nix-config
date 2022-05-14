@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.xorgWm;
+  cfg = config._custom.waylandWm;
   userName = config._userName;
 in {
   config = lib.mkIf cfg.enable {

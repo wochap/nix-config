@@ -1,7 +1,7 @@
 { config, pkgs, lib, libAttr, ... }:
 
 let
-  cfg = config._custom.xorgWm;
+  cfg = config._custom.waylandWm;
   theme = config._theme;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};

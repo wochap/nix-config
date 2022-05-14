@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.xorgWm;
-  localPkgs = import ../packages { inherit pkgs lib; };
+  localPkgs = import ../../../config/packages { inherit pkgs lib; };
 in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [

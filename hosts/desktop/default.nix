@@ -26,6 +26,7 @@ in {
     _custom.amdGpu.enable = true;
     _custom.bspwm.enable = true;
     _custom.lightdm.enable = true;
+    _custom.xorgWm.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
