@@ -3,12 +3,6 @@
 let userName = config._userName;
 in {
   imports = [
-    ./mixins/kanshi.nix
-    ./mixins/mako
-    ./mixins/way-displays
-    ./mixins/waybar
-    ./mixins/wofi
-
     ./mixins/alacritty
     ./mixins/amfora
     ./mixins/bat.nix
