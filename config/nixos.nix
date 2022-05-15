@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./users/user-xorg.nix
+    ./users/user-nixos.nix
 
     ./mixins/gnome-minimal-wm
 
