@@ -2,9 +2,9 @@
 
 {
   imports = [
-    ./users/user-wayland.nix
+    ./users/user-nixos.nix
 
-    ./mixins/gnome-minimal-wm
+    ./mixins/gnome-de.nix
 
     ./mixins/docker.nix
     ./mixins/gnome-pkgs.nix
@@ -19,11 +19,26 @@
     ./mixins/pkgs-node.nix
     ./mixins/pkgs-python.nix
     ./mixins/pkgs.nix
-    ./mixins/qt-pkgs.nix # Comment on first install
-    ./mixins/virt.nix
+    ./mixins/qt-pkgs.nix
     ./mixins/vscode.nix
-    ./mixins/xfce-minimal-wm.nix
-    # ./mixins/greetd.nix
     # ./mixins/ipwebcam
   ];
+
+  config = {
+    _displayServer = "wayland";
+
+    # For legacy apps
+    programs.xwayland.enable = true;
+
+    services.xserver = {
+      enable = true;
+      displayManager = {
+        gdm = {
+          enable = true;
+          nvidiaWayland = true;
+          wayland = true;
+        };
+      };
+    };
+  };
 }
