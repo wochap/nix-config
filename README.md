@@ -107,6 +107,10 @@ You probably want to press `Ctrl + Alt + F1`
    $ ln -s ~/nix-config/config/mixins/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
    ```
 1. Setup Syncthing (http://localhost:8384)
+1. Setup backagrounds
+   ```
+   $ ln -s ~/Sync/backgrounds ~/Pictures/backgrounds
+   ```
 1. Setup [NeoVim](https://github.com/wochap/nvim), with ansible
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
 1. Setup betterdiscord (optional)
