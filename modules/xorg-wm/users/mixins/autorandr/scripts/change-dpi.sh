@@ -9,13 +9,6 @@ mbp | mbp-i)
   BORDER_WIDTH=4
   WINDOW_PADDING=40
   ;;
-desktop-4k | mbp-4k | mbp-i-4k)
-  DPI=144
-  CURSOR_SIZE=48
-  GAP=0
-  BORDER_WIDTH=3
-  WINDOW_PADDING=30
-  ;;
 *)
   DPI=96
   CURSOR_SIZE=32
@@ -66,8 +59,8 @@ killall -HUP xsettingsd
 /etc/scripts/dunst-start.sh >/dev/null 2>&1
 /etc/scripts/polybar-start.sh >/dev/null 2>&1
 
-pgrep -f bspwm-borders | xargs kill -9
-/etc/scripts/bspwm-borders.sh >/dev/null 2>&1
+# pgrep -f bspwm-borders | xargs kill -9
+# /etc/scripts/bspwm-borders.sh >/dev/null 2>&1
 
 # Move windows from inactive monitor to primary monitor
 # TODO: this only works on single monitor setup
