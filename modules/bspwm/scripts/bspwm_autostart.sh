@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
+  /run/current-system/sw/etc/xdg/autostart/tracker-miner-fs-3.desktop \
   /run/current-system/sw/etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop \
   /run/current-system/sw/etc/xdg/autostart/xfce4-power-manager.desktop &
   # /run/current-system/sw/etc/xdg/autostart/org.gnome.Evolution-alarm-notify.desktop \
