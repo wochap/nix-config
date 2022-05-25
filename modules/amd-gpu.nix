@@ -22,7 +22,12 @@ in {
 
     environment.systemPackages = [ pkgs.radeontop ];
 
-    services.xserver = { videoDrivers = [ "amdgpu" ]; };
+    services.xserver = {
+      videoDrivers = [ "amdgpu" ];
+
+      deviceSection = ''
+      '';
+    };
 
     hardware = {
       # Hardware video acceleration?

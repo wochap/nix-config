@@ -13,7 +13,13 @@
       ];
     };
 
-    services.xserver.videoDrivers = [ "intel" ];
+    services.xserver = {
+      videoDrivers = [ "intel" ];
+
+      deviceSection = ''
+        Option "TearFree" "true"
+      '';
+    };
 
     hardware.cpu.intel.updateMicrocode = true;
   };
