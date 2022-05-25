@@ -2,16 +2,15 @@
 
 let
   hostName = "gdesktop";
-  isHidpi = true;
+  isHidpi = false;
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
   draculaTheme = import ../../config/mixins/dracula.nix;
 in {
   imports = [
-    ../../modules
     ./hardware-configuration.nix
-    ../../config/xorg.nix
+    ../../config/nixos.nix
     ../../config/mixins/powerManagement.nix
     ../../config/mixins/temp-sensor.nix
   ];
@@ -26,6 +25,11 @@ in {
     _custom.amdCpu.enable = true;
     _custom.amdGpu.enable = true;
     _custom.bspwm.enable = true;
+    _custom.lightdm.enable = true;
+    _custom.xorgWm.enable = true;
+
+    # _custom.sway.enable = true;
+    # _custom.waylandWm.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
@@ -69,8 +73,6 @@ in {
       };
       cleanTmpDir = true;
     };
-
-    powerManagement.cpuFreqGovernor = "schedutil";
 
     networking = {
       hostName = hostName;

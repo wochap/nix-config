@@ -17,14 +17,14 @@ in {
     ../../config/mixins/powerManagement.nix
     ../../config/mixins/backlight.nix
     ../../config/mixins/mbpfan
-    # ../../config/wayland-minimal.nix
-    ../../config/xorg.nix
+    ../../config/nixos.nix
     ./xorg.nix
   ];
 
   config = {
     _userName = userName;
     _isHidpi = isHidpi;
+    _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
     _theme = draculaTheme;
 
@@ -32,6 +32,8 @@ in {
     _custom.amdGpu.enable = true;
     _custom.amdGpu.enableSouthernIslands = true;
     _custom.bspwm.enable = true;
+    _custom.lightdm.enable = true;
+    _custom.xorgWm.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions

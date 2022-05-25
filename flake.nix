@@ -84,7 +84,10 @@
       mkSystem = pkgs: system: hostname:
         pkgs.lib.nixosSystem {
           system = system;
-          modules = [(./. + "/hosts/${hostname}")];
+          modules = [
+            ./modules
+            (./. + "/hosts/${hostname}")
+          ];
           specialArgs = { inherit inputs; inherit system; nixpkgs = pkgs; };
         };
     in
@@ -99,7 +102,10 @@
       };
       darwinConfigurations."mbp-darwin" = inputs.darwin.lib.darwinSystem {
         system = "x86_64-darwin";
-        modules = [ ./hosts/mbp-darwin ];
+        modules = [
+          ./modules
+          ./hosts/mbp-darwin
+        ];
         specialArgs = { inherit inputs; nixpkgs = inputs.nixpkgs-darwin; };
       };
     };

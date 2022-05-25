@@ -23,8 +23,8 @@ in {
       ];
 
       xdg.configFile = {
-        "ncmpcpp/ncmpcpp-ueberzug/fallback.jpg".source =
-          ../../../mixins/lightdm/assets/wallpaper.jpg;
+        # "ncmpcpp/ncmpcpp-ueberzug/fallback.jpg".source =
+        #   ../../../mixins/lightdm/assets/wallpaper.jpg;
 
         # cava audio visualizer
         "cava/config".source =
