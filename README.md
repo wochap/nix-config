@@ -24,12 +24,14 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
    sudo cp /boot/EFI/boot/bootx64.efi /boot/EFI/boot/bootx64.efi.bak
    sudo cp "$(nix-build '<nixpkgs>' --no-out-link -A 'refind')/share/refind/refind_x64.efi" /boot/EFI/boot/bootx64.efi
 
-   cd $(nix-build '<nixpkgs>' --no-out-link -A 'refind')
    sudo nix-shell -p efibootmgr
-   refind-install
+   cd $(nix-build '<nixpkgs>' --no-out-link -A 'refind')
+   ./bin/refind-install
    ```
 
    Install [rEFInd-minimal](https://github.com/evanpurkhiser/rEFInd-minimal)
+
+   Install [enable gpu-switch on rEFInd](https://github.com/0xbb/gpu-switch#macbook-pro-113-and-115-notes)
 
 ## Install device config
 
