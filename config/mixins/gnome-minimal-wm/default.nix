@@ -20,6 +20,8 @@
     programs.file-roller.enable = true;
 
     services = {
+      gvfs.package = lib.mkForce pkgs.gnome3.gvfs;
+
       gnome = {
         # Required by gnome `Online Accounts`, Calendar and Geary
         evolution-data-server.enable = true;
