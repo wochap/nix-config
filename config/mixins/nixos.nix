@@ -20,9 +20,6 @@ in {
         systemd-boot.configurationLimit = 42;
       };
 
-      # Show nixos logo on boot/shutdown
-      plymouth = { enable = true; };
-
       # Enable ntfs disks
       supportedFilesystems = [ "ntfs" ];
     };
@@ -59,11 +56,6 @@ in {
     hardware.opengl.driSupport32Bit = !isMbp;
 
     # Enable audio
-    # sound.enable = true;
-    # Explicit PulseAudio support in applications
-    # nixpkgs.config.pulseaudio = true;
-    # hardware.pulseaudio.enable = true;
-    # hardware.pulseaudio.support32Bit = true;
     security.rtkit.enable = true;
     services.pipewire = {
       enable = true;
