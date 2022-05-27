@@ -7,6 +7,7 @@
     ./bspwm
     ./globals.nix
     ./lightdm
+    ./startx
     ./sway
     ./wayland-wm
     ./xorg-wm
