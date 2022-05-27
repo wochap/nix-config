@@ -76,7 +76,11 @@ in {
     };
 
     environment = {
-      sessionVariables = { WIFI_DEVICE = "wlp4s0"; };
+      sessionVariables = {
+        WIFI_DEVICE = "wlp4s0";
+        MODULES_RIGHT =
+          "recording dunst mbpfan backlight battery volume wifi date";
+      };
 
       systemPackages = with pkgs; [
         # change keyboard backlight level
