@@ -12,6 +12,12 @@ in {
     services.xserver.displayManager.startx.enable = true;
 
     home-manager.users.${userName} = {
+      programs.zsh.initExtraFirst = ''
+        if [ -z "$DISPLAY" ] && [ $TTY == "/dev/tty1" ]; then
+          exec startx
+        fi
+      '';
+
       home.file = {
         ".xinitrc".text = ''
           [ -f ~/.xsession ] && . ~/.xsession
