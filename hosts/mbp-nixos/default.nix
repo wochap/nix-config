@@ -32,7 +32,8 @@ in {
     _custom.amdGpu.enable = true;
     _custom.amdGpu.enableSouthernIslands = true;
     _custom.bspwm.enable = true;
-    _custom.lightdm.enable = true;
+    _custom.lightdm.enable = false;
+    _custom.startx.enable = true;
     _custom.xorgWm.enable = true;
 
     # This value determines the NixOS release from which the default
