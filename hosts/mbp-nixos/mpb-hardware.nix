@@ -14,7 +14,7 @@ in
     # Apparently this is currently only supported by ati_unfree drivers, not ati
     hardware.opengl.driSupport32Bit = false;
 
-    services.xserver.videoDrivers = [ "ati" ];
+    # services.xserver.videoDrivers = [ "ati" ];
 
     services.udev.extraRules =
       # Disable XHC1 wakeup signal to avoid resume getting triggered some time
