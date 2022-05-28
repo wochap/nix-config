@@ -9,7 +9,7 @@ let
 in {
   imports = [
     /etc/nixos/hardware-configuration.nix
-    ../../config/mixins/backlight.nix
+    ../../config/mixins/backlight
     ../../config/xorg.nix
   ];
 
