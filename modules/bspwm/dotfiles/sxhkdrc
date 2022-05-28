@@ -269,7 +269,8 @@ super + ctrl + shift + Escape
 ### MEDIA KEYBINDINGS
 
 XF86MonBrightness{Down,Up}
-  brightnessctl set {5%-,5%+}
+  /etc/scripts/backlight.sh {5%-,5%+}
+  # brightnessctl set {5%-,5%+}
   # light {-U 5,-A 5}
 
 XF86Audio{LowerVolume,RaiseVolume}

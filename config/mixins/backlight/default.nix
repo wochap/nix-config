@@ -2,10 +2,17 @@
 
 {
   config = {
-    # Update display brightness
-    environment.systemPackages = with pkgs; [ brightnessctl ];
     programs.light.enable = true;
+
+    environment = {
+      systemPackages = with pkgs; [ brightnessctl ];
+
+      etc = {
+        "scripts/backlight.sh" = {
+          source = ./scripts/backlight.sh;
+          mode = "0755";
+        };
+      };
+    };
   };
 }
-
-

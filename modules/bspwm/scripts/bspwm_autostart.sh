@@ -29,8 +29,9 @@ blueberry-tray &
 caffeine -a &
 libinput-gestures -c /etc/libinput-gestures.conf &
 
-light -S 20 &
-brightnessctl set 20% &
+/etc/scripts/backlight.sh 20% &
+# light -S 20 &
+# brightnessctl set 20% &
 
 # sudo cpupower frequency-set -g powersave
 # sudo cpupower frequency-set -r -u 800MHz
