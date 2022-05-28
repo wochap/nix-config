@@ -115,7 +115,6 @@ in {
     home-manager.users.${userName} = {
       xsession = {
         enable = true;
-        initExtra = "";
         windowManager.bspwm = {
           enable = true;
           extraConfig = builtins.readFile ./dotfiles/bspwmrc;

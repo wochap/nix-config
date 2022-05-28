@@ -50,7 +50,7 @@ super + shift + {w,q}
 
 # Alternate between the tiled and monocle layout
 super + l ; {m,s,t,w}
-  bsp-layout set { monocle, stack, tall, wide }
+  bsp-layout set {monocle,stack,tall,wide}
 
 # Center floating window
 super + l ; c
@@ -84,7 +84,7 @@ super + {t,shift + t,s}
 
 # Toggle fullscreen
 super + f
-  bspc node -t \~fullscreen
+  bspc node -t "~fullscreen"
 
 # Set the node flags (marked|locked|sticky|private|hidden)
 super + ctrl + {m,x,y,z,h}
@@ -113,7 +113,7 @@ super + ctrl + shift + space
 ### FOCUS/SWAP
 
 # Focus or switch the node in the given direction
-super + {_,shift + }{Left,Down,Up,Right}
+super + {_,shift +}{Left,Down,Up,Right}
   bspc node -{f,s} {west,south,north,east}
 
 # Focus the node for the given path jump (parent|brother|first|second)

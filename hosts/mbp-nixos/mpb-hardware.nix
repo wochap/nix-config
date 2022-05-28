@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, modulesPath, ... }:
 
 let
   kernelPackages = config.boot.kernelPackages;
@@ -7,7 +7,7 @@ in
   imports = [
     "${inputs.nixos-hardware}/apple/macbook-pro"
     # "${inputs.nixos-hardware}/common/pc/laptop/ssd"
-    # (modulesPath + "/hardware/network/broadcom-43xx.nix")
+    (modulesPath + "/hardware/network/broadcom-43xx.nix")
   ];
 
   config = {
