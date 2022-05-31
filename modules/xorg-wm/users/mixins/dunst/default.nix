@@ -29,7 +29,34 @@ in {
           text = ''
             #! ${pkgs.bash}/bin/bash
 
-            ${pkgs.pulseaudio}/bin/paplay /etc/assets/notification.flac
+            declare -i last_called=0
+            declare -i throttle_by=1
+
+            @debounce() {
+              if [[ ! -f ./executing ]]
+              then
+                touch ./executing
+                "$@"
+                retVal=$?
+                {
+                  sleep $throttle_by
+                  if [[ -f ./on-finish ]]
+                  then
+                    "$@"
+                    rm -f ./on-finish
+                  fi
+                  rm -f ./executing
+                } &
+                return $retVal
+              elif [[ ! -f ./on-finish ]]
+              then
+                touch ./on-finish
+              fi
+            }
+
+            @debounce ${pkgs.pulseaudio}/bin/paplay /etc/assets/notification.flac
+
+            wait $(jobs -p)
           '';
           mode = "0755";
         };
