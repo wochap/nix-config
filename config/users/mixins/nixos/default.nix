@@ -47,10 +47,11 @@ in {
       #   ".icons/Dracula-cursors".source = "${inputs.dracula-gtk-theme}/kde/cursors/Dracula-cursors";
       # };
 
-      xsession.pointerCursor = lib.mkIf (!isWayland) {
+      home.pointerCursor = lib.mkIf (!isWayland) {
         name = globals.cursor.name;
         package = globals.cursor.package;
         size = globals.cursor.size;
+        x11.enable = true;
       };
     };
   };
