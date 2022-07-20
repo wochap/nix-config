@@ -12,10 +12,6 @@ in {
     };
 
     nixpkgs.overlays = [
-      # inputs.rust-overlay.overlay
-
-      # inputs.nixpkgs-s2k.overlay
-
       inputs.neovim-nightly-overlay.overlay
 
       (final: prev: {
