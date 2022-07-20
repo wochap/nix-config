@@ -13,7 +13,7 @@
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=1be0382761e59978d46c4a2a6fed0193f474751f";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=d9495602fc4d11f1048a810b4020d627184fcf06";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=a0e3761d2efbdb6efce2c2af288afa3831214329";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
     darwin.url = "github:lnl7/nix-darwin?rev=17fbc68a6110edbff67e55f7450230a697ecb17e";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
