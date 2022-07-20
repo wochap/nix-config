@@ -84,9 +84,11 @@
 
   outputs = inputs:
     let
-      mkSystem = pkgs: system: hostname:
-        pkgs.lib.nixosSystem {
-          system = system;
+      inherit (inputs.nixpkgs.lib) nixosSystem;
+      inherit (inputs.darwin.lib) darwinSystem;
+      mkSystem = systemFn: pkgs: system: hostname:
+        systemFn {
+          inherit system;
           modules = [
             ./modules
             (./. + "/hosts/${hostname}")
@@ -96,20 +98,15 @@
     in
     {
       nixosConfigurations = {
-        desktop = mkSystem inputs.nixpkgs "x86_64-linux" "desktop";
-        desktop-sway = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-sway";
-        desktop-gnome = mkSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
-        asus-vivobook = mkSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
-        mbp-nixos = mkSystem inputs.nixpkgs "x86_64-linux" "mbp-nixos";
-        asus-old = mkSystem inputs.nixpkgs "x86_64-linux" "asus-old";
+        desktop = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop";
+        desktop-sway = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop-sway";
+        desktop-gnome = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
+        asus-vivobook = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
+        mbp-nixos = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "mbp-nixos";
+        asus-old = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-old";
       };
-      darwinConfigurations."mbp-darwin" = inputs.darwin.lib.darwinSystem {
-        system = "x86_64-darwin";
-        modules = [
-          ./modules
-          ./hosts/mbp-darwin
-        ];
-        specialArgs = { inherit inputs; nixpkgs = inputs.nixpkgs-darwin; };
+      darwinConfigurations = {
+        mbp-darwin = mkSystem darwinSystem inputs.nixpkgs-darwin "x86_64-darwin" "mbp-darwin";
       };
     };
 }
