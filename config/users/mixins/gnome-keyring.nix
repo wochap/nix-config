@@ -8,9 +8,6 @@ in {
 
     services.gnome.gnome-keyring.enable = true;
 
-    # Fix gnome-keyring when sddm is enabled
-    security.pam.services.sddm.enableGnomeKeyring = true;
-
     # Fix gnome-keyring when lightdm is enablid
     security.pam.services.login.enableGnomeKeyring = true;
 
