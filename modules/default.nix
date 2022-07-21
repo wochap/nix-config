@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./efi.nix
     ./amd-cpu.nix
     ./amd-gpu.nix
     ./bspwm

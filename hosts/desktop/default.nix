@@ -22,6 +22,7 @@ in {
     _configDirectory = configDirectory;
     _theme = draculaTheme;
 
+    _custom.efi.enable = true;
     _custom.amdCpu.enable = true;
     _custom.amdGpu.enable = true;
     _custom.bspwm.enable = true;
@@ -60,19 +61,7 @@ in {
 
         # GDK_DPI_SCALE = "0.5";
         # GDK_SCALE = "2";
-
-        BSPWM_GAP = "25";
       };
-    };
-
-    boot = {
-      kernelPackages = pkgs.linuxPackages_latest;
-      loader = {
-        grub.enable = false;
-        systemd-boot.enable = true;
-        efi.canTouchEfiVariables = true;
-      };
-      cleanTmpDir = true;
     };
 
     networking = {
@@ -90,9 +79,8 @@ in {
     # Fix windows dualboot clock
     time.hardwareClockInLocalTime = true;
 
-    hardware = { video.hidpi.enable = true; };
-
     services.xserver = {
+
       # Setup keyboard
       layout = "us";
       xkbModel = "pc104";
