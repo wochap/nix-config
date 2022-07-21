@@ -84,7 +84,7 @@ in {
         dbus-sway-environment
         configure-gtk
 
-        gksu
+        # gksu
       ];
 
       sessionVariables = { NIXOS_OZONE_WL = "1"; };

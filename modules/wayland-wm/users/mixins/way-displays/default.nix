@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.waylandWm;
-  localPkgs = import ../../../packages {
+  localPkgs = import ../../../../../config/packages {
     pkgs = pkgs;
     lib = lib;
   };

@@ -13,7 +13,7 @@ in {
       systemPackages = with pkgs; [ mako libnotify dunst ];
       etc = {
         "assets/notification.flac" = {
-          source = ../dunst/assets/notification.flac;
+          source = ./assets/notification.flac;
           mode = "0755";
         };
         "scripts/mako/mako-toggle-mode.sh" = {
