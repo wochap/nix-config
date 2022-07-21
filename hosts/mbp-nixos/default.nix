@@ -28,6 +28,7 @@ in {
     _configDirectory = configDirectory;
     _theme = draculaTheme;
 
+    _custom.efi.enable = true;
     _custom.amdCpu.enable = true;
     _custom.amdGpu.enable = true;
     _custom.amdGpu.enableSouthernIslands = true;
@@ -57,13 +58,6 @@ in {
     };
 
     boot = {
-      loader = {
-        grub.enable = false;
-        systemd-boot.enable = true;
-        efi.canTouchEfiVariables = true;
-      };
-      cleanTmpDir = true;
-
       kernelParams = [
         # needed for suspend
         "acpi_osi=Darwin"
@@ -95,7 +89,7 @@ in {
     };
 
     networking = {
-      hostName = hostName;
+      inherit hostName;
 
       # The global useDHCP flag is deprecated, therefore explicitly set to false here.
       # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -103,8 +97,6 @@ in {
       useDHCP = false;
       interfaces.wlp4s0.useDHCP = true;
     };
-
-    hardware = { video.hidpi.enable = true; };
 
     services = {
       xserver = {
@@ -119,7 +111,6 @@ in {
         libinput.touchpad.naturalScrolling = true;
         libinput.touchpad.tapping = false;
       };
-
     };
 
     # Enable webcam
