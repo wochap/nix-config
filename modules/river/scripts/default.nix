@@ -14,6 +14,7 @@ let
     text = builtins.readFile ./sway-lock.sh;
   };
 
+  # HACK: fix portals
   # bash script to let dbus know about important env variables and
   # propogate them to relevent services run at the end of wayland wm config
   # see: https://github.com/emersion/xdg-desktop-portal-wlr/wiki/"It-doesn't-work"-Troubleshooting-Checklist
@@ -22,14 +23,19 @@ let
     destination = "/bin/dbus-wayland-wm-environment";
     executable = true;
 
+    # systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
     text = ''
+      dbus-update-activation-environment SEATD_SOCK DISPLAY WAYLAND _DISPLAY XDG_CURRENT_DESKTOP=river
       dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
-      systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river"
       systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
       systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
+
+      eval $(${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)
+      export SSH_AUTH_SOCK
     '';
   };
 
+  # Apply GTK theme
   # currently, there is some friction between Wayland and gtk:
   # https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
   # the suggested way to set gtk settings is with gsettings
@@ -64,4 +70,4 @@ let
       gsettings set "$gnome_schema" font-name "$font_name"
     '';
   };
-in { inherit dbus-sway-environment configure-gtk; }
+in { inherit dbus-wayland-wm-environment configure-gtk lock-screen; }

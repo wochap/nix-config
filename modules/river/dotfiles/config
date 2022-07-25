@@ -8,9 +8,9 @@
 riverctl set-repeat 50 300
 riverctl attach-mode "top"
 riverctl focus-follows-cursor "normal"
-riverctl border-width "8"
+riverctl border-width 2
 riverctl xcursor-theme capitaine-cursors 32
-riverctl hide-cursor when-typing enabled
+# riverctl hide-cursor when-typing enabled
 
 for pad in $(riverctl list-inputs | grep -i touchpad )
 do
@@ -23,7 +23,7 @@ done
 
 for pad in $(riverctl list-inputs | grep -i mouse )
 do
-  riverctl input $pad natural-scroll enabled
+  riverctl input $pad natural-scroll disabled
   riverctl input $pad accel-profile flat
   riverctl input $pad pointer-accel 0
 done

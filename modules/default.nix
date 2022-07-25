@@ -8,7 +8,7 @@
     ./efi.nix
     ./globals.nix
     ./lightdm
-    # ./river
+    ./river
     ./startx
     ./sway
     ./wayland-wm
