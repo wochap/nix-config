@@ -1,0 +1,283 @@
+
+
+all_tags=$(((1 << 32) - 1))
+
+# Use the "logo" key as the primary modifier
+mod="Mod4"
+ctrl="Control"
+alt="Mod1"
+
+bindsym() {
+  riverctl map $1 $2 $3 $4 $5 $6
+}
+
+### SYSTEM KEYBINDINGS
+
+# reload river
+bindsym normal $mod+$ctrl+$alt Escape spawn \
+  "bash ~/.config/river/init"
+
+# Lock screen
+bindsym normal $mod l spawn \
+  "bash /etc/scripts/lock-screen"
+
+# Open power menu
+bindsym normal $mod Escape spawn \
+  "bash /etc/scripts/wofi-powermenu.sh"
+
+# Open app launcher
+bindsym normal $mod space spawn \
+  "bash /etc/scripts/wofi-launcher.sh"
+
+# Take fullscreen screenshoot
+bindsym normal $mod Print spawn \
+  "bash /etc/scripts/takeshot.sh --now"
+
+# TODO: Open calc
+
+# Open wifi menu
+bindsym normal $mod v spawn \
+  "bash /etc/scripts/wofi-wifi.sh"
+
+# TODO: Show keybindings
+
+# Show clipboard
+bindsym normal $mod v spawn \
+  "bash /etc/scripts/wofi-clipboard.sh"
+
+# Clear clipboard
+bindsym normal $mod+Shift v spawn \
+  "clipman clear --all"
+
+# TODO: Show emojis
+
+# Show last notification
+bindsym normal $mod+$ctrl n spawn \
+  "makoctl restore"
+
+# Hide recent notification
+bindsym normal $mod+$ctrl+Shift n spawn \
+  "makoctl dismiss"
+
+# Hide all notifications
+bindsym normal $mod+$ctrl+Shift Escape spawn \
+  "makoctl dismiss --all"
+
+# Toggle bar
+bindsym normal $mod b spawn \
+  "bash /etc/scripts/waybar/waybar-toggle.sh"
+
+
+### WM KEYBINDINGS
+
+# Mod + Left Mouse Button to move views
+riverctl map-pointer normal $mod BTN_LEFT move-view
+
+# Mod + Right Mouse Button to resize views
+riverctl map-pointer normal $mod BTN_RIGHT resize-view
+
+# Close focused view
+bindsym normal $mod+Shift w close
+
+# Toggle float
+bindsym normal $mod s toggle-float
+
+# Toggle fullscreen
+bindsym normal $mod f toggle-fullscreen
+
+# Focus the next/previous view in the layout stack
+bindsym normal $mod Down focus-view next
+bindsym normal $mod Up focus-view previous
+
+# Swap the focused view with the next/previous
+# view in the layout stack
+bindsym normal $mod+Shift Down swap next
+bindsym normal $mod+Shift Up swap previous
+
+# To focus the next/previous output
+bindsym normal $mod Period focus-output next
+bindsym normal $mod Comma focus-output previous
+
+# To send the focused view to the next/previous output
+bindsym normal $mod+Shift Period send-to-output next
+bindsym normal $mod+Shift Comma send-to-output previous
+
+# To bump the focused view to the top of the layout stack
+bindsym normal $mod Return zoom
+
+# To decrease/increase the main ratio of rivertile(1)
+bindsym normal $mod Left send-layout-cmd \
+  rivertile "main-ratio -0.05"
+bindsym normal $mod Right send-layout-cmd \
+  rivertile "main-ratio +0.05"
+
+# To increment/decrement the main count of rivertile(1)
+bindsym normal $mod+Shift Left send-layout-cmd \
+  rivertile "main-count +1"
+bindsym normal $mod+Shift Right send-layout-cmd \
+  rivertile "main-count -1"
+
+# To move views
+bindsym normal $mod+$alt Left move \
+  left 200
+bindsym normal $mod+$alt Down move \
+  down 200
+bindsym normal $mod+$alt Up move \
+  up 200
+bindsym normal $mod+$alt Right move \
+  right 200
+
+# To snap views to screen edges
+bindsym normal $mod+$alt+$ctrl Left snap left
+bindsym normal $mod+$alt+$ctrl Down snap down
+bindsym normal $mod+$alt+$ctrl Up snap up
+bindsym normal $mod+$alt+$ctrl Right snap right
+
+# To resize views
+bindsym normal $mod+$alt+Shift Left resize \
+  horizontal -200
+bindsym normal $mod+$alt+Shift Down resize \
+  vertical 200
+bindsym normal $mod+$alt+Shift Up resize \
+  vertical -200
+bindsym normal $mod+$alt+Shift Right resize \
+  horizontal 200
+
+# Change layout orientation
+riverctl map normal $mod+$alt+$ctrl+Shift Up    send-layout-cmd \
+  rivertile "main-location top"
+riverctl map normal $mod+$alt+$ctrl+Shift Right send-layout-cmd \
+  rivertile "main-location right"
+riverctl map normal $mod+$alt+$ctrl+Shift Down  send-layout-cmd \
+  rivertile "main-location bottom"
+riverctl map normal $mod+$alt+$ctrl+Shift Left  send-layout-cmd \
+  rivertile "main-location left"
+
+
+### WM TAGS/VIEWS
+
+for i in $(seq 1 9)
+do
+    tags=$((1 << ($i - 1)))
+
+    # Mod+[1-9] to focus tag [0-8]
+    riverctl map normal $mod $i set-focused-tags $tags
+
+    # Mod+Shift+[1-9] to tag focused view with tag [0-8]
+    riverctl map normal $mod+Shift $i set-view-tags $tags
+
+    # Mod+Ctrl+[1-9] to toggle focus of tag [0-8]
+    riverctl map normal $mod+$ctrl $i toggle-focused-tags $tags
+
+    # Mod+Shift+Ctrl+[1-9] to toggle tag [0-8] of focused view
+    riverctl map normal $mod+Shift+$ctrl $i toggle-view-tags $tags
+done
+
+# Mod+0 to focus all tags
+riverctl map normal $mod 0 set-focused-tags $all_tags
+
+# Mod+Shift+0 to tag focused view with all tags
+riverctl map normal $mod+Shift 0 set-view-tags $all_tags
+
+
+### WM SCRATCHPAD
+
+# The scratchpad will live on an unused tag. Which tags are used depends on your
+# config, but rivers default uses the first 9 tags.
+scratch_tag=$((1 << 20 ))
+
+# Toggle the scratchpad with Super+P
+riverctl map normal $mod P toggle-focused-tags ${scratch_tag}
+
+# Send windows to the scratchpad with Super+Shift+P
+riverctl map normal $mod+Shift P set-view-tags ${scratch_tag}
+
+# Set spawn tagmask to ensure new windows don't have the scratchpad tag unless
+# explicitly set.
+all_but_scratch_tag=$(( ((1 << 32) - 1) ^ $scratch_tag ))
+riverctl spawn-tagmask ${all_but_scratch_tag}
+
+
+### APPLICATION KEYBINDINGS (Super + Alt + Key)
+
+# Open primary terminal
+bindsym normal $mod+$alt t \
+  "kitty"
+
+# Open scratch terminal
+
+# Open file manager
+bindsym normal $mod+$alt f \
+  "nautilus"
+
+# Screencast/record region to mp4
+bindsym normal $mod+$alt r spawn \
+  "bash /etc/scripts/recorder.sh --area"
+
+# Open screenshoot utility
+bindsym normal $mod+$alt s spawn \
+  "bash /etc/scripts/takeshot.sh --area"
+
+# Open color picker
+bindsym normal $mod+$alt c spawn \
+  "bash /etc/scripts/color-picker.sh clipboard"
+
+# Open Browser
+riverctl declare-mode browser
+bindsym normal $mod+$alt b enter-mode browser
+bindsym browser None f spawn firefox
+bindsym browser None b spawn brave
+bindsym browser None g spawn google-chrome-stable
+bindsym browser None Escape enter-mode normal
+
+# Open magnifying glass
+
+# Open quick note app
+# /etc/scripts/bspwm_toggle_visibility.sh kitty-neorg "$HOME/.config/kitty/scripts/kitty-neorg.sh"
+
+# Open monitor
+# /etc/scripts/bspwm_toggle_visibility.sh kitty-top "$HOME/.config/kitty/scripts/kitty-top.sh"
+
+# Open neomutt
+# /etc/scripts/bspwm_toggle_visibility.sh kitty-neomutt "$HOME/.config/kitty/scripts/kitty-neomutt.sh"
+
+# Open newsboat
+# /etc/scripts/bspwm_toggle_visibility.sh kitty-newsboat "$HOME/.config/kitty/scripts/kitty-newsboat.sh"
+
+# Open ncmpcpp
+# /etc/scripts/bspwm_toggle_visibility.sh kitty-ncmpcpp "$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh"
+
+
+### MEDIA KEYBINDINGS
+
+for mode in normal locked
+do
+  bindsym $mode None XF86AudioRaiseVolume \
+    "pactl set-sink-volume @DEFAULT_SINK@ +5%"
+
+  bindsym $mode None XF86AudioLowerVolume \
+    "pactl set-sink-volume @DEFAULT_SINK@ -5%"
+
+  bindsym $mode None XF86AudioMute \
+    "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+
+  bindsym $mode None XF86AudioNext \
+    "playerctl next"
+
+  bindsym $mode None XF86AudioPrev \
+    "playerctl previous"
+
+  bindsym $mode None XF86AudioStop \
+    "playerctl pause"
+
+  bindsym $mode None XF86AudioPlay \
+    "playerctl play-pause"
+
+  bindsym $mode None XF86MonBrightnessUp \
+    "bash /etc/scripts/backlight.sh 5%+"
+
+  bindsym $mode None XF86MonBrightnessDown \
+    "bash /etc/scripts/backlight.sh 5%-"
+done
+
+# vim: syntax=sh

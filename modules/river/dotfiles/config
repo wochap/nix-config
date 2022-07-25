@@ -1,0 +1,57 @@
+
+
+### CONFIG
+
+# Set app-ids of views which should use client side decorations
+# riverctl csd-filter-add "firefox"
+
+riverctl set-repeat 50 300
+riverctl attach-mode "top"
+riverctl focus-follows-cursor "normal"
+riverctl border-width "8"
+riverctl xcursor-theme capitaine-cursors 32
+riverctl hide-cursor when-typing enabled
+
+for pad in $(riverctl list-inputs | grep -i touchpad )
+do
+  riverctl input $pad events enabled
+  riverctl input $pad tap disabled
+  riverctl input $pad disable-while-typing enabled
+  riverctl input $pad accel-profile flat
+  riverctl input $pad pointer-accel 0
+done
+
+for pad in $(riverctl list-inputs | grep -i mouse )
+do
+  riverctl input $pad natural-scroll enabled
+  riverctl input $pad accel-profile flat
+  riverctl input $pad pointer-accel 0
+done
+
+
+#### RULES
+
+riverctl float-filter-add app-id "pavucontrol"
+riverctl float-filter-add app-id "nm-connection-editor"
+riverctl float-filter-add app-id "file-roller"
+
+
+#### AUTOSTART
+
+# TODO: add swayidle
+
+riverctl spawn "dbus-wayland-wm-environment"
+riverctl spawn "configure-gtk"
+
+# Autostart apps
+# riverctl spawn "bash /etc/scripts/river-autostart.sh"
+
+
+#### LAYOUT
+
+# Set and exec into the default layout generator, rivertile.
+# River will send the process group of the init executable SIGTERM on exit.
+riverctl default-layout rivertile
+exec rivertile -view-padding 0 -outer-padding 0
+
+# vim: syntax=sh
