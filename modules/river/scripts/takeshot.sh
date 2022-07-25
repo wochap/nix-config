@@ -1,23 +1,36 @@
 #!/usr/bin/env bash
 
+# source theme colors
+. "/etc/scripts/theme-colors.sh"
+
 time=$(date +%Y-%m-%d-%I-%M-%S)
 dir="$(xdg-user-dir PICTURES)/Screenshots"
 file="Screenshot_${time}.jpg"
 EXPIRE_TIME=5000
+dest="$dir/$file"
 
 # notify
 notify_user() {
-  if [[ -e "$dir/$file" ]]; then
-    dunstify -t "$EXPIRE_TIME" --replace=699 -i $dir/$file "Screen shooter" "Screenshot Saved"
+  if [[ -e "$dest" ]]; then
+    # TODO: copy to clipboard
+
+    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dest" "Screen shooter" "Screenshot Saved" --action "default,Edit" --action "open,Open")
   else
-    dunstify -t "$EXPIRE_TIME" --replace=699 -i $dir/$file "Screen shooter" "Screenshot Deleted."
+    dunstify -t "$EXPIRE_TIME" --replace=699 "Screen shooter" "Screenshot Aborted."
+    exit
+  fi
+
+  if [[ $action == "default" ]]; then
+    swappy -f "$dest" -o "$dest" &
+  elif [[ $action == "open" ]]; then
+    xdg-open "$dest" &
   fi
 }
 
 # countdown
 countdown() {
   for sec in $(seq $1 -1 1); do
-    dunstify -t 1000 --replace=699 -i $dir/$file "Taking shot in : $sec"
+    dunstify -t 1000 --replace=699 -i $dest "Taking shot in : $sec"
     sleep 1
   done
 }
@@ -40,13 +53,13 @@ shot10() {
   shotnow
 }
 
-shotwin() {
-  cd ${dir} && grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp)" - | swappy -f - -o "$file" -
-  notify_user
-}
-
 shotarea() {
-  cd ${dir} && grim -g "$(slurp)" - | swappy -f - -o "$file" -
+  area=$(slurp -d -b "${background}bf" -c "$primary")
+  if [[ -z $area ]]; then
+    notify_user
+    exit
+  fi
+  grim -g "$area" "$dest"
   notify_user
 }
 
@@ -58,14 +71,10 @@ if [[ "$1" == "--now" ]]; then
   shotnow
 elif [[ "$1" == "--in5" ]]; then
   shot5
-elif [[ "$1" == "--in10" ]]; then
-  shot10
-elif [[ "$1" == "--win" ]]; then
-  shotwin
 elif [[ "$1" == "--area" ]]; then
   shotarea
 else
-  echo -e "Available Options : --now --in5 --in10 --win --area"
+  echo -e "Available Options : --now --in5 --area"
 fi
 
 exit 0

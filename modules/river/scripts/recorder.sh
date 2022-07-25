@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
+# source theme colors
+. "/etc/scripts/theme-colors.sh"
+
 stopfile=/tmp/_stop
 time=$(date +%Y-%m-%d-%I-%M-%S)
 dir="$(xdg-user-dir VIDEOS)/Recordings"
 file="Recording_${time}.mp4"
 EXPIRE_TIME=5000
+dest="$dir/$file"
 
 wait_recording() {
   pid=$!
@@ -14,17 +18,33 @@ wait_recording() {
 }
 
 notify_user() {
-  if [[ -e "$dir/$file" ]]; then
-    dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Saved"
+  if [[ -e "$dest" ]]; then
+    # generate thumbnail
+    thumbnail_size=500
+    thumbnail=$(mktemp --suffix .png) || exit 1
+    trap 'rm -f "$thumbnail"' exit
+    ffmpegthumbnailer -i "$dest" -o "$thumbnail" -s "$thumbnail_size"
+
+    # TODO: copy to clipboard
+
+    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Video recording" "Recording Saved" --action "default,Open" --action "fm,Open in file manager")
   else
-    dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Deleted."
+    dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Aborted."
+  fi
+
+  # TODO: Open in video editor?
+  if [[ $action == "default" ]]; then
+    xdg-open "$dest"
+  fi
+  if [[ $action == "fm" ]]; then
+    xdg-open "$dir"
   fi
 }
 
 # countdown
 countdown() {
   for sec in $(seq $1 -1 1); do
-    dunstify -t 1000 --replace=699 -i $dir/$file "Recording in : $sec"
+    dunstify -t 1000 --replace=699 "Recording in : $sec"
     sleep 1
   done
 }
@@ -42,20 +62,13 @@ shot5() {
   shotnow
 }
 
-shot10() {
-  countdown '10'
-  sleep 1
-  shotnow
-}
-
-shotwin() {
-  cd ${dir} && wf-recorder -g "$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp)" -f "$file" &
-  wait_recording
-  notify_user
-}
-
 shotarea() {
-  cd ${dir} && wf-recorder -g "$(slurp)" -f "$file" &
+  area=$(slurp -d -b "${background}bf" -c "$primary")
+  if [[ -z $area ]]; then
+    notify_user
+    exit
+  fi
+  cd ${dir} && wf-recorder -g "$area" -f "$file" &
   wait_recording
   notify_user
 }
@@ -82,14 +95,10 @@ if [[ "$1" == "--now" ]]; then
   shotnow
 elif [[ "$1" == "--in5" ]]; then
   shot5
-elif [[ "$1" == "--in10" ]]; then
-  shot10
-elif [[ "$1" == "--win" ]]; then
-  shotwin
 elif [[ "$1" == "--area" ]]; then
   shotarea
 else
-  echo -e "Available Options : --now --in5 --in10 --win --area"
+  echo -e "Available Options : --now --in5 --area"
 fi
 
 exit 0
