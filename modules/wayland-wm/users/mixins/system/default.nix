@@ -9,6 +9,10 @@
           source = ./scripts/sway-lock.sh;
           mode = "0755";
         };
+        "scripts/system/clipboard-manager.sh" = {
+          source = ./scripts/clipboard-manager.sh;
+          mode = "0755";
+        };
         "scripts/system/color-picker.sh" = {
           source = ./scripts/color-picker.sh;
           mode = "0755";

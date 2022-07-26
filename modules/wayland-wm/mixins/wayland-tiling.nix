@@ -17,10 +17,12 @@ in {
         wlr-randr
         wf-recorder
 
+        cliphist
         clipman
-        wdisplays
-        swaylock-effects # lockscreen
+        fuzzel
         swaybg
+        swaylock-effects # lockscreen
+        wdisplays
         wl-clipboard
         # sway-alttab
       ];
