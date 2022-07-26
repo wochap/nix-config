@@ -12,7 +12,12 @@
           mode = "0755";
         };
 
+        # TODO: remove
         "scripts/random-bg.sh" = {
+          source = ./scripts/random-bg.sh;
+          mode = "0755";
+        };
+        "scripts/system/random-bg.sh" = {
           source = ./scripts/random-bg.sh;
           mode = "0755";
         };
