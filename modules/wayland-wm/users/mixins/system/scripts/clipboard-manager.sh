@@ -6,6 +6,7 @@ clear_db() {
 
 init() {
   clear_db
+  killall wl-paste
   wl-paste --watch cliphist store --primary &
 }
 

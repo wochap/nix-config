@@ -10,12 +10,15 @@ dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
 /etc/scripts/system/clipboard-manager.sh --start
 
 # TODO: move to systemd
+killall mako
 mako &
 
 # TODO: move to systemd
+killall gammastep
 gammastep -O 4000 &
 
 # TODO: move to systemd
+killall waybar
 waybar &
 
 /etc/scripts/backlight.sh 20% &

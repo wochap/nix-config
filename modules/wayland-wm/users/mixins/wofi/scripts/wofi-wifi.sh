@@ -1,14 +1,6 @@
 #!/usr/bin/env bash
 
-# HACK: window padding mess up wofi location
 wofi_width="300"
-wofi_padding="100"
-wofi_real_width=$(echo "$wofi_width+$wofi_padding*2" | bc)
-monitor_size=$(swaymsg -t get_outputs | jq '.[] | select(.focused) | .rect.width,.rect.height')
-monitor_width=$(printf "$monitor_size" | sed -n '1p')
-monitor_height=$(printf "$monitor_size" | sed -n '2p')
-xoffset=$(echo "$monitor_width/2-$wofi_real_width/2" | bc)
-yoffset=$(echo "$monitor_height*0.2" | bc)
 
 ## Get info
 IFACE="$(nmcli | grep -i interface | awk '/interface/ {print $2}')"
@@ -40,7 +32,7 @@ launch="Open Connection Editor"
 options="$connected\n$launch_cli\n$launch"
 
 ## Main
-chosen="$(echo -e "$options" | wofi --dmenu --width "$wofi_width" --lines 5 --location top_left --yoffset "$yoffset" --xoffset "$xoffset")"
+chosen="$(echo -e "$options" | wofi --dmenu --width "$wofi_width" --lines 3 --location top)"
 
 case $chosen in
 $connected)

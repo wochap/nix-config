@@ -18,10 +18,6 @@ in {
           source = ./scripts/wofi-wifi.sh;
           mode = "0755";
         };
-        "scripts/wofi-clipboard.sh" = {
-          source = ./scripts/wofi-clipboard.sh;
-          mode = "0755";
-        };
         "scripts/wofi-launcher.sh" = {
           source = ./scripts/wofi-launcher.sh;
           mode = "0755";

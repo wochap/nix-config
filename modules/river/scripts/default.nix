@@ -8,7 +8,7 @@ let
     destination = "/bin/river-focus-toggle";
     executable = true;
 
-    source = ./river-focus-toggle.sh;
+    text = builtins.readFile ./river-focus-toggle.sh;
   };
 
   # HACK: fix portals

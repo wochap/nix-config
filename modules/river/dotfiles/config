@@ -44,7 +44,7 @@ riverctl spawn "dbus-wayland-wm-environment"
 riverctl spawn "configure-gtk"
 
 # Autostart apps
-# riverctl spawn "bash /etc/scripts/river-autostart.sh"
+riverctl spawn "bash /etc/scripts/river-autostart.sh"
 
 
 #### LAYOUT
