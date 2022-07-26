@@ -4,6 +4,7 @@
   config = {
     environment = {
       etc = {
+
         "scripts/system/sway-lock.sh" = {
           source = ./scripts/sway-lock.sh;
           mode = "0755";

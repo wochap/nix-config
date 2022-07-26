@@ -7,6 +7,7 @@ in {
   imports = [
     ./mixins/kanshi.nix
     ./mixins/mako
+    ./mixins/system
     ./mixins/way-displays
     ./mixins/waybar
     ./mixins/wofi
