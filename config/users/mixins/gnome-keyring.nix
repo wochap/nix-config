@@ -16,12 +16,13 @@ in {
         pinentry-program ${pkgs.pinentry.gtk2}/bin/pinentry
       '';
 
-      # TODO: move it to shell init?
-      xsession.profileExtra = ''
-        systemctl --user import-environment
-
-        eval $(${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)
-        export SSH_AUTH_SOCK
+      #   eval $(gnome-keyring-daemon)
+      #   export SSH_AUTH_SOCK
+      programs.zsh.initExtraFirst = lib.mkBefore ''
+        if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
+          eval $(${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)
+          export SSH_AUTH_SOCK
+        fi
       '';
     };
   };
