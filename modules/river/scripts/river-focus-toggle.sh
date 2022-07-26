@@ -12,7 +12,9 @@ if [[ -z "$runstring" ]]; then
   exit
 fi
 
-# TODO:
+# TODO: check if it is running
+# if running move to scratchpad
+# if not, open or toggle visibility/sticky
 # https://git.sr.ht/~leon_plickat/lswt
+riverctl spawn "$runstring"
 
-echo "hee"

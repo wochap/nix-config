@@ -3,7 +3,6 @@
 let
   userName = config._userName;
   cfg = config._custom.river;
-
   theme = config._theme;
   scripts = import ./scripts { inherit config pkgs lib; };
   unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
@@ -15,18 +14,10 @@ in {
       systemPackages = with pkgs; [
         river
 
-        # scripts
-        # TODO: add run-or-raise cli
-        # TODO: add focus cli
+        scripts.river-focus-toggle
         scripts.dbus-wayland-wm-environment
         scripts.configure-gtk
       ];
-
-      sessionVariables = {
-
-        # enable wayland support (electron apps)
-        NIXOS_OZONE_WL = "1";
-      };
 
       etc = {
         "scripts/river-autostart.sh" = {

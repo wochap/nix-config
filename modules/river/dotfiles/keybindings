@@ -15,7 +15,7 @@ riverctl map normal $mod+$ctrl+$alt Escape spawn \
 
 # Lock screen
 riverctl map normal $mod l spawn \
-  "bash /etc/scripts/lock-screen"
+  "bash /etc/scripts/system/sway-lock.sh"
 
 # Open power menu
 riverctl map normal $mod Escape spawn \
@@ -27,7 +27,7 @@ riverctl map normal $mod space spawn \
 
 # Take fullscreen screenshoot
 riverctl map normal $mod Print spawn \
-  "bash /etc/scripts/takeshot.sh --now"
+  "bash /etc/scripts/system/takeshot.sh --now"
 
 # TODO: Open calc
 
@@ -39,11 +39,11 @@ riverctl map normal $mod v spawn \
 
 # Show clipboard
 riverctl map normal $mod v spawn \
-  "bash /etc/scripts/wofi-clipboard.sh"
+  "bash /etc/scripts/system/clipboard-manager.sh --menu"
 
 # Clear clipboard
 riverctl map normal $mod+Shift v spawn \
-  "clipman clear --all"
+  "bash /etc/scripts/system/clipboard-manager.sh --clear"
 
 # TODO: Show emojis
 
@@ -208,15 +208,15 @@ riverctl map normal $mod+$alt f spawn \
 
 # Screencast/record region to mp4
 riverctl map normal $mod+$alt r spawn \
-  "bash /etc/scripts/recorder.sh --area"
+  "bash /etc/scripts/system/recorder.sh --area"
 
 # Open screenshoot utility
 riverctl map normal $mod+$alt s spawn \
-  "bash /etc/scripts/takeshot.sh --area"
+  "bash /etc/scripts/system/takeshot.sh --area"
 
 # Open color picker
 riverctl map normal $mod+$alt c spawn \
-  "bash /etc/scripts/color-picker.sh clipboard"
+  "bash /etc/scripts/system/color-picker.sh"
 
 # Open Browser
 riverctl declare-mode browser
@@ -226,22 +226,27 @@ riverctl map browser None b spawn brave
 riverctl map browser None g spawn google-chrome-stable
 riverctl map browser None Escape enter-mode normal
 
-# Open magnifying glass
+# TODO: Open magnifying glass
 
 # Open quick note app
-# /etc/scripts/bspwm_toggle_visibility.sh kitty-neorg "$HOME/.config/kitty/scripts/kitty-neorg.sh"
+riverctl map normal $mod+$alt n spawn \
+  river-focus-toggle kitty-neorg "$HOME/.config/kitty/scripts/kitty-neorg.sh"
 
 # Open monitor
-# /etc/scripts/bspwm_toggle_visibility.sh kitty-top "$HOME/.config/kitty/scripts/kitty-top.sh"
+riverctl map normal $mod+$alt m spawn \
+  river-focus-toggle kitty-top "$HOME/.config/kitty/scripts/kitty-top.sh"
 
 # Open neomutt
-# /etc/scripts/bspwm_toggle_visibility.sh kitty-neomutt "$HOME/.config/kitty/scripts/kitty-neomutt.sh"
+riverctl map normal $mod+$alt e spawn \
+  river-focus-toggle kitty-neomutt "$HOME/.config/kitty/scripts/kitty-neomutt.sh"
 
 # Open newsboat
-# /etc/scripts/bspwm_toggle_visibility.sh kitty-newsboat "$HOME/.config/kitty/scripts/kitty-newsboat.sh"
+riverctl map normal $mod+$alt r spawn \
+  river-focus-toggle kitty-newsboat "$HOME/.config/kitty/scripts/kitty-newsboat.sh"
 
 # Open ncmpcpp
-# /etc/scripts/bspwm_toggle_visibility.sh kitty-ncmpcpp "$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh"
+riverctl map normal $mod+$alt u spawn \
+ river-focus-toggle kitty-ncmpcpp "$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh"
 
 
 ### MEDIA KEYBINDINGS

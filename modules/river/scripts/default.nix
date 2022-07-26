@@ -3,15 +3,12 @@
 let
   theme = config._theme;
 
-  # TODO: add run-or-raise cli
-  # TODO: add focus cli
-  focus-toggle = pkgs.writeTextFile {
-    name = "focus-toggle";
-    destination = "/bin/focus-toggle";
+  river-focus-toggle = pkgs.writeTextFile {
+    name = "river-focus-toggle";
+    destination = "/bin/river-focus-toggle";
     executable = true;
 
-    text = ''
-    '';
+    source = ./river-focus-toggle.sh;
   };
 
   # HACK: fix portals
@@ -66,4 +63,4 @@ let
       gsettings set "$gnome_schema" font-name "$font_name"
     '';
   };
-in { inherit dbus-wayland-wm-environment configure-gtk; }
+in { inherit dbus-wayland-wm-environment configure-gtk river-focus-toggle; }

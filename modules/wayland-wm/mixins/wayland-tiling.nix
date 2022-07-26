@@ -26,6 +26,12 @@ in {
         wl-clipboard
         # sway-alttab
       ];
+
+      sessionVariables = {
+
+        # enable wayland support (electron apps)
+        NIXOS_OZONE_WL = "1";
+      };
     };
 
     # slack on wayland to share screen
