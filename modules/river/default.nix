@@ -20,7 +20,6 @@ in {
         # TODO: add focus cli
         scripts.dbus-wayland-wm-environment
         scripts.configure-gtk
-        scripts.lock-screen
       ];
 
       sessionVariables = {
@@ -34,18 +33,23 @@ in {
           source = ./scripts/river-autostart.sh;
           mode = "0755";
         };
-        # "scripts/color-picker.sh" = {
-        #   source = ./scripts/color-picker.sh;
-        #   mode = "0755";
-        # };
-        # "scripts/takeshot.sh" = {
-        #   source = ./scripts/takeshot.sh;
-        #   mode = "0755";
-        # };
-        # "scripts/recorder.sh" = {
-        #   source = ./scripts/recorder.sh;
-        #   mode = "0755";
-        # };
+
+        "scripts/system/sway-lock.sh" = {
+          source = ./scripts/sway-lock.sh;
+          mode = "0755";
+        };
+        "scripts/system/color-picker.sh" = {
+          source = ./scripts/color-picker.sh;
+          mode = "0755";
+        };
+        "scripts/system/takeshot.sh" = {
+          source = ./scripts/takeshot.sh;
+          mode = "0755";
+        };
+        "scripts/system/recorder.sh" = {
+          source = ./scripts/recorder.sh;
+          mode = "0755";
+        };
 
         # scripts to open projects blazingly fast
         # "scripts/projects/sway-dangerp.sh" = {
@@ -56,13 +60,16 @@ in {
     };
 
     home-manager.users.${userName} = {
+      programs.zsh.initExtraFirst = ''
+        if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
+          exec river
+        fi
+      '';
 
       xdg.configFile = {
 
         "river/init" = {
           text = ''
-            #!/bin/sh
-
             riverctl background-color 0x${unwrapHex theme.background}
 
             riverctl border-color-focused 0x${unwrapHex theme.purple}

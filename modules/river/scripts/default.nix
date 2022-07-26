@@ -6,14 +6,6 @@ let
   # TODO: add run-or-raise cli
   # TODO: add focus cli
 
-  lock-screen = pkgs.writeTextFile {
-    name = "lock-screen";
-    destination = "/bin/lock-screen";
-    executable = true;
-
-    text = builtins.readFile ./sway-lock.sh;
-  };
-
   # HACK: fix portals
   # bash script to let dbus know about important env variables and
   # propogate them to relevent services run at the end of wayland wm config
@@ -23,15 +15,11 @@ let
     destination = "/bin/dbus-wayland-wm-environment";
     executable = true;
 
-    # systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
     text = ''
       dbus-update-activation-environment SEATD_SOCK DISPLAY WAYLAND _DISPLAY XDG_CURRENT_DESKTOP=river
       dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
       systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
       systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
-
-      eval $(${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)
-      export SSH_AUTH_SOCK
     '';
   };
 
@@ -70,4 +58,4 @@ let
       gsettings set "$gnome_schema" font-name "$font_name"
     '';
   };
-in { inherit dbus-wayland-wm-environment configure-gtk lock-screen; }
+in { inherit dbus-wayland-wm-environment configure-gtk; }
