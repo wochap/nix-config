@@ -5,6 +5,14 @@ let
 
   # TODO: add run-or-raise cli
   # TODO: add focus cli
+  focus-toggle = pkgs.writeTextFile {
+    name = "focus-toggle";
+    destination = "/bin/focus-toggle";
+    executable = true;
+
+    text = ''
+    '';
+  };
 
   # HACK: fix portals
   # bash script to let dbus know about important env variables and
