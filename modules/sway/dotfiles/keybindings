@@ -15,7 +15,7 @@ floating_modifier $mod normal
 bindsym $mod+Ctrl+alt+Escape reload
 
 # Lock screen
-bindsym $mod+alt+l exec \
+bindsym $mod+l exec \
   /etc/scripts/system/sway-lock.sh
 
 # Open power menu
