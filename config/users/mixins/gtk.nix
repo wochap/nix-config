@@ -68,6 +68,9 @@ in {
           # Hide minimize and maximize buttons
           gtk-decoration-layout = "menu:";
 
+          # Hide minimize, maximize, close buttons
+          button-layout = "";
+
           gtk-xft-antialias = 1;
           gtk-xft-hinting = 1;
           gtk-xft-hintstyle = "hintfull";

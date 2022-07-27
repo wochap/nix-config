@@ -17,13 +17,21 @@ in {
         wlr-randr
         wf-recorder
 
+        cliphist
         clipman
-        wdisplays
-        swaylock-effects # lockscreen
+        fuzzel
         swaybg
+        swaylock-effects # lockscreen
+        wdisplays
         wl-clipboard
         # sway-alttab
       ];
+
+      sessionVariables = {
+
+        # enable wayland support (electron apps)
+        NIXOS_OZONE_WL = "1";
+      };
     };
 
     # slack on wayland to share screen

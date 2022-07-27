@@ -115,4 +115,14 @@
       description = "Flag for devices with nvidia.";
     };
   };
+
+  config = {
+    environment.etc."scripts/theme-colors.sh" = {
+      text = ''
+        ${lib.concatStringsSep "\n"
+        (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'') config._theme)}
+      '';
+      mode = "0755";
+    };
+  };
 }

@@ -1,11 +1,11 @@
 @import url("colors.css");
 
 window#waybar {
-  background-color: transparent;
+  background-color: @background;
   color: @foreground;
   font-family: Iosevka Nerd Font, woos, sans-serif;
   font-size: 14px;
-  transition-duration: .5s;
+  transition-duration: 0.5s;
   transition-property: background-color;
 }
 
@@ -13,10 +13,12 @@ window#waybar.hidden {
   opacity: 0;
 }
 
+#mode,
 #keyboard-state label.locked,
 #custom-recorder,
 #custom-notifications,
 #custom-powermenu,
+#tags,
 #workspaces,
 #custom-scratchpad_indicator,
 #window,
@@ -27,9 +29,9 @@ window#waybar.hidden {
 #network,
 #clock,
 #tray {
-  background-color: @background;
-  padding: 0 1em;
-  margin: 0;
+  background-color: @selection;
+  padding: 0 7px;
+  margin: 7px 0;
   border-radius: 4px;
   background-clip: border-box;
 }
@@ -48,22 +50,28 @@ window#waybar.hidden {
   color: @red;
 }
 
+#tags,
 #workspaces {
   padding: 0 calc(1em - 4px);
 }
+#tags button,
 #workspaces button {
   padding: 0 4px;
   min-width: 20px;
 }
+#tags button:hover,
 #workspaces button:hover {
-  background-color: rgba(0, 0, 0, 0.2)
+  background-color: rgba(0, 0, 0, 0.2);
 }
+#tags button.focused,
 #workspaces button.focused {
   color: @purple;
 }
+#tags button.urgent,
 #workspaces button.urgent {
   color: @red;
 }
+#tags button.persistant,
 #workspaces button.persistant {
   color: @selection;
 }
@@ -74,6 +82,10 @@ window#waybar.hidden {
 
 #memory {
   color: #c678dd;
+}
+
+#mode {
+  color: @orange;
 }
 
 #temperature {

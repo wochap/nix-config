@@ -46,6 +46,8 @@ in {
       wheelNeedsPassword = false;
     };
 
+    hardware.video.hidpi.enable = true;
+
     # Enable bluetooth
     hardware.bluetooth.enable = true;
 

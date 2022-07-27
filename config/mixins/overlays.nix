@@ -12,10 +12,6 @@ in {
     };
 
     nixpkgs.overlays = [
-      # inputs.rust-overlay.overlay
-
-      # inputs.nixpkgs-s2k.overlay
-
       inputs.neovim-nightly-overlay.overlay
 
       (final: prev: {
@@ -82,37 +78,6 @@ in {
     ] ++ (if (isWayland) then
       [
         (final: prev: {
-          # HACK:
-          # https://forums.developer.nvidia.com/t/nvidia-495-does-not-advertise-ar24-xr24-as-shm-formats-as-required-by-wayland-wlroots/194651
-          # wlroots = prev.wlroots.overrideAttrs(old: {
-          #   postPatch = ''
-          #     sed -i 's/assert(argb8888 &&/assert(true || argb8888 ||/g' 'render/wlr_renderer.c'
-          #   '';
-          # });
-
-          # egl-wayland = prev.egl-wayland.overrideAttrs (old: rec {
-          #   pname = "egl-wayland";
-          #   version = "1.1.9.999";
-          #   name = "${pname}-${version}";
-          #   src = final.fetchFromGitHub {
-          #     owner = "Nvidia";
-          #     repo = "egl-wayland";
-          #     rev = "daab8546eca8428543a4d958a2c53fc747f70672";
-          #     sha256 = "sha256-IrLeqBW74mzo2OOd5GzUPDcqaxrsoJABwYyuKTGtPsw=";
-          #   };
-          #   buildInputs = old.buildInputs ++ [ final.wayland-protocols ];
-          # });
-
-          # xwayland = prev.xwayland.overrideAttrs (old: rec {
-          #   version = "21.1.2.901";
-          #   src = prev.fetchFromGitLab {
-          #     domain = "gitlab.freedesktop.org";
-          #     owner = "xorg";
-          #     repo = "xserver";
-          #     rev = "xwayland-21.1.2.901";
-          #     sha256 = "sha256-TOsxN+TVMICYhqkypqrFgzI/ln87ALb9LijPgHmlcos=";
-          #   };
-          # });
 
           rofi = prev.rofi.overrideAttrs (old: rec {
             src = prev.fetchurl {

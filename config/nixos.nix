@@ -19,7 +19,7 @@
     ./mixins/pkgs-node.nix
     ./mixins/pkgs-python.nix
     ./mixins/pkgs.nix
-    ./mixins/qt-pkgs.nix # Comment on first install
+    ./mixins/qt-pkgs.nix
     ./mixins/virt.nix
     ./mixins/vscode.nix
     ./mixins/xfce-minimal-wm.nix

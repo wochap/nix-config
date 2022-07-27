@@ -22,15 +22,17 @@ in {
     _configDirectory = configDirectory;
     _theme = draculaTheme;
 
+    _custom.efi.enable = true;
     _custom.amdCpu.enable = true;
     _custom.amdGpu.enable = true;
-    _custom.bspwm.enable = true;
+    # _custom.bspwm.enable = true;
     _custom.lightdm.enable = false;
-    _custom.startx.enable = true;
-    _custom.xorgWm.enable = true;
+    # _custom.startx.enable = true;
+    # _custom.xorgWm.enable = true;
 
-    # _custom.sway.enable = true;
-    # _custom.waylandWm.enable = true;
+    # _custom.river.enable = true;
+    _custom.sway.enable = true;
+    _custom.waylandWm.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
@@ -60,23 +62,11 @@ in {
 
         # GDK_DPI_SCALE = "0.5";
         # GDK_SCALE = "2";
-
-        BSPWM_GAP = "25";
       };
-    };
-
-    boot = {
-      kernelPackages = pkgs.linuxPackages_latest;
-      loader = {
-        grub.enable = false;
-        systemd-boot.enable = true;
-        efi.canTouchEfiVariables = true;
-      };
-      cleanTmpDir = true;
     };
 
     networking = {
-      hostName = hostName;
+      inherit hostName;
 
       # The global useDHCP flag is deprecated, therefore explicitly set to false here.
       # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -90,9 +80,8 @@ in {
     # Fix windows dualboot clock
     time.hardwareClockInLocalTime = true;
 
-    hardware = { video.hidpi.enable = true; };
-
     services.xserver = {
+
       # Setup keyboard
       layout = "us";
       xkbModel = "pc104";

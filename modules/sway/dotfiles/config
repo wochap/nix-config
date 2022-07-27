@@ -2,7 +2,7 @@
 
 include /etc/sway/config.d/*
 
-#### SWAY theme ####
+#### THEME
 font pango:JetBrainsMono Nerd Font 10
 titlebar_padding 12 7
 title_align center
@@ -11,7 +11,7 @@ default_border pixel 2
 default_floating_border pixel 2
 for_window [class=".*"] border pixel 2
 
-gaps inner 15
+gaps inner 0
 gaps outer 0
 
 # border_images.focused /etc/sway/borders/dropShadowDark.png
@@ -20,20 +20,9 @@ gaps outer 0
 # border_images.urgent /etc/sway/borders/dropShadowDark.png
 
 
-#### SWAY configuration ####
-
-# You can get the names of your outputs by running: swaymsg -t get_outputs
-# TODO: make it dynamic, use kanshi
-# output eDP-1 disable
-# output DP-3 resolution 3840x2160 scale 1.5
-# output * bg /home/gean/Pictures/backgrounds/default.png fill
+#### CONFIG
 
 focus_follows_mouse yes
-
-exec swayidle -w \
-     timeout 300 'bash /etc/scripts/sway-lock.sh' \
-     timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-     before-sleep 'bash /etc/scripts/sway-lock.sh'
 
 input * {
   natural_scroll enabled;
@@ -58,11 +47,9 @@ seat * {
   xcursor_theme capitaine-cursors 32
   hide_cursor when-typing enable
 }
-# exec gsettings set org.gnome.desktop.interface cursor-theme capitaine-cursors &
-# exec gsettings set org.gnome.desktop.interface cursor-size 32 &
 
 
-#### SWAY rules ####
+#### RULES
 for_window [class=".*"] border pixel 2;
 for_window [app_id=".*"] border pixel 2;
 for_window [app_id="blueberry.py"] floating enable; move position center;
@@ -87,25 +74,16 @@ for_window [app_id="kitty-scratch"] floating enable; move position center; stick
 for_window [app_id="kitty-neorg"] floating enable; move position center; sticky enable; resize set width 1500 px height 1200 px;
 for_window [app_id="kitty-nmtui"] floating enable; move position center; sticky enable; resize set width 750 px height 1200 px;
 
-# for_window [window_role="gimp-dock"] floating enable; move position center; resize shrink width 50 px or 50ppt
 
+#### AUTOSTART
+exec swayidle -w \
+     timeout 300 'bash /etc/scripts/system/sway-lock.sh' \
+     timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+     before-sleep 'bash /etc/scripts/system/sway-lock.sh'
 
-#### SWAY workspaces ####
-# exec firefox > /dev/null 2>&1 &
-# exec google-chrome-stable > /dev/null 2>&1 &
-
-# include @sysconfdir@/sway/config.d/*
-
-# exec "systemctl --user import-environment; systemctl --user start sway-session.target"
-
-exec dbus-sway-environment
+exec dbus-wayland-wm-environment
 exec configure-gtk
 
-#### AUTOSTART ####
-# init gnome keyring
-# exec eval $(gnome-keyring-daemon --start --components=secrets,ssh,pkcs11)
-# exec export SSH_AUTH_SOCK
+# Autostart apps
 exec bash /etc/scripts/sway-autostart.sh &
-
-
 

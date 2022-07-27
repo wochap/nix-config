@@ -21,6 +21,6 @@ gammastep -O 4000 &
 killall waybar
 waybar &
 
-# blueberry-tray &
 /etc/scripts/backlight.sh 20% &
 /etc/scripts/system/random-bg.sh &
+

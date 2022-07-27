@@ -21,7 +21,8 @@
   font-size: 14px;
 
   /* TODO: padding here requires offset */
-  padding: 60px 100px;
+  /* it mess up the position */
+  /* padding: 60px 100px; */
   /* margin-left: -100px; */
 }
 
@@ -42,6 +43,7 @@
 
 #entry {
   padding: 0.5em calc(1em - 4px);
+  min-height: 2.5em;
   /* transition-duration: .25s; */
   /* transition-property: background-color; */
   /* transition-timing-function: ease-in-out; */

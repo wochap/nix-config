@@ -1,9 +1,3 @@
-# vim: syntax=sh
-
-# Exit sway (logs you out of your Wayland session)
-# bindsym $mod+Escape exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
-
-#### SWAY keybindings ####
 
 set $mod Mod4
 set $left left
@@ -14,61 +8,67 @@ set $term kitty
 
 floating_modifier $mod normal
 
+
+#### SYSTEM KEYBINDINGS
+
 # Reload the configuration file
-bindsym $mod+Ctrl+Escape reload
+bindsym $mod+Ctrl+alt+Escape reload
+
+# Lock screen
+bindsym $mod+l exec \
+  /etc/scripts/system/sway-lock.sh
 
 # Open power menu
 bindsym $mod+Escape exec \
   swaymsg exec /etc/scripts/wofi-powermenu.sh
 
-# Take fullscreen screenshot
-bindsym $mod+Print exec \
-  /etc/scripts/takeshot.sh --now
-
 # Open app launcher
 bindsym $mod+space exec \
   swaymsg exec /etc/scripts/wofi-launcher.sh
 
-# Open calc
-# TODO
+# Take fullscreen screenshot
+bindsym $mod+Print exec \
+  /etc/scripts/system/takeshot.sh --now
+
+# TODO: Open calc
 
 # Open wifi menu
 bindsym $mod+w exec \
   swaymsg exec /etc/scripts/wofi-wifi.sh
 
-# Show help
-# TODO
+# TODO: Show keybindings
 
 # Show clipboard
-bindsym $mod+v exec /etc/scripts/wofi-clipboard.sh
+bindsym $mod+v exec \
+  /etc/scripts/system/clipboard-manager.sh --menu
 
 # Clear clipboard
-bindsym $mod+Shift+v exec clipman clear --all
+bindsym $mod+Shift+v exec \
+  /etc/scripts/system/clipboard-manager.sh --clear
 
-# Show emojis
-# TODO
+# TODO: Show emojis
 
-# Open terminal
-bindsym $mod+Return exec $term
+bindsym $mod+ctrl+n exec \
+  makoctl restore
+
+bindsym $mod+ctrl+shift+n exec \
+  makoctl dismiss
+
+bindsym $mod+ctrl+shift+Escape exec \
+  makoctl dismiss --all
+
+# Toggle waybar
+bindsym $mod+b exec \
+  /etc/scripts/waybar/waybar-toggle.sh
+
+
+### WM KEYBINDINGS
 
 # Close focused window
 bindsym $mod+Shift+w kill
 
-# Alternate between the tiled and monocle layout
-mode "layout" {
-  bindsym m mode "default"; layout tabbed
-  bindsym s mode "default"; layout splith
-  bindsym c mode "default"; move position center
-  bindsym Escape mode "default"
-}
-bindsym $mod+l mode "layout"
-
-
-### STATE/FLAGS
-
-# Set the window state (tiled|floating)
-bindsym $mod+s floating enable
-bindsym $mod+t floating disable
+# Toggle float
+bindsym $mod+s floating toggle
 
 # Toggle fullscreen
 bindsym $mod+f fullscreen toggle
@@ -76,24 +76,30 @@ bindsym $mod+f fullscreen toggle
 # Set the node flags (sticky)
 bindsym $mod+ctrl+y sticky toggle
 
-bindsym $mod+ctrl+h move container to scratchpad
+# Alternate between the tiled and monocle layout
+mode "layout" {
+  bindsym --to-code {
+    t mode "default"; layout tabbed
+    s mode "default"; layout splith
+    c mode "default"; move position center
 
-
-### PRESELECT
+    Escape mode "default"
+  }
+}
+bindsym $mod+a mode "layout"
 
 # preselect the direction
 bindsym $mod+ctrl+Right split horizontal
 bindsym $mod+ctrl+Down split vertical
 bindsym $mod+ctrl+space split none
 
-
-### FOCUS/SWAP
-
+# Focus direction
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
 bindsym $mod+$right focus right
 
+# Swap direction
 bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+$down move down
 bindsym $mod+Shift+$up move up
@@ -102,14 +108,8 @@ bindsym $mod+Shift+$right move right
 bindsym $mod+n focus next
 bindsym $mod+Shift+n focus prev
 
-# Open hidden windows
-bindsym $mod+alt+Tab scratchpad show
-
 # Focus floating or tile windows
-bindsym alt+Tab focus mode_toggle
-
-# Open windows
-# TODO
+bindsym $mod+Tab focus mode_toggle
 
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
@@ -133,102 +133,87 @@ bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
+# Resize
+bindsym $mod+alt+Shift+$left resize shrink width 40px
+bindsym $mod+alt+Shift+$down resize grow height 40px
+bindsym $mod+alt+Shift+$up resize shrink height 40px
+bindsym $mod+alt+Shift+$right resize grow width 40px
 
-### MOVE/RESIZE
-mode "resize" {
-  bindsym $left resize shrink width 40px
-  bindsym $down resize grow height 40px
-  bindsym $up resize shrink height 40px
-  bindsym $right resize grow width 40px
-  bindsym Escape mode "default"
-}
-bindsym $mod+r mode "resize"
+# Move
+bindsym $mod+alt+$left move left 40px
+bindsym $mod+alt+$down move down 40px
+bindsym $mod+alt+$up move up 40px
+bindsym $mod+alt+$right move right 40px
 
-mode "move" {
-  bindsym $left move left 40px
-  bindsym $down move down 40px
-  bindsym $up move up 40px
-  bindsym $right move right 40px
-  bindsym Escape mode "default"
-}
-bindsym $mod+m mode "move"
+
+### WM SCRATCHPAD
+
+# Send to scratchpad
+bindsym $mod+ctrl+p move container to scratchpad
+
+# Open scratchpad
+bindsym $mod+alt+Tab scratchpad show
 
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
-# Toggle waybar
-bindsym $mod+alt+p exec \
-  /etc/scripts/waybar/waybar-toggle.sh
-
-# Lock screen
-bindsym $mod+alt+l exec \
-  /etc/scripts/sway-lock.sh
+# Open primary terminal
+bindsym $mod+alt+t exec \
+  $term
 
 # Open file manager
 bindsym $mod+alt+f exec \
-  sway-focus.sh --toggle-scratchpad "org.gnome.Nautilus" nautilus
+  sway-focus-toggle "org.gnome.Nautilus" nautilus
 
 # Screencast/record region to mp4
 bindsym $mod+alt+r exec \
-  /etc/scripts/recorder.sh --area
+  /etc/scripts/system/recorder.sh --area
 
 # Open screenshoot utility
 bindsym $mod+alt+s exec \
-  /etc/scripts/takeshot.sh --area
+  /etc/scripts/system/takeshot.sh --area
 
 # Open color picker
 bindsym $mod+alt+c exec \
-  /etc/scripts/color-picker.sh clipboard
+  /etc/scripts/system/color-picker.sh
 
 # Open Browser
 mode "browser" {
-  bindsym b mode "default"; exec brave
-  bindsym c mode "default"; exec google-chrome-stable
-  bindsym f mode "default"; exec firefox
-  bindsym Escape mode "default"
+  bindsym --to-code {
+    b mode "default"; exec brave
+    g mode "default"; exec google-chrome-stable
+    f mode "default"; exec firefox
+
+    Escape mode "default"
+  }
 }
 bindsym $mod+alt+b mode "browser"
 
+# Terminal TUI
+mode "tui" {
+  bindsym --to-code {
+    n mode "default"; exec sway-focus-toggle kitty-neorg $HOME/.config/kitty/scripts/kitty-neorg.sh
+    m mode "default"; exec sway-focus-toggle kitty-top $HOME/.config/kitty/scripts/kitty-top.sh
+    e mode "default"; exec sway-focus-toggle kitty-neomutt $HOME/.config/kitty/scripts/kitty-neomutt.sh
+    r mode "default"; exec sway-focus-toggle kitty-newsboat $HOME/.config/kitty/scripts/kitty-newsboat.sh
+    u mode "default"; exec sway-focus-toggle kitty-ncmpcpp $HOME/.config/kitty/scripts/kitty-ncmpcpp.sh
+    s mode "default"; exec sway-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
 
-# Open terminal
-mode "terminal" {
-  bindsym a mode "default"; exec alacritty
-  bindsym k mode "default"; exec kitty
-  bindsym s mode "default"; exec sway-focus.sh --toggle-scratchpad kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
-  bindsym Escape mode "default"
+    Escape mode "default"
+  }
 }
-bindsym $mod+alt+t mode "terminal"
+bindsym $mod+alt+u mode "tui"
 
-# Open magnifying glass
-# TODO
-
-# Open quick note app
-bindsym $mod+alt+n exec \
-  sway-focus.sh --toggle-scratchpad kitty-neorg $HOME/.config/kitty/scripts/kitty-neorg.sh
-
-# Open monitor
-bindsym $mod+alt+m exec \
-  sway-focus.sh --toggle-scratchpad kitty-top $HOME/.config/kitty/scripts/kitty-top.sh
-
-bindsym $mod+ctrl+n exec \
-  makoctl restore
-
-bindsym $mod+ctrl+shift+n exec \
-  makoctl dismiss
-
-bindsym $mod+ctrl+shift+Escape exec \
-  makoctl dismiss --all
+# TODO: Open magnifying glass
 
 
 ### MEDIA KEYBINDINGS
 
 bindsym XF86MonBrightnessUp exec \
-  brightnessctl set 5%+
-  # light {-U 5,-A 5}
+  /etc/scripts/backlight.sh 5%+
 
 bindsym XF86MonBrightnessDown exec \
-  brightnessctl set 5%-
-  # light {-U 5,-A 5}
+  /etc/scripts/backlight.sh 5%-
 
 bindsym XF86AudioRaiseVolume exec \
   pactl set-sink-volume @DEFAULT_SINK@ +5%
@@ -255,3 +240,4 @@ bindsym XF86AudioPlay exec \
 bindsym XF86AudioPrev exec \
   playerctl previous
 
+# vim: syntax=sh

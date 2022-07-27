@@ -20,6 +20,7 @@ in {
       evtest # input debugging
       ffmpegthumbnailer
       glxinfo # opengl utils
+      graphicsmagick
       inotify-tools # c module
       inxi # check compositor running
       libva-utils # verifying VA-API
