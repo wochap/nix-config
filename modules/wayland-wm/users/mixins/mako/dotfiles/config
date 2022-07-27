@@ -10,7 +10,8 @@ max-visible=5
 layer=overlay
 anchor=bottom-right
 icon-location=left
-on-button-middle=exec makoctl menu -n "$id" dmenu -p 'Select action: '
+# on-button-middle=exec makoctl menu -n "$id" dmenu -p 'Select action: '
+on-button-middle=exec makoctl menu -n "$id" wofi --dmenu --width 300
 sort=+time
 
 # theme
