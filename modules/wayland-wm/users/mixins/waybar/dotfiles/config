@@ -1,12 +1,12 @@
 {
   "height": 40, // Waybar height (to be removed for auto height)
-  "modules-left": ["custom/powermenu", "sway/workspaces", "custom/scratchpad_indicator", "keyboard-state"],
-  "modules-center": ["sway/window"],
+  "modules-left": ["custom/powermenu", "river/tags", "sway/workspaces", "river/mode", "custom/scratchpad_indicator", "keyboard-state"],
+  "modules-center": ["river/window", "sway/window"],
   "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "battery", "backlight", "pulseaudio", "network", "clock"],
   "ipc": true,
   "id": "main",
-  "spacing": 15,
-  "margin": "15 15 0 15",
+  "spacing": 7,
+  "margin": "0 7 0 7",
 
   // Modules configuration
   "custom/scratchpad_indicator": {
