@@ -3,12 +3,12 @@
 let
   theme = config._theme;
 
-  river-focus-toggle = pkgs.writeTextFile {
-    name = "river-focus-toggle";
-    destination = "/bin/river-focus-toggle";
+  sway-focus-toggle = pkgs.writeTextFile {
+    name = "sway-focus-toggle";
+    destination = "/bin/sway-focus-toggle";
     executable = true;
 
-    text = builtins.readFile ./river-focus-toggle.sh;
+    text = builtins.readFile ./sway-focus-toggle.sh;
   };
 
   # HACK: fix portals
@@ -21,10 +21,11 @@ let
     executable = true;
 
     text = ''
-      dbus-update-activation-environment SEATD_SOCK DISPLAY WAYLAND _DISPLAY XDG_CURRENT_DESKTOP=river
-      dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
+      dbus-update-activation-environment SEATD_SOCK DISPLAY WAYLAND _DISPLAY XDG_CURRENT_DESKTOP=sway
+      dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
       systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
       systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
     '';
   };
-in { inherit dbus-wayland-wm-environment river-focus-toggle; }
+in { inherit dbus-wayland-wm-environment sway-focus-toggle; }
+

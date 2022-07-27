@@ -16,7 +16,6 @@ in {
 
         scripts.river-focus-toggle
         scripts.dbus-wayland-wm-environment
-        scripts.configure-gtk
       ];
 
       etc = {
@@ -34,7 +33,7 @@ in {
     };
 
     home-manager.users.${userName} = {
-      programs.zsh.initExtraFirst = ''
+      programs.zsh.initExtraFirst = lib.mkAfter ''
         if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
           exec river
         fi

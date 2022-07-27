@@ -32,7 +32,7 @@ riverctl map normal $mod Print spawn \
 # TODO: Open calc
 
 # Open wifi menu
-riverctl map normal $mod v spawn \
+riverctl map normal $mod w spawn \
   "bash /etc/scripts/wofi-wifi.sh"
 
 # TODO: Show keybindings
@@ -200,7 +200,7 @@ riverctl spawn-tagmask ${all_but_scratch_tag}
 riverctl map normal $mod+$alt t spawn \
   "kitty"
 
-# Open scratch terminal
+# TODO: Open scratch terminal
 
 # Open file manager
 riverctl map normal $mod+$alt f spawn \
@@ -228,25 +228,20 @@ riverctl map browser None Escape enter-mode normal
 
 # TODO: Open magnifying glass
 
+# Terminal TUI
+riverctl declare-mode tui
+riverctl map normal $mod+$alt u enter-mode tui
 # Open quick note app
-riverctl map normal $mod+$alt n spawn \
-  river-focus-toggle kitty-neorg "$HOME/.config/kitty/scripts/kitty-neorg.sh"
-
+riverctl map tui None n spawn "river-focus-toggle kitty-neorg \"$HOME/.config/kitty/scripts/kitty-neorg.sh\""
 # Open monitor
-riverctl map normal $mod+$alt m spawn \
-  river-focus-toggle kitty-top "$HOME/.config/kitty/scripts/kitty-top.sh"
-
+riverctl map tui None m spawn "river-focus-toggle kitty-top \"$HOME/.config/kitty/scripts/kitty-top.sh\""
 # Open neomutt
-riverctl map normal $mod+$alt e spawn \
-  river-focus-toggle kitty-neomutt "$HOME/.config/kitty/scripts/kitty-neomutt.sh"
-
+riverctl map tui None e spawn "river-focus-toggle kitty-neomutt \"$HOME/.config/kitty/scripts/kitty-neomutt.sh\""
 # Open newsboat
-riverctl map normal $mod+$alt r spawn \
-  river-focus-toggle kitty-newsboat "$HOME/.config/kitty/scripts/kitty-newsboat.sh"
-
+riverctl map tui None r spawn "river-focus-toggle kitty-newsboat \"$HOME/.config/kitty/scripts/kitty-newsboat.sh\""
 # Open ncmpcpp
-riverctl map normal $mod+$alt u spawn \
- river-focus-toggle kitty-ncmpcpp "$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh"
+riverctl map tui None u spawn "river-focus-toggle kitty-ncmpcpp \"$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh\""
+riverctl map tui None Escape enter-mode normal
 
 
 ### MEDIA KEYBINDINGS
