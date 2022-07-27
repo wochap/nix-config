@@ -1,6 +1,6 @@
 {
   "height": 40, // Waybar height (to be removed for auto height)
-  "modules-left": ["custom/powermenu", "river/tags", "sway/workspaces", "river/mode", "custom/scratchpad_indicator", "keyboard-state"],
+  "modules-left": ["custom/powermenu", "river/tags", "sway/workspaces", "custom/scratchpad_indicator", "keyboard-state", "river/mode", "sway/mode"],
   "modules-center": ["river/window", "sway/window"],
   "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "battery", "backlight", "pulseaudio", "network", "clock"],
   "ipc": true,
