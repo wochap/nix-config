@@ -11,7 +11,7 @@ init() {
 }
 
 menu() {
-  cliphist list | wofi --dmenu --location top | cliphist decode | wl-copy
+  cliphist list | wofi --dmenu --width "600" --location top | cliphist decode | wl-copy
 }
 
 if [[ "$1" == "--start" ]]; then
