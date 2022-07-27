@@ -52,7 +52,7 @@ window#waybar.hidden {
 
 #tags,
 #workspaces {
-  padding: 0 calc(1em - 4px);
+  padding: 0;
 }
 #tags button,
 #workspaces button {
@@ -65,7 +65,8 @@ window#waybar.hidden {
 }
 #tags button.focused,
 #workspaces button.focused {
-  color: @purple;
+  color: @background;
+  background-color: @primary;
 }
 #tags button.urgent,
 #workspaces button.urgent {
