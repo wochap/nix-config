@@ -25,7 +25,7 @@ gaps outer 0
 focus_follows_mouse yes
 
 input * {
-  natural_scroll enabled;
+  natural_scroll enabled
 }
 
 input "type:keyboard" {
@@ -33,8 +33,8 @@ input "type:keyboard" {
 }
 
 input "type:touchpad" {
-  accel_profile "flat"
-  pointer_accel 0
+  accel_profile "adaptive"
+  natural_scroll enabled
 }
 
 input "type:pointer" {
