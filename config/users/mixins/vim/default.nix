@@ -27,11 +27,12 @@ in {
           # uivonim
 
           # TODO: passextraMakeWrapperArgs?
-          neovim-nightly
+          unstable.neovim
+          # neovim-nightly
           neovim-remote
 
           # required by treesitter
-          unstable.tree-sitter
+          tree-sitter
 
           # required by telescope
           ripgrep

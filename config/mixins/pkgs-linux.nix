@@ -79,7 +79,7 @@ in {
       postman
       simplenote
       slack
-      unstable.notion-app-enhanced
+      notion-app-enhanced
       whatsapp-for-linux
     ];
   };

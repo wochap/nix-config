@@ -8,7 +8,6 @@ in {
 
       programs.bottom = {
         enable = true;
-        package = pkgs.unstable.bottom;
         settings = {
           flags = {
             group_processes = true;

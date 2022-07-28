@@ -1,8 +1,8 @@
 {
   inputs = {
     # nixpkgs channels
-    unstable.url = "github:nixos/nixpkgs?rev=5181d5945eda382ff6a9ca3e072ed6ea9b547fee";
-    nixpkgs.url = "github:nixos/nixpkgs?rev=62de360d75419386b69ea4af4a8ce104949a8242"; # nixos-22.05
+    unstable.url = "github:nixos/nixpkgs?rev=7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f";
+    nixpkgs.url = "github:nixos/nixpkgs?rev=d9536b9b1e33377fb520e115bc8588d093ed97be"; # nixos-22.05
     prevstable.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
 
@@ -27,7 +27,7 @@
 
     # third party overlays/modules
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=a0e3761d2efbdb6efce2c2af288afa3831214329";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=36ccc9c4bbe52ec826c51f1d991982e78174039b";
     nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";
 
     # third party darwin stuff
