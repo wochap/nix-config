@@ -22,7 +22,7 @@ gaps outer 0
 
 #### CONFIG
 
-focus_follows_mouse yes
+focus_follows_mouse always
 
 input * {
   natural_scroll enabled
