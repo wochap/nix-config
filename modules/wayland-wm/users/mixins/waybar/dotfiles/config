@@ -8,7 +8,7 @@
   "ipc": true,
   "id": "main",
   "spacing": 7,
-  "margin": 0,
+  "margin": "0 7px",
 
   // Modules configuration
   "custom/scratchpad_indicator": {

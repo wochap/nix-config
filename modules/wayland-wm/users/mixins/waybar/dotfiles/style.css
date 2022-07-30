@@ -1,7 +1,7 @@
 @import url("colors.css");
 
 window#waybar {
-  background-color: @background;
+  background-color: transparent;
   color: @foreground;
   font-family: Iosevka Nerd Font, woos, sans-serif;
   font-size: 14px;
