@@ -93,7 +93,7 @@
     "format-icons": [""]
   },
   "network": {
-    "format-wifi": "",
+    "format-wifi": " {essid}",
     "format-ethernet": "{ifname}: {ipaddr}/{cidr}  ",
     "format-linked": "{ifname} (No IP)  ",
     "format-disconnected": "",
