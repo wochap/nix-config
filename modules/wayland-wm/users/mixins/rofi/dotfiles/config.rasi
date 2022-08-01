@@ -1,0 +1,115 @@
+configuration {
+  display-combi: "";
+  display-run: "";
+  display-drun: "";
+  display-calc: "";
+  display-emoji: "";
+  hide-scrollbar: false;
+  case-sensitive: false;
+  cycle: false;
+  // dpi: 96;
+  font: "Iosevka Nerd Font 12";
+}
+
+@theme "colors"
+
+* {
+  background-color: inherit;
+  font: inherit;
+  spacing: 0;
+  text-color: inherit;
+
+  var-bg: @background;
+  var-fg: @foreground;
+  var-bg-selection: @selection;
+  var-fg-selection: @foreground;
+  var-input-placeholder-color: @green;
+  var-primary-color: @purple;
+  var-window-border-color: @selection;
+
+  var-window-border-width: 2px;
+  var-inputbar-padding: 18px;
+  var-listview-padding: 0 18px 18px;
+}
+
+window {
+  background-color: @var-bg;
+  border-color: @var-window-border-color;
+  border: @var-window-border-width;
+  text-color: @var-fg;
+  transparency: "real";
+  width: 25em;
+
+  // Window position
+  anchor: north;
+  location: north;
+  y-offset: 25%;
+}
+
+mainbox {
+  children: [ inputbar, listview ];
+}
+
+listview {
+  columns: 1;
+  cycle: false;
+  layout: vertical;
+  lines: 9;
+  padding: @var-listview-padding;
+  spacing: 0;
+
+  // Dynamic window height
+  dynamic: true;
+  fixed-height: false;
+}
+
+inputbar {
+  children: [ prompt, entry ];
+  expand: false;
+  margin: 0;
+  padding: @var-inputbar-padding;
+}
+
+prompt {
+  font: "woos 15";
+  vertical-align: 0.5;
+  padding: 0.35em 0.5em;
+  margin: 0;
+  background-color: @var-primary-color;
+  border-radius: 4px;
+  text-color: @var-bg;
+}
+
+entry {
+  blink: true;
+  expand: true;
+  horizontal-align: 0;
+  vertical-align: 0.5;
+  padding: 0 0 0 0.5em;
+  margin: 0 0.75em 0 0;
+  placeholder-color: @var-input-placeholder-color;
+  placeholder: "";
+}
+
+element {
+  padding: 0.6em 0.75em;
+}
+
+element-icon {
+  size: 40px;
+}
+
+element-text {
+  expand: true;
+  highlight: @var-primary-color;
+  horizontal-align: 0;
+  vertical-align: 0.5;
+}
+
+element selected {
+  border-radius: 4px;
+  background-color: @var-bg-selection;
+  text-color: @var-fg-selection;
+}
+
+// vim: syntax=less
