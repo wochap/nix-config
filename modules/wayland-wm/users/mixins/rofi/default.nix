@@ -18,22 +18,6 @@ in {
         rofi-emoji
       ];
       etc = {
-        "scripts/rofi-nm.sh" = {
-          source = ./scripts/rofi-nm.sh;
-          mode = "0755";
-        };
-        "scripts/rofi-custom-options.sh" = {
-          source = ./scripts/rofi-custom-options.sh;
-          mode = "0755";
-        };
-        "scripts/rofi-clipboard.sh" = {
-          source = ./scripts/rofi-clipboard.sh;
-          mode = "0755";
-        };
-        "scripts/rofi-help.sh" = {
-          source = ./scripts/rofi-help.sh;
-          mode = "0755";
-        };
         "scripts/rofi-calc.sh" = {
           text = ''
             #!/usr/bin/env bash
@@ -42,7 +26,7 @@ in {
               -modi calc \
               -show calc \
               -plugin-path ${pkgs.rofi-calc}/lib/rofi \
-              -calc-command "echo -n '{result}' | xclip -selection clipboard" \
+              -calc-command "echo -n '{result}' | wl-copy" \
               -theme-str 'window { width: 20em; }'
           '';
           mode = "0755";
@@ -57,18 +41,6 @@ in {
               -show emoji \
               -plugin-path ${pkgs.rofi-emoji}/lib/rofi
           '';
-          mode = "0755";
-        };
-        "scripts/rofi-launcher.sh" = {
-          source = ./scripts/rofi-launcher.sh;
-          mode = "0755";
-        };
-        "scripts/rofi-powermenu.sh" = {
-          source = ./scripts/rofi-powermenu.sh;
-          mode = "0755";
-        };
-        "scripts/rofi-hidden-windows.sh" = {
-          source = ./scripts/rofi-hidden-windows.sh;
           mode = "0755";
         };
       };
@@ -86,10 +58,8 @@ in {
         '';
         "rofi/config.rasi".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.rasi";
-        "rofi/rofi-emoji-theme.rasi".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/rofi-emoji-theme.rasi";
-        "rofi/rofi-help-theme.rasi".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/rofi-help-theme.rasi";
+        "rofi/rofi-emoji-theme.rasi".source = mkOutOfStoreSymlink
+          "${currentDirectory}/dotfiles/rofi-emoji-theme.rasi";
       };
     };
   };
