@@ -43,7 +43,8 @@ window {
   // Window position
   anchor: north;
   location: north;
-  y-offset: 25%;
+  // y-offset: 25%;
+  y-offset: 40px;
 }
 
 mainbox {
