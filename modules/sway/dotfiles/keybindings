@@ -30,7 +30,9 @@ bindsym $mod+space exec \
 bindsym $mod+Print exec \
   /etc/scripts/system/takeshot.sh --now
 
-# TODO: Open calc
+# Open calc
+bindsym $mod+c exec \
+  /etc/scripts/rofi-calc.sh
 
 # Open wifi menu
 bindsym $mod+w exec \
@@ -46,7 +48,9 @@ bindsym $mod+v exec \
 bindsym $mod+Shift+v exec \
   /etc/scripts/system/clipboard-manager.sh --clear
 
-# TODO: Show emojis
+# Show emojis
+bindsym $mod+e exec \
+  /etc/scripts/rofi-emoji.sh
 
 bindsym $mod+ctrl+n exec \
   makoctl restore
