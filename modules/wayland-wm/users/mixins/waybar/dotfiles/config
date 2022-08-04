@@ -11,6 +11,11 @@
   "margin": "0 7px",
 
   // Modules configuration
+  "custom/mbpfan": {
+    "interval": 1,
+    "exec": "/etc/scripts/mbpfan-polybar.sh --read",
+    "on-click": "/etc/scripts/mbpfan-polybar.sh --toggle &"
+  },
   "custom/scratchpad_indicator": {
     "interval": 1,
     "exec": "swaymsg -t get_tree | jq 'recurse(.nodes[]) | first(select(.name==\"__i3_scratch\")) | .floating_nodes | length | select(. >= 1)'",
