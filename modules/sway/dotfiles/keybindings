@@ -14,6 +14,10 @@ floating_modifier $mod normal
 # Reload the configuration file
 bindsym $mod+Ctrl+alt+Escape reload
 
+# Open scratchpad terminal
+bindsym $mod+i exec \
+  sway-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
+
 # Lock screen
 bindsym $mod+l exec \
   /etc/scripts/system/sway-lock.sh
