@@ -14,6 +14,10 @@ floating_modifier $mod normal
 # Reload the configuration file
 bindsym $mod+Ctrl+alt+Escape reload
 
+# Open scratchpad terminal
+bindsym $mod+i exec \
+  sway-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
+
 # Lock screen
 bindsym $mod+l exec \
   /etc/scripts/system/sway-lock.sh
@@ -30,7 +34,9 @@ bindsym $mod+space exec \
 bindsym $mod+Print exec \
   /etc/scripts/system/takeshot.sh --now
 
-# TODO: Open calc
+# Open calc
+bindsym $mod+c exec \
+  /etc/scripts/rofi-calc.sh
 
 # Open wifi menu
 bindsym $mod+w exec \
@@ -46,7 +52,9 @@ bindsym $mod+v exec \
 bindsym $mod+Shift+v exec \
   /etc/scripts/system/clipboard-manager.sh --clear
 
-# TODO: Show emojis
+# Show emojis
+bindsym $mod+e exec \
+  /etc/scripts/rofi-emoji.sh
 
 bindsym $mod+ctrl+n exec \
   makoctl restore

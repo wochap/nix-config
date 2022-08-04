@@ -1,10 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  localPkgs = import ../packages {
-    pkgs = pkgs;
-    lib = lib;
-  };
+let localPkgs = import ../packages { inherit pkgs lib; };
 in {
   config = {
     environment = {
@@ -14,6 +10,7 @@ in {
         # APPS MEDIA (Comment on first install)
         obs-studio # video capture
         # kdeApplications.kdenlive # video editor
+        libsForQt5.kdenlive
         # nomacs # image viewer/editor
         # olive-editor # video editor
         # openshot-qt # video editor
