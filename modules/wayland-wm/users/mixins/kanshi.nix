@@ -12,7 +12,7 @@ in {
         "kanshi/config".text = ''
           profile docked {
             output "eDP-1" disable
-            output "Goldstar Company Ltd LG ULTRAGEAR 112NTLEL9832" scale 1
+            output "Goldstar Company Ltd LG ULTRAGEAR 112NTLEL9832" mode 3440x1440@99.990Hz scale 1
           }
 
           profile undocked {
