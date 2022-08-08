@@ -5,9 +5,8 @@ function killport {
 }
 
 # Show scratchpad
-target="kitty-scratch"
-swaymsg "[con_id=$target] move window to workspace current" &>/dev/null
-swaymsg "[app_id=$target] focus" &>/dev/null
+sway-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
+sleep 0.5
 
 # finish prev running server
 killport 3001
@@ -24,7 +23,8 @@ swaymsg assign [app_id="kitty-dangerp"] workspace 2
 swaymsg workspace number 2
 swaymsg workspace_layout tabbed
 
-dangerp_session="$(cat << EOF
+dangerp_session="$(
+  cat <<EOF
 new_tab dangerp
 cd ~/Projects/boc/dangerp
 launch nvim
@@ -35,4 +35,3 @@ launch nvim
 EOF
 )"
 echo "$dangerp_session" | kitty --class "kitty-dangerp" --session - &
-
