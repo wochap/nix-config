@@ -170,6 +170,10 @@ window#waybar.hidden {
   color: @background;
 }
 
+#waybar.empty #window {
+  opacity: 0;
+}
+
 /*
 vim: syntax=less
 */

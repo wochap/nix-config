@@ -4,7 +4,7 @@
   // "modules-center": ["river/window"],
   "modules-left": ["custom/powermenu", "sway/workspaces", "custom/scratchpad_indicator", "keyboard-state", "sway/mode"],
   "modules-center": ["sway/window"],
-  "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "battery", "backlight", "pulseaudio", "network", "clock"],
+  "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/mbpfan", "battery", "backlight", "pulseaudio", "network", "clock"],
   "ipc": true,
   "id": "main",
   "spacing": 7,
@@ -22,6 +22,9 @@
     "format": "{} <span rise='-1000'></span>",
     "on-click": "swaymsg 'scratchpad show'",
     "on-click-right": "swaymsg 'move scratchpad'"
+  },
+  "sway/window": {
+    "max-length": 50
   },
   "sway/workspaces": {
     "disable-scroll": true,
