@@ -10,6 +10,7 @@ in {
         enable = true;
         settings = {
           flags = {
+            process_command = true;
             group_processes = true;
             mem_as_value = true;
             tree = true;
