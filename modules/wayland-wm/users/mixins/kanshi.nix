@@ -11,12 +11,12 @@ in {
       xdg.configFile = {
         "kanshi/config".text = ''
           profile docked {
-            output "eDP-1" disable
+            output "Apple Computer Inc Color LCD 0x00000000" disable
             output "Goldstar Company Ltd LG ULTRAGEAR 112NTLEL9832" mode 3440x1440@99.990Hz scale 1
           }
 
           profile undocked {
-            output "eDP-1" scale 2
+            output "Apple Computer Inc Color LCD 0x00000000" scale 2
           }
         '';
       };
