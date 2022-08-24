@@ -21,6 +21,8 @@ gammastep -O 4000 &
 killall waybar
 waybar &
 
+libinput-gestures -c /etc/libinput-gestures.conf &
+
 # blueberry-tray &
 /etc/scripts/backlight.sh 20% &
 /etc/scripts/system/random-bg.sh &

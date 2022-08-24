@@ -25,6 +25,11 @@ in {
       ];
 
       etc = {
+        "libinput-gestures.conf".text = ''
+          gesture swipe left 3 swaymsg workspace next_on_output
+          gesture swipe right 3 swaymsg workspace prev_on_output
+        '';
+
         "sway/config".text = ''
           ${builtins.readFile ./dotfiles/config}
           ${builtins.readFile ./dotfiles/keybindings}

@@ -7,8 +7,6 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       # TOOLS
-      libinput
-      libinput-gestures
       wmctrl # perform actions on windows
       wmutils-core
       wmutils-opt # required by borders script

@@ -9,6 +9,10 @@ let
 in {
   config = {
     environment.systemPackages = with pkgs; [
+      # TOOLS
+      libinput
+      libinput-gestures
+
       # CLI TOOLS
       acpitool
       cached-nix-shell # fast nix-shell scripts
