@@ -136,24 +136,24 @@ window#waybar.hidden {
 }
 
 #battery {
-  color: @cyan;
+  /* color: @cyan; */
+}
+#battery.discharging {
+  color: @yellow;
 }
 #battery.charging,
 #battery.plugged {
-  background-color: @green;
-  color: @background;
+  color: @green;
 }
 
 @keyframes blink {
   to {
-    background-color: #1e222a;
-    color: #e06c75;
+    color: @yellow;
   }
 }
 
 #battery.critical:not(.charging) {
-  background-color: @red;
-  color: @background;
+  color: @red;
   animation-name: blink;
   animation-duration: 0.5s;
   animation-timing-function: linear;

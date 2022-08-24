@@ -22,7 +22,7 @@ border-color=#44475a
 font=Iosevka Nerd Font 11
 format=<b>%s</b> <span color="#8be9fd">(%a)</span>\n%b
 height=150
-margin=15,15
+margin=7,7
 max-icon-size=48
 padding=11,11
 text-color=#f8f8f2

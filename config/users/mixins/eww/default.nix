@@ -11,7 +11,7 @@ in
 {
   config = {
     environment = {
-      systemPackages = with pkgs; if (isWayland) then [
+      systemPackages = with pkgs; if isWayland then [
         eww-wayland
       ] else [
         eww
