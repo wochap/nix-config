@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mangadesk";
-  version = "0.7.7";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "darylhjd";
     repo = "mangadesk";
     rev = "v${version}";
-    sha256 = "sha256-dpttLjx0lphlGERhJ7CCmHfM1wZ623JR+EnpLTDfJLA=";
+    sha256 = "sha256-nfh9X5ULDpUXu/DB9f3jnOsGw9EeMZ+YXwYmAjydCtY=";
   };
 
   vendorSha256 = null;
