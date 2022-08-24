@@ -16,7 +16,6 @@ in {
       xdotool # fake keyboard/mouse input
       xlayoutdisplay # fix dpi
       xorg.xdpyinfo # show monitor info
-      xorg.xev # get key actual name
       xorg.xeyes # check if app is running on wayland
       xorg.xkbcomp # print keymap
       xorg.xwininfo # print window info

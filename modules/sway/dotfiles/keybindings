@@ -217,6 +217,12 @@ bindsym $mod+alt+u mode "tui"
 
 ### MEDIA KEYBINDINGS
 
+bindsym XF86KbdBrightnessDown exec \
+  kbdlight down 5
+
+bindsym XF86KbdBrightnessUp exec \
+  kbdlight up 5
+
 bindsym XF86MonBrightnessUp exec \
   /etc/scripts/backlight.sh 5%+
 

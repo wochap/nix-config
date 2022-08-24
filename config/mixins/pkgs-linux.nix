@@ -12,6 +12,7 @@ in {
       # TOOLS
       libinput
       libinput-gestures
+      xorg.xev # get key actual name
 
       # CLI TOOLS
       acpitool
