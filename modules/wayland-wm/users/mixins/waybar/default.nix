@@ -17,6 +17,10 @@ in {
           source = ./scripts/waybar-toggle.sh;
           mode = "0755";
         };
+        "scripts/waybar/waybar-start.sh" = {
+          source = ./scripts/waybar-start.sh;
+          mode = "0755";
+        };
       };
     };
 

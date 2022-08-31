@@ -3,6 +3,8 @@
 include /etc/sway/config.d/*
 
 #### THEME
+output * background #282a36 solid_color
+
 font pango:JetBrainsMono Nerd Font 10
 titlebar_padding 12 7
 title_align center

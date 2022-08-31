@@ -8,10 +8,12 @@ toggle() {
   if [[ ! -f "$LOCK_FILE" ]]; then
     touch "$LOCK_FILE"
     makoctl set-mode do-not-disturb
+    # reload waybar
     pkill -SIGRTMIN+8 waybar
   else
     rm "$LOCK_FILE"
     makoctl set-mode default
+    # reload waybar
     pkill -SIGRTMIN+8 waybar
   fi
 }

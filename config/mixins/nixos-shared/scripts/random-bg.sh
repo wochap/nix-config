@@ -11,7 +11,7 @@ range=${#files[@]}
 
 if [[ $XDG_SESSION_TYPE == "wayland" ]]; then
   # ((range)) && swaymsg output "*" bg "$HOME/Pictures/backgrounds/${files[RANDOM % range]}" fill
-  ((range)) && swaybg -i "$HOME/Pictures/backgrounds/${files[RANDOM % range]}" -m fill
+  ((range)) && swaybg -m fill -i "$HOME/Pictures/backgrounds/${files[RANDOM % range]}"
 else
   ((range)) && feh --bg-fill "${files[RANDOM % range]}"
 fi
