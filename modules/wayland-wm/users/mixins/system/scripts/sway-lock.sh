@@ -1,27 +1,32 @@
 #!/usr/bin/env bash
 
+# source theme colors
+. "/etc/scripts/theme-colors.sh"
+
 swaylock --screenshots --clock --indicator-idle-visible \
+  --font "FiraCode Nerd Font" \
   --indicator-radius 100 \
-  --indicator-thickness 7 \
+  --indicator-thickness 10 \
   --ignore-empty-password \
-  --ring-color 282c34 \
-  --ring-ver-color 61afef \
-  --ring-wrong-color e06c75 \
-  --ring-clear-color d19a66 \
-  --key-hl-color 61afef \
-  --text-color abb2bf \
-  --text-ver-color abb2bf \
-  --text-wrong-color abb2bf \
-  --text-clear-color abb2bf \
-  --text-caps-lock-color d19a66 \
+  --ring-color ${selection:1} \
+  --ring-ver-color ${primary:1} \
+  --ring-wrong-color ${red:1} \
+  --ring-clear-color ${orange:1} \
+  --key-hl-color ${primary:1} \
+  --text-color ${foreground:1} \
+  --text-ver-color ${foreground:1} \
+  --text-wrong-color ${foreground:1} \
+  --text-clear-color ${foreground:1} \
+  --text-caps-lock-color ${orange:1} \
   --line-uses-inside \
-  --inside-color 12151d \
-  --inside-ver-color 12151d --inside-wrong-color 12151d \
-  --inside-clear-color 12151d \
-  --layout-bg 12151d \
-  --layout-border-color 282c34 \
-  --layout-text-color abb2bf \
+  --inside-color ${background:1} \
+  --inside-ver-color ${background:1} \
+  --inside-wrong-color ${background:1} \
+  --inside-clear-color ${background:1} \
+  --layout-bg ${background:1} \
+  --layout-border-color ${background:1} \
+  --layout-text-color ${foreground:1} \
   --separator-color 00000000 \
   --fade-in 0.5 \
   --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
-  -F --grace 5
+  -F --grace 1
