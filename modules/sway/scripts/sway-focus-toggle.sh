@@ -2,8 +2,22 @@
 # https://gitlab.com/wef/dotfiles/-/blob/master/bin/sway-focus
 
 PROG=$(basename $0)
-TEMP=$(getopt --options sth --longoptions toggle-scratchpad,send-to-origin,help -- "$@") || exit 1
+TEMP=$(getopt --options sth --longoptions only-focus,help -- "$@") || exit 1
 eval set -- "$TEMP"
+only_focus=""
+
+for i in "$@"; do
+  case "$i" in
+  -h | --help)
+    exit 0
+    ;;
+  --only-focus)
+    only_focus="set"
+    shift
+    ;;
+  esac
+done
+
 shift
 target="$1"
 runstring="$2"
@@ -16,11 +30,10 @@ if [[ "$program_data" ]]; then
   if [[ "$visible" == "false" ]]; then
     swaymsg "[con_id=$id] move window to workspace current" &>/dev/null
     swaymsg "[con_id=$id] focus" &>/dev/null
-    if [[ "$origin" ]]; then
-      swaymsg "[con_id=$id] move position 0 0"
-    fi
   else
-    swaymsg "[con_id=$id] move window to scratchpad" &>/dev/null
+    if ! [[ "$only_focus" ]]; then
+      swaymsg "[con_id=$id] move window to scratchpad" &>/dev/null
+    fi
   fi
 else
   if [[ "$runstring" ]]; then

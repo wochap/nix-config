@@ -5,7 +5,7 @@ function killport {
 }
 
 # Show scratchpad
-sway-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
+sway-focus-toggle --only-focus kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
 sleep 0.5
 
 # finish prev running server
@@ -21,7 +21,8 @@ kitty @ --to unix:/tmp/kitty_scratch goto-layout Grid
 # Open projects on nvim
 swaymsg assign [app_id="kitty-dangerp"] workspace 2
 swaymsg workspace number 2
-swaymsg workspace_layout tabbed
+# swaymsg workspace_layout tabbed
+swaymsg -- '[workspace="2" tiling] layout tabbed'
 
 dangerp_session="$(
   cat <<EOF
