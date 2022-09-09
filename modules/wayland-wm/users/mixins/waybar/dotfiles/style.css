@@ -37,6 +37,10 @@ window#waybar.hidden {
   background-clip: border-box;
 }
 
+#tray {
+  margin: 7px 0 7px 7px;
+}
+
 #keyboard-state label.locked {
   font-size: 1.2em;
 }
