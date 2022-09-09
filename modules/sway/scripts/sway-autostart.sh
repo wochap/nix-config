@@ -10,8 +10,7 @@ dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
 /etc/scripts/system/clipboard-manager.sh --start
 
 # TODO: move to systemd
-killall mako
-mako &
+/etc/scripts/mako/mako-start.sh
 
 # TODO: move to systemd
 killall gammastep

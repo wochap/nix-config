@@ -20,6 +20,10 @@ in {
           source = ./scripts/mako-toggle-mode.sh;
           mode = "0755";
         };
+        "scripts/mako/mako-start.sh" = {
+          source = ./scripts/mako-start.sh;
+          mode = "0755";
+        };
       };
     };
 

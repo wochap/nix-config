@@ -79,6 +79,17 @@ in {
       [
         (final: prev: {
 
+          mako = prev.mako.overrideAttrs (old: rec {
+            version = "1.7.1";
+
+            src = pkgs.fetchFromGitHub {
+              owner = "emersion";
+              repo = "mako";
+              rev = "v1.7.1";
+              sha256 = "sha256-/+XYf8FiH4lk7f7/pMt43hm13mRK+UqvaNOpf1TI6m4=";
+            };
+          });
+
           rofi = prev.rofi.overrideAttrs (old: rec {
             src = prev.fetchurl {
               url =
