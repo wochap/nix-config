@@ -32,10 +32,10 @@ width=300
 format=Hidden: %h [%t]
 
 [urgency=low]
-text-color=#6272a4
+border-color=#6272a4
 
 [urgency=high]
-background-color=#ff5555
+border-color=#ff5555
 ignore-timeout=1
 
 [actionable]
