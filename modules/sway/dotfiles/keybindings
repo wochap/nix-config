@@ -205,7 +205,6 @@ mode "tui" {
     e mode "default"; exec sway-focus-toggle kitty-neomutt $HOME/.config/kitty/scripts/kitty-neomutt.sh
     r mode "default"; exec sway-focus-toggle kitty-newsboat $HOME/.config/kitty/scripts/kitty-newsboat.sh
     u mode "default"; exec sway-focus-toggle kitty-ncmpcpp $HOME/.config/kitty/scripts/kitty-ncmpcpp.sh
-    s mode "default"; exec sway-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
 
     Escape mode "default"
   }
