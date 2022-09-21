@@ -15,7 +15,7 @@ case "$DPI" in
   font0="Iosevka Nerd Font:weight=Medium:size=10;7"
   font1="woos:size=10;7"
   height="60"
-  gap="32"
+  gap="8"
   ;;
 144)
   font0="Iosevka Nerd Font:weight=Medium:size=10;5"
