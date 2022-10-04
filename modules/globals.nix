@@ -25,7 +25,8 @@
         };
         size = lib.mkOption {
           type = lib.types.int;
-          default = 32;
+          # 16, 32, 48 or 64
+          default = 24;
         };
       };
 
@@ -120,7 +121,8 @@
     environment.etc."scripts/theme-colors.sh" = {
       text = ''
         ${lib.concatStringsSep "\n"
-        (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'') config._theme)}
+        (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
+          config._theme)}
       '';
       mode = "0755";
     };

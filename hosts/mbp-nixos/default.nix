@@ -31,6 +31,7 @@ in {
     _custom.amdCpu.enable = true;
     _custom.amdGpu.enable = true;
     _custom.amdGpu.enableSouthernIslands = true;
+
     # _custom.bspwm.enable = true;
     _custom.lightdm.enable = false;
     # _custom.startx.enable = true;

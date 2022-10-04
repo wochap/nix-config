@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
+  inherit (config._custom) globals;
+
   # Apply GTK theme
   # currently, there is some friction between Wayland and gtk:
   # https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
@@ -21,8 +23,8 @@ let
 
       gnome_schema="org.gnome.desktop.interface"
 
-      gsettings set $gnome_schema cursor-theme capitaine-cursors &
-      gsettings set $gnome_schema cursor-size 32 &
+      gsettings set $gnome_schema cursor-theme ${globals.cursor.name} &
+      gsettings set $gnome_schema cursor-size ${toString globals.cursor.size} &
 
       # import gtk settings to gsettings
       config="''${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"

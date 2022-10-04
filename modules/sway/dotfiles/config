@@ -46,7 +46,7 @@ input "type:pointer" {
 }
 
 seat * {
-  xcursor_theme capitaine-cursors 32
+  # xcursor_theme capitaine-cursors 32
   hide_cursor when-typing enable
 }
 

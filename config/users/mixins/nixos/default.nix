@@ -1,10 +1,9 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  inherit (config._custom) globals;
   isWayland = config._displayServer == "wayland";
   userName = config._userName;
-  globals =
-    import ../../../mixins/globals.nix { inherit config pkgs lib inputs; };
 in {
   config = {
     environment.systemPackages = with pkgs; [ globals.cursor.package ];
@@ -48,9 +47,7 @@ in {
       # };
 
       home.pointerCursor = lib.mkIf (!isWayland) {
-        name = globals.cursor.name;
-        package = globals.cursor.package;
-        size = globals.cursor.size;
+        inherit (globals.cursor) name package size;
         x11.enable = true;
       };
     };

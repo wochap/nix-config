@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  inherit (config._custom) globals;
   userName = config._userName;
   cfg = config._custom.sway;
   theme = config._theme;
@@ -33,6 +34,10 @@ in {
         "sway/config".text = ''
           ${builtins.readFile ./dotfiles/config}
           ${builtins.readFile ./dotfiles/keybindings}
+
+          seat * {
+            xcursor_theme ${globals.cursor.name} ${toString globals.cursor.size}
+          }
 
           #### SWAY theme ####
           #                         title-border         title-bg                title-text            indicator       window-border

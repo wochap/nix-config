@@ -1,9 +1,9 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  inherit (config._custom) globals;
   userName = config._userName;
   isWayland = config._displayServer == "wayland";
-  globals = import ../../mixins/globals.nix { inherit config pkgs lib inputs; };
   localPkgs = import ../../packages { inherit pkgs lib; };
 in {
   config = {
@@ -56,10 +56,7 @@ in {
         # Theme
         font = { name = globals.fonts.sans; };
         iconTheme = { name = "Dracula"; };
-        theme = {
-          name = globals.theme.name;
-          package = globals.theme.package;
-        };
+        theme = { inherit (globals.theme) name package; };
 
         gtk3.extraConfig = {
           gtk-application-prefer-dark-theme = true;
