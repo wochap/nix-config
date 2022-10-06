@@ -25,6 +25,8 @@ in {
         # gksu
       ];
 
+      sessionVariables = { XDG_CURRENT_DESKTOP = "sway"; };
+
       etc = {
         "libinput-gestures.conf".text = ''
           gesture swipe left 3 swaymsg workspace next_on_output

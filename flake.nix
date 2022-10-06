@@ -26,6 +26,8 @@
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party overlays/modules
+    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.inputs.nixpkgs.follows = "nixpkgs";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=36ccc9c4bbe52ec826c51f1d991982e78174039b";
     nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";

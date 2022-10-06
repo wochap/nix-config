@@ -119,6 +119,8 @@ You probably want to press `Ctrl + Alt + F1`
    ```
    $ betterdiscordctl install
    ```
+1. Enable WebRTC PipeWire support in chrome (wayland only)
+   Go to chrome://flags/ and enable `WebRTC PipeWire support`
 1. Add wallpapers to `~/Pictures/backgrounds/`
 1. Setup lock wallpaper (required for xorg config)
    ```

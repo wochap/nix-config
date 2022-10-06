@@ -579,6 +579,27 @@
         "type": "github"
       }
     },
+    "hyprland": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "wlroots": "wlroots"
+      },
+      "locked": {
+        "lastModified": 1665003520,
+        "narHash": "sha256-CIEXnmwTjf8AkfhFcGaGZHzFTvNyLe2ucG0DoM5wVmY=",
+        "owner": "hyprwm",
+        "repo": "Hyprland",
+        "rev": "32e8eda40a93f9c4a304faa54a3996087eae86e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hyprwm",
+        "repo": "Hyprland",
+        "type": "github"
+      }
+    },
     "mpv-osc-morden-x": {
       "flake": false,
       "locked": {
@@ -1078,6 +1099,7 @@
         "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
+        "hyprland": "hyprland",
         "mpv-osc-morden-x": "mpv-osc-morden-x",
         "ncmpcpp-ueberzug": "ncmpcpp-ueberzug",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
@@ -1151,6 +1173,24 @@
         "repo": "nixpkgs",
         "rev": "7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f",
         "type": "github"
+      }
+    },
+    "wlroots": {
+      "flake": false,
+      "locked": {
+        "host": "gitlab.freedesktop.org",
+        "lastModified": 1664816798,
+        "narHash": "sha256-oLJyFT1Fc4UNNaDSN+EYUAWL4CufCBpuS5AV4Z4XANo=",
+        "owner": "wlroots",
+        "repo": "wlroots",
+        "rev": "50cc1ef4d3791d86854dd83c15fff17e5ea1a5b6",
+        "type": "gitlab"
+      },
+      "original": {
+        "host": "gitlab.freedesktop.org",
+        "owner": "wlroots",
+        "repo": "wlroots",
+        "type": "gitlab"
       }
     },
     "yabai-src": {
