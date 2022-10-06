@@ -12,12 +12,12 @@ dest="$dir/$file"
 # notify
 notify_user() {
   if [[ -e "$dest" ]]; then
-    # TODO: copy to clipboard
+    copy_to_cb
 
     action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dest" "Screen shooter" "Screenshot Saved" --action "default,Edit" --action "open,Open")
   else
-    dunstify -t "$EXPIRE_TIME" --replace=699 "Screen shooter" "Screenshot Aborted."
-    exit
+    exit 1
+    # dunstify -t "$EXPIRE_TIME" --replace=699 "Screen shooter" "Screenshot Aborted."
   fi
 
   if [[ $action == "default" ]]; then
@@ -25,6 +25,10 @@ notify_user() {
   elif [[ $action == "open" ]]; then
     xdg-open "$dest" &
   fi
+}
+
+copy_to_cb() {
+  wl-copy -t image/png < "$dest"
 }
 
 # countdown
