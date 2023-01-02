@@ -46,7 +46,13 @@ in {
     services.dbus.enable = true;
     xdg.portal = {
       enable = true;
-      wlr.enable = true;
+      wlr = {
+        enable = true;
+        settings.screencast = {
+          chooser_type = "simple";
+          chooser_cmd = "${pkgs.slurp}/bin/slurp -f %o -or";
+        };
+      };
       extraPortals = with pkgs;
         [
           # xdg-desktop-portal-wlr # this causes a delay of 30 seconds on gtk apps
