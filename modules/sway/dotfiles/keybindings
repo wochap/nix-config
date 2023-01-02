@@ -157,10 +157,10 @@ bindsym $mod+alt+$right move right 40px
 ### WM SCRATCHPAD
 
 # Send to scratchpad
-bindsym $mod+ctrl+p move container to scratchpad
+bindsym $mod+Shift+p move container to scratchpad
 
 # Open scratchpad
-bindsym $mod+alt+Tab scratchpad show
+bindsym $mod+p scratchpad show
 
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)

@@ -2,7 +2,7 @@
   inputs = {
     # nixpkgs channels
     unstable.url = "github:nixos/nixpkgs?rev=7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f";
-    nixpkgs.url = "github:nixos/nixpkgs?rev=d9536b9b1e33377fb520e115bc8588d093ed97be"; # nixos-22.05
+    nixpkgs.url = "github:nixos/nixpkgs?rev=451c1a3e32ac73288d0f6fa48d53c9f2c1c5a3d8"; # nixos-22.05
     prevstable.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
 
@@ -11,7 +11,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=4a3d01fb53f52ac83194081272795aa4612c2381"; # release-22.05
+    home-manager.url = "github:nix-community/home-manager?rev=b81e128fc053ab3159d7b464d9b7dedc9d6a6891"; # release-22.05
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
     home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";

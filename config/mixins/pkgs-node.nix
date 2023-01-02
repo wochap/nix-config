@@ -19,6 +19,7 @@ in {
       nodePackages.nodemon
 
       # others
+      netlify-cli
       nodePackages.node2nix
 
       # nodePackages.sharp-cli
