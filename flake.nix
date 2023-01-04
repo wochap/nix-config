@@ -1,9 +1,10 @@
 {
   inputs = {
     # nixpkgs channels
-    unstable.url = "github:nixos/nixpkgs?rev=7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f";
-    nixpkgs.url = "github:nixos/nixpkgs?rev=451c1a3e32ac73288d0f6fa48d53c9f2c1c5a3d8"; # nixos-22.05
-    prevstable.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
+    unstable.url = "github:nixos/nixpkgs?rev=bb8d96f284edb0c2a960638fa5b1b4bb404b922e"; # master jan 2023
+    nixpkgs.url = "github:nixos/nixpkgs?rev=4d2b37a84fad1091b9de401eb450aae66f1a741e"; # nixos-22.11
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f";
+    prevstable-mongodb.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
 
     # macos related
@@ -11,7 +12,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=b81e128fc053ab3159d7b464d9b7dedc9d6a6891"; # release-22.05
+    home-manager.url = "github:nix-community/home-manager?rev=89a8ba0b5b43b3350ff2e3ef37b66736b2ef8706"; # release-22.11
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
     home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -29,7 +30,7 @@
     hyprland.url = "github:hyprwm/Hyprland";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=36ccc9c4bbe52ec826c51f1d991982e78174039b";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=fdb2d33c942bfa07762c0e5357920f41d2f734a9";
     nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";
 
     # third party darwin stuff

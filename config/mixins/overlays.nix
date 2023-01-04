@@ -18,12 +18,16 @@ in {
 
         # Custom channels
         unstable = import inputs.unstable {
-          system = prev.system;
-          config = config.nixpkgs.config;
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
         };
-        prevstable = import inputs.prevstable {
-          system = prev.system;
-          config = config.nixpkgs.config;
+        prevstable-neovim = import inputs.prevstable-neovim {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+        };
+        prevstable-mongodb = import inputs.prevstable-mongodb {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
         };
 
         wmutils-core = prev.wmutils-core.overrideAttrs (_: {

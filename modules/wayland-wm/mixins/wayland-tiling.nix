@@ -33,6 +33,9 @@ in {
         NIXOS_OZONE_WL = "1";
 
         XDG_SESSION_TYPE = "wayland";
+
+        # enable portal
+        GTK_USE_PORTAL = "1";
       };
     };
 
@@ -58,7 +61,6 @@ in {
           # xdg-desktop-portal-wlr # this causes a delay of 30 seconds on gtk apps
           xdg-desktop-portal-gtk
         ];
-      gtkUsePortal = true;
     };
   };
 }
