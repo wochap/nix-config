@@ -97,8 +97,8 @@ in {
           rofi = prev.rofi.overrideAttrs (old: rec {
             src = prev.fetchurl {
               url =
-                "https://github.com/lbonn/rofi/archive/6801bd85bbfa59143b8ec443a05b22ef977b4349.tar.gz";
-              sha256 = "sha256-X9E40nJzCIUTPaJNujyayuZH/Hm6/+7akrO0bRovycs=";
+                "https://github.com/lbonn/rofi/archive/5d4a3e14788945a9a1c7d18993151a3b00649373.tar.gz";
+              sha256 = "sha256-i1nkI2VfJPaxN/x6DWjevfscyWiEYTSuC8zcu4GfJDM=";
             };
           });
 
