@@ -48,7 +48,33 @@ in {
     };
 
     home-manager.users.${userName} = {
-      home.file = { ".icons/Dracula".source = inputs.dracula-icons-theme; };
+      home.file = {
+        ".icons/Dracula".source = inputs.dracula-icons-theme;
+
+        # Fix GTK 4 theme
+        ".config/gtk-4.0/apps".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/apps";
+        ".config/gtk-4.0/assets".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/assets";
+        ".config/gtk-4.0/widgets".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/widgets";
+        ".config/gtk-4.0/gtk.css".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/gtk.css";
+        ".config/gtk-4.0/gtk-dark.css".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/gtk-dark.css";
+        ".config/gtk-4.0/_apps.scss".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/_apps.scss";
+        ".config/gtk-4.0/_common.scss".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/_common.scss";
+        ".config/gtk-4.0/_drawing.scss".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/_drawing.scss";
+        ".config/gtk-4.0/gtk.scss".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/gtk.scss";
+        ".config/gtk-4.0/gtk-dark.scss".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/gtk-dark.scss";
+        ".config/gtk-4.0/_widgets.scss".source =
+          "${inputs.dracula-gtk-theme}/gtk-4.0/_widgets.scss";
+      };
 
       gtk = {
         enable = true;

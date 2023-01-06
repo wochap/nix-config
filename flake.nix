@@ -80,7 +80,7 @@
     dracula-mutt.flake = false;
     dracula-icons-theme.url = "github:m4thewz/dracula-icons?rev=2d3c83caa8664e93d956cfa67a0f21418b5cdad8";
     dracula-icons-theme.flake = false;
-    dracula-gtk-theme.url = "github:dracula/gtk?rev=18bb561588866e71ed2ef5176c2e4797c58f2655";
+    dracula-gtk-theme.url = "github:dracula/gtk?rev=b64d36afb21dd167886c2d73e22a8af20f20d342";
     dracula-gtk-theme.flake = false;
     dracula-sublime.url = "github:dracula/sublime?rev=09faa29057c3c39e9a45f3a51a5e262375e3bf9f";
     dracula-sublime.flake = false;
