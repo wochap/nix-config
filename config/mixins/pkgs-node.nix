@@ -6,6 +6,8 @@ let
 in {
   config = {
     environment.systemPackages = with pkgs; [
+      deno
+
       # global nodejs
       nodejs-14_x
       (yarn.override { nodejs = nodejs-14_x; })
