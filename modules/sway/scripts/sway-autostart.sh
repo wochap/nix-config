@@ -19,6 +19,9 @@ gammastep -O 4000 &
 # TODO: move to systemd
 /etc/scripts/waybar/waybar-start.sh &
 
+# turn off bluetooth to save battery
+bluetoothctl power off &
+
 libinput-gestures -c /etc/libinput-gestures.conf &
 
 # blueberry-tray &
