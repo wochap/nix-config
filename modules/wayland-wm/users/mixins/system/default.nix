@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   inherit (config._custom) globals;
+
+  hyprpicker = pkgs.callPackage "${inputs.hyprpicker}/nix/default.nix" { };
 
   # Apply GTK theme
   # currently, there is some friction between Wayland and gtk:
@@ -41,7 +43,7 @@ let
 in {
   config = {
     environment = {
-      systemPackages = with pkgs; [ configure-gtk ];
+      systemPackages = with pkgs; [ configure-gtk hyprpicker ];
 
       etc = {
 
