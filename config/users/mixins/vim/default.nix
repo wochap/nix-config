@@ -24,7 +24,8 @@ in {
           # uivonim
 
           # TODO: passextraMakeWrapperArgs?
-          prevstable-neovim.neovim
+          # prevstable-neovim.neovim
+          neovim
           # neovim-nightly
           neovim-remote
 

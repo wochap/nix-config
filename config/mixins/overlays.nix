@@ -7,12 +7,12 @@ let
   localPkgs = import ../packages { inherit pkgs lib; };
 in {
   config = {
-    home-manager.users.${userName} = {
-      nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
-    };
+    # home-manager.users.${userName} = {
+    #   nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
+    # };
 
     nixpkgs.overlays = [
-      inputs.neovim-nightly-overlay.overlay
+      # inputs.neovim-nightly-overlay.overlay
 
       (final: prev: {
 

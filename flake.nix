@@ -55,7 +55,7 @@
     ptsh.flake = false;
     flix-tools.url = "github:ThamognyaKodi/FlixTools?rev=76640494cf7ded9ecb8a4ac11249eb86839c5501";
     flix-tools.flake = false;
-    ani-cli.url = "github:pystardust/ani-cli?rev=8f70a4e49c2fb2097dd8c05a4eaa1b5c68b489a4";
+    ani-cli.url = "github:pystardust/ani-cli?rev=a2d47b56193afbbace2a0169b9b658c58493dbfb";
     ani-cli.flake = false;
     ranger.url = "github:ranger/ranger?rev=7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6";
     ranger.flake = false;
