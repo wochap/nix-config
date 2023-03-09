@@ -1,8 +1,8 @@
 {
   "height": 40, // Waybar height (to be removed for auto height)
-  // "modules-left": ["custom/powermenu", "river/tags", "keyboard-state", "river/mode"],
+  // "modules-left": ["river/tags", "keyboard-state", "river/mode"],
   // "modules-center": ["river/window"],
-  "modules-left": ["custom/powermenu", "sway/workspaces", "custom/scratchpad_indicator", "keyboard-state", "sway/mode"],
+  "modules-left": ["sway/workspaces", "custom/scratchpad_indicator", "keyboard-state", "sway/mode"],
   "modules-center": ["sway/window"],
   "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/mbpfan", "battery", "backlight", "pulseaudio", "network", "clock"],
   "ipc": true,

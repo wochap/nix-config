@@ -47,8 +47,9 @@ window#waybar.hidden {
 
 #keyboard-state label.locked,
 #custom-notifications.disabled {
-  background: @red;
+  background: @primary;
   color: @background;
+  min-width: 0.8em;
 }
 
 #custom-powermenu {
