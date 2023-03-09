@@ -4,7 +4,7 @@
   // "modules-center": ["river/window"],
   "modules-left": ["sway/workspaces", "custom/scratchpad_indicator", "keyboard-state", "sway/mode"],
   "modules-center": ["sway/window"],
-  "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/mbpfan", "battery", "backlight", "pulseaudio", "network", "clock"],
+  "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/mbpfan", "battery", "backlight", "pulseaudio", "bluetooth", "network", "clock"],
   "ipc": true,
   "id": "main",
   "spacing": 7,
@@ -99,6 +99,15 @@
     "tooltip-format": "{timeTo}, {capacity}%",
     "format-charging": "<span rise='-1000'></span> {capacity}%",
     "format-icons": [""]
+  },
+  "bluetooth": {
+    "on-click": "blueberry",
+    "format": "",
+    "format-disabled": "",
+    "format-connected": " {num_connections}",
+    "tooltip-format": "{controller_alias}\t{controller_address}",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
   },
   "network": {
     "format-wifi": " {essid}",
