@@ -12,7 +12,7 @@ in {
         SPLIT = "v";
         KITTY_LISTEN_ON = "unix:/tmp/kitty";
       };
-      shellAliases = { f = "nnn"; };
+      # shellAliases = { f = "nnn"; };
     };
 
     home-manager.users.${userName} = {

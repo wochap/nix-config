@@ -34,6 +34,7 @@ in {
           fi
 
           ${builtins.readFile ./zshrc.zsh}
+          ${builtins.readFile ./nnn.zsh}
           ${builtins.readFile ./awesome.zsh}
 
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
