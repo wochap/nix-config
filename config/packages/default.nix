@@ -9,6 +9,7 @@
   neeasade-wmutils-opt = pkgs.callPackage ./neeasade-wmutils-opt.nix {};
   nsxiv = pkgs.callPackage ./nsxiv.nix {};
   offlinemsmtp = pkgs.callPackage ./offlinemsmtp.nix {};
+  onagre = pkgs.callPackage ./onagre.nix {};
   ptsh = pkgs.callPackage ./ptsh {};
   sf-mono-liga-bin = pkgs.callPackage ./sf-mono-liga-bin.nix {};
   stremio = pkgs.qt5.callPackage ./stremio {};

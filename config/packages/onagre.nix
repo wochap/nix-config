@@ -1,34 +1,27 @@
-{ fetchzip, lib, rustPlatform, installShellFiles, makeWrapper }:
+{ fetchzip, lib, cmake, pkg-config, dbus, rustPlatform, installShellFiles
+, freetype, makeWrapper, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "onagre";
   version = "1.0.0-alpha.0";
 
-  # This release tarball includes source code for the tree-sitter grammars,
-  # which is not ordinarily part of the repository.
-  src = fetchzip {
-    url = "https://github.com/oknozor/onagre/archive/refs/tags/${version}.tar.gz";
-    sha256 = "sha256-En65OyAPNPPzDGdm2XTjbGG0NQFGBVzjjoyCbdnHFao=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "oknozor";
+    repo = pname;
+    rev = "8d4ffe9f7f38cb2d1eb3023a128856c209100cf1";
+    sha256 = "sha256-mL4kOSwJIhIY8BMGpdPS76WRFFL+ndMl5c0ANyt/jjY=";
   };
 
-  cargoSha256 = "sha256-oSS0L2Lg2JSRLYoF0+FVQzFUJtFuVKtU2MWYenmFC0s=";
+  cargoSha256 = "sha256-IOhAGrAiT2mnScNP7k7XK9CETUr6BjGdQVdEUvTYQT4=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  doCheck = false;
 
-  # postInstall = ''
-  #   # not needed at runtime
-  #   rm -r runtime/grammars/sources
-  #   mkdir -p $out/lib
-  #   cp -r runtime $out/lib
-  #   installShellCompletion contrib/completion/hx.{bash,fish,zsh}
-  #   mkdir -p $out/share/{applications,icons}
-  #   cp contrib/Helix.desktop $out/share/applications
-  #   cp contrib/helix.png $out/share/icons
-  # '';
-  # postFixup = ''
-  #   wrapProgram $out/bin/hx --set HELIX_RUNTIME $out/lib/runtime
-  # '';
+  nativeBuildInputs =
+    [ cmake pkg-config installShellFiles makeWrapper freetype ];
+
+  preConfigure = ''
+    export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
+  '';
 
   meta = with lib; {
     description = "Launcher";
