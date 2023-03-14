@@ -46,11 +46,14 @@ window#waybar.hidden {
   font-size: 1.2em;
 }
 
-#keyboard-state label.locked,
-#custom-notifications.disabled {
+#keyboard-state label.locked {
   background: @primary;
   color: @background;
   min-width: 0.8em;
+}
+
+#custom-notifications.disabled {
+  color: @red;
 }
 
 #custom-powermenu {
@@ -117,11 +120,10 @@ window#waybar.hidden {
 #clock {
 }
 
-#idle_inhibitor {
+#idle_inhibitor.deactivated {
+  color: @red;
 }
 #idle_inhibitor.activated {
-  background-color: @purple;
-  color: @background;
 }
 
 #custom-recorder.recording {
@@ -132,9 +134,9 @@ window#waybar.hidden {
 #pulseaudio {
 }
 
-#pulseaudio.muted {
-  background-color: @red;
-  color: @background;
+#pulseaudio.muted,
+#pulseaudio.source-muted {
+  color: @red;
 }
 
 #backlight {
@@ -167,13 +169,17 @@ window#waybar.hidden {
   animation-direction: alternate;
 }
 
+#bluetooth.off {
+  color: @comment;
+}
 #bluetooth.on {
+  color: @green;
+}
+#bluetooth.connected {
   color: @cyan;
 }
-
 #bluetooth.disabled {
-  background-color: @red;
-  color: @background;
+  color: @red;
 }
 
 #network {
