@@ -66,6 +66,9 @@ in {
       pulse.enable = true;
       # If you want to use JACK applications, uncomment this
       #jack.enable = true;
+
+      wireplumber.enable = true;
+      media-session.enable = false;
     };
 
     services.xserver = {
