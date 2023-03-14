@@ -121,7 +121,7 @@
     "format": "<span rise='-1000'>{icon}</span> {volume}% {format_source}",
     "format-bluetooth": "<span rise='-1000'>{icon}</span>  {volume}%",
     "format-bluetooth-muted": "<span rise='-1000'></span>  {volume}%",
-    "format-muted": "<span rise='-1000'></span> {format_source}",
+    "format-muted": "<span rise='-1000'></span> {volume}% {format_source}",
     "format-source": "<span rise='-1000'></span> {volume}%",
     "format-source-muted": "<span rise='-1000'></span> {volume}%",
     "format-icons": {
