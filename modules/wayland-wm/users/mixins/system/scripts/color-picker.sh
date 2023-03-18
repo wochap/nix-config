@@ -15,6 +15,10 @@ notify() {
 
 color=$(hyprpicker -f hex -n)
 
+if [ -z "$color" ]; then
+  exit 1
+fi
+
 echo $color | wl-copy -n
 notify $color
 
