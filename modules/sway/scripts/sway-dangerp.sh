@@ -16,7 +16,7 @@ kitty @ --to unix:/tmp/kitty_scratch launch --tab-title=dangerp --type=tab --cwd
 kitty @ --to unix:/tmp/kitty_scratch launch --cwd ~/Projects/boc/dangerp zsh
 kitty @ --to unix:/tmp/kitty_scratch launch --cwd ~/Projects/boc/dangerp-backend zsh -c 'yarn dev & zsh'
 kitty @ --to unix:/tmp/kitty_scratch launch --cwd ~/Projects/boc/dangerp-backend zsh
-kitty @ --to unix:/tmp/kitty_scratch goto-layout Grid
+kitty @ --to unix:/tmp/kitty_scratch goto-layout grid
 
 # Open projects on nvim
 swaymsg assign [app_id="kitty-dangerp"] workspace 2
