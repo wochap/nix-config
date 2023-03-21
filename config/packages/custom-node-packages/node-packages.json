@@ -5,6 +5,7 @@
   "eas-cli",
   "emmet-ls",
   "markdownlint",
+  "migrate-mongo",
   "stylelint",
   "ts-node",
   "typescript",
