@@ -23,6 +23,7 @@ in {
       # others
       netlify-cli
       nodePackages.node2nix
+      localPkgs.customNodePackages.migrate-mongo
 
       # nodePackages.sharp-cli
       # unstable.nodePackages_latest.webtorrent-cli
