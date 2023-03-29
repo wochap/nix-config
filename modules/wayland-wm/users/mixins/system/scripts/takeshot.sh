@@ -14,7 +14,13 @@ notify_user() {
   if [[ -e "$dest" ]]; then
     copy_to_cb
 
-    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$dest" "Screen shooter" "Screenshot Saved" --action "default,Edit" --action "open,Open")
+    # generate thumbnail
+    thumbnail_size="288x288"
+    thumbnail=$(mktemp --suffix .png) || exit 1
+    trap 'rm -f "$thumbnail"' exit
+    magick "$dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
+
+    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Screen shooter" "Screenshot Saved" --action "default,Edit" --action "open,Open")
   else
     exit 1
     # dunstify -t "$EXPIRE_TIME" --replace=699 "Screen shooter" "Screenshot Aborted."
@@ -47,12 +53,6 @@ shotnow() {
 
 shot5() {
   countdown '5'
-  sleep 1
-  shotnow
-}
-
-shot10() {
-  countdown '10'
   sleep 1
   shotnow
 }

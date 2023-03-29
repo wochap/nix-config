@@ -21,15 +21,18 @@ notify_user() {
   if [[ -e "$dest" ]]; then
     # generate thumbnail
     thumbnail_size=500
+    last_thumbnail_size="288x288"
     thumbnail=$(mktemp --suffix .png) || exit 1
     trap 'rm -f "$thumbnail"' exit
     ffmpegthumbnailer -i "$dest" -o "$thumbnail" -s "$thumbnail_size"
+    magick "$thumbnail" -resize "$last_thumbnail_size>" -gravity center -background transparent -extent "$last_thumbnail_size" "$thumbnail"
 
     # TODO: copy to clipboard
 
     action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Video recording" "Recording Saved" --action "default,Open" --action "fm,Open in file manager")
   else
-    dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Aborted."
+    exit 1
+    # dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Aborted."
   fi
 
   # TODO: Open in video editor?
@@ -90,7 +93,6 @@ if [[ -f "$stopfile" ]]; then
   fi
 fi
 
-
 if [[ "$1" == "--now" ]]; then
   shotnow
 elif [[ "$1" == "--in5" ]]; then
@@ -102,4 +104,3 @@ else
 fi
 
 exit 0
-
