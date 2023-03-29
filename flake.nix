@@ -1,8 +1,8 @@
 {
   inputs = {
     # nixpkgs channels
-    unstable.url = "github:nixos/nixpkgs?rev=bb8d96f284edb0c2a960638fa5b1b4bb404b922e"; # master jan 2023
-    nixpkgs.url = "github:nixos/nixpkgs?rev=4d2b37a84fad1091b9de401eb450aae66f1a741e"; # nixos-22.11
+    unstable.url = "github:nixos/nixpkgs?rev=730d115a6e4e23af17361a6a0682629a72e5eaf5"; # master jan 2023
+    nixpkgs.url = "github:nixos/nixpkgs?rev=9ae25db0be36b005ac6ea70ced60eef9b0608d88"; # nixos-small-22.11 mar 2023 (release-22.11)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f";
     prevstable-mongodb.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
@@ -27,7 +27,7 @@
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party overlays/modules
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "github:hyprwm/Hyprland?rev=569ae86c90df483b56b7eeefc2453c2ee3325361";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=fdb2d33c942bfa07762c0e5357920f41d2f734a9";
