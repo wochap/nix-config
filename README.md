@@ -219,6 +219,14 @@ $ sudo nixos-rebuild switch --flake .#dekstop --impure
 
 ## Troubleshooting
 
+* Blackscreen on macbook pro
+
+Run the following and restart
+
+```
+$ sudo gpu-switch -i
+```
+
 * Slow firefox with nvidia drivers
 
   Use wayland (EGL) or
