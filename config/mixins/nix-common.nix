@@ -1,5 +1,5 @@
 # Used by darwin|wayland|xorg config
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let theme = config._theme;
 in {
@@ -16,6 +16,12 @@ in {
       '';
 
       gc.automatic = true;
+
+      # pin the registry to avoid downloading and evaling a new nixpkgs version every time
+      registry = lib.mapAttrs (_: v: { flake = v; }) inputs;
+      # set the path for channels compat
+      nixPath =
+        lib.mapAttrsToList (key: _: "${key}=flake:${key}") config.nix.registry;
 
       settings = {
         # Enable cachix
