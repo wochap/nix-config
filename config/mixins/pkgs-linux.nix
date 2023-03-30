@@ -80,7 +80,8 @@ in {
       bitwarden
       brave
       google-chrome
-      insomnia
+      microsoft-edge
+      unstable.insomnia
       postman
       simplenote
       slack

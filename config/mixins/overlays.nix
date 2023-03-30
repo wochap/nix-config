@@ -5,6 +5,7 @@ let
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
   localPkgs = import ../packages { inherit pkgs lib; };
+  overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
 in {
   config = {
     # home-manager.users.${userName} = {
@@ -15,21 +16,25 @@ in {
       # inputs.neovim-nightly-overlay.overlay
 
       (final: prev: {
-
         # Custom channels
         unstable = import inputs.unstable {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
         };
         prevstable-neovim = import inputs.prevstable-neovim {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
         };
         prevstable-mongodb = import inputs.prevstable-mongodb {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
         };
+      })
 
+      (final: prev: {
         wmutils-core = prev.wmutils-core.overrideAttrs (_: {
           src = pkgs.fetchFromGitHub {
             owner = "wmutils";
@@ -78,6 +83,19 @@ in {
           };
         });
 
+        neovide = prev.neovide.overrideAttrs (drv: rec {
+          cargoDeps = drv.cargoDeps.overrideAttrs (_: {
+            inherit src;
+            outputHash = "sha256-1BkEx2emvGdA8agoBgeEyoz1Z9G3SB0M8ORTNat+PqU=";
+          });
+          src = prev.fetchFromGitHub {
+            owner = "neovide";
+            repo = "neovide";
+            rev = "2766fe7f84d4d1825d7399378fdd3b0e1ce7f4a6";
+            sha256 = "sha256-1WoVeobqOvT72Ml+gtVS1URYZFifMdKXLwHOMq1HUww=";
+          };
+        });
+
       })
     ] ++ (if (isWayland) then
       [
@@ -110,6 +128,28 @@ in {
 
             ln -sf ${prev.robo3t}/share $out/share
           '');
+
+          insomnia = (prev.runCommandNoCC "insomnia" {
+            buildInputs = with pkgs; [ makeWrapper ];
+          } ''
+            makeWrapper ${prev.insomnia}/bin/insomnia $out/bin/insomnia \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
+
+            ln -sf ${prev.insomnia}/share $out/share
+          '');
+
+          microsoft-edge = (prev.runCommandNoCC "microsoft-edge" {
+            buildInputs = with pkgs; [ makeWrapper ];
+          } ''
+            makeWrapper ${prev.microsoft-edge}/bin/microsoft-edge $out/bin/microsoft-edge \
+              --add-flags "--enable-features=WebRTCPipeWireCapturer" \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
+
+            ln -sf ${prev.microsoft-edge}/share $out/share
+          '');
+
         })
 
         # inputs.nixpkgs-wayland.overlay-egl
