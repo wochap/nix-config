@@ -66,6 +66,16 @@ in {
         # needed function keys
         "hid_apple.fnmode=2"
         "hid_apple.swap_opt_cmd=1"
+
+        # chatgpt suggestions, power optimizations
+        "i915.enable_guc=3"
+        "i915.enable_fbc=1"
+        "i915.enable_psr=1"
+        "radeon.dpm=1"
+        "radeon.runpm=1"
+
+        "radeon.cik_support=0"
+        "amdgpu.cik_support=0"
       ];
 
       kernelModules = [ "hid-apple" ];
