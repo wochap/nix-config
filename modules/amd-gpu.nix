@@ -25,8 +25,7 @@ in {
     services.xserver = {
       videoDrivers = [ "amdgpu" ];
 
-      deviceSection = ''
-      '';
+      deviceSection = "";
     };
 
     hardware = {
