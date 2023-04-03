@@ -15,7 +15,7 @@ in {
           libsForQt5.breeze-icons
 
           qt5.qtgraphicaleffects # required by gddm themes
-        ] ++ (if isWayland then [ qt5.qtwayland ] else [ ]);
+        ] ++ (if isWayland then [ qt5.qtwayland qt6.qtwayland ] else [ ]);
       variables = lib.mkMerge [
         {
           QT_QPA_PLATFORMTHEME = "qt5ct";
