@@ -60,15 +60,13 @@ in {
           mode = "0755";
         };
       };
-    };
 
-    home-manager.users.${userName} = {
-
-      programs.zsh.initExtraFirst = lib.mkAfter ''
+      loginShellInit = lib.mkAfter ''
         if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
           exec sway
         fi
       '';
     };
+
   };
 }
