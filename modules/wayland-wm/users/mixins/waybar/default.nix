@@ -5,9 +5,10 @@ let
   theme = config._theme;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/wayland-wm/users/mixins/waybar";
+  currentDirectory =
+    "${configDirectory}/modules/wayland-wm/users/mixins/waybar";
 in {
   config = lib.mkIf cfg.enable {
     environment = {
@@ -34,6 +35,25 @@ in {
           ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
             (key: value: "@define-color ${key} ${value};") theme)}
         '';
+      };
+
+      systemd.user.services.waybar = {
+        Unit = {
+          Description =
+            "Highly customizable Wayland bar for Sway and Wlroots based compositors.";
+          Documentation = "https://github.com/Alexays/Waybar/wiki";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+
+        Service = {
+          ExecStart = "${pkgs.waybar}/bin/waybar";
+          ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
+          Restart = "on-failure";
+          KillMode = "mixed";
+        };
+
+        Install = { WantedBy = [ "graphical-session.target" ]; };
       };
     };
   };
