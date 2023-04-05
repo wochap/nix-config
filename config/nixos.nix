@@ -17,7 +17,7 @@
     ./mixins/overlays.nix
     ./mixins/pkgs-linux.nix
     ./mixins/pkgs-node.nix
-    ./mixins/pkgs-python.nix
+    ./mixins/pkgs-python
     ./mixins/pkgs.nix
     ./mixins/qt-pkgs.nix
     ./mixins/virt.nix

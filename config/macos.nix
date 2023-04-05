@@ -8,7 +8,7 @@ in {
     ./mixins/nix-common.nix
     ./mixins/overlays.nix
     ./mixins/pkgs-node.nix
-    ./mixins/pkgs-python.nix
+    ./mixins/pkgs-python
     ./mixins/pkgs.nix
     ./mixins/yabai
     ./users/user-macos.nix
