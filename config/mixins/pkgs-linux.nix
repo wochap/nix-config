@@ -79,13 +79,14 @@ in {
       # Electron apps
       bitwarden
       brave
+      figma-linux
       google-chrome
       microsoft-edge
-      unstable.insomnia
+      notion-app-enhanced
       postman
       simplenote
       slack
-      notion-app-enhanced
+      unstable.insomnia
       whatsapp-for-linux
     ];
   };
