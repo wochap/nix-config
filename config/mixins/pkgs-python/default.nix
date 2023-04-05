@@ -1,7 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  localPkgs = import ../packages { inherit pkgs lib; };
   isDarwin = config._displayServer == "darwin";
 
   packageOverrides = pkgs.callPackage ./python-packages.nix { };
