@@ -22,6 +22,7 @@ in {
     ./mixins/kitty
     ./mixins/lsd.nix
     ./mixins/mangadesk
+    ./mixins/mangal
     ./mixins/mime-apps.nix
     ./mixins/mpv
     ./mixins/music

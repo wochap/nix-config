@@ -13,6 +13,7 @@ in {
     ./mixins/kitty
     ./mixins/lsd.nix
     ./mixins/mangadesk
+    ./mixins/mangal
     ./mixins/newsboat
     ./mixins/nix-common
     ./mixins/nnn
