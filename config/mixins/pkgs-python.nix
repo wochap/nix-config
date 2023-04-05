@@ -3,14 +3,18 @@
 let
   localPkgs = import ../packages { inherit pkgs lib; };
   isDarwin = config._displayServer == "darwin";
+  packageOverrides =
+    pkgs.callPackage ../packages/custom-python-packages/python-packages.nix { };
+  python = pkgs.python39.override { inherit packageOverrides; };
 in {
   config = {
     environment.systemPackages = with pkgs;
       [
-        # global python
-        (python3.withPackages (ps:
+        (python.withPackages (ps:
           with ps;
           [
+            animdl
+
             # required by icalview.py
             html2text
             pytz
