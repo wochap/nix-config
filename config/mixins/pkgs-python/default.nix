@@ -3,8 +3,8 @@
 let
   localPkgs = import ../packages { inherit pkgs lib; };
   isDarwin = config._displayServer == "darwin";
-  packageOverrides =
-    pkgs.callPackage ../packages/custom-python-packages/python-packages.nix { };
+
+  packageOverrides = pkgs.callPackage ./python-packages.nix { };
   python = pkgs.python39.override { inherit packageOverrides; };
 in {
   config = {
@@ -27,4 +27,3 @@ in {
       ];
   };
 }
-
