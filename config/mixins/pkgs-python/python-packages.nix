@@ -20,10 +20,10 @@ self: super: {
   };
   "animdl" = super.buildPythonPackage rec {
     pname = "animdl";
-    version = "1.7.11";
+    version = "1.7.12";
     src = fetchurl {
-      url = "https://files.pythonhosted.org/packages/83/77/e22e7e5208df90fc7f2b9dd60c19bef7beb0a45396f7ecd2bd27281536e5/animdl-1.7.11-py3-none-any.whl";
-      sha256 = "0gh3yb2amj0c9r58vpm5k1y6w2mm2cgxfghs18yg1xf1wychx1f8";
+      url = "https://files.pythonhosted.org/packages/8a/86/0d69c16da363793dab0e6950c04a08611c7dfdc378007569cc78881557ad/animdl-1.7.12-py3-none-any.whl";
+      sha256 = "0yzc1x4v3a0n3hcc7jmv1cfzcf3xcc4ljlav9k8wsqq4ja52i9zz";
     };
     format = "wheel";
     doCheck = false;
@@ -37,7 +37,8 @@ self: super: {
       self."comtypes"
       self."cssselect"
       self."httpx"
-      self."lxml"
+      # HACK: self.lxml require some nativeBuildInputs
+      pkgs.python39Packages.lxml
       self."packaging"
       self."pkginfo"
       self."pycryptodomex"
@@ -212,10 +213,7 @@ self: super: {
     doCheck = false;
     buildInputs = [];
     checkInputs = [];
-    nativeBuildInputs = [
-      pkgs.libxslt
-      pkgs.libxml2
-    ];
+    nativeBuildInputs = [];
     propagatedBuildInputs = [];
   };
   "markdown-it-py" = super.buildPythonPackage rec {
