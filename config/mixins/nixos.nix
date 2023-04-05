@@ -3,6 +3,25 @@
 let
   isHidpi = config._isHidpi;
   isMbp = config.networking.hostName == "gmbp";
+  terminalColors = [
+    "21222c"
+    "ff5555"
+    "50fa7b"
+    "f1fa8c"
+    "bd93f9"
+    "ff79c6"
+    "8be9fd"
+    "f8f8f2"
+
+    "6272a4"
+    "ff6e6e"
+    "69ff94"
+    "ffffa5"
+    "d6acff"
+    "ff92df"
+    "a4ffff"
+    "ffffff"
+  ];
 in {
   imports = [
     # Install home manager
@@ -25,13 +44,14 @@ in {
     };
 
     systemd.extraConfig = ''
-      DefaultTimeoutStopSec=25s
+      DefaultTimeoutStopSec=15s
     '';
 
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";
 
     console = {
+      colors = terminalColors;
       font = if isHidpi then "ter-132n" else "Lat2-Terminus16";
       earlySetup = true;
       keyMap = "us";
