@@ -83,18 +83,18 @@ in {
           };
         });
 
-        neovide = prev.neovide.overrideAttrs (drv: rec {
-          cargoDeps = drv.cargoDeps.overrideAttrs (_: {
-            inherit src;
-            outputHash = "sha256-1BkEx2emvGdA8agoBgeEyoz1Z9G3SB0M8ORTNat+PqU=";
-          });
-          src = prev.fetchFromGitHub {
-            owner = "neovide";
-            repo = "neovide";
-            rev = "2766fe7f84d4d1825d7399378fdd3b0e1ce7f4a6";
-            sha256 = "sha256-1WoVeobqOvT72Ml+gtVS1URYZFifMdKXLwHOMq1HUww=";
-          };
-        });
+        # neovide = prev.neovide.overrideAttrs (drv: rec {
+        #   cargoDeps = drv.cargoDeps.overrideAttrs (_: {
+        #     inherit src;
+        #     outputHash = "sha256-1BkEx2emvGdA8agoBgeEyoz1Z9G3SB0M8ORTNat+PqU=";
+        #   });
+        #   src = prev.fetchFromGitHub {
+        #     owner = "neovide";
+        #     repo = "neovide";
+        #     rev = "2766fe7f84d4d1825d7399378fdd3b0e1ce7f4a6";
+        #     sha256 = "sha256-1WoVeobqOvT72Ml+gtVS1URYZFifMdKXLwHOMq1HUww=";
+        #   };
+        # });
 
       })
     ] ++ (if (isWayland) then
