@@ -5,7 +5,7 @@ let
   theme = config._theme;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/modules/wayland-wm/users/mixins/rofi";
 in {

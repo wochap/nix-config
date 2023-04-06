@@ -6,7 +6,7 @@ let
   localPkgs = import ../../../packages { pkgs = pkgs; lib = lib; };
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/modules/xorg-wm/users/mixins/polybar";
   customPolybar = pkgs.polybar.override {
