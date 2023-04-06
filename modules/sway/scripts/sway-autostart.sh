@@ -5,8 +5,6 @@ dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
 
 # kanshi &
 
-/etc/scripts/mako/mako-start.sh &
-
 # turn off bluetooth to save battery
 bluetoothctl power off &
 

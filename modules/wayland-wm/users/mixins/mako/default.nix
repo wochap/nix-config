@@ -4,7 +4,7 @@ let
   cfg = config._custom.waylandWm;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/modules/wayland-wm/users/mixins/mako";
 in {
@@ -32,7 +32,25 @@ in {
         "mako/config".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config";
       };
+
+      systemd.user.services.mako = {
+        Unit = {
+          Description =
+            "A lightweight Wayland notification daemon";
+          Documentation = "https://github.com/emersion/mako";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+
+        Service = {
+          ExecStart = "${pkgs.mako}/bin/mako";
+          ExecReload = "${pkgs.mako}/bin/makoctl reload";
+          Restart = "on-failure";
+          KillMode = "mixed";
+        };
+
+        Install = { WantedBy = [ "graphical-session.target" ]; };
+      };
     };
   };
 }
-
