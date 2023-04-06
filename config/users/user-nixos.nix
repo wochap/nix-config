@@ -54,7 +54,8 @@ in {
 
   config = {
     home-manager.users.${userName} = {
-      imports = [ ./modules/symlinks.nix ];
+      imports =
+        [ ./modules/symlinks.nix inputs.hyprland.homeManagerModules.default ];
 
     };
   };
