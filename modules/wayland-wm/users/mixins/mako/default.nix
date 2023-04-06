@@ -43,10 +43,7 @@ in {
         };
 
         Service = {
-          Environment = [
-            "XCURSOR_THEME=${globals.cursor.name}"
-            "XCURSOR_SIZE=${toString globals.cursor.size}"
-          ];
+          PassEnvironment = [ "XCURSOR_THEME" "XCURSOR_SIZE" ];
           ExecStart = "${pkgs.mako}/bin/mako";
           ExecReload = "${pkgs.mako}/bin/makoctl reload";
           Restart = "on-failure";

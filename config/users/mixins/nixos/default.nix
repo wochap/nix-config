@@ -44,11 +44,12 @@ in {
       # home.file = {
       #   # Dracula-cursors doesn't support sizes
       #   ".icons/Dracula-cursors".source = "${inputs.dracula-gtk-theme}/kde/cursors/Dracula-cursors";
+      #   ".icons/capitaine-cursors".source = "${globals.cursor.package}/share/icons/capitaine-cursors";
       # };
 
-      home.pointerCursor = lib.mkIf (!isWayland) {
+      home.pointerCursor = {
         inherit (globals.cursor) name package size;
-        x11.enable = true;
+        x11.enable = !isWayland;
       };
     };
   };
