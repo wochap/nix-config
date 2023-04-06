@@ -13,8 +13,8 @@ init() {
 menu() {
   selected=$(cliphist list | wofi --dmenu --width "600" --location top | cliphist decode)
 
-  if [[ -n $selected ]]; then
-    wl-copy $selected
+  if [[ -n "$selected" ]]; then
+    echo "$selected" | wl-copy
   fi
 
   # cliphist list | wofi --dmenu --width "600" --location top | cliphist decode | wl-copy
@@ -31,4 +31,3 @@ else
 fi
 
 exit 0
-
