@@ -5,12 +5,7 @@ dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
 
 # kanshi &
 
-# clipboard manager
-/etc/scripts/system/clipboard-manager.sh --start
-
 /etc/scripts/mako/mako-start.sh &
-
-/etc/scripts/waybar/waybar-start.sh &
 
 # turn off bluetooth to save battery
 bluetoothctl power off &

@@ -81,6 +81,24 @@ in {
           Requires = [ "graphical-session-pre.target" ];
         };
       };
+
+      systemd.user.services = let
+        mkService = lib.recursiveUpdate {
+          Unit.PartOf = [ "graphical-session.target" ];
+          Unit.After = [ "graphical-session.target" ];
+          Install.WantedBy = [ "graphical-session.target" ];
+        };
+      in {
+        cliphist = mkService {
+          Unit.Description = "Wayland clipboard manager";
+          Unit.Documentation = "https://github.com/sentriz/cliphist";
+          Service = {
+            ExecStart = "/etc/scripts/system/clipboard-manager.sh --start";
+            Restart = "on-failure";
+            KillMode = "mixed";
+          };
+        };
+      };
     };
 
   };
