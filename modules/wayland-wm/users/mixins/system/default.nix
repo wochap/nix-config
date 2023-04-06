@@ -93,6 +93,7 @@ in {
           Unit.Description = "Wayland clipboard manager";
           Unit.Documentation = "https://github.com/sentriz/cliphist";
           Service = {
+          PassEnvironment = "PATH";
             ExecStart = "/etc/scripts/system/clipboard-manager.sh --start";
             Restart = "on-failure";
             KillMode = "mixed";

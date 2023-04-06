@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  inherit (config._custom) globals;
   cfg = config._custom.waylandWm;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
@@ -35,14 +36,17 @@ in {
 
       systemd.user.services.mako = {
         Unit = {
-          Description =
-            "A lightweight Wayland notification daemon";
+          Description = "A lightweight Wayland notification daemon";
           Documentation = "https://github.com/emersion/mako";
           PartOf = [ "graphical-session.target" ];
           After = [ "graphical-session.target" ];
         };
 
         Service = {
+          Environment = [
+            "XCURSOR_THEME=${globals.cursor.name}"
+            "XCURSOR_SIZE=${toString globals.cursor.size}"
+          ];
           ExecStart = "${pkgs.mako}/bin/mako";
           ExecReload = "${pkgs.mako}/bin/makoctl reload";
           Restart = "on-failure";
