@@ -90,5 +90,7 @@ exec dbus-wayland-wm-environment
 exec configure-gtk
 
 # Autostart apps
+# start systemd services related to graphical-session.target
+exec systemctl --user start graphical-session.target
 exec bash /etc/scripts/sway-autostart.sh &
 
