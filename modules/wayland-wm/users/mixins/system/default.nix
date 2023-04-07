@@ -73,6 +73,26 @@ in {
 
     home-manager.users.${userName} = {
 
+      # swayidle
+      services.swayidle = {
+        enable = true;
+        systemdTarget = "graphical-session.target";
+        events = [
+          {
+            event = "before-sleep";
+            command = "bash /etc/scripts/system/sway-lock.sh";
+          }
+          {
+            event = "lock";
+            command = "bash /etc/scripts/system/sway-lock.sh";
+          }
+        ];
+        timeouts = [{
+          timeout = 180;
+          command = "bash /etc/scripts/system/sway-lock.sh";
+        }];
+      };
+
       # fake a tray to let apps start
       # https://github.com/nix-community/home-manager/issues/2064
       systemd.user.targets.tray = {
@@ -89,11 +109,18 @@ in {
           Install.WantedBy = [ "graphical-session.target" ];
         };
       in {
+        swayidle = {
+          Service = {
+            Environment = lib.mkForce "";
+            PassEnvironment = "PATH";
+          };
+        };
+
         cliphist = mkService {
           Unit.Description = "Wayland clipboard manager";
           Unit.Documentation = "https://github.com/sentriz/cliphist";
           Service = {
-          PassEnvironment = "PATH";
+            PassEnvironment = "PATH";
             ExecStart = "/etc/scripts/system/clipboard-manager.sh --start";
             Restart = "on-failure";
             KillMode = "mixed";

@@ -68,5 +68,10 @@ in {
       '';
     };
 
+    home-manager.users.${userName}.services.swayidle.timeouts = lib.mkAfter [{
+      timeout = 360;
+      command = ''swaymsg "output * dpms off"'';
+      resumeCommand = ''swaymsg "output * dpms on"'';
+    }];
   };
 }
