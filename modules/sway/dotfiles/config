@@ -3,7 +3,6 @@
 include /etc/sway/config.d/*
 
 #### THEME
-output * background #282a36 solid_color
 
 font pango:JetBrainsMono Nerd Font 10
 titlebar_padding 12 7
@@ -15,11 +14,6 @@ for_window [class=".*"] border pixel 2
 
 gaps inner 0
 gaps outer 0
-
-# border_images.focused /etc/sway/borders/dropShadowDark.png
-# border_images.focused_inactive /etc/sway/borders/dropShadowDark.png
-# border_images.unfocused /etc/sway/borders/dropShadowDark.png
-# border_images.urgent /etc/sway/borders/dropShadowDark.png
 
 
 #### CONFIG

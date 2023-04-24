@@ -11,8 +11,4 @@ bluetoothctl power off &
 libinput-gestures -c /etc/libinput-gestures.conf &
 
 /etc/scripts/backlight.sh 20% &
-# /etc/scripts/system/random-bg.sh &
-swaybg -c "#282a36" -m fill -i "$HOME/Pictures/backgrounds/dracula.jpeg" &
-# HACK: make swaybg visible?
-swaymsg "output * background #282a36 solid_color" &
 

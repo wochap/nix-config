@@ -8,6 +8,7 @@ in {
     ./mixins/kanshi.nix
     ./mixins/mako
     ./mixins/rofi
+    ./mixins/swww
     ./mixins/system
     ./mixins/way-displays
     ./mixins/waybar
