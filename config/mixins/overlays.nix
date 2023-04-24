@@ -103,20 +103,11 @@ in {
 
           mako = prev.mako.overrideAttrs (old: rec {
             version = "1.7.1";
-
             src = pkgs.fetchFromGitHub {
               owner = "emersion";
               repo = "mako";
               rev = "v1.7.1";
               sha256 = "sha256-/+XYf8FiH4lk7f7/pMt43hm13mRK+UqvaNOpf1TI6m4=";
-            };
-          });
-
-          rofi = prev.rofi.overrideAttrs (old: rec {
-            src = prev.fetchurl {
-              url =
-                "https://github.com/lbonn/rofi/archive/5d4a3e14788945a9a1c7d18993151a3b00649373.tar.gz";
-              sha256 = "sha256-i1nkI2VfJPaxN/x6DWjevfscyWiEYTSuC8zcu4GfJDM=";
             };
           });
 

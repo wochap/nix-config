@@ -13,7 +13,7 @@ in {
     environment = {
       systemPackages = with pkgs; [
         libqalculate # rofi-calc dependency
-        rofi
+        rofi-wayland
         rofi-calc
         rofi-emoji
       ];
