@@ -10,7 +10,6 @@ bluetoothctl power off &
 
 libinput-gestures -c /etc/libinput-gestures.conf &
 
-# blueberry-tray &
 /etc/scripts/backlight.sh 20% &
 # /etc/scripts/system/random-bg.sh &
 swaybg -c "#282a36" -m fill -i "$HOME/Pictures/backgrounds/dracula.jpeg" &
