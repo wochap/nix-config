@@ -1,0 +1,82 @@
+[global]
+always_run_script=yes
+class="Dunst"
+follow="mouse"
+hide_duplicate_count=no
+history_length=20
+icon_path="/run/current-system/sw/share/icons/Numix-Circle/48@2x/apps:/run/current-system/sw/share/icons/gnome/256x256/status"
+# icon_path="/home/gean/.icons/Tela-circle-icon-theme-2023-01-29/src/scalable/apps"
+idle_threshold=120
+ignore_dbusclose=no
+indicate_hidden=yes
+markup="full"
+monitor=0
+notification_limit="4"
+show_age_threshold=-1
+show_indicators=yes
+shrink=no
+sort=no
+stack_duplicates=yes
+sticky_history=yes
+title="Dunst"
+
+# actions
+browser="xdg-open"
+dmenu = rofi -p '' -dmenu -i
+mouse_left_click="do_action, close_current"
+mouse_middle_click="context, close_current"
+mouse_right_click="close_current"
+
+# position
+offset="16x16"
+origin="bottom-right"
+
+# Theme
+alignment="left"
+corner_radius=0
+ellipsize="end"
+format="<b>%s</b> <span color='#8be9fd'>(%a)</span>\n%b"
+frame_color="#44475a"
+icon_position="left"
+separator_color="frame"
+transparency=0
+vertical_alignment="center"
+word_wrap=yes
+# line_height=1.5
+
+# Theme dpi static
+separator_height=2
+frame_width=2
+scale=1
+
+# Theme dpi
+font="Iosevka Nerd Font 11"
+height=150
+horizontal_padding=20
+padding=20
+width=350
+max_icon_size=60
+min_icon_size=60
+
+[play_sound]
+script="/etc/scripts/play_notification.sh"
+summary="*"
+
+[urgency_normal]
+background="#282a36"
+foreground="#f8f8f2"
+
+[urgency_critical]
+background="#ff5555"
+foreground="#282a36"
+timeout=0
+
+[urgency_low]
+background="#282a36"
+foreground="#6272a4"
+
+[slack]
+appname="Slack"
+new_icon="/run/current-system/sw/share/icons/Numix-Circle/48@2x/apps/slack.svg"
+
+# vim: syntax=dosini
