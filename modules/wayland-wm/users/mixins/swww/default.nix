@@ -3,11 +3,17 @@
 let
   cfg = config._custom.waylandWm;
   userName = config._userName;
+  swww-random = pkgs.writeTextFile {
+    name = "swww-random";
+    destination = "/bin/swww-random";
+    executable = true;
+    text = builtins.readFile ./scripts/random-bg.sh;
+  };
 in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home = {
-        packages = with pkgs; [ unstable.swww ];
+        packages = with pkgs; [ unstable.swww swww-random ];
         sessionVariables = {
           SWWW_TRANSITION_TYPE = "simple";
           SWWW_TRANSITION_STEP = "45";
@@ -32,29 +38,7 @@ in {
             "SWWW_TRANSITION_BEZIER"
           ];
           ExecStart = "${pkgs.unstable.swww}/bin/swww-daemon";
-          Type = "oneshot";
-          KillMode = "mixed";
-        };
-
-        Install = { WantedBy = [ "graphical-session.target" ]; };
-      };
-      systemd.user.services.swww = {
-        Unit = {
-          Description = "A Solution to your Wayland Wallpaper Woes";
-          Documentation = "https://github.com/Horus645/swww";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
-        };
-
-        Service = {
-          PassEnvironment = [
-            "SWWW_TRANSITION_TYPE"
-            "SWWW_TRANSITION_STEP"
-            "SWWW_TRANSITION_FPS"
-            "SWWW_TRANSITION_BEZIER"
-          ];
-          ExecStart =
-            "${pkgs.unstable.swww}/bin/swww img /home/${userName}/Pictures/backgrounds/dracula.jpeg";
+          ExecStop = "${pkgs.unstable.swww}/bin/swww kill";
           Type = "oneshot";
           KillMode = "mixed";
         };
