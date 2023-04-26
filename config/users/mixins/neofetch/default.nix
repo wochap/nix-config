@@ -1,10 +1,12 @@
-
 { config, pkgs, lib, ... }:
 
 let
   userName = config._userName;
-in
-{
+  hmConfig = config.home-manager.users.${userName};
+  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
+  configDirectory = config._configDirectory;
+  currentDirectory = "${configDirectory}/config/users/mixins/neofetch";
+in {
   config = {
     environment.systemPackages = with pkgs; [
       neofetch
@@ -16,7 +18,8 @@ in
 
     home-manager.users.${userName} = {
       xdg.configFile = {
-        "neofetch/config.conf".source = ./dotfiles/config.conf;
+        "neofetch/config.conf".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.conf";
       };
     };
   };
