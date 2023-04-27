@@ -8,58 +8,86 @@ let
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/modules/wayland-wm/users/mixins/rofi";
+  rofi-config-colors = ''
+    * {
+    ${lib.concatStringsSep "\n"
+    (lib.attrsets.mapAttrsToList (key: value: "  ${key}: ${value};") theme)}
+    }
+  '';
+  rofi-emoji = pkgs.writeTextFile {
+    name = "rofi-emoji";
+    destination = "/bin/rofi-emoji";
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+
+      rofi \
+        -config "$HOME/.config/rofi/config-one-line-emoji.rasi" \
+        -modi emoji \
+        -show emoji \
+        -emoji-format '{emoji}' \
+        -plugin-path ${pkgs.rofi-emoji}/lib/rofi
+    '';
+  };
+  rofi-calc = pkgs.writeTextFile {
+    name = "rofi-calc";
+    destination = "/bin/rofi-calc";
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+
+      rofi \
+        -config "$HOME/.config/rofi/config-multi-line.rasi" \
+        -no-sort \
+        -p "" \
+        -modi calc \
+        -show calc \
+        -plugin-path ${pkgs.rofi-calc}/lib/rofi \
+        -theme-str 'prompt { font: "woos 18px"; }' \
+        -calc-command "echo -n '{result}' | wl-copy"
+    '';
+  };
+  rofi-launcher = pkgs.writeTextFile {
+    name = "rofi-launcher";
+    destination = "/bin/rofi-launcher";
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+
+      rofi \
+        -config "$HOME/.config/rofi/config-one-line.rasi" \
+        -show drun
+    '';
+  };
+  rofi-powermenu = pkgs.writeTextFile {
+    name = "rofi-powermenu";
+    destination = "/bin/rofi-powermenu";
+    executable = true;
+    text = builtins.readFile ./scripts/rofi-power-menu.sh;
+  };
 in {
   config = lib.mkIf cfg.enable {
-    environment = {
-      systemPackages = with pkgs; [
-        libqalculate # rofi-calc dependency
-        rofi-wayland
-        rofi-calc
-        rofi-emoji
-      ];
-      etc = {
-        "scripts/rofi-calc.sh" = {
-          text = ''
-            #!/usr/bin/env bash
-
-            rofi \
-              -modi calc \
-              -show calc \
-              -plugin-path ${pkgs.rofi-calc}/lib/rofi \
-              -calc-command "echo -n '{result}' | wl-copy" \
-              -theme-str 'window { width: 20em; }'
-          '';
-          mode = "0755";
-        };
-        "scripts/rofi-emoji.sh" = {
-          text = ''
-            #!/usr/bin/env bash
-
-            rofi \
-              -config "$HOME/.config/rofi/rofi-emoji-theme.rasi" \
-              -modi emoji \
-              -show emoji \
-              -plugin-path ${pkgs.rofi-emoji}/lib/rofi
-          '';
-          mode = "0755";
-        };
-      };
-      pathsToLink = [ "/share/rofi-emoji" ];
-    };
-
     home-manager.users.${userName} = {
+      home = {
+        packages = with pkgs; [
+          libqalculate # rofi-calc dependency
+          pkgs.rofi-calc
+          pkgs.rofi-emoji
+          rofi-calc
+          rofi-emoji
+          rofi-launcher
+          rofi-powermenu
+          rofi-wayland
+        ];
+      };
       xdg.configFile = {
-        "rofi/colors.rasi".text = ''
-          * {
-          ${lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList (key: value: "  ${key}: ${value};")
-            theme)}
-          }
-        '';
-        "rofi/config.rasi".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.rasi";
-        "rofi/rofi-emoji-theme.rasi".source = mkOutOfStoreSymlink
-          "${currentDirectory}/dotfiles/rofi-emoji-theme.rasi";
+        "rofi/colors.rasi".text = rofi-config-colors;
+        "rofi/config-multi-line.rasi".source = mkOutOfStoreSymlink
+          "${currentDirectory}/dotfiles/config-multi-line.rasi";
+        "rofi/config-one-line.rasi".source = mkOutOfStoreSymlink
+          "${currentDirectory}/dotfiles/config-one-line.rasi";
+        "rofi/config-one-line-emoji.rasi".source = mkOutOfStoreSymlink
+          "${currentDirectory}/dotfiles/config-one-line-emoji.rasi";
       };
     };
   };

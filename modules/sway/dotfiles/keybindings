@@ -24,11 +24,11 @@ bindsym $mod+l exec \
 
 # Open power menu
 bindsym $mod+Escape exec \
-  swaymsg exec /etc/scripts/wofi-powermenu.sh
+  rofi-powermenu
 
 # Open app launcher
 bindsym $mod+space exec \
-  swaymsg exec /etc/scripts/wofi-launcher.sh
+  rofi-launcher
 
 # Take fullscreen screenshot
 bindsym $mod+Print exec \
@@ -36,7 +36,7 @@ bindsym $mod+Print exec \
 
 # Open calc
 bindsym $mod+c exec \
-  /etc/scripts/rofi-calc.sh
+  rofi-calc
 
 # Open wifi menu
 bindsym $mod+w exec \
@@ -54,7 +54,7 @@ bindsym $mod+Shift+v exec \
 
 # Show emojis
 bindsym $mod+e exec \
-  /etc/scripts/rofi-emoji.sh
+  rofi-emoji
 
 bindsym $mod+ctrl+n exec \
   makoctl restore
