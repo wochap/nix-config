@@ -65,11 +65,11 @@
     "on-click": "exec /etc/scripts/wofi-powermenu.sh"
   },
   "custom/notifications": {
-    "exec": "/etc/scripts/mako/mako-toggle-mode.sh --read",
+    "exec": "dunst-toggle-mode --read",
     "interval": 1,
     "return-type": "json",
     "format": "{icon}{}",
-    "on-click": "exec /etc/scripts/mako/mako-toggle-mode.sh --toggle",
+    "on-click": "dunst-toggle-mode --toggle",
     "signal": 8
   },
   "idle_inhibitor": {

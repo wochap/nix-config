@@ -1,72 +1,63 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.xorgWm;
+  cfg = config._custom.waylandWm;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/xorg-wm/users/mixins/dunst";
+  currentDirectory = "${configDirectory}/modules/wayland-wm/users/mixins/dunst";
+  dunst-toggle-mode = pkgs.writeTextFile {
+    name = "dunst-toggle-mode";
+    destination = "/bin/dunst-toggle-mode";
+    executable = true;
+    text = builtins.readFile ./scripts/dunst-toggle-mode.sh;
+  };
+  dunst-play-notification-sound = pkgs.writeTextFile {
+    name = "dunst-play-notification-sound";
+    destination = "/bin/dunst-play-notification-sound";
+    executable = true;
+    text = builtins.readFile ./scripts/dunst-play-notification-sound.sh;
+  };
 in {
   config = lib.mkIf cfg.enable {
-    environment = {
-      systemPackages = with pkgs; [ dunst libnotify gnome-icon-theme ];
-      etc = {
-        "assets/notification.flac" = {
-          source = ./assets/notification.flac;
-          mode = "0755";
-        };
-
-        "scripts/dunst-toggle-mode.sh" = {
-          source = ./scripts/dunst-toggle-mode.sh;
-          mode = "0755";
-        };
-        "scripts/dunst-start.sh" = {
-          source = ./scripts/dunst-start.sh;
-          mode = "0755";
-        };
-        "scripts/play_notification.sh" = {
-          text = ''
-            #! ${pkgs.bash}/bin/bash
-
-            declare -i last_called=0
-            declare -i throttle_by=1
-
-            @debounce() {
-              if [[ ! -f ./executing ]]
-              then
-                touch ./executing
-                "$@"
-                retVal=$?
-                {
-                  sleep $throttle_by
-                  if [[ -f ./on-finish ]]
-                  then
-                    "$@"
-                    rm -f ./on-finish
-                  fi
-                  rm -f ./executing
-                } &
-                return $retVal
-              elif [[ ! -f ./on-finish ]]
-              then
-                touch ./on-finish
-              fi
-            }
-
-            @debounce ${pkgs.pulseaudio}/bin/paplay /etc/assets/notification.flac
-
-            wait $(jobs -p)
-          '';
-          mode = "0755";
-        };
-      };
-    };
+    # so it propagates to:
+    # /run/current-system/sw/share/icons/Numix-Square
+    environment.systemPackages = with pkgs; [ numix-icon-theme-square ];
 
     home-manager.users.${userName} = {
+      home = {
+        packages = with pkgs; [
+          dunst
+          dunst-play-notification-sound
+          dunst-toggle-mode
+          gnome-icon-theme
+          libnotify
+        ];
+      };
+
       xdg.configFile = {
+        "dunst/assets/notification.flac".source = ./assets/notification.flac;
         "dunst/dunstrc".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/dunstrc";
+      };
+
+      systemd.user.services.dunst = {
+        Unit = {
+          Description = "Lightweight and customizable notification daemon";
+          Documentation = "https://github.com/dunst-project/dunst";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+
+        Service = {
+          # PassEnvironment = [ "XCURSOR_THEME" "XCURSOR_SIZE" ];
+          ExecStart = "${pkgs.dunst}/bin/dunst";
+          Restart = "on-failure";
+          KillMode = "mixed";
+        };
+
+        Install = { WantedBy = [ "graphical-session.target" ]; };
       };
     };
   };

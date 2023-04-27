@@ -57,13 +57,13 @@ bindsym $mod+e exec \
   rofi-emoji
 
 bindsym $mod+ctrl+n exec \
-  makoctl restore
+  dunstctl history-pop
 
 bindsym $mod+ctrl+shift+n exec \
-  makoctl dismiss
+  dunstctl close
 
 bindsym $mod+ctrl+shift+Escape exec \
-  makoctl dismiss --all
+  dunstctl close-all
 
 # Toggle waybar
 bindsym $mod+b exec \
