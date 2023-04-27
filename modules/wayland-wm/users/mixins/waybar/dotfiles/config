@@ -118,10 +118,12 @@
     "tooltip-format": "{essid} {signalStrength}%"
   },
   "pulseaudio": {
-    "format": "<span rise='-1000'>{icon}</span> {volume}% {format_source}",
+    // "format": "<span rise='-1000'>{icon}</span> {volume}% {format_source}",
+    "format": "<span rise='-1000'>{icon}</span> {volume}%",
     "format-bluetooth": "<span rise='-1000'>{icon}</span>  {volume}%",
     "format-bluetooth-muted": "<span rise='-1000'></span>  {volume}%",
-    "format-muted": "<span rise='-1000'></span> {volume}% {format_source}",
+    // "format-muted": "<span rise='-1000'></span> {volume}% {format_source}",
+    "format-muted": "<span rise='-1000'></span> {volume}%",
     "format-source": "<span rise='-1000'></span> {volume}%",
     "format-source-muted": "<span rise='-1000'></span> {volume}%",
     "format-icons": {
@@ -134,9 +136,10 @@
       "default": ["", "", ""]
     },
     "tooltip-format": "{desc}, {volume}%",
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
-    "on-click-middle": "pavucontrol"
+    "on-click": "pavucontrol"
+    // "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    // "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+    // "on-click-middle": "pavucontrol"
   }
 }
 
