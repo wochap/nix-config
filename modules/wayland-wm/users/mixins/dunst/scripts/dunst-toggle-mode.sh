@@ -29,10 +29,10 @@ toggle() {
 read() {
   case $(dunstctl is-paused) in
   true)
-    printf '{ "text": "%s", "class": "enabled" }' "$ENABLED"
+    printf '{ "text": "%s", "class": "disabled" }' "$DISABLED"
     ;;
   false)
-    printf '{ "text": "%s", "class": "disabled" }' "$DISABLED"
+    printf '{ "text": "%s", "class": "enabled" }' "$ENABLED"
     ;;
   esac
 }
