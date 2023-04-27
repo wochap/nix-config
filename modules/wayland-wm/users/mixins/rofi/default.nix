@@ -39,11 +39,10 @@ let
       rofi \
         -config "$HOME/.config/rofi/config-multi-line.rasi" \
         -no-sort \
-        -p "" \
+        -p "calc" \
         -modi calc \
         -show calc \
         -plugin-path ${pkgs.rofi-calc}/lib/rofi \
-        -theme-str 'prompt { font: "woos 18px"; }' \
         -calc-command "echo -n '{result}' | wl-copy"
     '';
   };

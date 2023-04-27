@@ -8,7 +8,9 @@ logout=" Logout"
 lock=" Lock"
 options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 
-selected="$(echo -e "$options" | rofi -p "powermenu" -dmenu -config "$HOME/.config/rofi/config-one-line.rasi" -theme-str 'mainbox {children: [ "prompt", "listview" ];} element-text {font: "Iosevka Nerd Font, woos 14px";}')"
+selected="$(echo -e "$options" | rofi -p "powermenu" -dmenu \
+  -config "$HOME/.config/rofi/config-one-line.rasi" \
+  -theme-str 'mainbox {children: [ "prompt", "listview" ];} element-text {font: "Iosevka Nerd Font, woos 14px";}')"
 
 case $selected in
 $shutdown)

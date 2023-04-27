@@ -1,7 +1,7 @@
 configuration {
-  display-calc: "";
+  display-calc: "calc";
   display-drun: "";
-  display-emoji: "";
+  display-emoji: "emoji";
   display-run: "";
   drun-display-format: "{name}";
   show-icons: false;
@@ -86,6 +86,7 @@ prompt {
   background-color: inherit;
   text-color: @border-colour;
   vertical-align: 0.5;
+  font: "Iosevka Nerd Font, woos 14px";
 }
 textbox-prompt-colon {
   enabled: true;

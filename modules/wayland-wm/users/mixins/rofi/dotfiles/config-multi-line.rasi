@@ -17,10 +17,6 @@ inputbar {
   spacing: 7px;
 }
 
-prompt {
-  font: "woos 14px";
-}
-
 /*****----- Listview -----*****/
 listview {
   layout: vertical;
