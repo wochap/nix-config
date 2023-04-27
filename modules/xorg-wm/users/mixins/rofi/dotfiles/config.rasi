@@ -112,3 +112,4 @@ element selected {
   text-color: @var-fg-selection;
 }
 
+// vim: syntax=less
