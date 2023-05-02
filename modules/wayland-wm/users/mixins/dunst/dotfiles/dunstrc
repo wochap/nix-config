@@ -74,4 +74,8 @@ timeout=0
 appname="Slack"
 new_icon="/run/current-system/sw/share/icons/Numix-Circle/48@2x/apps/slack.svg"
 
+[mail]
+appname="Mail"
+new_icon="/run/current-system/sw/share/icons/Numix-Circle/48@2x/apps/internet-mail.svg"
+
 # vim: syntax=dosini
