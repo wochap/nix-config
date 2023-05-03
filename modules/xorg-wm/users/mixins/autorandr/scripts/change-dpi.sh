@@ -43,6 +43,7 @@ sed --follow-symlinks --in-place -E "/window_border_width/s/[0-9.]+/$BORDER_WIDT
 
 # Update spacing wm
 bspc config window_gap "$GAP"
+bspc config border_width "$BORDER_WIDTH"
 
 # Update Xft DPI in xsettingsd which is a lightweight gnome settings daemon implementation.
 # The apps which query gsd for DPI will get updated on the fly.
