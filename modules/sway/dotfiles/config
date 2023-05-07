@@ -75,7 +75,7 @@ for_window [app_id="kitty-ncmpcpp"] floating enable; move position center; stick
 
 
 #### AUTOSTART
-exec dbus-wayland-wm-environment
+exec restart-pipewire-and-portal-services
 exec configure-gtk
 
 # Autostart apps

@@ -18,12 +18,12 @@ in {
     };
 
     environment = {
-      systemPackages = with pkgs; [
-        scripts.sway-focus-toggle
-        scripts.dbus-wayland-wm-environment
+      systemPackages = with pkgs;
+        [
+          scripts.sway-focus-toggle
 
-        # gksu
-      ];
+          # gksu
+        ];
 
       sessionVariables = {
         XDG_CURRENT_DESKTOP = "sway";

@@ -1,10 +1,32 @@
 { config, pkgs, lib, inputs, ... }:
 
-let cfg = config._custom.waylandWm;
+let
+  cfg = config._custom.waylandWm;
+
+  # HACK: fix portals
+  # bash script to let dbus know about important env variables and
+  # propogate them to relevent services run at the end of wayland wm config
+  # see: https://github.com/emersion/xdg-desktop-portal-wlr/wiki/"It-doesn't-work"-Troubleshooting-Checklist
+  # SWAYSOCK, /etc/sway/config.d/nixos.conf has it
+  restart-pipewire-and-portal-services = pkgs.writeTextFile {
+    name = "restart-pipewire-and-portal-services";
+    destination = "/bin/restart-pipewire-and-portal-services";
+    executable = true;
+
+    text = ''
+      dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
+      dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
+      systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
+      systemctl --user stop pipewire wireplumber xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+      systemctl --user start pipewire wireplumber xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+    '';
+  };
 in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
+        restart-pipewire-and-portal-services
+
         blueberry # bluetooth tray
         caffeine-ng
         libappindicator-gtk3
