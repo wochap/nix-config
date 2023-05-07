@@ -28,7 +28,9 @@ $sleep)
   systemctl suspend
   ;;
 $logout)
-  swaymsg exit
+  if [[ "$XDG_SESSION_DESKTOP" == 'sway' ]]; then
+    swaymsg exit
+  fi
   ;;
 $lock)
   /etc/scripts/sway-lock.sh

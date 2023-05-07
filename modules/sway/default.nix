@@ -25,7 +25,10 @@ in {
         # gksu
       ];
 
-      sessionVariables = { XDG_CURRENT_DESKTOP = "sway"; };
+      sessionVariables = {
+        XDG_CURRENT_DESKTOP = "sway";
+        XDG_SESSION_DESKTOP = "sway";
+      };
 
       etc = {
         "libinput-gestures.conf".text = ''

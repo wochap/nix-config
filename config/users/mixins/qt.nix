@@ -26,7 +26,7 @@ in {
         (lib.mkIf isWayland {
           # QT_WAYLAND_FORCE_DPI = "physical";
           QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-          QT_QPA_PLATFORM = "wayland";
+          QT_QPA_PLATFORM = "wayland;xcb";
         })
       ];
     };

@@ -40,7 +40,7 @@ in {
         (lib.mkIf isWayland {
           # Force GTK to use wayland
           # doesn't work with nvidia?
-          GDK_BACKEND = "wayland";
+          GDK_BACKEND = "wayland,x11";
 
           CLUTTER_BACKEND = "wayland";
         })
