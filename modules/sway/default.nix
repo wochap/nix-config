@@ -51,7 +51,6 @@ in {
           client.focused_inactive   ${theme.comment}     ${theme.comment}        ${theme.foreground}   ${theme.cyan}   ${theme.comment}
           client.urgent             ${theme.pink}        ${theme.pink}           ${theme.background}   ${theme.cyan}   ${theme.pink}
         '';
-        "sway/borders".source = ./assets/borders;
 
         "scripts/sway-autostart.sh" = {
           source = ./scripts/sway-autostart.sh;
