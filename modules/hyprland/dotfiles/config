@@ -1,14 +1,17 @@
 # monitor=name,resolution,position,scale
 monitor = ,preferred,auto,auto
 
+
+bind = SUPER, Return, exec, kitty
+
 general {
   border_size = 2
   gaps_in = 7
   gaps_out = 7
-  col.inactive_border = $seletion
-  col.active_border = $primary
-  col.group_border = $selection
-  col.group_border_active = $primary
+  # col.inactive_border = $selection
+  # col.active_border = $primary
+  # col.group_border = $selection
+  # col.group_border_active = $primary
   cursor_inactive_timeout = 5
   layout = master
   # no_cursor_warps
@@ -28,10 +31,10 @@ decoration {
 }
 
 input {
-  kb_layout = "us"
-  sensitivity = 0
-  accel_profile = "flat"
-  sensitivity = "2fg"
+  kb_layout = us
+  sensitivity = 0.0
+  accel_profile = flat
+  sensitivity = 2fg
   natural_scroll = true
 
   touchpad {
@@ -41,7 +44,7 @@ input {
   }
 }
 
-gesture {
+gestures {
   workspace_swipe = true
   # workspace_swipe_distance
 }
