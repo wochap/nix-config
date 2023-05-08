@@ -22,6 +22,7 @@ in {
       dex # execute DesktopEntry files (xdg/autostart)
       dmidecode
       dnsutils # test dns
+      efivar
       evtest # input debugging
       ffmpegthumbnailer
       glxinfo # opengl utils

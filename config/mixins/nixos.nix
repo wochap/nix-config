@@ -85,11 +85,17 @@ in {
       alsa.support32Bit = true;
       pulse.enable = true;
       # If you want to use JACK applications, uncomment this
-      #jack.enable = true;
+      # jack.enable = true;
 
       wireplumber.enable = true;
       media-session.enable = false;
     };
+    # I copy the following from other user config
+    # systemd.user.services = {
+    #   pipewire-pulse = {
+    #     path = [ pkgs.pulseaudio ];
+    #   };
+    # };
 
     services.xserver = {
       enable = true;
