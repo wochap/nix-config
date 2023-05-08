@@ -4,6 +4,7 @@ let
   inherit (config._custom) globals;
   userName = config._userName;
   cfg = config._custom.hyprland;
+  theme = config._theme;
 in {
   options._custom.hyprland = {
     enable = lib.mkEnableOption "activate hyprland";
@@ -12,7 +13,7 @@ in {
   config = lib.mkIf cfg.enable {
     environment.loginShellInit = lib.mkAfter ''
       if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
-        exec hyprland
+        exec Hyprland
       fi
     '';
 
@@ -34,8 +35,8 @@ in {
         };
         extraConfig = ''
           ${lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList (key: value: "$${key}=${value}")
-            globals.theme)}
+          (lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${value}")
+            theme)}
 
           ${builtins.readFile ./dotfiles/config}
           ${builtins.readFile ./dotfiles/keybindings}

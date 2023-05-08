@@ -1,6 +1,7 @@
 {
   inputs = {
     # nixpkgs channels
+    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=2b54d8d84bc651cefe3680e0076c2246643475f1"; # master (may 2023)
     unstable.url = "github:nixos/nixpkgs?rev=730d115a6e4e23af17361a6a0682629a72e5eaf5"; # master (jan 2023)
     nixpkgs.url = "github:nixos/nixpkgs?rev=799d153e4f316143a9db0eb869ecf44d8d4c0356"; # nixos-22.11-small (apr 2023)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f";
@@ -27,8 +28,8 @@
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party overlays/modules
-    hyprland.url = "github:hyprwm/Hyprland?rev=569ae86c90df483b56b7eeefc2453c2ee3325361";
-    hyprland.inputs.nixpkgs.follows = "nixpkgs";
+    hyprland.url = "github:hyprwm/Hyprland?rev=2df0d034bc4a18fafb3524401eeeceaa6b23e753";
+    hyprland.inputs.nixpkgs.follows = "nixpkgs-unstable"; # TODO: change to nixpkgs
     xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=e1f145d15db320fe5c5e99b90898ab87db7e8214";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=fdb2d33c942bfa07762c0e5357920f41d2f734a9";
@@ -46,7 +47,7 @@
     zsh-vi-mode.flake = false;
     fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
     fzf-tab.flake = false;
-    ncmpcpp-ueberzug.url = "github:tam-carre/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";
+    ncmpcpp-ueberzug.url = "github:munguua/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";
     ncmpcpp-ueberzug.flake = false;
     ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
     ohmyzsh.flake = false;

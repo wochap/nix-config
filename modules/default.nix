@@ -7,6 +7,7 @@
     ./bspwm
     ./efi.nix
     ./globals.nix
+    ./hyprland
     ./lightdm
     ./river
     ./startx

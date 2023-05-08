@@ -5,59 +5,45 @@ $term = kitty
 #### SYSTEM KEYBINDINGS
 
 # Open terminal
-bind = $mod, i, exec, \
-  ~/.config/kitty/scripts/kitty-scratch.sh
+bind = $mod, i, exec, ~/.config/kitty/scripts/kitty-scratch.sh
 
 # Lock screen
-bind = $mod, l, exec, \
-  /etc/scripts/system/sway-lock.sh
+bind = $mod, l, exec, /etc/scripts/system/sway-lock.sh
 
 # Open power menu
-bind = $mod, Escape, exec, \
-  rofi-powermenu
+bind = $mod, Escape, exec, rofi-powermenu
 
 # Open app launcher
-bind = $mod, space, exec, \
-  rofi-launcher
+bind = $mod, space, exec, rofi-launcher
 
 # Take fullscreen screenshot
-bind = $mod, Print, exec, \
-  /etc/scripts/system/takeshot.sh --now
+bind = $mod, Print, exec, /etc/scripts/system/takeshot.sh --now
 
 # Open calc
-bind = $mod, c, exec, \
-  rofi-calc
+bind = $mod, c, exec, rofi-calc
 
 # Open wifi menu
-# bind = $mod, w, exec, \
-#   /etc/scripts/wofi-wifi.sh
+# bind = $mod, w, exec, #   /etc/scripts/wofi-wifi.sh
 
 # TODO: Show keybindings
 
 # Show clipboard
-bind = $mod, v, exec, \
-  /etc/scripts/system/clipboard-manager.sh --menu
+bind = $mod, v, exec, /etc/scripts/system/clipboard-manager.sh --menu
 
 # Clear clipboard
-bind = $mod SHIFT, v, exec, \
-  /etc/scripts/system/clipboard-manager.sh --clear
+bind = $mod SHIFT, v, exec, /etc/scripts/system/clipboard-manager.sh --clear
 
 # Show emojis
-bind = $mod, e, exec, \
-  rofi-emoji
+bind = $mod, e, exec, rofi-emoji
 
-bind = $mod CTRL, n, exec, \
-  dunstctl history-pop
+bind = $mod CTRL, n, exec, dunstctl history-pop
 
-bind = $mod CTRL SHIFT, n, exec, \
-  dunstctl close
+bind = $mod CTRL SHIFT, n, exec, dunstctl close
 
-bind = $mod CTRL SHIFT, Escape, exec, \
-  dunstctl close-all
+bind = $mod CTRL SHIFT, Escape, exec, dunstctl close-all
 
 # Toggle waybar
-bind = $mod, b, exec, \
-  /etc/scripts/waybar/waybar-toggle.sh
+bind = $mod, b, exec, /etc/scripts/waybar/waybar-toggle.sh
 
 
 ### WM KEYBINDINGS
@@ -144,25 +130,20 @@ bind = $mod, p, togglespecialworkspace
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
 # Open primary terminal
-bind = $mod ALT, t, exec, \
-  $term
+bind = $mod ALT, t, exec, $term
 
 # Open file manager
-bind = $mod ALT, f, exec, \
-  nautilus
+bind = $mod ALT, f, exec, nautilus
 # TODO:
 
 # Screencast/record region to mp4
-bind = $mod ALT, r, exec, \
-  /etc/scripts/system/recorder.sh --area
+bind = $mod ALT, r, exec, /etc/scripts/system/recorder.sh --area
 
 # Open screenshoot utility
-bind = $mod ALT, s, exec, \
-  /etc/scripts/system/takeshot.sh --area
+bind = $mod ALT, s, exec, /etc/scripts/system/takeshot.sh --area
 
 # Open color picker
-bind = $mod ALT, c, exec, \
-  /etc/scripts/system/color-picker.sh
+bind = $mod ALT, c, exec, /etc/scripts/system/color-picker.sh
 
 # Open Browser
 bind = $mod ALT, b, submap, browser
@@ -195,41 +176,30 @@ submap = reset
 
 ### MEDIA KEYBINDINGS
 
-bind = , XF86KbdBrightnessDown, exec, \
-  /etc/scripts/kbd-backlight.sh 5%-
+bind = , XF86KbdBrightnessDown, exec, /etc/scripts/kbd-backlight.sh 5%-
 
-bind = , XF86KbdBrightnessUp, exec, \
-  /etc/scripts/kbd-backlight.sh 5%+
+bind = , XF86KbdBrightnessUp, exec, /etc/scripts/kbd-backlight.sh 5%+
 
-bind = , XF86MonBrightnessUp, exec, \
-  /etc/scripts/backlight.sh 5%+
+bind = , XF86MonBrightnessUp, exec, /etc/scripts/backlight.sh 5%+
 
-bind = , XF86MonBrightnessDown, exec, \
-  /etc/scripts/backlight.sh 5%-
+bind = , XF86MonBrightnessDown, exec, /etc/scripts/backlight.sh 5%-
 
-bind = , XF86AudioRaiseVolume, exec, \
-  pactl set-sink-volume @DEFAULT_SINK@ +5%
+bind = , XF86AudioRaiseVolume, exec, pactl set-sink-volume @DEFAULT_SINK@ +5%
 
-bind = , XF86AudioLowerVolume, exec, \
-  pactl set-sink-volume @DEFAULT_SINK@ -5%
+bind = , XF86AudioLowerVolume, exec, pactl set-sink-volume @DEFAULT_SINK@ -5%
 
-bind = , XF86AudioMute, exec, \
-  pactl set-sink-mute @DEFAULT_SINK@ toggle
+bind = , XF86AudioMute, exec, pactl set-sink-mute @DEFAULT_SINK@ toggle
 
 # Play next media
-bind = , XF86AudioNext, exec, \
-  playerctl next
+bind = , XF86AudioNext, exec, playerctl next
 
 # Pause media
-bind = , XF86AudioStop, exec, \
-  playerctl pause
+bind = , XF86AudioStop, exec, playerctl pause
 
 # Play media
-bind = , XF86AudioPlay, exec, \
-  playerctl play-pause
+bind = , XF86AudioPlay, exec, playerctl play-pause
 
 # Play previous media
-bind = , XF86AudioPrev, exec, \
-  playerctl previous
+bind = , XF86AudioPrev, exec, playerctl previous
 
 # vim: syntax=sh
