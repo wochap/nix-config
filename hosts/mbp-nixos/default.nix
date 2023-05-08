@@ -37,6 +37,7 @@ in {
     # _custom.startx.enable = true;
     # _custom.xorgWm.enable = true;
 
+    _custom.hyprland.enable = false;
     _custom.sway.enable = true;
     _custom.waylandWm.enable = true;
 
