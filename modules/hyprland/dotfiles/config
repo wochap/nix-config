@@ -1,17 +1,15 @@
 # monitor=name,resolution,position,scale
-monitor = ,preferred,auto,auto
-
-
-bind = SUPER, Return, exec, kitty
+monitor = , preferred,auto,auto
+monitor = , addreserved, -7, 0, 0, 0
 
 general {
   border_size = 2
-  gaps_in = 7
+  gaps_in = 3.5
   gaps_out = 7
-  # col.inactive_border = $selection
-  # col.active_border = $primary
-  # col.group_border = $selection
-  # col.group_border_active = $primary
+  col.inactive_border = rgb(44475a)
+  col.active_border = rgb(bd93f9)
+  col.group_border = rgb(44475a)
+  col.group_border_active = rgb(bd93f9)
   cursor_inactive_timeout = 5
   layout = master
   # no_cursor_warps
@@ -19,15 +17,15 @@ general {
 
 decoration {
   rounding = 4
-  blur_size = 5
+  blur_size = 6
   blur_passes = 2
   # blur_xray = true
-  shadow_range = 4
+  shadow_range = 15
   shadow_render_power = 3
   col.shadow = rgba(292c3cee)
-  # col.shadow_inactive = rgba(292c3cee)
-  shadow_offset
-  shadow_scale
+  col.shadow_inactive = rgba(292c3cee)
+  # shadow_offset = 0 5
+  # shadow_scale
 }
 
 input {
@@ -39,14 +37,18 @@ input {
 
   touchpad {
     natural_scroll = true
-    # middle_button_emulation = true
+    middle_button_emulation = true
     tap-to-click = false
   }
 }
 
 gestures {
   workspace_swipe = true
-  # workspace_swipe_distance
+  workspace_swipe_min_speed_to_force = 20
+  workspace_swipe_distance = 750
+  workspace_swipe_cancel_ratio = 0.1
+  workspace_swipe_forever = true
+  workspace_swipe_create_new = true
 }
 
 misc {
@@ -54,6 +56,20 @@ misc {
   disable_splash_rendering = true
   key_press_enables_dpms = true
   focus_on_activate = true
+}
+
+animations {
+  bezier = easyOut, 0, 0, 0.58, 1
+  bezier = easyIn, 0.42, 0, 1, 1
+  bezier = linear, 0, 0, 1, 1
+  bezier = easyInOut, 0.42, 0, 0.58, 1
+
+  animation = border, 1, 1.5, default
+  animation = workspaces, 1, 3, easyOut, fade
+  animation = windows, 1, 2.5, easyOut, slide
+  animation = windowsIn, 1, 2.5, easyOut, slide
+  animation = windowsOut, 1, 2.5, easyOut, popin
+  animation = fade, 1, 1.5, easyIn
 }
 
 

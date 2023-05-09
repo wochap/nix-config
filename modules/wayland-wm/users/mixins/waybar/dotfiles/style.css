@@ -13,6 +13,7 @@ window#waybar.hidden {
   opacity: 0;
 }
 
+#submap,
 #mode,
 #keyboard-state label.locked,
 #custom-mbpfan,
@@ -31,7 +32,8 @@ window#waybar.hidden {
 #bluetooth,
 #clock,
 #tray {
-  background-color: @selection;
+  /* background-color: rgba(40, 42, 54, 0.95); */
+  background-color: @background;
   padding: 0 7px;
   margin: 7px 0;
   border-radius: 4px;
@@ -74,6 +76,7 @@ window#waybar.hidden {
   background-color: rgba(0, 0, 0, 0.2);
 }
 #tags button.focused,
+#workspaces button.active,
 #workspaces button.focused {
   color: @background;
   background-color: @primary;
@@ -95,6 +98,7 @@ window#waybar.hidden {
   color: #c678dd;
 }
 
+#submap,
 #mode {
   color: @orange;
 }

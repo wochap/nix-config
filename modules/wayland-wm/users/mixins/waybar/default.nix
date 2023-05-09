@@ -48,7 +48,7 @@ in {
 
         Service = {
           PassEnvironment = "PATH";
-          ExecStart = "${pkgs.waybar}/bin/waybar";
+          ExecStart = "${pkgs.unstable.waybar}/bin/waybar";
           ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
           Restart = "on-failure";
           KillMode = "mixed";

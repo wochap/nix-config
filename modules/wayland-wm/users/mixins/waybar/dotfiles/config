@@ -2,8 +2,10 @@
   "height": 40, // Waybar height (to be removed for auto height)
   // "modules-left": ["river/tags", "keyboard-state", "river/mode"],
   // "modules-center": ["river/window"],
-  "modules-left": ["sway/workspaces", "custom/scratchpad_indicator", "keyboard-state", "sway/mode"],
-  "modules-center": ["sway/window"],
+  // "modules-left": ["sway/workspaces", "custom/scratchpad_indicator", "keyboard-state", "sway/mode"],
+  "modules-left": ["wlr/workspaces", "keyboard-state", "hyprland/submap"],
+  // "modules-center": ["sway/window"],
+  "modules-center": ["hyprland/window"],
   "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/mbpfan", "battery", "backlight", "pulseaudio", "bluetooth", "network", "clock"],
   "ipc": true,
   "id": "main",
@@ -25,6 +27,29 @@
   },
   "sway/window": {
     "max-length": 50
+  },
+  "hyprland/submap": {
+    "tooltip": false
+  },
+  "hyprland/window": {
+    "max-length": 50
+  },
+  "wlr/workspaces": {
+    "all-outputs": true,
+    "format": "<span rise='-1000'>{icon}</span>",
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "urgent": "",
+      "focused": "",
+      "default": ""
+    }
   },
   "sway/workspaces": {
     "disable-scroll": true,

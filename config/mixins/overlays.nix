@@ -101,6 +101,10 @@ in {
       [
         (final: prev: {
 
+          waybar = prev.waybar.overrideAttrs (oldAttrs: {
+            mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+          });
+
           mako = prev.mako.overrideAttrs (old: rec {
             version = "1.7.1";
             src = pkgs.fetchFromGitHub {

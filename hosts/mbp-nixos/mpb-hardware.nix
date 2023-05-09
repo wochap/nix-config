@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, modulesPath, ... }:
 
 let
-  kernelPackages = config.boot.kernelPackages;
+  inherit (config.boot) kernelPackages;
 in
 {
   imports = [

@@ -71,6 +71,13 @@ in {
       };
     };
 
+    # HACK: necessary for swaylock to unlock
+    security.pam.services.swaylock = {
+      text = ''
+        auth include login
+      '';
+    };
+
     home-manager.users.${userName} = {
 
       # swayidle
