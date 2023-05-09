@@ -191,7 +191,7 @@ super + alt + t
 
 # Open file manager
 super + alt + f
-  /etc/scripts/bspwm_toggle_visibility.sh Org.gnome.Nautilus nautilus
+  /etc/scripts/bspwm_toggle_visibility.sh org.gnome.Nautilus nautilus
 
 # Screencast/record region to mp4
 super + alt + r
