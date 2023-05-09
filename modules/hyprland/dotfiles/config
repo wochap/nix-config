@@ -15,11 +15,13 @@ general {
   # no_cursor_warps
 }
 
+# blurls = waybar
 decoration {
   rounding = 4
   blur_size = 6
   blur_passes = 2
   # blur_xray = true
+  drop_shadow = false
   shadow_range = 15
   shadow_render_power = 3
   col.shadow = rgba(292c3cee)

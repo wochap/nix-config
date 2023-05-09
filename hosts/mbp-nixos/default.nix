@@ -9,8 +9,9 @@ let
   draculaTheme = import ../../config/mixins/dracula.nix;
 in {
   imports = [
-    "${inputs.nixos-hardware}/common/pc/laptop/acpi_call.nix"
-    ./mpb-hardware.nix
+    inputs.nixos-hardware.nixosModules.common-pc-laptop-acpi_call
+    inputs.nixos-hardware.nixosModules.apple-macbook-pro-11-5
+    # inputs.nixos-hardware.nixosModules.common-gpu-amd-southern-islands
     ./hardware-configuration.nix
     ../../config/mixins/intel.nix
     ../../config/mixins/powerManagement.nix
@@ -28,17 +29,17 @@ in {
     _theme = draculaTheme;
 
     _custom.efi.enable = true;
-    _custom.amdCpu.enable = true;
-    _custom.amdGpu.enable = true;
-    _custom.amdGpu.enableSouthernIslands = true;
+    _custom.amdCpu.enable = false;
+    _custom.amdGpu.enable = false;
+    _custom.amdGpu.enableSouthernIslands = false;
 
     # _custom.bspwm.enable = true;
     _custom.lightdm.enable = false;
     # _custom.startx.enable = true;
     # _custom.xorgWm.enable = true;
 
-    _custom.hyprland.enable = false;
-    _custom.sway.enable = true;
+    _custom.hyprland.enable = true;
+    _custom.sway.enable = false;
     _custom.waylandWm.enable = true;
 
     # This value determines the NixOS release from which the default

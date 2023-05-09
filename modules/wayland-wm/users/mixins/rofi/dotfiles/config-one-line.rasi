@@ -17,7 +17,7 @@ configuration {
 }
 
 * {
-  border-colour: var(selected);
+  border-colour: var(comment);
   handle-colour: var(selected);
   background-colour: var(background);
   foreground-colour: var(foreground);
@@ -84,7 +84,7 @@ prompt {
   padding: 0px 0;
   border: 0px;
   background-color: inherit;
-  text-color: @border-colour;
+  text-color: @primary;
   vertical-align: 0.5;
   font: "Iosevka Nerd Font, woos 14px";
 }

@@ -3,7 +3,7 @@
 /*****----- Main Window -----*****/
 window {
   border: 0px solid 0px solid 2px solid 0px solid;
-  border-color: var(selection);
+  border-color: var(comment);
 }
 
 /*****----- Main Box -----*****/
