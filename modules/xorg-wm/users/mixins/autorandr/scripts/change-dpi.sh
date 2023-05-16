@@ -39,7 +39,7 @@ sed --follow-symlinks --in-place -E "/shadow-offset-x/s/[0-9.]+/$WINDOW_PADDING/
 sed --follow-symlinks --in-place -E "/shadow-offset-y/s/[0-9.]+/$WINDOW_PADDING/" "$HOME/.config/picom/picom.conf"
 
 # Update kitty inner border
-sed --follow-symlinks --in-place -E "/window_border_width/s/[0-9.]+/$BORDER_WIDTH/" "$HOME/.config/kitty/common.conf"
+# sed --follow-symlinks --in-place -E "/window_border_width/s/[0-9.]+/$BORDER_WIDTH/" "$HOME/.config/kitty/common.conf"
 
 # Update spacing wm
 bspc config window_gap "$GAP"
