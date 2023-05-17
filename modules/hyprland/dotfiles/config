@@ -18,6 +18,7 @@ general {
 # blurls = waybar
 decoration {
   rounding = 4
+  blur = false
   blur_size = 6
   blur_passes = 2
   # blur_xray = true

@@ -5,6 +5,12 @@ let
   userName = config._userName;
   cfg = config._custom.hyprland;
   theme = config._theme;
+  hyprland-focus-toggle = pkgs.writeTextFile {
+    name = "hyprland-focus-toggle";
+    destination = "/bin/hyprland-focus-toggle";
+    executable = true;
+    text = builtins.readFile ./scripts/hyprland-focus-toggle.sh;
+  };
 in {
   options._custom.hyprland = {
     enable = lib.mkEnableOption "activate hyprland";
@@ -18,7 +24,10 @@ in {
     '';
 
     home-manager.users.${userName} = {
-      home.sessionVariables = { XDG_CURRENT_DESKTOP = "Hyprland"; };
+      home = {
+        sessionVariables = { XDG_CURRENT_DESKTOP = "Hyprland"; };
+        packages = [ hyprland-focus-toggle ];
+      };
 
       xdg.configFile = {
         "hyprland/scripts/autostart.sh" = {
