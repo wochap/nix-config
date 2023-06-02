@@ -2,7 +2,7 @@
 
 # Reload keybindings
 super + ctrl + Escape
-  exec pkill -USR1 -x sxhkd
+  ~/.config/bspwm/scripts/restart-sxhkd.sh
 
 # Open scratch terminal
 super + i

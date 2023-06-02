@@ -113,6 +113,13 @@ in {
     };
 
     home-manager.users.${userName} = {
+      xdg.configFile = {
+        "bspwm/scripts/restart-sxhkd.sh" = {
+          executable = true;
+          source = ./scripts/restart-sxhkd.sh;
+        };
+      };
+
       xsession = {
         enable = true;
         windowManager.bspwm = {
