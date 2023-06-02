@@ -40,8 +40,9 @@ input {
 
   touchpad {
     natural_scroll = true
-    middle_button_emulation = true
+    middle_button_emulation = false
     tap-to-click = false
+    clickfinger_behavior = true
   }
 }
 
@@ -70,7 +71,7 @@ animations {
   animation = border, 1, 1.5, default
   animation = workspaces, 1, 3, easyOut, fade
   animation = windows, 1, 2.5, easyOut, slide
-  animation = windowsIn, 1, 2.5, easyOut, slide
+  animation = windowsIn, 1, 2.5, easyOut, popin 0%
   animation = windowsOut, 1, 2.5, easyOut, popin
   animation = fade, 1, 1.5, easyIn
 }
@@ -108,6 +109,7 @@ windowrulev2 = pin, class:^(kitty-top)$
 windowrulev2 = float, class:^(kitty-scratch)$
 windowrulev2 = center, class:^(kitty-scratch)$
 windowrulev2 = pin, class:^(kitty-scratch)$
+windowrulev2 = size 75% 75%, class:^(kitty-scratch)$
 windowrulev2 = float, class:^(kitty-neorg)$
 windowrulev2 = center, class:^(kitty-neorg)$
 windowrulev2 = pin, class:^(kitty-neorg)$

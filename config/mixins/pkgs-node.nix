@@ -19,6 +19,7 @@ in {
       nodePackages.http-server
       nodePackages.node-gyp-build
       nodePackages.nodemon
+      nodePackages.webtorrent-cli
 
       # others
       netlify-cli

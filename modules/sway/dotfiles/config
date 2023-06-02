@@ -63,7 +63,7 @@ for_window [app_id="mpv"] floating enable; move position center;
 assign [app_id="firefox"] workspace 5
 assign [app_id="google-chrome"] workspace 1
 assign [app_id="brave-browser"] workspace 8
-assign [app_id="slack"] workspace 4
+assign [app_id="Slack"] workspace 4
 
 for_window [app_id="kitty-top"] floating enable; move position center; sticky enable; resize set width 1500px height 1100px;
 for_window [app_id="kitty-scratch"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;

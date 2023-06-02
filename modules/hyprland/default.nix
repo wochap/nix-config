@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   inherit (config._custom) globals;
@@ -50,6 +50,8 @@ in {
           ${builtins.readFile ./dotfiles/config}
           ${builtins.readFile ./dotfiles/keybindings}
         '';
+        # TODO: fix build
+        # plugin = ${inputs.hyprland-plugins.packages.${pkgs.hostPlatform.system}.borders-plus-plus}/lib/libborders-plus-plus.so
       };
 
       services.swayidle.timeouts = lib.mkAfter [{
