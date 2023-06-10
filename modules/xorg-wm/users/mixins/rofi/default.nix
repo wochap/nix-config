@@ -8,22 +8,78 @@ let
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/modules/xorg-wm/users/mixins/rofi";
+  rofi-config-colors = ''
+    * {
+    ${lib.concatStringsSep "\n"
+    (lib.attrsets.mapAttrsToList (key: value: "  ${key}: ${value};") theme)}
+    }
+  '';
+  rofi-emoji = pkgs.writeTextFile {
+    name = "rofi-emoji";
+    destination = "/bin/rofi-emoji";
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+
+      rofi \
+        -config "$HOME/.config/rofi/config-one-line-emoji.rasi" \
+        -modi emoji \
+        -show emoji \
+        -emoji-format '{emoji}' \
+        -plugin-path ${pkgs.rofi-emoji}/lib/rofi
+    '';
+  };
+  rofi-calc = pkgs.writeTextFile {
+    name = "rofi-calc";
+    destination = "/bin/rofi-calc";
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+
+      rofi \
+        -config "$HOME/.config/rofi/config-multi-line.rasi" \
+        -no-sort \
+        -p "calc" \
+        -modi calc \
+        -show calc \
+        -plugin-path ${pkgs.rofi-calc}/lib/rofi \
+        -calc-command "echo -n '{result}' | wl-copy"
+    '';
+  };
+  rofi-launcher = pkgs.writeTextFile {
+    name = "rofi-launcher";
+    destination = "/bin/rofi-launcher";
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+
+      rofi \
+        -config "$HOME/.config/rofi/config-one-line.rasi" \
+        -show drun
+    '';
+  };
+  rofi-powermenu = pkgs.writeTextFile {
+    name = "rofi-powermenu";
+    destination = "/bin/rofi-powermenu";
+    executable = true;
+    text = builtins.readFile ./scripts/rofi-power-menu.sh;
+  };
 in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
         libqalculate # rofi-calc dependency
+        pkgs.rofi-calc
+        pkgs.rofi-emoji
         rofi
         rofi-calc
         rofi-emoji
+        rofi-launcher
+        rofi-powermenu
       ];
       etc = {
         "scripts/rofi-nm.sh" = {
           source = ./scripts/rofi-nm.sh;
-          mode = "0755";
-        };
-        "scripts/rofi-custom-options.sh" = {
-          source = ./scripts/rofi-custom-options.sh;
           mode = "0755";
         };
         "scripts/rofi-clipboard.sh" = {
@@ -34,62 +90,28 @@ in {
           source = ./scripts/rofi-help.sh;
           mode = "0755";
         };
-        "scripts/rofi-calc.sh" = {
-          text = ''
-            #!/usr/bin/env bash
-
-            rofi \
-              -modi calc \
-              -show calc \
-              -plugin-path ${pkgs.rofi-calc}/lib/rofi \
-              -calc-command "echo -n '{result}' | xclip -selection clipboard" \
-              -theme-str 'window { width: 20em; }'
-          '';
-          mode = "0755";
-        };
-        "scripts/rofi-emoji.sh" = {
-          text = ''
-            #!/usr/bin/env bash
-
-            rofi \
-              -config "$HOME/.config/rofi/rofi-emoji-theme.rasi" \
-              -modi emoji \
-              -show emoji \
-              -plugin-path ${pkgs.rofi-emoji}/lib/rofi
-          '';
-          mode = "0755";
-        };
-        "scripts/rofi-launcher.sh" = {
-          source = ./scripts/rofi-launcher.sh;
-          mode = "0755";
-        };
-        "scripts/rofi-powermenu.sh" = {
-          source = ./scripts/rofi-powermenu.sh;
-          mode = "0755";
-        };
         "scripts/rofi-hidden-windows.sh" = {
           source = ./scripts/rofi-hidden-windows.sh;
           mode = "0755";
         };
       };
-      pathsToLink = [ "/share/rofi-emoji" ];
     };
 
     home-manager.users.${userName} = {
       xdg.configFile = {
-        "rofi/colors.rasi".text = ''
-          * {
-          ${lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList (key: value: "  ${key}: ${value};")
-            theme)}
-          }
-        '';
-        "rofi/config.rasi".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.rasi";
-        "rofi/rofi-emoji-theme.rasi".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/rofi-emoji-theme.rasi";
-        "rofi/rofi-help-theme.rasi".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/rofi-help-theme.rasi";
+        "rofi/colors.rasi".text = rofi-config-colors;
+        "rofi/config-192-dpi.rasi".source = mkOutOfStoreSymlink
+          "${currentDirectory}/dotfiles/config-192-dpi.rasi";
+        "rofi/rofi-96-dpi.rasi".source =
+          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/rofi-96-dpi.rasi";
+        "rofi/rofi-help-theme.rasi".source = mkOutOfStoreSymlink
+          "${currentDirectory}/dotfiles/rofi-help-theme.rasi";
+        "rofi/config-multi-line.rasi".source = mkOutOfStoreSymlink
+          "${currentDirectory}/dotfiles/config-multi-line.rasi";
+        "rofi/config-one-line.rasi".source = mkOutOfStoreSymlink
+          "${currentDirectory}/dotfiles/config-one-line.rasi";
+        "rofi/config-one-line-emoji.rasi".source = mkOutOfStoreSymlink
+          "${currentDirectory}/dotfiles/config-one-line-emoji.rasi";
       };
     };
   };

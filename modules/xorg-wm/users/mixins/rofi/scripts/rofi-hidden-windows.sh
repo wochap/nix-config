@@ -11,7 +11,7 @@ do
   rows+="<span>${class}\t${title}</span>\n"
 done
 
-s=$(printf "$rows" | column -t -s "$(printf '\t')" | rofi -format i -dmenu -i -p "" -markup-rows)
+s=$(printf "$rows" | column -t -s "$(printf '\t')" | rofi -config "$HOME/.config/rofi/config-multi-line.rasi" -format i -dmenu -i -p "hidden windows" -markup-rows)
 
 if [[ -n "$s" ]]; then
   node="${nodesArray[$s]}"

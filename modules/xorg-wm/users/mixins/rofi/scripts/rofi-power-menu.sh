@@ -10,13 +10,10 @@ options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 
 PRESELECTION=4
 
-selected="$(echo -e "$options" | rofi \
-  -p "" \
-  -theme-str 'window { width: 15em; }' \
-  -theme-str 'element-text {font: "woos 12";}' \
-  -dmenu \
-  -i \
-  -selected-row ${PRESELECTION})"
+selected="$(echo -e "$options" | rofi -p "powermenu" -dmenu \
+  -config "$HOME/.config/rofi/config-one-line.rasi" \
+  -selected-row ${PRESELECTION} \
+  -theme-str 'mainbox {children: [ "prompt", "listview" ];} element-text {font: "Iosevka Nerd Font, woos 28px";}')"
 
 case $selected in
   $shutdown)

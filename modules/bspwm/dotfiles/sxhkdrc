@@ -14,11 +14,11 @@ super + l
 
 # Open power menu
 super + Escape
-  /etc/scripts/rofi-powermenu.sh
+  rofi-powermenu
 
 # Open app launcher
 super + space
-  /etc/scripts/rofi-launcher.sh
+  rofi-launcher
 
 # Take fullscreen screenshoot
 super + Print
@@ -26,7 +26,7 @@ super + Print
 
 # Open calc
 super + c
-  /etc/scripts/rofi-calc.sh
+  rofi-calc
 
 # Open wifi menu
 super + w
@@ -46,7 +46,7 @@ super + shift + v
 
 # Show emojis
 super + e
-  /etc/scripts/rofi-emoji.sh
+  rofi-emoji
 
 super + ctrl + n
   dunstctl history-pop

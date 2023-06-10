@@ -29,10 +29,8 @@ xsetroot -xcf /run/current-system/sw/share/icons/capitaine-cursors/cursors/left_
 sed --follow-symlinks --in-place -E "/CursorThemeSize/s/[0-9.]+/$CURSOR_SIZE/" "$HOME/.config/xsettingsd/xsettingsd.conf"
 
 # Update rofi
-sed --follow-symlinks --in-place -E "/dpi:/s/[0-9.]+/$DPI/" "$HOME/.config/rofi/config.rasi"
-sed --follow-symlinks --in-place -E "/var-window-border-width:/s/[0-9.]+/$BORDER_WIDTH/" "$HOME/.config/rofi/config.rasi"
-sed --follow-symlinks --in-place -E "/var-inputbar-padding:/s/[0-9.]+/$WINDOW_PADDING/" "$HOME/.config/rofi/config.rasi"
-sed --follow-symlinks --in-place "/var-listview-padding:/c\  var-listview-padding: 0 $WINDOW_PADDING\px $WINDOW_PADDING\px;" "$HOME/.config/rofi/config.rasi"
+rofi_one_line_config_path="$HOME/.config/rofi/config-one-line.rasi"
+sed --follow-symlinks --in-place -E "/import \"config-/s/[0-9.]+/$DPI/" "$rofi_one_line_config_path"
 
 # Update picom
 sed --follow-symlinks --in-place -E "/shadow-offset-x/s/[0-9.]+/$WINDOW_PADDING/" "$HOME/.config/picom/picom.conf"

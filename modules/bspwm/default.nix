@@ -11,6 +11,11 @@ in {
     environment = {
       systemPackages = with pkgs; [ bsp-layout ];
 
+      sessionVariables = {
+        XDG_CURRENT_DESKTOP = "XFCE";
+        XDG_SESSION_DESKTOP = "xfce";
+      };
+
       etc = {
         "libinput-gestures.conf".text = ''
           gesture swipe left 3 bspc desktop -f next.local
