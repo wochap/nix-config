@@ -27,15 +27,17 @@ mouse_middle_click="context, close_current"
 mouse_right_click="close_current"
 
 # position
-offset="32x32"
+offset="7x7"
 origin="bottom-right"
 
 # Theme
 alignment="left"
 corner_radius=0
 ellipsize="end"
+foreground="#f8f8f2"
 format="<b>%s</b> <span color='#8be9fd'>(%a)</span>\n%b"
 frame_color="#44475a"
+gaps = true
 icon_position="left"
 separator_color="frame"
 transparency=0
@@ -44,18 +46,19 @@ word_wrap=yes
 # line_height=1.5
 
 # Theme dpi static
-separator_height=4
-frame_width=4
-scale=1
+separator_height=2
+frame_width=2
+scale=2
 
 # Theme dpi
-font="Iosevka Nerd Font 11"
-height=300
-horizontal_padding=40
-padding=40
-width=700
-max_icon_size=120
-min_icon_size=120
+gap_size = 7
+font="Iosevka Nerd Font 28px"
+height=150
+horizontal_padding=11
+padding=11
+width=310
+max_icon_size=56
+min_icon_size=56
 
 [play_sound]
 script="/etc/scripts/play_notification.sh"
@@ -65,18 +68,24 @@ summary="*"
 background="#282a36"
 foreground="#f8f8f2"
 
-[urgency_critical]
-background="#ff5555"
-foreground="#282a36"
-timeout=0
-
 [urgency_low]
-background="#282a36"
-foreground="#6272a4"
+frame_color="#6272a4"
+
+[urgency_critical]
+frame_color="#ff5555"
+timeout=0
 
 [slack]
 appname="Slack"
-new_icon="/run/current-system/sw/share/icons/Numix-Circle/48@2x/apps/slack.svg"
+new_icon="slack"
+
+[mail]
+appname="Mail"
+new_icon="internet-mail"
+
+[offlinemsmtp]
+appname="offlinemsmtp"
+new_icon="internet-mail"
 
 # vim: syntax=dosini
 
