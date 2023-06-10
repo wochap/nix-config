@@ -11,14 +11,13 @@ i3lock-color \
   --ignore-empty-password \
   --indicator \
   --bar-indicator \
-  --bar-pos="1070" \
   --bar-base-width="10" \
   --bar-orientation=horizontal \
-  --bar-color=151515 \
-  --ringver-color=$color \
-  --ringwrong-color=$color \
-  --bshl-color=$color \
-  --keyhl-color=$color \
+  --bar-color=282a36ff \
+  --ringver-color=50fa7bff \
+  --ringwrong-color=ff5555ff \
+  --bshl-color=6272a4ff \
+  --keyhl-color=bd93f9ff \
   --clock \
   --time-color=$color \
   --time-str="%H:%M:%S" \
@@ -38,4 +37,4 @@ i3lock-color \
   --wrong-size=36 \
   --wrong-text="$wrong_pass" \
   --wrong-color=$color \
-  -i $background
+  -i "$background"
