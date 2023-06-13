@@ -219,6 +219,12 @@ $ sudo nixos-rebuild switch --flake .#dekstop --impure
 
 ## Troubleshooting
 
+* No wifi device at startup
+
+```
+$ nmcli r wifi on
+```
+
 * Blackscreen on macbook pro
 
 Run the following and restart
