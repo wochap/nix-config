@@ -121,14 +121,14 @@ in {
     };
 
     # Enable webcam
-    hardware.facetimehd.enable = false;
+    hardware.facetimehd.enable = true;
 
     # Default cpu cpuFreqGovernor at startup
     powerManagement = {
       # TODO: refactor to module options
       cpuFreqGovernor = "performance";
       cpufreq.min = 800000;
-      # cpufreq.max = 3000000;
+      cpufreq.max = 4000000;
     };
 
   };
