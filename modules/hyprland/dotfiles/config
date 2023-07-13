@@ -33,9 +33,10 @@ decoration {
 
 input {
   kb_layout = us
-  sensitivity = 0.0
-  accel_profile = flat
-  sensitivity = 2fg
+  # sensitivity = 0.0
+  # accel_profile = flat
+  accel_profile = adaptive
+  # sensitivity = 2fg
   natural_scroll = true
 
   touchpad {
