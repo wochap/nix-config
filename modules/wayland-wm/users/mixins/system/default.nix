@@ -147,7 +147,7 @@ in {
             ExecStart =
               "/etc/scripts/system/battery-notification.sh -t 5s -L 15 -l 5 -n -i battery -D";
             Restart = "on-failure";
-            KillMode = "none";
+            KillMode = "mixed";
           };
         };
       };
