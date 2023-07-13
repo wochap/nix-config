@@ -68,6 +68,10 @@ in {
           source = ./scripts/recorder.sh;
           mode = "0755";
         };
+        "scripts/system/battery-notification.sh" = {
+          source = ./scripts/battery-notification.sh;
+          mode = "0755";
+        };
       };
     };
 
@@ -131,6 +135,19 @@ in {
             ExecStart = "/etc/scripts/system/clipboard-manager.sh --start";
             Restart = "on-failure";
             KillMode = "mixed";
+          };
+        };
+
+        battery-notification = mkService {
+          Unit.Description =
+            "A script that shows warning messages to the user when the battery is almost empty.";
+          Unit.Documentation = "https://github.com/rjekker/i3-battery-popup";
+          Service = {
+            PassEnvironment = [ "PATH" "DISPLAY" ];
+            ExecStart =
+              "/etc/scripts/system/battery-notification.sh -t 5s -L 15 -l 5 -n -i battery -D";
+            Restart = "on-failure";
+            KillMode = "none";
           };
         };
       };

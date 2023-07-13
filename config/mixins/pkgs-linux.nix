@@ -15,6 +15,7 @@ in {
       xorg.xev # get key actual name
 
       # CLI TOOLS
+      acpi
       acpitool
       cached-nix-shell # fast nix-shell scripts
       coreutils-full # a lot of commands
