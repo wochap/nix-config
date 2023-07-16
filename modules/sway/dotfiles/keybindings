@@ -217,25 +217,25 @@ bindsym $mod+alt+u mode "tui"
 ### MEDIA KEYBINDINGS
 
 bindsym XF86KbdBrightnessDown exec \
-  /etc/scripts/kbd-backlight.sh 5%-
+  wob-osd --kbd-backlight 5%-
 
 bindsym XF86KbdBrightnessUp exec \
-  /etc/scripts/kbd-backlight.sh 5%+
+  wob-osd --kbd-backlight 5%+
 
 bindsym XF86MonBrightnessUp exec \
-  /etc/scripts/backlight.sh 5%+
+  wob-osd --backlight 5%+
 
 bindsym XF86MonBrightnessDown exec \
-  /etc/scripts/backlight.sh 5%-
+  wob-osd --backlight 5%-
 
 bindsym XF86AudioRaiseVolume exec \
-  pactl set-sink-volume @DEFAULT_SINK@ +5%
+  wob-osd --volume +5%
 
 bindsym XF86AudioLowerVolume exec \
-  pactl set-sink-volume @DEFAULT_SINK@ -5%
+  wob-osd --volume -5%
 
 bindsym XF86AudioMute exec \
-  pactl set-sink-mute @DEFAULT_SINK@ toggle
+  wob-osd --volume-toggle
 
 # Play next media
 bindsym XF86AudioNext exec \

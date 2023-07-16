@@ -5,14 +5,15 @@ let
   userName = config._userName;
 in {
   imports = [
+    # ./mixins/mako
     ./mixins/dunst
     ./mixins/kanshi.nix
-    # ./mixins/mako
     ./mixins/rofi
     ./mixins/swww
     ./mixins/system
     ./mixins/way-displays
     ./mixins/waybar
+    ./mixins/wob
     ./mixins/wofi
   ];
 }

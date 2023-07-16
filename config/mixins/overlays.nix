@@ -44,6 +44,18 @@ in {
           };
         });
 
+        wob = prev.wob.overrideAttrs (_: {
+          src = pkgs.fetchFromGitHub {
+            owner = "francma";
+            repo = "wob";
+            rev = "75a65e6c33e916a5453d705ed5b3b21335587631";
+            sha256 = "sha256-N6+UUCRerzswbU5XpoNeG6Qu//QSyXD4mTIXwCPXMsU=";
+          };
+
+          buildInputs = with pkgs; [ inih wayland wayland-protocols pixman cmocka ]
+            ++ lib.optional stdenv.isLinux pkgs.libseccomp;
+        });
+
         dracula-theme = prev.dracula-theme.overrideAttrs
           (_: { src = inputs.dracula-gtk-theme; });
 
