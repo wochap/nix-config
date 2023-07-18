@@ -66,10 +66,11 @@ script="dunst-play-notification-sound"
 summary="*"
 
 [urgency_low]
-frame_color="#6272a4"
+# frame_color="#6272a4"
 
 [urgency_critical]
-frame_color="#ff5555"
+foreground="#ff5555"
+# frame_color="#ff5555"
 timeout=0
 
 [slack]
