@@ -32,6 +32,11 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
+        prevstable-python = import inputs.prevstable-python {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
       })
 
       (final: prev: {

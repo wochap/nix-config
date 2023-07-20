@@ -3,8 +3,8 @@
 let
   isDarwin = config._displayServer == "darwin";
 
-  packageOverrides = pkgs.callPackage ./python-packages.nix { };
-  python = pkgs.python39.override { inherit packageOverrides; };
+  packageOverrides = pkgs.prevstable-python.callPackage ./python-packages.nix { };
+  python = pkgs.prevstable-python.python39.override { inherit packageOverrides; };
 in {
   config = {
     environment.systemPackages = with pkgs;

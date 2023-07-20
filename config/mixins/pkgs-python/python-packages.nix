@@ -20,10 +20,10 @@ self: super: {
   };
   "animdl" = super.buildPythonPackage rec {
     pname = "animdl";
-    version = "1.7.12";
+    version = "1.7.18";
     src = fetchurl {
-      url = "https://files.pythonhosted.org/packages/8a/86/0d69c16da363793dab0e6950c04a08611c7dfdc378007569cc78881557ad/animdl-1.7.12-py3-none-any.whl";
-      sha256 = "0yzc1x4v3a0n3hcc7jmv1cfzcf3xcc4ljlav9k8wsqq4ja52i9zz";
+      url = "https://files.pythonhosted.org/packages/59/d8/c2b91a3d902456b4e08552a1c89ec0e516594143c8e6eac26bf58f0db9e2/animdl-1.7.18-py3-none-any.whl";
+      sha256 = "17gz64925l8044ac7a0w9s13dklaa8gf5xa2cfjv5mhk8hnpnis9";
     };
     format = "wheel";
     doCheck = false;
@@ -39,6 +39,7 @@ self: super: {
       self."httpx"
       # HACK: self.lxml require some nativeBuildInputs
       pkgs.python39Packages.lxml
+      # self."lxml"
       self."packaging"
       self."pkginfo"
       self."pycryptodomex"
@@ -65,10 +66,10 @@ self: super: {
   };
   "anyio" = super.buildPythonPackage rec {
     pname = "anyio";
-    version = "3.6.2";
+    version = "3.7.1";
     src = fetchurl {
-      url = "https://files.pythonhosted.org/packages/77/2b/b4c0b7a3f3d61adb1a1e0b78f90a94e2b6162a043880704b7437ef297cad/anyio-3.6.2-py3-none-any.whl";
-      sha256 = "1qsi382l4607lsjz8k8azhqlwa2h2824ap8wxprjwahd4yyk5gpv";
+      url = "https://files.pythonhosted.org/packages/19/24/44299477fe7dcc9cb58d0a57d5a7588d6af2ff403fdd2d47a246c91a3246/anyio-3.7.1-py3-none-any.whl";
+      sha256 = "1dgv0k8dlpdcwnf7cj3hzy6sfvqx1n88pl8v0ij2rsbhwlbf9pli";
     };
     format = "wheel";
     doCheck = false;
@@ -76,16 +77,17 @@ self: super: {
     checkInputs = [];
     nativeBuildInputs = [];
     propagatedBuildInputs = [
+      self."exceptiongroup"
       self."idna"
       self."sniffio"
     ];
   };
   "certifi" = super.buildPythonPackage rec {
     pname = "certifi";
-    version = "2022.12.7";
+    version = "2023.5.7";
     src = fetchurl {
-      url = "https://files.pythonhosted.org/packages/71/4c/3db2b8021bd6f2f0ceb0e088d6b2d49147671f25832fb17970e9b583d742/certifi-2022.12.7-py3-none-any.whl";
-      sha256 = "065wqxligjai8la891i71s921q7xmpyc3krixhc6fvcjbqpj7lsa";
+      url = "https://files.pythonhosted.org/packages/9d/19/59961b522e6757f0c9097e4493fa906031b95b3ebe9360b2c3083561a6b4/certifi-2023.5.7-py3-none-any.whl";
+      sha256 = "05n7h0lz1vh69hqlqi0vkygm74fx539gw5l93z5fysbqbj7ykhn6";
     };
     format = "wheel";
     doCheck = false;
@@ -96,10 +98,10 @@ self: super: {
   };
   "click" = super.buildPythonPackage rec {
     pname = "click";
-    version = "8.1.3";
+    version = "8.1.5";
     src = fetchurl {
-      url = "https://files.pythonhosted.org/packages/c2/f1/df59e28c642d583f7dacffb1e0965d0e00b218e0186d7858ac5233dce840/click-8.1.3-py3-none-any.whl";
-      sha256 = "0j6vn6ayxq1bqs1v64r90sarg05hj6rxj4w29vs0k9hmrcrq2kdv";
+      url = "https://files.pythonhosted.org/packages/22/b3/1da4ea0efa2e5ae410a347be614162ca08bd24a84059938aa5122d1e751b/click-8.1.5-py3-none-any.whl";
+      sha256 = "0j25a3p1r7hs7d25i1zvpx9zq91xnkhqgfqasgbl3537gm4alxp5";
     };
     format = "wheel";
     doCheck = false;
@@ -128,6 +130,20 @@ self: super: {
     src = fetchurl {
       url = "https://files.pythonhosted.org/packages/06/a9/2da08717a6862c48f1d61ef957a7bba171e7eefa6c0aa0ceb96a140c2a6b/cssselect-1.2.0-py2.py3-none-any.whl";
       sha256 = "0pnkkx6db5gk93iwsvwpj66j9zvfinvbdjzcslzc0q0bq7q8a66s";
+    };
+    format = "wheel";
+    doCheck = false;
+    buildInputs = [];
+    checkInputs = [];
+    nativeBuildInputs = [];
+    propagatedBuildInputs = [];
+  };
+  "exceptiongroup" = super.buildPythonPackage rec {
+    pname = "exceptiongroup";
+    version = "1.1.2";
+    src = fetchurl {
+      url = "https://files.pythonhosted.org/packages/fe/17/f43b7c9ccf399d72038042ee72785c305f6c6fdc6231942f8ab99d995742/exceptiongroup-1.1.2-py3-none-any.whl";
+      sha256 = "13rj0i9fcfahp6s50msy0c20xaimcb8w3j19y1yclwk132fycip3";
     };
     format = "wheel";
     doCheck = false;
@@ -211,9 +227,10 @@ self: super: {
     };
     format = "setuptools";
     doCheck = false;
-    buildInputs = [];
+    buildInputs = with pkgs; [ libxml2 libxslt zlib ];
     checkInputs = [];
-    nativeBuildInputs = [];
+    # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
+    nativeBuildInputs = with pkgs; [ libxml2.dev libxslt.dev python39Packages.cython ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
     propagatedBuildInputs = [];
   };
   "markdown-it-py" = super.buildPythonPackage rec {
@@ -262,10 +279,10 @@ self: super: {
   };
   "packaging" = super.buildPythonPackage rec {
     pname = "packaging";
-    version = "23.0";
+    version = "23.1";
     src = fetchurl {
-      url = "https://files.pythonhosted.org/packages/ed/35/a31aed2993e398f6b09a790a181a7927eb14610ee8bbf02dc14d31677f1c/packaging-23.0-py3-none-any.whl";
-      sha256 = "1ch201bz087xfagzsy0hdyxz719bg9gq804vqacqrrn3jr2c2jki";
+      url = "https://files.pythonhosted.org/packages/ab/c3/57f0601a2d4fe15de7a553c00adbc901425661bf048f2a22dfc500caf121/packaging-23.1-py3-none-any.whl";
+      sha256 = "0qfwgvgx5f74cqlzjjlpzslw21wxc9jgcsxz5vmc80lm8apr6iwr";
     };
     format = "wheel";
     doCheck = false;
@@ -304,10 +321,10 @@ self: super: {
   };
   "pygments" = super.buildPythonPackage rec {
     pname = "pygments";
-    version = "2.14.0";
+    version = "2.15.1";
     src = fetchurl {
-      url = "https://files.pythonhosted.org/packages/0b/42/d9d95cc461f098f204cd20c85642ae40fbff81f74c300341b8d0e0df14e0/Pygments-2.14.0-py3-none-any.whl";
-      sha256 = "05r7p29qh4qps5lsniva5jym27vkzkyqpbq3wc6pqa3i4yyxfyzs";
+      url = "https://files.pythonhosted.org/packages/34/a7/37c8d68532ba71549db4212cb036dbd6161b40e463aba336770e80c72f84/Pygments-2.15.1-py3-none-any.whl";
+      sha256 = "1lazggnsh6n72dc9cdlx95v6nn3a7c14n189k8wry5xlnkgb6bfv";
     };
     format = "wheel";
     doCheck = false;
@@ -318,10 +335,10 @@ self: super: {
   };
   "pyyaml" = super.buildPythonPackage rec {
     pname = "pyyaml";
-    version = "6.0";
+    version = "6.0.1";
     src = fetchurl {
-      url = "https://files.pythonhosted.org/packages/36/2b/61d51a2c4f25ef062ae3f74576b01638bebad5e045f747ff12643df63844/PyYAML-6.0.tar.gz";
-      sha256 = "18imkjacvpxfgg1lbpraqywx3j7hr5dv99d242byqvrh2jf53yv8";
+      url = "https://files.pythonhosted.org/packages/cd/e5/af35f7ea75cf72f2cd079c95ee16797de7cd71f29ea7c68ae5ce7be1eda0/PyYAML-6.0.1.tar.gz";
+      sha256 = "0hsa7g6ddynifrwdgadqcx80khhblfy94slzpbr7birn2w5ldpxz";
     };
     format = "setuptools";
     doCheck = false;
