@@ -88,7 +88,7 @@ in {
       postman
       simplenote
       slack
-      unstable.insomnia
+      insomnia
       whatsapp-for-linux
     ];
   };
