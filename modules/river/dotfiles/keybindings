@@ -7,11 +7,15 @@ mod="Mod4"
 ctrl="Control"
 alt="Mod1"
 
+
 ### SYSTEM KEYBINDINGS
 
 # reload river
 riverctl map normal $mod+$ctrl+$alt Escape spawn \
   "bash ~/.config/river/init"
+
+# Open scratchpad terminal
+# TODO
 
 # Lock screen
 riverctl map normal $mod l spawn \
@@ -19,21 +23,22 @@ riverctl map normal $mod l spawn \
 
 # Open power menu
 riverctl map normal $mod Escape spawn \
-  "bash /etc/scripts/wofi-powermenu.sh"
+  "rofi-powermenu"
 
 # Open app launcher
 riverctl map normal $mod space spawn \
-  "bash /etc/scripts/wofi-launcher.sh"
+  "rofi-launcher"
 
 # Take fullscreen screenshoot
 riverctl map normal $mod Print spawn \
   "bash /etc/scripts/system/takeshot.sh --now"
 
-# TODO: Open calc
+# Open calc
+riverctl map normal $mod c spawn \
+  "rofi-calc"
 
 # Open wifi menu
-riverctl map normal $mod w spawn \
-  "bash /etc/scripts/wofi-wifi.sh"
+# TODO
 
 # TODO: Show keybindings
 
@@ -45,19 +50,21 @@ riverctl map normal $mod v spawn \
 riverctl map normal $mod+Shift v spawn \
   "bash /etc/scripts/system/clipboard-manager.sh --clear"
 
-# TODO: Show emojis
+# Show emojis
+riverctl map normal $mod e spawn \
+  "rofi-emoji"
 
 # Show last notification
 riverctl map normal $mod+$ctrl n spawn \
-  "makoctl restore"
+  "dunstctl history-pop"
 
 # Hide recent notification
 riverctl map normal $mod+$ctrl+Shift n spawn \
-  "makoctl dismiss"
+  "dunstctl close"
 
 # Hide all notifications
 riverctl map normal $mod+$ctrl+Shift Escape spawn \
-  "makoctl dismiss --all"
+  "dunstctl close-all"
 
 # Toggle bar
 riverctl map normal $mod b spawn \
@@ -200,8 +207,6 @@ riverctl spawn-tagmask ${all_but_scratch_tag}
 riverctl map normal $mod+$alt t spawn \
   "kitty"
 
-# TODO: Open scratch terminal
-
 # Open file manager
 riverctl map normal $mod+$alt f spawn \
   "nautilus"
@@ -249,13 +254,13 @@ riverctl map tui None Escape enter-mode normal
 for mode in normal locked
 do
   riverctl map $mode None XF86AudioRaiseVolume spawn \
-    "pactl set-sink-volume @DEFAULT_SINK@ +5%"
+    "wob-osd --volume +5%"
 
   riverctl map $mode None XF86AudioLowerVolume spawn \
-    "pactl set-sink-volume @DEFAULT_SINK@ -5%"
+    "wob-osd --volume -5%"
 
   riverctl map $mode None XF86AudioMute spawn \
-    "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+    "wob-osd --volume-toggle"
 
   riverctl map $mode None XF86AudioNext spawn \
     "playerctl next"
@@ -270,10 +275,16 @@ do
     "playerctl play-pause"
 
   riverctl map $mode None XF86MonBrightnessUp spawn \
-    "bash /etc/scripts/backlight.sh 5%+"
+    "wob-osd --backlight 5%+"
 
   riverctl map $mode None XF86MonBrightnessDown spawn \
-    "bash /etc/scripts/backlight.sh 5%-"
+    "wob-osd --backlight 5%-"
+
+  riverctl map $mode None XF86KbdBrightnessUp spawn \
+    "wob-osd --kbd-backlight 5%+"
+
+  riverctl map $mode None XF86KbdBrightnessDown spawn \
+    "wob-osd --kbd-backlight 5%-"
 done
 
 # vim: syntax=sh

@@ -6,21 +6,9 @@ dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
 # TODO: move to systemd
 # kanshi &
 
-# clipboard manager
-/etc/scripts/system/clipboard-manager.sh --start
+# turn off bluetooth to save battery
+bluetoothctl power off &
 
-# TODO: move to systemd
-killall mako
-mako &
-
-# TODO: move to systemd
-killall gammastep
-gammastep -O 4000 &
-
-# TODO: move to systemd
-killall waybar
-waybar &
+libinput-gestures -c /etc/libinput-gestures.conf &
 
 /etc/scripts/backlight.sh 20% &
-/etc/scripts/system/random-bg.sh &
-

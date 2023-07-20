@@ -15,8 +15,12 @@ in {
         river
 
         scripts.river-focus-toggle
-        scripts.dbus-wayland-wm-environment
       ];
+
+      sessionVariables = {
+        XDG_CURRENT_DESKTOP = "river";
+        XDG_SESSION_DESKTOP = "river";
+      };
 
       etc = {
         "scripts/river-autostart.sh" = {
@@ -25,22 +29,22 @@ in {
         };
 
         # scripts to open projects blazingly fast
-        # "scripts/projects/sway-dangerp.sh" = {
-        #   source = ./scripts/sway-dangerp.sh;
+        # "scripts/projects/river-dangerp.sh" = {
+        #   source = ./scripts/river-dangerp.sh;
         #   mode = "0755";
         # };
       };
-    };
 
-    home-manager.users.${userName} = {
-      programs.zsh.initExtraFirst = lib.mkAfter ''
+      loginShellInit = lib.mkAfter ''
         if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
           exec river
         fi
       '';
+    };
+
+    home-manager.users.${userName} = {
 
       xdg.configFile = {
-
         "river/init" = {
           text = ''
             riverctl background-color 0x${unwrapHex theme.background}
