@@ -66,8 +66,6 @@ in {
       wheelNeedsPassword = false;
     };
 
-    hardware.video.hidpi.enable = true;
-
     # Enable bluetooth
     hardware.bluetooth.enable = true;
 
@@ -88,7 +86,6 @@ in {
       # jack.enable = true;
 
       wireplumber.enable = true;
-      media-session.enable = false;
     };
     # I copy the following from other user config
     # systemd.user.services = {

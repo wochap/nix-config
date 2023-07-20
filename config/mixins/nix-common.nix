@@ -7,6 +7,8 @@ in {
   config = {
     # Allow unfree packages
     nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.permittedInsecurePackages =
+      [ "nodejs-14.21.3" "openssl-1.1.1u" ];
 
     nix = {
       # Enable flakes

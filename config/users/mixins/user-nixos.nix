@@ -9,6 +9,7 @@ in
     users.users.${userName} = {
       hashedPassword = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
       isNormalUser = true;
+      isSystemUser = false;
       extraGroups = [
         "adbusers"
         "audio"
