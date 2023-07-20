@@ -70,10 +70,17 @@ in {
       '';
     };
 
-    home-manager.users.${userName}.services.swayidle.timeouts = lib.mkAfter [{
-      timeout = 360;
-      command = ''swaymsg "output * dpms off"'';
-      resumeCommand = ''swaymsg "output * dpms on"'';
-    }];
+    home-manager.users.${userName}.services.swayidle.timeouts = lib.mkAfter [
+      {
+        timeout = 195;
+        command = ''swaymsg "output * dpms off"'';
+        resumeCommand = ''swaymsg "output * dpms on"'';
+      }
+      {
+        timeout = 15;
+        command = ''if pgrep swaylock; then swaymsg "output * dpms off"; fi'';
+        resumeCommand = ''if pgrep swaylock; then swaymsg "output * dpms on"; fi'';
+      }
+    ];
   };
 }
