@@ -62,12 +62,11 @@ in {
           mode = "0755";
         };
       };
+    };
 
-      loginShellInit = lib.mkAfter ''
-        if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
-          exec sway
-        fi
-      '';
+    _custom.greetd = {
+      enable = true;
+      cmd = "sway";
     };
 
     home-manager.users.${userName}.services.swayidle.timeouts = lib.mkAfter [
@@ -79,7 +78,8 @@ in {
       {
         timeout = 15;
         command = ''if pgrep swaylock; then swaymsg "output * dpms off"; fi'';
-        resumeCommand = ''if pgrep swaylock; then swaymsg "output * dpms on"; fi'';
+        resumeCommand =
+          ''if pgrep swaylock; then swaymsg "output * dpms on"; fi'';
       }
     ];
   };
