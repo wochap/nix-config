@@ -13,6 +13,7 @@ window#waybar.hidden {
   opacity: 0;
 }
 
+#temperature,
 #submap,
 #mode,
 #keyboard-state label.locked,
@@ -104,12 +105,11 @@ window#waybar.hidden {
 }
 
 #temperature {
-  color: #d19a66;
+  color: @foreground;
 }
 
 #temperature.critical {
-  background-color: #e06c75;
-  color: #1e222a;
+  color: @red;
 }
 
 #custom-media {

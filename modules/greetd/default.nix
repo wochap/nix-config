@@ -26,8 +26,14 @@ in {
     # https://github.com/apognu/tuigreet/issues/68#issuecomment-1192683029
     systemd.services.greetd.serviceConfig = {
       Type = "idle";
-      ExecStartPre = "kill -SIGRTMIN+21 1";
-      ExecStopPost = "kill -SIGRTMIN+20 1";
+
+      # Without this errors will spam on screen
+      StandardError = "journal";
+
+      # Without these bootlogs will spam on screen
+      TTYReset = true;
+      TTYVHangup = true;
+      TTYVTDisallocate = true;
     };
   };
 }

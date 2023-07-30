@@ -15,6 +15,7 @@ in {
     ./hardware-configuration.nix
     ../../config/mixins/intel.nix
     ../../config/mixins/powerManagement.nix
+    ../../config/mixins/temp-sensor.nix
     ../../config/mixins/backlight
     ../../config/mixins/mbpfan
     ../../config/nixos.nix

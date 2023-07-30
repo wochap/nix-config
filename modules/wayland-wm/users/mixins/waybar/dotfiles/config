@@ -6,7 +6,7 @@
   // "modules-left": ["wlr/workspaces", "keyboard-state", "hyprland/submap"],
   "modules-center": ["sway/window"],
   // "modules-center": ["hyprland/window"],
-  "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/mbpfan", "battery", "backlight", "pulseaudio", "bluetooth", "network", "clock"],
+  "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/mbpfan", "temperature", "battery", "backlight", "pulseaudio", "bluetooth", "network", "clock"],
   "ipc": true,
   "id": "main",
   "spacing": 7,
@@ -24,6 +24,11 @@
     "format": "{} <span rise='-1000'></span>",
     "on-click": "swaymsg 'scratchpad show'",
     "on-click-right": "swaymsg 'move scratchpad'"
+  },
+  "temperature": {
+    "critical-threshold": 80,
+    "format-critical": " {temperatureC}°C",
+    "format": " {temperatureC}°C"
   },
   "sway/window": {
     "max-length": 50
