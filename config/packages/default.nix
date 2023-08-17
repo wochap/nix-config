@@ -1,6 +1,7 @@
 { pkgs, lib }:
 
 {
+  advcpmv = pkgs.callPackage ./advcpmv {};
   dracula-icons = pkgs.callPackage ./dracula-icons {};
   interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock {};
   interception-caps2esc = pkgs.callPackage ./interception-caps2esc {};
