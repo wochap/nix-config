@@ -6,6 +6,7 @@
     ./amd-gpu.nix
     ./bspwm
     ./efi.nix
+    ./flatpak
     ./globals.nix
     ./greetd
     ./hyprland
@@ -13,6 +14,7 @@
     ./river
     ./startx
     ./sway
+    ./waydroid
     ./wayland-wm
     ./xorg-wm
   ];
