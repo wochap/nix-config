@@ -3,10 +3,11 @@
     # nixpkgs channels
     nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=2b54d8d84bc651cefe3680e0076c2246643475f1"; # master (may 2023)
     unstable.url = "github:nixos/nixpkgs?rev=730d115a6e4e23af17361a6a0682629a72e5eaf5"; # master (jan 2023)
-    nixpkgs.url = "github:nixos/nixpkgs?rev=53657afe29748b3e462f1f892287b7e254c26d77"; # nixos-23.05-small (jul 2023)
+    nixpkgs.url = "github:nixos/nixpkgs?rev=ae521bd4e460b076a455dca8b13f4151489a725c"; # nixos-23.05-small (aug 2023)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f";
     prevstable-mongodb.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
     prevstable-python.url = "github:nixos/nixpkgs?rev=799d153e4f316143a9db0eb869ecf44d8d4c0356";
+    prevstable-nodejs.url = "github:nixos/nixpkgs?rev=53657afe29748b3e462f1f892287b7e254c26d77";
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
 
     # macos related
@@ -14,7 +15,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=07c347bb50994691d7b0095f45ebd8838cf6bc38"; # release-23.05 (jul 2023)
+    home-manager.url = "github:nix-community/home-manager?rev=2a6679aa9cc3872c29ba2a57fe1b71b3e3c5649f"; # release-23.05 (aug 2023)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
     home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";

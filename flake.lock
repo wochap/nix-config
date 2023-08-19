@@ -544,17 +544,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1687871164,
-        "narHash": "sha256-bBFlPthuYX322xOlpJvkjUBz0C+MOBjZdDOOJJ+G2jU=",
+        "lastModified": 1692099905,
+        "narHash": "sha256-/pSusGhmIdSdAaywQRFA5dVbfdIzlWQTecM+E46+cJ0=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "07c347bb50994691d7b0095f45ebd8838cf6bc38",
+        "rev": "2a6679aa9cc3872c29ba2a57fe1b71b3e3c5649f",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "07c347bb50994691d7b0095f45ebd8838cf6bc38",
+        "rev": "2a6679aa9cc3872c29ba2a57fe1b71b3e3c5649f",
         "type": "github"
       }
     },
@@ -1010,17 +1010,17 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1689605451,
-        "narHash": "sha256-u2qp2k9V1smCfk6rdUcgMKvBj3G9jVvaPHyeXinjN9E=",
+        "lastModified": 1692339729,
+        "narHash": "sha256-TUK76/Pqm9qIDjEGd27Lz9EiBIvn5F70JWDmEQ4Y5DQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "53657afe29748b3e462f1f892287b7e254c26d77",
+        "rev": "ae521bd4e460b076a455dca8b13f4151489a725c",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "53657afe29748b3e462f1f892287b7e254c26d77",
+        "rev": "ae521bd4e460b076a455dca8b13f4151489a725c",
         "type": "github"
       }
     },
@@ -1235,6 +1235,22 @@
         "type": "github"
       }
     },
+    "prevstable-nodejs": {
+      "locked": {
+        "lastModified": 1689605451,
+        "narHash": "sha256-u2qp2k9V1smCfk6rdUcgMKvBj3G9jVvaPHyeXinjN9E=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "53657afe29748b3e462f1f892287b7e254c26d77",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "53657afe29748b3e462f1f892287b7e254c26d77",
+        "type": "github"
+      }
+    },
     "prevstable-python": {
       "locked": {
         "lastModified": 1680498889,
@@ -1339,6 +1355,7 @@
         "ohmyzsh": "ohmyzsh",
         "prevstable-mongodb": "prevstable-mongodb",
         "prevstable-neovim": "prevstable-neovim",
+        "prevstable-nodejs": "prevstable-nodejs",
         "prevstable-python": "prevstable-python",
         "ptsh": "ptsh",
         "ranger": "ranger",
