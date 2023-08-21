@@ -34,7 +34,8 @@ in {
           GTK_CSD = "1";
 
           XDG_DATA_DIRS = [
-            "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS"
+            "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
+            "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
           ];
         }
         (lib.mkIf isWayland {
@@ -46,6 +47,9 @@ in {
         })
       ];
     };
+
+    # Enable GTK applications to load SVG icons
+    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     home-manager.users.${userName} = {
       home.file = {
