@@ -13,7 +13,11 @@ in {
           libsForQt5.oxygen-icons5
           libsForQt5.breeze-qt5
           libsForQt5.breeze-icons
+
+          # required for some QT apps
+          libsForQt5.kirigami2
           libsForQt5.kirigami-addons
+          libsForQt5.kirigami-gallery
 
           qt5.qtgraphicaleffects # required by gddm themes
 
