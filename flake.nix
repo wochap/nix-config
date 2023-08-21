@@ -21,7 +21,7 @@
     home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
     # drivers?
-    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=51559e691f1493a26f94f1df1aaf516bb507e78b";
+    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=7f1836531b126cfcf584e7d7d71bf8758bb58969";
 
     # third party nixpkgs
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=1be0382761e59978d46c4a2a6fed0193f474751f";

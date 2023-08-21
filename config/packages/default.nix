@@ -18,6 +18,6 @@
   way-displays = pkgs.callPackage ./way-displays { inherit pkgs; };
   zscroll = pkgs.callPackage ./zscroll {};
   customNodePackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./custom-node-packages {
-    nodejs = pkgs.nodejs-14_x;
+    nodejs = pkgs.prevstable-nodejs.nodejs-14_x;
   });
 }

@@ -9,8 +9,8 @@ in {
       deno
 
       # global nodejs
-      nodejs-14_x
-      (yarn.override { nodejs = nodejs-14_x; })
+      prevstable-nodejs.nodejs-14_x
+      (yarn.override { nodejs = prevstable-nodejs.nodejs-14_x; })
 
       # global packages
       nodePackages.expo-cli
