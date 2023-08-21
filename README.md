@@ -139,6 +139,9 @@ You probably want to press `Ctrl + Alt + F1`
    - GTK apps settings are controlled by xsettingsd
    - Non GTK apps settings are controlled by xrdb
 
+1. [Waydroid](https://nixos.wiki/wiki/WayDroid)
+1. [Flatpak](https://nixos.wiki/wiki/Flatpak)
+
 1. ~~Setup gnome calendar and geary (optional)~~
    ```
    $ env WEBKIT_DISABLE_COMPOSITING_MODE=1 gnome-control-center online-accounts
