@@ -11,7 +11,6 @@ in
       isNormalUser = true;
       isSystemUser = false;
       extraGroups = [
-        "adbusers"
         "audio"
         "disk"
         "input"
