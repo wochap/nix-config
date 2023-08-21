@@ -20,6 +20,8 @@
     programs.file-roller.enable = true;
 
     services = {
+      gvfs.package = lib.mkForce pkgs.gnome3.gvfs;
+
       gnome = {
         # Required by gnome `Online Accounts`, Calendar and Geary
         evolution-data-server.enable = true;
@@ -28,10 +30,11 @@
         # Required by nautilus
         tracker-miners.enable = true;
         tracker.enable = true;
+
+        # On minimal wm, it doesn't do anything
+        gnome-settings-daemon.enable = true;
       };
     };
 
-    # On minimal wm, it doesn't do anything
-    services.gnome.gnome-settings-daemon.enable = true;
   };
 }

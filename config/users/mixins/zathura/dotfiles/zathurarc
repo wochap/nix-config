@@ -38,8 +38,8 @@ set render-loading-bg           "#f8f8f2" # Foreground
 set recolor-lightcolor          "#282a36" # Background
 set recolor-darkcolor           "#f8f8f2" # Foreground
 
-set statusbar-v-padding         25
-set statusbar-h-padding         75
+set statusbar-v-padding         15
+set statusbar-h-padding         7
 set selection-clipboard         clipboard
 set font                        "Iosevka Nerd Font 11"
 set adjust-open                 width

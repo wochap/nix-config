@@ -5,7 +5,7 @@ let
   isNvidia = config._isNvidia;
   isWayland = config._displayServer == "wayland";
   hmConfig = config.home-manager.users.${userName};
-  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/config/users/mixins/firefox";
 in {
@@ -31,7 +31,7 @@ in {
       programs.firefox = {
         enable = true;
         package =
-          if isWayland then pkgs.firefox-wayland else pkgs.unstable.firefox-bin;
+          if isWayland then pkgs.firefox-wayland else pkgs.firefox-bin;
         profiles = {
           default = {
             id = 0;

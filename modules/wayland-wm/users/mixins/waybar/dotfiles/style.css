@@ -1,0 +1,203 @@
+@import url("colors.css");
+
+window#waybar {
+  background-color: transparent;
+  color: @foreground;
+  font-family: Iosevka Nerd Font, woos, sans-serif;
+  font-size: 14px;
+  transition-duration: 0.5s;
+  transition-property: background-color;
+}
+
+window#waybar.hidden {
+  opacity: 0;
+}
+
+#temperature,
+#submap,
+#mode,
+#keyboard-state label.locked,
+#custom-mbpfan,
+#custom-recorder,
+#custom-notifications,
+#custom-powermenu,
+#tags,
+#workspaces,
+#custom-scratchpad_indicator,
+#window,
+#idle_inhibitor,
+#battery,
+#backlight,
+#pulseaudio,
+#network,
+#bluetooth,
+#clock,
+#tray {
+  /* background-color: rgba(40, 42, 54, 0.95); */
+  background-color: @background;
+  padding: 0 7px;
+  margin: 7px 0;
+  border-radius: 4px;
+  background-clip: border-box;
+}
+
+#tray {
+  margin: 7px 0 7px 7px;
+}
+
+#keyboard-state label.locked {
+  font-size: 1.2em;
+}
+
+#keyboard-state label.locked {
+  background: @primary;
+  color: @background;
+  min-width: 0.8em;
+}
+
+#custom-notifications.disabled {
+  color: @red;
+}
+
+#custom-powermenu {
+  color: @red;
+}
+
+#tags,
+#workspaces {
+  padding: 0;
+}
+#tags button,
+#workspaces button {
+  padding: 0 4px;
+  min-width: 20px;
+}
+#tags button:hover,
+#workspaces button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+#tags button.focused,
+#workspaces button.active,
+#workspaces button.focused {
+  color: @background;
+  background-color: @primary;
+}
+#tags button.urgent,
+#workspaces button.urgent {
+  color: @red;
+}
+#tags button.persistant,
+#workspaces button.persistant {
+  color: @selection;
+}
+
+#cpu {
+  color: #61afef;
+}
+
+#memory {
+  color: #c678dd;
+}
+
+#submap,
+#mode {
+  color: @orange;
+}
+
+#temperature {
+  color: @foreground;
+}
+
+#temperature.critical {
+  color: @red;
+}
+
+#custom-media {
+  background-color: #c678dd;
+  color: #1e222a;
+}
+
+#custom-fans {
+  color: #98c379;
+}
+
+#clock {
+}
+
+#idle_inhibitor.deactivated {
+  color: @red;
+}
+#idle_inhibitor.activated {
+}
+
+#custom-recorder.recording {
+  background: @red;
+  color: @background;
+}
+
+#pulseaudio {
+}
+
+#pulseaudio.muted,
+#pulseaudio.source-muted {
+  color: @red;
+}
+
+#backlight {
+  color: @yellow;
+}
+
+#battery {
+  /* color: @cyan; */
+}
+#battery.discharging {
+  color: @yellow;
+}
+#battery.charging,
+#battery.plugged {
+  color: @green;
+}
+
+@keyframes blink {
+  to {
+    color: @yellow;
+  }
+}
+
+#battery.critical:not(.charging) {
+  color: @red;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+#bluetooth.off {
+  color: @comment;
+}
+#bluetooth.on {
+  color: @green;
+}
+#bluetooth.connected {
+  color: @cyan;
+}
+#bluetooth.disabled {
+  color: @red;
+}
+
+#network {
+  color: @cyan;
+}
+
+#network.disconnected {
+  color: @red;
+}
+
+#waybar.empty #window {
+  opacity: 0;
+}
+
+/*
+vim: syntax=less
+*/

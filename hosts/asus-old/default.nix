@@ -9,7 +9,7 @@ let
 in {
   imports = [
     /etc/nixos/hardware-configuration.nix
-    ../../config/mixins/backlight.nix
+    ../../config/mixins/backlight
     ../../config/xorg.nix
   ];
 
@@ -45,7 +45,7 @@ in {
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
       };
-      cleanTmpDir = true;
+      tmp.cleanOnBoot = true;
     };
 
     environment = { sessionVariables = { WIFI_DEVICE = "wlp3s0"; }; };

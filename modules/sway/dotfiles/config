@@ -1,0 +1,87 @@
+# vim: syntax=sh
+
+include /etc/sway/config.d/*
+
+#### THEME
+
+font pango:JetBrainsMono Nerd Font 10
+titlebar_padding 12 7
+title_align center
+
+default_border pixel 2
+default_floating_border pixel 2
+for_window [class=".*"] border pixel 2
+
+gaps inner 0
+gaps outer 0
+
+
+#### CONFIG
+
+focus_follows_mouse always
+
+input * {
+  natural_scroll enabled
+}
+
+input "type:keyboard" {
+  xkb_layout "us"
+}
+
+input "type:touchpad" {
+  accel_profile "adaptive"
+  natural_scroll enabled
+}
+
+input "type:pointer" {
+  accel_profile "flat"
+  pointer_accel 0
+  # calibration_matrix 8 0 0 0 5 0
+}
+
+seat * {
+  # xcursor_theme capitaine-cursors 32
+  hide_cursor when-typing enable
+}
+
+
+#### RULES
+for_window [class=".*"] border pixel 2;
+for_window [app_id=".*"] border pixel 2;
+for_window [app_id="blueberry.py"] floating enable; move position center;
+for_window [app_id="eog"] floating enable; move position center;
+for_window [app_id="file-roller"] floating enable; move position center;
+for_window [app_id="org.gnome.Calculator"] floating enable; move position center; sticky enable;
+for_window [app_id="org.gnome.Nautilus"] floating enable; move position center; sticky enable;
+for_window [app_id="thunar"] floating enable; move position center; sticky enable;
+for_window [app_id="gnome-font-viewer"] floating enable; move position center;
+for_window [app_id="gnome-system-monitor"] floating enable; move position center;
+for_window [app_id="nm-connection-editor"] floating enable; move position center;
+for_window [app_id="pavucontrol"] floating enable; move position center;
+for_window [app_id="mpv"] floating enable; move position center;
+
+assign [app_id="firefox"] workspace 5
+assign [app_id="google-chrome"] workspace 1
+assign [app_id="brave-browser"] workspace 8
+assign [app_id="Slack"] workspace 4
+
+for_window [app_id="kitty-top"] floating enable; move position center; sticky enable; resize set width 1500px height 1100px;
+for_window [app_id="kitty-scratch"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;
+for_window [app_id="kitty-neorg"] floating enable; move position center; sticky enable; resize set width 1500px height 1100px;
+for_window [app_id="kitty-nmtui"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
+for_window [app_id="kitty-neomutt"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
+for_window [app_id="kitty-newsboat"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
+for_window [app_id="kitty-ncmpcpp"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
+
+
+#### AUTOSTART
+exec restart-pipewire-and-portal-services
+exec configure-gtk
+
+# Autostart apps
+# start systemd services related to graphical-session.target
+# https://github.com/emersion/xdg-desktop-portal-wlr/wiki/systemd-user-services,-pam,-and-environment-variables
+exec systemctl --user start graphical-session.target
+
+exec bash /etc/scripts/sway-autostart.sh &
+

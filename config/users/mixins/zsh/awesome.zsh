@@ -6,7 +6,11 @@ function pro() {
   projects+="\n"
   projects+=$(find ~/ -maxdepth 1 -type d -execdir test -d {}/.git \; -print -prune)
 
-  cd $(echo "$projects" | fzf)
+  selected=$(echo "$projects" | fzf)
+
+  if [[ -n "$selected" ]]; then
+    cd $selected
+  fi
 }
 
 function cht() {

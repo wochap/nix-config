@@ -23,6 +23,7 @@ in {
         Service = {
           ExecStart = ''
             ${offlinemsmtp}/bin/offlinemsmtp --daemon \
+              --loglevel DEBUG \
               --send-mail-file ${hmConfig.home.homeDirectory}/tmp/offlinemsmtp-sendmail \
               --file ${hmConfig.xdg.configHome}/msmtp/config
           '';

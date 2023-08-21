@@ -1,0 +1,256 @@
+
+set $mod Mod4
+set $left left
+set $down down
+set $up up
+set $right right
+set $term kitty
+
+floating_modifier $mod normal
+
+
+#### SYSTEM KEYBINDINGS
+
+# Reload the configuration file
+bindsym $mod+Ctrl+alt+Escape reload
+
+# Open scratchpad terminal
+bindsym $mod+i exec \
+  sway-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
+
+# Lock screen
+bindsym $mod+l exec \
+  /etc/scripts/system/sway-lock.sh
+
+# Open power menu
+bindsym $mod+Escape exec \
+  rofi-powermenu
+
+# Open app launcher
+bindsym $mod+space exec \
+  rofi-launcher
+
+# Take fullscreen screenshot
+bindsym $mod+Print exec \
+  /etc/scripts/system/takeshot.sh --now
+
+# Open calc
+bindsym $mod+c exec \
+  rofi-calc
+
+# Open wifi menu
+bindsym $mod+w exec \
+  swaymsg exec /etc/scripts/wofi-wifi.sh
+
+# TODO: Show keybindings
+
+# Show clipboard
+bindsym $mod+v exec \
+  /etc/scripts/system/clipboard-manager.sh --menu
+
+# Clear clipboard
+bindsym $mod+Shift+v exec \
+  /etc/scripts/system/clipboard-manager.sh --clear
+
+# Show emojis
+bindsym $mod+e exec \
+  rofi-emoji
+
+bindsym $mod+ctrl+n exec \
+  dunstctl history-pop
+
+bindsym $mod+ctrl+shift+n exec \
+  dunstctl close
+
+bindsym $mod+ctrl+shift+Escape exec \
+  dunstctl close-all
+
+# Toggle waybar
+bindsym $mod+b exec \
+  /etc/scripts/waybar/waybar-toggle.sh
+
+
+### WM KEYBINDINGS
+
+# Close focused window
+bindsym $mod+Shift+w kill
+
+# Toggle float
+bindsym $mod+s floating toggle
+
+# Toggle fullscreen
+bindsym $mod+f fullscreen toggle
+
+# Set the node flags (sticky)
+bindsym $mod+ctrl+y sticky toggle
+
+# Alternate between the tiled and monocle layout
+mode "layout" {
+  bindsym --to-code {
+    t mode "default"; layout tabbed
+    s mode "default"; layout splith
+    c mode "default"; move position center
+
+    Escape mode "default"
+  }
+}
+bindsym $mod+a mode "layout"
+
+# preselect the direction
+bindsym $mod+ctrl+Right split horizontal
+bindsym $mod+ctrl+Down split vertical
+bindsym $mod+ctrl+space split none
+
+# Focus direction
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# Swap direction
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+bindsym $mod+n focus next
+bindsym $mod+Shift+n focus prev
+
+# Focus floating or tile windows
+bindsym $mod+Tab focus mode_toggle
+
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+# Resize
+bindsym $mod+alt+Shift+$left resize shrink width 40px
+bindsym $mod+alt+Shift+$down resize grow height 40px
+bindsym $mod+alt+Shift+$up resize shrink height 40px
+bindsym $mod+alt+Shift+$right resize grow width 40px
+
+# Move
+bindsym $mod+alt+$left move left 40px
+bindsym $mod+alt+$down move down 40px
+bindsym $mod+alt+$up move up 40px
+bindsym $mod+alt+$right move right 40px
+
+
+### WM SCRATCHPAD
+
+# Send to scratchpad
+bindsym $mod+Shift+p move container to scratchpad
+
+# Open scratchpad
+bindsym $mod+p scratchpad show
+
+
+### APPLICATION KEYBINDINGS (Super + Alt + Key)
+
+# Open primary terminal
+bindsym $mod+alt+t exec \
+  $term
+
+# Open file manager
+bindsym $mod+alt+f exec \
+  sway-focus-toggle "org.gnome.Nautilus" nautilus
+
+# Screencast/record region to mp4
+bindsym $mod+alt+r exec \
+  /etc/scripts/system/recorder.sh --area
+
+# Open screenshoot utility
+bindsym $mod+alt+s exec \
+  /etc/scripts/system/takeshot.sh --area
+
+# Open color picker
+bindsym $mod+alt+c exec \
+  /etc/scripts/system/color-picker.sh
+
+# Open Browser
+mode "browser" {
+  bindsym --to-code {
+    b mode "default"; exec brave
+    g mode "default"; exec google-chrome-stable
+    f mode "default"; exec firefox
+
+    Escape mode "default"
+  }
+}
+bindsym $mod+alt+b mode "browser"
+
+# Terminal TUI
+mode "tui" {
+  bindsym --to-code {
+    n mode "default"; exec sway-focus-toggle kitty-neorg $HOME/.config/kitty/scripts/kitty-neorg.sh
+    m mode "default"; exec sway-focus-toggle kitty-top $HOME/.config/kitty/scripts/kitty-top.sh
+    e mode "default"; exec sway-focus-toggle kitty-neomutt $HOME/.config/kitty/scripts/kitty-neomutt.sh
+    r mode "default"; exec sway-focus-toggle kitty-newsboat $HOME/.config/kitty/scripts/kitty-newsboat.sh
+    u mode "default"; exec sway-focus-toggle kitty-ncmpcpp $HOME/.config/kitty/scripts/kitty-ncmpcpp.sh
+
+    Escape mode "default"
+  }
+}
+bindsym $mod+alt+u mode "tui"
+
+# TODO: Open magnifying glass
+
+
+### MEDIA KEYBINDINGS
+
+bindsym --locked XF86KbdBrightnessDown exec \
+  wob-osd --kbd-backlight 5%-
+
+bindsym --locked XF86KbdBrightnessUp exec \
+  wob-osd --kbd-backlight 5%+
+
+bindsym --locked XF86MonBrightnessUp exec \
+  wob-osd --backlight 5%+
+
+bindsym --locked XF86MonBrightnessDown exec \
+  wob-osd --backlight 5%-
+
+bindsym --locked XF86AudioRaiseVolume exec \
+  wob-osd --volume +5%
+
+bindsym --locked XF86AudioLowerVolume exec \
+  wob-osd --volume -5%
+
+bindsym --locked XF86AudioMute exec \
+  wob-osd --volume-toggle
+
+# Play next media
+bindsym XF86AudioNext exec \
+  playerctl next
+
+# Pause media
+bindsym XF86AudioStop exec \
+  playerctl pause
+
+# Play media
+bindsym XF86AudioPlay exec \
+  playerctl play-pause
+
+# Play previous media
+bindsym XF86AudioPrev exec \
+  playerctl previous
+
+# vim: syntax=sh

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 shopt -s nullglob
-cd ~/Pictures/backgrounds
+cd ~/Pictures/backgrounds || exit
 
 files=()
 for i in *.jpg *.png *.jpeg; do
@@ -10,7 +10,8 @@ done
 range=${#files[@]}
 
 if [[ $XDG_SESSION_TYPE == "wayland" ]]; then
-  ((range)) && swaymsg output "*" bg "~/Pictures/backgrounds/${files[RANDOM % range]}" fill
+  # ((range)) && swaymsg output "*" bg "$HOME/Pictures/backgrounds/${files[RANDOM % range]}" fill
+  ((range)) && swaybg -m fill -i "$HOME/Pictures/backgrounds/${files[RANDOM % range]}"
 else
   ((range)) && feh --bg-fill "${files[RANDOM % range]}"
 fi

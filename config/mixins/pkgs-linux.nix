@@ -9,7 +9,13 @@ let
 in {
   config = {
     environment.systemPackages = with pkgs; [
+      # TOOLS
+      libinput
+      libinput-gestures
+      xorg.xev # get key actual name
+
       # CLI TOOLS
+      acpi
       acpitool
       cached-nix-shell # fast nix-shell scripts
       coreutils-full # a lot of commands
@@ -17,12 +23,18 @@ in {
       dex # execute DesktopEntry files (xdg/autostart)
       dmidecode
       dnsutils # test dns
+      efivar
       evtest # input debugging
       ffmpegthumbnailer
       glxinfo # opengl utils
+      graphicsmagick
+      heimdall # reset samsung ROM
+      ifuse # mount ios
       inotify-tools # c module
       inxi # check compositor running
+      libimobiledevice # mount ios
       libva-utils # verifying VA-API
+      localPkgs.advcpmv # cp and mv with progress bar
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer
@@ -43,6 +55,7 @@ in {
       # tightvnc
 
       # DE CLI
+      bluetuith
       hunspell # dictionary for document programs
       hunspellDicts.en-us
       pulseaudio
@@ -73,12 +86,14 @@ in {
       # Electron apps
       bitwarden
       brave
+      figma-linux
       google-chrome
-      insomnia
+      microsoft-edge
+      notion-app-enhanced
       postman
       simplenote
       slack
-      unstable.notion-app-enhanced
+      insomnia
       whatsapp-for-linux
     ];
   };

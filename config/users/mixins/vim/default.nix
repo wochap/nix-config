@@ -3,10 +3,7 @@
 let
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
-  localPkgs = import ../../../packages {
-    pkgs = pkgs;
-    lib = lib;
-  };
+  localPkgs = import ../../../packages { inherit pkgs lib; };
   # extraPackages = with pkgs; [
   #   localPkgs.customNodePackages.typescript
   #   localPkgs.customNodePackages.typescript-language-server
@@ -27,11 +24,13 @@ in {
           # uivonim
 
           # TODO: passextraMakeWrapperArgs?
-          neovim-nightly
+          # prevstable-neovim.neovim
+          unstable.neovim
+          # neovim-nightly
           neovim-remote
 
           # required by treesitter
-          unstable.tree-sitter
+          tree-sitter
 
           # required by telescope
           ripgrep

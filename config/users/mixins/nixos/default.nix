@@ -1,10 +1,9 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  inherit (config._custom) globals;
   isWayland = config._displayServer == "wayland";
   userName = config._userName;
-  globals =
-    import ../../../mixins/globals.nix { inherit config pkgs lib inputs; };
 in {
   config = {
     environment.systemPackages = with pkgs; [ globals.cursor.package ];
@@ -45,12 +44,12 @@ in {
       # home.file = {
       #   # Dracula-cursors doesn't support sizes
       #   ".icons/Dracula-cursors".source = "${inputs.dracula-gtk-theme}/kde/cursors/Dracula-cursors";
+      #   ".icons/capitaine-cursors".source = "${globals.cursor.package}/share/icons/capitaine-cursors";
       # };
 
-      xsession.pointerCursor = lib.mkIf (!isWayland) {
-        name = globals.cursor.name;
-        package = globals.cursor.package;
-        size = globals.cursor.size;
+      home.pointerCursor = {
+        inherit (globals.cursor) name package size;
+        x11.enable = !isWayland;
       };
     };
   };

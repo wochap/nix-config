@@ -1,0 +1,171 @@
+configuration {
+  display-calc: "calc";
+  display-drun: "";
+  display-emoji: "emoji";
+  display-run: "";
+  drun-display-format: "{name}";
+  show-icons: false;
+  case-sensitive: false;
+  dpi: 96;
+}
+
+@theme "colors"
+
+* {
+  background-alt: var(selection);
+  selected: var(primary);
+  font: "Iosevka Nerd Font 14px";
+}
+
+* {
+  border-colour: var(comment);
+  handle-colour: var(selected);
+  background-colour: var(background);
+  foreground-colour: var(foreground);
+  alternate-background: var(background-alt);
+  normal-background: var(background);
+  normal-foreground: var(foreground);
+  selected-normal-background: var(selected);
+  selected-normal-foreground: var(background);
+  alternate-normal-background: var(background);
+  alternate-normal-foreground: var(foreground);
+}
+
+/*****----- Main Window -----*****/
+window {
+  /* properties for window widget */
+  transparency: "real";
+  location: north;
+  anchor: north;
+  fullscreen: false;
+  width: 100%;
+
+  /* properties for all widgets */
+  enabled: true;
+  margin: 0;
+  padding: 0;
+  border: 0px solid;
+  border-radius: 0;
+  border-color: @border-colour;
+  cursor: "default";
+  background-color: @background-colour;
+}
+
+/*****----- Main Box -----*****/
+mainbox {
+  enabled: true;
+  spacing: 7px;
+  margin: 0;
+  padding: 7px;
+  border: 0px solid;
+  border-radius: 0 0 0 0;
+  border-color: @border-colour;
+  background-color: transparent;
+  children: [ "prompt", "entry", "listview"];
+  orientation: horizontal;
+}
+
+/*****----- Inputbar -----*****/
+inputbar {
+  enabled: true;
+  spacing: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-color: @border-colour;
+  background-color: @background-colour;
+  text-color: @background-colour;
+  children: [ "prompt", "entry"];
+}
+
+prompt {
+  enabled: true;
+  padding: 0 0;
+  border: 0;
+  background-color: inherit;
+  text-color: @primary;
+  vertical-align: 0.5;
+  font: "Iosevka Nerd Font, woos 14px";
+}
+textbox-prompt-colon {
+  enabled: true;
+  expand: false;
+  str: "::";
+  background-color: inherit;
+  text-color: inherit;
+}
+entry {
+  enabled: true;
+  expand: false;
+  padding: 0 0;
+  width: 200;
+  background-color: inherit;
+  text-color: @foreground-colour;
+  cursor: text;
+  placeholder-color: inherit;
+  vertical-align: 0.5;
+}
+
+/*****----- Listview -----*****/
+listview {
+  enabled: true;
+  lines: 100;
+  cycle: true;
+  dynamic: true;
+  scrollbar: false;
+  layout: horizontal;
+  reverse: false;
+  fixed-height: true;
+  fixed-columns: true;
+
+  spacing: 5px;
+  margin: 0;
+  padding: 0;
+  border: 0px solid;
+  border-radius: 0;
+  border-color: @border-colour;
+  background-color: transparent;
+  text-color: @foreground-colour;
+  cursor: "default";
+}
+
+/*****----- Elements -----*****/
+element {
+  enabled: true;
+  spacing: 10;
+  margin: 0;
+  padding: 4px 7px;
+  border: 0px solid;
+  border-radius: 4px;
+  border-color: @border-colour;
+  background-color: transparent;
+  text-color: @foreground-colour;
+  cursor: pointer;
+}
+element normal.normal {
+  background-color: var(normal-background);
+  text-color: var(normal-foreground);
+}
+element selected.normal {
+  background-color: var(selected-normal-background);
+  text-color: var(selected-normal-foreground);
+}
+element-icon {
+  background-color: transparent;
+  text-color: inherit;
+  size: 24px;
+  cursor: inherit;
+  vertical-align: 0.5;
+}
+element-text {
+  background-color: transparent;
+  text-color: inherit;
+  highlight: inherit;
+  cursor: inherit;
+  vertical-align: 0.5;
+  horizontal-align: 0;
+}
+
+@import "config-192-dpi.rasi"
+
+// vim: syntax=less

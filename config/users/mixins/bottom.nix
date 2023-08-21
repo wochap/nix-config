@@ -8,9 +8,9 @@ in {
 
       programs.bottom = {
         enable = true;
-        package = pkgs.unstable.bottom;
         settings = {
           flags = {
+            process_command = true;
             group_processes = true;
             mem_as_value = true;
             tree = true;

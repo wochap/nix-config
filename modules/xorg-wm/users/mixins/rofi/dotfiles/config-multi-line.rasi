@@ -1,0 +1,26 @@
+@import "config-one-line.rasi"
+
+/*****----- Main Window -----*****/
+window {
+  border: 0px solid 0px solid 4px solid 0px solid;
+  border-color: var(comment);
+}
+
+/*****----- Main Box -----*****/
+mainbox {
+  orientation: vertical;
+  children: [ "inputbar", "listview"];
+}
+
+/*****----- Inputbar -----*****/
+inputbar {
+  spacing: 14px;
+}
+
+/*****----- Listview -----*****/
+listview {
+  layout: vertical;
+  lines: 10;
+}
+
+// vim: syntax=less

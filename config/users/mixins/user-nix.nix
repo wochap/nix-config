@@ -9,7 +9,7 @@ in {
     users.users.${userName} = {
       home = homeDirectory;
       shell = pkgs.zsh;
-      uid = 501;
+      # uid = 501;
     };
 
     home-manager.users.${userName} = {

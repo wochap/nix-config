@@ -6,9 +6,11 @@ let
 in {
   config = {
     environment.systemPackages = with pkgs; [
+      deno
+
       # global nodejs
-      nodejs-14_x
-      (yarn.override { nodejs = nodejs-14_x; })
+      prevstable-nodejs.nodejs-14_x
+      (yarn.override { nodejs = prevstable-nodejs.nodejs-14_x; })
 
       # global packages
       nodePackages.expo-cli
@@ -17,9 +19,12 @@ in {
       nodePackages.http-server
       nodePackages.node-gyp-build
       nodePackages.nodemon
+      nodePackages.webtorrent-cli
 
       # others
+      netlify-cli
       nodePackages.node2nix
+      localPkgs.customNodePackages.migrate-mongo
 
       # nodePackages.sharp-cli
       # unstable.nodePackages_latest.webtorrent-cli

@@ -6,7 +6,7 @@ default="Default (2500)"
 normal="Normal (3500)"
 high="High (4500)"
 higher="Higher (5500)"
-options="$default\n$high\n$higher"
+options="$default\n$normal\n$high\n$higher"
 
 selected="$(echo -e "$options" | rofi \
   -p "RPM" \

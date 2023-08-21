@@ -1,0 +1,91 @@
+[global]
+always_run_script=yes
+class="Dunst"
+follow="mouse"
+hide_duplicate_count=no
+history_length=20
+icon_path="/run/current-system/sw/share/icons/Numix-Circle/48@2x/apps:/run/current-system/sw/share/icons/gnome/256x256/status"
+idle_threshold=120
+ignore_dbusclose=no
+indicate_hidden=yes
+markup="full"
+monitor=0
+notification_limit="4"
+show_age_threshold=-1
+show_indicators=yes
+shrink=no
+sort=no
+stack_duplicates=yes
+sticky_history=yes
+title="Dunst"
+
+# actions
+browser="xdg-open"
+dmenu = rofi -p '' -dmenu -i
+mouse_left_click="do_action, close_current"
+mouse_middle_click="context, close_current"
+mouse_right_click="close_current"
+
+# position
+offset="7x7"
+origin="bottom-right"
+
+# Theme
+alignment="left"
+corner_radius=0
+ellipsize="end"
+foreground="#f8f8f2"
+format="<b>%s</b> <span color='#8be9fd'>(%a)</span>\n%b"
+frame_color="#44475a"
+gaps = true
+icon_position="left"
+separator_color="frame"
+transparency=0
+vertical_alignment="center"
+word_wrap=yes
+# line_height=1.5
+
+# Theme dpi static
+separator_height=2
+frame_width=2
+scale=2
+
+# Theme dpi
+gap_size = 7
+font="Iosevka Nerd Font 28px"
+height=150
+horizontal_padding=11
+padding=11
+width=310
+max_icon_size=56
+min_icon_size=56
+
+[play_sound]
+script="/etc/scripts/play_notification.sh"
+summary="*"
+
+[urgency_normal]
+background="#282a36"
+foreground="#f8f8f2"
+
+[urgency_low]
+frame_color="#6272a4"
+
+[urgency_critical]
+frame_color="#ff5555"
+timeout=0
+
+[slack]
+appname="Slack"
+new_icon="slack"
+
+[mail]
+appname="Mail"
+new_icon="internet-mail"
+
+[offlinemsmtp]
+appname="offlinemsmtp"
+new_icon="internet-mail"
+
+# vim: syntax=dosini
+

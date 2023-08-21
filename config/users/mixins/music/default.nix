@@ -3,7 +3,7 @@
 let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  mkOutOfStoreSymlink = hmConfig.lib.file.mkOutOfStoreSymlink;
+  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/config/users/mixins/music";
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
@@ -23,8 +23,8 @@ in {
       ];
 
       xdg.configFile = {
-        "ncmpcpp/ncmpcpp-ueberzug/fallback.jpg".source =
-          ../../../mixins/lightdm/assets/wallpaper.jpg;
+        # "ncmpcpp/ncmpcpp-ueberzug/fallback.jpg".source =
+        #   ../../../mixins/lightdm/assets/wallpaper.jpg;
 
         # cava audio visualizer
         "cava/config".source =

@@ -1,0 +1,70 @@
+@import url("/home/gean/.config/wofi/colors.css");
+
+* {
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: @purple;
+  color: @foreground;
+}
+
+#window {
+  background: transparent;
+}
+
+#outer-box {
+  background-color: @background;
+  border-radius: 4px;
+  border: 2px solid @selection;
+  color: @foreground;
+  font-family: Iosevka Nerd Font, woos, sans-serif;
+  font-size: 14px;
+
+  /* TODO: padding here requires offset */
+  /* it mess up the position */
+  /* padding: 60px 100px; */
+  /* margin-left: -100px; */
+}
+
+#input {
+  background: @selection;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  padding: 0.5em 1em;
+}
+
+#inner-box {
+  /* TODO: find workaround */
+  /* padding-top: 25px; */
+}
+
+#scroll {
+}
+
+#entry {
+  padding: 0.5em calc(1em - 4px);
+  min-height: 2.5em;
+  /* transition-duration: .25s; */
+  /* transition-property: background-color; */
+  /* transition-timing-function: ease-in-out; */
+}
+
+#img {
+  margin-right: 10px;
+}
+
+#text {
+}
+
+#entry:selected {
+  background: @selection;
+  border-radius: 4px;
+}
+
+#text:selected {
+}
+
+slider {
+  background: @purple;
+}
+

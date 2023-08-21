@@ -1,0 +1,270 @@
+#### SYSTEM KEYBINDINGS
+
+# Reload keybindings
+super + ctrl + Escape
+  ~/.config/bspwm/scripts/restart-sxhkd.sh
+
+# Open scratch terminal
+super + i
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-scratch "$HOME/.config/kitty/scripts/kitty-scratch.sh"
+
+# Lock screen
+super + l
+  /etc/scripts/lock.sh
+
+# Open power menu
+super + Escape
+  rofi-powermenu
+
+# Open app launcher
+super + space
+  rofi-launcher
+
+# Take fullscreen screenshoot
+super + Print
+  /etc/scripts/takeshot.sh --now
+
+# Open calc
+super + c
+  rofi-calc
+
+# Open wifi menu
+super + w
+  /etc/scripts/rofi-nm.sh
+
+# Show keybindings
+super + slash
+  /etc/scripts/rofi-help.sh
+
+# Show clipboard
+super + v
+  /etc/scripts/rofi-clipboard.sh
+
+# Clear clipboard
+super + shift + v
+  clipdel -d ".*"
+
+# Show emojis
+super + e
+  rofi-emoji
+
+super + ctrl + n
+  dunstctl history-pop
+
+super + ctrl + shift + n
+  dunstctl close
+
+super + ctrl + shift + Escape
+  dunstctl close-all
+
+# Toggle polybar
+super + b
+  /etc/scripts/polybar-toggle.sh
+
+
+### WM KEYBINDINGS
+
+# Close and kill
+super + shift + {w,q}
+  bspc node -{c,k}
+
+# Set the window state (tiled|pseudo_tiled)
+super + {t,shift + t,s}
+  bspc node -t {tiled,pseudo_tiled,floating}
+
+# Toggle float
+super + s
+  bspc node -t "~floating"
+
+# Toggle fullscreen
+super + f
+  bspc node -t "~fullscreen"
+
+# Set the node flags (marked|locked|sticky|private|hidden)
+super + ctrl + {m,x,y,z,h}
+  bspc node -g {marked,locked,sticky,private,hidden}
+
+# Alternate between the tiled and monocle layout
+super + a ; {m,s,t,w}
+  bsp-layout set {monocle,stack,tall,wide}
+
+# Center floating window
+super + a ; c
+  /etc/scripts/bspwm_center_window.sh
+
+# Send the newest marked node to the newest preselected node
+super + y
+  bspc node newest.marked -n newest.!automatic
+
+# Send the newest marked node to the newest preselected node in current desktop
+super + u
+  bspc node newest.marked.local -n newest.!automatic.local
+
+# Send current node to the newest preselected node
+super + shift + m
+  bspc node -n last.!automatic
+
+# swap the current node and the biggest node
+super + Return
+  bspc node -s biggest.local
+
+# preselect the direction
+super + ctrl + {Left,Down,Up,Right}
+  bspc node -p {west,south,north,east}
+
+# preselect the ratio
+super + ctrl + {1-9}
+  bspc node -o 0.{1-9}
+
+# cancel the preselection for the focused node
+super + ctrl + space
+  bspc node -p cancel
+
+# cancel the preselection for the focused desktop
+super + ctrl + shift + space
+  bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+# Focus or switch the node in the given direction
+super + {_,shift +}{Left,Down,Up,Right}
+  bspc node -{f,s} {west,south,north,east}
+
+# Focus the node for the given path jump (parent|brother|first|second)
+# super + {p,b,comma,period}
+#   bspc node -f @{parent,brother,first,second}
+
+# Rotate focused nodes
+# super + grave
+#   bspc node -R 90
+
+# Rotate tree
+# super + shift + {d,a}
+#   bspc node @/ -C {forward,backward}
+
+# Focus the next|previous node in the current desktop
+super + {_,shift + }n
+  bspc node -f {next,prev}.local.window.!hidden
+
+# Focus the next|previous workspace in the current monitor
+# super + {Left,Right}
+#   bspc desktop -f {prev,next}.local
+
+# Focus the last node/desktop
+# super + {grave,Tab}
+#   bspc {node,desktop} -f last
+
+# Open hidden windows
+super + alt + Tab
+  /etc/scripts/rofi-hidden-windows.sh
+
+# Open windows
+alt + Tab
+  NODES_QUERY=".!hidden.local.window" /etc/scripts/rofi-hidden-windows.sh
+
+# # Focus the older or newer node in the focus history
+# super + {o,i}
+#   bspc wm -h off; \
+#   bspc node {older,newer} -f; \
+#   bspc wm -h on
+
+# Focus or send to the given desktop
+super + {_,shift + }{1-9,0}
+  bspc {desktop -f,node -d} focused:'^{1-9,10}'
+
+# # Send and follow to given desktop
+# super + ctrl + shift + {1-9}
+#   id=$(bspc query -N -n); bspc node -d ^{1-9}; bspc node -f ${id}
+
+# Resize
+super + alt + shift + {Left,Down,Up,Right}
+  bspc node -z {right -40 0,bottom 0 40,bottom 0 -40,right 40 0}
+
+# Move a floating window
+super + alt + {Left,Down,Up,Right}
+  bspc node -v {-40 0,0 40,0 -40,40 0}
+
+
+### APPLICATION KEYBINDINGS (Super + Alt + Key)
+
+# Open primary terminal
+super + alt + t
+  kitty
+
+# Open file manager
+super + alt + f
+  /etc/scripts/bspwm_toggle_visibility.sh org.gnome.Nautilus nautilus
+
+# Screencast/record region to mp4
+super + alt + r
+  exec /etc/scripts/recorder.sh --area
+
+# Open screenshoot utility
+super + alt + s
+  /etc/scripts/takeshot.sh --area
+
+# Open color picker
+super + alt + c
+  /etc/scripts/color-pick.sh
+
+# Open Browser
+super + alt + b ; {f,g,b}
+  /etc/scripts/bspwm_open_or_focus.sh {Firefox firefox,Google-chrome google-chrome-stable,Brave-browser brave}
+
+# Open magnifying glass
+super + alt + z
+  kmag
+
+# Open quick note app
+super + alt + u ; n
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-neorg "$HOME/.config/kitty/scripts/kitty-neorg.sh"
+
+# Open monitor
+super + alt + u ; m
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-top "$HOME/.config/kitty/scripts/kitty-top.sh"
+
+# Open neomutt
+super + alt + u ; e
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-neomutt "$HOME/.config/kitty/scripts/kitty-neomutt.sh"
+
+# Open newsboat
+super + alt + u ; r
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-newsboat "$HOME/.config/kitty/scripts/kitty-newsboat.sh"
+
+# Open ncmpcpp
+super + alt + u ; u
+  /etc/scripts/bspwm_toggle_visibility.sh kitty-ncmpcpp "$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh"
+
+
+### MEDIA KEYBINDINGS
+
+XF86KbdBrightness{Down,Up}
+  kbdlight {down,up} 5
+
+XF86MonBrightness{Down,Up}
+  /etc/scripts/backlight.sh {5%-,5%+}
+  # brightnessctl set {5%-,5%+}
+  # light {-U 5,-A 5}
+
+XF86Audio{LowerVolume,RaiseVolume}
+  pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%}
+
+XF86AudioMute
+  pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Play next media
+XF86AudioNext
+  playerctl next
+
+# Pause media
+XF86AudioStop
+  playerctl pause
+
+# Play media
+XF86AudioPlay
+  playerctl play-pause
+
+# Play previous media
+XF86AudioPrev
+  playerctl previous
+
+# vim: syntax=sh
+

@@ -10,6 +10,10 @@
       # QT_SCALE_FACTOR = "2";
 
       # BSPWM_GAP = "25";
+
+      WIFI_DEVICE = "wlp4s0";
+      MODULES_RIGHT =
+        "recording dunst mbpfan backlight battery volume wifi date";
     };
   };
 }

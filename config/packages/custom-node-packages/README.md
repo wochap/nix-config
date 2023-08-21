@@ -46,3 +46,7 @@ To add a package from NPM to nixpkgs:
 For more information about the generation process, consult the
 [README.md](https://github.com/svanderburg/node2nix) file of the `node2nix`
 tool.
+
+### References
+
+https://github.com/svanderburg/node2nix#adding-additionalglobal-npm-packages-to-a-packaging-process

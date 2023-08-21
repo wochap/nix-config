@@ -5,31 +5,46 @@ let
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
   localPkgs = import ../packages { inherit pkgs lib; };
+  overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
 in {
   config = {
-    home-manager.users.${userName} = {
-      nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
-    };
+    # home-manager.users.${userName} = {
+    #   nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
+    # };
 
     nixpkgs.overlays = [
-      # inputs.rust-overlay.overlay
-
-      # inputs.nixpkgs-s2k.overlay
-
-      inputs.neovim-nightly-overlay.overlay
+      # inputs.neovim-nightly-overlay.overlay
 
       (final: prev: {
-
         # Custom channels
         unstable = import inputs.unstable {
-          system = prev.system;
-          config = config.nixpkgs.config;
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
         };
-        prevstable = import inputs.prevstable {
-          system = prev.system;
-          config = config.nixpkgs.config;
+        prevstable-neovim = import inputs.prevstable-neovim {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
         };
+        prevstable-mongodb = import inputs.prevstable-mongodb {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
+        prevstable-python = import inputs.prevstable-python {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
+        prevstable-nodejs = import inputs.prevstable-nodejs {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
+      })
 
+      (final: prev: {
         wmutils-core = prev.wmutils-core.overrideAttrs (_: {
           src = pkgs.fetchFromGitHub {
             owner = "wmutils";
@@ -37,6 +52,18 @@ in {
             rev = "d989db82b83cf457a3fb9bcd87637cf29770f9a4";
             sha256 = "sha256-ha6YCXk6/p21DAin2zwuOuqXCDjs2Bi5IHFRiVaIE3E=";
           };
+        });
+
+        wob = prev.wob.overrideAttrs (_: {
+          src = pkgs.fetchFromGitHub {
+            owner = "francma";
+            repo = "wob";
+            rev = "75a65e6c33e916a5453d705ed5b3b21335587631";
+            sha256 = "sha256-N6+UUCRerzswbU5XpoNeG6Qu//QSyXD4mTIXwCPXMsU=";
+          };
+
+          buildInputs = with pkgs; [ inih wayland wayland-protocols pixman cmocka ]
+            ++ lib.optional stdenv.isLinux pkgs.libseccomp;
         });
 
         dracula-theme = prev.dracula-theme.overrideAttrs
@@ -78,47 +105,44 @@ in {
           };
         });
 
+        heimdall = prev.heimdall.overrideAttrs (_: {
+          src = prev.fetchFromSourcehut {
+            owner  = "~grimler";
+            repo   = "Heimdall";
+            rev    = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
+            sha256 = "sha256-tcAE83CEHXCvHSn/S9pWu6pUiqGmukMifEadqPDTkQ0=";
+          };
+        });
+
+        # neovide = prev.neovide.overrideAttrs (drv: rec {
+        #   cargoDeps = drv.cargoDeps.overrideAttrs (_: {
+        #     inherit src;
+        #     outputHash = "sha256-1BkEx2emvGdA8agoBgeEyoz1Z9G3SB0M8ORTNat+PqU=";
+        #   });
+        #   src = prev.fetchFromGitHub {
+        #     owner = "neovide";
+        #     repo = "neovide";
+        #     rev = "2766fe7f84d4d1825d7399378fdd3b0e1ce7f4a6";
+        #     sha256 = "sha256-1WoVeobqOvT72Ml+gtVS1URYZFifMdKXLwHOMq1HUww=";
+        #   };
+        # });
+
       })
     ] ++ (if (isWayland) then
       [
         (final: prev: {
-          # HACK:
-          # https://forums.developer.nvidia.com/t/nvidia-495-does-not-advertise-ar24-xr24-as-shm-formats-as-required-by-wayland-wlroots/194651
-          # wlroots = prev.wlroots.overrideAttrs(old: {
-          #   postPatch = ''
-          #     sed -i 's/assert(argb8888 &&/assert(true || argb8888 ||/g' 'render/wlr_renderer.c'
-          #   '';
-          # });
 
-          # egl-wayland = prev.egl-wayland.overrideAttrs (old: rec {
-          #   pname = "egl-wayland";
-          #   version = "1.1.9.999";
-          #   name = "${pname}-${version}";
-          #   src = final.fetchFromGitHub {
-          #     owner = "Nvidia";
-          #     repo = "egl-wayland";
-          #     rev = "daab8546eca8428543a4d958a2c53fc747f70672";
-          #     sha256 = "sha256-IrLeqBW74mzo2OOd5GzUPDcqaxrsoJABwYyuKTGtPsw=";
-          #   };
-          #   buildInputs = old.buildInputs ++ [ final.wayland-protocols ];
-          # });
+          waybar = prev.waybar.overrideAttrs (oldAttrs: {
+            mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+          });
 
-          # xwayland = prev.xwayland.overrideAttrs (old: rec {
-          #   version = "21.1.2.901";
-          #   src = prev.fetchFromGitLab {
-          #     domain = "gitlab.freedesktop.org";
-          #     owner = "xorg";
-          #     repo = "xserver";
-          #     rev = "xwayland-21.1.2.901";
-          #     sha256 = "sha256-TOsxN+TVMICYhqkypqrFgzI/ln87ALb9LijPgHmlcos=";
-          #   };
-          # });
-
-          rofi = prev.rofi.overrideAttrs (old: rec {
-            src = prev.fetchurl {
-              url =
-                "https://github.com/lbonn/rofi/archive/70efa84f9bdf46593ee9d1a11acfe0a6e1c899a7.tar.gz";
-              sha256 = "sha256-lTwH2ChbU9NRYkHHhzE6vEd6ww/gw78tf5WvaC0iEyY=";
+          mako = prev.mako.overrideAttrs (old: rec {
+            version = "1.7.1";
+            src = pkgs.fetchFromGitHub {
+              owner = "emersion";
+              repo = "mako";
+              rev = "v1.7.1";
+              sha256 = "sha256-/+XYf8FiH4lk7f7/pMt43hm13mRK+UqvaNOpf1TI6m4=";
             };
           });
 
@@ -130,6 +154,28 @@ in {
 
             ln -sf ${prev.robo3t}/share $out/share
           '');
+
+          insomnia = (prev.runCommandNoCC "insomnia" {
+            buildInputs = with pkgs; [ makeWrapper ];
+          } ''
+            makeWrapper ${prev.insomnia}/bin/insomnia $out/bin/insomnia \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
+
+            ln -sf ${prev.insomnia}/share $out/share
+          '');
+
+          microsoft-edge = (prev.runCommandNoCC "microsoft-edge" {
+            buildInputs = with pkgs; [ makeWrapper ];
+          } ''
+            makeWrapper ${prev.microsoft-edge}/bin/microsoft-edge $out/bin/microsoft-edge \
+              --add-flags "--enable-features=WebRTCPipeWireCapturer" \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
+
+            ln -sf ${prev.microsoft-edge}/share $out/share
+          '');
+
         })
 
         # inputs.nixpkgs-wayland.overlay-egl

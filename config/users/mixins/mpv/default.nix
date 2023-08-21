@@ -29,7 +29,7 @@ in {
         config = {
           osc = false;
           border = false;
-          background = theme.background;
+          # background = theme.background;
 
           autofit-larger = "75%x75%";
           gpu-context = lib.mkIf (isWayland) "wayland";

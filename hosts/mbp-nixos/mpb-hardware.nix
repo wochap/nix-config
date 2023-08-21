@@ -1,20 +1,20 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, modulesPath, ... }:
 
 let
-  kernelPackages = config.boot.kernelPackages;
+  inherit (config.boot) kernelPackages;
 in
 {
   imports = [
     "${inputs.nixos-hardware}/apple/macbook-pro"
     # "${inputs.nixos-hardware}/common/pc/laptop/ssd"
-    # (modulesPath + "/hardware/network/broadcom-43xx.nix")
+    (modulesPath + "/hardware/network/broadcom-43xx.nix")
   ];
 
   config = {
     # Apparently this is currently only supported by ati_unfree drivers, not ati
     hardware.opengl.driSupport32Bit = false;
 
-    services.xserver.videoDrivers = [ "ati" ];
+    # services.xserver.videoDrivers = [ "ati" ];
 
     services.udev.extraRules =
       # Disable XHC1 wakeup signal to avoid resume getting triggered some time

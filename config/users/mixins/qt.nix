@@ -14,7 +14,13 @@ in {
           libsForQt5.breeze-qt5
           libsForQt5.breeze-icons
 
+          # required for some QT apps
+          libsForQt5.kirigami2
+          libsForQt5.kirigami-addons
+          libsForQt5.kirigami-gallery
+
           qt5.qtgraphicaleffects # required by gddm themes
+
         ] ++ (if isWayland then [ qt5.qtwayland ] else [ ]);
       variables = lib.mkMerge [
         {
@@ -24,8 +30,9 @@ in {
           DESKTOP_SESSION = "KDE";
         }
         (lib.mkIf isWayland {
+          # QT_WAYLAND_FORCE_DPI = "physical";
           QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-          QT_QPA_PLATFORM = "wayland";
+          QT_QPA_PLATFORM = "wayland;xcb";
         })
       ];
     };

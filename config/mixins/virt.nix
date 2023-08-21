@@ -12,6 +12,7 @@ in {
       bridge-utils
       dnsmasq
       flex
+      libvirt
       nftables
       qemu
       virt-manager
@@ -34,7 +35,7 @@ in {
 
       qemu.ovmf = {
         enable = true;
-        package = pkgs.OVMFFull;
+        packages = [ pkgs.OVMFFull ];
       };
     };
 
@@ -45,5 +46,15 @@ in {
 
       options kvm ignore_msrs=1
     '';
+
+    home-manager.users.${userName} = {
+      # fix "could not detect a default hypervisor" in virt-manager
+      dconf.settings = {
+        "org/virt-manager/virt-manager/connections" = {
+          autoconnect = [ "qemu:///system" ];
+          uris = [ "qemu:///system" ];
+        };
+      };
+    };
   };
 }
