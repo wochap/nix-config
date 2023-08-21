@@ -68,12 +68,27 @@ in {
 
     # Enable bluetooth
     hardware.bluetooth.enable = true;
+    hardware.bluetooth.settings = {
+      General = {
+        # Enables D-Bus experimental interfaces
+        # Possible values: true or false
+        Experimental = true;
+
+        # Enables kernel experimental features, alternatively a list of UUIDs
+        # can be given.
+        # Possible values: true,false,<UUID List>
+        # Possible UUIDS:
+        # Defaults to false.
+        KernelExperimental = true;
+      };
+      # Policy = { AutoEnable = false; };
+    };
 
     # Enable OpenGL
     hardware.opengl.enable = true;
-    hardware.opengl.driSupport = !isMbp;
+    hardware.opengl.driSupport = lib.mkForce (!isMbp);
 
-    hardware.opengl.driSupport32Bit = !isMbp;
+    hardware.opengl.driSupport32Bit = lib.mkForce (!isMbp);
 
     # Enable audio
     security.rtkit.enable = true;
