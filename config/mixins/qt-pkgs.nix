@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let localPkgs = import ../packages { inherit pkgs lib; };
+let
+  localPkgs = import ../packages { inherit pkgs lib; };
+  userName = config._userName;
 in {
   config = {
     environment = {
@@ -16,6 +18,13 @@ in {
         # openshot-qt # video editor
         localPkgs.stremio
       ];
+    };
+
+    home-manager.users.${userName} = {
+      services.kdeconnect = {
+        enable = true;
+        indicator = false;
+      };
     };
   };
 }
