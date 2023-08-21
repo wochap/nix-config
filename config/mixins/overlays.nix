@@ -37,6 +37,11 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
+        prevstable-nodejs = import inputs.prevstable-nodejs {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
       })
 
       (final: prev: {
@@ -97,6 +102,15 @@ in {
             repo = "lazygit";
             rev = "v0.31.4";
             sha256 = "sha256-yze4UaSEbyHwHSyj0mM7uCzaDED+p4O3HVVlHJi/FKU=";
+          };
+        });
+
+        heimdall = prev.heimdall.overrideAttrs (_: {
+          src = prev.fetchFromSourcehut {
+            owner  = "~grimler";
+            repo   = "Heimdall";
+            rev    = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
+            sha256 = "sha256-tcAE83CEHXCvHSn/S9pWu6pUiqGmukMifEadqPDTkQ0=";
           };
         });
 
