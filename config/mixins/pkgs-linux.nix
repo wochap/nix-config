@@ -28,9 +28,13 @@ in {
       ffmpegthumbnailer
       glxinfo # opengl utils
       graphicsmagick
+      heimdall # reset samsung ROM
+      ifuse # mount ios
       inotify-tools # c module
       inxi # check compositor running
+      libimobiledevice # mount ios
       libva-utils # verifying VA-API
+      localPkgs.advcpmv # cp and mv with progress bar
       notify-desktop # test notifications
       pciutils # lspci and others commands
       pulsemixer
@@ -51,6 +55,7 @@ in {
       # tightvnc
 
       # DE CLI
+      bluetuith
       hunspell # dictionary for document programs
       hunspellDicts.en-us
       pulseaudio
