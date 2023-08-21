@@ -30,6 +30,9 @@ in {
         restart-pipewire-and-portal-services
 
         blueberry # bluetooth tray
+        bluez # dependency of blueberry
+        bluez-tools # dependency of blueberry
+        gnome.gnome-bluetooth_1_0 # dependency of blueberry
         caffeine-ng
         libappindicator-gtk3
 
