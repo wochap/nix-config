@@ -8,6 +8,7 @@
         deluge # torrent client
         inkscape # photo editor cli/gui
         networkmanagerapplet
+        remmina
 
         # APPS
         gnome.cheese # test webcam
