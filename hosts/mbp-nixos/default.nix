@@ -29,6 +29,8 @@ in {
     _configDirectory = configDirectory;
     _theme = draculaTheme;
 
+    _custom.flatpak.enable = true;
+    _custom.waydroid.enable = false;
     _custom.efi.enable = true;
     _custom.amdCpu.enable = false;
     _custom.amdGpu.enable = false;
