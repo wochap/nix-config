@@ -4,7 +4,7 @@ let
   inherit (config._custom) globals;
   userName = config._userName;
   cfg = config._custom.hyprland;
-  theme = config._theme;
+  inherit (config._custom.globals) themeColors;
   hyprland-focus-toggle = pkgs.writeTextFile {
     name = "hyprland-focus-toggle";
     destination = "/bin/hyprland-focus-toggle";
@@ -45,7 +45,7 @@ in {
         extraConfig = ''
           ${lib.concatStringsSep "\n"
           (lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${value}")
-            theme)}
+            themeColors)}
 
           ${builtins.readFile ./dotfiles/config}
           ${builtins.readFile ./dotfiles/keybindings}

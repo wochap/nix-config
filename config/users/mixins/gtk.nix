@@ -86,7 +86,7 @@ in {
         # Theme
         font = { name = globals.fonts.sans; };
         iconTheme = { name = "Dracula"; };
-        theme = { inherit (globals.theme) name package; };
+        theme = { inherit (globals.gtkTheme) name package; };
 
         gtk3.extraConfig = {
           gtk-application-prefer-dark-theme = true;

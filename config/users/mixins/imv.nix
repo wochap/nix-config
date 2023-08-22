@@ -2,7 +2,7 @@
 
 let
   userName = config._userName;
-  theme = config._theme;
+  inherit (config._custom.globals) themeColors;
 in {
   config = {
     home-manager.users.${userName} = {
@@ -11,7 +11,7 @@ in {
       xdg.configFile = {
         "imv/config".text = lib.generators.toINI { } {
           options = {
-            background = theme.background;
+            inherit (themeColors) background;
           };
         };
       };

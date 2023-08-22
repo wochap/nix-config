@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.waylandWm;
-  theme = config._theme;
+  inherit (config._custom.globals) themeColors;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
@@ -11,7 +11,7 @@ let
   rofi-config-colors = ''
     * {
     ${lib.concatStringsSep "\n"
-    (lib.attrsets.mapAttrsToList (key: value: "  ${key}: ${value};") theme)}
+    (lib.attrsets.mapAttrsToList (key: value: "  ${key}: ${value};") themeColors)}
     }
   '';
   rofi-emoji = pkgs.writeTextFile {

@@ -1,7 +1,7 @@
 # Used by darwin|wayland|xorg config
 { config, pkgs, lib, inputs, ... }:
 
-let theme = config._theme;
+let inherit (config._custom.globals) themeColors;
 in {
 
   config = {
@@ -57,7 +57,7 @@ in {
         weather = "curl wttr.in";
         ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"'';
         fp =
-          "fontpreview-ueberzug -b ${theme.background} -f ${theme.foreground}";
+          "fontpreview-ueberzug -b ${themeColors.background} -f ${themeColors.foreground}";
       };
 
       # Links those paths from derivations to /run/current-system/sw

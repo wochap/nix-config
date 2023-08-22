@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.waylandWm;
-  theme = config._theme;
+  inherit (config._custom.globals) themeColors;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
@@ -39,7 +39,7 @@ in {
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/colors";
         "wofi/colors.css".text = ''
           ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
-            (key: value: "@define-color ${key} ${value};") theme)}
+            (key: value: "@define-color ${key} ${value};") themeColors)}
         '';
       };
     };

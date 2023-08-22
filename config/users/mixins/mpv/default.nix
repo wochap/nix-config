@@ -3,7 +3,6 @@
 let
   isWayland = config._displayServer == "wayland";
   userName = config._userName;
-  theme = config._theme;
 in {
   config = {
     home-manager.users.${userName} = {
@@ -29,7 +28,6 @@ in {
         config = {
           osc = false;
           border = false;
-          # background = theme.background;
 
           autofit-larger = "75%x75%";
           gpu-context = lib.mkIf (isWayland) "wayland";

@@ -30,7 +30,7 @@
         };
       };
 
-      theme = {
+      gtkTheme = {
         name = lib.mkOption {
           type = lib.types.str;
           default = "Dracula";
@@ -46,6 +46,12 @@
         default = "";
         example = "xorg"; # xorg, wayland, darwin
         description = "Display server type, used by common config files.";
+      };
+      isHidpi = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Flag for hidpi displays.";
       };
       userName = lib.mkOption {
         type = lib.types.str;
@@ -65,12 +71,13 @@
         example = "/home/gean/nix-config";
         description = "Path of config folder";
       };
-      # theme = lib.mkOption {
-      #   type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
-      #   default = { };
-      #   example = "{}";
-      #   description = "Theme colors";
-      # };
+
+      themeColors = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
+        default = { };
+        example = "{}";
+        description = "Theme colors";
+      };
     };
 
     _displayServer = lib.mkOption {
@@ -78,12 +85,6 @@
       default = "";
       example = "xorg"; # xorg, wayland, darwin
       description = "Display server type, used by common config files.";
-    };
-    _isHidpi = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      example = true;
-      description = "Flag for hidpi displays.";
     };
     _userName = lib.mkOption {
       type = lib.types.str;
@@ -103,18 +104,6 @@
       example = "/home/gean/nix-config";
       description = "Path of config folder";
     };
-    _theme = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
-      default = { };
-      example = "{}";
-      description = "Theme colors";
-    };
-    _isNvidia = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      example = true;
-      description = "Flag for devices with nvidia.";
-    };
   };
 
   config = {
@@ -122,7 +111,7 @@
       text = ''
         ${lib.concatStringsSep "\n"
         (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
-          config._theme)}
+          config._custom.globals.themeColors)}
       '';
       mode = "0755";
     };

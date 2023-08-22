@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  isHidpi = config._isHidpi;
+  inherit (config._custom.globals) isHidpi;
   isMbp = config.networking.hostName == "gmbp";
   terminalColors = [
     "21222c"

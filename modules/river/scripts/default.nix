@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  theme = config._theme;
-
   river-focus-toggle = pkgs.writeTextFile {
     name = "river-focus-toggle";
     destination = "/bin/river-focus-toggle";

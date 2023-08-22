@@ -2,7 +2,6 @@
 
 let
   hostName = "gmbp";
-  isHidpi = true;
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
@@ -19,15 +18,14 @@ in {
     ../../config/mixins/backlight
     ../../config/mixins/mbpfan
     ../../config/nixos.nix
-    # ./xorg.nix
   ];
 
   config = {
     _userName = userName;
-    _isHidpi = isHidpi;
     _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
-    _theme = draculaTheme;
+    _custom.globals.themeColors = draculaTheme;
+    _custom.globals.isHidpi = true;
 
     _custom.flatpak.enable = true;
     _custom.waydroid.enable = false;
@@ -35,11 +33,6 @@ in {
     _custom.amdCpu.enable = false;
     _custom.amdGpu.enable = false;
     _custom.amdGpu.enableSouthernIslands = false;
-
-    _custom.bspwm.enable = false;
-    _custom.lightdm.enable = false;
-    _custom.startx.enable = false;
-    _custom.xorgWm.enable = false;
 
     _custom.hyprland.enable = false;
     _custom.sway.enable = true;

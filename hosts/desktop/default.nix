@@ -20,7 +20,7 @@ in {
     _isHidpi = isHidpi;
     _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
-    _theme = draculaTheme;
+    _custom.globals.themeColors = draculaTheme;
 
     _custom.efi.enable = true;
     _custom.amdCpu.enable = true;

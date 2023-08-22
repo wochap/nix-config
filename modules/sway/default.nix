@@ -4,7 +4,7 @@ let
   inherit (config._custom) globals;
   userName = config._userName;
   cfg = config._custom.sway;
-  theme = config._theme;
+  inherit (config._custom.globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
 in {
   options._custom.sway = { enable = lib.mkEnableOption "activate SWAY"; };
@@ -46,10 +46,10 @@ in {
 
           #### SWAY theme ####
           #                         title-border         title-bg                title-text            indicator       window-border
-          client.focused            ${theme.purple}      ${theme.purple}         ${theme.background}   ${theme.cyan}   ${theme.purple}
-          client.unfocused          ${theme.selection}   ${theme.selection}    ${theme.foreground}   ${theme.cyan}   ${theme.selection}
-          client.focused_inactive   ${theme.comment}     ${theme.comment}        ${theme.foreground}   ${theme.cyan}   ${theme.comment}
-          client.urgent             ${theme.pink}        ${theme.pink}           ${theme.background}   ${theme.cyan}   ${theme.pink}
+          client.focused            ${themeColors.purple}      ${themeColors.purple}         ${themeColors.background}   ${themeColors.cyan}   ${themeColors.purple}
+          client.unfocused          ${themeColors.selection}   ${themeColors.selection}      ${themeColors.foreground}   ${themeColors.cyan}   ${themeColors.selection}
+          client.focused_inactive   ${themeColors.comment}     ${themeColors.comment}        ${themeColors.foreground}   ${themeColors.cyan}   ${themeColors.comment}
+          client.urgent             ${themeColors.pink}        ${themeColors.pink}           ${themeColors.background}   ${themeColors.cyan}   ${themeColors.pink}
         '';
 
         "scripts/sway-autostart.sh" = {
