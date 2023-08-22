@@ -16,7 +16,7 @@ in {
       settings = {
         default_session = {
           command = ''
-            ${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --asterisks --cmd "${cfg.cmd}"'';
+            ${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd "${cfg.cmd}"'';
           user = "greeter";
         };
       };
