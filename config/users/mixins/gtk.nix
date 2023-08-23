@@ -24,10 +24,12 @@ in {
           gtk-engine-murrine
           gtk_engines
         ] ++ [ localPkgs.dracula-icons ];
+
       variables = {
         # Hide dbus errors
         "NO_AT_BRIDGE" = "1";
       };
+
       sessionVariables = lib.mkMerge [
         {
           # https://wiki.gnome.org/Initiatives/CSD
@@ -94,9 +96,6 @@ in {
 
           # Hide minimize and maximize buttons
           gtk-decoration-layout = "menu:";
-
-          # Hide minimize, maximize, close buttons
-          button-layout = "";
 
           gtk-xft-antialias = 1;
           gtk-xft-hinting = 1;

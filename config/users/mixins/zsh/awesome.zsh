@@ -13,10 +13,6 @@ function pro() {
   fi
 }
 
-function cht() {
-  /etc/scripts/cht.sh "$@"
-}
-
 function killport {
   kill $(lsof -t -i:"$1")
 }

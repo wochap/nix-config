@@ -10,7 +10,11 @@
       fonts = {
         sans = lib.mkOption {
           type = lib.types.str;
-          default = "JetBrainsMono Nerd Font";
+          default = "Source Sans Pro";
+        };
+        size = lib.mkOption {
+          type = lib.types.int;
+          default = 10;
         };
       };
 
@@ -33,11 +37,21 @@
       gtkTheme = {
         name = lib.mkOption {
           type = lib.types.str;
-          default = "Dracula";
+          default = "adw-gtk3";
         };
         package = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.dracula-theme;
+          default = pkgs.adw-gtk3;
+        };
+      };
+      gtkIconTheme = {
+        name = lib.mkOption {
+          type = lib.types.str;
+          default = "kora";
+        };
+        package = lib.mkOption {
+          type = lib.types.package;
+          default = pkgs.kora-icon-theme;
         };
       };
 

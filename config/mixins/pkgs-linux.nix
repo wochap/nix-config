@@ -41,6 +41,7 @@ in {
       slop # region selection
       usbutils # lsusb, for android development
       vdpauinfo # verifying VDPAU
+      vulkan-tools
       wirelesstools
       # base-devel
       # busybox # a lot of commands but with less options/features
@@ -55,7 +56,6 @@ in {
       # tightvnc
 
       # DE CLI
-      bluetuith
       hunspell # dictionary for document programs
       hunspellDicts.en-us
       pulseaudio
@@ -67,16 +67,10 @@ in {
       tty-clock
 
       # APPS GUI
-      dfeet # dbus gui
       dmenu
-      filelight # view disk usage
-      gparted
       nyxt # browser
-      pinta
-      qbittorrent
       qutebrowser # browser
       skypeforlinux
-      sublime3 # text editor
       zoom-us
       # antimicroX
       # localPkgs.nsxiv
@@ -87,7 +81,7 @@ in {
       bitwarden
       brave
       figma-linux
-      google-chrome
+      prevstable-chrome.google-chrome
       microsoft-edge
       notion-app-enhanced
       postman

@@ -2,7 +2,6 @@
 
 let
   inherit (config._custom.globals) isHidpi;
-  isMbp = config.networking.hostName == "gmbp";
   terminalColors = [
     "21222c"
     "ff5555"
@@ -29,8 +28,6 @@ in {
   ];
 
   config = {
-    environment = { shellAliases = { open = "xdg-open"; }; };
-
     boot = {
       loader = {
         grub.configurationLimit = 42;
@@ -66,48 +63,8 @@ in {
       wheelNeedsPassword = false;
     };
 
-    # Enable bluetooth
-    hardware.bluetooth.enable = true;
-    hardware.bluetooth.settings = {
-      General = {
-        # Enables D-Bus experimental interfaces
-        # Possible values: true or false
-        Experimental = true;
-
-        # Enables kernel experimental features, alternatively a list of UUIDs
-        # can be given.
-        # Possible values: true,false,<UUID List>
-        # Possible UUIDS:
-        # Defaults to false.
-        KernelExperimental = true;
-      };
-      # Policy = { AutoEnable = false; };
-    };
-
     # Enable OpenGL
     hardware.opengl.enable = true;
-    hardware.opengl.driSupport = lib.mkForce (!isMbp);
-
-    hardware.opengl.driSupport32Bit = lib.mkForce (!isMbp);
-
-    # Enable audio
-    security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      # If you want to use JACK applications, uncomment this
-      # jack.enable = true;
-
-      wireplumber.enable = true;
-    };
-    # I copy the following from other user config
-    # systemd.user.services = {
-    #   pipewire-pulse = {
-    #     path = [ pkgs.pulseaudio ];
-    #   };
-    # };
 
     services.xserver = {
       enable = true;

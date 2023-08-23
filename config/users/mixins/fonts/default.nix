@@ -21,6 +21,8 @@ in {
           source-serif
           source-sans
           source-code-pro
+
+          cantarell-fonts
         ];
       }
       (if (isDarwin) then {

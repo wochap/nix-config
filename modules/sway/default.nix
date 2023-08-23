@@ -10,6 +10,11 @@ in {
   options._custom.sway = { enable = lib.mkEnableOption "activate SWAY"; };
 
   config = lib.mkIf cfg.enable {
+    _custom.wm.greetd = {
+      enable = lib.mkDefault true;
+      cmd = "sway";
+    };
+
     programs.sway = {
       enable = true;
       wrapperFeatures.gtk = true; # so that gtk works properly
@@ -20,6 +25,7 @@ in {
     environment = {
       systemPackages = with pkgs;
         [
+          wlprop
           scripts.sway-focus-toggle
 
           # gksu
@@ -62,11 +68,6 @@ in {
           mode = "0755";
         };
       };
-    };
-
-    _custom.greetd = {
-      enable = true;
-      cmd = "sway";
     };
 
     home-manager.users.${userName}.services.swayidle.timeouts = lib.mkAfter [

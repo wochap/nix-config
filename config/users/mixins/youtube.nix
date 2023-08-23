@@ -4,7 +4,7 @@ let userName = config._userName;
 in {
   config = {
     environment = {
-      systemPackages = with pkgs; [ perl534Packages.WWWYoutubeViewer yt-dlp ];
+      systemPackages = with pkgs; [ perl536Packages.WWWYoutubeViewer yt-dlp ];
 
       shellAliases = {
         # youtube-dl is buggy

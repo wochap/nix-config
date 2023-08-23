@@ -42,18 +42,19 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
+        prevstable-chrome = import inputs.prevstable-chrome {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
+        prevstable-kernel-pkgs = import inputs.prevstable-kernel-pkgs {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
       })
 
       (final: prev: {
-        wmutils-core = prev.wmutils-core.overrideAttrs (_: {
-          src = pkgs.fetchFromGitHub {
-            owner = "wmutils";
-            repo = "core";
-            rev = "d989db82b83cf457a3fb9bcd87637cf29770f9a4";
-            sha256 = "sha256-ha6YCXk6/p21DAin2zwuOuqXCDjs2Bi5IHFRiVaIE3E=";
-          };
-        });
-
         wob = prev.wob.overrideAttrs (_: {
           src = pkgs.fetchFromGitHub {
             owner = "francma";
@@ -78,23 +79,14 @@ in {
           };
         });
 
-        tela-icon-theme = prev.tela-icon-theme.overrideAttrs (_: {
-          src = prev.fetchFromGitHub {
-            owner = "vinceliuice";
-            repo = "Tela-icon-theme";
-            rev = "184959a91ed9726d7cbb3d55c627be09d302096f";
-            sha256 = "sha256-mvkgHBdZm6vF+/DS3CRLl1m14U0Lj4Xtz4J/vpJUTQM=";
-          };
-        });
-
-        i3lock-color = prev.i3lock-color.overrideAttrs (_: {
-          src = prev.fetchFromGitHub {
-            owner = "PandorasFox";
-            repo = "i3lock-color";
-            rev = "995f58dc7323d53095f1687ae157bfade1d00542";
-            sha256 = "sha256-2ojaIRtQpGzgPUwvhX1KsStMdCHuYSaZt3ndP1EBHmE=";
-          };
-        });
+        # tela-icon-theme = prev.tela-icon-theme.overrideAttrs (_: {
+        #   src = prev.fetchFromGitHub {
+        #     owner = "vinceliuice";
+        #     repo = "Tela-icon-theme";
+        #     rev = "184959a91ed9726d7cbb3d55c627be09d302096f";
+        #     sha256 = "sha256-mvkgHBdZm6vF+/DS3CRLl1m14U0Lj4Xtz4J/vpJUTQM=";
+        #   };
+        # });
 
         lazygit = prev.lazygit.overrideAttrs (_: {
           src = prev.fetchFromGitHub {
@@ -131,19 +123,8 @@ in {
     ] ++ (if (isWayland) then
       [
         (final: prev: {
-
           waybar = prev.waybar.overrideAttrs (oldAttrs: {
             mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-          });
-
-          mako = prev.mako.overrideAttrs (old: rec {
-            version = "1.7.1";
-            src = pkgs.fetchFromGitHub {
-              owner = "emersion";
-              repo = "mako";
-              rev = "v1.7.1";
-              sha256 = "sha256-/+XYf8FiH4lk7f7/pMt43hm13mRK+UqvaNOpf1TI6m4=";
-            };
           });
 
           robo3t = (prev.runCommandNoCC "robo3t" {
@@ -178,7 +159,6 @@ in {
 
         })
 
-        # inputs.nixpkgs-wayland.overlay-egl
         # inputs.nixpkgs-wayland.overlay
       ]
     else

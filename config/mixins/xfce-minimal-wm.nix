@@ -19,23 +19,11 @@ in {
         desktop-file-utils
         shared-mime-info # for update-mime-database
 
-        # For a polkit authentication agent
-        polkit_gnome
-
-        # Needed by Xfce's xinitrc script
-        xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-
         xfce.exo # Application library for Xfce
         xfce.garcon # Xfce menu support library
         xfce.libxfce4ui # Widgets library for Xfce
         xfce.xfconf # Simple client-server configuration storage and query system for Xfce
 
-        xfce.xfce4-screenshooter
-        xfce.xfce4-session
-        xfce.xfce4-settings
-        xfce.xfce4-terminal
-
-        pavucontrol
       ] ++ lib.optional config.powerManagement.enable xfce4-power-manager;
 
     environment.pathsToLink = [
@@ -55,27 +43,23 @@ in {
     #   '';
     # }];
 
-    services.xserver.updateDbusEnvironment = true;
-    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+    # services.xserver.updateDbusEnvironment = true;
+    # services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     # Enable helpful DBus services.
-    services.udisks2.enable = true;
-    security.polkit.enable = true;
-    services.accounts-daemon.enable = true;
-    services.upower.enable = lib.mkDefault enablePowerManagement;
+    # services.udisks2.enable = true;
+    # security.polkit.enable = true;
+    # services.accounts-daemon.enable = true;
+    # services.upower.enable = lib.mkDefault enablePowerManagement;
     services.gnome.glib-networking.enable = true;
-    services.gvfs.enable = true;
-    services.tumbler.enable = true;
+    # services.gvfs.enable = true;
+    # services.tumbler.enable = true;
     # TODO: support printer?
-    services.xserver.libinput.enable =
-      lib.mkDefault true; # used in xfce4-settings-manager
+    # services.xserver.libinput.enable =
+    #   lib.mkDefault true; # used in xfce4-settings-manager
 
     # Enable default programs
-    programs.dconf.enable = true;
-
-    # Shell integration for VTE terminals
-    programs.bash.vteIntegration = lib.mkDefault true;
-    programs.zsh.vteIntegration = lib.mkDefault true;
+    # programs.dconf.enable = true;
 
     powerManagement.enable = lib.mkDefault enablePowerManagement;
   };

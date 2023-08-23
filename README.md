@@ -106,7 +106,7 @@ You probably want to press `Ctrl + Alt + F1`
    ```
 1. If you are using nixos on mbp
    ```
-   $ ln -s ~/nix-config/config/mixins/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
+   $ ln -s ~/nix-config/modules/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
    ```
 1. Setup Syncthing (http://localhost:8384)
 1. Setup backagrounds

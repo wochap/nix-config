@@ -15,8 +15,8 @@
   // Modules configuration
   "custom/mbpfan": {
     "interval": 1,
-    "exec": "/etc/scripts/mbpfan-polybar.sh --read",
-    "on-click": "/etc/scripts/mbpfan-polybar.sh --toggle &"
+    "exec": "/etc/scripts/mbpfan-bar.sh --read",
+    "on-click": "/etc/scripts/mbpfan-bar.sh --toggle &"
   },
   "custom/scratchpad_indicator": {
     "interval": 1,

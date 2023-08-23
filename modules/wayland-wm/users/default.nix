@@ -5,7 +5,6 @@ let
   userName = config._userName;
 in {
   imports = [
-    # ./mixins/mako
     ./mixins/dunst
     ./mixins/kanshi.nix
     ./mixins/rofi

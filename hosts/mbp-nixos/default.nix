@@ -10,29 +10,46 @@ in {
   imports = [
     inputs.nixos-hardware.nixosModules.common-pc-laptop-acpi_call
     inputs.nixos-hardware.nixosModules.apple-macbook-pro-11-5
-    # inputs.nixos-hardware.nixosModules.common-gpu-amd-southern-islands
+    inputs.nixos-hardware.nixosModules.common-gpu-amd-southern-islands
     ./hardware-configuration.nix
-    ../../config/mixins/intel.nix
-    ../../config/mixins/powerManagement.nix
-    ../../config/mixins/temp-sensor.nix
-    ../../config/mixins/backlight
-    ../../config/mixins/mbpfan
+    ./intel.nix
     ../../config/nixos.nix
   ];
 
   config = {
+    # NOTE: amdvlk gives errors?
+    hardware.amdgpu.amdvlk = false;
+
     _userName = userName;
     _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
     _custom.globals.themeColors = draculaTheme;
     _custom.globals.isHidpi = true;
 
+    _custom.tui.nixDirenv.enable = true;
+
+    _custom.wm.networking.enable = true;
+    _custom.wm.powerManagement.enable = true;
+    _custom.wm.backlight.enable = true;
+    _custom.wm.audio.enable = true;
+    _custom.wm.cursor.enable = true;
+    _custom.wm.xdg.enable = true;
+    _custom.wm.dbus.enable = true;
+    _custom.wm.bluetooth.enable = true;
+    _custom.wm.qt.enable = true;
+    _custom.wm.gtk.enable = true;
+
+    _custom.mbpfan.enable = true;
+    _custom.docker.enable = true;
+    _custom.mongodb.enable = true;
+    _custom.virt.enable = true;
     _custom.flatpak.enable = true;
     _custom.waydroid.enable = false;
-    _custom.efi.enable = true;
-    _custom.amdCpu.enable = false;
-    _custom.amdGpu.enable = false;
-    _custom.amdGpu.enableSouthernIslands = false;
+
+    _custom.hardware.efi.enable = true;
+    _custom.hardware.amdCpu.enable = false;
+    _custom.hardware.amdGpu.enable = false;
+    _custom.hardware.amdGpu.enableSouthernIslands = false;
 
     _custom.hyprland.enable = false;
     _custom.sway.enable = true;
@@ -57,6 +74,9 @@ in {
     home-manager.users.${userName}.home.stateVersion = "21.11";
 
     boot = {
+      # kernel 5.15.119 works with amdgpu driver
+      kernelPackages = pkgs.prevstable-kernel-pkgs.linuxPackages;
+
       kernelParams = [
         # needed for suspend
         "acpi_osi=Darwin"
@@ -80,15 +100,12 @@ in {
     };
 
     environment = {
-      systemPackages = with pkgs; [
-        # change keyboard backlight level
-        # NOTE: looks like xfce4-power-manager manages it
-        kbdlight
-
-        # requires installing rEFInd
-        # more info on https://github.com/0xbb/gpu-switch
-        gpu-switch
-      ];
+      systemPackages = with pkgs;
+        [
+          # NOTE: requires installing rEFInd
+          # more info on https://github.com/0xbb/gpu-switch
+          gpu-switch
+        ];
     };
 
     networking = {
@@ -121,11 +138,9 @@ in {
 
     # Default cpu cpuFreqGovernor at startup
     powerManagement = {
-      # TODO: refactor to module options
       cpuFreqGovernor = "performance";
       cpufreq.min = 800000;
       cpufreq.max = 4000000;
     };
-
   };
 }

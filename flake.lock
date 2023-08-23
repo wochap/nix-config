@@ -1010,17 +1010,17 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1692339729,
-        "narHash": "sha256-TUK76/Pqm9qIDjEGd27Lz9EiBIvn5F70JWDmEQ4Y5DQ=",
+        "lastModified": 1692698134,
+        "narHash": "sha256-YtMmZWR/dlTypOcwiZfZTMPr3tj9fwr05QTStfSyDSg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ae521bd4e460b076a455dca8b13f4151489a725c",
+        "rev": "a16f7eb56e88c8985fcc6eb81dabd6cade4e425a",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ae521bd4e460b076a455dca8b13f4151489a725c",
+        "rev": "a16f7eb56e88c8985fcc6eb81dabd6cade4e425a",
         "type": "github"
       }
     },
@@ -1203,6 +1203,38 @@
         "type": "github"
       }
     },
+    "prevstable-chrome": {
+      "locked": {
+        "lastModified": 1692757770,
+        "narHash": "sha256-tcHu5mOKLyL/B2TTh6d2ma7M7CTSQBd1+mStVM7OFPM=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6fc32915e5c8ad3f8c46b70fd0f9ad201dd1adb4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6fc32915e5c8ad3f8c46b70fd0f9ad201dd1adb4",
+        "type": "github"
+      }
+    },
+    "prevstable-kernel-pkgs": {
+      "locked": {
+        "lastModified": 1688392541,
+        "narHash": "sha256-lHrKvEkCPTUO+7tPfjIcb7Trk6k31rz18vkyqmkeJfY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "ea4c80b39be4c09702b0cb3b42eab59e2ba4f24b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "ea4c80b39be4c09702b0cb3b42eab59e2ba4f24b",
+        "type": "github"
+      }
+    },
     "prevstable-mongodb": {
       "locked": {
         "lastModified": 1644026202,
@@ -1353,6 +1385,8 @@
         "nonicons": "nonicons",
         "nur": "nur",
         "ohmyzsh": "ohmyzsh",
+        "prevstable-chrome": "prevstable-chrome",
+        "prevstable-kernel-pkgs": "prevstable-kernel-pkgs",
         "prevstable-mongodb": "prevstable-mongodb",
         "prevstable-neovim": "prevstable-neovim",
         "prevstable-nodejs": "prevstable-nodejs",

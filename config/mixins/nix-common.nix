@@ -1,7 +1,9 @@
 # Used by darwin|wayland|xorg config
 { config, pkgs, lib, inputs, ... }:
 
-let inherit (config._custom.globals) themeColors;
+let
+  inherit (config._custom.globals) themeColors;
+  userName = config._userName;
 in {
 
   config = {
@@ -47,7 +49,7 @@ in {
     };
 
     # Set your time zone.
-    time.timeZone = "America/Panama";
+    time.timeZone = lib.mkDefault "America/Panama";
 
     environment = {
       shellAliases = {
@@ -71,5 +73,21 @@ in {
     # home-manager options
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = false;
+
+    home-manager.users.${userName} = {
+      # Let Home Manager install and manage itself.
+      programs.home-manager.enable = true;
+
+      # Setup dotfiles
+      home.file = {
+        ".config/nixpkgs/config.nix".text = ''
+          { allowUnfree = true; }
+        '';
+      };
+
+      programs.bash.enable = true;
+      programs.zsh.enable = true;
+      programs.fish.enable = true;
+    };
   };
 }

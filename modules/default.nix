@@ -2,16 +2,21 @@
 
 {
   imports = [
-    ./amd-cpu.nix
-    ./amd-gpu.nix
-    ./efi.nix
+    ./android
+    ./docker
     ./flatpak
     ./globals.nix
-    ./greetd
+    ./hardware
     ./hyprland
+    ./ipwebcam
+    ./mbpfan
+    ./mongodb
     ./river
     ./sway
+    ./tui
+    ./virt
     ./waydroid
     ./wayland-wm
+    ./wm
   ];
 }

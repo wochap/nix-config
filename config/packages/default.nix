@@ -9,6 +9,7 @@
   mangadesk = pkgs.callPackage ./mangadesk.nix {};
   neeasade-wmutils-opt = pkgs.callPackage ./neeasade-wmutils-opt.nix {};
   nsxiv = pkgs.callPackage ./nsxiv.nix {};
+  nwg-look = pkgs.callPackage ./nwg-look {};
   offlinemsmtp = pkgs.callPackage ./offlinemsmtp.nix {};
   onagre = pkgs.callPackage ./onagre.nix {};
   ptsh = pkgs.callPackage ./ptsh {};
