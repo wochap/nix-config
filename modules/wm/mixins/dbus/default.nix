@@ -15,6 +15,7 @@ in {
     services.dbus.enable = true;
     services.gnome.glib-networking.enable = true;
     services.udisks2.enable = true;
+    services.hardware.bolt.enable = true; # Thunderbolt
     services.xserver.updateDbusEnvironment = true;
   };
 }

@@ -9,10 +9,10 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = with pkgs;
-        [
-          xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-        ];
+      systemPackages = with pkgs; [
+        desktop-file-utils
+        xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+      ];
 
       shellAliases = { open = "xdg-open"; };
     };
