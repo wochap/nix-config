@@ -47,11 +47,13 @@
       gtkIconTheme = {
         name = lib.mkOption {
           type = lib.types.str;
-          default = "kora";
+          default = "Tela-circle-dracula";
         };
         package = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.kora-icon-theme;
+          default = pkgs.tela-circle-icon-theme.override {
+            colorVariants = [ "dracula" ];
+          };
         };
       };
 

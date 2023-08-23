@@ -129,6 +129,23 @@
         "type": "github"
       }
     },
+    "dracula-adw-gtk3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1684915555,
+        "narHash": "sha256-yksWZCu/xXp4o8B9uod5e+OZ6Kyl1IMDrcrDWVLHv74=",
+        "owner": "lassekongo83",
+        "repo": "adw-colors",
+        "rev": "b290fedc46e3dc0719b9e2455ad765afe0c6a4d7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lassekongo83",
+        "repo": "adw-colors",
+        "rev": "b290fedc46e3dc0719b9e2455ad765afe0c6a4d7",
+        "type": "github"
+      }
+    },
     "dracula-amfora": {
       "flake": false,
       "locked": {
@@ -1354,6 +1371,7 @@
         "android-nixpkgs": "android-nixpkgs",
         "ani-cli": "ani-cli",
         "darwin": "darwin",
+        "dracula-adw-gtk3": "dracula-adw-gtk3",
         "dracula-amfora": "dracula-amfora",
         "dracula-betterdiscord": "dracula-betterdiscord",
         "dracula-discord": "dracula-discord",

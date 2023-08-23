@@ -81,6 +81,8 @@
     nonicons.flake = false;
 
     # dracula theme
+    dracula-adw-gtk3.url = "github:lassekongo83/adw-colors?rev=b290fedc46e3dc0719b9e2455ad765afe0c6a4d7";
+    dracula-adw-gtk3.flake = false;
     dracula-discord.url = "github:dracula/betterdiscord?rev=6e9151fc3b013ae3c3961c45f11c0cd8d934f4be";
     dracula-discord.flake = false;
     dracula-kitty.url = "github:dracula/kitty?rev=eeaa86a730e3d38649053574dc60a74ce06a01bc";

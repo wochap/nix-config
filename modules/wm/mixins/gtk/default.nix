@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 let
   cfg = config._custom.wm.gtk;
@@ -127,6 +127,8 @@ in {
           decoration:backdrop {
             box-shadow: none;
           }
+
+          ${builtins.readFile "${inputs.dracula-adw-gtk3}/themes/dracula/gtk.css"}
         '';
       };
     };

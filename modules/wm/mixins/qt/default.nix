@@ -11,6 +11,15 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
+        # fix kirigami apps look
+        # for example in filelight, without it the app looks weird
+        # https://github.com/NixOS/nixpkgs/pull/202990#issuecomment-1328068486
+        libsForQt5.qqc2-desktop-style
+        libsForQt5.qqc2-breeze-style # required?
+
+        libsForQt5.qt5.qtwayland
+
+        lightly-qt
         libsForQt5.breeze-icons
         libsForQt5.breeze-qt5
 
