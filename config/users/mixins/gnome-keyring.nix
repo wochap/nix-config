@@ -18,7 +18,7 @@ in {
 
     home-manager.users.${userName} = {
       home.file.".gnupg/gpg-agent.conf".text = ''
-        pinentry-program ${pkgs.pinentry.gtk2}/bin/pinentry
+        pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
       '';
     };
 
