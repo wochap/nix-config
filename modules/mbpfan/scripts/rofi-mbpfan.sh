@@ -10,8 +10,8 @@ options="$default\n$normal\n$high\n$higher"
 
 selected="$(echo -e "$options" | rofi \
   -p "RPM" \
-  -theme-str 'window { width: 15em; }' \
   -dmenu \
+  -config "$HOME/.config/rofi/config-multi-line.rasi" \
   -i \
   -selected-row ${PRESELECTION})"
 

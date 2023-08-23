@@ -127,26 +127,10 @@ You probably want to press `Ctrl + Alt + F1`
    $ convert -resize $(xdpyinfo | grep dimensions | cut -d\  -f7 | cut -dx -f1) ~/Pictures/backgrounds/default.jpg ~/Pictures/backgrounds/lockscreen.jpg
    ```
 1. Sync `vscode`, `firefox`, `chrome` (optional)
-1. Scaling
-
-   Xorg is optomized for 100%, 150%, 200%
-
-   - DPI is controlled by autorandr, it also restart the following apps
-     - Rofi
-     - Polybar
-     - Dunst
-     - BSPWM gaps and borders
-   - GTK apps settings are controlled by xsettingsd
-   - Non GTK apps settings are controlled by xrdb
 
 1. [Waydroid](https://nixos.wiki/wiki/WayDroid)
 1. [Flatpak](https://nixos.wiki/wiki/Flatpak)
 
-1. ~~Setup gnome calendar and geary (optional)~~
-   ```
-   $ env WEBKIT_DISABLE_COMPOSITING_MODE=1 gnome-control-center online-accounts
-   ```
-1. ~~[Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)~~
 1. ~~Setup [Flatpak](https://flatpak.org/setup/NixOS/)~~
 
    ```
@@ -155,31 +139,6 @@ You probably want to press `Ctrl + Alt + F1`
    $ sudo flatpak override com.stremio.Stremio --env=QT_FONT_DPI=144
    $ sudo flatpak override com.stremio.Stremio --env=XCURSOR_SIZE=40
    $ sudo flatpak --user override com.stremio.Stremio --filesystem=/home/gean/.icons/:ro
-   ```
-
-1. ~~[Monitor setup](https://http.download.nvidia.com/XFree86/Linux-x86/325.15/README/xconfigoptions.html) for nvidia cards~~
-
-   ```
-   # Show external monitor
-   $ nvidia-settings --assign "CurrentMetaMode=DP-0: 3840x2160_60 @3840x2160 +2880+0 {ViewPortIn=3840x2160, ViewPortOut=3840x2160+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}, DP-2: 1920x1080_144 @1920x1080 +0+0 {ViewPortIn=2880x1620, ViewPortOut=2880x1620+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}"
-
-   # Show only primary monitor
-   $ nvidia-settings --assign "CurrentMetaMode=DP-0: 3840x2160_60 @3840x2160 +0+0 {ViewPortIn=3840x2160, ViewPortOut=3840x2160+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}"
-   ```
-
-1. ~~Monitor setup with [xrandr](https://wiki.archlinux.org/index.php/HiDPI#Side_display)~~
-
-   If panning is incorrect and you have NVIDIA, try toggling [adding 1px to the panning width](https://askubuntu.com/questions/853048/xrandr-adds-weird-virtual-screen-size-and-panning).
-
-   ```
-   # Show external monitor
-   xrandr --dpi 144 \
-     --output DP-0 --mode 3840x2160 --rate 60 --pos 2880x0 --primary \
-     --output DP-2 --mode 1920x1080 --rate 144 --pos 0x0 --scale 1.5x1.5 --panning 2880x1620
-
-   xrandr --dpi 144 \
-     --output DP-0 --mode 3840x2160 --rate 60 --pos 2880x0 --primary \
-     --output DP-2 --off
    ```
 
 ## Upgrating NixOS
@@ -236,18 +195,6 @@ Run the following and restart
 $ sudo gpu-switch -i
 ```
 
-* Slow firefox with nvidia drivers
-
-  Use wayland (EGL) or
-
-   ```sh
-   # Go to https://www.vsynctester.com/
-   $ __GL_HWSTATE_PER_CTX=2 __GL_yieldFunctionWaitForGpu=5 firefox
-   # or, in about:config
-   gfx.x11-egl.force-enabled true
-   gfx.webrender.software false
-   ```
-
 * Clear /nix/store
 
    ```
@@ -270,27 +217,6 @@ $ sudo gpu-switch -i
    $ nix path-info -rSh /run/current-system | sort -nk2
    ```
 
-* Fix flickering on nvidia cards?
-
-   - Open `Nvidia X Server Settings`.
-   - In `OpenGL Settings` uncheck `Allow Flipping`.
-   - In `XScreen0` > `X Server XVideo Settings` > `Sync to this display device` select your monitor.
-
-* Fix screen tearing on nvidia cards
-
-   - Buy AMD GPU
-   - FYI: ForceFullCompositionPipeline fix tearing but increase latency
-
-* Check if picom is running
-
-   ```
-   $ inxi -Gxx | grep compositor
-   ```
-
-* Macbook Pro wifi
-
-   Create wpa conf before rebuild switch.
-
 * Firefox doesnt load some websites
 
    Enable DNS over HTTPS
@@ -306,13 +232,6 @@ $ sudo gpu-switch -i
 * [Wifi keeps connecting and disconnecting](https://unix.stackexchange.com/questions/588333/networkmanager-keeps-connecting-and-disconnecting-how-can-i-fix-this)
 
    Disable ipv6 connection.
-
-* Test polybar themes
-
-   ```
-   $ killall polybar
-   $ polybar main --config=/home/gean/nix-config/devices/config/users/config/dotfiles/polybar/main.ini -r
-   ```
 
 * Copy installed icons unicode
 
