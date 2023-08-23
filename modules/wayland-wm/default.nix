@@ -2,7 +2,18 @@
 
 let cfg = config._custom.waylandWm;
 in {
-  imports = [ ./mixins/wayland-tiling.nix ./users ];
+  imports = [
+    ./mixins/dunst
+    ./mixins/kanshi.nix
+    ./mixins/rofi
+    ./mixins/swww
+    ./mixins/system
+    ./mixins/way-displays
+    ./mixins/waybar
+    ./mixins/wayland-tiling.nix
+    ./mixins/wob
+    ./mixins/wofi
+  ];
 
   options._custom.waylandWm = { enable = lib.mkEnableOption { }; };
 
@@ -16,6 +27,5 @@ in {
       enable = true;
       displayManager.lightdm.enable = false;
     };
-
   };
 }
