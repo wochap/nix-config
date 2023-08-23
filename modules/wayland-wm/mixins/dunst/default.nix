@@ -6,7 +6,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/wayland-wm/users/mixins/dunst";
+  currentDirectory = "${configDirectory}/modules/wayland-wm/mixins/dunst";
   dunst-toggle-mode = pkgs.writeTextFile {
     name = "dunst-toggle-mode";
     destination = "/bin/dunst-toggle-mode";

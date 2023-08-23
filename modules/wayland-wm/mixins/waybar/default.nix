@@ -8,7 +8,7 @@ let
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory =
-    "${configDirectory}/modules/wayland-wm/users/mixins/waybar";
+    "${configDirectory}/modules/wayland-wm/mixins/waybar";
 in {
   config = lib.mkIf cfg.enable {
     environment = {

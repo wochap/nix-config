@@ -4,22 +4,24 @@
   config = {
     environment = {
       systemPackages = with pkgs; [
+        # libappindicator-gtk3
         blanket
         dfeet # dbus gui
         gparted
         inkscape # photo editor cli/gui
+        pavucontrol
         pinta
         remmina # like vnc
-        pavucontrol
 
         # APPS
         gnome.cheese # test webcam
         gnome.gnome-calculator
         gnome.gnome-clocks
+        gnome.gnome-font-viewer
         gnome.gnome-sound-recorder # test microphone
         gnome.gnome-system-monitor
         gnome.pomodoro
-        gnome.gnome-font-viewer
+        gnome.zenity # GUI for terminal
       ];
     };
   };

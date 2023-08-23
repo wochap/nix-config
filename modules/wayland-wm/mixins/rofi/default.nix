@@ -7,7 +7,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/wayland-wm/users/mixins/rofi";
+  currentDirectory = "${configDirectory}/modules/wayland-wm/mixins/rofi";
   rofi-config-colors = ''
     * {
     ${lib.concatStringsSep "\n"
