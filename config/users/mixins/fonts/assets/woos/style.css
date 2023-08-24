@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'woos';
   src:
-    url('fonts/woos.ttf?1q4oyu') format('truetype'),
-    url('fonts/woos.woff?1q4oyu') format('woff'),
-    url('fonts/woos.svg?1q4oyu#woos') format('svg');
+    url('fonts/woos.ttf?umfbwu') format('truetype'),
+    url('fonts/woos.woff?umfbwu') format('woff'),
+    url('fonts/woos.svg?umfbwu#woos') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -24,6 +24,15 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.send:before {
+  content: "\e901";
+}
+.mail:before {
+  content: "\e902";
+}
+.inbox:before {
+  content: "\e903";
+}
 .window:before {
   content: "\e900";
 }

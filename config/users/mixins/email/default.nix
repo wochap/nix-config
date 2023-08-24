@@ -1,6 +1,12 @@
 { config, pkgs, lib, ... }:
 
 let userName = config._userName;
+  offlinemsmtp-toggle-mode = pkgs.writeTextFile {
+    name = "offlinemsmtp-toggle-mode";
+    destination = "/bin/offlinemsmtp-toggle-mode";
+    executable = true;
+    text = builtins.readFile ./scripts/offlinemsmtp-toggle-mode.sh;
+  };
 in {
   imports = [
     # ./contact-query.nix
@@ -14,6 +20,7 @@ in {
 
   config = {
     home-manager.users.${userName} = {
+      home.packages = with pkgs; [offlinemsmtp-toggle-mode];
 
       services.imapnotify.enable = true;
       programs.msmtp.enable = true;

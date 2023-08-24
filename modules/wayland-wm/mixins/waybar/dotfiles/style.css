@@ -20,6 +20,7 @@ window#waybar.hidden {
 #custom-mbpfan,
 #custom-recorder,
 #custom-notifications,
+#custom-offlinemsmtp,
 #custom-powermenu,
 #tags,
 #workspaces,
@@ -55,6 +56,7 @@ window#waybar.hidden {
   min-width: 0.8em;
 }
 
+#custom-offlinemsmtp.disabled,
 #custom-notifications.disabled {
   color: @red;
 }

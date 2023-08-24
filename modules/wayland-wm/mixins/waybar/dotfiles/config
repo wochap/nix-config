@@ -6,7 +6,7 @@
   // "modules-left": ["wlr/workspaces", "keyboard-state", "hyprland/submap"],
   "modules-center": ["sway/window"],
   // "modules-center": ["hyprland/window"],
-  "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/mbpfan", "temperature", "battery", "backlight", "pulseaudio", "bluetooth", "network", "clock"],
+  "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/offlinemsmtp", "custom/mbpfan", "temperature", "battery", "backlight", "pulseaudio", "bluetooth", "network", "clock"],
   "ipc": true,
   "id": "main",
   "spacing": 7,
@@ -102,6 +102,14 @@
     "return-type": "json",
     "format": "{icon}{}",
     "on-click": "dunst-toggle-mode --toggle",
+    "signal": 8
+  },
+  "custom/offlinemsmtp": {
+    "exec": "offlinemsmtp-toggle-mode --read",
+    "interval": 1,
+    "return-type": "json",
+    "format": "{icon}{}",
+    "on-click": "offlinemsmtp-toggle-mode --toggle",
     "signal": 8
   },
   "idle_inhibitor": {
