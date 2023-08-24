@@ -128,7 +128,8 @@ in {
             box-shadow: none;
           }
 
-          ${builtins.readFile "${inputs.dracula-adw-gtk3}/themes/dracula/gtk.css"}
+          ${builtins.readFile
+          "${inputs.dracula-adw-gtk3}/themes/dracula/gtk.css"}
         '';
       };
     };
