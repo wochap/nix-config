@@ -18,3 +18,7 @@
   allows you to use msmtp offline by queuing email until you have an internet connection
 - smtp
   protocol to send mails
+
+### Passwords for Gmail
+
+You must enable 2FA auth in your google account and create a password in "App passwords"
