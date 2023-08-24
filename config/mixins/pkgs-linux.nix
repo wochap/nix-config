@@ -81,7 +81,7 @@ in {
       bitwarden
       brave
       figma-linux
-      prevstable-chrome.google-chrome
+      prevstable-chrome.google-chrome # HACK: fix https://github.com/NixOS/nixpkgs/issues/244742
       microsoft-edge
       notion-app-enhanced
       postman

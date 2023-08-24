@@ -1222,17 +1222,17 @@
     },
     "prevstable-chrome": {
       "locked": {
-        "lastModified": 1692757770,
-        "narHash": "sha256-tcHu5mOKLyL/B2TTh6d2ma7M7CTSQBd1+mStVM7OFPM=",
+        "lastModified": 1689473667,
+        "narHash": "sha256-41ePf1ylHMTogSPAiufqvBbBos+gtB6zjQlYFSEKFMM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "6fc32915e5c8ad3f8c46b70fd0f9ad201dd1adb4",
+        "rev": "13231eccfa1da771afa5c0807fdd73e05a1ec4e6",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "6fc32915e5c8ad3f8c46b70fd0f9ad201dd1adb4",
+        "rev": "13231eccfa1da771afa5c0807fdd73e05a1ec4e6",
         "type": "github"
       }
     },
