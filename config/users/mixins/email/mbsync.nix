@@ -19,7 +19,6 @@ let
 in {
   config = {
     home-manager.users.${userName} = {
-
       programs.mbsync.enable = true;
 
       services.mbsync = {

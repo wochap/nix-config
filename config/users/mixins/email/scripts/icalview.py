@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
-
 import sys
-
 import html2text
 import pytz
 from icalendar import Calendar
@@ -10,7 +8,7 @@ from icalendar import Calendar
 calendar = Calendar.from_ical(sys.stdin.read())
 
 for event in calendar.walk('vevent'):
-    tz = pytz.timezone('America/Denver')
+    tz = pytz.timezone('America/Panama')
     summary = event.get('SUMMARY')
     start = event.decoded('DTSTART').astimezone(tz)
     end = event.decoded('DTEND').astimezone(tz)

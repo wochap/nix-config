@@ -4,16 +4,11 @@ with pkgs;
 let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  localPkgs = import ../../../packages {
-    pkgs = pkgs;
-    lib = lib;
-  };
-
-  offlinemsmtp = localPkgs.offlinemsmtp;
+  localPkgs = import ../../../packages { inherit pkgs lib; };
+  inherit (localPkgs) offlinemsmtp;
 in {
   config = {
     home-manager.users.${userName} = {
-
       systemd.user.services.offlinemsmtp = {
         Unit = {
           Description = "offlinemsmtp daemon";
@@ -22,10 +17,11 @@ in {
 
         Service = {
           ExecStart = ''
-            ${offlinemsmtp}/bin/offlinemsmtp --daemon \
+            ${offlinemsmtp}/bin/offlinemsmtp \
+              --daemon \
               --loglevel DEBUG \
-              --send-mail-file ${hmConfig.home.homeDirectory}/tmp/offlinemsmtp-sendmail \
-              --file ${hmConfig.xdg.configHome}/msmtp/config
+              --file ${hmConfig.xdg.configHome}/msmtp/config \
+              --send-mail-file ${hmConfig.home.homeDirectory}/tmp/offlinemsmtp-sendmail
           '';
           Restart = "always";
           RestartSec = 5;

@@ -19,6 +19,7 @@ in {
       accounts.email.accounts.Work = mkMerge [
         (helper.commonConfig accountConfig)
         (helper.imapnotifyConfig accountConfig)
+        helper.gpgConfig
         {
           flavor = "gmail.com";
           folders = {

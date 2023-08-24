@@ -1,12 +1,11 @@
-# source: https://github.com/sumnerevans/home-manager-config/blob/master/pkgs/mailnotify/default.nix
+# source: https://github.com/sumnerevans/home-manager-config/blob/master/pkgs/mailnotify.nix
 
-{ lib, fetchFromGitHub, buildGoPackage, olm }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "mailnotify";
   version = "0.1.0";
 
-  goPackagePath = "github.com/sumnerevans/mailnotify";
   src = fetchFromGitHub {
     owner = "sumnerevans";
     repo = pname;
@@ -14,11 +13,10 @@ buildGoPackage rec {
     sha256 = "sha256-KPgOtNPK4tE9hzFd7sJwIxRbwh2KFXu/1/m4GT/MBYU=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-Mj1vte+bnDmY/tn6+GXX9IwIKgy9J4QvoIP/pLcID6E=";
 
   meta = with lib; {
-    description =
-      "A small program that notifies when mail has arrived in your mail directory.";
+    description = "A small program that notifies when mail has arrived in your mail directory.";
     homepage = "https://github.com/sumnerevans/mailnotify";
     license = licenses.gpl3Plus;
   };

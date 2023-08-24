@@ -5,7 +5,7 @@
   dracula-icons = pkgs.callPackage ./dracula-icons {};
   interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock {};
   interception-caps2esc = pkgs.callPackage ./interception-caps2esc {};
-  mailnotify = pkgs.callPackage ./mailnotify {};
+  mailnotify = pkgs.callPackage ./mailnotify.nix {};
   mangadesk = pkgs.callPackage ./mangadesk.nix {};
   neeasade-wmutils-opt = pkgs.callPackage ./neeasade-wmutils-opt.nix {};
   nsxiv = pkgs.callPackage ./nsxiv.nix {};

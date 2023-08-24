@@ -3,8 +3,8 @@
 let userName = config._userName;
 in {
   imports = [
-    ./accounts
     # ./contact-query.nix
+    ./accounts
     ./mailcap.nix
     ./mailnotify.nix
     ./mbsync.nix

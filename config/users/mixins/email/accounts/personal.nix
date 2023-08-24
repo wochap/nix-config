@@ -7,10 +7,8 @@ let
 
   accountConfig = {
     address = "gean.marroquin@gmail.com";
-    name = "Gmail";
+    name = "Personal";
     color = "red";
-
-    # TODO: add gpg pub key id
     signatureLines = ''
       Gean Marroquin
       Software Engineer
@@ -27,7 +25,7 @@ in {
         (helper.commonConfig accountConfig)
         (helper.imapnotifyConfig accountConfig)
         (helper.signatureConfig accountConfig)
-        # helper.gpgConfig
+        helper.gpgConfig
         {
           primary = true;
           flavor = "gmail.com";

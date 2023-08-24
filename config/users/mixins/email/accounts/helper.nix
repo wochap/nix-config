@@ -4,18 +4,11 @@ with lib;
 let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  localPkgs = import ../../../../packages {
-    pkgs = pkgs;
-    lib = lib;
-  };
-
-  offlinemsmtp = localPkgs.offlinemsmtp;
-
-  # Create a signature script that gets a quote.
+  localPkgs = import ../../../../packages { inherit pkgs lib; };
+  inherit (localPkgs) offlinemsmtp;
   mkSignatureScript = signatureLines:
     pkgs.writeScript "signature" ''
       #!${pkgs.python3}/bin/python
-      import subprocess
 
       ${concatMapStringsSep "\n" (l: ''print("${l}")'')
       (splitString "\n" signatureLines)}
@@ -38,15 +31,18 @@ in {
 
     msmtp.enable = true;
 
+    smtp = {
+      port = 587;
+      tls.useStartTls = true;
+    };
+
     neomutt = {
       enable = true;
       sendMailCommand = "${offlinemsmtp}/bin/offlinemsmtp -a ${name}";
 
       extraConfig = concatStringsSep "\n" ([
         ''set folder="${hmConfig.accounts.email.maildirBasePath}"''
-
-        # TODO: add default gpg pub key id
-        # ''set pgp_default_key = "B50022FD"''
+        ''set pgp_default_key = "E73095E1"''
       ] ++ (optional (color != "") "color status ${color} default"));
     };
 
@@ -55,7 +51,7 @@ in {
 
   gpgConfig.gpg = {
     encryptByDefault = true;
-    key = "3F15C22BFD125095F9C072758904527AB50022FD";
+    key = "0F36350551B61784AA2F1E2BFE4CF844E73095E1";
     signByDefault = true;
   };
 
@@ -68,8 +64,9 @@ in {
   };
 
   signatureConfig = { signatureLines, ... }: {
-    neomutt.extraConfig = ''
-      set signature="${mkSignatureScript signatureLines}|"
-    '';
+    signature = {
+      showSignature = "append";
+      command = mkSignatureScript signatureLines;
+    };
   };
 }

@@ -2,8 +2,7 @@
 
 let
   userName = config._userName;
-
-  feh = "${pkgs.feh}/bin/feh";
+  imv = "${pkgs.imv}/bin/imv";
   icalviewScript =
     pkgs.writeScript "icalview" (builtins.readFile ./scripts/icalview.py);
 in {
@@ -18,11 +17,11 @@ in {
         application/pdf; ${pkgs.zathura}/bin/zathura %s
 
         # Images
-        image/jpg; ${feh} %s
-        image/jpeg; ${feh} %s
-        image/pjpeg; ${feh} %s
-        image/png; ${feh} %s
-        image/gif; ${feh} %s
+        image/jpg; ${imv} %s
+        image/jpeg; ${imv} %s
+        image/pjpeg; ${imv} %s
+        image/png; ${imv} %s
+        image/gif; ${imv} %s
 
         # iCal
         text/calendar; ${icalviewScript}; copiousoutput

@@ -4,13 +4,8 @@ with pkgs;
 let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-
   aliasfile = "${hmConfig.xdg.configHome}/neomutt/aliases";
   mailboxfile = "${hmConfig.xdg.configHome}/neomutt/mailboxes";
-  bindir = "${hmConfig.home.homeDirectory}/bin";
-  mutt-display-filter = pkgs.writeScriptBin "mdf"
-    (builtins.readFile ./scripts/mutt-display-filter.py);
-
   syncthingdir = "${hmConfig.home.homeDirectory}/Sync";
 in {
   config = {
@@ -109,21 +104,26 @@ in {
         };
 
         extraConfig = ''
-          source ${inputs.dracula-mutt}/dracula.muttrc
           source ${aliasfile}
           source ${mailboxfile}
+
           set allow_ansi
-          set display_filter="${mutt-display-filter}/bin/mdf"
+
           # Use return to open message because I'm not a savage
           unbind index <return>
           bind index <return> display-message
+
           # Use N to toggle new
           unbind index N
           bind index N toggle-new
+
           # Status Bar
           set status_chars  = " *%A"
           set status_format = "───[ Folder: %f (%l %s/%S)]───[%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)?%?F? (%F flagged)?]───%>─%?p?( %p postponed)?───"
+
           lists .*@lists.sr.ht
+
+          source ${inputs.dracula-mutt}/dracula.muttrc
         '';
       };
     };
