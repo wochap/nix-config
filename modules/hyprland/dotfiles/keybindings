@@ -136,7 +136,7 @@ bind = $mod, p, togglespecialworkspace
 bind = $mod ALT, t, exec, $term
 
 # Open file manager
-bind = $mod ALT, f, exec, hyprland-focus-toggle "org.gnome.Nautilus" nautilus
+bind = $mod ALT, f, exec, hyprland-focus-toggle "thunar" thunar
 # TODO:
 
 # Screencast/record region to mp4
@@ -181,19 +181,19 @@ submap = reset
 
 ### MEDIA KEYBINDINGS
 
-bind = , XF86KbdBrightnessDown, exec, /etc/scripts/kbd-backlight.sh 5%-
+bind = , XF86KbdBrightnessDown, exec, wob-osd --kbd-backlight 5%-
 
-bind = , XF86KbdBrightnessUp, exec, /etc/scripts/kbd-backlight.sh 5%+
+bind = , XF86KbdBrightnessUp, exec, wob-osd --kbd-backlight 5%+
 
-bind = , XF86MonBrightnessUp, exec, /etc/scripts/backlight.sh 5%+
+bind = , XF86MonBrightnessUp, exec, wob-osd --backlight 5%+
 
-bind = , XF86MonBrightnessDown, exec, /etc/scripts/backlight.sh 5%-
+bind = , XF86MonBrightnessDown, exec, wob-osd --backlight 5%-
 
-bind = , XF86AudioRaiseVolume, exec, pactl set-sink-volume @DEFAULT_SINK@ +5%
+bind = , XF86AudioRaiseVolume, exec, wob-osd --volume +5%
 
-bind = , XF86AudioLowerVolume, exec, pactl set-sink-volume @DEFAULT_SINK@ -5%
+bind = , XF86AudioLowerVolume, exec, wob-osd --volume -5%
 
-bind = , XF86AudioMute, exec, pactl set-sink-mute @DEFAULT_SINK@ toggle
+bind = , XF86AudioMute, exec, wob-osd --volume-toggle
 
 # Play next media
 bind = , XF86AudioNext, exec, playerctl next
