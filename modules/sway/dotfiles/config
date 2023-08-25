@@ -69,7 +69,7 @@ for_window [app_id="kitty-top"] floating enable; move position center; sticky en
 for_window [app_id="kitty-scratch"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;
 for_window [app_id="kitty-neorg"] floating enable; move position center; sticky enable; resize set width 1500px height 1100px;
 for_window [app_id="kitty-nmtui"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
-for_window [app_id="kitty-neomutt"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
+for_window [app_id="kitty-neomutt"] floating enable; move position center; sticky enable; resize set width 1500px height 1100px;
 for_window [app_id="kitty-newsboat"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
 for_window [app_id="kitty-ncmpcpp"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
 
