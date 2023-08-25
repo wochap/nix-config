@@ -1,12 +1,13 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.wm.email;
   userName = config._userName;
   imv = "${pkgs.imv}/bin/imv";
   icalviewScript =
     pkgs.writeScript "icalview" (builtins.readFile ./scripts/icalview.py);
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
 
       xdg.configFile."neomutt/mailcap".text = ''

@@ -2,6 +2,7 @@
 
 with lib;
 let
+  cfg = config._custom.wm.email;
   userName = config._userName;
   helper = import ./helper.nix { inherit config pkgs lib; };
   accountConfig = {
@@ -10,7 +11,7 @@ let
     color = "blue";
   };
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
 
       accounts.email.accounts.Work = mkMerge [

@@ -1,12 +1,13 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.wm.email;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   localPkgs = import ../../../../config/packages { inherit pkgs lib; };
   inherit (localPkgs) mailnotify;
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       systemd.user.services.mailnotify = {
         Unit = {

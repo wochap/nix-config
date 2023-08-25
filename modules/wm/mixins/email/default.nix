@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.wm.email;
+  userName = config._userName;
   offlinemsmtp-toggle-mode = pkgs.writeTextFile {
     name = "offlinemsmtp-toggle-mode";
     destination = "/bin/offlinemsmtp-toggle-mode";
@@ -18,9 +20,11 @@ in {
     ./offlinemsmtp.nix
   ];
 
-  config = {
+  options._custom.wm.email = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
-      home.packages = with pkgs; [offlinemsmtp-toggle-mode];
+      home.packages = with pkgs; [ offlinemsmtp-toggle-mode ];
 
       services.imapnotify.enable = true;
       programs.msmtp.enable = true;

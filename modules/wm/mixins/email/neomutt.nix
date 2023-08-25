@@ -2,13 +2,14 @@
 
 with pkgs;
 let
+  cfg = config._custom.wm.email;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   aliasfile = "${hmConfig.xdg.configHome}/neomutt/aliases";
   mailboxfile = "${hmConfig.xdg.configHome}/neomutt/mailboxes";
   syncthingdir = "${hmConfig.home.homeDirectory}/Sync";
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home.symlinks = {
         "${aliasfile}" = "${syncthingdir}/.config/neomutt/aliases";

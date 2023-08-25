@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.wm.email;
   userName = config._userName;
   checkNetworkOrAlreadyRunningScript = pkgs.writeShellScript "cknetpgrep" ''
     # Check that the network is up.
@@ -17,7 +18,7 @@ let
     fi
   '';
 in {
-  config = {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       programs.mbsync.enable = true;
 
