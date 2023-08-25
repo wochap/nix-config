@@ -18,10 +18,12 @@ general {
 # blurls = waybar
 decoration {
   rounding = 4
-  blur = false
-  blur_size = 6
-  blur_passes = 2
-  # blur_xray = true
+  blur {
+    enabled = false
+    size = 6
+    passes = 2
+    # xray = true
+  }
   drop_shadow = false
   shadow_range = 15
   shadow_render_power = 3
@@ -49,7 +51,7 @@ input {
 
 gestures {
   workspace_swipe = true
-  workspace_swipe_min_speed_to_force = 20
+  workspace_swipe_min_speed_to_force = 10
   workspace_swipe_distance = 750
   workspace_swipe_cancel_ratio = 0.1
   workspace_swipe_forever = true
