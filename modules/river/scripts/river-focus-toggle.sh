@@ -16,5 +16,7 @@ fi
 # if running move to scratchpad
 # if not, open or toggle visibility/sticky
 # https://git.sr.ht/~leon_plickat/lswt
+# https://git.sr.ht/~brocellous/wlrctl
+# https://github.com/riverwm/river/issues/350
 riverctl spawn "$runstring"
 

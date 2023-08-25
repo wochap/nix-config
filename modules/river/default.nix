@@ -19,7 +19,7 @@ in {
             owner = "riverwm";
             repo = "river";
             rev = "5ce2ca1bc0411b43e94e8a1dfdf3a90a5dc7fd20";
-            hash = "sha256-cIcO6owM6eYn+obYVaBOVQpnBx4++KO5Qk5Hzo3GcNs=";
+            hash = "sha256-sa5yWeuQzR/dcN74ok3QkP/FdiCcxifbmDVcHiAZkhU=";
             fetchSubmodules = true;
           };
         });
@@ -32,7 +32,14 @@ in {
     };
 
     environment = {
-      systemPackages = with pkgs; [ wlopm river scripts.river-focus-toggle ];
+      systemPackages = with pkgs; [
+        river-tag-overlay
+        ristate
+        lswt
+        wlopm
+        river
+        scripts.river-focus-toggle
+      ];
 
       sessionVariables = {
         XDG_CURRENT_DESKTOP = "river";
