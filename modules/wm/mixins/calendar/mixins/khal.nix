@@ -5,7 +5,7 @@ let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   # inherit (hmConfig.xdg) dataHome configHome;
-  dataHome = "home/gean/.local/share";
+  dataHome = "/home/gean/.local/share";
 in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
