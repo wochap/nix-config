@@ -3,7 +3,7 @@
 dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
   /run/current-system/sw/etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop &
 
-# kanshi &
+kanshi &
 
 # libinput-gestures -c /etc/libinput-gestures.conf &
 
