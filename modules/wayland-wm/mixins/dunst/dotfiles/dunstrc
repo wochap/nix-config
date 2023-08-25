@@ -85,4 +85,8 @@ new_icon="internet-mail"
 appname="offlinemsmtp"
 new_icon="internet-mail"
 
+[notify-send]
+appname="notify-send"
+new_icon="org.xfce.notification"
+
 # vim: syntax=dosini
