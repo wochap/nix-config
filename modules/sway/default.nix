@@ -69,18 +69,32 @@ in {
       };
     };
 
-    home-manager.users.${userName}.services.swayidle.timeouts = lib.mkAfter [
-      {
-        timeout = 195;
-        command = ''swaymsg "output * dpms off"'';
-        resumeCommand = ''swaymsg "output * dpms on"'';
-      }
-      {
-        timeout = 15;
-        command = ''if pgrep swaylock; then swaymsg "output * dpms off"; fi'';
-        resumeCommand =
-          ''if pgrep swaylock; then swaymsg "output * dpms on"; fi'';
-      }
-    ];
+    home-manager.users.${userName} = {
+      _custom.programs.waybar = {
+        settings.mainBar = {
+          modules-left = [
+            "sway/workspaces"
+            "custom/scratchpad_indicator"
+            "keyboard-state"
+            "sway/mode"
+          ];
+          modules-center = [ "sway/window" ];
+        };
+      };
+
+      services.swayidle.timeouts = lib.mkAfter [
+        {
+          timeout = 195;
+          command = ''swaymsg "output * dpms off"'';
+          resumeCommand = ''swaymsg "output * dpms on"'';
+        }
+        {
+          timeout = 15;
+          command = ''if pgrep swaylock; then swaymsg "output * dpms off"; fi'';
+          resumeCommand =
+            ''if pgrep swaylock; then swaymsg "output * dpms on"; fi'';
+        }
+      ];
+    };
   };
 }

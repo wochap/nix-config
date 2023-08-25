@@ -23,8 +23,16 @@ in {
     home-manager.users.${userName} = {
       imports = [
         # already in hm repository master branch
-        inputs.hyprland.homeManagerModules.default 
+        inputs.hyprland.homeManagerModules.default
       ];
+
+      _custom.programs.waybar = {
+        settings.mainBar = {
+          modules-left =
+            [ "wlr/workspaces" "keyboard-state" "hyprland/submap" ];
+          modules-center = [ "hyprland/window" ];
+        };
+      };
 
       home = {
         sessionVariables = {
@@ -43,10 +51,6 @@ in {
 
       wayland.windowManager.hyprland = {
         enable = true;
-        xwayland = {
-          enable = true;
-          hidpi = true;
-        };
         extraConfig = ''
           ${lib.concatStringsSep "\n"
           (lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${value}")
@@ -67,9 +71,9 @@ in {
         }
         {
           timeout = 15;
-          command = ''if pgrep swaylock; then hyprctl dispatch dpms off; fi'';
+          command = "if pgrep swaylock; then hyprctl dispatch dpms off; fi";
           resumeCommand =
-            ''if pgrep swaylock; then hyprctl dispatch dpms on; fi'';
+            "if pgrep swaylock; then hyprctl dispatch dpms on; fi";
         }
       ];
     };

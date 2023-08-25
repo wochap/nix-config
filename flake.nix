@@ -1,7 +1,7 @@
 {
   inputs = {
     # nixpkgs channels
-    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=2b54d8d84bc651cefe3680e0076c2246643475f1"; # master (may 2023)
+    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # master (aug 25 2023)
     unstable.url = "github:nixos/nixpkgs?rev=730d115a6e4e23af17361a6a0682629a72e5eaf5"; # master (jan 2023)
     # nixpkgs.url = "github:nixos/nixpkgs?rev=6fc32915e5c8ad3f8c46b70fd0f9ad201dd1adb4"; # master (aug 2023)
     nixpkgs.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # nixos-23.05-small (aug 2023)
@@ -35,7 +35,7 @@
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party overlays/modules
-    hyprland.url = "github:hyprwm/Hyprland?rev=2df0d034bc4a18fafb3524401eeeceaa6b23e753";
+    hyprland.url = "github:hyprwm/Hyprland?rev=116b9a80566e7956233b39697ac78c112d514c3c"; # main (aug 25 2023)
     hyprland.inputs.nixpkgs.follows = "nixpkgs-unstable"; # TODO: change to nixpkgs
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=e368bd15e4bfd560baa9333ad47415340c563458";
     hyprland-plugins.inputs.hyprland.url = "github:hyprwm/Hyprland?rev=2df0d034bc4a18fafb3524401eeeceaa6b23e753";

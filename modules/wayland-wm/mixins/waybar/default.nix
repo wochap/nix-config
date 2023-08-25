@@ -1,4 +1,4 @@
-{ config, pkgs, lib, libAttr, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config._custom.waylandWm;
@@ -7,9 +7,10 @@ let
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory =
-    "${configDirectory}/modules/wayland-wm/mixins/waybar";
+  currentDirectory = "${configDirectory}/modules/wayland-wm/mixins/waybar";
 in {
+  imports = [ ./waybar-config.nix ];
+
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [ waybar libevdev ];
@@ -26,9 +27,11 @@ in {
     };
 
     home-manager.users.${userName} = {
+      imports = [ ./options.nix ];
+
       xdg.configFile = {
-        "waybar/config".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config";
+        # "waybar/config".source =
+        #   mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config";
         "waybar/style.css".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/style.css";
         "waybar/colors.css".text = ''
