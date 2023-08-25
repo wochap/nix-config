@@ -39,8 +39,8 @@ bindsym $mod+c exec \
   rofi-calc
 
 # Open wifi menu
-bindsym $mod+w exec \
-  swaymsg exec /etc/scripts/wofi-wifi.sh
+# bindsym $mod+w exec \
+#   swaymsg exec /etc/scripts/wofi-wifi.sh
 
 # TODO: Show keybindings
 
