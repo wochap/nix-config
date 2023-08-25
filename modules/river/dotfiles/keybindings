@@ -7,10 +7,16 @@ mod="Mod4"
 ctrl="Control"
 alt="Mod1"
 
+# Mod + Left Mouse Button to move views
+riverctl map-pointer normal $mod BTN_LEFT move-view
+
+# Mod + Right Mouse Button to resize views
+riverctl map-pointer normal $mod BTN_RIGHT resize-view
+
 
 ### SYSTEM KEYBINDINGS
 
-# reload river
+# Reload the configuration file
 riverctl map normal $mod+$ctrl+$alt Escape spawn \
   "bash ~/.config/river/init"
 
@@ -36,9 +42,6 @@ riverctl map normal $mod Print spawn \
 # Open calc
 riverctl map normal $mod c spawn \
   "rofi-calc"
-
-# Open wifi menu
-# TODO
 
 # TODO: Show keybindings
 
@@ -73,12 +76,6 @@ riverctl map normal $mod b spawn \
 
 ### WM KEYBINDINGS
 
-# Mod + Left Mouse Button to move views
-riverctl map-pointer normal $mod BTN_LEFT move-view
-
-# Mod + Right Mouse Button to resize views
-riverctl map-pointer normal $mod BTN_RIGHT resize-view
-
 # Close focused view
 riverctl map normal $mod+Shift w close
 
@@ -88,14 +85,25 @@ riverctl map normal $mod s toggle-float
 # Toggle fullscreen
 riverctl map normal $mod f toggle-fullscreen
 
-# Focus the next/previous view in the layout stack
-riverctl map normal $mod Down focus-view next
-riverctl map normal $mod Up focus-view previous
+# Set the node flags (sticky)
+riverctl map normal $mod+$ctrl y set-view-tags $all_tags
+riverctl map normal $mod+$ctrl+Shift Y send-to-output -current-tags
 
-# Swap the focused view with the next/previous
-# view in the layout stack
-riverctl map normal $mod+Shift Down swap next
-riverctl map normal $mod+Shift Up swap previous
+# Focus direction
+riverctl map normal $mod Left focus-view left
+riverctl map normal $mod Down focus-view down
+riverctl map normal $mod Up focus-view up
+riverctl map normal $mod Right focus-view right
+riverctl map normal $mod n focus-view next
+riverctl map normal $mod+Shift N focus-view previous
+
+# Swap direction
+riverctl map normal $mod Left swap left
+riverctl map normal $mod Down swap down
+riverctl map normal $mod Up swap up
+riverctl map normal $mod Right swap right
+# riverctl map normal $mod+Shift Down swap next
+# riverctl map normal $mod+Shift Up swap previous
 
 # To focus the next/previous output
 riverctl map normal $mod Period focus-output next
@@ -108,53 +116,38 @@ riverctl map normal $mod+Shift Comma send-to-output previous
 # To bump the focused view to the top of the layout stack
 riverctl map normal $mod Return zoom
 
+riverctl declare-mode rivertile
+riverctl map normal $mod r enter-mode rivertile
 # To decrease/increase the main ratio of rivertile(1)
-riverctl map normal $mod Left send-layout-cmd \
-  rivertile "main-ratio -0.05"
-riverctl map normal $mod Right send-layout-cmd \
-  rivertile "main-ratio +0.05"
-
+riverctl map rivertile None Left send-layout-cmd rivertile "main-ratio -0.05"
+riverctl map rivertile None send-layout-cmd rivertile "main-ratio +0.05"
 # To increment/decrement the main count of rivertile(1)
-riverctl map normal $mod+Shift Left send-layout-cmd \
-  rivertile "main-count +1"
-riverctl map normal $mod+Shift Right send-layout-cmd \
-  rivertile "main-count -1"
+riverctl map rivertile Shift Left send-layout-cmd rivertile "main-count +1"
+riverctl map rivertile Shift Right send-layout-cmd rivertile "main-count -1"
+# Change layout orientation
+riverctl map normal $ctrl+Shift Up    send-layout-cmd rivertile "main-location top"
+riverctl map normal $ctrl+Shift Right send-layout-cmd rivertile "main-location right"
+riverctl map normal $ctrl+Shift Down  send-layout-cmd rivertile "main-location bottom"
+riverctl map normal $ctrl+Shift Left  send-layout-cmd rivertile "main-location left"
+riverctl map rivertile None Escape enter-mode normal
 
-# To move views
-riverctl map normal $mod+$alt Left move \
-  left 200
-riverctl map normal $mod+$alt Down move \
-  down 200
-riverctl map normal $mod+$alt Up move \
-  up 200
-riverctl map normal $mod+$alt Right move \
-  right 200
-
-# To snap views to screen edges
+# Snap
 riverctl map normal $mod+$alt+$ctrl Left snap left
 riverctl map normal $mod+$alt+$ctrl Down snap down
 riverctl map normal $mod+$alt+$ctrl Up snap up
 riverctl map normal $mod+$alt+$ctrl Right snap right
 
-# To resize views
-riverctl map normal $mod+$alt+Shift Left resize \
-  horizontal -200
-riverctl map normal $mod+$alt+Shift Down resize \
-  vertical 200
-riverctl map normal $mod+$alt+Shift Up resize \
-  vertical -200
-riverctl map normal $mod+$alt+Shift Right resize \
-  horizontal 200
+# Move
+riverctl map normal $mod+$alt Left move left 200
+riverctl map normal $mod+$alt Down move down 200
+riverctl map normal $mod+$alt Up move up 200
+riverctl map normal $mod+$alt Right move right 200
 
-# Change layout orientation
-riverctl map normal $mod+$alt+$ctrl+Shift Up    send-layout-cmd \
-  rivertile "main-location top"
-riverctl map normal $mod+$alt+$ctrl+Shift Right send-layout-cmd \
-  rivertile "main-location right"
-riverctl map normal $mod+$alt+$ctrl+Shift Down  send-layout-cmd \
-  rivertile "main-location bottom"
-riverctl map normal $mod+$alt+$ctrl+Shift Left  send-layout-cmd \
-  rivertile "main-location left"
+# Resize
+riverctl map normal $mod+$alt+Shift Left resize horizontal -200
+riverctl map normal $mod+$alt+Shift Down resize vertical 200
+riverctl map normal $mod+$alt+Shift Up resize vertical -200
+riverctl map normal $mod+$alt+Shift Right resize horizontal 200
 
 
 ### WM TAGS/VIEWS
@@ -178,9 +171,6 @@ done
 
 # Mod+0 to focus all tags
 riverctl map normal $mod 0 set-focused-tags $all_tags
-
-# Mod+Shift+0 to tag focused view with all tags
-riverctl map normal $mod+Shift 0 set-view-tags $all_tags
 
 
 ### WM SCRATCHPAD
@@ -209,7 +199,7 @@ riverctl map normal $mod+$alt t spawn \
 
 # Open file manager
 riverctl map normal $mod+$alt f spawn \
-  "nautilus"
+  "thunar"
 
 # Screencast/record region to mp4
 riverctl map normal $mod+$alt r spawn \
@@ -236,15 +226,10 @@ riverctl map browser None Escape enter-mode normal
 # Terminal TUI
 riverctl declare-mode tui
 riverctl map normal $mod+$alt u enter-mode tui
-# Open quick note app
 riverctl map tui None n spawn "river-focus-toggle kitty-neorg \"$HOME/.config/kitty/scripts/kitty-neorg.sh\""
-# Open monitor
 riverctl map tui None m spawn "river-focus-toggle kitty-top \"$HOME/.config/kitty/scripts/kitty-top.sh\""
-# Open neomutt
 riverctl map tui None e spawn "river-focus-toggle kitty-neomutt \"$HOME/.config/kitty/scripts/kitty-neomutt.sh\""
-# Open newsboat
 riverctl map tui None r spawn "river-focus-toggle kitty-newsboat \"$HOME/.config/kitty/scripts/kitty-newsboat.sh\""
-# Open ncmpcpp
 riverctl map tui None u spawn "river-focus-toggle kitty-ncmpcpp \"$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh\""
 riverctl map tui None Escape enter-mode normal
 
