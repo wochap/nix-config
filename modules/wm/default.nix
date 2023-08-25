@@ -5,6 +5,7 @@
     ./mixins/audio
     ./mixins/backlight
     ./mixins/bluetooth
+    ./mixins/calendar
     ./mixins/cursor
     ./mixins/dbus
     ./mixins/greetd

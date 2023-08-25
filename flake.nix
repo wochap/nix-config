@@ -19,7 +19,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
     # home-manager
-    # home-manager.url = "github:nix-community/home-manager?rev=8eb8c212e50e2fd95af5849585a2eb819add0a1e"; # master (aug 2023)
+    # home-manager.url = "github:nix-community/home-manager?rev=6a20e40acaebf067da682661aa67da8b36812606"; # master (aug 2023)
     home-manager.url = "github:nix-community/home-manager?rev=2a6679aa9cc3872c29ba2a57fe1b71b3e3c5649f"; # release-23.05 (aug 2023)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";

@@ -28,6 +28,7 @@ in {
 
     _custom.tui.nixDirenv.enable = true;
 
+    _custom.wm.calendar.enable = true;
     _custom.wm.networking.enable = true;
     _custom.wm.powerManagement.enable = true;
     _custom.wm.backlight.enable = true;
