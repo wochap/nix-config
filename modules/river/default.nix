@@ -71,18 +71,18 @@ in {
       xdg.configFile = {
         "river/init" = {
           text = ''
-            ${builtins.readFile ./dotfiles/keybindings}
-            ${builtins.readFile ./dotfiles/config}
-
             riverctl xcursor-theme ${globals.cursor.name} ${
               toString globals.cursor.size
-            } 
+            }
 
             riverctl background-color 0x${unwrapHex themeColors.background}
 
             riverctl border-color-focused 0x${unwrapHex themeColors.purple}
             riverctl border-color-unfocused 0x${unwrapHex themeColors.selection}
             riverctl border-color-urgent 0x${unwrapHex themeColors.pink}
+
+            ${builtins.readFile ./dotfiles/keybindings}
+            ${builtins.readFile ./dotfiles/config}
           '';
           executable = true;
         };
