@@ -1,18 +1,25 @@
 {
-  "height": 40, // Waybar height (to be removed for auto height)
-  // "modules-left": ["river/tags", "keyboard-state", "river/mode"],
-  // "modules-center": ["river/window"],
-  "modules-left": ["sway/workspaces", "custom/scratchpad_indicator", "keyboard-state", "sway/mode"],
-  // "modules-left": ["wlr/workspaces", "keyboard-state", "hyprland/submap"],
-  "modules-center": ["sway/window"],
-  // "modules-center": ["hyprland/window"],
-  "modules-right": ["tray", "custom/recorder", "idle_inhibitor", "custom/notifications", "custom/offlinemsmtp", "custom/mbpfan", "temperature", "battery", "backlight", "pulseaudio", "bluetooth", "network", "clock"],
+  "height": 40,
+  "modules-right": [
+    "tray",
+    "custom/recorder",
+    "idle_inhibitor",
+    "custom/notifications",
+    "custom/offlinemsmtp",
+    "custom/mbpfan",
+    "temperature",
+    "battery",
+    "backlight",
+    "pulseaudio",
+    "bluetooth",
+    "network",
+    "clock"
+  ],
   "ipc": true,
   "id": "main",
   "spacing": 7,
   "margin": "0 7px",
 
-  // Modules configuration
   "custom/mbpfan": {
     "interval": 1,
     "exec": "/etc/scripts/mbpfan-bar.sh --read",
@@ -158,11 +165,9 @@
     "tooltip-format": "{essid} {signalStrength}%"
   },
   "pulseaudio": {
-    // "format": "<span rise='-1000'>{icon}</span> {volume}% {format_source}",
     "format": "<span rise='-1000'>{icon}</span> {volume}%",
     "format-bluetooth": "<span rise='-1000'>{icon}</span>  {volume}%",
     "format-bluetooth-muted": "<span rise='-1000'></span>  {volume}%",
-    // "format-muted": "<span rise='-1000'></span> {volume}% {format_source}",
     "format-muted": "<span rise='-1000'></span> {volume}%",
     "format-source": "<span rise='-1000'></span> {volume}%",
     "format-source-muted": "<span rise='-1000'></span> {volume}%",
@@ -177,11 +182,5 @@
     },
     "tooltip-format": "{desc}, {volume}%",
     "on-click": "pavucontrol"
-    // "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    // "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
-    // "on-click-middle": "pavucontrol"
   }
 }
-
-// vim: syntax=jsonc
-
