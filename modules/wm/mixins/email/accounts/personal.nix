@@ -3,24 +3,28 @@
 with lib;
 let
   userName = config._userName;
-  hmConfig = config.home-manager.users.${userName};
-
-  accountConfig = {
-    address = "geanb@bandofcoders.com";
-    name = "Work";
-    color = "blue";
-  };
-
   helper = import ./helper.nix { inherit config pkgs lib; };
+  accountConfig = {
+    address = "gean.marroquin@gmail.com";
+    name = "Personal";
+    color = "red";
+    signatureLines = ''
+      Gean Marroquin
+      Software Engineer
+
+      https://geanmarroquin.com
+    '';
+  };
 in {
   config = {
     home-manager.users.${userName} = {
-
-      accounts.email.accounts.Work = mkMerge [
+      accounts.email.accounts.Personal = mkMerge [
         (helper.commonConfig accountConfig)
         (helper.imapnotifyConfig accountConfig)
+        (helper.signatureConfig accountConfig)
         helper.gpgConfig
         {
+          primary = true;
           flavor = "gmail.com";
           folders = {
             drafts = "[Gmail]/Drafts";

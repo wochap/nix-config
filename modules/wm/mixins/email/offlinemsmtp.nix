@@ -1,24 +1,27 @@
 { config, pkgs, lib, ... }:
 
+with pkgs;
 let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  localPkgs = import ../../../packages { inherit pkgs lib; };
-  inherit (localPkgs) mailnotify;
+  localPkgs = import ../../../../config/packages { inherit pkgs lib; };
+  inherit (localPkgs) offlinemsmtp;
 in {
   config = {
     home-manager.users.${userName} = {
-      systemd.user.services.mailnotify = {
+      systemd.user.services.offlinemsmtp = {
         Unit = {
-          Description = "mailnotify daemon";
+          Description = "offlinemsmtp daemon";
           PartOf = [ "graphical-session.target" ];
         };
 
         Service = {
           ExecStart = ''
-            ${mailnotify}/bin/mailnotify \
-              ${hmConfig.accounts.email.maildirBasePath} \
-              ${pkgs.numix-icon-theme-circle}/share/icons/Numix-Circle/48@2x/apps/mail-generic.svg
+            ${offlinemsmtp}/bin/offlinemsmtp \
+              --daemon \
+              --loglevel DEBUG \
+              --file ${hmConfig.xdg.configHome}/msmtp/config \
+              --send-mail-file ${hmConfig.home.homeDirectory}/tmp/offlinemsmtp-sendmail
           '';
           Restart = "always";
           RestartSec = 5;

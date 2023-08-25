@@ -8,6 +8,7 @@
     ./mixins/calendar
     ./mixins/cursor
     ./mixins/dbus
+    ./mixins/email
     ./mixins/greetd
     ./mixins/gtk
     ./mixins/networking

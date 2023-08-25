@@ -9,7 +9,6 @@ in {
     ./mixins/bottom.nix
     ./mixins/default-browser
     ./mixins/discord
-    ./mixins/email
     ./mixins/firefox
     ./mixins/fonts
     ./mixins/fzf.nix
