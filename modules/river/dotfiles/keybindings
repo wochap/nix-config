@@ -125,10 +125,10 @@ riverctl map rivertile None send-layout-cmd rivertile "main-ratio +0.05"
 riverctl map rivertile Shift Left send-layout-cmd rivertile "main-count +1"
 riverctl map rivertile Shift Right send-layout-cmd rivertile "main-count -1"
 # Change layout orientation
-riverctl map normal $ctrl+Shift Up    send-layout-cmd rivertile "main-location top"
-riverctl map normal $ctrl+Shift Right send-layout-cmd rivertile "main-location right"
-riverctl map normal $ctrl+Shift Down  send-layout-cmd rivertile "main-location bottom"
-riverctl map normal $ctrl+Shift Left  send-layout-cmd rivertile "main-location left"
+riverctl map rivertile $ctrl+Shift Up    send-layout-cmd rivertile "main-location top"
+riverctl map rivertile $ctrl+Shift Right send-layout-cmd rivertile "main-location right"
+riverctl map rivertile $ctrl+Shift Down  send-layout-cmd rivertile "main-location bottom"
+riverctl map rivertile $ctrl+Shift Left  send-layout-cmd rivertile "main-location left"
 riverctl map rivertile None Escape enter-mode normal
 
 # Snap
