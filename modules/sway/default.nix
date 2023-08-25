@@ -7,7 +7,7 @@ let
   inherit (config._custom.globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
 in {
-  options._custom.sway = { enable = lib.mkEnableOption "activate SWAY"; };
+  options._custom.sway = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
     _custom.wm.greetd = {
@@ -23,13 +23,12 @@ in {
     };
 
     environment = {
-      systemPackages = with pkgs;
-        [
-          wlprop
-          scripts.sway-focus-toggle
+      systemPackages = with pkgs; [
+        wlprop
+        scripts.sway-focus-toggle
 
-          # gksu
-        ];
+        # gksu
+      ];
 
       sessionVariables = {
         XDG_CURRENT_DESKTOP = "sway";

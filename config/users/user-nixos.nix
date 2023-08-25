@@ -43,14 +43,6 @@ in {
   ];
 
   config = {
-    home-manager.users.${userName} = {
-      imports = [
-        ./modules/symlinks.nix
-
-        # already in hm repository master branch
-        # inputs.hyprland.homeManagerModules.default 
-      ];
-
-    };
+    home-manager.users.${userName} = { imports = [ ./modules/symlinks.nix ]; };
   };
 }

@@ -12,20 +12,25 @@ let
     text = builtins.readFile ./scripts/hyprland-focus-toggle.sh;
   };
 in {
-  options._custom.hyprland = {
-    enable = lib.mkEnableOption "activate hyprland";
-  };
+  options._custom.hyprland = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    environment.loginShellInit = lib.mkAfter ''
-      if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then
-        exec Hyprland
-      fi
-    '';
+    _custom.wm.greetd = {
+      enable = lib.mkDefault true;
+      cmd = "Hyprland";
+    };
 
     home-manager.users.${userName} = {
+      imports = [
+        # already in hm repository master branch
+        inputs.hyprland.homeManagerModules.default 
+      ];
+
       home = {
-        sessionVariables = { XDG_CURRENT_DESKTOP = "Hyprland"; };
+        sessionVariables = {
+          XDG_CURRENT_DESKTOP = "Hyprland";
+          XDG_SESSION_DESKTOP = "Hyprland";
+        };
         packages = [ hyprland-focus-toggle ];
       };
 
@@ -54,11 +59,19 @@ in {
         # plugin = ${inputs.hyprland-plugins.packages.${pkgs.hostPlatform.system}.borders-plus-plus}/lib/libborders-plus-plus.so
       };
 
-      services.swayidle.timeouts = lib.mkAfter [{
-        timeout = 360;
-        command = "hyprctl dispatch dpms off";
-        resumeCommand = "hyprctl dispatch dpms on";
-      }];
+      services.swayidle.timeouts = lib.mkAfter [
+        {
+          timeout = 195;
+          command = "hyprctl dispatch dpms off";
+          resumeCommand = "hyprctl dispatch dpms on";
+        }
+        {
+          timeout = 15;
+          command = ''if pgrep swaylock; then hyprctl dispatch dpms off; fi'';
+          resumeCommand =
+            ''if pgrep swaylock; then hyprctl dispatch dpms on; fi'';
+        }
+      ];
     };
   };
 }
