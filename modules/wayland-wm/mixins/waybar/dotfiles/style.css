@@ -127,9 +127,10 @@ window#waybar.hidden {
 }
 
 #idle_inhibitor.deactivated {
-  color: @red;
+  color: @comment;
 }
 #idle_inhibitor.activated {
+  color: @green;
 }
 
 #custom-recorder.recording {
