@@ -37,13 +37,14 @@ riverctl float-filter-add app-id "file-roller"
 
 
 #### AUTOSTART
-
-# TODO: add swayidle
-
-riverctl spawn "dbus-wayland-wm-environment"
+riverctl spawn "restart-pipewire-and-portal-services"
 riverctl spawn "configure-gtk"
 
 # Autostart apps
+# start systemd services related to graphical-session.target
+# https://github.com/emersion/xdg-desktop-portal-wlr/wiki/systemd-user-services,-pam,-and-environment-variables
+riverctl spawn "systemctl --user start graphical-session.target"
+
 riverctl spawn "bash /etc/scripts/river-autostart.sh"
 
 
