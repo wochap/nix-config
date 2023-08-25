@@ -5,8 +5,8 @@ let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   # inherit (hmConfig.xdg) dataHome configHome;
-  dataHome = "home/gean/.local/share";
-  configHome = "home/gean/.config";
+  dataHome = "/home/gean/.local/share";
+  configHome = "/home/gean/.config";
   vdirsyncer = "${pkgs.vdirsyncer}/bin/vdirsyncer";
   vdirsyncerScript = pkgs.writeShellScript "vdirsyncer" ''
     ${vdirsyncer} discover
@@ -26,6 +26,7 @@ in {
         Unit.Description = "Synchronize Calendar and Contacts";
         Service = {
           Type = "oneshot";
+          PassEnvironment = "PATH";
           ExecStart = "${vdirsyncerScript}";
         };
       };
