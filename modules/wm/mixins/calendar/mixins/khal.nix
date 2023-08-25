@@ -26,6 +26,10 @@ in {
         path = ${dataHome}/vdirsyncer/personal-calendars/*
         type = discover
 
+        [[work_calendar_local]]
+        path = ${dataHome}/vdirsyncer/work-calendars/*
+        type = discover
+
         [locale]
         timeformat = %H:%M
         dateformat = %Y-%m-%d

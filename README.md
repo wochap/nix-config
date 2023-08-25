@@ -128,6 +128,12 @@ You probably want to press `Ctrl + Alt + F1`
    ```
 1. Sync `vscode`, `firefox`, `chrome` (optional)
 
+1. Setup calendar
+   A browser should open automatically asking for google credentials, otherwise run:
+   ```
+   $ vdirsyncer discover
+   ```
+
 1. [Waydroid](https://nixos.wiki/wiki/WayDroid)
 1. [Flatpak](https://nixos.wiki/wiki/Flatpak)
 

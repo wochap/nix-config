@@ -40,30 +40,34 @@ in {
         Install = { WantedBy = [ "timers.target" ]; };
       };
 
-      xdg.configFile."vdirsyncer/config".text = ''
+      xdg.configFile."vdirsyncer/config".text = let
+        mkGoogleCalendarPair = { name }: ''
+          [pair ${name}_google_calendar]
+          a = "${name}_google_calendar_local"
+          b = "${name}_google_calendar_remote"
+          collections = ["from a", "from b"]
+          conflict_resolution = "b wins"
+          metadata = [ "displayname", "color" ]
+
+          [storage ${name}_google_calendar_local]
+          type = "filesystem"
+          path = "${dataHome}/vdirsyncer/${name}-calendars/"
+          fileext = ".ics"
+
+          [storage ${name}_google_calendar_remote]
+          type = "google_calendar"
+          token_file = "${dataHome}/vdirsyncer/${name}_google_calendar_token_file"
+          # vda (vdirsyncer_desktop_app) the name of the OAuth client
+          client_id.fetch = ${passwordFetchCommand "vda_client_id"}
+          client_secret.fetch = ${passwordFetchCommand "vda_client_secret"}
+        '';
+      in ''
         [general]
         # A folder where vdirsyncer can store some metadata about each pair.
         status_path = "${dataHome}/vdirsyncer/status/"
 
-        # Personal Calendar
-        [pair personal_google_calendar]
-        a = "personal_google_calendar_local"
-        b = "personal_google_calendar_remote"
-        collections = ["from a", "from b"]
-        conflict_resolution = "b wins"
-        metadata = [ "displayname", "color" ]
-
-        [storage personal_google_calendar_local]
-        type = "filesystem"
-        path = "${dataHome}/vdirsyncer/personal-calendars/"
-        fileext = ".ics"
-
-        [storage personal_google_calendar_remote]
-        type = "google_calendar"
-        token_file = "${dataHome}/vdirsyncer/personal_google_calendar_token_file"
-        # vda (vdirsyncer_desktop_app) the name of the OAuth client
-        client_id.fetch = ${passwordFetchCommand "vda_client_id"}
-        client_secret.fetch = ${passwordFetchCommand "vda_client_secret"}
+        ${mkGoogleCalendarPair { name = "personal"; }}
+        ${mkGoogleCalendarPair { name = "work"; }}
       '';
     };
   };
