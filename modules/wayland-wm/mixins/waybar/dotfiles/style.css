@@ -69,10 +69,14 @@ window#waybar.hidden {
 #workspaces {
   padding: 0;
 }
+#tags button {
+  margin-right: 4px;
+}
 #tags button,
 #workspaces button {
-  padding: 0 4px;
+  padding: 0 2px;
   min-width: 20px;
+  font-weight: normal;
 }
 #tags button:hover,
 #workspaces button:hover {

@@ -63,7 +63,7 @@ in {
     home-manager.users.${userName} = {
       _custom.programs.waybar = {
         settings.mainBar = {
-          modules-left = [ "river/tags" "keyboard-state" "river/mode" ];
+          modules-left = [ "river/tags" "river/mode" "keyboard-state" ];
           modules-center = [ "river/window" ];
         };
       };
