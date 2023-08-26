@@ -40,6 +40,9 @@ let
       gsettings set "$gnome_schema" gtk-theme "$gtk_theme"
       gsettings set "$gnome_schema" icon-theme "$icon_theme"
       gsettings set "$gnome_schema" font-name "$font_name"
+
+      # remove GTK window buttons
+      gsettings set org.gnome.desktop.wm.preferences button-layout ""
     '';
   };
 

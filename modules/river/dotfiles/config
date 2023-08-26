@@ -73,6 +73,6 @@ riverctl spawn "bash /etc/scripts/river-autostart.sh"
 # Set and exec into the default layout generator, rivercarro.
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivercarro
-exec rivercarro -inner-gaps 7 -outer-gaps 7 -no-smart-gaps
+riverctl spawn "rivercarro -inner-gaps 7 -outer-gaps 7 -no-smart-gaps"
 
 # vim: syntax=sh
