@@ -140,16 +140,16 @@ riverctl map normal $mod+$alt+$ctrl Up snap up
 riverctl map normal $mod+$alt+$ctrl Right snap right
 
 # Move
-riverctl map normal $mod+$alt Left move left 200
-riverctl map normal $mod+$alt Down move down 200
-riverctl map normal $mod+$alt Up move up 200
-riverctl map normal $mod+$alt Right move right 200
+riverctl map normal $mod+$alt Left move left 40
+riverctl map normal $mod+$alt Down move down 40
+riverctl map normal $mod+$alt Up move up 40
+riverctl map normal $mod+$alt Right move right 40
 
 # Resize
-riverctl map normal $mod+$alt+Shift Left resize horizontal -200
-riverctl map normal $mod+$alt+Shift Down resize vertical 200
-riverctl map normal $mod+$alt+Shift Up resize vertical -200
-riverctl map normal $mod+$alt+Shift Right resize horizontal 200
+riverctl map normal $mod+$alt+Shift Left resize horizontal -40
+riverctl map normal $mod+$alt+Shift Down resize vertical 40
+riverctl map normal $mod+$alt+Shift Up resize vertical -40
+riverctl map normal $mod+$alt+Shift Right resize horizontal 40
 
 
 ### WM TAGS/VIEWS

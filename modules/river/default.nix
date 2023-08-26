@@ -7,6 +7,8 @@ let
   inherit (globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
   unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
+  river-shifttags = pkgs.callPackage ./packages/river-shifttags.nix { };
+  riverwm-utils = pkgs.callPackage ./packages/riverwm-utils.nix { };
 in {
   options._custom.river = { enable = lib.mkEnableOption { }; };
 
@@ -36,11 +38,13 @@ in {
         lswt
         ristate
         river
+        river-shifttags
         river-tag-overlay
+        rivercarro
+        riverwm-utils
         scripts.river-focus-toggle
         wlopm
         wlrctl
-        rivercarro
       ];
 
       sessionVariables = {
@@ -102,6 +106,50 @@ in {
           resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
         }
       ];
+
+      systemd.user.services.river-tag-overlay = {
+        Unit = {
+          Description = "A pop-up showing tag status";
+          Documentation = "https://git.sr.ht/~leon_plickat/river-tag-overlay";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+
+        Service = {
+          # PassEnvironment = "PATH";
+          ExecStart = ''
+            ${pkgs.river-tag-overlay}/bin/river-tag-overlay \
+              --tag-amount 32 \
+              --tags-per-row 8 \
+              --timeout 300 \
+              --anchors 0:1:1:1 \
+              --margins 0:0:7:0 \
+              --border-width 2 \
+              --square-border-width 1 \
+              --background-colour 0x${unwrapHex themeColors.background} \
+              --border-colour 0x${unwrapHex themeColors.comment} \
+              --square-active-background-colour 0xDCC5FC \
+              --square-active-border-colour 0x${unwrapHex themeColors.primary} \
+              --square-active-occupied-colour 0x${
+                unwrapHex themeColors.primary
+              } \
+              --square-inactive-background-colour 0x585C74 \
+              --square-inactive-border-colour 0x${
+                unwrapHex themeColors.selection
+              } \
+              --square-inactive-occupied-colour 0x${
+                unwrapHex themeColors.selection
+              } \
+              --square-urgent-background-colour 0xFF8585 \
+              --square-urgent-border-colour 0x${unwrapHex themeColors.red} \
+              --square-urgent-occupied-colour 0x${unwrapHex themeColors.red} \
+          '';
+          Restart = "on-failure";
+          KillMode = "mixed";
+        };
+
+        Install = { WantedBy = [ "graphical-session.target" ]; };
+      };
 
     };
   };
