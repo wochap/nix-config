@@ -126,11 +126,11 @@ riverctl map rivercarro None Right send-layout-cmd rivercarro "main-ratio +0.05"
 riverctl map rivercarro Shift Left send-layout-cmd rivercarro "main-count +1"
 riverctl map rivercarro Shift Right send-layout-cmd rivercarro "main-count -1"
 # Change layout orientation
-riverctl map rivercarro $ctrl+Shift Up    send-layout-cmd rivercarro "main-location top"
-riverctl map rivercarro $ctrl+Shift Right send-layout-cmd rivercarro "main-location right"
-riverctl map rivercarro $ctrl+Shift Down  send-layout-cmd rivercarro "main-location bottom"
-riverctl map rivercarro $ctrl+Shift Left  send-layout-cmd rivercarro "main-location left"
-riverctl map rivercarro $ctrl+Shift t     send-layout-cmd rivercarro "main-location monocle"
+riverctl map rivercarro $ctrl+Shift Up spawn "riverctl send-layout-cmd rivercarro \"main-location top\"; riverctl enter-mode normal"
+riverctl map rivercarro $ctrl+Shift Right spawn "riverctl send-layout-cmd rivercarro \"main-location right\"; riverctl enter-mode normal"
+riverctl map rivercarro $ctrl+Shift Down spawn "riverctl send-layout-cmd rivercarro \"main-location bottom\"; riverctl enter-mode normal"
+riverctl map rivercarro $ctrl+Shift Left spawn "riverctl send-layout-cmd rivercarro \"main-location left\"; riverctl enter-mode normal"
+riverctl map rivercarro $ctrl+Shift m spawn "riverctl send-layout-cmd rivercarro \"main-location monocle\"; riverctl enter-mode normal"
 riverctl map rivercarro None Escape enter-mode normal
 
 # Snap
