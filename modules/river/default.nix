@@ -40,6 +40,7 @@ in {
         scripts.river-focus-toggle
         wlopm
         wlrctl
+        rivercarro
       ];
 
       sessionVariables = {

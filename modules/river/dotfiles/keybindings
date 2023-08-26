@@ -116,20 +116,21 @@ riverctl map normal $mod+Shift Comma send-to-output previous
 # To bump the focused view to the top of the layout stack
 riverctl map normal $mod Return zoom
 
-riverctl declare-mode rivertile
-riverctl map normal $mod r enter-mode rivertile
-# To decrease/increase the main ratio of rivertile(1)
-riverctl map rivertile None Left send-layout-cmd rivertile "main-ratio -0.05"
-riverctl map rivertile None Right send-layout-cmd rivertile "main-ratio +0.05"
-# To increment/decrement the main count of rivertile(1)
-riverctl map rivertile Shift Left send-layout-cmd rivertile "main-count +1"
-riverctl map rivertile Shift Right send-layout-cmd rivertile "main-count -1"
+riverctl declare-mode rivercarro
+riverctl map normal $mod r enter-mode rivercarro
+# To decrease/increase the main ratio of rivercarro(1)
+riverctl map rivercarro None Left send-layout-cmd rivercarro "main-ratio -0.05"
+riverctl map rivercarro None Right send-layout-cmd rivercarro "main-ratio +0.05"
+# To increment/decrement the main count of rivercarro(1)
+riverctl map rivercarro Shift Left send-layout-cmd rivercarro "main-count +1"
+riverctl map rivercarro Shift Right send-layout-cmd rivercarro "main-count -1"
 # Change layout orientation
-riverctl map rivertile $ctrl+Shift Up    send-layout-cmd rivertile "main-location top"
-riverctl map rivertile $ctrl+Shift Right send-layout-cmd rivertile "main-location right"
-riverctl map rivertile $ctrl+Shift Down  send-layout-cmd rivertile "main-location bottom"
-riverctl map rivertile $ctrl+Shift Left  send-layout-cmd rivertile "main-location left"
-riverctl map rivertile None Escape enter-mode normal
+riverctl map rivercarro $ctrl+Shift Up    send-layout-cmd rivercarro "main-location top"
+riverctl map rivercarro $ctrl+Shift Right send-layout-cmd rivercarro "main-location right"
+riverctl map rivercarro $ctrl+Shift Down  send-layout-cmd rivercarro "main-location bottom"
+riverctl map rivercarro $ctrl+Shift Left  send-layout-cmd rivercarro "main-location left"
+riverctl map rivercarro $ctrl+Shift t     send-layout-cmd rivercarro "main-location monocle"
+riverctl map rivercarro None Escape enter-mode normal
 
 # Snap
 riverctl map normal $mod+$alt+$ctrl Left snap left

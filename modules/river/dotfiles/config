@@ -52,9 +52,9 @@ riverctl spawn "bash /etc/scripts/river-autostart.sh"
 
 #### LAYOUT
 
-# Set and exec into the default layout generator, rivertile.
+# Set and exec into the default layout generator, rivercarro.
 # River will send the process group of the init executable SIGTERM on exit.
-riverctl default-layout rivertile
-exec rivertile -view-padding 0 -outer-padding 0
+riverctl default-layout rivercarro
+exec rivercarro -inner-gaps 7 -outer-gaps 7 -no-smart-gaps
 
 # vim: syntax=sh
