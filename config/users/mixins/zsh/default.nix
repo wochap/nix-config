@@ -39,6 +39,9 @@ in {
 
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
           source ${inputs.dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
+
+          # load function completions in /share/zsh folder
+          autoload -U compinit && compinit
         '';
         enableCompletion = false;
         enableAutosuggestions = true;
