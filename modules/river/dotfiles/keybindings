@@ -218,9 +218,9 @@ riverctl map normal $mod+$alt c spawn \
 # Open Browser
 riverctl declare-mode browser
 riverctl map normal $mod+$alt b enter-mode browser
-riverctl map browser None f spawn firefox
-riverctl map browser None b spawn brave
-riverctl map browser None g spawn google-chrome-stable
+riverctl map browser None f spawn "firefox; riverctl enter-mode normal"
+riverctl map browser None b spawn "brave; riverctl enter-mode normal"
+riverctl map browser None g spawn "google-chrome-stable; riverctl enter-mode normal"
 riverctl map browser None Escape enter-mode normal
 
 # TODO: Open magnifying glass
