@@ -33,12 +33,13 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
-        river-tag-overlay
-        ristate
         lswt
-        wlopm
+        ristate
         river
+        river-tag-overlay
         scripts.river-focus-toggle
+        wlopm
+        wlrctl
       ];
 
       sessionVariables = {
