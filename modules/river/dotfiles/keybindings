@@ -95,15 +95,15 @@ riverctl map normal $mod Down focus-view down
 riverctl map normal $mod Up focus-view up
 riverctl map normal $mod Right focus-view right
 riverctl map normal $mod n focus-view next
-riverctl map normal $mod+Shift N focus-view previous
+riverctl map normal $mod p focus-view previous
 
 # Swap direction
-riverctl map normal $mod Left swap left
-riverctl map normal $mod Down swap down
-riverctl map normal $mod Up swap up
-riverctl map normal $mod Right swap right
-# riverctl map normal $mod+Shift Down swap next
-# riverctl map normal $mod+Shift Up swap previous
+riverctl map normal $mod+Shift Left swap left
+riverctl map normal $mod+Shift Down swap down
+riverctl map normal $mod+Shift Up swap up
+riverctl map normal $mod+Shift Right swap right
+riverctl map normal $mod+Shift n swap next
+riverctl map normal $mod+Shift p swap previous
 
 # To focus the next/previous output
 riverctl map normal $mod Period focus-output next
@@ -120,7 +120,7 @@ riverctl declare-mode rivertile
 riverctl map normal $mod r enter-mode rivertile
 # To decrease/increase the main ratio of rivertile(1)
 riverctl map rivertile None Left send-layout-cmd rivertile "main-ratio -0.05"
-riverctl map rivertile None send-layout-cmd rivertile "main-ratio +0.05"
+riverctl map rivertile None Right send-layout-cmd rivertile "main-ratio +0.05"
 # To increment/decrement the main count of rivertile(1)
 riverctl map rivertile Shift Left send-layout-cmd rivertile "main-count +1"
 riverctl map rivertile Shift Right send-layout-cmd rivertile "main-count -1"
@@ -180,10 +180,10 @@ riverctl map normal $mod 0 set-focused-tags $all_tags
 scratch_tag=$((1 << 20 ))
 
 # Toggle the scratchpad with Super+P
-riverctl map normal $mod P toggle-focused-tags ${scratch_tag}
+riverctl map normal $mod d toggle-focused-tags ${scratch_tag}
 
 # Send windows to the scratchpad with Super+Shift+P
-riverctl map normal $mod+Shift P set-view-tags ${scratch_tag}
+riverctl map normal $mod+Shift d set-view-tags ${scratch_tag}
 
 # Set spawn tagmask to ensure new windows don't have the scratchpad tag unless
 # explicitly set.
