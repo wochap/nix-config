@@ -73,6 +73,7 @@ window#waybar.hidden {
 #tags button {
   margin-right: 4px;
   background-color: @background;
+  color: @selection;
 }
 #tags button,
 #workspaces button {
@@ -80,9 +81,8 @@ window#waybar.hidden {
   min-width: 20px;
   font-weight: normal;
 }
-#tags button:hover,
-#workspaces button:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+#tags button.occupied {
+  color: @foreground;
 }
 #tags button.focused,
 #workspaces button.active,
@@ -94,7 +94,6 @@ window#waybar.hidden {
 #workspaces button.urgent {
   color: @red;
 }
-#tags button.persistant,
 #workspaces button.persistant {
   color: @selection;
 }
