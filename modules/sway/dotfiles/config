@@ -48,17 +48,13 @@ seat * {
 #### RULES
 for_window [class=".*"] border pixel 2;
 for_window [app_id=".*"] border pixel 2;
-for_window [app_id="blueberry.py"] floating enable; move position center;
-for_window [app_id="eog"] floating enable; move position center;
 for_window [app_id="file-roller"] floating enable; move position center;
-for_window [app_id="org.gnome.Calculator"] floating enable; move position center; sticky enable;
-for_window [app_id="org.gnome.Nautilus"] floating enable; move position center; sticky enable;
-for_window [app_id="thunar"] floating enable; move position center; sticky enable;
 for_window [app_id="gnome-font-viewer"] floating enable; move position center;
 for_window [app_id="gnome-system-monitor"] floating enable; move position center;
-for_window [app_id="nm-connection-editor"] floating enable; move position center;
-for_window [app_id="pavucontrol"] floating enable; move position center;
 for_window [app_id="mpv"] floating enable; move position center;
+for_window [app_id="org.gnome.Calculator"] floating enable; move position center; sticky enable;
+for_window [app_id="pavucontrol"] floating enable; move position center;
+for_window [app_id="thunar"] floating enable; move position center; sticky enable;
 
 assign [app_id="firefox"] workspace 5
 assign [app_id="google-chrome"] workspace 1

@@ -33,9 +33,27 @@ done
 
 #### RULES
 
-riverctl float-filter-add app-id "pavucontrol"
-riverctl float-filter-add app-id "nm-connection-editor"
-riverctl float-filter-add app-id "file-roller"
+riverctl rule-add ssd -app-id "*"
+riverctl rule-add float -app-id "file-roller"
+riverctl rule-add float -app-id "gnome-font-viewer"
+riverctl rule-add float -app-id "gnome-system-monitor"
+riverctl rule-add float -app-id "mpv"
+riverctl rule-add float -app-id "org.gnome.Calculator"
+riverctl rule-add float -app-id "pavucontrol"
+riverctl rule-add float -app-id "thunar"
+
+riverctl rule-add tag -app-id "firefox" $((1 << (5 - 1)))
+riverctl rule-add tag -app-id "google-chrome" $((1 << (1 - 1)))
+riverctl rule-add tag -app-id "brave-browser" $((1 << (8 - 1)))
+riverctl rule-add tag -app-id "Slack" $((1 << (4 - 1)))
+
+riverctl rule-add float -app-id "kitty-top"
+riverctl rule-add float -app-id "kitty-scratch"
+riverctl rule-add float -app-id "kitty-neorg"
+riverctl rule-add float -app-id "kitty-nmtui"
+riverctl rule-add float -app-id "kitty-neomutt"
+riverctl rule-add float -app-id "kitty-newsboat"
+riverctl rule-add float -app-id "kitty-ncmpcpp"
 
 
 #### AUTOSTART
