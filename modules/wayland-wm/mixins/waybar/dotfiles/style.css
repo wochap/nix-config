@@ -68,9 +68,11 @@ window#waybar.hidden {
 #tags,
 #workspaces {
   padding: 0;
+  background-color: transparent;
 }
 #tags button {
   margin-right: 4px;
+  background-color: @background;
 }
 #tags button,
 #workspaces button {
