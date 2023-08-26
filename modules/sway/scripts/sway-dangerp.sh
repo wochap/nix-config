@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function killport {
-  kill $(lsof -t -i:"$1")
+  kill $(lsof -t -i:"$1") > /dev/null 2>&1
 }
 
 # Show scratchpad
