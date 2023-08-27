@@ -41,6 +41,7 @@ in {
     _custom.wm.qt.enable = true;
     _custom.wm.gtk.enable = true;
 
+    _custom.steam.enable = true;
     _custom.mbpfan.enable = true;
     _custom.docker.enable = true;
     _custom.mongodb.enable = true;
