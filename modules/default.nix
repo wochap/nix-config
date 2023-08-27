@@ -12,6 +12,7 @@
     ./mbpfan
     ./mongodb
     ./river
+    ./steam
     ./sway
     ./tui
     ./virt
