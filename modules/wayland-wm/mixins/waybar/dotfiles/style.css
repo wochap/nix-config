@@ -53,7 +53,7 @@ window#waybar.hidden {
 #keyboard-state label.locked {
   background: @primary;
   color: @background;
-  min-width: 0.8em;
+  padding: 0 0.3em;
 }
 
 #custom-offlinemsmtp.disabled,
