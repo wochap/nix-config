@@ -1,6 +1,13 @@
 
 
 all_tags=$(((1 << 32) - 1))
+kitty_scratch_tag=$((1 << 31))
+file_manager_tag=$((1 << 30))
+kitty_neorg_tag=$((1 << 29))
+kitty_top_tag=$((1 << 28))
+kitty_neomutt_tag=$((1 << 27))
+kitty_newsboat_tag=$((1 << 26))
+kitty_ncmpcpp_tag=$((1 << 25))
 
 # Use the "logo" key as the primary modifier
 mod="Mod4"
@@ -22,7 +29,7 @@ riverctl map normal $mod+$ctrl+$alt Escape spawn \
 
 # Open scratchpad terminal
 riverctl map normal $mod i spawn \
-  "river-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh $((1 << 31))"
+  "river-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh $kitty_scratch_tag"
 
 # Lock screen
 riverctl map normal $mod l spawn \
@@ -188,8 +195,8 @@ riverctl map normal $mod d toggle-focused-tags ${scratch_tag}
 riverctl map normal $mod+Shift d set-view-tags ${scratch_tag}
 
 # Set spawn tagmask to ensure new windows don't have the scratchpad tag unless
-# explicitly set.
-all_but_scratch_tag=$(( ((1 << 32) - 1) ^ $scratch_tag ))
+# explicitly set. It also takes in consideration my custom special tags
+all_but_scratch_tag=$(( ((1 << 32) - 1) ^ $scratch_tag ^ $kitty_scratch_tag ^ file_manager_tag ^ kitty_neorg_tag ^ kitty_top_tag ^ kitty_neomutt_tag ^ kitty_newsboat_tag ^ kitty_ncmpcpp_tag))
 riverctl spawn-tagmask ${all_but_scratch_tag}
 
 
@@ -201,7 +208,7 @@ riverctl map normal $mod+$alt t spawn \
 
 # Open file manager
 riverctl map normal $mod+$alt f spawn \
-  "river-focus-toggle thunar thunar $((1 << 30))"
+  "river-focus-toggle thunar thunar $file_manager_tag"
 
 # Screencast/record region to mp4
 riverctl map normal $mod+$alt r spawn \
@@ -228,11 +235,11 @@ riverctl map browser None Escape enter-mode normal
 # Terminal TUI
 riverctl declare-mode tui
 riverctl map normal $mod+$alt u enter-mode tui
-riverctl map tui None n spawn "river-focus-toggle kitty-neorg \"$HOME/.config/kitty/scripts/kitty-neorg.sh\" $((1 << 29)); riverctl enter-mode normal"
-riverctl map tui None m spawn "river-focus-toggle kitty-top \"$HOME/.config/kitty/scripts/kitty-top.sh\" $((1 << 28)); riverctl enter-mode normal"
-riverctl map tui None e spawn "river-focus-toggle kitty-neomutt \"$HOME/.config/kitty/scripts/kitty-neomutt.sh\" $((1 << 27)); riverctl enter-mode normal"
-riverctl map tui None r spawn "river-focus-toggle kitty-newsboat \"$HOME/.config/kitty/scripts/kitty-newsboat.sh\" $((1 << 26)); riverctl enter-mode normal"
-riverctl map tui None u spawn "river-focus-toggle kitty-ncmpcpp \"$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh\" $((1 << 25)); riverctl enter-mode normal"
+riverctl map tui None n spawn "river-focus-toggle kitty-neorg \"$HOME/.config/kitty/scripts/kitty-neorg.sh\" $kitty_neorg_tag; riverctl enter-mode normal"
+riverctl map tui None m spawn "river-focus-toggle kitty-top \"$HOME/.config/kitty/scripts/kitty-top.sh\" $kitty_top_tag; riverctl enter-mode normal"
+riverctl map tui None e spawn "river-focus-toggle kitty-neomutt \"$HOME/.config/kitty/scripts/kitty-neomutt.sh\" $kitty_neomutt_tag; riverctl enter-mode normal"
+riverctl map tui None r spawn "river-focus-toggle kitty-newsboat \"$HOME/.config/kitty/scripts/kitty-newsboat.sh\" $kitty_newsboat_tag; riverctl enter-mode normal"
+riverctl map tui None u spawn "river-focus-toggle kitty-ncmpcpp \"$HOME/.config/kitty/scripts/kitty-ncmpcpp.sh\" $kitty_ncmpcpp_tag; riverctl enter-mode normal"
 riverctl map tui None Escape enter-mode normal
 
 
