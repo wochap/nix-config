@@ -72,14 +72,13 @@ window#waybar.hidden {
 }
 #tags button {
   margin-right: 4px;
-  background-color: @background;
-  color: @selection;
 }
 #tags button,
 #workspaces button {
   padding: 0 2px;
   min-width: 20px;
   font-weight: normal;
+  background-color: @background;
 }
 #tags button.occupied {
   color: @foreground;
