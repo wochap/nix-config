@@ -19,6 +19,7 @@ in {
               libpng
               libpulseaudio
               libvorbis
+              mangohud
               stdenv.cc.cc.lib
               xorg.libXScrnSaver
               xorg.libXcursor
@@ -29,12 +30,28 @@ in {
       })
     ];
 
-    environment.systemPackages = with pkgs; [ gamescope ];
+    environment.systemPackages = with pkgs; [ gamescope mangohud ];
 
     programs.steam = {
       enable = true;
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
+      gamescopeSession.enable = true;
+    };
+
+    hardware.opengl = {
+      extraPackages = with pkgs; [ mangohud ];
+      extraPackages32 = with pkgs; [ mangohud ];
+    };
+
+    home-manager.users.${userName} = {
+      programs.mangohud = {
+        enable = true;
+        settings = {
+          full = true;
+          cpu_load_change = true;
+        };
+      };
     };
   };
 }
