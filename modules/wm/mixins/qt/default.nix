@@ -11,6 +11,10 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
+        # kvantum (not required but...)
+        libsForQt5.qtstyleplugins
+        libsForQt5.qtstyleplugin-kvantum
+
         # fix kirigami apps look
         # for example in filelight, without it the app looks weird
         # https://github.com/NixOS/nixpkgs/pull/202990#issuecomment-1328068486
