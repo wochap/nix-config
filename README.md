@@ -105,6 +105,7 @@ You probably want to press `Ctrl + Alt + F1`
    $ gpg --import private.key
    ```
 1. If you are using nixos on mbp
+   [Disable startup sound](https://gist.github.com/0xbb/ae298e2798e1c06d0753)
    ```
    $ ln -s ~/nix-config/modules/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
    ```
@@ -137,6 +138,8 @@ You probably want to press `Ctrl + Alt + F1`
 1. [Waydroid](https://nixos.wiki/wiki/WayDroid)
 1. [Flatpak](https://nixos.wiki/wiki/Flatpak)
 
+1. Steam
+   Run steam, login, setup proton.
 1. ~~Setup [Flatpak](https://flatpak.org/setup/NixOS/)~~
 
    ```
