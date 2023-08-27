@@ -146,5 +146,10 @@ in {
       cpufreq.min = 800000;
       cpufreq.max = 4000000;
     };
+
+    home-manager.users.${userName}._custom.programs.waybar.settings.temperature =
+      {
+        thermal-zone = 2;
+      };
   };
 }
