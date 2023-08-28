@@ -181,6 +181,8 @@ done
 # Mod+0 to focus all tags
 riverctl map normal $mod 0 set-focused-tags $all_tags
 
+riverctl map normal $mod grave focus-previous-tags
+
 
 ### WM SCRATCHPAD
 

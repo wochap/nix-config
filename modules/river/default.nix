@@ -20,8 +20,8 @@ in {
           src = prev.fetchFromGitHub {
             owner = "riverwm";
             repo = "river";
-            rev = "5ce2ca1bc0411b43e94e8a1dfdf3a90a5dc7fd20";
-            hash = "sha256-sa5yWeuQzR/dcN74ok3QkP/FdiCcxifbmDVcHiAZkhU=";
+            rev = "c16628c7f57c51d50f2d10a96c265fb0afaddb02";
+            hash = "sha256-E3Xtv7JeCmafiNmpuS5VuLgh1TDAbibPtMo6A9Pz6EQ=";
             fetchSubmodules = true;
           };
         });
@@ -41,7 +41,7 @@ in {
         river-shifttags
         river-tag-overlay
         rivercarro
-        riverwm-utils
+        # riverwm-utils
         scripts.river-focus-toggle
         wlopm
         wlrctl

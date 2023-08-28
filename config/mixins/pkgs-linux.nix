@@ -13,6 +13,7 @@ in {
       libinput
       libinput-gestures
       xorg.xev # get key actual name
+      wev # get key actual name
 
       # CLI TOOLS
       acpi
