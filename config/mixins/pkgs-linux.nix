@@ -80,14 +80,15 @@ in {
       # Electron apps
       bitwarden
       brave
+      element-desktop-wayland
       figma-linux
-      prevstable-chrome.google-chrome # HACK: fix https://github.com/NixOS/nixpkgs/issues/244742
+      insomnia
       microsoft-edge
       notion-app-enhanced
       postman
+      prevstable-chrome.google-chrome # HACK: fix https://github.com/NixOS/nixpkgs/issues/244742
       simplenote
       slack
-      insomnia
       whatsapp-for-linux
     ];
   };
