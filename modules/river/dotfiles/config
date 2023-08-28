@@ -10,7 +10,6 @@ riverctl attach-mode "top"
 riverctl focus-follows-cursor "normal"
 riverctl set-cursor-warp on-output-change
 riverctl border-width 2
-riverctl xcursor-theme capitaine-cursors 32
 riverctl hide-cursor when-typing enabled
 
 for pad in $(riverctl list-inputs | grep -i pointer)
