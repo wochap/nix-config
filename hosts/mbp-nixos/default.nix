@@ -54,9 +54,9 @@ in {
     _custom.hardware.amdGpu.enable = false;
     _custom.hardware.amdGpu.enableSouthernIslands = false;
 
-    # _custom.river.enable = true;
+    _custom.river.enable = true;
     # _custom.hyprland.enable = true;
-    _custom.sway.enable = true;
+    # _custom.sway.enable = true;
     _custom.waylandWm.enable = true;
 
     # This value determines the NixOS release from which the default
@@ -75,7 +75,11 @@ in {
     # You can update Home Manager without changing this value. See
     # the Home Manager release notes for a list of state version
     # changes in each release.
-    home-manager.users.${userName}.home.stateVersion = "21.11";
+    home-manager.users.${userName} = {
+      home.stateVersion = "21.11";
+
+      _custom.programs.waybar.settings.temperature = { thermal-zone = 2; };
+    };
 
     boot = {
       # kernel 5.15.119 works with amdgpu driver
@@ -147,9 +151,5 @@ in {
       cpufreq.max = 4000000;
     };
 
-    home-manager.users.${userName}._custom.programs.waybar.settings.temperature =
-      {
-        thermal-zone = 2;
-      };
   };
 }
