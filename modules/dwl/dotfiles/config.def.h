@@ -1,11 +1,18 @@
+#define RGB(col) { \
+	((col >> 16) & 0xff) / 255.0f, \
+	((col >> 8) & 0xff) / 255.0f, \
+	(col & 0xff) / 255.0f, \
+	1.0f \
+}
+
 /* appearance */
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const int smartgaps                 = 0;  /* 1 means no outer gap when there is only one window */
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
 static const unsigned int gappx            = 7; /* horiz inner gap between windows */
-static const float bordercolor[]           = {0.68, 0.71, 0.90, 1.0};
-static const float focuscolor[]            = {1.0, 0.0, 0.0, 1.0};
+static const float bordercolor[]           = RGB(0x44475a);
+static const float focuscolor[]            = RGB(0xbd93f9);
 static const char cursortheme[]            = "capitaine-cursors"; /* theme from /usr/share/cursors/xorg-x11 */
 static const unsigned int cursorsize       = 24;
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
