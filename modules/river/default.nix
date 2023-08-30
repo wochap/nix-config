@@ -43,8 +43,8 @@ in {
         rivercarro
         # riverwm-utils
         scripts.river-focus-toggle
-        wlopm
-        wlrctl
+        wlopm # turn off/on screen
+        wlrctl # focus window
       ];
 
       sessionVariables = {
