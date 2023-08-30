@@ -328,10 +328,10 @@ static const Keychord keychords[] = {
   { 1, {{MODKEY|MOD_ALT, Key_r}}, spawn, SHCMD("/etc/scripts/system/recorder.sh --area") },
 
   // Open screenshoot utility
-  { 1, {{MODKEY|MOD_ALT, Key_r}}, spawn, SHCMD("/etc/scripts/system/takeshot.sh --area") },
+  { 1, {{MODKEY|MOD_ALT, Key_s}}, spawn, SHCMD("/etc/scripts/system/takeshot.sh --area") },
 
   // Open color picker
-  { 1, {{MODKEY|MOD_ALT, Key_r}}, spawn, SHCMD("/etc/scripts/system/color-picker.sh") },
+  { 1, {{MODKEY|MOD_ALT, Key_c}}, spawn, SHCMD("/etc/scripts/system/color-picker.sh") },
 
   // Open Browser
   { 2, {{MODKEY|MOD_ALT, Key_b}, {Key_f}}, spawn, SHCMD("firefox") },
