@@ -4,6 +4,7 @@
   imports = [
     ./android
     ./docker
+    ./dwl
     ./flatpak
     ./globals.nix
     ./hardware
