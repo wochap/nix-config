@@ -40,6 +40,7 @@ riverctl rule-add float -app-id "mpv"
 riverctl rule-add float -app-id "org.gnome.Calculator"
 riverctl rule-add float -app-id "pavucontrol"
 riverctl rule-add float -app-id "thunar"
+riverctl rule-add float -app-id "xdg-desktop-portal-gtk"
 
 riverctl rule-add tag -app-id "firefox" $((1 << (5 - 1)))
 riverctl rule-add tag -app-id "google-chrome" $((1 << (1 - 1)))
