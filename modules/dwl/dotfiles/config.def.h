@@ -334,16 +334,16 @@ static const Keychord keychords[] = {
   { 1, {{MODKEY|MOD_ALT, Key_c}}, spawn, SHCMD("/etc/scripts/system/color-picker.sh") },
 
   // Open Browser
-  { 2, {{MODKEY|MOD_ALT, Key_b}, {Key_f}}, spawn, SHCMD("firefox") },
-  { 2, {{MODKEY|MOD_ALT, Key_b}, {Key_b}}, spawn, SHCMD("brave") },
-  { 2, {{MODKEY|MOD_ALT, Key_b}, {Key_g}}, spawn, SHCMD("google-chrome-stable") },
+  { 2, {{MODKEY|MOD_ALT, Key_b}, {MOD_NONE, Key_f}}, spawn, RUN("firefox") },
+  { 2, {{MODKEY|MOD_ALT, Key_b}, {MOD_NONE, Key_b}}, spawn, RUN("brave") },
+  { 2, {{MODKEY|MOD_ALT, Key_b}, {MOD_NONE, Key_g}}, spawn, RUN("google-chrome-stable") },
 
   // Terminal TUI
-  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_n}}, togglescratch, {.v = kittyneorgcmd} },
-  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_m}}, togglescratch, {.v = kittytopcmd} },
-  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_e}}, togglescratch, {.v = kittyneomuttcmd} },
-  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_r}}, togglescratch, {.v = kittynewsboatcmd} },
-  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_u}}, togglescratch, {.v = kittyncmpcppcmd} },
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {MOD_NONE, Key_n}}, togglescratch, {.v = kittyneorgcmd} },
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {MOD_NONE, Key_m}}, togglescratch, {.v = kittytopcmd} },
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {MOD_NONE, Key_e}}, togglescratch, {.v = kittyneomuttcmd} },
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {MOD_NONE, Key_r}}, togglescratch, {.v = kittynewsboatcmd} },
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {MOD_NONE, Key_u}}, togglescratch, {.v = kittyncmpcppcmd} },
 
 
   // ### MEDIA KEYBINDINGS
