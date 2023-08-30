@@ -88,7 +88,17 @@ static const Layout layouts[] = {
 	{ "[@]",      spiral },
 	{ "@|@",      snail },
 	{ "[\\]",     dwindle },
-	{ NULL,       NULL },
+};
+
+enum layout_types {
+  LAYOUT_TILE,
+  LAYOUT_FLOAT,
+  LAYOUT_MONOCLE,
+  LAYOUT_CENTEREDMASTER,
+  LAYOUT_GRID,
+  LAYOUT_SPIRAL,
+  LAYOUT_SNAIL,
+  LAYOUT_DWINDLE,
 };
 
 /* monitors */
@@ -291,14 +301,14 @@ static const Keychord keychords[] = {
   // Change layout
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_comma}}, cyclelayout, {.i = -1 } },
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_period}}, cyclelayout, {.i = +1 } },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_t}}, setlayout, {.v = &layouts[0]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_f}}, setlayout, {.v = &layouts[1]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_m}}, setlayout, {.v = &layouts[2]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_c}}, setlayout, {.v = &layouts[3]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_g}}, setlayout, {.v = &layouts[4]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_s}}, setlayout, {.v = &layouts[5]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_w}}, setlayout, {.v = &layouts[6]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_d}}, setlayout, {.v = &layouts[7]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_t}}, setlayout, {.v = &layouts[LAYOUT_TILE]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_f}}, setlayout, {.v = &layouts[LAYOUT_FLOAT]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_m}}, setlayout, {.v = &layouts[LAYOUT_MONOCLE]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_c}}, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_g}}, setlayout, {.v = &layouts[LAYOUT_GRID]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_s}}, setlayout, {.v = &layouts[LAYOUT_SPIRAL]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_w}}, setlayout, {.v = &layouts[LAYOUT_SNAIL]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_d}}, setlayout, {.v = &layouts[LAYOUT_DWINDLE]} },
   // { 1, {{MODKEY, Key_space}}, setlayout, {0} },
 
 
