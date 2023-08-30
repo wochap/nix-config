@@ -270,25 +270,28 @@ static const Keychord keychords[] = {
   // Bump focused view to the top of the layout stack
   { 1, {{MODKEY, Key_Return}}, zoom, {0} },
 
+  // Toggle gaps
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_g}}, togglegaps, {0} },
+
   // To decrease/increase the main ratio
-  { 2, {{MODKEY, Key_r}, {Key_Left}}, incnmaster, {.i = +1} },
-  { 2, {{MODKEY, Key_r}, {Key_Right}}, incnmaster, {.i = -1} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Left}}, incnmaster, {.i = +1} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Right}}, incnmaster, {.i = -1} },
 
   // To increment/decrement the main count
   { 2, {{MODKEY, Key_r}, {MOD_SHIFT, Key_Left}}, setmfact, {.f = -0.05} },
   { 2, {{MODKEY, Key_r}, {MOD_SHIFT, Key_Right}}, setmfact, {.f = +0.05} },
 
   // Change layout
-  { 2, {{MODKEY, Key_r}, {Key_comma}}, cyclelayout, {.i = -1 } },
-  { 2, {{MODKEY, Key_r}, {Key_period}}, cyclelayout, {.i = +1 } },
-  { 2, {{MODKEY, Key_r}, {Key_t}}, setlayout, {.v = &layouts[0]} },
-  { 2, {{MODKEY, Key_r}, {Key_f}}, setlayout, {.v = &layouts[1]} },
-  { 2, {{MODKEY, Key_r}, {Key_m}}, setlayout, {.v = &layouts[2]} },
-  { 2, {{MODKEY, Key_r}, {Key_c}}, setlayout, {.v = &layouts[3]} },
-  { 2, {{MODKEY, Key_r}, {Key_g}}, setlayout, {.v = &layouts[4]} },
-  { 2, {{MODKEY, Key_r}, {Key_s}}, setlayout, {.v = &layouts[5]} },
-  { 2, {{MODKEY, Key_r}, {Key_w}}, setlayout, {.v = &layouts[6]} },
-  { 2, {{MODKEY, Key_r}, {Key_d}}, setlayout, {.v = &layouts[7]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_comma}}, cyclelayout, {.i = -1 } },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_period}}, cyclelayout, {.i = +1 } },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_t}}, setlayout, {.v = &layouts[0]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_f}}, setlayout, {.v = &layouts[1]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_m}}, setlayout, {.v = &layouts[2]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_c}}, setlayout, {.v = &layouts[3]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_g}}, setlayout, {.v = &layouts[4]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_s}}, setlayout, {.v = &layouts[5]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_w}}, setlayout, {.v = &layouts[6]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_d}}, setlayout, {.v = &layouts[7]} },
   // { 1, {{MODKEY, Key_space}}, setlayout, {0} },
 
 
