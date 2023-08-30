@@ -271,7 +271,7 @@ static const Keychord keychords[] = {
   { 1, {{MODKEY, Key_Return}}, zoom, {0} },
 
   // Toggle gaps
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_g}}, togglegaps, {0} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_grave}}, togglegaps, {0} },
 
   // To decrease/increase the main ratio
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Left}}, incnmaster, {.i = +1} },
@@ -348,20 +348,20 @@ static const Keychord keychords[] = {
 
   // ### MEDIA KEYBINDINGS
 
-  { 1, {{Key_XF86AudioRaiseVolume}}, spawn, SHCMD("wob-osd --volume +5%") },
-  { 1, {{Key_XF86AudioLowerVolume}}, spawn, SHCMD("wob-osd --volume -5%") },
-  { 1, {{Key_XF86AudioMute}}, spawn, SHCMD("wob-osd --volume-toggle") },
+  { 1, {{MOD_NONE, Key_XF86AudioRaiseVolume}}, spawn, SHCMD("wob-osd --volume +5%") },
+  { 1, {{MOD_NONE, Key_XF86AudioLowerVolume}}, spawn, SHCMD("wob-osd --volume -5%") },
+  { 1, {{MOD_NONE, Key_XF86AudioMute}}, spawn, SHCMD("wob-osd --volume-toggle") },
 
-  { 1, {{Key_XF86AudioNext}}, spawn, SHCMD("playerctl next") },
-  { 1, {{Key_XF86AudioPrev}}, spawn, SHCMD("playerctl previous") },
-  { 1, {{Key_XF86AudioStop}}, spawn, SHCMD("playerctl pause") },
-  { 1, {{Key_XF86AudioPlay}}, spawn, SHCMD("playerctl play-pause") },
+  { 1, {{MOD_NONE, Key_XF86AudioNext}}, spawn, SHCMD("playerctl next") },
+  { 1, {{MOD_NONE, Key_XF86AudioPrev}}, spawn, SHCMD("playerctl previous") },
+  { 1, {{MOD_NONE, Key_XF86AudioStop}}, spawn, SHCMD("playerctl pause") },
+  { 1, {{MOD_NONE, Key_XF86AudioPlay}}, spawn, SHCMD("playerctl play-pause") },
 
-  { 1, {{Key_XF86MonBrightnessUp}}, spawn, SHCMD("wob-osd --backlight 5%+") },
-  { 1, {{Key_XF86MonBrightnessDown}}, spawn, SHCMD("wob-osd --backlight 5%-") },
+  { 1, {{MOD_NONE, Key_XF86MonBrightnessUp}}, spawn, SHCMD("wob-osd --backlight 5%+") },
+  { 1, {{MOD_NONE, Key_XF86MonBrightnessDown}}, spawn, SHCMD("wob-osd --backlight 5%-") },
 
-  { 1, {{Key_XF86KbdBrightnessUp}}, spawn, SHCMD("wob-osd --kbd-backlight 5%+") },
-  { 1, {{Key_XF86KbdBrightnessDown}}, spawn, SHCMD("wob-osd --kbd-backlight 5%-") },
+  { 1, {{MOD_NONE, Key_XF86KbdBrightnessUp}}, spawn, SHCMD("wob-osd --kbd-backlight 5%+") },
+  { 1, {{MOD_NONE, Key_XF86KbdBrightnessDown}}, spawn, SHCMD("wob-osd --kbd-backlight 5%-") },
 
 
   // ### OTHERS
