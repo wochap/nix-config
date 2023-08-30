@@ -4,7 +4,7 @@ static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will
 static const int smartgaps                 = 0;  /* 1 means no outer gap when there is only one window */
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
 static const unsigned int gappx            = 7; /* horiz inner gap between windows */
-static const float bordercolor[]           = {0.5, 0.5, 0.5, 1.0};
+static const float bordercolor[]           = {0.68, 0.71, 0.90, 1.0};
 static const float focuscolor[]            = {1.0, 0.0, 0.0, 1.0};
 static const char cursortheme[]            = "capitaine-cursors"; /* theme from /usr/share/cursors/xorg-x11 */
 static const unsigned int cursorsize       = 24;
@@ -13,12 +13,12 @@ static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
 
 /* Autostart */
 static const char *const autostart[] = {
-  "restart-pipewire-and-portal-services", NULL,
-  "configure-gtk", NULL,
+  // "restart-pipewire-and-portal-services", NULL,
+  // "configure-gtk", NULL,
 
   // start systemd services related to graphical-session.target
   // https://github.com/emersion/xdg-desktop-portal-wlr/wiki/systemd-user-services,-pam,-and-environment-variables
-  "systemctl --user start graphical-session.target", NULL,
+  // "systemctl --user start graphical-session.target", NULL,
 
   // "bash", "/etc/scripts/dwl-autostart.sh", NULL,
   NULL /* terminate */
@@ -56,15 +56,14 @@ static const Rule rules[] = {
 	{ "brave-browser",           NULL,       1 << 7,    0,          0,          0,        -1,      0,   0,   0,    0,      0,          0,      0 },
 	{ "Slack",                   NULL,       1 << 3,    0,          0,          0,        -1,      0,   0,   0,    0,      0,          0,      0 },
 
-	{ "kitty-top",               NULL,       0,         1,          1,          1,        -1,      0,   0,   0,    0,      0,          0,      0 },
-	{ "kitty-scratch",           NULL,       0,         1,          1,          1,        -1,      0,   0,   0,    0,      0,          0,      0 },
-	{ "kitty-neorg",             NULL,       0,         1,          1,          1,        -1,      0,   0,   0,    0,      0,          0,      0 },
-	{ "kitty-nmtui",             NULL,       0,         1,          1,          1,        -1,      0,   0,   0,    0,      0,          0,      0 },
-	{ "kitty-neomutt",           NULL,       0,         1,          1,          1,        -1,      0,   0,   0,    0,      0,          0,      0 },
-	{ "kitty-newsboat",          NULL,       0,         1,          1,          1,        -1,      0,   0,   0,    0,      0,          0,      0 },
-	{ "kitty-ncmpcpp",           NULL,       0,         1,          1,          1,        -1,      0,   0,   0,    0,      0,          0,      0 },
+	{ "kitty-top",               NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'm',        0,      0 },
+	{ "kitty-scratch",           NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'i',        0,      0 },
+	{ "kitty-neorg",             NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'n',        0,      0 },
+	{ "kitty-nmtui",             NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'w',        0,      0 },
+	{ "kitty-neomutt",           NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'e',        0,      0 },
+	{ "kitty-newsboat",          NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'r',        0,      0 },
+	{ "kitty-ncmpcpp",           NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'u',        0,      0 },
 
-	{ NULL,                    "scratchpad", 0,         1,          1,          0,        -1,      0,   0,   0,    0,      's',        0,      0 },
 	/* x, y, width, heigh are floating only
 	* When x or y == 0 the client is placed at the center of the screen,
 	* when width or height == 0 the default size of the client is used*/
@@ -74,7 +73,7 @@ static const Rule rules[] = {
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ "><>",      NULL }, /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 	{ "|M|",      centeredmaster },
 	{ "HHH",      grid },
@@ -90,8 +89,9 @@ static const MonitorRule monrules[] = {
 	/* example of a HiDPI laptop monitor:
 	{ "eDP-1",    0.5,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	*/
+  { "eDP-1",    0.64,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	/* defaults */
-	{ NULL,       0.64, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	{ NULL,       0.64, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 };
 
 /* keyboard */
@@ -176,60 +176,200 @@ static const char *menucmd[] = { "rofi-launcher", NULL };
 #include "shiftview.c"
 
 /* named scratchpads - First arg only serves to match against key in rules*/
-static const char *scratchpadcmd[] = { "s", "alacritty", "-t", "scratchpad", NULL };
+static const char *fmscratchcmd[] = { "f", "thunar --name thunar-scratch", NULL };
+static const char *kittytopcmd[] = { "m", "bash", "-c", "~/.config/kitty/scripts/kitty-top.sh", NULL };
+static const char *kittyscratchcmd[] = { "i", "bash", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
+static const char *kittyneorgcmd[] = { "n", "bash", "-c", "~/.config/kitty/scripts/kitty-neorg.sh", NULL };
+// static const char *kittynmtuicmd[] = { "w", "bash", "-c", "~/.config/kitty/scripts/kitty-nmtui.sh", NULL };
+static const char *kittyneomuttcmd[] = { "e", "bash", "-c", "~/.config/kitty/scripts/kitty-neomutt.sh", NULL };
+static const char *kittynewsboatcmd[] = { "r", "bash", "-c", "~/.config/kitty/scripts/kitty-newsboat.sh", NULL };
+static const char *kittyncmpcppcmd[] = { "u", "bash", "-c", "~/.config/kitty/scripts/kitty-ncmpcpp.sh", NULL };
 
 #include "keys.h"
 static const Keychord keychords[] = {
 	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
-	/* count key_sequences                                    function          argument */
-	{ 1, {{MODKEY, Key_p}},                               spawn,            {.v = menucmd} },
-	{ 1, {{MODKEY|WLR_MODIFIER_SHIFT, Key_Return}},       spawn,            {.v = termcmd} },
-	{ 1, {{MODKEY, Key_b}},                               toggle_visibility,{0} },
-	{ 1, {{MODKEY, Key_grave}},                           togglescratch,    {.v = scratchpadcmd } },
-	{ 1, {{MODKEY, Key_j}},                               focusstack,       {.i = +1} },
-	{ 1, {{MODKEY, Key_k}},                               focusstack,       {.i = -1} },
-	{ 1, {{MODKEY|WLR_MODIFIER_SHIFT, Key_j}},            movestack,        {.i = +1} },
-	{ 1, {{MODKEY|WLR_MODIFIER_SHIFT, Key_k}},            movestack,        {.i = -1} },
-	{ 1, {{MODKEY, Key_i}},                               incnmaster,       {.i = +1} },
-	{ 1, {{MODKEY, Key_d}},                               incnmaster,       {.i = -1} },
-	{ 1, {{MODKEY, Key_h}},                               setmfact,         {.f = -0.05} },
-	{ 1, {{MODKEY, Key_l}},                               setmfact,         {.f = +0.05} },
-	{ 1, {{MODKEY, Key_Return}},                          zoom,             {0} },
-	{ 1, {{MODKEY, Key_Tab}},                             view,             {0} },
-	{ 1, {{MODKEY, Key_g}},                               togglegaps,       {0} },
-	{ 1, {{MODKEY, Key_a}},                               shiftview,        { .i = -1 } },
-	{ 1, {{MODKEY, Key_semicolon}},                       shiftview,        { .i = 1 } },
-	{ 1, {{MODKEY|WLR_MODIFIER_SHIFT, Key_c}},            killclient,       {0} },
-	{ 1, {{MODKEY, Key_t}},                               setlayout,        {.v = &layouts[0]} },
-	{ 1, {{MODKEY, Key_f}},                               setlayout,        {.v = &layouts[1]} },
-	{ 1, {{MODKEY, Key_m}},                               setlayout,        {.v = &layouts[2]} },
-	{ 1, {{MODKEY, Key_c}},                               setlayout,        {.v = &layouts[3]} },
-	{ 1, {{MODKEY, Key_g}},                               setlayout,        {.v = &layouts[4]} },
-	{ 1, {{MODKEY, Key_s}},                               setlayout,        {.v = &layouts[6]} },
-	{ 1, {{MODKEY|WLR_MODIFIER_CTRL, Key_comma}},         cyclelayout,      {.i = -1 } },
-	{ 1, {{MODKEY|WLR_MODIFIER_CTRL, Key_period}},        cyclelayout,      {.i = +1 } },
-	{ 1, {{MODKEY, Key_space}},                           setlayout,        {0} },
-	{ 1, {{MODKEY, Key_o}},                               menu,             {.v = &menus[0]} },
-	{ 1, {{MODKEY|WLR_MODIFIER_SHIFT, Key_o}},            menu,             {.v = &menus[1]} },
-	{ 1, {{MODKEY|WLR_MODIFIER_SHIFT, Key_space}},        togglefloating,   {0} },
-	{ 1, {{MODKEY, Key_s}},                               togglesticky,     {0} },
-	{ 1, {{MODKEY, Key_e}},                               togglefullscreen, {0} },
-	{ 1, {{MODKEY, Key_0}},                               view,             {.ui = ~0} },
-	{ 1, {{MODKEY|WLR_MODIFIER_SHIFT, Key_0}},            tag,              {.ui = ~0} },
-	{ 1, {{MODKEY, Key_comma}},                           focusmon,         {.i = WLR_DIRECTION_LEFT} },
-	{ 1, {{MODKEY, Key_period}},                          focusmon,         {.i = WLR_DIRECTION_RIGHT} },
-	{ 1, {{MODKEY|WLR_MODIFIER_SHIFT, Key_comma}},        tagmon,           {.i = WLR_DIRECTION_LEFT} },
-	{ 1, {{MODKEY|WLR_MODIFIER_SHIFT, Key_period}},       tagmon,           {.i = WLR_DIRECTION_RIGHT} },
-	TAGKEYS(                     Key_1,                   0),
-	TAGKEYS(                     Key_2,                   1),
-	TAGKEYS(                     Key_3,                   2),
-	TAGKEYS(                     Key_4,                   3),
-	TAGKEYS(                     Key_5,                   4),
-	TAGKEYS(                     Key_6,                   5),
-	TAGKEYS(                     Key_7,                   6),
-	TAGKEYS(                     Key_8,                   7),
-	TAGKEYS(                     Key_9,                   8),
-	{ 1, {{MODKEY|MOD_SHIFT, Key_q}},                     quit,             {0} },
+	/* count key_sequences                                function          argument */
+
+  // ### SYSTEM KEYBINDINGS
+
+  // Open scratchpad terminal
+  { 1, {{MODKEY, Key_i}}, togglescratch, {.v = kittyscratchcmd } },
+
+  // Lock screen
+	{ 1, {{MODKEY, Key_l}}, spawn, SHCMD("/etc/scripts/system/sway-lock.sh") },
+
+  // Open power menu
+  { 1, {{MODKEY, Key_Escape}}, spawn, SHCMD("rofi-powermenu") },
+
+  // Open app launcher
+	{ 1, {{MODKEY, Key_space}}, spawn, {.v = menucmd} },
+
+  // Take fullscreen screenshoot
+  { 1, {{MODKEY, Key_Print}}, spawn, SHCMD("/etc/scripts/system/takeshot.sh --now") },
+
+  // Open calc
+  { 1, {{MODKEY, Key_c}}, spawn, SHCMD("rofi-calc") },
+
+  // Show clipboard
+  { 1, {{MODKEY, Key_v}}, spawn, SHCMD("/etc/scripts/system/clipboard-manager.sh --menu") },
+
+  // Clear clipboard
+  { 1, {{MODKEY|MOD_SHIFT, Key_v}}, spawn, SHCMD("/etc/scripts/system/clipboard-manager.sh --clear") },
+
+  // Show emojis
+  { 1, {{MODKEY, Key_e}}, spawn, SHCMD("rofi-emoji") },
+
+  // Show last notification
+  { 1, {{MODKEY|MOD_CONTROL, Key_n}}, spawn, SHCMD("dunstctl history-pop") },
+
+  // Hide recent notification
+  { 1, {{MODKEY|MOD_CONTROL|MOD_SHIFT, Key_n}}, spawn, SHCMD("dunstctl close") },
+
+  // Hide all notifications
+  { 1, {{MODKEY|MOD_CONTROL|MOD_SHIFT, Key_Escape}}, spawn, SHCMD("dunstctl close-all") },
+
+  // Toggle bar
+  { 1, {{MODKEY|MOD_CONTROL, Key_n}}, spawn, SHCMD("/etc/scripts/waybar/waybar-toggle.sh") },
+
+
+  // ### WM KEYBINDINGS
+
+  // Close focused view
+  { 1, {{MODKEY|MOD_SHIFT, Key_w}}, killclient, {0} },
+
+  // Toggle float
+  { 1, {{MODKEY, Key_s}}, togglefloating, {0} },
+
+  // Toggle fullscreen
+  { 1, {{MODKEY, Key_f}}, togglefullscreen, {0} },
+
+  // Toggle sticky
+  { 1, {{MODKEY|MOD_CONTROL, Key_y}}, togglesticky, {0} },
+
+  // Toggle visibility
+  { 1, {{MODKEY, Key_h}}, toggle_visibility, {0} },
+
+  // Focus direction
+  { 1, {{MODKEY, Key_n}}, focusstack, {.i = +1} },
+  { 1, {{MODKEY, Key_p}}, focusstack, {.i = -1} },
+
+  // Swap direction
+  { 1, {{MODKEY|MOD_SHIFT, Key_n}}, movestack, {.i = +1} },
+  { 1, {{MODKEY|MOD_SHIFT, Key_p}}, movestack, {.i = -1} },
+
+  // Focus next/previous monitor
+  { 1, {{MODKEY, Key_comma}}, focusmon, {.i = WLR_DIRECTION_LEFT} },
+  { 1, {{MODKEY, Key_period}}, focusmon, {.i = WLR_DIRECTION_RIGHT} },
+
+  // Send focused view to the next/previous monitor
+  { 1, {{MODKEY|MOD_SHIFT, Key_comma}}, tagmon, {.i = WLR_DIRECTION_LEFT} },
+  { 1, {{MODKEY|MOD_SHIFT, Key_period}}, tagmon, {.i = WLR_DIRECTION_RIGHT} },
+
+  // Bump focused view to the top of the layout stack
+  { 1, {{MODKEY, Key_Return}}, zoom, {0} },
+
+  // To decrease/increase the main ratio
+  { 2, {{MODKEY, Key_r}, {Key_Left}}, incnmaster, {.i = +1} },
+  { 2, {{MODKEY, Key_r}, {Key_Right}}, incnmaster, {.i = -1} },
+
+  // To increment/decrement the main count
+  { 2, {{MODKEY, Key_r}, {MOD_SHIFT, Key_Left}}, setmfact, {.f = -0.05} },
+  { 2, {{MODKEY, Key_r}, {MOD_SHIFT, Key_Right}}, setmfact, {.f = +0.05} },
+
+  // Change layout
+  { 2, {{MODKEY, Key_r}, {Key_comma}}, cyclelayout, {.i = -1 } },
+  { 2, {{MODKEY, Key_r}, {Key_period}}, cyclelayout, {.i = +1 } },
+  { 2, {{MODKEY, Key_r}, {Key_t}}, setlayout, {.v = &layouts[0]} },
+  { 2, {{MODKEY, Key_r}, {Key_f}}, setlayout, {.v = &layouts[1]} },
+  { 2, {{MODKEY, Key_r}, {Key_m}}, setlayout, {.v = &layouts[2]} },
+  { 2, {{MODKEY, Key_r}, {Key_c}}, setlayout, {.v = &layouts[3]} },
+  { 2, {{MODKEY, Key_r}, {Key_g}}, setlayout, {.v = &layouts[4]} },
+  { 2, {{MODKEY, Key_r}, {Key_s}}, setlayout, {.v = &layouts[5]} },
+  { 2, {{MODKEY, Key_r}, {Key_w}}, setlayout, {.v = &layouts[6]} },
+  { 2, {{MODKEY, Key_r}, {Key_d}}, setlayout, {.v = &layouts[7]} },
+  // { 1, {{MODKEY, Key_space}}, setlayout, {0} },
+
+
+  // ### WM TAGS/VIEWS
+
+  TAGKEYS( Key_1, 0),
+  TAGKEYS( Key_2, 1),
+  TAGKEYS( Key_3, 2),
+  TAGKEYS( Key_4, 3),
+  TAGKEYS( Key_5, 4),
+  TAGKEYS( Key_6, 5),
+  TAGKEYS( Key_7, 6),
+  TAGKEYS( Key_8, 7),
+  TAGKEYS( Key_9, 8),
+
+  // { 1, {{MODKEY|MOD_SHIFT, Key_0}}, tag, {.ui = ~0} },
+
+  // Focus previous tags
+  { 1, {{MODKEY, Key_grave}}, view, {0} },
+
+  // Focus all tags
+  { 1, {{MODKEY, Key_0}}, view, {.ui = ~0} },
+
+
+  // ### APPLICATION KEYBINDINGS (Super + Alt + Key)
+
+  // Open primary terminal
+	{ 1, {{MODKEY|MOD_ALT, Key_t}}, spawn, {.v = termcmd} },
+
+  // Open file manager
+  { 1, {{MODKEY|MOD_ALT, Key_f}}, togglescratch, {.v = fmscratchcmd} },
+
+  // Screencast/record region to mp4
+  { 1, {{MODKEY|MOD_ALT, Key_r}}, spawn, SHCMD("/etc/scripts/system/recorder.sh --area") },
+
+  // Open screenshoot utility
+  { 1, {{MODKEY|MOD_ALT, Key_r}}, spawn, SHCMD("/etc/scripts/system/takeshot.sh --area") },
+
+  // Open color picker
+  { 1, {{MODKEY|MOD_ALT, Key_r}}, spawn, SHCMD("/etc/scripts/system/color-picker.sh") },
+
+  // Open Browser
+  { 2, {{MODKEY|MOD_ALT, Key_b}, {Key_f}}, spawn, SHCMD("firefox") },
+  { 2, {{MODKEY|MOD_ALT, Key_b}, {Key_b}}, spawn, SHCMD("brave") },
+  { 2, {{MODKEY|MOD_ALT, Key_b}, {Key_g}}, spawn, SHCMD("google-chrome-stable") },
+
+  // Terminal TUI
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_n}}, togglescratch, {.v = kittyneorgcmd} },
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_m}}, togglescratch, {.v = kittytopcmd} },
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_e}}, togglescratch, {.v = kittyneomuttcmd} },
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_r}}, togglescratch, {.v = kittynewsboatcmd} },
+  { 2, {{MODKEY|MOD_ALT, Key_u}, {Key_u}}, togglescratch, {.v = kittyncmpcppcmd} },
+
+
+  // ### MEDIA KEYBINDINGS
+
+  { 1, {{Key_XF86AudioRaiseVolume}}, spawn, SHCMD("wob-osd --volume +5%") },
+  { 1, {{Key_XF86AudioLowerVolume}}, spawn, SHCMD("wob-osd --volume -5%") },
+  { 1, {{Key_XF86AudioMute}}, spawn, SHCMD("wob-osd --volume-toggle") },
+
+  { 1, {{Key_XF86AudioNext}}, spawn, SHCMD("playerctl next") },
+  { 1, {{Key_XF86AudioPrev}}, spawn, SHCMD("playerctl previous") },
+  { 1, {{Key_XF86AudioStop}}, spawn, SHCMD("playerctl pause") },
+  { 1, {{Key_XF86AudioPlay}}, spawn, SHCMD("playerctl play-pause") },
+
+  { 1, {{Key_XF86MonBrightnessUp}}, spawn, SHCMD("wob-osd --backlight 5%+") },
+  { 1, {{Key_XF86MonBrightnessDown}}, spawn, SHCMD("wob-osd --backlight 5%-") },
+
+  { 1, {{Key_XF86KbdBrightnessUp}}, spawn, SHCMD("wob-osd --kbd-backlight 5%+") },
+  { 1, {{Key_XF86KbdBrightnessDown}}, spawn, SHCMD("wob-osd --kbd-backlight 5%-") },
+
+
+  // ### OTHERS
+
+  { 1, {{MODKEY, Key_g}}, togglegaps, {0} },
+
+  // { 1, {{MODKEY, Key_a}}, shiftview, { .i = -1 } },
+  // { 1, {{MODKEY, Key_semicolon}}, shiftview, { .i = 1 } },
+
+  { 1, {{MODKEY, Key_o}}, menu, {.v = &menus[0]} },
+  { 1, {{MODKEY|MOD_SHIFT, Key_o}}, menu, {.v = &menus[1]} },
+
+  { 1, {{MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q}}, quit, {0} },
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
 	{ 1, {{WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,Key_BackSpace}}, quit, {0} },
