@@ -177,7 +177,7 @@ static const char *menucmd[] = { "rofi-launcher", NULL };
 #include "shiftview.c"
 
 /* named scratchpads - First arg only serves to match against key in rules*/
-static const char *fmscratchcmd[] = { "f", "thunar --name thunar-scratch", NULL };
+static const char *fmscratchcmd[] = { "f", "thunar", "--name", "thunar-scratch", NULL };
 static const char *kittytopcmd[] = { "m", "bash", "-c", "~/.config/kitty/scripts/kitty-top.sh", NULL };
 static const char *kittyscratchcmd[] = { "i", "bash", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
 static const char *kittyneorgcmd[] = { "n", "bash", "-c", "~/.config/kitty/scripts/kitty-neorg.sh", NULL };
