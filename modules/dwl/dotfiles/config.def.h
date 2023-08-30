@@ -366,8 +366,6 @@ static const Keychord keychords[] = {
 
   // ### OTHERS
 
-  { 1, {{MODKEY, Key_g}}, togglegaps, {0} },
-
   // { 1, {{MODKEY, Key_a}}, shiftview, { .i = -1 } },
   // { 1, {{MODKEY, Key_semicolon}}, shiftview, { .i = 1 } },
 
@@ -377,8 +375,8 @@ static const Keychord keychords[] = {
   { 1, {{MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q}}, quit, {0} },
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
-	{ 1, {{WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,Key_BackSpace}}, quit, {0} },
-#define CHVT(KEY,n) { 1, {{WLR_MODIFIER_CTRL|WLR_MODIFIER_ALT,KEY}}, chvt, {.ui = (n)} }
+	{ 1, {{MOD_CONTROL|MOD_ALT,Key_BackSpace}}, quit, {0} },
+#define CHVT(KEY,n) { 1, {{MOD_CONTROL|MOD_ALT,KEY}}, chvt, {.ui = (n)} }
 	CHVT(Key_F1, 1), CHVT(Key_F2,  2),  CHVT(Key_F3,  3),  CHVT(Key_F4,  4),
 	CHVT(Key_F5, 5), CHVT(Key_F6,  6),  CHVT(Key_F7,  7),  CHVT(Key_F8,  8),
 	CHVT(Key_F9, 9), CHVT(Key_F10, 10), CHVT(Key_F11, 11), CHVT(Key_F12, 12),
