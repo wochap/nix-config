@@ -13,14 +13,14 @@ static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 0};
 
 /* Autostart */
 static const char *const autostart[] = {
-  // "restart-pipewire-and-portal-services", NULL,
-  // "configure-gtk", NULL,
+  "restart-pipewire-and-portal-services", NULL,
+  "configure-gtk", NULL,
 
   // start systemd services related to graphical-session.target
   // https://github.com/emersion/xdg-desktop-portal-wlr/wiki/systemd-user-services,-pam,-and-environment-variables
-  // "systemctl --user start graphical-session.target", NULL,
+  "systemctl", "--user", "start", "graphical-session.target", NULL,
 
-  // "bash", "/etc/scripts/dwl-autostart.sh", NULL,
+  "bash", "/etc/scripts/dwl-autostart.sh", NULL,
   NULL /* terminate */
 };
 
