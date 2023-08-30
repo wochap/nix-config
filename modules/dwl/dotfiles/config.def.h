@@ -231,7 +231,7 @@ static const Keychord keychords[] = {
   { 1, {{MODKEY|MOD_CONTROL|MOD_SHIFT, Key_Escape}}, spawn, SHCMD("dunstctl close-all") },
 
   // Toggle bar
-  { 1, {{MODKEY|MOD_CONTROL, Key_n}}, spawn, SHCMD("/etc/scripts/waybar/waybar-toggle.sh") },
+  { 1, {{MODKEY, Key_b}}, spawn, SHCMD("/etc/scripts/waybar/waybar-toggle.sh") },
 
 
   // ### WM KEYBINDINGS
