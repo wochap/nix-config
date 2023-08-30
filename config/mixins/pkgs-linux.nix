@@ -13,6 +13,8 @@ in {
       libinput
       libinput-gestures
       xorg.xev # get key actual name
+
+      # TOOLS (wayland)
       wev # get key actual name
 
       # CLI TOOLS
