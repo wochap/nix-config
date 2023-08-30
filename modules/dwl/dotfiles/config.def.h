@@ -168,9 +168,10 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 	{ 1, {{MODKEY|MOD_CONTROL|MOD_SHIFT, KEY}}, toggletag,  {.ui = 1 << TAG} } 
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "sh", "-c", cmd, NULL } }
 
 /* commands */
+#define RUN(...)   { .v = (const char*[]){ __VA_ARGS__, NULL } }
 static const char *termcmd[] = { "kitty", NULL };
 static const char *menucmd[] = { "rofi-launcher", NULL };
 
