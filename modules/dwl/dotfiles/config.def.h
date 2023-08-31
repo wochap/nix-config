@@ -25,9 +25,9 @@ static const char *const autostart[] = {
 
   // start systemd services related to graphical-session.target
   // https://github.com/emersion/xdg-desktop-portal-wlr/wiki/systemd-user-services,-pam,-and-environment-variables
-  "systemctl", "--user", "start", "graphical-session.target", NULL,
+  "sh", "-c", "systemctl --user start graphical-session.target", NULL,
 
-  "bash", "/etc/scripts/dwl-autostart.sh", NULL,
+  "sh", "-c", "/etc/scripts/dwl-autostart.sh", NULL,
   NULL /* terminate */
 };
 
