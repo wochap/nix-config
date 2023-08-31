@@ -60,10 +60,10 @@ in {
         };
 
         # scripts to open projects blazingly fast
-        # "scripts/projects/dwl-dangerp.sh" = {
-        #   source = ./scripts/dwl-dangerp.sh;
-        #   mode = "0755";
-        # };
+        "scripts/projects/dwl-dangerp.sh" = {
+          source = ./scripts/dwl-dangerp.sh;
+          mode = "0755";
+        };
       };
     };
 
