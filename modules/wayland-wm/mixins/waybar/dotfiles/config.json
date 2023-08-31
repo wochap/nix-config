@@ -18,7 +18,7 @@
   "ipc": true,
   "id": "main",
   "spacing": 7,
-  "margin": "0 7px",
+  "margin": "0",
 
   "custom/mbpfan": {
     "interval": 1,
