@@ -13,6 +13,8 @@ window#waybar.hidden {
   opacity: 0;
 }
 
+#custom-dwl_title,
+#custom-dwl_layout,
 #temperature,
 #submap,
 #mode,
@@ -205,6 +207,14 @@ window#waybar.hidden {
 #waybar.empty #window {
   opacity: 0;
 }
+
+#custom-dwl_layout {
+  color: @orange;
+}
+
+#custom-dwl_title {
+}
+
 
 /*
 vim: syntax=less

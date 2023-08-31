@@ -5,6 +5,14 @@ let
   userName = config._userName;
   cfg = config._custom.dwl;
   # inherit (globals) themeColors;
+
+  dwl-waybar = pkgs.writeTextFile {
+    name = "dwl-waybar";
+    destination = "/bin/dwl-waybar";
+    executable = true;
+
+    text = builtins.readFile ./scripts/dwl-waybar.sh;
+  };
 in {
   options._custom.dwl = { enable = lib.mkEnableOption { }; };
 
@@ -33,6 +41,7 @@ in {
     environment = {
       systemPackages = with pkgs; [
         (dwl.override { conf = ./dotfiles/config.def.h; })
+        dwl-waybar
 
         lswt
         wlopm
@@ -61,8 +70,19 @@ in {
     home-manager.users.${userName} = {
       _custom.programs.waybar = {
         settings.mainBar = {
-          modules-left = [ "dwl/tags" "keyboard-state" ];
-          modules-center = [];
+          modules-left = [ "dwl/tags" "custom/dwl_layout" "keyboard-state" ];
+          modules-center = [ "custom/dwl_title" ];
+          "custom/dwl_layout" = {
+            exec = "dwl-waybar '' layout";
+            format = "{}";
+            return-type = "json";
+          };
+          "custom/dwl_title" = {
+            exec = "dwl-waybar '' title";
+            format = "{}";
+            escape = true;
+            return-type = "json";
+          };
         };
       };
 
