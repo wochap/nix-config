@@ -27,7 +27,7 @@ in {
 
     _custom.wm.greetd = {
       enable = lib.mkDefault true;
-      cmd = "dwl";
+      cmd = "dwl > ~.cache/dwltags";
     };
 
     environment = {
