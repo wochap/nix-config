@@ -105,6 +105,7 @@ in {
           "file:///home/${userName}/Downloads"
           "file:///home/${userName}/Pictures"
           "file:///home/${userName}/Videos"
+          "file:///home/${userName}/nix-config"
           "file:///home/${userName}/Projects"
           "file:///home/${userName}/Projects/boc"
           "file:///home/${userName}/Videos/Recordings"
