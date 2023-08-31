@@ -2,7 +2,7 @@
 
 let
   userName = config._userName;
-  http-url-handler = pkgs.unstable.makeDesktopItem {
+  http-url-handler = pkgs.makeDesktopItem {
     name = "http-url-handler";
     desktopName = "HTTP URL handler";
     comment = "Open an HTTP/HTTPS URL with a particular browser";

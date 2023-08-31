@@ -13,7 +13,7 @@ in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home = {
-        packages = with pkgs; [ unstable.swww swww-random ];
+        packages = with pkgs; [ swww swww-random ];
         sessionVariables = {
           SWWW_TRANSITION_TYPE = "simple";
           SWWW_TRANSITION_STEP = "45";
@@ -37,8 +37,8 @@ in {
             "SWWW_TRANSITION_FPS"
             "SWWW_TRANSITION_BEZIER"
           ];
-          ExecStart = "${pkgs.unstable.swww}/bin/swww-daemon";
-          ExecStop = "${pkgs.unstable.swww}/bin/swww kill";
+          ExecStart = "${pkgs.swww}/bin/swww-daemon";
+          ExecStop = "${pkgs.swww}/bin/swww kill";
           Type = "oneshot";
           KillMode = "mixed";
         };

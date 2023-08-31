@@ -2,11 +2,11 @@
   inputs = {
     # nixpkgs channels
     nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # master (aug 25 2023)
-    unstable.url = "github:nixos/nixpkgs?rev=730d115a6e4e23af17361a6a0682629a72e5eaf5"; # master (jan 2023)
+    unstable.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # master (aug 25 2023)
     # nixpkgs.url = "github:nixos/nixpkgs?rev=6fc32915e5c8ad3f8c46b70fd0f9ad201dd1adb4"; # master (aug 2023)
     nixpkgs.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # nixos-23.05-small (aug 2023)
     # nixpkgs.url = "github:nixos/nixpkgs?rev=13231eccfa1da771afa5c0807fdd73e05a1ec4e6"; # nixos-23.05-small (jul 2023)
-    prevstable-neovim.url = "github:nixos/nixpkgs?rev=7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f"; # NVIM v0.8.3
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=730d115a6e4e23af17361a6a0682629a72e5eaf5"; # NVIM v0.8.3
     prevstable-mongodb.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419"; # MongoDB shell version v4.2.17
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=53657afe29748b3e462f1f892287b7e254c26d77"; # Node v14.21.3

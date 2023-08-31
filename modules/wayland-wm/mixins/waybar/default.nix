@@ -13,7 +13,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = with pkgs; [ waybar libevdev ];
+      systemPackages = with pkgs; [ unstable.waybar libevdev ];
       etc = {
         "scripts/waybar/waybar-toggle.sh" = {
           source = ./scripts/waybar-toggle.sh;
