@@ -28,8 +28,9 @@ $sleep)
   systemctl suspend
   ;;
 $logout)
+  systemctl --user stop graphical-session.target
+
   if [[ "$XDG_SESSION_DESKTOP" == 'sway' ]]; then
-    systemctl --user stop graphical-session.target
     swaymsg exit
   fi
   ;;
