@@ -54,7 +54,8 @@ in {
     _custom.hardware.amdGpu.enable = false;
     _custom.hardware.amdGpu.enableSouthernIslands = false;
 
-    _custom.river.enable = true;
+    _custom.dwl.enable = true;
+    # _custom.river.enable = true;
     # _custom.hyprland.enable = true;
     # _custom.sway.enable = true;
     _custom.waylandWm.enable = true;
