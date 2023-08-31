@@ -5,7 +5,6 @@ let
   userName = config._userName;
   cfg = config._custom.dwl;
   # inherit (globals) themeColors;
-  # scripts = import ./scripts { inherit config pkgs lib; };
 in {
   options._custom.dwl = { enable = lib.mkEnableOption { }; };
 
@@ -26,25 +25,24 @@ in {
       })
     ];
 
-    # _custom.wm.greetd = {
-    #   enable = lib.mkDefault true;
-    #   cmd = "dwl";
-    # };
+    _custom.wm.greetd = {
+      enable = lib.mkDefault true;
+      cmd = "dwl";
+    };
 
     environment = {
       systemPackages = with pkgs; [
         (dwl.override { conf = ./dotfiles/config.def.h; })
 
         lswt
-        # scripts.dwl-focus-toggle
         wlopm
         wlrctl
       ];
 
-      # sessionVariables = {
-      #   XDG_CURRENT_DESKTOP = "dwl";
-      #   XDG_SESSION_DESKTOP = "dwl";
-      # };
+      sessionVariables = {
+        XDG_CURRENT_DESKTOP = "dwl";
+        XDG_SESSION_DESKTOP = "dwl";
+      };
 
       etc = {
         "scripts/dwl-autostart.sh" = {
@@ -61,25 +59,25 @@ in {
     };
 
     home-manager.users.${userName} = {
-      # _custom.programs.waybar = {
-      #   settings.mainBar = {
-      #     modules-left = [ "dwl/tags" "keyboard-state" ];
-      #     modules-center = [];
-      #   };
-      # };
+      _custom.programs.waybar = {
+        settings.mainBar = {
+          modules-left = [ "dwl/tags" "keyboard-state" ];
+          modules-center = [];
+        };
+      };
 
-      # services.swayidle.timeouts = lib.mkAfter [
-      #   {
-      #     timeout = 195;
-      #     command = ''wlopm --off "*"'';
-      #     resumeCommand = ''wlopm --on "*"'';
-      #   }
-      #   {
-      #     timeout = 15;
-      #     command = ''if pgrep swaylock; then wlopm --off "*"; fi'';
-      #     resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
-      #   }
-      # ];
+      services.swayidle.timeouts = lib.mkAfter [
+        {
+          timeout = 195;
+          command = ''wlopm --off "*"'';
+          resumeCommand = ''wlopm --on "*"'';
+        }
+        {
+          timeout = 15;
+          command = ''if pgrep swaylock; then wlopm --off "*"; fi'';
+          resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
+        }
+      ];
 
     };
   };
