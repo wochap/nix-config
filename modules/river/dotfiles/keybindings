@@ -113,15 +113,15 @@ riverctl map normal $mod+Shift Right swap right
 riverctl map normal $mod+Shift n swap next
 riverctl map normal $mod+Shift p swap previous
 
-# To focus the next/previous output
+# Focus next/previous output
 riverctl map normal $mod Period focus-output next
 riverctl map normal $mod Comma focus-output previous
 
-# To send the focused view to the next/previous output
+# Send focused view to the next/previous output
 riverctl map normal $mod+Shift Period send-to-output next
 riverctl map normal $mod+Shift Comma send-to-output previous
 
-# To bump the focused view to the top of the layout stack
+# Bump focused view to the top of the layout stack
 riverctl map normal $mod Return zoom
 
 riverctl declare-mode rivercarro
