@@ -72,6 +72,8 @@ static const Rule rules[] = {
 	{ "kitty-newsboat",          NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'r',        0,      0 },
 	{ "kitty-ncmpcpp",           NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'u',        0,      0 },
 
+	{ "kitty-dangerp",           NULL,       1 << 1,    0,          0,          0,        -1,      0,   0,   0,    0,      0,          0,      0 },
+
 	/* x, y, width, heigh are floating only
 	* When x or y == 0 the client is placed at the center of the screen,
 	* when width or height == 0 the default size of the client is used*/
