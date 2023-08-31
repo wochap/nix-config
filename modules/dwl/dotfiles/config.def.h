@@ -301,14 +301,14 @@ static const Keychord keychords[] = {
   // Change layout
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_comma}}, cyclelayout, {.i = -1 } },
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_period}}, cyclelayout, {.i = +1 } },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_t}}, setlayout, {.v = &layouts[LAYOUT_TILE]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_f}}, setlayout, {.v = &layouts[LAYOUT_FLOAT]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_m}}, setlayout, {.v = &layouts[LAYOUT_MONOCLE]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_c}}, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_g}}, setlayout, {.v = &layouts[LAYOUT_GRID]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_s}}, setlayout, {.v = &layouts[LAYOUT_SPIRAL]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_w}}, setlayout, {.v = &layouts[LAYOUT_SNAIL]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_d}}, setlayout, {.v = &layouts[LAYOUT_DWINDLE]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_1}}, setlayout, {.v = &layouts[LAYOUT_TILE]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_2}}, setlayout, {.v = &layouts[LAYOUT_FLOAT]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_3}}, setlayout, {.v = &layouts[LAYOUT_MONOCLE]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_4}}, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_5}}, setlayout, {.v = &layouts[LAYOUT_GRID]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_6}}, setlayout, {.v = &layouts[LAYOUT_SPIRAL]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_7}}, setlayout, {.v = &layouts[LAYOUT_SNAIL]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_8}}, setlayout, {.v = &layouts[LAYOUT_DWINDLE]} },
   // { 1, {{MODKEY, Key_space}}, setlayout, {0} },
 
 
