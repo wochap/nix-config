@@ -60,7 +60,7 @@ window#waybar.hidden {
 
 #custom-offlinemsmtp.disabled,
 #custom-notifications.disabled {
-  color: @red;
+  color: @comment;
 }
 
 #custom-powermenu {
