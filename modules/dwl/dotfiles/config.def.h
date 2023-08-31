@@ -56,7 +56,7 @@ static const Rule rules[] = {
 	{ "org.gnome.Calculator",    NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      0,          0,      0 },
 	{ "pavucontrol",             NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      0,          0,      0 },
 	{ "thunar",                  NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      0,          0,      0 },
-	{ "thunar-scratch",          NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      0,          0,      0 },
+	{ "thunar-scratch",          NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      'f',        0,      0 },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          1,          0,        -1,      0,   0,   0,    0,      0,          0,      0 },
 
 	{ "firefox",                 NULL,       1 << 4,    0,          0,          0,        -1,      0,   0,   0,    0,      0,          0,      0 },
