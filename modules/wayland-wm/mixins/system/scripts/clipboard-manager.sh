@@ -16,8 +16,6 @@ menu() {
   if [[ -n "$selected" ]]; then
     echo -n "$selected" | wl-copy
   fi
-
-  # cliphist list | wofi --dmenu --width "600" --location top | cliphist decode | wl-copy
 }
 
 if [[ "$1" == "--start" ]]; then

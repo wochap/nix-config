@@ -11,7 +11,6 @@ in {
     ./mixins/way-displays
     ./mixins/waybar
     ./mixins/wob
-    ./mixins/wofi
   ];
 
   options._custom.waylandWm = { enable = lib.mkEnableOption { }; };
