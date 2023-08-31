@@ -75,6 +75,7 @@ in {
           "custom/dwl_layout" = {
             exec = "dwl-waybar '' layout";
             format = "{}";
+            escape = true;
             return-type = "json";
           };
           "custom/dwl_title" = {
@@ -82,6 +83,7 @@ in {
             format = "{}";
             escape = true;
             return-type = "json";
+            max-length = 50;
           };
         };
       };

@@ -75,6 +75,11 @@ while [[ -n "$(pgrep waybar)" ]]; do
   title="$(echo "${output}" | grep '^[[:graph:]]* title' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
   layout="$(echo "${output}" | grep '^[[:graph:]]* layout' | cut -d ' ' -f 3-)"
 
+  if [[ $layout == "[\\]" ]]; then
+    # HACK: waybar doesn't like \\
+    layout="[\\\]"
+  fi
+
   _cycle
 
   # 60-second timeout keeps this from becoming a zombified process when waybar is no longer running
