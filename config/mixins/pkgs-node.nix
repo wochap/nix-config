@@ -27,7 +27,6 @@ in {
       localPkgs.customNodePackages.migrate-mongo
 
       # nodePackages.sharp-cli
-      # unstable.nodePackages_latest.webtorrent-cli
     ];
 
     home-manager.users.${userName} = {
