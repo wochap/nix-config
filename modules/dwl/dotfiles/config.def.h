@@ -37,7 +37,7 @@ static const int tagcount = TAGCOUNT;
 
 static const int hide_type = 1;
 
-#define MENU "rofi -dmenu -config /home/gean/.config/rofi/config-multi-line.rasi"
+#define MENU "rofi -dmenu -config $HOME/.config/rofi/config-multi-line.rasi"
 static const Menu menus[] = {
 	/* command                            feed function        action function */
 	{ MENU " -i -p Windows",              menuwinfeed,         menuwinaction    },
