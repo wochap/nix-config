@@ -8,13 +8,8 @@ let
   overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
 in {
   config = {
-    # home-manager.users.${userName} = {
-    #   nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
-    # };
 
     nixpkgs.overlays = [
-      # inputs.neovim-nightly-overlay.overlay
-
       (final: prev: {
         # Custom channels
         unstable = import inputs.unstable {
@@ -55,119 +50,53 @@ in {
       })
 
       (final: prev: {
-        wob = prev.wob.overrideAttrs (_: {
-          src = pkgs.fetchFromGitHub {
-            owner = "francma";
-            repo = "wob";
-            rev = "75a65e6c33e916a5453d705ed5b3b21335587631";
-            sha256 = "sha256-N6+UUCRerzswbU5XpoNeG6Qu//QSyXD4mTIXwCPXMsU=";
-          };
-
-          buildInputs = with pkgs; [ inih wayland wayland-protocols pixman cmocka ]
-            ++ lib.optional stdenv.isLinux pkgs.libseccomp;
-        });
-
-        dracula-theme = prev.dracula-theme.overrideAttrs
-          (_: { src = inputs.dracula-gtk-theme; });
-
-        orchis = prev.orchis.overrideAttrs (_: {
-          src = prev.fetchFromGitHub {
-            repo = "Orchis-theme";
-            owner = "vinceliuice";
-            rev = "a0190354f93b4acbdb8636aef83d35a9dea8e0e8";
-            sha256 = "sha256-T8qaHeMMJ0RgTJavmmxKggnKatKc7Gs7bDLYxT6b1Bg=";
-          };
-        });
-
-        # tela-icon-theme = prev.tela-icon-theme.overrideAttrs (_: {
-        #   src = prev.fetchFromGitHub {
-        #     owner = "vinceliuice";
-        #     repo = "Tela-icon-theme";
-        #     rev = "184959a91ed9726d7cbb3d55c627be09d302096f";
-        #     sha256 = "sha256-mvkgHBdZm6vF+/DS3CRLl1m14U0Lj4Xtz4J/vpJUTQM=";
-        #   };
-        # });
-
-        lazygit = prev.lazygit.overrideAttrs (_: {
-          src = prev.fetchFromGitHub {
-            owner = "jesseduffield";
-            repo = "lazygit";
-            rev = "v0.31.4";
-            sha256 = "sha256-yze4UaSEbyHwHSyj0mM7uCzaDED+p4O3HVVlHJi/FKU=";
-          };
-        });
-
         heimdall = prev.heimdall.overrideAttrs (_: {
           src = prev.fetchFromSourcehut {
-            owner  = "~grimler";
-            repo   = "Heimdall";
-            rev    = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
+            owner = "~grimler";
+            repo = "Heimdall";
+            rev = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
             sha256 = "sha256-tcAE83CEHXCvHSn/S9pWu6pUiqGmukMifEadqPDTkQ0=";
           };
         });
 
-        # neovide = prev.neovide.overrideAttrs (drv: rec {
-        #   cargoDeps = drv.cargoDeps.overrideAttrs (_: {
-        #     inherit src;
-        #     outputHash = "sha256-1BkEx2emvGdA8agoBgeEyoz1Z9G3SB0M8ORTNat+PqU=";
-        #   });
-        #   src = prev.fetchFromGitHub {
-        #     owner = "neovide";
-        #     repo = "neovide";
-        #     rev = "2766fe7f84d4d1825d7399378fdd3b0e1ce7f4a6";
-        #     sha256 = "sha256-1WoVeobqOvT72Ml+gtVS1URYZFifMdKXLwHOMq1HUww=";
-        #   };
-        # });
-
+        waybar = prev.waybar.overrideAttrs (oldAttrs: {
+          mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+        });
       })
-    ] ++ (if (isWayland) then
+    ] ++ (if isWayland then
       [
         (final: prev: {
-          waybar = prev.waybar.overrideAttrs (oldAttrs: {
-            mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-          });
 
-          robo3t = (prev.runCommandNoCC "robo3t" {
-            buildInputs = with pkgs; [ makeWrapper ];
-          } ''
-            makeWrapper ${prev.robo3t}/bin/robo3t $out/bin/robo3t \
-              --set "QT_QPA_PLATFORM" "xcb"
-
-            ln -sf ${prev.robo3t}/share $out/share
-          '');
-
-          insomnia = (prev.runCommandNoCC "insomnia" {
+          insomnia = prev.runCommandNoCC "insomnia" {
             buildInputs = with pkgs; [ makeWrapper ];
           } ''
             makeWrapper ${prev.insomnia}/bin/insomnia $out/bin/insomnia \
-              --add-flags "--enable-features=UseOzonePlatform" \
-              --add-flags "--ozone-platform=wayland"
+            --add-flags "--enable-features=UseOzonePlatform" \
+            --add-flags "--ozone-platform=wayland"
 
             ln -sf ${prev.insomnia}/share $out/share
-          '');
+          '';
 
-          microsoft-edge = (prev.runCommandNoCC "microsoft-edge" {
+          microsoft-edge = prev.runCommandNoCC "microsoft-edge" {
             buildInputs = with pkgs; [ makeWrapper ];
           } ''
             makeWrapper ${prev.microsoft-edge}/bin/microsoft-edge $out/bin/microsoft-edge \
-              --add-flags "--enable-features=WebRTCPipeWireCapturer" \
-              --add-flags "--enable-features=UseOzonePlatform" \
-              --add-flags "--ozone-platform=wayland"
+            --add-flags "--enable-features=WebRTCPipeWireCapturer" \
+            --add-flags "--enable-features=UseOzonePlatform" \
+            --add-flags "--ozone-platform=wayland"
 
             ln -sf ${prev.microsoft-edge}/share $out/share
-          '');
+          '';
 
         })
-
-        # inputs.nixpkgs-wayland.overlay
       ]
     else
-      [ ]) ++ (if (isDarwin) then [
+      [ ]) ++ (if isDarwin then [
         inputs.nur.overlay
         inputs.spacebar.overlay.x86_64-darwin
 
         (final: prev: {
-          sf-mono-liga-bin = localPkgs.sf-mono-liga-bin;
+          inherit (localPkgs) sf-mono-liga-bin;
 
           # yabai is broken on macOS 12, so lets make a smol overlay to use the master version
           yabai = let

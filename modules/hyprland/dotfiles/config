@@ -1,5 +1,5 @@
 # monitor=name,resolution,position,scale
-monitor = , preferred,auto,auto
+monitor = , highres,auto,auto
 monitor = , addreserved, -7, 0, 0, 0
 
 general {
@@ -78,6 +78,14 @@ animations {
   animation = windowsOut, 1, 2.5, easyOut, popin
   animation = fade, 1, 1.5, easyIn
 }
+
+# unscale XWayland
+xwayland {
+  force_zero_scaling = true
+}
+# toolkit-specific scale
+env = GDK_SCALE,2
+env = XCURSOR_SIZE,24
 
 
 #### RULES

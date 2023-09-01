@@ -15,6 +15,28 @@ let
   };
 in {
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        wob = prev.wob.overrideAttrs (_: {
+          src = pkgs.fetchFromGitHub {
+            owner = "francma";
+            repo = "wob";
+            rev = "75a65e6c33e916a5453d705ed5b3b21335587631";
+            sha256 = "sha256-N6+UUCRerzswbU5XpoNeG6Qu//QSyXD4mTIXwCPXMsU=";
+          };
+
+          buildInputs = with pkgs; [
+            inih
+            wayland
+            wayland-protocols
+            pixman
+            cmocka
+            libseccomp
+          ];
+        });
+      })
+    ];
+
     home-manager.users.${userName} = {
       home = { packages = with pkgs; [ wob wob-osd ]; };
 

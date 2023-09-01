@@ -14,7 +14,6 @@ in {
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
-
       (final: prev: {
         river = prev.river.overrideAttrs (_: {
           src = prev.fetchFromGitHub {

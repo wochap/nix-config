@@ -1,17 +1,15 @@
 {
   inputs = {
     # nixpkgs channels
-    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # master (aug 25 2023)
     unstable.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # master (aug 25 2023)
-    # nixpkgs.url = "github:nixos/nixpkgs?rev=6fc32915e5c8ad3f8c46b70fd0f9ad201dd1adb4"; # master (aug 2023)
     nixpkgs.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # nixos-23.05-small (aug 2023)
-    # nixpkgs.url = "github:nixos/nixpkgs?rev=13231eccfa1da771afa5c0807fdd73e05a1ec4e6"; # nixos-23.05-small (jul 2023)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=730d115a6e4e23af17361a6a0682629a72e5eaf5"; # NVIM v0.8.3
     prevstable-mongodb.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419"; # MongoDB shell version v4.2.17
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=53657afe29748b3e462f1f892287b7e254c26d77"; # Node v14.21.3
     prevstable-chrome.url = "github:nixos/nixpkgs?rev=13231eccfa1da771afa5c0807fdd73e05a1ec4e6"; # Google Chrome 114.0.5735.198
     prevstable-kernel-pkgs.url = "github:nixos/nixpkgs?rev=ea4c80b39be4c09702b0cb3b42eab59e2ba4f24b"; # Linux 5.15.119
+    prevstable-hyprland.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # master (aug 25 2023)
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
     nixpkgs-python.url = "github:cachix/nixpkgs-python?rev=dfe9a33d0d9bd31650b69c36f8fff5f2d5342393"; # main (aug 26 2023)
 
@@ -37,12 +35,11 @@
 
     # third party overlays/modules
     hyprland.url = "github:hyprwm/Hyprland?rev=116b9a80566e7956233b39697ac78c112d514c3c"; # main (aug 25 2023)
-    hyprland.inputs.nixpkgs.follows = "nixpkgs-unstable"; # TODO: change to nixpkgs
+    hyprland.inputs.nixpkgs.follows = "prevstable-hyprland"; # TODO: change to nixpkgs
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=e368bd15e4bfd560baa9333ad47415340c563458";
     hyprland-plugins.inputs.hyprland.url = "github:hyprwm/Hyprland?rev=2df0d034bc4a18fafb3524401eeeceaa6b23e753";
     xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=e1f145d15db320fe5c5e99b90898ab87db7e8214";
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=fdb2d33c942bfa07762c0e5357920f41d2f734a9";
     nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=fe4535a27389624445b96450a7c338136c619c95";
 
@@ -95,8 +92,6 @@
     dracula-mutt.flake = false;
     dracula-icons-theme.url = "github:m4thewz/dracula-icons?rev=2d3c83caa8664e93d956cfa67a0f21418b5cdad8";
     dracula-icons-theme.flake = false;
-    dracula-gtk-theme.url = "github:dracula/gtk?rev=6ed4a6dfe6579a409dafbfe48a5e7473eab2a4bc";
-    dracula-gtk-theme.flake = false;
     dracula-sublime.url = "github:dracula/sublime?rev=09faa29057c3c39e9a45f3a51a5e262375e3bf9f";
     dracula-sublime.flake = false;
     dracula-xresources.url = "github:dracula/xresources?rev=49765e34adeebca381db1c3e5516b856ff149c93";
