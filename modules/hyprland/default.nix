@@ -29,7 +29,7 @@ in {
       _custom.programs.waybar = {
         settings.mainBar = {
           modules-left =
-            [ "wlr/workspaces" "keyboard-state" "hyprland/submap" ];
+            [ "hyprland/workspaces" "keyboard-state" "hyprland/submap" ];
           modules-center = [ "hyprland/window" ];
         };
       };

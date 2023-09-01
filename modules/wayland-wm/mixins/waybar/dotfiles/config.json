@@ -52,7 +52,7 @@
   "river/tags": {
     "num-tags": 8
   },
-  "wlr/workspaces": {
+  "hyprland/workspaces": {
     "all-outputs": true,
     "format": "<span rise='-1000'>{icon}</span>",
     "format-icons": {
