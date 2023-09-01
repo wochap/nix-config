@@ -264,9 +264,6 @@ static const Key keys[] = {
   // Toggle fullscreen
   { MODKEY, Key_f, togglefullscreen, {0} },
 
-  // Toggle sticky
-  { MODKEY|MOD_CONTROL, Key_y, togglesticky, {0} },
-
   // Toggle visibility
   { MODKEY, Key_h, toggle_visibility, {0} },
 
@@ -387,9 +384,6 @@ static const Key keys[] = {
 
   // { MODKEY, Key_a, shiftview, { .i = -1 } },
   // { MODKEY, Key_semicolon, shiftview, { .i = 1 } },
-
-  { MODKEY, Key_o, menu, {.v = &menus[0]} },
-  { MODKEY|MOD_SHIFT, Key_o, menu, {.v = &menus[1]} },
 
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
