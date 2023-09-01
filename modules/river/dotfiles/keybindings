@@ -210,7 +210,7 @@ riverctl map normal $mod+$alt t spawn \
 
 # Open file manager
 riverctl map normal $mod+$alt f spawn \
-  "river-focus-toggle thunar \"thunar --name thunar-scratch\" $file_manager_tag"
+  "river-focus-toggle thunar-scratch \"thunar --name thunar-scratch\" $file_manager_tag"
 
 # Screencast/record region to mp4
 riverctl map normal $mod+$alt r spawn \
