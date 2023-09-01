@@ -85,6 +85,8 @@ window#waybar.hidden {
   padding: 0 10.5px;
   background-color: @background;
   color: @comment;
+  transition-duration: 0.3s;
+  transition-property: background-color, color;
 }
 #tags button,
 #workspaces button {
@@ -227,7 +229,6 @@ window#waybar.hidden {
 
 #custom-dwl_title {
 }
-
 
 /*
 vim: syntax=less
