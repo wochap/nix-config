@@ -3,10 +3,6 @@
 let
   ani-cli = pkgs.writeShellScriptBin "ani-cli"
     (builtins.readFile "${inputs.ani-cli}/ani-cli");
-  mangaflix = pkgs.writeShellScriptBin "mangaflix"
-    (builtins.readFile "${inputs.flix-tools}/ManganatoFlix/mangaflix");
-  piratebayflix = pkgs.writeShellScriptBin "piratebayflix"
-    (builtins.readFile "${inputs.flix-tools}/PirateBayFlix/piratebayflix");
 in {
   config = {
     environment.systemPackages = with pkgs; [
@@ -57,11 +53,9 @@ in {
       # APPS CLI
       ani-cli
       cbonsai
-      piratebayflix
       speedread
       stripe-cli
       tmux
-      # mangaflix
       # dogecoin
 
     ];

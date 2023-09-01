@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  inherit (config._custom.globals) themeColors;
   localPkgs = import ../packages { inherit pkgs lib; };
   isWayland = config._displayServer == "wayland";
 
@@ -8,91 +9,98 @@ let
     (builtins.readFile "${inputs.fontpreview-ueberzug}/fontpreview-ueberzug");
 in {
   config = {
-    environment.systemPackages = with pkgs; [
-      # TOOLS
-      libinput
-      libinput-gestures
-      xorg.xev # get key actual name
+    environment = {
+      shellAliases = {
+        fp =
+          "fontpreview-ueberzug -b ${themeColors.background} -f ${themeColors.foreground}";
+      };
 
-      # TOOLS (wayland)
-      wev # get key actual name
+      systemPackages = with pkgs; [
+        # TOOLS
+        libinput
+        libinput-gestures
+        xorg.xev # get key actual name
 
-      # CLI TOOLS
-      acpi
-      acpitool
-      cached-nix-shell # fast nix-shell scripts
-      coreutils-full # a lot of commands
-      devour # swallow
-      dex # execute DesktopEntry files (xdg/autostart)
-      dmidecode
-      dnsutils # test dns
-      efivar
-      evtest # input debugging
-      ffmpegthumbnailer
-      glxinfo # opengl utils
-      graphicsmagick
-      heimdall # reset samsung ROM
-      ifuse # mount ios
-      inotify-tools # c module
-      inxi # check compositor running
-      libimobiledevice # mount ios
-      libva-utils # verifying VA-API
-      localPkgs.advcpmv # cp and mv with progress bar
-      notify-desktop # test notifications
-      pciutils # lspci and others commands
-      pulsemixer
-      slop # region selection
-      usbutils # lsusb, for android development
-      vdpauinfo # verifying VDPAU
-      vulkan-tools
-      wirelesstools
-      # base-devel
-      # busybox # a lot of commands but with less options/features
-      # mpc_cli
-      # mpd
-      # mpd_clientlib # mpd module
-      # procps
+        # TOOLS (wayland)
+        wev # get key actual name
 
-      # 7w7
-      nmap
-      # metasploit
-      # tightvnc
+        # CLI TOOLS
+        acpi
+        acpitool
+        cached-nix-shell # fast nix-shell scripts
+        coreutils-full # a lot of commands
+        devour # swallow
+        dex # execute DesktopEntry files (xdg/autostart)
+        dmidecode
+        dnsutils # test dns
+        efivar
+        evtest # input debugging
+        ffmpegthumbnailer
+        glxinfo # opengl utils
+        graphicsmagick
+        heimdall # reset samsung ROM
+        ifuse # mount ios
+        inotify-tools # c module
+        inxi # check compositor running
+        libimobiledevice # mount ios
+        libva-utils # verifying VA-API
+        localPkgs.advcpmv # cp and mv with progress bar
+        notify-desktop # test notifications
+        pciutils # lspci and others commands
+        pulsemixer
+        slop # region selection
+        usbutils # lsusb, for android development
+        vdpauinfo # verifying VDPAU
+        vulkan-tools
+        wirelesstools
+        # base-devel
+        # busybox # a lot of commands but with less options/features
+        # mpc_cli
+        # mpd
+        # mpd_clientlib # mpd module
+        # procps
 
-      # DE CLI
-      hunspell # dictionary for document programs
-      hunspellDicts.en-us
-      pulseaudio
-      systemd
-      # pamixer # audio cli
+        # 7w7
+        nmap
+        # metasploit
+        # tightvnc
 
-      # APPS CLI
-      fontpreview-ueberzug
-      tty-clock
+        # DE CLI
+        hunspell # dictionary for document programs
+        hunspellDicts.en-us
+        pulseaudio
+        systemd
+        # pamixer # audio cli
 
-      # APPS GUI
-      dmenu
-      nyxt # browser
-      qutebrowser # browser
-      skypeforlinux
-      zoom-us
-      # antimicroX
-      # localPkgs.nsxiv
-      # mysql-workbench
-      # teamviewer
+        # APPS CLI
+        fontpreview-ueberzug
+        tty-clock
 
-      # Electron apps
-      bitwarden
-      brave
-      element-desktop-wayland
-      figma-linux
-      insomnia
-      microsoft-edge
-      notion-app-enhanced
-      postman
-      prevstable-chrome.google-chrome # HACK: fix https://github.com/NixOS/nixpkgs/issues/244742
-      simplenote
-      slack
-      whatsapp-for-linux
-    ];
+        # APPS GUI
+        dmenu
+        nyxt # browser
+        qutebrowser # browser
+        skypeforlinux
+        zoom-us
+        # antimicroX
+        # localPkgs.nsxiv
+        # mysql-workbench
+        # teamviewer
+
+        # Electron apps
+        bitwarden
+        brave
+        element-desktop-wayland
+        figma-linux
+        insomnia
+        microsoft-edge
+        notion-app-enhanced
+        postman
+        prevstable-chrome.google-chrome # HACK: fix https://github.com/NixOS/nixpkgs/issues/244742
+        simplenote
+        slack
+        whatsapp-for-linux
+      ];
+    };
   };
 }

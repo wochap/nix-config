@@ -18,7 +18,6 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
     # home-manager
-    # home-manager.url = "github:nix-community/home-manager?rev=6a20e40acaebf067da682661aa67da8b36812606"; # master (aug 2023)
     home-manager.url = "github:nix-community/home-manager?rev=2a6679aa9cc3872c29ba2a57fe1b71b3e3c5649f"; # release-23.05 (aug 2023)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
@@ -32,6 +31,7 @@
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
+    nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";
 
     # third party overlays/modules
     hyprland.url = "github:hyprwm/Hyprland?rev=116b9a80566e7956233b39697ac78c112d514c3c"; # main (aug 25 2023)
@@ -39,8 +39,6 @@
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=e368bd15e4bfd560baa9333ad47415340c563458";
     hyprland-plugins.inputs.hyprland.url = "github:hyprwm/Hyprland?rev=2df0d034bc4a18fafb3524401eeeceaa6b23e753";
     xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=e1f145d15db320fe5c5e99b90898ab87db7e8214";
-    nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
-    nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=fe4535a27389624445b96450a7c338136c619c95";
 
     # third party darwin stuff
@@ -50,10 +48,10 @@
     yabai-src.flake = false;
 
     # terminal tools
-    zsh-vi-mode.url = "github:jeffreytse/zsh-vi-mode?rev=462c032389c30a1c53226890d83c7465af92b249";
-    zsh-vi-mode.flake = false;
-    fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
-    fzf-tab.flake = false;
+    # zsh-vi-mode.url = "github:jeffreytse/zsh-vi-mode?rev=462c032389c30a1c53226890d83c7465af92b249";
+    # zsh-vi-mode.flake = false;
+    # fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
+    # fzf-tab.flake = false;
     ncmpcpp-ueberzug.url = "github:munguua/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";
     ncmpcpp-ueberzug.flake = false;
     ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
@@ -62,15 +60,13 @@
     # third party cli
     ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";
     ptsh.flake = false;
-    flix-tools.url = "github:ThamognyaKodi/FlixTools?rev=76640494cf7ded9ecb8a4ac11249eb86839c5501";
-    flix-tools.flake = false;
-    ani-cli.url = "github:pystardust/ani-cli?rev=a2d47b56193afbbace2a0169b9b658c58493dbfb";
+    ani-cli.url = "github:pystardust/ani-cli?rev=6be7f07f33f7fb746103f3eeeafd14744555cff7";
     ani-cli.flake = false;
     ranger.url = "github:ranger/ranger?rev=7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6";
     ranger.flake = false;
     nnn.url = "github:jarun/nnn?rev=b8b0bab4266a635519f605c2e3e193e392674273";
     nnn.flake = false;
-    fontpreview-ueberzug.url = "github:OliverLew/fontpreview-ueberzug?rev=77a094c0fa846badb16e50616aa2c3635867d76a";
+    fontpreview-ueberzug.url = "github:OliverLew/fontpreview-ueberzug?rev=f10f40cba0c64a506772a0ff343cd0f57237432d";
     fontpreview-ueberzug.flake = false;
 
     # themes
@@ -82,20 +78,14 @@
     # dracula theme
     dracula-adw-gtk3.url = "github:lassekongo83/adw-colors?rev=b290fedc46e3dc0719b9e2455ad765afe0c6a4d7";
     dracula-adw-gtk3.flake = false;
-    dracula-discord.url = "github:dracula/betterdiscord?rev=6e9151fc3b013ae3c3961c45f11c0cd8d934f4be";
-    dracula-discord.flake = false;
     dracula-kitty.url = "github:dracula/kitty?rev=eeaa86a730e3d38649053574dc60a74ce06a01bc";
     dracula-kitty.flake = false;
     dracula-amfora.url = "github:dracula/amfora?rev=6e3fde02006707dc0a7b4677b0d4f40f52ed6227";
     dracula-amfora.flake = false;
     dracula-mutt.url = "github:dracula/mutt?rev=8e512a73d519b2d503b4771fbc58c67f232ce7e0";
     dracula-mutt.flake = false;
-    dracula-icons-theme.url = "github:m4thewz/dracula-icons?rev=2d3c83caa8664e93d956cfa67a0f21418b5cdad8";
-    dracula-icons-theme.flake = false;
     dracula-sublime.url = "github:dracula/sublime?rev=09faa29057c3c39e9a45f3a51a5e262375e3bf9f";
     dracula-sublime.flake = false;
-    dracula-xresources.url = "github:dracula/xresources?rev=49765e34adeebca381db1c3e5516b856ff149c93";
-    dracula-xresources.flake = false;
     dracula-zsh-syntax-highlighting.url = "github:dracula/zsh-syntax-highlighting?rev=47ba26d2d4912a1b8de066e589633ff1963c5621";
     dracula-zsh-syntax-highlighting.flake = false;
     dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
