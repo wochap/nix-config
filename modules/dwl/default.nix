@@ -21,13 +21,13 @@ in {
 
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "0.4-next";
+          version = "0.4-wlroots-next";
 
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
-            rev = "8280a92eba24ae4d97429a5df56398d805d53b8c";
-            hash = "sha256-r2kYENymlLVU6Pi+/x9N4gh37+AZNDMAEITtH0BImxw=";
+            rev = "e1427d7ad13f96c4291d8b94b98720b4172fdf1e";
+            hash = "sha256-9QQptGy5haVhcFGqQ7dMF0gfHvoyb/L+k5InrgJA5SI=";
           };
 
           buildInputs = with pkgs.unstable; [
@@ -37,7 +37,18 @@ in {
             pixman
             wayland
             wayland-protocols
-            wlroots_0_16
+
+            (wlroots_0_16.overrideAttrs (_: {
+              src = fetchFromGitLab {
+                domain = "gitlab.freedesktop.org";
+                owner = "wlroots";
+                repo = "wlroots";
+                rev = "2926acf60d80961597fa55ab68c3d15d7bf1980d";
+                hash = "sha256-Kkgx6KyJFtQEE4X+bgXlXAaSPnR9dWXGyw9ovf7wUlw=";
+              };
+              buildInputs = _.buildInputs
+                ++ [ pkgs.hwdata pkgs.libdisplay-info ];
+            }))
 
             xorg.libX11
             xorg.xcbutilwm
@@ -54,7 +65,7 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
-        (unstable.dwl.override { conf = ./dotfiles/config.def.h; })
+        (unstable.dwl.override { conf = ./dotfiles/wlroots-next-config.def.h; })
         dwl-waybar
 
         lswt
