@@ -26,9 +26,23 @@ in {
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
-            rev = "aa784c4479bbed09c944621f5fb30854cfed9990";
-            hash = "sha256-e07wD9iUNyzezzMTPPrhz7vGXo/yYR9Xl4W1Yff/gBE=";
+            rev = "8280a92eba24ae4d97429a5df56398d805d53b8c";
+            hash = "sha256-r2kYENymlLVU6Pi+/x9N4gh37+AZNDMAEITtH0BImxw=";
           };
+
+          buildInputs = with pkgs.unstable; [
+            libinput
+            xorg.libxcb
+            libxkbcommon
+            pixman
+            wayland
+            wayland-protocols
+            wlroots_0_16
+
+            xorg.libX11
+            xorg.xcbutilwm
+            xwayland
+          ];
         });
       })
     ];
@@ -40,7 +54,7 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
-        (dwl.override { conf = ./dotfiles/config.def.h; })
+        (unstable.dwl.override { conf = ./dotfiles/config.def.h; })
         dwl-waybar
 
         lswt
