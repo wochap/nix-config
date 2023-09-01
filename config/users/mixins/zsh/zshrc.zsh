@@ -19,6 +19,12 @@
 # Allow changing directories without `cd`.
 # setopt AUTOCD
 
+# Highlighting --help messages with bat
+alias bathelp='bat --plain --language=help'
+help() {
+  "$@" --help 2>&1 | bathelp
+}
+
 ### Fix slowness of pastes with zsh-syntax-highlighting.zsh
 ### https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {
