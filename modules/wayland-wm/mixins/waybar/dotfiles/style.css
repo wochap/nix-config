@@ -28,6 +28,7 @@ window#waybar.hidden {
 #custom-notifications,
 #custom-offlinemsmtp,
 #custom-powermenu,
+#custom-dwl_tag,
 #tags,
 #workspaces,
 #custom-scratchpad_indicator,
@@ -80,6 +81,11 @@ window#waybar.hidden {
   margin-right: 4px;
   color: @comment;
 }
+#custom-dwl_tag {
+  padding: 2px 10.5px 0;
+  background-color: @background;
+  color: @comment;
+}
 #tags button,
 #workspaces button {
   padding: 0 2px;
@@ -87,15 +93,18 @@ window#waybar.hidden {
   font-weight: normal;
   background-color: @background;
 }
+#custom-dwl_tag.occupied,
 #tags button.occupied {
   color: @foreground;
 }
+#custom-dwl_tag.focused,
 #tags button.focused,
 #workspaces button.active,
 #workspaces button.focused {
   color: @background;
   background-color: @primary;
 }
+#custom-dwl_tag.urgent,
 #tags button.urgent,
 #workspaces button.urgent {
   color: @red;

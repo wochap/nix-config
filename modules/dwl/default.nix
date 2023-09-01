@@ -83,8 +83,10 @@ in {
 
     home-manager.users.${userName} = {
       _custom.programs.waybar = {
-        settings.mainBar = {
-          modules-left = [ "dwl/tags" "custom/dwl_layout" "keyboard-state" ];
+        settings.mainBar = lib.mkMerge ([{
+          modules-left = (builtins.map (i: "custom/dwl_tag#${toString i}")
+            (builtins.genList (i: i) 9))
+            ++ [ "custom/dwl_layout" "keyboard-state" ];
           modules-center = [ "custom/dwl_title" ];
           "custom/dwl_layout" = {
             exec = "dwl-waybar '' layout";
@@ -99,7 +101,13 @@ in {
             return-type = "json";
             max-length = 50;
           };
-        };
+        }] ++ (builtins.map (i: {
+          "custom/dwl_tag#${toString i}" = {
+            exec = "dwl-waybar '' ${toString i}";
+            format = "{}";
+            return-type = "json";
+          };
+        }) (builtins.genList (i: i) 9)));
       };
 
       services.swayidle.timeouts = lib.mkAfter [
