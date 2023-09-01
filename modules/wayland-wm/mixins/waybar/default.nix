@@ -8,12 +8,13 @@ let
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/modules/wayland-wm/mixins/waybar";
+  inherit (pkgs.unstable) waybar;
 in {
   imports = [ ./waybar-config.nix ];
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = with pkgs; [ unstable.waybar libevdev ];
+      systemPackages = [ waybar pkgs.libevdev ];
       etc = {
         "scripts/waybar/waybar-toggle.sh" = {
           source = ./scripts/waybar-toggle.sh;
@@ -51,7 +52,7 @@ in {
 
         Service = {
           PassEnvironment = "PATH";
-          ExecStart = "${pkgs.unstable.waybar}/bin/waybar";
+          ExecStart = "${waybar}/bin/waybar";
           ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
           Restart = "on-failure";
           KillMode = "mixed";
