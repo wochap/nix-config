@@ -40,6 +40,7 @@ riverctl rule-add float -app-id "mpv"
 riverctl rule-add float -app-id "org.gnome.Calculator"
 riverctl rule-add float -app-id "pavucontrol"
 riverctl rule-add float -app-id "thunar"
+riverctl rule-add float -app-id "thunar-scratch"
 riverctl rule-add float -app-id "xdg-desktop-portal-gtk"
 
 riverctl rule-add tag -app-id "firefox" $((1 << (5 - 1)))
@@ -73,6 +74,6 @@ riverctl spawn "bash /etc/scripts/river-autostart.sh"
 # Set and exec into the default layout generator, rivercarro.
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivercarro
-riverctl spawn "rivercarro -inner-gaps 7 -outer-gaps 7 -no-smart-gaps"
+riverctl spawn "rivercarro -inner-gaps 0 -outer-gaps 0 -no-smart-gaps"
 
 # vim: syntax=sh
