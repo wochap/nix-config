@@ -4,6 +4,7 @@ let userName = config._userName;
 in {
   config = {
     services.openssh.enable = true;
+    services.openssh.settings.PasswordAuthentication = false;
 
     home-manager.users.${userName} = {
       # NOTE: ssh agent managed by gnome-keyring
