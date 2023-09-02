@@ -84,10 +84,10 @@ static const Layout layouts[] = {
 	{ "[M]",      monocle },
 	{ "|M|",      centeredmaster },
 	{ "||",       column },
+  { "HHH",      grid },
 	{ "[@]",      spiral },
 	{ "@|@",      snail },
 	{ "[\\]",     dwindle },
-	{ "HHH",      grid },
 	{ NULL,       NULL },
 };
 
@@ -97,10 +97,10 @@ enum layout_types {
   LAYOUT_MONOCLE,
   LAYOUT_CENTEREDMASTER,
   LAYOUT_COLUMN,
+  LAYOUT_GRID,
   LAYOUT_SPIRAL,
   LAYOUT_SNAIL,
   LAYOUT_DWINDLE,
-  LAYOUT_GRID,
 };
 
 /* monitors */
@@ -178,7 +178,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 #define MOD_NONE 0
 
 /* Prefix key */
-#define PREFIXKEY Key_t
+// #define PREFIXKEY Key_t
 
 #define TAGKEYS(KEY,TAG) \
 	{ 1, {{MODKEY,  KEY}},                      view,       {.ui = 1 << TAG} }, \
@@ -294,8 +294,8 @@ static const Keychord keychords[] = {
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Right}}, incnmaster, {.i = -1} },
 
   // To increment/decrement the main count
-  { 2, {{MODKEY, Key_r}, {MOD_SHIFT, Key_Left}}, setmfact, {.f = -0.05} },
-  { 2, {{MODKEY, Key_r}, {MOD_SHIFT, Key_Right}}, setmfact, {.f = +0.05} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Up}}, setmfact, {.f = +0.05} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Down}}, setmfact, {.f = -0.05} },
 
   // Change layout
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_comma}}, cyclelayout, {.i = -1 } },
@@ -304,10 +304,11 @@ static const Keychord keychords[] = {
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_2}}, setlayout, {.v = &layouts[LAYOUT_FLOAT]} },
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_3}}, setlayout, {.v = &layouts[LAYOUT_MONOCLE]} },
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_4}}, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_5}}, setlayout, {.v = &layouts[LAYOUT_GRID]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_6}}, setlayout, {.v = &layouts[LAYOUT_SPIRAL]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_7}}, setlayout, {.v = &layouts[LAYOUT_SNAIL]} },
-  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_8}}, setlayout, {.v = &layouts[LAYOUT_DWINDLE]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_5}}, setlayout, {.v = &layouts[LAYOUT_COLUMN]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_6}}, setlayout, {.v = &layouts[LAYOUT_GRID]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_7}}, setlayout, {.v = &layouts[LAYOUT_SPIRAL]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_8}}, setlayout, {.v = &layouts[LAYOUT_SNAIL]} },
+  { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_9}}, setlayout, {.v = &layouts[LAYOUT_DWINDLE]} },
   // { 1, {{MODKEY, Key_space}}, setlayout, {0} },
 
 
