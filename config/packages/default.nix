@@ -3,7 +3,6 @@
 {
   advcpmv = pkgs.callPackage ./advcpmv {};
   interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock {};
-  interception-caps2esc = pkgs.callPackage ./interception-caps2esc {};
   mailnotify = pkgs.callPackage ./mailnotify.nix {};
   mangadesk = pkgs.callPackage ./mangadesk.nix {};
   nwg-look = pkgs.callPackage ./nwg-look {};

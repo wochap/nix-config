@@ -10,6 +10,7 @@
     ./gui
     ./hardware
     ./hyprland
+    ./interception-tools
     ./ipwebcam
     ./mbpfan
     ./mongodb
