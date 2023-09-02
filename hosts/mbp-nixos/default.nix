@@ -28,6 +28,8 @@ in {
 
     _custom.tui.nixDirenv.enable = true;
 
+    _custom.gui.qutebrowser.enable = true;
+
     _custom.wm.email.enable = true;
     _custom.wm.calendar.enable = true;
     _custom.wm.networking.enable = true;

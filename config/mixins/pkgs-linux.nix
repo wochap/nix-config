@@ -79,7 +79,6 @@ in {
         # APPS GUI
         dmenu
         nyxt # browser
-        qutebrowser # browser
         skypeforlinux
         zoom-us
         # antimicroX

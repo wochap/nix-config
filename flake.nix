@@ -90,6 +90,10 @@
     dracula-zsh-syntax-highlighting.flake = false;
     dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
     dracula-betterdiscord.flake = false;
+
+    # catppuccin theme
+    catppuccin-qutebrowser.url = "github:catppuccin/qutebrowser?rev=78bb72b4c60b421c8ea64dd7c960add6add92f83";
+    catppuccin-qutebrowser.flake = false;
   };
 
   outputs = inputs:

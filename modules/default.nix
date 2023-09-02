@@ -7,6 +7,7 @@
     ./dwl
     ./flatpak
     ./globals.nix
+    ./gui
     ./hardware
     ./hyprland
     ./ipwebcam

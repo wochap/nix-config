@@ -56,6 +56,23 @@
         "type": "github"
       }
     },
+    "catppuccin-qutebrowser": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1679850032,
+        "narHash": "sha256-lp7HWYuD4aUyX1nRipldEojZVIvQmsxjYATdyHWph0g=",
+        "owner": "catppuccin",
+        "repo": "qutebrowser",
+        "rev": "78bb72b4c60b421c8ea64dd7c960add6add92f83",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "qutebrowser",
+        "rev": "78bb72b4c60b421c8ea64dd7c960add6add92f83",
+        "type": "github"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -926,6 +943,7 @@
       "inputs": {
         "android-nixpkgs": "android-nixpkgs",
         "ani-cli": "ani-cli",
+        "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "darwin": "darwin",
         "dracula-adw-gtk3": "dracula-adw-gtk3",
         "dracula-amfora": "dracula-amfora",
