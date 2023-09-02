@@ -71,13 +71,13 @@ setopt APPEND_HISTORY
 ZSH_WEB_SEARCH_ENGINES=(reddit "https://www.reddit.com/search/?q=")
 
 # Prevent nested nvim in nvim terminal
-if [[ -n "$NVIM_LISTEN_ADDRESS" ]]
-then
-  if [[ -x "$(command -v nvr)" ]]
-  then
-    alias nvim=nvr
-  else
-    alias nvim='echo "No nesting!"'
-  fi
+if [ -n "$NVIM" ]; then
+  alias nvim="nvr -cc split --remote-wait +'set bufhidden=wipe'"
 fi
-
+if [ -n "$NVIM" ]; then
+  export VISUAL="nvr -cc split --remote-wait +'set bufhidden=wipe'"
+  export EDITOR="nvr -cc split --remote-wait +'set bufhidden=wipe'"
+else
+  export VISUAL="nvim"
+  export EDITOR="nvim"
+fi

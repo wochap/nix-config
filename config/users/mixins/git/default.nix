@@ -3,6 +3,19 @@
 let userName = config._userName;
 in {
   config = {
+    nixpkgs.overlays = [
+      (final: prev: {
+        lazygit = prev.lazygit.overrideAttrs (_: {
+          src = prev.fetchFromGitHub {
+            owner = "jesseduffield";
+            repo = "lazygit";
+            rev = "e60936e964e0b978532745f319fc4600c00de7d7";
+            sha256 = "sha256-fP12JfOyeXdQXUur2PToV29PIXc9bT3J/xJr75BOC0o=";
+          };
+        });
+      })
+    ];
+
     environment = {
       shellAliases = {
         gs = "git status";
@@ -17,8 +30,15 @@ in {
 
       programs.lazygit = {
         enable = true;
+        package = pkgs.unstable.lazygit;
         settings = {
-          os = { openCommand = "xdg-open {{filename}} >/dev/null"; };
+          os = {
+            open = "xdg-open {{filename}} >/dev/null";
+            edit =
+              "nvr -cc split --remote-wait +'set bufhidden=wipe' {{filename}}";
+            # TODO: add editAtLine
+            suspend = true;
+          };
           gui = {
             showFileTree = false;
             scrollHeight = 10;

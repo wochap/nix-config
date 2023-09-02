@@ -12,11 +12,6 @@ let
 in {
   config = {
     environment = {
-      variables = {
-        VISUAL = "nvim";
-        EDITOR = "nvim";
-      };
-
       systemPackages = with pkgs;
         [
           # oni2
@@ -25,8 +20,7 @@ in {
 
           # TODO: passextraMakeWrapperArgs?
           prevstable-neovim.neovim
-          # neovim-nightly
-          neovim-remote
+          prevstable-neovim.neovim-remote
 
           # required by treesitter
           tree-sitter
