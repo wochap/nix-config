@@ -20,7 +20,7 @@ notify_user() {
     trap 'rm -f "$thumbnail"' exit
     magick "$dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
 
-    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Screen shooter" "Screenshot Saved" --action "default,Edit" --action "open,Open")
+    action=$(dunstify --appname="Takeshot" -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Screen shooter" "Screenshot Saved" --action "default,Edit" --action "open,Open")
   else
     exit 1
     # dunstify -t "$EXPIRE_TIME" --replace=699 "Screen shooter" "Screenshot Aborted."
@@ -40,7 +40,7 @@ copy_to_cb() {
 # countdown
 countdown() {
   for sec in $(seq $1 -1 1); do
-    dunstify -t 1000 --replace=699 -i $dest "Taking shot in : $sec"
+    dunstify -t 1000 --replace=698 -i "accessories-screenshot" "Taking shot in : $sec"
     sleep 1
   done
 }

@@ -29,7 +29,7 @@ notify_user() {
 
     # TODO: copy to clipboard
 
-    action=$(dunstify -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Video recording" "Recording Saved" --action "default,Open" --action "fm,Open in file manager")
+    action=$(dunstify --appname="Recorder" -t "$EXPIRE_TIME" --replace=691 -i "$thumbnail" "Video recording" "Recording Saved" --action "default,Open" --action "fm,Open in file manager")
   else
     exit 1
     # dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Aborted."
@@ -47,7 +47,7 @@ notify_user() {
 # countdown
 countdown() {
   for sec in $(seq $1 -1 1); do
-    dunstify -t 1000 --replace=699 "Recording in : $sec"
+    dunstify -t 1000 --replace=692 -i "screenrecorder" "Recording in : $sec"
     sleep 1
   done
 }
