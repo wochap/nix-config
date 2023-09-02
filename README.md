@@ -14,11 +14,13 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
 
    The initial config must have: `user config`, `flakes`, `cachix`, `git`, `videoDrivers`, `internet setup`
 
-   **NOTE:** Run `sudo nixos-install`
-
    Initial [configuration.nix](configuration-example.nix) example
 
-   Extra steps for MacBook Pro 11,5 (to enable Intel GPU)
+   **NOTE:** Run `sudo nixos-install`
+
+1. Extra steps for MacBook Pro 11,5 (optional)
+
+   To enable Intel GPU, you must install rEFInd and enable some options...
 
    ```sh
    sudo mkdir -p /boot/EFI/boot/
@@ -59,18 +61,17 @@ You probably want to press `Ctrl + Alt + F1`
    ```
 1. Rebuild nixos with the device's specific config, for example, heres's a rebuild for my `desktop`
 
-   **IMPORTANT:** On clean install, update harware-configuration.nix in this repository
+   **IMPORTANT:** On clean install, update/add harware-configuration.nix in this repository
 
    **NOTE:** Env vars are required on first install https://github.com/NixOS/nixpkgs/issues/97433#issuecomment-689554709
 
-   **WARNING:** First `nixos-rebuild` with device config can take several hours
+   **WARNING:** First `nixos-rebuild` with device config can take several hours, maybe you want to disable some features
 
    ```
    # Go to nix-config folder
    $ cd /home/gean/nix-config
-   $ NIXOS_INSTALL_BOOTLOADER=1 sudo --preserve-env=NIXOS_INSTALL_BOOTLOADER nixos-rebuild boot --flake .#desktop --impure
+   $ NIXOS_INSTALL_BOOTLOADER=1 sudo --preserve-env=NIXOS_INSTALL_BOOTLOADER nixos-rebuild boot --flake .#desktop
    # Reboot
-   # $ sudo nixos-rebuild boot -p sway --flake .#desktop-sway --impure
    ```
 
 1. Set password for new user `gean`
@@ -111,7 +112,7 @@ You probably want to press `Ctrl + Alt + F1`
    $ ln -s ~/nix-config/modules/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
    ```
 1. Setup Syncthing (http://localhost:8384)
-1. Setup backagrounds
+1. Setup backgrounds
    ```
    $ ln -s ~/Sync/backgrounds ~/Pictures/backgrounds
    ```
@@ -122,15 +123,12 @@ You probably want to press `Ctrl + Alt + F1`
    $ betterdiscordctl install
    ```
 1. Enable WebRTC PipeWire support in chrome (wayland only)
+
    Go to chrome://flags/ and enable `WebRTC PipeWire support`
-1. Add wallpapers to `~/Pictures/backgrounds/`
-1. Setup lock wallpaper (required for xorg config)
-   ```
-   $ convert -resize $(xdpyinfo | grep dimensions | cut -d\  -f7 | cut -dx -f1) ~/Pictures/backgrounds/default.jpg ~/Pictures/backgrounds/lockscreen.jpg
-   ```
 1. Sync `vscode`, `firefox`, `chrome` (optional)
 
 1. Setup calendar
+
    A browser should open automatically asking for google credentials, otherwise run:
    ```
    $ vdirsyncer discover
@@ -158,28 +156,17 @@ Update inputs on `flake.nix`, then:
 ```sh
 $ cd /home/gean/nix-config
 $ nix flake update --recreate-lock-file
-$ sudo nixos-rebuild switch --flake .#dekstop --impure
+$ sudo nixos-rebuild boot --flake .#dekstop
 ```
 
 ## Development Workflow
 
-1. Setup [Lorri](https://github.com/nix-community/lorri)
-
-   In the project folder:
+1. Setup a project with [nix-direnv]()
 
    ```
-   # Create shell.nix
-
-   $ lorri init
+   $ nix flake new -t github:nix-community/nix-direnv ./
    $ direnv allow
-   ```
-
-   [Fix XDG_DATA_DIRS reset](https://github.com/target/lorri/issues/496)
-   Debug initialization
-
-   ```
-   $ lorri shell
-   $ nix-shell
+   # update flake.nix
    ```
 
 ## Tools

@@ -22,6 +22,10 @@ in {
           prevstable-neovim.neovim
           prevstable-neovim.neovim-remote
 
+          # required by https://github.com/toppair/peek.nvim
+          deno
+          # webkitgtk
+
           # required by treesitter
           tree-sitter
 
