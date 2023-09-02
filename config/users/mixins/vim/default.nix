@@ -68,7 +68,11 @@ in {
           sumneko-lua-language-server
         ] else
           [ ]);
-      shellAliases = { nv = "nvim"; };
+      shellAliases = {
+        # HACK: remove padding inside kitty
+        nv =
+          "[[ -n $KITTY_PID ]] && (kitty @ set-spacing padding=0 && nvim && kitty @ set-spacing padding=7) || nvim";
+      };
     };
 
     home-manager.users.${userName} = {
