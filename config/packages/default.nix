@@ -2,22 +2,16 @@
 
 {
   advcpmv = pkgs.callPackage ./advcpmv {};
-  dracula-icons = pkgs.callPackage ./dracula-icons {};
   interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock {};
   interception-caps2esc = pkgs.callPackage ./interception-caps2esc {};
   mailnotify = pkgs.callPackage ./mailnotify.nix {};
   mangadesk = pkgs.callPackage ./mangadesk.nix {};
-  neeasade-wmutils-opt = pkgs.callPackage ./neeasade-wmutils-opt.nix {};
-  nsxiv = pkgs.callPackage ./nsxiv.nix {};
   nwg-look = pkgs.callPackage ./nwg-look {};
   offlinemsmtp = pkgs.callPackage ./offlinemsmtp.nix {};
-  onagre = pkgs.callPackage ./onagre.nix {};
   ptsh = pkgs.callPackage ./ptsh {};
   sf-mono-liga-bin = pkgs.callPackage ./sf-mono-liga-bin.nix {};
   stremio = pkgs.qt5.callPackage ./stremio {};
   usbfluxd = pkgs.callPackage ./usbfluxd.nix {};
-  way-displays = pkgs.callPackage ./way-displays { inherit pkgs; };
-  zscroll = pkgs.callPackage ./zscroll {};
   customNodePackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./custom-node-packages {
     nodejs = pkgs.prevstable-nodejs.nodejs-14_x;
   });

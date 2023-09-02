@@ -82,7 +82,6 @@ in {
         skypeforlinux
         zoom-us
         # antimicroX
-        # localPkgs.nsxiv
         # mysql-workbench
         # teamviewer
 

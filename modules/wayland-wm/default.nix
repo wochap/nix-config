@@ -8,7 +8,6 @@ in {
     ./mixins/rofi
     ./mixins/swww
     ./mixins/system
-    ./mixins/way-displays
     ./mixins/waybar
     ./mixins/wob
   ];
