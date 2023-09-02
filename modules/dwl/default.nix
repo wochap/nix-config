@@ -26,8 +26,8 @@ in {
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
-            rev = "e1427d7ad13f96c4291d8b94b98720b4172fdf1e";
-            hash = "sha256-9QQptGy5haVhcFGqQ7dMF0gfHvoyb/L+k5InrgJA5SI=";
+            rev = "0c10540f431b86215f7dde6183f1dc0d33ce4de9";
+            hash = "sha256-2vJAY50y1desTIi3dNI95ekYT5c18IRmEZefnkJo0uY=";
           };
 
           buildInputs = with pkgs.unstable; [
@@ -65,7 +65,9 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
-        (unstable.dwl.override { conf = ./dotfiles/wlroots-next-config.def.h; })
+        (unstable.dwl.override {
+          conf = ./dotfiles/wlroots-next-keychords-config.def.h;
+        })
         dwl-waybar
 
         lswt
