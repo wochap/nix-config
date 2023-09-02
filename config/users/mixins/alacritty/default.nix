@@ -1,15 +1,9 @@
 { config, pkgs, lib, ... }:
 
-let
-  userName = config._userName;
-in
-{
+let userName = config._userName;
+in {
   config = {
-    environment = {
-      systemPackages = with pkgs; [
-        alacritty
-      ];
-    };
+    environment = { systemPackages = with pkgs; [ unstable.alacritty ]; };
 
     home-manager.users.${userName} = {
       xdg.configFile = {
