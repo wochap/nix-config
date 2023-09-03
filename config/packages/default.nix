@@ -2,6 +2,7 @@
 
 {
   advcpmv = pkgs.callPackage ./advcpmv {};
+  fromYAML = pkgs.callPackage ./from-yaml.nix {};
   interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock {};
   mailnotify = pkgs.callPackage ./mailnotify.nix {};
   mangadesk = pkgs.callPackage ./mangadesk.nix {};
