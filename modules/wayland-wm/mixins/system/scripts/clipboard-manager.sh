@@ -7,8 +7,9 @@ clear_db() {
 init() {
   clear_db
   killall wl-paste
-  killall wl-clip-persist
-  wl-clip-persist --clipboard regular &
+  # killall wl-clip-persist
+  # TODO: wait for https://github.com/Linus789/wl-clip-persist/issues/6
+  # wl-clip-persist --clipboard regular &
   wl-paste --watch cliphist store --primary
 }
 
