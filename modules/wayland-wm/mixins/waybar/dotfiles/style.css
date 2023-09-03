@@ -50,14 +50,11 @@ window#waybar.hidden {
 }
 
 #tray {
-  margin: 7px 0 7px 7px;
+  margin: 0 0 0 7px;
 }
 
 #keyboard-state label.locked {
   font-size: 1.2em;
-}
-
-#keyboard-state label.locked {
   background: @primary;
   color: @background;
   padding: 0 0.3em;
@@ -66,10 +63,6 @@ window#waybar.hidden {
 #custom-offlinemsmtp.disabled,
 #custom-notifications.disabled {
   color: @comment;
-}
-
-#custom-powermenu {
-  color: @red;
 }
 
 #tags,
@@ -115,14 +108,6 @@ window#waybar.hidden {
   color: @selection;
 }
 
-#cpu {
-  color: #61afef;
-}
-
-#memory {
-  color: #c678dd;
-}
-
 #submap,
 #mode {
   color: @orange;
@@ -131,21 +116,8 @@ window#waybar.hidden {
 #temperature {
   color: @foreground;
 }
-
 #temperature.critical {
   color: @red;
-}
-
-#custom-media {
-  background-color: #c678dd;
-  color: #1e222a;
-}
-
-#custom-fans {
-  color: #98c379;
-}
-
-#clock {
 }
 
 #idle_inhibitor.deactivated {
@@ -158,9 +130,6 @@ window#waybar.hidden {
 #custom-recorder.recording {
   background: @red;
   color: @background;
-}
-
-#pulseaudio {
 }
 
 #pulseaudio.muted,
@@ -182,13 +151,11 @@ window#waybar.hidden {
 #battery.plugged {
   color: @green;
 }
-
 @keyframes blink {
   to {
     color: @yellow;
   }
 }
-
 #battery.critical:not(.charging) {
   color: @red;
   animation-name: blink;
@@ -214,7 +181,6 @@ window#waybar.hidden {
 #network {
   color: @cyan;
 }
-
 #network.disconnected {
   color: @red;
 }
