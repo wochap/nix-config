@@ -12,7 +12,15 @@ in {
       programs.bat = {
         enable = true;
         config = { theme = "Dracula"; };
-        themes = { dracula = "${inputs.dracula-sublime}/Dracula.tmTheme"; };
+        themes = {
+          Dracula = "${inputs.dracula-sublime}/Dracula.tmTheme";
+
+          # TODO: Catppuccin-mocha doesn't work
+          # $ bat cache --build
+          # Failed to load one or more themes from '/home/gean/.config/bat/themes' (reason: 'Invalid syntax theme settings')
+          # Catppuccin-mocha =
+          #   "${inputs.catppuccin-bat}/Catppuccin-mocha.tmTheme";
+        };
       };
     };
   };
