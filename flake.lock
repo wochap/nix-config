@@ -73,6 +73,23 @@
         "type": "github"
       }
     },
+    "catppuccin-bat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1668065083,
+        "narHash": "sha256-6WVKQErGdaqb++oaXnY3i6/GuH2FhTgK0v4TN4Y0Wbw=",
+        "owner": "catppuccin",
+        "repo": "bat",
+        "rev": "ba4d16880d63e656acced2b7d4e034e4a93f74b1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "bat",
+        "rev": "ba4d16880d63e656acced2b7d4e034e4a93f74b1",
+        "type": "github"
+      }
+    },
     "catppuccin-lazygit": {
       "flake": false,
       "locked": {
@@ -229,23 +246,6 @@
         "owner": "dracula",
         "repo": "mutt",
         "rev": "8e512a73d519b2d503b4771fbc58c67f232ce7e0",
-        "type": "github"
-      }
-    },
-    "dracula-sublime": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1631389861,
-        "narHash": "sha256-cUzPozktzJcLJxux/R99dKCRSexqjxBnFc8ekDdj3wc=",
-        "owner": "dracula",
-        "repo": "sublime",
-        "rev": "09faa29057c3c39e9a45f3a51a5e262375e3bf9f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dracula",
-        "repo": "sublime",
-        "rev": "09faa29057c3c39e9a45f3a51a5e262375e3bf9f",
         "type": "github"
       }
     },
@@ -978,6 +978,7 @@
         "android-nixpkgs": "android-nixpkgs",
         "ani-cli": "ani-cli",
         "catppuccin-alacritty": "catppuccin-alacritty",
+        "catppuccin-bat": "catppuccin-bat",
         "catppuccin-lazygit": "catppuccin-lazygit",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "darwin": "darwin",
@@ -986,7 +987,6 @@
         "dracula-betterdiscord": "dracula-betterdiscord",
         "dracula-kitty": "dracula-kitty",
         "dracula-mutt": "dracula-mutt",
-        "dracula-sublime": "dracula-sublime",
         "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",
         "fontpreview-ueberzug": "fontpreview-ueberzug",
         "home-manager": "home-manager",

@@ -84,8 +84,6 @@
     dracula-amfora.flake = false;
     dracula-mutt.url = "github:dracula/mutt?rev=8e512a73d519b2d503b4771fbc58c67f232ce7e0";
     dracula-mutt.flake = false;
-    dracula-sublime.url = "github:dracula/sublime?rev=09faa29057c3c39e9a45f3a51a5e262375e3bf9f";
-    dracula-sublime.flake = false;
     dracula-zsh-syntax-highlighting.url = "github:dracula/zsh-syntax-highlighting?rev=47ba26d2d4912a1b8de066e589633ff1963c5621";
     dracula-zsh-syntax-highlighting.flake = false;
     dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
@@ -98,6 +96,8 @@
     catppuccin-alacritty.flake = false;
     catppuccin-lazygit.url = "github:catppuccin/lazygit?rev=b2ecb6d41b6f54a82104879573c538e8bdaeb0bf";
     catppuccin-lazygit.flake = false;
+    catppuccin-bat.url = "github:catppuccin/bat?rev=ba4d16880d63e656acced2b7d4e034e4a93f74b1";
+    catppuccin-bat.flake = false;
   };
 
   outputs = inputs:

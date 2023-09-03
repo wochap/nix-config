@@ -5,7 +5,7 @@ in {
   imports = [
     ./mixins/alacritty
     ./mixins/amfora
-    ./mixins/bat.nix
+    ./mixins/bat
     ./mixins/bottom.nix
     ./mixins/default-browser
     ./mixins/discord
