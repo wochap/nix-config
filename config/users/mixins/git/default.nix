@@ -1,6 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
-let userName = config._userName;
+let
+  userName = config._userName;
+  catppuccin =
+    pkgs._custom.fromYAML "${inputs.catppuccin-lazygit}/themes/mocha.yml";
 in {
   config = {
     nixpkgs.overlays = [
@@ -42,6 +45,7 @@ in {
           gui = {
             showFileTree = false;
             scrollHeight = 10;
+            inherit (catppuccin) theme;
           };
           git.paging = {
             colorArg = "always";
@@ -51,7 +55,6 @@ in {
       };
 
       # TODO: setup gh signature verification
-      # Generates ~/.gitconfig
       programs.git = {
         package = pkgs.gitAndTools.gitFull;
         enable = true;
@@ -66,19 +69,14 @@ in {
           enable = true;
           options = {
             features = "side-by-side line-numbers decorations";
-            syntax-theme = "Dracula";
-            plus-style = ''syntax "#003800"'';
-            minus-style = ''syntax "#3f0001"'';
             navigate = true;
-            decorations = {
-              commit-decoration-style = "bold yellow box ul";
-              file-style = "bold yellow ul";
-              file-decoration-style = "none";
-              hunk-header-decoration-style = "cyan box ul";
-            };
+
+            # available themes `delta --list-syntax-themes`
+            syntax-theme = "Dracula";
+
+            file-modified-label = "modified:";
+            decorations = { commit-decoration-style = "yellow box ul"; };
             line-numbers = {
-              line-numbers-left-style = "cyan";
-              line-numbers-right-style = "cyan";
               line-numbers-minus-style = "124";
               line-numbers-plus-style = "28";
             };
@@ -99,21 +97,17 @@ in {
           };
           commit = { gpgSign = true; };
         };
-        includes = [
-          # { path = ./dotfiles/gitconfig.dracula; }
-
-          {
-            condition = "gitdir:~/Projects/boc/**/.git";
-            contents = {
-              user = {
-                email = "geanb@bandofcoders.com";
-                name = "Gean";
-                signingKey = "geanb@bandofcoders.com";
-              };
-              commit = { gpgSign = true; };
+        includes = [{
+          condition = "gitdir:~/Projects/boc/**/.git";
+          contents = {
+            user = {
+              email = "geanb@bandofcoders.com";
+              name = "Gean";
+              signingKey = "geanb@bandofcoders.com";
             };
-          }
-        ];
+            commit = { gpgSign = true; };
+          };
+        }];
 
       };
     };

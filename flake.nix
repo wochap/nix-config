@@ -96,6 +96,8 @@
     catppuccin-qutebrowser.flake = false;
     catppuccin-alacritty.url = "github:catppuccin/alacritty?rev=3c808cbb4f9c87be43ba5241bc57373c793d2f17";
     catppuccin-alacritty.flake = false;
+    catppuccin-lazygit.url = "github:catppuccin/lazygit?rev=b2ecb6d41b6f54a82104879573c538e8bdaeb0bf";
+    catppuccin-lazygit.flake = false;
   };
 
   outputs = inputs:
