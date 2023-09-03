@@ -3,10 +3,9 @@
 let
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
-  localPkgs = import ../../../packages { inherit pkgs lib; };
   # extraPackages = with pkgs; [
-  #   localPkgs.customNodePackages.typescript
-  #   localPkgs.customNodePackages.typescript-language-server
+  #   _custom.customNodePackages.typescript
+  #   _custom.customNodePackages.typescript-language-server
   # ];
   # extraMakeWrapperArgs = ''--suffix PATH : "${lib.makeBinPath extraPackages}"'';
 in {
@@ -34,9 +33,9 @@ in {
           fd
 
           # required by null-ls
-          localPkgs.customNodePackages."@fsouza/prettierd"
-          localPkgs.customNodePackages.markdownlint
-          localPkgs.customNodePackages.stylelint
+          _custom.customNodePackages."@fsouza/prettierd"
+          _custom.customNodePackages.markdownlint
+          _custom.customNodePackages.stylelint
           lua51Packages.luacheck
           nixfmt
           nodePackages.eslint_d
@@ -49,19 +48,19 @@ in {
           # required by lspconfig
           clang-tools
           flow
-          localPkgs.customNodePackages."@tailwindcss/language-server"
-          localPkgs.customNodePackages.cssmodules-language-server
-          localPkgs.customNodePackages.emmet-ls
+          _custom.customNodePackages."@tailwindcss/language-server"
+          _custom.customNodePackages.cssmodules-language-server
+          _custom.customNodePackages.emmet-ls
           nodePackages.bash-language-server
           nodePackages.svelte-language-server
           nodePackages.vscode-langservers-extracted
           rnix-lsp
-          # localPkgs.customNodePackages.typescript
-          # localPkgs.customNodePackages.typescript-language-server
+          # _custom.customNodePackages.typescript
+          # _custom.customNodePackages.typescript-language-server
           # npm i typescript typescript-language-server -g
 
           # required by nvim-dap
-          localPkgs.customNodePackages.ts-node
+          _custom.customNodePackages.ts-node
         ] ++ (if (!isDarwin) then [
           neovide
 

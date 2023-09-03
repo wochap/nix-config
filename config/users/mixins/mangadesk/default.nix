@@ -2,7 +2,6 @@
 
 let
   userName = config._userName;
-  localPkgs = import ../../../packages { inherit pkgs lib; };
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
@@ -10,7 +9,7 @@ let
 in {
   config = {
     home-manager.users.${userName} = {
-      home.packages = [ localPkgs.mangadesk ];
+      home.packages = with pkgs; [ _custom.mangadesk ];
 
       xdg.configFile = {
         "mangadesk/config.json".source =

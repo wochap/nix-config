@@ -2,8 +2,6 @@
 
 let
   inherit (config._custom.globals) themeColors;
-  localPkgs = import ../packages { inherit pkgs lib; };
-  isWayland = config._displayServer == "wayland";
 
   fontpreview-ueberzug = pkgs.writeShellScriptBin "fontpreview-ueberzug"
     (builtins.readFile "${inputs.fontpreview-ueberzug}/fontpreview-ueberzug");
@@ -44,7 +42,7 @@ in {
         inxi # check compositor running
         libimobiledevice # mount ios
         libva-utils # verifying VA-API
-        localPkgs.advcpmv # cp and mv with progress bar
+        _custom.advcpmv # cp and mv with progress bar
         notify-desktop # test notifications
         pciutils # lspci and others commands
         pulsemixer

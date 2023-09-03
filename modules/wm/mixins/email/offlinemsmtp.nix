@@ -5,8 +5,7 @@ let
   cfg = config._custom.wm.email;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  localPkgs = import ../../../../config/packages { inherit pkgs lib; };
-  inherit (localPkgs) offlinemsmtp;
+  inherit (pkgs._custom) offlinemsmtp;
 in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {

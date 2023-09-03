@@ -5,7 +5,6 @@ let
   inherit (config._custom) globals;
   userName = config._userName;
   isWayland = config._displayServer == "wayland";
-  localPkgs = import ../../../../config/packages { inherit pkgs lib; };
 in {
   options._custom.wm.gtk = {
     enable = lib.mkEnableOption "setup gtk theme and apps";
@@ -19,7 +18,7 @@ in {
 
         awf # widget factory
         gnome.dconf-editor
-        # localPkgs.nwg-look
+        # _custom.nwg-look
 
         globals.gtkTheme.package
         gnome.adwaita-icon-theme

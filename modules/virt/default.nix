@@ -2,7 +2,6 @@
 
 let
   userName = config._userName;
-  localPkgs = import ../packages { inherit pkgs lib; };
   cfg = config._custom.virt;
 in {
   options._custom.virt = { enable = lib.mkEnableOption { }; };
@@ -23,7 +22,7 @@ in {
 
       # required by iPhone USB -> Network style passthrough
       libusbmuxd
-      # localPkgs.usbfluxd # build fails unstable
+      # _custom.usbfluxd # build fails unstable
       socat
       usbmuxd
     ];

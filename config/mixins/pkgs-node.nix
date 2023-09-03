@@ -1,8 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 
-let
-  localPkgs = import ../packages { inherit pkgs lib; };
-  userName = config._userName;
+let userName = config._userName;
 in {
   config = {
     environment.systemPackages = with pkgs; [
@@ -24,7 +22,7 @@ in {
       # others
       netlify-cli
       nodePackages.node2nix
-      localPkgs.customNodePackages.migrate-mongo
+      _custom.customNodePackages.migrate-mongo
 
       # nodePackages.sharp-cli
     ];

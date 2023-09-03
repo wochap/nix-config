@@ -4,8 +4,7 @@ with lib;
 let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  localPkgs = import ../../../../../config/packages { inherit pkgs lib; };
-  inherit (localPkgs) offlinemsmtp;
+  inherit (pkgs._custom) offlinemsmtp;
   mkSignatureScript = signatureLines:
     pkgs.writeScript "signature" ''
       #!${pkgs.python3}/bin/python

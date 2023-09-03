@@ -2,13 +2,12 @@
 
 let
   userName = config._userName;
-  localPkgs = import ../../../packages { inherit pkgs lib; };
   ptsh-repo = inputs.ptsh;
 in {
   config = {
     home-manager.users.${userName} = {
       home = {
-        packages = [ localPkgs.ptsh ];
+        packages = with pkgs; [ _custom.ptsh ];
 
         file = {
           ".local/share/ptSh/logo.txt".source = "${ptsh-repo}/src/logo.txt";

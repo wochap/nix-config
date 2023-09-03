@@ -1,7 +1,6 @@
 { config, lib, pkgs, inputs, ... }:
 
-let localPkgs = import ./packages { inherit pkgs lib; };
-in {
+{
   imports = [
     ./mixins/darwin.nix
     ./mixins/lorri
@@ -163,7 +162,7 @@ in {
 
       masApps = {
         "CopyClip - Clipboard History" = 595191960;
-        "Slack" = 803453959 ;
+        "Slack" = 803453959;
       };
 
       extraConfig = ''
@@ -171,6 +170,5 @@ in {
       '';
     };
   };
-
 
 }

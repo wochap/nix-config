@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  localPkgs = import ../packages { inherit pkgs lib; };
-  userName = config._userName;
+let userName = config._userName;
 in {
   config = {
     environment = {
@@ -13,7 +11,7 @@ in {
 
         # APPS MEDIA (Comment on first install)
         libsForQt5.kdenlive
-        localPkgs.stremio
+        stremio
         obs-studio # video capture
         # kdeApplications.kdenlive # video editor
         # nomacs # image viewer/editor
