@@ -94,6 +94,8 @@
     # catppuccin theme
     catppuccin-qutebrowser.url = "github:catppuccin/qutebrowser?rev=78bb72b4c60b421c8ea64dd7c960add6add92f83";
     catppuccin-qutebrowser.flake = false;
+    catppuccin-alacritty.url = "github:catppuccin/alacritty?rev=3c808cbb4f9c87be43ba5241bc57373c793d2f17";
+    catppuccin-alacritty.flake = false;
   };
 
   outputs = inputs:

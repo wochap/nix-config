@@ -56,6 +56,23 @@
         "type": "github"
       }
     },
+    "catppuccin-alacritty": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1664239314,
+        "narHash": "sha256-w9XVtEe7TqzxxGUCDUR9BFkzLZjG8XrplXJ3lX6f+x0=",
+        "owner": "catppuccin",
+        "repo": "alacritty",
+        "rev": "3c808cbb4f9c87be43ba5241bc57373c793d2f17",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "alacritty",
+        "rev": "3c808cbb4f9c87be43ba5241bc57373c793d2f17",
+        "type": "github"
+      }
+    },
     "catppuccin-qutebrowser": {
       "flake": false,
       "locked": {
@@ -943,6 +960,7 @@
       "inputs": {
         "android-nixpkgs": "android-nixpkgs",
         "ani-cli": "ani-cli",
+        "catppuccin-alacritty": "catppuccin-alacritty",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "darwin": "darwin",
         "dracula-adw-gtk3": "dracula-adw-gtk3",

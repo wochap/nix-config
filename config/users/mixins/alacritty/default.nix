@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let userName = config._userName;
 in {
@@ -7,6 +7,7 @@ in {
 
     home-manager.users.${userName} = {
       xdg.configFile = {
+        "alacritty/catppuccin".source = inputs.catppuccin-alacritty;
         "alacritty/alacritty.yml".source = ./dotfiles/alacritty.yml;
       };
     };
