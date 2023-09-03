@@ -265,7 +265,7 @@ static const Keychord keychords[] = {
   { 1, {{MODKEY, Key_f}}, togglefullscreen, {0} },
 
   // Toggle visibility
-  { 1, {{MODKEY, Key_h}}, toggle_visibility, {0} },
+  // { 1, {{MODKEY, Key_h}}, toggle_visibility, {0} },
 
   // Focus direction
   { 1, {{MODKEY, Key_n}}, focusstack, {.i = +1} },
