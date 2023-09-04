@@ -283,6 +283,23 @@
         "type": "github"
       }
     },
+    "dracula-lsd": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1685999750,
+        "narHash": "sha256-ZNyNYJEffxxU7K/7JOv+VRD3JbhW42kvmWk7pLu1vA8=",
+        "owner": "dracula",
+        "repo": "lsd",
+        "rev": "75f3305a2bba4dacac82b143a15d278daee28232",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "lsd",
+        "rev": "75f3305a2bba4dacac82b143a15d278daee28232",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1006,6 +1023,7 @@
         "dracula-adw-gtk3": "dracula-adw-gtk3",
         "dracula-amfora": "dracula-amfora",
         "dracula-betterdiscord": "dracula-betterdiscord",
+        "dracula-lsd": "dracula-lsd",
         "fontpreview-ueberzug": "fontpreview-ueberzug",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
