@@ -5,9 +5,9 @@ in {
   config = {
     home-manager.users.${userName} = {
       home.sessionVariables = {
-        # setup https://draculatheme.com/fzf
+        # setup https://github.com/catppuccin/fzf
         FZF_DEFAULT_OPTS =
-          "--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4";
+          "--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8";
       };
 
       programs.fzf = {

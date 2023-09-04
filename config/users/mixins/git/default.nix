@@ -72,7 +72,7 @@ in {
             navigate = true;
 
             # available themes `delta --list-syntax-themes`
-            syntax-theme = "Dracula";
+            syntax-theme = "Catppuccin-mocha";
 
             file-modified-label = "modified:";
             decorations = { commit-decoration-style = "yellow box ul"; };
