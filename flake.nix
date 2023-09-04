@@ -102,6 +102,8 @@
     catppuccin-starship.flake = false;
     catppuccin-neomutt.url = "github:catppuccin/neomutt?rev=f6ce83da47cc36d5639b0d54e7f5f63cdaf69f11";
     catppuccin-neomutt.flake = false;
+    catppuccin-bottom.url = "github:catppuccin/bottom?rev=c0efe9025f62f618a407999d89b04a231ba99c92";
+    catppuccin-bottom.flake = false;
   };
 
   outputs = inputs:

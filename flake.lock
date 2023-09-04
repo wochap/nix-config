@@ -90,6 +90,23 @@
         "type": "github"
       }
     },
+    "catppuccin-bottom": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1672359880,
+        "narHash": "sha256-VaHX2I/Gn82wJWzybpWNqU3dPi3206xItOlt0iF6VVQ=",
+        "owner": "catppuccin",
+        "repo": "bottom",
+        "rev": "c0efe9025f62f618a407999d89b04a231ba99c92",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "bottom",
+        "rev": "c0efe9025f62f618a407999d89b04a231ba99c92",
+        "type": "github"
+      }
+    },
     "catppuccin-kitty": {
       "flake": false,
       "locked": {
@@ -1013,6 +1030,7 @@
         "ani-cli": "ani-cli",
         "catppuccin-alacritty": "catppuccin-alacritty",
         "catppuccin-bat": "catppuccin-bat",
+        "catppuccin-bottom": "catppuccin-bottom",
         "catppuccin-kitty": "catppuccin-kitty",
         "catppuccin-lazygit": "catppuccin-lazygit",
         "catppuccin-neomutt": "catppuccin-neomutt",

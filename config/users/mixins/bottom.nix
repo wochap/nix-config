@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let userName = config._userName;
 in {
@@ -16,9 +16,9 @@ in {
             tree = true;
             basic = true;
           };
-        };
+        } // builtins.fromTOML
+          (builtins.readFile "${inputs.catppuccin-bottom}/themes/mocha.toml");
       };
-
     };
   };
 }
