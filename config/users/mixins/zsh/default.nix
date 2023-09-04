@@ -23,8 +23,6 @@ in {
           source ${inputs.ohmyzsh}/lib/key-bindings.zsh
           source ${inputs.ohmyzsh}/lib/completion.zsh
           source ${inputs.ohmyzsh}/lib/clipboard.zsh
-          source ${inputs.ohmyzsh}/plugins/web-search/web-search.plugin.zsh
-          source ${inputs.ohmyzsh}/plugins/copydir/copydir.plugin.zsh
           source ${inputs.ohmyzsh}/plugins/copyfile/copyfile.plugin.zsh
           source ${inputs.ohmyzsh}/plugins/dirhistory/dirhistory.plugin.zsh
 
@@ -37,11 +35,14 @@ in {
           ${builtins.readFile ./nnn.zsh}
           ${builtins.readFile ./awesome.zsh}
 
-          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-          source ${inputs.dracula-zsh-syntax-highlighting}/zsh-syntax-highlighting.sh
-
           # load function completions in /share/zsh folder
+          zmodload zsh/complist
+          # autoload -Uz bashcompinit compinit
+          # bashcompinit
           autoload -U compinit && compinit
+
+          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
         '';
         enableCompletion = false;
         enableAutosuggestions = true;
@@ -57,7 +58,6 @@ in {
         };
         prezto = { enable = false; };
         oh-my-zsh = { enable = false; };
-        shellAliases = { ns = "nix-shell --run zsh"; };
       };
 
       programs.starship.enableZshIntegration = true;
