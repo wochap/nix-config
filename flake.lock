@@ -158,6 +158,23 @@
         "type": "github"
       }
     },
+    "catppuccin-newsboat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1666070943,
+        "narHash": "sha256-czvR3bVZ0NfBmuu0JixalS7B1vf1uEGSTSUVVTclKxI=",
+        "owner": "catppuccin",
+        "repo": "newsboat",
+        "rev": "be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "newsboat",
+        "rev": "be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f",
+        "type": "github"
+      }
+    },
     "catppuccin-qutebrowser": {
       "flake": false,
       "locked": {
@@ -1051,6 +1068,7 @@
         "catppuccin-kitty": "catppuccin-kitty",
         "catppuccin-lazygit": "catppuccin-lazygit",
         "catppuccin-neomutt": "catppuccin-neomutt",
+        "catppuccin-newsboat": "catppuccin-newsboat",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "catppuccin-starship": "catppuccin-starship",
         "catppuccin-zathura": "catppuccin-zathura",

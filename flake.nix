@@ -106,6 +106,8 @@
     catppuccin-bottom.flake = false;
     catppuccin-zathura.url = "github:catppuccin/zathura?rev=d85d8750acd0b0247aa10e0653998180391110a4";
     catppuccin-zathura.flake = false;
+    catppuccin-newsboat.url = "github:catppuccin/newsboat?rev=be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f";
+    catppuccin-newsboat.flake = false;
   };
 
   outputs = inputs:

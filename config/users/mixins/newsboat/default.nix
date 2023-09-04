@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   userName = config._userName;
@@ -16,6 +16,8 @@ in {
       home.packages = with pkgs; [ newsboat qndl linkhandler ];
 
       xdg.configFile = {
+        "newsboat/catppuccin-dark".source =
+          "${inputs.catppuccin-newsboat}/themes/dark";
         "newsboat/urls".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/urls";
         "newsboat/config".source =

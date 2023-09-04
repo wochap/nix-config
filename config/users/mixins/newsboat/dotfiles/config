@@ -20,17 +20,6 @@ bind-key n next-unread
 bind-key N prev-unread
 bind-key U show-urls
 
-# View
-#text-width 80
-#color               <element>           <fg>         <bg>
-color                background          default      default
-color                listnormal          color8       default
-color                listnormal_unread   white        default
-color                listfocus           color8       color0
-color                listfocus_unread    white        color0
-color                info                cyan         default
-color                article             default      default
-
 browser linkhandler
 macro , open-in-browser
 macro t set browser "qndl" ; open-in-browser ; set browser linkhandler
@@ -43,18 +32,4 @@ macro C set browser "youtube-viewer --comments=%u" ; open-in-browser ; set brows
 # macro p set browser "peertubetorrent %u 480" ; open-in-browser ; set browser linkhandler
 # macro P set browser "peertubetorrent %u 1080" ; open-in-browser ; set browser linkhandler
 
-# highlights
-highlight all "---.*---" yellow
-highlight article "^(Feed|Link):.*$" default default bold
-highlight article "^(Feed|Link):" blue default bold
-highlight article "^(Title|Date|Author):" blue default bold
-highlight article "https?://[^ ]+" magenta default
-highlight article "\\[[0-9][0-9]*\\]" cyan default bold
-highlight article "\\[image\\ [0-9]+\\]" red default bold
-highlight article ":.*\\(image\\)$" red default
-highlight article ":.*\\(link\\)$" magenta default
-highlight feedlist ".*(0/0))" black
-# TODO: make headers bold
-
-# highlight article "\\[embedded flash: [0-9][0-9]*\\]" pink default bold
-# highlight article ":.*\\(embedded flash\\)$" magenta default
+include ~/.config/newsboat/catppuccin-dark
