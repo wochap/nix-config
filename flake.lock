@@ -124,6 +124,23 @@
         "type": "github"
       }
     },
+    "catppuccin-neomutt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1664239314,
+        "narHash": "sha256-ye16nP2DL4VytDKB+JdMkBXU+Y9Z4dHmY+DsPcR2EG0=",
+        "owner": "catppuccin",
+        "repo": "neomutt",
+        "rev": "f6ce83da47cc36d5639b0d54e7f5f63cdaf69f11",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "neomutt",
+        "rev": "f6ce83da47cc36d5639b0d54e7f5f63cdaf69f11",
+        "type": "github"
+      }
+    },
     "catppuccin-qutebrowser": {
       "flake": false,
       "locked": {
@@ -138,6 +155,23 @@
         "owner": "catppuccin",
         "repo": "qutebrowser",
         "rev": "78bb72b4c60b421c8ea64dd7c960add6add92f83",
+        "type": "github"
+      }
+    },
+    "catppuccin-starship": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1689246850,
+        "narHash": "sha256-nsRuxQFKbQkyEI4TXgvAjcroVdG+heKX5Pauq/4Ota0=",
+        "owner": "catppuccin",
+        "repo": "starship",
+        "rev": "5629d2356f62a9f2f8efad3ff37476c19969bd4f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "starship",
+        "rev": "5629d2356f62a9f2f8efad3ff37476c19969bd4f",
         "type": "github"
       }
     },
@@ -246,57 +280,6 @@
         "owner": "dracula",
         "repo": "betterdiscord",
         "rev": "835bc3a15aba03ae10248d6a06ea8704e9cd4382",
-        "type": "github"
-      }
-    },
-    "dracula-kitty": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1632017685,
-        "narHash": "sha256-3yi5e/wnLYt7b3Lkf4fhSByr18SrOzJ4zYympUQMslc=",
-        "owner": "dracula",
-        "repo": "kitty",
-        "rev": "eeaa86a730e3d38649053574dc60a74ce06a01bc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dracula",
-        "repo": "kitty",
-        "rev": "eeaa86a730e3d38649053574dc60a74ce06a01bc",
-        "type": "github"
-      }
-    },
-    "dracula-mutt": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1631390609,
-        "narHash": "sha256-N7t2ImhNCn+vxUEJqfYFSmaLjLSg1A0hyBwbxJ4oEQM=",
-        "owner": "dracula",
-        "repo": "mutt",
-        "rev": "8e512a73d519b2d503b4771fbc58c67f232ce7e0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dracula",
-        "repo": "mutt",
-        "rev": "8e512a73d519b2d503b4771fbc58c67f232ce7e0",
-        "type": "github"
-      }
-    },
-    "dracula-zsh-syntax-highlighting": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1626822724,
-        "narHash": "sha256-McwtGFXFmRFDyqv0bn7jxGcpYjaSugH3e2yiLb5aG+Y=",
-        "owner": "dracula",
-        "repo": "zsh-syntax-highlighting",
-        "rev": "47ba26d2d4912a1b8de066e589633ff1963c5621",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dracula",
-        "repo": "zsh-syntax-highlighting",
-        "rev": "47ba26d2d4912a1b8de066e589633ff1963c5621",
         "type": "github"
       }
     },
@@ -1015,15 +998,14 @@
         "catppuccin-bat": "catppuccin-bat",
         "catppuccin-kitty": "catppuccin-kitty",
         "catppuccin-lazygit": "catppuccin-lazygit",
+        "catppuccin-neomutt": "catppuccin-neomutt",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
+        "catppuccin-starship": "catppuccin-starship",
         "catppuccin-zsh-syntax-highlighting": "catppuccin-zsh-syntax-highlighting",
         "darwin": "darwin",
         "dracula-adw-gtk3": "dracula-adw-gtk3",
         "dracula-amfora": "dracula-amfora",
         "dracula-betterdiscord": "dracula-betterdiscord",
-        "dracula-kitty": "dracula-kitty",
-        "dracula-mutt": "dracula-mutt",
-        "dracula-zsh-syntax-highlighting": "dracula-zsh-syntax-highlighting",
         "fontpreview-ueberzug": "fontpreview-ueberzug",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",

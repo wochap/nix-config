@@ -124,7 +124,7 @@ in {
 
           lists .*@lists.sr.ht
 
-          source ${inputs.dracula-mutt}/dracula.muttrc
+          source ${inputs.catppuccin-neomutt}/neomuttrc
         '';
       };
     };

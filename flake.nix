@@ -78,14 +78,8 @@
     # dracula theme
     dracula-adw-gtk3.url = "github:lassekongo83/adw-colors?rev=b290fedc46e3dc0719b9e2455ad765afe0c6a4d7";
     dracula-adw-gtk3.flake = false;
-    dracula-kitty.url = "github:dracula/kitty?rev=eeaa86a730e3d38649053574dc60a74ce06a01bc";
-    dracula-kitty.flake = false;
     dracula-amfora.url = "github:dracula/amfora?rev=6e3fde02006707dc0a7b4677b0d4f40f52ed6227";
     dracula-amfora.flake = false;
-    dracula-mutt.url = "github:dracula/mutt?rev=8e512a73d519b2d503b4771fbc58c67f232ce7e0";
-    dracula-mutt.flake = false;
-    dracula-zsh-syntax-highlighting.url = "github:dracula/zsh-syntax-highlighting?rev=47ba26d2d4912a1b8de066e589633ff1963c5621";
-    dracula-zsh-syntax-highlighting.flake = false;
     dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
     dracula-betterdiscord.flake = false;
 
@@ -102,6 +96,10 @@
     catppuccin-kitty.flake = false;
     catppuccin-zsh-syntax-highlighting.url = "github:catppuccin/zsh-syntax-highlighting?rev=06d519c20798f0ebe275fc3a8101841faaeee8ea";
     catppuccin-zsh-syntax-highlighting.flake = false;
+    catppuccin-starship.url = "github:catppuccin/starship?rev=5629d2356f62a9f2f8efad3ff37476c19969bd4f";
+    catppuccin-starship.flake = false;
+    catppuccin-neomutt.url = "github:catppuccin/neomutt?rev=f6ce83da47cc36d5639b0d54e7f5f63cdaf69f11";
+    catppuccin-neomutt.flake = false;
   };
 
   outputs = inputs:
