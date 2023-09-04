@@ -5,7 +5,7 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
-  draculaTheme = import ../../config/mixins/dracula.nix;
+  catppuccinMochaTheme = import ../../config/mixins/catppuccin-mocha.nix;
 in {
   imports = [
     inputs.nixos-hardware.nixosModules.common-pc-laptop-acpi_call
@@ -23,7 +23,7 @@ in {
     _userName = userName;
     _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
-    _custom.globals.themeColors = draculaTheme;
+    _custom.globals.themeColors = catppuccinMochaTheme;
     _custom.globals.isHidpi = true;
 
     _custom.tui.nixDirenv.enable = true;
