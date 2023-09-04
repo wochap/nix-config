@@ -31,9 +31,9 @@ in {
             source ${pkgs.fzf}/share/fzf/key-bindings.zsh
           fi
 
-          ${builtins.readFile ./zshrc.zsh}
+          ${builtins.readFile ./config.zsh}
           ${builtins.readFile ./nnn.zsh}
-          ${builtins.readFile ./awesome.zsh}
+          ${builtins.readFile ./functions.zsh}
 
           # load function completions in /share/zsh folder
           zmodload zsh/complist
@@ -58,11 +58,14 @@ in {
         };
         prezto = { enable = false; };
         oh-my-zsh = { enable = false; };
+        dirHashes = {
+          nxc = "$HOME/nix-config";
+          nxs = "/nix/store";
+          dl = "$HOME/Downloads";
+        };
       };
 
       programs.starship.enableZshIntegration = true;
-
-      programs.keychain.enableZshIntegration = true;
 
       # Enabled on programs.zsh.initExtra
       # programs.fzf.enableZshIntegration = true;
