@@ -192,6 +192,23 @@
         "type": "github"
       }
     },
+    "catppuccin-zathura": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1664239314,
+        "narHash": "sha256-5Vh2bVabuBluVCJm9vfdnjnk32CtsK7wGIWM5+XnacM=",
+        "owner": "catppuccin",
+        "repo": "zathura",
+        "rev": "d85d8750acd0b0247aa10e0653998180391110a4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "zathura",
+        "rev": "d85d8750acd0b0247aa10e0653998180391110a4",
+        "type": "github"
+      }
+    },
     "catppuccin-zsh-syntax-highlighting": {
       "flake": false,
       "locked": {
@@ -1036,6 +1053,7 @@
         "catppuccin-neomutt": "catppuccin-neomutt",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "catppuccin-starship": "catppuccin-starship",
+        "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-syntax-highlighting": "catppuccin-zsh-syntax-highlighting",
         "darwin": "darwin",
         "dracula-adw-gtk3": "dracula-adw-gtk3",

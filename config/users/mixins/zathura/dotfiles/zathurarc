@@ -1,47 +1,7 @@
-set notification-error-bg       "#ff5555" # Red
-set notification-error-fg       "#f8f8f2" # Foreground
-set notification-warning-bg     "#ffb86c" # Orange
-set notification-warning-fg     "#44475a" # Selection
-set notification-bg             "#282a36" # Background
-set notification-fg             "#f8f8f2" # Foreground
-
-set completion-bg               "#282a36" # Background
-set completion-fg               "#6272a4" # Comment
-set completion-group-bg         "#282a36" # Background
-set completion-group-fg         "#6272a4" # Comment
-set completion-highlight-bg     "#44475a" # Selection
-set completion-highlight-fg     "#f8f8f2" # Foreground
-
-# Define the color in index mode
-set index-bg                    "#504945" # bg2
-set index-fg                    "#ebdbb2" # fg
-set index-active-bg             "#83a598" # bright:blue
-set index-active-fg             "#504945" # bg2
-
-set inputbar-bg                 "#b16286" # bg
-set inputbar-fg                 "#000000" # fg
-
-set statusbar-bg                "#bd93f9" # bg2
-set statusbar-fg                "#21222C" # fg
-
-set highlight-color             "#ffb86c" # Orange
-set highlight-active-color      "#ff79c6" # Pink
-
-set default-bg                  "#282a36" # Background
-set default-fg                  "#f8f8f2" # Foreground
-
-set render-loading              true
-set render-loading-fg           "#282a36" # Background
-set render-loading-bg           "#f8f8f2" # Foreground
-
-# Recolor book content's color
-set recolor-lightcolor          "#282a36" # Background
-set recolor-darkcolor           "#f8f8f2" # Foreground
-
-set statusbar-v-padding         15
+set statusbar-v-padding         7
 set statusbar-h-padding         7
 set selection-clipboard         clipboard
-set font                        "Iosevka Nerd Font 11"
+set font                        "Iosevka Nerd Font 10"
 set adjust-open                 width
 set recolor                     true
 set pages-per-row               1
@@ -59,3 +19,5 @@ map J                           zoom out
 map i                           recolor
 map p                           print
 map g                           goto top
+
+include catppuccin-mocha

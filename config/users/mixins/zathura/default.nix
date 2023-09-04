@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   userName = config._userName;
@@ -15,6 +15,7 @@ in
       };
 
       xdg.configFile = {
+        "zathura/catppuccin-mocha".source = "${inputs.catppuccin-zathura}/src/catppuccin-mocha";
         "zathura/zathurarc".source = ./dotfiles/zathurarc;
       };
 
