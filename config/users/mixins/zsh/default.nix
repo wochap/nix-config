@@ -43,6 +43,13 @@ in {
 
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
           source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
+
+          # Remove underline under paths
+          (( ''${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
+          ZSH_HIGHLIGHT_STYLES[path]='fg=#cdd6f4'
+          ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#f38ba8'
+          ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#cdd6f4'
+          ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#f38ba8'
         '';
         enableCompletion = false;
         enableAutosuggestions = true;
