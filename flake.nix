@@ -98,6 +98,8 @@
     catppuccin-lazygit.flake = false;
     catppuccin-bat.url = "github:catppuccin/bat?rev=ba4d16880d63e656acced2b7d4e034e4a93f74b1";
     catppuccin-bat.flake = false;
+    catppuccin-kitty.url = "github:catppuccin/kitty?rev=4820b3ef3f4968cf3084b2239ce7d1e99ea04dda";
+    catppuccin-kitty.flake = false;
   };
 
   outputs = inputs:

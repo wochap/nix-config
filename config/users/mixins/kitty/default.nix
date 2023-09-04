@@ -36,7 +36,7 @@ in {
             # TODO: test on darwin ⬇
             TERMINAL = "kitty";
           }
-          (lib.mkIf (isDarwin) {
+          (lib.mkIf isDarwin {
             # TERM = "xterm-kitty";
             TERMINFO_DIRS =
               "${pkgs.kitty.terminfo.outPath}/share/terminfo:$TERMINFO_DIRS";
@@ -44,8 +44,6 @@ in {
         ];
 
         shellAliases = {
-          TERMINAL = "kitty";
-
           icat = "kitty +kitten icat";
 
           # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
@@ -54,14 +52,14 @@ in {
       };
 
       xdg.configFile = {
-        "kitty/tab_bar.py".source = ./scripts/tab_bar.py;
-        "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
-        "kitty/diff.conf".source = "${inputs.dracula-kitty}/diff.conf";
-        "kitty/dracula.conf".source = "${inputs.dracula-kitty}/dracula.conf";
         "kitty/common.conf".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/kitty-common.conf";
         "kitty/kitty.conf".text = ''
-          include ./dracula.conf
+          # Load theme
+          include ${inputs.catppuccin-kitty}/themes/diff-mocha.conf
+          include ${inputs.catppuccin-kitty}/themes/mocha.conf
+
+          # Load config
           include ./common.conf
           ${if isDarwin then macosConfig else linuxConfig}
         '';

@@ -90,6 +90,23 @@
         "type": "github"
       }
     },
+    "catppuccin-kitty": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1686340014,
+        "narHash": "sha256-uZSx+fuzcW//5/FtW98q7G4xRRjJjD5aQMbvJ4cs94U=",
+        "owner": "catppuccin",
+        "repo": "kitty",
+        "rev": "4820b3ef3f4968cf3084b2239ce7d1e99ea04dda",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "kitty",
+        "rev": "4820b3ef3f4968cf3084b2239ce7d1e99ea04dda",
+        "type": "github"
+      }
+    },
     "catppuccin-lazygit": {
       "flake": false,
       "locked": {
@@ -979,6 +996,7 @@
         "ani-cli": "ani-cli",
         "catppuccin-alacritty": "catppuccin-alacritty",
         "catppuccin-bat": "catppuccin-bat",
+        "catppuccin-kitty": "catppuccin-kitty",
         "catppuccin-lazygit": "catppuccin-lazygit",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "darwin": "darwin",
