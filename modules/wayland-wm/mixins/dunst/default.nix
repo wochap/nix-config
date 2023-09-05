@@ -2,11 +2,25 @@
 
 let
   cfg = config._custom.waylandWm;
+  inherit (config._custom.globals) themeColors;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/wayland-wm/mixins/dunst";
+  settings = builtins.fromTOML
+    (builtins.replaceStrings [ "=yes" "=no" ] [ "=true" "=false" ]
+      (builtins.readFile ./dotfiles/dunstrc));
+  toDunstIni = with lib;
+    generators.toINI {
+      mkKeyValue = key: value:
+        let
+          value' = if isBool value then
+            (hmConfig.lib.booleans.yesNo value)
+          else if isString value then
+            ''"${value}"''
+          else
+            toString value;
+        in "${key}=${value'}";
+    };
+
   dunst-toggle-mode = pkgs.writeTextFile {
     name = "dunst-toggle-mode";
     destination = "/bin/dunst-toggle-mode";
@@ -36,10 +50,20 @@ in {
         ];
       };
 
+      xdg.dataFile."dbus-1/services/org.knopwob.dunst.service".source =
+        "${pkgs.dunst}/share/dbus-1/services/org.knopwob.dunst.service";
+
       xdg.configFile = {
         "dunst/assets/notification.flac".source = ./assets/notification.flac;
-        "dunst/dunstrc".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/dunstrc";
+        "dunst/dunstrc".text = toDunstIni (lib.recursiveUpdate settings {
+          global = {
+            inherit (themeColors) background foreground;
+            frame_color = themeColors.selection;
+            format =
+              "<b>%s</b> <span color='${themeColors.cyan}'>(%a)</span>\\n%b";
+          };
+          urgency_critical = { frame_color = themeColors.red; };
+        });
       };
 
       systemd.user.services.dunst = {
@@ -51,10 +75,11 @@ in {
         };
 
         Service = {
-          # PassEnvironment = [ "XCURSOR_THEME" "XCURSOR_SIZE" ];
+          Type = "dbus";
+          BusName = "org.freedesktop.Notifications";
+          PassEnvironment =
+            [ "WAYLAND_DISPLAY" "XCURSOR_THEME" "XCURSOR_SIZE" ];
           ExecStart = "${pkgs.dunst}/bin/dunst";
-          Restart = "on-failure";
-          KillMode = "mixed";
         };
 
         Install = { WantedBy = [ "graphical-session.target" ]; };
