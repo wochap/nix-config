@@ -1,6 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let userName = config._userName;
+let
+  userName = config._userName;
+  themeSettings = pkgs._custom.fromYAML "${inputs.dracula-lsd}/config.yaml";
 in {
   config = {
     home-manager.users.${userName} = {
@@ -11,10 +13,10 @@ in {
         enable = true;
         # adds ls ll la lt ll
         enableAliases = true;
-        settings = {
+        settings = lib.recursiveUpdate themeSettings {
           sorting = { dir-grouping = "first"; };
           symlink-arrow = "->";
-        } // pkgs._custom.fromYAML "${inputs.dracula-lsd}/config.yaml";
+        };
       };
     };
   };

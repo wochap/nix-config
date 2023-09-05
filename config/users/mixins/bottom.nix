@@ -1,6 +1,9 @@
 { config, pkgs, lib, inputs, ... }:
 
-let userName = config._userName;
+let
+  userName = config._userName;
+  themeSettings = builtins.fromTOML
+    (builtins.readFile "${inputs.catppuccin-bottom}/themes/mocha.toml");
 in {
   config = {
     home-manager.users.${userName} = {
@@ -8,7 +11,7 @@ in {
 
       programs.bottom = {
         enable = true;
-        settings = {
+        settings = lib.recursiveUpdate themeSettings {
           flags = {
             process_command = true;
             group_processes = true;
@@ -16,8 +19,7 @@ in {
             tree = true;
             basic = true;
           };
-        } // builtins.fromTOML
-          (builtins.readFile "${inputs.catppuccin-bottom}/themes/mocha.toml");
+        };
       };
     };
   };
