@@ -19,7 +19,7 @@ in {
         ncmpcpp
         playerctl # media player cli
         sacad
-        ueberzug
+        ueberzugpp
       ];
 
       xdg.configFile = {

@@ -3,9 +3,9 @@
 let
   userName = config._userName;
   isDarwin = config._displayServer == "darwin";
-  customNerdFonts = (pkgs.nerdfonts.override {
+  customNerdFonts = pkgs.nerdfonts.override {
     fonts = [ "FiraCode" "FiraMono" "Hack" "Iosevka" "JetBrainsMono" ];
-  });
+  };
 in {
   config = {
     fonts = lib.mkMerge [
@@ -25,7 +25,7 @@ in {
           cantarell-fonts
         ];
       }
-      (if (isDarwin) then {
+      (if isDarwin then {
         enableFontDir = true;
       } else {
         fontDir.enable = true;

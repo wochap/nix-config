@@ -72,6 +72,7 @@ in {
 
         # APPS CLI
         fontpreview-ueberzug
+        ueberzugpp
         tty-clock
 
         # APPS GUI
