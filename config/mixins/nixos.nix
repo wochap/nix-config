@@ -4,8 +4,10 @@ let
   inherit (config._custom.globals) isHidpi;
 
   # Catppuccin mocha theme
+  # colors extracted from kitty theme
+  # you just need to change the first color (black)
   terminalColors = [
-    "45475A"
+    "1E1E2E"
     "F38BA8"
     "A6E3A1"
     "F9E2AF"
