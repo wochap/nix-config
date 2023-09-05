@@ -3,10 +3,8 @@
 let
   cfg = config._custom.waylandWm;
   userName = config._userName;
-  hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/wayland-wm/mixins/wob";
+  inherit (config._custom.globals) themeColors;
+  inherit (pkgs._custom) unwrapHex;
   wob-osd = pkgs.writeTextFile {
     name = "wob-osd";
     destination = "/bin/wob-osd";
@@ -41,8 +39,27 @@ in {
       home = { packages = with pkgs; [ wob wob-osd ]; };
 
       xdg.configFile = {
-        "wob/wob.ini".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/wob.ini";
+        "wob/wob.ini".text = ''
+          ${builtins.readFile ./dotfiles/wob.ini}
+
+          ; `background_color` Background color, in RRGGBB[AA] format.
+          background_color = ${unwrapHex themeColors.background}ff
+          ; `bar_color` Bar color, in RRGGBB[AA] format.
+          bar_color = ${unwrapHex themeColors.primary}ff
+          ; `border_color` Border color, in RRGGBB[AA] format.
+          border_color = ${unwrapHex themeColors.primary}ff
+
+          ; `overflow_background_color` Overflow background color, in RRGGBB[AA] format.
+          overflow_background_color = ${unwrapHex themeColors.background}ff
+          ; `overflow_bar_color` Overflow bar color, in RRGGBB[AA] format.
+          overflow_bar_color = ${unwrapHex themeColors.pink}ff
+          ; `overflow_border_color` Overflow border color, in RRGGBB[AA] format.
+          overflow_border_color = ${unwrapHex themeColors.primary}ff
+
+          [style.muted]
+          bar_color = ${unwrapHex themeColors.comment}ff
+          overflow_bar_color = ${unwrapHex themeColors.comment}ff
+        '';
       };
 
       systemd.user = {
