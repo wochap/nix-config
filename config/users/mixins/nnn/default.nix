@@ -12,13 +12,12 @@ in {
         SPLIT = "v";
         KITTY_LISTEN_ON = "unix:/tmp/kitty";
       };
-      # shellAliases = { f = "nnn"; };
     };
 
     home-manager.users.${userName} = {
       programs.nnn = {
         enable = true;
-        package = pkgs.nnn.override ({ withNerdIcons = true; });
+        package = pkgs.nnn.override { withNerdIcons = true; };
         extraPackages = with pkgs;
           [
             (writeShellScriptBin "scope.sh"
