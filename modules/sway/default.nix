@@ -51,7 +51,7 @@ in {
 
           #### SWAY theme ####
           #                         title-border         title-bg                title-text            indicator       window-border
-          client.focused            ${themeColors.purple}      ${themeColors.purple}         ${themeColors.background}   ${themeColors.cyan}   ${themeColors.purple}
+          client.focused            ${themeColors.primary}      ${themeColors.primary}         ${themeColors.background}   ${themeColors.cyan}   ${themeColors.primary}
           client.unfocused          ${themeColors.selection}   ${themeColors.selection}      ${themeColors.foreground}   ${themeColors.cyan}   ${themeColors.selection}
           client.focused_inactive   ${themeColors.comment}     ${themeColors.comment}        ${themeColors.foreground}   ${themeColors.cyan}   ${themeColors.comment}
           client.urgent             ${themeColors.pink}        ${themeColors.pink}           ${themeColors.background}   ${themeColors.cyan}   ${themeColors.pink}

@@ -82,7 +82,7 @@ in {
 
             riverctl background-color 0x${unwrapHex themeColors.background}
 
-            riverctl border-color-focused 0x${unwrapHex themeColors.purple}
+            riverctl border-color-focused 0x${unwrapHex themeColors.primary}
             riverctl border-color-unfocused 0x${unwrapHex themeColors.selection}
             riverctl border-color-urgent 0x${unwrapHex themeColors.pink}
 
