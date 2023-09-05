@@ -14,10 +14,6 @@ static const unsigned int gappih           = 0; /* horiz inner gap between windo
 static const unsigned int gappiv           = 0; /* vert inner gap between windows */
 static const unsigned int gappoh           = 0; /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov           = 0; /* vert outer gap between windows and screen edge */
-static const float bordercolor[]           = RGB(0x44475a);
-static const float focuscolor[]            = RGB(0xbd93f9);
-static const char cursortheme[]            = "capitaine-cursors"; /* theme from /usr/share/cursors/xorg-x11 */
-static const unsigned int cursorsize       = 24;
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 0};
 

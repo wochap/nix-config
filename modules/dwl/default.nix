@@ -1,10 +1,10 @@
 { config, inputs, pkgs, lib, ... }:
 
 let
-  # inherit (config._custom) globals;
   userName = config._userName;
   cfg = config._custom.dwl;
-  # inherit (globals) themeColors;
+  inherit (config._custom.globals) themeColors cursor;
+  unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
 
   dwl-waybar = pkgs.writeTextFile {
     name = "dwl-waybar";
@@ -18,42 +18,16 @@ in {
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
-
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "0.4-wlroots-next";
+          version = "0.4-next";
 
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
-            rev = "0c10540f431b86215f7dde6183f1dc0d33ce4de9";
-            hash = "sha256-2vJAY50y1desTIi3dNI95ekYT5c18IRmEZefnkJo0uY=";
+            rev = "415a9ea8038cf75b9f2d6a83a378a14259206aed";
+            hash = "sha256-esWGCkUwJx7RvsRxzqaz9mq3drTxFI+D1JXzctVnlvA=";
           };
-
-          buildInputs = with pkgs.unstable; [
-            libinput
-            xorg.libxcb
-            libxkbcommon
-            pixman
-            wayland
-            wayland-protocols
-
-            (wlroots_0_16.overrideAttrs (_: {
-              src = fetchFromGitLab {
-                domain = "gitlab.freedesktop.org";
-                owner = "wlroots";
-                repo = "wlroots";
-                rev = "2926acf60d80961597fa55ab68c3d15d7bf1980d";
-                hash = "sha256-Kkgx6KyJFtQEE4X+bgXlXAaSPnR9dWXGyw9ovf7wUlw=";
-              };
-              buildInputs = _.buildInputs
-                ++ [ pkgs.hwdata pkgs.libdisplay-info ];
-            }))
-
-            xorg.libX11
-            xorg.xcbutilwm
-            xwayland
-          ];
         });
       })
     ];
@@ -66,11 +40,22 @@ in {
     environment = {
       systemPackages = with pkgs; [
         (unstable.dwl.override {
-          conf = ./dotfiles/wlroots-next-keychords-config.def.h;
+          conf = ''
+            ${builtins.readFile ./dotfiles/wlroots-next-keychords-config.def.h}
+
+            static const float bordercolor[] = RGB(0x${
+              unwrapHex themeColors.selection
+            });
+            static const float focuscolor[] = RGB(0x${
+              unwrapHex themeColors.primary
+            });
+            static const char cursortheme[] = "${cursor.name}";
+            static const unsigned int cursorsize = ${toString cursor.size};
+          '';
         })
         dwl-waybar
 
-        lswt
+        lswt # doesn't work on dwl
         wlopm
         wlrctl
       ];
