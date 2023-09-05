@@ -18,7 +18,7 @@ local utils = require 'mp.utils'
 local user_opts = {
     showwindowed = true,        -- show OSC when windowed?
     showfullscreen = true,      -- show OSC when fullscreen?
-    idlescreen = true,          -- draw logo and text when idle
+    idlescreen = false,          -- draw logo and text when idle
     scalewindowed = 1.0,        -- scaling of the controller when windowed
     scalefullscreen = 1.0,      -- scaling of the controller when fullscreen
     scaleforcedwindow = 2.0,    -- scaling when rendered on a forced window
@@ -52,9 +52,9 @@ local user_opts = {
     timems = false,             -- Display time down to millliseconds by default
     visibility = 'auto',        -- only used at init to set visibility_mode(...)
     windowcontrols = 'auto',    -- whether to show window controls
-    greenandgrumpy = false,     -- disable santa hat
+    greenandgrumpy = true,     -- disable santa hat
     language = 'eng',		-- eng=English, chs=Chinese
-    volumecontrol = true,       -- whether to show mute button and volumne slider
+    volumecontrol = false,       -- whether to show mute button and volumne slider
     keyboardnavigation = false, -- enable directional keyboard navigation
     chapter_fmt = "Chapter: %s", -- chapter print format for seekbar-hover. "no" to disable
 }
@@ -143,12 +143,27 @@ local osc_param = { -- calculated by osc_init()
     areas = {},
 }
 
+local colors = {
+  TransBg = "000000",
+  SeekbarBg = "ffffff",
+  SeekbarFg = "cba6f7",
+  VolumebarBg = "ffffff",
+  VolumebarFg = "cba6f7",
+}
+
+local function rgbToBgr(rgb)
+    local r = string.sub(rgb, 1, 2)
+    local g = string.sub(rgb, 3, 4)
+    local b = string.sub(rgb, 5, 6)
+    return b .. g .. r
+end
+
 local osc_styles = {
-    TransBg = '{\\blur100\\bord150\\1c&H000000&\\3c&H000000&}',
-    SeekbarBg = '{\\blur0\\bord0\\1c&HFFFFFF&}',
-    SeekbarFg = '{\\blur1\\bord1\\1c&HE39C42&}',
-    VolumebarBg = '{\\blur0\\bord0\\1c&H999999&}',
-    VolumebarFg = '{\\blur1\\bord1\\1c&HFFFFFF&}',
+    TransBg = '{\\blur100\\bord150\\1c&H'..rgbToBgr(colors.TransBg)..'&\\3c&H'..rgbToBgr(colors.TransBg)..'&}',
+    SeekbarBg = '{\\blur0\\bord0\\1c&H'..rgbToBgr(colors.SeekbarBg)..'&}',
+    SeekbarFg = '{\\blur1\\bord1\\1c&H'..rgbToBgr(colors.SeekbarFg)..'&}',
+    VolumebarBg = '{\\blur0\\bord0\\1c&H'..rgbToBgr(colors.VolumebarBg)..'&}',
+    VolumebarFg = '{\\blur1\\bord1\\1c&H'..rgbToBgr(colors.VolumebarFg)..'&}',
     Ctrl1 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs36\\fnmaterial-design-iconic-font}',
     Ctrl2 = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs24\\fnmaterial-design-iconic-font}',
     Ctrl2Flip = '{\\blur0\\bord0\\1c&HFFFFFF&\\3c&HFFFFFF&\\fs24\\fnmaterial-design-iconic-font\\fry180',
