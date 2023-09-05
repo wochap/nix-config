@@ -2,7 +2,7 @@
 
 let
   userName = config._userName;
-  catppuccin =
+  catppuccinMochaTheme =
     pkgs._custom.fromYAML "${inputs.catppuccin-lazygit}/themes/mocha.yml";
 in {
   config = {
@@ -25,6 +25,7 @@ in {
         gc = "git clone";
         glo = "git pull origin";
         gpo = "git push origin";
+        lg = "lazygit";
       };
     };
 
@@ -45,7 +46,7 @@ in {
           gui = {
             showFileTree = false;
             scrollHeight = 10;
-            inherit (catppuccin) theme;
+            inherit (catppuccinMochaTheme) theme;
           };
           git.paging = {
             colorArg = "always";
