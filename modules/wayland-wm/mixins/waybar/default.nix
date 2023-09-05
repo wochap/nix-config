@@ -20,10 +20,6 @@ in {
           source = ./scripts/waybar-toggle.sh;
           mode = "0755";
         };
-        "scripts/waybar/waybar-start.sh" = {
-          source = ./scripts/waybar-start.sh;
-          mode = "0755";
-        };
       };
     };
 
@@ -31,8 +27,6 @@ in {
       imports = [ ./options.nix ];
 
       xdg.configFile = {
-        # "waybar/config".source =
-        #   mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config";
         "waybar/style.css".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/style.css";
         "waybar/colors.css".text = ''
