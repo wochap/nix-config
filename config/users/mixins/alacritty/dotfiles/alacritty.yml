@@ -26,8 +26,7 @@ env:
 # Font
 font:
   normal:
-    family: FiraCode Nerd Font
-    style: Retina
+    family: FiraCode Nerd Font Ret
 
   bold:
     family: FiraCode Nerd Font
