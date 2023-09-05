@@ -8,7 +8,7 @@ in {
     home-manager.users.${userName} = {
       xdg.configFile."amfora/config.toml".text = ''
         ${builtins.readFile ./dotfiles/config.toml}
-        ${builtins.readFile "${inputs.dracula-amfora}/Dracula.toml"}
+        ${builtins.readFile "${inputs.catppuccin-amfora}/themes/mocha.toml"}
       '';
     };
   };

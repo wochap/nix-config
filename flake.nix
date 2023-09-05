@@ -78,8 +78,6 @@
     # dracula theme
     dracula-adw-gtk3.url = "github:lassekongo83/adw-colors?rev=b290fedc46e3dc0719b9e2455ad765afe0c6a4d7";
     dracula-adw-gtk3.flake = false;
-    dracula-amfora.url = "github:dracula/amfora?rev=6e3fde02006707dc0a7b4677b0d4f40f52ed6227";
-    dracula-amfora.flake = false;
     dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
     dracula-betterdiscord.flake = false;
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
@@ -108,6 +106,8 @@
     catppuccin-zathura.flake = false;
     catppuccin-newsboat.url = "github:catppuccin/newsboat?rev=be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f";
     catppuccin-newsboat.flake = false;
+    catppuccin-amfora.url = "github:catppuccin/amfora?rev=26f6496fd2be0fe7308dfc57b9ab1e8ca5c38602";
+    catppuccin-amfora.flake = false;
   };
 
   outputs = inputs:

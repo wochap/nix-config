@@ -73,6 +73,23 @@
         "type": "github"
       }
     },
+    "catppuccin-amfora": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1665985240,
+        "narHash": "sha256-5NuGyRazPhF4AiruT8FqP+F4CL8uDfO+ngKuDBilMB8=",
+        "owner": "catppuccin",
+        "repo": "amfora",
+        "rev": "26f6496fd2be0fe7308dfc57b9ab1e8ca5c38602",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "amfora",
+        "rev": "26f6496fd2be0fe7308dfc57b9ab1e8ca5c38602",
+        "type": "github"
+      }
+    },
     "catppuccin-bat": {
       "flake": false,
       "locked": {
@@ -297,23 +314,6 @@
         "owner": "lassekongo83",
         "repo": "adw-colors",
         "rev": "b290fedc46e3dc0719b9e2455ad765afe0c6a4d7",
-        "type": "github"
-      }
-    },
-    "dracula-amfora": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1632340597,
-        "narHash": "sha256-2IyI0XvjtAXtWhNZNRE4MKnZg4BypE42JlI17+5DYg8=",
-        "owner": "dracula",
-        "repo": "amfora",
-        "rev": "6e3fde02006707dc0a7b4677b0d4f40f52ed6227",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dracula",
-        "repo": "amfora",
-        "rev": "6e3fde02006707dc0a7b4677b0d4f40f52ed6227",
         "type": "github"
       }
     },
@@ -1063,6 +1063,7 @@
         "android-nixpkgs": "android-nixpkgs",
         "ani-cli": "ani-cli",
         "catppuccin-alacritty": "catppuccin-alacritty",
+        "catppuccin-amfora": "catppuccin-amfora",
         "catppuccin-bat": "catppuccin-bat",
         "catppuccin-bottom": "catppuccin-bottom",
         "catppuccin-kitty": "catppuccin-kitty",
@@ -1075,7 +1076,6 @@
         "catppuccin-zsh-syntax-highlighting": "catppuccin-zsh-syntax-highlighting",
         "darwin": "darwin",
         "dracula-adw-gtk3": "dracula-adw-gtk3",
-        "dracula-amfora": "dracula-amfora",
         "dracula-betterdiscord": "dracula-betterdiscord",
         "dracula-lsd": "dracula-lsd",
         "fontpreview-ueberzug": "fontpreview-ueberzug",
