@@ -24,7 +24,6 @@ in {
         ".mozilla/firefox/default/chrome/customChrome.css".source =
           mkOutOfStoreSymlink "${currentDirectory}/assets/customChrome.css";
         ".mozilla/firefox/default/chrome/userContent.css".text = "";
-        # ${builtins.readFile ./assets/jira.css}
       };
       programs.firefox = {
         enable = true;
