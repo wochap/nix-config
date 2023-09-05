@@ -30,7 +30,7 @@ in {
           border = false;
 
           autofit-larger = "75%x75%";
-          gpu-context = lib.mkIf (isWayland) "wayland";
+          gpu-context = lib.mkIf isWayland "wayland";
           hwdec = "vaapi";
           hwdec-codecs = "all";
           keep-open = true;
@@ -39,8 +39,9 @@ in {
           video-sync = "display-resample";
           vo = "gpu";
         };
-        scripts = [
-          pkgs.mpvScripts.mpris
+        scripts = with pkgs; [
+          mpvScripts.mpris
+          mpvScripts.thumbfast
           # pkgs.mpvScripts.sponsorblock
           # pkgs.mpvScripts.youtube-quality
           # pkgs.mpvScripts.thumbnail
