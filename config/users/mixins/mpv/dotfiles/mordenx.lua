@@ -144,7 +144,7 @@ local osc_param = { -- calculated by osc_init()
 }
 
 local colors = {
-  TransBg = "000000",
+  TransBg = "1E1E2E",
   SeekbarBg = "ffffff",
   SeekbarFg = "cba6f7",
   VolumebarBg = "ffffff",
