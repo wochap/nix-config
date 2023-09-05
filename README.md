@@ -32,7 +32,8 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
    ./bin/refind-install
    ```
 
-   Install [rEFInd-minimal](https://github.com/evanpurkhiser/rEFInd-minimal)
+   Install [rEFInd-catppuccin](https://github.com/catppuccin/refind)
+   ~~Install [rEFInd-minimal](https://github.com/evanpurkhiser/rEFInd-minimal)~~
 
    Install [enable gpu-switch on rEFInd](https://github.com/0xbb/gpu-switch#macbook-pro-113-and-115-notes)
 
