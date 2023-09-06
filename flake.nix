@@ -74,10 +74,10 @@
     mpv-osc-morden-x.flake = false;
     nonicons.url = "github:yamatsum/nonicons?rev=6e4984bcb18e122a5f7588a482cb07f459b55a86";
     nonicons.flake = false;
+    adw-gtk3-colors.url = "github:lassekongo83/adw-colors?rev=b290fedc46e3dc0719b9e2455ad765afe0c6a4d7";
+    adw-gtk3-colors.flake = false;
 
     # dracula theme
-    dracula-adw-gtk3.url = "github:lassekongo83/adw-colors?rev=b290fedc46e3dc0719b9e2455ad765afe0c6a4d7";
-    dracula-adw-gtk3.flake = false;
     dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
     dracula-betterdiscord.flake = false;
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
