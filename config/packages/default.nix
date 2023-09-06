@@ -12,6 +12,7 @@
   offlinemsmtp = pkgs.callPackage ./offlinemsmtp.nix { };
   ptsh = pkgs.callPackage ./ptsh { };
   sf-mono-liga-bin = pkgs.callPackage ./sf-mono-liga-bin.nix { };
+  tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
   usbfluxd = pkgs.callPackage ./usbfluxd.nix { };
   customNodePackages = lib.dontRecurseIntoAttrs
     (pkgs.callPackage ./custom-node-packages {

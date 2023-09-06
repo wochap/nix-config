@@ -47,12 +47,12 @@
       gtkIconTheme = {
         name = lib.mkOption {
           type = lib.types.str;
-          default = "Tela-circle-dracula";
+          default = "Tela-catppuccin_mocha";
         };
         package = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.tela-circle-icon-theme.override {
-            colorVariants = [ "dracula" ];
+          default = pkgs._custom.tela-icon-theme.override {
+            colorVariants = [ "catppuccin_mocha" "dracula" ];
           };
         };
       };
