@@ -71,6 +71,16 @@ in {
     programs.gnome-disks.enable = true;
 
     home-manager.users.${userName} = {
+      # install gtk4 theme
+      xdg.configFile = {
+        "gtk-4.0/assets".source =
+          "${globals.gtkTheme.package}/share/themes/${globals.gtkTheme.name}/gtk-4.0/assets";
+        "gtk-4.0/gtk.css".source =
+          "${globals.gtkTheme.package}/share/themes/${globals.gtkTheme.name}/gtk-4.0/gtk.css";
+        "gtk-4.0/gtk-dark.css".source =
+          "${globals.gtkTheme.package}/share/themes/${globals.gtkTheme.name}/gtk-4.0/gtk-dark.css";
+      };
+
       # TODO: move out
       # Open GTK inspector with Ctrl + Shift + D
       # GTK_DEBUG=interactive <app>
