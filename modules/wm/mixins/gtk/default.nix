@@ -144,9 +144,6 @@ in {
           window.csd decoration { /* gtk3 */
             box-shadow: none;
           }
-
-          ${builtins.readFile
-          "${inputs.dracula-adw-gtk3}/themes/dracula/gtk.css"}
         '';
       };
     };

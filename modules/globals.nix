@@ -37,11 +37,16 @@
       gtkTheme = {
         name = lib.mkOption {
           type = lib.types.str;
-          default = "adw-gtk3";
+          default = "Catppuccin-Mocha-Standard-Mauve-Dark";
         };
         package = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.adw-gtk3;
+          default = pkgs.catppuccin-gtk.override {
+            accents = [ "mauve" ];
+            size = "standard";
+            tweaks = [ ];
+            variant = "mocha";
+          };
         };
       };
       gtkIconTheme = {
