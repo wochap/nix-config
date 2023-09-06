@@ -21,11 +21,11 @@
       cursor = {
         name = lib.mkOption {
           type = lib.types.str;
-          default = "capitaine-cursors";
+          default = "Catppuccin-Mocha-Dark-Cursors";
         };
         package = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.capitaine-cursors;
+          default = pkgs.catppuccin-cursors.mochaDark;
         };
         size = lib.mkOption {
           type = lib.types.int;
