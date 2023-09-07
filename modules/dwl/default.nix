@@ -41,7 +41,7 @@ in {
       systemPackages = with pkgs; [
         (unstable.dwl.override {
           conf = ''
-            ${builtins.readFile ./dotfiles/wlroots-next-keychords-config.def.h}
+            ${builtins.readFile ./dotfiles/config.def.h}
 
             static const float bordercolor[] = RGB(0x${
               unwrapHex themeColors.selection
