@@ -46,6 +46,7 @@ static const Rule rules[] = {
 	{ "gnome-font-viewer",       NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "thunar",                  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
@@ -66,11 +67,8 @@ static const Rule rules[] = {
 	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'u',       0,      0 },
 
 	{ "kitty-dangerp",           NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "Alacritty",               NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
-
-  // adding `kitty` with `isterm=1` breaks namedscratchpads patch
-	// { "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
-	// { "kitty",                   NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
+	{ "^Alacritty$",               NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
+	{ "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
 
 	/* x, y, width, heigh are floating only
 	* When x or y == 0 the client is placed at the center of the screen,

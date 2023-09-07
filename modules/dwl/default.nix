@@ -19,14 +19,14 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
+        # install my patched dwl
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
           version = "0.4-next";
-
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
-            rev = "491720c94e25813e28cfca55a39fd70e3894e90e";
-            hash = "sha256-syvfZqIRjMzGzELPZ7lDLbcU7JCvlAhAcjQfv7GCzb4=";
+            rev = "831c5a2db1df5ed646d6be1ba97319306049bbfc";
+            hash = "sha256-QiM76lHxj4zQkXyxSgJZA6EJjcx4krJZ5nOnnUPo1Kw=";
           };
         });
       })
