@@ -10,9 +10,25 @@ let
   # extraMakeWrapperArgs = ''--suffix PATH : "${lib.makeBinPath extraPackages}"'';
 in {
   config = {
+    # nixpkgs.overlays = [
+    #   (final: prev: {
+    #     # https://github.com/neovide/neovide/compare/0.11.1...wochap:fix_font_symbols_height.patch
+    #     neovide = prev.neovide.overrideAttrs (drv: rec {
+    #       patches = [
+    #         (prev.fetchpatch {
+    #           url =
+    #             "https://github.com/neovide/neovide/compare/0.11.1...wochap:fix_font_symbols_height.patch";
+    #           sha256 = "sha256-uZnqwcGiCIUQ7b2lcj4W0AfYNg61IwbgoE7/sJeXkH0=";
+    #         })
+    #       ];
+    #     });
+    #   })
+    # ];
+
     environment = {
       systemPackages = with pkgs;
         [
+          unstable.neovide
           # oni2
           # neovim-qt # better fractional scaling support
           # uivonim
