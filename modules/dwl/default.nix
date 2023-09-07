@@ -25,8 +25,8 @@ in {
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
-            rev = "415a9ea8038cf75b9f2d6a83a378a14259206aed";
-            hash = "sha256-esWGCkUwJx7RvsRxzqaz9mq3drTxFI+D1JXzctVnlvA=";
+            rev = "491720c94e25813e28cfca55a39fd70e3894e90e";
+            hash = "sha256-syvfZqIRjMzGzELPZ7lDLbcU7JCvlAhAcjQfv7GCzb4=";
           };
         });
       })

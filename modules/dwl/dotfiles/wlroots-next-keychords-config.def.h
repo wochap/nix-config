@@ -38,34 +38,39 @@ static const int hide_type = 0;
 
 
 static const Rule rules[] = {
-	/* app_id                    title       tags mask  isfloating  monitor  x    y    width height  scratchkey */
+	/* app_id                    title       tags mask  isfloating  monitor  x    y    width height  scratchkey isterm  noswallow */
 	/* examples:
-	{ "Gimp",                    NULL,       0,         1,          -1, 	   0, 	0,   500,  400,    0,          },
+	{ "Gimp",                    NULL,       0,         1,          -1, 	   0, 	0,   500,  400,    0,         0,      0 },
 	*/
-	{ "file-roller",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "gnome-font-viewer",       NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "thunar",                  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "thunar-scratch",          NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
-	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "file-roller",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "gnome-font-viewer",       NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "thunar",                  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "thunar-scratch",          NULL,       0,         1,          -1,      0,   0,   0,    0,      'f',       0,      0 },
+	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 
-	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "google-chrome",           NULL,       1 << 0,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "brave-browser",           NULL,       1 << 7,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "Slack",                   NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "google-chrome",           NULL,       1 << 0,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "brave-browser",           NULL,       1 << 7,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "Slack",                   NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 
-	{ "kitty-top",               NULL,       0,         1,          -1,      0,   0,   0,    0,      'm' },
-	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'i' },
-	{ "kitty-neorg",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'n' },
-	{ "kitty-nmtui",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'w' },
-	{ "kitty-neomutt",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'e' },
-	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   0,    0,      'r' },
-	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'u' },
+	{ "kitty-top",               NULL,       0,         1,          -1,      0,   0,   0,    0,      'm',       0,      0 },
+	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'i',       0,      0 },
+	{ "kitty-neorg",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'n',       0,      0 },
+	{ "kitty-nmtui",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'w',       0,      0 },
+	{ "kitty-neomutt",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'e',       0,      0 },
+	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   0,    0,      'r',       0,      0 },
+	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'u',       0,      0 },
 
-	{ "kitty-dangerp",           NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "kitty-dangerp",           NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "Alacritty",               NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
+
+  // adding `kitty` with `isterm=1` breaks namedscratchpads patch
+	// { "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
+	// { "kitty",                   NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
 
 	/* x, y, width, heigh are floating only
 	* When x or y == 0 the client is placed at the center of the screen,
