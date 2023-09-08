@@ -90,24 +90,26 @@ env = XCURSOR_SIZE,24
 
 #### RULES
 
-windowrulev2 = float, class:^(blueberry.py)$
-windowrulev2 = center, class:^(blueberry.py)$
 windowrulev2 = float, class:^(file-roller)$
 windowrulev2 = center, class:^(file-roller)$
-windowrulev2 = float, class:^(org.gnome.Calculator)$
-windowrulev2 = center, class:^(org.gnome.Calculator)$
-windowrulev2 = float, class:^(org.gnome.Nautilus)$
-windowrulev2 = center, class:^(org.gnome.Nautilus)$
-windowrulev2 = float, class:^(thunar)$
-windowrulev2 = center, class:^(thunar)$
+windowrulev2 = float, class:^(gnome-font-viewer)$
+windowrulev2 = center, class:^(gnome-font-viewer)$
 windowrulev2 = float, class:^(gnome-system-monitor)$
 windowrulev2 = center, class:^(gnome-system-monitor)$
-windowrulev2 = float, class:^(nm-connection-editor)$
-windowrulev2 = center, class:^(nm-connection-editor)$
-windowrulev2 = float, class:^(pavucontrol)$
-windowrulev2 = center, class:^(pavucontrol)$
 windowrulev2 = float, class:^(mpv)$
 windowrulev2 = center, class:^(mpv)$
+windowrulev2 = float, class:^(imv)$
+windowrulev2 = center, class:^(imv)$
+windowrulev2 = float, class:^(org.gnome.Calculator)$
+windowrulev2 = center, class:^(org.gnome.Calculator)$
+windowrulev2 = float, class:^(pavucontrol)$
+windowrulev2 = center, class:^(pavucontrol)$
+windowrulev2 = float, class:^(thunar)$
+windowrulev2 = center, class:^(thunar)$
+windowrulev2 = float, class:^(thunar-scratch)$
+windowrulev2 = center, class:^(thunar-scratch)$
+windowrulev2 = float, class:^(xdg-desktop-portal-gtk)$
+windowrulev2 = center, class:^(xdg-desktop-portal-gtk)$
 
 windowrulev2 = workspace 5, class:^(firefox)$
 windowrulev2 = workspace 1, class:^(google-chrome)$

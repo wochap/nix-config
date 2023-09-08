@@ -67,7 +67,7 @@ static const Rule rules[] = {
 	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'u',       0,      0 },
 
 	{ "kitty-dangerp",           NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "^Alacritty$",               NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
+	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
 	{ "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
 
 	/* x, y, width, heigh are floating only
@@ -288,11 +288,11 @@ static const Keychord keychords[] = {
   // Toggle gaps
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_grave}}, togglegaps, {0} },
 
-  // To decrease/increase the main ratio
+  // To decrease/increase the main count
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Left}}, incnmaster, {.i = +1} },
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Right}}, incnmaster, {.i = -1} },
 
-  // To increment/decrement the main count
+  // To increment/decrement the main ratio
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Up}}, setmfact, {.f = +0.05} },
   { 2, {{MODKEY, Key_r}, {MOD_NONE, Key_Down}}, setmfact, {.f = -0.05} },
 

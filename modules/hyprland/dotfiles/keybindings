@@ -25,9 +25,6 @@ bind = $mod, Print, exec, /etc/scripts/system/takeshot.sh --now
 # Open calc
 bind = $mod, c, exec, rofi-calc
 
-# Open wifi menu
-# bind = $mod, w, exec, #   /etc/scripts/wofi-wifi.sh
-
 # TODO: Show keybindings
 
 # Show clipboard
@@ -45,7 +42,7 @@ bind = $mod CTRL SHIFT, n, exec, dunstctl close
 
 bind = $mod CTRL SHIFT, Escape, exec, dunstctl close-all
 
-# Toggle waybar
+# Toggle bar
 bind = $mod, b, exec, /etc/scripts/waybar/waybar-toggle.sh
 
 
@@ -64,7 +61,7 @@ bind = SUPER, f, fullscreen
 bind = SUPER CTRL, y, pin
 
 # Alternate between the tiled and monocle layout
-bind = $mod, a, submap, layout
+bind = $mod, r, submap, layout
 submap = layout
 bind = , c, centerwindow
 bind = , c, submap, reset
@@ -76,15 +73,14 @@ bind = $mod, left, movefocus, l
 bind = $mod, down, movefocus, d
 bind = $mod, up, movefocus, u
 bind = $mod, right, movefocus, r
+bind = $mod, n, focuswindow, next
+bind = $mod, p, focuswindow, prev
 
 # Swap direction
 bind = $mod SHIFT, left, swapwindow, l
 bind = $mod SHIFT, down, swapwindow, d
 bind = $mod SHIFT, up, swapwindow, u
 bind = $mod SHIFT, right, swapwindow, r
-
-# bindsym $mod+n focus next
-# bindsym $mod+Shift+n focus prev
 
 bind = SUPER, 1, workspace, 1
 bind = SUPER, 2, workspace, 2
@@ -124,10 +120,10 @@ bind = $mod ALT, right, moveactive, 40 0
 ### WM SCRATCHPAD
 
 # Send to scratchpad
-bind = $mod SHIFT, p, movetoworkspace, special
+bind = $mod SHIFT, d, movetoworkspace, special
 
 # Open scratchpad
-bind = $mod, p, togglespecialworkspace
+bind = $mod, d, togglespecialworkspace
 
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
@@ -136,8 +132,7 @@ bind = $mod, p, togglespecialworkspace
 bind = $mod ALT, t, exec, $term
 
 # Open file manager
-bind = $mod ALT, f, exec, hyprland-focus-toggle "thunar" thunar
-# TODO:
+bind = $mod ALT, f, exec, hyprland-focus-toggle "thunar-scratch" "thunar --name thunar-scratch"
 
 # Screencast/record region to mp4
 bind = $mod ALT, r, exec, /etc/scripts/system/recorder.sh --area

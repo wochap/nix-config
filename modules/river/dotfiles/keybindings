@@ -126,18 +126,18 @@ riverctl map normal $mod Return zoom
 
 riverctl declare-mode rivercarro
 riverctl map normal $mod r enter-mode rivercarro
-# To decrease/increase the main ratio of rivercarro(1)
-riverctl map rivercarro None Left send-layout-cmd rivercarro "main-ratio -0.05"
-riverctl map rivercarro None Right send-layout-cmd rivercarro "main-ratio +0.05"
 # To increment/decrement the main count of rivercarro(1)
-riverctl map rivercarro Shift Left send-layout-cmd rivercarro "main-count +1"
-riverctl map rivercarro Shift Right send-layout-cmd rivercarro "main-count -1"
+riverctl map rivercarro None Left send-layout-cmd rivercarro "main-count +1"
+riverctl map rivercarro None Right send-layout-cmd rivercarro "main-count -1"
+# To decrease/increase the main ratio of rivercarro(1)
+riverctl map rivercarro None Up send-layout-cmd rivercarro "main-ratio +0.05"
+riverctl map rivercarro None Down send-layout-cmd rivercarro "main-ratio -0.05"
 # Change layout orientation
 riverctl map rivercarro $ctrl+Shift Up spawn "riverctl send-layout-cmd rivercarro \"main-location top\"; riverctl enter-mode normal"
 riverctl map rivercarro $ctrl+Shift Right spawn "riverctl send-layout-cmd rivercarro \"main-location right\"; riverctl enter-mode normal"
 riverctl map rivercarro $ctrl+Shift Down spawn "riverctl send-layout-cmd rivercarro \"main-location bottom\"; riverctl enter-mode normal"
 riverctl map rivercarro $ctrl+Shift Left spawn "riverctl send-layout-cmd rivercarro \"main-location left\"; riverctl enter-mode normal"
-riverctl map rivercarro $ctrl+Shift m spawn "riverctl send-layout-cmd rivercarro \"main-location monocle\"; riverctl enter-mode normal"
+riverctl map rivercarro $ctrl+Shift 3 spawn "riverctl send-layout-cmd rivercarro \"main-location monocle\"; riverctl enter-mode normal"
 riverctl map rivercarro None Escape enter-mode normal
 
 # Snap
@@ -190,10 +190,10 @@ riverctl map normal $mod grave focus-previous-tags
 # config, but rivers default uses the first 9 tags.
 scratch_tag=$((1 << 20 ))
 
-# Toggle the scratchpad with Super+P
+# Toggle the scratchpad with Super+d
 riverctl map normal $mod d toggle-focused-tags ${scratch_tag}
 
-# Send windows to the scratchpad with Super+Shift+P
+# Send windows to the scratchpad with Super+Shift+d
 riverctl map normal $mod+Shift d set-view-tags ${scratch_tag}
 
 # Set spawn tagmask to ensure new windows don't have the scratchpad tag unless
