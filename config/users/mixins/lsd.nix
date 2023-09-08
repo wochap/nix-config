@@ -16,6 +16,7 @@ in {
         settings = lib.recursiveUpdate themeSettings {
           sorting = { dir-grouping = "first"; };
           symlink-arrow = "->";
+          layout = "grid";
         };
       };
     };
