@@ -70,6 +70,10 @@ window#waybar.hidden {
   padding: 0;
   background-color: transparent;
 }
+#workspaces button {
+  margin-right: 4px;
+  color: @foreground;
+}
 #tags button {
   margin-right: 4px;
   color: @comment;
