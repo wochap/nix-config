@@ -19,6 +19,7 @@ in {
   config = {
     # NOTE: amdvlk gives errors?
     hardware.amdgpu.amdvlk = false;
+    hardware.amdgpu.loadInInitrd = true;
 
     _userName = userName;
     _homeDirectory = "/home/${userName}";
@@ -82,7 +83,9 @@ in {
     home-manager.users.${userName} = {
       home.stateVersion = "21.11";
 
-      _custom.programs.waybar.settings.mainBar.temperature = { thermal-zone = 2; };
+      _custom.programs.waybar.settings.mainBar.temperature = {
+        thermal-zone = 2;
+      };
     };
 
     boot = {
@@ -103,9 +106,6 @@ in {
         "i915.enable_psr=1"
         "radeon.dpm=1"
         "radeon.runpm=1"
-
-        "radeon.cik_support=0"
-        "amdgpu.cik_support=0"
       ];
 
       kernelModules = [ "hid-apple" ];
@@ -155,5 +155,15 @@ in {
       cpufreq.max = 4000000;
     };
 
+    # setup video drivers
+    services.xserver = {
+      videoDrivers = [ "modesetting" "amdgpu" "radeon" "intel" ];
+
+      deviceSection = ''
+        Option "EnablePageFlip" "off"
+        Option "TearFree" "false"
+        Option "DRI" "3"
+      '';
+    };
   };
 }

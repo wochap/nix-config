@@ -23,6 +23,7 @@ in {
         wev # get key actual name
 
         # CLI TOOLS
+        _custom.advcpmv # cp and mv with progress bar
         acpi
         acpitool
         cached-nix-shell # fast nix-shell scripts
@@ -42,7 +43,6 @@ in {
         inxi # check compositor running
         libimobiledevice # mount ios
         libva-utils # verifying VA-API
-        _custom.advcpmv # cp and mv with progress bar
         notify-desktop # test notifications
         pciutils # lspci and others commands
         pulsemixer
@@ -51,6 +51,7 @@ in {
         vdpauinfo # verifying VDPAU
         vulkan-tools
         wirelesstools
+        xorg.xdpyinfo
         # base-devel
         # busybox # a lot of commands but with less options/features
         # mpc_cli
