@@ -18,7 +18,7 @@ do
   riverctl input $pad events enabled
   riverctl input $pad tap disabled
   riverctl input $pad disable-while-typing enabled
-  # riverctl input $pad accel-profile flat
+  riverctl input $pad accel-profile adaptive
   # riverctl input $pad pointer-accel 0
 done
 
@@ -26,7 +26,7 @@ for pad in $(riverctl list-inputs | grep -i mouse)
 do
   riverctl input $pad natural-scroll disabled
   riverctl input $pad accel-profile flat
-  riverctl input $pad pointer-accel 0
+  # riverctl input $pad pointer-accel 0
 done
 
 
