@@ -162,7 +162,7 @@ $ sudo nixos-rebuild boot --flake .#dekstop
 
 ## Development Workflow
 
-1. Setup a project with [nix-direnv]()
+1. Setup a project with [nix-direnv](https://github.com/nix-community/nix-direnv)
 
    ```
    $ nix flake new -t github:nix-community/nix-direnv ./
