@@ -54,6 +54,7 @@ static const Rule rules[] = {
 	{ "thunar",                  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "thunar-scratch",          NULL,       0,         1,          -1,      0,   0,   0,    0,      'f',       0,      0 },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0,         0,      1 },
 
 	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "google-chrome",           NULL,       1 << 0,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
