@@ -36,9 +36,6 @@ static const char *const autostart[] = {
 #define TAGCOUNT (9)
 static const int tagcount = TAGCOUNT;
 
-static const int hide_type = 0;
-
-
 static const Rule rules[] = {
 	/* app_id                    title       tags mask  isfloating  monitor  x    y    width height  scratchkey isterm  noswallow */
 	/* examples:
@@ -54,7 +51,7 @@ static const Rule rules[] = {
 	{ "thunar",                  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "thunar-scratch",          NULL,       0,         1,          -1,      0,   0,   0,    0,      'f',       0,      0 },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0,         0,      1 },
+	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0,         0,      -1 },
 
 	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "google-chrome",           NULL,       1 << 0,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
@@ -70,8 +67,8 @@ static const Rule rules[] = {
 	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'u',       0,      0 },
 
 	{ "kitty-dangerp",           NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
-	{ "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      1 },
+	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
+	{ "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
 
 	/* x, y, width, heigh are floating only
 	* When x or y == 0 the client is placed at the center of the screen,
@@ -111,9 +108,9 @@ static const MonitorRule monrules[] = {
 	/* example of a HiDPI laptop monitor:
 	{ "eDP-1",    0.5,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	*/
-  { "eDP-1",    0.64, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+  { "eDP-1",    0.6, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	/* defaults */
-	{ NULL,       0.64, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	{ NULL,       0.6, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 };
 
 /* keyboard */
@@ -326,7 +323,8 @@ static const Keychord keychords[] = {
   TAGKEYS( Key_8, 7),
   TAGKEYS( Key_9, 8),
 
-  // { 1, {{MODKEY|MOD_SHIFT, Key_0}}, tag, {.ui = ~0} },
+  // Set sticky
+  { 1, {{MODKEY|MOD_CONTROL, Key_y}}, tag, {.ui = ~0} },
 
   // Focus previous tags
   { 1, {{MODKEY, Key_grave}}, view, {0} },
