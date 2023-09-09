@@ -16,6 +16,8 @@ static const unsigned int gappoh           = 0; /* horiz outer gap between windo
 static const unsigned int gappov           = 0; /* vert outer gap between windows and screen edge */
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 0};
+static const unsigned int swipe_min_threshold = 0;
+static const int swipe_fingers_count       = 3;
 
 /* Autostart */
 static const char *const autostart[] = {
@@ -382,9 +384,6 @@ static const Keychord keychords[] = {
 
   // ### OTHERS
 
-  // { 1, {{MODKEY, Key_a}}, shiftview, { .i = -1 } },
-  // { 1, {{MODKEY, Key_semicolon}}, shiftview, { .i = 1 } },
-
   { 1, {{MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q}}, quit, {0} },
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
@@ -400,3 +399,9 @@ static const Button buttons[] = {
 	{ MODKEY, BTN_MIDDLE, togglefloating, {0} },
 	{ MODKEY, BTN_RIGHT,  moveresize,     {.ui = CurResize} },
 };
+
+static const Gesture gestures[] = {
+	{ SWIPE_LEFT, shiftview, { .i = 1 } },
+	{ SWIPE_RIGHT, shiftview, { .i = -1 } },
+};
+
