@@ -7,6 +7,7 @@
     ./dwl
     ./flatpak
     ./globals.nix
+    ./gnome
     ./gui
     ./hardware
     ./hyprland
