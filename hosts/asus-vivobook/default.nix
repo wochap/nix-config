@@ -10,7 +10,7 @@ in {
   imports = [
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
     inputs.nixos-hardware.nixosModules.common-gpu-amd
-    /etc/nixos/hardware-configuration.nix
+    ./hardware-configuration.nix
     ../../config/nixos.nix
   ];
 
