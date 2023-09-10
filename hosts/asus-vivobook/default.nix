@@ -88,7 +88,6 @@ in {
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
       };
-      boot.cleanTmpDir = true;
     };
 
     networking = {
