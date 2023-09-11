@@ -30,11 +30,11 @@ in {
     _custom.wm.networking.enable = true;
     _custom.wm.powerManagement.enable = false;
     _custom.wm.backlight.enable = false;
-    _custom.wm.audio.enable = false;
+    _custom.wm.audio.enable = true;
     _custom.wm.cursor.enable = false;
     _custom.wm.xdg.enable = false;
     _custom.wm.dbus.enable = false;
-    _custom.wm.bluetooth.enable = false;
+    _custom.wm.bluetooth.enable = true;
     _custom.wm.qt.enable = false;
     _custom.wm.gtk.enable = false;
 
