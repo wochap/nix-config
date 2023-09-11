@@ -36,7 +36,7 @@ in {
     _custom.wm.dbus.enable = false;
     _custom.wm.bluetooth.enable = true;
     _custom.wm.qt.enable = false;
-    _custom.wm.gtk.enable = false;
+    _custom.wm.gtk.enable = true;
 
     _custom.interception-tools.enable = false;
     _custom.steam.enable = true;
