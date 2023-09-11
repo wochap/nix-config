@@ -25,8 +25,8 @@ in {
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
-            rev = "a7ebe3983d694c3500e54f1a4981928b7ed9e768";
-            hash = "sha256-J1gGqBDLCk6oN1kt/VH9rTOlFW1Q3/NatFd+V3gPTL0=";
+            rev = "1580c5e7c1f6c297fb325035349c3a9ed37f65fb";
+            hash = "sha256-QDaaiO2yCYE+F2JdbCIxoHnO8k//WH4Lc3FMm+itq54=";
           };
         });
       })
@@ -84,7 +84,7 @@ in {
         settings.mainBar = lib.mkMerge ([{
           modules-left = (builtins.map (i: "custom/dwl_tag#${toString i}")
             (builtins.genList (i: i) 9))
-            ++ [ "custom/dwl_layout" "keyboard-state" ];
+            ++ [ "custom/dwl_layout" "custom/dwl_mode" "keyboard-state" ];
           modules-center = [ "custom/dwl_title" ];
           "custom/dwl_layout" = {
             exec = "dwl-waybar '' layout";
@@ -98,6 +98,12 @@ in {
             escape = true;
             return-type = "json";
             max-length = 50;
+          };
+          "custom/dwl_mode" = {
+            exec = "dwl-waybar '' mode";
+            format = "{}";
+            escape = true;
+            return-type = "json";
           };
         }] ++ (builtins.map (i: {
           "custom/dwl_tag#${toString i}" = {

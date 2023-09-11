@@ -18,6 +18,7 @@ window#waybar.hidden {
 }
 
 #custom-dwl_title,
+#custom-dwl_mode,
 #custom-dwl_layout,
 #temperature,
 #submap,
@@ -112,6 +113,7 @@ window#waybar.hidden {
   color: @selection;
 }
 
+#custom-dwl_mode,
 #submap,
 #mode {
   color: @orange;

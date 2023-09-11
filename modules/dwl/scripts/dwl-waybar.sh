@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 #
 # source: https://gitee.com/guyuming76/personal/blob/dwl/gentoo/waybar-dwl/waybar-dwl.sh
+# NOTE: mode required the following patch https://github.com/djpohly/dwl/wiki/modes
 #
-# dwl-waybar.sh - display dwl tags, layout and active window title
+# dwl-waybar.sh - display dwl tags, layout, active mode and active window title
 #   Based heavily upon this script by user "novakane" (Hugo Machet) used to do the same for yambar
 #   https://codeberg.org/novakane/yambar/src/branch/master/examples/scripts/dwl-tags.sh
 #
 # USAGE: waybar-dwl.sh MONITOR COMPONENT
-#        "COMPONENT" is an integer representing a dwl tag OR "layout" OR "title"
+#        "COMPONENT" is an integer representing a dwl tag OR "layout" OR "title" OR "MODE"
 #
 # REQUIREMENTS:
 #  - inotifywait ( 'inotify-tools' on arch )
@@ -18,7 +19,7 @@
 ### Example ~/.config/waybar/config
 #
 # {
-#   "modules-left": ["custom/dwl_tag#0", "custom/dwl_layout", "custom/dwl_title"],
+#   "modules-left": ["custom/dwl_tag#0", "custom/dwl_layout", "custom/dwl_mode", "custom/dwl_title"],
 #   // The empty '' argument used in the following "exec": fields works for single-monitor setups
 #   // For multi-monitor setups, see https://github.com/Alexays/Waybar/wiki/Configuration
 #   //     and enter the monitor id (like "eDP-1") as the first argument to waybar-dwl.sh
@@ -34,6 +35,12 @@
 #   },
 #   "custom/dwl_title": {
 #     "exec": "/path/to/waybar-dwl.sh '' title",
+#     "format": "{}",
+#     "escape": true,
+#     "return-type": "json"
+#   }
+#   "custom/dwl_mode": {
+#     "exec": "/path/to/waybar-dwl.sh '' mode",
 #     "format": "{}",
 #     "escape": true,
 #     "return-type": "json"
@@ -67,7 +74,7 @@
 #
 
 # Variables
-declare output title layout occupiedtags focusedtags urgenttags
+declare output title mode layout occupiedtags focusedtags urgenttags
 declare -a name
 readonly fname="$HOME"/.cache/dwltags
 # TODO: what if there are multiple DWL instance which share the the file name, will is cause problem? and this file will increese constantly, how to trim it?
@@ -99,6 +106,9 @@ _cycle() {
   title)
     printf -- '{"text":"%s"}\n' "${title}"
     ;;
+  mode)
+    printf -- '{"text":"%s"}\n' "${mode}"
+    ;;
   *)
     printf -- '{"text":"INVALID INPUT"}\n'
     ;;
@@ -113,6 +123,7 @@ while [[ -n "$(pgrep waybar)" ]]; do
   # Get info from the file
   output="$(grep "${monitor}" "${fname}" | tail -n7)"
   title="$(echo "${output}" | grep '^[[:graph:]]* title' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
+  mode="$(echo "${output}" | grep '^[[:graph:]]* mode' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
   layout="$(echo "${output}" | grep '^[[:graph:]]* layout' | cut -d ' ' -f 3-)"
 
   if [[ $layout == "[\\]" ]]; then
@@ -131,4 +142,4 @@ while [[ -n "$(pgrep waybar)" ]]; do
   inotifywait -t 60 -qq --event modify "${fname}"
 done
 
-unset -v occupiedtags layout name output focusedtags title
+unset -v occupiedtags layout name output focusedtags title mode
