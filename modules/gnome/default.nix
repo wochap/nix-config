@@ -10,7 +10,7 @@ in {
     environment.gnome.excludePackages = with pkgs; [ epiphany ];
 
     services.xserver.displayManager.lightdm.enable = false;
-    services.xserver.displayManager.gdm.enable = false;
+    services.xserver.displayManager.gdm.enable = true;
     services.xserver.desktopManager.gnome.enable = true;
     services.gnome.games.enable = false;
   };
