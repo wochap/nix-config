@@ -121,7 +121,7 @@ while [[ -n "$(pgrep waybar)" ]]; do
     "You need to redirect dwl stdout to ~/.cache/dwltags" >&2
 
   # Get info from the file
-  output="$(grep "${monitor}" "${fname}" | tail -n7)"
+  output="$(grep "${monitor}" "${fname}" | tail -n8)"
   title="$(echo "${output}" | grep '^[[:graph:]]* title' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
   mode="$(echo "${output}" | grep '^[[:graph:]]* mode' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
   layout="$(echo "${output}" | grep '^[[:graph:]]* layout' | cut -d ' ' -f 3-)"
