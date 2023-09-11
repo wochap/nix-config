@@ -5,6 +5,8 @@ in {
   options._custom.wm.audio = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
+    hardware.pulseaudio.enable = false;
+
     # Enable audio
     security.rtkit.enable = true;
     services.pipewire = {

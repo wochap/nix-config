@@ -52,7 +52,7 @@ in {
     _custom.hardware.amdGpu.enable = false;
     _custom.hardware.amdGpu.enableSouthernIslands = false;
 
-    _custom.gnome.enable = false;
+    _custom.gnome.enable = true;
     _custom.dwl.enable = false;
     _custom.river.enable = false;
     _custom.hyprland.enable = false;

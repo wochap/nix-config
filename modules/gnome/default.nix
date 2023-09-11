@@ -9,6 +9,7 @@ in {
   config = lib.mkIf cfg.enable {
     environment.gnome.excludePackages = with pkgs; [ epiphany ];
 
+    services.xserver.displayManager.lightdm.enable = false;
     services.xserver.desktopManager.gnome.enable = true;
     services.gnome.games.enable = false;
   };
