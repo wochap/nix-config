@@ -60,6 +60,8 @@ in {
         package = pkgs.gitAndTools.gitFull;
         enable = true;
 
+        ignores = [ ".direnv" ".vscode" ".envrc" ];
+
         aliases = {
           co = "checkout";
           ci = "commit";
