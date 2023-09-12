@@ -13,6 +13,7 @@ static const unsigned int borderpx         = 2;  /* border pixel of windows */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 0};
 static const unsigned int swipe_min_threshold = 0;
 static const int swipe_fingers_count       = 3;
+static const int center_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
 
 enum {
 	BROWSER,
@@ -54,8 +55,8 @@ static const Rule rules[] = {
 	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "thunar",                  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "thunar-scratch",          NULL,       0,         1,          -1,      0,   0,   0,    0,      'f',       0,      0 },
+	{ "^thunar$",                NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      -1 },
+	{ "^thunar-scratch$",        NULL,       0,         1,          -1,      0,   0,   0,    0,      'f',       0,      -1 },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0,         0,      -1 },
 
@@ -114,7 +115,7 @@ static const MonitorRule monrules[] = {
 	/* example of a HiDPI laptop monitor:
 	{ "eDP-1",    0.5,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	*/
-  { "eDP-1",    0.6, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+  { "eDP-1",    0.5, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	/* defaults */
 	{ NULL,       0.6, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 };
@@ -277,6 +278,18 @@ static const Key keys[] = {
   { MODKEY|MOD_SHIFT, Key_n, movestack, {.i = +1} },
   { MODKEY|MOD_SHIFT, Key_p, movestack, {.i = -1} },
 
+  // Resize
+  { MODKEY|MOD_ALT|MOD_SHIFT, Key_Down, moveresizekb, {.v = (int []){ 0, 0, 0, 40 }}},
+  { MODKEY|MOD_ALT|MOD_SHIFT, Key_Up, moveresizekb, {.v = (int []){ 0, 0, 0, -40 }}},
+  { MODKEY|MOD_ALT|MOD_SHIFT, Key_Right, moveresizekb, {.v = (int []){ 0, 0, 40, 0 }}},
+  { MODKEY|MOD_ALT|MOD_SHIFT, Key_Left, moveresizekb, {.v = (int []){ 0, 0, -40, 0 }}},
+
+  // Move
+  { MODKEY|MOD_ALT, Key_Down, moveresizekb, {.v = (int []){ 0, 40, 0, 0 }}},
+  { MODKEY|MOD_ALT, Key_Up, moveresizekb, {.v = (int []){ 0, -40, 0, 0 }}},
+  { MODKEY|MOD_ALT, Key_Right, moveresizekb, {.v = (int []){ 40, 0, 0, 0 }}},
+  { MODKEY|MOD_ALT, Key_Left, moveresizekb, {.v = (int []){ -40, 0, 0, 0 }}},
+
   // Focus next/previous monitor
   { MODKEY, Key_comma, focusmon, {.i = WLR_DIRECTION_LEFT} },
   { MODKEY, Key_period, focusmon, {.i = WLR_DIRECTION_RIGHT} },
@@ -365,6 +378,8 @@ static const Key keys[] = {
 static const Modekey modekeys[] = {
 	/* mode      modifier                  key                 function        argument */
 
+  { LAYOUT, { MODKEY, Key_c, movecenter, {0} } },
+  { LAYOUT, { MODKEY, Key_c, entermode, {.i = NORMAL} } },
   // Toggle gaps
   // { LAYOUT, { MOD_NONE, Key_grave, togglegaps, {0} } },
   // { LAYOUT, { MOD_NONE, Key_grave, entermode, {.i = NORMAL} } },
