@@ -4,9 +4,7 @@ let
   cfg = config._custom.wm.calendar;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  # inherit (hmConfig.xdg) dataHome configHome;
-  dataHome = "home/gean/.local/share";
-  configHome = "home/gean/.config";
+  inherit (hmConfig.xdg) dataHome configHome;
 in {
   options._custom.wm.calendar = { enable = lib.mkEnableOption { }; };
 
