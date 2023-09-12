@@ -3,8 +3,16 @@
 let
   userName = config._userName;
   isDarwin = config._displayServer == "darwin";
-  customNerdFonts = pkgs.nerdfonts.override {
-    fonts = [ "FiraCode" "FiraMono" "Hack" "Iosevka" "JetBrainsMono" ];
+  customNerdFonts = pkgs.unstable.nerdfonts.override {
+    fonts = [
+      "FiraCode"
+      "FiraMono"
+      "Hack"
+      "Iosevka"
+      "IosevkaTerm"
+      "JetBrainsMono"
+      "NerdFontsSymbolsOnly"
+    ];
   };
 in {
   config = {
@@ -14,7 +22,7 @@ in {
           customNerdFonts
 
           cascadia-code
-          fira-code
+          fira-code # doesn't have retina
 
           ibm-plex
 
