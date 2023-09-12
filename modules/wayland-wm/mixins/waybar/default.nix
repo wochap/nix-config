@@ -13,6 +13,20 @@ in {
   imports = [ ./waybar-config.nix ];
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        waybar = prev.waybar.overrideAttrs (oldAttrs: {
+          mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+          src = prev.fetchFromGitHub {
+            owner = "Alexays";
+            repo = "Waybar";
+            rev = "a90e275d5e26226c9e69abbb6f9be4d7391ba3c1";
+            hash = "sha256-AKjdQH+jey1A235xQXVtogeqLUaB/SBfraGJw/tvwz8=";
+          };
+        });
+      })
+    ];
+
     environment = {
       systemPackages = [ waybar pkgs.libevdev ];
       etc = {
