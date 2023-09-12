@@ -83,8 +83,9 @@ in {
     home-manager.users.${userName} = {
       home.stateVersion = "21.11";
 
-      _custom.programs.waybar.settings.mainBar.temperature = {
-        thermal-zone = 2;
+      _custom.programs.waybar.settings.mainBar = {
+        temperature = { thermal-zone = 2; };
+        keyboard-state = { device-path = "/dev/input/event23"; };
       };
     };
 
