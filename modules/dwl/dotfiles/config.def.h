@@ -65,13 +65,13 @@ static const Rule rules[] = {
 	{ "brave-browser",           NULL,       1 << 7,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "Slack",                   NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 
-	{ "kitty-top",               NULL,       0,         1,          -1,      0,   0,   0,    0,      'm',       0,      0 },
-	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'i',       0,      0 },
-	{ "kitty-neorg",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'n',       0,      0 },
-	{ "kitty-nmtui",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'w',       0,      0 },
-	{ "kitty-neomutt",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'e',       0,      0 },
-	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   0,    0,      'r',       0,      0 },
-	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   0,    0,      'u',       0,      0 },
+	{ "kitty-top",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'm',       0,      0 },
+	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'i',       0,      0 },
+	{ "kitty-neorg",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'n',       0,      0 },
+	{ "kitty-nmtui",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'w',       0,      0 },
+	{ "kitty-neomutt",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'e',       0,      0 },
+	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   1200, 800,    'r',       0,      0 },
+	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u',       0,      0 },
 
 	{ "kitty-dangerp",           NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
@@ -378,8 +378,8 @@ static const Key keys[] = {
 static const Modekey modekeys[] = {
 	/* mode      modifier                  key                 function        argument */
 
-  { LAYOUT, { MODKEY, Key_c, movecenter, {0} } },
-  { LAYOUT, { MODKEY, Key_c, entermode, {.i = NORMAL} } },
+  { LAYOUT, { MOD_NONE, Key_c, movecenter, {0} } },
+  { LAYOUT, { MOD_NONE, Key_c, entermode, {.i = NORMAL} } },
   // Toggle gaps
   // { LAYOUT, { MOD_NONE, Key_grave, togglegaps, {0} } },
   // { LAYOUT, { MOD_NONE, Key_grave, entermode, {.i = NORMAL} } },
