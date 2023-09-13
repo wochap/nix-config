@@ -45,6 +45,8 @@ in {
     _custom.wm.gtk.enable = true;
 
     _custom.interception-tools.enable = true;
+    _custom.android.enable = true;
+    _custom.android.sdk.enable = false;
     _custom.steam.enable = true;
     _custom.mbpfan.enable = true;
     _custom.docker.enable = true;

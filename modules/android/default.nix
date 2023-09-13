@@ -33,7 +33,10 @@ let
       # system-images-android-29-google-apis-x86-64
     ]);
 in {
-  options._custom.android = { enable = lib.mkEnableOption { }; };
+  options._custom.android = {
+    enable = lib.mkEnableOption { };
+    sdk = { enable = lib.mkEnableOption { default = true; }; };
+  };
 
   config = lib.mkIf cfg.enable {
     # Enable android device debugging
@@ -43,7 +46,7 @@ in {
       SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", GROUP="plugdev"
     '';
 
-    home-manager.users.${userName} = {
+    home-manager.users.${userName} = lib.mkIf cfg.sdk.enable {
       config = {
         home = {
           file.${android-sdk-home-path}.source =
