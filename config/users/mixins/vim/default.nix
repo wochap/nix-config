@@ -80,6 +80,7 @@ in {
         ] ++ (if (!isDarwin) then [
           neovide
 
+          # required by lspconfig
           sumneko-lua-language-server
         ] else
           [ ]);
