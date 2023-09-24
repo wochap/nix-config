@@ -88,4 +88,9 @@ new_icon="internet-mail"
 appname="notify-send"
 new_icon="org.xfce.notification"
 
+[thunar]
+appname="thunar"
+new_icon="Thunar"
+
+
 # vim: syntax=dosini
