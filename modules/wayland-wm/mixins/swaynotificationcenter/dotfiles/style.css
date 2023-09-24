@@ -1,0 +1,67 @@
+/*
+ * vim: ft=less
+ */
+
+@define-color background #1E1E2E;
+@define-color comment #6C7086;
+@define-color currentline #585B70;
+@define-color cyan #94E2D5;
+@define-color foreground #CDD6F4;
+@define-color green #A6E3A1;
+@define-color orange #FAB387;
+@define-color pink #F5C2E7;
+@define-color primary #cba6f7;
+@define-color purple #cba6f7;
+@define-color red #F38BA8;
+@define-color selection #585B70;
+@define-color yellow #F9E2AF;
+
+* {
+  font-size: inherit;
+  font-family: inherit;
+  background: inherit;
+}
+
+/* notifications container */
+.notification-row {
+  outline: none;
+  background: blue;
+}
+
+.notification {
+  border-radius: 0;
+  margin: 0 7px 7px 0;
+  padding: 0;
+  box-shadow: none;
+  background: red;
+  font-family: "Iosevka Nerd Font";
+  font-size: 11pt;
+}
+
+.notification-default-action {
+  background: purple;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+}
+
+.notification-content {
+  background: pink;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+.notification-action {
+  border-radius: 0;
+  border: none;
+  background: inherit;
+}
+
+.close-button {
+  opacity: 0;
+}
+
+.blank-window {
+  background: purple;
+}

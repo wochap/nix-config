@@ -66,6 +66,13 @@ let
       systemctl --user start pipewire pipewire-pulse wireplumber
     '';
   };
+
+  play-notification-sound = pkgs.writeTextFile {
+    name = "play-notification-sound";
+    destination = "/bin/play-notification-sound";
+    executable = true;
+    text = builtins.readFile ./scripts/play-notification-sound.sh;
+  };
 in {
   config = lib.mkIf cfg.enable {
     environment = {
@@ -123,6 +130,9 @@ in {
     };
 
     home-manager.users.${userName} = {
+      home.packages = with pkgs; [ play-notification-sound ];
+      xdg.dataFile."assets/notification.flac".source =
+        ./assets/notification.flac;
 
       # swayidle
       services.swayidle = {

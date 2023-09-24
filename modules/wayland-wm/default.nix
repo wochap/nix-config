@@ -6,6 +6,7 @@ in {
     ./mixins/dunst
     ./mixins/kanshi.nix
     ./mixins/rofi
+    ./mixins/swaynotificationcenter
     ./mixins/swww
     ./mixins/system
     ./mixins/waybar
