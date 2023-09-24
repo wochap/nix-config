@@ -10,7 +10,8 @@ let
   currentDirectory =
     "${configDirectory}/modules/wayland-wm/mixins/swaynotificationcenter";
 in {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf false {
+  # config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
         swaynotificationcenter = prev.swaynotificationcenter.overrideAttrs (oldAttrs: rec {
