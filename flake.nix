@@ -34,6 +34,10 @@
     nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";
 
     # third party overlays/modules
+    nix-ld.url = "github:Mic92/nix-ld";
+    nix-ld.inputs.nixpkgs.follows = "nixpkgs";
+    nix-alien.url = "github:thiagokokada/nix-alien";
+    nix-alien.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland?rev=116b9a80566e7956233b39697ac78c112d514c3c"; # main (aug 25 2023)
     hyprland.inputs.nixpkgs.follows = "prevstable-hyprland"; # TODO: change to nixpkgs
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=e368bd15e4bfd560baa9333ad47415340c563458";

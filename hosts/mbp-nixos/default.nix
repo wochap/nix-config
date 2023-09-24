@@ -44,6 +44,7 @@ in {
     _custom.wm.qt.enable = true;
     _custom.wm.gtk.enable = true;
 
+    _custom.nix-alien.enable = true;
     _custom.interception-tools.enable = true;
     _custom.android.enable = true;
     _custom.android.sdk.enable = false;

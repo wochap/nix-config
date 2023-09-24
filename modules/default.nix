@@ -15,6 +15,7 @@
     ./ipwebcam
     ./mbpfan
     ./mongodb
+    ./nix-alien
     ./river
     ./steam
     ./sway

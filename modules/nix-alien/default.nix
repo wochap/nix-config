@@ -1,25 +1,16 @@
 { config, pkgs, lib, inputs, ... }:
 
-let
-  cfg = config._custom.nix-alien;
-  userName = config._userName;
+let cfg = config._custom.nix-alien;
 in {
-  options._custom.nix-alien = { enable = lib.mkEnableOption {}; };
+  options._custom.nix-alien = { enable = lib.mkEnableOption { }; };
 
-  modules = [
-        nix-ld.nixosModules.nix-ld
-        ];
+  imports = [ inputs.nix-ld.nixosModules.nix-ld ];
 
   config = lib.mkIf cfg.enable {
-nixpkgs.overlays = [
-              self.inputs.nix-alien.overlays.default
-            ];
+    nixpkgs.overlays = [ inputs.nix-alien.overlays.default ];
 
-environment.systemPackages = with pkgs; [
-              nix-alien
-            ];
+    environment.systemPackages = with pkgs; [ nix-alien ];
 
-programs.nix-ld.enable = true;
+    programs.nix-ld.enable = true;
   };
 }
-
