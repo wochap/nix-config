@@ -38,7 +38,9 @@ in {
       (python.withPackages (ps:
         with ps;
         [
-          # required by 
+          pip
+
+          # required by
           # config/users/mixins/email/scripts/icalview.py
           html2text
           pytz
