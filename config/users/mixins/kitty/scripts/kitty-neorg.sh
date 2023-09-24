@@ -3,7 +3,7 @@
 uname=$(uname)
 
 if [[ "$uname" == "Darwin" ]]; then
-  kitty --title kitty-neorg -e nvim +'cd ~/Sync/neorg' +'Neorg workspace home'
+  kitty --title kitty-neorg -o window_padding_width=0 -e nvim +'cd ~/Sync/neorg' +'Neorg workspace home'
 else
-  kitty --class kitty-neorg --title neorg -e nvim +'cd ~/Sync/neorg'
+  kitty --class kitty-neorg --title neorg -o window_padding_width=0 -e nvim +'cd ~/Sync/neorg'
 fi
