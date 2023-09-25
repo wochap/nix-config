@@ -29,11 +29,11 @@ dangerp_session="$(
   cat <<EOF
 new_tab dangerp
 cd ~/Projects/boc/dangerp
-launch nvim
+launch zsh -i -c "nv; exec zsh"
 
 new_tab dangerp-backend
 cd ~/Projects/boc/dangerp-backend
-launch nvim
+launch zsh -i -c "nv; exec zsh"
 EOF
 )"
 echo "$dangerp_session" | kitty --class "kitty-dangerp" --session - &
