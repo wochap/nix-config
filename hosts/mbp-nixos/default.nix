@@ -87,8 +87,11 @@ in {
       home.stateVersion = "21.11";
 
       _custom.programs.waybar.settings.mainBar = {
-        temperature = { thermal-zone = 2; };
-        keyboard-state = { device-path = "/dev/input/event23"; };
+        temperature = {
+          hwmon-path-abs = "/sys/devices/platform/coretemp.0/hwmon";
+          input-filename = "temp1_input";
+        };
+        keyboard-state = { device-path = "/dev/input/event25"; };
       };
     };
 
