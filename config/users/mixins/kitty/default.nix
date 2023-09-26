@@ -99,6 +99,18 @@ in {
           recursive = true;
           executable = true;
         };
+        "kitty/pass_keys.py" = {
+          source = "${inputs.smart-splits-nvim}/kitty/pass_keys.py";
+          executable = true;
+        };
+        "kitty/neighboring_window.py" = {
+          source = "${inputs.smart-splits-nvim}/kitty/neighboring_window.py";
+          executable = true;
+        };
+        "kitty/relative_resize.py" = {
+          source = "${inputs.smart-splits-nvim}/kitty/relative_resize.py";
+          executable = true;
+        };
       };
 
     };

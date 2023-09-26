@@ -1204,10 +1204,27 @@
         "prevstable-python": "prevstable-python",
         "ptsh": "ptsh",
         "ranger": "ranger",
+        "smart-splits-nvim": "smart-splits-nvim",
         "spacebar": "spacebar",
         "unstable": "unstable",
         "xdg-portal-hyprland": "xdg-portal-hyprland",
         "yabai-src": "yabai-src"
+      }
+    },
+    "smart-splits-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1694532430,
+        "narHash": "sha256-xOwWzI8zS8jT8rQljALLQcjPyL33GPeO0FAGvHSK6ss=",
+        "owner": "mrjones2014",
+        "repo": "smart-splits.nvim",
+        "rev": "0beb14427dcf2a5d5d63e0064b45032a7bd3e763",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mrjones2014",
+        "repo": "smart-splits.nvim",
+        "type": "github"
       }
     },
     "spacebar": {

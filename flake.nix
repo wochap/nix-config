@@ -60,6 +60,8 @@
     ncmpcpp-ueberzug.flake = false;
     ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
     ohmyzsh.flake = false;
+    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim";
+    smart-splits-nvim.flake = false;
 
     # third party cli
     ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";
