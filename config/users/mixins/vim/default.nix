@@ -28,7 +28,6 @@ in {
     environment = {
       systemPackages = with pkgs;
         [
-          unstable.neovide
           # oni2
           # neovim-qt # better fractional scaling support
           # uivonim
@@ -78,7 +77,7 @@ in {
           # required by nvim-dap
           _custom.customNodePackages.ts-node
         ] ++ (if (!isDarwin) then [
-          neovide
+          unstable.neovide
 
           # required by lspconfig
           sumneko-lua-language-server
