@@ -674,6 +674,22 @@
         "type": "github"
       }
     },
+    "kitty-scrollback-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1695662745,
+        "narHash": "sha256-1k/ZDnR1pyPfUJkymBZDM5O/vksZspG97vSKn3fAOjQ=",
+        "owner": "mikesmithgh",
+        "repo": "kitty-scrollback.nvim",
+        "rev": "31460e47816bffeda5d21f4e3b47720785ba2c94",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mikesmithgh",
+        "repo": "kitty-scrollback.nvim",
+        "type": "github"
+      }
+    },
     "mpv-osc-morden-x": {
       "flake": false,
       "locked": {
@@ -1182,6 +1198,7 @@
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
         "hyprpicker": "hyprpicker",
+        "kitty-scrollback-nvim": "kitty-scrollback-nvim",
         "mpv-osc-morden-x": "mpv-osc-morden-x",
         "ncmpcpp-ueberzug": "ncmpcpp-ueberzug",
         "nix-alien": "nix-alien",

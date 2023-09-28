@@ -111,6 +111,11 @@ in {
           source = "${inputs.smart-splits-nvim}/kitty/relative_resize.py";
           executable = true;
         };
+        "kitty/kitty_scrollback_nvim.py" = {
+          source =
+            "${inputs.kitty-scrollback-nvim}/python/kitty_scrollback_nvim.py";
+          executable = true;
+        };
       };
 
     };

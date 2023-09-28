@@ -62,6 +62,8 @@
     ohmyzsh.flake = false;
     smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim";
     smart-splits-nvim.flake = false;
+    kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim";
+    kitty-scrollback-nvim.flake = false;
 
     # third party cli
     ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";
