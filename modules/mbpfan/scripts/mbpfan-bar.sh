@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-ICON=
+ICON=󰈐
 
 toggle() {
   exec /etc/scripts/rofi-mbpfan.sh &
