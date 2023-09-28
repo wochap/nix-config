@@ -15,6 +15,7 @@
     ./ipwebcam
     ./mbpfan
     ./mongodb
+    ./neovim
     ./nix-alien
     ./river
     ./steam
