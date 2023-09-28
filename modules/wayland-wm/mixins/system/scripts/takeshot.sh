@@ -20,21 +20,23 @@ notify_user() {
     trap 'rm -f "$thumbnail"' exit
     magick "$dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
 
-    action=$(dunstify --appname="Takeshot" -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Screen shooter" "Screenshot Saved" --action "default,Edit" --action "open,Open")
+    action=$(dunstify --appname="Takeshot" -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Screen shooter" "Screenshot Saved" --action "default,Default" --action "edit,Edit" --action "open,Open")
   else
     exit 1
-    # dunstify -t "$EXPIRE_TIME" --replace=699 "Screen shooter" "Screenshot Aborted."
   fi
 
-  if [[ $action == "default" ]]; then
+  case $action in
+  "edit")
     swappy -f "$dest" -o "$dest" &
-  elif [[ $action == "open" ]]; then
+    ;;
+  "open" | "default")
     xdg-open "$dest" &
-  fi
+    ;;
+  esac
 }
 
 copy_to_cb() {
-  wl-copy -t image/png < "$dest"
+  wl-copy -t image/png <"$dest"
 }
 
 # countdown
@@ -82,4 +84,3 @@ else
 fi
 
 exit 0
-
