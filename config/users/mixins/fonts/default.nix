@@ -38,10 +38,6 @@ in {
         fonts = with pkgs; [
           # NOTE: uncommenting causes rofi to slow down
           # corefonts # basic fonts for office
-          # font-awesome
-          # font-awesome_4
-          # material-design-icons
-          # material-icons
 
           # common
           inter
