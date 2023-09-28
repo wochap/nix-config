@@ -66,7 +66,7 @@ in {
           flow
           _custom.customNodePackages."@tailwindcss/language-server"
           _custom.customNodePackages.cssmodules-language-server
-          _custom.customNodePackages.emmet-ls
+          _custom.customNodePackages."@olrtg/emmet-language-server"
           nodePackages.bash-language-server
           nodePackages.svelte-language-server
           nodePackages.vscode-langservers-extracted

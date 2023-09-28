@@ -1,11 +1,11 @@
 [
   "@fsouza/prettierd",
+  "@olrtg/emmet-language-server",
   "@tailwindcss/language-server",
   "cssmodules-language-server",
   "eas-cli",
-  "emmet-ls",
   "markdownlint",
-  "migrate-mongo",
+  { "migrate-mongo": "9.0.0" },
   "stylelint",
   "ts-node",
   "typescript",

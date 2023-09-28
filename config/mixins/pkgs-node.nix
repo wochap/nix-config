@@ -9,6 +9,8 @@ in {
       # global nodejs
       prevstable-nodejs.nodejs-14_x
       (yarn.override { nodejs = prevstable-nodejs.nodejs-14_x; })
+      # nodejs_20
+      # (yarn.override { nodejs = nodejs_20; })
 
       # global packages
       nodePackages.expo-cli
@@ -22,7 +24,7 @@ in {
       # others
       netlify-cli
       nodePackages.node2nix
-      _custom.customNodePackages.migrate-mongo
+      _custom.customNodePackages."migrate-mongo-9.0.0"
 
       # nodePackages.sharp-cli
     ];
