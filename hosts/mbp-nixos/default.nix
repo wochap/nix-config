@@ -44,6 +44,9 @@ in {
     _custom.wm.qt.enable = true;
     _custom.wm.gtk.enable = true;
 
+    _custom.neovim.enable = true;
+    _custom.neovim.setBuildEnv = true;
+    _custom.neovim.withBuildTools = true;
     _custom.nix-alien.enable = true;
     _custom.interception-tools.enable = true;
     _custom.android.enable = true;

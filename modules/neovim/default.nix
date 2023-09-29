@@ -2,7 +2,9 @@
 with lib;
 let
   cfg = config._custom.neovim;
+  isDarwin = config._displayServer == "darwin";
   userName = config._userName;
+  hmConfig = config.home-manager.users.${userName};
 in {
   options = {
     _custom.neovim = {
@@ -96,18 +98,40 @@ in {
       ignoreCollisions = true;
     };
     buildEnv = [
-      "CPATH=${config.home.profileDirectory}/lib/nvim-depends/include"
-      "CPLUS_INCLUDE_PATH=${config.home.profileDirectory}/lib/nvim-depends/include/c++/v1"
-      "LD_LIBRARY_PATH=${config.home.profileDirectory}/lib/nvim-depends/lib"
-      "LIBRARY_PATH=${config.home.profileDirectory}/lib/nvim-depends/lib"
-      "NIX_LD_LIBRARY_PATH=${config.home.profileDirectory}/lib/nvim-depends/lib"
-      "PKG_CONFIG_PATH=${config.home.profileDirectory}/lib/nvim-depends/pkgconfig"
+      "CPATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/include"
+      "CPLUS_INCLUDE_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/include/c++/v1"
+      "LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
+      "LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
+      "NIX_LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
+      "PKG_hmConfig_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/pkgconfig"
     ];
   in mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs;
         let
-          commonPackages = [ prevstable-neovim.neovim-remote ];
+          commonPackages = [
+            prevstable-neovim.neovim-remote
+
+            # HACK: required by mason
+            lua54Packages.luarocks
+
+            # required by https://github.com/toppair/peek.nvim
+            deno
+
+            # required by treesitter
+            tree-sitter
+
+            # required by null-ls
+            statix
+            nixfmt
+
+            # required by telescope
+            ripgrep
+            fd
+
+            # required by nvim-dap
+            _custom.customNodePackages.ts-node
+          ];
           linuxPackages = [ unstable.neovide ];
         in commonPackages ++ (if (!isDarwin) then linuxPackages else [ ]);
       shellAliases = {
@@ -138,7 +162,7 @@ in {
 
       programs.neovim = {
         enable = true;
-        package = prevstable-neovim.neovim;
+        package = pkgs.prevstable-neovim.neovim-unwrapped;
 
         withNodeJs = true;
         withPython3 = true;
@@ -147,7 +171,7 @@ in {
         extraPackages = with pkgs;
           [
             # Dependent packages used by default plugins
-            doq
+            unstable.doq
             sqlite
           ] ++ optionals cfg.withBuildTools [
             pkg-config
@@ -162,7 +186,7 @@ in {
             (pkgs.writeShellApplication {
               name = "stack";
               text = ''
-                exec "${pkgs.stack}/bin/stack" "--extra-include-dirs=${config.home.profileDirectory}/lib/nvim-depends/include" "--extra-lib-dirs=${config.home.profileDirectory}/lib/nvim-depends/lib" "$@"
+                exec "${pkgs.stack}/bin/stack" "--extra-include-dirs=${hmConfig.home.profileDirectory}/lib/nvim-depends/include" "--extra-lib-dirs=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib" "$@"
               '';
             })
             (haskellPackages.ghcWithPackages (ps:
