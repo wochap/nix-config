@@ -7,10 +7,8 @@ in {
       deno
 
       # global nodejs
-      prevstable-nodejs.nodejs-14_x
-      (yarn.override { nodejs = prevstable-nodejs.nodejs-14_x; })
-      # nodejs_20
-      # (yarn.override { nodejs = nodejs_20; })
+      nodejs_20
+      (yarn.override { nodejs = nodejs_20; })
 
       # global packages
       nodePackages.expo-cli
