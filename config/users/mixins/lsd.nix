@@ -25,7 +25,7 @@ in {
     ];
 
     home-manager.users.${userName} = {
-      xdg.configFile."lsd/themes/dracula.yaml".source =
+      xdg.configFile."lsd/colors.yaml".source =
         "${inputs.dracula-lsd}/dracula.yaml";
       xdg.configFile."lsd/icons.yaml".text = ''
         name:
