@@ -39,6 +39,7 @@ in {
         # adds ls ll la lt ll
         enableAliases = true;
         settings = lib.recursiveUpdate themeSettings {
+          color.theme = "custom";
           sorting.dir-grouping = "first";
           symlink-arrow = "->";
           layout = "grid";
