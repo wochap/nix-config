@@ -17,6 +17,8 @@ in {
         enable = true;
         dotDir = ".config/zsh";
         initExtra = ''
+          # source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
           # oh-my-zsh
           export ZSH="${inputs.ohmyzsh}"
           ${builtins.readFile ./ohmyzsh.zsh}
