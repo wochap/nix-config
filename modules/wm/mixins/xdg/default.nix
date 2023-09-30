@@ -14,6 +14,8 @@ in {
         xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
       ];
 
+      etc."mime.types".source = ./dotfiles/mime.types;
+
       shellAliases = { open = "xdg-open"; };
     };
 
@@ -40,6 +42,7 @@ in {
           "imv" = images;
           "mpv" = media;
           "org.gnome.Fileroller" = archives;
+          "kitty" = [ "application/x-shellscript" ];
         });
       addedAssociations = with lib;
         with mimeTypes;
@@ -60,6 +63,15 @@ in {
         defaultApplications = with lib;
           with mimeTypes;
           mkMerge (mapAttrsToList (n: ms: genAttrs ms (_: [ "${n}.desktop" ])) {
+            "thunar" = dirs;
+            # TODO: make nvim use kitty as terminal
+            "kitty-open" = text;
+            "google-chrome" = html;
+            "imv" = images;
+            "mpv" = media;
+            "org.gnome.Fileroller" = archives;
+            "kitty" = [ "application/x-shellscript" ];
+
             "amfora" = [ "x-scheme-handler/gemini" ];
             "Postman" = [ "x-scheme-handler/postman" ];
             # "neomutt" = [

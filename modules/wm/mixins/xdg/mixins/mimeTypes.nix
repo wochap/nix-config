@@ -1,7 +1,6 @@
 {
   dirs = [ "inode/directory" ];
   text = [
-    "application/x-shellscript"
     "text/english"
     "text/plain"
     "text/x-c"
