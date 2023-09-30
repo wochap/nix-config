@@ -2,7 +2,7 @@
 
 /*****----- Elements -----*****/
 element {
-  padding: 5px 7px 3px;
+  padding: 4px 6px 3px;
 }
 
 // vim: syntax=less

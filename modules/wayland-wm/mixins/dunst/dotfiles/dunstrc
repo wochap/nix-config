@@ -53,13 +53,13 @@ separator_height=2
 frame_width=2
 
 # Theme dpi
-font="Iosevka Nerd Font 11"
+font="Iosevka Nerd Font 10"
 height=150
-horizontal_padding=11
-padding=11
-width=310
-max_icon_size=56
-min_icon_size=56
+horizontal_padding=7
+padding=7
+width=280
+max_icon_size=48
+min_icon_size=48
 
 [play_sound]
 script="dunst-play-notification-sound"
