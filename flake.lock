@@ -690,6 +690,38 @@
         "type": "github"
       }
     },
+    "kitty-smart-scroll": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641475108,
+        "narHash": "sha256-QqNYi5s7VqOj0LBCaZKVHe65j75NBs3WYPdeGbYYXVo=",
+        "owner": "yurikhan",
+        "repo": "kitty-smart-scroll",
+        "rev": "8aaa91b9f52527c3dbe395a79a90aea4a879857a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yurikhan",
+        "repo": "kitty-smart-scroll",
+        "type": "github"
+      }
+    },
+    "kitty-smart-tab": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1641475036,
+        "narHash": "sha256-MbozCVGeEiYBsc9EIJpV5/W7Mx33TPI0CB1F2DhbIHU=",
+        "owner": "yurikhan",
+        "repo": "kitty-smart-tab",
+        "rev": "ec2af6fb763ce8336da77f28ae7277161b9286b4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yurikhan",
+        "repo": "kitty-smart-tab",
+        "type": "github"
+      }
+    },
     "mpv-osc-morden-x": {
       "flake": false,
       "locked": {
@@ -1199,6 +1231,8 @@
         "hyprland-plugins": "hyprland-plugins",
         "hyprpicker": "hyprpicker",
         "kitty-scrollback-nvim": "kitty-scrollback-nvim",
+        "kitty-smart-scroll": "kitty-smart-scroll",
+        "kitty-smart-tab": "kitty-smart-tab",
         "mpv-osc-morden-x": "mpv-osc-morden-x",
         "ncmpcpp-ueberzug": "ncmpcpp-ueberzug",
         "nix-alien": "nix-alien",

@@ -87,7 +87,17 @@ in {
         };
 
         extraConfig = {
-          diff = { colorMoved = "default"; };
+          diff = {
+            tool = "kitty";
+            guitool = "kitty.gui";
+            colorMoved = "default";
+          };
+          difftool = {
+            prompt = "false";
+            trustExitCode = "true";
+            kitty = { cmd = "kitty +kitten diff $LOCAL $REMOTE"; };
+            "kitty.gui" = { cmd = "kitty kitty +kitten diff $LOCAL $REMOTE"; };
+          };
           color.ui = "auto";
           pull.rebase = "false";
           init = { defaultBranch = "main"; };

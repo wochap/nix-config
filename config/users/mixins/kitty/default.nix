@@ -44,25 +44,33 @@ in {
         ];
 
         shellAliases = {
+          diff = "kitty +kitten diff";
+          gdiff = "git difftool --no-symlinks --dir-diff";
           icat = "kitty +kitten icat";
-
           # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
           sshk = "kitty +kitten ssh";
         };
       };
 
       xdg.configFile = {
+        "kitty/diff.conf".text = ''
+          # Load theme
+          include ${inputs.catppuccin-kitty}/themes/diff-late.conf
+
+          ${builtins.readFile ./dotfiles/kitty-diff.conf}
+        '';
         "kitty/common.conf".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/kitty-common.conf";
         "kitty/kitty.conf".text = ''
           # Load theme
-          include ${inputs.catppuccin-kitty}/themes/diff-mocha.conf
           include ${inputs.catppuccin-kitty}/themes/mocha.conf
 
           # Load config
           include ./common.conf
           ${if isDarwin then macosConfig else linuxConfig}
         '';
+        "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
+        "kitty/mime.types".source = ./dotfiles/mime.types;
 
         "kitty/scripts/kitty-top.sh" = {
           source = ./scripts/kitty-top.sh;
@@ -99,6 +107,8 @@ in {
           recursive = true;
           executable = true;
         };
+
+        # kittens
         "kitty/pass_keys.py" = {
           source = "${inputs.smart-splits-nvim}/kitty/pass_keys.py";
           executable = true;
@@ -114,6 +124,14 @@ in {
         "kitty/kitty_scrollback_nvim.py" = {
           source =
             "${inputs.kitty-scrollback-nvim}/python/kitty_scrollback_nvim.py";
+          executable = true;
+        };
+        "kitty/smart_scroll.py" = {
+          source = "${inputs.kitty-smart-scroll}/smart_scroll.py";
+          executable = true;
+        };
+        "kitty/smart_tab.py" = {
+          source = "${inputs.kitty-smart-tab}/smart_tab.py";
           executable = true;
         };
       };

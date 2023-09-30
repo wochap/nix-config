@@ -64,6 +64,10 @@
     smart-splits-nvim.flake = false;
     kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim";
     kitty-scrollback-nvim.flake = false;
+    kitty-smart-scroll.url = "github:yurikhan/kitty-smart-scroll";
+    kitty-smart-scroll.flake = false;
+    kitty-smart-tab.url = "github:yurikhan/kitty-smart-tab";
+    kitty-smart-tab.flake = false;
 
     # third party cli
     ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";

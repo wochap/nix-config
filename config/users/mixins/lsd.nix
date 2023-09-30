@@ -43,6 +43,7 @@ in {
           sorting.dir-grouping = "first";
           symlink-arrow = "->";
           layout = "grid";
+          hyperlink = "auto";
         };
       };
     };
