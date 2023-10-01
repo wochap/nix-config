@@ -5,8 +5,8 @@
 #
 # If you really want the terminal's default colors, and if lynx is built using
 # ncurses' default-color support, remove these two lines:
-normal:		normal:			lightgray:black
-default:	normal:			white:black
+#normal:		normal:			lightgray:black
+#default:	normal:			white:black
 
 # Normal type styles correspond to HTML tags.
 #
