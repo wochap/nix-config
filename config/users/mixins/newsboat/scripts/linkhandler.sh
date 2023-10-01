@@ -6,10 +6,10 @@
 }
 
 case "$1" in
-*mkv | *webm | *mp4 | *youtube.com/watch* | *youtube.com/playlist* | *youtu.be* | *hooktube.com* | *bitchute.com* | *videos.lukesmith.xyz* | *odysee.com*)
+*mkv | *webm | *mp4 | *youtube.com/watch* | *youtube.com/playlist* | *youtube.com/shorts* | *youtu.be* | *hooktube.com* | *bitchute.com* | *videos.lukesmith.xyz* | *odysee.com*)
   setsid -f mpv -quiet "$1" >/dev/null 2>&1
   ;;
-*png | *jpg | *jpe | *jpeg | *gif)
+*png | *jpg | *jpe | *jpeg | *gif | *webp)
   curl -sL "$1" >"/tmp/$(echo "$1" | sed "s/.*\///;s/%20/ /g")" && imv "/tmp/$(echo "$1" | sed "s/.*\///;s/%20/ /g")" >/dev/null 2>&1 &
   ;;
 *pdf | *cbz | *cbr)
