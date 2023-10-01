@@ -45,5 +45,12 @@ in {
           "[[ -n $KITTY_PID ]] && (kitty @ set-spacing padding=0 && nvim && kitty @ set-spacing padding=7) || nvim";
       };
     };
+
+    home-manager.users.${userName} = {
+      home.sessionVariables = {
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+      };
+    };
   };
 }
