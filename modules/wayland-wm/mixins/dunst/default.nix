@@ -78,7 +78,7 @@ in {
           Type = "dbus";
           BusName = "org.freedesktop.Notifications";
           PassEnvironment =
-            [ "WAYLAND_DISPLAY" "XCURSOR_THEME" "XCURSOR_SIZE" ];
+            [ "WAYLAND_DISPLAY" "XCURSOR_THEME" "XCURSOR_SIZE" "PATH" "HOME" ];
           ExecStart = "${pkgs.dunst}/bin/dunst";
         };
 
