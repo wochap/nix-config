@@ -48,7 +48,6 @@ in {
       amfora
       gitAndTools.gh
       gotop # monitor system
-      lynx
 
       # APPS CLI
       ani-cli
