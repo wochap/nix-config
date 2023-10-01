@@ -1,6 +1,9 @@
 -7 "~Commits"
 https://github.com/NvChad/NvChad/commits/v2.0.atom
 
+-8 "~Reddit"
+https://www.reddit.com/r/unixporn/.rss
+
 -1 "~The Giants"
 https://css-tricks.com/feed/ "~CSS-Tricks"
 https://dev.to/feed/ "~DEV Community"
