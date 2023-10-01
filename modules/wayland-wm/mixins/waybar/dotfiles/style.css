@@ -134,8 +134,9 @@ window#waybar.hidden {
 }
 
 #custom-recorder.recording {
-  background: @red;
-  color: @background;
+  padding: 0 0.48em 0 0.35em;
+  color: @red;
+  font-size: 1.70em;
 }
 
 #pulseaudio.muted,

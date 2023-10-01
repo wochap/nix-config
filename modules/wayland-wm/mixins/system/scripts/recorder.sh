@@ -29,19 +29,21 @@ notify_user() {
 
     # TODO: copy to clipboard
 
-    action=$(dunstify --appname="Recorder" -t "$EXPIRE_TIME" --replace=691 -i "$thumbnail" "Video recording" "Recording Saved" --action "default,Open" --action "fm,Open in file manager")
+    action=$(dunstify --appname="Recorder" -t "$EXPIRE_TIME" --replace=691 -i "$thumbnail" "Video recording" "Recording Saved" --action "default,Default" --action "open,Open" --action "open_in_fm,Open in file manager")
   else
     exit 1
     # dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Aborted."
   fi
 
   # TODO: Open in video editor?
-  if [[ $action == "default" ]]; then
-    xdg-open "$dest"
-  fi
-  if [[ $action == "fm" ]]; then
-    xdg-open "$dir"
-  fi
+  case $action in
+  "open_in_fm")
+    xdg-open "$dir" &
+    ;;
+  "open" | "default")
+    xdg-open "$dest" &
+    ;;
+  esac
 }
 
 # countdown

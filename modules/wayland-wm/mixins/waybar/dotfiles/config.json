@@ -84,7 +84,7 @@
     }
   },
   "custom/recorder": {
-    "format": " ",
+    "format": "󰑋",
     "return-type": "json",
     "interval": 1,
     "exec": "echo '{\"class\": \"recording\"}'",
