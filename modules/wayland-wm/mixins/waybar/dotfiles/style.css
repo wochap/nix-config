@@ -1,12 +1,16 @@
 @import url("colors.css");
 
+@define-color bar_bg #11111B;
+@define-color module_bg @background;
+
 window#waybar {
-  background-color: transparent;
+  background-color: @bar_bg;
   color: @foreground;
-  font-family: Iosevka Nerd Font, woos, sans-serif;
-  font-size: 14px;
-  transition-duration: 0.5s;
-  transition-property: background-color;
+  font-family:
+    Iosevka Nerd Font,
+    woos,
+    sans-serif;
+  font-size: 10pt;
 }
 
 window#waybar > box.horizontal {
@@ -15,6 +19,10 @@ window#waybar > box.horizontal {
 
 window#waybar.hidden {
   opacity: 0;
+}
+
+.modules-center {
+  margin: 0 7px;
 }
 
 #custom-dwl_title,
@@ -42,16 +50,11 @@ window#waybar.hidden {
 #bluetooth,
 #clock,
 #tray {
-  /* background-color: rgba(40, 42, 54, 0.95); */
-  background-color: @background;
-  padding: 0 7px;
+  background-color: @module_bg;
+  padding: 0.15em 0.5em 0;
   margin: 0;
   border-radius: 4px;
   background-clip: border-box;
-}
-
-#tray {
-  margin: 0 0 0 7px;
 }
 
 #keyboard-state label.locked {
@@ -79,11 +82,9 @@ window#waybar.hidden {
   color: @comment;
 }
 #custom-dwl_tag {
-  padding: 0 10.5px;
+  padding: 0.15em 0.7em 0;
   background-color: @background;
   color: @comment;
-  transition-duration: 0.3s;
-  transition-property: background-color, color;
 }
 #tags button,
 #workspaces button {
@@ -146,9 +147,6 @@ window#waybar.hidden {
   color: @yellow;
 }
 
-#battery {
-  /* color: @cyan; */
-}
 #battery.discharging {
   color: @yellow;
 }

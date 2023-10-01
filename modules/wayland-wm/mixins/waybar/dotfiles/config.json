@@ -94,7 +94,7 @@
     "capslock": true,
     "format": "{icon}",
     "format-icons": {
-      "locked": "",
+      "locked": "󰌎",
       "unlocked": ""
     }
   },
@@ -157,23 +157,23 @@
   },
   "network": {
     "format-wifi": " {essid}",
-    "format-ethernet": "{ifname}: {ipaddr}/{cidr}  ",
-    "format-linked": "{ifname} (No IP)  ",
+    "format-ethernet": "{ifname}: {ipaddr}/{cidr} 󰈀 ",
+    "format-linked": "{ifname} (No IP) 󰈀 ",
     "format-disconnected": "",
     "format-alt": "{ifname}: {ipaddr}/{cidr}",
     "tooltip-format": "{essid} {signalStrength}%"
   },
   "pulseaudio": {
     "format": "<span rise='-1000'>{icon}</span> {volume}%",
-    "format-bluetooth": "<span rise='-1000'>{icon}</span>  {volume}%",
-    "format-bluetooth-muted": "<span rise='-1000'></span>  {volume}%",
     "format-muted": "<span rise='-1000'></span> {volume}%",
+    "format-bluetooth": "<span rise='-1000'>{icon}</span> {volume}%",
+    "format-bluetooth-muted": "<span rise='-1000'></span> {volume}%",
     "format-source": "<span rise='-1000'></span> {volume}%",
     "format-source-muted": "<span rise='-1000'></span> {volume}%",
     "format-icons": {
       "headphone": "",
-      "hands-free": "",
-      "headset": "",
+      "hands-free": "",
+      "headset": "󰋎",
       "phone": "",
       "portable": "",
       "car": "",
