@@ -32,7 +32,6 @@ notify_user() {
     action=$(dunstify --appname="Recorder" -t "$EXPIRE_TIME" --replace=691 -i "$thumbnail" "Video recording" "Recording Saved" --action "default,Default" --action "open,Open" --action "open_in_fm,Open in file manager")
   else
     exit 1
-    # dunstify -t "$EXPIRE_TIME" --replace=699 -i mpv "Video recording" "Recording Aborted."
   fi
 
   # TODO: Open in video editor?
