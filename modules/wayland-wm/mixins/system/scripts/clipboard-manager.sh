@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 clear_db() {
-  rm "$XDG_CACHE_HOME/cliphist/db"
+  cliphist wipe
 }
 
 init() {
