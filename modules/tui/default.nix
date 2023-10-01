@@ -1,5 +1,5 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [ ./mixins/nix-direnv ];
+  imports = [ ./mixins/nix-direnv ./mixins/wtf ];
 }

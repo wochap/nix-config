@@ -27,6 +27,7 @@ in {
     _custom.globals.themeColors = catppuccinMochaTheme;
     _custom.globals.isHidpi = true;
 
+    _custom.tui.wtf.enable = true;
     _custom.tui.nixDirenv.enable = true;
 
     _custom.gui.qutebrowser.enable = true;
