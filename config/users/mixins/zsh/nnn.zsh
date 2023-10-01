@@ -19,6 +19,11 @@ f ()
     # stty lwrap undef
     # stty lnext undef
 
+    # This will create a fifo where all nnn selections will be written to
+    NNN_FIFO="$(mktemp --suffix=-nnn -u)"
+    export NNN_FIFO
+    (umask 077; mkfifo "$NNN_FIFO")
+
     # The backslash allows one to alias n to nnn if desired without making an
     # infinitely recursive alias
     \nnn "$@"

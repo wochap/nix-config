@@ -9,8 +9,7 @@ in {
       variables = {
         NNN_TRASH = "1";
         NNN_FIFO = "/tmp/nnn.fifo";
-        SPLIT = "v";
-        KITTY_LISTEN_ON = "unix:/tmp/kitty";
+        NNN_SPLIT = "v";
       };
     };
 
