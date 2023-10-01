@@ -63,7 +63,7 @@ min_icon_size=48
 
 [play_sound]
 script="dunst-play-notification-sound"
-summary="*"
+msg_urgency="critical"
 
 # [urgency_low]
 # frame_color="#6272a4"
