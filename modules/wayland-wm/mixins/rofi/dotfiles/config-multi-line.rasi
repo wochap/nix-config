@@ -16,6 +16,9 @@ mainbox {
 inputbar {
   spacing: 7px;
 }
+entry {
+  width: 100%;
+}
 
 /*****----- Listview -----*****/
 listview {
