@@ -27,6 +27,9 @@ in {
             repo = "dwl";
             rev = "defbee76b4911bb1f9a2248d14c0a7eca802f157";
             hash = "sha256-efghzSCMW/iHjRmdFuZZOKo8UbJGLktWRhj62PLTmcg=";
+            # IPC v2
+            # rev = "b18cf6662705bc431d68accaf13476315663d55c";
+            # hash = "sha256-HYbnWEw+H241jdBO9Qs8SOpOIumH6mN40jOwCcqYZ5M=";
           };
         });
       })
@@ -54,6 +57,7 @@ in {
           '';
         })
         dwl-waybar
+        # _custom.dwl-state
 
         lswt # doesn't work on dwl
         wlopm
