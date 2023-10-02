@@ -17,8 +17,9 @@ in {
           commonPackages = [
             prevstable-neovim.neovim-remote
 
-            # HACK: required by mason
-            lua54Packages.luarocks
+            # required by mason
+            lua54Packages.luarocks # HACK: it should be necessary here
+            go
 
             # required by https://github.com/toppair/peek.nvim
             deno
