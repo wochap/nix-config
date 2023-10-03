@@ -4,6 +4,7 @@
   unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
 
   advcpmv = pkgs.callPackage ./advcpmv { };
+  dunst-nctui = pkgs.callPackage ./dunst-nctui.nix { };
   dwl-state = pkgs.callPackage ./dwl-state.nix { };
   fromYAML = pkgs.callPackage ./from-yaml.nix { };
   interception-both-shift-capslock =

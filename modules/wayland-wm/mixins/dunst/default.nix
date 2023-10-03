@@ -42,6 +42,7 @@ in {
     home-manager.users.${userName} = {
       home = {
         packages = with pkgs; [
+          _custom.dunst-nctui
           dunst
           dunst-play-notification-sound
           dunst-toggle-mode
