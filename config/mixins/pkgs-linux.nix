@@ -90,7 +90,7 @@ in {
         brave
         element-desktop-wayland
         figma-linux
-        insomnia
+        unstable.insomnia
         microsoft-edge
         notion-app-enhanced
         postman
