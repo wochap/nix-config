@@ -27,12 +27,15 @@ toggle() {
 }
 
 read() {
+  count=$(dunstctl count history)
+  count_str=$([[ $count -gt 0 ]] && echo " $count" || echo "")
+
   case $(dunstctl is-paused) in
   true)
-    printf '{ "text": "%s", "class": "disabled" }' "$DISABLED"
+    printf '{ "text": "<span rise=\\"-1000\\">%s</span>%s", "class": "disabled" }' "$DISABLED" "$count_str"
     ;;
   false)
-    printf '{ "text": "%s", "class": "enabled" }' "$ENABLED"
+    printf '{ "text": "<span rise=\\"-1000\\">%s</span>%s", "class": "enabled" }' "$ENABLED" "$count_str"
     ;;
   esac
 }
