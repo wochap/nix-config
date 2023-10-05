@@ -13,7 +13,7 @@ sudo sh ~/Projects/boc/dangerp-backend/local-mongodb-replica/stop-mongodb-replic
 sleep 1
 
 # Run yarn commands on kitty scratchpad
-kitty @ --to unix:/tmp/kitty_scratch launch --tab-title=dangerp-mongodb --type=tab --cwd ~/Projects/boc/dangerp-backend/local-mongodb-replica zsh -c 'sudo sh ./start-mongodb-replica.sh & zsh'
+kitty @ --to unix:/tmp/kitty_scratch launch --tab-title=dangerp-mongodb --type=tab --cwd ~/Projects/boc/dangerp-backend/local-mongodb-replica zsh -i -c 'sudo sh ./start-mongodb-replica.sh; zsh -c "trap '\''sudo sh ./stop-mongodb-replica.sh'\'' EXIT; zsh"'
 sleep 1
 kitty @ --to unix:/tmp/kitty_scratch launch --cwd ~/Projects/boc/dangerp-backend/local-mongodb-replica zsh -c 'mongo --port 27018 < ./init-mongodb-replica.js & zsh'
 kitty @ --to unix:/tmp/kitty_scratch launch --tab-title=dangerp --type=tab --cwd ~/Projects/boc/dangerp zsh -c 'yarn dev & zsh'
