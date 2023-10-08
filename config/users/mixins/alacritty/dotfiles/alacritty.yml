@@ -26,29 +26,26 @@ env:
 # Font
 font:
   normal:
-    family: FiraCode Nerd Font Ret
+    family: Iosevka NF
 
   bold:
-    family: FiraCode Nerd Font
-    style: Bold
+    family: Iosevka NF Medium
 
   italic:
-    family: FiraCode Nerd Font
-    style: Italic
+    family: Iosevka NF Italic
 
   bold_italic:
-    family: FiraCode Nerd Font
-    style: Bold Italic
+    family: Iosevka NF Medium Italic
 
   size: 10
 
-  offset:
-    x: 0
-    y: 6
-
-  glyph_offset:
-    x: 0
-    y: 3
+  # offset:
+  #   x: 0
+  #   y: 6
+  #
+  # glyph_offset:
+  #   x: 0
+  #   y: 3
 
   builtin_box_drawing: true
 
