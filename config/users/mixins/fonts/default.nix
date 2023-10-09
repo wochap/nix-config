@@ -7,10 +7,9 @@ let
     fonts = [
       "FiraCode"
       "Iosevka"
+      "IosevkaTerm"
       "NerdFontsSymbolsOnly"
-      # "FiraMono"
       # "Hack"
-      # "IosevkaTerm"
       # "JetBrainsMono"
     ];
   };
@@ -26,8 +25,6 @@ in {
           source-code-pro
 
           # cascadia-code
-          # fira-code # doesn't have retina
-          # ibm-plex
         ];
       }
       (if isDarwin then {
@@ -41,8 +38,6 @@ in {
 
           # common
           inter
-          noto-fonts
-          noto-fonts-cjk
           open-sans
           roboto
           roboto-slab
@@ -67,12 +62,6 @@ in {
 
     home-manager.users.${userName} = {
       home.file = {
-        # "fontconfig/conf.d/10-nerd-font-symbols-2.1.0.conf".source =
-        #   ./assets/10-nerd-font-symbols.conf.conf;
-        # ".local/share/fonts/Symbols-1000-em_Nerd_Font_Complete.ttf".source =
-        #   ./assets/Symbols-1000-em_Nerd_Font_Complete.ttf;
-        # ".local/share/fonts/Symbols-2048-em_Nerd_Font_Complete.ttf".source =
-        #   ./assets/Symbols-2048-em_Nerd_Font_Complete.ttf;
         ".local/share/fonts/nonicons.ttf".source =
           "${inputs.nonicons}/dist/nonicons.ttf";
         ".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
