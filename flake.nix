@@ -34,6 +34,8 @@
     nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";
 
     # third party overlays/modules
+    ags.url = "github:Aylur/ags";
+    ags.inputs.nixpkgs.follows = "nixpkgs";
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
@@ -43,7 +45,9 @@
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=e368bd15e4bfd560baa9333ad47415340c563458";
     hyprland-plugins.inputs.hyprland.url = "github:hyprwm/Hyprland?rev=2df0d034bc4a18fafb3524401eeeceaa6b23e753";
     xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=e1f145d15db320fe5c5e99b90898ab87db7e8214";
+    xdg-portal-hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=fe4535a27389624445b96450a7c338136c619c95";
+    hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party darwin stuff
     spacebar.url = "github:cmacrae/spacebar?rev=79257bae525059be5230e86df96b3b3f1a3ed0a7";

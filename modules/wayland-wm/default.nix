@@ -3,6 +3,7 @@
 let cfg = config._custom.waylandWm;
 in {
   imports = [
+    ./mixins/ags
     ./mixins/dunst
     ./mixins/kanshi.nix
     ./mixins/rofi
