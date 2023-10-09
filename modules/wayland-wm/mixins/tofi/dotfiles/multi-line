@@ -1,0 +1,10 @@
+include = one-line
+
+# Text layout
+result-spacing = 13
+horizontal = false
+num-results = 9
+
+# Window theming
+# height = 295 + 11
+height = 306

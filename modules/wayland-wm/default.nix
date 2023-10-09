@@ -10,6 +10,7 @@ in {
     ./mixins/swaynotificationcenter
     ./mixins/swww
     ./mixins/system
+    ./mixins/tofi
     ./mixins/waybar
     ./mixins/wob
   ];
