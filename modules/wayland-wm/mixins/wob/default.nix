@@ -47,14 +47,14 @@ in {
           ; `bar_color` Bar color, in RRGGBB[AA] format.
           bar_color = ${unwrapHex themeColors.primary}ff
           ; `border_color` Border color, in RRGGBB[AA] format.
-          border_color = ${unwrapHex themeColors.primary}ff
+          border_color = ${unwrapHex themeColors.selection}ff
 
           ; `overflow_background_color` Overflow background color, in RRGGBB[AA] format.
           overflow_background_color = ${unwrapHex themeColors.background}ff
           ; `overflow_bar_color` Overflow bar color, in RRGGBB[AA] format.
           overflow_bar_color = ${unwrapHex themeColors.pink}ff
           ; `overflow_border_color` Overflow border color, in RRGGBB[AA] format.
-          overflow_border_color = ${unwrapHex themeColors.primary}ff
+          overflow_border_color = ${unwrapHex themeColors.selection}ff
 
           [style.muted]
           bar_color = ${unwrapHex themeColors.comment}ff
