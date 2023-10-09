@@ -8,7 +8,7 @@ class OsdService extends Service {
     });
   }
 
-  _delay = 1500;
+  _delay = 1000;
   _count = 0;
 
   popup(value) {
