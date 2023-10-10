@@ -3,7 +3,7 @@
 ICON=󰈐
 
 toggle() {
-  exec /etc/scripts/rofi-mbpfan.sh &
+  exec /etc/scripts/tofi-mbpfan.sh &
 }
 
 read() {
