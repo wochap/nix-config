@@ -26,16 +26,16 @@ env:
 # Font
 font:
   normal:
-    family: Iosevka NF
+    family: IosevkaTerm NF
 
   bold:
-    family: Iosevka NF Medium
+    family: IosevkaTerm NF Medium
 
   italic:
-    family: Iosevka NF Italic
+    family: IosevkaTerm NF Italic
 
   bold_italic:
-    family: Iosevka NF Medium Italic
+    family: IosevkaTerm NF Medium Italic
 
   size: 10
 
