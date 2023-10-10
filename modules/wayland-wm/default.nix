@@ -41,7 +41,8 @@ in {
     programs.xwayland.enable = true;
 
     xdg.portal.extraPortals = with pkgs; [
-      inputs.xdg-portal-hyprland.packages.${pkgs.system}.default
+      # inputs.xdg-portal-hyprland.packages.${pkgs.system}.default
+      xdg-desktop-portal-wlr
       xdg-desktop-portal-gtk
     ];
 

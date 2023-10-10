@@ -23,6 +23,8 @@ let
       schema = pkgs.gsettings-desktop-schemas;
       datadir = "${schema}/share/gsettings-schemas/${schema.name}";
     in ''
+      #!/usr/bin/env bash
+
       export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
 
       gnome_schema="org.gnome.desktop.interface"
@@ -57,12 +59,24 @@ let
     executable = true;
 
     text = ''
+      #!/usr/bin/env bash
+
+      wait_for_service() {
+        while [[ $(systemctl --user is-active "$1") != "active" ]]; do
+          sleep 0.1
+        done
+      }
+
+      export XDG_CURRENT_DESKTOP=sway
       dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
       dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
       systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
-      systemctl --user stop pipewire pipewire-pulse wireplumber xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
-      systemctl --user start xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
-      sleep 1
+      systemctl --user stop pipewire pipewire-pulse wireplumber xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
+      systemctl --user start xdg-desktop-portal-wlr xdg-desktop-portal-gtk
+      wait_for_service xdg-desktop-portal-wlr
+      wait_for_service xdg-desktop-portal-gtk
+      systemctl --user start xdg-desktop-portal
+      wait_for_service xdg-desktop-portal
       systemctl --user start pipewire pipewire-pulse wireplumber
     '';
   };
