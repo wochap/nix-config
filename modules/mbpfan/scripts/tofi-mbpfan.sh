@@ -6,9 +6,10 @@ high="High (4500)"
 higher="Higher (5500)"
 options="$default\n$normal\n$high\n$higher"
 
-selected="$(echo -e "$options" | tofi \
-  --prompt-text "mbpfan" \
-  --config "$HOME/.config/tofi/one-line")"
+selected="$(echo -e "$options" |
+  tofi \
+    --prompt-text "mbpfan" \
+    --config "$HOME/.config/tofi/one-line")"
 
 reloadMbpfan() {
   # killall mbpfan

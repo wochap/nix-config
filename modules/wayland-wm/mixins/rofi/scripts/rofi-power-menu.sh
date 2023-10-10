@@ -8,33 +8,34 @@ logout=" Logout"
 lock=" Lock"
 options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
 
-selected="$(echo -e "$options" | rofi -p "powermenu" -dmenu \
-  -config "$HOME/.config/rofi/config-one-line.rasi" \
-  -theme-str 'mainbox {children: [ "prompt", "listview" ];} element-text {font: "Iosevka Nerd Font, woos 10";}')"
+selected="$(echo -e "$options" |
+  tofi \
+    --prompt-text "powermenu" \
+    --config "$HOME/.config/tofi/one-line")"
 
 case $selected in
-$shutdown)
+"$shutdown")
   systemctl poweroff --check-inhibitors=no
   ;;
-$reboot)
+"$reboot")
   systemctl reboot
   ;;
-$hibernate)
+"$hibernate")
   # Hold all on disk
   systemctl hibernate
   ;;
-$sleep)
+"$sleep")
   # Hold all on RAM
   systemctl suspend
   ;;
-$logout)
+"$logout")
   systemctl --user stop graphical-session.target
 
   if [[ "$XDG_SESSION_DESKTOP" == 'sway' ]]; then
     swaymsg exit
   fi
   ;;
-$lock)
+"$lock")
   /etc/scripts/sway-lock.sh
   ;;
 esac

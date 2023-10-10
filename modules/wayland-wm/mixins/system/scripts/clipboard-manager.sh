@@ -14,7 +14,11 @@ init() {
 }
 
 menu() {
-  selected=$(cliphist list | rofi -p "clipboard" -dmenu -config "$HOME/.config/rofi/config-multi-line.rasi" | cliphist decode)
+  selected=$(cliphist list |
+    tofi \
+      --prompt-text "clipboard" \
+      --config "$HOME/.config/tofi/multi-line" |
+    cliphist decode)
 
   if [[ -n "$selected" ]]; then
     echo -n "$selected" | wl-copy

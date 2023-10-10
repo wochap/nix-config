@@ -1,5 +1,6 @@
 # Fonts
-font = "/nix/store/lq39j44drfqfzd85cgsv8kvx33s6p29d-nerdfonts-3.0.2/share/fonts/truetype/NerdFonts/IosevkaNerdFont-Regular.ttf"
+# font = "/nix/store/lq39j44drfqfzd85cgsv8kvx33s6p29d-nerdfonts-3.0.2/share/fonts/truetype/NerdFonts/IosevkaNerdFont-Regular.ttf"
+font = "Iosevka NF"
 font-size = 10
 
 # Text theming
@@ -43,5 +44,7 @@ exclusive-zone = 0
 # Behaviour
 text-cursor = true
 # matching-algorithm = fuzzy
+fuzzy-match = true
 drun-launch = true
+ascii-input = true
 
