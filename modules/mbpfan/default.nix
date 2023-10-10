@@ -16,8 +16,8 @@ in {
           source = ./scripts/mbpfan-bar.sh;
           mode = "0755";
         };
-        "scripts/rofi-mbpfan.sh" = {
-          source = ./scripts/rofi-mbpfan.sh;
+        "scripts/tofi-mbpfan.sh" = {
+          source = ./scripts/tofi-mbpfan.sh;
           mode = "0755";
         };
       };
