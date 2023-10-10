@@ -1,19 +1,14 @@
 #!/usr/bin/env bash
 
-PRESELECTION=2
-
 default="Default (2500)"
 normal="Normal (3500)"
 high="High (4500)"
 higher="Higher (5500)"
 options="$default\n$normal\n$high\n$higher"
 
-selected="$(echo -e "$options" | rofi \
-  -p "RPM" \
-  -dmenu \
-  -config "$HOME/.config/rofi/config-multi-line.rasi" \
-  -i \
-  -selected-row ${PRESELECTION})"
+selected="$(echo -e "$options" | tofi \
+  --prompt-text "mbpfan" \
+  --config "$HOME/.config/tofi/one-line")"
 
 reloadMbpfan() {
   # killall mbpfan
