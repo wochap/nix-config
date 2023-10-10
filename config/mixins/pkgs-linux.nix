@@ -95,6 +95,7 @@ in {
         notion-app-enhanced
         postman
         prevstable-chrome.google-chrome # HACK: fix https://github.com/NixOS/nixpkgs/issues/244742
+        prevstable-chrome.netflix
         simplenote
         slack
         whatsapp-for-linux
