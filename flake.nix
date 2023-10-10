@@ -7,7 +7,7 @@
     prevstable-mongodb.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419"; # MongoDB shell version v4.2.17
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=53657afe29748b3e462f1f892287b7e254c26d77"; # Node v14.21.3
-    prevstable-chrome.url = "github:nixos/nixpkgs?rev=13231eccfa1da771afa5c0807fdd73e05a1ec4e6"; # Google Chrome 114.0.5735.198
+    prevstable-chrome.url = "github:nixos/nixpkgs?rev=5a237aecb57296f67276ac9ab296a41c23981f56"; # Google Chrome 117.0.5938.132
     prevstable-kernel-pkgs.url = "github:nixos/nixpkgs?rev=ea4c80b39be4c09702b0cb3b42eab59e2ba4f24b"; # Linux 5.15.119
     prevstable-hyprland.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # master (aug 25 2023)
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
