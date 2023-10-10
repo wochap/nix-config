@@ -11,7 +11,8 @@ let
   rofi-config-colors = ''
     * {
     ${lib.concatStringsSep "\n"
-    (lib.attrsets.mapAttrsToList (key: value: "  ${key}: ${value};") themeColors)}
+    (lib.attrsets.mapAttrsToList (key: value: "  ${key}: ${value};")
+      themeColors)}
     }
   '';
   rofi-emoji = pkgs.writeTextFile {
@@ -58,12 +59,6 @@ let
         -show drun
     '';
   };
-  rofi-powermenu = pkgs.writeTextFile {
-    name = "rofi-powermenu";
-    destination = "/bin/rofi-powermenu";
-    executable = true;
-    text = builtins.readFile ./scripts/rofi-power-menu.sh;
-  };
 in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
@@ -75,7 +70,6 @@ in {
           rofi-calc
           rofi-emoji
           rofi-launcher
-          rofi-powermenu
           rofi-wayland
         ];
       };

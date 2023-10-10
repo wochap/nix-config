@@ -19,10 +19,18 @@ let
       tofi-drun --config "$HOME/.config/tofi/one-line"
     '';
   };
+  tofi-powermenu = pkgs.writeTextFile {
+    name = "tofi-powermenu";
+    destination = "/bin/tofi-powermenu";
+    executable = true;
+    text = builtins.readFile ./scripts/tofi-powermenu.sh;
+  };
 in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
-      home = { packages = with pkgs; [ unstable.tofi tofi-launcher ]; };
+      home = {
+        packages = with pkgs; [ unstable.tofi tofi-launcher tofi-powermenu ];
+      };
 
       xdg.configFile = {
         "tofi/multi-line".source =
