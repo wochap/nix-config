@@ -17,7 +17,7 @@ in {
   ];
 
   config = {
-    # NOTE: amdvlk gives errors?
+    # NOTE: can't get amdvlk working
     hardware.amdgpu.amdvlk = false;
     hardware.amdgpu.loadInInitrd = true;
 
@@ -169,7 +169,7 @@ in {
 
     # setup video drivers
     services.xserver = {
-      videoDrivers = [ "modesetting" "amdgpu" "radeon" "intel" ];
+      videoDrivers = lib.mkForce [ "amdgpu" "radeon" "intel" "modesetting" ];
 
       deviceSection = ''
         Option "EnablePageFlip" "off"
