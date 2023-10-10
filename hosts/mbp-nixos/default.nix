@@ -100,6 +100,8 @@ in {
 
     boot = {
       # kernel 5.15.119 works with amdgpu driver
+      # https://github.com/NixOS/nixpkgs/pull/218437
+      # https://github.com/NixOS/nixpkgs/pull/241759
       kernelPackages = pkgs.prevstable-kernel-pkgs.linuxPackages;
 
       kernelParams = [
