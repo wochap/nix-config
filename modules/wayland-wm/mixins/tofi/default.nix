@@ -35,8 +35,10 @@ in {
       xdg.configFile = {
         "tofi/multi-line".source =
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/multi-line";
-        "tofi/one-line".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/one-line";
+        "tofi/one-line".source = pkgs.substituteAll {
+          src = ./dotfiles/one-line;
+          inherit (themeColors) foreground primary background;
+        };
       };
     };
   };
