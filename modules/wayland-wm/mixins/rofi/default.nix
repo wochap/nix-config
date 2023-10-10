@@ -47,18 +47,6 @@ let
         -calc-command "echo -n '{result}' | wl-copy"
     '';
   };
-  rofi-launcher = pkgs.writeTextFile {
-    name = "rofi-launcher";
-    destination = "/bin/rofi-launcher";
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-
-      rofi \
-        -config "$HOME/.config/rofi/config-one-line.rasi" \
-        -show drun
-    '';
-  };
 in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
@@ -69,7 +57,6 @@ in {
           pkgs.rofi-emoji
           rofi-calc
           rofi-emoji
-          rofi-launcher
           rofi-wayland
         ];
       };

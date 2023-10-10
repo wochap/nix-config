@@ -223,7 +223,7 @@ static const Key keys[] = {
 	{ MODKEY, Key_l, spawn, SHCMD("/etc/scripts/system/sway-lock.sh") },
 
   // Open power menu
-  { MODKEY, Key_Escape, spawn, SHCMD("rofi-powermenu") },
+  { MODKEY, Key_Escape, spawn, SHCMD("tofi-powermenu") },
 
   // Open app launcher
 	{ MODKEY, Key_space, spawn, {.v = menucmd} },
