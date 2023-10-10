@@ -1,10 +1,9 @@
 @import "customChrome.css";
 
-/*
 :root {
-  --mff-tab-font-family: "JetBrainsMono Nerd Font";
-  --mff-urlbar-font-family: "JetBrainsMono Nerd Font";
-  --mff-urlbar-results-font-family: "JetBrainsMono Nerd Font";
+  --mff-tab-font-family: "Iosevka NF";
+  --mff-urlbar-font-family: "Iosevka NF";
+  --mff-urlbar-results-font-family: "Iosevka NF";
 }
 
 .tab-text {
@@ -23,4 +22,3 @@
 #urlbar-input {
   font-family: var(--mff-urlbar-font-family) !important;
 }
-*/
