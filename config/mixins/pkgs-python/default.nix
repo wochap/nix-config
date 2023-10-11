@@ -5,6 +5,9 @@ let
   animdl = pkgs.prevstable-python.callPackage ./animdl.nix {
     pkgs = pkgs.prevstable-python;
   };
+  vidcutter = pkgs.prevstable-python.callPackage ./vidcutter.nix {
+    pkgs = pkgs.prevstable-python;
+  };
   packageOverrides = pkgs.prevstable-python.callPackage ./python-packages.nix {
     pkgs = pkgs.prevstable-python;
   };
@@ -34,6 +37,7 @@ in {
 
     environment.systemPackages = with pkgs; [
       animdl
+      vidcutter
 
       (python.withPackages (ps:
         with ps;
