@@ -178,6 +178,12 @@ $ sudo nixos-rebuild boot --flake .#dekstop
 
 ## Troubleshooting
 
+* Reload .desktop files
+
+```sh
+$ nix shell nixpkgs#desktop-file-utils -c update-desktop-database -v ~/.local/share/applicationss
+```
+
 * No wifi device at startup
 
 ```
