@@ -1,6 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let cfg = config._custom.wm.bluetooth;
+let
+  userName = config._userName;
+  cfg = config._custom.wm.bluetooth;
 in {
   options._custom.wm.bluetooth = { enable = lib.mkEnableOption { }; };
 
@@ -31,6 +33,11 @@ in {
         KernelExperimental = true;
       };
       # Policy = { AutoEnable = false; };
+    };
+
+    home-manager.users.${userName} = {
+      # proxy forwarding Bluetooth MIDI controls via MPRIS2 to control media players
+      services.mpris-proxy.enable = true;
     };
   };
 }
