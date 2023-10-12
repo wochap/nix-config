@@ -120,6 +120,11 @@ in {
 
       services.swayidle.timeouts = lib.mkAfter [
         {
+          timeout = 195;
+          command = ''wlopm --off "*"'';
+          resumeCommand = ''wlopm --on "*"'';
+        }
+        {
           timeout = 15;
           command = ''if pgrep swaylock; then wlopm --off "*"; fi'';
           resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
