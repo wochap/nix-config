@@ -178,6 +178,12 @@ $ sudo nixos-rebuild boot --flake .#dekstop
 
 ## Troubleshooting
 
+* Inspect systemctl services
+
+```sh
+$ systemctl cat --user swayidle.service
+```
+
 * Reload .desktop files
 
 ```sh
