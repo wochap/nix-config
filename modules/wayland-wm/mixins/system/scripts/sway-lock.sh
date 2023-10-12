@@ -3,8 +3,10 @@
 # source theme colors
 . "/etc/scripts/theme-colors.sh"
 
-swaylock --screenshots --clock --indicator-idle-visible \
-  --font "FiraCode Nerd Font" \
+swaylock \
+  --daemonize \
+  --screenshots --clock --indicator-idle-visible \
+  --font "Iosevka Nerd Font" \
   --indicator-radius 100 \
   --indicator-thickness 10 \
   --ignore-empty-password \
@@ -29,4 +31,4 @@ swaylock --screenshots --clock --indicator-idle-visible \
   --separator-color 00000000 \
   --fade-in 0.5 \
   --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
-  -F --grace 1
+  --show-failed-attempts --grace 1
