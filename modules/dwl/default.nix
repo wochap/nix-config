@@ -25,8 +25,8 @@ in {
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
-            rev = "defbee76b4911bb1f9a2248d14c0a7eca802f157";
-            hash = "sha256-efghzSCMW/iHjRmdFuZZOKo8UbJGLktWRhj62PLTmcg=";
+            rev = "979769c3fbe313fedd2c1af543593a97c99f3bb2";
+            hash = "sha256-5B0mus6m/pMPjcxafj5C0BqUKlzJ598ZXFB8PX+jQ20=";
             # IPC v2
             # rev = "b18cf6662705bc431d68accaf13476315663d55c";
             # hash = "sha256-HYbnWEw+H241jdBO9Qs8SOpOIumH6mN40jOwCcqYZ5M=";
@@ -119,11 +119,6 @@ in {
       };
 
       services.swayidle.timeouts = lib.mkAfter [
-        {
-          timeout = 195;
-          command = ''wlopm --off "*"'';
-          resumeCommand = ''wlopm --on "*"'';
-        }
         {
           timeout = 15;
           command = ''if pgrep swaylock; then wlopm --off "*"; fi'';

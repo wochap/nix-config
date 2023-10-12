@@ -59,6 +59,7 @@ static const Rule rules[] = {
 	{ "^thunar-scratch$",        NULL,       0,         1,          -1,      0,   0,   0,    0,      'f',       0,      -1 },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0,         0,      -1 },
+	{ NULL, "meet.google.com is sharing your screen.", 0, 1,        -1,      0,   0,   0,    0,      0,         0,      0 },
 
 	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "google-chrome",           NULL,       1 << 0,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
@@ -73,7 +74,7 @@ static const Rule rules[] = {
 	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   1200, 800,    'r',       0,      0 },
 	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u',       0,      0 },
 
-	{ "kitty-dangerp",           NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "^kitty-dangerp$",         NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
 	{ "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
 
