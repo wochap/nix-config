@@ -9,6 +9,21 @@ let
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
   currentDirectory = "${configDirectory}/config/users/mixins/kitty";
+
+  shellIntegrationInit = {
+    bash = ''
+      if test -n "$KITTY_INSTALLATION_DIR"; then
+        source "$KITTY_INSTALLATION_DIR/shell-integration/bash/kitty.bash"
+      fi
+    '';
+    zsh = ''
+      if test -n "$KITTY_INSTALLATION_DIR"; then
+        autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+        kitty-integration
+        unfunction kitty-integration
+      fi
+    '';
+  };
 in {
   config = {
     environment = {
@@ -28,7 +43,7 @@ in {
       home = {
         packages = with pkgs;
           [
-            kitty # terminal
+            unstable.kitty # terminal
           ];
 
         sessionVariables = lib.mkMerge [
@@ -51,6 +66,10 @@ in {
           sshk = "kitty +kitten ssh";
         };
       };
+
+      # manually add kitty shell integration
+      programs.bash.initExtra = shellIntegrationInit.bash;
+      programs.zsh.initExtra = shellIntegrationInit.zsh;
 
       xdg.configFile = {
         "kitty/diff.conf".text = ''
