@@ -62,7 +62,7 @@
         # pamixer # audio cli
 
         # APPS CLI
-        ueberzugpp
+        unstable.ueberzugpp
         tty-clock
 
         # APPS GUI
