@@ -40,12 +40,9 @@ in {
           ];
           linuxPackages = [ unstable.neovide ];
         in commonPackages ++ (if (!isDarwin) then linuxPackages else [ ]);
-      shellAliases = {
-        # HACK: remove padding inside kitty
-        nv = ''
-          [[ -n $KITTY_PID ]] && (kitty @ set-spacing padding=0 && nvim "$@" && kitty @ set-spacing padding=7) || nvim "$@"'';
-      };
     };
+
+    programs.zsh.shellAliases = { nv = ''run-without-kpadding nvim "$@"''; };
 
     home-manager.users.${userName} = {
       home.sessionVariables = {

@@ -25,9 +25,9 @@ in {
         gc = "git clone";
         glo = "git pull origin";
         gpo = "git push origin";
-        lg = "lazygit";
       };
     };
+    programs.zsh.shellAliases = { lg = ''run-without-kpadding lazygit "$@"''; };
 
     home-manager.users.${userName} = {
       home.packages = with pkgs; [ commitizen ];
@@ -44,9 +44,14 @@ in {
             suspend = true;
           };
           gui = {
-            showFileTree = false;
-            scrollHeight = 10;
             inherit (catppuccinMochaTheme) theme;
+            border = "single";
+            mainPanelSplitMode = "vertical";
+            nerdFontsVersion = "3";
+            scrollHeight = 10;
+            scrollOffMargin = 4;
+            showFileTree = false;
+            sidePanelWidth = 0.3333;
           };
           git.paging = {
             colorArg = "always";

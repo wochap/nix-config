@@ -35,3 +35,13 @@ function fns() {
   script=$(cat package.json | jq -r '.scripts | keys[] ' | sort | fzf) && npm run $(echo "$script")
 }
 
+# HACK: remove padding inside kitty
+function run-without-kpadding() {
+  if [[ -n $KITTY_PID ]]; then
+    kitty @ set-spacing padding=0
+    "$@"
+    kitty @ set-spacing padding=7
+  else
+    "$@"
+  fi
+}
