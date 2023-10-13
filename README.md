@@ -178,6 +178,12 @@ $ sudo nixos-rebuild boot --flake .#dekstop
 
 ## Troubleshooting
 
+* Generate Nix fetcher calls from repository URLs
+
+```sh
+$ nurl https://github.com/nix-community/patsh v0.2.0 2>/dev/null
+```
+
 * Inspect systemctl services
 
 ```sh

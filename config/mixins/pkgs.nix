@@ -31,6 +31,7 @@ in {
       ngrok # expose web server
       nix-prefetch-git # get fetchgit hashes
       nix-serve
+      nurl
       openssl
       pup # parse html
       tldr
