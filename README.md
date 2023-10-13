@@ -178,6 +178,8 @@ $ sudo nixos-rebuild boot --flake .#dekstop
 
 ## Troubleshooting
 
+* [Search a package version in nixpkgs](https://lazamar.co.uk/nix-versions/)
+
 * Generate Nix fetcher calls from repository URLs
 
 ```sh
