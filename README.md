@@ -195,7 +195,7 @@ $ systemctl cat --user swayidle.service
 * Reload .desktop files
 
 ```sh
-$ nix shell nixpkgs#desktop-file-utils -c update-desktop-database -v ~/.local/share/applicationss
+$ nix shell nixpkgs#desktop-file-utils -c update-desktop-database -v ~/.local/share/applications
 ```
 
 * No wifi device at startup
