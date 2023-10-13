@@ -7,4 +7,12 @@
 * khal
   calendar TUI
 
+### Setup
 
+```
+# remove any token file in
+$ cd ~/.local/share/vdirsyncer
+
+# generate new tokens
+$ vdirsyncer discover
+```
