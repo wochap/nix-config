@@ -3,7 +3,7 @@
 # source theme colors
 . "/etc/scripts/theme-colors.sh"
 
-time=$(date +%Y-%m-%d-%I-%M-%S)
+time=$(date +%Y-%m-%d_%I-%M-%S)
 dir="$(xdg-user-dir PICTURES)/Screenshots"
 file="Screenshot_${time}.jpg"
 EXPIRE_TIME=5000

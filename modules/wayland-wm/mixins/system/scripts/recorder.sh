@@ -4,7 +4,7 @@
 . "/etc/scripts/theme-colors.sh"
 
 stopfile=/tmp/_stop
-time=$(date +%Y-%m-%d-%I-%M-%S)
+time=$(date +%Y-%m-%d_%I-%M-%S)
 dir="$(xdg-user-dir VIDEOS)/Recordings"
 file="Recording_${time}.mp4"
 EXPIRE_TIME=5000

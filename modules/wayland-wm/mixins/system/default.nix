@@ -96,7 +96,6 @@ in {
         hyprpicker # color picker
         swaylock-effects # lockscreen
 
-        swappy # image editor
         slurp # screenshoot utility
         grim # screenshoot utility
         wf-recorder # screen recorder utility
