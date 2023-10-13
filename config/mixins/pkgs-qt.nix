@@ -20,6 +20,8 @@ in {
       ];
     };
 
+    programs.kdeconnect.enable = true;
+
     home-manager.users.${userName} = {
       services.kdeconnect = {
         enable = true;
