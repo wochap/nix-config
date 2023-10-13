@@ -1,7 +1,7 @@
 {
   inputs = {
     # nixpkgs channels
-    unstable.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # master (aug 25 2023)
+    unstable.url = "github:nixos/nixpkgs?rev=4f2b18d41893ffbf9487a86a874791a681601260"; # master (aug 25 2023)
     nixpkgs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # nixos-23.05-small (sep 04 2023)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # NVIM v0.9.1
     prevstable-mongodb.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419"; # MongoDB shell version v4.2.17

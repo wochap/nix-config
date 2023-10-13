@@ -1,18 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let
-  inherit (config._custom.globals) themeColors;
-
-  fontpreview-ueberzug = pkgs.writeShellScriptBin "fontpreview-ueberzug"
-    (builtins.readFile "${inputs.fontpreview-ueberzug}/fontpreview-ueberzug");
-in {
+{
   config = {
     environment = {
-      shellAliases = {
-        fp =
-          "fontpreview-ueberzug -b ${themeColors.background} -f ${themeColors.foreground}";
-      };
-
       systemPackages = with pkgs; [
         # TOOLS
         libinput
@@ -72,7 +62,6 @@ in {
         # pamixer # audio cli
 
         # APPS CLI
-        fontpreview-ueberzug
         ueberzugpp
         tty-clock
 

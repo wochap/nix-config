@@ -12,6 +12,7 @@ in {
 
       programs.fzf = {
         enable = true;
+        package = pkgs.unstable.fzf;
         enableBashIntegration = true;
       };
 
