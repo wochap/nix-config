@@ -16,7 +16,7 @@ let
     text = ''
       #!/usr/bin/env bash
 
-      tofi-drun --config "$HOME/.config/tofi/one-line"
+      tofi-drun --config "$HOME/.config/tofi/one-line" --drun-launch=false | xargs zsh -c --
     '';
   };
   tofi-powermenu = pkgs.writeTextFile {
