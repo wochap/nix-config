@@ -115,8 +115,13 @@ You probably want to press `Ctrl + Alt + F1`
 1. Setup backgrounds
    ```
    $ ln -s ~/Sync/backgrounds ~/Pictures/backgrounds
+   $ swww img ~/Pictures/backgrounds/<IMAGE_NAME>
    ```
 1. Setup [NeoVim](https://github.com/wochap/nvim), with ansible
+   ```
+   $ rm -rf ~/.local/share/nvim ~/.cache/nvim
+   $ nvim
+   ```
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
 1. Setup betterdiscord (optional)
    ```
