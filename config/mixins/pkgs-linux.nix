@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
-{
+let userName = config._userName;
+in {
   config = {
     environment = {
       systemPackages = with pkgs; [
@@ -10,7 +11,8 @@
         xorg.xev # get key actual name
 
         # TOOLS (wayland)
-        wev # get key actual name
+        wev # xev type
+        wtype # xdotool
 
         # CLI TOOLS
         _custom.advcpmv # cp and mv with progress bar
@@ -89,6 +91,15 @@
         slack
         whatsapp-for-linux
       ];
+    };
+
+    home-manager.users.${userName} = {
+      xdg.desktopEntries = {
+        microsoft-edge = {
+          name = "Microsoft Edge";
+          exec = "microsoft-edge %U";
+        };
+      };
     };
   };
 }
