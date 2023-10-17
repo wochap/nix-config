@@ -132,6 +132,11 @@ You probably want to press `Ctrl + Alt + F1`
    Go to chrome://flags/ and enable `WebRTC PipeWire support`
 1. Sync `vscode`, `firefox`, `chrome` (optional)
 
+1. Setup mail
+
+  Generate [App passwords](https://support.google.com/accounts/answer/185833?hl=en) in [Google Account settings](https://myaccount.google.com/u/1/apppasswords)
+  Copy App password (16 digits) to secrets/mail/<EMAIL>
+
 1. Setup calendar
 
    A browser should open automatically asking for google credentials, otherwise run:
