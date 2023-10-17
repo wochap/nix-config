@@ -17,9 +17,9 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
 
    **NOTE:** Run `sudo nixos-install`
 
-1. Extra steps for MacBook Pro 11,5 (optional)
+1. Extra steps for MacBook Pro 11,5 or if you dual boot (optional)
 
-   To enable Intel GPU, you must install rEFInd and enable some options...
+   (MacBook Pro 11,5) To enable Intel GPU, you must install rEFInd and enable some options...
 
    ```sh
    sudo mkdir -p /boot/EFI/boot/

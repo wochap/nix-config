@@ -94,7 +94,7 @@ in {
   users.users.${userName} = {
     home = "/home/gean";
     shell = pkgs.zsh;
-    uid = 501;
+    # uid = 501;
     isNormalUser = true;
     extraGroups = [
       "input"
