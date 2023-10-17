@@ -3,7 +3,6 @@
 let
   isWayland = config._displayServer == "wayland";
   isDarwin = config._displayServer == "darwin";
-  userName = config._userName;
   localPkgs = import ../packages { inherit pkgs lib; };
   overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
 in {
