@@ -19,7 +19,7 @@ in {
     _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
     _custom.globals.themeColors = catppuccinMochaTheme;
-    _custom.globals.isHidpi = true;
+    _custom.globals.isHidpi = false;
 
     _custom.tui.fontpreview-kik.enable = true;
     _custom.tui.lynx.enable = true;
