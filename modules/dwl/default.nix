@@ -48,7 +48,7 @@ in {
 
             static const float bordercolor[] = COLOR(0x${
               unwrapHex themeColors.selection
-            }00);
+            }ff);
             static const float focuscolor[] = COLOR(0x${
               unwrapHex themeColors.primary
             }ff);
