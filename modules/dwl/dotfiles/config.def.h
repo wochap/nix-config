@@ -1,8 +1,9 @@
-#define RGB(col) { \
-	((col >> 16) & 0xff) / 255.0f, \
-	((col >> 8) & 0xff) / 255.0f, \
-	(col & 0xff) / 255.0f, \
-	1.0f \
+/* Taken from https://github.com/djpohly/dwl/issues/466 */
+#define COLOR(hex) { \
+	((hex >> 24) & 0xFF) / 255.0f, \
+	((hex >> 16) & 0xFF) / 255.0f, \
+	((hex >> 8) & 0xFF) / 255.0f, \
+	(hex & 0xFF) / 255.0f \
 }
 
 /* appearance */
@@ -10,7 +11,7 @@ static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
-static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 0};
+static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
 static const unsigned int swipe_min_threshold = 0;
 static const int swipe_fingers_count       = 3;
 static const int center_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */

@@ -46,12 +46,12 @@ in {
           conf = ''
             ${builtins.readFile ./dotfiles/config.def.h}
 
-            static const float bordercolor[] = RGB(0x${
+            static const float bordercolor[] = COLOR(0x${
               unwrapHex themeColors.selection
-            });
-            static const float focuscolor[] = RGB(0x${
+            }00);
+            static const float focuscolor[] = COLOR(0x${
               unwrapHex themeColors.primary
-            });
+            }ff);
             static const char cursortheme[] = "${cursor.name}";
             static const unsigned int cursorsize = ${toString cursor.size};
           '';
