@@ -430,9 +430,11 @@ static const Modekey modekeys[] = {
 };
 
 static const Button buttons[] = {
-	{ MODKEY, BTN_LEFT,   moveresize,     {.ui = CurMove} },
+	{ MODKEY, BTN_LEFT, moveresize, {.ui = CurMove} },
 	{ MODKEY, BTN_MIDDLE, togglefloating, {0} },
-	{ MODKEY, BTN_RIGHT,  moveresize,     {.ui = CurResize} },
+	{ MODKEY, BTN_RIGHT, moveresize, {.ui = CurResize} },
+	{ MOD_NONE, BTN_EXTRA, shiftview, { .i = 1 } },
+	{ MOD_NONE, BTN_SIDE, shiftview, { .i = -1 } },
 };
 
 static const Gesture gestures[] = {
