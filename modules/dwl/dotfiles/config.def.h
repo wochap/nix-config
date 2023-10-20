@@ -401,11 +401,11 @@ static const Modekey modekeys[] = {
   { LAYOUT, { MOD_NONE, Key_comma, cyclelayout, {.i = -1 } } },
   { LAYOUT, { MOD_NONE, Key_period, cyclelayout, {.i = +1 } } },
   { LAYOUT, { MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]} } },
-  { LAYOUT, { MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_FLOAT]} } },
+  { LAYOUT, { MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_BSTACK]} } },
   { LAYOUT, { MOD_NONE, Key_3, setlayout, {.v = &layouts[LAYOUT_MONOCLE]} } },
-  { LAYOUT, { MOD_NONE, Key_4, setlayout, {.v = &layouts[LAYOUT_BSTACK]} } },
+  { LAYOUT, { MOD_NONE, Key_4, setlayout, {.v = &layouts[LAYOUT_SNAIL]} } },
   { LAYOUT, { MOD_NONE, Key_5, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]} } },
-  { LAYOUT, { MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_SNAIL]} } },
+  { LAYOUT, { MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_FLOAT]} } },
   { LAYOUT, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Open Browser
