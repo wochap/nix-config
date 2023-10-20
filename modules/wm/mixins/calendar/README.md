@@ -1,5 +1,9 @@
 ## Calendar
 
+Calendar are saved to `~/.local/share/vdirsyncer` folder
+
+### Stack
+
 * vdirsyncer
   synchronize calendars and contacts
   it requires to create a project in google cloud console
