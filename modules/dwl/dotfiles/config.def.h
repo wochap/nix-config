@@ -90,21 +90,21 @@ static const Rule rules[] = {
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
 	{ "TTT",      bstack },
+	{ "[M]",      monocle },
 	{ "|M|",      centeredmaster },
 	{ "@|@",      snail },
+	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ NULL,       NULL },
 };
 
 enum layout_types {
   LAYOUT_TILE,
-  LAYOUT_FLOAT,
-  LAYOUT_MONOCLE,
   LAYOUT_BSTACK,
+  LAYOUT_MONOCLE,
   LAYOUT_CENTEREDMASTER,
   LAYOUT_SNAIL,
+  LAYOUT_FLOAT,
 };
 
 /* monitors */
@@ -386,8 +386,11 @@ static const Key keys[] = {
 static const Modekey modekeys[] = {
 	/* mode      modifier                  key                 function        argument */
 
-  { LAYOUT, { MOD_NONE, Key_c, movecenter, {0} } },
-  { LAYOUT, { MOD_NONE, Key_c, entermode, {.i = NORMAL} } },
+#define EXIT_TO_NORMAL_MODE(mode_index, mod, keycode, func, arg) \
+  { mode_index, { mod, keycode, func, arg } }, \
+  { mode_index, { mod, keycode, entermode, {.i = NORMAL} } }
+
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_c, movecenter, {0}),
   // Toggle gaps
   // { LAYOUT, { MOD_NONE, Key_grave, togglegaps, {0} } },
   // { LAYOUT, { MOD_NONE, Key_grave, entermode, {.i = NORMAL} } },
@@ -400,34 +403,32 @@ static const Modekey modekeys[] = {
   // Change layout
   { LAYOUT, { MOD_NONE, Key_comma, cyclelayout, {.i = -1 } } },
   { LAYOUT, { MOD_NONE, Key_period, cyclelayout, {.i = +1 } } },
-  { LAYOUT, { MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]} } },
-  { LAYOUT, { MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_BSTACK]} } },
-  { LAYOUT, { MOD_NONE, Key_3, setlayout, {.v = &layouts[LAYOUT_MONOCLE]} } },
-  { LAYOUT, { MOD_NONE, Key_4, setlayout, {.v = &layouts[LAYOUT_SNAIL]} } },
-  { LAYOUT, { MOD_NONE, Key_5, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]} } },
-  { LAYOUT, { MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_FLOAT]} } },
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_3, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_4, setlayout, {.v = &layouts[LAYOUT_SNAIL]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_5, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_FLOAT]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_t, setlayout, {.v = &layouts[LAYOUT_TILE]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_f, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_m, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_s, setlayout, {.v = &layouts[LAYOUT_SNAIL]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_e, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]}),
   { LAYOUT, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Open Browser
-  { BROWSER, { MOD_NONE, Key_f, spawn, RUN("firefox") } },
-  { BROWSER, { MOD_NONE, Key_f, entermode, {.i = NORMAL} } },
-  { BROWSER, { MOD_NONE, Key_b, spawn, RUN("brave") } },
-  { BROWSER, { MOD_NONE, Key_b, entermode, {.i = NORMAL} } },
-  { BROWSER, { MOD_NONE, Key_g, spawn, RUN("google-chrome-stable") } },
-  { BROWSER, { MOD_NONE, Key_g, entermode, {.i = NORMAL} } },
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_f, spawn, RUN("firefox")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, RUN("brave")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, RUN("google-chrome-stable")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, RUN("microsoft-edge")),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Terminal TUI
-  { TUI, { MOD_NONE, Key_n, togglescratch, {.v = kittyneorgcmd} } },
-  { TUI, { MOD_NONE, Key_n, entermode, {.i = NORMAL} } },
-  { TUI, { MOD_NONE, Key_m, togglescratch, {.v = kittytopcmd} } },
-  { TUI, { MOD_NONE, Key_m, entermode, {.i = NORMAL} } },
-  { TUI, { MOD_NONE, Key_e, togglescratch, {.v = kittyneomuttcmd} } },
-  { TUI, { MOD_NONE, Key_e, entermode, {.i = NORMAL} } },
-  { TUI, { MOD_NONE, Key_r, togglescratch, {.v = kittynewsboatcmd} } },
-  { TUI, { MOD_NONE, Key_r, entermode, {.i = NORMAL} } },
-  { TUI, { MOD_NONE, Key_u, togglescratch, {.v = kittyncmpcppcmd} } },
-  { TUI, { MOD_NONE, Key_u, entermode, {.i = NORMAL} } },
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, togglescratch, {.v = kittyneorgcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, togglescratch, {.v = kittytopcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, togglescratch, {.v = kittyneomuttcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, togglescratch, {.v = kittynewsboatcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, togglescratch, {.v = kittyncmpcppcmd}),
   { TUI, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 };
 
