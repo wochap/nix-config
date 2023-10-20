@@ -3,6 +3,33 @@
 let userName = config._userName;
 in {
   config = {
+    nixpkgs.overlays = [
+      (final: prev: {
+
+        insomnia = prev.runCommandNoCC "insomnia" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.insomnia}/bin/insomnia $out/bin/insomnia \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland"
+
+          ln -sf ${prev.insomnia}/share $out/share
+        '';
+
+        microsoft-edge = prev.runCommandNoCC "microsoft-edge" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.microsoft-edge}/bin/microsoft-edge $out/bin/microsoft-edge \
+          --add-flags "--enable-features=WebRTCPipeWireCapturer" \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland"
+
+          ln -sf ${prev.microsoft-edge}/share $out/share
+        '';
+
+      })
+    ];
+
     environment = {
       systemPackages = with pkgs; [
         # TOOLS
@@ -95,6 +122,10 @@ in {
 
     home-manager.users.${userName} = {
       xdg.desktopEntries = {
+        insomnia = {
+          name = "Insomnia";
+          exec = "insomnia %U";
+        };
         microsoft-edge = {
           name = "Microsoft Edge";
           exec = "microsoft-edge %U";

@@ -13,33 +13,30 @@ in {
 
     environment = {
       systemPackages = with pkgs;
-        let
-          commonPackages = [
-            prevstable-neovim.neovim-remote
+        [
+          prevstable-neovim.neovim-remote
 
-            # required by mason
-            lua54Packages.luarocks # HACK: it should be necessary here
-            go
+          # required by mason
+          lua54Packages.luarocks # HACK: it should be necessary here
+          go
 
-            # required by https://github.com/toppair/peek.nvim
-            deno
+          # required by https://github.com/toppair/peek.nvim
+          deno
 
-            # required by treesitter
-            tree-sitter
+          # required by treesitter
+          tree-sitter
 
-            # required by null-ls
-            statix
-            nixfmt
+          # required by null-ls
+          statix
+          nixfmt
 
-            # required by telescope
-            ripgrep
-            fd
+          # required by telescope
+          ripgrep
+          fd
 
-            # required by nvim-dap
-            _custom.customNodePackages.ts-node
-          ];
-          linuxPackages = [ unstable.neovide ];
-        in commonPackages ++ (if (!isDarwin) then linuxPackages else [ ]);
+          # required by nvim-dap
+          _custom.customNodePackages.ts-node
+        ] ++ (lib.optionals (!isDarwin) [ unstable.neovide ]);
     };
 
     programs.zsh.shellAliases = { nv = ''run-without-kpadding nvim "$@"''; };

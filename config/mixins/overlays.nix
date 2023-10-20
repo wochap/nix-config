@@ -1,7 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  isWayland = config._displayServer == "wayland";
   isDarwin = config._displayServer == "darwin";
   localPkgs = import ../packages { inherit pkgs lib; };
   overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
@@ -60,64 +59,35 @@ in {
 
         _custom = localPkgs;
       })
-    ] ++ (if isWayland then
-      [
-        (final: prev: {
+    ] ++ (lib.optionals isDarwin [
+      inputs.nur.overlay
+      inputs.spacebar.overlay.x86_64-darwin
 
-          insomnia = prev.runCommandNoCC "insomnia" {
-            buildInputs = with pkgs; [ makeWrapper ];
-          } ''
-            makeWrapper ${prev.insomnia}/bin/insomnia $out/bin/insomnia \
-            --add-flags "--enable-features=UseOzonePlatform" \
-            --add-flags "--ozone-platform=wayland"
+      (final: prev: {
+        inherit (localPkgs) sf-mono-liga-bin;
 
-            ln -sf ${prev.insomnia}/share $out/share
+        # yabai is broken on macOS 12, so lets make a smol overlay to use the master version
+        yabai = let
+          version = "4.0.0";
+          buildSymlinks = prev.runCommand "build-symlinks" { } ''
+            mkdir -p $out/bin
+            ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
           '';
+        in prev.yabai.overrideAttrs (old: {
+          inherit version;
+          src = inputs.yabai-src;
 
-          microsoft-edge = prev.runCommandNoCC "microsoft-edge" {
-            buildInputs = with pkgs; [ makeWrapper ];
-          } ''
-            makeWrapper ${prev.microsoft-edge}/bin/microsoft-edge $out/bin/microsoft-edge \
-            --add-flags "--enable-features=WebRTCPipeWireCapturer" \
-            --add-flags "--enable-features=UseOzonePlatform" \
-            --add-flags "--ozone-platform=wayland"
+          buildInputs = with prev.darwin.apple_sdk.frameworks; [
+            Carbon
+            Cocoa
+            ScriptingBridge
+            prev.xxd
+            SkyLight
+          ];
 
-            ln -sf ${prev.microsoft-edge}/share $out/share
-          '';
-
-        })
-      ]
-    else
-      [ ]) ++ (if isDarwin then [
-        inputs.nur.overlay
-        inputs.spacebar.overlay.x86_64-darwin
-
-        (final: prev: {
-          inherit (localPkgs) sf-mono-liga-bin;
-
-          # yabai is broken on macOS 12, so lets make a smol overlay to use the master version
-          yabai = let
-            version = "4.0.0";
-            buildSymlinks = prev.runCommand "build-symlinks" { } ''
-              mkdir -p $out/bin
-              ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
-            '';
-          in prev.yabai.overrideAttrs (old: {
-            inherit version;
-            src = inputs.yabai-src;
-
-            buildInputs = with prev.darwin.apple_sdk.frameworks; [
-              Carbon
-              Cocoa
-              ScriptingBridge
-              prev.xxd
-              SkyLight
-            ];
-
-            nativeBuildInputs = [ buildSymlinks ];
-          });
-        })
-      ] else
-        [ ]);
+          nativeBuildInputs = [ buildSymlinks ];
+        });
+      })
+    ]);
   };
 }
