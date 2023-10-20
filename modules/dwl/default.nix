@@ -62,6 +62,10 @@ in {
         lswt # doesn't work on dwl
         wlopm
         wlrctl
+
+        # for testing dwl
+        bemenu
+        foot
       ];
 
       sessionVariables = {
