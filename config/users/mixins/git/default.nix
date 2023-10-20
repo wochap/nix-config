@@ -38,9 +38,8 @@ in {
         settings = {
           os = {
             open = "xdg-open {{filename}} >/dev/null";
-            edit =
-              "nvr -cc split --remote-wait +'set bufhidden=wipe' {{filename}}";
-            # TODO: add editAtLine
+            edit = "nvr -l --remote-wait-silent {{filename}}";
+            editAtLine = "nvr -l --remote-wait-silent {{filename}} +':{{line}}'";
             suspend = true;
           };
           gui = {
@@ -60,7 +59,6 @@ in {
         };
       };
 
-      # TODO: setup gh signature verification
       programs.git = {
         package = pkgs.gitAndTools.gitFull;
         enable = true;
@@ -92,6 +90,7 @@ in {
         };
 
         extraConfig = {
+          core = { editor = "nvr -l --remote-wait-silent +'set bufhidden=wipe'"; };
           diff = {
             tool = "kitty";
             guitool = "kitty.gui";

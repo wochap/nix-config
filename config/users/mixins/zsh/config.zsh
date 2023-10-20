@@ -39,11 +39,12 @@ setopt APPEND_HISTORY
 
 # Prevent nested nvim in nvim terminal
 if [ -n "$NVIM" ]; then
-  alias nvim="nvr -cc split --remote-wait +'set bufhidden=wipe'"
+  alias nvim='nvr -l --remote-wait-silent "$@"'
+  alias nv='nvr -l --remote-wait-silent "$@"'
 fi
 if [ -n "$NVIM" ]; then
-  export VISUAL="nvr -cc split --remote-wait +'set bufhidden=wipe'"
-  export EDITOR="nvr -cc split --remote-wait +'set bufhidden=wipe'"
+  export VISUAL="nvr -l --remote-wait-silent"
+  export EDITOR="nvr -l --remote-wait-silent"
 else
   export VISUAL="nvim"
   export EDITOR="nvim"
