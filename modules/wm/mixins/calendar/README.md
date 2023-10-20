@@ -9,6 +9,8 @@
 
 ### Setup
 
+In `<NIX_CONFIG_PATH>/secrets/vdirsyncer` add 2 files: `vda_client_id` and `vda_client_secret`, you get those from [Google Console](https://vdirsyncer.pimutils.org/en/stable/config.html?highlight=google#google), then
+
 ```
 # remove any token file in
 $ cd ~/.local/share/vdirsyncer

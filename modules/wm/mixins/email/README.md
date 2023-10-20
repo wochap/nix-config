@@ -1,5 +1,7 @@
 ## Email setup
 
+Mails are saved to `~/Mail` folder
+
 ### Stack
 
 - Neomutt
@@ -19,6 +21,11 @@
 - smtp
   protocol to send mails
 
+### Setup
+
+Add a file in `<NIX_CONFIG_PATH>/secrets/mail/<EMAIL>`, and inside paste the password/token/app_password
+
 ### Passwords for Gmail
 
 You must enable 2FA auth in your google account and create a password in "App passwords"
+
