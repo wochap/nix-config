@@ -25,8 +25,8 @@ in {
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
-            rev = "979769c3fbe313fedd2c1af543593a97c99f3bb2";
-            hash = "sha256-5B0mus6m/pMPjcxafj5C0BqUKlzJ598ZXFB8PX+jQ20=";
+            rev = "e3ff60809a553e89e6a32f50882959d3cd73c500";
+            hash = "sha256-1eDv5Hnx6BYJK2NMjDyNhDu92zv3g4nqbufXNmCscn8=";
             # IPC v2
             # rev = "b18cf6662705bc431d68accaf13476315663d55c";
             # hash = "sha256-HYbnWEw+H241jdBO9Qs8SOpOIumH6mN40jOwCcqYZ5M=";
@@ -51,6 +51,9 @@ in {
             }ff);
             static const float focuscolor[] = COLOR(0x${
               unwrapHex themeColors.primary
+            }ff);
+            static const float urgentcolor[] = COLOR(0x${
+              unwrapHex themeColors.red
             }ff);
             static const char cursortheme[] = "${cursor.name}";
             static const unsigned int cursorsize = ${toString cursor.size};

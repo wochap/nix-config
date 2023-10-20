@@ -40,9 +40,11 @@ static const char *const autostart[] = {
   NULL /* terminate */
 };
 
-/* tagging - tagcount must be no greater than 31 */
+/* tagging - TAGCOUNT must be no greater than 31 */
 #define TAGCOUNT (9)
-static const int tagcount = TAGCOUNT;
+
+/* logging */
+static int log_level = WLR_ERROR;
 
 static const Rule rules[] = {
 	/* app_id                    title       tags mask  isfloating  monitor  x    y    width height  scratchkey isterm  noswallow */
@@ -90,12 +92,9 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ "TTT",      bstack },
 	{ "|M|",      centeredmaster },
-	{ "||",       column },
-  { "HHH",      grid },
-	{ "[@]",      spiral },
 	{ "@|@",      snail },
-	{ "[\\]",     dwindle },
 	{ NULL,       NULL },
 };
 
@@ -103,12 +102,9 @@ enum layout_types {
   LAYOUT_TILE,
   LAYOUT_FLOAT,
   LAYOUT_MONOCLE,
+  LAYOUT_BSTACK,
   LAYOUT_CENTEREDMASTER,
-  LAYOUT_COLUMN,
-  LAYOUT_GRID,
-  LAYOUT_SPIRAL,
   LAYOUT_SNAIL,
-  LAYOUT_DWINDLE,
 };
 
 /* monitors */
@@ -129,12 +125,16 @@ static const struct xkb_rule_names xkb_rules = {
 	/* example:
 	.options = "ctrl:nocaps",
 	*/
-  .layout = "us",
 	.options = NULL,
 };
 
 static const int repeat_rate = 50;
 static const int repeat_delay = 300;
+
+/* gb will be set the first time togglekblayout is called, then us.. it is
+ * recommended to set the same layout in position 0 of kblayouts and in
+ * xkb_rules */
+static const char *kblayouts[] = {"us", "ru"};
 
 /* Trackpad */
 static const int tap_to_click = 0;
@@ -276,6 +276,10 @@ static const Key keys[] = {
   // Focus direction
   { MODKEY, Key_n, focusstack, {.i = +1} },
   { MODKEY, Key_p, focusstack, {.i = -1} },
+  { MODKEY, Key_Down, focusdir, {.ui = 3} },
+  { MODKEY, Key_Up, focusdir, {.ui = 2} },
+  { MODKEY, Key_Left, focusdir, {.ui = 0} },
+  { MODKEY, Key_Right, focusdir, {.ui = 1} },
 
   // Swap direction
   { MODKEY|MOD_SHIFT, Key_n, movestack, {.i = +1} },
@@ -368,6 +372,7 @@ static const Key keys[] = {
   { MODKEY, Key_r, entermode, {.i = LAYOUT} },
   { MODKEY|MOD_ALT, Key_b, entermode, {.i = BROWSER} },
   { MODKEY|MOD_ALT, Key_u, entermode, {.i = TUI} },
+  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, togglekblayout, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
@@ -398,12 +403,9 @@ static const Modekey modekeys[] = {
   { LAYOUT, { MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]} } },
   { LAYOUT, { MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_FLOAT]} } },
   { LAYOUT, { MOD_NONE, Key_3, setlayout, {.v = &layouts[LAYOUT_MONOCLE]} } },
-  { LAYOUT, { MOD_NONE, Key_4, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]} } },
-  { LAYOUT, { MOD_NONE, Key_5, setlayout, {.v = &layouts[LAYOUT_COLUMN]} } },
-  { LAYOUT, { MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_GRID]} } },
-  { LAYOUT, { MOD_NONE, Key_7, setlayout, {.v = &layouts[LAYOUT_SPIRAL]} } },
-  { LAYOUT, { MOD_NONE, Key_8, setlayout, {.v = &layouts[LAYOUT_SNAIL]} } },
-  { LAYOUT, { MOD_NONE, Key_9, setlayout, {.v = &layouts[LAYOUT_DWINDLE]} } },
+  { LAYOUT, { MOD_NONE, Key_4, setlayout, {.v = &layouts[LAYOUT_BSTACK]} } },
+  { LAYOUT, { MOD_NONE, Key_5, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]} } },
+  { LAYOUT, { MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_SNAIL]} } },
   { LAYOUT, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Open Browser
@@ -433,8 +435,10 @@ static const Button buttons[] = {
 	{ MODKEY, BTN_LEFT, moveresize, {.ui = CurMove} },
 	{ MODKEY, BTN_MIDDLE, togglefloating, {0} },
 	{ MODKEY, BTN_RIGHT, moveresize, {.ui = CurResize} },
-	{ MOD_NONE, BTN_EXTRA, shiftview, { .i = 1 } },
-	{ MOD_NONE, BTN_SIDE, shiftview, { .i = -1 } },
+	{ MOD_NONE, BTN_EXTRA, shiftview, {.i = 1} },
+	{ MOD_NONE, BTN_SIDE, shiftview, {.i = -1} },
+	{ MODKEY, BTN_EXTRA, rotatetags, {.i = 1} },
+	{ MODKEY, BTN_SIDE, rotatetags, {.i = -1} },
 };
 
 static const Gesture gestures[] = {
