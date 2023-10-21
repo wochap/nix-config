@@ -173,13 +173,13 @@ window#waybar.hidden {
   color: @comment;
 }
 #bluetooth.on {
-  color: @green;
+  color: @foreground;
 }
 #bluetooth.connected {
   color: @cyan;
 }
 #bluetooth.disabled {
-  color: @red;
+  color: @comment;
 }
 
 #network {

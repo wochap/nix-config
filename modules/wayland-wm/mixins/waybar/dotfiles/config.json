@@ -148,19 +148,20 @@
   },
   "bluetooth": {
     "on-click": "blueberry",
-    "format": "",
-    "format-disabled": "",
-    "format-connected": " {num_connections}",
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱 {num_connections}",
     "tooltip-format": "{controller_alias}\t{controller_address}",
     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
   },
   "network": {
     "format-wifi": " {essid}",
-    "format-ethernet": "{ifname}: {ipaddr}/{cidr} 󰈀 ",
-    "format-linked": "{ifname} (No IP) 󰈀 ",
+    "format-ethernet": "󰈀 {ipaddr}",
+    "format-ethernet-disconnected": "󰈀 hehe",
+    "format-linked": "󰈀 (No IP)",
     "format-disconnected": "",
-    "format-alt": "{ifname}: {ipaddr}/{cidr}",
+    "format-alt": "{ipaddr}",
     "tooltip-format": "{essid} {signalStrength}%"
   },
   "pulseaudio": {
