@@ -214,6 +214,12 @@ $ nix shell nixpkgs#desktop-file-utils -c update-desktop-database -v ~/.local/sh
 $ nmcli r wifi on
 ```
 
+* No bluetooth device at startup
+
+```
+$ sudo rfkill unblock bluetooth
+```
+
 * Blackscreen on macbook pro
 
 Run the following and restart
