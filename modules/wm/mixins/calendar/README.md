@@ -4,6 +4,8 @@ Calendar are saved to `~/.local/share/vdirsyncer` folder
 
 ### Stack
 
+* remind
+  notifies on events
 * vdirsyncer
   synchronize calendars and contacts
   it requires to create a project in google cloud console
