@@ -3,5 +3,5 @@
 {
   options._custom.wm.calendar = { enable = lib.mkEnableOption { }; };
 
-  imports = [ ./mixins/khal.nix ./mixins/vdirsyncer.nix ];
+  imports = [ ./mixins/khal.nix ./mixins/remind.nix ./mixins/vdirsyncer.nix ];
 }

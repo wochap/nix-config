@@ -142,6 +142,8 @@ You probably want to press `Ctrl + Alt + F1`
    A browser should open automatically asking for google credentials, otherwise run:
    ```
    $ vdirsyncer discover
+   $ mkdir -p ~/.config/remind
+   $ touch ~/.config/remind/remind.rem
    ```
 
 1. [Waydroid](https://nixos.wiki/wiki/WayDroid)
