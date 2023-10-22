@@ -11,12 +11,17 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    environment.etc."greetd/environments".text = ''
+      dwl
+      zsh
+    '';
+
     services.greetd = {
       enable = true;
       settings = {
         default_session = {
           command = ''
-            ${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --cmd "${cfg.cmd}"'';
+            ${pkgs.greetd.tuigreet}/bin/tuigreet --user-menu --window-padding 2 --time --remember --cmd "${cfg.cmd}"'';
           user = "greeter";
         };
       };
@@ -24,11 +29,13 @@ in {
 
     # HACK: stop printing status messages in tuigreet
     # https://github.com/apognu/tuigreet/issues/68#issuecomment-1192683029
+    # https://www.reddit.com/r/NixOS/comments/u0cdpi/tuigreet_with_xmonad_how/
     systemd.services.greetd.serviceConfig = {
       Type = "idle";
 
-      # Without this errors will spam on screen
-      StandardError = "journal";
+      StandardInput = "tty";
+      StandardOutput = "tty";
+      StandardError = "journal"; # Without this errors will spam on screen
 
       # Without these bootlogs will spam on screen
       TTYReset = true;
