@@ -61,9 +61,13 @@ width=280
 max_icon_size=48
 min_icon_size=48
 
-[play_sound]
+[play_sound_critical]
 script="dunst-play-notification-sound"
 msg_urgency="critical"
+
+[play_sound_remind]
+script="dunst-play-notification-sound"
+appname="Remind"
 
 # [urgency_low]
 # frame_color="#6272a4"
