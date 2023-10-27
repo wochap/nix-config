@@ -190,6 +190,10 @@ $ sudo nixos-rebuild boot --flake .#dekstop
 
 ## Troubleshooting
 
+* Read and write NTFS partitions
+
+  disable fast startup in windows
+
 * [Search a package version in nixpkgs](https://lazamar.co.uk/nix-versions/)
 
 * Generate Nix fetcher calls from repository URLs
