@@ -25,11 +25,29 @@ let
     executable = true;
     text = builtins.readFile ./scripts/tofi-powermenu.sh;
   };
+  tofi-emoji = pkgs.writeTextFile {
+    name = "tofi-emoji";
+    destination = "/bin/tofi-emoji";
+    executable = true;
+    text = builtins.readFile ./scripts/tofi-emoji.sh;
+  };
+  tofi-calc = pkgs.writeTextFile {
+    name = "tofi-calc";
+    destination = "/bin/tofi-calc";
+    executable = true;
+    text = builtins.readFile ./scripts/tofi-calc.sh;
+  };
 in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home = {
-        packages = with pkgs; [ unstable.tofi tofi-launcher tofi-powermenu ];
+        packages = with pkgs; [
+          unstable.tofi
+          tofi-launcher
+          tofi-powermenu
+          tofi-emoji
+          tofi-calc
+        ];
       };
 
       xdg.configFile = {

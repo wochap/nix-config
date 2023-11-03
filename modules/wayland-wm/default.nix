@@ -6,7 +6,6 @@ in {
     ./mixins/ags
     ./mixins/dunst
     ./mixins/kanshi.nix
-    ./mixins/rofi
     ./mixins/swappy
     ./mixins/swaynotificationcenter
     ./mixins/swww

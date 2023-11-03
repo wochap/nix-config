@@ -237,7 +237,7 @@ static const Key keys[] = {
   { MODKEY, Key_Print, spawn, SHCMD("/etc/scripts/system/takeshot.sh --now") },
 
   // Open calc
-  { MODKEY, Key_c, spawn, SHCMD("rofi-calc") },
+  { MODKEY, Key_c, spawn, SHCMD("tofi-calc") },
 
   // Show clipboard
   { MODKEY, Key_v, spawn, SHCMD("/etc/scripts/system/clipboard-manager.sh --menu") },
@@ -246,7 +246,7 @@ static const Key keys[] = {
   { MODKEY|MOD_SHIFT, Key_v, spawn, SHCMD("/etc/scripts/system/clipboard-manager.sh --clear") },
 
   // Show emojis
-  { MODKEY, Key_e, spawn, SHCMD("rofi-emoji") },
+  { MODKEY, Key_e, spawn, SHCMD("tofi-emoji") },
 
   // Show last notification
   { MODKEY|MOD_CONTROL, Key_n, spawn, SHCMD("dunstctl history-pop") },

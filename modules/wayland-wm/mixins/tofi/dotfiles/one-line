@@ -39,7 +39,7 @@ clip-to-padding = false
 
 # Window positioning
 anchor = top
-exclusive-zone = 0
+exclusive-zone = 1
 
 # Behaviour
 text-cursor = true
