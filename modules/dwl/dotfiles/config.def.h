@@ -385,6 +385,25 @@ static const Key keys[] = {
 	CHVT(Key_F9, 9), CHVT(Key_F10, 10), CHVT(Key_F11, 11), CHVT(Key_F12, 12),
 };
 
+static const Key lockedkeys[] = {
+	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
+	/* modifier                  key                 function        argument */
+
+
+  // ### OTHERS
+
+  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, togglekblayout, {0} },
+  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
+
+
+	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
+	{ MOD_CONTROL|MOD_ALT, Key_BackSpace, quit, {0} },
+#define CHVT(KEY,n) { MOD_CONTROL|MOD_ALT,KEY, chvt, {.ui = (n)} }
+	CHVT(Key_F1, 1), CHVT(Key_F2,  2),  CHVT(Key_F3,  3),  CHVT(Key_F4,  4),
+	CHVT(Key_F5, 5), CHVT(Key_F6,  6),  CHVT(Key_F7,  7),  CHVT(Key_F8,  8),
+	CHVT(Key_F9, 9), CHVT(Key_F10, 10), CHVT(Key_F11, 11), CHVT(Key_F12, 12),
+};
+
 static const Modekey modekeys[] = {
 	/* mode      modifier                  key                 function        argument */
 
