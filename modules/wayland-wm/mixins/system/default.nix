@@ -99,6 +99,7 @@ in {
         slurp # screenshoot utility
         grim # screenshoot utility
         wf-recorder # screen recorder utility
+        unstable.wl-screenrec # screen recorder utility (faster)
 
         # clipboard manager
         cliphist

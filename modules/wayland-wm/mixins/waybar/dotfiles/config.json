@@ -88,7 +88,7 @@
     "return-type": "json",
     "interval": 1,
     "exec": "echo '{\"class\": \"recording\"}'",
-    "exec-if": "pgrep wf-recorder"
+    "exec-if": "pgrep wl-screenrec"
   },
   "keyboard-state": {
     "capslock": true,

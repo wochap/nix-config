@@ -55,7 +55,7 @@ countdown() {
 
 # take shots
 shotnow() {
-  cd ${dir} && wf-recorder -f "$file" &
+  cd ${dir} && wl-screenrec -f "$file" &
   wait_recording
   notify_user
 }
@@ -72,7 +72,7 @@ shotarea() {
     notify_user
     exit
   fi
-  cd ${dir} && wf-recorder -g "$area" -f "$file" &
+  cd ${dir} && wl-screenrec -g "$area" -f "$file" &
   wait_recording
   notify_user
 }
@@ -87,7 +87,7 @@ if [[ -f "$stopfile" ]]; then
 
   if [[ $(ps aux | grep "$pid" | wc -l) -eq 2 ]]; then
     # TODO: use $pid
-    killall -s 2 wf-recorder
+    killall -s 2 wl-screenrec
     exit 0
   else
     rm -f $stopfile
