@@ -123,6 +123,8 @@ You probably want to press `Ctrl + Alt + F1`
    $ nvim
    ```
 1. Disable IPv6 in the NetworkManager Applet/Tray icon
+1. Setup qt look and feel
+   Open `Qt5 Settings` and update theme and icons
 1. Setup betterdiscord (optional)
    ```
    $ betterdiscordctl install
