@@ -10,6 +10,7 @@
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
+static const unsigned int gappx            = 7; /* gap between windows */
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
 static const unsigned int swipe_min_threshold = 0;
@@ -412,15 +413,17 @@ static const Modekey modekeys[] = {
   { mode_index, { mod, keycode, entermode, {.i = NORMAL} } }
 
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_c, movecenter, {0}),
-  // Toggle gaps
-  // { LAYOUT, { MOD_NONE, Key_grave, togglegaps, {0} } },
-  // { LAYOUT, { MOD_NONE, Key_grave, entermode, {.i = NORMAL} } },
+  // Gaps
+  { LAYOUT, { MOD_NONE, Key_g, incgaps, {.i = +1} } },
+  { LAYOUT, { MOD_SHIFT, Key_g, incgaps, {.i = -1} } },
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_grave, togglegaps, {0}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_SHIFT, Key_grave, defaultgaps, {0}),
   // To decrease/increase the main count
   { LAYOUT, { MOD_NONE, Key_Left, incnmaster, {.i = +1} } },
   { LAYOUT, { MOD_NONE, Key_Right, incnmaster, {.i = -1} } },
   // To increment/decrement the main ratio
-  { LAYOUT, { MOD_NONE, Key_Up, setmfact, {.f = +0.05} } },
-  { LAYOUT, { MOD_NONE, Key_Down, setmfact, {.f = -0.05} } },
+  { LAYOUT, { MOD_SHIFT, Key_Left, setmfact, {.f = -0.05} } },
+  { LAYOUT, { MOD_SHIFT, Key_Right, setmfact, {.f = +0.05} } },
   // Change layout
   { LAYOUT, { MOD_NONE, Key_comma, cyclelayout, {.i = -1 } } },
   { LAYOUT, { MOD_NONE, Key_period, cyclelayout, {.i = +1 } } },
