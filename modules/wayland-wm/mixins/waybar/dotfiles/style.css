@@ -169,14 +169,14 @@ window#waybar.hidden {
   animation-direction: alternate;
 }
 
-#bluetooth.off {
-  color: @comment;
-}
 #bluetooth.on {
   color: @foreground;
 }
 #bluetooth.connected {
   color: @cyan;
+}
+#bluetooth.off {
+  color: @comment;
 }
 #bluetooth.disabled {
   color: @comment;
