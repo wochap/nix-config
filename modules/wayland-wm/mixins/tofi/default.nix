@@ -55,7 +55,7 @@ in {
           mkOutOfStoreSymlink "${currentDirectory}/dotfiles/multi-line";
         "tofi/one-line".source = pkgs.substituteAll {
           src = ./dotfiles/one-line;
-          inherit (themeColors) foreground primary background;
+          inherit (themeColors) foreground primary background red;
         };
       };
     };

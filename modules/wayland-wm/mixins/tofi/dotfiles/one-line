@@ -6,7 +6,7 @@ font-size = 10
 # Text theming
 text-color = @foreground@
 
-prompt-color = @primary@
+prompt-color = @red@
 
 selection-color = @background@
 selection-background = @primary@
