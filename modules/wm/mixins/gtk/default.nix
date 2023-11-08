@@ -81,11 +81,12 @@ in {
           "${globals.gtkTheme.package}/share/themes/${globals.gtkTheme.name}/gtk-4.0/gtk-dark.css";
       };
 
-      # TODO: move out
-      # Open GTK inspector with Ctrl + Shift + D
-      # GTK_DEBUG=interactive <app>
       dconf.settings = {
+        # Open GTK inspector with Ctrl + Shift + D
+        # GTK_DEBUG=interactive <app>
         "org/gtk/Settings/Debug" = { enable-inspector-keybinding = true; };
+
+        "org/gnome/desktop/interface" = { prefer-dark = true; };
       };
 
       gtk = {
