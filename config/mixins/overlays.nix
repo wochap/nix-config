@@ -45,6 +45,11 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
+        prevstable-kitty = import inputs.prevstable-kitty {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
       })
 
       (final: prev: {

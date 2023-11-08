@@ -10,6 +10,7 @@
     prevstable-chrome.url = "github:nixos/nixpkgs?rev=5a237aecb57296f67276ac9ab296a41c23981f56"; # Google Chrome 117.0.5938.132
     prevstable-kernel-pkgs.url = "github:nixos/nixpkgs?rev=ea4c80b39be4c09702b0cb3b42eab59e2ba4f24b"; # Linux 5.15.119
     prevstable-hyprland.url = "github:nixos/nixpkgs?rev=94d494b2f667a9c910582e1ba9648babd63550bf"; # master (aug 25 2023)
+    prevstable-kitty.url = "github:adamcstephens/nixpkgs?rev=05825f7d60ddd24709926e2d5edd1e2cc33113ad"; # kitty 0.31.0
     nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
     nixpkgs-python.url = "github:cachix/nixpkgs-python?rev=dfe9a33d0d9bd31650b69c36f8fff5f2d5342393"; # main (aug 26 2023)
 

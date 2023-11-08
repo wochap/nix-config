@@ -43,7 +43,7 @@ in {
       home = {
         packages = with pkgs;
           [
-            unstable.kitty # terminal
+            prevstable-kitty.kitty # terminal
           ];
 
         sessionVariables = lib.mkMerge [

@@ -1116,6 +1116,22 @@
         "type": "github"
       }
     },
+    "prevstable-kitty": {
+      "locked": {
+        "lastModified": 1699477395,
+        "narHash": "sha256-4IDCBaJiu55A6M0tzAlyYpxxOceUbaV4l1C0iqaSl7Y=",
+        "owner": "adamcstephens",
+        "repo": "nixpkgs",
+        "rev": "05825f7d60ddd24709926e2d5edd1e2cc33113ad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "adamcstephens",
+        "repo": "nixpkgs",
+        "rev": "05825f7d60ddd24709926e2d5edd1e2cc33113ad",
+        "type": "github"
+      }
+    },
     "prevstable-mongodb": {
       "locked": {
         "lastModified": 1644026202,
@@ -1260,6 +1276,7 @@
         "prevstable-chrome": "prevstable-chrome",
         "prevstable-hyprland": "prevstable-hyprland",
         "prevstable-kernel-pkgs": "prevstable-kernel-pkgs",
+        "prevstable-kitty": "prevstable-kitty",
         "prevstable-mongodb": "prevstable-mongodb",
         "prevstable-neovim": "prevstable-neovim",
         "prevstable-nodejs": "prevstable-nodejs",
