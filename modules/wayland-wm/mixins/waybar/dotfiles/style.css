@@ -1,7 +1,7 @@
 @import url("colors.css");
 
-@define-color bar_bg #11111B;
-@define-color module_bg @background;
+@define-color bar_bg @background;
+@define-color module_bg #313244;
 
 window#waybar {
   background-color: @bar_bg;
@@ -83,7 +83,7 @@ window#waybar.hidden {
 }
 #custom-dwl_tag {
   padding: 0.15em 0.7em 0;
-  background-color: @background;
+  background-color: @module_bg;
   color: @comment;
 }
 #tags button,
@@ -91,7 +91,7 @@ window#waybar.hidden {
   padding: 0 2px;
   min-width: 20px;
   font-weight: normal;
-  background-color: @background;
+  background-color: @module_bg;
 }
 #custom-dwl_tag.occupied,
 #tags button.occupied {
@@ -101,7 +101,7 @@ window#waybar.hidden {
 #tags button.focused,
 #workspaces button.active,
 #workspaces button.focused {
-  color: @background;
+  color: @bar_bg;
   background-color: @primary;
 }
 #custom-dwl_tag.urgent,
@@ -136,7 +136,7 @@ window#waybar.hidden {
 #custom-recorder.recording {
   padding: 0 0.48em 0 0.35em;
   color: @red;
-  font-size: 1.70em;
+  font-size: 1.7em;
 }
 
 #pulseaudio.muted,
