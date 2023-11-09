@@ -2,7 +2,6 @@
 
 let
   isDarwin = config._displayServer == "darwin";
-  localPkgs = import ../packages { inherit pkgs lib; };
   overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
 in {
   config = {
@@ -61,16 +60,12 @@ in {
             sha256 = "sha256-tcAE83CEHXCvHSn/S9pWu6pUiqGmukMifEadqPDTkQ0=";
           };
         });
-
-        _custom = localPkgs;
       })
     ] ++ (lib.optionals isDarwin [
       inputs.nur.overlay
       inputs.spacebar.overlay.x86_64-darwin
 
       (final: prev: {
-        inherit (localPkgs) sf-mono-liga-bin;
-
         # yabai is broken on macOS 12, so lets make a smol overlay to use the master version
         yabai = let
           version = "4.0.0";

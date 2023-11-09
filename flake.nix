@@ -135,6 +135,7 @@
           inherit system;
           modules = [
             ./modules
+            ./packages
             (./. + "/hosts/${hostname}")
           ];
           specialArgs = { inherit inputs; inherit system; nixpkgs = pkgs; };
