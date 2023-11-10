@@ -1,5 +1,5 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [ ./qutebrowser/default.nix ];
+  imports = [ ./mixins/qutebrowser/default.nix ];
 }
