@@ -30,7 +30,7 @@ in {
     home-manager.users.${userName} = {
       home.sessionVariables = {
         PATH = "$HOME/.npm-packages/bin:$PATH";
-        NODE_PATH = "$HOME/.npm-packages/lib/node_modules";
+        NODE_PATH = "$HOME/.npm-packages/lib/node_modules:$NODE_PATH";
       };
 
       home.file = {

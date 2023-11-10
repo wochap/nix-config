@@ -6,58 +6,57 @@ let
 in {
   config = {
     environment.systemPackages = with pkgs; [
+      # OTHERS
+      gecode # c++ module
+      gpp # c++ module?, decrypt
+      watchman # required by react native
+
       # CLI TOOLS
-      ansible
-      aria
-      bc # calculator cli
+      aria # like wget but supports torrents, sftp
       dos2unix # convert line breaks DOS - mac
-      ffmpeg-full # music/video codecs?
       file # print filetype
-      gcc
-      gecode # c++ module?
+      gcc # GNU compiler collection
       getopt # fix macos getopt
-      git
       git-crypt
       gnumake # make
-      gpp # c++ module?, decrypt
-      inetutils
-      jq # JSON
+      inetutils # network tools
+      jq # manipulate JSON
       killall
-      libpwquality # pwscore
-      lolcat # rainbow
+      libpwquality # password tools, pwscore
       lsof # print port process
       man-pages
       mkcert # create certificates (HTTPS)
-      ngrok # expose web server
       nix-prefetch-git # get fetchgit hashes
-      nix-serve
-      nurl
+      nix-serve # create a local nix cachix like server
+      nurl # get fetchgit hashes
       openssl
       pup # parse html
-      tldr
-      tree
+      tldr # examples of each command
+      tree # like ls
       unrar
       unzip
-      urlscan
-      vim
-      watchman # required by react native
-      wget
-      xcp
+      urlscan # extract urls from emails/txt files
+      wget # download http/ftp
+      xcp # like cp
       zip
 
-      # DE CLI
-      amfora
-      gitAndTools.gh
-      gotop # monitor system
-
-      # APPS CLI
-      ani-cli
-      cbonsai
-      speedread
+      # CLI APPS
+      ansible # automation scripts
+      bc # calculator
+      clolcat # like cat/bat but with colors
+      ffmpeg-full # record, convert music/video
+      git
+      gitAndTools.gh # github cli
+      ngrok # expose web server
       stripe-cli
-      tmux
-      # dogecoin
 
+      # TUI APPS
+      amfora # gemini browser
+      ani-cli
+      cbonsai # print bonsai ascii
+      gotop # monitor system
+      speedread # read a file, word by word
+      tmux # terminal multiplexer
     ];
   };
 }

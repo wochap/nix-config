@@ -1,8 +1,5 @@
 { config, pkgs, lib, ... }:
 
-let
-  isWayland = config._displayServer == "wayland";
-in
 {
   config = {
     environment = {
@@ -13,7 +10,7 @@ in
 
       sessionVariables = {
         # Fix vscode delete
-        ELECTRON_TRASH="trash-cli";
+        ELECTRON_TRASH = "trash-cli";
       };
     };
   };

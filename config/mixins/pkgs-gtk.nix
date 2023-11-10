@@ -5,12 +5,12 @@
     environment = {
       systemPackages = with pkgs; [
         # libappindicator-gtk3
-        blanket
+        blanket # play rain, waves, etc sounds
         dfeet # dbus gui
-        gparted
+        gparted # disk partition editor
         inkscape # photo editor cli/gui
-        pavucontrol
-        pinta
+        pavucontrol # pulseaudio gui
+        pinta # image editor
         remmina # like vnc
 
         # APPS

@@ -5,7 +5,6 @@ in {
   config = {
     nixpkgs.overlays = [
       (final: prev: {
-
         insomnia = prev.runCommandNoCC "insomnia" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
@@ -27,88 +26,90 @@ in {
           ln -sf ${prev.microsoft-edge}/share $out/share
         '';
 
+        heimdall = prev.heimdall.overrideAttrs (_: {
+          src = prev.fetchFromSourcehut {
+            owner = "~grimler";
+            repo = "Heimdall";
+            rev = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
+            sha256 = "sha256-tcAE83CEHXCvHSn/S9pWu6pUiqGmukMifEadqPDTkQ0=";
+          };
+        });
       })
     ];
 
     environment = {
       systemPackages = with pkgs; [
-        # TOOLS
-        libinput
-        libinput-gestures
-        xorg.xev # get key actual name
-
-        # TOOLS (wayland)
-        wev # xev type
-        wtype # xdotool
-
-        # CLI TOOLS
-        _custom.advcpmv # cp and mv with progress bar
-        acpi
-        acpitool
-        cached-nix-shell # fast nix-shell scripts
-        coreutils-full # a lot of commands
-        devour # swallow
-        dex # execute DesktopEntry files (xdg/autostart)
-        dmidecode
-        dnsutils # test dns
-        efivar
-        evtest # input debugging
-        ffmpegthumbnailer
-        glxinfo # opengl utils
-        graphicsmagick
+        # OHERS
         heimdall # reset samsung ROM
         ifuse # mount ios
         inotify-tools # c module
-        inxi # check compositor running
         libimobiledevice # mount ios
-        libva-utils # verifying VA-API
-        notify-desktop # test notifications
-        pciutils # lspci and others commands
-        pulsemixer
-        slop # region selection
-        usbutils # lsusb, for android development
-        vdpauinfo # verifying VDPAU
-        vulkan-tools
-        wirelesstools
-        xorg.xdpyinfo
-        # base-devel
-        # busybox # a lot of commands but with less options/features
-        # mpc_cli
-        # mpd
-        # mpd_clientlib # mpd module
-        # procps
 
         # 7w7
         nmap
         # metasploit
         # tightvnc
 
-        # DE CLI
+        # CLI TOOLS (xorg)
+        devour # window swallower
+        libinput-gestures # handle swipe events
+        slop # region selection
+        xorg.xev # get pressed key name
+
+        # CLI TOOLS (wayland)
+        wev # like xev
+        wtype # like xdotool
+
+        # CLI TOOLS
+        _custom.advcpmv # cp/mv with progress bar
+        acpi # log battery/temp info
+        acpitool # like acpi + control hw
+        cached-nix-shell # fast nix-shell scripts
+        coreutils-full # GNU utils commands
+        dex # execute DesktopEntry files (xdg/autostart)
+        dmidecode # log hw info
+        dnsutils # test dns
+        efivar # manipulate efi vars
+        evtest # input debugging
+        glxinfo # opengl utils
         hunspell # dictionary for document programs
         hunspellDicts.en-us
+        inxi # log OS info
+        libinput # input devices helper
+        libva-utils # verifying VA-API
+        notify-desktop # send notifications
+        pciutils # inspect/manipulate PCI devices, e.g. lspci
         pulseaudio
         systemd
-        # pamixer # audio cli
+        usbutils # lsusb, for android development
+        vdpauinfo # verifying VDPAU
+        vulkan-tools # verify vulkan
+        wirelesstools
+        xorg.xdpyinfo
 
-        # APPS CLI
-        unstable.ueberzugpp
-        tty-clock
+        # CLI APPS
+        ffmpegthumbnailer # video thumbnailer
+        graphicsmagick # image editor
 
-        # APPS GUI
-        dmenu
+        # TUI APPS
+        pulsemixer # pulseaudio
+        tty-clock # clock
+        unstable.ueberzugpp # images in terminal
+
+        # GUI APPS
+        dmenu # menu
         nyxt # browser
         skypeforlinux
         zoom-us
-        # antimicroX
+        # antimicroX # map kb/mouse to gamepad
         # mysql-workbench
         # teamviewer
 
-        # Electron apps
+        # ELECTRON APPS
         bitwarden
         brave
         element-desktop-wayland
         figma-linux
-        unstable.insomnia
         microsoft-edge
         notion-app-enhanced
         postman
@@ -116,6 +117,7 @@ in {
         prevstable-chrome.netflix
         simplenote
         slack
+        unstable.insomnia
         whatsapp-for-linux
       ];
     };
