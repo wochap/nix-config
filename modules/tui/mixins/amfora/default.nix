@@ -1,8 +1,12 @@
 { config, pkgs, lib, inputs, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.tui.amfora;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.tui.amfora = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ amfora ];
 
     home-manager.users.${userName} = {

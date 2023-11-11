@@ -1,8 +1,12 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.tui.htop;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.tui.htop = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
 
       programs.htop = {
@@ -19,4 +23,3 @@ in {
     };
   };
 }
-

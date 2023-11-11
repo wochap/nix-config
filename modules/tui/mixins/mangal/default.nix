@@ -1,8 +1,12 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.tui.mangal;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.tui.mangal = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home.packages = [ pkgs.mangal ];
 

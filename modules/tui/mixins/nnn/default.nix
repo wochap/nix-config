@@ -1,10 +1,13 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  cfg = config._custom.tui.nnn;
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
 in {
-  config = {
+  options._custom.tui.nnn = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     environment = {
       variables = {
         NNN_TRASH = "1";

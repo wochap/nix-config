@@ -1,10 +1,12 @@
 { config, pkgs, lib, ... }:
 
 let
-  isDarwin = config._displayServer == "darwin";
+  cfg = config._custom.tui.vim;
   userName = config._userName;
 in {
-  config = {
+  options._custom.tui.vim = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home.file = { ".vimrc".source = ./dotfiles/.vimrc; };
 

@@ -1,8 +1,6 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.tui.nixDirenv;
-  userName = config._userName;
+let cfg = config._custom.tui.nixDirenv;
 in {
   options._custom.tui.nixDirenv = { enable = lib.mkEnableOption { }; };
 
