@@ -86,7 +86,7 @@ in {
         # GTK_DEBUG=interactive <app>
         "org/gtk/Settings/Debug" = { enable-inspector-keybinding = true; };
 
-        "org/gnome/desktop/interface" = { prefer-dark = true; };
+        "org/gnome/desktop/interface" = { color-scheme = "prefer-dark"; };
       };
 
       gtk = {
