@@ -1,13 +1,16 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.wm.neofetch;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/neofetch";
+  currentDirectory = "${configDirectory}/modules/wm/mixins/neofetch";
 in {
-  config = {
+  options._custom.wm.neofetch = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       neofetch
 

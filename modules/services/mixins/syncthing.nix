@@ -1,8 +1,12 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.services.syncthing;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.services.syncthing = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
 
       services.syncthing = { enable = true; };

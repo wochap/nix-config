@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  cfg = config._custom.wm.fonts;
   userName = config._userName;
   isDarwin = config._displayServer == "darwin";
   customNerdFonts = pkgs.unstable.nerdfonts.override {
@@ -14,7 +15,9 @@ let
     ];
   };
 in {
-  config = {
+  options._custom.wm.fonts = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     fonts = lib.mkMerge [
       {
         fonts = with pkgs; [

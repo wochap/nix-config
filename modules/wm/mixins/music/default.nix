@@ -1,14 +1,17 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.wm.music;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/music";
+  currentDirectory = "${configDirectory}/modules/wm/mixins/music";
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
 in {
-  config = {
+  options._custom.wm.music = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     # required by cava
     boot.kernelModules = [ "snd_aloop" ];
 

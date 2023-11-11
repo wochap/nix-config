@@ -1,8 +1,12 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.services.gnome-keyring;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.services.gnome-keyring = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     # GUI for gnome-keyring
     programs.seahorse.enable = true;
 
