@@ -1,8 +1,12 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.cli.gpg;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.cli.gpg = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
 
     home-manager.users.${userName} = {
 

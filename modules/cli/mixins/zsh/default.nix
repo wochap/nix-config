@@ -1,11 +1,13 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  isDarwin = config._displayServer == "darwin";
+  cfg = config._custom.cli.zsh;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
 in {
-  config = {
+  options._custom.cli.zsh = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     environment.pathsToLink = [ "/share/zsh" ];
 
     home-manager.users.${userName} = {

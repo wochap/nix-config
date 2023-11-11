@@ -1,10 +1,13 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  cfg = config._custom.cli.lsd;
   userName = config._userName;
   themeSettings = pkgs._custom.fromYAML "${inputs.dracula-lsd}/config.yaml";
 in {
-  config = {
+  options._custom.cli.lsd = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
         lsd = prev.lsd.overrideAttrs (drv: rec {

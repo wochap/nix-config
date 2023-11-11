@@ -1,11 +1,14 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  cfg = config._custom.cli.starship;
   userName = config._userName;
   themeSettings = builtins.fromTOML
     (builtins.readFile "${inputs.catppuccin-starship}/palettes/mocha.toml");
 in {
-  config = {
+  options._custom.cli.starship = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
 
       programs.starship = {

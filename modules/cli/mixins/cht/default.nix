@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.cli.cht;
   cht = pkgs.writeTextFile {
     name = "cht";
     destination = "/bin/cht";
@@ -8,7 +9,9 @@ let
     text = builtins.readFile ./scripts/cht.sh;
   };
 in {
-  config = {
+  options._custom.cli.cht = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cht ];
       etc = {

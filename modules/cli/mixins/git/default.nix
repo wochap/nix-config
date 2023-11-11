@@ -1,11 +1,14 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
+  cfg = config._custom.cli.git;
   userName = config._userName;
   catppuccinMochaTheme =
     pkgs._custom.fromYAML "${inputs.catppuccin-lazygit}/themes/mocha.yml";
 in {
-  config = {
+  options._custom.cli.git = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
         lazygit = prev.lazygit.overrideAttrs (_: {
@@ -39,7 +42,8 @@ in {
           os = {
             open = "xdg-open {{filename}} >/dev/null";
             edit = "nvr -l --remote-wait-silent {{filename}}";
-            editAtLine = "nvr -l --remote-wait-silent {{filename}} +':{{line}}'";
+            editAtLine =
+              "nvr -l --remote-wait-silent {{filename}} +':{{line}}'";
             suspend = true;
           };
           gui = {
@@ -90,7 +94,9 @@ in {
         };
 
         extraConfig = {
-          core = { editor = "nvr -l --remote-wait-silent +'set bufhidden=wipe'"; };
+          core = {
+            editor = "nvr -l --remote-wait-silent +'set bufhidden=wipe'";
+          };
           diff = {
             tool = "kitty";
             guitool = "kitty.gui";

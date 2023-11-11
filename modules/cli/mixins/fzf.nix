@@ -1,8 +1,12 @@
 { config, pkgs, lib, inputs, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.cli.fzf;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.cli.fzf = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home.sessionVariables = {
         # setup https://github.com/catppuccin/fzf
