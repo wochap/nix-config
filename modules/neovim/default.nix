@@ -27,8 +27,9 @@ in {
           tree-sitter
 
           # required by null-ls
-          statix
+          deadnix
           nixfmt
+          statix
 
           # required by telescope
           ripgrep
