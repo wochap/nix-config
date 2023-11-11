@@ -1,14 +1,17 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.gui.firefox;
   userName = config._userName;
   isWayland = config._displayServer == "wayland";
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/firefox";
+  currentDirectory = "${configDirectory}/modules/gui/mixins/firefox";
 in {
-  config = {
+  options._custom.gui.firefox = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     environment.sessionVariables = {
       # Force firefox to use wayland
       MOZ_ENABLE_WAYLAND = lib.mkIf isWayland "1";

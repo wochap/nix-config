@@ -1,8 +1,12 @@
 { config, lib, pkgs, inputs, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.gui.discord;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.gui.discord = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ betterdiscordctl discord ]; };
 
     home-manager.users.${userName} = {

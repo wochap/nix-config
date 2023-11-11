@@ -1,13 +1,16 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  cfg = config._custom.gui.alacritty;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/alacritty";
+  currentDirectory = "${configDirectory}/modules/gui/mixins/alacritty";
 in {
-  config = {
+  options._custom.gui.alacritty = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ unstable.alacritty ]; };
 
     home-manager.users.${userName} = {

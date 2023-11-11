@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  cfg = config._custom.gui.kitty;
   isDarwin = config._displayServer == "darwin";
   macosConfig = builtins.readFile ./dotfiles/kitty-macos.conf;
   linuxConfig = builtins.readFile ./dotfiles/kitty-linux.conf;
@@ -8,7 +9,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/config/users/mixins/kitty";
+  currentDirectory = "${configDirectory}/modules/gui/mixins/kitty";
 
   shellIntegrationInit = {
     bash = ''
@@ -25,7 +26,9 @@ let
     '';
   };
 in {
-  config = {
+  options._custom.gui.kitty = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     environment = {
       etc = {
         "config/kitty-session-tripper.conf".source =

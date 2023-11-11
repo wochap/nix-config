@@ -1,10 +1,13 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  cfg = config._custom.gui.mpv;
   isWayland = config._displayServer == "wayland";
   userName = config._userName;
 in {
-  config = {
+  options._custom.gui.mpv = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home.sessionVariables = { VIDEO = "mpv"; };
 

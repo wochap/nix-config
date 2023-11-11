@@ -1,8 +1,12 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.gui.thunar;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.gui.thunar = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     programs.thunar = {
       enable = true;
       plugins = with pkgs; [
