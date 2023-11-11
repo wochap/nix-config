@@ -1,8 +1,12 @@
 { config, pkgs, lib, ... }:
 
-let userName = config._userName;
+let
+  cfg = config._custom.services.ssh;
+  userName = config._userName;
 in {
-  config = {
+  options._custom.services.ssh = { enable = lib.mkEnableOption { }; };
+
+  config = lib.mkIf cfg.enable {
     services.openssh.enable = true;
     services.openssh.settings.PasswordAuthentication = false;
     services.openssh.settings.KbdInteractiveAuthentication = false;
