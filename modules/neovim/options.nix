@@ -147,7 +147,7 @@ in {
             cmake
             gnumake
             ninja
-            cargo
+            unstable.cargo
             yarn
           ] ++ optionals cfg.withHaskell [
             (pkgs.writeShellApplication {
