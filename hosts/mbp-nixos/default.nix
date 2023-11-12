@@ -85,7 +85,7 @@ in {
     _custom.services.docker.enable = true;
     _custom.services.flatpak.enable = true;
     _custom.services.interception-tools.enable = true;
-    _custom.services.ipwebcam.enable = true;
+    _custom.services.ipwebcam.enable = false;
     _custom.services.mbpfan.enable = true;
     _custom.services.mongodb.enable = true;
     _custom.services.ssh.enable = true;
