@@ -14,5 +14,6 @@
     ./mixins/lsd.nix
     ./mixins/starship.nix
     ./mixins/youtube.nix
+    ./mixins/zoxide.nix
   ];
 }

@@ -39,6 +39,7 @@ in {
     _custom.cli.lsd.enable = true;
     _custom.cli.starship.enable = true;
     _custom.cli.youtube.enable = true;
+    _custom.cli.zoxide.enable = true;
 
     _custom.tui.amfora.enable = true;
     _custom.tui.fontpreview-kik.enable = true;

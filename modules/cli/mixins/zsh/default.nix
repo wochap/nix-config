@@ -77,6 +77,7 @@ in {
       };
 
       programs.starship.enableZshIntegration = true;
+      programs.zoxide.enableZshIntegration = true;
 
       # Enabled on programs.zsh.initExtra
       # programs.fzf.enableZshIntegration = true;
