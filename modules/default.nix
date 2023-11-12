@@ -1,8 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ ... }:
 
 {
   imports = [
     ./android
+    ./cli
     ./docker
     ./dwl
     ./flatpak
@@ -18,6 +19,7 @@
     ./neovim
     ./nix-alien
     ./river
+    ./services
     ./steam
     ./sway
     ./tui
