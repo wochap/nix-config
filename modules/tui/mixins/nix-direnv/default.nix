@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.tui.nixDirenv;
+let cfg = config._custom.tui.nix-direnv;
 in {
-  options._custom.tui.nixDirenv = { enable = lib.mkEnableOption { }; };
+  options._custom.tui.nix-direnv = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
     programs.direnv = {

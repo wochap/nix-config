@@ -27,25 +27,60 @@ in {
     _custom.globals.themeColors = catppuccinMochaTheme;
     _custom.globals.isHidpi = true;
 
+    _custom.cli.bat.enable = true;
+    _custom.cli.cht.enable = true;
+    _custom.cli.git.enable = true;
+    _custom.cli.ptsh.enable = true;
+    _custom.cli.zsh.enable = true;
+    _custom.cli.fzf.enable = true;
+    _custom.cli.gpg.enable = true;
+    _custom.cli.lsd.enable = true;
+    _custom.cli.starship.enable = true;
+    _custom.cli.youtube.enable = true;
+
+    _custom.tui.amfora.enable = true;
     _custom.tui.fontpreview-kik.enable = true;
     _custom.tui.lynx.enable = true;
+    _custom.tui.mangadesk.enable = true;
+    _custom.tui.mangal.enable = true;
+    _custom.tui.newsboat.enable = true;
+    _custom.tui.nix-direnv.enable = true;
+    _custom.tui.nnn.enable = true;
+    _custom.tui.vim.enable = true;
     _custom.tui.wtf.enable = true;
-    _custom.tui.nixDirenv.enable = true;
+    _custom.tui.bottom.enable = true;
+    _custom.tui.htop.enable = true;
 
+    _custom.gui.alacritty.enable = true;
+    _custom.gui.discord.enable = true;
+    _custom.gui.firefox.enable = true;
+    _custom.gui.kitty.enable = true;
     _custom.gui.qutebrowser.enable = true;
+    _custom.gui.thunar.enable = true;
+    _custom.gui.vscode.enable = true;
+    _custom.gui.zathura.enable = true;
+    _custom.gui.imv.enable = true;
 
-    _custom.wm.email.enable = true;
-    _custom.wm.calendar.enable = true;
-    _custom.wm.networking.enable = true;
-    _custom.wm.powerManagement.enable = true;
-    _custom.wm.backlight.enable = true;
     _custom.wm.audio.enable = true;
-    _custom.wm.cursor.enable = true;
-    _custom.wm.xdg.enable = true;
-    _custom.wm.dbus.enable = true;
+    _custom.wm.backlight.enable = true;
     _custom.wm.bluetooth.enable = true;
-    _custom.wm.qt.enable = true;
+    _custom.wm.calendar.enable = true;
+    _custom.wm.cursor.enable = true;
+    _custom.wm.dbus.enable = true;
+    _custom.wm.email.enable = true;
+    _custom.wm.fonts.enable = true;
     _custom.wm.gtk.enable = true;
+    _custom.wm.music.enable = true;
+    _custom.wm.neofetch.enable = true;
+    _custom.wm.networking.enable = true;
+    _custom.wm.power-management.enable = true;
+    _custom.wm.qt.enable = true;
+    _custom.wm.xdg.enable = true;
+    _custom.wm.gammastep.enable = true;
+
+    _custom.services.ssh.enable = true;
+    _custom.services.gnome-keyring.enable = true;
+    _custom.services.syncthing.enable = true;
 
     _custom.neovim.enable = true;
     _custom.nix-alien.enable = true;

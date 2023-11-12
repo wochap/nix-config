@@ -10,7 +10,7 @@ let
 in
 {
   imports = [
-    ../../config/macos.nix
+    # ../../config/macos.nix
   ];
 
   config = {
