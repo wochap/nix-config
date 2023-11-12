@@ -2,9 +2,9 @@
 
 let
   userName = config._userName;
-  cfg = config._custom.virt;
+  cfg = config._custom.services.virt;
 in {
-  options._custom.virt = { enable = lib.mkEnableOption { }; };
+  options._custom.services.virt = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [

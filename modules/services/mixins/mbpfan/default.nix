@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.mbpfan;
+let cfg = config._custom.services.mbpfan;
 in {
-  options._custom.mbpfan = { enable = lib.mkEnableOption { }; };
+  options._custom.services.mbpfan = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
     services.mbpfan.enable = lib.mkForce false;

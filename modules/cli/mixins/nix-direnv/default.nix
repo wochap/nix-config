@@ -1,8 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
-let cfg = config._custom.tui.nix-direnv;
+let cfg = config._custom.cli.nix-direnv;
 in {
-  options._custom.tui.nix-direnv = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.nix-direnv = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
     programs.direnv = {

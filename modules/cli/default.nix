@@ -5,6 +5,8 @@
     ./mixins/bat
     ./mixins/cht
     ./mixins/git
+    ./mixins/nix-alien
+    ./mixins/nix-direnv
     ./mixins/ptsh
     ./mixins/zsh
     ./mixins/fzf.nix

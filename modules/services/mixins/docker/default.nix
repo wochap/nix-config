@@ -2,9 +2,9 @@
 
 let
   userName = config._userName;
-  cfg = config._custom.docker;
+  cfg = config._custom.services.docker;
 in {
-  options._custom.docker = { enable = lib.mkEnableOption { }; };
+  options._custom.services.docker = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ docker-compose ];

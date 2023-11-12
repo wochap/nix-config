@@ -1,11 +1,11 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.ipwebcam;
+  cfg = config._custom.services.ipwebcam;
   run-videochat = pkgs.writeScriptBin "run-videochat"
     (builtins.readFile ./scripts/run-videochat.sh);
 in {
-  options._custom.ipwebcam = { enable = lib.mkEnableOption { }; };
+  options._custom.services.ipwebcam = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
     boot = {

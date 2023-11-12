@@ -1,10 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
-let
-  cfg = config._custom.flatpak;
-  userName = config._userName;
+let cfg = config._custom.services.flatpak;
 in {
-  options._custom.flatpak = { enable = lib.mkEnableOption "enable flatpak"; };
+  options._custom.services.flatpak = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
     services.flatpak.enable = true;

@@ -1,10 +1,8 @@
 { config, pkgs, lib, inputs, system, ... }:
 
 let
-  cfg = config._custom.android;
-
+  cfg = config._custom.services.android;
   userName = config._userName;
-  hmConfig = config.home-manager.users.${userName};
 
   android-sdk-home-path = "Android/Sdk";
   phoneId = "04e8";
@@ -33,7 +31,7 @@ let
       # system-images-android-29-google-apis-x86-64
     ]);
 in {
-  options._custom.android = {
+  options._custom.services.android = {
     enable = lib.mkEnableOption { };
     sdk = { enable = lib.mkEnableOption { default = true; }; };
   };

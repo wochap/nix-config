@@ -1,11 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.wm.gammastep;
+  cfg = config._custom.waylandWm;
   userName = config._userName;
 in {
-  options._custom.wm.gammastep = { enable = lib.mkEnableOption { }; };
-
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ gammastep ];
 

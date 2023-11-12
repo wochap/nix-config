@@ -1,15 +1,15 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config._custom.neovim;
+  cfg = config._custom.tui.neovim;
   isDarwin = config._displayServer == "darwin";
   userName = config._userName;
 in {
   imports = [ ./options.nix ];
 
   config = lib.mkIf cfg.enable {
-    _custom.neovim.setBuildEnv = true;
-    _custom.neovim.withBuildTools = true;
+    _custom.tui.neovim.setBuildEnv = true;
+    _custom.tui.neovim.withBuildTools = true;
 
     environment = {
       systemPackages = with pkgs;

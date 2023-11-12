@@ -1,11 +1,10 @@
-{ config, pkgs, inputs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let cfg = config._custom.waylandWm;
 in {
   imports = [
     ./mixins/ags
     ./mixins/dunst
-    ./mixins/kanshi.nix
     ./mixins/swappy
     ./mixins/swaynotificationcenter
     ./mixins/swww
@@ -13,6 +12,8 @@ in {
     ./mixins/tofi
     ./mixins/waybar
     ./mixins/wob
+    ./mixins/gammastep.nix
+    ./mixins/kanshi.nix
   ];
 
   options._custom.waylandWm = { enable = lib.mkEnableOption { }; };

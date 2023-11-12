@@ -7,8 +7,8 @@
     ./mixins/lynx
     ./mixins/mangadesk
     ./mixins/mangal
+    ./mixins/neovim
     ./mixins/newsboat
-    ./mixins/nix-direnv
     ./mixins/nnn
     ./mixins/vim
     ./mixins/wtf

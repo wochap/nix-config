@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.interception-tools;
+  cfg = config._custom.services.interception-tools;
   mbpKeyboard =
     "/dev/input/by-id/usb-Apple_Inc._Apple_Internal_Keyboard___Trackpad_D3H54961U11GHMFA75BS-if01-event-kbd";
   keychrone = "/dev/input/by-id/usb-Keychron_Keychron_K3-event-kbd";
@@ -14,7 +14,9 @@ let
             EV_KEY: [KEY_CAPSLOCK, KEY_LEFTSHIFT, KEY_RIGHTSHIFT]
     '';
 in {
-  options._custom.interception-tools = { enable = lib.mkEnableOption { }; };
+  options._custom.services.interception-tools = {
+    enable = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     services.interception-tools.enable = true;

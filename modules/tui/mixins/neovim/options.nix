@@ -3,13 +3,12 @@
 
 with lib;
 let
-  cfg = config._custom.neovim;
-  isDarwin = config._displayServer == "darwin";
+  cfg = config._custom.tui.neovim;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
 in {
   options = {
-    _custom.neovim = {
+    _custom.tui.neovim = {
       enable = mkEnableOption { };
       setBuildEnv = mkEnableOption ''
         Sets environment variables that resolve build dependencies as required by `mason.nvim` and `nvim-treesitter`

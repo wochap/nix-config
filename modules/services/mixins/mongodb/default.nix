@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.mongodb;
+let cfg = config._custom.services.mongodb;
 in {
-  options._custom.mongodb = { enable = lib.mkEnableOption { }; };
+  options._custom.services.mongodb = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
