@@ -109,7 +109,7 @@ You probably want to press `Ctrl + Alt + F1`
 1. If you are using nixos on mbp
    [Disable startup sound](https://gist.github.com/0xbb/ae298e2798e1c06d0753)
    ```
-   $ ln -s ~/nix-config/modules/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
+   $ sudo ln -s ~/nix-config/modules/services/mixins/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
    ```
 1. Setup Syncthing (http://localhost:8384)
 1. Setup backgrounds
