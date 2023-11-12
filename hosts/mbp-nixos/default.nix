@@ -30,6 +30,8 @@ in {
     _custom.cli.bat.enable = true;
     _custom.cli.cht.enable = true;
     _custom.cli.git.enable = true;
+    _custom.cli.nix-alien.enable = true;
+    _custom.cli.nix-direnv.enable = true;
     _custom.cli.ptsh.enable = true;
     _custom.cli.zsh.enable = true;
     _custom.cli.fzf.enable = true;
@@ -43,8 +45,8 @@ in {
     _custom.tui.lynx.enable = true;
     _custom.tui.mangadesk.enable = true;
     _custom.tui.mangal.enable = true;
+    _custom.tui.neovim.enable = true;
     _custom.tui.newsboat.enable = true;
-    _custom.tui.nix-direnv.enable = true;
     _custom.tui.nnn.enable = true;
     _custom.tui.vim.enable = true;
     _custom.tui.wtf.enable = true;
@@ -55,6 +57,7 @@ in {
     _custom.gui.discord.enable = true;
     _custom.gui.firefox.enable = true;
     _custom.gui.kitty.enable = true;
+    _custom.gui.mpv.enable = true;
     _custom.gui.qutebrowser.enable = true;
     _custom.gui.thunar.enable = true;
     _custom.gui.vscode.enable = true;
@@ -76,24 +79,21 @@ in {
     _custom.wm.power-management.enable = true;
     _custom.wm.qt.enable = true;
     _custom.wm.xdg.enable = true;
-    _custom.wm.gammastep.enable = true;
 
+    _custom.services.android.enable = true;
+    _custom.services.android.sdk.enable = false;
+    _custom.services.docker.enable = true;
+    _custom.services.flatpak.enable = true;
+    _custom.services.interception-tools.enable = true;
+    _custom.services.ipwebcam.enable = true;
+    _custom.services.mbpfan.enable = true;
+    _custom.services.mongodb.enable = true;
     _custom.services.ssh.enable = true;
+    _custom.services.steam.enable = true;
+    _custom.services.virt.enable = true;
+    _custom.services.waydroid.enable = false;
     _custom.services.gnome-keyring.enable = true;
     _custom.services.syncthing.enable = true;
-
-    _custom.neovim.enable = true;
-    _custom.nix-alien.enable = true;
-    _custom.interception-tools.enable = true;
-    _custom.android.enable = true;
-    _custom.android.sdk.enable = false;
-    _custom.steam.enable = true;
-    _custom.mbpfan.enable = true;
-    _custom.docker.enable = true;
-    _custom.mongodb.enable = true;
-    _custom.virt.enable = true;
-    _custom.flatpak.enable = true;
-    _custom.waydroid.enable = false;
 
     _custom.hardware.efi.enable = true;
     _custom.hardware.amdCpu.enable = false;

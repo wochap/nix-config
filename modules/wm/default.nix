@@ -10,7 +10,6 @@
     ./mixins/dbus
     ./mixins/email
     ./mixins/fonts
-    ./mixins/gammastep.nix
     ./mixins/greetd
     ./mixins/gtk
     ./mixins/music
