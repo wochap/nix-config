@@ -94,8 +94,6 @@
     adw-gtk3-colors.flake = false;
 
     # dracula theme
-    dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
-    dracula-betterdiscord.flake = false;
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
     dracula-lsd.flake = false;
 
@@ -124,6 +122,8 @@
     catppuccin-newsboat.flake = false;
     catppuccin-amfora.url = "github:catppuccin/amfora?rev=26f6496fd2be0fe7308dfc57b9ab1e8ca5c38602";
     catppuccin-amfora.flake = false;
+    catppuccin-discord.url = "github:catppuccin/discord";
+    catppuccin-discord.flake = false;
   };
 
   outputs = inputs:

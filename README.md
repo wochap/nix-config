@@ -130,6 +130,7 @@ You probably want to press `Ctrl + Alt + F1`
    ```
    $ betterdiscordctl install
    ```
+   enable theme from discord > betterdiscordctl settings
 1. Enable WebRTC PipeWire support in chrome (wayland only)
 
    Go to chrome://flags/ and enable `WebRTC PipeWire support`

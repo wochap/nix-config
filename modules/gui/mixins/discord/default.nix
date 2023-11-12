@@ -12,8 +12,8 @@ in {
     home-manager.users.${userName} = {
       xdg.configFile = {
         "discord/settings.json".source = ./dotfiles/discord-settings.json;
-        "BetterDiscord/themes/Dracula.theme.css".source =
-          "${inputs.dracula-betterdiscord}/Dracula.theme.css";
+        "BetterDiscord/themes/mocha.theme.css".source =
+          "${inputs.catppuccin-discord}/themes/mocha.theme.css";
       };
     };
   };

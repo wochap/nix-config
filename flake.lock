@@ -161,6 +161,22 @@
         "type": "github"
       }
     },
+    "catppuccin-discord": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1699630293,
+        "narHash": "sha256-H8SMStxmUG0mQ4pZnkVdriLqufTrf9Y9cRYLyWfDscY=",
+        "owner": "catppuccin",
+        "repo": "discord",
+        "rev": "693f1b25e0835abbff03572b9bcda322fb707a70",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "discord",
+        "type": "github"
+      }
+    },
     "catppuccin-kitty": {
       "flake": false,
       "locked": {
@@ -1240,6 +1256,7 @@
         "catppuccin-amfora": "catppuccin-amfora",
         "catppuccin-bat": "catppuccin-bat",
         "catppuccin-bottom": "catppuccin-bottom",
+        "catppuccin-discord": "catppuccin-discord",
         "catppuccin-kitty": "catppuccin-kitty",
         "catppuccin-lazygit": "catppuccin-lazygit",
         "catppuccin-neomutt": "catppuccin-neomutt",
