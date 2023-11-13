@@ -1,8 +1,6 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, lib, inputs, ... }:
 
-let
-  isDarwin = config._displayServer == "darwin";
-  overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
+let overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
 in {
   config = {
 
@@ -50,33 +48,6 @@ in {
           overlays = overlaysWithoutCustomChannels;
         };
       })
-    ] ++ (lib.optionals isDarwin [
-      inputs.nur.overlay
-      inputs.spacebar.overlay.x86_64-darwin
-
-      (final: prev: {
-        # yabai is broken on macOS 12, so lets make a smol overlay to use the master version
-        yabai = let
-          version = "4.0.0";
-          buildSymlinks = prev.runCommand "build-symlinks" { } ''
-            mkdir -p $out/bin
-            ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
-          '';
-        in prev.yabai.overrideAttrs (old: {
-          inherit version;
-          src = inputs.yabai-src;
-
-          buildInputs = with prev.darwin.apple_sdk.frameworks; [
-            Carbon
-            Cocoa
-            ScriptingBridge
-            prev.xxd
-            SkyLight
-          ];
-
-          nativeBuildInputs = [ buildSymlinks ];
-        });
-      })
-    ]);
+    ];
   };
 }
