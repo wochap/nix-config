@@ -10,6 +10,8 @@ in {
   config = lib.mkIf cfg.enable {
     environment.pathsToLink = [ "/share/zsh" ];
 
+    users.users.${userName}.shell = pkgs.zsh;
+
     home-manager.users.${userName} = {
       # Make sure we create a cache directory since some plugins expect it to exist
       # See: https://github.com/nix-community/home-manager/issues/761

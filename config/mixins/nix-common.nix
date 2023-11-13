@@ -67,7 +67,7 @@ in {
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.${userName} = {
       home = homeDirectory;
-      shell = pkgs.zsh;
+      shell = lib.mkDefault pkgs.zsh;
     };
 
     # home-manager options
