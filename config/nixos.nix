@@ -20,6 +20,8 @@ in {
   ];
 
   config = {
-    home-manager.users.${userName} = { imports = [ ./modules/symlinks.nix ]; };
+    home-manager.users.${userName} = {
+      imports = [ ./hm-modules/symlinks.nix ];
+    };
   };
 }
