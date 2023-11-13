@@ -353,23 +353,6 @@
         "type": "github"
       }
     },
-    "dracula-betterdiscord": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1646106958,
-        "narHash": "sha256-rj0aDBEqKeefzs+m4ajKCb6W2SKbunBXRI6hAAnG2W0=",
-        "owner": "dracula",
-        "repo": "betterdiscord",
-        "rev": "835bc3a15aba03ae10248d6a06ea8704e9cd4382",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dracula",
-        "repo": "betterdiscord",
-        "rev": "835bc3a15aba03ae10248d6a06ea8704e9cd4382",
-        "type": "github"
-      }
-    },
     "dracula-lsd": {
       "flake": false,
       "locked": {
@@ -1266,7 +1249,6 @@
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-syntax-highlighting": "catppuccin-zsh-syntax-highlighting",
         "darwin": "darwin",
-        "dracula-betterdiscord": "dracula-betterdiscord",
         "dracula-lsd": "dracula-lsd",
         "fontpreview-ueberzug": "fontpreview-ueberzug",
         "home-manager": "home-manager",
