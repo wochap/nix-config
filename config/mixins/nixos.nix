@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
+  userName = config._userName;
   inherit (config._custom.globals) isHidpi;
 
   # Catppuccin mocha theme
@@ -40,7 +41,7 @@ in {
         systemd-boot.configurationLimit = 42;
       };
 
-      # Enable ntfs disks
+      # Enable support for ntfs disks
       supportedFilesystems = [ "ntfs" ];
     };
 
@@ -59,15 +60,11 @@ in {
       packages = [ pkgs.terminus_font ];
     };
 
-    # Clear nixos store
-    # nix.settings.auto-optimise-store = true;
-
     security.sudo = {
       enable = true;
       wheelNeedsPassword = false;
     };
 
-    # Enable OpenGL
     hardware.opengl.enable = true;
 
     services.xserver = {
@@ -76,7 +73,7 @@ in {
     };
 
     # Apply trim to SSDs
-    services.fstrim.enable = true;
+    services.fstrim.enable = lib.mkDefault true;
 
     # minimum amount of swapping without disabling it entirely
     boot.kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
@@ -88,5 +85,15 @@ in {
     # Required for some gtk apps
     programs.bash.vteIntegration = lib.mkDefault true;
     programs.zsh.vteIntegration = lib.mkDefault true;
+
+    # create user
+    users.users.${userName} = {
+      hashedPassword =
+        "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
+      isNormalUser = true;
+      isSystemUser = false;
+      extraGroups =
+        [ "audio" "disk" "input" "networkmanager" "storage" "video" "wheel" ];
+    };
   };
 }

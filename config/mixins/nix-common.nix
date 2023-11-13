@@ -1,9 +1,10 @@
-# Used by darwin|wayland|xorg config
+# common nixos and nix-darwin configuraion
 { config, pkgs, lib, inputs, ... }:
 
-let userName = config._userName;
+let
+  userName = config._userName;
+  homeDirectory = config._homeDirectory;
 in {
-
   config = {
     # Allow unfree packages
     nixpkgs.config.allowUnfree = true;
@@ -26,6 +27,9 @@ in {
         lib.mapAttrsToList (key: _: "${key}=flake:${key}") config.nix.registry;
 
       settings = {
+        # Clear nixos store
+        auto-optimise-store = true;
+
         # Enable cachix
         trusted-public-keys = [
           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
@@ -53,22 +57,18 @@ in {
     # Set your time zone.
     time.timeZone = lib.mkDefault "America/Panama";
 
-    environment = {
-      shellAliases = {
-        cp = "xcp";
-        tree = "tree -a -C -L 1";
-
-        weather = "curl wttr.in";
-        ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"'';
-      };
-
-      # Links those paths from derivations to /run/current-system/sw
-      pathsToLink = [ "/share" "/libexec" ];
-    };
+    # Links those paths from derivations to /run/current-system/sw
+    environment.pathsToLink = [ "/share" "/libexec" ];
 
     # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
     programs.zsh.enable = true;
     programs.fish.enable = true;
+
+    # Define a user account. Don't forget to set a password with ‘passwd’.
+    users.users.${userName} = {
+      home = homeDirectory;
+      shell = pkgs.zsh;
+    };
 
     # home-manager options
     home-manager.useGlobalPkgs = true;
@@ -77,6 +77,11 @@ in {
     home-manager.users.${userName} = {
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
+
+      # Home Manager needs a bit of information about you and the
+      # paths it should manage.
+      home.username = userName;
+      home.homeDirectory = homeDirectory;
 
       # Setup dotfiles
       home.file = {

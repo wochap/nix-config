@@ -120,6 +120,8 @@ in {
         unstable.insomnia
         whatsapp-for-linux
       ];
+
+      shellAliases = { ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"''; };
     };
 
     home-manager.users.${userName} = {
