@@ -3,6 +3,7 @@
 let
   cfg = config._custom.waylandWm;
   userName = config._userName;
+  hmConfig = config.home-manager.users.${userName};
   swww-random = pkgs.writeTextFile {
     name = "swww-random";
     destination = "/bin/swww-random";
@@ -14,6 +15,11 @@ in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home = {
+        symlinks = {
+          "${hmConfig.home.homeDirectory}/Sync/backgrounds" =
+            "${hmConfig.home.homeDirectory}/Pictures/backgrounds";
+        };
+
         packages = [ swww swww-random ];
         sessionVariables = {
           SWWW_TRANSITION_TYPE = "simple";
