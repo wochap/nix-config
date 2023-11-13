@@ -6,10 +6,6 @@ let
   macosConfig = builtins.readFile ./dotfiles/kitty-macos.conf;
   linuxConfig = builtins.readFile ./dotfiles/kitty-linux.conf;
   userName = config._userName;
-  hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/gui/mixins/kitty";
 
   shellIntegrationInit = {
     bash = ''
@@ -81,8 +77,7 @@ in {
 
           ${builtins.readFile ./dotfiles/kitty-diff.conf}
         '';
-        "kitty/common.conf".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/kitty-common.conf";
+        "kitty/common.conf".source = ./dotfiles/kitty-common.conf;
         "kitty/kitty.conf".text = ''
           # Load theme
           include ${inputs.catppuccin-kitty}/themes/mocha.conf

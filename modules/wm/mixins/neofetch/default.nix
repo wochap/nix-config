@@ -1,12 +1,11 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, _customLib, ... }:
 
 let
   cfg = config._custom.wm.neofetch;
   userName = config._userName;
-  hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/wm/mixins/neofetch";
+  relativeSymlink = path:
+    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
+    (_customLib.runtimePath config._custom.globals.configDirectory path);
 in {
   options._custom.wm.neofetch = { enable = lib.mkEnableOption { }; };
 
@@ -21,8 +20,7 @@ in {
 
     home-manager.users.${userName} = {
       xdg.configFile = {
-        "neofetch/config.conf".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.conf";
+        "neofetch/config.conf".source = relativeSymlink ./dotfiles/config.conf;
       };
     };
   };

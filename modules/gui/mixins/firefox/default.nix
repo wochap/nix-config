@@ -4,10 +4,6 @@ let
   cfg = config._custom.gui.firefox;
   userName = config._userName;
   isWayland = config._displayServer == "wayland";
-  hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/gui/mixins/firefox";
 in {
   options._custom.gui.firefox = { enable = lib.mkEnableOption { }; };
 
@@ -23,9 +19,9 @@ in {
     home-manager.users.${userName} = {
       home.file = {
         ".mozilla/firefox/default/chrome/userChrome.css".source =
-          mkOutOfStoreSymlink "${currentDirectory}/assets/userChrome.css";
+          ./assets/userChrome.css;
         ".mozilla/firefox/default/chrome/customChrome.css".source =
-          mkOutOfStoreSymlink "${currentDirectory}/assets/customChrome.css";
+          ./assets/customChrome.css;
         ".mozilla/firefox/default/chrome/userContent.css".text = "";
       };
       programs.firefox = {

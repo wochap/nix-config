@@ -3,10 +3,6 @@
 let
   cfg = config._custom.tui.newsboat;
   userName = config._userName;
-  hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/tui/mixins/newsboat";
 
   qndl = pkgs.writeShellScriptBin "qndl" (builtins.readFile ./scripts/qndl.sh);
   linkhandler = pkgs.writeShellScriptBin "linkhandler"
@@ -21,10 +17,8 @@ in {
       xdg.configFile = {
         "newsboat/catppuccin-dark".source =
           "${inputs.catppuccin-newsboat}/themes/dark";
-        "newsboat/urls".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/urls";
-        "newsboat/config".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config";
+        "newsboat/urls".source = ./dotfiles/urls;
+        "newsboat/config".source = ./dotfiles/config;
       };
     };
   };

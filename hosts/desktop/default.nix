@@ -18,6 +18,7 @@ in {
     _userName = userName;
     _homeDirectory = "/home/${userName}";
     _configDirectory = configDirectory;
+    _custom.globals.configDirectory = configDirectory;
     _custom.globals.themeColors = catppuccinMochaTheme;
     _custom.globals.isHidpi = false;
 

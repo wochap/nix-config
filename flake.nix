@@ -128,6 +128,17 @@
 
   outputs = inputs:
     let
+      # https://github.com/nix-community/home-manager/issues/257#issuecomment-1646557848
+      _customLib = rec {
+        inherit (inputs.nixpkgs) lib;
+        runtimePath = runtimeRoot: path:
+          let
+            rootStr = toString inputs.self;
+            pathStr = toString path;
+          in assert lib.assertMsg (lib.hasPrefix rootStr pathStr)
+            "${pathStr} does not start with ${rootStr}";
+          runtimeRoot + lib.removePrefix rootStr pathStr;
+      };
       inherit (inputs.nixpkgs.lib) nixosSystem;
       inherit (inputs.darwin.lib) darwinSystem;
       mkSystem = systemFn: pkgs: system: hostname:
@@ -138,7 +149,7 @@
             ./packages
             (./. + "/hosts/${hostname}")
           ];
-          specialArgs = { inherit inputs; inherit system; nixpkgs = pkgs; };
+          specialArgs = { inherit inputs; inherit system; nixpkgs = pkgs; inherit _customLib; };
         };
     in
     {
