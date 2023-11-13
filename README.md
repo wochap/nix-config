@@ -3,12 +3,11 @@
 ![](https://i.imgur.com/wqC4Eur.jpg)
 ![](https://i.imgur.com/ZVmsJL5.jpg)
 
-Hardware drivers are managed by [NixOS](https://nixos.org/) config files.
-WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home-manager).
+[NixOS](https://nixos.org/) and [home-manager](https://github.com/nix-community/home-manager) config files are merged.
 
-`NixOS` and `home-manager` config files are merged.
+## Installaion
 
-## Install vanilla NixOS
+### Install vanilla NixOS
 
 1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
 
@@ -37,11 +36,21 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
 
    Install [enable gpu-switch on rEFInd](https://github.com/0xbb/gpu-switch#macbook-pro-113-and-115-notes)
 
-## Install device config
+### Install device config
 
 You probably want to press `Ctrl + Alt + F1`
 
-1. Reboot into vanilla NixOS and connect to wifi/ethernet
+1. Use local cachix, if you have 2 machines using the same nix config (optional)
+   ```
+   # Run on another machine, with nixos installed
+   $ nix-serve -p 8080
+
+   # On current/new machine, test
+   $ curl http://192.168.x.x:8080/nix-cache-info
+   ```
+   On the current/new machine, update `nix.binaryCaches` config, add `http://192.168.x.x:8080`
+
+1. Reboot into vanilla NixOS and connect to internet
 
    ```
    # The following commands will work if you enabled `networking.networkmanager.enable = true;`
@@ -70,27 +79,17 @@ You probably want to press `Ctrl + Alt + F1`
 
    ```
    # Go to nix-config folder
-   $ cd /home/gean/nix-config
+   $ cd /home/<username>/nix-config
    $ NIXOS_INSTALL_BOOTLOADER=1 sudo --preserve-env=NIXOS_INSTALL_BOOTLOADER nixos-rebuild boot --flake .#desktop
    # Reboot
    ```
 
-1. Set password for new user `gean`
+1. Set password for new user `<username>`
    ```
    $ passwd gean
    ```
 
-## Setup NixOS
-
-1. Use local cachix (optional)
-   ```
-   # Run on local machine with nixos installed
-   $ nix-serve -p 8080
-
-   # On new machine, test
-   $ curl http://192.168.x.x:8080/nix-cache-info
-   ```
-   On the new machine, update `nix.binaryCaches`, add `http://192.168.x.x:8080`
+### After install
 
 1. Copy `.ssh` backup folder to `/home/gean/.ssh`
    ```
@@ -115,10 +114,11 @@ You probably want to press `Ctrl + Alt + F1`
 1. Setup Syncthing (http://localhost:8384)
 1. Setup backgrounds
    ```
-   $ ln -s ~/Sync/backgrounds ~/Pictures/backgrounds
+   # modules/wayland-wm/mixins/swww/default.nix do the symlink
+   # $ ln -s ~/Sync/backgrounds ~/Pictures/backgrounds
    $ swww img ~/Pictures/backgrounds/<IMAGE_NAME>
    ```
-1. Setup [NeoVim](https://github.com/wochap/nvim), with ansible
+1. Setup [Neovim](https://github.com/wochap/nvim)
    ```
    $ rm -rf ~/.local/share/nvim ~/.cache/nvim
    $ nvim
@@ -150,8 +150,8 @@ You probably want to press `Ctrl + Alt + F1`
    $ touch ~/.config/remind/remind.rem
    ```
 
-1. [Waydroid](https://nixos.wiki/wiki/WayDroid)
-1. [Flatpak](https://nixos.wiki/wiki/Flatpak)
+1. [Waydroid](https://nixos.wiki/wiki/WayDroid) (optional)
+1. [Flatpak](https://nixos.wiki/wiki/Flatpak) (optional)
 
 1. Steam
    Run steam, login, setup proton.
@@ -177,7 +177,7 @@ $ sudo nixos-rebuild boot --flake .#dekstop
 
 ## Development Workflow
 
-1. Setup a project with [nix-direnv](https://github.com/nix-community/nix-direnv)
+* Setup a project with [nix-direnv](https://github.com/nix-community/nix-direnv)
 
    ```
    $ nix flake new -t github:nix-community/nix-direnv ./
@@ -187,7 +187,7 @@ $ sudo nixos-rebuild boot --flake .#dekstop
 
 ## Tools
 
-1. Script for using phone webcam
+* Script for using phone webcam
    ```
    $ run-videochat -i <ip> -v
    ```
