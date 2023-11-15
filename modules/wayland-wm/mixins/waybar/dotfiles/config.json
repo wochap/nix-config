@@ -9,7 +9,6 @@
     "custom/mbpfan",
     "temperature",
     "battery",
-    "backlight",
     "pulseaudio",
     "bluetooth",
     "network",
@@ -23,7 +22,8 @@
   "custom/mbpfan": {
     "interval": 1,
     "exec": "/etc/scripts/mbpfan-bar.sh --read",
-    "on-click": "/etc/scripts/mbpfan-bar.sh --toggle &"
+    "on-click": "/etc/scripts/mbpfan-bar.sh --toggle &",
+    "tooltip": false
   },
   "custom/scratchpad_indicator": {
     "interval": 1,
@@ -158,13 +158,14 @@
     "tooltip-format-enumerate-connected": "{device_alias} {device_address}"
   },
   "network": {
-    "format-wifi": "",
+    "format-wifi": "<span rise='-1000'>{icon}</span>",
     "format-ethernet": "󰈁",
     "format-ethernet-disconnected": "󰈂",
     "format-linked": "󰈁",
     "format-disconnected": "",
     "format-alt": "{ipaddr}",
-    "tooltip-format": "{essid} {signalStrength}% {ipaddr}"
+    "tooltip-format": "{essid} {signalStrength}% {ipaddr}",
+    "format-icons": [""]
   },
   "pulseaudio": {
     "format": "<span rise='-1000'>{icon}</span> {volume}%",
