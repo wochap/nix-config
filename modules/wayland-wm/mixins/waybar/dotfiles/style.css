@@ -215,6 +215,10 @@ tooltip label {
   background: transparent;
 }
 
+#network.wifi {
+  padding-top: 0;
+}
+
 /*
 vim: syntax=less
 */
