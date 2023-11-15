@@ -129,7 +129,9 @@
     "spacing": 10
   },
   "clock": {
-    "format": "<span rise='-1000'></span> {:%a %b %d %I:%M %p}"
+    "format": "<span rise='-1000'></span> {:%H:%M}",
+    "tooltip": true,
+    "tooltip-format": "{:%a %b %d %I:%M %p}"
   },
   "backlight": {
     "format": "<span rise='-1000'>{icon}</span> {percent}%",
@@ -151,18 +153,18 @@
     "format": "󰂯",
     "format-disabled": "󰂲",
     "format-connected": "󰂱 {num_connections}",
-    "tooltip-format": "{controller_alias}\t{controller_address}",
-    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
-    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
+    "tooltip-format": "{controller_alias} {controller_address}",
+    "tooltip-format-connected": "{controller_alias} {controller_address}\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias} {device_address}"
   },
   "network": {
-    "format-wifi": " {essid}",
-    "format-ethernet": "󰈀 {ipaddr}",
-    "format-ethernet-disconnected": "󰈀 hehe",
-    "format-linked": "󰈀 (No IP)",
+    "format-wifi": "",
+    "format-ethernet": "󰈁",
+    "format-ethernet-disconnected": "󰈂",
+    "format-linked": "󰈁",
     "format-disconnected": "",
     "format-alt": "{ipaddr}",
-    "tooltip-format": "{essid} {signalStrength}%"
+    "tooltip-format": "{essid} {signalStrength}% {ipaddr}"
   },
   "pulseaudio": {
     "format": "<span rise='-1000'>{icon}</span> {volume}%",

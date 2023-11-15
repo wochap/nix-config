@@ -88,8 +88,8 @@ window#waybar.hidden {
   color: @comment;
 }
 #custom-dwl_tag {
-  padding: 0.15em 0.7em 0;
-  background-color: @module_bg;
+  padding: 0.15em 0.5em 0;
+  background-color: transparent;
   color: @comment;
 }
 #tags button,
@@ -107,8 +107,7 @@ window#waybar.hidden {
 #tags button.focused,
 #workspaces button.active,
 #workspaces button.focused {
-  color: @bar_bg;
-  background-color: @primary;
+  color: @primary;
 }
 #custom-dwl_tag.urgent,
 #tags button.urgent,
@@ -209,6 +208,11 @@ tooltip {
 }
 tooltip label {
   color: @foreground;
+}
+
+#custom-dwl_title,
+#clock {
+  background: transparent;
 }
 
 /*
