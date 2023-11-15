@@ -1,13 +1,13 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, _customLib, ... }:
 
 let
   cfg = config._custom.wm.music;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/wm/mixins/music";
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
+  relativeSymlink = path:
+    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
+    (_customLib.runtimePath config._custom.globals.configDirectory path);
 in {
   options._custom.wm.music = { enable = lib.mkEnableOption { }; };
 
@@ -17,25 +17,24 @@ in {
 
     home-manager.users.${userName} = {
       home.packages = with pkgs; [
-        cava
-        mpc_cli
-        ncmpcpp
+        cava # visualizer
+        mpc_cli # mpd cli
+        (pkgs.ncmpcpp.override {
+          visualizerSupport = true;
+          clockSupport = true;
+          taglibSupport = true;
+        })
         playerctl # media player cli
-        sacad
+        sacad # search and download album covert
         unstable.ueberzugpp
       ];
 
       xdg.configFile = {
+        "cava/config".source = relativeSymlink ./dotfiles/cava/config;
+
         # "ncmpcpp/ncmpcpp-ueberzug/fallback.jpg".source =
         #   ../../../mixins/lightdm/assets/wallpaper.jpg;
-
-        # cava audio visualizer
-        "cava/config".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/cava/config";
-
-        # ncmpcpp config
-        "ncmpcpp/config".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/ncmpcpp/config";
+        "ncmpcpp/config".source = relativeSymlink ./dotfiles/ncmpcpp/config;
         "ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh" = {
           recursive = true;
           executable = true;
@@ -54,23 +53,25 @@ in {
       # music player daemon
       services.mpd = {
         enable = true;
-        musicDirectory = musicDirectory;
+        inherit musicDirectory;
+        extraArgs = [ "--verbose" ];
         network = {
-          # listenAddress = "any";
+          listenAddress = "127.0.0.1";
           port = 6600;
-          startWhenNeeded = true;
+          startWhenNeeded = false;
         };
         extraConfig = ''
+          auto_update "yes"
           restore_paused "yes"
 
           audio_output {
             type "pipewire"
-            name "My PipeWire Output"
+            name "PipeWire output"
           }
 
           audio_output {
+            name "Visualizer feed"
             type "fifo"
-            name "my_fifo"
             path "/tmp/mpd.fifo"
             format "44100:16:2"
           }

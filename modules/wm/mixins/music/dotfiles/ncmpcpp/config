@@ -1,82 +1,73 @@
+# inspiration: https://raw.githubusercontent.com/gh0stzk/dotfiles/master/config/ncmpcpp/config
+
 # Artwork
 # TODO: artwork doesnt disappear
 # execute_on_song_change="~/.config/ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh"
 # song_list_format = "$3%n $2• $8%y $2• $5%b $8%t $R$0%A $2• $2%l                      "
 
-# Files
-mpd_music_dir = "~/Music"
-lyrics_directory  = ~/.config/ncmpcpp/lyrics
-ncmpcpp_directory  = ~/.config/ncmpcpp
-mpd_host = "localhost"
-mpd_port = "6600"
+# Settings
+default_place_to_search_in = "database"
+empty_tag_marker = "-"
+external_editor = "nvim"
+use_console_editor = "yes"
+ignore_leading_the = "yes"
+lyrics_directory = "~/.config/ncmpcpp/lyrics"
 mpd_connection_timeout = "5"
 mpd_crossfade_time = "5"
+mpd_host = "localhost"
+mpd_music_dir = "~/Music"
+mpd_port = "6600"
+ncmpcpp_directory = "~/.config/ncmpcpp"
+regular_expressions = "extended"
+system_encoding = "utf-8"
+jump_to_now_playing_song_at_start = "yes"
 
-# Display classic
-alternative_header_first_line_format = "$0$aqqu$/a {$7%a - $9}{$0%t$9}|{$8%f$9} $0$atqq$/a$9"
-alternative_header_second_line_format = "{{$5%b$9}{ [$6%y$9]}}|{%D}"
-now_playing_prefix = "$b$2> "
-now_playing_suffix = "$8$/b"
-playlist_display_mode = "classic"
-song_list_format = "$3%n $0• $6%y $0• $5%b $0%t $R{$7%A}|{$7%a} $0• $2%l"
-user_interface = "alternative"
-
-# Display columns
-# playlist_display_mode = "columns"
-# song_columns_list_format = ""
-# song_status_format = "$b $8%a $8•$3• $3%t $3•$5• $5%b $5•$2• $2%y"
-# user_interface = "classic"
+# Visualizer
+# startup_slave_screen = "visualizer"
+visualizer_color = "33,39,63,75,81,99,117,153,189"
+visualizer_data_source = "/tmp/mpd.fifo"
+visualizer_in_stereo = "no"
+visualizer_output_name = "Visualizer feed"
+visualizer_spectrum_dft_size = "5"
+visualizer_spectrum_smooth_look = "no"
+visualizer_type = "spectrum"
+visualizer_look = "││"
+# visualizer_look = "▋▋"
 
 # Theme
-browser_display_mode = "columns"
-colors_enabled = "yes"
-header_window_color = "white"
+active_window_border = "blue"
+centered_cursor = "yes"
+autocenter_mode = "no"
+connected_message_on_startup = "no"
+current_item_prefix = "$b$(blue)$(end)  "
+current_item_suffix = "$/b"
+display_bitrate = "no"
+locked_screen_width_part = "50"
 main_window_color = "white"
+now_playing_prefix = "$b$(blue)$(end)  "
+now_playing_suffix = "$/b"
+player_state_color = "246_" # gray
+playlist_display_mode = "columns"
+browser_display_mode = "columns"
+search_engine_display_mode = "columns"
+playlist_editor_display_mode = "columns"
 progressbar_color = "black"
 progressbar_elapsed_color = "blue"
 progressbar_look =  "━━━"
+startup_screen = "playlist"
 statusbar_color = "white"
-volume_color = "red"
+statusbar_time_color = "246_" # gray
+window_border_color = "blue"
 
-# Playlist
-browser_playlist_prefix = "$2 ♥ $0 "
-playlist_disable_highlight_delay = "1"
-playlist_show_remaining_time = "yes"
-
-## Navigation ##
-cyclic_scrolling = "yes"
-header_text_scrolling = "yes"
-jump_to_now_playing_song_at_start = "yes"
-lines_scrolled = "2"
-
-## Selected tracks ##
-discard_colors_if_item_is_selected = "yes"
-selected_item_prefix = "* "
-
-## Seeking ##
-incremental_seeking = "yes"
-seek_time = "1"
-
-## Visivility ##
+# UI visibility
 header_visibility = "no"
 statusbar_visibility = "yes"
 titles_visibility = "yes"
+enable_window_title = "yes"
 
-# Misc
-centered_cursor = "yes"
-connected_message_on_startup = "no"
-display_bitrate = "no"
-empty_tag_marker = "-"
-enable_window_title = "no"
-ignore_leading_the = "yes"
-
-## Other ##
-regular_expressions = "extended"
-system_encoding = "utf-8"
-default_place_to_search_in = "database"
-
-# Lyrics
-# follow_now_playing_lyrics = "yes"
-# lyrics_database = "1"
-# follow_now_playing_lyrics = "yes"
+# Theme formats
+# song_columns_list_format = "(50)[]{t|f:Title}  (30)[231]{ar}  (5f)[blue]{lr}(50f)[]{: }"
+song_columns_list_format = "(50)[]{t|f:Title}  (30)[231]{ar}  (5f)[blue]{lr}"
+song_status_format = "{%t - }|{%f - }{%a}{ (%b)}"
+song_window_title_format = "Now Playing ... {%t - }|{%f - }{%a}{ (%b)}"
 
