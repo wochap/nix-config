@@ -3,14 +3,20 @@
 @define-color bar_bg @background;
 @define-color module_bg #313244;
 
+* {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+tooltip,
 window#waybar {
   background-color: @bar_bg;
   color: @foreground;
   font-family:
-    Iosevka Nerd Font,
-    woos,
-    sans-serif;
+    Iosevka NF,
+    woos;
   font-size: 10pt;
+  font-weight: 500;
 }
 
 window#waybar > box.horizontal {
@@ -197,7 +203,12 @@ window#waybar.hidden {
   color: @orange;
 }
 
-#custom-dwl_title {
+tooltip {
+  border-radius: 4px;
+  border: none;
+}
+tooltip label {
+  color: @foreground;
 }
 
 /*
