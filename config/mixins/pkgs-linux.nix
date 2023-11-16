@@ -92,6 +92,7 @@ in {
         graphicsmagick # image editor
 
         # TUI APPS
+        ncdu # disk usage
         pulsemixer # pulseaudio
         tty-clock # clock
         unstable.ueberzugpp # images in terminal
