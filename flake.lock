@@ -499,6 +499,23 @@
         "type": "github"
       }
     },
+    "fuzzy-sys": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1680769463,
+        "narHash": "sha256-zUiavHjovWbDNuqAKb7svH7iyyHVy8sTEFv9D4+Hnuk=",
+        "owner": "NullSense",
+        "repo": "fuzzy-sys",
+        "rev": "ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NullSense",
+        "repo": "fuzzy-sys",
+        "rev": "ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -1251,6 +1268,7 @@
         "darwin": "darwin",
         "dracula-lsd": "dracula-lsd",
         "fontpreview-ueberzug": "fontpreview-ueberzug",
+        "fuzzy-sys": "fuzzy-sys",
         "home-manager": "home-manager",
         "home-manager-darwin": "home-manager-darwin",
         "hyprland": "hyprland",

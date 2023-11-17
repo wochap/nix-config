@@ -40,6 +40,7 @@ in {
           ${builtins.readFile ./config.zsh}
           ${builtins.readFile ./nnn.zsh}
           ${builtins.readFile ./functions.zsh}
+          source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
 
           # load function completions in /share/zsh folder
           zmodload zsh/complist
