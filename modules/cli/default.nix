@@ -3,6 +3,7 @@
 {
   imports = [
     ./mixins/bat
+    ./mixins/buku
     ./mixins/cht
     ./mixins/git
     ./mixins/nix-alien

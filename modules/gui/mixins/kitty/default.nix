@@ -124,6 +124,11 @@ in {
           recursive = true;
           executable = true;
         };
+        "kitty/scripts/kitty-buku.sh" = {
+          source = ./scripts/kitty-buku.sh;
+          recursive = true;
+          executable = true;
+        };
 
         # kittens
         "kitty/pass_keys.py" = {
