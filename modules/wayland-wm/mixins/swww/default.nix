@@ -16,8 +16,8 @@ in {
     home-manager.users.${userName} = {
       home = {
         symlinks = {
-          "${hmConfig.home.homeDirectory}/Sync/backgrounds" =
-            "${hmConfig.home.homeDirectory}/Pictures/backgrounds";
+          "${hmConfig.home.homeDirectory}/Pictures/backgrounds" =
+            "${hmConfig.home.homeDirectory}/Sync/backgrounds";
         };
 
         packages = [ swww swww-random ];
