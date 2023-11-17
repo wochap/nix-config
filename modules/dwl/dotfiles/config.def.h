@@ -79,6 +79,7 @@ static const Rule rules[] = {
 	{ "kitty-neomutt",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'e',       0,      0 },
 	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   1200, 800,    'r',       0,      0 },
 	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u',       0,      0 },
+	{ "kitty-buku",              NULL,       0,         1,          -1,      0,   0,   1200, 800,    0,         0,      0 },
 
 	{ "^kitty-dangerp$",         NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
@@ -453,6 +454,9 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, togglescratch, {.v = kittyneomuttcmd}),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, togglescratch, {.v = kittynewsboatcmd}),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, togglescratch, {.v = kittyncmpcppcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --select")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --add")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --edit")),
   { TUI, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 };
 
