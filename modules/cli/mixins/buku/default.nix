@@ -13,8 +13,7 @@ let
 in {
   options._custom.cli.buku = { enable = lib.mkEnableOption { }; };
 
-  # config = lib.mkIf cfg.enable {
-  config = {
+  config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home = {
         packages = with pkgs; [ buku buku-fzf sqlite ];
