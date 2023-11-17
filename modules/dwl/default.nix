@@ -72,7 +72,7 @@ in {
       ];
 
       sessionVariables = {
-        XDG_CURRENT_DESKTOP = "dwl";
+        XDG_CURRENT_DESKTOP = "wlroots";
         XDG_SESSION_DESKTOP = "dwl";
       };
 

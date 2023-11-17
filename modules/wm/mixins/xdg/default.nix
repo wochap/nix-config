@@ -57,6 +57,12 @@ in {
       xdg.systemDirs.data = [ "/usr/share" "/usr/local/share" ];
 
       xdg.configFile."mimeapps.list".force = true;
+      xdg.configFile."xdg-desktop-portal-wlr/config".text = ''
+        [screencast]
+        max_fps=30
+        chooser_type=simple
+        chooser_cmd=slurp -f %o -or
+      '';
 
       xdg.mimeApps = {
         enable = true;
