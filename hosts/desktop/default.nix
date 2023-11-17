@@ -23,6 +23,7 @@ in {
     _custom.globals.isHidpi = false;
 
     _custom.cli.bat.enable = true;
+    _custom.cli.buku.enable = true;
     _custom.cli.cht.enable = true;
     _custom.cli.git.enable = true;
     _custom.cli.nix-alien.enable = true;
