@@ -22,10 +22,25 @@ in {
     _displayServer = "wayland";
     _custom.globals.displayServer = "wayland";
 
+    nixpkgs.overlays = [
+      (final: prev: {
+        showmethekey = prev.showmethekey.overrideAttrs (oldAttrs: {
+          src = prev.fetchFromGitHub {
+            owner = "AlynxZhou";
+            repo = "showmethekey";
+            rev = "6204cf1d4794578372c273348daa342589479b13";
+            hash = "sha256-eeObomb4Gv/vpvViHsi3+O0JR/rYamrlZNZaXKL6KJw=";
+          };
+          buildInputs = oldAttrs.buildInputs ++ [ prev.libadwaita ];
+        });
+      })
+    ];
+
     environment = {
       systemPackages = with pkgs; [
         wdisplays # control display outputs
         wlr-randr
+        showmethekey
       ];
 
       sessionVariables = {
