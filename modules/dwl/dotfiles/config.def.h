@@ -47,6 +47,21 @@ static const char *const autostart[] = {
 /* logging */
 static int log_level = WLR_ERROR;
 
+/* named scratchpads - First arg only serves to match against key in rules*/
+static const char *msgptscratchcmd[] = { "g", "microsoft-edge", "--app=https://www.bing.com/search?q=q&showconv=1", NULL };
+static const char *chatgptscratchcmd[] = { "c", "google-chrome-stable", "--app=https://chat.openai.com", NULL };
+static const char *fmscratchcmd[] = { "f", "thunar", "--name", "thunar-scratch", NULL };
+static const char *kittytopcmd[] = { "m", "bash", "-c", "~/.config/kitty/scripts/kitty-top.sh", NULL };
+static const char *kittyscratchcmd[] = { "i", "bash", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
+static const char *kittyneorgcmd[] = { "n", "bash", "-c", "~/.config/kitty/scripts/kitty-neorg.sh", NULL };
+// static const char *kittynmtuicmd[] = { "w", "bash", "-c", "~/.config/kitty/scripts/kitty-nmtui.sh", NULL };
+static const char *kittyneomuttcmd[] = { "e", "bash", "-c", "~/.config/kitty/scripts/kitty-neomutt.sh", NULL };
+static const char *kittynewsboatcmd[] = { "r", "bash", "-c", "~/.config/kitty/scripts/kitty-newsboat.sh", NULL };
+static const char *kittyncmpcppcmd[] = { "u", "bash", "-c", "~/.config/kitty/scripts/kitty-ncmpcpp.sh", NULL };
+
+static const char bing_gpt_appid[] = "msedge-www.bing.com__search-Default";
+static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
+
 static const Rule rules[] = {
 	/* app_id                    title       tags mask  isfloating  monitor  x    y    width height  scratchkey isterm  noswallow */
 	/* examples:
@@ -64,6 +79,8 @@ static const Rule rules[] = {
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0,         0,      -1 },
 	{ NULL, "meet.google.com is sharing your screen.", 0, 1,        -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ bing_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'g',       0,      0 },
+	{ chat_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'c',       0,      0 },
 
 	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
 	{ "google-chrome",           NULL,       1 << 0,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
@@ -205,16 +222,6 @@ static const char *termcmd[] = { "kitty", NULL };
 static const char *menucmd[] = { "tofi-launcher", NULL };
 
 #include "shiftview.c"
-
-/* named scratchpads - First arg only serves to match against key in rules*/
-static const char *fmscratchcmd[] = { "f", "thunar", "--name", "thunar-scratch", NULL };
-static const char *kittytopcmd[] = { "m", "bash", "-c", "~/.config/kitty/scripts/kitty-top.sh", NULL };
-static const char *kittyscratchcmd[] = { "i", "bash", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
-static const char *kittyneorgcmd[] = { "n", "bash", "-c", "~/.config/kitty/scripts/kitty-neorg.sh", NULL };
-// static const char *kittynmtuicmd[] = { "w", "bash", "-c", "~/.config/kitty/scripts/kitty-nmtui.sh", NULL };
-static const char *kittyneomuttcmd[] = { "e", "bash", "-c", "~/.config/kitty/scripts/kitty-neomutt.sh", NULL };
-static const char *kittynewsboatcmd[] = { "r", "bash", "-c", "~/.config/kitty/scripts/kitty-newsboat.sh", NULL };
-static const char *kittyncmpcppcmd[] = { "u", "bash", "-c", "~/.config/kitty/scripts/kitty-ncmpcpp.sh", NULL };
 
 #include "keys.h"
 static const Key keys[] = {
@@ -446,6 +453,8 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, RUN("brave")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, RUN("google-chrome-stable")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, RUN("microsoft-edge")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, togglescratch, {.v = msgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, togglescratch, {.v = chatgptscratchcmd}),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Terminal TUI
