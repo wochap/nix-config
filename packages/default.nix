@@ -12,6 +12,7 @@ let
       pkgs.callPackage ./interception-both-shift-capslock { };
     mailnotify = pkgs.callPackage ./mailnotify.nix { };
     mangadesk = pkgs.callPackage ./mangadesk.nix { };
+    matcha = pkgs.callPackage ./matcha.nix { };
     nwg-look = pkgs.callPackage ./nwg-look { };
     offlinemsmtp = pkgs.callPackage ./offlinemsmtp.nix { };
     ptsh = pkgs.callPackage ./ptsh { };

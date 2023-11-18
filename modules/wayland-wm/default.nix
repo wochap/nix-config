@@ -40,6 +40,7 @@ in {
       systemPackages = with pkgs; [
         wdisplays # control display outputs
         wlr-randr
+        _custom.matcha
         showmethekey
       ];
 
