@@ -130,8 +130,9 @@
   },
   "clock": {
     "format": "<span rise='-1000'></span> {:%H:%M}",
+    "format-alt": "{:%a %d %b %H:%M}",
     "tooltip": true,
-    "tooltip-format": "{:%a %b %d %I:%M %p}"
+    "tooltip-format": "{:%a %d %b %H:%M}"
   },
   "backlight": {
     "format": "<span rise='-1000'>{icon}</span> {percent}%",
