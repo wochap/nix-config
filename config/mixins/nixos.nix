@@ -34,12 +34,15 @@ in {
 
   config = {
     boot = {
+      # Bootloader
       loader = {
-        grub.configurationLimit = 42;
-        grub.efiSupport = true;
-        grub.useOSProber = true;
+        grub.enable = false;
+        systemd-boot.enable = true;
         systemd-boot.configurationLimit = 42;
+        efi.canTouchEfiVariables = true;
       };
+
+      tmp.cleanOnBoot = true;
 
       # Enable support for ntfs disks
       supportedFilesystems = [ "ntfs" ];

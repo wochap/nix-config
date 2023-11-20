@@ -92,7 +92,6 @@ in {
     _custom.services.gnome-keyring.enable = true;
     _custom.services.syncthing.enable = true;
 
-    _custom.hardware.efi.enable = true;
     _custom.hardware.amdCpu.enable = true;
     _custom.hardware.amdGpu.enable = true;
     _custom.hardware.amdGpu.enableSouthernIslands = false;
