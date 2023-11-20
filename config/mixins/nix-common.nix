@@ -12,12 +12,6 @@ in {
       [ "nodejs-14.21.3" "openssl-1.1.1u" "openssl-1.1.1v" ];
 
     nix = {
-      # Enable flakes
-      package = pkgs.nixUnstable;
-      extraOptions = ''
-        experimental-features = nix-command flakes recursive-nix
-      '';
-
       gc.automatic = true;
 
       # pin the registry to avoid downloading and evaling a new nixpkgs version every time
@@ -27,7 +21,10 @@ in {
         lib.mapAttrsToList (key: _: "${key}=flake:${key}") config.nix.registry;
 
       settings = {
-        # Clear nixos store
+        # Enable flakes
+        experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
+
+        # Auto clear nixos store
         auto-optimise-store = true;
 
         # Enable cachix
@@ -73,6 +70,7 @@ in {
     # home-manager options
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = false;
+    home-manager.backupFileExtension = "bak";
 
     home-manager.users.${userName} = {
       # Let Home Manager install and manage itself.
