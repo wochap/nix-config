@@ -7,19 +7,21 @@
 
 ## Installaion
 
-### Install vanilla NixOS
+### Install NixOS
 
-1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
+1. Follow the [manual](https://nixos.org/manual/nixos/stable/) and install NixOS with the GNOME Desktop Environment and reboot.
 
-   The initial config must have: `user config`, `flakes`, `cachix`, `git`, `videoDrivers`, `internet setup`
+1. Update the generated nixos configuration in `/etc/nixos/configuration.nix`.
 
-   Initial [configuration.nix](configuration-example.nix) example
+   The new configuration must have: user configuration, `flakes` enabled, `cachix` (optional), `git`, `git-crypt`, internet setup, `firewall` disabled
 
-   **NOTE:** Run `sudo nixos-install`
+   Check the [configuration.nix](configuration-example.nix) example
 
 1. Extra steps for MacBook Pro 11,5 or if you dual boot (optional)
 
    (MacBook Pro 11,5) To enable Intel GPU, you must install rEFInd and enable some options...
+
+   1. rEFInd installation:
 
    ```sh
    sudo mkdir -p /boot/EFI/boot/
@@ -31,14 +33,12 @@
    ./bin/refind-install
    ```
 
-   Install [rEFInd-catppuccin](https://github.com/catppuccin/refind)
+   1. Install [rEFInd-catppuccin](https://github.com/catppuccin/refind)
    ~~Install [rEFInd-minimal](https://github.com/evanpurkhiser/rEFInd-minimal)~~
 
-   Install [enable gpu-switch on rEFInd](https://github.com/0xbb/gpu-switch#macbook-pro-113-and-115-notes)
+   1. Install [enable gpu-switch on rEFInd](https://github.com/0xbb/gpu-switch#macbook-pro-113-and-115-notes)
 
 ### Install device config
-
-You probably want to press `Ctrl + Alt + F1`
 
 1. Use local cachix, if you have 2 machines using the same nix config (optional)
    ```
@@ -48,9 +48,9 @@ You probably want to press `Ctrl + Alt + F1`
    # On current/new machine, test
    $ curl http://192.168.x.x:8080/nix-cache-info
    ```
-   On the current/new machine, update `nix.binaryCaches` config, add `http://192.168.x.x:8080`
+   On the current/new machine, update `nix.settings.substituters` config, add `http://192.168.x.x:8080`
 
-1. Reboot into vanilla NixOS and connect to internet
+1. Reboot into NixOS and connect to internet
 
    ```
    # The following commands will work if you enabled `networking.networkmanager.enable = true;`
@@ -65,26 +65,24 @@ You probably want to press `Ctrl + Alt + F1`
    # add `nameserver 8.8.8.8` to `/etc/resolv.conf`
    ```
 
-1. Login with root user and clone into `~/nix-config`
+1. Login with your user and clone into `~/nix-config`
    ```
    $ git clone https://github.com/wochap/nix-config.git ~/nix-config
    ```
 1. Rebuild nixos with the device's specific config, for example, heres's a rebuild for my `desktop`
 
-   **IMPORTANT:** On clean install, update/add harware-configuration.nix in this repository
-
-   **NOTE:** Env vars are required on first install https://github.com/NixOS/nixpkgs/issues/97433#issuecomment-689554709
-
-   **WARNING:** First `nixos-rebuild` with device config can take several hours, maybe you want to disable some features
+   **WARNING:** First `nixos-rebuild` with device config can take several hours, maybe you want to disable some modules
 
    ```
    # Go to nix-config folder
    $ cd /home/<username>/nix-config
-   $ NIXOS_INSTALL_BOOTLOADER=1 sudo --preserve-env=NIXOS_INSTALL_BOOTLOADER nixos-rebuild boot --flake .#desktop
+   $ nixos-rebuild boot --flake .#desktop
    # Reboot
    ```
 
-1. Set password for new user `<username>`
+   **NOTE:** If you see an error related to home-manager, it is probably because there's a file collision and you need to remove a file.
+
+1. Set password for new user `<username>` if you haven't
    ```
    $ passwd gean
    ```
@@ -93,7 +91,6 @@ You probably want to press `Ctrl + Alt + F1`
 
 1. Copy `.ssh` backup folder to `/home/gean/.ssh`
    ```
-   $ ssh-keygen -m PEM -t rsa -b 4096 -C "email@email.com"
    $ chmod 600 ~/.ssh/*
    $ ssh-add <PATH_TO_PRIVATE_KEY>
    ```
@@ -107,23 +104,20 @@ You probably want to press `Ctrl + Alt + F1`
    $ gpg --import private.key
    ```
 1. If you are using nixos on mbp
-   [Disable startup sound](https://gist.github.com/0xbb/ae298e2798e1c06d0753)
-   ```
-   $ sudo ln -s ~/nix-config/modules/services/mixins/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
-   ```
+
+   1. [Disable startup sound](https://gist.github.com/0xbb/ae298e2798e1c06d0753)
+
+   1. Run the following command to use mbpfan module in waybar
+
+      ```
+      $ sudo ln -s ~/nix-config/modules/services/mixins/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
+      ```
 1. Setup Syncthing (http://localhost:8384)
 1. Setup backgrounds
    ```
-   # modules/wayland-wm/mixins/swww/default.nix do the symlink
-   # $ ln -s ~/Sync/backgrounds ~/Pictures/backgrounds
    $ swww img ~/Pictures/backgrounds/<IMAGE_NAME>
    ```
-1. Setup [Neovim](https://github.com/wochap/nvim)
-   ```
-   $ rm -rf ~/.local/share/nvim ~/.cache/nvim
-   $ nvim
-   ```
-1. Disable IPv6 in the NetworkManager Applet/Tray icon
+1. Setup [Neovim](https://github.com/wochap/nvim) configuration
 1. Setup qt look and feel
    Open `Qt5 Settings` and update theme and icons
 1. Setup betterdiscord (optional)
@@ -155,15 +149,6 @@ You probably want to press `Ctrl + Alt + F1`
 
 1. Steam
    Run steam, login, setup proton.
-1. ~~Setup [Flatpak](https://flatpak.org/setup/NixOS/)~~
-
-   ```
-   $ sudo flatpak override com.stremio.Stremio --env=QT_AUTO_SCREEN_SCALE_FACTOR=0
-   $ sudo flatpak override com.stremio.Stremio --env=QT_SCALE_FACTOR=1.5
-   $ sudo flatpak override com.stremio.Stremio --env=QT_FONT_DPI=144
-   $ sudo flatpak override com.stremio.Stremio --env=XCURSOR_SIZE=40
-   $ sudo flatpak --user override com.stremio.Stremio --filesystem=/home/gean/.icons/:ro
-   ```
 
 ## Upgrating NixOS
 
@@ -173,6 +158,13 @@ Update inputs on `flake.nix`, then:
 $ cd /home/gean/nix-config
 $ nix flake update --recreate-lock-file
 $ sudo nixos-rebuild boot --flake .#dekstop
+```
+
+Fix bootloader (optional):
+
+```sh
+# https://github.com/NixOS/nixpkgs/issues/97433#issuecomment-689554709
+$ NIXOS_INSTALL_BOOTLOADER=1 sudo --preserve-env=NIXOS_INSTALL_BOOTLOADER nixos-rebuild boot --flake .#desktop
 ```
 
 ## Development Workflow
@@ -311,7 +303,8 @@ $ sudo gpu-switch -i
    ```
 
 * [Cannot add google account in gnome > online accounts](https://github.com/NixOS/nixpkgs/issues/32580)
-   In gmail settings, enable IMAP
+
+  In gmail settings, enable IMAP
 
 ## Resources
 
