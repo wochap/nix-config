@@ -37,6 +37,10 @@ in {
 
           # required by nvim-dap
           _custom.customNodePackages.ts-node
+
+          # required by nvim-lspconfig
+          _custom.customNodePackages.typescript
+          _custom.customNodePackages."@styled/typescript-styled-plugin"
         ] ++ (lib.optionals (!isDarwin) [ unstable.neovide ]);
     };
 
