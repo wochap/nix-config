@@ -21,7 +21,7 @@ let
     usbfluxd = pkgs.callPackage ./usbfluxd.nix { };
     customNodePackages = lib.dontRecurseIntoAttrs
       (pkgs.callPackage ./custom-node-packages {
-        nodejs = pkgs.prevstable-nodejs.nodejs-14_x;
+        nodejs = pkgs.prevstable-nodejs.nodejs_20;
       });
   };
 in {
