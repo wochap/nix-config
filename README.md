@@ -155,6 +155,7 @@
 1. [Flatpak](https://nixos.wiki/wiki/Flatpak) (optional)
 
 1. Steam
+
    Run steam, login, setup proton.
 
 ## Upgrating NixOS
