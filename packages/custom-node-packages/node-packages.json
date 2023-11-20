@@ -1,14 +1,7 @@
 [
-  "@fsouza/prettierd",
-  "@olrtg/emmet-language-server",
-  "@tailwindcss/language-server",
-  "cssmodules-language-server",
-  "eas-cli",
-  "markdownlint",
+  "@styled/typescript-styled-plugin",
   { "migrate-mongo": "9.0.0" },
-  "stylelint",
   "ts-node",
   "typescript",
-  "typescript-language-server",
   "webtorrent-cli"
 ]
