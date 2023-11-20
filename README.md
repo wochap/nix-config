@@ -138,10 +138,17 @@
 1. Setup calendar
 
    A browser should open automatically asking for google credentials, otherwise run:
-   ```
+   ```sh
    $ vdirsyncer discover
    $ mkdir -p ~/.config/remind
    $ touch ~/.config/remind/remind.rem
+   ```
+
+1. Setup npm
+
+   ```sh
+   $ mkdir ~/.npm-packages
+   $ mkdir ~/.npm-packages/lib
    ```
 
 1. [Waydroid](https://nixos.wiki/wiki/WayDroid) (optional)
