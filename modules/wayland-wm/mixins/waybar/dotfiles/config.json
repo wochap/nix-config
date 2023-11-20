@@ -129,8 +129,8 @@
     "spacing": 10
   },
   "clock": {
-    "format": "<span rise='-1000'></span> {:%H:%M}",
-    "format-alt": "{:%a %d %b %H:%M}",
+    "format": "{:%a %d %b %H:%M}",
+    "format-alt": "<span rise='-1000'></span> {:%H:%M}",
     "tooltip": true,
     "tooltip-format": "{:%a %d %b %H:%M}"
   },
