@@ -132,8 +132,8 @@
 
 1. Setup mail
 
-  Generate [App passwords](https://support.google.com/accounts/answer/185833?hl=en) in [Google Account settings](https://myaccount.google.com/u/1/apppasswords)
-  Copy App password (16 digits) to secrets/mail/<EMAIL>
+   Generate [App passwords](https://support.google.com/accounts/answer/185833?hl=en) in [Google Account settings](https://myaccount.google.com/u/1/apppasswords)
+   Copy App password (16 digits) to secrets/mail/<EMAIL>
 
 1. Setup calendar
 
