@@ -88,6 +88,10 @@ new_icon="internet-mail"
 appname="KDE Connect"
 new_icon="kdeconnect"
 
+[firefox]
+appname="Firefox"
+new_icon="firefox"
+
 [offlinemsmtp]
 appname="offlinemsmtp"
 new_icon="internet-mail"
