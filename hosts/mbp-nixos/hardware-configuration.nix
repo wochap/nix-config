@@ -4,31 +4,34 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/hardware/network/broadcom-43xx.nix")
-      (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [
+    (modulesPath + "/hardware/network/broadcom-43xx.nix")
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules =
+    [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/8fb367b4-4394-42ec-900b-26d8c675e15b";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/8fb367b4-4394-42ec-900b-26d8c675e15b";
+    fsType = "ext4";
+  };
 
-  boot.initrd.luks.devices."luks-d8ac7a76-8356-46c8-b281-b8c9d366b2b2".device = "/dev/disk/by-uuid/d8ac7a76-8356-46c8-b281-b8c9d366b2b2";
+  boot.initrd.luks.devices."luks-d8ac7a76-8356-46c8-b281-b8c9d366b2b2".device =
+    "/dev/disk/by-uuid/d8ac7a76-8356-46c8-b281-b8c9d366b2b2";
+  boot.initrd.luks.devices."luks-5e55f437-0358-410c-bcc5-0ee81f77631f".device =
+    "/dev/disk/by-uuid/5e55f437-0358-410c-bcc5-0ee81f77631f";
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/1941-485D";
-      fsType = "vfat";
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/1941-485D";
+    fsType = "vfat";
+  };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/273c73b4-c76d-4758-89a6-aa70408795e3"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/273c73b4-c76d-4758-89a6-aa70408795e3"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -38,5 +41,6 @@
   # networking.interfaces.wlp4s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
