@@ -48,7 +48,7 @@
    # On current/new machine, test
    $ curl http://192.168.x.x:8080/nix-cache-info
    ```
-   On the current/new machine, update `nix.settings.substituters` config, add `http://192.168.x.x:8080`
+   On the current/new machine, update `nix.settings.substituters` config, add `http://192.168.x.x:8080`, then restart
 
 1. Reboot into NixOS and connect to internet
 
