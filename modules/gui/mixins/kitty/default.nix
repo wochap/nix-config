@@ -1,11 +1,15 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, _customLib, ... }:
 
 let
   cfg = config._custom.gui.kitty;
   isDarwin = config._displayServer == "darwin";
   macosConfig = builtins.readFile ./dotfiles/kitty-macos.conf;
   linuxConfig = builtins.readFile ./dotfiles/kitty-linux.conf;
+  inherit (config._custom.globals) themeColors;
   userName = config._userName;
+  relativeSymlink = path:
+    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
+    (_customLib.runtimePath config._custom.globals.configDirectory path);
 
   shellIntegrationInit = {
     bash = ''
@@ -77,7 +81,8 @@ in {
 
           ${builtins.readFile ./dotfiles/kitty-diff.conf}
         '';
-        "kitty/common.conf".source = ./dotfiles/kitty-common.conf;
+        "kitty/common.conf".source =
+          relativeSymlink ./dotfiles/kitty-common.conf;
         "kitty/kitty.conf".text = ''
           # Load theme
           include ${inputs.catppuccin-kitty}/themes/mocha.conf
@@ -85,6 +90,10 @@ in {
           # Load config
           include ./common.conf
           ${if isDarwin then macosConfig else linuxConfig}
+
+          # Theme
+          active_border_color ${themeColors.primary}
+          inactive_border_color ${themeColors.selection}
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;
@@ -131,6 +140,10 @@ in {
         };
 
         # kittens
+        "kitty/custom_pass_keys.py" = {
+          source = ./dotfiles/custom_pass_keys.py;
+          executable = true;
+        };
         "kitty/pass_keys.py" = {
           source = "${inputs.smart-splits-nvim}/kitty/pass_keys.py";
           executable = true;
