@@ -21,11 +21,13 @@ enum {
 	BROWSER,
 	LAYOUT,
 	TUI,
+  KB_INHIBIT,
 };
 const char *modes_labels[] = {
 	"browser",
 	"layout",
 	"tui",
+	"kb inhibit",
 };
 
 /* Autostart */
@@ -65,45 +67,45 @@ static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
 static const char ytmusic_appid[] = "chrome-music.youtube.com__-Default";
 
 static const Rule rules[] = {
-	/* app_id                    title       tags mask  isfloating  monitor  x    y    width height  scratchkey isterm  noswallow */
+	/* app_id                    title       tags mask  isfloating  monitor  x    y    width height  scratchkey */
 	/* examples:
-	{ "Gimp",                    NULL,       0,         1,          -1, 	   0, 	0,   500,  400,    0,         0,      0 },
+	{ "Gimp",                    NULL,       0,         1,          -1, 	   0, 	0,   500,  400,    0 },
 	*/
-	{ "file-roller",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "gnome-font-viewer",       NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "^thunar$",                NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      -1 },
-	{ "^thunar-scratch$",        NULL,       0,         1,          -1,      0,   0,   0,    0,      'f',       0,      -1 },
-	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0,         0,      -1 },
-	{ NULL, "meet.google.com is sharing your screen.", 0, 1,        -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ bing_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'g',       0,      0 },
-	{ chat_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'c',       0,      0 },
-	{ ytmusic_appid,             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'y',       0,      0 },
+	{ "file-roller",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "gnome-font-viewer",       NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "^thunar$",                NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "^thunar-scratch$",        NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
+	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0 },
+	{ NULL, "meet.google.com is sharing your screen.", 0, 1,        -1,      0,   0,   0,    0,      0 },
+	{ bing_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'g' },
+	{ chat_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'c' },
+	{ ytmusic_appid,             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'y' },
 
-	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "google-chrome",           NULL,       1 << 0,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "brave-browser",           NULL,       1 << 7,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "Slack",                   NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "discord",                 NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "microsoft-edge",          NULL,       1 << 8,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
+	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "google-chrome",           NULL,       1 << 0,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "brave-browser",           NULL,       1 << 7,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "Slack",                   NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "discord",                 NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "microsoft-edge",          NULL,       1 << 8,    0,          -1,      0,   0,   0,    0,      0 },
 
-	{ "kitty-top",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'm',       0,      0 },
-	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'i',       0,      0 },
-	{ "kitty-neorg",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'n',       0,      0 },
-	{ "kitty-nmtui",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'w',       0,      0 },
-	{ "kitty-neomutt",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'e',       0,      0 },
-	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   1200, 800,    'r',       0,      0 },
-	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u',       0,      0 },
-	{ "kitty-buku",              NULL,       0,         1,          -1,      0,   0,   1200, 800,    0,         0,      0 },
+	{ "kitty-top",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'm' },
+	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'i' },
+	{ "kitty-neorg",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'n' },
+	{ "kitty-nmtui",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'w' },
+	{ "kitty-neomutt",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'e' },
+	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   1200, 800,    'r' },
+	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u' },
+	{ "kitty-buku",              NULL,       0,         1,          -1,      0,   0,   1200, 800,    0 },
 
-	{ "^kitty-dangerp$",         NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0,         0,      0 },
-	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
-	{ "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0,         1,      0 },
+	{ "^kitty-dangerp$",         NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0 },
+	{ "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0 },
 
 	/* x, y, width, heigh are floating only
 	* When x or y == 0 the client is placed at the center of the screen,
@@ -234,7 +236,7 @@ static const Key keys[] = {
   // ### SYSTEM KEYBINDINGS
 
   // Open scratchpad terminal
-  { MODKEY, Key_i, togglescratch, {.v = kittyscratchcmd } },
+  { MODKEY, Key_i, focusortogglescratch, {.v = kittyscratchcmd } },
 
   // Lock screen
 	{ MODKEY, Key_l, spawn, SHCMD("/etc/scripts/system/sway-lock.sh") },
@@ -351,7 +353,7 @@ static const Key keys[] = {
 	{ MODKEY|MOD_ALT, Key_t, spawn, {.v = termcmd} },
 
   // Open file manager
-  { MODKEY|MOD_ALT, Key_f, togglescratch, {.v = fmscratchcmd} },
+  { MODKEY|MOD_ALT, Key_f, focusortogglescratch, {.v = fmscratchcmd} },
 
   // Screencast/record region to mp4
   { MODKEY|MOD_ALT, Key_r, spawn, SHCMD("/etc/scripts/system/recorder.sh --area") },
@@ -386,6 +388,7 @@ static const Key keys[] = {
   { MODKEY, Key_r, entermode, {.i = LAYOUT} },
   { MODKEY|MOD_ALT, Key_b, entermode, {.i = BROWSER} },
   { MODKEY|MOD_ALT, Key_u, entermode, {.i = TUI} },
+  { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = KB_INHIBIT} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, togglekblayout, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
@@ -435,6 +438,10 @@ static const Modekey modekeys[] = {
   // To increment/decrement the main ratio
   { LAYOUT, { MOD_SHIFT, Key_Left, setmfact, {.f = -0.05} } },
   { LAYOUT, { MOD_SHIFT, Key_Right, setmfact, {.f = +0.05} } },
+  // To increment/decrement the client ratio
+  { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Left, setcfact, {.f = +0.25} } },
+  { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Right, setcfact, {.f = -0.25} } },
+  { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Up, setcfact, {.f = 0} } },
   // Change layout
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
@@ -454,17 +461,20 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, RUN("brave")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, RUN("google-chrome-stable")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, RUN("microsoft-edge")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, togglescratch, {.v = msgptscratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, togglescratch, {.v = chatgptscratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, togglescratch, {.v = ytmusicscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, focusortogglescratch, {.v = msgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, focusortogglescratch, {.v = chatgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, focusortogglescratch, {.v = ytmusicscratchcmd}),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
+  // HACK: disable all dwl keymappings
+  { KB_INHIBIT, { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = NORMAL} } },
+
   // Terminal TUI
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, togglescratch, {.v = kittyneorgcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, togglescratch, {.v = kittytopcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, togglescratch, {.v = kittyneomuttcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, togglescratch, {.v = kittynewsboatcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, togglescratch, {.v = kittyncmpcppcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, focusortogglescratch, {.v = kittyneorgcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, focusortogglescratch, {.v = kittytopcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, focusortogglescratch, {.v = kittyneomuttcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, focusortogglescratch, {.v = kittynewsboatcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, focusortogglescratch, {.v = kittyncmpcppcmd}),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --select")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --add")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --edit")),
