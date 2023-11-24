@@ -296,10 +296,13 @@ static const Key keys[] = {
   { MODKEY, Key_Right, focusdir, {.ui = 1} },
 
   // Swap direction
-  // TODO: add direction keymaps
   // TODO: pick a window to swap with
   { MODKEY|MOD_SHIFT, Key_n, movestack, {.i = +1} },
   { MODKEY|MOD_SHIFT, Key_p, movestack, {.i = -1} },
+  { MODKEY|MOD_SHIFT, Key_Down, swapdir, {.ui = 3} },
+  { MODKEY|MOD_SHIFT, Key_Up, swapdir, {.ui = 2} },
+  { MODKEY|MOD_SHIFT, Key_Left, swapdir, {.ui = 0} },
+  { MODKEY|MOD_SHIFT, Key_Right, swapdir, {.ui = 1} },
 
   // Resize floating windows
   { MODKEY|MOD_ALT|MOD_SHIFT, Key_Down, moveresizekb, {.v = (int []){ 0, 0, 0, 40 }}},
