@@ -65,6 +65,7 @@ in {
         acpi # log battery/temp info
         acpitool # like acpi + control hw
         cached-nix-shell # fast nix-shell scripts
+        clinfo # print info about OpenCL
         coreutils-full # GNU utils commands
         dex # execute DesktopEntry files (xdg/autostart)
         dmidecode # log hw info
