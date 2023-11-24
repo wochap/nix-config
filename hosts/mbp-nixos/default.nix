@@ -20,6 +20,7 @@ in {
     # NOTE: can't get amdvlk working
     hardware.amdgpu.amdvlk = false;
     hardware.amdgpu.loadInInitrd = true;
+    hardware.amdgpu.opencl = true;
 
     _userName = userName;
     _homeDirectory = "/home/${userName}";
