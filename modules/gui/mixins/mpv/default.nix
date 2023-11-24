@@ -34,13 +34,16 @@ in {
 
           autofit-larger = "75%x75%";
           gpu-context = lib.mkIf isWayland "wayland";
-          hwdec = "vaapi";
           hwdec-codecs = "all";
           keep-open = true;
           osd-font = "Iosevka Nerd Font";
           pause = true;
           video-sync = "display-resample";
+
+          # enable hardware acceleration
+          hwdec = "auto-safe";
           vo = "gpu";
+          profile = "gpu-hq";
         };
         scripts = with pkgs; [
           mpvScripts.mpris
