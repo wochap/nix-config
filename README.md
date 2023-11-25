@@ -230,6 +230,8 @@ $ nmcli r wifi on
 $ sudo rfkill unblock bluetooth
 ```
 
+* [Bluetooth sound glitches](https://wiki.archlinux.org/title/bluetooth_headset#Connecting_works,_but_there_are_sound_glitches_all_the_time)
+
 * Blackscreen on macbook pro
 
 Run the following and restart
