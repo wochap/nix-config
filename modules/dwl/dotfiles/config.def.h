@@ -119,7 +119,7 @@ static const Layout layouts[] = {
 	{ "TTT",      bstack },
 	{ "[M]",      monocle },
 	{ "|M|",      centeredmaster },
-	{ "@|@",      snail },
+	// { "@|@",      snail },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ NULL,       NULL },
 };
@@ -129,7 +129,7 @@ enum layout_types {
   LAYOUT_BSTACK,
   LAYOUT_MONOCLE,
   LAYOUT_CENTEREDMASTER,
-  LAYOUT_SNAIL,
+  // LAYOUT_SNAIL,
   LAYOUT_FLOAT,
 };
 
@@ -449,13 +449,13 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_3, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_4, setlayout, {.v = &layouts[LAYOUT_SNAIL]}),
+  // EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_4, setlayout, {.v = &layouts[LAYOUT_SNAIL]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_5, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_FLOAT]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_t, setlayout, {.v = &layouts[LAYOUT_TILE]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_f, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_m, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_s, setlayout, {.v = &layouts[LAYOUT_SNAIL]}),
+  // EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_s, setlayout, {.v = &layouts[LAYOUT_SNAIL]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_e, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]}),
   { LAYOUT, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
@@ -495,7 +495,7 @@ static const Button buttons[] = {
 };
 
 static const Gesture gestures[] = {
-	{ SWIPE_LEFT, shiftview, { .i = 1 } },
-	{ SWIPE_RIGHT, shiftview, { .i = -1 } },
+	{ MOD_NONE, SWIPE_LEFT, shiftview, { .i = 1 } },
+	{ MOD_NONE, SWIPE_RIGHT, shiftview, { .i = -1 } },
 };
 

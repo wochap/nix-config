@@ -21,13 +21,39 @@ in {
       (final: prev: {
         # install my patched dwl
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "0.4-next";
-          src = prev.fetchFromGitHub {
+          version = "0.6-alpha";
+          src = prev.fetchFromGitea {
+            domain = "codeberg.org";
             owner = "wochap";
             repo = "dwl";
-            rev = "d6ec18f5cfe04cf0ab2ab3c7e9680fe5786ae8d6";
-            hash = "sha256-RXhJXKj9WEMG/as5pcLnYG2gU1KAxepWaZbUcSwlR/I=";
+            rev = "590a74c31dab7ddb0176db72827de0be66af0882";
+            hash = "sha256-IdskIfRlw4fUF7jLl0tVHDHof0FJeNMyuKAnGhAr3PE=";
           };
+          buildInputs = with pkgs.unstable; [
+            libinput
+            xorg.libxcb
+            libxkbcommon
+            pixman
+            wayland
+            wayland-protocols
+
+            (wlroots_0_16.overrideAttrs (oldAttrs: {
+              version = "fe53ec693789afb44c899cad8c2df70c8f9f9023";
+              buildInputs = with pkgs;
+                oldAttrs.buildInputs ++ [ hwdata libdisplay-info ];
+              src = pkgs.fetchFromGitLab {
+                domain = "gitlab.freedesktop.org";
+                owner = "wlroots";
+                repo = "wlroots";
+                rev = "fe53ec693789afb44c899cad8c2df70c8f9f9023";
+                sha256 = "sha256-ah8TRZemPDT3NlPAHcW0+kUIZojEGkXZ53I/cNeCcpA=";
+              };
+            }))
+
+            xorg.libX11
+            xorg.xcbutilwm
+            xwayland
+          ];
         });
       })
     ];
