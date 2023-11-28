@@ -51,8 +51,8 @@ in {
               # Disable thumbnail preview ctrl + tab
               "browser.ctrlTab.recentlyUsedOrder" = false;
 
-              # Force webrender
-              # "gfx.webrender.all" = true;
+              "extensions.pocket.enabled" = false;
+              "general.smoothScroll" = false;
 
               # Force opengl
               # "layers.acceleration.force-enabled" = true;
