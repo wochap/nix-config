@@ -170,6 +170,8 @@ in {
 
     environment.systemPackages = with pkgs;
       [
+        radeontop
+
         # NOTE: requires installing rEFInd
         # more info on https://github.com/0xbb/gpu-switch
         gpu-switch
