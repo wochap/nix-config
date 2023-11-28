@@ -15,6 +15,7 @@
     ./mixins/music
     ./mixins/neofetch
     ./mixins/networking
+    ./mixins/plymouth
     ./mixins/power-management
     ./mixins/qt
     ./mixins/xdg
