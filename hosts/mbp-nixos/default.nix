@@ -80,6 +80,7 @@ in {
     _custom.wm.music.enable = true;
     _custom.wm.neofetch.enable = true;
     _custom.wm.networking.enable = true;
+    _custom.wm.plymouth.enable = false;
     _custom.wm.power-management.enable = true;
     _custom.wm.qt.enable = true;
     _custom.wm.xdg.enable = true;
@@ -147,8 +148,13 @@ in {
         # needed for suspend
         "acpi_osi=Darwin"
 
+        # disable cpu interrupts
+        "acpi_mask_gpe=0x06"
+
         # needed function keys
         "hid_apple.fnmode=2"
+
+        # swap alt and command keys
         "hid_apple.swap_opt_cmd=1"
 
         # chatgpt suggestions, power optimizations
