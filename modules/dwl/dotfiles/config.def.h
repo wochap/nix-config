@@ -10,7 +10,7 @@
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
-static const unsigned int gappx            = 7; /* gap between windows */
+static const unsigned int gappx            = 2; /* gap between windows */
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
 static const unsigned int swipe_min_threshold = 0;
@@ -139,10 +139,10 @@ static const MonitorRule monrules[] = {
 	/* example of a HiDPI laptop monitor:
 	{ "eDP-1",    0.5,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	*/
-  { "DP-1",     0.5, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
-  { "eDP-1",    0.5, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+  // { "DP-1",     0.5, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+  // { "eDP-1",    0.5, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	/* defaults */
-	{ NULL,       0.6, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	{ NULL,       0.5, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 };
 
 /* keyboard */
@@ -495,6 +495,8 @@ static const Button buttons[] = {
 };
 
 static const Gesture gestures[] = {
+	{ MODKEY, SWIPE_LEFT, rotatetags, { .i = 1 } },
+	{ MODKEY, SWIPE_RIGHT, rotatetags, { .i = -1 } },
 	{ MOD_NONE, SWIPE_LEFT, shiftview, { .i = 1 } },
 	{ MOD_NONE, SWIPE_RIGHT, shiftview, { .i = -1 } },
 };
