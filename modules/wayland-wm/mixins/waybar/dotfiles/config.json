@@ -35,7 +35,8 @@
   "temperature": {
     "critical-threshold": 80,
     "format-critical": " {temperatureC}°C",
-    "format": " {temperatureC}°C"
+    "format": " {temperatureC}°C",
+    "tooltip": false
   },
   "sway/window": {
     "max-length": 50
@@ -123,16 +124,16 @@
     "format-icons": {
       "activated": "",
       "deactivated": ""
-    }
+    },
+    "tooltip": false
   },
   "tray": {
     "spacing": 10
   },
   "clock": {
     "format": "{:%a %d %b %H:%M}",
-    "format-alt": "<span rise='-1000'></span> {:%H:%M}",
-    "tooltip": true,
-    "tooltip-format": "{:%a %d %b %H:%M}"
+    "format-alt": "{:%H:%M}",
+    "tooltip": false
   },
   "backlight": {
     "format": "<span rise='-1000'>{icon}</span> {percent}%",
