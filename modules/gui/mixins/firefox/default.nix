@@ -61,14 +61,14 @@ in {
               "ui.context_menus.after_mouseup" = true;
 
               # Enable video hardware acceleration
-              "media.ffmpeg.vaapi.enabled" = true;
-              "media.ffvpx.enabled" = false;
-              "media.navigator.mediadatadecoder_vpx_enabled" = true;
-              "media.rdd-vpx.enabled" = false;
+              # "media.ffmpeg.vaapi.enabled" = true;
+              # "media.ffvpx.enabled" = false;
+              # "media.navigator.mediadatadecoder_vpx_enabled" = true;
+              # "media.rdd-vpx.enabled" = false;
 
               # https://wiki.archlinux.org/index.php/Firefox/Tweaks#Performance
-              "browser.preferences.defaultPerformanceSettings.enabled" = false;
-              "dom.ipc.processCount" = 8;
+              # "browser.preferences.defaultPerformanceSettings.enabled" = false;
+              # "dom.ipc.processCount" = 8;
 
               # Workaround for when xdg.portal is enabled? set to false
               # https://bugzilla.mozilla.org/show_bug.cgi?id=1618094
