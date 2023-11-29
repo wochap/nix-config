@@ -21,6 +21,7 @@ in {
         git-crypt
         gnumake # make
         inetutils # network tools
+        jp2a # image to ascii
         jq # manipulate JSON
         killall
         libpwquality # password tools, pwscore
