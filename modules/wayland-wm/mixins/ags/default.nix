@@ -1,12 +1,11 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, _customLib, ... }:
 
 let
   cfg = config._custom.waylandWm;
   userName = config._userName;
-  hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/wayland-wm/mixins/ags";
+  relativeSymlink = path:
+    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
+    (_customLib.runtimePath config._custom.globals.configDirectory path);
   inherit (config._custom.globals) themeColors;
 in {
   config = lib.mkIf cfg.enable {
@@ -20,7 +19,7 @@ in {
 
       xdg.configFile = {
         "ags" = {
-          source = mkOutOfStoreSymlink "${currentDirectory}/dotfiles/ags";
+          source = relativeSymlink ./dotfiles/ags;
           recursive = true;
         };
       };

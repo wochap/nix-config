@@ -4,10 +4,6 @@ let
   cfg = config._custom.waylandWm;
   inherit (config._custom.globals) themeColors;
   userName = config._userName;
-  hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/wayland-wm/mixins/tofi";
 
   tofi-launcher = pkgs.writeTextFile {
     name = "tofi-launcher";
@@ -51,8 +47,7 @@ in {
       };
 
       xdg.configFile = {
-        "tofi/multi-line".source =
-          mkOutOfStoreSymlink "${currentDirectory}/dotfiles/multi-line";
+        "tofi/multi-line".source = ./dotfiles/multi-line;
         "tofi/one-line".source = pkgs.substituteAll {
           src = ./dotfiles/one-line;
           inherit (themeColors) foreground primary background red;

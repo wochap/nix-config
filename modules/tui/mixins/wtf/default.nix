@@ -1,12 +1,13 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, _customLib, ... }:
 
 let
   cfg = config._custom.tui.wtf;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
-  currentDirectory = "${configDirectory}/modules/tui/mixins/wtf";
+  relativeSymlink = path:
+    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
+    (_customLib.runtimePath config._custom.globals.configDirectory path);
+
   customWtf = pkgs.writeTextFile {
     name = "wtf";
     destination = "/bin/wtf";
@@ -26,7 +27,7 @@ in {
       home.packages = with pkgs; [ unstable.wtf customWtf ];
 
       xdg.configFile."wtf/config.yml".source =
-        mkOutOfStoreSymlink "${currentDirectory}/dotfiles/config.yml";
+        relativeSymlink ./dotfiles/config.yml;
     };
   };
 }
