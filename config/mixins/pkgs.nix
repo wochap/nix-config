@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, system, ... }:
 
 let
   ani-cli = pkgs.writeShellScriptBin "ani-cli"
@@ -57,6 +57,7 @@ in {
         ani-cli
         cbonsai # print bonsai ascii
         gotop # monitor system
+        inputs.lobster.packages.${system}.lobster
         speedread # read a file, word by word
         tmux # terminal multiplexer
       ];

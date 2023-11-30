@@ -48,6 +48,8 @@
     xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=bb6bcf846b07fc7ed7a812414f5b6b1cf0f8742e"; # v1.2.1 (oct 09 2023)
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=fe4535a27389624445b96450a7c338136c619c95";
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
+    lobster.url = "github:justchokingaround/lobster";
+    lobster.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party darwin stuff
     spacebar.url = "github:cmacrae/spacebar?rev=79257bae525059be5230e86df96b3b3f1a3ed0a7";
