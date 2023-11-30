@@ -1,3 +1,8 @@
+function timezsh() {
+  shell=${1-$SHELL}
+  for i in $(seq 1 10); do time $shell -i -c exit; done
+}
+
 # cd into git repository
 function pro() {
   projects=$(find ~/.config -maxdepth 1 -type d -execdir test -d {}/.git \; -print -prune)
