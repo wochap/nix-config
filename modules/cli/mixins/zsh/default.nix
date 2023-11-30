@@ -31,7 +31,7 @@ in {
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
         '';
         enableCompletion = false;
-        syntaxHighlighting.enable = false;
+        # syntaxHighlighting.enable = false;
         enableAutosuggestions = true;
         history = {
           ignoreDups = false;
