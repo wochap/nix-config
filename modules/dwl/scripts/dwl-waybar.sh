@@ -74,7 +74,7 @@
 #
 
 # Variables
-declare output title mode layout occupiedtags focusedtags urgenttags
+declare output title appid mode layout occupiedtags focusedtags urgenttags
 declare -a name
 readonly fname="$HOME"/.cache/dwltags
 # TODO: what if there are multiple DWL instance which share the the file name, will is cause problem? and this file will increese constantly, how to trim it?
@@ -106,6 +106,9 @@ _cycle() {
   title)
     printf -- '{"text":"%s"}\n' "${title}"
     ;;
+  appid)
+    printf -- '{"text":"%s"}\n' "${appid}" 2>/dev/null
+    ;;
   mode)
     printf -- '{"text":"%s"}\n' "${mode}"
     ;;
@@ -123,7 +126,8 @@ while [[ -n "$(pgrep waybar)" ]]; do
   # Get info from the file
   output="$(grep "${monitor}" "${fname}" | tail -n8)"
   title="$(echo "${output}" | grep '^[[:graph:]]* title' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
-  mode="$(echo "${output}" | grep '^[[:graph:]]* mode' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
+  appid="$(echo "${output}" | grep '^[[:graph:]]* appid' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
+  mode="$(echo "${output}" | grep '^[[:graph:]]* mode' | cut -d ' ' -f 3- | sed s/\"/“/g)"   # Replace quotes - prevent waybar crash
   layout="$(echo "${output}" | grep '^[[:graph:]]* layout' | cut -d ' ' -f 3-)"
 
   if [[ $layout == "[\\]" ]]; then
@@ -142,4 +146,4 @@ while [[ -n "$(pgrep waybar)" ]]; do
   inotifywait -t 60 -qq --event modify "${fname}"
 done
 
-unset -v occupiedtags layout name output focusedtags title mode
+unset -v occupiedtags layout name output focusedtags title appid mode
