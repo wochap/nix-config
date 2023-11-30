@@ -12,7 +12,6 @@ in {
     ./mixins/tofi
     ./mixins/waybar
     ./mixins/wob
-    ./mixins/yambar
     ./mixins/gammastep.nix
     ./mixins/kanshi.nix
   ];
