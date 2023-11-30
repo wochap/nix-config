@@ -1251,6 +1251,22 @@
         "type": "github"
       }
     },
+    "prevstable-waybar": {
+      "locked": {
+        "lastModified": 1701068326,
+        "narHash": "sha256-vmMceA+q6hG1yrjb+MP8T0YFDQIrW3bl45e7z24IEts=",
+        "owner": "adamcstephens",
+        "repo": "nixpkgs",
+        "rev": "8cfef6986adfb599ba379ae53c9f5631ecd2fd9c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "adamcstephens",
+        "repo": "nixpkgs",
+        "rev": "8cfef6986adfb599ba379ae53c9f5631ecd2fd9c",
+        "type": "github"
+      }
+    },
     "ptsh": {
       "flake": false,
       "locked": {
@@ -1338,6 +1354,7 @@
         "prevstable-neovim": "prevstable-neovim",
         "prevstable-nodejs": "prevstable-nodejs",
         "prevstable-python": "prevstable-python",
+        "prevstable-waybar": "prevstable-waybar",
         "ptsh": "ptsh",
         "ranger": "ranger",
         "smart-splits-nvim": "smart-splits-nvim",

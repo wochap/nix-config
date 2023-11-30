@@ -7,24 +7,24 @@ let
   relativeSymlink = path:
     config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
     (_customLib.runtimePath config._custom.globals.configDirectory path);
-  inherit (pkgs.unstable) waybar;
+  inherit (pkgs.prevstable-waybar) waybar;
 in {
   imports = [ ./waybar-config.nix ];
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        waybar = prev.waybar.overrideAttrs (oldAttrs: {
-          mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-          src = prev.fetchFromGitHub {
-            owner = "Alexays";
-            repo = "Waybar";
-            rev = "a90e275d5e26226c9e69abbb6f9be4d7391ba3c1";
-            hash = "sha256-AKjdQH+jey1A235xQXVtogeqLUaB/SBfraGJw/tvwz8=";
-          };
-        });
-      })
-    ];
+    # nixpkgs.overlays = [
+    #   (final: prev: {
+    #     waybar = prev.waybar.overrideAttrs (oldAttrs: {
+    #       version = "58db0baaf48937554de9ce5f962e2103a33585e9";
+    #       src = prev.fetchFromGitHub {
+    #         owner = "Alexays";
+    #         repo = "Waybar";
+    #         rev = "58db0baaf48937554de9ce5f962e2103a33585e9";
+    #         hash = "sha256-Wqd9HuzerxP6s7bjYPQBR0NPS083lB8ApzKy6SrOtWc=";
+    #       };
+    #     });
+    #   })
+    # ];
 
     environment = {
       systemPackages = [ waybar pkgs.libevdev ];
