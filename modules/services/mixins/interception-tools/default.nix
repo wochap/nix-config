@@ -28,5 +28,7 @@ in {
       ${generateJob mbpKeyboard}
       ${generateJob keychrone}
     '';
+
+    systemd.services.interception-tools.after = [ "multi-user.target" ];
   };
 }
