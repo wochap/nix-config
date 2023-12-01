@@ -10,7 +10,7 @@
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
-static const unsigned int gappx            = 2; /* gap between windows */
+static const int draw_minimal_borders      = 1; /* merge adjacent borders */
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
 static const unsigned int swipe_min_threshold = 0;
@@ -430,11 +430,6 @@ static const Modekey modekeys[] = {
   { mode_index, { mod, keycode, entermode, {.i = NORMAL} } }
 
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_c, movecenter, {0}),
-  // Gaps
-  { LAYOUT, { MOD_NONE, Key_g, incgaps, {.i = +1} } },
-  { LAYOUT, { MOD_SHIFT, Key_g, incgaps, {.i = -1} } },
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_grave, togglegaps, {0}),
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_SHIFT, Key_grave, defaultgaps, {0}),
   // To decrease/increase the main count
   { LAYOUT, { MOD_NONE, Key_Left, incnmaster, {.i = +1} } },
   { LAYOUT, { MOD_NONE, Key_Right, incnmaster, {.i = -1} } },
