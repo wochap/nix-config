@@ -26,8 +26,8 @@ in {
             domain = "codeberg.org";
             owner = "wochap";
             repo = "dwl";
-            rev = "071a0643a179bd38f856671267039a302262c328";
-            sha256 = "sha256-5lYCTtKxbyN9kx9U4djGGxbBftWd/NBttOHmfzgKvQg=";
+            rev = "0060d431988090d42e8f5cec6e035ff3fa6217d7";
+            hash = "sha256-x4cy5icfes06nYQomGFGpk+AiLb4bABhPlV++v2E7tU=";
           };
           buildInputs = with pkgs.unstable; [
             libinput
