@@ -18,8 +18,13 @@ in {
         enable = true;
         package = pkgs.unstable.fzf;
         enableBashIntegration = true;
+        # CTRL-T - Paste the selected file path(s) into the command line
+        fileWidgetOptions = [ "--preview 'head {}'" ];
+        # CTRL-R - Paste the selected command from history into the command line
+        historyWidgetOptions = [ ];
+        # ALT-C - cd into the selected directory
+        changeDirWidgetOptions = [ "--preview 'tree -C {} | head -100'" ];
       };
-
     };
   };
 }
