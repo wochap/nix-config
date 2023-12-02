@@ -50,6 +50,7 @@ in {
         git
         gitAndTools.gh # github cli
         ngrok # expose web server
+        silver-searcher # ag, ack like
         stripe-cli
 
         # TUI APPS
