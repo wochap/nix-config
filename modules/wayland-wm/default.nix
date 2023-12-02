@@ -42,6 +42,7 @@ in {
         wlr-randr
         _custom.matcha
         showmethekey
+        unstable.chayang # gradually dim the screen
       ];
 
       sessionVariables = {
