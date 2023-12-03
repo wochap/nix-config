@@ -43,8 +43,8 @@ preview() {
     -pointsize "$FONT_SIZE" -font "$fontfile" -gravity "$TEXT_ALIGN" \
     -annotate +"${PADDING:-0}+0" "$PREVIEW_TEXT" "$IMAGE" &&
     kitten icat --clear --transfer-mode=memory \
-      --place="$((WIDTH - VPAD))"x"$((HEIGHT - 2))"@2x1 --align center \
-      --stdin=no $IMAGE >/dev/tty
+      --place="$((WIDTH - VPAD))x$((HEIGHT - 2))@2x1" --align center \
+      --engine="magick" --stdin=no $IMAGE >/dev/tty
 }
 
 while getopts "a:hs:b:f:t:" arg; do
