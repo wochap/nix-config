@@ -17,6 +17,8 @@ function pro() {
     cd $selected
   fi
 }
+zle -N pro
+bindkey '^[up' pro
 
 # cd into git repository
 function apro() {
@@ -28,6 +30,8 @@ function apro() {
     cd $selected
   fi
 }
+zle -N apro
+bindkey '^[ua' apro
 
 function killport {
   kill $(lsof -t -i:"$1") > /dev/null 2>&1
@@ -38,6 +42,8 @@ function opro() {
 
   $(echo "$projects" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" fzf)
 }
+zle -N opro
+bindkey '^[uo' opro
 
 function scripts() {
   scripts=$(find /etc/scripts -type l,f -name "*.sh")
