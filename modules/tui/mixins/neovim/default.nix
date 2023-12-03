@@ -44,7 +44,10 @@ in {
         ] ++ (lib.optionals (!isDarwin) [ unstable.neovide ]);
     };
 
-    programs.zsh.shellAliases = { nv = ''run-without-kpadding nvim "$@"''; };
+    programs.zsh.shellAliases = {
+      nv = ''run-without-kpadding nvim "$@"'';
+      lc = "run-without-kpadding nvim leetcode.nvim";
+    };
 
     home-manager.users.${userName} = {
       home.sessionVariables = {
