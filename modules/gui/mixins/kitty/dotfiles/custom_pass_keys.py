@@ -37,6 +37,9 @@ def handle_result(args, result, target_window_id, boss):
         if hasattr(boss, action):
             getattr(boss, action)(*action_args)
             return
+        if hasattr(boss.active_window, action):
+            getattr(boss.active_window, action)(*action_args)
+            return
         getattr(boss.active_tab, action)(*action_args)
     else:
         for keymap in key_mapping.split(">"):
