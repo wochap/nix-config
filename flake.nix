@@ -101,6 +101,8 @@
     # dracula theme
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
     dracula-lsd.flake = false;
+    dracula-dircolors.url = "github:dracula/dircolors";
+    dracula-dircolors.flake = false;
 
     # catppuccin theme
     catppuccin-qutebrowser.url = "github:catppuccin/qutebrowser?rev=78bb72b4c60b421c8ea64dd7c960add6add92f83";

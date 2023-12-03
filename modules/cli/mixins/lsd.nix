@@ -28,13 +28,14 @@ in {
     ];
 
     home-manager.users.${userName} = {
-      xdg.configFile."lsd/colors.yaml".source =
-        "${inputs.dracula-lsd}/dracula.yaml";
-      xdg.configFile."lsd/icons.yaml".text = ''
-        name:
-          mail: 
-          Mail: 
-      '';
+      xdg.configFile = {
+        "lsd/colors.yaml".source = "${inputs.dracula-lsd}/dracula.yaml";
+        "lsd/icons.yaml".text = ''
+          name:
+            mail: 
+            Mail: 
+        '';
+      };
 
       programs.lsd = {
         # TODO: use package option instead of overlay

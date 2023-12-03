@@ -353,6 +353,22 @@
         "type": "github"
       }
     },
+    "dracula-dircolors": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1686688926,
+        "narHash": "sha256-ZMBTKEp4oO1My53UYPcndwhZnh96FANsZk2+OD9Kxsc=",
+        "owner": "dracula",
+        "repo": "dircolors",
+        "rev": "89479aa861c4193805076a00ef7f0932d5eea134",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dracula",
+        "repo": "dircolors",
+        "type": "github"
+      }
+    },
     "dracula-lsd": {
       "flake": false,
       "locked": {
@@ -1321,6 +1337,7 @@
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-syntax-highlighting": "catppuccin-zsh-syntax-highlighting",
         "darwin": "darwin",
+        "dracula-dircolors": "dracula-dircolors",
         "dracula-lsd": "dracula-lsd",
         "fontpreview-ueberzug": "fontpreview-ueberzug",
         "fuzzy-sys": "fuzzy-sys",

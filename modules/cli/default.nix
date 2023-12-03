@@ -10,6 +10,7 @@
     ./mixins/nix-direnv
     ./mixins/ptsh
     ./mixins/zsh
+    ./mixins/dircolors.nix
     ./mixins/fzf.nix
     ./mixins/gpg.nix
     ./mixins/lsd.nix
