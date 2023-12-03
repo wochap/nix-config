@@ -138,6 +138,11 @@ in {
           recursive = true;
           executable = true;
         };
+        "kitty/scripts/nvim-scrollback.sh" = {
+          source = ./scripts/nvim-scrollback.sh;
+          recursive = true;
+          executable = true;
+        };
 
         # kittens
         "kitty/custom_pass_keys.py" = {
