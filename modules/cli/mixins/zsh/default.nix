@@ -45,7 +45,7 @@ in {
         };
         oh-my-zsh = {
           enable = true;
-          plugins = [ "copyfile" ];
+          plugins = [ "copyfile" "ag" "aliases" ];
           extraConfig = ''
             zstyle ':omz:update' mode disabled
             DISABLE_AUTO_TITLE=true
