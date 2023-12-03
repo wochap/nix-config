@@ -12,10 +12,10 @@ in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home = {
-        packages = with pkgs; [ fontpreview-kik ];
+        packages = [ fontpreview-kik ];
         shellAliases = {
           fp =
-            "fontpreview-kik -b ${themeColors.background} -f ${themeColors.foreground}";
+            "fontpreview-kik -b '${themeColors.background}' -f '${themeColors.foreground}'";
         };
       };
     };
