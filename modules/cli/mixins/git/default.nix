@@ -22,18 +22,19 @@ in {
       })
     ];
 
-    environment = {
-      shellAliases = {
-        gs = "git status";
-        gc = "git clone";
-        glo = "git pull origin";
-        gpo = "git push origin";
-      };
-    };
-    programs.zsh.shellAliases = { lg = ''run-without-kpadding lazygit "$@"''; };
-
     home-manager.users.${userName} = {
+      home.shellAliases = {
+        gst = "git status";
+        gc = "git clone";
+        gco = "git checkout";
+        gcmsg = "git commit --message";
+      };
+
       home.packages = with pkgs; [ commitizen ];
+
+      programs.zsh.shellAliases = {
+        lg = ''run-without-kpadding lazygit "$@"'';
+      };
 
       programs.lazygit = {
         enable = true;
@@ -68,12 +69,6 @@ in {
         enable = true;
 
         ignores = [ ".direnv" ".vscode" ".envrc" ];
-
-        aliases = {
-          co = "checkout";
-          ci = "commit";
-          st = "status";
-        };
 
         delta = {
           enable = true;
@@ -131,7 +126,6 @@ in {
             commit = { gpgSign = true; };
           };
         }];
-
       };
     };
   };
