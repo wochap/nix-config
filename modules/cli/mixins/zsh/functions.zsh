@@ -81,7 +81,7 @@ function run-without-kpadding() {
 
 # switch between nvim configurations
 function nvims() {
-  items=$(find ~/.config -maxdepth 2 -name "init.lua" -type f -execdir basename "$(pwd)" \;)
+  items=$(find $HOME/.config -maxdepth 2 -name "init.lua" -type f -execdir sh -c 'pwd | xargs basename' \;)
   selected=$(printf "%s\n" "${items[@]}" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name ~/.config/{} | head -200'" fzf )
   if [[ -z $selected ]]; then
     return 0
