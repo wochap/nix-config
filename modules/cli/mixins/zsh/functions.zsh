@@ -15,6 +15,7 @@ function pro() {
 
   if [[ -n "$selected" ]]; then
     cd "$selected"
+    zle reset-prompt 2>/dev/null
   fi
 }
 zle -N pro
@@ -28,6 +29,7 @@ function apro() {
 
   if [[ -n "$selected" ]]; then
     cd "$selected"
+    zle reset-prompt 2>/dev/null
   fi
 }
 zle -N apro
