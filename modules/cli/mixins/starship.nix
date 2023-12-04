@@ -16,6 +16,7 @@ in {
         settings = lib.recursiveUpdate themeSettings {
           add_newline = false;
           nix_shell = { disabled = true; };
+          lua = { disabled = true; };
           package = { disabled = true; };
 
           # Setup theme
