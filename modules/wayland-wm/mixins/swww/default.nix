@@ -8,7 +8,13 @@ let
     name = "swww-random";
     destination = "/bin/swww-random";
     executable = true;
-    text = builtins.readFile ./scripts/random-bg.sh;
+    text = builtins.readFile ./scripts/swww-random.sh;
+  };
+  swww-change = pkgs.writeTextFile {
+    name = "swww-change";
+    destination = "/bin/swww-change";
+    executable = true;
+    text = builtins.readFile ./scripts/swww-change.sh;
   };
   inherit (pkgs.unstable) swww;
 in {
@@ -20,7 +26,7 @@ in {
             "${hmConfig.home.homeDirectory}/Sync/backgrounds";
         };
 
-        packages = [ swww swww-random ];
+        packages = [ swww swww-random swww-change ];
         sessionVariables = {
           SWWW_TRANSITION_TYPE = "simple";
           SWWW_TRANSITION_STEP = "45";
