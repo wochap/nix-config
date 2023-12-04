@@ -40,9 +40,9 @@ function killport {
 }
 
 function opro() {
-  projects=$(find /etc/scripts/projects -type l,f -name "*.sh")
+  scripts=$(find /etc/scripts/projects -type l,f -name "*.sh")
 
-  $(echo "$projects" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" fzf)
+  $(echo "$scripts" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" fzf)
 }
 zle -N opro
 bindkey '^[uo' opro
@@ -78,3 +78,17 @@ function run-without-kpadding() {
     "$@"
   fi
 }
+
+# switch between nvim configurations
+function nvims() {
+  items=$(find ~/.config -maxdepth 2 -name "init.lua" -type f -execdir basename "$(pwd)" \;)
+  selected=$(printf "%s\n" "${items[@]}" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name ~/.config/{} | head -200'" fzf )
+  if [[ -z $selected ]]; then
+    return 0
+  elif [[ $selected == "nvim" ]]; then
+    selected=""
+  fi
+  NVIM_APPNAME=$selected nvim "$@"
+}
+alias nvs=nvims
+
