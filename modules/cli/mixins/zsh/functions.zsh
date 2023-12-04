@@ -14,7 +14,7 @@ function pro() {
   selected=$(echo "$projects" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name {} | head -200'" fzf)
 
   if [[ -n "$selected" ]]; then
-    cd $selected
+    cd "$selected"
   fi
 }
 zle -N pro
@@ -27,7 +27,7 @@ function apro() {
   selected=$(echo "$projects" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name {} | head -200'" fzf)
 
   if [[ -n "$selected" ]]; then
-    cd $selected
+    cd "$selected"
   fi
 }
 zle -N apro
