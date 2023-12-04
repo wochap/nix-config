@@ -25,6 +25,9 @@ in {
           "--layout=default"
           "--no-separator"
           "--scroll-off=4"
+          "--prompt='❯ '"
+          "--marker='❯'"
+          "--pointer='❯'"
 
           # mappings
           "--bind 'ctrl-d:preview-half-page-down'"
