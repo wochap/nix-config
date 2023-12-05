@@ -30,7 +30,7 @@ if [[ "$1" == "--preview" ]]; then
   exit 0
 fi
 
-items=$(find "${BACKGROUNDS_PATH}/" -type f -maxdepth 1)
+items=$(find "${BACKGROUNDS_PATH}/" -maxdepth 1 -type f)
 selected=$(
   printf "%s\n" "${items[@]}" | fzf --layout=reverse --preview "sh $0 --preview {}" \
     --preview-window "left:50%:noborder"
