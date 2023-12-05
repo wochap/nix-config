@@ -33,6 +33,7 @@ in {
             name = "default";
             isDefault = true;
             settings = lib.mkMerge [{
+              "browser.fullscreen.autohide" = false;
               "browser.quitShortcut.disabled" = true;
               "browser.tabs.tabMinWidth" = 5;
 
