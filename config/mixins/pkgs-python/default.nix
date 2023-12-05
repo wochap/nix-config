@@ -43,6 +43,9 @@ in {
       python-remind
       vidcutter
 
+      pipx
+      poetry
+      pipenv
       (python.withPackages (ps:
         with ps;
         [
