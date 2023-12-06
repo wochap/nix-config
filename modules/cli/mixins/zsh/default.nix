@@ -39,6 +39,9 @@ in {
         enableCompletion = false;
         # syntaxHighlighting.enable = false;
         enableAutosuggestions = true;
+        # HACK: disable zsh viins mode
+        # If one of the VISUAL or EDITOR environment variables contain the string 'vi' when the shell starts up then it will be viins
+        defaultKeymap = "emacs";
         history = {
           ignoreDups = false;
           expireDuplicatesFirst = true;
