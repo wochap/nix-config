@@ -17,6 +17,7 @@ in {
       nodePackages.gulp
       nodePackages.http-server
       nodePackages.nodemon
+      nodePackages.pnpm
       nodePackages.webtorrent-cli
 
       # others
