@@ -33,7 +33,7 @@
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
-    nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";
+    nur.url = "github:nix-community/NUR?rev=2e83dd29ad04000515593f32de01d6e7ae9f63bc";
 
     # third party overlays/modules
     ags.url = "github:Aylur/ags";

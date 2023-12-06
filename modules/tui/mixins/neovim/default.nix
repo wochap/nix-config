@@ -39,6 +39,7 @@ in {
           _custom.customNodePackages.ts-node
 
           # required by nvim-lspconfig
+          # config.nur.repos.Freed-Wu.autotools-language-server
           _custom.customNodePackages.typescript
           _custom.customNodePackages."@styled/typescript-styled-plugin"
         ] ++ (lib.optionals (!isDarwin) [ unstable.neovide ]);

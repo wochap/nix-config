@@ -30,6 +30,9 @@ in {
   imports = [
     # Install home manager
     inputs.home-manager.nixosModules.home-manager
+
+    # Install nur
+    inputs.nur.nixosModules.nur
   ];
 
   config = {
