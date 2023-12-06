@@ -7,7 +7,7 @@ in {
   options._custom.services.docker = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ docker-compose ];
+    environment.systemPackages = with pkgs; [ docker-compose lazydocker ];
 
     virtualisation.docker.enable = true;
 
