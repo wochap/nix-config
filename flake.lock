@@ -1378,7 +1378,8 @@
         "spacebar": "spacebar",
         "unstable": "unstable",
         "xdg-portal-hyprland": "xdg-portal-hyprland",
-        "yabai-src": "yabai-src"
+        "yabai-src": "yabai-src",
+        "zsh-autocomplete": "zsh-autocomplete"
       }
     },
     "smart-splits-nvim": {
@@ -1638,6 +1639,23 @@
         "owner": "koekeishiya",
         "repo": "yabai",
         "rev": "a4030e771f76d4f135f5b830eedd7234592df51e",
+        "type": "github"
+      }
+    },
+    "zsh-autocomplete": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1693206903,
+        "narHash": "sha256-npflZ7sr2yTeLQZIpozgxShq3zbIB5WMIZwMv8rkLJg=",
+        "owner": "marlonrichert",
+        "repo": "zsh-autocomplete",
+        "rev": "afc5afd15fe093bfd96faa521abe0255334c85b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "marlonrichert",
+        "repo": "zsh-autocomplete",
+        "rev": "afc5afd15fe093bfd96faa521abe0255334c85b0",
         "type": "github"
       }
     }

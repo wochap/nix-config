@@ -21,10 +21,17 @@ in {
       programs.zsh = {
         enable = true;
         dotDir = ".config/zsh";
+        initExtraBeforeCompInit = ''
+          source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
+          zstyle ':autocomplete:*' delay 0.1
+        '';
         initExtra = ''
+          source ${pkgs.oh-my-zsh}/plugins/aliases/aliases.plugin.zsh
+
           source ${./config.zsh}
           source ${./nnn.zsh}
           source ${./functions.zsh}
+          source ${./key-bindings.zsh}
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
 
           source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
@@ -51,16 +58,6 @@ in {
           size = 1000000000;
           # Shares current history file between all sessions as soon as shell closes
           share = true;
-        };
-        oh-my-zsh = {
-          enable = true;
-          plugins = [ "copyfile" "ag" "aliases" ];
-          extraConfig = ''
-            zstyle ':omz:update' mode disabled
-            DISABLE_AUTO_TITLE=true
-            DISABLE_MAGIC_FUNCTIONS=true
-            DISABLE_LS_COLORS=true
-          '';
         };
         dirHashes = {
           nxc = "$HOME/nix-config";

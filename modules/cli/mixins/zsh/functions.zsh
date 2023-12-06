@@ -92,3 +92,7 @@ function nvims() {
 }
 alias nvs=nvims
 
+copyfile()
+{
+  cat $1 | wl-copy
+}
