@@ -1,9 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, ... }:
 
 let userName = config._userName;
 in {
   config = {
     environment.systemPackages = with pkgs; [
+      bun
       deno
 
       # global nodejs
