@@ -7,9 +7,15 @@ in {
   options._custom.cli.zsh = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    environment.pathsToLink = [ "/share/zsh" ];
-
     users.users.${userName}.shell = pkgs.zsh;
+
+    programs.zsh = {
+      enable = true;
+      enableCompletion = true;
+      enableGlobalCompInit = false;
+      # enableLsColors = false;
+      promptInit = "";
+    };
 
     home-manager.users.${userName} = {
       programs.zsh = {
