@@ -26,7 +26,7 @@ in {
           zstyle ':autocomplete:*' delay 0.1
         '';
         initExtra = ''
-          source ${pkgs.oh-my-zsh}/plugins/aliases/aliases.plugin.zsh
+          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
 
           source ${./config.zsh}
           source ${./nnn.zsh}
