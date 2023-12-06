@@ -22,8 +22,16 @@ in {
         enable = true;
         dotDir = ".config/zsh";
         initExtraBeforeCompInit = ''
+          # Install https://github.com/marlonrichert/zsh-autocomplete
           source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
           zstyle ':autocomplete:*' delay 0.1
+
+          # Make Tab go straight to the menu and cycle there
+          bindkey '\t' menu-select "$terminfo[kcbt]" menu-select
+          bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
+
+          # bind ctrl+e to cancel autocomplete
+          bindkey '^e' send-break
         '';
         initExtra = ''
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
