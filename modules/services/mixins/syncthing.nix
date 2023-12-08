@@ -15,7 +15,7 @@ in {
         relay.enable = false;
         settings.options = {
           urAccepted = -1;
-          globalDiscoveryEnabled = false;
+          # globalDiscoveryEnabled = false;
         };
       };
     };
