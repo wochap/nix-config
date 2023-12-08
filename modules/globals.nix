@@ -41,7 +41,7 @@
         };
         package = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.catppuccin-gtk.override {
+          default = pkgs.unstable.catppuccin-gtk.override {
             accents = [ "mauve" ];
             size = "standard";
             tweaks = [ ];
