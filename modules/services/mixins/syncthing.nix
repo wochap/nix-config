@@ -9,7 +9,15 @@ in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
 
-      services.syncthing = { enable = true; };
+      services.syncthing = {
+        enable = true;
+        openDefaultPorts = true;
+        relay.enable = false;
+        settings.options = {
+          urAccepted = -1;
+          globalDiscoveryEnabled = false;
+        };
+      };
     };
   };
 }
