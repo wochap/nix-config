@@ -442,8 +442,8 @@ static const Modekey modekeys[] = {
   { LAYOUT, { MOD_SHIFT, Key_Left, setmfact, {.f = -0.05} } },
   { LAYOUT, { MOD_SHIFT, Key_Right, setmfact, {.f = +0.05} } },
   // To increment/decrement the client ratio
-  { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Left, setcfact, {.f = +0.25} } },
-  { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Right, setcfact, {.f = -0.25} } },
+  { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Left, setcfact, {.f = -0.25} } },
+  { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Right, setcfact, {.f = +0.25} } },
   { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Up, setcfact, {.f = 0} } },
   // Change layout
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]}),
