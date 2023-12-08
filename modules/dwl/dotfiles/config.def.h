@@ -10,7 +10,12 @@
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
+static const unsigned int borderspx        = 0;  /* border pixel of windows */
+static const unsigned int borderepx        = 1;  /* border pixel of windows */
+static const unsigned int borderspx_offset = 0;  /* border pixel of windows */
+static const unsigned int borderepx_negative_offset = 0;  /* border pixel of windows */
 static const int draw_minimal_borders      = 1; /* merge adjacent borders */
+static const int border_color_type         = BrdEnd;
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
 static const unsigned int swipe_min_threshold = 0;

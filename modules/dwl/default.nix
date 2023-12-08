@@ -26,8 +26,8 @@ in {
             domain = "codeberg.org";
             owner = "wochap";
             repo = "dwl";
-            rev = "0060d431988090d42e8f5cec6e035ff3fa6217d7";
-            hash = "sha256-x4cy5icfes06nYQomGFGpk+AiLb4bABhPlV++v2E7tU=";
+            rev = "0b6a3fb6c36af475e90c61f44106f94995b488e7";
+            hash = "sha256-uUpM26CCDaDCIHJve+4LTrdrfe6o623x1H4lkywkt+Y=";
           };
           buildInputs = with pkgs.unstable; [
             libinput
@@ -70,6 +70,12 @@ in {
             ${builtins.readFile ./dotfiles/config.def.h}
 
             static const float bordercolor[] = COLOR(0x${
+              unwrapHex themeColors.selection
+            }ff);
+            static const float borderscolor[] = COLOR(0x${
+              unwrapHex themeColors.selection
+            }00);
+            static const float borderecolor[] = COLOR(0x${
               unwrapHex themeColors.selection
             }ff);
             static const float focuscolor[] = COLOR(0x${
