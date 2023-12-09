@@ -11,12 +11,12 @@ in {
 
       services.syncthing = {
         enable = true;
-        openDefaultPorts = true;
-        relay.enable = false;
-        settings.options = {
-          urAccepted = -1;
-          # globalDiscoveryEnabled = false;
-        };
+        # openDefaultPorts = true;
+        # relay.enable = false;
+        # settings.options = {
+        #   urAccepted = -1;
+        #   globalDiscoveryEnabled = false;
+        # };
       };
     };
   };
