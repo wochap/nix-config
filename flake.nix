@@ -79,6 +79,8 @@
     fuzzy-sys.flake = false;
     zsh-autocomplete.url = "github:marlonrichert/zsh-autocomplete?rev=afc5afd15fe093bfd96faa521abe0255334c85b0";
     zsh-autocomplete.flake = false;
+    zsh-history-substring-search.url = "github:zsh-users/zsh-history-substring-search?rev=8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64";
+    zsh-history-substring-search.flake = false;
 
     # third party cli
     ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";

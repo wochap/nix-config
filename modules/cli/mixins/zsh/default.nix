@@ -18,29 +18,32 @@ in {
     };
 
     home-manager.users.${userName} = {
+      home.sessionVariables = {
+        # https://github.com/zsh-users/zsh-history-substring-search
+        # change the behavior of history-substring-search-up
+        HISTORY_SUBSTRING_SEARCH_PREFIXED = "1";
+
+        # make word movement commands to stop at every character
+        WORDCHARS = "";
+      };
+
       programs.zsh = {
         enable = true;
         dotDir = ".config/zsh";
         initExtraBeforeCompInit = ''
           # Install https://github.com/marlonrichert/zsh-autocomplete
           source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
+
+          # Increase zsh-autocomplete delay
           zstyle ':autocomplete:*' delay 0.1
 
-          # Make Tab go straight to the menu and cycle there
-          bindkey '\t' menu-select "$terminfo[kcbt]" menu-select
-          bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
-
-          # bind ctrl+e to cancel autocomplete
-          bindkey '^e' send-break
+          # Don't add spaces after accepting an option
+          zstyle ':autocomplete:*' add-space ""
         '';
         initExtra = ''
-          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
-
-          source ${./config.zsh}
-          source ${./nnn.zsh}
-          source ${./functions.zsh}
-          source ${./key-bindings.zsh}
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
+          source ${inputs.zsh-history-substring-search}/zsh-history-substring-search.zsh
+          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
 
           source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
           # Remove underline under paths (catppuccin_mocha-zsh-syntax-highlighting)
@@ -50,6 +53,11 @@ in {
           ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#cdd6f4'
           ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#f38ba8'
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+          source ${./config.zsh}
+          source ${./nnn.zsh}
+          source ${./functions.zsh}
+          source ${./key-bindings.zsh}
         '';
         enableCompletion = false;
         # syntaxHighlighting.enable = false;
@@ -58,6 +66,7 @@ in {
         # If one of the VISUAL or EDITOR environment variables contain the string 'vi' when the shell starts up then it will be viins
         defaultKeymap = "emacs";
         history = {
+          # TODO: add ignorePatterns
           ignoreDups = false;
           expireDuplicatesFirst = true;
           extended = true;

@@ -1379,7 +1379,8 @@
         "unstable": "unstable",
         "xdg-portal-hyprland": "xdg-portal-hyprland",
         "yabai-src": "yabai-src",
-        "zsh-autocomplete": "zsh-autocomplete"
+        "zsh-autocomplete": "zsh-autocomplete",
+        "zsh-history-substring-search": "zsh-history-substring-search"
       }
     },
     "smart-splits-nvim": {
@@ -1656,6 +1657,23 @@
         "owner": "marlonrichert",
         "repo": "zsh-autocomplete",
         "rev": "afc5afd15fe093bfd96faa521abe0255334c85b0",
+        "type": "github"
+      }
+    },
+    "zsh-history-substring-search": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1700734334,
+        "narHash": "sha256-houujb1CrRTjhCc+dp3PRHALvres1YylgxXwjjK6VZA=",
+        "owner": "zsh-users",
+        "repo": "zsh-history-substring-search",
+        "rev": "8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zsh-users",
+        "repo": "zsh-history-substring-search",
+        "rev": "8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64",
         "type": "github"
       }
     }
