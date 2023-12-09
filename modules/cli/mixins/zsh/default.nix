@@ -54,6 +54,7 @@ in {
           ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#f38ba8'
           source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+          # HACK: zsh-syntax-highlighting mess up my key bindings
           source ${./config.zsh}
           source ${./nnn.zsh}
           source ${./functions.zsh}
