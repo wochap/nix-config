@@ -25,6 +25,10 @@ in {
 
         # make word movement commands to stop at every character
         WORDCHARS = "";
+
+        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND = "bg=cyan,fg=black,bold";
+        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND =
+          "bg=red,fg=black,bold";
       };
 
       programs.zsh = {
