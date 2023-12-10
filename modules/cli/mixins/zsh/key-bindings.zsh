@@ -56,6 +56,11 @@ bindkey -M emacs '\t' menu-select "${terminfo[kcbt]}" menu-select
 # [Shift-Tab] - move through the completion menu backwards
 bindkey -M menuselect '\t' menu-complete "${terminfo[kcbt]}" reverse-menu-complete
 
+# NOTE: when selecting an option, backspace doesn't delete a char
+# TODO: with the following code, backspace deletes a char
+# but the option selected doesn't get highlighted
+# bindkey -M emacs '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
+
 # [Ctrl+e] - cancel autocomplete
 bindkey -M emacs '^e' send-break
 
