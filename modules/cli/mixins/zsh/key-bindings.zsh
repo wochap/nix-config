@@ -78,3 +78,6 @@ bindkey -M menuselect "${terminfo[kcuu1]}" history-substring-search-up
 # Start typing + [Down-Arrow] - fuzzy find history backward
 bindkey -M emacs "${terminfo[kcud1]}" history-substring-search-down
 bindkey -M menuselect "${terminfo[kcud1]}" history-substring-search-down
+
+# [Alt+UpArrow] remove key binding
+bindkey -r "^[[1;3A" -M emacs
