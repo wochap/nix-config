@@ -3,7 +3,7 @@ with pkgs;
 python3Packages.buildPythonApplication rec {
   pname = "offlinemsmtp";
   version = "unstable-2023-06-23";
-  format = "flit";
+  format = "pyproject";
 
   src = pkgs.fetchFromGitHub {
     owner = "sumnerevans";
@@ -12,8 +12,12 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-V4CDnpG8PZHs/0vA+6DvS5v9o08WRCQ0CKwmK1rGuY0=";
   };
 
-  nativeBuildInputs =
-    [ gobject-introspection python3Packages.setuptools wrapGAppsHook ];
+  nativeBuildInputs = [
+    python3Packages.flit-core
+    gobject-introspection
+    python3Packages.setuptools
+    wrapGAppsHook
+  ];
 
   buildInputs = [ libnotify ];
 
