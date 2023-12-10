@@ -95,3 +95,9 @@ bindkey -M menuselect "${terminfo[kcud1]}" history-substring-search-down
 # [Alt+p] - allows you to run another command before your current command
 bindkey -M emacs '^[p' push-line-or-edit
 
+# [Alt+u p] - run pro func
+bindkey '^[up' pro
+# [Alt+u a] - run apro func
+bindkey '^[ua' apro
+# [Alt+u o] - run opro func
+bindkey '^[uo' opro

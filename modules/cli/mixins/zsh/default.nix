@@ -19,6 +19,10 @@ in {
 
     home-manager.users.${userName} = {
       home.sessionVariables = {
+        # zsh-autocomplete: dont add key bindings
+        # https://github.com/wochap/zsh-autocomplete#options
+        AUTOCOMPLETE_INHIBIT_INIT = "1";
+
         # https://github.com/zsh-users/zsh-history-substring-search
         # change the behavior of history-substring-search-up
         HISTORY_SUBSTRING_SEARCH_PREFIXED = "1";
@@ -43,17 +47,18 @@ in {
 
           # Don't add spaces after accepting an option
           zstyle ':autocomplete:*' add-space ""
-
-          # [Alt+UpArrow] remove key binding
-          bindkey -r "^[[1;3A" -M emacs
         '';
         initExtra = ''
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
           source ${inputs.zsh-history-substring-search}/zsh-history-substring-search.zsh
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
-          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/dirhistory/dirhistory.plugin.zsh
           source ${inputs.zsh-autopair}/autopair.zsh
           autopair-init
+          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/dirhistory/dirhistory.plugin.zsh
+
+          source ${./config.zsh}
+          source ${./nnn.zsh}
+          source ${./functions.zsh}
 
           source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
           # Remove underline under paths (catppuccin_mocha-zsh-syntax-highlighting)
@@ -62,12 +67,9 @@ in {
           ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#f38ba8'
           ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#cdd6f4'
           ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#f38ba8'
-          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          source ${inputs.zsh-syntax-highlighting}/zsh-syntax-highlighting.zsh
 
           # HACK: zsh-syntax-highlighting mess up my key bindings
-          source ${./config.zsh}
-          source ${./nnn.zsh}
-          source ${./functions.zsh}
           source ${./key-bindings.zsh}
         '';
         enableCompletion = false;

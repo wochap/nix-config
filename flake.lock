@@ -1381,7 +1381,8 @@
         "yabai-src": "yabai-src",
         "zsh-autocomplete": "zsh-autocomplete",
         "zsh-autopair": "zsh-autopair",
-        "zsh-history-substring-search": "zsh-history-substring-search"
+        "zsh-history-substring-search": "zsh-history-substring-search",
+        "zsh-syntax-highlighting": "zsh-syntax-highlighting"
       }
     },
     "smart-splits-nvim": {
@@ -1647,17 +1648,17 @@
     "zsh-autocomplete": {
       "flake": false,
       "locked": {
-        "lastModified": 1693206903,
-        "narHash": "sha256-npflZ7sr2yTeLQZIpozgxShq3zbIB5WMIZwMv8rkLJg=",
-        "owner": "marlonrichert",
+        "lastModified": 1702241496,
+        "narHash": "sha256-PB0u783u2d72VxT8FeCmjUTa+DBr087ToOT2dleKpH4=",
+        "owner": "wochap",
         "repo": "zsh-autocomplete",
-        "rev": "afc5afd15fe093bfd96faa521abe0255334c85b0",
+        "rev": "5aedb496754c867e949c144e19c74bfccbbef1a2",
         "type": "github"
       },
       "original": {
-        "owner": "marlonrichert",
+        "owner": "wochap",
         "repo": "zsh-autocomplete",
-        "rev": "afc5afd15fe093bfd96faa521abe0255334c85b0",
+        "rev": "5aedb496754c867e949c144e19c74bfccbbef1a2",
         "type": "github"
       }
     },
@@ -1692,6 +1693,23 @@
         "owner": "zsh-users",
         "repo": "zsh-history-substring-search",
         "rev": "8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64",
+        "type": "github"
+      }
+    },
+    "zsh-syntax-highlighting": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1698603908,
+        "narHash": "sha256-bD0oKXSw9lucJR+6/O16m7prwA1cP36C0Tvh5mklapw=",
+        "owner": "zsh-users",
+        "repo": "zsh-syntax-highlighting",
+        "rev": "bb27265aeeb0a22fb77f1275118a5edba260ec47",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zsh-users",
+        "repo": "zsh-syntax-highlighting",
+        "rev": "bb27265aeeb0a22fb77f1275118a5edba260ec47",
         "type": "github"
       }
     }

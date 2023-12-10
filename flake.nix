@@ -79,12 +79,14 @@
     kitty-smart-tab.flake = false;
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f";
     fuzzy-sys.flake = false;
-    zsh-autocomplete.url = "github:marlonrichert/zsh-autocomplete?rev=afc5afd15fe093bfd96faa521abe0255334c85b0";
+    zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=5aedb496754c867e949c144e19c74bfccbbef1a2";
     zsh-autocomplete.flake = false;
     zsh-history-substring-search.url = "github:zsh-users/zsh-history-substring-search?rev=8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64";
     zsh-history-substring-search.flake = false;
     zsh-autopair.url = "github:hlissner/zsh-autopair?rev=396c38a7468458ba29011f2ad4112e4fd35f78e6";
     zsh-autopair.flake = false;
+    zsh-syntax-highlighting.url = "github:zsh-users/zsh-syntax-highlighting?rev=bb27265aeeb0a22fb77f1275118a5edba260ec47";
+    zsh-syntax-highlighting.flake = false;
 
     # third party cli
     ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";
