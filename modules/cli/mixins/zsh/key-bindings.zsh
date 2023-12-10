@@ -39,12 +39,25 @@ else
   bindkey -M emacs "^[3;5~" delete-char
 fi
 
-# [Alt-Delete] - delete whole forward-word
-bindkey -M emacs '^[[3;3~' kill-word
-# [Alt-RightArrow] - move forward one word
-bindkey -M emacs '^[[1;3C' forward-word
-# [Alt-LeftArrow] - move backward one word
-bindkey -M emacs '^[[1;3D' backward-word
+function backward-kill-blank-word() {
+    local WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+    zle backward-kill-word
+    zle -f kill
+}
+zle -N backward-kill-blank-word
+# [Alt-Delete] - delete backward-word
+bindkey -M emacs '^[[3;3~' backward-kill-word
+# [Alt+Shift-Delete] - delete the entire backward-word
+bindkey -M emacs '^[[3;6~' backward-kill-blank-word
+bindkey -M emacs '^[g' backward-kill-blank-word
+# [Alt-f] - move forward one word
+bindkey -M emacs "^[f" forward-word
+# [Alt-Shift-f] - move forward one entire word
+bindkey -M emacs "^[F" vi-forward-blank-word
+# [Alt-b] - move backward one word
+bindkey -M emacs "^[b" backward-word
+# [Alt-Shift-b] - move backward one entire word
+bindkey -M emacs "^[B" vi-backward-blank-word
 
 # Edit the current command line in $EDITOR
 autoload -U edit-command-line
@@ -79,5 +92,6 @@ bindkey -M menuselect "${terminfo[kcuu1]}" history-substring-search-up
 bindkey -M emacs "${terminfo[kcud1]}" history-substring-search-down
 bindkey -M menuselect "${terminfo[kcud1]}" history-substring-search-down
 
-# [Alt+UpArrow] remove key binding
-bindkey -r "^[[1;3A" -M emacs
+# [Alt+p] - allows you to run another command before your current command
+bindkey -M emacs '^[p' push-line-or-edit
+

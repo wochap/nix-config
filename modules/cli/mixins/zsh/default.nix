@@ -23,12 +23,12 @@ in {
         # change the behavior of history-substring-search-up
         HISTORY_SUBSTRING_SEARCH_PREFIXED = "1";
 
-        # make word movement commands to stop at every character
-        WORDCHARS = "";
+        # make word movement commands to stop at every character except:
+        # WORDCHARS = "*?_-.[]~=/&;!#$%^(){}<>";
+        WORDCHARS = "_*";
 
         HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND = "bg=cyan,fg=black,bold";
-        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND =
-          "bg=red,fg=black,bold";
+        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND = "bg=red,fg=black,bold";
       };
 
       programs.zsh = {
@@ -43,11 +43,17 @@ in {
 
           # Don't add spaces after accepting an option
           zstyle ':autocomplete:*' add-space ""
+
+          # [Alt+UpArrow] remove key binding
+          bindkey -r "^[[1;3A" -M emacs
         '';
         initExtra = ''
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
           source ${inputs.zsh-history-substring-search}/zsh-history-substring-search.zsh
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
+          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/dirhistory/dirhistory.plugin.zsh
+          source ${inputs.zsh-autopair}/autopair.zsh
+          autopair-init
 
           source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
           # Remove underline under paths (catppuccin_mocha-zsh-syntax-highlighting)

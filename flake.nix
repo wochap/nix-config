@@ -3,6 +3,7 @@
     # nixpkgs channels
     unstable.url = "github:nixos/nixpkgs?rev=4f2b18d41893ffbf9487a86a874791a681601260"; # master (aug 25 2023)
     nixpkgs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # nixos-23.05-small (sep 04 2023)
+    # nixpkgs.url = "github:nixos/nixpkgs?rev=0561103cedb11e7554cf34cea81e5f5d578a4753"; # nixos-23.11 (dec 09 2023)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=e44462d6021bfe23dfb24b775cc7c390844f773d"; # NVIM v0.9.1
     prevstable-mongodb.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419"; # MongoDB shell version v4.2.17
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
@@ -21,6 +22,7 @@
 
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=5bac4a1c06cd77cf8fc35a658ccb035a6c50cd2c"; # release-23.05 (sep 04 2023)
+    # home-manager.url = "github:nix-community/home-manager?rev=aeb2232d7a32530d3448318790534d196bf9427a"; # release-23.11 (dec 09 2023)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
     home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -81,6 +83,8 @@
     zsh-autocomplete.flake = false;
     zsh-history-substring-search.url = "github:zsh-users/zsh-history-substring-search?rev=8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64";
     zsh-history-substring-search.flake = false;
+    zsh-autopair.url = "github:hlissner/zsh-autopair?rev=396c38a7468458ba29011f2ad4112e4fd35f78e6";
+    zsh-autopair.flake = false;
 
     # third party cli
     ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";

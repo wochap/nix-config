@@ -92,7 +92,19 @@ function nvims() {
 }
 alias nvs=nvims
 
-copyfile()
-{
-  cat $1 | wl-copy
+function copyfile() {
+  wl-copy < $1
 }
+
+function disappointed() {
+  echo -n " ಠ_ಠ " | tee /dev/tty | wl-copy;
+}
+
+function flip() {
+  echo -n "（╯°□°）╯ ┻━┻" | tee /dev/tty | wl-copy;
+}
+
+function shrug() {
+  echo -n "¯\_(ツ)_/¯" | tee /dev/tty | wl-copy;
+}
+

@@ -1380,6 +1380,7 @@
         "xdg-portal-hyprland": "xdg-portal-hyprland",
         "yabai-src": "yabai-src",
         "zsh-autocomplete": "zsh-autocomplete",
+        "zsh-autopair": "zsh-autopair",
         "zsh-history-substring-search": "zsh-history-substring-search"
       }
     },
@@ -1657,6 +1658,23 @@
         "owner": "marlonrichert",
         "repo": "zsh-autocomplete",
         "rev": "afc5afd15fe093bfd96faa521abe0255334c85b0",
+        "type": "github"
+      }
+    },
+    "zsh-autopair": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1664801964,
+        "narHash": "sha256-PXHxPxFeoYXYMOC29YQKDdMnqTO0toyA7eJTSCV6PGE=",
+        "owner": "hlissner",
+        "repo": "zsh-autopair",
+        "rev": "396c38a7468458ba29011f2ad4112e4fd35f78e6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hlissner",
+        "repo": "zsh-autopair",
+        "rev": "396c38a7468458ba29011f2ad4112e4fd35f78e6",
         "type": "github"
       }
     },
