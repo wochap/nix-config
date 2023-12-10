@@ -14,6 +14,7 @@ in {
       (final: prev: {
         swaynotificationcenter = prev.swaynotificationcenter.overrideAttrs
           (oldAttrs: rec {
+            version = "9f6cd8716d6bf2a1eb38eb3db710c0ad91ca3274";
             src = prev.fetchFromGitHub {
               owner = "ErikReider";
               repo = "SwayNotificationCenter";

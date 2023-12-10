@@ -12,6 +12,7 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         lazygit = prev.lazygit.overrideAttrs (_: {
+          version = "e60936e964e0b978532745f319fc4600c00de7d7";
           src = prev.fetchFromGitHub {
             owner = "jesseduffield";
             repo = "lazygit";

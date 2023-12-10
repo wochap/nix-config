@@ -21,7 +21,7 @@ in {
       (final: prev: {
         # install my patched dwl
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "0.6-alpha";
+          version = "0b6a3fb6c36af475e90c61f44106f94995b488e7";
           src = prev.fetchFromGitea {
             domain = "codeberg.org";
             owner = "wochap";

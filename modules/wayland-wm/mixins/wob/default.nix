@@ -16,6 +16,7 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         wob = prev.wob.overrideAttrs (_: {
+          version = "75a65e6c33e916a5453d705ed5b3b21335587631";
           src = pkgs.fetchFromGitHub {
             owner = "francma";
             repo = "wob";

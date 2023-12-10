@@ -25,6 +25,7 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         showmethekey = prev.showmethekey.overrideAttrs (oldAttrs: {
+          version = "6204cf1d4794578372c273348daa342589479b13";
           src = prev.fetchFromGitHub {
             owner = "AlynxZhou";
             repo = "showmethekey";
