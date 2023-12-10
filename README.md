@@ -305,6 +305,12 @@ $ sudo gpu-switch -i
      ln -sf $newlinkcontent $newlinkpath;
    done
    ```
+* Get key terminal code
+
+   ```sh
+   $ kitty +kitten show_key
+   $ showkey -a
+   ```
 
 * Get key actual name
 
