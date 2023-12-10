@@ -169,14 +169,15 @@ in {
       kernelModules = [ "hid-apple" ];
     };
 
-    environment.systemPackages = with pkgs;
-      [
-        radeontop
+    environment.systemPackages = with pkgs; [
+      undervolt
 
-        # NOTE: requires installing rEFInd
-        # more info on https://github.com/0xbb/gpu-switch
-        gpu-switch
-      ];
+      radeontop
+
+      # NOTE: requires installing rEFInd
+      # more info on https://github.com/0xbb/gpu-switch
+      gpu-switch
+    ];
 
     networking = {
       inherit hostName;
@@ -207,7 +208,8 @@ in {
 
     # setup video drivers
     services.xserver = {
-      videoDrivers = lib.mkForce [ "amdgpu" "radeon" "intel" "modesetting" ];
+      # radeon intel
+      videoDrivers = lib.mkForce [ "amdgpu" "modesetting" ];
 
       deviceSection = ''
         Option "EnablePageFlip" "off"
