@@ -19,10 +19,6 @@ in {
 
     home-manager.users.${userName} = {
       home.sessionVariables = {
-        # zsh-autocomplete: dont add key bindings
-        # https://github.com/wochap/zsh-autocomplete#options
-        AUTOCOMPLETE_INHIBIT_INIT = "1";
-
         # https://github.com/zsh-users/zsh-history-substring-search
         # change the behavior of history-substring-search-up
         HISTORY_SUBSTRING_SEARCH_PREFIXED = "1";
@@ -39,14 +35,21 @@ in {
         enable = true;
         dotDir = ".config/zsh";
         initExtraBeforeCompInit = ''
-          # Install https://github.com/marlonrichert/zsh-autocomplete
-          source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
+          # Show dotfiles in zsh-autocomplete
+          # _comp_options+=(globdots)
+          setopt GLOB_DOTS
+
+          # Disable zsh-autocomplete key bindings
+          zstyle ':autocomplete:key-bindings' enabled no
 
           # Increase zsh-autocomplete delay
           zstyle ':autocomplete:*' delay 0.1
 
           # Don't add spaces after accepting an option
           zstyle ':autocomplete:*' add-space ""
+
+          # Install https://github.com/marlonrichert/zsh-autocomplete
+          source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
         '';
         initExtra = ''
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
