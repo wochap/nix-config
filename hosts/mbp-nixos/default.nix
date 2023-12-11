@@ -53,6 +53,7 @@ in {
     _custom.tui.neovim.enable = true;
     _custom.tui.newsboat.enable = true;
     _custom.tui.nnn.enable = true;
+    _custom.tui.taskwarrior.enable = true;
     _custom.tui.vim.enable = true;
     _custom.tui.wtf.enable = true;
     _custom.tui.bottom.enable = true;

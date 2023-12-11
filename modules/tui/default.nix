@@ -10,6 +10,7 @@
     ./mixins/neovim
     ./mixins/newsboat
     ./mixins/nnn
+    ./mixins/taskwarrior
     ./mixins/vim
     ./mixins/wtf
     ./mixins/bottom.nix

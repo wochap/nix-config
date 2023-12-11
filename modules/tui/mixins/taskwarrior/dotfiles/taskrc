@@ -1,0 +1,13 @@
+editor=nvim
+
+dateformat=a d b Y
+dateformat.report=
+dateformat.holiday=🎉 a d b Y
+dateformat.edit=a d b Y H:N
+dateformat.info=a d b Y H:N
+dateformat.annotation=
+report.X.dateformat=a d b Y
+
+weekstart=Monday
+
+uda.taskwarrior-tui.selection.indicator=❯
