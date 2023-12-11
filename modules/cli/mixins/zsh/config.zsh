@@ -55,4 +55,26 @@ fi
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS} "ma=48;5;2;38;5;16;1"
 
 # Show dotfiles by default in completion system
-_comp_options+=(globdots)
+# _comp_options+=(globdots)
+
+# Don't treat non-executable files in your $path as commands. This makes sure
+# they don't show up as command completions. Settinig this option can impact
+# performance on older systems, but should not be a problem on modern ones.
+# source: https://github.com/marlonrichert/zsh-launchpad/blob/main/.config/zsh/rc.d/07-opts.zsh
+setopt HASH_EXECUTABLES_ONLY
+
+# Treat comments pasted into the command line as comments, not code.
+setopt INTERACTIVE_COMMENTS
+
+# Sort numbers numerically, not lexicographically.
+setopt NUMERIC_GLOB_SORT
+
+# Auto-remove the right side of each prompt when you press enter. This way,
+# we'll have less clutter on screen. This also makes it easier to copy code from
+# our terminal.
+setopt TRANSIENT_RPROMPT
+
+# These aliases enable us to paste example code into the terminal without the
+# shell complaining about the pasted prompt symbol.
+alias %= \$=
+

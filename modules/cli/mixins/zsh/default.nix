@@ -27,8 +27,8 @@ in {
         # WORDCHARS = "*?_-.[]~=/&;!#$%^(){}<>";
         WORDCHARS = "_*";
 
-        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND = "bg=cyan,fg=black,bold";
-        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND = "bg=red,fg=black,bold";
+        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND = "bg=cyan,fg=16,bold";
+        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND = "bg=red,fg=16,bold";
       };
 
       programs.zsh = {
@@ -50,6 +50,10 @@ in {
 
           # Install https://github.com/marlonrichert/zsh-autocomplete
           source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
+
+          # zsh-autosuggestions options
+          export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
+          export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
         '';
         initExtra = ''
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh

@@ -86,7 +86,10 @@ bindkey -M menuselect '\t' menu-complete "${terminfo[kcbt]}" reverse-menu-comple
 # bindkey -M emacs '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete
 
 # [Ctrl+e] - cancel autocomplete
-bindkey -M emacs '^e' send-break
+bindkey -M menuselect '^e' undo
+
+# [Esc] - abort completion
+bindkey -M menuselect '^?' send-break
 
 # [LeftArrow] - move backward one char
 bindkey -M menuselect "${terminfo[kcub1]}" .backward-char
@@ -112,3 +115,16 @@ bindkey '^[up' pro
 bindkey '^[ua' apro
 # [Alt+u o] - run opro func
 bindkey '^[uo' opro
+
+function .recover-line() { LBUFFER+=$ZLE_LINE_ABORTED }
+zle -N .recover-line
+# [Alt+g] - recover last line aborted
+bindkey -M emacs '^[g' recover-line
+
+# [Alt-V] - show the next key combo's terminal code and state what it does.
+bindkey '^[v' describe-key-briefly
+
+# [Alt-W] - type a widget name and press Enter to see the keys bound to it.
+# type part of a widget name and press Enter for autocompletion.
+bindkey '^[w' where-is
+
