@@ -24,6 +24,8 @@ in {
         ${builtins.readFile ./dotfiles/timewarrior.cfg}
       '';
 
+      home.shellAliases = { twt = "taskwarrior-tui"; };
+
       programs.taskwarrior = {
         enable = true;
         colorTheme = "dark-green-256";
