@@ -45,11 +45,22 @@ function backward-kill-blank-word() {
     zle -f kill
 }
 zle -N backward-kill-blank-word
-# [Alt-Delete] - delete backward-word
-bindkey -M emacs '^[[3;3~' backward-kill-word
-# [Alt+Shift-Delete] - delete the entire backward-word
-bindkey -M emacs '^[[3;6~' backward-kill-blank-word
-bindkey -M emacs '^[g' backward-kill-blank-word
+function kill-blank-word() {
+    local WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+    zle kill-word
+    zle -f kill
+}
+zle -N kill-blank-word
+# [Alt-Backspace] - delete forward-word
+bindkey -M emacs '^[^?' backward-kill-word
+# [Alt+Shift-Backspace] - delete the entire backward-word
+# TODO: find Alt+Shift-Backspace keycode
+# HACK: kitty sends alt+shift+h instead of alt+shift+backspace
+bindkey -M emacs '^[^H' backward-kill-blank-word
+# [Alt-Delete] - delete forward-word
+bindkey -M emacs '^[[3;3~' kill-word
+# [Alt+Shift-Delete] - delete the entire forward-word
+bindkey -M emacs '^[[3;4~' kill-blank-word
 # [Alt-f] - move forward one word
 bindkey -M emacs "^[f" forward-word
 # [Alt-Shift-f] - move forward one entire word

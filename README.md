@@ -308,6 +308,7 @@ $ sudo gpu-switch -i
 * Get key terminal code
 
    ```sh
+   $ kitten show_key -m kitty
    $ kitty +kitten show_key
    $ showkey -a
    ```

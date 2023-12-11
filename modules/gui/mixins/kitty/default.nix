@@ -145,6 +145,10 @@ in {
         };
 
         # kittens
+        "kitty/replace_alt_shift_backspace.py" = {
+          source = ./dotfiles/replace_alt_shift_backspace.py;
+          executable = true;
+        };
         "kitty/custom_pass_keys.py" = {
           source = ./dotfiles/custom_pass_keys.py;
           executable = true;
