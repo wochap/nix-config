@@ -50,3 +50,9 @@ else
   export EDITOR="nvim"
 fi
 
+# Rice completion system
+# https://zsh.sourceforge.io/Doc/Release/Completion-System.html
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS} "ma=48;5;2;38;5;16;1"
+
+# Show dotfiles by default in completion system
+_comp_options+=(globdots)
