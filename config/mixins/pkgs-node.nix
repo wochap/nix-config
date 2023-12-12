@@ -4,7 +4,7 @@ let userName = config._userName;
 in {
   config = {
     environment.systemPackages = with pkgs; [
-      bun
+      unstable.bun
       deno
 
       # global nodejs
@@ -29,7 +29,7 @@ in {
 
     home-manager.users.${userName} = {
       home.sessionVariables = {
-        PATH = "$HOME/.npm-packages/bin:$PATH";
+        PATH = "$HOME/.npm-packages/bin:$HOME/.bun/bin:$PATH";
         NODE_PATH = "$HOME/.npm-packages/lib/node_modules:$NODE_PATH";
       };
 
@@ -38,6 +38,19 @@ in {
           prefix = ''${HOME}/.npm-packages
         '';
       };
+
+      xdg.configFile.".bunfig.toml".text = ''
+        [install]
+        # where `bun install --global` installs packages
+        globalDir = "~/.bun/install/global"
+
+        # where globally-installed package bins are linked
+        globalBinDir = "~/.bun/bin"
+
+        [install.cache]
+        # the directory to use for the cache
+        dir = "~/.bun/install/cache"
+      '';
     };
   };
 }
