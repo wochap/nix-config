@@ -92,12 +92,13 @@ in {
 
           if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
             abbr import-aliases --quiet
-            abbr erase nvim --quiet
-            abbr erase ls --quiet
-            abbr erase la --quiet
-            abbr erase lt --quiet
-            abbr erase ll --quiet
-            abbr erase lla --quiet
+            abbr erase --quiet nv
+            abbr erase --quiet nvim
+            abbr erase --quiet ls
+            abbr erase --quiet la
+            abbr erase --quiet lt
+            abbr erase --quiet ll
+            abbr erase --quiet lla
           fi
 
           source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
