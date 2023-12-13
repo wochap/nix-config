@@ -7,6 +7,28 @@ in {
   options._custom.cli.zsh = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        zsh-abbr = prev.zsh-abbr.overrideAttrs (oldAttrs: rec {
+          version = "5.2.0";
+
+          src = prev.fetchFromGitHub {
+            owner = "olets";
+            repo = "zsh-abbr";
+            rev = "v${version}";
+            hash = "sha256-MvxJkEbJKMmYRku/RF6ayOb7u7NI4HZehO8ty64jEnE=";
+          };
+
+          installPhase = ''
+            mkdir -p $out/share/zsh-abbr
+            cp zsh-abbr.zsh zsh-abbr.plugin.zsh $out/share/zsh-abbr
+            install -D completions/_abbr $out/share/zsh/site-functions/_abbr
+            install -D man/man1/abbr.1 $out/share/man/man1/abbr.1
+          '';
+        });
+      })
+    ];
+
     users.users.${userName}.shell = pkgs.zsh;
 
     programs.zsh = {
@@ -18,6 +40,7 @@ in {
     };
 
     home-manager.users.${userName} = {
+      home.packages = with pkgs; [ unstable.zsh-abbr ];
       home.sessionVariables = {
         # https://github.com/zsh-users/zsh-history-substring-search
         # change the behavior of history-substring-search-up
@@ -59,17 +82,23 @@ in {
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
           source ${inputs.zsh-history-substring-search}/zsh-history-substring-search.zsh
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
-          source ${inputs.zsh-autopair}/autopair.zsh
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/dirhistory/dirhistory.plugin.zsh
-          source ${inputs.zsh-abbr}/zsh-abbr.zsh
+          source ${pkgs.unstable.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
 
           source ${./config.zsh}
           source ${./nnn.zsh}
           source ${./functions.zsh}
           source ${./key-bindings.zsh}
 
-          autopair-init
-          abbr import-aliases --quiet
+          if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
+            abbr import-aliases --quiet
+            abbr erase nvim --quiet
+            abbr erase ls --quiet
+            abbr erase la --quiet
+            abbr erase lt --quiet
+            abbr erase ll --quiet
+            abbr erase lla --quiet
+          fi
 
           source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
           # Remove underline under paths (catppuccin_mocha-zsh-syntax-highlighting)
