@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./mixins/asciinema
     ./mixins/bat
     ./mixins/buku
     ./mixins/cht
