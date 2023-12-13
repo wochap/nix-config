@@ -75,13 +75,10 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
 
-function reverse-menu-select() {
-  zle menu-select
-  zle reverse-menu-complete
-}
-zle -N reverse-menu-select
-# [Tab] [Shift-Tab] - go straight to the menu and cycle there
-bindkey -M emacs '\t' menu-select "${terminfo[kcbt]}" reverse-menu-select
+# [Tab] - go straight to the menu and cycle there
+bindkey -M emacs '\t' menu-select "${terminfo[kcbt]}" menu-select
+# [Shift-Tab] - insert substring occuring in all listed completions
+bindkey -M emacs "${terminfo[kcbt]}" insert-unambiguous-or-complete
 # [Tab] [Shift-Tab] - move through the completion menu
 bindkey -M menuselect '\t' menu-complete "${terminfo[kcbt]}" reverse-menu-complete
 
@@ -100,6 +97,9 @@ bindkey -M menuselect '^?' send-break
 bindkey -M menuselect "${terminfo[kcub1]}" .backward-char
 # [RightArrow] - move forward one char
 bindkey -M menuselect "${terminfo[kcuf1]}" .forward-char
+
+# [Enter] - execute the command
+bindkey -M emacs '\r' .accept-line
 
 # [Enter] - execute the command in menuselect mode
 bindkey -M menuselect '\r' .accept-line
