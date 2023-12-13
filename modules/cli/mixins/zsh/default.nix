@@ -40,7 +40,13 @@ in {
     };
 
     home-manager.users.${userName} = {
-      home.packages = with pkgs; [ unstable.zsh-abbr ];
+      home.packages = with pkgs; [
+        # completions and manpage install
+        unstable.zsh-abbr
+
+        # more completions
+        unstable.zsh-completions
+      ];
       home.sessionVariables = {
         # https://github.com/zsh-users/zsh-history-substring-search
         # change the behavior of history-substring-search-up
