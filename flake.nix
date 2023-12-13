@@ -87,6 +87,8 @@
     zsh-autopair.flake = false;
     zsh-syntax-highlighting.url = "github:zsh-users/zsh-syntax-highlighting?rev=bb27265aeeb0a22fb77f1275118a5edba260ec47";
     zsh-syntax-highlighting.flake = false;
+    zsh-fsh.url = "github:zdharma-continuum/fast-syntax-highlighting?rev=cf318e06a9b7c9f2219d78f41b46fa6e06011fd9";
+    zsh-fsh.flake = false;
     zsh-abbr.url = "github:olets/zsh-abbr?rev=6802d7353b2422d7a82134ce655aff97367eefa0";
     zsh-abbr.flake = false;
 
@@ -129,6 +131,8 @@
     catppuccin-kitty.flake = false;
     catppuccin-zsh-syntax-highlighting.url = "github:catppuccin/zsh-syntax-highlighting?rev=06d519c20798f0ebe275fc3a8101841faaeee8ea";
     catppuccin-zsh-syntax-highlighting.flake = false;
+    catppuccin-zsh-fsh.url = "github:catppuccin/zsh-fsh?rev=7cdab58bddafe0565f84f6eaf2d7dd109bd6fc18";
+    catppuccin-zsh-fsh.flake = false;
     catppuccin-starship.url = "github:catppuccin/starship?rev=5629d2356f62a9f2f8efad3ff37476c19969bd4f";
     catppuccin-starship.flake = false;
     catppuccin-neomutt.url = "github:catppuccin/neomutt?rev=f6ce83da47cc36d5639b0d54e7f5f63cdaf69f11";

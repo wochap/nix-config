@@ -312,6 +312,23 @@
         "type": "github"
       }
     },
+    "catppuccin-zsh-fsh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1689083399,
+        "narHash": "sha256-31lh+LpXGe7BMZBhRWvvbOTkwjOM77FPNaGy6d26hIA=",
+        "owner": "catppuccin",
+        "repo": "zsh-fsh",
+        "rev": "7cdab58bddafe0565f84f6eaf2d7dd109bd6fc18",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "zsh-fsh",
+        "rev": "7cdab58bddafe0565f84f6eaf2d7dd109bd6fc18",
+        "type": "github"
+      }
+    },
     "catppuccin-zsh-syntax-highlighting": {
       "flake": false,
       "locked": {
@@ -1352,6 +1369,7 @@
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "catppuccin-starship": "catppuccin-starship",
         "catppuccin-zathura": "catppuccin-zathura",
+        "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",
         "catppuccin-zsh-syntax-highlighting": "catppuccin-zsh-syntax-highlighting",
         "darwin": "darwin",
         "dracula-dircolors": "dracula-dircolors",
@@ -1399,6 +1417,7 @@
         "zsh-abbr": "zsh-abbr",
         "zsh-autocomplete": "zsh-autocomplete",
         "zsh-autopair": "zsh-autopair",
+        "zsh-fsh": "zsh-fsh",
         "zsh-history-substring-search": "zsh-history-substring-search",
         "zsh-syntax-highlighting": "zsh-syntax-highlighting"
       }
@@ -1711,6 +1730,23 @@
         "owner": "hlissner",
         "repo": "zsh-autopair",
         "rev": "396c38a7468458ba29011f2ad4112e4fd35f78e6",
+        "type": "github"
+      }
+    },
+    "zsh-fsh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1688591419,
+        "narHash": "sha256-RVX9ZSzjBW3LpFs2W86lKI6vtcvDWP6EPxzeTcRZua4=",
+        "owner": "zdharma-continuum",
+        "repo": "fast-syntax-highlighting",
+        "rev": "cf318e06a9b7c9f2219d78f41b46fa6e06011fd9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zdharma-continuum",
+        "repo": "fast-syntax-highlighting",
+        "rev": "cf318e06a9b7c9f2219d78f41b46fa6e06011fd9",
         "type": "github"
       }
     },
