@@ -68,7 +68,7 @@ autocomplete:config:format:warnings() {
   [[ $CURRENT == 1 && -z $PREFIX$SUFFIX ]] ||
     typeset -ga reply=( $'%{\e[38;5;1m%}'"-- no matching %d completions --"$'%{\e[0m%}' )
 }
-
+zstyle ':completion:unambiguous' format $'%{\e[38;5;8m%}-- common substring: %{\e[38;5;2m%}%d %{\e[38;5;8m%}--%{\e[0m%}'
 
 # Show dotfiles by default in completion system
 # _comp_options+=(globdots)

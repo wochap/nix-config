@@ -79,7 +79,7 @@
     kitty-smart-tab.flake = false;
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f";
     fuzzy-sys.flake = false;
-    zsh-autocomplete.url = "github:marlonrichert/zsh-autocomplete?rev=afc5afd15fe093bfd96faa521abe0255334c85b0";
+    zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=d52da825c2b60b664f33e8d82fdfc1c3b647b753";
     zsh-autocomplete.flake = false;
     zsh-history-substring-search.url = "github:zsh-users/zsh-history-substring-search?rev=8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64";
     zsh-history-substring-search.flake = false;
