@@ -143,6 +143,8 @@
     catppuccin-amfora.flake = false;
     catppuccin-discord.url = "github:catppuccin/discord";
     catppuccin-discord.flake = false;
+    catppuccin-dircolors.url = "github:wochap/dircolors";
+    catppuccin-dircolors.flake = false;
   };
 
   outputs = inputs:

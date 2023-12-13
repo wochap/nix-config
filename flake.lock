@@ -161,6 +161,22 @@
         "type": "github"
       }
     },
+    "catppuccin-dircolors": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1702444528,
+        "narHash": "sha256-QuK/4G0qb6YzSL8B8Vf+WBsoDGssUMtaFZ871cZHd/U=",
+        "owner": "wochap",
+        "repo": "dircolors",
+        "rev": "26823e1d958617773d6291800d574af97c867632",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "dircolors",
+        "type": "github"
+      }
+    },
     "catppuccin-discord": {
       "flake": false,
       "locked": {
@@ -1327,6 +1343,7 @@
         "catppuccin-amfora": "catppuccin-amfora",
         "catppuccin-bat": "catppuccin-bat",
         "catppuccin-bottom": "catppuccin-bottom",
+        "catppuccin-dircolors": "catppuccin-dircolors",
         "catppuccin-discord": "catppuccin-discord",
         "catppuccin-kitty": "catppuccin-kitty",
         "catppuccin-lazygit": "catppuccin-lazygit",

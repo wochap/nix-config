@@ -11,8 +11,9 @@ in {
       programs.dircolors = {
         enable = true;
         enableBashIntegration = true;
+        settings = lib.mkForce { };
         extraConfig =
-          builtins.readFile "${inputs.dracula-dircolors}/.dircolors";
+          builtins.readFile "${inputs.catppuccin-dircolors}/.dircolors";
       };
     };
   };
