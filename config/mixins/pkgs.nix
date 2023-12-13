@@ -1,6 +1,7 @@
 { config, pkgs, inputs, system, ... }:
 
 let
+  userName = config._userName;
   ani-cli = pkgs.writeShellScriptBin "ani-cli"
     (builtins.readFile "${inputs.ani-cli}/ani-cli");
 in {
@@ -70,6 +71,10 @@ in {
         tree = "tree -a -C -L 1";
         weather = "curl wttr.in";
       };
+    };
+
+    home-manager.users.${userName} = {
+      programs.command-not-found.enable = true;
     };
   };
 }
