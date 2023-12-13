@@ -75,9 +75,14 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
 
-# [Tab] - go straight to the menu and cycle there
-bindkey -M emacs '\t' menu-select "${terminfo[kcbt]}" menu-select
-# [Shift-Tab] - move through the completion menu backwards
+function reverse-menu-select() {
+  zle menu-select
+  zle menu-complete-backward
+}
+zle -N reverse-menu-select
+# [Tab] [Shift-Tab] - go straight to the menu and cycle there
+bindkey -M emacs '\t' menu-select "${terminfo[kcbt]}" reverse-menu-select
+# [Tab] [Shift-Tab] - move through the completion menu
 bindkey -M menuselect '\t' menu-complete "${terminfo[kcbt]}" reverse-menu-complete
 
 # NOTE: when selecting an option, backspace doesn't delete a char
