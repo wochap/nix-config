@@ -101,5 +101,10 @@ in {
       extraGroups =
         [ "audio" "disk" "input" "networkmanager" "storage" "video" "wheel" ];
     };
+
+    home-manager.users.${userName} = {
+      # better ls sorting
+      home.language.collate = "C.UTF-8";
+    };
   };
 }
