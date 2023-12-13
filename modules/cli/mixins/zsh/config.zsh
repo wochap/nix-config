@@ -57,10 +57,11 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS} 'ma=48;5;2;38;5;16
 # https://github.com/Phantas0s/.dotfiles/blob/master/zsh/completion.zsh
 # https://thevaluable.dev/zsh-completion-guide-examples/
 # https://stackoverflow.com/questions/23152157/how-does-the-zsh-list-colors-syntax-work/23568183#23568183
+# https://github.com/backdround/configuration/blob/046d9490dda15998cc2223de44e45cbcb09ef7b5/configs/terminal/zsh/zshrc#L42
 zstyle ':completion:*:functions' list-colors '=*=38;5;4'
-zstyle ':completion:*:commands' list-colors '=*=38;5;2'
+zstyle ':completion:*:commands' list-colors '=(#b)*(-- [a-zA-Z0-9]*)=38;5;2=38;5;8'
 zstyle ':completion:*:aliases' list-colors '=*=38;5;2'
-zstyle ':completion:*:options' list-colors '=^(-- *)=38;5;216' '=(-- *)=38;5;8'
+zstyle ':completion:*:options' list-colors '=(#b)*(-- [a-zA-Z0-9]*)=38;5;216=38;5;8' '=^(-- *)=38;5;216'
 zstyle ':completion:*:descriptions' format $'%{\e[38;5;8m%}-- %d --%{\e[0m%}'
 zstyle ':completion:*:messages' format $'%{\e[38;5;8m%}-- %d --%{\e[0m%}'
 zstyle -e ':completion:*:warnings' format autocomplete:config:format:warnings
