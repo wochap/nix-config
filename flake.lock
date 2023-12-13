@@ -1379,6 +1379,7 @@
         "unstable": "unstable",
         "xdg-portal-hyprland": "xdg-portal-hyprland",
         "yabai-src": "yabai-src",
+        "zsh-abbr": "zsh-abbr",
         "zsh-autocomplete": "zsh-autocomplete",
         "zsh-autopair": "zsh-autopair",
         "zsh-history-substring-search": "zsh-history-substring-search",
@@ -1642,6 +1643,23 @@
         "owner": "koekeishiya",
         "repo": "yabai",
         "rev": "a4030e771f76d4f135f5b830eedd7234592df51e",
+        "type": "github"
+      }
+    },
+    "zsh-abbr": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1697757732,
+        "narHash": "sha256-MvxJkEbJKMmYRku/RF6ayOb7u7NI4HZehO8ty64jEnE=",
+        "owner": "olets",
+        "repo": "zsh-abbr",
+        "rev": "6802d7353b2422d7a82134ce655aff97367eefa0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "olets",
+        "repo": "zsh-abbr",
+        "rev": "6802d7353b2422d7a82134ce655aff97367eefa0",
         "type": "github"
       }
     },

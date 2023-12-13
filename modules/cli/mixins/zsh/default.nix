@@ -60,12 +60,16 @@ in {
           source ${inputs.zsh-history-substring-search}/zsh-history-substring-search.zsh
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
           source ${inputs.zsh-autopair}/autopair.zsh
-          autopair-init
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/dirhistory/dirhistory.plugin.zsh
+          source ${inputs.zsh-abbr}/zsh-abbr.zsh
 
           source ${./config.zsh}
           source ${./nnn.zsh}
           source ${./functions.zsh}
+          source ${./key-bindings.zsh}
+
+          autopair-init
+          abbr import-aliases --quiet
 
           source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
           # Remove underline under paths (catppuccin_mocha-zsh-syntax-highlighting)
@@ -75,9 +79,6 @@ in {
           ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#cdd6f4'
           ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#f38ba8'
           source ${inputs.zsh-syntax-highlighting}/zsh-syntax-highlighting.zsh
-
-          # HACK: zsh-syntax-highlighting mess up my key bindings
-          source ${./key-bindings.zsh}
         '';
         enableCompletion = false;
         # syntaxHighlighting.enable = false;

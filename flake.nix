@@ -87,6 +87,8 @@
     zsh-autopair.flake = false;
     zsh-syntax-highlighting.url = "github:zsh-users/zsh-syntax-highlighting?rev=bb27265aeeb0a22fb77f1275118a5edba260ec47";
     zsh-syntax-highlighting.flake = false;
+    zsh-abbr.url = "github:olets/zsh-abbr?rev=6802d7353b2422d7a82134ce655aff97367eefa0";
+    zsh-abbr.flake = false;
 
     # third party cli
     ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";
