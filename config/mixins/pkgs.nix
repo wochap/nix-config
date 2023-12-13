@@ -34,7 +34,7 @@ in {
         nurl # get fetchgit hashes
         openssl
         pup # parse html
-        tldr # examples of each command
+        tealdeer # examples of each command
         tree # like ls
         unrar
         unzip
