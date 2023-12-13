@@ -66,7 +66,6 @@ in {
 
       shellAliases = {
         ".." = "cd ..";
-        "~" = "cd ~";
         cp = "xcp";
         tree = "tree -a -C -L 1";
         weather = "curl wttr.in";

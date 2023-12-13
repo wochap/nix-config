@@ -94,3 +94,5 @@ setopt TRANSIENT_RPROMPT
 # shell complaining about the pasted prompt symbol.
 alias %= \$=
 
+alias ~="cd ~"
+
