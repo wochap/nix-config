@@ -77,7 +77,7 @@ bindkey '\C-x\C-e' edit-command-line
 
 function reverse-menu-select() {
   zle menu-select
-  zle menu-complete-backward
+  zle reverse-menu-complete
 }
 zle -N reverse-menu-select
 # [Tab] [Shift-Tab] - go straight to the menu and cycle there
