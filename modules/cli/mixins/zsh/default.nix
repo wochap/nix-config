@@ -3,6 +3,24 @@
 let
   cfg = config._custom.cli.zsh;
   userName = config._userName;
+
+  fshPlugin = {
+    name = "zsh-fast-syntax-highlighting";
+    src = pkgs.zsh-fast-syntax-highlighting;
+    file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
+  };
+  fshTheme = pkgs.stdenvNoCC.mkDerivation {
+    name = "fsh-theme";
+    nativeBuildInputs = [ pkgs.zsh ];
+    buildCommand = ''
+      zsh << EOF
+        source "${fshPlugin.src}/${fshPlugin.file}"
+        FAST_WORK_DIR="$out"
+        mkdir -p "$out"
+        fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-mocha.ini"
+      EOF
+    '';
+  };
 in {
   options._custom.cli.zsh = { enable = lib.mkEnableOption { }; };
 
@@ -35,8 +53,8 @@ in {
       enable = true;
       enableCompletion = true;
       enableGlobalCompInit = false;
-      # enableLsColors = false;
       promptInit = "";
+      # enableLsColors = false;
     };
 
     home-manager.users.${userName} = {
@@ -47,22 +65,25 @@ in {
         # more completions
         unstable.zsh-completions
       ];
-      home.sessionVariables = {
-        # https://github.com/zsh-users/zsh-history-substring-search
-        # change the behavior of history-substring-search-up
-        HISTORY_SUBSTRING_SEARCH_PREFIXED = "1";
-
-        # make word movement commands to stop at every character except:
-        # WORDCHARS = "*?_-.[]~=/&;!#$%^(){}<>";
-        WORDCHARS = "_*";
-
-        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND = "bg=cyan,fg=16,bold";
-        HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND = "bg=red,fg=16,bold";
-      };
 
       programs.zsh = {
         enable = true;
         dotDir = ".config/zsh";
+        envExtra = ''
+          # https://github.com/zsh-users/zsh-history-substring-search
+          # change the behavior of history-substring-search-up
+          export HISTORY_SUBSTRING_SEARCH_PREFIXED="1"
+
+          export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND="bg=cyan,fg=16,bold"
+          export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND="bg=red,fg=16,bold"
+
+          # make word movement commands to stop at every character except:
+          # WORDCHARS="*?_-.[]~=/&;!#$%^(){}<>"
+          export WORDCHARS="_*"
+
+          # HACK: set catppuccin-mocha theme for zsh-fast-syntax-highlighting
+          FAST_WORK_DIR="${fshTheme}"
+        '';
         initExtraBeforeCompInit = ''
           # Show dotfiles in zsh-autocomplete
           # _comp_options+=(globdots)
@@ -106,15 +127,6 @@ in {
             abbr erase --quiet ll
             abbr erase --quiet lla
           fi
-
-          source ${inputs.catppuccin-zsh-syntax-highlighting}/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
-          # Remove underline under paths (catppuccin_mocha-zsh-syntax-highlighting)
-          (( ''${+ZSH_HIGHLIGHT_STYLES} )) || typeset -A ZSH_HIGHLIGHT_STYLES
-          ZSH_HIGHLIGHT_STYLES[path]='fg=#cdd6f4'
-          ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#f38ba8'
-          ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#cdd6f4'
-          ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#f38ba8'
-          source ${inputs.zsh-syntax-highlighting}/zsh-syntax-highlighting.zsh
         '';
         enableCompletion = false;
         # syntaxHighlighting.enable = false;
@@ -138,6 +150,7 @@ in {
           nxs = "/nix/store";
           dl = "$HOME/Downloads";
         };
+        plugins = [ fshPlugin ];
       };
 
       programs.starship.enableZshIntegration = true;
