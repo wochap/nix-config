@@ -9,7 +9,10 @@ in {
   config = lib.mkIf cfg.enable {
     home-manager.users.${userName} = {
       home = {
-        shellAliases = { cat = "bat"; };
+        shellAliases = {
+          cat = "bat";
+          bathelp = "bat --plain --language=help";
+        };
         sessionVariables = { MANPAGER = "sh -c 'col -bx | bat -l man -p'"; };
       };
 

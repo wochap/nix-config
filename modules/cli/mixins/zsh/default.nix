@@ -22,6 +22,18 @@ let
       EOF
     '';
   };
+  # zinitBuilder = pkgs.stdenvNoCC.mkDerivation {
+  #   name = "zinit-builder";
+  #   nativeBuildInputs = [ pkgs.zsh ];
+  #   buildCommand = ''
+  #     zsh << EOF
+  #       mkdir -p "$out"
+  #       ZINIT_HOME="$out"
+  #       source "${fshPlugin.src}/${fshPlugin.file}"
+  #       fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-mocha.ini"
+  #     EOF
+  #   '';
+  # };
 in {
   options._custom.cli.zsh = { enable = lib.mkEnableOption { }; };
 
@@ -153,7 +165,6 @@ in {
           source ${pkgs.unstable.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
 
           source ${./config.zsh}
-          source ${./nnn.zsh}
           source ${./functions.zsh}
           function zvm_after_init() {
             if [[ $options[zle] = on ]]; then
@@ -162,7 +173,6 @@ in {
             fi
             source ${./key-bindings-vi.zsh}
           }
-          # source ${./key-bindings-emacs.zsh}
 
           if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
             abbr import-aliases --quiet
@@ -209,7 +219,7 @@ in {
 
       # programs.carapace.enableZshIntegration = true;
       # programs.thefuck.enableZshIntegration = true;
-      programs.starship.enableZshIntegration = true;
+      programs.starship.enableZshIntegration = lib.mkForce false;
       programs.zoxide.enableZshIntegration = true;
       programs.fzf.enableZshIntegration = lib.mkForce false;
       programs.dircolors.enableZshIntegration = true;
