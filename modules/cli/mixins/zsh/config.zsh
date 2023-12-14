@@ -1,6 +1,3 @@
-# Completion for kitty
-# kitty + complete setup zsh | source /dev/stdin
-
 # ================
 # History
 # ================
@@ -23,6 +20,9 @@ setopt APPEND_HISTORY
 # ================
 # Completion menu
 # ================
+
+# Completion for kitty
+# kitty + complete setup zsh | source /dev/stdin
 
 # Zsh completion has this dumb thing where it will SSH into remote servers
 # to suggest file paths. With autosuggestions, this causes an SSH
@@ -60,9 +60,6 @@ autocomplete:config:format:warnings() {
   [[ $CURRENT == 1 && -z $PREFIX$SUFFIX ]] ||
     typeset -ga reply=( $'%{\e[38;5;1m%}'"-- no matching %d completions --"$'%{\e[0m%}' )
 }
-
-# Show dotfiles by default in completion system
-# _comp_options+=(globdots)
 
 # ================
 # Misc

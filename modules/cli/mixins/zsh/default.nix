@@ -99,7 +99,6 @@ in {
         '';
         initExtraBeforeCompInit = ''
           # Show dotfiles in zsh-autocomplete
-          # _comp_options+=(globdots)
           setopt GLOB_DOTS
 
           # Disable zsh-autocomplete key bindings
@@ -166,6 +165,8 @@ in {
 
           source ${./config.zsh}
           source ${./functions.zsh}
+
+          # zsh-vi-mode options
           function zvm_after_init() {
             if [[ $options[zle] = on ]]; then
               . ${hmConfig.programs.fzf.package}/share/fzf/completion.zsh
