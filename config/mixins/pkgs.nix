@@ -74,7 +74,7 @@ in {
 
     home-manager.users.${userName} = {
       home.sessionVariables = {
-        LESS = "-i -R -M";
+        LESS = "--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT";
         LESSCHARSET = "utf-8";
       };
 
