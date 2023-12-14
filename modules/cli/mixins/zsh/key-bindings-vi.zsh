@@ -1,13 +1,29 @@
 # inspiration: https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/key-bindings.zsh
-
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
-# NOTE: when ZLE widget starts with a dot (`.`), that widget will get executed in the cmd, not in the current mode/context
+
+function backward-kill-blank-word() {
+    local WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+    zle backward-kill-word
+    zle -f kill
+}
+zle -N backward-kill-blank-word
+
+function kill-blank-word() {
+    local WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+    zle kill-word
+    zle -f kill
+}
+zle -N kill-blank-word
+
+function .recover-line() { LBUFFER+=$ZLE_LINE_ABORTED }
+zle -N .recover-line
 
 # ================
 # Movement
 # ================
+# NOTE: when ZLE widget starts with a dot (`.`), that widget will get executed in the cmd, not in the current mode/context
 
 # [Home] - Go to beginning of line
 if [[ -n "${terminfo[khome]}" ]]; then
@@ -23,18 +39,18 @@ if [[ -n "${terminfo[kend]}" ]]; then
   done
 fi
 
-function backward-kill-blank-word() {
-    local WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
-    zle backward-kill-word
-    zle -f kill
-}
-zle -N backward-kill-blank-word
-function kill-blank-word() {
-    local WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
-    zle kill-word
-    zle -f kill
-}
-zle -N kill-blank-word
+# [Alt-f] - move forward one word
+bindkey -M viins "^[f" forward-word
+# [Alt-Shift-f] - move forward one entire word
+bindkey -M viins "^[F" vi-forward-blank-word
+# [Alt-b] - move backward one word
+bindkey -M viins "^[b" backward-word
+# [Alt-Shift-b] - move backward one entire word
+bindkey -M viins "^[B" vi-backward-blank-word
+
+# ================
+# Modification
+# ================
 
 # [Backspace] - delete backward char
 bindkey -M menuselect '^?' backward-delete-char
@@ -49,14 +65,9 @@ bindkey -M viins '^[[3;3~' kill-word
 # [Alt+Shift-Delete] - delete the entire forward word
 bindkey -M viins '^[[3;4~' kill-blank-word
 
-# [Alt-f] - move forward one word
-bindkey -M viins "^[f" forward-word
-# [Alt-Shift-f] - move forward one entire word
-bindkey -M viins "^[F" vi-forward-blank-word
-# [Alt-b] - move backward one word
-bindkey -M viins "^[b" backward-word
-# [Alt-Shift-b] - move backward one entire word
-bindkey -M viins "^[B" vi-backward-blank-word
+# ================
+# Menu
+# ================
 
 # [Ctrl-y] - accept option
 bindkey -M menuselect '^Y' accept-line
@@ -105,8 +116,6 @@ bindkey -M viins '^[ua' apro
 # [Alt+u o] - run opro func
 bindkey -M viins '^[uo' opro
 
-function .recover-line() { LBUFFER+=$ZLE_LINE_ABORTED }
-zle -N .recover-line
 # [Alt+g] - recover last line aborted
 bindkey -M viins '^[g' .recover-line
 
