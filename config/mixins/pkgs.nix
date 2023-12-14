@@ -73,6 +73,11 @@ in {
     };
 
     home-manager.users.${userName} = {
+      home.sessionVariables = {
+        LESS = "-i -R -M";
+        LESSCHARSET = "utf-8";
+      };
+
       # programs.thefuck.enable = true; # corrects previous console cmd
       # programs.carapace.enable = true; # completions
       programs.nix-index.enable = true; # locale nix pkgs
@@ -83,6 +88,13 @@ in {
           finder.command = "fzf";
           shell.command = "bash";
         };
+      };
+      programs.less = {
+        enable = true;
+        keys = ''
+          f forw-line 4j
+          b back-line 4k
+        '';
       };
     };
   };
