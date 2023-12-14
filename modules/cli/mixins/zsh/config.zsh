@@ -17,7 +17,7 @@ zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
 # Clear right promt
-RPROMPT=""
+# RPROMPT=""
 
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
