@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, system, ... }:
+{ config, lib, pkgs, inputs, system, ... }:
 
 let
   userName = config._userName;
@@ -73,7 +73,17 @@ in {
     };
 
     home-manager.users.${userName} = {
-      programs.command-not-found.enable = true;
+      # programs.thefuck.enable = true; # corrects previous console cmd
+      # programs.carapace.enable = true; # completions
+      programs.nix-index.enable = true; # locale nix pkgs
+      programs.command-not-found.enable = lib.mkForce false;
+      programs.navi = { # like tldr
+        enable = true;
+        settings = {
+          finder.command = "fzf";
+          shell.command = "bash";
+        };
+      };
     };
   };
 }

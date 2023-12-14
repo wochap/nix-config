@@ -4,39 +4,17 @@
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 
-# Make sure that the terminal is in application mode when zle is active, since
-# only then values from $terminfo are valid
-if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-  function zle-line-init() {
-    echoti smkx
-  }
-  function zle-line-finish() {
-    echoti rmkx
-  }
-  zle -N zle-line-init
-  zle -N zle-line-finish
-fi
-
-# Use emacs key bindings
-bindkey -e
-
 # [Home] - Go to beginning of line
 if [[ -n "${terminfo[khome]}" ]]; then
-  bindkey -M emacs "${terminfo[khome]}" beginning-of-line
+  for keymap in viins visual vicmd viopp; do
+    bindkey -M $keymap "${terminfo[khome]}" beginning-of-line
+  done
 fi
 # [End] - Go to end of line
 if [[ -n "${terminfo[kend]}" ]]; then
-  bindkey -M emacs "${terminfo[kend]}"  end-of-line
-fi
-
-# [Backspace] - delete backward
-bindkey -M emacs '^?' backward-delete-char
-# [Delete] - delete forward
-if [[ -n "${terminfo[kdch1]}" ]]; then
-  bindkey -M emacs "${terminfo[kdch1]}" delete-char
-else
-  bindkey -M emacs "^[[3~" delete-char
-  bindkey -M emacs "^[3;5~" delete-char
+  for keymap in viins visual vicmd viopp; do
+    bindkey -M $keymap "${terminfo[kend]}"  end-of-line
+  done
 fi
 
 function backward-kill-blank-word() {
@@ -52,33 +30,28 @@ function kill-blank-word() {
 }
 zle -N kill-blank-word
 # [Alt-Backspace] - delete backward word
-bindkey -M emacs '^[^?' backward-kill-word
+bindkey -M viins '^[^?' backward-kill-word
 # [Alt+Shift-Backspace] - delete the entire backward word
 # TODO: find Alt+Shift-Backspace keycode
 # HACK: kitty sends alt+shift+h instead of alt+shift+backspace
-bindkey -M emacs '^[^H' backward-kill-blank-word
-# [Alt-Delete] - delete forward word
-bindkey -M emacs '^[[3;3~' kill-word
+bindkey -M viins '^[^H' backward-kill-blank-word
+# [Alt-Delete] - delete forward-word
+bindkey -M viins '^[[3;3~' kill-word
 # [Alt+Shift-Delete] - delete the entire forward word
-bindkey -M emacs '^[[3;4~' kill-blank-word
+bindkey -M viins '^[[3;4~' kill-blank-word
 # [Alt-f] - move forward one word
-bindkey -M emacs "^[f" forward-word
+bindkey -M viins "^[f" forward-word
 # [Alt-Shift-f] - move forward one entire word
-bindkey -M emacs "^[F" vi-forward-blank-word
+bindkey -M viins "^[F" vi-forward-blank-word
 # [Alt-b] - move backward one word
-bindkey -M emacs "^[b" backward-word
+bindkey -M viins "^[b" backward-word
 # [Alt-Shift-b] - move backward one entire word
-bindkey -M emacs "^[B" vi-backward-blank-word
-
-# Edit the current command line in $EDITOR
-autoload -U edit-command-line
-zle -N edit-command-line
-bindkey '\C-x\C-e' edit-command-line
+bindkey -M viins "^[B" vi-backward-blank-word
 
 # [Tab] - go straight to the menu and cycle there
-bindkey -M emacs '\t' menu-select "${terminfo[kcbt]}" menu-select
+bindkey -M viins '\t' menu-select "${terminfo[kcbt]}" menu-select
 # [Shift-Tab] - insert substring occuring in all listed completions
-bindkey -M emacs "${terminfo[kcbt]}" insert-unambiguous-or-complete
+bindkey -M viins "${terminfo[kcbt]}" insert-unambiguous-or-complete
 # [Tab] [Shift-Tab] - move through the completion menu
 bindkey -M menuselect '\t' menu-complete "${terminfo[kcbt]}" reverse-menu-complete
 
@@ -98,38 +71,44 @@ bindkey -M menuselect "${terminfo[kcub1]}" .backward-char
 # [RightArrow] - move forward one char
 bindkey -M menuselect "${terminfo[kcuf1]}" .forward-char
 
-# [Enter] - execute the command
-bindkey -M emacs '\r' .accept-line
-
-# [Enter] - execute the command in menuselect mode
-bindkey -M menuselect '\r' .accept-line
+# [Enter] - execute command in all modes
+for keymap in viins visual vicmd viopp menuselect; do
+  bindkey -M $keymap '\r' .accept-line
+done
 
 # Start typing + [Up-Arrow] - fuzzy find history forward
-bindkey -M emacs "${terminfo[kcuu1]}" history-substring-search-up
+bindkey -M viins "${terminfo[kcuu1]}" history-substring-search-up
 bindkey -M menuselect "${terminfo[kcuu1]}" history-substring-search-up
 # Start typing + [Down-Arrow] - fuzzy find history backward
-bindkey -M emacs "${terminfo[kcud1]}" history-substring-search-down
+bindkey -M viins "${terminfo[kcud1]}" history-substring-search-down
 bindkey -M menuselect "${terminfo[kcud1]}" history-substring-search-down
 
 # [Alt+p] - allows you to run another command before your current command
-bindkey -M emacs '^[p' push-line-or-edit
+bindkey -M viins '^[p' push-line-or-edit
 
 # [Alt+u p] - run pro func
-bindkey -M emacs '^[up' pro
+bindkey -M viins '^[up' pro
 # [Alt+u a] - run apro func
-bindkey -M emacs '^[ua' apro
+bindkey -M viins '^[ua' apro
 # [Alt+u o] - run opro func
-bindkey -M emacs '^[uo' opro
+bindkey -M viins '^[uo' opro
 
 function .recover-line() { LBUFFER+=$ZLE_LINE_ABORTED }
 zle -N .recover-line
 # [Alt+g] - recover last line aborted
-bindkey -M emacs '^[g' .recover-line
+bindkey -M viins '^[g' .recover-line
 
 # [Alt-V] - show the next key combo's terminal code and state what it does.
-bindkey -M emacs '^[v' describe-key-briefly
+for keymap in viins visual vicmd viopp; do
+  bindkey -M $keymap '^[v' describe-key-briefly
+done
 
 # [Alt-W] - type a widget name and press Enter to see the keys bound to it.
 # type part of a widget name and press Enter for autocompletion.
-bindkey -M emacs '^[w' where-is
+bindkey -M viins '^[w' where-is
 
+# [Esc] - remove key binding, use Ctrl+x
+bindkey -M viins -r '^['
+
+# [Delete] - remove key binding
+bindkey -M vicmd -r '^[[3~'

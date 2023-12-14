@@ -3,6 +3,7 @@
 let
   cfg = config._custom.cli.zsh;
   userName = config._userName;
+  hmConfig = config.home-manager.users.${userName};
 
   fshPlugin = {
     name = "zsh-fast-syntax-highlighting";
@@ -104,6 +105,17 @@ in {
           # zsh-autosuggestions options
           export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
           export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+          function zvm_config() {
+            ZVM_VI_INSERT_ESCAPE_BINDKEY=^X
+            ZVM_VI_HIGHLIGHT_BACKGROUND=#45475A
+            ZVM_VI_HIGHLIGHT_FOREGROUND=#cdd6f4
+            ZVM_VI_SURROUND_BINDKEY=s-prefix
+            ZVM_ESCAPE_KEYTIMEOUT=0
+            ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+            ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+            ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+          }
         '';
         initExtra = ''
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
@@ -115,7 +127,14 @@ in {
           source ${./config.zsh}
           source ${./nnn.zsh}
           source ${./functions.zsh}
-          source ${./key-bindings.zsh}
+          function zvm_after_init() {
+            if [[ $options[zle] = on ]]; then
+              . ${hmConfig.programs.fzf.package}/share/fzf/completion.zsh
+              . ${hmConfig.programs.fzf.package}/share/fzf/key-bindings.zsh
+            fi
+            source ${./key-bindings-vi.zsh}
+          }
+          # source ${./key-bindings-emacs.zsh}
 
           if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
             abbr import-aliases --quiet
@@ -150,13 +169,24 @@ in {
           nxs = "/nix/store";
           dl = "$HOME/Downloads";
         };
-        plugins = [ fshPlugin ];
+        plugins = [
+          fshPlugin
+          {
+            name = "zsh-vi-mode";
+            src = inputs.zsh-vi-mode;
+            file = "zsh-vi-mode.plugin.zsh";
+          }
+        ];
       };
 
+      # programs.carapace.enableZshIntegration = true;
+      # programs.thefuck.enableZshIntegration = true;
       programs.starship.enableZshIntegration = true;
       programs.zoxide.enableZshIntegration = true;
-      programs.fzf.enableZshIntegration = true;
+      programs.fzf.enableZshIntegration = lib.mkForce false;
       programs.dircolors.enableZshIntegration = true;
+      programs.navi.enableZshIntegration = true;
+      programs.nix-index.enableZshIntegration = true;
     };
   };
 }

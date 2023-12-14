@@ -1419,7 +1419,8 @@
         "zsh-autopair": "zsh-autopair",
         "zsh-fsh": "zsh-fsh",
         "zsh-history-substring-search": "zsh-history-substring-search",
-        "zsh-syntax-highlighting": "zsh-syntax-highlighting"
+        "zsh-syntax-highlighting": "zsh-syntax-highlighting",
+        "zsh-vi-mode": "zsh-vi-mode"
       }
     },
     "smart-splits-nvim": {
@@ -1781,6 +1782,23 @@
         "owner": "zsh-users",
         "repo": "zsh-syntax-highlighting",
         "rev": "bb27265aeeb0a22fb77f1275118a5edba260ec47",
+        "type": "github"
+      }
+    },
+    "zsh-vi-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1702530156,
+        "narHash": "sha256-bgK2jqYHGNsRwwa6i3HmgKoDFQbrNpc7txx1EAiP50Y=",
+        "owner": "wochap",
+        "repo": "zsh-vi-mode",
+        "rev": "0619e6bb711226e738494e49842c5249a2205a0d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "zsh-vi-mode",
+        "rev": "0619e6bb711226e738494e49842c5249a2205a0d",
         "type": "github"
       }
     }

@@ -61,10 +61,10 @@
     yabai-src.flake = false;
 
     # terminal tools
-    # zsh-vi-mode.url = "github:jeffreytse/zsh-vi-mode?rev=462c032389c30a1c53226890d83c7465af92b249";
-    # zsh-vi-mode.flake = false;
     # fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
     # fzf-tab.flake = false;
+    zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=0619e6bb711226e738494e49842c5249a2205a0d";
+    zsh-vi-mode.flake = false;
     ncmpcpp-ueberzug.url = "github:munguua/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";
     ncmpcpp-ueberzug.flake = false;
     ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
