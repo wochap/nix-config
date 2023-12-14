@@ -113,11 +113,13 @@ in {
             ZVM_VI_HIGHLIGHT_FOREGROUND=#cdd6f4
             ZVM_VI_SURROUND_BINDKEY=s-prefix
             ZVM_ESCAPE_KEYTIMEOUT=0
-            ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+            ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST
             ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
             ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
           }
           typeset -g VI_MODE
+          VI_MODE="%B%F{#1E1E2E}%K{#a6e3a1} INSERT %k%f%b"
+          RPROMPT="%B%F{#1E1E2E}%K{#a6e3a1} INSERT %k%f%b"
           function zvm_after_select_vi_mode() {
             case $ZVM_MODE in
               $ZVM_MODE_NORMAL)
