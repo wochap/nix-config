@@ -3,17 +3,23 @@
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
+# NOTE: when ZLE widget starts with a dot (`.`), that widget will get executed in the cmd, not in the current mode/context
+
+# ================
+# Movement
+# ================
 
 # [Home] - Go to beginning of line
 if [[ -n "${terminfo[khome]}" ]]; then
-  for keymap in viins visual vicmd viopp; do
-    bindkey -M $keymap "${terminfo[khome]}" beginning-of-line
+  for keymap in viins visual vicmd viopp menuselect; do
+    bindkey -M $keymap "${terminfo[khome]}" .beginning-of-line
   done
 fi
+
 # [End] - Go to end of line
 if [[ -n "${terminfo[kend]}" ]]; then
-  for keymap in viins visual vicmd viopp; do
-    bindkey -M $keymap "${terminfo[kend]}"  end-of-line
+  for keymap in viins visual vicmd viopp menuselect; do
+    bindkey -M $keymap "${terminfo[kend]}" .end-of-line
   done
 fi
 
@@ -29,6 +35,9 @@ function kill-blank-word() {
     zle -f kill
 }
 zle -N kill-blank-word
+
+# [Backspace] - delete backward char
+bindkey -M menuselect '^?' backward-delete-char
 # [Alt-Backspace] - delete backward word
 bindkey -M viins '^[^?' backward-kill-word
 # [Alt+Shift-Backspace] - delete the entire backward word
@@ -39,6 +48,7 @@ bindkey -M viins '^[^H' backward-kill-blank-word
 bindkey -M viins '^[[3;3~' kill-word
 # [Alt+Shift-Delete] - delete the entire forward word
 bindkey -M viins '^[[3;4~' kill-blank-word
+
 # [Alt-f] - move forward one word
 bindkey -M viins "^[f" forward-word
 # [Alt-Shift-f] - move forward one entire word
@@ -48,6 +58,8 @@ bindkey -M viins "^[b" backward-word
 # [Alt-Shift-b] - move backward one entire word
 bindkey -M viins "^[B" vi-backward-blank-word
 
+# [Ctrl-y] - accept option
+bindkey -M menuselect '^Y' accept-line
 # [Tab] - go straight to the menu and cycle there
 bindkey -M viins '\t' menu-select "${terminfo[kcbt]}" menu-select
 # [Shift-Tab] - insert substring occuring in all listed completions
