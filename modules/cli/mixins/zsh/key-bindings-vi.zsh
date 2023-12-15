@@ -146,6 +146,9 @@ multibindkey 'viins menuselect' "${terminfo[kcud1]}" history-substring-search-do
 # Misc
 # ================
 
+# [Ctrl+y] - copy buffer
+bindkey -M viins '^y' copybuffer
+
 # [Alt+p] - allows you to run another command before your current command
 bindkey -M viins '^[p' push-line-or-edit
 

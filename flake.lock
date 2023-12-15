@@ -1414,6 +1414,7 @@
         "unstable": "unstable",
         "xdg-portal-hyprland": "xdg-portal-hyprland",
         "yabai-src": "yabai-src",
+        "zinit": "zinit",
         "zsh-abbr": "zsh-abbr",
         "zsh-autocomplete": "zsh-autocomplete",
         "zsh-autopair": "zsh-autopair",
@@ -1680,6 +1681,23 @@
         "owner": "koekeishiya",
         "repo": "yabai",
         "rev": "a4030e771f76d4f135f5b830eedd7234592df51e",
+        "type": "github"
+      }
+    },
+    "zinit": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1702088389,
+        "narHash": "sha256-zMsKUSfe+ABk1DqZSuTJNMmcNd9Zw8ow7HT7JY04SoU=",
+        "owner": "zdharma-continuum",
+        "repo": "zinit",
+        "rev": "0ba778ac734e33c960fe08bbd56a351b1b86dcd4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zdharma-continuum",
+        "repo": "zinit",
+        "rev": "0ba778ac734e33c960fe08bbd56a351b1b86dcd4",
         "type": "github"
       }
     },

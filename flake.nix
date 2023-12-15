@@ -63,6 +63,8 @@
     # terminal tools
     # fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
     # fzf-tab.flake = false;
+    zinit.url = "github:zdharma-continuum/zinit?rev=0ba778ac734e33c960fe08bbd56a351b1b86dcd4";
+    zinit.flake = false;
     zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=0619e6bb711226e738494e49842c5249a2205a0d";
     zsh-vi-mode.flake = false;
     ncmpcpp-ueberzug.url = "github:munguua/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";

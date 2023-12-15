@@ -93,6 +93,11 @@ function copyfile() {
   wl-copy < $1
 }
 
+function copybuffer() {
+	printf "%s" "$BUFFER" | wl-copy -n
+}
+zle -N copybuffer
+
 function disappointed() {
   echo -n " ಠ_ಠ " | tee /dev/tty | wl-copy;
 }
