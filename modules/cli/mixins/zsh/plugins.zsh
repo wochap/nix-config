@@ -128,6 +128,7 @@ function zvm_after_select_vi_mode() {
   esac
 }
 
+# TODO: keybindings doesn't load before zsh-vi-mode keybindings
 function zvm_after_init() {
   load_key_bindings
 }
