@@ -80,7 +80,7 @@ setopt NUMERIC_GLOB_SORT
 # Auto-remove the right side of each prompt when you press enter. This way,
 # we'll have less clutter on screen. This also makes it easier to copy code from
 # our terminal.
-setopt TRANSIENT_RPROMPT
+# setopt TRANSIENT_RPROMPT
 
 # ================
 # Aliases

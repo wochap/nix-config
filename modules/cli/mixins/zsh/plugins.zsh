@@ -86,6 +86,7 @@ zinit light olets/zsh-abbr
 ## zsh-vi-mode
 
 export ZVM_INIT_MODE=sourcing
+export ZVM_LAZY_KEYBINDINGS=false
 
 function load_key_bindings() {
   source ~/.config/zsh/key-bindings-vi.zsh
@@ -101,7 +102,7 @@ function zvm_config() {
   ZVM_VI_SURROUND_BINDKEY=s-prefix
   ZVM_ESCAPE_KEYTIMEOUT=0
   ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST
-  ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+  ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
   ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
 }
 
@@ -134,7 +135,7 @@ function zvm_after_init() {
 zinit ice lucid wait \
   atload"load_key_bindings" \
   depth"1" src"zsh-vi-mode.plugin.zsh"
-zinit light jeffreytse/zsh-vi-mode
+zinit light wochap/zsh-vi-mode
 
 ## fzf
 

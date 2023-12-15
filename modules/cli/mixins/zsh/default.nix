@@ -51,12 +51,10 @@ in {
           [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
           source "''${ZINIT_HOME}/zinit.zsh"
         '';
-        initExtraBeforeCompInit = ''
-          source ${relativeSymlink ./plugins.zsh}
-        '';
         initExtra = ''
           source ${relativeSymlink ./config.zsh}
           source ${relativeSymlink ./functions.zsh}
+          source ${relativeSymlink ./plugins.zsh}
         '';
         enableCompletion = false;
         enableAutosuggestions = false;
