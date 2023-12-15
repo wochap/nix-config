@@ -49,6 +49,9 @@ multibindkey 'visual vicmd viopp' "${terminfo[kcud1]}" .down-line
 # [Esc] - remove key binding to espace to vicmd, use Ctrl+x
 bindkey -M viins -r '^['
 
+# [Ctrl+l] - remove key binding
+bindkey -M viins -r '^L'
+
 # [Ctrl+c] -
 multibindkey 'viins visual vicmd viopp menuselect' '^C' send-break
 
