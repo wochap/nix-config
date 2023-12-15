@@ -53,6 +53,7 @@ in {
         ngrok # expose web server
         silver-searcher # ag, ack like
         stripe-cli
+        subversion
 
         # TUI APPS
         amfora # gemini browser
