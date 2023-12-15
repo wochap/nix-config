@@ -24,8 +24,10 @@ in {
     home-manager.users.${userName} = {
       xdg.configFile = {
         "zsh/.p10k.zsh".source = relativeSymlink ./.p10k.zsh;
-        "zsh/nix-store/command-not-found.sh".source = "${hmConfig.programs.nix-index.package}/etc/profile.d/command-not-found.sh";
-        "zsh/key-bindings-vi.zsh".source = ./key-bindings-vi.zsh;
+        "zsh/key-bindings-vi.zsh".source =
+          relativeSymlink ./key-bindings-vi.zsh;
+        "zsh/nix-store/command-not-found.sh".source =
+          "${hmConfig.programs.nix-index.package}/etc/profile.d/command-not-found.sh";
         "fsh/catppuccin-mocha.ini".source =
           "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-mocha.ini";
       };
@@ -45,19 +47,21 @@ in {
           if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
             source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
           fi
-
+        '';
+        initExtraBeforeCompInit = ''
           # Install zinit
           ZINIT_HOME="''${XDG_DATA_HOME:-''${HOME}/.local/share}/zinit/zinit.git"
           [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
           [ ! -d $ZINIT_HOME/.git ] && git clone --depth 1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
           source "''${ZINIT_HOME}/zinit.zsh"
         '';
+        completionInit = "";
         initExtra = ''
           source ${relativeSymlink ./config.zsh}
           source ${relativeSymlink ./functions.zsh}
           source ${relativeSymlink ./plugins.zsh}
         '';
-        enableCompletion = false;
+        enableCompletion = true;
         enableAutosuggestions = false;
         # syntaxHighlighting.enable = false;
         defaultKeymap = "emacs";
@@ -85,7 +89,8 @@ in {
       programs.starship.enableZshIntegration = false; # enabled by default
       programs.zoxide.enableZshIntegration = false; # zinit takes care of this
       programs.navi.enableZshIntegration = false; # zinit takes care of this
-      programs.nix-index.enableZshIntegration = false; # zinit takes care of this
+      programs.nix-index.enableZshIntegration =
+        false; # zinit takes care of this
       programs.fzf.enableZshIntegration = false; # zinit takes care of this
     };
   };
