@@ -23,6 +23,7 @@ in {
 
     home-manager.users.${userName} = {
       xdg.configFile = {
+        "zsh/.p10k.zsh".source = relativeSymlink ./.p10k.zsh;
         "zsh/nix-store/command-not-found.sh".source = "${hmConfig.programs.nix-index.package}/etc/profile.d/command-not-found.sh";
         "zsh/key-bindings-vi.zsh".source = ./key-bindings-vi.zsh;
         "fsh/catppuccin-mocha.ini".source =
