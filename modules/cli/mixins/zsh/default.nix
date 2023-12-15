@@ -37,6 +37,20 @@ in {
           # WORDCHARS="*?_-.[]~=/&;!#$%^(){}<>"
           export WORDCHARS="_*"
         '';
+        initExtraFirst = ''
+          # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+          # Initialization code that may require console input (password prompts, [y/n]
+          # confirmations, etc.) must go above this block; everything else may go below.
+          if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+            source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+          fi
+
+          # Install zinit
+          ZINIT_HOME="''${XDG_DATA_HOME:-''${HOME}/.local/share}/zinit/zinit.git"
+          [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+          [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+          source "''${ZINIT_HOME}/zinit.zsh"
+        '';
         initExtraBeforeCompInit = ''
           source ${relativeSymlink ./plugins.zsh}
         '';
@@ -67,11 +81,12 @@ in {
 
       # programs.carapace.enableZshIntegration = true;
       # programs.thefuck.enableZshIntegration = true;
+      programs.dircolors.enableZshIntegration = true;
       programs.starship.enableZshIntegration = false; # enabled by default
       programs.zoxide.enableZshIntegration = false; # zinit takes care of this
-      programs.dircolors.enableZshIntegration = true;
       programs.navi.enableZshIntegration = false; # zinit takes care of this
       programs.nix-index.enableZshIntegration = false; # zinit takes care of this
+      programs.fzf.enableZshIntegration = false; # zinit takes care of this
     };
   };
 }
