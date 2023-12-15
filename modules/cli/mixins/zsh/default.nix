@@ -1,9 +1,12 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, _customLib, ... }:
 
 let
   cfg = config._custom.cli.zsh;
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
+  relativeSymlink = path:
+    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
+    (_customLib.runtimePath config._custom.globals.configDirectory path);
 
   fshPlugin = {
     name = "zsh-fast-syntax-highlighting";
@@ -22,18 +25,6 @@ let
       EOF
     '';
   };
-  # zinitBuilder = pkgs.stdenvNoCC.mkDerivation {
-  #   name = "zinit-builder";
-  #   nativeBuildInputs = [ pkgs.zsh ];
-  #   buildCommand = ''
-  #     zsh << EOF
-  #       mkdir -p "$out"
-  #       ZINIT_HOME="$out"
-  #       source "${fshPlugin.src}/${fshPlugin.file}"
-  #       fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-mocha.ini"
-  #     EOF
-  #   '';
-  # };
 in {
   options._custom.cli.zsh = { enable = lib.mkEnableOption { }; };
 
@@ -75,7 +66,7 @@ in {
         # completions and manpage install
         unstable.zsh-abbr
 
-        # more completions
+        # completions
         unstable.zsh-completions
       ];
 
@@ -83,22 +74,17 @@ in {
         enable = true;
         dotDir = ".config/zsh";
         envExtra = ''
-          # https://github.com/zsh-users/zsh-history-substring-search
-          # change the behavior of history-substring-search-up
-          export HISTORY_SUBSTRING_SEARCH_PREFIXED="1"
-
-          export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND="bg=cyan,fg=16,bold"
-          export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND="bg=red,fg=16,bold"
+          ## misc
 
           # make word movement commands to stop at every character except:
           # WORDCHARS="*?_-.[]~=/&;!#$%^(){}<>"
           export WORDCHARS="_*"
-
-          # HACK: set catppuccin-mocha theme for zsh-fast-syntax-highlighting
-          FAST_WORK_DIR="${fshTheme}"
         '';
-        initExtraBeforeCompInit = ''
-          # Show dotfiles in zsh-autocomplete
+        initExtraBeforeCompInit = "";
+        completionInit = ''
+          ## zsh-autocomplete
+
+          # Show dotfiles in complete menu
           setopt GLOB_DOTS
 
           # Disable zsh-autocomplete key bindings
@@ -110,14 +96,21 @@ in {
           # Don't add spaces after accepting an option
           zstyle ':autocomplete:*' add-space ""
 
-          # Install https://github.com/marlonrichert/zsh-autocomplete
           source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
+        '';
+        initExtra = ''
+          source ${relativeSymlink ./config.zsh}
+          source ${relativeSymlink ./functions.zsh}
 
-          # zsh-autosuggestions options
-          export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
-          export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+          ## zsh-vi-mode
 
-          # zsh-vi-mode options
+          function load_key_bindings() {
+            source ${relativeSymlink ./key-bindings-vi.zsh}
+
+            # HACK: fix race condition where zsh-vi-mode overwrites fzf key-binding
+            bindkey -M viins '^R' fzf-history-widget
+          }
+
           function zvm_config() {
             ZVM_VI_INSERT_ESCAPE_BINDKEY=^X
             ZVM_VI_HIGHLIGHT_BACKGROUND=#45475A
@@ -125,55 +118,65 @@ in {
             ZVM_VI_SURROUND_BINDKEY=s-prefix
             ZVM_ESCAPE_KEYTIMEOUT=0
             ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST
-            ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+            ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
             ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
           }
+
           typeset -g VI_MODE
           VI_MODE="%B%F{#1E1E2E}%K{#a6e3a1} INSERT %k%f%b"
-          RPROMPT="%B%F{#1E1E2E}%K{#a6e3a1} INSERT %k%f%b"
           function zvm_after_select_vi_mode() {
             case $ZVM_MODE in
               $ZVM_MODE_NORMAL)
                 VI_MODE="%B%F{#1E1E2E}%K{#b4befe} NORMAL %k%f%b"
-                RPROMPT="%B%F{#1E1E2E}%K{#b4befe} NORMAL %k%f%b"
               ;;
               $ZVM_MODE_INSERT)
                 VI_MODE="%B%F{#1E1E2E}%K{#a6e3a1} INSERT %k%f%b"
-                RPROMPT="%B%F{#1E1E2E}%K{#a6e3a1} INSERT %k%f%b"
               ;;
               $ZVM_MODE_VISUAL)
                 VI_MODE="%B%F{#1E1E2E}%K{#f2cdcd} VISUAL %k%f%b"
-                RPROMPT="%B%F{#1E1E2E}%K{#f2cdcd} VISUAL %k%f%b"
               ;;
               $ZVM_MODE_VISUAL_LINE)
                 VI_MODE="%B%F{#1E1E2E}%K{#f2cdcd} V-LINE %k%f%b"
-                RPROMPT="%B%F{#1E1E2E}%K{#f2cdcd} V-LINE %k%f%b"
               ;;
               $ZVM_MODE_REPLACE)
                 VI_MODE="%B%F{#1E1E2E}%K{#eba0ac} REPLACE %k%f%b"
-                RPROMPT="%B%F{#1E1E2E}%K{#eba0ac} REPLACE %k%f%b"
               ;;
             esac
           }
-        '';
-        initExtra = ''
-          source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
-          source ${inputs.zsh-history-substring-search}/zsh-history-substring-search.zsh
-          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
-          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/dirhistory/dirhistory.plugin.zsh
-          source ${pkgs.unstable.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
 
-          source ${./config.zsh}
-          source ${./functions.zsh}
-
-          # zsh-vi-mode options
           function zvm_after_init() {
-            if [[ $options[zle] = on ]]; then
-              . ${hmConfig.programs.fzf.package}/share/fzf/completion.zsh
-              . ${hmConfig.programs.fzf.package}/share/fzf/key-bindings.zsh
-            fi
-            source ${./key-bindings-vi.zsh}
+            load_key_bindings
           }
+
+          source ${inputs.zsh-vi-mode}/zsh-vi-mode.plugin.zsh
+
+          ## zsh-fsh
+
+          # HACK: set catppuccin-mocha theme for zsh-fast-syntax-highlighting
+          FAST_WORK_DIR="${fshTheme}"
+          source ${fshPlugin.src}/${fshPlugin.file}
+
+          ## zsh-autosuggestions
+
+          export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
+          export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+          source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+          ## zsh-history-substring-search
+
+          # https://github.com/zsh-users/zsh-history-substring-search
+          # change the behavior of history-substring-search-up
+          export HISTORY_SUBSTRING_SEARCH_PREFIXED="1"
+
+          export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND="bg=cyan,fg=16,bold"
+          export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND="bg=red,fg=16,bold"
+
+          source ${inputs.zsh-history-substring-search}/zsh-history-substring-search.zsh
+
+          ## zsh-abbr
+
+          source ${pkgs.unstable.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
 
           if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
             abbr import-aliases --quiet
@@ -185,15 +188,15 @@ in {
             abbr erase --quiet ll
             abbr erase --quiet lla
           fi
+
+          ## snippets
+
+          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
+          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/dirhistory/dirhistory.plugin.zsh
+          source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
         '';
-        enableCompletion = false;
-        # syntaxHighlighting.enable = false;
-        enableAutosuggestions = true;
-        # HACK: disable zsh viins mode
-        # If one of the VISUAL or EDITOR environment variables contain the string 'vi' when the shell starts up then it will be viins
-        defaultKeymap = "emacs";
+        enableCompletion = true;
         history = {
-          # TODO: add ignorePatterns
           ignoreDups = false;
           expireDuplicatesFirst = true;
           extended = true;
@@ -202,30 +205,23 @@ in {
           size = 1000000000;
           # Shares current history file between all sessions as soon as shell closes
           share = true;
+          # TODO: add ignorePatterns
         };
         dirHashes = {
           nxc = "$HOME/nix-config";
           nxs = "/nix/store";
           dl = "$HOME/Downloads";
         };
-        plugins = [
-          fshPlugin
-          {
-            name = "zsh-vi-mode";
-            src = inputs.zsh-vi-mode;
-            file = "zsh-vi-mode.plugin.zsh";
-          }
-        ];
       };
 
       # programs.carapace.enableZshIntegration = true;
       # programs.thefuck.enableZshIntegration = true;
-      programs.starship.enableZshIntegration = lib.mkForce false;
-      programs.zoxide.enableZshIntegration = true;
-      programs.fzf.enableZshIntegration = lib.mkForce false;
       programs.dircolors.enableZshIntegration = true;
+      programs.starship.enableZshIntegration = true;
+      programs.zoxide.enableZshIntegration = true;
       programs.navi.enableZshIntegration = true;
       programs.nix-index.enableZshIntegration = true;
+      programs.fzf.enableZshIntegration = true;
     };
   };
 }
