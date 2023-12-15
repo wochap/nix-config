@@ -143,6 +143,7 @@ zinit light wochap/zsh-vi-mode
 zinit ice lucid wait \
   multisrc"shell/{completion,key-bindings}.zsh" \
   id-as"junegunn/fzf_completions" \
+  pick"/dev/null" \
   has"fzf" \
   depth"1"
 zinit light junegunn/fzf
@@ -181,6 +182,7 @@ zinit light ajeetdsouza/zoxide
 zinit ice lucid wait"1" \
   src"shell/navi.plugin.zsh" \
   id-as"denisidoro/plugin_navi" \
+  pick"/dev/null" \
   has"navi" \
   depth"1"
 zinit light denisidoro/navi
