@@ -159,7 +159,8 @@ zinit light NullSense/fuzzy-sys
 zinit ice svn
 zinit snippet OMZP::aliases
 
-zinit ice lucid wait"1"
+zinit ice lucid wait"1" \
+  atload"load_key_bindings" \
 zinit snippet OMZP::dirhistory
 
 ## zsh-completions
