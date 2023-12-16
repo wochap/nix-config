@@ -155,9 +155,9 @@ bindkey -M menuselect "$key_right" .forward-char
 # [Enter] - execute command in all modes
 multibindkey 'viins visual vicmd viopp menuselect' '\r' .accept-line
 
-# [Alt+\] - search in the completion menu
+# [Ctrl+\] - search in the completion menu
 # press again to clear and search again
-bindkey -M viins '^[\\\\' menu-search
+bindkey -M viins '^\\\\' menu-search
 
 # ================
 # Plugins
