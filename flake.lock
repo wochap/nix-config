@@ -1172,6 +1172,23 @@
         "type": "github"
       }
     },
+    "powerlevel10k": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1702206900,
+        "narHash": "sha256-gPsOB2JaBZzISLvp2pY+1g0J9aLaGLJXszAc4u3Ih+k=",
+        "owner": "romkatv",
+        "repo": "powerlevel10k",
+        "rev": "d70eedb345a9cc54b4f3e9ae09b0dbbb4edc9a39",
+        "type": "github"
+      },
+      "original": {
+        "owner": "romkatv",
+        "repo": "powerlevel10k",
+        "rev": "d70eedb345a9cc54b4f3e9ae09b0dbbb4edc9a39",
+        "type": "github"
+      }
+    },
     "prevstable-chrome": {
       "locked": {
         "lastModified": 1696697597,
@@ -1398,6 +1415,7 @@
         "nonicons": "nonicons",
         "nur": "nur",
         "ohmyzsh": "ohmyzsh",
+        "powerlevel10k": "powerlevel10k",
         "prevstable-chrome": "prevstable-chrome",
         "prevstable-hyprland": "prevstable-hyprland",
         "prevstable-kernel-pkgs": "prevstable-kernel-pkgs",

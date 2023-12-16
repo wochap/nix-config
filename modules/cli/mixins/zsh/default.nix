@@ -62,6 +62,9 @@ in {
     };
 
     home-manager.users.${userName} = {
+      xdg.configFile = {
+        "zsh/.p10k.zsh".source = relativeSymlink ./.p10k.zsh;
+      };
       home.packages = with pkgs; [
         # completions and manpage install
         unstable.zsh-abbr
@@ -80,7 +83,22 @@ in {
           # WORDCHARS="*?_-.[]~=/&;!#$%^(){}<>"
           export WORDCHARS="_*"
         '';
-        initExtraBeforeCompInit = "";
+        initExtraFirst = ''
+          # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+          # Initialization code that may require console input (password prompts, [y/n]
+          # confirmations, etc.) must go above this block; everything else may go below.
+          if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+            source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+          fi
+        '';
+        initExtraBeforeCompInit = ''
+          ## powerlevel10k
+
+          # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+          [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+          source ${inputs.powerlevel10k}/powerlevel10k.zsh-theme
+        '';
         completionInit = ''
           ## zsh-autocomplete
 
@@ -229,7 +247,7 @@ in {
       # programs.carapace.enableZshIntegration = true;
       # programs.thefuck.enableZshIntegration = true;
       programs.dircolors.enableZshIntegration = true;
-      programs.starship.enableZshIntegration = true;
+      programs.starship.enableZshIntegration = false;
       programs.zoxide.enableZshIntegration = true;
       programs.navi.enableZshIntegration = true;
       programs.nix-index.enableZshIntegration = true;
