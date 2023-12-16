@@ -1435,8 +1435,10 @@
         "zsh-abbr": "zsh-abbr",
         "zsh-autocomplete": "zsh-autocomplete",
         "zsh-autopair": "zsh-autopair",
+        "zsh-defer": "zsh-defer",
         "zsh-fsh": "zsh-fsh",
         "zsh-history-substring-search": "zsh-history-substring-search",
+        "zsh-notify": "zsh-notify",
         "zsh-syntax-highlighting": "zsh-syntax-highlighting",
         "zsh-vi-mode": "zsh-vi-mode"
       }
@@ -1752,6 +1754,23 @@
         "type": "github"
       }
     },
+    "zsh-defer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1699174976,
+        "narHash": "sha256-Kus+yJGJTsMcrItfoMJZ9pGaH0nfB6mChS9a+CNAAmc=",
+        "owner": "romkatv",
+        "repo": "zsh-defer",
+        "rev": "1c75faff4d8584afe090b06db11991c8c8d62055",
+        "type": "github"
+      },
+      "original": {
+        "owner": "romkatv",
+        "repo": "zsh-defer",
+        "rev": "1c75faff4d8584afe090b06db11991c8c8d62055",
+        "type": "github"
+      }
+    },
     "zsh-fsh": {
       "flake": false,
       "locked": {
@@ -1783,6 +1802,23 @@
         "owner": "zsh-users",
         "repo": "zsh-history-substring-search",
         "rev": "8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64",
+        "type": "github"
+      }
+    },
+    "zsh-notify": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1682877959,
+        "narHash": "sha256-ovmnl+V1B7J/yav0ep4qVqlZOD3Ex8sfrkC92dXPLFI=",
+        "owner": "marzocchi",
+        "repo": "zsh-notify",
+        "rev": "9c1dac81a48ec85d742ebf236172b4d92aab2f3f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "marzocchi",
+        "repo": "zsh-notify",
+        "rev": "9c1dac81a48ec85d742ebf236172b4d92aab2f3f",
         "type": "github"
       }
     },

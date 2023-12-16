@@ -93,6 +93,10 @@
     zsh-fsh.flake = false;
     zsh-abbr.url = "github:olets/zsh-abbr?rev=6802d7353b2422d7a82134ce655aff97367eefa0";
     zsh-abbr.flake = false;
+    zsh-notify.url = "github:marzocchi/zsh-notify?rev=9c1dac81a48ec85d742ebf236172b4d92aab2f3f";
+    zsh-notify.flake = false;
+    zsh-defer.url = "github:romkatv/zsh-defer?rev=1c75faff4d8584afe090b06db11991c8c8d62055";
+    zsh-defer.flake = false;
 
     # third party cli
     ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";

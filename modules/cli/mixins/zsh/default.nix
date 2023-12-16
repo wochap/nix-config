@@ -124,6 +124,22 @@ in {
             source ${relativeSymlink ./key-bindings-vi.zsh}
           }
 
+          ## zsh-defer
+
+          source ${inputs.zsh-defer}/zsh-defer.plugin.zsh
+
+          ## zsh-notify
+
+          zstyle ':notify:*' app-name zsh-notify
+          zstyle ':notify:*' error-icon "gksu-root-terminal"
+          zstyle ':notify:*' error-title "wow such #fail (#{time_elapsed}s)"
+          zstyle ':notify:*' success-icon "terminal-tango"
+          zstyle ':notify:*' success-title "very #success. wow (#{time_elapsed}s)"
+          zstyle ':notify:*' disable-urgent yes
+
+          # TODO: write wayland support
+          # zsh-defer source ${inputs.zsh-notify}/notify.plugin.zsh
+
           ## zsh-autosuggestions
 
           export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
