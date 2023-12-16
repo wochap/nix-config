@@ -175,7 +175,6 @@ in {
                 VI_MODE="%B%F{#1E1E2E}%K{#eba0ac} REPLACE %k%f%b"
               ;;
             esac
-            RPROMPT=$VI_MODE
           }
 
           function zvm_after_init() {
