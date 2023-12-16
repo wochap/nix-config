@@ -155,28 +155,6 @@ in {
             ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
           }
 
-          # typeset -g VI_MODE="%B%F{#1E1E2E}%K{#a6e3a1} INSERT %k%f%b"
-          # RPROMPT=$VI_MODE
-          # function zvm_after_select_vi_mode() {
-          #   case $ZVM_MODE in
-          #     $ZVM_MODE_NORMAL)
-          #       VI_MODE="%B%F{#1E1E2E}%K{#b4befe} NORMAL %k%f%b"
-          #     ;;
-          #     $ZVM_MODE_INSERT)
-          #       VI_MODE="%B%F{#1E1E2E}%K{#a6e3a1} INSERT %k%f%b"
-          #     ;;
-          #     $ZVM_MODE_VISUAL)
-          #       VI_MODE="%B%F{#1E1E2E}%K{#f2cdcd} VISUAL %k%f%b"
-          #     ;;
-          #     $ZVM_MODE_VISUAL_LINE)
-          #       VI_MODE="%B%F{#1E1E2E}%K{#f2cdcd} V-LINE %k%f%b"
-          #     ;;
-          #     $ZVM_MODE_REPLACE)
-          #       VI_MODE="%B%F{#1E1E2E}%K{#eba0ac} REPLACE %k%f%b"
-          #     ;;
-          #   esac
-          # }
-
           function zvm_after_init() {
             load_key_bindings
 
