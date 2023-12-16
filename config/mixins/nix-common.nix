@@ -25,7 +25,7 @@ in {
         experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
 
         # Auto clear nixos store
-        auto-optimise-store = true;
+        auto-optimise-store = false;
 
         # Enable cachix
         trusted-public-keys = [
