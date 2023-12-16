@@ -3,12 +3,21 @@
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 
-local key_up="^[[A"
-local key_down="^[[B"
-local key_left="^[[D"
-local key_right="^[[C"
-local key_home="^[[H"
-local key_end="^[[F"
+# NOTE: with starship:
+# local key_up="^[[A"
+# local key_down="^[[B"
+# local key_left="^[[D"
+# local key_right="^[[C"
+# local key_home="^[[H"
+# local key_end="^[[F"
+
+# NOTE: with powerlevel10k
+local key_up="^[OA"
+local key_down="^[OB"
+local key_left="^[OD"
+local key_right="^[OC"
+local key_home="^[OH"
+local key_end="^[OF"
 
 function multibindkey() {
   # Convert the space-separated string to an array
