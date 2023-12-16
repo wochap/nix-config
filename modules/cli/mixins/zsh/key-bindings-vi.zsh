@@ -3,6 +3,13 @@
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 
+local key_up="^[[A"
+local key_down="^[[B"
+local key_left="^[[D"
+local key_right="^[[C"
+local key_home="^[[H"
+local key_end="^[[F"
+
 function multibindkey() {
   # Convert the space-separated string to an array
   local keymaps=("${(s: :)1}")
@@ -41,10 +48,16 @@ bindkey -M viins '^[[3;2~' delete-char
 bindkey -M menuselect '^?' .backward-delete-char
 
 # [UpArrow] - go 1 line up
-multibindkey 'visual vicmd viopp' "${terminfo[kcuu1]}" .up-line
+multibindkey 'visual vicmd viopp' "$key_up" .up-line
 
 # [DownArrow] - go 1 line down
-multibindkey 'visual vicmd viopp' "${terminfo[kcud1]}" .down-line
+multibindkey 'visual vicmd viopp' "$key_down" .down-line
+
+# [LeftArrow] - go left 1 char
+multibindkey 'visual vicmd viopp' "$key_left" .backward-char
+
+# [RightArrow] - go right 1 char
+multibindkey 'visual vicmd viopp' "$key_right" .forward-char
 
 # [Esc] - remove key binding to espace to vicmd, use Ctrl+x
 bindkey -M viins -r '^['
@@ -53,7 +66,10 @@ bindkey -M viins -r '^['
 bindkey -M viins -r '^L'
 
 # [Ctrl+c] -
-multibindkey 'viins visual vicmd viopp menuselect' '^C' send-break
+multibindkey 'viins menuselect' '^C' send-break
+
+# [Ctrl+c] TODO: dont send break when in vicmd mode
+# multibindkey 'visual vicmd viopp' '^C' .down-line
 
 # ================
 # Movement
@@ -61,10 +77,10 @@ multibindkey 'viins visual vicmd viopp menuselect' '^C' send-break
 # NOTE: when ZLE widget starts with a dot (`.`), that widget will get executed in the cmd, not in the current mode/context
 
 # [Home] - always go to beginning of line
-multibindkey 'viins visual vicmd viopp menuselect' "${terminfo[khome]}" .beginning-of-line
+multibindkey 'viins visual vicmd viopp menuselect' "$key_home" .beginning-of-line
 
 # [End] - always go to end of line
-multibindkey 'viins visual vicmd viopp menuselect' "${terminfo[kend]}" .end-of-line
+multibindkey 'viins visual vicmd viopp menuselect' "$key_end" .end-of-line
 
 # [Alt+RightArrow] - move forward one word
 multibindkey 'viins menuselect' "^[[1;3C" .vi-forward-word
@@ -122,15 +138,17 @@ bindkey -M viins '\t' menu-select "${terminfo[kcbt]}" menu-select
 bindkey -M menuselect '\t' menu-complete "${terminfo[kcbt]}" reverse-menu-complete
 
 # [LeftArrow] - move backward one char
-bindkey -M menuselect "${terminfo[kcub1]}" .backward-char
+bindkey -M menuselect "$key_left" .backward-char
 
 # [RightArrow] - move forward one char
-bindkey -M menuselect "${terminfo[kcuf1]}" .forward-char
+bindkey -M menuselect "$key_right" .forward-char
 
 # [Enter] - execute command in all modes
 multibindkey 'viins visual vicmd viopp menuselect' '\r' .accept-line
 
-# TODO: add [Shift+Enter] to do Ctrl+v-Ctrl+j to insert new line
+# [Alt+\] - search in the completion menu
+# press again to clear and search again
+bindkey -M viins '^[\\\\' menu-search
 
 # ================
 # Plugins
@@ -143,14 +161,16 @@ bindkey -M viins -r '^[[1;3A'
 bindkey -M viins -r '^[[1;3B'
 
 # Start typing + [Up-Arrow] - fuzzy find history forward
-multibindkey 'viins menuselect' "${terminfo[kcuu1]}" history-substring-search-up
+multibindkey 'viins menuselect' "$key_up" history-substring-search-up
 
 # Start typing + [Down-Arrow] - fuzzy find history backward
-multibindkey 'viins menuselect' "${terminfo[kcud1]}" history-substring-search-down
+multibindkey 'viins menuselect' "$key_down" history-substring-search-down
 
 # ================
 # Misc
 # ================
+
+# TODO: add [Shift+Enter] to do Ctrl+v-Ctrl+j to insert new line
 
 # [Ctrl+y] - copy buffer
 bindkey -M viins '^y' copybuffer

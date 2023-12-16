@@ -146,6 +146,7 @@ function f()
   fi
 }
 
+# transient prompt for starship
 zle-line-init() {
   emulate -L zsh
 

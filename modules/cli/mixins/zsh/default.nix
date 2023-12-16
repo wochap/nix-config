@@ -102,14 +102,29 @@ in {
           source ${relativeSymlink ./config.zsh}
           source ${relativeSymlink ./functions.zsh}
 
-          ## zsh-vi-mode
-
           function load_key_bindings() {
             source ${relativeSymlink ./key-bindings-vi.zsh}
-
-            # HACK: fix race condition where zsh-vi-mode overwrites fzf key-binding
-            bindkey -M viins '^R' fzf-history-widget
           }
+
+          ## zsh-autosuggestions
+
+          export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
+          export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+          source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+          ## zsh-fsh
+
+          # remove background from pasted text
+          # source: https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/25
+          # docs: https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Character-Highlighting
+          zle_highlight=('paste:fg=white,bold')
+
+          # HACK: set catppuccin-mocha theme for zsh-fast-syntax-highlighting
+          FAST_WORK_DIR="${fshTheme}"
+          source ${fshPlugin.src}/${fshPlugin.file}
+
+          ## zsh-vi-mode
 
           function zvm_config() {
             ZVM_VI_INSERT_ESCAPE_BINDKEY=^X
@@ -147,22 +162,12 @@ in {
 
           function zvm_after_init() {
             load_key_bindings
+
+            # HACK: fix race condition where zsh-vi-mode overwrites fzf key-binding
+            bindkey -M viins '^R' fzf-history-widget
           }
 
           source ${inputs.zsh-vi-mode}/zsh-vi-mode.plugin.zsh
-
-          ## zsh-fsh
-
-          # HACK: set catppuccin-mocha theme for zsh-fast-syntax-highlighting
-          FAST_WORK_DIR="${fshTheme}"
-          source ${fshPlugin.src}/${fshPlugin.file}
-
-          ## zsh-autosuggestions
-
-          export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
-          export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-
-          source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
           ## zsh-history-substring-search
 
@@ -177,7 +182,11 @@ in {
 
           ## zsh-abbr
 
+          export ABBR_DEFAULT_BINDINGS=0
+
           source ${pkgs.unstable.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
+
+          bindkey -M viins " " abbr-expand-and-space
 
           if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
             abbr import-aliases --quiet
@@ -188,6 +197,7 @@ in {
             abbr erase --quiet lt
             abbr erase --quiet ll
             abbr erase --quiet lla
+            abbr erase --quiet z
           fi
 
           ## snippets
@@ -197,6 +207,7 @@ in {
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
         '';
         enableCompletion = true;
+        defaultKeymap = "emacs";
         history = {
           ignoreDups = false;
           expireDuplicatesFirst = true;
