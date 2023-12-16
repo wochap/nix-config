@@ -206,3 +206,6 @@ multibindkey 'viins visual vicmd viopp menuselect' '^[v' describe-key-briefly
 # type part of a widget name and press Enter for autocompletion.
 bindkey -M viins '^[w' where-is
 
+# [Ctrl+k] - clear terminal
+multibindkey 'viins visual vicmd viopp menuselect' '^K' clear-screen
+
