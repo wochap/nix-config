@@ -2,9 +2,6 @@
 
 let
   cfg = config._custom.gui.kitty;
-  isDarwin = config._displayServer == "darwin";
-  macosConfig = builtins.readFile ./dotfiles/kitty-macos.conf;
-  linuxConfig = builtins.readFile ./dotfiles/kitty-linux.conf;
   inherit (config._custom.globals) themeColors;
   userName = config._userName;
   relativeSymlink = path:
@@ -49,17 +46,10 @@ in {
             prevstable-kitty.kitty # terminal
           ];
 
-        sessionVariables = lib.mkMerge [
-          {
-            # TODO: test on darwin ⬇
-            TERMINAL = "kitty";
-          }
-          (lib.mkIf isDarwin {
-            # TERM = "xterm-kitty";
-            TERMINFO_DIRS =
-              "${pkgs.kitty.terminfo.outPath}/share/terminfo:$TERMINFO_DIRS";
-          })
-        ];
+        sessionVariables = {
+          # TODO: test on darwin ⬇
+          TERMINAL = "kitty";
+        };
 
         shellAliases = {
           diff = "kitty +kitten diff";
@@ -81,19 +71,12 @@ in {
 
           ${builtins.readFile ./dotfiles/kitty-diff.conf}
         '';
-        "kitty/common.conf".source =
-          relativeSymlink ./dotfiles/kitty-common.conf;
         "kitty/kitty.conf".text = ''
-          # Load theme
           include ${inputs.catppuccin-kitty}/themes/mocha.conf
-
-          # Load config
-          include ./common.conf
-          ${if isDarwin then macosConfig else linuxConfig}
-
-          # Theme
           active_border_color ${themeColors.primary}
           inactive_border_color ${themeColors.selection}
+
+          include ${relativeSymlink ./dotfiles/kitty-common.conf}
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;
