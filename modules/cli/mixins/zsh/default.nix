@@ -98,6 +98,10 @@ in {
           [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
           source ${inputs.powerlevel10k}/powerlevel10k.zsh-theme
+
+          ## zsh-defer
+
+          source ${inputs.zsh-defer}/zsh-defer.plugin.zsh
         '';
         completionInit = ''
           ## zsh-autocomplete
@@ -123,10 +127,6 @@ in {
           function load_key_bindings() {
             source ${relativeSymlink ./key-bindings-vi.zsh}
           }
-
-          ## zsh-defer
-
-          source ${inputs.zsh-defer}/zsh-defer.plugin.zsh
 
           ## zsh-notify
 
@@ -186,6 +186,8 @@ in {
           # change the behavior of history-substring-search-up
           export HISTORY_SUBSTRING_SEARCH_PREFIXED="1"
 
+          export HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+          export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_TIMEOUT=0.2
           export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND="bg=cyan,fg=16,bold"
           export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND="bg=red,fg=16,bold"
 
@@ -193,23 +195,27 @@ in {
 
           ## zsh-abbr
 
-          export ABBR_DEFAULT_BINDINGS=0
+          function _zsh-abbr-start() {
+            export ABBR_DEFAULT_BINDINGS=0
 
-          source ${pkgs.unstable.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
+            source ${pkgs.unstable.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
 
-          bindkey -M viins " " abbr-expand-and-space
+            bindkey -M viins " " abbr-expand-and-space
 
-          if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
-            abbr import-aliases --quiet
-            abbr erase --quiet nv
-            abbr erase --quiet nvim
-            abbr erase --quiet ls
-            abbr erase --quiet la
-            abbr erase --quiet lt
-            abbr erase --quiet ll
-            abbr erase --quiet lla
-            abbr erase --quiet z
-          fi
+            if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
+              abbr import-aliases --quiet
+              abbr erase --quiet nv
+              abbr erase --quiet nvim
+              abbr erase --quiet ls
+              abbr erase --quiet la
+              abbr erase --quiet lt
+              abbr erase --quiet ll
+              abbr erase --quiet lla
+              abbr erase --quiet z
+            fi
+          }
+
+          zsh-defer _zsh-abbr-start
 
           ## snippets
 
