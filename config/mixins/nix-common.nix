@@ -36,6 +36,7 @@ in {
           "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
           "nixpkgs-python.cachix.org-1:hxjI7pFxTyuTHn2NkvWCrAUcNZLNS3ZAvfYNuYifcEU="
           "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+          "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
         ];
         substituters = [
           "https://cache.nixos.org"
@@ -45,6 +46,7 @@ in {
           "https://hyprland.cachix.org"
           "https://nixpkgs-python.cachix.org"
           "https://cache.garnix.io"
+          "https://devenv.cachix.org"
         ];
 
         trusted-users = [ "@wheel" "root" ];
