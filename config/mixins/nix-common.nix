@@ -14,6 +14,12 @@ in {
     nix = {
       gc.automatic = true;
 
+      # Enable flakes
+      package = pkgs.nixUnstable;
+      extraOptions = ''
+        experimental-features = nix-command flakes recursive-nix
+      '';
+
       # pin the registry to avoid downloading and evaling a new nixpkgs version every time
       registry = lib.mapAttrs (_: v: { flake = v; }) inputs;
       # set the path for channels compat
