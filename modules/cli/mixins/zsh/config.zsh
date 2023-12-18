@@ -105,3 +105,4 @@ else
   export EDITOR="nvim"
 fi
 
+alias lv='NVIM_APPNAME=lvim run-without-kpadding nvim "$@"'
