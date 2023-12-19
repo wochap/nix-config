@@ -85,7 +85,7 @@ function nvims() {
   elif [[ $selected == "nvim" ]]; then
     selected=""
   fi
-  NVIM_APPNAME=$selected nvim "$@"
+  NVIM_APPNAME=$selected run-without-kpadding nvim "$@"
 }
 alias nvs=nvims
 
