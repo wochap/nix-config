@@ -175,6 +175,7 @@ in {
       undervolt
 
       radeontop
+      intel-gpu-tools
 
       # NOTE: requires installing rEFInd
       # more info on https://github.com/0xbb/gpu-switch
