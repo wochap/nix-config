@@ -173,6 +173,7 @@ in {
 
     environment.systemPackages = with pkgs; [
       undervolt
+      mprime
 
       radeontop
       intel-gpu-tools
