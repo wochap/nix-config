@@ -8,6 +8,7 @@ kanshi &
 
 /etc/scripts/backlight.sh 20% &
 
+# sudo undervolt --core -50 --cache -50
 # sudo cpupower frequency-set -g powersave
 # sudo cpupower frequency-set --related --max 2800000
 # sudo cpupower frequency-set --related --max 4000000
