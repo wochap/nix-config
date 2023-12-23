@@ -15,6 +15,16 @@ in {
           ln -sf ${prev.insomnia}/share $out/share
         '';
 
+        postman = prev.runCommandNoCC "postman" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.postman}/bin/postman $out/bin/postman \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland"
+
+          ln -sf ${prev.postman}/share $out/share
+        '';
+
         microsoft-edge = prev.runCommandNoCC "microsoft-edge" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
@@ -135,6 +145,10 @@ in {
         microsoft-edge = {
           name = "Microsoft Edge";
           exec = "microsoft-edge %U";
+        };
+        postman = {
+          name = "Postman";
+          exec = "postman %U";
         };
       };
     };
