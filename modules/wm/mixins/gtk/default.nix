@@ -1,10 +1,17 @@
-{ config, pkgs, inputs, lib, ... }:
+{ config, pkgs, inputs, lib, _customLib, ... }:
 
 let
   cfg = config._custom.wm.gtk;
   inherit (config._custom) globals;
   userName = config._userName;
   isWayland = config._displayServer == "wayland";
+  relativeSymlink = path:
+    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
+    (_customLib.runtimePath config._custom.globals.configDirectory path);
+  extraCss = ''
+    @import url("file://${relativeSymlink ./dotfiles/gtk.css}");
+    @import url("file://${relativeSymlink ./dotfiles/catppuccin-mocha.css}");
+  '';
 in {
   options._custom.wm.gtk = {
     enable = lib.mkEnableOption "setup gtk theme and apps";
@@ -71,15 +78,8 @@ in {
     programs.gnome-disks.enable = true;
 
     home-manager.users.${userName} = {
-      # install gtk4 theme
-      xdg.configFile = {
-        "gtk-4.0/assets".source =
-          "${globals.gtkTheme.package}/share/themes/${globals.gtkTheme.name}/gtk-4.0/assets";
-        "gtk-4.0/gtk.css".source =
-          "${globals.gtkTheme.package}/share/themes/${globals.gtkTheme.name}/gtk-4.0/gtk.css";
-        "gtk-4.0/gtk-dark.css".source =
-          "${globals.gtkTheme.package}/share/themes/${globals.gtkTheme.name}/gtk-4.0/gtk-dark.css";
-      };
+      disabledModules = [ "misc/gtk.nix" ];
+      imports = [ "${inputs.home-manager-unstable}/modules/misc/gtk.nix" ];
 
       dconf.settings = {
         # Open GTK inspector with Ctrl + Shift + D
@@ -123,38 +123,10 @@ in {
           "file:///home/${userName}/Sync"
         ];
         gtk3.extraCss = ''
-          /** Some apps use titlebar class and some window */
-          .titlebar,
-          window {
-            border-radius: 0;
-            box-shadow: none;
-          }
-
-          /** also remove shaddows */
-          decoration {
-            box-shadow: none;
-          }
-
-          decoration:backdrop {
-            box-shadow: none;
-          }
-
-          /* No (default) titlebar on wayland */
-          headerbar.titlebar.default-decoration {
-            background: transparent;
-            padding: 0;
-            margin: 0 0 -17px 0;
-            border: 0;
-            min-height: 0;
-            font-size: 0;
-            box-shadow: none;
-          }
-
-          /* rm -rf window shadows */
-          window.csd,             /* gtk4? */
-          window.csd decoration { /* gtk3 */
-            box-shadow: none;
-          }
+          ${extraCss}
+        '';
+        gtk4.extraCss = ''
+          ${extraCss}
         '';
       };
     };
