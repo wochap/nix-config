@@ -10,7 +10,7 @@ in {
     home-manager.users.${userName} = {
       home = {
         shellAliases = {
-          cat = "bat";
+          cat = "bat --plain";
           bathelp = "bat --plain --language=help";
         };
         sessionVariables = { MANPAGER = "sh -c 'col -bx | bat -l man -p'"; };
