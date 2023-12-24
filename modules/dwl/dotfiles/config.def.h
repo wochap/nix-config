@@ -498,7 +498,7 @@ static const Gesture gestures[] = {
 	{ MODKEY, SWIPE_RIGHT, 3, rotatetags, { .i = -1 } },
 	{ MOD_NONE, SWIPE_LEFT, 3, shiftview, { .i = 1 } },
 	{ MOD_NONE, SWIPE_RIGHT, 3, shiftview, { .i = -1 } },
-	{ MOD_NONE, SWIPE_DOWN, 3, focusstack, {.i = 1} },
-	{ MOD_NONE, SWIPE_UP, 3, focusstack, {.i = -1} },
+	{ MOD_NONE, SWIPE_DOWN, 3, focusstack, {.i = -1} },
+	{ MOD_NONE, SWIPE_UP, 3, focusstack, {.i = 1} },
 };
 
