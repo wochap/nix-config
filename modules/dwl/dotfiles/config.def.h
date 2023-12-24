@@ -19,7 +19,6 @@ static const int border_color_type         = BrdEnd;
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
 static const unsigned int swipe_min_threshold = 0;
-static const int swipe_fingers_count       = 3;
 static const int center_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
 
 enum {
@@ -495,9 +494,11 @@ static const Button buttons[] = {
 };
 
 static const Gesture gestures[] = {
-	{ MODKEY, SWIPE_LEFT, rotatetags, { .i = 1 } },
-	{ MODKEY, SWIPE_RIGHT, rotatetags, { .i = -1 } },
-	{ MOD_NONE, SWIPE_LEFT, shiftview, { .i = 1 } },
-	{ MOD_NONE, SWIPE_RIGHT, shiftview, { .i = -1 } },
+	{ MODKEY, SWIPE_LEFT, 3, rotatetags, { .i = 1 } },
+	{ MODKEY, SWIPE_RIGHT, 3, rotatetags, { .i = -1 } },
+	{ MOD_NONE, SWIPE_LEFT, 3, shiftview, { .i = 1 } },
+	{ MOD_NONE, SWIPE_RIGHT, 3, shiftview, { .i = -1 } },
+	{ MOD_NONE, SWIPE_DOWN, 3, focusstack, {.i = 1} },
+	{ MOD_NONE, SWIPE_UP, 3, focusstack, {.i = -1} },
 };
 
