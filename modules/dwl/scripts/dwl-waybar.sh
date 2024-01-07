@@ -73,19 +73,23 @@
 # }
 #
 
-# Variables
-declare output title appid mode layout occupiedtags focusedtags urgenttags
-declare -a name
-readonly fname="$HOME"/.cache/dwltags
-# TODO: what if there are multiple DWL instance which share the the file name, will is cause problem? and this file will increese constantly, how to trim it?
-
-name=("1" "2" "3" "4" "5" "6" "7" "8" "9") # Array of labels for tags
+declare occupiedtags focusedtags urgenttags val last_val
+declare -a tag_labels
+readonly file_path="$HOME"/.cache/dwltags
+tag_labels=("1" "2" "3" "4" "5" "6" "7" "8" "9")
 monitor="${1}"
 component="${2}"
 
-_cycle() {
+[[ ! -f "${file_path}" ]] && printf -- '%s\n' \
+  "You need to redirect dwl stdout to ~/.cache/dwltags" >&2
+
+cycle() {
   case "${component}" in
   [012345678])
+    occupiedtags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $3}')
+    focusedtags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $4}')
+    urgenttags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $6}')
+
     this_tag="${component}"
     unset this_status
     mask=$((1 << this_tag))
@@ -95,22 +99,25 @@ _cycle() {
     if (("${urgenttags}" & mask)) 2>/dev/null; then this_status+='"urgent",'; fi
 
     if [[ "${this_status}" ]]; then
-      printf -- '{"text":"%s","class":[%s]}\n' "${name[this_tag]}" "${this_status}"
+      val=$(printf -- '{"text":"%s","class":[%s]}\n' "${tag_labels[this_tag]}" "${this_status}")
     else
-      printf -- '{"text":"%s"}\n' "${name[this_tag]}"
+      val=$(printf -- '{"text":"%s"}\n' "${tag_labels[this_tag]}")
+    fi
+    if [ "$val" != "$last_val" ]; then
+      last_val=$val
+      printf -- "%s\n" "${val}"
     fi
     ;;
-  layout)
-    printf -- '{"text":"%s"}\n' "${layout}"
-    ;;
-  title)
-    printf -- '{"text":"%s"}\n' "${title}"
-    ;;
-  appid)
-    printf -- '{"text":"%s"}\n' "${appid}" 2>/dev/null
-    ;;
-  mode)
-    printf -- '{"text":"%s"}\n' "${mode}"
+  layout | title | appid | mode)
+    val=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} ${component}" | cut -d ' ' -f 3- | sed s/\"/“/g)
+    # if [[ $component == "layout" && $val == "[\\]" ]]; then
+    #   # HACK: waybar doesn't like \\ (dwindle layout)
+    #   val="[\\\]"
+    # fi
+    if [ "$val" != "$last_val" ]; then
+      last_val=$val
+      printf -- '{"text":"%s"}\n' "${val}"
+    fi
     ;;
   *)
     printf -- '{"text":"INVALID INPUT"}\n'
@@ -118,32 +125,9 @@ _cycle() {
   esac
 }
 
-while [[ -n "$(pgrep waybar)" ]]; do
-
-  [[ ! -f "${fname}" ]] && printf -- '%s\n' \
-    "You need to redirect dwl stdout to ~/.cache/dwltags" >&2
-
-  # Get info from the file
-  output="$(grep "${monitor}" "${fname}" | tail -n8)"
-  title="$(echo "${output}" | grep '^[[:graph:]]* title' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
-  appid="$(echo "${output}" | grep '^[[:graph:]]* appid' | cut -d ' ' -f 3- | sed s/\"/“/g)" # Replace quotes - prevent waybar crash
-  mode="$(echo "${output}" | grep '^[[:graph:]]* mode' | cut -d ' ' -f 3- | sed s/\"/“/g)"   # Replace quotes - prevent waybar crash
-  layout="$(echo "${output}" | grep '^[[:graph:]]* layout' | cut -d ' ' -f 3-)"
-
-  if [[ $layout == "[\\]" ]]; then
-    # HACK: waybar doesn't like \\
-    layout="[\\\]"
-  fi
-
-  # Get the tag bit mask as a decimal
-  occupiedtags="$(echo "${output}" | grep '^[[:graph:]]* tags' | awk '{print $3}')"
-  focusedtags="$(echo "${output}" | grep '^[[:graph:]]* tags' | awk '{print $4}')"
-  urgenttags="$(echo "${output}" | grep '^[[:graph:]]* tags' | awk '{print $6}')"
-
-  _cycle
-
-  # 60-second timeout keeps this from becoming a zombified process when waybar is no longer running
-  inotifywait -t 60 -qq --event modify "${fname}"
+cycle
+while inotifywait -qq -e modify "$file_path"; do
+  cycle
 done
 
-unset -v occupiedtags layout name output focusedtags title appid mode
+unset -v occupiedtags focusedtags urgenttags val last_val tag_labels
