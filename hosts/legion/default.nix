@@ -107,7 +107,7 @@ in {
     # this value at the release version of the first install of this system.
     # Before changing this value read the documentation for this option
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-    system.stateVersion = "21.11"; # Did you read the comment?
+    system.stateVersion = "23.11"; # Did you read the comment?
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
@@ -117,7 +117,7 @@ in {
     # You can update Home Manager without changing this value. See
     # the Home Manager release notes for a list of state version
     home-manager.users.${userName} = {
-      home.stateVersion = "21.11";
+      home.stateVersion = "23.11";
 
       # _custom.programs.waybar.settings.mainBar."modules-right" = lib.mkForce [
       #   "tray"
@@ -143,14 +143,6 @@ in {
 
     networking = {
       inherit hostName;
-
-      # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-      # Per-interface useDHCP will be mandatory in the future, so this generated config
-      # replicates the default behaviour.
-      useDHCP = false;
-      interfaces.enp11s0.useDHCP = true;
-      interfaces.enp42s0.useDHCP = true;
-      interfaces.wlp10s0.useDHCP = true;
     };
 
     # Fix windows dualboot clock
