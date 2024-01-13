@@ -5,6 +5,7 @@ let
   mbpKeyboard =
     "/dev/input/by-id/usb-Apple_Inc._Apple_Internal_Keyboard___Trackpad_D3H54961U11GHMFA75BS-if01-event-kbd";
   keychrone = "/dev/input/by-id/usb-Keychron_Keychron_K3-event-kbd";
+  legionKb = "/dev/input/by-id/usb-ITE_Tech._Inc._ITE_Device_8910_-event-kbd";
   generateJob = devnode:
     with pkgs; ''
       - JOB: "if [ -e $DEVNODE ]; then ${interception-tools}/bin/intercept -g $DEVNODE | ${interception-tools-plugins.caps2esc}/bin/caps2esc -m 1 | ${_custom.interception-both-shift-capslock}/bin/both-shift-capslock | ${interception-tools}/bin/uinput -d $DEVNODE; fi"
@@ -27,6 +28,7 @@ in {
     services.interception-tools.udevmonConfig = ''
       ${generateJob mbpKeyboard}
       ${generateJob keychrone}
+      ${generateJob legionKb}
     '';
 
     systemd.services.interception-tools.after = [ "multi-user.target" ];
