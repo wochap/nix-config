@@ -80,7 +80,7 @@ in {
 
       # programs.thefuck.enable = true; # corrects previous console cmd
       # programs.carapace.enable = true; # completions
-      programs.nix-index.enable = true; # locale nix pkgs
+      programs.nix-index.enable = false; # locale nix pkgs
       programs.command-not-found.enable = lib.mkForce false;
       programs.navi = { # like tldr
         enable = true;
