@@ -193,6 +193,7 @@
         desktop-gnome = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
         asus-vivobook = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
         mbp-nixos = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "mbp-nixos";
+        legion = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "legion";
         asus-old = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-old";
       };
       darwinConfigurations = {
