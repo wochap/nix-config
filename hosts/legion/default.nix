@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, ... }:
 
 let
   hostName = "glegion";
@@ -7,7 +7,8 @@ let
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
   catppuccinMochaTheme = import ../../config/mixins/catppuccin-mocha.nix;
 in {
-  imports = [ ./hardware-configuration.nix ../../config/nixos.nix ];
+  imports =
+    [ ./hardware-configuration.nix ./hardware.nix ../../config/nixos.nix ];
 
   config = {
     _userName = userName;
@@ -141,9 +142,7 @@ in {
       # };
     };
 
-    networking = {
-      inherit hostName;
-    };
+    networking = { inherit hostName; };
 
     # Fix windows dualboot clock
     time.hardwareClockInLocalTime = true;
