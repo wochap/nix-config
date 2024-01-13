@@ -40,6 +40,7 @@
     nur.url = "github:nix-community/NUR?rev=2e83dd29ad04000515593f32de01d6e7ae9f63bc";
 
     # third party overlays/modules
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=506c5a80c5a57b27dd51f4e4693d3153d1d7ae42";
     ags.url = "github:Aylur/ags";
     ags.inputs.nixpkgs.follows = "nixpkgs";
     nix-ld.url = "github:Mic92/nix-ld";
