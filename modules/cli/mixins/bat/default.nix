@@ -20,9 +20,10 @@ in {
         enable = true;
         config = { theme = "Catppuccin-mocha"; };
         themes = {
-          # HACK: without builtins.readFile bat doesn't recognize the file
-          Catppuccin-mocha = builtins.readFile
-            "${inputs.catppuccin-bat}/Catppuccin-mocha.tmTheme";
+          Catppuccin-mocha = {
+            src = inputs.catppuccin-bat;
+            file = "Catppuccin-mocha.tmTheme";
+          };
         };
       };
     };

@@ -26,7 +26,7 @@ in {
               (builtins.readFile "${inputs.ranger}/ranger/data/scope.sh"))
             libarchive
             bat
-            exa
+            eza
             fzf
             mediainfo
           ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer sxiv fontpreview ];

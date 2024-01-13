@@ -37,6 +37,7 @@ in {
         '';
 
         heimdall = prev.heimdall.overrideAttrs (_: {
+          version = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
           src = prev.fetchFromSourcehut {
             owner = "~grimler";
             repo = "Heimdall";
@@ -50,7 +51,7 @@ in {
     environment = {
       systemPackages = with pkgs; [
         # OHERS
-        heimdall # reset samsung ROM
+        # heimdall # reset samsung ROM
         ifuse # mount ios
         inotify-tools # c module
         libimobiledevice # mount ios
@@ -124,10 +125,10 @@ in {
         figma-linux
         microsoft-edge
         notion-app-enhanced
-        postman
+        bruno
         prevstable-chrome.google-chrome # HACK: fix https://github.com/NixOS/nixpkgs/issues/244742
         prevstable-chrome.netflix
-        simplenote
+        # simplenote
         slack
         unstable.insomnia
         whatsapp-for-linux

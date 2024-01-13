@@ -20,7 +20,7 @@ in {
   config = lib.mkIf cfg.enable {
     fonts = lib.mkMerge [
       {
-        fonts = with pkgs; [
+        packages = with pkgs; [
           customNerdFonts
 
           source-serif
@@ -34,8 +34,8 @@ in {
         enableFontDir = true;
       } else {
         fontDir.enable = true;
-        enableDefaultFonts = true;
-        fonts = with pkgs; [
+        enableDefaultPackages = true;
+        packages = with pkgs; [
           # NOTE: uncommenting causes rofi to slow down
           # corefonts # basic fonts for office
 

@@ -27,6 +27,7 @@ in {
     # printing and others.
     # NOTE: it required dbus, also setup extraPortals according to your wm
     xdg.portal.enable = true;
+    xdg.portal.config.common.default = "*";
     # xdg.portal.xdgOpenUsePortal = true;
 
     xdg.icons.enable = true;

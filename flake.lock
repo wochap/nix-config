@@ -888,17 +888,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1673270158,
-        "narHash": "sha256-22VKnL4PT3CSy0IErOkL1U85jq8sXmI7VPhcPtRYSko=",
+        "lastModified": 1703987863,
+        "narHash": "sha256-MHhAk74uk0qHVwSkLCcXLXMe4478M2oZEFPXwjSoo2E=",
         "owner": "hyprwm",
         "repo": "hyprpicker",
-        "rev": "fe4535a27389624445b96450a7c338136c619c95",
+        "rev": "2ef703474fb96e97e03e66e8820f213359f29382",
         "type": "github"
       },
       "original": {
         "owner": "hyprwm",
         "repo": "hyprpicker",
-        "rev": "fe4535a27389624445b96450a7c338136c619c95",
+        "rev": "2ef703474fb96e97e03e66e8820f213359f29382",
         "type": "github"
       }
     },

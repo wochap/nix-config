@@ -22,7 +22,7 @@ in {
           cargoHash = "sha256-viLr76Bq9OkPMp+BoprQusMDgx59nbevVi4uxjZ+eZg=";
           cargoDeps = drv.cargoDeps.overrideAttrs (_: {
             inherit src;
-            outputHash = "sha256-ux6t1Xie0ux0y/2WDgRXfAGGuUSnQ2ErbznHdAtq/F8=";
+            outputHash = "sha256-viLr76Bq9OkPMp+BoprQusMDgx59nbevVi4uxjZ+eZg=";
           });
         });
       })
