@@ -32,7 +32,7 @@
     hyprland.url = "github:hyprwm/Hyprland";
     hyprland.inputs.nixpkgs.follows = "unstable";
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins";
-    hyprland-plugins.inputs.nixpkgs.follows = "hyprland";
+    hyprland-plugins.inputs.hyprland.follows = "hyprland";
     xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=6a5de92769d5b7038134044053f90e7458f6a197"; # (jan 13 2024)
     xdg-portal-hyprland.inputs.nixpkgs.follows = "hyprland";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=2ef703474fb96e97e03e66e8820f213359f29382"; # (jan 13 2024)
