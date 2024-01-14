@@ -11,5 +11,6 @@
     hardware.amdgpu.loadInInitrd = true;
 
     services.thermald.enable = lib.mkDefault true;
+    services.fwupd.enable = true;
   };
 }
