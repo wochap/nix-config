@@ -69,5 +69,10 @@ in {
       enable = true;
       displayManager.lightdm.enable = false;
     };
+
+    # HACK: allow manually start graphical-session.target
+    systemd.user.targets.graphical-session.unitConfig = {
+      RefuseManualStart = "no";
+    };
   };
 }
