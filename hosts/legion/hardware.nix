@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ config, inputs, lib, pkgs, ... }:
 
 {
   imports = [
@@ -10,6 +10,12 @@
     hardware.amdgpu.amdvlk = true;
     hardware.amdgpu.loadInInitrd = true;
 
+    boot.extraModulePackages = with config.boot.kernelPackages;
+      [ lenovo-legion-module ];
+
+    environment.systemPackages = with pkgs; [
+      lenovo-legion
+    ];
     services.thermald.enable = lib.mkDefault true;
     services.fwupd.enable = true;
   };
