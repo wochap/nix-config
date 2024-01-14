@@ -75,6 +75,8 @@ in {
     _custom.wm.qt.enable = true;
     _custom.wm.xdg.enable = true;
 
+    _custom.llm.enable = true;
+
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;
     _custom.services.docker.enable = true;

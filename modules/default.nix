@@ -8,6 +8,7 @@
     ./gnome
     ./gui
     ./hyprland
+    ./llm
     ./river
     ./services
     ./sway
