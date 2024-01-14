@@ -13,16 +13,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    _custom.wm.greetd = {
+    _custom.wm.greetd = lib.mkIf cfg.isDefault {
       enable = lib.mkDefault true;
-      cmd = lib.mkIf cfg.isDefault "sway";
-    };
-
-    programs.sway = {
-      enable = true;
-      wrapperFeatures.gtk = true; # so that gtk works properly
-      extraPackages = [ ]; # block rxvt
-      extraOptions = [ "--debug" ];
+      cmd = "sway";
     };
 
     environment = {
@@ -44,7 +37,26 @@ in {
           gesture swipe right 3 swaymsg workspace prev_on_output
         '';
 
-        "sway/config".text = ''
+        "scripts/sway-autostart.sh" = {
+          source = ./scripts/sway-autostart.sh;
+          mode = "0755";
+        };
+        "scripts/projects/sway-dangerp.sh" = {
+          source = ./scripts/sway-dangerp.sh;
+          mode = "0755";
+        };
+      };
+    };
+
+    home-manager.users.${userName} = {
+      wayland.windowManager.sway = {
+        enable = true;
+        systemd.enable = true;
+        systemd.xdgAutostart = true;
+        wrapperFeatures.gtk = true;
+        extraOptions = [ "--debug" "--unsupported-gpu" ];
+        config.bars = lib.mkForce [ ];
+        extraConfig = ''
           ${builtins.readFile ./dotfiles/config}
           ${builtins.readFile ./dotfiles/keybindings}
 
@@ -59,21 +71,9 @@ in {
           client.focused_inactive   ${themeColors.comment}     ${themeColors.comment}        ${themeColors.foreground}   ${themeColors.cyan}   ${themeColors.comment}
           client.urgent             ${themeColors.pink}        ${themeColors.pink}           ${themeColors.background}   ${themeColors.cyan}   ${themeColors.pink}
         '';
-
-        "scripts/sway-autostart.sh" = {
-          source = ./scripts/sway-autostart.sh;
-          mode = "0755";
-        };
-
-        "scripts/projects/sway-dangerp.sh" = {
-          source = ./scripts/sway-dangerp.sh;
-          mode = "0755";
-        };
       };
-    };
 
-    home-manager.users.${userName} = lib.mkIf cfg.isDefault {
-      _custom.programs.waybar = {
+      _custom.programs.waybar = lib.mkIf cfg.isDefault {
         settings.mainBar = {
           modules-left = [
             "sway/workspaces"
@@ -85,7 +85,7 @@ in {
         };
       };
 
-      services.swayidle.timeouts = lib.mkAfter [
+      services.swayidle.timeouts = lib.mkIf cfg.isDefault (lib.mkAfter [
         {
           timeout = 195;
           command = ''swaymsg "output * dpms off"'';
@@ -97,7 +97,7 @@ in {
           resumeCommand =
             ''if pgrep swaylock; then swaymsg "output * dpms on"; fi'';
         }
-      ];
+      ]);
     };
   };
 }
