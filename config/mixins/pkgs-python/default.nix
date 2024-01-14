@@ -1,7 +1,7 @@
-{ system, config, pkgs, lib, inputs, ... }:
+{ pkgs, lib, ... }:
 
 let
-  isDarwin = config._displayServer == "darwin";
+  isDarwin = pkgs.stdenv.isDarwin;
   animdl = pkgs.prevstable-python.callPackage ./animdl.nix {
     pkgs = pkgs.prevstable-python;
   };

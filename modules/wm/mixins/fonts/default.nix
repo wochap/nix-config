@@ -3,7 +3,7 @@
 let
   cfg = config._custom.wm.fonts;
   userName = config._userName;
-  isDarwin = config._displayServer == "darwin";
+  isDarwin = pkgs.stdenv.isDarwin;
   customNerdFonts = pkgs.nerdfonts.override {
     fonts = [
       "FiraCode"

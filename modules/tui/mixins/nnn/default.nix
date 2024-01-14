@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.tui.nnn;
-  isDarwin = config._displayServer == "darwin";
+  isDarwin = pkgs.stdenv.isDarwin;
   userName = config._userName;
 in {
   options._custom.tui.nnn = { enable = lib.mkEnableOption { }; };

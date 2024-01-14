@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.tui.neovim;
-  isDarwin = config._displayServer == "darwin";
+  isDarwin = pkgs.stdenv.isDarwin;
   userName = config._userName;
 in {
   imports = [ ./options.nix ];
