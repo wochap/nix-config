@@ -15,8 +15,14 @@
 
     environment.systemPackages = with pkgs; [
       lenovo-legion
+      # nvtop
+      amdgpu_top
     ];
+
+    # zramSwap.enable = true;
+
     services.thermald.enable = lib.mkDefault true;
+
     services.fwupd.enable = true;
   };
 }
