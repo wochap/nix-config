@@ -124,7 +124,7 @@ in {
         google-chrome
         microsoft-edge
         slack
-        unstable.postman
+        # unstable.postman
       ];
 
       shellAliases = { ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"''; };
