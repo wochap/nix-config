@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, lib, ... }:
 
 let cfg = config._custom.wm.audio;
 in {
@@ -6,6 +6,9 @@ in {
 
   config = lib.mkIf cfg.enable {
     hardware.pulseaudio.enable = false;
+
+    # suppress background noice
+    programs.noisetorch.enable = true;
 
     # Enable audio
     security.rtkit.enable = true;
