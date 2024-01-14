@@ -8,7 +8,7 @@ in {
     environment.gnome.excludePackages = with pkgs; [ epiphany ];
 
     environment.systemPackages = with pkgs; [
-      gnomeExtensions.appindicatora
+      gnomeExtensions.appindicator
       gnomeExtensions.blur-my-shell
       gnomeExtensions.clipboard-indicator
       gnomeExtensions.dash-to-panel
