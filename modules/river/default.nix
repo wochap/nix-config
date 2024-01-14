@@ -10,7 +10,10 @@ let
   river-shifttags = pkgs.callPackage ./packages/river-shifttags.nix { };
   riverwm-utils = pkgs.callPackage ./packages/riverwm-utils.nix { };
 in {
-  options._custom.river = { enable = lib.mkEnableOption { }; };
+  options._custom.river = {
+    enable = lib.mkEnableOption { };
+    isDefault = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
@@ -27,7 +30,7 @@ in {
       })
     ];
 
-    _custom.wm.greetd = {
+    _custom.wm.greetd = lib.mkIf cfg.isDefault {
       enable = lib.mkDefault true;
       cmd = "river";
     };
@@ -46,7 +49,7 @@ in {
         wlrctl # focus window
       ];
 
-      sessionVariables = {
+      sessionVariables = lib.mkIf cfg.isDefault {
         XDG_CURRENT_DESKTOP = "river";
         XDG_SESSION_DESKTOP = "river";
       };
@@ -66,7 +69,7 @@ in {
     };
 
     home-manager.users.${userName} = {
-      _custom.programs.waybar = {
+      _custom.programs.waybar = lib.mkIf cfg.isDefault {
         settings.mainBar = {
           modules-left = [ "river/tags" "river/mode" "keyboard-state" ];
           modules-center = [ "river/window" ];
@@ -93,7 +96,7 @@ in {
         };
       };
 
-      services.swayidle.timeouts = lib.mkAfter [
+      services.swayidle.timeouts = lib.mkIf cfg.isDefault (lib.mkAfter [
         {
           timeout = 195;
           command = ''wlopm --off "*"'';
@@ -104,9 +107,9 @@ in {
           command = ''if pgrep swaylock; then wlopm --off "*"; fi'';
           resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
         }
-      ];
+      ]);
 
-      systemd.user.services.river-tag-overlay = {
+      systemd.user.services.river-tag-overlay = lib.mkIf cfg.isDefault {
         Unit = {
           Description = "A pop-up showing tag status";
           Documentation = "https://git.sr.ht/~leon_plickat/river-tag-overlay";
