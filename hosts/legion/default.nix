@@ -84,22 +84,18 @@ in {
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
     _custom.services.mbpfan.enable = false;
-    _custom.services.mongodb.enable = false;
+    _custom.services.mongodb.enable = true;
     _custom.services.ssh.enable = true;
-    _custom.services.steam.enable = false;
-    _custom.services.virt.enable = false;
+    _custom.services.steam.enable = true;
+    _custom.services.virt.enable = true;
     _custom.services.waydroid.enable = false;
     _custom.services.gnome-keyring.enable = true;
     _custom.services.syncthing.enable = true;
 
-    _custom.hardware.amdCpu.enable = false;
-    _custom.hardware.amdGpu.enable = false;
-    _custom.hardware.amdGpu.enableSouthernIslands = false;
-
     _custom.dwl.enable = true;
     # _custom.river.enable = true;
     # _custom.hyprland.enable = true;
-    # _custom.sway.enable = true;
+    _custom.sway.enable = true;
     _custom.waylandWm.enable = true;
 
     # This value determines the NixOS release from which the default
@@ -142,7 +138,7 @@ in {
       # };
     };
 
-    networking = { inherit hostName; };
+    networking.hostName = hostName;
 
     # Fix windows dualboot clock
     time.hardwareClockInLocalTime = true;
@@ -157,7 +153,7 @@ in {
       # Enable touchpad support (enabled default in most desktopManager).
       libinput.enable = true;
       libinput.touchpad.naturalScrolling = true;
-      libinput.touchpad.tapping = false;
+      libinput.touchpad.tapping = true;
     };
   };
 }

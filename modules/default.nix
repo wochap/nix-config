@@ -7,7 +7,6 @@
     ./globals.nix
     ./gnome
     ./gui
-    ./hardware
     ./hyprland
     ./river
     ./services

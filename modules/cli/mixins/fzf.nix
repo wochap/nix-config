@@ -10,7 +10,6 @@ in {
     home-manager.users.${userName} = {
       programs.fzf = {
         enable = true;
-        package = pkgs.unstable.fzf;
         enableBashIntegration = true;
         defaultOptions = [
           # theme

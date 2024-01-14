@@ -12,7 +12,7 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.wm.greetd = {
       enable = lib.mkDefault true;
-      cmd = "sway";
+      # cmd = "sway";
     };
 
     programs.sway = {
@@ -31,8 +31,8 @@ in {
       ];
 
       sessionVariables = {
-        XDG_CURRENT_DESKTOP = "sway";
-        XDG_SESSION_DESKTOP = "sway";
+        # XDG_CURRENT_DESKTOP = "sway";
+        # XDG_SESSION_DESKTOP = "sway";
       };
 
       etc = {

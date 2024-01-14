@@ -26,7 +26,7 @@ in {
         })
         playerctl # media player cli
         sacad # search and download album covert
-        unstable.ueberzugpp
+        ueberzugpp
       ];
 
       xdg.configFile = {

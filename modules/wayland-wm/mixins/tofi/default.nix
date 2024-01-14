@@ -38,7 +38,7 @@ in {
     home-manager.users.${userName} = {
       home = {
         packages = with pkgs; [
-          unstable.tofi
+          tofi
           tofi-launcher
           tofi-powermenu
           tofi-emoji

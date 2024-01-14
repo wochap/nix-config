@@ -1,9 +1,8 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, lib, inputs, ... }:
 
 let
   cfg = config._custom.cli.lsd;
   userName = config._userName;
-  # themeSettings = pkgs._custom.fromYAML "${inputs.dracula-lsd}/config.yaml";
   themeSettings = { };
 in {
   options._custom.cli.lsd = { enable = lib.mkEnableOption { }; };

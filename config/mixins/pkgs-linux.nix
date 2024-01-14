@@ -1,18 +1,18 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, ... }:
 
 let userName = config._userName;
 in {
   config = {
     nixpkgs.overlays = [
       (final: prev: {
-        insomnia = prev.runCommandNoCC "insomnia" {
+        bruno = prev.runCommandNoCC "bruno" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
-          makeWrapper ${prev.insomnia}/bin/insomnia $out/bin/insomnia \
+          makeWrapper ${prev.bruno}/bin/bruno $out/bin/bruno \
           --add-flags "--enable-features=UseOzonePlatform" \
           --add-flags "--ozone-platform=wayland"
 
-          ln -sf ${prev.insomnia}/share $out/share
+          ln -sf ${prev.bruno}/share $out/share
         '';
 
         postman = prev.runCommandNoCC "postman" {
@@ -107,11 +107,9 @@ in {
         ncdu # disk usage
         pulsemixer # pulseaudio
         tty-clock # clock
-        unstable.ueberzugpp # images in terminal
 
         # GUI APPS
         dmenu # menu
-        nyxt # browser
         skypeforlinux
         zoom-us
         # antimicroX # map kb/mouse to gamepad
@@ -121,17 +119,12 @@ in {
         # ELECTRON APPS
         bitwarden
         brave
-        element-desktop-wayland
-        figma-linux
-        microsoft-edge
-        notion-app-enhanced
         bruno
-        prevstable-chrome.google-chrome # HACK: fix https://github.com/NixOS/nixpkgs/issues/244742
-        prevstable-chrome.netflix
-        # simplenote
+        element-desktop-wayland
+        google-chrome
+        microsoft-edge
         slack
-        unstable.insomnia
-        whatsapp-for-linux
+        unstable.postman
       ];
 
       shellAliases = { ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"''; };
@@ -139,9 +132,9 @@ in {
 
     home-manager.users.${userName} = {
       xdg.desktopEntries = {
-        insomnia = {
-          name = "Insomnia";
-          exec = "insomnia %U";
+        bruno = {
+          name = "bruno";
+          exec = "bruno %U";
         };
         microsoft-edge = {
           name = "Microsoft Edge";

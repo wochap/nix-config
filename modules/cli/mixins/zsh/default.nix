@@ -70,7 +70,7 @@ in {
         unstable.zsh-abbr
 
         # completions
-        unstable.zsh-completions
+        zsh-completions
       ];
 
       programs.zsh = {

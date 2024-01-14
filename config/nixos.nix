@@ -8,7 +8,6 @@ in {
 
     ./mixins/nix-common.nix
     ./mixins/nixos.nix
-    ./mixins/default-browser
     ./mixins/pkgs-gtk.nix
     ./mixins/pkgs-linux.nix
     ./mixins/pkgs-node.nix
