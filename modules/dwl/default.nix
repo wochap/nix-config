@@ -14,7 +14,10 @@ let
     text = builtins.readFile ./scripts/dwl-waybar.sh;
   };
 in {
-  options._custom.dwl = { enable = lib.mkEnableOption { }; };
+  options._custom.dwl = {
+    enable = lib.mkEnableOption { };
+    isDefault = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
@@ -35,7 +38,7 @@ in {
 
     _custom.wm.greetd = {
       enable = lib.mkDefault true;
-      cmd = "dwl > /home/${userName}/.cache/dwltags";
+      cmd = lib.mkIf cfg.isDefault "dwl > /home/${userName}/.cache/dwltags";
     };
 
     environment = {
@@ -75,7 +78,7 @@ in {
         foot
       ];
 
-      sessionVariables = {
+      sessionVariables = lib.mkIf cfg.isDefault {
         XDG_CURRENT_DESKTOP = "wlroots";
         XDG_SESSION_DESKTOP = "dwl";
       };
@@ -94,7 +97,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = {
+    home-manager.users.${userName} = lib.mkIf cfg.isDefault {
       _custom.programs.waybar = {
         settings.mainBar = lib.mkMerge ([{
           modules-left = (builtins.map (i: "custom/dwl_tag#${toString i}")

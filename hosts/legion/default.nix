@@ -91,6 +91,7 @@ in {
     _custom.services.syncthing.enable = true;
 
     _custom.dwl.enable = true;
+    _custom.dwl.isDefault = true;
     # _custom.river.enable = true;
     # _custom.hyprland.enable = true;
     _custom.sway.enable = true;

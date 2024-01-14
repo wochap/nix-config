@@ -24,11 +24,11 @@ bindsym $mod+l exec \
 
 # Open power menu
 bindsym $mod+Escape exec \
-  rofi-powermenu
+  tofi-powermenu
 
 # Open app launcher
 bindsym $mod+space exec \
-  rofi-launcher
+  tofi-launcher
 
 # Take fullscreen screenshot
 bindsym $mod+Print exec \
@@ -36,13 +36,7 @@ bindsym $mod+Print exec \
 
 # Open calc
 bindsym $mod+c exec \
-  rofi-calc
-
-# Open wifi menu
-# bindsym $mod+w exec \
-#   swaymsg exec /etc/scripts/wofi-wifi.sh
-
-# TODO: Show keybindings
+  tofi-calc
 
 # Show clipboard
 bindsym $mod+v exec \
@@ -54,7 +48,7 @@ bindsym $mod+Shift+v exec \
 
 # Show emojis
 bindsym $mod+e exec \
-  rofi-emoji
+  tofi-emoji
 
 bindsym $mod+ctrl+n exec \
   dunstctl history-pop

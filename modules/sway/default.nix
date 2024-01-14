@@ -7,12 +7,15 @@ let
   inherit (config._custom.globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
 in {
-  options._custom.sway = { enable = lib.mkEnableOption { }; };
+  options._custom.sway = {
+    enable = lib.mkEnableOption { };
+    isDefault = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     _custom.wm.greetd = {
       enable = lib.mkDefault true;
-      # cmd = "sway";
+      cmd = lib.mkIf cfg.isDefault "sway";
     };
 
     programs.sway = {
@@ -30,9 +33,9 @@ in {
         # gksu
       ];
 
-      sessionVariables = {
-        # XDG_CURRENT_DESKTOP = "sway";
-        # XDG_SESSION_DESKTOP = "sway";
+      sessionVariables = lib.mkIf cfg.isDefault {
+        XDG_CURRENT_DESKTOP = "sway";
+        XDG_SESSION_DESKTOP = "sway";
       };
 
       etc = {
@@ -69,7 +72,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = {
+    home-manager.users.${userName} = lib.mkIf cfg.isDefault {
       _custom.programs.waybar = {
         settings.mainBar = {
           modules-left = [
