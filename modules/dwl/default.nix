@@ -29,31 +29,6 @@ in {
             rev = "bfd95f07624418d7d3522e2dc41ad44f5aa7c207";
             hash = "sha256-rjRuzZsDdXv8vYGqWsKEQt0ORPMYpkNhmBNl/eyKVxk=";
           };
-          buildInputs = with pkgs.unstable; [
-            libinput
-            xorg.libxcb
-            libxkbcommon
-            pixman
-            wayland
-            wayland-protocols
-
-            (wlroots_0_16.overrideAttrs (oldAttrs: {
-              version = "fe53ec693789afb44c899cad8c2df70c8f9f9023";
-              buildInputs = with pkgs;
-                oldAttrs.buildInputs ++ [ hwdata libdisplay-info ];
-              src = pkgs.fetchFromGitLab {
-                domain = "gitlab.freedesktop.org";
-                owner = "wlroots";
-                repo = "wlroots";
-                rev = "fe53ec693789afb44c899cad8c2df70c8f9f9023";
-                sha256 = "sha256-ah8TRZemPDT3NlPAHcW0+kUIZojEGkXZ53I/cNeCcpA=";
-              };
-            }))
-
-            xorg.libX11
-            xorg.xcbutilwm
-            xwayland
-          ];
         });
       })
     ];

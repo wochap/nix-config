@@ -4,7 +4,7 @@ let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
-  configDirectory = config._configDirectory;
+  configDirectory = config._custom.globals.configDirectory;
 in {
   config = {
     home-manager.users.${userName} = {

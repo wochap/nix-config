@@ -3,7 +3,7 @@
 let
   cfg = config._custom.gui.firefox;
   userName = config._userName;
-  isWayland = config._displayServer == "wayland";
+  isWayland = config._custom.globals.displayServer == "wayland";
 in {
   options._custom.gui.firefox = { enable = lib.mkEnableOption { }; };
 

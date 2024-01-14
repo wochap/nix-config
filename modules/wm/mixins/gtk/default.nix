@@ -4,7 +4,7 @@ let
   cfg = config._custom.wm.gtk;
   inherit (config._custom) globals;
   userName = config._userName;
-  isWayland = config._displayServer == "wayland";
+  isWayland = config._custom.globals.displayServer == "wayland";
   relativeSymlink = path:
     config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
     (_customLib.runtimePath config._custom.globals.configDirectory path);

@@ -3,7 +3,7 @@
 
 let
   userName = config._userName;
-  homeDirectory = config._homeDirectory;
+  homeDirectory = config._custom.globals.homeDirectory;
 in {
   config = {
     # Allow unfree packages

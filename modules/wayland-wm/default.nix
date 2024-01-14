@@ -19,7 +19,6 @@ in {
   options._custom.waylandWm = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    _displayServer = "wayland";
     _custom.globals.displayServer = "wayland";
 
     nixpkgs.overlays = [

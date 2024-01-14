@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.gui.mpv;
-  isWayland = config._displayServer == "wayland";
+  isWayland = config._custom.globals.displayServer == "wayland";
   userName = config._userName;
 in {
   options._custom.gui.mpv = { enable = lib.mkEnableOption { }; };

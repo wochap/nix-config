@@ -12,11 +12,9 @@ in {
 
   config = {
     _userName = userName;
-    _homeDirectory = "/home/${userName}";
-    _configDirectory = configDirectory;
+    _custom.globals.homeDirectory = "/home/${userName}";
     _custom.globals.configDirectory = configDirectory;
     _custom.globals.themeColors = catppuccinMochaTheme;
-    _custom.globals.isHidpi = true;
 
     _custom.cli.asciinema.enable = true;
     _custom.cli.bat.enable = true;
