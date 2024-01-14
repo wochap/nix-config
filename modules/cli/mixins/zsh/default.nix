@@ -32,15 +32,7 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         zsh-abbr = prev.zsh-abbr.overrideAttrs (oldAttrs: rec {
-          version = "5.2.0";
-
-          src = prev.fetchFromGitHub {
-            owner = "olets";
-            repo = "zsh-abbr";
-            rev = "v${version}";
-            hash = "sha256-MvxJkEbJKMmYRku/RF6ayOb7u7NI4HZehO8ty64jEnE=";
-          };
-
+          # Install completions and man page
           installPhase = ''
             mkdir -p $out/share/zsh-abbr
             cp zsh-abbr.zsh zsh-abbr.plugin.zsh $out/share/zsh-abbr

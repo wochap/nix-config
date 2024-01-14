@@ -45,8 +45,6 @@
     zsh-vi-mode.flake = false;
     ncmpcpp-ueberzug.url = "github:munguua/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";
     ncmpcpp-ueberzug.flake = false;
-    ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
-    ohmyzsh.flake = false;
     smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim";
     smart-splits-nvim.flake = false;
     kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim";
@@ -63,14 +61,6 @@
     zsh-autocomplete.flake = false;
     zsh-history-substring-search.url = "github:zsh-users/zsh-history-substring-search?rev=8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64";
     zsh-history-substring-search.flake = false;
-    zsh-autopair.url = "github:hlissner/zsh-autopair?rev=396c38a7468458ba29011f2ad4112e4fd35f78e6";
-    zsh-autopair.flake = false;
-    zsh-syntax-highlighting.url = "github:zsh-users/zsh-syntax-highlighting?rev=bb27265aeeb0a22fb77f1275118a5edba260ec47";
-    zsh-syntax-highlighting.flake = false;
-    zsh-fsh.url = "github:zdharma-continuum/fast-syntax-highlighting?rev=cf318e06a9b7c9f2219d78f41b46fa6e06011fd9";
-    zsh-fsh.flake = false;
-    zsh-abbr.url = "github:olets/zsh-abbr?rev=6802d7353b2422d7a82134ce655aff97367eefa0";
-    zsh-abbr.flake = false;
     zsh-notify.url = "github:marzocchi/zsh-notify?rev=9c1dac81a48ec85d742ebf236172b4d92aab2f3f";
     zsh-notify.flake = false;
     zsh-defer.url = "github:romkatv/zsh-defer?rev=1c75faff4d8584afe090b06db11991c8c8d62055";
@@ -107,8 +97,6 @@
     catppuccin-bat.flake = false;
     catppuccin-kitty.url = "github:catppuccin/kitty?rev=4820b3ef3f4968cf3084b2239ce7d1e99ea04dda";
     catppuccin-kitty.flake = false;
-    catppuccin-zsh-syntax-highlighting.url = "github:catppuccin/zsh-syntax-highlighting?rev=06d519c20798f0ebe275fc3a8101841faaeee8ea";
-    catppuccin-zsh-syntax-highlighting.flake = false;
     catppuccin-zsh-fsh.url = "github:catppuccin/zsh-fsh?rev=7cdab58bddafe0565f84f6eaf2d7dd109bd6fc18";
     catppuccin-zsh-fsh.flake = false;
     catppuccin-starship.url = "github:catppuccin/starship?rev=5629d2356f62a9f2f8efad3ff37476c19969bd4f";
