@@ -36,9 +36,9 @@ in {
       })
     ];
 
-    _custom.wm.greetd = {
+    _custom.wm.greetd = lib.mkIf cfg.isDefault {
       enable = lib.mkDefault true;
-      cmd = lib.mkIf cfg.isDefault "dwl > /home/${userName}/.cache/dwltags";
+      cmd = "dwl > /home/${userName}/.cache/dwltags";
     };
 
     environment = {
