@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  userName = config._userName;
-  cfg = config._custom.gnome;
+let cfg = config._custom.gnome;
 in {
   options._custom.gnome = { enable = lib.mkEnableOption { }; };
 
