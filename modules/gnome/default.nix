@@ -12,7 +12,7 @@ in {
       gnomeExtensions.blur-my-shell
       gnomeExtensions.clipboard-indicator
       gnomeExtensions.dash-to-panel
-      gnomeExtensions.tweaks-in-system-menu
+      # gnomeExtensions.tweaks-in-system-menu
       gnomeExtensions.workspace-indicator
       gnomeExtensions.x11-gestures
     ];
