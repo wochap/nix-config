@@ -144,6 +144,10 @@ in {
           name = "Postman";
           exec = "postman %U";
         };
+        figma = {
+          name = "Figma";
+          exec = "google-chrome-stable --app=https://www.figma.com";
+        };
       };
     };
   };
