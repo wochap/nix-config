@@ -18,6 +18,11 @@
       # nvtop
       amdgpu_top
     ];
+    environment.sessionVariables = {
+      IGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:05:00.0-card)";
+      DGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)";
+      WLR_DRM_DEVICES = "$IGPU_CARD:$DGPU_CARD";
+    };
 
     # zramSwap.enable = true;
 
