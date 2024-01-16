@@ -58,13 +58,13 @@ static const char *msgptscratchcmd[] = { "g", "microsoft-edge", "--app=https://w
 static const char *chatgptscratchcmd[] = { "c", "google-chrome-stable", "--app=https://chat.openai.com", NULL };
 static const char *ytmusicscratchcmd[] = { "y", "google-chrome-stable", "--app=https://music.youtube.com", NULL };
 static const char *fmscratchcmd[] = { "f", "thunar", "--name", "thunar-scratch", NULL };
-static const char *kittytopcmd[] = { "m", "bash", "-c", "~/.config/kitty/scripts/kitty-top.sh", NULL };
-static const char *kittyscratchcmd[] = { "i", "bash", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
-static const char *kittyneorgcmd[] = { "n", "bash", "-c", "~/.config/kitty/scripts/kitty-neorg.sh", NULL };
-// static const char *kittynmtuicmd[] = { "w", "bash", "-c", "~/.config/kitty/scripts/kitty-nmtui.sh", NULL };
-static const char *kittyneomuttcmd[] = { "e", "bash", "-c", "~/.config/kitty/scripts/kitty-neomutt.sh", NULL };
-static const char *kittynewsboatcmd[] = { "r", "bash", "-c", "~/.config/kitty/scripts/kitty-newsboat.sh", NULL };
-static const char *kittyncmpcppcmd[] = { "u", "bash", "-c", "~/.config/kitty/scripts/kitty-ncmpcpp.sh", NULL };
+static const char *kittytopcmd[] = { "m", "sh", "-c", "~/.config/kitty/scripts/kitty-top.sh", NULL };
+static const char *kittyscratchcmd[] = { "i", "sh", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
+static const char *kittyneorgcmd[] = { "n", "sh", "-c", "~/.config/kitty/scripts/kitty-neorg.sh", NULL };
+// static const char *kittynmtuicmd[] = { "w", "sh", "-c", "~/.config/kitty/scripts/kitty-nmtui.sh", NULL };
+static const char *kittyneomuttcmd[] = { "e", "sh", "-c", "~/.config/kitty/scripts/kitty-neomutt.sh", NULL };
+static const char *kittynewsboatcmd[] = { "r", "sh", "-c", "~/.config/kitty/scripts/kitty-newsboat.sh", NULL };
+static const char *kittyncmpcppcmd[] = { "u", "sh", "-c", "~/.config/kitty/scripts/kitty-ncmpcpp.sh", NULL };
 
 static const char bing_gpt_appid[] = "msedge-www.bing.com__search-Default";
 static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
