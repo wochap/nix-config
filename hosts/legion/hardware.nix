@@ -33,6 +33,10 @@
 
     boot.kernelPackages = lib.mkForce pkgs.unstable.linuxPackages_latest;
 
+    # Disables scatter/gather which was introduced with kernel version 6.2
+    # It produces completely white or flashing screens when enabled while using the iGPU of Ryzen 7000-series CPUs (Raphael)
+    boot.kernelParams = [ "amdgpu.sg_display=0" ];
+
     environment.systemPackages = with pkgs; [
       lenovo-legion
       # nvtop
