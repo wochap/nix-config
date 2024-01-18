@@ -227,8 +227,6 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 
 /* commands */
 #define RUN(...)   { .v = (const char*[]){ __VA_ARGS__, NULL } }
-static const char *termcmd[] = { "kitty", NULL };
-static const char *menucmd[] = { "tofi-launcher", NULL };
 
 #include "shiftview.c"
 
@@ -249,7 +247,7 @@ static const Key keys[] = {
   { MODKEY, Key_Escape, spawn, SHCMD("tofi-powermenu") },
 
   // Open app launcher
-	{ MODKEY, Key_space, spawn, {.v = menucmd} },
+	{ MODKEY, Key_space, spawn, SHCMD("tofi-launcher") },
 
   // Take fullscreen screenshoot
   { MODKEY, Key_Print, spawn, SHCMD("/etc/scripts/system/takeshot.sh --now") },
@@ -357,7 +355,7 @@ static const Key keys[] = {
   // ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
   // Open primary terminal
-	{ MODKEY|MOD_ALT, Key_t, spawn, {.v = termcmd} },
+	{ MODKEY|MOD_ALT, Key_t, spawn, SHCMD("kitty") },
 
   // Open file manager
   { MODKEY|MOD_ALT, Key_f, focusortogglescratch, {.v = fmscratchcmd} },
