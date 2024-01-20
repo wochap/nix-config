@@ -53,6 +53,7 @@ in {
     _custom.gui.kitty.enable = true;
     _custom.gui.mpv.enable = true;
     _custom.gui.qutebrowser.enable = true;
+    _custom.gui.retroarch.enable = true;
     _custom.gui.thunar.enable = true;
     _custom.gui.vscode.enable = true;
     _custom.gui.zathura.enable = true;
