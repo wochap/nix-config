@@ -27,6 +27,12 @@
       nvidiaBusId = "PCI:1:0:0";
     };
 
+    # Enable nvidia cuda
+    nixpkgs.config.cudaSupport = true;
+    virtualisation.docker.enableNvidia = true;
+    virtualisation.docker.extraOptions =
+      "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
+
     # Doesn't work yet...
     # boot.extraModulePackages = with config.boot.kernelPackages;
     #   [ lenovo-legion-module ];
