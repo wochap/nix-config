@@ -24,6 +24,11 @@ in {
       port = 8090;
       ollama-webui-package = pkgs._custom.ollama-webui;
     };
+    systemd.services.ollama-webui.serviceConfig.ExecStart = let
+      ollamaWebuiCfg = config.services.ollama-webui;
+      port = toString ollamaWebuiCfg.port;
+    in lib.mkForce
+    "${ollamaWebuiCfg.ollama-webui-package}/bin/ollama-webui --port ${port} --proxy http://localhost:${port}?";
 
     nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
   };
