@@ -22,7 +22,7 @@ in {
     services.ollama-webui = {
       enable = true;
       port = 8090;
-      ollama-webui-package = pkgs.prevstable-ollama-webui.ollama-webui;
+      ollama-webui-package = pkgs._custom.ollama-webui;
     };
 
     nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;

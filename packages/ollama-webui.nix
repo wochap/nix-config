@@ -30,7 +30,7 @@ buildNpmPackage rec {
     mkdir -p $out/bin
     cat <<EOF >>$out/bin/${pname}
     #!${runtimeShell}
-    ${nodePackages.http-server}/bin/http-server $out/lib
+    ${nodePackages.http-server}/bin/http-server $out/lib "\$@"
     EOF
     chmod +x $out/bin/${pname}
   '';
