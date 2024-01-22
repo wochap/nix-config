@@ -77,10 +77,12 @@ in {
     _custom.wm.xdg.enable = true;
 
     _custom.llm.enable = true;
+    _custom.llm.enableNvidia = true;
 
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;
     _custom.services.docker.enable = true;
+    _custom.services.docker.enableNvidia = true;
     _custom.services.flatpak.enable = false;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
