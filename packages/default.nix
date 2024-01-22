@@ -15,6 +15,7 @@ let
     matcha = pkgs.callPackage ./matcha.nix { };
     nwg-look = pkgs.callPackage ./nwg-look { };
     offlinemsmtp = pkgs.callPackage ./offlinemsmtp.nix { };
+    ollama-webui = pkgs.callPackage ./ollama-webui.nix { };
     ptsh = pkgs.callPackage ./ptsh { };
     sf-mono-liga-bin = pkgs.callPackage ./sf-mono-liga-bin.nix { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
