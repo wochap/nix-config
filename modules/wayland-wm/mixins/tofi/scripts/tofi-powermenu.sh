@@ -2,11 +2,10 @@
 
 shutdown=" Shutdown"
 reboot=" Reboot"
-sleep=" Sleep"
-hibernate=" Hibernate"
+suspend=" Suspend"
 logout=" Logout"
 lock=" Lock"
-options="$shutdown\n$reboot\n$sleep\n$logout\n$lock"
+options="$shutdown\n$reboot\n$suspend\n$logout\n$lock"
 
 selected="$(echo -e "$options" |
   tofi \
@@ -20,11 +19,7 @@ case $selected in
 "$reboot")
   systemctl reboot
   ;;
-"$hibernate")
-  # Hold all on disk
-  systemctl hibernate
-  ;;
-"$sleep")
+"$suspend")
   # Hold all on RAM
   systemctl suspend
   ;;
