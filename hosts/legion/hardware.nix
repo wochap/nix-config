@@ -31,8 +31,9 @@
     # Doesn't work yet...
     # boot.extraModulePackages = with config.boot.kernelPackages;
     #   [ lenovo-legion-module ];
+    # NOTE: kernel 6.7.0 gives artifacts
+    boot.kernelPackages = lib.mkForce pkgs.unstable.linuxPackages_6_6;
 
-    boot.kernelPackages = lib.mkForce pkgs.unstable.linuxPackages_latest;
 
     # Disables scatter/gather which was introduced with kernel version 6.2
     # It produces completely white or flashing screens when enabled while using the iGPU of Ryzen 7000-series CPUs (Raphael)
