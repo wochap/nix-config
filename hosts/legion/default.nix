@@ -77,7 +77,6 @@ in {
     _custom.wm.xdg.enable = true;
 
     _custom.llm.enable = true;
-    _custom.llm.enableNvidia = true;
 
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;
