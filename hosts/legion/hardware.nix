@@ -49,7 +49,7 @@
       WLR_DRM_DEVICES = "$IGPU_CARD";
     };
 
-    # zramSwap.enable = true;
+    zramSwap.enable = true;
 
     # AMD has better battery life with PPD over TLP:
     # https://community.frame.work/t/responded-amd-7040-sleep-states/38101/13
