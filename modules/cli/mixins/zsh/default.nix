@@ -153,11 +153,12 @@ in {
           ## zsh-vi-mode
 
           function zvm_config() {
-            ZVM_VI_INSERT_ESCAPE_BINDKEY=^X
+            # ZVM_VI_INSERT_ESCAPE_BINDKEY=^X
+            ZVM_ESCAPE_KEYTIMEOUT=0
+            ZVM_KEYTIMEOUT=0.2
             ZVM_VI_HIGHLIGHT_BACKGROUND=#45475A
             ZVM_VI_HIGHLIGHT_FOREGROUND=#cdd6f4
             ZVM_VI_SURROUND_BINDKEY=s-prefix
-            ZVM_ESCAPE_KEYTIMEOUT=0
             ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST
             ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
             ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK

@@ -69,7 +69,7 @@ multibindkey 'visual vicmd viopp' "$key_left" .backward-char
 multibindkey 'visual vicmd viopp' "$key_right" .forward-char
 
 # [Esc] - remove key binding to espace to vicmd, use Ctrl+x
-bindkey -M viins -r '^['
+# bindkey -M viins -r '^['
 
 # [Ctrl+l] - remove key binding
 bindkey -M viins -r '^L'
