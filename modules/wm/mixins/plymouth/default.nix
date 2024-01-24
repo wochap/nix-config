@@ -9,13 +9,13 @@ in {
     boot.plymouth = {
       enable = true;
       font = "${pkgs.iosevka}/share/fonts/truetype/iosevka-regular.ttf";
-      themePackages = with pkgs;
-        [ (catppuccin-plymouth.override { variant = "mocha"; }) ];
-      theme = "catppuccin-mocha";
     };
 
+    # required if you use luks
     boot.initrd.systemd.enable = true;
-    boot.kernelParams = [ "quiet" ];
+
+    # hide boot messages
+    boot.kernelParams = [ "quiet" "udev.log_level=3" ];
   };
 }
 
