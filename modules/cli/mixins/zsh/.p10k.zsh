@@ -870,7 +870,7 @@ source /etc/scripts/theme-colors.sh
 
   ##############[ taskwarrior: taskwarrior task count (https://taskwarrior.org/) ]##############
   # Taskwarrior color.
-  typeset -g POWERLEVEL9K_TASKWARRIOR_FOREGROUND=74
+  typeset -g POWERLEVEL9K_TASKWARRIOR_FOREGROUND=4
 
   # Taskwarrior segment format. The following parameters are available within the expansion.
   #
