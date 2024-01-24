@@ -163,11 +163,17 @@ bindkey -M viins '^\\\\' menu-search
 # Plugins
 # ================
 
-# [Alt+UpArrow] - unbind dirhistory
-bindkey -M viins -r '^[[1;3A'
+# [Alt+RightArrow] - dirhistory future
+bindkey -M vicmd "^[[1;3C" dirhistory_zle_dirhistory_future
 
-# [Alt+DownArrow] - unbind dirhistory
-bindkey -M viins -r '^[[1;3B'
+# [Alt+LeftArrow] - dirhistory back
+bindkey -M vicmd "^[[1;3D" dirhistory_zle_dirhistory_back
+
+# [Alt+UpArrow] - dirhistory up
+bindkey -M vicmd '^[[1;3A' dirhistory_zle_dirhistory_up
+
+# [Alt+DownArrow] - dirhistory down
+bindkey -M vicmd '^[[1;3B' dirhistory_zle_dirhistory_down
 
 # Start typing + [Up-Arrow] - fuzzy find history forward
 multibindkey 'viins menuselect' "$key_up" history-substring-search-up

@@ -212,7 +212,7 @@ in {
           ## snippets
 
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
-          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/dirhistory/dirhistory.plugin.zsh
+          source ${./plugins/dirhistory.zsh}
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
         '';
         enableCompletion = true;
