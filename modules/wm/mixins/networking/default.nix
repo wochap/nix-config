@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let cfg = config._custom.wm.networking;
 in {
@@ -39,7 +39,7 @@ in {
           80 # Hypertext Transfer Protocol (HTTP)
           # 110 # Post Office Protocol (POP3)
           # 143 # Internet Message Access Protocol (IMAP)
-          # 443 #  HTTP Secure (HTTPS)
+          443 # HTTP Secure (HTTPS)
 
           3333
           4444
