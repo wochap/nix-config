@@ -70,6 +70,10 @@ in {
       displayManager.lightdm.enable = false;
     };
 
+    # HACK: allow manually start graphical-session-pre.target
+    systemd.user.targets.graphical-session-pre.unitConfig = {
+      RefuseManualStart = "no";
+    };
     # HACK: allow manually start graphical-session.target
     systemd.user.targets.graphical-session.unitConfig = {
       RefuseManualStart = "no";
