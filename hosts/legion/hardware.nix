@@ -27,10 +27,14 @@
       nvidiaBusId = "PCI:1:0:0";
     };
 
+    boot.extraModulePackages = with config.boot.kernelPackages; [
+      # for steam i guess...
+      nvidia_x11
 
-    # Doesn't work yet...
-    # boot.extraModulePackages = with config.boot.kernelPackages;
-    #   [ lenovo-legion-module ];
+      # Doesn't work yet...
+      lenovo-legion-module
+    ];
+
     # NOTE: kernel 6.7.0 gives artifacts
     boot.kernelPackages = lib.mkForce pkgs.unstable.linuxPackages_6_6;
 
