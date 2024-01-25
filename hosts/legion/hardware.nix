@@ -46,7 +46,7 @@
 
     environment.systemPackages = with pkgs; [
       lenovo-legion
-      # nvtop
+      nvtop
       amdgpu_top
     ];
     environment.sessionVariables = {
