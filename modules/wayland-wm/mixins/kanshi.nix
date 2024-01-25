@@ -8,8 +8,10 @@ in {
     environment = { systemPackages = with pkgs; [ kanshi ]; };
 
     home-manager.users.${userName} = {
-      xdg.configFile = {
-        "kanshi/config".text = ''
+      services.kanshi = {
+        enable = true;
+        systemdTarget = "graphical-session.target";
+        extraConfig = ''
           profile docked {
             output "Apple Computer Inc Color LCD Unknown" disable
             output "Goldstar Company Ltd LG ULTRAGEAR 112NTLEL9832" mode 3440x1440@99.990Hz scale 1

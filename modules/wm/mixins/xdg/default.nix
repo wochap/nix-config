@@ -56,6 +56,7 @@ in {
       # Edit home files
       xdg.enable = true;
       xdg.systemDirs.data = [ "/usr/share" "/usr/local/share" ];
+      xdg.userDirs.enable = true;
 
       xdg.configFile."mimeapps.list".force = true;
       xdg.configFile."xdg-desktop-portal-wlr/config".text = ''
