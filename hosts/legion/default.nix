@@ -71,7 +71,7 @@ in {
     _custom.wm.music.enable = true;
     _custom.wm.neofetch.enable = true;
     _custom.wm.networking.enable = true;
-    _custom.wm.plymouth.enable = false;
+    _custom.wm.plymouth.enable = true;
     _custom.wm.power-management.enable = true;
     _custom.wm.qt.enable = true;
     _custom.wm.xdg.enable = true;
