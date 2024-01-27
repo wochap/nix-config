@@ -151,7 +151,6 @@
     "format-icons": [""]
   },
   "bluetooth": {
-    "on-click": "blueberry",
     "format": "󰂯",
     "format-disabled": "󰂲",
     "format-connected": "󰂱 {num_connections}",
