@@ -25,7 +25,10 @@ let
     '';
   };
 in {
-  options._custom.cli.zsh = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.zsh = {
+    enable = lib.mkEnableOption { };
+    isDefault = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
@@ -42,7 +45,8 @@ in {
       })
     ];
 
-    users.users.${userName}.shell = pkgs.zsh;
+    # make zsh default user shell
+    users.users.${userName}.shell = lib.mkIf cfg.isDefault pkgs.zsh;
 
     programs.zsh = {
       enable = true;
@@ -56,6 +60,7 @@ in {
       xdg.configFile = {
         "zsh/.p10k.zsh".source = relativeSymlink ./.p10k.zsh;
       };
+
       home.packages = with pkgs; [
         # completions and manpage install
         unstable.zsh-abbr

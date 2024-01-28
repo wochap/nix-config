@@ -25,6 +25,7 @@ in {
     _custom.cli.nix-direnv.enable = true;
     _custom.cli.ptsh.enable = true;
     _custom.cli.zsh.enable = true;
+    _custom.cli.zsh.isDefault = true;
     _custom.cli.dircolors.enable = true;
     _custom.cli.fzf.enable = true;
     _custom.cli.gpg.enable = true;
