@@ -22,8 +22,8 @@ in {
         package = pkgs.nnn.override { withNerdIcons = true; };
         extraPackages = with pkgs;
           [
-            (writeShellScriptBin "scope.sh"
-              (builtins.readFile "${inputs.ranger}/ranger/data/scope.sh"))
+            (writeShellScriptBin "scope.sh" (builtins.readFile
+              "${pkgs.ranger}/share/doc/ranger/config/scope.sh"))
             libarchive
             bat
             eza
@@ -39,7 +39,7 @@ in {
             t = "nmount";
             v = "imgview";
           };
-          src = "${inputs.nnn}/plugins";
+          src = "${pkgs.nnn}/share/plugins";
         };
       };
     };

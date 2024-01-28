@@ -604,27 +604,6 @@
         "type": "github"
       }
     },
-    "home-manager-unstable": {
-      "inputs": {
-        "nixpkgs": [
-          "unstable"
-        ]
-      },
-      "locked": {
-        "lastModified": 1705169127,
-        "narHash": "sha256-j9OEtNxOIPWZWjbECVMkI1TO17SzlpHMm0LnVWKOR/g=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "f2942f3385f1b35cc8a1abb03a45e29c9cb4d3c8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "f2942f3385f1b35cc8a1abb03a45e29c9cb4d3c8",
-        "type": "github"
-      }
-    },
     "hyprland": {
       "inputs": {
         "hyprland-protocols": "hyprland-protocols",
@@ -863,23 +842,6 @@
         "owner": "cyl0",
         "repo": "mpv-osc-morden-x",
         "rev": "e0adf03d40403b87d106161c1f805a65bcb34738",
-        "type": "github"
-      }
-    },
-    "ncmpcpp-ueberzug": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1596382682,
-        "narHash": "sha256-eqo+Zwb8qab2tNz7osaae3oxG0QDqU8XwdYoOYS3x5c=",
-        "owner": "munguua",
-        "repo": "ncmpcpp-ueberzug",
-        "rev": "9bd9121d9ba0ac49106b34f792c3445a07643a19",
-        "type": "github"
-      },
-      "original": {
-        "owner": "munguua",
-        "repo": "ncmpcpp-ueberzug",
-        "rev": "9bd9121d9ba0ac49106b34f792c3445a07643a19",
         "type": "github"
       }
     },
@@ -1155,40 +1117,6 @@
         "type": "github"
       }
     },
-    "nnn": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1702600664,
-        "narHash": "sha256-VVVHbRsml/2ugQnp/WL828S8ODwskg9uajaR2D7Q7G8=",
-        "owner": "jarun",
-        "repo": "nnn",
-        "rev": "f2a8648861ff88e1c2d5a95ae4d76b7367e12c9b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jarun",
-        "repo": "nnn",
-        "rev": "f2a8648861ff88e1c2d5a95ae4d76b7367e12c9b",
-        "type": "github"
-      }
-    },
-    "nonicons": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1635136650,
-        "narHash": "sha256-IUJKPOdflQTlXMfsbwGLEbGeausqijH4bewc7kg1zCA=",
-        "owner": "yamatsum",
-        "repo": "nonicons",
-        "rev": "6e4984bcb18e122a5f7588a482cb07f459b55a86",
-        "type": "github"
-      },
-      "original": {
-        "owner": "yamatsum",
-        "repo": "nonicons",
-        "rev": "6e4984bcb18e122a5f7588a482cb07f459b55a86",
-        "type": "github"
-      }
-    },
     "nur": {
       "locked": {
         "lastModified": 1705197850,
@@ -1317,40 +1245,6 @@
         "type": "github"
       }
     },
-    "ptsh": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1621025492,
-        "narHash": "sha256-ATJSg7J/5E49TokUUDAANGgl0FhRaLHo1m2WQraV6tc=",
-        "owner": "jszczerbinsky",
-        "repo": "ptSh",
-        "rev": "737685cf64dcd00572d3997a6f2b514219156288",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jszczerbinsky",
-        "repo": "ptSh",
-        "rev": "737685cf64dcd00572d3997a6f2b514219156288",
-        "type": "github"
-      }
-    },
-    "ranger": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1692788718,
-        "narHash": "sha256-nW4KlatugmPRPXl+XvV0/mo+DE5o8FLRrsJuiKbFGyY=",
-        "owner": "ranger",
-        "repo": "ranger",
-        "rev": "136416c7e2ecc27315fe2354ecadfe09202df7dd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ranger",
-        "repo": "ranger",
-        "rev": "136416c7e2ecc27315fe2354ecadfe09202df7dd",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "ags": "ags",
@@ -1373,7 +1267,6 @@
         "dracula-lsd": "dracula-lsd",
         "fuzzy-sys": "fuzzy-sys",
         "home-manager": "home-manager",
-        "home-manager-unstable": "home-manager-unstable",
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
         "hyprpicker": "hyprpicker",
@@ -1382,15 +1275,12 @@
         "kitty-smart-tab": "kitty-smart-tab",
         "lobster": "lobster",
         "mpv-osc-morden-x": "mpv-osc-morden-x",
-        "ncmpcpp-ueberzug": "ncmpcpp-ueberzug",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-alien": "nix-alien",
         "nix-ld": "nix-ld",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-wayland": "nixpkgs-wayland",
-        "nnn": "nnn",
-        "nonicons": "nonicons",
         "nur": "nur",
         "powerlevel10k": "powerlevel10k",
         "prevstable-kitty": "prevstable-kitty",
@@ -1399,8 +1289,6 @@
         "prevstable-ollama-webui": "prevstable-ollama-webui",
         "prevstable-python": "prevstable-python",
         "prevstable-waybar": "prevstable-waybar",
-        "ptsh": "ptsh",
-        "ranger": "ranger",
         "smart-splits-nvim": "smart-splits-nvim",
         "unstable": "unstable",
         "xdg-portal-hyprland": "xdg-portal-hyprland",

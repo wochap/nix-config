@@ -13,8 +13,6 @@
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=5f0ab0eedc6ede69beb8f45561ffefa54edc6e65"; # release-23.11 (jan 10 2024)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager-unstable.url = "github:nix-community/home-manager?rev=f2942f3385f1b35cc8a1abb03a45e29c9cb4d3c8"; # master (jan 13 2024)
-    home-manager-unstable.inputs.nixpkgs.follows = "unstable";
 
     # third party nixpkgs|overlays|modules
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland";
@@ -44,8 +42,6 @@
     # terminal tools
     zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=0619e6bb711226e738494e49842c5249a2205a0d";
     zsh-vi-mode.flake = false;
-    ncmpcpp-ueberzug.url = "github:munguua/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";
-    ncmpcpp-ueberzug.flake = false;
     smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim";
     smart-splits-nvim.flake = false;
     kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim";
@@ -68,20 +64,12 @@
     zsh-defer.flake = false;
 
     # cli
-    ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";
-    ptsh.flake = false;
     ani-cli.url = "github:pystardust/ani-cli";
     ani-cli.flake = false;
-    ranger.url = "github:ranger/ranger?rev=136416c7e2ecc27315fe2354ecadfe09202df7dd";
-    ranger.flake = false;
-    nnn.url = "github:jarun/nnn?rev=f2a8648861ff88e1c2d5a95ae4d76b7367e12c9b"; # (jan 13 2024)
-    nnn.flake = false;
 
     # themes
     mpv-osc-morden-x.url = "github:cyl0/mpv-osc-morden-x?rev=e0adf03d40403b87d106161c1f805a65bcb34738";
     mpv-osc-morden-x.flake = false;
-    nonicons.url = "github:yamatsum/nonicons?rev=6e4984bcb18e122a5f7588a482cb07f459b55a86";
-    nonicons.flake = false;
 
     # dracula theme
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";

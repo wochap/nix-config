@@ -1,9 +1,8 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config._custom.cli.ptsh;
   userName = config._userName;
-  ptsh-repo = inputs.ptsh;
 in {
   options._custom.cli.ptsh = { enable = lib.mkEnableOption { }; };
 
@@ -13,11 +12,14 @@ in {
         packages = with pkgs; [ _custom.ptsh ];
 
         file = {
-          ".local/share/ptSh/logo.txt".source = "${ptsh-repo}/src/logo.txt";
-          ".local/share/ptSh/LICENSE".source = "${ptsh-repo}/LICENSE";
+          ".local/share/ptSh/logo.txt".source =
+            "${pkgs._custom.ptsh}/share/ptSh/logo.txt";
+          ".local/share/ptSh/LICENSE".source =
+            "${pkgs._custom.ptsh}/share/ptSh/LICENSE";
           ".local/share/ptSh/version.txt".text =
-            "Version: cloned from v0.2-alpha";
-          ".local/share/ptSh/config".source = "${ptsh-repo}/src/config";
+            "${pkgs._custom.ptsh}/share/ptSh/version.txt";
+          ".local/share/ptSh/config".source =
+            "${pkgs._custom.ptsh}/share/ptSh/config";
           ".config/ptSh/config".source = ./dotfiles/config;
         };
 

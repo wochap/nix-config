@@ -1,8 +1,8 @@
-{ lib, pkgs ? import <nixpkgs> {}, ... }:
+{ pkgs, ... }:
 
-pkgs.stdenv.mkDerivation rec {
+pkgs.stdenv.mkDerivation {
   pname = "ptsh";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = pkgs.fetchFromGitHub {
     repo = "ptSh";
@@ -15,7 +15,7 @@ pkgs.stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
-   	mkdir -p $out/share/ptSh
+    mkdir -p $out/share/ptSh
     mkdir -p $out/bin
     cp ./source/src/set_aliases.sh $out/bin/ptSh_set_aliases
     cp ./source/src/ptLs.sh $out/bin/ptls
@@ -25,9 +25,14 @@ pkgs.stdenv.mkDerivation rec {
     cp ./source/src/ptCp.sh $out/bin/ptcp
     cp ./source/src/ptRm.sh $out/bin/ptrm
     cp ./source/src/ptsh.sh $out/bin/ptsh
+
+    cp ./source/src/logo.txt $out/share/ptSh/logo.txt
+    cp ./source/LICENSE $out/share/ptSh/LICENSE
+    cp ./source/src/config $out/share/ptSh/config
+    echo "Version: cloned from v0.2-alpha" > $out/share/ptSh/version.txt
   '';
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "ptSh";
     homepage = "https://github.com/jszczerbinsky/ptSh";
   };

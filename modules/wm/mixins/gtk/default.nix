@@ -77,9 +77,6 @@ in {
     programs.gnome-disks.enable = true;
 
     home-manager.users.${userName} = {
-      disabledModules = [ "misc/gtk.nix" ];
-      imports = [ "${inputs.home-manager-unstable}/modules/misc/gtk.nix" ];
-
       dconf.settings = {
         # Open GTK inspector with Ctrl + Shift + D
         # GTK_DEBUG=interactive <app>
