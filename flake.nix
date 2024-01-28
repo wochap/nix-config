@@ -40,70 +40,64 @@
     lobster.inputs.nixpkgs.follows = "nixpkgs";
 
     # terminal tools
-    zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=0619e6bb711226e738494e49842c5249a2205a0d";
-    zsh-vi-mode.flake = false;
-    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim";
-    smart-splits-nvim.flake = false;
+    ani-cli.url = "github:pystardust/ani-cli";
+    ani-cli.flake = false;
+    fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f";
+    fuzzy-sys.flake = false;
     kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim";
     kitty-scrollback-nvim.flake = false;
     kitty-smart-scroll.url = "github:yurikhan/kitty-smart-scroll";
     kitty-smart-scroll.flake = false;
     kitty-smart-tab.url = "github:yurikhan/kitty-smart-tab";
     kitty-smart-tab.flake = false;
-    fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f";
-    fuzzy-sys.flake = false;
     powerlevel10k.url = "github:romkatv/powerlevel10k?rev=d70eedb345a9cc54b4f3e9ae09b0dbbb4edc9a39";
     powerlevel10k.flake = false;
+    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim";
+    smart-splits-nvim.flake = false;
     zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=d52da825c2b60b664f33e8d82fdfc1c3b647b753";
     zsh-autocomplete.flake = false;
+    zsh-defer.url = "github:romkatv/zsh-defer?rev=1c75faff4d8584afe090b06db11991c8c8d62055";
+    zsh-defer.flake = false;
     zsh-history-substring-search.url = "github:zsh-users/zsh-history-substring-search?rev=8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64";
     zsh-history-substring-search.flake = false;
     zsh-notify.url = "github:marzocchi/zsh-notify?rev=9c1dac81a48ec85d742ebf236172b4d92aab2f3f";
     zsh-notify.flake = false;
-    zsh-defer.url = "github:romkatv/zsh-defer?rev=1c75faff4d8584afe090b06db11991c8c8d62055";
-    zsh-defer.flake = false;
-
-    # cli
-    ani-cli.url = "github:pystardust/ani-cli";
-    ani-cli.flake = false;
+    zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=0619e6bb711226e738494e49842c5249a2205a0d";
+    zsh-vi-mode.flake = false;
 
     # themes
     mpv-osc-morden-x.url = "github:cyl0/mpv-osc-morden-x?rev=e0adf03d40403b87d106161c1f805a65bcb34738";
     mpv-osc-morden-x.flake = false;
-
-    # dracula theme
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
     dracula-lsd.flake = false;
-
-    # catppuccin theme
-    catppuccin-qutebrowser.url = "github:catppuccin/qutebrowser?rev=78bb72b4c60b421c8ea64dd7c960add6add92f83";
-    catppuccin-qutebrowser.flake = false;
     catppuccin-alacritty.url = "github:catppuccin/alacritty?rev=3c808cbb4f9c87be43ba5241bc57373c793d2f17";
     catppuccin-alacritty.flake = false;
-    catppuccin-lazygit.url = "github:catppuccin/lazygit?rev=b2ecb6d41b6f54a82104879573c538e8bdaeb0bf";
-    catppuccin-lazygit.flake = false;
-    catppuccin-bat.url = "github:catppuccin/bat?rev=ba4d16880d63e656acced2b7d4e034e4a93f74b1";
-    catppuccin-bat.flake = false;
-    catppuccin-kitty.url = "github:catppuccin/kitty?rev=4820b3ef3f4968cf3084b2239ce7d1e99ea04dda";
-    catppuccin-kitty.flake = false;
-    catppuccin-zsh-fsh.url = "github:catppuccin/zsh-fsh?rev=7cdab58bddafe0565f84f6eaf2d7dd109bd6fc18";
-    catppuccin-zsh-fsh.flake = false;
-    catppuccin-starship.url = "github:catppuccin/starship?rev=5629d2356f62a9f2f8efad3ff37476c19969bd4f";
-    catppuccin-starship.flake = false;
-    catppuccin-neomutt.url = "github:catppuccin/neomutt?rev=f6ce83da47cc36d5639b0d54e7f5f63cdaf69f11";
-    catppuccin-neomutt.flake = false;
-    catppuccin-bottom.url = "github:catppuccin/bottom?rev=c0efe9025f62f618a407999d89b04a231ba99c92";
-    catppuccin-bottom.flake = false;
-    catppuccin-zathura.url = "github:catppuccin/zathura?rev=d85d8750acd0b0247aa10e0653998180391110a4";
-    catppuccin-zathura.flake = false;
-    catppuccin-newsboat.url = "github:catppuccin/newsboat?rev=be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f";
-    catppuccin-newsboat.flake = false;
     catppuccin-amfora.url = "github:catppuccin/amfora?rev=26f6496fd2be0fe7308dfc57b9ab1e8ca5c38602";
     catppuccin-amfora.flake = false;
-    catppuccin-discord.url = "github:catppuccin/discord";
-    catppuccin-discord.flake = false;
+    catppuccin-bat.url = "github:catppuccin/bat?rev=ba4d16880d63e656acced2b7d4e034e4a93f74b1";
+    catppuccin-bat.flake = false;
+    catppuccin-bottom.url = "github:catppuccin/bottom?rev=c0efe9025f62f618a407999d89b04a231ba99c92";
+    catppuccin-bottom.flake = false;
     catppuccin-dircolors.url = "github:wochap/dircolors";
     catppuccin-dircolors.flake = false;
+    catppuccin-discord.url = "github:catppuccin/discord";
+    catppuccin-discord.flake = false;
+    catppuccin-kitty.url = "github:catppuccin/kitty?rev=4820b3ef3f4968cf3084b2239ce7d1e99ea04dda";
+    catppuccin-kitty.flake = false;
+    catppuccin-lazygit.url = "github:catppuccin/lazygit?rev=b2ecb6d41b6f54a82104879573c538e8bdaeb0bf";
+    catppuccin-lazygit.flake = false;
+    catppuccin-neomutt.url = "github:catppuccin/neomutt?rev=f6ce83da47cc36d5639b0d54e7f5f63cdaf69f11";
+    catppuccin-neomutt.flake = false;
+    catppuccin-newsboat.url = "github:catppuccin/newsboat?rev=be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f";
+    catppuccin-newsboat.flake = false;
+    catppuccin-qutebrowser.url = "github:catppuccin/qutebrowser?rev=78bb72b4c60b421c8ea64dd7c960add6add92f83";
+    catppuccin-qutebrowser.flake = false;
+    catppuccin-starship.url = "github:catppuccin/starship?rev=5629d2356f62a9f2f8efad3ff37476c19969bd4f";
+    catppuccin-starship.flake = false;
+    catppuccin-zathura.url = "github:catppuccin/zathura?rev=d85d8750acd0b0247aa10e0653998180391110a4";
+    catppuccin-zathura.flake = false;
+    catppuccin-zsh-fsh.url = "github:catppuccin/zsh-fsh?rev=7cdab58bddafe0565f84f6eaf2d7dd109bd6fc18";
+    catppuccin-zsh-fsh.flake = false;
   };
 
   outputs = inputs:
