@@ -3,7 +3,7 @@
 {
   imports = [
     # HACK: it needs to load first
-    ./mixins/overlays.nix
+    ./mixins/channels.nix
 
     ./mixins/nix-common.nix
     ./mixins/nixos.nix
