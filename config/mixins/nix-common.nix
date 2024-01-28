@@ -12,7 +12,7 @@ in {
       [ "nodejs-14.21.3" "openssl-1.1.1u" "openssl-1.1.1v" ];
 
     nix = {
-      gc.automatic = true;
+      gc.automatic = lib.mkDefault false;
 
       # Enable flakes
       package = pkgs.nixUnstable;
@@ -43,7 +43,6 @@ in {
           "nixpkgs-python.cachix.org-1:hxjI7pFxTyuTHn2NkvWCrAUcNZLNS3ZAvfYNuYifcEU="
           "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
           "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-          "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
         ];
         substituters = [
           "https://cache.nixos.org"
@@ -54,30 +53,21 @@ in {
           "https://nixpkgs-python.cachix.org"
           "https://cache.garnix.io"
           "https://devenv.cachix.org"
-          "https://colemickens.cachix.org"
         ];
 
         trusted-users = [ "@wheel" "root" ];
       };
     };
 
-    # Set your time zone.
     time.timeZone = lib.mkDefault "America/Panama";
 
     # Links those paths from derivations to /run/current-system/sw
     environment.pathsToLink = [ "/share" "/libexec" ];
 
-    # Fix https://discourse.nixos.org/t/normal-users-not-appearing-in-login-manager-lists/4619
-    programs.zsh.enable = true;
-    programs.fish.enable = true;
-
     # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.${userName} = {
-      home = homeDirectory;
-      shell = lib.mkDefault pkgs.zsh;
-    };
+    users.users.${userName}.home = homeDirectory;
 
-    # home-manager options
+    # Home Manager options
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = false;
     home-manager.backupFileExtension = "bak";
@@ -91,16 +81,12 @@ in {
       home.username = userName;
       home.homeDirectory = homeDirectory;
 
-      # Setup dotfiles
-      home.file = {
-        ".config/nixpkgs/config.nix".text = ''
-          { allowUnfree = true; }
-        '';
-      };
+      # Allow unfree packages
+      home.file.".config/nixpkgs/config.nix".text = ''
+        { allowUnfree = true; }
+      '';
 
       programs.bash.enable = true;
-      programs.zsh.enable = true;
-      programs.fish.enable = true;
     };
   };
 }

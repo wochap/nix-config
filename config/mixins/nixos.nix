@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, lib, inputs, ... }:
 
 let userName = config._userName;
 in {
@@ -51,7 +51,7 @@ in {
     };
 
     # minimum amount of swapping without disabling it entirely
-    boot.kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
+    boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 1;
 
     documentation.man.generateCaches = true;
     documentation.dev.enable = true;
