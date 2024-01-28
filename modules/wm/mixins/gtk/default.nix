@@ -25,7 +25,6 @@ in {
 
         awf # widget factory
         gnome.dconf-editor
-        # _custom.nwg-look
 
         globals.gtkTheme.package
         gnome.adwaita-icon-theme
