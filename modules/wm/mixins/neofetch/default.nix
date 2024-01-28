@@ -1,11 +1,11 @@
-{ config, pkgs, lib, _customLib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config._custom.wm.neofetch;
   userName = config._userName;
   relativeSymlink = path:
     config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (_customLib.runtimePath config._custom.globals.configDirectory path);
+    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
 in {
   options._custom.wm.neofetch = { enable = lib.mkEnableOption { }; };
 

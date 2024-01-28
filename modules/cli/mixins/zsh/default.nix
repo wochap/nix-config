@@ -1,12 +1,11 @@
-{ config, pkgs, lib, inputs, _customLib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.cli.zsh;
   userName = config._userName;
-  hmConfig = config.home-manager.users.${userName};
   relativeSymlink = path:
     config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (_customLib.runtimePath config._custom.globals.configDirectory path);
+    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
 
   fshPlugin = {
     name = "zsh-fast-syntax-highlighting";

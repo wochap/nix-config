@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, lib, _customLib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config._custom.wm.gtk;
@@ -7,7 +7,7 @@ let
   isWayland = config._custom.globals.displayServer == "wayland";
   relativeSymlink = path:
     config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (_customLib.runtimePath config._custom.globals.configDirectory path);
+    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
   extraCss = ''
     @import url("file://${relativeSymlink ./dotfiles/gtk.css}");
     @import url("file://${relativeSymlink ./dotfiles/catppuccin-mocha.css}");

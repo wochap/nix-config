@@ -1,11 +1,22 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, inputs, ... }:
 
 let
   localPkgs = rec {
+    # lib
+    # TODO: move to custom lib
     unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
     fromYAML = pkgs.callPackage ./from-yaml { };
     generate-ssc = pkgs.callPackage ./generate-ssc { };
+    # https://github.com/nix-community/home-manager/issues/257#issuecomment-1646557848
+    runtimePath = runtimeRoot: path:
+      let
+        rootStr = toString inputs.self;
+        pathStr = toString path;
+      in assert lib.assertMsg (lib.hasPrefix rootStr pathStr)
+        "${pathStr} does not start with ${rootStr}";
+      runtimeRoot + lib.removePrefix rootStr pathStr;
 
+    # packages
     advcpmv = pkgs.callPackage ./advcpmv { };
     dunst-nctui = pkgs.callPackage ./dunst-nctui { };
     dwl-state = pkgs.callPackage ./dwl-state { };

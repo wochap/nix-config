@@ -99,30 +99,18 @@
 
   outputs = inputs:
     let
-      # https://github.com/nix-community/home-manager/issues/257#issuecomment-1646557848
-      _customLib = rec {
-        inherit (inputs.nixpkgs) lib;
-        runtimePath = runtimeRoot: path:
-          let
-            rootStr = toString inputs.self;
-            pathStr = toString path;
-          in assert lib.assertMsg (lib.hasPrefix rootStr pathStr)
-            "${pathStr} does not start with ${rootStr}";
-          runtimeRoot + lib.removePrefix rootStr pathStr;
-      };
       inherit (inputs.nixpkgs.lib) nixosSystem;
       mkSystem = systemFn: pkgs: system: hostname:
         systemFn {
           inherit system;
-          modules = [
-            ./modules
-            ./packages
-            (./. + "/hosts/${hostname}")
-          ];
-          specialArgs = { inherit inputs; inherit system; nixpkgs = pkgs; inherit _customLib; };
+          modules = [ ./modules ./packages (./. + "/hosts/${hostname}") ];
+          specialArgs = {
+            inherit inputs;
+            inherit system;
+            nixpkgs = pkgs;
+          };
         };
-    in
-    {
+    in {
       nixosConfigurations = {
         desktop = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop";
         asus-vivobook = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
