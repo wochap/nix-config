@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let cfg = config.services.ollama-webui;
-
 in {
   options = {
     services.ollama-webui = {
@@ -31,11 +29,12 @@ in {
         on how to set up a reverse proxy.
       '');
 
-      ollama-webui-package = mkPackageOption pkgs "ollama-webui" { };
+      package = mkPackageOption pkgs "ollama-webui" { };
 
       host = mkOption {
         type = types.str;
-        default = "127.0.0.1";
+        default = "localhost";
+        example = "0.0.0.0";
         description = lib.mdDoc ''
           The host/domain name under which the Ollama-WebUI service is reachable.
         '';
@@ -43,21 +42,8 @@ in {
 
       port = mkOption {
         type = types.port;
-        default = 8080;
+        default = 11444;
         description = lib.mdDoc "The port for the  Ollama-WebUI service.";
-      };
-
-      cors_origins = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "*,https://myserver:8080,http://10.0.0.10:*";
-        description = lib.mdDoc ''
-          Allow access from web apps that are served under some (different) URL.
-          If a web app like Ollama-WebUI is available/served on `https://myserver:8080`,
-          then add this URL here. Otherwise the Ollama frontend server will reject the
-          UIs request and return 403 forbidden due to CORS.
-          See <https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS>.
-        '';
       };
 
       openFirewall = mkOption {
@@ -70,21 +56,15 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.ollama-webui = {
       description = "Ollama WebUI Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      serviceConfig = let
-        cors-arg = if cfg.cors_origins == null then
-          ""
-        else
-          "--cors='" + cfg.cors_origin + "'";
+      serviceConfig = let port = toString cfg.port;
       in {
-        ExecStart = "${cfg.ollama-webui-package}/bin/ollama-webui --port ${
-            toString cfg.port
-          } ${cors-arg}";
+        ExecStart =
+          "${cfg.package}/bin/ollama-webui --port ${port} --address ${cfg.host} --proxy http://${cfg.host}:${port}?";
         DynamicUser = "true";
         Type = "simple";
         Restart = "on-failure";
@@ -93,7 +73,6 @@ in {
 
     networking.firewall =
       mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
-
   };
   meta.maintainers = with lib.maintainers; [ malteneuss ];
 }
