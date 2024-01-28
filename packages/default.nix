@@ -3,23 +3,23 @@
 let
   localPkgs = rec {
     unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
-    fromYAML = pkgs.callPackage ./from-yaml.nix { };
-    generate-ssc = pkgs.callPackage ./generate-ssc.nix { };
+    fromYAML = pkgs.callPackage ./from-yaml { };
+    generate-ssc = pkgs.callPackage ./generate-ssc { };
 
     advcpmv = pkgs.callPackage ./advcpmv { };
-    dunst-nctui = pkgs.callPackage ./dunst-nctui.nix { };
-    dwl-state = pkgs.callPackage ./dwl-state.nix { };
+    dunst-nctui = pkgs.callPackage ./dunst-nctui { };
+    dwl-state = pkgs.callPackage ./dwl-state { };
     generated-ssc = generate-ssc { domain = "wochap.local"; };
     interception-both-shift-capslock =
       pkgs.callPackage ./interception-both-shift-capslock { };
-    mailnotify = pkgs.callPackage ./mailnotify.nix { };
-    mangadesk = pkgs.callPackage ./mangadesk.nix { };
-    matcha = pkgs.callPackage ./matcha.nix { };
-    offlinemsmtp = pkgs.callPackage ./offlinemsmtp.nix { };
-    ollama-webui = pkgs.callPackage ./ollama-webui.nix { };
+    mailnotify = pkgs.callPackage ./mailnotify { };
+    mangadesk = pkgs.callPackage ./mangadesk { };
+    matcha = pkgs.callPackage ./matcha { };
+    offlinemsmtp = pkgs.callPackage ./offlinemsmtp { };
+    ollama-webui = pkgs.callPackage ./ollama-webui { };
     ptsh = pkgs.callPackage ./ptsh { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
-    usbfluxd = pkgs.callPackage ./usbfluxd.nix { };
+    usbfluxd = pkgs.callPackage ./usbfluxd { };
     customNodePackages = lib.dontRecurseIntoAttrs
       (pkgs.callPackage ./custom-node-packages {
         nodejs = pkgs.prevstable-nodejs.nodejs_20;
