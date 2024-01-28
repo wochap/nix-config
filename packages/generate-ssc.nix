@@ -18,7 +18,8 @@ in stdenv.mkDerivation {
   installPhase = ''
     export CAROOT="$TMPDIR/mkcert"
     mkdir -p $out
-    cp -r "$CAROOT/*" $out
+    cd "$CAROOT"
+    cp ./* $out
   '';
 
   nativeBuildInputs = with pkgs; [ openssl nssTools mkcert ];
