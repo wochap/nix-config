@@ -41,10 +41,7 @@ in {
 
     home-manager.users.${userName} = {
       home = {
-        packages = with pkgs;
-          [
-            prevstable-kitty.kitty # terminal
-          ];
+        packages = with pkgs; [ kitty ];
 
         sessionVariables = {
           # TODO: test on darwin ⬇

@@ -27,21 +27,6 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
-        prevstable-kitty = import inputs.prevstable-kitty {
-          inherit (prev) system;
-          inherit (config.nixpkgs) config;
-          overlays = overlaysWithoutCustomChannels;
-        };
-        prevstable-waybar = import inputs.prevstable-waybar {
-          inherit (prev) system;
-          inherit (config.nixpkgs) config;
-          overlays = overlaysWithoutCustomChannels;
-        };
-        prevstable-ollama-webui = import inputs.prevstable-ollama-webui {
-          inherit (prev) system;
-          inherit (config.nixpkgs) config;
-          overlays = overlaysWithoutCustomChannels;
-        };
       })
     ];
   };

@@ -6,9 +6,6 @@
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=317484b1ead87b9c1b8ac5261a8d2dd748a0492d"; # NVIM v0.9.5
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
-    prevstable-kitty.url = "github:adamcstephens/nixpkgs?rev=05825f7d60ddd24709926e2d5edd1e2cc33113ad"; # kitty 0.31.0
-    prevstable-waybar.url = "github:adamcstephens/nixpkgs?rev=8cfef6986adfb599ba379ae53c9f5631ecd2fd9c"; # waybar 0.9.24
-    prevstable-ollama-webui.url = "github:malteneuss/nixpkgs?rev=d48979f4e62d5e98a171f8c0ebf839997ea714f0";
 
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=5f0ab0eedc6ede69beb8f45561ffefa54edc6e65"; # release-23.11 (jan 10 2024)
