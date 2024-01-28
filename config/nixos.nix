@@ -1,7 +1,6 @@
-{ config, ... }:
+{ ... }:
 
-let userName = config._userName;
-in {
+{
   imports = [
     # HACK: it needs to load first
     ./mixins/overlays.nix
@@ -17,10 +16,4 @@ in {
     ./mixins/secrets.nix
     ./mixins/temp-sensor.nix
   ];
-
-  config = {
-    home-manager.users.${userName} = {
-      imports = [ ./hm-modules/symlinks.nix ];
-    };
-  };
 }

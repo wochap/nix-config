@@ -26,3 +26,4 @@ in {
       (concatStringsSep "\n" (mapAttrsToList toSymlinkCmd cfg));
   };
 }
+

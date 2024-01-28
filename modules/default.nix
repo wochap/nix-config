@@ -1,6 +1,7 @@
-{ ... }:
+{ config, ... }:
 
-{
+let userName = config._userName;
+in {
   imports = [
     ./cli
     ./dwl
@@ -16,4 +17,6 @@
     ./wayland-wm
     ./wm
   ];
+
+  config.home-manager.users.${userName}.imports = [ ./symlinks ];
 }
