@@ -1,13 +1,15 @@
 { pkgs, lib, ... }:
 
 let
-  localPkgs = {
+  localPkgs = rec {
     unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
+    fromYAML = pkgs.callPackage ./from-yaml.nix { };
+    generate-ssc = pkgs.callPackage ./generate-ssc.nix { };
 
     advcpmv = pkgs.callPackage ./advcpmv { };
     dunst-nctui = pkgs.callPackage ./dunst-nctui.nix { };
     dwl-state = pkgs.callPackage ./dwl-state.nix { };
-    fromYAML = pkgs.callPackage ./from-yaml.nix { };
+    generated-ssc = generate-ssc { domain = "wochap.local"; };
     interception-both-shift-capslock =
       pkgs.callPackage ./interception-both-shift-capslock { };
     mailnotify = pkgs.callPackage ./mailnotify.nix { };
