@@ -8,6 +8,8 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      spice-autorandr
+      spice-vdagent
 
       # required by https://github.com/sickcodes/Docker-OSX
       bison
