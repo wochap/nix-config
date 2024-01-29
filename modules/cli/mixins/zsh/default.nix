@@ -240,8 +240,8 @@ in {
         };
       };
 
-      # programs.carapace.enableZshIntegration = true;
-      # programs.thefuck.enableZshIntegration = true;
+      programs.carapace.enableZshIntegration = true;
+      programs.thefuck.enableZshIntegration = true;
       programs.dircolors.enableZshIntegration = true;
       programs.starship.enableZshIntegration = false;
       programs.zoxide.enableZshIntegration = true;
