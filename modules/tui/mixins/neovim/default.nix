@@ -11,7 +11,7 @@ in {
     _custom.tui.neovim.setBuildEnv = true;
     _custom.tui.neovim.withBuildTools = true;
 
-    nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
+    # nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
 
     environment = {
       systemPackages = with pkgs;
