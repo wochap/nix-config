@@ -7,8 +7,7 @@ let
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
   catppuccinMochaTheme = import ../../config/mixins/catppuccin-mocha.nix;
 in {
-  imports =
-    [ ./hardware-configuration.nix ./hardware.nix ../../config/nixos.nix ];
+  imports = [ ./hardware-configuration.nix ./hardware.nix ];
 
   config = {
     _userName = userName;

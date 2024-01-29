@@ -36,7 +36,7 @@
     ];
 
     # NOTE: kernel 6.7.0 gives artifacts
-    boot.kernelPackages = lib.mkForce pkgs.unstable.linuxPackages_6_6;
+    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_6;
 
     boot.kernelParams = [
       # this doesn't fix my ACPI Bios errors :c
@@ -48,11 +48,7 @@
       "amdgpu.sg_display=0"
     ];
 
-    environment.systemPackages = with pkgs; [
-      lenovo-legion
-      nvtop
-      amdgpu_top
-    ];
+    environment.systemPackages = with pkgs; [ lenovo-legion nvtop amdgpu_top ];
     environment.sessionVariables = {
       IGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:05:00.0-card)";
       DGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)";
