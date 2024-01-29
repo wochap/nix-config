@@ -27,8 +27,8 @@ in {
         components = [ "pkcs11" "secrets" "ssh" ];
       };
 
-      programs.bash.initExtra = gnomeKeyringInitStr;
-      programs.zsh.initExtra = gnomeKeyringInitStr;
+      # programs.bash.initExtra = gnomeKeyringInitStr;
+      # programs.zsh.initExtra = gnomeKeyringInitStr;
     };
   };
 }
