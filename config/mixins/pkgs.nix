@@ -78,8 +78,8 @@ in {
         LESSCHARSET = "utf-8";
       };
 
-      # programs.thefuck.enable = true; # corrects previous console cmd
-      # programs.carapace.enable = true; # completions
+      programs.thefuck.enable = true; # corrects previous console cmd
+      programs.carapace.enable = true; # completions
       programs.nix-index.enable = false; # locale nix pkgs
       programs.command-not-found.enable = lib.mkForce false;
       programs.navi = { # like tldr
