@@ -114,8 +114,10 @@
         allowUnfree = true;
       };
 
-      overlays = with inputs; [
-        flake.overlays.default
+      overlays =  [
+        inputs.flake.overlays.default
+        inputs.home-manager.nixosModules.home-manager
+        inputs.nur.nixosModules.nur
       ];
     };
 }

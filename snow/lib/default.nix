@@ -1,4 +1,4 @@
-{ lib, inputs, snowfall-inputs }:
+{ lib, inputs, ... }:
 
 rec {
   unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
