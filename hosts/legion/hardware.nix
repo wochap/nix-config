@@ -50,6 +50,7 @@
 
     environment.systemPackages = with pkgs; [ lenovo-legion nvtop amdgpu_top ];
     environment.sessionVariables = {
+      # Use iGPU for wlroots window managers
       IGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:05:00.0-card)";
       DGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)";
       WLR_DRM_DEVICES = "$IGPU_CARD";
