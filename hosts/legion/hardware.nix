@@ -57,6 +57,7 @@
 
       # Tells every app to use my iGPU unless I specially instruct it not to
       # I would have to use the `nvidia-offload` command
+      # This also speeds up the startup time of apps using GPU, because my nvidia card is always powered off
       # source: https://sw.kovidgoyal.net/kitty/faq/#why-does-kitty-sometimes-start-slowly-on-my-linux-system
       # source: https://github.com/Einjerjar/nix/blob/172d17410cd0849f7028f80c0e2084b4eab27cc7/home/vars.nix#L30
       __EGL_VENDOR_LIBRARY_FILENAMES =
