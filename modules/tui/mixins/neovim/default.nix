@@ -11,12 +11,15 @@ in {
     _custom.tui.neovim.setBuildEnv = true;
     _custom.tui.neovim.withBuildTools = true;
 
-    # nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
+    nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
 
     environment = {
       systemPackages = with pkgs;
         [
           prevstable-neovim.neovim-remote
+
+          # custom
+          fswatch
 
           # required by mason
           lua54Packages.luarocks # HACK: it should be necessary here
