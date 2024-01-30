@@ -54,6 +54,13 @@
       IGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:05:00.0-card)";
       DGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)";
       WLR_DRM_DEVICES = "$IGPU_CARD";
+
+      # Tells every app to use my iGPU unless I specially instruct it not to
+      # I would have to use the `nvidia-offload` command
+      # source: https://sw.kovidgoyal.net/kitty/faq/#why-does-kitty-sometimes-start-slowly-on-my-linux-system
+      # source: https://github.com/Einjerjar/nix/blob/172d17410cd0849f7028f80c0e2084b4eab27cc7/home/vars.nix#L30
+      __EGL_VENDOR_LIBRARY_FILENAMES =
+        "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
     };
 
     zramSwap.enable = true;
