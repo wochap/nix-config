@@ -10,18 +10,20 @@ init() {
   # killall wl-clip-persist
   # TODO: wait for https://github.com/Linus789/wl-clip-persist/issues/6
   # wl-clip-persist --clipboard regular &
-  wl-paste --watch cliphist store --primary
+  wl-paste --type text --watch cliphist store --primary
 }
 
 menu() {
   selected=$(cliphist list |
+    sort -k 2 -u | # sort by 2 field to the end of line and output only unique lines
+    sort -nr |     # sort numerically in reverse
     tofi \
       --prompt-text "clipboard" \
       --config "$HOME/.config/tofi/multi-line" |
     cliphist decode)
 
-  if [[ -n "$selected" ]]; then
-    echo -n "$selected" | wl-copy
+  if [ -n "$selected" ]; then
+    printf "%s" "$selected" | wl-copy --trim-newline --type text/plain
   fi
 }
 
