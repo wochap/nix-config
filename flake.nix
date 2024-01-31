@@ -120,7 +120,12 @@
             ./modules/shared
             ./packages
             (./. + "/hosts/${hostName}")
-            { networking.hostName = hostName; }
+            {
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.config.permittedInsecurePackages =
+                [ "nodejs-14.21.3" "openssl-1.1.1u" "openssl-1.1.1v" ];
+              networking.hostName = hostName;
+            }
           ];
           specialArgs = {
             inherit inputs;

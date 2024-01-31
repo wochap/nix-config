@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ./globals
+    ./home
     ./nix
 
     ./programs/cli/asciinema

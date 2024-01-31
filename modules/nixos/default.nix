@@ -48,7 +48,6 @@
     ./de/wm/xdg
 
     ./globals
-    ./home
 
     ./programs/cli/nix-alien
     ./programs/cli/nix-direnv
