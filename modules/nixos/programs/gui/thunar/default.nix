@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.gui.thunar;
-  userName = config._userName;
+let cfg = config._custom.gui.thunar;
 in {
   options._custom.gui.thunar = { enable = lib.mkEnableOption { }; };
 
@@ -35,7 +33,7 @@ in {
     services.gvfs.package = pkgs.gnome.gvfs;
     services.tumbler.enable = true; # Thumbnail support for images
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.configFile = { "Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml; };
     };
   };

@@ -1,8 +1,7 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config._custom.wm.fonts;
-  userName = config._userName;
   isDarwin = pkgs.stdenv.isDarwin;
   customNerdFonts = pkgs.nerdfonts.override {
     fonts = [
@@ -63,7 +62,7 @@ in {
       })
     ];
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.file = {
         ".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
       };

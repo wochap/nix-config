@@ -1,8 +1,6 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.waylandWm;
-  userName = config._userName;
+let cfg = config._custom.waylandWm;
 in {
   config = lib.mkIf cfg.enable {
     environment = {
@@ -12,8 +10,6 @@ in {
         ];
     };
 
-    home-manager.users.${userName} = {
-      xdg.configFile."swappy/config".source = ./dotfiles/config;
-    };
+    _custom.hm = { xdg.configFile."swappy/config".source = ./dotfiles/config; };
   };
 }

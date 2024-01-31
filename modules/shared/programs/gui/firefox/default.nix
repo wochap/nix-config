@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.gui.firefox;
-  userName = config._userName;
   isWayland = config._custom.globals.displayServer == "wayland";
 in {
   options._custom.gui.firefox = { enable = lib.mkEnableOption { }; };
@@ -16,7 +15,7 @@ in {
       MOZ_USE_XINPUT2 = "1";
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.file = {
         ".mozilla/firefox/default/chrome/userChrome.css".source =
           ./assets/userChrome.css;

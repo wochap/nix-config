@@ -3,7 +3,6 @@
 let
   cfg = config._custom.tui.neovim;
   isDarwin = pkgs.stdenv.isDarwin;
-  userName = config._userName;
 in {
   imports = [ ./options.nix ];
 
@@ -55,7 +54,7 @@ in {
       lc = "run-without-kpadding nvim leetcode.nvim";
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.sessionVariables = {
         EDITOR = "nvim";
         VISUAL = "nvim";

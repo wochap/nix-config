@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.services.gnome-keyring;
-  userName = config._userName;
   gnomeKeyringInitStr = ''
     eval $(gnome-keyring-daemon --start 2> /dev/null)
   '';
@@ -17,7 +16,7 @@ in {
     # NOTE: unlock gnome-keyring with greetd
     security.pam.services.greetd.enableGnomeKeyring = true;
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.file.".gnupg/gpg-agent.conf".text = ''
         pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
       '';

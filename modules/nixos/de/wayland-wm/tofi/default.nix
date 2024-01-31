@@ -3,7 +3,6 @@
 let
   cfg = config._custom.waylandWm;
   inherit (config._custom.globals) themeColors;
-  userName = config._userName;
 
   tofi-launcher = pkgs.writeTextFile {
     name = "tofi-launcher";
@@ -35,7 +34,7 @@ let
   };
 in {
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home = {
         packages = with pkgs; [
           tofi

@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.wm.email;
-  userName = config._userName;
   offlinemsmtp-toggle-mode = pkgs.writeTextFile {
     name = "offlinemsmtp-toggle-mode";
     destination = "/bin/offlinemsmtp-toggle-mode";
@@ -23,7 +22,7 @@ in {
   options._custom.wm.email = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.packages = with pkgs; [ offlinemsmtp-toggle-mode ];
 
       services.imapnotify.enable = true;

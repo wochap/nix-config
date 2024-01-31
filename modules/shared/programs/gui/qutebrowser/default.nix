@@ -1,13 +1,11 @@
-{ config, pkgs, inputs, lib, ... }:
+{ config, inputs, lib, ... }:
 
-let
-  cfg = config._custom.gui.qutebrowser;
-  userName = config._userName;
+let cfg = config._custom.gui.qutebrowser;
 in {
   options._custom.gui.qutebrowser = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.configFile."qutebrowser/catppuccin".source =
         inputs.catppuccin-qutebrowser;
 

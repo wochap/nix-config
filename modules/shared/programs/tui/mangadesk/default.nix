@@ -1,13 +1,11 @@
 { config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.tui.mangadesk;
-  userName = config._userName;
+let cfg = config._custom.tui.mangadesk;
 in {
   options._custom.tui.mangadesk = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.packages = with pkgs; [ _custom.mangadesk ];
 
       xdg.configFile = {

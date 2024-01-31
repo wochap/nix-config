@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.wm.email;
-  userName = config._userName;
   checkNetworkOrAlreadyRunningScript = pkgs.writeShellScript "cknetpgrep" ''
     # Check that the network is up.
     ${pkgs.iputils}/bin/ping -c 1 8.8.8.8
@@ -19,7 +18,7 @@ let
   '';
 in {
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       programs.mbsync.enable = true;
 
       services.mbsync = {

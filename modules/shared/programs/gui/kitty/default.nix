@@ -3,7 +3,6 @@
 let
   cfg = config._custom.gui.kitty;
   inherit (config._custom.globals) themeColors;
-  userName = config._userName;
   inherit (lib._custom) relativeSymlink;
 
   shellIntegrationInit = {
@@ -37,7 +36,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home = {
         packages = with pkgs; [ kitty ];
 

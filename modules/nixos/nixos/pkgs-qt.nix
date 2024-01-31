@@ -1,7 +1,6 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
-let userName = config._userName;
-in {
+{
   config = {
     environment = {
       systemPackages = with pkgs; [
@@ -22,7 +21,7 @@ in {
 
     programs.kdeconnect.enable = true;
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       services.kdeconnect = {
         enable = true;
         indicator = false;

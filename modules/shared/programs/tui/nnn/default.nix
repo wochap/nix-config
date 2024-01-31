@@ -1,9 +1,8 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config._custom.tui.nnn;
   isDarwin = pkgs.stdenv.isDarwin;
-  userName = config._userName;
 in {
   options._custom.tui.nnn = { enable = lib.mkEnableOption { }; };
 
@@ -16,7 +15,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       programs.nnn = {
         enable = true;
         package = pkgs.nnn.override { withNerdIcons = true; };

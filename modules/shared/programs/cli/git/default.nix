@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.cli.git;
-  userName = config._userName;
   catppuccinMochaTheme =
     lib._custom.fromYAML "${inputs.catppuccin-lazygit}/themes/mocha.yml";
 in {
@@ -23,7 +22,7 @@ in {
       })
     ];
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.shellAliases = {
         gst = "git status";
         gc = "git clone";

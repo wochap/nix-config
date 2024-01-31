@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.tui.taskwarrior;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   timewarriorConfigPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
@@ -10,7 +10,7 @@ in {
   options._custom.tui.taskwarrior = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.packages = with pkgs; [
         taskwarrior-tui
         timewarrior

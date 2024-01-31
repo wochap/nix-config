@@ -1,13 +1,11 @@
 { config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.cli.ptsh;
-  userName = config._userName;
+let cfg = config._custom.cli.ptsh;
 in {
   options._custom.cli.ptsh = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home = {
         packages = with pkgs; [ _custom.ptsh ];
 

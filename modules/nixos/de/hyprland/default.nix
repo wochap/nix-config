@@ -1,8 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  inherit (config._custom) globals;
-  userName = config._userName;
   cfg = config._custom.hyprland;
   inherit (config._custom.globals) themeColors;
   hyprland-focus-toggle = pkgs.writeTextFile {
@@ -20,7 +18,7 @@ in {
       cmd = "Hyprland";
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       imports = [
         # already in hm repository master branch
         inputs.hyprland.homeManagerModules.default

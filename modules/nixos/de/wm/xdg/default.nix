@@ -1,8 +1,7 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config._custom.wm.xdg;
-  userName = config._userName;
   mimeTypes = import ./mixins/mimeTypes.nix;
 in {
   options._custom.wm.xdg = { enable = lib.mkEnableOption { }; };
@@ -52,7 +51,7 @@ in {
         });
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       # Edit home files
       xdg.enable = true;
       xdg.systemDirs.data = [ "/usr/share" "/usr/local/share" ];

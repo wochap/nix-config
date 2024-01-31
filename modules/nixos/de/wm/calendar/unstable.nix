@@ -2,14 +2,14 @@
 
 let
   cfg = config._custom.wm.calendar;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) dataHome configHome;
 in {
   options._custom.wm.calendar = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       programs.vdirsyncer = {
         enable = true;
         statusPath = "${dataHome}/vdirsyncer/status/";

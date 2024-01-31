@@ -3,12 +3,11 @@
 let
   cfg = config._custom.gui.mpv;
   isWayland = config._custom.globals.displayServer == "wayland";
-  userName = config._userName;
 in {
   options._custom.gui.mpv = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.sessionVariables = { VIDEO = "mpv"; };
 
       home.packages = with pkgs;

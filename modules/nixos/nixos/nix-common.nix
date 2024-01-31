@@ -2,7 +2,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   homeDirectory = config._custom.globals.homeDirectory;
 in {
   config = {
@@ -72,7 +72,7 @@ in {
     home-manager.useUserPackages = false;
     home-manager.backupFileExtension = "bak";
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
 

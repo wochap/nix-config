@@ -1,7 +1,6 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
-let userName = config._userName;
-in {
+{
   config = {
     nixpkgs.overlays = [
       (final: prev: {
@@ -130,7 +129,7 @@ in {
       shellAliases = { ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"''; };
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.desktopEntries = {
         bruno = {
           name = "bruno";

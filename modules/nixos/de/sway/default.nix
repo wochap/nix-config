@@ -2,7 +2,6 @@
 
 let
   inherit (config._custom) globals;
-  userName = config._userName;
   cfg = config._custom.sway;
   inherit (config._custom.globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
@@ -48,7 +47,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       wayland.windowManager.sway = {
         enable = true;
         systemd.enable = true;

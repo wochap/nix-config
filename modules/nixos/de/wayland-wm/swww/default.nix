@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.waylandWm;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   swww-random = pkgs.writeTextFile {
     name = "swww-random";
@@ -19,7 +19,7 @@ let
   inherit (pkgs.unstable) swww;
 in {
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home = {
         symlinks = {
           "${hmConfig.home.homeDirectory}/Pictures/backgrounds" =

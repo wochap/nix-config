@@ -9,7 +9,7 @@ in {
   imports = [ ./hardware-configuration.nix ./hardware.nix ];
 
   config = {
-    _userName = userName;
+    _custom.globals.userName = userName;
     _custom.globals.homeDirectory = "/home/${userName}";
     _custom.globals.configDirectory = configDirectory;
     _custom.globals.themeColors = catppuccinMochaTheme;

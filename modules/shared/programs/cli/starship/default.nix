@@ -2,14 +2,13 @@
 
 let
   cfg = config._custom.cli.starship;
-  userName = config._userName;
   themeSettings = builtins.fromTOML
     (builtins.readFile "${inputs.catppuccin-starship}/palettes/mocha.toml");
 in {
   options._custom.cli.starship = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.configFile."starship-transient.toml".text = ''
         add_newline = false
         palette = "catppuccin_mocha"

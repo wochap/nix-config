@@ -3,7 +3,6 @@
 let
   cfg = config._custom.waylandWm;
   inherit (config._custom) globals;
-  userName = config._userName;
 
   hyprpicker = pkgs.callPackage "${inputs.hyprpicker}/nix/default.nix" { };
 
@@ -142,7 +141,7 @@ in {
       '';
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.packages = with pkgs; [ play-notification-sound ];
       xdg.dataFile."assets/notification.flac".source =
         ./assets/notification.flac;

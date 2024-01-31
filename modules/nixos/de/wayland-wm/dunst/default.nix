@@ -3,7 +3,7 @@
 let
   cfg = config._custom.waylandWm;
   inherit (config._custom.globals) themeColors;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   settings = builtins.fromTOML
     (builtins.replaceStrings [ "=yes" "=no" ] [ "=true" "=false" ]
@@ -39,7 +39,7 @@ in {
     # /run/current-system/sw/share/icons/Numix-Square
     environment.systemPackages = with pkgs; [ numix-icon-theme-square ];
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home = {
         packages = with pkgs; [
           _custom.dunst-nctui

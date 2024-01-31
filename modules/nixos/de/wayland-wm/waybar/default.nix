@@ -3,7 +3,6 @@
 let
   cfg = config._custom.waylandWm;
   inherit (config._custom.globals) themeColors;
-  userName = config._userName;
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
   waybar = pkgs.waybar;
@@ -21,7 +20,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       imports = [ ./options.nix ];
 
       xdg.configFile = {

@@ -1,7 +1,6 @@
-{ config, lib, pkgs, inputs, system, ... }:
+{ lib, pkgs, inputs, system, ... }:
 
 let
-  userName = config._userName;
   ani-cli = pkgs.writeShellScriptBin "ani-cli"
     (builtins.readFile "${inputs.ani-cli}/ani-cli");
 in {
@@ -72,7 +71,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.sessionVariables = {
         LESS = "--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT";
         LESSCHARSET = "utf-8";

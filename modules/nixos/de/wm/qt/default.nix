@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.wm.qt;
-  userName = config._userName;
+let cfg = config._custom.wm.qt;
 in {
   options._custom.wm.qt = {
     enable = lib.mkEnableOption "setup qt theme and apps";
@@ -44,7 +42,7 @@ in {
       platformTheme = "qt5ct";
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       qt = {
         enable = true;
         # the following options requires unstable nixpkgs

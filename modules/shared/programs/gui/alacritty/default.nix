@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.gui.alacritty;
-  userName = config._userName;
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
 in {
@@ -11,7 +10,7 @@ in {
   config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ unstable.alacritty ]; };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.configFile = {
         "alacritty/catppuccin".source = inputs.catppuccin-alacritty;
         "alacritty/alacritty.yml".source =

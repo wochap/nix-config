@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.services.android;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
 
   android-sdk-home-path = "Android/Sdk";
   phoneId = "04e8";
@@ -44,7 +44,7 @@ in {
       SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", GROUP="plugdev"
     '';
 
-    home-manager.users.${userName} = lib.mkIf cfg.sdk.enable {
+    _custom.hm = lib.mkIf cfg.sdk.enable {
       config = {
         home = {
           file.${android-sdk-home-path}.source =

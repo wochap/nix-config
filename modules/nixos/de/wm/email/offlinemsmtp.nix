@@ -3,12 +3,12 @@
 with pkgs;
 let
   cfg = config._custom.wm.email;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (pkgs._custom) offlinemsmtp;
 in {
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       systemd.user.services.offlinemsmtp = {
         Unit = {
           Description = "offlinemsmtp daemon";

@@ -1,6 +1,6 @@
 { config, lib, inputs, ... }:
 
-let userName = config._userName;
+let inherit (config._custom.globals) userName;
 in {
   imports = [
     # Install home manager
@@ -71,7 +71,7 @@ in {
         [ "audio" "disk" "input" "networkmanager" "storage" "video" "wheel" ];
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       # better ls sorting
       home.language.collate = "C.UTF-8";
     };

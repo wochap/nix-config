@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.tui.newsboat;
-  userName = config._userName;
 
   qndl = pkgs.writeShellScriptBin "qndl" (builtins.readFile ./scripts/qndl.sh);
   linkhandler = pkgs.writeShellScriptBin "linkhandler"
@@ -11,7 +10,7 @@ in {
   options._custom.tui.newsboat = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.packages = with pkgs; [ newsboat qndl linkhandler ];
 
       xdg.configFile = {

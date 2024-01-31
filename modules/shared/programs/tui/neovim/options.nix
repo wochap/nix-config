@@ -4,7 +4,7 @@
 with lib;
 let
   cfg = config._custom.tui.neovim;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
 in {
   options = {
@@ -107,7 +107,7 @@ in {
       "PKG_hmConfig_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/pkgconfig"
     ];
   in mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       # xdg.configFile = {
       #   "nvim/init.lua".source = ../../init.lua;
       #   "nvim/lua".source = ../../lua;

@@ -1,13 +1,11 @@
 { config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.waylandWm;
-  userName = config._userName;
+let cfg = config._custom.waylandWm;
 in {
   config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ kanshi ]; };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       services.kanshi = {
         enable = true;
         systemdTarget = "graphical-session.target";

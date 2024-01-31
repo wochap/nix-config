@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   cfg = config._custom.dwl;
   inherit (config._custom.globals) themeColors cursor;
   inherit (lib._custom) unwrapHex;
@@ -97,7 +97,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = lib.mkIf cfg.isDefault {
+    _custom.hm = lib.mkIf cfg.isDefault {
       _custom.programs.waybar = {
         settings.mainBar = lib.mkMerge ([{
           modules-left = (builtins.map (i: "custom/dwl_tag#${toString i}")

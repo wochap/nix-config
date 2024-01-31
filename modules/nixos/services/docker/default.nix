@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   cfg = config._custom.services.docker;
 in {
   options._custom.services.docker = {

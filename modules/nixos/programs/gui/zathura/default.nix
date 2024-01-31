@@ -1,8 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 
-let
-  cfg = config._custom.gui.zathura;
-  userName = config._userName;
+let cfg = config._custom.gui.zathura;
 in {
   options._custom.gui.zathura = { enable = lib.mkEnableOption { }; };
 
@@ -12,7 +10,7 @@ in {
         zathura # PDF viewer
       ];
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.sessionVariables = { READER = "zathura"; };
 
       xdg.configFile = {

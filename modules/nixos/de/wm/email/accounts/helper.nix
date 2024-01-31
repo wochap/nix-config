@@ -2,7 +2,7 @@
 
 with lib;
 let
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (pkgs._custom) offlinemsmtp;
   mkSignatureScript = signatureLines:

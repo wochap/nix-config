@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.wm.music;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
   inherit (config._custom.globals) configDirectory;
@@ -14,7 +14,7 @@ in {
     # required by cava
     boot.kernelModules = [ "snd_aloop" ];
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.packages = with pkgs; [
         cava # visualizer
         mpc_cli # mpd cli

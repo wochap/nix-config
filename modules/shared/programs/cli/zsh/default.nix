@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.cli.zsh;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
 
@@ -55,7 +55,7 @@ in {
       # enableLsColors = false;
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.configFile = {
         "zsh/.p10k.zsh".source = relativeSymlink configDirectory ./.p10k.zsh;
       };

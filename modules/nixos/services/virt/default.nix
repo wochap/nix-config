@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  userName = config._userName;
-  cfg = config._custom.services.virt;
+let cfg = config._custom.services.virt;
 in {
   options._custom.services.virt = { enable = lib.mkEnableOption { }; };
 
@@ -43,7 +41,7 @@ in {
       };
     };
 
-    users.users.${userName}.extraGroups = [ "libvirtd" "kvm" ];
+    _custom.user.extraGroups = [ "libvirtd" "kvm" ];
 
     boot.extraModprobeConfig = ''
       options kvm_amd nested=1
@@ -51,7 +49,7 @@ in {
       options kvm ignore_msrs=1
     '';
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       # fix "could not detect a default hypervisor" in virt-manager
       dconf.settings = {
         "org/virt-manager/virt-manager/connections" = {

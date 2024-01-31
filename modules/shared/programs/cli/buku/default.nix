@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.cli.buku;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   buku-fzf = pkgs.writeTextFile {
     name = "buku-fzf";
@@ -14,7 +14,7 @@ in {
   options._custom.cli.buku = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home = {
         packages = with pkgs; [ buku buku-fzf sqlite ];
 

@@ -1,13 +1,11 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
-let
-  cfg = config._custom.cli.fzf;
-  userName = config._userName;
+let cfg = config._custom.cli.fzf;
 in {
   options._custom.cli.fzf = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       programs.fzf = {
         enable = true;
         enableBashIntegration = true;

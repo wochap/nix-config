@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.cli.youtube;
-  userName = config._userName;
+let cfg = config._custom.cli.youtube;
 in {
   options._custom.cli.youtube = { enable = lib.mkEnableOption { }; };
 
@@ -20,7 +18,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.configFile."youtube-viewer/api.json".source =
         ../../../../../secrets/dotfiles/youtube-viewer/api.json;
     };

@@ -1,13 +1,11 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, lib, inputs, ... }:
 
-let
-  cfg = config._custom.cli.bat;
-  userName = config._userName;
+let cfg = config._custom.cli.bat;
 in {
   options._custom.cli.bat = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home = {
         shellAliases = {
           cat = "bat --plain";

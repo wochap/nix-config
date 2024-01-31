@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.services.steam;
-  userName = config._userName;
+let cfg = config._custom.services.steam;
 in {
   options._custom.services.steam = { enable = lib.mkEnableOption { }; };
 
@@ -44,7 +42,7 @@ in {
       extraPackages32 = with pkgs; [ mangohud ];
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       programs.mangohud = {
         enable = true;
         settings = {

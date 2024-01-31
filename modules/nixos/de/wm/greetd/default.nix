@@ -1,7 +1,7 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   cfg = config._custom.wm.greetd;
 in {
   options._custom.wm.greetd = {

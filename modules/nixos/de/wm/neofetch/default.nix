@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.wm.neofetch;
-  userName = config._userName;
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
 in {
@@ -17,7 +16,7 @@ in {
       imagemagick
     ];
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.configFile = {
         "neofetch/config.conf".source =
           relativeSymlink configDirectory ./dotfiles/config.conf;

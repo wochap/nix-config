@@ -3,7 +3,6 @@
 with lib;
 let
   cfg = config._custom.wm.email;
-  userName = config._userName;
   helper = import ./helper.nix { inherit config pkgs lib; };
   accountConfig = {
     address = "geanb@bandofcoders.com";
@@ -12,7 +11,7 @@ let
   };
 in {
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
 
       accounts.email.accounts.Work = mkMerge [
         (helper.commonConfig accountConfig)

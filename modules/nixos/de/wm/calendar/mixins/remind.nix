@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.wm.calendar;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) dataHome configHome;
   remFilePath = "${configHome}/remind/remind.rem";
@@ -16,7 +16,7 @@ let
 in {
   config = lib.mkIf cfg.enable {
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.packages = with pkgs; [ remind ];
 
       systemd.user.services.ics2rem = {

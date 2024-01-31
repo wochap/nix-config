@@ -3,7 +3,7 @@
 let
   cfg = config._custom.wm.gtk;
   inherit (config._custom) globals;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   isWayland = config._custom.globals.displayServer == "wayland";
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
@@ -77,7 +77,7 @@ in {
 
     programs.gnome-disks.enable = true;
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       dconf.settings = {
         # Open GTK inspector with Ctrl + Shift + D
         # GTK_DEBUG=interactive <app>

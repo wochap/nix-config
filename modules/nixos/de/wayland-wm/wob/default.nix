@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.waylandWm;
-  userName = config._userName;
   inherit (config._custom.globals) themeColors;
   inherit (lib._custom) unwrapHex;
   wob-osd = pkgs.writeTextFile {
@@ -36,7 +35,7 @@ in {
       })
     ];
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home = { packages = with pkgs; [ wob wob-osd ]; };
 
       xdg.configFile = {

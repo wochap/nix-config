@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.cli.lsd;
-  userName = config._userName;
   themeSettings = { };
 in {
   options._custom.cli.lsd = { enable = lib.mkEnableOption { }; };
@@ -27,7 +26,7 @@ in {
       })
     ];
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.configFile = {
         "lsd/colors.yaml".source = "${inputs.dracula-lsd}/dracula.yaml";
         "lsd/icons.yaml".text = ''

@@ -1,7 +1,6 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
-let userName = config._userName;
-in {
+{
   config = {
     environment.systemPackages = with pkgs; [
       bun
@@ -27,7 +26,7 @@ in {
       # nodePackages.sharp-cli
     ];
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       home.sessionVariables = {
         PATH = "$HOME/.npm-packages/bin:$HOME/.bun/bin:$PATH";
         NODE_PATH = "$HOME/.npm-packages/lib/node_modules:$NODE_PATH";

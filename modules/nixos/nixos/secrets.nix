@@ -1,13 +1,13 @@
 { config, ... }:
 
 let
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.lib.file) mkOutOfStoreSymlink;
   configDirectory = config._custom.globals.configDirectory;
 in {
   config = {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       xdg.configFile = {
         "secrets".source = mkOutOfStoreSymlink "${configDirectory}/secrets";
       };

@@ -2,12 +2,12 @@
 
 let
   cfg = config._custom.wm.calendar;
-  userName = config._userName;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) dataHome;
 in {
   config = lib.mkIf cfg.enable {
-    home-manager.users.${userName} = {
+    _custom.hm = {
       nixpkgs.overlays = [
         # Workaround from https://github.com/NixOS/nixpkgs/issues/205014
         (self: super: {

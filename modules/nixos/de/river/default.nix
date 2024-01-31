@@ -2,7 +2,6 @@
 
 let
   inherit (config._custom) globals;
-  userName = config._userName;
   cfg = config._custom.river;
   inherit (globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
@@ -68,7 +67,7 @@ in {
       };
     };
 
-    home-manager.users.${userName} = {
+    _custom.hm = {
       _custom.programs.waybar = lib.mkIf cfg.isDefault {
         settings.mainBar = {
           modules-left = [ "river/tags" "river/mode" "keyboard-state" ];
