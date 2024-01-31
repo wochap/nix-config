@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ./nix
+
     ./programs/cli/asciinema
     ./programs/cli/bat
     ./programs/cli/buku

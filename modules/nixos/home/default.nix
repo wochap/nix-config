@@ -1,6 +1,6 @@
 { config, lib, options, ... }:
 
-let inherit (config._custom.globals) userName;
+let inherit (config._custom.globals) userName homeDirectory;
 in {
   options = {
     _custom.hm = lib.mkOption {
@@ -12,11 +12,30 @@ in {
     _custom.user = lib.mkOption {
       type = lib.types.attrs;
       default = { };
-      description = "Options to pass directly to users.extraUsers primary user.";
+      description =
+        "Options to pass directly to users.extraUsers primary user.";
     };
   };
 
   config = {
+    _custom.user.home = homeDirectory;
+
+    home-manager.useGlobalPkgs = true;
+    home-manager.useUserPackages = false;
+    home-manager.backupFileExtension = "bak";
+
+    _custom.hm = {
+      # Let Home Manager install and manage itself.
+      programs.home-manager.enable = true;
+
+      # Home Manager needs a bit of information about you and the
+      # paths it should manage.
+      home.username = userName;
+      home.homeDirectory = homeDirectory;
+
+      programs.bash.enable = true;
+    };
+
     # hm -> home-manager.users.<primary user>
     home-manager.users.${userName} = lib.mkAliasDefinitions options._custom.hm;
 
