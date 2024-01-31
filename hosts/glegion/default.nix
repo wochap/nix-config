@@ -42,9 +42,7 @@ in {
     _custom.tui.newsboat.enable = true;
     _custom.tui.nnn.enable = true;
     _custom.tui.taskwarrior.enable = true;
-    _custom.tui.vim.enable = true;
     _custom.tui.bottom.enable = true;
-    _custom.tui.htop.enable = true;
 
     _custom.gui.alacritty.enable = true;
     _custom.gui.discord.enable = true;
@@ -85,7 +83,6 @@ in {
     _custom.services.flatpak.enable = false;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
-    _custom.services.mbpfan.enable = false;
     _custom.services.mongodb.enable = true;
     _custom.services.ssh.enable = true;
     _custom.services.steam.enable = true;

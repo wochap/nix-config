@@ -2,18 +2,6 @@
 
 let cfg = config._custom.waylandWm;
 in {
-  imports = [
-    ./mixins/dunst
-    ./mixins/swappy
-    ./mixins/swww
-    ./mixins/system
-    ./mixins/tofi
-    ./mixins/waybar
-    ./mixins/wob
-    ./mixins/gammastep.nix
-    ./mixins/kanshi.nix
-  ];
-
   options._custom.waylandWm = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {

@@ -115,7 +115,9 @@
         systemFn {
           inherit system;
           modules = [
-            ./modules
+            ./modules/home
+            ./modules/nixos
+            ./modules/shared
             ./packages
             (./. + "/hosts/${hostName}")
             { networking.hostName = hostName; }

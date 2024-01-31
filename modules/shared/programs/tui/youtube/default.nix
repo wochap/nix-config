@@ -22,7 +22,7 @@ in {
 
     home-manager.users.${userName} = {
       xdg.configFile."youtube-viewer/api.json".source =
-        ../../../secrets/dotfiles/youtube-viewer/api.json;
+        ../../../../../secrets/dotfiles/youtube-viewer/api.json;
     };
   };
 }
