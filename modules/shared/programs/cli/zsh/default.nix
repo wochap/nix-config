@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.cli.zsh;
-  inherit (config._custom.globals) userName;
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
 
@@ -45,7 +44,7 @@ in {
     ];
 
     # make zsh default user shell
-    users.users.${userName}.shell = lib.mkIf cfg.isDefault pkgs.zsh;
+    _custom.user.shell = lib.mkIf cfg.isDefault pkgs.zsh;
 
     programs.zsh = {
       enable = true;

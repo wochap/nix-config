@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  inherit (config._custom.globals) userName;
-  cfg = config._custom.services.docker;
+let cfg = config._custom.services.docker;
 in {
   options._custom.services.docker = {
     enable = lib.mkEnableOption { };
@@ -17,6 +15,6 @@ in {
     virtualisation.docker.extraOptions = lib.mkIf cfg.enableNvidia
       "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
 
-    users.users.${userName}.extraGroups = [ "docker" ];
+    _custom.user.extraGroups = [ "docker" ];
   };
 }

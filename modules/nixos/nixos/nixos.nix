@@ -62,7 +62,7 @@ in {
     programs.zsh.vteIntegration = lib.mkDefault true;
 
     # create user
-    users.users.${userName} = {
+    users.extraUsers.${userName} = {
       hashedPassword =
         "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
       isNormalUser = true;

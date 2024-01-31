@@ -39,7 +39,7 @@ in {
   config = lib.mkIf cfg.enable {
     # Enable android device debugging
     programs.adb.enable = true;
-    users.users.${userName}.extraGroups = [ "adbusers" ];
+    _custom.user.extraGroups = [ "adbusers" ];
     services.udev.extraRules = ''
       SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", GROUP="plugdev"
     '';

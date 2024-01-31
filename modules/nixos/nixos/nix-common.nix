@@ -1,9 +1,7 @@
 # common nixos and nix-darwin configuraion
 { config, pkgs, lib, inputs, ... }:
 
-let
-  inherit (config._custom.globals) userName;
-  homeDirectory = config._custom.globals.homeDirectory;
+let inherit (config._custom.globals) userName homeDirectory;
 in {
   config = {
     # Allow unfree packages
@@ -65,7 +63,7 @@ in {
     environment.pathsToLink = [ "/share" "/libexec" ];
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.${userName}.home = homeDirectory;
+    _custom.user.home = homeDirectory;
 
     # Home Manager options
     home-manager.useGlobalPkgs = true;
