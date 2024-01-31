@@ -3,8 +3,6 @@
 let
   cfg = config._custom.waylandWm;
   inherit (config._custom.globals) themeColors;
-  inherit (config._custom.globals) userName;
-  hmConfig = config.home-manager.users.${userName};
   settings = builtins.fromTOML
     (builtins.replaceStrings [ "=yes" "=no" ] [ "=true" "=false" ]
       (builtins.readFile ./dotfiles/dunstrc));
@@ -13,7 +11,7 @@ let
       mkKeyValue = key: value:
         let
           value' = if isBool value then
-            (hmConfig.lib.booleans.yesNo value)
+            (lib.home-manager.booleans.yesNo value)
           else if isString value then
             ''"${value}"''
           else
