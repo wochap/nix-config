@@ -29,7 +29,7 @@
 
     hardware.opengl.enable = true;
 
-    documentation.man.generateCaches = true;
+    # documentation.man.generateCaches = true;
     documentation.dev.enable = true;
   };
 }
