@@ -1,129 +1,121 @@
 {
   inputs = {
-    # nixpkgs channels
-    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=2b54d8d84bc651cefe3680e0076c2246643475f1"; # master (may 2023)
-    unstable.url = "github:nixos/nixpkgs?rev=730d115a6e4e23af17361a6a0682629a72e5eaf5"; # master (jan 2023)
-    nixpkgs.url = "github:nixos/nixpkgs?rev=ae521bd4e460b076a455dca8b13f4151489a725c"; # nixos-23.05-small (aug 2023)
-    prevstable-neovim.url = "github:nixos/nixpkgs?rev=7c7b94f9b078ba1a96fe5ca6708dbae8c3434f2f";
-    prevstable-mongodb.url = "github:nixos/nixpkgs?rev=88dcc4ff3ba0a78b829ffd2c6d7c4499bf675419";
-    prevstable-python.url = "github:nixos/nixpkgs?rev=799d153e4f316143a9db0eb869ecf44d8d4c0356";
-    prevstable-nodejs.url = "github:nixos/nixpkgs?rev=53657afe29748b3e462f1f892287b7e254c26d77";
-    nixpkgs-darwin.url = "github:nixos/nixpkgs?rev=3960078a2007e3662fc9c93637ee043ccdc7285e";
-
-    # macos related
-    darwin.url = "github:lnl7/nix-darwin?rev=17fbc68a6110edbff67e55f7450230a697ecb17e";
-    darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
+    # channels
+    unstable.url = "github:nixos/nixpkgs?rev=317484b1ead87b9c1b8ac5261a8d2dd748a0492d"; # nixos-unstable (jan 10 2024)
+    nixpkgs.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (jan 10 2024)
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=317484b1ead87b9c1b8ac5261a8d2dd748a0492d"; # NVIM v0.9.5
+    prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
+    prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=2a6679aa9cc3872c29ba2a57fe1b71b3e3c5649f"; # release-23.05 (aug 2023)
+    home-manager.url = "github:nix-community/home-manager?rev=5f0ab0eedc6ede69beb8f45561ffefa54edc6e65"; # release-23.11 (jan 10 2024)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager-darwin.url = "github:nix-community/home-manager?rev=48f2b381dd397ec88040d3354ac9c036739ba139";
-    home-manager-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
-    # drivers?
-    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=7f1836531b126cfcf584e7d7d71bf8758bb58969";
-
-    # third party nixpkgs
-    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=1be0382761e59978d46c4a2a6fed0193f474751f";
+    # third party nixpkgs|overlays|modules
+    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
-
-    # third party overlays/modules
-    hyprland.url = "github:hyprwm/Hyprland?rev=2df0d034bc4a18fafb3524401eeeceaa6b23e753";
-    hyprland.inputs.nixpkgs.follows = "nixpkgs-unstable"; # TODO: change to nixpkgs
-    hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=e368bd15e4bfd560baa9333ad47415340c563458";
-    hyprland-plugins.inputs.hyprland.url = "github:hyprwm/Hyprland?rev=2df0d034bc4a18fafb3524401eeeceaa6b23e753";
-    xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=e1f145d15db320fe5c5e99b90898ab87db7e8214";
-    nix-doom-emacs.url = "github:vlaci/nix-doom-emacs?rev=fee14d217b7a911aad507679dafbeaa8c1ebf5ff";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=fdb2d33c942bfa07762c0e5357920f41d2f734a9";
-    nur.url = "github:nix-community/NUR?rev=0ba95a2c93c4965bc244c1221649d25198c7e687";
-    hyprpicker.url = "github:hyprwm/hyprpicker?rev=fe4535a27389624445b96450a7c338136c619c95";
-
-    # third party darwin stuff
-    spacebar.url = "github:cmacrae/spacebar?rev=79257bae525059be5230e86df96b3b3f1a3ed0a7";
-    spacebar.inputs.nixpkgs.follows = "nixpkgs-darwin";
-    yabai-src.url = "github:koekeishiya/yabai?rev=a4030e771f76d4f135f5b830eedd7234592df51e";
-    yabai-src.flake = false;
+    nur.url = "github:nix-community/NUR";
+    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=b34a6075e9e298c4124e35c3ccaf2210c1f3a43b";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=ac772de590d661e08d9bdd0a2d8f15daec3b2499";
+    ags.url = "github:Aylur/ags";
+    ags.inputs.nixpkgs.follows = "nixpkgs";
+    nix-ld.url = "github:Mic92/nix-ld";
+    nix-ld.inputs.nixpkgs.follows = "nixpkgs";
+    nix-alien.url = "github:thiagokokada/nix-alien";
+    nix-alien.inputs.nixpkgs.follows = "nixpkgs";
+    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.inputs.nixpkgs.follows = "unstable";
+    hyprland-plugins.url ="github:hyprwm/hyprland-plugins";
+    hyprland-plugins.inputs.hyprland.follows = "hyprland";
+    xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=6a5de92769d5b7038134044053f90e7458f6a197"; # (jan 13 2024)
+    xdg-portal-hyprland.inputs.nixpkgs.follows = "hyprland";
+    hyprpicker.url = "github:hyprwm/hyprpicker?rev=2ef703474fb96e97e03e66e8820f213359f29382"; # (jan 13 2024)
+    hyprpicker.inputs.nixpkgs.follows = "hyprland";
+    lobster.url = "github:justchokingaround/lobster";
+    lobster.inputs.nixpkgs.follows = "nixpkgs";
 
     # terminal tools
-    zsh-vi-mode.url = "github:jeffreytse/zsh-vi-mode?rev=462c032389c30a1c53226890d83c7465af92b249";
-    zsh-vi-mode.flake = false;
-    fzf-tab.url = "github:Aloxaf/fzf-tab?rev=e85f76a3af3b6b6b799ad3d64899047962b9ce52";
-    fzf-tab.flake = false;
-    ncmpcpp-ueberzug.url = "github:munguua/ncmpcpp-ueberzug?rev=9bd9121d9ba0ac49106b34f792c3445a07643a19";
-    ncmpcpp-ueberzug.flake = false;
-    ohmyzsh.url = "github:ohmyzsh/ohmyzsh?rev=c6e7f8905fb61b927f12f43fb57f8c514cd48a67";
-    ohmyzsh.flake = false;
-
-    # third party cli
-    ptsh.url = "github:jszczerbinsky/ptSh?rev=737685cf64dcd00572d3997a6f2b514219156288";
-    ptsh.flake = false;
-    flix-tools.url = "github:ThamognyaKodi/FlixTools?rev=76640494cf7ded9ecb8a4ac11249eb86839c5501";
-    flix-tools.flake = false;
-    ani-cli.url = "github:pystardust/ani-cli?rev=a2d47b56193afbbace2a0169b9b658c58493dbfb";
+    ani-cli.url = "github:pystardust/ani-cli";
     ani-cli.flake = false;
-    ranger.url = "github:ranger/ranger?rev=7cbdd92a66e5f0d08672b4b9fc36492a7dc1eed6";
-    ranger.flake = false;
-    nnn.url = "github:jarun/nnn?rev=b8b0bab4266a635519f605c2e3e193e392674273";
-    nnn.flake = false;
-    fontpreview-ueberzug.url = "github:OliverLew/fontpreview-ueberzug?rev=77a094c0fa846badb16e50616aa2c3635867d76a";
-    fontpreview-ueberzug.flake = false;
+    fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f";
+    fuzzy-sys.flake = false;
+    kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim";
+    kitty-scrollback-nvim.flake = false;
+    kitty-smart-scroll.url = "github:yurikhan/kitty-smart-scroll";
+    kitty-smart-scroll.flake = false;
+    kitty-smart-tab.url = "github:yurikhan/kitty-smart-tab";
+    kitty-smart-tab.flake = false;
+    powerlevel10k.url = "github:romkatv/powerlevel10k?rev=d70eedb345a9cc54b4f3e9ae09b0dbbb4edc9a39";
+    powerlevel10k.flake = false;
+    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim";
+    smart-splits-nvim.flake = false;
+    zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=d52da825c2b60b664f33e8d82fdfc1c3b647b753";
+    zsh-autocomplete.flake = false;
+    zsh-defer.url = "github:romkatv/zsh-defer?rev=1c75faff4d8584afe090b06db11991c8c8d62055";
+    zsh-defer.flake = false;
+    zsh-history-substring-search.url = "github:zsh-users/zsh-history-substring-search?rev=8dd05bfcc12b0cd1ee9ea64be725b3d9f713cf64";
+    zsh-history-substring-search.flake = false;
+    zsh-notify.url = "github:marzocchi/zsh-notify?rev=9c1dac81a48ec85d742ebf236172b4d92aab2f3f";
+    zsh-notify.flake = false;
+    zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=0619e6bb711226e738494e49842c5249a2205a0d";
+    zsh-vi-mode.flake = false;
 
     # themes
     mpv-osc-morden-x.url = "github:cyl0/mpv-osc-morden-x?rev=e0adf03d40403b87d106161c1f805a65bcb34738";
     mpv-osc-morden-x.flake = false;
-    nonicons.url = "github:yamatsum/nonicons?rev=6e4984bcb18e122a5f7588a482cb07f459b55a86";
-    nonicons.flake = false;
-
-    # dracula theme
-    dracula-discord.url = "github:dracula/betterdiscord?rev=6e9151fc3b013ae3c3961c45f11c0cd8d934f4be";
-    dracula-discord.flake = false;
-    dracula-kitty.url = "github:dracula/kitty?rev=eeaa86a730e3d38649053574dc60a74ce06a01bc";
-    dracula-kitty.flake = false;
-    dracula-amfora.url = "github:dracula/amfora?rev=6e3fde02006707dc0a7b4677b0d4f40f52ed6227";
-    dracula-amfora.flake = false;
-    dracula-mutt.url = "github:dracula/mutt?rev=8e512a73d519b2d503b4771fbc58c67f232ce7e0";
-    dracula-mutt.flake = false;
-    dracula-icons-theme.url = "github:m4thewz/dracula-icons?rev=2d3c83caa8664e93d956cfa67a0f21418b5cdad8";
-    dracula-icons-theme.flake = false;
-    dracula-gtk-theme.url = "github:dracula/gtk?rev=6ed4a6dfe6579a409dafbfe48a5e7473eab2a4bc";
-    dracula-gtk-theme.flake = false;
-    dracula-sublime.url = "github:dracula/sublime?rev=09faa29057c3c39e9a45f3a51a5e262375e3bf9f";
-    dracula-sublime.flake = false;
-    dracula-xresources.url = "github:dracula/xresources?rev=49765e34adeebca381db1c3e5516b856ff149c93";
-    dracula-xresources.flake = false;
-    dracula-zsh-syntax-highlighting.url = "github:dracula/zsh-syntax-highlighting?rev=47ba26d2d4912a1b8de066e589633ff1963c5621";
-    dracula-zsh-syntax-highlighting.flake = false;
-    dracula-betterdiscord.url = "github:dracula/betterdiscord?rev=835bc3a15aba03ae10248d6a06ea8704e9cd4382";
-    dracula-betterdiscord.flake = false;
+    dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
+    dracula-lsd.flake = false;
+    catppuccin-alacritty.url = "github:catppuccin/alacritty?rev=3c808cbb4f9c87be43ba5241bc57373c793d2f17";
+    catppuccin-alacritty.flake = false;
+    catppuccin-amfora.url = "github:catppuccin/amfora?rev=26f6496fd2be0fe7308dfc57b9ab1e8ca5c38602";
+    catppuccin-amfora.flake = false;
+    catppuccin-bat.url = "github:catppuccin/bat?rev=ba4d16880d63e656acced2b7d4e034e4a93f74b1";
+    catppuccin-bat.flake = false;
+    catppuccin-bottom.url = "github:catppuccin/bottom?rev=c0efe9025f62f618a407999d89b04a231ba99c92";
+    catppuccin-bottom.flake = false;
+    catppuccin-dircolors.url = "github:wochap/dircolors";
+    catppuccin-dircolors.flake = false;
+    catppuccin-discord.url = "github:catppuccin/discord";
+    catppuccin-discord.flake = false;
+    catppuccin-kitty.url = "github:catppuccin/kitty?rev=4820b3ef3f4968cf3084b2239ce7d1e99ea04dda";
+    catppuccin-kitty.flake = false;
+    catppuccin-lazygit.url = "github:catppuccin/lazygit?rev=b2ecb6d41b6f54a82104879573c538e8bdaeb0bf";
+    catppuccin-lazygit.flake = false;
+    catppuccin-neomutt.url = "github:catppuccin/neomutt?rev=f6ce83da47cc36d5639b0d54e7f5f63cdaf69f11";
+    catppuccin-neomutt.flake = false;
+    catppuccin-newsboat.url = "github:catppuccin/newsboat?rev=be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f";
+    catppuccin-newsboat.flake = false;
+    catppuccin-qutebrowser.url = "github:catppuccin/qutebrowser?rev=78bb72b4c60b421c8ea64dd7c960add6add92f83";
+    catppuccin-qutebrowser.flake = false;
+    catppuccin-starship.url = "github:catppuccin/starship?rev=5629d2356f62a9f2f8efad3ff37476c19969bd4f";
+    catppuccin-starship.flake = false;
+    catppuccin-zathura.url = "github:catppuccin/zathura?rev=d85d8750acd0b0247aa10e0653998180391110a4";
+    catppuccin-zathura.flake = false;
+    catppuccin-zsh-fsh.url = "github:catppuccin/zsh-fsh?rev=7cdab58bddafe0565f84f6eaf2d7dd109bd6fc18";
+    catppuccin-zsh-fsh.flake = false;
   };
 
   outputs = inputs:
     let
       inherit (inputs.nixpkgs.lib) nixosSystem;
-      inherit (inputs.darwin.lib) darwinSystem;
       mkSystem = systemFn: pkgs: system: hostname:
         systemFn {
           inherit system;
-          modules = [
-            ./modules
-            (./. + "/hosts/${hostname}")
-          ];
-          specialArgs = { inherit inputs; inherit system; nixpkgs = pkgs; };
+          modules = [ ./modules ./packages (./. + "/hosts/${hostname}") ];
+          specialArgs = {
+            inherit inputs;
+            inherit system;
+            nixpkgs = pkgs;
+          };
         };
-    in
-    {
+    in {
       nixosConfigurations = {
         desktop = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop";
-        desktop-sway = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop-sway";
-        desktop-gnome = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop-gnome";
         asus-vivobook = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
-        mbp-nixos = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "mbp-nixos";
+        legion = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "legion";
         asus-old = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-old";
-      };
-      darwinConfigurations = {
-        mbp-darwin = mkSystem darwinSystem inputs.nixpkgs-darwin "x86_64-darwin" "mbp-darwin";
       };
     };
 }

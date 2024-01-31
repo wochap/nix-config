@@ -24,11 +24,11 @@ bindsym $mod+l exec \
 
 # Open power menu
 bindsym $mod+Escape exec \
-  rofi-powermenu
+  tofi-powermenu
 
 # Open app launcher
 bindsym $mod+space exec \
-  rofi-launcher
+  tofi-launcher
 
 # Take fullscreen screenshot
 bindsym $mod+Print exec \
@@ -36,13 +36,7 @@ bindsym $mod+Print exec \
 
 # Open calc
 bindsym $mod+c exec \
-  rofi-calc
-
-# Open wifi menu
-bindsym $mod+w exec \
-  swaymsg exec /etc/scripts/wofi-wifi.sh
-
-# TODO: Show keybindings
+  tofi-calc
 
 # Show clipboard
 bindsym $mod+v exec \
@@ -54,7 +48,7 @@ bindsym $mod+Shift+v exec \
 
 # Show emojis
 bindsym $mod+e exec \
-  rofi-emoji
+  tofi-emoji
 
 bindsym $mod+ctrl+n exec \
   dunstctl history-pop
@@ -65,7 +59,7 @@ bindsym $mod+ctrl+shift+n exec \
 bindsym $mod+ctrl+shift+Escape exec \
   dunstctl close-all
 
-# Toggle waybar
+# Toggle bar
 bindsym $mod+b exec \
   /etc/scripts/waybar/waybar-toggle.sh
 
@@ -81,20 +75,20 @@ bindsym $mod+s floating toggle
 # Toggle fullscreen
 bindsym $mod+f fullscreen toggle
 
-# Set the node flags (sticky)
+# Toggle sticky
 bindsym $mod+ctrl+y sticky toggle
 
 # Alternate between the tiled and monocle layout
 mode "layout" {
   bindsym --to-code {
-    t mode "default"; layout tabbed
-    s mode "default"; layout splith
+    1 mode "default"; layout splith
+    3 mode "default"; layout tabbed
     c mode "default"; move position center
 
     Escape mode "default"
   }
 }
-bindsym $mod+a mode "layout"
+bindsym $mod+r mode "layout"
 
 # preselect the direction
 bindsym $mod+ctrl+Right split horizontal
@@ -106,15 +100,14 @@ bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
 bindsym $mod+$right focus right
+bindsym $mod+n focus next
+bindsym $mod+p focus prev
 
 # Swap direction
 bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+$down move down
 bindsym $mod+Shift+$up move up
 bindsym $mod+Shift+$right move right
-
-bindsym $mod+n focus next
-bindsym $mod+Shift+n focus prev
 
 # Focus floating or tile windows
 bindsym $mod+Tab focus mode_toggle
@@ -141,6 +134,8 @@ bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
+bindsym $mod+grave workspace back_and_forth
+
 # Resize
 bindsym $mod+alt+Shift+$left resize shrink width 40px
 bindsym $mod+alt+Shift+$down resize grow height 40px
@@ -157,10 +152,10 @@ bindsym $mod+alt+$right move right 40px
 ### WM SCRATCHPAD
 
 # Send to scratchpad
-bindsym $mod+Shift+p move container to scratchpad
+bindsym $mod+Shift+d move container to scratchpad
 
 # Open scratchpad
-bindsym $mod+p scratchpad show
+bindsym $mod+d scratchpad show
 
 
 ### APPLICATION KEYBINDINGS (Super + Alt + Key)
@@ -171,7 +166,7 @@ bindsym $mod+alt+t exec \
 
 # Open file manager
 bindsym $mod+alt+f exec \
-  sway-focus-toggle "org.gnome.Nautilus" nautilus
+  sway-focus-toggle "thunar-scratch" "thunar --name thunar-scratch"
 
 # Screencast/record region to mp4
 bindsym $mod+alt+r exec \
@@ -205,7 +200,6 @@ mode "tui" {
     e mode "default"; exec sway-focus-toggle kitty-neomutt $HOME/.config/kitty/scripts/kitty-neomutt.sh
     r mode "default"; exec sway-focus-toggle kitty-newsboat $HOME/.config/kitty/scripts/kitty-newsboat.sh
     u mode "default"; exec sway-focus-toggle kitty-ncmpcpp $HOME/.config/kitty/scripts/kitty-ncmpcpp.sh
-
     Escape mode "default"
   }
 }

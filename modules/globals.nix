@@ -10,18 +10,22 @@
       fonts = {
         sans = lib.mkOption {
           type = lib.types.str;
-          default = "JetBrainsMono Nerd Font";
+          default = "Source Sans Pro";
+        };
+        size = lib.mkOption {
+          type = lib.types.int;
+          default = 10;
         };
       };
 
       cursor = {
         name = lib.mkOption {
           type = lib.types.str;
-          default = "capitaine-cursors";
+          default = "Catppuccin-Mocha-Dark-Cursors";
         };
         package = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.capitaine-cursors;
+          default = pkgs.catppuccin-cursors.mochaDark;
         };
         size = lib.mkOption {
           type = lib.types.int;
@@ -30,21 +34,33 @@
         };
       };
 
-      theme = {
+      gtkTheme = {
         name = lib.mkOption {
           type = lib.types.str;
-          default = "Dracula";
+          default = "adw-gtk3-dark";
         };
         package = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.dracula-theme;
+          default = pkgs.adw-gtk3;
+        };
+      };
+      gtkIconTheme = {
+        name = lib.mkOption {
+          type = lib.types.str;
+          default = "Tela-catppuccin_mocha";
+        };
+        package = lib.mkOption {
+          type = lib.types.package;
+          default = pkgs._custom.tela-icon-theme.override {
+            colorVariants = [ "catppuccin_mocha" "dracula" ];
+          };
         };
       };
 
       displayServer = lib.mkOption {
         type = lib.types.str;
         default = "";
-        example = "xorg"; # xorg, wayland, darwin
+        example = "xorg"; # xorg, wayland
         description = "Display server type, used by common config files.";
       };
       userName = lib.mkOption {
@@ -65,55 +81,20 @@
         example = "/home/gean/nix-config";
         description = "Path of config folder";
       };
-      # theme = lib.mkOption {
-      #   type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
-      #   default = { };
-      #   example = "{}";
-      #   description = "Theme colors";
-      # };
+
+      themeColors = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
+        default = { };
+        example = "{}";
+        description = "Theme colors";
+      };
     };
 
-    _displayServer = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      example = "xorg"; # xorg, wayland, darwin
-      description = "Display server type, used by common config files.";
-    };
-    _isHidpi = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      example = true;
-      description = "Flag for hidpi displays.";
-    };
     _userName = lib.mkOption {
       type = lib.types.str;
       default = "gean";
       example = "gean";
       description = "Default user name";
-    };
-    _homeDirectory = lib.mkOption {
-      type = lib.types.str;
-      default = "/home/gean";
-      example = "/home/gean";
-      description = "Path of user home folder";
-    };
-    _configDirectory = lib.mkOption {
-      type = lib.types.str;
-      default = "/home/gean/nix-config";
-      example = "/home/gean/nix-config";
-      description = "Path of config folder";
-    };
-    _theme = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
-      default = { };
-      example = "{}";
-      description = "Theme colors";
-    };
-    _isNvidia = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      example = true;
-      description = "Flag for devices with nvidia.";
     };
   };
 
@@ -122,7 +103,7 @@
       text = ''
         ${lib.concatStringsSep "\n"
         (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
-          config._theme)}
+          config._custom.globals.themeColors)}
       '';
       mode = "0755";
     };

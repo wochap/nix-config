@@ -1,23 +1,27 @@
 # My NixOS configuration
 
-![](https://i.imgur.com/Fuj0NXH.jpg)
+![](https://i.imgur.com/wqC4Eur.jpg)
+![](https://i.imgur.com/ZVmsJL5.jpg)
 
-Hardware drivers are managed by [NixOS](https://nixos.org/) config files.
-WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home-manager).
+[NixOS](https://nixos.org/) and [home-manager](https://github.com/nix-community/home-manager) config files are merged.
 
-`NixOS` and `home-manager` config files are merged.
+## Installaion
 
-## Install vanilla NixOS
+### Install NixOS
 
-1. Install NixOS following the [manual](https://nixos.org/manual/nixos/stable/index.html#ch-installation) and reboot.
+1. Follow the [manual](https://nixos.org/manual/nixos/stable/) and install NixOS with the GNOME Desktop Environment and reboot.
 
-   The initial config must have: `user config`, `flakes`, `cachix`, `git`, `videoDrivers`, `internet setup`
+1. Update the generated nixos configuration in `/etc/nixos/configuration.nix`.
 
-   **NOTE:** Run `sudo nixos-install`
+   The new configuration must have: user configuration, `flakes` enabled, `cachix` (optional), `git`, `git-crypt`, internet setup, `firewall` disabled
 
-   Initial [configuration.nix](configuration-example.nix) example
+   Check the [configuration.nix](configuration-example.nix) example
 
-   Extra steps for MacBook Pro 11,5 (to enable Intel GPU)
+1. Extra steps for MacBook Pro 11,5 or if you dual boot (optional)
+
+   (MacBook Pro 11,5) To enable Intel GPU, you must install rEFInd and enable some options...
+
+   1. rEFInd installation:
 
    ```sh
    sudo mkdir -p /boot/EFI/boot/
@@ -29,15 +33,24 @@ WM, Dotfiles are managed by [home-manager](https://github.com/nix-community/home
    ./bin/refind-install
    ```
 
-   Install [rEFInd-minimal](https://github.com/evanpurkhiser/rEFInd-minimal)
+   1. Install [rEFInd-catppuccin](https://github.com/catppuccin/refind)
+   ~~Install [rEFInd-minimal](https://github.com/evanpurkhiser/rEFInd-minimal)~~
 
-   Install [enable gpu-switch on rEFInd](https://github.com/0xbb/gpu-switch#macbook-pro-113-and-115-notes)
+   1. Install [enable gpu-switch on rEFInd](https://github.com/0xbb/gpu-switch#macbook-pro-113-and-115-notes)
 
-## Install device config
+### Install device config
 
-You probably want to press `Ctrl + Alt + F1`
+1. Use local cachix, if you have 2 machines using the same nix config (optional)
+   ```
+   # Run on another machine, with nixos installed
+   $ nix-serve -p 8080
 
-1. Reboot into vanilla NixOS and connect to wifi/ethernet
+   # On current/new machine, test
+   $ curl http://192.168.x.x:8080/nix-cache-info
+   ```
+   On the current/new machine, update `nix.settings.substituters` config, add `http://192.168.x.x:8080`, then restart
+
+1. Reboot into NixOS and connect to internet
 
    ```
    # The following commands will work if you enabled `networking.networkmanager.enable = true;`
@@ -52,46 +65,32 @@ You probably want to press `Ctrl + Alt + F1`
    # add `nameserver 8.8.8.8` to `/etc/resolv.conf`
    ```
 
-1. Login with root user and clone into `~/nix-config`
+1. Login with your user and clone into `~/nix-config`
    ```
    $ git clone https://github.com/wochap/nix-config.git ~/nix-config
    ```
 1. Rebuild nixos with the device's specific config, for example, heres's a rebuild for my `desktop`
 
-   **IMPORTANT:** On clean install, update harware-configuration.nix in this repository
-
-   **NOTE:** Env vars are required on first install https://github.com/NixOS/nixpkgs/issues/97433#issuecomment-689554709
-
-   **WARNING:** First `nixos-rebuild` with device config can take several hours
+   **WARNING:** First `nixos-rebuild` with device config can take several hours, maybe you want to disable some modules
 
    ```
    # Go to nix-config folder
-   $ cd /home/gean/nix-config
-   $ NIXOS_INSTALL_BOOTLOADER=1 sudo --preserve-env=NIXOS_INSTALL_BOOTLOADER nixos-rebuild boot --flake .#desktop --impure
+   $ cd /home/<username>/nix-config
+   $ nixos-rebuild boot --flake .#desktop
    # Reboot
-   # $ sudo nixos-rebuild boot -p sway --flake .#desktop-sway --impure
    ```
 
-1. Set password for new user `gean`
+   **NOTE:** If you see an error related to home-manager, it is probably because there's a file collision and you need to remove a file.
+
+1. Set password for new user `<username>` if you haven't
    ```
    $ passwd gean
    ```
 
-## Setup NixOS
-
-1. Use local cachix (optional)
-   ```
-   # Run on local machine with nixos installed
-   $ nix-serve -p 8080
-
-   # On new machine, test
-   $ curl http://192.168.x.x:8080/nix-cache-info
-   ```
-   On the new machine, update `nix.binaryCaches`, add `http://192.168.x.x:8080`
+### After install
 
 1. Copy `.ssh` backup folder to `/home/gean/.ssh`
    ```
-   $ ssh-keygen -m PEM -t rsa -b 4096 -C "email@email.com"
    $ chmod 600 ~/.ssh/*
    $ ssh-add <PATH_TO_PRIVATE_KEY>
    ```
@@ -105,82 +104,59 @@ You probably want to press `Ctrl + Alt + F1`
    $ gpg --import private.key
    ```
 1. If you are using nixos on mbp
-   ```
-   $ ln -s ~/nix-config/config/mixins/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
-   ```
+
+   1. [Disable startup sound](https://gist.github.com/0xbb/ae298e2798e1c06d0753)
+
+   1. Run the following command to use mbpfan module in waybar
+
+      ```
+      $ sudo ln -s ~/nix-config/modules/services/mixins/mbpfan/dotfiles/mbpfan.conf /etc/mbpfan.conf
+      ```
 1. Setup Syncthing (http://localhost:8384)
-1. Setup backagrounds
+1. Setup backgrounds
    ```
-   $ ln -s ~/Sync/backgrounds ~/Pictures/backgrounds
+   $ swww img ~/Pictures/backgrounds/<IMAGE_NAME>
    ```
-1. Setup [NeoVim](https://github.com/wochap/nvim), with ansible
-1. Disable IPv6 in the NetworkManager Applet/Tray icon
+1. Setup [Neovim](https://github.com/wochap/nvim) configuration
+1. Setup qt look and feel
+   Open `Qt5 Settings` and update theme and icons
 1. Setup betterdiscord (optional)
    ```
    $ betterdiscordctl install
    ```
+   enable theme from discord > betterdiscordctl settings
 1. Enable WebRTC PipeWire support in chrome (wayland only)
+
    Go to chrome://flags/ and enable `WebRTC PipeWire support`
-1. Add wallpapers to `~/Pictures/backgrounds/`
-1. Setup lock wallpaper (required for xorg config)
-   ```
-   $ convert -resize $(xdpyinfo | grep dimensions | cut -d\  -f7 | cut -dx -f1) ~/Pictures/backgrounds/default.jpg ~/Pictures/backgrounds/lockscreen.jpg
-   ```
 1. Sync `vscode`, `firefox`, `chrome` (optional)
-1. Scaling
 
-   Xorg is optomized for 100%, 150%, 200%
+1. Setup mail
 
-   - DPI is controlled by autorandr, it also restart the following apps
-     - Rofi
-     - Polybar
-     - Dunst
-     - BSPWM gaps and borders
-   - GTK apps settings are controlled by xsettingsd
-   - Non GTK apps settings are controlled by xrdb
+   Generate [App passwords](https://support.google.com/accounts/answer/185833?hl=en) in [Google Account settings](https://myaccount.google.com/u/1/apppasswords)
+   Copy App password (16 digits) to secrets/mail/<EMAIL>
 
-1. [Waydroid](https://nixos.wiki/wiki/WayDroid)
-1. [Flatpak](https://nixos.wiki/wiki/Flatpak)
+1. Setup calendar
 
-1. ~~Setup gnome calendar and geary (optional)~~
-   ```
-   $ env WEBKIT_DISABLE_COMPOSITING_MODE=1 gnome-control-center online-accounts
-   ```
-1. ~~[Setup Thunderbird](https://www.lifewire.com/how-to-sync-google-calendar-with-thunderbird-4691009)~~
-1. ~~Setup [Flatpak](https://flatpak.org/setup/NixOS/)~~
-
-   ```
-   $ sudo flatpak override com.stremio.Stremio --env=QT_AUTO_SCREEN_SCALE_FACTOR=0
-   $ sudo flatpak override com.stremio.Stremio --env=QT_SCALE_FACTOR=1.5
-   $ sudo flatpak override com.stremio.Stremio --env=QT_FONT_DPI=144
-   $ sudo flatpak override com.stremio.Stremio --env=XCURSOR_SIZE=40
-   $ sudo flatpak --user override com.stremio.Stremio --filesystem=/home/gean/.icons/:ro
+   A browser should open automatically asking for google credentials, otherwise run:
+   ```sh
+   $ vdirsyncer discover
+   $ mkdir -p ~/.config/remind
+   $ touch ~/.config/remind/remind.rem
    ```
 
-1. ~~[Monitor setup](https://http.download.nvidia.com/XFree86/Linux-x86/325.15/README/xconfigoptions.html) for nvidia cards~~
+1. Setup npm
 
-   ```
-   # Show external monitor
-   $ nvidia-settings --assign "CurrentMetaMode=DP-0: 3840x2160_60 @3840x2160 +2880+0 {ViewPortIn=3840x2160, ViewPortOut=3840x2160+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}, DP-2: 1920x1080_144 @1920x1080 +0+0 {ViewPortIn=2880x1620, ViewPortOut=2880x1620+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}"
-
-   # Show only primary monitor
-   $ nvidia-settings --assign "CurrentMetaMode=DP-0: 3840x2160_60 @3840x2160 +0+0 {ViewPortIn=3840x2160, ViewPortOut=3840x2160+0+0, ForceCompositionPipeline=Off, ForceFullCompositionPipeline=Off}"
+   ```sh
+   $ mkdir ~/.npm-packages
+   $ mkdir ~/.npm-packages/lib
    ```
 
-1. ~~Monitor setup with [xrandr](https://wiki.archlinux.org/index.php/HiDPI#Side_display)~~
+1. [Waydroid](https://nixos.wiki/wiki/WayDroid) (optional)
+1. [Flatpak](https://nixos.wiki/wiki/Flatpak) (optional)
 
-   If panning is incorrect and you have NVIDIA, try toggling [adding 1px to the panning width](https://askubuntu.com/questions/853048/xrandr-adds-weird-virtual-screen-size-and-panning).
+1. Steam
 
-   ```
-   # Show external monitor
-   xrandr --dpi 144 \
-     --output DP-0 --mode 3840x2160 --rate 60 --pos 2880x0 --primary \
-     --output DP-2 --mode 1920x1080 --rate 144 --pos 0x0 --scale 1.5x1.5 --panning 2880x1620
-
-   xrandr --dpi 144 \
-     --output DP-0 --mode 3840x2160 --rate 60 --pos 2880x0 --primary \
-     --output DP-2 --off
-   ```
+   Run steam, login, setup proton.
 
 ## Upgrating NixOS
 
@@ -189,44 +165,72 @@ Update inputs on `flake.nix`, then:
 ```sh
 $ cd /home/gean/nix-config
 $ nix flake update --recreate-lock-file
-$ sudo nixos-rebuild switch --flake .#dekstop --impure
+$ sudo nixos-rebuild boot --flake .#dekstop
+```
+
+Fix bootloader (optional):
+
+```sh
+# https://github.com/NixOS/nixpkgs/issues/97433#issuecomment-689554709
+$ NIXOS_INSTALL_BOOTLOADER=1 sudo --preserve-env=NIXOS_INSTALL_BOOTLOADER nixos-rebuild boot --flake .#desktop
 ```
 
 ## Development Workflow
 
-1. Setup [Lorri](https://github.com/nix-community/lorri)
-
-   In the project folder:
+* Setup a project with [nix-direnv](https://github.com/nix-community/nix-direnv)
 
    ```
-   # Create shell.nix
-
-   $ lorri init
+   $ nix flake new -t github:nix-community/nix-direnv ./
    $ direnv allow
-   ```
-
-   [Fix XDG_DATA_DIRS reset](https://github.com/target/lorri/issues/496)
-   Debug initialization
-
-   ```
-   $ lorri shell
-   $ nix-shell
+   # update flake.nix
    ```
 
 ## Tools
 
-1. Script for using phone webcam
+* Script for using phone webcam
    ```
    $ run-videochat -i <ip> -v
    ```
 
 ## Troubleshooting
 
+* Read and write NTFS partitions
+
+  disable fast startup in windows
+
+* [Search a package version in nixpkgs](https://lazamar.co.uk/nix-versions/)
+
+* Generate Nix fetcher calls from repository URLs
+
+```sh
+$ nurl https://github.com/nix-community/patsh v0.2.0 2>/dev/null
+```
+
+* Inspect systemctl services
+
+```sh
+$ systemctl cat --user swayidle.service
+```
+
+* Reload .desktop files
+
+```sh
+$ nix shell nixpkgs#desktop-file-utils -c update-desktop-database -v ~/.local/share/applications
+```
+
 * No wifi device at startup
 
 ```
 $ nmcli r wifi on
 ```
+
+* No bluetooth device at startup
+
+```
+$ sudo rfkill unblock bluetooth
+```
+
+* [Bluetooth sound glitches](https://wiki.archlinux.org/title/bluetooth_headset#Connecting_works,_but_there_are_sound_glitches_all_the_time)
 
 * Blackscreen on macbook pro
 
@@ -235,18 +239,6 @@ Run the following and restart
 ```
 $ sudo gpu-switch -i
 ```
-
-* Slow firefox with nvidia drivers
-
-  Use wayland (EGL) or
-
-   ```sh
-   # Go to https://www.vsynctester.com/
-   $ __GL_HWSTATE_PER_CTX=2 __GL_yieldFunctionWaitForGpu=5 firefox
-   # or, in about:config
-   gfx.x11-egl.force-enabled true
-   gfx.webrender.software false
-   ```
 
 * Clear /nix/store
 
@@ -270,27 +262,6 @@ $ sudo gpu-switch -i
    $ nix path-info -rSh /run/current-system | sort -nk2
    ```
 
-* Fix flickering on nvidia cards?
-
-   - Open `Nvidia X Server Settings`.
-   - In `OpenGL Settings` uncheck `Allow Flipping`.
-   - In `XScreen0` > `X Server XVideo Settings` > `Sync to this display device` select your monitor.
-
-* Fix screen tearing on nvidia cards
-
-   - Buy AMD GPU
-   - FYI: ForceFullCompositionPipeline fix tearing but increase latency
-
-* Check if picom is running
-
-   ```
-   $ inxi -Gxx | grep compositor
-   ```
-
-* Macbook Pro wifi
-
-   Create wpa conf before rebuild switch.
-
 * Firefox doesnt load some websites
 
    Enable DNS over HTTPS
@@ -306,13 +277,6 @@ $ sudo gpu-switch -i
 * [Wifi keeps connecting and disconnecting](https://unix.stackexchange.com/questions/588333/networkmanager-keeps-connecting-and-disconnecting-how-can-i-fix-this)
 
    Disable ipv6 connection.
-
-* Test polybar themes
-
-   ```
-   $ killall polybar
-   $ polybar main --config=/home/gean/nix-config/devices/config/users/config/dotfiles/polybar/main.ini -r
-   ```
 
 * Copy installed icons unicode
 
@@ -341,6 +305,13 @@ $ sudo gpu-switch -i
      ln -sf $newlinkcontent $newlinkpath;
    done
    ```
+* Get key terminal code
+
+   ```sh
+   $ kitten show_key -m kitty
+   $ kitty +kitten show_key
+   $ showkey -a
+   ```
 
 * Get key actual name
 
@@ -349,7 +320,8 @@ $ sudo gpu-switch -i
    ```
 
 * [Cannot add google account in gnome > online accounts](https://github.com/NixOS/nixpkgs/issues/32580)
-   In gmail settings, enable IMAP
+
+  In gmail settings, enable IMAP
 
 ## Resources
 

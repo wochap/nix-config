@@ -1,9 +1,0 @@
-[
-	{ "keys": ["alt+up"], "command": "swap_line_up" },
-	{ "keys": ["alt+down"], "command": "swap_line_down" },
-	{ "keys": ["ctrl+shift+up"], "command": "select_lines", "args": {"forward": false} },
-	{ "keys": ["ctrl+shift+down"], "command": "select_lines", "args": {"forward": true} },
-  { "keys": ["ctrl+shift+alt+down"], "command": "duplicate_line" },
-  { "keys": ["ctrl+tab"], "command": "next_view" },
-  { "keys": ["ctrl+shift+tab"], "command": "prev_view" }
-]

@@ -1,0 +1,50 @@
+# Fonts
+# font = "/nix/store/lq39j44drfqfzd85cgsv8kvx33s6p29d-nerdfonts-3.0.2/share/fonts/truetype/NerdFonts/IosevkaNerdFont-Regular.ttf"
+font = "Iosevka NF"
+font-size = 10
+
+# Text theming
+text-color = @foreground@
+
+prompt-color = @red@
+
+selection-color = @background@
+selection-background = @primary@
+selection-background-padding = 4, 7
+selection-background-corner-radius = 4
+
+selection-match-color = @background@
+
+# Text cursor theme
+text-cursor-thickness = 2
+
+# Text layout
+prompt-text = "launcher"
+prompt-padding = 7
+result-spacing = 19
+horizontal = true
+min-input-width = 200
+
+# Window theming
+width = 100%
+height = 40
+background-color = @background@
+outline-width = 0
+border-width = 0
+padding-top = 11
+padding-bottom = 0
+padding-left = 7
+padding-right = 7
+clip-to-padding = false
+
+# Window positioning
+anchor = top
+exclusive-zone = -1
+
+# Behaviour
+text-cursor = true
+# matching-algorithm = fuzzy
+fuzzy-match = true
+drun-launch = true
+ascii-input = true
+

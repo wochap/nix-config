@@ -26,6 +26,9 @@ input * {
 
 input "type:keyboard" {
   xkb_layout "us"
+
+  repeat_delay 300
+  repeat_rate 50
 }
 
 input "type:touchpad" {
@@ -40,7 +43,6 @@ input "type:pointer" {
 }
 
 seat * {
-  # xcursor_theme capitaine-cursors 32
   hide_cursor when-typing enable
 }
 
@@ -48,30 +50,29 @@ seat * {
 #### RULES
 for_window [class=".*"] border pixel 2;
 for_window [app_id=".*"] border pixel 2;
-for_window [app_id="blueberry.py"] floating enable; move position center;
-for_window [app_id="eog"] floating enable; move position center;
 for_window [app_id="file-roller"] floating enable; move position center;
-for_window [app_id="org.gnome.Calculator"] floating enable; move position center; sticky enable;
-for_window [app_id="org.gnome.Nautilus"] floating enable; move position center; sticky enable;
-for_window [app_id="thunar"] floating enable; move position center; sticky enable;
 for_window [app_id="gnome-font-viewer"] floating enable; move position center;
 for_window [app_id="gnome-system-monitor"] floating enable; move position center;
-for_window [app_id="nm-connection-editor"] floating enable; move position center;
-for_window [app_id="pavucontrol"] floating enable; move position center;
 for_window [app_id="mpv"] floating enable; move position center;
+for_window [app_id="imv"] floating enable; move position center;
+for_window [app_id="org.gnome.Calculator"] floating enable; move position center;
+for_window [app_id="pavucontrol"] floating enable; move position center;
+for_window [app_id="thunar"] floating enable; move position center;
+for_window [app_id="thunar-scratch"] floating enable; move position center; sticky enable;
+for_window [app_id="xdg-desktop-portal-gtk"] floating enable; move position center;
 
 assign [app_id="firefox"] workspace 5
 assign [app_id="google-chrome"] workspace 1
 assign [app_id="brave-browser"] workspace 8
 assign [app_id="Slack"] workspace 4
 
-for_window [app_id="kitty-top"] floating enable; move position center; sticky enable; resize set width 1500px height 1100px;
+for_window [app_id="kitty-top"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;
 for_window [app_id="kitty-scratch"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;
-for_window [app_id="kitty-neorg"] floating enable; move position center; sticky enable; resize set width 1500px height 1100px;
-for_window [app_id="kitty-nmtui"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
-for_window [app_id="kitty-neomutt"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
-for_window [app_id="kitty-newsboat"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
-for_window [app_id="kitty-ncmpcpp"] floating enable; move position center; sticky enable; resize set width 750px height 1100px;
+for_window [app_id="kitty-neorg"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;
+for_window [app_id="kitty-nmtui"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;
+for_window [app_id="kitty-neomutt"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;
+for_window [app_id="kitty-newsboat"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;
+for_window [app_id="kitty-ncmpcpp"] floating enable; move position center; sticky enable; resize set width 80ppt height 80ppt;
 
 
 #### AUTOSTART

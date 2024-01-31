@@ -1,0 +1,23 @@
+set statusbar-v-padding         7
+set statusbar-h-padding         7
+set selection-clipboard         clipboard
+set font                        "Iosevka Nerd Font 10"
+set adjust-open                 width
+set recolor                     true
+set pages-per-row               1
+set statusbar-basename          true
+set page-padding                1
+set sandbox                     none
+
+map u                           scroll half-up
+map d                           scroll half-down
+map D                           toggle_page_mode
+map r                           reload
+map R                           rotate
+map K                           zoom in
+map J                           zoom out
+map i                           recolor
+map p                           print
+map g                           goto top
+
+include catppuccin-mocha

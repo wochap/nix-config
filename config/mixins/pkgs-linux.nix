@@ -1,100 +1,154 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, ... }:
 
-let
-  localPkgs = import ../packages { inherit pkgs lib; };
-  isWayland = config._displayServer == "wayland";
-
-  fontpreview-ueberzug = pkgs.writeShellScriptBin "fontpreview-ueberzug"
-    (builtins.readFile "${inputs.fontpreview-ueberzug}/fontpreview-ueberzug");
+let userName = config._userName;
 in {
   config = {
-    environment.systemPackages = with pkgs; [
-      # TOOLS
-      libinput
-      libinput-gestures
-      xorg.xev # get key actual name
+    nixpkgs.overlays = [
+      (final: prev: {
+        bruno = prev.runCommandNoCC "bruno" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.bruno}/bin/bruno $out/bin/bruno \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland"
 
-      # CLI TOOLS
-      acpi
-      acpitool
-      cached-nix-shell # fast nix-shell scripts
-      coreutils-full # a lot of commands
-      devour # swallow
-      dex # execute DesktopEntry files (xdg/autostart)
-      dmidecode
-      dnsutils # test dns
-      efivar
-      evtest # input debugging
-      ffmpegthumbnailer
-      glxinfo # opengl utils
-      graphicsmagick
-      heimdall # reset samsung ROM
-      ifuse # mount ios
-      inotify-tools # c module
-      inxi # check compositor running
-      libimobiledevice # mount ios
-      libva-utils # verifying VA-API
-      localPkgs.advcpmv # cp and mv with progress bar
-      notify-desktop # test notifications
-      pciutils # lspci and others commands
-      pulsemixer
-      slop # region selection
-      usbutils # lsusb, for android development
-      vdpauinfo # verifying VDPAU
-      wirelesstools
-      # base-devel
-      # busybox # a lot of commands but with less options/features
-      # mpc_cli
-      # mpd
-      # mpd_clientlib # mpd module
-      # procps
+          ln -sf ${prev.bruno}/share $out/share
+        '';
 
-      # 7w7
-      nmap
-      # metasploit
-      # tightvnc
+        postman = prev.runCommandNoCC "postman" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.postman}/bin/postman $out/bin/postman \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland"
 
-      # DE CLI
-      bluetuith
-      hunspell # dictionary for document programs
-      hunspellDicts.en-us
-      pulseaudio
-      systemd
-      # pamixer # audio cli
+          ln -sf ${prev.postman}/share $out/share
+        '';
 
-      # APPS CLI
-      fontpreview-ueberzug
-      tty-clock
+        microsoft-edge = prev.runCommandNoCC "microsoft-edge" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.microsoft-edge}/bin/microsoft-edge $out/bin/microsoft-edge \
+          --add-flags "--enable-features=WebRTCPipeWireCapturer" \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland"
 
-      # APPS GUI
-      dfeet # dbus gui
-      dmenu
-      filelight # view disk usage
-      gparted
-      nyxt # browser
-      pinta
-      qbittorrent
-      qutebrowser # browser
-      skypeforlinux
-      sublime3 # text editor
-      zoom-us
-      # antimicroX
-      # localPkgs.nsxiv
-      # mysql-workbench
-      # teamviewer
+          ln -sf ${prev.microsoft-edge}/share $out/share
+        '';
 
-      # Electron apps
-      bitwarden
-      brave
-      figma-linux
-      google-chrome
-      microsoft-edge
-      notion-app-enhanced
-      postman
-      simplenote
-      slack
-      insomnia
-      whatsapp-for-linux
+        heimdall = prev.heimdall.overrideAttrs (_: {
+          version = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
+          src = prev.fetchFromSourcehut {
+            owner = "~grimler";
+            repo = "Heimdall";
+            rev = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
+            sha256 = "sha256-tcAE83CEHXCvHSn/S9pWu6pUiqGmukMifEadqPDTkQ0=";
+          };
+        });
+      })
     ];
+
+    environment = {
+      systemPackages = with pkgs; [
+        # OHERS
+        # heimdall # reset samsung ROM
+        ifuse # mount ios
+        inotify-tools # c module
+        libimobiledevice # mount ios
+
+        # 7w7
+        nmap
+        # metasploit
+        # tightvnc
+
+        # CLI TOOLS (xorg)
+        devour # window swallower
+        libinput-gestures # handle swipe events
+        slop # region selection
+        xorg.xev # get pressed key name
+
+        # CLI TOOLS (wayland)
+        wev # like xev
+        wtype # like xdotool
+
+        # CLI TOOLS
+        _custom.advcpmv # cp/mv with progress bar
+        acpi # log battery/temp info
+        acpitool # like acpi + control hw
+        cached-nix-shell # fast nix-shell scripts
+        clinfo # print info about OpenCL
+        coreutils-full # GNU utils commands
+        dex # execute DesktopEntry files (xdg/autostart)
+        dmidecode # log hw info
+        dnsutils # test dns
+        efivar # manipulate efi vars
+        evtest # input debugging
+        glxinfo # opengl utils
+        hunspell # dictionary for document programs
+        hunspellDicts.en-us
+        inxi # log OS info
+        libinput # input devices helper
+        libva-utils # verifying VA-API
+        notify-desktop # send notifications
+        pciutils # inspect/manipulate PCI devices, e.g. lspci
+        pulseaudio
+        systemd
+        usbutils # lsusb, for android development
+        vdpauinfo # verifying VDPAU
+        vulkan-tools # verify vulkan
+        wirelesstools
+        xorg.xdpyinfo
+
+        # CLI APPS
+        ffmpegthumbnailer # video thumbnailer
+        graphicsmagick # image editor
+
+        # TUI APPS
+        ncdu # disk usage
+        pulsemixer # pulseaudio
+        tty-clock # clock
+
+        # GUI APPS
+        dmenu # menu
+        skypeforlinux
+        zoom-us
+        # antimicroX # map kb/mouse to gamepad
+        # mysql-workbench
+        # teamviewer
+
+        # ELECTRON APPS
+        bitwarden
+        brave
+        bruno
+        element-desktop-wayland
+        google-chrome
+        microsoft-edge
+        slack
+        # unstable.postman
+      ];
+
+      shellAliases = { ttc = ''tty-clock -c -C 2 -r -f "%A, %B %d"''; };
+    };
+
+    home-manager.users.${userName} = {
+      xdg.desktopEntries = {
+        bruno = {
+          name = "bruno";
+          exec = "bruno %U";
+        };
+        microsoft-edge = {
+          name = "Microsoft Edge";
+          exec = "microsoft-edge %U";
+        };
+        postman = {
+          name = "Postman";
+          exec = "postman %U";
+        };
+        figma = {
+          name = "Figma";
+          exec = "google-chrome-stable --app=https://www.figma.com";
+        };
+      };
+    };
   };
 }

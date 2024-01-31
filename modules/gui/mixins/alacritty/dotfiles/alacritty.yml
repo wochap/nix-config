@@ -1,0 +1,58 @@
+import:
+  - ~/.config/alacritty/catppuccin/catppuccin-mocha.yml
+
+# Terminal Emulator Settings
+window:
+  decorations: full
+  padding:
+    x: 7
+    y: 7
+  scrolling:
+    history: 1000
+
+# Setting zsh as the default shell
+# shell:
+#   program: /bin/zsh
+
+env:
+  # TERM variable
+  #
+  # This value is used to set the `$TERM` environment variable for
+  # each instance of Alacritty. If it is not present, alacritty will
+  # check the local terminfo database and use `alacritty` if it is
+  # available, otherwise `xterm-256color` is used.
+  TERM: alacritty
+
+# Font
+font:
+  normal:
+    family: IosevkaTerm NF
+
+  bold:
+    family: IosevkaTerm NF Medium
+
+  italic:
+    family: IosevkaTerm NF Italic
+
+  bold_italic:
+    family: IosevkaTerm NF Medium Italic
+
+  size: 10
+
+  # offset:
+  #   x: 0
+  #   y: 6
+  #
+  # glyph_offset:
+  #   x: 0
+  #   y: 3
+
+  builtin_box_drawing: true
+
+cursor:
+  style:
+    shape: Underline
+    blinking: Always
+
+# Apply Settings without relaunching
+live_config_reload: true

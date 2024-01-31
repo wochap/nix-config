@@ -1,14 +1,15 @@
 #!/usr/bin/env sh
 
-dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop \
-  /run/current-system/sw/etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop &
+dex /run/current-system/sw/etc/xdg/autostart/xdg-user-dirs.desktop &
 
-# TODO: move to systemd
-# kanshi &
+kanshi &
 
-# turn off bluetooth to save battery
-bluetoothctl power off &
-
-libinput-gestures -c /etc/libinput-gestures.conf &
+# libinput-gestures -c /etc/libinput-gestures.conf &
 
 /etc/scripts/backlight.sh 20% &
+
+# sudo undervolt --core -50 --cache -50
+# sudo cpupower frequency-set -g powersave
+# sudo cpupower frequency-set --related --max 2800000
+# sudo cpupower frequency-set --related --max 4000000
+# sudo cpupower frequency-set --related --min 800000

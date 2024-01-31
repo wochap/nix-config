@@ -10,6 +10,5 @@
       # cli
       lm_sensors
     ];
-
   };
 }

@@ -4,28 +4,29 @@ let
   inherit (config._custom) globals;
   userName = config._userName;
   cfg = config._custom.sway;
-  theme = config._theme;
+  inherit (config._custom.globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
 in {
-  options._custom.sway = { enable = lib.mkEnableOption "activate SWAY"; };
+  options._custom.sway = {
+    enable = lib.mkEnableOption { };
+    isDefault = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
-    programs.sway = {
-      enable = true;
-      wrapperFeatures.gtk = true; # so that gtk works properly
-      extraPackages = [ ]; # block rxvt
-      extraOptions = [ "--debug" ];
+    _custom.wm.greetd = lib.mkIf cfg.isDefault {
+      enable = lib.mkDefault true;
+      cmd = "sway";
     };
 
     environment = {
-      systemPackages = with pkgs;
-        [
-          scripts.sway-focus-toggle
+      systemPackages = with pkgs; [
+        wlprop
+        scripts.sway-focus-toggle
 
-          # gksu
-        ];
+        # gksu
+      ];
 
-      sessionVariables = {
+      sessionVariables = lib.mkIf cfg.isDefault {
         XDG_CURRENT_DESKTOP = "sway";
         XDG_SESSION_DESKTOP = "sway";
       };
@@ -36,7 +37,26 @@ in {
           gesture swipe right 3 swaymsg workspace prev_on_output
         '';
 
-        "sway/config".text = ''
+        "scripts/sway-autostart.sh" = {
+          source = ./scripts/sway-autostart.sh;
+          mode = "0755";
+        };
+        "scripts/projects/sway-dangerp.sh" = {
+          source = ./scripts/sway-dangerp.sh;
+          mode = "0755";
+        };
+      };
+    };
+
+    home-manager.users.${userName} = {
+      wayland.windowManager.sway = {
+        enable = true;
+        systemd.enable = true;
+        systemd.xdgAutostart = true;
+        wrapperFeatures.gtk = true;
+        extraOptions = [ "--debug" "--unsupported-gpu" ];
+        config.bars = lib.mkForce [ ];
+        extraConfig = ''
           ${builtins.readFile ./dotfiles/config}
           ${builtins.readFile ./dotfiles/keybindings}
 
@@ -45,42 +65,39 @@ in {
           }
 
           #### SWAY theme ####
-          #                         title-border         title-bg                title-text            indicator       window-border
-          client.focused            ${theme.purple}      ${theme.purple}         ${theme.background}   ${theme.cyan}   ${theme.purple}
-          client.unfocused          ${theme.selection}   ${theme.selection}    ${theme.foreground}   ${theme.cyan}   ${theme.selection}
-          client.focused_inactive   ${theme.comment}     ${theme.comment}        ${theme.foreground}   ${theme.cyan}   ${theme.comment}
-          client.urgent             ${theme.pink}        ${theme.pink}           ${theme.background}   ${theme.cyan}   ${theme.pink}
+          #                         title-border               title-bg                      title-text                  indicator             window-border
+          client.focused            ${themeColors.primary}     ${themeColors.primary}        ${themeColors.background}   ${themeColors.cyan}   ${themeColors.primary}
+          client.unfocused          ${themeColors.selection}   ${themeColors.selection}      ${themeColors.foreground}   ${themeColors.cyan}   ${themeColors.selection}
+          client.focused_inactive   ${themeColors.comment}     ${themeColors.comment}        ${themeColors.foreground}   ${themeColors.cyan}   ${themeColors.comment}
+          client.urgent             ${themeColors.pink}        ${themeColors.pink}           ${themeColors.background}   ${themeColors.cyan}   ${themeColors.pink}
         '';
+      };
 
-        "scripts/sway-autostart.sh" = {
-          source = ./scripts/sway-autostart.sh;
-          mode = "0755";
-        };
-
-        "scripts/projects/sway-dangerp.sh" = {
-          source = ./scripts/sway-dangerp.sh;
-          mode = "0755";
+      _custom.programs.waybar = lib.mkIf cfg.isDefault {
+        settings.mainBar = {
+          modules-left = [
+            "sway/workspaces"
+            "custom/scratchpad_indicator"
+            "keyboard-state"
+            "sway/mode"
+          ];
+          modules-center = [ "sway/window" ];
         };
       };
-    };
 
-    _custom.greetd = {
-      enable = true;
-      cmd = "sway";
+      services.swayidle.timeouts = lib.mkIf cfg.isDefault (lib.mkAfter [
+        {
+          timeout = 195;
+          command = ''swaymsg "output * dpms off"'';
+          resumeCommand = ''swaymsg "output * dpms on"'';
+        }
+        {
+          timeout = 15;
+          command = ''if pgrep swaylock; then swaymsg "output * dpms off"; fi'';
+          resumeCommand =
+            ''if pgrep swaylock; then swaymsg "output * dpms on"; fi'';
+        }
+      ]);
     };
-
-    home-manager.users.${userName}.services.swayidle.timeouts = lib.mkAfter [
-      {
-        timeout = 195;
-        command = ''swaymsg "output * dpms off"'';
-        resumeCommand = ''swaymsg "output * dpms on"'';
-      }
-      {
-        timeout = 15;
-        command = ''if pgrep swaylock; then swaymsg "output * dpms off"; fi'';
-        resumeCommand =
-          ''if pgrep swaylock; then swaymsg "output * dpms on"; fi'';
-      }
-    ];
   };
 }

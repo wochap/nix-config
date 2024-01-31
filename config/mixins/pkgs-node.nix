@@ -1,39 +1,36 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, ... }:
 
-let
-  localPkgs = import ../packages { inherit pkgs lib; };
-  userName = config._userName;
+let userName = config._userName;
 in {
   config = {
     environment.systemPackages = with pkgs; [
+      unstable.bun
       deno
 
       # global nodejs
-      prevstable-nodejs.nodejs-14_x
-      (yarn.override { nodejs = prevstable-nodejs.nodejs-14_x; })
+      nodejs_20
+      (yarn.override { nodejs = nodejs_20; })
 
       # global packages
       nodePackages.expo-cli
       nodePackages.firebase-tools
       nodePackages.gulp
       nodePackages.http-server
-      nodePackages.node-gyp-build
       nodePackages.nodemon
+      nodePackages.pnpm
       nodePackages.webtorrent-cli
 
       # others
       netlify-cli
       nodePackages.node2nix
-      localPkgs.customNodePackages.migrate-mongo
 
       # nodePackages.sharp-cli
-      # unstable.nodePackages_latest.webtorrent-cli
     ];
 
     home-manager.users.${userName} = {
       home.sessionVariables = {
-        PATH = "$HOME/.npm-packages/bin:$PATH";
-        NODE_PATH = "$HOME/.npm-packages/lib/node_modules";
+        PATH = "$HOME/.npm-packages/bin:$HOME/.bun/bin:$PATH";
+        NODE_PATH = "$HOME/.npm-packages/lib/node_modules:$NODE_PATH";
       };
 
       home.file = {
@@ -41,6 +38,19 @@ in {
           prefix = ''${HOME}/.npm-packages
         '';
       };
+
+      xdg.configFile.".bunfig.toml".text = ''
+        [install]
+        # where `bun install --global` installs packages
+        globalDir = "~/.bun/install/global"
+
+        # where globally-installed package bins are linked
+        globalBinDir = "~/.bun/bin"
+
+        [install.cache]
+        # the directory to use for the cache
+        dir = "~/.bun/install/cache"
+      '';
     };
   };
 }

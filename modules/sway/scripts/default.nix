@@ -1,8 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 let
-  theme = config._theme;
-
   sway-focus-toggle = pkgs.writeTextFile {
     name = "sway-focus-toggle";
     destination = "/bin/sway-focus-toggle";
@@ -10,5 +8,4 @@ let
 
     text = builtins.readFile ./sway-focus-toggle.sh;
   };
-
 in { inherit sway-focus-toggle; }

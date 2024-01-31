@@ -1,8 +1,0 @@
-@import "config-one-line.rasi"
-
-/*****----- Elements -----*****/
-element {
-  padding: 10px 14px 6px;
-}
-
-// vim: syntax=less

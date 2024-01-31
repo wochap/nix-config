@@ -1,5 +1,0 @@
-%admin ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/darwin-rebuild, \
-                              /run/current-system/sw/bin/nix*, \
-                              /run/current-system/sw/bin/ln, \
-                              /nix/store/*/activate, \
-                              /bin/launchctl

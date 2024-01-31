@@ -1,45 +1,28 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, lib, inputs, ... }:
 
-let
-  isHidpi = config._isHidpi;
-  isMbp = config.networking.hostName == "gmbp";
-  terminalColors = [
-    "21222c"
-    "ff5555"
-    "50fa7b"
-    "f1fa8c"
-    "bd93f9"
-    "ff79c6"
-    "8be9fd"
-    "f8f8f2"
-
-    "6272a4"
-    "ff6e6e"
-    "69ff94"
-    "ffffa5"
-    "d6acff"
-    "ff92df"
-    "a4ffff"
-    "ffffff"
-  ];
+let userName = config._userName;
 in {
   imports = [
     # Install home manager
     inputs.home-manager.nixosModules.home-manager
+
+    # Install nur
+    inputs.nur.nixosModules.nur
   ];
 
   config = {
-    environment = { shellAliases = { open = "xdg-open"; }; };
-
     boot = {
+      # Bootloader
       loader = {
-        grub.configurationLimit = 42;
-        grub.efiSupport = true;
-        grub.useOSProber = true;
+        grub.enable = false;
+        systemd-boot.enable = true;
         systemd-boot.configurationLimit = 42;
+        efi.canTouchEfiVariables = true;
       };
 
-      # Enable ntfs disks
+      tmp.cleanOnBoot = true;
+
+      # Enable support for ntfs disks
       supportedFilesystems = [ "ntfs" ];
     };
 
@@ -51,74 +34,24 @@ in {
     i18n.defaultLocale = "en_US.UTF-8";
 
     console = {
-      colors = terminalColors;
-      font = if isHidpi then "ter-132n" else "Lat2-Terminus16";
       earlySetup = true;
       keyMap = "us";
-      packages = [ pkgs.terminus_font ];
     };
-
-    # Clear nixos store
-    # nix.settings.auto-optimise-store = true;
 
     security.sudo = {
       enable = true;
       wheelNeedsPassword = false;
     };
 
-    # Enable bluetooth
-    hardware.bluetooth.enable = true;
-    hardware.bluetooth.settings = {
-      General = {
-        # Enables D-Bus experimental interfaces
-        # Possible values: true or false
-        Experimental = true;
-
-        # Enables kernel experimental features, alternatively a list of UUIDs
-        # can be given.
-        # Possible values: true,false,<UUID List>
-        # Possible UUIDS:
-        # Defaults to false.
-        KernelExperimental = true;
-      };
-      # Policy = { AutoEnable = false; };
-    };
-
-    # Enable OpenGL
     hardware.opengl.enable = true;
-    hardware.opengl.driSupport = lib.mkForce (!isMbp);
-
-    hardware.opengl.driSupport32Bit = lib.mkForce (!isMbp);
-
-    # Enable audio
-    security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      # If you want to use JACK applications, uncomment this
-      # jack.enable = true;
-
-      wireplumber.enable = true;
-    };
-    # I copy the following from other user config
-    # systemd.user.services = {
-    #   pipewire-pulse = {
-    #     path = [ pkgs.pulseaudio ];
-    #   };
-    # };
 
     services.xserver = {
       enable = true;
       exportConfiguration = true;
     };
 
-    # Apply trim to SSDs
-    services.fstrim.enable = true;
-
     # minimum amount of swapping without disabling it entirely
-    boot.kernel.sysctl = { "vm.swappiness" = lib.mkDefault 1; };
+    boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 1;
 
     documentation.man.generateCaches = true;
     documentation.dev.enable = true;
@@ -127,5 +60,20 @@ in {
     # Required for some gtk apps
     programs.bash.vteIntegration = lib.mkDefault true;
     programs.zsh.vteIntegration = lib.mkDefault true;
+
+    # create user
+    users.users.${userName} = {
+      hashedPassword =
+        "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
+      isNormalUser = true;
+      isSystemUser = false;
+      extraGroups =
+        [ "audio" "disk" "input" "networkmanager" "storage" "video" "wheel" ];
+    };
+
+    home-manager.users.${userName} = {
+      # better ls sorting
+      home.language.collate = "C.UTF-8";
+    };
   };
 }

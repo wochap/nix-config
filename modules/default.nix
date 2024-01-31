@@ -1,21 +1,22 @@
-{ config, pkgs, lib, ... }:
+{ config, ... }:
 
-{
+let userName = config._userName;
+in {
   imports = [
-    ./amd-cpu.nix
-    ./amd-gpu.nix
-    ./bspwm
-    ./efi.nix
-    ./flatpak
+    ./cli
+    ./dwl
     ./globals.nix
-    ./greetd
+    ./gnome
+    ./gui
     ./hyprland
-    ./lightdm
+    ./llm
     ./river
-    ./startx
+    ./services
     ./sway
-    ./waydroid
+    ./tui
     ./wayland-wm
-    ./xorg-wm
+    ./wm
   ];
+
+  config.home-manager.users.${userName}.imports = [ ./symlinks ];
 }
