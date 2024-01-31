@@ -114,6 +114,7 @@
         pkgs.lib.nixosSystem {
           inherit system;
           modules = [
+            ./overlays
             ./modules/home
             ./modules/nixos
             ./modules/shared

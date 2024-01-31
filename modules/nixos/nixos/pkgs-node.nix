@@ -4,7 +4,7 @@ let userName = config._userName;
 in {
   config = {
     environment.systemPackages = with pkgs; [
-      unstable.bun
+      bun
       deno
 
       # global nodejs

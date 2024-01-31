@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./nixos/channels.nix
     ./nixos/pkgs-python
     ./nixos/nix-common.nix
     ./nixos/nixos.nix

@@ -103,7 +103,7 @@ in {
 
         # clipboard manager
         cliphist
-        unstable.wl-clip-persist
+        wl-clip-persist
         wl-clipboard
       ];
 

@@ -1,12 +1,11 @@
-{ config, lib, inputs, ... }:
+{ lib, config, inputs, ... }:
 
 let overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
 in {
   config = {
-
     nixpkgs.overlays = [
+      # Custom channels
       (final: prev: {
-        # Custom channels
         unstable = import inputs.unstable {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
@@ -31,3 +30,4 @@ in {
     ];
   };
 }
+
