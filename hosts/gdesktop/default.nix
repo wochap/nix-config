@@ -1,26 +1,18 @@
 { config, pkgs, lib, ... }:
 
 let
-  hostName = "gdesktop";
-  isHidpi = false;
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
-  catppuccinMochaTheme = import ../../config/mixins/catppuccin-mocha.nix;
+  catppuccinMochaTheme = import ../../modules/mixins/catppuccin-mocha.nix;
 in {
-  imports = [
-    ./hardware-configuration.nix
-    ../../config/nixos.nix
-    ../../config/mixins/temp-sensor.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   config = {
-    _userName = userName;
-    _homeDirectory = "/home/${userName}";
-    _configDirectory = configDirectory;
+    _custom.globals.userName = userName;
+    _custom.globals.homeDirectory = "/home/${userName}";
     _custom.globals.configDirectory = configDirectory;
     _custom.globals.themeColors = catppuccinMochaTheme;
-    _custom.globals.isHidpi = false;
 
     _custom.cli.bat.enable = true;
     _custom.cli.buku.enable = true;
@@ -96,13 +88,34 @@ in {
     _custom.hardware.amdGpu.enable = true;
     _custom.hardware.amdGpu.enableSouthernIslands = false;
 
+    _custom.gnome.enable = false;
     _custom.dwl.enable = true;
-    # _custom.river.enable = true;
-    # _custom.hyprland.enable = true;
-    # _custom.sway.enable = true;
-
-    # waylandWm enables: ags, dunst, rofi, swappy, swaync, swww, tofi, waybar, wob
+    _custom.dwl.isDefault = true;
+    _custom.river.enable = false;
+    _custom.hyprland.enable = false;
+    _custom.sway.enable = true;
     _custom.waylandWm.enable = true;
+
+    networking = {
+      # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+      # Per-interface useDHCP will be mandatory in the future, so this generated config
+      # replicates the default behaviour.
+      useDHCP = false;
+      interfaces.enp11s0.useDHCP = true;
+      interfaces.enp42s0.useDHCP = true;
+      interfaces.wlp10s0.useDHCP = true;
+    };
+
+    # Fix windows dualboot clock
+    time.hardwareClockInLocalTime = true;
+
+    services.xserver = {
+
+      # Setup keyboard
+      layout = "us";
+      xkbModel = "pc104";
+      # xkbVariant = "altgr-intl";
+    };
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
@@ -142,29 +155,6 @@ in {
       #   };
       #   keyboard-state = { device-path = "/dev/input/event25"; };
       # };
-    };
-
-    networking = {
-      inherit hostName;
-
-      # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-      # Per-interface useDHCP will be mandatory in the future, so this generated config
-      # replicates the default behaviour.
-      useDHCP = false;
-      interfaces.enp11s0.useDHCP = true;
-      interfaces.enp42s0.useDHCP = true;
-      interfaces.wlp10s0.useDHCP = true;
-    };
-
-    # Fix windows dualboot clock
-    time.hardwareClockInLocalTime = true;
-
-    services.xserver = {
-
-      # Setup keyboard
-      layout = "us";
-      xkbModel = "pc104";
-      # xkbVariant = "altgr-intl";
     };
   };
 }

@@ -131,10 +131,8 @@
         };
     in {
       nixosConfigurations = {
-        desktop = mkNixosSystem inputs.nixpkgs "x86_64-linux" "desktop";
-        asus-vivobook = mkNixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
+        gdesktop = mkNixosSystem inputs.nixpkgs "x86_64-linux" "gdesktop";
         glegion = mkNixosSystem inputs.nixpkgs "x86_64-linux" "glegion";
-        asus-old = mkNixosSystem inputs.nixpkgs "x86_64-linux" "asus-old";
       };
     };
 }

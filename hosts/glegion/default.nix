@@ -98,6 +98,21 @@ in {
     _custom.sway.enable = true;
     _custom.waylandWm.enable = true;
 
+    # Fix windows dualboot clock
+    time.hardwareClockInLocalTime = true;
+
+    services.xserver = {
+      # Setup keyboard
+      layout = "us";
+      xkbModel = "pc104";
+      xkbVariant = "";
+
+      # Enable touchpad support (enabled default in most desktopManager).
+      libinput.enable = true;
+      libinput.touchpad.naturalScrolling = true;
+      libinput.touchpad.tapping = true;
+    };
+
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
     # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -136,22 +151,6 @@ in {
       #   };
       #   keyboard-state = { device-path = "/dev/input/event25"; };
       # };
-    };
-
-    # Fix windows dualboot clock
-    time.hardwareClockInLocalTime = true;
-
-    services.xserver = {
-
-      # Setup keyboard
-      layout = "us";
-      xkbModel = "pc104";
-      xkbVariant = "";
-
-      # Enable touchpad support (enabled default in most desktopManager).
-      libinput.enable = true;
-      libinput.touchpad.naturalScrolling = true;
-      libinput.touchpad.tapping = true;
     };
   };
 }
