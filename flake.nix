@@ -126,7 +126,7 @@
       nixosConfigurations = {
         desktop = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop";
         asus-vivobook = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
-        legion = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "legion";
+        legion = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "glegion";
         asus-old = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-old";
       };
     };
