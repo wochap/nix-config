@@ -5,7 +5,10 @@
 
 swaylock \
   --daemonize \
-  --screenshots --clock --indicator-idle-visible \
+  --scaling center \
+  --color "#1E1E2E" \
+  --clock \
+  --indicator-idle-visible \
   --font "Iosevka Nerd Font" \
   --indicator-radius 100 \
   --indicator-thickness 10 \
@@ -29,6 +32,5 @@ swaylock \
   --layout-border-color ${background:1} \
   --layout-text-color ${foreground:1} \
   --separator-color 00000000 \
-  --fade-in 0.5 \
-  --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
-  --show-failed-attempts --grace 1
+  --screenshots --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
+  --show-failed-attempts
