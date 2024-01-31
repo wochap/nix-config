@@ -5,12 +5,13 @@ let
   inherit (config._custom) globals;
   userName = config._userName;
   isWayland = config._custom.globals.displayServer == "wayland";
-  relativeSymlink = path:
-    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
+  inherit (config._custom.globals) configDirectory;
+  inherit (lib._custom) relativeSymlink;
   extraCss = ''
-    @import url("file://${relativeSymlink ./dotfiles/gtk.css}");
-    @import url("file://${relativeSymlink ./dotfiles/catppuccin-mocha.css}");
+    @import url("file://${relativeSymlink configDirectory ./dotfiles/gtk.css}");
+    @import url("file://${
+      relativeSymlink configDirectory ./dotfiles/catppuccin-mocha.css
+    }");
   '';
 in {
   options._custom.wm.gtk = {

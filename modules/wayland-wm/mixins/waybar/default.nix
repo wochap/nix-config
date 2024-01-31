@@ -4,9 +4,8 @@ let
   cfg = config._custom.waylandWm;
   inherit (config._custom.globals) themeColors;
   userName = config._userName;
-  relativeSymlink = path:
-    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
+  inherit (config._custom.globals) configDirectory;
+  inherit (lib._custom) relativeSymlink;
   waybar = pkgs.waybar;
 in {
   imports = [ ./waybar-config.nix ];
@@ -26,7 +25,8 @@ in {
       imports = [ ./options.nix ];
 
       xdg.configFile = {
-        "waybar/style.css".source = relativeSymlink ./dotfiles/style.css;
+        "waybar/style.css".source =
+          relativeSymlink configDirectory ./dotfiles/style.css;
         "waybar/colors.css".text = ''
           ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
             (key: value: "@define-color ${key} ${value};") themeColors)}

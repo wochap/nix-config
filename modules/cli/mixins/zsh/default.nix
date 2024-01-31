@@ -3,9 +3,8 @@
 let
   cfg = config._custom.cli.zsh;
   userName = config._userName;
-  relativeSymlink = path:
-    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
+  inherit (config._custom.globals) configDirectory;
+  inherit (lib._custom) relativeSymlink;
 
   fshPlugin = {
     name = "zsh-fast-syntax-highlighting";
@@ -58,7 +57,7 @@ in {
 
     home-manager.users.${userName} = {
       xdg.configFile = {
-        "zsh/.p10k.zsh".source = relativeSymlink ./.p10k.zsh;
+        "zsh/.p10k.zsh".source = relativeSymlink configDirectory ./.p10k.zsh;
       };
 
       home.packages = with pkgs; [
@@ -117,11 +116,11 @@ in {
           source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
         '';
         initExtra = ''
-          source ${relativeSymlink ./config.zsh}
-          source ${relativeSymlink ./functions.zsh}
+          source ${relativeSymlink configDirectory ./config.zsh}
+          source ${relativeSymlink configDirectory ./functions.zsh}
 
           function load_key_bindings() {
-            source ${relativeSymlink ./key-bindings-vi.zsh}
+            source ${relativeSymlink configDirectory ./key-bindings-vi.zsh}
           }
 
           ## zsh-notify

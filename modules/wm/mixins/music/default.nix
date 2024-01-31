@@ -5,9 +5,8 @@ let
   userName = config._userName;
   hmConfig = config.home-manager.users.${userName};
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
-  relativeSymlink = path:
-    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
+  inherit (config._custom.globals) configDirectory;
+  inherit (lib._custom) relativeSymlink;
 in {
   options._custom.wm.music = { enable = lib.mkEnableOption { }; };
 
@@ -30,11 +29,13 @@ in {
       ];
 
       xdg.configFile = {
-        "cava/config".source = relativeSymlink ./dotfiles/cava/config;
+        "cava/config".source =
+          relativeSymlink configDirectory ./dotfiles/cava/config;
 
         # "ncmpcpp/ncmpcpp-ueberzug/fallback.jpg".source =
         #   ../../../mixins/lightdm/assets/wallpaper.jpg;
-        "ncmpcpp/config".source = relativeSymlink ./dotfiles/ncmpcpp/config;
+        "ncmpcpp/config".source =
+          relativeSymlink configDirectory ./dotfiles/ncmpcpp/config;
         "ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh" = {
           recursive = true;
           executable = true;

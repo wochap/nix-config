@@ -4,9 +4,7 @@ let
   cfg = config._custom.gui.kitty;
   inherit (config._custom.globals) themeColors;
   userName = config._userName;
-  relativeSymlink = path:
-    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
+  inherit (lib._custom) relativeSymlink;
 
   shellIntegrationInit = {
     bash = ''
@@ -73,7 +71,10 @@ in {
           active_border_color ${themeColors.primary}
           inactive_border_color ${themeColors.selection}
 
-          include ${relativeSymlink ./dotfiles/kitty-common.conf}
+          include ${
+            relativeSymlink config._custom.globals.configDirectory
+            ./dotfiles/kitty-common.conf
+          }
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;

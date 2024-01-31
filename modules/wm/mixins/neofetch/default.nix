@@ -3,9 +3,8 @@
 let
   cfg = config._custom.wm.neofetch;
   userName = config._userName;
-  relativeSymlink = path:
-    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
+  inherit (config._custom.globals) configDirectory;
+  inherit (lib._custom) relativeSymlink;
 in {
   options._custom.wm.neofetch = { enable = lib.mkEnableOption { }; };
 
@@ -20,7 +19,8 @@ in {
 
     home-manager.users.${userName} = {
       xdg.configFile = {
-        "neofetch/config.conf".source = relativeSymlink ./dotfiles/config.conf;
+        "neofetch/config.conf".source =
+          relativeSymlink configDirectory ./dotfiles/config.conf;
       };
     };
   };

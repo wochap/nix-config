@@ -3,9 +3,8 @@
 let
   cfg = config._custom.gui.alacritty;
   userName = config._userName;
-  relativeSymlink = path:
-    config.home-manager.users.${userName}.lib.file.mkOutOfStoreSymlink
-    (pkgs._custom.runtimePath config._custom.globals.configDirectory path);
+  inherit (config._custom.globals) configDirectory;
+  inherit (lib._custom) relativeSymlink;
 in {
   options._custom.gui.alacritty = { enable = lib.mkEnableOption { }; };
 
@@ -15,7 +14,8 @@ in {
     home-manager.users.${userName} = {
       xdg.configFile = {
         "alacritty/catppuccin".source = inputs.catppuccin-alacritty;
-        "alacritty/alacritty.yml".source = relativeSymlink ./dotfiles/alacritty.yml;
+        "alacritty/alacritty.yml".source =
+          relativeSymlink configDirectory ./dotfiles/alacritty.yml;
       };
     };
   };
