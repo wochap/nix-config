@@ -100,6 +100,17 @@
   outputs = inputs:
     let
       inherit (inputs.nixpkgs.lib) nixosSystem;
+      mkLib = pkgs: system:
+        let
+          lib = pkgs.lib.extend (final: prev: {
+            home-manager = inputs.home-manager.lib.hm;
+            _custom = import ./lib {
+              pkgs = import pkgs { inherit system; };
+              inherit inputs;
+              inherit lib;
+            };
+          });
+        in lib;
       mkSystem = systemFn: pkgs: system: hostname:
         systemFn {
           inherit system;
@@ -107,6 +118,7 @@
           specialArgs = {
             inherit inputs;
             inherit system;
+            lib = mkLib pkgs system;
             nixpkgs = pkgs;
           };
         };

@@ -4,7 +4,7 @@ let
   cfg = config._custom.waylandWm;
   userName = config._userName;
   inherit (config._custom.globals) themeColors;
-  inherit (pkgs._custom) unwrapHex;
+  inherit (lib._custom) unwrapHex;
   wob-osd = pkgs.writeTextFile {
     name = "wob-osd";
     destination = "/bin/wob-osd";

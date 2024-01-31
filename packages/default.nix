@@ -4,7 +4,6 @@ let
   localPkgs = rec {
     # lib
     # TODO: move to custom lib
-    unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
     fromYAML = pkgs.callPackage ./from-yaml { };
     generate-ssc = pkgs.callPackage ./generate-ssc { };
     # https://github.com/nix-community/home-manager/issues/257#issuecomment-1646557848

@@ -6,7 +6,7 @@ let
   cfg = config._custom.river;
   inherit (globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
-  unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
+  inherit (lib._custom) unwrapHex;
   river-shifttags = pkgs.callPackage ./packages/river-shifttags.nix { };
   riverwm-utils = pkgs.callPackage ./packages/riverwm-utils.nix { };
 in {

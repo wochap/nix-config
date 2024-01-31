@@ -4,7 +4,7 @@ let
   userName = config._userName;
   cfg = config._custom.dwl;
   inherit (config._custom.globals) themeColors cursor;
-  unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
+  inherit (lib._custom) unwrapHex;
 
   dwl-waybar = pkgs.writeTextFile {
     name = "dwl-waybar";
