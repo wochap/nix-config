@@ -49,9 +49,13 @@ in {
     programs.zsh = {
       enable = true;
       enableCompletion = true;
+
+      # we'll call compinit in home-manager zsh module
       enableGlobalCompInit = false;
       promptInit = "";
-      # enableLsColors = false;
+
+      # prefer to use home-manager dircolors module
+      enableLsColors = false;
     };
 
     _custom.hm = {
@@ -238,13 +242,13 @@ in {
         };
       };
 
-      programs.carapace.enableZshIntegration = true;
-      programs.thefuck.enableZshIntegration = true;
+      programs.carapace.enableZshIntegration = false;
+      programs.thefuck.enableZshIntegration = false;
       programs.dircolors.enableZshIntegration = true;
       programs.starship.enableZshIntegration = false;
       programs.zoxide.enableZshIntegration = true;
       programs.navi.enableZshIntegration = true;
-      programs.nix-index.enableZshIntegration = true;
+      programs.nix-index.enableZshIntegration = false;
       programs.fzf.enableZshIntegration = true;
     };
   };
