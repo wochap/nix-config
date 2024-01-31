@@ -44,7 +44,6 @@ in {
     _custom.tui.nnn.enable = true;
     _custom.tui.taskwarrior.enable = true;
     _custom.tui.vim.enable = true;
-    _custom.tui.wtf.enable = true;
     _custom.tui.bottom.enable = true;
     _custom.tui.htop.enable = true;
 

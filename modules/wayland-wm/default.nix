@@ -3,10 +3,8 @@
 let cfg = config._custom.waylandWm;
 in {
   imports = [
-    ./mixins/ags
     ./mixins/dunst
     ./mixins/swappy
-    ./mixins/swaynotificationcenter
     ./mixins/swww
     ./mixins/system
     ./mixins/tofi

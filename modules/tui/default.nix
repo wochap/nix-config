@@ -12,7 +12,6 @@
     ./mixins/nnn
     ./mixins/taskwarrior
     ./mixins/vim
-    ./mixins/wtf
     ./mixins/bottom.nix
     ./mixins/htop.nix
   ];
