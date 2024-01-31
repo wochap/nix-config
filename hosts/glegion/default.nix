@@ -91,8 +91,8 @@ in {
     _custom.services.syncthing.enable = true;
 
     _custom.gnome.enable = false;
-    _custom.dwl.enable = true;
-    _custom.dwl.isDefault = true;
+    _custom.de.dwl.enable = true;
+    _custom.de.dwl.isDefault = true;
     _custom.river.enable = false;
     _custom.hyprland.enable = false;
     _custom.sway.enable = true;
