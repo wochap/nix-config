@@ -5,6 +5,8 @@ in {
   options._custom.wm.networking = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
+    _custom.user.extraGroups = [ "networkmanager" ];
+
     networking = {
       enableIPv6 = false;
 

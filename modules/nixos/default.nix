@@ -3,8 +3,6 @@
 {
   imports = [
     ./nixos/pkgs-python
-    ./nixos/nix-common.nix
-    ./nixos/nixos.nix
     ./nixos/pkgs-gtk.nix
     ./nixos/pkgs-linux.nix
     ./nixos/pkgs-node.nix
@@ -57,6 +55,7 @@
     ./programs/gui/zathura
     ./programs/tui/fontpreview-kik
 
+    ./security/doas
     ./security/gnome-keyring
     ./security/gpg
     ./security/ssh
@@ -71,5 +70,12 @@
     ./services/syncthing
     ./services/virt
     ./services/waydroid
+
+    ./system/boot
+    ./system/others
+    ./system/locale
+    ./system/windows
+
+    ./user
   ];
 }

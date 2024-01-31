@@ -98,9 +98,6 @@ in {
     _custom.sway.enable = true;
     _custom.waylandWm.enable = true;
 
-    # Fix windows dualboot clock
-    time.hardwareClockInLocalTime = true;
-
     services.xserver = {
       # Setup keyboard
       layout = "us";
