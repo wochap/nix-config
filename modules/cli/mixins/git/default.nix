@@ -4,7 +4,7 @@ let
   cfg = config._custom.cli.git;
   userName = config._userName;
   catppuccinMochaTheme =
-    pkgs._custom.fromYAML "${inputs.catppuccin-lazygit}/themes/mocha.yml";
+    lib._custom.fromYAML "${inputs.catppuccin-lazygit}/themes/mocha.yml";
 in {
   options._custom.cli.git = { enable = lib.mkEnableOption { }; };
 

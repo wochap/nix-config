@@ -1,6 +1,8 @@
 { inputs, lib, pkgs, ... }:
 
 rec {
+  fromYAML = pkgs.callPackage ./from-yaml { };
+
   unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
 
   runtimePath = runtimeRoot: path:
