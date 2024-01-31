@@ -1,7 +1,6 @@
 { config, ... }:
 
 let
-  hostName = "glegion";
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
@@ -142,8 +141,6 @@ in {
       #   keyboard-state = { device-path = "/dev/input/event25"; };
       # };
     };
-
-    networking.hostName = hostName;
 
     # Fix windows dualboot clock
     time.hardwareClockInLocalTime = true;

@@ -111,10 +111,15 @@
             };
           });
         in lib;
-      mkSystem = systemFn: pkgs: system: hostname:
+      mkSystem = systemFn: pkgs: system: hostName:
         systemFn {
           inherit system;
-          modules = [ ./modules ./packages (./. + "/hosts/${hostname}") ];
+          modules = [
+            ./modules
+            ./packages
+            (./. + "/hosts/${hostName}")
+            { networking.hostName = hostName; }
+          ];
           specialArgs = {
             inherit inputs;
             inherit system;
@@ -126,7 +131,7 @@
       nixosConfigurations = {
         desktop = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop";
         asus-vivobook = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
-        legion = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "glegion";
+        glegion = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "glegion";
         asus-old = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-old";
       };
     };
