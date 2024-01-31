@@ -99,7 +99,6 @@
 
   outputs = inputs:
     let
-      inherit (inputs.nixpkgs.lib) nixosSystem;
       mkLib = pkgs: system:
         let
           lib = pkgs.lib.extend (final: prev: {
@@ -111,8 +110,8 @@
             };
           });
         in lib;
-      mkSystem = systemFn: pkgs: system: hostName:
-        systemFn {
+      mkNixosSystem = pkgs: system: hostName:
+        pkgs.lib.nixosSystem {
           inherit system;
           modules = [
             ./modules/home
@@ -131,10 +130,10 @@
         };
     in {
       nixosConfigurations = {
-        desktop = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop";
-        asus-vivobook = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
-        glegion = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "glegion";
-        asus-old = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-old";
+        desktop = mkNixosSystem inputs.nixpkgs "x86_64-linux" "desktop";
+        asus-vivobook = mkNixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
+        glegion = mkNixosSystem inputs.nixpkgs "x86_64-linux" "glegion";
+        asus-old = mkNixosSystem inputs.nixpkgs "x86_64-linux" "asus-old";
       };
     };
 }
