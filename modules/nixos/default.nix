@@ -2,6 +2,18 @@
 
 {
   imports = [
+    ./nixos/channels.nix
+    ./nixos/pkgs-python
+    ./nixos/nix-common.nix
+    ./nixos/nixos.nix
+    ./nixos/pkgs-gtk.nix
+    ./nixos/pkgs-linux.nix
+    ./nixos/pkgs-node.nix
+    ./nixos/pkgs-qt.nix
+    ./nixos/pkgs.nix
+    ./nixos/secrets.nix
+    ./nixos/temp-sensor.nix
+
     ./de/dwl
     ./de/gnome
     ./de/hyprland
