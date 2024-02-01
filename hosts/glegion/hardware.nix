@@ -70,7 +70,6 @@
     # https://community.frame.work/t/responded-amd-7040-sleep-states/38101/13
     services.power-profiles-daemon.enable = lib.mkDefault true;
 
-    services.thermald.enable = lib.mkDefault true;
 
     services.fwupd.enable = true;
   };
