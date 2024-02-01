@@ -10,5 +10,12 @@
       isSystemUser = false;
       extraGroups = [ "audio" "disk" "input" "storage" "video" ];
     };
+
+    _custom.hm.home.file = {
+      "Projects/.keep".text = "";
+      "Projects/wochap/.keep".text = "";
+      "Picture/Screenshots/.keep".text = "";
+      "Videos/Recordings/.keep".text = "";
+    };
   };
 }
