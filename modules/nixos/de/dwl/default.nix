@@ -1,20 +1,41 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (config._custom.globals) userName;
-  cfg = config._custom.dwl;
-  inherit (config._custom.globals) themeColors cursor;
+  cfg = config._custom.de.dwl;
+  inherit (config._custom.globals) themeColors cursor userName;
   inherit (lib._custom) unwrapHex;
 
   dwl-waybar = pkgs.writeTextFile {
     name = "dwl-waybar";
     destination = "/bin/dwl-waybar";
     executable = true;
-
     text = builtins.readFile ./scripts/dwl-waybar.sh;
   };
+  dwl-final = (pkgs.unstable.dwl.override {
+    conf = ''
+      ${builtins.readFile ./dotfiles/config.def.h}
+
+      static const float bordercolor[] = COLOR(0x${
+        unwrapHex themeColors.selection
+      }ff);
+      static const float borderscolor[] = COLOR(0x${
+        unwrapHex themeColors.selection
+      }00);
+      static const float borderecolor[] = COLOR(0x${
+        unwrapHex themeColors.selection
+      }ff);
+      static const float focuscolor[] = COLOR(0x${
+        unwrapHex themeColors.primary
+      }ff);
+      static const float urgentcolor[] = COLOR(0x${
+        unwrapHex themeColors.red
+      }ff);
+      static const char cursortheme[] = "${cursor.name}";
+      static const unsigned int cursorsize = ${toString cursor.size};
+    '';
+  });
 in {
-  options._custom.dwl = {
+  options._custom.de.dwl = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
   };
@@ -22,58 +43,44 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
-        # install my patched dwl
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "0b6a3fb6c36af475e90c61f44106f94995b488e7";
+          version = "bfd95f07624418d7d3522e2dc41ad44f5aa7c207";
+          # install patched dwl
           src = prev.fetchFromGitea {
             domain = "codeberg.org";
             owner = "wochap";
             repo = "dwl";
-            rev = "bfd95f07624418d7d3522e2dc41ad44f5aa7c207";
+            rev = version;
             hash = "sha256-rjRuzZsDdXv8vYGqWsKEQt0ORPMYpkNhmBNl/eyKVxk=";
           };
+
+          # add display manager session
+          postInstall = let
+            dwlSession = ''
+              [Desktop Entry]
+              Name=dwl
+              Comment=dwl for Wayland
+              Exec=dwl > /home/${userName}/.cache/dwltags
+              Type=Application
+            '';
+          in ''
+            mkdir -p $out/share/wayland-sessions
+            echo "${dwlSession}" > $out/share/wayland-sessions/dwl.desktop
+          '';
+          passthru.providedSessions = [ "dwl" ];
         });
       })
     ];
 
-    _custom.wm.greetd = lib.mkIf cfg.isDefault {
-      enable = lib.mkDefault true;
-      cmd = "dwl > /home/${userName}/.cache/dwltags";
-    };
-
     environment = {
       systemPackages = with pkgs; [
-        (unstable.dwl.override {
-          conf = ''
-            ${builtins.readFile ./dotfiles/config.def.h}
+        dwl-waybar # script that prints dwl state
+        dwl-final
 
-            static const float bordercolor[] = COLOR(0x${
-              unwrapHex themeColors.selection
-            }ff);
-            static const float borderscolor[] = COLOR(0x${
-              unwrapHex themeColors.selection
-            }00);
-            static const float borderecolor[] = COLOR(0x${
-              unwrapHex themeColors.selection
-            }ff);
-            static const float focuscolor[] = COLOR(0x${
-              unwrapHex themeColors.primary
-            }ff);
-            static const float urgentcolor[] = COLOR(0x${
-              unwrapHex themeColors.red
-            }ff);
-            static const char cursortheme[] = "${cursor.name}";
-            static const unsigned int cursorsize = ${toString cursor.size};
-          '';
-        })
-        dwl-waybar
-        # _custom.dwl-state
+        wlopm # toggle screen
+        wlrctl # control keyboard, mouse and wm from cli
 
-        lswt # doesn't work on dwl
-        wlopm
-        wlrctl
-
-        # for testing dwl
+        # for testing vanilla dwl
         bemenu
         foot
       ];
@@ -82,9 +89,14 @@ in {
         XDG_CURRENT_DESKTOP = "wlroots";
         XDG_SESSION_DESKTOP = "dwl";
       };
-
-
     };
+
+    _custom.wm.greetd.cmd =
+      lib.mkIf cfg.isDefault "dwl > /home/${userName}/.cache/dwltags";
+
+    xdg.portal.config.dwl.default = [ "wlr" "gtk" ];
+
+    services.xserver.displayManager.sessionPackages = [ dwl-final ];
 
     _custom.hm = lib.mkIf cfg.isDefault {
       _custom.programs.waybar = {
@@ -133,7 +145,6 @@ in {
           resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
         }
       ];
-
     };
   };
 }

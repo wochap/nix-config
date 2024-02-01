@@ -91,6 +91,7 @@ in {
     _custom.services.syncthing.enable = true;
 
     _custom.gnome.enable = false;
+    _custom.wm.greetd.enable = true;
     _custom.de.dwl.enable = true;
     _custom.de.dwl.isDefault = true;
     _custom.river.enable = false;

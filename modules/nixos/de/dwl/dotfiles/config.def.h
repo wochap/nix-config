@@ -36,13 +36,9 @@ const char *modes_labels[] = {
 
 /* Autostart */
 static const char *const autostart[] = {
-  "restart-pipewire-and-portal-services", NULL,
-  "configure-gtk", NULL,
+  "sh", "-c", "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway SWAYSOCK && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target", NULL,
 
-  // start systemd services related to graphical-session.target
-  // https://github.com/emersion/xdg-desktop-portal-wlr/wiki/systemd-user-services,-pam,-and-environment-variables
-  "sh", "-c", "systemctl --user start graphical-session-pre.target", NULL,
-  "sh", "-c", "systemctl --user start graphical-session.target", NULL,
+  "configure-gtk", NULL,
 
   NULL /* terminate */
 };
