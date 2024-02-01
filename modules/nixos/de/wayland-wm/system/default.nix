@@ -94,6 +94,7 @@ in {
         configure-gtk
         hyprpicker # color picker
         swaylock-effects # lockscreen
+        chayang # gradually dim the screen
 
         slurp # screenshoot utility
         grim # screenshoot utility
