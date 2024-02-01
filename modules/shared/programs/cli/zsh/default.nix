@@ -222,6 +222,10 @@ in {
           source ${./plugins/dirhistory.zsh}
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
           source ${pkgs.unstable.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
+
+          ## completions
+
+          zsh-defer source ${inputs.zsh-pnpm-shell-completion}/pnpm-shell-completion.plugin.zsh
         '';
         enableCompletion = true;
         defaultKeymap = "emacs";
