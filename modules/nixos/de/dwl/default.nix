@@ -83,18 +83,7 @@ in {
         XDG_SESSION_DESKTOP = "dwl";
       };
 
-      etc = {
-        "scripts/dwl-autostart.sh" = {
-          source = ./scripts/dwl-autostart.sh;
-          mode = "0755";
-        };
 
-        # scripts to open projects blazingly fast
-        "scripts/projects/dwl-dangerp.sh" = {
-          source = ./scripts/dwl-dangerp.sh;
-          mode = "0755";
-        };
-      };
     };
 
     _custom.hm = lib.mkIf cfg.isDefault {

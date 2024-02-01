@@ -44,7 +44,6 @@ static const char *const autostart[] = {
   "sh", "-c", "systemctl --user start graphical-session-pre.target", NULL,
   "sh", "-c", "systemctl --user start graphical-session.target", NULL,
 
-  "sh", "-c", "/etc/scripts/dwl-autostart.sh", NULL,
   NULL /* terminate */
 };
 
