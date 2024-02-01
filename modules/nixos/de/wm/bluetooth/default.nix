@@ -17,7 +17,7 @@ in {
 
     # Enable bluetooth
     hardware.bluetooth.enable = true;
-    hardware.bluetooth.powerOnBoot = true;
+    hardware.bluetooth.powerOnBoot = lib.mkDefault true;
     hardware.bluetooth.settings = {
       General = {
         # Enables D-Bus experimental interfaces
