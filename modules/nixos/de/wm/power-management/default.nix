@@ -7,7 +7,11 @@ in {
   options._custom.wm.power-management = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ cpupower-gui cpupower ];
+    environment.systemPackages = with pkgs; [
+      cpupower-gui
+      cpupower
+      powertop # only use it to check current power usage
+    ];
 
     # systemd service for suspense and resume commands
     powerManagement.enable = true;
