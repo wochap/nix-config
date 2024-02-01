@@ -17,7 +17,6 @@ in {
     services.udisks2.enable = true;
     services.hardware.bolt.enable = true; # Thunderbolt
     services.xserver.updateDbusEnvironment = true;
-    services.logind.lidSwitch = "ignore";
 
     systemd.user.services.polkit-gnome-authentication-agent-1 = {
       description = "polkit-gnome-authentication-agent-1";
