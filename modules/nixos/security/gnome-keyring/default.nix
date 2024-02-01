@@ -5,6 +5,8 @@ in {
   options._custom.services.gnome-keyring = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [ gnome.libgnome-keyring ];
+
     programs.seahorse.enable = true;
 
     services.gnome.gnome-keyring.enable = true;
