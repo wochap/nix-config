@@ -95,6 +95,8 @@ in {
         hyprpicker # color picker
         swaylock-effects # lockscreen
         chayang # gradually dim the screen
+        swayidle
+        sway-audio-idle-inhibit # complement to swayidle
 
         slurp # screenshoot utility
         grim # screenshoot utility
@@ -187,6 +189,23 @@ in {
           Service = {
             Environment = lib.mkForce "";
             PassEnvironment = "PATH";
+          };
+        };
+
+        sway-audio-idle-inhibit = mkService {
+          Unit = {
+            Description =
+              "Prevents swayidle from sleeping while any application is outputting or receiving audio.";
+            Documentation =
+              "https://github.com/ErikReider/SwayAudioIdleInhibit";
+            After = [ "swayidle.service" ];
+            Wants = [ "swayidle.service" ];
+          };
+          Service = {
+            PassEnvironment = "PATH";
+            ExecStart =
+              "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
+            Type = "simple";
           };
         };
 
