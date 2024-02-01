@@ -12,6 +12,7 @@
     ./nixos/temp-sensor.nix
 
     ./de/dwl
+    ./de/gdm
     ./de/gnome
     ./de/hyprland
     ./de/kde
