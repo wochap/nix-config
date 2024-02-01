@@ -14,6 +14,8 @@ in {
     _custom.globals.configDirectory = configDirectory;
     _custom.globals.themeColors = catppuccinMochaTheme;
 
+    _custom.security.polkit.enable = true;
+
     _custom.cli.asciinema.enable = true;
     _custom.cli.bat.enable = true;
     _custom.cli.buku.enable = true;

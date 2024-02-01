@@ -60,6 +60,7 @@
     ./security/doas
     ./security/gnome-keyring
     ./security/gpg
+    ./security/polkit
     ./security/ssh
 
     ./services/android
