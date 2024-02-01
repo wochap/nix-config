@@ -29,10 +29,10 @@
     hyprland.inputs.nixpkgs.follows = "unstable";
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins";
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
-    xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=6a5de92769d5b7038134044053f90e7458f6a197"; # (jan 13 2024)
-    xdg-portal-hyprland.inputs.nixpkgs.follows = "hyprland";
+    hyprland-xdp.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=57ab6df950970f05f833371cc4fdf1a30fccfb2f"; # v1.3.1
+    hyprland-xdp.inputs.nixpkgs.follows = "unstable";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=2ef703474fb96e97e03e66e8820f213359f29382"; # (jan 13 2024)
-    hyprpicker.inputs.nixpkgs.follows = "hyprland";
+    hyprpicker.inputs.nixpkgs.follows = "unstable";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
 
