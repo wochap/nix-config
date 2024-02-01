@@ -56,6 +56,18 @@ in {
       displayManager.lightdm.enable = false;
     };
 
+    # starting this target will also start graphical-session targets
+    # NOTE: update dbus and systemd env variables so that gtk apps start without delay
+    _custom.hm.systemd.user.targets.wayland-session = {
+      Unit = {
+        Description = "wayland compositor session";
+        Documentation = [ "man:systemd.special(7)" ];
+        BindsTo = [ "graphical-session.target" ];
+        Wants = [ "graphical-session-pre.target" ];
+        After = [ "graphical-session-pre.target" ];
+      };
+    };
+
     # HACK: allow manually start graphical-session-pre.target
     systemd.user.targets.graphical-session-pre.unitConfig = {
       RefuseManualStart = "no";
