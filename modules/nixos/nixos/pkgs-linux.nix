@@ -24,6 +24,16 @@
           ln -sf ${prev.postman}/share $out/share
         '';
 
+        freetube = prev.runCommandNoCC "freetube" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.freetube}/bin/freetube $out/bin/freetube \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland"
+
+          ln -sf ${prev.freetube}/share $out/share
+        '';
+
         microsoft-edge = prev.runCommandNoCC "microsoft-edge" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
@@ -116,6 +126,7 @@
         # teamviewer
 
         # ELECTRON APPS
+        freetube
         bitwarden
         brave
         bruno
@@ -142,6 +153,10 @@
         postman = {
           name = "Postman";
           exec = "postman %U";
+        };
+        freetube = {
+          name = "Freetube";
+          exec = "freetube %U";
         };
         figma = {
           name = "Figma";
