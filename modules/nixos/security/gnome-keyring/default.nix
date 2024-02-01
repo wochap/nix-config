@@ -1,10 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.services.gnome-keyring;
-  gnomeKeyringInitStr = ''
-    eval $(gnome-keyring-daemon --start 2> /dev/null)
-  '';
+let cfg = config._custom.services.gnome-keyring;
 in {
   options._custom.services.gnome-keyring = { enable = lib.mkEnableOption { }; };
 
@@ -13,21 +9,34 @@ in {
 
     services.gnome.gnome-keyring.enable = true;
 
-    # NOTE: unlock gnome-keyring with greetd
+    # Automatic unlocking keyring without automatic login
     security.pam.services.greetd.enableGnomeKeyring = true;
 
+    xdg.portal.config.common."org.freedesktop.impl.portal.Secret" =
+      [ "gnome-keyring" ];
+
     _custom.hm = {
+      # GnuPG integration
       home.file.".gnupg/gpg-agent.conf".text = ''
         pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
       '';
 
-      services.gnome-keyring = {
-        enable = true;
-        components = [ "pkcs11" "secrets" "ssh" ];
-      };
+      # SSH integration
+      home.sessionVariables.SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/keyring/ssh";
 
-      programs.bash.initExtra = gnomeKeyringInitStr;
-      programs.zsh.initExtra = gnomeKeyringInitStr;
+      systemd.user.services.gnome-keyring = {
+        Unit = {
+          Description = "GNOME Keyring";
+          PartOf = [ "graphical-session-pre.target" ];
+        };
+        Service = {
+          # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
+          ExecStart =
+            "/run/wrappers/bin/gnome-keyring-daemon --start --foreground --components=secrets,ssh,pkcs11";
+          Restart = "on-abort";
+        };
+        Install = { WantedBy = [ "graphical-session-pre.target" ]; };
+      };
     };
   };
 }
