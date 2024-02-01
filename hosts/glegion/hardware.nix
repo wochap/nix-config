@@ -1,6 +1,7 @@
 { config, inputs, lib, pkgs, ... }:
 
 {
+  disabledModules = [ "services/hardware/auto-epp.nix" ];
   imports = [
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
@@ -10,6 +11,8 @@
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
     inputs.nixos-hardware.nixosModules.common-hidpi
+
+    "${inputs.unstable}/nixos/modules/services/hardware/auto-epp.nix"
   ];
 
   config = {
@@ -66,10 +69,25 @@
 
     zramSwap.enable = true;
 
+    hardware.bluetooth.powerOnBoot = false;
+
+    # Enable autosuspend for usb port
+    services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="048d", ATTR{idProduct}=="c104", ATTR{power/control}="auto"
+    '';
+
+    # AMD has better battery life with PPD over TLP:
+    services.auto-epp = {
+      enable = lib.mkDefault true;
+      package = pkgs.unstable.auto-epp;
+      settings.Settings.epp_state_for_BAT = "power";
+      settings.Settings.epp_state_for_AC = "balance_performance";
+    };
+
     # AMD has better battery life with PPD over TLP:
     # https://community.frame.work/t/responded-amd-7040-sleep-states/38101/13
-    services.power-profiles-daemon.enable = lib.mkDefault true;
-
+    # TODO: build from git main branch, for better support
+    # services.power-profiles-daemon.enable = lib.mkDefault true;
 
     services.fwupd.enable = true;
   };
