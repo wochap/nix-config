@@ -38,6 +38,7 @@
     ./de/wm/fonts
     ./de/wm/greetd
     ./de/wm/gtk
+    ./de/wm/logind
     ./de/wm/music
     ./de/wm/neofetch
     ./de/wm/networking
