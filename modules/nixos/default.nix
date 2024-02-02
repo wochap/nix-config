@@ -27,6 +27,10 @@
     ./de/wayland-wm/tofi
     ./de/wayland-wm/waybar
     ./de/wayland-wm/wayland-wm
+    ./de/wayland-wm/wayland-session
+    ./de/wayland-wm/swayidle
+    ./de/wayland-wm/swaylock
+    ./de/wayland-wm/cliphist
     ./de/wayland-wm/wob
     ./de/wm/audio
     ./de/wm/backlight

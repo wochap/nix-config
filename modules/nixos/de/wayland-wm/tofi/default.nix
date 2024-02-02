@@ -4,34 +4,14 @@ let
   cfg = config._custom.waylandWm;
   inherit (config._custom.globals) themeColors;
 
-  tofi-launcher = pkgs.writeTextFile {
-    name = "tofi-launcher";
-    destination = "/bin/tofi-launcher";
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-
-      tofi-drun --config "$HOME/.config/tofi/one-line" --drun-launch=false | xargs -I {} zsh -c {}
-    '';
-  };
-  tofi-powermenu = pkgs.writeTextFile {
-    name = "tofi-powermenu";
-    destination = "/bin/tofi-powermenu";
-    executable = true;
-    text = builtins.readFile ./scripts/tofi-powermenu.sh;
-  };
-  tofi-emoji = pkgs.writeTextFile {
-    name = "tofi-emoji";
-    destination = "/bin/tofi-emoji";
-    executable = true;
-    text = builtins.readFile ./scripts/tofi-emoji.sh;
-  };
-  tofi-calc = pkgs.writeTextFile {
-    name = "tofi-calc";
-    destination = "/bin/tofi-calc";
-    executable = true;
-    text = builtins.readFile ./scripts/tofi-calc.sh;
-  };
+  tofi-launcher =
+    pkgs.writeScriptBin "tofi-launcher" ./scripts/tofi-launcher.sh;
+  tofi-powermenu = pkgs.writeScriptBin "tofi-powermenu"
+    (builtins.readFile ./scripts/tofi-powermenu.sh);
+  tofi-emoji = pkgs.writeScriptBin "tofi-emoji"
+    (builtins.readFile ./scripts/tofi-emoji.sh);
+  tofi-calc =
+    pkgs.writeScriptBin "tofi-calc" (builtins.readFile ./scripts/tofi-calc.sh);
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {

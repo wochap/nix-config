@@ -3,13 +3,10 @@
 let cfg = config._custom.waylandWm;
 in {
   config = lib.mkIf cfg.enable {
-    environment = {
-      systemPackages = with pkgs;
-        [
-          swappy # image editor
-        ];
-    };
+    _custom.hm = {
+      home.packages = with pkgs; [ swappy ];
 
-    _custom.hm = { xdg.configFile."swappy/config".source = ./dotfiles/config; };
+      xdg.configFile."swappy/config".source = ./dotfiles/config;
+    };
   };
 }

@@ -23,4 +23,10 @@ rec {
   # source: https://github.com/nix-community/home-manager/issues/257#issuecomment-1646557848
   relativeSymlink = configDirectory: path:
     mkOutOfStoreSymlink (runtimePath configDirectory path);
+
+  mkWaylandService = lib.recursiveUpdate {
+    Unit.PartOf = [ "wayland-session.target" ];
+    Unit.After = [ "wayland-session.target" ];
+    Install.WantedBy = [ "wayland-session.target" ];
+  };
 }

@@ -6,7 +6,7 @@ let
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.modules) mkIf mkMerge;
 
-  cfg = config._custom.programs.waybar;
+  cfg = config.programs.waybar;
 
   jsonFormat = pkgs.formats.json { };
 
@@ -142,7 +142,7 @@ let
       };
     };
 in {
-  options._custom.programs.waybar = with lib.types; {
+  options.programs.waybar = with lib.types; {
     enable = mkEnableOption "Waybar";
 
     settings = mkOption {

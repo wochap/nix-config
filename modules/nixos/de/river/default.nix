@@ -68,7 +68,7 @@ in {
     };
 
     _custom.hm = {
-      _custom.programs.waybar = lib.mkIf cfg.isDefault {
+      programs.waybar = lib.mkIf cfg.isDefault {
         settings.mainBar = {
           modules-left = [ "river/tags" "river/mode" "keyboard-state" ];
           modules-center = [ "river/window" ];

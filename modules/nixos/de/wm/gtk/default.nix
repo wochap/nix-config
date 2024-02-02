@@ -4,13 +4,47 @@ let
   cfg = config._custom.wm.gtk;
   inherit (config._custom) globals;
   inherit (config._custom.globals) userName configDirectory displayServer;
-  isWayland = displayServer == "wayland";
   inherit (lib._custom) relativeSymlink;
   extraCss = ''
     @import url("file://${relativeSymlink configDirectory ./dotfiles/gtk.css}");
     @import url("file://${
       relativeSymlink configDirectory ./dotfiles/catppuccin-mocha.css
     }");
+  '';
+
+  # Apply GTK theme
+  # currently, there is some friction between Wayland and gtk:
+  # https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
+  # the suggested way to set gtk settings is with gsettings
+  # for gsettings to work, we need to tell it where the schemas are
+  # using the XDG_DATA_DIR environment variable
+  # run at the end of config
+  configure-gtk = let
+    schema = pkgs.gsettings-desktop-schemas;
+    datadir = "${schema}/share/gsettings-schemas/${schema.name}";
+  in pkgs.writeScriptBin "configure-gtk" ''
+    #!/usr/bin/env bash
+
+    export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
+
+    gnome_schema="org.gnome.desktop.interface"
+
+    gsettings set $gnome_schema cursor-theme ${globals.cursor.name} &
+    gsettings set $gnome_schema cursor-size ${toString globals.cursor.size} &
+
+    # import gtk settings to gsettings
+    config="''${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
+    if [ ! -f "$config" ]; then exit 1; fi
+
+    gtk_theme="$(grep 'gtk-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+    icon_theme="$(grep 'gtk-icon-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+    font_name="$(grep 'gtk-font-name' "$config" | sed 's/.*\s*=\s*//')"
+    gsettings set "$gnome_schema" gtk-theme "$gtk_theme"
+    gsettings set "$gnome_schema" icon-theme "$icon_theme"
+    gsettings set "$gnome_schema" font-name "$font_name"
+
+    # remove GTK window buttons
+    gsettings set org.gnome.desktop.wm.preferences button-layout ""
   '';
 in {
   options._custom.wm.gtk.enable = lib.mkEnableOption { };
@@ -23,6 +57,8 @@ in {
 
         awf # widget factory
         gnome.dconf-editor
+
+        configure-gtk
 
         globals.gtkTheme.package
         gnome.adwaita-icon-theme
@@ -53,21 +89,13 @@ in {
     programs.dconf.enable = true;
 
     _custom.hm = {
-      home.sessionVariables = lib.mkMerge [
-        {
-          # Hide dbus errors in GTK apps?
-          NO_AT_BRIDGE = "1";
+      home.sessionVariables = {
+        # Hide dbus errors in GTK apps?
+        NO_AT_BRIDGE = "1";
 
-          # https://wiki.gnome.org/Initiatives/CSD
-          GTK_CSD = "1";
-        }
-        (lib.mkIf isWayland {
-          # Force GTK to use wayland
-          GDK_BACKEND = "wayland,x11";
-
-          CLUTTER_BACKEND = "wayland";
-        })
-      ];
+        # https://wiki.gnome.org/Initiatives/CSD
+        GTK_CSD = "1";
+      };
 
       dconf.settings = {
         # Open GTK inspector with Ctrl + Shift + D

@@ -24,7 +24,7 @@ in {
         inputs.hyprland.homeManagerModules.default
       ];
 
-      _custom.programs.waybar = {
+      programs.waybar = {
         settings.mainBar = {
           modules-left =
             [ "hyprland/workspaces" "keyboard-state" "hyprland/submap" ];

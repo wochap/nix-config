@@ -74,6 +74,7 @@ in {
     _custom.wm.networking.enable = true;
     _custom.wm.plymouth.enable = true;
     _custom.wm.power-management.enable = true;
+    _custom.wm.power-management.enableLowBatteryNotification = true;
     _custom.wm.qt.enable = true;
     _custom.wm.xdg.enable = true;
 
@@ -92,6 +93,10 @@ in {
     _custom.services.virt.enable = true;
     _custom.services.waydroid.enable = false;
 
+    _custom.de.wayland-session.enable = true;
+    _custom.de.swayidle.enable = true;
+    _custom.de.cliphist.enable = true;
+    _custom.de.swaylock.enable = true;
     _custom.gnome.enable = false;
     _custom.wm.greetd.enable = true;
     _custom.de.logind.enable = true;
@@ -134,7 +139,7 @@ in {
     home-manager.users.${userName} = {
       home.stateVersion = "23.11";
 
-      # _custom.programs.waybar.settings.mainBar."modules-right" = lib.mkForce [
+      # programs.waybar.settings.mainBar."modules-right" = lib.mkForce [
       #   "tray"
       #   "custom/recorder"
       #   "idle_inhibitor"
@@ -147,7 +152,7 @@ in {
       #   "clock"
       # ];
 
-      # _custom.programs.waybar.settings.mainBar = {
+      # programs.waybar.settings.mainBar = {
       #   temperature = {
       #     hwmon-path-abs = "/sys/devices/platform/coretemp.0/hwmon";
       #     input-filename = "temp1_input";

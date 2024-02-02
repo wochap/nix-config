@@ -4,18 +4,10 @@ let
   cfg = config._custom.waylandWm;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
-  swww-random = pkgs.writeTextFile {
-    name = "swww-random";
-    destination = "/bin/swww-random";
-    executable = true;
-    text = builtins.readFile ./scripts/swww-random.sh;
-  };
-  swww-pick = pkgs.writeTextFile {
-    name = "swww-pick";
-    destination = "/bin/swww-pick";
-    executable = true;
-    text = builtins.readFile ./scripts/swww-pick.sh;
-  };
+  swww-random = pkgs.writeScriptBin "swww-random"
+    (builtins.readFile ./scripts/swww-random.sh);
+  swww-pick =
+    pkgs.writeScriptBin "swww-pick" (builtins.readFile ./scripts/swww-pick.sh);
   inherit (pkgs.unstable) swww;
 in {
   config = lib.mkIf cfg.enable {
@@ -54,8 +46,6 @@ in {
             "SWWW_TRANSITION_BEZIER"
           ];
           ExecStart = "${swww}/bin/swww init";
-          # ExecStartPost = "${swww}/bin/swww img $(${pkgs.coreutils}/bin/cat $HOME/.cache/swww/* | ${pkgs.coreutils}/bin/head -n 1)";
-          # ExecStartPost = "${swww-random}/bin/swww-random $HOME/Pictures/backgrounds/";
           ExecStop = "${swww}/bin/swww kill";
           Type = "oneshot";
           RemainAfterExit = true;

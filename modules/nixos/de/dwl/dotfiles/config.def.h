@@ -237,7 +237,7 @@ static const Key keys[] = {
   { MODKEY, Key_i, focusortogglescratch, {.v = kittyscratchcmd } },
 
   // Lock screen
-	{ MODKEY, Key_l, spawn, SHCMD("/etc/scripts/system/sway-lock.sh") },
+	{ MODKEY, Key_l, spawn, SHCMD("swaylock-start") },
 
   // Open power menu
   { MODKEY, Key_Escape, spawn, SHCMD("tofi-powermenu") },
@@ -252,10 +252,10 @@ static const Key keys[] = {
   { MODKEY, Key_c, spawn, SHCMD("tofi-calc") },
 
   // Show clipboard
-  { MODKEY, Key_v, spawn, SHCMD("/etc/scripts/system/clipboard-manager.sh --menu") },
+  { MODKEY, Key_v, spawn, SHCMD("clipboard-manager --menu") },
 
   // Clear clipboard
-  { MODKEY|MOD_SHIFT, Key_v, spawn, SHCMD("/etc/scripts/system/clipboard-manager.sh --clear") },
+  { MODKEY|MOD_SHIFT, Key_v, spawn, SHCMD("clipboard-manager --clear") },
 
   // Show emojis
   { MODKEY, Key_e, spawn, SHCMD("tofi-emoji") },
@@ -270,7 +270,7 @@ static const Key keys[] = {
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_Escape, spawn, SHCMD("dunstctl close-all") },
 
   // Toggle bar
-  { MODKEY, Key_b, spawn, SHCMD("/etc/scripts/waybar/waybar-toggle.sh") },
+  { MODKEY, Key_b, spawn, SHCMD("waybar-toggle") },
 
 
   // ### WM KEYBINDINGS

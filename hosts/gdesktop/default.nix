@@ -135,7 +135,7 @@ in {
     home-manager.users.${userName} = {
       home.stateVersion = "21.11";
 
-      _custom.programs.waybar.settings.mainBar."modules-right" = lib.mkForce [
+      programs.waybar.settings.mainBar."modules-right" = lib.mkForce [
         "tray"
         "custom/recorder"
         "idle_inhibitor"
@@ -148,7 +148,7 @@ in {
         "clock"
       ];
 
-      # _custom.programs.waybar.settings.mainBar = {
+      # programs.waybar.settings.mainBar = {
       #   temperature = {
       #     hwmon-path-abs = "/sys/devices/platform/coretemp.0/hwmon";
       #     input-filename = "temp1_input";

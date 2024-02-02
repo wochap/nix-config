@@ -3,14 +3,20 @@
 let
   inherit (config.boot.kernelPackages) cpupower;
   cfg = config._custom.wm.power-management;
+  battery-notification = pkgs.writeScriptBin "battery-notification"
+    (builtins.readFile ./scripts/battery-notification.sh);
 in {
-  options._custom.wm.power-management.enable = lib.mkEnableOption { };
+  options._custom.wm.power-management = {
+    enable = lib.mkEnableOption { };
+    enableLowBatteryNotification = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       cpupower-gui
       cpupower
       powertop # only use it to check current power usage
+      battery-notification
     ];
 
     # systemd service for suspense and resume commands
@@ -33,5 +39,18 @@ in {
         };
       };
     };
+
+    _custom.hm.systemd.user.services.battery-notification =
+      lib.mkIf cfg.enableLowBatteryNotification (lib._custom.mkWaylandService {
+        Unit.Description =
+          "A script that shows warning messages to the user when the battery is almost empty.";
+        Unit.Documentation = "https://github.com/rjekker/i3-battery-popup";
+        Service = {
+          PassEnvironment = [ "PATH" "DISPLAY" ];
+          ExecStart = "battery-notification -t 5s -L 15 -l 5 -n -i battery -D";
+          Restart = "on-failure";
+          KillMode = "mixed";
+        };
+      });
   };
 }

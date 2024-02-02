@@ -19,18 +19,11 @@ let
         in "${key}=${value'}";
     };
 
-  dunst-toggle-mode = pkgs.writeTextFile {
-    name = "dunst-toggle-mode";
-    destination = "/bin/dunst-toggle-mode";
-    executable = true;
-    text = builtins.readFile ./scripts/dunst-toggle-mode.sh;
-  };
-  dunst-play-notification-sound = pkgs.writeTextFile {
-    name = "dunst-play-notification-sound";
-    destination = "/bin/dunst-play-notification-sound";
-    executable = true;
-    text = builtins.readFile ./scripts/dunst-play-notification-sound.sh;
-  };
+  dunst-toggle-mode = pkgs.writeScriptBin "dunst-toggle-mode"
+    (builtins.readFile ./scripts/dunst-toggle-mode.sh);
+  dunst-play-notification-sound =
+    pkgs.writeScriptBin "dunst-play-notification-sound"
+    (builtins.readFile ./scripts/dunst-play-notification-sound.sh);
 in {
   config = lib.mkIf cfg.enable {
     # so it propagates to:

@@ -72,7 +72,7 @@ in {
         '';
       };
 
-      _custom.programs.waybar = lib.mkIf cfg.isDefault {
+      programs.waybar = lib.mkIf cfg.isDefault {
         settings.mainBar = {
           modules-left = [
             "sway/workspaces"

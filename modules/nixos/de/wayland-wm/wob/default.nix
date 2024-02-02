@@ -4,12 +4,8 @@ let
   cfg = config._custom.waylandWm;
   inherit (config._custom.globals) themeColors;
   inherit (lib._custom) unwrapHex;
-  wob-osd = pkgs.writeTextFile {
-    name = "wob-osd";
-    destination = "/bin/wob-osd";
-    executable = true;
-    text = builtins.readFile ./scripts/wob-osd.sh;
-  };
+  wob-osd =
+    pkgs.writeScriptBin "wob-osd" (builtins.readFile ./scripts/wob-osd.sh);
 in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
@@ -36,7 +32,7 @@ in {
     ];
 
     _custom.hm = {
-      home = { packages = with pkgs; [ wob wob-osd ]; };
+      home.packages = with pkgs; [ wob wob-osd ];
 
       xdg.configFile = {
         "wob/wob.ini".text = ''

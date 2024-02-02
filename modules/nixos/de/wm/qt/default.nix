@@ -38,7 +38,6 @@ in {
         DESKTOP_SESSION = "KDE";
 
         # QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-        QT_QPA_PLATFORM = "wayland;xcb";
       };
 
       qt = {

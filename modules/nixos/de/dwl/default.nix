@@ -99,7 +99,7 @@ in {
     services.xserver.displayManager.sessionPackages = [ dwl-final ];
 
     _custom.hm = lib.mkIf cfg.isDefault {
-      _custom.programs.waybar = {
+      programs.waybar = {
         settings.mainBar = lib.mkMerge ([{
           modules-left = (builtins.map (i: "custom/dwl_tag#${toString i}")
             (builtins.genList (i: i) 9))

@@ -20,6 +20,8 @@ in {
       zsh
     '';
 
+    services.xserver.displayManager.lightdm.enable = false;
+
     services.greetd = {
       enable = true;
       settings = {
