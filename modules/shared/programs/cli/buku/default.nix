@@ -1,17 +1,13 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.cli.buku;
+  cfg = config._custom.programs.buku;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
-  buku-fzf = pkgs.writeTextFile {
-    name = "buku-fzf";
-    destination = "/bin/buku-fzf";
-    executable = true;
-    text = builtins.readFile ./scripts/buku-fzf.sh;
-  };
+  buku-fzf =
+    pkgs.writeScriptBin "buku-fzf" (builtins.readFile ./scripts/buku-fzf.sh);
 in {
-  options._custom.cli.buku.enable = lib.mkEnableOption { };
+  options._custom.programs.buku.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

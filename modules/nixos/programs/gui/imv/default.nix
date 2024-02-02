@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.gui.imv;
+  cfg = config._custom.programs.imv;
   inherit (config._custom.globals) themeColors;
 in {
-  options._custom.gui.imv.enable = lib.mkEnableOption { };
+  options._custom.programs.imv.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

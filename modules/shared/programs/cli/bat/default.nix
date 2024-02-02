@@ -1,8 +1,8 @@
 { config, lib, inputs, ... }:
 
-let cfg = config._custom.cli.bat;
+let cfg = config._custom.programs.bat;
 in {
-  options._custom.cli.bat.enable = lib.mkEnableOption { };
+  options._custom.programs.bat.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

@@ -25,8 +25,8 @@ in {
     _custom.cli.buku.enable = true;
     _custom.cli.cht.enable = true;
     _custom.cli.git.enable = true;
-    _custom.cli.nix-alien.enable = true;
-    _custom.cli.nix-direnv.enable = true;
+    _custom.programs.nix-alien.enable = true;
+    _custom.programs.nix-direnv.enable = true;
     _custom.cli.ptsh.enable = true;
     _custom.cli.zsh.enable = true;
     _custom.cli.zsh.isDefault = true;

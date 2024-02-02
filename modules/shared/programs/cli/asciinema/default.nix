@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.cli.asciinema;
+let cfg = config._custom.programs.asciinema;
 in {
-  options._custom.cli.asciinema.enable = lib.mkEnableOption { };
+  options._custom.programs.asciinema.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

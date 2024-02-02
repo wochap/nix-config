@@ -40,12 +40,12 @@ in {
           fd
 
           # required by nvim-dap
-          _custom.customNodePackages.ts-node
+          _custom.nodePackages.ts-node
 
           # required by nvim-lspconfig
           # config.nur.repos.Freed-Wu.autotools-language-server
-          _custom.customNodePackages.typescript
-          _custom.customNodePackages."@styled/typescript-styled-plugin"
+          _custom.nodePackages.typescript
+          _custom.nodePackages."@styled/typescript-styled-plugin"
         ] ++ (lib.optionals (!isDarwin) [ unstable.neovide ]);
     };
 

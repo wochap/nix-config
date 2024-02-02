@@ -1,8 +1,8 @@
 { config, lib, inputs, ... }:
 
-let cfg = config._custom.cli.dircolors;
+let cfg = config._custom.programs.dircolors;
 in {
-  options._custom.cli.dircolors.enable = lib.mkEnableOption { };
+  options._custom.programs.dircolors.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

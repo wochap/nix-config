@@ -1,8 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let cfg = config._custom.cli.nix-alien;
+let cfg = config._custom.programs.nix-alien;
 in {
-  options._custom.cli.nix-alien.enable = lib.mkEnableOption { };
+  options._custom.programs.nix-alien.enable = lib.mkEnableOption { };
 
   imports = [ inputs.nix-ld.nixosModules.nix-ld ];
 

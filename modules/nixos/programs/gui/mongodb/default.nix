@@ -25,7 +25,7 @@ in {
       mongodb-compass
       mongodb-tools
       robo3t
-      _custom.customNodePackages."migrate-mongo-9.0.0"
+      _custom.nodePackages."migrate-mongo-9.0.0"
     ];
   };
 }

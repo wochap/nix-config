@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.cli.ptsh;
+let cfg = config._custom.programs.ptsh;
 in {
-  options._custom.cli.ptsh.enable = lib.mkEnableOption { };
+  options._custom.programs.ptsh.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

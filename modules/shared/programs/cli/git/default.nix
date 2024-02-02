@@ -1,11 +1,11 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  cfg = config._custom.cli.git;
+  cfg = config._custom.programs.git;
   catppuccinMochaTheme =
     lib._custom.fromYAML "${inputs.catppuccin-lazygit}/themes/mocha.yml";
 in {
-  options._custom.cli.git.enable = lib.mkEnableOption { };
+  options._custom.programs.git.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [

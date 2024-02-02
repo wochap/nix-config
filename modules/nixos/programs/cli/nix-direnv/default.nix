@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
-let cfg = config._custom.cli.nix-direnv;
+let cfg = config._custom.programs.nix-direnv;
 in {
-  options._custom.cli.nix-direnv.enable = lib.mkEnableOption { };
+  options._custom.programs.nix-direnv.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     programs.direnv = {

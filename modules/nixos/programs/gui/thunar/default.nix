@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.gui.thunar;
+let cfg = config._custom.programs.thunar;
 in {
-  options._custom.gui.thunar.enable = lib.mkEnableOption { };
+  options._custom.programs.thunar.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     programs.thunar = {

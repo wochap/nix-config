@@ -1,10 +1,10 @@
 { config, lib, inputs, ... }:
 
 let
-  cfg = config._custom.cli.lsd;
+  cfg = config._custom.programs.lsd;
   themeSettings = { };
 in {
-  options._custom.cli.lsd.enable = lib.mkEnableOption { };
+  options._custom.programs.lsd.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [

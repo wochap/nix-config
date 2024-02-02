@@ -1,8 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let cfg = config._custom.gui.zathura;
+let cfg = config._custom.programs.zathura;
 in {
-  options._custom.gui.zathura.enable = lib.mkEnableOption { };
+  options._custom.programs.zathura.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs;
