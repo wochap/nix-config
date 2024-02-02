@@ -19,35 +19,35 @@
     ./de/kde
     ./de/river
     ./de/sway
-    ./de/wayland-wm/cliphist
-    ./de/wayland-wm/dunst
-    ./de/wayland-wm/gammastep
-    ./de/wayland-wm/kanshi
-    ./de/wayland-wm/swayidle
-    ./de/wayland-wm/swaylock
-    ./de/wayland-wm/swww
-    ./de/wayland-wm/tofi
-    ./de/wayland-wm/utils
-    ./de/wayland-wm/waybar
-    ./de/wayland-wm/wayland-session
-    ./de/wayland-wm/wob
-    ./de/wm/audio
-    ./de/wm/backlight
-    ./de/wm/bluetooth
-    ./de/wm/calendar
-    ./de/wm/cursor
-    ./de/wm/dbus
-    ./de/wm/email
-    ./de/wm/fonts
-    ./de/wm/gtk
-    ./de/wm/logind
-    ./de/wm/music
-    ./de/wm/neofetch
-    ./de/wm/networking
-    ./de/wm/plymouth
-    ./de/wm/power-management
-    ./de/wm/qt
-    ./de/wm/xdg
+    ./de/wm-addons/audio
+    ./de/wm-addons/backlight
+    ./de/wm-addons/bluetooth
+    ./de/wm-addons/calendar
+    ./de/wm-addons/cursor
+    ./de/wm-addons/dbus
+    ./de/wm-addons/email
+    ./de/wm-addons/fonts
+    ./de/wm-addons/gtk
+    ./de/wm-addons/logind
+    ./de/wm-addons/music
+    ./de/wm-addons/neofetch
+    ./de/wm-addons/networking
+    ./de/wm-addons/plymouth
+    ./de/wm-addons/power-management
+    ./de/wm-addons/qt
+    ./de/wm-addons/xdg
+    ./de/wm-wayland-addons/cliphist
+    ./de/wm-wayland-addons/dunst
+    ./de/wm-wayland-addons/gammastep
+    ./de/wm-wayland-addons/kanshi
+    ./de/wm-wayland-addons/swayidle
+    ./de/wm-wayland-addons/swaylock
+    ./de/wm-wayland-addons/swww
+    ./de/wm-wayland-addons/tofi
+    ./de/wm-wayland-addons/utils
+    ./de/wm-wayland-addons/waybar
+    ./de/wm-wayland-addons/wayland-session
+    ./de/wm-wayland-addons/wob
 
     ./globals
 
