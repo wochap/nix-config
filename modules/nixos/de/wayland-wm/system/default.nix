@@ -152,7 +152,7 @@ in {
       # swayidle
       services.swayidle = {
         enable = true;
-        systemdTarget = "graphical-session.target";
+        systemdTarget = "wayland-session.target";
         events = [
           {
             event = "before-sleep";
@@ -180,9 +180,9 @@ in {
 
       systemd.user.services = let
         mkService = lib.recursiveUpdate {
-          Unit.PartOf = [ "graphical-session.target" ];
-          Unit.After = [ "graphical-session.target" ];
-          Install.WantedBy = [ "graphical-session.target" ];
+          Unit.PartOf = [ "wayland-session.target" ];
+          Unit.After = [ "wayland-session.target" ];
+          Install.WantedBy = [ "wayland-session.target" ];
         };
       in {
         swayidle = {

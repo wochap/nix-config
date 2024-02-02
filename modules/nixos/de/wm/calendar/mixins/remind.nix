@@ -37,8 +37,8 @@ in {
         Unit = {
           Description = "Remind is a sophisticated calendar and alarm program.";
           Documentation = "https://dianne.skoll.ca/projects/remind/";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
+          PartOf = [ "wayland-session.target" ];
+          After = [ "wayland-session.target" ];
         };
 
         Service = {
@@ -47,7 +47,7 @@ in {
           KillMode = "mixed";
         };
 
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Install = { WantedBy = [ "wayland-session.target" ]; };
       };
     };
   };

@@ -69,8 +69,8 @@ in {
         Unit = {
           Description = "Lightweight and customizable notification daemon";
           Documentation = "https://github.com/dunst-project/dunst";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
+          PartOf = [ "wayland-session.target" ];
+          After = [ "wayland-session.target" ];
         };
 
         Service = {
@@ -81,7 +81,7 @@ in {
           ExecStart = "${pkgs.dunst}/bin/dunst";
         };
 
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Install = { WantedBy = [ "wayland-session.target" ]; };
       };
     };
   };

@@ -37,8 +37,8 @@ in {
           Description =
             "Highly customizable Wayland bar for Sway and Wlroots based compositors.";
           Documentation = "https://github.com/Alexays/Waybar/wiki";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
+          PartOf = [ "wayland-session.target" ];
+          After = [ "wayland-session.target" ];
         };
 
         Service = {
@@ -49,7 +49,7 @@ in {
           KillMode = "mixed";
         };
 
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Install = { WantedBy = [ "wayland-session.target" ]; };
       };
     };
   };

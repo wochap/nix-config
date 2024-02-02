@@ -9,7 +9,7 @@ in {
     _custom.hm.systemd.user.services.mailnotify = {
       Unit = {
         Description = "mailnotify daemon";
-        PartOf = [ "graphical-session.target" ];
+        PartOf = [ "wayland-session.target" ];
       };
 
       Service = {
@@ -22,7 +22,7 @@ in {
         RestartSec = 5;
       };
 
-      Install = { WantedBy = [ "graphical-session.target" ]; };
+      Install = { WantedBy = [ "wayland-session.target" ]; };
     };
   };
 }

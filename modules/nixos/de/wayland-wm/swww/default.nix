@@ -39,8 +39,8 @@ in {
         Unit = {
           Description = "A Solution to your Wayland Wallpaper Woes";
           Documentation = "https://github.com/Horus645/swww";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
+          PartOf = [ "wayland-session.target" ];
+          After = [ "wayland-session.target" ];
         };
 
         Service = {
@@ -62,7 +62,7 @@ in {
           KillMode = "mixed";
         };
 
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Install = { WantedBy = [ "wayland-session.target" ]; };
       };
     };
   };

@@ -16,9 +16,9 @@ in {
 
     systemd.user.services.polkit-gnome-authentication-agent-1 = {
       description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
+      wantedBy = [ "wayland-session.target" ];
+      wants = [ "wayland-session.target" ];
+      after = [ "wayland-session.target" ];
 
       serviceConfig = {
         Type = "simple";

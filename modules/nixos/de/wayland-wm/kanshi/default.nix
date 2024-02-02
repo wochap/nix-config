@@ -8,7 +8,7 @@ in {
     _custom.hm = {
       services.kanshi = {
         enable = true;
-        systemdTarget = "graphical-session.target";
+        systemdTarget = "wayland-session.target";
         extraConfig = ''
           profile docked {
             output "Apple Computer Inc Color LCD Unknown" disable
