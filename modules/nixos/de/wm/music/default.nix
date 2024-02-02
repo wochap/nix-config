@@ -2,10 +2,9 @@
 
 let
   cfg = config._custom.wm.music;
-  inherit (config._custom.globals) userName;
+  inherit (config._custom.globals) userName configDirectory;
   hmConfig = config.home-manager.users.${userName};
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
-  inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
 in {
   options._custom.wm.music.enable = lib.mkEnableOption { };
@@ -32,20 +31,8 @@ in {
         "cava/config".source =
           relativeSymlink configDirectory ./dotfiles/cava/config;
 
-        # "ncmpcpp/ncmpcpp-ueberzug/fallback.jpg".source =
-        #   ../../../mixins/lightdm/assets/wallpaper.jpg;
         "ncmpcpp/config".source =
           relativeSymlink configDirectory ./dotfiles/ncmpcpp/config;
-        "ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh" = {
-          recursive = true;
-          executable = true;
-          source = ./dotfiles/ncmpcpp/ncmpcpp-ueberzug/ncmpcpp_cover_art.sh;
-        };
-        "ncmpcpp/ncmpcpp-ueberzug/ncmpcpp-ueberzug" = {
-          recursive = true;
-          executable = true;
-          source = ./dotfiles/ncmpcpp/ncmpcpp-ueberzug/ncmpcpp-ueberzug.sh;
-        };
       };
 
       # media keys

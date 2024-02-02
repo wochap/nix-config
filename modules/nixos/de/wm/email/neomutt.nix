@@ -1,6 +1,5 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, lib, inputs, ... }:
 
-with pkgs;
 let
   cfg = config._custom.wm.email;
   inherit (config._custom.globals) userName;

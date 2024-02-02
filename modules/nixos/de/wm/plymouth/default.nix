@@ -5,7 +5,6 @@ in {
   options._custom.wm.plymouth.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-
     boot.plymouth = {
       enable = true;
       font = "${pkgs.iosevka}/share/fonts/truetype/iosevka-regular.ttf";

@@ -6,6 +6,7 @@ let
 in {
   options._custom.wm.greetd = {
     enable = lib.mkEnableOption { };
+    enableAutoLogin = lib.mkEnableOption { };
     cmd = lib.mkOption {
       type = lib.types.str;
       default = "";
@@ -19,23 +20,14 @@ in {
       zsh
     '';
 
-    # Enable automatic login for the user.
-    # services.xserver.displayManager.autoLogin.enable = true;
-    # services.xserver.displayManager.autoLogin.user = userName;
-
-    # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-    # systemd.services."getty@tty1".enable = false;
-    # systemd.services."autovt@tty1".enable = false;
-
     services.greetd = {
       enable = true;
       settings = {
-        # autologin
         # TODO: autologin doesn't unlock gnome keyring
-        # initial_session = {
-        #   command = cfg.cmd;
-        #   user = userName;
-        # };
+        initial_session = lib.mkIf cfg.enableAutoLogin {
+          command = cfg.cmd;
+          user = userName;
+        };
         default_session = {
           command = ''
             ${pkgs.greetd.tuigreet}/bin/tuigreet --user-menu --window-padding 2 --time --remember --cmd "${cfg.cmd}"'';

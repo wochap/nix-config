@@ -233,4 +233,11 @@
     "text/html"
     "text/xml"
   ];
+  web = [
+    "default-web-browser"
+    "x-scheme-handler/chrome"
+    "x-scheme-handler/http"
+    "x-scheme-handler/https"
+    "x-scheme-handler/unknown"
+  ];
 }

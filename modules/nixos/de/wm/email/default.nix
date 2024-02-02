@@ -2,15 +2,10 @@
 
 let
   cfg = config._custom.wm.email;
-  offlinemsmtp-toggle-mode = pkgs.writeTextFile {
-    name = "offlinemsmtp-toggle-mode";
-    destination = "/bin/offlinemsmtp-toggle-mode";
-    executable = true;
-    text = builtins.readFile ./scripts/offlinemsmtp-toggle-mode.sh;
-  };
+  offlinemsmtp-toggle-mode = pkgs.writeScriptBin "offlinemsmtp-toggle-mode"
+    (builtins.readFile ./scripts/offlinemsmtp-toggle-mode.sh);
 in {
   imports = [
-    # ./contact-query.nix
     ./accounts
     ./mailcap.nix
     ./mailnotify.nix
@@ -23,7 +18,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [ offlinemsmtp-toggle-mode ];
+      home.packages = [ offlinemsmtp-toggle-mode ];
 
       services.imapnotify.enable = true;
       programs.msmtp.enable = true;

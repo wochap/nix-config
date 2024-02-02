@@ -8,15 +8,7 @@ let
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      nixpkgs.overlays = [
-        # Workaround from https://github.com/NixOS/nixpkgs/issues/205014
-        (self: super: {
-          khal =
-            super.khal.overridePythonAttrs (attrs: rec { doCheck = false; });
-        })
-      ];
-
-      home.packages = [ pkgs.khal ];
+      home.packages = with pkgs; [ khal ];
 
       xdg.configFile."khal/config".text = ''
         [calendars]

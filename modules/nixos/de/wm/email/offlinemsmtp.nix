@@ -1,11 +1,9 @@
 { config, pkgs, lib, ... }:
 
-with pkgs;
 let
   cfg = config._custom.wm.email;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
-  inherit (pkgs._custom) offlinemsmtp;
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
@@ -17,7 +15,7 @@ in {
 
         Service = {
           ExecStart = ''
-            ${offlinemsmtp}/bin/offlinemsmtp \
+            ${pkgs._custom.offlinemsmtp}/bin/offlinemsmtp \
               --daemon \
               --loglevel DEBUG \
               --file ${hmConfig.xdg.configHome}/msmtp/config \

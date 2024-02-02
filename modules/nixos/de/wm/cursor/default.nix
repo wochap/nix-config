@@ -1,15 +1,13 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 let
   inherit (config._custom) globals;
   cfg = config._custom.wm.cursor;
 in {
-  options._custom.wm.cursor = {
-    enable = lib.mkEnableOption "setup gtk theme and apps";
-  };
+  options._custom.wm.cursor.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ globals.cursor.package ];
+    environment.systemPackages = [ globals.cursor.package ];
 
     _custom.hm = {
       home.pointerCursor = {

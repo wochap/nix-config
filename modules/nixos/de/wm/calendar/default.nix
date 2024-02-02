@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ lib, ... }:
 
 {
   options._custom.wm.calendar.enable = lib.mkEnableOption { };

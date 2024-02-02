@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 let cfg = config._custom.wm.backlight;
 in {
@@ -6,18 +6,12 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = with pkgs; [ brightnessctl ];
-
-      etc = {
-        "scripts/backlight.sh" = {
-          source = ./scripts/backlight.sh;
-          mode = "0755";
-        };
-        "scripts/kbd-backlight.sh" = {
-          source = ./scripts/kbd-backlight.sh;
-          mode = "0755";
-        };
-      };
+      systemPackages = with pkgs; [
+        brightnessctl
+        (writeScriptBin "backlight" (builtins.readFile ./scripts/backlight.sh))
+        (writeScriptBin "kbd-backlight"
+          (builtins.readFile ./scripts/kbd-backlight.sh))
+      ];
     };
   };
 }

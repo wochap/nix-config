@@ -29,9 +29,8 @@ in {
           # cascadia-code
         ];
       }
-      (if isDarwin then {
-        enableFontDir = true;
-      } else {
+      (lib.mkIf isDarwin { enableFontDir = true; })
+      (lib.mkIf (!isDarwin) {
         fontDir.enable = true;
         enableDefaultPackages = true;
         packages = with pkgs; [
@@ -62,10 +61,7 @@ in {
       })
     ];
 
-    _custom.hm = {
-      home.file = {
-        ".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
-      };
-    };
+    _custom.hm.home.file.".local/share/fonts/woos.ttf".source =
+      ./assets/woos/fonts/woos.ttf;
   };
 }

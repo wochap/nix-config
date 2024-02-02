@@ -15,7 +15,6 @@ let
   '';
 in {
   config = lib.mkIf cfg.enable {
-
     _custom.hm = {
       home.packages = with pkgs; [ remind ];
 

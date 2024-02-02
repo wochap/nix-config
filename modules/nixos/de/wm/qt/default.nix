@@ -17,24 +17,12 @@ in {
         # for example in filelight, without it the app looks weird
         # https://github.com/NixOS/nixpkgs/pull/202990#issuecomment-1328068486
         libsForQt5.qqc2-desktop-style
-        libsForQt5.qqc2-breeze-style # required?
 
-        libsForQt5.qt5.qtwayland
-
+        # themes
         lightly-qt
         libsForQt5.breeze-icons
         libsForQt5.breeze-qt5
-
-        # required for some QT apps
-        libsForQt5.kirigami2
-        libsForQt5.kirigami-addons
-        libsForQt5.kirigami-gallery
       ];
-      variables = {
-        DESKTOP_SESSION = "KDE";
-        # QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-        QT_QPA_PLATFORM = "wayland;xcb";
-      };
     };
 
     qt = {
@@ -43,16 +31,20 @@ in {
     };
 
     _custom.hm = {
-      qt = {
-        enable = true;
-        # the following options requires unstable nixpkgs
-        # platformTheme = "qtct";
+      home.sessionVariables = {
+        # Fake running KDE
+        # https://wiki.archlinux.org/title/qt#Configuration_of_Qt_5_applications_under_environments_other_than_KDE_Plasma
+        # https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications#The_KDE_Plasma_XDG_Desktop_Portal_is_not_being_used
+        DESKTOP_SESSION = "KDE";
+
+        # QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+        QT_QPA_PLATFORM = "wayland;xcb";
       };
 
-      # HACK: only home manager unstable supports qtct as platformTheme
-      home.sessionVariables = { QT_QPA_PLATFORMTHEME = "qt5ct"; };
-      home.packages = [ pkgs.libsForQt5.qt5ct ];
-      xsession.importedVariables = [ "QT_QPA_PLATFORMTHEME" ];
+      qt = {
+        enable = true;
+        platformTheme = "qtct";
+      };
     };
   };
 }

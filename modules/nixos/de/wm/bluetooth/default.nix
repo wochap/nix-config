@@ -13,6 +13,8 @@ in {
         bluez
         bluez-tools
       ];
+
+      shellAliases.btui = "bluetuith";
     };
 
     # Enable bluetooth
