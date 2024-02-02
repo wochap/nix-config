@@ -63,8 +63,6 @@ in {
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "nixpkgs-python.cachix.org-1:hxjI7pFxTyuTHn2NkvWCrAUcNZLNS3ZAvfYNuYifcEU="
-      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-      "colemickens.cachix.org-1:bNrJ6FfMREB4bd4BOjEN85Niu8VcPdQe4F4KxVsb/I4="
     ];
     substituters = [
       "https://cache.nixos.org"
@@ -73,8 +71,6 @@ in {
       "https://nixpkgs-wayland.cachix.org"
       "https://hyprland.cachix.org"
       "https://nixpkgs-python.cachix.org"
-      "https://cache.garnix.io"
-      "https://colemickens.cachix.org"
       # "http://192.168.1.100:8080"
     ];
 
