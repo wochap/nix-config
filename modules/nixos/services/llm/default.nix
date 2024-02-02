@@ -1,8 +1,8 @@
 { config, pkgs, inputs, lib, ... }:
 
-let cfg = config._custom.llm;
+let cfg = config._custom.services.llm;
 in {
-  options._custom.llm = {
+  options._custom.services.llm = {
     enable = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
   };

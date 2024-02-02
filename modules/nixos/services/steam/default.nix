@@ -2,7 +2,7 @@
 
 let cfg = config._custom.services.steam;
 in {
-  options._custom.services.steam = { enable = lib.mkEnableOption { }; };
+  options._custom.services.steam.enable = lib.mkEnableOption { };
 
   # inspiration: https://www.reddit.com/r/NixOS/comments/15dokde/problems_with_steam_and_gamescope_in_hyprland/
   config = lib.mkIf cfg.enable {

@@ -5,7 +5,7 @@ let
   run-videochat = pkgs.writeScriptBin "run-videochat"
     (builtins.readFile ./scripts/run-videochat.sh);
 in {
-  options._custom.services.ipwebcam = { enable = lib.mkEnableOption { }; };
+  options._custom.services.ipwebcam.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     boot = {

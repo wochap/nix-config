@@ -74,23 +74,23 @@ in {
     _custom.wm.qt.enable = true;
     _custom.wm.xdg.enable = true;
 
-    _custom.llm.enable = true;
-    _custom.llm.enableNvidia = true;
 
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;
     _custom.services.docker.enable = true;
     _custom.services.docker.enableNvidia = true;
     _custom.services.flatpak.enable = false;
+    _custom.services.gnome-keyring.enable = true;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
+    _custom.services.llm.enable = true;
+    _custom.services.llm.enableNvidia = true;
     _custom.services.mongodb.enable = true;
     _custom.services.ssh.enable = true;
     _custom.services.steam.enable = true;
+    _custom.services.syncthing.enable = true;
     _custom.services.virt.enable = true;
     _custom.services.waydroid.enable = false;
-    _custom.services.gnome-keyring.enable = true;
-    _custom.services.syncthing.enable = true;
 
     _custom.gnome.enable = false;
     _custom.wm.greetd.enable = true;

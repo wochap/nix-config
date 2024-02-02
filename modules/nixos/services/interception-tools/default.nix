@@ -15,9 +15,7 @@ let
             EV_KEY: [KEY_CAPSLOCK, KEY_LEFTSHIFT, KEY_RIGHTSHIFT]
     '';
 in {
-  options._custom.services.interception-tools = {
-    enable = lib.mkEnableOption { };
-  };
+  options._custom.services.interception-tools.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     services.interception-tools.enable = true;
