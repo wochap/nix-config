@@ -8,7 +8,7 @@
         "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
       isNormalUser = true;
       isSystemUser = false;
-      extraGroups = [ "audio" "disk" "input" "storage" "video" ];
+      extraGroups = [ "disk" "input" "storage" "video" ];
     };
 
     _custom.hm.home.file = {

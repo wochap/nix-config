@@ -5,6 +5,8 @@ in {
   options._custom.wm.audio.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    _custom.user.extraGroups = [ "audio" ];
+
     hardware.pulseaudio.enable = false;
 
     # suppress background noice
@@ -22,6 +24,7 @@ in {
 
       wireplumber.enable = true;
     };
+
     # I copy the following from other user config
     # systemd.user.services = {
     #   pipewire-pulse = {
