@@ -11,7 +11,12 @@ in {
           cat = "bat --plain";
           bathelp = "bat --plain --language=help";
         };
-        sessionVariables = { MANPAGER = "sh -c 'col -bx | bat -l man -p'"; };
+        sessionVariables = {
+          # Use bat in man pager
+          # source: https://github.com/sharkdp/bat?tab=readme-ov-file#man
+          MANPAGER = "sh -c 'col -bx | bat -l man -p'";
+          MANROFFOPT = "-c";
+        };
       };
 
       programs.bat = {
