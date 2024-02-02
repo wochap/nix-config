@@ -24,7 +24,7 @@ case $selected in
   systemctl suspend
   ;;
 "$logout")
-  systemctl --user stop graphical-session.target
+  systemctl --user stop wayland-session.target
 
   if [[ "$XDG_SESSION_DESKTOP" == 'sway' ]]; then
     swaymsg exit
