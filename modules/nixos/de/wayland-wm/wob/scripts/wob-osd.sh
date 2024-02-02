@@ -12,9 +12,9 @@ elif [[ "$1" == "--volume-toggle" ]]; then
     pactl get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' >$WOBSOCK
   fi
 elif [[ "$1" == "--backlight" ]]; then
-  /etc/scripts/backlight.sh "$2" | grep "Current brightness" | awk '{ sub(/\(/, "", $4); print $4 }' | cut -d "%" -f1 >$WOBSOCK
+  backlight "$2" | grep "Current brightness" | awk '{ sub(/\(/, "", $4); print $4 }' | cut -d "%" -f1 >$WOBSOCK
 elif [[ "$1" == "--kbd-backlight" ]]; then
-  /etc/scripts/kbd-backlight.sh "$2" | grep "Current brightness" | awk '{ sub(/\(/, "", $4); print $4 }' | cut -d "%" -f1 >$WOBSOCK
+  kbd-backlight "$2" | grep "Current brightness" | awk '{ sub(/\(/, "", $4); print $4 }' | cut -d "%" -f1 >$WOBSOCK
 else
   echo -e "Available Options : --volume --volume-toggle --backlight --kbd-backlight"
 fi
