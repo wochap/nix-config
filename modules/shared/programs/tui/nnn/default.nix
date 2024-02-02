@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.tui.nnn;
+  cfg = config._custom.programs.nnn;
   isDarwin = pkgs.stdenv.isDarwin;
 in {
-  options._custom.tui.nnn.enable = lib.mkEnableOption { };
+  options._custom.programs.nnn.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.tui.mangal;
+let cfg = config._custom.programs.mangal;
 in {
-  options._custom.tui.mangal.enable = lib.mkEnableOption { };
+  options._custom.programs.mangal.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

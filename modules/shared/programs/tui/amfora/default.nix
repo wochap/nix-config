@@ -1,8 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let cfg = config._custom.tui.amfora;
+let cfg = config._custom.programs.amfora;
 in {
-  options._custom.tui.amfora.enable = lib.mkEnableOption { };
+  options._custom.programs.amfora.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ amfora ];

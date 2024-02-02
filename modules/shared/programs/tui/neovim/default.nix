@@ -1,14 +1,14 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-  cfg = config._custom.tui.neovim;
+  cfg = config._custom.programs.neovim;
   isDarwin = pkgs.stdenv.isDarwin;
 in {
   imports = [ ./options.nix ];
 
   config = lib.mkIf cfg.enable {
-    _custom.tui.neovim.setBuildEnv = true;
-    _custom.tui.neovim.withBuildTools = true;
+    _custom.programs.neovim.setBuildEnv = true;
+    _custom.programs.neovim.withBuildTools = true;
 
     nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
 
@@ -49,15 +49,15 @@ in {
         ] ++ (lib.optionals (!isDarwin) [ unstable.neovide ]);
     };
 
-    programs.zsh.shellAliases = {
-      nv = ''run-without-kpadding nvim "$@"'';
-      lc = "run-without-kpadding nvim leetcode.nvim";
-    };
-
     _custom.hm = {
       home.sessionVariables = {
         EDITOR = "nvim";
         VISUAL = "nvim";
+      };
+
+      programs.zsh.shellAliases = {
+        nv = ''run-without-kpadding nvim "$@"'';
+        lc = "run-without-kpadding nvim leetcode.nvim";
       };
     };
   };

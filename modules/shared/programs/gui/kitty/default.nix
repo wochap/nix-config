@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  cfg = config._custom.gui.kitty;
+  cfg = config._custom.programs.kitty;
   inherit (config._custom.globals) themeColors;
   inherit (lib._custom) relativeSymlink;
 
@@ -20,22 +20,9 @@ let
     '';
   };
 in {
-  options._custom.gui.kitty.enable = lib.mkEnableOption { };
+  options._custom.programs.kitty.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment = {
-      etc = {
-        "config/kitty-session-tripper.conf".source =
-          ./dotfiles/kitty-session-tripper.conf;
-        "config/kitty-session-booker.conf".source =
-          ./dotfiles/kitty-session-booker.conf;
-        "config/kitty-session-cinefest.conf".source =
-          ./dotfiles/kitty-session-cinefest.conf;
-        "config/kitty-session-nix-config.conf".source =
-          ./dotfiles/kitty-session-nix-config.conf;
-      };
-    };
-
     _custom.hm = {
       home = {
         packages = with pkgs; [ kitty ];
@@ -72,7 +59,7 @@ in {
 
           include ${
             relativeSymlink config._custom.globals.configDirectory
-            ./dotfiles/kitty-common.conf
+            ./dotfiles/kitty.conf
           }
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;

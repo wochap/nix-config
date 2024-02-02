@@ -3,12 +3,12 @@
 
 with lib;
 let
-  cfg = config._custom.tui.neovim;
+  cfg = config._custom.programs.neovim;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
 in {
   options = {
-    _custom.tui.neovim = {
+    _custom.programs.neovim = {
       enable = mkEnableOption { };
       setBuildEnv = mkEnableOption ''
         Sets environment variables that resolve build dependencies as required by `mason.nvim` and `nvim-treesitter`

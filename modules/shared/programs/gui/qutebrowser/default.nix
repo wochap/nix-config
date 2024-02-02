@@ -1,8 +1,8 @@
 { config, inputs, lib, ... }:
 
-let cfg = config._custom.gui.qutebrowser;
+let cfg = config._custom.programs.qutebrowser;
 in {
-  options._custom.gui.qutebrowser.enable = lib.mkEnableOption { };
+  options._custom.programs.qutebrowser.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

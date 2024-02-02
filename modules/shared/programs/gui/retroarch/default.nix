@@ -1,11 +1,11 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.gui.retroarch;
+  cfg = config._custom.programs.retroarch;
   retroarchFinal = with pkgs;
     (unstable.retroarch.override { cores = with libretro; [ bsnes ]; });
 in {
-  options._custom.gui.retroarch.enable = lib.mkEnableOption { };
+  options._custom.programs.retroarch.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = { systemPackages = [ retroarchFinal ]; };

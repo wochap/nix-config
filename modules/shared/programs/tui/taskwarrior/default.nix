@@ -1,13 +1,13 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.tui.taskwarrior;
+  cfg = config._custom.programs.taskwarrior;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   timewarriorConfigPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
 in {
-  options._custom.tui.taskwarrior.enable = lib.mkEnableOption { };
+  options._custom.programs.taskwarrior.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
@@ -24,7 +24,7 @@ in {
         ${builtins.readFile ./dotfiles/timewarrior.cfg}
       '';
 
-      home.shellAliases = { twt = "taskwarrior-tui"; };
+      home.shellAliases.twt = "taskwarrior-tui";
 
       programs.taskwarrior = {
         enable = true;

@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  cfg = config._custom.cli.zsh;
+  cfg = config._custom.programs.zsh;
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
 
@@ -23,7 +23,7 @@ let
     '';
   };
 in {
-  options._custom.cli.zsh = {
+  options._custom.programs.zsh = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
   };

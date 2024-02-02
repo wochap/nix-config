@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.cli.youtube;
+let cfg = config._custom.programs.youtube;
 in {
-  options._custom.cli.youtube.enable = lib.mkEnableOption { };
+  options._custom.programs.youtube.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

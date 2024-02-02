@@ -1,11 +1,11 @@
 { config, lib, pkgs, inputs, ... }:
 
-let cfg = config._custom.gui.discord;
+let cfg = config._custom.programs.discord;
 in {
-  options._custom.gui.discord.enable = lib.mkEnableOption { };
+  options._custom.programs.discord.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment = { systemPackages = with pkgs; [ betterdiscordctl discord ]; };
+    environment.systemPackages = with pkgs; [ betterdiscordctl discord ];
 
     _custom.hm = {
       xdg.configFile = {

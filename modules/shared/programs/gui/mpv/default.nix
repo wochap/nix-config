@@ -1,14 +1,14 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  cfg = config._custom.gui.mpv;
+  cfg = config._custom.programs.mpv;
   isWayland = config._custom.globals.displayServer == "wayland";
 in {
-  options._custom.gui.mpv.enable = lib.mkEnableOption { };
+  options._custom.programs.mpv.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.sessionVariables = { VIDEO = "mpv"; };
+      home.sessionVariables.VIDEO = "mpv";
 
       home.packages = with pkgs;
         [

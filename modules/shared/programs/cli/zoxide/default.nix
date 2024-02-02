@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
-let cfg = config._custom.cli.zoxide;
+let cfg = config._custom.programs.zoxide;
 in {
-  options._custom.cli.zoxide.enable = lib.mkEnableOption { };
+  options._custom.programs.zoxide.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

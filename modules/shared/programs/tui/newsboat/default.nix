@@ -1,13 +1,13 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  cfg = config._custom.tui.newsboat;
+  cfg = config._custom.programs.newsboat;
 
   qndl = pkgs.writeShellScriptBin "qndl" (builtins.readFile ./scripts/qndl.sh);
   linkhandler = pkgs.writeShellScriptBin "linkhandler"
     (builtins.readFile ./scripts/linkhandler.sh);
 in {
-  options._custom.tui.newsboat.enable = lib.mkEnableOption { };
+  options._custom.programs.newsboat.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  localPkgs = rec {
+  customPkgs = rec {
     advcpmv = pkgs.callPackage ./advcpmv { };
     dunst-nctui = pkgs.callPackage ./dunst-nctui { };
     dwl-state = pkgs.callPackage ./dwl-state { };
@@ -17,11 +17,12 @@ let
     ptsh = pkgs.callPackage ./ptsh { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };
-    nodePackages = lib.dontRecurseIntoAttrs
-      (pkgs.callPackage ./node-packages {
-        nodejs = pkgs.prevstable-nodejs.nodejs_20;
-      });
+    nodePackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./node-packages {
+      nodejs = pkgs.prevstable-nodejs.nodejs_20;
+    });
+    pythonPackages =
+      lib.dontRecurseIntoAttrs (pkgs.callPackage ./python-packages { });
   };
 in {
-  config = { nixpkgs.overlays = [ (final: prev: { _custom = localPkgs; }) ]; };
+  config = { nixpkgs.overlays = [ (final: prev: { _custom = customPkgs; }) ]; };
 }

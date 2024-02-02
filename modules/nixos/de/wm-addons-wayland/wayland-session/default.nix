@@ -45,6 +45,9 @@ in {
         # Force QT to use wayland
         QT_QPA_PLATFORM = "wayland;xcb";
 
+        # Force firefox to use wayland
+        MOZ_ENABLE_WAYLAND = "1";
+
         XDG_SESSION_TYPE = lib.mkDefault "wayland";
       };
 

@@ -1,21 +1,16 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.gui.firefox;
+  cfg = config._custom.programs.firefox;
   isWayland = config._custom.globals.displayServer == "wayland";
 in {
-  options._custom.gui.firefox.enable = lib.mkEnableOption { };
+  options._custom.programs.firefox.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.sessionVariables = {
-      # Force firefox to use wayland
-      MOZ_ENABLE_WAYLAND = lib.mkIf isWayland "1";
-
-      # precise scrolling in Firefox
-      MOZ_USE_XINPUT2 = "1";
-    };
-
     _custom.hm = {
+      # precise scrolling in Firefox
+      home.sessionVariables.MOZ_USE_XINPUT2 = "1";
+
       home.file = {
         ".mozilla/firefox/default/chrome/userChrome.css".source =
           ./assets/userChrome.css;
@@ -23,6 +18,7 @@ in {
           ./assets/customChrome.css;
         ".mozilla/firefox/default/chrome/userContent.css".text = "";
       };
+
       programs.firefox = {
         enable = true;
         package = if isWayland then pkgs.firefox-wayland else pkgs.firefox-bin;

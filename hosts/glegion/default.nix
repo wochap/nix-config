@@ -14,58 +14,69 @@ in {
     _custom.globals.configDirectory = configDirectory;
     _custom.globals.themeColors = catppuccinMochaTheme;
 
+    # cli
+    _custom.programs.nix-alien.enable = true;
+    _custom.programs.nix-direnv.enable = true;
+
+    # gui
+    _custom.programs.gtk.enable = true;
+    _custom.programs.imv.enable = true;
+    _custom.programs.mongodb.enable = true;
+    _custom.programs.thunar.enable = true;
+    _custom.programs.qt.enable = true;
+    _custom.programs.zathura.enable = true;
+
+    _custom.programs.suites-linux.enable = true;
+
+    # tui
+    _custom.programs.fontpreview-kik.enable = true;
+
+    # cli
+    _custom.programs.asciinema.enable = true;
+    _custom.programs.bat.enable = true;
+    _custom.programs.buku.enable = true;
+    _custom.programs.cht.enable = true;
+    _custom.programs.dircolors.enable = true;
+    _custom.programs.fzf.enable = true;
+    _custom.programs.git.enable = true;
+    _custom.programs.lsd.enable = true;
+    _custom.programs.nodejs.enable = true;
+    _custom.programs.ptsh.enable = true;
+    _custom.programs.python.enable = true;
+    _custom.programs.starship.enable = false;
+    _custom.programs.zoxide.enable = true;
+    _custom.programs.zsh.enable = true;
+    _custom.programs.zsh.isDefault = true;
+
+    # gui
+    _custom.programs.alacritty.enable = true;
+    _custom.programs.discord.enable = true;
+    _custom.programs.firefox.enable = true;
+    _custom.programs.kitty.enable = true;
+    _custom.programs.mpv.enable = true;
+    _custom.programs.qutebrowser.enable = true;
+    _custom.programs.retroarch.enable = true;
+    _custom.programs.vscode.enable = true;
+
+    _custom.programs.suites.enable = true;
+
+    # tui
+    _custom.programs.amfora.enable = true;
+    _custom.programs.bottom.enable = true;
+    _custom.programs.lynx.enable = true;
+    _custom.programs.mangadesk.enable = true;
+    _custom.programs.mangal.enable = true;
+    _custom.programs.neovim.enable = true;
+    _custom.programs.newsboat.enable = true;
+    _custom.programs.nnn.enable = true;
+    _custom.programs.taskwarrior.enable = true;
+    _custom.programs.youtube.enable = true;
+
     _custom.security.doas.enable = true;
     _custom.security.gnome-keyring.enable = true;
     _custom.security.gpg.enable = true;
     _custom.security.polkit.enable = true;
     _custom.security.ssh.enable = true;
-
-    _custom.cli.asciinema.enable = true;
-    _custom.cli.bat.enable = true;
-    _custom.cli.buku.enable = true;
-    _custom.cli.cht.enable = true;
-    _custom.cli.git.enable = true;
-    _custom.programs.nix-alien.enable = true;
-    _custom.programs.nix-direnv.enable = true;
-    _custom.cli.ptsh.enable = true;
-    _custom.cli.zsh.enable = true;
-    _custom.cli.zsh.isDefault = true;
-    _custom.cli.dircolors.enable = true;
-    _custom.cli.fzf.enable = true;
-    _custom.cli.lsd.enable = true;
-    _custom.cli.starship.enable = true;
-    _custom.cli.youtube.enable = true;
-    _custom.cli.zoxide.enable = true;
-
-    _custom.tui.amfora.enable = true;
-    _custom.tui.fontpreview-kik.enable = true;
-    _custom.tui.lynx.enable = true;
-    _custom.tui.mangadesk.enable = true;
-    _custom.tui.mangal.enable = true;
-    _custom.tui.neovim.enable = true;
-    _custom.tui.newsboat.enable = true;
-    _custom.tui.nnn.enable = true;
-    _custom.tui.taskwarrior.enable = true;
-    _custom.tui.bottom.enable = true;
-
-    _custom.gui.alacritty.enable = true;
-    _custom.gui.discord.enable = true;
-    _custom.gui.firefox.enable = true;
-    _custom.gui.kitty.enable = true;
-    _custom.gui.mpv.enable = true;
-    _custom.gui.qutebrowser.enable = true;
-    _custom.gui.retroarch.enable = true;
-    _custom.gui.thunar.enable = true;
-    _custom.gui.vscode.enable = true;
-    _custom.gui.zathura.enable = true;
-    _custom.gui.imv.enable = true;
-    _custom.programs.mongodb.enable = true;
-    _custom.programs.gtk.enable = true;
-    _custom.programs.qt.enable = true;
-    _custom.programs.nodejs.enable = true;
-    _custom.programs.python.enable = true;
-    _custom.programs.suites.enable = true;
-    _custom.programs.suites-linux.enable = true;
 
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;
