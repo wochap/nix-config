@@ -1,7 +1,10 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
-  config = {
+let cfg = config._custom.programs.suites-linux;
+in {
+  options._custom.programs.suites-linux.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
         bruno = prev.runCommandNoCC "bruno" {
@@ -166,3 +169,4 @@
     };
   };
 }
+

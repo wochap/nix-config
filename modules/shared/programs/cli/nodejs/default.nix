@@ -1,7 +1,10 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
-  config = {
+let cfg = config._custom.programs.nodejs;
+in {
+  options._custom.programs.nodejs.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       bun
       deno
@@ -53,3 +56,4 @@
     };
   };
 }
+

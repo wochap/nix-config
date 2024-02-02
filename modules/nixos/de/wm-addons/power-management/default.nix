@@ -17,6 +17,8 @@ in {
       cpupower
       powertop # only use it to check current power usage
       battery-notification
+      psensor
+      lm_sensors
     ];
 
     # systemd service for suspense and resume commands

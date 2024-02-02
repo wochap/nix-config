@@ -60,6 +60,12 @@ in {
     _custom.gui.zathura.enable = true;
     _custom.gui.imv.enable = true;
     _custom.programs.mongodb.enable = true;
+    _custom.programs.gtk.enable = true;
+    _custom.programs.qt.enable = true;
+    _custom.programs.nodejs.enable = true;
+    _custom.programs.python.enable = true;
+    _custom.programs.suites.enable = true;
+    _custom.programs.suites-linux.enable = true;
 
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;

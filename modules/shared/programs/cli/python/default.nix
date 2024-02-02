@@ -1,6 +1,7 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.programs.python;
   isDarwin = pkgs.stdenv.isDarwin;
   animdl = pkgs.prevstable-python.callPackage ./animdl.nix {
     pkgs = pkgs.prevstable-python;
@@ -18,7 +19,9 @@ let
     pkgs.prevstable-python.python311.override { inherit packageOverrides; };
   # python = inputs.nixpkgs-python.packages.${system}."3.9.16";
 in {
-  config = {
+  options._custom.programs.python.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     # disable tests in some python packages?
     # source: https://discourse.nixos.org/t/force-nix-not-to-check-test-without-to-override-each-package/7616
     # nixpkgs.overlays = [

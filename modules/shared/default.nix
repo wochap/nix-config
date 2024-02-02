@@ -14,7 +14,9 @@
     ./programs/cli/fzf
     ./programs/cli/git
     ./programs/cli/lsd
+    ./programs/cli/nodejs
     ./programs/cli/ptsh
+    ./programs/cli/python
     ./programs/cli/starship
     ./programs/cli/zoxide
     ./programs/cli/zsh
@@ -27,6 +29,8 @@
     ./programs/gui/qutebrowser
     ./programs/gui/retroarch
     ./programs/gui/vscode
+
+    ./programs/suites
 
     ./programs/tui/amfora
     ./programs/tui/bottom

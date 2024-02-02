@@ -42,21 +42,15 @@
 
     ./globals
 
-    ./nixos/pkgs-python
-    ./nixos/pkgs-gtk.nix
-    ./nixos/pkgs-linux.nix
-    ./nixos/pkgs-node.nix
-    ./nixos/pkgs-qt.nix
-    ./nixos/pkgs.nix
-    ./nixos/secrets.nix
-    ./nixos/temp-sensor.nix
-
     ./programs/cli/nix-alien
     ./programs/cli/nix-direnv
+    ./programs/gui/gtk
     ./programs/gui/imv
     ./programs/gui/mongodb
+    ./programs/gui/qt
     ./programs/gui/thunar
     ./programs/gui/zathura
+    ./programs/suites-linux
     ./programs/tui/fontpreview-kik
 
     ./security/doas

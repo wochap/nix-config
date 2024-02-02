@@ -1,7 +1,10 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
-  config = {
+let cfg = config._custom.programs.gtk;
+in {
+  options._custom.programs.gtk.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
         # libappindicator-gtk3
@@ -31,3 +34,4 @@
     programs.gnome-disks.enable = true;
   };
 }
+

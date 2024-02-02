@@ -1,7 +1,10 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
-  config = {
+let cfg = config._custom.programs.qt;
+in {
+  options._custom.programs.qt.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
         anki # mnemonic tool
@@ -29,3 +32,4 @@
     };
   };
 }
+
