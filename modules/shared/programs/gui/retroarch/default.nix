@@ -1,13 +1,18 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.gui.retroarch;
+let
+  cfg = config._custom.gui.retroarch;
+  retroarchFinal = with pkgs;
+    (unstable.retroarch.override { cores = with libretro; [ bsnes ]; });
 in {
   options._custom.gui.retroarch = { enable = lib.mkEnableOption { }; };
 
   config = lib.mkIf cfg.enable {
-    environment = {
-      systemPackages = with pkgs;
-        [ (retroarch.override { cores = with libretro; [ beetle-ngp ]; }) ];
+    environment = { systemPackages = [ retroarchFinal ]; };
+
+    services.xserver.desktopManager.retroarch = {
+      enable = true;
+      package = retroarchFinal;
     };
 
     programs.gamemode = {
