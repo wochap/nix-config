@@ -2,7 +2,7 @@
 
 let cfg = config._custom.waylandWm;
 in {
-  options._custom.waylandWm = { enable = lib.mkEnableOption { }; };
+  options._custom.waylandWm.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.globals.displayServer = "wayland";

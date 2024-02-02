@@ -4,7 +4,7 @@ let
   inherit (config.boot.kernelPackages) cpupower;
   cfg = config._custom.wm.power-management;
 in {
-  options._custom.wm.power-management = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.power-management.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [

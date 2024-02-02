@@ -14,7 +14,7 @@ let
     ];
   };
 in {
-  options._custom.wm.fonts = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.fonts.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     fonts = lib.mkMerge [

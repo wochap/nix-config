@@ -10,7 +10,7 @@ let
     text = builtins.readFile ./scripts/hyprland-focus-toggle.sh;
   };
 in {
-  options._custom.hyprland = { enable = lib.mkEnableOption { }; };
+  options._custom.hyprland.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.wm.greetd = {

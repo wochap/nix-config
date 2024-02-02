@@ -2,7 +2,7 @@
 
 let cfg = config._custom.wm.audio;
 in {
-  options._custom.wm.audio = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.audio.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     hardware.pulseaudio.enable = false;

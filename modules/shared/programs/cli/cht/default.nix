@@ -9,7 +9,7 @@ let
     text = builtins.readFile ./scripts/cht.sh;
   };
 in {
-  options._custom.cli.cht = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.cht.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

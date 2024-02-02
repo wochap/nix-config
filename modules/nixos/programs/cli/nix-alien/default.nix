@@ -2,7 +2,7 @@
 
 let cfg = config._custom.cli.nix-alien;
 in {
-  options._custom.cli.nix-alien = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.nix-alien.enable = lib.mkEnableOption { };
 
   imports = [ inputs.nix-ld.nixosModules.nix-ld ];
 

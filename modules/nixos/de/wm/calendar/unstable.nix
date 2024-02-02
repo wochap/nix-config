@@ -6,7 +6,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) dataHome configHome;
 in {
-  options._custom.wm.calendar = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.calendar.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

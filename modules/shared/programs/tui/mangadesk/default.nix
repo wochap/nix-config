@@ -2,7 +2,7 @@
 
 let cfg = config._custom.tui.mangadesk;
 in {
-  options._custom.tui.mangadesk = { enable = lib.mkEnableOption { }; };
+  options._custom.tui.mangadesk.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

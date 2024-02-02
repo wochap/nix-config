@@ -2,7 +2,7 @@
 
 let cfg = config._custom.wm.bluetooth;
 in {
-  options._custom.wm.bluetooth = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.bluetooth.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

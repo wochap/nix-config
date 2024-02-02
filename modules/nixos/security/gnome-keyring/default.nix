@@ -2,7 +2,7 @@
 
 let cfg = config._custom.services.gnome-keyring;
 in {
-  options._custom.services.gnome-keyring = { enable = lib.mkEnableOption { }; };
+  options._custom.services.gnome-keyring.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ gnome.libgnome-keyring ];

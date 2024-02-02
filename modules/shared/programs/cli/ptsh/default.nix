@@ -2,7 +2,7 @@
 
 let cfg = config._custom.cli.ptsh;
 in {
-  options._custom.cli.ptsh = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.ptsh.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

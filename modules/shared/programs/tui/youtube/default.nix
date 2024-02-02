@@ -2,7 +2,7 @@
 
 let cfg = config._custom.cli.youtube;
 in {
-  options._custom.cli.youtube = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.youtube.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

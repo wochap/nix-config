@@ -4,7 +4,7 @@ let
   cfg = config._custom.cli.lsd;
   themeSettings = { };
 in {
-  options._custom.cli.lsd = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.lsd.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [

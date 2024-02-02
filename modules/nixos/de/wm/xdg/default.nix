@@ -4,7 +4,7 @@ let
   cfg = config._custom.wm.xdg;
   mimeTypes = import ./mixins/mimeTypes.nix;
 in {
-  options._custom.wm.xdg = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.xdg.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

@@ -20,7 +20,7 @@ let
     '';
   };
 in {
-  options._custom.gui.kitty = { enable = lib.mkEnableOption { }; };
+  options._custom.gui.kitty.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

@@ -11,7 +11,7 @@ let
     text = builtins.readFile ./scripts/buku-fzf.sh;
   };
 in {
-  options._custom.cli.buku = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.buku.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

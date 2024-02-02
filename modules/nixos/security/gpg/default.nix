@@ -2,7 +2,7 @@
 
 let cfg = config._custom.cli.gpg;
 in {
-  options._custom.cli.gpg = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.gpg.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
 

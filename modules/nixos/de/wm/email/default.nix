@@ -19,7 +19,7 @@ in {
     ./offlinemsmtp.nix
   ];
 
-  options._custom.wm.email = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.email.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

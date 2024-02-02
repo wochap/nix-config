@@ -2,7 +2,7 @@
 
 let cfg = config._custom.wm.plymouth;
 in {
-  options._custom.wm.plymouth = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.plymouth.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
 

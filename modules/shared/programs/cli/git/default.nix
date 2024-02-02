@@ -5,7 +5,7 @@ let
   catppuccinMochaTheme =
     lib._custom.fromYAML "${inputs.catppuccin-lazygit}/themes/mocha.yml";
 in {
-  options._custom.cli.git = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.git.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [

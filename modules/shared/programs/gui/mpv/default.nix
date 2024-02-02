@@ -4,7 +4,7 @@ let
   cfg = config._custom.gui.mpv;
   isWayland = config._custom.globals.displayServer == "wayland";
 in {
-  options._custom.gui.mpv = { enable = lib.mkEnableOption { }; };
+  options._custom.gui.mpv.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

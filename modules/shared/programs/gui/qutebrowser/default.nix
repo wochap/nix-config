@@ -2,7 +2,7 @@
 
 let cfg = config._custom.gui.qutebrowser;
 in {
-  options._custom.gui.qutebrowser = { enable = lib.mkEnableOption { }; };
+  options._custom.gui.qutebrowser.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

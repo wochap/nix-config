@@ -2,7 +2,7 @@
 
 let cfg = config._custom.services.ssh;
 in {
-  options._custom.services.ssh = { enable = lib.mkEnableOption { }; };
+  options._custom.services.ssh.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     services.openssh.enable = true;

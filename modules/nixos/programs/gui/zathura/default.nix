@@ -2,7 +2,7 @@
 
 let cfg = config._custom.gui.zathura;
 in {
-  options._custom.gui.zathura = { enable = lib.mkEnableOption { }; };
+  options._custom.gui.zathura.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs;

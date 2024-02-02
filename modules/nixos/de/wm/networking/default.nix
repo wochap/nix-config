@@ -2,7 +2,7 @@
 
 let cfg = config._custom.wm.networking;
 in {
-  options._custom.wm.networking = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.networking.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "networkmanager" ];

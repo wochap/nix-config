@@ -7,7 +7,7 @@ let
   linkhandler = pkgs.writeShellScriptBin "linkhandler"
     (builtins.readFile ./scripts/linkhandler.sh);
 in {
-  options._custom.tui.newsboat = { enable = lib.mkEnableOption { }; };
+  options._custom.tui.newsboat.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

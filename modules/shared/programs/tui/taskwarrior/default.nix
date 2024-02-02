@@ -7,7 +7,7 @@ let
   timewarriorConfigPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
 in {
-  options._custom.tui.taskwarrior = { enable = lib.mkEnableOption { }; };
+  options._custom.tui.taskwarrior.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

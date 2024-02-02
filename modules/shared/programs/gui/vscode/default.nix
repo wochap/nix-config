@@ -2,7 +2,7 @@
 
 let cfg = config._custom.gui.vscode;
 in {
-  options._custom.gui.vscode = { enable = lib.mkEnableOption { }; };
+  options._custom.gui.vscode.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

@@ -5,7 +5,7 @@ let
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
 in {
-  options._custom.wm.neofetch = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.neofetch.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [

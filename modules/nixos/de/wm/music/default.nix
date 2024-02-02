@@ -8,7 +8,7 @@ let
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
 in {
-  options._custom.wm.music = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.music.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     # required by cava

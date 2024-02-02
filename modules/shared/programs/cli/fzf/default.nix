@@ -2,7 +2,7 @@
 
 let cfg = config._custom.cli.fzf;
 in {
-  options._custom.cli.fzf = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.fzf.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

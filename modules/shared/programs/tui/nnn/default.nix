@@ -4,7 +4,7 @@ let
   cfg = config._custom.tui.nnn;
   isDarwin = pkgs.stdenv.isDarwin;
 in {
-  options._custom.tui.nnn = { enable = lib.mkEnableOption { }; };
+  options._custom.tui.nnn.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

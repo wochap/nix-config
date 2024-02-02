@@ -2,7 +2,7 @@
 
 let cfg = config._custom.gnome;
 in {
-  options._custom.gnome = { enable = lib.mkEnableOption { }; };
+  options._custom.gnome.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.gnome.excludePackages = with pkgs; [ epiphany ];

@@ -2,7 +2,7 @@
 
 let cfg = config._custom.gui.discord;
 in {
-  options._custom.gui.discord = { enable = lib.mkEnableOption { }; };
+  options._custom.gui.discord.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ betterdiscordctl discord ]; };

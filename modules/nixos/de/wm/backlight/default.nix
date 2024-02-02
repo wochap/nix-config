@@ -2,7 +2,7 @@
 
 let cfg = config._custom.wm.backlight;
 in {
-  options._custom.wm.backlight = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.backlight.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

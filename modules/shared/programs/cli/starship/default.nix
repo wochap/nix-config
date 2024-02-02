@@ -5,7 +5,7 @@ let
   themeSettings = builtins.fromTOML
     (builtins.readFile "${inputs.catppuccin-starship}/palettes/mocha.toml");
 in {
-  options._custom.cli.starship = { enable = lib.mkEnableOption { }; };
+  options._custom.cli.starship.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

@@ -5,7 +5,7 @@ let
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
 in {
-  options._custom.tui.lynx = { enable = lib.mkEnableOption { }; };
+  options._custom.tui.lynx.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

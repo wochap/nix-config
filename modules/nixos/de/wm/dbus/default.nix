@@ -2,7 +2,7 @@
 
 let cfg = config._custom.wm.dbus;
 in {
-  options._custom.wm.dbus = { enable = lib.mkEnableOption { }; };
+  options._custom.wm.dbus.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs;

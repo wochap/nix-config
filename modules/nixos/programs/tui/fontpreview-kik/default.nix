@@ -6,7 +6,7 @@ let
   fontpreview-kik = pkgs.writeShellScriptBin "fontpreview-kik"
     (builtins.readFile ./scripts/fontpreview-kik.sh);
 in {
-  options._custom.tui.fontpreview-kik = { enable = lib.mkEnableOption { }; };
+  options._custom.tui.fontpreview-kik.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
