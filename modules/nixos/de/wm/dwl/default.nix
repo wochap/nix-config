@@ -94,8 +94,6 @@ in {
     _custom.de.greetd.cmd =
       lib.mkIf cfg.isDefault "dwl > /home/${userName}/.cache/dwltags";
 
-    xdg.portal.config.dwl.default = [ "wlr" "gtk" ];
-
     services.xserver.displayManager.sessionPackages = [ dwl-final ];
 
     _custom.hm = lib.mkIf cfg.isDefault {

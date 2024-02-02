@@ -18,6 +18,7 @@ in {
 
     programs.xwayland.enable = true;
 
+    xdg.portal.config.wlroots.default = [ "wlr" "gtk" ];
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-hyprland
       xdg-desktop-portal-wlr
