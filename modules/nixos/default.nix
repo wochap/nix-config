@@ -27,18 +27,18 @@
     ./de/wm-addons/power-management
     ./de/wm-addons/qt
     ./de/wm-addons/xdg
-    ./de/wm-wayland-addons/cliphist
-    ./de/wm-wayland-addons/dunst
-    ./de/wm-wayland-addons/gammastep
-    ./de/wm-wayland-addons/kanshi
-    ./de/wm-wayland-addons/swayidle
-    ./de/wm-wayland-addons/swaylock
-    ./de/wm-wayland-addons/swww
-    ./de/wm-wayland-addons/tofi
-    ./de/wm-wayland-addons/utils
-    ./de/wm-wayland-addons/waybar
-    ./de/wm-wayland-addons/wayland-session
-    ./de/wm-wayland-addons/wob
+    ./de/wm-addons-wayland/cliphist
+    ./de/wm-addons-wayland/dunst
+    ./de/wm-addons-wayland/gammastep
+    ./de/wm-addons-wayland/kanshi
+    ./de/wm-addons-wayland/swayidle
+    ./de/wm-addons-wayland/swaylock
+    ./de/wm-addons-wayland/swww
+    ./de/wm-addons-wayland/tofi
+    ./de/wm-addons-wayland/utils
+    ./de/wm-addons-wayland/waybar
+    ./de/wm-addons-wayland/wayland-session
+    ./de/wm-addons-wayland/wob
 
     ./globals
 
