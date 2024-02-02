@@ -18,7 +18,7 @@ let
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };
     nodePackages = lib.dontRecurseIntoAttrs
-      (pkgs.callPackage ./custom-node-packages {
+      (pkgs.callPackage ./node-packages {
         nodejs = pkgs.prevstable-nodejs.nodejs_20;
       });
   };
