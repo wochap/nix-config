@@ -14,7 +14,11 @@ in {
     _custom.globals.configDirectory = configDirectory;
     _custom.globals.themeColors = catppuccinMochaTheme;
 
+    _custom.security.doas.enable = true;
+    _custom.security.gnome-keyring.enable = true;
+    _custom.security.gpg.enable = true;
     _custom.security.polkit.enable = true;
+    _custom.security.ssh.enable = true;
 
     _custom.cli.asciinema.enable = true;
     _custom.cli.bat.enable = true;
@@ -28,7 +32,6 @@ in {
     _custom.cli.zsh.isDefault = true;
     _custom.cli.dircolors.enable = true;
     _custom.cli.fzf.enable = true;
-    _custom.cli.gpg.enable = true;
     _custom.cli.lsd.enable = true;
     _custom.cli.starship.enable = true;
     _custom.cli.youtube.enable = true;
@@ -74,19 +77,16 @@ in {
     _custom.wm.qt.enable = true;
     _custom.wm.xdg.enable = true;
 
-
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;
     _custom.services.docker.enable = true;
     _custom.services.docker.enableNvidia = true;
     _custom.services.flatpak.enable = false;
-    _custom.services.gnome-keyring.enable = true;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
     _custom.services.llm.enable = true;
     _custom.services.llm.enableNvidia = true;
     _custom.services.mongodb.enable = true;
-    _custom.services.ssh.enable = true;
     _custom.services.steam.enable = true;
     _custom.services.syncthing.enable = true;
     _custom.services.virt.enable = true;

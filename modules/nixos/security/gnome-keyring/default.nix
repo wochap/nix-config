@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.services.gnome-keyring;
+let cfg = config._custom.security.gnome-keyring;
 in {
-  options._custom.services.gnome-keyring.enable = lib.mkEnableOption { };
+  options._custom.security.gnome-keyring.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ gnome.libgnome-keyring ];

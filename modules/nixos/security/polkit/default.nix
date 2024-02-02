@@ -11,7 +11,7 @@ in {
         polkit_gnome
       ];
 
-    # NOTE: requires dbus
+    services.dbus.enable = lib.mkDefault true;
     security.polkit.enable = true;
 
     systemd.user.services.polkit-gnome-authentication-agent-1 = {

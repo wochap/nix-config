@@ -1,8 +1,12 @@
-{ config, ... }:
+{ config, lib, ... }:
 
-let inherit (config._custom.globals) userName;
+let
+  cfg = config._custom.security.doas;
+  inherit (config._custom.globals) userName;
 in {
-  config = {
+  options._custom.security.doas.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "wheel" ];
 
     # Disable sudo

@@ -1,10 +1,12 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.services.ssh;
+let cfg = config._custom.security.ssh;
 in {
-  options._custom.services.ssh.enable = lib.mkEnableOption { };
+  options._custom.security.ssh.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [ sshfs ];
+
     services.openssh.enable = true;
     services.openssh.settings.PasswordAuthentication = false;
     services.openssh.settings.KbdInteractiveAuthentication = false;
@@ -15,12 +17,7 @@ in {
 
     _custom.hm = {
       # NOTE: ssh agent managed by gnome-keyring
-
-      home.packages = with pkgs; [ sshfs ];
-
-      home.file = {
-        ".ssh/config".source = ../../../../secrets/dotfiles/ssh-config;
-      };
+      home.file.".ssh/config".source = ../../../../secrets/dotfiles/ssh-config;
     };
   };
 }
