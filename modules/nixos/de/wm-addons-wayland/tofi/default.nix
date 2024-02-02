@@ -4,8 +4,8 @@ let
   cfg = config._custom.de.tofi;
   inherit (config._custom.globals) themeColors;
 
-  tofi-launcher =
-    pkgs.writeScriptBin "tofi-launcher" ./scripts/tofi-launcher.sh;
+  tofi-launcher = pkgs.writeScriptBin "tofi-launcher"
+    (builtins.readFile ./scripts/tofi-launcher.sh);
   tofi-powermenu = pkgs.writeScriptBin "tofi-powermenu"
     (builtins.readFile ./scripts/tofi-powermenu.sh);
   tofi-emoji = pkgs.writeScriptBin "tofi-emoji"

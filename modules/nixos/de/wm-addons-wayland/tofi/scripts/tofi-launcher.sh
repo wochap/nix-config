@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-tofi-drun --config "$HOME/.config/tofi/one-line" --drun-launch=false | xargs -I {} zsh -c {}
+tofi-drun --config "$HOME/.config/tofi/one-line" --drun-launch=false | xargs -I {} sh -c {}
