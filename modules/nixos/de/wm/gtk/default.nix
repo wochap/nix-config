@@ -3,9 +3,8 @@
 let
   cfg = config._custom.wm.gtk;
   inherit (config._custom) globals;
-  inherit (config._custom.globals) userName;
-  isWayland = config._custom.globals.displayServer == "wayland";
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) userName configDirectory displayServer;
+  isWayland = displayServer == "wayland";
   inherit (lib._custom) relativeSymlink;
   extraCss = ''
     @import url("file://${relativeSymlink configDirectory ./dotfiles/gtk.css}");
@@ -14,9 +13,7 @@ let
     }");
   '';
 in {
-  options._custom.wm.gtk = {
-    enable = lib.mkEnableOption "setup gtk theme and apps";
-  };
+  options._custom.wm.gtk.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {
@@ -41,27 +38,10 @@ in {
         # gtk_engines
       ];
 
-      variables = {
-        # Hide dbus errors in GTK apps?
-        "NO_AT_BRIDGE" = "1";
-      };
-
-      sessionVariables = lib.mkMerge [
-        {
-          # https://wiki.gnome.org/Initiatives/CSD
-          GTK_CSD = "1";
-
-          XDG_DATA_DIRS = [
-            "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
-            "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
-          ];
-        }
-        (lib.mkIf isWayland {
-          # Force GTK to use wayland
-          GDK_BACKEND = "wayland,x11";
-
-          CLUTTER_BACKEND = "wayland";
-        })
+      # NOTE: can't move it to home-manager because of a conflict
+      sessionVariables.XDG_DATA_DIRS = [
+        "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
+        "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
       ];
     };
 
@@ -72,12 +52,23 @@ in {
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
     programs.dconf.enable = true;
 
-    # Required by gnome file managers
-    programs.file-roller.enable = true;
-
-    programs.gnome-disks.enable = true;
-
     _custom.hm = {
+      home.sessionVariables = lib.mkMerge [
+        {
+          # Hide dbus errors in GTK apps?
+          NO_AT_BRIDGE = "1";
+
+          # https://wiki.gnome.org/Initiatives/CSD
+          GTK_CSD = "1";
+        }
+        (lib.mkIf isWayland {
+          # Force GTK to use wayland
+          GDK_BACKEND = "wayland,x11";
+
+          CLUTTER_BACKEND = "wayland";
+        })
+      ];
+
       dconf.settings = {
         # Open GTK inspector with Ctrl + Shift + D
         # GTK_DEBUG=interactive <app>
@@ -95,6 +86,7 @@ in {
           inherit (globals.fonts) size;
         };
         iconTheme = { inherit (globals.gtkIconTheme) name package; };
+        cursorTheme = { inherit (globals.cursor) package name size; };
         theme = { inherit (globals.gtkTheme) name package; };
 
         gtk3.extraConfig = {
