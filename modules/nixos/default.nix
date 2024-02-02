@@ -11,8 +11,9 @@
     ./nixos/secrets.nix
     ./nixos/temp-sensor.nix
 
+    ./de/dm/gdm
+    ./de/dm/greetd
     ./de/dwl
-    ./de/gdm
     ./de/gnome
     ./de/hyprland
     ./de/kde
@@ -38,7 +39,6 @@
     ./de/wm/dbus
     ./de/wm/email
     ./de/wm/fonts
-    ./de/wm/greetd
     ./de/wm/gtk
     ./de/wm/logind
     ./de/wm/music

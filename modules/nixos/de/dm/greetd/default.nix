@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
+  cfg = config._custom.de.greetd;
   inherit (config._custom.globals) userName;
-  cfg = config._custom.wm.greetd;
 in {
-  options._custom.wm.greetd = {
+  options._custom.de.greetd = {
     enable = lib.mkEnableOption { };
     enableAutoLogin = lib.mkEnableOption { };
     cmd = lib.mkOption {

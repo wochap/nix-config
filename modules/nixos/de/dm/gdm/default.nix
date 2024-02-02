@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
 let
-  inherit (config._custom.globals) userName;
   cfg = config._custom.de.gdm;
+  inherit (config._custom.globals) userName;
 in {
   options._custom.de.gdm = {
     enable = lib.mkEnableOption { };
