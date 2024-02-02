@@ -18,19 +18,17 @@
     ./de/kde
     ./de/river
     ./de/sway
+    ./de/wayland-wm/cliphist
     ./de/wayland-wm/dunst
     ./de/wayland-wm/gammastep
     ./de/wayland-wm/kanshi
-    ./de/wayland-wm/swappy
-    ./de/wayland-wm/swww
-    ./de/wayland-wm/system
-    ./de/wayland-wm/tofi
-    ./de/wayland-wm/waybar
-    ./de/wayland-wm/wayland-wm
-    ./de/wayland-wm/wayland-session
     ./de/wayland-wm/swayidle
     ./de/wayland-wm/swaylock
-    ./de/wayland-wm/cliphist
+    ./de/wayland-wm/swww
+    ./de/wayland-wm/tofi
+    ./de/wayland-wm/utils
+    ./de/wayland-wm/waybar
+    ./de/wayland-wm/wayland-session
     ./de/wayland-wm/wob
     ./de/wm/audio
     ./de/wm/backlight

@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.waylandWm;
+  cfg = config._custom.de.waybar;
   inherit (config._custom.globals) themeColors configDirectory;
   waybar = pkgs.waybar;
   jsonRAW = builtins.readFile ./dotfiles/config.json;
@@ -9,6 +9,8 @@ let
   waybar-toggle = pkgs.writeScriptBin "waybar-toggle"
     (builtins.readFile ./scripts/waybar-toggle.sh);
 in {
+  options._custom.de.waybar.enable = lib.mkEnableOption { };
+
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ libevdev ];
 

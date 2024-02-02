@@ -246,7 +246,7 @@ static const Key keys[] = {
 	{ MODKEY, Key_space, spawn, SHCMD("tofi-launcher") },
 
   // Take fullscreen screenshoot
-  { MODKEY, Key_Print, spawn, SHCMD("/etc/scripts/system/takeshot.sh --now") },
+  { MODKEY, Key_Print, spawn, SHCMD("takeshot --now") },
 
   // Open calc
   { MODKEY, Key_c, spawn, SHCMD("tofi-calc") },
@@ -357,13 +357,13 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT, Key_f, focusortogglescratch, {.v = fmscratchcmd} },
 
   // Screencast/record region to mp4
-  { MODKEY|MOD_ALT, Key_r, spawn, SHCMD("/etc/scripts/system/recorder.sh --area") },
+  { MODKEY|MOD_ALT, Key_r, spawn, SHCMD("recorder --area") },
 
   // Open screenshoot utility
-  { MODKEY|MOD_ALT, Key_s, spawn, SHCMD("/etc/scripts/system/takeshot.sh --area") },
+  { MODKEY|MOD_ALT, Key_s, spawn, SHCMD("takeshot --area") },
 
   // Open color picker
-  { MODKEY|MOD_ALT, Key_c, spawn, SHCMD("/etc/scripts/system/color-picker.sh") },
+  { MODKEY|MOD_ALT, Key_c, spawn, SHCMD("color-picker") },
 
 
   // ### MEDIA KEYBINDINGS

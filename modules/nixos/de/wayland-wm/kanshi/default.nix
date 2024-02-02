@@ -1,7 +1,9 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.waylandWm;
+let cfg = config._custom.de.kanshi;
 in {
+  options._custom.de.kanshi.enable = lib.mkEnableOption { };
+
   config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ kanshi ]; };
 

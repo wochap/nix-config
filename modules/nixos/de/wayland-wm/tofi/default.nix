@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config._custom.waylandWm;
+  cfg = config._custom.de.tofi;
   inherit (config._custom.globals) themeColors;
 
   tofi-launcher =
@@ -13,6 +13,8 @@ let
   tofi-calc =
     pkgs.writeScriptBin "tofi-calc" (builtins.readFile ./scripts/tofi-calc.sh);
 in {
+  options._custom.de.tofi.enable = lib.mkEnableOption { };
+
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home = {

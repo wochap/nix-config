@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.waylandWm;
+  cfg = config._custom.de.swww;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   swww-random = pkgs.writeScriptBin "swww-random"
@@ -10,6 +10,8 @@ let
     pkgs.writeScriptBin "swww-pick" (builtins.readFile ./scripts/swww-pick.sh);
   inherit (pkgs.unstable) swww;
 in {
+  options._custom.de.swww.enable = lib.mkEnableOption { };
+
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home = {

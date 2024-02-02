@@ -1,12 +1,14 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.waylandWm;
+  cfg = config._custom.de.wob;
   inherit (config._custom.globals) themeColors;
   inherit (lib._custom) unwrapHex;
   wob-osd =
     pkgs.writeScriptBin "wob-osd" (builtins.readFile ./scripts/wob-osd.sh);
 in {
+  options._custom.de.wob.enable = lib.mkEnableOption { };
+
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {

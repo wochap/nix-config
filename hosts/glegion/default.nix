@@ -93,10 +93,19 @@ in {
     _custom.services.virt.enable = true;
     _custom.services.waydroid.enable = false;
 
-    _custom.de.wayland-session.enable = true;
-    _custom.de.swayidle.enable = true;
     _custom.de.cliphist.enable = true;
+    _custom.de.dunst.enable = true;
+    _custom.de.gammastep.enable = true;
+    _custom.de.kanshi.enable = true;
+    _custom.de.swayidle.enable = true;
     _custom.de.swaylock.enable = true;
+    _custom.de.swww.enable = true;
+    _custom.de.tofi.enable = true;
+    _custom.de.utils.enable = true;
+    _custom.de.waybar.enable = true;
+    _custom.de.wayland-session.enable = true;
+    _custom.de.wob.enable = true;
+
     _custom.gnome.enable = false;
     _custom.wm.greetd.enable = true;
     _custom.de.logind.enable = true;
@@ -105,7 +114,6 @@ in {
     _custom.river.enable = false;
     _custom.hyprland.enable = false;
     _custom.sway.enable = true;
-    _custom.waylandWm.enable = true;
 
     services.xserver = {
       # Setup keyboard
