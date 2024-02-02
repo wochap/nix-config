@@ -2,15 +2,6 @@
 
 {
   imports = [
-    ./nixos/pkgs-python
-    ./nixos/pkgs-gtk.nix
-    ./nixos/pkgs-linux.nix
-    ./nixos/pkgs-node.nix
-    ./nixos/pkgs-qt.nix
-    ./nixos/pkgs.nix
-    ./nixos/secrets.nix
-    ./nixos/temp-sensor.nix
-
     ./de/dm/gdm
     ./de/dm/greetd
     ./de/gnome
@@ -50,6 +41,15 @@
     ./de/wm-wayland-addons/wob
 
     ./globals
+
+    ./nixos/pkgs-python
+    ./nixos/pkgs-gtk.nix
+    ./nixos/pkgs-linux.nix
+    ./nixos/pkgs-node.nix
+    ./nixos/pkgs-qt.nix
+    ./nixos/pkgs.nix
+    ./nixos/secrets.nix
+    ./nixos/temp-sensor.nix
 
     ./programs/cli/nix-alien
     ./programs/cli/nix-direnv

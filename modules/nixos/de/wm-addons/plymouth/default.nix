@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.wm.plymouth;
+let cfg = config._custom.de.plymouth;
 in {
-  options._custom.wm.plymouth.enable = lib.mkEnableOption { };
+  options._custom.de.plymouth.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     boot.plymouth = {

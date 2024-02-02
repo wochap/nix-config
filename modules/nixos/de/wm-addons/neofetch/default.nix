@@ -1,11 +1,11 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.wm.neofetch;
+  cfg = config._custom.de.neofetch;
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
 in {
-  options._custom.wm.neofetch.enable = lib.mkEnableOption { };
+  options._custom.de.neofetch.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [

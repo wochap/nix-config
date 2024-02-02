@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  cfg = config._custom.hyprland;
+  cfg = config._custom.de.hyprland;
   inherit (config._custom.globals) themeColors;
   hyprland-focus-toggle = pkgs.writeTextFile {
     name = "hyprland-focus-toggle";
@@ -10,10 +10,10 @@ let
     text = builtins.readFile ./scripts/hyprland-focus-toggle.sh;
   };
 in {
-  options._custom.hyprland.enable = lib.mkEnableOption { };
+  options._custom.de.hyprland.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    _custom.wm.greetd = {
+    _custom.de.greetd = {
       enable = lib.mkDefault true;
       cmd = "Hyprland";
     };

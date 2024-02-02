@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.gnome;
+let cfg = config._custom.de.gnome;
 in {
-  options._custom.gnome.enable = lib.mkEnableOption { };
+  options._custom.de.gnome.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.gnome.excludePackages = with pkgs; [ epiphany ];

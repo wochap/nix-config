@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.wm.email;
+  cfg = config._custom.de.email;
   offlinemsmtp-toggle-mode = pkgs.writeScriptBin "offlinemsmtp-toggle-mode"
     (builtins.readFile ./scripts/offlinemsmtp-toggle-mode.sh);
 in {
@@ -14,7 +14,7 @@ in {
     ./offlinemsmtp.nix
   ];
 
-  options._custom.wm.email.enable = lib.mkEnableOption { };
+  options._custom.de.email.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

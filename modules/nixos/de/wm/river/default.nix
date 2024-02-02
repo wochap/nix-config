@@ -2,14 +2,14 @@
 
 let
   inherit (config._custom) globals;
-  cfg = config._custom.river;
+  cfg = config._custom.de.river;
   inherit (globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
   inherit (lib._custom) unwrapHex;
   river-shifttags = pkgs.callPackage ./packages/river-shifttags.nix { };
   riverwm-utils = pkgs.callPackage ./packages/riverwm-utils.nix { };
 in {
-  options._custom.river = {
+  options._custom.de.river = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
   };
@@ -29,7 +29,7 @@ in {
       })
     ];
 
-    _custom.wm.greetd = lib.mkIf cfg.isDefault {
+    _custom.de.greetd = lib.mkIf cfg.isDefault {
       enable = lib.mkDefault true;
       cmd = "river";
     };

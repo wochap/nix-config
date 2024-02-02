@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.wm.email;
+  cfg = config._custom.de.email;
   imv = "${pkgs.imv}/bin/imv";
   icalviewScript =
     pkgs.writeScript "icalview" (builtins.readFile ./scripts/icalview.py);

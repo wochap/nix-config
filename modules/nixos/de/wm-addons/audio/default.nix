@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
-let cfg = config._custom.wm.audio;
+let cfg = config._custom.de.audio;
 in {
-  options._custom.wm.audio.enable = lib.mkEnableOption { };
+  options._custom.de.audio.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "audio" ];

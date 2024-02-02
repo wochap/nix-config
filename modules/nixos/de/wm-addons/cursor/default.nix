@@ -2,9 +2,9 @@
 
 let
   inherit (config._custom) globals;
-  cfg = config._custom.wm.cursor;
+  cfg = config._custom.de.cursor;
 in {
-  options._custom.wm.cursor.enable = lib.mkEnableOption { };
+  options._custom.de.cursor.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ globals.cursor.package ];

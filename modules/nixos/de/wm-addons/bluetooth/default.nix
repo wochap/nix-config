@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.wm.bluetooth;
+let cfg = config._custom.de.bluetooth;
 in {
-  options._custom.wm.bluetooth.enable = lib.mkEnableOption { };
+  options._custom.de.bluetooth.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

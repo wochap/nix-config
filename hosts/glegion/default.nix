@@ -59,24 +59,7 @@ in {
     _custom.gui.vscode.enable = true;
     _custom.gui.zathura.enable = true;
     _custom.gui.imv.enable = true;
-
-    _custom.wm.audio.enable = true;
-    _custom.wm.backlight.enable = true;
-    _custom.wm.bluetooth.enable = true;
-    _custom.wm.calendar.enable = true;
-    _custom.wm.cursor.enable = true;
-    _custom.wm.dbus.enable = true;
-    _custom.wm.email.enable = true;
-    _custom.wm.fonts.enable = true;
-    _custom.wm.gtk.enable = true;
-    _custom.wm.music.enable = true;
-    _custom.wm.neofetch.enable = true;
-    _custom.wm.networking.enable = true;
-    _custom.wm.plymouth.enable = true;
-    _custom.wm.power-management.enable = true;
-    _custom.wm.power-management.enableLowBatteryNotification = true;
-    _custom.wm.qt.enable = true;
-    _custom.wm.xdg.enable = true;
+    _custom.programs.mongodb.enable = true;
 
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;
@@ -87,11 +70,29 @@ in {
     _custom.services.ipwebcam.enable = false;
     _custom.services.llm.enable = true;
     _custom.services.llm.enableNvidia = true;
-    _custom.services.mongodb.enable = true;
     _custom.services.steam.enable = true;
     _custom.services.syncthing.enable = true;
     _custom.services.virt.enable = true;
     _custom.services.waydroid.enable = false;
+
+    _custom.de.audio.enable = true;
+    _custom.de.backlight.enable = true;
+    _custom.de.bluetooth.enable = true;
+    _custom.de.calendar.enable = true;
+    _custom.de.cursor.enable = true;
+    _custom.de.dbus.enable = true;
+    _custom.de.email.enable = true;
+    _custom.de.fonts.enable = true;
+    _custom.de.gtk.enable = true;
+    _custom.de.logind.enable = true;
+    _custom.de.music.enable = true;
+    _custom.de.neofetch.enable = true;
+    _custom.de.networking.enable = true;
+    _custom.de.plymouth.enable = true;
+    _custom.de.power-management.enable = true;
+    _custom.de.power-management.enableLowBatteryNotification = true;
+    _custom.de.qt.enable = true;
+    _custom.de.xdg.enable = true;
 
     _custom.de.cliphist.enable = true;
     _custom.de.dunst.enable = true;
@@ -106,14 +107,15 @@ in {
     _custom.de.wayland-session.enable = true;
     _custom.de.wob.enable = true;
 
-    _custom.gnome.enable = false;
+    _custom.de.kde.enable = false;
+    _custom.de.gnome.enable = false;
     _custom.de.greetd.enable = true;
-    _custom.de.logind.enable = true;
+    _custom.de.gdm.enable = false;
     _custom.de.dwl.enable = true;
     _custom.de.dwl.isDefault = true;
-    _custom.river.enable = false;
-    _custom.hyprland.enable = false;
-    _custom.sway.enable = true;
+    _custom.de.river.enable = false;
+    _custom.de.hyprland.enable = false;
+    _custom.de.sway.enable = false;
 
     services.xserver = {
       # Setup keyboard

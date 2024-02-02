@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
-let cfg = config._custom.wm.networking;
+let cfg = config._custom.de.networking;
 in {
-  options._custom.wm.networking.enable = lib.mkEnableOption { };
+  options._custom.de.networking.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "networkmanager" ];

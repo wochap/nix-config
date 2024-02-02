@@ -2,17 +2,17 @@
 
 let
   inherit (config._custom) globals;
-  cfg = config._custom.sway;
+  cfg = config._custom.de.sway;
   inherit (config._custom.globals) themeColors;
   scripts = import ./scripts { inherit config pkgs lib; };
 in {
-  options._custom.sway = {
+  options._custom.de.sway = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
-    _custom.wm.greetd = lib.mkIf cfg.isDefault {
+    _custom.de.greetd = lib.mkIf cfg.isDefault {
       enable = lib.mkDefault true;
       cmd = "sway";
     };

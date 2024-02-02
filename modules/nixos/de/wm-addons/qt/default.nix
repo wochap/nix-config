@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.wm.qt;
+let cfg = config._custom.de.qt;
 in {
-  options._custom.wm.qt = {
+  options._custom.de.qt = {
     enable = lib.mkEnableOption "setup qt theme and apps";
   };
 

@@ -1,7 +1,7 @@
 { config, lib, inputs, ... }:
 
 let
-  cfg = config._custom.wm.email;
+  cfg = config._custom.de.email;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   aliasfile = "${hmConfig.xdg.configHome}/neomutt/aliases";

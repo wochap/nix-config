@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.services.mongodb;
+let cfg = config._custom.programs.mongodb;
 in {
-  options._custom.services.mongodb.enable = lib.mkEnableOption { };
+  options._custom.programs.mongodb.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
@@ -13,7 +13,7 @@ in {
           makeWrapper ${prev.robo3t}/bin/robo3t $out/bin/robo3t \
             --set "QT_QPA_PLATFORM" "xcb" \
             --set "QT_FONT_DPI" "${
-              toString (if config._custom.hyprland.enable then 192 else 96)
+              toString (if config._custom.de.hyprland.enable then 192 else 96)
             }"
 
           ln -sf ${prev.robo3t}/share $out/share

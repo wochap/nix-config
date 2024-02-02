@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.wm.gtk;
+  cfg = config._custom.de.gtk;
   inherit (config._custom) globals;
   inherit (config._custom.globals) userName configDirectory displayServer;
   inherit (lib._custom) relativeSymlink;
@@ -47,7 +47,7 @@ let
     gsettings set org.gnome.desktop.wm.preferences button-layout ""
   '';
 in {
-  options._custom.wm.gtk.enable = lib.mkEnableOption { };
+  options._custom.de.gtk.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

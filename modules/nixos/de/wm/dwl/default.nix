@@ -91,7 +91,7 @@ in {
       };
     };
 
-    _custom.wm.greetd.cmd =
+    _custom.de.greetd.cmd =
       lib.mkIf cfg.isDefault "dwl > /home/${userName}/.cache/dwltags";
 
     xdg.portal.config.dwl.default = [ "wlr" "gtk" ];

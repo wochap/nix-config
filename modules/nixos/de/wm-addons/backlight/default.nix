@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.wm.backlight;
+let cfg = config._custom.de.backlight;
 in {
-  options._custom.wm.backlight.enable = lib.mkEnableOption { };
+  options._custom.de.backlight.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {
