@@ -50,7 +50,6 @@ in {
 
         Install = { WantedBy = [ "graphical-session.target" ]; };
       };
-
     };
   };
 }
