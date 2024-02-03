@@ -100,9 +100,9 @@ in {
       dconf.settings = {
         # Open GTK inspector with Ctrl + Shift + D
         # GTK_DEBUG=interactive <app>
-        "org/gtk/Settings/Debug" = { enable-inspector-keybinding = true; };
+        "org/gtk/Settings/Debug".enable-inspector-keybinding = true;
 
-        "org/gnome/desktop/interface" = { color-scheme = "prefer-dark"; };
+        "org/gnome/desktop/interface".color-scheme = "prefer-dark";
       };
 
       gtk = {
