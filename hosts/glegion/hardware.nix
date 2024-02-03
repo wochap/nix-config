@@ -71,11 +71,6 @@
 
     hardware.bluetooth.powerOnBoot = false;
 
-    # Enable autosuspend for usb port
-    services.udev.extraRules = ''
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="048d", ATTR{idProduct}=="c104", ATTR{power/control}="auto"
-    '';
-
     # AMD has better battery life with PPD over TLP:
     services.auto-epp = {
       enable = lib.mkDefault true;
