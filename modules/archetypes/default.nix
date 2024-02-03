@@ -21,6 +21,7 @@
       _custom.de.email.enable = true;
       _custom.de.fonts.enable = true;
       _custom.de.gtk.enable = true;
+      _custom.de.gtk.enableCsd = false;
       _custom.de.logind.enable = true;
       _custom.de.music.enable = true;
       _custom.de.neofetch.enable = true;
@@ -53,9 +54,11 @@
       _custom.security.ssh.enable = true;
 
       _custom.de.fonts.enable = true;
+      _custom.de.gtk.enable = true;
+      _custom.de.gtk.enableCsd = true;
       _custom.de.neofetch.enable = true;
       _custom.de.networking.enable = true;
-      # _custom.de.plymouth.enable = true;
+      _custom.de.plymouth.enable = true;
       _custom.de.power-management.enable = true;
 
       _custom.de.utils.enable = true;
