@@ -81,7 +81,9 @@ in {
       };
 
       programs.thefuck.enable = true; # corrects previous console cmd
+      programs.thefuck.enableBashIntegration = false;
       programs.carapace.enable = true; # completions
+      programs.carapace.enableBashIntegration = false;
       programs.nix-index.enable = false; # locale nix pkgs
       programs.command-not-found.enable = lib.mkForce false;
       programs.navi = { # like tldr
@@ -90,6 +92,7 @@ in {
           finder.command = "fzf";
           shell.command = "bash";
         };
+        enableBashIntegration = false;
       };
       programs.less = {
         enable = true;
