@@ -49,7 +49,7 @@ in {
         Unit.Documentation = "https://github.com/rjekker/i3-battery-popup";
         Service = {
           PassEnvironment = [ "PATH" "DISPLAY" ];
-          ExecStart = "battery-notification -t 5s -L 15 -l 5 -n -i battery -D";
+          ExecStart = "${battery-notification}/bin/battery-notification -t 5s -L 15 -l 5 -n -i battery -D";
           Restart = "on-failure";
           KillMode = "mixed";
         };

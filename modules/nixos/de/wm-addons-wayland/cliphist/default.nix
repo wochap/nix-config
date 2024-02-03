@@ -21,7 +21,7 @@ in {
         Unit.Documentation = "https://github.com/sentriz/cliphist";
         Service = {
           PassEnvironment = "PATH";
-          ExecStart = "clipboard-manager --start";
+          ExecStart = "${clipboard-manager}/bin/clipboard-manager --start";
           Restart = "on-failure";
           KillMode = "mixed";
         };
