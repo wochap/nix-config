@@ -3,7 +3,9 @@
 let
   cfg = config._custom.programs.retroarch;
   retroarchFinal = with pkgs;
-    (unstable.retroarch.override { cores = with libretro; [ bsnes ]; });
+    (unstable.retroarch.override {
+      cores = with libretro; [ bsnes genesis-plus-gx beetle-ngp ];
+    });
 in {
   options._custom.programs.retroarch.enable = lib.mkEnableOption { };
 
