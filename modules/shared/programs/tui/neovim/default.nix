@@ -17,6 +17,9 @@ in {
         [
           prevstable-neovim.neovim-remote
 
+          # required in wayland to copy
+          wl-clipboard
+
           # custom
           fswatch
 
