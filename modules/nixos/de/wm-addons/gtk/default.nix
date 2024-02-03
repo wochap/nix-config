@@ -126,7 +126,6 @@ in {
           inherit (globals.fonts) size;
         };
         iconTheme = { inherit (globals.gtkIconTheme) name package; };
-        cursorTheme = { inherit (globals.cursor) package name size; };
         theme = { inherit (globals.gtkTheme) name package; };
 
         gtk3.extraConfig = {

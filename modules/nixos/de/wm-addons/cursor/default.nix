@@ -15,6 +15,8 @@ in {
         x11.enable = true;
         gtk.enable = true;
       };
+
+      gtk.cursorTheme = { inherit (globals.cursor) package name size; };
     };
   };
 }
