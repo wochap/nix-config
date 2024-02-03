@@ -3,14 +3,20 @@
 let
   cfg = config._custom.de.gtk;
   inherit (config._custom) globals;
-  inherit (config._custom.globals) userName configDirectory displayServer;
+  inherit (config._custom.globals) userName configDirectory;
   inherit (lib._custom) relativeSymlink;
-  extraCss = ''
-    @import url("file://${relativeSymlink configDirectory ./dotfiles/gtk.css}");
-    @import url("file://${
-      relativeSymlink configDirectory ./dotfiles/catppuccin-mocha.css
-    }");
-  '';
+  extraCss = lib.concatLines [
+    ''
+      @import url("file://${
+        relativeSymlink configDirectory ./dotfiles/catppuccin-mocha.css
+      }");
+    ''
+    (lib.optionalString (!cfg.enableCsd) ''
+      @import url("file://${
+        relativeSymlink configDirectory ./dotfiles/gtk-remove-csd.css
+      }");
+    '')
+  ];
 
   # Apply GTK theme
   # currently, there is some friction between Wayland and gtk:
@@ -47,7 +53,10 @@ let
     gsettings set org.gnome.desktop.wm.preferences button-layout ""
   '';
 in {
-  options._custom.de.gtk.enable = lib.mkEnableOption { };
+  options._custom.de.gtk = {
+    enable = lib.mkEnableOption { };
+    enableCsd = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment = {
@@ -89,13 +98,16 @@ in {
     programs.dconf.enable = true;
 
     _custom.hm = {
-      home.sessionVariables = {
-        # Hide dbus errors in GTK apps?
-        NO_AT_BRIDGE = "1";
-
-        # https://wiki.gnome.org/Initiatives/CSD
-        GTK_CSD = "1";
-      };
+      home.sessionVariables = lib.mkMerge [
+        {
+          # Hide dbus errors in GTK apps?
+          NO_AT_BRIDGE = "1";
+        }
+        (lib.mkIf cfg.enableCsd {
+          # https://wiki.gnome.org/Initiatives/CSD
+          GTK_CSD = "1";
+        })
+      ];
 
       dconf.settings = {
         # Open GTK inspector with Ctrl + Shift + D
