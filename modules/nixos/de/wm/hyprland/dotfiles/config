@@ -60,12 +60,7 @@ input {
 }
 
 gestures {
-  workspace_swipe = true
-  workspace_swipe_min_speed_to_force = 10
-  workspace_swipe_distance = 750
-  workspace_swipe_cancel_ratio = 0.1
-  workspace_swipe_forever = true
-  workspace_swipe_create_new = true
+  workspace_swipe = false
 }
 
 misc {

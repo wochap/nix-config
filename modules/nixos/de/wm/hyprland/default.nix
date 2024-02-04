@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.de.hyprland;
-  inherit (config._custom.globals) themeColors;
+  inherit (config._custom.globals) userName themeColors;
   hyprlandFinal = inputs.hyprland.packages."${system}".hyprland;
   hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
@@ -39,6 +39,11 @@ in {
         packages = [ hyprland-focus-toggle ];
       };
 
+      xdg.configFile."hypr/libinput-gestures.conf".text = ''
+        gesture swipe left 3 hyprctl dispatch workspace e+1
+        gesture swipe right 3 hyprctl dispatch workspace e-1
+      '';
+
       wayland.windowManager.hyprland = {
         enable = true;
         package = hyprlandFinal;
@@ -68,6 +73,19 @@ in {
             "if pgrep swaylock; then hyprctl dispatch dpms on; fi";
         }
       ];
+
+      systemd.user.services.libinput-gestures = lib._custom.mkWaylandService {
+        Unit = {
+          Description = "Actions gestures on your touchpad using libinput";
+          Documentation = "https://github.com/bulletmark/libinput-gestures";
+        };
+        Service = {
+          PassEnvironment = [ "PATH" "HOME" ];
+          ExecStart =
+            "${pkgs.libinput-gestures}/bin/libinput-gestures -c /home/${userName}/.config/hypr/libinput-gestures.conf";
+          Type = "simple";
+        };
+      };
     };
   };
 }
