@@ -7,43 +7,40 @@ bindm = $mod, mouse:273, resizewindow
 
 #### SYSTEM KEYBINDINGS
 
-# Open terminal
-bind = $mod, i, exec, hyprland-focus-toggle kitty-scratch ~/.config/kitty/scripts/kitty-scratch.sh
+# Open scratchpad terminal
+bind = $mod, i, exec, hyprland-focus-toggle kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh
 
 # Lock screen
-bind = $mod, l, exec, /etc/scripts/system/sway-lock.sh
+bind = $mod, l, exec, swaylock-start
 
 # Open power menu
-bind = $mod, Escape, exec, rofi-powermenu
+bind = $mod, Escape, exec, tofi-powermenu
 
 # Open app launcher
-bind = $mod, space, exec, rofi-launcher
+bind = $mod, space, exec, tofi-launcher
 
 # Take fullscreen screenshot
-bind = $mod, Print, exec, /etc/scripts/system/takeshot.sh --now
+bind = $mod, Print, exec, takeshot --now
 
 # Open calc
-bind = $mod, c, exec, rofi-calc
-
-# TODO: Show keybindings
+bind = $mod, c, exec, tofi-calc
 
 # Show clipboard
-bind = $mod, v, exec, /etc/scripts/system/clipboard-manager.sh --menu
+bind = $mod, v, exec, clipboard-manager --menu
 
 # Clear clipboard
-bind = $mod SHIFT, v, exec, /etc/scripts/system/clipboard-manager.sh --clear
+bind = $mod SHIFT, v, exec, clipboard-manager --clear
 
 # Show emojis
-bind = $mod, e, exec, rofi-emoji
+bind = $mod, e, exec, tofi-emoji
 
+# Notifications
 bind = $mod CTRL, n, exec, dunstctl history-pop
-
 bind = $mod CTRL SHIFT, n, exec, dunstctl close
-
 bind = $mod CTRL SHIFT, Escape, exec, dunstctl close-all
 
 # Toggle bar
-bind = $mod, b, exec, /etc/scripts/waybar/waybar-toggle.sh
+bind = $mod, b, exec, waybar-toggle
 
 
 ### WM KEYBINDINGS
@@ -60,14 +57,6 @@ bind = SUPER, f, fullscreen
 # Set the node flags (sticky)
 bind = SUPER CTRL, y, pin
 
-# Alternate between the tiled and monocle layout
-bind = $mod, r, submap, layout
-submap = layout
-bind = , c, centerwindow
-bind = , c, submap, reset
-bind = , escape, submap, reset
-submap = reset
-
 # Focus direction
 bind = $mod, left, movefocus, l
 bind = $mod, down, movefocus, d
@@ -81,6 +70,18 @@ bind = $mod SHIFT, left, swapwindow, l
 bind = $mod SHIFT, down, swapwindow, d
 bind = $mod SHIFT, up, swapwindow, u
 bind = $mod SHIFT, right, swapwindow, r
+
+# Resize
+bind = $mod ALT SHIFT, left, resizeactive, -40 0
+bind = $mod ALT SHIFT, down, resizeactive, 0 40
+bind = $mod ALT SHIFT, up, resizeactive, 0 -40
+bind = $mod ALT SHIFT, right, resizeactive, 40 0
+
+# Move
+bind = $mod ALT, left, moveactive, -40 0
+bind = $mod ALT, down, moveactive, 0 40
+bind = $mod ALT, up, moveactive, 0 -40
+bind = $mod ALT, right, moveactive, 40 0
 
 bind = SUPER, 1, workspace, 1
 bind = SUPER, 2, workspace, 2
@@ -104,18 +105,6 @@ bind = SUPER SHIFT, 8, movetoworkspace, 8
 bind = SUPER SHIFT, 9, movetoworkspace, 9
 bind = SUPER SHIFT, 0, movetoworkspace, 10
 
-# Resize
-bind = $mod ALT SHIFT, left, resizeactive, -40 0
-bind = $mod ALT SHIFT, down, resizeactive, 0 40
-bind = $mod ALT SHIFT, up, resizeactive, 0 -40
-bind = $mod ALT SHIFT, right, resizeactive, 40 0
-
-# Move
-bind = $mod ALT, left, moveactive, -40 0
-bind = $mod ALT, down, moveactive, 0 40
-bind = $mod ALT, up, moveactive, 0 -40
-bind = $mod ALT, right, moveactive, 40 0
-
 
 ### WM SCRATCHPAD
 
@@ -135,13 +124,43 @@ bind = $mod ALT, t, exec, $term
 bind = $mod ALT, f, exec, hyprland-focus-toggle "thunar-scratch" "thunar --name thunar-scratch"
 
 # Screencast/record region to mp4
-bind = $mod ALT, r, exec, /etc/scripts/system/recorder.sh --area
+bind = $mod ALT, r, exec, recorder --area
 
 # Open screenshoot utility
-bind = $mod ALT, s, exec, /etc/scripts/system/takeshot.sh --area
+bind = $mod ALT, s, exec, takeshot --area
 
 # Open color picker
-bind = $mod ALT, c, exec, /etc/scripts/system/color-picker.sh
+bind = $mod ALT, c, exec, color-picker
+
+
+### MEDIA KEYBINDINGS
+
+bind = , XF86KbdBrightnessDown, exec, wob-osd --kbd-backlight 5%-
+bind = , XF86KbdBrightnessUp, exec, wob-osd --kbd-backlight 5%+
+
+bind = , XF86MonBrightnessUp, exec, wob-osd --backlight 5%+
+bind = , XF86MonBrightnessDown, exec, wob-osd --backlight 5%-
+
+bind = , XF86AudioRaiseVolume, exec, wob-osd --volume +5%
+bind = , XF86AudioLowerVolume, exec, wob-osd --volume -5%
+bind = , XF86AudioMute, exec, wob-osd --volume-toggle
+
+bind = , XF86AudioNext, exec, playerctl next
+bind = , XF86AudioStop, exec, playerctl pause
+bind = , XF86AudioPlay, exec, playerctl play-pause
+bind = , XF86AudioPrev, exec, playerctl previous
+
+
+## SUBMAPS
+
+# Layout
+bind = $mod, r, submap, layout
+submap = layout
+bind = , c, centerwindow
+bind = , c, submap, reset
+# TODO: add master stack keybinding
+bind = , escape, submap, reset
+submap = reset
 
 # Open Browser
 bind = $mod ALT, b, submap, browser
@@ -152,6 +171,7 @@ bind = , g, exec, google-chrome-stable
 bind = , g, submap, reset
 bind = , f, exec, firefox
 bind = , f, submap, reset
+# TODO: add chatgpt, ytmusic, msgpt
 bind = , escape, submap, reset
 submap = reset
 
@@ -168,38 +188,8 @@ bind = , r, exec, hyprland-focus-toggle kitty-newsboat $HOME/.config/kitty/scrip
 bind = , r, submap, reset
 bind = , u, exec, hyprland-focus-toggle kitty-ncmpcpp $HOME/.config/kitty/scripts/kitty-ncmpcpp.sh
 bind = , u, submap, reset
+# TODO: add buku
 bind = , escape, submap, reset
 submap = reset
-
-# TODO: Open magnifying glass
-
-
-### MEDIA KEYBINDINGS
-
-bind = , XF86KbdBrightnessDown, exec, wob-osd --kbd-backlight 5%-
-
-bind = , XF86KbdBrightnessUp, exec, wob-osd --kbd-backlight 5%+
-
-bind = , XF86MonBrightnessUp, exec, wob-osd --backlight 5%+
-
-bind = , XF86MonBrightnessDown, exec, wob-osd --backlight 5%-
-
-bind = , XF86AudioRaiseVolume, exec, wob-osd --volume +5%
-
-bind = , XF86AudioLowerVolume, exec, wob-osd --volume -5%
-
-bind = , XF86AudioMute, exec, wob-osd --volume-toggle
-
-# Play next media
-bind = , XF86AudioNext, exec, playerctl next
-
-# Pause media
-bind = , XF86AudioStop, exec, playerctl pause
-
-# Play media
-bind = , XF86AudioPlay, exec, playerctl play-pause
-
-# Play previous media
-bind = , XF86AudioPrev, exec, playerctl previous
 
 # vim: syntax=sh

@@ -1,35 +1,34 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, system, ... }:
 
 let
   cfg = config._custom.de.hyprland;
   inherit (config._custom.globals) themeColors;
-  hyprland-focus-toggle = pkgs.writeTextFile {
-    name = "hyprland-focus-toggle";
-    destination = "/bin/hyprland-focus-toggle";
-    executable = true;
-    text = builtins.readFile ./scripts/hyprland-focus-toggle.sh;
-  };
+  hyprlandFinal = inputs.hyprland.packages."${system}".hyprland;
+  hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
+    (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
 in {
-  options._custom.de.hyprland.enable = lib.mkEnableOption { };
+  options._custom.de.hyprland = {
+    enable = lib.mkEnableOption { };
+    isDefault = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
-    _custom.de.greetd = {
-      enable = lib.mkDefault true;
-      cmd = "Hyprland";
+    _custom.de.greetd.cmd = lib.mkIf cfg.isDefault "Hyprland";
+
+    programs.hyprland = {
+      enable = true;
+      package = hyprlandFinal;
+      portalPackage =
+        inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
     };
 
-    _custom.hm = {
-      imports = [
-        # already in hm repository master branch
-        inputs.hyprland.homeManagerModules.default
-      ];
+    xdg.portal.config.Hyprland.default = [ "gtk" ];
 
-      programs.waybar = {
-        settings.mainBar = {
-          modules-left =
-            [ "hyprland/workspaces" "keyboard-state" "hyprland/submap" ];
-          modules-center = [ "hyprland/window" ];
-        };
+    _custom.hm = {
+      programs.waybar.settings.mainBar = {
+        modules-left =
+          [ "hyprland/workspaces" "keyboard-state" "hyprland/submap" ];
+        modules-center = [ "hyprland/window" ];
       };
 
       home = {
@@ -40,15 +39,9 @@ in {
         packages = [ hyprland-focus-toggle ];
       };
 
-      xdg.configFile = {
-        "hyprland/scripts/autostart.sh" = {
-          executable = true;
-          source = ./scripts/autostart.sh;
-        };
-      };
-
       wayland.windowManager.hyprland = {
         enable = true;
+        package = hyprlandFinal;
         extraConfig = ''
           ${lib.concatStringsSep "\n"
           (lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${value}")
@@ -57,8 +50,8 @@ in {
           ${builtins.readFile ./dotfiles/config}
           ${builtins.readFile ./dotfiles/keybindings}
         '';
-        # TODO: fix build
-        # plugin = ${inputs.hyprland-plugins.packages.${pkgs.hostPlatform.system}.borders-plus-plus}/lib/libborders-plus-plus.so
+        plugins =
+          [ inputs.hyprland-plugins.packages."${system}".borders-plus-plus ];
       };
 
       services.swayidle.timeouts = lib.mkAfter [

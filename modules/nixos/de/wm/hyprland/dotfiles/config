@@ -43,8 +43,8 @@ input {
 
   touchpad {
     natural_scroll = true
-    middle_button_emulation = false
-    tap-to-click = false
+    middle_button_emulation = true
+    tap-to-click = true
     clickfinger_behavior = true
   }
 }
@@ -145,9 +145,7 @@ windowrulev2 = rounding 0, xwayland:1, floating:1
 
 #### AUTOSTART
 
-exec-once = restart-pipewire-and-portal-services
+exec-once = dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK QT_QPA_PLATFORMTHEME && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target
 exec-once = configure-gtk
-exec-once = systemctl --user start graphical-session.target
-exec-once = bash ~/.config/hyprland/scripts/autostart.sh
 
 # vim: syntax=sh
