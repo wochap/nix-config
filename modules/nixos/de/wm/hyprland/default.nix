@@ -50,7 +50,7 @@ in {
         systemd.enable = false;
         extraConfig = ''
           ${lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${value}")
+          (lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
             themeColors)}
 
           ${builtins.readFile ./dotfiles/config}

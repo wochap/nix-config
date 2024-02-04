@@ -10,8 +10,8 @@ general {
   border_size = 1
   gaps_in = 2
   gaps_out = 4
-  col.inactive_border = rgb(44475a)
-  col.active_border = rgb(bd93f9)
+  col.inactive_border = rgb($selection)
+  col.active_border = rgb($primary)
   cursor_inactive_timeout = 5
   layout = master
   no_cursor_warps = true
@@ -26,7 +26,7 @@ master {
 plugin {
   borders-plus-plus {
     add_borders = 1
-    col.border_1 = rgb(44475a)
+    col.border_1 = rgb($selection)
     border_size_1 = -1
     natural_rounding = yes
   }
@@ -70,7 +70,7 @@ misc {
   key_press_enables_dpms = true
   focus_on_activate = true
   disable_autoreload = true
-  background_color = rgb(1e1e2e)
+  background_color = rgb($background)
 }
 
 animations {
