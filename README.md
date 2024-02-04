@@ -77,6 +77,7 @@
    # Go to nix-config folder
    $ cd /home/<username>/nix-config
    $ nixos-rebuild boot --flake .#desktop
+   # $ nixos-rebuild switch --flake .#desktop --specialisation hyprland-specialisation
    # Reboot
    ```
 
