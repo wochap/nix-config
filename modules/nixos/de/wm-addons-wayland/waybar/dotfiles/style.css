@@ -66,7 +66,7 @@ window#waybar.hidden {
 #keyboard-state label.locked {
   font-size: 1.2em;
   color: @red;
-  padding: 0 0.3em;
+  padding: 0 0.5em;
 }
 
 #custom-offlinemsmtp.disabled,
