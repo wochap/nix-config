@@ -8,8 +8,8 @@ monitor = , addreserved, 0, 0, 0, 0
 
 general {
   border_size = 1
-  gaps_in = 2
-  gaps_out = 4
+  gaps_in = 0
+  gaps_out = 0
   col.inactive_border = rgb($selection)
   col.active_border = rgb($primary)
   cursor_inactive_timeout = 5
@@ -33,7 +33,7 @@ plugin {
 }
 
 decoration {
-  rounding = 4
+  rounding = 0
   blur {
     enabled = false
   }
