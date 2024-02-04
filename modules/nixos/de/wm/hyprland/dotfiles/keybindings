@@ -62,16 +62,16 @@ bind = $mod, left, movefocus, l
 bind = $mod, down, movefocus, d
 bind = $mod, up, movefocus, u
 bind = $mod, right, movefocus, r
-bind = $mod, n, cyclenext, next
-bind = $mod, p, cycleprev, prev
+bind = $mod, n, layoutmsg, cyclenext next
+bind = $mod, p, layoutmsg, cycleprev prev
 
 # Swap direction
 bind = $mod SHIFT, left, swapwindow, l
 bind = $mod SHIFT, down, swapwindow, d
 bind = $mod SHIFT, up, swapwindow, u
 bind = $mod SHIFT, right, swapwindow, r
-bind = $mod, SHIFT, n, swapnext
-bind = $mod, SHIFT, p, swapprev
+bind = $mod SHIFT, n, layoutmsg, swapnext
+bind = $mod SHIFT, p, layoutmsg, swapprev
 
 # Resize floating windows
 bind = $mod ALT SHIFT, left, resizeactive, -40 0
@@ -86,7 +86,7 @@ bind = $mod ALT, up, moveactive, 0 -40
 bind = $mod ALT, right, moveactive, 40 0
 
 # Bump focused view to the top of the layout stack
-bind = $mod, return, swapwithmaster
+bind = $mod, return, layoutmsg, swapwithmaster
 
 bind = SUPER, 1, workspace, 1
 bind = SUPER, 2, workspace, 2
@@ -163,9 +163,9 @@ bind = $mod, r, submap, layout
 submap = layout
 bind = , c, centerwindow
 bind = , c, submap, reset
-bind = , left, addmaster
+bind = , left, layoutmsg, addmaster
 bind = , left, submap, reset
-bind = , right, removemaster
+bind = , right, layoutmsg, removemaster
 bind = , right, submap, reset
 bind = , escape, submap, reset
 submap = reset
