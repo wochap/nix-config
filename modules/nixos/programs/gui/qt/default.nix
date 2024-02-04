@@ -22,7 +22,11 @@ in {
       ];
     };
 
-    programs.kdeconnect.enable = true;
+    programs.kdeconnect = {
+      enable = true;
+      package =
+        lib.mkIf config._custom.de.gnome.enable pkgs.gnomeExtensions.gsconnect;
+    };
 
     _custom.hm = {
       services.kdeconnect = {
