@@ -94,10 +94,12 @@ window#waybar.hidden {
 }
 #tags button,
 #workspaces button {
-  padding: 0 2px;
-  min-width: 20px;
   font-weight: normal;
-  background-color: @module_bg;
+  padding: 0.15em 0 0;
+  background-color: transparent;
+}
+#workspaces button.empty {
+  color: @comment;
 }
 #custom-dwl_tag.occupied,
 #tags button.occupied {
@@ -208,6 +210,7 @@ tooltip label {
   color: @foreground;
 }
 
+#window,
 #custom-dwl_title,
 #clock {
   background: transparent;

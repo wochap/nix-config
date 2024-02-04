@@ -42,6 +42,7 @@ in {
       wayland.windowManager.hyprland = {
         enable = true;
         package = hyprlandFinal;
+        systemd.enable = false;
         extraConfig = ''
           ${lib.concatStringsSep "\n"
           (lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${value}")
