@@ -29,7 +29,7 @@ in {
       systemd.user.services.gnome-keyring = {
         Unit = {
           Description = "GNOME Keyring";
-          PartOf = [ "default.target" ];
+          PartOf = [ "graphical-session-pre.target" ];
         };
         Service = {
           # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
@@ -37,7 +37,7 @@ in {
             "/run/wrappers/bin/gnome-keyring-daemon --start --foreground --components=secrets,ssh,pkcs11";
           Restart = "on-abort";
         };
-        Install = { WantedBy = [ "default.target" ]; };
+        Install = { WantedBy = [ "graphical-session-pre.target" ]; };
       };
     };
   };
