@@ -41,17 +41,11 @@
   "sway/window": {
     "max-length": 50
   },
-  "river/window": {
-    "max-length": 50
-  },
   "hyprland/submap": {
     "tooltip": false
   },
   "hyprland/window": {
     "max-length": 50
-  },
-  "river/tags": {
-    "num-tags": 8
   },
   "hyprland/workspaces": {
     "all-outputs": true,

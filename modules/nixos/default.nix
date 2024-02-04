@@ -8,7 +8,6 @@
     ./de/kde
     ./de/wm/dwl
     ./de/wm/hyprland
-    ./de/wm/river
     ./de/wm/sway
     ./de/wm-addons/audio
     ./de/wm-addons/backlight
