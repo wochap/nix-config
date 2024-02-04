@@ -10,6 +10,7 @@ in {
   options._custom.programs.retroarch.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    # NOTE: manually download shaders, https://github.com/libretro/slang-shaders
     environment = { systemPackages = [ retroarchFinal ]; };
 
     services.xserver.desktopManager.retroarch = {
