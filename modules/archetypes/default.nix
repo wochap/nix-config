@@ -34,6 +34,7 @@
 
       _custom.de.cliphist.enable = true;
       _custom.de.dunst.enable = true;
+      _custom.de.electron-support.enable = true;
       _custom.de.gammastep.enable = true;
       _custom.de.kanshi.enable = true;
       _custom.de.swayidle.enable = true;
@@ -61,6 +62,7 @@
       _custom.de.plymouth.enable = true;
       _custom.de.power-management.enable = true;
 
+      _custom.de.electron-support.enable = true;
       _custom.de.utils.enable = true;
     })
   ];

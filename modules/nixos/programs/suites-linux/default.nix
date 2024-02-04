@@ -7,47 +7,6 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
-        bruno = prev.runCommandNoCC "bruno" {
-          buildInputs = with pkgs; [ makeWrapper ];
-        } ''
-          makeWrapper ${prev.bruno}/bin/bruno $out/bin/bruno \
-          --add-flags "--enable-features=UseOzonePlatform" \
-          --add-flags "--ozone-platform=wayland"
-
-          ln -sf ${prev.bruno}/share $out/share
-        '';
-
-        postman = prev.runCommandNoCC "postman" {
-          buildInputs = with pkgs; [ makeWrapper ];
-        } ''
-          makeWrapper ${prev.postman}/bin/postman $out/bin/postman \
-          --add-flags "--enable-features=UseOzonePlatform" \
-          --add-flags "--ozone-platform=wayland"
-
-          ln -sf ${prev.postman}/share $out/share
-        '';
-
-        freetube = prev.runCommandNoCC "freetube" {
-          buildInputs = with pkgs; [ makeWrapper ];
-        } ''
-          makeWrapper ${prev.freetube}/bin/freetube $out/bin/freetube \
-          --add-flags "--enable-features=UseOzonePlatform" \
-          --add-flags "--ozone-platform=wayland"
-
-          ln -sf ${prev.freetube}/share $out/share
-        '';
-
-        microsoft-edge = prev.runCommandNoCC "microsoft-edge" {
-          buildInputs = with pkgs; [ makeWrapper ];
-        } ''
-          makeWrapper ${prev.microsoft-edge}/bin/microsoft-edge $out/bin/microsoft-edge \
-          --add-flags "--enable-features=WebRTCPipeWireCapturer" \
-          --add-flags "--enable-features=UseOzonePlatform" \
-          --add-flags "--ozone-platform=wayland"
-
-          ln -sf ${prev.microsoft-edge}/share $out/share
-        '';
-
         heimdall = prev.heimdall.overrideAttrs (_: {
           version = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
           src = prev.fetchFromSourcehut {
@@ -145,22 +104,6 @@ in {
 
     _custom.hm = {
       xdg.desktopEntries = {
-        bruno = {
-          name = "bruno";
-          exec = "bruno %U";
-        };
-        microsoft-edge = {
-          name = "Microsoft Edge";
-          exec = "microsoft-edge %U";
-        };
-        postman = {
-          name = "Postman";
-          exec = "postman %U";
-        };
-        freetube = {
-          name = "Freetube";
-          exec = "freetube %U";
-        };
         figma = {
           name = "Figma";
           exec = "google-chrome-stable --app=https://www.figma.com";

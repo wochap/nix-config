@@ -7,14 +7,8 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.globals.displayServer = "wayland";
 
-    environment.sessionVariables = {
-      # Enable wayland support (electron apps)
-      # https://nixos.wiki/wiki/Wayland
-      NIXOS_OZONE_WL = "1";
-
-      # Enable portal
-      GTK_USE_PORTAL = "1";
-    };
+    # Enable portal
+    environment.sessionVariables.GTK_USE_PORTAL = "1";
 
     programs.xwayland.enable = true;
 

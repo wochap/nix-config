@@ -29,6 +29,7 @@
     ./de/wm-addons/xdg
     ./de/wm-addons-wayland/cliphist
     ./de/wm-addons-wayland/dunst
+    ./de/wm-addons-wayland/electron-support
     ./de/wm-addons-wayland/gammastep
     ./de/wm-addons-wayland/kanshi
     ./de/wm-addons-wayland/swayidle
