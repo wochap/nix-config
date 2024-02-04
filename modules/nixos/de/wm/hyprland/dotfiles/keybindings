@@ -181,9 +181,9 @@ bind = , f, exec, firefox
 bind = , f, submap, reset
 bind = , i, exec, hyprland-focus-toggle $bing_gpt_appid "microsoft-edge --app=https://www.bing.com/search?q=q&showconv=1"
 bind = , i, submap, reset
-bind = SHIFT, i, exec, hyprland-focus-toggle $bing_gpt_appid "google-chrome-stable --app=https://chat.openai.com"
+bind = SHIFT, i, exec, hyprland-focus-toggle $chat_gpt_appid "google-chrome-stable --app=https://chat.openai.com"
 bind = SHIFT, i, submap, reset
-bind = , u, exec, hyprland-focus-toggle $bing_gpt_appid "google-chrome-stable --app=https://music.youtube.com"
+bind = , u, exec, hyprland-focus-toggle $ytmusic_appid "google-chrome-stable --app=https://music.youtube.com"
 bind = , u, submap, reset
 bind = , escape, submap, reset
 submap = reset
