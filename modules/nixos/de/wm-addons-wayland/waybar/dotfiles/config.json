@@ -6,7 +6,6 @@
     "idle_inhibitor",
     "custom/notifications",
     "custom/offlinemsmtp",
-    "custom/mbpfan",
     "temperature",
     "battery",
     "pulseaudio",
@@ -19,12 +18,6 @@
   "spacing": 7,
   "margin": "0",
 
-  "custom/mbpfan": {
-    "interval": 1,
-    "exec": "/etc/scripts/mbpfan-bar.sh --read",
-    "on-click": "/etc/scripts/mbpfan-bar.sh --toggle &",
-    "tooltip": false
-  },
   "custom/scratchpad_indicator": {
     "interval": 1,
     "exec": "swaymsg -t get_tree | jq 'recurse(.nodes[]) | first(select(.name==\"__i3_scratch\")) | .floating_nodes | length | select(. >= 1)'",
