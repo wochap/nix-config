@@ -49,6 +49,10 @@
       # Disables scatter/gather which was introduced with kernel version 6.2
       # It produces completely white or flashing screens when enabled while using the iGPU of Ryzen 7000-series CPUs (Raphael)
       "amdgpu.sg_display=0"
+
+      # Hide not harmful ACPI BIOS Errors (AE_ALREADY_EXISTS)
+      # more info: https://forum.zorin.com/t/acpi-bios-error-help-to-make-sense-of-this/22035/2
+      "loglevel=3"
     ];
 
     environment.systemPackages = with pkgs; [ lenovo-legion nvtop amdgpu_top ];
