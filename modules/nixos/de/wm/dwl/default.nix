@@ -5,12 +5,8 @@ let
   inherit (config._custom.globals) themeColors cursor userName;
   inherit (lib._custom) unwrapHex;
 
-  dwl-waybar = pkgs.writeTextFile {
-    name = "dwl-waybar";
-    destination = "/bin/dwl-waybar";
-    executable = true;
-    text = builtins.readFile ./scripts/dwl-waybar.sh;
-  };
+  dwl-waybar = pkgs.writeScriptBin "dwl-waybar"
+    (builtins.readFile ./scripts/dwl-waybar.sh);
   dwl-final = (pkgs.unstable.dwl.override {
     conf = ''
       ${builtins.readFile ./dotfiles/config.def.h}
@@ -97,39 +93,37 @@ in {
     services.xserver.displayManager.sessionPackages = [ dwl-final ];
 
     _custom.hm = lib.mkIf cfg.isDefault {
-      programs.waybar = {
-        settings.mainBar = lib.mkMerge ([{
-          modules-left = (builtins.map (i: "custom/dwl_tag#${toString i}")
-            (builtins.genList (i: i) 9))
-            ++ [ "custom/dwl_layout" "custom/dwl_mode" "keyboard-state" ];
-          modules-center = [ "custom/dwl_title" ];
-          "custom/dwl_layout" = {
-            exec = "dwl-waybar '' layout";
-            format = "{}";
-            escape = true;
-            return-type = "json";
-          };
-          "custom/dwl_title" = {
-            exec = "dwl-waybar '' title";
-            format = "{}";
-            escape = true;
-            return-type = "json";
-            max-length = 50;
-          };
-          "custom/dwl_mode" = {
-            exec = "dwl-waybar '' mode";
-            format = "{}";
-            escape = true;
-            return-type = "json";
-          };
-        }] ++ (builtins.map (i: {
-          "custom/dwl_tag#${toString i}" = {
-            exec = "dwl-waybar '' ${toString i}";
-            format = "{}";
-            return-type = "json";
-          };
-        }) (builtins.genList (i: i) 9)));
-      };
+      programs.waybar.settings.mainBar = lib.mkMerge ([{
+        modules-left = (builtins.map (i: "custom/dwl_tag#${toString i}")
+          (builtins.genList (i: i) 9))
+          ++ [ "custom/dwl_layout" "custom/dwl_mode" "keyboard-state" ];
+        modules-center = [ "custom/dwl_title" ];
+        "custom/dwl_layout" = {
+          exec = "dwl-waybar '' layout";
+          format = "{}";
+          escape = true;
+          return-type = "json";
+        };
+        "custom/dwl_title" = {
+          exec = "dwl-waybar '' title";
+          format = "{}";
+          escape = true;
+          return-type = "json";
+          max-length = 50;
+        };
+        "custom/dwl_mode" = {
+          exec = "dwl-waybar '' mode";
+          format = "{}";
+          escape = true;
+          return-type = "json";
+        };
+      }] ++ (builtins.map (i: {
+        "custom/dwl_tag#${toString i}" = {
+          exec = "dwl-waybar '' ${toString i}";
+          format = "{}";
+          return-type = "json";
+        };
+      }) (builtins.genList (i: i) 9)));
 
       services.swayidle.timeouts = lib.mkAfter [
         {
