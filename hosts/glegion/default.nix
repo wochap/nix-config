@@ -162,30 +162,7 @@ in {
     #
     # You can update Home Manager without changing this value. See
     # the Home Manager release notes for a list of state version
-    home-manager.users.${userName} = {
-      home.stateVersion = "23.11";
-
-      # programs.waybar.settings.mainBar."modules-right" = lib.mkForce [
-      #   "tray"
-      #   "custom/recorder"
-      #   "idle_inhibitor"
-      #   "custom/notifications"
-      #   "custom/offlinemsmtp"
-      #   "temperature"
-      #   "pulseaudio"
-      #   "bluetooth"
-      #   "network"
-      #   "clock"
-      # ];
-
-      # programs.waybar.settings.mainBar = {
-      #   temperature = {
-      #     hwmon-path-abs = "/sys/devices/platform/coretemp.0/hwmon";
-      #     input-filename = "temp1_input";
-      #   };
-      #   keyboard-state = { device-path = "/dev/input/event25"; };
-      # };
-    };
+    home-manager.users.${userName}.home.stateVersion = "23.11";
   };
 }
 
