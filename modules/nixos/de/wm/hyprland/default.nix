@@ -22,7 +22,7 @@ in {
         inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
     };
 
-    xdg.portal.config.Hyprland.default = [ "gtk" ];
+    xdg.portal.config.hyprland.default = [ "gtk" "hyprland" ];
 
     _custom.hm = {
       programs.waybar.settings.mainBar = {
@@ -49,8 +49,8 @@ in {
         package = hyprlandFinal;
         systemd.enable = false;
         extraConfig = ''
-          ${lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
+          ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
+            (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
             themeColors)}
 
           ${builtins.readFile ./dotfiles/config}
