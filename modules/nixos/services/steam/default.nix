@@ -28,7 +28,7 @@ in {
       })
     ];
 
-    environment.systemPackages = with pkgs; [ gamescope mangohud ];
+    environment.systemPackages = with pkgs; [ gamescope goverlay mangohud ];
 
     programs.steam = {
       enable = true;
