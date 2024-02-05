@@ -138,6 +138,7 @@ in {
       layout = "us";
       xkbModel = "pc104";
       xkbVariant = "";
+      xkbOptions = "compose:ralt";
 
       # Enable touchpad support (enabled default in most desktopManager).
       libinput.enable = true;
