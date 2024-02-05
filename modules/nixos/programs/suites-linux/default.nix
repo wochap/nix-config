@@ -7,6 +7,26 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
+        bruno = prev.runCommandNoCC "bruno" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.bruno}/bin/bruno $out/bin/bruno \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland"
+
+          ln -sf ${prev.bruno}/share $out/share
+        '';
+
+        freetube = prev.runCommandNoCC "freetube" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.freetube}/bin/freetube $out/bin/freetube \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland"
+
+          ln -sf ${prev.freetube}/share $out/share
+        '';
+
         heimdall = prev.heimdall.overrideAttrs (_: {
           version = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
           src = prev.fetchFromSourcehut {
@@ -104,6 +124,14 @@ in {
 
     _custom.hm = {
       xdg.desktopEntries = {
+        bruno = {
+          name = "bruno";
+          exec = "bruno %U";
+        };
+        freetube = {
+          name = "Freetube";
+          exec = "freetube %U";
+        };
         figma = {
           name = "Figma";
           exec = "google-chrome-stable --app=https://www.figma.com";
