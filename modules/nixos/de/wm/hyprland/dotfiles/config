@@ -33,6 +33,7 @@ decoration {
 
 input {
   kb_layout = us
+  kb_options = compose:ralt
   accel_profile = adaptive
   repeat_delay = 300
   repeat_rate = 50
