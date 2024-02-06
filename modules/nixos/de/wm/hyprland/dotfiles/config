@@ -80,32 +80,21 @@ env = XCURSOR_SIZE,24
 
 #### RULES
 
+windowrulev2 = center, class:.*
+
 windowrulev2 = float, class:^(file-roller)$
-windowrulev2 = center, class:^(file-roller)$
 windowrulev2 = float, class:^(gnome-system-monitor)$
-windowrulev2 = center, class:^(gnome-system-monitor)$
 windowrulev2 = float, class:^(mpv)$
-windowrulev2 = center, class:^(mpv)$
 windowrulev2 = float, class:^(imv)$
-windowrulev2 = center, class:^(imv)$
 windowrulev2 = float, class:^(org.gnome.Calculator)$
-windowrulev2 = center, class:^(org.gnome.Calculator)$
 windowrulev2 = float, class:^(pavucontrol)$
-windowrulev2 = center, class:^(pavucontrol)$
 windowrulev2 = float, class:^(thunar)$
-windowrulev2 = center, class:^(thunar)$
 windowrulev2 = float, class:^(thunar-scratch)$
-windowrulev2 = center, class:^(thunar-scratch)$
 windowrulev2 = float, class:^(xdg-desktop-portal-gtk)$
-windowrulev2 = center, class:^(xdg-desktop-portal-gtk)$
 windowrulev2 = float, title:^(meet.google.com is sharing your screen.)$
-windowrulev2 = center, title:^(meet.google.com is sharing your screen.)$
 windowrulev2 = float, class:^($bing_gpt_appid)$
-windowrulev2 = center, class:^($bing_gpt_appid)$
 windowrulev2 = float, class:^($chat_gpt_appid)$
-windowrulev2 = center, class:^($chat_gpt_appid)$
 windowrulev2 = float, class:^($ytmusic_appid)$
-windowrulev2 = center, class:^($ytmusic_appid)$
 
 windowrulev2 = workspace 5, class:^(firefox)$
 windowrulev2 = workspace 1, class:^(google-chrome)$
@@ -115,29 +104,21 @@ windowrulev2 = workspace 4, class:^(discord)$
 windowrulev2 = workspace 9, class:^(microsoft-edge)$
 
 windowrulev2 = float, class:^(kitty-top)$
-windowrulev2 = center, class:^(kitty-top)$
 windowrulev2 = pin, class:^(kitty-top)$
 windowrulev2 = float, class:^(kitty-scratch)$
-windowrulev2 = center, class:^(kitty-scratch)$
 windowrulev2 = pin, class:^(kitty-scratch)$
 windowrulev2 = size 75% 75%, class:^(kitty-scratch)$
 windowrulev2 = float, class:^(kitty-neorg)$
-windowrulev2 = center, class:^(kitty-neorg)$
 windowrulev2 = pin, class:^(kitty-neorg)$
 windowrulev2 = float, class:^(kitty-nmtui)$
-windowrulev2 = center, class:^(kitty-nmtui)$
 windowrulev2 = pin, class:^(kitty-nmtui)$
 windowrulev2 = float, class:^(kitty-neomutt)$
-windowrulev2 = center, class:^(kitty-neomutt)$
 windowrulev2 = pin, class:^(kitty-neomutt)$
 windowrulev2 = float, class:^(kitty-newsboat)$
-windowrulev2 = center, class:^(kitty-newsboat)$
 windowrulev2 = pin, class:^(kitty-newsboat)$
 windowrulev2 = float, class:^(kitty-ncmpcpp)$
-windowrulev2 = center, class:^(kitty-ncmpcpp)$
 windowrulev2 = pin, class:^(kitty-ncmpcpp)$
 windowrulev2 = float, class:^(kitty-buku)$
-windowrulev2 = center, class:^(kitty-buku)$
 windowrulev2 = pin, class:^(kitty-buku)$
 
 # fix xwayland apps
