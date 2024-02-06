@@ -12,7 +12,7 @@ general {
   gaps_out = 0
   col.inactive_border = rgb($selection)
   col.active_border = rgb($primary)
-  cursor_inactive_timeout = 5
+  # cursor_inactive_timeout = 5
   layout = master
   no_cursor_warps = true
   no_focus_fallback = true
