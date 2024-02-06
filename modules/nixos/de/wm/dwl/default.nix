@@ -80,19 +80,19 @@ in {
         bemenu
         foot
       ];
-
-      sessionVariables = lib.mkIf cfg.isDefault {
-        XDG_CURRENT_DESKTOP = "wlroots";
-        XDG_SESSION_DESKTOP = "dwl";
-      };
     };
+
+    services.xserver.displayManager.sessionPackages = [ dwl-final ];
 
     _custom.de.greetd.cmd =
       lib.mkIf cfg.isDefault "dwl > /home/${userName}/.cache/dwltags";
 
-    services.xserver.displayManager.sessionPackages = [ dwl-final ];
-
     _custom.hm = lib.mkIf cfg.isDefault {
+      home.sessionVariables = {
+        XDG_CURRENT_DESKTOP = "wlroots";
+        XDG_SESSION_DESKTOP = "dwl";
+      };
+
       programs.waybar.settings.mainBar = lib.mkMerge ([{
         modules-left = (builtins.map (i: "custom/dwl_tag#${toString i}")
           (builtins.genList (i: i) 9))
