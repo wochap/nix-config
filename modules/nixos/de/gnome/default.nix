@@ -3,12 +3,11 @@
 let
   cfg = config._custom.de.gnome;
   extensionsPkgs = with pkgs.gnomeExtensions; [
-    appindicator
+    # appindicator
+    # dash-to-panel
     blur-my-shell
     clipboard-indicator
-    dash-to-panel
     workspace-indicator
-    x11-gestures
     just-perfection # customize GNOME Shell
   ];
 in {
