@@ -122,7 +122,7 @@ windowrulev2 = float, class:^(kitty-buku)$
 windowrulev2 = pin, class:^(kitty-buku)$
 
 # fix xwayland apps
-windowrulev2 = rounding 0, xwayland:1, floating:1
+windowrulev2 = rounding 0, xwayland:1
 
 
 #### AUTOSTART
