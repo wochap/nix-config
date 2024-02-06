@@ -23,15 +23,6 @@ master {
   mfact = 0.5
 }
 
-plugin {
-  borders-plus-plus {
-    add_borders = 1
-    col.border_1 = rgb($selection)
-    border_size_1 = -1
-    natural_rounding = yes
-  }
-}
-
 decoration {
   rounding = 0
   blur {

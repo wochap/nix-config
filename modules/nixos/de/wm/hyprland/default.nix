@@ -56,8 +56,8 @@ in {
           ${builtins.readFile ./dotfiles/config}
           ${builtins.readFile ./dotfiles/keybindings}
         '';
-        plugins =
-          [ inputs.hyprland-plugins.packages."${system}".borders-plus-plus ];
+        # plugins =
+        #   [ inputs.hyprland-plugins.packages."${system}".borders-plus-plus ];
       };
 
       services.swayidle.timeouts = lib.mkAfter [
