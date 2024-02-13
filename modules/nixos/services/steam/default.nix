@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, system, ... }:
 
 let cfg = config._custom.services.steam;
 in {
   options._custom.services.steam.enable = lib.mkEnableOption { };
+
+  imports = [ inputs.nix-gaming.nixosModules.steamCompat ];
 
   # inspiration: https://www.reddit.com/r/NixOS/comments/15dokde/problems_with_steam_and_gamescope_in_hyprland/
   config = lib.mkIf cfg.enable {
@@ -11,13 +13,15 @@ in {
         steam = prev.steam.override {
           extraPkgs = pkgs:
             with pkgs; [
+              openssl
               gamescope
+              mangohud
+
               keyutils
               libkrb5
               libpng
               libpulseaudio
               libvorbis
-              mangohud
               stdenv.cc.cc.lib
               xorg.libXScrnSaver
               xorg.libXcursor
@@ -28,28 +32,29 @@ in {
       })
     ];
 
-    environment.systemPackages = with pkgs; [ gamescope goverlay mangohud ];
+    environment.systemPackages = with pkgs; [
+      gamescope
+      goverlay
+      mangohud
+      protonup-qt
+    ];
+    environment.sessionVariables = {
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS =
+        [ "$HOME/.local/share/Steam/compatibilitytools.d" ];
+    };
 
     programs.steam = {
       enable = true;
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
       gamescopeSession.enable = true;
+      # extraCompatPackages = with pkgs;
+      #   [ inputs.nix-gaming.packages.${system}.proton-ge ];
     };
 
     hardware.opengl = {
       extraPackages = with pkgs; [ mangohud ];
       extraPackages32 = with pkgs; [ mangohud ];
-    };
-
-    _custom.hm = {
-      programs.mangohud = {
-        enable = true;
-        settings = {
-          full = true;
-          cpu_load_change = true;
-        };
-      };
     };
   };
 }
