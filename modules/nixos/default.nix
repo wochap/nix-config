@@ -37,6 +37,7 @@
     ./de/wm-addons-wayland/tofi
     ./de/wm-addons-wayland/utils
     ./de/wm-addons-wayland/waybar
+    ./de/wm-addons-wayland/sfwbar
     ./de/wm-addons-wayland/wayland-session
     ./de/wm-addons-wayland/wob
 
@@ -44,6 +45,7 @@
 
     ./programs/cli/nix-alien
     ./programs/cli/nix-direnv
+    ./programs/gui/gaming
     ./programs/gui/gtk
     ./programs/gui/imv
     ./programs/gui/mongodb

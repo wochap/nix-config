@@ -126,6 +126,7 @@ in {
       hyprland-specialisation = {
         inheritParentConfig = true;
         configuration.config = {
+          _custom.programs.gaming.enable = true;
           _custom.de.dwl.enable = lib.mkForce false;
           _custom.de.hyprland.enable = true;
           _custom.de.hyprland.isDefault = true;

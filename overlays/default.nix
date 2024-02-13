@@ -26,6 +26,11 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
+        prevstable-gaming = import inputs.prevstable-gaming {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
       })
     ];
   };
