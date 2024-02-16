@@ -132,6 +132,17 @@ in {
           _custom.de.hyprland.isDefault = true;
         };
       };
+
+      labwc-specialisation = {
+        inheritParentConfig = true;
+        configuration.config = {
+          _custom.programs.gaming.enable = true;
+          _custom.de.dwl.enable = lib.mkForce false;
+          _custom.de.labwc.enable = true;
+          _custom.de.labwc.isDefault = true;
+          _custom.de.sfwbar.enable = true;
+        };
+      };
     };
 
     services.xserver = {

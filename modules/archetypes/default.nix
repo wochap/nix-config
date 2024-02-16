@@ -37,12 +37,12 @@
       _custom.de.electron-support.enable = true;
       _custom.de.gammastep.enable = true;
       _custom.de.kanshi.enable = true;
-      _custom.de.swayidle.enable = true;
+      _custom.de.swayidle.enable = lib.mkDefault true;
       _custom.de.swaylock.enable = true;
       _custom.de.swww.enable = true;
       _custom.de.tofi.enable = true;
       _custom.de.utils.enable = true;
-      _custom.de.waybar.enable = true;
+      _custom.de.waybar.enable = lib.mkDefault true;
       _custom.de.wayland-session.enable = true;
       _custom.de.wob.enable = true;
 
