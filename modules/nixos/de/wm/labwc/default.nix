@@ -19,6 +19,7 @@ in {
     ];
 
     _custom.de.greetd.cmd = lib.mkIf cfg.isDefault "labwc";
+    _custom.de.waybar.enable = lib.mkIf cfg.isDefault false;
 
     _custom.hm = lib.mkMerge [
       {
@@ -29,8 +30,6 @@ in {
       }
 
       (lib.mkIf cfg.isDefault {
-        _custom.de.waybar.enable = false;
-
         home.sessionVariables = {
           XDG_CURRENT_DESKTOP = "wlroots";
           XDG_SESSION_DESKTOP = "labwc";
