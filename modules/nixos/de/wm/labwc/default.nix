@@ -27,6 +27,10 @@ in {
           lib._custom.relativeSymlink configDirectory ./dotfiles/environment;
         xdg.configFile."labwc/rc.xml".source =
           lib._custom.relativeSymlink configDirectory ./dotfiles/rc.xml;
+        xdg.configFile."labwc/menu.xml".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/menu.xml;
+        xdg.configFile."labwc/autostart".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/autostart;
       }
 
       (lib.mkIf cfg.isDefault {

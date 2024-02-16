@@ -1,15 +1,9 @@
 <?xml version="1.0"?>
-
-<!--
-  This file contains all supported config elements & attributes with
-  default values.
--->
-
 <labwc_config>
 
   <core>
     <decoration>server</decoration>
-    <gap>0</gap>
+    <gap>2</gap>
     <adaptiveSync>no</adaptiveSync>
     <reuseOutputMode>no</reuseOutputMode>
   </core>
@@ -20,6 +14,12 @@
     <cornerRadius>8</cornerRadius>
     <keepBorder>yes</keepBorder>
     <font place="ActiveWindow">
+      <name>sans</name>
+      <size>10</size>
+      <slant>normal</slant>
+      <weight>normal</weight>
+    </font>
+    <font place="InactiveWindow">
       <name>sans</name>
       <size>10</size>
       <slant>normal</slant>
@@ -97,6 +97,7 @@
     <popupTime>1000</popupTime>
     <names>
       <name>Default</name>
+      <name>2</name>
     </names>
   </desktops>
 
@@ -141,6 +142,8 @@
     your favourite terminal or application launcher. See rc.xml for an example.
   -->
   <keyboard>
+    <numlock>off</numlock>
+    <layoutScope>global</layoutScope>
     <repeatRate>25</repeatRate>
     <repeatDelay>600</repeatDelay>
     <keybind key="A-Tab">
@@ -297,7 +300,6 @@
       <mousebind button="Right" action="Click">
         <action name="Focus" />
         <action name="Raise" />
-        <action name="ShowMenu" menu="client-menu" />
       </mousebind>
     </context>
 
@@ -308,18 +310,28 @@
       <mousebind button="Left" action="DoubleClick">
         <action name="ToggleMaximize" />
       </mousebind>
+      <mousebind button="Right" action="Click">
+        <action name="ShowMenu" menu="client-menu" />
+      </mousebind>
     </context>
 
     <context name="Maximize">
       <mousebind button="Left" action="Click">
-        <action name="Focus" />
-        <action name="Raise" />
         <action name="ToggleMaximize" />
+      </mousebind>
+      <mousebind button="Right" action="Click">
+        <action name="ToggleMaximize" direction="horizontal" />
+      </mousebind>
+      <mousebind button="Middle" action="Click">
+        <action name="ToggleMaximize" direction="vertical" />
       </mousebind>
     </context>
 
     <context name="WindowMenu">
       <mousebind button="Left" action="Click">
+        <action name="ShowMenu" menu="client-menu" />
+      </mousebind>
+      <mousebind button="Right" action="Click">
         <action name="ShowMenu" menu="client-menu" />
       </mousebind>
     </context>
@@ -386,16 +398,13 @@
   -->
   <libinput>
     <device category="">
-      <naturalScroll></naturalScroll>
-      <leftHanded></leftHanded>
-      <pointerSpeed></pointerSpeed>
-      <accelProfile></accelProfile>
+      <naturalScroll>yes</naturalScroll>
+      <accelProfile>adaptive</accelProfile>
       <tap>yes</tap>
-      <tapButtonMap></tapButtonMap>
-      <tapAndDrag></tapAndDrag>
-      <dragLock></dragLock>
-      <middleEmulation></middleEmulation>
-      <disableWhileTyping></disableWhileTyping>
+      <tapAndDrag>no</tapAndDrag>
+      <dragLock>no</dragLock>
+      <middleEmulation>yes</middleEmulation>
+      <disableWhileTyping>yes</disableWhileTyping>
     </device>
   </libinput>
 
@@ -431,6 +440,7 @@
       <windowRule title="pcmanfm-desktop*">
         <skipTaskbar>yes</skipTaskbar>
         <skipWindowSwitcher>yes</skipWindowSwitcher>
+        <fixedPosition>yes</fixedPosition>
         <action name="MoveTo" x="0" y="0" />
         <action name="ToggleAlwaysOnBottom"/>
       </windowRule>
@@ -438,4 +448,3 @@
   -->
 
 </labwc_config>
-
