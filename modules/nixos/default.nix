@@ -8,6 +8,7 @@
     ./de/kde
     ./de/wm/dwl
     ./de/wm/hyprland
+    ./de/wm/labwc
     ./de/wm/sway
     ./de/wm-addons/audio
     ./de/wm-addons/backlight
@@ -31,6 +32,7 @@
     ./de/wm-addons-wayland/electron-support
     ./de/wm-addons-wayland/gammastep
     ./de/wm-addons-wayland/kanshi
+    ./de/wm-addons-wayland/sfwbar
     ./de/wm-addons-wayland/swayidle
     ./de/wm-addons-wayland/swaylock
     ./de/wm-addons-wayland/swww
