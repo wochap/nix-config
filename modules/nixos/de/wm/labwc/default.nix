@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.hyprland;
+  cfg = config._custom.de.labwc;
   inherit (config._custom.globals) configDirectory;
 in {
   options._custom.de.labwc = {
