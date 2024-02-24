@@ -9,14 +9,13 @@ in {
 
     # Enable portal
     environment.sessionVariables.GTK_USE_PORTAL = "1";
-
-    programs.xwayland.enable = true;
-
     xdg.portal.config.wlroots.default = [ "wlr" "gtk" ];
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-wlr
       xdg-desktop-portal-gtk
     ];
+
+    programs.xwayland.enable = true;
 
     services.xserver.enable = true;
 
