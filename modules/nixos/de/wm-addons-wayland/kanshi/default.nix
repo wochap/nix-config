@@ -12,13 +12,13 @@ in {
         enable = true;
         systemdTarget = "wayland-session.target";
         extraConfig = ''
-          profile docked {
-            output "Apple Computer Inc Color LCD Unknown" disable
+          profile docked-glegion {
+            output "Samsung Display Corp. 0x4188" disable
             output "Goldstar Company Ltd LG ULTRAGEAR 112NTLEL9832" mode 3440x1440@99.990Hz scale 1
           }
 
-          profile undocked {
-            output "Apple Computer Inc Color LCD Unknown" scale 2
+          profile undocked-glegion {
+            output "Samsung Display Corp." scale 2
           }
         '';
       };
