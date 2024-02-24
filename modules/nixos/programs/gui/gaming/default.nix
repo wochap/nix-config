@@ -7,6 +7,8 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      prevstable-gaming.rpcs3
+
       prevstable-gaming.lutris
 
       prevstable-gaming.protontricks
