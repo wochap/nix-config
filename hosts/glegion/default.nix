@@ -111,10 +111,13 @@ in {
       kde-specialisation = {
         inheritParentConfig = true;
         configuration.config = {
+          _custom.programs.gaming.enable = true;
+
           _custom.de.dwl.enable = lib.mkForce false;
           _custom.de.kde.enable = lib.mkForce true;
           _custom.de.greetd.enable = lib.mkForce false;
           _custom.de.audio.enable = true;
+          _custom.de.bluetooth.enable = true;
 
           _custom.archetypes.wm-wayland-desktop.enable = lib.mkForce false;
           _custom.archetypes.de-wayland-desktop.enable = true;
@@ -130,6 +133,7 @@ in {
           _custom.de.dwl.enable = lib.mkForce false;
           _custom.de.hyprland.enable = true;
           _custom.de.hyprland.isDefault = true;
+          services.auto-epp.enable = lib.mkForce false;
         };
       };
 
@@ -141,6 +145,18 @@ in {
           _custom.de.labwc.enable = true;
           _custom.de.labwc.isDefault = true;
           _custom.de.sfwbar.enable = true;
+        };
+      };
+
+      openbox-specialisation = {
+        inheritParentConfig = true;
+        configuration.config = {
+          _custom.archetypes.wm-wayland-desktop.enable = lib.mkForce false;
+          _custom.archetypes.wm-xorg-desktop.enable = true;
+          _custom.programs.gaming.enable = true;
+          _custom.de.dwl.enable = lib.mkForce false;
+          _custom.de.openbox.enable = true;
+          _custom.de.openbox.isDefault = true;
         };
       };
     };
