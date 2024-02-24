@@ -28,7 +28,7 @@ in {
         Service = {
           PassEnvironment = "PATH";
           ExecStart =
-            "${cfg.package}/bin/xsettingsd -c $HOME/.config/xsettingsd/xsettingsd.conf";
+            "${pkgs.xsettingsd}/bin/xsettingsd -c $HOME/.config/xsettingsd/xsettingsd.conf";
           Restart = "on-abort";
         };
 
