@@ -30,7 +30,7 @@ in {
           ExecStart = "${ics2remScript}";
         };
 
-        Install = { WantedBy = [ "vdirsyncer.service" ]; };
+        Install.WantedBy = [ "vdirsyncer.service" ];
       };
 
       systemd.user.services.remind = {
@@ -47,7 +47,7 @@ in {
           KillMode = "mixed";
         };
 
-        Install = { WantedBy = [ "wayland-session.target" ]; };
+        Install.WantedBy = [ "wayland-session.target" ];
       };
     };
   };

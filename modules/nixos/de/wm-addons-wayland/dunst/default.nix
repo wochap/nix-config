@@ -76,7 +76,7 @@ in {
           ExecStart = "${pkgs.dunst}/bin/dunst";
         };
 
-        Install = { WantedBy = [ "wayland-session.target" ]; };
+        Install.WantedBy = [ "wayland-session.target" ];
       };
     };
   };

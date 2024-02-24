@@ -76,7 +76,7 @@ in {
             StandardInput = "socket";
           };
 
-          Install = { WantedBy = [ "wayland-session.target" ]; };
+          Install.WantedBy = [ "wayland-session.target" ];
         };
 
         sockets.wob = {
@@ -88,7 +88,7 @@ in {
             FlushPending = "yes";
           };
 
-          Install = { WantedBy = [ "sockets.target" ]; };
+          Install.WantedBy = [ "sockets.target" ];
         };
       };
     };

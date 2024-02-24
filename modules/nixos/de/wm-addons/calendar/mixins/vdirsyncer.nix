@@ -35,7 +35,7 @@ in {
           OnCalendar = "*:0/15"; # Every 15 minutes
           Unit = "vdirsyncer.service";
         };
-        Install = { WantedBy = [ "timers.target" ]; };
+        Install.WantedBy = [ "timers.target" ];
       };
 
       xdg.configFile."vdirsyncer/config".text = let

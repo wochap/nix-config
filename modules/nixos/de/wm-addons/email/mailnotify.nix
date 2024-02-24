@@ -22,7 +22,7 @@ in {
         RestartSec = 5;
       };
 
-      Install = { WantedBy = [ "wayland-session.target" ]; };
+      Install.WantedBy = [ "wayland-session.target" ];
     };
   };
 }

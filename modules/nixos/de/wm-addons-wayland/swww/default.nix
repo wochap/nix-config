@@ -54,7 +54,7 @@ in {
           KillMode = "mixed";
         };
 
-        Install = { WantedBy = [ "wayland-session.target" ]; };
+        Install.WantedBy = [ "wayland-session.target" ];
       };
     };
   };
