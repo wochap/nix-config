@@ -68,19 +68,17 @@ in {
       })
     ];
 
-    environment = {
-      systemPackages = with pkgs; [
-        dwl-waybar # script that prints dwl state
-        dwl-final
+    environment.systemPackages = with pkgs; [
+      dwl-waybar # script that prints dwl state
+      dwl-final
 
-        wlopm # toggle screen
-        wlrctl # control keyboard, mouse and wm from cli
+      wlopm # toggle screen
+      wlrctl # control keyboard, mouse and wm from cli
 
-        # for testing vanilla dwl
-        bemenu
-        foot
-      ];
-    };
+      # for testing vanilla dwl
+      bemenu
+      foot
+    ];
 
     services.xserver.displayManager.sessionPackages = [ dwl-final ];
 
