@@ -9,6 +9,7 @@
     ./de/wm/dwl
     ./de/wm/hyprland
     ./de/wm/labwc
+    ./de/wm/openbox
     ./de/wm/sway
     ./de/wm-addons/audio
     ./de/wm-addons/backlight
@@ -37,11 +38,15 @@
     ./de/wm-addons-wayland/swaylock
     ./de/wm-addons-wayland/swww
     ./de/wm-addons-wayland/tofi
-    ./de/wm-addons-wayland/utils
+    ./de/wm-addons-wayland/wayland-utils
     ./de/wm-addons-wayland/waybar
     ./de/wm-addons-wayland/sfwbar
     ./de/wm-addons-wayland/wayland-session
     ./de/wm-addons-wayland/wob
+    ./de/wm-addons-xorg/tint2
+    ./de/wm-addons-xorg/xorg-session
+    ./de/wm-addons-xorg/xorg-utils
+    ./de/wm-addons-xorg/xsettingsd
 
     ./globals
 
