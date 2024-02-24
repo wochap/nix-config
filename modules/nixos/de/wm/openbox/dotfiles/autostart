@@ -1,0 +1,1 @@
+systemctl --user stop xorg-session.target && systemctl --user start xorg-session.target
