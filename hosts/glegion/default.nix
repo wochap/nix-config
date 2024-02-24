@@ -92,21 +92,21 @@ in {
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
     specialisation = {
-      gnome-specialisation = {
-        inheritParentConfig = true;
-        configuration.config = {
-          _custom.security.gnome-keyring.enable = true;
-
-          _custom.de.dwl.enable = lib.mkForce false;
-          _custom.de.gnome.enable = lib.mkForce true;
-          _custom.de.greetd.enable = lib.mkForce false;
-
-          _custom.archetypes.wm-wayland-desktop.enable = lib.mkForce false;
-          _custom.archetypes.de-wayland-desktop.enable = true;
-
-          services.auto-epp.enable = lib.mkForce false;
-        };
-      };
+      # gnome-specialisation = {
+      #   inheritParentConfig = true;
+      #   configuration.config = {
+      #     _custom.security.gnome-keyring.enable = true;
+      #
+      #     _custom.de.dwl.enable = lib.mkForce false;
+      #     _custom.de.gnome.enable = lib.mkForce true;
+      #     _custom.de.greetd.enable = lib.mkForce false;
+      #
+      #     _custom.archetypes.wm-wayland-desktop.enable = lib.mkForce false;
+      #     _custom.archetypes.de-wayland-desktop.enable = true;
+      #
+      #     services.auto-epp.enable = lib.mkForce false;
+      #   };
+      # };
 
       kde-specialisation = {
         inheritParentConfig = true;
@@ -130,33 +130,12 @@ in {
         inheritParentConfig = true;
         configuration.config = {
           _custom.programs.gaming.enable = true;
+
           _custom.de.dwl.enable = lib.mkForce false;
           _custom.de.hyprland.enable = true;
           _custom.de.hyprland.isDefault = true;
+
           services.auto-epp.enable = lib.mkForce false;
-        };
-      };
-
-      labwc-specialisation = {
-        inheritParentConfig = true;
-        configuration.config = {
-          _custom.programs.gaming.enable = true;
-          _custom.de.dwl.enable = lib.mkForce false;
-          _custom.de.labwc.enable = true;
-          _custom.de.labwc.isDefault = true;
-          _custom.de.sfwbar.enable = true;
-        };
-      };
-
-      openbox-specialisation = {
-        inheritParentConfig = true;
-        configuration.config = {
-          _custom.archetypes.wm-wayland-desktop.enable = lib.mkForce false;
-          _custom.archetypes.wm-xorg-desktop.enable = true;
-          _custom.programs.gaming.enable = true;
-          _custom.de.dwl.enable = lib.mkForce false;
-          _custom.de.openbox.enable = true;
-          _custom.de.openbox.isDefault = true;
         };
       };
     };
