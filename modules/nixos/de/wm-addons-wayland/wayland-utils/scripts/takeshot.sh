@@ -42,7 +42,7 @@ copy_to_cb() {
 # countdown
 countdown() {
   for sec in $(seq $1 -1 1); do
-    dunstify -t 1000 --replace=698 -i "accessories-screenshot" "Taking shot in : $sec"
+    notify-send --app-name="Takeshot" --expire-time=1000 --replace-id=698 --icon="accessories-screenshot" "Taking shot in $sec"
     sleep 1
   done
 }
