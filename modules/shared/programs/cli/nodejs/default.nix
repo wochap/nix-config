@@ -36,23 +36,12 @@ in {
       };
 
       home.file = {
-        ".npmrc".text = ''
-          prefix = ''${HOME}/.npm-packages
-        '';
+        ".npmrc".source = ./dotfiles/.npmrc;
+        ".npm-packages/.keep".text = "";
+        ".npm-packages/lib/.keep".text = "";
       };
 
-      xdg.configFile.".bunfig.toml".text = ''
-        [install]
-        # where `bun install --global` installs packages
-        globalDir = "~/.bun/install/global"
-
-        # where globally-installed package bins are linked
-        globalBinDir = "~/.bun/bin"
-
-        [install.cache]
-        # the directory to use for the cache
-        dir = "~/.bun/install/cache"
-      '';
+      xdg.configFile.".bunfig.toml".source = ./dotfiles/.bunfig.toml;
     };
   };
 }
