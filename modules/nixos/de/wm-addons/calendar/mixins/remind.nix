@@ -18,6 +18,8 @@ in {
     _custom.hm = {
       home.packages = with pkgs; [ remind ];
 
+      xdg.configFile."remind/.keep".text = "";
+
       systemd.user.services.ics2rem = {
         Unit = {
           Description = "Convert ics files to rem";
