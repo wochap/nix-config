@@ -34,6 +34,7 @@
 
     ./programs/tui/amfora
     ./programs/tui/bottom
+    ./programs/tui/less
     ./programs/tui/lynx
     ./programs/tui/mangadesk
     ./programs/tui/mangal

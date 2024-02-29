@@ -75,11 +75,6 @@ in {
     };
 
     _custom.hm = {
-      home.sessionVariables = {
-        LESS = "--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT";
-        LESSCHARSET = "utf-8";
-      };
-
       programs.thefuck.enable = true; # corrects previous console cmd
       programs.thefuck.enableBashIntegration = false;
       programs.carapace.enable = true; # completions
@@ -93,13 +88,6 @@ in {
           shell.command = "bash";
         };
         enableBashIntegration = false;
-      };
-      programs.less = {
-        enable = true;
-        keys = ''
-          f forw-line 4j
-          b back-line 4k
-        '';
       };
     };
   };
