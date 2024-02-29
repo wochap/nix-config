@@ -11,25 +11,25 @@ dest="$dir/$file"
 
 # notify
 notify_user() {
-  if [[ -e "$dest" ]]; then
-    copy_to_cb
-
-    # generate thumbnail
-    thumbnail_size="288x288"
-    thumbnail=$(mktemp --suffix .png) || exit 1
-    trap 'rm -f "$thumbnail"' exit
-    magick "$dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
-
-    action=$(dunstify --appname="Takeshot" -t "$EXPIRE_TIME" --replace=699 -i "$thumbnail" "Screen shooter" "Screenshot Saved" --action "default,Default" --action "edit,Edit" --action "open,Open")
-  else
+  if [[ ! -e "$dest" ]]; then
     exit 1
   fi
+
+  copy_to_cb
+
+  # generate thumbnail
+  thumbnail_size="288x288"
+  thumbnail=$(mktemp --suffix .png) || exit 1
+  trap 'rm -f "$thumbnail"' exit
+  magick "$dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
+
+  action=$(notify-send --app-name="Takeshot" --expire-time="$EXPIRE_TIME" --replace-id=699 --icon="$thumbnail" "Screen shooter" "Screenshot Saved" --action="open=Open" --action="edit=Edit")
 
   case $action in
   "edit")
     swappy -f "$dest" -o "$dest" &
     ;;
-  "open" | "default")
+  "open")
     xdg-open "$dest" &
     ;;
   esac
@@ -49,7 +49,7 @@ countdown() {
 
 # take shots
 shotnow() {
-  cd ${dir} && grim - | swappy -f - -o "$file" -
+  grim "$dest"
   notify_user
 }
 
@@ -62,7 +62,6 @@ shot5() {
 shotarea() {
   area=$(slurp -d -b "${background}bf" -c "$primary")
   if [[ -z $area ]]; then
-    notify_user
     exit
   fi
   grim -g "$area" "$dest"
