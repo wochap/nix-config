@@ -3,7 +3,7 @@
   "modules-right": [
     "tray",
     "custom/recorder",
-    "idle_inhibitor",
+    "custom/matcha",
     "custom/notifications",
     "custom/offlinemsmtp",
     "temperature",
@@ -107,6 +107,14 @@
     "return-type": "json",
     "format": "{icon}{}",
     "on-click": "offlinemsmtp-toggle-mode --toggle",
+    "signal": 8
+  },
+  "custom/matcha": {
+    "exec": "matcha-toggle-mode --read",
+    "interval": 1,
+    "return-type": "json",
+    "format": "{icon}{}",
+    "on-click": "matcha-toggle-mode --toggle",
     "signal": 8
   },
   "idle_inhibitor": {

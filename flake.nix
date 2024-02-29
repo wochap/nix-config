@@ -13,6 +13,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
+    matcha.url = "git+https://codeberg.org/QuincePie/matcha";
+    matcha.inputs.nixpkgs.follows = "unstable";
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-gaming.inputs.nixpkgs.follows = "unstable";
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland";

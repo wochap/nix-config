@@ -47,6 +47,7 @@ window#waybar.hidden {
 #workspaces,
 #custom-scratchpad_indicator,
 #window,
+#custom-matcha,
 #idle_inhibitor,
 #battery,
 #backlight,
@@ -132,9 +133,11 @@ window#waybar.hidden {
   color: @red;
 }
 
+#custom-matcha.disabled,
 #idle_inhibitor.deactivated {
   color: @comment;
 }
+#custom-matcha.enabled,
 #idle_inhibitor.activated {
   color: @green;
 }

@@ -867,6 +867,26 @@
         "type": "github"
       }
     },
+    "matcha": {
+      "inputs": {
+        "nixpkgs": [
+          "unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1704517827,
+        "narHash": "sha256-WhpLwINCuXYxa9y8o4bcFsryvD/VcGi/9VimwJmbobw=",
+        "ref": "refs/heads/main",
+        "rev": "438da25cacd014b99460de76a59a9fecec04f48a",
+        "revCount": 18,
+        "type": "git",
+        "url": "https://codeberg.org/QuincePie/matcha"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/QuincePie/matcha"
+      }
+    },
     "mpv-osc-morden-x": {
       "flake": false,
       "locked": {
@@ -1337,6 +1357,7 @@
         "kitty-smart-scroll": "kitty-smart-scroll",
         "kitty-smart-tab": "kitty-smart-tab",
         "lobster": "lobster",
+        "matcha": "matcha",
         "mpv-osc-morden-x": "mpv-osc-morden-x",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-alien": "nix-alien",

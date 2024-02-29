@@ -11,7 +11,6 @@ let
       pkgs.callPackage ./interception-both-shift-capslock { };
     mailnotify = pkgs.callPackage ./mailnotify { };
     mangadesk = pkgs.callPackage ./mangadesk { };
-    matcha = pkgs.callPackage ./matcha { };
     offlinemsmtp = pkgs.callPackage ./offlinemsmtp { };
     ollama-webui = pkgs.callPackage ./ollama-webui { };
     ptsh = pkgs.callPackage ./ptsh { };

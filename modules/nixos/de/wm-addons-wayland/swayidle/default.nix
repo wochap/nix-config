@@ -1,6 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, system, ... }:
 
-let cfg = config._custom.de.swayidle;
+let
+  cfg = config._custom.de.swayidle;
+  matcha = inputs.matcha.packages.${system}.default;
+  matcha-toggle-mode = pkgs.writeScriptBin "matcha-toggle-mode"
+    (builtins.readFile ./scripts/matcha-toggle-mode.sh);
 in {
   options._custom.de.swayidle.enable = lib.mkEnableOption { };
 
@@ -9,6 +13,8 @@ in {
       home.packages = with pkgs; [
         swayidle
         sway-audio-idle-inhibit # complement to swayidle
+        matcha # control idle inhibit
+        matcha-toggle-mode
       ];
 
       services.swayidle = {
@@ -49,6 +55,20 @@ in {
             PassEnvironment = "PATH";
             ExecStart =
               "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
+            Type = "simple";
+          };
+        };
+
+        matcha = lib._custom.mkWaylandService {
+          Unit = {
+            Description = "An Idle Inhibitor for Wayland";
+            Documentation = "https://codeberg.org/QuincePie/matcha";
+            After = [ "swayidle.service" ];
+            Wants = [ "swayidle.service" ];
+          };
+          Service = {
+            PassEnvironment = "PATH";
+            ExecStart = "${matcha}/bin/matcha --daemon --off";
             Type = "simple";
           };
         };

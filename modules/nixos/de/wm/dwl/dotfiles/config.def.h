@@ -272,6 +272,9 @@ static const Key keys[] = {
   // Toggle bar
   { MODKEY, Key_b, spawn, SHCMD("waybar-toggle") },
 
+  // Toggle idle inhibitor
+  { MODKEY, Key_m, spawn, SHCMD("matcha-toggle-mode --toggle") },
+
 
   // ### WM KEYBINDINGS
 

@@ -47,7 +47,6 @@ in {
         showmethekey
         wdisplays # control display outputs
         wlr-randr
-        _custom.matcha # control idle inhibitor
         swaybg
       ];
 
