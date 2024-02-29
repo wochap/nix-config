@@ -18,28 +18,28 @@ wait_recording() {
 }
 
 notify_user() {
-  if [[ -e "$dest" ]]; then
-    # generate thumbnail
-    thumbnail_size=500
-    last_thumbnail_size="288x288"
-    thumbnail=$(mktemp --suffix .png) || exit 1
-    trap 'rm -f "$thumbnail"' exit
-    ffmpegthumbnailer -i "$dest" -o "$thumbnail" -s "$thumbnail_size"
-    magick "$thumbnail" -resize "$last_thumbnail_size>" -gravity center -background transparent -extent "$last_thumbnail_size" "$thumbnail"
-
-    # TODO: copy to clipboard
-
-    action=$(dunstify --appname="Recorder" -t "$EXPIRE_TIME" --replace=691 -i "$thumbnail" "Video recording" "Recording Saved" --action "default,Default" --action "open,Open" --action "open_in_fm,Open in file manager")
-  else
+  if [[ ! -e "$dest" ]]; then
     exit 1
   fi
+
+  # TODO: copy to clipboard
+
+  # generate thumbnail
+  thumbnail_size=500
+  last_thumbnail_size="288x288"
+  thumbnail=$(mktemp --suffix .png) || exit 1
+  trap 'rm -f "$thumbnail"' exit
+  ffmpegthumbnailer -i "$dest" -o "$thumbnail" -s "$thumbnail_size"
+  magick "$thumbnail" -resize "$last_thumbnail_size>" -gravity center -background transparent -extent "$last_thumbnail_size" "$thumbnail"
+
+  action=$(notify-send --app-name="Recorder" --expire-time="$EXPIRE_TIME" --replace-id=691 --icon="$thumbnail" "Video recording" "Recording saved" --action="open=Open" --action="open_in_fm=Open in file manager")
 
   # TODO: Open in video editor?
   case $action in
   "open_in_fm")
     xdg-open "$dir" &
     ;;
-  "open" | "default")
+  "open")
     xdg-open "$dest" &
     ;;
   esac
@@ -48,14 +48,14 @@ notify_user() {
 # countdown
 countdown() {
   for sec in $(seq $1 -1 1); do
-    dunstify -t 1000 --replace=692 -i "screenrecorder" "Recording in : $sec"
+    notify-send --app-name="Recorder" --expire-time=1000 --replace-id=692 --icon="screenrecorder" "Recording in $sec"
     sleep 1
   done
 }
 
 # take shots
 shotnow() {
-  cd ${dir} && wl-screenrec -f "$file" &
+  cd "$dir" && wl-screenrec -f "$file" &
   wait_recording
   notify_user
 }
@@ -69,10 +69,9 @@ shot5() {
 shotarea() {
   area=$(slurp -d -b "${background}bf" -c "$primary")
   if [[ -z $area ]]; then
-    notify_user
     exit
   fi
-  cd ${dir} && wl-screenrec -g "$area" -f "$file" &
+  cd "$dir" && wl-screenrec -g "$area" -f "$file" &
   wait_recording
   notify_user
 }
