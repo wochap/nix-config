@@ -40,14 +40,14 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "bfd95f07624418d7d3522e2dc41ad44f5aa7c207";
+          version = "a6201df34e615a9d081afcfe319ef1c8d77fe476";
           # install patched dwl
           src = prev.fetchFromGitea {
             domain = "codeberg.org";
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-rjRuzZsDdXv8vYGqWsKEQt0ORPMYpkNhmBNl/eyKVxk=";
+            hash = "sha256-LryTDyB4F8npRm4M5d4RdThtkvV0DEzEc3mHZw6FA/Q=";
           };
 
           # add display manager session
