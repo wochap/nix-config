@@ -63,6 +63,7 @@ in {
     # tui
     _custom.programs.amfora.enable = true;
     _custom.programs.bottom.enable = true;
+    _custom.programs.less.enable = true;
     _custom.programs.lynx.enable = true;
     _custom.programs.mangadesk.enable = true;
     _custom.programs.mangal.enable = true;
