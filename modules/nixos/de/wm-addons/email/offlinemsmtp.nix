@@ -4,9 +4,13 @@ let
   cfg = config._custom.de.email;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
+  offlinemsmtp-toggle-mode = pkgs.writeScriptBin "offlinemsmtp-toggle-mode"
+    (builtins.readFile ./scripts/offlinemsmtp-toggle-mode.sh);
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
+      home.packages = [ offlinemsmtp-toggle-mode ];
+
       systemd.user.services.offlinemsmtp = {
         Unit = {
           Description = "offlinemsmtp daemon";
