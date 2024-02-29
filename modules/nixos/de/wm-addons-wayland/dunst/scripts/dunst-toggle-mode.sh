@@ -8,7 +8,7 @@ reload_waybar() {
 }
 
 toggle() {
-  notify="notify-send -u low dunst"
+  notify="notify-send --urgency=low --replace-id=696 dunst"
 
   case $(dunstctl is-paused) in
   true)

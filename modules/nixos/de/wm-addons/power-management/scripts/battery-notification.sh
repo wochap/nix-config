@@ -157,7 +157,7 @@ show_notify() {
     fi
   fi
   [[ -n $NOTIFY_ICON ]] && NOTIFY_OPT="-i ${NOTIFY_ICON}"
-  notify-send -u critical "${1}" ${NOTIFY_OPT}
+  notify-send --urgency=critical --replace-id=693 "${1}" ${NOTIFY_OPT}
 }
 
 play_sound() {

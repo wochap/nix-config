@@ -10,7 +10,7 @@ notify() {
   convert -size 80x80 xc:"$HEX_COLOR" "$FNAME"
   COLOR_CODE="$HEX_COLOR"
 
-  notify-send "Color picker" "$COLOR_CODE" --icon="$FNAME" --expire-time="$EXPIRE_TIME" --app-name="Hyprpicker"
+  notify-send "Color picker" "$COLOR_CODE" --icon="$FNAME" --replace-id=692 --expire-time="$EXPIRE_TIME" --app-name="Hyprpicker"
 }
 
 color=$(hyprpicker -f hex -n)
