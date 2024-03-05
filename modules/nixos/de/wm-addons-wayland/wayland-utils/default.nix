@@ -35,7 +35,6 @@ in {
       home.packages = with pkgs; [
         swappy # minimal image editor
         hyprpicker # color picker
-        chayang # gradually dim the screen
         slurp # screenshoot utility
         grim # screenshoot utility
         wf-recorder # screen recorder utility

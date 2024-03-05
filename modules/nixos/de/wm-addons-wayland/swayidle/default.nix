@@ -15,6 +15,7 @@ in {
         sway-audio-idle-inhibit # complement to swayidle
         matcha # control idle inhibit
         matcha-toggle-mode
+        chayang # gradually dim the screen
       ];
 
       services.swayidle = {
@@ -31,7 +32,7 @@ in {
           }
         ];
         timeouts = [{
-          timeout = 180;
+          timeout = 185;
           command = "swaylock-start";
         }];
       };
