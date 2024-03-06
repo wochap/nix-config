@@ -22,6 +22,12 @@ static const unsigned int swipe_min_threshold = 0;
 static const int center_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
 
 enum {
+    VIEW_L = -1,
+    VIEW_R = 1,
+    SHIFT_L = -2,
+    SHIFT_R = 2,
+} RotateTags;
+enum {
 	BROWSER,
 	LAYOUT,
 	TUI,
@@ -234,7 +240,7 @@ static const Key keys[] = {
   // ### SYSTEM KEYBINDINGS
 
   // Open scratchpad terminal
-  { MODKEY, Key_i, focusortogglescratch, {.v = kittyscratchcmd } },
+  { MODKEY, Key_i, focusortogglematchingscratch, {.v = kittyscratchcmd } },
 
   // Lock screen
 	{ MODKEY, Key_l, spawn, SHCMD("swaylock-start") },
@@ -318,12 +324,12 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT, Key_Left, moveresizekb, {.v = (int []){ -40, 0, 0, 0 }}},
 
   // Focus next/previous tag
-  { MODKEY, Key_comma, rotatetags, {.i = -1} },
-  { MODKEY, Key_period, rotatetags, {.i = 1} },
+  { MODKEY, Key_comma, rotatetags, {.i = VIEW_L} },
+  { MODKEY, Key_period, rotatetags, {.i = VIEW_R} },
 
   // Send focused view to the next/previous tag
-  { MODKEY|MOD_SHIFT, Key_comma, rotatetags, {.i = -2} },
-  { MODKEY|MOD_SHIFT, Key_period, rotatetags, {.i = 2} },
+  { MODKEY|MOD_SHIFT, Key_comma, rotatetags, {.i = SHIFT_L} },
+  { MODKEY|MOD_SHIFT, Key_period, rotatetags, {.i = SHIFT_R} },
 
   // Bump focused view to the top of the layout stack
   { MODKEY, Key_Return, zoom, {0} },
@@ -357,7 +363,7 @@ static const Key keys[] = {
 	{ MODKEY|MOD_ALT, Key_t, spawn, SHCMD("kitty") },
 
   // Open file manager
-  { MODKEY|MOD_ALT, Key_f, focusortogglescratch, {.v = fmscratchcmd} },
+  { MODKEY|MOD_ALT, Key_f, focusortogglematchingscratch, {.v = fmscratchcmd} },
 
   // Screencast/record region to mp4
   { MODKEY|MOD_ALT, Key_r, spawn, SHCMD("recorder --area") },
@@ -460,20 +466,20 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, RUN("brave")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, RUN("google-chrome-stable")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, RUN("microsoft-edge")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, focusortogglescratch, {.v = msgptscratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, focusortogglescratch, {.v = chatgptscratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, focusortogglescratch, {.v = ytmusicscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, focusortogglematchingscratch, {.v = msgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, focusortogglematchingscratch, {.v = chatgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, focusortogglematchingscratch, {.v = ytmusicscratchcmd}),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // HACK: disable all dwl keymappings
   { KB_INHIBIT, { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = NORMAL} } },
 
   // Terminal TUI
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, focusortogglescratch, {.v = kittyneorgcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, focusortogglescratch, {.v = kittytopcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, focusortogglescratch, {.v = kittyneomuttcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, focusortogglescratch, {.v = kittynewsboatcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, focusortogglescratch, {.v = kittyncmpcppcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, focusortogglematchingscratch, {.v = kittyneorgcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, focusortogglematchingscratch, {.v = kittytopcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, focusortogglematchingscratch, {.v = kittyneomuttcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, focusortogglematchingscratch, {.v = kittynewsboatcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, focusortogglematchingscratch, {.v = kittyncmpcppcmd}),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --select")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --add")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --edit")),
