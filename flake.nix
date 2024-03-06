@@ -6,12 +6,17 @@
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=317484b1ead87b9c1b8ac5261a8d2dd748a0492d"; # NVIM v0.9.5
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
+    prevstable-gaming.url = "github:nixos/nixpkgs?rev=f8e2ebd66d097614d51a56a755450d4ae1632df1"; # nixos-unstable (feb 06 2024)
 
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=5f0ab0eedc6ede69beb8f45561ffefa54edc6e65"; # release-23.11 (jan 10 2024)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
+    matcha.url = "git+https://codeberg.org/QuincePie/matcha";
+    matcha.inputs.nixpkgs.follows = "unstable";
+    nix-gaming.url = "github:fufexan/nix-gaming";
+    nix-gaming.inputs.nixpkgs.follows = "unstable";
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
@@ -29,10 +34,10 @@
     hyprland.inputs.nixpkgs.follows = "unstable";
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins";
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
-    xdg-portal-hyprland.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=6a5de92769d5b7038134044053f90e7458f6a197"; # (jan 13 2024)
-    xdg-portal-hyprland.inputs.nixpkgs.follows = "hyprland";
+    hyprland-xdp.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=57ab6df950970f05f833371cc4fdf1a30fccfb2f"; # v1.3.1
+    hyprland-xdp.inputs.nixpkgs.follows = "unstable";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=2ef703474fb96e97e03e66e8820f213359f29382"; # (jan 13 2024)
-    hyprpicker.inputs.nixpkgs.follows = "hyprland";
+    hyprpicker.inputs.nixpkgs.follows = "unstable";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -61,6 +66,8 @@
     zsh-notify.flake = false;
     zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=0619e6bb711226e738494e49842c5249a2205a0d";
     zsh-vi-mode.flake = false;
+    zsh-pnpm-shell-completion.url = "github:g-plane/pnpm-shell-completion";
+    zsh-pnpm-shell-completion.flake = false;
 
     # themes
     mpv-osc-morden-x.url = "github:cyl0/mpv-osc-morden-x?rev=e0adf03d40403b87d106161c1f805a65bcb34738";
@@ -99,23 +106,48 @@
 
   outputs = inputs:
     let
-      inherit (inputs.nixpkgs.lib) nixosSystem;
-      mkSystem = systemFn: pkgs: system: hostname:
-        systemFn {
+      mkLib = pkgs: system:
+        let
+          lib = pkgs.lib.extend (final: prev: {
+            home-manager = inputs.home-manager.lib.hm;
+            _custom = import ./lib {
+              pkgs = import pkgs { inherit system; };
+              inherit inputs;
+              inherit lib;
+            };
+          });
+        in lib;
+      mkNixosSystem = pkgs: system: hostName:
+        pkgs.lib.nixosSystem {
           inherit system;
-          modules = [ ./modules ./packages (./. + "/hosts/${hostname}") ];
+          modules = [
+            inputs.home-manager.nixosModules.home-manager
+            inputs.nur.nixosModules.nur
+            ./overlays
+            ./modules/archetypes
+            ./modules/home
+            ./modules/nixos
+            ./modules/shared
+            ./packages
+            (./. + "/hosts/${hostName}")
+            {
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.config.permittedInsecurePackages =
+                [ "nodejs-14.21.3" "openssl-1.1.1u" "openssl-1.1.1v" ];
+              networking.hostName = hostName;
+            }
+          ];
           specialArgs = {
             inherit inputs;
             inherit system;
+            lib = mkLib pkgs system;
             nixpkgs = pkgs;
           };
         };
     in {
       nixosConfigurations = {
-        desktop = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "desktop";
-        asus-vivobook = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-vivobook";
-        legion = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "legion";
-        asus-old = mkSystem nixosSystem inputs.nixpkgs "x86_64-linux" "asus-old";
+        gdesktop = mkNixosSystem inputs.nixpkgs "x86_64-linux" "gdesktop";
+        glegion = mkNixosSystem inputs.nixpkgs "x86_64-linux" "glegion";
       };
     };
 }

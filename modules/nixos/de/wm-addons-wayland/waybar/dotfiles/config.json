@@ -1,0 +1,188 @@
+{
+  "height": 40,
+  "modules-right": [
+    "tray",
+    "custom/recorder",
+    "custom/matcha",
+    "custom/notifications",
+    "custom/offlinemsmtp",
+    "temperature",
+    "battery",
+    "pulseaudio",
+    "bluetooth",
+    "network",
+    "clock"
+  ],
+  "ipc": true,
+  "id": "main",
+  "spacing": 7,
+  "margin": "0",
+
+  "custom/scratchpad_indicator": {
+    "interval": 1,
+    "exec": "swaymsg -t get_tree | jq 'recurse(.nodes[]) | first(select(.name==\"__i3_scratch\")) | .floating_nodes | length | select(. >= 1)'",
+    "format": "{} <span rise='-1000'></span>",
+    "on-click": "swaymsg 'scratchpad show'",
+    "on-click-right": "swaymsg 'move scratchpad'"
+  },
+  "temperature": {
+    "critical-threshold": 80,
+    "format-critical": " {temperatureC}°C",
+    "format": " {temperatureC}°C",
+    "tooltip": false
+  },
+  "sway/window": {
+    "max-length": 50
+  },
+  "hyprland/submap": {
+    "tooltip": false
+  },
+  "hyprland/window": {
+    "max-length": 50
+  },
+  "hyprland/workspaces": {
+    "all-outputs": true,
+    "format": "<span rise='-1000'>{icon}</span>",
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9"
+    },
+    "persistent-workspaces": {
+      "*": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    }
+  },
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "<span rise='-1000'>{icon}</span>",
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9"
+    }
+  },
+  "custom/recorder": {
+    "format": "󰑊 REC",
+    "return-type": "json",
+    "interval": 1,
+    "exec": "echo '{\"class\": \"recording\"}'",
+    "exec-if": "pgrep wl-screenrec"
+  },
+  "keyboard-state": {
+    "capslock": true,
+    "format": "{icon}",
+    "format-icons": {
+      "locked": "󰌎",
+      "unlocked": ""
+    }
+  },
+  "custom/powermenu": {
+    "format": "",
+    "on-click": "exec /etc/scripts/wofi-powermenu.sh"
+  },
+  "custom/notifications": {
+    "exec": "dunst-toggle-mode --read",
+    "interval": 1,
+    "return-type": "json",
+    "format": "{icon}{}",
+    "on-click": "dunst-toggle-mode --toggle",
+    "signal": 8
+  },
+  "custom/offlinemsmtp": {
+    "exec": "offlinemsmtp-toggle-mode --read",
+    "interval": 1,
+    "return-type": "json",
+    "format": "{icon}{}",
+    "on-click": "offlinemsmtp-toggle-mode --toggle",
+    "signal": 8
+  },
+  "custom/matcha": {
+    "exec": "matcha-toggle-mode --read",
+    "interval": 1,
+    "return-type": "json",
+    "format": "{icon}{}",
+    "on-click": "matcha-toggle-mode --toggle",
+    "signal": 8
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    },
+    "tooltip": false
+  },
+  "tray": {
+    "spacing": 10
+  },
+  "clock": {
+    "format": "{:%a %d %b %H:%M}",
+    "format-alt": "{:%H:%M}",
+    "tooltip": false
+  },
+  "backlight": {
+    "format": "<span rise='-1000'>{icon}</span> {percent}%",
+    "format-icons": [""]
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 10
+    },
+    "interval": 5,
+    "format": "<span rise='-1000'>{icon}</span> {capacity}%",
+    "tooltip-format": "{timeTo}, {capacity}%",
+    "format-charging": "<span rise='-1000'></span> {capacity}%",
+    "format-icons": [""]
+  },
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱 {num_connections}",
+    "tooltip-format": "{controller_alias} {controller_address}",
+    "tooltip-format-connected": "{controller_alias} {controller_address}\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias} {device_address}"
+  },
+  "network": {
+    "format-wifi": "<span rise='-1000'>{icon}</span>",
+    "format-ethernet": "󰈁",
+    "format-ethernet-disconnected": "󰈂",
+    "format-linked": "󰈁",
+    "format-disconnected": "",
+    "format-alt": "{ipaddr}",
+    "tooltip-format": "{essid} {signalStrength}% {ipaddr}",
+    "format-icons": [""]
+  },
+  "pulseaudio": {
+    "format": "<span rise='-1000'>{icon}</span> {volume}%",
+    "format-muted": "<span rise='-1000'></span> {volume}%",
+    "format-bluetooth": "<span rise='-1000'>{icon}</span> {volume}%",
+    "format-bluetooth-muted": "<span rise='-1000'></span> {volume}%",
+    "format-source": "<span rise='-1000'></span> {volume}%",
+    "format-source-muted": "<span rise='-1000'></span> {volume}%",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "󰋎",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
+    },
+    "tooltip-format": "{desc}, {volume}%",
+    "on-click": "pavucontrol"
+  }
+}

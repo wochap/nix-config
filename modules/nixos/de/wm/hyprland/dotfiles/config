@@ -1,0 +1,143 @@
+$bing_gpt_appid = msedge-www.bing.com__search-Default
+$chat_gpt_appid = chrome-chat.openai.com__-Default
+$ytmusic_appid = chrome-music.youtube.com__-Default
+
+# monitor=name,resolution,position,scale
+monitor = , highres,auto,auto
+monitor = , addreserved, 0, 0, 0, 0
+
+general {
+  border_size = 1
+  gaps_in = 0
+  gaps_out = 0
+  col.inactive_border = rgb($selection)
+  col.active_border = rgb($primary)
+  # cursor_inactive_timeout = 5
+  layout = master
+  no_cursor_warps = true
+  no_focus_fallback = true
+}
+
+master {
+  mfact = 0.5
+}
+
+decoration {
+  rounding = 0
+  blur {
+    enabled = false
+  }
+  drop_shadow = false
+}
+
+input {
+  kb_layout = us
+  kb_options = compose:ralt
+  accel_profile = adaptive
+  repeat_delay = 300
+  repeat_rate = 50
+  scroll_method = 2fg
+  natural_scroll = true
+  follow_mouse = true
+
+  touchpad {
+    natural_scroll = true
+    middle_button_emulation = true
+    clickfinger_behavior = true
+    tap-to-click = true
+    drag_lock = false
+    tap-and-drag = false
+  }
+}
+
+gestures {
+  workspace_swipe = false
+}
+
+misc {
+  disable_hyprland_logo = true
+  disable_splash_rendering = true
+  force_default_wallpaper = 0
+  key_press_enables_dpms = true
+  focus_on_activate = true
+  disable_autoreload = true
+  background_color = rgb($background)
+}
+
+animations {
+  enabled = false;
+}
+
+# unscale XWayland
+xwayland {
+  force_zero_scaling = true
+}
+# toolkit-specific scale
+env = GDK_SCALE,2
+env = XCURSOR_SIZE,24
+# env = QT_AUTO_SCREEN_SCALE_FACTOR,0
+# env = QT_ENABLE_HIGHDPI_SCALING,0
+# env = QT_SCALE_FACTOR,2
+# env = QT_FONT_DPI,96
+
+# enable tearing
+general {
+  allow_tearing = true
+}
+env = WLR_DRM_NO_ATOMIC,1
+windowrulev2 = immediate, workspace:9
+
+
+#### RULES
+
+windowrulev2 = center, class:.*
+
+windowrulev2 = float, class:^(file-roller)$
+windowrulev2 = float, class:^(gnome-system-monitor)$
+windowrulev2 = float, class:^(mpv)$
+windowrulev2 = float, class:^(imv)$
+windowrulev2 = float, class:^(org.gnome.Calculator)$
+windowrulev2 = float, class:^(pavucontrol)$
+windowrulev2 = float, class:^(thunar)$
+windowrulev2 = float, class:^(thunar-scratch)$
+windowrulev2 = float, class:^(xdg-desktop-portal-gtk)$
+windowrulev2 = float, title:^(meet.google.com is sharing your screen.)$
+windowrulev2 = float, class:^($bing_gpt_appid)$
+windowrulev2 = float, class:^($chat_gpt_appid)$
+windowrulev2 = float, class:^($ytmusic_appid)$
+
+windowrulev2 = workspace 5, class:^(firefox)$
+windowrulev2 = workspace 1, class:^(google-chrome)$
+windowrulev2 = workspace 8, class:^(brave-browser)$
+windowrulev2 = workspace 4, class:^(Slack)$
+windowrulev2 = workspace 4, class:^(discord)$
+windowrulev2 = workspace 9, class:^(microsoft-edge)$
+
+windowrulev2 = float, class:^(kitty-top)$
+windowrulev2 = pin, class:^(kitty-top)$
+windowrulev2 = float, class:^(kitty-scratch)$
+windowrulev2 = pin, class:^(kitty-scratch)$
+windowrulev2 = size 75% 75%, class:^(kitty-scratch)$
+windowrulev2 = float, class:^(kitty-neorg)$
+windowrulev2 = pin, class:^(kitty-neorg)$
+windowrulev2 = float, class:^(kitty-nmtui)$
+windowrulev2 = pin, class:^(kitty-nmtui)$
+windowrulev2 = float, class:^(kitty-neomutt)$
+windowrulev2 = pin, class:^(kitty-neomutt)$
+windowrulev2 = float, class:^(kitty-newsboat)$
+windowrulev2 = pin, class:^(kitty-newsboat)$
+windowrulev2 = float, class:^(kitty-ncmpcpp)$
+windowrulev2 = pin, class:^(kitty-ncmpcpp)$
+windowrulev2 = float, class:^(kitty-buku)$
+windowrulev2 = pin, class:^(kitty-buku)$
+
+# fix xwayland apps
+windowrulev2 = rounding 0, xwayland:1
+
+
+#### AUTOSTART
+
+exec-once = dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK QT_QPA_PLATFORMTHEME && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target
+exec-once = configure-gtk
+
+# vim: syntax=sh
