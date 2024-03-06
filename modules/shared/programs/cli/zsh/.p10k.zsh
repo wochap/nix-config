@@ -797,10 +797,10 @@ source /etc/scripts/theme-colors.sh
   typeset -g POWERLEVEL9K_VI_MODE_FOREGROUND=$darkerblack
   # Text and color for normal (a.k.a. command) vi mode.
   typeset -g POWERLEVEL9K_VI_COMMAND_MODE_STRING="%B NOR %b%k "
-  typeset -g POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND="#b4befe"
+  typeset -g POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND="#89b4fa"
   # Text and color for visual vi mode.
   typeset -g POWERLEVEL9K_VI_VISUAL_MODE_STRING="%B VIS %b%k "
-  typeset -g POWERLEVEL9K_VI_MODE_VISUAL_BACKGROUND="#f2cdcd"
+  typeset -g POWERLEVEL9K_VI_MODE_VISUAL_BACKGROUND="#cba6f7"
   # Text and color for overtype (a.k.a. overwrite and replace) vi mode.
   typeset -g POWERLEVEL9K_VI_OVERWRITE_MODE_STRING="%B REP %b%k "
   typeset -g POWERLEVEL9K_VI_MODE_OVERWRITE_BACKGROUND=3
