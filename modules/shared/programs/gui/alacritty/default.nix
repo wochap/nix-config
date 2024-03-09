@@ -13,8 +13,8 @@ in {
     _custom.hm = {
       xdg.configFile = {
         "alacritty/catppuccin".source = inputs.catppuccin-alacritty;
-        "alacritty/alacritty.yml".source =
-          relativeSymlink configDirectory ./dotfiles/alacritty.yml;
+        "alacritty/alacritty.toml".source =
+          relativeSymlink configDirectory ./dotfiles/alacritty.toml;
       };
     };
   };

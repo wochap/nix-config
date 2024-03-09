@@ -74,7 +74,7 @@
     mpv-osc-morden-x.flake = false;
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
     dracula-lsd.flake = false;
-    catppuccin-alacritty.url = "github:catppuccin/alacritty?rev=3c808cbb4f9c87be43ba5241bc57373c793d2f17";
+    catppuccin-alacritty.url = "github:catppuccin/alacritty?rev=071d73effddac392d5b9b8cd5b4b527a6cf289f9";
     catppuccin-alacritty.flake = false;
     catppuccin-amfora.url = "github:catppuccin/amfora?rev=26f6496fd2be0fe7308dfc57b9ab1e8ca5c38602";
     catppuccin-amfora.flake = false;
