@@ -42,7 +42,16 @@ in {
           # enable hardware acceleration
           hwdec = "auto-safe";
           vo = "gpu";
-          profile = "gpu-hq";
+        };
+        profiles = {
+          igpu-amd = {
+            hwdec = "auto-safe";
+            vo = "gpu";
+          };
+          dgpu-nvidia = {
+            hwdec = "nvdec-copy";
+            vo = "gpu-next";
+          };
         };
         scripts = with pkgs; [
           mpvScripts.mpris
