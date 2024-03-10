@@ -7,7 +7,7 @@ live_config_reload = true
 program = "tmux"
 
 [env]
-TERM = "xterm-256color"
+TERM = "alacritty"
 
 [window]
 decorations = "full"

@@ -27,18 +27,22 @@ in {
       programs.fzf.tmux.enableShellIntegration = true;
 
       # systemd service required by tmux-continuum
-      systemd.user.services.tmux = {
-        Unit.Description = "tmux default session (detached)";
-        Unit.Documentation = "man:tmux(1)";
+      systemd.user.services.tmux-server = {
+        Unit = {
+          Description = "tmux default session (detached)";
+          Documentation = "man:tmux(1)";
+        };
         Service = {
           Type = "forking";
+          Environment = [ "TERM=alacritty" ];
           PassEnvironment = [ "PATH" "DISPLAY" ];
           ExecStart = "${pkgs.tmux}/bin/tmux new-session -d";
           ExecStop = [
             "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh"
             "${pkgs.tmux}/bin/tmux kill-server"
           ];
-          KillMode = "none";
+          KillMode = "mixed";
+          RestartSec = 2;
         };
         Install.WantedBy = [ "default.target" ];
       };
