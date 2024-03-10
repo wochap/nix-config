@@ -2,6 +2,7 @@
 
 ![](https://i.imgur.com/1KeAXUM.jpg)
 ![](https://i.imgur.com/kDqejTT.jpg)
+![](https://i.imgur.com/jlPHWis.jpg)
 
 [NixOS](https://nixos.org/) and [home-manager](https://github.com/nix-community/home-manager) config files are merged.
 
