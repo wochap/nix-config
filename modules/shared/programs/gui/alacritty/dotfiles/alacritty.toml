@@ -3,6 +3,12 @@ import = [
 ]
 live_config_reload = true
 
+[shell]
+program = "tmux"
+
+[env]
+TERM = "xterm-256color"
+
 [window]
 decorations = "full"
 
