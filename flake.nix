@@ -102,6 +102,8 @@
     catppuccin-zathura.flake = false;
     catppuccin-zsh-fsh.url = "github:catppuccin/zsh-fsh?rev=7cdab58bddafe0565f84f6eaf2d7dd109bd6fc18";
     catppuccin-zsh-fsh.flake = false;
+    catppuccin-tmux.url = "github:catppuccin/tmux";
+    catppuccin-tmux.flake = false;
   };
 
   outputs = inputs:

@@ -42,6 +42,7 @@
     ./programs/tui/newsboat
     ./programs/tui/nnn
     ./programs/tui/taskwarrior
+    ./programs/tui/tmux
     ./programs/tui/youtube
   ];
 }

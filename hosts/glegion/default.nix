@@ -71,6 +71,7 @@ in {
     _custom.programs.newsboat.enable = true;
     _custom.programs.nnn.enable = true;
     _custom.programs.taskwarrior.enable = true;
+    _custom.programs.tmux.enable = true;
     _custom.programs.youtube.enable = true;
 
     _custom.services.android.enable = true;

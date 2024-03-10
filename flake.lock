@@ -62,17 +62,17 @@
     "catppuccin-alacritty": {
       "flake": false,
       "locked": {
-        "lastModified": 1664239314,
-        "narHash": "sha256-w9XVtEe7TqzxxGUCDUR9BFkzLZjG8XrplXJ3lX6f+x0=",
+        "lastModified": 1708974882,
+        "narHash": "sha256-HiIYxTlif5Lbl9BAvPsnXp8WAexL8YuohMDd/eCJVQ8=",
         "owner": "catppuccin",
         "repo": "alacritty",
-        "rev": "3c808cbb4f9c87be43ba5241bc57373c793d2f17",
+        "rev": "071d73effddac392d5b9b8cd5b4b527a6cf289f9",
         "type": "github"
       },
       "original": {
         "owner": "catppuccin",
         "repo": "alacritty",
-        "rev": "3c808cbb4f9c87be43ba5241bc57373c793d2f17",
+        "rev": "071d73effddac392d5b9b8cd5b4b527a6cf289f9",
         "type": "github"
       }
     },
@@ -258,6 +258,22 @@
         "owner": "catppuccin",
         "repo": "starship",
         "rev": "5629d2356f62a9f2f8efad3ff37476c19969bd4f",
+        "type": "github"
+      }
+    },
+    "catppuccin-tmux": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1709830705,
+        "narHash": "sha256-LJWwTy9raWY2T0kZeP95aC0Jw+WA2eB6Rg0pLgzYHS8=",
+        "owner": "catppuccin",
+        "repo": "tmux",
+        "rev": "32df6db4b44ce901b7a9a10d1299d507dd218641",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "tmux",
         "type": "github"
       }
     },
@@ -1344,6 +1360,7 @@
         "catppuccin-newsboat": "catppuccin-newsboat",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "catppuccin-starship": "catppuccin-starship",
+        "catppuccin-tmux": "catppuccin-tmux",
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",
         "dracula-lsd": "dracula-lsd",
