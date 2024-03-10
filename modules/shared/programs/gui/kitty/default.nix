@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.programs.kitty;
-  inherit (config._custom.globals) themeColors;
+  inherit (config._custom.globals) themeColors configDirectory;
   inherit (lib._custom) relativeSymlink;
 
   shellIntegrationInit = {
@@ -57,57 +57,50 @@ in {
           active_border_color ${themeColors.primary}
           inactive_border_color ${themeColors.selection}
 
-          include ${
-            relativeSymlink config._custom.globals.configDirectory
-            ./dotfiles/kitty.conf
-          }
+          include ${relativeSymlink configDirectory ./dotfiles/kitty.conf}
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;
 
         "kitty/scripts/kitty-top.sh" = {
           source = ./scripts/kitty-top.sh;
-          recursive = true;
           executable = true;
         };
         "kitty/scripts/kitty-newsboat.sh" = {
           source = ./scripts/kitty-newsboat.sh;
-          recursive = true;
           executable = true;
         };
         "kitty/scripts/kitty-neomutt.sh" = {
           source = ./scripts/kitty-neomutt.sh;
-          recursive = true;
           executable = true;
         };
         "kitty/scripts/kitty-neorg.sh" = {
           source = ./scripts/kitty-neorg.sh;
-          recursive = true;
           executable = true;
         };
         "kitty/scripts/kitty-nmtui.sh" = {
           source = ./scripts/kitty-nmtui.sh;
-          recursive = true;
           executable = true;
         };
         "kitty/scripts/kitty-scratch.sh" = {
           source = ./scripts/kitty-scratch.sh;
-          recursive = true;
           executable = true;
         };
         "kitty/scripts/kitty-ncmpcpp.sh" = {
           source = ./scripts/kitty-ncmpcpp.sh;
-          recursive = true;
           executable = true;
         };
         "kitty/scripts/kitty-buku.sh" = {
           source = ./scripts/kitty-buku.sh;
-          recursive = true;
           executable = true;
         };
         "kitty/scripts/nvim-scrollback.sh" = {
           source = ./scripts/nvim-scrollback.sh;
-          recursive = true;
+          executable = true;
+        };
+
+        "kitty/tab_bar.py" = {
+          source = ./scripts/tab_bar.py;
           executable = true;
         };
 
