@@ -6,27 +6,50 @@ const title = Variable(
     listen: [`bash -c "dwl-waybar '' title"`, (out) => JSON.parse(out)],
   },
 );
-
 const layout = Variable(
   { text: "" },
   {
     listen: [`bash -c "dwl-waybar '' layout"`, (out) => JSON.parse(out)],
   },
 );
-
 const mode = Variable(
   { text: "" },
   {
     listen: [`bash -c "dwl-waybar '' mode"`, (out) => JSON.parse(out)],
   },
 );
-
 const tags = range(8, 0).map((i) =>
   Variable(
     { text: "", class: [] },
     { listen: [`bash -c "dwl-waybar '' ${i}"`, (out) => JSON.parse(out)] },
   ),
 );
+
+export const dwltitle = () =>
+  Widget.Box({
+    class_name: "dwltitle",
+    child: Widget.Label({
+      label: title.bind().as((value) => value.text),
+    }),
+    visible: title.bind().as((value) => !!value.text),
+  });
+
+export const dwllayout = Widget.Box({
+  class_name: "dwllayout",
+  child: Widget.Label({
+    label: layout.bind().as((value) => value.text),
+  }),
+});
+
+// HACK: without using a function initial `visible` won't work
+export const dwlmode = () =>
+  Widget.Box({
+    class_name: "dwlmode",
+    child: Widget.Label({
+      label: mode.bind().as((value) => value.text),
+    }),
+    visible: mode.bind().as((value) => !!value.text),
+  });
 
 export const dwltags = Widget.Box({
   class_name: "dwltags",
