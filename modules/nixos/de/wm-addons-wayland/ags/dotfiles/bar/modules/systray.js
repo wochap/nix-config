@@ -1,8 +1,8 @@
-const systemtray = await Service.import("systemtray");
+const Systemtray = await Service.import("systemtray");
 
 export const systray = Widget.Box({
   class_name: "systray",
-  children: systemtray.bind("items").as((items) =>
+  children: Systemtray.bind("items").as((items) =>
     items.map((item) =>
       Widget.Button({
         child: Widget.Icon({
