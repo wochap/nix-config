@@ -90,6 +90,7 @@ const bar = Widget.Window({
   child: Widget.CenterBox({
     class_name: "bar",
     startWidget: Widget.Box({
+      spacing,
       children: [dwltags, dwllayout, dwlmode()],
     }),
     centerWidget: Widget.Box({

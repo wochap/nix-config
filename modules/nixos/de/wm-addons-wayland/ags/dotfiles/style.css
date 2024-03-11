@@ -41,10 +41,25 @@ tooltip label {
 }
 
 .dwltags label {
-  background: blue;
+  padding: 0 0.5em;
+  color: @comment;
+}
+.dwltags label.occupied {
+  color: @foreground;
 }
 .dwltags label.focused {
-  background: red;
+  color: @primary;
+}
+.dwltags label.urgent {
+  color: @red;
+}
+
+.dwllayout,
+.dwlmode {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @module_bg;
+  color: @orange;
 }
 
 .taskbar box.focused {
@@ -58,8 +73,8 @@ tooltip label {
   padding: 0 0.3em;
 }
 
-.hehe {
-  background: red;
+.clock {
+  padding: 0 0.5em;
 }
 
 /*

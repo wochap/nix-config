@@ -34,20 +34,16 @@ export const dwltitle = () =>
     visible: title.bind().as((value) => !!value.text),
   });
 
-export const dwllayout = Widget.Box({
+export const dwllayout = Widget.Label({
   class_name: "dwllayout",
-  child: Widget.Label({
-    label: layout.bind().as((value) => value.text),
-  }),
+  label: layout.bind().as((value) => value.text),
 });
 
 // HACK: without using a function initial `visible` won't work
 export const dwlmode = () =>
-  Widget.Box({
+  Widget.Label({
     class_name: "dwlmode",
-    child: Widget.Label({
-      label: mode.bind().as((value) => value.text),
-    }),
+    label: mode.bind().as((value) => value.text),
     visible: mode.bind().as((value) => !!value.text),
   });
 
