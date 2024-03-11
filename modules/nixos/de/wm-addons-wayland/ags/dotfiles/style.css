@@ -40,15 +40,22 @@ tooltip label {
   min-height: 26px;
 }
 
-.systray button {
-  background: transparent;
-  padding: 0 0.3em;
+.dwltags label {
+  background: blue;
+}
+.dwltags label.focused {
+  background: red;
 }
 
 .taskbar box.focused {
   padding: 0 0.25em;
   border-radius: 4px;
   background: @module_bg;
+}
+
+.systray button {
+  background: transparent;
+  padding: 0 0.3em;
 }
 
 .hehe {
