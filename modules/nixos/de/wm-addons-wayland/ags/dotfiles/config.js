@@ -3,16 +3,9 @@ const battery = await Service.import("battery");
 const systemtray = await Service.import("systemtray");
 const bluetooth = await Service.import("bluetooth");
 
-import { dwltags } from "./bar/modules/dwl.js";
+import { dwltags, dwllayout, dwlmode } from "./bar/modules/dwl.js";
 
 const spacing = 7;
-
-const myVar = Variable(
-  {},
-  {
-    listen: [`bash -c "dwl-waybar '' title"`, (out) => JSON.parse(out)],
-  },
-);
 
 const appIds = ["kitty", "slack", "thunar-scratch", "thunar"];
 const activeAppId = "slack";
@@ -56,9 +49,15 @@ const clock = Widget.Label({
   label: date.bind(),
 });
 
-const myLabel = Widget.Label({
-  label: myVar.bind().as((value) => value.text),
-});
+// const myVar = Variable(
+//   {},
+//   {
+//     listen: [`bash -c "dwl-waybar '' title"`, (out) => JSON.parse(out)],
+//   },
+// );
+// const myLabel = Widget.Label({
+//   label: myVar.bind().as((value) => value.text),
+// });
 
 // function Left() {
 //   return Widget.Box({
@@ -91,7 +90,7 @@ const bar = Widget.Window({
   child: Widget.CenterBox({
     class_name: "bar",
     startWidget: Widget.Box({
-      children: [dwltags],
+      children: [dwltags, dwllayout, dwlmode()],
     }),
     centerWidget: Widget.Box({
       hpack: "center",
