@@ -73,8 +73,16 @@ tooltip label {
   padding: 0 0.3em;
 }
 
+.network {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @module_bg;
+  color: @cyan;
+}
+
 .clock {
   padding: 0 0.5em;
+  color: @comment;
 }
 
 /*

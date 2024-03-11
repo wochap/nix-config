@@ -1,5 +1,6 @@
 import { clock } from "./modules/clock.js";
 import { dwltags, dwllayout, dwlmode } from "./modules/dwl.js";
+import { network } from "./modules/network.js";
 import { systray } from "./modules/systray.js";
 import { taskbar } from "./modules/taskbar.js";
 import { spacing } from "./constants.js";
@@ -23,7 +24,7 @@ export const bar = Widget.Window({
     endWidget: Widget.Box({
       spacing,
       hpack: "end",
-      children: [systray, clock],
+      children: [systray, network(), clock],
     }),
   }),
 });
