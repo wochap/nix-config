@@ -102,7 +102,7 @@ cycle() {
       this_status="${this_status%,}"
       val=$(printf -- '{"text":"%s","class":[%s]}\n' "${tag_labels[this_tag]}" "${this_status}")
     else
-      val=$(printf -- '{"text":"%s"}\n' "${tag_labels[this_tag]}")
+      val=$(printf -- '{"text":"%s","class":[]}\n' "${tag_labels[this_tag]}")
     fi
     if [ "$val" != "$last_val" ]; then
       last_val=$val
