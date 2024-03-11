@@ -80,7 +80,7 @@ static const Rule rules[] = {
 	{ "file-roller",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "gnome-font-viewer",       NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   0.8,  0.8,    0 },
 	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
