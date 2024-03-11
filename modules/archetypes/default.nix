@@ -33,6 +33,7 @@
       _custom.de.qt.enable = true;
       _custom.de.xdg.enable = true;
 
+      _custom.de.ags.enable = true;
       _custom.de.cliphist.enable = true;
       _custom.de.dunst.enable = true;
       _custom.de.electron-support.enable = true;

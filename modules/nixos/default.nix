@@ -28,6 +28,7 @@
     ./de/wm-addons/power-management
     ./de/wm-addons/qt
     ./de/wm-addons/xdg
+    ./de/wm-addons-wayland/ags
     ./de/wm-addons-wayland/cliphist
     ./de/wm-addons-wayland/dunst
     ./de/wm-addons-wayland/electron-support
