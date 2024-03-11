@@ -5,6 +5,6 @@
 import { bar } from "./bar/index.js";
 
 App.config({
-  style: "./style.css",
+  style: "./bar/style.css",
   windows: [bar],
 });
