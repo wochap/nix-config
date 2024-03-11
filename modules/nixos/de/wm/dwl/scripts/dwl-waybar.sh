@@ -99,6 +99,7 @@ cycle() {
     if (("${urgenttags}" & mask)) 2>/dev/null; then this_status+='"urgent",'; fi
 
     if [[ "${this_status}" ]]; then
+      this_status="${this_status%,}"
       val=$(printf -- '{"text":"%s","class":[%s]}\n' "${tag_labels[this_tag]}" "${this_status}")
     else
       val=$(printf -- '{"text":"%s"}\n' "${tag_labels[this_tag]}")
