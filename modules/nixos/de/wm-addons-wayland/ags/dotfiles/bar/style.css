@@ -73,6 +73,21 @@ tooltip label {
   padding: 0 0.3em;
 }
 
+.bluetooth {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @module_bg;
+}
+.bluetooth.on {
+  color: @foreground;
+}
+.bluetooth.connected {
+  color: @cyan;
+}
+.bluetooth.off {
+  color: @comment;
+}
+
 .network {
   padding: 0 0.5em;
   border-radius: 4px;

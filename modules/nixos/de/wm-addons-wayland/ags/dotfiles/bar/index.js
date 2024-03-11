@@ -1,3 +1,7 @@
+// const audio = await Service.import("audio");
+// const battery = await Service.import("battery");
+
+import { bluetooth } from "./modules/bluetooth.js";
 import { clock } from "./modules/clock.js";
 import { dwltags, dwllayout, dwlmode } from "./modules/dwl.js";
 import { network } from "./modules/network.js";
@@ -24,7 +28,7 @@ export const bar = Widget.Window({
     endWidget: Widget.Box({
       spacing,
       hpack: "end",
-      children: [systray, network(), clock],
+      children: [systray, bluetooth, network(), clock],
     }),
   }),
 });
