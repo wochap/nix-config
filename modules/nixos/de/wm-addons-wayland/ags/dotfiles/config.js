@@ -5,12 +5,21 @@ const bluetooth = await Service.import("bluetooth");
 
 const spacing = 7;
 
-const date = Variable("", {
-  poll: [1000, `date +"%a %d %b %H:%M"`],
-});
-const clock = Widget.Label({
-  class_name: "clock",
-  label: date.bind(),
+const appIds = ["kitty", "slack", "thunar-scratch", "thunar"];
+const activeAppId = "slack";
+const taskbar = Widget.Box({
+  class_name: "taskbar",
+  spacing,
+  children: appIds.map((appId) =>
+    Widget.Box({
+      tooltip_text: appId,
+      class_name: activeAppId === appId ? "focused" : "",
+      child: Widget.Icon({
+        icon: appId,
+        size: 20,
+      }),
+    }),
+  ),
 });
 
 const systray = Widget.Box({
@@ -30,21 +39,12 @@ const systray = Widget.Box({
   ),
 });
 
-const appIds = ["kitty", "slack", "thunar-scratch", "thunar"];
-const activeAppId = "slack";
-const taskbar = Widget.Box({
-  class_name: "taskbar",
-  spacing,
-  children: appIds.map((appId) =>
-    Widget.Box({
-      tooltip_text: appId,
-      class_name: activeAppId === appId ? "focused" : "",
-      child: Widget.Icon({
-        icon: appId,
-        size: 20,
-      }),
-    }),
-  ),
+const date = Variable("", {
+  poll: [1000, `date +"%a %d %b %H:%M"`],
+});
+const clock = Widget.Label({
+  class_name: "clock",
+  label: date.bind(),
 });
 
 const myLabel = Widget.Label({
