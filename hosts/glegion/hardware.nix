@@ -38,8 +38,7 @@
       lenovo-legion-module
     ];
 
-    # NOTE: kernel 6.7.0 gives artifacts
-    boot.kernelPackages = lib.mkForce pkgs.unstable.linuxPackages_6_6;
+    boot.kernelPackages = lib.mkForce pkgs.unstable.linuxPackages_latest;
 
     boot.kernelParams = [
       # this doesn't fix my ACPI Bios errors :c

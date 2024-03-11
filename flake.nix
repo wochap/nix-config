@@ -1,7 +1,7 @@
 {
   inputs = {
     # channels
-    unstable.url = "github:nixos/nixpkgs?rev=317484b1ead87b9c1b8ac5261a8d2dd748a0492d"; # nixos-unstable (jan 10 2024)
+    unstable.url = "github:nixos/nixpkgs?rev=3030f185ba6a4bf4f18b87f345f104e6a6961f34"; # nixos-unstable (jan 10 2024)
     nixpkgs.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (jan 10 2024)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=317484b1ead87b9c1b8ac5261a8d2dd748a0492d"; # NVIM v0.9.5
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
