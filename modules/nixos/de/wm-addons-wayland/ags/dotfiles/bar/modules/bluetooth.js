@@ -14,9 +14,13 @@ export const bluetooth = Widget.Label({
   label: Utils.merge(
     [Bluetooth.bind("enabled"), Bluetooth.bind("connected-devices")],
     (enabled, connectedDevices) => {
-      return enabled
-        ? `󰂯${connectedDevices.length ? ` ${connectedDevices.length}` : ""}`
-        : "󰂲";
+      if (enabled) {
+        if (connectedDevices.length) {
+          return `󰂱 ${connectedDevices.length}`;
+        }
+        return "󰂯";
+      }
+      return "󰂲";
     },
   ),
 });
