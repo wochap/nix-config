@@ -9,6 +9,7 @@ import { dwltags, dwllayout, dwlmode } from "./modules/dwl.js";
 import { network } from "./modules/network.js";
 import { systray } from "./modules/systray.js";
 import { taskbar } from "./modules/taskbar.js";
+import { temperature } from "./modules/temperature.js";
 import { spacing } from "./constants.js";
 
 export const bar = Widget.Window({
@@ -30,7 +31,7 @@ export const bar = Widget.Window({
     endWidget: Widget.Box({
       spacing,
       hpack: "end",
-      children: [systray, battery, audio, bluetooth, network(), clock],
+      children: [systray, temperature, battery, audio, bluetooth, network(), clock],
     }),
   }),
 });
