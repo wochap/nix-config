@@ -8,8 +8,6 @@ export const audio = Widget.Button({
   // HACK: `Audio.bind("speaker")` doesn't work
   setup(self) {
     self.hook(Audio.speaker, () => {
-      const vol = Audio.speaker.volume * 100;
-      self.tooltip_text = `Volume ${Math.floor(vol)}%`;
       self.class_name = `audio ${Audio.speaker.stream?.isMuted ? "muted" : ""}`;
     });
   },
