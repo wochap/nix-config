@@ -79,7 +79,8 @@
     "return-type": "json",
     "interval": 1,
     "exec": "echo '{\"class\": \"recording\"}'",
-    "exec-if": "pgrep wl-screenrec"
+    "exec-if": "pgrep wl-screenrec",
+    "on-click": "recorder --area"
   },
   "keyboard-state": {
     "capslock": true,
