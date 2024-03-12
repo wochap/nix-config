@@ -61,6 +61,7 @@
     ./programs/gui/thunar
     ./programs/gui/zathura
     ./programs/suites-linux
+    ./programs/tui/figlet
     ./programs/tui/fontpreview-kik
 
     ./security/doas

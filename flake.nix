@@ -68,6 +68,8 @@
     zsh-vi-mode.flake = false;
     zsh-pnpm-shell-completion.url = "github:g-plane/pnpm-shell-completion";
     zsh-pnpm-shell-completion.flake = false;
+    figlet-fonts.url = "github:xero/figlet-fonts";
+    figlet-fonts.flake = false;
 
     # themes
     mpv-osc-morden-x.url = "github:cyl0/mpv-osc-morden-x?rev=e0adf03d40403b87d106161c1f805a65bcb34738";

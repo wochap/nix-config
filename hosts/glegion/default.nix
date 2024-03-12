@@ -29,6 +29,7 @@ in {
     _custom.programs.suites-linux.enable = true;
 
     # tui
+    _custom.programs.figlet.enable = true;
     _custom.programs.fontpreview-kik.enable = true;
 
     # cli

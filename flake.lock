@@ -348,6 +348,22 @@
         "type": "github"
       }
     },
+    "figlet-fonts": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1687004104,
+        "narHash": "sha256-HmO968OYH5yWwsDRp7HVfWvp48upUv+YwZxcMxBHNSw=",
+        "owner": "xero",
+        "repo": "figlet-fonts",
+        "rev": "0c0697139d6db66878eee720ebf299bc3a605fd0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "xero",
+        "repo": "figlet-fonts",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1365,6 +1381,7 @@
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",
         "dracula-lsd": "dracula-lsd",
+        "figlet-fonts": "figlet-fonts",
         "fuzzy-sys": "fuzzy-sys",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
