@@ -75,6 +75,43 @@ tooltip label {
   padding: 0 0.3em;
 }
 
+.recorder {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @module_bg;
+  color: @red;
+}
+
+.matcha {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @module_bg;
+  color: @comment;
+}
+.matcha.enabled {
+  color: @green;
+}
+
+.dunst {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @module_bg;
+  color: @comment;
+}
+.dunst.enabled {
+  color: @foreground;
+}
+
+.offlinemsmtp {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @module_bg;
+  color: @comment;
+}
+.offlinemsmtp.enabled {
+  color: @foreground;
+}
+
 .temperature {
   padding: 0 0.5em;
   border-radius: 4px;

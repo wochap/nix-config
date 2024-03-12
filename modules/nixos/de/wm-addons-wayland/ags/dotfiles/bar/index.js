@@ -2,8 +2,12 @@ import { audio } from "./modules/audio.js";
 import { battery } from "./modules/battery.js";
 import { bluetooth } from "./modules/bluetooth.js";
 import { clock } from "./modules/clock.js";
+import { dunst } from "./modules/dunst.js";
 import { dwltags, dwllayout, dwlmode } from "./modules/dwl.js";
+import { matcha } from "./modules/matcha.js";
 import { network } from "./modules/network.js";
+import { offlinemsmtp } from "./modules/offlinemsmtp.js";
+import { recorder } from "./modules/recorder.js";
 import { systray } from "./modules/systray.js";
 import { taskbar } from "./modules/taskbar.js";
 import { temperature } from "./modules/temperature.js";
@@ -28,7 +32,19 @@ export const bar = Widget.Window({
     endWidget: Widget.Box({
       spacing,
       hpack: "end",
-      children: [systray, temperature, battery, audio, bluetooth, network(), clock],
+      children: [
+        systray,
+        recorder(),
+        matcha,
+        dunst,
+        offlinemsmtp,
+        temperature,
+        battery,
+        audio,
+        bluetooth,
+        network(),
+        clock,
+      ],
     }),
   }),
 });
