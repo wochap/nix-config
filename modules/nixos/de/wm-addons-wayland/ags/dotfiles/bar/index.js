@@ -1,6 +1,3 @@
-// const audio = await Service.import("audio");
-// const battery = await Service.import("battery");
-
 import { audio } from "./modules/audio.js";
 import { battery } from "./modules/battery.js";
 import { bluetooth } from "./modules/bluetooth.js";
