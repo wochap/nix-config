@@ -73,6 +73,16 @@ tooltip label {
   padding: 0 0.3em;
 }
 
+.audio {
+  font-size: 10pt;
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @module_bg;
+}
+.audio.muted {
+  color: @red;
+}
+
 .bluetooth {
   padding: 0 0.5em;
   border-radius: 4px;
