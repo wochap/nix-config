@@ -73,6 +73,31 @@ tooltip label {
   padding: 0 0.3em;
 }
 
+.battery {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @module_bg;
+}
+.battery.discharging {
+  color: @yellow;
+}
+.battery.charging {
+  color: @green;
+}
+@keyframes blink {
+  to {
+    color: @yellow;
+  }
+}
+.battery.critical:not(.charging) {
+  color: @red;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
 .audio {
   font-size: 10pt;
   padding: 0 0.5em;
