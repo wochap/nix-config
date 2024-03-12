@@ -14,8 +14,7 @@ export const audio = Widget.Button({
     });
   },
   child: Widget.Label({
-    vpack: "fill",
-    vexpand: true,
+    useMarkup: true,
     setup(self) {
       self.hook(Audio.speaker, () => {
         const vol = Audio.speaker.volume * 100;
@@ -26,7 +25,7 @@ export const audio = Widget.Button({
           [1, ""],
           [0, ""],
         ].find(([threshold]) => threshold <= vol)?.[1];
-        self.label = `${Audio.speaker.stream?.isMuted ? "" : icon} ${Math.ceil(vol)}%`;
+        self.label = `<span rise='-1000'>${Audio.speaker.stream?.isMuted ? "" : icon}</span> ${Math.ceil(vol)}%`;
       });
     },
   }),
