@@ -64,6 +64,10 @@ tooltip label {
   color: @orange;
 }
 
+.dwltitle {
+  padding: 0 0.5em;
+}
+
 .capslock {
   padding: 0 0.5em;
   border-radius: 4px;
@@ -72,10 +76,13 @@ tooltip label {
   font-size: 1.2em;
 }
 
-.taskbar box.focused {
-  padding: 0 0.25em;
+.taskbar box {
+  padding: 0 0.1em;
   border-radius: 4px;
-  background: @module_bg;
+  opacity: 0.5;
+}
+.taskbar box.focused {
+  opacity: 1;
 }
 
 .systray button {
@@ -187,7 +194,6 @@ tooltip label {
 
 .clock {
   padding: 0 0.5em;
-  color: @comment;
 }
 
 /*

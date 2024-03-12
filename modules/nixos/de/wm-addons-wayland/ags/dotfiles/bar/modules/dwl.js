@@ -1,6 +1,6 @@
 import { range } from "../../utils/index.js";
 
-const generateScriptModule = ({ cmd, className }) => {
+const generateScriptModule = ({ cmd, className, labelAttrs }) => {
   const variable = Variable(
     { text: "", class: [] },
     {
@@ -13,6 +13,7 @@ const generateScriptModule = ({ cmd, className }) => {
       class_name: className,
       label: variable.bind().as((value) => value.text),
       visible: variable.bind().as((value) => !!value.text),
+      ...labelAttrs,
     });
 };
 
@@ -37,6 +38,9 @@ export const dwltags = Widget.Box({
 export const dwltitle = generateScriptModule({
   cmd: "dwl-waybar '' title",
   className: "dwltitle",
+  labelAttrs: {
+    truncate: "middle",
+  },
 });
 
 export const dwllayout = generateScriptModule({

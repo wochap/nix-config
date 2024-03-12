@@ -11,7 +11,7 @@ export const taskbar = Widget.Box({
       class_name: activeAppId === appId ? "focused" : "",
       child: Widget.Icon({
         icon: appId,
-        size: 20,
+        size: 24,
       }),
     }),
   ),

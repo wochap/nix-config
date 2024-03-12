@@ -4,7 +4,7 @@ import { bluetooth } from "./modules/bluetooth.js";
 import { capslock } from "./modules/capslock.js";
 import { clock } from "./modules/clock.js";
 import { dunst } from "./modules/dunst.js";
-import { dwltags, dwllayout, dwlmode } from "./modules/dwl.js";
+import { dwltags, dwllayout, dwlmode, dwltitle } from "./modules/dwl.js";
 import { matcha } from "./modules/matcha.js";
 import { network } from "./modules/network.js";
 import { offlinemsmtp } from "./modules/offlinemsmtp.js";
@@ -22,9 +22,10 @@ export const bar = Widget.Window({
   anchor: ["top", "left", "right"],
   child: Widget.CenterBox({
     class_name: "bar",
+    spacing,
     startWidget: Widget.Box({
       spacing,
-      children: [dwltags, dwllayout, dwlmode(), capslock()],
+      children: [dwltags, dwllayout, dwlmode(), capslock(), dwltitle()],
     }),
     centerWidget: Widget.Box({
       hpack: "center",
