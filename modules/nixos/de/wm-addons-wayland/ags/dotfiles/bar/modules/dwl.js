@@ -16,7 +16,7 @@ const generateScriptModule = ({ cmd, className }) => {
     });
 };
 
-const tags = range(8, 0).map((i) =>
+const tags = range(9, 0).map((i) =>
   Variable(
     { text: "", class: [] },
     { listen: [`dwl-waybar '' ${i}`, (out) => JSON.parse(out)] },
@@ -25,6 +25,7 @@ const tags = range(8, 0).map((i) =>
 
 export const dwltags = Widget.Box({
   class_name: "dwltags",
+  spacing: 3.5,
   children: tags.map((tag) =>
     Widget.Label({
       label: tag.bind().as((value) => value.text),
