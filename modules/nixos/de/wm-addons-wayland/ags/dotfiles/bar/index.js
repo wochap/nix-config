@@ -1,6 +1,7 @@
 import { audio } from "./modules/audio.js";
 import { battery } from "./modules/battery.js";
 import { bluetooth } from "./modules/bluetooth.js";
+import { capslock } from "./modules/capslock.js";
 import { clock } from "./modules/clock.js";
 import { dunst } from "./modules/dunst.js";
 import { dwltags, dwllayout, dwlmode } from "./modules/dwl.js";
@@ -23,7 +24,7 @@ export const bar = Widget.Window({
     class_name: "bar",
     startWidget: Widget.Box({
       spacing,
-      children: [dwltags, dwllayout, dwlmode()],
+      children: [dwltags, dwllayout, dwlmode(), capslock()],
     }),
     centerWidget: Widget.Box({
       hpack: "center",
