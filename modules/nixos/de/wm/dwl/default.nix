@@ -40,13 +40,13 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "7e6051fa2b740af225ae099b643d17caf04ea102";
+          version = "f3ceeb16fd260f84901b3bbadb5dee11e4f2fb2d";
           # install patched dwl
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-tquhkvbyjcZJEh+A6A8UFE/rpnaFZ+2UYEe12dWCrPY=";
+            hash = "sha256-f/rux71RvTaKVrdFWYCDb1YL9PwFElBvtVoUhFsTcX4=";
           };
 
           # add display manager session
