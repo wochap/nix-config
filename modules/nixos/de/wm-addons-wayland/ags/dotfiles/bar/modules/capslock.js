@@ -1,9 +1,4 @@
-const Capslock = Variable(
-  { text: "", class: "" },
-  {
-    listen: ["capslock", (out) => JSON.parse(out)],
-  },
-);
+import { Capslock } from "../../variables/Capslock.js";
 
 // HACK: without using a function initial `visible` won't work
 export const capslock = () =>

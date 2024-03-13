@@ -5,7 +5,7 @@ const ProgressFifo = Variable(0, {
     [
       "bash",
       "-c",
-      `while true; do if read -r line < /run/user/$UID/ags_osd; then echo "$line"; fi; done`,
+      `while true; do if read -r line < /run/user/$UID/progress_osd; then echo "$line"; fi; done`,
     ],
     (out) => parseInt(out),
   ],

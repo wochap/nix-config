@@ -1,8 +1,5 @@
 import { progressOsd } from "./progress-osd.js";
-
-App.applyCss(
-  "/home/gean/nix-config/modules/nixos/de/wm-addons-wayland/ags/dotfiles/osd/style.css",
-);
+import { capslockOsd } from "./capslock-osd.js";
 
 export const osd = Widget.Window({
   name: "osd",
@@ -10,8 +7,8 @@ export const osd = Widget.Window({
   layer: "overlay",
   click_through: true,
   anchor: ["top", "bottom", "right", "left"],
-  child: Widget.Overlay(
-    { child: progressOsd },
-    // TODO: add capslock osd
-  ),
+  child: Widget.Overlay({
+    child: Widget.Box(),
+    overlays: [progressOsd, capslockOsd],
+  }),
 });
