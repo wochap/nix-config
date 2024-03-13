@@ -26,7 +26,7 @@ in {
           # last argument (optional, default is False): enable the plain look for the menu rows
           catppuccin.setup(c, 'mocha', True)
 
-          c.fonts.default_family = "Iosevka Nerd Font"
+          c.fonts.default_family = "Iosevka NF"
           c.fonts.default_size = "10pt"
         '';
       };

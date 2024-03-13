@@ -54,7 +54,7 @@ separator_height=2
 frame_width=2
 
 # Theme dpi
-font="Iosevka Nerd Font 10"
+font="Iosevka NF 10"
 height=150
 horizontal_padding=7
 padding=7

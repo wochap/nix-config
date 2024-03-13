@@ -9,7 +9,7 @@ swaylock \
   --color "#1E1E2E" \
   --clock \
   --indicator-idle-visible \
-  --font "Iosevka Nerd Font" \
+  --font "Iosevka NF" \
   --indicator-radius 100 \
   --indicator-thickness 10 \
   --ignore-empty-password \

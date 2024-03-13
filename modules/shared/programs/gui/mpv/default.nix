@@ -35,7 +35,7 @@ in {
           gpu-context = lib.mkIf isWayland "wayland";
           hwdec-codecs = "all";
           keep-open = true;
-          osd-font = "Iosevka Nerd Font";
+          osd-font = "Iosevka NF";
           pause = true;
           video-sync = "display-resample";
 
