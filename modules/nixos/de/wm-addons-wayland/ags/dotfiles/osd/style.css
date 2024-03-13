@@ -1,0 +1,35 @@
+@import url("/home/gean/.config/waybar/colors.css");
+
+.osd-container {
+  background-color: transparent;
+}
+
+.osd {
+  background-color: transparent;
+  padding: 7px; /* HACK: required to make revealer work */
+}
+
+.osd-container .progress-container {
+  background-color: @background;
+  border-color: @selection;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 2px;
+  padding: 2px;
+}
+
+.osd-container .progress {
+  background-color: transparent;
+  border-radius: 2px;
+}
+
+.osd-container .fill {
+  background-color: @primary;
+  border-radius: 2px;
+}
+.osd-container .fill.overflow {
+  background-color: @pink;
+}
+.osd-container .fill.muted {
+  background-color: @comment;
+}
