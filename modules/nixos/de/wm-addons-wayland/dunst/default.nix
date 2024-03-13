@@ -28,9 +28,7 @@ in {
   options._custom.de.dunst.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    # so it propagates to:
-    # /run/current-system/sw/share/icons/Numix-Square
-    environment.systemPackages = with pkgs; [ numix-icon-theme-square ];
+    environment.systemPackages = with pkgs; [ reversal-icon-theme ];
 
     _custom.hm = {
       home = {

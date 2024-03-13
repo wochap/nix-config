@@ -73,9 +73,11 @@ in {
         gnome.adwaita-icon-theme
         gnome.gnome-themes-extra
         hicolor-icon-theme
-        numix-icon-theme-circle # required by notifications
+        numix-icon-theme-circle
+        numix-icon-theme-square
         tela-icon-theme
         xfce.xfce4-icon-theme
+        reversal-icon-theme
 
         # Themes settings
         gsettings-desktop-schemas
