@@ -42,7 +42,7 @@ export const bar = Widget.Window({
     }),
     centerWidget: Widget.Box({
       hpack: "center",
-      children: [dwltaskbar],
+      children: [dwltaskbar()],
     }),
     endWidget: Widget.Box({
       spacing,

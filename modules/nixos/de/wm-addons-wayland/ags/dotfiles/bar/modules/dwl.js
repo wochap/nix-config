@@ -22,7 +22,9 @@ const VisibleAppIds = Variable([], {
   listen: [
     "dwl-waybar '' visible_appids",
     (out) => {
-      const items = JSON.parse(out).text.split(" ");
+      const items = JSON.parse(out)
+        .text.split(" ")
+        .filter((str) => str.trim().length);
       const result = [];
       for (let i = 0; i < items.length; i += 2) {
         let appId = items[i];
@@ -38,6 +40,9 @@ const VisibleAppIds = Variable([], {
         if (/^msedge-.*-Default$/.test(appId)) {
           appId = "microsoft-edge";
         }
+        if (appId === "Slack") {
+          appId = "slack";
+        }
         result.push({
           appId,
           focused: items[i + 1] === "true",
@@ -47,22 +52,29 @@ const VisibleAppIds = Variable([], {
     },
   ],
 });
-export const dwltaskbar = Widget.Box({
-  class_name: "taskbar",
-  spacing,
-  children: VisibleAppIds.bind().as((visibleAppIds) => {
-    return visibleAppIds.map(({ appId, focused }) =>
-      Widget.Box({
-        tooltip_text: appId,
-        class_name: focused ? "focused" : "",
-        child: Widget.Icon({
-          icon: appId,
-          size: 24,
+export const dwltaskbar = () =>
+  Widget.Box({
+    class_name: "taskbar",
+    spacing,
+    // HACK: using binding `visible` property doesn't work
+    setup(self) {
+      self.hook(VisibleAppIds, () => {
+        self.visible = VisibleAppIds.value.length > 0;
+      });
+    },
+    children: VisibleAppIds.bind().as((visibleAppIds) => {
+      return visibleAppIds.map(({ appId, focused }) =>
+        Widget.Box({
+          tooltip_text: appId,
+          class_name: focused ? "focused" : "",
+          child: Widget.Icon({
+            icon: appId,
+            size: 24,
+          }),
         }),
-      }),
-    );
-  }),
-});
+      );
+    }),
+  });
 
 const tags = range(9, 0).map((i) =>
   Variable(
