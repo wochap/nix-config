@@ -377,20 +377,20 @@ static const Key keys[] = {
 
   // ### MEDIA KEYBINDINGS
 
-  { MOD_NONE, Key_XF86AudioRaiseVolume, spawn, SHCMD("wob-osd --volume +5%") },
-  { MOD_NONE, Key_XF86AudioLowerVolume, spawn, SHCMD("wob-osd --volume -5%") },
-  { MOD_NONE, Key_XF86AudioMute, spawn, SHCMD("wob-osd --volume-toggle") },
+  { MOD_NONE, Key_XF86AudioRaiseVolume, spawn, SHCMD("progress-osd --volume +5%") },
+  { MOD_NONE, Key_XF86AudioLowerVolume, spawn, SHCMD("progress-osd --volume -5%") },
+  { MOD_NONE, Key_XF86AudioMute, spawn, SHCMD("progress-osd --volume-toggle") },
 
   { MOD_NONE, Key_XF86AudioNext, spawn, SHCMD("playerctl next") },
   { MOD_NONE, Key_XF86AudioPrev, spawn, SHCMD("playerctl previous") },
   { MOD_NONE, Key_XF86AudioStop, spawn, SHCMD("playerctl pause") },
   { MOD_NONE, Key_XF86AudioPlay, spawn, SHCMD("playerctl play-pause") },
 
-  { MOD_NONE, Key_XF86MonBrightnessUp, spawn, SHCMD("wob-osd --backlight 5%+") },
-  { MOD_NONE, Key_XF86MonBrightnessDown, spawn, SHCMD("wob-osd --backlight 5%-") },
+  { MOD_NONE, Key_XF86MonBrightnessUp, spawn, SHCMD("progress-osd --backlight 5%+") },
+  { MOD_NONE, Key_XF86MonBrightnessDown, spawn, SHCMD("progress-osd --backlight 5%-") },
 
-  { MOD_NONE, Key_XF86KbdBrightnessUp, spawn, SHCMD("wob-osd --kbd-backlight 5%+") },
-  { MOD_NONE, Key_XF86KbdBrightnessDown, spawn, SHCMD("wob-osd --kbd-backlight 5%-") },
+  { MOD_NONE, Key_XF86KbdBrightnessUp, spawn, SHCMD("progress-osd --kbd-backlight 5%+") },
+  { MOD_NONE, Key_XF86KbdBrightnessDown, spawn, SHCMD("progress-osd --kbd-backlight 5%-") },
 
 
   // ### OTHERS

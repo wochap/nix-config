@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-AGSOSDFIFO="/run/user/$UID/ags_osd"
+AGSOSDFIFO="/run/user/$UID/progress_osd"
 
 if [[ "$1" == "--volume" ]]; then
   pactl set-sink-volume @DEFAULT_SINK@ "$2" && pactl get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' | xargs -I {} echo {} >$AGSOSDFIFO

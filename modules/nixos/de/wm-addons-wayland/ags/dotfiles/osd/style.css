@@ -4,12 +4,12 @@
   background-color: transparent;
 }
 
-.osd {
+.progress-osd {
   background-color: transparent;
   padding: 7px; /* HACK: required to make revealer work */
 }
 
-.osd-container .progress-container {
+.progress-osd .progress-container {
   background-color: @background;
   border-color: @selection;
   border-radius: 4px;
@@ -18,18 +18,18 @@
   padding: 2px;
 }
 
-.osd-container .progress {
+.progress-osd .progress {
   background-color: transparent;
   border-radius: 2px;
 }
 
-.osd-container .fill {
+.progress-osd .fill {
   background-color: @primary;
   border-radius: 2px;
 }
-.osd-container .fill.overflow {
+.progress-osd .fill.overflow {
   background-color: @pink;
 }
-.osd-container .fill.muted {
+.progress-osd .fill.muted {
   background-color: @comment;
 }

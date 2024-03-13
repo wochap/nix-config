@@ -6,8 +6,8 @@ let
   agsFinal = inputs.ags.packages.${system}.default;
   capslock =
     pkgs.writeScriptBin "capslock" (builtins.readFile ./scripts/capslock.sh);
-  ags-osd =
-    pkgs.writeScriptBin "ags-osd" (builtins.readFile ./scripts/ags-osd.sh);
+  progress-osd = pkgs.writeScriptBin "progress-osd"
+    (builtins.readFile ./scripts/progress-osd.sh);
 in {
   options._custom.de.ags = {
     enable = lib.mkEnableOption { };
@@ -20,7 +20,7 @@ in {
     _custom.hm = {
       imports = [ inputs.ags.homeManagerModules.default ];
 
-      home.packages = [ capslock ags-osd ];
+      home.packages = [ capslock progress-osd ];
 
       programs.ags = {
         enable = true;
@@ -48,14 +48,14 @@ in {
         Install.WantedBy = [ "wayland-session.target" ];
       };
 
-      systemd.user.services.ags-osd = lib._custom.mkWaylandService {
+      systemd.user.services.progress-osd = lib._custom.mkWaylandService {
         Unit.Description = "OSD made with ags";
         Unit.Documentation = "https://github.com/Aylur/ags";
         Service = {
           Type = "oneshot";
           PassEnvironment = [ "PATH" "UID" ];
           ExecStart =
-            "${pkgs.bash}/bin/bash -c 'if [ -p /run/user/$UID/ags_osd ]; then rm /run/user/$UID/ags_osd; fi && ${pkgs.coreutils}/bin/mkfifo /run/user/$UID/ags_osd'";
+            "${pkgs.bash}/bin/bash -c 'if [ -p /run/user/$UID/progress_osd ]; then rm /run/user/$UID/progress_osd; fi && ${pkgs.coreutils}/bin/mkfifo /run/user/$UID/progress_osd'";
         };
       };
     };

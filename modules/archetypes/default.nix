@@ -47,7 +47,7 @@
       _custom.de.waybar.systemdEnable = lib.mkDefault true;
       _custom.de.wayland-session.enable = true;
       _custom.de.wayland-utils.enable = true;
-      _custom.de.wob.enable = true;
+      _custom.de.wob.enable = lib.mkDefault true;
 
       _custom.de.greetd.enable = true;
     })

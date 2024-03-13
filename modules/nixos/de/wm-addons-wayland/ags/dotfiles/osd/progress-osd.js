@@ -1,6 +1,6 @@
 import { Progress } from "./widgets/Progress.js";
 
-const ProgressSock = Variable(0, {
+const ProgressFifo = Variable(0, {
   listen: [
     [
       "bash",
@@ -17,14 +17,14 @@ const progress = Progress({
   vertical: true,
 });
 
-export const progressRevealer = Widget.Revealer({
+const progressRevealer = Widget.Revealer({
   revealChild: false,
   transition: "none",
   child: progress,
 });
-let count = 0;
 
-ProgressSock.connect("changed", ({ value }) => {
+let count = 0;
+ProgressFifo.connect("changed", ({ value }) => {
   progress.setValue(value / 100);
   progressRevealer.reveal_child = true;
   count++;
@@ -34,4 +34,12 @@ ProgressSock.connect("changed", ({ value }) => {
       progressRevealer.reveal_child = false;
     }
   });
+});
+
+export const progressOsd = Widget.Box({
+  class_name: "progress-osd",
+  hpack: "end",
+  vpack: "center",
+  expand: true,
+  children: [progressRevealer],
 });
