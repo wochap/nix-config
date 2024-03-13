@@ -1,6 +1,7 @@
 {
-  black3 = "#313244";
-  darkerblack = "#181825";
+  lavender = "#b4befe";
+  flamingo = "#f2cdcd";
+  mantle = "#181825";
   primary = "#cba6f7";
   background = "#1E1E2E";
   currentline = "#585B70";

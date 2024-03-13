@@ -794,7 +794,7 @@ source /etc/scripts/theme-colors.sh
 
   ###########[ vi_mode: vi mode (you don't need this if you've enabled prompt_char) ]###########
   # Foreground color.
-  typeset -g POWERLEVEL9K_VI_MODE_FOREGROUND=$darkerblack
+  typeset -g POWERLEVEL9K_VI_MODE_FOREGROUND=$mantle
   # Text and color for normal (a.k.a. command) vi mode.
   typeset -g POWERLEVEL9K_VI_COMMAND_MODE_STRING="%B NOR %b%k "
   typeset -g POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND="#89b4fa"

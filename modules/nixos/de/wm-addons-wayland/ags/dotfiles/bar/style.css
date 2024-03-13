@@ -59,6 +59,10 @@ tooltip label {
   padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
+  color: @flamingo;
+}
+
+.dwlmode {
   color: @orange;
 }
 
@@ -71,13 +75,14 @@ tooltip label {
 
 .dwltitle {
   padding: 1px 0.5em 0;
+  color: @comment;
 }
 
 .bar .capslock {
   padding: 0 0.5em;
   border-radius: 4px;
   background-color: @module_bg;
-  color: @red;
+  color: @orange;
   font-size: 1.2em;
 }
 
@@ -187,7 +192,7 @@ tooltip label {
   color: @foreground;
 }
 .bluetooth.connected {
-  color: @cyan;
+  color: @lavender;
 }
 .bluetooth.off {
   color: @comment;
@@ -197,11 +202,12 @@ tooltip label {
   padding: 0 0.5em;
   border-radius: 4px;
   background-color: @module_bg;
-  color: @cyan;
+  color: @lavender;
 }
 
 .clock {
   padding: 0 0.5em;
+  color: @comment;
 }
 
 /*
