@@ -4,13 +4,19 @@ import { bluetooth } from "./modules/bluetooth.js";
 import { capslock } from "./modules/capslock.js";
 import { clock } from "./modules/clock.js";
 import { dunst } from "./modules/dunst.js";
-import { dwltags, dwllayout, dwlmode, dwltitle } from "./modules/dwl.js";
+import {
+  dwltags,
+  dwllayout,
+  dwlmode,
+  dwltitle,
+  dwlscratchpads,
+  dwltaskbar,
+} from "./modules/dwl.js";
 import { matcha } from "./modules/matcha.js";
 import { network } from "./modules/network.js";
 import { offlinemsmtp } from "./modules/offlinemsmtp.js";
 import { recorder } from "./modules/recorder.js";
 import { systray } from "./modules/systray.js";
-import { taskbar } from "./modules/taskbar.js";
 import { temperature } from "./modules/temperature.js";
 import { spacing } from "./constants.js";
 
@@ -25,11 +31,18 @@ export const bar = Widget.Window({
     spacing,
     startWidget: Widget.Box({
       spacing,
-      children: [dwltags, dwllayout, dwlmode(), capslock(), dwltitle()],
+      children: [
+        dwltags,
+        dwllayout,
+        dwlscratchpads(),
+        dwlmode(),
+        capslock(),
+        dwltitle(),
+      ],
     }),
     centerWidget: Widget.Box({
       hpack: "center",
-      children: [taskbar],
+      children: [dwltaskbar],
     }),
     endWidget: Widget.Box({
       spacing,
