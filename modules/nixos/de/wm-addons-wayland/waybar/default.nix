@@ -9,7 +9,10 @@ let
   waybar-toggle = pkgs.writeScriptBin "waybar-toggle"
     (builtins.readFile ./scripts/waybar-toggle.sh);
 in {
-  options._custom.de.waybar.enable = lib.mkEnableOption { };
+  options._custom.de.waybar = {
+    enable = lib.mkEnableOption { };
+    systemdEnable = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ libevdev ];
@@ -35,7 +38,7 @@ in {
         '';
       };
 
-      systemd.user.services.waybar = {
+      systemd.user.services.waybar = lib.mkIf cfg.systemdEnable {
         Unit = {
           Description =
             "Highly customizable Wayland bar for Sway and Wlroots based compositors.";

@@ -19,7 +19,7 @@ in {
     ];
 
     _custom.de.greetd.cmd = lib.mkIf cfg.isDefault "labwc";
-    _custom.de.waybar.enable = lib.mkIf cfg.isDefault false;
+    _custom.de.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
 
     _custom.hm = lib.mkMerge [
       {

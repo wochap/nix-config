@@ -83,6 +83,8 @@ in {
 
     _custom.de.greetd.cmd =
       lib.mkIf cfg.isDefault "dwl > /home/${userName}/.cache/dwltags";
+    _custom.de.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
+    _custom.de.ags.systemdEnable = lib.mkIf cfg.isDefault true;
 
     _custom.hm = lib.mkIf cfg.isDefault {
       home.sessionVariables = {
