@@ -10,6 +10,7 @@ from kitty.tab_bar import (
 
 opts = get_options()
 
+lavender = as_rgb(int("B4BEFE", 16))
 surface1 = as_rgb(int("45475A", 16))
 window_icon = ""
 layout_icon = ""
@@ -47,10 +48,11 @@ def _draw_right_status(screen: Screen, is_last: bool) -> int:
     if not is_last:
         return screen.cursor.x
 
+    layout_fg = surface1 if active_tab_layout_name == "fat" else lavender
     cells = [
         # layout name
-        (surface1, screen.cursor.bg, " " + layout_icon + " "),
-        (surface1, screen.cursor.bg, active_tab_layout_name + " "),
+        (layout_fg, screen.cursor.bg, " " + layout_icon + " "),
+        (layout_fg, screen.cursor.bg, active_tab_layout_name + " "),
         # num windows
         (surface1, screen.cursor.bg, " " + window_icon + " "),
         (surface1, screen.cursor.bg, str(active_tab_num_windows) + " "),
