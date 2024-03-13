@@ -276,7 +276,7 @@ static const Key keys[] = {
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_Escape, spawn, SHCMD("dunstctl close-all") },
 
   // Toggle bar
-  { MODKEY, Key_b, spawn, SHCMD("waybar-toggle") },
+  { MODKEY, Key_b, spawn, SHCMD("ags --toggle-window bar") },
 
   // Toggle idle inhibitor
   { MODKEY, Key_m, spawn, SHCMD("matcha-toggle-mode --toggle") },
