@@ -43,7 +43,7 @@ tooltip label {
 }
 
 .dwltags label {
-  padding: 0 0.5em;
+  padding: 1px 0.5em 0;
   color: @comment;
 }
 .dwltags label.occupied {
@@ -58,21 +58,21 @@ tooltip label {
 
 .dwllayout,
 .dwlmode {
-  padding: 0 0.5em;
+  padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
   color: @orange;
 }
 
 .dwlscratchpads {
-  padding: 0 0.5em;
+  padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
   color: @lavender;
 }
 
 .dwltitle {
-  padding: 0 0.5em;
+  padding: 1px 0.5em 0;
 }
 
 .capslock {
@@ -83,9 +83,12 @@ tooltip label {
   font-size: 1.2em;
 }
 
-.taskbar box {
-  padding: 0 0.1em;
+.taskbar {
+  padding: 0 0.3em;
   border-radius: 4px;
+  background-color: @module_bg;
+}
+.taskbar box {
   opacity: 0.5;
 }
 .taskbar box.focused {
@@ -94,7 +97,7 @@ tooltip label {
 
 .systray button {
   background: transparent;
-  padding: 0 0.3em;
+  padding: 1px 0.3em 0;
 }
 
 .recorder {
@@ -115,7 +118,7 @@ tooltip label {
 }
 
 .dunst {
-  padding: 0 0.5em;
+  padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
   color: @comment;
@@ -135,7 +138,7 @@ tooltip label {
 }
 
 .temperature {
-  padding: 0 0.5em;
+  padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
 }
@@ -144,7 +147,7 @@ tooltip label {
 }
 
 .battery {
-  padding: 0 0.5em;
+  padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
 }
@@ -169,7 +172,7 @@ tooltip label {
 }
 
 .audio {
-  padding: 0 0.5em;
+  padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
 }
@@ -178,7 +181,7 @@ tooltip label {
 }
 
 .bluetooth {
-  padding: 0 0.5em;
+  padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
 }
