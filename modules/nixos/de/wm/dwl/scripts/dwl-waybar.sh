@@ -109,7 +109,7 @@ cycle() {
       printf -- "%s\n" "${val}"
     fi
     ;;
-  layout | title | appid | mode)
+  layout | title | appid | mode | namedscratchpads_count | visible_appids)
     val=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} ${component}" | cut -d ' ' -f 3- | sed s/\"/“/g)
     # if [[ $component == "layout" && $val == "[\\]" ]]; then
     #   # HACK: waybar doesn't like \\ (dwindle layout)
