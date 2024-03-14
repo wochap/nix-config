@@ -43,6 +43,9 @@ const VisibleAppIds = Variable([], {
         if (appId === "Slack") {
           appId = "slack";
         }
+        if (appId === "com.stremio.stremio") {
+          appId = "stremio";
+        }
         result.push({
           appId,
           focused: items[i + 1] === "true",
