@@ -81,14 +81,35 @@ export const dwltaskbar = () =>
 
 const tags = range(9, 0).map((i) =>
   Variable(
-    { text: "", class: [] },
-    { listen: [`dwl-waybar '' ${i}`, (out) => JSON.parse(out)] },
+    {
+      text: "",
+      class: [],
+      occupied: false,
+      activated: false,
+      focused: false,
+      urgent: false,
+    },
+    {
+      listen: [
+        `dwl-waybar '' ${i}`,
+        (out) => {
+          const result = JSON.parse(out);
+          return {
+            ...result,
+            occupied: result.class.includes("occupied"),
+            activated: result.class.includes("activated"),
+            focused: result.class.includes("focused"),
+            urgent: result.class.includes("urgent"),
+          };
+        },
+      ],
+    },
   ),
 );
 
 export const dwltags = Widget.Box({
   class_name: "dwltags",
-  spacing: 3.5,
+  spacing: 7,
   children: tags.map((tag) =>
     Widget.Label({
       label: tag.bind().as((value) => value.text),

@@ -43,9 +43,13 @@ tooltip label {
 .dwltags label {
   padding: 1px 0.5em 0;
   color: @comment;
+  border-radius: 4px;
 }
 .dwltags label.occupied {
   color: @foreground;
+}
+.dwltags label.activated {
+  background-color: @module_bg;
 }
 .dwltags label.focused {
   color: @primary;

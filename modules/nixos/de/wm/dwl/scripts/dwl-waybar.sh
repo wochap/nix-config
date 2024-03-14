@@ -73,7 +73,7 @@
 # }
 #
 
-declare occupiedtags focusedtags urgenttags val last_val
+declare occupiedtags activatedtags focusedtags urgenttags val last_val
 declare -a tag_labels
 readonly file_path="$HOME"/.cache/dwltags
 tag_labels=("1" "2" "3" "4" "5" "6" "7" "8" "9")
@@ -87,7 +87,8 @@ cycle() {
   case "${component}" in
   [012345678])
     occupiedtags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $3}')
-    focusedtags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $4}')
+    activatedtags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $4}')
+    focusedtags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $5}')
     urgenttags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $6}')
 
     this_tag="${component}"
@@ -95,6 +96,7 @@ cycle() {
     mask=$((1 << this_tag))
 
     if (("${occupiedtags}" & mask)) 2>/dev/null; then this_status+='"occupied",'; fi
+    if (("${activatedtags}" & mask)) 2>/dev/null; then this_status+='"activated",'; fi
     if (("${focusedtags}" & mask)) 2>/dev/null; then this_status+='"focused",'; fi
     if (("${urgenttags}" & mask)) 2>/dev/null; then this_status+='"urgent",'; fi
 
@@ -131,4 +133,4 @@ while inotifywait -qq -e modify "$file_path"; do
   cycle
 done
 
-unset -v occupiedtags focusedtags urgenttags val last_val tag_labels
+unset -v occupiedtags activatedtags focusedtags urgenttags val last_val tag_labels
