@@ -128,8 +128,8 @@ in {
       services.swayidle.timeouts = lib.mkAfter [
         {
           timeout = 180;
-          command = ''chayang -d 5 && wlopm --off "*"'';
-          resumeCommand = ''wlopm --on "*"'';
+          command = ''if ! pgrep swaylock; then chayang -d 5 && wlopm --off "*"; fi'';
+          resumeCommand = ''if ! pgrep swaylock; then wlopm --on "*"; fi'';
         }
         {
           timeout = 15;
