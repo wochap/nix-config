@@ -1,6 +1,6 @@
 # My NixOS configuration
 
-![](https://i.imgur.com/V8du9hC.jpg)
+![](https://i.imgur.com/AnjjwPX.jpg)
 ![](https://i.imgur.com/5qvQoz9.jpg)
 
 [NixOS](https://nixos.org/) and [home-manager](https://github.com/nix-community/home-manager) config files are merged.
