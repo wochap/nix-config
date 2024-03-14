@@ -121,7 +121,7 @@ tooltip label {
   color: @comment;
 }
 .matcha.enabled {
-  color: @green;
+  color: @maroon;
 }
 
 .dunst {
@@ -141,13 +141,16 @@ tooltip label {
   color: @comment;
 }
 .offlinemsmtp.enabled {
-  color: @foreground;
+  color: @maroon;
 }
 
 .temperature {
   padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
+}
+.temperature.medium {
+  color: @yellow;
 }
 .temperature.critical {
   color: @red;

@@ -50,10 +50,10 @@ export const bar = Widget.Window({
       children: [
         systray,
         recorder(),
-        matcha,
+        matcha(),
         dunst,
-        offlinemsmtp,
-        temperature,
+        offlinemsmtp(),
+        temperature(),
         battery,
         audio,
         bluetooth,

@@ -9,12 +9,14 @@ const Matcha = Variable(
   },
 );
 
-export const matcha = Widget.Button({
-  class_names: Matcha.bind().as((value) => ["matcha", value.class]),
-  on_clicked: () => {
-    Utils.execAsync(["bash", "-c", "matcha-toggle-mode --toggle"]);
-  },
-  child: Widget.Label({
-    label: Matcha.bind().as((value) => value.text),
-  }),
-});
+export const matcha = () =>
+  Widget.Button({
+    class_names: Matcha.bind().as((value) => ["matcha", value.class]),
+    visible: Matcha.bind().as((value) => value.class.includes("enabled")),
+    on_clicked: () => {
+      Utils.execAsync(["bash", "-c", "matcha-toggle-mode --toggle"]);
+    },
+    child: Widget.Label({
+      label: Matcha.bind().as((value) => value.text),
+    }),
+  });

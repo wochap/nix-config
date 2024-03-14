@@ -5,10 +5,15 @@ const Offlinemsmtp = Variable(
   },
 );
 
-export const offlinemsmtp = Widget.Button({
-  class_names: Offlinemsmtp.bind().as((value) => ["offlinemsmtp", value.class]),
-  on_clicked: () => Utils.execAsync("offlinemsmtp-toggle-mode --toggle"),
-  child: Widget.Label({
-    label: Offlinemsmtp.bind().as((value) => value.text),
-  }),
-});
+export const offlinemsmtp = () =>
+  Widget.Button({
+    class_names: Offlinemsmtp.bind().as((value) => [
+      "offlinemsmtp",
+      value.class,
+    ]),
+    visible: Offlinemsmtp.bind().as((value) => value.class.includes("enabled")),
+    on_clicked: () => Utils.execAsync("offlinemsmtp-toggle-mode --toggle"),
+    child: Widget.Label({
+      label: Offlinemsmtp.bind().as((value) => value.text),
+    }),
+  });
