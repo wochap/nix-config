@@ -196,7 +196,7 @@ tooltip label {
   color: @foreground;
 }
 .bluetooth.connected {
-  color: @lavender;
+  color: @blue;
 }
 .bluetooth.off {
   color: @comment;
@@ -206,7 +206,7 @@ tooltip label {
   padding: 0 0.5em;
   border-radius: 4px;
   background-color: @module_bg;
-  color: @lavender;
+  color: @blue;
 }
 
 .clock {
