@@ -35,7 +35,7 @@ export const Progress = ({ width, height, vertical = false }) => {
       fill.class_name = `fill ${overflow ? "overflow" : ""}`;
       const axis = vertical ? "height" : "width";
       const fill_size = (vertical ? height : width) * value;
-      fill.css = `min-${axis}: ${fill_size}px`;
+      fill.css = `min-${axis}: ${fill_size}px;opacity: ${fill_size === 0 ? 0 : 1};`;
     },
   });
 };
