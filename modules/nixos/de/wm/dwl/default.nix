@@ -134,7 +134,7 @@ in {
         {
           timeout = 15;
           command =
-            ''if pgrep swaylock; then chayang -d 5 && wlopm --off "*"; fi'';
+            ''if pgrep swaylock; then wlopm --off "*"; fi'';
           resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
         }
       ];
