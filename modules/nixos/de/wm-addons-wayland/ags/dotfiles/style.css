@@ -1,3 +1,26 @@
+* {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  border: none;
+  border-radius: 4px;
+  padding: 0;
+  margin: 0;
+  font-weight: normal;
+}
+
+tooltip {
+  border-radius: 4px;
+  border: none;
+  background: @mantle;
+}
+tooltip label {
+  color: @foreground;
+  font-family: Iosevka NF;
+}
+
 @import url("../waybar/colors.css");
 @import url("bar/style.css");
 @import url("osd/style.css");
