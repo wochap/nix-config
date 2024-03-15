@@ -30,27 +30,25 @@ in {
       xdg.configFile."ags".source =
         lib._custom.relativeSymlink configDirectory ./dotfiles;
 
-      systemd.user.services.ags = lib.mkIf cfg.systemdEnable {
-        Unit = {
-          Description = "A customizable and extensible shell";
-          Documentation = "https://github.com/Aylur/ags";
-          PartOf = [ "wayland-session.target" ];
-          After = [ "wayland-session.target" ];
-        };
-
-        Service = {
-          PassEnvironment = "PATH";
-          ExecStart = "${agsFinal}/bin/ags";
-          Restart = "on-failure";
-          KillMode = "mixed";
-        };
-
-        Install.WantedBy = [ "wayland-session.target" ];
-      };
+      systemd.user.services.ags = lib.mkIf cfg.systemdEnable
+        (lib._custom.mkWaylandService {
+          Unit = {
+            Description = "A customizable and extensible shell";
+            Documentation = "https://github.com/Aylur/ags";
+          };
+          Service = {
+            PassEnvironment = "PATH";
+            ExecStart = "${agsFinal}/bin/ags";
+            Restart = "on-failure";
+            KillMode = "mixed";
+          };
+        });
 
       systemd.user.services.progress-osd = lib._custom.mkWaylandService {
-        Unit.Description = "OSD made with ags";
-        Unit.Documentation = "https://github.com/Aylur/ags";
+        Unit = {
+          Description = "OSD made with ags";
+          Documentation = "https://github.com/Aylur/ags";
+        };
         Service = {
           Type = "oneshot";
           PassEnvironment = [ "PATH" "UID" ];
