@@ -129,7 +129,7 @@ export const dwltitle = generateScriptModule({
 export const dwllayout = generateScriptModule({
   cmd: "dwl-waybar '' layout",
   className: "dwllayout",
-})();
+});
 
 export const dwlmode = generateScriptModule({
   cmd: "dwl-waybar '' mode",

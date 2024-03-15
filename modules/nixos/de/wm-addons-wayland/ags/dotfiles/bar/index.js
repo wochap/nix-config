@@ -37,7 +37,7 @@ export const bar = () =>
         spacing,
         children: [
           dwltags,
-          dwllayout,
+          dwllayout(),
           dwlscratchpads(),
           dwlmode(),
           capslock(),
