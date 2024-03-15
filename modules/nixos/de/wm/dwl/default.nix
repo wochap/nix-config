@@ -81,8 +81,8 @@ in {
 
     services.xserver.displayManager.sessionPackages = [ dwl-final ];
 
-    _custom.de.greetd.cmd =
-      lib.mkIf cfg.isDefault "dwl > /home/${userName}/.cache/dwltags";
+    _custom.de.greetd.cmd = lib.mkIf cfg.isDefault
+      "dwl > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog";
     _custom.de.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
     _custom.de.wob.enable = lib.mkIf cfg.isDefault false;
     _custom.de.ags.systemdEnable = lib.mkIf cfg.isDefault true;
