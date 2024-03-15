@@ -4,5 +4,11 @@ import { osd } from "./osd/index.js";
 App.config({
   style: "./style.css",
   iconTheme: "Reversal",
-  windows: [bar, osd],
+});
+
+// HACK: to ensure that our CSS is loaded before widget creation
+Utils.timeout(0, () => {
+  App.config({
+    windows: [bar(), osd],
+  });
 });

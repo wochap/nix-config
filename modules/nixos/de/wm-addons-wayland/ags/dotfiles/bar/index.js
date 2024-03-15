@@ -20,46 +20,50 @@ import { systray } from "./modules/systray.js";
 import { temperature } from "./modules/temperature.js";
 import { spacing } from "./constants.js";
 
-export const bar = Widget.Window({
-  name: "bar",
-  class_name: "bar-container",
-  exclusivity: "exclusive",
-  layer: "bottom",
-  anchor: ["top", "left", "right"],
-  child: Widget.CenterBox({
-    class_name: "bar",
-    spacing,
-    startWidget: Widget.Box({
+// HACK: without wrapping bar in a function
+// bar will be visible before our CSS is loaded
+// making the bar look BAD for the first few seconds
+export const bar = () =>
+  Widget.Window({
+    name: "bar",
+    class_name: "bar-container",
+    exclusivity: "exclusive",
+    layer: "bottom",
+    anchor: ["top", "left", "right"],
+    child: Widget.CenterBox({
+      class_name: "bar",
       spacing,
-      children: [
-        dwltags,
-        dwllayout,
-        dwlscratchpads(),
-        dwlmode(),
-        capslock(),
-        dwltitle(),
-      ],
+      startWidget: Widget.Box({
+        spacing,
+        children: [
+          dwltags,
+          dwllayout,
+          dwlscratchpads(),
+          dwlmode(),
+          capslock(),
+          dwltitle(),
+        ],
+      }),
+      centerWidget: Widget.Box({
+        hpack: "center",
+        children: [dwltaskbar()],
+      }),
+      endWidget: Widget.Box({
+        spacing,
+        hpack: "end",
+        children: [
+          systray,
+          recorder(),
+          matcha(),
+          dunst,
+          offlinemsmtp(),
+          temperature(),
+          battery,
+          audio,
+          bluetooth,
+          network(),
+          clock,
+        ],
+      }),
     }),
-    centerWidget: Widget.Box({
-      hpack: "center",
-      children: [dwltaskbar()],
-    }),
-    endWidget: Widget.Box({
-      spacing,
-      hpack: "end",
-      children: [
-        systray,
-        recorder(),
-        matcha(),
-        dunst,
-        offlinemsmtp(),
-        temperature(),
-        battery,
-        audio,
-        bluetooth,
-        network(),
-        clock,
-      ],
-    }),
-  }),
-});
+  });
