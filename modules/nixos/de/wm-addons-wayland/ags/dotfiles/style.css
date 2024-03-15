@@ -1,4 +1,3 @@
-@import url("/home/gean/.config/waybar/colors.css");
-@import url("/home/gean/.config/ags/bar/style.css");
-@import url("/home/gean/.config/ags/osd/style.css");
-
+@import url("../waybar/colors.css");
+@import url("bar/style.css");
+@import url("osd/style.css");
