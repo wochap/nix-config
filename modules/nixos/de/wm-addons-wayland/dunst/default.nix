@@ -52,7 +52,7 @@ in {
             inherit (themeColors) background foreground;
             frame_color = themeColors.selection;
             format =
-              "<b>%s</b> <span color='${themeColors.cyan}'>(%a)</span>\\n%b";
+              "<b>%s</b> <span color='${themeColors.comment}'>(%a)</span>\\n%b";
           };
           urgency_critical = { frame_color = themeColors.red; };
         });

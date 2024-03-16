@@ -34,12 +34,12 @@ origin="bottom-right"
 
 # Theme
 alignment="left"
-background="#282a36"
+# background="#282a36"
 corner_radius=4
 ellipsize="end"
-foreground="#f8f8f2"
-format="<b>%s</b> <span color='#8be9fd'>(%a)</span>\n%b"
-frame_color="#44475a"
+# foreground="#f8f8f2"
+# format="<b>%s</b> <span color='#8be9fd'>(%a)</span>\n%b"
+# frame_color="#44475a"
 gap_size=7
 gaps=yes
 icon_position="left"
