@@ -94,6 +94,11 @@ in {
         XDG_SESSION_DESKTOP = "dwl";
       };
 
+      xdg.configFile."scripts/dwl-vtm.sh" = {
+        source = ./scripts/dwl-vtm.sh;
+        executable = true;
+      };
+
       programs.waybar.settings.mainBar = lib.mkMerge ([{
         modules-left = (builtins.map (i: "custom/dwl_tag#${toString i}")
           (builtins.genList (i: i) 9))

@@ -109,6 +109,7 @@ static const Rule rules[] = {
 	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u' },
 	{ "kitty-buku",              NULL,       0,         1,          -1,      0,   0,   1200, 800,    0 },
 
+	{ "^kitty-vtm$",             NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
 	{ "^kitty-dangerp$",         NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
 	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0 },
 	{ "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0 },
