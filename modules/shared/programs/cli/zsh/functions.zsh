@@ -38,9 +38,9 @@ function killport {
 }
 
 function opro() {
-  scripts+=$(find ~/.config/scripts -type l,f -name "*.sh")
+  scripts=$(find ~/.config/scripts -type l,f -name "*.sh")
   scripts+="\n"
-  scripts=$(find /etc/scripts/projects -type l,f -name "*.sh")
+  scripts+=$(find /etc/scripts/projects -type l,f -name "*.sh")
 
   $(echo "$scripts" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" fzf)
 }
