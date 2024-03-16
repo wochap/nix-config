@@ -174,4 +174,4 @@ def get_cwd():
             ]
         )
 
-    return cwd
+    return "󰉖 " + cwd
