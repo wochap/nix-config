@@ -46,6 +46,9 @@ const VisibleAppIds = Variable([], {
         if (appId === "com.stremio.stremio") {
           appId = "stremio";
         }
+        if (appId === "imv") {
+          appId = "eog";
+        }
         result.push({
           appId,
           focused: items[i + 1] === "true",
