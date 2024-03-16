@@ -16,15 +16,15 @@ session="$(
   cat <<EOF
 new_tab todofull-frontend-3
 cd ~/Projects/vtm/todofull_frontend_3
-launch zsh -c 'nvim && zsh'
-launch zsh -c 'pnpm dev'
+launch zsh -i -c 'nv && zsh'
+launch zsh -c 'pnpm dev && zsh'
 
 new_tab todo-mujeron
 cd ~/Projects/vtm/todo-mujeron
-launch zsh -c 'nvim && zsh'
-launch zsh -c 'pnpm local'
+launch zsh -i -c 'nv && zsh'
+launch zsh -c 'pnpm local && zsh'
 cd ~/Projects/vtm/vtm-flakes
-launch zsh -c 'docker-compose up'
+launch zsh -c 'docker-compose up && zsh'
 EOF
 )"
 echo "$session" | kitty --class "kitty-vtm" --session - &
