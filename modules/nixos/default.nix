@@ -44,6 +44,7 @@
     ./de/wm-addons-wayland/sfwbar
     ./de/wm-addons-wayland/wayland-session
     ./de/wm-addons-wayland/wob
+    ./de/wm-addons-wayland/ydotool
     ./de/wm-addons-xorg/tint2
     ./de/wm-addons-xorg/xorg-session
     ./de/wm-addons-xorg/xorg-utils

@@ -86,6 +86,7 @@ in {
     _custom.de.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
     _custom.de.wob.enable = lib.mkIf cfg.isDefault false;
     _custom.de.ags.systemdEnable = lib.mkIf cfg.isDefault true;
+    _custom.de.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
     _custom.hm = lib.mkIf cfg.isDefault {
       home.sessionVariables = {
