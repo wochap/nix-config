@@ -61,22 +61,17 @@ in {
       };
 
       systemd.user = {
-        services.wob = {
+        services.wob = lib._custom.mkWaylandService {
           Unit = {
             Description =
               "A lightweight overlay volume/backlight/progress/anything bar for Wayland";
             Documentation = "man:wob(1)";
-            PartOf = [ "wayland-session.target" ];
-            After = [ "wayland-session.target" ];
             ConditionEnvironment = [ "WAYLAND_DISPLAY" ];
           };
-
           Service = {
             ExecStart = "${pkgs.wob}/bin/wob";
             StandardInput = "socket";
           };
-
-          Install.WantedBy = [ "wayland-session.target" ];
         };
 
         sockets.wob = {

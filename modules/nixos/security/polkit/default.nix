@@ -14,21 +14,21 @@ in {
     services.dbus.enable = lib.mkDefault true;
     security.polkit.enable = true;
 
-    systemd.user.services.polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "wayland-session.target" ];
-      wants = [ "wayland-session.target" ];
-      after = [ "wayland-session.target" ];
-
-      serviceConfig = {
-        Type = "simple";
-        ExecStart =
-          "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
+    _custom.hm.systemd.user.services.polkit-gnome-authentication-agent-1 =
+      lib._custom.mkWaylandService {
+        Unit = {
+          Description = "polkit-gnome-authentication-agent-1";
+          Documentation = "https://gitlab.gnome.org/Archive/policykit-gnome";
+        };
+        Service = {
+          Type = "simple";
+          ExecStart =
+            "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+          Restart = "on-failure";
+          RestartSec = 1;
+          TimeoutStopSec = 10;
+        };
       };
-    };
   };
 }
 

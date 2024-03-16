@@ -11,12 +11,11 @@ in {
     _custom.hm = {
       home.packages = [ offlinemsmtp-toggle-mode ];
 
-      systemd.user.services.offlinemsmtp = {
+      systemd.user.services.offlinemsmtp = lib._custom.mkWaylandService {
         Unit = {
           Description = "offlinemsmtp daemon";
-          PartOf = [ "wayland-session.target" ];
+          Documentation = "https://github.com/sumnerevans/offlinemsmtp";
         };
-
         Service = {
           ExecStart = ''
             ${pkgs._custom.offlinemsmtp}/bin/offlinemsmtp \
@@ -28,8 +27,6 @@ in {
           Restart = "always";
           RestartSec = 5;
         };
-
-        Install.WantedBy = [ "wayland-session.target" ];
       };
     };
   };

@@ -58,14 +58,11 @@ in {
         });
       };
 
-      systemd.user.services.dunst = {
+      systemd.user.services.dunst = lib._custom.mkWaylandService {
         Unit = {
           Description = "Lightweight and customizable notification daemon";
           Documentation = "https://github.com/dunst-project/dunst";
-          PartOf = [ "wayland-session.target" ];
-          After = [ "wayland-session.target" ];
         };
-
         Service = {
           Type = "dbus";
           BusName = "org.freedesktop.Notifications";
@@ -73,8 +70,6 @@ in {
             [ "WAYLAND_DISPLAY" "XCURSOR_THEME" "XCURSOR_SIZE" "PATH" "HOME" ];
           ExecStart = "${pkgs.dunst}/bin/dunst";
         };
-
-        Install.WantedBy = [ "wayland-session.target" ];
       };
     };
   };

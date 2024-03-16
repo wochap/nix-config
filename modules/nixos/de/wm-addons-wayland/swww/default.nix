@@ -29,14 +29,11 @@ in {
         };
       };
 
-      systemd.user.services.swww-daemon = {
+      systemd.user.services.swww-daemon = lib._custom.mkWaylandService {
         Unit = {
           Description = "A Solution to your Wayland Wallpaper Woes";
           Documentation = "https://github.com/Horus645/swww";
-          PartOf = [ "wayland-session.target" ];
-          After = [ "wayland-session.target" ];
         };
-
         Service = {
           PassEnvironment = [
             # "HOME"
@@ -53,8 +50,6 @@ in {
           RemainAfterExit = true;
           KillMode = "mixed";
         };
-
-        Install.WantedBy = [ "wayland-session.target" ];
       };
     };
   };

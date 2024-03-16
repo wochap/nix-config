@@ -6,12 +6,11 @@ let
   hmConfig = config.home-manager.users.${userName};
 in {
   config = lib.mkIf cfg.enable {
-    _custom.hm.systemd.user.services.mailnotify = {
+    _custom.hm.systemd.user.services.mailnotify = lib._custom.mkWaylandService {
       Unit = {
         Description = "mailnotify daemon";
-        PartOf = [ "wayland-session.target" ];
+        Documentation = "https://github.com/sumnerevans/mailnotify";
       };
-
       Service = {
         ExecStart = ''
           ${pkgs._custom.mailnotify}/bin/mailnotify \
@@ -21,8 +20,6 @@ in {
         Restart = "always";
         RestartSec = 5;
       };
-
-      Install.WantedBy = [ "wayland-session.target" ];
     };
   };
 }

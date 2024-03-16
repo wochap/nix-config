@@ -38,25 +38,21 @@ in {
         '';
       };
 
-      systemd.user.services.waybar = lib.mkIf cfg.systemdEnable {
-        Unit = {
-          Description =
-            "Highly customizable Wayland bar for Sway and Wlroots based compositors.";
-          Documentation = "https://github.com/Alexays/Waybar/wiki";
-          PartOf = [ "wayland-session.target" ];
-          After = [ "wayland-session.target" ];
-        };
-
-        Service = {
-          PassEnvironment = "PATH";
-          ExecStart = "${waybar}/bin/waybar";
-          ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
-          Restart = "on-failure";
-          KillMode = "mixed";
-        };
-
-        Install.WantedBy = [ "wayland-session.target" ];
-      };
+      systemd.user.services.waybar = lib.mkIf cfg.systemdEnable
+        (lib._custom.mkWaylandService {
+          Unit = {
+            Description =
+              "Highly customizable Wayland bar for Sway and Wlroots based compositors.";
+            Documentation = "https://github.com/Alexays/Waybar/wiki";
+          };
+          Service = {
+            PassEnvironment = "PATH";
+            ExecStart = "${waybar}/bin/waybar";
+            ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
+            Restart = "on-failure";
+            KillMode = "mixed";
+          };
+        });
     };
   };
 }

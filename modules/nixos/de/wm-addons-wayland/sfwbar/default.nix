@@ -13,22 +13,17 @@ in {
       xdg.configFile."sfwbar/sfwbar.config".source =
         lib._custom.relativeSymlink configDirectory ./dotfiles/sfwbar.config;
 
-      # systemd.user.services.sfwbar = {
+      # systemd.user.services.sfwbar = lib._custom.mkWaylandService {
       #   Unit = {
       #     Description = "S* Floating Window Bar";
       #     Documentation = "https://github.com/LBCrion/sfwbar";
-      #     PartOf = [ "wayland-session.target" ];
-      #     After = [ "wayland-session.target" ];
       #   };
-      #
       #   Service = {
       #     PassEnvironment = "PATH";
       #     ExecStart = "${pkgs.sfwbar}/bin/waybar";
       #     Restart = "on-failure";
       #     KillMode = "mixed";
       #   };
-      #
-      #   Install.WantedBy = [ "wayland-session.target" ];
       # };
     };
   };

@@ -35,21 +35,16 @@ in {
         Install.WantedBy = [ "vdirsyncer.service" ];
       };
 
-      systemd.user.services.remind = {
+      systemd.user.services.remind = lib._custom.mkWaylandService {
         Unit = {
           Description = "Remind is a sophisticated calendar and alarm program.";
           Documentation = "https://dianne.skoll.ca/projects/remind/";
-          PartOf = [ "wayland-session.target" ];
-          After = [ "wayland-session.target" ];
         };
-
         Service = {
           PassEnvironment = [ "PATH" ];
           ExecStart = "${remindScript}";
           KillMode = "mixed";
         };
-
-        Install.WantedBy = [ "wayland-session.target" ];
       };
     };
   };
