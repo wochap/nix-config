@@ -20,8 +20,11 @@ in {
           };
           Service = {
             ExecStart = "${pkgs.ydotool}/bin/ydotoold";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             Type = "simple";
-            Restart = "on-failure";
+            Restart = "always";
+            KillMode = "process";
+            TimeoutSec = 180;
           };
         });
     };
