@@ -348,6 +348,22 @@
         "type": "github"
       }
     },
+    "easy-effects-presets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1690091819,
+        "narHash": "sha256-jMTQp2wdPOno/3FckKeOAV+ZMoalaWXIQkg+Aai3jaU=",
+        "owner": "JackHack96",
+        "repo": "EasyEffects-Presets",
+        "rev": "834bc5007b976250190cd71937c8c22f182d2415",
+        "type": "github"
+      },
+      "original": {
+        "owner": "JackHack96",
+        "repo": "EasyEffects-Presets",
+        "type": "github"
+      }
+    },
     "figlet-fonts": {
       "flake": false,
       "locked": {
@@ -1381,6 +1397,7 @@
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",
         "dracula-lsd": "dracula-lsd",
+        "easy-effects-presets": "easy-effects-presets",
         "figlet-fonts": "figlet-fonts",
         "fuzzy-sys": "fuzzy-sys",
         "home-manager": "home-manager",

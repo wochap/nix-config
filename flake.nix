@@ -41,6 +41,10 @@
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
 
+    # others
+    easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
+    easy-effects-presets.flake = false;
+
     # terminal tools
     ani-cli.url = "github:pystardust/ani-cli";
     ani-cli.flake = false;

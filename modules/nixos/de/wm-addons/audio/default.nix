@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, inputs, ... }:
 
 let cfg = config._custom.de.audio;
 in {
@@ -23,6 +23,18 @@ in {
       # jack.enable = true;
 
       wireplumber.enable = true;
+    };
+
+    _custom.hm = {
+      # alternative to Dolby Atmos
+      services.easyeffects = {
+        enable = true;
+        preset = "Perfect EQ";
+      };
+      xdg.configFile."easyeffects/output" = {
+        source = inputs.easy-effects-presets;
+        recursive = true;
+      };
     };
 
     # I copy the following from other user config
