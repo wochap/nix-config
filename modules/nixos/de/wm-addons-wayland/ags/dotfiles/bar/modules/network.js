@@ -1,18 +1,23 @@
 const Network = await Service.import("network");
 
 const wifi = Widget.Label({
-  label: Network.wifi.bind("internet").as((internet) => {
-    if (internet === "connected") {
-      return "";
-    }
-    return "";
-  }),
   tooltip_text: Utils.merge(
     [Network.wifi.bind("ssid"), Network.wifi.bind("strength")],
     (ssid, strength) => {
       return `${ssid || "Unknown"} ${strength}%`;
     },
   ),
+  setup(self) {
+    self.hook(Network.wifi, () => {
+      if (Network.wifi.ssid) {
+        self.label = "";
+        self.class_name = "connected";
+      } else {
+        self.label = "";
+        self.class_name = "disconnected";
+      }
+    });
+  },
 });
 
 // TODO: implement wired
