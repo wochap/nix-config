@@ -16,6 +16,8 @@ in {
           "--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc"
           "--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
+          "--color=border:#181825,scrollbar:#6c7086"
+
           "--no-height"
           "--tabstop=2"
           "--cycle"
@@ -25,6 +27,7 @@ in {
           "--prompt='❯ '"
           "--marker='❯'"
           "--pointer='❯'"
+          "--scrollbar='🮉'"
 
           # mappings
           "--bind 'ctrl-d:preview-half-page-down'"
