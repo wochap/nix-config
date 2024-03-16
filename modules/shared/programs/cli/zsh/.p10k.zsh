@@ -149,13 +149,13 @@ source /etc/scripts/theme-colors.sh
   typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 
   # Connect left prompt lines with these symbols.
-  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%F{#cba6f7}╭─'
-  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='%F{#cba6f7}├─'
-  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%F{#cba6f7}╰─'
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%F{8}╭─'
+  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='%F{8}├─'
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%F{8}╰─'
   # Connect right prompt lines with these symbols.
-  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX='%F{#cba6f7}─╮'
-  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX='%F{#cba6f7}─┤'
-  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_SUFFIX='%F{#cba6f7}─╯'
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX='%F{8}─╮'
+  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX='%F{8}─┤'
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_SUFFIX='%F{8}─╯'
 
   # The left end of left prompt.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL=' '
@@ -216,17 +216,17 @@ source /etc/scripts/theme-colors.sh
 
   ##################################[ dir: current directory ]##################################
   # Default current directory color.
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND=$cyan
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND=4
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
   # Replace removed segment suffixes with this symbol.
   typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
   # Color of the shortened directory segments.
-  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=$cyan
+  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=4
   # Color of the anchor directory segments. Anchor segments are never shortened. The first
   # segment is always an anchor.
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=$cyan
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=4
   # Display anchor directory segments in bold.
   typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
   # Don't shorten directories that contain any of these files. They are anchors.
@@ -292,7 +292,13 @@ source /etc/scripts/theme-colors.sh
 
   # The default icon shown next to non-writable and non-existent directories when
   # POWERLEVEL9K_DIR_SHOW_WRITABLE is set to v3.
-  # typeset -g POWERLEVEL9K_LOCK_ICON='⭐'
+  typeset -g POWERLEVEL9K_LOCK_ICON=''
+
+  typeset -g POWERLEVEL9K_FOLDER_ICON='󰉖'
+  typeset -g POWERLEVEL9K_HOME_ICON='󰉖'
+  typeset -g POWERLEVEL9K_HOME_SUB_ICON='󰉖'
+  typeset -g POWERLEVEL9K_FOLDER_ICON='󰉖'
+  typeset -g POWERLEVEL9K_ETC_ICON='󰉖'
 
   # POWERLEVEL9K_DIR_CLASSES allows you to specify custom icons and colors for different
   # directories. It must be an array with 3 * N elements. Each triplet consists of:
@@ -309,10 +315,10 @@ source /etc/scripts/theme-colors.sh
   #
   # For example, given these settings:
   #
-    typeset -g POWERLEVEL9K_DIR_CLASSES=(
+  #   typeset -g POWERLEVEL9K_DIR_CLASSES=(
   #     '~/work(|/*)'  WORK     ''
   #     '~(|/*)'       HOME     ''
-      '*'            DEFAULT  '')
+  #     '*'            DEFAULT  '')
   #
   # Whenever the current directory is ~/work or a subdirectory of ~/work, it gets styled with one
   # of the following classes depending on its writability and existence: WORK, WORK_NOT_WRITABLE or
@@ -498,7 +504,7 @@ source /etc/scripts/theme-colors.sh
   # Custom icon.
   typeset -g POWERLEVEL9K_VCS_VISUAL_IDENTIFIER_EXPANSION=''
   # Custom prefix.
-  typeset -g POWERLEVEL9K_VCS_PREFIX='%fon '
+  typeset -g POWERLEVEL9K_VCS_PREFIX='%F{8}on '
 
   # Show status of repositories of these types. You can add svn and/or hg if you are
   # using them. If you do, your prompt may become slow even when your current directory
