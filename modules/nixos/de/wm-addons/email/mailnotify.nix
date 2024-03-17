@@ -15,7 +15,7 @@ in {
         ExecStart = ''
           ${pkgs._custom.mailnotify}/bin/mailnotify \
             ${hmConfig.accounts.email.maildirBasePath} \
-            ${pkgs.numix-icon-theme-circle}/share/icons/Numix-Circle/48@2x/apps/mail-generic.svg
+            ${pkgs.reversal-icon-theme}/share/icons/Reversal/apps/scalable/internet-mail.svg
         '';
         Restart = "always";
         RestartSec = 5;
