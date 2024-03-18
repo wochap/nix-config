@@ -5,6 +5,8 @@ UNLOCKED=""
 
 # check if any capslock led is on
 check_capslock() {
+  # HACK: wait for files to be updated
+  sleep 0.1
   is_capslock_on=0
   for capslock_led_path in $(ls -al /sys/class/leds | grep capslock | awk '{print $(NF - 2)}'); do
     [ "$(cat "/sys/class/leds/$capslock_led_path/brightness")" -eq 1 ] && is_capslock_on=1
