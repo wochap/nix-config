@@ -41,7 +41,7 @@ in {
     programs.adb.enable = true;
     _custom.user.extraGroups = [ "adbusers" ];
     services.udev.extraRules = ''
-      SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", GROUP="plugdev"
+      SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", TAG+="uaccess"
     '';
 
     _custom.hm = lib.mkIf cfg.sdk.enable {
