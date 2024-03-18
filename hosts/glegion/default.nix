@@ -89,6 +89,7 @@ in {
     _custom.services.virt.enable = true;
     _custom.services.waydroid.enable = false;
 
+    _custom.de.udev-rules.enable = true;
     _custom.de.greetd.enable = true;
     _custom.de.dwl.enable = true;
     _custom.de.dwl.isDefault = true;

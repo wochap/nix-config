@@ -27,6 +27,7 @@
     ./de/wm-addons/plymouth
     ./de/wm-addons/power-management
     ./de/wm-addons/qt
+    ./de/wm-addons/udev-rules
     ./de/wm-addons/xdg
     ./de/wm-addons-wayland/ags
     ./de/wm-addons-wayland/cliphist
