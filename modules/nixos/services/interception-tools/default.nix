@@ -2,8 +2,6 @@
 
 let
   cfg = config._custom.services.interception-tools;
-  mbpKeyboard =
-    "/dev/input/by-id/usb-Apple_Inc._Apple_Internal_Keyboard___Trackpad_D3H54961U11GHMFA75BS-if01-event-kbd";
   keychrone = "/dev/input/by-id/usb-Keychron_Keychron_K3-event-kbd";
   legionKb = "/dev/input/by-id/usb-ITE_Tech._Inc._ITE_Device_8910_-event-kbd";
   generateJob = devnode:
@@ -18,16 +16,19 @@ in {
   options._custom.services.interception-tools.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    services.interception-tools.enable = true;
-    services.interception-tools.plugins = with pkgs; [
-      interception-tools-plugins.caps2esc
-      _custom.interception-both-shift-capslock
-    ];
-    services.interception-tools.udevmonConfig = ''
-      ${generateJob mbpKeyboard}
-      ${generateJob keychrone}
-      ${generateJob legionKb}
-    '';
+    environment.systemPackages = with pkgs; [ interception-tools ];
+
+    services.interception-tools = {
+      enable = true;
+      plugins = with pkgs; [
+        interception-tools-plugins.caps2esc
+        _custom.interception-both-shift-capslock
+      ];
+      udevmonConfig = ''
+        ${generateJob keychrone}
+        ${generateJob legionKb}
+      '';
+    };
 
     systemd.services.interception-tools.after = [ "multi-user.target" ];
   };
