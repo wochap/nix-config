@@ -29,6 +29,7 @@
     ./de/wm-addons/qt
     ./de/wm-addons/udev-rules
     ./de/wm-addons/xdg
+    ./de/wm-addons/xwaylandvideobridge
     ./de/wm-addons-wayland/ags
     ./de/wm-addons-wayland/cliphist
     ./de/wm-addons-wayland/dunst

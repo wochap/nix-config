@@ -32,6 +32,7 @@
       _custom.de.power-management.enableLowBatteryNotification = true;
       _custom.de.qt.enable = true;
       _custom.de.xdg.enable = true;
+      _custom.de.xwaylandvideobridge.enable = true;
 
       _custom.de.ags.enable = true;
       _custom.de.cliphist.enable = true;

@@ -60,6 +60,7 @@ static const char *msgptscratchcmd[] = { "g", "microsoft-edge", "--app=https://w
 static const char *chatgptscratchcmd[] = { "c", "google-chrome-stable", "--app=https://chat.openai.com", NULL };
 static const char *ytmusicscratchcmd[] = { "y", "google-chrome-stable", "--app=https://music.youtube.com", NULL };
 static const char *fmscratchcmd[] = { "f", "thunar", "--name", "thunar-scratch", NULL };
+static const char *xwvbscratchcmd[] = { "x", "xwaylandvideobridge", NULL };
 static const char *kittytopcmd[] = { "m", "sh", "-c", "~/.config/kitty/scripts/kitty-top.sh", NULL };
 static const char *kittyscratchcmd[] = { "i", "sh", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
 static const char *kittyneorgcmd[] = { "n", "sh", "-c", "~/.config/kitty/scripts/kitty-neorg.sh", NULL };
@@ -88,6 +89,7 @@ static const Rule rules[] = {
 	{ "^thunar-scratch$",        NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0 },
+	{ "xwaylandvideobridge",     NULL,       1 << 9,         1,          -1,      0,   0,   0,    0,      'x' },
 	{ NULL, "meet.google.com is sharing your screen.", 0, 1,        -1,      0,   0,   0,    0,      0 },
 	{ bing_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'g' },
 	{ chat_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'c' },
@@ -403,6 +405,7 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT, Key_b, entermode, {.i = BROWSER} },
   { MODKEY|MOD_ALT, Key_u, entermode, {.i = TUI} },
   { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = KB_INHIBIT} },
+  { MODKEY|MOD_ALT, Key_x, focusortogglematchingscratch, {.v = xwvbscratchcmd} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, togglekblayout, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
