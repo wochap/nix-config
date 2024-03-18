@@ -289,6 +289,22 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
   In gmail settings, enable IMAP
 
+- Create udev rule
+
+  ```sh
+  # monitor uevent
+  $ udevadm monitor --property
+
+  # print devices ids (vendor, product, etc)
+  $ lsusb
+
+  # get env values
+  $ udevadm info -q all -n /dev/input/eventX
+
+  # get attr values
+  $ udevadm info -n /dev/input/eventX --attribute-walk
+  ```
+
 ## Resources
 
 ### Inspiration
