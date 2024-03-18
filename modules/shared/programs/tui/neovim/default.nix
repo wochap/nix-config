@@ -1,55 +1,54 @@
 { config, lib, pkgs, inputs, ... }:
 
-let
-  cfg = config._custom.programs.neovim;
-  isDarwin = pkgs.stdenv.isDarwin;
+let cfg = config._custom.programs.neovim;
 in {
   imports = [ ./options.nix ];
 
   config = lib.mkIf cfg.enable {
-    _custom.programs.neovim.setBuildEnv = true;
-    _custom.programs.neovim.withBuildTools = true;
-
     nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
 
+    _custom.programs.neovim = {
+      setBuildEnv = true;
+      withBuildTools = true;
+      # package = pkgs.neovim-unwrapped;
+    };
+
     environment = {
-      systemPackages = with pkgs;
-        [
-          prevstable-neovim.neovim-remote
+      systemPackages = with pkgs; [
+        fswatch
+        prevstable-neovim.neovim-remote
+        unstable.neovide
 
-          # required in wayland to copy
-          wl-clipboard
+        # required in wayland to copy
+        wl-clipboard
 
-          # custom
-          fswatch
+        # required by mason
+        lua54Packages.luarocks # HACK: it should be necessary here
+        go
 
-          # required by mason
-          lua54Packages.luarocks # HACK: it should be necessary here
-          go
+        # required by peek.nvim
+        deno
 
-          # required by https://github.com/toppair/peek.nvim
-          deno
+        # required by treesitter
+        tree-sitter
 
-          # required by treesitter
-          tree-sitter
+        # required by nvim-lint
+        statix
 
-          # required by null-ls
-          deadnix
-          nixfmt
-          statix
+        # required by conform.nvim
+        nixfmt
 
-          # required by telescope
-          ripgrep
-          fd
+        # required by telescope
+        ripgrep
+        fd
 
-          # required by nvim-dap
-          _custom.nodePackages.ts-node
+        # required by nvim-dap
+        unstable.nodePackages.ts-node
 
-          # required by nvim-lspconfig
-          # config.nur.repos.Freed-Wu.autotools-language-server
-          _custom.nodePackages.typescript
-          _custom.nodePackages."@styled/typescript-styled-plugin"
-        ] ++ (lib.optionals (!isDarwin) [ unstable.neovide ]);
+        # required by nvim-lspconfig
+        unstable.typescript
+        _custom.nodePackages."@styled/typescript-styled-plugin"
+      ];
     };
 
     _custom.hm = {

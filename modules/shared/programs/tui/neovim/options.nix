@@ -6,10 +6,67 @@ let
   cfg = config._custom.programs.neovim;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
+
+  # Inspired from https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/programs/nix-ld.nix
+  build-dependent-pkgs = with pkgs;
+    [
+      acl
+      attr
+      bzip2
+      curl
+      libsodium
+      libssh
+      libxml2
+      openssl
+      stdenv.cc.cc
+      systemd
+      util-linux
+      xz
+      zlib
+      zstd
+      # Packages not included in `nix-ld`'s NixOSModule
+      glib
+      libcxx
+    ] ++ cfg.extraDependentPackages;
+
+  makePkgConfigPath = x: makeSearchPathOutput "dev" "lib/pkgconfig" x;
+  makeIncludePath = x: makeSearchPathOutput "dev" "include" x;
+
+  nvim-depends-library = pkgs.buildEnv {
+    name = "nvim-depends-library";
+    paths = map lib.getLib build-dependent-pkgs;
+    extraPrefix = "/lib/nvim-depends";
+    pathsToLink = [ "/lib" ];
+    ignoreCollisions = true;
+  };
+  nvim-depends-include = pkgs.buildEnv {
+    name = "nvim-depends-include";
+    paths = splitString ":" (makeIncludePath build-dependent-pkgs);
+    extraPrefix = "/lib/nvim-depends/include";
+    ignoreCollisions = true;
+  };
+  nvim-depends-pkgconfig = pkgs.buildEnv {
+    name = "nvim-depends-pkgconfig";
+    paths = splitString ":" (makePkgConfigPath build-dependent-pkgs);
+    extraPrefix = "/lib/nvim-depends/pkgconfig";
+    ignoreCollisions = true;
+  };
+  buildEnv = [
+    "CPATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/include"
+    "CPLUS_INCLUDE_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/include/c++/v1"
+    "LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
+    "LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
+    "NIX_LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
+    "PKG_hmConfig_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/pkgconfig"
+  ];
 in {
   options = {
     _custom.programs.neovim = {
       enable = mkEnableOption { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.prevstable-neovim.neovim-unwrapped;
+      };
       setBuildEnv = mkEnableOption ''
         Sets environment variables that resolve build dependencies as required by `mason.nvim` and `nvim-treesitter`
         Environment variables are only visible to `nvim` and have no effect on any parent sessions.
@@ -53,73 +110,14 @@ in {
     };
   };
 
-  config = let
-    # Inspired from https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/programs/nix-ld.nix
-    build-dependent-pkgs = with pkgs;
-      [
-        zlib
-        zstd
-        stdenv.cc.cc
-        curl
-        openssl
-        attr
-        libssh
-        bzip2
-        libxml2
-        acl
-        libsodium
-        util-linux
-        xz
-        systemd
-        # Packages not included in `nix-ld`'s NixOSModule
-        glib
-        libcxx
-      ] ++ cfg.extraDependentPackages;
-
-    makePkgConfigPath = x: makeSearchPathOutput "dev" "lib/pkgconfig" x;
-    makeIncludePath = x: makeSearchPathOutput "dev" "include" x;
-
-    nvim-depends-library = pkgs.buildEnv {
-      name = "nvim-depends-library";
-      paths = map lib.getLib build-dependent-pkgs;
-      extraPrefix = "/lib/nvim-depends";
-      pathsToLink = [ "/lib" ];
-      ignoreCollisions = true;
-    };
-    nvim-depends-include = pkgs.buildEnv {
-      name = "nvim-depends-include";
-      paths = splitString ":" (makeIncludePath build-dependent-pkgs);
-      extraPrefix = "/lib/nvim-depends/include";
-      ignoreCollisions = true;
-    };
-    nvim-depends-pkgconfig = pkgs.buildEnv {
-      name = "nvim-depends-pkgconfig";
-      paths = splitString ":" (makePkgConfigPath build-dependent-pkgs);
-      extraPrefix = "/lib/nvim-depends/pkgconfig";
-      ignoreCollisions = true;
-    };
-    buildEnv = [
-      "CPATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/include"
-      "CPLUS_INCLUDE_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/include/c++/v1"
-      "LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
-      "LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
-      "NIX_LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
-      "PKG_hmConfig_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/pkgconfig"
-    ];
-  in mkIf cfg.enable {
+  config = mkIf cfg.enable {
     _custom.hm = {
-      # xdg.configFile = {
-      #   "nvim/init.lua".source = ../../init.lua;
-      #   "nvim/lua".source = ../../lua;
-      #   "nvim/snips".source = ../../snips;
-      #   "nvim/tutor".source = ../../tutor;
-      # };
       home.packages = with pkgs;
         [ ripgrep ] ++ optionals cfg.setBuildEnv [
-          patchelf
-          nvim-depends-library
           nvim-depends-include
+          nvim-depends-library
           nvim-depends-pkgconfig
+          patchelf
         ];
       home.extraOutputsToInstall = optional cfg.setBuildEnv "nvim-depends";
       home.shellAliases.nvim =
@@ -128,7 +126,7 @@ in {
 
       programs.neovim = {
         enable = true;
-        package = pkgs.prevstable-neovim.neovim-unwrapped;
+        package = cfg.package;
 
         withNodeJs = true;
         withPython3 = true;
@@ -140,13 +138,13 @@ in {
             unstable.doq
             sqlite
           ] ++ optionals cfg.withBuildTools [
-            pkg-config
+            unstable.cargo
             clang
-            gcc
             cmake
+            gcc
             gnumake
             ninja
-            unstable.cargo
+            pkg-config
             yarn
           ] ++ optionals cfg.withHaskell [
             (pkgs.writeShellApplication {
@@ -161,7 +159,7 @@ in {
               ] ++ cfg.extraHaskellPackages pkgs.haskellPackages))
           ];
 
-        extraPython3Packages = ps: with ps; [ isort docformatter pynvim ];
+        extraPython3Packages = ps: with ps; [ docformatter isort pynvim ];
         extraLuaPackages = ls: with ls; [ luarocks ];
       };
     };
