@@ -16,6 +16,11 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
+    environment.systemPackages = with pkgs; [
+      python311Packages.huggingface-hub
+      unstable.oterm
+    ];
+
     services.ollama = {
       enable = true;
       package = pkgs.unstable.ollama;
@@ -23,9 +28,9 @@ in {
     };
     systemd.services.ollama.environment.OLLAMA_ORIGINS = "*";
 
-    services.ollama-webui = {
+    services.ollama-webui-lite = {
       enable = true;
-      package = pkgs._custom.ollama-webui;
+      package = pkgs._custom.ollama-webui-lite;
     };
 
     networking.hosts = { "127.0.0.1" = [ "ollama.wochap.local" ]; };
@@ -43,10 +48,12 @@ in {
         locations."/" = {
           recommendedProxySettings = true;
           proxyPass =
-            "http://127.0.0.1:${toString config.services.ollama-webui.port}";
+            "http://127.0.0.1:${toString config.services.ollama-webui-lite.port}";
           proxyWebsockets = true;
         };
       };
     };
+
+    _custom.hm.home.file."Models/.keep".text = "";
   };
 }
