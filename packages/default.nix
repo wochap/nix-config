@@ -12,7 +12,7 @@ let
     mailnotify = pkgs.callPackage ./mailnotify { };
     mangadesk = pkgs.callPackage ./mangadesk { };
     offlinemsmtp = pkgs.callPackage ./offlinemsmtp { };
-    ollama-webui-lite = pkgs.callPackage ./ollama-webui { };
+    ollama-webui-lite = pkgs.callPackage ./ollama-webui-lite { };
     ptsh = pkgs.callPackage ./ptsh { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };

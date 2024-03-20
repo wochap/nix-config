@@ -7,10 +7,10 @@ in {
     enableNvidia = lib.mkEnableOption { };
   };
   disabledModules =
-    [ "services/misc/ollama.nix" "services/web-apps/ollama-webui.nix" ];
+    [ "services/misc/ollama.nix" "services/web-apps/ollama-webui-lite.nix" ];
   imports = [
     "${inputs.unstable}/nixos/modules/services/misc/ollama.nix"
-    ./ollama-webui.nix
+    ./ollama-webui-lite.nix
   ];
 
   config = lib.mkIf cfg.enable {
@@ -47,8 +47,9 @@ in {
         sslCertificate = "${pkgs._custom.generated-ssc}/wochap.local+4.pem";
         locations."/" = {
           recommendedProxySettings = true;
-          proxyPass =
-            "http://127.0.0.1:${toString config.services.ollama-webui-lite.port}";
+          proxyPass = "http://127.0.0.1:${
+              toString config.services.ollama-webui-lite.port
+            }";
           proxyWebsockets = true;
         };
       };
