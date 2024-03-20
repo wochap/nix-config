@@ -12,7 +12,7 @@ const generateScriptModule = ({ cmd, className, labelAttrs }) => {
   return () =>
     Widget.Label({
       class_name: className,
-      label: Var.bind().as((value) => value.text.replace("\n", " ")),
+      label: Var.bind().as((value) => value.text.replace(/\n/g, " ")),
       visible: Var.bind().as((value) => !!value.text),
       ...labelAttrs,
     });
