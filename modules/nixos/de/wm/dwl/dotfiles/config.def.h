@@ -58,6 +58,7 @@ static int log_level = WLR_ERROR;
 /* named scratchpads - First arg only serves to match against key in rules*/
 static const char *msgptscratchcmd[] = { "g", "microsoft-edge", "--app=https://www.bing.com/search?q=q&showconv=1", NULL };
 static const char *chatgptscratchcmd[] = { "c", "google-chrome-stable", "--app=https://chat.openai.com", NULL };
+static const char *ollamascratchcmd[] = { "o", "google-chrome-stable", "--app=https://ollama.wochap.local", NULL };
 static const char *ytmusicscratchcmd[] = { "y", "google-chrome-stable", "--app=https://music.youtube.com", NULL };
 static const char *fmscratchcmd[] = { "f", "thunar", "--name", "thunar-scratch", NULL };
 static const char *xwvbscratchcmd[] = { "x", "xwaylandvideobridge", NULL };
@@ -71,6 +72,7 @@ static const char *kittyncmpcppcmd[] = { "u", "sh", "-c", "~/.config/kitty/scrip
 
 static const char bing_gpt_appid[] = "msedge-www.bing.com__search-Default";
 static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
+static const char ollama_appid[] = "chrome-ollama.wochap.local__-Default";
 static const char ytmusic_appid[] = "chrome-music.youtube.com__-Default";
 
 static const Rule rules[] = {
@@ -93,6 +95,7 @@ static const Rule rules[] = {
 	{ NULL, "meet.google.com is sharing your screen.", 0, 1,        -1,      0,   0,   0,    0,      0 },
 	{ bing_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'g' },
 	{ chat_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'c' },
+	{ ollama_appid,              NULL,       0,         1,          -1,      0,   0,   1200, 800,    'o' },
 	{ ytmusic_appid,             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'y' },
 
 	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0 },
@@ -473,8 +476,9 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, RUN("brave")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, RUN("google-chrome-stable")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, RUN("microsoft-edge")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, focusortogglematchingscratch, {.v = msgptscratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, focusortogglematchingscratch, {.v = chatgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, focusortogglematchingscratch, {.v = msgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, focusortogglematchingscratch, {.v = chatgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, focusortogglematchingscratch, {.v = ollamascratchcmd}),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, focusortogglematchingscratch, {.v = ytmusicscratchcmd}),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
