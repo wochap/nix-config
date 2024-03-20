@@ -2,8 +2,8 @@
 
 ### Downloading model
 
-* https://ollama.com/library
-* https://huggingface.co/models
+- https://ollama.com/library
+- https://huggingface.co/models
 
 ### Selecting models
 
@@ -21,6 +21,15 @@ $ ollama pull <model>
 
 # e.g.
 $ ollama pull deepseek-coder:33b-instruct-q4_K_M
+```
+
+To download from huggingface:
+
+```sh
+$ huggingface-cli download <user/model> <file name>
+
+# e.g.
+$ huggingface-cli download TheBloke/WhiteRabbitNeo-13B-GGUF whiterabbitneo-13b.Q5_K_M.gguf
 ```
 
 ### Testing models
