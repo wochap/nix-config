@@ -219,6 +219,7 @@ in {
           ## snippets
 
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
+          source ${pkgs.oh-my-zsh}/share/oh-my-zsh/lib/clipboard.zsh
           source ${./plugins/dirhistory.zsh}
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
           source ${pkgs.unstable.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh

@@ -1713,17 +1713,17 @@
     "zsh-vi-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1702530156,
-        "narHash": "sha256-bgK2jqYHGNsRwwa6i3HmgKoDFQbrNpc7txx1EAiP50Y=",
+        "lastModified": 1710948400,
+        "narHash": "sha256-xn6E0f0p7b9uZ7UuR8NUvXDOHYU+db0AWn/nn0/CS50=",
         "owner": "wochap",
         "repo": "zsh-vi-mode",
-        "rev": "0619e6bb711226e738494e49842c5249a2205a0d",
+        "rev": "6091e2bc63cd076f94583a6d51eda74980566d28",
         "type": "github"
       },
       "original": {
         "owner": "wochap",
         "repo": "zsh-vi-mode",
-        "rev": "0619e6bb711226e738494e49842c5249a2205a0d",
+        "rev": "6091e2bc63cd076f94583a6d51eda74980566d28",
         "type": "github"
       }
     }
