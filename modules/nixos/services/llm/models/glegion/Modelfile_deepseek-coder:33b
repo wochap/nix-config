@@ -1,0 +1,4 @@
+FROM deepseek-coder:33b-instruct-q4_K_M
+
+PARAMETER num_gpu 1
+PARAMETER num_thread 8

@@ -1,0 +1,5 @@
+FROM deepseek-coder:6.7b-instruct
+
+PARAMETER num_gpu 50
+PARAMETER num_thread 8
+
