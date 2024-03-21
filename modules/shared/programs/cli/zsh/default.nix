@@ -199,7 +199,7 @@ in {
 
             source ${pkgs.unstable.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
 
-            bindkey -M viins " " abbr-expand-and-space
+            bindkey -M viins " " abbr-expand-and-insert
 
             if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
               abbr import-aliases --quiet

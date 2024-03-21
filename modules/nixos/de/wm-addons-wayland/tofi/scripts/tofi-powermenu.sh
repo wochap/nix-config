@@ -24,9 +24,6 @@ case $selected in
   systemctl suspend
   ;;
 "$logout")
-  systemctl --user stop graphical-session.target
-  systemctl --user stop wayland-session.target
-
   if [[ "$XDG_SESSION_DESKTOP" == 'sway' ]]; then
     swaymsg exit
   fi
@@ -34,6 +31,9 @@ case $selected in
     # simulate logo + ctrl + shift + q key press
     ydotool key 125:1 29:1 42:1 16:1 16:0 42:0 29:0 125:0
   fi
+
+  systemctl --user stop graphical-session.target
+  systemctl --user stop wayland-session.target
   ;;
 "$lock")
   /etc/scripts/sway-lock.sh

@@ -58,7 +58,7 @@ in {
           };
           git.paging = {
             colorArg = "always";
-            pager = "delta --paging=never";
+            pager = "delta --dark --paging=never";
           };
         };
       };

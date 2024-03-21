@@ -32,9 +32,9 @@ in {
     services.xserver = {
 
       # Setup keyboard
-      layout = "us";
-      xkbModel = "pc104";
-      # xkbVariant = "altgr-intl";
+      xkb.layout = "us";
+      xkb.model = "pc104";
+      xkb.variant = "altgr-intl";
     };
 
     # This value determines the NixOS release from which the default

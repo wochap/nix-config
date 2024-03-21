@@ -2,16 +2,12 @@
 
 let cfg = config._custom.services.llm;
 in {
+  imports = [ ./ollama-webui-lite.nix ];
+
   options._custom.services.llm = {
     enable = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
   };
-  disabledModules =
-    [ "services/misc/ollama.nix" "services/web-apps/ollama-webui-lite.nix" ];
-  imports = [
-    "${inputs.unstable}/nixos/modules/services/misc/ollama.nix"
-    ./ollama-webui-lite.nix
-  ];
 
   config = lib.mkIf cfg.enable {
     nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;

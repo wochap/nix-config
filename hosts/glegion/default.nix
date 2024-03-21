@@ -146,10 +146,10 @@ in {
 
     services.xserver = {
       # Setup keyboard
-      layout = "us";
-      xkbModel = "pc104";
-      xkbVariant = "";
-      xkbOptions = "compose:ralt";
+      xkb.layout = "us";
+      xkb.model = "pc104";
+      xkb.variant = "";
+      xkb.options = "compose:ralt";
 
       # Enable touchpad support (enabled default in most desktopManager).
       libinput.enable = true;

@@ -9,7 +9,7 @@ in {
       systemPackages = with pkgs; [
         # libappindicator-gtk3
         blanket # play rain, waves, etc sounds
-        dfeet # dbus gui
+        d-spy # dbus gui
         gparted # disk partition editor
         inkscape # photo editor cli/gui
         pavucontrol # pulseaudio gui

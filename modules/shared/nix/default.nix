@@ -5,7 +5,11 @@
     gc.automatic = lib.mkDefault false;
 
     # Enable flakes
-    package = pkgs.nixUnstable;
+    # use nix 2.18.1 until PR is merge https://github.com/NixOS/nix/pull/9723
+    # PR fixes the following issues:
+    # https://github.com/nix-community/home-manager/issues/4692
+    # https://github.com/NixOS/nix/issues/9579
+    package = pkgs.stable.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes recursive-nix
     '';

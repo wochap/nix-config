@@ -2,10 +2,9 @@
 
 let
   cfg = config._custom.de.music;
-  inherit (config._custom.globals) userName configDirectory;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
-  inherit (lib._custom) relativeSymlink;
 in {
   options._custom.de.music.enable = lib.mkEnableOption { };
 
@@ -28,11 +27,9 @@ in {
       ];
 
       xdg.configFile = {
-        "cava/config".source =
-          relativeSymlink configDirectory ./dotfiles/cava/config;
+        "cava/config".source = ./dotfiles/cava/config;
 
-        "ncmpcpp/config".source =
-          relativeSymlink configDirectory ./dotfiles/ncmpcpp/config;
+        "ncmpcpp/config".source = ./dotfiles/ncmpcpp/config;
       };
 
       # media keys

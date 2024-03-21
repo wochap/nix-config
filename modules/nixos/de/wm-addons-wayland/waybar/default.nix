@@ -3,7 +3,7 @@
 let
   cfg = config._custom.de.waybar;
   inherit (config._custom.globals) themeColors configDirectory;
-  waybar = pkgs.waybar;
+  waybar = pkgs.stable.waybar;
   jsonRAW = builtins.readFile ./dotfiles/config.json;
   parsedJson = builtins.fromJSON jsonRAW;
   waybar-toggle = pkgs.writeScriptBin "waybar-toggle"
