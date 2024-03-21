@@ -49,6 +49,9 @@ const VisibleAppIds = Variable([], {
         if (appId === "imv") {
           appId = "eog";
         }
+        if (appId === "MongoDB") {
+          appId = "mongodb-compass";
+        }
         result.push({
           appId,
           focused: items[i + 1] === "true",
