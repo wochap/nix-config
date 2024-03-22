@@ -28,7 +28,7 @@ export const bar = () =>
     name: "bar",
     class_name: "bar-container",
     exclusivity: "exclusive",
-    layer: "bottom",
+    layer: "top",
     anchor: ["top", "left", "right"],
     child: Widget.CenterBox({
       class_name: "bar",

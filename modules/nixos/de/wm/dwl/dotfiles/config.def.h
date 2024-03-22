@@ -9,16 +9,16 @@
 /* appearance */
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
-static const unsigned int borderpx         = 2;  /* border pixel of windows */
+static const unsigned int borderpx         = 1;  /* border pixel of windows */
 static const unsigned int borderspx        = 0;  /* border pixel of windows */
-static const unsigned int borderepx        = 1;  /* border pixel of windows */
+static const unsigned int borderepx        = 0;  /* border pixel of windows */
 static const unsigned int borderspx_offset = 0;  /* border pixel of windows */
 static const unsigned int borderepx_negative_offset = 0;  /* border pixel of windows */
 static const int draw_minimal_borders      = 1; /* merge adjacent borders */
 static const float bordercolor[] = COLOR(0x@selection@ff);
 static const float borderscolor[] = COLOR(0x@selection@00);
 static const float borderecolor[] = COLOR(0x@selection@ff);
-static const int border_color_type         = BrdEnd;
+static const int border_color_type         = BrdOriginal;
 static const float focuscolor[] = COLOR(0x@primary@ff);
 static const float urgentcolor[] = COLOR(0x@red@ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
@@ -28,9 +28,9 @@ static const unsigned int cursorsize = @cursorSize@;
 static const unsigned int swipe_min_threshold = 0;
 static const int center_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
 static const int shadow = 1;
-static const int shadow_only_floating = 1;
-static const struct wlr_render_color shadow_color = COLOR(0x@crust@ff);
-static const int shadow_blur_sigma = 7;
+static const int shadow_only_floating = 0;
+static const struct wlr_render_color shadow_color = COLOR(0x@selection@ff);
+static const int shadow_blur_sigma = 16;
 
 enum {
     VIEW_L = -1,

@@ -51,7 +51,7 @@ word_wrap=yes
 
 # Theme dpi static
 separator_height=2
-frame_width=2
+frame_width=1
 
 # Theme dpi
 font="Iosevka NF 10"

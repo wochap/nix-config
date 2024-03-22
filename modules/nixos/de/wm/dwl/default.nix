@@ -10,7 +10,6 @@ let
   dwl-final = (pkgs.unstable.dwl.override {
     conf = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
-      crust = unwrapHex themeColors.crust;
       primary = unwrapHex themeColors.primary;
       red = unwrapHex themeColors.red;
       selection = unwrapHex themeColors.selection;
@@ -28,12 +27,12 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "5f78b9bded462fc88c05b10388abd02295bc567b";
+          version = "9d83ddc640fec66b83dd128d06b948ae138ed0dc";
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-FGC0XoyP8LXgiJqJJIQsD0coE8P7AeotgdejZpOXHpA=";
+            hash = "sha256-T6FO9QQIAQXBcRyd9kQRvZRUiXCQ2L26RaTq2kzGUhw=";
           };
           buildInputs = with pkgs; [
             pkgs._custom.scenefx
