@@ -33,7 +33,7 @@ in {
         ];
         timeouts = [{
           timeout = 185;
-          command = "swaylock-start";
+          command = "BACKGROUND=1 swaylock-start";
         }];
       };
 

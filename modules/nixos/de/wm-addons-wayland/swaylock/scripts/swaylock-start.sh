@@ -3,7 +3,14 @@
 # source theme colors
 . "/etc/scripts/theme-colors.sh"
 
-swaylock \
+args=""
+if [ "$BACKGROUND" = "1" ]; then
+  args="--image $HOME/Pictures/backgrounds/swaylock.jpg"
+else
+  args="--screenshots --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2"
+fi
+
+echo "$args" | xargs swaylock \
   --daemonize \
   --scaling center \
   --color "#1E1E2E" \
@@ -32,5 +39,4 @@ swaylock \
   --layout-border-color ${background:1} \
   --layout-text-color ${foreground:1} \
   --separator-color 00000000 \
-  --screenshots --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
   --show-failed-attempts
