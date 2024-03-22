@@ -15,11 +15,22 @@ static const unsigned int borderepx        = 1;  /* border pixel of windows */
 static const unsigned int borderspx_offset = 0;  /* border pixel of windows */
 static const unsigned int borderepx_negative_offset = 0;  /* border pixel of windows */
 static const int draw_minimal_borders      = 1; /* merge adjacent borders */
+static const float bordercolor[] = COLOR(0x@selection@ff);
+static const float borderscolor[] = COLOR(0x@selection@00);
+static const float borderecolor[] = COLOR(0x@selection@ff);
 static const int border_color_type         = BrdEnd;
+static const float focuscolor[] = COLOR(0x@primary@ff);
+static const float urgentcolor[] = COLOR(0x@red@ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
+static const char cursortheme[] = "@cursorName@";
+static const unsigned int cursorsize = @cursorSize@;
 static const unsigned int swipe_min_threshold = 0;
 static const int center_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
+static const int shadow = 1;
+static const int shadow_only_floating = 1;
+static const struct wlr_render_color shadow_color = COLOR(0x@crust@ff);
+static const int shadow_blur_sigma = 7;
 
 enum {
     VIEW_L = -1,

@@ -8,27 +8,15 @@ let
   dwl-waybar = pkgs.writeScriptBin "dwl-waybar"
     (builtins.readFile ./scripts/dwl-waybar.sh);
   dwl-final = (pkgs.unstable.dwl.override {
-    conf = ''
-      ${builtins.readFile ./dotfiles/config.def.h}
-
-      static const float bordercolor[] = COLOR(0x${
-        unwrapHex themeColors.selection
-      }ff);
-      static const float borderscolor[] = COLOR(0x${
-        unwrapHex themeColors.selection
-      }00);
-      static const float borderecolor[] = COLOR(0x${
-        unwrapHex themeColors.selection
-      }ff);
-      static const float focuscolor[] = COLOR(0x${
-        unwrapHex themeColors.primary
-      }ff);
-      static const float urgentcolor[] = COLOR(0x${
-        unwrapHex themeColors.red
-      }ff);
-      static const char cursortheme[] = "${cursor.name}";
-      static const unsigned int cursorsize = ${toString cursor.size};
-    '';
+    conf = builtins.readFile (pkgs.substituteAll {
+      src = ./dotfiles/config.def.h;
+      crust = unwrapHex themeColors.crust;
+      primary = unwrapHex themeColors.primary;
+      red = unwrapHex themeColors.red;
+      selection = unwrapHex themeColors.selection;
+      cursorName = cursor.name;
+      cursorSize = toString cursor.size;
+    });
   });
 in {
   options._custom.de.dwl = {
@@ -40,14 +28,39 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "a0dcf93cb0c6e9c55030a2aed9c2b1a25212dccf";
-          # install patched dwl
+          version = "5f78b9bded462fc88c05b10388abd02295bc567b";
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-AD1R/z+RDUKF62DRpjJ44v2VtJw9xenl4nz1TUNG1XQ=";
+            hash = "sha256-FGC0XoyP8LXgiJqJJIQsD0coE8P7AeotgdejZpOXHpA=";
           };
+          buildInputs = with pkgs; [
+            pkgs._custom.scenefx
+
+            # wlroots buildInputs
+            libGL
+            libcap
+            libinput
+            libpng
+            libxkbcommon
+            mesa
+            pixman
+            seatd
+            vulkan-loader
+            wayland
+            wayland-protocols
+            xorg.libX11
+            xorg.xcbutilerrors
+            xorg.xcbutilimage
+            xorg.xcbutilrenderutil
+            xorg.xcbutilwm
+            xwayland
+            ffmpeg
+            hwdata
+            libliftoff
+            libdisplay-info
+          ];
         });
       })
     ];

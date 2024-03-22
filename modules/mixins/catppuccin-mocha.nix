@@ -1,4 +1,5 @@
 {
+  crust = "#11111b";
   lavender = "#b4befe";
   flamingo = "#f2cdcd";
   mantle = "#181825";
