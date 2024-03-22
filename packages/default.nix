@@ -14,6 +14,7 @@ let
     offlinemsmtp = pkgs.callPackage ./offlinemsmtp { };
     ollama-webui-lite = pkgs.callPackage ./ollama-webui-lite { };
     ptsh = pkgs.callPackage ./ptsh { };
+    scenefx = pkgs.callPackage ./scenefx { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };
     nodePackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./node-packages {
