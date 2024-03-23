@@ -116,6 +116,7 @@ static const Rule rules[] = {
 	{ "brave-browser",           NULL,       1 << 7,    0,          -1,      0,   0,   0,    0,      0 },
 	{ "Slack",                   NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
 	{ "discord",                 NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "discord",                 "Discord Updater", 1 << 3, 1,      -1,      0,   0,   0,    0,      0 },
 	{ "microsoft-edge",          NULL,       1 << 8,    0,          -1,      0,   0,   0,    0,      0 },
 
 	{ "kitty-top",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'm' },
