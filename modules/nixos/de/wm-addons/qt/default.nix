@@ -7,23 +7,30 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment = {
-      systemPackages = with pkgs; [
-        # kvantum (not required but...)
-        libsForQt5.qtstyleplugins
-        libsForQt5.qtstyleplugin-kvantum
+    fonts.packages = with pkgs; [ source-sans-pro ];
 
-        # fix kirigami apps look
-        # for example in filelight, without it the app looks weird
-        # https://github.com/NixOS/nixpkgs/pull/202990#issuecomment-1328068486
-        libsForQt5.qqc2-desktop-style
+    environment.systemPackages = with pkgs; [
+      libsForQt5.qt5.qtwayland
 
-        # themes
-        lightly-qt
-        libsForQt5.breeze-icons
-        libsForQt5.breeze-qt5
-      ];
-    };
+      # kvantum (not required but...)
+      libsForQt5.qtstyleplugins
+      libsForQt5.qtstyleplugin-kvantum
+
+      # fix kirigami apps look
+      # for example in filelight, without it the app looks weird
+      # https://github.com/NixOS/nixpkgs/pull/202990#issuecomment-1328068486
+      libsForQt5.qqc2-desktop-style
+
+      # themes
+      lightly-qt
+      libsForQt5.breeze-icons
+      libsForQt5.breeze-qt5
+      catppuccin-qt5ct
+      (catppuccin-kvantum.override {
+        accent = "Mauve";
+        variant = "Mocha";
+      })
+    ];
 
     qt = {
       enable = true;
@@ -39,6 +46,9 @@ in {
 
         # QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       };
+
+      xdg.configFile."qt5ct/colors/Catppuccin-Mocha-Mauve.conf".source =
+        ./dotfiles/Catppuccin-Mocha-Mauve.conf;
 
       qt = {
         enable = true;

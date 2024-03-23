@@ -112,6 +112,10 @@ Reboot into NixOS, login with the user you created
 1. Setup [Neovim](https://github.com/wochap/nvim) configuration
 1. Setup qt look and feel
    Open `Qt5 Settings` and update theme and icons
+   - icon theme: Tela-catppuccin_mocha-dark
+   - color scheme: Catppuccin-Mocha-Mauve
+   - style: Lightly
+   - change font size to 10
 1. Setup betterdiscord (optional)
    ```
    $ betterdiscordctl install

@@ -25,13 +25,13 @@ in lib.checkListOfEnum "${pname}: color variants" [
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-09-06";
+  version = "6946b39b13fe5c1b8eb4111a8d4a2f7a5f57b060";
 
   src = fetchFromGitHub {
-    owner = "vinceliuice";
+    owner = "wochap";
     repo = pname;
-    rev = "1ae67c12412b05ae999ebd0cc3583697ced7e505";
-    sha256 = "sha256-LMuuRgeo7xROycB34UZwkHAvJ8pv7uc3J5ehhqvgKTc=";
+    rev = version;
+    sha256 = "sha256-qsNN6tF+IHXxYDsoCU4qRCHnRPNCyrAZ+Nb9NHY47lQ=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
