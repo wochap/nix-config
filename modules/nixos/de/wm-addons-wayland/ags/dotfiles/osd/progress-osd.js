@@ -55,7 +55,7 @@ ProgressIconFifo.connect("changed", ({ value }) => {
 export const progressOsd = Widget.Box({
   class_name: "progress-osd",
   hpack: "center",
-  vpack: "end",
+  vpack: "start",
   expand: true,
   children: [progressRevealer],
 });

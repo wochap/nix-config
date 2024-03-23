@@ -15,7 +15,7 @@
   border-width: 1px;
   padding: 1px;
   box-shadow: 0px 0px 7px 0px rgba(17, 17, 27, 1); /* crust */
-  margin: 48px 48px 70px 48px; /* HACK: add enought space so shadow is visible */
+  margin: 70px 48px 48px 48px; /* HACK: add enought space so shadow is visible */
 }
 
 .progress-osd .progress {
