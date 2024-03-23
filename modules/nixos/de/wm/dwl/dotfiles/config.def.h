@@ -30,7 +30,9 @@ static const int center_relative_to_monitor = 1;  /* 0 means center floating rel
 static const int shadow = 1;
 static const int shadow_only_floating = 0;
 static const struct wlr_render_color shadow_color = COLOR(0x@selection@ff);
+static const struct wlr_render_color shadow_color_focus = COLOR(0x@selection@ff);
 static const int shadow_blur_sigma = 16;
+static const int shadow_blur_sigma_focus = 30;
 
 enum {
     VIEW_L = -1,
