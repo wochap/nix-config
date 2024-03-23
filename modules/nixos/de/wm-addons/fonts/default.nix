@@ -25,6 +25,7 @@ in {
           source-serif
           source-sans
           source-code-pro
+          source-sans-pro
 
           # cascadia-code
         ];
