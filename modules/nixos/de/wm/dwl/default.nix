@@ -10,6 +10,7 @@ let
   dwl-final = (pkgs.unstable.dwl.override {
     conf = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
+      crust = unwrapHex themeColors.crust;
       primary = unwrapHex themeColors.primary;
       red = unwrapHex themeColors.red;
       selection = unwrapHex themeColors.selection;
