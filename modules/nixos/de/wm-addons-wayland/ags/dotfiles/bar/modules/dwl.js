@@ -31,7 +31,7 @@ const VisibleAppIds = Variable([], {
         if (/^kitty-/.test(appId)) {
           appId = "kitty";
         }
-        if (/^thunar-/.test(appId)) {
+        if (/^thunar-/.test(appId) || appId === "xdg-desktop-portal-gtk") {
           appId = "thunar";
         }
         if (/^chrome-.*__-Default$/.test(appId)) {
