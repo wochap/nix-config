@@ -10,6 +10,7 @@
         type = lib.types.str;
         default = "Source Sans Pro";
       };
+      # TODO: add monospace and serif
       size = lib.mkOption {
         type = lib.types.int;
         default = 10;

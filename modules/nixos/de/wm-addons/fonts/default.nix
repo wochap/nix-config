@@ -3,6 +3,7 @@
 let
   cfg = config._custom.de.fonts;
   isDarwin = pkgs.stdenv.isDarwin;
+  inherit (config._custom.globals) fonts;
   customNerdFonts = pkgs.nerdfonts.override {
     fonts = [
       "FiraCode"
@@ -54,7 +55,7 @@ in {
           allowBitmaps = true;
           defaultFonts = {
             serif = [ "Source Serif Pro" ];
-            sansSerif = [ "Source Sans Pro" ];
+            sansSerif = [ fonts.sans ];
             monospace = [ "Source Code Pro" ];
             emoji = [ "Twemoji" "Noto Color Emoji" "Symbola" ];
           };
