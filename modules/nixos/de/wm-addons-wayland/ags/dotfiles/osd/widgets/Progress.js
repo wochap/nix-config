@@ -1,4 +1,4 @@
-export const Progress = ({ width, height, vertical = false }) => {
+export const Progress = ({ width, height, vertical = false, child }) => {
   const fill = Widget.Box({
     class_name: "fill",
     hexpand: vertical,
@@ -18,7 +18,10 @@ export const Progress = ({ width, height, vertical = false }) => {
   });
   const container = Widget.Box({
     class_name: "progress-container",
-    child: wrapper,
+    child: Widget.Overlay({
+      child: wrapper,
+      overlays: [child],
+    }),
   });
 
   return Object.assign(container, {

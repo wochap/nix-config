@@ -9,6 +9,6 @@ export const osd = Widget.Window({
   anchor: ["top", "bottom", "right", "left"],
   child: Widget.Overlay({
     child: Widget.Box(),
-    overlays: [progressOsd, capslockOsd],
+    overlays: [capslockOsd, progressOsd],
   }),
 });

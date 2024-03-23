@@ -10,11 +10,24 @@ const ProgressFifo = Variable(0, {
     (out) => parseInt(out),
   ],
 });
+const ProgressIconFifo = Variable(0, {
+  listen: [
+    [
+      "bash",
+      "-c",
+      `while true; do if read -r line < /run/user/$UID/progress_icon_osd; then echo "$line"; fi; done`,
+    ],
+  ],
+});
 
+const progressIcon = Widget.Label({
+  class_name: "icon",
+});
 const progress = Progress({
-  width: 31,
-  height: 241,
-  vertical: true,
+  width: 234,
+  height: 31,
+  vertical: false,
+  child: progressIcon,
 });
 
 const progressRevealer = Widget.Revealer({
@@ -35,11 +48,14 @@ ProgressFifo.connect("changed", ({ value }) => {
     }
   });
 });
+ProgressIconFifo.connect("changed", ({ value }) => {
+  progressIcon.label = value;
+});
 
 export const progressOsd = Widget.Box({
   class_name: "progress-osd",
-  hpack: "end",
-  vpack: "center",
+  hpack: "center",
+  vpack: "end",
   expand: true,
   children: [progressRevealer],
 });

@@ -45,15 +45,19 @@ in {
         });
 
       systemd.user.services.progress-osd = lib._custom.mkWaylandService {
-        Unit = {
-          Description = "OSD made with ags";
-          Documentation = "https://github.com/Aylur/ags";
-        };
         Service = {
           Type = "oneshot";
           PassEnvironment = [ "PATH" "UID" ];
           ExecStart =
-            "${pkgs.bash}/bin/bash -c 'if [ -p /run/user/$UID/progress_osd ]; then rm /run/user/$UID/progress_osd; fi && ${pkgs.coreutils}/bin/mkfifo /run/user/$UID/progress_osd'";
+            "${pkgs.bash}/bin/bash -c 'if [ -p /run/user/$UID/progress_osd ]; then ${pkgs.coreutils}/bin/rm /run/user/$UID/progress_osd; fi && ${pkgs.coreutils}/bin/mkfifo /run/user/$UID/progress_osd'";
+        };
+      };
+      systemd.user.services.progress-icon-osd = lib._custom.mkWaylandService {
+        Service = {
+          Type = "oneshot";
+          PassEnvironment = [ "PATH" "UID" ];
+          ExecStart =
+            "${pkgs.bash}/bin/bash -c 'if [ -p /run/user/$UID/progress_icon_osd ]; then ${pkgs.coreutils}/bin/rm /run/user/$UID/progress_icon_osd; fi && ${pkgs.coreutils}/bin/mkfifo /run/user/$UID/progress_icon_osd'";
         };
       };
     };

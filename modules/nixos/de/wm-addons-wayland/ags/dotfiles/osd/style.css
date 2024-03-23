@@ -4,7 +4,7 @@
 
 .progress-osd {
   background-color: transparent;
-  padding: 7px; /* HACK: required to make revealer work */
+  padding: 1px 0; /* HACK: required to make revealer work */
 }
 
 .progress-osd .progress-container {
@@ -14,11 +14,19 @@
   border-style: solid;
   border-width: 1px;
   padding: 1px;
+  box-shadow: 0px 0px 7px 0px rgba(49, 50, 68, 1);
+  margin: 48px 48px 70px 48px; /* HACK: add enought space so shadow is visible */
 }
 
 .progress-osd .progress {
   background-color: transparent;
   border-radius: 2px;
+}
+
+.progress-osd .icon {
+  color: @background;
+  font-size: 1.5em;
+  text-shadow: 0px 0px 7px rgba(203, 166, 247, 1);
 }
 
 .progress-osd .fill {
@@ -33,7 +41,7 @@
 }
 
 .capslock-osd {
-  padding: 7px;
+  padding: 1px 0; /* HACK: required to make revealer work */
 }
 
 .capslock-osd .capslock {
@@ -43,8 +51,11 @@
   border-style: solid;
   border-width: 1px;
   color: @comment;
-  font-size: 7.5em;
-  padding: 0 0.45em;
+  font-size: 118px;
+  box-shadow: 0px 0px 7px 0px rgba(49, 50, 68, 1);
+  margin: 48px 48px 70px 48px; /* HACK: add enought space so shadow is visible */
+  min-width: 154px;
+  min-height: 154px;
 }
 .capslock-osd .capslock.locked {
   color: @orange;

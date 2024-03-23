@@ -6,6 +6,7 @@ const capslock = Widget.Box({
   child: Widget.Label({
     vpack: "center",
     hpack: "center",
+    expand: true,
     label: "󰌎",
   }),
 });
