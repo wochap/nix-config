@@ -3,14 +3,6 @@
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Zle-Builtins
 # http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 
-# NOTE: with starship:
-# local key_up="^[[A"
-# local key_down="^[[B"
-# local key_left="^[[D"
-# local key_right="^[[C"
-# local key_home="^[[H"
-# local key_end="^[[F"
-
 # NOTE: with powerlevel10k
 local key_up="^[OA"
 local key_down="^[OB"

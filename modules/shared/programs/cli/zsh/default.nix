@@ -251,7 +251,6 @@ in {
       programs.carapace.enableZshIntegration = false;
       programs.thefuck.enableZshIntegration = false;
       programs.dircolors.enableZshIntegration = true;
-      programs.starship.enableZshIntegration = false;
       programs.zoxide.enableZshIntegration = true;
       programs.navi.enableZshIntegration = true;
       programs.nix-index.enableZshIntegration = false;

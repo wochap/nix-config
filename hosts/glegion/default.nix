@@ -44,7 +44,6 @@ in {
     _custom.programs.nodejs.enable = true;
     _custom.programs.ptsh.enable = true;
     _custom.programs.python.enable = true;
-    _custom.programs.starship.enable = false;
     _custom.programs.zoxide.enable = true;
     _custom.programs.zsh.enable = true;
     _custom.programs.zsh.isDefault = true;
