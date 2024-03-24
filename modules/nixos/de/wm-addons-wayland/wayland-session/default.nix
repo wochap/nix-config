@@ -7,6 +7,8 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.globals.displayServer = "wayland";
 
+    environment.systemPackages = with pkgs; [ vulkan-validation-layers ];
+
     # Enable portal
     environment.sessionVariables.GTK_USE_PORTAL = "1";
     xdg.portal.config.wlroots.default = [ "wlr" "gtk" ];
