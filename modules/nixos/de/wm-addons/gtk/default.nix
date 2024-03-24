@@ -111,6 +111,13 @@ in {
         })
       ];
 
+      # Prevent home-manager service to fail
+      # https://discourse.nixos.org/t/way-to-automatically-override-home-manager-collisions/33038/3
+      xdg.configFile."gtk-4.0/gtk.css".force = true;
+      xdg.configFile."gtk-4.0/settings.ini".force = true;
+      xdg.configFile."gtk-3.0/gtk.css".force = true;
+      xdg.configFile."gtk-3.0/settings.ini".force = true;
+
       dconf.settings = {
         # Open GTK inspector with Ctrl + Shift + D
         # GTK_DEBUG=interactive <app>

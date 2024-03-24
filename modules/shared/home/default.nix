@@ -34,13 +34,6 @@ in {
       home.homeDirectory = homeDirectory;
 
       programs.bash.enable = true;
-
-      # Prevent home-manager service to fail
-      # https://discourse.nixos.org/t/way-to-automatically-override-home-manager-collisions/33038/3
-      xdg.configFile."gtk-4.0/gtk.css".force = true;
-      xdg.configFile."gtk-4.0/settings.ini".force = true;
-      xdg.configFile."gtk-3.0/gtk.css".force = true;
-      xdg.configFile."gtk-3.0/settings.ini".force = true;
     };
 
     # hm -> home-manager.users.<primary user>
