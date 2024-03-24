@@ -29,6 +29,7 @@ in {
       package = pkgs._custom.ollama-webui-lite;
     };
 
+    # Make ollama-webui-lite accessible at https://ollama.wochap.local
     networking.hosts = { "127.0.0.1" = [ "ollama.wochap.local" ]; };
     security.pki.certificateFiles =
       [ "${pkgs._custom.generated-ssc}/rootCA.pem" ];
