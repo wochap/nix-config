@@ -1,1 +1,2 @@
 animdl==1.7.27
+bt-dualboot==1.0.1

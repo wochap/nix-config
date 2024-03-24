@@ -209,6 +209,13 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
   $ nmcli r wifi on
   ```
 
+- Sync Bluetooth for dualboot Linux and Windows
+
+  ```
+  # mount your disk with windows, then:
+  $ sudo bt-dualboot --sync-all --backup
+  ```
+
 - No bluetooth device at startup
 
   ```
