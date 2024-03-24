@@ -31,26 +31,16 @@ window#waybar.hidden {
   margin: 0 7px;
 }
 
-#custom-dwl_title,
-#custom-dwl_mode,
-#custom-dwl_layout,
 #temperature,
 #submap,
-#mode,
 #keyboard-state label.locked,
 #custom-recorder,
 #custom-notifications,
 #custom-offlinemsmtp,
-#custom-powermenu,
-#custom-dwl_tag,
-#tags,
 #workspaces,
-#custom-scratchpad_indicator,
 #window,
 #custom-matcha,
-#idle_inhibitor,
 #battery,
-#backlight,
 #pulseaudio,
 #network,
 #bluetooth,
@@ -74,7 +64,6 @@ window#waybar.hidden {
   color: @comment;
 }
 
-#tags,
 #workspaces {
   padding: 0;
   background-color: transparent;
@@ -83,16 +72,6 @@ window#waybar.hidden {
   margin-right: 4px;
   color: @foreground;
 }
-#tags button {
-  margin-right: 4px;
-  color: @comment;
-}
-#custom-dwl_tag {
-  padding: 0.15em 0.5em 0;
-  background-color: transparent;
-  color: @comment;
-}
-#tags button,
 #workspaces button {
   font-weight: normal;
   padding: 0.15em 0 0;
@@ -101,18 +80,10 @@ window#waybar.hidden {
 #workspaces button.empty {
   color: @comment;
 }
-#custom-dwl_tag.occupied,
-#tags button.occupied {
-  color: @foreground;
-}
-#custom-dwl_tag.focused,
-#tags button.focused,
 #workspaces button.active,
 #workspaces button.focused {
   color: @primary;
 }
-#custom-dwl_tag.urgent,
-#tags button.urgent,
 #workspaces button.urgent {
   color: @red;
 }
@@ -120,9 +91,7 @@ window#waybar.hidden {
   color: @selection;
 }
 
-#custom-dwl_mode,
-#submap,
-#mode {
+#submap {
   color: @orange;
 }
 
@@ -133,12 +102,10 @@ window#waybar.hidden {
   color: @red;
 }
 
-#custom-matcha.disabled,
-#idle_inhibitor.deactivated {
+#custom-matcha.disabled {
   color: @comment;
 }
-#custom-matcha.enabled,
-#idle_inhibitor.activated {
+#custom-matcha.enabled {
   color: @green;
 }
 
@@ -149,10 +116,6 @@ window#waybar.hidden {
 #pulseaudio.muted,
 #pulseaudio.source-muted {
   color: @red;
-}
-
-#backlight {
-  color: @yellow;
 }
 
 #battery.discharging {
@@ -215,7 +178,6 @@ tooltip label {
 }
 
 #window,
-#custom-dwl_title,
 #clock {
   background: transparent;
 }

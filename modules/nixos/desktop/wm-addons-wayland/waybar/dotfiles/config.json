@@ -4,9 +4,9 @@
     "tray",
     "custom/recorder",
     "custom/matcha",
-    "custom/notifications",
     "custom/offlinemsmtp",
     "temperature",
+    "custom/notifications",
     "battery",
     "pulseaudio",
     "bluetooth",
@@ -18,28 +18,6 @@
   "spacing": 7,
   "margin": "0",
 
-  "custom/scratchpad_indicator": {
-    "interval": 1,
-    "exec": "swaymsg -t get_tree | jq 'recurse(.nodes[]) | first(select(.name==\"__i3_scratch\")) | .floating_nodes | length | select(. >= 1)'",
-    "format": "{} <span rise='-1000'></span>",
-    "on-click": "swaymsg 'scratchpad show'",
-    "on-click-right": "swaymsg 'move scratchpad'"
-  },
-  "temperature": {
-    "critical-threshold": 80,
-    "format-critical": " {temperatureC}°C",
-    "format": " {temperatureC}°C",
-    "tooltip": false
-  },
-  "sway/window": {
-    "max-length": 50
-  },
-  "hyprland/submap": {
-    "tooltip": false
-  },
-  "hyprland/window": {
-    "max-length": 50
-  },
   "hyprland/workspaces": {
     "all-outputs": true,
     "format": "<span rise='-1000'>{icon}</span>",
@@ -58,20 +36,22 @@
       "*": [1, 2, 3, 4, 5, 6, 7, 8, 9]
     }
   },
-  "sway/workspaces": {
-    "disable-scroll": true,
-    "all-outputs": true,
-    "format": "<span rise='-1000'>{icon}</span>",
+  "hyprland/submap": {
+    "tooltip": false
+  },
+  "hyprland/window": {
+    "max-length": 50
+  },
+
+  "tray": {
+    "spacing": 10
+  },
+  "keyboard-state": {
+    "capslock": true,
+    "format": "{icon}",
     "format-icons": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7",
-      "8": "8",
-      "9": "9"
+      "locked": "󰌎",
+      "unlocked": ""
     }
   },
   "custom/recorder": {
@@ -82,24 +62,12 @@
     "exec-if": "pgrep wl-screenrec",
     "on-click": "recorder --area"
   },
-  "keyboard-state": {
-    "capslock": true,
-    "format": "{icon}",
-    "format-icons": {
-      "locked": "󰌎",
-      "unlocked": ""
-    }
-  },
-  "custom/powermenu": {
-    "format": "",
-    "on-click": "exec /etc/scripts/wofi-powermenu.sh"
-  },
-  "custom/notifications": {
-    "exec": "dunst-toggle-mode --read",
+  "custom/matcha": {
+    "exec": "matcha-toggle-mode --read",
     "interval": 1,
     "return-type": "json",
     "format": "{icon}{}",
-    "on-click": "dunst-toggle-mode --toggle",
+    "on-click": "matcha-toggle-mode --toggle",
     "signal": 8
   },
   "custom/offlinemsmtp": {
@@ -110,33 +78,19 @@
     "on-click": "offlinemsmtp-toggle-mode --toggle",
     "signal": 8
   },
-  "custom/matcha": {
-    "exec": "matcha-toggle-mode --read",
+  "temperature": {
+    "critical-threshold": 80,
+    "format-critical": " {temperatureC}°C",
+    "format": " {temperatureC}°C",
+    "tooltip": false
+  },
+  "custom/notifications": {
+    "exec": "dunst-toggle-mode --read",
     "interval": 1,
     "return-type": "json",
     "format": "{icon}{}",
-    "on-click": "matcha-toggle-mode --toggle",
+    "on-click": "dunst-toggle-mode --toggle",
     "signal": 8
-  },
-  "idle_inhibitor": {
-    "format": "{icon}",
-    "format-icons": {
-      "activated": "",
-      "deactivated": ""
-    },
-    "tooltip": false
-  },
-  "tray": {
-    "spacing": 10
-  },
-  "clock": {
-    "format": "{:%a %d %b %H:%M}",
-    "format-alt": "{:%H:%M}",
-    "tooltip": false
-  },
-  "backlight": {
-    "format": "<span rise='-1000'>{icon}</span> {percent}%",
-    "format-icons": [""]
   },
   "battery": {
     "states": {
@@ -148,24 +102,6 @@
     "tooltip-format": "{timeTo}, {capacity}%",
     "format-charging": "<span rise='-1000'></span> {capacity}%",
     "format-icons": [""]
-  },
-  "bluetooth": {
-    "format": "󰂯",
-    "format-disabled": "󰂲",
-    "format-connected": "󰂱 {num_connections}",
-    "tooltip-format": "{controller_alias} {controller_address}",
-    "tooltip-format-connected": "{controller_alias} {controller_address}\n\n{device_enumerate}",
-    "tooltip-format-enumerate-connected": "{device_alias} {device_address}"
-  },
-  "network": {
-    "format-wifi": "<span rise='-1000'>{icon}</span>",
-    "format-ethernet": "󰈁",
-    "format-ethernet-disconnected": "󰈂",
-    "format-linked": "󰈁",
-    "format-disconnected": "",
-    "format-alt": "{ipaddr}",
-    "tooltip-format": "{essid} {signalStrength}% {ipaddr}",
-    "format-icons": [""]
   },
   "pulseaudio": {
     "format": "<span rise='-1000'>{icon}</span> {volume}%",
@@ -185,5 +121,28 @@
     },
     "tooltip-format": "{desc}, {volume}%",
     "on-click": "pavucontrol"
+  },
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-connected": "󰂱 {num_connections}",
+    "tooltip-format": "{controller_alias} {controller_address}",
+    "tooltip-format-connected": "{controller_alias} {controller_address}\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias} {device_address}"
+  },
+  "network": {
+    "format-wifi": "<span rise='-1000'>{icon}</span>",
+    "format-ethernet": "󰈁",
+    "format-ethernet-disconnected": "󰈂",
+    "format-linked": "󰈁",
+    "format-disconnected": "",
+    "format-alt": "{ipaddr}",
+    "tooltip-format": "{essid} {signalStrength}% {ipaddr}",
+    "format-icons": [""]
+  },
+  "clock": {
+    "format": "{:%a %d %b %H:%M}",
+    "format-alt": "{:%H:%M}",
+    "tooltip": false
   }
 }

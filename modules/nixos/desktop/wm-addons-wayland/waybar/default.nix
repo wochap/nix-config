@@ -26,7 +26,7 @@ in {
       # edited waybar module, only generates $HOME/waybar/config and nothing else
       programs.waybar = {
         enable = true;
-        settings = { mainBar = parsedJson; };
+        settings.mainBar = parsedJson;
       };
 
       xdg.configFile = {
