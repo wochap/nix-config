@@ -78,7 +78,6 @@ in {
     ];
 
     _custom.de.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
-    _custom.de.wob.enable = lib.mkIf cfg.isDefault false;
 
     _custom.de.greetd.cmd = lib.mkIf cfg.isDefault
       "dwl > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog";
