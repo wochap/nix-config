@@ -12,7 +12,6 @@
     ./de/wm/hyprland
     ./de/wm/labwc
     ./de/wm/openbox
-    ./de/wm/sway
 
     ./de/wm-addons/audio
     ./de/wm-addons/backlight
