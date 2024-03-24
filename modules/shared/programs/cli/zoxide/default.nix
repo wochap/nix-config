@@ -8,7 +8,7 @@ in {
     _custom.hm = {
       programs.zoxide = {
         enable = true;
-        enableBashIntegration = true;
+        enableZshIntegration = config._custom.programs.zsh.enable;
         options = [ ];
       };
     };

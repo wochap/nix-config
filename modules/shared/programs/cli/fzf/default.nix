@@ -8,7 +8,7 @@ in {
     _custom.hm = {
       programs.fzf = {
         enable = true;
-        enableBashIntegration = true;
+        enableZshIntegration = config._custom.programs.zsh.enable;
         defaultOptions = [
           # theme
           # source: https://github.com/catppuccin/fzf

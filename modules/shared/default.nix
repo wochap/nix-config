@@ -14,6 +14,7 @@
     ./programs/cli/fzf
     ./programs/cli/git
     ./programs/cli/lsd
+    ./programs/cli/nix-direnv
     ./programs/cli/nodejs
     ./programs/cli/ptsh
     ./programs/cli/python
@@ -26,7 +27,6 @@
     ./programs/gui/kitty
     ./programs/gui/mpv
     ./programs/gui/qutebrowser
-    ./programs/gui/retroarch
     ./programs/gui/vscode
 
     ./programs/suites

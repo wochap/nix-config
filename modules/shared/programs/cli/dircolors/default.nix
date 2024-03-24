@@ -8,7 +8,7 @@ in {
     _custom.hm = {
       programs.dircolors = {
         enable = true;
-        enableBashIntegration = true;
+        enableZshIntegration = config._custom.programs.zsh.enable;
         settings = lib.mkForce { };
         extraConfig =
           builtins.readFile "${inputs.catppuccin-dircolors}/.dircolors";

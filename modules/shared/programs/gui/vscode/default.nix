@@ -5,15 +5,16 @@ in {
   options._custom.programs.vscode.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment = {
-      systemPackages = with pkgs; [
-        trash-cli # required by vscode
-        vscode
-      ];
-
-      sessionVariables = {
-        # Fix vscode delete
-        ELECTRON_TRASH = "trash-cli";
+    _custom.hm = {
+      home = {
+        packages = with pkgs; [
+          trash-cli # required by vscode
+          vscode
+        ];
+        sessionVariables = {
+          # Fix vscode delete
+          ELECTRON_TRASH = "trash-cli";
+        };
       };
     };
   };

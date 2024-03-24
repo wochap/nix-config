@@ -8,9 +8,9 @@ in {
   options._custom.programs.alacritty.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ unstable.alacritty ];
-
     _custom.hm = {
+      home.packages = with pkgs; [ alacritty ];
+
       xdg.configFile = {
         "alacritty/catppuccin".source = inputs.catppuccin-alacritty;
         "alacritty/alacritty.toml".source =

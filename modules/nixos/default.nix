@@ -52,11 +52,13 @@
     ./de/wm-addons-xorg/xorg-utils
     ./de/wm-addons-xorg/xsettingsd
 
+    ./gaming/emulators
+    ./gaming/steam
+    ./gaming/utils
+
     ./globals
 
     ./programs/cli/nix-alien
-    ./programs/cli/nix-direnv
-    ./programs/gui/gaming
     ./programs/gui/gtk
     ./programs/gui/imv
     ./programs/gui/mongodb
@@ -79,7 +81,6 @@
     ./services/interception-tools
     ./services/ipwebcam
     ./services/llm
-    ./services/steam
     ./services/syncthing
     ./services/virt
     ./services/waydroid

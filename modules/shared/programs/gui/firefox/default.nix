@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let
-  cfg = config._custom.programs.firefox;
-  isWayland = config._custom.globals.displayServer == "wayland";
+let cfg = config._custom.programs.firefox;
 in {
   options._custom.programs.firefox.enable = lib.mkEnableOption { };
 
@@ -21,7 +19,8 @@ in {
 
       programs.firefox = {
         enable = true;
-        package = if isWayland then pkgs.firefox-wayland else pkgs.firefox-bin;
+        package = (pkgs.wrapFirefox
+          (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { });
         profiles = {
           default = {
             id = 0;
@@ -34,6 +33,8 @@ in {
 
               # custom scrollbar
               "widget.non-native-theme.scrollbar.size" = 24;
+
+              "widget.use-xdg-desktop-portal.file-picker" = 1;
 
               # Allow customChrome.css
               "toolkit.legacyUserProfileCustomizations.stylesheets" = true;

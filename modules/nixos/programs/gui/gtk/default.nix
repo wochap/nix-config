@@ -7,7 +7,6 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
-        # libappindicator-gtk3
         blanket # play rain, waves, etc sounds
         d-spy # dbus gui
         gparted # disk partition editor

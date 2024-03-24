@@ -10,13 +10,16 @@ let
     ${pkgs.remind}/bin/remind -z -k'${pkgs.dunst}/bin/dunstify --appname "Remind" -i "kalarm" "Reminder" "%s" &' ${remFilePath}
   '';
   ics2remScript = pkgs.writeShellScript "ics2rem" ''
-    ${pkgs.findutils}/bin/find ${dataHome}/vdirsyncer -name '*.ics' -exec ics2rem {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > ${remFilePath}
+    ${pkgs.findutils}/bin/find ${dataHome}/vdirsyncer -name '*.ics' -exec ${pkgs._custom.pythonPackages.python-remind}/bin/ics2rem {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > ${remFilePath}
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
   '';
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [ remind ];
+      home.packages = with pkgs; [
+        remind
+        _custom.pythonPackages.python-remind # ics2rem
+      ];
 
       xdg.configFile."remind/.keep".text = "";
 

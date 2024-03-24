@@ -1,6 +1,7 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
-{
+let isDarwin = pkgs.stdenv.isDarwin;
+in {
   # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
   # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
@@ -51,7 +52,7 @@
         (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
           config._custom.globals.themeColors)}
       '';
-      mode = "0755";
+      mode = lib.mkIf (!isDarwin) "0755";
     };
   };
 }

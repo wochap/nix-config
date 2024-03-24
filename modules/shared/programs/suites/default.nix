@@ -17,6 +17,7 @@ in {
 
         # CLI TOOLS
         aria # like wget but supports torrents, sftp
+        atool # file archives (tar, tar+gzip, zip etc)
         dos2unix # convert line breaks DOS - mac
         file # print filetype
         gcc # GNU compiler collection
@@ -57,13 +58,11 @@ in {
         stripe-cli
 
         # TUI APPS
-        amfora # gemini browser
         ani-cli
         cbonsai # print bonsai ascii
         gotop # monitor system
         inputs.lobster.packages.${system}.lobster
         speedread # read a file, word by word
-        tmux # terminal multiplexer
       ];
 
       shellAliases = {
@@ -88,6 +87,7 @@ in {
           shell.command = "bash";
         };
         enableBashIntegration = false;
+        enableZshIntegration = config._custom.programs.zsh.enable;
       };
     };
   };

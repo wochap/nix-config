@@ -15,7 +15,6 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       _custom.pythonPackages.animdl
-      _custom.pythonPackages.python-remind
       _custom.pythonPackages.vidcutter
 
       pipx

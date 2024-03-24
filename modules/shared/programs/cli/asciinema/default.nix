@@ -6,13 +6,11 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home = {
-        packages = with pkgs; [
-          asciinema # record terminal
-          asciinema-agg # generate GIF
-          asciinema-scenario # generate recording from txt files
-        ];
-      };
+      home.packages = with pkgs; [
+        asciinema # record terminal
+        asciinema-agg # generate GIF
+        asciinema-scenario # generate recording from txt files
+      ];
     };
   };
 }

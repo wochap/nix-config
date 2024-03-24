@@ -5,13 +5,11 @@ in {
   options._custom.programs.zathura.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs;
-      [
-        zathura # PDF viewer
-      ];
-
     _custom.hm = {
-      home.sessionVariables = { READER = "zathura"; };
+      home = {
+        packages = with pkgs; [ zathura ];
+        sessionVariables.READER = "zathura";
+      };
 
       xdg.configFile = {
         "zathura/catppuccin-mocha".source =

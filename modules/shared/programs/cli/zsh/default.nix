@@ -250,11 +250,7 @@ in {
 
       programs.carapace.enableZshIntegration = false;
       programs.thefuck.enableZshIntegration = false;
-      programs.dircolors.enableZshIntegration = true;
-      programs.zoxide.enableZshIntegration = true;
-      programs.navi.enableZshIntegration = true;
       programs.nix-index.enableZshIntegration = false;
-      programs.fzf.enableZshIntegration = true;
     };
   };
 }

@@ -9,7 +9,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.shellAliases = { top = "btm"; };
+      home.shellAliases.top = "btm";
 
       programs.bottom = {
         enable = true;

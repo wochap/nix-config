@@ -1,17 +1,18 @@
 { config, pkgs, lib, inputs, ... }:
 
-let cfg = config._custom.programs.gaming;
+let cfg = config._custom.gaming.utils;
 in {
   imports = [ inputs.nix-gaming.nixosModules.pipewireLowLatency ];
-  options._custom.programs.gaming.enable = lib.mkEnableOption { };
+  options._custom.gaming.utils.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      prevstable-gaming.rpcs3
-
-      prevstable-gaming.lutris
+      gamescope
+      goverlay
+      mangohud
 
       prevstable-gaming.protontricks
+      protonup-qt
 
       # winetricks
       prevstable-gaming.winePackages.unstable
@@ -21,6 +22,17 @@ in {
 
     # see https://github.com/fufexan/nix-gaming/#pipewire-low-latency
     services.pipewire.lowLatency.enable = true;
+
+    programs.gamemode = {
+      enable = true;
+      settings.general.inhibit_screensaver = 0;
+    };
+
+    # TODO: add mangohud, gamescope
+    hardware.opengl = {
+      extraPackages = with pkgs; [ mangohud ];
+      extraPackages32 = with pkgs; [ mangohud ];
+    };
   };
 }
 

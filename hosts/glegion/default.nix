@@ -55,7 +55,6 @@ in {
     _custom.programs.kitty.enable = true;
     _custom.programs.mpv.enable = true;
     _custom.programs.qutebrowser.enable = true;
-    _custom.programs.retroarch.enable = true;
     _custom.programs.vscode.enable = true;
 
     _custom.programs.suites.enable = true;
@@ -83,10 +82,13 @@ in {
     _custom.services.ipwebcam.enable = false;
     _custom.services.llm.enable = true;
     _custom.services.llm.enableNvidia = true;
-    _custom.services.steam.enable = true;
     _custom.services.syncthing.enable = true;
-    _custom.services.virt.enable = true;
+    _custom.services.virt.enable = false;
     _custom.services.waydroid.enable = false;
+
+    _custom.gaming.emulators.enable = true;
+    _custom.gaming.steam.enable = true;
+    _custom.gaming.utils.enable = true;
 
     _custom.de.udev-rules.enable = true;
     _custom.de.greetd.enable = true;
@@ -97,8 +99,6 @@ in {
     # specialisation.hyprland-specialisation = {
     #   inheritParentConfig = true;
     #   configuration.config = {
-    #     _custom.programs.gaming.enable = true;
-    #
     #     _custom.de.dwl.enable = lib.mkForce false;
     #     _custom.de.hyprland.enable = true;
     #     _custom.de.hyprland.isDefault = true;
