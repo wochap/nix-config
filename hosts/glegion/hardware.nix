@@ -72,7 +72,6 @@
     # AMD has better battery life with PPD over TLP:
     services.auto-epp = {
       enable = lib.mkDefault false;
-      package = pkgs.unstable.auto-epp;
       settings.Settings.epp_state_for_BAT = "power";
       settings.Settings.epp_state_for_AC = "balance_performance";
     };
