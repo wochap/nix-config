@@ -2,58 +2,58 @@
 
 {
   imports = [
-    ./de/dm/gdm
-    ./de/dm/greetd
+    ./desktop/dm/gdm
+    ./desktop/dm/greetd
 
-    ./de/gnome
-    ./de/kde
+    ./desktop/gnome
+    ./desktop/kde
 
-    ./de/wm/dwl
-    ./de/wm/hyprland
-    ./de/wm/labwc
-    ./de/wm/openbox
+    ./desktop/wm/dwl
+    ./desktop/wm/hyprland
+    ./desktop/wm/labwc
+    ./desktop/wm/openbox
 
-    ./de/wm-addons/audio
-    ./de/wm-addons/backlight
-    ./de/wm-addons/bluetooth
-    ./de/wm-addons/calendar
-    ./de/wm-addons/cursor
-    ./de/wm-addons/dbus
-    ./de/wm-addons/email
-    ./de/wm-addons/fonts
-    ./de/wm-addons/gtk
-    ./de/wm-addons/logind
-    ./de/wm-addons/music
-    ./de/wm-addons/neofetch
-    ./de/wm-addons/networking
-    ./de/wm-addons/plymouth
-    ./de/wm-addons/power-management
-    ./de/wm-addons/qt
-    ./de/wm-addons/udev-rules
-    ./de/wm-addons/xdg
-    ./de/wm-addons/xwaylandvideobridge
+    ./desktop/wm-addons/audio
+    ./desktop/wm-addons/backlight
+    ./desktop/wm-addons/bluetooth
+    ./desktop/wm-addons/calendar
+    ./desktop/wm-addons/cursor
+    ./desktop/wm-addons/dbus
+    ./desktop/wm-addons/email
+    ./desktop/wm-addons/fonts
+    ./desktop/wm-addons/gtk
+    ./desktop/wm-addons/logind
+    ./desktop/wm-addons/music
+    ./desktop/wm-addons/neofetch
+    ./desktop/wm-addons/networking
+    ./desktop/wm-addons/plymouth
+    ./desktop/wm-addons/power-management
+    ./desktop/wm-addons/qt
+    ./desktop/wm-addons/udev-rules
+    ./desktop/wm-addons/xdg
+    ./desktop/wm-addons/xwaylandvideobridge
 
-    ./de/wm-addons-wayland/ags
-    ./de/wm-addons-wayland/cliphist
-    ./de/wm-addons-wayland/dunst
-    ./de/wm-addons-wayland/electron-support
-    ./de/wm-addons-wayland/gammastep
-    ./de/wm-addons-wayland/kanshi
-    ./de/wm-addons-wayland/sfwbar
-    ./de/wm-addons-wayland/swayidle
-    ./de/wm-addons-wayland/swaylock
-    ./de/wm-addons-wayland/swww
-    ./de/wm-addons-wayland/tofi
-    ./de/wm-addons-wayland/wayland-utils
-    ./de/wm-addons-wayland/waybar
-    ./de/wm-addons-wayland/sfwbar
-    ./de/wm-addons-wayland/wayland-session
-    ./de/wm-addons-wayland/ydotool
+    ./desktop/wm-addons-wayland/ags
+    ./desktop/wm-addons-wayland/cliphist
+    ./desktop/wm-addons-wayland/dunst
+    ./desktop/wm-addons-wayland/electron-support
+    ./desktop/wm-addons-wayland/gammastep
+    ./desktop/wm-addons-wayland/kanshi
+    ./desktop/wm-addons-wayland/sfwbar
+    ./desktop/wm-addons-wayland/swayidle
+    ./desktop/wm-addons-wayland/swaylock
+    ./desktop/wm-addons-wayland/swww
+    ./desktop/wm-addons-wayland/tofi
+    ./desktop/wm-addons-wayland/wayland-utils
+    ./desktop/wm-addons-wayland/waybar
+    ./desktop/wm-addons-wayland/sfwbar
+    ./desktop/wm-addons-wayland/wayland-session
+    ./desktop/wm-addons-wayland/ydotool
 
-    ./de/wm-addons-xorg/tint2
-    ./de/wm-addons-xorg/xorg-session
-    ./de/wm-addons-xorg/xorg-utils
-    ./de/wm-addons-xorg/xsettingsd
+    ./desktop/wm-addons-xorg/tint2
+    ./desktop/wm-addons-xorg/xorg-session
+    ./desktop/wm-addons-xorg/xorg-utils
+    ./desktop/wm-addons-xorg/xsettingsd
 
     ./gaming/emulators
     ./gaming/steam
