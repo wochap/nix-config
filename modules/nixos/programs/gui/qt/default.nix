@@ -10,6 +10,7 @@ in {
         anki # mnemonic tool
         filelight # view disk usage
         qbittorrent
+        libsForQt5.dolphin
 
         # APPS MEDIA (Comment on first install)
         libsForQt5.kdenlive
