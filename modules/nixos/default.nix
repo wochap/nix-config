@@ -2,16 +2,16 @@
 
 {
   imports = [
-    ./desktop/dm/gdm
-    ./desktop/dm/greetd
+    ./desktop/display-managers/gdm
+    ./desktop/display-managers/greetd
 
-    ./desktop/gnome
-    ./desktop/kde
+    ./desktop/desktop-environments/gnome
+    ./desktop/desktop-environments/kde
 
-    ./desktop/wm/dwl
-    ./desktop/wm/hyprland
-    ./desktop/wm/labwc
-    ./desktop/wm/openbox
+    ./desktop/window-managers/dwl
+    ./desktop/window-managers/hyprland
+    ./desktop/window-managers/labwc
+    ./desktop/window-managers/openbox
 
     ./desktop/wm-addons/audio
     ./desktop/wm-addons/backlight
