@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.waybar;
+  cfg = config._custom.desktop.waybar;
   inherit (config._custom.globals) themeColors configDirectory;
   waybar = pkgs.stable.waybar;
   jsonRAW = builtins.readFile ./dotfiles/config.json;
@@ -9,7 +9,7 @@ let
   waybar-toggle = pkgs.writeScriptBin "waybar-toggle"
     (builtins.readFile ./scripts/waybar-toggle.sh);
 in {
-  options._custom.de.waybar = {
+  options._custom.desktop.waybar = {
     enable = lib.mkEnableOption { };
     systemdEnable = lib.mkEnableOption { };
   };

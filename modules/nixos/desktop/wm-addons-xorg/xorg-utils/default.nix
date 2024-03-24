@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.de.xorg-utils;
+let cfg = config._custom.desktop.xorg-utils;
 in {
-  options._custom.de.xorg-utils.enable = lib.mkEnableOption { };
+  options._custom.desktop.xorg-utils.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

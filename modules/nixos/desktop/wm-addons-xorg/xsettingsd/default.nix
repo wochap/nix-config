@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config._custom.de.xsettingsd;
+  cfg = config._custom.desktop.xsettingsd;
   inherit (config._custom.globals) configDirectory;
 in {
-  options._custom.de.xsettingsd.enable = lib.mkEnableOption { };
+  options._custom.desktop.xsettingsd.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
-let cfg = config._custom.de.kde;
+let cfg = config._custom.desktop.kde;
 in {
-  options._custom.de.kde.enable = lib.mkEnableOption { };
+  options._custom.desktop.kde.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     services.xserver.enable = true;

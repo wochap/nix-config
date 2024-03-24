@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.gtk;
+  cfg = config._custom.desktop.gtk;
   inherit (config._custom) globals;
   inherit (config._custom.globals) userName configDirectory;
   inherit (lib._custom) relativeSymlink;
@@ -53,7 +53,7 @@ let
     gsettings set org.gnome.desktop.wm.preferences button-layout ""
   '';
 in {
-  options._custom.de.gtk = {
+  options._custom.desktop.gtk = {
     enable = lib.mkEnableOption { };
     enableCsd = lib.mkEnableOption { };
   };

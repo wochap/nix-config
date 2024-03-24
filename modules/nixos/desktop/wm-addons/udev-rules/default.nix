@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.udev-rules;
+  cfg = config._custom.desktop.udev-rules;
 
   cornekbd = pkgs.writeTextFile {
     name = "99-cornekbd.rules";
@@ -12,7 +12,7 @@ let
     destination = "/etc/udev/rules.d/99-cornekbd.rules";
   };
 in {
-  options._custom.de.udev-rules.enable = lib.mkEnableOption { };
+  options._custom.desktop.udev-rules.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     services.udev.packages = [ cornekbd ];

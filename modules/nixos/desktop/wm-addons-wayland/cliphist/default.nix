@@ -1,11 +1,11 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.cliphist;
+  cfg = config._custom.desktop.cliphist;
   clipboard-manager = pkgs.writeScriptBin "clipboard-manager"
     (builtins.readFile ./scripts/clipboard-manager.sh);
 in {
-  options._custom.de.cliphist.enable = lib.mkEnableOption { };
+  options._custom.desktop.cliphist.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

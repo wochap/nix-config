@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config._custom.de.gdm;
+  cfg = config._custom.desktop.gdm;
   inherit (config._custom.globals) userName;
 in {
-  options._custom.de.gdm = {
+  options._custom.desktop.gdm = {
     enable = lib.mkEnableOption { };
     enableAutoLogin = lib.mkEnableOption { };
   };

@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.xdg;
+  cfg = config._custom.desktop.xdg;
   mimeTypes = import ./mixins/mimeTypes.nix;
 in {
-  options._custom.de.xdg.enable = lib.mkEnableOption { };
+  options._custom.desktop.xdg.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

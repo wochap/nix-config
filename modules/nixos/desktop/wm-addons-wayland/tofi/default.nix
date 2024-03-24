@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config._custom.de.tofi;
+  cfg = config._custom.desktop.tofi;
   inherit (config._custom.globals) themeColors;
 
   tofi-launcher = pkgs.writeScriptBin "tofi-launcher"
@@ -13,7 +13,7 @@ let
   tofi-calc =
     pkgs.writeScriptBin "tofi-calc" (builtins.readFile ./scripts/tofi-calc.sh);
 in {
-  options._custom.de.tofi.enable = lib.mkEnableOption { };
+  options._custom.desktop.tofi.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

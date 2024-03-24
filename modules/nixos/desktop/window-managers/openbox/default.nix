@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.openbox;
+  cfg = config._custom.desktop.openbox;
   inherit (config._custom.globals) configDirectory;
 in {
-  options._custom.de.openbox = {
+  options._custom.desktop.openbox = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
   };
@@ -12,7 +12,7 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ openbox obconf ];
 
-    _custom.de.greetd.cmd = lib.mkIf cfg.isDefault "startx";
+    _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault "startx";
 
     services.xserver.windowManager.session = [{
       name = "openbox";

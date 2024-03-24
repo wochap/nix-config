@@ -2,11 +2,11 @@
 
 let
   inherit (config.boot.kernelPackages) cpupower;
-  cfg = config._custom.de.power-management;
+  cfg = config._custom.desktop.power-management;
   battery-notification = pkgs.writeScriptBin "battery-notification"
     (builtins.readFile ./scripts/battery-notification.sh);
 in {
-  options._custom.de.power-management = {
+  options._custom.desktop.power-management = {
     enable = lib.mkEnableOption { };
     enableLowBatteryNotification = lib.mkEnableOption { };
   };

@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.dwl;
+  cfg = config._custom.desktop.dwl;
   inherit (config._custom.globals) themeColors cursor userName;
   inherit (lib._custom) unwrapHex;
 
@@ -19,7 +19,7 @@ let
     });
   });
 in {
-  options._custom.de.dwl = {
+  options._custom.desktop.dwl = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
   };
@@ -77,12 +77,12 @@ in {
       foot
     ];
 
-    _custom.de.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
+    _custom.desktop.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
 
-    _custom.de.greetd.cmd = lib.mkIf cfg.isDefault
+    _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault
       "dwl > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog";
-    _custom.de.ags.systemdEnable = lib.mkIf cfg.isDefault true;
-    _custom.de.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
+    _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
+    _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
     _custom.hm = lib.mkIf cfg.isDefault {
       home.sessionVariables = {

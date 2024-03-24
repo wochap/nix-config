@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
-let cfg = config._custom.de.dbus;
+let cfg = config._custom.desktop.dbus;
 in {
-  options._custom.de.dbus.enable = lib.mkEnableOption { };
+  options._custom.desktop.dbus.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     services.dbus.enable = true;

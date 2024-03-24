@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-let cfg = config._custom.de.email;
+let cfg = config._custom.desktop.email;
 in {
   imports = [
     ./accounts
@@ -11,7 +11,7 @@ in {
     ./offlinemsmtp.nix
   ];
 
-  options._custom.de.email.enable = lib.mkEnableOption { };
+  options._custom.desktop.email.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

@@ -1,9 +1,9 @@
 # keycodes: https://gist.github.com/rickyzhang82/8581a762c9f9fc6ddb8390872552c250
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.de.ydotool;
+let cfg = config._custom.desktop.ydotool;
 in {
-  options._custom.de.ydotool = {
+  options._custom.desktop.ydotool = {
     enable = lib.mkEnableOption { };
     systemdEnable = lib.mkEnableOption { };
   };

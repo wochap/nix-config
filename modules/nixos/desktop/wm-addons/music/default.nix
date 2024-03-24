@@ -1,12 +1,12 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.music;
+  cfg = config._custom.desktop.music;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
 in {
-  options._custom.de.music.enable = lib.mkEnableOption { };
+  options._custom.desktop.music.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     # required by cava

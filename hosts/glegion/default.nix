@@ -90,20 +90,20 @@ in {
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
 
-    _custom.de.udev-rules.enable = true;
-    _custom.de.greetd.enable = true;
-    _custom.de.dwl.enable = true;
-    _custom.de.dwl.isDefault = true;
-    _custom.de.hyprland.enable = true;
-    _custom.de.labwc.enable = true;
+    _custom.desktop.udev-rules.enable = true;
+    _custom.desktop.greetd.enable = true;
+    _custom.desktop.dwl.enable = true;
+    _custom.desktop.dwl.isDefault = true;
+    _custom.desktop.hyprland.enable = true;
+    _custom.desktop.labwc.enable = true;
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
     # specialisation.hyprland-specialisation = {
     #   inheritParentConfig = true;
     #   configuration.config = {
-    #     _custom.de.dwl.enable = lib.mkForce false;
-    #     _custom.de.hyprland.enable = true;
-    #     _custom.de.hyprland.isDefault = true;
+    #     _custom.desktop.dwl.enable = lib.mkForce false;
+    #     _custom.desktop.hyprland.enable = true;
+    #     _custom.desktop.hyprland.isDefault = true;
     #
     #     services.auto-epp.enable = lib.mkForce false;
     #   };

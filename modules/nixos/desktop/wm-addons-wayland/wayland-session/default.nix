@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.de.wayland-session;
+let cfg = config._custom.desktop.wayland-session;
 in {
-  options._custom.de.wayland-session.enable = lib.mkEnableOption { };
+  options._custom.desktop.wayland-session.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.globals.displayServer = "wayland";

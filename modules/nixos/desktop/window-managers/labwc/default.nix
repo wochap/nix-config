@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.labwc;
+  cfg = config._custom.desktop.labwc;
   inherit (config._custom.globals) configDirectory;
 in {
-  options._custom.de.labwc = {
+  options._custom.desktop.labwc = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
   };
@@ -19,9 +19,9 @@ in {
       labwc
     ];
 
-    _custom.de.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
+    _custom.desktop.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
 
-    _custom.de.greetd.cmd = lib.mkIf cfg.isDefault "labwc";
+    _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault "labwc";
 
     _custom.hm = lib.mkMerge [
       {

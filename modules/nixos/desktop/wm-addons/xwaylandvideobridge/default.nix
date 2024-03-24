@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.de.xwaylandvideobridge;
+let cfg = config._custom.desktop.xwaylandvideobridge;
 in {
-  options._custom.de.xwaylandvideobridge.enable = lib.mkEnableOption { };
+  options._custom.desktop.xwaylandvideobridge.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ xwaylandvideobridge ];

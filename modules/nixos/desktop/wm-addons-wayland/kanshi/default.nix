@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.de.kanshi;
+let cfg = config._custom.desktop.kanshi;
 in {
-  options._custom.de.kanshi.enable = lib.mkEnableOption { };
+  options._custom.desktop.kanshi.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = { systemPackages = with pkgs; [ kanshi ]; };

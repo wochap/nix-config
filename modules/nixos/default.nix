@@ -5,8 +5,8 @@
     ./desktop/display-managers/gdm
     ./desktop/display-managers/greetd
 
-    ./desktop/desktop-environments/gnome
-    ./desktop/desktop-environments/kde
+    ./desktop/desktop-managers/gnome
+    ./desktop/desktop-managers/kde
 
     ./desktop/window-managers/dwl
     ./desktop/window-managers/hyprland

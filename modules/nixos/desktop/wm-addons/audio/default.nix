@@ -1,8 +1,8 @@
 { config, lib, inputs, ... }:
 
-let cfg = config._custom.de.audio;
+let cfg = config._custom.desktop.audio;
 in {
-  options._custom.de.audio.enable = lib.mkEnableOption { };
+  options._custom.desktop.audio.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "audio" ];

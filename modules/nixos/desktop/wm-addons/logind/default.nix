@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
-let cfg = config._custom.de.logind;
+let cfg = config._custom.desktop.logind;
 in {
-  options._custom.de.logind.enable = lib.mkEnableOption { };
+  options._custom.desktop.logind.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     services.logind = {

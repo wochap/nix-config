@@ -1,20 +1,20 @@
 { config, pkgs, lib, inputs, system, ... }:
 
 let
-  cfg = config._custom.de.hyprland;
+  cfg = config._custom.desktop.hyprland;
   inherit (config._custom.globals) themeColors;
 
   hyprlandFinal = inputs.hyprland.packages."${system}".hyprland;
   hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
 in {
-  options._custom.de.hyprland = {
+  options._custom.desktop.hyprland = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
-    _custom.de.greetd.cmd = lib.mkIf cfg.isDefault "Hyprland";
+    _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault "Hyprland";
 
     programs.hyprland = {
       enable = true;

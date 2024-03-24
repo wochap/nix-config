@@ -1,8 +1,8 @@
 { config, lib, ... }:
 
-let cfg = config._custom.de.electron-support;
+let cfg = config._custom.desktop.electron-support;
 in {
-  options._custom.de.electron-support.enable = lib.mkEnableOption { };
+  options._custom.desktop.electron-support.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     # Enable wayland support (electron apps)

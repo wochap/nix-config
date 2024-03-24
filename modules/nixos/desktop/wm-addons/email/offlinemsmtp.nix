@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.email;
+  cfg = config._custom.desktop.email;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   offlinemsmtp-toggle-mode = pkgs.writeScriptBin "offlinemsmtp-toggle-mode"

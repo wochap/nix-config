@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, system, ... }:
 
 let
-  cfg = config._custom.de.wayland-utils;
+  cfg = config._custom.desktop.wayland-utils;
 
   hyprpicker = inputs.hyprpicker.packages.${system}.hyprpicker;
   play-notification-sound = pkgs.writeScriptBin "play-notification-sound"
@@ -13,7 +13,7 @@ let
   recorder =
     pkgs.writeScriptBin "recorder" (builtins.readFile ./scripts/recorder.sh);
 in {
-  options._custom.de.wayland-utils.enable = lib.mkEnableOption { };
+  options._custom.desktop.wayland-utils.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [

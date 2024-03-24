@@ -1,12 +1,12 @@
 { config, pkgs, lib, inputs, system, ... }:
 
 let
-  cfg = config._custom.de.swayidle;
+  cfg = config._custom.desktop.swayidle;
   matcha = inputs.matcha.packages.${system}.default;
   matcha-toggle-mode = pkgs.writeScriptBin "matcha-toggle-mode"
     (builtins.readFile ./scripts/matcha-toggle-mode.sh);
 in {
-  options._custom.de.swayidle.enable = lib.mkEnableOption { };
+  options._custom.desktop.swayidle.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

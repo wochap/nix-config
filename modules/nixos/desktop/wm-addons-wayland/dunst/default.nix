@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.dunst;
+  cfg = config._custom.desktop.dunst;
   inherit (config._custom.globals) themeColors;
   settings = builtins.fromTOML
     (builtins.replaceStrings [ "=yes" "=no" ] [ "=true" "=false" ]
@@ -25,7 +25,7 @@ let
     pkgs.writeScriptBin "dunst-play-notification-sound"
     (builtins.readFile ./scripts/dunst-play-notification-sound.sh);
 in {
-  options._custom.de.dunst.enable = lib.mkEnableOption { };
+  options._custom.desktop.dunst.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ reversal-icon-theme ];

@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config._custom.de.tint2;
+  cfg = config._custom.desktop.tint2;
   inherit (config._custom.globals) configDirectory;
 in {
-  options._custom.de.tint2.enable = lib.mkEnableOption { };
+  options._custom.desktop.tint2.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

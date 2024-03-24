@@ -26,7 +26,7 @@ in {
     programs.kdeconnect = {
       enable = true;
       package =
-        lib.mkIf config._custom.de.gnome.enable pkgs.gnomeExtensions.gsconnect;
+        lib.mkIf config._custom.desktop.gnome.enable pkgs.gnomeExtensions.gsconnect;
     };
 
     _custom.hm = {

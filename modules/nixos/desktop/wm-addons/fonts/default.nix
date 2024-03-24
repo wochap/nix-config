@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.fonts;
+  cfg = config._custom.desktop.fonts;
   isDarwin = pkgs.stdenv.isDarwin;
   inherit (config._custom.globals) fonts;
   customNerdFonts = pkgs.nerdfonts.override {
@@ -15,7 +15,7 @@ let
     ];
   };
 in {
-  options._custom.de.fonts.enable = lib.mkEnableOption { };
+  options._custom.desktop.fonts.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     fonts = lib.mkMerge [

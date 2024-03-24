@@ -1,7 +1,7 @@
 { config, lib, inputs, pkgs, system, ... }:
 
 let
-  cfg = config._custom.de.ags;
+  cfg = config._custom.desktop.ags;
   inherit (config._custom.globals) configDirectory;
   agsFinal = inputs.ags.packages.${system}.default;
   capslock =
@@ -9,7 +9,7 @@ let
   progress-osd = pkgs.writeScriptBin "progress-osd"
     (builtins.readFile ./scripts/progress-osd.sh);
 in {
-  options._custom.de.ags = {
+  options._custom.desktop.ags = {
     enable = lib.mkEnableOption { };
     systemdEnable = lib.mkEnableOption { };
   };

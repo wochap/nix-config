@@ -2,7 +2,7 @@
 
 with lib;
 let
-  cfg = config._custom.de.email;
+  cfg = config._custom.desktop.email;
   helper = import ./helper.nix { inherit config pkgs lib; };
   accountConfig = {
     address = "geanb@bandofcoders.com";

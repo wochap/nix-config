@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.de.xorg-session;
+let cfg = config._custom.desktop.xorg-session;
 in {
-  options._custom.de.xorg-session.enable = lib.mkEnableOption { };
+  options._custom.desktop.xorg-session.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.globals.displayServer = "xorg";

@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.email;
+  cfg = config._custom.desktop.email;
   checkNetworkOrAlreadyRunningScript = pkgs.writeShellScript "cknetpgrep" ''
     # Check that the network is up.
     ${pkgs.iputils}/bin/ping -c 1 8.8.8.8

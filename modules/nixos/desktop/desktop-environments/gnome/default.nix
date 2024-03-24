@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.de.gnome;
+  cfg = config._custom.desktop.gnome;
   extensionsPkgs = with pkgs.gnomeExtensions; [
     # appindicator
     # dash-to-panel
@@ -11,7 +11,7 @@ let
     just-perfection # customize GNOME Shell
   ];
 in {
-  options._custom.de.gnome.enable = lib.mkEnableOption { };
+  options._custom.desktop.gnome.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.gnome.excludePackages = with pkgs; [ epiphany gnome-tour ];

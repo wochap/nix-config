@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config._custom.de.sfwbar;
+  cfg = config._custom.desktop.sfwbar;
   inherit (config._custom.globals) configDirectory;
 in {
-  options._custom.de.sfwbar.enable = lib.mkEnableOption { };
+  options._custom.desktop.sfwbar.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

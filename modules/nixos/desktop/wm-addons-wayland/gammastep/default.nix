@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.de.gammastep;
+let cfg = config._custom.desktop.gammastep;
 in {
-  options._custom.de.gammastep.enable = lib.mkEnableOption { };
+  options._custom.desktop.gammastep.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ gammastep ];
