@@ -108,11 +108,11 @@ let
   };
 in buildPythonPackage rec {
   pname = "animdl";
-  version = "1.7.22";
+  version = "1.7.27";
   src = fetchurl {
     url =
-      "https://files.pythonhosted.org/packages/f3/43/6231c57feb02fe49c2cc2cbd3d40f1a6eeb3c23c93aa4018182364e3a49a/animdl-1.7.22-py3-none-any.whl";
-    sha256 = "1l373ya31hqci9jalqs6px9j64gn03wyiacsjmxhmn4si6z37fal";
+      "https://files.pythonhosted.org/packages/68/88/ed0d089d86a36dd14bafb11d6496517f76943a770cf15711f96692470546/animdl-1.7.27-py3-none-any.whl";
+    sha256 = "19d4wghwwnb7k1x343gkhga6w2g8a43gpgsbqpk7h5brwwhbp7hk";
   };
   format = "wheel";
   doCheck = false;
