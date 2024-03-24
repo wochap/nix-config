@@ -4,6 +4,8 @@
   options._custom.archetypes.wm-wayland-desktop.enable = lib.mkEnableOption { };
   options._custom.archetypes.wm-xorg-desktop.enable = lib.mkEnableOption { };
   options._custom.archetypes.de-wayland-desktop.enable = lib.mkEnableOption { };
+  options._custom.archetypes.gnome.enable = lib.mkEnableOption { };
+  options._custom.archetypes.kde.enable = lib.mkEnableOption { };
 
   config = lib.mkMerge [
     (lib.mkIf config._custom.archetypes.wm-wayland-desktop.enable {
@@ -107,6 +109,23 @@
 
       _custom.de.electron-support.enable = true;
       _custom.de.wayland-utils.enable = true;
+    })
+
+    (lib.mkIf config._custom.archetypes.gnome.enable {
+      _custom.archetypes.de-wayland-desktop.enable = true;
+
+      _custom.security.gnome-keyring.enable = true;
+
+      _custom.de.gnome.enable = lib.mkForce true;
+    })
+
+    (lib.mkIf config._custom.archetypes.kde.enable {
+      _custom.archetypes.de-wayland-desktop.enable = true;
+
+      _custom.de.audio.enable = true;
+      _custom.de.bluetooth.enable = true;
+
+      _custom.de.kde.enable = lib.mkForce true;
     })
   ];
 }

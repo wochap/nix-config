@@ -95,54 +95,18 @@ in {
     _custom.de.dwl.isDefault = true;
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
-    specialisation = {
-      # gnome-specialisation = {
-      #   inheritParentConfig = true;
-      #   configuration.config = {
-      #     _custom.security.gnome-keyring.enable = true;
-      #
-      #     _custom.de.dwl.enable = lib.mkForce false;
-      #     _custom.de.gnome.enable = lib.mkForce true;
-      #     _custom.de.greetd.enable = lib.mkForce false;
-      #
-      #     _custom.archetypes.wm-wayland-desktop.enable = lib.mkForce false;
-      #     _custom.archetypes.de-wayland-desktop.enable = true;
-      #
-      #     services.auto-epp.enable = lib.mkForce false;
-      #   };
-      # };
-
-      # kde-specialisation = {
-      #   inheritParentConfig = true;
-      #   configuration.config = {
-      #     _custom.programs.gaming.enable = true;
-      #
-      #     _custom.de.dwl.enable = lib.mkForce false;
-      #     _custom.de.kde.enable = lib.mkForce true;
-      #     _custom.de.greetd.enable = lib.mkForce false;
-      #     _custom.de.audio.enable = true;
-      #     _custom.de.bluetooth.enable = true;
-      #
-      #     _custom.archetypes.wm-wayland-desktop.enable = lib.mkForce false;
-      #     _custom.archetypes.de-wayland-desktop.enable = true;
-      #
-      #     services.auto-epp.enable = lib.mkForce false;
-      #   };
-      # };
-
-      hyprland-specialisation = {
-        inheritParentConfig = true;
-        configuration.config = {
-          _custom.programs.gaming.enable = true;
-
-          _custom.de.dwl.enable = lib.mkForce false;
-          _custom.de.hyprland.enable = true;
-          _custom.de.hyprland.isDefault = true;
-
-          services.auto-epp.enable = lib.mkForce false;
-        };
-      };
-    };
+    # specialisation.hyprland-specialisation = {
+    #   inheritParentConfig = true;
+    #   configuration.config = {
+    #     _custom.programs.gaming.enable = true;
+    #
+    #     _custom.de.dwl.enable = lib.mkForce false;
+    #     _custom.de.hyprland.enable = true;
+    #     _custom.de.hyprland.isDefault = true;
+    #
+    #     services.auto-epp.enable = lib.mkForce false;
+    #   };
+    # };
 
     services.xserver = {
       # Setup keyboard
