@@ -10,29 +10,6 @@ in {
   options._custom.de.wob.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        wob = prev.wob.overrideAttrs (_: {
-          version = "75a65e6c33e916a5453d705ed5b3b21335587631";
-          src = pkgs.fetchFromGitHub {
-            owner = "francma";
-            repo = "wob";
-            rev = "75a65e6c33e916a5453d705ed5b3b21335587631";
-            sha256 = "sha256-N6+UUCRerzswbU5XpoNeG6Qu//QSyXD4mTIXwCPXMsU=";
-          };
-
-          buildInputs = with pkgs; [
-            inih
-            wayland
-            wayland-protocols
-            pixman
-            cmocka
-            libseccomp
-          ];
-        });
-      })
-    ];
-
     _custom.hm = {
       home.packages = with pkgs; [ wob wob-osd ];
 
