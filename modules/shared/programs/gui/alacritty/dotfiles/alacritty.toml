@@ -43,3 +43,9 @@ thickness = 0.3
 
 [mouse]
 hide_when_typing = true
+
+[keyboard]
+bindings = [
+{ key = "L", mods = "Control", chars = "ReceiveChar" },
+{ key = "Space", mods = "Shift|Control", chars = "ReceiveChar" },
+]
