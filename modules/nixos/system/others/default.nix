@@ -24,7 +24,7 @@
 
     console = {
       earlySetup = true;
-      keyMap = "us";
+      keyMap = lib.mkDefault "us";
     };
 
     hardware.opengl.enable = true;
