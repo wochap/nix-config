@@ -245,23 +245,6 @@
         "type": "github"
       }
     },
-    "catppuccin-starship": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1689246850,
-        "narHash": "sha256-nsRuxQFKbQkyEI4TXgvAjcroVdG+heKX5Pauq/4Ota0=",
-        "owner": "catppuccin",
-        "repo": "starship",
-        "rev": "5629d2356f62a9f2f8efad3ff37476c19969bd4f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "catppuccin",
-        "repo": "starship",
-        "rev": "5629d2356f62a9f2f8efad3ff37476c19969bd4f",
-        "type": "github"
-      }
-    },
     "catppuccin-tmux": {
       "flake": false,
       "locked": {
@@ -1393,7 +1376,6 @@
         "catppuccin-neomutt": "catppuccin-neomutt",
         "catppuccin-newsboat": "catppuccin-newsboat",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
-        "catppuccin-starship": "catppuccin-starship",
         "catppuccin-tmux": "catppuccin-tmux",
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",

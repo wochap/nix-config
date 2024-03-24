@@ -9,9 +9,10 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       variables = {
-        NNN_TRASH = "1";
-        NNN_FIFO = "/tmp/nnn.fifo";
+        NNN_OPENER = "${pkgs.nnn}/share/plugins/nuke";
+        NNN_PISTOL = "1";
         NNN_SPLIT = "v";
+        NNN_TRASH = "1";
       };
     };
 
@@ -21,14 +22,31 @@ in {
         package = pkgs.nnn.override { withNerdIcons = true; };
         extraPackages = with pkgs;
           [
-            (writeShellScriptBin "scope.sh" (builtins.readFile
-              "${pkgs.ranger}/share/doc/ranger/config/scope.sh"))
-            libarchive
+            # nuke dependencies
+            atool # file archives
+            rar
+            zip
+            p7zip
+            zathura
+            mpv
+            glow
+            jq
+            w3m
+            imv
+
+            # preview-tui dependencies
             bat
             eza
+            ffmpeg
             fzf
+            gnutar
+            imagemagick
             mediainfo
-          ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer sxiv fontpreview ];
+            mktemp
+            pistol
+            poppler_utils
+            unzip
+          ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer ];
         plugins = {
           mappings = {
             c = "fzcd";
@@ -41,6 +59,7 @@ in {
           src = "${pkgs.nnn}/share/plugins";
         };
       };
+      programs.zsh.initExtra = builtins.readFile ./dotfiles/f.zsh;
     };
   };
 }
