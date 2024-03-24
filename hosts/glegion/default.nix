@@ -94,6 +94,8 @@ in {
     _custom.de.greetd.enable = true;
     _custom.de.dwl.enable = true;
     _custom.de.dwl.isDefault = true;
+    _custom.de.hyprland.enable = true;
+    _custom.de.labwc.enable = true;
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
     # specialisation.hyprland-specialisation = {

@@ -13,24 +13,20 @@ in {
     environment.systemPackages = with pkgs; [
       wlopm # toggle screen
       wlrctl # control keyboard, mouse and wm from cli
+
       bemenu
       foot
-      unstable.labwc
+      labwc
     ];
 
-    _custom.de.greetd.cmd = lib.mkIf cfg.isDefault "labwc";
     _custom.de.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
+
+    _custom.de.greetd.cmd = lib.mkIf cfg.isDefault "labwc";
 
     _custom.hm = lib.mkMerge [
       {
-        xdg.configFile."labwc/environment".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/environment;
-        xdg.configFile."labwc/rc.xml".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/rc.xml;
-        xdg.configFile."labwc/menu.xml".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/menu.xml;
-        xdg.configFile."labwc/autostart".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/autostart;
+        xdg.configFile."labwc".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles;
       }
 
       (lib.mkIf cfg.isDefault {
@@ -41,9 +37,10 @@ in {
 
         services.swayidle.timeouts = lib.mkAfter [
           {
-            timeout = 195;
-            command = ''wlopm --off "*"'';
-            resumeCommand = ''wlopm --on "*"'';
+            timeout = 180;
+            command =
+              ''if ! pgrep swaylock; then chayang -d 5 && wlopm --off "*"; fi'';
+            resumeCommand = ''if ! pgrep swaylock; then wlopm --on "*"; fi'';
           }
           {
             timeout = 15;

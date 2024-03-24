@@ -2,7 +2,8 @@
 
 let
   cfg = config._custom.de.hyprland;
-  inherit (config._custom.globals) userName themeColors;
+  inherit (config._custom.globals) themeColors;
+
   hyprlandFinal = inputs.hyprland.packages."${system}".hyprland;
   hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
@@ -24,68 +25,71 @@ in {
 
     xdg.portal.config.hyprland.default = [ "gtk" "hyprland" ];
 
-    _custom.hm = {
-      programs.waybar.settings.mainBar = {
-        modules-left =
-          [ "hyprland/workspaces" "keyboard-state" "hyprland/submap" ];
-        modules-center = [ "hyprland/window" ];
-      };
+    _custom.hm = lib.mkMerge [
+      {
+        home.packages = [ hyprland-focus-toggle ];
 
-      home = {
-        sessionVariables = {
+        wayland.windowManager.hyprland = {
+          enable = true;
+          package = hyprlandFinal;
+          systemd.enable = false;
+          extraConfig = ''
+            ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
+              (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
+              themeColors)}
+
+            ${builtins.readFile ./dotfiles/config}
+            ${builtins.readFile ./dotfiles/keybindings}
+          '';
+          # plugins =
+          #   [ inputs.hyprland-plugins.packages."${system}".borders-plus-plus ];
+        };
+      }
+
+      (lib.mkIf cfg.isDefault {
+        home.sessionVariables = {
           XDG_CURRENT_DESKTOP = "Hyprland";
           XDG_SESSION_DESKTOP = "Hyprland";
         };
-        packages = [ hyprland-focus-toggle ];
-      };
 
-      xdg.configFile."hypr/libinput-gestures.conf".text = ''
-        gesture swipe left 3 hyprctl dispatch workspace e+1
-        gesture swipe right 3 hyprctl dispatch workspace e-1
-      '';
+        programs.waybar.settings.mainBar = {
+          modules-left =
+            [ "hyprland/workspaces" "keyboard-state" "hyprland/submap" ];
+          modules-center = [ "hyprland/window" ];
+        };
 
-      wayland.windowManager.hyprland = {
-        enable = true;
-        package = hyprlandFinal;
-        systemd.enable = false;
-        extraConfig = ''
-          ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
-            (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
-            themeColors)}
-
-          ${builtins.readFile ./dotfiles/config}
-          ${builtins.readFile ./dotfiles/keybindings}
+        xdg.configFile."hypr/libinput-gestures.conf".text = ''
+          gesture swipe left 3 hyprctl dispatch workspace e+1
+          gesture swipe right 3 hyprctl dispatch workspace e-1
         '';
-        # plugins =
-        #   [ inputs.hyprland-plugins.packages."${system}".borders-plus-plus ];
-      };
 
-      services.swayidle.timeouts = lib.mkAfter [
-        {
-          timeout = 195;
-          command = "hyprctl dispatch dpms off";
-          resumeCommand = "hyprctl dispatch dpms on";
-        }
-        {
-          timeout = 15;
-          command = "if pgrep swaylock; then hyprctl dispatch dpms off; fi";
-          resumeCommand =
-            "if pgrep swaylock; then hyprctl dispatch dpms on; fi";
-        }
-      ];
+        services.swayidle.timeouts = lib.mkAfter [
+          {
+            timeout = 185;
+            command = "hyprctl dispatch dpms off";
+            resumeCommand = "hyprctl dispatch dpms on";
+          }
+          {
+            timeout = 15;
+            command = "if pgrep swaylock; then hyprctl dispatch dpms off; fi";
+            resumeCommand =
+              "if pgrep swaylock; then hyprctl dispatch dpms on; fi";
+          }
+        ];
 
-      systemd.user.services.libinput-gestures = lib._custom.mkWaylandService {
-        Unit = {
-          Description = "Actions gestures on your touchpad using libinput";
-          Documentation = "https://github.com/bulletmark/libinput-gestures";
+        systemd.user.services.libinput-gestures = lib._custom.mkWaylandService {
+          Unit = {
+            Description = "Actions gestures on your touchpad using libinput";
+            Documentation = "https://github.com/bulletmark/libinput-gestures";
+          };
+          Service = {
+            PassEnvironment = [ "PATH" "HOME" ];
+            ExecStart =
+              "${pkgs.libinput-gestures}/bin/libinput-gestures -c $HOME/.config/hypr/libinput-gestures.conf";
+            Type = "simple";
+          };
         };
-        Service = {
-          PassEnvironment = [ "PATH" "HOME" ];
-          ExecStart =
-            "${pkgs.libinput-gestures}/bin/libinput-gestures -c /home/${userName}/.config/hypr/libinput-gestures.conf";
-          Type = "simple";
-        };
-      };
-    };
+      })
+    ];
   };
 }

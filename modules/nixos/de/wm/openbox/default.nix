@@ -21,14 +21,8 @@ in {
 
     _custom.hm = lib.mkMerge [
       {
-        xdg.configFile."openbox/environment".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/environment;
-        xdg.configFile."openbox/rc.xml".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/rc.xml;
-        xdg.configFile."openbox/menu.xml".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/menu.xml;
-        xdg.configFile."openbox/autostart".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/autostart;
+        xdg.configFile."openbox".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles;
       }
 
       (lib.mkIf cfg.isDefault {
