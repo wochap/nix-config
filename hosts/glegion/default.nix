@@ -26,7 +26,7 @@ in {
     _custom.programs.qt.enable = true;
     _custom.programs.zathura.enable = true;
 
-    _custom.programs.suites-linux.enable = true;
+    _custom.programs.others-linux.enable = true;
 
     # tui
     _custom.programs.figlet.enable = true;
@@ -57,7 +57,7 @@ in {
     _custom.programs.qutebrowser.enable = true;
     _custom.programs.vscode.enable = true;
 
-    _custom.programs.suites.enable = true;
+    _custom.programs.others.enable = true;
 
     # tui
     _custom.programs.amfora.enable = true;

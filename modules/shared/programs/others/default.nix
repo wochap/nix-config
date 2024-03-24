@@ -1,11 +1,11 @@
 { config, lib, pkgs, inputs, system, ... }:
 
 let
-  cfg = config._custom.programs.suites;
+  cfg = config._custom.programs.others;
   ani-cli = pkgs.writeShellScriptBin "ani-cli"
     (builtins.readFile "${inputs.ani-cli}/ani-cli");
 in {
-  options._custom.programs.suites.enable = lib.mkEnableOption { };
+  options._custom.programs.others.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {

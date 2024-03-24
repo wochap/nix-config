@@ -4,13 +4,16 @@
   imports = [
     ./de/dm/gdm
     ./de/dm/greetd
+
     ./de/gnome
     ./de/kde
+
     ./de/wm/dwl
     ./de/wm/hyprland
     ./de/wm/labwc
     ./de/wm/openbox
     ./de/wm/sway
+
     ./de/wm-addons/audio
     ./de/wm-addons/backlight
     ./de/wm-addons/bluetooth
@@ -30,6 +33,7 @@
     ./de/wm-addons/udev-rules
     ./de/wm-addons/xdg
     ./de/wm-addons/xwaylandvideobridge
+
     ./de/wm-addons-wayland/ags
     ./de/wm-addons-wayland/cliphist
     ./de/wm-addons-wayland/dunst
@@ -47,6 +51,7 @@
     ./de/wm-addons-wayland/wayland-session
     ./de/wm-addons-wayland/wob
     ./de/wm-addons-wayland/ydotool
+
     ./de/wm-addons-xorg/tint2
     ./de/wm-addons-xorg/xorg-session
     ./de/wm-addons-xorg/xorg-utils
@@ -59,13 +64,16 @@
     ./globals
 
     ./programs/cli/nix-alien
+
     ./programs/gui/gtk
     ./programs/gui/imv
     ./programs/gui/mongodb
     ./programs/gui/qt
     ./programs/gui/thunar
     ./programs/gui/zathura
-    ./programs/suites-linux
+
+    ./programs/others-linux
+
     ./programs/tui/figlet
     ./programs/tui/fontpreview-kik
 

@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.programs.suites-linux;
+let cfg = config._custom.programs.others-linux;
 in {
-  options._custom.programs.suites-linux.enable = lib.mkEnableOption { };
+  options._custom.programs.others-linux.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [

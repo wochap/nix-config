@@ -29,7 +29,7 @@
     ./programs/gui/qutebrowser
     ./programs/gui/vscode
 
-    ./programs/suites
+    ./programs/others
 
     ./programs/tui/amfora
     ./programs/tui/bottom
