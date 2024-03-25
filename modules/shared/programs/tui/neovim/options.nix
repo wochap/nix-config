@@ -135,10 +135,10 @@ in {
         extraPackages = with pkgs;
           [
             # Dependent packages used by default plugins
-            unstable.doq
+            doq
             sqlite
           ] ++ optionals cfg.withBuildTools [
-            unstable.cargo
+            cargo
             clang
             cmake
             gcc

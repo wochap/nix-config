@@ -4,7 +4,7 @@ let
   cfg = config._custom.gaming.emulators;
 
   retroarchFinal = with pkgs;
-    (unstable.retroarch.override {
+    (retroarch.override {
       cores = with libretro; [ bsnes genesis-plus-gx beetle-ngp ];
     });
 in {

@@ -7,7 +7,7 @@ let
 
   dwl-waybar = pkgs.writeScriptBin "dwl-waybar"
     (builtins.readFile ./scripts/dwl-waybar.sh);
-  dwl-final = (pkgs.unstable.dwl.override {
+  dwl-final = (pkgs.dwl.override {
     conf = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
       crust = unwrapHex themeColors.crust;

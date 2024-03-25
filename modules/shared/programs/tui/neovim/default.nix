@@ -17,7 +17,7 @@ in {
       systemPackages = with pkgs; [
         fswatch
         prevstable-neovim.neovim-remote
-        unstable.neovide
+        neovide
 
         # required in wayland to copy
         wl-clipboard

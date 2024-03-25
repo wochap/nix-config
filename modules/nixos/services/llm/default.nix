@@ -14,12 +14,12 @@ in {
 
     environment.systemPackages = with pkgs; [
       python311Packages.huggingface-hub
-      unstable.oterm
+      oterm
     ];
 
     services.ollama = {
       enable = true;
-      package = pkgs.unstable.ollama;
+      package = pkgs.ollama;
       acceleration = lib.mkIf cfg.enableNvidia "cuda";
     };
     systemd.services.ollama.environment.OLLAMA_ORIGINS = "*";

@@ -65,7 +65,7 @@ in {
 
       home.packages = with pkgs; [
         # completions and manpage install
-        unstable.zsh-abbr
+        zsh-abbr
 
         # completions
         zsh-completions
@@ -197,7 +197,7 @@ in {
           function _zsh-abbr-start() {
             export ABBR_DEFAULT_BINDINGS=0
 
-            source ${pkgs.unstable.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
+            source ${pkgs.zsh-abbr}/share/zsh-abbr/zsh-abbr.zsh
 
             bindkey -M viins " " abbr-expand-and-insert
 
@@ -222,7 +222,7 @@ in {
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/lib/clipboard.zsh
           source ${./plugins/dirhistory.zsh}
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
-          source ${pkgs.unstable.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
+          source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
 
           ## completions
 
