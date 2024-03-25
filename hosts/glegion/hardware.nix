@@ -82,5 +82,11 @@
     services.power-profiles-daemon.enable = lib.mkDefault true;
 
     services.fwupd.enable = true;
+
+    # improve performance on SSDs
+    boot.initrd.luks.devices."luks-4fa1d0c5-2c4a-478f-a9ce-099e36b3b390".bypassWorkqueues =
+      true;
+    boot.initrd.luks.devices."luks-f73c3c32-9bc9-4a22-ab24-bd456988a628".bypassWorkqueues =
+      true;
   };
 }
