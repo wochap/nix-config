@@ -14,8 +14,8 @@ find . -type f -mtime -7"""
 
 TEMPLATE """{{ .System }}<|end_of_turn|>GPT4 Correct User: {{ .Prompt }}<|end_of_turn|>GPT4 Correct Assistant:"""
 
-PARAMETER num_thread 75
-PARAMETER num_gpu 1
+PARAMETER num_gpu 75
+PARAMETER num_thread 8
 
 PARAMETER stop "<|endoftext|>"
 PARAMETER stop "<|end_of_turn|>"
