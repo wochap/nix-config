@@ -10,7 +10,6 @@ in {
     _custom.hm = {
       home.sessionVariables = {
         NNN_OPENER = "${pkgs.nnn}/share/plugins/nuke";
-        NNN_PISTOL = "1";
         NNN_SPLIT = "v";
         NNN_TRASH = "1";
       };
@@ -44,7 +43,6 @@ in {
             imagemagick
             mediainfo
             mktemp
-            pistol
             poppler_utils
             unzip
           ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer ];
