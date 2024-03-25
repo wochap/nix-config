@@ -20,6 +20,9 @@ in {
         package = pkgs.nnn.override { withNerdIcons = true; };
         extraPackages = with pkgs;
           [
+            # dragdrop dependencies
+            xdragon
+
             # nuke dependencies
             atool # file archives
             rar
@@ -53,6 +56,7 @@ in {
             p = "preview-tui";
             t = "nmount";
             v = "imgview";
+            d = "dragdrop";
           };
           src = "${pkgs.nnn}/share/plugins";
         };
