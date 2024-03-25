@@ -1,0 +1,5 @@
+FROM llama2-uncensored:7b-chat
+
+PARAMETER num_gpu 50
+PARAMETER num_thread 8
+
