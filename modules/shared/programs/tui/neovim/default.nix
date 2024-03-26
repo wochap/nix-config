@@ -10,7 +10,7 @@ in {
     _custom.programs.neovim = {
       setBuildEnv = true;
       withBuildTools = true;
-      # package = pkgs.neovim-unwrapped;
+      package = pkgs.neovim-unwrapped;
     };
 
     environment = {

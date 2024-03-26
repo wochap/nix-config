@@ -969,17 +969,17 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1709769948,
-        "narHash": "sha256-fOKqYDzj6GK2eDB7QFs/6tsP5CgRyG4YN/xUfeRZGaQ=",
+        "lastModified": 1711411421,
+        "narHash": "sha256-4sp4EIymCtkaBI37L0pYnasSxLJ7EWmedzNxXuEpIoI=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "f0fc63c0db1bb97939919abfb93f63a80504933a",
+        "rev": "73b284862eb33c198207ca11f8e1eb99fe086653",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "f0fc63c0db1bb97939919abfb93f63a80504933a",
+        "rev": "73b284862eb33c198207ca11f8e1eb99fe086653",
         "type": "github"
       }
     },
