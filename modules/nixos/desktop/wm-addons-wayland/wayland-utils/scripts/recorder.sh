@@ -67,7 +67,7 @@ shot5() {
 }
 
 shotarea() {
-  area=$(slurp -d -b "${background}bf" -c "$primary")
+  area=$(slurp -d -b "${background}bf" -c "$primary" -F "Iosevka NF" -w 1)
   if [[ -z $area ]]; then
     exit
   fi
