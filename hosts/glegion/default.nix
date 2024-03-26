@@ -90,8 +90,9 @@ in {
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
 
-    _custom.desktop.udev-rules.enable = true;
     _custom.desktop.greetd.enable = true;
+    _custom.desktop.greetd.enablePamAutoLogin = true;
+    _custom.desktop.udev-rules.enable = true;
     _custom.desktop.dwl.enable = true;
     _custom.desktop.dwl.isDefault = true;
     _custom.desktop.hyprland.enable = true;
@@ -101,11 +102,9 @@ in {
     # specialisation.hyprland-specialisation = {
     #   inheritParentConfig = true;
     #   configuration.config = {
-    #     _custom.desktop.dwl.enable = lib.mkForce false;
+    #     _custom.desktop.dwl.isDefault = lib.mkForce false;
     #     _custom.desktop.hyprland.enable = true;
     #     _custom.desktop.hyprland.isDefault = true;
-    #
-    #     services.auto-epp.enable = lib.mkForce false;
     #   };
     # };
 

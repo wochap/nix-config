@@ -104,6 +104,12 @@ Reboot into NixOS, login with the user you created
    $ gpg --import private.key
    ```
 
+1. Enable autologin (optional)
+
+   ```sh
+   $ sudo touch /etc/security/autologin.conf
+   ```
+
 1. Setup Syncthing (http://localhost:8384)
 1. Setup desktop wallpaper (optional)
    ```
