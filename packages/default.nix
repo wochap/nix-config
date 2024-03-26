@@ -13,6 +13,7 @@ let
     mangadesk = pkgs.callPackage ./mangadesk { };
     offlinemsmtp = pkgs.callPackage ./offlinemsmtp { };
     ollama-webui-lite = pkgs.callPackage ./ollama-webui-lite { };
+    pam-autologin = pkgs.callPackage ./pam-autologin { };
     ptsh = pkgs.callPackage ./ptsh { };
     scenefx = pkgs.callPackage ./scenefx { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
