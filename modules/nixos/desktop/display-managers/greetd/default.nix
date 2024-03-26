@@ -7,6 +7,7 @@ in {
   options._custom.desktop.greetd = {
     enable = lib.mkEnableOption { };
     enableAutoLogin = lib.mkEnableOption { };
+    enablePamAutoLogin = lib.mkEnableOption { };
     cmd = lib.mkOption {
       type = lib.types.str;
       default = "";
@@ -26,7 +27,7 @@ in {
     services.greetd = {
       enable = true;
       settings = {
-        # TODO: autologin doesn't unlock gnome keyring
+        # NOTE: greetd autologin doesn't unlock gnome keyring
         initial_session = lib.mkIf cfg.enableAutoLogin {
           command = cfg.cmd;
           user = userName;
@@ -38,6 +39,18 @@ in {
         };
       };
     };
+
+    # autologin with Pam_autologin
+    # docs: https://wiki.archlinux.org/title/Pam_autologin
+    security.pam.services.greetd.rules.auth.autologin =
+      lib.mkIf cfg.enablePamAutoLogin {
+        enable = true;
+        order = config.security.pam.services.greetd.rules.auth.unix-early.order
+          - 1;
+        control = "required";
+        modulePath =
+          "${pkgs._custom.pam-autologin}/lib/security/pam_autologin.so";
+      };
 
     # HACK: stop printing status messages in tuigreet
     # https://github.com/apognu/tuigreet/issues/68#issuecomment-1192683029
