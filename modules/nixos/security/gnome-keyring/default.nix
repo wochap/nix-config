@@ -11,8 +11,11 @@ in {
 
     services.gnome.gnome-keyring.enable = true;
 
-    # Automatic unlocking keyring without automatic login
-    security.pam.services.greetd.enableGnomeKeyring = true;
+    security.pam.services.login.enableGnomeKeyring = true;
+
+    # Unlock gnome keyring with password entered in greetd
+    security.pam.services.greetd.enableGnomeKeyring =
+      config._custom.desktop.greetd.enable;
 
     xdg.portal.config.common."org.freedesktop.impl.portal.Secret" =
       [ "gnome-keyring" ];
