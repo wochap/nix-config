@@ -78,6 +78,7 @@ in {
         hunspell # dictionary for document programs
         hunspellDicts.en-us
         inxi # log OS info
+        keyutils # inspect kernel keyring
         libinput # input devices helper
         libva-utils # verifying VA-API
         notify-desktop # send notifications
