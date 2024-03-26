@@ -52,7 +52,7 @@
       _custom.desktop.wayland-utils.enable = true;
       _custom.desktop.ydotool.enable = lib.mkDefault true;
 
-      _custom.desktop.greetd.enable = true;
+      _custom.desktop.greetd.enable = lib.mkDefault true;
     })
 
     (lib.mkIf config._custom.archetypes.wm-xorg-desktop.enable {
@@ -90,7 +90,7 @@
       _custom.desktop.xorg-utils.enable = true;
       _custom.desktop.xsettingsd.enable = true;
 
-      _custom.desktop.greetd.enable = true;
+      _custom.desktop.greetd.enable = lib.mkDefault true;
     })
 
     (lib.mkIf config._custom.archetypes.de-wayland-desktop.enable {
