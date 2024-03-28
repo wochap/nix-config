@@ -8,7 +8,7 @@ let
     (builtins.readFile ./scripts/swww-random.sh);
   swww-pick =
     pkgs.writeScriptBin "swww-pick" (builtins.readFile ./scripts/swww-pick.sh);
-  inherit (pkgs.unstable) swww;
+  inherit (pkgs) swww;
 in {
   options._custom.desktop.swww.enable = lib.mkEnableOption { };
 
