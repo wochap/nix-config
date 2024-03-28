@@ -106,7 +106,7 @@ static const Rule rules[] = {
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0 },
 	{ "xwaylandvideobridge",     NULL,       1 << 9,         1,     -1,      0,   0,   0,    0,      'x' },
-	{ NULL, "meet.google.com is sharing your screen.", 1 << 9, 1,   -1,      0,   0,   0,    0,      0 },
+	{ NULL, ".com is sharing your screen.$", 1 << 9, 1,   -1,      0,   0,   0,    0,      0 },
 	{ bing_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'g' },
 	{ chat_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'c' },
 	{ ollama_appid,              NULL,       0,         1,          -1,      0,   0,   1200, 800,    'o' },
