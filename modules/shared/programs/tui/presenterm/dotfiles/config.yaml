@@ -1,0 +1,11 @@
+defaults:
+  theme: catppuccin-mocha
+
+options:
+  # whether slides are automatically terminated when a slide title is found.
+  implicit_slide_ends: true
+
+bindings:
+  go_to_slide: ["<number>gg"]
+  # execute_code: ["<c-e>"]
+  exit: ["Q"]

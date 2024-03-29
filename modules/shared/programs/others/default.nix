@@ -54,7 +54,6 @@ in {
         git
         gitAndTools.gh # github cli
         ngrok # expose web server
-        presenterm
         silver-searcher # ag, ack like
         stripe-cli
 
