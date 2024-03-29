@@ -1,9 +1,9 @@
-@define-color bar_bg @background;
-@define-color module_bg #313244;
+@define-color bar_bg @base;
+@define-color module_bg @surface0;
 
 .bar-container {
   background-color: @bar_bg;
-  color: @foreground;
+  color: @text;
   font-family:
     Iosevka NF,
     woos;
@@ -19,17 +19,17 @@
 
 .dwltags label {
   padding: 1px 0.5em 0;
-  color: @comment;
+  color: @overlay0;
   border-radius: 4px;
 }
 .dwltags label.occupied {
-  color: @foreground;
+  color: @text;
 }
 .dwltags label.activated {
   background-color: @module_bg;
 }
 .dwltags label.focused {
-  color: @primary;
+  color: @peach;
 }
 .dwltags label.urgent {
   color: @red;
@@ -44,7 +44,7 @@
 }
 
 .dwlmode {
-  color: @orange;
+  color: @peach;
 }
 
 .dwlscratchpads {
@@ -56,14 +56,14 @@
 
 .dwltitle {
   padding: 1px 0.5em 0;
-  color: @comment;
+  color: @overlay0;
 }
 
 .bar .capslock {
   padding: 0 0.5em;
   border-radius: 4px;
   background-color: @module_bg;
-  color: @orange;
+  color: @peach;
   font-size: 1.2em;
 }
 
@@ -95,7 +95,7 @@
   padding: 0 0.5em;
   border-radius: 4px;
   background-color: @module_bg;
-  color: @comment;
+  color: @overlay0;
 }
 .matcha.enabled {
   color: @maroon;
@@ -105,17 +105,17 @@
   padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @module_bg;
-  color: @comment;
+  color: @overlay0;
 }
 .dunst.enabled {
-  color: @foreground;
+  color: @text;
 }
 
 .offlinemsmtp {
   padding: 0 0.5em;
   border-radius: 4px;
   background-color: @module_bg;
-  color: @comment;
+  color: @overlay0;
 }
 .offlinemsmtp.enabled {
   color: @maroon;
@@ -173,20 +173,20 @@
   background-color: @module_bg;
 }
 .bluetooth.on {
-  color: @foreground;
+  color: @text;
 }
 .bluetooth.connected {
   color: @blue;
 }
 .bluetooth.off {
-  color: @comment;
+  color: @overlay0;
 }
 
 .network {
   padding: 0 0.5em;
   border-radius: 4px;
   background-color: @module_bg;
-  color: @comment;
+  color: @overlay0;
 }
 .network .connected {
   color: @blue;
@@ -194,7 +194,6 @@
 
 .clock {
   padding: 0 0.5em;
-  color: @comment;
 }
 
 /*

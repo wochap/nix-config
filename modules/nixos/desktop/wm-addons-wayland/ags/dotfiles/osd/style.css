@@ -1,3 +1,5 @@
+@define-color window_bg @mantle;
+
 .osd-container {
   background-color: transparent;
 }
@@ -8,8 +10,8 @@
 }
 
 .progress-osd .progress-container {
-  background-color: @background;
-  border-color: @selection;
+  background-color: @window_bg;
+  border-color: @surface0;
   border-radius: 4px;
   border-style: solid;
   border-width: 1px;
@@ -24,20 +26,20 @@
 }
 
 .progress-osd .icon {
-  color: @background;
+  color: @window_bg;
   font-size: 1.5em;
   text-shadow: 0px 0px 7px rgba(203, 166, 247, 1); /* mauve */
 }
 
 .progress-osd .fill {
-  background-color: @primary;
+  background-color: @maroon;
   border-radius: 2px;
 }
 .progress-osd .fill.overflow {
-  background-color: @pink;
+  background-color: @red;
 }
 .progress-osd .fill.muted {
-  background-color: @comment;
+  background-color: @overlay0;
 }
 
 .capslock-osd {
@@ -45,12 +47,12 @@
 }
 
 .capslock-osd .capslock {
-  background-color: @background;
-  border-color: @selection;
+  background-color: @window_bg;
+  border-color: @surface0;
   border-radius: 4px;
   border-style: solid;
   border-width: 1px;
-  color: @comment;
+  color: @overlay0;
   font-size: 118px;
   box-shadow: 0px 0px 7px 0px rgba(17, 17, 27, 1); /* crust */
   margin: 48px 48px 70px 48px; /* HACK: add enought space so shadow is visible */
@@ -58,5 +60,5 @@
   min-height: 154px;
 }
 .capslock-osd .capslock.locked {
-  color: @orange;
+  color: @peach;
 }
