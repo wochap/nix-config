@@ -29,7 +29,7 @@
   background-color: @module_bg;
 }
 .dwltags label.focused {
-  color: @peach;
+  color: @maroon;
 }
 .dwltags label.urgent {
   color: @red;
