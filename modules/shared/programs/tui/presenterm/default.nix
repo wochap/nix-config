@@ -12,6 +12,10 @@ in {
 
       xdg.configFile."presenterm/config.yaml".source =
         lib._custom.relativeSymlink configDirectory ./dotfiles/config.yaml;
+
+      programs.zsh.shellAliases = {
+        p = ''run-present-kmode presenterm "$@"'';
+      };
     };
   };
 }
