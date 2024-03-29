@@ -1,12 +1,12 @@
 {
   primary = "#cba6f7";
-  background = "#1E1E2E";
-  currentline = "#585B70";
-  selection = "#313244";
-  foreground = "#CDD6F4";
-  comment = "#6C7086";
-  cyan = "#94E2D5";
-  orange = "#FAB387";
+  background = "#1e1e2e"; # base
+  currentline = "#585b70"; # surface2
+  selection = "#313244"; # surface0
+  foreground = "#cdd6f4"; # text
+  comment = "#6c7086"; # overlay0
+  cyan = "#94e2d5";
+  orange = "#fab387"; # peach
   purple = "#cba6f7";
 
   rosewater = "#f5e0dc";

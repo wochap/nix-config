@@ -28,7 +28,7 @@
 .progress-osd .icon {
   color: @window_bg;
   font-size: 1.5em;
-  text-shadow: 0px 0px 7px rgba(203, 166, 247, 1); /* mauve */
+  text-shadow: 0px 0px 7px rgba(235, 160, 172, 1); /* maroon */
 }
 
 .progress-osd .fill {
