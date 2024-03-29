@@ -12,7 +12,14 @@ in {
 
       xdg.configFile = {
         "imv/config".text = lib.generators.toINI { } {
-          options = { inherit (themeColors) background; };
+          options = {
+            background = themeColors.base;
+            overlay_text_color = themeColors.text;
+            overlay_background_color = themeColors.mantle;
+            overlay = true;
+            overlay_font = "Iosevka NF:10";
+            scaling_mode = "shrink";
+          };
         };
       };
     };
