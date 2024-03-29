@@ -1,0 +1,4 @@
+FROM stable-code:3b-instruct
+
+PARAMETER num_gpu 40
+PARAMETER num_thread 8

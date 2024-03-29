@@ -32,6 +32,19 @@ $ huggingface-cli download <user/model> <file name>
 $ huggingface-cli download TheBloke/WhiteRabbitNeo-13B-GGUF whiterabbitneo-13b.Q5_K_M.gguf
 ```
 
+then create a Modelfile, `FROM` should point to path of the
+
+### Usage of `Modelfile`s
+
+You can download `Modelfile`s at https://openwebui.com/
+
+```sh
+$ ollama create <name> -f <location of the file>'
+
+# e.g.
+$ ollama create "deepseek-coder:33b-instruct-q4_K_M_glegion" -f ./models/glegion/Modelfile_deepseek-coder:33b-instruct-q4_K_M
+```
+
 ### Testing models
 
 ```sh
@@ -49,14 +62,3 @@ $ curl http://localhost:11434/api/generate -d '{
 - `num_thread` represents the number of physical cores
 
 To calculate how fast the response is generated in tokens per second (token/s), divide eval_count / (eval_duration / 1000000000)
-
-### Usage of `Modelfile`s
-
-You can download `Modelfile`s at https://openwebui.com/
-
-```sh
-$ ollama create <name> -f <location of the file>'
-
-# e.g.
-$ ollama create "deepseek-coder:33b-instruct-q4_K_M_glegion" -f ./models/glegion/Modelfile_deepseek-coder:33b-instruct-q4_K_M
-```

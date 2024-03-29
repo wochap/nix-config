@@ -10,4 +10,5 @@ $ ollama create "glegion-english-teacher" -f ./Modelfile_english-teacher
 $ ollama create "glegion-english-translator-improver" -f ./Modelfile_english-translator-improver
 $ ollama create "glegion-llama2-uncensored:7b" -f ./Modelfile_llama2-uncensored:7b
 $ ollama create "glegion-socratic-tutor" -f ./Modelfile_socratic-tutor
+$ ollama create "glegion-stable-code-3b" -f ./Modelfile_stable-code:3b-instruct
 ```
