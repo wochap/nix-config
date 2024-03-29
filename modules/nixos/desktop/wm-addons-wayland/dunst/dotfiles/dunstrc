@@ -34,12 +34,12 @@ origin="bottom-right"
 
 # Theme
 alignment="left"
-# background="#282a36"
+background="@base@"
 corner_radius=4
 ellipsize="end"
-# foreground="#f8f8f2"
-# format="<b>%s</b> <span color='#8be9fd'>(%a)</span>\n%b"
-# frame_color="#44475a"
+foreground="@text@"
+format="<span color='@lavender@'><b>%s</b></span> <span color='@overlay0@'>(%a)</span>\n%b"
+frame_color="@surface0@"
 gap_size=7
 gaps=yes
 icon_position="left"
@@ -70,12 +70,12 @@ msg_urgency="critical"
 script="dunst-play-notification-sound"
 appname="Remind"
 
-# [urgency_low]
-# frame_color="#6272a4"
+[urgency_low]
+format="<span color='@text@'><b>%s</b></span> <span color='@overlay0@'>(%a)</span>\n%b"
 
 [urgency_critical]
-frame_color="#ff5555"
 timeout=0
+format="<span color='@red@'><b>%s</b></span> <span color='@overlay0@'>(%a)</span>\n%b"
 
 [slack]
 appname="Slack"

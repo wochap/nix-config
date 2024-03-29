@@ -3,21 +3,6 @@
 let
   cfg = config._custom.desktop.dunst;
   inherit (config._custom.globals) themeColors;
-  settings = builtins.fromTOML
-    (builtins.replaceStrings [ "=yes" "=no" ] [ "=true" "=false" ]
-      (builtins.readFile ./dotfiles/dunstrc));
-  toDunstIni = with lib;
-    generators.toINI {
-      mkKeyValue = key: value:
-        let
-          value' = if isBool value then
-            (lib.home-manager.booleans.yesNo value)
-          else if isString value then
-            ''"${value}"''
-          else
-            toString value;
-        in "${key}=${value'}";
-    };
 
   dunst-toggle-mode = pkgs.writeScriptBin "dunst-toggle-mode"
     (builtins.readFile ./scripts/dunst-toggle-mode.sh);
@@ -47,15 +32,15 @@ in {
 
       xdg.configFile = {
         "dunst/assets/notification.flac".source = ./assets/notification.flac;
-        "dunst/dunstrc".text = toDunstIni (lib.recursiveUpdate settings {
-          global = {
-            inherit (themeColors) background foreground;
-            frame_color = themeColors.selection;
-            format =
-              "<b>%s</b> <span color='${themeColors.comment}'>(%a)</span>\\n%b";
-          };
-          urgency_critical = { frame_color = themeColors.red; };
-        });
+        "dunst/dunstrc" = {
+          source = (pkgs.substituteAll {
+            src = ./dotfiles/dunstrc;
+            inherit (themeColors) base text surface0 lavender overlay0 red;
+          });
+          onChange = ''
+            ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
+          '';
+        };
       };
 
       systemd.user.services.dunst = lib._custom.mkWaylandService {
