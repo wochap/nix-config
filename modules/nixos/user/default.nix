@@ -18,6 +18,7 @@ in {
         "Projects/wochap/.keep".text = "";
         "Picture/Screenshots/.keep".text = "";
         "Videos/Recordings/.keep".text = "";
+        "Videos/OBS/.keep".text = "";
       };
 
       xdg.configFile."secrets".source =
