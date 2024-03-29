@@ -1,11 +1,25 @@
-{ ... }:
+{ lib, inputs, ... }:
 
 {
   config.boot = {
     loader = {
-      grub.enable = false;
-      systemd-boot.enable = true;
-      systemd-boot.configurationLimit = 15;
+      grub = {
+        enable = false;
+        configurationLimit = 10;
+        device = "nodev";
+        efiSupport = true;
+        enableCryptodisk = true;
+        theme = lib.mkDefault
+          "${inputs.catppuccin-grub}/src/catppuccin-mocha-grub-theme";
+        useOSProber = true;
+      };
+
+      systemd-boot = {
+        enable = lib.mkDefault true;
+        configurationLimit = 10;
+        consoleMode = "keep";
+      };
+
       efi.canTouchEfiVariables = true;
     };
 
