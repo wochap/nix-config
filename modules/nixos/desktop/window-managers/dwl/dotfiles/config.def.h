@@ -15,11 +15,11 @@ static const unsigned int borderepx        = 0;  /* border pixel of windows */
 static const unsigned int borderspx_offset = 0;  /* border pixel of windows */
 static const unsigned int borderepx_negative_offset = 0;  /* border pixel of windows */
 static const int draw_minimal_borders      = 1; /* merge adjacent borders */
-static const float bordercolor[] = COLOR(0x@selection@ff);
-static const float borderscolor[] = COLOR(0x@selection@00);
-static const float borderecolor[] = COLOR(0x@selection@ff);
+static const float bordercolor[] = COLOR(0x@surface0@ff);
+static const float borderscolor[] = COLOR(0x@surface0@00);
+static const float borderecolor[] = COLOR(0x@surface0@00);
 static const int border_color_type         = BrdOriginal;
-static const float focuscolor[] = COLOR(0x@primary@ff);
+static const float focuscolor[] = COLOR(0x@surface2@ff);
 static const float urgentcolor[] = COLOR(0x@red@ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
@@ -28,12 +28,12 @@ static const unsigned int cursorsize = @cursorSize@;
 static const unsigned int swipe_min_threshold = 0;
 static const int center_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
 static const int shadow = 1;
-static const int shadow_only_floating = 0;
+static const int shadow_only_floating = 0; /* 0 means center floating relative to the window area */
 static const struct wlr_render_color shadow_color = COLOR(0x@crust@ff);
 static const struct wlr_render_color shadow_color_focus = COLOR(0x@crust@ff);
 static const int shadow_blur_sigma = 16;
 static const int shadow_blur_sigma_focus = 30;
-static const char *const shadow_ignore_list[] = { "xdg-desktop-portal-gtk", "file-roller", "cpupower-gui", "gnome-disks", "lutris", "seahorse", NULL }; /* list of app-id to ignore */
+static const char *const shadow_ignore_list[] = { NULL }; /* list of app-id to ignore */
 
 enum {
     VIEW_L = -1,
