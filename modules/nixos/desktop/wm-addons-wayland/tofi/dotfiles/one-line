@@ -4,16 +4,16 @@ font = "Iosevka NF"
 font-size = 10
 
 # Text theming
-text-color = @foreground@
+text-color = @text@
 
-prompt-color = @red@
+prompt-color = @overlay0@
 
-selection-color = @background@
-selection-background = @primary@
+selection-color = @mantle@
+selection-background = @green@
 selection-background-padding = 4, 7
 selection-background-corner-radius = 4
 
-selection-match-color = @background@
+selection-match-color = @mantle@
 
 # Text cursor theme
 text-cursor-thickness = 2
@@ -28,7 +28,7 @@ min-input-width = 200
 # Window theming
 width = 100%
 height = 40
-background-color = @background@
+background-color = @mantle@
 outline-width = 0
 border-width = 0
 padding-top = 11
@@ -43,8 +43,7 @@ exclusive-zone = -1
 
 # Behaviour
 text-cursor = true
-# matching-algorithm = fuzzy
-fuzzy-match = true
+matching-algorithm = fuzzy
 drun-launch = true
 ascii-input = true
 
