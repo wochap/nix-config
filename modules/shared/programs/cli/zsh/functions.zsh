@@ -78,20 +78,6 @@ function run-without-kpadding() {
   fi
 }
 
-# HACK: remove padding inside kitty
-# HACK: increase font size inside kitty
-function run-present-kmode() {
-  if [[ -n $KITTY_PID ]]; then
-    kitty @ set-spacing padding=0
-    kitty @ set-font-size 14
-    "$@"
-    kitty @ set-spacing padding=7
-    kitty @ set-font-size 10
-  else
-    "$@"
-  fi
-}
-
 # switch between nvim configurations
 function nvims() {
   items=$(find $HOME/.config -maxdepth 2 -name "init.lua" -type f -execdir sh -c 'pwd | xargs basename' \;)
