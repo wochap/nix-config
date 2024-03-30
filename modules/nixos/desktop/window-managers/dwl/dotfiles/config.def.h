@@ -316,6 +316,7 @@ static const Key keys[] = {
 
   // Toggle fullscreen
   { MODKEY, Key_f, togglefullscreen, {0} },
+  { MODKEY|MOD_SHIFT, Key_f, togglefakefullscreen, {0} },
 
   // Focus direction
   // TODO: pick a window to focus
