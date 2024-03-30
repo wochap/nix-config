@@ -8,8 +8,10 @@ in {
     _custom.hm = {
       home = {
         packages = with pkgs; [
-          trash-cli # required by vscode
-          vscode
+          trash-cli
+
+          (vscode.fhsWithPackages
+            (ps: with ps; [ rustup zlib openssl.dev pkg-config ]))
         ];
         sessionVariables = {
           # Fix vscode delete
