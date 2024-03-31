@@ -3,7 +3,7 @@ import { spacing } from "../constants.js";
 
 const generateScriptModule = ({ cmd, className, labelAttrs }) => {
   const Var = Variable(
-    { text: "", class: [] },
+    { text: "" },
     {
       listen: [cmd, (out) => JSON.parse(out)],
     },
@@ -20,7 +20,7 @@ const generateScriptModule = ({ cmd, className, labelAttrs }) => {
 
 const VisibleAppIds = Variable([], {
   listen: [
-    "dwl-waybar '' visible_appids",
+    "dwl-state '' visible_appids",
     (out) => {
       const items = JSON.parse(out)
         .text.split(" ")
@@ -92,7 +92,6 @@ const tags = range(9, 0).map((i) =>
   Variable(
     {
       text: "",
-      class: [],
       occupied: false,
       activated: false,
       focused: false,
@@ -100,16 +99,9 @@ const tags = range(9, 0).map((i) =>
     },
     {
       listen: [
-        `dwl-waybar '' ${i}`,
+        `dwl-state '' ${i}`,
         (out) => {
-          const result = JSON.parse(out);
-          return {
-            ...result,
-            occupied: result.class.includes("occupied"),
-            activated: result.class.includes("activated"),
-            focused: result.class.includes("focused"),
-            urgent: result.class.includes("urgent"),
-          };
+          return JSON.parse(out);
         },
       ],
     },
@@ -122,13 +114,17 @@ export const dwltags = Widget.Box({
   children: tags.map((tag) =>
     Widget.Label({
       label: tag.bind().as((value) => value.text),
-      class_names: tag.bind().as((value) => value.class),
+      class_names: tag.bind().as((value) =>
+        Object.entries(value)
+          .filter(([_, val]) => val === true)
+          .map(([key]) => key),
+      ),
     }),
   ),
 });
 
 export const dwltitle = generateScriptModule({
-  cmd: "dwl-waybar '' title",
+  cmd: "dwl-state '' title",
   className: "dwltitle",
   labelAttrs: {
     truncate: "middle",
@@ -136,18 +132,18 @@ export const dwltitle = generateScriptModule({
 });
 
 export const dwllayout = generateScriptModule({
-  cmd: "dwl-waybar '' layout",
+  cmd: "dwl-state '' layout",
   className: "dwllayout",
 });
 
 export const dwlmode = generateScriptModule({
-  cmd: "dwl-waybar '' mode",
+  cmd: "dwl-state '' mode",
   className: "dwlmode",
 });
 
 const Dwlscratchpads = Variable(0, {
   listen: [
-    "dwl-waybar '' namedscratchpads_count",
+    "dwl-state '' namedscratchpads_count",
     (out) => parseInt(JSON.parse(out).text),
   ],
 });

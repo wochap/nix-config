@@ -5,13 +5,13 @@ let
   inherit (config._custom.globals) themeColors cursor userName;
   inherit (lib._custom) unwrapHex;
 
-  dwl-waybar = pkgs.writeScriptBin "dwl-waybar"
-    (builtins.readFile ./scripts/dwl-waybar.sh);
+  dwl-state =
+    pkgs.writeScriptBin "dwl-state" (builtins.readFile ./scripts/dwl-state.sh);
   dwl-final = (pkgs.dwl.override {
     conf = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
       border = unwrapHex themeColors.border;
-      crust = unwrapHex themeColors.crust;
+      mantle = unwrapHex themeColors.mantle;
       red = unwrapHex themeColors.red;
       shadow = unwrapHex themeColors.shadow;
       cursorName = cursor.name;
@@ -66,7 +66,7 @@ in {
     ];
 
     environment.systemPackages = with pkgs; [
-      dwl-waybar # script that prints dwl state
+      dwl-state # script that prints dwl state
       dwl-final
 
       wlopm # toggle screen
