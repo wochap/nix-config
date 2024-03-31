@@ -1,11 +1,4 @@
 rec {
-  selection = border; # surface0
-  foreground = text; # text
-  comment = textDimmed; # overlay0
-  cyan = teal;
-  orange = peach; # peach
-  purple = mauve;
-
   primary = mauve;
   border = surface0;
   background = base;
