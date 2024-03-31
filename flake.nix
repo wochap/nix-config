@@ -77,8 +77,6 @@
     figlet-fonts.flake = false;
 
     # themes
-    mpv-osc-morden-x.url = "github:cyl0/mpv-osc-morden-x?rev=e0adf03d40403b87d106161c1f805a65bcb34738";
-    mpv-osc-morden-x.flake = false;
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
     dracula-lsd.flake = false;
     catppuccin-grub.url = "github:catppuccin/grub";
@@ -111,6 +109,8 @@
     catppuccin-zsh-fsh.flake = false;
     catppuccin-tmux.url = "github:catppuccin/tmux";
     catppuccin-tmux.flake = false;
+    catppuccin-mpv.url = "github:catppuccin/mpv";
+    catppuccin-mpv.flake = false;
   };
 
   outputs = inputs:

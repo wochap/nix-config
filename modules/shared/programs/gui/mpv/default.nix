@@ -3,6 +3,7 @@
 let
   cfg = config._custom.programs.mpv;
   isWayland = config._custom.globals.displayServer == "wayland";
+  inherit (config._custom.globals) themeColors;
 in {
   options._custom.programs.mpv.enable = lib.mkEnableOption { };
 
@@ -20,16 +21,23 @@ in {
         "mpv/script-opts/osc.conf".text = ''
           windowcontrols=no
         '';
-        "mpv/scripts/mordenx.lua".source = ./dotfiles/mordenx.lua;
-        "mpv/fonts/Material-Design-Iconic-Font.ttf".source =
-          "${inputs.mpv-osc-morden-x}/Material-Design-Iconic-Font.ttf";
+        "mpv/scripts-opts/stats.conf".source =
+          "${inputs.catppuccin-mpv}/themes/mocha/scripts-opts/stats.conf";
       };
 
       programs.mpv = {
         enable = true;
         config = {
+          # uosc script recommended config
           osc = false;
           border = false;
+
+          # catppuccin mpv theme
+          background = themeColors.base;
+          osd-back-color = themeColors.overlay0;
+          osd-border-color = themeColors.crust;
+          osd-color = themeColors.text;
+          osd-shadow-color = themeColors.base;
 
           autofit-larger = "75%x75%";
           gpu-context = lib.mkIf isWayland "wayland";
@@ -56,9 +64,11 @@ in {
         scripts = with pkgs; [
           mpvScripts.mpris
           mpvScripts.thumbfast
+          mpvScripts.uosc
+          mpvScripts.cutter
+          mpvScripts.quality-menu
+          mpvScripts.mpv-cheatsheet
           # pkgs.mpvScripts.sponsorblock
-          # pkgs.mpvScripts.youtube-quality
-          # pkgs.mpvScripts.thumbnail
         ];
       };
     };

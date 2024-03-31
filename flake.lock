@@ -210,6 +210,22 @@
         "type": "github"
       }
     },
+    "catppuccin-mpv": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1705538641,
+        "narHash": "sha256-vRLo8bKy8O3WvuX9IWy5lrTGkOrgZifQtxDFOScnP3Y=",
+        "owner": "catppuccin",
+        "repo": "mpv",
+        "rev": "77dac62e40b957968cb22c430e3ad2c676d02e38",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "mpv",
+        "type": "github"
+      }
+    },
     "catppuccin-neomutt": {
       "flake": false,
       "locked": {
@@ -935,23 +951,6 @@
         "url": "https://codeberg.org/QuincePie/matcha"
       }
     },
-    "mpv-osc-morden-x": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1644681087,
-        "narHash": "sha256-LHI+wt4ACGq34LXAFawDTSXf1FTouk9i/aYiOp39EEo=",
-        "owner": "cyl0",
-        "repo": "mpv-osc-morden-x",
-        "rev": "e0adf03d40403b87d106161c1f805a65bcb34738",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cyl0",
-        "repo": "mpv-osc-morden-x",
-        "rev": "e0adf03d40403b87d106161c1f805a65bcb34738",
-        "type": "github"
-      }
-    },
     "neovim-flake": {
       "inputs": {
         "flake-utils": "flake-utils_4",
@@ -1390,6 +1389,7 @@
         "catppuccin-grub": "catppuccin-grub",
         "catppuccin-kitty": "catppuccin-kitty",
         "catppuccin-lazygit": "catppuccin-lazygit",
+        "catppuccin-mpv": "catppuccin-mpv",
         "catppuccin-neomutt": "catppuccin-neomutt",
         "catppuccin-newsboat": "catppuccin-newsboat",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
@@ -1410,7 +1410,6 @@
         "kitty-smart-tab": "kitty-smart-tab",
         "lobster": "lobster",
         "matcha": "matcha",
-        "mpv-osc-morden-x": "mpv-osc-morden-x",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-alien": "nix-alien",
         "nix-gaming": "nix-gaming",
