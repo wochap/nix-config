@@ -1,10 +1,10 @@
 rec {
-  selection = "#313244"; # surface0
-  foreground = "#cdd6f4"; # text
-  comment = "#6c7086"; # overlay0
-  cyan = "#94e2d5";
-  orange = "#fab387"; # peach
-  purple = "#cba6f7";
+  selection = border; # surface0
+  foreground = text; # text
+  comment = textDimmed; # overlay0
+  cyan = teal;
+  orange = peach; # peach
+  purple = mauve;
 
   primary = mauve;
   border = surface0;
