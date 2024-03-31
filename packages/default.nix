@@ -4,7 +4,6 @@ let
   customPkgs = rec {
     advcpmv = pkgs.callPackage ./advcpmv { };
     dunst-nctui = pkgs.callPackage ./dunst-nctui { };
-    dwl-state = pkgs.callPackage ./dwl-state { };
     generate-ssc = pkgs.callPackage ./generate-ssc { };
     generated-ssc = generate-ssc { domain = "wochap.local"; };
     interception-both-shift-capslock =
