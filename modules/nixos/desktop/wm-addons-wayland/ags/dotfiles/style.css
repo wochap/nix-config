@@ -17,7 +17,7 @@ tooltip {
   background: @mantle;
 }
 tooltip label {
-  color: @foreground;
+  color: @text;
   font-family: Iosevka NF;
 }
 
