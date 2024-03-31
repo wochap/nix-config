@@ -1,8 +1,8 @@
-@define-color bar_bg @base;
-@define-color module_bg @surface0;
+@define-color barBg @background;
+@define-color moduleBg @surface0;
 
 .bar-container {
-  background-color: @bar_bg;
+  background-color: @barBg;
   color: @text;
   font-family:
     Iosevka NF,
@@ -19,14 +19,14 @@
 
 .dwltags label {
   padding: 1px 0.5em 0;
-  color: @overlay0;
+  color: @textDimmed;
   border-radius: 4px;
 }
 .dwltags label.occupied {
   color: @text;
 }
 .dwltags label.activated {
-  background-color: @module_bg;
+  background-color: @moduleBg;
 }
 .dwltags label.focused {
   color: @maroon;
@@ -39,7 +39,7 @@
 .dwlmode {
   padding: 1px 0.5em 0;
   border-radius: 4px;
-  background-color: @module_bg;
+  background-color: @moduleBg;
   color: @flamingo;
 }
 
@@ -50,19 +50,19 @@
 .dwlscratchpads {
   padding: 1px 0.5em 0;
   border-radius: 4px;
-  background-color: @module_bg;
+  background-color: @moduleBg;
   color: @lavender;
 }
 
 .dwltitle {
   padding: 1px 0.5em 0;
-  color: @overlay0;
+  color: @textDimmed;
 }
 
 .bar .capslock {
   padding: 0 0.5em;
   border-radius: 4px;
-  background-color: @module_bg;
+  background-color: @moduleBg;
   color: @peach;
   font-size: 1.2em;
 }
@@ -70,7 +70,7 @@
 .taskbar {
   padding: 0 0.3em;
   border-radius: 4px;
-  background-color: @module_bg;
+  background-color: @moduleBg;
 }
 .taskbar box {
   opacity: 0.5;
@@ -87,15 +87,15 @@
 .recorder {
   padding: 1px 0.5em;
   border-radius: 4px;
-  background-color: @module_bg;
+  background-color: @moduleBg;
   color: @red;
 }
 
 .matcha {
   padding: 0 0.5em;
   border-radius: 4px;
-  background-color: @module_bg;
-  color: @overlay0;
+  background-color: @moduleBg;
+  color: @textDimmed;
 }
 .matcha.enabled {
   color: @maroon;
@@ -104,8 +104,8 @@
 .dunst {
   padding: 1px 0.5em 0;
   border-radius: 4px;
-  background-color: @module_bg;
-  color: @overlay0;
+  background-color: @moduleBg;
+  color: @textDimmed;
 }
 .dunst.enabled {
   color: @text;
@@ -114,8 +114,8 @@
 .offlinemsmtp {
   padding: 0 0.5em;
   border-radius: 4px;
-  background-color: @module_bg;
-  color: @overlay0;
+  background-color: @moduleBg;
+  color: @textDimmed;
 }
 .offlinemsmtp.enabled {
   color: @maroon;
@@ -124,7 +124,7 @@
 .temperature {
   padding: 1px 0.5em 0;
   border-radius: 4px;
-  background-color: @module_bg;
+  background-color: @moduleBg;
 }
 .temperature.medium {
   color: @yellow;
@@ -136,7 +136,7 @@
 .battery {
   padding: 1px 0.5em 0;
   border-radius: 4px;
-  background-color: @module_bg;
+  background-color: @moduleBg;
 }
 .battery.discharging {
   color: @yellow;
@@ -161,7 +161,7 @@
 .audio {
   padding: 1px 0.5em 0;
   border-radius: 4px;
-  background-color: @module_bg;
+  background-color: @moduleBg;
 }
 .audio.muted {
   color: @red;
@@ -170,7 +170,7 @@
 .bluetooth {
   padding: 1px 0.5em 0;
   border-radius: 4px;
-  background-color: @module_bg;
+  background-color: @moduleBg;
 }
 .bluetooth.on {
   color: @text;
@@ -179,14 +179,14 @@
   color: @blue;
 }
 .bluetooth.off {
-  color: @overlay0;
+  color: @textDimmed;
 }
 
 .network {
   padding: 0 0.5em;
   border-radius: 4px;
-  background-color: @module_bg;
-  color: @overlay0;
+  background-color: @moduleBg;
+  color: @textDimmed;
 }
 .network .connected {
   color: @blue;
@@ -197,5 +197,5 @@
 }
 
 /*
-vim: syntax=less
+vim: filetype=less
 */

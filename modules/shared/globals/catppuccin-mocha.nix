@@ -11,6 +11,7 @@ rec {
   background = base;
   backgroundOverlay = mantle;
   shadow = crust;
+  textDimmed = overlay0;
 
   rosewater = "#f5e0dc";
   flamingo = "#f2cdcd";
