@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # source theme colors
-. "/etc/scripts/theme-colors.sh"
+source "$HOME/.config/scripts/theme-colors.sh"
 
 args=""
 if [ "$BACKGROUND" = "1" ]; then

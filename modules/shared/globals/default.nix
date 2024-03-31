@@ -1,7 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
   catppuccinMochaTheme = import ./catppuccin-mocha.nix;
   inherit (config._custom.globals) themeColors;
 in {
@@ -49,20 +48,22 @@ in {
   };
 
   config = {
-    environment.etc."scripts/theme-colors.sh" = {
-      text = ''
-        ${lib.concatStringsSep "\n"
-        (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
-          config._custom.globals.themeColors)}
-      '';
-      mode = lib.mkIf (!isDarwin) "0755";
-    };
-
     _custom.hm = {
-      xdg.configFile."theme-colors.css".text = ''
-        ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
-          (key: value: "@define-color ${key} ${value};") themeColors)}
-      '';
+      xdg.configFile = {
+        "scripts/theme-colors.sh" = {
+          text = ''
+            ${lib.concatStringsSep "\n"
+            (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
+              config._custom.globals.themeColors)}
+          '';
+          executable = true;
+        };
+
+        "theme-colors.css".text = ''
+          ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
+            (key: value: "@define-color ${key} ${value};") themeColors)}
+        '';
+      };
     };
   };
 }

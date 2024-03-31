@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # source theme colors
-. "/etc/scripts/theme-colors.sh"
+source "$HOME/.config/scripts/theme-colors.sh"
 
 time=$(date +%Y-%m-%d_%I-%M-%S)
 dir="$(xdg-user-dir PICTURES)/Screenshots"
