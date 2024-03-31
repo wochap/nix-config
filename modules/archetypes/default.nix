@@ -45,8 +45,6 @@
       _custom.desktop.swaylock.enable = true;
       _custom.desktop.swww.enable = true;
       _custom.desktop.tofi.enable = true;
-      _custom.desktop.waybar.enable = lib.mkDefault true;
-      _custom.desktop.waybar.systemdEnable = lib.mkDefault true;
       _custom.desktop.wayland-session.enable = true;
       _custom.desktop.wayland-utils.enable = true;
       _custom.desktop.ydotool.enable = lib.mkDefault true;

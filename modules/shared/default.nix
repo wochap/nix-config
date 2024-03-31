@@ -6,7 +6,6 @@
     ./home
     ./nix
 
-    ./programs/cli/asciinema
     ./programs/cli/bat
     ./programs/cli/buku
     ./programs/cli/cht

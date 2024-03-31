@@ -31,7 +31,6 @@ in {
     _custom.programs.fontpreview-kik.enable = true;
 
     # cli
-    _custom.programs.asciinema.enable = true;
     _custom.programs.bat.enable = true;
     _custom.programs.buku.enable = true;
     _custom.programs.cht.enable = true;
@@ -95,7 +94,6 @@ in {
     _custom.desktop.dwl.enable = true;
     _custom.desktop.dwl.isDefault = true;
     _custom.desktop.hyprland.enable = true;
-    _custom.desktop.labwc.enable = true;
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
     # specialisation.hyprland-specialisation = {

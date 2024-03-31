@@ -10,8 +10,6 @@
 
     ./desktop/window-managers/dwl
     ./desktop/window-managers/hyprland
-    ./desktop/window-managers/labwc
-    ./desktop/window-managers/openbox
 
     ./desktop/wm-addons/audio
     ./desktop/wm-addons/backlight
@@ -39,21 +37,13 @@
     ./desktop/wm-addons-wayland/electron-support
     ./desktop/wm-addons-wayland/gammastep
     ./desktop/wm-addons-wayland/kanshi
-    ./desktop/wm-addons-wayland/sfwbar
     ./desktop/wm-addons-wayland/swayidle
     ./desktop/wm-addons-wayland/swaylock
     ./desktop/wm-addons-wayland/swww
     ./desktop/wm-addons-wayland/tofi
     ./desktop/wm-addons-wayland/wayland-utils
-    ./desktop/wm-addons-wayland/waybar
-    ./desktop/wm-addons-wayland/sfwbar
     ./desktop/wm-addons-wayland/wayland-session
     ./desktop/wm-addons-wayland/ydotool
-
-    ./desktop/wm-addons-xorg/tint2
-    ./desktop/wm-addons-xorg/xorg-session
-    ./desktop/wm-addons-xorg/xorg-utils
-    ./desktop/wm-addons-xorg/xsettingsd
 
     ./gaming/emulators
     ./gaming/steam

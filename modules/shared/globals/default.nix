@@ -3,6 +3,7 @@
 let
   isDarwin = pkgs.stdenv.isDarwin;
   catppuccinMochaTheme = import ./catppuccin-mocha.nix;
+  inherit (config._custom.globals) themeColors;
 in {
   # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
@@ -55,6 +56,13 @@ in {
           config._custom.globals.themeColors)}
       '';
       mode = lib.mkIf (!isDarwin) "0755";
+    };
+
+    _custom.hm = {
+      xdg.configFile."theme-colors.css".text = ''
+        ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
+          (key: value: "@define-color ${key} ${value};") themeColors)}
+      '';
     };
   };
 }

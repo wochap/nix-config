@@ -77,8 +77,6 @@ in {
       foot
     ];
 
-    _custom.desktop.waybar.systemdEnable = lib.mkIf cfg.isDefault false;
-
     _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault
       "dwl > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog";
     _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
