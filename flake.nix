@@ -134,7 +134,6 @@
             inputs.nur.nixosModules.nur
             ./overlays
             ./modules/archetypes
-            ./modules/home
             ./modules/nixos
             ./modules/shared
             ./packages

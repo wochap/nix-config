@@ -45,4 +45,6 @@
     ./programs/tui/tmux
     ./programs/tui/youtube
   ];
+
+  config._custom.hm.imports = [ ./symlinks ];
 }
