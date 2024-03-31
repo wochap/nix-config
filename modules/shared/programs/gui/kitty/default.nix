@@ -47,15 +47,13 @@ in {
 
       xdg.configFile = {
         "kitty/diff.conf".text = ''
-          # Load theme
           include ${inputs.catppuccin-kitty}/themes/diff-late.conf
-
           ${builtins.readFile ./dotfiles/kitty-diff.conf}
         '';
         "kitty/kitty.conf".text = ''
           include ${inputs.catppuccin-kitty}/themes/mocha.conf
           active_border_color ${themeColors.primary}
-          inactive_border_color ${themeColors.selection}
+          inactive_border_color ${themeColors.border}
 
           include ${relativeSymlink configDirectory ./dotfiles/kitty.conf}
         '';
