@@ -1297,17 +1297,17 @@
     "powerlevel10k": {
       "flake": false,
       "locked": {
-        "lastModified": 1702206900,
-        "narHash": "sha256-gPsOB2JaBZzISLvp2pY+1g0J9aLaGLJXszAc4u3Ih+k=",
+        "lastModified": 1706252285,
+        "narHash": "sha256-ES5vJXHjAKw/VHjWs8Au/3R+/aotSbY7PWnWAMzCR8E=",
         "owner": "romkatv",
         "repo": "powerlevel10k",
-        "rev": "d70eedb345a9cc54b4f3e9ae09b0dbbb4edc9a39",
+        "rev": "35833ea15f14b71dbcebc7e54c104d8d56ca5268",
         "type": "github"
       },
       "original": {
         "owner": "romkatv",
         "repo": "powerlevel10k",
-        "rev": "d70eedb345a9cc54b4f3e9ae09b0dbbb4edc9a39",
+        "rev": "35833ea15f14b71dbcebc7e54c104d8d56ca5268",
         "type": "github"
       }
     },

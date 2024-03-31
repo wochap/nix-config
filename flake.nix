@@ -57,7 +57,7 @@
     kitty-smart-scroll.flake = false;
     kitty-smart-tab.url = "github:yurikhan/kitty-smart-tab";
     kitty-smart-tab.flake = false;
-    powerlevel10k.url = "github:romkatv/powerlevel10k?rev=d70eedb345a9cc54b4f3e9ae09b0dbbb4edc9a39";
+    powerlevel10k.url = "github:romkatv/powerlevel10k?rev=35833ea15f14b71dbcebc7e54c104d8d56ca5268";
     powerlevel10k.flake = false;
     smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim";
     smart-splits-nvim.flake = false;
