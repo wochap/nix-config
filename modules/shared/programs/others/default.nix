@@ -47,6 +47,9 @@ in {
         zip
 
         # CLI APPS
+        asciinema # record terminal
+        asciinema-agg # generate GIF
+        asciinema-scenario # generate recording from txt files
         ansible # automation scripts
         bc # calculator
         clolcat # like cat/bat but with colors
