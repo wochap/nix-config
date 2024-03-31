@@ -140,4 +140,4 @@ windowrulev2 = rounding 0, xwayland:1
 exec-once = dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK QT_QPA_PLATFORMTHEME && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target
 exec-once = configure-gtk
 
-# vim: syntax=sh
+# vim: filetype=conf

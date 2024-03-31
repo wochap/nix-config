@@ -210,4 +210,4 @@ bind = CTRL SHIFT, b, submap, reset
 bind = , escape, submap, reset
 submap = reset
 
-# vim: syntax=sh
+# vim: filetype=conf
