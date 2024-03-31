@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.desktop.music;
-  inherit (config._custom.globals) userName;
+  inherit (config._custom.globals) userName themeColors configDirectory;
   hmConfig = config.home-manager.users.${userName};
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
 in {
@@ -27,8 +27,10 @@ in {
       ];
 
       xdg.configFile = {
-        "cava/config".source = ./dotfiles/cava/config;
-
+        "cava/config".source = (pkgs.substituteAll {
+          src = ./dotfiles/cava/config;
+          inherit (themeColors) red maroon peach yellow green teal sky sapphire;
+        });
         "ncmpcpp/config".source = ./dotfiles/ncmpcpp/config;
       };
 
