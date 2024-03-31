@@ -4,7 +4,6 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
-  catppuccinMochaTheme = import ../../modules/mixins/catppuccin-mocha.nix;
 in {
   imports = [ ./hardware-configuration.nix ./hardware.nix ];
 
@@ -12,7 +11,6 @@ in {
     _custom.globals.userName = userName;
     _custom.globals.homeDirectory = "/home/${userName}";
     _custom.globals.configDirectory = configDirectory;
-    _custom.globals.themeColors = catppuccinMochaTheme;
 
     # cli
     _custom.programs.nix-alien.enable = true;

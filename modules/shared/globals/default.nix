@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
-let isDarwin = pkgs.stdenv.isDarwin;
+let
+  isDarwin = pkgs.stdenv.isDarwin;
+  catppuccinMochaTheme = import ./catppuccin-mocha.nix;
 in {
   # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
@@ -39,7 +41,7 @@ in {
 
     themeColors = lib.mkOption {
       type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
-      default = { };
+      default = catppuccinMochaTheme;
       example = "{}";
       description = "Theme colors";
     };
