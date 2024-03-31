@@ -35,7 +35,7 @@ in {
         "dunst/dunstrc" = {
           source = (pkgs.substituteAll {
             src = ./dotfiles/dunstrc;
-            inherit (themeColors) base text surface0 lavender overlay0 red;
+            inherit (themeColors) background text border lavender textDimmed red;
           });
           onChange = ''
             ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
