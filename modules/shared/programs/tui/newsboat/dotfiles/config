@@ -33,3 +33,5 @@ macro C set browser "youtube-viewer --comments=%u" ; open-in-browser ; set brows
 # macro P set browser "peertubetorrent %u 1080" ; open-in-browser ; set browser linkhandler
 
 include ~/.config/newsboat/catppuccin-dark
+
+# vim: filetype=conf
