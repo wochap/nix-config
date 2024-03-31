@@ -1,6 +1,8 @@
 { config, lib, ... }:
 
-let cfg = config._custom.programs.fzf;
+let
+  cfg = config._custom.programs.fzf;
+  inherit (config._custom.globals) themeColors;
 in {
   options._custom.programs.fzf.enable = lib.mkEnableOption { };
 
@@ -9,14 +11,14 @@ in {
       programs.fzf = {
         enable = true;
         enableZshIntegration = config._custom.programs.zsh.enable;
-        defaultOptions = [
+        defaultOptions = with themeColors; [
           # theme
           # source: https://github.com/catppuccin/fzf
-          "--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8"
-          "--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc"
-          "--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+          "--color=bg+:${surface0},bg:${base},spinner:${rosewater},hl:${red}"
+          "--color=fg:${text},header:${red},info:${mauve},pointer:${rosewater}"
+          "--color=marker:${rosewater},fg+:${text},prompt:${mauve},hl+:${red}"
 
-          "--color=border:#181825,scrollbar:#6c7086"
+          "--color=border:${mantle},scrollbar:${overlay0}"
 
           "--no-height"
           "--tabstop=2"
