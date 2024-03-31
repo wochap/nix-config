@@ -342,6 +342,7 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ### Rice resources
 
+- https://bennymeg.github.io/ngx-fluent-ui/
 - https://fontawesome.com/cheatsheet
 - https://fontdrop.info/
 - https://coderwall.com/p/dedqca/argb-colors-in-android
