@@ -10,10 +10,10 @@ let
   dwl-final = (pkgs.dwl.override {
     conf = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
-      surface0 = unwrapHex themeColors.surface0;
-      surface2 = unwrapHex themeColors.surface2;
-      red = unwrapHex themeColors.red;
+      border = unwrapHex themeColors.border;
       crust = unwrapHex themeColors.crust;
+      red = unwrapHex themeColors.red;
+      shadow = unwrapHex themeColors.shadow;
       cursorName = cursor.name;
       cursorSize = toString cursor.size;
     });
