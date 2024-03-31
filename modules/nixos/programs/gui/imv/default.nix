@@ -13,9 +13,9 @@ in {
       xdg.configFile = {
         "imv/config".text = lib.generators.toINI { } {
           options = {
-            background = themeColors.base;
+            background = themeColors.background;
             overlay_text_color = themeColors.text;
-            overlay_background_color = themeColors.mantle;
+            overlay_background_color = themeColors.backgroundOverlay;
             overlay = true;
             overlay_font = "Iosevka NF:10";
             scaling_mode = "shrink";
