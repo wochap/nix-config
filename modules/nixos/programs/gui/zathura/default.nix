@@ -1,6 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let cfg = config._custom.programs.zathura;
+let
+  cfg = config._custom.programs.zathura;
+  inherit (config._custom.globals) themeColors;
 in {
   options._custom.programs.zathura.enable = lib.mkEnableOption { };
 
@@ -14,7 +16,10 @@ in {
       xdg.configFile = {
         "zathura/catppuccin-mocha".source =
           "${inputs.catppuccin-zathura}/src/catppuccin-mocha";
-        "zathura/zathurarc".source = ./dotfiles/zathurarc;
+        "zathura/zathurarc".source = pkgs.substituteAll {
+          src = ./dotfiles/zathurarc;
+          inherit (themeColors) backgroundOverlay;
+        };
       };
 
       xdg.mimeApps = {

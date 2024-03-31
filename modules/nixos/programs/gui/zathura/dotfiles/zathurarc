@@ -21,3 +21,8 @@ map p                           print
 map g                           goto top
 
 include catppuccin-mocha
+
+set statusbar-bg                "@backgroundOverlay@"
+set notification-bg		          "@backgroundOverlay@"
+set notification-error-bg	      "@backgroundOverlay@"
+set notification-warning-bg	    "@backgroundOverlay@"

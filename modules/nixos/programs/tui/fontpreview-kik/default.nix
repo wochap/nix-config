@@ -14,7 +14,7 @@ in {
         packages = [ fontpreview-kik ];
         shellAliases = {
           fp =
-            "fontpreview-kik -b '${themeColors.background}' -f '${themeColors.foreground}'";
+            "fontpreview-kik -b '${themeColors.background}' -f '${themeColors.text}'";
         };
       };
     };
