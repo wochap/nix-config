@@ -31,7 +31,7 @@ in {
         "tofi/multi-line".source = ./dotfiles/multi-line;
         "tofi/one-line".source = pkgs.substituteAll {
           src = ./dotfiles/one-line;
-          inherit (themeColors) text overlay0 mantle green;
+          inherit (themeColors) text textDimmed backgroundOverlay green;
         };
       };
     };
