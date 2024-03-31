@@ -52,12 +52,6 @@ in {
           XDG_SESSION_DESKTOP = "Hyprland";
         };
 
-        programs.waybar.settings.mainBar = {
-          modules-left =
-            [ "hyprland/workspaces" "keyboard-state" "hyprland/submap" ];
-          modules-center = [ "hyprland/window" ];
-        };
-
         xdg.configFile."hypr/libinput-gestures.conf".text = ''
           gesture swipe left 3 hyprctl dispatch workspace e+1
           gesture swipe right 3 hyprctl dispatch workspace e-1
