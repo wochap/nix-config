@@ -33,7 +33,6 @@ in {
           border = false;
 
           # catppuccin mpv theme
-          background = themeColors.base;
           osd-back-color = themeColors.overlay0;
           osd-border-color = themeColors.crust;
           osd-color = themeColors.text;
