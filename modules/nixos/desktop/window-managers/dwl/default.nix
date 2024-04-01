@@ -11,9 +11,9 @@ let
     conf = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
       border = unwrapHex themeColors.border;
-      mantle = unwrapHex themeColors.mantle;
       red = unwrapHex themeColors.red;
       shadow = unwrapHex themeColors.shadow;
+      surface0 = unwrapHex themeColors.surface0;
       cursorName = cursor.name;
       cursorSize = toString cursor.size;
     });
