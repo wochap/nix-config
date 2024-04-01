@@ -11,6 +11,16 @@
     <directories/>
   </action>
   <action>
+    <icon>neovide</icon>
+    <name>Open Neovide Here</name>
+    <unique-id>1612104464586266-1</unique-id>
+    <command>neovide</command>
+    <description></description>
+    <patterns>*</patterns>
+    <startup-notify/>
+    <directories/>
+  </action>
+  <action>
     <icon>code</icon>
     <name>Open VSCode Here</name>
     <unique-id>1612104464586265-1</unique-id>
