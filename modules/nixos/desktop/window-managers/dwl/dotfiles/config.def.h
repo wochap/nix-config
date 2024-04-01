@@ -102,6 +102,7 @@ static const Rule rules[] = {
 	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "^thunar$",                NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "^Thunar$",                NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "^thunar-scratch$",        NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0 },
