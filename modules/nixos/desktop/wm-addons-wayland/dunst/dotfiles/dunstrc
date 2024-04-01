@@ -4,7 +4,6 @@ class="Dunst"
 follow="mouse"
 hide_duplicate_count=no
 history_length=40
-icon_theme="Reversal"
 enable_recursive_icon_lookup=yes
 idle_threshold=120
 ignore_dbusclose=no
@@ -33,6 +32,7 @@ offset="7x7"
 origin="bottom-right"
 
 # Theme
+icon_theme="Reversal"
 alignment="left"
 background="@background@"
 corner_radius=4
