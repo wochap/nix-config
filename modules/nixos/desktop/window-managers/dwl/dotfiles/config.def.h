@@ -360,6 +360,14 @@ static const Key keys[] = {
   // Bump focused view to the top of the layout stack
   { MODKEY, Key_Return, zoom, {0} },
 
+  // Focus next/prev monitor
+  { MODKEY, Key_bracketleft, focusmon, {.i = WLR_DIRECTION_LEFT} },
+	{ MODKEY, Key_bracketright, focusmon, {.i = WLR_DIRECTION_RIGHT} },
+
+  // Send focused view to the next/previous monitor
+	{ MODKEY|WLR_MODIFIER_SHIFT, Key_bracketleft, tagmon, {.i = WLR_DIRECTION_LEFT} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, Key_bracketright, tagmon, {.i = WLR_DIRECTION_RIGHT} },
+
 
   // ### WM TAGS/VIEWS
 
@@ -374,7 +382,7 @@ static const Key keys[] = {
   TAGKEYS( Key_9, 8),
 
   // Set sticky
-  { MODKEY|MOD_CONTROL, Key_y, tag, {.ui = ~0} },
+  { MODKEY|MOD_CONTROL, Key_0, tag, {.ui = ~0} },
 
   // Focus previous tags
   { MODKEY, Key_grave, view, {0} },
