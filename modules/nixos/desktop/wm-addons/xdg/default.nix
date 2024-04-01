@@ -55,7 +55,7 @@ in {
             "google-chrome" = html ++ web;
             "imv" = images;
             "mpv" = media;
-            "org.gnome.Fileroller" = archives;
+            "org.gnome.FileRoller" = archives;
             "kitty" = [ "application/x-shellscript" ];
             "amfora" = [ "x-scheme-handler/gemini" ];
             "Postman" = [ "x-scheme-handler/postman" ];
