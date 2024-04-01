@@ -16,7 +16,7 @@ in {
       home.file = {
         "Projects/.keep".text = "";
         "Projects/wochap/.keep".text = "";
-        "Picture/Screenshots/.keep".text = "";
+        "Pictures/Screenshots/.keep".text = "";
         "Videos/Recordings/.keep".text = "";
         "Videos/OBS/.keep".text = "";
       };
