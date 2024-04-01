@@ -6,7 +6,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     services.flatpak.enable = true;
-    environment.sessionVariables = { XDG_DATA_DIRS = [ "/usr/share" ]; };
+    environment.sessionVariables.XDG_DATA_DIRS = [ "/usr/share" ];
     xdg.portal.enable = true;
   };
 }
