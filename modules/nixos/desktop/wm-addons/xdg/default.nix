@@ -49,7 +49,6 @@ in {
         defaultApplications = with lib;
           with mimeTypes;
           mkMerge (mapAttrsToList (n: ms: genAttrs ms (_: [ "${n}.desktop" ])) {
-            "thunar" = dirs;
             # TODO: make nvim use kitty as terminal
             "kitty-open" = text ++ [ "text/*" ];
             "google-chrome" = html ++ web;

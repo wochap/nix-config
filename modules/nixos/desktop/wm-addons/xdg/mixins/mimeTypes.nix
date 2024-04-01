@@ -1,5 +1,4 @@
 {
-  dirs = [ "inode/directory" ];
   text = [
     "text/english"
     "text/plain"

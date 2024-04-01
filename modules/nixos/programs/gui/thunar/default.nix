@@ -39,6 +39,15 @@ in {
     _custom.hm = {
       xdg.configFile."Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
 
+      xdg.mimeApps = {
+        defaultApplications = {
+          "inode/directory" = [ "thunar" ];
+        };
+        associations.added = {
+          "inode/directory" = [ "thunar" ];
+        };
+      };
+
       systemd.user.services.thunar = {
         Unit = {
           Description = "Thunar file manager";
