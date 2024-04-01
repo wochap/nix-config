@@ -1,6 +1,6 @@
 rec {
   primary = mauve;
-  border = surface0;
+  border = surface2;
   background = base;
   backgroundOverlay = mantle;
   shadow = crust;
