@@ -19,7 +19,7 @@ static const float bordercolor[] = COLOR(0x@border@ff);
 static const float borderscolor[] = COLOR(0x@border@00);
 static const float borderecolor[] = COLOR(0x@border@00);
 static const int border_color_type         = BrdOriginal;
-static const float focuscolor[] = COLOR(0x@crust@ff);
+static const float focuscolor[] = COLOR(0x@mantle@ff);
 static const float urgentcolor[] = COLOR(0x@red@ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 1.0};
