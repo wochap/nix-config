@@ -96,10 +96,6 @@ in {
           [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
           source ${inputs.powerlevel10k}/powerlevel10k.zsh-theme
-
-          ## zsh-defer
-
-          source ${inputs.zsh-defer}/zsh-defer.plugin.zsh
         '';
         completionInit = ''
           ## zsh-autocomplete
@@ -119,6 +115,12 @@ in {
           source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
         '';
         initExtra = ''
+          ## zsh-defer
+
+          source ${inputs.zsh-defer}/zsh-defer.plugin.zsh
+
+          ## load our scripts
+
           source ${relativeSymlink configDirectory ./config.zsh}
           source ${relativeSymlink configDirectory ./functions.zsh}
 
