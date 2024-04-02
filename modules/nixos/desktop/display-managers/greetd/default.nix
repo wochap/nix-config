@@ -17,7 +17,6 @@ in {
   config = lib.mkIf cfg.enable {
     environment.etc."greetd/environments".text = ''
       Hyprland
-      dwl
       bash
       zsh
     '';
@@ -34,8 +33,8 @@ in {
         };
         default_session = {
           command = ''
-            ${pkgs.greetd.tuigreet}/bin/tuigreet --user-menu --window-padding 2 --time --remember --cmd "${cfg.cmd}"'';
-          user = userName;
+            ${pkgs.greetd.tuigreet}/bin/tuigreet --user-menu --window-padding 2 --time --sessions "/etc/greetd/sessions" --cmd "${cfg.cmd}"'';
+          user = "gean";
         };
       };
     };

@@ -18,6 +18,14 @@ let
       cursorSize = toString cursor.size;
     });
   });
+  dwl-start = pkgs.writeScriptBin "dwl-start" ''
+    dwl > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog
+  '';
+  dwl-start-with-dgpu-port = pkgs.writeScriptBin "dwl-start-with-dgpu-port" ''
+    # NOTE: This is specific for glegion host with nvidia
+    # so I can use HDMI port connected directly to dGPU
+    unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" dwl > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog
+  '';
 in {
   options._custom.desktop.dwl = {
     enable = lib.mkEnableOption { };
@@ -68,6 +76,8 @@ in {
     environment.systemPackages = with pkgs; [
       dwl-state # script that prints dwl state
       dwl-final
+      dwl-start
+      dwl-start-with-dgpu-port
 
       wlopm # toggle screen
       wlrctl # control keyboard, mouse and wm from cli
@@ -77,8 +87,30 @@ in {
       foot
     ];
 
-    _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault
-      "dwl > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog";
+    _custom.desktop.greetd.cmd =
+      lib.mkIf cfg.isDefault "${dwl-start}/bin/dwl-start";
+    environment.etc = {
+      "greetd/environments".text = lib.mkAfter ''
+        dwl
+        dwl-start
+        dwl-start-with-dgpu-port
+      '';
+      "greetd/sessions/dwl.dekstop".text = ''
+        [Desktop Entry]
+        Name=dwl
+        Comment=dwm for Wayland
+        Exec=dwl-start
+        Type=Application
+      '';
+      "greetd/sessions/dwl-dgpu-port.dekstop".text = ''
+        [Desktop Entry]
+        Name=dwl-dgpu-port
+        Comment=dwm for Wayland
+        Exec=dwl-start-with-dgpu-port
+        Type=Application
+      '';
+    };
+
     _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
     _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 

@@ -6,7 +6,7 @@
     inputs.nixos-hardware.nixosModules.common-cpu-amd-pstate
     inputs.nixos-hardware.nixosModules.common-cpu-amd-raphael-igpu
     inputs.nixos-hardware.nixosModules.common-gpu-amd
-    inputs.nixos-hardware.nixosModules.common-gpu-nvidia
+    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
     inputs.nixos-hardware.nixosModules.common-hidpi
@@ -20,12 +20,17 @@
     hardware.nvidia = {
       modesetting.enable = true;
       nvidiaSettings = true;
+      powerManagement.enable = true;
+      powerManagement.finegrained = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
+      prime = {
+        offload.enable = true;
+        offload.enableOffloadCmd = true;
+        amdgpuBusId = "PCI:6:0:0";
+        nvidiaBusId = "PCI:1:0:0";
+      };
     };
-    hardware.nvidia.prime = {
-      amdgpuBusId = "PCI:5:0:0";
-      nvidiaBusId = "PCI:1:0:0";
-    };
+    services.xserver.videoDrivers = [ "nvidia" ];
 
     boot.extraModulePackages = with config.boot.kernelPackages; [
       # for steam i guess...
@@ -35,7 +40,8 @@
       lenovo-legion-module
     ];
 
-    boot.kernelPackages = lib.mkForce pkgs.unstable.linuxPackages_latest;
+    # kernel 6.8.1
+    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
 
     boot.kernelParams = [
       # this doesn't fix my ACPI Bios errors :c
@@ -49,6 +55,7 @@
 
     environment.systemPackages = with pkgs; [ lenovo-legion nvtop amdgpu_top ];
     environment.sessionVariables = {
+      # Vulkan reduces power usage
       WLR_RENDERER = "vulkan";
 
       # Use iGPU for wlroots window managers
@@ -62,7 +69,7 @@
       # source: https://sw.kovidgoyal.net/kitty/faq/#why-does-kitty-sometimes-start-slowly-on-my-linux-system
       # source: https://github.com/Einjerjar/nix/blob/172d17410cd0849f7028f80c0e2084b4eab27cc7/home/vars.nix#L30
       __EGL_VENDOR_LIBRARY_FILENAMES =
-        "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json";
+        "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json:${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/10_nvidia.json";
     };
 
     zramSwap.enable = true;
