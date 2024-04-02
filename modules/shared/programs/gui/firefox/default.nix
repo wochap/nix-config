@@ -26,7 +26,7 @@ in {
             id = 0;
             name = "default";
             isDefault = true;
-            settings = lib.mkMerge [{
+            settings = {
               "browser.fullscreen.autohide" = false;
               "browser.quitShortcut.disabled" = true;
               "browser.tabs.tabMinWidth" = 5;
@@ -66,7 +66,7 @@ in {
               # Workaround for when xdg.portal is enabled? set to false
               # https://bugzilla.mozilla.org/show_bug.cgi?id=1618094
               # "network.protocol-handler.external-default" = false;
-            }];
+            };
           };
         };
       };
