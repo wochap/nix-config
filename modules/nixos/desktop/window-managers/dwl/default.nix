@@ -19,12 +19,12 @@ let
     });
   });
   dwl-start = pkgs.writeScriptBin "dwl-start" ''
-    dwl > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog
+    dwl "$@" > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog
   '';
   dwl-start-with-dgpu-port = pkgs.writeScriptBin "dwl-start-with-dgpu-port" ''
     # NOTE: This is specific for glegion host with nvidia
     # so I can use HDMI port connected directly to dGPU
-    unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" dwl > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog
+    unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" dwl "$@" > /home/${userName}/.cache/dwltags 2> /home/${userName}/.cache/dwlstderrlog
   '';
 in {
   options._custom.desktop.dwl = {
