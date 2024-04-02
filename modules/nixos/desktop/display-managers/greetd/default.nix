@@ -16,7 +16,6 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.etc."greetd/environments".text = ''
-      Hyprland
       bash
       zsh
     '';

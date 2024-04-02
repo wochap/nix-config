@@ -15,6 +15,13 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault "Hyprland";
+    environment.etc = {
+      "greetd/environments".text = lib.mkAfter ''
+        Hyprland
+      '';
+      "greetd/sessions/hyprland.dekstop".source =
+        "${hyprlandFinal}/share/wayland-sessions/hyprland.desktop";
+    };
 
     programs.hyprland = {
       enable = true;
