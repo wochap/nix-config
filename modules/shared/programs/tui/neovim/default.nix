@@ -63,6 +63,13 @@ in {
         lc = "run-without-kpadding nvim leetcode.nvim";
         lcd = "neovide leetcode.nvim";
       };
+
+      xdg.desktopEntries = {
+        leetcode = {
+          name = "LeetCode";
+          exec = "neovide leetcode.nvim";
+        };
+      };
     };
   };
 }
