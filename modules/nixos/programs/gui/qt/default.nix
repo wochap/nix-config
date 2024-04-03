@@ -15,7 +15,6 @@ in {
         # APPS MEDIA (Comment on first install)
         libsForQt5.kdenlive
         stremio
-        obs-studio # video capture
         # kdeApplications.kdenlive # video editor
         # nomacs # image viewer/editor
         # olive-editor # video editor
@@ -25,11 +24,23 @@ in {
 
     programs.kdeconnect = {
       enable = true;
-      package =
-        lib.mkIf config._custom.desktop.gnome.enable pkgs.gnomeExtensions.gsconnect;
+      package = lib.mkIf config._custom.desktop.gnome.enable
+        pkgs.gnomeExtensions.gsconnect;
     };
 
     _custom.hm = {
+      programs.obs-studio = {
+        enable = true;
+        plugins = with pkgs; [
+          obs-studio-plugins.obs-vkcapture
+          obs-studio-plugins.obs-gstreamer
+          obs-studio-plugins.obs-vaapi
+
+          obs-studio-plugins.obs-source-record
+          obs-studio-plugins.obs-backgroundremoval
+        ];
+      };
+
       services.kdeconnect = {
         enable = true;
         indicator = false;
