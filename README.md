@@ -174,13 +174,6 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
   # update flake.nix
   ```
 
-## Tools
-
-- Script for using phone webcam
-  ```
-  $ run-videochat -i <ip> -v
-  ```
-
 ## Troubleshooting
 
 - Fix [bootloader](https://nixos.wiki/wiki/Bootloader)

@@ -77,7 +77,7 @@ in {
     _custom.services.docker.enableNvidia = true;
     _custom.services.flatpak.enable = false;
     _custom.services.interception-tools.enable = true;
-    _custom.services.ipwebcam.enable = false;
+    _custom.services.ipwebcam.enable = true;
     _custom.services.llm.enable = true;
     _custom.services.llm.enableNvidia = true;
     _custom.services.syncthing.enable = true;

@@ -843,6 +843,23 @@
         "type": "github"
       }
     },
+    "ipwebcam-gst": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1683151918,
+        "narHash": "sha256-Skwe9Jv9BW83/I4uMETNhhHITqlMLBNBzfA74fcy8hs=",
+        "owner": "agarciadom",
+        "repo": "ipwebcam-gst",
+        "rev": "5a02ffae8597ab1cc7461f096f86ca233f925a07",
+        "type": "github"
+      },
+      "original": {
+        "owner": "agarciadom",
+        "repo": "ipwebcam-gst",
+        "rev": "5a02ffae8597ab1cc7461f096f86ca233f925a07",
+        "type": "github"
+      }
+    },
     "kitty-scrollback-nvim": {
       "flake": false,
       "locked": {
@@ -1405,6 +1422,7 @@
         "hyprland-plugins": "hyprland-plugins",
         "hyprland-xdp": "hyprland-xdp",
         "hyprpicker": "hyprpicker",
+        "ipwebcam-gst": "ipwebcam-gst",
         "kitty-scrollback-nvim": "kitty-scrollback-nvim",
         "kitty-smart-scroll": "kitty-smart-scroll",
         "kitty-smart-tab": "kitty-smart-tab",

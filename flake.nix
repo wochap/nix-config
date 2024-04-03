@@ -75,6 +75,8 @@
     zsh-pnpm-shell-completion.flake = false;
     figlet-fonts.url = "github:xero/figlet-fonts";
     figlet-fonts.flake = false;
+    ipwebcam-gst.url = "github:agarciadom/ipwebcam-gst?rev=5a02ffae8597ab1cc7461f096f86ca233f925a07";
+    ipwebcam-gst.flake = false;
 
     # themes
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
