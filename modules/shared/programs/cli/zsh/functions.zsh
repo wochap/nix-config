@@ -3,15 +3,21 @@ function timezsh() {
   for i in $(seq 1 10); do time $shell -i -c exit; done
 }
 
+function projects() {
+  projects=$(find ~ ~/.config -maxdepth 2 -name ".git" -type d -execdir pwd \;)
+  if [ -n "$projects" ]; then
+    _projects=$(find ~/Projects -maxdepth 3 -name ".git" -type d -execdir pwd \;)
+    if [ -n "$_projects" ]; then
+      projects+="\n"
+      projects+="$_projects"
+    fi
+  fi
+  echo "$projects"
+}
+
 # cd into git repository
 function pro() {
-  projects=$(find ~/.config -maxdepth 2 -name ".git" -type d -execdir pwd \;)
-  projects+="\n"
-  projects+=$(find ~/Projects -maxdepth 3 -name ".git" -type d -execdir pwd \;)
-  projects+="\n"
-  projects+=$(find ~ -maxdepth 2 -name ".git" -type d -execdir pwd \;)
-
-  selected=$(echo "$projects" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name {} | head -200'" fzf)
+  selected=$(projects | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name {} | head -200'" fzf)
 
   if [[ -n "$selected" ]]; then
     cd "$selected"
@@ -38,9 +44,7 @@ function killport {
 }
 
 function opro() {
-  scripts=$(find ~/.config/scripts -type l,f -name "*.sh")
-  scripts+="\n"
-  scripts+=$(find /etc/scripts/projects -type l,f -name "*.sh")
+  scripts=$(find ~/.config/scripts /etc/scripts/projects -type l,f -name "*.sh")
 
   $(echo "$scripts" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" fzf)
 }
