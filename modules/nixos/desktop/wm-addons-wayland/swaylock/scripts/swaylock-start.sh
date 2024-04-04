@@ -10,6 +10,11 @@ else
   args="--screenshots --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2"
 fi
 
+swaylock_pid=$(pgrep swaylock)
+if [[ -n "$swaylock_pid" ]]; then
+  exit 1
+fi
+
 echo "$args" | xargs swaylock \
   --daemonize \
   --scaling center \
