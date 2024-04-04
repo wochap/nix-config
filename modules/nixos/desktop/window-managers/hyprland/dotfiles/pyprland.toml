@@ -1,7 +1,7 @@
 [pyprland]
 plugins = [
-  "zoom"
+  "magnify"
 ]
 
-[zoom]
+[magnify]
 factor = 2
