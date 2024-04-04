@@ -80,7 +80,7 @@ static const char *msgptscratchcmd[] = { "g", "microsoft-edge", "--app=https://w
 static const char *chatgptscratchcmd[] = { "c", "google-chrome-stable", "--app=https://chat.openai.com", NULL };
 static const char *ollamascratchcmd[] = { "o", "google-chrome-stable", "--app=https://ollama.wochap.local", NULL };
 static const char *ytmusicscratchcmd[] = { "y", "google-chrome-stable", "--app=https://music.youtube.com", NULL };
-static const char *fmscratchcmd[] = { "f", "thunar", "--name", "thunar-scratch", NULL };
+static const char *fmscratchcmd[] = { "f", "Thunar", "--name", "Thunar", NULL };
 static const char *xwvbscratchcmd[] = { "x", "xwaylandvideobridge", NULL };
 static const char *kittytopcmd[] = { "m", "sh", "-c", "~/.config/kitty/scripts/kitty-top.sh", NULL };
 static const char *kittyscratchcmd[] = { "i", "sh", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
