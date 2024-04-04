@@ -6,7 +6,9 @@ let Hyprland;
 
 try {
   Hyprland = await Service.import("hyprland");
-} catch (error) {}
+} catch (error) {
+  console.log(error);
+}
 
 export const hyprlandTitle = () =>
   Widget.Label({

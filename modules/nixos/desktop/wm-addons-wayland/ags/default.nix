@@ -37,7 +37,7 @@ in {
             Documentation = "https://github.com/Aylur/ags";
           };
           Service = {
-            PassEnvironment = "PATH";
+            PassEnvironment = [ "PATH" "XDG_SESSION_DESKTOP" "HYPRLAND_INSTANCE_SIGNATURE" ];
             ExecStart = "${agsFinal}/bin/ags";
             Restart = "on-failure";
             KillMode = "mixed";
