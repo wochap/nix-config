@@ -54,6 +54,12 @@ const char *modes_labels[] = {
 	"kb inhibit",
 };
 
+static const Env envs[] = {
+    /* variable            value */
+    { "XDG_CURRENT_DESKTOP", "wlroots" },
+    { "XDG_SESSION_DESKTOP", "dwl" },
+};
+
 /* Autostart */
 static const char *const autostart[] = {
   "sh", "-c", "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target", NULL,
