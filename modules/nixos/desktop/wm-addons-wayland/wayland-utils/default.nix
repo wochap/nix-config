@@ -33,20 +33,20 @@ in {
 
     _custom.hm = {
       home.packages = with pkgs; [
-        swappy # minimal image editor
-        hyprpicker # color picker
-        slurp # screenshoot utility
+        color-picker
         grim # screenshoot utility
-        wf-recorder # screen recorder utility
-        wl-screenrec # screen recorder utility (faster)
+        hyprpicker # color picker
         play-notification-sound
         recorder
-        takeshot
-        color-picker
         showmethekey
-        wdisplays # control display outputs
-        wlr-randr
+        slurp # screenshoot utility
+        swappy # minimal image editor
         swaybg
+        takeshot
+        wdisplays # control display outputs
+        wf-recorder # screen recorder utility
+        wl-screenrec # screen recorder utility (faster)
+        wlr-randr
         wlrctl # control keyboard, mouse and wm from cli
       ];
 
