@@ -5,8 +5,6 @@ let
   inherit (config._custom.globals) userName themeColors configDirectory;
   inherit (lib._custom) relativeSymlink;
 
-  hyprland-submap = pkgs.writeScriptBin "hyprland-submap"
-    (builtins.readFile ./scripts/hyprland-submap.sh);
   hyprland-final = inputs.hyprland.packages."${system}".hyprland;
   hyprland-xdp-final =
     inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
@@ -29,7 +27,6 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      hyprland-submap # script that prints submap state
       hyprland-start
       hyprland-start-with-dgpu-port
     ];

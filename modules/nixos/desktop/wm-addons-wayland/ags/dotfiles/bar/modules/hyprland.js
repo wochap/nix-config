@@ -35,10 +35,24 @@ export const hyprlandWorkspaces = () =>
     ),
   });
 
-export const hyprlandMode = generateScriptModule({
-  cmd: "hyprland-submap",
-  className: "wmmode",
-});
+export const hyprlandMode = () =>
+  Widget.Label({
+    className: "wmmode",
+    setup(self) {
+      self.hook(
+        Hyprland,
+        async (_, submap) => {
+          self.label = submap;
+          self.visible = !!submap;
+        },
+        "submap",
+      );
+      // HACK: only way to hide at start
+      setTimeout(() => {
+        self.visible = false;
+      }, 0);
+    },
+  });
 
 export const hyprlandScratchpads = () =>
   Widget.Label({
