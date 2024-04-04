@@ -11,11 +11,13 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home.packages = with pkgs; [
-        swayidle
-        sway-audio-idle-inhibit # complement to swayidle
         matcha # control idle inhibit
         matcha-toggle-mode
+        sway-audio-idle-inhibit # complement to swayidle
+        swayidle
+
         chayang # gradually dim the screen
+        wlopm # toggle screen
       ];
 
       services.swayidle = {
@@ -31,10 +33,23 @@ in {
             command = "swaylock-start";
           }
         ];
-        timeouts = [{
-          timeout = 185;
-          command = "BACKGROUND=1 swaylock-start";
-        }];
+        timeouts = [
+          {
+            timeout = 185;
+            command = "BACKGROUND=1 swaylock-start";
+          }
+          {
+            timeout = 180;
+            command =
+              ''if ! pgrep swaylock; then chayang -d 5 && wlopm --off "*"; fi'';
+            resumeCommand = ''if ! pgrep swaylock; then wlopm --on "*"; fi'';
+          }
+          {
+            timeout = 15;
+            command = ''if pgrep swaylock; then wlopm --off "*"; fi'';
+            resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
+          }
+        ];
       };
 
       systemd.user.services = {

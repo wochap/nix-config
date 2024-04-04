@@ -2,13 +2,22 @@
 
 let
   cfg = config._custom.desktop.hyprland;
-  inherit (config._custom.globals) themeColors;
+  inherit (config._custom.globals) userName themeColors;
 
-  hyprlandFinal = inputs.hyprland.packages."${system}".hyprland;
-  hyprlandXdpFinal =
+  hyprland-final = inputs.hyprland.packages."${system}".hyprland;
+  hyprland-xdp-final =
     inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
   hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
+  hyprland-start = pkgs.writeScriptBin "hyprland-start" ''
+    Hyprland "$@" > /home/${userName}/.cache/hyprland-logs 2> /home/${userName}/.cache/hyprland-stderr-logs
+  '';
+  hyprland-start-with-dgpu-port =
+    pkgs.writeScriptBin "hyprland-start-with-dgpu-port" ''
+      # NOTE: This is specific for glegion host with nvidia
+      # so I can use HDMI port connected directly to dGPU
+      unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" Hyprland "$@" > /home/${userName}/.cache/hyprland-logs 2> /home/${userName}/.cache/hyprland-stderr-logs
+    '';
 in {
   options._custom.desktop.hyprland = {
     enable = lib.mkEnableOption { };
@@ -16,85 +25,84 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages =
+      [ hyprland-start hyprland-start-with-dgpu-port ];
+
     _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault "Hyprland";
     environment.etc = {
       "greetd/environments".text = lib.mkAfter ''
         Hyprland
+        hyprland-start
+        hyprland-start-with-dgpu-port
       '';
-      "greetd/sessions/hyprland.dekstop".source =
-        "${hyprlandFinal}/share/wayland-sessions/hyprland.desktop";
+      "greetd/sessions/hyprland.dekstop".text = ''
+        [Desktop Entry]
+        Name=hyprland
+        Comment=An intelligent dynamic tiling Wayland compositor
+        Exec=hyprland-start
+        Type=Application
+      '';
+      "greetd/sessions/hyprland-dgpu-port.dekstop".text = ''
+        [Desktop Entry]
+        Name=hyprland-dgpu-port
+        Comment=An intelligent dynamic tiling Wayland compositor
+        Exec=hyprland-start-with-dgpu-port
+        Type=Application
+      '';
     };
 
     programs.hyprland = {
       enable = true;
-      package = hyprlandFinal;
-      portalPackage = hyprlandXdpFinal;
+      package = hyprland-final;
+      portalPackage = hyprland-xdp-final;
     };
 
-    xdg.portal.config.hyprland.default = [ "hyprland" "gtk" ];
+    _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
 
-    _custom.hm = lib.mkMerge [
-      {
-        home.packages = [ hyprland-focus-toggle ];
+    _custom.hm = {
+      home.packages = [ hyprland-focus-toggle ];
 
-        xdg.configFile."hypr/libinput-gestures.conf".text = ''
-          gesture swipe left 3 hyprctl dispatch workspace e+1
-          gesture swipe right 3 hyprctl dispatch workspace e-1
+      xdg.configFile."hypr/libinput-gestures.conf".text = ''
+        gesture swipe left 3 hyprctl dispatch workspace e+1
+        gesture swipe right 3 hyprctl dispatch workspace e-1
+      '';
+
+      wayland.windowManager.hyprland = {
+        enable = true;
+        package = hyprland-final;
+        systemd.enable = false;
+        extraConfig = ''
+          ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
+            (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
+            themeColors)}
+
+          ${builtins.readFile ./dotfiles/config}
+          ${builtins.readFile ./dotfiles/keybindings}
         '';
+      };
 
-        wayland.windowManager.hyprland = {
-          enable = true;
-          package = hyprlandFinal;
-          systemd.enable = false;
-          extraConfig = ''
-            ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
-              (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
-              themeColors)}
-
-            ${builtins.readFile ./dotfiles/config}
-            ${builtins.readFile ./dotfiles/keybindings}
-          '';
+      systemd.user.services.xdg-desktop-portal-hyprland = {
+        Unit = {
+          Description = "Portal service (Hyprland implementation)";
+          PartOf = "graphical-session.target";
+          After = "graphical-session.target";
+          ConditionEnvironment = "WAYLAND_DISPLAY";
         };
-
-        systemd.user.services.xdg-desktop-portal-hyprland = {
-          Unit = {
-            Description = "Portal service (Hyprland implementation)";
-            PartOf = "graphical-session.target";
-            After = "graphical-session.target";
-            ConditionEnvironment = "WAYLAND_DISPLAY";
-          };
-          Service = {
-            PassEnvironment = [
-              "WAYLAND_DISPLAY"
-              "XDG_CURRENT_DESKTOP"
-              "QT_QPA_PLATFORMTHEME"
-              "PATH"
-            ];
-            Type = "dbus";
-            BusName = "org.freedesktop.impl.portal.desktop.hyprland";
-            ExecStart =
-              "${hyprlandXdpFinal}/libexec/xdg-desktop-portal-hyprland";
-            Restart = "on-failure";
-            Slice = "session.slice";
-          };
+        Service = {
+          PassEnvironment = [
+            "WAYLAND_DISPLAY"
+            "XDG_CURRENT_DESKTOP"
+            "QT_QPA_PLATFORMTHEME"
+            "PATH"
+          ];
+          Type = "dbus";
+          BusName = "org.freedesktop.impl.portal.desktop.hyprland";
+          ExecStart =
+            "${hyprland-xdp-final}/libexec/xdg-desktop-portal-hyprland";
+          Restart = "on-failure";
+          Slice = "session.slice";
         };
-      }
-
-      (lib.mkIf cfg.isDefault {
-        services.swayidle.timeouts = lib.mkAfter [
-          {
-            timeout = 180;
-            command =
-              ''if ! pgrep swaylock; then chayang -d 5 && wlopm --off "*"; fi'';
-            resumeCommand = ''if ! pgrep swaylock; then wlopm --on "*"; fi'';
-          }
-          {
-            timeout = 15;
-            command = ''if pgrep swaylock; then wlopm --off "*"; fi'';
-            resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
-          }
-        ];
-      })
-    ];
+      };
+    };
   };
 }

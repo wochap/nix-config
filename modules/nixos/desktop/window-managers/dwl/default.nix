@@ -79,9 +79,6 @@ in {
       dwl-start
       dwl-start-with-dgpu-port
 
-      wlopm # toggle screen
-      wlrctl # control keyboard, mouse and wm from cli
-
       # for testing vanilla dwl
       bemenu
       foot
@@ -114,30 +111,11 @@ in {
     _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
     _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
-    _custom.hm = lib.mkIf cfg.isDefault {
-      home.sessionVariables = {
-        XDG_CURRENT_DESKTOP = "wlroots";
-        XDG_SESSION_DESKTOP = "dwl";
-      };
-
+    _custom.hm = {
       xdg.configFile."scripts/dwl-vtm.sh" = {
         source = ./scripts/dwl-vtm.sh;
         executable = true;
       };
-
-      services.swayidle.timeouts = lib.mkAfter [
-        {
-          timeout = 180;
-          command =
-            ''if ! pgrep swaylock; then chayang -d 5 && wlopm --off "*"; fi'';
-          resumeCommand = ''if ! pgrep swaylock; then wlopm --on "*"; fi'';
-        }
-        {
-          timeout = 15;
-          command = ''if pgrep swaylock; then wlopm --off "*"; fi'';
-          resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
-        }
-      ];
     };
   };
 }

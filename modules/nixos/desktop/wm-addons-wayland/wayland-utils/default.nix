@@ -47,6 +47,7 @@ in {
         wdisplays # control display outputs
         wlr-randr
         swaybg
+        wlrctl # control keyboard, mouse and wm from cli
       ];
 
       xdg.configFile."swappy/config".source = ./dotfiles/swappy-config;
