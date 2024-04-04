@@ -36,10 +36,10 @@ static const int shadow_blur_sigma_focus = 29;
 static const char *const shadow_ignore_list[] = { NULL }; /* list of app-id to ignore */
 
 enum {
-    VIEW_L = -1,
-    VIEW_R = 1,
-    SHIFT_L = -2,
-    SHIFT_R = 2,
+  VIEW_L = -1,
+  VIEW_R = 1,
+  SHIFT_L = -2,
+  SHIFT_R = 2,
 } RotateTags;
 enum {
 	BROWSER,
@@ -55,9 +55,9 @@ const char *modes_labels[] = {
 };
 
 static const Env envs[] = {
-    /* variable            value */
-    { "XDG_CURRENT_DESKTOP", "wlroots" },
-    { "XDG_SESSION_DESKTOP", "dwl" },
+  /* variable            value */
+  { "XDG_CURRENT_DESKTOP", "wlroots" },
+  { "XDG_SESSION_DESKTOP", "dwl" },
 };
 
 /* Autostart */
@@ -112,8 +112,8 @@ static const Rule rules[] = {
 	{ "^thunar-scratch$",        NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0 },
-	{ "xwaylandvideobridge",     NULL,       1 << 9,         1,     -1,      0,   0,   0,    0,      'x' },
-	{ NULL, ".com is sharing your screen.$", 1 << 9, 1,   -1,      0,   0,   0,    0,      0 },
+	{ "xwaylandvideobridge",     NULL,       1 << 9,    1,          -1,      0,   0,   0,    0,      'x' },
+	{ NULL, ".com is sharing your screen.$", 1 << 9,    1,          -1,      0,   0,   0,    0,      0 },
 	{ bing_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'g' },
 	{ chat_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'c' },
 	{ ollama_appid,              NULL,       0,         1,          -1,      0,   0,   1200, 800,    'o' },
