@@ -2,6 +2,7 @@
 
 let
   cfg = config._custom.desktop.xdg;
+  inherit (config._custom.globals) themeColors;
   mimeTypes = import ./mixins/mimeTypes.nix;
 in {
   options._custom.desktop.xdg.enable = lib.mkEnableOption { };
@@ -41,7 +42,7 @@ in {
         [screencast]
         max_fps=30
         chooser_type=simple
-        chooser_cmd=slurp -f %o -or
+        chooser_cmd=slurp -d -b "${themeColors.background}bf" -c "${themeColors.primary}" -F "Iosevka NF" -w 1 -f %o -or
       '';
 
       xdg.mimeApps = {
