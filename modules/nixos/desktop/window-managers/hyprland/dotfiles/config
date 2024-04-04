@@ -3,7 +3,7 @@ $chat_gpt_appid = chrome-chat.openai.com__-Default
 $ytmusic_appid = chrome-music.youtube.com__-Default
 
 # monitor=name,resolution,position,scale
-monitor = , highres,auto,auto
+monitor = , highres, auto, auto
 monitor = , addreserved, 0, 0, 0, 0
 
 general {
@@ -11,8 +11,7 @@ general {
   gaps_in = 0
   gaps_out = 0
   col.inactive_border = rgb($border)
-  col.active_border = rgb($primary)
-  # cursor_inactive_timeout = 5
+  col.active_border = rgb($surface0)
   layout = master
   no_cursor_warps = true
   no_focus_fallback = true
@@ -23,11 +22,11 @@ master {
 }
 
 decoration {
-  rounding = 0
+  rounding = 4
   blur {
     enabled = false
   }
-  drop_shadow = false
+  drop_shadow = true
 }
 
 input {
