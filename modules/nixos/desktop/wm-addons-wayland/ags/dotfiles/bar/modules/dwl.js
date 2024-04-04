@@ -111,7 +111,7 @@ const tags = range(9, 0).map((i) =>
 export const dwltags = () =>
   Widget.Box({
     class_name: "dwltags",
-    spacing: 7,
+    spacing,
     children: tags.map((tag) =>
       Widget.Label({
         label: tag.bind().as((value) => value.text),
