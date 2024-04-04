@@ -39,6 +39,8 @@
     hyprland-xdp.inputs.nixpkgs.follows = "unstable";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=2ef703474fb96e97e03e66e8820f213359f29382"; # (jan 13 2024)
     hyprpicker.inputs.nixpkgs.follows = "unstable";
+    pyprland.url = "github:hyprland-community/pyprland?rev=43aae08227fa7ec269deb990d32382dcbca7788c"; # (apr 04 2024)
+    pyprland.inputs.nixpkgs.follows = "unstable";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
 

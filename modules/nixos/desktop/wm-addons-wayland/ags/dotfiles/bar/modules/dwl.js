@@ -1,5 +1,6 @@
 import { range } from "../../utils/index.js";
 import { spacing } from "../constants.js";
+import { mapAppId } from "../utils.js";
 
 const generateScriptModule = ({ cmd, className, labelAttrs }) => {
   const Var = Variable(
@@ -27,34 +28,7 @@ const VisibleAppIds = Variable([], {
         .filter((str) => str.trim().length);
       const result = [];
       for (let i = 0; i < items.length; i += 2) {
-        let appId = items[i];
-        if (/^kitty-/.test(appId)) {
-          appId = "kitty";
-        }
-        if (/^thunar-/.test(appId) || appId === "xdg-desktop-portal-gtk") {
-          appId = "thunar";
-        }
-        if (/^chrome-.*__-Default$/.test(appId)) {
-          appId = "google-chrome";
-        }
-        if (/^msedge-.*-Default$/.test(appId)) {
-          appId = "microsoft-edge";
-        }
-        if (appId === "Slack") {
-          appId = "slack";
-        }
-        if (appId === "com.stremio.stremio") {
-          appId = "stremio";
-        }
-        if (appId === "imv") {
-          appId = "eog";
-        }
-        if (appId === "MongoDB") {
-          appId = "mongodb-compass";
-        }
-        if (appId === "code-url-handler") {
-          appId = "vscode";
-        }
+        const appId = mapAppId(items[i]);
         result.push({
           appId,
           focused: items[i + 1] === "true",

@@ -1,8 +1,87 @@
-const Hyprland = await Service.import("hyprland");
+import { range } from "../../utils/index.js";
+import { spacing } from "../constants.js";
+import { generateScriptModule, mapAppId } from "../utils.js";
+
+let Hyprland;
+
+try {
+  Hyprland = await Service.import("hyprland");
+} catch (error) {}
 
 export const hyprlandTitle = () =>
   Widget.Label({
     class_name: "dwltitle",
     label: Hyprland.active.client.bind("title"),
     visible: Hyprland.active.client.bind("address").as((addr) => !!addr),
+    truncate: "middle",
+  });
+
+export const hyprlandWorkspaces = () =>
+  Widget.Box({
+    class_name: "dwltags",
+    spacing,
+    children: range(9, 1).map((ws) =>
+      Widget.Label({
+        label: `${ws}`,
+        setup(self) {
+          self.hook(Hyprland, () => {
+            const wsData = Hyprland.getWorkspace(ws);
+            self.class_name = `${(wsData?.windows ?? 0) > 0 ? "occupied" : ""} ${Hyprland.active.workspace.id == ws ? "focused" : ""}`;
+          });
+        },
+      }),
+    ),
+  });
+
+export const hyprlandMode = generateScriptModule({
+  cmd: "hyprland-submap",
+  className: "dwlmode",
+});
+
+export const hyprlandScratchpads = () =>
+  Widget.Label({
+    class_name: "dwlscratchpads",
+    tooltip_text: "scratchpads count",
+    setup(self) {
+      self.hook(Hyprland, async () => {
+        const count = await Utils.execAsync([
+          "bash",
+          "-c",
+          `hyprctl clients -j | jq '[.[] | select(.workspace.name == "special")] | length'`,
+        ]);
+        if (count === "0") {
+          self.visible = false;
+          return;
+        }
+        self.visible = true;
+        self.label = `  ${count}`;
+      });
+    },
+  });
+
+export const hyprlandTaskbar = () =>
+  Widget.Box({
+    class_name: "taskbar",
+    spacing,
+    setup(self) {
+      self.hook(Hyprland, () => {
+        const visibleAppIds = Hyprland.clients
+          .filter((c) => c.workspace.name === Hyprland.active.workspace.name)
+          .map((c) => ({
+            appId: mapAppId(c.class),
+            focused: c.focusHistoryID === 0,
+          }));
+        self.visible = visibleAppIds.length > 0;
+        self.children = visibleAppIds.map(({ appId, focused }) =>
+          Widget.Box({
+            tooltip_text: appId,
+            class_name: focused ? "focused" : "",
+            child: Widget.Icon({
+              icon: appId,
+              size: 24,
+            }),
+          }),
+        );
+      });
+    },
   });

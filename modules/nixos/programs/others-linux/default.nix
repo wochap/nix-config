@@ -84,6 +84,7 @@ in {
         notify-desktop # send notifications
         pciutils # inspect/manipulate PCI devices, e.g. lspci
         pulseaudio
+        socat
         systemd
         usbutils # lsusb, for android development
         vdpauinfo # verifying VDPAU

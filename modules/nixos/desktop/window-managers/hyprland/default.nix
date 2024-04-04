@@ -5,6 +5,8 @@ let
   inherit (config._custom.globals) userName themeColors configDirectory;
   inherit (lib._custom) relativeSymlink;
 
+  hyprland-submap = pkgs.writeScriptBin "hyprland-submap"
+    (builtins.readFile ./scripts/hyprland-submap.sh);
   hyprland-final = inputs.hyprland.packages."${system}".hyprland;
   hyprland-xdp-final =
     inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
@@ -26,8 +28,11 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages =
-      [ hyprland-start hyprland-start-with-dgpu-port ];
+    environment.systemPackages = [
+      hyprland-submap # script that prints submap state
+      hyprland-start
+      hyprland-start-with-dgpu-port
+    ];
 
     _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault "Hyprland";
     environment.etc = {
@@ -61,7 +66,10 @@ in {
     _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
 
     _custom.hm = {
-      home.packages = [ hyprland-focus-toggle ];
+      home.packages = [
+        hyprland-focus-toggle
+        inputs.pyprland.packages.${pkgs.system}.default
+      ];
 
       xdg.configFile = {
         "hypr/colors.conf".text = lib.concatStringsSep "\n"
@@ -72,6 +80,8 @@ in {
           relativeSymlink configDirectory ./dotfiles/keybindings.conf;
         "hypr/config.conf".source =
           relativeSymlink configDirectory ./dotfiles/config.conf;
+        "hypr/pyprland.toml".source =
+          relativeSymlink configDirectory ./dotfiles/pyprland.toml;
 
         "hypr/libinput-gestures.conf".text = ''
           gesture swipe left 3 hyprctl dispatch workspace e+1

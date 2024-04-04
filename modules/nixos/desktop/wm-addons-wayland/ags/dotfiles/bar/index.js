@@ -12,7 +12,13 @@ import {
   dwlscratchpads,
   dwltaskbar,
 } from "./modules/dwl.js";
-import { hyprlandTitle } from "./modules/hyprland.js";
+import {
+  hyprlandTitle,
+  hyprlandWorkspaces,
+  hyprlandScratchpads,
+  hyprlandMode,
+  hyprlandTaskbar,
+} from "./modules/hyprland.js";
 import { matcha } from "./modules/matcha.js";
 import { network } from "./modules/network.js";
 import { offlinemsmtp } from "./modules/offlinemsmtp.js";
@@ -29,31 +35,45 @@ export const bar = () => {
   const isDwl = XDG_SESSION_DESKTOP === "dwl";
   const isHyprland = XDG_SESSION_DESKTOP === "Hyprland";
 
+  let leftModules = [];
+  let centerModules = [];
+  if (isDwl) {
+    leftModules = [
+      dwltags(),
+      dwllayout(),
+      dwlscratchpads(),
+      dwlmode(),
+      capslock(),
+      dwltitle(),
+    ];
+    centerModules = [dwltaskbar()];
+  } else if (isHyprland) {
+    leftModules = [
+      hyprlandWorkspaces(),
+      hyprlandScratchpads(),
+      hyprlandMode(),
+      capslock(),
+      hyprlandTitle(),
+    ];
+    centerModules = [hyprlandTaskbar()];
+  }
+
   return Widget.Window({
     name: "bar",
     class_name: "bar-container",
     exclusivity: "exclusive",
-    layer: "top",
+    layer: isDwl ? "top" : "bottom",
     anchor: ["top", "left", "right"],
     child: Widget.CenterBox({
       class_name: "bar",
       spacing,
       startWidget: Widget.Box({
         spacing,
-        children: isDwl
-          ? [
-              dwltags(),
-              dwllayout(),
-              dwlscratchpads(),
-              dwlmode(),
-              capslock(),
-              dwltitle(),
-            ]
-          : [capslock(), hyprlandTitle()],
+        children: leftModules,
       }),
       centerWidget: Widget.Box({
         hpack: "center",
-        children: isDwl ? [dwltaskbar()] : [],
+        children: centerModules,
       }),
       endWidget: Widget.Box({
         spacing,

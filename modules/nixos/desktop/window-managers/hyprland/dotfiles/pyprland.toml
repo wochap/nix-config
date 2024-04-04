@@ -1,0 +1,7 @@
+[pyprland]
+plugins = [
+  "zoom"
+]
+
+[zoom]
+factor = 2
