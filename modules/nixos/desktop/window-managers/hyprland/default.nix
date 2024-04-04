@@ -2,7 +2,8 @@
 
 let
   cfg = config._custom.desktop.hyprland;
-  inherit (config._custom.globals) userName themeColors;
+  inherit (config._custom.globals) userName themeColors configDirectory;
+  inherit (lib._custom) relativeSymlink;
 
   hyprland-final = inputs.hyprland.packages."${system}".hyprland;
   hyprland-xdp-final =
@@ -62,22 +63,30 @@ in {
     _custom.hm = {
       home.packages = [ hyprland-focus-toggle ];
 
-      xdg.configFile."hypr/libinput-gestures.conf".text = ''
-        gesture swipe left 3 hyprctl dispatch workspace e+1
-        gesture swipe right 3 hyprctl dispatch workspace e-1
-      '';
+      xdg.configFile = {
+        "hypr/colors.conf".text = lib.concatStringsSep "\n"
+          (lib.attrsets.mapAttrsToList
+            (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
+            themeColors);
+        "hypr/keybindings.conf".source =
+          relativeSymlink configDirectory ./dotfiles/keybindings.conf;
+        "hypr/config.conf".source =
+          relativeSymlink configDirectory ./dotfiles/config.conf;
+
+        "hypr/libinput-gestures.conf".text = ''
+          gesture swipe left 3 hyprctl dispatch workspace e+1
+          gesture swipe right 3 hyprctl dispatch workspace e-1
+        '';
+      };
 
       wayland.windowManager.hyprland = {
         enable = true;
         package = hyprland-final;
         systemd.enable = false;
         extraConfig = ''
-          ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
-            (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
-            themeColors)}
-
-          ${builtins.readFile ./dotfiles/config}
-          ${builtins.readFile ./dotfiles/keybindings}
+          source=~/.config/hypr/colors.conf
+          source=~/.config/hypr/config.conf
+          source=~/.config/hypr/keybindings.conf
         '';
       };
 
