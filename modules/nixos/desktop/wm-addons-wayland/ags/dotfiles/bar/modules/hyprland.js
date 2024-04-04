@@ -68,7 +68,10 @@ export const hyprlandTaskbar = () =>
     setup(self) {
       self.hook(Hyprland, () => {
         const visibleAppIds = Hyprland.clients
-          .filter((c) => c.workspace.name === Hyprland.active.workspace.name)
+          .filter(
+            (c) =>
+              c.mapped && c.workspace.name === Hyprland.active.workspace.name,
+          )
           .map((c) => ({
             appId: mapAppId(c.class),
             focused: c.focusHistoryID === 0,
