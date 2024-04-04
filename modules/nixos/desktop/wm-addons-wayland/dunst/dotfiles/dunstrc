@@ -34,7 +34,7 @@ origin="bottom-right"
 # Theme
 icon_theme="Reversal"
 alignment="left"
-background="@background@"
+background="@backgroundOverlay@"
 corner_radius=4
 ellipsize="end"
 foreground="@text@"
