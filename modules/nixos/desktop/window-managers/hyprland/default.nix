@@ -5,6 +5,8 @@ let
   inherit (config._custom.globals) themeColors;
 
   hyprlandFinal = inputs.hyprland.packages."${system}".hyprland;
+  hyprlandXdpFinal =
+    inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
   hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
 in {
@@ -26,15 +28,19 @@ in {
     programs.hyprland = {
       enable = true;
       package = hyprlandFinal;
-      portalPackage =
-        inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
+      portalPackage = hyprlandXdpFinal;
     };
 
-    xdg.portal.config.hyprland.default = [ "gtk" "hyprland" ];
+    xdg.portal.config.hyprland.default = [ "hyprland" "gtk" ];
 
     _custom.hm = lib.mkMerge [
       {
         home.packages = [ hyprland-focus-toggle ];
+
+        xdg.configFile."hypr/libinput-gestures.conf".text = ''
+          gesture swipe left 3 hyprctl dispatch workspace e+1
+          gesture swipe right 3 hyprctl dispatch workspace e-1
+        '';
 
         wayland.windowManager.hyprland = {
           enable = true;
@@ -48,48 +54,46 @@ in {
             ${builtins.readFile ./dotfiles/config}
             ${builtins.readFile ./dotfiles/keybindings}
           '';
-          # plugins =
-          #   [ inputs.hyprland-plugins.packages."${system}".borders-plus-plus ];
+        };
+
+        systemd.user.services.xdg-desktop-portal-hyprland = {
+          Unit = {
+            Description = "Portal service (Hyprland implementation)";
+            PartOf = "graphical-session.target";
+            After = "graphical-session.target";
+            ConditionEnvironment = "WAYLAND_DISPLAY";
+          };
+          Service = {
+            PassEnvironment = [
+              "WAYLAND_DISPLAY"
+              "XDG_CURRENT_DESKTOP"
+              "QT_QPA_PLATFORMTHEME"
+              "PATH"
+            ];
+            Type = "dbus";
+            BusName = "org.freedesktop.impl.portal.desktop.hyprland";
+            ExecStart =
+              "${hyprlandXdpFinal}/libexec/xdg-desktop-portal-hyprland";
+            Restart = "on-failure";
+            Slice = "session.slice";
+          };
         };
       }
 
       (lib.mkIf cfg.isDefault {
-        home.sessionVariables = {
-          XDG_CURRENT_DESKTOP = "Hyprland";
-          XDG_SESSION_DESKTOP = "Hyprland";
-        };
-
-        xdg.configFile."hypr/libinput-gestures.conf".text = ''
-          gesture swipe left 3 hyprctl dispatch workspace e+1
-          gesture swipe right 3 hyprctl dispatch workspace e-1
-        '';
-
         services.swayidle.timeouts = lib.mkAfter [
           {
-            timeout = 185;
-            command = "hyprctl dispatch dpms off";
-            resumeCommand = "hyprctl dispatch dpms on";
+            timeout = 180;
+            command =
+              ''if ! pgrep swaylock; then chayang -d 5 && wlopm --off "*"; fi'';
+            resumeCommand = ''if ! pgrep swaylock; then wlopm --on "*"; fi'';
           }
           {
             timeout = 15;
-            command = "if pgrep swaylock; then hyprctl dispatch dpms off; fi";
-            resumeCommand =
-              "if pgrep swaylock; then hyprctl dispatch dpms on; fi";
+            command = ''if pgrep swaylock; then wlopm --off "*"; fi'';
+            resumeCommand = ''if pgrep swaylock; then wlopm --on "*"; fi'';
           }
         ];
-
-        systemd.user.services.libinput-gestures = lib._custom.mkWaylandService {
-          Unit = {
-            Description = "Actions gestures on your touchpad using libinput";
-            Documentation = "https://github.com/bulletmark/libinput-gestures";
-          };
-          Service = {
-            PassEnvironment = [ "PATH" "HOME" ];
-            ExecStart =
-              "${pkgs.libinput-gestures}/bin/libinput-gestures -c $HOME/.config/hypr/libinput-gestures.conf";
-            Type = "simple";
-          };
-        };
       })
     ];
   };

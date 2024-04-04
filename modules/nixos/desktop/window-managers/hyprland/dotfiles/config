@@ -135,9 +135,15 @@ windowrulev2 = pin, class:^(kitty-buku)$
 windowrulev2 = rounding 0, xwayland:1
 
 
+#### ENV
+env = XDG_CURRENT_DESKTOP,Hyprland
+env = XDG_SESSION_DESKTOP,Hyprland
+
+
 #### AUTOSTART
 
-exec-once = dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK QT_QPA_PLATFORMTHEME && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target
+exec-once = dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target
 exec-once = configure-gtk
+exec-once = libinput-gestures -c $HOME/.config/hypr/libinput-gestures.conf"
 
 # vim: filetype=conf
