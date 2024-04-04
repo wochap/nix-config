@@ -67,7 +67,8 @@ in {
         package = pkgs.gitAndTools.gitFull;
         enable = true;
 
-        ignores = [ ".direnv" ".vscode" ".envrc" ];
+        ignores =
+          [ ".direnv" ".vscode" ".envrc" ".cache" "compile_commands.json" ];
 
         delta = {
           enable = true;
