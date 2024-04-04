@@ -1,58 +1,62 @@
 #!/usr/bin/env bash
-# https://gitlab.com/wef/dotfiles/-/blob/master/bin/sway-focus
 
 PROG=$(basename $0)
-TEMP=$(getopt --options sth --longoptions only-focus,help -- "$@") || exit 1
+TEMP=$(getopt --options h --longoptions help -- "$@") || exit 1
 eval set -- "$TEMP"
-only_focus=""
 
 for i in "$@"; do
   case "$i" in
   -h | --help)
+    echo "$PROG: class='$class' runstr='$runstr'" >&2
     exit 0
-    ;;
-  --only-focus)
-    only_focus="set"
-    shift
     ;;
   esac
 done
 
 shift
-target="$1"
-runstring="$2"
-echo "$PROG: target='$target' runstring='$runstring'" >&2
+class="$1"
+runstr="$2"
 
-current_workspace="$(hyprctl monitors -j | jq '.[] | select(.focused==true)' | jq -j '.activeWorkspace.name')"
-
-[ -z "$current_workspace" ] && {
-  notify-send "Scratchpad" "Some Error Occured while getting current workspace."
+current_ws="$(hyprctl monitors -j | jq '.[] | select(.focused==true)' | jq -j '.activeWorkspace.name')"
+if [[ -z "$current_ws" ]]; then
+  notify-send "hyprland-focus-toggle" "Some Error Occured while getting current workspace."
   exit 1
-}
-program_data=$(hyprctl clients -j | jq ".[] | select(.class == \"$target\")")
-if [[ "$program_data" ]]; then
-  pinned=$(echo "$program_data" | jq ".pinned" | head -n 1)
-  pid=$(echo "$program_data" | jq ".pid" | head -n 1)
-  inSpecialWs=$(echo "$program_data" | jq '. | select(.workspace.name == "special") |= . + {inSpecialWs: true} | select(.workspace.name != "special") |= . + {inSpecialWs: false} | .inSpecialWs' | head -n 1)
-  visible=$(! $inSpecialWs && echo true || echo false)
-  if [[ "$visible" == "false" ]]; then
-    hyprctl dispatch movetoworkspace "$current_workspace,pid:$pid" &>/dev/null
-    hyprctl dispatch focuswindow "pid:$pid" &>/dev/null
+fi
 
-    if [[ "$pinned" == "false" ]]; then
-      hyprctl dispatch pin "pid:$pid" &>/dev/null
+program_data=$(hyprctl clients -j | jq ".[] | select(.class == \"$class\")")
+if [[ "$program_data" ]]; then
+  focused=$(echo "$program_data" | jq '.focusHistoryID == 0')
+  ws=$(echo "$program_data" | jq -j ".workspace.name")
+  visible=$([ "$ws" == "$current_ws" ] && echo "true" || echo "false")
+  if [[ "$visible" == "true" ]]; then
+    if [[ "$focused" == "true" ]]; then
+      hyprctl dispatch movetoworkspacesilent "special,^($class)$" &>/dev/null
+      # TODO: focus next window on current workspace?
+    else
+      hyprctl dispatch focuswindow "^($class)$" &>/dev/null
     fi
   else
-    if ! [[ "$only_focus" ]]; then
-      # HACK: if window is pinned, it can't be moved to special workspace
-      if [[ "$pinned" == "true" ]]; then
-        hyprctl dispatch pin "pid:$pid" &>/dev/null
-      fi
-      hyprctl dispatch movetoworkspacesilent "special,pid:$pid" &>/dev/null
-    fi
+    hyprctl dispatch movetoworkspacesilent "e+0,^($class)$" &>/dev/null
+    hyprctl dispatch focuswindow "^($class)$" &>/dev/null
   fi
 else
-  if [[ "$runstring" ]]; then
-    hyprctl dispatch exec "$runstring"
+  if [[ "$runstr" ]]; then
+    hyprctl dispatch exec "$runstr"
   fi
+fi
+
+state_path="/tmp/hyprland-focus-toggle-state"
+
+# save scratchpad class
+if ! grep -qF "$class" "$state_path"; then
+  echo "$class" >>"$state_path"
+fi
+
+# hide all others scratchpads
+if [ -f "$state_path" ]; then
+  while IFS= read -r line; do
+    if [[ "$line" != "$class" ]]; then
+      hyprctl dispatch movetoworkspacesilent "special,^($line)$" &>/dev/null
+    fi
+  done <"$state_path"
 fi
