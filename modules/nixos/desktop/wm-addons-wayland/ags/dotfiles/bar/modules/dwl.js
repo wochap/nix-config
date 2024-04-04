@@ -108,20 +108,21 @@ const tags = range(9, 0).map((i) =>
   ),
 );
 
-export const dwltags = Widget.Box({
-  class_name: "dwltags",
-  spacing: 7,
-  children: tags.map((tag) =>
-    Widget.Label({
-      label: tag.bind().as((value) => value.text),
-      class_names: tag.bind().as((value) =>
-        Object.entries(value)
-          .filter(([_, val]) => val === true)
-          .map(([key]) => key),
-      ),
-    }),
-  ),
-});
+export const dwltags = () =>
+  Widget.Box({
+    class_name: "dwltags",
+    spacing: 7,
+    children: tags.map((tag) =>
+      Widget.Label({
+        label: tag.bind().as((value) => value.text),
+        class_names: tag.bind().as((value) =>
+          Object.entries(value)
+            .filter(([_, val]) => val === true)
+            .map(([key]) => key),
+        ),
+      }),
+    ),
+  });
 
 export const dwltitle = generateScriptModule({
   cmd: "dwl-state '' title",

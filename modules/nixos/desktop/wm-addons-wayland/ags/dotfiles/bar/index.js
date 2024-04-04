@@ -12,6 +12,7 @@ import {
   dwlscratchpads,
   dwltaskbar,
 } from "./modules/dwl.js";
+import { hyprlandTitle } from "./modules/hyprland.js";
 import { matcha } from "./modules/matcha.js";
 import { network } from "./modules/network.js";
 import { offlinemsmtp } from "./modules/offlinemsmtp.js";
@@ -23,8 +24,12 @@ import { spacing } from "./constants.js";
 // HACK: without wrapping bar in a function
 // bar will be visible before our CSS is loaded
 // making the bar look BAD for the first few seconds
-export const bar = () =>
-  Widget.Window({
+export const bar = () => {
+  const XDG_SESSION_DESKTOP = Utils.exec(`sh -c 'echo "$XDG_SESSION_DESKTOP"'`);
+  const isDwl = XDG_SESSION_DESKTOP === "dwl";
+  const isHyprland = XDG_SESSION_DESKTOP === "Hyprland";
+
+  return Widget.Window({
     name: "bar",
     class_name: "bar-container",
     exclusivity: "exclusive",
@@ -35,18 +40,20 @@ export const bar = () =>
       spacing,
       startWidget: Widget.Box({
         spacing,
-        children: [
-          dwltags,
-          dwllayout(),
-          dwlscratchpads(),
-          dwlmode(),
-          capslock(),
-          dwltitle(),
-        ],
+        children: isDwl
+          ? [
+              dwltags(),
+              dwllayout(),
+              dwlscratchpads(),
+              dwlmode(),
+              capslock(),
+              dwltitle(),
+            ]
+          : [capslock(), hyprlandTitle()],
       }),
       centerWidget: Widget.Box({
         hpack: "center",
-        children: [dwltaskbar()],
+        children: isDwl ? [dwltaskbar()] : [],
       }),
       endWidget: Widget.Box({
         spacing,
@@ -67,3 +74,4 @@ export const bar = () =>
       }),
     }),
   });
+};
