@@ -56,7 +56,7 @@ const char *modes_labels[] = {
 
 /* Autostart */
 static const char *const autostart[] = {
-  "sh", "-c", "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK QT_QPA_PLATFORMTHEME && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target", NULL,
+  "sh", "-c", "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target", NULL,
 
   "configure-gtk", NULL,
 
