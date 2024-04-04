@@ -72,10 +72,10 @@
   border-radius: 4px;
   background-color: @moduleBg;
 }
-.taskbar box {
+.wmtaskbar box {
   opacity: 0.5;
 }
-.taskbar box.focused {
+.wmtaskbar box.focused {
   opacity: 1;
 }
 
