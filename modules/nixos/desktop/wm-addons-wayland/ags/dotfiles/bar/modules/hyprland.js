@@ -73,7 +73,6 @@ export const hyprlandTaskbar = () =>
             appId: mapAppId(c.class),
             focused: c.focusHistoryID === 0,
           }));
-        self.visible = visibleAppIds.length > 0;
         self.children = visibleAppIds.map(({ appId, focused }) =>
           Widget.Box({
             tooltip_text: appId,
@@ -84,6 +83,7 @@ export const hyprlandTaskbar = () =>
             }),
           }),
         );
+        self.visible = visibleAppIds.length > 0;
       });
     },
   });
