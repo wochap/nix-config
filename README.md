@@ -1,4 +1,4 @@
-# My NixOS configuration
+# Personal NixOS configuration
 
 ![](https://i.imgur.com/4XyYjSC.jpg)
 ![](https://i.imgur.com/N5LV3Hv.jpg)
