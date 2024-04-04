@@ -17,44 +17,44 @@
   min-height: 26px;
 }
 
-.dwltags label {
+.wmtags label {
   padding: 1px 0.5em 0;
   color: @textDimmed;
   border-radius: 4px;
 }
-.dwltags label.occupied {
+.wmtags label.occupied {
   color: @text;
 }
-.dwltags label.activated {
+.wmtags label.activated {
   background-color: @moduleBg;
 }
-.dwltags label.focused {
+.wmtags label.focused {
   color: @maroon;
 }
-.dwltags label.urgent {
+.wmtags label.urgent {
   color: @red;
 }
 
 .dwllayout,
-.dwlmode {
+.wmmode {
   padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @moduleBg;
   color: @flamingo;
 }
 
-.dwlmode {
+.wmmode {
   color: @peach;
 }
 
-.dwlscratchpads {
+.wmscratchpads {
   padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @moduleBg;
   color: @lavender;
 }
 
-.dwltitle {
+.wmtitle {
   padding: 1px 0.5em 0;
   color: @textDimmed;
 }
@@ -67,7 +67,7 @@
   font-size: 1.2em;
 }
 
-.taskbar {
+.wmtaskbar {
   padding: 0 0.3em;
   border-radius: 4px;
   background-color: @moduleBg;

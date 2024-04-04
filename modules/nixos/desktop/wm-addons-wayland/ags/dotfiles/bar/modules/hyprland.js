@@ -10,7 +10,7 @@ try {
 
 export const hyprlandTitle = () =>
   Widget.Label({
-    class_name: "dwltitle",
+    class_name: "wmtitle",
     label: Hyprland.active.client.bind("title"),
     visible: Hyprland.active.client.bind("address").as((addr) => !!addr),
     truncate: "middle",
@@ -18,7 +18,7 @@ export const hyprlandTitle = () =>
 
 export const hyprlandWorkspaces = () =>
   Widget.Box({
-    class_name: "dwltags",
+    class_name: "wmtags",
     spacing,
     children: range(9, 1).map((ws) =>
       Widget.Label({
@@ -35,12 +35,12 @@ export const hyprlandWorkspaces = () =>
 
 export const hyprlandMode = generateScriptModule({
   cmd: "hyprland-submap",
-  className: "dwlmode",
+  className: "wmmode",
 });
 
 export const hyprlandScratchpads = () =>
   Widget.Label({
-    class_name: "dwlscratchpads",
+    class_name: "wmscratchpads",
     tooltip_text: "scratchpads count",
     setup(self) {
       self.hook(Hyprland, async () => {
@@ -61,7 +61,7 @@ export const hyprlandScratchpads = () =>
 
 export const hyprlandTaskbar = () =>
   Widget.Box({
-    class_name: "taskbar",
+    class_name: "wmtaskbar",
     spacing,
     setup(self) {
       self.hook(Hyprland, () => {

@@ -40,7 +40,7 @@ const VisibleAppIds = Variable([], {
 });
 export const dwltaskbar = () =>
   Widget.Box({
-    class_name: "taskbar",
+    class_name: "wmtaskbar",
     spacing,
     // HACK: using binding `visible` property doesn't work
     setup(self) {
@@ -84,7 +84,7 @@ const tags = range(9, 0).map((i) =>
 
 export const dwltags = () =>
   Widget.Box({
-    class_name: "dwltags",
+    class_name: "wmtags",
     spacing,
     children: tags.map((tag) =>
       Widget.Label({
@@ -100,7 +100,7 @@ export const dwltags = () =>
 
 export const dwltitle = generateScriptModule({
   cmd: "dwl-state '' title",
-  className: "dwltitle",
+  className: "wmtitle",
   labelAttrs: {
     truncate: "middle",
   },
@@ -113,7 +113,7 @@ export const dwllayout = generateScriptModule({
 
 export const dwlmode = generateScriptModule({
   cmd: "dwl-state '' mode",
-  className: "dwlmode",
+  className: "wmmode",
 });
 
 const Dwlscratchpads = Variable(0, {
@@ -124,7 +124,7 @@ const Dwlscratchpads = Variable(0, {
 });
 export const dwlscratchpads = () =>
   Widget.Label({
-    class_name: "dwlscratchpads",
+    class_name: "wmscratchpads",
     label: Dwlscratchpads.bind().as((value) => `  ${value}`),
     visible: Dwlscratchpads.bind().as((value) => !!value),
     tooltip_text: "scratchpads count",
