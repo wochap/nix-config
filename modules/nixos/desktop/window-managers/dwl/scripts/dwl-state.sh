@@ -12,17 +12,17 @@
 #
 # REQUIREMENTS:
 #  - inotifywait ( 'inotify-tools' on arch )
-#  - Launch dwl with `dwl > ~.cache/dwltags` or change $fname
+#  - Launch dwl with `dwl > ~.cache/dwllogs` or change $fname
 
 declare occupiedtags activatedtags focusedtags urgenttags val last_val
 declare -a tag_labels
-readonly file_path="$HOME"/.cache/dwltags
+readonly file_path="$HOME"/.cache/dwllogs
 tag_labels=("1" "2" "3" "4" "5" "6" "7" "8" "9")
 monitor="${1}"
 component="${2}"
 
 [[ ! -f "${file_path}" ]] && printf -- '%s\n' \
-  "You need to redirect dwl stdout to ~/.cache/dwltags" >&2
+  "You need to redirect dwl stdout to ~/.cache/dwllogs" >&2
 
 cycle() {
   case "${component}" in
