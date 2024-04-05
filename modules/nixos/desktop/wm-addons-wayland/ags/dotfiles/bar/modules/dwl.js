@@ -118,7 +118,7 @@ export const dwlmode = generateScriptModule({
 
 const Dwlscratchpads = Variable(0, {
   listen: [
-    "dwl-state '' namedscratchpads_count",
+    "dwl-state '' scratchpads_count",
     (out) => parseInt(JSON.parse(out).text),
   ],
 });
@@ -128,4 +128,18 @@ export const dwlscratchpads = () =>
     label: Dwlscratchpads.bind().as((value) => `  ${value}`),
     visible: Dwlscratchpads.bind().as((value) => !!value),
     tooltip_text: "scratchpads count",
+  });
+
+const Dwlnamedscratchpads = Variable(0, {
+  listen: [
+    "dwl-state '' namedscratchpads_count",
+    (out) => parseInt(JSON.parse(out).text),
+  ],
+});
+export const dwlnamedscratchpads = () =>
+  Widget.Label({
+    class_name: "wmnamedscratchpads",
+    label: Dwlnamedscratchpads.bind().as((value) => `  ${value}`),
+    visible: Dwlnamedscratchpads.bind().as((value) => !!value),
+    tooltip_text: "namedscratchpads count",
   });

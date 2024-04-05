@@ -10,6 +10,7 @@ import {
   dwlmode,
   dwltitle,
   dwlscratchpads,
+  dwlnamedscratchpads,
   dwltaskbar,
 } from "./modules/dwl.js";
 import {
@@ -41,6 +42,7 @@ export const bar = () => {
     leftModules = [
       dwltags(),
       dwllayout(),
+      dwlnamedscratchpads(),
       dwlscratchpads(),
       dwlmode(),
       capslock(),

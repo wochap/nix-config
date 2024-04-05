@@ -47,11 +47,18 @@
   color: @peach;
 }
 
-.wmscratchpads {
+.wmnamedscratchpads {
   padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @moduleBg;
   color: @lavender;
+}
+
+.wmscratchpads {
+  padding: 1px 0.5em 0;
+  border-radius: 4px;
+  background-color: @moduleBg;
+  color: @red;
 }
 
 .wmtitle {

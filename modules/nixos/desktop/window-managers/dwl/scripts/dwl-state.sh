@@ -3,12 +3,12 @@
 # inspiration: https://gitee.com/guyuming76/personal/blob/dwl/gentoo/waybar-dwl/waybar-dwl.sh
 # NOTE: `mode` requires the following patch https://github.com/djpohly/dwl/wiki/modes
 #
-# dwl-status.sh - display dwl tags, layout, active mode, active window title, namedscratchpads_count and visible_appid
+# dwl-status.sh - display dwl tags, layout, active mode, active window title, namedscratchpads_count, scratchpads_count and visible_appid
 #   Based heavily upon this script by user "novakane" (Hugo Machet) used to do the same for yambar
 #   https://codeberg.org/novakane/yambar/src/branch/master/examples/scripts/dwl-tags.sh
 #
 # USAGE: waybar-dwl.sh MONITOR COMPONENT
-#        "COMPONENT" is an integer representing a dwl tag OR "layout" OR "title" OR "mode" OR "namedscratchpads_count" or "visible_appids"
+#        "COMPONENT" is an integer representing a dwl tag OR "layout" OR "title" OR "mode" OR "namedscratchpads_count" or "scratchpads_count" or "visible_appids"
 #
 # REQUIREMENTS:
 #  - inotifywait ( 'inotify-tools' on arch )
@@ -49,7 +49,7 @@ cycle() {
       printf -- "%s\n" "${val}"
     fi
     ;;
-  layout | title | appid | mode | namedscratchpads_count | visible_appids)
+  layout | title | appid | mode | namedscratchpads_count | scratchpads_count | visible_appids)
     val=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} ${component}" | cut -d ' ' -f 3- | sed s/\"/“/g)
 
     if [ "$val" != "$last_val" ]; then

@@ -396,6 +396,12 @@ static const Key keys[] = {
   { MODKEY, Key_0, view, {.ui = ~0} },
 
 
+  // ### WM SCRATCHPAD
+
+  { MODKEY, Key_d, togglescratchpad, {0} },
+  { MODKEY|WLR_MODIFIER_SHIFT, Key_d, toggleinscratchpad, {0} },
+
+
   // ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
   // Open primary terminal
