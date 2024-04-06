@@ -5,5 +5,5 @@ launch zsh -c 'ncmpcpp'
 launch zsh -c 'cava'
 EOF
 )"
-echo "$kitty_session" | kitty --class kitty-ncmpcpp --title ncmpcpp --session - &
+echo "$kitty_session" | kitty --class kitty-ncmpcpp --session - &
 
