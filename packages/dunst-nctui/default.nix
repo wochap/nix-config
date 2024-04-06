@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "dunst-nctui";
-  version = "0.1.0-next";
+  version = "v0.2.0";
 
   src = fetchFromGitHub {
     owner = "wochap";
     repo = pname;
-    rev = "43a62f5723fa1669494b927ab1b78107af61a981";
-    sha256 = "sha256-7gLbXtuw4wZPSYasiGB0O0jr9hK2BCT28OvvmrvsmpI=";
+    rev = version;
+    sha256 = "sha256-B6CVPSJVQT48YIOwxN9L2hu0DcTuUgVxeIe2vkdRJCg=";
   };
 
   vendorHash = "sha256-06zgYVphSC3YoUGEbdNN0jTJTXpLNDykjR41kooJYlE=";
