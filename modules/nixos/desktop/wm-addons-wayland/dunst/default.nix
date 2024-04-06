@@ -35,12 +35,14 @@ in {
         "dunst/dunstrc" = {
           source = (pkgs.substituteAll {
             src = ./dotfiles/dunstrc;
-            inherit (themeColors) backgroundOverlay text border lavender textDimmed red;
+            inherit (themeColors)
+              backgroundOverlay text border lavender textDimmed red;
           });
           onChange = ''
             ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
           '';
         };
+        "dunst-nctui/config.toml".source = ./dotfiles/dunst-nctui.toml;
       };
 
       systemd.user.services.dunst = lib._custom.mkWaylandService {

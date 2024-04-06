@@ -1,0 +1,19 @@
+[theme]
+subdued = "#6c7086"
+verySubdued = "#45475a"
+
+titleFg = "#b4befe"
+spinnerFg = "#6c7086"
+filterPromptFg = "#f5c2e7"
+filterCursorFg = "#f5c2e7"
+statusBarFg = "#9399b2"
+statusBarActiveFilterFg = "#9399b2"
+noItemsFg = "#9399b2"
+
+normalTitleFg = "#9399b2"
+normalDescFg = "#6c7086"
+selectedTitleFg = "#a6e3a1"
+selectedDescFg = "#628168"
+dimmedTitleFg = "#9399b2"
+dimmedDescFg = "#6c7086"
+
