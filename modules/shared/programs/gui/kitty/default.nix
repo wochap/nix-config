@@ -88,6 +88,10 @@ in {
           source = ./scripts/kitty-ncmpcpp.sh;
           executable = true;
         };
+        "kitty/scripts/kitty-dunst-nctui.sh" = {
+          source = ./scripts/kitty-dunst-nctui.sh;
+          executable = true;
+        };
         "kitty/scripts/kitty-buku.sh" = {
           source = ./scripts/kitty-buku.sh;
           executable = true;

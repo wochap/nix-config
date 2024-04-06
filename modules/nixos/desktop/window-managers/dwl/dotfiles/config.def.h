@@ -89,6 +89,7 @@ static const char *kittyneorgcmd[] = { "n", "sh", "-c", "~/.config/kitty/scripts
 static const char *kittyneomuttcmd[] = { "e", "sh", "-c", "~/.config/kitty/scripts/kitty-neomutt.sh", NULL };
 static const char *kittynewsboatcmd[] = { "r", "sh", "-c", "~/.config/kitty/scripts/kitty-newsboat.sh", NULL };
 static const char *kittyncmpcppcmd[] = { "u", "sh", "-c", "~/.config/kitty/scripts/kitty-ncmpcpp.sh", NULL };
+static const char *kittydunstnctuicmd[] = { "d", "sh", "-c", "~/.config/kitty/scripts/kitty-dunst-nctui.sh", NULL };
 
 static const char bing_gpt_appid[] = "msedge-www.bing.com__search-Default";
 static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
@@ -133,6 +134,7 @@ static const Rule rules[] = {
 	{ "kitty-neomutt",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'e' },
 	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   1200, 800,    'r' },
 	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u' },
+	{ "kitty-dunst-nctui",       NULL,       0,         1,          -1,      0,   0,   1200, 800,    'd' },
 	{ "kitty-buku",              NULL,       0,         1,          -1,      0,   0,   1200, 800,    0 },
 
 	{ "^kitty-vtm$",             NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
@@ -527,6 +529,7 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, focusortogglematchingscratch, {.v = kittyneomuttcmd}),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, focusortogglematchingscratch, {.v = kittynewsboatcmd}),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, focusortogglematchingscratch, {.v = kittyncmpcppcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_d, focusortogglematchingscratch, {.v = kittydunstnctuicmd}),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --select")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --add")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --edit")),
