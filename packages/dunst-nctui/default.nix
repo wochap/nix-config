@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "wochap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-B6CVPSJVQT48YIOwxN9L2hu0DcTuUgVxeIe2vkdRJCg=";
+    sha256 = "sha256-4R6fzXAqOlL7cOptO9KXQZQ55lz+mCoR0OxnmeQZ17o=";
   };
 
-  vendorHash = "sha256-06zgYVphSC3YoUGEbdNN0jTJTXpLNDykjR41kooJYlE=";
+  vendorHash = "sha256-B6CVPSJVQT48YIOwxN9L2hu0DcTuUgVxeIe2vkdRJCg=";
 
   meta = with lib; {
     description = "Notification center for dunst in the terminal";
