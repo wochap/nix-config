@@ -51,12 +51,12 @@ browser_display_mode = "columns"
 search_engine_display_mode = "columns"
 playlist_editor_display_mode = "columns"
 progressbar_color = "1"
-progressbar_elapsed_color = "6"
+progressbar_elapsed_color = "184"
 progressbar_look =  "━━━"
 startup_screen = "playlist"
 statusbar_color = "blue"
-player_state_color = "white"
-statusbar_time_color = "white"
+# player_state_color = "white" # NOTE: the color removes bold style
+# statusbar_time_color = "white"
 window_border_color = "blue"
 
 # UI visibility
@@ -67,7 +67,7 @@ enable_window_title = "yes"
 
 # Theme formats
 # song_columns_list_format = "(50)[]{t|f:Title}  (30)[231]{ar}  (5f)[blue]{lr}(50f)[]{: }"
-song_columns_list_format = "(50)[]{t|f:Title}  (30)[6]{ar}  (5f)[green]{lr}"
+song_columns_list_format = "(50)[]{t|f:Title}  (30)[184]{ar}  (5f)[green]{lr}"
 song_status_format = "{%t - }|{%f - }{%a}{ (%b)}"
 song_window_title_format = "Now Playing ... {%t - }|{%f - }{%a}{ (%b)}"
 
