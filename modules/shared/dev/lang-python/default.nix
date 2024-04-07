@@ -15,6 +15,7 @@ let
       # NOTE: add here any python package you need globally
       html2text
       pytz
+      icalendar
     ]));
 in {
   options._custom.dev.lang-python.enable = lib.mkEnableOption { };
@@ -24,7 +25,7 @@ in {
 
     # HACK: so pylint can resolve modules
     environment.sessionVariables.PYTHONPATH =
-      "${python-final}/lib/python3.11/site-packages:$PYTHONPATH";
+      [ "${python-final}/lib/python3.11/site-packages" "$PYTHONPATH" ];
 
     _custom.hm = {
       # HACK: to make mason.nvim work

@@ -5,6 +5,7 @@ let
   inherit (config._custom.globals) themeColors configDirectory;
   inherit (lib._custom) relativeSymlink;
 
+  kitty-final = pkgs.kitty;
   shellIntegrationInit = {
     bash = ''
       if test -n "$KITTY_INSTALLATION_DIR"; then
@@ -23,9 +24,11 @@ in {
   options._custom.programs.kitty.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    environment.sessionVariables.PYTHONPATH = [ "${kitty-final}/lib/kitty" ];
+
     _custom.hm = {
       home = {
-        packages = with pkgs; [ kitty ];
+        packages = [ kitty-final ];
 
         sessionVariables = {
           # TODO: test on darwin ⬇
