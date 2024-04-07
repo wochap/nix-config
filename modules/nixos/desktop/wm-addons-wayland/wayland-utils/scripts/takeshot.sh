@@ -5,7 +5,7 @@ source "$HOME/.config/scripts/theme-colors.sh"
 
 time=$(date +%Y-%m-%d_%I-%M-%S)
 dir="$(xdg-user-dir PICTURES)/Screenshots"
-file="Screenshot_${time}.jpg"
+file="Screenshot_${time}.png"
 EXPIRE_TIME=5000
 dest="$dir/$file"
 
