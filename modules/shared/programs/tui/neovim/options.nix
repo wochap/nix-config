@@ -129,7 +129,7 @@ in {
         package = cfg.package;
 
         withNodeJs = true;
-        withPython3 = true;
+        withPython3 = false;
         withRuby = true;
 
         extraPackages = with pkgs;
@@ -159,7 +159,6 @@ in {
               ] ++ cfg.extraHaskellPackages pkgs.haskellPackages))
           ];
 
-        extraPython3Packages = ps: with ps; [ docformatter isort pynvim ];
         extraLuaPackages = ls: with ls; [ luarocks ];
       };
     };

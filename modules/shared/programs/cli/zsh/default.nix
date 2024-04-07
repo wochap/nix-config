@@ -113,11 +113,12 @@ in {
           zstyle ':autocomplete:*' add-space ""
 
           source ${inputs.zsh-autocomplete}/zsh-autocomplete.plugin.zsh
-        '';
-        initExtra = ''
+
           ## zsh-defer
 
           source ${inputs.zsh-defer}/zsh-defer.plugin.zsh
+        '';
+        initExtra = ''
 
           ## load our scripts
 
