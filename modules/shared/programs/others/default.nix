@@ -61,7 +61,6 @@ in {
         stripe-cli
 
         # TUI APPS
-        ani-cli
         cbonsai # print bonsai ascii
         gotop # monitor system
         inputs.lobster.packages.${system}.lobster

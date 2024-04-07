@@ -36,8 +36,6 @@
     ./programs/tui/bottom
     ./programs/tui/less
     ./programs/tui/lynx
-    ./programs/tui/mangadesk
-    ./programs/tui/mangal
     ./programs/tui/neovim
     ./programs/tui/newsboat
     ./programs/tui/nnn
@@ -45,6 +43,8 @@
     ./programs/tui/taskwarrior
     ./programs/tui/tmux
     ./programs/tui/youtube
+
+    ./weeb
   ];
 
   config._custom.hm.imports = [ ./symlinks ];

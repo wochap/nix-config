@@ -17,6 +17,8 @@ in {
     _custom.dev.lang-python.enable = true;
     _custom.dev.lang-web.enable = true;
 
+    _custom.weeb.enable = true;
+
     # cli
     _custom.programs.nix-alien.enable = true;
     _custom.programs.nix-direnv.enable = true;
@@ -64,8 +66,6 @@ in {
     _custom.programs.bottom.enable = true;
     _custom.programs.less.enable = true;
     _custom.programs.lynx.enable = true;
-    _custom.programs.mangadesk.enable = true;
-    _custom.programs.mangal.enable = true;
     _custom.programs.neovim.enable = true;
     _custom.programs.newsboat.enable = true;
     _custom.programs.nnn.enable = true;
