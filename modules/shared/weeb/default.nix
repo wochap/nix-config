@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.weeb;
+let
+  cfg = config._custom.weeb;
+  inherit (config._custom.globals) configDirectory;
 in {
   options._custom.weeb.enable = lib.mkEnableOption { };
 
@@ -15,7 +17,10 @@ in {
 
       xdg.configFile = {
         "mangal/mangal.toml".source = ./dotfiles/mangal.toml;
-        "mangadesk/config.json".source = ./dotfiles/config.json;
+
+        # HACK: symlink since it needs to be writable
+        "mangadesk/config.json".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/config.json;
       };
     };
   };

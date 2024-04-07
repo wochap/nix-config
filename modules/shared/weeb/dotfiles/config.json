@@ -6,6 +6,7 @@
 	"downloadQuality": "data",
 	"explicitContent": false,
 	"forcePort443": false,
-	"asZip": false,
-	"zipType": "zip"
+	"asZip": true,
+	"zipType": "zip",
+	"guestMode": true
 }
