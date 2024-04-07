@@ -11,6 +11,8 @@ in {
         filelight # view disk usage
         qbittorrent
 
+        libsForQt5.ark # archive manager
+
         # kcmshell5 to change kde settings on wm
         # e.g. default terminal on dolphin
         libsForQt5.kde-cli-tools
@@ -21,11 +23,11 @@ in {
         libsForQt5.kio-extras # thumbnails
         libsForQt5.kdegraphics-thumbnailers # thumbnails
         libsForQt5.qt5.qtimageformats # thumbnails
+        libsForQt5.ffmpegthumbs # thumbnails
 
         # APPS MEDIA (Comment on first install)
         libsForQt5.kdenlive
         stremio
-        # kdeApplications.kdenlive # video editor
         # nomacs # image viewer/editor
         # olive-editor # video editor
         # openshot-qt # video editor
