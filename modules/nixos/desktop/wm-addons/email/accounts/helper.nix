@@ -7,7 +7,7 @@ let
   inherit (pkgs._custom) offlinemsmtp;
   mkSignatureScript = signatureLines:
     pkgs.writeScript "signature" ''
-      #!${pkgs.python3}/bin/python
+      #!/usr/bin/env python
 
       ${concatMapStringsSep "\n" (l: ''print("${l}")'')
       (splitString "\n" signatureLines)}
