@@ -10,7 +10,17 @@ in {
         anki # mnemonic tool
         filelight # view disk usage
         qbittorrent
+
+        # kcmshell5 to change kde settings on wm
+        # e.g. default terminal on dolphin
+        libsForQt5.kde-cli-tools
+
+        # dolplhin
         libsForQt5.dolphin
+        libsForQt5.dolphin-plugins
+        libsForQt5.kio-extras # thumbnails
+        libsForQt5.kdegraphics-thumbnailers # thumbnails
+        libsForQt5.qt5.qtimageformats # thumbnails
 
         # APPS MEDIA (Comment on first install)
         libsForQt5.kdenlive
