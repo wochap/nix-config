@@ -22,6 +22,11 @@ in {
         "mangadesk/config.json".source =
           lib._custom.relativeSymlink configDirectory ./dotfiles/mangadesk.json;
       };
+
+      programs.zsh.shellAliases = {
+        md = ''run-without-kpadding mangadesk "$@"'';
+        mg = ''run-without-kpadding mangal "$@"'';
+      };
     };
   };
 }
