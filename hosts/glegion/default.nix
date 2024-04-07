@@ -12,6 +12,9 @@ in {
     _custom.globals.homeDirectory = "/home/${userName}";
     _custom.globals.configDirectory = configDirectory;
 
+    # dev
+    _custom.dev.lang-c.enable = true;
+
     # cli
     _custom.programs.nix-alien.enable = true;
     _custom.programs.nix-direnv.enable = true;

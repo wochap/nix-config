@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ./dev/lang-c
+
     ./globals
     ./home
     ./nix
