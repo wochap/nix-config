@@ -1,8 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.programs.python;
-  isDarwin = pkgs.stdenv.isDarwin;
+  cfg = config._custom.dev.lang-python;
   packageOverrides =
     pkgs.prevstable-python.callPackage ./pip2nix/python-packages.nix {
       pkgs = pkgs.prevstable-python;
@@ -10,13 +9,10 @@ let
   python =
     pkgs.prevstable-python.python311.override { inherit packageOverrides; };
 in {
-  options._custom.programs.python.enable = lib.mkEnableOption { };
+  options._custom.dev.lang-python.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      _custom.pythonPackages.animdl
-      _custom.pythonPackages.vidcutter
-
       pipx
       poetry
       pipenv
@@ -24,18 +20,9 @@ in {
         with ps;
         [
           pip
-
-          # required by
-          # config/users/mixins/email/scripts/icalview.py
-          html2text
-          pytz
-          icalendar
-
-          # required by mutt-display-filer.py
-          # NOTE: no longer required
-          # pytz
-          # dateutil
-        ] ++ (lib.optionals (!isDarwin) (with ps; [ pulsectl ]))))
+          # NOTE: add here any python package you need globally
+        ]))
     ];
   };
 }
+
