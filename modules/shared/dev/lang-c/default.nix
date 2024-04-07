@@ -9,6 +9,13 @@ in {
       # TODO: override CPLUS_INCLUDE_PATH?
 
       home.packages = with pkgs; [
+        # build tools
+        cmake
+        gcc
+        gnumake
+        ninja
+        pkg-config
+
         # generates .cache and compile_commands.json
         # files required by clangd
         bear
