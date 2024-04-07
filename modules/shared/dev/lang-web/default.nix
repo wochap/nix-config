@@ -20,9 +20,9 @@ in {
       nodejs_20
 
       # required by personal nvim config
-      unstable.nodePackages.ts-node # nvim-dap
+      nodePackages.ts-node # nvim-dap
       _custom.nodePackages."@styled/typescript-styled-plugin" # nvim-lspconfig
-      unstable.typescript # nvim-lspconfig
+      typescript # nvim-lspconfig
     ];
 
     _custom.hm = {
