@@ -18,6 +18,11 @@ in {
       nodePackages.nodemon
       nodePackages.webtorrent-cli
       nodejs_20
+
+      # required by personal nvim config
+      unstable.nodePackages.ts-node # nvim-dap
+      _custom.nodePackages."@styled/typescript-styled-plugin" # nvim-lspconfig
+      unstable.typescript # nvim-lspconfig
     ];
 
     _custom.hm = {

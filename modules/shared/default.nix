@@ -3,6 +3,8 @@
 {
   imports = [
     ./dev/lang-c
+    ./dev/lang-go
+    ./dev/lang-nix
     ./dev/lang-python
     ./dev/lang-web
 

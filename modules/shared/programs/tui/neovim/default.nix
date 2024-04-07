@@ -18,36 +18,16 @@ in {
         fswatch
         prevstable-neovim.neovim-remote
         neovide
+        wl-clipboard # required in wayland to copy
+        tree-sitter # required by nvim-treesitter
 
-        # required in wayland to copy
-        wl-clipboard
-
-        # required by mason
-        lua54Packages.luarocks # HACK: it should be necessary here
-        go
-
-        # required by peek.nvim
-        deno
-
-        # required by treesitter
-        tree-sitter
-
-        # required by nvim-lint
-        statix
-
-        # required by conform.nvim
-        nixfmt
+        # required by mason.nvim
+        # NOTE: it shouldn't be necessary here
+        lua54Packages.luarocks
 
         # required by telescope
         ripgrep
         fd
-
-        # required by nvim-dap
-        unstable.nodePackages.ts-node
-
-        # required by nvim-lspconfig
-        _custom.nodePackages."@styled/typescript-styled-plugin"
-        unstable.typescript
       ];
     };
 
