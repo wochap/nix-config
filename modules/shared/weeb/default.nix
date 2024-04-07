@@ -20,7 +20,7 @@ in {
 
         # HACK: symlink since it needs to be writable
         "mangadesk/config.json".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/config.json;
+          lib._custom.relativeSymlink configDirectory ./dotfiles/mangadesk.json;
       };
     };
   };
