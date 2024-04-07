@@ -1,32 +1,23 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.programs.nodejs;
+let cfg = config._custom.dev.lang-web;
 in {
-  options._custom.programs.nodejs.enable = lib.mkEnableOption { };
+  options._custom.dev.lang-web.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       bun
       deno
-
-      # global nodejs
       nodejs_20
-      (yarn.override { nodejs = nodejs_20; })
-
-      # global packages
+      corepack_20 # yarn, pnpm
       nodePackages.expo-cli
       nodePackages.firebase-tools
       nodePackages.gulp
       nodePackages.http-server
       nodePackages.nodemon
-      nodePackages.pnpm
       nodePackages.webtorrent-cli
-
-      # others
       netlify-cli
       nodePackages.node2nix
-
-      # nodePackages.sharp-cli
     ];
 
     _custom.hm = {
