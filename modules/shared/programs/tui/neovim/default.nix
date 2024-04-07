@@ -46,8 +46,8 @@ in {
         unstable.nodePackages.ts-node
 
         # required by nvim-lspconfig
-        unstable.typescript
         _custom.nodePackages."@styled/typescript-styled-plugin"
+        unstable.typescript
       ];
     };
 
