@@ -75,6 +75,27 @@ export const hyprlandScratchpads = () =>
     },
   });
 
+export const hyprlandNamedScratchpads = () =>
+  Widget.Label({
+    class_name: "wmnamedscratchpads",
+    tooltip_text: "namedscratchpads count",
+    setup(self) {
+      self.hook(Hyprland, async () => {
+        const count = await Utils.execAsync([
+          "bash",
+          "-c",
+          `hyprctl clients -j | jq '[.[] | select(.workspace.name == "special:scratchpads")] | length'`,
+        ]);
+        if (count === "0") {
+          self.visible = false;
+          return;
+        }
+        self.visible = true;
+        self.label = `  ${count}`;
+      });
+    },
+  });
+
 export const hyprlandTaskbar = () =>
   Widget.Box({
     class_name: "wmtaskbar",

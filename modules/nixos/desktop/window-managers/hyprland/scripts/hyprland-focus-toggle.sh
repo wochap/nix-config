@@ -30,7 +30,7 @@ if [[ "$program_data" ]]; then
   visible=$([ "$ws" == "$current_ws" ] && echo "true" || echo "false")
   if [[ "$visible" == "true" ]]; then
     if [[ "$focused" == "true" ]]; then
-      hyprctl dispatch movetoworkspacesilent "special,^($class)$" &>/dev/null
+      hyprctl dispatch movetoworkspacesilent "special:scratchpads,^($class)$" &>/dev/null
       # TODO: focus next window on current workspace?
     else
       hyprctl dispatch focuswindow "^($class)$" &>/dev/null
@@ -56,7 +56,7 @@ fi
 if [ -f "$state_path" ]; then
   while IFS= read -r line; do
     if [[ "$line" != "$class" ]]; then
-      hyprctl dispatch movetoworkspacesilent "special,^($line)$" &>/dev/null
+      hyprctl dispatch movetoworkspacesilent "special:scratchpads,^($line)$" &>/dev/null
     fi
   done <"$state_path"
 fi

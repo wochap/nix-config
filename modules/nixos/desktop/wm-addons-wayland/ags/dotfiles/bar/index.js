@@ -16,6 +16,7 @@ import {
 import {
   hyprlandTitle,
   hyprlandWorkspaces,
+  hyprlandNamedScratchpads,
   hyprlandScratchpads,
   hyprlandMode,
   hyprlandTaskbar,
@@ -52,6 +53,7 @@ export const bar = () => {
   } else if (isHyprland) {
     leftModules = [
       hyprlandWorkspaces(),
+      hyprlandNamedScratchpads(),
       hyprlandScratchpads(),
       hyprlandMode(),
       capslock(),
