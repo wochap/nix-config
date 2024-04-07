@@ -7,17 +7,17 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       bun
-      deno
-      nodejs_20
       corepack_20 # yarn, pnpm
+      deno
+      netlify-cli
       nodePackages.expo-cli
       nodePackages.firebase-tools
       nodePackages.gulp
       nodePackages.http-server
+      nodePackages.node2nix
       nodePackages.nodemon
       nodePackages.webtorrent-cli
-      netlify-cli
-      nodePackages.node2nix
+      nodejs_20
     ];
 
     _custom.hm = {
