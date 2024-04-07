@@ -31,9 +31,9 @@
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-alien.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "github:hyprwm/Hyprland?rev=360ede79d124ffdeebbe8401f1ac4bc0dbec2c91"; # 0.38.1
     hyprland.inputs.nixpkgs.follows = "unstable";
-    hyprland-plugins.url ="github:hyprwm/hyprland-plugins";
+    hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=5ec0140d4aeca42b8a33e7f335f979e376d1b549";
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprland-xdp.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=57ab6df950970f05f833371cc4fdf1a30fccfb2f"; # v1.3.1
     hyprland-xdp.inputs.nixpkgs.follows = "unstable";
