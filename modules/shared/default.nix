@@ -3,6 +3,7 @@
 {
   imports = [
     ./dev/lang-c
+    ./dev/lang-python
     ./dev/lang-web
 
     ./globals
@@ -18,7 +19,6 @@
     ./programs/cli/lsd
     ./programs/cli/nix-direnv
     ./programs/cli/ptsh
-    ./programs/cli/python
     ./programs/cli/zoxide
     ./programs/cli/zsh
 

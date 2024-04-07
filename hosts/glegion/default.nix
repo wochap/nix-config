@@ -14,6 +14,7 @@ in {
 
     # dev
     _custom.dev.lang-c.enable = true;
+    _custom.dev.lang-python.enable = true;
     _custom.dev.lang-web.enable = true;
 
     # cli
@@ -43,7 +44,6 @@ in {
     _custom.programs.git.enable = true;
     _custom.programs.lsd.enable = true;
     _custom.programs.ptsh.enable = true;
-    _custom.programs.python.enable = true;
     _custom.programs.zoxide.enable = true;
     _custom.programs.zsh.enable = true;
     _custom.programs.zsh.isDefault = true;

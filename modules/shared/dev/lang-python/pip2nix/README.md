@@ -8,7 +8,7 @@ $ cd pip2nix
 $ nix-shell release.nix -A pip2nix.python39
 ```
 
-Then update `requirements.txt`, for example: `animdl==1.7.22`
+Then update `requirements.txt`, for example: `bt-dualboot==1.0.1`
 
 ```
 # the following will generate `python-packages.nix`
