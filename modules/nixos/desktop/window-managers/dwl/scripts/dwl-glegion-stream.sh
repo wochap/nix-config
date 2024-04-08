@@ -21,5 +21,7 @@ sleep 0.1
 remmina "$XDG_CONFIG_HOME/remmina/glegion.remmina" &
 sleep 0.1
 
+systemctl --user restart ags.service &
+
 nvidia-offload obs
 
