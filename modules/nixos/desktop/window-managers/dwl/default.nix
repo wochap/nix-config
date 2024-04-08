@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.desktop.dwl;
-  inherit (config._custom.globals) themeColors cursor userName;
+  inherit (config._custom.globals) themeColors cursor userName configDirectory;
   inherit (lib._custom) unwrapHex;
 
   dwl-state =
@@ -36,12 +36,12 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "57f529e1e0c112c5df9e23a24db13d76d7e58eb9";
+          version = "3a997d0336f122898ac8c28b60433c7cbbe14d02";
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-EiSztYHiXuKas0mg7xylAyj0M+S6BAvSOPBU0LoXpgE=";
+            hash = "sha256-r6eN1rS7dCCdpsSY8ywKT5a2hXYXx/NyT5Woy0NGLYo=";
           };
           buildInputs = with pkgs; [
             pkgs._custom.scenefx
@@ -112,9 +112,18 @@ in {
     _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
     _custom.hm = {
-      xdg.configFile."scripts/dwl-vtm.sh" = {
-        source = ./scripts/dwl-vtm.sh;
-        executable = true;
+      xdg.configFile = {
+        "scripts/dwl-vtm.sh" = {
+          source = ./scripts/dwl-vtm.sh;
+          executable = true;
+        };
+        "scripts/dwl-glegion-stream.sh" = {
+          source = ./scripts/dwl-glegion-stream.sh;
+          executable = true;
+        };
+
+        "remmina/glegion.remmina".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/glegion.remmina;
       };
     };
   };

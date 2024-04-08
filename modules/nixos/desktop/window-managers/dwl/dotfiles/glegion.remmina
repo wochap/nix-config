@@ -1,0 +1,17 @@
+[remmina_pref]
+
+[ssh_colors]
+
+[remmina]
+name=glegion
+port=5900
+protocol=VNC
+quality=9
+scale=1
+server=0.0.0.0
+viewmode=1
+viewonly=1
+window_height=858
+window_maximize=0
+window_width=1438
+
