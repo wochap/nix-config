@@ -1,3 +1,4 @@
+import { forMonitors } from "./utils/index.js";
 import { bar } from "./bar/index.js";
 import { osd } from "./osd/index.js";
 
@@ -9,6 +10,6 @@ App.config({
 // HACK: to ensure that our CSS is loaded before widget creation
 Utils.timeout(0, () => {
   App.config({
-    windows: [bar(), osd],
+    windows: [bar(), ...forMonitors(osd)],
   });
 });

@@ -20,42 +20,44 @@ const ProgressIconFifo = Variable(0, {
   ],
 });
 
-const progressIcon = Widget.Label({
-  class_name: "icon",
-});
-const progress = Progress({
-  width: 234,
-  height: 31,
-  vertical: false,
-  child: progressIcon,
-});
-
-const progressRevealer = Widget.Revealer({
-  revealChild: false,
-  transition: "none",
-  child: progress,
-});
-
-let count = 0;
-ProgressFifo.connect("changed", ({ value }) => {
-  progress.setValue(value / 100);
-  progressRevealer.reveal_child = true;
-  count++;
-  Utils.timeout(1000, () => {
-    count--;
-    if (count === 0) {
-      progressRevealer.reveal_child = false;
-    }
+export const progressOsd = () => {
+  const progressIcon = Widget.Label({
+    class_name: "icon",
   });
-});
-ProgressIconFifo.connect("changed", ({ value }) => {
-  progressIcon.label = value;
-});
+  const progress = Progress({
+    width: 234,
+    height: 31,
+    vertical: false,
+    child: progressIcon,
+  });
 
-export const progressOsd = Widget.Box({
-  class_name: "progress-osd",
-  hpack: "center",
-  vpack: "start",
-  expand: true,
-  children: [progressRevealer],
-});
+  const progressRevealer = Widget.Revealer({
+    revealChild: false,
+    transition: "none",
+    child: progress,
+  });
+
+  let count = 0;
+  ProgressFifo.connect("changed", ({ value }) => {
+    progress.setValue(value / 100);
+    progressRevealer.reveal_child = true;
+    count++;
+    Utils.timeout(1000, () => {
+      count--;
+      if (count === 0) {
+        progressRevealer.reveal_child = false;
+      }
+    });
+  });
+  ProgressIconFifo.connect("changed", ({ value }) => {
+    progressIcon.label = value;
+  });
+
+  return Widget.Box({
+    class_name: "progress-osd",
+    hpack: "center",
+    vpack: "start",
+    expand: true,
+    children: [progressRevealer],
+  });
+};
