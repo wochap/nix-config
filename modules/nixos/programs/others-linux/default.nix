@@ -95,6 +95,7 @@ in {
         # CLI APPS
         ffmpegthumbnailer # video thumbnailer
         graphicsmagick # image editor
+        wayvnc # vnc server
 
         # TUI APPS
         ncdu # disk usage

@@ -13,7 +13,7 @@ in {
         inkscape # photo editor cli/gui
         pavucontrol # pulseaudio gui
         pinta # image editor
-        remmina # like vnc
+        remmina # vnc client
 
         # APPS
         gnome.cheese # test webcam

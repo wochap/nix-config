@@ -181,21 +181,23 @@ static const MonitorRule monrules[] = {
 };
 
 /* keyboard */
-static const struct xkb_rule_names xkb_rules = {
-	/* can specify fields: rules, model, layout, variant, options */
-	/* example:
-	.options = "ctrl:nocaps",
-	*/
-	.options = "compose:ralt",
+static const struct xkb_rule_names xkb_rules[] = {
+  {
+    /* can specify fields: rules, model, layout, variant, options */
+    /* example:
+    .options = "ctrl:nocaps",
+    */
+    .layout = "us",
+    .options = "",
+  },
+  {
+    .layout = "us",
+    .options = "compose:ralt",
+  }
 };
 
 static const int repeat_rate = 50;
 static const int repeat_delay = 300;
-
-/* gb will be set the first time togglekblayout is called, then us.. it is
- * recommended to set the same layout in position 0 of kblayouts and in
- * xkb_rules */
-static const char *kblayouts[] = {"us", "ru"};
 
 /* Trackpad */
 static const int tap_to_click = 1;
@@ -446,8 +448,9 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT, Key_b, entermode, {.i = BROWSER} },
   { MODKEY|MOD_ALT, Key_u, entermode, {.i = TUI} },
   { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = KB_INHIBIT} },
+  { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
   { MODKEY|MOD_ALT, Key_x, focusortogglematchingscratch, {.v = xwvbscratchcmd} },
-  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, togglekblayout, {0} },
+  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, switchxkbrule, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
@@ -465,7 +468,7 @@ static const Key lockedkeys[] = {
 
   // ### OTHERS
 
-  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, togglekblayout, {0} },
+  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, switchxkbrule, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
 
