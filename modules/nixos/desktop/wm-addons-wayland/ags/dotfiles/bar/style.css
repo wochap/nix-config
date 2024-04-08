@@ -1,8 +1,7 @@
-@define-color barBg @background;
 @define-color moduleBg @surface0;
 
 .bar-container {
-  background-color: @barBg;
+  background-color: @surface0;
   color: @text;
   font-family:
     Iosevka NF,
@@ -10,6 +9,9 @@
   font-size: 10pt;
   font-weight: 500;
   padding: 7px;
+}
+.bar-container.focused {
+  background-color: @background;
 }
 
 .bar {

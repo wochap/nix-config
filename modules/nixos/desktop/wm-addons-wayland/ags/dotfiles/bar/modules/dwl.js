@@ -1,6 +1,10 @@
+import GLib from "gi://GLib";
 import { range } from "../../utils/index.js";
 import { spacing } from "../constants.js";
 import { mapAppId } from "../utils.js";
+
+// NOTE: personal preference, I like to have only one bar
+const mainOutputName = GLib.getenv("MAIN_OUTPUT_NAME") || "";
 
 const generateScriptModule = ({ cmd, className, labelAttrs }) => {
   const Var = Variable(
@@ -21,7 +25,7 @@ const generateScriptModule = ({ cmd, className, labelAttrs }) => {
 
 const VisibleAppIds = Variable([], {
   listen: [
-    "dwl-state '' visible_appids",
+    `dwl-state '${mainOutputName}' visible_appids`,
     (out) => {
       const items = JSON.parse(out)
         .text.split(" ")
@@ -73,7 +77,7 @@ const tags = range(9, 0).map((i) =>
     },
     {
       listen: [
-        `dwl-state '' ${i}`,
+        `dwl-state '${mainOutputName}' ${i}`,
         (out) => {
           return JSON.parse(out);
         },
@@ -99,7 +103,7 @@ export const dwltags = () =>
   });
 
 export const dwltitle = generateScriptModule({
-  cmd: "dwl-state '' title",
+  cmd: `dwl-state '${mainOutputName}' title`,
   className: "wmtitle",
   labelAttrs: {
     truncate: "middle",
@@ -107,39 +111,47 @@ export const dwltitle = generateScriptModule({
 });
 
 export const dwllayout = generateScriptModule({
-  cmd: "dwl-state '' layout",
+  cmd: `dwl-state '${mainOutputName}' layout`,
   className: "dwllayout",
 });
 
 export const dwlmode = generateScriptModule({
-  cmd: "dwl-state '' mode",
+  cmd: `dwl-state '${mainOutputName}' mode`,
   className: "wmmode",
 });
 
-const Dwlscratchpads = Variable(0, {
+const DwlScratchpads = Variable(0, {
   listen: [
-    "dwl-state '' scratchpads_count",
+    `dwl-state '${mainOutputName}' scratchpads_count`,
     (out) => parseInt(JSON.parse(out).text),
   ],
 });
 export const dwlscratchpads = () =>
   Widget.Label({
     class_name: "wmscratchpads",
-    label: Dwlscratchpads.bind().as((value) => `  ${value}`),
-    visible: Dwlscratchpads.bind().as((value) => !!value),
+    label: DwlScratchpads.bind().as((value) => `  ${value}`),
+    visible: DwlScratchpads.bind().as((value) => !!value),
     tooltip_text: "scratchpads count",
   });
 
-const Dwlnamedscratchpads = Variable(0, {
+const DwlNamedscratchpads = Variable(0, {
   listen: [
-    "dwl-state '' namedscratchpads_count",
+    `dwl-state '${mainOutputName}' namedscratchpads_count`,
     (out) => parseInt(JSON.parse(out).text),
   ],
 });
 export const dwlnamedscratchpads = () =>
   Widget.Label({
     class_name: "wmnamedscratchpads",
-    label: Dwlnamedscratchpads.bind().as((value) => `  ${value}`),
-    visible: Dwlnamedscratchpads.bind().as((value) => !!value),
+    label: DwlNamedscratchpads.bind().as((value) => `  ${value}`),
+    visible: DwlNamedscratchpads.bind().as((value) => !!value),
     tooltip_text: "namedscratchpads count",
   });
+
+export const IsMainOutputFocused = Variable(0, {
+  listen: [
+    `dwl-state '${mainOutputName}' selmon`,
+    (out) => !!parseInt(JSON.parse(out).text),
+  ],
+});
+

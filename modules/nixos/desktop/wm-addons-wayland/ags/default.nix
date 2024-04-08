@@ -12,6 +12,10 @@ in {
   options._custom.desktop.ags = {
     enable = lib.mkEnableOption { };
     systemdEnable = lib.mkEnableOption { };
+    mainOutputName = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -21,6 +25,7 @@ in {
       imports = [ inputs.ags.homeManagerModules.default ];
 
       home.packages = [ capslock progress-osd ];
+      home.sessionVariables."MAIN_OUTPUT_NAME" = cfg.mainOutputName;
 
       programs.ags = {
         enable = true;
@@ -37,7 +42,12 @@ in {
             Documentation = "https://github.com/Aylur/ags";
           };
           Service = {
-            PassEnvironment = [ "PATH" "XDG_SESSION_DESKTOP" "HYPRLAND_INSTANCE_SIGNATURE" ];
+            PassEnvironment = [
+              "PATH"
+              "XDG_SESSION_DESKTOP"
+              "MAIN_OUTPUT_NAME"
+              "HYPRLAND_INSTANCE_SIGNATURE"
+            ];
             ExecStart = "${agsFinal}/bin/ags";
             Restart = "on-failure";
             KillMode = "mixed";

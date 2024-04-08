@@ -1,6 +1,6 @@
 import { range } from "../../utils/index.js";
 import { spacing } from "../constants.js";
-import { generateScriptModule, mapAppId } from "../utils.js";
+import { mapAppId } from "../utils.js";
 
 let Hyprland;
 

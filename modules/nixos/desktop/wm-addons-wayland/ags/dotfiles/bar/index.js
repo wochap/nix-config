@@ -12,6 +12,7 @@ import {
   dwlscratchpads,
   dwlnamedscratchpads,
   dwltaskbar,
+  IsMainOutputFocused,
 } from "./modules/dwl.js";
 import {
   hyprlandTitle,
@@ -39,6 +40,7 @@ export const bar = () => {
 
   let leftModules = [];
   let centerModules = [];
+  let className = "bar-container";
   if (isDwl) {
     leftModules = [
       dwltags(),
@@ -50,6 +52,9 @@ export const bar = () => {
       dwltitle(),
     ];
     centerModules = [dwltaskbar()];
+    className = IsMainOutputFocused.bind().as(
+      (value) => `bar-container ${value ? "focused" : ""}`,
+    );
   } else if (isHyprland) {
     leftModules = [
       hyprlandWorkspaces(),
@@ -64,7 +69,7 @@ export const bar = () => {
 
   return Widget.Window({
     name: "bar",
-    class_name: "bar-container",
+    class_name: className,
     exclusivity: "exclusive",
     layer: isDwl ? "top" : "bottom",
     anchor: ["top", "left", "right"],
