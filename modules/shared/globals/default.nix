@@ -54,14 +54,15 @@ in {
           text = ''
             ${lib.concatStringsSep "\n"
             (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
-              config._custom.globals.themeColors)}
+              (builtins.removeAttrs themeColors [ "flavor" ]))}
           '';
           executable = true;
         };
 
         "theme-colors.css".text = ''
           ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
-            (key: value: "@define-color ${key} ${value};") themeColors)}
+            (key: value: "@define-color ${key} ${value};")
+            (builtins.removeAttrs themeColors [ "flavor" ]))}
         '';
       };
     };
