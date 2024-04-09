@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scenefx";
-  version = "7e723f983b074e62e676caffe21cd5527b524587";
+  version = "de4ec10e1ff9347b5833f00f8615d760d9378c99";
 
   src = fetchFromGitHub {
     owner = "wlrfx";
     repo = pname;
     rev = version;
-    hash = "sha256-qvQjVTAkfsk6lOTjcYm1AdlMban1jnGdRKjhUJytoPA=";
+    hash = "sha256-4IWvkQCaPSB6o5XMK1aofP9IZWgFYhkqYbmYp/BB2+o=";
   };
 
   mesonFlags = [ "-Doptimization=2" ];
