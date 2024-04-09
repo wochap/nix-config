@@ -65,6 +65,7 @@ export const bar = () => {
       hyprlandTitle(),
     ];
     centerModules = [hyprlandTaskbar()];
+    className = "bar-container focused";
   }
 
   return Widget.Window({
