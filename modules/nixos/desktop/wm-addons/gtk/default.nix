@@ -7,9 +7,9 @@ let
   inherit (lib._custom) relativeSymlink;
   extraCss = lib.concatLines [
     ''
-      @import url("file://${
-        relativeSymlink configDirectory ./dotfiles/catppuccin-mocha.css
-      }");
+      /* Palette */
+      @import url("file:///home/${userName}/.config/theme-colors.css");
+      @import url("file://${./dotfiles/catppuccin.css}");
     ''
     (lib.optionalString (!cfg.enableCsd) ''
       @import url("file://${

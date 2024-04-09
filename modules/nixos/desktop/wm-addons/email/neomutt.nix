@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.desktop.email;
-  inherit (config._custom.globals) userName;
+  inherit (config._custom.globals) userName themeColors;
   hmConfig = config.home-manager.users.${userName};
   aliasfile = "${hmConfig.xdg.configHome}/neomutt/aliases";
   mailboxfile = "${hmConfig.xdg.configHome}/neomutt/mailboxes";
@@ -123,7 +123,12 @@ in {
 
           lists .*@lists.sr.ht
 
-          source ${inputs.catppuccin-neomutt}/neomuttrc
+          source ${inputs.catppuccin-neomutt}/${
+            if themeColors.flavor == "latte" then
+              "latte-neomuttrc"
+            else
+              "neomuttrc"
+          }
         '';
       };
     };

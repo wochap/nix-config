@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.programs.tmux;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) configDirectory themeColors;
 in {
   options._custom.programs.tmux.enable = lib.mkEnableOption { };
 
@@ -20,8 +20,12 @@ in {
         "tmux/plugins/continuum".source =
           "${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum";
         "tmux/plugins/catppuccin".source = inputs.catppuccin-tmux;
-        "tmux/tmux.conf".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/tmux.conf;
+        "tmux/tmux.conf".text = ''
+          set -g @catppuccin_flavour '${themeColors.flavor}'
+          source-file $HOME/.config/tmux/config.conf
+        '';
+        "tmux/config.conf".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/config.conf;
       };
 
       programs.fzf.tmux.enableShellIntegration = true;
@@ -35,7 +39,7 @@ in {
         Service = {
           Type = "forking";
           Environment = [ "TERM=alacritty" ];
-          PassEnvironment = [ "PATH" "DISPLAY" ];
+          PassEnvironment = [ "PATH" "DISPLAY" "HOME" ];
           ExecStart = "${pkgs.tmux}/bin/tmux new-session -d";
           ExecStop = [
             "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh"

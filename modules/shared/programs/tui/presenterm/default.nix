@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.programs.presenterm;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) themeColors;
 in {
   options._custom.programs.presenterm.enable = lib.mkEnableOption { };
 
@@ -10,8 +10,10 @@ in {
     _custom.hm = {
       home.packages = with pkgs; [ presenterm ];
 
-      xdg.configFile."presenterm/config.yaml".source =
-        lib._custom.relativeSymlink configDirectory ./dotfiles/config.yaml;
+      xdg.configFile."presenterm/config.yaml".source = pkgs.substituteAll {
+        src = ./dotfiles/config.yaml;
+        inherit (themeColors) flavor;
+      };
 
       programs.zsh.initExtra = builtins.readFile ./dotfiles/p.zsh;
     };

@@ -6,6 +6,8 @@ rec {
   shadow = crust;
   textDimmed = overlay0;
 
+  flavor = "mocha";
+
   rosewater = "#f5e0dc";
   flamingo = "#f2cdcd";
   pink = "#f5c2e7";

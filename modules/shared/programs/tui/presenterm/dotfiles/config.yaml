@@ -1,5 +1,5 @@
 defaults:
-  theme: catppuccin-mocha
+  theme: catppuccin-@flavor@
 
 options:
   # whether slides are automatically terminated when a slide title is found.

@@ -3,7 +3,7 @@
 let
   cfg = config._custom.programs.kitty;
   inherit (config._custom.globals) themeColors configDirectory;
-  inherit (lib._custom) relativeSymlink;
+  inherit (lib._custom) relativeSymlink unwrapHex;
 
   kitty-final = pkgs.kitty;
   shellIntegrationInit = {
@@ -54,9 +54,15 @@ in {
           ${builtins.readFile ./dotfiles/kitty-diff.conf}
         '';
         "kitty/kitty.conf".text = ''
-          include ${inputs.catppuccin-kitty}/themes/mocha.conf
+          include ${inputs.catppuccin-kitty}/themes/${themeColors.flavor}.conf
           active_border_color ${themeColors.primary}
           inactive_border_color ${themeColors.border}
+          tab_title_template "{fmt.bg.default}{fmt.fg._${unwrapHex themeColors.surface1}}  {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
+          active_tab_title_template "{fmt.bg.default}{fmt.fg._${unwrapHex themeColors.lavender}}{fmt.bg._${unwrapHex themeColors.lavender}}{fmt.fg._${unwrapHex themeColors.surface1}} {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${unwrapHex themeColors.lavender}}{fmt.bg.default}{fmt.fg.default}"
+          tab_bar_background ${themeColors.base}
+          active_tab_foreground ${themeColors.base}
+          inactive_tab_background ${themeColors.base}
+          inactive_tab_foreground ${themeColors.surface1}
 
           include ${relativeSymlink configDirectory ./dotfiles/kitty.conf}
         '';

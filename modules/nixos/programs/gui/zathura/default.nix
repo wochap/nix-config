@@ -14,11 +14,18 @@ in {
       };
 
       xdg.configFile = {
+        "zathura/catppuccin-latte".source =
+          "${inputs.catppuccin-zathura}/src/catppuccin-latte";
+        "zathura/catppuccin-frappe".source =
+          "${inputs.catppuccin-zathura}/src/catppuccin-frappe";
+        "zathura/catppuccin-macchiato".source =
+          "${inputs.catppuccin-zathura}/src/catppuccin-macchiato";
         "zathura/catppuccin-mocha".source =
           "${inputs.catppuccin-zathura}/src/catppuccin-mocha";
         "zathura/zathurarc".source = pkgs.substituteAll {
           src = ./dotfiles/zathurarc;
           inherit (themeColors) backgroundOverlay;
+          themeFile = "catppuccin-${themeColors.flavor}";
         };
       };
 

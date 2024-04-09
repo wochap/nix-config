@@ -1,6 +1,3 @@
-import = [
-"~/.config/alacritty/catppuccin/catppuccin-mocha.toml"
-]
 live_config_reload = true
 
 [shell]

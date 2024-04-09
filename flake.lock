@@ -128,6 +128,22 @@
         "type": "github"
       }
     },
+    "catppuccin-delta": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1711225340,
+        "narHash": "sha256-GA0n9obZlD0Y2rAbGMjcdJ5I0ij1NEPBFC7rv7J49QI=",
+        "owner": "catppuccin",
+        "repo": "delta",
+        "rev": "765eb17d0268bf07c20ca439771153f8bc79444f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "delta",
+        "type": "github"
+      }
+    },
     "catppuccin-dircolors": {
       "flake": false,
       "locked": {
@@ -1589,6 +1605,7 @@
         "catppuccin-amfora": "catppuccin-amfora",
         "catppuccin-bat": "catppuccin-bat",
         "catppuccin-bottom": "catppuccin-bottom",
+        "catppuccin-delta": "catppuccin-delta",
         "catppuccin-dircolors": "catppuccin-dircolors",
         "catppuccin-discord": "catppuccin-discord",
         "catppuccin-grub": "catppuccin-grub",

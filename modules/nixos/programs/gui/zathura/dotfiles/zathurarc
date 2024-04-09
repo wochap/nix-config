@@ -20,7 +20,7 @@ map i                           recolor
 map p                           print
 map g                           goto top
 
-include catppuccin-mocha
+include @themeFile@
 
 set statusbar-bg                "@backgroundOverlay@"
 set notification-bg		          "@backgroundOverlay@"

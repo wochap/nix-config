@@ -1,6 +1,7 @@
-{ lib, inputs, ... }:
+{ config, lib, inputs, ... }:
 
-{
+let inherit (config._custom.globals) themeColors;
+in {
   config.boot = {
     loader = {
       grub = {
@@ -10,7 +11,7 @@
         efiSupport = true;
         enableCryptodisk = true;
         theme = lib.mkDefault
-          "${inputs.catppuccin-grub}/src/catppuccin-mocha-grub-theme";
+          "${inputs.catppuccin-grub}/src/catppuccin-${themeColors.flavor}-grub-theme";
         useOSProber = true;
       };
 

@@ -1,6 +1,8 @@
 { config, lib, inputs, ... }:
 
-let cfg = config._custom.programs.bat;
+let
+  cfg = config._custom.programs.bat;
+  inherit (config._custom.globals) themeColors;
 in {
   options._custom.programs.bat.enable = lib.mkEnableOption { };
 
@@ -21,8 +23,20 @@ in {
 
       programs.bat = {
         enable = true;
-        config = { theme = "Catppuccin-mocha"; };
+        config = { theme = "Catppuccin-${themeColors.flavor}"; };
         themes = {
+          Catppuccin-latte = {
+            src = inputs.catppuccin-bat;
+            file = "Catppuccin-latte.tmTheme";
+          };
+          Catppuccin-frappe = {
+            src = inputs.catppuccin-bat;
+            file = "Catppuccin-frappe.tmTheme";
+          };
+          Catppuccin-macchiato = {
+            src = inputs.catppuccin-bat;
+            file = "Catppuccin-macchiato.tmTheme";
+          };
           Catppuccin-mocha = {
             src = inputs.catppuccin-bat;
             file = "Catppuccin-mocha.tmTheme";

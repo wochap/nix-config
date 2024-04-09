@@ -1,6 +1,8 @@
 { config, inputs, lib, ... }:
 
-let cfg = config._custom.programs.qutebrowser;
+let
+  cfg = config._custom.programs.qutebrowser;
+  inherit (config._custom.globals) themeColors;
 in {
   options._custom.programs.qutebrowser.enable = lib.mkEnableOption { };
 
@@ -22,9 +24,8 @@ in {
           import catppuccin
 
           # set the flavor you'd like to use
-          # valid options are 'mocha', 'macchiato', 'frappe', and 'latte'
           # last argument (optional, default is False): enable the plain look for the menu rows
-          catppuccin.setup(c, 'mocha', True)
+          catppuccin.setup(c, '${themeColors.flavor}', True)
 
           c.fonts.default_family = "Iosevka NF"
           c.fonts.default_size = "10pt"

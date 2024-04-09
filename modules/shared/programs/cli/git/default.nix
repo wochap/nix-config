@@ -2,8 +2,9 @@
 
 let
   cfg = config._custom.programs.git;
-  catppuccinMochaTheme =
-    lib._custom.fromYAML "${inputs.catppuccin-lazygit}/themes/mocha.yml";
+  inherit (config._custom.globals) themeColors;
+  catppuccinTheme = lib._custom.fromYAML
+    "${inputs.catppuccin-lazygit}/themes/${themeColors.flavor}.yml";
 in {
   options._custom.programs.git.enable = lib.mkEnableOption { };
 
@@ -47,7 +48,7 @@ in {
             suspend = true;
           };
           gui = {
-            inherit (catppuccinMochaTheme) theme;
+            inherit (catppuccinTheme) theme;
             border = "single";
             mainPanelSplitMode = "vertical";
             nerdFontsVersion = "3";
@@ -77,10 +78,10 @@ in {
             navigate = true;
 
             # available themes `delta --list-syntax-themes`
-            syntax-theme = "Catppuccin-mocha";
+            syntax-theme = "Catppuccin-${themeColors.flavor}";
 
             file-modified-label = "modified:";
-            decorations = { commit-decoration-style = "yellow box ul"; };
+            decorations.commit-decoration-style = "yellow box ul";
             line-numbers = {
               line-numbers-minus-style = "124";
               line-numbers-plus-style = "28";
@@ -115,17 +116,20 @@ in {
           };
           commit = { gpgSign = true; };
         };
-        includes = [{
-          condition = "gitdir:~/Projects/boc/**/.git";
-          contents = {
-            user = {
-              email = "geanb@bandofcoders.com";
-              name = "Gean";
-              signingKey = "geanb@bandofcoders.com";
+        includes = [
+          { path = "${inputs.catppuccin-delta}/catppuccin.gitconfig"; }
+          {
+            condition = "gitdir:~/Projects/boc/**/.git";
+            contents = {
+              user = {
+                email = "geanb@bandofcoders.com";
+                name = "Gean";
+                signingKey = "geanb@bandofcoders.com";
+              };
+              commit = { gpgSign = true; };
             };
-            commit = { gpgSign = true; };
-          };
-        }];
+          }
+        ];
       };
     };
   };

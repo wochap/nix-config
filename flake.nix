@@ -101,6 +101,8 @@
     catppuccin-kitty.flake = false;
     catppuccin-lazygit.url = "github:catppuccin/lazygit?rev=b2ecb6d41b6f54a82104879573c538e8bdaeb0bf";
     catppuccin-lazygit.flake = false;
+    catppuccin-delta.url = "github:catppuccin/delta";
+    catppuccin-delta.flake = false;
     catppuccin-neomutt.url = "github:catppuccin/neomutt?rev=f6ce83da47cc36d5639b0d54e7f5f63cdaf69f11";
     catppuccin-neomutt.flake = false;
     catppuccin-newsboat.url = "github:catppuccin/newsboat?rev=be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f";

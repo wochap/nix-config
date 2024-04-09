@@ -2,6 +2,7 @@
 
 let
   cfg = config._custom.programs.newsboat;
+  inherit (config._custom.globals) themeColors;
 
   qndl = pkgs.writeShellScriptBin "qndl" (builtins.readFile ./scripts/qndl.sh);
   linkhandler = pkgs.writeShellScriptBin "linkhandler"
@@ -15,7 +16,9 @@ in {
 
       xdg.configFile = {
         "newsboat/catppuccin-dark".source =
-          "${inputs.catppuccin-newsboat}/themes/dark";
+          "${inputs.catppuccin-newsboat}/themes/${
+            if themeColors.flavor == "latte" then "latte" else "dark"
+          }";
         "newsboat/urls".source = ./dotfiles/urls;
         "newsboat/config".source = ./dotfiles/config;
       };

@@ -10,6 +10,7 @@ in {
         enable = true;
         enableZshIntegration = config._custom.programs.zsh.enable;
         settings = lib.mkForce { };
+        # TODO: support other flavors
         extraConfig =
           builtins.readFile "${inputs.catppuccin-dircolors}/.dircolors";
       };

@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.programs.zsh;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) configDirectory themeColors;
   inherit (lib._custom) relativeSymlink;
 
   fshPlugin = {
@@ -18,7 +18,7 @@ let
         source "${fshPlugin.src}/${fshPlugin.file}"
         FAST_WORK_DIR="$out"
         mkdir -p "$out"
-        fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-mocha.ini"
+        fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-${themeColors.flavor}.ini"
       EOF
     '';
   };
@@ -155,7 +155,7 @@ in {
           # docs: https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Character-Highlighting
           zle_highlight=('paste:fg=white,bold')
 
-          # HACK: set catppuccin-mocha theme for zsh-fast-syntax-highlighting
+          # HACK: set catppuccin theme for zsh-fast-syntax-highlighting
           FAST_WORK_DIR="${fshTheme}"
           source ${fshPlugin.src}/${fshPlugin.file}
 
