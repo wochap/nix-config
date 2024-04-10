@@ -23,7 +23,7 @@ in {
 
           profile stream-glegion {
             output "Samsung Display Corp. 0x4188 Unknown" scale 2
-            output HEADLESS-1 scale 2 position 1440,0 mode --custom 2880x1800@120Hz adaptive_sync off
+            output HEADLESS-1 scale 2 position 1440,0 mode --custom 2880x1620@120Hz adaptive_sync off
           }
         '';
       };
