@@ -201,6 +201,9 @@
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
+.bar-container.focused .battery {
+  background-color: @moduleBgFocus;
+}
 
 .audio {
   padding: 1px 0.5em 0;
