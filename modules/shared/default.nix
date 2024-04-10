@@ -27,6 +27,7 @@
     ./programs/gui/alacritty
     ./programs/gui/discord
     ./programs/gui/firefox
+    ./programs/gui/foot
     ./programs/gui/kitty
     ./programs/gui/mpv
     ./programs/gui/qutebrowser

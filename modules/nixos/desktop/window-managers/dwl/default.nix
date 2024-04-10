@@ -81,7 +81,6 @@ in {
 
       # for testing vanilla dwl
       bemenu
-      foot
     ];
 
     _custom.desktop.greetd.cmd =

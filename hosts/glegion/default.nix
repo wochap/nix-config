@@ -56,6 +56,7 @@ in {
     _custom.programs.alacritty.enable = true;
     _custom.programs.discord.enable = true;
     _custom.programs.firefox.enable = true;
+    _custom.programs.foot.enable = true;
     _custom.programs.kitty.enable = true;
     _custom.programs.mpv.enable = true;
     _custom.programs.qutebrowser.enable = true;
