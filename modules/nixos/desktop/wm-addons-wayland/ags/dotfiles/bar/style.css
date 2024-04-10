@@ -1,4 +1,5 @@
-@define-color moduleBg @surface0;
+@define-color moduleBg @surface1;
+@define-color moduleBgFocus @surface0;
 
 .bar-container {
   background-color: @surface0;
@@ -36,6 +37,9 @@
 .wmtags label.urgent {
   color: @red;
 }
+.bar-container.focused .wmtags label.activated {
+  background-color: @moduleBgFocus;
+}
 
 .dwllayout,
 .wmmode {
@@ -43,6 +47,10 @@
   border-radius: 4px;
   background-color: @moduleBg;
   color: @flamingo;
+}
+.bar-container.focused .dwllayout,
+.bar-container.focused .wmmode {
+  background-color: @moduleBgFocus;
 }
 
 .wmmode {
@@ -55,12 +63,18 @@
   background-color: @moduleBg;
   color: @lavender;
 }
+.bar-container.focused .wmnamedscratchpads {
+  background-color: @moduleBgFocus;
+}
 
 .wmscratchpads {
   padding: 1px 0.5em 0;
   border-radius: 4px;
   background-color: @moduleBg;
   color: @red;
+}
+.bar-container.focused .wmscratchpads {
+  background-color: @moduleBgFocus;
 }
 
 .wmtitle {
@@ -75,6 +89,9 @@
   color: @peach;
   font-size: 1.2em;
 }
+.bar-container.focused .bar .capslock {
+  background-color: @moduleBgFocus;
+}
 
 .wmtaskbar {
   padding: 0 0.3em;
@@ -86,6 +103,9 @@
 }
 .wmtaskbar box.focused {
   opacity: 1;
+}
+.bar-container.focused .wmtaskbar {
+  background-color: @moduleBgFocus;
 }
 
 .systray button {
@@ -99,6 +119,9 @@
   background-color: @moduleBg;
   color: @red;
 }
+.bar-container.focused .recorder {
+  background-color: @moduleBgFocus;
+}
 
 .matcha {
   padding: 0 0.5em;
@@ -108,6 +131,9 @@
 }
 .matcha.enabled {
   color: @maroon;
+}
+.bar-container.focused .matcha {
+  background-color: @moduleBgFocus;
 }
 
 .dunst {
@@ -119,6 +145,9 @@
 .dunst.enabled {
   color: @text;
 }
+.bar-container.focused .dunst {
+  background-color: @moduleBgFocus;
+}
 
 .offlinemsmtp {
   padding: 0 0.5em;
@@ -128,6 +157,9 @@
 }
 .offlinemsmtp.enabled {
   color: @maroon;
+}
+.bar-container.focused .offlinemsmtp {
+  background-color: @moduleBgFocus;
 }
 
 .temperature {
@@ -140,6 +172,9 @@
 }
 .temperature.critical {
   color: @red;
+}
+.bar-container.focused .temperature {
+  background-color: @moduleBgFocus;
 }
 
 .battery {
@@ -175,6 +210,9 @@
 .audio.muted {
   color: @red;
 }
+.bar-container.focused .audio {
+  background-color: @moduleBgFocus;
+}
 
 .bluetooth {
   padding: 1px 0.5em 0;
@@ -190,6 +228,9 @@
 .bluetooth.off {
   color: @textDimmed;
 }
+.bar-container.focused .bluetooth {
+  background-color: @moduleBgFocus;
+}
 
 .network {
   padding: 0 0.5em;
@@ -199,6 +240,9 @@
 }
 .network .connected {
   color: @blue;
+}
+.bar-container.focused .network {
+  background-color: @moduleBgFocus;
 }
 
 .clock {
