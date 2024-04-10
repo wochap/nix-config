@@ -36,12 +36,12 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "a33ae30d30df3d458c8de6b03677fb8c1c361e26";
+          version = "9ad61ef121f8e99144c4023cc72b546a03bdebff";
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-k6ZDyz9eFVl5I95NrNfgQgw/BrPstR5Fg5TJtODtG0Q=";
+            hash = "sha256-NW+JnxQ4Dl1XAdTRGd+zw/zqgUYsKFIRQvP2m7DxWWI=";
           };
           buildInputs = with pkgs; [
             pkgs._custom.scenefx

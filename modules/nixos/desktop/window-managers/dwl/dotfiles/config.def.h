@@ -27,6 +27,11 @@ static const char cursortheme[] = "@cursorName@";
 static const unsigned int cursorsize = @cursorSize@;
 static const unsigned int swipe_min_threshold = 0;
 static const int center_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
+
+static const int opacity = 0; /* flag to enable opacity */
+static const float opacity_inactive = 0.5;
+static const float opacity_active = 1.0;
+
 static const int shadow = 1;
 static const int shadow_only_floating = 0; /* 0 means center floating relative to the window area */
 static const struct wlr_render_color shadow_color = COLOR(0x@shadow@ff);
@@ -34,9 +39,14 @@ static const struct wlr_render_color shadow_color_focus = COLOR(0x@shadow@ff);
 static const int shadow_blur_sigma = 15;
 static const int shadow_blur_sigma_focus = 29;
 static const char *const shadow_ignore_list[] = { NULL }; /* list of app-id to ignore */
-static const int optimized_blur = 0;
+
+static const int corner_radius = 0; /* 0 disables corner_radius */
+
+static const int blur = 1; /* flag to enable blur */
+static const int blur_optimized = 1;
+static const int blur_ignore_transparent = 1;
 static const struct blur_data blur_data = {
-	.radius = 5, /* 0 disables blur */
+	.radius = 5,
 	.num_passes = 3,
 	.noise = 0.02,
 	.brightness = 0.9,
