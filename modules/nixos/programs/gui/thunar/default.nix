@@ -45,8 +45,8 @@ in {
       };
 
       xdg.mimeApps = {
-        defaultApplications = { "inode/directory" = [ "thunar" ]; };
-        associations.added = { "inode/directory" = [ "thunar" ]; };
+        defaultApplications = { "inode/directory" = [ "thunar.desktop" ]; };
+        associations.added = { "inode/directory" = [ "thunar.desktop" ]; };
       };
 
       systemd.user.services.thunar = {
