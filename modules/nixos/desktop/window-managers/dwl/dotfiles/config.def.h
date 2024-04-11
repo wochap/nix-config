@@ -15,10 +15,8 @@ static const unsigned int borderepx        = 0;  /* border pixel of windows */
 static const unsigned int borderspx_offset = 0;  /* border pixel of windows */
 static const unsigned int borderepx_negative_offset = 0;  /* border pixel of windows */
 static const int draw_minimal_borders      = 1; /* merge adjacent borders */
+static const float rootcolor[] = COLOR(0x222222ff);
 static const float bordercolor[] = COLOR(0x@border@ff);
-static const float borderscolor[] = COLOR(0x@border@00);
-static const float borderecolor[] = COLOR(0x@border@00);
-static const int border_color_type         = BrdOriginal;
 static const float focuscolor[] = COLOR(0x@surface0@ff);
 static const float urgentcolor[] = COLOR(0x@red@ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
@@ -26,7 +24,7 @@ static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 0.0};
 static const char cursortheme[] = "@cursorName@";
 static const unsigned int cursorsize = @cursorSize@;
 static const unsigned int swipe_min_threshold = 0;
-static const int center_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
+static const int floating_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
 
 static const int opacity = 0; /* flag to enable opacity */
 static const float opacity_inactive = 0.5;
@@ -42,17 +40,16 @@ static const char *const shadow_ignore_list[] = { NULL }; /* list of app-id to i
 
 static const int corner_radius = 0; /* 0 disables corner_radius */
 
-static const int blur = 1; /* flag to enable blur */
+static const int blur = 0; /* flag to enable blur */
 static const int blur_optimized = 1;
 static const int blur_ignore_transparent = 1;
 static const struct blur_data blur_data = {
 	.radius = 5,
 	.num_passes = 3,
-	.noise = 0.02,
-	.brightness = 0.9,
-	.contrast = 0.9,
-	.saturation = 1.1,
-};
+	.noise = (float)0.02,
+	.brightness = (float)0.9,
+	.contrast = (float)0.9,
+	.saturation = (float)1.1,};
 
 enum {
   VIEW_L = -1,
@@ -290,7 +287,7 @@ static const Key keys[] = {
   // ### SYSTEM KEYBINDINGS
 
   // Open scratchpad terminal
-  { MODKEY, Key_i, focusortogglematchingscratch, {.v = kittyscratchcmd } },
+  { MODKEY, Key_i, raiserunnamedscratchpad, {.v = kittyscratchcmd } },
 
   // Lock screen
 	{ MODKEY, Key_l, spawn, SHCMD("swaylock-start") },
@@ -431,7 +428,7 @@ static const Key keys[] = {
 	{ MODKEY|MOD_ALT, Key_t, spawn, SHCMD("kitty") },
 
   // Open file manager
-  { MODKEY|MOD_ALT, Key_f, focusortogglematchingscratch, {.v = fmscratchcmd} },
+  { MODKEY|MOD_ALT, Key_f, raiserunnamedscratchpad, {.v = fmscratchcmd} },
 
   // Screencast/record region to mp4
   { MODKEY|MOD_ALT, Key_r, spawn, SHCMD("recorder --area") },
@@ -468,7 +465,7 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT, Key_u, entermode, {.i = TUI} },
   { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = KB_INHIBIT} },
   { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
-  { MODKEY|MOD_ALT, Key_x, focusortogglematchingscratch, {.v = xwvbscratchcmd} },
+  { MODKEY|MOD_ALT, Key_x, raiserunnamedscratchpad, {.v = xwvbscratchcmd} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, switchxkbrule, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
@@ -536,22 +533,22 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, RUN("brave")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, RUN("google-chrome-stable")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, RUN("microsoft-edge")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, focusortogglematchingscratch, {.v = msgptscratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, focusortogglematchingscratch, {.v = chatgptscratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, focusortogglematchingscratch, {.v = ollamascratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, focusortogglematchingscratch, {.v = ytmusicscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, {.v = msgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, raiserunnamedscratchpad, {.v = chatgptscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, raiserunnamedscratchpad, {.v = ollamascratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, {.v = ytmusicscratchcmd}),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // HACK: disable all dwl keymappings
   { KB_INHIBIT, { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = NORMAL} } },
 
   // Terminal TUI
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, focusortogglematchingscratch, {.v = kittyneorgcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, focusortogglematchingscratch, {.v = kittytopcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, focusortogglematchingscratch, {.v = kittyneomuttcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, focusortogglematchingscratch, {.v = kittynewsboatcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, focusortogglematchingscratch, {.v = kittyncmpcppcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_d, focusortogglematchingscratch, {.v = kittydunstnctuicmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, raiserunnamedscratchpad, {.v = kittyneorgcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, raiserunnamedscratchpad, {.v = kittytopcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, raiserunnamedscratchpad, {.v = kittyneomuttcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, raiserunnamedscratchpad, {.v = kittynewsboatcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, raiserunnamedscratchpad, {.v = kittyncmpcppcmd}),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_d, raiserunnamedscratchpad, {.v = kittydunstnctuicmd}),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --select")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --add")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --edit")),
