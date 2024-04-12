@@ -14,8 +14,7 @@ export const battery = Widget.Label({
       return [
         "battery",
         charging ? "charging" : "",
-        charged ? "charged" : "charged",
-        charged ? "charged" : "charged",
+        charged ? "charged" : "",
         energyRate > 0 ? "discharging" : "",
         percent < 15 ? "critical" : "",
       ];
@@ -26,12 +25,33 @@ export const battery = Widget.Label({
       Battery.bind("percent"),
       Battery.bind("charging"),
       Battery.bind("charged"),
+      Battery.bind("energy-rate"),
     ],
-    (percent, charging, charged) => {
-      if (charging) {
-        return `<span rise='-1000'></span> ${percent}%`;
+    (percent, charging, charged, energyRate) => {
+      if (charged) {
+        return `<span size="large" rise='-2050'></span> ${percent}%`;
       }
-      return `<span rise='-1000'></span> ${percent}%`;
+      if (charging) {
+        return `<span size="large" rise='-2050'></span> ${percent}%`;
+      }
+      if (energyRate === 0) {
+        return `<span size="large" rise='-2050'></span> ${percent}%`;
+      }
+      const icons = [
+        [100, ""],
+        [80, ""],
+        [80, ""],
+        [70, ""],
+        [60, ""],
+        [50, ""],
+        [40, ""],
+        [30, ""],
+        [20, ""],
+        [10, ""],
+        [0, ""],
+      ];
+      const icon = icons.find(([threshold, _]) => percent >= threshold)[1];
+      return `<span size="large" rise='-2050'>${icon}</span> ${percent}%`;
     },
   ),
 });

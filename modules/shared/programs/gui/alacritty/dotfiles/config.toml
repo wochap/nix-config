@@ -8,6 +8,8 @@ TERM = "alacritty"
 
 [window]
 decorations = "full"
+# opacity = 0.75
+opacity = 1
 
   [window.padding]
   x = 7

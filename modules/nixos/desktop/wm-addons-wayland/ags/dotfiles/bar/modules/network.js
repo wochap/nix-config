@@ -1,6 +1,7 @@
 const Network = await Service.import("network");
 
 const wifi = Widget.Label({
+  useMarkup: true,
   tooltip_text: Utils.merge(
     [Network.wifi.bind("ssid"), Network.wifi.bind("strength")],
     (ssid, strength) => {
@@ -10,11 +11,20 @@ const wifi = Widget.Label({
   setup(self) {
     self.hook(Network.wifi, () => {
       if (Network.wifi.ssid) {
-        self.label = "";
+        const icons = [
+          [66, ""],
+          [44, ""],
+          [22, ""],
+          [1, ""],
+          [0, ""],
+        ];
+        const percent = Network.wifi.strength;
+        const icon = icons.find(([threshold, _]) => percent >= threshold)[1];
         self.class_name = "connected";
+        self.label = `<span size="large" rise='-2050'>${icon}</span>`;
       } else {
-        self.label = "";
         self.class_name = "disconnected";
+        self.label = `<span size="large" rise='-2050'></span>`;
       }
     });
   },

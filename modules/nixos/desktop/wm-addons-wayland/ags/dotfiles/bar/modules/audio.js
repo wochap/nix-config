@@ -16,14 +16,14 @@ export const audio = Widget.Button({
     setup(self) {
       self.hook(Audio.speaker, () => {
         const vol = Audio.speaker.volume * 100;
-        const icon = [
-          [101, ""],
-          [67, ""],
-          [34, ""],
-          [1, ""],
-          [0, ""],
-        ].find(([threshold]) => threshold <= vol)?.[1];
-        self.label = `<span rise='-1000'>${Audio.speaker.stream?.isMuted ? "" : icon}</span> ${Math.ceil(vol)}%`;
+        const icons = [
+          [66, ""],
+          [33, ""],
+          [1, ""],
+          [0, ""],
+        ];
+        const icon = icons.find(([threshold, _]) => vol >= threshold)[1];
+        self.label = `<span rise='-1000'>${Audio.speaker.stream?.isMuted ? "" : icon}</span> ${Math.ceil(vol)}%`;
       });
     },
   }),

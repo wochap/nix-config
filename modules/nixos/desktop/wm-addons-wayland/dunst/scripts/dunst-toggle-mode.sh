@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-ENABLED=
-DISABLED=
+ENABLED=
+DISABLED=
 
 reload_waybar() {
   pkill -SIGRTMIN+8 waybar

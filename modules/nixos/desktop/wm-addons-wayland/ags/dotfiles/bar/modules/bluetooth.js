@@ -1,6 +1,7 @@
 const Bluetooth = await Service.import("bluetooth");
 
 export const bluetooth = Widget.Label({
+  useMarkup: true,
   class_names: Utils.merge(
     [Bluetooth.bind("enabled"), Bluetooth.bind("connected-devices")],
     (enabled, connectedDevices) => {
@@ -16,11 +17,11 @@ export const bluetooth = Widget.Label({
     (enabled, connectedDevices) => {
       if (enabled) {
         if (connectedDevices.length) {
-          return `󰂱 ${connectedDevices.length}`;
+          return `<span rise='-1000'></span> ${connectedDevices.length}`;
         }
-        return "󰂯";
+        return `<span rise='-1000'></span>`;
       }
-      return "󰂲";
+      return `<span rise='-1000'></span>`;
     },
   ),
 });

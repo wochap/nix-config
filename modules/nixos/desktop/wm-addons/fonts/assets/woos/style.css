@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'woos';
   src:
-    url('fonts/woos.ttf?umfbwu') format('truetype'),
-    url('fonts/woos.woff?umfbwu') format('woff'),
-    url('fonts/woos.svg?umfbwu#woos') format('svg');
+    url('fonts/woos.ttf?mgfm6f') format('truetype'),
+    url('fonts/woos.woff?mgfm6f') format('woff'),
+    url('fonts/woos.svg?mgfm6f#woos') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -24,74 +24,164 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ic_fluent_settings_24_regular:before {
+  content: "\e903";
+}
+.ic_fluent_emoji_24_regular:before {
+  content: "\e904";
+}
+.ic_fluent_search_24_regular:before {
+  content: "\e905";
+}
+.ic_fluent_clipboard_24_regular:before {
+  content: "\e906";
+}
+.ic_fluent_calculator_24_regular:before {
+  content: "\e907";
+}
+.ic_fluent_send_24_regular:before {
+  content: "\e908";
+}
+.ic_fluent_send_clock_24_regular:before {
+  content: "\e909";
+}
+.ic_fluent_camera_24_regular:before {
+  content: "\e90a";
+}
+.ic_fluent_camera_off_24_regular:before {
+  content: "\e90b";
+}
+.ic_fluent_mic_prohibited_24_regular:before {
+  content: "\e90c";
+}
+.ic_fluent_mic_24_regular:before {
+  content: "\e90d";
+}
+.ic_fluent_mic_off_24_regular:before {
+  content: "\e90e";
+}
+.ic_fluent_mic_record_24_regular:before {
+  content: "\e90f";
+}
+.ic_fluent_alert_24_regular:before {
+  content: "\e910";
+}
+.ic_fluent_alert_badge_24_regular:before {
+  content: "\e911";
+}
+.ic_fluent_alert_off_24_regular:before {
+  content: "\e912";
+}
+.ic_fluent_alert_on_24_regular:before {
+  content: "\e919";
+}
+.ic_fluent_alert_snooze_24_regular:before {
+  content: "\e91b";
+}
+.ic_fluent_alert_urgent_24_regular:before {
+  content: "\e920";
+}
+.ic_fluent_clock_24_regular:before {
+  content: "\e923";
+}
+.ic_fluent_speaker_0_24_regular:before {
+  content: "\e924";
+}
+.ic_fluent_speaker_1_24_regular:before {
+  content: "\e92a";
+}
+.ic_fluent_speaker_2_24_regular:before {
+  content: "\e92b";
+}
+.ic_fluent_speaker_bluetooth_24_regular:before {
+  content: "\e931";
+}
+.ic_fluent_speaker_off_24_regular:before {
+  content: "\e932";
+}
+.ic_fluent_speaker_mute_24_regular:before {
+  content: "\e933";
+}
+.ic_fluent_bluetooth_24_regular:before {
+  content: "\e935";
+}
+.ic_fluent_bluetooth_connected_24_regular:before {
+  content: "\e936";
+}
+.ic_fluent_bluetooth_disabled_24_regular:before {
+  content: "\e938";
+}
+.ic_fluent_bluetooth_searching_24_regular:before {
+  content: "\e939";
+}
+.ic_fluent_wifi_warning_24_regular:before {
+  content: "\e93a";
+}
+.ic_fluent_wifi_off_24_regular:before {
+  content: "\e93b";
+}
+.ic_fluent_wifi_4_24_regular:before {
+  content: "\e93c";
+}
+.ic_fluent_wifi_3_24_regular:before {
+  content: "\e93d";
+}
+.ic_fluent_wifi_2_24_regular:before {
+  content: "\e93e";
+}
+.ic_fluent_wifi_1_24_regular:before {
+  content: "\e93f";
+}
+.ic_fluent_battery_checkmark_24_regular:before {
+  content: "\e940";
+}
+.ic_fluent_battery_charge_24_regular:before {
+  content: "\e941";
+}
+.ic_fluent_battery_10_24_regular:before {
+  content: "\e942";
+}
+.ic_fluent_battery_9_24_regular:before {
+  content: "\e943";
+}
+.ic_fluent_battery_8_24_regular:before {
+  content: "\e944";
+}
+.ic_fluent_battery_7_24_regular:before {
+  content: "\e945";
+}
+.ic_fluent_battery_6_24_regular:before {
+  content: "\e946";
+}
+.ic_fluent_battery_5_24_regular:before {
+  content: "\e947";
+}
+.ic_fluent_battery_4_24_regular:before {
+  content: "\e948";
+}
+.ic_fluent_battery_3_24_regular:before {
+  content: "\e949";
+}
+.ic_fluent_battery_2_24_regular:before {
+  content: "\e94a";
+}
+.ic_fluent_battery_1_24_regular:before {
+  content: "\e94b";
+}
+.ic_fluent_battery_0_24_regular:before {
+  content: "\e94c";
+}
 .send:before {
   content: "\e901";
 }
 .mail:before {
   content: "\e902";
 }
-.inbox:before {
-  content: "\e903";
-}
 .window:before {
   content: "\e900";
 }
-.mozillafirefox:before {
-  content: "\e440";
-}
-.brave:before {
-  content: "\e441";
-}
-.radio-unchecked:before {
-  content: "\e442";
-}
-.radio-button:before {
-  content: "\e442";
-}
-.circle1:before {
-  content: "\e442";
-}
-.radio-checked:before {
-  content: "\e443";
-}
-.radio-button1:before {
-  content: "\e443";
-}
-.radio-checked1:before {
-  content: "\e444";
-}
-.radio-button2:before {
-  content: "\e444";
-}
 .nixos:before {
   content: "\e445";
-}
-.battery:before {
-  content: "\e90a";
-}
-.battery-charging:before {
-  content: "\e90b";
-}
-.bell:before {
-  content: "\e90c";
-}
-.bell-off:before {
-  content: "\e90d";
-}
-.bluetooth:before {
-  content: "\e90e";
-}
-.chrome:before {
-  content: "\e90f";
-}
-.circle11:before {
-  content: "\e910";
-}
-.clipboard:before {
-  content: "\e911";
-}
-.clock:before {
-  content: "\e912";
 }
 .cloud:before {
   content: "\e913";
@@ -111,14 +201,8 @@ i {
 .cloud-snow:before {
   content: "\e918";
 }
-.code:before {
-  content: "\e919";
-}
 .coffee:before {
   content: "\e91a";
-}
-.compass:before {
-  content: "\e91b";
 }
 .copy:before {
   content: "\e91c";
@@ -132,23 +216,11 @@ i {
 .database:before {
   content: "\e91f";
 }
-.disc:before {
-  content: "\e920";
-}
 .dollar-sign:before {
   content: "\e921";
 }
 .download:before {
   content: "\e922";
-}
-.figma:before {
-  content: "\e93f";
-}
-.github:before {
-  content: "\e923";
-}
-.globe:before {
-  content: "\e924";
 }
 .grid:before {
   content: "\e925";
@@ -156,26 +228,14 @@ i {
 .hard-drive:before {
   content: "\e926";
 }
-.headphones:before {
-  content: "\e940";
-}
 .help-circle:before {
   content: "\e927";
 }
 .lock:before {
   content: "\e928";
 }
-.log-in:before {
-  content: "\e941";
-}
 .log-out:before {
   content: "\e929";
-}
-.mic:before {
-  content: "\e92a";
-}
-.mic-off:before {
-  content: "\e92b";
 }
 .minus-circle:before {
   content: "\e92c";
@@ -192,42 +252,9 @@ i {
 .rotate-ccw:before {
   content: "\e930";
 }
-.search:before {
-  content: "\e931";
-}
-.slack:before {
-  content: "\e932";
-}
-.smile:before {
-  content: "\e933";
-}
 .sun:before {
   content: "\e934";
 }
-.terminal:before {
-  content: "\e935";
-}
-.thermometer:before {
-  content: "\e936";
-}
 .upload:before {
   content: "\e937";
-}
-.volume:before {
-  content: "\e938";
-}
-.volume-1:before {
-  content: "\e939";
-}
-.volume-2:before {
-  content: "\e93a";
-}
-.volume-x:before {
-  content: "\e93b";
-}
-.wifi:before {
-  content: "\e93c";
-}
-.wifi-off:before {
-  content: "\e93d";
 }
