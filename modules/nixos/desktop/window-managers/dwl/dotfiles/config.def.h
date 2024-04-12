@@ -13,7 +13,7 @@ static const float bordercolor[] = COLOR(0x@border@ff);
 static const float focuscolor[] = COLOR(0x@surface0@ff);
 static const float urgentcolor[] = COLOR(0x@red@ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
-static const float fullscreen_bg[]         = {0.1, 0.1, 0.1, 0.0};
+static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 0.0f}; /* You can also use glsl colors */
 static const char cursortheme[] = "@cursorName@";
 static const unsigned int cursorsize = @cursorSize@;
 static const unsigned int swipe_min_threshold = 0;
