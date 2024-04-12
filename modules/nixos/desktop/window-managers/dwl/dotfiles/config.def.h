@@ -1,11 +1,8 @@
 /* Taken from https://github.com/djpohly/dwl/issues/466 */
-#define COLOR(hex) { \
-	((hex >> 24) & 0xFF) / 255.0f, \
-	((hex >> 16) & 0xFF) / 255.0f, \
-	((hex >> 8) & 0xFF) / 255.0f, \
-	(hex & 0xFF) / 255.0f \
-}
-
+#define COLOR(hex)    { ((hex >> 24) & 0xFF) / 255.0f, \
+                        ((hex >> 16) & 0xFF) / 255.0f, \
+                        ((hex >> 8) & 0xFF) / 255.0f, \
+                        (hex & 0xFF) / 255.0f }
 /* appearance */
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
