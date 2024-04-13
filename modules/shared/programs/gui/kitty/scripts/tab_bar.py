@@ -16,7 +16,13 @@ lavender = as_rgb(int("B4BEFE", 16))
 surface1 = as_rgb(int("45475A", 16))
 base = as_rgb(int("1E1E2E", 16))
 window_icon = ""
-layout_icon = ""
+default_layout_icon = ""
+layout_icon_by_name = {
+  "fat" : "",
+  "tall" : "",
+  "stack" : "",
+  "splits" : "",
+}
 active_tab_layout_name = ""
 active_tab_num_windows = 1
 left_status_length = 0
@@ -92,6 +98,7 @@ def _draw_left_status(screen: Screen):
 
 def _draw_right_status(screen: Screen, is_last: bool) -> int:
     layout_fg = surface1 if active_tab_layout_name == "fat" else lavender
+    layout_icon = layout_icon_by_name[active_tab_layout_name] or default_layout_icon
     cells = [
         # layout name
         (layout_fg, base, " " + layout_icon + " "),

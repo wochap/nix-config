@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'woos';
   src:
-    url('fonts/woos.ttf?mgfm6f') format('truetype'),
-    url('fonts/woos.woff?mgfm6f') format('woff'),
-    url('fonts/woos.svg?mgfm6f#woos') format('svg');
+    url('fonts/woos.ttf?kktqwm') format('truetype'),
+    url('fonts/woos.woff?kktqwm') format('woff'),
+    url('fonts/woos.svg?kktqwm#woos') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -24,6 +24,42 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ic_fluent_layout_cell_four_24_regular:before {
+  content: "\e94d";
+}
+.ic_fluent_layout_row_three_24_regular:before {
+  content: "\e94e";
+}
+.ic_fluent_layer_diagonal_24_regular:before {
+  content: "\e94f";
+}
+.ic_fluent_layout_column_three_24_regular:before {
+  content: "\e950";
+}
+.ic_fluent_layout_column_two_split_left_24_regular:before {
+  content: "\e951";
+}
+.ic_fluent_layout_column_two_split_right_24_regular:before {
+  content: "\e952";
+}
+.ic_fluent_layout_row_two_split_bottom_24_regular:before {
+  content: "\e953";
+}
+.ic_fluent_layout_row_two_split_top_24_regular:before {
+  content: "\e954";
+}
+.ic_fluent_layout_row_two_split_top_focus_bottom_24_filled:before {
+  content: "\e955";
+}
+.ic_fluent_layout_column_two_split_left_focus_right_24_filled:before {
+  content: "\e956";
+}
+.ic_fluent_layout_column_two_split_right_focus_left_24_filled:before {
+  content: "\e957";
+}
+.ic_fluent_layout_row_two_split_bottom_focus_top_24_filled:before {
+  content: "\e958";
+}
 .ic_fluent_settings_24_regular:before {
   content: "\e903";
 }
