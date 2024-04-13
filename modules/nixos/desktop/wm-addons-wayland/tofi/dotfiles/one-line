@@ -43,7 +43,8 @@ exclusive-zone = -1
 
 # Behaviour
 text-cursor = true
-matching-algorithm = fuzzy
+fuzzy-match = true
+# matching-algorithm = fuzzy
 drun-launch = true
 ascii-input = true
 
