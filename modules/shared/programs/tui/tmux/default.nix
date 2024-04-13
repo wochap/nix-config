@@ -4,7 +4,10 @@ let
   cfg = config._custom.programs.tmux;
   inherit (config._custom.globals) configDirectory themeColors;
 in {
-  options._custom.programs.tmux.enable = lib.mkEnableOption { };
+  options._custom.programs.tmux = {
+    enable = lib.mkEnableOption { };
+    systemdEnable = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ tmux tmuxp ];
@@ -31,7 +34,7 @@ in {
       programs.fzf.tmux.enableShellIntegration = true;
 
       # systemd service required by tmux-continuum
-      systemd.user.services.tmux-server = {
+      systemd.user.services.tmux-server = lib.mkIf cfg.systemdEnable {
         Unit = {
           Description = "tmux default session (detached)";
           Documentation = "man:tmux(1)";

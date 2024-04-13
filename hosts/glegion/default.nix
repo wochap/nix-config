@@ -75,6 +75,7 @@ in {
     _custom.programs.presenterm.enable = true;
     _custom.programs.taskwarrior.enable = true;
     _custom.programs.tmux.enable = true;
+    _custom.programs.tmux.systemdEnable = false;
     _custom.programs.youtube.enable = true;
 
     _custom.services.android.enable = true;
