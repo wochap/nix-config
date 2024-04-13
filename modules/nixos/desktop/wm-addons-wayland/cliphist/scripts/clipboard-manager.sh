@@ -14,10 +14,16 @@ init() {
 }
 
 menu() {
-  selected=$(cliphist list |
+  list=$(cliphist list |
     sort -k 2 -u | # sort by 2 field to the end of line and output only unique lines
-    sort -nr |     # sort numerically in reverse
+    sort -nr) # sort numerically in reverse
+  list_count=$(if [[ -z "$list" ]]; then echo 0; else echo "$list" | wc -l; fi)
+  num_results=$(if [[ "$list_count" -gt 10 ]]; then echo 10; else echo "$list_count"; fi)
+  height=$(if [[ "$num_results" -gt 0 ]]; then echo "scale=0; ($num_results * 29.20) + 11 + 40" | bc -l | awk '{print int($1+0.5)}'; else echo 40; fi)
+  selected=$(echo "$list" |
     tofi \
+      --height "$height" \
+      --num-results "$num_results" \
       --prompt-text "clipboard" \
       --config "$HOME/.config/tofi/multi-line" |
     cliphist decode)
