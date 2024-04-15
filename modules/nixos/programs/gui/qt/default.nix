@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let cfg = config._custom.programs.qt;
 in {
@@ -25,8 +25,11 @@ in {
         libsForQt5.qt5.qtimageformats # thumbnails
         libsForQt5.ffmpegthumbs # thumbnails
 
-        # APPS MEDIA (Comment on first install)
+        # kdenlive
         libsForQt5.kdenlive
+        # glaxnimate
+
+        # APPS MEDIA (Comment on first install)
         stremio
         # nomacs # image viewer/editor
         # olive-editor # video editor
@@ -41,6 +44,9 @@ in {
     };
 
     _custom.hm = {
+      xdg.configFile."obs-studio/themes".source =
+        "${inputs.catppuccin-obs}/themes";
+
       programs.obs-studio = {
         enable = true;
         plugins = with pkgs; [

@@ -119,6 +119,8 @@
     catppuccin-mpv.flake = false;
     catppuccin-foot.url = "github:catppuccin/foot";
     catppuccin-foot.flake = false;
+    catppuccin-obs.url = "github:catppuccin/obs";
+    catppuccin-obs.flake = false;
   };
 
   outputs = inputs:
