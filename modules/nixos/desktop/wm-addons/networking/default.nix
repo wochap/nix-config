@@ -38,7 +38,7 @@ in {
           # 22 # Secure Shell (SSH)
           # 25 # Simple Mail Transfer Protocol (SMTP)
           # 53 #  Domain Name System (DNS)
-          80 # Hypertext Transfer Protocol (HTTP)
+          # 80 # Hypertext Transfer Protocol (HTTP)
           # 110 # Post Office Protocol (POP3)
           # 143 # Internet Message Access Protocol (IMAP)
           443 # HTTP Secure (HTTPS)
