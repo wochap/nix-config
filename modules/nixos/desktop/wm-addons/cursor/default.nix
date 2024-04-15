@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (config._custom) globals;
@@ -17,6 +17,14 @@ in {
       };
 
       gtk.cursorTheme = { inherit (globals.cursor) package name size; };
+
+      systemd.user.services.xsetroot = lib._custom.mkWaylandService {
+        Service = {
+          Type = "oneshot";
+          PassEnvironment = [ "PATH" ];
+          ExecStart = "${pkgs.xorg.xsetroot}/bin/xsetroot -cursor_name left_ptr";
+        };
+      };
     };
   };
 }
