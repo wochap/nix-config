@@ -1,6 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
-let cfg = config._custom.gaming.utils;
+let
+  cfg = config._custom.gaming.utils;
+  inherit (config._custom.globals) configDirectory;
 in {
   imports = [ inputs.nix-gaming.nixosModules.pipewireLowLatency ];
   options._custom.gaming.utils.enable = lib.mkEnableOption { };
@@ -32,6 +34,11 @@ in {
     hardware.opengl = {
       extraPackages = with pkgs; [ mangohud ];
       extraPackages32 = with pkgs; [ mangohud ];
+    };
+
+    _custom.hm = {
+      xdg.configFile."MangoHud".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/MangoHud.conf;
     };
   };
 }
