@@ -47,6 +47,8 @@
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
     easy-effects-presets.flake = false;
+    retroarch-shaders.url = "github:libretro/glsl-shaders";
+    retroarch-shaders.flake = false;
 
     # terminal tools
     ani-cli.url = "github:pystardust/ani-cli";

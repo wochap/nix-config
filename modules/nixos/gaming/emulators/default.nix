@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.gaming.emulators;
@@ -21,6 +21,13 @@ in {
     services.xserver.desktopManager.retroarch = {
       enable = true;
       package = retroarchFinal;
+    };
+
+    _custom.hm = {
+      xdg.configFile."retroarch/shaders" = {
+        source = "${inputs.retroarch-shaders}";
+        recursive = true;
+      };
     };
   };
 }

@@ -1628,6 +1628,22 @@
         "type": "github"
       }
     },
+    "retroarch-shaders": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1713186413,
+        "narHash": "sha256-nZk7C4LxTAMEgyFA7fXHUo2QrXLguPqH/2fo0DMppVE=",
+        "owner": "libretro",
+        "repo": "glsl-shaders",
+        "rev": "ccc1c195c1e7040beae4d3118ef6738e5780dd88",
+        "type": "github"
+      },
+      "original": {
+        "owner": "libretro",
+        "repo": "glsl-shaders",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "ags": "ags",
@@ -1681,6 +1697,7 @@
         "prevstable-nodejs": "prevstable-nodejs",
         "prevstable-python": "prevstable-python",
         "pyprland": "pyprland",
+        "retroarch-shaders": "retroarch-shaders",
         "smart-splits-nvim": "smart-splits-nvim",
         "stable": "stable",
         "unstable": "unstable",
