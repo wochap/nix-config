@@ -31,3 +31,7 @@ window.csd decoration {
   /* gtk3 */
   box-shadow: none;
 }
+
+headerbar {
+  border-radius: 0;
+}
