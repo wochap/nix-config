@@ -57,7 +57,7 @@ let
     "LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
     "LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
     "NIX_LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
-    "PKG_hmConfig_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/pkgconfig"
+    "PKG_CONFIG_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/pkgconfig"
   ];
 in {
   options = {
