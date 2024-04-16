@@ -35,3 +35,12 @@ window.csd decoration {
 headerbar {
   border-radius: 0;
 }
+
+messagedialog,
+decoration {
+  border-radius: 0;
+}
+
+messagedialog button {
+  border-radius: 0;
+}
