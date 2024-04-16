@@ -1,17 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, pkgs }:
+{ lib, stdenv, fetchFromGitHub, pkgs, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "scenefx";
-  version = "de4ec10e1ff9347b5833f00f8615d760d9378c99";
+  version = "2f9505ac96d97e32d6a243e87714b74ccdb70498";
 
   src = fetchFromGitHub {
     owner = "wlrfx";
     repo = pname;
     rev = version;
-    hash = "sha256-4IWvkQCaPSB6o5XMK1aofP9IZWgFYhkqYbmYp/BB2+o=";
+    hash = "sha256-4Z5KDDyjXlEaE+w9pojRebssrHnrXJzAkJ7vLZCLDV8=";
   };
 
   mesonFlags = [ "-Doptimization=2" ];
+
+  patches = [
+    (fetchurl {
+      name = "install-headers-at-include-render";
+      url =
+        "https://github.com/wlrfx/scenefx/commit/640e92102b9043fdd840004b85be5aa7e1fddfa9.patch";
+      sha256 = "sha256-q+OCZvpV6ppYfyT24y2WL9/iNEUNCTB230SI8HUt/0c=";
+    })
+  ];
 
   preConfigure = ''
     ls
