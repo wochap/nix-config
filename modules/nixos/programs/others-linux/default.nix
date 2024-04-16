@@ -104,6 +104,7 @@ in {
 
         # GUI APPS
         dmenu # menu
+        galaxy-buds-client
         skypeforlinux
         zoom-us
         # antimicroX # map kb/mouse to gamepad
