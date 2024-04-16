@@ -211,6 +211,7 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 - Sync Bluetooth for dualboot Linux and Windows
 
   ```
+  # on windows, turn off `fast startup``
   # mount your disk with windows, then:
   $ sudo bt-dualboot --sync-all --backup
   ```
