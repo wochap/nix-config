@@ -463,6 +463,7 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
   { MODKEY|MOD_ALT, Key_x, raiserunnamedscratchpad, {.v = xwvbscratchcmd} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, switchxkbrule, {0} },
+  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_c, togglepointerconstraints, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
