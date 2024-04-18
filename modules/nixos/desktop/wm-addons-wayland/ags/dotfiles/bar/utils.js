@@ -48,5 +48,8 @@ export const mapAppId = (appId) => {
   if (appId === "code-url-handler") {
     return "vscode";
   }
+  if (appId === ".gamescope-wrapped") {
+    return "gamescope";
+  }
   return appId
 };
