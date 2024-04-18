@@ -8,6 +8,7 @@ in {
     environment = {
       systemPackages = with pkgs; [
         bluetuith # bluetooth TUI
+        blueberry # bluetooth GUI
         modemmanager
 
         bluez
@@ -32,6 +33,8 @@ in {
         # Possible UUIDS:
         # Defaults to false.
         KernelExperimental = true;
+
+        Enable = "Control,Gateway,Headset,Media,Sink,Socket,Source";
       };
       # Policy = { AutoEnable = false; };
     };

@@ -9,6 +9,8 @@ in {
 
     hardware.pulseaudio.enable = false;
 
+    hardware.enableAllFirmware = true;
+
     # suppress background noice
     programs.noisetorch.enable = true;
 
