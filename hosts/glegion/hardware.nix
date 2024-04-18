@@ -74,7 +74,7 @@
 
     zramSwap.enable = true;
 
-    hardware.bluetooth.powerOnBoot = false;
+    hardware.bluetooth.powerOnBoot = true;
 
     # AMD has better battery life with PPD over TLP:
     services.auto-epp = {
