@@ -22,7 +22,7 @@ let
   dwl-save-logs-str = ''
     errlogs_path="/home/${userName}/.cache/dwlstderrlogs"
     logs_path="/home/${userName}/.cache/dwllogs"
-    timestamp=$(date +"%a-%m-%b-%H:%M-%Y")
+    timestamp=$(date +"%a-%d-%b-%H:%M-%Y")
 
     if [[ -f "$errlogs_path" ]]; then
       mv "$errlogs_path" "''${errlogs_path}_''${timestamp}"
