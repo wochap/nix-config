@@ -34,10 +34,12 @@ if [[ "$program_data" ]]; then
       # TODO: focus next window on current workspace?
     else
       hyprctl dispatch focuswindow "^($class)$" &>/dev/null
+      hyprctl dispatch alterzorder top &>/dev/null
     fi
   else
     hyprctl dispatch movetoworkspacesilent "e+0,^($class)$" &>/dev/null
     hyprctl dispatch focuswindow "^($class)$" &>/dev/null
+    hyprctl dispatch alterzorder top &>/dev/null
   fi
 else
   if [[ "$runstr" ]]; then
