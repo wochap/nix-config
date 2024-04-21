@@ -26,10 +26,8 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      hyprland-start
-      hyprland-start-with-dgpu-port
-    ];
+    environment.systemPackages =
+      [ hyprland-start hyprland-start-with-dgpu-port ];
 
     _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault "Hyprland";
     environment.etc = {
