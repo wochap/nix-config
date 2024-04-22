@@ -3,6 +3,25 @@
 let
   cfg = config._custom.programs.tmux;
   inherit (config._custom.globals) configDirectory themeColors;
+
+  kill-unnamed-tmux-sessions = pkgs.writeScriptBin "kill-unnamed-tmux-sessions"
+    (builtins.readFile ./scripts/kill-unnamed-tmux-sessions.sh);
+  start-tmux-server = pkgs.writeScriptBin "start-tmux-server" ''
+    #!/usr/bin/env bash
+
+    ${pkgs.tmux}/bin/tmux kill-server
+    TMUX_ID=$(${pkgs.tmux}/bin/tmux new-session -d -P)
+    ${pkgs.tmux}/bin/tmux kill-session -t tmux-server
+    ${pkgs.tmux}/bin/tmux rename-session -t $TMUX_ID tmux-server
+    ${kill-unnamed-tmux-sessions}/bin/kill-unnamed-tmux-sessions
+  '';
+  stop-tmux-server = pkgs.writeScriptBin "stop-tmux-server" ''
+    #!/usr/bin/env bash
+
+    ${kill-unnamed-tmux-sessions}/bin/kill-unnamed-tmux-sessions
+    ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
+    ${pkgs.tmux}/bin/tmux kill-server
+  '';
 in {
   options._custom.programs.tmux = {
     enable = lib.mkEnableOption { };
@@ -10,7 +29,11 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ tmux tmuxp ];
+    environment.systemPackages = with pkgs; [
+      kill-unnamed-tmux-sessions
+      tmux
+      tmuxp
+    ];
 
     _custom.hm = {
       xdg.configFile = {
@@ -41,13 +64,10 @@ in {
         };
         Service = {
           Type = "forking";
-          Environment = [ "TERM=alacritty" ];
+          Environment = [ "TERM=foot" ];
           PassEnvironment = [ "PATH" "DISPLAY" "HOME" ];
-          ExecStart = "${pkgs.tmux}/bin/tmux new-session -d";
-          ExecStop = [
-            "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh"
-            "${pkgs.tmux}/bin/tmux kill-server"
-          ];
+          ExecStart = "${start-tmux-server}/bin/start-tmux-server";
+          ExecStop = "${stop-tmux-server}/bin/stop-tmux-server";
           KillMode = "mixed";
           RestartSec = 2;
         };
