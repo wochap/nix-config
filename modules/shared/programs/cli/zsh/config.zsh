@@ -21,9 +21,6 @@ setopt APPEND_HISTORY
 # Completion menu
 # ================
 
-# Completion for kitty
-# kitty + complete setup zsh | source /dev/stdin
-
 # Zsh completion has this dumb thing where it will SSH into remote servers
 # to suggest file paths. With autosuggestions, this causes an SSH
 # connection to occur for each keypress causing a number of undesirable

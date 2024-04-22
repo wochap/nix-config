@@ -3,8 +3,15 @@
 let
   cfg = config._custom.programs.foot;
   inherit (config._custom.globals) themeColors;
+  iniFormat = pkgs.formats.ini { };
 in {
-  options._custom.programs.foot.enable = lib.mkEnableOption { };
+  options._custom.programs.foot = {
+    enable = lib.mkEnableOption { };
+    settings = lib.mkOption {
+      type = iniFormat.type;
+      default = { };
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
@@ -14,6 +21,8 @@ in {
         ${builtins.readFile ./dotfiles/foot.ini}
         ${builtins.readFile
         "${inputs.catppuccin-foot}/catppuccin-${themeColors.flavor}.ini"}
+        ${builtins.readFile
+        (iniFormat.generate "foot.ini" config._custom.programs.foot.settings)}
       '';
     };
   };

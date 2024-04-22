@@ -57,6 +57,10 @@ in {
     _custom.programs.discord.enable = true;
     _custom.programs.firefox.enable = true;
     _custom.programs.foot.enable = true;
+    _custom.programs.foot.settings.main = {
+      initial-window-size-pixels = "1440x900";
+      workers = 8;
+    };
     _custom.programs.kitty.enable = true;
     _custom.programs.mpv.enable = true;
     _custom.programs.qutebrowser.enable = true;
