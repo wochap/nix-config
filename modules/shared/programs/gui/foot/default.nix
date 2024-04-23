@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.programs.foot;
-  inherit (config._custom.globals) themeColors;
+  inherit (config._custom.globals) themeColors configDirectory;
   iniFormat = pkgs.formats.ini { };
 in {
   options._custom.programs.foot = {
@@ -15,11 +15,16 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    _custom.programs.foot.settings.main = {
+      shell = "${pkgs.tmux}/bin/tmux";
+      include =
+        "${lib._custom.relativeSymlink configDirectory ./dotfiles/foot.ini}";
+    };
+
     _custom.hm = {
       home.packages = with pkgs; [ foot ];
 
       xdg.configFile."foot/foot.ini".text = ''
-        ${builtins.readFile ./dotfiles/foot.ini}
         ${builtins.readFile
         "${inputs.catppuccin-foot}/catppuccin-${themeColors.flavor}.ini"}
         ${builtins.readFile
