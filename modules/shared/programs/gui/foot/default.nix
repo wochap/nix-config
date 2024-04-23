@@ -36,18 +36,33 @@ in {
         (iniFormat.generate "foot.ini" config._custom.programs.foot.settings)}
       '';
 
-      systemd.user.services.foot-server = lib.mkIf cfg.systemdEnable
-        (lib._custom.mkWaylandService {
-          Unit = {
-            Description = "foot server";
-            Documentation = "man:foot(1)";
-          };
-          Service = {
-            Type = "forking";
-            PassEnvironment = [ "PATH" ];
-            ExecStart = "${pkgs.foot}/bin/foot --server";
-          };
-        });
+      systemd.user.services.foot-server = lib.mkIf cfg.systemdEnable {
+        Unit = {
+          Description = "Foot terminal server mode";
+          Documentation = "man:foot(1)";
+          Requires = "%N.socket";
+          PartOf = "graphical-session.target";
+          After = "graphical-session.target";
+          ConditionEnvironment = "WAYLAND_DISPLAY";
+        };
+        Service = {
+          PassEnvironment = [ "PATH" "WAYLAND_DISPLAY" ];
+          ExecStart = "${pkgs.foot}/bin/foot --server=3";
+          UnsetEnvironment = "LISTEN_PID LISTEN_FDS LISTEN_FDNAMES";
+          NonBlocking = true;
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
+
+      systemd.user.sockets.foot-server = lib.mkIf cfg.systemdEnable {
+        Socket.ListenStream = "%t/foot.sock";
+        Unit = {
+          PartOf = "graphical-session.target";
+          After = "graphical-session.target";
+          ConditionEnvironment = "WAYLAND_DISPLAY";
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
     };
   };
 }
