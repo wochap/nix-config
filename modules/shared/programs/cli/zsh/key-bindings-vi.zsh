@@ -179,6 +179,9 @@ multibindkey 'viins menuselect' "$key_down" history-substring-search-down
 
 # TODO: add [Shift+Enter] to do Ctrl+v-Ctrl+j to insert new line
 
+# [Ctrl+k] - clear screen
+bindkey -M viins '^k' clear-screen
+
 # [Ctrl+y] - copy buffer
 bindkey -M viins '^y' copybuffer
 
