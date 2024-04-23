@@ -55,6 +55,8 @@ in {
         '';
         "kitty/kitty.conf".text = ''
           include ${inputs.catppuccin-kitty}/themes/${themeColors.flavor}.conf
+          cursor ${themeColors.green}
+          cursor_text_color ${themeColors.base}
           active_border_color ${themeColors.primary}
           inactive_border_color ${themeColors.border}
           tab_title_template "{fmt.bg.default}{fmt.fg._${unwrapHex themeColors.surface1}}  {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"

@@ -15,10 +15,15 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    _custom.programs.foot.settings.main = {
-      shell = "${pkgs.tmux}/bin/tmux";
-      include =
-        "${lib._custom.relativeSymlink configDirectory ./dotfiles/foot.ini}";
+    _custom.programs.foot.settings = {
+      main = {
+        shell = "${pkgs.tmux}/bin/tmux";
+        include =
+          "${lib._custom.relativeSymlink configDirectory ./dotfiles/foot.ini}";
+      };
+      cursor.color = "${lib._custom.unwrapHex themeColors.base} ${
+          lib._custom.unwrapHex themeColors.green
+        }";
     };
 
     _custom.hm = {
