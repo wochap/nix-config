@@ -4,7 +4,7 @@ import { osd } from "./osd/index.js";
 
 App.config({
   style: "./style.css",
-  iconTheme: "Reversal",
+  iconTheme: "Reversal-Extra",
 });
 
 // HACK: to ensure that our CSS is loaded before widget creation

@@ -32,6 +32,9 @@ in {
         package = agsFinal;
       };
 
+      # Install custom icon theme, for taskbar
+      xdg.dataFile."icons/Reversal-Extra".source = "${inputs.reversal-extra}";
+
       xdg.configFile."ags".source =
         lib._custom.relativeSymlink configDirectory ./dotfiles;
 

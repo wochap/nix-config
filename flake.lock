@@ -1644,6 +1644,23 @@
         "type": "github"
       }
     },
+    "reversal-extra": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1713890347,
+        "narHash": "sha256-loMcUvSoAIq37ZTgPpwUteDbG0DE1H7oXQ5HQbpb9To=",
+        "owner": "wochap",
+        "repo": "Reversal-Extra",
+        "rev": "62ff8126bd64f638017ea59df8ea928a5769f03a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "Reversal-Extra",
+        "rev": "62ff8126bd64f638017ea59df8ea928a5769f03a",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "ags": "ags",
@@ -1698,6 +1715,7 @@
         "prevstable-python": "prevstable-python",
         "pyprland": "pyprland",
         "retroarch-shaders": "retroarch-shaders",
+        "reversal-extra": "reversal-extra",
         "smart-splits-nvim": "smart-splits-nvim",
         "stable": "stable",
         "unstable": "unstable",
