@@ -4,8 +4,8 @@ let
   cfg = config._custom.programs.tmux;
   inherit (config._custom.globals) configDirectory themeColors;
 
-  kill-unnamed-tmux-sessions = pkgs.writeScriptBin "kill-unnamed-tmux-sessions"
-    (builtins.readFile ./scripts/kill-unnamed-tmux-sessions.sh);
+  tmux-kill-unnamed-sessions = pkgs.writeScriptBin "tmux-kill-unnamed-sessions"
+    (builtins.readFile ./scripts/tmux-kill-unnamed-sessions.sh);
   start-tmux-server = pkgs.writeScriptBin "start-tmux-server" ''
     #!/usr/bin/env bash
 
@@ -13,12 +13,12 @@ let
     TMUX_ID=$(${pkgs.tmux}/bin/tmux new-session -d -P)
     ${pkgs.tmux}/bin/tmux kill-session -t tmux-server
     ${pkgs.tmux}/bin/tmux rename-session -t $TMUX_ID tmux-server
-    ${kill-unnamed-tmux-sessions}/bin/kill-unnamed-tmux-sessions
+    ${tmux-kill-unnamed-sessions}/bin/tmux-kill-unnamed-sessions
   '';
   stop-tmux-server = pkgs.writeScriptBin "stop-tmux-server" ''
     #!/usr/bin/env bash
 
-    ${kill-unnamed-tmux-sessions}/bin/kill-unnamed-tmux-sessions
+    ${tmux-kill-unnamed-sessions}/bin/tmux-kill-unnamed-sessions
     ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
     ${pkgs.tmux}/bin/tmux kill-server
   '';
@@ -30,8 +30,8 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      kill-unnamed-tmux-sessions
       tmux
+      tmux-kill-unnamed-sessions
       tmuxp
     ];
 
