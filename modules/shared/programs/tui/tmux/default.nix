@@ -53,6 +53,7 @@ in {
         "tmux/plugins/catppuccin".source = inputs.catppuccin-tmux;
         "tmux/tmux.conf".text = ''
           set -g @catppuccin_flavour '${themeColors.flavor}'
+          set -g @catppuccin_pane_active_border_style "fg=${themeColors.primary}"
           source-file $HOME/.config/tmux/config.conf
         '';
         "tmux/config.conf".source =
