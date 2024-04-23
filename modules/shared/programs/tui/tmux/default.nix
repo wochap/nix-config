@@ -37,7 +37,8 @@ in {
       tmux
       tmux-kill-unattached-sessions
       tmux-kill-unnamed-sessions
-      tmuxp
+      tmuxinator # session manager
+      tmuxp # session manager
     ];
 
     _custom.hm = {
