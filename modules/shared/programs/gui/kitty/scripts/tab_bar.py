@@ -15,7 +15,8 @@ opts = get_options()
 lavender = as_rgb(int("B4BEFE", 16))
 surface1 = as_rgb(int("45475A", 16))
 base = as_rgb(int("1E1E2E", 16))
-window_icon = ""
+windows_icon = ""
+folder_icon = "󰉖"
 default_layout_icon = ""
 layout_icon_by_name = {
   "fat" : "",
@@ -104,7 +105,7 @@ def _draw_right_status(screen: Screen, is_last: bool) -> int:
         (layout_fg, base, " " + layout_icon + " "),
         (layout_fg, base, active_tab_layout_name + " "),
         # num windows
-        (surface1, base, " " + window_icon + " "),
+        (surface1, base, " " + windows_icon + " "),
         (surface1, base, str(active_tab_num_windows)),
     ]
 
@@ -181,4 +182,4 @@ def get_cwd():
             ]
         )
 
-    return "󰉖 " + cwd
+    return folder_icon + " " + cwd
