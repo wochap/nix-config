@@ -27,7 +27,7 @@ in {
     };
 
     _custom.hm = {
-      home.packages = with pkgs; [ foot ];
+      home.packages = with pkgs; [ foot libsixel ];
 
       xdg.configFile."foot/foot.ini".text = ''
         ${builtins.readFile
