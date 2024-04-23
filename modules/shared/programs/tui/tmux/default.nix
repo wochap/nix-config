@@ -52,6 +52,9 @@ in {
         '';
         "tmux/config.conf".source =
           lib._custom.relativeSymlink configDirectory ./dotfiles/config.conf;
+        "tmux/plugins/status-bar/status-bar.tmux".source =
+          lib._custom.relativeSymlink configDirectory
+          ./dotfiles/status-bar.tmux;
       };
 
       programs.fzf.tmux.enableShellIntegration = true;
