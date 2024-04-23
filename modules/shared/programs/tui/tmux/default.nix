@@ -6,6 +6,9 @@ let
 
   tmux-kill-unnamed-sessions = pkgs.writeScriptBin "tmux-kill-unnamed-sessions"
     (builtins.readFile ./scripts/tmux-kill-unnamed-sessions.sh);
+  tmux-kill-unattached-sessions =
+    pkgs.writeScriptBin "tmux-kill-unattached-sessions"
+    (builtins.readFile ./scripts/tmux-kill-unattached-sessions.sh);
   start-tmux-server = pkgs.writeScriptBin "start-tmux-server" ''
     #!/usr/bin/env bash
 
@@ -14,6 +17,7 @@ let
     ${pkgs.tmux}/bin/tmux kill-session -t tmux-server
     ${pkgs.tmux}/bin/tmux rename-session -t $TMUX_ID tmux-server
     ${tmux-kill-unnamed-sessions}/bin/tmux-kill-unnamed-sessions
+    ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
   '';
   stop-tmux-server = pkgs.writeScriptBin "stop-tmux-server" ''
     #!/usr/bin/env bash
@@ -31,6 +35,7 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       tmux
+      tmux-kill-unattached-sessions
       tmux-kill-unnamed-sessions
       tmuxp
     ];
