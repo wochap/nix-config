@@ -43,6 +43,8 @@
     pyprland.inputs.nixpkgs.follows = "unstable";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
+    scenefx.url = "github:wlrfx/scenefx?rev=e6bc2467d43219f4b06beb3e750b66d444b679b2";
+    scenefx.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";

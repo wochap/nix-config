@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.desktop.dwl;
@@ -52,38 +52,28 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "d2077555bda33db4734cfda5abeca81af4e659e1";
+          version = "60fd522d692e9aa68fde7e9a40494e5ec1a96965";
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-xDKKhEJsJCyMEKAOBfYsa1y/Sipzv2fUkz49bY/P+xI=";
+            hash = "sha256-AjRDO9uztQ8rA6+irv6UUaLjAjAwkQ+prQlhtOQFCH0=";
           };
           buildInputs = with pkgs; [
-            pkgs._custom.scenefx
-
-            # wlroots buildInputs
+            inputs.scenefx.packages."${system}".scenefx
             libGL
-            libcap
+
+            # dwl buildInputs
             libinput
-            libpng
+            xorg.libxcb
             libxkbcommon
-            mesa
             pixman
-            seatd
-            vulkan-loader
             wayland
             wayland-protocols
+            wlroots
             xorg.libX11
-            xorg.xcbutilerrors
-            xorg.xcbutilimage
-            xorg.xcbutilrenderutil
             xorg.xcbutilwm
             xwayland
-            ffmpeg
-            hwdata
-            libliftoff
-            libdisplay-info
           ];
         });
       })
@@ -138,7 +128,8 @@ in {
         };
 
         "remmina/glegion.remmina".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/glegion.remmina;
+          lib._custom.relativeSymlink configDirectory
+          ./dotfiles/glegion.remmina;
       };
     };
   };

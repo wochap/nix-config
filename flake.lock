@@ -1716,6 +1716,7 @@
         "pyprland": "pyprland",
         "retroarch-shaders": "retroarch-shaders",
         "reversal-extra": "reversal-extra",
+        "scenefx": "scenefx",
         "smart-splits-nvim": "smart-splits-nvim",
         "stable": "stable",
         "unstable": "unstable",
@@ -1725,6 +1726,27 @@
         "zsh-notify": "zsh-notify",
         "zsh-pnpm-shell-completion": "zsh-pnpm-shell-completion",
         "zsh-vi-mode": "zsh-vi-mode"
+      }
+    },
+    "scenefx": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1713561527,
+        "narHash": "sha256-vBmunqXwGbMNiGRd372TdMU4siWhIVYn5RVYne9C7uQ=",
+        "owner": "wlrfx",
+        "repo": "scenefx",
+        "rev": "e6bc2467d43219f4b06beb3e750b66d444b679b2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wlrfx",
+        "repo": "scenefx",
+        "rev": "e6bc2467d43219f4b06beb3e750b66d444b679b2",
+        "type": "github"
       }
     },
     "smart-splits-nvim": {
