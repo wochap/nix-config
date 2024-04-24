@@ -18,7 +18,8 @@ export const recorder = () => {
     ]),
     on_clicked: () => Utils.execAsync("recorder --area"),
     child: Widget.Label({
-      label: "󰑊 REC",
+      useMarkup: true,
+      label: "<span rise='-1000'>󰑊</span> <span rise='-1000'>REC</span>",
     }),
   });
 };
