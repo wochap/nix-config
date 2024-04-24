@@ -17,7 +17,7 @@ static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 0.0f}; /* You ca
 static const char cursortheme[] = "@cursorName@";
 static const unsigned int cursorsize = @cursorSize@;
 static const unsigned int swipe_min_threshold = 0;
-static const int floating_relative_to_monitor = 1;  /* 0 means center floating relative to the window area  */
+static const int respect_monitor_reserved_area = 0;  /* 1 to monitor center while respecting the monitor's reserved area, 0 to monitor center */
 
 static const int opacity = 0; /* flag to enable opacity */
 static const float opacity_inactive = 0.5;
