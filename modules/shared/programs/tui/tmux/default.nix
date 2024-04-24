@@ -71,6 +71,9 @@ in {
         Unit = {
           Description = "tmux default session (detached)";
           Documentation = "man:tmux(1)";
+          PartOf = "graphical-session.target";
+          After = "graphical-session.target";
+          ConditionEnvironment = "WAYLAND_DISPLAY";
         };
         Service = {
           Type = "forking";
@@ -81,7 +84,7 @@ in {
           KillMode = "mixed";
           RestartSec = 2;
         };
-        Install.WantedBy = [ "default.target" ];
+        Install.WantedBy = [ "graphical-session.target" ];
       };
     };
   };
