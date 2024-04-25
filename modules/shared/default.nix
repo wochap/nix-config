@@ -6,6 +6,7 @@
     ./dev/lang-go
     ./dev/lang-nix
     ./dev/lang-python
+    ./dev/lang-ruby
     ./dev/lang-web
 
     ./globals

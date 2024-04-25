@@ -17,6 +17,7 @@ in {
     _custom.dev.lang-go.enable = true;
     _custom.dev.lang-nix.enable = true;
     _custom.dev.lang-python.enable = true;
+    _custom.dev.lang-ruby.enable = true;
     _custom.dev.lang-web.enable = true;
 
     _custom.weeb.enable = true;
