@@ -113,7 +113,7 @@ static const Rule rules[] = {
 	{ "file-roller",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "gnome-font-viewer",       NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   0.8,  0.8,    0 },
+	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   (float)0.8, (float)0.8, 0 },
 	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
@@ -250,9 +250,6 @@ LIBINPUT_CONFIG_TAP_MAP_LRM -- 1/2/3 finger tap maps to left/right/middle
 LIBINPUT_CONFIG_TAP_MAP_LMR -- 1/2/3 finger tap maps to left/middle/right
 */
 static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TAP_MAP_LRM;
-
-static const int cursor_timeout = 15;
-static const int cursor_hide_when_typing = 1;
 
 /* If you want to use the windows key for MODKEY, use WLR_MODIFIER_LOGO */
 #define MODKEY WLR_MODIFIER_LOGO
@@ -422,7 +419,7 @@ static const Key keys[] = {
   // ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
   // Open primary terminal
-	{ MODKEY|MOD_ALT, Key_t, spawn, SHCMD("kitty") },
+	{ MODKEY|MOD_ALT, Key_t, spawn, SHCMD("footclient") },
 
   // Open file manager
   { MODKEY|MOD_ALT, Key_f, raiserunnamedscratchpad, {.v = fmscratchcmd} },
@@ -506,8 +503,8 @@ static const Modekey modekeys[] = {
   { LAYOUT, { MOD_NONE, Key_Left, incnmaster, {.i = +1} } },
   { LAYOUT, { MOD_NONE, Key_Right, incnmaster, {.i = -1} } },
   // To increment/decrement the main ratio
-  { LAYOUT, { MOD_SHIFT, Key_Left, setmfact, {.f = -0.05} } },
-  { LAYOUT, { MOD_SHIFT, Key_Right, setmfact, {.f = +0.05} } },
+  { LAYOUT, { MOD_SHIFT, Key_Left, setmfact, {.f = (float)-0.05} } },
+  { LAYOUT, { MOD_SHIFT, Key_Right, setmfact, {.f = (float)+0.05} } },
   // To increment/decrement the client ratio
   { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Left, setcfact, {.f = -0.25} } },
   { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Right, setcfact, {.f = +0.25} } },
