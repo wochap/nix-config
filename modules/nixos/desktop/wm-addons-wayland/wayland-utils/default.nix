@@ -18,15 +18,25 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
-        showmethekey = prev.showmethekey.overrideAttrs (oldAttrs: {
+        showmethekey = prev.showmethekey.overrideAttrs (oldAttrs: rec {
           version = "6204cf1d4794578372c273348daa342589479b13";
           src = prev.fetchFromGitHub {
             owner = "AlynxZhou";
             repo = "showmethekey";
-            rev = "6204cf1d4794578372c273348daa342589479b13";
+            rev = version;
             hash = "sha256-eeObomb4Gv/vpvViHsi3+O0JR/rYamrlZNZaXKL6KJw=";
           };
           buildInputs = oldAttrs.buildInputs ++ [ prev.libadwaita ];
+        });
+
+        slurp = prev.slurp.overrideAttrs (oldAttrs: rec {
+          version = "6735eaba5ab61b393fffd6f81ee1ecc069a61312";
+          src = prev.fetchFromGitHub {
+            owner = "emersion";
+            repo = "slurp";
+            rev = version;
+            hash = "sha256-dbwKaf9KMSGU226hRHUr0NSCKxumt+eFZEKJ1baJyPI=";
+          };
         });
       })
     ];
