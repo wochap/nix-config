@@ -94,7 +94,7 @@ in {
     _custom.services.llm.enable = true;
     _custom.services.llm.enableNvidia = true;
     _custom.services.syncthing.enable = true;
-    _custom.services.virt.enable = false;
+    _custom.services.virt.enable = true;
     _custom.services.waydroid.enable = false;
 
     _custom.gaming.emulators.enable = true;
