@@ -77,7 +77,6 @@ in {
         };
         Service = {
           Type = "forking";
-          Environment = [ "TERM=foot" ];
           PassEnvironment = [ "PATH" "DISPLAY" "HOME" ];
           ExecStart = "${start-tmux-server}/bin/start-tmux-server";
           ExecStop = "${stop-tmux-server}/bin/stop-tmux-server";
