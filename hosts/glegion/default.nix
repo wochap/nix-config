@@ -110,15 +110,6 @@ in {
     _custom.desktop.hyprland.enable = true;
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
-    # specialisation.hyprland-specialisation = {
-    #   inheritParentConfig = true;
-    #   configuration.config = {
-    #     _custom.desktop.dwl.isDefault = lib.mkForce false;
-    #     _custom.desktop.hyprland.enable = true;
-    #     _custom.desktop.hyprland.isDefault = true;
-    #   };
-    # };
-
     services.xserver = {
       # Setup keyboard
       xkb.layout = "us";
