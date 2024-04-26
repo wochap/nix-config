@@ -15,17 +15,17 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
-        fswatch
-        prevstable-neovim.neovim-remote
-        neovide
-        wl-clipboard # required in wayland to copy
+        neovide # gui
+
+        prevstable-neovim.neovim-remote # required by lazygit
         tree-sitter # required by nvim-treesitter
+        luajit # required by neorg
 
-        # required by mason.nvim
-        # NOTE: it shouldn't be necessary here
-        lua54Packages.luarocks
+        # required by nvim
+        fswatch
+        wl-clipboard # required in wayland to copy
 
-        # required by telescope
+        # required by telescope.nvim
         ripgrep
         fd
       ];

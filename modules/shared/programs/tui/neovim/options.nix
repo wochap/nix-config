@@ -128,9 +128,9 @@ in {
         enable = true;
         package = cfg.package;
 
-        withNodeJs = true;
+        withNodeJs = false;
         withPython3 = false;
-        withRuby = true;
+        withRuby = false;
 
         extraPackages = with pkgs;
           [
@@ -143,6 +143,7 @@ in {
             cmake
             gcc
             gnumake
+            luajitPackages.luarocks
             ninja
             pkg-config
             yarn
@@ -159,7 +160,10 @@ in {
               ] ++ cfg.extraHaskellPackages pkgs.haskellPackages))
           ];
 
-        extraLuaPackages = ls: with ls; [ luarocks ];
+        # NOTE: extraLuaPackages doesn't work
+        # https://github.com/NixOS/nixpkgs/issues/306367
+        # https://github.com/NixOS/nixpkgs/pull/301573
+        # extraLuaPackages = ls: with ls; [ luarocks ];
       };
     };
   };
