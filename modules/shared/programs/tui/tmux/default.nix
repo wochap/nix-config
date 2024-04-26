@@ -77,6 +77,15 @@ in {
         };
         Service = {
           Type = "forking";
+          Environment = [
+            # NOTE: when starting tmux from systemctl and not from a terminal
+            # the following env variables are empty
+
+            # I only plan to use tmux within foot
+            "TERM=foot"
+            "TERMINFO=${pkgs.foot}/share/terminfo" # required by my zsh keybindings
+            "COLORTERM=truecolor" # required by bat
+          ];
           PassEnvironment = [ "PATH" "DISPLAY" "HOME" ];
           ExecStart = "${start-tmux-server}/bin/start-tmux-server";
           ExecStop = "${stop-tmux-server}/bin/stop-tmux-server";
