@@ -83,7 +83,7 @@ in {
 
             # I only plan to use tmux within foot
             "TERM=foot"
-            "TERMINFO=${pkgs.foot}/share/terminfo" # required by my zsh keybindings
+            "TERMINFO=${pkgs.foot.terminfo}/share/terminfo" # required by my zsh keybindings
             "COLORTERM=truecolor" # required by bat
           ];
           PassEnvironment = [ "PATH" "DISPLAY" "HOME" ];
