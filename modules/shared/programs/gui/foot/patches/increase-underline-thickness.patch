@@ -1,0 +1,14 @@
+diff --git a/render.c b/render.c
+index 393f372d..fc7d0ef2 100644
+--- a/render.c
++++ b/render.c
+@@ -395,7 +395,7 @@ draw_ext_underline(const struct terminal *term, pixman_image_t *pix,
+ {
+     if (style == UNDERLINE_NONE)
+         return;
+-    const int thickness = font->underline.thickness;
++    const int thickness = font->underline.thickness * 2;
+
+     int y_ofs;
+     /* Make sure the line isn't positioned below the cell */
+
