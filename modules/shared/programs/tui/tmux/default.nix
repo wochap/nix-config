@@ -2,8 +2,14 @@
 
 let
   cfg = config._custom.programs.tmux;
-  inherit (config._custom.globals) configDirectory themeColors;
+  inherit (config._custom.globals) configDirectory themeColors userName;
+  hmConfig = config.home-manager.users.${userName};
 
+  defaultOptionsStr =
+    lib.strings.concatStringsSep " " hmConfig.programs.fzf.defaultOptions;
+
+  fzf-tmux = pkgs.writeScriptBin "fzf-tmux"
+    (builtins.readFile "${inputs.fzf}/bin/fzf-tmux");
   tmux-kill-unnamed-sessions = pkgs.writeScriptBin "tmux-kill-unnamed-sessions"
     (builtins.readFile ./scripts/tmux-kill-unnamed-sessions.sh);
   tmux-kill-unattached-sessions =
@@ -39,6 +45,7 @@ in {
       tmux-kill-unnamed-sessions
       tmuxinator # session manager
       tmuxp # session manager
+      fzf-tmux # required by tmux-sessionx
     ];
 
     _custom.hm = {
@@ -51,6 +58,9 @@ in {
           "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect";
         "tmux/plugins/continuum".source =
           "${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum";
+        "tmux/plugins/tmux-sessionx".source = "${
+            inputs.tmux-sessionx.packages.${pkgs.system}.default
+          }/share/tmux-plugins/sessionx";
         "tmux/plugins/catppuccin".source = inputs.catppuccin-tmux;
         "tmux/tmux.conf".text = ''
           set -g @catppuccin_flavour '${themeColors.flavor}'
@@ -80,11 +90,13 @@ in {
           Environment = [
             # NOTE: when starting tmux from systemctl and not from a terminal
             # the following env variables are empty
-
             # I only plan to use tmux within foot
             "TERM=foot"
             "TERMINFO=${pkgs.foot.terminfo}/share/terminfo" # required by my zsh keybindings
             "COLORTERM=truecolor" # required by bat
+
+            # tmux-server service doesn't inherit FZF_DEFAULT_OPTS env var
+            ''FZF_DEFAULT_OPTS="${defaultOptionsStr}"''
           ];
           PassEnvironment = [ "PATH" "DISPLAY" "HOME" ];
           ExecStart = "${start-tmux-server}/bin/start-tmux-server";

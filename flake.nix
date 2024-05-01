@@ -85,6 +85,9 @@
     figlet-fonts.flake = false;
     ipwebcam-gst.url = "github:agarciadom/ipwebcam-gst?rev=5a02ffae8597ab1cc7461f096f86ca233f925a07";
     ipwebcam-gst.flake = false;
+    fzf.url = "github:junegunn/fzf?rev=ee9d88b637e5a1210bb8727da87df5c5bc5cfa70";
+    fzf.flake = false;
+    tmux-sessionx.url = "github:omerxx/tmux-sessionx?rev=ac9b0ec219c2e36ce6beb3f900ef852ba8888095";
 
     # themes
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";

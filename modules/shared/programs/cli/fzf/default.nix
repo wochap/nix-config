@@ -14,22 +14,22 @@ in {
         defaultOptions = with themeColors; [
           # theme
           # source: https://github.com/catppuccin/fzf
-          "--color=bg+:${surface0},bg:${base},spinner:${rosewater},hl:${red}"
-          "--color=fg:${text},header:${red},info:${mauve},pointer:${rosewater}"
-          "--color=marker:${rosewater},fg+:${text},prompt:${mauve},hl+:${red}"
+          "--color 'bg+:${surface0},bg:${base},spinner:${rosewater},hl:${red}'"
+          "--color 'fg:${text},header:${red},info:${mauve},pointer:${rosewater}'"
+          "--color 'marker:${rosewater},fg+:${text},prompt:${mauve},hl+:${red}'"
 
-          "--color=border:${mantle},scrollbar:${overlay0}"
+          "--color 'border:${mantle},scrollbar:${overlay0},label:${overlay0}'"
 
           "--no-height"
-          "--tabstop=2"
+          "--tabstop '2'"
           "--cycle"
-          "--layout=default"
+          "--layout 'default'"
           "--no-separator"
-          "--scroll-off=4"
-          "--prompt='❯ '"
-          "--marker='❯'"
-          "--pointer='❯'"
-          "--scrollbar='🮉'"
+          "--scroll-off '4'"
+          "--prompt '❯ '"
+          "--marker '❯'"
+          "--pointer '❯'"
+          "--scrollbar '🮉'"
 
           # mappings
           "--bind 'ctrl-d:preview-half-page-down'"
