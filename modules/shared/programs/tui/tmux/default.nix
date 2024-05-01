@@ -5,8 +5,12 @@ let
   inherit (config._custom.globals) configDirectory themeColors userName;
   hmConfig = config.home-manager.users.${userName};
 
-  defaultOptionsStr =
-    lib.strings.concatStringsSep " " hmConfig.programs.fzf.defaultOptions;
+  defaultOptionsStr = lib.strings.concatStringsSep " "
+    (hmConfig.programs.fzf.defaultOptions ++ [
+      # remove border added by fzf-tmux
+      "--border 'none'"
+      "--padding '0,1'"
+    ]);
 
   fzf-tmux = pkgs.writeScriptBin "fzf-tmux"
     (builtins.readFile "${inputs.fzf}/bin/fzf-tmux");
