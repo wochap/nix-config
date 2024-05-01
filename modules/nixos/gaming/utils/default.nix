@@ -17,9 +17,10 @@ in {
       protonup-qt
 
       # winetricks
-      prevstable-gaming.winePackages.unstable
       prevstable-gaming.winetricks
-      prevstable-gaming.wine64Packages.unstable
+      prevstable-gaming.wineWowPackages.waylandFull
+
+      bottles
     ];
 
     # see https://github.com/fufexan/nix-gaming/#pipewire-low-latency
