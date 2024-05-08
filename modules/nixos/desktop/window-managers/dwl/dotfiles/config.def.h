@@ -27,8 +27,8 @@ static const int shadow = 1;
 static const int shadow_only_floating = 0; /* 0 means center floating relative to the window area */
 static const struct wlr_render_color shadow_color = COLOR(0x@shadow@ff);
 static const struct wlr_render_color shadow_color_focus = COLOR(0x@shadow@ff);
-static const int shadow_blur_sigma = 15;
-static const int shadow_blur_sigma_focus = 29;
+static const int shadow_blur_sigma = 28;
+static const int shadow_blur_sigma_focus = 56;
 static const char *const shadow_ignore_list[] = { NULL }; /* list of app-id to ignore */
 
 static const int corner_radius = 0; /* 0 disables corner_radius */
