@@ -7,7 +7,6 @@
 ![](https://i.imgur.com/4XyYjSC.jpg)
 ![](https://i.imgur.com/N5LV3Hv.jpg)
 
-
 ## Installaion
 
 ### Install NixOS
@@ -178,6 +177,12 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
   ```
 
 ## Troubleshooting
+
+- Fix Virtual Machine Manager `network default is not active` error
+
+  ```
+  $ sudo virsh net-start default
+  ```
 
 - Fix [bootloader](https://nixos.wiki/wiki/Bootloader)
 
