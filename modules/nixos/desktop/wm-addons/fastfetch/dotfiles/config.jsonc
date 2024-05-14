@@ -1,0 +1,71 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "type": "small",
+    "padding": {
+      "left": 4,
+      "top": 3,
+    },
+  },
+  "display": {
+    "separator": " ›  ",
+  },
+  "modules": [
+    "break",
+    {
+      "type": "title",
+      "key": "HOST ",
+      "keyColor": "31",
+    },
+    {
+      "type": "host",
+      "format": "{5} {1} Type {2}",
+      "key": "MODEL",
+      "keyColor": "32",
+    },
+    {
+      "type": "cpu",
+      "key": "CPU  ",
+      "keyColor": "33",
+    },
+    {
+      "type": "gpu",
+      "key": "GPU  ",
+      "keyColor": "35",
+    },
+    {
+      "type": "disk",
+      "key": "DISK ",
+      "keyColor": "36",
+    },
+    {
+      "type": "memory",
+      "key": "RAM  ",
+      "keyColor": "31",
+    },
+    {
+      "type": "os",
+      "key": "OS   ",
+      "keyColor": "32",
+    },
+    {
+      "type": "wm",
+      "key": "WM   ",
+      "keyColor": "33",
+    },
+    // {
+    //   "type": "packages",
+    //   "key": "PKGS ",
+    //   "keyColor": "34",
+    // },
+    {
+      "type": "kernel",
+      "key": "KER  ",
+      "keyColor": "35",
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[30m  \u001b[31m  \u001b[32m  \u001b[33m  \u001b[34m  \u001b[35m  \u001b[36m  \u001b[37m  ",
+    },
+  ],
+}

@@ -21,12 +21,12 @@
       _custom.desktop.cursor.enable = true;
       _custom.desktop.dbus.enable = true;
       _custom.desktop.email.enable = true;
+      _custom.desktop.fastfetch.enable = true;
       _custom.desktop.fonts.enable = true;
       _custom.desktop.gtk.enable = true;
       _custom.desktop.gtk.enableCsd = false;
       _custom.desktop.logind.enable = true;
       _custom.desktop.music.enable = true;
-      _custom.desktop.neofetch.enable = true;
       _custom.desktop.networking.enable = true;
       _custom.desktop.plymouth.enable = true;
       _custom.desktop.power-management.enable = true;

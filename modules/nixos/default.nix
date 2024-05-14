@@ -18,11 +18,11 @@
     ./desktop/wm-addons/cursor
     ./desktop/wm-addons/dbus
     ./desktop/wm-addons/email
+    ./desktop/wm-addons/fastfetch
     ./desktop/wm-addons/fonts
     ./desktop/wm-addons/gtk
     ./desktop/wm-addons/logind
     ./desktop/wm-addons/music
-    ./desktop/wm-addons/neofetch
     ./desktop/wm-addons/networking
     ./desktop/wm-addons/plymouth
     ./desktop/wm-addons/power-management
