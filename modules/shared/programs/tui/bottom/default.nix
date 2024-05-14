@@ -22,6 +22,16 @@ in {
             tree = true;
             basic = true;
           };
+          processes = {
+            columns = [
+              "PID"
+              "Name"
+              "CPU%"
+              "Mem%"
+              "User"
+              "State"
+            ];
+          };
         };
       };
     };
