@@ -4,7 +4,7 @@ let
   cfg = config._custom.desktop.email;
   imv = "${pkgs.imv}/bin/imv";
   icalviewScript =
-    pkgs.writeScript "icalview" (builtins.readFile ./scripts/icalview.py);
+    pkgs.writeScript "icalview" (builtins.readFile ./icalview.py);
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm.xdg.configFile."neomutt/mailcap".text = ''

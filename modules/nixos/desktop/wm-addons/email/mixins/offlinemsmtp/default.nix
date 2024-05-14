@@ -5,7 +5,7 @@ let
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   offlinemsmtp-toggle-mode = pkgs.writeScriptBin "offlinemsmtp-toggle-mode"
-    (builtins.readFile ./scripts/offlinemsmtp-toggle-mode.sh);
+    (builtins.readFile ./offlinemsmtp-toggle-mode.sh);
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {

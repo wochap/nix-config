@@ -3,12 +3,12 @@
 let cfg = config._custom.desktop.email;
 in {
   imports = [
-    ./accounts
-    ./mailcap.nix
-    ./mailnotify.nix
-    ./mbsync.nix
-    ./neomutt.nix
-    ./offlinemsmtp.nix
+    ./mixins/accounts
+    ./mixins/mailcap
+    ./mixins/mailnotify.nix
+    ./mixins/mbsync.nix
+    ./mixins/neomutt.nix
+    ./mixins/offlinemsmtp
   ];
 
   options._custom.desktop.email.enable = lib.mkEnableOption { };
