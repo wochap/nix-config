@@ -6,7 +6,10 @@ let
   catppuccinTheme = lib._custom.fromYAML
     "${inputs.catppuccin-lazygit}/themes/${themeColors.flavor}.yml";
 in {
-  options._custom.programs.git.enable = lib.mkEnableOption { };
+  options._custom.programs.git = {
+    enable = lib.mkEnableOption { };
+    enableUser = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
@@ -89,36 +92,43 @@ in {
           };
         };
 
-        extraConfig = {
-          core = {
-            editor = "nvr -l --remote-wait-silent +'set bufhidden=wipe'";
-          };
-          diff = {
-            tool = "kitty";
-            guitool = "kitty.gui";
-            colorMoved = "default";
-          };
-          difftool = {
-            prompt = "false";
-            trustExitCode = "true";
-            kitty = { cmd = "kitty +kitten diff $LOCAL $REMOTE"; };
-            "kitty.gui" = { cmd = "kitty kitty +kitten diff $LOCAL $REMOTE"; };
-          };
-          color.ui = "auto";
-          pull.rebase = "false";
-          init = { defaultBranch = "main"; };
-          merge = { conflictstyle = "diff3"; };
+        extraConfig = lib.mkMerge [
+          {
+            core = {
+              editor = "nvr -l --remote-wait-silent +'set bufhidden=wipe'";
+            };
+            diff = {
+              tool = "kitty";
+              guitool = "kitty.gui";
+              colorMoved = "default";
+            };
+            difftool = {
+              prompt = "false";
+              trustExitCode = "true";
+              kitty = { cmd = "kitty +kitten diff $LOCAL $REMOTE"; };
+              "kitty.gui" = {
+                cmd = "kitty kitty +kitten diff $LOCAL $REMOTE";
+              };
+            };
+            color.ui = "auto";
+            pull.rebase = "false";
+            init = { defaultBranch = "main"; };
+            merge = { conflictstyle = "diff3"; };
+          }
 
-          user = {
-            email = "gean.marroquin@gmail.com";
-            name = "wochap";
-            signingKey = "gean.marroquin@gmail.com";
-          };
-          commit = { gpgSign = true; };
-        };
+          (lib.mkIf cfg.enableUser {
+            user = {
+              email = "gean.marroquin@gmail.com";
+              name = "wochap";
+              signingKey = "gean.marroquin@gmail.com";
+            };
+            commit.gpgSign = true;
+          })
+        ];
         includes = [
           { path = "${inputs.catppuccin-delta}/catppuccin.gitconfig"; }
-          {
+
+          (lib.mkIf cfg.enableUser {
             condition = "gitdir:~/Projects/boc/**/.git";
             contents = {
               user = {
@@ -126,9 +136,9 @@ in {
                 name = "Gean";
                 signingKey = "geanb@bandofcoders.com";
               };
-              commit = { gpgSign = true; };
+              commit.gpgSign = true;
             };
-          }
+          })
         ];
       };
     };
