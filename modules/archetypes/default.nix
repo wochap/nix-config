@@ -25,6 +25,7 @@
       _custom.desktop.fonts.enable = true;
       _custom.desktop.gtk.enable = true;
       _custom.desktop.gtk.enableCsd = false;
+      _custom.desktop.gtk.enableTheme = true;
       _custom.desktop.logind.enable = true;
       _custom.desktop.music.enable = true;
       _custom.desktop.networking.enable = true;
@@ -32,6 +33,7 @@
       _custom.desktop.power-management.enable = true;
       _custom.desktop.power-management.enableLowBatteryNotification = true;
       _custom.desktop.qt.enable = true;
+      _custom.desktop.qt.enableTheme = true;
       _custom.desktop.xdg.enable = true;
       _custom.desktop.xwaylandvideobridge.enable = true;
 
@@ -57,13 +59,16 @@
       _custom.security.gpg.enable = true;
       _custom.security.ssh.enable = true;
 
+      _custom.desktop.fastfetch.enable = true;
       _custom.desktop.fonts.enable = true;
       _custom.desktop.gtk.enable = true;
       _custom.desktop.gtk.enableCsd = true;
-      _custom.desktop.fastfetch.enable = true;
+      _custom.desktop.gtk.enableTheme = false;
       _custom.desktop.networking.enable = true;
       _custom.desktop.plymouth.enable = true;
       _custom.desktop.power-management.enable = true;
+      _custom.desktop.qt.enable = true;
+      _custom.desktop.qt.enableTheme = false;
 
       _custom.desktop.electron-support.enable = true;
       _custom.desktop.wayland-utils.enable = true;

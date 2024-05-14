@@ -4,6 +4,7 @@ let cfg = config._custom.desktop.qt;
 in {
   options._custom.desktop.qt = {
     enable = lib.mkEnableOption "setup qt theme and apps";
+    enableTheme = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -33,7 +34,7 @@ in {
     ];
 
     qt = {
-      enable = true;
+      enable = cfg.enableTheme;
       platformTheme = "qt5ct";
     };
 
@@ -51,7 +52,7 @@ in {
         ./dotfiles/Catppuccin-Mocha-Mauve.conf;
 
       qt = {
-        enable = true;
+        enable = cfg.enableTheme;
         platformTheme = "qtct";
       };
     };
