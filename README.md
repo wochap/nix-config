@@ -182,6 +182,7 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
   ```
   $ sudo virsh net-start default
+  $ sudo virsh net-autostart default
   ```
 
 - Fix [bootloader](https://nixos.wiki/wiki/Bootloader)
