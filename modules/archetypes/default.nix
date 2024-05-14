@@ -60,7 +60,7 @@
       _custom.desktop.fonts.enable = true;
       _custom.desktop.gtk.enable = true;
       _custom.desktop.gtk.enableCsd = true;
-      _custom.desktop.neofetch.enable = true;
+      _custom.desktop.fastfetch.enable = true;
       _custom.desktop.networking.enable = true;
       _custom.desktop.plymouth.enable = true;
       _custom.desktop.power-management.enable = true;
