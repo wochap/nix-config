@@ -17,9 +17,9 @@ in {
         settings = lib.recursiveUpdate themeSettings {
           flags = {
             process_command = true;
-            group_processes = true;
+            group_processes = false;
             mem_as_value = true;
-            tree = true;
+            tree = false;
             basic = true;
           };
           processes = {
