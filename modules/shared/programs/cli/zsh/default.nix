@@ -60,7 +60,7 @@ in {
 
     _custom.hm = {
       xdg.configFile = {
-        "zsh/.p10k.zsh".source = relativeSymlink configDirectory ./.p10k.zsh;
+        "zsh/.p10k.zsh".source = relativeSymlink configDirectory ./dotfiles/.p10k.zsh;
       };
 
       home.packages = with pkgs; [
@@ -122,11 +122,11 @@ in {
 
           ## load our scripts
 
-          source ${relativeSymlink configDirectory ./config.zsh}
-          source ${relativeSymlink configDirectory ./functions.zsh}
+          source ${relativeSymlink configDirectory ./dotfiles/config.zsh}
+          source ${relativeSymlink configDirectory ./dotfiles/functions.zsh}
 
           function load_key_bindings() {
-            source ${relativeSymlink configDirectory ./key-bindings-vi.zsh}
+            source ${relativeSymlink configDirectory ./dotfiles/key-bindings-vi.zsh}
           }
 
           ## zsh-notify
@@ -223,7 +223,7 @@ in {
 
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
           source ${pkgs.oh-my-zsh}/share/oh-my-zsh/lib/clipboard.zsh
-          source ${./plugins/dirhistory.zsh}
+          source ${./dotfiles/plugins/dirhistory.zsh}
           source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
           source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
 
