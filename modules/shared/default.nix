@@ -48,7 +48,7 @@
     ./programs/tui/tmux
     ./programs/tui/youtube
 
-    ./weeb
+    ./programs/weeb
   ];
 
   config._custom.hm.imports = [ ./symlinks ];

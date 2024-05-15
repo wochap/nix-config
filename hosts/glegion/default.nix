@@ -20,7 +20,7 @@ in {
     _custom.dev.lang-ruby.enable = true;
     _custom.dev.lang-web.enable = true;
 
-    _custom.weeb.enable = true;
+    _custom.programs.weeb.enable = true;
 
     # cli
     _custom.programs.nix-alien.enable = true;

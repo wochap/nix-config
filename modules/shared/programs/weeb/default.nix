@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.weeb;
+  cfg = config._custom.programs.weeb;
   inherit (config._custom.globals) configDirectory;
 in {
-  options._custom.weeb.enable = lib.mkEnableOption { };
+  options._custom.programs.weeb.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
