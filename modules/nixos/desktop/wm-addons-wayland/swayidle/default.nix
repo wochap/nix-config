@@ -6,13 +6,6 @@ let
   matcha = inputs.matcha.packages.${system}.default;
   matcha-toggle-mode = pkgs.writeScriptBin "matcha-toggle-mode"
     (builtins.readFile ./scripts/matcha-toggle-mode.sh);
-  matcha-start = pkgs.writeScriptBin "matcha-start" ''
-    FILE="$HOME/tmp/matcha"
-    if test -f "$FILE"; then
-      rm "$FILE"
-    fi
-    ${matcha}/bin/matcha --daemon --off
-  '';
 in {
   options._custom.desktop.swayidle.enable = lib.mkEnableOption { };
 
