@@ -44,15 +44,16 @@ in {
         zip
 
         # CLI APPS
+        ansible # automation scripts
         asciinema # record terminal
         asciinema-agg # generate GIF
         asciinema-scenario # generate recording from txt files
-        ansible # automation scripts
         bc # calculator
         clolcat # like cat/bat but with colors
         ffmpeg-full # record, convert music/video
         git
         gitAndTools.gh # github cli
+        imagemagick # image editor
         ngrok # expose web server
         silver-searcher # ag, ack like
         stripe-cli
