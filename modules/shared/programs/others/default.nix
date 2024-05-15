@@ -1,9 +1,6 @@
 { config, lib, pkgs, inputs, system, ... }:
 
-let
-  cfg = config._custom.programs.others;
-  ani-cli = pkgs.writeShellScriptBin "ani-cli"
-    (builtins.readFile "${inputs.ani-cli}/ani-cli");
+let cfg = config._custom.programs.others;
 in {
   options._custom.programs.others.enable = lib.mkEnableOption { };
 
@@ -78,9 +75,12 @@ in {
     _custom.hm = {
       programs.thefuck.enable = true; # corrects previous console cmd
       programs.thefuck.enableBashIntegration = false;
+      programs.thefuck.enableZshIntegration = false;
       programs.carapace.enable = true; # completions
       programs.carapace.enableBashIntegration = false;
+      programs.carapace.enableZshIntegration = false;
       programs.nix-index.enable = false; # locale nix pkgs
+      programs.nix-index.enableZshIntegration = false;
       programs.command-not-found.enable = lib.mkForce false;
       programs.navi = { # like tldr
         enable = true;

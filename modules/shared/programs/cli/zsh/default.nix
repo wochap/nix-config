@@ -60,7 +60,8 @@ in {
 
     _custom.hm = {
       xdg.configFile = {
-        "zsh/.p10k.zsh".source = relativeSymlink configDirectory ./dotfiles/.p10k.zsh;
+        "zsh/.p10k.zsh".source =
+          relativeSymlink configDirectory ./dotfiles/.p10k.zsh;
       };
 
       home.packages = with pkgs; [
@@ -126,7 +127,9 @@ in {
           source ${relativeSymlink configDirectory ./dotfiles/functions.zsh}
 
           function load_key_bindings() {
-            source ${relativeSymlink configDirectory ./dotfiles/key-bindings-vi.zsh}
+            source ${
+              relativeSymlink configDirectory ./dotfiles/key-bindings-vi.zsh
+            }
           }
 
           ## zsh-notify
@@ -250,10 +253,6 @@ in {
           dl = "$HOME/Downloads";
         };
       };
-
-      programs.carapace.enableZshIntegration = false;
-      programs.thefuck.enableZshIntegration = false;
-      programs.nix-index.enableZshIntegration = false;
     };
   };
 }

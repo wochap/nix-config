@@ -55,8 +55,6 @@
     reversal-extra.flake = false;
 
     # terminal tools
-    ani-cli.url = "github:pystardust/ani-cli";
-    ani-cli.flake = false;
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f";
     fuzzy-sys.flake = false;
     kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim";
