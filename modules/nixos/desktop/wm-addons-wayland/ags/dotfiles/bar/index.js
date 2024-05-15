@@ -75,8 +75,13 @@ export const bar = () => {
     layer: isDwl ? "top" : "bottom",
     anchor: ["top", "left", "right"],
     child: Widget.CenterBox({
-      class_name: "bar",
+      class_name: "bar loading",
       spacing,
+      setup(self) {
+        setTimeout(() => {
+          self.toggleClassName("loading", false);
+        }, 250);
+      },
       startWidget: Widget.Box({
         spacing,
         children: leftModules,

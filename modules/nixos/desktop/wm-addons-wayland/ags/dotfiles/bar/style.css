@@ -20,6 +20,10 @@
   min-height: 26px;
 }
 
+.bar.loading > * {
+  opacity: 0;
+}
+
 .wmtags label {
   padding: 1px 0.5em 0;
   color: @textDimmed;
