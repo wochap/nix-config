@@ -2,14 +2,14 @@
 with pkgs;
 python3Packages.buildPythonApplication rec {
   pname = "offlinemsmtp";
-  version = "unstable-2023-06-23";
+  version = "cb14dd9f5e62ad6d160ed3b0d6e1fc3cf936f3dd";
   format = "pyproject";
 
   src = pkgs.fetchFromGitHub {
-    owner = "sumnerevans";
+    owner = "wochap";
     repo = pname;
-    rev = "9dd0a8eec84aa62dfd4a4a7eae62e0733917e9b2";
-    sha256 = "sha256-V4CDnpG8PZHs/0vA+6DvS5v9o08WRCQ0CKwmK1rGuY0=";
+    rev = version;
+    sha256 = "sha256-0lnVM5hAFDUqWD2IMDlVqV4Ya47mvpjUfTf0e6P2ONg=";
   };
 
   nativeBuildInputs = [

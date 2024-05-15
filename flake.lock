@@ -44,22 +44,6 @@
         "type": "github"
       }
     },
-    "ani-cli": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1704294772,
-        "narHash": "sha256-rz8uAgyXTPDJhewi71CmTcmlDm+MybewXc0WkXD8fCI=",
-        "owner": "pystardust",
-        "repo": "ani-cli",
-        "rev": "be32fb7cea73668dae89cb08cecc1c08a7fc773e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "pystardust",
-        "repo": "ani-cli",
-        "type": "github"
-      }
-    },
     "catppuccin-alacritty": {
       "flake": false,
       "locked": {
@@ -1733,7 +1717,6 @@
       "inputs": {
         "ags": "ags",
         "android-nixpkgs": "android-nixpkgs",
-        "ani-cli": "ani-cli",
         "catppuccin-alacritty": "catppuccin-alacritty",
         "catppuccin-amfora": "catppuccin-amfora",
         "catppuccin-bat": "catppuccin-bat",
