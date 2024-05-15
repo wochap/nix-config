@@ -102,6 +102,8 @@ in {
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
 
+    _custom.desktop.power-management.cpupowerGuiArgs =
+      [ "--performance" "profile" "Performance" ];
     _custom.desktop.ags.mainOutputName = "eDP-1";
     _custom.desktop.greetd.enable = true;
     _custom.desktop.greetd.enablePamAutoLogin = true;

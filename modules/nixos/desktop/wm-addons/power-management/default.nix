@@ -8,6 +8,10 @@ let
 in {
   options._custom.desktop.power-management = {
     enable = lib.mkEnableOption { };
+    cpupowerGuiArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+    };
     enableLowBatteryNotification = lib.mkEnableOption { };
   };
 
@@ -29,8 +33,19 @@ in {
 
     # required by cpupower-gui
     services.dbus.packages = [ pkgs.cpupower-gui ];
-    systemd.services = {
-      cpupower-gui-helper = {
+    systemd = {
+      user.services.cpupower-gui-user =
+        lib.mkIf (builtins.length cfg.cpupowerGuiArgs > 0) {
+          description = "Apply cpupower-gui config at user login";
+          wantedBy = [ "graphical-session.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.cpupower-gui}/bin/cpupower-gui ${
+                lib.concatStringsSep " " cfg.cpupowerGuiArgs
+              }";
+          };
+        };
+      services.cpupower-gui-helper = {
         description = "cpupower-gui system helper";
         aliases = [ "dbus-org.rnd2.cpupower_gui.helper.service" ];
         serviceConfig = {
@@ -41,7 +56,6 @@ in {
         };
       };
     };
-
     _custom.hm.systemd.user.services.battery-notification =
       lib.mkIf cfg.enableLowBatteryNotification (lib._custom.mkWaylandService {
         Unit.Description =
@@ -49,7 +63,8 @@ in {
         Unit.Documentation = "https://github.com/rjekker/i3-battery-popup";
         Service = {
           PassEnvironment = [ "PATH" "DISPLAY" ];
-          ExecStart = "${battery-notification}/bin/battery-notification -t 5s -L 15 -l 5 -n -i battery -D";
+          ExecStart =
+            "${battery-notification}/bin/battery-notification -t 5s -L 15 -l 5 -n -i battery -D";
           Restart = "on-failure";
           KillMode = "mixed";
         };
