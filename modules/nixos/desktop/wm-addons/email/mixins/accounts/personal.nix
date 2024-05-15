@@ -12,7 +12,7 @@ let
       Gean Marroquin
       Software Engineer
 
-      https://geanmarroquin.com
+      https://geanmar.com
     '';
   };
 in {
