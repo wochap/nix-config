@@ -11,7 +11,8 @@ reload_waybar() {
 toggle() {
   notify="notify-send --urgency=low --replace-id=695 matcha"
 
-  case $(MATCHA_WAYBAR_OFF=false MATCHA_WAYBAR_ON=true matcha --toggle --bar=waybar | head -n 1) in
+  status=$(MATCHA_WAYBAR_OFF=false MATCHA_WAYBAR_ON=true matcha --toggle --bar=waybar | head -n 1)
+  case $status in
   true)
     if test ! -f "$FILE"; then
       touch "$FILE"
