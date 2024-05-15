@@ -106,7 +106,7 @@
     catppuccin-discord.flake = false;
     catppuccin-kitty.url = "github:catppuccin/kitty?rev=4820b3ef3f4968cf3084b2239ce7d1e99ea04dda";
     catppuccin-kitty.flake = false;
-    catppuccin-lazygit.url = "github:catppuccin/lazygit?rev=b2ecb6d41b6f54a82104879573c538e8bdaeb0bf";
+    catppuccin-lazygit.url = "github:catppuccin/lazygit?rev=30bff2e6d14ca12a09d71e5ce4e6a086b3e48aa6";
     catppuccin-lazygit.flake = false;
     catppuccin-delta.url = "github:catppuccin/delta";
     catppuccin-delta.flake = false;

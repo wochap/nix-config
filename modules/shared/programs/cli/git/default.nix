@@ -4,7 +4,7 @@ let
   cfg = config._custom.programs.git;
   inherit (config._custom.globals) themeColors;
   catppuccinTheme = lib._custom.fromYAML
-    "${inputs.catppuccin-lazygit}/themes/${themeColors.flavor}.yml";
+    "${inputs.catppuccin-lazygit}/themes/${themeColors.flavor}/mauve.yml";
 in {
   options._custom.programs.git = {
     enable = lib.mkEnableOption { };
@@ -14,13 +14,13 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
-        lazygit = prev.lazygit.overrideAttrs (_: {
-          version = "e60936e964e0b978532745f319fc4600c00de7d7";
+        lazygit = prev.lazygit.overrideAttrs (_: rec {
+          version = "v0.41.0";
           src = prev.fetchFromGitHub {
             owner = "jesseduffield";
             repo = "lazygit";
-            rev = "e60936e964e0b978532745f319fc4600c00de7d7";
-            sha256 = "sha256-fP12JfOyeXdQXUur2PToV29PIXc9bT3J/xJr75BOC0o=";
+            rev = version;
+            sha256 = "sha256-Ok6QnXw3oDeSzBekft8cDXM/YsADgF1NZznfNoGNvck=";
           };
         });
       })
@@ -43,6 +43,8 @@ in {
       programs.lazygit = {
         enable = true;
         settings = {
+          update.method = "never";
+          disableStartupPopups = true;
           os = {
             open = "xdg-open {{filename}} >/dev/null";
             edit = "nvr -l --remote-wait-silent {{filename}}";
@@ -51,8 +53,18 @@ in {
             suspend = true;
           };
           gui = {
-            inherit (catppuccinTheme) theme;
-            border = "single";
+            theme = {
+              inherit (catppuccinTheme.theme)
+                optionsTextColor selectedLineBgColor cherryPickedCommitBgColor
+                cherryPickedCommitFgColor unstagedChangesColor defaultFgColor
+                searchingActiveBorderColor;
+              activeBorderColor = [ themeColors.mauve ];
+              inactiveBorderColor = [ themeColors.textDimmed ];
+            };
+            showBottomLine = false;
+            showPanelJumps = false;
+            filterMode = "fuzzy";
+            border = "rounded";
             mainPanelSplitMode = "vertical";
             nerdFontsVersion = "3";
             scrollHeight = 10;

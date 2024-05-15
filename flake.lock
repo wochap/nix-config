@@ -212,17 +212,17 @@
     "catppuccin-lazygit": {
       "flake": false,
       "locked": {
-        "lastModified": 1683041570,
-        "narHash": "sha256-9BBmWRcjNaJE9T0RKVEJaSnkrbMom0CLYE8PzAT6yFw=",
+        "lastModified": 1711897415,
+        "narHash": "sha256-mmNA7MpORvdCb37myo2QqagPK46rxRxD0dvUMsHegEM=",
         "owner": "catppuccin",
         "repo": "lazygit",
-        "rev": "b2ecb6d41b6f54a82104879573c538e8bdaeb0bf",
+        "rev": "30bff2e6d14ca12a09d71e5ce4e6a086b3e48aa6",
         "type": "github"
       },
       "original": {
         "owner": "catppuccin",
         "repo": "lazygit",
-        "rev": "b2ecb6d41b6f54a82104879573c538e8bdaeb0bf",
+        "rev": "30bff2e6d14ca12a09d71e5ce4e6a086b3e48aa6",
         "type": "github"
       }
     },
