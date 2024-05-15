@@ -21,11 +21,22 @@ in {
       home.packages = [ pkgs.vdirsyncer ];
 
       systemd.user.services.vdirsyncer = {
-        Unit.Description = "Synchronize Calendar and Contacts";
+        Unit = {
+          Description = "Synchronize Calendar and Contacts";
+          OnFailure = "vdirsyncer-on-failure.service";
+        };
         Service = {
           Type = "oneshot";
           PassEnvironment = "PATH";
           ExecStart = "${vdirsyncerScript}";
+        };
+      };
+
+      systemd.user.services.vdirsyncer-on-failure = {
+        Service = {
+          Type = "oneshot";
+          ExecStart =
+            "${pkgs.libnotify}/bin/notify-send --app-name vdirsyncer --icon apport 'Service failed'";
         };
       };
 

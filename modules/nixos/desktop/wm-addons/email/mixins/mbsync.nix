@@ -26,6 +26,16 @@ in {
         preExec = "${checkNetworkOrAlreadyRunningScript}";
         frequency = "*:0/10";
       };
+
+      systemd.user.services.mbsync.Unit.OnFailure = "mbsync-on-failure.service";
+
+      systemd.user.services.mbsync-on-failure = {
+        Service = {
+          Type = "oneshot";
+          ExecStart =
+            "${pkgs.libnotify}/bin/notify-send --app-name mbsync --icon apport 'Service failed'";
+        };
+      };
     };
   };
 }
