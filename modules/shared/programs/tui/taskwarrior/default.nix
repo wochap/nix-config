@@ -11,20 +11,32 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [
-        taskwarrior-tui
-        timewarrior
-        # TODO: setup bugwarrior
-        python311Packages.bugwarrior
-      ];
-      home.sessionVariables = { TIMEWARRIORDB = timewarriorConfigPath; };
-      home.file."${timewarriorConfigPath}/timewarrior.cfg".text = ''
-        import ${pkgs.timewarrior}/share/doc/timew/doc/themes/dark_green.theme
-        import ${pkgs.timewarrior}/share/doc/timew/doc/holidays/holidays.en-US
-        ${builtins.readFile ./dotfiles/timewarrior.cfg}
-      '';
+      home = {
+        packages = with pkgs; [
+          taskwarrior-tui
+          timewarrior
+          # TODO: setup bugwarrior
+          python311Packages.bugwarrior
+        ];
 
-      home.shellAliases.twt = "taskwarrior-tui";
+        sessionVariables.TIMEWARRIORDB = timewarriorConfigPath;
+
+        file = {
+          "${timewarriorConfigPath}/timewarrior.cfg".text = ''
+            import ${pkgs.timewarrior}/share/doc/timew/doc/themes/dark_green.theme
+            import ${pkgs.timewarrior}/share/doc/timew/doc/holidays/holidays.en-US
+            ${builtins.readFile ./dotfiles/timewarrior.cfg}
+          '';
+
+          "${timewarriorConfigPath}/hooks/on-modify.timewarrior" = {
+            executable = true;
+            source =
+              "${pkgs.timewarrior}/share/doc/timew/ext/on-modify.timewarrior";
+          };
+        };
+
+        shellAliases.twt = "taskwarrior-tui";
+      };
 
       programs.taskwarrior = {
         enable = true;
