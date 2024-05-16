@@ -8,6 +8,7 @@
     ./dev/lang-python
     ./dev/lang-ruby
     ./dev/lang-web
+    ./dev/tools
 
     ./globals
     ./home
