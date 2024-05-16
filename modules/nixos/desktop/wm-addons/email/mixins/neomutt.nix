@@ -59,8 +59,14 @@ in {
           }
           {
             action =
-              "<change-folder>${hmConfig.accounts.email.accounts.Work.maildir.absPath}/INBOX<enter>";
-            key = "W";
+              "<change-folder>${hmConfig.accounts.email.accounts.BOC.maildir.absPath}/INBOX<enter>";
+            key = "B";
+            map = [ "index" ];
+          }
+          {
+            action =
+              "<change-folder>${hmConfig.accounts.email.accounts.SE.maildir.absPath}/INBOX<enter>";
+            key = "S";
             map = [ "index" ];
           }
           {

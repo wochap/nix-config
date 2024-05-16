@@ -76,7 +76,8 @@ in {
         status_path = "${dataHome}/vdirsyncer/status/"
 
         ${mkGoogleCalendarPair { name = "personal"; }}
-        ${mkGoogleCalendarPair { name = "work"; }}
+        ${mkGoogleCalendarPair { name = "boc"; }}
+        ${mkGoogleCalendarPair { name = "se"; }}
       '';
     };
   };

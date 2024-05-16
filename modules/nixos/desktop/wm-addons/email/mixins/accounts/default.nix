@@ -5,7 +5,7 @@ let
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
 in {
-  imports = [ ./personal.nix ./work.nix ];
+  imports = [ ./personal.nix ./boc.nix ./se.nix ];
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

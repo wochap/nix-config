@@ -17,8 +17,12 @@ in {
         path = ${dataHome}/vdirsyncer/personal-calendars/*
         type = discover
 
-        [[work_calendar_local]]
-        path = ${dataHome}/vdirsyncer/work-calendars/*
+        [[boc_calendar_local]]
+        path = ${dataHome}/vdirsyncer/boc-calendars/*
+        type = discover
+
+        [[se_calendar_local]]
+        path = ${dataHome}/vdirsyncer/se-calendars/*
         type = discover
 
         [locale]

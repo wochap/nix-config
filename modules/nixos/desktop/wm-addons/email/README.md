@@ -29,3 +29,5 @@ Add a file in `<NIX_CONFIG_PATH>/secrets/mail/<EMAIL>`, and inside paste the pas
 
 You must enable 2FA auth in your google account and create a password in "App passwords"
 
+In Gmail > Settings > Forwarding and POP/IMAP, enable POP and IMAP
+

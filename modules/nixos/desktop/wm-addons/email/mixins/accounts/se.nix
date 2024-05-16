@@ -5,15 +5,15 @@ let
   cfg = config._custom.desktop.email;
   helper = import ./helper.nix { inherit config pkgs lib; };
   accountConfig = {
-    address = "geanb@bandofcoders.com";
-    name = "Work";
-    color = "blue";
+    address = "gean.bonifacio@socialexplorer.com";
+    name = "SE";
+    color = "yellow";
   };
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
 
-      accounts.email.accounts.Work = mkMerge [
+      accounts.email.accounts.SE = mkMerge [
         (helper.commonConfig accountConfig)
         (helper.imapnotifyConfig accountConfig)
         helper.gpgConfig
