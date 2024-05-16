@@ -6,6 +6,8 @@ let
   hmConfig = config.home-manager.users.${userName};
   timewarriorConfigPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
+  taskwarriorConfigPath =
+    "${hmConfig.home.homeDirectory}/Sync/.config/taskwarrior";
 in {
   options._custom.programs.taskwarrior.enable = lib.mkEnableOption { };
 
@@ -28,7 +30,7 @@ in {
             ${builtins.readFile ./dotfiles/timewarrior.cfg}
           '';
 
-          "${timewarriorConfigPath}/hooks/on-modify.timewarrior" = {
+          "${taskwarriorConfigPath}/hooks/on-modify.timewarrior" = {
             executable = true;
             source =
               "${pkgs.timewarrior}/share/doc/timew/ext/on-modify.timewarrior";
@@ -41,8 +43,7 @@ in {
       programs.taskwarrior = {
         enable = true;
         colorTheme = "dark-green-256";
-        dataLocation =
-          "${hmConfig.home.homeDirectory}/Sync/.config/taskwarrior";
+        dataLocation = taskwarriorConfigPath;
         config = { };
         extraConfig = builtins.readFile ./dotfiles/taskrc;
       };
