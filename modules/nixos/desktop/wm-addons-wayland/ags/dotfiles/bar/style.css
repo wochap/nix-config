@@ -140,6 +140,16 @@
   background-color: @moduleBgFocus;
 }
 
+.timewarrior {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @moduleBg;
+  color: @green;
+}
+.bar-container.focused .timewarrior {
+  background-color: @moduleBgFocus;
+}
+
 .dunst {
   padding: 1px 0.5em 0;
   border-radius: 4px;

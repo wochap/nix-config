@@ -1,24 +1,27 @@
-const Timewarrior = Variable(false, {
+const Timewarrior = Variable("", {
   poll: [
     1000,
     [
       "bash",
       "-c",
-      `(timew | grep -q "There is no active time tracking." && echo "false") || echo "true"`,
+      `timew | grep 'Total' | awk '{split($2, a, ":"); print a[1] ":" a[2]}'`,
     ],
-    (out) => JSON.parse(out),
+    (out) => out.trim(),
   ],
 });
 
 export const timewarrior = () =>
   Widget.Button({
-    class_names: "timewarrior",
-    visible: Timewarrior.bind(),
+    class_name: "timewarrior",
+    visible: Timewarrior.bind().as((value) => value.length > 0),
     on_clicked: () => {
       Utils.execAsync(["bash", "-c", "timew stop"]);
     },
     child: Widget.Label({
       useMarkup: true,
-      label: "<span rise='-1000'>󱫠</span> <span rise='-1000'></span>",
+      label: Timewarrior.bind().as(
+        (value) =>
+          `<span rise='-1000'>󱫠 </span> <span rise='-1000'>${value}</span>`,
+      ),
     }),
   });

@@ -28,6 +28,7 @@ import { offlinemsmtp } from "./modules/offlinemsmtp.js";
 import { recorder } from "./modules/recorder.js";
 import { systray } from "./modules/systray.js";
 import { temperature } from "./modules/temperature.js";
+import { timewarrior } from "./modules/timewarrior.js";
 import { spacing } from "./constants.js";
 
 // HACK: without wrapping bar in a function
@@ -99,6 +100,7 @@ export const bar = () => {
           matcha(),
           offlinemsmtp(),
           temperature(),
+          timewarrior(),
           dunst,
           battery,
           audio,
