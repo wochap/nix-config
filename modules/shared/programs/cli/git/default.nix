@@ -151,6 +151,18 @@ in {
               commit.gpgSign = true;
             };
           })
+
+          (lib.mkIf cfg.enableUser {
+            condition = "gitdir:~/Projects/se/**/.git";
+            contents = {
+              user = {
+                email = "gean.bonifacio@socialexplorer.com";
+                name = "Gean";
+                signingKey = "gean.bonifacio@socialexplorer.com";
+              };
+              commit.gpgSign = true;
+            };
+          })
         ];
       };
     };
