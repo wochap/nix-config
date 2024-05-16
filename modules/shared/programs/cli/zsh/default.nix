@@ -233,6 +233,7 @@ in {
           ## completions
 
           zsh-defer source ${inputs.zsh-pnpm-shell-completion}/pnpm-shell-completion.plugin.zsh
+          zsh-defer source ${pkgs.timewarrior}/share/bash-completion/completions/timew.bash
         '';
         enableCompletion = true;
         defaultKeymap = "emacs";
