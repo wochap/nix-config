@@ -148,6 +148,8 @@ in {
 
           export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
           export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+          # https://github.com/zsh-users/zsh-autosuggestions/issues/689
+          export ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(''${ZSH_AUTOSUGGEST_ACCEPT_WIDGETS:#vi-add-eol})
 
           source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
