@@ -36,6 +36,18 @@ zle -N kill-blank-word
 function .recover-line() { LBUFFER+=$ZLE_LINE_ABORTED }
 zle -N .recover-line
 
+custom-forward-char() {
+  local cursor_position=${CURSOR}
+  local command_line=${BUFFER}
+  local line_length=${#command_line}
+
+  zle .forward-char
+  if [[ $cursor_position -eq $line_length ]]; then
+    zle autosuggest-accept
+  fi
+}
+zle -N custom-forward-char
+
 # ================
 # Clean up
 # ================
@@ -142,7 +154,7 @@ bindkey -M menuselect '\t' menu-complete "${terminfo[kcbt]}" reverse-menu-comple
 bindkey -M menuselect "$key_left" .backward-char
 
 # [RightArrow] - move forward one char
-bindkey -M menuselect "$key_right" .forward-char
+# bindkey -M menuselect "$key_right" .forward-char
 
 # [Enter] - execute command in all modes
 multibindkey 'viins visual vicmd viopp menuselect' '\r' .accept-line
@@ -154,6 +166,12 @@ bindkey -M viins '^\\\\' menu-search
 # ================
 # Plugins
 # ================
+
+# [RightArrow] - move forward one char and if at the end of line accept suggestion
+multibindkey 'viins menuselect' "$key_right" custom-forward-char
+
+# [Ctrl+Space] - accept suggestion
+multibindkey 'viins menuselect' '^ ' autosuggest-accept
 
 # [Alt+RightArrow] - dirhistory future
 bindkey -M vicmd "^[[1;3C" dirhistory_zle_dirhistory_future
