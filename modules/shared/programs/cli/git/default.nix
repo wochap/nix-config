@@ -5,6 +5,7 @@ let
   inherit (config._custom.globals) themeColors;
   catppuccinTheme = lib._custom.fromYAML
     "${inputs.catppuccin-lazygit}/themes/${themeColors.flavor}/mauve.yml";
+  git-final = pkgs.gitAndTools.gitFull;
 in {
   options._custom.programs.git = {
     enable = lib.mkEnableOption { };
@@ -25,6 +26,8 @@ in {
         });
       })
     ];
+
+    environment.systemPackages = [ git-final ];
 
     _custom.hm = {
       home.shellAliases = {
@@ -85,7 +88,7 @@ in {
       };
 
       programs.git = {
-        package = pkgs.gitAndTools.gitFull;
+        package = git-final;
         enable = true;
 
         ignores =
