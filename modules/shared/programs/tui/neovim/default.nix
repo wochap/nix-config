@@ -5,12 +5,12 @@ in {
   imports = [ ./options.nix ];
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
+    # nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
 
     _custom.programs.neovim = {
       setBuildEnv = true;
       withBuildTools = true;
-      package = pkgs.neovim-unwrapped;
+      package = pkgs.prevstable-neovim.neovim-unwrapped;
     };
 
     environment = {

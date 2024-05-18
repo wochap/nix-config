@@ -4,7 +4,7 @@
     unstable.url = "github:nixos/nixpkgs?rev=b06025f1533a1e07b6db3e75151caa155d1c7eb3"; # nixos-unstable (jan 10 2024)
     stable.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (jan 10 2024)
     nixpkgs.url = "github:nixos/nixpkgs?rev=b06025f1533a1e07b6db3e75151caa155d1c7eb3"; # nixos-unstable (mar 21 2024)
-    prevstable-neovim.url = "github:nixos/nixpkgs?rev=317484b1ead87b9c1b8ac5261a8d2dd748a0492d"; # NVIM v0.9.5
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=8e6da80eb90e6fffde4b5ec38f46a8f200af66dd"; # NVIM v0.10.0
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=f8e2ebd66d097614d51a56a755450d4ae1632df1"; # nixos-unstable (feb 06 2024)
@@ -24,7 +24,7 @@
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=9a763a7acc4cfbb8603bb0231fec3eda864f81c0";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=73b284862eb33c198207ca11f8e1eb99fe086653";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=7b5ca2486bba58cac80b9229209239740b67cf90";
     ags.url = "github:Aylur/ags?rev=b40b8d81c5543ef02caee67560ab1c13ebcee49a";
     ags.inputs.nixpkgs.follows = "unstable";
     nix-ld.url = "github:Mic92/nix-ld";
