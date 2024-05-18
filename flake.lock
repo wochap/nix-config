@@ -1172,17 +1172,17 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1711411421,
-        "narHash": "sha256-4sp4EIymCtkaBI37L0pYnasSxLJ7EWmedzNxXuEpIoI=",
+        "lastModified": 1715817852,
+        "narHash": "sha256-UH5o7hT72oAavJTG2NxlpMyQe3BQMniQAsgTugWtlc4=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "73b284862eb33c198207ca11f8e1eb99fe086653",
+        "rev": "7b5ca2486bba58cac80b9229209239740b67cf90",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "73b284862eb33c198207ca11f8e1eb99fe086653",
+        "rev": "7b5ca2486bba58cac80b9229209239740b67cf90",
         "type": "github"
       }
     },
@@ -1611,17 +1611,17 @@
     },
     "prevstable-neovim": {
       "locked": {
-        "lastModified": 1704722960,
-        "narHash": "sha256-mKGJ3sPsT6//s+Knglai5YflJUF2DGj7Ai6Ynopz0kI=",
+        "lastModified": 1716048723,
+        "narHash": "sha256-SWDzpxZco1hLocrO6q/5KxWhL6GU5MpiEhBd+NTN1cg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "317484b1ead87b9c1b8ac5261a8d2dd748a0492d",
+        "rev": "8e6da80eb90e6fffde4b5ec38f46a8f200af66dd",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "317484b1ead87b9c1b8ac5261a8d2dd748a0492d",
+        "rev": "8e6da80eb90e6fffde4b5ec38f46a8f200af66dd",
         "type": "github"
       }
     },
@@ -1654,6 +1654,22 @@
         "owner": "nixos",
         "repo": "nixpkgs",
         "rev": "a16f7eb56e88c8985fcc6eb81dabd6cade4e425a",
+        "type": "github"
+      }
+    },
+    "prevstable-rubymine": {
+      "locked": {
+        "lastModified": 1715623670,
+        "narHash": "sha256-sNtDSMcLx9jip/Vxo0DK5SL9hx9VEJiFKDdXRMuKRwY=",
+        "owner": "mevatron",
+        "repo": "nixpkgs",
+        "rev": "6ae3ced59e52bb3fd99d82913e299273a3d4f18a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mevatron",
+        "repo": "nixpkgs",
+        "rev": "6ae3ced59e52bb3fd99d82913e299273a3d4f18a",
         "type": "github"
       }
     },
@@ -1765,6 +1781,7 @@
         "prevstable-neovim": "prevstable-neovim",
         "prevstable-nodejs": "prevstable-nodejs",
         "prevstable-python": "prevstable-python",
+        "prevstable-rubymine": "prevstable-rubymine",
         "pyprland": "pyprland",
         "retroarch-shaders": "retroarch-shaders",
         "reversal-extra": "reversal-extra",

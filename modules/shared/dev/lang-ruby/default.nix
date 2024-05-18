@@ -6,7 +6,10 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ ruby ];
+    environment.systemPackages = with pkgs; [
+      ruby
+      prevstable-rubymine.jetbrains.ruby-mine
+    ];
   };
 }
 

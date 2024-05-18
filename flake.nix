@@ -8,6 +8,7 @@
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=f8e2ebd66d097614d51a56a755450d4ae1632df1"; # nixos-unstable (feb 06 2024)
+    prevstable-rubymine.url = "github:mevatron/nixpkgs?rev=6ae3ced59e52bb3fd99d82913e299273a3d4f18a"; # v2024.1.1
 
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=1c2acec99933f9835cc7ad47e35303de92d923a4"; # master (mar 21 2024)
