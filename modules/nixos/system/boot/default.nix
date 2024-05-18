@@ -24,6 +24,9 @@ in {
       efi.canTouchEfiVariables = true;
     };
 
+    # increase the limits to avoid running out of inotify watches
+    kernel.sysctl."fs.inotify.max_user_watches" = "1048576";
+
     tmp.cleanOnBoot = true;
   };
 }
