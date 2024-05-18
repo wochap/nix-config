@@ -55,9 +55,11 @@
     ./programs/cli/core-utils-linux
     ./programs/cli/nix-alien
 
+    ./programs/gui/dolphin
     ./programs/gui/gtk
     ./programs/gui/imv
     ./programs/gui/mongodb
+    ./programs/gui/obs-studio
     ./programs/gui/qt
     ./programs/gui/thunar
     ./programs/gui/zathura
