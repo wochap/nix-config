@@ -47,6 +47,7 @@ in {
           };
           Service = {
             Environment = [
+              # NOTE: this or use `dbus-update-activation-environment --systemd <env_var_name>`
               "TIMEWARRIORDB=${hmConfig.home.sessionVariables.TIMEWARRIORDB}"
               "MAIN_OUTPUT_NAME=${hmConfig.home.sessionVariables.MAIN_OUTPUT_NAME}"
             ];
