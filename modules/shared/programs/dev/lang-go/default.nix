@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.dev.lang-go;
+let cfg = config._custom.programs.lang-go;
 in {
-  options._custom.dev.lang-go.enable = lib.mkEnableOption { };
+  options._custom.programs.lang-go.enable = lib.mkEnableOption { };
 
   config =
     lib.mkIf cfg.enable { environment.systemPackages = with pkgs; [ go ]; };

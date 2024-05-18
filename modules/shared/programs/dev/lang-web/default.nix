@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.dev.lang-web;
+let cfg = config._custom.programs.lang-web;
 in {
-  options._custom.dev.lang-web.enable = lib.mkEnableOption { };
+  options._custom.programs.lang-web.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [

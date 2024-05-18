@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.dev.lang-nix;
+let cfg = config._custom.programs.lang-nix;
 in {
-  options._custom.dev.lang-nix.enable = lib.mkEnableOption { };
+  options._custom.programs.lang-nix.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [

@@ -2,14 +2,6 @@
 
 {
   imports = [
-    ./dev/lang-c
-    ./dev/lang-go
-    ./dev/lang-nix
-    ./dev/lang-python
-    ./dev/lang-ruby
-    ./dev/lang-web
-    ./dev/tools
-
     ./globals
     ./home
     ./nix
@@ -27,6 +19,14 @@
     ./programs/cli/ptsh
     ./programs/cli/zoxide
     ./programs/cli/zsh
+
+    ./programs/dev/lang-c
+    ./programs/dev/lang-go
+    ./programs/dev/lang-nix
+    ./programs/dev/lang-python
+    ./programs/dev/lang-ruby
+    ./programs/dev/lang-web
+    ./programs/dev/tools
 
     ./programs/gui/alacritty
     ./programs/gui/discord

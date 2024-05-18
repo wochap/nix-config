@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.dev.lang-python;
+  cfg = config._custom.programs.lang-python;
   packageOverrides =
     pkgs.prevstable-python.callPackage ./pip2nix/python-packages.nix {
       pkgs = pkgs.prevstable-python;
@@ -18,7 +18,7 @@ let
       icalendar
     ]));
 in {
-  options._custom.dev.lang-python.enable = lib.mkEnableOption { };
+  options._custom.programs.lang-python.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ pipx poetry pipenv python-final ];

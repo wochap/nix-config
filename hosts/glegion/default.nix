@@ -12,15 +12,6 @@ in {
     _custom.globals.homeDirectory = "/home/${userName}";
     _custom.globals.configDirectory = configDirectory;
 
-    # dev
-    _custom.dev.lang-c.enable = true;
-    _custom.dev.lang-go.enable = true;
-    _custom.dev.lang-nix.enable = true;
-    _custom.dev.lang-python.enable = true;
-    _custom.dev.lang-ruby.enable = true;
-    _custom.dev.lang-web.enable = true;
-    _custom.dev.tools.enable = true;
-
     _custom.programs.weeb.enable = true;
 
     # cli
@@ -60,6 +51,15 @@ in {
     _custom.programs.zoxide.enable = true;
     _custom.programs.zsh.enable = true;
     _custom.programs.zsh.isDefault = true;
+
+    # dev
+    _custom.programs.lang-c.enable = true;
+    _custom.programs.lang-go.enable = true;
+    _custom.programs.lang-nix.enable = true;
+    _custom.programs.lang-python.enable = true;
+    _custom.programs.lang-ruby.enable = true;
+    _custom.programs.lang-web.enable = true;
+    _custom.programs.tools.enable = true;
 
     # gui
     _custom.programs.alacritty.enable = false;

@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.dev.lang-c;
+let cfg = config._custom.programs.lang-c;
 in {
-  options._custom.dev.lang-c.enable = lib.mkEnableOption { };
+  options._custom.programs.lang-c.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

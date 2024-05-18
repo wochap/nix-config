@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.dev.tools;
+let cfg = config._custom.programs.tools;
 in {
-  options._custom.dev.tools.enable = lib.mkEnableOption { };
+  options._custom.programs.tools.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
