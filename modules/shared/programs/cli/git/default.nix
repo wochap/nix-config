@@ -34,7 +34,12 @@ in {
         gcmsg = "git commit --message";
       };
 
-      home.packages = with pkgs; [ commitizen git-town gitflow ];
+      home.packages = with pkgs; [
+        commitizen
+        git-town
+        gitAndTools.gh # github cli
+        gitflow
+      ];
 
       programs.zsh.shellAliases = {
         lg = ''run-without-kpadding lazygit "$@"'';

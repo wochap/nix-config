@@ -12,7 +12,12 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [ newsboat qndl linkhandler ];
+      home.packages = with pkgs; [
+        newsboat
+        qndl
+        linkhandler
+        urlscan # extract urls from emails/txt files
+      ];
 
       xdg.configFile = {
         "newsboat/catppuccin-dark".source =

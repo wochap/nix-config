@@ -17,6 +17,8 @@
     ./programs/cli/bat
     ./programs/cli/buku
     ./programs/cli/cht
+    ./programs/cli/core-utils
+    ./programs/cli/core-utils-extra
     ./programs/cli/dircolors
     ./programs/cli/fzf
     ./programs/cli/git
@@ -34,8 +36,6 @@
     ./programs/gui/mpv
     ./programs/gui/qutebrowser
     ./programs/gui/vscode
-
-    ./programs/others
 
     ./programs/tui/amfora
     ./programs/tui/bottom

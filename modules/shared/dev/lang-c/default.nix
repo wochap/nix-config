@@ -28,6 +28,10 @@ in {
         # required by codelldb (debugger)
         # lldb # libraries conflicts with clang-tools
         gdb
+
+        # libs
+        gpp # c++ module?, decrypt
+        gecode # c++ module
       ];
     };
   };

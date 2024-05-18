@@ -51,6 +51,8 @@
 
     ./globals
 
+    ./programs/cli/core-utils-extra-linux
+    ./programs/cli/core-utils-linux
     ./programs/cli/nix-alien
 
     ./programs/gui/gtk
