@@ -2,7 +2,8 @@
 
 let
   cfg = config._custom.desktop.ags;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) configDirectory userName;
+  hmConfig = config.home-manager.users.${userName};
   agsFinal = inputs.ags.packages.${system}.default;
   capslock =
     pkgs.writeScriptBin "capslock" (builtins.readFile ./scripts/capslock.sh);
@@ -45,12 +46,12 @@ in {
             Documentation = "https://github.com/Aylur/ags";
           };
           Service = {
-            PassEnvironment = [
-              "PATH"
-              "XDG_SESSION_DESKTOP"
-              "MAIN_OUTPUT_NAME"
-              "HYPRLAND_INSTANCE_SIGNATURE"
+            Environment = [
+              "TIMEWARRIORDB=${hmConfig.home.sessionVariables.TIMEWARRIORDB}"
+              "MAIN_OUTPUT_NAME=${hmConfig.home.sessionVariables.MAIN_OUTPUT_NAME}"
             ];
+            PassEnvironment =
+              [ "PATH" "XDG_SESSION_DESKTOP" "HYPRLAND_INSTANCE_SIGNATURE" ];
             ExecStart = "${agsFinal}/bin/ags";
             Restart = "on-failure";
             KillMode = "mixed";
