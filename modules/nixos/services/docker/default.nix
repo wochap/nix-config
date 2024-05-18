@@ -8,6 +8,8 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    programs.zsh.shellAliases.lD = ''run-without-kpadding lazydocker "$@"'';
+
     environment.systemPackages = with pkgs; [ docker-compose lazydocker ];
 
     virtualisation.docker = {
