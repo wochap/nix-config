@@ -41,14 +41,17 @@ in {
           }
           {
             timeout = 180;
-            command =
-              ''if ! pgrep swaylock; then brightnessctl --save && chayang -d 5 && wlopm --off "*"; fi'';
-            resumeCommand = ''if ! pgrep swaylock; then wlopm --on "*" && brightnessctl --restore; fi'';
+            command = ''
+              if ! pgrep swaylock; then brightnessctl --save && chayang -d 5 && wlopm --off "*"; fi'';
+            resumeCommand = ''
+              if ! pgrep swaylock; then wlopm --on "*" && brightnessctl --restore; fi'';
           }
           {
             timeout = 15;
-            command = ''if pgrep swaylock; then brightnessctl --save && wlopm --off "*"; fi'';
-            resumeCommand = ''if pgrep swaylock; then wlopm --on "*" && brightnessctl --restore; fi'';
+            command = ''
+              if pgrep swaylock; then brightnessctl --save && wlopm --off "*"; fi'';
+            resumeCommand = ''
+              if pgrep swaylock; then wlopm --on "*" && brightnessctl --restore; fi'';
           }
         ];
       };
@@ -86,8 +89,8 @@ in {
           Service = {
             PassEnvironment = "PATH";
             ExecStart = "${matcha}/bin/matcha --daemon --off";
-            ExecStartPost =
-              "${pkgs.coreutils}/bin/rm /home/${userName}/tmp/matcha";
+            ExecStartPost = let file = "/home/${userName}/tmp/matcha";
+            in "${pkgs.bash}/bin/bash -c '${pkgs.coreutils}/bin/test -f ${file} && ${pkgs.coreutils}/bin/rm ${file}'";
             Type = "simple";
           };
         };
