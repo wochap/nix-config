@@ -17,17 +17,18 @@ in {
       systemPackages = with pkgs; [
         neovide # gui
 
+        luajit # required by neorg
+        marksman # required by nvim-lspconfig
         prevstable-neovim.neovim-remote # required by lazygit
         tree-sitter # required by nvim-treesitter
-        luajit # required by neorg
 
         # required by nvim
         fswatch
         wl-clipboard # required in wayland to copy
 
         # required by telescope.nvim
-        ripgrep
         fd
+        ripgrep
       ];
     };
 
