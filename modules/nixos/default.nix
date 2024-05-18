@@ -78,6 +78,7 @@
     ./services/flatpak
     ./services/interception-tools
     ./services/ipwebcam
+    ./services/kdeconnect
     ./services/llm
     ./services/syncthing
     ./services/virt

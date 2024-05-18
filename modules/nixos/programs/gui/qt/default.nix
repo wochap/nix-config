@@ -37,12 +37,6 @@ in {
       ];
     };
 
-    programs.kdeconnect = {
-      enable = true;
-      package = lib.mkIf config._custom.desktop.gnome.enable
-        pkgs.gnomeExtensions.gsconnect;
-    };
-
     _custom.hm = {
       xdg.configFile."obs-studio/themes".source =
         "${inputs.catppuccin-obs}/themes";
@@ -62,11 +56,6 @@ in {
           obs-studio-plugins.obs-rgb-levels-filter
           # obs-studio-plugins.obs-backgroundremoval # takes too long to build
         ];
-      };
-
-      services.kdeconnect = {
-        enable = true;
-        indicator = false;
       };
     };
   };
