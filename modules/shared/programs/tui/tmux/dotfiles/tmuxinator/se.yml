@@ -96,3 +96,9 @@ windows:
         - frontend:
             - cd ./frontend
             - gulp glu-vizwiz:development
+        - layout-editor:
+            - cd ./frontend-neo/layout-editor
+            - yarn start
+        - surveys-renderer:
+            - cd ./frontend-neo/surveys-renderer
+            # - yarn start
