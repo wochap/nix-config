@@ -54,6 +54,8 @@ in {
 
     _custom.hm = {
       xdg.configFile = {
+        "tmuxinator".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/tmuxinator;
         "tmux/plugins/sensible".source =
           "${pkgs.tmuxPlugins.sensible}/share/tmux-plugins/sensible";
         "tmux/plugins/yank".source =
