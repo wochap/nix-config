@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.programs.nnn;
@@ -13,6 +13,13 @@ in {
         NNN_SPLIT = "v";
         NNN_TRASH = "1";
       };
+
+      xdg.configFile."nnn/plugins" = {
+        source = "${pkgs.nnn}/share/plugins";
+        recursive = true;
+      };
+      xdg.configFile."nnn/plugins/cppath".source =
+        "${inputs.nnn-cppath}/cppath";
 
       programs.nnn = {
         enable = true;
@@ -48,6 +55,7 @@ in {
           ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer ];
         plugins = {
           mappings = {
+            y = "cppath";
             c = "fzcd";
             f = "finder";
             o = "fzopen";
@@ -56,7 +64,7 @@ in {
             v = "imgview";
             d = "dragdrop";
           };
-          src = "${pkgs.nnn}/share/plugins";
+          src = null;
         };
       };
       programs.zsh.initExtra = builtins.readFile ./dotfiles/f.zsh;

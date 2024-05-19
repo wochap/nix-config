@@ -87,6 +87,8 @@
     fzf.url = "github:junegunn/fzf?rev=ee9d88b637e5a1210bb8727da87df5c5bc5cfa70";
     fzf.flake = false;
     tmux-sessionx.url = "github:omerxx/tmux-sessionx?rev=ac9b0ec219c2e36ce6beb3f900ef852ba8888095";
+    nnn-cppath.url = "github:raffaem/nnn-cppath?rev=1d3f4f64d43533d203af82c61f4a93afc8d5aaf5";
+    nnn-cppath.flake = false;
 
     # themes
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
