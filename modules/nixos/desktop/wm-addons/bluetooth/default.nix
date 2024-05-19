@@ -39,6 +39,54 @@ in {
       # Policy = { AutoEnable = false; };
     };
 
+    # source: https://wiki.archlinux.org/title/PipeWire#Noticeable_audio_delay_or_audible_pop/crack_when_starting_playback
+    services.pipewire.wireplumber.configPackages = [
+      (pkgs.writeTextDir
+        "share/wireplumber/wireplumber.conf.d/51-disable-suspension.conf" ''
+          monitor.alsa.rules = [
+            {
+              matches = [
+                {
+                  # Matches all sources
+                  node.name = "~alsa_input.*"
+                },
+                {
+                  # Matches all sinks
+                  node.name = "~alsa_output.*"
+                }
+              ]
+              actions = {
+                update-props = {
+                  session.suspend-timeout-seconds = 0
+                }
+              }
+            }
+          ]
+          # bluetooth devices
+          monitor.bluez.rules = [
+            {
+              matches = [
+                {
+                  # Matches all sources
+                  node.name = "~bluez_input.*"
+                },
+                {
+                  # Matches all sinks
+                  node.name = "~bluez_output.*"
+                }
+              ]
+              actions = {
+                update-props = {
+                  session.suspend-timeout-seconds = 0
+                  dither.method = "wannamaker3",
+                  dither.noise = 2,
+                }
+              }
+            }
+          ]
+        '')
+    ];
+
     _custom.hm = {
       # proxy forwarding Bluetooth MIDI controls via MPRIS2 to control media players
       services.mpris-proxy.enable = true;
