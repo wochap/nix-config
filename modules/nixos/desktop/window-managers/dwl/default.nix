@@ -122,6 +122,10 @@ in {
           source = ./scripts/dwl-vtm.sh;
           executable = true;
         };
+        "scripts/dwl-se.sh" = {
+          source = ./scripts/dwl-se.sh;
+          executable = true;
+        };
         "scripts/dwl-glegion-stream.sh" = {
           source = ./scripts/dwl-glegion-stream.sh;
           executable = true;
