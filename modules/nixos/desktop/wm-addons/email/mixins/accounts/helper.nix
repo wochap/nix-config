@@ -6,15 +6,19 @@ let
   hmConfig = config.home-manager.users.${userName};
   inherit (pkgs._custom) offlinemsmtp;
   mkSignatureScript = signatureLines:
-    pkgs.writeScript "signature" ''
+    pkgs.writeScript "signature" # python
+    ''
       #!/usr/bin/env python
-
-      ${concatMapStringsSep "\n" (l: ''print("${l}")'')
-      (splitString "\n" signatureLines)}
+      lines = [
+        ${
+          concatMapStringsSep ", "
+          (l: "[${concatMapStringsSep ", " (i: ''"${i}"'') l}]") signatureLines
+        }
+      ];
+      print('\n'.join('{:32}{}'.format(*x) for x in lines))
     '';
 in {
-  # Common configuration
-  commonConfig = { address, name, color ? "", ... }: {
+  commonConfig = { address, name, color, pgpKey ? "", ... }: {
     inherit address;
 
     realName = mkDefault "Gean Marroquin";
@@ -26,6 +30,7 @@ in {
       enable = true;
       create = "both";
       remove = "both";
+      expunge = "both";
     };
 
     msmtp.enable = true;
@@ -41,7 +46,8 @@ in {
 
       extraConfig = concatStringsSep "\n" ([
         ''set folder="${hmConfig.accounts.email.maildirBasePath}"''
-        ''set pgp_default_key = "E73095E1"''
+        ''set pgp_default_key = "${pgpKey}"''
+        ''set pgp_sign_as = "${pgpKey}"''
       ] ++ (optional (color != "") "color status ${color} default"));
     };
 
@@ -50,7 +56,6 @@ in {
 
   gpgConfig.gpg = {
     encryptByDefault = true;
-    key = "0F36350551B61784AA2F1E2BFE4CF844E73095E1";
     signByDefault = true;
   };
 

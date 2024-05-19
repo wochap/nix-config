@@ -8,12 +8,12 @@ let
     address = "gean.marroquin@gmail.com";
     name = "Personal";
     color = "red";
-    signatureLines = ''
-      Gean Marroquin
-      Software Engineer
-
-      https://geanmar.com
-    '';
+    pgpKey = "E73095E1";
+    signatureLines = [
+      [ "Gean Marroquin" "Software Engineer" ]
+      [ "https://geanmar.com" ]
+      [ "GPG: E73095E1" ]
+    ];
   };
 in {
   config = lib.mkIf cfg.enable {

@@ -8,11 +8,11 @@ let
     address = "geanb@bandofcoders.com";
     name = "BOC";
     color = "blue";
+    pgpKey = "391E628A";
   };
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-
       accounts.email.accounts.BOC = mkMerge [
         (helper.commonConfig accountConfig)
         (helper.imapnotifyConfig accountConfig)

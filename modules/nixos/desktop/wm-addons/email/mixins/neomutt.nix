@@ -1,4 +1,4 @@
-{ config, lib, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let
   cfg = config._custom.desktop.email;
@@ -10,6 +10,11 @@ let
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
+      home.packages = with pkgs;
+        [
+          urlscan # extract urls from emails/txt files
+        ];
+
       home.symlinks = {
         "${aliasfile}" = "${syncthingdir}/.config/neomutt/aliases";
         "${mailboxfile}" = "${syncthingdir}/.config/neomutt/mailboxes";
@@ -31,12 +36,12 @@ in {
           }
           {
             action = "sidebar-prev";
-            key = "\\Cp";
+            key = "[";
             map = [ "index" "pager" ];
           }
           {
             action = "sidebar-next";
-            key = "\\Cn";
+            key = "]";
             map = [ "index" "pager" ];
           }
           {
@@ -70,14 +75,19 @@ in {
             map = [ "index" ];
           }
           {
-            action = "<change-folder>?<change-dir><home>^K=<enter><tab>";
-            key = "c";
-            map = [ "index" ];
-          }
-          {
             action = "<save-message>?<tab>";
             key = "s";
             map = [ "index" ];
+          }
+          {
+            action = "<pipe-message>urlscan -dc<Enter>";
+            key = "\\Cl";
+            map = [ "index" "pager" ];
+          }
+          {
+            action = "<pipe-entry>urlscan -dc<Enter>";
+            key = "\\Cl";
+            map = [ "attach" "compose" ];
           }
         ];
 
@@ -89,31 +99,46 @@ in {
         };
 
         settings = {
+          abort_key = "<Esc>";
           alias_file = aliasfile;
-          confirmappend = "no";
-          edit_headers = "yes";
-          fast_reply = "yes";
+          allow_ansi = "yes";
+          beep_new = "no"; # bell on new mails
+          confirmappend = "no"; # don't ask, just do!
+          delete = "yes"; # don't ask, just do
+          edit_headers = "yes"; # show headers when composing
+          fast_reply = "yes"; # skip to compose when replying
+          fcc_attach = "yes"; # save attachments with the body
           folder = "${hmConfig.home.homeDirectory}/Mail";
-          imap_check_subscribed = "yes";
-          include = "yes";
-          mail_check = "0";
-          mail_check_stats = "yes";
-          mailcap_path = "${hmConfig.xdg.configHome}/neomutt/mailcap";
-          mark_old = "no";
-          markers = "no";
+          forward_quote = "yes"; # include message in forwards
+          include = "yes"; # include message in replies
+          mail_check = "0"; # how often look for new mail
+          mailcap_path = "${hmConfig.xdg.configHome}/neomutt/mailcap"; # MIMEs
+          mark_old = "no"; # read/new is good enough for me
+          markers = "no"; # show '+' at start of wrapped lines
+          move = "no"; # gmail does that
           pager_context = "3";
-          pager_index_lines = "10";
+          pager_index_lines =
+            "10"; # shows 10 lines of index when pager is active
           pager_stop = "yes";
+          quit = "yes"; # don't ask, just do!!
+          reply_to = "yes"; # reply to Reply to: field
+          reverse_name = "yes"; # reply as whomever it was to
+          sort = "threads";
           sort_aux = "reverse-last-date-received";
           sort_re = "yes";
-          tmpdir = "${hmConfig.home.homeDirectory}/tmp";
+          text_flowed = "yes";
+          timeout = "0";
+          tmpdir = "${hmConfig.xdg.configHome}/neomutt/tmp";
+          wait_key = "no"; # don't ask "press key to continue"
+
+          imap_check_subscribed = "yes";
+          mail_check_stats = "yes";
+
         };
 
         extraConfig = ''
           source ${aliasfile}
           source ${mailboxfile}
-
-          set allow_ansi
 
           # Use return to open message because I'm not a savage
           unbind index <return>
@@ -123,18 +148,25 @@ in {
           unbind index N
           bind index N toggle-new
 
-          # Status Bar
-          set status_chars  = " *%A"
-          set status_format = "───[ Folder: %f (%l %s/%S)]───[%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)?%?F? (%F flagged)?]───%>─%?p?( %p postponed)?───"
-
           lists .*@lists.sr.ht
 
+          # Theme formats
+          set date_format = "%d %h %H:%M";
+          set status_chars = " 󰁦";
+          set status_format = "[ %D ] %?r?[ 󰇰 %m ] ?%?n?[ 󰇮 %n ] ?%?d?[ 󰩹 %d ] ?%?t?[  %t ] ?%?F?[  %F ] ?%?p?[  %p ]?%|─";
+          set crypt_chars = "󰈡 ";
+          set flag_chars = "󰩹󰩺 󰇰󰇮 ";
+          set to_chars = " ";
+          set pager_format = "[ %n ] [ %T %s ]%* [ 󰸗 %{!%Y %a %d %b %H:%M} ] %?X?[ 󰁦 %X ]? [  %P ]%|─";
+
+          # Theme
           source ${inputs.catppuccin-neomutt}/${
             if themeColors.flavor == "latte" then
               "latte-neomuttrc"
             else
               "neomuttrc"
           }
+          color index color0 default '~R'
         '';
       };
     };
