@@ -6,6 +6,13 @@ let
   matcha = inputs.matcha.packages.${system}.default;
   matcha-toggle-mode = pkgs.writeScriptBin "matcha-toggle-mode"
     (builtins.readFile ./scripts/matcha-toggle-mode.sh);
+  matcha-start = let file = "/home/${userName}/tmp/matcha";
+  in (pkgs.writeScriptBin "matcha-start" ''
+    #!${pkgs.bash}/bin/bash
+
+    ${pkgs.coreutils}/bin/test -f ${file} && ${pkgs.coreutils}/bin/rm ${file}
+    ${matcha}/bin/matcha --daemon --off
+  '');
 in {
   options._custom.desktop.swayidle.enable = lib.mkEnableOption { };
 
@@ -87,11 +94,9 @@ in {
             Wants = [ "swayidle.service" ];
           };
           Service = {
+            Type = "forking";
             PassEnvironment = "PATH";
-            ExecStart = "${matcha}/bin/matcha --daemon --off";
-            ExecStartPost = let file = "/home/${userName}/tmp/matcha";
-            in "${pkgs.bash}/bin/bash -c '${pkgs.coreutils}/bin/test -f ${file} && ${pkgs.coreutils}/bin/rm ${file}'";
-            Type = "simple";
+            ExecStart = "${matcha-start}/bin/matcha-start";
           };
         };
       };
