@@ -103,6 +103,10 @@ in {
           source = ./scripts/kitty-dunst-nctui.sh;
           executable = true;
         };
+        "kitty/scripts/kitty-khal.sh" = {
+          source = ./scripts/kitty-khal.sh;
+          executable = true;
+        };
         "kitty/scripts/kitty-buku.sh" = {
           source = ./scripts/kitty-buku.sh;
           executable = true;
