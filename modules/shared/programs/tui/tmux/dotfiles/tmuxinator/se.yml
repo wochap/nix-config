@@ -86,11 +86,11 @@ windows:
       layout: tiled
       panes:
         - layout-editor:
-            - cd ./frontend-neo/layout-editor
+            - cd ./layout-editor
             - yarn start
         - surveys-renderer:
-            - cd ./frontend-neo/surveys-renderer
-            # - yarn start
+            - cd ./surveys-renderer
+            - sh ./run.sh start
 
   - viz-websites:
       root: ~/Projects/se/viz-websites
