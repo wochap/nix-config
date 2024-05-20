@@ -35,6 +35,8 @@ windows:
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../identity_storage ./ ../ruby_common
         - job_coordinator:
             - cd ./job_coordinator
+            # HACK: wait for job_processor_00
+            - sleep 1
             - RACK_ENV=local MALLOC_ARENA_MAX=2 ruby ./job_coordinator.rb
         # 9999
         - job_processor_00:
