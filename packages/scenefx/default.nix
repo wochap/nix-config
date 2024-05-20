@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     xorg.xcbutilimage
     xorg.xcbutilrenderutil
     xorg.xcbutilwm
-    xwayland
+    unstable.xwayland
     ffmpeg
     hwdata
     libliftoff
