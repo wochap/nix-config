@@ -5,39 +5,50 @@ windows:
       root: ~/Projects/se/viz-omni/backend
       layout: tiled
       panes:
+        # 10011
         - account_service:
             - cd ./account_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./
+        # 10008
         - chart_service:
             - cd ./chart_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        # 10023
         - currency_service:
             - cd ./currency_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        # 20001
         - dev_tools:
             - cd ./dev_tools
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        # 10002
         - document_storage_service:
             - cd ./document_storage_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../document_storage ./ ../ruby_common
+        # 10014
         - geobuffer_service:
             - cd ./geobuffer_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        # 10010
         - identity_storage_service:
             - cd ./identity_storage_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../identity_storage ./ ../ruby_common
         - job_coordinator:
             - cd ./job_coordinator
             - RACK_ENV=local MALLOC_ARENA_MAX=2 ruby ./job_coordinator.rb
+        # 9999
         - job_processor_00:
             - cd ./job_processor
             - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ -d ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9999
+        # 9998
         # - job_processor_01:
         #     - cd ./job_processor
         #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9998
+        # 9997
         # - job_processor_02:
         #     - cd ./job_processor
         #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9997
+        # 9996
         # - job_processor_03:
         #     - cd ./job_processor
         #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9996
@@ -46,24 +57,31 @@ windows:
       root: ~/Projects/se/viz-omni/backend
       layout: tiled
       panes:
+        # 10012
         - job_service:
             - cd ./job_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../job ./ ../ruby_common
+        # 10015
         - notification_service:
             - cd ./notification_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../notification ./ ../ruby_common
+        # 10016
         - publishing_service:
             - cd ./publishing_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        # 10007
         - realtime_service:
             - cd ./realtime_service
             - NODE_ENV=local node ./server.js
+        # 10005
         - search_service:
             - cd ./search_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../search ./ ../ruby_common
+        # 10000
         - table_storage_service:
             - cd ./table_storage_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../table_storage ./ ../ruby_common
+        # 10013
         - tile_service:
             - cd ./tile_service
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
@@ -75,8 +93,10 @@ windows:
       root: ~/Projects/se/viz-omni/frontend
       layout: tiled
       panes:
+        # 5555
         - frontend:
-            - gulp glu-vizwiz:development
+            - gulp glu-vizwiz:local
+        # 3000
         - organizations:
             - cd ./organizations
             - yarn start
@@ -85,23 +105,29 @@ windows:
       root: ~/Projects/se/viz-omni/frontend-neo
       layout: tiled
       panes:
+        # 5601
         - layout-editor:
             - cd ./layout-editor
             - yarn start
+        # 3003
         - surveys-renderer:
             - cd ./surveys-renderer
-            - sh ./run.sh start
+            - sh ./run.sh -e local start
 
   - viz-websites:
       root: ~/Projects/se/viz-websites
       layout: tiled
       panes:
+        # 4000
         - accounts:
             - NODE_ENV=local APP=accounts gulp
+        # 5002
         - viz_help:
             - NODE_ENV=local APP=viz_help gulp
+        # 4002
         - charts:
             - NODE_ENV=local APP=charts gulp
+        # 4005
         - vizualist:
             - NODE_ENV=local APP=vizualist gulp
         # - se_help:
