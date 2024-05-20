@@ -1,6 +1,97 @@
 name: se
 
 windows:
+  - viz-omni-backend-1:
+      root: ~/Projects/se/viz-omni/backend
+      layout: tiled
+      panes:
+        - account_service:
+            - cd ./account_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./
+        - chart_service:
+            - cd ./chart_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        - currency_service:
+            - cd ./currency_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        - dev_tools:
+            - cd ./dev_tools
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        - document_storage_service:
+            - cd ./document_storage_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../document_storage ./ ../ruby_common
+        - geobuffer_service:
+            - cd ./geobuffer_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        - identity_storage_service:
+            - cd ./identity_storage_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../identity_storage ./ ../ruby_common
+        - job_coordinator:
+            - cd ./job_coordinator
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 ruby ./job_coordinator.rb
+        - job_processor_00:
+            - cd ./job_processor
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ -d ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9999
+        # - job_processor_01:
+        #     - cd ./job_processor
+        #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9998
+        # - job_processor_02:
+        #     - cd ./job_processor
+        #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9997
+        # - job_processor_03:
+        #     - cd ./job_processor
+        #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9996
+
+  - viz-omni-backend-2:
+      root: ~/Projects/se/viz-omni/backend
+      layout: tiled
+      panes:
+        - job_service:
+            - cd ./job_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../job ./ ../ruby_common
+        - notification_service:
+            - cd ./notification_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../notification ./ ../ruby_common
+        - publishing_service:
+            - cd ./publishing_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        - realtime_service:
+            - cd ./realtime_service
+            - NODE_ENV=local node ./server.js
+        - search_service:
+            - cd ./search_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../search ./ ../ruby_common
+        - table_storage_service:
+            - cd ./table_storage_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../table_storage ./ ../ruby_common
+        - tile_service:
+            - cd ./tile_service
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+        - tile_worker:
+            - cd ./tile_worker
+            - RACK_ENV=local MALLOC_ARENA_MAX=2 ruby ./tile_worker.rb
+
+  - viz-omni-frontend:
+      root: ~/Projects/se/viz-omni/frontend
+      layout: tiled
+      panes:
+        - frontend:
+            - gulp glu-vizwiz:development
+        - organizations:
+            - cd ./organizations
+            - yarn start
+
+  - viz-omni-frontend-neo:
+      root: ~/Projects/se/viz-omni/frontend-neo
+      layout: tiled
+      panes:
+        - layout-editor:
+            - cd ./frontend-neo/layout-editor
+            - yarn start
+        - surveys-renderer:
+            - cd ./frontend-neo/surveys-renderer
+            # - yarn start
+
   - viz-websites:
       root: ~/Projects/se/viz-websites
       layout: tiled
@@ -15,90 +106,3 @@ windows:
             - NODE_ENV=local APP=vizualist gulp
         # - se_help:
         #     - NODE_ENV=local APP=se_help gulp
-
-  - viz-omni-backend-1:
-      root: ~/Projects/se/viz-omni
-      layout: tiled
-      panes:
-        - account_service:
-            - cd ./backend/account_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./
-        - chart_service:
-            - cd ./backend/chart_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
-        - currency_service:
-            - cd ./backend/currency_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
-        - dev_tools:
-            - cd ./backend/dev_tools
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
-        - document_storage_service:
-            - cd ./backend/document_storage_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../document_storage ./ ../ruby_common
-        - geobuffer_service:
-            - cd ./backend/geobuffer_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
-        - identity_storage_service:
-            - cd ./backend/identity_storage_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../identity_storage ./ ../ruby_common
-        - job_coordinator:
-            - cd ./backend/job_coordinator
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 ruby ./job_coordinator.rb
-        - job_processor_00:
-            - cd ./backend/job_processor
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ -d ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9999
-        # - job_processor_01:
-        #     - cd ./backend/job_processor
-        #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9998
-        # - job_processor_02:
-        #     - cd ./backend/job_processor
-        #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9997
-        # - job_processor_03:
-        #     - cd ./backend/job_processor
-        #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9996
-
-  - viz-omni-backend-1:
-      root: ~/Projects/se/viz-omni
-      layout: tiled
-      panes:
-        - job_service:
-            - cd ./backend/job_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../job ./ ../ruby_common
-        - notification_service:
-            - cd ./backend/notification_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../notification ./ ../ruby_common
-        - publishing_service:
-            - cd ./backend/publishing_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
-        - realtime_service:
-            - cd ./backend/realtime_service
-            - NODE_ENV=local node ./server.js
-        - search_service:
-            - cd ./backend/search_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../search ./ ../ruby_common
-        - table_storage_service:
-            - cd ./backend/table_storage_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../table_storage ./ ../ruby_common
-        - tile_service:
-            - cd ./backend/tile_service
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
-        - tile_worker:
-            - cd ./backend/tile_worker
-            - RACK_ENV=local MALLOC_ARENA_MAX=2 ruby ./tile_worker.rb
-
-  - viz-omni-frontend:
-      root: ~/Projects/se/viz-omni
-      layout: tiled
-      panes:
-        - organizations:
-            - cd ./frontend/organizations
-            - yarn start
-        - frontend:
-            - cd ./frontend
-            - gulp glu-vizwiz:development
-        - layout-editor:
-            - cd ./frontend-neo/layout-editor
-            - yarn start
-        - surveys-renderer:
-            - cd ./frontend-neo/surveys-renderer
-            # - yarn start

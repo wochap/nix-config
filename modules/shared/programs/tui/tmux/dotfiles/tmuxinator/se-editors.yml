@@ -1,15 +1,15 @@
 name: se-editors
 
 windows:
-  - viz-websites:
-      root: ~/Projects/se/viz-websites
+  - viz-omni:
+      root: ~/Projects/se/viz-omni
       layout: tiled
       panes:
         - editor:
             - nv
 
-  - viz-omni:
-      root: ~/Projects/se/viz-omni
+  - viz-websites:
+      root: ~/Projects/se/viz-websites
       layout: tiled
       panes:
         - editor:
