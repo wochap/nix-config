@@ -58,6 +58,8 @@ in {
       portalPackage = hyprland-xdp-final;
     };
 
+    xdg.portal.config.Hyprland.default = [ "hyprland" "gtk" ];
+
     _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
 
     _custom.hm = {
@@ -100,7 +102,8 @@ in {
           Description = "Portal service (Hyprland implementation)";
           PartOf = "graphical-session.target";
           After = "graphical-session.target";
-          ConditionEnvironment = "WAYLAND_DISPLAY";
+          ConditionEnvironment =
+            [ "WAYLAND_DISPLAY" "XDG_SESSION_DESKTOP=Hyprland" ];
         };
         Service = {
           PassEnvironment = [
