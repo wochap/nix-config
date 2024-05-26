@@ -94,7 +94,7 @@ in {
     _custom.services.android.sdk.enable = false;
     _custom.services.docker.enable = true;
     _custom.services.docker.enableNvidia = true;
-    _custom.services.flatpak.enable = false;
+    _custom.services.flatpak.enable = true;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
     _custom.services.kdeconnect.enable = true;
