@@ -5,15 +5,16 @@ let
   inherit (config._custom.globals) configDirectory themeColors userName;
   hmConfig = config.home-manager.users.${userName};
 
-  defaultOptionsStr = lib.strings.concatStringsSep " "
+  fzfDefaultOptsStr = lib.strings.concatStringsSep " "
     (hmConfig.programs.fzf.defaultOptions ++ [
       # remove border added by fzf-tmux
       "--border 'none'"
       "--padding '0,1'"
     ]);
 
-  fzf-tmux = pkgs.writeScriptBin "fzf-tmux"
-    (builtins.readFile "${inputs.fzf}/bin/fzf-tmux");
+  tmux-sessionx =
+    inputs.tmux-sessionx.packages.${pkgs.system}.default.overrideAttrs
+    (oldAttrs: { postInstall = ""; });
   tmux-kill-unnamed-sessions = pkgs.writeScriptBin "tmux-kill-unnamed-sessions"
     (builtins.readFile ./scripts/tmux-kill-unnamed-sessions.sh);
   tmux-kill-unattached-sessions =
@@ -43,13 +44,25 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        # HACK: don't remove popup border
+        fzf = prev.fzf.overrideAttrs (oldAttrs: rec {
+          postPatch = ''
+            ${oldAttrs.postPatch}
+            substituteInPlace bin/fzf-tmux \
+              --replace "opt=\"-B" "# opt=\"-B"
+          '';
+        });
+      })
+    ];
+
     environment.systemPackages = with pkgs; [
       tmux
       tmux-kill-unattached-sessions
       tmux-kill-unnamed-sessions
       tmuxinator # session manager
       tmuxp # session manager
-      fzf-tmux # required by tmux-sessionx
     ];
 
     _custom.hm = {
@@ -64,13 +77,13 @@ in {
           "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect";
         "tmux/plugins/continuum".source =
           "${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum";
-        "tmux/plugins/tmux-sessionx".source = "${
-            inputs.tmux-sessionx.packages.${pkgs.system}.default
-          }/share/tmux-plugins/sessionx";
+        "tmux/plugins/tmux-sessionx".source =
+          "${tmux-sessionx}/share/tmux-plugins/sessionx";
         "tmux/plugins/catppuccin".source = inputs.catppuccin-tmux;
         "tmux/tmux.conf".text = ''
           set -g @catppuccin_flavour '${themeColors.flavor}'
           set -g @catppuccin_pane_active_border_style "fg=${themeColors.primary}"
+          set -g @catppuccin_pane_border_style "fg=${themeColors.border}"
           source-file $HOME/.config/tmux/config.conf
         '';
         "tmux/config.conf".source =
@@ -102,7 +115,7 @@ in {
             "COLORTERM=truecolor" # required by bat
 
             # tmux-server service doesn't inherit FZF_DEFAULT_OPTS env var
-            ''FZF_DEFAULT_OPTS="${defaultOptionsStr}"''
+            ''FZF_DEFAULT_OPTS="${fzfDefaultOptsStr}"''
           ];
           PassEnvironment = [ "PATH" "DISPLAY" "HOME" ];
           ExecStart = "${start-tmux-server}/bin/start-tmux-server";
