@@ -53,7 +53,7 @@ in {
 
       qt = {
         enable = cfg.enableTheme;
-        platformTheme = "qtct";
+        platformTheme.name = "qt5ct";
       };
     };
   };

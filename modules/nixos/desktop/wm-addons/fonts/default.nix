@@ -4,7 +4,7 @@ let
   cfg = config._custom.desktop.fonts;
   isDarwin = pkgs.stdenv.isDarwin;
   inherit (config._custom.globals) fonts;
-  customNerdFonts = pkgs.unstable.nerdfonts.override {
+  customNerdFonts = pkgs.nerdfonts.override {
     fonts = [
       "FiraCode"
       "Iosevka"

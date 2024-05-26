@@ -7,25 +7,6 @@ in {
   options._custom.programs.lsd.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        lsd = prev.lsd.overrideAttrs (drv: rec {
-          version = "1.0.0";
-          src = prev.fetchFromGitHub {
-            owner = "lsd-rs";
-            repo = "lsd";
-            rev = "v${version}";
-            hash = "sha256-syT+1LNdigUWkfJ/wkbY/kny2uW6qfpl7KmW1FjZKR8=";
-          };
-          cargoHash = "sha256-viLr76Bq9OkPMp+BoprQusMDgx59nbevVi4uxjZ+eZg=";
-          cargoDeps = drv.cargoDeps.overrideAttrs (_: {
-            inherit src;
-            outputHash = "sha256-viLr76Bq9OkPMp+BoprQusMDgx59nbevVi4uxjZ+eZg=";
-          });
-        });
-      })
-    ];
-
     _custom.hm = {
       xdg.configFile = {
         "lsd/colors.yaml".source = "${inputs.dracula-lsd}/dracula.yaml";

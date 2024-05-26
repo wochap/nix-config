@@ -22,7 +22,7 @@
       nvidiaSettings = true;
       powerManagement.enable = true;
       powerManagement.finegrained = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
       prime = {
         offload.enable = true;
         offload.enableOffloadCmd = true;
@@ -33,14 +33,11 @@
     services.xserver.videoDrivers = [ "nvidia" ];
 
     boot.extraModulePackages = with config.boot.kernelPackages; [
-      # for steam i guess...
-      nvidia_x11
-
       # Doesn't work yet...
       lenovo-legion-module
     ];
 
-    # kernel 6.8.1
+    # kernel 6.9.1
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
 
     boot.kernelParams = [
@@ -53,7 +50,7 @@
       "amdgpu.sg_display=0"
     ];
 
-    environment.systemPackages = with pkgs; [ lenovo-legion nvtop amdgpu_top ];
+    environment.systemPackages = with pkgs; [ lenovo-legion nvtopPackages.nvidia nvtopPackages.amd amdgpu_top ];
     environment.sessionVariables = {
       # Vulkan reduces power usage
       # WLR_RENDERER = "vulkan";

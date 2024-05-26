@@ -126,10 +126,13 @@ in {
       xkb.variant = "";
       xkb.options = "compose:ralt";
 
-      # Enable touchpad support (enabled default in most desktopManager).
-      libinput.enable = true;
-      libinput.touchpad.naturalScrolling = true;
-      libinput.touchpad.tapping = true;
+    };
+
+    # Enable touchpad support (enabled default in most desktopManager).
+    services.libinput = {
+      enable = true;
+      touchpad.naturalScrolling = true;
+      touchpad.tapping = true;
     };
 
     time.timeZone = "America/Panama";

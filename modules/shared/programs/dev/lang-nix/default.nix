@@ -8,7 +8,7 @@ in {
     environment.systemPackages = with pkgs; [
       # required by personal nvim config
       statix # nvim-lint
-      nixfmt # conform.nvim
+      nixfmt-classic # conform.nvim
     ];
   };
 }
