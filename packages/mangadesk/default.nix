@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "darylhjd";
     repo = "mangadesk";
-    rev = "v${version}";
+    rev = version;
     sha256 = "sha256-axVwQOVG4KLcL2IpuILBifaJYhvkwQ0B8373E338NgM=";
   };
 
