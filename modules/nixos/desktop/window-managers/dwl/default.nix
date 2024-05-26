@@ -36,6 +36,10 @@ let
     ${dwl-save-logs-str}
     dwl -d "$@" > /home/${userName}/.cache/dwllogs 2> /home/${userName}/.cache/dwlstderrlogs
   '';
+  dwl-debug-start = pkgs.writeScriptBin "dwl-debug-start" ''
+    ${dwl-save-logs-str}
+    gdb -batch -ex "run > /home/${userName}/.cache/dwllogs 2> /home/${userName}/.cache/dwlstderrlogs" --args dwl -d "$@"
+  '';
   dwl-start-with-dgpu-port = pkgs.writeScriptBin "dwl-start-with-dgpu-port" ''
     ${dwl-save-logs-str}
     # NOTE: This is specific for glegion host with nvidia
@@ -80,10 +84,11 @@ in {
     ];
 
     environment.systemPackages = with pkgs; [
-      dwl-state # script that prints dwl state
+      dwl-debug-start
       dwl-final
       dwl-start
       dwl-start-with-dgpu-port
+      dwl-state # script that prints dwl state
 
       # for testing vanilla dwl
       bemenu
