@@ -22,7 +22,7 @@ notify_user() {
     exit 1
   fi
 
-  # TODO: copy to clipboard
+  copy_to_cb
 
   # generate thumbnail
   thumbnail_size=500
@@ -43,6 +43,10 @@ notify_user() {
     xdg-open "$dest" &
     ;;
   esac
+}
+
+copy_to_cb() {
+  wl-copy -t text/uri-list <<<"file:/$dest"
 }
 
 # countdown
