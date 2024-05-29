@@ -65,7 +65,7 @@ const char *modes_labels[] = {
 
 static const Env envs[] = {
   /* variable            value */
-  { "XDG_CURRENT_DESKTOP", "wlroots" },
+  { "XDG_CURRENT_DESKTOP", "dwl" },
   { "XDG_SESSION_DESKTOP", "dwl" },
 };
 

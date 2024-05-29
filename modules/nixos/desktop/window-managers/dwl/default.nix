@@ -118,6 +118,8 @@ in {
       '';
     };
 
+    xdg.portal.config.dwl.default = [ "wlr" "gtk" ];
+
     _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
     _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 

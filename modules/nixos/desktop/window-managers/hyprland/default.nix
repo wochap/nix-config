@@ -58,7 +58,7 @@ in {
       portalPackage = hyprland-xdp-final;
     };
 
-    xdg.portal.config.Hyprland.default = [ "hyprland" "gtk" ];
+    xdg.portal.config.hyprland.default = [ "hyprland" "gtk" ];
 
     _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
 
