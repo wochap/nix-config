@@ -119,13 +119,12 @@ in {
     _custom.desktop.hyprland.enable = true;
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
-    services.xserver = {
-      # Setup keyboard
-      xkb.layout = "us";
-      xkb.model = "pc104";
-      xkb.variant = "";
-      xkb.options = "compose:ralt";
-
+    # Setup keyboard
+    services.xserver.xkb = {
+      layout = "us";
+      model = "pc104";
+      variant = "";
+      options = "compose:ralt";
     };
 
     # Enable touchpad support (enabled default in most desktopManager).
