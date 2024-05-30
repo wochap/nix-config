@@ -60,6 +60,9 @@ in {
 
     xdg.portal.config.hyprland.default = [ "hyprland" "gtk" ];
 
+    systemd.user.services.xdg-desktop-portal-hyprland.serviceConfig.PassEnvironment =
+      [ "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" "QT_QPA_PLATFORMTHEME" "PATH" ];
+
     _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
 
     _custom.hm = {
@@ -95,30 +98,6 @@ in {
           source=~/.config/hypr/config.conf
           source=~/.config/hypr/keybindings.conf
         '';
-      };
-
-      systemd.user.services.xdg-desktop-portal-hyprland = {
-        Unit = {
-          Description = "Portal service (Hyprland implementation)";
-          PartOf = "graphical-session.target";
-          After = "graphical-session.target";
-          ConditionEnvironment =
-            [ "WAYLAND_DISPLAY" "XDG_SESSION_DESKTOP=Hyprland" ];
-        };
-        Service = {
-          PassEnvironment = [
-            "WAYLAND_DISPLAY"
-            "XDG_CURRENT_DESKTOP"
-            "QT_QPA_PLATFORMTHEME"
-            "PATH"
-          ];
-          Type = "dbus";
-          BusName = "org.freedesktop.impl.portal.desktop.hyprland";
-          ExecStart =
-            "${hyprland-xdp-final}/libexec/xdg-desktop-portal-hyprland";
-          Restart = "on-failure";
-          Slice = "session.slice";
-        };
       };
     };
   };
