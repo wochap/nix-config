@@ -15,5 +15,5 @@ ydotool key 125:1 3:1 3:0 125:0
 
 # Start new foot terminal with tmux session
 echo "Start new tmux session"
-footclient tmux new-session zsh -i -c 'tmuxinator start se-editors' &
-footclient tmux new-session zsh -i -c 'tmuxinator start se' &
+footclient tmux new-session zsh -i -c "tmuxinator start se-editors" &
+footclient tmux new-session zsh -i -c "tmuxinator start se" &
