@@ -32,10 +32,11 @@
     };
     services.xserver.videoDrivers = [ "nvidia" ];
 
-    boot.extraModulePackages = with config.boot.kernelPackages; [
-      # Doesn't work yet...
-      lenovo-legion-module
-    ];
+    boot.extraModulePackages = with config.boot.kernelPackages;
+      [
+        # Doesn't work yet...
+        lenovo-legion-module
+      ];
 
     # kernel 6.9.1
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
@@ -50,7 +51,11 @@
       "amdgpu.sg_display=0"
     ];
 
-    environment.systemPackages = with pkgs; [ lenovo-legion nvtopPackages.nvidia nvtopPackages.amd amdgpu_top ];
+    environment.systemPackages = with pkgs; [
+      lenovo-legion
+      (nvtopPackages.nvidia.override { amd = true; })
+      amdgpu_top
+    ];
     environment.sessionVariables = {
       # Vulkan reduces power usage
       # WLR_RENDERER = "vulkan";
@@ -70,8 +75,6 @@
     };
 
     zramSwap.enable = true;
-
-    hardware.bluetooth.powerOnBoot = true;
 
     # AMD has better battery life with PPD over TLP:
     services.auto-epp = {
