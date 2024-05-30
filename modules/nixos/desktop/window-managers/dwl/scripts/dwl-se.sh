@@ -13,7 +13,19 @@ fi
 # Focus DWL tag 2
 ydotool key 125:1 3:1 3:0 125:0
 
+echo "Start docker services"
+docker start viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1
+trap 'docker stop viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1' exit
+
+# wait for docker services to be ready
+sleep 3
+
 # Start new foot terminal with tmux session
 echo "Start new tmux session"
 footclient tmux new-session zsh -i -c "tmuxinator start se-editors" &
 footclient tmux new-session zsh -i -c "tmuxinator start se" &
+
+# Keep the script running
+while true; do
+  sleep 1
+done

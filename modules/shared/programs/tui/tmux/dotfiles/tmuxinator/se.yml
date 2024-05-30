@@ -6,7 +6,6 @@ windows:
       layout: tiled
       panes:
         - docker:
-            - docker start viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1
             - lazydocker
 
   - viz-omni-backend-1:
