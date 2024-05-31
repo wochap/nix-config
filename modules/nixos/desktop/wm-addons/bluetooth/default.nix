@@ -1,12 +1,17 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.desktop.bluetooth;
+let
+  cfg = config._custom.desktop.bluetooth;
+  unblock-bluetooth = pkgs.writeScriptBin "unblock-bluetooth"
+    (builtins.readFile ./scripts/unblock-bluetooth.sh);
 in {
   options._custom.desktop.bluetooth.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
+        unblock-bluetooth
+
         bluetuith # bluetooth TUI
         blueberry # bluetooth GUI
         modemmanager
@@ -24,20 +29,18 @@ in {
     hardware.bluetooth.settings = {
       General = {
         # Enables D-Bus experimental interfaces
-        # Possible values: true or false
         Experimental = true;
 
-        # Enables kernel experimental features, alternatively a list of UUIDs
-        # can be given.
-        # Possible values: true,false,<UUID List>
-        # Possible UUIDS:
-        # Defaults to false.
+        # Enables kernel experimental features, alternatively a list of UUIDs can be given.
         KernelExperimental = true;
 
         Enable = "Control,Gateway,Headset,Media,Sink,Socket,Source";
       };
-      # Policy = { AutoEnable = false; };
     };
+
+    # Fix "ConfigurationDirectory 'bluetooth' already exists but the mode is different"
+    systemd.services.bluetooth.serviceConfig.ConfigurationDirectoryMode =
+      "0755";
 
     # source: https://wiki.archlinux.org/title/PipeWire#Noticeable_audio_delay_or_audible_pop/crack_when_starting_playback
     services.pipewire.wireplumber.configPackages = [
@@ -90,6 +93,15 @@ in {
     _custom.hm = {
       # proxy forwarding Bluetooth MIDI controls via MPRIS2 to control media players
       services.mpris-proxy.enable = true;
+
+      # HACK: unblock bluetooth device
+      systemd.user.services.unblock-bluetooth = lib._custom.mkWaylandService {
+        Service = {
+          Type = "oneshot";
+          PassEnvironment = "PATH";
+          ExecStart = "${unblock-bluetooth}/bin/unblock-bluetooth";
+        };
+      };
     };
   };
 }
