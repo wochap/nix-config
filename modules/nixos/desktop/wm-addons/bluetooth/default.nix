@@ -33,8 +33,6 @@ in {
 
         # Enables kernel experimental features, alternatively a list of UUIDs can be given.
         KernelExperimental = true;
-
-        Enable = "Control,Gateway,Headset,Media,Sink,Socket,Source";
       };
     };
 
