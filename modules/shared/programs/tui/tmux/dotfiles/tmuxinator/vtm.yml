@@ -1,0 +1,23 @@
+name: vtm
+
+windows:
+  - vtm-flakes:
+      root: ~/Projects/vtm/vtm-flakes
+      layout: tiled
+      panes:
+        - docker:
+            - docker-compose up
+
+  - todo-mujeron:
+      root: ~/Projects/vtm/todo-mujeron
+      layout: tiled
+      panes:
+        - backend:
+            - pnpm local
+
+  - todofull_frontend_3:
+      root: ~/Projects/vtm/todofull_frontend_3
+      layout: tiled
+      panes:
+        - frontend:
+            - pnpm dev

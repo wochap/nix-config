@@ -1,0 +1,9 @@
+name: vtm-editors
+
+windows:
+  - todofull_frontend_3:
+      root: ~/Projects/vtm/todofull_frontend_3
+      layout: tiled
+      panes:
+        - editor:
+            - nv

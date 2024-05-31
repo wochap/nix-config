@@ -22,8 +22,8 @@ sleep 3
 
 # Start new foot terminal with tmux session
 echo "Start new tmux session"
-footclient tmux new-session zsh -i -c "tmuxinator start se-editors" &
 footclient tmux new-session zsh -i -c "tmuxinator start se" &
+footclient tmux new-session zsh -i -c "tmuxinator start se-editors" &
 
 # Keep the script running
 while true; do
