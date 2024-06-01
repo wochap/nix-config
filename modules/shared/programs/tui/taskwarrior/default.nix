@@ -42,6 +42,7 @@ in {
 
       programs.taskwarrior = {
         enable = true;
+        package = pkgs.taskwarrior3;
         colorTheme = "dark-green-256";
         dataLocation = taskwarriorConfigPath;
         config = { };
