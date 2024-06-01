@@ -3,7 +3,11 @@
 # Kill previous tmux session
 if tmux has-session -t vtm 2>/dev/null; then
   echo "Killing previous tmux session: vtm"
-  tmux kill-session -t se
+  tmux kill-session -t vtm
+fi
+if tmux has-session -t vtm-editors 2>/dev/null; then
+  echo "Killing previous tmux session: vtm-editors"
+  tmux kill-session -t vtm-editors
 fi
 
 # Focus DWL tag 2
