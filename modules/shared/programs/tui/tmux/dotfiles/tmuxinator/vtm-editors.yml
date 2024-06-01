@@ -7,3 +7,10 @@ windows:
       panes:
         - editor:
             - nv
+
+  - todofull-front-2:
+      root: ~/Projects/vtm/todofull-front-2
+      layout: tiled
+      panes:
+        - editor:
+            - nv
