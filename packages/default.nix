@@ -5,7 +5,11 @@ let
     advcpmv = pkgs.callPackage ./advcpmv { };
     dunst-nctui = pkgs.callPackage ./dunst-nctui { };
     generate-ssc = pkgs.callPackage ./generate-ssc { };
-    generated-ssc = generate-ssc { domain = "wochap.local"; };
+    wochap-ssc = generate-ssc {
+      domain = "wochap.local";
+      # NOTE: don't use 127.0.0.1 to prevent conflicts with localhost
+      address = "127.0.1.1";
+    };
     interception-both-shift-capslock =
       pkgs.callPackage ./interception-both-shift-capslock { };
     mailnotify = pkgs.callPackage ./mailnotify { };

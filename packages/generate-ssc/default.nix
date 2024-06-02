@@ -1,7 +1,9 @@
 { pkgs, stdenv, ... }:
 metadata:
 
-let domain = metadata.domain;
+let
+  domain = metadata.domain;
+  address = metadata.address;
 in stdenv.mkDerivation {
   name = "generate-ssc";
   version = "1.0.0";
@@ -12,7 +14,7 @@ in stdenv.mkDerivation {
     mkdir -p "$CAROOT"
     cd "$CAROOT"
     mkcert -install
-    mkcert ${domain} "*.${domain}" localhost 127.0.0.1 ::1
+    mkcert ${domain} "*.${domain}" localhost ${address} ::1
   '';
 
   installPhase = ''
@@ -23,4 +25,6 @@ in stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = with pkgs; [ openssl nssTools mkcert ];
+
+  meta = { inherit domain address; };
 }

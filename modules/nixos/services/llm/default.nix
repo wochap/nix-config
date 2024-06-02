@@ -1,6 +1,8 @@
 { config, pkgs, inputs, lib, ... }:
 
-let cfg = config._custom.services.llm;
+let
+  cfg = config._custom.services.llm;
+  inherit (pkgs._custom) wochap-ssc;
 in {
   imports = [ ./ollama-webui-lite.nix ];
 
@@ -27,28 +29,42 @@ in {
     services.ollama-webui-lite = {
       enable = true;
       package = pkgs._custom.ollama-webui-lite;
+      host = wochap-ssc.meta.address;
     };
 
     # Make ollama-webui-lite accessible at https://ollama.wochap.local
-    networking.hosts = { "127.0.0.1" = [ "ollama.wochap.local" ]; };
-    security.pki.certificateFiles =
-      [ "${pkgs._custom.generated-ssc}/rootCA.pem" ];
+    # NOTE: restart after changing certificate
+    # you also might need to add certificate to your browsers
+    networking.hosts.${wochap-ssc.meta.address} =
+      [ "ollama.${wochap-ssc.meta.domain}" ];
+    security.pki.certificateFiles = [ "${wochap-ssc}/rootCA.pem" ];
     services.nginx = {
       enable = true;
+      enableReload = true;
       recommendedTlsSettings = true;
-      virtualHosts."ollama.wochap.local" = {
+      virtualHosts."ollama.${wochap-ssc.meta.domain}" = {
         forceSSL = true;
-        sslTrustedCertificate = "${pkgs._custom.generated-ssc}/rootCA.pem";
-        sslCertificateKey =
-          "${pkgs._custom.generated-ssc}/wochap.local+4-key.pem";
-        sslCertificate = "${pkgs._custom.generated-ssc}/wochap.local+4.pem";
+        sslTrustedCertificate = "${wochap-ssc}/rootCA.pem";
+        sslCertificateKey = "${wochap-ssc}/${wochap-ssc.meta.domain}+4-key.pem";
+        sslCertificate = "${wochap-ssc}/${wochap-ssc.meta.domain}+4.pem";
         locations."/" = {
           recommendedProxySettings = true;
-          proxyPass = "http://127.0.0.1:${
+          proxyPass = "http://${wochap-ssc.meta.address}:${
               toString config.services.ollama-webui-lite.port
             }";
           proxyWebsockets = true;
         };
+        listen = [
+          {
+            addr = wochap-ssc.meta.address;
+            port = 443;
+            ssl = true;
+          }
+          {
+            addr = wochap-ssc.meta.address;
+            port = 80;
+          }
+        ];
       };
     };
 
