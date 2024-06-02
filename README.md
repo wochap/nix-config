@@ -178,6 +178,13 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Slow zsh startup
+
+  ```
+  # print all zsh scripts that are being loaded
+  $ exec -l zsh --sourcetrace
+  ```
+
 - Fix Virtual Machine Manager `network default is not active` error
 
   ```
