@@ -14,6 +14,7 @@ in {
     services.dbus.enable = lib.mkDefault true;
     security.polkit.enable = true;
 
+    # NOTE: doesn't work as expected if you have more than 1 TTY active
     _custom.hm.systemd.user.services.polkit-gnome-authentication-agent-1 =
       lib._custom.mkWaylandService {
         Unit = {
