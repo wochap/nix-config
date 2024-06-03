@@ -14,8 +14,9 @@ let
       pynvim # required by nvim
       # NOTE: add here any python package you need globally
       html2text
-      pytz
       icalendar
+      pytz
+      tzlocal
     ]));
 in {
   options._custom.programs.lang-python.enable = lib.mkEnableOption { };
