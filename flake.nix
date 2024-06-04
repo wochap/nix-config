@@ -49,6 +49,8 @@
     lobster.inputs.nixpkgs.follows = "nixpkgs";
     scenefx.url = "github:wlrfx/scenefx?rev=e6bc2467d43219f4b06beb3e750b66d444b679b2";
     scenefx.inputs.nixpkgs.follows = "nixpkgs";
+    wayfreeze.url = "github:Jappie3/wayfreeze?rev=37ef9e456c87601ed4e06f36f437f688083d61cf";
+    wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
