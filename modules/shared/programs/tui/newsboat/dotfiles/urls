@@ -1,8 +1,11 @@
 -7 "~Commits"
-https://github.com/NvChad/NvChad/commits/v2.0.atom
+https://github.com/LazyVim/LazyVim/commits/main.atom
 
 -8 "~Reddit"
+https://www.reddit.com/r/neovim/.rss
 https://www.reddit.com/r/unixporn/.rss
+https://www.reddit.com/r/zsh/.rss
+https://www.reddit.com/r/nixos/.rss
 
 -1 "~The Giants"
 https://css-tricks.com/feed/ "~CSS-Tricks"
