@@ -2,13 +2,11 @@
 
 import sys
 import html2text
-import pytz
 from icalendar import Calendar
-# from tzlocal import get_localzone
+from tzlocal import get_localzone
 
 calendar = Calendar.from_ical(sys.stdin.read())
-# tz = get_localzone()
-tz = pytz.timezone("America/Panama")
+tz = get_localzone()
 
 for event in calendar.walk("vevent"):
     summary = event.get("SUMMARY")
@@ -21,7 +19,7 @@ for event in calendar.walk("vevent"):
     attendees = None
     if "ATTENDEE" in event:
         if type(event.decoded("ATTENDEE")) == list:
-            attendees = ",\n               ".join(
+            attendees = ",\n             ".join(
                 [a[7:] for a in event.decoded("ATTENDEE")]
             )
         else:
@@ -30,14 +28,12 @@ for event in calendar.walk("vevent"):
     description = event.get("DESCRIPTION") or ""
     description = description.replace("\n", "<br>")
     description = html2text.html2text(description)
-    description = "  " + "\n  ".join(description.split("\n"))
+    description = "\n".join(description.split("\n"))
 
-    print("=" * len(summary))
-    print(summary)
-    print("=" * len(summary))
+    print("# " + summary)
     print()
-    print("  Start:      ", start)
-    print("  End:        ", end)
-    print("  Attendee(s):", attendees)
-    print("  Description:")
+    print("Start:      ", start)
+    print("End:        ", end)
+    print("Attendee(s):", attendees)
+    print("Description:")
     print(description)
