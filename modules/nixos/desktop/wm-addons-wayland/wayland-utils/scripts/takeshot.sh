@@ -60,6 +60,9 @@ shot5() {
 }
 
 shotarea() {
+  if [[ -n $(pgrep slurp) ]]; then
+    exit 0
+  fi
   area=$(slurp -d -b "${background}bf" -c "$primary" -F "Iosevka NF" -w 1)
   if [[ -z $area ]]; then
     exit
