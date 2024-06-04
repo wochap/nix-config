@@ -20,7 +20,10 @@ export const generateScriptModule = ({ cmd, className, labelAttrs }) => {
     });
 };
 
-const ignored = ["chrome-music.youtube.com__-Default"];
+const ignored = [
+  "chrome-music.youtube.com__-Default",
+  "chrome-www.figma.com__-Default",
+];
 
 export const mapAppId = (appId) => {
   if (/^kitty-/.test(appId)) {
