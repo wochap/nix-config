@@ -100,7 +100,6 @@ static const Rule rules[] = {
 	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "^[tT]hunar$",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
 	{ "file-roller",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "gnome-font-viewer",       NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
