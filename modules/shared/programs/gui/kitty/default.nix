@@ -59,8 +59,16 @@ in {
           cursor_text_color ${themeColors.base}
           active_border_color ${themeColors.primary}
           inactive_border_color ${themeColors.border}
-          tab_title_template "{fmt.bg.default}{fmt.fg._${unwrapHex themeColors.surface1}}  {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
-          active_tab_title_template "{fmt.bg.default}{fmt.fg._${unwrapHex themeColors.lavender}}{fmt.bg._${unwrapHex themeColors.lavender}}{fmt.fg._${unwrapHex themeColors.surface1}} {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${unwrapHex themeColors.lavender}}{fmt.bg.default}{fmt.fg.default}"
+          tab_title_template "{fmt.bg.default}{fmt.fg._${
+            unwrapHex themeColors.surface1
+          }}  {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
+          active_tab_title_template "{fmt.bg.default}{fmt.fg._${
+            unwrapHex themeColors.lavender
+          }}{fmt.bg._${unwrapHex themeColors.lavender}}{fmt.fg._${
+            unwrapHex themeColors.surface1
+          }} {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${
+            unwrapHex themeColors.lavender
+          }}{fmt.bg.default}{fmt.fg.default}"
           tab_bar_background ${themeColors.base}
           active_tab_foreground ${themeColors.base}
           inactive_tab_background ${themeColors.base}
@@ -71,54 +79,15 @@ in {
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;
 
-        "kitty/scripts/kitty-top.sh" = {
-          source = ./scripts/kitty-top.sh;
-          executable = true;
-        };
-        "kitty/scripts/kitty-newsboat.sh" = {
-          source = ./scripts/kitty-newsboat.sh;
-          executable = true;
-        };
-        "kitty/scripts/kitty-neomutt.sh" = {
-          source = ./scripts/kitty-neomutt.sh;
-          executable = true;
-        };
-        "kitty/scripts/kitty-neorg.sh" = {
-          source = ./scripts/kitty-neorg.sh;
-          executable = true;
-        };
-        "kitty/scripts/kitty-nmtui.sh" = {
-          source = ./scripts/kitty-nmtui.sh;
-          executable = true;
-        };
-        "kitty/scripts/kitty-scratch.sh" = {
-          source = ./scripts/kitty-scratch.sh;
-          executable = true;
-        };
-        "kitty/scripts/kitty-ncmpcpp.sh" = {
-          source = ./scripts/kitty-ncmpcpp.sh;
-          executable = true;
-        };
-        "kitty/scripts/kitty-dunst-nctui.sh" = {
-          source = ./scripts/kitty-dunst-nctui.sh;
-          executable = true;
-        };
-        "kitty/scripts/kitty-khal.sh" = {
-          source = ./scripts/kitty-khal.sh;
-          executable = true;
-        };
-        "kitty/scripts/kitty-buku.sh" = {
-          source = ./scripts/kitty-buku.sh;
-          executable = true;
-        };
-        "kitty/scripts/nvim-scrollback.sh" = {
-          source = ./scripts/nvim-scrollback.sh;
+        "kitty/tab_bar.py" = {
+          source = ./dotfiles/tab_bar.py;
           executable = true;
         };
 
-        "kitty/tab_bar.py" = {
-          source = ./scripts/tab_bar.py;
-          executable = true;
+        # scripts
+        "kitty/scripts" = {
+          recursive = true;
+          source = ./scripts;
         };
 
         # kittens
