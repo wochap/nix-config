@@ -8,6 +8,11 @@ let
     "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
   taskwarriorConfigPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/taskwarrior";
+  taskwarrior-final = pkgs.taskwarrior3;
+  stop-tasks = pkgs.writeScriptBin "stop-tasks" ''
+    #!/usr/bin/env bash
+    echo y | ${taskwarrior-final}/bin/task status:pending stop
+  '';
 in {
   options._custom.programs.taskwarrior.enable = lib.mkEnableOption { };
 
@@ -42,11 +47,23 @@ in {
 
       programs.taskwarrior = {
         enable = true;
-        package = pkgs.taskwarrior3;
+        package = taskwarrior-final;
         colorTheme = "dark-green-256";
         dataLocation = taskwarriorConfigPath;
         config = { };
         extraConfig = builtins.readFile ./dotfiles/taskrc;
+      };
+
+      systemd.user.services = {
+        stop-taskwarrior = lib._custom.mkGraphicalService {
+          Service = {
+            Environment = [ "TIMEWARRIORDB=${timewarriorConfigPath}" ];
+            PassEnvironment = [ "PATH" ];
+            Type = "oneshot";
+            ExecStop = "${stop-tasks}/bin/stop-tasks";
+            RemainAfterExit = true;
+          };
+        };
       };
     };
   };

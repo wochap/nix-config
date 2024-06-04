@@ -29,4 +29,10 @@ rec {
     Unit.After = [ "wayland-session.target" ];
     Install.WantedBy = [ "wayland-session.target" ];
   };
+
+  mkGraphicalService = lib.recursiveUpdate {
+    Unit.PartOf = [ "graphical-session.target" ];
+    Unit.After = [ "graphical-session.target" ];
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
 }
