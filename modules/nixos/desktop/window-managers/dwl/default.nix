@@ -125,16 +125,20 @@ in {
 
     _custom.hm = {
       xdg.configFile = {
-        "scripts/dwl-vtm.sh" = {
-          source = ./scripts/dwl-vtm.sh;
+        "scripts/dwl-glegion-stream.sh" = {
+          source = ./scripts/dwl-glegion-stream.sh;
           executable = true;
         };
         "scripts/dwl-se.sh" = {
           source = ./scripts/dwl-se.sh;
           executable = true;
         };
-        "scripts/dwl-glegion-stream.sh" = {
-          source = ./scripts/dwl-glegion-stream.sh;
+        "scripts/dwl-timers.sh" = {
+          source = ./scripts/dwl-timers.sh;
+          executable = true;
+        };
+        "scripts/dwl-vtm.sh" = {
+          source = ./scripts/dwl-vtm.sh;
           executable = true;
         };
 
