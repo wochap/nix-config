@@ -34,17 +34,15 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-alien.inputs.nixpkgs.follows = "nixpkgs";
     hyprland.url = "github:hyprwm/Hyprland?rev=360ede79d124ffdeebbe8401f1ac4bc0dbec2c91"; # 0.38.1
-    hyprland.inputs.nixpkgs.follows = "unstable";
+    hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=5ec0140d4aeca42b8a33e7f335f979e376d1b549";
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprland-xdp.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=57ab6df950970f05f833371cc4fdf1a30fccfb2f"; # v1.3.1
-    hyprland-xdp.inputs.nixpkgs.follows = "unstable";
-    hyprpicker.url = "github:hyprwm/hyprpicker?rev=2ef703474fb96e97e03e66e8820f213359f29382"; # (jan 13 2024)
-    hyprpicker.inputs.nixpkgs.follows = "unstable";
+    hyprland-xdp.inputs.nixpkgs.follows = "nixpkgs";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=bff005ac9c308acb3046d277b60879defb1ee303"; # (jun 03 2024)
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
     pyprland.url = "github:hyprland-community/pyprland?rev=43aae08227fa7ec269deb990d32382dcbca7788c"; # (apr 04 2024)
-    pyprland.inputs.nixpkgs.follows = "unstable";
+    pyprland.inputs.nixpkgs.follows = "nixpkgs";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
     scenefx.url = "github:wlrfx/scenefx?rev=e6bc2467d43219f4b06beb3e750b66d444b679b2";
@@ -57,7 +55,7 @@
     easy-effects-presets.flake = false;
     retroarch-shaders.url = "github:libretro/glsl-shaders";
     retroarch-shaders.flake = false;
-    reversal-extra.url = "github:wochap/Reversal-Extra?rev=2534b02618ac9d97fafca6dd843bc9aca724a4e3";
+    reversal-extra.url = "github:wochap/Reversal-Extra?rev=9af7e7d4d83f462f15f159f7c35538770dfceeae";
     reversal-extra.flake = false;
 
     # terminal tools
