@@ -84,15 +84,6 @@ static const char *const autostart[] = {
 /* logging */
 static int log_level = WLR_ERROR;
 
-/* named scratchpads - First arg only serves to match against key in rules*/
-static const char *msgptscratchcmd[] = { "g", "microsoft-edge", "--app=https://www.bing.com/search?q=q&showconv=1", NULL };
-static const char *chatgptscratchcmd[] = { "c", "google-chrome-stable", "--app=https://chat.openai.com", NULL };
-static const char *ollamascratchcmd[] = { "o", "google-chrome-stable", "--app=https://ollama.wochap.local", NULL };
-static const char *ytmusicscratchcmd[] = { "y", "google-chrome-stable", "--app=https://music.youtube.com", NULL };
-static const char *fmscratchcmd[] = { "f", "Thunar", "--name", "Thunar", NULL };
-static const char *xwvbscratchcmd[] = { "x", "xwaylandvideobridge", NULL };
-static const char *kittyscratchcmd[] = { "i", "sh", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
-
 static const char bing_gpt_appid[] = "msedge-www.bing.com__search-Default";
 static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
 static const char ollama_appid[] = "chrome-ollama.wochap.local__-Default";
@@ -103,35 +94,35 @@ static const Rule rules[] = {
 	/* examples:
 	{ "Gimp",                    NULL,       0,         1,          -1, 	   0, 	0,   500,  400,    0 },
 	*/
+	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   (float)0.8, (float)0.8, 0 },
+	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "xwaylandvideobridge",     NULL,       1 << 9,    1,          -1,      0,   0,   0,    0,      'x' },
+	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
+	{ "^[tT]hunar$",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
 	{ "file-roller",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "gnome-font-viewer",       NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   (float)0.8, (float)0.8, 0 },
-	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "^[tT]hunar$",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0 },
+	{ "Slack",                   NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "discord",                 NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "discord",                 "Discord Updater", 1 << 3, 1,      -1,      0,   0,   0,    0,      0 },
+
 	{ NULL,                      "^Extracting Files.*", 0, 1,       -1,      0,   0,   0,    0,      0 },
-	{ "xwaylandvideobridge",     NULL,       1 << 9,    1,          -1,      0,   0,   0,    0,      'x' },
 	{ NULL, ".com is sharing your screen.$", 1 << 9,    1,          -1,      0,   0,   0,    0,      0 },
+
 	{ bing_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'g' },
 	{ chat_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'c' },
 	{ ollama_appid,              NULL,       0,         1,          -1,      0,   0,   1200, 800,    'o' },
 	{ ytmusic_appid,             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'y' },
-
 	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0 },
 	{ "brave-browser",           NULL,       1 << 7,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "Slack",                   NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "discord",                 NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "discord",                 "Discord Updater", 1 << 3, 1,      -1,      0,   0,   0,    0,      0 },
 	{ "microsoft-edge",          NULL,       1 << 8,    0,          -1,      0,   0,   0,    0,      0 },
 
-	{ "^foot-.*",                NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "^footclient-.*",          NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "^kitty-.*",               NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "^alacritty-.*",           NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+// { "^foot-.*",                NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+// { "^footclient-.*",          NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+// { "^kitty-.*",               NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+// { "^alacritty-.*",           NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
 
 	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'i' },
 	{ "tui-monitor",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'm' },
@@ -275,7 +266,7 @@ static const Key keys[] = {
   // ### SYSTEM KEYBINDINGS
 
   // Open scratchpad terminal
-  { MODKEY, Key_i, raiserunnamedscratchpad, {.v = kittyscratchcmd } },
+  { MODKEY, Key_i, raiserunnamedscratchpad, SHCMD_SK("i", "~/.config/kitty/scripts/kitty-scratch.sh") },
 
   // Lock screen
 	{ MODKEY, Key_l, spawn, SHCMD("swaylock-start") },
@@ -416,7 +407,7 @@ static const Key keys[] = {
 	{ MODKEY|MOD_ALT, Key_t, spawn, SHCMD("footclient") },
 
   // Open file manager
-  { MODKEY|MOD_ALT, Key_f, raiserunnamedscratchpad, {.v = fmscratchcmd} },
+  { MODKEY|MOD_ALT, Key_f, raiserunnamedscratchpad, SHCMD_SK("f", "Thunar --name Thunar") },
 
   // Screencast/record region to mp4
   { MODKEY|MOD_ALT, Key_r, spawn, SHCMD("recorder --area") },
@@ -453,7 +444,8 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT, Key_u, entermode, {.i = TUI} },
   { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = KB_INHIBIT} },
   { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
-  { MODKEY|MOD_ALT, Key_x, raiserunnamedscratchpad, {.v = xwvbscratchcmd} },
+  // { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
+  { MODKEY|MOD_ALT, Key_x, raiserunnamedscratchpad, SHCMD_SK("x", "xwaylandvideobridge") },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, switchxkbrule, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_c, togglepointerconstraints, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
@@ -518,14 +510,14 @@ static const Modekey modekeys[] = {
   { LAYOUT, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Open Browser
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_f, spawn, RUN("firefox")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, RUN("brave")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, RUN("google-chrome-stable")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, RUN("microsoft-edge")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, {.v = msgptscratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, raiserunnamedscratchpad, {.v = chatgptscratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, raiserunnamedscratchpad, {.v = ollamascratchcmd}),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, {.v = ytmusicscratchcmd}),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_f, spawn, SHCMD("firefox")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, SHCMD("brave")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, SHCMD("google-chrome-stable")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, SHCMD("microsoft-edge")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, SHCMD_SK("g", "microsoft-edge --app=https://www.bing.com/search?q=q&showconv=1")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_SK("c", "google-chrome-stable --app=https://chat.openai.com")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, raiserunnamedscratchpad, SHCMD_SK("o", "google-chrome-stable --app=https://ollama.wochap.local")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_SK("y", "google-chrome-stable --app=https://music.youtube.com")),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // HACK: disable all dwl keymappings
