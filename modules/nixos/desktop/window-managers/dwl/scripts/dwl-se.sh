@@ -11,6 +11,8 @@ if tmux has-session -t se-editors 2>/dev/null; then
 fi
 
 # Focus DWL tag 2
+# 125 = logo
+# 3 = 2
 ydotool key 125:1 3:1 3:0 125:0
 
 echo "Start docker services"
