@@ -55,7 +55,7 @@
     easy-effects-presets.flake = false;
     retroarch-shaders.url = "github:libretro/glsl-shaders";
     retroarch-shaders.flake = false;
-    reversal-extra.url = "github:wochap/Reversal-Extra?rev=62ff8126bd64f638017ea59df8ea928a5769f03a";
+    reversal-extra.url = "github:wochap/Reversal-Extra?rev=92f08def0e07baeed5843236f030ce05f721ae7a";
     reversal-extra.flake = false;
 
     # terminal tools
