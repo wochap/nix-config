@@ -3,6 +3,7 @@
 let
   cfg = config._custom.desktop.wayland-utils;
 
+  wayfreeze = inputs.wayfreeze.packages.${system}.wayfreeze;
   hyprpicker = inputs.hyprpicker.packages.${system}.hyprpicker;
   play-notification-sound = pkgs.writeScriptBin "play-notification-sound"
     (builtins.readFile ./scripts/play-notification-sound.sh);
@@ -30,12 +31,12 @@ in {
         });
 
         slurp = prev.slurp.overrideAttrs (oldAttrs: rec {
-          version = "6735eaba5ab61b393fffd6f81ee1ecc069a61312";
+          version = "0616010cbc74e79368f75a220cc4eb7a6116dcd0";
           src = prev.fetchFromGitHub {
             owner = "emersion";
             repo = "slurp";
             rev = version;
-            hash = "sha256-dbwKaf9KMSGU226hRHUr0NSCKxumt+eFZEKJ1baJyPI=";
+            hash = "sha256-/ntSVJ+HfdM6mHKYwR6zijClkBP0eZg7oVZL6/QqNMo=";
           };
         });
       })
@@ -53,6 +54,7 @@ in {
         swappy # minimal image editor
         swaybg
         takeshot
+        wayfreeze # freeze display
         wdisplays # control display outputs
         wf-recorder # screen recorder utility
         wl-screenrec # screen recorder utility (faster)
