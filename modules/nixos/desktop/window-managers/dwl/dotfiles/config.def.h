@@ -91,15 +91,7 @@ static const char *ollamascratchcmd[] = { "o", "google-chrome-stable", "--app=ht
 static const char *ytmusicscratchcmd[] = { "y", "google-chrome-stable", "--app=https://music.youtube.com", NULL };
 static const char *fmscratchcmd[] = { "f", "Thunar", "--name", "Thunar", NULL };
 static const char *xwvbscratchcmd[] = { "x", "xwaylandvideobridge", NULL };
-static const char *kittytopcmd[] = { "m", "sh", "-c", "~/.config/kitty/scripts/kitty-top.sh", NULL };
 static const char *kittyscratchcmd[] = { "i", "sh", "-c", "~/.config/kitty/scripts/kitty-scratch.sh", NULL };
-static const char *kittyneorgcmd[] = { "n", "sh", "-c", "~/.config/kitty/scripts/kitty-neorg.sh", NULL };
-// static const char *kittynmtuicmd[] = { "w", "sh", "-c", "~/.config/kitty/scripts/kitty-nmtui.sh", NULL };
-static const char *kittyneomuttcmd[] = { "e", "sh", "-c", "~/.config/kitty/scripts/kitty-neomutt.sh", NULL };
-static const char *kittynewsboatcmd[] = { "r", "sh", "-c", "~/.config/kitty/scripts/kitty-newsboat.sh", NULL };
-static const char *kittyncmpcppcmd[] = { "u", "sh", "-c", "~/.config/kitty/scripts/kitty-ncmpcpp.sh", NULL };
-static const char *kittydunstnctuicmd[] = { "d", "sh", "-c", "~/.config/kitty/scripts/kitty-dunst-nctui.sh", NULL };
-static const char *calendar_cmd[] = { "k", "sh", "-c", "~/.config/kitty/scripts/kitty-khal.sh", NULL };
 
 static const char bing_gpt_appid[] = "msedge-www.bing.com__search-Default";
 static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
@@ -118,8 +110,7 @@ static const Rule rules[] = {
 	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "^thunar$",                NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "^Thunar$",                NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
+	{ "^[tT]hunar$",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
 	{ "org.qutebrowser.qutebrowser", NULL,   0,         0,          -1,      0,   0,   0,    0,      0 },
 	{ NULL,                      "^Extracting Files.*", 0, 1,       -1,      0,   0,   0,    0,      0 },
@@ -137,21 +128,20 @@ static const Rule rules[] = {
 	{ "discord",                 "Discord Updater", 1 << 3, 1,      -1,      0,   0,   0,    0,      0 },
 	{ "microsoft-edge",          NULL,       1 << 8,    0,          -1,      0,   0,   0,    0,      0 },
 
-	{ "kitty-top",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'm' },
-	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'i' },
-	{ "kitty-neorg",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'n' },
-	{ "kitty-nmtui",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'w' },
-	{ "kitty-neomutt",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'e' },
-	{ "kitty-newsboat",          NULL,       0,         1,          -1,      0,   0,   1200, 800,    'r' },
-	{ "kitty-ncmpcpp",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u' },
-	{ "kitty-dunst-nctui",       NULL,       0,         1,          -1,      0,   0,   1200, 800,    'd' },
-	{ "kitty-khal",              NULL,       0,         1,          -1,      0,   0,   1200, 800,    'k' },
-	{ "kitty-buku",              NULL,       0,         1,          -1,      0,   0,   1200, 800,    0 },
+	{ "^foot-.*",                NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "^footclient-.*",          NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "^kitty-.*",               NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+	{ "^alacritty-.*",           NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
 
-	{ "^kitty-vtm$",             NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "^kitty-dangerp$",         NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "^Alacritty$",             NULL,       0,         0,          -1,      0,   0,   0,    0,      0 },
-	{ "^kitty$",                 NULL,       0,         0,          -1,      0,   0,   0,    0,      0 },
+	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'i' },
+	{ "tui-monitor",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'm' },
+	{ "tui-notes",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'n' },
+	{ "tui-email",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'e' },
+	{ "tui-rss",                 NULL,       0,         1,          -1,      0,   0,   1200, 800,    'r' },
+	{ "tui-music",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u' },
+	{ "tui-notification-center", NULL,       0,         1,          -1,      0,   0,   1200, 800,    'd' },
+	{ "tui-calendar",            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'k' },
+	{ "tui-bookmarks",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    0 },
 
 	/* x, y, width, heigh are floating only
 	* When x or y == 0 the client is placed at the center of the screen,
@@ -268,6 +258,9 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "sh", "-c", cmd, NULL } }
+
+// same as SHCMD but adds scratchkey
+#define SHCMD_SK(scratchkey, cmd) { .v = (const char*[]){ scratchkey, "sh", "-c", cmd, NULL } }
 
 /* commands */
 #define RUN(...)   { .v = (const char*[]){ __VA_ARGS__, NULL } }
@@ -539,16 +532,16 @@ static const Modekey modekeys[] = {
   { KB_INHIBIT, { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = NORMAL} } },
 
   // Terminal TUI
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, raiserunnamedscratchpad, {.v = kittyneorgcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, raiserunnamedscratchpad, {.v = kittytopcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, raiserunnamedscratchpad, {.v = kittyneomuttcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, raiserunnamedscratchpad, {.v = kittynewsboatcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, raiserunnamedscratchpad, {.v = kittyncmpcppcmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_d, raiserunnamedscratchpad, {.v = kittydunstnctuicmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_c, raiserunnamedscratchpad, {.v = calendar_cmd}),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --select")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --add")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD("~/.config/kitty/scripts/kitty-buku.sh --edit")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, raiserunnamedscratchpad, SHCMD_SK("n", "tui-notes")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, raiserunnamedscratchpad, SHCMD_SK("m", "tui-monitor")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, raiserunnamedscratchpad, SHCMD_SK("e", "tui-email")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, raiserunnamedscratchpad, SHCMD_SK("r", "tui-rss")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_SK("u", "tui-music")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_d, raiserunnamedscratchpad, SHCMD_SK("d", "tui-notification-center")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_c, raiserunnamedscratchpad, SHCMD_SK("k", "tui-calendar")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_b, spawn, SHCMD("tui-bookmarks --select")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD("tui-bookmarks --add")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD("tui-bookmarks --edit")),
   { TUI, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 };
 

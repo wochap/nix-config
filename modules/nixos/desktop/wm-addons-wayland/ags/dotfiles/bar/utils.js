@@ -20,36 +20,29 @@ export const generateScriptModule = ({ cmd, className, labelAttrs }) => {
     });
 };
 
+const ignored = ["chrome-music.youtube.com__-Default"];
+
 export const mapAppId = (appId) => {
   if (/^kitty-/.test(appId)) {
     return "kitty";
   }
-  if (/^thunar-/.test(appId) || appId === "xdg-desktop-portal-gtk") {
+  if (/^foot-/.test(appId)) {
+    return "foot";
+  }
+  if (/^footclient-/.test(appId)) {
+    return "footclient";
+  }
+  if (/^alacritty-/.test(appId)) {
+    return "Alacritty";
+  }
+  if (/^thunar-/.test(appId)) {
     return "thunar";
   }
-  if (/^chrome-.*__-Default$/.test(appId)) {
+  if (/^chrome-.*__-Default$/.test(appId) && !ignored.includes(appId)) {
     return "google-chrome";
   }
-  if (/^msedge-.*-Default$/.test(appId)) {
+  if (/^msedge-.*-Default$/.test(appId) && !ignored.includes(appId)) {
     return "microsoft-edge";
   }
-  if (appId === "Slack") {
-    return "slack";
-  }
-  if (appId === "com.stremio.stremio") {
-    return "stremio";
-  }
-  if (appId === "imv") {
-    return "eog";
-  }
-  if (appId === "MongoDB") {
-    return "mongodb-compass";
-  }
-  if (appId === "code-url-handler") {
-    return "vscode";
-  }
-  if (appId === ".gamescope-wrapped") {
-    return "gamescope";
-  }
-  return appId
+  return appId;
 };

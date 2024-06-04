@@ -13,8 +13,8 @@ let
     pkgs.writeScriptBin "takeshot" (builtins.readFile ./scripts/takeshot.sh);
   recorder =
     pkgs.writeScriptBin "recorder" (builtins.readFile ./scripts/recorder.sh);
-  tui-bookmark = pkgs.writeScriptBin "tui-bookmark"
-    (builtins.readFile ./scripts/tui-bookmark.sh);
+  tui-bookmarks = pkgs.writeScriptBin "tui-bookmarks"
+    (builtins.readFile ./scripts/tui-bookmarks.sh);
   tui-calendar = pkgs.writeScriptBin "tui-calendar"
     (builtins.readFile ./scripts/tui-calendar.sh);
   tui-email =
@@ -23,6 +23,8 @@ let
     (builtins.readFile ./scripts/tui-monitor.sh);
   tui-music =
     pkgs.writeScriptBin "tui-music" (builtins.readFile ./scripts/tui-music.sh);
+  tui-notes =
+    pkgs.writeScriptBin "tui-notes" (builtins.readFile ./scripts/tui-notes.sh);
   tui-notification-center = pkgs.writeScriptBin "tui-notification-center"
     (builtins.readFile ./scripts/tui-notification-center.sh);
   tui-rss =
@@ -76,11 +78,12 @@ in {
         recorder
         takeshot
 
-        tui-bookmark
+        tui-bookmarks
         tui-calendar
         tui-email
         tui-monitor
         tui-music
+        tui-notes
         tui-notification-center
         tui-rss
       ];

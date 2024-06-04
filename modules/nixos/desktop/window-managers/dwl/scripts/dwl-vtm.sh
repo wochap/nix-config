@@ -14,5 +14,5 @@ fi
 ydotool key 125:1 3:1 3:0 125:0
 
 echo "Start new tmux session"
-footclient tmux new-session zsh -i -c "tmuxinator start vtm" &
-footclient tmux new-session zsh -i -c "tmuxinator start vtm-editors" &
+footclient --app-id=footclient-vtm tmux new-session zsh -i -c "tmuxinator start vtm" &
+footclient --app-id=footclient-vtm-editors tmux new-session zsh -i -c "tmuxinator start vtm-editors" &
