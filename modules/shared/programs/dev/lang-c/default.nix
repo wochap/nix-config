@@ -9,6 +9,8 @@ in {
       # TODO: override CPLUS_INCLUDE_PATH?
 
       home.packages = with pkgs; [
+        valgrind
+
         # build tools
         cmake
         gcc
