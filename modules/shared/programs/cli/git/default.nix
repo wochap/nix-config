@@ -55,10 +55,12 @@ in {
           disableStartupPopups = true;
           os = {
             open = "xdg-open {{filename}} >/dev/null";
-            edit = "nvr -l --remote-wait-silent {{filename}}";
+            editPreset = "nvim-remote";
+            edit = "nvr -l --remote-silent +':WindowPicker {{filename}}'";
             editAtLine =
-              "nvr -l --remote-wait-silent {{filename}} +':{{line}}'";
-            suspend = true;
+              "nvr -l --remote-silent +':WindowPicker {{filename}}' +':{{line}}'";
+            editAtLineAndWaitTemplate =
+              "nvr -l --remote-wait-silent +':WindowPicker {{filename}}' +':{{line}}'";
           };
           gui = {
             theme = {
@@ -114,9 +116,7 @@ in {
 
         extraConfig = lib.mkMerge [
           {
-            core = {
-              editor = "nvr -l --remote-wait-silent +'set bufhidden=wipe'";
-            };
+            core.editor = "nvr -l --remote-silent -O";
             diff = {
               tool = "kitty";
               guitool = "kitty.gui";
