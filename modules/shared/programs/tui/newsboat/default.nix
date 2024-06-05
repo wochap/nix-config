@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.programs.newsboat;
-  inherit (config._custom.globals) themeColors;
+  inherit (config._custom.globals) themeColors configDirectory;
 
   qndl = pkgs.writeShellScriptBin "qndl" (builtins.readFile ./scripts/qndl.sh);
   linkhandler = pkgs.writeShellScriptBin "linkhandler"
@@ -24,7 +24,8 @@ in {
           "${inputs.catppuccin-newsboat}/themes/${
             if themeColors.flavor == "latte" then "latte" else "dark"
           }";
-        "newsboat/urls".source = ./dotfiles/urls;
+        "newsboat/urls".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/urls;
         "newsboat/config".source = ./dotfiles/config;
       };
     };
