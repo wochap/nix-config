@@ -13,20 +13,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        lazygit = prev.lazygit.overrideAttrs (_: rec {
-          version = "v0.41.0";
-          src = prev.fetchFromGitHub {
-            owner = "jesseduffield";
-            repo = "lazygit";
-            rev = version;
-            sha256 = "sha256-Ok6QnXw3oDeSzBekft8cDXM/YsADgF1NZznfNoGNvck=";
-          };
-        });
-      })
-    ];
-
     environment.systemPackages = [ git-final ];
 
     _custom.hm = {
