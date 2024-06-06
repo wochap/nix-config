@@ -40,13 +40,8 @@ in {
           update.method = "never";
           disableStartupPopups = true;
           os = {
-            open = "xdg-open {{filename}} >/dev/null";
-            editPreset = "nvim-remote";
-            edit = "nvr -l --remote-silent +':WindowPicker {{filename}}'";
-            editAtLine =
-              "nvr -l --remote-silent +':WindowPicker {{filename}}' +':{{line}}'";
-            editAtLineAndWaitTemplate =
-              "nvr -l --remote-wait-silent +':WindowPicker {{filename}}' +':{{line}}'";
+            open = # sh
+              "xdg-open {{filename}} >/dev/null";
           };
           gui = {
             theme = {
@@ -102,7 +97,6 @@ in {
 
         extraConfig = lib.mkMerge [
           {
-            core.editor = "nvr -l --remote-wait-silent -O";
             diff = {
               tool = "kitty";
               guitool = "kitty.gui";
@@ -111,15 +105,13 @@ in {
             difftool = {
               prompt = "false";
               trustExitCode = "true";
-              kitty = { cmd = "kitty +kitten diff $LOCAL $REMOTE"; };
-              "kitty.gui" = {
-                cmd = "kitty kitty +kitten diff $LOCAL $REMOTE";
-              };
+              kitty.cmd = "kitty +kitten diff $LOCAL $REMOTE";
+              "kitty.gui".cmd = "kitty kitty +kitten diff $LOCAL $REMOTE";
             };
             color.ui = "auto";
             pull.rebase = "false";
-            init = { defaultBranch = "main"; };
-            merge = { conflictstyle = "diff3"; };
+            init.defaultBranch = "main";
+            merge.conflictstyle = "diff3";
           }
 
           (lib.mkIf cfg.enableUser {

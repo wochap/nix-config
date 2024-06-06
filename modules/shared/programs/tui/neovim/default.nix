@@ -38,6 +38,17 @@ in {
         VISUAL = "nvim";
       };
 
+      programs.git.extraConfig.core.editor = "nvim";
+      programs.lazygit.settings.os = {
+        editPreset = "nvim-remote";
+        edit = # sh
+          "[ -z $NVIM ] && (nvim -- {{filename}}) || (nvr -l --remote-silent +'WindowPicker {{filename}}')";
+        editAtLine = # sh
+          "[ -z $NVIM ] && (nvim +{{line}} -- {{filename}}) || (nvr -l --remote-silent +'WindowPicker {{filename}}' +{{line}})";
+        editAtLineAndWait = # sh
+          "[ -z $NVIM ] && (nvim +{{line}} {{filename}}) || (nvr -l --remote-wait-silent +'WindowPicker {{filename}}' +{{line}})";
+      };
+
       programs.zsh.shellAliases = {
         nvd = ''neovide "$@"'';
         nv = ''run-without-kpadding nvim "$@"'';
@@ -51,6 +62,17 @@ in {
           exec = "neovide leetcode.nvim";
         };
       };
+
+      programs.zsh.initExtra = lib.mkBefore # zsh
+        ''
+          # Prevent nested nvim in nvim terminal
+          if [ -n "$NVIM" ]; then
+            alias nvim='nvr -l --remote-wait-silent "$@"'
+            alias nv='nvr -l --remote-wait-silent "$@"'
+            export VISUAL="nvr -l --remote-wait-silent"
+            export EDITOR="nvr -l --remote-wait-silent"
+          fi
+        '';
     };
   };
 }

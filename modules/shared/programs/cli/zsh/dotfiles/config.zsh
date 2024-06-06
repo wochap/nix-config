@@ -89,10 +89,3 @@ alias %= \$=
 
 alias ~="cd ~"
 
-# Prevent nested nvim in nvim terminal
-if [ -n "$NVIM" ]; then
-  alias nvim='nvr -l --remote-wait-silent "$@"'
-  alias nv='nvr -l --remote-wait-silent "$@"'
-  export VISUAL="nvr -l --remote-wait-silent"
-  export EDITOR="nvr -l --remote-wait-silent"
-fi
