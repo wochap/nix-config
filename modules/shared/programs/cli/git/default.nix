@@ -42,11 +42,11 @@ in {
           os = {
             open = "xdg-open {{filename}} >/dev/null";
             editPreset = "nvim-remote";
-            edit = "nvr -s -l --remote-silent +':WindowPicker {{filename}}'";
+            edit = "nvr -l --remote-silent +':WindowPicker {{filename}}'";
             editAtLine =
-              "nvr -s -l --remote-silent +':WindowPicker {{filename}}' +':{{line}}'";
+              "nvr -l --remote-silent +':WindowPicker {{filename}}' +':{{line}}'";
             editAtLineAndWaitTemplate =
-              "nvr -s -l --remote-wait-silent +':WindowPicker {{filename}}' +':{{line}}'";
+              "nvr -l --remote-wait-silent +':WindowPicker {{filename}}' +':{{line}}'";
           };
           gui = {
             theme = {
@@ -102,7 +102,7 @@ in {
 
         extraConfig = lib.mkMerge [
           {
-            core.editor = "nvr -s -l --remote-wait-silent -O";
+            core.editor = "nvr -l --remote-wait-silent -O";
             diff = {
               tool = "kitty";
               guitool = "kitty.gui";
