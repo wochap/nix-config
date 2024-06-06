@@ -5,7 +5,10 @@ in {
   options._custom.security.gnome-keyring.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ gnome.libgnome-keyring ];
+    environment.systemPackages = with pkgs; [
+      gnome.libgnome-keyring
+      libsecret # secret-tool
+    ];
 
     programs.seahorse.enable = true;
 
