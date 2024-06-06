@@ -38,7 +38,15 @@ in {
         VISUAL = "nvim";
       };
 
+      xdg.desktopEntries = {
+        leetcode = {
+          name = "LeetCode";
+          exec = "neovide leetcode.nvim";
+        };
+      };
+
       programs.git.extraConfig.core.editor = "nvim";
+
       programs.lazygit.settings.os = {
         editPreset = "nvim-remote";
         edit = # sh
@@ -54,13 +62,6 @@ in {
         nv = ''run-without-kpadding nvim "$@"'';
         lc = "run-without-kpadding nvim leetcode.nvim";
         lcd = "neovide leetcode.nvim";
-      };
-
-      xdg.desktopEntries = {
-        leetcode = {
-          name = "LeetCode";
-          exec = "neovide leetcode.nvim";
-        };
       };
 
       programs.zsh.initExtra = lib.mkBefore # zsh
