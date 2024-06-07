@@ -6,6 +6,8 @@ let
   matcha = inputs.matcha.packages.${system}.default;
   matcha-toggle-mode = pkgs.writeScriptBin "matcha-toggle-mode"
     (builtins.readFile ./scripts/matcha-toggle-mode.sh);
+  backlight-restore = pkgs.writeScriptBin "backlight-restore" # sh
+    (builtins.readFile ./scripts/backlight-restore.sh);
 in {
   options._custom.desktop.swayidle.enable = lib.mkEnableOption { };
 
@@ -43,15 +45,15 @@ in {
             timeout = 180;
             command = ''
               if ! pgrep swaylock; then brightnessctl --save && chayang -d 5 && wlopm --off "*"; fi'';
-            resumeCommand = ''
-              if ! pgrep swaylock; then wlopm --on "*" && brightnessctl --restore; fi'';
+            resumeCommand =
+              "if ! pgrep swaylock; then ${backlight-restore}/bin/backlight-restore; fi";
           }
           {
             timeout = 15;
             command = ''
               if pgrep swaylock; then brightnessctl --save && wlopm --off "*"; fi'';
-            resumeCommand = ''
-              if pgrep swaylock; then wlopm --on "*" && brightnessctl --restore; fi'';
+            resumeCommand =
+              "if pgrep swaylock; then ${backlight-restore}/bin/backlight-restore; fi";
           }
         ];
       };
