@@ -10,8 +10,6 @@ Host github.com
   User git
   IdentitiesOnly yes
   IdentityFile ~/.ssh/id_ed25519
-  IdentityFile ~/.ssh/id_ed25519_se
-  IdentityFile ~/.ssh/id_ed25519_boc
 
 Host github.com-se
   HostName github.com
