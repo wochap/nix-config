@@ -22,6 +22,7 @@ in {
 
     # gui
     _custom.programs.dolphin.enable = true;
+    _custom.programs.electron.enable = true;
     _custom.programs.gtk.enable = true;
     _custom.programs.imv.enable = true;
     _custom.programs.mongodb.enable = true;
