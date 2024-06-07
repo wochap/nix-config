@@ -27,7 +27,7 @@ case $selected in
   if [[ "$XDG_SESSION_DESKTOP" == 'sway' ]]; then
     swaymsg exit
   fi
-  if [[ "$XDG_SESSION_DESKTOP" == 'Hyprland' ]]; then
+  if [[ "$XDG_SESSION_DESKTOP" == 'hyprland' ]]; then
     hyprctl dispatch exit
   fi
   if [[ "$XDG_SESSION_DESKTOP" == 'dwl' ]]; then
