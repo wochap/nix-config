@@ -27,6 +27,7 @@ in {
       ffmpeg-full # record, convert music/video
       imagemagick # image editor
       silver-searcher # ag, ack like
+      gum # shell scripting ui
     ];
 
     _custom.hm = {
