@@ -37,7 +37,7 @@ import { spacing } from "./constants.js";
 export const bar = () => {
   const XDG_SESSION_DESKTOP = Utils.exec(`sh -c 'echo "$XDG_SESSION_DESKTOP"'`);
   const isDwl = XDG_SESSION_DESKTOP === "dwl";
-  const isHyprland = XDG_SESSION_DESKTOP === "Hyprland";
+  const isHyprland = XDG_SESSION_DESKTOP === "hyprland";
 
   let leftModules = [];
   let centerModules = [];
