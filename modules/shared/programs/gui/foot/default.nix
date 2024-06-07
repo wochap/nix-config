@@ -50,7 +50,7 @@ in {
 
       xdg.configFile."foot/foot.ini".text = ''
         ${builtins.readFile
-        "${inputs.catppuccin-foot}/catppuccin-${themeColors.flavor}.ini"}
+        "${inputs.catppuccin-foot}/themes/catppuccin-${themeColors.flavor}.ini"}
         ${builtins.readFile
         (iniFormat.generate "foot.ini" config._custom.programs.foot.settings)}
       '';
