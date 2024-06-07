@@ -34,6 +34,13 @@ in {
         lg = ''run-without-kpadding lazygit "$@"'';
       };
 
+      programs.gh = {
+        enable = true;
+        extensions = [ pkgs._custom.gh-prx ];
+      };
+
+      programs.gh-dash = { enable = true; };
+
       programs.lazygit = {
         enable = true;
         settings = {

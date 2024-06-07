@@ -5,6 +5,7 @@ let
     advcpmv = pkgs.callPackage ./advcpmv { };
     dunst-nctui = pkgs.callPackage ./dunst-nctui { };
     generate-ssc = pkgs.callPackage ./generate-ssc { };
+    gh-prx = pkgs.callPackage ./gh-prx { };
     wochap-ssc = generate-ssc {
       domain = "wochap.local";
       # NOTE: don't use 127.0.0.1 to prevent conflicts with localhost

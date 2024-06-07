@@ -13,6 +13,7 @@ in {
         ngrok # expose web server
         stripe-cli
         watchman # required by react native
+        jira-cli-go
       ];
     };
   };
