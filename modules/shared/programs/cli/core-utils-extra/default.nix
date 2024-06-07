@@ -17,6 +17,8 @@ in {
         speedread # read a file, word by word
         tealdeer # examples of each command
 
+        gdu # tui disk usage
+
         asciinema # record terminal
         asciinema-agg # generate GIF
         asciinema-scenario # generate recording from txt files
