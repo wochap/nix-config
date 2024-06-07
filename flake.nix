@@ -27,7 +27,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=2e7d6c568063c83355fe066b8a8917ee758de1b8";
     nixos-hardware.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=7b5ca2486bba58cac80b9229209239740b67cf90";
-    ags.url = "github:Aylur/ags?rev=b40b8d81c5543ef02caee67560ab1c13ebcee49a";
+    ags.url = "github:Aylur/ags?rev=11150225e62462bcd431d1e55185e810190a730a";
     ags.inputs.nixpkgs.follows = "unstable";
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
