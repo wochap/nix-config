@@ -21,8 +21,6 @@ in {
 
     environment.systemPackages = with pkgs; [
       devour # xorg window swallower
-      hunspell # dictionary for document programs
-      hunspellDicts.en-us
       ifuse # mount ios
       libimobiledevice # mount ios
       nmap

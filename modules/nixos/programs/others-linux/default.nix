@@ -11,7 +11,11 @@ in {
       microsoft-edge
 
       galaxy-buds-client
-      libreoffice-fresh
+
+      libreoffice-qt
+      hunspell
+      hunspellDicts.uk_UA
+      hunspellDicts.th_TH
       # antimicroX # map kb/mouse to gamepad
       # skypeforlinux
       # teamviewer
