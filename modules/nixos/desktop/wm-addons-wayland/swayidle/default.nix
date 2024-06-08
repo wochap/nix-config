@@ -44,14 +44,14 @@ in {
           {
             timeout = 180;
             command = ''
-              if ! pgrep swaylock; then brightnessctl --save && chayang -d 5 && wlopm --off "*"; fi'';
+              if ! pgrep swaylock; then brightnessctl --save && chayang -d 5 && wlopm --off "*" && killall tofi --quiet; fi'';
             resumeCommand =
               "if ! pgrep swaylock; then ${backlight-restore}/bin/backlight-restore; fi";
           }
           {
             timeout = 15;
             command = ''
-              if pgrep swaylock; then brightnessctl --save && wlopm --off "*"; fi'';
+              if pgrep swaylock; then brightnessctl --save && wlopm --off "*" && killall tofi --quiet; fi'';
             resumeCommand =
               "if pgrep swaylock; then ${backlight-restore}/bin/backlight-restore; fi";
           }
