@@ -1,0 +1,17 @@
+name: dp-editors
+
+windows:
+  - dangerp:
+      root: ~/Projects/boc/dangerp
+      layout: tiled
+      panes:
+        - editor:
+            - nv
+
+  - dangerp-backend:
+      root: ~/Projects/boc/dangerp-backend
+      layout: tiled
+      panes:
+        - editor:
+            - nv
+

@@ -115,6 +115,10 @@ in {
 
     _custom.hm = {
       xdg.configFile = {
+        "scripts/dwl-dp.sh" = {
+          source = ./scripts/dwl-dp.sh;
+          executable = true;
+        };
         "scripts/dwl-glegion-stream.sh" = {
           source = ./scripts/dwl-glegion-stream.sh;
           executable = true;

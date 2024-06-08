@@ -1,0 +1,21 @@
+name: dp
+
+windows:
+  - backend:
+      root: ~/Projects/boc
+      layout: tiled
+      panes:
+        - dp-flakes:
+            - cd ./dangerp-flakes
+            - docker-compose up
+        - dp-backend:
+            - cd ./dangerp-backend
+            - pnpm dev
+
+  - frontend:
+      root: ~/Projects/boc
+      layout: tiled
+      panes:
+        - dangerp-backend:
+            - cd ./dangerp
+            - pnpm dev -- --port 3000
