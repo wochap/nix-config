@@ -7,9 +7,17 @@
 static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const unsigned int borderpx         = 1;  /* border pixel of windows */
+static const unsigned int borderspx        = 0;  /* width of the border that start from outside the windows */
+static const unsigned int borderepx        = 1;  /* width of the border that start from inside the windows */
+static const unsigned int borderspx_offset = 0;  /* offset of the border that start from outside the windows */
+static const unsigned int borderepx_negative_offset = 1; /* offset of the border that start from inside the windows */
 static const int draw_minimal_borders      = 1; /* merge adjacent borders */
 static const float rootcolor[] = COLOR(0x@base@ff);
 static const float bordercolor[] = COLOR(0x@border@ff);
+static const float borderscolor[] = COLOR(0x@border@ff); /* color of the border that start from outside the windows */
+static const float borderecolor[] = COLOR(0x@lavender@ff); /* color of the border that start from inside the windows */
+static const int border_color_type = BrdOriginal; /* borders to be colored (focuscolor, urgentcolor) */
+static const int borders_only_floating = 1;
 static const float focuscolor[] = COLOR(0x@surface0@ff);
 static const float urgentcolor[] = COLOR(0x@red@ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
@@ -443,7 +451,6 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT, Key_u, entermode, {.i = TUI} },
   { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = KB_INHIBIT} },
   { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
-  // { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
   { MODKEY|MOD_ALT, Key_x, raiserunnamedscratchpad, SHCMD_SK("x", "xwaylandvideobridge") },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, switchxkbrule, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_c, togglepointerconstraints, {0} },
@@ -498,13 +505,11 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_3, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
-  // EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_4, setlayout, {.v = &layouts[LAYOUT_SNAIL]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_5, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_FLOAT]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_t, setlayout, {.v = &layouts[LAYOUT_TILE]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_f, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_m, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
-  // EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_s, setlayout, {.v = &layouts[LAYOUT_SNAIL]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_e, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]}),
   { LAYOUT, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 

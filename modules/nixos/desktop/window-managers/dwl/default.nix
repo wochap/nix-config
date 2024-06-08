@@ -11,6 +11,7 @@ let
     conf = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
       primary = unwrapHex themeColors.primary;
+      lavender = unwrapHex themeColors.lavender;
       base = unwrapHex themeColors.base;
       border = unwrapHex themeColors.border;
       red = unwrapHex themeColors.red;
@@ -57,29 +58,17 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "5e645bdea6a9971b855405dc3f4faf188024ad66";
+          version = "a599a72618cd325d91c36ce79c12c74f96b364b1";
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-UOw16QhjPwQBGyh6iypWdwbvgvnTOroiPMZvkR4WUEY=";
+            hash = "sha256-f2SUMnpNx7MhT+WHigZpJcNqpNDVGdCxKpyV0yUM3rU=";
           };
-          buildInputs = with pkgs; [
+          buildInputs = oldAttrs.buildInputs ++ (with pkgs; [
             inputs.scenefx.packages."${system}".scenefx
             libGL
-
-            # dwl buildInputs
-            libinput
-            xorg.libxcb
-            libxkbcommon
-            pixman
-            wayland
-            wayland-protocols
-            wlroots
-            xorg.libX11
-            xorg.xcbutilwm
-            xwayland
-          ];
+          ]);
         });
       })
     ];
