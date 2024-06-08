@@ -59,6 +59,8 @@ in {
               activeBorderColor = [ themeColors.mauve ];
               inactiveBorderColor = [ themeColors.textDimmed ];
             };
+            statusPanelView = "allBranchesLog";
+            showCommandLog = false; # @ toggles it
             showBottomLine = false;
             showPanelJumps = false;
             filterMode = "fuzzy";
