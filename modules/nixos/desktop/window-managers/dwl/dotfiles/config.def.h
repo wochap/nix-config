@@ -45,12 +45,13 @@ static const int blur = 0; /* flag to enable blur */
 static const int blur_optimized = 1;
 static const int blur_ignore_transparent = 1;
 static const struct blur_data blur_data = {
-	.radius = 5,
-	.num_passes = 3,
-	.noise = (float)0.02,
-	.brightness = (float)0.9,
-	.contrast = (float)0.9,
-	.saturation = (float)1.1,};
+  .radius = 5,
+  .num_passes = 3,
+  .noise = (float)0.02,
+  .brightness = (float)0.9,
+  .contrast = (float)0.9,
+  .saturation = (float)1.1,
+};
 
 enum {
   VIEW_L = -1,
