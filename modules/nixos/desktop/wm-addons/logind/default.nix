@@ -10,8 +10,8 @@ in {
       suspendKey = "ignore";
       rebootKeyLongPress = "ignore";
       rebootKey = "ignore";
-      powerKeyLongPress = "ignore";
-      powerKey = "ignore";
+      powerKeyLongPress = "poweroff";
+      powerKey = "poweroff";
       hibernateKeyLongPress = "ignore";
       hibernateKey = "ignore";
       lidSwitchExternalPower = "suspend";
