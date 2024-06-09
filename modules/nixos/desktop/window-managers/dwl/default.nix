@@ -13,6 +13,8 @@ let
       primary = unwrapHex themeColors.primary;
       lavender = unwrapHex themeColors.lavender;
       base = unwrapHex themeColors.base;
+      mantle = unwrapHex themeColors.mantle;
+      crust = unwrapHex themeColors.crust;
       border = unwrapHex themeColors.border;
       red = unwrapHex themeColors.red;
       shadow = unwrapHex themeColors.shadow;
