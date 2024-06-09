@@ -10,14 +10,22 @@ let
     inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
   hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
+  stop-targets-str = ''
+    pid=$!
+    wait $pid
+    systemctl --user stop graphical-session.target --quiet
+    systemctl --user stop wayland-session.target --quiet
+  '';
   hyprland-start = pkgs.writeScriptBin "hyprland-start" ''
-    Hyprland "$@" > /home/${userName}/.cache/hyprland-logs 2> /home/${userName}/.cache/hyprland-stderr-logs
+    Hyprland "$@" > /home/${userName}/.cache/hyprland-logs 2> /home/${userName}/.cache/hyprland-stderr-logs &
+    ${stop-targets-str}
   '';
   hyprland-start-with-dgpu-port =
     pkgs.writeScriptBin "hyprland-start-with-dgpu-port" ''
       # NOTE: This is specific for glegion host with nvidia
       # so I can use HDMI port connected directly to dGPU
-      unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" Hyprland "$@" > /home/${userName}/.cache/hyprland-logs 2> /home/${userName}/.cache/hyprland-stderr-logs
+      unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" Hyprland "$@" > /home/${userName}/.cache/hyprland-logs 2> /home/${userName}/.cache/hyprland-stderr-logs &
+      ${stop-targets-str}
     '';
 in {
   options._custom.desktop.hyprland = {

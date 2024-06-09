@@ -36,19 +36,23 @@ let
       mv "$logs_path" "''${logs_path}_''${timestamp}"
     fi
   '';
+  stop-targets-str = ''
+    pid=$!
+    wait $pid
+    systemctl --user stop graphical-session.target --quiet
+    systemctl --user stop wayland-session.target --quiet
+  '';
   dwl-start = pkgs.writeScriptBin "dwl-start" ''
     ${dwl-save-logs-str}
-    dwl -d "$@" > /home/${userName}/.cache/dwllogs 2> /home/${userName}/.cache/dwlstderrlogs
-  '';
-  dwl-debug-start = pkgs.writeScriptBin "dwl-debug-start" ''
-    ${dwl-save-logs-str}
-    gdb -batch -ex "run > /home/${userName}/.cache/dwllogs 2> /home/${userName}/.cache/dwlstderrlogs" --args dwl -d "$@"
+    dwl -d "$@" > /home/${userName}/.cache/dwllogs 2> /home/${userName}/.cache/dwlstderrlogs &
+    ${stop-targets-str}
   '';
   dwl-start-with-dgpu-port = pkgs.writeScriptBin "dwl-start-with-dgpu-port" ''
     ${dwl-save-logs-str}
     # NOTE: This is specific for glegion host with nvidia
     # so I can use HDMI port connected directly to dGPU
-    unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" dwl -d "$@" > /home/${userName}/.cache/dwllogs 2> /home/${userName}/.cache/dwlstderrlogs
+    unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" dwl -d "$@" > /home/${userName}/.cache/dwllogs 2> /home/${userName}/.cache/dwlstderrlogs &
+    ${stop-targets-str}
   '';
 in {
   options._custom.desktop.dwl = {
@@ -76,7 +80,6 @@ in {
     ];
 
     environment.systemPackages = with pkgs; [
-      dwl-debug-start
       dwl-final
       dwl-start
       dwl-start-with-dgpu-port
