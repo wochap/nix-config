@@ -18,7 +18,7 @@ in {
           "--color 'fg:${text},header:${red},info:${mauve},pointer:${rosewater}'"
           "--color 'marker:${rosewater},fg+:${text},prompt:${mauve},hl+:${red}'"
 
-          "--color 'border:${mantle},scrollbar:${overlay0},label:${overlay0}'"
+          "--color 'border:${mantle},scrollbar:${overlay0},preview-scrollbar:${overlay0},label:${overlay0}'"
 
           "--no-height"
           "--tabstop '2'"
