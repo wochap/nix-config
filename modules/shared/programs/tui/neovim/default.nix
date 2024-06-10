@@ -64,7 +64,7 @@ in {
         lcd = "neovide leetcode.nvim";
       };
 
-      programs.zsh.initExtra = lib.mkBefore # zsh
+      home.file.".config/zsh/.zshrc".text = lib.mkAfter # zsh
         ''
           # Prevent nested nvim in nvim terminal
           if [ -n "$NVIM" ]; then
