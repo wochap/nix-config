@@ -47,6 +47,7 @@
     ./programs/tui/presenterm
     ./programs/tui/taskwarrior
     ./programs/tui/tmux
+    ./programs/tui/urlscan
     ./programs/tui/youtube
 
     ./programs/weeb
