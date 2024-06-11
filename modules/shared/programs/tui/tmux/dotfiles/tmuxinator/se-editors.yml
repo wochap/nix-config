@@ -8,9 +8,9 @@ windows:
         - editor:
             - nv
 
-  - viz-websites:
-      root: ~/Projects/se/viz-websites
-      layout: tiled
-      panes:
-        - editor:
-            - nv
+  # - viz-websites:
+  #     root: ~/Projects/se/viz-websites
+  #     layout: tiled
+  #     panes:
+  #       - editor:
+  #           - nv
