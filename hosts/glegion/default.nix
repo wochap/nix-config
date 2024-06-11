@@ -110,6 +110,7 @@ in {
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
 
+    _custom.desktop.xwaylandvideobridge.enable = false;
     _custom.desktop.power-management.cpupowerGuiArgs =
       [ "--performance" "profile" "Performance" ];
     _custom.desktop.ags.mainOutputName = "eDP-1";

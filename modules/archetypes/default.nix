@@ -35,7 +35,7 @@
       _custom.desktop.qt.enable = true;
       _custom.desktop.qt.enableTheme = true;
       _custom.desktop.xdg.enable = true;
-      _custom.desktop.xwaylandvideobridge.enable = true;
+      _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 
       _custom.desktop.ags.enable = true;
       _custom.desktop.cliphist.enable = true;
