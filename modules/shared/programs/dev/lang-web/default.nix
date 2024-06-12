@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.programs.lang-web;
+let
+  cfg = config._custom.programs.lang-web;
+  inherit (config._custom.globals) configDirectory;
 in {
   options._custom.programs.lang-web.enable = lib.mkEnableOption { };
 
@@ -38,7 +40,8 @@ in {
       };
 
       home.file = {
-        ".npmrc".source = ./dotfiles/.npmrc;
+        ".npmrc".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/.npmrc;
         ".npm-packages/.keep".text = "";
         ".npm-packages/lib/.keep".text = "";
       };
