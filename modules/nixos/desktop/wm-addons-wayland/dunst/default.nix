@@ -6,9 +6,6 @@ let
 
   dunst-toggle-mode = pkgs.writeScriptBin "dunst-toggle-mode"
     (builtins.readFile ./scripts/dunst-toggle-mode.sh);
-  dunst-play-notification-sound =
-    pkgs.writeScriptBin "dunst-play-notification-sound"
-    (builtins.readFile ./scripts/dunst-play-notification-sound.sh);
 in {
   options._custom.desktop.dunst.enable = lib.mkEnableOption { };
 
@@ -20,7 +17,6 @@ in {
         packages = with pkgs; [
           _custom.dunst-nctui
           dunst
-          dunst-play-notification-sound
           dunst-toggle-mode
           gnome-icon-theme
           libnotify
