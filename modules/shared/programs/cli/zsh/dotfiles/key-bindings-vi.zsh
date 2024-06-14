@@ -48,6 +48,17 @@ custom-forward-char() {
 }
 zle -N custom-forward-char
 
+custom-autosuggest-accept-or-expand-or-complete-prefix() {
+  local suggestion=${POSTDISPLAY}
+  local -P word=$IPREFIX$PREFIX$SUFFIX$ISUFFIX
+  if [[ -n "$suggestion" ]]; then
+    zle autosuggest-accept
+  else
+    zle expand-or-complete-prefix
+  fi
+}
+zle -N custom-autosuggest-accept-or-expand-or-complete-prefix
+
 # ================
 # Clean up
 # ================
@@ -161,7 +172,13 @@ multibindkey 'viins visual vicmd viopp menuselect' '\r' .accept-line
 
 # [Ctrl+\] - search in the completion menu
 # press again to clear and search again
-bindkey -M viins '^\\\\' menu-search
+bindkey -M viins '^\' menu-search
+
+# [Backspace] - Exit menu-search
+bindkey -M menuselect '^?' undo
+
+# [Ctrl+Space] - expand or complete prefix if there isn't a suggestion
+multibindkey 'viins menuselect' '^ ' custom-autosuggest-accept-or-expand-or-complete-prefix
 
 # ================
 # Plugins
@@ -170,8 +187,8 @@ bindkey -M viins '^\\\\' menu-search
 # [RightArrow] - move forward one char and if at the end of line accept suggestion
 multibindkey 'viins menuselect' "$key_right" custom-forward-char
 
-# [Ctrl+Space] - accept suggestion
-multibindkey 'viins menuselect' '^ ' autosuggest-accept
+# [Ctrl+Space] - accept suggestion if there is any
+multibindkey 'viins menuselect' '^ ' custom-autosuggest-accept-or-expand-or-complete-prefix
 
 # [Alt+RightArrow] - dirhistory future
 bindkey -M vicmd "^[[1;3C" dirhistory_zle_dirhistory_future
