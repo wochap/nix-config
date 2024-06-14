@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
 declare -i throttle_by=1
+cache_path="$HOME/.cache/"
 
 debounce() {
-  if [[ ! -f ./executing ]]; then
-    touch ./executing
+  if [[ ! -f "$cache_path/executing" ]]; then
+    touch "$cache_path/executing"
     "$@"
     retVal=$?
     {
       sleep $throttle_by
-      if [[ -f ./on-finish ]]; then
+      if [[ -f "$cache_path/on-finish" ]]; then
         "$@"
-        rm -f ./on-finish
+        rm -f "$cache_path/on-finish"
       fi
-      rm -f ./executing
+      rm -f "$cache_path/executing"
     } &
     return $retVal
-  elif [[ ! -f ./on-finish ]]; then
-    touch ./on-finish
+  elif [[ ! -f "$cache_path/on-finish" ]]; then
+    touch "$cache_path/on-finish"
   fi
 }
 
