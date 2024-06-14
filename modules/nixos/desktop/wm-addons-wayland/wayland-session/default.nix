@@ -28,6 +28,12 @@ in {
     systemd.user.targets.graphical-session.unitConfig = {
       RefuseManualStart = "no";
     };
+    # HACK: stop xdg-desktop-portal-gtk when graphical-session.target stops
+    # TODO: don't start if in KDE DE
+    systemd.user.services.xdg-desktop-portal-gtk = {
+      partOf = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+    };
 
     _custom.hm = {
       home.sessionVariables = {
