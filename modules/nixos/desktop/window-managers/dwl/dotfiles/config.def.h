@@ -80,7 +80,7 @@ static const Env envs[] = {
 
 /* Autostart */
 static const char *const autostart[] = {
-  "sh", "-c", "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP QT_QPA_PLATFORMTHEME && systemctl --user stop wayland-session.target && systemctl --user start wayland-session.target", NULL,
+  "start-wm-dependencies", NULL,
 
   "configure-gtk", NULL,
 
