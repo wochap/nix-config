@@ -57,6 +57,8 @@
     retroarch-shaders.flake = false;
     reversal-extra.url = "github:wochap/Reversal-Extra?rev=e1ddde0770705aa3a58656712299522fb79d2415";
     reversal-extra.flake = false;
+    wluma.url = "github:maximbaz/wluma?rev=f7aa9967231ef5c821eeea7e43a9929ace0c4fa8";
+    wluma.flake = false;
 
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f";

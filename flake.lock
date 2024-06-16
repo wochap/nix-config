@@ -1815,6 +1815,7 @@
         "tmux-sessionx": "tmux-sessionx",
         "unstable": "unstable",
         "wayfreeze": "wayfreeze",
+        "wluma": "wluma",
         "zsh-autocomplete": "zsh-autocomplete",
         "zsh-defer": "zsh-defer",
         "zsh-history-substring-search": "zsh-history-substring-search",
@@ -2123,6 +2124,23 @@
         "owner": "Jappie3",
         "repo": "wayfreeze",
         "rev": "37ef9e456c87601ed4e06f36f437f688083d61cf",
+        "type": "github"
+      }
+    },
+    "wluma": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1715865652,
+        "narHash": "sha256-dXpxQ7d6T13acd1GhgbFla0FdZ9oNS6rPcm8k0IhPYA=",
+        "owner": "maximbaz",
+        "repo": "wluma",
+        "rev": "f7aa9967231ef5c821eeea7e43a9929ace0c4fa8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "maximbaz",
+        "repo": "wluma",
+        "rev": "f7aa9967231ef5c821eeea7e43a9929ace0c4fa8",
         "type": "github"
       }
     },

@@ -117,6 +117,13 @@ in {
     _custom.desktop.greetd.enable = true;
     _custom.desktop.greetd.enablePamAutoLogin = true;
     _custom.desktop.udev-rules.enable = true;
+    _custom.desktop.wluma.systemdEnable = true;
+    _custom.desktop.wluma.config.als.none = { };
+    _custom.desktop.wluma.config.output.backlight = [{
+      name = "Samsung Display Corp. 0x4188 Unknown";
+      path = "/sys/class/backlight/amdgpu_bl1";
+      capturer = "wlroots";
+    }];
     _custom.desktop.dwl.enable = true;
     _custom.desktop.dwl.isDefault = true;
     _custom.desktop.hyprland.enable = true;

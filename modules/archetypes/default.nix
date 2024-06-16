@@ -49,6 +49,7 @@
       _custom.desktop.tofi.enable = true;
       _custom.desktop.wayland-session.enable = true;
       _custom.desktop.wayland-utils.enable = true;
+      _custom.desktop.wluma.enable = true;
       _custom.desktop.ydotool.enable = lib.mkDefault true;
 
       _custom.desktop.greetd.enable = lib.mkDefault true;
