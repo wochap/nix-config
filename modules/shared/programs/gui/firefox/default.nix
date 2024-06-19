@@ -41,6 +41,7 @@ in {
 
               # Use OS window border
               "browser.tabs.drawInTitlebar" = false;
+              "browser.tabs.inTitlebar" = 1;
 
               # Density compact
               "browser.uidensity" = 1;
