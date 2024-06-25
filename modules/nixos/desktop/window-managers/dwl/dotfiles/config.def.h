@@ -417,6 +417,9 @@ static const Key keys[] = {
   // Open file manager
   { MODKEY|MOD_ALT, Key_f, raiserunnamedscratchpad, SHCMD_SK("f", "Thunar --name Thunar") },
 
+  // Show ruler
+  { MODKEY|MOD_ALT, Key_m, spawn, SHCMD("ruler") },
+
   // Screencast/record region to mp4
   { MODKEY|MOD_ALT, Key_r, spawn, SHCMD("recorder --area") },
 

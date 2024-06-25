@@ -9,6 +9,7 @@ let
     (builtins.readFile ./scripts/play-notification-sound.sh);
   color-picker = pkgs.writeScriptBin "color-picker"
     (builtins.readFile ./scripts/color-picker.sh);
+  ruler = pkgs.writeScriptBin "ruler" (builtins.readFile ./scripts/ruler.sh);
   takeshot =
     pkgs.writeScriptBin "takeshot" (builtins.readFile ./scripts/takeshot.sh);
   recorder =
@@ -75,6 +76,7 @@ in {
 
         play-notification-sound
         color-picker
+        ruler
         recorder
         takeshot
 
