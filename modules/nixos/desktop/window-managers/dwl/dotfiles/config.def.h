@@ -22,8 +22,8 @@ static const float focuscolor[] = COLOR(0x@surface0@ff);
 static const float urgentcolor[] = COLOR(0x@red@ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 0.0f}; /* You can also use glsl colors */
-static const char cursortheme[] = "@cursorName@";
-static const unsigned int cursorsize = @cursorSize@;
+static const char *cursor_theme = "@cursorName@";
+static const char cursor_size[] = "@cursorSize@";
 static const unsigned int swipe_min_threshold = 0;
 static const int respect_monitor_reserved_area = 0;  /* 1 to monitor center while respecting the monitor's reserved area, 0 to monitor center */
 
@@ -98,6 +98,7 @@ static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
 static const char ollama_appid[] = "chrome-ollama.wochap.local__-Default";
 static const char ytmusic_appid[] = "chrome-music.youtube.com__-Default";
 
+/* NOTE: ALWAYS keep a rule declared even if you don't use rules (e.g leave at least one example) */
 static const Rule rules[] = {
 	/* app_id                    title       tags mask  isfloating  monitor  x    y    width height  scratchkey */
 	/* examples:
@@ -153,7 +154,6 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },
 	{ "TTT",      bstack },
 	{ "[M]",      monocle },
-	{ "|M|",      centeredmaster },
 	// { "@|@",      snail },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ NULL,       NULL },
@@ -163,12 +163,16 @@ enum layout_types {
   LAYOUT_TILE,
   LAYOUT_BSTACK,
   LAYOUT_MONOCLE,
-  LAYOUT_CENTEREDMASTER,
   // LAYOUT_SNAIL,
   LAYOUT_FLOAT,
 };
 
 /* monitors */
+/* (x=-1, y=-1) is reserved as an "autoconfigure" monitor position indicator
+ * WARNING: negative values other than (-1, -1) cause problems with Xwayland clients
+ * https://gitlab.freedesktop.org/xorg/xserver/-/issues/899
+*/
+/* NOTE: ALWAYS add a fallback rule, even if you are completely sure it won't be used */
 static const MonitorRule monrules[] = {
 	/* name       mfact nmaster scale layout       rotate/reflect                x    y */
 	/* example of a HiDPI laptop monitor:
@@ -177,7 +181,7 @@ static const MonitorRule monrules[] = {
   // { "DP-1",     0.5, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
   // { "eDP-1",    0.5, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 	/* defaults */
-	{ NULL,       0.5, 1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	{ NULL,       0.5f,  1,      2,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 };
 
 /* keyboard */
@@ -457,7 +461,6 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
   { MODKEY|MOD_ALT, Key_x, raiserunnamedscratchpad, SHCMD_SK("x", "xwaylandvideobridge") },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, switchxkbrule, {0} },
-  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_c, togglepointerconstraints, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
 	/* Ctrl-Alt-Backspace and Ctrl-Alt-Fx used to be handled by X server */
@@ -509,12 +512,10 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_3, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_5, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_FLOAT]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_t, setlayout, {.v = &layouts[LAYOUT_TILE]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_f, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_m, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_e, setlayout, {.v = &layouts[LAYOUT_CENTEREDMASTER]}),
   { LAYOUT, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Open Browser
