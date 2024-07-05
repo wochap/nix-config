@@ -38,7 +38,7 @@ To add a package from NPM to nixpkgs:
 
  1. Modify `packages/custom-node-packages/node-packages.json` to add, update
     or remove package entries to have it included in `_custom.nodePackages`.
- 2. Run the script: `(cd packages/custom-node-packages && ./generate.sh)`.
+ 2. Run the script: `(cd packages/node-packages && ./generate.sh)`.
  3. Test build your new package to test your changes:
     `cd /path/to/nixpkgs && nix-build -A nodePackages.<new-or-updated-package>`.
  4. Add and commit all modified and generated files.
