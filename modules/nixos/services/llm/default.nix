@@ -30,6 +30,7 @@ in {
       enable = true;
       package = pkgs._custom.ollama-webui-lite;
       host = wochap-ssc.meta.address;
+      port = 11444;
     };
 
     # Make ollama-webui-lite accessible at https://ollama.wochap.local
