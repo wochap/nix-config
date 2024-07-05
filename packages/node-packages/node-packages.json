@@ -1,7 +1,5 @@
 [
   "@styled/typescript-styled-plugin",
   { "migrate-mongo": "9.0.0" },
-  "ts-node",
-  "typescript",
-  "webtorrent-cli"
+  { "webtorrent-cli": "4.1.0" }
 ]
