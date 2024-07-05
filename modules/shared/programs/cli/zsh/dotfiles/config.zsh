@@ -79,6 +79,8 @@ setopt NUMERIC_GLOB_SORT
 # our terminal.
 # setopt TRANSIENT_RPROMPT
 
+export PS2="%_❯❯ "
+
 # ================
 # Aliases
 # ================
