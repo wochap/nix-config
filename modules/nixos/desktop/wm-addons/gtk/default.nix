@@ -94,7 +94,7 @@ in {
     };
 
     # Enable GTK applications to load SVG icons
-    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+    programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     # Required by some apps (gtk3 applications, firefox)
     # Fix https://github.com/NixOS/nixpkgs/issues/30866

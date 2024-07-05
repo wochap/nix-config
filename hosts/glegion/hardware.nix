@@ -13,9 +13,8 @@
   ];
 
   config = {
-    hardware.amdgpu.amdvlk = true;
-    hardware.amdgpu.loadInInitrd = true;
-    hardware.amdgpu.opencl = true;
+    hardware.amdgpu.initrd.enable = true;
+    hardware.amdgpu.opencl.enable = true;
 
     hardware.nvidia = {
       modesetting.enable = true;

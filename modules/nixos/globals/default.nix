@@ -8,7 +8,7 @@
     cursor = {
       name = lib.mkOption {
         type = lib.types.str;
-        default = "Catppuccin-Mocha-Dark-Cursors";
+        default = "catppuccin-mocha-dark-cursors";
       };
       package = lib.mkOption {
         type = lib.types.package;

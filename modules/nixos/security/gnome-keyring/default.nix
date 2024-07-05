@@ -6,7 +6,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      gnome.libgnome-keyring
+      libgnome-keyring
       libsecret # secret-tool
     ];
 

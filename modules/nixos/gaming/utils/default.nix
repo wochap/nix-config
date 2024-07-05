@@ -32,7 +32,7 @@ in {
     };
 
     # TODO: add mangohud, gamescope
-    hardware.opengl = {
+    hardware.graphics = {
       extraPackages = with pkgs; [ mangohud ];
       extraPackages32 = with pkgs; [ mangohud ];
     };

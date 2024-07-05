@@ -20,7 +20,7 @@ in {
       nodePackages.http-server
       nodePackages.node2nix
       nodePackages.nodemon
-      nodePackages.webtorrent-cli
+      # nodePackages.webtorrent-cli
       nodejs_20
 
       # required by personal nvim config

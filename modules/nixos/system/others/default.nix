@@ -6,7 +6,13 @@
     boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 1;
 
     # Links those paths from derivations to /run/current-system/sw
-    environment.pathsToLink = [ "/share" "/libexec" ];
+    environment.pathsToLink = [
+      "/share"
+      # binaries
+      "/libexec"
+      # C libs
+      "/lib"
+    ];
 
     # Shell integration for VTE terminals
     # Required for some gtk apps
@@ -27,10 +33,7 @@
       keyMap = lib.mkDefault "us";
     };
 
-    hardware.opengl.enable = true;
-
-    # documentation.man.generateCaches = true;
-    documentation.dev.enable = true;
+    hardware.graphics.enable = true;
   };
 }
 
