@@ -21,6 +21,7 @@ in {
         gc = "git clone";
         gco = "git checkout";
         gcmsg = "git commit --message";
+        gdiff = "git difftool --no-symlinks --dir-diff";
       };
 
       home.packages = with pkgs; [
@@ -89,7 +90,7 @@ in {
         delta = {
           enable = true;
           options = {
-            features = "side-by-side line-numbers decorations";
+            features = "side-by-side line-numbers decorations word-diff";
             navigate = true;
 
             # available themes `delta --list-syntax-themes`
@@ -107,20 +108,27 @@ in {
         extraConfig = lib.mkMerge [
           {
             diff = {
-              tool = "kitty";
-              guitool = "kitty.gui";
+              tool = "delta";
               colorMoved = "default";
             };
             difftool = {
-              prompt = "false";
-              trustExitCode = "true";
-              kitty.cmd = "kitty +kitten diff $LOCAL $REMOTE";
-              "kitty.gui".cmd = "kitty kitty +kitten diff $LOCAL $REMOTE";
+              prompt = false;
+              trustExitCode = true;
+              "delta".cmd = "delta";
+            };
+            merge = {
+              conflictstyle = "diff3";
+              tool = "diffview_nvim";
+            };
+            mergetool = {
+              prompt = false;
+              keepBackup = false;
+              layout = "LOCAL,BASE,REMOTE / MERGED";
+              "diffview_nvim".cmd = "nvim -f -n -c 'DiffviewOpen' '$MERGE'";
             };
             color.ui = "auto";
-            pull.rebase = "false";
+            pull.rebase = false;
             init.defaultBranch = "main";
-            merge.conflictstyle = "diff3";
           }
 
           (lib.mkIf cfg.enableUser {

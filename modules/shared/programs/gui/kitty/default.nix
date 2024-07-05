@@ -36,8 +36,7 @@ in {
         };
 
         shellAliases = {
-          diff = "kitty +kitten diff";
-          gdiff = "git difftool --no-symlinks --dir-diff";
+          kdiff = "kitty +kitten diff";
           icat = "kitty +kitten icat";
           # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
           sshk = "kitty +kitten ssh";
