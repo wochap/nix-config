@@ -25,8 +25,7 @@
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=6e253f12b1009053eff5344be5e835f604bb64cd"; # master (jul 04 2024)
-    nixos-hardware.inputs.nixpkgs.follows = "nixpkgs";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=7b5ca2486bba58cac80b9229209239740b67cf90";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=9822e0611d49ae70278ac20c9d7b68e4797b2fab";
     ags.url = "github:Aylur/ags?rev=11150225e62462bcd431d1e55185e810190a730a";
     ags.inputs.nixpkgs.follows = "unstable";
     nix-ld.url = "github:Mic92/nix-ld";
