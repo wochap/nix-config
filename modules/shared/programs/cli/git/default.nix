@@ -72,6 +72,7 @@ in {
             scrollOffMargin = 4;
             showFileTree = false;
             sidePanelWidth = 0.3333;
+            expandFocusedSidePanel = true;
           };
           git.paging = {
             colorArg = "always";
