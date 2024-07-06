@@ -17,7 +17,6 @@ in {
       systemPackages = with pkgs; [
         neovide # gui
 
-        luajit # required by neorg
         marksman # required by nvim-lspconfig
         prevstable-neovim.neovim-remote # required by lazygit
         tree-sitter # required by nvim-treesitter

@@ -76,31 +76,6 @@ in {
         Include basic build tools like `gcc` and `pkg-config`.
         Required for NixOS.
       '';
-      withHaskell = mkEnableOption ''
-        Enable the Haskell compiler. Set to `true` to
-        use Haskell plugins.
-      '';
-      extraHaskellPackages = mkOption {
-        type = with types;
-          let fromType = listOf package;
-          in coercedTo fromType (flip warn const ''
-            Assigning a plain list to extraRPackages is deprecated.
-                Please assign a function taking a package set as argument, so
-                    extraHaskellPackages = [ pkgs.haskellPackages.xxx ];
-                should be
-                    extraHaskellPackages = hsPkgs: with hsPkgs; [ xxx ];
-          '') (functionTo fromType);
-        default = _: [ ];
-        defaultText = literalExpression "ps: [ ]";
-        example =
-          literalExpression "hsPkgs: with hsPkgs; [ haskell-language-server ]";
-        description = ''
-          The extra Haskell packages required for your plugins to work.
-          This option accepts a function that takes a Haskell package set as an argument,
-          and selects the required Haskell packages from this package set.
-          See the example for more info.
-        '';
-      };
       extraDependentPackages = mkOption {
         type = with types; listOf package;
         default = [ ];
@@ -143,27 +118,20 @@ in {
             cmake
             gcc
             gnumake
-            luajitPackages.luarocks
             ninja
             pkg-config
             yarn
-          ] ++ optionals cfg.withHaskell [
-            (pkgs.writeShellApplication {
-              name = "stack";
-              text = ''
-                exec "${pkgs.stack}/bin/stack" "--extra-include-dirs=${hmConfig.home.profileDirectory}/lib/nvim-depends/include" "--extra-lib-dirs=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib" "$@"
-              '';
-            })
-            (haskellPackages.ghcWithPackages (ps:
-              [
-                # ghcup # ghcup is broken
-              ] ++ cfg.extraHaskellPackages pkgs.haskellPackages))
           ];
 
-        # NOTE: extraLuaPackages doesn't work
+        # NOTE: extraLuaPackages doesn't work?
         # https://github.com/NixOS/nixpkgs/issues/306367
         # https://github.com/NixOS/nixpkgs/pull/301573
-        # extraLuaPackages = ls: with ls; [ luarocks ];
+        extraLuaPackages = ls:
+          with ls; [
+            luarocks
+            # required by 3rd/image.nvim
+            magick
+          ];
       };
     };
   };

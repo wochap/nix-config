@@ -22,6 +22,7 @@
 
     ./programs/dev/lang-c
     ./programs/dev/lang-go
+    ./programs/dev/lang-lua
     ./programs/dev/lang-nix
     ./programs/dev/lang-python
     ./programs/dev/lang-ruby

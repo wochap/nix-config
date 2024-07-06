@@ -56,6 +56,7 @@ in {
     # dev
     _custom.programs.lang-c.enable = true;
     _custom.programs.lang-go.enable = true;
+    _custom.programs.lang-lua.enable = true;
     _custom.programs.lang-nix.enable = true;
     _custom.programs.lang-python.enable = true;
     _custom.programs.lang-ruby.enable = true;
