@@ -29,6 +29,7 @@ in {
         git-town
         gitAndTools.gh # github cli
         gitflow
+        gut # alternative git cli
       ];
 
       programs.zsh.shellAliases = {
