@@ -98,9 +98,10 @@
 }
 
 .wmtaskbar {
+  margin: -7px 0;
   padding: 0 0.3em;
   border-radius: 4px;
-  background-color: @moduleBg;
+  /* background-color: @moduleBg; */
 }
 .wmtaskbar box {
   opacity: 0.5;
@@ -109,7 +110,7 @@
   opacity: 1;
 }
 .bar-container.focused .wmtaskbar {
-  background-color: @moduleBgFocus;
+  /* background-color: @moduleBgFocus; */
 }
 
 .systray button {

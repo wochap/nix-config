@@ -99,7 +99,7 @@ export const hyprlandNamedScratchpads = () =>
 export const hyprlandTaskbar = () =>
   Widget.Box({
     class_name: "wmtaskbar",
-    spacing,
+    spacing: spacing / 2,
     setup(self) {
       self.hook(Hyprland, () => {
         const visibleAppIds = Hyprland.clients
@@ -117,7 +117,7 @@ export const hyprlandTaskbar = () =>
             class_name: focused ? "focused" : "",
             child: Widget.Icon({
               icon: appId,
-              size: 24,
+              size: 32,
             }),
           }),
         );

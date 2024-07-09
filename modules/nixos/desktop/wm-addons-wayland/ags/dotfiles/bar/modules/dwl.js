@@ -45,7 +45,7 @@ const VisibleAppIds = Variable([], {
 export const dwltaskbar = () =>
   Widget.Box({
     class_name: "wmtaskbar",
-    spacing,
+    spacing: spacing / 2,
     // HACK: using binding `visible` property doesn't work
     setup(self) {
       self.hook(VisibleAppIds, () => {
@@ -59,7 +59,7 @@ export const dwltaskbar = () =>
           class_name: focused ? "focused" : "",
           child: Widget.Icon({
             icon: appId,
-            size: 24,
+            size: 32,
           }),
         }),
       );
@@ -154,4 +154,3 @@ export const IsMainOutputFocused = Variable(0, {
     (out) => !!parseInt(JSON.parse(out).text),
   ],
 });
-
