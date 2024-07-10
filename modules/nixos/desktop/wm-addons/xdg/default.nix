@@ -18,6 +18,7 @@ in {
       etc."mime.types".source = ./dotfiles/mime.types;
 
       shellAliases.open = "xdg-open";
+      shellAliases.o = "xdg-open";
     };
 
     # xdg-desktop-portal works by exposing a series of D-Bus interfaces

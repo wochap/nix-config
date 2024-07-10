@@ -90,6 +90,8 @@ in {
         tui-rss
       ];
 
+      home.shellAliases."cpi" = ''wl-copy -t text/uri-list <<<file:/"$@"'';
+
       xdg.configFile."swappy/config".source = ./dotfiles/swappy-config;
       xdg.dataFile."assets/notification.flac".source =
         ./assets/notification.flac;
