@@ -84,7 +84,7 @@
     zsh-vi-mode.flake = false;
     zsh-pnpm-shell-completion.url = "github:g-plane/pnpm-shell-completion";
     zsh-pnpm-shell-completion.flake = false;
-    figlet-fonts.url = "github:xero/figlet-fonts";
+    figlet-fonts.url = "github:wochap/figlet-fonts";
     figlet-fonts.flake = false;
     ipwebcam-gst.url = "github:agarciadom/ipwebcam-gst?rev=5a02ffae8597ab1cc7461f096f86ca233f925a07";
     ipwebcam-gst.flake = false;

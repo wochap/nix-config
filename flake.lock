@@ -414,15 +414,15 @@
     "figlet-fonts": {
       "flake": false,
       "locked": {
-        "lastModified": 1687004104,
-        "narHash": "sha256-HmO968OYH5yWwsDRp7HVfWvp48upUv+YwZxcMxBHNSw=",
-        "owner": "xero",
+        "lastModified": 1720653650,
+        "narHash": "sha256-s5cvGc/2JbLMkKq18MgzOdlrelDF0kz5imPkFYX4sxo=",
+        "owner": "wochap",
         "repo": "figlet-fonts",
-        "rev": "0c0697139d6db66878eee720ebf299bc3a605fd0",
+        "rev": "453f5ee25eb9fbb19e7e0bbf98ce9d1808b2ec39",
         "type": "github"
       },
       "original": {
-        "owner": "xero",
+        "owner": "wochap",
         "repo": "figlet-fonts",
         "type": "github"
       }
