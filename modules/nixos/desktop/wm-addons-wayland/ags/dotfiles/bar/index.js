@@ -12,7 +12,7 @@ import {
   dwlscratchpads,
   dwlnamedscratchpads,
   dwltaskbar,
-  IsMainOutputFocused,
+  IsOutputFocused,
 } from "./modules/dwl.js";
 import {
   hyprlandTitle,
@@ -29,12 +29,12 @@ import { recorder } from "./modules/recorder.js";
 import { systray } from "./modules/systray.js";
 import { temperature } from "./modules/temperature.js";
 import { timewarrior } from "./modules/timewarrior.js";
-import { spacing } from "./constants.js";
+import { spacing, mainOutputName, headlessOutputName } from "./constants.js";
 
 // HACK: without wrapping bar in a function
 // bar will be visible before our CSS is loaded
 // making the bar look BAD for the first few seconds
-export const bar = () => {
+export const bar = (monitorIndex) => {
   const XDG_SESSION_DESKTOP = Utils.exec(`sh -c 'echo "$XDG_SESSION_DESKTOP"'`);
   const isDwl = XDG_SESSION_DESKTOP === "dwl";
   const isHyprland = XDG_SESSION_DESKTOP === "hyprland";
@@ -43,19 +43,25 @@ export const bar = () => {
   let centerModules = [];
   let className = "bar-container";
   if (isDwl) {
+    const outputIdByIndex = {
+      0: mainOutputName,
+      // NOTE: generally my secondary monitor is just a headless one
+      1: headlessOutputName,
+    };
+    const outputId = outputIdByIndex[monitorIndex];
     leftModules = [
-      dwltags(),
-      dwllayout(),
-      dwlnamedscratchpads(),
-      dwlscratchpads(),
-      dwlmode(),
-      capslock(),
-      dwltitle(),
+      dwltags(outputId),
+      dwllayout(outputId),
+      dwlnamedscratchpads(outputId),
+      dwlscratchpads(outputId),
+      dwlmode(outputId),
+      capslock(outputId),
+      dwltitle(outputId),
     ];
-    centerModules = [dwltaskbar()];
-    className = IsMainOutputFocused.bind().as(
-      (value) => `bar-container ${value ? "focused" : ""}`,
-    );
+    centerModules = [dwltaskbar(outputId)];
+    className = IsOutputFocused(outputId)
+      .bind()
+      .as((value) => `bar-container ${value ? "focused" : ""}`);
   } else if (isHyprland) {
     leftModules = [
       hyprlandWorkspaces(),
@@ -70,7 +76,8 @@ export const bar = () => {
   }
 
   return Widget.Window({
-    name: "bar",
+    name: `bar-${monitorIndex}`,
+    monitor: monitorIndex,
     class_name: className,
     exclusivity: "exclusive",
     layer: isDwl ? "top" : "bottom",
@@ -95,18 +102,18 @@ export const bar = () => {
         spacing,
         hpack: "end",
         children: [
-          systray,
+          systray(),
           recorder(),
           matcha(),
           offlinemsmtp(),
           temperature(),
           timewarrior(),
-          dunst,
-          battery,
-          audio,
-          bluetooth,
+          dunst(),
+          battery(),
+          audio(),
+          bluetooth(),
           network(),
-          clock,
+          clock(),
         ],
       }),
     }),

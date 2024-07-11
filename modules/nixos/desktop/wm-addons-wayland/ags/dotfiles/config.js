@@ -10,6 +10,6 @@ App.config({
 // HACK: to ensure that our CSS is loaded before widget creation
 Utils.timeout(0, () => {
   App.config({
-    windows: [bar(), ...forMonitors(osd)],
+    windows: [...forMonitors(bar), ...forMonitors(osd)],
   });
 });

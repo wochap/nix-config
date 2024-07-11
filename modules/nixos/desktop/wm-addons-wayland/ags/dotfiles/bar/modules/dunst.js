@@ -9,13 +9,14 @@ const Dunst = Variable(
   },
 );
 
-export const dunst = Widget.Button({
-  class_names: Dunst.bind().as((value) => ["dunst", value.class]),
-  on_clicked: () => {
-    Utils.execAsync(["bash", "-c", "dunst-toggle-mode --toggle"]);
-  },
-  child: Widget.Label({
-    useMarkup: true,
-    label: Dunst.bind().as((value) => value.text),
-  }),
-});
+export const dunst = () =>
+  Widget.Button({
+    class_names: Dunst.bind().as((value) => ["dunst", value.class]),
+    on_clicked: () => {
+      Utils.execAsync(["bash", "-c", "dunst-toggle-mode --toggle"]);
+    },
+    child: Widget.Label({
+      useMarkup: true,
+      label: Dunst.bind().as((value) => value.text),
+    }),
+  });
