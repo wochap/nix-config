@@ -180,6 +180,9 @@ bindkey -M menuselect '^?' undo
 # [Ctrl+Space] - expand or complete prefix if there isn't a suggestion
 multibindkey 'viins menuselect' '^ ' custom-autosuggest-accept-or-expand-or-complete-prefix
 
+# [Ctrl+f] - fuzzy find with fzf, requires to have `**` before calling fzf-completion
+bindkey -M viins '^f' fzf-completion
+
 # ================
 # Plugins
 # ================
