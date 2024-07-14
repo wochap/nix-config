@@ -63,7 +63,7 @@ export const hyprlandScratchpads = () =>
         const count = await Utils.execAsync([
           "bash",
           "-c",
-          `hyprctl clients -j | jq '[.[] | select(.workspace.name == "special")] | length'`,
+          `hyprctl clients -j | jq '[.[] | select(.workspace.name == "special:tmpscratchpads")] | length'`,
         ]);
         if (count === "0") {
           self.visible = false;
@@ -102,6 +102,7 @@ export const hyprlandTaskbar = () =>
     spacing: spacing / 2,
     setup(self) {
       self.hook(Hyprland, () => {
+        const activeAddress = Hyprland.active.client.address;
         const visibleAppIds = Hyprland.clients
           .filter(
             (c) =>
@@ -109,7 +110,7 @@ export const hyprlandTaskbar = () =>
           )
           .map((c) => ({
             appId: mapAppId(c.class),
-            focused: c.focusHistoryID === 0,
+            focused: c.address === activeAddress,
           }));
         self.children = visibleAppIds.map(({ appId, focused }) =>
           Widget.Box({
