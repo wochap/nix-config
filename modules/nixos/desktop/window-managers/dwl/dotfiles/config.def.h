@@ -335,6 +335,9 @@ static const Key keys[] = {
   { MODKEY, Key_f, togglefullscreen, {0} },
   { MODKEY|MOD_SHIFT, Key_f, togglefakefullscreen, {0} },
 
+  // Set sticky
+  { MODKEY|MOD_CONTROL, Key_0, tag, {.ui = ~0} },
+
   // Focus direction
   // TODO: pick a window to focus
   { MODKEY, Key_n, focusstack, {.i = +1} },
@@ -397,9 +400,6 @@ static const Key keys[] = {
   TAGKEYS( Key_8, 7),
   TAGKEYS( Key_9, 8),
 
-  // Set sticky
-  { MODKEY|MOD_CONTROL, Key_0, tag, {.ui = ~0} },
-
   // Focus previous tags
   { MODKEY, Key_grave, view, {0} },
 
@@ -409,7 +409,10 @@ static const Key keys[] = {
 
   // ### WM SCRATCHPAD
 
+  // Open scratchpad
   { MODKEY, Key_d, togglescratchpad, {0} },
+
+  // Send to scratchpad
   { MODKEY|WLR_MODIFIER_SHIFT, Key_d, toggleinscratchpad, {0} },
 
 
@@ -432,6 +435,9 @@ static const Key keys[] = {
 
   // Open color picker
   { MODKEY|MOD_ALT, Key_c, spawn, SHCMD("color-picker") },
+
+  // TODO: Magnifying glass
+  // { MODKEY|MOD_ALT, Key_z, spawn, SHCMD("") },
 
 
   // ### MEDIA KEYBINDINGS

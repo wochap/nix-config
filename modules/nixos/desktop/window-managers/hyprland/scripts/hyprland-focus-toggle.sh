@@ -37,7 +37,10 @@ if [[ "$program_data" ]]; then
       hyprctl dispatch alterzorder top &>/dev/null
     fi
   else
-    hyprctl dispatch movetoworkspacesilent "e+0,^($class)$" &>/dev/null
+    # HACK: if we don't move to speacial workspace before, strange things happen
+    hyprctl dispatch movetoworkspacesilent "special:scratchpads,^($class)$" &>/dev/null
+
+    hyprctl dispatch movetoworkspace "$current_ws,^($class)$" &>/dev/null
     hyprctl dispatch focuswindow "^($class)$" &>/dev/null
     hyprctl dispatch alterzorder top &>/dev/null
   fi

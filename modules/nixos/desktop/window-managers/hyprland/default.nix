@@ -10,6 +10,8 @@ let
     inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
   hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
+  hyprland-scratch-toggle = pkgs.writeScriptBin "hyprland-scratch-toggle"
+    (builtins.readFile ./scripts/hyprland-scratch-toggle.sh);
   stop-targets-str = ''
     pid=$!
     wait $pid
@@ -76,6 +78,7 @@ in {
     _custom.hm = {
       home.packages = [
         hyprland-focus-toggle
+        hyprland-scratch-toggle
         inputs.pyprland.packages.${pkgs.system}.default
       ];
 
