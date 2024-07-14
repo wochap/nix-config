@@ -24,8 +24,8 @@ let
     });
   });
   dwl-save-logs-str = ''
-    errlogs_path="/home/${userName}/.cache/dwlstderrlogs"
-    logs_path="/home/${userName}/.cache/dwllogs"
+    errlogs_path="/home/${userName}/.cache/dwl/stderrlogs"
+    logs_path="/home/${userName}/.cache/dwl/logs"
     timestamp=$(date +"%a-%d-%b-%H:%M-%Y")
 
     if [[ -f "$errlogs_path" ]]; then
@@ -44,14 +44,14 @@ let
   '';
   dwl-start = pkgs.writeScriptBin "dwl-start" ''
     ${dwl-save-logs-str}
-    dwl -d "$@" > /home/${userName}/.cache/dwllogs 2> /home/${userName}/.cache/dwlstderrlogs &
+    dwl -d "$@" > $logs_path 2> $errlogs_path &
     ${stop-targets-str}
   '';
   dwl-start-with-dgpu-port = pkgs.writeScriptBin "dwl-start-with-dgpu-port" ''
     ${dwl-save-logs-str}
     # NOTE: This is specific for glegion host with nvidia
     # so I can use HDMI port connected directly to dGPU
-    unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" dwl -d "$@" > /home/${userName}/.cache/dwllogs 2> /home/${userName}/.cache/dwlstderrlogs &
+    unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" dwl -d "$@" > $logs_path 2> $errlogs_path &
     ${stop-targets-str}
   '';
 in {
@@ -119,6 +119,8 @@ in {
     _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
     _custom.hm = {
+      home.file.".cache/dwl/.keep".text = "";
+
       xdg.configFile = {
         "scripts/dwl-dp.sh" = {
           source = ./scripts/dwl-dp.sh;
