@@ -75,6 +75,9 @@ in {
             inputs.scenefx.packages."${system}".scenefx
             libGL
           ]);
+          # enable debug symbols for better backtrace
+          separateDebugInfo = true;
+          dontStrip = true;
         });
       })
     ];
