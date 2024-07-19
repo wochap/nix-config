@@ -21,6 +21,7 @@ let
     ptsh = pkgs.callPackage ./ptsh { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };
+    neovim-remote = pkgs.stable.callPackage ./neovim-remote { };
     nodePackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./node-packages {
       nodejs = pkgs.prevstable-nodejs.nodejs_20;
     });

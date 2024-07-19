@@ -12,7 +12,7 @@ in {
         _custom.mangadesk
         _custom.pythonPackages.animdl
         ani-cli
-        mangal
+        # mangal
       ];
 
       xdg.configFile = {

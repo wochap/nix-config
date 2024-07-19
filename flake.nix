@@ -3,8 +3,8 @@
     # channels
     unstable.url = "github:nixos/nixpkgs?rev=e8057b67ebf307f01bdcc8fba94d94f75039d1f6"; # nixos-unstable (jun 07 2024)
     stable.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (jan 10 2024)
-    nixpkgs.url = "github:nixos/nixpkgs?rev=00d80d13810dbfea8ab4ed1009b09100cca86ba8"; # nixos-unstable (jul 04 2024)
-    prevstable-neovim.url = "github:nixos/nixpkgs?rev=8e6da80eb90e6fffde4b5ec38f46a8f200af66dd"; # NVIM v0.10.0
+    nixpkgs.url = "github:nixos/nixpkgs?rev=ad0b5eed1b6031efaed382844806550c3dcb4206"; # nixos-unstable (jul 19 2024)
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=ad0b5eed1b6031efaed382844806550c3dcb4206"; # NVIM v0.10.0
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=c5187508b11177ef4278edf19616f44f21cc8c69"; # nixos-unstable (may 08 2024)
@@ -36,8 +36,6 @@
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=98cb18c6fcfe8196ef4150d09fbae305b7bb2954"; # (jul 04 2024)
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
-    hyprland-xdp.url = "github:hyprwm/xdg-desktop-portal-hyprland?rev=24be4a26f0706e456fca1b61b8c79f7486a9e86d"; # v1.3.2 (jul 04 2024)
-    hyprland-xdp.inputs.nixpkgs.follows = "nixpkgs";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=b0974381f996f92dc191e6b03adf7d581061619b"; # (jul 04 2024)
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
     pyprland.url = "github:hyprland-community/pyprland?rev=a609ceeea7b1aeedf6e82d7224f9c96ccbac5342"; # 2.4.0 (jul 04 2024)

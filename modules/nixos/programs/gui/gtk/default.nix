@@ -16,14 +16,14 @@ in {
         remmina # vnc client
 
         # APPS
-        gnome.cheese # test webcam
-        gnome.gnome-calculator
+        cheese # test webcam
+        gnome-calculator
         gnome.gnome-clocks
-        gnome.gnome-font-viewer
+        gnome-font-viewer
         gnome.gnome-sound-recorder # test microphone
-        gnome.gnome-system-monitor
-        gnome.pomodoro
-        gnome.zenity # GUI for terminal
+        gnome-system-monitor
+        pomodoro
+        zenity # GUI for terminal
       ];
     };
 

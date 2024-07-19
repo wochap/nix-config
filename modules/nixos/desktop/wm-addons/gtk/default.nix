@@ -66,13 +66,13 @@ in {
         gtk3.out # for gtk-launch program
 
         awf # widget factory
-        gnome.dconf-editor
+        dconf-editor
 
         configure-gtk
 
         globals.gtkTheme.package
-        gnome.adwaita-icon-theme
-        gnome.gnome-themes-extra
+        adwaita-icon-theme
+        gnome-themes-extra
         hicolor-icon-theme
         numix-icon-theme-circle
         numix-icon-theme-square

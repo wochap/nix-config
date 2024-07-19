@@ -28,7 +28,7 @@ in {
       droidcam
 
       # required by run-videochat
-      gnome.zenity
+      zenity
       run-videochat
     ];
 

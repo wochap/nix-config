@@ -17,7 +17,7 @@ in {
         neovide # gui
 
         marksman # required by nvim-lspconfig
-        prevstable-neovim.neovim-remote # required by lazygit
+        _custom.neovim-remote # required by lazygit
         tree-sitter # required by nvim-treesitter
 
         # required by nvim

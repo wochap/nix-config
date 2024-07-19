@@ -6,8 +6,7 @@ let
   inherit (lib._custom) relativeSymlink;
 
   hyprland-final = inputs.hyprland.packages."${system}".hyprland;
-  hyprland-xdp-final =
-    inputs.hyprland-xdp.packages.${system}.xdg-desktop-portal-hyprland;
+  hyprland-xdp-final = pkgs.xdg-desktop-portal-hyprland;
   hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
   hyprland-scratch-toggle = pkgs.writeScriptBin "hyprland-scratch-toggle"

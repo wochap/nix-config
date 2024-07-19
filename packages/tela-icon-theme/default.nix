@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gnome, libsForQt5, gtk3, hicolor-icon-theme
+{ lib, stdenvNoCC, fetchFromGitHub, adwaita-icon-theme, libsForQt5, gtk3, hicolor-icon-theme
 , jdupes, gitUpdater, allColorVariants ? false
 , colorVariants ? [ ] # default is standard
 }:
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ gtk3 jdupes ];
 
   propagatedBuildInputs =
-    [ gnome.adwaita-icon-theme libsForQt5.breeze-icons hicolor-icon-theme ];
+    [ adwaita-icon-theme libsForQt5.breeze-icons hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 
