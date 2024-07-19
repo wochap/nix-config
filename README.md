@@ -182,6 +182,8 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
   Clear `GPUCache`, in `~/.config/google-chrome/ShaderCache`
 
+  source: https://github.com/electron/electron/issues/40366
+
 - Slow zsh startup
 
   ```
