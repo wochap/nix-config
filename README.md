@@ -178,6 +178,10 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Chrome like apps with blank screen or vanishing text on scroll
+
+  Clear `GPUCache`, in `~/.config/google-chrome/ShaderCache`
+
 - Slow zsh startup
 
   ```
