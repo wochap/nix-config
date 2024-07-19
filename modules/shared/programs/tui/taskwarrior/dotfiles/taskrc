@@ -11,3 +11,8 @@ report.X.dateformat=a d b Y
 weekstart=Monday
 
 uda.taskwarrior-tui.selection.indicator=❯
+uda.taskwarrior-tui.task-report.next.filter=status:pending -WAITING
+uda.taskwarrior-tui.scrollbar.indicator=🮉
+uda.taskwarrior-tui.scrollbar.area=🮉
+uda.taskwarrior-tui.style.report.scrollbar=white
+uda.taskwarrior-tui.style.report.scrollbar.area=black
