@@ -183,6 +183,7 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
   Clear `GPUCache`, in `~/.config/google-chrome/ShaderCache`
 
   source: https://github.com/electron/electron/issues/40366
+  source: https://discussion.fedoraproject.org/t/chromium-based-browsers-display-garbled-web-pages-after-mesa-is-updated/83438
 
 - Slow zsh startup
 
