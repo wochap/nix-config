@@ -159,6 +159,12 @@ static const Layout layouts[] = {
 	{ NULL,       NULL },
 };
 
+/* size(s) */
+static const Size sizes[] = {
+	/* width   height */
+	{ 1200,    800 },
+};
+
 enum layout_types {
   LAYOUT_TILE,
   LAYOUT_BSTACK,
@@ -515,12 +521,10 @@ static const Modekey modekeys[] = {
   { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Right, setcfact, {.f = +0.25} } },
   { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Up, setcfact, {.f = 0} } },
   // Change layout
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_1, setlayout, {.v = &layouts[LAYOUT_TILE]}),
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_2, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_3, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
-  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_6, setlayout, {.v = &layouts[LAYOUT_FLOAT]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_1, setsize, {.v = &sizes[0]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_t, setlayout, {.v = &layouts[LAYOUT_TILE]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_f, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_SHIFT, Key_f, setlayout, {.v = &layouts[LAYOUT_FLOAT]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_m, setlayout, {.v = &layouts[LAYOUT_MONOCLE]}),
   { LAYOUT, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
