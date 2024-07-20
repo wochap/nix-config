@@ -9,6 +9,8 @@ let
     pkgs.writeScriptBin "capslock" (builtins.readFile ./scripts/capslock.sh);
   progress-osd = pkgs.writeScriptBin "progress-osd"
     (builtins.readFile ./scripts/progress-osd.sh);
+  toggle-bars = pkgs.writeScriptBin "toggle-bars"
+    (builtins.readFile ./scripts/toggle-bars.sh);
 in {
   options._custom.desktop.ags = {
     enable = lib.mkEnableOption { };
@@ -25,7 +27,7 @@ in {
     _custom.hm = {
       imports = [ inputs.ags.homeManagerModules.default ];
 
-      home.packages = [ capslock progress-osd ];
+      home.packages = [ capslock progress-osd toggle-bars ];
       home.sessionVariables."MAIN_OUTPUT_NAME" = cfg.mainOutputName;
 
       programs.ags = {
