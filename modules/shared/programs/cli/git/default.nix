@@ -36,6 +36,8 @@ in {
         lg = ''run-without-kpadding lazygit "$@"'';
       };
 
+      programs.zsh.initExtra = builtins.readFile ./dotfiles/git.zsh;
+
       programs.gh = {
         enable = true;
         extensions = [ pkgs._custom.gh-prx ];
@@ -113,6 +115,7 @@ in {
               tool = "delta";
               colorMoved = "default";
             };
+            # TODO: fix difftool
             difftool = {
               prompt = false;
               trustExitCode = true;
