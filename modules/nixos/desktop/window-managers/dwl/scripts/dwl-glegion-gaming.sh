@@ -21,8 +21,8 @@ if ! [[ $(wlr-randr | grep "$output_name") ]]; then
   sleep 0.1
 fi
 
-# update aspect ratio of HEADLESS output
-kanshictl switch glegion-stream &
+# update scaling of HEADLESS output
+kanshictl switch glegion-gaming &
 sleep 0.1
 
 # show bar on HEADLESS output
@@ -33,8 +33,6 @@ systemctl --user restart swww-daemon.service &
 
 # show HEADLESS output in physical output
 wl-mirror $output_name &
-
-nvidia-offload obs &
 
 trap cleanup EXIT
 

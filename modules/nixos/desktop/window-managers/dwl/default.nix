@@ -125,25 +125,10 @@ in {
       home.file.".cache/dwl/.keep".text = "";
 
       xdg.configFile = {
-        "scripts/dwl-dp.sh" = {
-          source = ./scripts/dwl-dp.sh;
-          executable = true;
-        };
-        "scripts/dwl-glegion-stream.sh" = {
-          source = ./scripts/dwl-glegion-stream.sh;
-          executable = true;
-        };
-        "scripts/dwl-se.sh" = {
-          source = ./scripts/dwl-se.sh;
-          executable = true;
-        };
-        "scripts/dwl-timers.sh" = {
-          source = ./scripts/dwl-timers.sh;
-          executable = true;
-        };
-        "scripts/dwl-vtm.sh" = {
-          source = ./scripts/dwl-vtm.sh;
-          executable = true;
+        "scripts" = {
+          recursive = true;
+          # TODO: skip dwl-state.sh
+          source = ./scripts;
         };
 
         "remmina/glegion.remmina".source =

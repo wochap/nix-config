@@ -7,8 +7,13 @@ profile glegion-undocked {
   output "Samsung Display Corp. 0x4188 Unknown" scale 2
 }
 
-profile stream-glegion {
+profile glegion-stream {
   output "Samsung Display Corp. 0x4188 Unknown" scale 2
   output HEADLESS-1 scale 2 position 1440,0 mode --custom 2880x1620@120Hz adaptive_sync off
+}
+
+profile glegion-gaming {
+  output "Samsung Display Corp. 0x4188 Unknown" scale 2
+  output HEADLESS-1 scale 1 position 1440,0 mode --custom 2880x1800@120Hz adaptive_sync off
 }
 

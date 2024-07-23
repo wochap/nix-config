@@ -69,6 +69,7 @@ in {
         swaybg
         wayfreeze # freeze display
         wdisplays # control display outputs
+        wl-mirror # mirror outputs
         wf-recorder # screen recorder utility
         wl-screenrec # screen recorder utility (faster)
         wlr-randr
