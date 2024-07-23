@@ -36,7 +36,7 @@ notify_user() {
 }
 
 copy_to_cb() {
-  wl-copy -t text/uri-list <<<"file:/$dest"
+  wl-copy -t image/png <"$dest"
 }
 
 # countdown
