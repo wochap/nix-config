@@ -46,14 +46,14 @@ function killport {
 function opro() {
   scripts=$(find ~/.config/scripts /etc/scripts/projects -type l,f -name "*.sh")
 
-  $(echo "$scripts" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" fzf)
+  sh $(echo "$scripts" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" fzf)
 }
 zle -N opro
 
 function scripts() {
   scripts=$(find /etc/scripts -type l,f -name "*.sh")
 
-  $(echo "$scripts" | fzf)
+  sh $(echo "$scripts" | fzf)
 }
 
 # run npm script (requires jq)
