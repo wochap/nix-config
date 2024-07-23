@@ -1,7 +1,7 @@
 {
   inputs = {
     # channels
-    unstable.url = "github:nixos/nixpkgs?rev=e8057b67ebf307f01bdcc8fba94d94f75039d1f6"; # nixos-unstable (jun 07 2024)
+    unstable.url = "github:nixos/nixpkgs?rev=ad0b5eed1b6031efaed382844806550c3dcb4206"; # nixos-unstable (jul 19 2024)
     stable.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (jan 10 2024)
     nixpkgs.url = "github:nixos/nixpkgs?rev=ad0b5eed1b6031efaed382844806550c3dcb4206"; # nixos-unstable (jul 19 2024)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=ad0b5eed1b6031efaed382844806550c3dcb4206"; # NVIM v0.10.0
@@ -27,7 +27,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=6e253f12b1009053eff5344be5e835f604bb64cd"; # master (jul 04 2024)
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=9822e0611d49ae70278ac20c9d7b68e4797b2fab";
     ags.url = "github:Aylur/ags?rev=11150225e62462bcd431d1e55185e810190a730a";
-    ags.inputs.nixpkgs.follows = "unstable";
+    ags.inputs.nixpkgs.follows = "nixpkgs";
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
