@@ -118,6 +118,10 @@ windows:
         - layout-editor:
             - cd ./layout-editor
             - yarn start
+        # 3210
+        - layout-editor-widget:
+            - cd ./layout-editor
+            - yarn start:widget
         # 3003
         - surveys-renderer:
             - cd ./surveys-renderer
