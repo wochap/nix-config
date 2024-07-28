@@ -37,14 +37,14 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         showmethekey = prev.showmethekey.overrideAttrs (oldAttrs: rec {
-          version = "6204cf1d4794578372c273348daa342589479b13";
+          version = "d7b249c39867d9e8afbf1fefcee2f0cc159e573e";
           src = prev.fetchFromGitHub {
             owner = "AlynxZhou";
             repo = "showmethekey";
             rev = version;
-            hash = "sha256-eeObomb4Gv/vpvViHsi3+O0JR/rYamrlZNZaXKL6KJw=";
+            hash = "sha256-GaffO+DPDt8F3TkwX1LQYRkxImiLIt7gyZu5QHE+Y10=";
           };
-          buildInputs = oldAttrs.buildInputs ++ [ prev.libadwaita ];
+          patches = [ ./patches/showmethekey-remove-header.patch ];
         });
 
         slurp = prev.slurp.overrideAttrs (oldAttrs: rec {
