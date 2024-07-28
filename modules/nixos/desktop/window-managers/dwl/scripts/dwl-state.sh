@@ -3,7 +3,7 @@
 # inspiration: https://gitee.com/guyuming76/personal/blob/dwl/gentoo/waybar-dwl/waybar-dwl.sh
 # NOTE: `mode` requires the following patch https://github.com/djpohly/dwl/wiki/modes
 #
-# dwl-status.sh - display dwl tags, layout, selmon, active mode, active window title, namedscratchpads_count, scratchpads_count and visible_appid
+# dwl-status.sh - display dwl tags, layout, selmon, active mode, active window title, namedscratchpads_count, scratchpads_count and visible_appids
 #   Based heavily upon this script by user "novakane" (Hugo Machet) used to do the same for yambar
 #   https://codeberg.org/novakane/yambar/src/branch/master/examples/scripts/dwl-tags.sh
 #
