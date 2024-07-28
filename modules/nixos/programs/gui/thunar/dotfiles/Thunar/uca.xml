@@ -30,4 +30,19 @@
     <startup-notify/>
     <directories/>
   </action>
+   <action>
+    <icon>clipboard</icon>
+    <name>Copy Path</name>
+    <unique-id>1612104464586267-1</unique-id>
+    <command>echo -n %f | wl-copy --trim-newline --type text/plain</command>
+    <description></description>
+    <patterns>*</patterns>
+    <startup-notify/>
+    <directories/>
+    <audio-files/>
+    <image-files/>
+    <other-files/>
+    <text-files/>
+    <video-files/>
+  </action>
 </actions>
