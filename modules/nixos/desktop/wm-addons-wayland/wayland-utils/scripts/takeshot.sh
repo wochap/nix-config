@@ -59,15 +59,44 @@ shot5() {
   shotnow
 }
 
+kill_hyprpicker() {
+  hyprpicker_pid=$(pgrep hyprpicker)
+  if [ -n "$hyprpicker_pid" ]; then
+    kill $hyprpicker_pid
+  fi
+
+}
+
+kill_slurp() {
+  slurp_pid=$(pgrep slurp)
+  if [ -n "$slurp_pid" ]; then
+    kill $slurp_pid
+  fi
+}
+
+freeze_screen() {
+  hyprpicker -r -z &
+  hyprpicker_pid=$!
+  wait $hyprpicker_pid
+
+  # if hyprpicker is killed
+  # kill slurp
+  kill_slurp
+}
+
 shotarea() {
   if [[ -n $(pgrep slurp) ]]; then
     exit 0
   fi
+  sh $0 --freeze &
+  sleep 0.1
   area=$(slurp -d -b "${background}bf" -c "$primary" -F "Iosevka NF" -w 1)
   if [[ -z $area ]]; then
+    kill_hyprpicker
     exit
   fi
   grim -g "$area" "$dest"
+  kill_hyprpicker
   notify_user
 }
 
@@ -81,6 +110,8 @@ elif [[ "$1" == "--in5" ]]; then
   shot5
 elif [[ "$1" == "--area" ]]; then
   shotarea
+elif [[ "$1" == "--freeze" ]]; then
+  freeze_screen
 else
   echo -e "Available Options : --now --in5 --area"
 fi
