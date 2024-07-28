@@ -35,7 +35,8 @@ in {
           firstweekday = 0
 
           [default]
-          highlight_event_days = True
+          # PERF: highlight_event_days slows start up
+          highlight_event_days = False
           # enable_mouse = False
 
           [view]
