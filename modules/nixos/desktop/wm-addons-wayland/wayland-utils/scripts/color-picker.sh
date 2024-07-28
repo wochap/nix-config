@@ -13,7 +13,7 @@ notify() {
   notify-send "Color picker" "$COLOR_CODE" --icon="$FNAME" --replace-id=697 --expire-time="$EXPIRE_TIME" --app-name="Hyprpicker"
 }
 
-color=$(hyprpicker -f hex -n)
+color=$(hyprpicker -r -f hex -n)
 
 if [ -z "$color" ]; then
   exit 1
