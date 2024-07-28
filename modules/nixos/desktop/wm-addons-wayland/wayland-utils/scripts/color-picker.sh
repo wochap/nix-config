@@ -7,7 +7,7 @@ notify() {
   mkdir -p $TEMP_DIR
   HEX="${HEX_COLOR#\#}"
   FNAME="$TEMP_DIR/$HEX.png"
-  convert -size 80x80 xc:"$HEX_COLOR" "$FNAME"
+  magick -size 80x80 xc:"$HEX_COLOR" "$FNAME"
   COLOR_CODE="$HEX_COLOR"
 
   notify-send "Color picker" "$COLOR_CODE" --icon="$FNAME" --replace-id=697 --expire-time="$EXPIRE_TIME" --app-name="Hyprpicker"

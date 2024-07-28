@@ -18,7 +18,7 @@ preview() {
     mkdir "$THUMBNAILS_FOLDER"
   fi
   if [[ ! -e "$IMAGE_RESIZED" ]]; then
-    convert "$IMAGE" -resize 1000x1000 "$IMAGE_RESIZED"
+    magick "$IMAGE" -resize 1000x1000 "$IMAGE_RESIZED"
   fi
   kitten icat --clear --transfer-mode=memory \
     --place="$((WIDTH - VPAD))x$((HEIGHT - 2))@2x1" --align center \

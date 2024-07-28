@@ -39,7 +39,7 @@ preview() {
   [ "$TEXT_ALIGN" = center ] || [ "$TEXT_ALIGN" = south ] || [ "$TEXT_ALIGN" = north ] || PADDING=50
   fontfile=$(echo "$1" | cut -f2)
   # In fzf the cols and lines are those of the preview pane
-  convert -size "$SIZE" xc:"$BG_COLOR" -fill "$FG_COLOR" \
+  magick -size "$SIZE" xc:"$BG_COLOR" -fill "$FG_COLOR" \
     -pointsize "$FONT_SIZE" -font "$fontfile" -gravity "$TEXT_ALIGN" \
     -annotate +"${PADDING:-0}+0" "$PREVIEW_TEXT" "$IMAGE" &&
     kitten icat --clear --transfer-mode=memory \
