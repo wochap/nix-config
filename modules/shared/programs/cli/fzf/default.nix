@@ -30,6 +30,7 @@ in {
           "--marker '❯'"
           "--pointer '❯'"
           "--scrollbar '🮉'"
+          "--ellipsis '…'"
 
           # mappings
           "--bind 'ctrl-d:preview-half-page-down'"
