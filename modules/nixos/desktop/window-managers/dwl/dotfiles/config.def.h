@@ -112,7 +112,7 @@ static const Rule rules[] = {
 	{ "file-roller",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "gnome-system-monitor",    NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "org.gnome.Calculator",    NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
-	{ "showmethekey-gtk",        NULL,       0,         1,          1,        -1,      -40, -40, 500,  100,    0 },
+	{ "showmethekey-gtk",        NULL,       0,         1,          1,        -1,      -7,  -7,  500,  100,    0 },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "Slack",                   NULL,       1 << 3,    0,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "discord",                 NULL,       1 << 3,    0,          0,        -1,      0,   0,   0,    0,      0 },
