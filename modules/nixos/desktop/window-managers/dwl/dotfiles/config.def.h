@@ -100,48 +100,49 @@ static const char ytmusic_appid[] = "chrome-music.youtube.com__-Default";
 
 /* NOTE: ALWAYS keep a rule declared even if you don't use rules (e.g leave at least one example) */
 static const Rule rules[] = {
-	/* app_id                    title       tags mask  isfloating  monitor  x    y    width height  scratchkey */
+	/* app_id                    title       tags mask  isfloating  issticky  monitor  x    y    width height  scratchkey */
 	/* examples:
-	{ "Gimp",                    NULL,       0,         1,          -1, 	   0, 	0,   500,  400,    0 },
+	{ "Gimp",                    NULL,       0,         1,          0,        -1, 	   0, 	0,   500,  400,    0 },
 	*/
-	{ "mpv",                     NULL,       0,         1,          -1,      0,   0,   (float)0.8, (float)0.8, 0 },
-	{ "imv",                     NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "xwaylandvideobridge",     NULL,       1 << 9,    1,          -1,      0,   0,   0,    0,      'x' },
-	{ "pavucontrol",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "^[tT]hunar$",             NULL,       0,         1,          -1,      0,   0,   0,    0,      'f' },
-	{ "file-roller",             NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "gnome-system-monitor",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "org.gnome.Calculator",    NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          -1,      0,   0,   0,    0,      0 },
-	{ "Slack",                   NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "discord",                 NULL,       1 << 3,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "discord",                 "Discord Updater", 1 << 3, 1,      -1,      0,   0,   0,    0,      0 },
+	{ "mpv",                     NULL,       0,         1,          0,        -1,      0,   0,   0.8f, 0.8f, 0 },
+	{ "imv",                     NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "xwaylandvideobridge",     NULL,       1 << 9,    1,          0,        -1,      0,   0,   0,    0,      'x' },
+	{ "pavucontrol",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "^[tT]hunar$",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      'f' },
+	{ "file-roller",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "gnome-system-monitor",    NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "org.gnome.Calculator",    NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "showmethekey-gtk",        NULL,       0,         1,          1,        -1,      -40, -40, 500,  100,    0 },
+	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "Slack",                   NULL,       1 << 3,    0,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "discord",                 NULL,       1 << 3,    0,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "discord",                 "Discord Updater", 1 << 3, 1,      0,        -1,      0,   0,   0,    0,      0 },
 
-	{ NULL,                      "^Extracting Files.*", 0, 1,       -1,      0,   0,   0,    0,      0 },
-	{ NULL, ".com is sharing your screen.$", 1 << 9,    1,          -1,      0,   0,   0,    0,      0 },
+	{ NULL,                      "^Extracting Files.*", 0, 1,       0,        -1,      0,   0,   0,    0,      0 },
+	{ NULL, ".com is sharing your screen.$", 1 << 9,    1,          0,        -1,      0,   0,   0,    0,      0 },
 
-	{ bing_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'g' },
-	{ chat_gpt_appid,            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'c' },
-	{ ollama_appid,              NULL,       0,         1,          -1,      0,   0,   1200, 800,    'o' },
-	{ ytmusic_appid,             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'y' },
-	{ "firefox",                 NULL,       1 << 4,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "brave-browser",           NULL,       1 << 7,    0,          -1,      0,   0,   0,    0,      0 },
-	{ "microsoft-edge",          NULL,       1 << 8,    0,          -1,      0,   0,   0,    0,      0 },
+	{ bing_gpt_appid,            NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'g' },
+	{ chat_gpt_appid,            NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'c' },
+	{ ollama_appid,              NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'o' },
+	{ ytmusic_appid,             NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'y' },
+	{ "firefox",                 NULL,       1 << 4,    0,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "brave-browser",           NULL,       1 << 7,    0,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "microsoft-edge",          NULL,       1 << 8,    0,          0,        -1,      0,   0,   0,    0,      0 },
 
-// { "^foot-.*",                NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
-// { "^footclient-.*",          NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
-// { "^kitty-.*",               NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
-// { "^alacritty-.*",           NULL,       1 << 1,    0,          -1,      0,   0,   0,    0,      0 },
+// { "^foot-.*",                NULL,       1 << 1,    0,          0,        -1,      0,   0,   0,    0,      0 },
+// { "^footclient-.*",          NULL,       1 << 1,    0,          0,        -1,      0,   0,   0,    0,      0 },
+// { "^kitty-.*",               NULL,       1 << 1,    0,          0,        -1,      0,   0,   0,    0,      0 },
+// { "^alacritty-.*",           NULL,       1 << 1,    0,          0,        -1,      0,   0,   0,    0,      0 },
 
-	{ "kitty-scratch",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    'i' },
-	{ "tui-monitor",             NULL,       0,         1,          -1,      0,   0,   1200, 800,    'm' },
-	{ "tui-notes",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'n' },
-	{ "tui-email",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'e' },
-	{ "tui-rss",                 NULL,       0,         1,          -1,      0,   0,   1200, 800,    'r' },
-	{ "tui-music",               NULL,       0,         1,          -1,      0,   0,   1200, 800,    'u' },
-	{ "tui-notification-center", NULL,       0,         1,          -1,      0,   0,   1200, 800,    'd' },
-	{ "tui-calendar",            NULL,       0,         1,          -1,      0,   0,   1200, 800,    'k' },
-	{ "tui-bookmarks",           NULL,       0,         1,          -1,      0,   0,   1200, 800,    0 },
+	{ "kitty-scratch",           NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'i' },
+	{ "tui-monitor",             NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'm' },
+	{ "tui-notes",               NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'n' },
+	{ "tui-email",               NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'e' },
+	{ "tui-rss",                 NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'r' },
+	{ "tui-music",               NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'u' },
+	{ "tui-notification-center", NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'd' },
+	{ "tui-calendar",            NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'k' },
+	{ "tui-bookmarks",           NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    0 },
 
 	/* x, y, width, heigh are floating only
 	* When x or y == 0 the client is placed at the center of the screen,
@@ -342,6 +343,7 @@ static const Key keys[] = {
   { MODKEY|MOD_SHIFT, Key_f, togglefakefullscreen, {0} },
 
   // Set sticky
+  { MODKEY|MOD_CONTROL, Key_y, togglesticky, {0} },
   { MODKEY|MOD_CONTROL, Key_0, tag, {.ui = ~0} },
 
   // Focus direction
@@ -522,6 +524,8 @@ static const Modekey modekeys[] = {
   { LAYOUT, { MOD_CONTROL|MOD_SHIFT, Key_Up, setcfact, {.f = 0} } },
   // Change layout
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_1, setsize, {.v = &sizes[0]}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_2, setminsize, {0}),
+  EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_3, setmaxsize, {0}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_t, setlayout, {.v = &layouts[LAYOUT_TILE]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_NONE, Key_f, setlayout, {.v = &layouts[LAYOUT_BSTACK]}),
   EXIT_TO_NORMAL_MODE(LAYOUT, MOD_SHIFT, Key_f, setlayout, {.v = &layouts[LAYOUT_FLOAT]}),
