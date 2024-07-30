@@ -238,6 +238,9 @@ bindkey -M viins '^[ua' apro
 # [Alt+u o] - run opro func
 bindkey -M viins '^[uo' opro
 
+# [Alt+u c] - run cdfzf func
+bindkey -M viins '^[uc' cdfzf
+
 # [Alt+v] - show the next key combo's terminal code and state what it does.
 multibindkey 'viins visual vicmd viopp menuselect' '^[v' describe-key-briefly
 

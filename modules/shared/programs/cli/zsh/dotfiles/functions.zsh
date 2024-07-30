@@ -50,6 +50,18 @@ function opro() {
 }
 zle -N opro
 
+function cdfzf() {
+  dirs=$(fd --type d --max-depth 1 --fixed-strings --no-ignore --hidden)
+
+  selected=$(echo "$dirs" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_ALT_C_OPTS-}" fzf)
+
+  if [[ -n "$selected" ]]; then
+    cd "$selected"
+    zle reset-prompt 2>/dev/null
+  fi
+}
+zle -N cdfzf
+
 function scripts() {
   scripts=$(find /etc/scripts -type l,f -name "*.sh")
 
