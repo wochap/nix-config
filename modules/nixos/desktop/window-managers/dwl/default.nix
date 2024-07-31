@@ -71,10 +71,22 @@ in {
             rev = version;
             hash = "sha256-vH2f6tU7HIAWKj/Xp2R25P17UC0QvAoX+oWWMWMJe60=";
           };
-          buildInputs = oldAttrs.buildInputs ++ (with pkgs; [
+          buildInputs = with pkgs; [
+            libinput
+            xorg.libxcb
+            libxkbcommon
+            pixman
+            wayland
+            wayland-protocols
+            wlroots_0_17
+            # xwayland support
+            xorg.libX11
+            xorg.xcbutilwm
+            xwayland
+            # scenefx support
             inputs.scenefx.packages."${system}".scenefx
             libGL
-          ]);
+          ];
           # enable debug symbols for better backtrace
           separateDebugInfo = true;
           dontStrip = true;
