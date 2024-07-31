@@ -22,6 +22,11 @@ function start() {
   # wait for docker services to be ready
   sleep 3
 
+  # Focus DWL tag 2
+  # 125 = logo
+  # 3 = 2
+  ydotool key 125:1 3:1 3:0 125:0
+
   # Start new foot terminal with tmux session
   echo "Starting tmux session: se"
   footclient --app-id=footclient-se tmux new-session zsh -i -c "tmuxinator start se" &
@@ -30,11 +35,6 @@ function start() {
 }
 
 cleanup
-
-# Focus DWL tag 2
-# 125 = logo
-# 3 = 2
-ydotool key 125:1 3:1 3:0 125:0
 
 start
 trap 'cleanup' exit
