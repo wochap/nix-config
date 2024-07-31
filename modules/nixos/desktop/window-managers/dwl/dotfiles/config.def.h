@@ -215,7 +215,7 @@ static const int tap_to_click = 1;
 static const int tap_and_drag = 1;
 static const int drag_lock = 0;
 static const int natural_scrolling = 1;
-static const int disable_while_typing = 1;
+static const int disable_while_typing = LIBINPUT_CONFIG_DWTP_DISABLED;
 static const int left_handed = 0;
 static const int middle_button_emulation = 1;
 /* You can choose between:
