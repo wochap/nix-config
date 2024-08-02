@@ -16,6 +16,11 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
+        prevstable-nixpkgs = import inputs.prevstable-nixpkgs {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
         prevstable-neovim = import inputs.prevstable-neovim {
           inherit (prev) system;
           inherit (config.nixpkgs) config;

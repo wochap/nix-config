@@ -14,7 +14,6 @@ in {
 
     virtualisation.docker = {
       enable = true;
-      enableNvidia = lib.mkIf cfg.enableNvidia true;
       rootless = {
         enable = true;
         setSocketVariable = true;
@@ -22,5 +21,7 @@ in {
       extraOptions = lib.mkIf cfg.enableNvidia
         "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
     };
+
+    hardware.nvidia-container-toolkit.enable = lib.mkIf cfg.enableNvidia true;
   };
 }

@@ -1,4 +1,4 @@
-{ config, inputs, lib, ... }:
+{ config, inputs, lib, pkgs, ... }:
 
 let
   cfg = config._custom.programs.qutebrowser;
@@ -13,6 +13,7 @@ in {
 
       programs.qutebrowser = {
         enable = true;
+        package = pkgs.prevstable-nixpkgs.qutebrowser;
         enableDefaultBindings = true;
         quickmarks = {
           home-manager =

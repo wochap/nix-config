@@ -14,14 +14,15 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
-    environment.systemPackages = with pkgs; [
-      python311Packages.huggingface-hub
-      oterm
-    ];
+    environment.systemPackages = with pkgs;
+      [
+        python311Packages.huggingface-hub
+        prevstable-nixpkgs.oterm
+      ];
 
     services.ollama = {
       enable = true;
-      package = pkgs.ollama;
+      package = pkgs.prevstable-nixpkgs.ollama;
       acceleration = lib.mkIf cfg.enableNvidia "cuda";
     };
     systemd.services.ollama.environment.OLLAMA_ORIGINS = "*";

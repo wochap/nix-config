@@ -8,7 +8,7 @@ let
   dwl-state =
     pkgs.writeScriptBin "dwl-state" (builtins.readFile ./scripts/dwl-state.sh);
   dwl-final = (pkgs.dwl.override {
-    conf = builtins.readFile (pkgs.substituteAll {
+    configH = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
       primary = unwrapHex themeColors.primary;
       lavender = unwrapHex themeColors.lavender;
@@ -64,12 +64,12 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "d9edfce7dca8d7d53c976b481fa228f96306939a";
+          version = "9e2e6233a98ecdb93f66a58d8b57cba267c96af0";
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-vH2f6tU7HIAWKj/Xp2R25P17UC0QvAoX+oWWMWMJe60=";
+            hash = "sha256-U7nOUkkEmyIQ1N3Nk5gKGuM03pMDKB5F2UIXPT0upN4=";
           };
           buildInputs = with pkgs; [
             libinput
@@ -78,14 +78,14 @@ in {
             pixman
             wayland
             wayland-protocols
-            wlroots_0_17
+            wlroots_0_18
             # xwayland support
             xorg.libX11
             xorg.xcbutilwm
             xwayland
             # scenefx support
-            inputs.scenefx.packages."${system}".scenefx
-            libGL
+            # inputs.scenefx.packages."${system}".scenefx
+            # libGL
           ];
           # enable debug symbols for better backtrace
           separateDebugInfo = true;
