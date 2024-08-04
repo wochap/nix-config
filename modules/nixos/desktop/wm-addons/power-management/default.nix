@@ -56,6 +56,7 @@ in {
         };
       };
     };
+
     _custom.hm.systemd.user.services.battery-notification =
       lib.mkIf cfg.enableLowBatteryNotification (lib._custom.mkWaylandService {
         Unit.Description =
