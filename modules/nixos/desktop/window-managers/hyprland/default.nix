@@ -91,8 +91,15 @@ in {
           relativeSymlink configDirectory ./dotfiles/keybindings.conf;
         "hypr/config.conf".source =
           relativeSymlink configDirectory ./dotfiles/config.conf;
+        "hypr/autostart.conf".source =
+          relativeSymlink configDirectory ./dotfiles/autostart.conf;
         "hypr/pyprland.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
+        "hypr/vnc.toml".text = ''
+          source=~/.config/hypr/colors.conf
+          source=~/.config/hypr/config.conf
+          source=~/.config/hypr/keybindings.conf
+        '';
 
         "hypr/libinput-gestures.conf".text = ''
           gesture swipe left 3 hyprctl dispatch workspace e+1
@@ -107,6 +114,7 @@ in {
         extraConfig = ''
           source=~/.config/hypr/colors.conf
           source=~/.config/hypr/config.conf
+          source=~/.config/hypr/autostart.conf
           source=~/.config/hypr/keybindings.conf
         '';
       };
