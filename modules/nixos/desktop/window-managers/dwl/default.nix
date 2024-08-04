@@ -23,25 +23,27 @@ let
       cursorSize = toString cursor.size;
     });
   });
-  dwl-save-logs-str = ''
-    errlogs_path="/home/${userName}/.cache/dwl/stderrlogs"
-    logs_path="/home/${userName}/.cache/dwl/logs"
-    timestamp=$(date +"%a-%d-%b-%H:%M-%Y")
+  dwl-save-logs-str = # bash
+    ''
+      errlogs_path="/home/${userName}/.cache/dwl/stderrlogs"
+      logs_path="/home/${userName}/.cache/dwl/logs"
+      timestamp=$(date +"%a-%d-%b-%H:%M-%Y")
 
-    if [[ -f "$errlogs_path" ]]; then
-      mv "$errlogs_path" "''${errlogs_path}_''${timestamp}"
-    fi
+      if [[ -f "$errlogs_path" ]]; then
+        mv "$errlogs_path" "''${errlogs_path}_''${timestamp}"
+      fi
 
-    if [[ -f "$logs_path" ]]; then
-      mv "$logs_path" "''${logs_path}_''${timestamp}"
-    fi
-  '';
-  stop-targets-str = ''
-    pid=$!
-    wait $pid
-    systemctl --user stop graphical-session.target --quiet
-    systemctl --user stop wayland-session.target --quiet
-  '';
+      if [[ -f "$logs_path" ]]; then
+        mv "$logs_path" "''${logs_path}_''${timestamp}"
+      fi
+    '';
+  stop-targets-str = # bash
+    ''
+      pid=$!
+      wait $pid
+      systemctl --user stop graphical-session.target --quiet
+      systemctl --user stop wayland-session.target --quiet
+    '';
   dwl-start = pkgs.writeScriptBin "dwl-start" ''
     ${dwl-save-logs-str}
     dwl -d "$@" > "$logs_path" 2> "$errlogs_path" &
@@ -99,9 +101,6 @@ in {
       dwl-start
       dwl-start-with-dgpu-port
       dwl-state # script that prints dwl state
-
-      # for testing vanilla dwl
-      bemenu
     ];
 
     _custom.desktop.greetd.cmd =

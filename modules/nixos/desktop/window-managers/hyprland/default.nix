@@ -11,12 +11,13 @@ let
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
   hyprland-scratch-toggle = pkgs.writeScriptBin "hyprland-scratch-toggle"
     (builtins.readFile ./scripts/hyprland-scratch-toggle.sh);
-  stop-targets-str = ''
-    pid=$!
-    wait $pid
-    systemctl --user stop graphical-session.target --quiet
-    systemctl --user stop wayland-session.target --quiet
-  '';
+  stop-targets-str = # bash
+    ''
+      pid=$!
+      wait $pid
+      systemctl --user stop graphical-session.target --quiet
+      systemctl --user stop wayland-session.target --quiet
+    '';
   hyprland-start = pkgs.writeScriptBin "hyprland-start" ''
     Hyprland "$@" > /home/${userName}/.cache/hyprland-logs 2> /home/${userName}/.cache/hyprland-stderr-logs &
     ${stop-targets-str}
