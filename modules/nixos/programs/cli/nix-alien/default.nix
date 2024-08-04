@@ -10,6 +10,7 @@ in {
 
     environment.systemPackages = with pkgs; [ nix-alien ];
 
-    # programs.nix-ld.enable = true;
+    programs.nix-ld.dev.enable = false;
+    programs.nix-ld.enable = true;
   };
 }
