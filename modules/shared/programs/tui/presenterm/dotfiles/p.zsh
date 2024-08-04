@@ -20,6 +20,6 @@ launch zsh -i -c 'run-present-kmode presenterm $@'
 EOF
   )"
   # -e sh -i -c "run-present-kmode presenterm $@"
-  echo "$session" | kitty -o font_family="DejaVu Sans Mono" -o bold_font="auto" -o italic_font="auto" -o bold_italic_font="auto" --session -
+  echo "$session" | kitty -o font_family="DejaVu Sans Mono" -o bold_font="auto" -o italic_font="auto" -o bold_italic_font="auto" -o inactive_text_alpha=1 --session -
 }
 
