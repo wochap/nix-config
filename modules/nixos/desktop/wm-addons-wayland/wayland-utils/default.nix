@@ -67,10 +67,10 @@ in {
         slurp # screenshoot utility
         swappy # minimal image editor
         swaybg
-        wayfreeze # freeze display
+        wayfreeze # freeze display, only works on hyprland
         wdisplays # control display outputs
-        wl-mirror # mirror outputs
         wf-recorder # screen recorder utility
+        wl-mirror # mirror outputs
         wl-screenrec # screen recorder utility (faster)
         wlr-randr
         wlrctl # control keyboard, mouse and wm from cli
