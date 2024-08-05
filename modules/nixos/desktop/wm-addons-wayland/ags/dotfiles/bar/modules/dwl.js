@@ -28,11 +28,12 @@ export const dwltaskbar = (outputId) => {
           .text.split(" ")
           .filter((str) => str.trim().length);
         const result = [];
-        for (let i = 0; i < items.length; i += 2) {
+        for (let i = 0; i < items.length; i += 3) {
           const appId = mapAppId(items[i]);
           result.push({
             appId,
             focused: items[i + 1] === "true",
+            floating: items[i + 2] === "true",
           });
         }
         return result;
@@ -50,10 +51,10 @@ export const dwltaskbar = (outputId) => {
       });
     },
     children: VisibleAppIds.bind().as((visibleAppIds) => {
-      return visibleAppIds.map(({ appId, focused }) =>
+      return visibleAppIds.map(({ appId, focused, floating }) =>
         Widget.Box({
           tooltip_text: appId,
-          class_name: focused ? "focused" : "",
+          class_name: `${focused ? "focused" : ""} ${floating ? "floating" : ""}`,
           child: Widget.Icon({
             icon: appId,
             size: 32,

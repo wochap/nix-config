@@ -66,12 +66,12 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "9e2e6233a98ecdb93f66a58d8b57cba267c96af0";
+          version = "346d937f4f6ea77faad8a1c829fd42aae10d39d9";
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-U7nOUkkEmyIQ1N3Nk5gKGuM03pMDKB5F2UIXPT0upN4=";
+            hash = "sha256-5s7weDCn/Ag1HL2nLBc28cTMnVKLtkUW34l2S2dAzl8=";
           };
           buildInputs = with pkgs; [
             libinput

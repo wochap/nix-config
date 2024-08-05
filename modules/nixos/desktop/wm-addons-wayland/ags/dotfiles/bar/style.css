@@ -105,9 +105,18 @@
 }
 .wmtaskbar box {
   opacity: 0.5;
+  padding-top: 3.5px;
+  padding-bottom: 3.5px;
 }
 .wmtaskbar box.focused {
   opacity: 1;
+}
+.wmtaskbar box.floating image {
+  border-radius: 7px;
+  /* color is mocha text */
+  box-shadow:
+    inset 0px 0px 10px 10px rgba(205, 214, 244, 0.2),
+    0px 0px 5px 2.5px rgba(205, 214, 244, 0.25);
 }
 .bar-container.focused .wmtaskbar {
   /* background-color: @moduleBgFocus; */
