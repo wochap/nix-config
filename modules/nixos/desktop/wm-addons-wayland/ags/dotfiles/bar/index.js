@@ -56,7 +56,7 @@ export const bar = (monitorIndex) => {
       dwlscratchpads(outputId),
       dwlmode(outputId),
       capslock(outputId),
-      dwltitle(outputId),
+      // dwltitle(outputId),
     ];
     centerModules = [dwltaskbar(outputId)];
     className = IsOutputFocused(outputId)
@@ -69,7 +69,7 @@ export const bar = (monitorIndex) => {
       hyprlandScratchpads(),
       hyprlandMode(),
       capslock(),
-      hyprlandTitle(),
+      // hyprlandTitle(),
     ];
     centerModules = [hyprlandTaskbar()];
     className = "bar-container focused";
