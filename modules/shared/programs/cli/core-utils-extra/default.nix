@@ -16,7 +16,10 @@ in {
         pup # parse html
         speedread # read a file, word by word
         tealdeer # examples of each command
+        portal # transfer files
+        age # encrypt files
 
+        termshark # tui wireshark
         gdu # tui disk usage
 
         asciinema # record terminal
