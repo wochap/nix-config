@@ -21,6 +21,10 @@ in {
       # teamviewer
       # zoom-us
     ];
+
+    # required by libreoffice
+    programs.java.enable = true;
   };
 }
-
+# Show icons in GTK menus: https://forums.linuxmint.com/viewtopic.php?t=337850
+# Change icons: https://www.youtube.com/watch?v=L8CteAuicqY
