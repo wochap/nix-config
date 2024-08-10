@@ -7,7 +7,12 @@ in {
   options._custom.security.ssh.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ sshfs ];
+    environment.systemPackages = with pkgs; [
+      sshfs
+
+      # TUI for ssh
+      sshs
+    ];
 
     services.openssh.enable = true;
     services.openssh.settings.PasswordAuthentication = false;
