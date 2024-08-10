@@ -89,6 +89,7 @@
     ./services/waydroid
 
     ./system/boot
+    ./system/console
     ./system/others
     ./system/locale
     ./system/windows

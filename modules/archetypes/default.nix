@@ -14,6 +14,8 @@
       _custom.security.polkit.enable = true;
       _custom.security.ssh.enable = true;
 
+      _custom.system.console.enable = true;
+
       _custom.desktop.audio.enable = true;
       _custom.desktop.backlight.enable = true;
       _custom.desktop.bluetooth.enable = true;
@@ -59,6 +61,8 @@
       _custom.security.doas.enable = true;
       _custom.security.gpg.enable = true;
       _custom.security.ssh.enable = true;
+
+      _custom.system.console.enable = true;
 
       _custom.desktop.fastfetch.enable = true;
       _custom.desktop.fonts.enable = true;

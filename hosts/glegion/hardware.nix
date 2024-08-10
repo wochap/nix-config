@@ -9,7 +9,6 @@
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-nonprime
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
-    inputs.nixos-hardware.nixosModules.common-hidpi
   ];
 
   config = {
@@ -49,6 +48,8 @@
       # It produces completely white or flashing screens when enabled while using the iGPU of Ryzen 7000-series CPUs (Raphael)
       "amdgpu.sg_display=0"
     ];
+
+    console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
 
     environment.systemPackages = with pkgs; [
       lenovo-legion

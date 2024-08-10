@@ -28,11 +28,6 @@
       DefaultTimeoutStopSec=15s
     '';
 
-    console = {
-      earlySetup = true;
-      keyMap = lib.mkDefault "us";
-    };
-
     hardware.graphics.enable = true;
   };
 }
