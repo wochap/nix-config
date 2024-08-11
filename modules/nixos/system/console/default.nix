@@ -5,11 +5,15 @@ let
   inherit (config._custom.globals) configDirectory;
   start-tmux = pkgs.writeScriptBin "start-tmux" # bash
     ''
-      TERM=fbterm tmux -L fbtmux -f ~/.config/tmux/tmux-fbterm.conf "$@" new -A -s fbtmux
+      # set TERM to fbterm so tmux supports 256 colors
+      export TERM=fbterm
+      export TERMINFO=${pkgs.fbterm}/share/terminfo
+      tmux -L fbtmux kill-server
+      tmux -L fbtmux -f ~/.config/tmux/tmux-fbterm.conf "$@" new -A -s fbtmux
     '';
   start-fbterm = pkgs.writeScriptBin "start-fbterm" # bash
     ''
-      TERM=fbterm fbterm -- ${start-tmux}/bin/start-tmux "$@"
+      fbterm -- ${start-tmux}/bin/start-tmux "$@"
     '';
 in {
   options._custom.system.console.enable = lib.mkEnableOption { };
@@ -54,9 +58,11 @@ in {
         "fbterm/fbtermrc".source =
           lib._custom.relativeSymlink configDirectory ./dotfiles/fbtermrc;
         "tmux/tmux-fbterm.conf".text = ''
+          set-environment -g TERM "foot"
+          set-environment -g TERMINFO "${pkgs.foot.terminfo}/share/terminfo"
+          set-environment -g COLORTERM "truecolor"
+
           source-file $HOME/.config/tmux/tmux.conf
-          set -g default-terminal "screen-256color"
-          set -ga terminal-overrides ",screen-256color:Tc"
         '';
       };
     };
