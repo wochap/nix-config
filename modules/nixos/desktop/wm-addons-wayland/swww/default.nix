@@ -8,6 +8,8 @@ let
     (builtins.readFile ./scripts/swww-random.sh);
   swww-pick =
     pkgs.writeScriptBin "swww-pick" (builtins.readFile ./scripts/swww-pick.sh);
+  swww-unsplash = pkgs.writeScriptBin "swww-unsplash"
+    (builtins.readFile ./scripts/swww-pick.sh);
   inherit (pkgs) swww;
 in {
   options._custom.desktop.swww.enable = lib.mkEnableOption { };
@@ -20,7 +22,7 @@ in {
             "${hmConfig.home.homeDirectory}/Sync/backgrounds";
         };
 
-        packages = [ swww swww-random swww-pick ];
+        packages = [ swww swww-random swww-pick swww-unsplash ];
         sessionVariables = {
           SWWW_TRANSITION_TYPE = "simple";
           SWWW_TRANSITION_STEP = "45";
