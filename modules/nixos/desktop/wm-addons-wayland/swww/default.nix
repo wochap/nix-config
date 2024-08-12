@@ -9,7 +9,7 @@ let
   swww-pick =
     pkgs.writeScriptBin "swww-pick" (builtins.readFile ./scripts/swww-pick.sh);
   swww-unsplash = pkgs.writeScriptBin "swww-unsplash"
-    (builtins.readFile ./scripts/swww-pick.sh);
+    (builtins.readFile ./scripts/swww-unsplash.sh);
   inherit (pkgs) swww;
 in {
   options._custom.desktop.swww.enable = lib.mkEnableOption { };
