@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-# UNSPLASH_API_KEY=${UNSPLASH_API_KEY:-your_unsplash_api_key}
-UNSPLASH_API_KEY=$(cat ~/nix-config/secrets/unsplash/gean.marroquin@gmail.com/access_key)
-download_path=$(mktemp -d)
-
 declare -A topicIdByType
 topicIdByType=(
   ["wallpapers"]="bo8jQKTaE0Y"
@@ -12,10 +8,14 @@ topicIdByType=(
   ["nature"]="6sMVjTLSkeQ"
   ["travel"]="Fzo3zuOHN6w"
 )
+
+# UNSPLASH_API_KEY=${UNSPLASH_API_KEY:-your_unsplash_api_key}
+UNSPLASH_API_KEY=$(cat ~/nix-config/secrets/unsplash/gean.marroquin@gmail.com/access_key)
+download_path=$(mktemp -d)
+width="3840" # value between 1920 and 3840, snap up to nearest 240 for improved caching
 topic_id=${topicIdByType["wallpapers"]}
 
 # Fetch a random image URL from the Unsplash API
-width="3840"
 response=$(curl -s -H "Authorization: Client-ID ${UNSPLASH_API_KEY}" \
   "https://api.unsplash.com/photos/random?topics=$topic_id&orientation=landscape&count=1")
 slug=$(echo "${response}" | jq -r '.[].slug')
