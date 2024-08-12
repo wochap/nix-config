@@ -20,7 +20,7 @@
     matcha.inputs.nixpkgs.follows = "unstable";
     nix-gaming.url = "github:fufexan/nix-gaming?rev=1e435616e688c2b9125cd5282febcad3ab981d5e";
     nix-gaming.inputs.nixpkgs.follows = "unstable";
-    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland";
+    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=34d357829660a9f84e4f23ef06e461b9cca89212"; # master (aug 11 2024)
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";

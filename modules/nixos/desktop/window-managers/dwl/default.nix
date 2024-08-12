@@ -5,6 +5,7 @@ let
   inherit (config._custom.globals) themeColors cursor userName configDirectory;
   inherit (lib._custom) unwrapHex;
 
+  wlroots_0_19 = inputs.nixpkgs-wayland.packages."${pkgs.system}".wlroots;
   dwl-state =
     pkgs.writeScriptBin "dwl-state" (builtins.readFile ./scripts/dwl-state.sh);
   dwl-final = (pkgs.dwl.override {
@@ -66,12 +67,12 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "346d937f4f6ea77faad8a1c829fd42aae10d39d9";
+          version = "95b903a59b75c6224b988efc6099036f632e4555";
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-5s7weDCn/Ag1HL2nLBc28cTMnVKLtkUW34l2S2dAzl8=";
+            hash = "sha256-x1rtJflcKBSFaxDLj/kOEXVdVBrUq39w+7vffFaAv9A=";
           };
           buildInputs = with pkgs; [
             libinput
@@ -80,7 +81,7 @@ in {
             pixman
             wayland
             wayland-protocols
-            wlroots_0_18
+            wlroots_0_19
             # xwayland support
             xorg.libX11
             xorg.xcbutilwm
