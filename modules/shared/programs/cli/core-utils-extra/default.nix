@@ -18,6 +18,8 @@ in {
         tealdeer # examples of each command
         portal # transfer files
         age # encrypt files
+        dust # disk usage
+        entr # run something on file change
 
         termshark # tui wireshark
         gdu # tui disk usage
