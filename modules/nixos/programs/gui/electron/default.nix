@@ -35,6 +35,7 @@ in {
       element-desktop-wayland
       freetube
       slack
+      obsidian
     ];
 
     _custom.hm = {
