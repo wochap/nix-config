@@ -42,11 +42,13 @@ response=$(curl -s -H "Authorization: Client-ID ${UNSPLASH_API_KEY}" \
 slug=$(echo "${response}" | jq -r '.[].slug')
 image_url=$(echo "${response}" | jq -r '.[].urls.raw')
 image_link="${image_url}&q=85&w=${width}"
-image_path="${download_path}/${slug}"
+image_tmp_path="${download_path}/${slug}"
 
 # Download the image
-curl -o "${image_path}" "$image_link"
-echo "Image downloaded as '${image_path}'"
+curl -o "${image_tmp_path}" "$image_link"
+echo "Image downloaded as '${image_tmp_path}'"
 
 # Change wallpaper
+image_path="${HOME}/Pictures/backgrounds/unsplash_wallpaper"
+cp "${image_tmp_path}" "${image_path}"
 swww img "${image_path}"
