@@ -8,6 +8,8 @@ let
     (builtins.readFile ./scripts/matcha-toggle-mode.sh);
   backlight-restore = pkgs.writeScriptBin "backlight-restore" # sh
     (builtins.readFile ./scripts/backlight-restore.sh);
+  close-overlays = pkgs.writeScriptBin "close-overlays" # sh
+    (builtins.readFile ./scripts/close-overlays.sh);
 in {
   options._custom.desktop.swayidle.enable = lib.mkEnableOption { };
 
@@ -44,14 +46,14 @@ in {
           {
             timeout = 180;
             command = ''
-              if ! pgrep swaylock; then brightnessctl --save && chayang -d 5 && wlopm --off "*" && killall tofi --quiet; fi'';
+              if ! pgrep swaylock; then brightnessctl --save && chayang -d 5 && wlopm --off "*" && ${close-overlays}/bin/close-overlays; fi'';
             resumeCommand =
               "if ! pgrep swaylock; then ${backlight-restore}/bin/backlight-restore; fi";
           }
           {
             timeout = 15;
             command = ''
-              if pgrep swaylock; then brightnessctl --save && wlopm --off "*" && killall tofi --quiet; fi'';
+              if pgrep swaylock; then brightnessctl --save && wlopm --off "*" && ${close-overlays}/bin/close-overlays; fi'';
             resumeCommand =
               "if pgrep swaylock; then ${backlight-restore}/bin/backlight-restore; fi";
           }
