@@ -13,9 +13,6 @@ in {
       galaxy-buds-client
 
       libreoffice-qt
-      hunspell
-      hunspellDicts.uk_UA
-      hunspellDicts.th_TH
       # antimicroX # map kb/mouse to gamepad
       # skypeforlinux
       # teamviewer
