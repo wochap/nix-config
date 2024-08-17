@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let cfg = config._custom.programs.firefox;
 in {
@@ -6,6 +6,8 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
+      imports = [ inputs.arkenfox.hmModules.default ];
+
       # precise scrolling in Firefox
       home.sessionVariables.MOZ_USE_XINPUT2 = "1";
 
@@ -21,15 +23,63 @@ in {
         enable = true;
         package = (pkgs.wrapFirefox
           (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { });
+        arkenfox = {
+          enable = true;
+          version = "118.0";
+        };
+        policies = {
+          DisableTelemetry = true;
+          DisablePocket = true;
+          DisableFirefoxStudies = true;
+          EnableTrackingProtection = {
+            Value = true;
+            Locked = true;
+            Cryptomining = true;
+            Fingerprinting = true;
+          };
+          OverrideFirstRunPage = "";
+          OverridePostUpdatePage = "";
+          ExtensionSettings = {
+            # Disable built-in search engines
+            "amazondotcom@search.mozilla.org" = {
+              installation_mode = "blocked";
+            };
+            "bing@search.mozilla.org" = { installation_mode = "blocked"; };
+            "ddg@search.mozilla.org" = { installation_mode = "blocked"; };
+            "ebay@search.mozilla.org" = { installation_mode = "blocked"; };
+          };
+        };
         profiles = {
           default = {
             id = 0;
             name = "default";
             isDefault = true;
+            arkenfox = {
+              enable = true;
+              # docs: https://arkenfox.dwarfmaster.net/
+              "0000".enable = true; # disable about:config warning
+              "0100".enable = true; # STARTUP
+              "0200".enable = true; # GEOLOCATION / LANGUAGE / LOCALE
+              "0300".enable = true; # QUIETER FOX
+              "0400".enable = true; # SAFE BROWSING (SB)
+              "0600".enable = true; # BLOCK IMPLICIT OUTBOUND
+              "0800".enable =
+                true; # LOCATION BAR / SEARCH BAR / SUGGESTIONS / HISTORY / FORMS
+              "0900".enable = true; # PASSWORDS
+              "1200".enable = true; # HTTPS (SSL/TLS / OCSP / CERTS / HPKP)
+              "1600".enable = true; # REFERERS
+              "1700".enable = true; # CONTAINERS
+              "2600".enable = true; # MISCELLANEOUS
+              "2700".enable = true; # ETP (ENHANCED TRACKING PROTECTION)
+              # "2800".enable = true; # SHUTDOWN & SANITIZING
+            };
             settings = {
               "browser.fullscreen.autohide" = false;
               "browser.quitShortcut.disabled" = true;
               "browser.tabs.tabMinWidth" = 5;
+
+              # use native GTK buttons
+              "widget.gtk.non-native-titlebar-buttons.enabled" = false;
 
               # custom scrollbar
               "widget.non-native-theme.scrollbar.size" = 24;

@@ -47,6 +47,8 @@
     scenefx.inputs.nixpkgs.follows = "nixpkgs";
     wayfreeze.url = "github:Jappie3/wayfreeze?rev=37ef9e456c87601ed4e06f36f437f688083d61cf";
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
+    arkenfox.url = "github:dwarfmaster/arkenfox-nixos?rev=92c9a287b7b98198c3ba5cdfc90218402e49c4b3";
+    arkenfox.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
