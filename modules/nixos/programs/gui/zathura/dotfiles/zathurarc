@@ -8,6 +8,8 @@ set pages-per-row               1
 set statusbar-basename          true
 set page-padding                1
 set sandbox                     none
+set synctex true
+set synctex-editor-command "texlab inverse-search -i %{input} -l %{line}"
 
 map u                           scroll half-up
 map d                           scroll half-down
