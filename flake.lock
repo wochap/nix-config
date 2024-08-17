@@ -352,17 +352,17 @@
     "catppuccin-zathura": {
       "flake": false,
       "locked": {
-        "lastModified": 1664239314,
-        "narHash": "sha256-5Vh2bVabuBluVCJm9vfdnjnk32CtsK7wGIWM5+XnacM=",
+        "lastModified": 1712249512,
+        "narHash": "sha256-/vD/hOi6KcaGyAp6Az7jL5/tQSGRzIrf0oHjAJf4QbI=",
         "owner": "catppuccin",
         "repo": "zathura",
-        "rev": "d85d8750acd0b0247aa10e0653998180391110a4",
+        "rev": "0adc53028d81bf047461bc61c43a484d11b15220",
         "type": "github"
       },
       "original": {
         "owner": "catppuccin",
         "repo": "zathura",
-        "rev": "d85d8750acd0b0247aa10e0653998180391110a4",
+        "rev": "0adc53028d81bf047461bc61c43a484d11b15220",
         "type": "github"
       }
     },

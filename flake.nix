@@ -122,7 +122,7 @@
     catppuccin-newsboat.flake = false;
     catppuccin-qutebrowser.url = "github:catppuccin/qutebrowser?rev=78bb72b4c60b421c8ea64dd7c960add6add92f83";
     catppuccin-qutebrowser.flake = false;
-    catppuccin-zathura.url = "github:catppuccin/zathura?rev=d85d8750acd0b0247aa10e0653998180391110a4";
+    catppuccin-zathura.url = "github:catppuccin/zathura?rev=0adc53028d81bf047461bc61c43a484d11b15220";
     catppuccin-zathura.flake = false;
     catppuccin-zsh-fsh.url = "github:catppuccin/zsh-fsh?rev=7cdab58bddafe0565f84f6eaf2d7dd109bd6fc18";
     catppuccin-zsh-fsh.flake = false;
