@@ -58,7 +58,7 @@ in {
               enable = true;
               # docs: https://arkenfox.dwarfmaster.net/
               "0000".enable = true; # disable about:config warning
-              "0100".enable = true; # STARTUP
+              # "0100".enable = true; # STARTUP
               "0200".enable = true; # GEOLOCATION / LANGUAGE / LOCALE
               "0300".enable = true; # QUIETER FOX
               "0400".enable = true; # SAFE BROWSING (SB)
@@ -77,6 +77,7 @@ in {
               "browser.fullscreen.autohide" = false;
               "browser.quitShortcut.disabled" = true;
               "browser.tabs.tabMinWidth" = 5;
+              "browser.startup.page" = 3;
 
               # use native GTK buttons
               "widget.gtk.non-native-titlebar-buttons.enabled" = false;
