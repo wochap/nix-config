@@ -105,6 +105,10 @@ windows:
         # 5555
         - frontend:
             - gulp glu-vizwiz:local
+        # 5557
+        - currency-editor:
+            - ./currency-editor
+            - gulp
         # 3000
         - organizations:
             - cd ./organizations
