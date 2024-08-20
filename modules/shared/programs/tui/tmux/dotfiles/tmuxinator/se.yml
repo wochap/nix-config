@@ -107,7 +107,7 @@ windows:
             - gulp glu-vizwiz:local
         # 5557
         - currency-editor:
-            - ./currency-editor
+            - cd ./currency-editor
             - gulp
         # 3000
         - organizations:
