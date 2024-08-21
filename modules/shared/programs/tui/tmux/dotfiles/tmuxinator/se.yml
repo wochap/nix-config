@@ -113,6 +113,10 @@ windows:
         - organizations:
             - cd ./organizations
             - yarn start
+        # 5556
+        - geobuffer:
+            - cd ./geobuffer
+            - gulp
 
   - viz-omni-frontend-neo:
       root: ~/Projects/se/viz-omni/frontend-neo
