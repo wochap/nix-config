@@ -16,6 +16,7 @@
       "type": "title",
       "key": "HOST ",
       "keyColor": "31",
+      "format": "{user-name}@{host-name}",
     },
     {
       "type": "host",
