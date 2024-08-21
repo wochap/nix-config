@@ -30,6 +30,8 @@ in {
 
         cbonsai # print bonsai ascii
         clolcat # like cat/bat but with colors
+        cowsay # print animals with message
+        fortune # print fortune text
         jp2a # image to ascii
 
         inputs.lobster.packages.${system}.lobster
