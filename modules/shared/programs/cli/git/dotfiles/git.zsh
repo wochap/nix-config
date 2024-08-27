@@ -14,3 +14,7 @@ function gundo() {
   git reset --soft "HEAD~"
 }
 
+function gpoforce() {
+  branch_name=$(git rev-parse --abbrev-ref HEAD)
+  git push origin $branch_name --force
+}
