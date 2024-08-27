@@ -55,7 +55,7 @@ function opro() {
 zle -N opro
 
 function cdfzf() {
-  dirs=$(fd --type d --max-depth 1 --fixed-strings --no-ignore --hidden)
+  dirs=$(fd --type d --max-depth 1 --fixed-strings --no-ignore --hidden --exclude node_modules --exclude .git --exclude .direnv)
 
   selected=$(echo "$dirs" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_ALT_C_OPTS-}" fzf)
 
