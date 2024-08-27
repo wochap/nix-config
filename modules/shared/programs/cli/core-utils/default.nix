@@ -12,6 +12,7 @@ in {
       getopt # fix macos getopt
       git-crypt
       jq # manipulate JSON
+      yq # manipulate YAML
       killall
       lsof # print port process
       nix-prefetch-git # get fetchgit hashes
@@ -28,6 +29,7 @@ in {
       imagemagick # image editor
       silver-searcher # ag, ack like
       gum # shell scripting ui
+      just # like make but better
     ];
 
     _custom.hm = {
