@@ -1913,17 +1913,17 @@
     "reversal-extra": {
       "flake": false,
       "locked": {
-        "lastModified": 1720561637,
-        "narHash": "sha256-4TwjrhCN1lvKqblqJuFafGxJX04NFeb9oSi/0Jy3pMM=",
+        "lastModified": 1724852407,
+        "narHash": "sha256-eQ2Qhq1tea7mYzocikNOFXBY9+7f4BFYIHpsTDGGqUU=",
         "owner": "wochap",
         "repo": "Reversal-Extra",
-        "rev": "9358e4dff06223e051e013a612de2b949d043f38",
+        "rev": "cab51b96a08289d4ad5eed8e3a58d06d55dcc961",
         "type": "github"
       },
       "original": {
         "owner": "wochap",
         "repo": "Reversal-Extra",
-        "rev": "9358e4dff06223e051e013a612de2b949d043f38",
+        "rev": "cab51b96a08289d4ad5eed8e3a58d06d55dcc961",
         "type": "github"
       }
     },
@@ -1991,6 +1991,7 @@
         "unstable": "unstable",
         "wayfreeze": "wayfreeze",
         "wluma": "wluma",
+        "zen-browser": "zen-browser",
         "zsh-autocomplete": "zsh-autocomplete",
         "zsh-defer": "zsh-defer",
         "zsh-history-substring-search": "zsh-history-substring-search",
@@ -2331,6 +2332,27 @@
       "original": {
         "owner": "hyprwm",
         "repo": "xdg-desktop-portal-hyprland",
+        "type": "github"
+      }
+    },
+    "zen-browser": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1724347856,
+        "narHash": "sha256-OQxWHztlw5hSJYCRWoJ98+bgqWinRSTR0KZos7aq2h8=",
+        "owner": "MarceColl",
+        "repo": "zen-browser-flake",
+        "rev": "96dffb45b36141261e97a8f83438e4c88911fefa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MarceColl",
+        "repo": "zen-browser-flake",
+        "rev": "96dffb45b36141261e97a8f83438e4c88911fefa",
         "type": "github"
       }
     },

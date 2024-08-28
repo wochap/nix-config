@@ -49,13 +49,15 @@
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos?rev=92c9a287b7b98198c3ba5cdfc90218402e49c4b3";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
+    zen-browser.url = "github:MarceColl/zen-browser-flake?rev=96dffb45b36141261e97a8f83438e4c88911fefa";
+    zen-browser.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
     easy-effects-presets.flake = false;
     retroarch-shaders.url = "github:libretro/glsl-shaders";
     retroarch-shaders.flake = false;
-    reversal-extra.url = "github:wochap/Reversal-Extra?rev=9358e4dff06223e051e013a612de2b949d043f38";
+    reversal-extra.url = "github:wochap/Reversal-Extra?rev=cab51b96a08289d4ad5eed8e3a58d06d55dcc961";
     reversal-extra.flake = false;
     wluma.url = "github:maximbaz/wluma?rev=f7aa9967231ef5c821eeea7e43a9929ace0c4fa8";
     wluma.flake = false;

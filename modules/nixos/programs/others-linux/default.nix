@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, system, ... }:
 
 let cfg = config._custom.programs.others-linux;
 in {
@@ -9,6 +9,7 @@ in {
       brave
       google-chrome
       microsoft-edge
+      inputs.zen-browser.packages."${system}".specific
 
       galaxy-buds-client
 
