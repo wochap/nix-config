@@ -19,6 +19,8 @@ if ! [[ $(wlr-randr | grep "$output_name") ]]; then
   # 50 = m
   ydotool key 125:1 56:1 29:1 54:1 50:1 50:0 54:0 29:0 56:0 125:0
   sleep 0.1
+
+  output_name=$(wlr-randr --json | jq -r '.[] | select(.name | startswith("HEADLESS")) | .name | limit(1; .)')
 fi
 
 # update aspect ratio of HEADLESS output
