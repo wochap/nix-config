@@ -12,6 +12,8 @@ in {
 
       xdg.configFile."fastfetch/config.jsonc".source =
         lib._custom.relativeSymlink configDirectory ./dotfiles/config.jsonc;
+
+      home.shellAliases.ff = "fastfetch";
     };
   };
 }
