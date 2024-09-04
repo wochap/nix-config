@@ -5,7 +5,12 @@ source "$HOME/.config/scripts/theme-colors.sh"
 
 args=""
 if [ "$BACKGROUND" = "1" ]; then
-  args="--image $HOME/Pictures/backgrounds/swaylock.jpg"
+  swww_image_path=$(swww query | sed 's/.*image: //')
+  if [ -e $swww_image_path ]; then
+    args="--image $swww_image_path"
+  else
+    args="--image $HOME/Pictures/backgrounds/swaylock.jpg"
+  fi
 else
   args="--screenshots --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2"
 fi
