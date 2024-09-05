@@ -95,7 +95,7 @@ in {
           relativeSymlink configDirectory ./dotfiles/autostart.conf;
         "hypr/pyprland.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
-        "hypr/vnc.toml".text = ''
+        "hypr/vnc.conf".text = ''
           source=~/.config/hypr/colors.conf
           source=~/.config/hypr/config.conf
           source=~/.config/hypr/keybindings.conf
