@@ -16,6 +16,7 @@
     hardware.amdgpu.opencl.enable = true;
 
     hardware.nvidia = {
+      open = false;
       modesetting.enable = true;
       nvidiaSettings = true;
       powerManagement.enable = true;
