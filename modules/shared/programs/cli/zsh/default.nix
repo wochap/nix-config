@@ -212,6 +212,7 @@ in {
 
             if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
               abbr import-aliases --quiet
+              abbr erase --quiet sudo
               abbr erase --quiet nv
               abbr erase --quiet nvim
               abbr erase --quiet ls
