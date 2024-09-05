@@ -33,13 +33,13 @@
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-alien.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=918d8340afd652b011b937d29d5eea0be08467f5"; # v0.41.2 (jul 04 2024)
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=9a09eac79b85c846e3a865a9078a3f8ff65a9259"; # v0.42
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=98cb18c6fcfe8196ef4150d09fbae305b7bb2954"; # (jul 04 2024)
+    hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=7a28245e5a8d30e520bc6ce8bc9b7ee177d9f2b6"; # v0.42
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
-    hyprpicker.url = "github:hyprwm/hyprpicker?rev=b0974381f996f92dc191e6b03adf7d581061619b"; # (jul 04 2024)
+    hyprpicker.url = "github:hyprwm/hyprpicker?rev=38fe668e58014c75cf28f7cb5fc136aa710e7039"; # (aug 22 2024)
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
-    pyprland.url = "github:hyprland-community/pyprland?rev=a609ceeea7b1aeedf6e82d7224f9c96ccbac5342"; # 2.4.0 (jul 04 2024)
+    pyprland.url = "github:hyprland-community/pyprland?rev=af680d6d17f1d72ee335e1067e28dce3799f80f6"; # (aug 26 2024)
     pyprland.inputs.nixpkgs.follows = "nixpkgs";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
@@ -65,7 +65,7 @@
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f";
     fuzzy-sys.flake = false;
-    kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim";
+    kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim?rev=3f430ff8829dc2b0f5291d87789320231fdb65a1"; # (aug 20 2024)
     kitty-scrollback-nvim.flake = false;
     kitty-smart-scroll.url = "github:yurikhan/kitty-smart-scroll";
     kitty-smart-scroll.flake = false;
@@ -73,7 +73,7 @@
     kitty-smart-tab.flake = false;
     powerlevel10k.url = "github:romkatv/powerlevel10k?rev=35833ea15f14b71dbcebc7e54c104d8d56ca5268";
     powerlevel10k.flake = false;
-    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim";
+    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim?rev=aee30930689ae427729aad41568ccaae57c167fe"; # (aug 30 2024)
     smart-splits-nvim.flake = false;
     zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=d52da825c2b60b664f33e8d82fdfc1c3b647b753";
     zsh-autocomplete.flake = false;
