@@ -1,4 +1,4 @@
-{ lib, config, inputs, ... }:
+{ lib, config, inputs, pkgs, ... }:
 
 let overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
 in {
@@ -12,6 +12,11 @@ in {
           overlays = overlaysWithoutCustomChannels;
         };
         stable = import inputs.stable {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
+        nextstable-nixpkgs = import inputs.nextstable-nixpkgs {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;

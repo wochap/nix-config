@@ -1369,6 +1369,22 @@
         "type": "github"
       }
     },
+    "nextstable-nixpkgs": {
+      "locked": {
+        "lastModified": 1725432240,
+        "narHash": "sha256-+yj+xgsfZaErbfYM3T+QvEE2hU7UuE+Jf0fJCJ8uPS0=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "ad416d066ca1222956472ab7d0555a6946746a80",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "ad416d066ca1222956472ab7d0555a6946746a80",
+        "type": "github"
+      }
+    },
     "nix-alien": {
       "inputs": {
         "flake-compat": "flake-compat_5",
@@ -1760,11 +1776,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1725501612,
-        "narHash": "sha256-AvSKGXL54hP0pPUur93SL038bO5TwM5L4ULHJfI5Jrw=",
+        "lastModified": 1725551138,
+        "narHash": "sha256-4tSFz+wu2NvB41MLF68PDLM3gu8lg1hjgtgikbRq6Zo=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "c3f611cee74e73be438b97e7899514e0c1368e2a",
+        "rev": "06bc57134f691188397ebeffa9b88552cc8090d3",
         "type": "github"
       },
       "original": {
@@ -2028,6 +2044,7 @@
         "lobster": "lobster",
         "matcha": "matcha",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
+        "nextstable-nixpkgs": "nextstable-nixpkgs",
         "nix-alien": "nix-alien",
         "nix-gaming": "nix-gaming",
         "nix-ld": "nix-ld",
