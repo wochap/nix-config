@@ -1,6 +1,8 @@
 { config, lib, pkgs, inputs, ... }:
 
-let cfg = config._custom.programs.neovim;
+let
+  cfg = config._custom.programs.neovim;
+  inherit (config._custom.globals) configDirectory;
 in {
   imports = [ ./options.nix ];
 
@@ -61,6 +63,9 @@ in {
         lc = "run-without-kpadding nvim leetcode.nvim";
         lcd = "neovide leetcode.nvim";
       };
+
+      xdg.configFile."neovide/config.toml".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/neovide.toml;
 
       home.file.".config/zsh/.zshrc".text = lib.mkAfter # zsh
         ''

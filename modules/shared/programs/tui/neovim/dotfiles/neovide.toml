@@ -1,0 +1,36 @@
+fork = false
+frame = "full"
+idle = true
+maximized = false
+neovim-bin = "nvim"
+no-multigrid = false
+srgb = false
+tabs = true
+theme = "auto"
+title-hidden = true
+vsync = true
+wsl = false
+
+[font]
+size = 14
+hinting = "full"
+edging = "antialias"
+
+[[font.normal]]
+family = "IosevkaTerm NF"
+style = "W400"
+
+[[font.italic]]
+family = "IosevkaTerm NF"
+style = "W400"
+slant = "Italic"
+
+[[font.bold]]
+family = "IosevkaTerm NF"
+style = "W600"
+
+[[font.bold_italic]]
+family = "IosevkaTerm NF"
+style = "W600"
+slant = "Italic"
+
