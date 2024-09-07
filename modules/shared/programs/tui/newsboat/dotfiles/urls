@@ -1,5 +1,12 @@
 -1 "~Commits"
 https://github.com/LazyVim/LazyVim/commits/main.atom
+https://github.com/s1n7ax/nvim-window-picker/commits/main.atom
+https://github.com/brenoprata10/nvim-highlight-colors/commits/main.atom
+https://github.com/nvimdev/indentmini.nvim/commits/main.atom
+https://github.com/folke/noice.nvim/commits/main.atom
+https://github.com/akinsho/bufferline.nvim/commits/main.atom
+https://github.com/VidocqH/lsp-lens.nvim/commits/main.atom
+https://github.com/mattn/emmet-vim/commits/master.atom
 
 -2 "~Neovim"
 https://dotfyle.com/this-week-in-neovim/rss.xml
