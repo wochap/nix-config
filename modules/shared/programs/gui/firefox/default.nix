@@ -25,7 +25,7 @@ in {
           (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { });
         arkenfox = {
           enable = true;
-          version = "126.1";
+          version = "128.0";
         };
         policies = {
           DisableTelemetry = true;

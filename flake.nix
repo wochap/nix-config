@@ -48,7 +48,7 @@
     scenefx.inputs.nixpkgs.follows = "nixpkgs";
     wayfreeze.url = "github:Jappie3/wayfreeze?rev=37ef9e456c87601ed4e06f36f437f688083d61cf";
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
-    arkenfox.url = "github:dwarfmaster/arkenfox-nixos?rev=92c9a287b7b98198c3ba5cdfc90218402e49c4b3";
+    arkenfox.url = "github:dwarfmaster/arkenfox-nixos?rev=72addd96455cce49c0c8524c53aecd02cf20adec";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.url = "github:MarceColl/zen-browser-flake?rev=96dffb45b36141261e97a8f83438e4c88911fefa";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
