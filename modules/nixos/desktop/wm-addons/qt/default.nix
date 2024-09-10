@@ -11,6 +11,7 @@ in {
     fonts.packages = with pkgs; [ source-sans-pro ];
 
     environment.systemPackages = with pkgs; [
+      kdePackages.qtwayland # qt6
       libsForQt5.qt5.qtwayland
 
       # kvantum (not required but...)
@@ -20,10 +21,11 @@ in {
       # fix kirigami apps look
       # for example in filelight, without it the app looks weird
       # https://github.com/NixOS/nixpkgs/pull/202990#issuecomment-1328068486
+      kdePackages.qqc2-desktop-style # qt6
       libsForQt5.qqc2-desktop-style
 
-      # themes
-      lightly-qt
+      # themes qt5
+      lightly-boehs
       libsForQt5.breeze-icons
       libsForQt5.breeze-qt5
       catppuccin-qt5ct
@@ -31,6 +33,10 @@ in {
         accent = "Mauve";
         variant = "Mocha";
       })
+
+      # themes qt6
+      kdePackages.breeze-icons
+      kdePackages.breeze
     ];
 
     qt = {
@@ -48,12 +54,16 @@ in {
         # QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       };
 
-      xdg.configFile."qt5ct/colors/Catppuccin-Mocha-Mauve.conf".source =
-        ./dotfiles/Catppuccin-Mocha-Mauve.conf;
+      xdg.configFile = {
+        "qt5ct/colors/Catppuccin-Mocha-Mauve.conf".source =
+          ./dotfiles/Catppuccin-Mocha-Mauve.conf;
+        "qt6ct/colors/Catppuccin-Mocha-Mauve.conf".source =
+          ./dotfiles/Catppuccin-Mocha-Mauve.conf;
+      };
 
       qt = {
         enable = cfg.enableTheme;
-        platformTheme.name = "qt5ct";
+        platformTheme.name = "qtct";
       };
     };
   };
