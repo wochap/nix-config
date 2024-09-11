@@ -12,7 +12,7 @@ vsync = true
 wsl = false
 
 [font]
-size = 14
+size = 10
 hinting = "full"
 edging = "antialias"
 
@@ -26,11 +26,11 @@ style = "W400"
 slant = "Italic"
 
 [[font.bold]]
-family = "IosevkaTerm NF"
+family = "IosevkaTerm NF Heavy"
 style = "W600"
 
 [[font.bold_italic]]
-family = "IosevkaTerm NF"
+family = "IosevkaTerm NF Heavy"
 style = "W600"
 slant = "Italic"
 
