@@ -1,4 +1,5 @@
 editor=nvim
+search.case.sensitive=no
 
 dateformat=a d b Y
 dateformat.report=
