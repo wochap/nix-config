@@ -41,6 +41,11 @@ if [[ "$program_data" ]]; then
     hyprctl dispatch movetoworkspacesilent "special:scratchpads,^($class)$" &>/dev/null
 
     hyprctl dispatch movetoworkspace "$current_ws,^($class)$" &>/dev/null
+
+    # HACK: kitty freezes if we dont change workspaces
+    hyprctl dispatch togglespecialworkspace void
+    hyprctl dispatch workspace "$current_ws"
+
     hyprctl dispatch focuswindow "^($class)$" &>/dev/null
     hyprctl dispatch alterzorder top &>/dev/null
   fi
