@@ -6,9 +6,15 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      # latex
       texlive.combined.scheme-full
       pandoc
       biber
+
+      # typst
+      typstyle
+      typst
+      tinymist
     ];
   };
 }
