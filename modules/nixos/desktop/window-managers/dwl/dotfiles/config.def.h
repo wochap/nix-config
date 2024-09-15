@@ -93,7 +93,7 @@ static const char *const autostart[] = {
 /* logging */
 static int log_level = WLR_ERROR;
 
-static const char bing_gpt_appid[] = "msedge-www.bing.com__search-Default";
+static const char bing_gpt_appid[] = "msedge-www.bing.com__chat-Default";
 static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
 static const char ollama_appid[] = "chrome-ollama.wochap.local__-Default";
 static const char ytmusic_appid[] = "chrome-music.youtube.com__-Default";
@@ -537,7 +537,7 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, SHCMD("brave")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, SHCMD("google-chrome-stable")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, SHCMD("microsoft-edge")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, SHCMD_SK("g", "microsoft-edge --app=https://www.bing.com/search?q=q&showconv=1")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, SHCMD_SK("g", "microsoft-edge --app=https://www.bing.com/chat")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_SK("c", "google-chrome-stable --app=https://chat.openai.com")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, raiserunnamedscratchpad, SHCMD_SK("o", "google-chrome-stable --app=https://ollama.wochap.local")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_SK("y", "google-chrome-stable --app=https://music.youtube.com")),
