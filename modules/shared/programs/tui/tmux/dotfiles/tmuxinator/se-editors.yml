@@ -8,6 +8,18 @@ windows:
         - editor:
             - nv
 
+  - backend:
+      root: ~/Projects/se/viz-omni/backend
+      layout: tiled
+
+  - layout-editor:
+      root: ~/Projects/se/viz-omni/frontend-neo/layout-editor
+      layout: tiled
+
+  - organization:
+      root: ~/Projects/se/viz-omni/frontend/organizations
+      layout: tiled
+
   # - viz-websites:
   #     root: ~/Projects/se/viz-websites
   #     layout: tiled
