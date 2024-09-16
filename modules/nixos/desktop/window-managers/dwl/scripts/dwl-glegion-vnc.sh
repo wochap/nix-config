@@ -50,4 +50,3 @@ done
 
 # on tty 2
 # Hyprland --config ~/.config/hypr/vnc.conf
-# remmina "$XDG_CONFIG_HOME/remmina/glegion.remmina"

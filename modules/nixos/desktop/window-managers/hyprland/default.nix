@@ -99,6 +99,8 @@ in {
           source=~/.config/hypr/colors.conf
           source=~/.config/hypr/config.conf
           source=~/.config/hypr/keybindings.conf
+
+          exec-once = remmina "$XDG_CONFIG_HOME/remmina/glegion.remmina"
         '';
 
         "hypr/libinput-gestures.conf".text = ''
