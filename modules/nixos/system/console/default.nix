@@ -8,7 +8,7 @@ let
       # set TERM to fbterm so tmux supports 256 colors
       export TERM=fbterm
       export TERMINFO=${pkgs.fbterm}/share/terminfo
-      tmux -L fbtmux kill-server
+      tmux -L fbtmux has-session 2>/dev/null && tmux -L fbtmux kill-server
       tmux -L fbtmux -f ~/.config/tmux/tmux-fbterm.conf "$@" new -A -s fbtmux
     '';
   start-fbterm = pkgs.writeScriptBin "start-fbterm" # bash
