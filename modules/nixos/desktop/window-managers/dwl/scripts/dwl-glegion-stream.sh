@@ -10,7 +10,7 @@ cleanup() {
   # TODO: remove HEADLESS output?
 }
 
-if ! [[ $(wlr-randr | grep "$output_name") ]]; then
+if [[ -z "$output_name" ]]; then
   # initialize DWL headless output
   # 125 = logo
   # 56 = alt

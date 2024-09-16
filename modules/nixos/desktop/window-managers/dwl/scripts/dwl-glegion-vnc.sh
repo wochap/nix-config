@@ -2,7 +2,15 @@
 
 output_name=$(wlr-randr --json | jq -r '.[] | select(.name | startswith("HEADLESS")) | .name | limit(1; .)')
 
-if ! [[ $(wlr-randr | grep "$output_name") ]]; then
+cleanup() {
+  echo "Cleaning up..."
+  # kill all subprocesses
+  pkill -P $$
+
+  # TODO: remove HEADLESS output?
+}
+
+if [[ -z "$output_name" ]]; then
   # initialize DWL headless output
   # 125 = logo
   # 56 = alt
@@ -25,8 +33,20 @@ systemctl --user restart ags.service &
 # show wallpaper on HEADLESS output
 systemctl --user restart swww-daemon.service &
 
-# on tty 1
-wayvnc --output="eDP-1" --max-fps=60 0.0.0.0 5900
+# show HEADLESS output in physical output
+wl-mirror $output_name &
+
+# NOTE: if the output isn't headless
+# the screen freezes after switching to tty2
+wayvnc --output="$output_name" --max-fps=60 0.0.0.0 5900 &
+echo "wayvnc server started"
+
+trap cleanup EXIT
+
+# keep the script running
+while true; do
+  sleep 1
+done
 
 # on tty 2
 # Hyprland --config ~/.config/hypr/vnc.conf
