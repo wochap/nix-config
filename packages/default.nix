@@ -2,6 +2,7 @@
 
 let
   customPkgs = rec {
+    pseint = pkgs.callPackage ./pseint { };
     fcitx5-fbterm = pkgs.callPackage ./fcitx5-fbterm { };
     clipboard-sync = pkgs.callPackage ./clipboard-sync { };
     advcpmv = pkgs.callPackage ./advcpmv { };
