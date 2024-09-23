@@ -116,7 +116,6 @@ in {
     _custom.desktop.xwaylandvideobridge.enable = false;
     _custom.desktop.power-management.cpupowerGuiArgs =
       [ "--performance" "profile" "Performance" ];
-    _custom.desktop.ags.mainOutputName = "eDP-1";
     _custom.desktop.greetd.enable = true;
     _custom.desktop.greetd.enablePamAutoLogin = true;
     _custom.desktop.udev-rules.enable = true;

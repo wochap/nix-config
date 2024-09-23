@@ -15,10 +15,6 @@ in {
   options._custom.desktop.ags = {
     enable = lib.mkEnableOption { };
     systemdEnable = lib.mkEnableOption { };
-    mainOutputName = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -28,7 +24,6 @@ in {
       imports = [ inputs.ags.homeManagerModules.default ];
 
       home.packages = [ capslock progress-osd toggle-bars ];
-      home.sessionVariables."MAIN_OUTPUT_NAME" = cfg.mainOutputName;
 
       programs.ags = {
         enable = true;

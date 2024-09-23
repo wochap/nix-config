@@ -1,5 +1,5 @@
 import { range } from "../../utils/index.js";
-import { spacing, mainOutputName, headlessOutputName } from "../constants.js";
+import { spacing } from "../constants.js";
 import { mapAppId } from "../utils.js";
 
 const generateScriptModule = ({ cmd, className, labelAttrs }) => {
@@ -19,10 +19,10 @@ const generateScriptModule = ({ cmd, className, labelAttrs }) => {
     });
 };
 
-export const dwltaskbar = (outputId) => {
+export const dwltaskbar = (monitorPlugName) => {
   const VisibleAppIds = Variable([], {
     listen: [
-      `dwl-state "${outputId}" visible_appids`,
+      `dwl-state "${monitorPlugName}" visible_appids`,
       (out) => {
         const items = JSON.parse(out)
           .text.split(" ")
@@ -65,7 +65,7 @@ export const dwltaskbar = (outputId) => {
   });
 };
 
-export const dwltags = (outputId) => {
+export const dwltags = (monitorPlugName) => {
   const tags = range(9, 0).map((i) =>
     Variable(
       {
@@ -77,7 +77,7 @@ export const dwltags = (outputId) => {
       },
       {
         listen: [
-          `dwl-state '${outputId}' ${i}`,
+          `dwl-state '${monitorPlugName}' ${i}`,
           (out) => {
             return JSON.parse(out);
           },
@@ -102,31 +102,31 @@ export const dwltags = (outputId) => {
   });
 };
 
-export const dwltitle = (outputId) =>
+export const dwltitle = (monitorPlugName) =>
   generateScriptModule({
-    cmd: `dwl-state '${outputId}' title`,
+    cmd: `dwl-state '${monitorPlugName}' title`,
     className: "wmtitle",
     labelAttrs: {
       truncate: "middle",
     },
   })();
 
-export const dwllayout = (outputId) =>
+export const dwllayout = (monitorPlugName) =>
   generateScriptModule({
-    cmd: `dwl-state '${outputId}' layout`,
+    cmd: `dwl-state '${monitorPlugName}' layout`,
     className: "dwllayout",
   })();
 
-export const dwlmode = (outputId) =>
+export const dwlmode = (monitorPlugName) =>
   generateScriptModule({
-    cmd: `dwl-state '${outputId}' mode`,
+    cmd: `dwl-state '${monitorPlugName}' mode`,
     className: "wmmode",
   })();
 
-export const dwlscratchpads = (outputId) => {
+export const dwlscratchpads = (monitorPlugName) => {
   const DwlScratchpads = Variable(0, {
     listen: [
-      `dwl-state '${outputId}' scratchpads_count`,
+      `dwl-state '${monitorPlugName}' scratchpads_count`,
       (out) => parseInt(JSON.parse(out).text),
     ],
   });
@@ -139,10 +139,10 @@ export const dwlscratchpads = (outputId) => {
   });
 };
 
-export const dwlnamedscratchpads = (outputId) => {
+export const dwlnamedscratchpads = (monitorPlugName) => {
   const DwlNamedscratchpads = Variable(0, {
     listen: [
-      `dwl-state '${outputId}' namedscratchpads_count`,
+      `dwl-state '${monitorPlugName}' namedscratchpads_count`,
       (out) => parseInt(JSON.parse(out).text),
     ],
   });
@@ -155,10 +155,10 @@ export const dwlnamedscratchpads = (outputId) => {
   });
 };
 
-export const IsOutputFocused = (outputId) =>
+export const IsOutputFocused = (monitorPlugName) =>
   Variable(0, {
     listen: [
-      `dwl-state '${outputId}' selmon`,
+      `dwl-state '${monitorPlugName}' selmon`,
       (out) => !!parseInt(JSON.parse(out).text),
     ],
   });
