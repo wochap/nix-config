@@ -1,6 +1,11 @@
+profile glegion-docked-both {
+  output "Samsung Display Corp. 0x4188 Unknown" scale 2
+  output "LG Electronics LG ULTRAGEAR 112NTLEL9832" mode 3440x1440@143.923Hz scale 1 adaptive_sync off
+}
+
 profile glegion-docked {
   output "Samsung Display Corp. 0x4188 Unknown" disable
-  output "Goldstar Company Ltd LG ULTRAGEAR 112NTLEL9832" mode 3440x1440@99.990Hz scale 1
+  output "LG Electronics LG ULTRAGEAR 112NTLEL9832" mode 3440x1440@143.923Hz scale 1 adaptive_sync off
 }
 
 profile glegion-undocked {

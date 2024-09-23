@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.desktop.kanshi;
+let
+  cfg = config._custom.desktop.kanshi;
+  inherit (config._custom.globals) configDirectory;
 in {
   options._custom.desktop.kanshi.enable = lib.mkEnableOption { };
 
@@ -8,7 +10,8 @@ in {
     environment = { systemPackages = with pkgs; [ kanshi ]; };
 
     _custom.hm = {
-      xdg.configFile."kanshi/config".source = ./dotfiles/config;
+      xdg.configFile."kanshi/config".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/config;
 
       systemd.user.services.kanshi = lib._custom.mkWaylandService {
         Unit = {
