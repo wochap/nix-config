@@ -153,3 +153,19 @@ windows:
             - NODE_ENV=local APP=vizualist gulp
         # - se_help:
         #     - NODE_ENV=local APP=se_help gulp
+
+  - surveys:
+      root: ~/Projects/se
+      layout: tiled
+      panes:
+        - compile-pearson-surveys:
+            - cd ./pearson-surveys
+            - tmux send-keys "npx gulp compile:local"
+        # 5555
+        - pearson-surveys:
+            - cd ./pearson-surveys
+            - tmux send-keys "npx gulp"
+        # 5002
+        - socialexplorer-surveys:
+            - cd ./socialexplorer-surveys
+            - tmux send-keys "npx gulp"
