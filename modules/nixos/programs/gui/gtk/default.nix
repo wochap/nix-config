@@ -18,9 +18,9 @@ in {
         # APPS
         cheese # test webcam
         gnome-calculator
-        gnome.gnome-clocks
+        gnome-clocks
         gnome-font-viewer
-        gnome.gnome-sound-recorder # test microphone
+        gnome-sound-recorder # test microphone
         gnome-system-monitor
         pomodoro
         zenity # GUI for terminal

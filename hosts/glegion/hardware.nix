@@ -34,7 +34,7 @@
     boot.extraModulePackages = with config.boot.kernelPackages;
       [
         # Doesn't work yet...
-        lenovo-legion-module
+        # lenovo-legion-module # fails at build
       ];
 
     # kernel 6.10.2

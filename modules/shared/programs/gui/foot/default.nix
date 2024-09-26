@@ -15,25 +15,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        # Foot fork with undercurl support
-        # source: https://codeberg.org/dnkl/foot/pulls/1099
-        foot = prev.foot.overrideAttrs (oldAttrs: rec {
-          version = "e95b52edc002da5b33657c11ef8c4d107ca696d9";
-          src = pkgs.fetchFromGitea {
-            domain = "codeberg.org";
-            owner = "kraftwerk28";
-            repo = "foot";
-            rev = version;
-            hash = "sha256-yXYrkHPAg1q0WIYe9vr97Gd++RWgc9SBDmnO3VRL/Ok=";
-          };
-          mesonFlags = oldAttrs.mesonFlags ++ [ "-Dext-underline=enabled" ];
-          patches = [ ./patches/increase-underline-thickness.patch ];
-        });
-      })
-    ];
-
     _custom.programs.foot.settings = {
       main = {
         shell = "${pkgs.tmux}/bin/tmux";

@@ -22,7 +22,7 @@ in {
 
     services.ollama = {
       enable = true;
-      package = pkgs.prevstable-nixpkgs.ollama;
+      package = pkgs.ollama;
       acceleration = lib.mkIf cfg.enableNvidia "cuda";
     };
     systemd.services.ollama.environment.OLLAMA_ORIGINS = "*";

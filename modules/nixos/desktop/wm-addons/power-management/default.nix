@@ -21,7 +21,7 @@ in {
       cpupower
       powertop # only use it to check current power usage
       battery-notification
-      psensor
+      # psensor # unmaintained
       lm_sensors
     ];
 
