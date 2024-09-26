@@ -13,6 +13,9 @@ function cleanup() {
 
   echo "Stopping docker services"
   docker stop viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1
+
+  # wait for docker services stop
+  sleep 3
 }
 
 function start() {
