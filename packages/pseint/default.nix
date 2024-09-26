@@ -17,12 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "ARCH=lnx" ];
 
-  desktopItems = [
+  desktopItems = let pseintOut = "${placeholder "out"}";
+  in [
     (makeDesktopItem {
       name = "PSeint";
-      exec = "${placeholder "out"}/opt/pseint/pseint";
+      exec = "${pseintOut}/opt/pseint/pseint";
       icon = "pseint";
-      desktopName = "pseint";
+      desktopName = "PSeint";
       categories = [ "Development" ];
     })
   ];
