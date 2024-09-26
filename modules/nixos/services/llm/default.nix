@@ -12,6 +12,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    # NOTE: cudaSupport rebuild opencv everytime nixpkgs changes
     nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
     environment.systemPackages = with pkgs; [
