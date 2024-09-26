@@ -1,6 +1,7 @@
 name: se
 
 windows:
+  # 1
   - viz-omni-docker:
       root: ~/Projects/se/viz-omni/backend/docker
       layout: tiled
@@ -8,6 +9,7 @@ windows:
         - docker:
             - lazydocker
 
+  # 2
   - viz-omni-backend-1:
       root: ~/Projects/se/viz-omni/backend
       layout: tiled
@@ -62,6 +64,7 @@ windows:
         #     - cd ./job_processor
         #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9996
 
+  # 3
   - viz-omni-backend-2:
       root: ~/Projects/se/viz-omni/backend
       layout: tiled
@@ -98,6 +101,7 @@ windows:
             - cd ./tile_worker
             - RACK_ENV=local MALLOC_ARENA_MAX=2 ruby ./tile_worker.rb
 
+  # 4
   - viz-omni-frontend:
       root: ~/Projects/se/viz-omni/frontend
       layout: tiled
@@ -118,6 +122,7 @@ windows:
             - cd ./geobuffer
             - gulp
 
+  # 5
   - viz-omni-frontend-neo:
       root: ~/Projects/se/viz-omni/frontend-neo
       layout: tiled
@@ -135,6 +140,7 @@ windows:
             - cd ./surveys-renderer
             - sh ./run.sh -e local start
 
+  # 6
   - viz-websites:
       root: ~/Projects/se/viz-websites
       layout: tiled
@@ -154,18 +160,19 @@ windows:
         # - se_help:
         #     - NODE_ENV=local APP=se_help gulp
 
+  # 7
   - surveys:
       root: ~/Projects/se
       layout: tiled
       panes:
         - compile-pearson-surveys:
             - cd ./pearson-surveys
-            - tmux send-keys "npx gulp compile:local"
+            # - tmux send-keys "npx gulp compile:local"
         # 5555
         - pearson-surveys:
             - cd ./pearson-surveys
-            - tmux send-keys "npx gulp"
+            # - tmux send-keys "npx gulp"
         # 5002
         - socialexplorer-surveys:
             - cd ./socialexplorer-surveys
-            - tmux send-keys "npx gulp"
+            # - tmux send-keys "npx gulp"
