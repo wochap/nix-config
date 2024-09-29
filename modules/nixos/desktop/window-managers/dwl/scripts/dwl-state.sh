@@ -20,6 +20,7 @@ readonly file_path="$HOME"/.cache/dwl/logs
 tag_labels=("1" "2" "3" "4" "5" "6" "7" "8" "9")
 monitor="${1}"
 component="${2}"
+once_mode="${3}"
 
 [[ ! -f "${file_path}" ]] && printf -- '%s\n' \
   "You need to redirect dwl stdout to $file_path" >&2
@@ -64,6 +65,11 @@ cycle() {
 }
 
 cycle
+
+if [ "$once_mode" == "--once" ]; then
+  exit 0
+fi
+
 while inotifywait -qq -e modify "$file_path"; do
   cycle
 done
