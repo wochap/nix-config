@@ -12,6 +12,14 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        # cuda 12.2+ doesn't build
+        # https://github.com/NixOS/nixpkgs/issues/338315
+        cudaPackages = prev.cudaPackages_12_2;
+      })
+    ];
+
     # NOTE: cudaSupport rebuild opencv everytime nixpkgs changes
     nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
