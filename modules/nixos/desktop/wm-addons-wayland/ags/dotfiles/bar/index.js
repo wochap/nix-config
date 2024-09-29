@@ -70,7 +70,7 @@ export const bar = (gdkMonitorId, monitorPlugName) => {
   }
 
   return Widget.Window({
-    name: `bar-${gdkMonitorId}`,
+    name: `bar-${monitorPlugName}`,
     monitor: gdkMonitorId,
     class_name: className,
     exclusivity: "exclusive",
