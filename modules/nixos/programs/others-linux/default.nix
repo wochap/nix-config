@@ -28,6 +28,8 @@ in {
       # skypeforlinux
       # teamviewer
       # zoom-us
+
+      _custom.pseint
     ];
 
     # intune-portal
