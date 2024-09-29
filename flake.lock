@@ -1831,6 +1831,22 @@
         "type": "github"
       }
     },
+    "prevstable-microsoft-identity-broker": {
+      "locked": {
+        "lastModified": 1725898530,
+        "narHash": "sha256-SIqKdrV6CUJii2XCRa5ArGIVEGfFC3FI4kM6Ejm/zKk=",
+        "owner": "liff",
+        "repo": "nixpkgs",
+        "rev": "caee0feb9ffe39364d39c54cd9c07bf477b64bff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "liff",
+        "repo": "nixpkgs",
+        "rev": "caee0feb9ffe39364d39c54cd9c07bf477b64bff",
+        "type": "github"
+      }
+    },
     "prevstable-neovim": {
       "locked": {
         "lastModified": 1722185531,
@@ -2018,6 +2034,7 @@
         "nur": "nur",
         "powerlevel10k": "powerlevel10k",
         "prevstable-gaming": "prevstable-gaming",
+        "prevstable-microsoft-identity-broker": "prevstable-microsoft-identity-broker",
         "prevstable-neovim": "prevstable-neovim",
         "prevstable-nixpkgs": "prevstable-nixpkgs",
         "prevstable-nodejs": "prevstable-nodejs",
