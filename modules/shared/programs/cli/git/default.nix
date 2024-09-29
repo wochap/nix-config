@@ -77,9 +77,12 @@ in {
             sidePanelWidth = 0.3333;
             expandFocusedSidePanel = true;
           };
-          git.paging = {
-            colorArg = "always";
-            pager = "delta --dark --paging=never";
+          git = {
+            overrideGpg = true;
+            paging = {
+              colorArg = "always";
+              pager = "delta --dark --paging=never";
+            };
           };
         };
       };
