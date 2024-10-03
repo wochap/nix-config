@@ -17,6 +17,14 @@ windows:
       root: ~/Projects/se/viz-omni/frontend/organizations
       layout: tiled
 
+  - pearson-surveys:
+      root: ~/Projects/se/pearson-surveys
+      layout: tiled
+
+  - socialexplorer-surveys:
+      root: ~/Projects/se/socialexplorer-surveys
+      layout: tiled
+
   # - viz-websites:
   #     root: ~/Projects/se/viz-websites
   #     layout: tiled
