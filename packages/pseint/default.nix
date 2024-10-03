@@ -17,17 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "ARCH=lnx" ];
 
-  desktopItems = let pseintOut = "${placeholder "out"}";
-  in [
-    (makeDesktopItem {
-      name = "PSeint";
-      exec = "${pseintOut}/opt/pseint/pseint";
-      icon = "pseint";
-      desktopName = "PSeint";
-      categories = [ "Development" ];
-    })
-  ];
-
   installPhase = ''
     runHook preInstall
 
