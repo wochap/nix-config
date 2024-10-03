@@ -26,20 +26,20 @@ in {
         config = { theme = "Catppuccin-${themeColors.flavor}"; };
         themes = {
           Catppuccin-latte = {
-            src = inputs.catppuccin-bat;
-            file = "Catppuccin-latte.tmTheme";
+            src = "${inputs.catppuccin-bat}/themes";
+            file = "Catppuccin Latte.tmTheme";
           };
           Catppuccin-frappe = {
-            src = inputs.catppuccin-bat;
-            file = "Catppuccin-frappe.tmTheme";
+            src = "${inputs.catppuccin-bat}/themes";
+            file = "Catppuccin Frappe.tmTheme";
           };
           Catppuccin-macchiato = {
-            src = inputs.catppuccin-bat;
-            file = "Catppuccin-macchiato.tmTheme";
+            src = "${inputs.catppuccin-bat}/themes";
+            file = "Catppuccin Macchiato.tmTheme";
           };
           Catppuccin-mocha = {
-            src = inputs.catppuccin-bat;
-            file = "Catppuccin-mocha.tmTheme";
+            src = "${inputs.catppuccin-bat}/themes";
+            file = "Catppuccin Mocha.tmTheme";
           };
         };
       };
