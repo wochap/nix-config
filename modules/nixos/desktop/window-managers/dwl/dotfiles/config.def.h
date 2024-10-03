@@ -537,10 +537,10 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, SHCMD("brave")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, SHCMD("google-chrome-stable")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, SHCMD("microsoft-edge")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, SHCMD_SK("g", "microsoft-edge --app=https://www.bing.com/chat")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_SK("c", "google-chrome-stable --app=https://chat.openai.com")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, raiserunnamedscratchpad, SHCMD_SK("o", "google-chrome-stable --app=https://ollama.wochap.local")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_SK("y", "google-chrome-stable --app=https://music.youtube.com")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, SHCMD_SK("g", "microsoft-edge --profile-directory=Default --app=https://www.bing.com/chat")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_SK("c", "google-chrome-stable --profile-directory=Default --app=https://chat.openai.com")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, raiserunnamedscratchpad, SHCMD_SK("o", "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_SK("y", "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com")),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // HACK: disable all dwl keymappings

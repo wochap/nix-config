@@ -46,7 +46,7 @@ in {
         };
         figma = {
           name = "Figma";
-          exec = "google-chrome-stable --app=https://www.figma.com";
+          exec = "google-chrome-stable --profile-directory=Default --app=https://www.figma.com";
         };
         freetube = {
           name = "Freetube";
