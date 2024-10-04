@@ -75,7 +75,8 @@ function scripts() {
 # run npm script (requires jq)
 function fns() {
   local script
-  script=$(cat package.json | jq -r '.scripts | keys[] ' | sort | fzf) && npm run $(echo "$script")
+  script=$(cat ./package.json | jq -r '.scripts | keys[] ' | sort | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_R_OPTS-}" fzf --preview 'cat package.json | jq -r '.scripts.{}' | bat --plain --language=sh --color=always')
+  npm run $(echo "$script")
 }
 
 # play song with mpc
