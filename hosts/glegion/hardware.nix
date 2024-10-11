@@ -72,7 +72,7 @@
       # source: https://sw.kovidgoyal.net/kitty/faq/#why-does-kitty-sometimes-start-slowly-on-my-linux-system
       # source: https://github.com/Einjerjar/nix/blob/172d17410cd0849f7028f80c0e2084b4eab27cc7/home/vars.nix#L30
       __EGL_VENDOR_LIBRARY_FILENAMES =
-        "${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json:${pkgs.mesa.drivers}/share/glvnd/egl_vendor.d/10_nvidia.json";
+        "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/10_nvidia.json";
     };
 
     zramSwap.enable = true;
