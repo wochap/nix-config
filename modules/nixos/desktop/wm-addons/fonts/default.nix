@@ -37,7 +37,7 @@ in {
         enableDefaultPackages = true;
         packages = with pkgs; [
           # NOTE: uncommenting causes rofi to slow down
-          # corefonts # basic fonts for office
+          corefonts # basic fonts for office
 
           # common
           inter
