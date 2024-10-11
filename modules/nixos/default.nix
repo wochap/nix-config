@@ -90,8 +90,8 @@
 
     ./system/boot
     ./system/console
-    ./system/others
     ./system/internationalization
+    ./system/others
     ./system/windows
 
     ./user
