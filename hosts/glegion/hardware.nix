@@ -54,8 +54,9 @@
     console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
 
     # bleeding edge mesa
-    chaotic.mesa-git.enable = true;
-    chaotic.mesa-git.fallbackSpecialisation = false;
+    # NOTE: breaks nvidia
+    # chaotic.mesa-git.enable = true;
+    # chaotic.mesa-git.fallbackSpecialisation = false;
 
     # better fps in games
     # requires linuxPackages_cachyos
