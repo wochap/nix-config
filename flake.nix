@@ -19,6 +19,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
+    chaotic.url = "github:chaotic-cx/nyx?rev=d73c548a001f367048d4f22cf2ae626cd2002503"; # nyxpkgs-unstable (10 oct 2024)
     matcha.url = "git+https://codeberg.org/QuincePie/matcha";
     matcha.inputs.nixpkgs.follows = "unstable";
     nix-gaming.url = "github:fufexan/nix-gaming?rev=1e435616e688c2b9125cd5282febcad3ab981d5e";
@@ -160,6 +161,7 @@
           modules = [
             inputs.home-manager.nixosModules.home-manager
             inputs.nur.nixosModules.nur
+            inputs.chaotic.nixosModules.default
             ./overlays
             ./modules/archetypes
             ./modules/nixos

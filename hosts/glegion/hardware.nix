@@ -38,7 +38,7 @@
       ];
 
     # kernel 6.10.2
-    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+    # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
 
     boot.kernelParams = [
       # this doesn't fix my ACPI Bios errors :c
@@ -51,6 +51,17 @@
     ];
 
     console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
+
+    # bleeding edge mesa
+    chaotic.mesa-git.enable = true;
+    chaotic.mesa-git.fallbackSpecialisation = false;
+
+    # better fps in games
+    # requires linuxPackages_cachyos
+    # docs: https://github.com/sched-ext/scx
+    chaotic.scx.enable = true;
+    # kernel 6.11.2
+    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
 
     environment.systemPackages = with pkgs; [
       lenovo-legion

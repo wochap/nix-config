@@ -36,6 +36,10 @@ in {
       extraPackages = with pkgs; [ mangohud ];
       extraPackages32 = with pkgs; [ mangohud ];
     };
+    chaotic.mesa-git = {
+      extraPackages = with pkgs; [ mangohud ];
+      extraPackages32 = with pkgs; [ mangohud ];
+    };
 
     _custom.hm = {
       xdg.configFile."MangoHud".source =
