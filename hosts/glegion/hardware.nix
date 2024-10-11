@@ -25,6 +25,7 @@
       prime = {
         offload.enable = true;
         offload.enableOffloadCmd = true;
+        # run `lspci | grep VGA`
         amdgpuBusId = "PCI:6:0:0";
         nvidiaBusId = "PCI:1:0:0";
       };
