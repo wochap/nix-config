@@ -15,7 +15,7 @@
     prevstable-microsoft-identity-broker.url = "github:liff/nixpkgs?rev=caee0feb9ffe39364d39c54cd9c07bf477b64bff";
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=0a30138c694ab3b048ac300794c2eb599dc40266"; # master (jul 04 2024)
+    home-manager.url = "github:nix-community/home-manager?rev=fe56302339bb28e3471632379d733547caec8103"; # master (oct 20 2024)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
