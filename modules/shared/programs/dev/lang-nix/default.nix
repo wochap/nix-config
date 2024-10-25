@@ -9,6 +9,7 @@ in {
       # required by personal nvim config
       statix # nvim-lint
       nixfmt-classic # conform.nvim
+      nixd # lsp server
     ];
   };
 }
