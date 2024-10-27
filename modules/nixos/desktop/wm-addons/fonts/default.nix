@@ -38,6 +38,7 @@ in {
         packages = with pkgs; [
           # NOTE: uncommenting causes rofi to slow down
           corefonts # basic fonts for office
+          vistafonts # more ms fonts
 
           # common
           inter
