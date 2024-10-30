@@ -980,17 +980,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1720045378,
-        "narHash": "sha256-lmE7B+QXw7lWdBu5GQlUABSpzPk3YBb9VbV+IYK5djk=",
+        "lastModified": 1729414726,
+        "narHash": "sha256-Dtmm1OU8Ymiy9hVWn/a2B8DhRYo9Eoyx9veERdOBR4o=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "0a30138c694ab3b048ac300794c2eb599dc40266",
+        "rev": "fe56302339bb28e3471632379d733547caec8103",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "0a30138c694ab3b048ac300794c2eb599dc40266",
+        "rev": "fe56302339bb28e3471632379d733547caec8103",
         "type": "github"
       }
     },
@@ -1986,6 +1986,22 @@
         "type": "github"
       }
     },
+    "prevstable-intune": {
+      "locked": {
+        "lastModified": 1728888510,
+        "narHash": "sha256-nsNdSldaAyu6PE3YUA+YQLqUDJh+gRbBooMMekZJwvI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c",
+        "type": "github"
+      }
+    },
     "prevstable-microsoft-identity-broker": {
       "locked": {
         "lastModified": 1725898530,
@@ -2206,6 +2222,7 @@
         "nur": "nur",
         "powerlevel10k": "powerlevel10k",
         "prevstable-gaming": "prevstable-gaming",
+        "prevstable-intune": "prevstable-intune",
         "prevstable-microsoft-identity-broker": "prevstable-microsoft-identity-broker",
         "prevstable-neovim": "prevstable-neovim",
         "prevstable-nix": "prevstable-nix",

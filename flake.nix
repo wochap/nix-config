@@ -13,6 +13,7 @@
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=c5187508b11177ef4278edf19616f44f21cc8c69"; # nixos-unstable (may 08 2024)
     prevstable-rubymine.url = "github:mevatron/nixpkgs?rev=6ae3ced59e52bb3fd99d82913e299273a3d4f18a"; # v2024.1.1
     prevstable-microsoft-identity-broker.url = "github:liff/nixpkgs?rev=caee0feb9ffe39364d39c54cd9c07bf477b64bff";
+    prevstable-intune.url = "github:nixos/nixpkgs?rev=a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c"; # nixos-unstable (oct 16 2024)
 
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=fe56302339bb28e3471632379d733547caec8103"; # master (oct 20 2024)

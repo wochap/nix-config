@@ -21,6 +21,8 @@ in {
         microsoft-identity-broker = pkgs.callPackage
           "${inputs.prevstable-microsoft-identity-broker}/pkgs/by-name/mi/microsoft-identity-broker/package.nix"
           { };
+
+        intune-portal = pkgs.prevstable-intune.intune-portal;
       })
     ];
 
