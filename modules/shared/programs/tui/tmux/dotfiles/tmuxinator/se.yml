@@ -88,6 +88,8 @@ windows:
         # 10005
         - search_service:
             - cd ./search_service
+            # HACK: wait for Elastic Search docker
+            - sleep 2
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../search ./ ../ruby_common
         # 10000
         - table_storage_service:
