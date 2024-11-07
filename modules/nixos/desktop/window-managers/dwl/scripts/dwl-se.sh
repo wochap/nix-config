@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+workspace=$(gum choose --height 5 --no-show-help {all,'layout-editor',surveys})
+
+if [ -z "$workspace" ]; then
+  exit 0
+fi
+
 function cleanup() {
   # Kill previous tmux session
   if tmux has-session -t se 2>/dev/null; then
@@ -30,11 +36,16 @@ function start() {
   # 3 = 2
   ydotool key 125:1 3:1 3:0 125:0
 
+  # Change to monocle layout
+  # 125 = logo
+  # 3 = 2
+  # ydotool
+
   # Start new foot terminal with tmux session
   echo "Starting tmux session: se"
-  footclient --app-id=footclient-se tmux new-session zsh -i -c "tmuxinator start se" &
+  footclient --app-id=footclient-se tmux new-session zsh -i -c "tmuxinator start se workspace=$workspace" &
   echo "Starting tmux session: se-editors"
-  footclient --app-id=footclient-se-editors tmux new-session zsh -i -c "tmuxinator start se-editors" &
+  footclient --app-id=footclient-se-editors tmux new-session zsh -i -c "tmuxinator start se-editors workspace=$workspace" &
 }
 
 cleanup

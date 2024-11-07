@@ -110,7 +110,9 @@ windows:
       panes:
         # 5555
         - frontend:
+            # <%- if @settings["workspace"] != "surveys" %>
             - gulp glu-vizwiz:local
+            # <%- end %>
         # 5557
         - currency-editor:
             - cd ./currency-editor
@@ -152,7 +154,9 @@ windows:
             - NODE_ENV=local APP=accounts gulp
         # 5002
         - viz_help:
+            # <%- if @settings["workspace"] != "surveys" %>
             - NODE_ENV=local APP=viz_help gulp
+            # <%- end %>
         # 4002
         - charts:
             - NODE_ENV=local APP=charts gulp
@@ -173,8 +177,12 @@ windows:
         # 5555
         - pearson-surveys:
             - cd ./pearson-surveys
-            # - tmux send-keys "npx gulp"
+            # <%- if @settings["workspace"] == "surveys" %>
+            - npx gulp
+            # <%- end %>
         # 5002
         - socialexplorer-surveys:
             - cd ./socialexplorer-surveys
-            # - tmux send-keys "npx gulp"
+            # <%- if @settings["workspace"] == "surveys" %>
+            - npx gulp
+            # <%- end %>
