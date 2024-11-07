@@ -14,6 +14,7 @@ in {
       deno
       hugo
       netlify-cli
+      nodePackages.prettier
       nodePackages.expo-cli
       nodePackages.firebase-tools
       nodePackages.gulp
