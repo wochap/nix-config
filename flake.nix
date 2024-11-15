@@ -56,6 +56,7 @@
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.url = "github:MarceColl/zen-browser-flake?rev=96dffb45b36141261e97a8f83438e4c88911fefa";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
+    ucodenix.url = "github:e-tho/ucodenix?rev=7d7586d3fcd07e147c0dba9291b2473e060c4c98";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
@@ -163,6 +164,7 @@
             inputs.home-manager.nixosModules.home-manager
             inputs.nur.nixosModules.nur
             inputs.chaotic.nixosModules.default
+            inputs.ucodenix.nixosModules.default
             ./overlays
             ./modules/archetypes
             ./modules/nixos

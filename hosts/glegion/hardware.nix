@@ -65,6 +65,12 @@
     # kernel 6.11.2
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
 
+    services.ucodenix = {
+      enable = true;
+      # docs: https://github.com/e-tho/ucodenix?tab=readme-ov-file#usage
+      cpuModelId = "00A70F41";
+    };
+
     environment.systemPackages = with pkgs; [
       lenovo-legion
       (nvtopPackages.nvidia.override { amd = true; })
