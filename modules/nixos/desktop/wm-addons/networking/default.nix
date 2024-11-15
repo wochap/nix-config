@@ -20,6 +20,7 @@ in {
         enable = true;
         allowPing = true;
         allowedTCPPortRanges = [
+          # servers
           {
             from = 8080;
             to = 8090;
@@ -28,9 +29,15 @@ in {
             from = 3000;
             to = 3010;
           }
+          # ?
           {
             from = 19000;
             to = 19020;
+          }
+          # vite
+          {
+            from = 5173;
+            to = 5179;
           }
         ];
         allowedTCPPorts = [
@@ -51,6 +58,12 @@ in {
           9099
           5000
           5001
+
+          # se surveys
+          5555
+          10016
+          9005
+          10011
         ];
       };
     };
