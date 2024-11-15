@@ -61,7 +61,11 @@
     # better fps in games
     # requires linuxPackages_cachyos
     # docs: https://github.com/sched-ext/scx
-    chaotic.scx.enable = true;
+    # https://github.com/chaotic-cx/nyx
+    chaotic.scx = {
+      enable = true;
+      scheduler = "scx_rustland";
+    };
     # kernel 6.11.2
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
 
