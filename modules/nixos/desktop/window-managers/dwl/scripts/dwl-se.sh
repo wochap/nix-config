@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+start_docker=$(gum confirm --no-show-help 'start docker?' && echo 1 || echo 0)
 workspace=$(gum choose --height 5 --no-show-help {all,'layout-editor',surveys})
 
 if [ -z "$workspace" ]; then
@@ -17,19 +18,23 @@ function cleanup() {
     tmux kill-session -t se-editors
   fi
 
-  echo "Stopping docker services"
-  docker stop viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1
+  if [ $start_docker -eq 1 ]; then
+    echo "Stopping docker services"
+    docker stop viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1
 
-  # wait for docker services stop
-  sleep 3
+    # wait for docker services stop
+    sleep 3
+  fi
 }
 
 function start() {
-  echo "Starting docker services"
-  docker start viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1
+  if [ $start_docker -eq 1 ]; then
+    echo "Starting docker services"
+    docker start viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1
 
-  # wait for docker services to be ready
-  sleep 3
+    # wait for docker services to be ready
+    sleep 3
+  fi
 
   # Focus DWL tag 2
   # 125 = logo
