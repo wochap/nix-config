@@ -6,14 +6,14 @@
     nixpkgs.url = "github:nixos/nixpkgs?rev=9357f4f23713673f310988025d9dc261c20e70c6"; # nixos-unstable (25 sep 2024)
     nextstable-nixpkgs.url = "github:nixos/nixpkgs?rev=ad416d066ca1222956472ab7d0555a6946746a80"; # nixos-unstable (05 sep 2024)
     prevstable-nixpkgs.url = "github:nixos/nixpkgs?rev=9f918d616c5321ad374ae6cb5ea89c9e04bf3e58"; # nixos-unstable (02 aug 2024)
-    prevstable-nix.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (jan 10 2024)
+    prevstable-nix.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (10 jan 2024)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=52ec9ac3b12395ad677e8b62106f0b98c1f8569d"; # NVIM v0.10.1
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
-    prevstable-gaming.url = "github:nixos/nixpkgs?rev=c5187508b11177ef4278edf19616f44f21cc8c69"; # nixos-unstable (may 08 2024)
+    prevstable-gaming.url = "github:nixos/nixpkgs?rev=c5187508b11177ef4278edf19616f44f21cc8c69"; # nixos-unstable (08 may 2024)
     prevstable-rubymine.url = "github:mevatron/nixpkgs?rev=6ae3ced59e52bb3fd99d82913e299273a3d4f18a"; # v2024.1.1
     prevstable-microsoft-identity-broker.url = "github:liff/nixpkgs?rev=caee0feb9ffe39364d39c54cd9c07bf477b64bff";
-    prevstable-intune.url = "github:nixos/nixpkgs?rev=a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c"; # nixos-unstable (oct 16 2024)
+    prevstable-intune.url = "github:nixos/nixpkgs?rev=a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c"; # nixos-unstable (16 oct 2024)
 
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=fe56302339bb28e3471632379d733547caec8103"; # master (oct 20 2024)
@@ -25,12 +25,12 @@
     matcha.inputs.nixpkgs.follows = "unstable";
     nix-gaming.url = "github:fufexan/nix-gaming?rev=1e435616e688c2b9125cd5282febcad3ab981d5e";
     nix-gaming.inputs.nixpkgs.follows = "unstable";
-    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=52b72b12c456a5c0c87c40941ef79335e8d61104"; # master (sep 03 2024)
+    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=52b72b12c456a5c0c87c40941ef79335e8d61104"; # master (03 sep 2024)
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
-    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=6e253f12b1009053eff5344be5e835f604bb64cd"; # master (jul 04 2024)
+    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=6e253f12b1009053eff5344be5e835f604bb64cd"; # master (04 jul 2024)
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=9822e0611d49ae70278ac20c9d7b68e4797b2fab";
     ags.url = "github:Aylur/ags?rev=11150225e62462bcd431d1e55185e810190a730a";
     ags.inputs.nixpkgs.follows = "nixpkgs";
@@ -71,7 +71,7 @@
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f";
     fuzzy-sys.flake = false;
-    kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim?rev=3f430ff8829dc2b0f5291d87789320231fdb65a1"; # (aug 20 2024)
+    kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim?rev=3f430ff8829dc2b0f5291d87789320231fdb65a1"; # (20 aug 2024)
     kitty-scrollback-nvim.flake = false;
     kitty-smart-scroll.url = "github:yurikhan/kitty-smart-scroll";
     kitty-smart-scroll.flake = false;
@@ -79,7 +79,7 @@
     kitty-smart-tab.flake = false;
     powerlevel10k.url = "github:romkatv/powerlevel10k?rev=35833ea15f14b71dbcebc7e54c104d8d56ca5268";
     powerlevel10k.flake = false;
-    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim?rev=aee30930689ae427729aad41568ccaae57c167fe"; # (aug 30 2024)
+    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim?rev=aee30930689ae427729aad41568ccaae57c167fe"; # (30 aug 2024)
     smart-splits-nvim.flake = false;
     zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=d52da825c2b60b664f33e8d82fdfc1c3b647b753";
     zsh-autocomplete.flake = false;
