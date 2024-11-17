@@ -8,7 +8,6 @@ in {
 
     environment.systemPackages = with pkgs; [
       ruby
-      prevstable-rubymine.jetbrains.ruby-mine
     ];
   };
 }
