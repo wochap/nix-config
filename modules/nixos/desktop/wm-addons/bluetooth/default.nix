@@ -33,6 +33,9 @@ in {
 
         # Enables kernel experimental features, alternatively a list of UUIDs can be given.
         KernelExperimental = true;
+
+        PairableTimeout = 0;
+        DiscoverableTimeout = 0;
       };
     };
 
