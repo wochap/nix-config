@@ -17,7 +17,6 @@ in {
     # make Public folder accessible for windows
     services.samba = {
       enable = true;
-      securityType = "user";
       openFirewall = true;
       nsswins = true;
       settings = {
