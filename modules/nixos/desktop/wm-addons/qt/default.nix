@@ -29,9 +29,9 @@ in {
       libsForQt5.breeze-icons
       libsForQt5.breeze-qt5
       catppuccin-qt5ct
-      (catppuccin-kvantum.override {
-        accent = "Mauve";
-        variant = "Mocha";
+      (unstable.catppuccin-kvantum.override {
+        accent = "mauve";
+        variant = "mocha";
       })
 
       # themes qt6
