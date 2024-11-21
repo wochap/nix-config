@@ -1,8 +1,8 @@
 {
   inputs = {
     # channels
-    unstable.url = "github:nixos/nixpkgs?rev=ecf7c683c21655a2c90bec49ce726aa6615a7d28"; # master (02 aug 2024)
-    stable.url = "github:nixos/nixpkgs?rev=d51c28603def282a24fa034bcb007e2bcb5b5dd0"; # nixos-24.05 (oct 11 2024)
+    unstable.url = "github:nixos/nixpkgs?rev=dc460ec76cbff0e66e269457d7b728432263166c"; # nixos-unstable (16 nov 2024)
+    stable.url = "github:nixos/nixpkgs?rev=d51c28603def282a24fa034bcb007e2bcb5b5dd0"; # nixos-24.05 (11 oct 2024)
     nixpkgs.url = "github:nixos/nixpkgs?rev=9357f4f23713673f310988025d9dc261c20e70c6"; # nixos-unstable (25 sep 2024)
     nextstable-nixpkgs.url = "github:nixos/nixpkgs?rev=ad416d066ca1222956472ab7d0555a6946746a80"; # nixos-unstable (05 sep 2024)
     prevstable-nixpkgs.url = "github:nixos/nixpkgs?rev=9f918d616c5321ad374ae6cb5ea89c9e04bf3e58"; # nixos-unstable (02 aug 2024)
@@ -19,11 +19,12 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
-    chaotic.url = "github:chaotic-cx/nyx?rev=d73c548a001f367048d4f22cf2ae626cd2002503"; # nyxpkgs-unstable (10 oct 2024)
+    chaotic.url = "github:chaotic-cx/nyx?rev=d9d59a2819215227199b5eeab06a7e5fb56681f7"; # nyxpkgs-unstable (16 nov 2024)
+    chaotic.inputs.nixpkgs.follows = "unstable";
     matcha.url = "git+https://codeberg.org/QuincePie/matcha";
-    matcha.inputs.nixpkgs.follows = "unstable";
+    matcha.inputs.nixpkgs.follows = "nixpkgs";
     nix-gaming.url = "github:fufexan/nix-gaming?rev=1e435616e688c2b9125cd5282febcad3ab981d5e";
-    nix-gaming.inputs.nixpkgs.follows = "unstable";
+    nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=52b72b12c456a5c0c87c40941ef79335e8d61104"; # master (03 sep 2024)
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
