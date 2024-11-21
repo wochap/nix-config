@@ -64,6 +64,7 @@
     # https://github.com/chaotic-cx/nyx
     chaotic.scx = {
       enable = true;
+      package = pkgs.unstable.scx.rustland;
       scheduler = "scx_rustland";
     };
     # kernel 6.11.2
@@ -95,8 +96,33 @@
       # source: https://sw.kovidgoyal.net/kitty/faq/#why-does-kitty-sometimes-start-slowly-on-my-linux-system
       # source: https://github.com/Einjerjar/nix/blob/172d17410cd0849f7028f80c0e2084b4eab27cc7/home/vars.nix#L30
       __EGL_VENDOR_LIBRARY_FILENAMES =
-        "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/10_nvidia.json";
+        "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:/etc/egl/egl_external_platform.d/10_nvidia_wayland.json:/etc/egl/egl_external_platform.d/15_nvidia_gbm.json";
     };
+
+    # Ugly hack to fix a bug in egl-wayland, see
+    # https://github.com/NixOS/nixpkgs/issues/202454
+    environment.etc."egl/egl_external_platform.d".source = let
+      nvidia_wayland = pkgs.writeText "10_nvidia_wayland.json" ''
+        {
+            "file_format_version" : "1.0.0",
+            "ICD" : {
+                "library_path" : "${pkgs.egl-wayland}/lib/libnvidia-egl-wayland.so"
+            }
+        }
+      '';
+      nvidia_gbm = pkgs.writeText "15_nvidia_gbm.json" ''
+        {
+            "file_format_version" : "1.0.0",
+            "ICD" : {
+                "library_path" : "${config.hardware.nvidia.package}/lib/libnvidia-egl-gbm.so.1"
+            }
+        }
+      '';
+    in lib.mkForce (pkgs.runCommandLocal "nvidia-egl-hack" { } ''
+      mkdir -p $out
+      cp ${nvidia_wayland} $out/10_nvidia_wayland.json
+      cp ${nvidia_gbm} $out/15_nvidia_gbm.json
+    '');
 
     zramSwap.enable = true;
 
