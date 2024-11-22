@@ -18,6 +18,17 @@ in {
 
           ln -sf ${prev.robo3t}/share $out/share
         '';
+
+        mongodb-compass = prev.runCommandNoCC "mongodb-compass" {
+          buildInputs = with pkgs; [ makeWrapper ];
+        } ''
+          makeWrapper ${prev.mongodb-compass}/bin/mongodb-compass $out/bin/mongodb-compass \
+          --add-flags "--enable-features=UseOzonePlatform" \
+          --add-flags "--ozone-platform=wayland" \
+          --add-flags "--ignore-additional-command-line-flags"
+
+          ln -sf ${prev.mongodb-compass}/share $out/share
+        '';
       })
     ];
 
