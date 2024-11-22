@@ -16,7 +16,7 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
-        neovide # gui
+        nixpkgs-unstable.neovide # gui
 
         marksman # required by nvim-lspconfig
         _custom.neovim-remote # required by lazygit

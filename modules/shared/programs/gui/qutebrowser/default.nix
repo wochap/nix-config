@@ -13,7 +13,7 @@ in {
 
       programs.qutebrowser = {
         enable = true;
-        package = pkgs.nextstable-nixpkgs.qutebrowser;
+        package = pkgs.qutebrowser;
         enableDefaultBindings = true;
         quickmarks = {
           home-manager =

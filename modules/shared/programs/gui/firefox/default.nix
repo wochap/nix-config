@@ -21,8 +21,8 @@ in {
 
       programs.firefox = {
         enable = true;
-        package = (pkgs.wrapFirefox
-          (pkgs.firefox-unwrapped.override { pipewireSupport = true; }) { });
+        package =
+          (pkgs.firefox.override (old: { cfg = { pipewireSupport = true; }; }));
         arkenfox = {
           enable = true;
           version = "128.0";

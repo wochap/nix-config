@@ -6,22 +6,17 @@ in {
     nixpkgs.overlays = [
       # Custom channels
       (final: prev: {
-        unstable = import inputs.unstable {
+        nixpkgs-master = import inputs.nixpkgs-master {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
-        stable = import inputs.stable {
+        nixpkgs-24-11-small = import inputs.nixpkgs-24-11-small {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
-        nextstable-nixpkgs = import inputs.nextstable-nixpkgs {
-          inherit (prev) system;
-          inherit (config.nixpkgs) config;
-          overlays = overlaysWithoutCustomChannels;
-        };
-        prevstable-nixpkgs = import inputs.prevstable-nixpkgs {
+        nixpkgs-unstable = import inputs.nixpkgs-unstable {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;

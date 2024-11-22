@@ -8,7 +8,7 @@ let
     "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
   taskwarriorConfigPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/taskwarrior";
-  taskwarrior-final = pkgs.nextstable-nixpkgs.taskwarrior3;
+  taskwarrior-final = pkgs.taskwarrior3;
   stop-tasks = pkgs.writeScriptBin "stop-tasks" ''
     #!/usr/bin/env bash
     echo y | ${taskwarrior-final}/bin/task status:pending stop

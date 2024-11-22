@@ -29,7 +29,7 @@ in {
       libsForQt5.breeze-icons
       libsForQt5.breeze-qt5
       catppuccin-qt5ct
-      (unstable.catppuccin-kvantum.override {
+      (catppuccin-kvantum.override {
         accent = "mauve";
         variant = "mocha";
       })

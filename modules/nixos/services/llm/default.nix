@@ -25,7 +25,7 @@ in {
 
     environment.systemPackages = with pkgs; [
       python311Packages.huggingface-hub
-      nextstable-nixpkgs.oterm
+      oterm
     ];
 
     services.ollama = {

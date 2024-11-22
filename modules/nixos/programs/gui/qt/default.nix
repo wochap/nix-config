@@ -11,7 +11,7 @@ in {
         filelight # view disk usage
         qbittorrent
 
-        prevstable-nixpkgs.libsForQt5.kdenlive
+        libsForQt5.kdenlive
         # glaxnimate
 
         # APPS MEDIA (Comment on first install)

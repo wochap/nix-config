@@ -1,11 +1,10 @@
 {
   inputs = {
     # channels
-    unstable.url = "github:nixos/nixpkgs?rev=dc460ec76cbff0e66e269457d7b728432263166c"; # nixos-unstable (16 nov 2024)
-    stable.url = "github:nixos/nixpkgs?rev=d51c28603def282a24fa034bcb007e2bcb5b5dd0"; # nixos-24.05 (11 oct 2024)
-    nixpkgs.url = "github:nixos/nixpkgs?rev=9357f4f23713673f310988025d9dc261c20e70c6"; # nixos-unstable (25 sep 2024)
-    nextstable-nixpkgs.url = "github:nixos/nixpkgs?rev=ad416d066ca1222956472ab7d0555a6946746a80"; # nixos-unstable (05 sep 2024)
-    prevstable-nixpkgs.url = "github:nixos/nixpkgs?rev=9f918d616c5321ad374ae6cb5ea89c9e04bf3e58"; # nixos-unstable (02 aug 2024)
+    nixpkgs.url = "github:nixos/nixpkgs?rev=057f63b6dc1a2c67301286152eb5af20747a9cb4"; # nixos-24.11 (21 nov 2024)
+    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=23e89b7da85c3640bbc2173fe04f4bd114342367"; # nixos-unstable (22 nov 2024)
+    nixpkgs-master.url = "github:nixos/nixpkgs?rev=1f8150661e78f70bda0b51893344326fc2ca264c"; # master (22 nov 2024)
+    nixpkgs-24-11-small.url = "github:nixos/nixpkgs?rev=9bbcb9a5a7e54369faaced5fb0ddad1fda21b751"; # nixos-24.11-small (21 nov 2024)
     prevstable-nix.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (10 jan 2024)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=52ec9ac3b12395ad677e8b62106f0b98c1f8569d"; # NVIM v0.10.1
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4
@@ -15,12 +14,12 @@
     prevstable-intune.url = "github:nixos/nixpkgs?rev=a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c"; # nixos-unstable (16 oct 2024)
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=fe56302339bb28e3471632379d733547caec8103"; # master (oct 20 2024)
+    home-manager.url = "github:nix-community/home-manager?rev=aecd341dfead1c3ef7a3c15468ecd71e8343b7c6"; # release-24.11 (21 nov 2024)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
     chaotic.url = "github:chaotic-cx/nyx?rev=d9d59a2819215227199b5eeab06a7e5fb56681f7"; # nyxpkgs-unstable (16 nov 2024)
-    chaotic.inputs.nixpkgs.follows = "unstable";
+    chaotic.inputs.nixpkgs.follows = "nixpkgs-unstable";
     matcha.url = "git+https://codeberg.org/QuincePie/matcha";
     matcha.inputs.nixpkgs.follows = "nixpkgs";
     nix-gaming.url = "github:fufexan/nix-gaming?rev=1e435616e688c2b9125cd5282febcad3ab981d5e";

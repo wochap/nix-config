@@ -35,7 +35,7 @@
     boot.extraModulePackages = with config.boot.kernelPackages;
       [
         # Doesn't work yet...
-        # lenovo-legion-module # fails at build
+        lenovo-legion-module
       ];
 
     # kernel 6.10.2
@@ -62,13 +62,13 @@
     # requires linuxPackages_cachyos
     # docs: https://github.com/sched-ext/scx
     # https://github.com/chaotic-cx/nyx
-    chaotic.scx = {
-      enable = true;
-      package = pkgs.unstable.scx.rustland;
-      scheduler = "scx_rustland";
-    };
+    # chaotic.scx = {
+    #   enable = true;
+    #   package = pkgs.nixpkgs-unstable.scx.rustland;
+    #   scheduler = "scx_rustland";
+    # };
     # kernel 6.11.2
-    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
+    # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
 
     services.ucodenix = {
       enable = true;
@@ -95,8 +95,9 @@
       # This also speeds up the startup time of apps using GPU, because my nvidia card is always powered off
       # source: https://sw.kovidgoyal.net/kitty/faq/#why-does-kitty-sometimes-start-slowly-on-my-linux-system
       # source: https://github.com/Einjerjar/nix/blob/172d17410cd0849f7028f80c0e2084b4eab27cc7/home/vars.nix#L30
+      # source: https://github.com/NixOS/nixpkgs/pull/139354#issuecomment-926942682
       __EGL_VENDOR_LIBRARY_FILENAMES =
-        "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:/etc/egl/egl_external_platform.d/10_nvidia_wayland.json:/etc/egl/egl_external_platform.d/15_nvidia_gbm.json";
+        "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:${config.hardware.nvidia.package}/share/glvnd/egl_vendor.d/10_nvidia.json";
     };
 
     # Ugly hack to fix a bug in egl-wayland, see
