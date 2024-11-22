@@ -5,6 +5,7 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=23e89b7da85c3640bbc2173fe04f4bd114342367"; # nixos-unstable (22 nov 2024)
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=1f8150661e78f70bda0b51893344326fc2ca264c"; # master (22 nov 2024)
     nixpkgs-24-11-small.url = "github:nixos/nixpkgs?rev=9bbcb9a5a7e54369faaced5fb0ddad1fda21b751"; # nixos-24.11-small (21 nov 2024)
+    nixpkgs-24-05.url = "github:nixos/nixpkgs?rev=e8c38b73aeb218e27163376a2d617e61a2ad9b59"; # nixos-24.05 (21 nov 2024)
     prevstable-nix.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (10 jan 2024)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=52ec9ac3b12395ad677e8b62106f0b98c1f8569d"; # NVIM v0.10.1
     prevstable-python.url = "github:nixos/nixpkgs?rev=a16f7eb56e88c8985fcc6eb81dabd6cade4e425a"; # Python v3.11.4

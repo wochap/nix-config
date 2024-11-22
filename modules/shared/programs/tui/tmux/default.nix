@@ -12,6 +12,8 @@ let
       "--padding '0,1'"
     ]);
 
+  # NOTE: tmux v3.5a introduced a change that broke keybindings using the Shift key
+  tmux-final = pkgs.nixpkgs-24-05.tmux; # tmux v3.4
   tmux-sessionx =
     inputs.tmux-sessionx.packages.${pkgs.system}.default.overrideAttrs
     (oldAttrs: { postInstall = ""; });
@@ -23,10 +25,10 @@ let
   start-tmux-server = pkgs.writeScriptBin "start-tmux-server" ''
     #!/usr/bin/env bash
 
-    ${pkgs.tmux}/bin/tmux -L default kill-server
-    TMUX_ID=$(${pkgs.tmux}/bin/tmux new-session -d -P)
-    ${pkgs.tmux}/bin/tmux kill-session -t tmux-server
-    ${pkgs.tmux}/bin/tmux rename-session -t $TMUX_ID tmux-server
+    ${tmux-final}/bin/tmux -L default kill-server
+    TMUX_ID=$(${tmux-final}/bin/tmux new-session -d -P)
+    ${tmux-final}/bin/tmux kill-session -t tmux-server
+    ${tmux-final}/bin/tmux rename-session -t $TMUX_ID tmux-server
     ${tmux-kill-unnamed-sessions}/bin/tmux-kill-unnamed-sessions
     ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
   '';
@@ -35,7 +37,7 @@ let
 
     ${tmux-kill-unnamed-sessions}/bin/tmux-kill-unnamed-sessions
     ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
-    ${pkgs.tmux}/bin/tmux -L default kill-server
+    ${tmux-final}/bin/tmux -L default kill-server
   '';
 in {
   options._custom.programs.tmux = {
@@ -58,7 +60,7 @@ in {
     ];
 
     environment.systemPackages = with pkgs; [
-      tmux
+      tmux-final
       tmux-kill-unattached-sessions
       tmux-kill-unnamed-sessions
       tmuxinator # session manager
