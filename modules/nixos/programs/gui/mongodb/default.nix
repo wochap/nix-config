@@ -13,7 +13,8 @@ in {
           makeWrapper ${prev.robo3t}/bin/robo3t $out/bin/robo3t \
             --set "QT_QPA_PLATFORM" "xcb" \
             --set "QT_FONT_DPI" "${
-              toString (if config._custom.desktop.hyprland.enable then 192 else 96)
+              toString
+              (if config._custom.desktop.hyprland.enable then 192 else 96)
             }"
 
           ln -sf ${prev.robo3t}/share $out/share
