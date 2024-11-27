@@ -28,7 +28,7 @@ in {
 
     environment.systemPackages = with pkgs; [
       brave
-      google-chrome
+      prevstable-chrome.google-chrome
       microsoft-edge
       inputs.zen-browser.packages."${system}".specific
 
