@@ -38,6 +38,11 @@ in {
       mongodb-tools
       robo3t
       _custom.nodePackages."migrate-mongo-9.0.0"
+
+      redisinsight
+
+      # PostgreSQL
+      dbeaver-bin
     ];
   };
 }
