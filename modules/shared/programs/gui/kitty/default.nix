@@ -53,6 +53,7 @@ in {
           ${builtins.readFile ./dotfiles/kitty-diff.conf}
         '';
         "kitty/kitty.conf".text = ''
+          shell ${pkgs.zsh}/bin/zsh
           include ${inputs.catppuccin-kitty}/themes/${themeColors.flavor}.conf
           cursor ${themeColors.green}
           cursor_text_color ${themeColors.base}

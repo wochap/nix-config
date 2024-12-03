@@ -44,6 +44,7 @@ in {
     ];
 
     # make zsh default user shell
+    # NOTE: tmux and kitty use pkgs.zsh
     _custom.user.shell = lib.mkIf cfg.isDefault pkgs.zsh;
 
     programs.zsh = {

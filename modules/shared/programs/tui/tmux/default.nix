@@ -83,6 +83,7 @@ in {
           "${tmux-sessionx}/share/tmux-plugins/sessionx";
         "tmux/plugins/catppuccin".source = inputs.catppuccin-tmux;
         "tmux/tmux.conf".text = ''
+          set -g default-shell ${pkgs.zsh}/bin/zsh
           set -g popup-border-style "bg=default,fg=${themeColors.primary}"
           set -g @catppuccin_flavour "${themeColors.flavor}"
           set -g @catppuccin_pane_active_border_style "fg=${themeColors.primary}"

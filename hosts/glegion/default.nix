@@ -53,7 +53,8 @@ in {
     _custom.programs.zk.enable = true;
     _custom.programs.zoxide.enable = true;
     _custom.programs.zsh.enable = true;
-    _custom.programs.zsh.isDefault = true;
+    # tmux and kitty still use zsh
+    _custom.programs.zsh.isDefault = false;
 
     # dev
     _custom.programs.lang-c.enable = true;
