@@ -16,7 +16,7 @@
     prevstable-intune.url = "github:nixos/nixpkgs?rev=a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c"; # nixos-unstable (16 oct 2024)
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=aecd341dfead1c3ef7a3c15468ecd71e8343b7c6"; # release-24.11 (21 nov 2024)
+    home-manager.url = "github:nix-community/home-manager?rev=62d536255879be574ebfe9b87c4ac194febf47c5"; # release-24.11 (04 dec 2024)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
