@@ -1,10 +1,10 @@
 {
   inputs = {
     # channels
-    nixpkgs.url = "github:nixos/nixpkgs?rev=057f63b6dc1a2c67301286152eb5af20747a9cb4"; # nixos-24.11 (21 nov 2024)
+    nixpkgs.url = "github:nixos/nixpkgs?rev=b681065d0919f7eb5309a93cea2cfa84dec9aa88"; # nixos-24.11 (04 dec 2024)
     nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=23e89b7da85c3640bbc2173fe04f4bd114342367"; # nixos-unstable (22 nov 2024)
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=1f8150661e78f70bda0b51893344326fc2ca264c"; # master (22 nov 2024)
-    nixpkgs-24-11-small.url = "github:nixos/nixpkgs?rev=9bbcb9a5a7e54369faaced5fb0ddad1fda21b751"; # nixos-24.11-small (21 nov 2024)
+    nixpkgs-24-11-small.url = "github:nixos/nixpkgs?rev=c3b08708334cca32db70df24516608e73f645136"; # nixos-24.11-small (04 dec 2024)
     nixpkgs-24-05.url = "github:nixos/nixpkgs?rev=e8c38b73aeb218e27163376a2d617e61a2ad9b59"; # nixos-24.05 (21 nov 2024)
     prevstable-nix.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (10 jan 2024)
     prevstable-chrome.url = "github:nixos/nixpkgs?rev=9357f4f23713673f310988025d9dc261c20e70c6"; # nixos-unstable (25 sep 2024)
