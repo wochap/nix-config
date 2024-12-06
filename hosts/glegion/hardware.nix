@@ -45,10 +45,6 @@
       # this doesn't fix my ACPI Bios errors :c
       # source: https://discordapp.com/channels/761178912230473768/1159412133117833286
       "acpi_osi=Linux"
-
-      # Disables scatter/gather which was introduced with kernel version 6.2
-      # It produces completely white or flashing screens when enabled while using the iGPU of Ryzen 7000-series CPUs (Raphael)
-      "amdgpu.sg_display=0"
     ];
 
     console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
