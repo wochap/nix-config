@@ -30,7 +30,7 @@
         nvidiaBusId = "PCI:1:0:0";
       };
     };
-    services.xserver.videoDrivers = [ "nvidia" ];
+    services.xserver.videoDrivers = lib.mkForce [ "modesetting" "nvidia" ];
 
     boot.extraModulePackages = with config.boot.kernelPackages;
       [
