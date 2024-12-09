@@ -94,6 +94,12 @@ in {
         ignores =
           [ ".direnv" ".vscode" ".envrc" ".cache" "compile_commands.json" ];
 
+        # enable Git Large File Storage
+        lfs = {
+          enable = true;
+          skipSmudge = true;
+        };
+
         delta = {
           enable = true;
           options = {
