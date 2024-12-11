@@ -29,7 +29,7 @@ in {
           layout = "grid";
           hyperlink = "auto";
           blocks = [ "permission" "user" "group" "size" "date" "git" "name" ];
-          date = "+%a %m %b %H:%M %Y";
+          date = "+%a %d %b %H:%M %Y";
         };
       };
     };
