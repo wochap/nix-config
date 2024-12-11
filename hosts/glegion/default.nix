@@ -17,7 +17,6 @@ in {
     # cli
     _custom.programs.core-utils-extra-linux.enable = true;
     _custom.programs.core-utils-linux.enable = true;
-    _custom.programs.nix-alien.enable = true;
     _custom.programs.nix-direnv.enable = true;
 
     # gui

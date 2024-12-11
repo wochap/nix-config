@@ -15,6 +15,7 @@
       _custom.security.ssh.enable = true;
 
       _custom.system.console.enable = true;
+      _custom.system.fhs-compat.enable = true;
 
       _custom.desktop.audio.enable = true;
       _custom.desktop.backlight.enable = true;
@@ -63,6 +64,7 @@
       _custom.security.ssh.enable = true;
 
       _custom.system.console.enable = true;
+      _custom.system.fhs-compat.enable = true;
 
       _custom.desktop.fastfetch.enable = true;
       _custom.desktop.fonts.enable = true;

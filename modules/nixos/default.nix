@@ -54,7 +54,6 @@
 
     ./programs/cli/core-utils-extra-linux
     ./programs/cli/core-utils-linux
-    ./programs/cli/nix-alien
 
     ./programs/gui/dolphin
     ./programs/gui/electron
@@ -90,6 +89,7 @@
 
     ./system/boot
     ./system/console
+    ./system/fhs-compat
     ./system/internationalization
     ./system/others
     ./system/windows
