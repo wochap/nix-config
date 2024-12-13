@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let cfg = config._custom.desktop.networking;
 in {
@@ -7,14 +7,39 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "networkmanager" ];
 
+    environment = {
+      systemPackages = with pkgs; [ impala ];
+
+      shellAliases.wtui = "impala";
+    };
+
     networking = {
       enableIPv6 = false;
 
       # Disable wpa_supplicant
-      wireless.enable = lib.mkForce false;
+      wireless.enable = false;
+
+      wireless.iwd = {
+        enable = true;
+        settings = {
+          # MAC address randomization
+          General = {
+            AddressRandomization = "once";
+            AddressRandomizationRange = "full";
+            EnableNetworkConfiguration = true;
+          };
+          Network.EnableIPv6 = false;
+          Settings.AutoConnect = true;
+        };
+      };
 
       # Enable NetworkManager
-      networkmanager.enable = true;
+      networkmanager = {
+        enable = true;
+        # increase boot speed
+        wifi.backend = "iwd";
+      };
+
       nameservers = [ "1.1.1.1" "1.0.0.1" "8.8.8.8" "8.8.4.4" ];
       firewall = {
         enable = true;
