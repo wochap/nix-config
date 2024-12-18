@@ -20,6 +20,9 @@ in {
     ];
 
     environment.systemPackages = with pkgs; [
+      tor
+      w3m-full
+      libwebp
       devour # xorg window swallower
       ifuse # mount ios
       libimobiledevice # mount ios
