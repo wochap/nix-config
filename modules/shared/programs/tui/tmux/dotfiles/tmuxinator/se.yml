@@ -111,12 +111,12 @@ windows:
         # 5555
         - frontend:
             # <%- if @settings["workspace"] != "surveys" %>
-            - gulp glu-vizwiz:local
+            - npx gulp glu-vizwiz:local
             # <%- end %>
         # 5557
         - currency-editor:
             - cd ./currency-editor
-            - gulp
+            - npx gulp
         # 3000
         - organizations:
             - cd ./organizations
@@ -124,7 +124,7 @@ windows:
         # 5556
         - geobuffer:
             - cd ./geobuffer
-            - gulp
+            - npx gulp
 
   # 5
   - viz-omni-frontend-neo:
