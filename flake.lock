@@ -2304,17 +2304,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1722270686,
-        "narHash": "sha256-QTapwxtiYyGbYlHCfXKeCzOsSMAC0cVpVtCKvI+6M44=",
+        "lastModified": 1732453658,
+        "narHash": "sha256-ctihO7P8qhbnR1kIQMMQAPpfEu1C3aknDErJdPpNnzY=",
         "owner": "wlrfx",
         "repo": "scenefx",
-        "rev": "7a7c35750239bd117931698b121a072f30bc1cbe",
+        "rev": "b2e0ac4beb85aa89d0357dc8fcf8762808650890",
         "type": "github"
       },
       "original": {
         "owner": "wlrfx",
         "repo": "scenefx",
-        "rev": "7a7c35750239bd117931698b121a072f30bc1cbe",
+        "rev": "b2e0ac4beb85aa89d0357dc8fcf8762808650890",
         "type": "github"
       }
     },

@@ -8,7 +8,7 @@ static const int sloppyfocus               = 1;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const unsigned int borderpx         = 1;  /* border pixel of windows */
 static const unsigned int borderspx        = 0;  /* width of the border that start from outside the windows */
-static const unsigned int borderepx        = 1;  /* width of the border that start from inside the windows */
+static const unsigned int borderepx        = 0;  /* width of the border that start from inside the windows */
 static const unsigned int borderspx_offset = 0;  /* offset of the border that start from outside the windows */
 static const unsigned int borderepx_negative_offset = 1; /* offset of the border that start from inside the windows */
 static const int draw_minimal_borders      = 1; /* merge adjacent borders */
@@ -27,31 +27,31 @@ static const char cursor_size[] = "@cursorSize@";
 static const unsigned int swipe_min_threshold = 0;
 static const int respect_monitor_reserved_area = 0;  /* 1 to monitor center while respecting the monitor's reserved area, 0 to monitor center */
 
-// static const int opacity = 0; /* flag to enable opacity */
-// static const float opacity_inactive = 0.5;
-// static const float opacity_active = 1.0;
-//
-// static const int shadow = 1;
-// static const int shadow_only_floating = 0; /* 0 means center floating relative to the window area */
-// static const struct wlr_render_color shadow_color = COLOR(0x@shadow@ff);
-// static const struct wlr_render_color shadow_color_focus = COLOR(0x@shadow@ff);
-// static const int shadow_blur_sigma = 28;
-// static const int shadow_blur_sigma_focus = 56;
-// static const char *const shadow_ignore_list[] = { NULL }; /* list of app-id to ignore */
-//
-// static const int corner_radius = 0; /* 0 disables corner_radius */
-//
-// static const int blur = 0; /* flag to enable blur */
-// static const int blur_optimized = 1;
-// static const int blur_ignore_transparent = 1;
-// static const struct blur_data blur_data = {
-//   .radius = 5,
-//   .num_passes = 3,
-//   .noise = (float)0.02,
-//   .brightness = (float)0.9,
-//   .contrast = (float)0.9,
-//   .saturation = (float)1.1,
-// };
+static const int opacity = 0; /* flag to enable opacity */
+static const float opacity_inactive = 0.5;
+static const float opacity_active = 1.0;
+
+static const int shadow = 1;
+static const int shadow_only_floating = 1; /* 0 means center floating relative to the window area */
+static const float shadow_color[4] = COLOR(0x@shadow@80);
+static const float shadow_color_focus[4] = COLOR(0x@shadow@80);
+static const int shadow_blur_sigma = 28;
+static const int shadow_blur_sigma_focus = 56;
+
+static const int corner_radius = 4; /* 0 disables corner_radius */
+static const int corner_radius_inner = 2; /* 0 disables corner_radius */
+
+static const int blur = 1; /* flag to enable blur */
+static const int blur_optimized = 1;
+static const int blur_ignore_transparent = 1;
+static const struct blur_data blur_data = {
+  .radius = 5,
+  .num_passes = 3,
+  .noise = (float)0.02,
+  .brightness = (float)0.9,
+  .contrast = (float)0.9,
+  .saturation = (float)1.1,
+};
 
 enum {
   VIEW_L = -1,

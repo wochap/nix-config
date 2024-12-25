@@ -49,7 +49,7 @@
     pyprland.inputs.nixpkgs.follows = "nixpkgs";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
-    scenefx.url = "github:wlrfx/scenefx?rev=7a7c35750239bd117931698b121a072f30bc1cbe";
+    scenefx.url = "github:wlrfx/scenefx?rev=b2e0ac4beb85aa89d0357dc8fcf8762808650890"; # main (24 dec 2024)
     scenefx.inputs.nixpkgs.follows = "nixpkgs";
     wayfreeze.url = "github:Jappie3/wayfreeze?rev=37ef9e456c87601ed4e06f36f437f688083d61cf";
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";

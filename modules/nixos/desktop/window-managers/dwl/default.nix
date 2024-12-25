@@ -1,14 +1,15 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, inputs, system, ... }:
 
 let
   cfg = config._custom.desktop.dwl;
   inherit (config._custom.globals) themeColors cursor userName configDirectory;
   inherit (lib._custom) unwrapHex;
 
-  wlroots_0_19 = inputs.nixpkgs-wayland.packages."${pkgs.system}".wlroots;
+  scenefx-final = inputs.scenefx.packages."${system}".scenefx;
   dwl-state =
     pkgs.writeScriptBin "dwl-state" (builtins.readFile ./scripts/dwl-state.sh);
   dwl-final = (pkgs.dwl.override {
+    wlroots = pkgs.wlroots_0_18;
     configH = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
       primary = unwrapHex themeColors.primary;
@@ -67,28 +68,16 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "e83cde576a9104c7632a900c82781e3d810bbd1f";
+          version = "d098b92c"; # v0.8-a/patches-02-aug-2024
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-G7E/x6f3/37JQ/heNUfVYuXCQhhaLFd6Jwds2+VD3Sc=";
+            hash = "sha256-3R/8IwJyutCKV6B/w91bJRLu2bl1FUu/reCRK0SQeR0=";
           };
-          buildInputs = with pkgs; [
-            libinput
-            xorg.libxcb
-            libxkbcommon
-            pixman
-            wayland
-            wayland-protocols
-            wlroots_0_19
-            # xwayland support
-            xorg.libX11
-            xorg.xcbutilwm
-            xwayland
-            # scenefx support
-            # inputs.scenefx.packages."${system}".scenefx
-            # libGL
+          buildInputs = with pkgs; oldAttrs.buildInputs ++ [
+            scenefx-final
+            libGL
           ];
           # enable debug symbols for better backtrace
           separateDebugInfo = true;
