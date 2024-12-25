@@ -32,7 +32,7 @@ static const float opacity_inactive = 0.5;
 static const float opacity_active = 1.0;
 
 static const int shadow = 1;
-static const int shadow_only_floating = 1; /* 0 means center floating relative to the window area */
+static const int shadow_only_floating = 1;
 static const float shadow_color[4] = COLOR(0x@shadow@80);
 static const float shadow_color_focus[4] = COLOR(0x@shadow@80);
 static const int shadow_blur_sigma = 28;
@@ -41,7 +41,7 @@ static const int shadow_blur_sigma_focus = 56;
 static const int corner_radius = 4; /* 0 disables corner_radius */
 static const int corner_radius_inner = 2; /* 0 disables corner_radius */
 
-static const int blur = 1; /* flag to enable blur */
+static const int blur = 0; /* flag to enable blur */
 static const int blur_optimized = 1;
 static const int blur_ignore_transparent = 1;
 static const struct blur_data blur_data = {
