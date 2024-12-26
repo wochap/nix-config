@@ -119,6 +119,7 @@ in {
     _custom.desktop.greetd.enable = true;
     _custom.desktop.greetd.enablePamAutoLogin = true;
     _custom.desktop.udev-rules.enable = true;
+    # _custom.desktop.wluma.enable = true;
     _custom.desktop.wluma.systemdEnable = true;
     _custom.desktop.wluma.config.als.none = { };
     _custom.desktop.wluma.config.output.backlight = [{
