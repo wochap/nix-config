@@ -32,7 +32,7 @@ in {
     environment.systemPackages = with pkgs; [
       bitwarden
       bruno # like postman
-      element-desktop-wayland
+      element-desktop
       freetube
       slack
       obsidian

@@ -1,7 +1,7 @@
 {
   inputs = {
     # channels
-    nixpkgs.url = "github:nixos/nixpkgs?rev=b681065d0919f7eb5309a93cea2cfa84dec9aa88"; # nixos-24.11 (04 dec 2024)
+    nixpkgs.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # nixos-24.11 (25 dec 2024)
     nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=23e89b7da85c3640bbc2173fe04f4bd114342367"; # nixos-unstable (22 nov 2024)
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=1f8150661e78f70bda0b51893344326fc2ca264c"; # master (22 nov 2024)
     nixpkgs-24-11-small.url = "github:nixos/nixpkgs?rev=c3b08708334cca32db70df24516608e73f645136"; # nixos-24.11-small (04 dec 2024)
@@ -16,7 +16,7 @@
     prevstable-intune.url = "github:nixos/nixpkgs?rev=a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c"; # nixos-unstable (16 oct 2024)
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=62d536255879be574ebfe9b87c4ac194febf47c5"; # release-24.11 (04 dec 2024)
+    home-manager.url = "github:nix-community/home-manager?rev=80b0fdf483c5d1cb75aaad909bd390d48673857f"; # release-24.11 (25 dec 2024)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
@@ -33,17 +33,17 @@
     nur.url = "github:nix-community/NUR";
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=672ac2ac86f7dff2f6f3406405bddecf960e0db6"; # master (22 nov 2024)
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=9822e0611d49ae70278ac20c9d7b68e4797b2fab";
-    ags.url = "github:Aylur/ags?rev=11150225e62462bcd431d1e55185e810190a730a";
+    ags.url = "github:Aylur/ags?rev=bb91f7c8fdd2f51c79d3af3f2881cacbdff19f60"; # v1.8.2
     ags.inputs.nixpkgs.follows = "nixpkgs";
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-alien.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland.url = "github:hyprwm/Hyprland?rev=a425fbebe4cf4238e48a42f724ef2208959d66cf"; # v0.45.0
+    hyprland.url = "github:hyprwm/Hyprland?rev=12f9a0d0b93f691d4d9923716557154d74777b0a"; # v0.45.2
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=844eb98250da448e17471f20beed23a5f5d33a3a"; # v0.45
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
-    hyprpicker.url = "github:hyprwm/hyprpicker?rev=38fe668e58014c75cf28f7cb5fc136aa710e7039"; # (22 aug 2024)
+    hyprpicker.url = "github:hyprwm/hyprpicker?rev=116cec14a552191a9ad69ca96252ca12ecfa9826"; # v0.4.1
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
     pyprland.url = "github:hyprland-community/pyprland?rev=af680d6d17f1d72ee335e1067e28dce3799f80f6"; # (26 aug 2024)
     pyprland.inputs.nixpkgs.follows = "nixpkgs";
@@ -51,7 +51,7 @@
     lobster.inputs.nixpkgs.follows = "nixpkgs";
     scenefx.url = "github:wlrfx/scenefx?rev=b2e0ac4beb85aa89d0357dc8fcf8762808650890"; # main (24 dec 2024)
     scenefx.inputs.nixpkgs.follows = "nixpkgs";
-    wayfreeze.url = "github:Jappie3/wayfreeze?rev=37ef9e456c87601ed4e06f36f437f688083d61cf";
+    wayfreeze.url = "github:Jappie3/wayfreeze?rev=dcbe2690ce41a286ef1eed54747bac47cee6dc2c"; # master (20 sep 2024)
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
@@ -66,7 +66,7 @@
     retroarch-shaders.flake = false;
     reversal-extra.url = "github:wochap/Reversal-Extra?rev=cab51b96a08289d4ad5eed8e3a58d06d55dcc961";
     reversal-extra.flake = false;
-    wluma.url = "github:maximbaz/wluma?rev=f7aa9967231ef5c821eeea7e43a9929ace0c4fa8";
+    wluma.url = "github:maximbaz/wluma?rev=d6462471b98697643bae6feab2c8eb4468fc71ef"; # 4.5.1
     wluma.flake = false;
 
     # terminal tools
