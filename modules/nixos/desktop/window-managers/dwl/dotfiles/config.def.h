@@ -220,6 +220,10 @@ static const int natural_scrolling = 1;
 static const int disable_while_typing = LIBINPUT_CONFIG_DWTP_DISABLED;
 static const int left_handed = 0;
 static const int middle_button_emulation = 1;
+
+/* Scroll sensitivity */
+static const double scroll_factor = 0.5f;
+
 /* You can choose between:
 LIBINPUT_CONFIG_SCROLL_NO_SCROLL
 LIBINPUT_CONFIG_SCROLL_2FG
