@@ -10,6 +10,7 @@ in {
     environment.systemPackages = with pkgs; [
       lua51Packages.lua
       lua51Packages.luarocks
+      lua51Packages.tiktoken_core
     ];
 
     _custom.hm = {
