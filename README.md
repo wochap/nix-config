@@ -277,6 +277,11 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
   Disable ipv6 connection.
 
+  ```sh
+  # run the following to disable ipv6
+  $ sudo sysctl net.ipv6.conf.all.disable_ipv6=1
+  ```
+
 - Copy installed icons unicode
 
   `E8E4` is the unicode.
