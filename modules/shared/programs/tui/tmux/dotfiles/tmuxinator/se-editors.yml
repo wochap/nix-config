@@ -9,14 +9,23 @@ windows:
       root: ~/Projects/se/viz-omni/backend
       layout: tiled
 
+  # <%- if @settings["workspaces"].split(',').include?("charts") %>
+  - frontend:
+      root: ~/Projects/se/viz-omni/frontend
+      layout: tiled
+  # <%- end %>
+
+  # <%- if @settings["workspaces"].split(',').include?("layout-editor") %>
   - layout-editor:
       root: ~/Projects/se/viz-omni/frontend-neo/layout-editor
       layout: tiled
+  # <%- end %>
 
   - organization:
       root: ~/Projects/se/viz-omni/frontend/organizations
       layout: tiled
 
+  # <%- if @settings["workspaces"].split(',').include?("surveys") %>
   - pearson-surveys:
       root: ~/Projects/se/pearson-surveys
       layout: tiled
@@ -24,6 +33,13 @@ windows:
   - socialexplorer-surveys:
       root: ~/Projects/se/socialexplorer-surveys
       layout: tiled
+  # <%- end %>
+
+  # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+  - single-spa-app:
+      root: ~/Projects/se/single-spa-demo/single-spa-app
+      layout: tiled
+  # <%- end %>
 
   # - viz-websites:
   #     root: ~/Projects/se/viz-websites

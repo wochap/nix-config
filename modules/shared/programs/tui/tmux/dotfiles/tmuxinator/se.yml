@@ -2,12 +2,12 @@ name: se
 
 windows:
   # 1
-  - viz-omni-docker:
-      root: ~/Projects/se/viz-omni/backend/docker
-      layout: tiled
-      panes:
-        - docker:
-            - lazydocker
+  # - viz-omni-docker:
+  #     root: ~/Projects/se/viz-omni/backend/docker
+  #     layout: tiled
+  #     panes:
+  #       - docker:
+  #           - lazydocker
 
   # 2
   - viz-omni-backend-1:
@@ -21,7 +21,9 @@ windows:
         # 10008
         - chart_service:
             - cd ./chart_service
+            # <%- if @settings["workspaces"].split(',').include?("charts") %>
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
+            # <%- end %>
         # 10023
         - currency_service:
             - cd ./currency_service
@@ -110,7 +112,7 @@ windows:
       panes:
         # 5555
         - frontend:
-            # <%- if @settings["workspace"] != "surveys" %>
+            # <%- if @settings["workspaces"].split(',').include?("charts") %>
             - npx gulp glu-vizwiz:local
             # <%- end %>
         # 5557
@@ -134,15 +136,21 @@ windows:
         # 5601
         - layout-editor:
             - cd ./layout-editor
+            # <%- if @settings["workspaces"].split(',').include?("layout-editor") %>
             - yarn start
+            # <%- end %>
         # 3210
         - layout-editor-widget:
             - cd ./layout-editor
+            # <%- if @settings["workspaces"].split(',').include?("layout-editor") %>
             - yarn start:widget
+            # <%- end %>
         # 3003
         - surveys-renderer:
             - cd ./surveys-renderer
+            # <%- if @settings["workspaces"].split(',').include?("surveys") %>
             - sh ./run.sh -e local start
+            # <%- end %>
 
   # 6
   - viz-websites:
@@ -154,7 +162,7 @@ windows:
             - NODE_ENV=local APP=accounts gulp
         # 5002
         - viz_help:
-            # <%- if @settings["workspace"] != "surveys" %>
+            # <%- if !@settings["workspaces"].split(',').include?("surveys") %>
             - NODE_ENV=local APP=viz_help gulp
             # <%- end %>
         # 4002
@@ -173,16 +181,34 @@ windows:
       panes:
         - compile-pearson-surveys:
             - cd ./pearson-surveys
-            # - tmux send-keys "npx gulp compile:local"
+            # - npx gulp compile:local
         # 5555
         - pearson-surveys:
             - cd ./pearson-surveys
-            # <%- if @settings["workspace"] == "surveys" %>
+            # <%- if @settings["workspaces"].split(',').include?("surveys") %>
             - npx gulp
             # <%- end %>
         # 5002
         - socialexplorer-surveys:
             - cd ./socialexplorer-surveys
-            # <%- if @settings["workspace"] == "surveys" %>
+            # <%- if @settings["workspaces"].split(',').include?("surveys") %>
             - npx gulp
+            # <%- end %>
+
+  # 8
+  - microfrontends:
+      root: ~/Projects/se/single-spa-demo
+      layout: tiled
+      panes:
+        # 3010
+        - single-spa-app:
+            - cd ./single-spa-app
+            # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+            - yarn run dev
+            # <%- end %>
+        # 9000
+        - single-spa-root-config:
+            - cd ./single-spa-root-config
+            # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+            - yarn run start
             # <%- end %>

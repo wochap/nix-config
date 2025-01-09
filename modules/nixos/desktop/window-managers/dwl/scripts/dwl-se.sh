@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 start_docker=$(gum confirm --no-show-help 'start docker?' && echo 1 || echo 0)
-workspace=$(gum choose --height 5 --no-show-help {all,'layout-editor',surveys})
+workspaces=$(gum choose --height 6 --no-show-help --no-limit {'layout-editor',microfrontends,charts,surveys} | paste -sd, -)
 
-if [ -z "$workspace" ]; then
+if [ -z "$workspaces" ]; then
   exit 0
 fi
 
@@ -48,9 +48,9 @@ function start() {
 
   # Start new foot terminal with tmux session
   echo "Starting tmux session: se"
-  footclient --app-id=footclient-se tmux new-session zsh -i -c "tmuxinator start se workspace=$workspace" &
+  footclient --app-id=footclient-se tmux new-session zsh -i -c "tmuxinator start se workspaces=$workspaces" &
   echo "Starting tmux session: se-editors"
-  footclient --app-id=footclient-se-editors tmux new-session zsh -i -c "tmuxinator start se-editors workspace=$workspace" &
+  footclient --app-id=footclient-se-editors tmux new-session zsh -i -c "tmuxinator start se-editors workspaces=$workspaces" &
 }
 
 cleanup
