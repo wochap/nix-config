@@ -21,9 +21,7 @@ windows:
         # 10008
         - chart_service:
             - cd ./chart_service
-            # <%- if @settings["workspaces"].split(',').include?("charts") %>
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
-            # <%- end %>
         # 10023
         - currency_service:
             - cd ./currency_service
