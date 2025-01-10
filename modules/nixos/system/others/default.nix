@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   config = {
@@ -29,6 +29,20 @@
     '';
 
     hardware.graphics.enable = true;
+
+    # run sysctl after the graphical session has started
+    # otherwise, rules in sysctl files won't be applied
+    systemd.services.custom-sysctl = {
+      description = "Apply sysctl settings";
+      wantedBy = [ "graphical.target" ];
+      after = [ "graphical.target" ];
+      partOf = [ "graphical.target" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.procps}/bin/sysctl --system";
+      };
+    };
   };
 }
 
