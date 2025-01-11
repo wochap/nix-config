@@ -25,7 +25,7 @@ in {
           })
         ];
       });
-    _custom.globals.cursor.gtkSize = 32;
+    _custom.globals.cursor.size = 28;
 
     _custom.programs.weeb.enable = true;
 

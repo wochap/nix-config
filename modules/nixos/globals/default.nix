@@ -19,11 +19,6 @@
         # 16, 32, 48 or 64
         default = 24;
       };
-      gtkSize = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
-        # 16, 32, 48 or 64
-        default = null;
-      };
     };
 
     gtkTheme = {

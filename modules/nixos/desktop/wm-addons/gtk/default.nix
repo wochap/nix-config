@@ -36,12 +36,7 @@ let
     gnome_schema="org.gnome.desktop.interface"
 
     gsettings set $gnome_schema cursor-theme ${globals.cursor.name} &
-    gsettings set $gnome_schema cursor-size ${
-      toString (if globals.cursor.gtkSize != null then
-        globals.cursor.gtkSize
-      else
-        globals.cursor.size)
-    } &
+    gsettings set $gnome_schema cursor-size ${toString (globals.cursor.size)} &
 
     # import gtk settings to gsettings
     config="''${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
