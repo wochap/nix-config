@@ -112,16 +112,17 @@ export const hyprlandTaskbar = () =>
             appId: mapAppId(c.class),
             focused: c.address === activeAddress,
           }));
-        self.children = visibleAppIds.map(({ appId, focused }) =>
-          Widget.Box({
-            tooltip_text: appId,
+        self.children = visibleAppIds.map(({ appId, focused }) => {
+          const _appId = appId.trim() || "unknown";
+          return Widget.Box({
+            tooltip_text: _appId,
             class_name: focused ? "focused" : "",
             child: Widget.Icon({
-              icon: appId,
+              icon: _appId,
               size: 32,
             }),
-          }),
-        );
+          });
+        });
         self.visible = visibleAppIds.length > 0;
       });
     },
