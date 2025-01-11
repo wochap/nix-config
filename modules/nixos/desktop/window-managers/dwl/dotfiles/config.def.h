@@ -109,7 +109,6 @@ static const Rule rules[] = {
 	{ "mpv",                     NULL,       0,         1,          0,        -1,      0,   0,   0.8f, 0.8f, 0 },
 	{ "imv",                     NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "xwaylandvideobridge",     NULL,       1 << 9,    1,          0,        -1,      0,   0,   0,    0,      'x' },
-	{ "pavucontrol",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "^[tT]hunar$",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      'f' },
 	{ "file-roller",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "gnome-system-monitor",    NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
