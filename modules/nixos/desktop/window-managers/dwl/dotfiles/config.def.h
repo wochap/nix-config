@@ -65,12 +65,14 @@ enum {
 	BROWSER,
 	LAYOUT,
 	TUI,
+	NOTIFICATION,
   KB_INHIBIT,
 };
 const char *modes_labels[] = {
 	"browser",
 	"layout",
 	"tui",
+	"notification",
 	"kb inhibit",
 };
 
@@ -316,15 +318,6 @@ static const Key keys[] = {
   // Show emojis
   { MODKEY, Key_e, spawn, SHCMD("tofi-emoji") },
 
-  // Show last notification
-  { MODKEY|MOD_CONTROL, Key_n, spawn, SHCMD("dunstctl history-pop") },
-
-  // Hide recent notification
-  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_n, spawn, SHCMD("dunstctl close") },
-
-  // Hide all notifications
-  { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_Escape, spawn, SHCMD("dunstctl close-all") },
-
   // Toggle bars
   { MODKEY, Key_b, spawn, SHCMD("toggle-bars") },
 
@@ -476,6 +469,7 @@ static const Key keys[] = {
   { MODKEY, Key_r, entermode, {.i = LAYOUT} },
   { MODKEY|MOD_ALT, Key_b, entermode, {.i = BROWSER} },
   { MODKEY|MOD_ALT, Key_u, entermode, {.i = TUI} },
+  { MODKEY|MOD_ALT, Key_n, entermode, {.i = NOTIFICATION} },
   { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = KB_INHIBIT} },
   { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
   { MODKEY|MOD_ALT, Key_x, raiserunnamedscratchpad, SHCMD_SK("x", "xwaylandvideobridge") },
@@ -548,9 +542,6 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_SK("y", "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com")),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
-  // HACK: disable all dwl keymappings
-  { KB_INHIBIT, { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = NORMAL} } },
-
   // Terminal TUI
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, raiserunnamedscratchpad, SHCMD_SK("n", "tui-notes")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, raiserunnamedscratchpad, SHCMD_SK("m", "tui-monitor")),
@@ -563,6 +554,20 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD("tui-bookmarks --add")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD("tui-bookmarks --edit")),
   { TUI, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
+
+  // Notification
+  // Show recent notification menu
+  EXIT_TO_NORMAL_MODE(NOTIFICATION, MOD_NONE, Key_n, spawn, SHCMD("dunstctl context")),
+  // Show last notification
+  EXIT_TO_NORMAL_MODE(NOTIFICATION, MOD_NONE, Key_h, spawn, SHCMD("dunstctl history-pop")),
+  // Hide recent notification
+  EXIT_TO_NORMAL_MODE(NOTIFICATION, MOD_NONE, Key_c, spawn, SHCMD("dunstctl close")),
+  // Hide all notifications
+  EXIT_TO_NORMAL_MODE(NOTIFICATION, MOD_SHIFT, Key_c, spawn, SHCMD("dunstctl close-all")),
+  { NOTIFICATION, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
+
+  // HACK: disable all dwl keymappings
+  { KB_INHIBIT, { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = NORMAL} } },
 };
 
 static const Button buttons[] = {
