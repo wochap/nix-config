@@ -8,8 +8,9 @@ set pages-per-row               1
 set statusbar-basename          true
 set page-padding                1
 set sandbox                     none
-set synctex true
-set synctex-editor-command "texlab inverse-search -i %{input} -l %{line}"
+set synctex                     true
+# set recolor-reverse-video       true
+set synctex-editor-command      "texlab inverse-search -i %{input} -l %{line}"
 
 map u                           scroll half-up
 map d                           scroll half-down
@@ -28,3 +29,4 @@ set statusbar-bg                "@backgroundOverlay@"
 set notification-bg		          "@backgroundOverlay@"
 set notification-error-bg	      "@backgroundOverlay@"
 set notification-warning-bg	    "@backgroundOverlay@"
+set recolor-lightcolor		      "@crust@"
