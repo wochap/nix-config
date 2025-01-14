@@ -37,12 +37,12 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         showmethekey = prev.showmethekey.overrideAttrs (oldAttrs: rec {
-          version = "d7b249c39867d9e8afbf1fefcee2f0cc159e573e";
+          version = "v1.15.1";
           src = prev.fetchFromGitHub {
             owner = "AlynxZhou";
             repo = "showmethekey";
             rev = version;
-            hash = "sha256-GaffO+DPDt8F3TkwX1LQYRkxImiLIt7gyZu5QHE+Y10=";
+            hash = "sha256-odlIgWFmhDqju7U5Y9q6apUEAqZUvMUA7/eU7LMltQs=";
           };
           patches = [ ./patches/showmethekey-remove-header.patch ];
         });
