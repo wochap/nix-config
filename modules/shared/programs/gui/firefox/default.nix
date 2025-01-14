@@ -100,6 +100,9 @@ in {
               # Disable thumbnail preview ctrl + tab
               "browser.ctrlTab.recentlyUsedOrder" = false;
 
+              # Disable mouseover preview
+              "browser.tabs.hoverPreview.enabled" = false;
+
               "extensions.pocket.enabled" = false;
               "general.smoothScroll" = false;
 
