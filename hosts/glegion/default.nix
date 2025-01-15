@@ -118,8 +118,10 @@ in {
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
     _custom.services.kdeconnect.enable = true;
-    _custom.services.llm.enable = false;
-    _custom.services.llm.enableNvidia = true;
+    _custom.services.llm.enable = true;
+    _custom.services.llm.enableOllama = false;
+    _custom.services.llm.enableNvidia = false;
+    _custom.services.llm.enableOpenWebui = true;
     _custom.services.syncthing.enable = true;
     _custom.services.virt.enable = true;
     _custom.services.waydroid.enable = false;

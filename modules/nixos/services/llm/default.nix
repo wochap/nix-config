@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config._custom.services.llm;
@@ -8,18 +8,12 @@ in {
 
   options._custom.services.llm = {
     enable = lib.mkEnableOption { };
+    enableOllama = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
+    enableOpenWebui = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        # cuda 12.2+ doesn't build
-        # https://github.com/NixOS/nixpkgs/issues/338315
-        cudaPackages = prev.cudaPackages_12_2;
-      })
-    ];
-
     # NOTE: cudaSupport rebuild opencv everytime nixpkgs changes
     nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
@@ -28,31 +22,36 @@ in {
       oterm
     ];
 
-    services.ollama = {
+    services.ollama = lib.mkIf cfg.enableOllama {
       enable = true;
       package = pkgs.ollama;
       acceleration = lib.mkIf cfg.enableNvidia "cuda";
     };
     systemd.services.ollama.environment.OLLAMA_ORIGINS = "*";
 
-    services.ollama-webui-lite = {
+    services.ollama-webui-lite = lib.mkIf cfg.enableOllama {
       enable = true;
       package = pkgs._custom.ollama-webui-lite;
       host = wochap-ssc.meta.address;
       port = 11444;
     };
 
-    # Make ollama-webui-lite accessible at https://ollama.wochap.local
-    # NOTE: restart after changing certificate
-    # you also might need to add certificate to your browsers
-    networking.hosts.${wochap-ssc.meta.address} =
-      [ "ollama.${wochap-ssc.meta.domain}" ];
-    security.pki.certificateFiles = [ "${wochap-ssc}/rootCA.pem" ];
     services.nginx = {
       enable = true;
       enableReload = true;
       recommendedTlsSettings = true;
-      virtualHosts."ollama.${wochap-ssc.meta.domain}" = {
+    };
+
+    # NOTE: restart after changing certificate
+    # you also might need to add certificate to your browsers
+    security.pki.certificateFiles = [ "${wochap-ssc}/rootCA.pem" ];
+
+    networking.hosts.${wochap-ssc.meta.address} = [ ]
+      ++ lib.optional cfg.enableOllama "ollama.${wochap-ssc.meta.domain}"
+      ++ lib.optional cfg.enableOpenWebui "openwebui.${wochap-ssc.meta.domain}";
+    services.nginx.virtualHosts = {
+      # Make ollama-webui-lite accessible at https://ollama.wochap.local
+      "ollama.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOllama {
         forceSSL = true;
         sslTrustedCertificate = "${wochap-ssc}/rootCA.pem";
         sslCertificateKey = "${wochap-ssc}/${wochap-ssc.meta.domain}+4-key.pem";
@@ -62,6 +61,31 @@ in {
           proxyPass = "http://${wochap-ssc.meta.address}:${
               toString config.services.ollama-webui-lite.port
             }";
+          proxyWebsockets = true;
+        };
+        listen = [
+          {
+            addr = wochap-ssc.meta.address;
+            port = 443;
+            ssl = true;
+          }
+          {
+            addr = wochap-ssc.meta.address;
+            port = 80;
+          }
+        ];
+      };
+      # Make openwebui accessible at https://openwebui.wochap.local
+      # docker run -d -p 127.0.1.1:11454:8080 -e WEBUI_AUTH=False -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+      # docs: https://docs.openwebui.com/getting-started/quick-start/#step-1-pull-the-open-webui-image
+      "openwebui.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOpenWebui {
+        forceSSL = true;
+        sslTrustedCertificate = "${wochap-ssc}/rootCA.pem";
+        sslCertificateKey = "${wochap-ssc}/${wochap-ssc.meta.domain}+4-key.pem";
+        sslCertificate = "${wochap-ssc}/${wochap-ssc.meta.domain}+4.pem";
+        locations."/" = {
+          recommendedProxySettings = true;
+          proxyPass = "http://${wochap-ssc.meta.address}:11454";
           proxyWebsockets = true;
         };
         listen = [
