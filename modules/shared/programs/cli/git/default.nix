@@ -118,69 +118,65 @@ in {
           };
         };
 
-        extraConfig = lib.mkMerge [
-          {
-            diff = {
-              tool = "delta";
-              colorMoved = "default";
-            };
-            # TODO: fix difftool
-            difftool = {
-              prompt = false;
-              trustExitCode = true;
-              "delta".cmd = "delta";
-            };
-            merge = {
-              conflictstyle = "diff3";
-              tool = "diffview_nvim";
-            };
-            mergetool = {
-              prompt = false;
-              keepBackup = false;
-              layout = "LOCAL,BASE,REMOTE / MERGED";
-              "diffview_nvim".cmd = "nvim -f -n -c 'DiffviewOpen' '$MERGE'";
-            };
-            color.ui = "auto";
-            pull.rebase = false;
-            init.defaultBranch = "main";
-          }
+        extraConfig = {
+          diff = {
+            tool = "delta";
+            colorMoved = "default";
+          };
+          # TODO: fix difftool
+          difftool = {
+            prompt = false;
+            trustExitCode = true;
+            "delta".cmd = "delta";
+          };
+          merge = {
+            conflictstyle = "diff3";
+            tool = "diffview_nvim";
+          };
+          mergetool = {
+            prompt = false;
+            keepBackup = false;
+            layout = "LOCAL,BASE,REMOTE / MERGED";
+            "diffview_nvim".cmd = "nvim -f -n -c 'DiffviewOpen' '$MERGE'";
+          };
+          color.ui = "auto";
+          pull.rebase = false;
+          init.defaultBranch = "main";
+        } // lib.optionalAttrs cfg.enableUser {
+          user = {
+            email = "gean.marroquin@gmail.com";
+            name = "wochap";
+            signingKey = "gean.marroquin@gmail.com";
+          };
+          commit.gpgSign = true;
+        };
 
-          (lib.mkIf cfg.enableUser {
-            user = {
-              email = "gean.marroquin@gmail.com";
-              name = "wochap";
-              signingKey = "gean.marroquin@gmail.com";
-            };
-            commit.gpgSign = true;
-          })
-        ];
-        includes = [
-          { path = "${inputs.catppuccin-delta}/catppuccin.gitconfig"; }
-
-          (lib.mkIf cfg.enableUser {
-            condition = "gitdir:~/Projects/boc/**/.git";
-            contents = {
-              user = {
-                email = "geanb@bandofcoders.com";
-                name = "Gean";
-                signingKey = "geanb@bandofcoders.com";
+        includes =
+          [{ path = "${inputs.catppuccin-delta}/catppuccin.gitconfig"; }]
+          ++ lib.optionals cfg.enableUser [
+            {
+              condition = "gitdir:~/Projects/boc/**/.git";
+              contents = {
+                user = {
+                  email = "geanb@bandofcoders.com";
+                  name = "Gean";
+                  signingKey = "geanb@bandofcoders.com";
+                };
+                commit.gpgSign = true;
               };
-              commit.gpgSign = true;
-            };
-          })
-
-          (lib.mkIf cfg.enableUser {
-            condition = "gitdir:~/Projects/se/**/.git";
-            contents = {
-              user = {
-                email = "gean.bonifacio@socialexplorer.com";
-                name = "Gean";
-                signingKey = "gean.bonifacio@socialexplorer.com";
+            }
+            {
+              condition = "gitdir:~/Projects/se/**/.git";
+              contents = {
+                user = {
+                  email = "gean.bonifacio@socialexplorer.com";
+                  name = "Gean";
+                  signingKey = "gean.bonifacio@socialexplorer.com";
+                };
+                commit.gpgSign = true;
               };
-              commit.gpgSign = true;
-            };
-          })
-        ];
+            }
+          ];
       };
     };
   };
