@@ -100,6 +100,7 @@ static int log_level = WLR_ERROR;
 static const char bing_gpt_appid[] = "msedge-www.bing.com__chat-Default";
 static const char chat_gpt_appid[] = "chrome-chat.openai.com__-Default";
 static const char ollama_appid[] = "chrome-ollama.wochap.local__-Default";
+static const char openwebui_appid[] = "chrome-openwebui.wochap.local__-Default";
 static const char ytmusic_appid[] = "chrome-music.youtube.com__-Default";
 
 /* NOTE: ALWAYS keep a rule declared even if you don't use rules (e.g leave at least one example) */
@@ -127,6 +128,7 @@ static const Rule rules[] = {
 	{ bing_gpt_appid,            NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'g' },
 	{ chat_gpt_appid,            NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'c' },
 	{ ollama_appid,              NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'o' },
+	{ openwebui_appid,           NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'w' },
 	{ ytmusic_appid,             NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'y' },
 	{ "firefox",                 NULL,       1 << 4,    0,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "brave-browser",           NULL,       1 << 7,    0,          0,        -1,      0,   0,   0,    0,      0 },
@@ -539,6 +541,7 @@ static const Modekey modekeys[] = {
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, SHCMD_SK("g", "microsoft-edge --profile-directory=Default --app=https://www.bing.com/chat")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_SK("c", "google-chrome-stable --profile-directory=Default --app=https://chat.openai.com")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, raiserunnamedscratchpad, SHCMD_SK("o", "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_w, raiserunnamedscratchpad, SHCMD_SK("w", "google-chrome-stable --profile-directory=Default --app=https://openwebui.wochap.local")),
   EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_SK("y", "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com")),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
