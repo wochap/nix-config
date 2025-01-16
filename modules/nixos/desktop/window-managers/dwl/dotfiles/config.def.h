@@ -35,8 +35,8 @@ static const int shadow = 1;
 static const int shadow_only_floating = 1;
 static const float shadow_color[4] = COLOR(0x@shadow@80);
 static const float shadow_color_focus[4] = COLOR(0x@shadow@80);
-static const int shadow_blur_sigma = 28;
-static const int shadow_blur_sigma_focus = 56;
+static const int shadow_blur_sigma = 14;
+static const int shadow_blur_sigma_focus = 28;
 static const char *const shadow_ignore_list[] = { NULL }; /* list of app-id to ignore */
 
 static const int corner_radius = 4; /* 0 disables corner_radius */
