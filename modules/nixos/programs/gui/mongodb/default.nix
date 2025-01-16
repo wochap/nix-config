@@ -42,6 +42,7 @@ in {
       redisinsight
 
       # PostgreSQL
+      postgresql
       dbeaver-bin
     ];
   };
