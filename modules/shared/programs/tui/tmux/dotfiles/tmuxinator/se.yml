@@ -21,6 +21,7 @@ windows:
         # 10008
         - chart_service:
             - cd ./chart_service
+            # TODO: ignore watching .direnv
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ./ ../ruby_common
         # 10023
         - currency_service:
@@ -44,8 +45,6 @@ windows:
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../identity_storage ./ ../ruby_common
         - job_coordinator:
             - cd ./job_coordinator
-            # HACK: wait for job_processor_00
-            - sleep 1
             - RACK_ENV=local MALLOC_ARENA_MAX=2 ruby ./job_coordinator.rb
         # 9999
         - job_processor_00:
@@ -88,8 +87,6 @@ windows:
         # 10005
         - search_service:
             - cd ./search_service
-            # HACK: wait for Elastic Search docker
-            - sleep 2
             - RACK_ENV=local MALLOC_ARENA_MAX=2 guard -w ../search ./ ../ruby_common
         # 10000
         - table_storage_service:
@@ -111,12 +108,12 @@ windows:
         # 5555
         - frontend:
             # <%- if @settings["workspaces"].split(',').include?("charts") %>
-            - npx gulp glu-vizwiz:local
+            - yarn run gulp glu-vizwiz:local
             # <%- end %>
         # 5557
         - currency-editor:
             - cd ./currency-editor
-            - npx gulp
+            - gulp
         # 3000
         - organizations:
             - cd ./organizations
@@ -124,7 +121,7 @@ windows:
         # 5556
         - geobuffer:
             - cd ./geobuffer
-            - npx gulp
+            - gulp
 
   # 5
   - viz-omni-frontend-neo:

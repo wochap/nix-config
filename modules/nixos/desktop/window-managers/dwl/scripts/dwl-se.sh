@@ -22,8 +22,15 @@ function cleanup() {
     echo "Stopping docker services"
     docker stop viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1
 
-    # wait for docker services stop
-    sleep 3
+    # grace time for docker services to stop
+    # sleep 1
+
+    echo -n "Waiting for PostgreSQL to stop..."
+    while pg_isready -h localhost -p 5433 -U datahub -d datahub2_local -q; do
+      echo -n "."
+      sleep 0.1
+    done
+    echo -e "\nPostgreSQL has stopped!"
   fi
 }
 
@@ -32,8 +39,17 @@ function start() {
     echo "Starting docker services"
     docker start viz-docker-viz-tile-delivery-1 viz-docker-viz-mongo-1 viz-docker-viz-elasticsearch-1 viz-docker-viz-redis-1 viz-docker-viz-minio-1 viz-docker-viz-postgis-1
 
-    # wait for docker services to be ready
-    sleep 4
+    # grace time for docker services to start
+    sleep 1
+
+    # TODO: check for Elasticsearch?
+
+    echo -n "Waiting for PostgreSQL to be ready..."
+    while ! pg_isready -h localhost -p 5433 -U datahub -d datahub2_local -q; do
+      echo -n "."
+      sleep 0.1
+    done
+    echo -e "\nPostgreSQL is ready!"
   fi
 
   # Focus DWL tag 2
