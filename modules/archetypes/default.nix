@@ -45,6 +45,7 @@
       _custom.desktop.dunst.enable = true;
       _custom.desktop.electron-support.enable = true;
       _custom.desktop.gammastep.enable = true;
+      _custom.desktop.hyprlock.enable = lib.mkDefault true;
       _custom.desktop.kanshi.enable = true;
       _custom.desktop.swayidle.enable = lib.mkDefault true;
       _custom.desktop.swaylock.enable = true;

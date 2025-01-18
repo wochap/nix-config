@@ -36,6 +36,7 @@
     ./desktop/wm-addons-wayland/dunst
     ./desktop/wm-addons-wayland/electron-support
     ./desktop/wm-addons-wayland/gammastep
+    ./desktop/wm-addons-wayland/hyprlock
     ./desktop/wm-addons-wayland/kanshi
     ./desktop/wm-addons-wayland/swayidle
     ./desktop/wm-addons-wayland/swaylock

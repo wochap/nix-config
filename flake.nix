@@ -45,6 +45,8 @@
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=116cec14a552191a9ad69ca96252ca12ecfa9826"; # v0.4.1
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
+    hyprlock.url = "github:hyprwm/hyprlock?rev=3d63d9b129d5def270bc8a2471347e6f97274e2b"; # v0.6.1
+    hyprlock.inputs.nixpkgs.follows = "nixpkgs";
     pyprland.url = "github:hyprland-community/pyprland?rev=af680d6d17f1d72ee335e1067e28dce3799f80f6"; # (26 aug 2024)
     pyprland.inputs.nixpkgs.follows = "nixpkgs";
     lobster.url = "github:justchokingaround/lobster";
@@ -143,6 +145,8 @@
     catppuccin-foot.flake = false;
     catppuccin-obs.url = "github:catppuccin/obs";
     catppuccin-obs.flake = false;
+    catppuccin-hyprland.url = "github:catppuccin/hyprland";
+    catppuccin-hyprland.flake = false;
   };
 
   outputs = inputs:
