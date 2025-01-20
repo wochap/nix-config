@@ -31,7 +31,7 @@ in {
         events = [
           {
             event = "before-sleep";
-            command = "swaylock-start";
+            command = "loginctl lock-session";
           }
           {
             event = "lock";
