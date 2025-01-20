@@ -25,7 +25,9 @@ export const dwltaskbar = (monitorPlugName) => {
       `dwl-state "${monitorPlugName}" visible_appids`,
       (out) => {
         const items = JSON.parse(out)
+          // fix dwl-state bug
           .text.replace("  ", " unknown ")
+          .replace(/^\s/, " unknown ")
           .split(" ")
           .filter((str) => str.trim().length);
         const result = [];
