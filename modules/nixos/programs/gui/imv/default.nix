@@ -3,12 +3,17 @@
 let
   cfg = config._custom.programs.imv;
   inherit (config._custom.globals) themeColors;
+  imv-final = pkgs.imv.override {
+    withBackends = [ "libjxl" "libtiff" "libjpeg" "libpng" "librsvg" "libheif" ]
+      ++ (lib.optional cfg.enableInsecureFreeImage "freeimage");
+  };
 in {
   options._custom.programs.imv.enable = lib.mkEnableOption { };
+  options._custom.programs.imv.enableInsecureFreeImage = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [ imv ];
+      home.packages = with pkgs; [ imv-final ];
 
       xdg.configFile = {
         "imv/config".text = lib.generators.toINI { } {

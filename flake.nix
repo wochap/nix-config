@@ -178,8 +178,12 @@
             (./. + "/hosts/${hostName}")
             {
               nixpkgs.config.allowUnfree = true;
-              nixpkgs.config.permittedInsecurePackages =
-                [ "nodejs-14.21.3" "openssl-1.1.1u" "openssl-1.1.1v" ];
+              nixpkgs.config.permittedInsecurePackages = [
+                "freeimage-unstable-2021-11-01"
+                "nodejs-14.21.3"
+                "openssl-1.1.1u"
+                "openssl-1.1.1v"
+              ];
               networking.hostName = hostName;
             }
           ];
