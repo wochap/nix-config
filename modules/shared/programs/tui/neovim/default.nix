@@ -50,11 +50,11 @@ in {
       programs.lazygit.settings.os = {
         editPreset = "nvim-remote";
         edit = # sh
-          "[ -z $NVIM ] && (nvim -- {{filename}}) || (nvr -l --remote-silent +'WindowPicker {{filename}}')";
+          "[ -z $NVIM ] && (nvim -- {{filename}}) || (nvr -l --remote-silent +'lua Snacks.lazygit()' +'WindowPicker {{filename}}')";
         editAtLine = # sh
-          "[ -z $NVIM ] && (nvim +{{line}} -- {{filename}}) || (nvr -l --remote-silent +'WindowPicker {{filename}}' +{{line}})";
+          "[ -z $NVIM ] && (nvim +{{line}} -- {{filename}}) || (nvr -l --remote-silent +'lua Snacks.lazygit()' +'WindowPicker {{filename}}' +{{line}})";
         editAtLineAndWait = # sh
-          "[ -z $NVIM ] && (nvim +{{line}} {{filename}}) || (nvr -l --remote-wait-silent +'WindowPicker {{filename}}' +{{line}})";
+          "[ -z $NVIM ] && (nvim +{{line}} {{filename}}) || (nvr -l --remote-wait-silent +'lua Snacks.lazygit()' +'WindowPicker {{filename}}' +{{line}})";
       };
 
       programs.zsh.shellAliases = {
