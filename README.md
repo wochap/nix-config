@@ -178,6 +178,15 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Connecting Galaxy Buds
+
+  - Disconnect the Galaxy Buds case from the power source
+  - Close the Galaxy Buds case
+  - Open the Galaxy Buds case
+  - Pair the Galaxy Buds (only required for the first time)
+  - Repeat the process until the Galaxy Buds connect via Bluetooth
+  - Once connected via Bluetooth, open the Galaxy Buds Client
+
 - Chrome like apps with blank screen or vanishing text on scroll
 
   Clear `GPUCache`, in `~/.config/google-chrome/ShaderCache`
