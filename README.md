@@ -4,8 +4,8 @@
 
 ## DWL
 
-![](https://i.imgur.com/4XyYjSC.jpg)
-![](https://i.imgur.com/N5LV3Hv.jpg)
+![](https://i.imgur.com/TmgUC5J.jpg)
+![](https://i.imgur.com/jBtseU6.jpg)
 
 ## Installaion
 
