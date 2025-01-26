@@ -178,14 +178,18 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
-- Connecting Galaxy Buds
+- Galaxy Buds
 
-  - Disconnect the Galaxy Buds case from the power source
-  - Close the Galaxy Buds case
-  - Open the Galaxy Buds case
-  - Pair the Galaxy Buds (only required for the first time)
-  - Repeat the process until the Galaxy Buds connect via Bluetooth
-  - Once connected via Bluetooth, open the Galaxy Buds Client
+  - Connecting
+    - Disconnect the Galaxy Buds case from the power source
+    - Close the Galaxy Buds case
+    - Open the Galaxy Buds case
+    - Pair the Galaxy Buds (only required for the first time)
+    - Repeat the process until the Galaxy Buds connect via Bluetooth
+    - Once connected via Bluetooth, open the Galaxy Buds Client
+  - Best audio profiles
+    - Best audio output: High Fidelity Playback (A2DP Sink, codec AAC)
+    - Worst output but allows input: Headset Head Unit (HSP/HFP, codec mSBC)
 
 - Chrome like apps with blank screen or vanishing text on scroll
 
