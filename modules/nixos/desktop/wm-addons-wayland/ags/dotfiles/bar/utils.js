@@ -25,6 +25,8 @@ const ignored = [
   "chrome-www.figma.com__-Default",
   "chrome-chat.openai.com__-Default",
   "chrome-ollama.wochap.local__-Default",
+  "chrome-openwebui.wochap.local__-Default",
+  "msedge-www.bing.com__chat-Default",
 ];
 
 export const mapAppId = (appId) => {
