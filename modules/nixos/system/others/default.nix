@@ -28,6 +28,11 @@
       DefaultTimeoutStopSec=15s
     '';
 
+    services.journald.extraConfig = ''
+      SystemMaxUse=1G
+      MaxRetentionSec=7days
+    '';
+
     hardware.graphics.enable = true;
 
     # run sysctl after the graphical session has started
