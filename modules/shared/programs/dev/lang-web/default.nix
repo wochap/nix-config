@@ -31,20 +31,23 @@ in {
     ];
 
     _custom.hm = {
-      home.sessionVariables = {
-        PATH = "$HOME/.npm-packages/bin:$HOME/.bun/bin:$PATH";
-        NODE_PATH = "$HOME/.npm-packages/lib/node_modules:$NODE_PATH";
+      home = {
+        sessionPath = [ "$HOME/.npm-packages/bin" "$HOME/.bun/bin" ];
 
-        # Fixes `bad interpreter: Text file busy`
-        # https://github.com/NixOS/nixpkgs/issues/314713
-        UV_USE_IO_URING = "0";
-      };
+        sessionVariables = {
+          NODE_PATH = "$HOME/.npm-packages/lib/node_modules:$NODE_PATH";
 
-      home.file = {
-        ".npmrc".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/.npmrc;
-        ".npm-packages/.keep".text = "";
-        ".npm-packages/lib/.keep".text = "";
+          # Fixes `bad interpreter: Text file busy`
+          # https://github.com/NixOS/nixpkgs/issues/314713
+          UV_USE_IO_URING = "0";
+        };
+
+        file = {
+          ".npmrc".source =
+            lib._custom.relativeSymlink configDirectory ./dotfiles/.npmrc;
+          ".npm-packages/.keep".text = "";
+          ".npm-packages/lib/.keep".text = "";
+        };
       };
 
       xdg.configFile.".bunfig.toml".source = ./dotfiles/.bunfig.toml;

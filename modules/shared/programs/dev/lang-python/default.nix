@@ -29,6 +29,8 @@ in {
       [ "${python-final}/lib/python3.11/site-packages" "$PYTHONPATH" ];
 
     _custom.hm = {
+      home.sessionPath = [ "$HOME/.local/bin" ];
+
       # HACK: to make mason.nvim work
       programs.zsh.initExtra = lib.mkBefore ''
         if [ -d "$HOME/.venv" ]; then
