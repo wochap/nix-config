@@ -12,6 +12,7 @@ let
   ruler = pkgs.writeScriptBin "ruler" (builtins.readFile ./scripts/ruler.sh);
   takeshot =
     pkgs.writeScriptBin "takeshot" (builtins.readFile ./scripts/takeshot.sh);
+  ocr = pkgs.writeScriptBin "ocr" (builtins.readFile ./scripts/ocr.sh);
   recorder =
     pkgs.writeScriptBin "recorder" (builtins.readFile ./scripts/recorder.sh);
   tui-bookmarks = pkgs.writeScriptBin "tui-bookmarks"
@@ -74,12 +75,14 @@ in {
         wl-screenrec # screen recorder utility (faster)
         wlr-randr
         wlrctl # control keyboard, mouse and wm from cli
+        tesseract5 # ocr
 
         play-notification-sound
         color-picker
         ruler
         recorder
         takeshot
+        ocr
 
         tui-bookmarks
         tui-calendar

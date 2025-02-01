@@ -441,6 +441,9 @@ static const Key keys[] = {
   // Open screenshoot utility
   { MODKEY|MOD_ALT, Key_s, spawn, SHCMD("takeshot --area") },
 
+  // Open ocr utility
+  { MODKEY|MOD_ALT, Key_o, spawn, SHCMD("ocr") },
+
   // Open color picker
   { MODKEY|MOD_ALT, Key_c, spawn, SHCMD("color-picker") },
 
