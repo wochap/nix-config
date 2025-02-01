@@ -11,6 +11,7 @@
       _custom.security.doas.enable = true;
       _custom.security.gnome-keyring.enable = true;
       _custom.security.gpg.enable = true;
+      _custom.security.network.enable = true;
       _custom.security.polkit.enable = true;
       _custom.security.ssh.enable = true;
 

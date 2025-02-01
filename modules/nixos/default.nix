@@ -74,6 +74,7 @@
     ./security/doas
     ./security/gnome-keyring
     ./security/gpg
+    ./security/network
     ./security/polkit
     ./security/ssh
 
