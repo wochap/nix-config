@@ -8,6 +8,8 @@ let
   scenefx-final = inputs.scenefx.packages."${system}".scenefx;
   dwl-state =
     pkgs.writeScriptBin "dwl-state" (builtins.readFile ./scripts/dwl-state.sh);
+  dwl-write-logs = pkgs.writeScriptBin "dwl-write-logs"
+    (builtins.readFile ./scripts/dwl-write-logs.sh);
   dwl-final = (pkgs.dwl.override {
     wlroots = pkgs.wlroots_0_18;
     configH = builtins.readFile (pkgs.substituteAll {
@@ -25,39 +27,8 @@ let
       cursorSize = toString cursor.size;
     });
   });
-  dwl-save-logs-str = # bash
-    ''
-      errlogs_path="/home/${userName}/.cache/dwl/stderrlogs"
-      logs_path="/home/${userName}/.cache/dwl/logs"
-      timestamp=$(date +"%a-%d-%b-%H:%M-%Y")
-
-      if [[ -f "$errlogs_path" ]]; then
-        mv "$errlogs_path" "''${errlogs_path}_''${timestamp}"
-      fi
-
-      if [[ -f "$logs_path" ]]; then
-        mv "$logs_path" "''${logs_path}_''${timestamp}"
-      fi
-    '';
-  stop-targets-str = # bash
-    ''
-      pid=$!
-      wait $pid
-      systemctl --user stop graphical-session.target --quiet
-      systemctl --user stop wayland-session.target --quiet
-    '';
-  dwl-start = pkgs.writeScriptBin "dwl-start" ''
-    ${dwl-save-logs-str}
-    dwl -d "$@" > "$logs_path" 2> "$errlogs_path" &
-    ${stop-targets-str}
-  '';
-  dwl-start-with-dgpu-port = pkgs.writeScriptBin "dwl-start-with-dgpu-port" ''
-    ${dwl-save-logs-str}
-    # NOTE: This is specific for glegion host with nvidia
-    # so I can use HDMI port connected directly to dGPU
-    unset WLR_RENDERER; unset __EGL_VENDOR_LIBRARY_FILENAMES; WLR_DRM_DEVICES="$IGPU_CARD:$DGPU_CARD" dwl -d "$@" > "$logs_path" 2> "$errlogs_path" &
-    ${stop-targets-str}
-  '';
+  greetd-default-cmd =
+    "uwsm start -S -F -N dwl -D dwl -- /run/current-system/sw/bin/dwl";
 in {
   options._custom.desktop.dwl = {
     enable = lib.mkEnableOption { };
@@ -68,17 +39,16 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
-          version = "c6678a43c8f7167761a495e7ed2adbdf8b979683"; # v0.8-a/patches-02-aug-2024
+          version =
+            "c6678a43c8f7167761a495e7ed2adbdf8b979683"; # v0.8-a/patches-02-aug-2024
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
             hash = "sha256-P2UP3Oetr8Y/vVE9P7g6WkPZNMECEan+e9Hhs+zOPIQ=";
           };
-          buildInputs = with pkgs; oldAttrs.buildInputs ++ [
-            scenefx-final
-            libGL
-          ];
+          buildInputs = with pkgs;
+            oldAttrs.buildInputs ++ [ scenefx-final libGL ];
           # enable debug symbols for better backtrace
           separateDebugInfo = true;
           dontStrip = true;
@@ -88,31 +58,28 @@ in {
 
     environment.systemPackages = with pkgs; [
       dwl-final
-      dwl-start
-      dwl-start-with-dgpu-port
       dwl-state # script that prints dwl state
+      dwl-write-logs # script that copies logs from journal to file
     ];
 
-    _custom.desktop.greetd.cmd =
-      lib.mkIf cfg.isDefault "${dwl-start}/bin/dwl-start";
+    _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault greetd-default-cmd;
     environment.etc = {
       "greetd/environments".text = lib.mkAfter ''
         dwl
-        dwl-start
-        dwl-start-with-dgpu-port
+        tee
       '';
-      "greetd/sessions/dwl.dekstop".text = ''
+      "greetd/sessions/dwl-uwsm.dekstop".text = ''
         [Desktop Entry]
-        Name=dwl
+        Name=dwl (UWSM)
         Comment=dwm for Wayland
-        Exec=dwl-start
+        Exec=${greetd-default-cmd}
         Type=Application
       '';
-      "greetd/sessions/dwl-dgpu-port.dekstop".text = ''
+      "greetd/sessions/dwl-dgpu-uwsm.dekstop".text = ''
         [Desktop Entry]
-        Name=dwl-dgpu-port
+        Name=dwl-dgpu (UWSM)
         Comment=dwm for Wayland
-        Exec=dwl-start-with-dgpu-port
+        Exec=uwsm start -S -F -N dwl-dgpu -D dwl -- /run/current-system/sw/bin/dwl
         Type=Application
       '';
     };
@@ -125,16 +92,28 @@ in {
     _custom.hm = {
       home.file.".cache/dwl/.keep".text = "";
 
-      xdg.configFile = {
-        "scripts" = {
-          recursive = true;
-          # TODO: skip dwl-state.sh
-          source = ./scripts;
-        };
+      xdg = {
+        configFile = {
+          "scripts" = {
+            recursive = true;
+            # TODO: skip dwl-state.sh
+            source = ./scripts;
+          };
 
-        "remmina/glegion.remmina".source =
-          lib._custom.relativeSymlink configDirectory
-          ./dotfiles/glegion.remmina;
+          "remmina/glegion.remmina".source =
+            lib._custom.relativeSymlink configDirectory
+            ./dotfiles/glegion.remmina;
+
+          # TODO: WLR_DRM_DEVICES isn't being passed to wm
+          "uwsm/env-dwl-dgpu".text = ''
+            # env variables for starting hyprland with discrete gpu
+            # NOTE: This is specific to glegion host with nvidia
+            # to enable using the HDMI port connected directly to the dGPU
+            export WLR_RENDERER=
+            export __EGL_VENDOR_LIBRARY_FILENAMES=
+            export WLR_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
+          '';
+        };
       };
     };
   };

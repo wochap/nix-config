@@ -121,7 +121,6 @@ in {
             # tmux-server service doesn't inherit FZF_DEFAULT_OPTS env var
             ''FZF_DEFAULT_OPTS="${fzfDefaultOptsStr}"''
           ];
-          PassEnvironment = [ "PATH" "DISPLAY" "HOME" ];
           ExecStart = "${start-tmux-server}/bin/start-tmux-server";
           ExecStop = "${stop-tmux-server}/bin/stop-tmux-server";
           KillMode = "mixed";

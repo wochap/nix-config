@@ -99,7 +99,6 @@ in {
       systemd.user.services.unblock-bluetooth = lib._custom.mkWaylandService {
         Service = {
           Type = "oneshot";
-          PassEnvironment = "PATH";
           ExecStart = "${unblock-bluetooth}/bin/unblock-bluetooth";
         };
       };

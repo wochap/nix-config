@@ -27,7 +27,6 @@ in {
         };
         Service = {
           Type = "oneshot";
-          PassEnvironment = "PATH";
           ExecStart = "${vdirsyncerScript}";
         };
       };

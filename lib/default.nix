@@ -25,9 +25,16 @@ rec {
     mkOutOfStoreSymlink (runtimePath configDirectory path);
 
   mkWaylandService = lib.recursiveUpdate {
-    Unit.PartOf = [ "wayland-session.target" ];
-    Unit.After = [ "wayland-session.target" ];
-    Install.WantedBy = [ "wayland-session.target" ];
+    Unit.PartOf = [ "graphical-session.target" ];
+    Unit.After = [ "graphical-session.target" ];
+    Install.WantedBy = [ "graphical-session.target" ];
+    Service = {
+      Slice = "app-graphical.slice";
+      ExecCondition = [
+        ''
+          ${pkgs.systemd}/lib/systemd/systemd-xdg-autostart-condition "dwl:hyprland:wlroots:sway:Wayfire:labwc:Hyprland" ""''
+      ];
+    };
   };
 
   mkGraphicalService = lib.recursiveUpdate {

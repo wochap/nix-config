@@ -17,6 +17,9 @@ in {
           night = 3700;
         };
       };
+
+      # only start gammastep on wayland wm
+      systemd.user.services.gammastep = lib._custom.mkWaylandService { };
     };
   };
 }

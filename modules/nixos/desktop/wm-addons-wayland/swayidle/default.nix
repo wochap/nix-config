@@ -27,7 +27,7 @@ in {
 
       services.swayidle = {
         enable = true;
-        systemdTarget = "wayland-session.target";
+        systemdTarget = "graphical-session.target";
         events = [
           {
             event = "before-sleep";
@@ -63,7 +63,6 @@ in {
       systemd.user.services = {
         swayidle.Service = {
           Environment = lib.mkForce "";
-          PassEnvironment = "PATH";
         };
 
         sway-audio-idle-inhibit = lib._custom.mkWaylandService {
@@ -76,7 +75,6 @@ in {
             Wants = [ "swayidle.service" ];
           };
           Service = {
-            PassEnvironment = "PATH";
             ExecStart =
               "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
             Type = "simple";

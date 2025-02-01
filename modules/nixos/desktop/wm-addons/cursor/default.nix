@@ -21,7 +21,6 @@ in {
       systemd.user.services.xsetroot = lib._custom.mkWaylandService {
         Service = {
           Type = "oneshot";
-          PassEnvironment = [ "PATH" ];
           ExecStart = "${pkgs.xorg.xsetroot}/bin/xsetroot -cursor_name left_ptr";
         };
       };

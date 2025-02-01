@@ -44,6 +44,7 @@
     ./desktop/wm-addons-wayland/tofi
     ./desktop/wm-addons-wayland/wayland-utils
     ./desktop/wm-addons-wayland/wluma
+    ./desktop/wm-addons-wayland/uwsm
     ./desktop/wm-addons-wayland/wayland-session
     ./desktop/wm-addons-wayland/ydotool
 

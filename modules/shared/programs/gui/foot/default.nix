@@ -46,7 +46,6 @@ in {
           ConditionEnvironment = "WAYLAND_DISPLAY";
         };
         Service = {
-          PassEnvironment = [ "PATH" "WAYLAND_DISPLAY" ];
           ExecStart = "${pkgs.foot}/bin/foot --server=3";
           UnsetEnvironment = "LISTEN_PID LISTEN_FDS LISTEN_FDNAMES";
           NonBlocking = true;

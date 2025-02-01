@@ -84,9 +84,11 @@ static const Env envs[] = {
 
 /* Autostart */
 static const char *const autostart[] = {
-  "start-wm-dependencies", NULL,
+  "uwsm", "finalize", "XDG_CURRENT_DESKTOP", "XDG_SESSION_TYPE", "XDG_SESSION_DESKTOP", NULL,
 
   "configure-gtk", NULL,
+
+  "dwl-write-logs", NULL,
 
   NULL /* terminate */
 };
@@ -276,10 +278,10 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 	{ MODKEY|MOD_CONTROL|MOD_SHIFT, KEY, toggletag,  {.ui = 1 << TAG} }
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "sh", "-c", cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "sh", "-c", "uwsm-app -- " cmd, NULL } }
 
 // same as SHCMD but adds scratchkey
-#define SHCMD_SK(scratchkey, cmd) { .v = (const char*[]){ scratchkey, "sh", "-c", cmd, NULL } }
+#define SHCMD_SK(scratchkey, cmd) { .v = (const char*[]){ scratchkey, "sh", "-c", "uwsm-app -- " cmd, NULL } }
 
 /* commands */
 #define RUN(...)   { .v = (const char*[]){ __VA_ARGS__, NULL } }

@@ -17,7 +17,7 @@ in {
         Unit = {
           Description = "Dynamic output configuration";
           Documentation = "man:kanshi(1)";
-          Requires = "wayland-session.target";
+          Requires = "graphical-session.target";
         };
         Service = {
           Type = "simple";

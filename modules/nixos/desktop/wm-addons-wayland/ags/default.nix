@@ -47,18 +47,18 @@ in {
               # NOTE: this or use `dbus-update-activation-environment --systemd <env_var_name>`
               "TIMEWARRIORDB=${hmConfig.home.sessionVariables.TIMEWARRIORDB}"
             ];
-            PassEnvironment =
-              [ "PATH" "XDG_SESSION_DESKTOP" "HYPRLAND_INSTANCE_SIGNATURE" ];
-            ExecStart = "${agsFinal}/bin/ags";
+            PassEnvironment = [ "HYPRLAND_INSTANCE_SIGNATURE" ];
+            ExecStart = "${agsFinal}/bin/ags --bus-name $XDG_SESSION_DESKTOP";
             Restart = "on-failure";
             KillMode = "mixed";
           };
         });
 
+      # HACK: delete temp files used by AGS osd
       systemd.user.services.progress-osd = lib._custom.mkWaylandService {
         Service = {
           Type = "oneshot";
-          PassEnvironment = [ "PATH" "UID" ];
+          PassEnvironment = [ "UID" ];
           ExecStart =
             "${pkgs.bash}/bin/bash -c 'if [ -p /run/user/$UID/progress_osd ]; then ${pkgs.coreutils}/bin/rm /run/user/$UID/progress_osd; fi && ${pkgs.coreutils}/bin/mkfifo /run/user/$UID/progress_osd'";
         };
@@ -66,7 +66,7 @@ in {
       systemd.user.services.progress-icon-osd = lib._custom.mkWaylandService {
         Service = {
           Type = "oneshot";
-          PassEnvironment = [ "PATH" "UID" ];
+          PassEnvironment = [ "UID" ];
           ExecStart =
             "${pkgs.bash}/bin/bash -c 'if [ -p /run/user/$UID/progress_icon_osd ]; then ${pkgs.coreutils}/bin/rm /run/user/$UID/progress_icon_osd; fi && ${pkgs.coreutils}/bin/mkfifo /run/user/$UID/progress_icon_osd'";
         };

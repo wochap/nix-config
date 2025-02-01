@@ -15,6 +15,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    # binaries to whitelist in greetd
     environment.etc."greetd/environments".text = ''
       bash
       zsh

@@ -58,7 +58,6 @@ in {
         stop-taskwarrior = lib._custom.mkGraphicalService {
           Service = {
             Environment = [ "TIMEWARRIORDB=${timewarriorConfigPath}" ];
-            PassEnvironment = [ "PATH" ];
             Type = "oneshot";
             ExecStop = "${stop-tasks}/bin/stop-tasks";
             RemainAfterExit = true;

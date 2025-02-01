@@ -52,6 +52,7 @@
       _custom.desktop.swaylock.enable = true;
       _custom.desktop.swww.enable = true;
       _custom.desktop.tofi.enable = true;
+      _custom.desktop.uwsm.enable = true;
       _custom.desktop.wayland-session.enable = true;
       _custom.desktop.wayland-utils.enable = true;
       _custom.desktop.wluma.enable = lib.mkDefault false;

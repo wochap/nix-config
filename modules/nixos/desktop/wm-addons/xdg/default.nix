@@ -33,6 +33,8 @@ in {
 
     xdg.icons.enable = true;
 
+    xdg.terminal-exec.enable = true;
+
     _custom.hm = {
       xdg.enable = true;
       xdg.systemDirs.data = [ "/usr/share" "/usr/local/share" ];

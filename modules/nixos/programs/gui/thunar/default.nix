@@ -59,8 +59,6 @@ in {
           ExecStart = "${finalThunar}/bin/Thunar --daemon";
           BusName = "org.xfce.FileManager";
           KillMode = "process";
-          # NOTE: PATH is necessary for when thunar is launched by browsers
-          PassEnvironment = [ "PATH" ];
         };
       };
     };

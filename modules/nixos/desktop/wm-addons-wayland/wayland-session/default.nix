@@ -37,11 +37,15 @@ in {
 
       home.sessionVariables = {
         # Force GTK to use wayland
-        GDK_BACKEND = "wayland,x11";
+        GDK_BACKEND = "wayland,x11,*";
         CLUTTER_BACKEND = "wayland";
+
+        SDL_VIDEODRIVER = "wayland";
 
         # Force QT to use wayland
         QT_QPA_PLATFORM = "wayland;xcb";
+
+        QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
 
         # Force firefox to use wayland
         MOZ_ENABLE_WAYLAND = "1";
@@ -55,18 +59,6 @@ in {
         Unit = {
           Description = "Home Manager System Tray";
           Requires = [ "graphical-session-pre.target" ];
-        };
-      };
-
-      # starting this target will also start graphical-session targets
-      # NOTE: update dbus and systemd env variables so that gtk apps start without delay
-      systemd.user.targets.wayland-session = {
-        Unit = {
-          Description = "wayland compositor session";
-          Documentation = [ "man:systemd.special(7)" ];
-          BindsTo = [ "graphical-session.target" ];
-          Wants = [ "graphical-session-pre.target" ];
-          After = [ "graphical-session-pre.target" ];
         };
       };
     };

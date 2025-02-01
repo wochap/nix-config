@@ -30,23 +30,20 @@ in {
           Description = "Convert ics files to rem";
           After = [ "vdirsyncer.service" ];
         };
-
         Service = {
           Type = "oneshot";
-          PassEnvironment = [ "PATH" ];
           ExecStart = "${ics2remScript}";
         };
-
         Install.WantedBy = [ "vdirsyncer.service" ];
       };
 
+      # TODO: change service target
       systemd.user.services.remind = lib._custom.mkWaylandService {
         Unit = {
           Description = "Remind is a sophisticated calendar and alarm program.";
           Documentation = "https://dianne.skoll.ca/projects/remind/";
         };
         Service = {
-          PassEnvironment = [ "PATH" ];
           ExecStart = "${remindScript}";
           KillMode = "mixed";
         };

@@ -50,8 +50,6 @@ in {
         # https://wiki.archlinux.org/title/qt#Configuration_of_Qt_5_applications_under_environments_other_than_KDE_Plasma
         # https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications#The_KDE_Plasma_XDG_Desktop_Portal_is_not_being_used
         DESKTOP_SESSION = "KDE";
-
-        # QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       };
 
       xdg.configFile = {

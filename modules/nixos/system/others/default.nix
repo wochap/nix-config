@@ -48,6 +48,11 @@
         ExecStart = "${pkgs.procps}/bin/sysctl --system";
       };
     };
+
+    # update PATH for user systemd services
+    systemd.user.extraConfig = ''
+      DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
+    '';
   };
 }
 

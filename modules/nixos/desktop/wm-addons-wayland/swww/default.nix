@@ -38,9 +38,6 @@ in {
         };
         Service = {
           PassEnvironment = [
-            # "HOME"
-            "PATH"
-            "XDG_RUNTIME_DIR"
             "SWWW_TRANSITION_TYPE"
             "SWWW_TRANSITION_STEP"
             "SWWW_TRANSITION_FPS"

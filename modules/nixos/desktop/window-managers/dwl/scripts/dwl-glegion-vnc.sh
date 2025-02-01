@@ -49,4 +49,4 @@ while true; do
 done
 
 # on tty 2
-# Hyprland --config ~/.config/hypr/vnc.conf
+# Hyprland --config ~/.config/hypr/hyprland-vnc.conf

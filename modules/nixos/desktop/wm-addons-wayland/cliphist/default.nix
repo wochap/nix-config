@@ -20,7 +20,6 @@ in {
         Unit.Description = "Wayland clipboard manager";
         Unit.Documentation = "https://github.com/sentriz/cliphist";
         Service = {
-          PassEnvironment = "PATH";
           ExecStart = "${clipboard-manager}/bin/clipboard-manager --start";
           Restart = "on-failure";
           KillMode = "mixed";
