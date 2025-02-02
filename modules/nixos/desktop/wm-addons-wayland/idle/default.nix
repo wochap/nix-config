@@ -45,8 +45,9 @@ in {
               "Prevents swayidle from sleeping while any application is outputting or receiving audio.";
             Documentation =
               "https://github.com/ErikReider/SwayAudioIdleInhibit";
-            After = [ "hypridle.service" ];
+            Requires = [ "hypridle.service" ];
             Wants = [ "hypridle.service" ];
+            PartOf = [ ];
           };
           Service = {
             ExecStart =
@@ -59,8 +60,9 @@ in {
           Unit = {
             Description = "An Idle Inhibitor for Wayland";
             Documentation = "https://codeberg.org/QuincePie/matcha";
-            After = [ "hypridle.service" ];
+            Requires = [ "hypridle.service" ];
             Wants = [ "hypridle.service" ];
+            PartOf = [ ];
           };
           Service = {
             ExecStartPre =
