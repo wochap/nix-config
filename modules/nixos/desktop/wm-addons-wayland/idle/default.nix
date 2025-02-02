@@ -69,6 +69,10 @@ in {
             Type = "simple";
           };
         };
+
+        hypridle = lib._custom.mkWaylandService {
+          Unit.ConditionEnvironment = lib.mkForce "";
+        };
       };
     };
   };
