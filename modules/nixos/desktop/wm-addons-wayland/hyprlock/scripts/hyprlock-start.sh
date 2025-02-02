@@ -14,7 +14,7 @@ EOF
 if [ "$BACKGROUND" = "1" ]; then
   swww_image_path=$(swww query | sed 's/.*image: //')
   if ! [ -e "$swww_image_path" ]; then
-    swww_image_path="$HOME/Pictures/backgrounds/swaylock.jpg"
+    swww_image_path="$HOME/Pictures/backgrounds/lock.jpg"
   fi
   cat <<EOF >>"$tmpfile"
     background {

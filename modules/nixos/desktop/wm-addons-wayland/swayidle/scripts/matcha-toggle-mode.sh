@@ -4,10 +4,6 @@ ENABLED=
 DISABLED=
 FILE="$HOME/tmp/matcha"
 
-reload_waybar() {
-  pkill -SIGRTMIN+8 waybar
-}
-
 toggle() {
   notify="notify-send --urgency=low --replace-id=695 matcha"
 
@@ -18,14 +14,12 @@ toggle() {
       touch "$FILE"
     fi
     $notify "Matcha is enabled"
-    reload_waybar
     ;;
   false)
     if test -f "$FILE"; then
       rm "$FILE"
     fi
     $notify "Matcha is disabled"
-    reload_waybar
     ;;
   esac
 }

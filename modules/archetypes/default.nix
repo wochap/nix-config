@@ -48,8 +48,7 @@
       _custom.desktop.gammastep.enable = true;
       _custom.desktop.hyprlock.enable = lib.mkDefault true;
       _custom.desktop.kanshi.enable = true;
-      _custom.desktop.swayidle.enable = lib.mkDefault true;
-      _custom.desktop.swaylock.enable = true;
+      _custom.desktop.idle.enable = lib.mkDefault true;
       _custom.desktop.swww.enable = true;
       _custom.desktop.tofi.enable = true;
       _custom.desktop.uwsm.enable = true;

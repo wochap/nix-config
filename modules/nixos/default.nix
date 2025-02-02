@@ -39,7 +39,6 @@
     ./desktop/wm-addons-wayland/hyprlock
     ./desktop/wm-addons-wayland/kanshi
     ./desktop/wm-addons-wayland/swayidle
-    ./desktop/wm-addons-wayland/swaylock
     ./desktop/wm-addons-wayland/swww
     ./desktop/wm-addons-wayland/tofi
     ./desktop/wm-addons-wayland/wayland-utils

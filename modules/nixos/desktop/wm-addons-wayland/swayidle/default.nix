@@ -1,8 +1,8 @@
 { config, pkgs, lib, inputs, system, ... }:
 
 let
-  cfg = config._custom.desktop.swayidle;
-  inherit (config._custom.globals) userName;
+  cfg = config._custom.desktop.idle;
+  inherit (config._custom.globals) userName configDirectory;
   matcha = inputs.matcha.packages.${system}.default;
   matcha-toggle-mode = pkgs.writeScriptBin "matcha-toggle-mode"
     (builtins.readFile ./scripts/matcha-toggle-mode.sh);
@@ -10,8 +10,10 @@ let
     (builtins.readFile ./scripts/backlight-restore.sh);
   close-overlays = pkgs.writeScriptBin "close-overlays" # sh
     (builtins.readFile ./scripts/close-overlays.sh);
+  dpms = pkgs.writeScriptBin "dpms" # sh
+    (builtins.readFile ./scripts/dpms.sh);
 in {
-  options._custom.desktop.swayidle.enable = lib.mkEnableOption { };
+  options._custom.desktop.idle.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
@@ -21,58 +23,31 @@ in {
         sway-audio-idle-inhibit # complement to swayidle
         swayidle
 
+        backlight-restore
+        close-overlays
+        dpms
+
         chayang # gradually dim the screen
         wlopm # toggle screen
       ];
 
-      services.swayidle = {
+      xdg.configFile."hypr/hypridle.conf".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/hypridle.conf;
+
+      services.hypridle = {
         enable = true;
-        systemdTarget = "graphical-session.target";
-        events = [
-          {
-            event = "before-sleep";
-            command = "loginctl lock-session";
-          }
-          {
-            event = "lock";
-            command = "swaylock-start";
-          }
-        ];
-        timeouts = [
-          {
-            timeout = 185;
-            command = "BACKGROUND=1 swaylock-start";
-          }
-          {
-            timeout = 180;
-            command = ''
-              if ! pgrep swaylock; then brightnessctl --save && chayang -d 5 && wlopm --off "*" && ${close-overlays}/bin/close-overlays; fi'';
-            resumeCommand =
-              "if ! pgrep swaylock; then ${backlight-restore}/bin/backlight-restore; fi";
-          }
-          {
-            timeout = 15;
-            command = ''
-              if pgrep swaylock; then brightnessctl --save && wlopm --off "*" && ${close-overlays}/bin/close-overlays; fi'';
-            resumeCommand =
-              "if pgrep swaylock; then ${backlight-restore}/bin/backlight-restore; fi";
-          }
-        ];
+        settings = { };
       };
 
       systemd.user.services = {
-        swayidle.Service = {
-          Environment = lib.mkForce "";
-        };
-
         sway-audio-idle-inhibit = lib._custom.mkWaylandService {
           Unit = {
             Description =
               "Prevents swayidle from sleeping while any application is outputting or receiving audio.";
             Documentation =
               "https://github.com/ErikReider/SwayAudioIdleInhibit";
-            After = [ "swayidle.service" ];
-            Wants = [ "swayidle.service" ];
+            After = [ "hypridle.service" ];
+            Wants = [ "hypridle.service" ];
           };
           Service = {
             ExecStart =
@@ -85,8 +60,8 @@ in {
           Unit = {
             Description = "An Idle Inhibitor for Wayland";
             Documentation = "https://codeberg.org/QuincePie/matcha";
-            After = [ "swayidle.service" ];
-            Wants = [ "swayidle.service" ];
+            After = [ "hypridle.service" ];
+            Wants = [ "hypridle.service" ];
           };
           Service = {
             ExecStartPre =
