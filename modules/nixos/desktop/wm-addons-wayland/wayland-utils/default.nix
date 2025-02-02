@@ -76,6 +76,7 @@ in {
         wlr-randr
         wlrctl # control keyboard, mouse and wm from cli
         tesseract5 # ocr
+        cage # wm
 
         play-notification-sound
         color-picker
