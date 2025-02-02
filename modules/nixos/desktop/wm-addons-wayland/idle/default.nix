@@ -21,7 +21,6 @@ in {
         matcha # control idle inhibit
         matcha-toggle-mode
         sway-audio-idle-inhibit # complement to swayidle
-        swayidle
 
         backlight-restore
         close-overlays
