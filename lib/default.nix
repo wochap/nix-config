@@ -41,5 +41,6 @@ rec {
     Unit.PartOf = [ "graphical-session.target" ];
     Unit.After = [ "graphical-session.target" ];
     Install.WantedBy = [ "graphical-session.target" ];
+    Service.Slice = "app-graphical.slice";
   };
 }
