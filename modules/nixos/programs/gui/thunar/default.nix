@@ -12,6 +12,31 @@ in {
   options._custom.programs.thunar.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        xfce = prev.lib.recursiveUpdate prev.xfce {
+          thunar = prev.xfce.thunar.overrideAttrs (oldAttrs: rec {
+            src = pkgs.fetchFromGitHub {
+              owner = "wochap";
+              repo = "thunar";
+              rev = "xfce-4.18-hide-menu-btn-b";
+              sha256 = "sha256-3Fu7KBwom5+wf896x6r0ixldqguX6fCXXUEOgGcrx+Y=";
+            };
+            # patches = [
+            #   # removes toolbar toggle button
+            #   # press Ctrl+m to toggle toolbar
+            #   # patch works on thunar 4.18
+            #   (pkgs.fetchpatch {
+            #     url =
+            #       "https://github.com/wochap/thunar/commit/906bbc2a30b32cfe8c36a4f1c7f7bff354c98c90.patch";
+            #     sha256 = "sha256-RuHWBsGooo/BuHYlmYP6BhttmUMHOc334Y4v1/kEC/8=";
+            #   })
+            # ];
+          });
+        };
+      })
+    ];
+
     programs.thunar = {
       enable = true;
       inherit plugins;
@@ -49,15 +74,15 @@ in {
         associations.added = { "inode/directory" = [ "thunar.desktop" ]; };
       };
 
-      systemd.user.services.thunar = {
+      # fast thunar
+      systemd.user.services.thunar-server = lib._custom.mkWaylandService {
         Unit = {
           Description = "Thunar file manager";
           Documentation = "man:Thunar(1)";
         };
         Service = {
-          Type = "dbus";
+          Type = "simple";
           ExecStart = "${finalThunar}/bin/Thunar --daemon";
-          BusName = "org.xfce.FileManager";
           KillMode = "process";
         };
       };
