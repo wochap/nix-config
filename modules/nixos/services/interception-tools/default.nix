@@ -2,6 +2,7 @@
 
 let
   cfg = config._custom.services.interception-tools;
+  # TODO: add an config option
   keychrone = "/dev/input/by-id/usb-Keychron_Keychron_K3-event-kbd";
   legionKb = "/dev/input/by-id/usb-ITE_Tech._Inc._ITE_Device_8910_-event-kbd";
   generateJob = devnode:
