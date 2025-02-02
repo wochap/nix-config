@@ -6,18 +6,11 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home = {
-        packages = with pkgs; [
-          trash-cli
-
+      home.packages = with pkgs;
+        [
           (vscode.fhsWithPackages
             (ps: with ps; [ rustup zlib openssl.dev pkg-config ]))
         ];
-        sessionVariables = {
-          # Fix vscode delete
-          ELECTRON_TRASH = "trash-cli";
-        };
-      };
     };
   };
 }

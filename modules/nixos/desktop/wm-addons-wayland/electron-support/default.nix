@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let cfg = config._custom.desktop.electron-support;
 in {
@@ -9,9 +9,17 @@ in {
     # https://nixos.wiki/wiki/Wayland
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-    _custom.hm.xdg.configFile."electron-flags.conf".text = ''
-      --enable-features=UseOzonePlatform
-      --ozone-platform=wayland
-    '';
+    _custom.hm = {
+      home = {
+        # Fix vscode delete
+        packages = with pkgs; [ trash-cli ];
+        sessionVariables.ELECTRON_TRASH = "trash-cli";
+      };
+
+      xdg.configFile."electron-flags.conf".text = ''
+        --enable-features=UseOzonePlatform
+        --ozone-platform=wayland
+      '';
+    };
   };
 }
