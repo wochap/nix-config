@@ -26,12 +26,14 @@ once_mode="${3}"
   "You need to redirect dwl stdout to $file_path" >&2
 
 cycle() {
+  file=$(tac "$file_path")
   case "${component}" in
   [012345678])
-    occupiedtags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $3}')
-    activatedtags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $4}')
-    focusedtags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $5}')
-    urgenttags=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} tags" | awk '{print $6}')
+    tags=$(echo "$file" | grep -m1 "^${monitor:-[[:graph:]]*} tags")
+    occupiedtags=$(echo "$tags" | awk '{print $3}')
+    activatedtags=$(echo "$tags" | awk '{print $4}')
+    focusedtags=$(echo "$tags" | awk '{print $5}')
+    urgenttags=$(echo "$tags" | awk '{print $6}')
 
     this_tag="${component}"
     unset this_status
@@ -51,7 +53,7 @@ cycle() {
     fi
     ;;
   layout | title | appid | mode | selmon | namedscratchpads_count | scratchpads_count | visible_appids)
-    val=$(tac "$file_path" | grep -m1 "^${monitor:-[[:graph:]]*} ${component}" | cut -d ' ' -f 3- | sed s/\"/“/g)
+    val=$(echo "$file" | grep -m1 "^${monitor:-[[:graph:]]*} ${component}" | cut -d ' ' -f 3- | sed s/\"/“/g)
 
     if [ "$val" != "$last_val" ]; then
       last_val=$val
