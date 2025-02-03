@@ -23,6 +23,7 @@ in {
   options._custom.desktop.udev-rules.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    services.udev.enable = true;
     services.udev.packages = [ cornekbd chocofikbd ];
 
     systemd.services.cornekbd-disable-glegion-builtin-kbd = {
