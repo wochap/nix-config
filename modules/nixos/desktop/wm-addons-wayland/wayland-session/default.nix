@@ -53,6 +53,8 @@ in {
         XDG_SESSION_TYPE = lib.mkDefault "wayland";
       };
 
+      # wayland.systemd.target = "graphical-session.target";
+
       # fake a tray to let apps start
       # https://github.com/nix-community/home-manager/issues/2064
       systemd.user.targets.tray = {
