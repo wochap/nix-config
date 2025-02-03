@@ -26,6 +26,9 @@ in {
 
       # stop systemd from printing its version number (initramfs)
       "rd.udev.log_level=3"
+
+      # shows plymouth earlier but sometimes there's a little flashing
+      # "plymouth.use-simpledrm"
     ];
 
     # hide not harmful ACPI BIOS errors (AE_ALREADY_EXISTS) before plymouth
