@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+hyprlock_pid=$(pgrep hyprlock)
+if [[ -n "$hyprlock_pid" ]]; then
+  exit 1
+fi
+
 # create tmp file
 tmpfile=$(mktemp)
 
@@ -22,11 +27,6 @@ if [ "$BACKGROUND" = "1" ]; then
       blur_passes = 0
     }
 EOF
-fi
-
-hyprlock_pid=$(pgrep hyprlock)
-if [[ -n "$hyprlock_pid" ]]; then
-  exit 1
 fi
 
 exec hyprlock -c "$tmpfile"
