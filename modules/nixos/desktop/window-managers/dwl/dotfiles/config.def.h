@@ -299,7 +299,7 @@ static const Key keys[] = {
   { MODKEY, Key_i, raiserunnamedscratchpad, SHCMD_SK("i", "~/.config/kitty/scripts/kitty-scratch.sh") },
 
   // Lock screen
-	{ MODKEY, Key_l, spawn, SHCMD("swaylock-start") },
+	{ MODKEY, Key_l, spawn, SHCMD("hyprlock-start") },
 
   // Open power menu
   { MODKEY, Key_Escape, spawn, SHCMD("tofi-powermenu") },
