@@ -13,5 +13,15 @@ in {
           (builtins.readFile ./scripts/kbd-backlight.sh))
       ];
     };
+
+    services.udev.packages = [
+      (pkgs.writeTextFile {
+        name = "90-amd-backlight.rules";
+        text = ''
+          ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="amdgpu_bl1", MODE="0666", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
+        '';
+        destination = "/etc/udev/rules.d/90-amd-backlight.rules";
+      })
+    ];
   };
 }
