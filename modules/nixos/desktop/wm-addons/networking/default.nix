@@ -8,7 +8,7 @@ in {
     _custom.user.extraGroups = [ "networkmanager" ];
 
     environment = {
-      systemPackages = with pkgs; [ impala ];
+      systemPackages = with pkgs; [ impala iw ];
 
       shellAliases.wtui = "impala";
     };
