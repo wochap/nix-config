@@ -20,6 +20,7 @@ in {
         age # encrypt files
         dust # disk usage
         entr # run something on file change
+        qpdf # removes password of pdf
 
         termshark # tui wireshark
         gdu # tui disk usage
