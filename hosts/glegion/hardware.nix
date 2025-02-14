@@ -48,6 +48,9 @@
       # this doesn't fix my ACPI Bios errors :c
       # source: https://discordapp.com/channels/761178912230473768/1159412133117833286
       "acpi_osi=Linux"
+
+      # TODO: change to deep when on battery
+      # "mem_sleep_default=deep"
     ];
 
     console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
