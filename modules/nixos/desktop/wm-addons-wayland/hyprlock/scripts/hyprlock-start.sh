@@ -29,4 +29,4 @@ if [ "$BACKGROUND" = "1" ]; then
 EOF
 fi
 
-exec hyprlock -c "$tmpfile"
+exec hyprlock -c "$tmpfile" "$@"

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-dpms --on && brightnessctl --restore
+dpms --on
+brightnessctl --restore
 
 # increase brightness if it is too low
 DEVICES=$(find /sys/class/backlight -type l -printf "%f\n")
