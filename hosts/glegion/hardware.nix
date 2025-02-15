@@ -14,8 +14,8 @@
   config = {
     hardware.amdgpu.initrd.enable = true;
     hardware.amdgpu.opencl.enable = true;
-
     # NOTE: amdvlk introduces black bard on GTK apps
+    # hardware.amdgpu.amdvlk.enable = true;
 
     hardware.nvidia = {
       open = false;
