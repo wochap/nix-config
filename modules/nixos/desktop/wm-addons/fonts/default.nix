@@ -46,6 +46,7 @@ in {
           roboto
           roboto-slab
           unifont # i18n
+          noto-fonts-cjk-sans # jp, kr, sc, tc, hk chars
 
           # emojis
           noto-fonts-emoji
