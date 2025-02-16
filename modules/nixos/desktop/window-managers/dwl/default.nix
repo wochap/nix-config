@@ -27,8 +27,19 @@ let
       cursorSize = toString cursor.size;
     });
   });
+  dwl-start = pkgs.writeScriptBin "dwl-start"
+    # bash
+    ''
+      #!/usr/bin/env bash
+
+      logs_path="/home/${userName}/.cache/dwl/logs"
+      if [[ -f "$logs_path" ]]; then
+        rm "$logs_path"
+      fi
+      dwl | tee -a "$logs_path"
+    '';
   greetd-default-cmd =
-    "uwsm start -S -F -N dwl -D dwl -- /run/current-system/sw/bin/dwl";
+    "uwsm start -S -F -N dwl -D dwl -- /run/current-system/sw/bin/dwl-start";
 in {
   options._custom.desktop.dwl = {
     enable = lib.mkEnableOption { };
@@ -60,6 +71,7 @@ in {
       dwl-final
       dwl-state # script that prints dwl state
       dwl-write-logs # script that copies logs from journal to file
+      dwl-start
     ];
 
     _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault greetd-default-cmd;
@@ -79,7 +91,7 @@ in {
         [Desktop Entry]
         Name=dwl-dgpu (UWSM)
         Comment=dwm for Wayland
-        Exec=uwsm start -S -F -N dwl-dgpu -D dwl -- /run/current-system/sw/bin/dwl
+        Exec=uwsm start -S -F -N dwl-dgpu -D dwl -- /run/current-system/sw/bin/dwl-start
         Type=Application
       '';
     };
