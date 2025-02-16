@@ -16,17 +16,13 @@
 
 declare occupiedtags activatedtags focusedtags urgenttags val last_val
 declare -a tag_labels
-readonly file_path="$HOME"/.cache/dwl/logs
 tag_labels=("1" "2" "3" "4" "5" "6" "7" "8" "9")
 monitor="${1}"
 component="${2}"
 once_mode="${3}"
 
-[[ ! -f "${file_path}" ]] && printf -- '%s\n' \
-  "You need to redirect dwl stdout to $file_path" >&2
-
 cycle() {
-  file=$(tac "$file_path")
+  file="$1"
   case "${component}" in
   [012345678])
     tags=$(echo "$file" | grep -m1 "^${monitor:-[[:graph:]]*} tags")
@@ -64,16 +60,22 @@ cycle() {
     printf -- '{"text":"INVALID COMPONENT"}\n'
     ;;
   esac
+  if [ "$once_mode" == "--once" ]; then
+    exit 0
+  fi
 }
 
-cycle
-
-if [ "$once_mode" == "--once" ]; then
-  exit 0
-fi
-
-while inotifywait -qq -e modify "$file_path"; do
-  cycle
-done
+case "${component}" in
+[012345678])
+  journalctl --quiet --no-pager --follow --output=cat --user-unit=wayland-wm@dwl.service --grep="$monitor tags " | while read -r line; do
+    cycle "$line"
+  done
+  ;;
+layout | title | appid | mode | selmon | namedscratchpads_count | scratchpads_count | visible_appids)
+  journalctl --quiet --no-pager --follow --output=cat --user-unit=wayland-wm@dwl.service --grep="$monitor $component" | while read -r line; do
+    cycle "$line"
+  done
+  ;;
+esac
 
 unset -v occupiedtags activatedtags focusedtags urgenttags val last_val tag_labels
