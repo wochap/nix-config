@@ -92,7 +92,7 @@
     zsh-history-substring-search.flake = false;
     zsh-notify.url = "github:marzocchi/zsh-notify?rev=9c1dac81a48ec85d742ebf236172b4d92aab2f3f";
     zsh-notify.flake = false;
-    zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=bf1fecda457e230cf35ebf89c0e0f60eb0c559c0";
+    zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=b503518fd9725bf365a55401a78b7ae26c3ad901"; # (17 feb 2024)
     zsh-vi-mode.flake = false;
     zsh-pnpm-shell-completion.url = "github:g-plane/pnpm-shell-completion";
     zsh-pnpm-shell-completion.flake = false;

@@ -2929,17 +2929,17 @@
     "zsh-vi-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1739794171,
-        "narHash": "sha256-iaPSVe2zvNuqJwQHmu+bypf30hiwOGE8P0TgBM9NHWE=",
+        "lastModified": 1739794976,
+        "narHash": "sha256-vPmNwW0GfdDpVNXqA1Djp+CuicSDgQlG/RCjeygbXCU=",
         "owner": "wochap",
         "repo": "zsh-vi-mode",
-        "rev": "bf1fecda457e230cf35ebf89c0e0f60eb0c559c0",
+        "rev": "b503518fd9725bf365a55401a78b7ae26c3ad901",
         "type": "github"
       },
       "original": {
         "owner": "wochap",
         "repo": "zsh-vi-mode",
-        "rev": "bf1fecda457e230cf35ebf89c0e0f60eb0c559c0",
+        "rev": "b503518fd9725bf365a55401a78b7ae26c3ad901",
         "type": "github"
       }
     }
