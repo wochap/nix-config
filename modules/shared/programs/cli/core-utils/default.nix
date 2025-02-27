@@ -30,6 +30,7 @@ in {
       silver-searcher # ag, ack like
       gum # shell scripting ui
       just # like make but better
+      poppler_utils # pdftotext
     ];
 
     _custom.hm = {
