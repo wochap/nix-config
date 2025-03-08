@@ -2,7 +2,17 @@
 
 let
   cfg = config._custom.programs.neovim;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) userName configDirectory;
+  hmConfig = config.home-manager.users.${userName};
+  clear-nvim-state = pkgs.writeScriptBin "clear-nvim-state"
+    # zsh
+    ''
+      #!/usr/bin/env bash
+
+      ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/conform.log
+      ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/lsp.log
+      ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/nvim-tree.log
+    '';
 in {
   imports = [ ./options.nix ];
 
@@ -77,6 +87,13 @@ in {
             export EDITOR="nvr -l --remote-wait-silent"
           fi
         '';
+
+      systemd.user.services.clear-nvim-state = lib._custom.mkWaylandService {
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${clear-nvim-state}/bin/clear-nvim-state";
+        };
+      };
     };
   };
 }
