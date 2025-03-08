@@ -12,6 +12,7 @@ in {
     _custom.hm = {
       home = {
         # Gemfile for LSP, formatters, linters, etc
+        # It is used by my neovim config
         sessionVariables.GLOBAL_GEMFILE = "$HOME/.gem/global/Gemfile";
 
         file = {
