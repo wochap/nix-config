@@ -10,6 +10,7 @@ let
     pkgs.prevstable-python.python311.override { inherit packageOverrides; };
   python-final = (python.withPackages (ps:
     with ps; [
+      pylint-venv
       pip
       pynvim # required by nvim
       # NOTE: add here any python package you need globally
@@ -24,9 +25,8 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ pipx poetry pipenv python-final ];
 
-    # HACK: so pylint can resolve modules
-    environment.sessionVariables.PYTHONPATH =
-      [ "${python-final}/lib/python3.11/site-packages" "$PYTHONPATH" ];
+    # env variable to be used within neovim config
+    environment.sessionVariables.GLOBAL_PYTHON_FOLDER_PATH = "${python-final}";
 
     _custom.hm = {
       home.sessionPath = [ "$HOME/.local/bin" ];

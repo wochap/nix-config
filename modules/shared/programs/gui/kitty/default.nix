@@ -24,7 +24,8 @@ in {
   options._custom.programs.kitty.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.sessionVariables.PYTHONPATH = [ "${kitty-final}/lib/kitty" ];
+    # env variable to be used within neovim config
+    environment.sessionVariables.GLOBAL_KITTY_FOLDER_PATH = "${kitty-final}";
 
     _custom.hm = {
       home = {

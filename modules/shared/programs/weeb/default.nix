@@ -10,7 +10,7 @@ in {
     _custom.hm = {
       home.packages = with pkgs; [
         _custom.mangadesk
-        _custom.pythonPackages.animdl
+        animdl
         ani-cli
         # mangal
       ];
