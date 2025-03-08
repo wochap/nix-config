@@ -102,6 +102,7 @@ in {
           abort_key = "<Esc>";
           alias_file = aliasfile;
           allow_ansi = "yes";
+          beep = "no";
           beep_new = "no"; # bell on new mails
           confirmappend = "no"; # don't ask, just do!
           delete = "yes"; # don't ask, just do
