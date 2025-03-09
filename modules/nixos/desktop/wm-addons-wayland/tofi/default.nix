@@ -33,6 +33,8 @@ in {
           src = ./dotfiles/one-line;
           inherit (themeColors) text textDimmed backgroundOverlay green;
         };
+
+        ".local/share/tofi/emojis.txt".source = ./dotfiles/emojis.txt;
       };
     };
   };

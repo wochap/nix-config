@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 
-file_path=$HOME/Sync/options
-url='https://git.io/JXXO7'
-
-if [ ! -f "$file_path" ]; then
-  curl -sSL "$url" -o "$file_path"
-fi
-
+# file_path=$HOME/.local/share/tofi/emojis.txt
+file_path=/home/gean/nix-config/modules/nixos/desktop/wm-addons-wayland/tofi/dotfiles/emojis.txt
 options=$(cat "$file_path")
 selected="$(echo -e "$options" |
   tofi \
