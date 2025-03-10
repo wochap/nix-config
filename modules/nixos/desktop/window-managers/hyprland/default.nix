@@ -13,7 +13,7 @@ let
   hyprland-scratch-toggle = pkgs.writeScriptBin "hyprland-scratch-toggle"
     (builtins.readFile ./scripts/hyprland-scratch-toggle.sh);
   greetd-default-cmd =
-    "uwsm start -S -F -N hyprland -D hyprland -- /run/current-system/sw/bin/Hyprland";
+    "uwsm start -S -F -N hyprland -D hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null";
 in {
   options._custom.desktop.hyprland = {
     enable = lib.mkEnableOption { };
