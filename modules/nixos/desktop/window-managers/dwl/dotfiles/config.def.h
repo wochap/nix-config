@@ -44,7 +44,7 @@ static const int corner_radius_inner = 5; /* 0 disables corner_radius */
 static const int corner_radius_only_floating = 1; /* only apply corner_radius and corner_radius_inner to floating windows */
 
 static const int blur = 0; /* flag to enable blur */
-static const int blur_optimized = 1;
+static const int blur_xray = 1; /* flag to make transparent fs and floating windows display your background */
 static const int blur_ignore_transparent = 1;
 static const struct blur_data blur_data = {
   .radius = 5,

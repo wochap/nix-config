@@ -39,7 +39,7 @@ let
       dwl | tee -a "$logs_path"
     '';
   greetd-default-cmd =
-    "uwsm start -S -F -N dwl -D dwl -- /run/current-system/sw/bin/dwl-start";
+    "uwsm start -S -F -N dwl -D dwl -- /run/current-system/sw/bin/dwl-start > /dev/null";
 in {
   options._custom.desktop.dwl = {
     enable = lib.mkEnableOption { };
@@ -51,12 +51,12 @@ in {
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
           version =
-            "48e269e80b34efdd6176925d79e0f82625ae5c1e"; # v0.8-a/patches-02-aug-2024
+            "22eaefbadb76992a9432d8da823811d274f78fc9"; # v0.8-a/patches-09-mar-2025
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-sgIbALKOaEflZUs3NHNZl3oofU+UnEcOzVN6QyFg56k=";
+            hash = "sha256-575e22REyZqJGT+YiH68qXr7cwDQC1R4FfUlyGQm6v0=";
           };
           buildInputs = with pkgs;
             oldAttrs.buildInputs ++ [ scenefx-final libGL ];
