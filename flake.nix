@@ -66,7 +66,7 @@
     easy-effects-presets.flake = false;
     retroarch-shaders.url = "github:libretro/glsl-shaders";
     retroarch-shaders.flake = false;
-    reversal-extra.url = "github:wochap/Reversal-Extra?rev=6cefd4307eefb28ba44b5d991ffa43e346392632";
+    reversal-extra.url = "github:wochap/Reversal-Extra?rev=4f7607585f38cb82e032f9f6817d047fbb16295f";
     reversal-extra.flake = false;
     wluma.url = "github:maximbaz/wluma?rev=d6462471b98697643bae6feab2c8eb4468fc71ef"; # 4.5.1
     wluma.flake = false;
