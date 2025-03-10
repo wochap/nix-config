@@ -272,7 +272,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 #define MOD_NONE 0
 
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,  KEY,                      view,       {.ui = 1 << TAG} }, \
+	{ MODKEY,  KEY,                      remembertagsview,{.ui = TAG} }, \
 	{ MODKEY|MOD_CONTROL, KEY,           toggleview, {.ui = 1 << TAG} }, \
 	{ MODKEY|MOD_SHIFT, KEY,             tag,        {.ui = 1 << TAG} }, \
 	{ MODKEY|MOD_CONTROL|MOD_SHIFT, KEY, toggletag,  {.ui = 1 << TAG} }
@@ -425,6 +425,8 @@ static const Key keys[] = {
   // Send to scratchpad
   { MODKEY|WLR_MODIFIER_SHIFT, Key_d, toggleinscratchpad, {0} },
 
+  // Open last named scratchpad
+  { MODKEY|WLR_MODIFIER_SHIFT, Key_grave, focusprevnamedscratchpad, {0} },
 
   // ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
