@@ -10,6 +10,7 @@ in {
     _custom.hm = {
       programs.fzf = {
         enable = true;
+        enableBashIntegration = false;
         enableZshIntegration = config._custom.programs.zsh.enable;
         defaultOptions = with themeColors; [
           # theme

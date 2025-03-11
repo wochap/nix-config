@@ -8,6 +8,7 @@ in {
     _custom.hm = {
       programs.dircolors = {
         enable = true;
+        enableBashIntegration = false;
         enableZshIntegration = config._custom.programs.zsh.enable;
         settings = lib.mkForce { };
         # TODO: support other flavors
