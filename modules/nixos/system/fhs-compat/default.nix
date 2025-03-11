@@ -6,9 +6,8 @@ in {
   options._custom.system.fhs-compat.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [ inputs.nix-alien.overlays.default ];
-
-    environment.systemPackages = with pkgs; [ nix-alien ];
+    environment.systemPackages = with pkgs;
+      [ inputs.nix-alien.packages.${pkgs.system}.nix-alien ];
 
     # populates contents of /bin and /usr/bin/
     services.envfs.enable = lib.mkDefault true;
@@ -17,7 +16,28 @@ in {
     programs.nix-ld = {
       enable = true;
       dev.enable = false;
-      libraries = with pkgs; [ fontconfig freetype stdenv.cc.cc util-linux ];
+      libraries = with pkgs; [
+        # nix-ld adds the following libs by default
+        zlib
+        zstd
+        stdenv.cc.cc
+        curl
+        openssl
+        attr
+        libssh
+        bzip2
+        libxml2
+        acl
+        libsodium
+        util-linux
+        xz
+        systemd
+
+        # custom libs
+        stdenv.cc.cc.lib
+        fontconfig
+        freetype
+      ];
     };
   };
 }
