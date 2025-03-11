@@ -81,7 +81,8 @@ in {
             overrideGpg = true;
             paging = {
               colorArg = "always";
-              pager = "delta --dark --paging=never";
+              pager = ''
+                delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"'';
             };
           };
         };
