@@ -18,7 +18,7 @@ static const float borderscolor[] = COLOR(0x@border@ff); /* color of the border 
 static const float borderecolor[] = COLOR(0x@crust@ff); /* color of the border that start from inside the windows */
 static const int border_color_type = BrdOriginal; /* borders to be colored (focuscolor, urgentcolor) */
 static const int borders_only_floating = 1;
-static const float focuscolor[] = COLOR(0x@lavender@ff);
+static const float focuscolor[] = COLOR(0x@surface0@ff);
 static const float urgentcolor[] = COLOR(0x@red@ff);
 /* To conform the xdg-protocol, set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 0.0f}; /* You can also use glsl colors */
@@ -271,8 +271,9 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 #define MOD_LOGO WLR_MODIFIER_LOGO
 #define MOD_NONE 0
 
+// { MODKEY,  KEY,                      remembertagsview, {.ui = TAG} },
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,  KEY,                      remembertagsview,{.ui = TAG} }, \
+	{ MODKEY,  KEY,                      view,       {.ui = 1 << TAG} }, \
 	{ MODKEY|MOD_CONTROL, KEY,           toggleview, {.ui = 1 << TAG} }, \
 	{ MODKEY|MOD_SHIFT, KEY,             tag,        {.ui = 1 << TAG} }, \
 	{ MODKEY|MOD_CONTROL|MOD_SHIFT, KEY, toggletag,  {.ui = 1 << TAG} }
@@ -411,9 +412,11 @@ static const Key keys[] = {
   TAGKEYS( Key_9, 8),
 
   // Focus previous tags
+  // { MODKEY, Key_grave, remembertagsview, {0} },
   { MODKEY, Key_grave, view, {0} },
 
   // Focus all tags
+  // { MODKEY, Key_0, remembertagsview, {.ui = ~0} },
   { MODKEY, Key_0, view, {.ui = ~0} },
 
 
