@@ -12,6 +12,7 @@ in {
     # populates contents of /bin and /usr/bin/
     services.envfs.enable = lib.mkDefault true;
 
+    # more info: https://github.com/mcdonc/.nixconfig/blob/master/videos/pydev/script.rst
     # run unpatched dynamic binaries on NixOS
     programs.nix-ld = {
       enable = true;

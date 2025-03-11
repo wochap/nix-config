@@ -33,6 +33,7 @@ in {
 
       # HACK: to make mason.nvim work
       programs.zsh.initExtra = lib.mkBefore ''
+        # TODO: clear $HOME/.venv when updating python version
         if [ -d "$HOME/.venv" ]; then
           zsh-defer source "$HOME/.venv/bin/activate"
         else
