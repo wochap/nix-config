@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let cfg = config._custom.programs.core-utils;
 in {
+  imports = [ inputs.nix-index-database.nixosModules.nix-index ];
+
   options._custom.programs.core-utils.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -58,7 +60,8 @@ in {
 
         # locale nix pkgs
         nix-index = {
-          enable = false;
+          enable = true;
+          enableBashIntegration = false;
           enableZshIntegration = false;
         };
 
