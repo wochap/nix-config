@@ -76,7 +76,9 @@ function scripts() {
 function fns() {
   local script
   script=$(cat ./package.json | jq -r '.scripts | keys[] ' | sort | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_R_OPTS-}" fzf --preview "cat package.json | jq -r '.scripts.\"{}\"' | bat --plain --language=sh --color=always")
-  npm run $(echo "$script")
+  if [[ -n "$script" ]]; then
+    npm run $(echo "$script")
+  fi
 }
 
 # play song with mpc
