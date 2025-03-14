@@ -8,7 +8,7 @@ in {
     # make wayland compositors great again
     # better resource management
     programs.uwsm.enable = true;
-    programs.uwsm.waylandCompositors = {};
+    programs.uwsm.waylandCompositors = { };
 
     environment.etc."greetd/environments".text = lib.mkAfter ''
       uwsm
@@ -29,6 +29,15 @@ in {
         export HOME=$HOME
         export QT_QPA_PLATFORMTHEME=$QT_QPA_PLATFORMTHEME
       '';
+
+      # HACK: start app-daemon
+      systemd.user.services.start-uwsm-app-daemon =
+        lib._custom.mkWaylandService {
+          Service = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.uwsm}/bin/uwsm-app -- zsh -c exit";
+          };
+        };
     };
   };
 }
