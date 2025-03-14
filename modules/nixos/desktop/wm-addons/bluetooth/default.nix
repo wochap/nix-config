@@ -37,6 +37,10 @@ in {
         PairableTimeout = 0;
         DiscoverableTimeout = 0;
       };
+      Policy = {
+        # https://askubuntu.com/a/1448936
+        ReconnectAttempts = 2;
+      };
     };
 
     # Fix "ConfigurationDirectory 'bluetooth' already exists but the mode is different"
