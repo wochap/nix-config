@@ -1471,17 +1471,17 @@
     "kitty-scrollback-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1724124912,
-        "narHash": "sha256-6aU9lXfRtxJA/MYkaJ4iRQYAnpBBSGI1R6Ny048aJx8=",
+        "lastModified": 1737397484,
+        "narHash": "sha256-0OPNHWR/qCbMKDQE6Pbt0Ew9QCm2ZSeZq4s9OL2rj04=",
         "owner": "mikesmithgh",
         "repo": "kitty-scrollback.nvim",
-        "rev": "3f430ff8829dc2b0f5291d87789320231fdb65a1",
+        "rev": "fd9f83f3f1141ef65de73fbe962f6c606ef02da8",
         "type": "github"
       },
       "original": {
         "owner": "mikesmithgh",
         "repo": "kitty-scrollback.nvim",
-        "rev": "3f430ff8829dc2b0f5291d87789320231fdb65a1",
+        "rev": "fd9f83f3f1141ef65de73fbe962f6c606ef02da8",
         "type": "github"
       }
     },

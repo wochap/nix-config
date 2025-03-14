@@ -100,6 +100,8 @@ in {
           source = ./dotfiles/custom_pass_keys.py;
           executable = true;
         };
+
+        # required by smart-splits.nvim
         "kitty/neighboring_window.py" = {
           source = "${inputs.smart-splits-nvim}/kitty/neighboring_window.py";
           executable = true;
@@ -108,11 +110,12 @@ in {
           source = "${inputs.smart-splits-nvim}/kitty/relative_resize.py";
           executable = true;
         };
-        "kitty/kitty_scrollback_nvim.py" = {
-          source =
-            "${inputs.kitty-scrollback-nvim}/python/kitty_scrollback_nvim.py";
-          executable = true;
+
+        # required by kitty-scrollback.nvim
+        "kitty/kitty-scrollback-nvim" = {
+          source = inputs.kitty-scrollback-nvim;
         };
+
         "kitty/smart_scroll.py" = {
           source = "${inputs.kitty-smart-scroll}/smart_scroll.py";
           executable = true;
