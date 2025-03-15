@@ -22,7 +22,7 @@ in {
         gnome-font-viewer
         gnome-sound-recorder # test microphone
         gnome-system-monitor
-        pomodoro
+        gnome-pomodoro
         zenity # GUI for terminal
       ];
     };
