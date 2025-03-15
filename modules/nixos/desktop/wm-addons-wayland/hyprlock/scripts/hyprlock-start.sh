@@ -11,7 +11,7 @@ tmpfile=$(mktemp)
 # delete tmp file on exit
 trap 'rm -f "$tmpfile"' EXIT
 
-# write to tmp file
+# write config to tmp file
 cat <<EOF >"$tmpfile"
   source = ~/.config/hypr/hyprlock.conf
 EOF
@@ -27,6 +27,12 @@ if [ "$BACKGROUND" = "1" ]; then
       blur_passes = 0
     }
 EOF
+fi
+
+# disable matcha idle inhibidor
+matcha_status=$(matcha-toggle-mode --read | jq -r '.class')
+if [[ "$matcha_status" == "enabled" ]]; then
+  matcha-toggle-mode --toggle
 fi
 
 exec hyprlock -c "$tmpfile" "$@"
