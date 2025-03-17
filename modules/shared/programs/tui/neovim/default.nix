@@ -20,8 +20,8 @@ in {
     _custom.programs.neovim = {
       setBuildEnv = true;
       withBuildTools = true;
-      package = pkgs.prevstable-neovim.neovim-unwrapped;
-      # package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+      package = lib.mkDefault pkgs.prevstable-neovim.neovim-unwrapped;
+      # package = lib.mkDefault inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
     };
 
     environment = {
