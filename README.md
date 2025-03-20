@@ -178,6 +178,12 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Ruby `warning: It seems your ruby installation is missing ...`
+
+  ```
+  $ rm -rf ~/.gem/ruby/<YOUR_PREVIOUS_RUBY_VERSION>
+  ```
+
 - Galaxy Buds
 
   - Connecting
