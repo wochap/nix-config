@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
+  inherit (config._custom.globals) configDirectory;
   cfg = config._custom.programs.thunar;
   plugins = with pkgs; [
     xfce.thunar-archive-plugin
@@ -62,7 +63,8 @@ in {
     services.tumbler.enable = true; # Thumbnail support for images
 
     _custom.hm = {
-      xdg.configFile."Thunar/uca.xml".source = ./dotfiles/Thunar/uca.xml;
+      xdg.configFile."Thunar/uca.xml".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/Thunar/uca.xml;
 
       xdg.desktopEntries.thunar = {
         name = "Thunar File Manager";
