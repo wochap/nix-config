@@ -7,6 +7,8 @@ in {
   options._custom.programs.lang-ruby.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    # NOTE: Every time you upgrade Ruby, you should also consider
+    # deleting the previous `~/.gem/ruby/x.x.x` directory
     environment.systemPackages = with pkgs; [ ruby ];
 
     _custom.hm = {
