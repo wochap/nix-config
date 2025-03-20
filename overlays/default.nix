@@ -56,11 +56,6 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
-        prevstable-intune = import inputs.prevstable-intune {
-          inherit (prev) system;
-          inherit (config.nixpkgs) config;
-          overlays = [ ];
-        };
       })
     ];
   };

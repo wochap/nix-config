@@ -1,22 +1,20 @@
 {
   inputs = {
     # channels
-    nixpkgs.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # nixos-24.11 (25 dec 2024)
+    nixpkgs.url = "github:nixos/nixpkgs?rev=b75693fb46bfaf09e662d09ec076c5a162efa9f6"; # nixos-24.11 (20 mar 2025)
     nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=23e89b7da85c3640bbc2173fe04f4bd114342367"; # nixos-unstable (22 nov 2024)
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=3b998b4adb33a0a8f1a340a66a6757b206d6d3b7"; # master (05 jan 2025)
     nixpkgs-24-11-small.url = "github:nixos/nixpkgs?rev=c3b08708334cca32db70df24516608e73f645136"; # nixos-24.11-small (04 dec 2024)
     nixpkgs-24-05.url = "github:nixos/nixpkgs?rev=e8c38b73aeb218e27163376a2d617e61a2ad9b59"; # nixos-24.05 (21 nov 2024)
     prevstable-nix.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (10 jan 2024)
     prevstable-chrome.url = "github:nixos/nixpkgs?rev=9357f4f23713673f310988025d9dc261c20e70c6"; # nixos-unstable (25 sep 2024)
-    prevstable-neovim.url = "github:nixos/nixpkgs?rev=799ba5bffed04ced7067a91798353d360788b30d"; # NVIM v0.10.1
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=799ba5bffed04ced7067a91798353d360788b30d"; # nvim v0.10.4
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=c5187508b11177ef4278edf19616f44f21cc8c69"; # nixos-unstable (08 may 2024)
-    prevstable-microsoft-identity-broker.url = "github:liff/nixpkgs?rev=caee0feb9ffe39364d39c54cd9c07bf477b64bff";
-    prevstable-intune.url = "github:nixos/nixpkgs?rev=a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c"; # nixos-unstable (16 oct 2024)
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=80b0fdf483c5d1cb75aaad909bd390d48673857f"; # release-24.11 (25 dec 2024)
+    home-manager.url = "github:nix-community/home-manager?rev=f6af7280a3390e65c2ad8fd059cdc303426cbd59"; # release-24.11 (20 mar 2025)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
@@ -57,7 +55,7 @@
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
-    zen-browser.url = "github:MarceColl/zen-browser-flake?rev=96dffb45b36141261e97a8f83438e4c88911fefa";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake?rev=d19fab1586636ff01fa6f10c58dffd0efedf1411"; # main (20 mar 2025)
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
     ucodenix.url = "github:e-tho/ucodenix?rev=7d7586d3fcd07e147c0dba9291b2473e060c4c98";
     nix-index-database.url = "github:nix-community/nix-index-database";

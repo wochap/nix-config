@@ -14,23 +14,11 @@ in {
   options._custom.programs.others-linux.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    # nixpkgs.overlays = [
-    #   (final: prev: {
-    #     # fix microsoft-identity-broker build
-    #     # https://github.com/NixOS/nixpkgs/pull/340811
-    #     microsoft-identity-broker = pkgs.callPackage
-    #       "${inputs.prevstable-microsoft-identity-broker}/pkgs/by-name/mi/microsoft-identity-broker/package.nix"
-    #       { };
-    #
-    #     intune-portal = pkgs.prevstable-intune.intune-portal;
-    #   })
-    # ];
-
     environment.systemPackages = with pkgs; [
       brave
       prevstable-chrome.google-chrome
       microsoft-edge
-      inputs.zen-browser.packages."${system}".specific
+      inputs.zen-browser.packages."${system}".beta
 
       galaxy-buds-client
 
@@ -45,7 +33,7 @@ in {
     ];
 
     # intune-portal
-    # services.intune.enable = true;
+    services.intune.enable = true;
 
     # required by libreoffice
     programs.java.enable = true;
