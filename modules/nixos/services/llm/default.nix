@@ -86,9 +86,6 @@ in {
         ];
       };
       # Make openwebui accessible at https://openwebui.wochap.local
-      # if you want to use latest open-webui, use:
-      # docker run -d --restart always -p 127.0.1.1:11454:8080 -e WEBUI_AUTH=False --gpus all --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
-      # docs: https://docs.openwebui.com/getting-started/quick-start/#step-1-pull-the-open-webui-image
       "openwebui.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOpenWebui {
         forceSSL = true;
         sslTrustedCertificate = "${wochap-ssc}/rootCA.pem";
