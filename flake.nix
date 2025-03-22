@@ -7,7 +7,7 @@
     nixpkgs-24-11-small.url = "github:nixos/nixpkgs?rev=c3b08708334cca32db70df24516608e73f645136"; # nixos-24.11-small (04 dec 2024)
     nixpkgs-24-05.url = "github:nixos/nixpkgs?rev=e8c38b73aeb218e27163376a2d617e61a2ad9b59"; # nixos-24.05 (21 nov 2024)
     prevstable-nix.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (10 jan 2024)
-    prevstable-chrome.url = "github:nixos/nixpkgs?rev=9357f4f23713673f310988025d9dc261c20e70c6"; # nixos-unstable (25 sep 2024)
+    prevstable-chrome.url = "github:nixos/nixpkgs?rev=b75693fb46bfaf09e662d09ec076c5a162efa9f6"; # nixos-24.11 (20 mar 2025)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=799ba5bffed04ced7067a91798353d360788b30d"; # nvim v0.10.4
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
