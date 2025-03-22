@@ -9,9 +9,9 @@ let
   remindScript = pkgs.writeShellScript "remind" ''
     ${pkgs.remind}/bin/remind -z -k'${pkgs.dunst}/bin/dunstify --appname "Remind" -i "kalarm" "Reminder" "%s" &' ${remFilePath}
   '';
-  python-remid-final = pkgs._custom.pythonPackages.python-remind;
+  python-remind-final = pkgs._custom.pythonPackages.python-remind;
   ics2remScript = pkgs.writeShellScript "ics2rem" ''
-    ${pkgs.findutils}/bin/find ${dataHome}/vdirsyncer -name '*.ics' -exec ${python-remid-final}/bin/ics2rem {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > ${remFilePath}
+    ${pkgs.findutils}/bin/find ${dataHome}/vdirsyncer -name '*.ics' -exec ${python-remind-final}/bin/ics2rem {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > ${remFilePath}
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
   '';
 in {
@@ -19,7 +19,7 @@ in {
     _custom.hm = {
       home.packages = with pkgs; [
         remind
-        python-remid-final # ics2rem
+        python-remind-final # ics2rem
       ];
 
       xdg.configFile."remind/.keep".text = "";
