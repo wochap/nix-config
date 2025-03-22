@@ -15,7 +15,8 @@ in {
 
   config = lib.mkIf cfg.enable {
     # NOTE: cudaSupport rebuild opencv everytime nixpkgs changes
-    nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
+    # maybe this is unnecessary for ollama but necessary for docker
+    # nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
     environment.systemPackages = with pkgs; [
       python311Packages.huggingface-hub
@@ -24,7 +25,7 @@ in {
 
     services.ollama = lib.mkIf cfg.enableOllama {
       enable = true;
-      package = pkgs.ollama;
+      package = pkgs.nixpkgs-unstable.ollama;
       acceleration = lib.mkIf cfg.enableNvidia "cuda";
     };
     systemd.services.ollama.environment.OLLAMA_ORIGINS = "*";
@@ -34,6 +35,15 @@ in {
       package = pkgs._custom.ollama-webui-lite;
       host = wochap-ssc.meta.address;
       port = 11444;
+    };
+
+    services.open-webui = lib.mkIf cfg.enableOllama {
+      enable = true;
+      package = pkgs.nixpkgs-unstable.open-webui;
+      openFirewall = false;
+      host = wochap-ssc.meta.address;
+      port = 11454;
+      environment = { WEBUI_AUTH = "False"; };
     };
 
     services.nginx = {
@@ -76,7 +86,8 @@ in {
         ];
       };
       # Make openwebui accessible at https://openwebui.wochap.local
-      # docker run -d -p 127.0.1.1:11454:8080 -e WEBUI_AUTH=False -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+      # if you want to use latest open-webui, use:
+      # docker run -d --restart always -p 127.0.1.1:11454:8080 -e WEBUI_AUTH=False --gpus all --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
       # docs: https://docs.openwebui.com/getting-started/quick-start/#step-1-pull-the-open-webui-image
       "openwebui.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOpenWebui {
         forceSSL = true;
@@ -85,7 +96,9 @@ in {
         sslCertificate = "${wochap-ssc}/${wochap-ssc.meta.domain}+4.pem";
         locations."/" = {
           recommendedProxySettings = true;
-          proxyPass = "http://${wochap-ssc.meta.address}:11454";
+          proxyPass = "http://${wochap-ssc.meta.address}:${
+              toString config.services.open-webui.port
+            }";
           proxyWebsockets = true;
         };
         listen = [
