@@ -122,6 +122,8 @@ in {
     _custom.services.llm.enable = true;
     _custom.services.llm.enableOllama = true;
     _custom.services.llm.enableNvidia = true;
+    _custom.services.llm.enableOllamaWebuiLite = false;
+    _custom.services.llm.enableNextjsOllamaLlmUi = false;
     _custom.services.llm.enableOpenWebui = true;
     _custom.services.syncthing.enable = true;
     _custom.services.virt.enable = true;
