@@ -5,23 +5,26 @@ source "$HOME/.config/scripts/theme-colors.sh"
 
 time=$(date +%Y-%m-%d_%I-%M-%S)
 dir="$(xdg-user-dir PICTURES)/Screenshots"
-file="Screenshot_${time}.png"
+filename="Screenshot_${time}"
 EXPIRE_TIME=5000
-dest="$dir/$file"
+grim_dest="$dir/${filename}.png"
+dest="$dir/${filename}.webp"
 
 # notify
 notify_user() {
-  if [[ ! -e "$dest" ]]; then
+  if [[ ! -e "$grim_dest" ]]; then
     exit 1
   fi
 
+  optimize_image
   copy_to_cb
 
   # generate thumbnail
   thumbnail_size="288x288"
   thumbnail=$(mktemp --suffix .png) || exit 1
   trap 'rm -f "$thumbnail"' exit
-  magick "$dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
+  magick "$grim_dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
+  rm -f "$grim_dest"
 
   action=$(notify-send --app-name="Takeshot" --expire-time="$EXPIRE_TIME" --replace-id=699 --icon="$thumbnail" "Screen shooter" "Screenshot Saved" --action="open=Open" --action="edit=Edit")
 
@@ -35,8 +38,12 @@ notify_user() {
   esac
 }
 
+optimize_image() {
+  magick "$grim_dest" -quality 85 "$dest"
+}
+
 copy_to_cb() {
-  wl-copy -t image/png <"$dest"
+  wl-copy -t image/webp <"$dest"
 }
 
 # countdown
@@ -49,7 +56,7 @@ countdown() {
 
 # take shots
 shotnow() {
-  grim "$dest"
+  grim "$grim_dest"
   notify_user
 }
 
@@ -95,7 +102,7 @@ shotarea() {
     kill_hyprpicker
     exit
   fi
-  grim -g "$area" "$dest"
+  grim -g "$area" "$grim_dest"
   kill_hyprpicker
   notify_user
 }
