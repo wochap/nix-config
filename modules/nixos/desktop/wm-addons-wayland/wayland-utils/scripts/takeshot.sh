@@ -30,6 +30,7 @@ notify_user() {
 
   case $action in
   "edit")
+    # TODO: swappy doesn't support webp
     swappy -f "$dest" -o "$dest" &
     ;;
   "open")
