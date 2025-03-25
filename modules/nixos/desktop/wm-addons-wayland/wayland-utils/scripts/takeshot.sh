@@ -43,7 +43,7 @@ optimize_image() {
 }
 
 copy_to_cb() {
-  wl-copy -t image/webp <"$dest"
+  printf 'file://%s\n' "$dest" | wl-copy -t text/uri-list
 }
 
 # countdown
