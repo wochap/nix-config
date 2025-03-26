@@ -2,6 +2,7 @@
 
 let
   cfg = config._custom.services.llm;
+  inherit (config._custom.globals) configDirectory;
   inherit (pkgs._custom) wochap-ssc;
   makeVirtualHost = port: {
     forceSSL = true;
@@ -109,6 +110,12 @@ in {
         (makeVirtualHost config.services.open-webui.port);
     };
 
-    _custom.hm.home.file."Models/.keep".text = "";
+    _custom.hm = {
+      home.file = {
+        "Models/.keep".text = "";
+        ".aider.conf.yml".source = lib._custom.relativeSymlink configDirectory
+          ../../../../secrets/dotfiles/aider/.aider.conf.yml;
+      };
+    };
   };
 }
