@@ -178,6 +178,12 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Some keybindings doesn't work
+
+  ```sh
+  $ uwsm finalize XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP
+  ```
+
 - Ruby `warning: It seems your ruby installation is missing ...`
 
   ```
