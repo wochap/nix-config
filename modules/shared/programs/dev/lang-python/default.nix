@@ -11,6 +11,7 @@ let
   python-final = (python.withPackages (ps:
     with ps; [
       pylint-venv
+      uv # better pip
       pip
       pynvim # required by nvim
       # NOTE: add here any python package you need globally
@@ -29,6 +30,7 @@ in {
     environment.sessionVariables.GLOBAL_PYTHON_FOLDER_PATH = "${python-final}";
 
     _custom.hm = {
+      # adds ~/.local/bin folder to the PATH env var
       home.sessionPath = [ "$HOME/.local/bin" ];
 
       # HACK: to make mason.nvim work
