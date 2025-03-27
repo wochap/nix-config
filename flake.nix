@@ -60,6 +60,8 @@
     ucodenix.url = "github:e-tho/ucodenix?rev=7d7586d3fcd07e147c0dba9291b2473e060c4c98";
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    figma-linux.url = "github:HelloWorld017/figma-linux-nixos?rev=11d282f45c5acb90660db7d0d989fe0d9eec8813"; # v0.11.5
+    figma-linux.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, system, ... }:
 
 let cfg = config._custom.programs.electron;
 in {
@@ -36,6 +36,7 @@ in {
       freetube
       slack
       obsidian
+      inputs.figma-linux.packages.${system}.default
     ];
 
     _custom.hm = {
@@ -44,9 +45,10 @@ in {
           name = "bruno";
           exec = "bruno %U";
         };
-        figma = {
-          name = "Figma";
-          exec = "google-chrome-stable --profile-directory=Default --app=https://www.figma.com";
+        figma-pwa = {
+          name = "Figma PWA";
+          exec =
+            "google-chrome-stable --profile-directory=Default --app=https://www.figma.com";
         };
         freetube = {
           name = "Freetube";
