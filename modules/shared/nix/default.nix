@@ -55,6 +55,15 @@
         ];
 
         trusted-users = [ "@wheel" "root" ];
+
+        system-features = [
+          # default values
+          # "benchmark"
+          # "nixos-test"
+          "big-parallel"
+          "kvm"
+          "recursive-nix"
+        ];
       };
     };
   };

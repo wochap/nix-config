@@ -12,6 +12,10 @@
   ];
 
   config = {
+    nix.settings.system-features = [ "gccarch-znver4" ];
+
+    hardware.enableRedistributableFirmware = true;
+
     hardware.amdgpu.initrd.enable = true;
     hardware.amdgpu.opencl.enable = true;
     # NOTE: amdvlk introduces black bard on GTK apps
@@ -39,6 +43,34 @@
         # Doesn't work yet...
         lenovo-legion-module
       ];
+
+    # boot.kernelPatches = [
+    #   # didn't work, tx power is 0
+    #   # source: https://github.com/openwrt/mt76/issues/689#issuecomment-2646106685
+    #   # source: https://patchwork.kernel.org/project/linux-wireless/cover/20250209011856.6726-1-razvan.grigore@vampirebyte.ro/
+    #   {
+    #     name = "1-4-wifi-mt76-add-mt76_get_power_bound-helper-function";
+    #     patch = pkgs.fetchpatch {
+    #       url =
+    #         "https://patchwork.kernel.org/project/linux-wireless/patch/20250209011856.6726-2-razvan.grigore@vampirebyte.ro/mbox/";
+    #       sha256 = "sha256-Ddq0i2E2+19aHAxI9bwDxzCdDVFObm+WeLgiP2Kq0LM=";
+    #     };
+    #   }
+    #   {
+    #     name = "2-4-wifi-mt76-mt7921-fix-returned-txpower";
+    #     patch = pkgs.fetchpatch {
+    #       url =
+    #         "https://patchwork.kernel.org/project/linux-wireless/patch/20250209011856.6726-3-razvan.grigore@vampirebyte.ro/mbox/";
+    #       sha256 = "sha256-POhKpnN+Vmm0CrYCwQI4kIsWGYsH1wsH1MQH4nbkPbE=";
+    #     };
+    #   }
+    # ];
+
+    # NOTE: if WiFi becomes unstable after upgrading the kernel v6.6, uncomment:
+    # https://bugzilla.kernel.org/show_bug.cgi?id=215391
+    # boot.extraModprobeConfig = ''
+    #   options mt7921e disable_aspm=1
+    # '';
 
     # kernel 6.6.67: pkgs.linuxPackages
     # kernel 6.12.1

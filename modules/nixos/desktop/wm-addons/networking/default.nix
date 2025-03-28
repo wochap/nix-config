@@ -8,7 +8,7 @@ in {
     _custom.user.extraGroups = [ "networkmanager" ];
 
     environment = {
-      systemPackages = with pkgs; [ impala iw ];
+      systemPackages = with pkgs; [ impala iw wireless-regdb ];
 
       shellAliases.wtui = "impala";
     };
