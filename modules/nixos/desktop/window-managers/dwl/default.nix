@@ -11,7 +11,7 @@ let
   dwl-write-logs = pkgs.writeScriptBin "dwl-write-logs"
     (builtins.readFile ./scripts/dwl-write-logs.sh);
   dwl-final = (pkgs.dwl.override {
-    wlroots = pkgs.wlroots_0_18;
+    wlroots = pkgs._custom.wlroots.wlroots_0_18;
     configH = builtins.readFile (pkgs.substituteAll {
       src = ./dotfiles/config.def.h;
       primary = unwrapHex themeColors.primary;
@@ -51,12 +51,12 @@ in {
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
           version =
-            "f488bbee5ca1a1d94a90a352827c6ea7976a10ab"; # v0.8-a/patches-09-mar-2025
+            "112ac3744b068e96e7573d8d7c1a5e716897c7ef"; # v0.8-a/patches-28-mar-2025
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-lFwz/STrftTde7yk8LMhNeg18+JliHN8jB1QdjmGhfM=";
+            hash = "sha256-myjhwILzM6KcOmMoxsB2m4ezEV4Fr58zx0WYlGDswjM=";
           };
           buildInputs = with pkgs;
             oldAttrs.buildInputs ++ [ scenefx-final libGL ];
