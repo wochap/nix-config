@@ -113,9 +113,14 @@ in {
 
     _custom.hm = {
       home = {
-        shellAliases.wis =
-          # generates
-          "whisper-cpp -m ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin -ovtt -f";
+        shellAliases = {
+          # transform wav 16kHz to vtt
+          wis =
+            "whisper-cpp -m ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin -ovtt -f";
+          # downloads youtube video and also generates a wav 16kHz format
+          ytaw =
+            "youtube-dl -f bestvideo+bestaudio --keep-video --add-metadata --xattrs --merge-output-format mp4 --extract-audio --audio-format wav --postprocessor-args 'ffmpeg:-ar 16000'";
+        };
 
         file = {
           "Models/.keep".text = "";
