@@ -7,7 +7,7 @@ let
 
   toSymlinkCmd = destination: target: ''
     $DRY_RUN_CMD ${cu}/mkdir -p $(${cu}/dirname ${destination})
-    $DRY_RUN_CMD ${cu}/ln -sf $VERBOSE_ARG \
+    $DRY_RUN_CMD ${cu}/ln -sfnT $VERBOSE_ARG \
       ${target} ${destination}
   '';
 in {
