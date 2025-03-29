@@ -31,6 +31,7 @@ in {
 
   options._custom.services.llm = {
     enable = lib.mkEnableOption { };
+    enableWhisper = lib.mkEnableOption { };
     enableOllama = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
     enableOpenWebui = lib.mkEnableOption { };
@@ -43,10 +44,10 @@ in {
     # maybe this is unnecessary for ollama but necessary for docker
     # nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
-    environment.systemPackages = with pkgs; [
-      python311Packages.huggingface-hub
-      oterm
-    ];
+    environment.systemPackages = with pkgs;
+      [ python311Packages.huggingface-hub oterm ]
+      ++ lib.optionals cfg.enableWhisper
+      [ (openai-whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ];
 
     services.ollama = lib.mkIf cfg.enableOllama {
       enable = true;
@@ -111,10 +112,16 @@ in {
     };
 
     _custom.hm = {
-      home.file = {
-        "Models/.keep".text = "";
-        ".aider.conf.yml".source = lib._custom.relativeSymlink configDirectory
-          ../../../../secrets/dotfiles/aider/.aider.conf.yml;
+      home = {
+        shellAliases.wis =
+          # generates
+          "whisper-cpp -m ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin -ovtt -f";
+
+        file = {
+          "Models/.keep".text = "";
+          ".aider.conf.yml".source = lib._custom.relativeSymlink configDirectory
+            ../../../../secrets/dotfiles/aider/.aider.conf.yml;
+        };
       };
     };
   };

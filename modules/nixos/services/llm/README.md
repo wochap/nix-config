@@ -62,3 +62,21 @@ $ curl http://localhost:11434/api/generate -d '{
 - `num_thread` represents the number of physical cores
 
 To calculate how fast the response is generated in tokens per second (token/s), divide eval_count / (eval_duration / 1000000000)
+
+## Whisper cpp
+
+Downloading models for whisper-cpp
+
+```sh
+$ git clone https://github.com/ggerganov/whisper.cpp.git
+$ cd whisper.cpp
+$ sh ./models/download-ggml-model.sh large-v3
+```
+
+Running
+
+```sh
+$ whisper-cpp -m /path-to/whisper.cpp/models/ggml-large-v3.bin -f audio.wav
+```
+
+[Available models](https://github.com/ggerganov/whisper.cpp/blob/master/models/README.md#available-models)
