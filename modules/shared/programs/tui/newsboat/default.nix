@@ -26,7 +26,8 @@ in {
           }";
         "newsboat/urls".source =
           lib._custom.relativeSymlink configDirectory ./dotfiles/urls;
-        "newsboat/config".source = ./dotfiles/config;
+        "newsboat/config".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/config;
       };
     };
   };
