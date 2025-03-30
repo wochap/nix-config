@@ -21,6 +21,7 @@ in {
         dust # disk usage
         entr # run something on file change
         qpdf # removes password of pdf
+        reader # blog post reader
 
         termshark # tui wireshark
         gdu # tui disk usage
