@@ -1,4 +1,4 @@
-{ config, lib, options, ... }:
+{ config, lib, options, inputs, system, ... }:
 
 let inherit (config._custom.globals) userName homeDirectory;
 in {
@@ -32,6 +32,9 @@ in {
       # paths it should manage.
       home.username = userName;
       home.homeDirectory = homeDirectory;
+
+      # TODO: programs.home-manager.enable should add this pkg
+      home.packages = [ inputs.home-manager.packages.${system}.default ];
 
       programs.bash.enable = true;
     };
