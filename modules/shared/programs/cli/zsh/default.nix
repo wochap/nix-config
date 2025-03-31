@@ -222,8 +222,6 @@ in {
               abbr erase --quiet ll
               abbr erase --quiet lla
               abbr erase --quiet z
-              abbr erase --quiet wis
-              abbr erase --quiet ytaw
             fi
           }
 
