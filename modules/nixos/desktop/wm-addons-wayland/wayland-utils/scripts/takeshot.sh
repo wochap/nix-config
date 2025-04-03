@@ -17,24 +17,30 @@ notify_user() {
   fi
 
   optimize_image
-  copy_to_cb
+  copy_to_cb "$dest"
 
   # generate thumbnail
   thumbnail_size="288x288"
   thumbnail=$(mktemp --suffix .png) || exit 1
   trap 'rm -f "$thumbnail"' exit
   magick "$grim_dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
-  rm -f "$grim_dest"
 
-  action=$(notify-send --app-name="Takeshot" --expire-time="$EXPIRE_TIME" --replace-id=699 --icon="$thumbnail" "Screen shooter" "Screenshot Saved" --action="open=Open" --action="edit=Edit")
+  action=$(notify-send --app-name="Takeshot" --expire-time="$EXPIRE_TIME" --replace-id=699 --icon="$thumbnail" "Screen shooter" "Screenshot Saved" --action="open=Open" --action="edit=Edit" --action="png=Copy PNG")
 
   case $action in
   "edit")
     # NOTE: swappy doesn't support webp
-    swappy -f "$dest" -o "$dest" &
+    swappy -f "$grim_dest" -o "$dest" &
     ;;
   "open")
+    rm -f "$grim_dest"
     xdg-open "$dest" &
+    ;;
+  "png")
+    copy_to_cb "$grim_dest"
+    ;;
+  *)
+    rm -f "$grim_dest"
     ;;
   esac
 }
@@ -44,7 +50,7 @@ optimize_image() {
 }
 
 copy_to_cb() {
-  printf 'file://%s\n' "$dest" | wl-copy -t text/uri-list
+  printf 'file://%s\n' "$1" | wl-copy -t text/uri-list
 }
 
 # countdown
