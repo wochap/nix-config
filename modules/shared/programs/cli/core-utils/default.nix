@@ -33,6 +33,7 @@ in {
       gum # shell scripting ui
       just # like make but better
       poppler_utils # pdftotext
+      streamlink # download hsl stream
     ];
 
     _custom.hm = {
