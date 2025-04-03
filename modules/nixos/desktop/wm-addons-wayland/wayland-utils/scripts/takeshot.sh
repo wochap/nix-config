@@ -7,7 +7,7 @@ time=$(date +%Y-%m-%d_%I-%M-%S)
 dir="$(xdg-user-dir PICTURES)/Screenshots"
 filename="Screenshot_${time}"
 EXPIRE_TIME=5000
-grim_dest="$dir/${filename}.png"
+grim_dest="$dir/grim_${filename}.png"
 dest="$dir/${filename}.webp"
 
 # notify
