@@ -29,6 +29,7 @@ in {
       bc # calculator
       ffmpeg-full # record, convert music/video
       imagemagick # image editor
+      ghostscript # required by imagemagick for pdf
       silver-searcher # ag, ack like
       gum # shell scripting ui
       just # like make but better

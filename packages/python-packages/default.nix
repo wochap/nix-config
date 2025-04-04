@@ -13,5 +13,8 @@
   vidcutter = pkgs.prevstable-python.callPackage ./vidcutter.nix {
     pkgs = pkgs.prevstable-python;
   };
+  pix2tex = pkgs.prevstable-python.callPackage ./pix2tex {
+    pkgs = pkgs.prevstable-python;
+  };
 }
 

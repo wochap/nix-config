@@ -121,6 +121,7 @@ in {
     _custom.services.kdeconnect.enable = true;
     _custom.services.llm.enable = true;
     _custom.services.llm.enableWhisper = true;
+    _custom.services.llm.enablePix2tex = true;
     _custom.services.llm.enableOllama = true;
     _custom.services.llm.enableNvidia = true;
     _custom.services.llm.enableOllamaWebuiLite = false;

@@ -31,6 +31,7 @@ in {
 
   options._custom.services.llm = {
     enable = lib.mkEnableOption { };
+    enablePix2tex = lib.mkEnableOption { };
     enableWhisper = lib.mkEnableOption { };
     enableOllama = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
@@ -47,7 +48,8 @@ in {
     environment.systemPackages = with pkgs;
       [ python311Packages.huggingface-hub oterm ]
       ++ lib.optionals cfg.enableWhisper
-      [ (openai-whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ];
+      [ (openai-whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
+      ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ];
 
     services.ollama = lib.mkIf cfg.enableOllama {
       enable = true;
