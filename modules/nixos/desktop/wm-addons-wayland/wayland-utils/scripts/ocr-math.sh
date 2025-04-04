@@ -43,6 +43,7 @@ main() {
   grim -g "$area" "$grim_dest"
   kill_hyprpicker
   pix2tex "$grim_dest" | awk -F': ' '{print $2}' | wl-copy
+  # TODO: https://github.com/qwinsi/tex2typst
   rm "$grim_dest"
   result=$(wl-paste)
   if [[ -n "$result" ]]; then
