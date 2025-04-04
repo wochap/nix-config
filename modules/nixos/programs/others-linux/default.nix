@@ -26,7 +26,7 @@ in {
       # antimicroX # map kb/mouse to gamepad
       # skypeforlinux
       # teamviewer
-      # zoom-us
+      zoom-us
 
       pseintDesktopItem
       _custom.pseint
