@@ -156,3 +156,13 @@ extract_for_whisper() {
 
   ffmpeg -i "$input_file" -acodec pcm_s16le -ar 16000 "$output_file"
 }
+
+# NOTE: doesn't work on thunar
+function cpf() {
+  local filepath=$(realpath "$1")
+  printf 'file://%s\n' "$filepath" | wl-copy -t text/uri-list
+}
+_cpf_files_only() {
+  _files -g '*(-.)'
+}
+compdef _cpf_files_only cpf
