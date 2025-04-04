@@ -146,7 +146,8 @@ static const Rule rules[] = {
 
 	{ "kitty-scratch",           NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'i' },
 	{ "tui-monitor",             NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'm' },
-	{ "tui-notes",               NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'n' },
+	{ "tui-notes$",              NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'n' },
+	{ "tui-notes-obsidian",      NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'b' },
 	{ "tui-email",               NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'e' },
 	{ "tui-rss",                 NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'r' },
 	{ "tui-music",               NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'u' },
@@ -563,6 +564,7 @@ static const Modekey modekeys[] = {
 
   // Terminal TUI
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, raiserunnamedscratchpad, SHCMD_SK("n", "tui-notes")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_SK("b", "tui-notes-obsidian")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, raiserunnamedscratchpad, SHCMD_SK("m", "tui-monitor")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, raiserunnamedscratchpad, SHCMD_SK("e", "tui-email")),
   EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, raiserunnamedscratchpad, SHCMD_SK("r", "tui-rss")),

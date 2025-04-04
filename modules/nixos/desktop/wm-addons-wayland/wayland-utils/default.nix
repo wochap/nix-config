@@ -29,6 +29,8 @@ let
     pkgs.writeScriptBin "tui-music" (builtins.readFile ./scripts/tui-music.sh);
   tui-notes =
     pkgs.writeScriptBin "tui-notes" (builtins.readFile ./scripts/tui-notes.sh);
+  tui-notes-obsidian = pkgs.writeScriptBin "tui-notes-obsidian"
+    (builtins.readFile ./scripts/tui-notes-obsidian.sh);
   tui-notification-center = pkgs.writeScriptBin "tui-notification-center"
     (builtins.readFile ./scripts/tui-notification-center.sh);
   tui-rss =
@@ -94,6 +96,7 @@ in {
         tui-monitor
         tui-music
         tui-notes
+        tui-notes-obsidian
         tui-notification-center
         tui-rss
       ];
