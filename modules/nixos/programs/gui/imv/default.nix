@@ -23,6 +23,7 @@ in {
             overlay_background_color = themeColors.backgroundOverlay;
             overlay = true;
             overlay_font = "Iosevka NF:10";
+            overlay_position_bottom = true;
             scaling_mode = "shrink";
           };
           binds = {
