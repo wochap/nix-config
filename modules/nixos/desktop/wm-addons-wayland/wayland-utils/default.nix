@@ -13,6 +13,8 @@ let
   takeshot =
     pkgs.writeScriptBin "takeshot" (builtins.readFile ./scripts/takeshot.sh);
   ocr = pkgs.writeScriptBin "ocr" (builtins.readFile ./scripts/ocr.sh);
+  ocr-math =
+    pkgs.writeScriptBin "ocr-math" (builtins.readFile ./scripts/ocr-math.sh);
   recorder =
     pkgs.writeScriptBin "recorder" (builtins.readFile ./scripts/recorder.sh);
   tui-bookmarks = pkgs.writeScriptBin "tui-bookmarks"
@@ -84,6 +86,7 @@ in {
         recorder
         takeshot
         ocr
+        ocr-math
 
         tui-bookmarks
         tui-calendar

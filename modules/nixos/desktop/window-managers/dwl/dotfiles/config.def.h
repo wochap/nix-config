@@ -454,6 +454,9 @@ static const Key keys[] = {
   // Open ocr utility
   { MODKEY|MOD_ALT, Key_o, spawn, SHCMD("ocr") },
 
+  // Open ocr math utility
+  { MODKEY|MOD_ALT, Key_h, spawn, SHCMD("ocr-math") },
+
   // Open color picker
   { MODKEY|MOD_ALT, Key_c, spawn, SHCMD("color-picker") },
 
