@@ -111,12 +111,15 @@ static const Rule rules[] = {
 	/* examples:
 	{ "Gimp",                    NULL,       0,         1,          0,        -1, 	   0, 	0,   500,  400,    0 },
 	*/
-	{ "mpv",                     NULL,       0,         1,          0,        -1,      0,   0,   0.8f, 0.8f, 0 },
-	{ "imv",                     NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
+	// { "mpv",                     NULL,       0,         1,          0,        -1,      0,   0,   0.8f, 0.8f, 0 },
+	// { "imv",                     NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "^Zoom",                   "^zoom$",   0,         1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "^Zoom",                   "^menu window$", 0,    1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "^Zoom",                   "^Settings$", 0,       1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "^Zoom",                   "^Zoom Workplace$", 0, 1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "xwaylandvideobridge",     NULL,       1 << 9,    1,          0,        -1,      0,   0,   0,    0,      'x' },
 	{ "^[tT]hunar$",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      'f' },
 	{ "file-roller",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
-	{ "gnome-system-monitor",    NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "org.gnome.Calculator",    NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "showmethekey-gtk",        NULL,       0,         1,          1,        -1,      -7,  -7,  500,  100,    0 },
 	{ "xdg-desktop-portal-gtk",  NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
