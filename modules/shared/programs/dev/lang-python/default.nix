@@ -15,6 +15,7 @@ let
       pip
       pynvim # required by nvim
       # NOTE: add here any python package you need globally
+      pdf2image
       html2text
       icalendar
       pytz
