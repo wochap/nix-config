@@ -192,7 +192,7 @@ windows:
 
   # 8
   - microfrontends:
-      root: ~/Projects/se/single-spa-demo
+      root: ~/Projects/se
       layout: tiled
       panes:
         # 3010
@@ -213,4 +213,3 @@ windows:
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
             - yarn run dev
             # <%- end %>
-
