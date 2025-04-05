@@ -14,7 +14,12 @@ let
       uv # better pip
       pip
       pynvim # required by nvim
+
       # NOTE: add here any python package you need globally
+      python-dotenv
+      requests
+      datetime
+      ics
       pdf2image
       html2text
       icalendar
@@ -27,12 +32,14 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ pipx poetry pipenv python-final ];
 
-    # env variable to be used within neovim config
-    environment.sessionVariables.GLOBAL_PYTHON_FOLDER_PATH = "${python-final}";
-
     _custom.hm = {
       # adds ~/.local/bin folder to the PATH env var
       home.sessionPath = [ "$HOME/.local/bin" ];
+
+      # env variable to be used within neovim config
+      # NOTE: this variable changes every time you update Python pkgs
+      # you may need to log out and log back in for changes to take effect
+      home.sessionVariables.GLOBAL_PYTHON_FOLDER_PATH = "${python-final}";
 
       # HACK: to make mason.nvim work
       programs.zsh.initExtra = lib.mkBefore ''
