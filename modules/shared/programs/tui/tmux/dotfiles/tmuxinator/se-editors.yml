@@ -39,6 +39,10 @@ windows:
   - single-spa-app:
       root: ~/Projects/se/single-spa-demo/single-spa-app
       layout: tiled
+
+  - viz-api:
+      root: ~/Projects/se/viz-api
+      layout: tiled
   # <%- end %>
 
   # - viz-websites:

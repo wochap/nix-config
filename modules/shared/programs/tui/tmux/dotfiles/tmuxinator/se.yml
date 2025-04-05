@@ -197,13 +197,20 @@ windows:
       panes:
         # 3010
         - single-spa-app:
-            - cd ./single-spa-app
+            - cd ./single-spa-demo/single-spa-app
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
             - yarn run dev
             # <%- end %>
         # 9000
         - single-spa-root-config:
-            - cd ./single-spa-root-config
+            - cd ./single-spa-demo/single-spa-root-config
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
             - yarn run start
             # <%- end %>
+        # 3008
+        - viz-api:
+            - cd ./viz-api
+            # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+            - yarn run dev
+            # <%- end %>
+
