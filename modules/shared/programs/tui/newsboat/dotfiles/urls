@@ -12,10 +12,13 @@ https://www.reddit.com/r/zsh/.rss
 https://www.reddit.com/r/nixos/.rss
 
 -4 "~The Giants"
-https://css-tricks.com/feed/ "~CSS-Tricks"
-https://dev.to/feed/ "~DEV Community"
 https://hnrss.org/frontpage "~Hacker News"
 https://lobste.rs/rss "~Lobsters"
+https://isocpp.org/blog/rss/category/news "~C++ News"
+https://javascriptweekly.com/rss "~JS Weekly"
+https://feedpress.me/cssweekly "~CSS Weekly"
+https://css-tricks.com/feed/ "~CSS-Tricks"
+https://dev.to/feed/ "~DEV Community"
 
 -5 "~Top Front-end Bloggers"
 https://feeds.feedburner.com/brad-frosts-blog "~Brad Frost"
