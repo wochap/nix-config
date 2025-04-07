@@ -16,6 +16,7 @@ let
       pynvim # required by nvim
 
       # NOTE: add here any python package you need globally
+      matplotlib
       python-dotenv
       requests
       datetime
