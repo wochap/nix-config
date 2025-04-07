@@ -117,6 +117,7 @@ static const Rule rules[] = {
 	{ "^Zoom",                   "^menu window$", 0,    1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "^Zoom",                   "^Settings$", 0,       1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "^Zoom",                   "^Zoom Workplace$", 0, 1,          0,        -1,      0,   0,   0,    0,      0 },
+	{ "^Zoom",                   "^cc_receiver$", 0,    1,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "xwaylandvideobridge",     NULL,       1 << 9,    1,          0,        -1,      0,   0,   0,    0,      'x' },
 	{ "^[tT]hunar$",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      'f' },
 	{ "file-roller",             NULL,       0,         1,          0,        -1,      0,   0,   0,    0,      0 },
