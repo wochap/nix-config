@@ -1,18 +1,23 @@
-@define-color moduleBg @surface1;
+@define-color moduleBg @surface0;
 @define-color moduleBgFocus @surface0;
 
 .bar-container {
-  background-color: @surface0;
   color: @text;
+  /* @background color in rgb */
+  /* HACK: 0.99 for RGBA opacity; otherwise, */
+  /* the background turns black when opacity is applied */
+  background-color: rgba(30, 30, 46, 0.99);
   font-family:
     Iosevka NF,
     woos;
   font-size: 10pt;
   font-weight: 500;
   padding: 7px;
+  opacity: 0.75;
 }
 .bar-container.focused {
   background-color: @background;
+  opacity: 1;
 }
 
 .bar {
