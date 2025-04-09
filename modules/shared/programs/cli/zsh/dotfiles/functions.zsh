@@ -114,10 +114,6 @@ function nvims() {
 }
 alias nvs=nvims
 
-function copyfile() {
-  wl-copy < $1
-}
-
 function copybuffer() {
 	printf "%s" "$BUFFER" | wl-copy -n
 }
@@ -147,7 +143,7 @@ extract_for_whisper() {
   fi
 
   local input_file="$1"
-  local output_file="${input_file%.*}.wav"
+  local output_file="./$(basename "${input_file%.*}.wav")"
 
   if [[ ! -f "$input_file" ]]; then
     echo "Error: File '$input_file' not found."
@@ -157,6 +153,14 @@ extract_for_whisper() {
   ffmpeg -i "$input_file" -acodec pcm_s16le -ar 16000 "$output_file"
 }
 
+# add file content to clipboard
+function cpfc() {
+  local filepath=$(realpath "$1")
+  cat "$filepath" | wl-copy --type text
+}
+compdef _cpf_files_only cpfc
+
+# add file to clipboard
 # NOTE: doesn't work on thunar
 function cpf() {
   local filepath=$(realpath "$1")
