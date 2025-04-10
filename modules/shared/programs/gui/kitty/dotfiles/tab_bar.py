@@ -19,10 +19,10 @@ windows_icon = ""
 folder_icon = "󰉖"
 default_layout_icon = ""
 layout_icon_by_name = {
-  "fat" : "",
-  "tall" : "",
-  "stack" : "",
-  "splits" : "",
+    "fat": "",
+    "tall": "",
+    "stack": "",
+    "splits": "",
 }
 active_tab_layout_name = ""
 active_tab_num_windows = 1
@@ -63,6 +63,12 @@ def draw_tab(
         screen.cursor.x = left_status_length
         screen.insert_characters(leading_spaces)
         # TODO: fix tab click handlers
+        # https://github.com/kovidgoyal/kitty/discussions/4447#discussioncomment-11723638
+        # tab_manager = get_boss().active_tab_manager
+        # tab_manager.tab_bar.cell_ranges = [
+        #     (start + leading_spaces, end + leading_spaces)
+        #     for (start, end) in tab_manager.tab_bar.cell_ranges
+        # ]
         # self.cell_ranges = [(s + leading_spaces, e + leading_spaces) for (s, e) in self.cell_ranges]
         screen.cursor.x = screen_cursor_x + leading_spaces
 
@@ -183,3 +189,4 @@ def get_cwd():
         )
 
     return folder_icon + " " + cwd
+
