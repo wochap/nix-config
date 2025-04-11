@@ -463,7 +463,7 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT, Key_c, spawn, SHCMD("color-picker") },
 
   // TODO: Magnifying glass
-  // { MODKEY|MOD_ALT, Key_z, spawn, SHCMD("") },
+  { MODKEY|MOD_ALT, Key_z, spawn, SHCMD("hyprmag --radius 250") },
 
 
   // ### MEDIA KEYBINDINGS

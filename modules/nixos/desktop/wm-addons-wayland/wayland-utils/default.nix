@@ -5,6 +5,7 @@ let
 
   wayfreeze = inputs.wayfreeze.packages.${system}.wayfreeze;
   hyprpicker = inputs.hyprpicker.packages.${system}.hyprpicker;
+  hyprmag = inputs.hyprmag.packages.${system}.default;
   play-notification-sound = pkgs.writeScriptBin "play-notification-sound"
     (builtins.readFile ./scripts/play-notification-sound.sh);
   color-picker = pkgs.writeScriptBin "color-picker"
@@ -81,6 +82,7 @@ in {
         wlrctl # control keyboard, mouse and wm from cli
         tesseract5 # ocr
         cage # wm
+        hyprmag # magnifier
 
         play-notification-sound
         color-picker
