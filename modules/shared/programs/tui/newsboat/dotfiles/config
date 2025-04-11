@@ -21,11 +21,10 @@ bind-key N prev-unread
 bind-key U show-urls
 
 browser linkhandler
-macro , open-in-browser
 macro t set browser "qndl" ; open-in-browser ; set browser linkhandler
 macro a set browser "tsp yt-dlp --embed-metadata -xic -f bestaudio/best --restrict-filenames" ; open-in-browser ; set browser linkhandler
 macro v set browser "setsid -f mpv" ; open-in-browser ; set browser linkhandler
-macro w set browser "kitty @ launch --type=tab sh -c 'reader --image-mode kitty %u && kitty @ scroll-window start && zsh'" ; open-in-browser ; set browser linkhandler
+macro w set browser "kitty @ launch --type=tab sh -c 'reader --image-mode kitty %u && kitty @ scroll-window start && zsh'" ; open-in-browser ; toggle-article-read "read" ; set browser linkhandler
 macro W set browser "lynx" ; open-in-browser ; set browser linkhandler
 # macro d set browser "dmenuhandler" ; open-in-browser ; set browser linkhandler
 macro c set browser "echo %u | wl-copy" ; open-in-browser ; set browser linkhandler
