@@ -79,6 +79,9 @@ in {
               "browser.tabs.tabMinWidth" = 5;
               "browser.startup.page" = 3;
 
+              # vertical tabs
+              "sidebar.verticalTabs" = true;
+
               # use native GTK buttons
               "widget.gtk.non-native-titlebar-buttons.enabled" = false;
 
