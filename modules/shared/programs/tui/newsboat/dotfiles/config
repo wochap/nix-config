@@ -4,9 +4,9 @@ auto-reload yes
 reload-time 60
 prepopulate-query-feeds yes
 external-url-viewer "urlscan -dc -r 'linkhandler {}'"
+goto-next-feed no
 
 # Key navigation
-goto-next-feed no
 bind-key d pagedown
 bind-key u pageup
 bind-key g home feedlist
@@ -19,6 +19,8 @@ bind-key a toggle-article-read
 bind-key n next-unread
 bind-key N prev-unread
 bind-key U show-urls
+bind-key o open-in-browser-and-mark-read
+bind-key O open-in-browser
 
 browser linkhandler
 macro t set browser "qndl" ; open-in-browser ; set browser linkhandler
