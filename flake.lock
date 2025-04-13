@@ -2449,17 +2449,17 @@
     "reversal-extra": {
       "flake": false,
       "locked": {
-        "lastModified": 1744069359,
-        "narHash": "sha256-kkqLAZK4yWovriac+k1oCfwdpWLWCVUtpkrAVborATE=",
+        "lastModified": 1744584982,
+        "narHash": "sha256-56NQvZqEtSYQSha/8DSELK5Nk1Gx2vkTIc0aJb5FtDg=",
         "owner": "wochap",
         "repo": "Reversal-Extra",
-        "rev": "33cf24e35ff94257a9b8aaea480f2a3b919e2aff",
+        "rev": "04ece964acabf60d5b74836359769f1ece53ee55",
         "type": "github"
       },
       "original": {
         "owner": "wochap",
         "repo": "Reversal-Extra",
-        "rev": "33cf24e35ff94257a9b8aaea480f2a3b919e2aff",
+        "rev": "04ece964acabf60d5b74836359769f1ece53ee55",
         "type": "github"
       }
     },
