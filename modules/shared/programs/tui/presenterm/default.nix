@@ -8,7 +8,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [ presenterm ];
+      home.packages = with pkgs; [ nixpkgs-unstable.presenterm ];
 
       xdg.configFile."presenterm/config.yaml".source = pkgs.substituteAll {
         src = ./dotfiles/config.yaml;

@@ -5,7 +5,7 @@ let
   inherit (config._custom.globals) themeColors configDirectory;
   inherit (lib._custom) relativeSymlink unwrapHex;
 
-  kitty-final = pkgs.kitty;
+  kitty-final = pkgs.nixpkgs-unstable.kitty;
   shellIntegrationInit = {
     bash = ''
       if test -n "$KITTY_INSTALLATION_DIR"; then
