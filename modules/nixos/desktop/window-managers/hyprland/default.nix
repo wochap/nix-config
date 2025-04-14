@@ -70,6 +70,13 @@ in {
           # export QT_FONT_DPI=96
         '';
       in {
+        "hypr/xdph.conf".text = ''
+          screencopy {
+            max_fps = 60
+            allow_token_by_default = true
+          }
+        '';
+
         "hypr/colors.conf".text = lib.concatStringsSep "\n"
           (lib.attrsets.mapAttrsToList
             (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
