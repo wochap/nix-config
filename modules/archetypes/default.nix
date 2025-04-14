@@ -47,6 +47,7 @@
       _custom.desktop.electron-support.enable = true;
       _custom.desktop.gammastep.enable = true;
       _custom.desktop.hyprlock.enable = lib.mkDefault true;
+      _custom.desktop.hyprsunset.enable = lib.mkDefault false;
       _custom.desktop.kanshi.enable = true;
       _custom.desktop.idle.enable = lib.mkDefault true;
       _custom.desktop.swww.enable = true;

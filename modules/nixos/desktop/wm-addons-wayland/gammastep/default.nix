@@ -19,7 +19,9 @@ in {
       };
 
       # only start gammastep on wayland wm
-      systemd.user.services.gammastep = lib._custom.mkWaylandService { };
+      systemd.user.services.gammastep = lib._custom.mkWaylandService {
+        # Unit.ConditionEnvironment = lib.mkForce "!XDG_SESSION_DESKTOP=hyprland";
+      };
     };
   };
 }

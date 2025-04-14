@@ -37,6 +37,7 @@
     ./desktop/wm-addons-wayland/electron-support
     ./desktop/wm-addons-wayland/gammastep
     ./desktop/wm-addons-wayland/hyprlock
+    ./desktop/wm-addons-wayland/hyprsunset
     ./desktop/wm-addons-wayland/kanshi
     ./desktop/wm-addons-wayland/idle
     ./desktop/wm-addons-wayland/swww
