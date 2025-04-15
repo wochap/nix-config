@@ -12,7 +12,7 @@
       };
       package = lib.mkOption {
         type = lib.types.package;
-        default = pkgs.catppuccin-cursors.mochaDark;
+        default = pkgs.nixpkgs-unstable.catppuccin-cursors.mochaDark;
       };
       size = lib.mkOption {
         type = lib.types.int;
