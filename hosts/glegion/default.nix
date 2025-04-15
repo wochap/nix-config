@@ -11,9 +11,25 @@ in {
     _custom.globals.userName = userName;
     _custom.globals.homeDirectory = "/home/${userName}";
     _custom.globals.configDirectory = configDirectory;
+
+    # fix blurry cursor on GTK 3 apps
+    # update catppuccin cursor NOMINAL_SIZE
+    # TODO: remove after updating gtk to 4.18
+    # source: https://blogs.kde.org/2024/10/09/cursor-size-problems-in-wayland-explained/#my-fix-or-shall-we-say-workaround
+    # source: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/7722
+    # source: https://bbs.archlinux.org/viewtopic.php?id=299624
     _custom.globals.cursor.package =
-      pkgs.nixpkgs-unstable.catppuccin-cursors.mochaDark;
-    _custom.globals.cursor.size = 20;
+      pkgs.nixpkgs-unstable.catppuccin-cursors.mochaDark.overrideAttrs
+      (oldAttrs: rec {
+        patches = [
+          (pkgs.fetchpatch {
+            url =
+              "https://github.com/wochap/cursors/commit/243becf94ad2ae52eb8be55fc36f329ca7f2ce3b.patch";
+            sha256 = "sha256-fQnE9HHRG8PoNGAeax+KAeWV8XR81jwVAJ3Yrt7UYQc=";
+          })
+        ];
+      });
+    _custom.globals.cursor.size = 28;
 
     _custom.programs.weeb.enable = true;
 
