@@ -28,7 +28,9 @@ export const hyprlandWorkspaces = () =>
         setup(self) {
           self.hook(Hyprland, () => {
             const wsData = Hyprland.getWorkspace(ws);
-            self.class_name = `${(wsData?.windows ?? 0) > 0 ? "occupied" : ""} ${Hyprland.active.workspace.id == ws ? "focused" : ""}`;
+            const occupied = (wsData?.windows ?? 0) > 0;
+            const focused = Hyprland.active.workspace.id == ws;
+            self.class_name = `${occupied ? "occupied" : ""} ${focused ? "activated" : ""} ${occupied && focused ? "focused" : ""}`;
           });
         },
       }),

@@ -50,6 +50,8 @@
     pyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprmag.url = "github:SIMULATAN/hyprmag?rev=a7ca558d357e2a0d34373620f89d2daf210744dc"; # main (8 jun 2024)
     hyprmag.inputs.nixpkgs.follows = "nixpkgs";
+    hyprgrass.url = "github:horriblename/hyprgrass?rev=427690aec574fec75f5b7b800ac4a0b4c8e4b1d5"; # v0.8.1
+    hyprgrass.inputs.nixpkgs.follows = "hyprland";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
     scenefx.url = "github:wlrfx/scenefx?rev=87c0e8b6d5c86557a800445e8e4c322f387fe19c"; # main (17 feb 2024)

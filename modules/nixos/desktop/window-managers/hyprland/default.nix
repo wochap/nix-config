@@ -2,9 +2,11 @@
 
 let
   cfg = config._custom.desktop.hyprland;
-  inherit (config._custom.globals) themeColors configDirectory;
+  inherit (config._custom) globals;
+  inherit (globals) themeColors configDirectory;
   inherit (lib._custom) relativeSymlink;
 
+  hyprplugins = inputs.hyprland-plugins.packages.${pkgs.system};
   hyprland-final = inputs.hyprland.packages."${system}".hyprland;
   hyprland-xdp-final =
     inputs.hyprland.packages."${system}".xdg-desktop-portal-hyprland;
@@ -112,11 +114,19 @@ in {
         enable = true;
         package = hyprland-final;
         systemd.enable = false;
+        plugins = with hyprplugins; [
+          hyprexpo
+          # inputs.hyprgrass.packages.${pkgs.system}.default
+        ];
         extraConfig = ''
           source=~/.config/hypr/colors.conf
           source=~/.config/hypr/config.conf
           source=~/.config/hypr/autostart.conf
           source=~/.config/hypr/keybindings.conf
+
+          # hyprcursor config
+          env = HYPRCURSOR_THEME,${globals.cursor.name}
+          env = HYPRCURSOR_SIZE,${toString globals.cursor.size}
         '';
       };
     };
