@@ -276,8 +276,9 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 #define MOD_LOGO WLR_MODIFIER_LOGO
 #define MOD_NONE 0
 
+/* { MODKEY, KEY,                       remembertagsview, {.ui = TAG} }, \ */
 #define TAGKEYS(KEY,TAG) \
-  { MODKEY, KEY,                       remembertagsview, {.ui = TAG} }, \
+  { MODKEY,  KEY,                      view,       {.ui = 1 << TAG} }, \
 	{ MODKEY|MOD_CONTROL, KEY,           toggleview, {.ui = 1 << TAG} }, \
 	{ MODKEY|MOD_SHIFT, KEY,             tag,        {.ui = 1 << TAG} }, \
 	{ MODKEY|MOD_CONTROL|MOD_SHIFT, KEY, toggletag,  {.ui = 1 << TAG} }
