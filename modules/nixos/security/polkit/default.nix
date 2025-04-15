@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.security.polkit;
+let
+  cfg = config._custom.security.polkit;
+  hyprpolkitagent-final = pkgs.hyprpolkitagent;
 in {
   options._custom.security.polkit.enable = lib.mkEnableOption { };
 
@@ -8,23 +10,19 @@ in {
     environment.systemPackages = with pkgs;
       [
         # polkit authentication agent
-        polkit_gnome
+        hyprpolkitagent-final
       ];
 
     services.dbus.enable = lib.mkDefault true;
     security.polkit.enable = true;
 
     # NOTE: doesn't work as expected if you have more than 1 TTY active
-    _custom.hm.systemd.user.services.polkit-gnome-authentication-agent-1 =
+    _custom.hm.systemd.user.services.hyprpolkitagent =
       lib._custom.mkWaylandService {
-        Unit = {
-          Description = "polkit-gnome-authentication-agent-1";
-          Documentation = "https://gitlab.gnome.org/Archive/policykit-gnome";
-        };
+        Unit.Description = "Hyprland PolicyKit Agent";
         Service = {
           Type = "simple";
-          ExecStart =
-            "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+          ExecStart = "${hyprpolkitagent-final}/libexec/hyprpolkitagent";
           Restart = "on-failure";
           RestartSec = 1;
           TimeoutStopSec = 10;
