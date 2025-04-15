@@ -51,12 +51,12 @@ in {
       (final: prev: {
         dwl = prev.dwl.overrideAttrs (oldAttrs: rec {
           version =
-            "112ac3744b068e96e7573d8d7c1a5e716897c7ef"; # v0.8-a/patches-28-mar-2025
+            "ba748a4be711c1abb6ac0c65b423a719df8254d2"; # v0.8-a/patches-28-mar-2025
           src = prev.fetchFromGitHub {
             owner = "wochap";
             repo = "dwl";
             rev = version;
-            hash = "sha256-myjhwILzM6KcOmMoxsB2m4ezEV4Fr58zx0WYlGDswjM=";
+            hash = "sha256-hnvxmhzn06pVOI0vcPOzV3NzaQGAOhsMs+Cj3uLOPIE=";
           };
           buildInputs = with pkgs;
             oldAttrs.buildInputs ++ [ scenefx-final libGL ];
