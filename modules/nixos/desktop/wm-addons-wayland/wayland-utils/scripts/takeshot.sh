@@ -29,8 +29,8 @@ notify_user() {
 
   case $action in
   "edit")
-    # NOTE: swappy doesn't support webp
-    swappy -f "$grim_dest" -o "$dest" &
+    # NOTE: satty doesn't support webp
+    satty -f "$grim_dest" -o "$dest" &
     ;;
   "open")
     rm -f "$grim_dest"

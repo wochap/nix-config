@@ -71,7 +71,7 @@ in {
         hyprpicker # color picker
         showmethekey
         slurp # screenshoot utility
-        swappy # minimal image editor
+        nixpkgs-unstable.satty # image editor
         swaybg
         wayfreeze # freeze display, only works on hyprland
         wdisplays # control display outputs
@@ -105,7 +105,7 @@ in {
 
       home.shellAliases."cpi" = ''wl-copy -t text/uri-list <<<file:/"$@"'';
 
-      xdg.configFile."swappy/config".source = ./dotfiles/swappy-config;
+      xdg.configFile."satty/config.toml".source = ./dotfiles/satty-config.toml;
       xdg.dataFile."assets/notification.flac".source =
         ./assets/notification.flac;
     };

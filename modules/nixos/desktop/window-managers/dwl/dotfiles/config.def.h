@@ -127,6 +127,7 @@ static const Rule rules[] = {
 	{ "Slack",                   NULL,       1 << 3,    0,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "discord",                 NULL,       1 << 3,    0,          0,        -1,      0,   0,   0,    0,      0 },
 	{ "discord",                 "Discord Updater", 1 << 3, 1,      0,        -1,      0,   0,   0,    0,      0 },
+	{ "com.gabm.satty",          NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    0 },
 
 	{ NULL,                      "^Extracting Files.*", 0, 1,       0,        -1,      0,   0,   0,    0,      0 },
 	{ NULL, ".com is sharing your screen.$", 1 << 9,    1,          0,        -1,      0,   0,   0,    0,      0 },

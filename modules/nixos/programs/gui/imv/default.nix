@@ -29,7 +29,7 @@ in {
           binds = {
             gy = ''exec echo "$imv_current_file" | wl-copy'';
             e = ''
-              exec swappy -f "$imv_current_file" -o "$imv_current_file" &; quit'';
+              exec satty -f "$imv_current_file" -o "$imv_current_file" &; quit'';
             r = ''exec mogrify -rotate 90 "$imv_current_file" &;'';
             "<Ctrl+Shift+D>" = ''exec rm "$imv_current_file"; quit'';
             "<Shift+D>" = ''exec rm "$imv_current_file"; close'';
