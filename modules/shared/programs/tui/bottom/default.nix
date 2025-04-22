@@ -12,6 +12,11 @@ in {
     _custom.hm = {
       home.shellAliases.top = "btm";
 
+      # useful keymaps
+      # % toggle memoryvalues
+      # t toggle tree view
+      # P toggle viewing the full command
+      # tab toggle grouping same apps
       programs.bottom = {
         enable = true;
         settings = lib.recursiveUpdate themeSettings {
