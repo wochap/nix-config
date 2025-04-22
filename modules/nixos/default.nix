@@ -22,6 +22,7 @@
     ./desktop/wm-addons/fonts
     ./desktop/wm-addons/gtk
     ./desktop/wm-addons/logind
+    ./desktop/wm-addons/mouseless
     ./desktop/wm-addons/music
     ./desktop/wm-addons/networking
     ./desktop/wm-addons/plymouth

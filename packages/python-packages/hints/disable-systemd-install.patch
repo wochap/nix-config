@@ -1,0 +1,22 @@
+From ec60c74ce04aaa3f03cb5b974906640cdaa06d08 Mon Sep 17 00:00:00 2001
+From: Gean Marroquin <wochap@users.noreply.github.com>
+Date: Wed, 16 Apr 2025 22:58:50 -0500
+Subject: [PATCH] disable install_hintsd_service
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index d3a41b8..f017a6c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -84,7 +84,7 @@ def install_hintsd_service(self):
+
+     def run(self):
+         install.run(self)
+-        self.install_hintsd_service()
++        # self.install_hintsd_service()
+
+
+ dynamic_version = find_version("hints", "__init__.py")

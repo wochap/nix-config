@@ -31,6 +31,7 @@
       _custom.desktop.gtk.enableCsd = false;
       _custom.desktop.gtk.enableTheme = true;
       _custom.desktop.logind.enable = true;
+      _custom.desktop.mouseless.enable = lib.mkDefault true;
       _custom.desktop.music.enable = true;
       _custom.desktop.networking.enable = true;
       _custom.desktop.plymouth.enable = true;
