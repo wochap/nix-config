@@ -11,7 +11,7 @@ export const network = () => {
       },
     ),
     setup(self) {
-      self.hook(Network.wifi, () => {
+      self.hook(Network, () => {
         if (Network.wifi.ssid) {
           const icons = [
             [66, ""],
