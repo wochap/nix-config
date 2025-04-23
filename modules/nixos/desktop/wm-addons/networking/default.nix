@@ -8,7 +8,12 @@ in {
     _custom.user.extraGroups = [ "networkmanager" ];
 
     environment = {
-      systemPackages = with pkgs; [ impala iw wireless-regdb ];
+      systemPackages = with pkgs; [
+        impala
+        iw
+        wireless-regdb
+        zbar # scan wifi QR codes
+      ];
 
       shellAliases.wtui = "impala";
     };
