@@ -12,6 +12,7 @@ in {
         gparted # disk partition editor
         inkscape # photo editor cli/gui
         pavucontrol # pulseaudio gui
+        pwvucontrol # pipewire gui
         pinta # image editor
         remmina # vnc client
 
