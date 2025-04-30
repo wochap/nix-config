@@ -195,10 +195,12 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
   - Connecting
     - Disconnect the Galaxy Buds case from the power source
     - Close the Galaxy Buds case
+    - Open GalaxyBudsClient (after pairing)
     - Open the Galaxy Buds case
     - Pair the Galaxy Buds (only required for the first time)
+    - In GalaxyBudsClient click on 'connect'
     - Repeat the process until the Galaxy Buds connect via Bluetooth
-    - Once connected via Bluetooth, open the Galaxy Buds Client
+    - Once connected via Bluetooth
   - Best audio profiles
     - Best audio output: High Fidelity Playback (A2DP Sink, codec AAC)
     - Worst output but allows input: Headset Head Unit (HSP/HFP, codec mSBC)
