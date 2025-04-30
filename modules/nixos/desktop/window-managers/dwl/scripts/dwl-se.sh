@@ -1,5 +1,35 @@
 #!/usr/bin/env bash
 
+function get_branch_info() {
+  local path="$1"
+  local dir_name
+  dir_name=$(basename "$path")
+  local branch
+  branch=$(git -C "$path" rev-parse --abbrev-ref HEAD)
+  echo "Current branch in '$dir_name' is '$branch'"
+}
+
+viz_omni_path="$HOME/Projects/se/viz-omni"
+pearson_surveys_path="$HOME/Projects/se/pearson-surveys"
+socialexplorer_surveys_path="$HOME/Projects/se/socialexplorer-surveys"
+pearson_customs_path="$HOME/Projects/se/pearson-customs"
+viz_websites_path="$HOME/Projects/se/viz-websites"
+mapspice_ui_path="$HOME/Projects/se/mapspice-ui"
+confirm_message=$(
+  get_branch_info "$viz_omni_path"
+  get_branch_info "$pearson_surveys_path"
+  get_branch_info "$socialexplorer_surveys_path"
+  get_branch_info "$pearson_customs_path"
+  get_branch_info "$viz_websites_path"
+  get_branch_info "$mapspice_ui_path"
+  echo "Continue?"
+)
+confirm_branch=$(gum confirm --no-show-help "$confirm_message" && echo 1 || echo 0)
+
+if [ "$confirm_branch" -eq 0 ]; then
+  exit 0
+fi
+
 start_docker=$(gum confirm --no-show-help 'start docker?' && echo 1 || echo 0)
 workspaces=$(gum choose --height 6 --no-show-help --no-limit {'layout-editor',microfrontends,charts,surveys} | paste -sd, -)
 
