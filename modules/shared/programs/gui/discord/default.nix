@@ -6,7 +6,12 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [ betterdiscordctl discord ];
+      home.packages = with pkgs; [
+        betterdiscordctl
+        discord
+        legcord # discord client
+        equicord # discord client mod
+      ];
 
       xdg.configFile = {
         "discord/settings.json".source = ./dotfiles/discord-settings.json;
