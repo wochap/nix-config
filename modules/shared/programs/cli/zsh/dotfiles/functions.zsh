@@ -143,7 +143,7 @@ extract_for_whisper() {
   fi
 
   local input_file="$1"
-  local output_file="./$(basename "${input_file%.*}.wav")"
+  local output_file="./$(basename "${input_file%.*}_wis.wav")"
 
   if [[ ! -f "$input_file" ]]; then
     echo "Error: File '$input_file' not found."
