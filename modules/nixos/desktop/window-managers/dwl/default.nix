@@ -11,13 +11,12 @@ let
   dwl-write-logs = pkgs.writeScriptBin "dwl-write-logs"
     (builtins.readFile ./scripts/dwl-write-logs.sh);
   dwl-final = (pkgs.dwl.override {
-    wlroots = pkgs._custom.wlroots.wlroots_0_18;
-    configH = builtins.readFile (pkgs.substituteAll {
-      src = ./dotfiles/config.def.h;
-      primary = unwrapHex themeColors.primary;
-      lavender = unwrapHex themeColors.lavender;
+    wlroots = pkgs.wlroots_0_18;
+    configH = builtins.readFile (pkgs.replaceVars ./dotfiles/config.def.h {
+      # primary = unwrapHex themeColors.primary;
+      # lavender = unwrapHex themeColors.lavender;
       base = unwrapHex themeColors.base;
-      mantle = unwrapHex themeColors.mantle;
+      # mantle = unwrapHex themeColors.mantle;
       crust = unwrapHex themeColors.crust;
       border = unwrapHex themeColors.border;
       red = unwrapHex themeColors.red;

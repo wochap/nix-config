@@ -27,10 +27,9 @@ in {
       ];
 
       xdg.configFile = {
-        "cava/config".source = (pkgs.substituteAll {
-          src = ./dotfiles/cava/config;
+        "cava/config".source = pkgs.replaceVars ./dotfiles/cava/config {
           inherit (themeColors) red maroon peach yellow green teal sky sapphire;
-        });
+        };
         "ncmpcpp/config".source = ./dotfiles/ncmpcpp/config;
       };
 

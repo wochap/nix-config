@@ -4,16 +4,6 @@ let
   cfg = config._custom.desktop.fonts;
   isDarwin = pkgs.stdenv.isDarwin;
   inherit (config._custom.globals) fonts;
-  customNerdFonts = pkgs.nerdfonts.override {
-    fonts = [
-      "FiraCode"
-      "Iosevka"
-      "IosevkaTerm"
-      "NerdFontsSymbolsOnly"
-      # "Hack"
-      # "JetBrainsMono"
-    ];
-  };
 in {
   options._custom.desktop.fonts.enable = lib.mkEnableOption { };
 
@@ -21,7 +11,12 @@ in {
     fonts = lib.mkMerge [
       {
         packages = with pkgs; [
-          customNerdFonts
+          nerd-fonts.fira-code
+          nerd-fonts.iosevka
+          nerd-fonts.iosevka-term
+          nerd-fonts.symbols-only
+          # nerd-fonts.hack
+          # nerd-fonts.jetbrains-mono
 
           source-serif
           source-sans

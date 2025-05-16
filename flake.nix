@@ -1,20 +1,21 @@
 {
   inputs = {
     # channels
-    nixpkgs.url = "github:nixos/nixpkgs?rev=b75693fb46bfaf09e662d09ec076c5a162efa9f6"; # nixos-24.11 (20 mar 2025)
+    nixpkgs.url = "github:nixos/nixpkgs?rev=adaa24fbf46737f3f1b5497bf64bae750f82942e"; # nixos-unstable (15 may 2025)
     nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=a84ebe20c6bc2ecbcfb000a50776219f48d134cc"; # nixos-unstable (22 mar 2025)
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=3b998b4adb33a0a8f1a340a66a6757b206d6d3b7"; # master (05 jan 2025)
+    nixpkgs-24-11.url = "github:nixos/nixpkgs?rev=b75693fb46bfaf09e662d09ec076c5a162efa9f6"; # nixos-24.11 (20 mar 2025)
     nixpkgs-24-11-small.url = "github:nixos/nixpkgs?rev=c3b08708334cca32db70df24516608e73f645136"; # nixos-24.11-small (04 dec 2024)
     nixpkgs-24-05.url = "github:nixos/nixpkgs?rev=e8c38b73aeb218e27163376a2d617e61a2ad9b59"; # nixos-24.05 (21 nov 2024)
     prevstable-nix.url = "github:nixos/nixpkgs?rev=3dc440faeee9e889fe2d1b4d25ad0f430d449356"; # nixos-23.11 (10 jan 2024)
-    prevstable-chrome.url = "github:nixos/nixpkgs?rev=b75693fb46bfaf09e662d09ec076c5a162efa9f6"; # nixos-24.11 (20 mar 2025)
-    prevstable-neovim.url = "github:GaetanLepage/nixpkgs?rev=2b876ec04bb832b10a0bcaa1584da251cafdf884"; # nvim v0.11.0
+    prevstable-chrome.url = "github:nixos/nixpkgs?rev=adaa24fbf46737f3f1b5497bf64bae750f82942e"; # nixos-unstable (15 may 2025)
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=adaa24fbf46737f3f1b5497bf64bae750f82942e"; # nixos-unstable (15 may 2025)
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=c5187508b11177ef4278edf19616f44f21cc8c69"; # nixos-unstable (08 may 2024)
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=f6af7280a3390e65c2ad8fd059cdc303426cbd59"; # release-24.11 (20 mar 2025)
+    home-manager.url = "github:nix-community/home-manager?rev=954615c510c9faa3ee7fb6607ff72e55905e69f2"; # master (15 may 2025)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
@@ -22,42 +23,42 @@
     chaotic.inputs.nixpkgs.follows = "nixpkgs-unstable";
     matcha.url = "git+https://codeberg.org/QuincePie/matcha";
     matcha.inputs.nixpkgs.follows = "nixpkgs";
-    nix-gaming.url = "github:fufexan/nix-gaming?rev=1e435616e688c2b9125cd5282febcad3ab981d5e";
+    nix-gaming.url = "github:fufexan/nix-gaming?rev=1e435616e688c2b9125cd5282febcad3ab981d5e"; # master (21 mar 2024)
     nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=52b72b12c456a5c0c87c40941ef79335e8d61104"; # master (03 sep 2024)
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4";
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
-    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=672ac2ac86f7dff2f6f3406405bddecf960e0db6"; # master (22 nov 2024)
+    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=e81fd167b33121269149c57806599045fd33eeed"; # master (15 may 2025)
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=9822e0611d49ae70278ac20c9d7b68e4797b2fab";
     ags.url = "github:Aylur/ags?rev=bb91f7c8fdd2f51c79d3af3f2881cacbdff19f60"; # v1.8.2
-    ags.inputs.nixpkgs.follows = "nixpkgs";
+    ags.inputs.nixpkgs.follows = "nixpkgs-24-11";
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-alien.inputs.nixpkgs.follows = "nixpkgs";
     # everytime you update hyprland flake, run `sudo nix flake lock --update-input hyprland`
-    hyprland.url = "github:hyprwm/Hyprland?rev=12f9a0d0b93f691d4d9923716557154d74777b0a"; # v0.45.2
+    hyprland.url = "github:hyprwm/Hyprland?rev=9958d297641b5c84dcff93f9039d80a5ad37ab00"; # v0.49.0
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=844eb98250da448e17471f20beed23a5f5d33a3a"; # v0.45
+    hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=c25ee86113d99ec9188d218442f7e93ee62aef27"; # v0.49.0
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
-    hyprpicker.url = "github:hyprwm/hyprpicker?rev=116cec14a552191a9ad69ca96252ca12ecfa9826"; # v0.4.1
+    hyprpicker.url = "github:hyprwm/hyprpicker?rev=980ebd486b8a4c2ac1670286f38d163db1e38cd9"; # v0.4.5
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
-    hyprlock.url = "github:hyprwm/hyprlock?rev=3d63d9b129d5def270bc8a2471347e6f97274e2b"; # v0.6.1
+    # everytime you update hyprland flake, `sudo nix flake lock --update-input hyprlock`
+    hyprlock.url = "github:hyprwm/hyprlock?rev=6c64630df81b52208b210f02476f55e4db56e6cf"; # v0.8.2
     hyprlock.inputs.nixpkgs.follows = "nixpkgs";
-    pyprland.url = "github:hyprland-community/pyprland?rev=af680d6d17f1d72ee335e1067e28dce3799f80f6"; # (26 aug 2024)
+    pyprland.url = "github:hyprland-community/pyprland?rev=399a62afa2b3d7574f78a9ef483c7478de1fbf97"; # v2.4.5
     pyprland.inputs.nixpkgs.follows = "nixpkgs";
     hyprmag.url = "github:SIMULATAN/hyprmag?rev=a7ca558d357e2a0d34373620f89d2daf210744dc"; # main (8 jun 2024)
     hyprmag.inputs.nixpkgs.follows = "nixpkgs";
     hyprgrass.url = "github:horriblename/hyprgrass?rev=427690aec574fec75f5b7b800ac4a0b4c8e4b1d5"; # v0.8.1
-    hyprgrass.inputs.nixpkgs.follows = "hyprland";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
-    scenefx.url = "github:wlrfx/scenefx?rev=87c0e8b6d5c86557a800445e8e4c322f387fe19c"; # main (17 feb 2024)
+    scenefx.url = "github:wochap/scenefx?rev=5991e3979dd81349f35eecb7f03cbcbece6bc24d"; # main (17 feb 2024)
     scenefx.inputs.nixpkgs.follows = "nixpkgs";
-    wayfreeze.url = "github:Jappie3/wayfreeze?rev=dcbe2690ce41a286ef1eed54747bac47cee6dc2c"; # master (20 sep 2024)
-    wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
+    wayfreeze.url = "github:Jappie3/wayfreeze?rev=8277f981b4aace2a8411b39e2fbd4e15ad211078"; # master (15 may 2025)
+    wayfreeze.inputs.nixpkgs.follows = "nixpkgs-24-11";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.url = "github:0xc000022070/zen-browser-flake?rev=d19fab1586636ff01fa6f10c58dffd0efedf1411"; # main (20 mar 2025)
@@ -185,6 +186,7 @@
             {
               nixpkgs.config.allowUnfree = true;
               nixpkgs.config.permittedInsecurePackages = [
+                "freeimage-3.18.0-unstable-2024-04-18"
                 "freeimage-unstable-2021-11-01"
                 "nodejs-14.21.3"
                 "openssl-1.1.1u"

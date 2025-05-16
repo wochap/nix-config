@@ -29,11 +29,10 @@ in {
       xdg.configFile = {
         "dunst/assets/notification.flac".source = ./assets/notification.flac;
         "dunst/dunstrc" = {
-          source = (pkgs.substituteAll {
-            src = ./dotfiles/dunstrc;
+          source = pkgs.replaceVars ./dotfiles/dunstrc {
             inherit (themeColors)
               backgroundOverlay text border lavender textDimmed red;
-          });
+          };
           onChange = ''
             ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
           '';

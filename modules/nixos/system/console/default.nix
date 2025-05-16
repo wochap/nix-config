@@ -23,7 +23,7 @@ in {
       fbcat # screenshoot
       fbida # image and pdf viewer
       fbterm
-      fbv # wallpaper, image viewer
+      nixpkgs-24-11.fbv # wallpaper, image viewer
       mplayer # video player
       _custom.fcitx5-fbterm
 

@@ -21,7 +21,8 @@ in {
         # TODO: use package option instead of overlay
         enable = true;
         # adds ls ll la lt ll
-        enableAliases = true;
+        enableBashIntegration = true;
+        enableZshIntegration = config._custom.programs.zsh.enable;
         settings = lib.recursiveUpdate themeSettings {
           color.theme = "custom";
           sorting.dir-grouping = "first";

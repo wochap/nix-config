@@ -3,13 +3,13 @@
 let
   cfg = config._custom.programs.others-linux;
 
-  pseintDesktopItem = (pkgs.makeDesktopItem {
-    name = "PSeint";
-    exec = "${pkgs._custom.pseint}/opt/pseint/pseint";
-    icon = "pseint";
-    desktopName = "PSeint";
-    categories = [ "Development" ];
-  });
+  # pseintDesktopItem = (pkgs.makeDesktopItem {
+  #   name = "PSeint";
+  #   exec = "${pkgs._custom.pseint}/opt/pseint/pseint";
+  #   icon = "pseint";
+  #   desktopName = "PSeint";
+  #   categories = [ "Development" ];
+  # });
 in {
   options._custom.programs.others-linux.enable = lib.mkEnableOption { };
 
@@ -28,8 +28,8 @@ in {
       # teamviewer
       zoom-us
 
-      pseintDesktopItem
-      _custom.pseint
+      # pseintDesktopItem
+      # _custom.pseint
     ];
 
     # intune-portal

@@ -67,7 +67,7 @@ in {
           src = null;
         };
       };
-      programs.zsh.initExtra = builtins.readFile ./dotfiles/f.zsh;
+      programs.zsh.initContent = builtins.readFile ./dotfiles/f.zsh;
     };
   };
 }

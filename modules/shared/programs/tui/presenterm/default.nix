@@ -10,12 +10,12 @@ in {
     _custom.hm = {
       home.packages = with pkgs; [ nixpkgs-unstable.presenterm ];
 
-      xdg.configFile."presenterm/config.yaml".source = pkgs.substituteAll {
-        src = ./dotfiles/config.yaml;
-        inherit (themeColors) flavor;
-      };
+      xdg.configFile."presenterm/config.yaml".source =
+        pkgs.replaceVars ./dotfiles/config.yaml {
+          inherit (themeColors) flavor;
+        };
 
-      programs.zsh.initExtra = builtins.readFile ./dotfiles/p.zsh;
+      programs.zsh.initContent = builtins.readFile ./dotfiles/p.zsh;
     };
   };
 }

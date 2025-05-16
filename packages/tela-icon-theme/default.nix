@@ -1,6 +1,5 @@
-{ lib, stdenvNoCC, fetchFromGitHub, adwaita-icon-theme, libsForQt5, gtk3, hicolor-icon-theme
-, jdupes, gitUpdater, allColorVariants ? false
-, colorVariants ? [ ] # default is standard
+{ lib, stdenvNoCC, fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes
+, allColorVariants ? false, colorVariants ? [ ] # default is standard
 }:
 
 let pname = "tela-icon-theme";
@@ -25,50 +24,43 @@ in lib.checkListOfEnum "${pname}: color variants" [
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "6946b39b13fe5c1b8eb4111a8d4a2f7a5f57b060";
+  version = "397c57e4d3782aabe790766027e836976e208ee2";
 
   src = fetchFromGitHub {
     owner = "wochap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qsNN6tF+IHXxYDsoCU4qRCHnRPNCyrAZ+Nb9NHY47lQ=";
+    sha256 = "sha256-mL2xqhy9bahqScC9+m2XUFQs5iUhMYHSw3c+0DG12qo=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
 
-  propagatedBuildInputs =
-    [ adwaita-icon-theme libsForQt5.breeze-icons hicolor-icon-theme ];
+  propagatedBuildInputs = [ hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 
-  # These fixup steps are slow and unnecessary for this package.
-  # Package may install almost 400 000 small files.
+  # These fixup steps are slow and unnecessary.
   dontPatchELF = true;
   dontRewriteSymlinks = true;
-
-  postPatch = ''
-    patchShebangs install.sh
-  '';
 
   installPhase = ''
     runHook preInstall
 
+    patchShebangs install.sh
+    mkdir -p $out/share/icons
     ./install.sh -d $out/share/icons \
       ${if allColorVariants then "-a" else builtins.toString colorVariants}
-
-    jdupes --quiet --link-soft --recurse $out/share
+    jdupes -l -r $out/share/icons
 
     runHook postInstall
   '';
-
-  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Flat and colorful personality icon theme";
     homepage = "https://github.com/wochap/Tela-icon-theme";
     license = licenses.gpl3Only;
-    platforms =
-      platforms.linux; # darwin use case-insensitive filesystems that cause hash mismatches
+    # darwin systems use case-insensitive filesystems that cause hash mismatches
+    platforms = subtractLists platforms.darwin platforms.unix;
     maintainers = with maintainers; [ ];
   };
 }

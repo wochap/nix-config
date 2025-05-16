@@ -3,10 +3,8 @@
 let
   cfg = config._custom.gaming.emulators;
 
-  retroarchFinal = with pkgs;
-    (retroarch.override {
-      cores = with libretro; [ bsnes genesis-plus-gx beetle-ngp ];
-    });
+  retroarchFinal = pkgs.retroarch.withCores
+    (cores: with cores; [ bsnes genesis-plus-gx beetle-ngp ]);
 in {
   options._custom.gaming.emulators.enable = lib.mkEnableOption { };
 

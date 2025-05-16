@@ -29,8 +29,7 @@ in {
 
       xdg.configFile = {
         "tofi/multi-line".source = ./dotfiles/multi-line;
-        "tofi/one-line".source = pkgs.substituteAll {
-          src = ./dotfiles/one-line;
+        "tofi/one-line".source = pkgs.replaceVars ./dotfiles/one-line {
           inherit (themeColors) text textDimmed backgroundOverlay green;
         };
 

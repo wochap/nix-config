@@ -45,8 +45,7 @@ in {
       };
 
       # manually add kitty shell integration
-      programs.bash.initExtra = shellIntegrationInit.bash;
-      programs.zsh.initExtra = shellIntegrationInit.zsh;
+      programs.zsh.initContent = shellIntegrationInit.zsh;
 
       xdg.configFile = {
         "kitty/diff.conf".text = ''
