@@ -35,11 +35,26 @@ function init() {
 }
 
 function dispatch() {
-  is_special="$1"
+  is_special=$([[ "$1" == "special" ]] && echo true || echo false)
+  is_scratchpad=$([[ "$1" == "scratchpad" ]] && echo true || echo false)
+  is_workspace=$([[ "$1" == "workspace" ]] && echo true || echo false)
 
-  if [[ -n "$is_special" ]]; then
-    echo "TODO"
-  else
+  if [[ "$is_special" == "true" ]]; then
+    echo "TODO?"
+  elif [[ "$is_scratchpad" == "true" ]]; then
+    monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
+    file="/tmp/hyprland-$monitor-last-scratchpad"
+
+    if [[ -f "$file" ]] && [[ $(wc -l <"$file") -eq 2 ]]; then
+      first_line=$(sed -n '1p' "$file")
+      # second_line=$(sed -n '2p' "$file")
+      class="${first_line%% *}"
+      runstr="${first_line#* }"
+      uwsm-app -- hyprland-focus-toggle "$class" "$runstr"
+    else
+      hyprctl dispatch focuscurrentorlast
+    fi
+  elif [[ "$is_workspace" == "true" ]]; then
     monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
     file="/tmp/hyprland-$monitor-last-wk"
 

@@ -62,6 +62,16 @@ if ! grep -qF "$class" "$state_path"; then
   echo "$class" >>"$state_path"
 fi
 
+# save 2 last opened scratchpad
+monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
+file="/tmp/hyprland-$monitor-last-scratchpad"
+if [[ -n "$class" ]]; then
+  {
+    echo "$class $runstr"
+    cat "$file" 2>/dev/null
+  } | head -n 2 >"$file.tmp" && mv "$file.tmp" "$file"
+fi
+
 # hide all others scratchpads
 if [ -f "$state_path" ]; then
   while IFS= read -r line; do

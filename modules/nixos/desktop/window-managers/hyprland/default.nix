@@ -16,8 +16,8 @@ let
     (builtins.readFile ./scripts/hyprland-monocle.sh);
   hyprland-scratch-toggle = pkgs.writeScriptBin "hyprland-scratch-toggle"
     (builtins.readFile ./scripts/hyprland-scratch-toggle.sh);
-  hyprland-wk-prev = pkgs.writeScriptBin "hyprland-wk-prev"
-    (builtins.readFile ./scripts/hyprland-wk-prev.sh);
+  hyprland-focus-prev = pkgs.writeScriptBin "hyprland-focus-prev"
+    (builtins.readFile ./scripts/hyprland-focus-prev.sh);
   greetd-default-cmd =
     "uwsm start -S -F -N hyprland -D hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null";
 in {
@@ -64,7 +64,7 @@ in {
         hyprland-focus-toggle
         hyprland-monocle
         hyprland-scratch-toggle
-        hyprland-wk-prev
+        hyprland-focus-prev
         inputs.pyprland.packages.${pkgs.system}.default
       ];
 
