@@ -12,8 +12,12 @@ let
     inputs.hyprland.packages."${system}".xdg-desktop-portal-hyprland;
   hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
     (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
+  hyprland-monocle = pkgs.writeScriptBin "hyprland-monocle"
+    (builtins.readFile ./scripts/hyprland-monocle.sh);
   hyprland-scratch-toggle = pkgs.writeScriptBin "hyprland-scratch-toggle"
     (builtins.readFile ./scripts/hyprland-scratch-toggle.sh);
+  hyprland-wk-prev = pkgs.writeScriptBin "hyprland-wk-prev"
+    (builtins.readFile ./scripts/hyprland-wk-prev.sh);
   greetd-default-cmd =
     "uwsm start -S -F -N hyprland -D hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null";
 in {
@@ -58,7 +62,9 @@ in {
     _custom.hm = {
       home.packages = [
         hyprland-focus-toggle
+        hyprland-monocle
         hyprland-scratch-toggle
+        hyprland-wk-prev
         inputs.pyprland.packages.${pkgs.system}.default
       ];
 
