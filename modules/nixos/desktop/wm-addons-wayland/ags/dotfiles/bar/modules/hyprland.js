@@ -113,12 +113,13 @@ export const hyprlandTaskbar = () =>
           .map((c) => ({
             appId: mapAppId(c.class),
             focused: c.address === activeAddress,
+            floating: c.floating,
           }));
-        self.children = visibleAppIds.map(({ appId, focused }) => {
+        self.children = visibleAppIds.map(({ appId, focused, floating }) => {
           const _appId = appId.trim() || "unknown";
           return Widget.Box({
             tooltip_text: _appId,
-            class_name: focused ? "focused" : "",
+            class_name: `${focused ? "focused" : ""} ${floating ? "floating" : ""}`,
             child: Widget.Icon({
               icon: _appId,
               size: 32,
