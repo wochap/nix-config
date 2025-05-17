@@ -130,3 +130,10 @@ export const hyprlandTaskbar = () =>
       });
     },
   });
+
+export const hyprlandBarClass = (monitorPlugName) => {
+  return Hyprland.active.monitor.bind("name").as((name) => {
+    const focused = name === monitorPlugName;
+    return `bar-container ${focused ? "focused" : ""}`;
+  });
+};

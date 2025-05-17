@@ -21,6 +21,7 @@ import {
   hyprlandScratchpads,
   hyprlandMode,
   hyprlandTaskbar,
+  hyprlandBarClass,
 } from "./modules/hyprland.js";
 import { matcha } from "./modules/matcha.js";
 import { network } from "./modules/network.js";
@@ -66,7 +67,7 @@ export const bar = (gdkMonitorId, monitorPlugName) => {
       // hyprlandTitle(),
     ];
     centerModules = [hyprlandTaskbar()];
-    className = "bar-container focused";
+    className = hyprlandBarClass(monitorPlugName);
   }
 
   return Widget.Window({
