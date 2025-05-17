@@ -92,10 +92,8 @@ in {
         "hypr/pyprland.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
 
-        "hypr/libinput-gestures.conf".text = ''
-          gesture swipe left 3 hyprctl dispatch workspace e+1
-          gesture swipe right 3 hyprctl dispatch workspace e-1
-        '';
+        "hypr/libinput-gestures.conf".source =
+          ./dotfiles/libinput-gestures.conf;
 
         "uwsm/env-hyprland".text = common-env-hyprland;
         "uwsm/env-hyprland-dgpu".text = ''
