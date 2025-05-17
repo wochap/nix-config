@@ -72,6 +72,11 @@ in {
           # export QT_FONT_DPI=96
         '';
       in {
+        "scripts/hyprland" = {
+          recursive = true;
+          source = ./scripts/automation;
+        };
+
         "hypr/xdph.conf".text = ''
           screencopy {
             max_fps = 60
