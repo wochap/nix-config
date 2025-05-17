@@ -105,10 +105,9 @@ in {
 
       xdg = {
         configFile = {
-          "scripts" = {
+          "scripts/dwl" = {
             recursive = true;
-            # TODO: skip dwl-state.sh
-            source = ./scripts;
+            source = ./scripts/automation;
           };
 
           "remmina/glegion.remmina".source =
