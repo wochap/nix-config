@@ -123,10 +123,11 @@ in {
         enable = true;
         package = hyprland-final;
         systemd.enable = false;
-        plugins = with hyprplugins; [
-          hyprexpo
-          # inputs.hyprgrass.packages.${pkgs.system}.default
-        ];
+        plugins = with hyprplugins;
+          [
+            hyprexpo
+            # inputs.hyprgrass.packages.${pkgs.system}.default
+          ];
         extraConfig = ''
           source=~/.config/hypr/colors.conf
           source=~/.config/hypr/config.conf
