@@ -8,8 +8,6 @@ let
   scenefx-final = inputs.scenefx.packages."${system}".scenefx;
   dwl-state =
     pkgs.writeScriptBin "dwl-state" (builtins.readFile ./scripts/dwl-state.sh);
-  dwl-write-logs = pkgs.writeScriptBin "dwl-write-logs"
-    (builtins.readFile ./scripts/dwl-write-logs.sh);
   dwl-final = (pkgs.dwl.override {
     wlroots = pkgs.wlroots_0_18;
     configH = builtins.readFile (pkgs.replaceVars ./dotfiles/config.def.h {
@@ -69,7 +67,6 @@ in {
     environment.systemPackages = with pkgs; [
       dwl-final
       dwl-state # script that prints dwl state
-      dwl-write-logs # script that copies logs from journal to file
       dwl-start
     ];
 

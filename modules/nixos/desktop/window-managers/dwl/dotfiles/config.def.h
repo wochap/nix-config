@@ -88,8 +88,6 @@ static const char *const autostart[] = {
 
   "configure-gtk", NULL,
 
-  // "dwl-write-logs", NULL,
-
   NULL /* terminate */
 };
 
