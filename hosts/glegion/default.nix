@@ -152,7 +152,7 @@ in {
     _custom.desktop.wluma.config.output.backlight = [{
       name = "Samsung Display Corp. 0x4188 Unknown";
       path = "/sys/class/backlight/amdgpu_bl1";
-      capturer = "wlroots";
+      capturer = "wayland";
     }];
     _custom.desktop.dwl.enable = true;
     _custom.desktop.dwl.isDefault = true;
