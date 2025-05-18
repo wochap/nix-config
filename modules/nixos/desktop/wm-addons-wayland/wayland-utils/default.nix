@@ -71,7 +71,7 @@ in {
         hyprpicker # color picker
         showmethekey
         slurp # screenshoot utility
-        nixpkgs-unstable.satty # image editor
+        satty # image editor
         swaybg
         wayfreeze # freeze display, only works on hyprland
         wdisplays # control display outputs

@@ -11,11 +11,6 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
-        nixpkgs-24-11-small = import inputs.nixpkgs-24-11-small {
-          inherit (prev) system;
-          inherit (config.nixpkgs) config;
-          overlays = overlaysWithoutCustomChannels;
-        };
         nixpkgs-24-11 = import inputs.nixpkgs-24-11 {
           inherit (prev) system;
           inherit (config.nixpkgs) config;

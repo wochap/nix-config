@@ -19,7 +19,7 @@ in {
     # source: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/7722
     # source: https://bbs.archlinux.org/viewtopic.php?id=299624
     _custom.globals.cursor.package =
-      pkgs.nixpkgs-unstable.catppuccin-cursors.mochaDark.overrideAttrs
+      pkgs.catppuccin-cursors.mochaDark.overrideAttrs
       (oldAttrs: rec {
         patches = [
           (pkgs.fetchpatch {
