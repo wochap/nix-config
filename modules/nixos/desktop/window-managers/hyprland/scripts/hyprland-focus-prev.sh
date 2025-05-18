@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function init() {
-  function handle {
+  function handle() {
     input="$1"
     event="${input%%>>*}"
 
