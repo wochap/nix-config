@@ -100,6 +100,44 @@ function move_to_workspace() {
   fi
 }
 
+function toggle_floating() {
+  is_focused_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
+  is_floating=$(hyprctl activewindow -j | jq -r '.floating')
+
+  current_ws=$(hyprctl activeworkspace -j | jq -cr '.id')
+  monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
+  file="/tmp/hyprland-$monitor-monocle-ws"
+  is_ws_monocle="false"
+  if [[ -f "$file" ]]; then
+    if grep -qxF "$current_ws" "$file"; then
+      is_ws_monocle="true"
+    fi
+  fi
+
+  if [ "$is_floating" = "true" ]; then
+    # is floating, tile it
+    if [ "$is_focused_window_grouped" = "true" ]; then
+      hyprctl --batch "dispatch moveoutofgroup active; dispatch settiled active;"
+    else
+      hyprctl --batch "dispatch settiled active;"
+    fi
+
+    if [ "$is_ws_monocle" = "true" ]; then
+      batch_args="setignoregrouplock on;"
+      batch_args="$batch_args dispatch moveintogroup l; dispatch moveintogroup r; dispatch moveintogroup u; dispatch moveintogroup d;"
+      batch_args="$batch_args setignoregrouplock off;"
+      hyprctl --batch "$batch_args"
+    fi
+  else
+    # is tiled, float it
+    if [ "$is_focused_window_grouped" = "true" ]; then
+      hyprctl --batch "dispatch moveoutofgroup active; dispatch setfloating active; dispatch centerwindow;"
+    else
+      hyprctl --batch "dispatch setfloating active; dispatch centerwindow;"
+    fi
+  fi
+}
+
 function cycle() {
   dir="$1"
   is_focused_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
@@ -145,7 +183,6 @@ function cycle() {
   fi
 
   hyprctl dispatch alterzorder top
-
 }
 
 case "$1" in
@@ -162,6 +199,9 @@ case "$1" in
   fi
   move_to_workspace "$2"
   ;;
+--togglefloating)
+  toggle_floating
+  ;;
 --cycle)
   if [ -z "$2" ]; then
     echo "Error: --cycle requires a dir argument."
@@ -170,7 +210,7 @@ case "$1" in
   cycle "$2"
   ;;
 *)
-  echo "Usage: $0 [--start | --finish | --movetows <workspace_id> | --cycle <dir>]"
+  echo "Usage: $0 [--start | --finish | togglefloating | --movetows <workspace_id> | --cycle <dir>]"
   exit 1
   ;;
 esac
