@@ -125,7 +125,7 @@
       IGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:06:00.0-card)";
       DGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)";
       WLR_DRM_DEVICES = "$IGPU_CARD";
-      # AQ_DRM_DEVICES = "$IGPU_CARD";
+      # AQ_DRM_DEVICES = "$IGPU_CARD:$DGPU_CARD";
 
       # Tells every app to use my iGPU unless I specially instruct it not to
       # I would have to use the `nvidia-offload` command

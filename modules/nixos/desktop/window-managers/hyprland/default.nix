@@ -110,7 +110,11 @@ in {
         "hypr/libinput-gestures.conf".source =
           ./dotfiles/libinput-gestures.conf;
 
-        "uwsm/env-hyprland".text = common-env-hyprland;
+        "uwsm/env-hyprland".text = ''
+          ${common-env-hyprland}
+          export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
+        '';
+
         "uwsm/env-hyprland-dgpu".text = ''
           ${common-env-hyprland}
 
