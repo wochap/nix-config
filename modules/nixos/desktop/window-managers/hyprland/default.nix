@@ -83,6 +83,10 @@ in {
           source = ./scripts/automation;
         };
 
+        "remmina/hypr-glegion.remmina".source =
+          lib._custom.relativeSymlink configDirectory
+          ./dotfiles/hypr-glegion.remmina;
+
         "hypr/xdph.conf".text = ''
           screencopy {
             max_fps = 60
