@@ -78,6 +78,7 @@ in {
             expandFocusedSidePanel = true;
           };
           git = {
+            autoFetch = false;
             overrideGpg = true;
             paging = {
               colorArg = "always";
