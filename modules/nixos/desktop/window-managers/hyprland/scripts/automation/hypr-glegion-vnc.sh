@@ -1,24 +1,23 @@
 #!/usr/bin/env bash
 
-output_name=$(wlr-randr --json | jq -r '.[] | select(.name | startswith("HEADLESS")) | .name | limit(1; .)')
+output_name="HEADLESS-2"
+has_output=$(wlr-randr --json | jq -e ".[] | select(.name == \"$output_name\")" >/dev/null && echo true || echo false)
 
 cleanup() {
   echo "Cleaning up..."
 
   # remove hyprland headless output
-  hyprctl output remove HEADLESS-1
+  hyprctl output remove "$output_name"
   sleep 0.1
 
   # kill all subprocesses
   pkill -P $$
 }
 
-if [[ -z "$output_name" ]]; then
+if [[ "$has_output" == "false" ]]; then
   # create hyprland headless output
-  hyprctl output create headless HEADLESS-1
+  hyprctl output create headless "$output_name"
   sleep 0.1
-
-  output_name=$(wlr-randr --json | jq -r '.[] | select(.name | startswith("HEADLESS")) | .name | limit(1; .)')
 fi
 
 # update aspect ratio of HEADLESS output
