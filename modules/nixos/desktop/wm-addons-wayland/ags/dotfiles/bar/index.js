@@ -38,7 +38,7 @@ import { spacing } from "./constants.js";
 export const bar = (gdkMonitorId, monitorPlugName) => {
   const XDG_SESSION_DESKTOP = Utils.exec(`sh -c 'echo "$XDG_SESSION_DESKTOP"'`);
   const isDwl = XDG_SESSION_DESKTOP === "dwl";
-  const isHyprland = XDG_SESSION_DESKTOP === "hyprland";
+  const isHyprland = XDG_SESSION_DESKTOP === "Hyprland";
 
   let leftModules = [];
   let centerModules = [];

@@ -27,7 +27,7 @@ in {
 
       # only start hyprsunset on wayland wm
       systemd.user.services.hyprsunset.Unit.ConditionEnvironment =
-        lib.mkForce "XDG_SESSION_DESKTOP=hyprland";
+        lib.mkForce "XDG_SESSION_DESKTOP=Hyprland";
     };
   };
 }

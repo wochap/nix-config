@@ -19,7 +19,7 @@ let
   hyprland-focus-prev = pkgs.writeScriptBin "hyprland-focus-prev"
     (builtins.readFile ./scripts/hyprland-focus-prev.sh);
   greetd-default-cmd =
-    "uwsm start -S -F -N hyprland -D hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null";
+    "uwsm start -S -F -N hyprland -D Hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null";
 in {
   options._custom.desktop.hyprland = {
     enable = lib.mkEnableOption { };
@@ -27,7 +27,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # TODO: use hyprland.dekstop as default
     _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault greetd-default-cmd;
     environment.etc = {
       "greetd/environments".text = lib.mkAfter ''
@@ -44,7 +43,7 @@ in {
         [Desktop Entry]
         Name=hyprland-dgpu (UWSM)
         Comment=Hyprland compositor
-        Exec=uwsm start -S -F -N hyprland-dgpu -D hyprland -- /run/current-system/sw/bin/Hyprland
+        Exec=uwsm start -S -F -N hyprland-dgpu -D Hyprland -- /run/current-system/sw/bin/Hyprland
         Type=Application
       '';
     };
@@ -57,7 +56,7 @@ in {
       systemd.setPath.enable = false;
     };
 
-    xdg.portal.config.hyprland.default = [ "hyprland" "gtk" ];
+    xdg.portal.config.Hyprland.default = [ "hyprland" "gtk" ];
 
     _custom.hm = {
       home.packages = [
@@ -129,7 +128,8 @@ in {
 
       wayland.windowManager.hyprland = {
         enable = true;
-        package = hyprland-final;
+        package = null;
+        portalPackage = null;
         systemd.enable = false;
         plugins = with hyprplugins;
           [
