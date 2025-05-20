@@ -60,7 +60,7 @@
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs-24-11";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
-    zen-browser.url = "github:0xc000022070/zen-browser-flake?rev=d19fab1586636ff01fa6f10c58dffd0efedf1411"; # main (20 mar 2025)
+    zen-browser.url = "github:0xc000022070/zen-browser-flake?rev=ebeabdb79392f3dfac8c6019754e76997e4d5dfa"; # 1.13t#1747739974
     ucodenix.url = "github:e-tho/ucodenix?rev=355238cbd87e5bf9cbc23ae65b90740eb10e8d56"; # main (17 may 2025)
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
