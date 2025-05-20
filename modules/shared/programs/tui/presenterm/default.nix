@@ -15,7 +15,8 @@ in {
           inherit (themeColors) flavor;
         };
 
-      programs.zsh.initContent = builtins.readFile ./dotfiles/p.zsh;
+      programs.zsh.initContent =
+        lib.mkOrder 1000 (builtins.readFile ./dotfiles/p.zsh);
     };
   };
 }

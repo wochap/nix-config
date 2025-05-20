@@ -36,7 +36,8 @@ in {
         lg = ''run-without-kpadding lazygit "$@"'';
       };
 
-      programs.zsh.initContent = builtins.readFile ./dotfiles/git.zsh;
+      programs.zsh.initContent =
+        lib.mkOrder 1000 (builtins.readFile ./dotfiles/git.zsh);
 
       programs.gh = {
         enable = true;

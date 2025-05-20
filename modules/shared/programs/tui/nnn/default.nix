@@ -67,7 +67,8 @@ in {
           src = null;
         };
       };
-      programs.zsh.initContent = builtins.readFile ./dotfiles/f.zsh;
+      programs.zsh.initContent =
+        lib.mkOrder 1000 (builtins.readFile ./dotfiles/f.zsh);
     };
   };
 }
