@@ -18,7 +18,7 @@ in {
 
     environment.sessionVariables = {
       ACCESSIBILITY_ENABLED = "1";
-      GTK_MODULES = "gail:atk-bridge";
+      # GTK_MODULES = "gail:atk-bridge";
       OOO_FORCE_DESKTOP = "gnome";
       GNOME_ACCESSIBILITY = "1";
       QT_ACCESSIBILITY = "1";
