@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-get_is_monocle_ws() {
+function get_is_monocle_ws() {
   local monitor="$1"
   local ws="$2"
   local file="/tmp/hyprland-$monitor-monocle-ws"
