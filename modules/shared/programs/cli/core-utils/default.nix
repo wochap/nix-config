@@ -34,6 +34,7 @@ in {
       gum # shell scripting ui
       just # like make but better
       poppler_utils # pdftotext
+      qpdf # manipulate pdfs
       streamlink # download hsl stream
     ];
 
