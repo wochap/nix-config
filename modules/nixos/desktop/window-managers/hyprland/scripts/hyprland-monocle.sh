@@ -36,7 +36,7 @@ function init_monocle() {
     fi
   }
 
-  socat - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while read -r line; do handle "$line"; done
+  socat -U - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while read -r line; do handle "$line"; done
 }
 
 function start_monocle() {
@@ -223,14 +223,14 @@ case "$1" in
 --finish)
   finish_monocle
   ;;
---movetows)
+--move-to-workspace)
   if [ -z "$2" ]; then
     echo "Error: --movetows requires a workspace ID argument."
     exit 1
   fi
   move_to_workspace "$2"
   ;;
---togglefloating)
+--toggle-floating)
   toggle_floating
   ;;
 --cycle)

@@ -10,14 +10,12 @@ let
   hyprland-final = inputs.hyprland.packages."${system}".hyprland;
   hyprland-xdp-final =
     inputs.hyprland.packages."${system}".xdg-desktop-portal-hyprland;
-  hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
-    (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
+  hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad"
+    (builtins.readFile ./scripts/hyprland-scratchpad.sh);
   hyprland-monocle = pkgs.writeScriptBin "hyprland-monocle"
     (builtins.readFile ./scripts/hyprland-monocle.sh);
-  hyprland-scratch-toggle = pkgs.writeScriptBin "hyprland-scratch-toggle"
-    (builtins.readFile ./scripts/hyprland-scratch-toggle.sh);
-  hyprland-focus-prev = pkgs.writeScriptBin "hyprland-focus-prev"
-    (builtins.readFile ./scripts/hyprland-focus-prev.sh);
+  hyprland-socket = pkgs.writeScriptBin "hyprland-socket"
+    (builtins.readFile ./scripts/hyprland-socket.sh);
   greetd-default-cmd =
     "uwsm start -S -F -N hyprland -D Hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null";
 in {
@@ -60,10 +58,9 @@ in {
 
     _custom.hm = {
       home.packages = [
-        hyprland-focus-toggle
+        hyprland-scratchpad
         hyprland-monocle
-        hyprland-scratch-toggle
-        hyprland-focus-prev
+        hyprland-socket
         inputs.pyprland.packages.${pkgs.system}.default
       ];
 
