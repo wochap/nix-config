@@ -15,11 +15,11 @@ in {
         package = hyprsunset-final;
         transitions = {
           sunrise = {
-            calendar = "*-*-* 06:00:00";
+            calendar = "*-*-* 10:00:00";
             requests = [[ "temperature" "4000" ]];
           };
           sunset = {
-            calendar = "*-*-* 18:00:00";
+            calendar = "*-*-* 16:00:00";
             requests = [[ "temperature" "3700" ]];
           };
         };

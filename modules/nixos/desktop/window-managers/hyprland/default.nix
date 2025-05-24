@@ -17,7 +17,10 @@ let
   hyprland-socket = pkgs.writeScriptBin "hyprland-socket"
     (builtins.readFile ./scripts/hyprland-socket.sh);
 in {
-  options._custom.desktop.hyprland.enable = lib.mkEnableOption { };
+  options._custom.desktop.hyprland = {
+    enable = lib.mkEnableOption { };
+    isDefault = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment.etc."greetd/environments".text = lib.mkAfter ''
@@ -38,6 +41,9 @@ in {
         xdgCurrentDesktop = "Hyprland";
       };
     };
+
+    _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
+    _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
     programs.hyprland = {
       enable = true;
@@ -118,7 +124,7 @@ in {
 
       wayland.windowManager.hyprland = {
         enable = true;
-        package = null;
+        package = hyprland-final;
         portalPackage = null;
         systemd.enable = false;
         plugins = with hyprplugins;
