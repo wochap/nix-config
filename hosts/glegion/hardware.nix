@@ -76,8 +76,6 @@
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_13;
 
     boot.kernelParams = [
-      "microcode.amd_sha_check=off"
-
       # this doesn't fix my ACPI Bios errors :c
       # source: https://discordapp.com/channels/761178912230473768/1159412133117833286
       "acpi_osi=Linux"
