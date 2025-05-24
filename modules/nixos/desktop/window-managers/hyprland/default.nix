@@ -16,34 +16,27 @@ let
     (builtins.readFile ./scripts/hyprland-monocle.sh);
   hyprland-socket = pkgs.writeScriptBin "hyprland-socket"
     (builtins.readFile ./scripts/hyprland-socket.sh);
-  greetd-default-cmd =
-    "uwsm start -S -F -N hyprland -D Hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null";
 in {
-  options._custom.desktop.hyprland = {
-    enable = lib.mkEnableOption { };
-    isDefault = lib.mkEnableOption { };
-  };
+  options._custom.desktop.hyprland.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault greetd-default-cmd;
-    environment.etc = {
-      "greetd/environments".text = lib.mkAfter ''
-        Hyprland
-      '';
-      "greetd/sessions/hyprland-uwsm.dekstop".text = ''
-        [Desktop Entry]
-        Name=hyprland (UWSM)
-        Comment=Hyprland compositor
-        Exec=${greetd-default-cmd}
-        Type=Application
-      '';
-      "greetd/sessions/hyprland-dgpu-uwsm.dekstop".text = ''
-        [Desktop Entry]
-        Name=hyprland-dgpu (UWSM)
-        Comment=Hyprland compositor
-        Exec=uwsm start -S -F -N hyprland-dgpu -D Hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null
-        Type=Application
-      '';
+    environment.etc."greetd/environments".text = lib.mkAfter ''
+      Hyprland
+    '';
+
+    _custom.desktop.uwsm.waylandCompositors = {
+      hyprland = {
+        prettyName = "hyprland";
+        comment = "Hyprland compositor managed by UWSM";
+        binPath = "/run/current-system/sw/bin/Hyprland";
+        xdgCurrentDesktop = "Hyprland";
+      };
+      hyprland-dgpu = {
+        prettyName = "hyprland-dgpu";
+        comment = "Hyprland compositor managed by UWSM";
+        binPath = "/run/current-system/sw/bin/Hyprland";
+        xdgCurrentDesktop = "Hyprland";
+      };
     };
 
     programs.hyprland = {
@@ -108,6 +101,7 @@ in {
 
         "uwsm/env-hyprland".text = ''
           ${common-env-hyprland}
+
           export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
         '';
 
@@ -117,7 +111,6 @@ in {
           # env variables for starting hyprland with discrete gpu
           # NOTE: This is specific to glegion host with nvidia
           # to enable using the HDMI port connected directly to the dGPU
-          export WLR_RENDERER=
           export __EGL_VENDOR_LIBRARY_FILENAMES=
           export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
         '';

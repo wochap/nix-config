@@ -1,8 +1,48 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.desktop.uwsm;
+let
+  cfg = config._custom.desktop.uwsm;
+
+  # Helper function to create desktop entry files for UWSM-managed compositors
+  mk_uwsm_desktop_entry = opts:
+    (pkgs.writeTextFile {
+      name = "${opts.name}-uwsm";
+      text = ''
+        [Desktop Entry]
+        Name=${opts.prettyName} (UWSM)
+        Comment=${opts.comment}
+        Exec=${
+          lib.getExe cfg.package
+        } start -S -F -N ${opts.prettyName} -D ${opts.xdgCurrentDesktop} -- ${opts.binPath} > /dev/null
+        Type=Application
+      '';
+      destination = "/share/wayland-sessions/${opts.name}-uwsm.desktop";
+      derivationArgs = { passthru.providedSessions = [ "${opts.name}-uwsm" ]; };
+    });
 in {
-  options._custom.desktop.uwsm.enable = lib.mkEnableOption { };
+  options._custom.desktop.uwsm = {
+    enable = lib.mkEnableOption { };
+    package = lib.mkPackageOption pkgs "uwsm" { };
+    # slightly similar to https://search.nixos.org/options?channel=25.05&show=programs.uwsm.waylandCompositors&from=0&size=50&sort=relevance&type=packages&query=uwsm
+    waylandCompositors = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule ({ ... }: {
+        options = {
+          prettyName = lib.mkOption { type = lib.types.str; };
+          comment = lib.mkOption { type = lib.types.str; };
+          binPath = lib.mkOption { type = lib.types.path; };
+          xdgCurrentDesktop = lib.mkOption { type = lib.types.str; };
+        };
+      }));
+      example = lib.literalExpression ''
+        hyprland = {
+          prettyName = "Hyprland";
+          comment = "Hyprland compositor managed by UWSM";
+          binPath = "/run/current-system/sw/bin/Hyprland";
+          xdgCurrentDesktop = "Hyprland";
+        };
+      '';
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     # make wayland compositors great again
@@ -18,6 +58,12 @@ in {
     xdg.terminal-exec.package = pkgs.writeShellScriptBin "xdg-terminal-exec" ''
       uwsm-app -T -- "''${@-$SHELL}"
     '';
+
+    services.displayManager.sessionPackages = lib.mapAttrsToList (name: value:
+      mk_uwsm_desktop_entry {
+        inherit name;
+        inherit (value) prettyName comment binPath xdgCurrentDesktop;
+      }) cfg.waylandCompositors;
 
     _custom.hm = {
       home.sessionVariables.UWSM_USE_SESSION_SLICE = "true";
