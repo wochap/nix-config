@@ -7,6 +7,9 @@ eval set -- "$TEMP"
 current_ws="$(hyprctl activeworkspace -j | jq -r '.id')"
 current_monitor="$(hyprctl activeworkspace -j | jq -r '.monitorID')"
 
+# NOTE: add windowrule so those scratchpads
+# have the tag scratchpad
+# e.g.: windowrule = tag +scratchpad, class:kitty-scratch
 function raise_or_run() {
   class="$1"
   runstr="$2"
