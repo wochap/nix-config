@@ -170,8 +170,12 @@ function toggle_in_scratchpad() {
     batch_args="$batch_args dispatch movetoworkspacesilent $current_ws;"
     hyprctl --batch "$batch_args" -q
   else
+    is_focused_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
     # move in to scratchpad
     batch_args="dispatch tagwindow +tmpscratchpad;"
+    if [ "$is_focused_window_grouped" = "true" ]; then
+      batch_args="$batch_args dispatch moveoutofgroup active;"
+    fi
     batch_args="$batch_args dispatch movetoworkspacesilent special:tmpscratchpads"
     hyprctl --batch "$batch_args" -q
   fi
