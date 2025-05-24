@@ -41,7 +41,7 @@ in {
         [Desktop Entry]
         Name=hyprland-dgpu (UWSM)
         Comment=Hyprland compositor
-        Exec=uwsm start -S -F -N hyprland-dgpu -D Hyprland -- /run/current-system/sw/bin/Hyprland
+        Exec=uwsm start -S -F -N hyprland-dgpu -D Hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null
         Type=Application
       '';
     };
