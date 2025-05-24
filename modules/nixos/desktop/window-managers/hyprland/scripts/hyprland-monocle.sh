@@ -112,20 +112,21 @@ function finish_monocle() {
 }
 
 function move_to_workspace() {
-  current_ws=$(hyprctl activeworkspace -j | jq -cr '.id')
   ws="$1"
-  is_focused_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
-  window_address=$(hyprctl activewindow -j | jq -r '.address')
   monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
+  current_ws=$(hyprctl activeworkspace -j | jq -cr '.id')
+  is_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
+  is_window_floating=$(hyprctl activewindow -j | jq -r '.floating')
+  window_address=$(hyprctl activewindow -j | jq -r '.address')
   is_ws_monocle=$(get_is_monocle_ws "$monitor" "$ws")
 
-  if [ "$is_focused_window_grouped" = "true" ]; then
+  if [ "$is_window_grouped" = "true" ]; then
     hyprctl --batch "dispatch moveoutofgroup active; dispatch movetoworkspacesilent $ws"
   else
     hyprctl dispatch movetoworkspacesilent "$ws"
   fi
 
-  if [ "$is_ws_monocle" = "true" ]; then
+  if [ "$is_ws_monocle" = "true" ] && [ "$is_window_floating" != "true" ]; then
     batch_args="dispatch setignoregrouplock on;"
     batch_args="$batch_args dispatch focuswindow address:$window_address; dispatch togglegroup;"
     batch_args="$batch_args dispatch moveintogroup l; dispatch moveintogroup r; dispatch moveintogroup u; dispatch moveintogroup d;"
@@ -136,15 +137,15 @@ function move_to_workspace() {
 }
 
 function toggle_floating() {
-  is_focused_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
-  is_floating=$(hyprctl activewindow -j | jq -r '.floating')
+  is_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
+  is_window_floating=$(hyprctl activewindow -j | jq -r '.floating')
   current_ws=$(hyprctl activeworkspace -j | jq -cr '.id')
   monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
   is_ws_monocle=$(get_is_monocle_ws "$monitor" "$current_ws")
 
-  if [ "$is_floating" = "true" ]; then
+  if [ "$is_window_floating" = "true" ]; then
     # is floating, tile it
-    if [ "$is_focused_window_grouped" = "true" ]; then
+    if [ "$is_window_grouped" = "true" ]; then
       hyprctl --batch "dispatch moveoutofgroup active; dispatch settiled active;"
     else
       hyprctl --batch "dispatch settiled active;"
@@ -152,13 +153,14 @@ function toggle_floating() {
 
     if [ "$is_ws_monocle" = "true" ]; then
       batch_args="dispatch setignoregrouplock on;"
+      batch_args="$batch_args dispatch togglegroup;"
       batch_args="$batch_args dispatch moveintogroup l; dispatch moveintogroup r; dispatch moveintogroup u; dispatch moveintogroup d;"
       batch_args="$batch_args dispatch setignoregrouplock off;"
       hyprctl --batch "$batch_args"
     fi
   else
     # is tiled, float it
-    if [ "$is_focused_window_grouped" = "true" ]; then
+    if [ "$is_window_grouped" = "true" ]; then
       hyprctl --batch "dispatch moveoutofgroup active; dispatch setfloating active; dispatch centerwindow;"
     else
       hyprctl --batch "dispatch setfloating active; dispatch centerwindow;"
@@ -168,9 +170,9 @@ function toggle_floating() {
 
 function cycle() {
   dir="$1"
-  is_focused_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
+  is_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
 
-  if [ "$is_focused_window_grouped" = "true" ]; then
+  if [ "$is_window_grouped" = "true" ]; then
     if [ "$dir" = "next" ]; then
       is_last=$(hyprctl activewindow -j | jq '. as $window | $window.grouped | length > 0 and .[-1] == $window.address')
       if [ "$is_last" = "true" ]; then

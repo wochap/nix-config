@@ -18,6 +18,28 @@ export const hyprlandTitle = () =>
     truncate: "middle",
   });
 
+export const hyprlandLayout = (monitorPlugName) =>
+  Widget.Label({
+    className: "wmlayout",
+    tooltip_text: "layout",
+    setup(self) {
+      self.hook(Hyprland, async () => {
+        const is_ws_monocle = await Utils.execAsync([
+          "bash",
+          "-c",
+          `[ -f "/tmp/hyprland-${monitorPlugName}-monocle-ws" ] && grep -qxF "${Hyprland.active.workspace.id}" "/tmp/hyprland-${monitorPlugName}-monocle-ws" && echo true || echo false`,
+        ]);
+        if (is_ws_monocle === "true") {
+          self.visible = true;
+          self.label = "[M]";
+        } else {
+          self.label = "";
+          self.visible = false;
+        }
+      });
+    },
+  });
+
 export const hyprlandWorkspaces = () =>
   Widget.Box({
     class_name: "wmtags",

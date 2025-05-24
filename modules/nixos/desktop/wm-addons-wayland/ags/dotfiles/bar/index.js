@@ -16,6 +16,7 @@ import {
 } from "./modules/dwl.js";
 import {
   hyprlandTitle,
+  hyprlandLayout,
   hyprlandWorkspaces,
   hyprlandNamedScratchpads,
   hyprlandScratchpads,
@@ -60,6 +61,7 @@ export const bar = (gdkMonitorId, monitorPlugName) => {
   } else if (isHyprland) {
     leftModules = [
       hyprlandWorkspaces(),
+      hyprlandLayout(monitorPlugName),
       hyprlandNamedScratchpads(),
       hyprlandScratchpads(),
       hyprlandMode(),
