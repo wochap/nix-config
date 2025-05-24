@@ -72,9 +72,8 @@
     #   options mt7921e disable_aspm=1
     # '';
 
-    # kernel 6.6.67: pkgs.linuxPackages
-    # kernel 6.12.1
-    # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+    # NOTE: kernel 6.12.x gives me a lot of DRM issues
+    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_13;
 
     boot.kernelParams = [
       "microcode.amd_sha_check=off"
