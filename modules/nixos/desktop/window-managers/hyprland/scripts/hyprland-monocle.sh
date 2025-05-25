@@ -74,7 +74,7 @@ function start_monocle() {
     batch_args="$batch_args $window_args $window_args"
 
     # Also focus the original window at the very end
-    batch_args="$batch_args dispatch focuswindow address:$focused_window_address"
+    batch_args="$batch_args dispatch focuswindow address:$focused_window_address;"
 
     # Execute the grouping using hyprctl --batch for performance
     hyprctl --batch "$batch_args"
@@ -121,7 +121,7 @@ function move_to_workspace() {
   is_ws_monocle=$(get_is_monocle_ws "$monitor" "$ws")
 
   if [ "$is_window_grouped" = "true" ]; then
-    hyprctl --batch "dispatch moveoutofgroup active; dispatch movetoworkspacesilent $ws"
+    hyprctl --batch "dispatch moveoutofgroup active; dispatch movetoworkspacesilent $ws;"
   else
     hyprctl dispatch movetoworkspacesilent "$ws"
   fi

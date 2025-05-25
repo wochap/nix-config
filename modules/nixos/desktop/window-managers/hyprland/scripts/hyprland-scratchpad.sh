@@ -32,8 +32,8 @@ function raise_or_run() {
       fi
     else
       batch_args="dispatch movetoworkspace $current_ws,class:^($class)$;"
-      batch_args="$batch_args dispatch focuswindow class:^($class)$"
-      batch_args="$batch_args dispatch alterzorder top"
+      batch_args="$batch_args dispatch focuswindow class:^($class)$;"
+      batch_args="$batch_args dispatch alterzorder top;"
       hyprctl --batch "$batch_args" -q
     fi
   else
@@ -179,7 +179,7 @@ function toggle_in_scratchpad() {
     if [ "$is_focused_window_grouped" = "true" ]; then
       batch_args="$batch_args dispatch moveoutofgroup active;"
     fi
-    batch_args="$batch_args dispatch movetoworkspacesilent special:tmpscratchpads"
+    batch_args="$batch_args dispatch movetoworkspacesilent special:tmpscratchpads;"
     hyprctl --batch "$batch_args" -q
   fi
 
