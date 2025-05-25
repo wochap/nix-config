@@ -65,7 +65,7 @@ export const hyprlandMode = () =>
     setup(self) {
       self.hook(
         Hyprland,
-        async (_, submap) => {
+        (_, submap = "") => {
           self.label = submap;
           self.visible = !!submap;
         },
