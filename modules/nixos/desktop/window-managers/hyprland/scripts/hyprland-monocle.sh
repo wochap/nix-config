@@ -169,8 +169,15 @@ function toggle_floating() {
 }
 
 function cycle() {
-  dir="$1"
+  dir="$1"   # next|prev
+  scope="$2" # tiled
   is_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
+  is_window_floating=$(hyprctl activewindow -j | jq -r '.floating')
+
+  if [ "$scope" = "tiled" ] && [ "$is_window_floating" = "true" ]; then
+    hyprctl dispatch cyclenext "$dir" "$scope"
+    exit 0
+  fi
 
   if [ "$is_window_grouped" = "true" ]; then
     if [ "$dir" = "next" ]; then
@@ -178,10 +185,14 @@ function cycle() {
       if [ "$is_last" = "true" ]; then
         current_ws=$(hyprctl activeworkspace -j | jq -r '.name')
         current_window_address=$(hyprctl activewindow -j | jq -r .address)
-        others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$current_ws\" and .hidden == false and .address != \"$current_window_address\")] | length")
+        if [ "$scope" == "tiled" ]; then
+          others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$current_ws\" and .hidden == false and .address != \"$current_window_address\" and .floating == false)] | length")
+        else
+          others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$current_ws\" and .hidden == false and .address != \"$current_window_address\")] | length")
+        fi
 
         if ((others_windows_count > 0)); then
-          hyprctl dispatch cyclenext
+          hyprctl dispatch cyclenext next "$scope"
         else
           hyprctl dispatch changegroupactive f
         fi
@@ -193,10 +204,14 @@ function cycle() {
       if [ "$is_first" = "true" ]; then
         current_ws=$(hyprctl activeworkspace -j | jq -r '.name')
         current_window_address=$(hyprctl activewindow -j | jq -r .address)
-        others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$current_ws\" and .hidden == false and .address != \"$current_window_address\")] | length")
+        if [ "$scope" == "tiled" ]; then
+          others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$current_ws\" and .hidden == false and .address != \"$current_window_address\" and .floating == false)] | length")
+        else
+          others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$current_ws\" and .hidden == false and .address != \"$current_window_address\")] | length")
+        fi
 
         if ((others_windows_count > 0)); then
-          hyprctl dispatch cyclenext prev
+          hyprctl dispatch cyclenext prev "$scope"
         else
           hyprctl dispatch changegroupactive b
         fi
@@ -206,9 +221,9 @@ function cycle() {
     fi
   else
     if [ "$dir" = "next" ]; then
-      hyprctl dispatch cyclenext
+      hyprctl dispatch cyclenext next "$scope"
     elif [ "$dir" = "prev" ]; then
-      hyprctl dispatch cyclenext prev
+      hyprctl dispatch cyclenext prev "$scope"
     fi
   fi
 
@@ -240,10 +255,10 @@ case "$1" in
     echo "Error: --cycle requires a dir argument."
     exit 1
   fi
-  cycle "$2"
+  cycle "$2" "$3"
   ;;
 *)
-  echo "Usage: $0 [--init | --start | --finish | togglefloating | --movetows <workspace_id> | --cycle <dir>]"
+  echo "Usage: $0 [--init | --start | --finish | togglefloating | --movetows <workspace_id> | --cycle <dir> <scope>]"
   exit 1
   ;;
 esac
