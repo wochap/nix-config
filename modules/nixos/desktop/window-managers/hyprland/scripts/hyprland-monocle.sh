@@ -83,6 +83,10 @@ function start_monocle() {
   if ! grep -qxF "$current_ws" "$file"; then
     echo "$current_ws" >>"$file"
   fi
+
+  # HACK: wait a little bit so next commands
+  # are able to find $current_ws in $file
+  sleep 0.1
 }
 
 function finish_monocle() {
