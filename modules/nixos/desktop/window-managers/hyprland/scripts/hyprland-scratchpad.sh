@@ -31,6 +31,7 @@ function raise_or_run() {
         hyprctl --batch "$batch_args" -q
       fi
     else
+      # focus
       batch_args="dispatch movetoworkspace $current_ws,class:^($class)$;"
       batch_args="$batch_args dispatch focuswindow class:^($class)$;"
       batch_args="$batch_args dispatch alterzorder top;"
