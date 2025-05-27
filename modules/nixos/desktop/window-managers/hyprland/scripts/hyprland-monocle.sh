@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 function get_is_monocle_ws() {
-  local monitor="$1"
+  local monitor_name="$1"
   local ws="$2"
-  local file="/tmp/hyprland-$monitor-monocle-ws"
+  local file="/tmp/hyprland-$monitor_name-monocle-ws"
 
   if [[ -f "$file" ]] && grep -qxF "$ws" "$file"; then
     echo "true"
@@ -18,20 +18,36 @@ function init_monocle() {
     event="${input%%>>*}"
     payload="${input#*>>}"
 
-    # move window into group if its workspace is monocle
+    # move window into group if its workspace is monocle and it is tiled
     if [[ "$event" == "openwindow" ]]; then
       IFS=',' read -r address ws app_id title <<<"$payload"
-      address="0x$address"
+      window_address="0x$address"
       current_ws=$(hyprctl activeworkspace -j | jq -cr '.id')
-      monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-      is_ws_monocle=$(get_is_monocle_ws "$monitor" "$ws")
-      windows_addresses=$(hyprctl -j clients | jq -cr ".[] | select(.workspace.id == $ws and .floating == false) | .address")
+      current_monitor_id="$(hyprctl activeworkspace -j | jq -r '.monitorID')"
+      current_monitor_name=$(hyprctl activeworkspace -j | jq -r .monitor)
+      is_window_floating=$(hyprctl clients -j | jq -r ".[] | select(.address == \"$window_address\") | .floating")
+      is_window_grouped=$(hyprctl clients -j | jq -r ".[] | select(.address == \"$window_address\") | .grouped | length > 0")
+      is_ws_monocle=$(get_is_monocle_ws "$current_monitor_name" "$ws")
+      windows_addresses=$(hyprctl -j clients | jq -cr ".[] | select(.monitor == $current_monitor_id and .workspace.id == $ws and .floating == false and .hidden == false) | .address")
 
-      if [ "$(echo "$windows_addresses" | wc -l)" -eq 1 ] && [ "$is_ws_monocle" = "true" ]; then
-        batch_args="dispatch workspace $ws;"
-        batch_args="$batch_args dispatch focuswindow address:$address; dispatch togglegroup;"
-        batch_args="$batch_args dispatch workspace $current_ws;"
-        hyprctl --batch "$batch_args"
+      if [ "$is_window_floating" = "false" ] && [ "$is_window_grouped" = "false" ]; then
+        if [ -z "$windows_addresses" ]; then
+          echo "no windows found"
+        elif [ "$(echo "$windows_addresses" | wc -l)" -eq 1 ] && [ "$is_ws_monocle" = "true" ]; then
+          batch_args="dispatch workspace $ws;"
+          batch_args="$batch_args dispatch focuswindow address:$window_address; dispatch togglegroup;"
+          batch_args="$batch_args dispatch workspace $current_ws;"
+          hyprctl --batch "$batch_args"
+        elif [ "$(echo "$windows_addresses" | wc -l)" -gt 1 ] && [ "$is_ws_monocle" = "true" ]; then
+          batch_args="dispatch setignoregrouplock on;"
+          batch_args="$batch_args dispatch workspace $ws;"
+          batch_args="$batch_args dispatch focuswindow address:$window_address; dispatch togglegroup;"
+          batch_args="$batch_args dispatch moveintogroup l; dispatch moveintogroup r; dispatch moveintogroup u; dispatch moveintogroup d;"
+          batch_args="$batch_args dispatch setignoregrouplock off;"
+          batch_args="$batch_args dispatch workspace $current_ws;"
+          hyprctl --batch "$batch_args"
+          echo "more than 1 window"
+        fi
       fi
     fi
   }
@@ -44,8 +60,8 @@ function start_monocle() {
   current_ws=$(hyprctl activeworkspace -j | jq -cr '.id')
   windows_addresses=$(hyprctl -j clients | jq -cr ".[] | select(.workspace.id == $current_ws and .floating == false) | .address")
   first_window_address=$(echo "$windows_addresses" | head -n 1)
-  monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-  file="/tmp/hyprland-$monitor-monocle-ws"
+  current_monitor_name=$(hyprctl activeworkspace -j | jq -r .monitor)
+  file="/tmp/hyprland-$current_monitor_name-monocle-ws"
 
   if [[ -f "$file" ]]; then
     if grep -qxF "$current_ws" "$file"; then
@@ -94,8 +110,8 @@ function finish_monocle() {
   current_ws=$(hyprctl activeworkspace -j | jq -cr '.id')
   windows_addresses=$(hyprctl -j clients | jq -cr ".[] | select(.workspace.id == $current_ws and .floating == false) | .address")
   first_window_address=$(echo "$windows_addresses" | head -n 1)
-  monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-  file="/tmp/hyprland-$monitor-monocle-ws"
+  current_monitor_name=$(hyprctl activeworkspace -j | jq -r .monitor)
+  file="/tmp/hyprland-$current_monitor_name-monocle-ws"
 
   if [[ -f "$file" ]]; then
     if ! grep -qxF "$current_ws" "$file"; then
@@ -117,12 +133,12 @@ function finish_monocle() {
 
 function move_to_workspace() {
   ws="$1"
-  monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
+  current_monitor_name=$(hyprctl activeworkspace -j | jq -r .monitor)
   current_ws=$(hyprctl activeworkspace -j | jq -cr '.id')
   is_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
   is_window_floating=$(hyprctl activewindow -j | jq -r '.floating')
   window_address=$(hyprctl activewindow -j | jq -r '.address')
-  is_ws_monocle=$(get_is_monocle_ws "$monitor" "$ws")
+  is_ws_monocle=$(get_is_monocle_ws "$current_monitor_name" "$ws")
 
   if [ "$is_window_grouped" = "true" ]; then
     hyprctl --batch "dispatch moveoutofgroup active; dispatch movetoworkspacesilent $ws;"
@@ -144,8 +160,8 @@ function toggle_floating() {
   is_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
   is_window_floating=$(hyprctl activewindow -j | jq -r '.floating')
   current_ws=$(hyprctl activeworkspace -j | jq -cr '.id')
-  monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-  is_ws_monocle=$(get_is_monocle_ws "$monitor" "$current_ws")
+  current_monitor_name=$(hyprctl activeworkspace -j | jq -r .monitor)
+  is_ws_monocle=$(get_is_monocle_ws "$current_monitor_name" "$current_ws")
 
   if [ "$is_window_floating" = "true" ]; then
     # is floating, tile it
