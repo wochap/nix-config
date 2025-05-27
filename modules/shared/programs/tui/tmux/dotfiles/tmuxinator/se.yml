@@ -210,6 +210,13 @@ windows:
         # 3008
         - viz-api:
             - cd ./viz-api
-            # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+            # <%- if @settings["workspaces"].split(',').include?("microfrontends") || @settings["workspaces"].split(',').include?("lti") %>
             - yarn run dev
+            # <%- end %>
+        # 5432
+        # 8080
+        - lti-docker:
+            - cd ./viz-api/src/db/pg-lti-docker
+            # <%- if @settings["workspaces"].split(',').include?("lti") %>
+            - docker-compose up -d
             # <%- end %>
