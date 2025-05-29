@@ -86,23 +86,6 @@
 
     console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
 
-    # bleeding edge mesa
-    # NOTE: breaks nvidia
-    # chaotic.mesa-git.enable = true;
-    # chaotic.mesa-git.fallbackSpecialisation = false;
-
-    # better fps in games
-    # requires linuxPackages_cachyos
-    # docs: https://github.com/sched-ext/scx
-    # https://github.com/chaotic-cx/nyx
-    # chaotic.scx = {
-    #   enable = true;
-    #   package = pkgs.nixpkgs-unstable.scx.rustland;
-    #   scheduler = "scx_rustland";
-    # };
-    # kernel 6.11.2
-    # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
-
     services.ucodenix = {
       enable = true;
       # docs: https://github.com/e-tho/ucodenix?tab=readme-ov-file#usage

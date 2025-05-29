@@ -49,6 +49,7 @@
     ./desktop/wm-addons-wayland/xwaylandvideobridge
     ./desktop/wm-addons-wayland/ydotool
 
+    ./gaming/chaotic
     ./gaming/emulators
     ./gaming/steam
     ./gaming/utils

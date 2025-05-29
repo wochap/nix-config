@@ -174,7 +174,6 @@
           modules = [
             inputs.home-manager.nixosModules.home-manager
             inputs.nur.nixosModules.nur
-            inputs.chaotic.nixosModules.default
             inputs.ucodenix.nixosModules.default
             ./overlays
             ./modules/archetypes
