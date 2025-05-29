@@ -100,5 +100,7 @@ in {
         ];
       };
     };
+
+    hardware.wirelessRegulatoryDatabase = true;
   };
 }
