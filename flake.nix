@@ -172,7 +172,6 @@
         pkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            inputs.home-manager.nixosModules.home-manager
             inputs.nur.nixosModules.nur
             inputs.ucodenix.nixosModules.default
             ./overlays
