@@ -39,10 +39,7 @@
     services.xserver.videoDrivers = lib.mkForce [ "modesetting" "nvidia" ];
 
     boot.extraModulePackages = with config.boot.kernelPackages;
-      [
-        # Doesn't work yet...
-        lenovo-legion-module
-      ];
+      [ lenovo-legion-module ];
 
     # boot.kernelPatches = [
     #   # didn't work, tx power is 0
