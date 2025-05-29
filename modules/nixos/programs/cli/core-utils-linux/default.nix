@@ -40,6 +40,7 @@ in {
       xorg.xdpyinfo
       xorg.xev # get pressed key name
       lazyjournal # journalctl tui
+      systemctl-tui # systemd/systemctl tui
 
       ffmpegthumbnailer # video thumbnailer
       graphicsmagick # image editor
