@@ -283,10 +283,13 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 	{ MODKEY|MOD_CONTROL|MOD_SHIFT, KEY, toggletag,  {.ui = 1 << TAG} }
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "sh", "-c", "uwsm-app -- " cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "sh", "-c", cmd, NULL } }
 
-// same as SHCMD but adds scratchkey
-#define SHCMD_SK(scratchkey, cmd) { .v = (const char*[]){ scratchkey, "sh", "-c", "uwsm-app -- " cmd, NULL } }
+// same as SHCMD but adds uwsm-app
+#define SHCMD_UWSM(cmd) { .v = (const char*[]){ "sh", "-c", "uwsm-app -- " cmd, NULL } }
+
+// same as SHCMD_UWSM but adds scratchkey
+#define SHCMD_UWSM_SK(scratchkey, cmd) { .v = (const char*[]){ scratchkey, "sh", "-c", "uwsm-app -- " cmd, NULL } }
 
 /* commands */
 #define RUN(...)   { .v = (const char*[]){ __VA_ARGS__, NULL } }
@@ -301,31 +304,31 @@ static const Key keys[] = {
   // ### SYSTEM KEYBINDINGS
 
   // Open scratchpad terminal
-  { MODKEY, Key_i, raiserunnamedscratchpad, SHCMD_SK("i", "~/.config/kitty/scripts/kitty-scratch.sh") },
+  { MODKEY, Key_i, raiserunnamedscratchpad, SHCMD_UWSM_SK("i", "~/.config/kitty/scripts/kitty-scratch.sh") },
 
   // Lock screen
 	{ MODKEY, Key_l, spawn, SHCMD("hyprlock-start") },
 
   // Open power menu
-  { MODKEY, Key_Escape, spawn, SHCMD("tofi-powermenu") },
+  { MODKEY, Key_Escape, spawn, SHCMD_UWSM("tofi-powermenu") },
 
   // Open app launcher
-	{ MODKEY, Key_space, spawn, SHCMD("tofi-launcher") },
+	{ MODKEY, Key_space, spawn, SHCMD_UWSM("tofi-launcher") },
 
   // Take fullscreen screenshoot
-  { MODKEY, Key_Print, spawn, SHCMD("takeshot --now") },
+  { MODKEY, Key_Print, spawn, SHCMD_UWSM("takeshot --now") },
 
   // Open calc
-  { MODKEY, Key_c, spawn, SHCMD("tofi-calc") },
+  { MODKEY, Key_c, spawn, SHCMD_UWSM("tofi-calc") },
 
   // Show clipboard
-  { MODKEY, Key_v, spawn, SHCMD("clipboard-manager --menu") },
+  { MODKEY, Key_v, spawn, SHCMD_UWSM("clipboard-manager --menu") },
 
   // Clear clipboard
   { MODKEY|MOD_SHIFT, Key_v, spawn, SHCMD("clipboard-manager --clear") },
 
   // Show emojis
-  { MODKEY, Key_e, spawn, SHCMD("tofi-emoji") },
+  { MODKEY, Key_e, spawn, SHCMD_UWSM("tofi-emoji") },
 
   // Toggle bars
   { MODKEY, Key_b, spawn, SHCMD("toggle-bars") },
@@ -436,31 +439,31 @@ static const Key keys[] = {
   // ### APPLICATION KEYBINDINGS (Super + Alt + Key)
 
   // Open primary terminal
-	{ MODKEY|MOD_ALT, Key_t, spawn, SHCMD("footclient") },
+	{ MODKEY|MOD_ALT, Key_t, spawn, SHCMD_UWSM("footclient") },
 
   // Open file manager
-  { MODKEY|MOD_ALT, Key_f, raiserunnamedscratchpad, SHCMD_SK("f", "Thunar --name Thunar") },
+  { MODKEY|MOD_ALT, Key_f, raiserunnamedscratchpad, SHCMD_UWSM_SK("f", "Thunar --name Thunar") },
 
   // Show ruler
-  { MODKEY|MOD_ALT, Key_m, spawn, SHCMD("ruler") },
+  { MODKEY|MOD_ALT, Key_m, spawn, SHCMD_UWSM("ruler") },
 
   // Screencast/record region to mp4
-  { MODKEY|MOD_ALT, Key_r, spawn, SHCMD("recorder --area") },
+  { MODKEY|MOD_ALT, Key_r, spawn, SHCMD_UWSM("recorder --area") },
 
   // Open screenshoot utility
-  { MODKEY|MOD_ALT, Key_s, spawn, SHCMD("takeshot --area") },
+  { MODKEY|MOD_ALT, Key_s, spawn, SHCMD_UWSM("takeshot --area") },
 
   // Open ocr utility
-  { MODKEY|MOD_ALT, Key_o, spawn, SHCMD("ocr") },
+  { MODKEY|MOD_ALT, Key_o, spawn, SHCMD_UWSM("ocr") },
 
   // Open ocr math utility
-  { MODKEY|MOD_ALT, Key_h, spawn, SHCMD("ocr-math") },
+  { MODKEY|MOD_ALT, Key_h, spawn, SHCMD_UWSM("ocr-math") },
 
   // Open color picker
-  { MODKEY|MOD_ALT, Key_c, spawn, SHCMD("color-picker") },
+  { MODKEY|MOD_ALT, Key_c, spawn, SHCMD_UWSM("color-picker") },
 
   // TODO: Magnifying glass
-  { MODKEY|MOD_ALT, Key_z, spawn, SHCMD("hyprmag --radius 250") },
+  { MODKEY|MOD_ALT, Key_z, spawn, SHCMD_UWSM("hyprmag --radius 250") },
 
 
   // ### MEDIA KEYBINDINGS
@@ -489,7 +492,7 @@ static const Key keys[] = {
   { MODKEY|MOD_ALT, Key_n, entermode, {.i = NOTIFICATION} },
   { MODKEY|MOD_ALT|MOD_CONTROL, Key_g, entermode, {.i = KB_INHIBIT} },
   { MODKEY|MOD_ALT|MOD_CONTROL|MOD_SHIFT, Key_m, create_output, {0} },
-  { MODKEY|MOD_ALT, Key_x, raiserunnamedscratchpad, SHCMD_SK("x", "xwaylandvideobridge") },
+  { MODKEY|MOD_ALT, Key_x, raiserunnamedscratchpad, SHCMD_UWSM_SK("x", "xwaylandvideobridge") },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_w, switchxkbrule, {0} },
   { MODKEY|MOD_CONTROL|MOD_SHIFT, Key_q, quit, {0} },
 
@@ -549,29 +552,29 @@ static const Modekey modekeys[] = {
   { LAYOUT, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Open Browser
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_f, spawn, SHCMD("firefox")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, SHCMD("brave")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, SHCMD("google-chrome-stable")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, SHCMD("microsoft-edge")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, SHCMD_SK("g", "microsoft-edge --profile-directory=Default --app=https://www.bing.com/chat")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_SK("c", "google-chrome-stable --profile-directory=Default --app=https://chat.openai.com")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, raiserunnamedscratchpad, SHCMD_SK("o", "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_w, raiserunnamedscratchpad, SHCMD_SK("w", "google-chrome-stable --profile-directory=Default --app=https://openwebui.wochap.local")),
-  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_SK("y", "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_f, spawn, SHCMD_UWSM("firefox")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_b, spawn, SHCMD_UWSM("brave")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_g, spawn, SHCMD_UWSM("google-chrome-stable")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_m, spawn, SHCMD_UWSM("microsoft-edge")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_SHIFT, Key_i, raiserunnamedscratchpad, SHCMD_UWSM_SK("g", "microsoft-edge --profile-directory=Default --app=https://www.bing.com/chat")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_UWSM_SK("c", "google-chrome-stable --profile-directory=Default --app=https://chat.openai.com")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_o, raiserunnamedscratchpad, SHCMD_UWSM_SK("o", "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_w, raiserunnamedscratchpad, SHCMD_UWSM_SK("w", "google-chrome-stable --profile-directory=Default --app=https://openwebui.wochap.local")),
+  EXIT_TO_NORMAL_MODE(BROWSER, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_UWSM_SK("y", "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com")),
   { BROWSER, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Terminal TUI
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, raiserunnamedscratchpad, SHCMD_SK("n", "tui-notes")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_SK("b", "tui-notes-obsidian")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, raiserunnamedscratchpad, SHCMD_SK("m", "tui-monitor")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, raiserunnamedscratchpad, SHCMD_SK("e", "tui-email")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, raiserunnamedscratchpad, SHCMD_SK("r", "tui-rss")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_SK("u", "tui-music")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_d, raiserunnamedscratchpad, SHCMD_SK("d", "tui-notification-center")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_c, raiserunnamedscratchpad, SHCMD_SK("k", "tui-calendar")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_b, spawn, SHCMD("tui-bookmarks --select")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD("tui-bookmarks --add")),
-  EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD("tui-bookmarks --edit")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_n, raiserunnamedscratchpad, SHCMD_UWSM_SK("n", "tui-notes")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_i, raiserunnamedscratchpad, SHCMD_UWSM_SK("b", "tui-notes-obsidian")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_m, raiserunnamedscratchpad, SHCMD_UWSM_SK("m", "tui-monitor")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_e, raiserunnamedscratchpad, SHCMD_UWSM_SK("e", "tui-email")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_r, raiserunnamedscratchpad, SHCMD_UWSM_SK("r", "tui-rss")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_u, raiserunnamedscratchpad, SHCMD_UWSM_SK("u", "tui-music")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_d, raiserunnamedscratchpad, SHCMD_UWSM_SK("d", "tui-notification-center")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_c, raiserunnamedscratchpad, SHCMD_UWSM_SK("k", "tui-calendar")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_NONE, Key_b, spawn, SHCMD_UWSM("tui-bookmarks --select")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_SHIFT, Key_b, spawn, SHCMD_UWSM("tui-bookmarks --add")),
+  EXIT_TO_NORMAL_MODE(TUI, MOD_CONTROL|MOD_SHIFT, Key_b, spawn, SHCMD_UWSM("tui-bookmarks --edit")),
   { TUI, { MOD_NONE, Key_Escape, entermode, {.i = NORMAL} } },
 
   // Notification
