@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PROG=$(basename $0)
-TEMP=$(getopt --options h --longoptions help,raise-or-run:,focus-last,focus-last-workspace,focus-last-workspace-init,toggle,toggle-in -- "$@") || exit 1
+TEMP=$(getopt --options h --longoptions help,raise-or-run-uwsm:,raise-or-run:,focus-last,focus-last-workspace,focus-last-workspace-init,toggle,toggle-in -- "$@") || exit 1
 eval set -- "$TEMP"
 
 current_ws="$(hyprctl activeworkspace -j | jq -r '.id')"
@@ -13,6 +13,7 @@ current_monitor="$(hyprctl activeworkspace -j | jq -r '.monitorID')"
 function raise_or_run() {
   class="$1"
   runstr="$2"
+  has_uwsm="$3"
 
   window=$(hyprctl clients -j | jq ".[] | select(.class == \"$class\")")
   if [[ "$window" ]]; then
@@ -39,7 +40,11 @@ function raise_or_run() {
     fi
   else
     if [[ "$runstr" ]]; then
-      hyprctl dispatch exec "$runstr" -q
+      if [[ "$has_uwsm" == "true" ]]; then
+        hyprctl dispatch exec uwsm-app -q -- "$runstr"
+      else
+        hyprctl dispatch exec "$runstr" -q
+      fi
     fi
   fi
 
@@ -203,10 +208,16 @@ Options:
 EOF
     exit 0
     ;;
+  --raise-or-run-uwsm)
+    class="$2"
+    cmd="$4"
+    raise_or_run "$class" "$cmd" "true"
+    shift 3
+    ;;
   --raise-or-run)
     class="$2"
     cmd="$4"
-    raise_or_run "$class" "$cmd"
+    raise_or_run "$class" "$cmd" "false"
     shift 3
     ;;
   --focus-last)
