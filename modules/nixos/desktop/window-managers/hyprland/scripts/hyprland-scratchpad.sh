@@ -41,7 +41,8 @@ function raise_or_run() {
   else
     if [[ "$runstr" ]]; then
       if [[ "$has_uwsm" == "true" ]]; then
-        hyprctl dispatch exec uwsm-app -q -- "$runstr"
+        # shellcheck disable=SC2086
+        uwsm-app -- $runstr
       else
         hyprctl dispatch exec "$runstr" -q
       fi
