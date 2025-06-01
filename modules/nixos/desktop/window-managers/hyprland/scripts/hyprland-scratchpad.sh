@@ -15,9 +15,10 @@ function raise_or_run() {
   runstr="$2"
   has_uwsm="$3"
 
-  window=$(hyprctl clients -j | jq ".[] | select(.class == \"$class\")")
+  window=$(hyprctl clients -j | jq "first(.[] | select(.class == \"$class\"))")
   if [[ "$window" ]]; then
     window_ws=$(echo "$window" | jq -j ".workspace.name")
+    window_address=$(echo "$window" | jq -j ".address")
     window_monitor=$(echo "$window" | jq -j ".monitor")
     is_focused=$(echo "$window" | jq '.focusHistoryID == 0')
     is_visible=$([[ "$window_monitor" == "$current_monitor" && "$window_ws" == "$current_ws" ]] && echo "true" || echo "false")
@@ -28,14 +29,14 @@ function raise_or_run() {
       else
         # focus
         batch_args="dispatch focuswindow class:^($class)$;"
-        batch_args="$batch_args dispatch alterzorder top;"
+        batch_args="$batch_args dispatch alterzorder top,address:$window_address;"
         hyprctl --batch "$batch_args" -q
       fi
     else
       # focus
       batch_args="dispatch movetoworkspace $current_ws,class:^($class)$;"
       batch_args="$batch_args dispatch focuswindow class:^($class)$;"
-      batch_args="$batch_args dispatch alterzorder top;"
+      batch_args="$batch_args dispatch alterzorder top,address:$window_address;"
       hyprctl --batch "$batch_args" -q
     fi
   else
@@ -129,7 +130,7 @@ function process_scratchpad() {
         if [[ "$ws_name" == tmpscratchpad* ]]; then
           # focus
           batch_args="dispatch focuswindow address:$window_address;"
-          batch_args="$batch_args dispatch alterzorder top;"
+          batch_args="$batch_args dispatch alterzorder top,address:$window_address;"
           hyprctl --batch "$batch_args" -q
           exit 0
         fi
@@ -163,7 +164,7 @@ function toggle_scratchpad() {
     batch_args="$batch_args dispatch movetoworkspace $current_ws,address:$window_address;"
   done
   batch_args="$batch_args dispatch focuswindow address:$recent_tmpscratchpad_window_address;"
-  batch_args="$batch_args dispatch alterzorder top;"
+  batch_args="$batch_args dispatch alterzorder top,address:$recent_tmpscratchpad_window_address;"
   hyprctl --batch "$batch_args"
 
 }
