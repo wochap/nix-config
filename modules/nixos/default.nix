@@ -88,6 +88,7 @@
     ./services/ipwebcam
     ./services/kdeconnect
     ./services/llm
+    ./services/ms-intune
     ./services/syncthing
     ./services/virt
     ./services/waydroid

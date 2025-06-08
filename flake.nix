@@ -12,6 +12,8 @@
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=adaa24fbf46737f3f1b5497bf64bae750f82942e"; # nixos-unstable (15 may 2025)
+    prevstable-intune.url = "github:kahlstrm/nixpkgs?rev=9c71553dfe5e77329fc4f3b4f18f9483b52f0ccc"; # master (05 jun 2025)
+    prevstable-msedge.url = "github:Daholli/nixpkgs?rev=fe6e79e571fa7eb7693cda131b68fe9891078adf"; # master (07 jun 2025)
 
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=954615c510c9faa3ee7fb6607ff72e55905e69f2"; # master (15 may 2025)
