@@ -1,9 +1,6 @@
 { pkgs, ... }:
 
 {
-  animdl = pkgs.prevstable-python.callPackage ./animdl.nix {
-    pkgs = pkgs.prevstable-python;
-  };
   bt-dualboot = pkgs.prevstable-python.callPackage ./bt-dualboot.nix {
     pkgs = pkgs.prevstable-python;
   };

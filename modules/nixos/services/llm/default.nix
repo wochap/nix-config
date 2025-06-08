@@ -53,7 +53,7 @@ in {
 
     services.ollama = lib.mkIf cfg.enableOllama {
       enable = true;
-      package = pkgs.nixpkgs-unstable.ollama;
+      package = pkgs.ollama;
       acceleration = lib.mkIf cfg.enableNvidia "cuda";
     };
     systemd.services.ollama.environment.OLLAMA_ORIGINS = "*";
@@ -68,14 +68,14 @@ in {
     services.nextjs-ollama-llm-ui.enable =
       lib.mkIf cfg.enableNextjsOllamaLlmUi {
         enable = true;
-        package = pkgs.nixpkgs-unstable.nextjs-ollama-llm-ui;
+        package = pkgs.nextjs-ollama-llm-ui;
         hostname = wochap-ssc.meta.address;
         port = 11464;
       };
 
     services.open-webui = lib.mkIf cfg.enableOllama {
       enable = true;
-      package = pkgs.nixpkgs-unstable.open-webui;
+      package = pkgs.open-webui;
       openFirewall = false;
       host = wochap-ssc.meta.address;
       port = 11454;

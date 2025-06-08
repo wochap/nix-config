@@ -15,11 +15,11 @@ in {
         package = hyprsunset-final;
         transitions = {
           sunrise = {
-            calendar = "*-*-* 06:00:00";
+            calendar = "*-*-* 10:00:00";
             requests = [[ "temperature" "4000" ]];
           };
           sunset = {
-            calendar = "*-*-* 18:00:00";
+            calendar = "*-*-* 16:00:00";
             requests = [[ "temperature" "3700" ]];
           };
         };
@@ -27,7 +27,7 @@ in {
 
       # only start hyprsunset on wayland wm
       systemd.user.services.hyprsunset.Unit.ConditionEnvironment =
-        lib.mkForce "XDG_SESSION_DESKTOP=hyprland";
+        lib.mkForce "XDG_SESSION_DESKTOP=Hyprland";
     };
   };
 }

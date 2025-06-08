@@ -8,14 +8,15 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [ nixpkgs-unstable.presenterm ];
+      home.packages = with pkgs; [ presenterm ];
 
-      xdg.configFile."presenterm/config.yaml".source = pkgs.substituteAll {
-        src = ./dotfiles/config.yaml;
-        inherit (themeColors) flavor;
-      };
+      xdg.configFile."presenterm/config.yaml".source =
+        pkgs.replaceVars ./dotfiles/config.yaml {
+          inherit (themeColors) flavor;
+        };
 
-      programs.zsh.initExtra = builtins.readFile ./dotfiles/p.zsh;
+      programs.zsh.initContent =
+        lib.mkOrder 1000 (builtins.readFile ./dotfiles/p.zsh);
     };
   };
 }

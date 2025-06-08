@@ -16,11 +16,13 @@ import {
 } from "./modules/dwl.js";
 import {
   hyprlandTitle,
+  hyprlandLayout,
   hyprlandWorkspaces,
   hyprlandNamedScratchpads,
   hyprlandScratchpads,
   hyprlandMode,
   hyprlandTaskbar,
+  hyprlandBarClass,
 } from "./modules/hyprland.js";
 import { matcha } from "./modules/matcha.js";
 import { network } from "./modules/network.js";
@@ -37,7 +39,7 @@ import { spacing } from "./constants.js";
 export const bar = (gdkMonitorId, monitorPlugName) => {
   const XDG_SESSION_DESKTOP = Utils.exec(`sh -c 'echo "$XDG_SESSION_DESKTOP"'`);
   const isDwl = XDG_SESSION_DESKTOP === "dwl";
-  const isHyprland = XDG_SESSION_DESKTOP === "hyprland";
+  const isHyprland = XDG_SESSION_DESKTOP === "Hyprland";
 
   let leftModules = [];
   let centerModules = [];
@@ -59,6 +61,7 @@ export const bar = (gdkMonitorId, monitorPlugName) => {
   } else if (isHyprland) {
     leftModules = [
       hyprlandWorkspaces(),
+      hyprlandLayout(monitorPlugName),
       hyprlandNamedScratchpads(),
       hyprlandScratchpads(),
       hyprlandMode(),
@@ -66,7 +69,7 @@ export const bar = (gdkMonitorId, monitorPlugName) => {
       // hyprlandTitle(),
     ];
     centerModules = [hyprlandTaskbar()];
-    className = "bar-container focused";
+    className = hyprlandBarClass(monitorPlugName);
   }
 
   return Widget.Window({

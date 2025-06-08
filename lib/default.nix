@@ -32,7 +32,7 @@ rec {
       Slice = "app-graphical.slice";
       ExecCondition = [
         ''
-          ${pkgs.systemd}/lib/systemd/systemd-xdg-autostart-condition "dwl:hyprland:wlroots:sway:Wayfire:labwc:Hyprland" ""''
+          ${pkgs.systemd}/lib/systemd/systemd-xdg-autostart-condition "dwl:Hyprland:wlroots:sway:Wayfire:labwc" ""''
       ];
     };
   };

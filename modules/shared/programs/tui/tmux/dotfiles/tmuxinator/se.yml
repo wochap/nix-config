@@ -2,14 +2,6 @@ name: se
 
 windows:
   # 1
-  # - viz-omni-docker:
-  #     root: ~/Projects/se/viz-omni/backend/docker
-  #     layout: tiled
-  #     panes:
-  #       - docker:
-  #           - lazydocker
-
-  # 2
   - viz-omni-backend-1:
       root: ~/Projects/se/viz-omni/backend
       layout: tiled
@@ -63,7 +55,7 @@ windows:
         #     - cd ./job_processor
         #     - RACK_ENV=local MALLOC_ARENA_MAX=2 rerun -d ./ ../ruby_common ruby ./job_processor.rb -- --bind 127.0.0.1 --port 9996
 
-  # 3
+  # 2
   - viz-omni-backend-2:
       root: ~/Projects/se/viz-omni/backend
       layout: tiled
@@ -100,7 +92,7 @@ windows:
             - cd ./tile_worker
             - RACK_ENV=local MALLOC_ARENA_MAX=2 ruby ./tile_worker.rb
 
-  # 4
+  # 3
   - viz-omni-frontend:
       root: ~/Projects/se/viz-omni/frontend
       layout: tiled
@@ -123,7 +115,7 @@ windows:
             - cd ./geobuffer
             - gulp
 
-  # 5
+  # 4
   - viz-omni-frontend-neo:
       root: ~/Projects/se/viz-omni/frontend-neo
       layout: tiled
@@ -147,7 +139,7 @@ windows:
             - sh ./run.sh -e local start
             # <%- end %>
 
-  # 6
+  # 5
   - viz-websites:
       root: ~/Projects/se/viz-websites
       layout: tiled
@@ -169,7 +161,7 @@ windows:
         # - se_help:
         #     - NODE_ENV=local APP=se_help gulp
 
-  # 7
+  # 6
   - surveys:
       root: ~/Projects/se
       layout: tiled
@@ -190,7 +182,7 @@ windows:
             - npx gulp
             # <%- end %>
 
-  # 8
+  # 7
   - microfrontends:
       root: ~/Projects/se
       layout: tiled
@@ -210,6 +202,13 @@ windows:
         # 3008
         - viz-api:
             - cd ./viz-api
-            # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+            # <%- if @settings["workspaces"].split(',').include?("microfrontends") || @settings["workspaces"].split(',').include?("lti") %>
             - yarn run dev
+            # <%- end %>
+        # 5432
+        # 8080
+        - lti-docker:
+            - cd ./viz-api/src/db/pg-lti-docker
+            # <%- if @settings["workspaces"].split(',').include?("lti") %>
+            - docker-compose up
             # <%- end %>

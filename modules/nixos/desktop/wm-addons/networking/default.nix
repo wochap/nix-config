@@ -13,6 +13,7 @@ in {
         iw
         wireless-regdb
         zbar # scan wifi QR codes
+        wireguard-tools # wg-quick
       ];
 
       shellAliases.wtui = "impala";
@@ -100,5 +101,7 @@ in {
         ];
       };
     };
+
+    hardware.wirelessRegulatoryDatabase = true;
   };
 }

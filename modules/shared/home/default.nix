@@ -2,6 +2,8 @@
 
 let inherit (config._custom.globals) userName homeDirectory;
 in {
+  imports = [ inputs.home-manager.nixosModules.home-manager ];
+
   options = {
     _custom.hm = lib.mkOption {
       type = lib.types.attrs;

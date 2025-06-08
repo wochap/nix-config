@@ -29,8 +29,8 @@
     ./desktop/wm-addons/power-management
     ./desktop/wm-addons/qt
     ./desktop/wm-addons/udev-rules
+    ./desktop/wm-addons/uwsm
     ./desktop/wm-addons/xdg
-    ./desktop/wm-addons/xwaylandvideobridge
 
     ./desktop/wm-addons-wayland/ags
     ./desktop/wm-addons-wayland/cliphist
@@ -45,10 +45,11 @@
     ./desktop/wm-addons-wayland/tofi
     ./desktop/wm-addons-wayland/wayland-utils
     ./desktop/wm-addons-wayland/wluma
-    ./desktop/wm-addons-wayland/uwsm
     ./desktop/wm-addons-wayland/wayland-session
+    ./desktop/wm-addons-wayland/xwaylandvideobridge
     ./desktop/wm-addons-wayland/ydotool
 
+    ./gaming/chaotic
     ./gaming/emulators
     ./gaming/steam
     ./gaming/utils
@@ -87,6 +88,7 @@
     ./services/ipwebcam
     ./services/kdeconnect
     ./services/llm
+    ./services/ms-intune
     ./services/syncthing
     ./services/virt
     ./services/waydroid

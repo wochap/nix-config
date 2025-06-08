@@ -7,7 +7,7 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "audio" ];
 
-    hardware.pulseaudio.enable = false;
+    services.pulseaudio.enable = false;
 
     hardware.enableAllFirmware = true;
 

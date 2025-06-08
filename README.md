@@ -178,6 +178,9 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Kdenlive doesn't render project
+  Help > Reset Configuration...
+
 - Some keybindings doesn't work
 
   ```sh

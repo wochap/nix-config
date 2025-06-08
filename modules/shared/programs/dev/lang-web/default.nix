@@ -15,7 +15,7 @@ in {
       hugo
       netlify-cli
       nodePackages.prettier
-      nodePackages.expo-cli
+      nodePackages.eas-cli
       nodePackages.firebase-tools
       nodePackages.gulp
       nodePackages.http-server

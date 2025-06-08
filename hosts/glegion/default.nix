@@ -19,7 +19,7 @@ in {
     # source: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/7722
     # source: https://bbs.archlinux.org/viewtopic.php?id=299624
     _custom.globals.cursor.package =
-      pkgs.nixpkgs-unstable.catppuccin-cursors.mochaDark.overrideAttrs
+      pkgs.catppuccin-cursors.mochaDark.overrideAttrs
       (oldAttrs: rec {
         patches = [
           (pkgs.fetchpatch {
@@ -146,17 +146,20 @@ in {
     _custom.desktop.greetd.enablePamAutoLogin = true;
     _custom.desktop.udev-rules.enable = true;
     _custom.desktop.udev-rules.canDisableGlegionKbd = false;
-    # _custom.desktop.wluma.enable = true;
+    _custom.desktop.gammastep.enable = false;
+    _custom.desktop.hyprsunset.enable = true;
+    _custom.desktop.wluma.enable = false;
     _custom.desktop.wluma.systemdEnable = true;
     _custom.desktop.wluma.config.als.none = { };
     _custom.desktop.wluma.config.output.backlight = [{
       name = "Samsung Display Corp. 0x4188 Unknown";
       path = "/sys/class/backlight/amdgpu_bl1";
-      capturer = "wlroots";
+      capturer = "wayland";
     }];
-    _custom.desktop.dwl.enable = true;
-    _custom.desktop.dwl.isDefault = true;
+    _custom.desktop.dwl.enable = false;
+    _custom.desktop.dwl.isDefault = false;
     _custom.desktop.hyprland.enable = true;
+    _custom.desktop.hyprland.isDefault = true;
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
     # Setup keyboard

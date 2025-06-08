@@ -10,12 +10,12 @@ let
   hyprland-final = inputs.hyprland.packages."${system}".hyprland;
   hyprland-xdp-final =
     inputs.hyprland.packages."${system}".xdg-desktop-portal-hyprland;
-  hyprland-focus-toggle = pkgs.writeScriptBin "hyprland-focus-toggle"
-    (builtins.readFile ./scripts/hyprland-focus-toggle.sh);
-  hyprland-scratch-toggle = pkgs.writeScriptBin "hyprland-scratch-toggle"
-    (builtins.readFile ./scripts/hyprland-scratch-toggle.sh);
-  greetd-default-cmd =
-    "uwsm start -S -F -N hyprland -D hyprland -- /run/current-system/sw/bin/Hyprland > /dev/null";
+  hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad"
+    (builtins.readFile ./scripts/hyprland-scratchpad.sh);
+  hyprland-monocle = pkgs.writeScriptBin "hyprland-monocle"
+    (builtins.readFile ./scripts/hyprland-monocle.sh);
+  hyprland-socket = pkgs.writeScriptBin "hyprland-socket"
+    (builtins.readFile ./scripts/hyprland-socket.sh);
 in {
   options._custom.desktop.hyprland = {
     enable = lib.mkEnableOption { };
@@ -23,27 +23,27 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    # TODO: use hyprland.dekstop as default
-    _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault greetd-default-cmd;
-    environment.etc = {
-      "greetd/environments".text = lib.mkAfter ''
-        Hyprland
-      '';
-      "greetd/sessions/hyprland-uwsm.dekstop".text = ''
-        [Desktop Entry]
-        Name=hyprland (UWSM)
-        Comment=Hyprland compositor
-        Exec=${greetd-default-cmd}
-        Type=Application
-      '';
-      "greetd/sessions/hyprland-dgpu-uwsm.dekstop".text = ''
-        [Desktop Entry]
-        Name=hyprland-dgpu (UWSM)
-        Comment=Hyprland compositor
-        Exec=uwsm start -S -F -N hyprland-dgpu -D hyprland -- /run/current-system/sw/bin/Hyprland
-        Type=Application
-      '';
+    environment.etc."greetd/environments".text = lib.mkAfter ''
+      Hyprland
+    '';
+
+    _custom.desktop.uwsm.waylandCompositors = {
+      hyprland = {
+        prettyName = "hyprland";
+        comment = "Hyprland compositor managed by UWSM";
+        binPath = "/run/current-system/sw/bin/Hyprland";
+        xdgCurrentDesktop = "Hyprland";
+      };
+      hyprland-dgpu = {
+        prettyName = "hyprland-dgpu";
+        comment = "Hyprland compositor managed by UWSM";
+        binPath = "/run/current-system/sw/bin/Hyprland";
+        xdgCurrentDesktop = "Hyprland";
+      };
     };
+
+    _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
+    _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
     programs.hyprland = {
       enable = true;
@@ -53,12 +53,13 @@ in {
       systemd.setPath.enable = false;
     };
 
-    xdg.portal.config.hyprland.default = [ "hyprland" "gtk" ];
+    xdg.portal.config.Hyprland.default = [ "hyprland" "gtk" ];
 
     _custom.hm = {
       home.packages = [
-        hyprland-focus-toggle
-        hyprland-scratch-toggle
+        hyprland-scratchpad
+        hyprland-monocle
+        hyprland-socket
         inputs.pyprland.packages.${pkgs.system}.default
       ];
 
@@ -72,6 +73,15 @@ in {
           # export QT_FONT_DPI=96
         '';
       in {
+        "scripts/hyprland" = {
+          recursive = true;
+          source = ./scripts/automation;
+        };
+
+        "remmina/hypr-glegion.remmina".source =
+          lib._custom.relativeSymlink configDirectory
+          ./dotfiles/hypr-glegion.remmina;
+
         "hypr/xdph.conf".text = ''
           screencopy {
             max_fps = 60
@@ -92,19 +102,21 @@ in {
         "hypr/pyprland.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
 
-        "hypr/libinput-gestures.conf".text = ''
-          gesture swipe left 3 hyprctl dispatch workspace e+1
-          gesture swipe right 3 hyprctl dispatch workspace e-1
+        "hypr/libinput-gestures.conf".source =
+          ./dotfiles/libinput-gestures.conf;
+
+        "uwsm/env-hyprland".text = ''
+          ${common-env-hyprland}
+
+          export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
         '';
 
-        "uwsm/env-hyprland".text = common-env-hyprland;
         "uwsm/env-hyprland-dgpu".text = ''
           ${common-env-hyprland}
 
           # env variables for starting hyprland with discrete gpu
           # NOTE: This is specific to glegion host with nvidia
           # to enable using the HDMI port connected directly to the dGPU
-          export WLR_RENDERER=
           export __EGL_VENDOR_LIBRARY_FILENAMES=
           export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
         '';
@@ -113,11 +125,13 @@ in {
       wayland.windowManager.hyprland = {
         enable = true;
         package = hyprland-final;
+        portalPackage = null;
         systemd.enable = false;
-        plugins = with hyprplugins; [
-          hyprexpo
-          # inputs.hyprgrass.packages.${pkgs.system}.default
-        ];
+        plugins = with hyprplugins;
+          [
+            hyprexpo
+            # inputs.hyprgrass.packages.${pkgs.system}.default
+          ];
         extraConfig = ''
           source=~/.config/hypr/colors.conf
           source=~/.config/hypr/config.conf

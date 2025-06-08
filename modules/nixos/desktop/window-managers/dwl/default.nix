@@ -8,16 +8,13 @@ let
   scenefx-final = inputs.scenefx.packages."${system}".scenefx;
   dwl-state =
     pkgs.writeScriptBin "dwl-state" (builtins.readFile ./scripts/dwl-state.sh);
-  dwl-write-logs = pkgs.writeScriptBin "dwl-write-logs"
-    (builtins.readFile ./scripts/dwl-write-logs.sh);
   dwl-final = (pkgs.dwl.override {
-    wlroots = pkgs._custom.wlroots.wlroots_0_18;
-    configH = builtins.readFile (pkgs.substituteAll {
-      src = ./dotfiles/config.def.h;
-      primary = unwrapHex themeColors.primary;
-      lavender = unwrapHex themeColors.lavender;
+    wlroots = pkgs.wlroots_0_18;
+    configH = builtins.readFile (pkgs.replaceVars ./dotfiles/config.def.h {
+      # primary = unwrapHex themeColors.primary;
+      # lavender = unwrapHex themeColors.lavender;
       base = unwrapHex themeColors.base;
-      mantle = unwrapHex themeColors.mantle;
+      # mantle = unwrapHex themeColors.mantle;
       crust = unwrapHex themeColors.crust;
       border = unwrapHex themeColors.border;
       red = unwrapHex themeColors.red;
@@ -38,8 +35,6 @@ let
       fi
       dwl | tee -a "$logs_path"
     '';
-  greetd-default-cmd =
-    "uwsm start -S -F -N dwl -D dwl -- /run/current-system/sw/bin/dwl-start > /dev/null";
 in {
   options._custom.desktop.dwl = {
     enable = lib.mkEnableOption { };
@@ -70,30 +65,27 @@ in {
     environment.systemPackages = with pkgs; [
       dwl-final
       dwl-state # script that prints dwl state
-      dwl-write-logs # script that copies logs from journal to file
       dwl-start
     ];
 
-    _custom.desktop.greetd.cmd = lib.mkIf cfg.isDefault greetd-default-cmd;
-    environment.etc = {
-      "greetd/environments".text = lib.mkAfter ''
-        dwl
-        tee
-      '';
-      "greetd/sessions/dwl-uwsm.dekstop".text = ''
-        [Desktop Entry]
-        Name=dwl (UWSM)
-        Comment=dwm for Wayland
-        Exec=${greetd-default-cmd}
-        Type=Application
-      '';
-      "greetd/sessions/dwl-dgpu-uwsm.dekstop".text = ''
-        [Desktop Entry]
-        Name=dwl-dgpu (UWSM)
-        Comment=dwm for Wayland
-        Exec=uwsm start -S -F -N dwl-dgpu -D dwl -- /run/current-system/sw/bin/dwl-start
-        Type=Application
-      '';
+    environment.etc."greetd/environments".text = lib.mkAfter ''
+      dwl
+      tee
+    '';
+
+    _custom.desktop.uwsm.waylandCompositors = {
+      dwl = {
+        prettyName = "dwl";
+        comment = "dwm for Wayland";
+        binPath = "/run/current-system/sw/bin/dwl-start";
+        xdgCurrentDesktop = "dwl";
+      };
+      dwl-dgpu = {
+        prettyName = "dwl-dgpu";
+        comment = "dwm for Wayland";
+        binPath = "/run/current-system/sw/bin/dwl-start";
+        xdgCurrentDesktop = "dwl";
+      };
     };
 
     xdg.portal.config.dwl.default = [ "wlr" "gtk" ];
@@ -106,10 +98,9 @@ in {
 
       xdg = {
         configFile = {
-          "scripts" = {
+          "scripts/dwl" = {
             recursive = true;
-            # TODO: skip dwl-state.sh
-            source = ./scripts;
+            source = ./scripts/automation;
           };
 
           "remmina/glegion.remmina".source =

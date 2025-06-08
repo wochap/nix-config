@@ -8,9 +8,10 @@ in {
     environment = {
       systemPackages = with pkgs; [
         anki # mnemonic tool
-        filelight # view disk usage
+        libsForQt5.filelight # view disk usage
         qbittorrent
 
+        libsForQt5.kalgebra
         libsForQt5.kdenlive
         # glaxnimate
 

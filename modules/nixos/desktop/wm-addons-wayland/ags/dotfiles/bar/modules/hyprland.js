@@ -18,6 +18,28 @@ export const hyprlandTitle = () =>
     truncate: "middle",
   });
 
+export const hyprlandLayout = (monitorPlugName) =>
+  Widget.Label({
+    className: "wmlayout",
+    tooltip_text: "layout",
+    setup(self) {
+      self.hook(Hyprland, async () => {
+        const is_ws_monocle = await Utils.execAsync([
+          "bash",
+          "-c",
+          `[ -f "/tmp/hyprland-${monitorPlugName}-monocle-ws" ] && grep -qxF "${Hyprland.active.workspace.id}" "/tmp/hyprland-${monitorPlugName}-monocle-ws" && echo true || echo false`,
+        ]);
+        if (is_ws_monocle === "true") {
+          self.visible = true;
+          self.label = "[M]";
+        } else {
+          self.label = "";
+          self.visible = false;
+        }
+      });
+    },
+  });
+
 export const hyprlandWorkspaces = () =>
   Widget.Box({
     class_name: "wmtags",
@@ -43,7 +65,7 @@ export const hyprlandMode = () =>
     setup(self) {
       self.hook(
         Hyprland,
-        async (_, submap) => {
+        (_, submap = "") => {
           self.label = submap;
           self.visible = !!submap;
         },
@@ -113,12 +135,13 @@ export const hyprlandTaskbar = () =>
           .map((c) => ({
             appId: mapAppId(c.class),
             focused: c.address === activeAddress,
+            floating: c.floating,
           }));
-        self.children = visibleAppIds.map(({ appId, focused }) => {
+        self.children = visibleAppIds.map(({ appId, focused, floating }) => {
           const _appId = appId.trim() || "unknown";
           return Widget.Box({
             tooltip_text: _appId,
-            class_name: focused ? "focused" : "",
+            class_name: `${focused ? "focused" : ""} ${floating ? "floating" : ""}`,
             child: Widget.Icon({
               icon: _appId,
               size: 32,
@@ -129,3 +152,10 @@ export const hyprlandTaskbar = () =>
       });
     },
   });
+
+export const hyprlandBarClass = (monitorPlugName) => {
+  return Hyprland.active.monitor.bind("name").as((name) => {
+    const focused = name === monitorPlugName;
+    return `bar-container ${focused ? "focused" : ""}`;
+  });
+};

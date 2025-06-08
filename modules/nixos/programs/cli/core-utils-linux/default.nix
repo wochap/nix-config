@@ -39,10 +39,14 @@ in {
       wtype # wayland like xdotool
       xorg.xdpyinfo
       xorg.xev # get pressed key name
+      lazyjournal # journalctl tui
+      systemctl-tui # systemd/systemctl tui
 
       ffmpegthumbnailer # video thumbnailer
       graphicsmagick # image editor
     ];
+
+    programs.zsh.shellAliases.lj = ''run-without-kpadding lazyjournal "$@"'';
   };
 }
 

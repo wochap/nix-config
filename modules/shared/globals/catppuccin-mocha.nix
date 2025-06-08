@@ -1,5 +1,6 @@
 rec {
   primary = mauve;
+  secondary = peach;
   border = surface2;
   background = base;
   backgroundOverlay = mantle;

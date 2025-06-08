@@ -43,7 +43,7 @@ in {
       home.sessionVariables.GLOBAL_PYTHON_FOLDER_PATH = "${python-final}";
 
       # HACK: to make mason.nvim work
-      programs.zsh.initExtra = lib.mkBefore ''
+      programs.zsh.initContent = lib.mkOrder 999 ''
         # TODO: clear $HOME/.venv when updating python version
         if [ -d "$HOME/.venv" ]; then
           zsh-defer source "$HOME/.venv/bin/activate"

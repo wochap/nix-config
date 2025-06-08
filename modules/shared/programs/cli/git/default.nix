@@ -36,7 +36,8 @@ in {
         lg = ''run-without-kpadding lazygit "$@"'';
       };
 
-      programs.zsh.initExtra = builtins.readFile ./dotfiles/git.zsh;
+      programs.zsh.initContent =
+        lib.mkOrder 1000 (builtins.readFile ./dotfiles/git.zsh);
 
       programs.gh = {
         enable = true;
@@ -78,6 +79,7 @@ in {
             expandFocusedSidePanel = true;
           };
           git = {
+            autoFetch = false;
             overrideGpg = true;
             paging = {
               colorArg = "always";

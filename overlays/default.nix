@@ -11,7 +11,7 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
-        nixpkgs-24-11-small = import inputs.nixpkgs-24-11-small {
+        nixpkgs-24-11 = import inputs.nixpkgs-24-11 {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
@@ -52,6 +52,16 @@ in {
           overlays = overlaysWithoutCustomChannels;
         };
         prevstable-gaming = import inputs.prevstable-gaming {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
+        prevstable-intune = import inputs.prevstable-intune {
+          inherit (prev) system;
+          inherit (config.nixpkgs) config;
+          overlays = overlaysWithoutCustomChannels;
+        };
+        prevstable-msedge = import inputs.prevstable-msedge {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;

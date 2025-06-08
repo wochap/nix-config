@@ -20,15 +20,13 @@ in {
     _custom.programs.neovim = {
       setBuildEnv = true;
       withBuildTools = true;
-      # package = lib.mkDefault pkgs.nixpkgs-unstable.neovim-unwrapped; # 0.10.4
-      # neovim 0.11 causes blink.cmp to become laggy
-      package = lib.mkDefault pkgs.prevstable-neovim.neovim-unwrapped; # 0.11.0
+      package = lib.mkDefault pkgs.prevstable-neovim.neovim-unwrapped; # 0.11.1
       # package = lib.mkDefault inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
     };
 
     environment = {
       systemPackages = with pkgs; [
-        nixpkgs-master.neovide # gui
+        neovide # gui
 
         marksman # required by nvim-lspconfig
         _custom.neovim-remote # required by lazygit
