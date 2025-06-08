@@ -210,5 +210,5 @@ windows:
         - lti-docker:
             - cd ./viz-api/src/db/pg-lti-docker
             # <%- if @settings["workspaces"].split(',').include?("lti") %>
-            - docker-compose up -d
+            - docker-compose up
             # <%- end %>
