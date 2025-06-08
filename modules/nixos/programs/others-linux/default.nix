@@ -17,7 +17,7 @@ in {
     environment.systemPackages = with pkgs; [
       brave
       prevstable-chrome.google-chrome
-      microsoft-edge
+      prevstable-msedge.microsoft-edge
       inputs.zen-browser.packages."${system}".beta
 
       galaxy-buds-client
@@ -31,9 +31,6 @@ in {
       # pseintDesktopItem
       # _custom.pseint
     ];
-
-    # intune-portal
-    services.intune.enable = true;
 
     # required by libreoffice
     programs.java.enable = true;
