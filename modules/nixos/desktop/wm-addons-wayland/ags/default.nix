@@ -11,6 +11,8 @@ let
     (builtins.readFile ./scripts/progress-osd.sh);
   toggle-bars = pkgs.writeScriptBin "toggle-bars"
     (builtins.readFile ./scripts/toggle-bars.sh);
+  wireguard-status = pkgs.writeScriptBin "wireguard-status"
+    (builtins.readFile ./scripts/wireguard-status.sh);
 in {
   options._custom.desktop.ags = {
     enable = lib.mkEnableOption { };
@@ -23,7 +25,7 @@ in {
     _custom.hm = {
       imports = [ inputs.ags.homeManagerModules.default ];
 
-      home.packages = [ capslock progress-osd toggle-bars ];
+      home.packages = [ capslock progress-osd toggle-bars wireguard-status ];
 
       programs.ags = {
         enable = true;

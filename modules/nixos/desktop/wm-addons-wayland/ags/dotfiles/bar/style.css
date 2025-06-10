@@ -279,6 +279,13 @@
   background-color: @moduleBgFocus;
 }
 
+.wireguard {
+  padding: 0 0.5em;
+  border-radius: 4px;
+  background-color: @moduleBg;
+  color: @peach;
+}
+
 .clock {
   padding: 0 0.5em;
 }

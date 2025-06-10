@@ -31,6 +31,7 @@ import { recorder } from "./modules/recorder.js";
 import { systray } from "./modules/systray.js";
 import { temperature } from "./modules/temperature.js";
 import { timewarrior } from "./modules/timewarrior.js";
+import { wireguard } from "./modules/wireguard.js";
 import { spacing } from "./constants.js";
 
 // HACK: without wrapping bar in a function
@@ -103,6 +104,7 @@ export const bar = (gdkMonitorId, monitorPlugName) => {
         hpack: "end",
         children: [
           systray(),
+          wireguard(),
           recorder(),
           matcha(),
           offlinemsmtp(),
