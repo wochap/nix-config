@@ -64,9 +64,15 @@ function focus_last() {
   raise_or_run "$window_class" ""
 }
 
+function get_last_ws_file_name() {
+  local hyprland_signature="$HYPRLAND_INSTANCE_SIGNATURE"
+  local monitor_name="$1"
+
+  echo "/tmp/hyprland-$monitor_name-last-ws-$hyprland_signature"
+}
 function focus_last_ws() {
   monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-  file="/tmp/hyprland-$monitor-last-ws"
+  file=$(get_last_ws_file_name "$monitor")
 
   if [[ -f "$file" ]] && [[ $(wc -l <"$file") -eq 2 ]]; then
     prev_ws=$(sed -n '2p' "$file")
@@ -85,7 +91,7 @@ function focus_last_ws_init() {
     if [[ "$event" == "workspacev2" ]]; then
       IFS=',' read -r ws_id ws_name <<<"$payload"
       monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-      file="/tmp/hyprland-$monitor-last-ws"
+      file=$(get_last_ws_file_name "$monitor")
       if [[ -n "$ws_id" ]]; then
         {
           echo "$ws_id"

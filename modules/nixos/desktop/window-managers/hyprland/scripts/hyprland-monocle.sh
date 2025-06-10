@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
+function get_monocle_ws_file_name() {
+  local hyprland_signature="$HYPRLAND_INSTANCE_SIGNATURE"
+  local monitor_name="$1"
+
+  echo "/tmp/hyprland-$monitor_name-monocle-ws-$hyprland_signature"
+}
+
 function get_is_monocle_ws() {
   local monitor_name="$1"
   local ws="$2"
-  local file="/tmp/hyprland-$monitor_name-monocle-ws"
+  local file=$(get_monocle_ws_file_name "$monitor_name")
 
   if [[ -f "$file" ]] && grep -qxF "$ws" "$file"; then
     echo "true"
@@ -61,7 +68,7 @@ function start_monocle() {
   windows_addresses=$(hyprctl -j clients | jq -cr ".[] | select(.workspace.id == $current_ws and .floating == false) | .address")
   first_window_address=$(echo "$windows_addresses" | head -n 1)
   current_monitor_name=$(hyprctl activeworkspace -j | jq -r .monitor)
-  file="/tmp/hyprland-$current_monitor_name-monocle-ws"
+  file=$(get_monocle_ws_file_name "$current_monitor_name")
 
   if [[ -f "$file" ]]; then
     if grep -qxF "$current_ws" "$file"; then
@@ -111,7 +118,7 @@ function finish_monocle() {
   windows_addresses=$(hyprctl -j clients | jq -cr ".[] | select(.workspace.id == $current_ws and .floating == false) | .address")
   first_window_address=$(echo "$windows_addresses" | head -n 1)
   current_monitor_name=$(hyprctl activeworkspace -j | jq -r .monitor)
-  file="/tmp/hyprland-$current_monitor_name-monocle-ws"
+  file=$(get_monocle_ws_file_name "$current_monitor_name")
 
   if [[ -f "$file" ]]; then
     if ! grep -qxF "$current_ws" "$file"; then

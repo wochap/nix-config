@@ -95,12 +95,23 @@ in {
             themeColors);
         "hypr/keybindings.conf".source =
           relativeSymlink configDirectory ./dotfiles/keybindings.conf;
+        "hypr/keybindings-kiosk.conf".source =
+          relativeSymlink configDirectory ./dotfiles/keybindings-kiosk.conf;
         "hypr/config.conf".source =
           relativeSymlink configDirectory ./dotfiles/config.conf;
         "hypr/autostart.conf".source =
           relativeSymlink configDirectory ./dotfiles/autostart.conf;
         "hypr/pyprland.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
+        "hypr/kiosk.conf".text = ''
+          source=~/.config/hypr/colors.conf
+          source=~/.config/hypr/config.conf
+          source=~/.config/hypr/keybindings-kiosk.conf
+
+          # hyprcursor config
+          env = HYPRCURSOR_THEME,${globals.cursor.name}
+          env = HYPRCURSOR_SIZE,${toString globals.cursor.size}
+        '';
 
         "hypr/libinput-gestures.conf".source =
           ./dotfiles/libinput-gestures.conf;

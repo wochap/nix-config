@@ -6,4 +6,8 @@ if [[ -z "$result" ]]; then
   exit 0
 fi
 
-uwsm-app -- $result
+if [[ "$1" == "--uwsm" ]]; then
+  uwsm-app -- $result
+else
+  echo $result | xargs -I {} sh -c {}
+fi

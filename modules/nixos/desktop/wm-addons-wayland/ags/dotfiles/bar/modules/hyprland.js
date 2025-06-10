@@ -18,7 +18,7 @@ export const hyprlandTitle = () =>
     truncate: "middle",
   });
 
-export const hyprlandLayout = (monitorPlugName) =>
+export const hyprlandLayout = (monitorPlugName, HYPRLAND_INSTANCE_SIGNATURE) =>
   Widget.Label({
     className: "wmlayout",
     tooltip_text: "layout",
@@ -27,7 +27,7 @@ export const hyprlandLayout = (monitorPlugName) =>
         const is_ws_monocle = await Utils.execAsync([
           "bash",
           "-c",
-          `[ -f "/tmp/hyprland-${monitorPlugName}-monocle-ws" ] && grep -qxF "${Hyprland.active.workspace.id}" "/tmp/hyprland-${monitorPlugName}-monocle-ws" && echo true || echo false`,
+          `[ -f "/tmp/hyprland-${monitorPlugName}-monocle-ws-${HYPRLAND_INSTANCE_SIGNATURE}" ] && grep -qxF "${Hyprland.active.workspace.id}" "/tmp/hyprland-${monitorPlugName}-monocle-ws-${HYPRLAND_INSTANCE_SIGNATURE}" && echo true || echo false`,
         ]);
         if (is_ws_monocle === "true") {
           self.visible = true;

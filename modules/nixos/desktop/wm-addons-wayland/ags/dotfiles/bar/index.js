@@ -59,9 +59,12 @@ export const bar = (gdkMonitorId, monitorPlugName) => {
       .bind()
       .as((value) => `bar-container ${value ? "focused" : ""}`);
   } else if (isHyprland) {
+    const HYPRLAND_INSTANCE_SIGNATURE = Utils.exec(
+      `sh -c 'echo "$HYPRLAND_INSTANCE_SIGNATURE"'`,
+    );
     leftModules = [
       hyprlandWorkspaces(),
-      hyprlandLayout(monitorPlugName),
+      hyprlandLayout(monitorPlugName, HYPRLAND_INSTANCE_SIGNATURE),
       hyprlandNamedScratchpads(),
       hyprlandScratchpads(),
       hyprlandMode(),
