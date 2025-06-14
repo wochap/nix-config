@@ -1,34 +1,17 @@
 #!/usr/bin/env bash
 
-output_name="HEADLESS-2"
-has_output=$(wlr-randr --json | jq -e ".[] | select(.name == \"$output_name\")" >/dev/null && echo true || echo false)
+# e.g. eDP-1
+output_name=$(wlr-randr --json | jq -r '.[] | select(.name | endswith("-1")) | .name | limit(1; .)')
 
 cleanup() {
   echo "Cleaning up..."
-
-  # remove hyprland headless output
-  hyprctl output remove "$output_name"
-  sleep 0.1
 
   # kill all subprocesses
   pkill -P $$
 }
 
-if [[ "$has_output" == "false" ]]; then
-  # create hyprland headless output
-  hyprctl output create headless "$output_name"
-  sleep 0.1
-fi
-
-# update aspect ratio of HEADLESS output
-kanshictl switch glegion-vnc &
-sleep 0.1
-
-# show HEADLESS output in physical output
-wl-mirror "$output_name" &
-
 # NOTE: if the output isn't headless
-# the screen freezes after switching to tty2
+# the screen freezes after switching to different tty
 wayvnc --output="$output_name" --max-fps=60 0.0.0.0 5900 &
 echo "wayvnc server started"
 
@@ -40,4 +23,5 @@ while true; do
 done
 
 # on tty 2
-# Hyprland --config ~/.config/hypr/hyprland-vnc.conf
+# Hyprland --config ~/.config/hypr/kiosk.conf
+# remmina ~/.config/remmina/hypr-glegion.remmina

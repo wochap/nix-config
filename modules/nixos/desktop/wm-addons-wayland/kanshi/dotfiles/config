@@ -26,9 +26,3 @@ profile glegion-gaming {
   exec kanshi-after-hook
 }
 
-profile glegion-vnc {
-  output "Samsung Display Corp. 0x4188 Unknown" scale 2 position 0,0
-  output HEADLESS-2 scale 2 position 1440,0 mode --custom 2880x1800@120Hz adaptive_sync off
-  exec kanshi-after-hook
-}
-
