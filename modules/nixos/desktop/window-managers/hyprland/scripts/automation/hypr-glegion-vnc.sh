@@ -24,12 +24,6 @@ fi
 kanshictl switch glegion-vnc &
 sleep 0.1
 
-# show bar on HEADLESS output
-systemctl --user restart ags.service &
-
-# show wallpaper on HEADLESS output
-systemctl --user restart swww-daemon.service &
-
 # show HEADLESS output in physical output
 wl-mirror "$output_name" &
 
