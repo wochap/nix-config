@@ -41,17 +41,17 @@ function init_monocle() {
         if [ -z "$windows_addresses" ]; then
           echo "no windows found"
         elif [ "$(echo "$windows_addresses" | wc -l)" -eq 1 ] && [ "$is_ws_monocle" = "true" ]; then
-          batch_args="dispatch workspace $ws;"
+          batch_args="dispatch focusworkspaceoncurrentmonitor $ws;"
           batch_args="$batch_args dispatch focuswindow address:$window_address; dispatch togglegroup;"
-          batch_args="$batch_args dispatch workspace $current_ws;"
+          batch_args="$batch_args dispatch focusworkspaceoncurrentmonitor $current_ws;"
           hyprctl --batch "$batch_args"
         elif [ "$(echo "$windows_addresses" | wc -l)" -gt 1 ] && [ "$is_ws_monocle" = "true" ]; then
           batch_args="dispatch setignoregrouplock on;"
-          batch_args="$batch_args dispatch workspace $ws;"
+          batch_args="$batch_args dispatch focusworkspaceoncurrentmonitor $ws;"
           batch_args="$batch_args dispatch focuswindow address:$window_address; dispatch togglegroup;"
           batch_args="$batch_args dispatch moveintogroup l; dispatch moveintogroup r; dispatch moveintogroup u; dispatch moveintogroup d;"
           batch_args="$batch_args dispatch setignoregrouplock off;"
-          batch_args="$batch_args dispatch workspace $current_ws;"
+          batch_args="$batch_args dispatch focusworkspaceoncurrentmonitor $current_ws;"
           hyprctl --batch "$batch_args"
           echo "more than 1 window"
         fi
@@ -158,7 +158,7 @@ function move_to_workspace() {
     batch_args="$batch_args dispatch focuswindow address:$window_address; dispatch togglegroup;"
     batch_args="$batch_args dispatch moveintogroup l; dispatch moveintogroup r; dispatch moveintogroup u; dispatch moveintogroup d;"
     batch_args="$batch_args dispatch setignoregrouplock off;"
-    batch_args="$batch_args dispatch workspace $current_ws;"
+    batch_args="$batch_args dispatch focusworkspaceoncurrentmonitor $current_ws;"
     hyprctl --batch "$batch_args"
   fi
 }

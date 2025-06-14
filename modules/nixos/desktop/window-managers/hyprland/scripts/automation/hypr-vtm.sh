@@ -11,7 +11,7 @@ if tmux has-session -t vtm-editors 2>/dev/null; then
 fi
 
 # Focus workspace 2
-hyprctl dispatch workspace 2
+hyprctl dispatch focusworkspaceoncurrentmonitor 2
 
 # Change to monocle layout
 hyprland-monocle --start
