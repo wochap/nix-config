@@ -118,7 +118,7 @@ in {
         shellAliases = {
           # transform wav 16kHz to vtt
           wis =
-            "whisper-cpp -m ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin -ovtt -f";
+            "whisper-command -m ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin -ovtt -f";
           # downloads youtube video and also generates a wav 16kHz format
           ytaw =
             "youtube-dl -f bestvideo+bestaudio --keep-video --add-metadata --xattrs --merge-output-format mp4 --extract-audio --audio-format wav --postprocessor-args 'ffmpeg:-ar 16000'";
@@ -130,6 +130,9 @@ in {
             ../../../../secrets/dotfiles/aider/.aider.conf.yml;
         };
       };
+
+      programs.zsh.initContent =
+        lib.mkOrder 1000 (builtins.readFile ./dotfiles/whisper.zsh);
     };
   };
 }

@@ -1,3 +1,8 @@
+# regular files, ignore directories, ignore symlinks
+_cpf_files_only() {
+  _files -g '*(-.)'
+}
+
 function timezsh() {
   shell=${1-$SHELL}
   for i in $(seq 1 10); do time $shell -i -c exit; done
@@ -16,6 +21,7 @@ function projects() {
 }
 
 # cd into git repository
+# git repo in projects dir
 function pro() {
   selected=$(projects | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name {} | head -200'" fzf)
 
@@ -27,6 +33,7 @@ function pro() {
 zle -N pro
 
 # cd into git repository
+# any git repo in home dir
 function apro() {
   projects=$(find ~ -maxdepth 4 -name ".git" -type d -execdir pwd \;)
 
@@ -43,6 +50,7 @@ function killport {
   kill $(lsof -t -i:"$1") > /dev/null 2>&1
 }
 
+# automation scripts picker
 function opro() {
   scripts=$(find ~/.config/scripts /etc/scripts/projects -type l,f -name "*.sh")
 
@@ -65,12 +73,6 @@ function cdfzf() {
   fi
 }
 zle -N cdfzf
-
-function scripts() {
-  scripts=$(find /etc/scripts -type l,f -name "*.sh")
-
-  sh $(echo "$scripts" | fzf)
-}
 
 # run npm script (requires jq)
 function fns() {
@@ -136,23 +138,6 @@ function help() {
   "$@" --help 2>&1 | bathelp
 }
 
-extract_for_whisper() {
-  if [[ $# -ne 1 ]]; then
-    echo "Usage: extract_audio <input_video_file>"
-    return 1
-  fi
-
-  local input_file="$1"
-  local output_file="./$(basename "${input_file%.*}_wis.wav")"
-
-  if [[ ! -f "$input_file" ]]; then
-    echo "Error: File '$input_file' not found."
-    return 1
-  fi
-
-  ffmpeg -i "$input_file" -acodec pcm_s16le -ar 16000 "$output_file"
-}
-
 # add file content to clipboard
 function cpfc() {
   local filepath=$(realpath "$1")
@@ -165,8 +150,5 @@ compdef _cpf_files_only cpfc
 function cpf() {
   local filepath=$(realpath "$1")
   printf 'file://%s\n' "$filepath" | wl-copy -t text/uri-list
-}
-_cpf_files_only() {
-  _files -g '*(-.)'
 }
 compdef _cpf_files_only cpf
