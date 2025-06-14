@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PROG=$(basename $0)
-TEMP=$(getopt --options h --longoptions help,raise-or-run-uwsm:,raise-or-run:,focus-last,focus-last-workspace,focus-last-workspace-init,toggle,toggle-in -- "$@") || exit 1
+TEMP=$(getopt --options h --longoptions help,raise-or-run-uwsm:,raise-or-run:,focus-last,toggle,toggle-in -- "$@") || exit 1
 eval set -- "$TEMP"
 
 current_ws="$(hyprctl activeworkspace -j | jq -r '.id')"
@@ -62,46 +62,6 @@ function raise_or_run() {
 function focus_last() {
   window_class=$(hyprctl clients -j | jq -r "[.[] | select((.tags[]? | test(\"^scratchpad\")))] | sort_by(.focusHistoryID) | .[0] | .class")
   raise_or_run "$window_class" ""
-}
-
-function get_last_ws_file_name() {
-  local hyprland_signature="$HYPRLAND_INSTANCE_SIGNATURE"
-  local monitor_name="$1"
-
-  echo "/tmp/hyprland-$monitor_name-last-ws-$hyprland_signature"
-}
-function focus_last_ws() {
-  monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-  file=$(get_last_ws_file_name "$monitor")
-
-  if [[ -f "$file" ]] && [[ $(wc -l <"$file") -eq 2 ]]; then
-    prev_ws=$(sed -n '2p' "$file")
-    hyprctl dispatch workspace "$prev_ws"
-  else
-    hyprctl dispatch workspace previous
-  fi
-}
-function focus_last_ws_init() {
-  function handle() {
-    input="$1"
-    event="${input%%>>*}"
-    payload="${input#*>>}"
-
-    # save last normal/special workspace
-    if [[ "$event" == "workspacev2" ]]; then
-      IFS=',' read -r ws_id ws_name <<<"$payload"
-      monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-      file=$(get_last_ws_file_name "$monitor")
-      if [[ -n "$ws_id" ]]; then
-        {
-          echo "$ws_id"
-          cat "$file" 2>/dev/null
-        } | head -n 2 >"$file.tmp" && mv "$file.tmp" "$file"
-      fi
-    fi
-  }
-
-  socat -U - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while read -r line; do handle "$line"; done
 }
 
 function process_scratchpad() {
@@ -209,8 +169,6 @@ Options:
   -h, --help                      Show this help message.
   --raise-or-run CLASS CMD        Raise or run a window with given CLASS, launching CMD if not found.
   --focus-last                    Focus the last used scratchpad window.
-  --focus-last-workspace          Switch to the last used workspace on the current monitor.
-  --focus-last-workspace-init     Initialize workspace tracking via Hyprland events.
   --toggle                        Toggle visibility of scratchpad windows.
   --toggle-in                     Toggle the currently focused window in/out of the scratchpad.
 EOF
@@ -230,14 +188,6 @@ EOF
     ;;
   --focus-last)
     focus_last
-    shift
-    ;;
-  --focus-last-workspace)
-    focus_last_ws
-    shift
-    ;;
-  --focus-last-workspace-init)
-    focus_last_ws_init
     shift
     ;;
   --toggle)
