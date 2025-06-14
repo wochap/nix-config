@@ -48,7 +48,7 @@ in {
     environment.systemPackages = with pkgs;
       [ python311Packages.huggingface-hub oterm ]
       ++ lib.optionals cfg.enableWhisper
-      [ (openai-whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
+      [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
       ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ];
 
     services.ollama = lib.mkIf cfg.enableOllama {
@@ -118,7 +118,7 @@ in {
         shellAliases = {
           # transform wav 16kHz to vtt
           wis =
-            "whisper-command -m ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin -ovtt -f";
+            "whisper-cli --model ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin --output-vtt --file";
           # downloads youtube video and also generates a wav 16kHz format
           ytaw =
             "youtube-dl -f bestvideo+bestaudio --keep-video --add-metadata --xattrs --merge-output-format mp4 --extract-audio --audio-format wav --postprocessor-args 'ffmpeg:-ar 16000'";

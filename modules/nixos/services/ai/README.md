@@ -76,7 +76,7 @@ $ sh ./models/download-ggml-model.sh large-v3
 Running
 
 ```sh
-$ whisper-cpp -m /path-to/whisper.cpp/models/ggml-large-v3.bin -f audio.wav
+$ whisper-cli -m /path-to/whisper.cpp/models/ggml-large-v3.bin -f audio.wav
 ```
 
 [Available models](https://github.com/ggerganov/whisper.cpp/blob/master/models/README.md#available-models)
