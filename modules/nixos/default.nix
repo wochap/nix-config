@@ -81,13 +81,13 @@
     ./security/polkit
     ./security/ssh
 
+    ./services/ai
     ./services/android
     ./services/docker
     ./services/flatpak
     ./services/interception-tools
     ./services/ipwebcam
     ./services/kdeconnect
-    ./services/llm
     ./services/ms-intune
     ./services/syncthing
     ./services/virt

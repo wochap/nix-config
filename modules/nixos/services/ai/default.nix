@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config._custom.services.llm;
+  cfg = config._custom.services.ai;
   inherit (config._custom.globals) configDirectory;
   inherit (pkgs._custom) wochap-ssc;
   makeVirtualHost = port: {
@@ -29,7 +29,7 @@ let
 in {
   imports = [ ./ollama-webui-lite.nix ];
 
-  options._custom.services.llm = {
+  options._custom.services.ai = {
     enable = lib.mkEnableOption { };
     enablePix2tex = lib.mkEnableOption { };
     enableWhisper = lib.mkEnableOption { };
