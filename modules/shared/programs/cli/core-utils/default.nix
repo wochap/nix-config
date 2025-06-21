@@ -2,8 +2,6 @@
 
 let cfg = config._custom.programs.core-utils;
 in {
-  imports = [ inputs.nix-index-database.nixosModules.nix-index ];
-
   options._custom.programs.core-utils.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -39,6 +37,8 @@ in {
     ];
 
     _custom.hm = {
+      imports = [ inputs.nix-index-database.hmModules.nix-index ];
+
       home.shellAliases = {
         ".." = "cd ..";
         cp = "xcp";
@@ -67,10 +67,11 @@ in {
           enableBashIntegration = false;
           enableZshIntegration = false;
         };
+        nix-index-database.comma.enable = true;
 
         command-not-found.enable = lib.mkForce false;
 
-        # like tldr
+        # sh oneliners commands bookmarks
         navi = {
           enable = true;
           settings = {
