@@ -579,7 +579,7 @@ static const Modekey modekeys[] = {
 
   // Notification
   // Show recent notification menu
-  EXIT_TO_NORMAL_MODE(NOTIFICATION, MOD_NONE, Key_n, spawn, SHCMD("dunstctl context")),
+  EXIT_TO_NORMAL_MODE(NOTIFICATION, MOD_NONE, Key_a, spawn, SHCMD("dunstctl context")),
   // Show last notification
   EXIT_TO_NORMAL_MODE(NOTIFICATION, MOD_NONE, Key_h, spawn, SHCMD("dunstctl history-pop")),
   // Hide recent notification
