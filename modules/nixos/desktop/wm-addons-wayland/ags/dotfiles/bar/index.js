@@ -70,7 +70,7 @@ export const bar = (gdkMonitorId, monitorPlugName) => {
       hyprlandScratchpads(),
       hyprlandMode(),
       capslock(),
-      // hyprlandTitle(),
+      hyprlandTitle(),
     ];
     centerModules = [hyprlandTaskbar()];
     className = hyprlandBarClass(monitorPlugName);

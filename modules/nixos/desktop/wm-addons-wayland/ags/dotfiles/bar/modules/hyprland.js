@@ -11,11 +11,27 @@ try {
 }
 
 export const hyprlandTitle = () =>
-  Widget.Label({
-    class_name: "wmtitle",
-    label: Hyprland.active.client.bind("title"),
-    visible: Hyprland.active.client.bind("address").as((addr) => !!addr),
-    truncate: "middle",
+  Widget.Box({
+    className: "wmtitle",
+    spacing: 0,
+    homogeneous: true,
+    vertical: true,
+    children: [
+      Widget.Label({
+        class_name: "wmtitle_appid",
+        label: Hyprland.active.client.bind("class"),
+        visible: Hyprland.active.client.bind("address").as((addr) => !!addr),
+        truncate: "middle",
+        xalign: 0,
+      }),
+      Widget.Label({
+        class_name: "wmtitle_title",
+        label: Hyprland.active.client.bind("title"),
+        visible: Hyprland.active.client.bind("address").as((addr) => !!addr),
+        truncate: "middle",
+        xalign: 0,
+      }),
+    ],
   });
 
 export const hyprlandLayout = (monitorPlugName, HYPRLAND_INSTANCE_SIGNATURE) =>
@@ -133,21 +149,24 @@ export const hyprlandTaskbar = () =>
               c.mapped && c.workspace.name === Hyprland.active.workspace.name,
           )
           .map((c) => ({
+            appIdOriginal: c.class,
             appId: mapAppId(c.class),
             focused: c.address === activeAddress,
             floating: c.floating,
           }));
-        self.children = visibleAppIds.map(({ appId, focused, floating }) => {
-          const _appId = appId.trim() || "unknown";
-          return Widget.Box({
-            tooltip_text: _appId,
-            class_name: `${focused ? "focused" : ""} ${floating ? "floating" : ""}`,
-            child: Widget.Icon({
-              icon: _appId,
-              size: 32,
-            }),
-          });
-        });
+        self.children = visibleAppIds.map(
+          ({ appId, focused, floating, appIdOriginal }) => {
+            const _appId = appId.trim() || "unknown";
+            return Widget.Box({
+              tooltip_text: appIdOriginal,
+              class_name: `${focused ? "focused" : ""} ${floating ? "floating" : ""}`,
+              child: Widget.Icon({
+                icon: _appId,
+                size: 32,
+              }),
+            });
+          },
+        );
         self.visible = visibleAppIds.length > 0;
       });
     },

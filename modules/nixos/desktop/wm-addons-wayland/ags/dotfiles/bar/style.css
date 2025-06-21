@@ -90,7 +90,11 @@
 
 .wmtitle {
   padding: 1px 0.5em 0;
+}
+.wmtitle_appid,
+.wmtitle_title {
   color: @textDimmed;
+  font-size: 0.7em;
 }
 
 .bar .capslock {
