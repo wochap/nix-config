@@ -1,6 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
-{
+let inherit (config._custom.globals) configDirectory;
+in {
   config = {
     environment.systemPackages = with pkgs; [ nix-tree ];
 
@@ -65,6 +66,12 @@
           "recursive-nix"
         ];
       };
+    };
+
+    programs.nh = {
+      enable = true;
+      clean.enable = false;
+      flake = configDirectory;
     };
   };
 }
