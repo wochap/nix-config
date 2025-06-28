@@ -93,7 +93,6 @@
 }
 .wmtitle_appid,
 .wmtitle_title {
-  color: @textDimmed;
   font-size: 0.7em;
 }
 
