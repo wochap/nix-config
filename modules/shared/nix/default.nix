@@ -3,7 +3,7 @@
 let inherit (config._custom.globals) configDirectory;
 in {
   config = {
-    environment.systemPackages = with pkgs; [ nix-tree ];
+    environment.systemPackages = with pkgs; [ nixpkgs-unstable.nix-tree ];
 
     nix = {
       gc.automatic = lib.mkDefault false;
