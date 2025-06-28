@@ -26,11 +26,6 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
-        prevstable-nix = import inputs.prevstable-nix {
-          inherit (prev) system;
-          inherit (config.nixpkgs) config;
-          overlays = overlaysWithoutCustomChannels;
-        };
         prevstable-chrome = import inputs.prevstable-chrome {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
