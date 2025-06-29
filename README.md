@@ -56,6 +56,13 @@ Reboot into NixOS, login with the user you created
    $ git clone https://github.com/wochap/nix-config.git ~/.config/nix-config
    ```
 
+1. Add the following to `/root/.gitconfig`
+
+   ```
+   [safe]
+     directory = /home/gean/nix-config
+   ```
+
 1. Rebuild nixos with the host's specific config, for example, heres's a rebuild for my `gdesktop`
 
    **WARNING:** First `nixos-rebuild` with device config can take several hours, maybe you want to disable some modules
