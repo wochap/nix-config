@@ -7,6 +7,7 @@ if [[ "$1" == "--select" ]]; then
     echo -n "$selected" | wl-copy
   fi
 elif [[ "$1" == "--add" ]]; then
+  # https://github.com/jarun/buku/issues/837
   buku --write
 elif [[ "$1" == "--edit" ]]; then
   while true; do
