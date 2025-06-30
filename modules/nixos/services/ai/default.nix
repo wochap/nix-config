@@ -73,7 +73,7 @@ in {
         port = 11464;
       };
 
-    services.open-webui = lib.mkIf cfg.enableOllama {
+    services.open-webui = lib.mkIf cfg.enableOpenWebui {
       enable = true;
       package = pkgs.open-webui;
       openFirewall = false;
