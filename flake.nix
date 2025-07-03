@@ -2,7 +2,7 @@
   inputs = {
     # channels
     nixpkgs.url = "github:nixos/nixpkgs?rev=4792576cb003c994bd7cc1edada3129def20b27d"; # nixos-25.05 (07 jun 2025)
-    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=adaa24fbf46737f3f1b5497bf64bae750f82942e"; # nixos-unstable (15 may 2025)
+    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=3016b4b15d13f3089db8a41ef937b13a9e33a8df"; # nixos-unstable (03 jul 2025)
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=3b998b4adb33a0a8f1a340a66a6757b206d6d3b7"; # master (05 jan 2025)
     nixpkgs-24-11.url = "github:nixos/nixpkgs?rev=b75693fb46bfaf09e662d09ec076c5a162efa9f6"; # nixos-24.11 (20 mar 2025)
     nixpkgs-24-05.url = "github:nixos/nixpkgs?rev=e8c38b73aeb218e27163376a2d617e61a2ad9b59"; # nixos-24.05 (21 nov 2024)
