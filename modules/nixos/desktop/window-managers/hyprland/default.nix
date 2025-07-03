@@ -85,39 +85,42 @@ in {
           lib._custom.relativeSymlink configDirectory
           ./dotfiles/hypr-glegion.remmina;
 
-        "hypr/xdph.conf".text = ''
-          screencopy {
-            max_fps = 60
-            allow_token_by_default = true
-          }
-        '';
+        "hypr/xdph.conf".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/xdph.conf;
 
         "hypr/colors.conf".text = lib.concatStringsSep "\n"
           (lib.attrsets.mapAttrsToList
             (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
             themeColors);
-        "hypr/keybindings.conf".source =
-          relativeSymlink configDirectory ./dotfiles/keybindings.conf;
-        "hypr/keybindings-kiosk.conf".source =
-          relativeSymlink configDirectory ./dotfiles/keybindings-kiosk.conf;
-        "hypr/config.conf".source =
-          relativeSymlink configDirectory ./dotfiles/config.conf;
-        "hypr/autostart.conf".source =
-          relativeSymlink configDirectory ./dotfiles/autostart.conf;
+        "hypr/binds-kiosk.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hypr/binds-kiosk.conf;
+        "hypr/binds-main.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hypr/binds-main.conf;
+        "hypr/keywords-main.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hypr/keywords-main.conf;
+        "hypr/keywords.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hypr/keywords.conf;
+        "hypr/rules.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hypr/rules.conf;
+        "hypr/variables.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hypr/variables.conf;
+
         "hypr/pyprland.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
+        "hypr/libinput-gestures.conf".source =
+          ./dotfiles/libinput-gestures.conf;
+
         "hypr/kiosk.conf".text = ''
           source=~/.config/hypr/colors.conf
-          source=~/.config/hypr/config.conf
-          source=~/.config/hypr/keybindings-kiosk.conf
+          source=~/.config/hypr/variables.conf
+          source=~/.config/hypr/keywords.conf
+          source=~/.config/hypr/rules.conf
+          source=~/.config/hypr/binds-kiosk.conf
 
           # hyprcursor config
           env = HYPRCURSOR_THEME,${globals.cursor.name}
           env = HYPRCURSOR_SIZE,${toString globals.cursor.size}
         '';
-
-        "hypr/libinput-gestures.conf".source =
-          ./dotfiles/libinput-gestures.conf;
 
         "uwsm/env-hyprland".text = ''
           ${common-env-hyprland}
@@ -148,9 +151,11 @@ in {
           ];
         extraConfig = ''
           source=~/.config/hypr/colors.conf
-          source=~/.config/hypr/config.conf
-          source=~/.config/hypr/autostart.conf
-          source=~/.config/hypr/keybindings.conf
+          source=~/.config/hypr/variables.conf
+          source=~/.config/hypr/keywords.conf
+          source=~/.config/hypr/keywords-main.conf
+          source=~/.config/hypr/rules.conf
+          source=~/.config/hypr/binds-main.conf
 
           # hyprcursor config
           env = HYPRCURSOR_THEME,${globals.cursor.name}
