@@ -147,6 +147,8 @@ in {
         plugins = with hyprplugins;
           [
             hyprexpo
+
+            # touch screen support gestures
             # inputs.hyprgrass.packages.${pkgs.system}.default
           ];
         extraConfig = ''
