@@ -2832,17 +2832,16 @@
     "reversal-extra": {
       "flake": false,
       "locked": {
-        "lastModified": 1744769352,
-        "narHash": "sha256-30+2dRmq5AW1GfclRqWb71iXWldsoWQ+tSKVmDJG410=",
+        "lastModified": 1751980778,
+        "narHash": "sha256-XCkr0RzVeaIRySaZcLGSAU7iEnxSWeOpGMNKTcNa1XA=",
         "owner": "wochap",
         "repo": "Reversal-Extra",
-        "rev": "0ef3dc16cd227f3379a4ce453b41eca7d7fc7b59",
+        "rev": "165eb1f1d46d564ee79507339ab553ec4adf75fc",
         "type": "github"
       },
       "original": {
         "owner": "wochap",
         "repo": "Reversal-Extra",
-        "rev": "0ef3dc16cd227f3379a4ce453b41eca7d7fc7b59",
         "type": "github"
       }
     },
