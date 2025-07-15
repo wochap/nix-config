@@ -11,6 +11,7 @@ in {
       file # print filetype
       getopt # fix macos getopt
       git-crypt
+      jc # output to JSON
       jq # manipulate JSON
       yq # manipulate YAML
       killall
