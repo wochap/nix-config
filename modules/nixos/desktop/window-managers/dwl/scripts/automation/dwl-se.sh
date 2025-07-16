@@ -30,7 +30,7 @@ if [ "$confirm_branch" -eq 0 ]; then
   exit 0
 fi
 
-start_docker=$(gum confirm --no-show-help 'start docker?' && echo 1 || echo 0)
+start_docker=$(gum confirm --no-show-help 'start docker?' --default=false && echo 1 || echo 0)
 workspaces=$(gum choose --height 6 --no-show-help --no-limit {'layout-editor',microfrontends,charts,surveys} | paste -sd, -)
 
 if [ -z "$workspaces" ]; then
