@@ -2832,11 +2832,11 @@
     "reversal-extra": {
       "flake": false,
       "locked": {
-        "lastModified": 1751980778,
-        "narHash": "sha256-XCkr0RzVeaIRySaZcLGSAU7iEnxSWeOpGMNKTcNa1XA=",
+        "lastModified": 1752680016,
+        "narHash": "sha256-d5z7Bipzqqksz2jmaO4VmKqSp7QMuAp4y4hjYsMIzOg=",
         "owner": "wochap",
         "repo": "Reversal-Extra",
-        "rev": "165eb1f1d46d564ee79507339ab553ec4adf75fc",
+        "rev": "744c711fe98ce3e197beb5b2b5ab5ffc5ddbb008",
         "type": "github"
       },
       "original": {
@@ -2970,17 +2970,17 @@
     "smart-splits-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1737571732,
-        "narHash": "sha256-5dclrvSTF3Eg/aQ5FaTVqW+i9h0YRcJlwBCofPaY+Qs=",
+        "lastModified": 1752523537,
+        "narHash": "sha256-zfuBaSnudCWw0N1XAms9CeVrAuPEAPDXxLLg1rTX7FE=",
         "owner": "mrjones2014",
         "repo": "smart-splits.nvim",
-        "rev": "4a231987665d3c6e02ca88833d050e918afe3e1e",
+        "rev": "2b5dda43b3de5d13b56c4606f7d19db78637e527",
         "type": "github"
       },
       "original": {
         "owner": "mrjones2014",
         "repo": "smart-splits.nvim",
-        "rev": "4a231987665d3c6e02ca88833d050e918afe3e1e",
+        "rev": "2b5dda43b3de5d13b56c4606f7d19db78637e527",
         "type": "github"
       }
     },

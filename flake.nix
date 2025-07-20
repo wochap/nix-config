@@ -89,7 +89,7 @@
     kitty-smart-tab.flake = false;
     powerlevel10k.url = "github:romkatv/powerlevel10k?rev=35833ea15f14b71dbcebc7e54c104d8d56ca5268"; # v1.20.0
     powerlevel10k.flake = false;
-    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim?rev=4a231987665d3c6e02ca88833d050e918afe3e1e"; # v1.8.1
+    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim?rev=2b5dda43b3de5d13b56c4606f7d19db78637e527"; # v2.0.3
     smart-splits-nvim.flake = false;
     zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=d52da825c2b60b664f33e8d82fdfc1c3b647b753"; # (12 dec 2023)
     zsh-autocomplete.flake = false;
