@@ -138,6 +138,11 @@ function help() {
   "$@" --help 2>&1 | bathelp
 }
 
+# Prints real path of bin
+function rp() {
+  realpath $(which $@)
+}
+
 # add file content to clipboard
 function cpfc() {
   local filepath=$(realpath "$1")
