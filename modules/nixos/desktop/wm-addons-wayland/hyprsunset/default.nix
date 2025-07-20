@@ -2,6 +2,7 @@
 
 let
   cfg = config._custom.desktop.hyprsunset;
+  inherit (config._custom.globals) configDirectory;
   hyprsunset-final = pkgs.hyprsunset;
 in {
   options._custom.desktop.hyprsunset.enable = lib.mkEnableOption { };
@@ -10,24 +11,16 @@ in {
     environment.systemPackages = with pkgs; [ hyprsunset-final ];
 
     _custom.hm = {
-      services.hyprsunset = {
-        enable = true;
-        package = hyprsunset-final;
-        transitions = {
-          sunrise = {
-            calendar = "*-*-* 10:00:00";
-            requests = [[ "temperature" "4000" ]];
-          };
-          sunset = {
-            calendar = "*-*-* 16:00:00";
-            requests = [[ "temperature" "3700" ]];
-          };
+      xdg.configFile."hypr/hyprsunset.conf".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/hyprsunset.conf;
+
+      systemd.user.services.hyprsunset = lib._custom.mkWaylandService {
+        Service = {
+          ExecStart = "${lib.getExe hyprsunset-final} --temperature 4000";
+          Restart = "on-failure";
+          KillMode = "mixed";
         };
       };
-
-      # only start hyprsunset on wayland wm
-      systemd.user.services.hyprsunset.Unit.ConditionEnvironment =
-        lib.mkForce "XDG_SESSION_DESKTOP=Hyprland";
     };
   };
 }
