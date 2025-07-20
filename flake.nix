@@ -2,7 +2,7 @@
   inputs = {
     # channels
     nixpkgs.url = "github:nixos/nixpkgs?rev=4792576cb003c994bd7cc1edada3129def20b27d"; # nixos-25.05 (07 jun 2025)
-    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=3016b4b15d13f3089db8a41ef937b13a9e33a8df"; # nixos-unstable (03 jul 2025)
+    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=c87b95e25065c028d31a94f06a62927d18763fdf"; # nixos-unstable (20 jul 2025)
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=3b998b4adb33a0a8f1a340a66a6757b206d6d3b7"; # master (05 jan 2025)
     nixpkgs-24-11.url = "github:nixos/nixpkgs?rev=b75693fb46bfaf09e662d09ec076c5a162efa9f6"; # nixos-24.11 (20 mar 2025)
     nixpkgs-24-05.url = "github:nixos/nixpkgs?rev=e8c38b73aeb218e27163376a2d617e61a2ad9b59"; # nixos-24.05 (21 nov 2024)
@@ -39,18 +39,20 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-alien.inputs.nixpkgs.follows = "nixpkgs";
     # everytime you update hyprland flake, run `sudo nix flake lock --update-input hyprland`
-    hyprland.url = "github:hyprwm/Hyprland?rev=9958d297641b5c84dcff93f9039d80a5ad37ab00"; # v0.49.0
-    hyprland.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=c25ee86113d99ec9188d218442f7e93ee62aef27"; # v0.49.0
+    hyprland.url = "github:hyprwm/Hyprland?rev=4e242d086e20b32951fdc0ebcbfb4d41b5be8dcc"; # v0.50.1
+    hyprland.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=d723e5b153b7990d36e62a425bda3768c41dd9eb"; # v0.50.0
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=980ebd486b8a4c2ac1670286f38d163db1e38cd9"; # v0.4.5
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
+    hyprsunset.url = "github:hyprwm/hyprsunset?rev=a52fd1539de2eb08bf87ca545fa9e3671c6580f4"; # v0.3.0
+    hyprsunset.inputs.nixpkgs.follows = "nixpkgs";
     # everytime you update hyprland flake, `sudo nix flake lock --update-input hyprlock`
-    hyprlock.url = "github:hyprwm/hyprlock?rev=6c64630df81b52208b210f02476f55e4db56e6cf"; # v0.8.2
+    hyprlock.url = "github:hyprwm/hyprlock?rev=31297a871b7b1aea35dcf8627c6bfecf33fe03db"; # v0.9.0
     hyprlock.inputs.nixpkgs.follows = "nixpkgs";
-    pyprland.url = "github:hyprland-community/pyprland?rev=399a62afa2b3d7574f78a9ef483c7478de1fbf97"; # v2.4.5
+    pyprland.url = "github:hyprland-community/pyprland?rev=619da2bcbae92014b8f0cdc2268b2cef3f7ad757"; # v2.4.6
     pyprland.inputs.nixpkgs.follows = "nixpkgs";
-    hyprmag.url = "github:SIMULATAN/hyprmag?rev=a7ca558d357e2a0d34373620f89d2daf210744dc"; # main (8 jun 2024)
+    hyprmag.url = "github:SIMULATAN/hyprmag?rev=a58f3715ab1b097343bda0918ebc450ffcae4627"; # main (20 jul 2025)
     hyprmag.inputs.nixpkgs.follows = "nixpkgs";
     hyprgrass.url = "github:horriblename/hyprgrass?rev=427690aec574fec75f5b7b800ac4a0b4c8e4b1d5"; # v0.8.1
     lobster.url = "github:justchokingaround/lobster";
