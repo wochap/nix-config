@@ -1,0 +1,14 @@
+charging:
+  90:
+    - "notify-send --replace-id=693 --app-name=batty --urgency=normal --icon=battery-good-charging 'Battery Nearing Full' 'Your battery is at 90%.'"
+  95:
+    - "notify-send --replace-id=693 --app-name=batty --urgency=normal --icon=battery-full-charged 'Battery Nearing Full' 'Your battery is at 95%.'"
+    - "pkexec legion_cli --donotexpecthwmon batteryconservation-enable"
+  100:
+    - "notify-send --replace-id=693 --app-name=batty --urgency=normal --icon=battery-full-charged 'Battery Charged' 'You can unplug your charger.'"
+
+discharging:
+  15:
+    - "notify-send --replace-id=693 --app-name=batty --urgency=critical --icon=battery-low 'Battery Low' 'Your battery is at 15%.'"
+  5:
+    - "notify-send --replace-id=693 --app-name=batty --urgency=critical --icon=battery-caution 'Battery Critically Low!' 'Plug in your charger. 5% remaining.'"

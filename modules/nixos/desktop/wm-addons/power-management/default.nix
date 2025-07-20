@@ -1,10 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (config.boot.kernelPackages) cpupower;
   cfg = config._custom.desktop.power-management;
-  battery-notification = pkgs.writeScriptBin "battery-notification"
-    (builtins.readFile ./scripts/battery-notification.sh);
+  inherit (config._custom.globals) configDirectory;
+  inherit (config.boot.kernelPackages) cpupower;
+  batty = pkgs.writeScriptBin "batty" (builtins.readFile ./scripts/batty.sh);
 in {
   options._custom.desktop.power-management = {
     enable = lib.mkEnableOption { };
@@ -12,7 +12,7 @@ in {
       type = lib.types.listOf lib.types.str;
       default = [ ];
     };
-    enableLowBatteryNotification = lib.mkEnableOption { };
+    enableBatty = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -20,7 +20,7 @@ in {
       cpupower-gui
       cpupower
       powertop # only use it to check current power usage
-      battery-notification
+      batty
       # psensor # unmaintained
       lm_sensors
     ];
@@ -57,17 +57,19 @@ in {
       };
     };
 
-    _custom.hm.systemd.user.services.battery-notification =
-      lib.mkIf cfg.enableLowBatteryNotification (lib._custom.mkWaylandService {
-        Unit.Description =
-          "A script that shows warning messages to the user when the battery is almost empty.";
-        Unit.Documentation = "https://github.com/rjekker/i3-battery-popup";
-        Service = {
-          ExecStart =
-            "${battery-notification}/bin/battery-notification -t 5s -L 15 -l 5 -n -i battery -D";
-          Restart = "on-failure";
-          KillMode = "mixed";
-        };
-      });
+    _custom.hm = {
+      xdg.configFile."batty/config.yaml".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/config.yaml;
+
+      systemd.user.services.batty = lib.mkIf cfg.enableBatty
+        (lib._custom.mkWaylandService {
+          Unit.Description = "A Customizable Battery Notifier Script";
+          Service = {
+            ExecStart = "${batty}/bin/batty";
+            Restart = "on-failure";
+            KillMode = "mixed";
+          };
+        });
+    };
   };
 }
