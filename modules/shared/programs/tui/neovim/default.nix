@@ -70,6 +70,7 @@ in {
       programs.zsh.shellAliases = {
         nvd = ''neovide "$@"'';
         nv = ''run-without-kpadding nvim "$@"'';
+        nvl = ''LITE=true run-without-kpadding nvim "$@"'';
         lc = "run-without-kpadding nvim leetcode.nvim";
         lcd = "neovide leetcode.nvim";
       };
