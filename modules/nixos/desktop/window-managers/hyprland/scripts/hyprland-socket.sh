@@ -2,6 +2,8 @@
 
 # source theme colors
 source "$HOME/.config/scripts/theme-colors.sh"
+active_border_color="${primary#\#}"
+active_border_color_single="${surface0#\#}"
 
 function handle() {
   input="$1"
@@ -11,8 +13,6 @@ function handle() {
   # use different active border colors for when
   # there's only 1 tiling window or not
   if [[ "$event" == "activewindow" ]]; then
-    active_border_color="${primary#\#}"
-    active_border_color_single="${surface0#\#}"
     ws=$(hyprctl activeworkspace -j | jq -cr '.id')
     monitor=$(hyprctl activeworkspace -j | jq -r .monitorID)
     tiling_windows_count=$(hyprctl -j clients | jq "[.[] | select(.workspace.id == $ws and .floating == false and .monitor == $monitor and (.grouped | length == 0))] | length")
