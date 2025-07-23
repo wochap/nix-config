@@ -113,15 +113,19 @@
   border-radius: 4px;
   /* background-color: @moduleBg; */
 }
-.wmtaskbar box {
+.wmtaskbar button {
+  border: 0;
+  background-color: transparent;
   opacity: 0.5;
   padding-top: 3.5px;
   padding-bottom: 3.5px;
+  padding-left: 0;
+  padding-right: 0;
 }
-.wmtaskbar box.focused {
+.wmtaskbar button.focused {
   opacity: 1;
 }
-.wmtaskbar box.floating image {
+.wmtaskbar button.floating image {
   border-radius: 7px;
   /* color is mocha text */
   box-shadow:

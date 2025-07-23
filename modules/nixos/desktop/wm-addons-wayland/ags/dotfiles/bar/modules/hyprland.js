@@ -153,13 +153,21 @@ export const hyprlandTaskbar = () =>
             appId: mapAppId(c.class),
             focused: c.address === activeAddress,
             floating: c.floating,
+            address: c.address,
           }));
         self.children = visibleAppIds.map(
-          ({ appId, focused, floating, appIdOriginal }) => {
+          ({ appId, focused, floating, appIdOriginal, address }) => {
             const _appId = appId.trim() || "unknown";
-            return Widget.Box({
+            return Widget.Button({
               tooltip_text: appIdOriginal,
               class_name: `${focused ? "focused" : ""} ${floating ? "floating" : ""}`,
+              onClicked: () => {
+                Utils.execAsync([
+                  "bash",
+                  "-c",
+                  `hyprctl dispatch focuswindow address:${address}`,
+                ]);
+              },
               child: Widget.Icon({
                 icon: _appId,
                 size: 32,
