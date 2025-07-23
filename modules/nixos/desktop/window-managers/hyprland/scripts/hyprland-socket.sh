@@ -15,7 +15,7 @@ function handle() {
   if [[ "$event" == "activewindow" ]]; then
     ws=$(hyprctl activeworkspace -j | jq -cr '.id')
     monitor=$(hyprctl activeworkspace -j | jq -r .monitorID)
-    tiling_windows_count=$(hyprctl -j clients | jq "[.[] | select(.workspace.id == $ws and .floating == false and .monitor == $monitor and (.grouped | length == 0))] | length")
+    tiling_windows_count=$(hyprctl -j clients | jq "[.[] | select(.workspace.id == $ws and .floating == false and .monitor == $monitor and .hidden == false)] | length")
 
     if [ "$tiling_windows_count" -eq 1 ]; then
       hyprctl keyword "general:col.active_border" "rgb($active_border_color_single)"
