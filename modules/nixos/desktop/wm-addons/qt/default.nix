@@ -16,6 +16,7 @@ in {
         # custom themes
         darkly
 
+        # qt deps
         # source: https://github.com/NixOS/nixpkgs/blob/nixos-25.05/nixos/modules/services/desktop-managers/plasma6.nix
         kdePackages.qtwayland # Hack? To make everything run on Wayland
         kdePackages.qtsvg # Needed to render SVG icons

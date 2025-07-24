@@ -62,14 +62,16 @@ in {
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
-        glib # for gsettings program
-        gtk3.out # for gtk-launch program
-
         awf # widget factory
         dconf-editor
-
         configure-gtk
 
+        # gtk deps
+        glib # for gsettings program
+        gtk3.out # for gtk-launch program
+        gsettings-desktop-schemas
+
+        # gtk themes
         globals.gtkTheme.package
         adwaita-icon-theme
         gnome-themes-extra
@@ -79,11 +81,6 @@ in {
         tela-icon-theme
         xfce.xfce4-icon-theme
         reversal-icon-theme
-
-        # Themes settings
-        gsettings-desktop-schemas
-        # gtk-engine-murrine
-        # gtk_engines
       ];
 
       # NOTE: can't move it to home-manager because of a conflict
@@ -131,8 +128,6 @@ in {
 
       gtk = {
         enable = cfg.enableTheme;
-
-        # Theme
         font = {
           name = globals.fonts.sans;
           inherit (globals.fonts) size;
@@ -140,34 +135,27 @@ in {
         iconTheme = { inherit (globals.gtkIconTheme) name package; };
         theme = { inherit (globals.gtkTheme) name package; };
 
-        gtk3.extraConfig = {
-          gtk-application-prefer-dark-theme = true;
-          # gtk-fallback-icon-theme = "gnome";
-
-          # Hide minimize and maximize buttons
-          # gtk-decoration-layout = "menu:";
-
-          gtk-xft-antialias = 1;
-          gtk-xft-hinting = 1;
-          gtk-xft-hintstyle = "hintfull";
+        gtk3 = {
+          inherit extraCss;
+          extraConfig = {
+            gtk-application-prefer-dark-theme = true;
+            gtk-xft-antialias = 1;
+            gtk-xft-hinting = 1;
+            gtk-xft-hintstyle = "hintfull";
+          };
+          bookmarks = [
+            "file:///home/${userName}/Downloads"
+            "file:///home/${userName}/Pictures"
+            "file:///home/${userName}/Videos"
+            "file:///home/${userName}/nix-config"
+            "file:///home/${userName}/Projects"
+            "file:///home/${userName}/Projects/boc"
+            "file:///home/${userName}/Videos/Recordings"
+            "file:///home/${userName}/Pictures/Screenshots"
+            "file:///home/${userName}/Sync"
+          ];
         };
-        gtk3.bookmarks = [
-          "file:///home/${userName}/Downloads"
-          "file:///home/${userName}/Pictures"
-          "file:///home/${userName}/Videos"
-          "file:///home/${userName}/nix-config"
-          "file:///home/${userName}/Projects"
-          "file:///home/${userName}/Projects/boc"
-          "file:///home/${userName}/Videos/Recordings"
-          "file:///home/${userName}/Pictures/Screenshots"
-          "file:///home/${userName}/Sync"
-        ];
-        gtk3.extraCss = ''
-          ${extraCss}
-        '';
-        gtk4.extraCss = ''
-          ${extraCss}
-        '';
+        gtk4.extraCss = extraCss;
       };
     };
   };
