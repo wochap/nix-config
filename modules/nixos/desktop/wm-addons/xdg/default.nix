@@ -13,6 +13,7 @@ in {
         xdg-launch
         desktop-file-utils
         xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+        xdg-user-dirs-gtk # Used to create the default bookmarks
       ];
 
       etc."mime.types".source = ./dotfiles/mime.types;
