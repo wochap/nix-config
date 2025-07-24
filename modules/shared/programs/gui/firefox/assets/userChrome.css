@@ -1,24 +1,21 @@
 @import "customChrome.css";
 
+/* Update font family */
 :root {
   --mff-tab-font-family: "Iosevka NF";
   --mff-urlbar-font-family: "Iosevka NF";
   --mff-urlbar-results-font-family: "Iosevka NF";
 }
-
 .tab-text {
   font-family: var(--mff-tab-font-family);
 }
-
 #urlbar-results {
   font-family: var(--mff-urlbar-results-font-family);
 }
-
 .urlbarView-url,
 .search-panel-one-offs-container {
   font-family: var(--mff-urlbar-font-family);
 }
-
 #urlbar-input {
   font-family: var(--mff-urlbar-font-family) !important;
 }

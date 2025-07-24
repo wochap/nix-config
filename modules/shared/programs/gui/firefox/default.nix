@@ -1,6 +1,9 @@
 { config, pkgs, lib, inputs, ... }:
 
-let cfg = config._custom.programs.firefox;
+let
+  cfg = config._custom.programs.firefox;
+  firefox-final =
+    pkgs.firefox.override (old: { cfg = { pipewireSupport = true; }; });
 in {
   options._custom.programs.firefox.enable = lib.mkEnableOption { };
 
@@ -21,11 +24,10 @@ in {
 
       programs.firefox = {
         enable = true;
-        package =
-          (pkgs.firefox.override (old: { cfg = { pipewireSupport = true; }; }));
+        package = firefox-final;
         arkenfox = {
           enable = true;
-          version = "128.0";
+          version = "135.0";
         };
         policies = {
           DisableTelemetry = true;
