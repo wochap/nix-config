@@ -59,8 +59,8 @@
     lobster.inputs.nixpkgs.follows = "nixpkgs";
     scenefx.url = "github:wochap/scenefx?rev=5991e3979dd81349f35eecb7f03cbcbece6bc24d"; # main (17 feb 2024)
     scenefx.inputs.nixpkgs.follows = "nixpkgs";
-    wayfreeze.url = "github:Jappie3/wayfreeze?rev=8277f981b4aace2a8411b39e2fbd4e15ad211078"; # master (15 may 2025)
-    wayfreeze.inputs.nixpkgs.follows = "nixpkgs-24-11";
+    wayfreeze.url = "github:Jappie3/wayfreeze?rev=dc41ae1662c4c760f3deba9f826ba605e99971cc"; # master (08 jul 2025)
+    wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.url = "github:0xc000022070/zen-browser-flake?rev=ebeabdb79392f3dfac8c6019754e76997e4d5dfa"; # 1.13t#1747739974
