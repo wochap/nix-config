@@ -39,6 +39,7 @@
       _custom.desktop.power-management.enableBatty = true;
       _custom.desktop.qt.enable = true;
       _custom.desktop.qt.enableTheme = true;
+      _custom.desktop.qt.enableQt5Integration = lib.mkDefault true;
       _custom.desktop.xdg.enable = true;
       _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 

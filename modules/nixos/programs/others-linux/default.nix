@@ -1,15 +1,6 @@
 { config, pkgs, lib, inputs, system, ... }:
 
-let
-  cfg = config._custom.programs.others-linux;
-
-  # pseintDesktopItem = (pkgs.makeDesktopItem {
-  #   name = "PSeint";
-  #   exec = "${pkgs._custom.pseint}/opt/pseint/pseint";
-  #   icon = "pseint";
-  #   desktopName = "PSeint";
-  #   categories = [ "Development" ];
-  # });
+let cfg = config._custom.programs.others-linux;
 in {
   options._custom.programs.others-linux.enable = lib.mkEnableOption { };
 
@@ -19,22 +10,16 @@ in {
       prevstable-chrome.google-chrome
       prevstable-msedge.microsoft-edge
       inputs.zen-browser.packages."${system}".beta
-
       galaxy-buds-client
-
-      libreoffice-qt
-      # antimicroX # map kb/mouse to gamepad
-      # skypeforlinux
-      # teamviewer
       zoom-us
+      # teamviewer
 
-      # pseintDesktopItem
-      # _custom.pseint
+      # NOTE: alt+f12 -> View -> Icon Theme
+      # NOTE: alt+f12 -> Appearance
+      libreoffice-qt6-fresh
     ];
 
     # required by libreoffice
     programs.java.enable = true;
   };
 }
-# Show icons in GTK menus: https://forums.linuxmint.com/viewtopic.php?t=337850
-# Change icons: https://www.youtube.com/watch?v=L8CteAuicqY

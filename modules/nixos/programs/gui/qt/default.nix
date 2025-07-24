@@ -8,11 +8,11 @@ in {
     environment = {
       systemPackages = with pkgs; [
         anki # mnemonic tool
-        libsForQt5.filelight # view disk usage
+        kdePackages.filelight # view disk usage
         qbittorrent
 
-        libsForQt5.kalgebra
-        libsForQt5.kdenlive
+        kdePackages.kalgebra
+        kdePackages.kdenlive
         # glaxnimate
 
         # APPS MEDIA (Comment on first install)
