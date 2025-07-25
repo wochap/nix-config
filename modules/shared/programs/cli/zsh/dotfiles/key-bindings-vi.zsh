@@ -59,6 +59,14 @@ custom-autosuggest-accept-or-expand-or-complete-prefix() {
 }
 zle -N custom-autosuggest-accept-or-expand-or-complete-prefix
 
+custom-vi-edit() {
+  local -x LITE="true"
+  local -x IN_VI_EDIT="true"
+  zle zvm_vi_edit_command_line
+  zle .end-of-line
+}
+zle -N custom-vi-edit
+
 # ================
 # Clean up
 # ================
@@ -250,4 +258,7 @@ bindkey -M viins '^[w' where-is
 
 # [Ctrl+k] - clear terminal
 multibindkey 'viins visual vicmd viopp menuselect' '^K' clear-screen
+
+# [Ctrl+x Ctrl+e] - edit with nvim
+bindkey -M viins '^x^e' custom-vi-edit
 
