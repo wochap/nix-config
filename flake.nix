@@ -15,7 +15,7 @@
     prevstable-msedge.url = "github:Daholli/nixpkgs?rev=fe6e79e571fa7eb7693cda131b68fe9891078adf"; # master (07 jun 2025)
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=7aae0ee71a17b19708b93b3ed448a1a0952bf111"; # release-25.05 (07 jun 2025)
+    home-manager.url = "github:nix-community/home-manager?rev=7b5a978e00273b8676c530c03d315f5b75fae564"; # release-25.05 (25 jul 2025)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules

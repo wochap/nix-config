@@ -3,99 +3,97 @@
 let
   cfg = config._custom.desktop.gtk;
   inherit (config._custom) globals;
-  inherit (config._custom.globals) userName configDirectory;
-  inherit (lib._custom) relativeSymlink;
+  inherit (globals) userName configDirectory;
+  hmConfig = config.home-manager.users.${userName};
+
+  libadwaitaWithoutAdwaitaAurRepo = pkgs.fetchgit {
+    url = "https://aur.archlinux.org/libadwaita-without-adwaita-git.git";
+    rev = "312880664a0b37402a93d381c9465967d142284a";
+    hash = "sha256-Z8htdlLBz9vSiv5qKpCLPoFqk14VTanaLpn+mBITq3o=";
+  };
   extraCss = lib.concatLines [
     ''
       /* Palette */
-      @import url("file:///home/${userName}/.config/theme-colors.css");
-      @import url("file://${./dotfiles/catppuccin.css}");
+      @import url("file://${hmConfig.xdg.configHome}/theme-colors.css");
+      @import url("file://${
+        lib._custom.relativeSymlink configDirectory
+        ./dotfiles/gtk-theme-catppuccin.css
+      }");
     ''
+
     (lib.optionalString (!cfg.enableCsd) ''
       @import url("file://${
-        relativeSymlink configDirectory ./dotfiles/gtk-remove-csd.css
+        lib._custom.relativeSymlink configDirectory
+        ./dotfiles/gtk-remove-csd.css
       }");
     '')
   ];
-
-  # Apply GTK theme
-  # currently, there is some friction between Wayland and gtk:
-  # https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
-  # the suggested way to set gtk settings is with gsettings
-  # for gsettings to work, we need to tell it where the schemas are
-  # using the XDG_DATA_DIR environment variable
-  # run at the end of config
-  configure-gtk = let
-    schema = pkgs.gsettings-desktop-schemas;
-    datadir = "${schema}/share/gsettings-schemas/${schema.name}";
-  in pkgs.writeScriptBin "configure-gtk" ''
-    #!/usr/bin/env bash
-
-    export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
-
-    gnome_schema="org.gnome.desktop.interface"
-
-    gsettings set $gnome_schema cursor-theme ${globals.cursor.name} &
-    gsettings set $gnome_schema cursor-size ${toString (globals.cursor.size)} &
-
-    # import gtk settings to gsettings
-    config="''${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
-    if [ ! -f "$config" ]; then exit 1; fi
-
-    gtk_theme="$(grep 'gtk-theme-name' "$config" | sed 's/.*\s*=\s*//')"
-    icon_theme="$(grep 'gtk-icon-theme-name' "$config" | sed 's/.*\s*=\s*//')"
-    font_name="$(grep 'gtk-font-name' "$config" | sed 's/.*\s*=\s*//')"
-    gsettings set "$gnome_schema" gtk-theme "$gtk_theme"
-    gsettings set "$gnome_schema" icon-theme "$icon_theme"
-    gsettings set "$gnome_schema" font-name "$font_name"
-
-    # remove GTK window buttons
-    gsettings set org.gnome.desktop.wm.preferences button-layout ""
-  '';
 in {
   options._custom.desktop.gtk = {
     enable = lib.mkEnableOption { };
     enableCsd = lib.mkEnableOption { };
     enableTheme = lib.mkEnableOption { };
+    enableLibadwaitaWithoutAdwaita = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
-        awf # widget factory
         dconf-editor
-        configure-gtk
+        nwg-look
 
         # gtk deps
         glib # for gsettings program
-        gtk3.out # for gtk-launch program
+        gtk3 # for gtk-launch program
+        gtk4
         gsettings-desktop-schemas
 
         # gtk themes
         globals.gtkTheme.package
-        adwaita-icon-theme
+        globals.gtkIconTheme.package
+        whitesur-gtk-theme
         gnome-themes-extra
-        hicolor-icon-theme
+        whitesur-icon-theme
         numix-icon-theme-circle
         numix-icon-theme-square
         tela-icon-theme
         xfce.xfce4-icon-theme
         reversal-icon-theme
+        adwaita-icon-theme
+        hicolor-icon-theme
       ];
 
       # NOTE: can't move it to home-manager because of a conflict
-      sessionVariables.XDG_DATA_DIRS = [
-        "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
-        "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
+      sessionVariables.XDG_DATA_DIRS = with pkgs; [
+        "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+        "${gtk3}/share/gsettings-schemas/${gtk3.name}"
       ];
     };
 
-    # Enable GTK applications to load SVG icons
+    # Enable GDK Pixbuf to load SVG icons, essential for many modern icon themes.
     programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
-    # Required by some apps (gtk3 applications, firefox)
+    # Enable the dconf service, required for GSettings to work properly
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
     programs.dconf.enable = true;
+
+    # Setup libadwaita without adwaita
+    nixpkgs.overlays = lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [
+      (final: prev: {
+        libadwaita-without-adwaita = prev.libadwaita.overrideAttrs (oldAttrs: {
+          doCheck = false;
+          patches = (oldAttrs.patches or [ ])
+            ++ [ "${libadwaitaWithoutAdwaitaAurRepo}/theming_patch.diff" ];
+          mesonFlags = (oldAttrs.mesonFlags or [ ])
+            ++ [ "--buildtype=release" "-Dexamples=false" ];
+        });
+      })
+    ];
+    system.replaceDependencies.replacements = with pkgs;
+      lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [{
+        oldDependency = libadwaita.out;
+        newDependency = libadwaita-without-adwaita.out;
+      }];
 
     _custom.hm = {
       home.sessionVariables = lib.mkMerge [
@@ -109,6 +107,17 @@ in {
         })
       ];
 
+      dconf.settings = {
+        "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+
+        # Hide window buttons from CSD applications (e.g., Nautilus).
+        "org/gnome/desktop/wm/preferences".button-layout = "";
+
+        # Open GTK inspector with Ctrl + Shift + D
+        # GTK_DEBUG=interactive <app>
+        "org/gtk/Settings/Debug".enable-inspector-keybinding = true;
+      };
+
       # Prevent home-manager service to fail
       # https://discourse.nixos.org/t/way-to-automatically-override-home-manager-collisions/33038/3
       xdg.configFile = {
@@ -117,15 +126,6 @@ in {
         "gtk-3.0/gtk.css".force = true;
         "gtk-3.0/settings.ini".force = true;
       };
-
-      dconf.settings = {
-        # Open GTK inspector with Ctrl + Shift + D
-        # GTK_DEBUG=interactive <app>
-        "org/gtk/Settings/Debug".enable-inspector-keybinding = true;
-
-        "org/gnome/desktop/interface".color-scheme = "prefer-dark";
-      };
-
       gtk = {
         enable = cfg.enableTheme;
         font = {
@@ -134,25 +134,23 @@ in {
         };
         iconTheme = { inherit (globals.gtkIconTheme) name package; };
         theme = { inherit (globals.gtkTheme) name package; };
-
         gtk3 = {
           inherit extraCss;
           extraConfig = {
-            gtk-application-prefer-dark-theme = true;
             gtk-xft-antialias = 1;
             gtk-xft-hinting = 1;
             gtk-xft-hintstyle = "hintfull";
           };
           bookmarks = [
-            "file:///home/${userName}/Downloads"
-            "file:///home/${userName}/Pictures"
-            "file:///home/${userName}/Videos"
-            "file:///home/${userName}/nix-config"
-            "file:///home/${userName}/Projects"
-            "file:///home/${userName}/Projects/boc"
-            "file:///home/${userName}/Videos/Recordings"
-            "file:///home/${userName}/Pictures/Screenshots"
-            "file:///home/${userName}/Sync"
+            "file://${hmConfig.home.homeDirectory}/Downloads"
+            "file://${hmConfig.home.homeDirectory}/Pictures"
+            "file://${hmConfig.home.homeDirectory}/Videos"
+            "file://${hmConfig.home.homeDirectory}/nix-config"
+            "file://${hmConfig.home.homeDirectory}/Projects"
+            "file://${hmConfig.home.homeDirectory}/Projects/boc"
+            "file://${hmConfig.home.homeDirectory}/Videos/Recordings"
+            "file://${hmConfig.home.homeDirectory}/Pictures/Screenshots"
+            "file://${hmConfig.home.homeDirectory}/Sync"
           ];
         };
         gtk4.extraCss = extraCss;

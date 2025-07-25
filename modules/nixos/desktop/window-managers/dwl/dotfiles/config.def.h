@@ -86,8 +86,6 @@ static const Env envs[] = {
 static const char *const autostart[] = {
   "uwsm", "finalize", "XDG_CURRENT_DESKTOP", "XDG_SESSION_TYPE", "XDG_SESSION_DESKTOP", NULL,
 
-  "configure-gtk", NULL,
-
   NULL /* terminate */
 };
 

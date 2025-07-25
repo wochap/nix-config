@@ -1,3 +1,5 @@
+/* source: https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland#removing-the-rounded-corners-and-dropshadow-of-themes-like-adwaita */
+
 /** Some apps use titlebar class and some window */
 .titlebar,
 window {
@@ -14,33 +16,3 @@ decoration:backdrop {
   box-shadow: none;
 }
 
-/* No (default) titlebar on wayland */
-headerbar.titlebar.default-decoration {
-  background: transparent;
-  padding: 0;
-  margin: 0 0 -17px 0;
-  border: 0;
-  min-height: 0;
-  font-size: 0;
-  box-shadow: none;
-}
-
-/* rm -rf window shadows */
-window.csd, /* gtk4? */
-window.csd decoration {
-  /* gtk3 */
-  box-shadow: none;
-}
-
-headerbar {
-  border-radius: 0;
-}
-
-messagedialog,
-decoration {
-  border-radius: 0;
-}
-
-messagedialog button {
-  border-radius: 0;
-}
