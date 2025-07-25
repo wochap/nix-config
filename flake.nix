@@ -118,8 +118,6 @@
     dracula-lsd.flake = false;
     catppuccin-grub.url = "github:catppuccin/grub";
     catppuccin-grub.flake = false;
-    catppuccin-alacritty.url = "github:catppuccin/alacritty";
-    catppuccin-alacritty.flake = false;
     catppuccin-amfora.url = "github:catppuccin/amfora";
     catppuccin-amfora.flake = false;
     catppuccin-bat.url = "github:catppuccin/bat";

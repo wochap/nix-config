@@ -31,7 +31,6 @@
     ./programs/dev/lang-web
     ./programs/dev/tools
 
-    ./programs/gui/alacritty
     ./programs/gui/discord
     ./programs/gui/firefox
     ./programs/gui/foot

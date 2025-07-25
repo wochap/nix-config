@@ -39,9 +39,6 @@ export const mapAppId = (appId) => {
   if (/^footclient-/.test(appId)) {
     return "footclient";
   }
-  if (/^alacritty-/.test(appId)) {
-    return "Alacritty";
-  }
   if (/^thunar-/.test(appId)) {
     return "thunar";
   }

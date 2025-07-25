@@ -140,7 +140,6 @@ static const Rule rules[] = {
 // { "^foot-.*",                NULL,       1 << 1,    0,          0,        -1,      0,   0,   0,    0,      0 },
 // { "^footclient-.*",          NULL,       1 << 1,    0,          0,        -1,      0,   0,   0,    0,      0 },
 // { "^kitty-.*",               NULL,       1 << 1,    0,          0,        -1,      0,   0,   0,    0,      0 },
-// { "^alacritty-.*",           NULL,       1 << 1,    0,          0,        -1,      0,   0,   0,    0,      0 },
 
 	{ "kitty-scratch",           NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'i' },
 	{ "tui-monitor",             NULL,       0,         1,          0,        -1,      0,   0,   1200, 800,    'm' },

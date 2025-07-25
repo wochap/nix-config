@@ -85,7 +85,6 @@ in {
     _custom.programs.tools.enable = true;
 
     # gui
-    _custom.programs.alacritty.enable = false;
     _custom.programs.discord.enable = true;
     _custom.programs.firefox.enable = true;
     _custom.programs.foot.enable = true;
