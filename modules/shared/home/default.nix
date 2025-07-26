@@ -23,7 +23,8 @@ in {
     _custom.user.home = homeDirectory;
 
     home-manager.useGlobalPkgs = true;
-    home-manager.useUserPackages = false;
+    # Speed up home-manager service
+    home-manager.useUserPackages = true;
     home-manager.backupFileExtension = "hm-bak";
 
     _custom.hm = {

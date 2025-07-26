@@ -22,10 +22,8 @@ in {
     };
 
     _custom.hm = {
-      xdg.configFile."retroarch/shaders" = {
-        source = "${inputs.retroarch-shaders}";
-        recursive = true;
-      };
+      xdg.configFile = lib._custom.linkContents "retroarch/shaders"
+        "${inputs.retroarch-shaders}";
     };
   };
 }

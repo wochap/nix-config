@@ -33,10 +33,8 @@ in {
         enable = true;
         preset = "Perfect EQ";
       };
-      xdg.configFile."easyeffects/output" = {
-        source = inputs.easy-effects-presets;
-        recursive = true;
-      };
+      xdg.configFile = lib._custom.linkContents "easyeffects/output"
+        "${inputs.easy-effects-presets}";
     };
 
     # I copy the following from other user config

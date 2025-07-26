@@ -20,6 +20,8 @@ in {
 
       shellAliases.open = "xdg-open";
       shellAliases.o = "xdg-open";
+
+      pathsToLink = [ "/share/xdg-desktop-portal" "/share/applications" ];
     };
 
     # xdg-desktop-portal works by exposing a series of D-Bus interfaces

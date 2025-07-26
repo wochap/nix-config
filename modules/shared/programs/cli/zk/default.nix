@@ -12,10 +12,7 @@ in {
 
       home.sessionVariables.ZK_NOTEBOOK_DIR = "$HOME/Sync/zk";
 
-      xdg.configFile."zk" = {
-        source = lib._custom.relativeSymlink configDirectory ./dotfiles;
-        recursive = true;
-      };
+      xdg.configFile."zk".source = lib._custom.relativeSymlink configDirectory ./dotfiles;
     };
   };
 }

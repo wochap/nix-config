@@ -24,6 +24,16 @@ rec {
   relativeSymlink = configDirectory: path:
     mkOutOfStoreSymlink (runtimePath configDirectory path);
 
+  # generates xdg.configFile attributes for a directory's top-level items
+  linkContents = targetDir: sourceDir:
+    let
+      files = builtins.readDir sourceDir;
+      fileAttrs = lib.mapAttrs'
+        (name: _: lib.nameValuePair name { source = "${sourceDir}/${name}"; })
+        files;
+    in lib.mapAttrs'
+    (name: value: lib.nameValuePair "${targetDir}/${name}" value) fileAttrs;
+
   mkWaylandService = lib.recursiveUpdate {
     Unit.PartOf = [ "graphical-session.target" ];
     Unit.After = [ "graphical-session.target" ];
