@@ -1,6 +1,14 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.desktop.qt;
+let
+  cfg = config._custom.desktop.qt;
+  inherit (config._custom.globals) themeColors;
+
+  catppuccin-kde-final = pkgs.catppuccin-kde.override {
+    flavour = [ "latte" "mocha" ];
+    accents = [ "mauve" ];
+    winDecStyles = [ "modern" ];
+  };
 in {
   options._custom.desktop.qt = {
     enable = lib.mkEnableOption "setup qt theme and apps";
@@ -20,6 +28,9 @@ in {
         # source: https://github.com/NixOS/nixpkgs/blob/nixos-25.05/nixos/modules/services/desktop-managers/plasma6.nix
         kdePackages.qtwayland # Hack? To make everything run on Wayland
         kdePackages.qtsvg # Needed to render SVG icons
+        kdePackages.libplasma # provides Kirigami platform theme
+        kdePackages.plasma-integration # provides Qt platform theme
+        # kdePackages.plasma-workspace
 
         # kde/qt themes
         kdePackages.breeze
@@ -28,6 +39,7 @@ in {
         kdePackages.ocean-sound-theme
         kdePackages.qqc2-breeze-style
         kdePackages.qqc2-desktop-style
+        catppuccin-kde-final
         hicolor-icon-theme # fallback icons
       ] ++ lib.optionals cfg.enableQt5Integration [
         # custom themes
@@ -60,6 +72,20 @@ in {
           ./dotfiles/Catppuccin-Mocha-Mauve.conf;
         "qt6ct/colors/Catppuccin-Mocha-Mauve.conf".source =
           ./dotfiles/Catppuccin-Mocha-Mauve.conf;
+
+        # Fix mime apps
+        # source: https://discourse.nixos.org/t/dolphin-does-not-have-mime-associations/48985
+        "menus/applications.menu".source =
+          "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
+
+        # HACK: force theme on QT6 KDE apps
+        "kdeglobals".text = ''
+          ${builtins.readFile
+          "${catppuccin-kde-final}/share/color-schemes/CatppuccinMochaMauve.colors"}
+
+          [UiSettings]
+          ColorScheme=qt6ct
+        '';
       };
     };
   };
