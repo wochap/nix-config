@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.desktop.qt;
-  inherit (config._custom.globals) themeColors;
+  inherit (config._custom.globals) themeColors gtkIconTheme;
 
   catppuccin-kde-final = pkgs.catppuccin-kde.override {
     flavour = [ "latte" "mocha" ];
@@ -65,6 +65,9 @@ in {
         # Blurred icon rendering on Wayland with fractional scaling
         # source: https://github.com/Bali10050/darkly?tab=readme-ov-file
         QT_SCALE_FACTOR_ROUNDING_POLICY = "RoundPreferFloor";
+
+        # HACK: only way to make dolphin use darkly theme
+        QT_STYLE_OVERRIDE = "Darkly";
       };
 
       xdg.configFile = {
@@ -85,6 +88,10 @@ in {
 
           [UiSettings]
           ColorScheme=qt6ct
+
+          [Icons]
+          # HACK: only way to make dolphin use icon theme
+          Theme=${gtkIconTheme.name}
         '';
       };
     };
