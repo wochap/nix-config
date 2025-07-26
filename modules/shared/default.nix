@@ -28,6 +28,7 @@
     ./programs/dev/lang-nix
     ./programs/dev/lang-python
     ./programs/dev/lang-ruby
+    ./programs/dev/lang-rust
     ./programs/dev/lang-web
     ./programs/dev/tools
 
