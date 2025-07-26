@@ -24,13 +24,13 @@ in lib.checkListOfEnum "${pname}: color variants" [
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "397c57e4d3782aabe790766027e836976e208ee2";
+  version = "2b335a215fae614d3250c80a287235b6017c6d49";
 
   src = fetchFromGitHub {
     owner = "wochap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mL2xqhy9bahqScC9+m2XUFQs5iUhMYHSw3c+0DG12qo=";
+    sha256 = "sha256-1fdwvReO+KXbRL+eZwzcwJEIMqFz4AiFUyKiJG+rJU0=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

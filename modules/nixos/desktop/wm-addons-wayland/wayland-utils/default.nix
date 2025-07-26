@@ -52,16 +52,6 @@ in {
           };
           patches = [ ./patches/showmethekey-remove-header.patch ];
         });
-
-        slurp = prev.slurp.overrideAttrs (oldAttrs: rec {
-          version = "0616010cbc74e79368f75a220cc4eb7a6116dcd0";
-          src = prev.fetchFromGitHub {
-            owner = "emersion";
-            repo = "slurp";
-            rev = version;
-            hash = "sha256-/ntSVJ+HfdM6mHKYwR6zijClkBP0eZg7oVZL6/QqNMo=";
-          };
-        });
       })
     ];
 

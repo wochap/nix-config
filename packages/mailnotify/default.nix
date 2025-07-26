@@ -9,8 +9,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "wochap";
     repo = pname;
-    rev = "56b719d2c5a072121001ab90dfb993da2c486e38";
-    sha256 = "sha256-7ikjr49tznr/QbbBJYaQYfHGWQe9eNrzP7di7nKdKUw=";
+    rev = "d771510278c63052b7c591e75f451ad38708a970";
+    sha256 = "sha256-LDZFQ2YRNQW96MAKsw4H1/uqXrNWDEP0AbBChD9HxJI=";
   };
 
   vendorHash = "sha256-Mj1vte+bnDmY/tn6+GXX9IwIKgy9J4QvoIP/pLcID6E=";

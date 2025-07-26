@@ -49,7 +49,7 @@ zstyle ':completion:*:aliases' list-colors '=*=38;5;4'
 zstyle ':completion:*:options' list-colors '=(#b)*(-- *)=38;5;14=38;5;8' '=^(-- *)=38;5;14'
 zstyle ':completion:*:parameters' list-colors '=(#b)*(-- *)=38;5;216=38;5;8' '=^(-- *)=38;5;216'
 
-zstyle ':completion:unambiguous' format $'%{\e[38;5;8m%}-- common substring: %{\e[38;5;2m%}%d %{\e[38;5;8m%}--%{\e[0m%}'
+zstyle ':completion:*:unambiguous' format $'%{\e[38;5;8m%}-- common substring: %{\e[38;5;2m%}%d %{\e[38;5;8m%}--%{\e[0m%}'
 zstyle ':completion:*:descriptions' format $'%{\e[38;5;8m%}-- %d --%{\e[0m%}'
 zstyle ':completion:*:messages' format $'%{\e[38;5;8m%}-- %d --%{\e[0m%}'
 zstyle -e ':completion:*:warnings' format autocomplete:config:format:warnings

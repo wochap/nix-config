@@ -95,7 +95,7 @@
     powerlevel10k.flake = false;
     smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim?rev=2b5dda43b3de5d13b56c4606f7d19db78637e527"; # v2.0.3
     smart-splits-nvim.flake = false;
-    zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=d52da825c2b60b664f33e8d82fdfc1c3b647b753"; # (12 dec 2023)
+    zsh-autocomplete.url = "github:marlonrichert/zsh-autocomplete?rev=316c588a92e3444e919ca9a341fc8894c82800a2"; # (26 jul 2025)
     zsh-autocomplete.flake = false;
     zsh-defer.url = "github:romkatv/zsh-defer?rev=1c75faff4d8584afe090b06db11991c8c8d62055"; # (05 nov 2023)
     zsh-defer.flake = false;
@@ -103,7 +103,7 @@
     zsh-history-substring-search.flake = false;
     zsh-notify.url = "github:marzocchi/zsh-notify?rev=9c1dac81a48ec85d742ebf236172b4d92aab2f3f"; # (30 apr 2023)
     zsh-notify.flake = false;
-    zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=b503518fd9725bf365a55401a78b7ae26c3ad901"; # (17 feb 2024)
+    zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=425e4293e243bccf8da3439a25a7699fe4ab3b1b"; # (26 jul 2025)
     zsh-vi-mode.flake = false;
     zsh-pnpm-shell-completion.url = "github:g-plane/pnpm-shell-completion";
     zsh-pnpm-shell-completion.flake = false;
