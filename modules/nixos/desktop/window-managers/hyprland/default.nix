@@ -146,7 +146,11 @@ in {
         systemd.enable = false;
         plugins = with hyprplugins;
           [
-            hyprexpo
+            # better preview all workspaces
+            # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
+
+            # preview all workspaces
+            # hyprexpo
 
             # touch screen support gestures
             # inputs.hyprgrass.packages.${pkgs.system}.default
