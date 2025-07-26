@@ -32,8 +32,8 @@
     nur.url = "github:nix-community/NUR";
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=4602f7e1d3f197b3cb540d5accf5669121629628"; # master (07 jun 2025)
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=b34ae92bd1dc371e8ba59262108677d96879e2ce"; # (07 jun 2025)
-    ags.url = "github:Aylur/ags?rev=bb91f7c8fdd2f51c79d3af3f2881cacbdff19f60"; # v1.8.2
-    ags.inputs.nixpkgs.follows = "nixpkgs-24-11";
+    ags.url = "github:Aylur/ags?rev=237601999d65a4663bcbab934f4f6ce1f579d728"; # v1 (26 jul 2025)
+    ags.inputs.nixpkgs.follows = "nixpkgs";
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
@@ -44,7 +44,7 @@
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=d723e5b153b7990d36e62a425bda3768c41dd9eb"; # v0.50.0
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprspace.url = "github:KZDKM/Hyprspace?rev=0a82e3724f929de8ad8fb04d2b7fa128493f24f7"; # (25 jul 2025)
-    hyprspace.inputs.nixpkgs.follows = "hyprland";
+    hyprspace.inputs.hyprland.follows = "hyprland";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=980ebd486b8a4c2ac1670286f38d163db1e38cd9"; # v0.4.5
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
     hyprsunset.url = "github:hyprwm/hyprsunset?rev=962f519df793ea804810b1ddebfc8a88b80a845c"; # v0.3.1
