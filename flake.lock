@@ -2050,17 +2050,17 @@
         "systems": "systems_7"
       },
       "locked": {
-        "lastModified": 1753018226,
-        "narHash": "sha256-Cp5kHNfWFFyJpA5eRxZh/7fJcHU1uM2tBehQyeyKEUA=",
+        "lastModified": 1753378338,
+        "narHash": "sha256-Ctk7zophp8obM/u9S2c8a6nOWV+VeIzq6ma+dI5BE3s=",
         "owner": "hyprwm",
         "repo": "hyprsunset",
-        "rev": "a52fd1539de2eb08bf87ca545fa9e3671c6580f4",
+        "rev": "962f519df793ea804810b1ddebfc8a88b80a845c",
         "type": "github"
       },
       "original": {
         "owner": "hyprwm",
         "repo": "hyprsunset",
-        "rev": "a52fd1539de2eb08bf87ca545fa9e3671c6580f4",
+        "rev": "962f519df793ea804810b1ddebfc8a88b80a845c",
         "type": "github"
       }
     },

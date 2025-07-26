@@ -47,7 +47,7 @@
     hyprspace.inputs.nixpkgs.follows = "hyprland";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=980ebd486b8a4c2ac1670286f38d163db1e38cd9"; # v0.4.5
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
-    hyprsunset.url = "github:hyprwm/hyprsunset?rev=a52fd1539de2eb08bf87ca545fa9e3671c6580f4"; # v0.3.0
+    hyprsunset.url = "github:hyprwm/hyprsunset?rev=962f519df793ea804810b1ddebfc8a88b80a845c"; # v0.3.1
     hyprsunset.inputs.nixpkgs.follows = "nixpkgs";
     # everytime you update hyprland flake, `sudo nix flake lock --update-input hyprlock`
     hyprlock.url = "github:hyprwm/hyprlock?rev=31297a871b7b1aea35dcf8627c6bfecf33fe03db"; # v0.9.0
