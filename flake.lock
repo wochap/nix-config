@@ -413,6 +413,22 @@
         "type": "github"
       }
     },
+    "catppuccin-qt5ct": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1743247755,
+        "narHash": "sha256-wDj6kQ2LQyMuEvTQP6NifYFdsDLT+fMCe3Fxr8S783w=",
+        "owner": "catppuccin",
+        "repo": "qt5ct",
+        "rev": "cb585307edebccf74b8ae8f66ea14f21e6666535",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "qt5ct",
+        "type": "github"
+      }
+    },
     "catppuccin-qutebrowser": {
       "flake": false,
       "locked": {
@@ -3399,6 +3415,7 @@
         "catppuccin-neomutt": "catppuccin-neomutt",
         "catppuccin-newsboat": "catppuccin-newsboat",
         "catppuccin-obs": "catppuccin-obs",
+        "catppuccin-qt5ct": "catppuccin-qt5ct",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "catppuccin-tmux": "catppuccin-tmux",
         "catppuccin-zathura": "catppuccin-zathura",

@@ -118,6 +118,8 @@
     # themes
     dracula-lsd.url = "github:dracula/lsd?rev=75f3305a2bba4dacac82b143a15d278daee28232";
     dracula-lsd.flake = false;
+    catppuccin-qt5ct.url = "github:catppuccin/qt5ct";
+    catppuccin-qt5ct.flake = false;
     catppuccin-grub.url = "github:catppuccin/grub";
     catppuccin-grub.flake = false;
     catppuccin-amfora.url = "github:catppuccin/amfora";

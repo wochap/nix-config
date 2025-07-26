@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.desktop.qt;
@@ -69,9 +69,9 @@ in {
 
       xdg.configFile = {
         "qt5ct/colors/Catppuccin-Mocha-Mauve.conf".source =
-          ./dotfiles/Catppuccin-Mocha-Mauve.conf;
+          "${inputs.catppuccin-qt5ct}/themes/catppuccin-mocha-mauve.conf";
         "qt6ct/colors/Catppuccin-Mocha-Mauve.conf".source =
-          ./dotfiles/Catppuccin-Mocha-Mauve.conf;
+          "${inputs.catppuccin-qt5ct}/themes/catppuccin-mocha-mauve.conf";
 
         # Fix mime apps
         # source: https://discourse.nixos.org/t/dolphin-does-not-have-mime-associations/48985
