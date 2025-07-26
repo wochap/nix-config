@@ -106,5 +106,7 @@
     nix.settings.system-features = [ "gccarch-znver4" ];
 
     console.font = "${pkgs.terminus_font}/share/consolefonts/ter-v32n.psf.gz";
+
+    systemd.services."serial-getty@".enable = false;
   };
 }

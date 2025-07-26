@@ -34,7 +34,7 @@
       _custom.desktop.mouseless.enable = lib.mkDefault true;
       _custom.desktop.music.enable = true;
       _custom.desktop.networking.enable = true;
-      _custom.desktop.plymouth.enable = true;
+      _custom.desktop.plymouth.enable = lib.mkDefault true;
       _custom.desktop.power-management.enable = true;
       _custom.desktop.power-management.enableBatty = true;
       _custom.desktop.qt.enable = true;
