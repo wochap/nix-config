@@ -29,14 +29,14 @@ let
     TMUX_ID=$(${tmux-final}/bin/tmux new-session -d -P)
     ${tmux-final}/bin/tmux kill-session -t tmux-server
     ${tmux-final}/bin/tmux rename-session -t $TMUX_ID tmux-server
-    ${tmux-kill-unnamed-sessions}/bin/tmux-kill-unnamed-sessions
-    ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
+    # ${tmux-kill-unnamed-sessions}/bin/tmux-kill-unnamed-sessions
+    # ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
   '';
   stop-tmux-server = pkgs.writeScriptBin "stop-tmux-server" ''
     #!/usr/bin/env bash
 
-    ${tmux-kill-unnamed-sessions}/bin/tmux-kill-unnamed-sessions
-    ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
+    # ${tmux-kill-unnamed-sessions}/bin/tmux-kill-unnamed-sessions
+    # ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
     ${tmux-final}/bin/tmux -L default kill-server
   '';
 in {
