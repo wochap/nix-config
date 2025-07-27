@@ -40,7 +40,7 @@ in {
             ${
               lib.getExe pkgs.greetd.tuigreet
             } --user-menu --window-padding 2 --remember-session --time --time-format "%a %d %b %H:%M %Y" --sessions "${desktopsPath}/share/wayland-sessions" --xsessions "${desktopsPath}/share/xsessions"'';
-          user = userName;
+          user = "greeter";
         };
       };
     };
