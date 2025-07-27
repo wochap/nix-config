@@ -187,6 +187,12 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Identify shutdown service timeout
+
+  ```sh
+  $ journalctl -b -1 | grep -i "timed out"
+  ```
+
 - Kdenlive doesn't render project
   Help > Reset Configuration...
 
