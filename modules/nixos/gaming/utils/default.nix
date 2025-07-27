@@ -12,6 +12,7 @@ in {
       gamescope
       goverlay
       mangohud
+      gamemode
 
       prevstable-gaming.protontricks
       protonup-qt
