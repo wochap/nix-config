@@ -71,6 +71,8 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     figma-linux.url = "github:HelloWorld017/figma-linux-nixos?rev=11d282f45c5acb90660db7d0d989fe0d9eec8813"; # v0.11.5
     figma-linux.inputs.nixpkgs.follows = "nixpkgs";
+    quickshell.url = "github:quickshell-mirror/quickshell?rev=a5431dd02dc23d9ef1680e67777fed00fe5f7cda"; # v0.2.0
+    quickshell.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";

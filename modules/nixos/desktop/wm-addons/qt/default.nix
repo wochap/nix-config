@@ -30,6 +30,7 @@ in {
         kdePackages.qtsvg # Needed to render SVG icons
         kdePackages.libplasma # provides Kirigami platform theme
         kdePackages.plasma-integration # provides Qt platform theme
+        kdePackages.kservice # query DE info, kbuildsycoca6
         # kdePackages.plasma-workspace
 
         # kde/qt themes

@@ -43,7 +43,7 @@
       _custom.desktop.xdg.enable = true;
       _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 
-      _custom.desktop.ags.enable = true;
+      _custom.desktop.ags.enable = lib.mkDefault true;
       _custom.desktop.cliphist.enable = true;
       _custom.desktop.dunst.enable = true;
       _custom.desktop.electron-support.enable = true;
@@ -51,6 +51,7 @@
       _custom.desktop.hyprlock.enable = lib.mkDefault true;
       _custom.desktop.hyprsunset.enable = lib.mkDefault false;
       _custom.desktop.kanshi.enable = true;
+      _custom.desktop.quickshell.enable = lib.mkDefault true;
       _custom.desktop.idle.enable = lib.mkDefault true;
       _custom.desktop.swww.enable = true;
       _custom.desktop.tofi.enable = true;

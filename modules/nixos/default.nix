@@ -40,6 +40,7 @@
     ./desktop/wm-addons-wayland/hyprlock
     ./desktop/wm-addons-wayland/hyprsunset
     ./desktop/wm-addons-wayland/kanshi
+    ./desktop/wm-addons-wayland/quickshell
     ./desktop/wm-addons-wayland/idle
     ./desktop/wm-addons-wayland/swww
     ./desktop/wm-addons-wayland/tofi
