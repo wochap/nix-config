@@ -80,6 +80,7 @@ in {
     _custom.programs.lang-lua.enable = true;
     _custom.programs.lang-nix.enable = true;
     _custom.programs.lang-python.enable = true;
+    _custom.programs.lang-qt.enable = true;
     _custom.programs.lang-ruby.enable = true;
     _custom.programs.lang-rust.enable = true;
     _custom.programs.lang-web.enable = true;

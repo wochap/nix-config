@@ -27,6 +27,7 @@
     ./programs/dev/lang-lua
     ./programs/dev/lang-nix
     ./programs/dev/lang-python
+    ./programs/dev/lang-qt
     ./programs/dev/lang-ruby
     ./programs/dev/lang-rust
     ./programs/dev/lang-web
