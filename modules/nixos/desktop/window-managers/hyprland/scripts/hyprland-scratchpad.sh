@@ -25,7 +25,13 @@ function raise_or_run() {
     if [[ "$is_visible" == "true" ]]; then
       if [[ "$is_focused" == "true" ]]; then
         # hide
-        hyprctl dispatch movetoworkspacesilent "special:scratchpads,class:^($class)$" -q
+        is_window_grouped=$(echo "$window" | jq '.grouped | length > 0')
+        batch_args=""
+        if [ "$is_window_grouped" = "true" ]; then
+          batch_args="dispatch moveoutofgroup active;"
+        fi
+        batch_args="$batch_args dispatch movetoworkspacesilent special:scratchpads,class:^($class)$;"
+        hyprctl --batch "$batch_args" -q
       else
         # focus
         batch_args="dispatch focuswindow class:^($class)$;"
