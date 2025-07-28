@@ -58,12 +58,15 @@ in {
     xdg.portal.config.Hyprland.default = [ "hyprland" "gtk" ];
 
     _custom.hm = {
-      home.packages = [
+      home.packages = with pkgs; [
         hyprland-scratchpad
         hyprland-monocle
         hyprland-previous-ws
         hyprland-socket
         inputs.pyprland.packages.${pkgs.system}.default
+        hyprland-qt-support
+        hyprland-qtutils
+        hyprpaper
       ];
 
       xdg.configFile = let
