@@ -12,7 +12,9 @@ in {
     boot.supportedFilesystems = [ "ntfs" ];
 
     # Fix windows dualboot clock
-    time.hardwareClockInLocalTime = true;
+    # on windows run:
+    # $ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" /v RealTimeIsUniversal /t REG_DWORD /d 1 /f
+    # time.hardwareClockInLocalTime = true;
 
     # make Public folder accessible for windows
     services.samba = {
