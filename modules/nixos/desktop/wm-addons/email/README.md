@@ -23,6 +23,7 @@ Mails are saved to `~/Mail` folder
 
 ### Setup
 
+Generate a app_password, go to Google Account > Security > 2-Step Verification > App passwords
 Add a file in `<NIX_CONFIG_PATH>/secrets/mail/<EMAIL>`, and inside paste the password/token/app_password
 
 ### Passwords for Gmail
