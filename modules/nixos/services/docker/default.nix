@@ -16,18 +16,22 @@ in {
 
     virtualisation.docker = {
       enable = true;
+      # enable storage driver containerd
+      daemon.settings.features.containerd-snapshotter = true;
       rootless = {
         enable = true;
+        # sets DOCKER_HOST env var
         setSocketVariable = true;
-        # TODO: rootless docker can't use nvidia gpu
-        # more info: https://github.com/NixOS/nixpkgs/issues/339999
-        # daemon.settings.features.cdi = true;
+        # enable storage driver containerd
+        daemon.settings.features.containerd-snapshotter = true;
       };
       extraOptions = lib.mkIf cfg.enableNvidia
         "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
     };
 
     hardware.nvidia-container-toolkit.enable = lib.mkIf cfg.enableNvidia true;
+    # reduce gpu startup latency
+    # prevents gpu to enter in low-power state
     # hardware.nvidia.nvidiaPersistenced = true;
   };
 }
