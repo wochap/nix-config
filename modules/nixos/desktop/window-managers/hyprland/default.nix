@@ -150,7 +150,7 @@ in {
         plugins = with hyprplugins;
           [
             # better preview all workspaces
-            # inputs.Hyprspace.packages.${pkgs.system}.Hyprspace
+            # inputs.hyprspace.packages.${pkgs.system}.Hyprspace
 
             # preview all workspaces
             # hyprexpo
