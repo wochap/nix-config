@@ -6,8 +6,11 @@ in {
   options._custom.system.fhs-compat.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs;
-      [ inputs.nix-alien.packages.${pkgs.system}.nix-alien ];
+    environment.systemPackages = with pkgs; [
+      inputs.nix-alien.packages.${pkgs.system}.nix-alien
+      appimage-run
+      # NOTE: you can also run non nix pkgs apps with `steam-run`
+    ];
 
     # populates contents of /bin and /usr/bin/
     services.envfs.enable = lib.mkDefault true;
