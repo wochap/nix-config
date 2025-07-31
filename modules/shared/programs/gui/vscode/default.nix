@@ -11,6 +11,8 @@ in {
           (vscode.fhsWithPackages
             (ps: with ps; [ rustup zlib openssl.dev pkg-config ]))
         ];
+
+      programs.git.ignores = [ ".vscode" ];
     };
   };
 }

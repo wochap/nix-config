@@ -94,14 +94,7 @@ in {
         package = git-final;
         enable = true;
 
-        ignores = [
-          ".direnv"
-          ".vscode"
-          ".envrc"
-          ".cache"
-          "compile_commands.json"
-          ".aider*"
-        ];
+        ignores = [ ".direnv" ".envrc" ".cache" ".aider*" ];
 
         # enable Git Large File Storage
         lfs = {

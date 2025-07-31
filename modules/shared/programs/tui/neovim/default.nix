@@ -55,7 +55,10 @@ in {
         };
       };
 
-      programs.git.extraConfig.core.editor = "nvim";
+      programs.git = {
+        extraConfig.core.editor = "nvim";
+        ignores = [ ".nolazy.lua" ".lazy.lua" ];
+      };
 
       programs.lazygit.settings.os = {
         editPreset = "nvim-remote";

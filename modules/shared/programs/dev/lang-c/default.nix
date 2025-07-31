@@ -35,6 +35,8 @@ in {
         gpp # c++ module?, decrypt
         gecode # c++ module
       ];
+
+      programs.git.ignores = [ "compile_commands.json" ];
     };
   };
 }
