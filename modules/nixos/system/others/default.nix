@@ -25,7 +25,7 @@
     };
 
     systemd.extraConfig = ''
-      DefaultTimeoutStopSec=15s
+      DefaultTimeoutStopSec=30s
     '';
 
     services.journald.extraConfig = ''
@@ -49,9 +49,11 @@
       };
     };
 
-    # update PATH for user systemd services
     systemd.user.extraConfig = ''
+      # update PATH for user systemd services
       DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
+
+      DefaultTimeoutStopSec=30s
     '';
   };
 }
