@@ -43,7 +43,7 @@
     hyprland.inputs.nixpkgs.follows = "nixpkgs-unstable";
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=d723e5b153b7990d36e62a425bda3768c41dd9eb"; # v0.50.0
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
-    hyprspace.url = "github:KZDKM/Hyprspace?rev=0a82e3724f929de8ad8fb04d2b7fa128493f24f7"; # (25 jul 2025)
+    hyprspace.url = "github:KZDKM/Hyprspace?rev=0a82e3724f929de8ad8fb04d2b7fa128493f24f7"; # (30 jul 2025)
     hyprspace.inputs.hyprland.follows = "hyprland";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=980ebd486b8a4c2ac1670286f38d163db1e38cd9"; # v0.4.5
     hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
