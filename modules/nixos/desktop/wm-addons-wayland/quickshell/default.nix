@@ -22,8 +22,8 @@ in {
       # shell deps
       ddcutil # query monitor
       rink # calculator
-      # wallust # pywall like
-      # matugen # color generator
+      wallust # pywall like
+      matugen # color generator
     ];
 
     fonts.packages = with pkgs; [ nixpkgs-unstable.material-symbols ];
