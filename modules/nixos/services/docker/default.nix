@@ -17,13 +17,14 @@ in {
     virtualisation.docker = {
       enable = true;
       # enable storage driver containerd
-      daemon.settings.features.containerd-snapshotter = true;
+      # NOTE: it change the location of where your containers are saved
+      # daemon.settings.features.containerd-snapshotter = true;
       rootless = {
         enable = true;
         # sets DOCKER_HOST env var
         setSocketVariable = true;
         # enable storage driver containerd
-        daemon.settings.features.containerd-snapshotter = true;
+        # daemon.settings.features.containerd-snapshotter = true;
       };
       extraOptions = lib.mkIf cfg.enableNvidia
         "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
