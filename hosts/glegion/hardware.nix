@@ -36,6 +36,10 @@
       #   "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:${config.hardware.nvidia.package}/share/glvnd/egl_vendor.d/10_nvidia.json";
     };
 
+    # Mesa 25.1.7
+    hardware.graphics.package = pkgs.nixpkgs-unstable.mesa;
+    hardware.graphics.package32 = pkgs.nixpkgs-unstable.pkgsi686Linux.mesa;
+
     hardware.enableRedistributableFirmware = true;
 
     hardware.amdgpu.initrd.enable = true;
