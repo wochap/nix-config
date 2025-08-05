@@ -66,7 +66,10 @@
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.url = "github:0xc000022070/zen-browser-flake?rev=ebeabdb79392f3dfac8c6019754e76997e4d5dfa"; # 1.13t#1747739974
-    ucodenix.url = "github:e-tho/ucodenix?rev=355238cbd87e5bf9cbc23ae65b90740eb10e8d56"; # main (17 may 2025)
+    cpu-microcodes.url = "github:platomav/CPUMicrocodes/ec5200961ecdf78cf00e55d73902683e835edefd";
+    cpu-microcodes.flake = false;
+    ucodenix.url = "github:e-tho/ucodenix?rev=98c0b8ec151ee6495711d2dd902112b4f2a30ceb"; # main (04 aug 2025)
+    ucodenix.inputs.cpu-microcodes.follows = "cpu-microcodes";
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     figma-linux.url = "github:HelloWorld017/figma-linux-nixos?rev=11d282f45c5acb90660db7d0d989fe0d9eec8813"; # v0.11.5

@@ -485,17 +485,17 @@
     "cpu-microcodes": {
       "flake": false,
       "locked": {
-        "lastModified": 1746370478,
-        "narHash": "sha256-3mpvHkDiQcpXrAS1lNJe2oYbKLTQnCbAkSmIWNF5l98=",
+        "lastModified": 1735409317,
+        "narHash": "sha256-08yRkyEKk94ax8KfqRFsffXH8J6DCOCE7vKLvHORWZM=",
         "owner": "platomav",
         "repo": "CPUMicrocodes",
-        "rev": "71092548b863438bf630ba54290002694da05655",
+        "rev": "ec5200961ecdf78cf00e55d73902683e835edefd",
         "type": "github"
       },
       "original": {
         "owner": "platomav",
         "repo": "CPUMicrocodes",
-        "rev": "71092548b863438bf630ba54290002694da05655",
+        "rev": "ec5200961ecdf78cf00e55d73902683e835edefd",
         "type": "github"
       }
     },
@@ -3045,6 +3045,7 @@
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",
         "chaotic": "chaotic",
+        "cpu-microcodes": "cpu-microcodes",
         "dracula-lsd": "dracula-lsd",
         "easy-effects-presets": "easy-effects-presets",
         "figlet-fonts": "figlet-fonts",
@@ -3457,20 +3458,22 @@
     },
     "ucodenix": {
       "inputs": {
-        "cpu-microcodes": "cpu-microcodes"
+        "cpu-microcodes": [
+          "cpu-microcodes"
+        ]
       },
       "locked": {
-        "lastModified": 1746447632,
-        "narHash": "sha256-h/9skHfT2+bHBUXX0CGZROknobw7/+X8bAa+kDv0rkE=",
+        "lastModified": 1754273604,
+        "narHash": "sha256-UOYeysPqCVO9jsu+gjGpWn+JvpPFO5hS9CChP049w6k=",
         "owner": "e-tho",
         "repo": "ucodenix",
-        "rev": "355238cbd87e5bf9cbc23ae65b90740eb10e8d56",
+        "rev": "98c0b8ec151ee6495711d2dd902112b4f2a30ceb",
         "type": "github"
       },
       "original": {
         "owner": "e-tho",
         "repo": "ucodenix",
-        "rev": "355238cbd87e5bf9cbc23ae65b90740eb10e8d56",
+        "rev": "98c0b8ec151ee6495711d2dd902112b4f2a30ceb",
         "type": "github"
       }
     },
