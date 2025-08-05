@@ -38,8 +38,21 @@
     };
 
     # Mesa 25.1.7
-    hardware.graphics.package = pkgs.nixpkgs-unstable.mesa;
-    hardware.graphics.package32 = pkgs.nixpkgs-unstable.pkgsi686Linux.mesa;
+    hardware.graphics = {
+      package = pkgs.nixpkgs-unstable.mesa;
+      package32 = pkgs.nixpkgs-unstable.pkgsi686Linux.mesa;
+      extraPackages = with pkgs.nixpkgs-unstable; [
+        # https://discourse.nixos.org/t/unable-to-find-gpu/19818/4
+        vulkan-loader
+        # video acceleration libs
+        libva
+        libvdpau
+        # NVIDIA VA-API support
+        # nvidia-vaapi-driver
+      ];
+      extraPackages32 = with pkgs.nixpkgs-unstable.pkgsi686Linux;
+        [ vulkan-loader ];
+    };
 
     hardware.enableRedistributableFirmware = true;
 
