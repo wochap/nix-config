@@ -11,6 +11,7 @@ let
   '';
   python-remind-final = pkgs._custom.pythonPackages.python-remind;
   ics2remScript = pkgs.writeShellScript "ics2rem" ''
+    ${pkgs.coreutils-full}/bin/echo "ics2rem start"
     ${pkgs.findutils}/bin/find ${dataHome}/vdirsyncer -name '*.ics' -exec ${python-remind-final}/bin/ics2rem {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > ${remFilePath}
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
   '';
