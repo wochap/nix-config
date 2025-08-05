@@ -143,6 +143,11 @@ in {
     _custom.desktop.xwaylandvideobridge.enable = false;
     _custom.desktop.power-management.cpupowerGuiArgs =
       [ "--performance" "profile" "Performance" ];
+    _custom.desktop.power-management.keyboard = {
+      enable = true;
+      idVendor = "048d";
+      idProduct = "c104";
+    };
     _custom.desktop.greetd.enable = true;
     _custom.desktop.greetd.enablePamAutoLogin = true;
     _custom.desktop.udev-rules.enable = true;

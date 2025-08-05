@@ -13,6 +13,17 @@ in {
       default = [ ];
     };
     enableBatty = lib.mkEnableOption { };
+    keyboard = {
+      enable = lib.mkEnableOption { };
+      idVendor = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+      };
+      idProduct = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -21,9 +32,14 @@ in {
       cpupower
       powertop # only use it to check current power usage
       batty
-      # psensor # unmaintained
       lm_sensors
     ];
+
+    # conflicts with power-profiles-daemon
+    services.tlp.enable = lib.mkDefault false;
+
+    # conflicts with tlp
+    services.power-profiles-daemon.enable = lib.mkDefault false;
 
     # systemd service for suspense and resume commands
     powerManagement.enable = true;
@@ -31,9 +47,29 @@ in {
     # required by others apps
     services.upower.enable = true;
 
+    # enable powertop auto tuning on startup
+    services.udev.extraRules = lib.mkIf cfg.keyboard.enable ''
+      # disable USB auto-suspend for keyboard controller
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="${cfg.keyboard.idVendor}", ATTR{idProduct}=="${cfg.keyboard.idProduct}", ATTR{power/control}="on"
+    '';
+    powerManagement.powertop = {
+      enable = lib.mkDefault true;
+      # NOTE: ' after getExe tells nixos to install the package
+      postStart = lib.mkIf cfg.keyboard.enable ''
+        # retrigger the udev rule for the keyboard after powertop's auto-tune
+        ${lib.getExe' config.systemd.package "udevadm"} trigger \
+          --action=add \
+          --subsystem-match=usb \
+          --attr-match=idVendor=${cfg.keyboard.idVendor} \
+          --attr-match=idProduct=${cfg.keyboard.idProduct}
+      '';
+    };
+
+    # select cpu profile
     # required by cpupower-gui
     services.dbus.packages = [ pkgs.cpupower-gui ];
     systemd = {
+      sleep.extraConfig = "HibernateDelaySec=2h";
       user.services.cpupower-gui-user =
         lib.mkIf (builtins.length cfg.cpupowerGuiArgs > 0) {
           description = "Apply cpupower-gui config at user login";
