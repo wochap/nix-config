@@ -20,6 +20,7 @@ in {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
+      # TODO: disable pulse
       pulse.enable = true;
       # If you want to use JACK applications, uncomment this
       # jack.enable = true;
@@ -36,12 +37,5 @@ in {
       xdg.configFile = lib._custom.linkContents "easyeffects/output"
         "${inputs.easy-effects-presets}";
     };
-
-    # I copy the following from other user config
-    # systemd.user.services = {
-    #   pipewire-pulse = {
-    #     path = [ pkgs.pulseaudio ];
-    #   };
-    # };
   };
 }
