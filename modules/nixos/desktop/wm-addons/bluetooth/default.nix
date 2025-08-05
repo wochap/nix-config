@@ -14,7 +14,7 @@ in {
 
         bluetuith # bluetooth TUI
         blueberry # bluetooth GUI
-        modemmanager
+        # modemmanager # cellular service 3G/4G/5G
 
         bluez
         bluez-tools

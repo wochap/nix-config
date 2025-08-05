@@ -74,8 +74,17 @@
 
     # AMD has better battery life with PPD over TLP:
     # https://community.frame.work/t/responded-amd-7040-sleep-states/38101/13
-    # TODO: build from git main branch, for better support
-    services.power-profiles-daemon.enable = lib.mkDefault false;
+    services.power-profiles-daemon.enable = true;
+
+    services.udev.extraRules = ''
+      # Enable USB autosuspend specifically for the Integrated Camera
+      ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="04f2", ATTRS{idProduct}=="b7b6", TEST=="power/control", ATTR{power/control}="auto"
+    '';
+
+    # fix audio power saving
+    boot.extraModprobeConfig = ''
+      options snd_hda_intel power_save=1
+    '';
 
     boot.extraModulePackages = with config.boot.kernelPackages;
       [ lenovo-legion-module ];
