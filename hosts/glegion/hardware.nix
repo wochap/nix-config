@@ -32,8 +32,9 @@
       # source: https://sw.kovidgoyal.net/kitty/faq/#why-does-kitty-sometimes-start-slowly-on-my-linux-system
       # source: https://github.com/Einjerjar/nix/blob/172d17410cd0849f7028f80c0e2084b4eab27cc7/home/vars.nix#L30
       # source: https://github.com/NixOS/nixpkgs/pull/139354#issuecomment-926942682
-      # __EGL_VENDOR_LIBRARY_FILENAMES =
-      #   "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:${config.hardware.nvidia.package}/share/glvnd/egl_vendor.d/10_nvidia.json";
+      __EGL_VENDOR_LIBRARY_FILENAMES =
+        "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:${config.hardware.nvidia.package}/share/glvnd/egl_vendor.d/10_nvidia.json";
+      __GLX_VENDOR_LIBRARY_NAME = "mesa";
     };
 
     # Mesa 25.1.7
@@ -51,11 +52,18 @@
       open = false;
       modesetting.enable = true;
       nvidiaSettings = true;
-      powerManagement.enable = true;
-      powerManagement.finegrained = true;
+      powerManagement = {
+        enable = true;
+        finegrained = true;
+      };
+      dynamicBoost.enable = true;
       # NOTE: nvidia beta package gives problems with sleep/suspend
       package = config.boot.kernelPackages.nvidiaPackages.stable;
       prime = {
+        # force igpu to do all rendering
+        # allowing to use hdmi ports without
+        # dgpu consuming a lot of power
+        reverseSync.enable = true;
         offload.enable = true;
         offload.enableOffloadCmd = true;
         # run `lspci | grep VGA`
@@ -65,6 +73,9 @@
     };
 
     services.xserver.videoDrivers = lib.mkForce [ "modesetting" "nvidia" ];
+
+    # nvidia prime is better
+    services.switcherooControl.enable = false;
 
     services.ucodenix = {
       enable = true;
@@ -79,18 +90,28 @@
     services.udev.extraRules = ''
       # Enable USB autosuspend specifically for the Integrated Camera
       ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="04f2", ATTRS{idProduct}=="b7b6", TEST=="power/control", ATTR{power/control}="auto"
+
+      # NOTE: these aren't needed for dGPU deep sleep
+      # Automatically manage power state of NVIDIA PCI GPU
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{device}=="0x28a0", ATTR{power/control}="auto"
+      # Automatically manage power state of NVIDIA Audio device
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{device}=="0x22be", ATTR{power/control}="auto"
     '';
 
     # fix audio power saving
     boot.extraModprobeConfig = ''
       options snd_hda_intel power_save=1
+
+      # prevents apps from crashing when GPU powers down and wakes back up
+      options nvidia "NVreg_DynamicPowerManagementVideoMemoryThreshold=0"
+      options nvidia "NVreg_PreserveVideoMemoryAllocations=1"
     '';
 
     boot.extraModulePackages = with config.boot.kernelPackages;
       [ lenovo-legion-module ];
 
     # NOTE: kernel 6.12.x gives me a lot of DRM issues
-    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_13;
+    boot.kernelPackages = lib.mkForce pkgs.nixpkgs-unstable.linuxPackages_6_15;
 
     boot.kernelParams = [
       # this doesn't fix my ACPI Bios errors :c

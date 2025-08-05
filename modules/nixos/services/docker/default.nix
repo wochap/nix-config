@@ -31,8 +31,9 @@ in {
     };
 
     hardware.nvidia-container-toolkit.enable = lib.mkIf cfg.enableNvidia true;
-    # reduce gpu startup latency
+
+    # when true, reduce gpu startup latency
     # prevents gpu to enter in low-power state
-    # hardware.nvidia.nvidiaPersistenced = true;
+    hardware.nvidia.nvidiaPersistenced = false;
   };
 }

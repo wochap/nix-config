@@ -55,8 +55,20 @@ in {
       enable = true;
       package = pkgs.ollama;
       acceleration = lib.mkIf cfg.enableNvidia "cuda";
+      environmentVariables.OLLAMA_ORIGINS = "*";
     };
-    systemd.services.ollama.environment.OLLAMA_ORIGINS = "*";
+    systemd.services.ollama = {
+      wantedBy = lib.mkForce [ ];
+      # unitConfig.stopWhenUnneeded = true;
+    };
+    # TODO: enable socket activation
+    # source: https://github.com/ollama/ollama/pull/8072
+    # systemd.sockets.ollama = {
+    #   description = "Ollama server socket";
+    #   wantedBy = [ "sockets.target" ];
+    #   listenStreams =
+    #     [ "${config.services.ollama.host}:${toString config.services.ollama.port}" ];
+    # };
 
     services.ollama-webui-lite = lib.mkIf cfg.enableOllamaWebuiLite {
       enable = true;

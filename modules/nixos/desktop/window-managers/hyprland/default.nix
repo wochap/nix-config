@@ -128,7 +128,7 @@ in {
         "uwsm/env-hyprland".text = ''
           ${common-env-hyprland}
 
-          export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
+          export AQ_DRM_DEVICES=$IGPU_CARD
         '';
 
         "uwsm/env-hyprland-dgpu".text = ''
