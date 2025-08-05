@@ -30,14 +30,26 @@ windows:
       root: ~/Projects/se/pearson-surveys
       layout: tiled
 
+  # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+  - pearson-surveys-spa-parcel:
+      root: ~/Projects/se/pearson-surveys/helper-scripts/spa-parcel
+      layout: tiled
+  # <%- end %>
+
   - socialexplorer-surveys:
       root: ~/Projects/se/socialexplorer-surveys
       layout: tiled
   # <%- end %>
 
   # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
-  - single-spa-app:
-      root: ~/Projects/se/single-spa-demo/single-spa-app
+  # - single-spa-app:
+  #     root: ~/Projects/se/single-spa-demo/single-spa-app
+  #     layout: tiled
+  # <%- end %>
+
+  # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+  - single-spa-root-html:
+      root: ~/Projects/se/single-spa-demo/single-spa-root-html
       layout: tiled
   # <%- end %>
 

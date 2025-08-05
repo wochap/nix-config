@@ -175,6 +175,12 @@ windows:
             # <%- if @settings["workspaces"].split(',').include?("surveys") %>
             - npx gulp
             # <%- end %>
+        # 5173
+        - pearson-surveys-spa-parcel:
+            - cd ./pearson-surveys/helper-scripts/spa-parcel
+            # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+            - yarn dev
+            # <%- end %>
         # 5002
         - socialexplorer-surveys:
             - cd ./socialexplorer-surveys
@@ -191,13 +197,19 @@ windows:
         - single-spa-app:
             - cd ./single-spa-demo/single-spa-app
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
-            - yarn run dev
+            # - yarn run dev
             # <%- end %>
         # 9000
         - single-spa-root-config:
             - cd ./single-spa-demo/single-spa-root-config
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
-            - yarn run start
+            # - yarn run start
+            # <%- end %>
+        # 8080
+        - single-spa-root-html:
+            - cd ./single-spa-demo/single-spa-root-html
+            # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+            - yarn run dev
             # <%- end %>
         # 3008
         - viz-api:
