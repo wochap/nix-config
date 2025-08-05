@@ -187,6 +187,13 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Nvidia doesn't enter deep sleep
+
+```sh
+# close any program listed in
+$ sudo lsof /dev/nvidia*
+```
+
 - Identify shutdown service timeout
 
   ```sh
