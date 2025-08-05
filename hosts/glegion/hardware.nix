@@ -53,7 +53,8 @@
       nvidiaSettings = true;
       powerManagement.enable = true;
       powerManagement.finegrained = true;
-      package = config.boot.kernelPackages.nvidiaPackages.beta;
+      # NOTE: nvidia beta package gives problems with sleep/suspend
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
       prime = {
         offload.enable = true;
         offload.enableOffloadCmd = true;
