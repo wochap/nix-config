@@ -21,17 +21,7 @@ in {
       qemu
       virt-manager
       xorg.xhost
-
-      # required by iPhone USB -> Network style passthrough
-      libusbmuxd
-      # _custom.usbfluxd # build fails unstable
-      socat
-      usbmuxd
     ];
-
-    # required by iPhone USB -> Network style passthrough
-    services.avahi.enable = true;
-    services.usbmuxd.enable = true;
 
     # this is needed to get a bridge with DHCP enabled
     virtualisation.libvirtd = {

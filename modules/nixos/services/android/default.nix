@@ -33,7 +33,7 @@ let
 in {
   options._custom.services.android = {
     enable = lib.mkEnableOption { };
-    sdk = { enable = lib.mkEnableOption { default = true; }; };
+    sdk.enable = lib.mkEnableOption { default = true; };
   };
 
   config = lib.mkIf cfg.enable {

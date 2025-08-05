@@ -103,5 +103,8 @@ in {
     };
 
     hardware.wirelessRegulatoryDatabase = true;
+
+    # service discovery, airplay, chromecast, vnc, etc
+    services.avahi.enable = true;
   };
 }

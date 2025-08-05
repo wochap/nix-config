@@ -119,7 +119,7 @@ in {
     _custom.services.android.sdk.enable = false;
     _custom.services.docker.enable = true;
     _custom.services.docker.enableNvidia = true;
-    _custom.services.flatpak.enable = true;
+    _custom.services.flatpak.enable = false;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
     _custom.services.kdeconnect.enable = true;
@@ -138,6 +138,10 @@ in {
     _custom.gaming.emulators.enable = true;
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
+
+    _custom.system.apple.enable = false;
+    _custom.system.windows.enable = true;
+    _custom.system.windows.enableSamba = false;
 
     _custom.desktop.plymouth.enable = false;
     _custom.desktop.xwaylandvideobridge.enable = false;

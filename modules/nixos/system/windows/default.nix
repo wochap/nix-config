@@ -1,8 +1,15 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-let inherit (config._custom.globals) homeDirectory;
+let
+  cfg = config._custom.system.windows;
+  inherit (config._custom.globals) homeDirectory;
 in {
-  config = {
+  options._custom.system.windows = {
+    enable = lib.mkEnableOption { };
+    enableSamba = lib.mkEnableOption { };
+  };
+
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       chntpw # reset windows local account pwd
       _custom.pythonPackages.bt-dualboot # sync bt keys between windows and linux
@@ -17,7 +24,7 @@ in {
     # time.hardwareClockInLocalTime = true;
 
     # make Public folder accessible for windows
-    services.samba = {
+    services.samba = lib.mkIf cfg.enableSamba {
       enable = true;
       openFirewall = true;
       nsswins = true;
@@ -40,7 +47,7 @@ in {
     };
 
     # make shares visible for windows 10 clients
-    services.samba-wsdd = {
+    services.samba-wsdd = lib.mkIf cfg.enableSamba {
       enable = true;
       workgroup = "WORKGROUP";
       openFirewall = true;

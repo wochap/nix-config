@@ -94,6 +94,7 @@
     ./services/virt
     ./services/waydroid
 
+    ./system/apple
     ./system/boot
     ./system/console
     ./system/fhs-compat
