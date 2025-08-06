@@ -85,6 +85,10 @@
       };
     };
 
+    # disable power saving for the mt7921e driver
+    # fixes wrong powertop energy report
+    networking.wireless.iwd.settings.DriverQuirks.PowerSaveDisable = "mt7921e";
+
     services.xserver.videoDrivers = lib.mkForce [ "modesetting" "nvidia" ];
 
     # nvidia prime is better

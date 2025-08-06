@@ -19,6 +19,10 @@ in {
       shellAliases.wtui = "impala";
     };
 
+    # enable systemd-resolved
+    services.resolved.enable = true;
+    networking.resolvconf.enable = false;
+
     networking = {
       enableIPv6 = false;
 
@@ -34,7 +38,11 @@ in {
             AddressRandomizationRange = "full";
             EnableNetworkConfiguration = true;
           };
-          Network.EnableIPv6 = false;
+          Scan.DisablePeriodicScan = true;
+          Network = {
+            EnableIPv6 = false;
+            NameResolvingService = "systemd";
+          };
           Settings.AutoConnect = true;
         };
       };

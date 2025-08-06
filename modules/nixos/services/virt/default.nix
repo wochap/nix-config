@@ -25,6 +25,7 @@ in {
 
     # this is needed to get a bridge with DHCP enabled
     virtualisation.libvirtd = {
+      # TODO: reduce power usage of libvirtd
       enable = true;
 
       qemu.ovmf = {

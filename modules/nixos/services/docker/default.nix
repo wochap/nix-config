@@ -15,6 +15,7 @@ in {
       ++ lib.optionals cfg.enableNvidia [ nvidia-docker ];
 
     virtualisation.docker = {
+      # TODO: reduce power usage of docker
       enable = true;
       # enable storage driver containerd
       # NOTE: it change the location of where your containers are saved
