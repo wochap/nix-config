@@ -17,6 +17,37 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        # override qt6ct with qt6ct-kde to fix style in kde apps
+        # https://aur.archlinux.org/packages/qt6ct-kde
+        kdePackages = prev.kdePackages.overrideScope (kdeSelf: kdePrev: {
+          qt6ct = kdePrev.qt6ct.overrideAttrs (oldAttrs: rec {
+            version = "23a985f45cf793ce7ce05811411d2374b4f979c4";
+            src = pkgs.fetchFromGitLab {
+              domain = "opencode.net";
+              owner = "trialuser";
+              repo = "qt6ct";
+              rev = version;
+              sha256 = "sha256-AUl2Se+8fUIeiYutObiM31VLbfJv09tpzJr3/2kB54c=";
+            };
+          });
+        });
+        qt6Packages = prev.qt6Packages.overrideScope (qt6Self: qt6Prev: {
+          qt6ct = qt6Prev.qt6ct.overrideAttrs (oldAttrs: rec {
+            version = "23a985f45cf793ce7ce05811411d2374b4f979c4";
+            src = pkgs.fetchFromGitLab {
+              domain = "opencode.net";
+              owner = "trialuser";
+              repo = "qt6ct";
+              rev = version;
+              sha256 = "sha256-AUl2Se+8fUIeiYutObiM31VLbfJv09tpzJr3/2kB54c=";
+            };
+          });
+        });
+      })
+    ];
+
     fonts.packages = with pkgs; [ noto-fonts source-sans-pro ];
 
     environment.systemPackages = with pkgs;
@@ -61,14 +92,13 @@ in {
         # Fake running KDE
         # https://wiki.archlinux.org/title/qt#Configuration_of_Qt_5_applications_under_environments_other_than_KDE_Plasma
         # https://wiki.archlinux.org/title/Uniform_look_for_Qt_and_GTK_applications#The_KDE_Plasma_XDG_Desktop_Portal_is_not_being_used
-        DESKTOP_SESSION = "KDE";
+        # DESKTOP_SESSION = "KDE";
 
         # Blurred icon rendering on Wayland with fractional scaling
         # source: https://github.com/Bali10050/darkly?tab=readme-ov-file
         QT_SCALE_FACTOR_ROUNDING_POLICY = "RoundPreferFloor";
 
-        # HACK: only way to make dolphin use darkly theme
-        QT_STYLE_OVERRIDE = "Darkly";
+        QT_STYLE_OVERRIDE = "qt6ct-style";
       };
 
       xdg.configFile = {
@@ -82,17 +112,17 @@ in {
         "menus/applications.menu".source =
           "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
 
-        # HACK: force theme on QT6 KDE apps
         "kdeglobals".text = ''
+          # HACK: force dolphin to use catppuccin theme
           ${builtins.readFile
           "${catppuccin-kde-final}/share/color-schemes/CatppuccinMochaMauve.colors"}
 
+          [Icons]
+          # HACK: force dolphin to use icon theme
+          Theme=${gtkIconTheme.name}
+
           [UiSettings]
           ColorScheme=qt6ct
-
-          [Icons]
-          # HACK: only way to make dolphin use icon theme
-          Theme=${gtkIconTheme.name}
         '';
       };
     };
