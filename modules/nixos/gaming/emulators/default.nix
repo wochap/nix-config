@@ -3,7 +3,7 @@
 let
   cfg = config._custom.gaming.emulators;
 
-  retroarchFinal = pkgs.retroarch.withCores
+  retroarch-final = pkgs.retroarch.withCores
     (cores: with cores; [ bsnes genesis-plus-gx beetle-ngp ]);
 in {
   options._custom.gaming.emulators.enable = lib.mkEnableOption { };
@@ -11,14 +11,14 @@ in {
   config = lib.mkIf cfg.enable {
     # NOTE: manually download shaders, https://github.com/libretro/slang-shaders
     environment.systemPackages = with pkgs; [
-      retroarchFinal
+      retroarch-final
       prevstable-gaming.rpcs3
       prevstable-gaming.lutris
     ];
 
     services.xserver.desktopManager.retroarch = {
       enable = true;
-      package = retroarchFinal;
+      package = retroarch-final;
     };
 
     _custom.hm = {

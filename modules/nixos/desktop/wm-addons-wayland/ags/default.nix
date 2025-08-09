@@ -4,7 +4,7 @@ let
   cfg = config._custom.desktop.ags;
   inherit (config._custom.globals) configDirectory userName;
   hmConfig = config.home-manager.users.${userName};
-  agsFinal = inputs.ags.packages.${system}.default;
+  ags-final = inputs.ags.packages.${system}.default;
   capslock =
     pkgs.writeScriptBin "capslock" (builtins.readFile ./scripts/capslock.sh);
   progress-osd = pkgs.writeScriptBin "progress-osd"
@@ -29,7 +29,7 @@ in {
 
       programs.ags = {
         enable = true;
-        package = agsFinal;
+        package = ags-final;
       };
 
       # Install custom icon theme, for taskbar
@@ -50,7 +50,7 @@ in {
               "TIMEWARRIORDB=${hmConfig.home.sessionVariables.TIMEWARRIORDB}"
             ];
             PassEnvironment = [ "HYPRLAND_INSTANCE_SIGNATURE" ];
-            ExecStart = "${agsFinal}/bin/ags --bus-name $XDG_SESSION_DESKTOP";
+            ExecStart = "${ags-final}/bin/ags --bus-name $XDG_SESSION_DESKTOP";
             Restart = "on-failure";
             KillMode = "mixed";
           };

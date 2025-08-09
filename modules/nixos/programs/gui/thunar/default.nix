@@ -8,7 +8,7 @@ let
     xfce.thunar-media-tags-plugin
     xfce.thunar-volman # auto mont devices
   ];
-  finalThunar = pkgs.xfce.thunar.override { thunarPlugins = plugins; };
+  thunar-final = pkgs.xfce.thunar.override { thunarPlugins = plugins; };
 in {
   options._custom.programs.thunar.enable = lib.mkEnableOption { };
 
@@ -78,13 +78,10 @@ in {
 
       # fast thunar
       systemd.user.services.thunar-server = lib._custom.mkWaylandService {
-        Unit = {
-          Description = "Thunar file manager";
-          Documentation = "man:Thunar(1)";
-        };
+        Unit.Description = "Thunar file manager";
         Service = {
           Type = "simple";
-          ExecStart = "${finalThunar}/bin/Thunar --daemon";
+          ExecStart = "${thunar-final}/bin/Thunar --daemon";
           KillMode = "process";
         };
       };
