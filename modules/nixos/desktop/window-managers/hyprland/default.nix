@@ -55,7 +55,10 @@ in {
       systemd.setPath.enable = false;
     };
 
-    xdg.portal.config.Hyprland.default = [ "hyprland" "gtk" ];
+    # NOTE: not sure why xdg-desktop-portal picks
+    # "hyprland" and not "Hyprland"
+    xdg.portal.config.Hyprland.default = [ "gtk" "hyprland" ];
+    xdg.portal.config.hyprland.default = [ "gtk" "hyprland" ];
 
     _custom.hm = {
       home.packages = with pkgs; [

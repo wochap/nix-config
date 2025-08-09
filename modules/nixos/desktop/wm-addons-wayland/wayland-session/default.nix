@@ -16,6 +16,7 @@ in {
     environment.sessionVariables.GTK_USE_PORTAL = "1";
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-wlr
+      kdePackages.xdg-desktop-portal-kde
       xdg-desktop-portal-gtk
     ];
 
