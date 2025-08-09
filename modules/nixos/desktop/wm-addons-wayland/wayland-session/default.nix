@@ -2,8 +2,6 @@
 
 let
   cfg = config._custom.desktop.wayland-session;
-  start-wm-dependencies = pkgs.writeScriptBin "start-wm-dependencies"
-    (builtins.readFile ./scripts/start-wm-dependencies.sh);
 in {
   options._custom.desktop.wayland-session.enable = lib.mkEnableOption { };
 
@@ -34,8 +32,6 @@ in {
     };
 
     _custom.hm = {
-      home.packages = [ start-wm-dependencies ];
-
       home.sessionVariables = {
         # Force GTK to use wayland
         GDK_BACKEND = "wayland,x11,*";
