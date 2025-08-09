@@ -1,0 +1,3 @@
+[org.freedesktop.secrets]
+apiEnabled=true
+autoStart=true
