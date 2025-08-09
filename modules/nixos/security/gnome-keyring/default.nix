@@ -14,14 +14,46 @@ in {
 
     services.gnome.gnome-keyring.enable = true;
 
-    security.pam.services.login.enableGnomeKeyring = true;
+    security.pam.services = {
+      login = {
+        enableGnomeKeyring = true;
+        # unlock gnome-keyring using luks passphrase
+        rules.auth.systemd_loadkey = {
+          enable = false;
+          order =
+            config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
+          control = "optional";
+          modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
+        };
+      };
 
-    # Unlock gnome keyring with password entered in greetd
-    security.pam.services.greetd.enableGnomeKeyring =
-      config._custom.desktop.greetd.enable;
+      greetd = lib.mkIf config._custom.desktop.greetd.enable {
+        # unlock gnome-keyring with password entered in greetd
+        enableGnomeKeyring = true;
+        # unlock gnome-keyring using luks passphrase
+        rules.auth.systemd_loadkey = {
+          enable = false;
+          order =
+            config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
+          control = "optional";
+          modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
+        };
+      };
+    };
 
-    xdg.portal.config.common."org.freedesktop.impl.portal.Secret" =
-      [ "gnome-keyring" ];
+    xdg.portal.config = {
+      common."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+      Hyprland."org.freedesktop.impl.portal.Secret" =
+        lib.mkIf config._custom.desktop.hyprland.enable [ "gnome-keyring" ];
+    };
+
+    # TODO: use services.gnome.gcr-ssh-agent.enable
+    # this sets SSH_AUTH_SOCK
+    systemd = {
+      packages = [ pkgs.nixpkgs-unstable.gcr_4 ];
+      user.services.gcr-ssh-agent.wantedBy = [ "default.target" ];
+      user.sockets.gcr-ssh-agent.wantedBy = [ "sockets.target" ];
+    };
 
     _custom.hm = {
       # GnuPG integration
@@ -29,8 +61,8 @@ in {
         pinentry-program ${pkgs.pinentry.gnome3}/bin/pinentry
       '';
 
-      # SSH integration
-      home.sessionVariables.SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/keyring/ssh";
+      # disable kwallet
+      xdg.configFile."kwalletrc".source = ./dotfiles/kwalletrc;
 
       systemd.user.services.gnome-keyring = {
         Unit = {
@@ -40,7 +72,7 @@ in {
         Service = {
           # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
           ExecStart =
-            "/run/wrappers/bin/gnome-keyring-daemon --start --foreground --components=secrets,ssh,pkcs11";
+            "/run/wrappers/bin/gnome-keyring-daemon --start --foreground --components=secrets";
           Restart = "on-abort";
         };
         Install.WantedBy = [ "graphical-session-pre.target" ];

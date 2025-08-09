@@ -47,15 +47,14 @@ in {
 
     # autologin with Pam_autologin
     # docs: https://wiki.archlinux.org/title/Pam_autologin
-    security.pam.services.greetd.rules.auth.autologin =
-      lib.mkIf cfg.enablePamAutoLogin {
-        enable = true;
-        order = config.security.pam.services.greetd.rules.auth.unix-early.order
-          - 1;
-        control = "required";
-        modulePath =
-          "${pkgs._custom.pam-autologin}/lib/security/pam_autologin.so";
-      };
+    security.pam.services.greetd.rules.auth.autologin = {
+      enable = cfg.enablePamAutoLogin;
+      order = config.security.pam.services.greetd.rules.auth.unix-early.order
+        - 1;
+      control = "required";
+      modulePath =
+        "${pkgs._custom.pam-autologin}/lib/security/pam_autologin.so";
+    };
 
     # HACK: stop printing status messages in tuigreet
     # https://github.com/apognu/tuigreet/issues/68#issuecomment-1192683029

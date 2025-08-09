@@ -9,8 +9,9 @@
   config = lib.mkMerge [
     (lib.mkIf config._custom.archetypes.wm-wayland-desktop.enable {
       _custom.security.doas.enable = true;
-      _custom.security.gnome-keyring.enable = true;
+      _custom.security.gnome-keyring.enable = lib.mkDefault true;
       _custom.security.gpg.enable = true;
+      _custom.security.kwallet.enable = lib.mkDefault false;
       _custom.security.network.enable = true;
       _custom.security.polkit.enable = true;
       _custom.security.ssh.enable = true;
@@ -95,7 +96,7 @@
     (lib.mkIf config._custom.archetypes.gnome.enable {
       _custom.archetypes.de-wayland-desktop.enable = true;
 
-      _custom.security.gnome-keyring.enable = true;
+      _custom.security.gnome-keyring.enable = lib.mkDefault true;
 
       _custom.desktop.gnome.enable = lib.mkForce true;
     })

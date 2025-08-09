@@ -23,7 +23,7 @@ in {
         rules.session.kwallet.settings.auto_start = true;
         # unlock KWallet using luks passphrase
         rules.auth.systemd_loadkey = {
-          enable = true;
+          enable = false;
           order =
             config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
           control = "optional";
@@ -31,6 +31,7 @@ in {
         };
       };
 
+      # TODO: kwallet doesn't unlock after login
       greetd = lib.mkIf config._custom.desktop.greetd.enable {
         kwallet = {
           enable = true;
@@ -40,7 +41,7 @@ in {
         rules.session.kwallet.settings.auto_start = true;
         # unlock KWallet using luks passphrase
         rules.auth.systemd_loadkey = {
-          enable = true;
+          enable = false;
           order =
             config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
           control = "optional";
