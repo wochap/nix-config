@@ -56,7 +56,6 @@ in {
         whitesur-icon-theme
         numix-icon-theme-circle
         numix-icon-theme-square
-        tela-icon-theme
         xfce.xfce4-icon-theme
         reversal-icon-theme
         adwaita-icon-theme
