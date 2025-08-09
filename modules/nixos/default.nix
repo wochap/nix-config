@@ -80,6 +80,7 @@
     ./security/gpg
     ./security/kwallet
     ./security/network
+    ./security/pam
     ./security/polkit
     ./security/ssh
 

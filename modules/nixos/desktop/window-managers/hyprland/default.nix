@@ -47,6 +47,9 @@ in {
     _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
     _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
+    services.displayManager.defaultSession =
+      lib.mkIf cfg.isDefault "hyprland-uwsm";
+
     programs.hyprland = {
       enable = true;
       package = hyprland-final;

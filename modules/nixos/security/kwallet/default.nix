@@ -21,14 +21,6 @@ in {
           forceRun = true;
         };
         rules.session.kwallet.settings.auto_start = true;
-        # unlock KWallet using luks passphrase
-        rules.auth.systemd_loadkey = {
-          enable = false;
-          order =
-            config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
-          control = "optional";
-          modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
-        };
       };
 
       # TODO: kwallet doesn't unlock after login
@@ -39,16 +31,11 @@ in {
           forceRun = true;
         };
         rules.session.kwallet.settings.auto_start = true;
-        # unlock KWallet using luks passphrase
-        rules.auth.systemd_loadkey = {
-          enable = false;
-          order =
-            config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
-          control = "optional";
-          modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
-        };
       };
     };
+    _custom.security.pam.enablePamSystemdLoadkey = true;
+    _custom.desktop.greetd.enablePamSystemdLoadkey =
+      config._custom.desktop.greetd.enable;
 
     # GnuPG integration
     programs.gnupg.agent = {

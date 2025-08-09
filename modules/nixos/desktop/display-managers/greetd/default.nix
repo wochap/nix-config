@@ -3,57 +3,87 @@
 let
   cfg = config._custom.desktop.greetd;
   inherit (config._custom.globals) userName;
-  desktopsPath = config.services.displayManager.sessionData.desktops;
+  sessionsBasePath = config.services.displayManager.sessionData.desktops;
+  run-desktop = pkgs.writers.writePerlBin "run-desktop" {
+    libraries = with pkgs.perlPackages; [ ConfigINI ];
+  } (lib.fileContents (pkgs.replaceVars ./dotfiles/run-desktop.pl {
+    waylandSessionsPath = "${sessionsBasePath}/share/wayland-sessions";
+  }));
 in {
   options._custom.desktop.greetd = {
     enable = lib.mkEnableOption { };
     enableAutoLogin = lib.mkEnableOption { };
     enablePamAutoLogin = lib.mkEnableOption { };
-    autoLoginCmd = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-    };
+    enablePamSystemdLoadkey = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
     # binaries to whitelist in greetd
-    environment.etc."greetd/environments".text = ''
-      bash
-      zsh
-    '';
+    environment = {
+      systemPackages = with pkgs; [ run-desktop ];
+      etc."greetd/environments".text = ''
+        bash
+        zsh
+        run-desktop
+      '';
+    };
 
     services.xserver.displayManager.lightdm.enable = false;
+
+    services.displayManager.autoLogin = {
+      enable = true;
+      user = userName;
+    };
 
     services.greetd = {
       enable = true;
       settings = {
         terminal.vt = "1";
-        restart = true;
-        # NOTE: greetd autologin doesn't unlock gnome keyring
-        # NOTE: autologin inspiration https://github.com/viperML/dotfiles/blob/77c91f02baed99bb0e62d9a5d8bb8ed02d50b035/misc/nixos/greetd/default.nix#L27
+        restart = !cfg.enableAutoLogin;
+        # TODO: greetd autologin doesn't unlock keyring
+        # source: https://github.com/viperML/dotfiles/blob/77c91f02baed99bb0e62d9a5d8bb8ed02d50b035/misc/nixos/greetd/default.nix#L27
         initial_session = lib.mkIf cfg.enableAutoLogin {
-          command = cfg.autoLoginCmd;
-          user = userName;
+          command = "${
+              lib.getExe run-desktop
+            } --silent ${config.services.displayManager.defaultSession}";
+          inherit (config.services.displayManager.autoLogin) user;
         };
         default_session = {
           command = ''
             ${
               lib.getExe pkgs.greetd.tuigreet
-            } --user-menu --window-padding 2 --remember-session --time --time-format "%a %d %b %H:%M %Y" --sessions "${desktopsPath}/share/wayland-sessions" --xsessions "${desktopsPath}/share/xsessions"'';
+            } --user-menu --window-padding 2 --remember-session --time --time-format "%a %d %b %H:%M %Y" --sessions "${sessionsBasePath}/share/wayland-sessions" --xsessions "${sessionsBasePath}/share/xsessions"'';
           user = "greeter";
         };
       };
     };
+    systemd.services.greetd.serviceConfig.KeyringMode =
+      lib.mkIf cfg.enablePamSystemdLoadkey (lib.mkForce "inherit");
 
-    # autologin with Pam_autologin
-    # docs: https://wiki.archlinux.org/title/Pam_autologin
-    security.pam.services.greetd.rules.auth.autologin = {
-      enable = cfg.enablePamAutoLogin;
-      order = config.security.pam.services.greetd.rules.auth.unix-early.order
-        - 1;
-      control = "required";
-      modulePath =
-        "${pkgs._custom.pam-autologin}/lib/security/pam_autologin.so";
+    security.pam.services.greetd.rules = {
+      password.gnome_keyring.settings.use_authtok = cfg.enablePamSystemdLoadkey;
+
+      auth = {
+        # autologin with Pam_autologin
+        # docs: https://wiki.archlinux.org/title/Pam_autologin
+        autologin = {
+          enable = cfg.enablePamAutoLogin;
+          order =
+            config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
+          control = "required";
+          modulePath =
+            "${pkgs._custom.pam-autologin}/lib/security/pam_autologin.so";
+        };
+
+        # unlock keyring using luks passphrase
+        systemd_loadkey = {
+          enable = cfg.enablePamSystemdLoadkey;
+          order =
+            config.security.pam.services.greetd.rules.auth.gnome_keyring.order - 1;
+          control = "optional";
+          modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
+        };
+      };
     };
 
     # HACK: stop printing status messages in tuigreet

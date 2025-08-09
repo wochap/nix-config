@@ -13,6 +13,7 @@
       _custom.security.gpg.enable = true;
       _custom.security.kwallet.enable = lib.mkDefault false;
       _custom.security.network.enable = true;
+      _custom.security.pam.enable = true;
       _custom.security.polkit.enable = true;
       _custom.security.ssh.enable = true;
 

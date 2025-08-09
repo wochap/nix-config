@@ -15,31 +15,14 @@ in {
     services.gnome.gnome-keyring.enable = true;
 
     security.pam.services = {
-      login = {
-        enableGnomeKeyring = true;
-        # unlock gnome-keyring using luks passphrase
-        rules.auth.systemd_loadkey = {
-          enable = false;
-          order =
-            config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
-          control = "optional";
-          modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
-        };
-      };
+      login.enableGnomeKeyring = true;
 
-      greetd = lib.mkIf config._custom.desktop.greetd.enable {
-        # unlock gnome-keyring with password entered in greetd
-        enableGnomeKeyring = true;
-        # unlock gnome-keyring using luks passphrase
-        rules.auth.systemd_loadkey = {
-          enable = false;
-          order =
-            config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
-          control = "optional";
-          modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
-        };
-      };
+      # unlock gnome-keyring with password entered in greetd
+      greetd.enableGnomeKeyring = config._custom.desktop.greetd.enable;
     };
+    _custom.security.pam.enablePamSystemdLoadkey = true;
+    _custom.desktop.greetd.enablePamSystemdLoadkey =
+      config._custom.desktop.greetd.enable;
 
     xdg.portal.config = {
       common."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];

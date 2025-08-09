@@ -153,6 +153,7 @@ in {
       idProduct = "c104";
     };
     _custom.desktop.greetd.enable = true;
+    _custom.desktop.greetd.enableAutoLogin = false;
     _custom.desktop.greetd.enablePamAutoLogin = true;
     _custom.desktop.udev-rules.enable = true;
     _custom.desktop.udev-rules.canDisableGlegionKbd = false;
