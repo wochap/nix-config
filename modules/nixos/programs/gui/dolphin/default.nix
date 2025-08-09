@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config._custom.programs.dolphin;
+let
+  cfg = config._custom.programs.dolphin;
+  dolphin-final = pkgs.kdePackages.dolphin;
 in {
   options._custom.programs.dolphin.enable = lib.mkEnableOption { };
 
@@ -13,12 +15,23 @@ in {
       kdePackages.kde-cli-tools
 
       # dolplhin
-      kdePackages.dolphin
+      dolphin-final
       kdePackages.dolphin-plugins
       kdePackages.kio-extras # thumbnails
       kdePackages.kdegraphics-thumbnailers # thumbnails
       kdePackages.qtimageformats # thumbnails
       kdePackages.ffmpegthumbs # thumbnails
     ];
+
+    _custom.hm = {
+      systemd.user.services.dolphin-server = lib._custom.mkWaylandService {
+        Unit.Description = "Dolphin file manager";
+        Service = {
+          Type = "simple";
+          ExecStart = "${dolphin-final}/bin/dolphin --daemon";
+          KillMode = "process";
+        };
+      };
+    };
   };
 }
