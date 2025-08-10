@@ -154,6 +154,9 @@ in {
         {
           # Hide dbus errors in GTK apps?
           NO_AT_BRIDGE = "1";
+
+          # TODO: do we need this?
+          # ADW_DISABLE_PORTAL = "1";
         }
         (lib.mkIf cfg.enableCsd {
           # https://wiki.gnome.org/Initiatives/CSD
