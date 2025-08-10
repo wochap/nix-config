@@ -137,7 +137,7 @@ in {
           # source: https://github.com/Bali10050/darkly?tab=readme-ov-file
           QT_SCALE_FACTOR_ROUNDING_POLICY = "RoundPreferFloor";
 
-          QT_STYLE_OVERRIDE = lib.mkIf cfg.enableTheme "qt6ct-style";
+          QT_STYLE_OVERRIDE = lib.mkIf cfg.enableQt6ctKde "qt6ct-style";
         };
 
         symlinks = {
@@ -150,10 +150,8 @@ in {
 
       xdg.configFile = {
         "qt5ct/colors/catppuccin-${themeColorsLight.flavour}-${cfg.theme.accent}.conf".source =
-          lib.mkIf cfg.enableQt5Integration
           "${inputs.catppuccin-qt5ct}/themes/catppuccin-${themeColorsLight.flavour}-${cfg.theme.accent}.conf";
         "qt5ct/colors/catppuccin-${themeColorsDark.flavour}-${cfg.theme.accent}.conf".source =
-          lib.mkIf cfg.enableQt5Integration
           "${inputs.catppuccin-qt5ct}/themes/catppuccin-${themeColorsDark.flavour}-${cfg.theme.accent}.conf";
         "qt6ct/colors/catppuccin-${themeColorsLight.flavour}-${cfg.theme.accent}.conf".source =
           "${inputs.catppuccin-qt5ct}/themes/catppuccin-${themeColorsLight.flavour}-${cfg.theme.accent}.conf";
