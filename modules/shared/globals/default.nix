@@ -8,18 +8,6 @@ in {
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
   # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
   options._custom.globals = {
-    fonts = {
-      sans = lib.mkOption {
-        type = lib.types.str;
-        default = "Source Sans Pro";
-      };
-      # TODO: add monospace and serif
-      size = lib.mkOption {
-        type = lib.types.int;
-        default = 10;
-      };
-    };
-
     userName = lib.mkOption {
       type = lib.types.str;
       default = "gean";
@@ -37,6 +25,25 @@ in {
       default = "/home/gean/nix-config";
       example = "/home/gean/nix-config";
       description = "Path of config folder";
+    };
+
+    fonts = {
+      sans = lib.mkOption {
+        type = lib.types.str;
+        default = "Source Sans Pro";
+      };
+      serif = lib.mkOption {
+        type = lib.types.str;
+        default = "Source Serif Pro";
+      };
+      monospace = lib.mkOption {
+        type = lib.types.str;
+        default = "Source Code Pro";
+      };
+      size = lib.mkOption {
+        type = lib.types.int;
+        default = 10;
+      };
     };
 
     themeColors = lib.mkOption {

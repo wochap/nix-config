@@ -51,9 +51,9 @@ in {
         fontconfig = {
           allowBitmaps = true;
           defaultFonts = {
-            serif = [ "Source Serif Pro" ];
+            serif = [ fonts.serif ];
             sansSerif = [ fonts.sans ];
-            monospace = [ "Source Code Pro" ];
+            monospace = [ fonts.monospace ];
             emoji = [ "Twemoji" "Noto Color Emoji" "Symbola" ];
           };
         };
