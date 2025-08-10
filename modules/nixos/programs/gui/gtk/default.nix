@@ -9,15 +9,14 @@ in {
       systemPackages = with pkgs; [
         blanket # play rain, waves, etc sounds
         d-spy # dbus gui
-        gparted # disk partition editor
         inkscape # photo editor cli/gui
-        pavucontrol # pulseaudio gui
+        # pavucontrol # pulseaudio gui
         pwvucontrol # pipewire gui
-        pinta # image editor
+        # pinta # image editor
         remmina # vnc client
 
         # APPS
-        cheese # test webcam
+        pantheon.elementary-camera # camera app
         gnome-calculator
         gnome-clocks
         gnome-font-viewer

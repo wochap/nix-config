@@ -80,7 +80,19 @@ in {
             hash = "sha256-YYaqSEnIYHHkY4L3UhFBkR3DehoB6QADhSGOP/9NKx8=";
           };
           nativeBuildInputs = with pkgs; [ meson ninja dart-sass ];
-          postPatch = "";
+          postPatch = ''
+            echo "🎨 Applying custom border radius settings..."
+            local settingsFile="src/sass/_settings.scss"
+
+            sed -i \
+              -e 's/^\($button_radius:\).*/\1 5px;/' \
+              -e 's/^\($menu_radius:\).*/\1 5px;/' \
+              -e 's/^\($window_radius:\).*/\1 0px;/' \
+              -e 's/^\($card_radius:\).*/\1 8px;/' \
+              "$settingsFile"
+
+            echo "✅ Successfully applied custom radius values."
+          '';
           postInstall = ''
             echo "Appending Catppuccin styles to final theme files..."
 
