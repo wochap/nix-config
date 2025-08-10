@@ -73,6 +73,7 @@ in {
         hyprland-qt-support
         hyprland-qtutils
         hyprpaper
+        nixpkgs-unstable.hyprshade
       ];
 
       xdg.configFile = let
@@ -113,6 +114,9 @@ in {
           relativeSymlink configDirectory ./dotfiles/hypr/rules.conf;
         "hypr/variables.conf".source =
           relativeSymlink configDirectory ./dotfiles/hypr/variables.conf;
+
+        "hypr/shaders/grayscale.frag".source =
+          ./dotfiles/shaders/grayscale.frag;
 
         "hypr/pyprland.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
