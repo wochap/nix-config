@@ -14,27 +14,11 @@ let
     hash = "sha256-a2yzF9kqycEo44Hmy/Tg+c2UpONiOiU/7KAnCMdpTFY=";
   };
   catppuccin-adw-light-theme-path =
-    "${inputs.catppuccin-adw}/adw/themes/${themeColorsLight.flavour}/catppuccin-${themeColorsLight.flavour}-${globals.gtkTheme.accent}.css";
+    "${inputs.catppuccin-adw}/adw/themes/${themeColorsLight.flavour}/catppuccin-${themeColorsLight.flavour}-${cfg.theme.accent}.css";
   catppuccin-adw-dark-theme-path =
-    "${inputs.catppuccin-adw}/adw/themes/${themeColorsDark.flavour}/catppuccin-${themeColorsDark.flavour}-${globals.gtkTheme.accent}.css";
-  extraCssLight = lib.concatLines [
+    "${inputs.catppuccin-adw}/adw/themes/${themeColorsDark.flavour}/catppuccin-${themeColorsDark.flavour}-${cfg.theme.accent}.css";
+  extraCss = lib.concatLines [
     ''
-      /* Palette */
-      @import url("file://${
-        lib._custom.relativeSymlink configDirectory ./dotfiles/gtk-custom.css
-      }");
-    ''
-    (lib.optionalString (!cfg.enableCsd) ''
-      @import url("file://${
-        lib._custom.relativeSymlink configDirectory
-        ./dotfiles/gtk-remove-csd.css
-      }");
-    '')
-  ];
-  # NOTE: looks like gtk3/4 doesn't support this
-  extraCssDark = lib.concatLines [
-    ''
-      /* Palette */
       @import url("file://${
         lib._custom.relativeSymlink configDirectory ./dotfiles/gtk-custom.css
       }");
@@ -52,6 +36,22 @@ in {
     enableCsd = lib.mkEnableOption { };
     enableTheme = lib.mkEnableOption { };
     enableLibadwaitaWithoutAdwaita = lib.mkEnableOption { };
+    # NOTE: theme is highly coupled to catppuccin and adw-gtk3
+    theme = {
+      name = lib.mkOption {
+        type = lib.types.str;
+        # NOTE: never add suffix `-dark`
+        default = "adw-gtk3";
+      };
+      accent = lib.mkOption {
+        type = lib.types.str;
+        default = "lavender";
+      };
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.adw-gtk3;
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -122,8 +122,8 @@ in {
         gsettings-desktop-schemas
 
         # gtk themes
-        globals.gtkTheme.package
-        globals.gtkIconTheme.package
+        cfg.theme.package
+        globals.iconTheme.package
         whitesur-gtk-theme
         gnome-themes-extra
         whitesur-icon-theme
@@ -178,24 +178,24 @@ in {
 
       # Prevent home-manager service to fail
       # https://discourse.nixos.org/t/way-to-automatically-override-home-manager-collisions/33038/3
-      xdg.configFile = {
+      xdg.configFile = lib.mkIf cfg.enableTheme {
         # prevent hm from adding gtk-theme contents into gtk4 css
         "gtk-4.0/gtk.css" = {
-          text = lib.mkForce extraCssLight;
+          text = lib.mkForce extraCss;
           force = true;
         };
         "gtk-4.0/gtk-dark.css" = {
-          text = lib.mkForce extraCssDark;
+          text = lib.mkForce extraCss;
           force = true;
         };
 
         "gtk-4.0/settings.ini".force = true;
         "gtk-3.0/gtk.css" = {
-          text = lib.mkForce extraCssLight;
+          text = lib.mkForce extraCss;
           force = true;
         };
         "gtk-3.0/gtk-dark.css" = {
-          text = lib.mkForce extraCssDark;
+          text = lib.mkForce extraCss;
           force = true;
         };
         "gtk-3.0/settings.ini".force = true;
@@ -208,20 +208,18 @@ in {
         };
         iconTheme = {
           name = if preferDark then
-            "${globals.gtkIconTheme.name}-dark"
+            "${globals.iconTheme.name}-dark"
           else
-            "${globals.gtkIconTheme.name}-light";
-          inherit (globals.gtkIconTheme) package;
+            "${globals.iconTheme.name}-light";
+          inherit (globals.iconTheme) package;
         };
         theme = {
-          name = if preferDark then
-            "${globals.gtkTheme.name}-dark"
-          else
-            globals.gtkTheme.name;
-          inherit (globals.gtkTheme) package;
+          name =
+            if preferDark then "${cfg.theme.name}-dark" else cfg.theme.name;
+          inherit (cfg.theme) package;
         };
         gtk3 = {
-          extraCss = extraCssLight;
+          extraCss = extraCss;
           extraConfig = {
             gtk-xft-antialias = 1;
             gtk-xft-hinting = 1;
@@ -239,7 +237,7 @@ in {
             "file://${hmConfig.home.homeDirectory}/Sync"
           ];
         };
-        gtk4.extraCss = extraCssLight;
+        gtk4.extraCss = extraCss;
       };
     };
   };

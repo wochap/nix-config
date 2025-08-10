@@ -29,6 +29,7 @@ in {
         ];
       });
     _custom.globals.cursor.size = 28;
+    _custom.globals.preferDark = true;
 
     _custom.programs.weeb.enable = true;
 

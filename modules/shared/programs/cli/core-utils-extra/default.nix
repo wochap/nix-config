@@ -8,6 +8,7 @@ in {
     _custom.hm = {
 
       home.packages = with pkgs; [
+        crudini # edit ini files
         dos2unix # convert line breaks DOS - mac
         inetutils # network tools
         libpwquality # password tools, pwscore

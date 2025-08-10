@@ -5,6 +5,15 @@ rec {
 
   unwrapHex = str: builtins.substring 1 (builtins.stringLength str) str;
 
+  capitalize = str:
+    if builtins.stringLength str == 0 then
+      ""
+    else
+      let
+        firstChar = builtins.substring 0 1 str;
+        restOfString = builtins.substring 1 (-1) str;
+      in (lib.toUpper firstChar) + restOfString;
+
   runtimePath = runtimeRoot: path:
     let
       rootStr = toString inputs.self;

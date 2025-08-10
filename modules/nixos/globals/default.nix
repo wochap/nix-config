@@ -21,22 +21,8 @@
       };
     };
 
-    gtkTheme = {
-      name = lib.mkOption {
-        type = lib.types.str;
-        # NOTE: never add suffix `-dark`
-        default = "adw-gtk3";
-      };
-      accent = lib.mkOption {
-        type = lib.types.str;
-        default = "lavender";
-      };
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.adw-gtk3;
-      };
-    };
-    gtkIconTheme = {
+    # file manager icons
+    iconTheme = {
       name = lib.mkOption {
         type = lib.types.str;
         # NOTE: never add suffix `-dark`/`-light`
