@@ -34,6 +34,7 @@
       _custom.desktop.gtk.enable = true;
       _custom.desktop.gtk.enableCsd = false;
       _custom.desktop.gtk.enableTheme = true;
+      _custom.desktop.gtk.enableLibadwaitaWithoutAdwaita = true;
       _custom.desktop.logind.enable = true;
       _custom.desktop.mouseless.enable = lib.mkDefault true;
       _custom.desktop.music.enable = true;

@@ -1,26 +1,44 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.desktop.gtk;
   inherit (config._custom) globals;
-  inherit (globals) userName configDirectory;
+  inherit (globals)
+    userName configDirectory themeColorsLight themeColorsDark preferDark;
   hmConfig = config.home-manager.users.${userName};
 
+  # source: https://aur.archlinux.org/packages/libadwaita-without-adwaita-git
   libadwaitaWithoutAdwaitaAurRepo = pkgs.fetchgit {
     url = "https://aur.archlinux.org/libadwaita-without-adwaita-git.git";
-    rev = "312880664a0b37402a93d381c9465967d142284a";
-    hash = "sha256-Z8htdlLBz9vSiv5qKpCLPoFqk14VTanaLpn+mBITq3o=";
+    rev = "d98b5bc68b2eba95104ee36661af788701f43219";
+    hash = "sha256-a2yzF9kqycEo44Hmy/Tg+c2UpONiOiU/7KAnCMdpTFY=";
   };
-  extraCss = lib.concatLines [
+  catppuccin-adw-light-theme-path =
+    "${inputs.catppuccin-adw}/adw/themes/${themeColorsLight.flavour}/catppuccin-${themeColorsLight.flavour}-${globals.gtkTheme.accent}.css";
+  catppuccin-adw-dark-theme-path =
+    "${inputs.catppuccin-adw}/adw/themes/${themeColorsDark.flavour}/catppuccin-${themeColorsDark.flavour}-${globals.gtkTheme.accent}.css";
+  extraCssLight = lib.concatLines [
     ''
       /* Palette */
-      @import url("file://${hmConfig.xdg.configHome}/theme-colors.css");
       @import url("file://${
-        lib._custom.relativeSymlink configDirectory
-        ./dotfiles/gtk-theme-catppuccin.css
+        lib._custom.relativeSymlink configDirectory ./dotfiles/gtk-custom.css
       }");
     ''
-
+    (lib.optionalString (!cfg.enableCsd) ''
+      @import url("file://${
+        lib._custom.relativeSymlink configDirectory
+        ./dotfiles/gtk-remove-csd.css
+      }");
+    '')
+  ];
+  # NOTE: looks like gtk3/4 doesn't support this
+  extraCssDark = lib.concatLines [
+    ''
+      /* Palette */
+      @import url("file://${
+        lib._custom.relativeSymlink configDirectory ./dotfiles/gtk-custom.css
+      }");
+    ''
     (lib.optionalString (!cfg.enableCsd) ''
       @import url("file://${
         lib._custom.relativeSymlink configDirectory
@@ -37,6 +55,61 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    # Setup libadwaita without adwaita
+    # so we can change gtk4 theme via gsettings, etc
+    nixpkgs.overlays = lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [
+      (final: prev: {
+        libadwaita-without-adwaita = prev.libadwaita.overrideAttrs (oldAttrs: {
+          doCheck = false;
+          patches = (oldAttrs.patches or [ ])
+            ++ [ "${libadwaitaWithoutAdwaitaAurRepo}/theming_patch.diff" ];
+          mesonFlags = (oldAttrs.mesonFlags or [ ])
+            ++ [ "--buildtype=release" "-Dexamples=false" ];
+        });
+
+        # HACK: inject catppuccin dark/light themes directly into the pkg
+        # TODO: fix selected items text contrast
+        # @define-color accent_bg_color mix(@mauve, @base, 0.75);
+        # @define-color accent_color @mauve;
+        adw-gtk3 = prev.adw-gtk3.overrideAttrs (oldAttrs: {
+          version = "catppuccin-6.2";
+          src = pkgs.fetchFromGitHub {
+            owner = "lassekongo83";
+            repo = "adw-gtk3";
+            tag = "v6.2";
+            hash = "sha256-YYaqSEnIYHHkY4L3UhFBkR3DehoB6QADhSGOP/9NKx8=";
+          };
+          nativeBuildInputs = with pkgs; [ meson ninja dart-sass ];
+          postPatch = "";
+          postInstall = ''
+            echo "Appending Catppuccin styles to final theme files..."
+
+            local lightCssSource="${catppuccin-adw-light-theme-path}"
+            local darkCssSource="${catppuccin-adw-dark-theme-path}"
+
+            # Append light theme styles
+            cat "$lightCssSource" >> "$out/share/themes/adw-gtk3/gtk-3.0/gtk.css"
+            cat "$lightCssSource" >> "$out/share/themes/adw-gtk3/gtk-4.0/gtk.css"
+
+            # Append dark theme styles
+            cat "$darkCssSource" >> "$out/share/themes/adw-gtk3/gtk-3.0/gtk-dark.css"
+            cat "$darkCssSource" >> "$out/share/themes/adw-gtk3/gtk-4.0/gtk-dark.css"
+            cat "$darkCssSource" >> "$out/share/themes/adw-gtk3-dark/gtk-3.0/gtk.css"
+            cat "$darkCssSource" >> "$out/share/themes/adw-gtk3-dark/gtk-4.0/gtk.css"
+            cat "$darkCssSource" >> "$out/share/themes/adw-gtk3-dark/gtk-3.0/gtk-dark.css"
+            cat "$darkCssSource" >> "$out/share/themes/adw-gtk3-dark/gtk-4.0/gtk-dark.css"
+
+            echo "✅ Successfully applied Catppuccin themes."
+          '';
+        });
+      })
+    ];
+    system.replaceDependencies.replacements = with pkgs;
+      lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [{
+        oldDependency = libadwaita.out;
+        newDependency = libadwaita-without-adwaita.out;
+      }];
+
     environment = {
       systemPackages = with pkgs; [
         dconf-editor
@@ -76,24 +149,6 @@ in {
     # Fix https://github.com/NixOS/nixpkgs/issues/30866
     programs.dconf.enable = true;
 
-    # Setup libadwaita without adwaita
-    nixpkgs.overlays = lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [
-      (final: prev: {
-        libadwaita-without-adwaita = prev.libadwaita.overrideAttrs (oldAttrs: {
-          doCheck = false;
-          patches = (oldAttrs.patches or [ ])
-            ++ [ "${libadwaitaWithoutAdwaitaAurRepo}/theming_patch.diff" ];
-          mesonFlags = (oldAttrs.mesonFlags or [ ])
-            ++ [ "--buildtype=release" "-Dexamples=false" ];
-        });
-      })
-    ];
-    system.replaceDependencies.replacements = with pkgs;
-      lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [{
-        oldDependency = libadwaita.out;
-        newDependency = libadwaita-without-adwaita.out;
-      }];
-
     _custom.hm = {
       home.sessionVariables = lib.mkMerge [
         {
@@ -107,7 +162,8 @@ in {
       ];
 
       dconf.settings = {
-        "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+        "org/gnome/desktop/interface".color-scheme =
+          if preferDark then "prefer-dark" else "default";
 
         # Hide window buttons from CSD applications (e.g., Nautilus).
         "org/gnome/desktop/wm/preferences".button-layout = "";
@@ -120,9 +176,25 @@ in {
       # Prevent home-manager service to fail
       # https://discourse.nixos.org/t/way-to-automatically-override-home-manager-collisions/33038/3
       xdg.configFile = {
-        "gtk-4.0/gtk.css".force = true;
+        # prevent hm from adding gtk-theme contents into gtk4 css
+        "gtk-4.0/gtk.css" = {
+          text = lib.mkForce extraCssLight;
+          force = true;
+        };
+        "gtk-4.0/gtk-dark.css" = {
+          text = lib.mkForce extraCssDark;
+          force = true;
+        };
+
         "gtk-4.0/settings.ini".force = true;
-        "gtk-3.0/gtk.css".force = true;
+        "gtk-3.0/gtk.css" = {
+          text = lib.mkForce extraCssLight;
+          force = true;
+        };
+        "gtk-3.0/gtk-dark.css" = {
+          text = lib.mkForce extraCssDark;
+          force = true;
+        };
         "gtk-3.0/settings.ini".force = true;
       };
       gtk = {
@@ -131,10 +203,22 @@ in {
           name = globals.fonts.sans;
           inherit (globals.fonts) size;
         };
-        iconTheme = { inherit (globals.gtkIconTheme) name package; };
-        theme = { inherit (globals.gtkTheme) name package; };
+        iconTheme = {
+          name = if preferDark then
+            "${globals.gtkIconTheme.name}-dark"
+          else
+            "${globals.gtkIconTheme.name}-light";
+          inherit (globals.gtkIconTheme) package;
+        };
+        theme = {
+          name = if preferDark then
+            "${globals.gtkTheme.name}-dark"
+          else
+            globals.gtkTheme.name;
+          inherit (globals.gtkTheme) package;
+        };
         gtk3 = {
-          inherit extraCss;
+          extraCss = extraCssLight;
           extraConfig = {
             gtk-xft-antialias = 1;
             gtk-xft-hinting = 1;
@@ -152,7 +236,7 @@ in {
             "file://${hmConfig.home.homeDirectory}/Sync"
           ];
         };
-        gtk4.extraCss = extraCss;
+        gtk4.extraCss = extraCssLight;
       };
     };
   };

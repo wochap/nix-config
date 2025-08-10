@@ -1,8 +1,18 @@
 { config, lib, ... }:
 
 let
+  inherit (config._custom.globals) themeColors themeColorsLight themeColorsDark;
+
+  catppuccinLatteTheme = import ./catppuccin-latte.nix;
   catppuccinMochaTheme = import ./catppuccin-mocha.nix;
-  inherit (config._custom.globals) themeColors;
+  mkThemeScript = colors:
+    lib.concatStringsSep "\n"
+    (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
+      (builtins.removeAttrs colors [ "flavour" ]));
+  mkThemeGtk = colors:
+    lib.concatStringsSep "\n"
+    (lib.attrsets.mapAttrsToList (key: value: "@define-color ${key} ${value};")
+      (builtins.removeAttrs colors [ "flavour" ]));
 in {
   # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
@@ -46,11 +56,27 @@ in {
       };
     };
 
+    # TODO: add a OLED variant
+    # this is highly opinionated to catppuccin theme
+    preferDark = lib.mkEnableOption { default = true; };
+    # TODO: remove themeColors or replace with prefered dark/light
     themeColors = lib.mkOption {
       type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
       default = catppuccinMochaTheme;
       example = "{}";
       description = "Theme colors";
+    };
+    themeColorsLight = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
+      default = catppuccinLatteTheme;
+      example = "{}";
+      description = "Theme colors";
+    };
+    themeColorsDark = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
+      default = catppuccinMochaTheme;
+      example = "{}";
+      description = "Theme colors dark";
     };
   };
 
@@ -58,19 +84,21 @@ in {
     _custom.hm = {
       xdg.configFile = {
         "scripts/theme-colors.sh" = {
-          text = ''
-            ${lib.concatStringsSep "\n"
-            (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
-              (builtins.removeAttrs themeColors [ "flavor" ]))}
-          '';
+          text = mkThemeScript themeColors;
+          executable = true;
+        };
+        "scripts/theme-colors-light.sh" = {
+          text = mkThemeScript themeColorsLight;
+          executable = true;
+        };
+        "scripts/theme-colors-dark.sh" = {
+          text = mkThemeScript themeColorsDark;
           executable = true;
         };
 
-        "theme-colors.css".text = ''
-          ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
-            (key: value: "@define-color ${key} ${value};")
-            (builtins.removeAttrs themeColors [ "flavor" ]))}
-        '';
+        "theme-colors.css".text = mkThemeGtk themeColors;
+        "theme-colors-gtk-light.css".text = mkThemeGtk themeColorsLight;
+        "theme-colors-gtk-dark.css".text = mkThemeGtk themeColorsDark;
       };
     };
   };

@@ -18,19 +18,19 @@ in lib.checkListOfEnum "${pname}: color variants" [
   "manjaro"
   "ubuntu"
   "dracula"
-  "catppuccin_mocha"
+  "catppuccin_mocha_lavender"
   "nord"
 ] colorVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2b335a215fae614d3250c80a287235b6017c6d49";
+  version = "84fc332b966987ed1c23dfbb1274149a1a67ac68";
 
   src = fetchFromGitHub {
     owner = "wochap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1fdwvReO+KXbRL+eZwzcwJEIMqFz4AiFUyKiJG+rJU0=";
+    sha256 = "sha256-iJh/wA5OisdxvHvAXRZou+WfptURiUKQXwFJoZ2huAE=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

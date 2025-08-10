@@ -137,6 +137,22 @@
         "type": "github"
       }
     },
+    "catppuccin-adw": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1752665989,
+        "narHash": "sha256-ELpzK2vx7O/GFwGzdTrYQa7mvGQDxCzJoW3QRkCUcao=",
+        "owner": "claymorwan",
+        "repo": "catppuccin",
+        "rev": "d03125088f4fe9b7ec44aa8d3e2f0c42abcdb7a1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "claymorwan",
+        "repo": "catppuccin",
+        "type": "github"
+      }
+    },
     "catppuccin-amfora": {
       "flake": false,
       "locked": {
@@ -3024,6 +3040,7 @@
         "ags": "ags",
         "android-nixpkgs": "android-nixpkgs",
         "arkenfox": "arkenfox",
+        "catppuccin-adw": "catppuccin-adw",
         "catppuccin-amfora": "catppuccin-amfora",
         "catppuccin-bat": "catppuccin-bat",
         "catppuccin-bottom": "catppuccin-bottom",

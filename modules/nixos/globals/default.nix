@@ -24,7 +24,12 @@
     gtkTheme = {
       name = lib.mkOption {
         type = lib.types.str;
-        default = "adw-gtk3-dark";
+        # NOTE: never add suffix `-dark`
+        default = "adw-gtk3";
+      };
+      accent = lib.mkOption {
+        type = lib.types.str;
+        default = "lavender";
       };
       package = lib.mkOption {
         type = lib.types.package;
@@ -34,12 +39,13 @@
     gtkIconTheme = {
       name = lib.mkOption {
         type = lib.types.str;
-        default = "Tela-catppuccin_mocha";
+        # NOTE: never add suffix `-dark`/`-light`
+        default = "Tela-catppuccin_mocha_lavender";
       };
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs._custom.tela-icon-theme.override {
-          colorVariants = [ "catppuccin_mocha" "dracula" ];
+          colorVariants = [ "catppuccin_mocha_lavender" ];
         };
       };
     };

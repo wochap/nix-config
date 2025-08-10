@@ -1,0 +1,27 @@
+button.titlebutton {
+  /* GTK3 */
+  color: transparent;
+  min-width: 18px;
+  min-height: 18px;
+}
+button.titlebutton:backdrop {
+  opacity: 0.5;
+}
+
+filechooser list {
+  /* GTK3 filechooser */
+  background: @sidebar_backdrop_color;
+}
+
+windowcontrols > button {
+  /* GTK4 */
+  color: transparent;
+  min-width: 18px;
+  min-height: 18px;
+  border-radius: 100%;
+  padding: 0;
+  margin: 0 5px;
+}
+windowcontrols > button > image {
+  padding: 0;
+}

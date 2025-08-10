@@ -125,6 +125,8 @@
     dracula-lsd.flake = false;
     catppuccin-qt5ct.url = "github:catppuccin/qt5ct";
     catppuccin-qt5ct.flake = false;
+    catppuccin-adw.url = "github:claymorwan/catppuccin";
+    catppuccin-adw.flake = false;
     catppuccin-grub.url = "github:catppuccin/grub";
     catppuccin-grub.flake = false;
     catppuccin-amfora.url = "github:catppuccin/amfora";
