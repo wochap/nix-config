@@ -11,7 +11,7 @@ in {
         efiSupport = true;
         enableCryptodisk = true;
         theme = lib.mkDefault
-          "${inputs.catppuccin-grub}/src/catppuccin-${themeColors.flavor}-grub-theme";
+          "${inputs.catppuccin-grub}/src/catppuccin-${themeColors.flavour}-grub-theme";
         useOSProber = true;
       };
 

@@ -4,7 +4,7 @@ let
   cfg = config._custom.programs.bottom;
   inherit (config._custom.globals) themeColors;
   themeSettings = builtins.fromTOML (builtins.readFile
-    "${inputs.catppuccin-bottom}/themes/${themeColors.flavor}.toml");
+    "${inputs.catppuccin-bottom}/themes/${themeColors.flavour}.toml");
 in {
   options._custom.programs.bottom.enable = lib.mkEnableOption { };
 

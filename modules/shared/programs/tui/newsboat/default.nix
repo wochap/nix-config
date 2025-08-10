@@ -22,7 +22,7 @@ in {
       xdg.configFile = {
         "newsboat/catppuccin-dark".source =
           "${inputs.catppuccin-newsboat}/themes/${
-            if themeColors.flavor == "latte" then "latte" else "dark"
+            if themeColors.flavour == "latte" then "latte" else "dark"
           }";
         "newsboat/urls".source =
           lib._custom.relativeSymlink configDirectory ./dotfiles/urls;

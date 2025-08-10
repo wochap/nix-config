@@ -12,7 +12,7 @@ in {
 
       xdg.configFile."presenterm/config.yaml".source =
         pkgs.replaceVars ./dotfiles/config.yaml {
-          inherit (themeColors) flavor;
+          inherit (themeColors) flavour;
         };
 
       programs.zsh.initContent =

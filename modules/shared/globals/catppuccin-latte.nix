@@ -1,12 +1,13 @@
 rec {
+  flavour = "latte";
+
   primary = mauve;
+  secondary = peach;
   border = surface2;
   background = base;
   backgroundOverlay = mantle;
   shadow = crust;
   textDimmed = overlay0;
-
-  flavor = "latte";
 
   rosewater = "#dc8a78";
   flamingo = "#dd7878";

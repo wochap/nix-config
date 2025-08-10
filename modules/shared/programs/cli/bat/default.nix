@@ -23,7 +23,7 @@ in {
 
       programs.bat = {
         enable = true;
-        config = { theme = "Catppuccin-${themeColors.flavor}"; };
+        config = { theme = "Catppuccin-${themeColors.flavour}"; };
         themes = {
           Catppuccin-latte = {
             src = "${inputs.catppuccin-bat}/themes";

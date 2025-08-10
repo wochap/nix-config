@@ -162,7 +162,7 @@ in {
 
           # Theme
           source ${inputs.catppuccin-neomutt}/${
-            if themeColors.flavor == "latte" then
+            if themeColors.flavour == "latte" then
               "latte-neomuttrc"
             else
               "neomuttrc"

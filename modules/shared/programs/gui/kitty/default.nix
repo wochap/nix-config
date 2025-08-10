@@ -54,7 +54,7 @@ in {
         '';
         "kitty/kitty.conf".text = ''
           shell ${pkgs.zsh}/bin/zsh
-          include ${inputs.catppuccin-kitty}/themes/${themeColors.flavor}.conf
+          include ${inputs.catppuccin-kitty}/themes/${themeColors.flavour}.conf
           cursor ${themeColors.green}
           cursor_text_color ${themeColors.base}
           active_border_color ${themeColors.primary}

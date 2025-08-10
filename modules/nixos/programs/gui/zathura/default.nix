@@ -24,7 +24,7 @@ in {
           "${inputs.catppuccin-zathura}/src/catppuccin-mocha";
         "zathura/zathurarc".source = pkgs.replaceVars ./dotfiles/zathurarc {
           inherit (themeColors) backgroundOverlay crust text;
-          themeFile = "catppuccin-${themeColors.flavor}";
+          themeFile = "catppuccin-${themeColors.flavour}";
         };
       };
 

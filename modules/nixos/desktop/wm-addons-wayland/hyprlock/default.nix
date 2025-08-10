@@ -25,11 +25,11 @@ in {
         "hypr/hyprlock.conf".source =
           relativeSymlink configDirectory ./dotfiles/hyprlock.conf;
         "hypr/catppuccin-theme.conf".source =
-          "${inputs.catppuccin-hyprland}/themes/${themeColors.flavor}.conf";
+          "${inputs.catppuccin-hyprland}/themes/${themeColors.flavour}.conf";
         "hypr/theme-colors.conf".text = ''
           ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
             (key: value: "\$${key} = rgb(${unwrapHex value})")
-            (builtins.removeAttrs themeColors [ "flavor" ]))}
+            (builtins.removeAttrs themeColors [ "flavour" ]))}
         '';
       };
     };

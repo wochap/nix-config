@@ -85,7 +85,7 @@ in {
         "tmux/tmux.conf".text = ''
           set -g default-shell ${pkgs.zsh}/bin/zsh
           set -g popup-border-style "bg=default,fg=${themeColors.primary}"
-          set -g @catppuccin_flavour "${themeColors.flavor}"
+          set -g @catppuccin_flavour "${themeColors.flavour}"
           set -g @catppuccin_pane_active_border_style "fg=${themeColors.primary}"
           set -g @catppuccin_pane_border_style "fg=${themeColors.border}"
           source-file $HOME/.config/tmux/config.conf

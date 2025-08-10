@@ -4,7 +4,7 @@ let
   cfg = config._custom.programs.git;
   inherit (config._custom.globals) themeColors;
   catppuccinTheme = lib._custom.fromYAML
-    "${inputs.catppuccin-lazygit}/themes/${themeColors.flavor}/mauve.yml";
+    "${inputs.catppuccin-lazygit}/themes/${themeColors.flavour}/mauve.yml";
   git-final = pkgs.gitAndTools.gitFull;
 in {
   options._custom.programs.git = {
@@ -109,7 +109,7 @@ in {
             navigate = true;
 
             # available themes `delta --list-syntax-themes`
-            syntax-theme = "Catppuccin-${themeColors.flavor}";
+            syntax-theme = "Catppuccin-${themeColors.flavour}";
 
             file-modified-label = "modified:";
             decorations.commit-decoration-style = "yellow box ul";

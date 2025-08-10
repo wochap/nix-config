@@ -24,9 +24,9 @@ in {
         extraConfig = ''
           import catppuccin
 
-          # set the flavor you'd like to use
+          # set the flavour you'd like to use
           # last argument (optional, default is False): enable the plain look for the menu rows
-          catppuccin.setup(c, '${themeColors.flavor}', True)
+          catppuccin.setup(c, '${themeColors.flavour}', True)
 
           c.fonts.default_family = "Iosevka NF"
           c.fonts.default_size = "10pt"

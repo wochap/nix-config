@@ -18,7 +18,7 @@ let
         source "${fshPlugin.src}/${fshPlugin.file}"
         FAST_WORK_DIR="$out"
         mkdir -p "$out"
-        fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-${themeColors.flavor}.ini"
+        fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-${themeColors.flavour}.ini"
       EOF
     '';
   };

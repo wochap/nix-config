@@ -13,7 +13,7 @@ in {
       xdg.configFile."amfora/config.toml".text = ''
         ${builtins.readFile ./dotfiles/config.toml}
         ${builtins.readFile
-        "${inputs.catppuccin-amfora}/themes/${themeColors.flavor}.toml"}
+        "${inputs.catppuccin-amfora}/themes/${themeColors.flavour}.toml"}
       '';
     };
   };

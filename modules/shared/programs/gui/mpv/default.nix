@@ -22,7 +22,7 @@ in {
           windowcontrols=no
         '';
         "mpv/scripts-opts/stats.conf".source =
-          "${inputs.catppuccin-mpv}/themes/${themeColors.flavor}/scripts-opts/stats.conf";
+          "${inputs.catppuccin-mpv}/themes/${themeColors.flavour}/scripts-opts/stats.conf";
       };
 
       programs.mpv = {
