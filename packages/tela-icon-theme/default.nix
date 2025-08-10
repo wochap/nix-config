@@ -5,32 +5,20 @@
 let pname = "tela-icon-theme";
 in lib.checkListOfEnum "${pname}: color variants" [
   "standard"
-  "black"
-  "blue"
-  "brown"
-  "green"
-  "grey"
-  "orange"
-  "pink"
-  "purple"
-  "red"
-  "yellow"
-  "manjaro"
-  "ubuntu"
-  "dracula"
+  "catppuccin_mocha_sky"
+  "catppuccin_mocha_blue"
   "catppuccin_mocha_lavender"
-  "nord"
 ] colorVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "84fc332b966987ed1c23dfbb1274149a1a67ac68";
+  version = "46c6321b1df87a3d828ccb19ed097c83ed3035df";
 
   src = fetchFromGitHub {
     owner = "wochap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-iJh/wA5OisdxvHvAXRZou+WfptURiUKQXwFJoZ2huAE=";
+    sha256 = "sha256-vV3YqXmnAh6yS4IIza6ABDSJ+SyDYnLYC+NesJsxzJQ=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
@@ -42,6 +30,8 @@ stdenvNoCC.mkDerivation rec {
   # These fixup steps are slow and unnecessary.
   dontPatchELF = true;
   dontRewriteSymlinks = true;
+  dontCheckForBrokenSymlinks = true;
+  dontPatchShebangs = true;
 
   installPhase = ''
     runHook preInstall

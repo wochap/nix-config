@@ -26,12 +26,16 @@
       name = lib.mkOption {
         type = lib.types.str;
         # NOTE: never add suffix `-dark`/`-light`
-        default = "Tela-catppuccin_mocha_lavender";
+        default = "Tela-catppuccin_mocha_blue";
       };
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs._custom.tela-icon-theme.override {
-          colorVariants = [ "catppuccin_mocha_lavender" ];
+          colorVariants = [
+            "catppuccin_mocha_sky"
+            "catppuccin_mocha_blue"
+            "catppuccin_mocha_lavender"
+          ];
         };
       };
     };
