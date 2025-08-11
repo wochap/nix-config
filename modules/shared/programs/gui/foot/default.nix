@@ -2,8 +2,14 @@
 
 let
   cfg = config._custom.programs.foot;
-  inherit (config._custom.globals) themeColors configDirectory;
+  inherit (config._custom.globals)
+    themeColorsLight themeColorsDark configDirectory preferDark;
+
   iniFormat = pkgs.formats.ini { };
+  catppuccin-foot-light-theme-path =
+    "${inputs.catppuccin-foot}/themes/catppuccin-${themeColorsLight.flavour}.ini";
+  catppuccin-foot-dark-theme-path =
+    "${inputs.catppuccin-foot}/themes/catppuccin-${themeColorsDark.flavour}.ini";
 in {
   options._custom.programs.foot = {
     enable = lib.mkEnableOption { };
@@ -15,14 +21,33 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        foot = prev.foot.overrideAttrs (oldAttrs: rec {
+          version = "72d9a13c0c6b6ee4b56a38f508c2e8d5c56616b5";
+          src = pkgs.fetchFromGitea {
+            domain = "codeberg.org";
+            owner = "dnkl";
+            repo = "foot";
+            rev = version;
+            hash = "sha256-cUUoAVBtlhnZJWfuCYqHjjYKIpKf9JBHcE5YCi5WscI=";
+          };
+        });
+      })
+    ];
+
     _custom.programs.foot.settings = {
       main = {
         shell = "${pkgs.tmux}/bin/tmux";
         include =
           "${lib._custom.relativeSymlink configDirectory ./dotfiles/foot.ini}";
+        initial-color-theme = if preferDark then 2 else 1;
       };
-      cursor.color = "${lib._custom.unwrapHex themeColors.base} ${
-          lib._custom.unwrapHex themeColors.green
+      colors.cursor = "${lib._custom.unwrapHex themeColorsLight.base} ${
+          lib._custom.unwrapHex themeColorsLight.green
+        }";
+      colors2.cursor = "${lib._custom.unwrapHex themeColorsDark.base} ${
+          lib._custom.unwrapHex themeColorsDark.green
         }";
     };
 
@@ -30,8 +55,12 @@ in {
       home.packages = with pkgs; [ foot libsixel ];
 
       xdg.configFile."foot/foot.ini".text = ''
-        ${builtins.readFile
-        "${inputs.catppuccin-foot}/themes/catppuccin-${themeColors.flavour}.ini"}
+        # themes
+        ${builtins.readFile catppuccin-foot-light-theme-path}
+        ${lib.strings.replaceStrings [ "[colors]" ] [ "[colors2]" ]
+        (builtins.readFile catppuccin-foot-dark-theme-path)}
+
+        # nixos options
         ${builtins.readFile
         (iniFormat.generate "foot.ini" config._custom.programs.foot.settings)}
       '';

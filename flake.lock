@@ -252,11 +252,11 @@
     "catppuccin-foot": {
       "flake": false,
       "locked": {
-        "lastModified": 1727220871,
-        "narHash": "sha256-eVH3BY2fZe0/OjqucM/IZthV8PMsM9XeIijOg8cNE1Y=",
+        "lastModified": 1752980058,
+        "narHash": "sha256-bpGVDESE6Pr7kaFgfAWJ/5KC9mRPlv2ciYwRr6jcIKs=",
         "owner": "catppuccin",
         "repo": "foot",
-        "rev": "962ff1a5b6387bc5419e9788a773a080eea5f1e1",
+        "rev": "8d263e0e6b58a6b9ea507f71e4dbf6870aaf8507",
         "type": "github"
       },
       "original": {
