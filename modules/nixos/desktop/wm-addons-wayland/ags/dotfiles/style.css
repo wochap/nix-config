@@ -22,6 +22,6 @@ tooltip label {
   font-family: Iosevka NF;
 }
 
-@import url("../theme-colors.css");
+@import url("../theme-colors-gtk.css");
 @import url("bar/style.css");
 @import url("osd/style.css");
