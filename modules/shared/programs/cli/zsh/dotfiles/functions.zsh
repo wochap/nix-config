@@ -3,6 +3,12 @@ _cpf_files_only() {
   _files -g '*(-.)'
 }
 
+function print-terminal-colors() {
+  for i in {0..255}; do
+    echo -e "$(tput setaf $i)This is color 󱓻 $i$(tput sgr0)";
+  done
+}
+
 function timezsh() {
   shell=${1-$SHELL}
   for i in $(seq 1 10); do time $shell -i -c exit; done
