@@ -6,7 +6,7 @@ let
     themeColorsLight themeColorsDark configDirectory preferDark;
   inherit (lib._custom) relativeSymlink unwrapHex;
 
-  kitty-final = pkgs.kitty;
+  kitty-final = pkgs.nixpkgs-unstable.kitty;
   shellIntegrationInit = {
     bash = ''
       if test -n "$KITTY_INSTALLATION_DIR"; then
@@ -28,20 +28,12 @@ let
     cursor_text_color ${themeColors.base}
     active_border_color ${themeColors.primary}
     inactive_border_color ${themeColors.border}
-    tab_title_template "{fmt.bg.default}{fmt.fg._${
-      unwrapHex themeColors.surface1
-    }}  {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
-    active_tab_title_template "{fmt.bg.default}{fmt.fg._${
-      unwrapHex themeColors.lavender
-    }}{fmt.bg._${unwrapHex themeColors.lavender}}{fmt.fg._${
-      unwrapHex themeColors.surface1
-    }} {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${
-      unwrapHex themeColors.lavender
-    }}{fmt.bg.default}{fmt.fg.default}"
     tab_bar_background ${themeColors.base}
-    active_tab_foreground ${themeColors.base}
     inactive_tab_background ${themeColors.base}
+    # color0
     inactive_tab_foreground ${themeColors.surface1}
+    active_tab_background ${themeColors.lavender}
+    active_tab_foreground ${themeColors.base}
   '';
   catppuccin-kitty-light-theme = mkKittyTheme themeColorsLight;
   catppuccin-kitty-dark-theme = mkKittyTheme themeColorsDark;
@@ -100,6 +92,18 @@ in {
         "kitty/kitty.conf".text = ''
           shell ${pkgs.zsh}/bin/zsh
           include ${relativeSymlink configDirectory ./dotfiles/kitty.conf}
+
+          # TODO: move into *-theme.auto.conf
+          # currently we can't because it doesn't work there
+          # color0 is surface1
+          tab_title_template "{fmt.bg.default}{fmt.fg.color0}  {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
+          active_tab_title_template "{fmt.bg.default}{fmt.fg._${
+            unwrapHex themeColorsDark.lavender
+          }}{fmt.bg._${
+            unwrapHex themeColorsDark.lavender
+          }}{fmt.fg.color0} {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${
+            unwrapHex themeColorsDark.lavender
+          }}{fmt.bg.default}{fmt.fg.default}"
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;

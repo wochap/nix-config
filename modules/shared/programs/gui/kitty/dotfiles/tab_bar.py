@@ -1,3 +1,5 @@
+# source: https://github.com/kovidgoyal/kitty/blob/master/kitty/tab_bar.py
+
 import math
 from pathlib import Path
 from kitty.boss import get_boss
@@ -7,14 +9,15 @@ from kitty.tab_bar import (
     ExtraData,
     TabBarData,
     as_rgb,
+    color_as_int,
     draw_tab_with_separator,
 )
 
 opts = get_options()
 
-lavender = as_rgb(int("B4BEFE", 16))
-surface1 = as_rgb(int("45475A", 16))
-base = as_rgb(int("1E1E2E", 16))
+active_tab_background = as_rgb(color_as_int(opts.active_tab_background))
+inactive_tab_foreground = as_rgb(color_as_int(opts.inactive_tab_foreground))
+tab_bar_background = as_rgb(color_as_int(opts.tab_bar_background))
 windows_icon = ""
 folder_icon = "󰉖"
 default_layout_icon = ""
@@ -83,7 +86,7 @@ def _draw_left_status(screen: Screen):
 
     cwd = get_cwd()
     cells = [
-        (surface1, base, cwd),
+        (inactive_tab_foreground, tab_bar_background, cwd),
     ]
 
     left_status_length = 0
@@ -104,15 +107,15 @@ def _draw_left_status(screen: Screen):
 
 
 def _draw_right_status(screen: Screen, is_last: bool) -> int:
-    layout_fg = surface1 if active_tab_layout_name == "fat" else lavender
+    layout_fg = inactive_tab_foreground if active_tab_layout_name == "fat" else active_tab_background
     layout_icon = layout_icon_by_name[active_tab_layout_name] or default_layout_icon
     cells = [
         # layout name
-        (layout_fg, base, " " + layout_icon + " "),
-        (layout_fg, base, active_tab_layout_name + " "),
+        (layout_fg, tab_bar_background, " " + layout_icon + " "),
+        (layout_fg, tab_bar_background, active_tab_layout_name + " "),
         # num windows
-        (surface1, base, " " + windows_icon + " "),
-        (surface1, base, str(active_tab_num_windows)),
+        (inactive_tab_foreground, tab_bar_background, " " + windows_icon + " "),
+        (inactive_tab_foreground, tab_bar_background, str(active_tab_num_windows)),
     ]
 
     # calculate leading spaces to separate tabs from right status
@@ -189,4 +192,3 @@ def get_cwd():
         )
 
     return folder_icon + " " + cwd
-
