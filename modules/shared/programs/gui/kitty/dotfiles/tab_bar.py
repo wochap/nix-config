@@ -44,6 +44,13 @@ def draw_tab(
 ) -> int:
     global active_tab_layout_name
     global active_tab_num_windows
+    global active_tab_background
+    global inactive_tab_foreground
+    global tab_bar_background
+
+    active_tab_background = as_rgb(color_as_int(draw_data.active_bg))
+    inactive_tab_foreground = as_rgb(color_as_int(draw_data.inactive_fg))
+    tab_bar_background = as_rgb(color_as_int(draw_data.default_bg))
 
     if tab.is_active:
         active_tab_layout_name = tab.layout_name
@@ -192,3 +199,5 @@ def get_cwd():
         )
 
     return folder_icon + " " + cwd
+
+
