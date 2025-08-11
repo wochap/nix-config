@@ -2,7 +2,8 @@
 
 let
   cfg = config._custom.programs.kitty;
-  inherit (config._custom.globals) themeColors configDirectory;
+  inherit (config._custom.globals)
+    themeColorsLight themeColorsDark configDirectory preferDark;
   inherit (lib._custom) relativeSymlink unwrapHex;
 
   kitty-final = pkgs.kitty;
@@ -20,6 +21,30 @@ let
       fi
     '';
   };
+  mkKittyTheme = themeColors: ''
+    include ${inputs.catppuccin-kitty}/themes/${themeColors.flavour}.conf
+
+    cursor ${themeColors.green}
+    cursor_text_color ${themeColors.base}
+    active_border_color ${themeColors.primary}
+    inactive_border_color ${themeColors.border}
+    tab_title_template "{fmt.bg.default}{fmt.fg._${
+      unwrapHex themeColors.surface1
+    }}  {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
+    active_tab_title_template "{fmt.bg.default}{fmt.fg._${
+      unwrapHex themeColors.lavender
+    }}{fmt.bg._${unwrapHex themeColors.lavender}}{fmt.fg._${
+      unwrapHex themeColors.surface1
+    }} {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${
+      unwrapHex themeColors.lavender
+    }}{fmt.bg.default}{fmt.fg.default}"
+    tab_bar_background ${themeColors.base}
+    active_tab_foreground ${themeColors.base}
+    inactive_tab_background ${themeColors.base}
+    inactive_tab_foreground ${themeColors.surface1}
+  '';
+  catppuccin-kitty-light-theme = mkKittyTheme themeColorsLight;
+  catppuccin-kitty-dark-theme = mkKittyTheme themeColorsDark;
 in {
   options._custom.programs.kitty.enable = lib.mkEnableOption { };
 
@@ -48,32 +73,32 @@ in {
       programs.zsh.initContent = lib.mkOrder 1000 shellIntegrationInit.zsh;
 
       xdg.configFile = {
-        "kitty/diff.conf".text = ''
-          include ${inputs.catppuccin-kitty}/themes/diff-late.conf
+        "kitty/diff.conf".text = let
+          rawContent = builtins.readFile
+            "${inputs.catppuccin-kitty}/themes/diff-${themeColorsDark.flavour}.conf";
+          lines = lib.strings.splitString "\n" rawContent;
+          processedLines = map (line:
+            let match = builtins.match "^([a-zA-Z0-9_-]+)(.*)" line;
+            in if match == null then
+              line
+            else
+              "dark_${builtins.elemAt match 0}${builtins.elemAt match 1}")
+            lines;
+          darkDiff = lib.strings.concatStringsSep "\n" processedLines;
+        in ''
+          ${builtins.readFile
+          "${inputs.catppuccin-kitty}/themes/diff-${themeColorsLight.flavour}.conf"}
+          ${darkDiff}
           ${builtins.readFile ./dotfiles/kitty-diff.conf}
         '';
+        "kitty/light-theme.auto.conf".text = catppuccin-kitty-light-theme;
+        "kitty/dark-theme.auto.conf".text = catppuccin-kitty-dark-theme;
+        "kitty/no-preference-theme.auto.conf".text = if preferDark then
+          catppuccin-kitty-dark-theme
+        else
+          catppuccin-kitty-light-theme;
         "kitty/kitty.conf".text = ''
           shell ${pkgs.zsh}/bin/zsh
-          include ${inputs.catppuccin-kitty}/themes/${themeColors.flavour}.conf
-          cursor ${themeColors.green}
-          cursor_text_color ${themeColors.base}
-          active_border_color ${themeColors.primary}
-          inactive_border_color ${themeColors.border}
-          tab_title_template "{fmt.bg.default}{fmt.fg._${
-            unwrapHex themeColors.surface1
-          }}  {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
-          active_tab_title_template "{fmt.bg.default}{fmt.fg._${
-            unwrapHex themeColors.lavender
-          }}{fmt.bg._${unwrapHex themeColors.lavender}}{fmt.fg._${
-            unwrapHex themeColors.surface1
-          }} {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${
-            unwrapHex themeColors.lavender
-          }}{fmt.bg.default}{fmt.fg.default}"
-          tab_bar_background ${themeColors.base}
-          active_tab_foreground ${themeColors.base}
-          inactive_tab_background ${themeColors.base}
-          inactive_tab_foreground ${themeColors.surface1}
-
           include ${relativeSymlink configDirectory ./dotfiles/kitty.conf}
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
