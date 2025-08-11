@@ -13,9 +13,9 @@ $ crudini --set ~/.config/qt5ct/qt5ct.conf Appearance icon_theme "Tela-catppucci
 # switch to dark theme
 $ ln -sf ~/.config/kdeglobals-dark ~/.config/kdeglobals
 $ crudini --set ~/.config/qt6ct/qt6ct.conf Appearance color_scheme_path "/home/gean/.config/qt6ct/colors/catppuccin-mocha-lavender.conf"
-$ crudini --set ~/.config/qt6ct/qt6ct.conf Appearance icon_theme "Tela-catppuccin_mocha_lavender-dark"
+$ crudini --set ~/.config/qt6ct/qt6ct.conf Appearance icon_theme "Tela-catppuccin_mocha_blue-dark"
 $ crudini --set ~/.config/qt5ct/qt5ct.conf Appearance color_scheme_path "/home/gean/.config/qt5ct/colors/catppuccin-mocha-lavender.conf"
-$ crudini --set ~/.config/qt5ct/qt5ct.conf Appearance icon_theme "Tela-catppuccin_mocha_lavender-dark"
+$ crudini --set ~/.config/qt5ct/qt5ct.conf Appearance icon_theme "Tela-catppuccin_mocha_blue-dark"
 ```
 
 ## Doesn't work
