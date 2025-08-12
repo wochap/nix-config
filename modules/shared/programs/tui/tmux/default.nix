@@ -12,8 +12,7 @@ let
       "--padding '0,1'"
     ]);
 
-  # NOTE: tmux v3.5a introduced a change that broke keybindings using the Shift key
-  tmux-final = pkgs.nixpkgs-24-05.tmux; # tmux v3.4
+  tmux-final = cfg.package;
   tmux-sessionx =
     inputs.tmux-sessionx.packages.${pkgs.system}.default.overrideAttrs
     (oldAttrs: { postInstall = ""; });
@@ -42,6 +41,10 @@ let
 in {
   options._custom.programs.tmux = {
     enable = lib.mkEnableOption { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.tmux;
+    };
     systemdEnable = lib.mkEnableOption { };
   };
 
@@ -55,6 +58,18 @@ in {
             substituteInPlace bin/fzf-tmux \
               --replace "opt=\"-B" "# opt=\"-B"
           '';
+        });
+
+        # NOTE: fix newline pasting broken in neovim
+        # source: https://github.com/tmux/tmux/issues/4163
+        tmux = prev.tmux.overrideAttrs (oldAttrs: rec {
+          version = "b13005e802df23652e87c98f136f9eb13f096374";
+          src = pkgs.fetchFromGitHub {
+            owner = "tmux";
+            repo = "tmux";
+            rev = version;
+            hash = "sha256-V/F16gXadfSoR7kdq5pKXdL7nnqjYuZQl+P8DIZTcGM=";
+          };
         });
       })
     ];
@@ -83,6 +98,7 @@ in {
           "${tmux-sessionx}/share/tmux-plugins/sessionx";
         "tmux/plugins/catppuccin".source = inputs.catppuccin-tmux;
         "tmux/tmux.conf".text = ''
+          set -gu default-command
           set -g default-shell ${pkgs.zsh}/bin/zsh
           set -g popup-border-style "bg=default,fg=${themeColors.primary}"
           set -g @catppuccin_flavour "${themeColors.flavour}"

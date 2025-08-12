@@ -38,7 +38,8 @@ in {
 
     _custom.programs.foot.settings = {
       main = {
-        shell = "${pkgs.tmux}/bin/tmux";
+        shell = lib.mkIf config._custom.programs.tmux.enable
+          "${config._custom.programs.tmux.package}/bin/tmux";
         include =
           "${lib._custom.relativeSymlink configDirectory ./dotfiles/foot.ini}";
         initial-color-theme = if preferDark then 2 else 1;
