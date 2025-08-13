@@ -4,7 +4,7 @@ let
   cfg = config._custom.programs.fzf;
   inherit (config._custom.globals) themeColorsLight themeColorsDark;
 
-  get-catppuccin-fzf-args = themeStr:
+  mkThemeFzfArgs = themeStr:
     let
       lines = lib.strings.splitString "\n" themeStr;
       tailLines = lib.lists.tail lines;
@@ -12,9 +12,9 @@ let
         let cleanedLine = builtins.replaceStrings [ "\\" ''"'' ] [ "" "" ] line;
         in lib.strings.trim cleanedLine) tailLines;
     in processedLines;
-  catppuccin-fzf-light-theme-args = get-catppuccin-fzf-args (lib.fileContents
+  catppuccin-fzf-light-theme-args = mkThemeFzfArgs (lib.fileContents
     "${inputs.catppuccin-fzf}/themes/catppuccin-fzf-${themeColorsLight.flavour}.sh");
-  catppuccin-fzf-dark-theme-args = get-catppuccin-fzf-args (lib.fileContents
+  catppuccin-fzf-dark-theme-args = mkThemeFzfArgs (lib.fileContents
     "${inputs.catppuccin-fzf}/themes/catppuccin-fzf-${themeColorsDark.flavour}.sh");
 in {
   options._custom.programs.fzf.enable = lib.mkEnableOption { };
