@@ -6,7 +6,7 @@ rec {
   border = surface2;
   background = base;
   backgroundOverlay = mantle;
-  shadow = crust;
+  shadow = "#11111b";
   textDimmed = overlay0;
 
   rosewater = "#dc8a78";
