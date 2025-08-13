@@ -15,7 +15,7 @@ Utils.timeout(0, () => {
   });
 });
 
-Utils.subprocess(["bash", "-c", "watch-color-scheme"], (colorScheme) => {
+Utils.subprocess(["bash", "-c", "color-scheme watch"], (colorScheme) => {
   const HOME = Utils.exec(`sh -c 'echo "$HOME"'`);
   App.applyCss(`/${HOME}/.config/theme-colors-gtk-${colorScheme}.css`);
 });

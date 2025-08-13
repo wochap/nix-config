@@ -38,8 +38,8 @@ let
     pkgs.writeScriptBin "tui-rss" (builtins.readFile ./scripts/tui-rss.sh);
   theme-switch = pkgs.writeScriptBin "theme-switch"
     (builtins.readFile ./scripts/theme-switch.sh);
-  watch-color-scheme = pkgs.writeScriptBin "watch-color-scheme"
-    (builtins.readFile ./scripts/watch-color-scheme.sh);
+  color-scheme = pkgs.writeScriptBin "color-scheme"
+    (builtins.readFile ./scripts/color-scheme.sh);
 in {
   options._custom.desktop.wayland-utils.enable = lib.mkEnableOption { };
 
@@ -86,7 +86,7 @@ in {
         ocr
         ocr-math
         theme-switch
-        watch-color-scheme
+        color-scheme
 
         tui-bookmarks
         tui-calendar
