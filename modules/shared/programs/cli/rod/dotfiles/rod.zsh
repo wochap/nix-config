@@ -16,7 +16,7 @@ _rod_preexec () {
   [[ ! -t 0 ]] && return 0
 
   # Run rod, redirecting its input from the terminal device, and evaluate its output
-  eval $(rod env --no-export)
+  eval $(rod env)
 }
 
 autoload -U add-zsh-hook
