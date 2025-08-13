@@ -125,7 +125,8 @@ in {
         "hypr/variables.conf".source =
           relativeSymlink configDirectory ./dotfiles/hypr/variables.conf;
 
-        "hypr/shaders".source = ./dotfiles/shaders;
+        "hypr/shaders".source =
+          relativeSymlink configDirectory ./dotfiles/shaders;
 
         "hypr/pyprland.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
