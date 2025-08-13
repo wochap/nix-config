@@ -75,6 +75,8 @@
     figma-linux.inputs.nixpkgs.follows = "nixpkgs";
     quickshell.url = "github:quickshell-mirror/quickshell?rev=a5431dd02dc23d9ef1680e67777fed00fe5f7cda"; # v0.2.0
     quickshell.inputs.nixpkgs.follows = "nixpkgs";
+    rod.url = "github:leiserfg/rod?rev=05601eaa09f08830613c41b6bdc35e34336880a5"; # master (12 aug 2025)
+    rod.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";

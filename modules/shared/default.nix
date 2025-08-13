@@ -17,6 +17,7 @@
     ./programs/cli/lsd
     ./programs/cli/nix-direnv
     ./programs/cli/ptsh
+    ./programs/cli/rod
     ./programs/cli/texlive
     ./programs/cli/zk
     ./programs/cli/zoxide
