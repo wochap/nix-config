@@ -3,9 +3,14 @@
 let
   cfg = config._custom.desktop.hyprland;
   inherit (config._custom) globals;
-  inherit (globals) themeColors configDirectory;
+  inherit (globals) themeColorsLight themeColorsDark preferDark configDirectory;
   inherit (lib._custom) relativeSymlink;
 
+  mkThemeHyprland = colors:
+    lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
+      (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}") colors);
+  catppuccin-hyprland-light-theme = mkThemeHyprland themeColorsLight;
+  catppuccin-hyprland-dark-theme = mkThemeHyprland themeColorsDark;
   hyprplugins = inputs.hyprland-plugins.packages.${pkgs.system};
   hyprland-final = inputs.hyprland.packages."${system}".hyprland;
   hyprland-xdp-final =
@@ -98,10 +103,15 @@ in {
         "hypr/xdph.conf".source =
           lib._custom.relativeSymlink configDirectory ./dotfiles/xdph.conf;
 
-        "hypr/colors.conf".text = lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList
-            (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}")
-            themeColors);
+        "hypr/colors.conf" = {
+          text = if preferDark then
+            catppuccin-hyprland-dark-theme
+          else
+            catppuccin-hyprland-light-theme;
+          force = true;
+        };
+        "hypr/colors-light.conf".text = catppuccin-hyprland-light-theme;
+        "hypr/colors-dark.conf".text = catppuccin-hyprland-dark-theme;
         "hypr/binds-kiosk.conf".source =
           relativeSymlink configDirectory ./dotfiles/hypr/binds-kiosk.conf;
         "hypr/binds-main.conf".source =

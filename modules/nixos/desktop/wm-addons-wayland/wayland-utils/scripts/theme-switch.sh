@@ -24,6 +24,10 @@ set_light_theme() {
 
   # lsd
   ln -sf ~/.config/lsd/light.yaml ~/.config/lsd/colors.yaml
+
+  # Hyprland
+  ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
+  hyprctl reload
 }
 
 set_dark_theme() {
@@ -49,6 +53,10 @@ set_dark_theme() {
 
   # lsd
   ln -sf ~/.config/lsd/dark.yaml ~/.config/lsd/colors.yaml
+
+  # Hyprland
+  ln -sf ~/.config/hypr/colors-dark.conf ~/.config/hypr/colors.conf
+  hyprctl reload
 }
 
 # Check for command-line arguments (e.g., ./script.sh dark)
@@ -62,10 +70,9 @@ light)
 *)
   # If no argument, toggle the theme automatically
   echo "🤔 Checking current theme to toggle..."
-  CURRENT_SCHEME=$(gsettings get org.gnome.desktop.interface color-scheme)
+  CURRENT_SCHEME=$(color-scheme print)
 
-  # The output of gsettings includes single quotes, so we match them
-  if [[ "$CURRENT_SCHEME" == "'prefer-dark'" ]]; then
+  if [[ "$CURRENT_SCHEME" == "dark" ]]; then
     # If currently dark, switch to light
     set_light_theme
   else
