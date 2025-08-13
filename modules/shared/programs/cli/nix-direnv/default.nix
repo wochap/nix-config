@@ -15,6 +15,9 @@ in {
         enableBashIntegration = true;
         enableZshIntegration = config._custom.programs.zsh.enable;
       };
+
+      # HACK: wait for https://github.com/direnv/direnv/pull/1475
+      xdg.configFile."direnv/direnv.toml".text = "";
     };
   };
 }
