@@ -1,5 +1,11 @@
 name: se
 
+# HACK:
+# https://github.com/leiserfg/rod/
+on_project_start:
+  - tmux new-session -d -s se
+  - tmux set-environment -t se NO_ROD "TRUE"
+
 windows:
   # 1
   - viz-omni-backend-1:

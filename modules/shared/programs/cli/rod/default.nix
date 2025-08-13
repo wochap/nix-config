@@ -37,6 +37,7 @@ in {
         force = true;
       };
 
+      # NOTE: `rod env` BREAKS automation (e.g. tmuxinator)
       programs.zsh.initContent =
         lib.mkOrder 1000 (builtins.readFile ./dotfiles/rod.zsh);
     };

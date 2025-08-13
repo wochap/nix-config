@@ -78,7 +78,7 @@ in {
       tmux-final
       tmux-kill-unattached-sessions
       tmux-kill-unnamed-sessions
-      tmuxinator # session manager
+      _custom.tmuxinator # session manager
       tmuxp # session manager
     ];
 

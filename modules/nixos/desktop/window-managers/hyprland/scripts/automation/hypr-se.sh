@@ -90,9 +90,9 @@ function start() {
 
   # Start new foot terminal with tmux session
   echo "Starting tmux session: se"
-  footclient --app-id=footclient-se tmux new-session zsh -i -c "tmuxinator start se workspaces=$workspaces" &
+  footclient --app-id=footclient-se tmux new-session zsh -i -c "tmuxinator start se workspaces=$workspaces --suppress-tmux-version-warning" &
   echo "Starting tmux session: se-editors"
-  footclient --app-id=footclient-se-editors tmux new-session zsh -i -c "tmuxinator start se-editors workspaces=$workspaces" &
+  footclient --app-id=footclient-se-editors tmux new-session zsh -i -c "tmuxinator start se-editors workspaces=$workspaces --suppress-tmux-version-warning" &
 }
 
 cleanup
