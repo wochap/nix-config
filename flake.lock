@@ -172,11 +172,11 @@
     "catppuccin-bat": {
       "flake": false,
       "locked": {
-        "lastModified": 1729267055,
-        "narHash": "sha256-x1yqPCWuoBSx/cI94eA+AWwhiSA42cLNUOFJl7qjhmw=",
+        "lastModified": 1751237777,
+        "narHash": "sha256-lJapSgRVENTrbmpVyn+UQabC9fpV1G1e+CdlJ090uvg=",
         "owner": "catppuccin",
         "repo": "bat",
-        "rev": "d2bbee4f7e7d5bac63c054e4d8eca57954b31471",
+        "rev": "6810349b28055dce54076712fc05fc68da4b8ec0",
         "type": "github"
       },
       "original": {
@@ -204,11 +204,11 @@
     "catppuccin-delta": {
       "flake": false,
       "locked": {
-        "lastModified": 1729014005,
-        "narHash": "sha256-JvkTvAe1YltgmYSHeewzwg6xU38oGOIYoehXdHwW1zI=",
+        "lastModified": 1754930883,
+        "narHash": "sha256-HHD0hszHIxf/tyQgS5KtdAN5m0EM9oI54cA2Ij1keOI=",
         "owner": "catppuccin",
         "repo": "delta",
-        "rev": "0674ec5114c08393d808e2516d153c7e6df00d41",
+        "rev": "7b06b1f174c03f53ff68da1ae1666ca3ef7683ad",
         "type": "github"
       },
       "original": {
@@ -220,11 +220,11 @@
     "catppuccin-dircolors": {
       "flake": false,
       "locked": {
-        "lastModified": 1702446108,
-        "narHash": "sha256-mPLXb+G4w5qffKAzdXko4wkkpu1BEwvANv3ZobUFH1o=",
+        "lastModified": 1755043942,
+        "narHash": "sha256-LS1RHLzesAxwbxtScmkEWv+RjOF/8LtwRQDOwmSouC8=",
         "owner": "wochap",
         "repo": "dircolors",
-        "rev": "cfa5890e14bc021b5f1b920d0d1bbccd2fcb3773",
+        "rev": "4f3f47ee7c0ff7e2af047e77311563851743cfe4",
         "type": "github"
       },
       "original": {
@@ -262,6 +262,22 @@
       "original": {
         "owner": "catppuccin",
         "repo": "foot",
+        "type": "github"
+      }
+    },
+    "catppuccin-fzf": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1754347673,
+        "narHash": "sha256-qb+1cA4s4FRDWH6w4rV4vvmUujGdhfXGh2gPF69VdCc=",
+        "owner": "catppuccin",
+        "repo": "fzf",
+        "rev": "b465d3bd56204434ff2396bb6eab26039982824f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "fzf",
         "type": "github"
       }
     },
@@ -316,16 +332,32 @@
     "catppuccin-lazygit": {
       "flake": false,
       "locked": {
-        "lastModified": 1728940761,
-        "narHash": "sha256-b2SoIeXT1BaoxvEeQ0VaPmnBND+7qUe342kOIkyOcAc=",
+        "lastModified": 1745275813,
+        "narHash": "sha256-4eJEOEfwLBc4EoQ32TpuhXS3QDvQ8FtT7EgpotEKV7o=",
         "owner": "catppuccin",
         "repo": "lazygit",
-        "rev": "d3c95a67ea3f778f7705d8ef814f87ac5213436d",
+        "rev": "c24895902ec2a3cb62b4557f6ecd8e0afeed95d5",
         "type": "github"
       },
       "original": {
         "owner": "catppuccin",
         "repo": "lazygit",
+        "type": "github"
+      }
+    },
+    "catppuccin-lsd": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1732764700,
+        "narHash": "sha256-lf6VawCgK9VlKO+PAzPD/WqPjxoqw2j000b5ZlEXj/Y=",
+        "owner": "catppuccin",
+        "repo": "lsd",
+        "rev": "7085155432c7fe53a7acd7b0c004955368aa0fba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "lsd",
         "type": "github"
       }
     },
@@ -531,23 +563,6 @@
       "original": {
         "owner": "numtide",
         "repo": "devshell",
-        "type": "github"
-      }
-    },
-    "dracula-lsd": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1685999750,
-        "narHash": "sha256-ZNyNYJEffxxU7K/7JOv+VRD3JbhW42kvmWk7pLu1vA8=",
-        "owner": "dracula",
-        "repo": "lsd",
-        "rev": "75f3305a2bba4dacac82b143a15d278daee28232",
-        "type": "github"
-      },
-      "original": {
-        "owner": "dracula",
-        "repo": "lsd",
-        "rev": "75f3305a2bba4dacac82b143a15d278daee28232",
         "type": "github"
       }
     },
@@ -3089,10 +3104,12 @@
         "catppuccin-dircolors": "catppuccin-dircolors",
         "catppuccin-discord": "catppuccin-discord",
         "catppuccin-foot": "catppuccin-foot",
+        "catppuccin-fzf": "catppuccin-fzf",
         "catppuccin-grub": "catppuccin-grub",
         "catppuccin-hyprland": "catppuccin-hyprland",
         "catppuccin-kitty": "catppuccin-kitty",
         "catppuccin-lazygit": "catppuccin-lazygit",
+        "catppuccin-lsd": "catppuccin-lsd",
         "catppuccin-mpv": "catppuccin-mpv",
         "catppuccin-neomutt": "catppuccin-neomutt",
         "catppuccin-newsboat": "catppuccin-newsboat",
@@ -3104,7 +3121,6 @@
         "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",
         "chaotic": "chaotic",
         "cpu-microcodes": "cpu-microcodes",
-        "dracula-lsd": "dracula-lsd",
         "easy-effects-presets": "easy-effects-presets",
         "figlet-fonts": "figlet-fonts",
         "figma-linux": "figma-linux",
