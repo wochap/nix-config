@@ -126,6 +126,8 @@
     catppuccin-lsd.flake = false;
     catppuccin-qt5ct.url = "github:catppuccin/qt5ct";
     catppuccin-qt5ct.flake = false;
+    catppuccin-fzf.url = "github:catppuccin/fzf";
+    catppuccin-fzf.flake = false;
     catppuccin-adw.url = "github:claymorwan/catppuccin";
     catppuccin-adw.flake = false;
     catppuccin-grub.url = "github:catppuccin/grub";

@@ -1,26 +1,44 @@
-{ config, lib, ... }:
+{ config, lib, inputs, ... }:
 
 let
   cfg = config._custom.programs.fzf;
-  inherit (config._custom.globals) themeColors;
+  inherit (config._custom.globals) themeColorsLight themeColorsDark;
+
+  get-catppuccin-fzf-args = themeStr:
+    let
+      lines = lib.strings.splitString "\n" themeStr;
+      tailLines = lib.lists.tail lines;
+      processedLines = lib.lists.map (line:
+        let cleanedLine = builtins.replaceStrings [ "\\" ''"'' ] [ "" "" ] line;
+        in lib.strings.trim cleanedLine) tailLines;
+    in processedLines;
+  catppuccin-fzf-light-theme-args = get-catppuccin-fzf-args (lib.fileContents
+    "${inputs.catppuccin-fzf}/themes/catppuccin-fzf-${themeColorsLight.flavour}.sh");
+  catppuccin-fzf-dark-theme-args = get-catppuccin-fzf-args (lib.fileContents
+    "${inputs.catppuccin-fzf}/themes/catppuccin-fzf-${themeColorsDark.flavour}.sh");
 in {
   options._custom.programs.fzf.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    _custom.programs.rod.config = {
+      cmds.fzf.light = {
+        pre_args = [ "--color=light" ] ++ catppuccin-fzf-light-theme-args;
+        pos_args = [ ];
+      };
+      cmds.fzf.dark = {
+        pre_args = [ "--color=dark" ] ++ catppuccin-fzf-dark-theme-args;
+        pos_args = [ ];
+      };
+    };
+
     _custom.hm = {
+      programs.zsh.shellAliases.fzf = ''rod run fzf -- "$@"'';
+
       programs.fzf = {
         enable = true;
         enableBashIntegration = false;
         enableZshIntegration = config._custom.programs.zsh.enable;
-        defaultOptions = with themeColors; [
-          # theme
-          # source: https://github.com/catppuccin/fzf
-          "--color 'bg+:${surface0},bg:${base},spinner:${rosewater},hl:${red}'"
-          "--color 'fg:${text},header:${red},info:${mauve},pointer:${rosewater}'"
-          "--color 'marker:${rosewater},fg+:${text},prompt:${mauve},hl+:${red}'"
-
-          "--color 'border:${mantle},scrollbar:${overlay0},preview-scrollbar:${overlay0},label:${overlay0}'"
-
+        defaultOptions = [
           "--no-height"
           "--tabstop '2'"
           "--cycle"
