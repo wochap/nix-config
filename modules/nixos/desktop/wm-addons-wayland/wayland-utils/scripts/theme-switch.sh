@@ -21,6 +21,9 @@ set_light_theme() {
 
   # Foot
   killall -SIGUSR1 foot
+
+  # lsd
+  ln -sf ~/.config/lsd/light.yaml ~/.config/lsd/colors.yaml
 }
 
 set_dark_theme() {
@@ -43,6 +46,9 @@ set_dark_theme() {
 
   # Foot
   killall -SIGUSR2 foot
+
+  # lsd
+  ln -sf ~/.config/lsd/dark.yaml ~/.config/lsd/colors.yaml
 }
 
 # Check for command-line arguments (e.g., ./script.sh dark)
