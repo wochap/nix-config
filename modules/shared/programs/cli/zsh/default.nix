@@ -2,7 +2,8 @@
 
 let
   cfg = config._custom.programs.zsh;
-  inherit (config._custom.globals) configDirectory themeColors;
+  inherit (config._custom.globals)
+    configDirectory themeColorsLight themeColorsDark preferDark;
   inherit (lib._custom) relativeSymlink;
 
   fshPlugin = {
@@ -10,15 +11,27 @@ let
     src = pkgs.zsh-fast-syntax-highlighting;
     file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
   };
-  fshTheme = pkgs.stdenvNoCC.mkDerivation {
-    name = "fsh-theme";
+  catppuccin-fsh-light-theme = pkgs.stdenvNoCC.mkDerivation {
+    name = "catppuccin-fsh-light-theme";
     nativeBuildInputs = [ pkgs.zsh ];
     buildCommand = ''
       zsh << EOF
         source "${fshPlugin.src}/${fshPlugin.file}"
         FAST_WORK_DIR="$out"
         mkdir -p "$out"
-        fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-${themeColors.flavour}.ini"
+        fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-${themeColorsLight.flavour}.ini"
+      EOF
+    '';
+  };
+  catppuccin-fsh-dark-theme = pkgs.stdenvNoCC.mkDerivation {
+    name = "catppuccin-fsh-dark-theme";
+    nativeBuildInputs = [ pkgs.zsh ];
+    buildCommand = ''
+      zsh << EOF
+        source "${fshPlugin.src}/${fshPlugin.file}"
+        FAST_WORK_DIR="$out"
+        mkdir -p "$out"
+        fast-theme "${inputs.catppuccin-zsh-fsh}/themes/catppuccin-${themeColorsDark.flavour}.ini"
       EOF
     '';
   };
@@ -127,8 +140,22 @@ in {
             # docs: https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Character-Highlighting
             zle_highlight=('paste:fg=white,bold')
 
-            # HACK: set catppuccin theme for zsh-fast-syntax-highlighting
-            FAST_WORK_DIR="${fshTheme}"
+            # set catppuccin theme for zsh-fast-syntax-highlighting
+            if [[ -z "$NO_ROD" ]]; then
+              # TODO: add automation to hotreload
+              if [[ "$(rod print)" == "Dark" ]]; then
+                FAST_WORK_DIR="${catppuccin-fsh-dark-theme}"
+              else
+                FAST_WORK_DIR="${catppuccin-fsh-light-theme}"
+              fi
+            else
+              FAST_WORK_DIR="${
+                if preferDark then
+                  catppuccin-fsh-dark-theme
+                else
+                  catppuccin-fsh-light-theme
+              }"
+            fi
             source ${fshPlugin.src}/${fshPlugin.file}
 
             ## zsh-vi-mode
