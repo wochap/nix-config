@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.programs.bat;
-  inherit (config._custom.globals) themeColors;
+  inherit (config._custom.globals) themeColorsLight themeColorsDark;
 in {
   options._custom.programs.bat.enable = lib.mkEnableOption { };
 
@@ -23,21 +23,25 @@ in {
 
       programs.bat = {
         enable = true;
-        config = { theme = "Catppuccin-${themeColors.flavour}"; };
+        config = {
+          theme = "auto";
+          theme-light = "Catppuccin ${lib._custom.capitalize themeColorsLight.flavour}";
+          theme-dark = "Catppuccin ${lib._custom.capitalize themeColorsDark.flavour}";
+        };
         themes = {
-          Catppuccin-latte = {
+          "Catppuccin Latte" = {
             src = "${inputs.catppuccin-bat}/themes";
             file = "Catppuccin Latte.tmTheme";
           };
-          Catppuccin-frappe = {
+          "Catppuccin Frappe" = {
             src = "${inputs.catppuccin-bat}/themes";
             file = "Catppuccin Frappe.tmTheme";
           };
-          Catppuccin-macchiato = {
+          "Catppuccin Macchiato" = {
             src = "${inputs.catppuccin-bat}/themes";
             file = "Catppuccin Macchiato.tmTheme";
           };
-          Catppuccin-mocha = {
+          "Catppuccin Mocha" = {
             src = "${inputs.catppuccin-bat}/themes";
             file = "Catppuccin Mocha.tmTheme";
           };
