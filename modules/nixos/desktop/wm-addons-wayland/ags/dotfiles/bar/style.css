@@ -36,6 +36,7 @@
 }
 .wmtags label.occupied {
   color: @text;
+  font-weight: 500;
 }
 .wmtags label.activated {
   background-color: @moduleBg;
