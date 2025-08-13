@@ -1,8 +1,7 @@
 { config, lib, ... }:
 
 let
-  inherit (config._custom.globals)
-    themeColors themeColorsLight themeColorsDark preferDark;
+  inherit (config._custom.globals) themeColorsLight themeColorsDark preferDark;
 
   catppuccinLatteTheme = import ./catppuccin-latte.nix;
   catppuccinMochaTheme = import ./catppuccin-mocha.nix;
@@ -85,10 +84,17 @@ in {
     _custom.hm = {
       xdg.configFile = {
         "scripts/theme-colors.sh" = {
-          text = mkThemeScript
-            (if preferDark then themeColorsDark else themeColorsLight);
+          text = ''
+            CURRENT_SCHEME=$(color-scheme print)
+            if [[ "$CURRENT_SCHEME" == "dark" ]]; then
+              ${mkThemeScript themeColorsDark}
+            else
+              ${mkThemeScript themeColorsLight}
+            fi
+          '';
           executable = true;
         };
+        # TODO: do we need these?
         "scripts/theme-colors-light.sh" = {
           text = mkThemeScript themeColorsLight;
           executable = true;
@@ -98,7 +104,6 @@ in {
           executable = true;
         };
 
-        "theme-colors.css".text = mkThemeGtk themeColors;
         "theme-colors-gtk.css".text =
           mkThemeGtk (if preferDark then themeColorsDark else themeColorsLight);
         "theme-colors-gtk-light.css".text = mkThemeGtk themeColorsLight;
