@@ -14,6 +14,7 @@
     ./programs/cli/dircolors
     ./programs/cli/fzf
     ./programs/cli/git
+    ./programs/cli/lazygit
     ./programs/cli/lsd
     ./programs/cli/nix-direnv
     ./programs/cli/ptsh

@@ -2,9 +2,7 @@
 
 let
   cfg = config._custom.programs.git;
-  inherit (config._custom.globals) themeColors;
-  catppuccinTheme = lib._custom.fromYAML
-    "${inputs.catppuccin-lazygit}/themes/${themeColors.flavour}/mauve.yml";
+  inherit (config._custom.globals) themeColorsLight themeColorsDark;
   git-final = pkgs.gitAndTools.gitFull;
 in {
   options._custom.programs.git = {
@@ -14,6 +12,15 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ git-final ];
+
+    # TODO: wait for https://github.com/dandavison/delta/issues/1976
+    _custom.programs.rod.config = {
+      # TODO: cmds.delta.light.env didn't work
+      light.env = {
+        DELTA_FEATURES = "+catppuccin-${themeColorsLight.flavour}";
+      };
+      dark.env = { DELTA_FEATURES = "+catppuccin-${themeColorsDark.flavour}"; };
+    };
 
     _custom.hm = {
       home.shellAliases = {
@@ -32,10 +39,6 @@ in {
         gut # alternative git cli
       ];
 
-      programs.zsh.shellAliases = {
-        lg = ''run-without-kpadding lazygit "$@"'';
-      };
-
       programs.zsh.initContent =
         lib.mkOrder 1000 (builtins.readFile ./dotfiles/git.zsh);
 
@@ -45,50 +48,6 @@ in {
       };
 
       programs.gh-dash = { enable = true; };
-
-      programs.lazygit = {
-        enable = true;
-        settings = {
-          update.method = "never";
-          disableStartupPopups = true;
-          os = {
-            open = # sh
-              "xdg-open {{filename}} >/dev/null";
-          };
-          gui = {
-            theme = {
-              inherit (catppuccinTheme.theme)
-                optionsTextColor selectedLineBgColor cherryPickedCommitBgColor
-                cherryPickedCommitFgColor unstagedChangesColor defaultFgColor
-                searchingActiveBorderColor;
-              activeBorderColor = [ themeColors.mauve ];
-              inactiveBorderColor = [ themeColors.textDimmed ];
-            };
-            statusPanelView = "allBranchesLog";
-            showCommandLog = false; # @ toggles it
-            showBottomLine = false;
-            showPanelJumps = false;
-            filterMode = "fuzzy";
-            border = "rounded";
-            mainPanelSplitMode = "vertical";
-            nerdFontsVersion = "3";
-            scrollHeight = 10;
-            scrollOffMargin = 4;
-            showFileTree = false;
-            sidePanelWidth = 0.3333;
-            expandFocusedSidePanel = true;
-          };
-          git = {
-            autoFetch = false;
-            overrideGpg = true;
-            paging = {
-              colorArg = "always";
-              pager = ''
-                delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"'';
-            };
-          };
-        };
-      };
 
       programs.git = {
         package = git-final;
@@ -107,10 +66,6 @@ in {
           options = {
             features = "side-by-side line-numbers decorations word-diff";
             navigate = true;
-
-            # available themes `delta --list-syntax-themes`
-            syntax-theme = "Catppuccin-${themeColors.flavour}";
-
             file-modified-label = "modified:";
             decorations.commit-decoration-style = "yellow box ul";
             line-numbers = {
