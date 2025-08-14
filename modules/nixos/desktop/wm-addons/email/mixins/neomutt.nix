@@ -2,11 +2,25 @@
 
 let
   cfg = config._custom.desktop.email;
-  inherit (config._custom.globals) userName themeColors;
+  inherit (config._custom.globals)
+    userName themeColorsLight themeColorsDark preferDark;
   hmConfig = config.home-manager.users.${userName};
   aliasfile = "${hmConfig.xdg.configHome}/neomutt/aliases";
   mailboxfile = "${hmConfig.xdg.configHome}/neomutt/mailboxes";
   syncthingdir = "${hmConfig.home.homeDirectory}/Sync";
+
+  catppuccin-neomutt-light-theme-path = "${inputs.catppuccin-neomutt}/${
+      if themeColorsLight.flavour == "latte" then
+        "latte-neomuttrc"
+      else
+        "neomuttrc"
+    }";
+  catppuccin-neomutt-dark-theme-path = "${inputs.catppuccin-neomutt}/${
+      if themeColorsDark.flavour == "latte" then
+        "latte-neomuttrc"
+      else
+        "neomuttrc"
+    }";
 in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
@@ -18,6 +32,18 @@ in {
       home.symlinks = {
         "${aliasfile}" = "${syncthingdir}/.config/neomutt/aliases";
         "${mailboxfile}" = "${syncthingdir}/.config/neomutt/mailboxes";
+      };
+
+      xdg.configFile = {
+        "neomutt/neomuttrc-theme" = {
+          source = if preferDark then
+            catppuccin-neomutt-dark-theme-path
+          else
+            catppuccin-neomutt-light-theme-path;
+          force = true;
+        };
+        "neomutt/neomuttrc-light".source = catppuccin-neomutt-light-theme-path;
+        "neomutt/neomuttrc-dark".source = catppuccin-neomutt-dark-theme-path;
       };
 
       programs.neomutt = {
@@ -161,12 +187,7 @@ in {
           set pager_format = "[ %n ] [ %T %s ]%* [ 󰸗 %{!%Y %a %d %b %H:%M} ] %?X?[ 󰁦 %X ]? [  %P ]%|─";
 
           # Theme
-          source ${inputs.catppuccin-neomutt}/${
-            if themeColors.flavour == "latte" then
-              "latte-neomuttrc"
-            else
-              "neomuttrc"
-          }
+          source ${hmConfig.xdg.configHome}/neomutt/neomuttrc-theme
           color index color0 default '~R'
         '';
       };
