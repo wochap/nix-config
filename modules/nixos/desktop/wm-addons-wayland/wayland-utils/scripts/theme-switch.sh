@@ -35,6 +35,9 @@ set_light_theme() {
   # bottom
   ln -sf ~/.config/bottom/bottom-light.toml ~/.config/bottom/bottom.toml
 
+  # newsboat
+  ln -sf ~/.config/newsboat/theme-light ~/.config/newsboat/theme
+
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # Hyprland
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
@@ -79,6 +82,9 @@ set_dark_theme() {
 
   # bottom
   ln -sf ~/.config/bottom/bottom-dark.toml ~/.config/bottom/bottom.toml
+
+  # newsboat
+  ln -sf ~/.config/newsboat/theme-dark ~/.config/newsboat/theme
 
   # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
