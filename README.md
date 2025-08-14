@@ -128,34 +128,34 @@ Reboot into NixOS, login with the user you created
    ```
 1. Setup [Neovim](https://github.com/wochap/nvim) configuration
 1. Setup qt look and feel
+
    Read instructions to change theme in `modules/nixos/desktop/wm-addons/qt/README.md`
+
    Open `qt5ct and qt6ct` and update style and fonts
+
    - style: Darkly
    - change font size to 10
+
 1. Setup betterdiscord (optional)
    ```
    $ betterdiscordctl install
    ```
-   enable theme from discord > betterdiscordctl settings
+   Enable theme from discord > betterdiscordctl settings
 1. Enable WebRTC PipeWire support in chrome (wayland only)
 
    Go to chrome://flags/ and enable `WebRTC PipeWire support`
 
 1. Sync `vscode`, `firefox`, `chrome` (optional)
 
+   > NOTE: Default theme for firefox and chrome have better dark/light theme support
+
 1. Setup mail
 
-   Generate [App passwords](https://support.google.com/accounts/answer/185833?hl=en) in [Google Account settings](https://myaccount.google.com/u/1/apppasswords)
-   Copy App password (16 digits) to secrets/mail/<EMAIL>
+   Read instruction in `modules/nixos/desktop/wm-addons/email/README.md`
 
 1. Setup calendar
 
-   A browser should open automatically asking for google credentials, otherwise run:
-
-   ```sh
-   $ vdirsyncer discover
-   $ touch ~/.config/remind/remind.rem
-   ```
+   Read instruction in `modules/nixos/desktop/wm-addons/calendar/README.md`
 
 1. [Waydroid](https://nixos.wiki/wiki/WayDroid) (optional)
 1. [Flatpak](https://nixos.wiki/wiki/Flatpak) (optional)
@@ -164,6 +164,15 @@ Reboot into NixOS, login with the user you created
 
    Run steam, login, setup proton.
 
+## Usage
+
+- Switch between themes
+
+  ```sh
+  $ theme-switch dark
+  $ theme-switch light
+  ```
+
 ## Upgrating NixOS
 
 Update inputs on `flake.nix`, then:
@@ -171,6 +180,8 @@ Update inputs on `flake.nix`, then:
 ```sh
 $ cd /home/<username>/.config/nix-config
 $ nix flake update --recreate-lock-file
+# update 1 single input
+# $ sudo nix flake lock --update-input hyprland
 $ sudo nixos-rebuild boot --flake .#gdesktop
 ```
 

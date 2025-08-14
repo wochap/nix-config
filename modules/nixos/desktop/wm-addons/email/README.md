@@ -4,31 +4,28 @@ Mails are saved to `~/Mail` folder
 
 ### Stack
 
-- Neomutt
+- Neomutt:
   email TUI
-  - Mailcap
+  - Mailcap:
     define mimetypes for email content
-- Mailnotify
+- Mailnotify:
   notifies when mail has arrived in your mail directory
-- imapnotify
+- imapnotify:
   notifies you of new e-mails coming in
-- Mbsync
+- Mbsync:
   synchronizes mailboxes
-- msmtp
+- msmtp:
   simple and easy-to-use SMTP client with fairly complete sendmail compatibility
-- Offlinemsmtp
+- Offlinemsmtp:
   allows you to use msmtp offline by queuing email until you have an internet connection
-- smtp
+- smtp:
   protocol to send mails
 
 ### Setup
 
-Generate a app_password, go to Google Account > Security > 2-Step Verification > App passwords
-Add a file in `<NIX_CONFIG_PATH>/secrets/mail/<EMAIL>`, and inside paste the password/token/app_password
+#### Gmail
 
-### Passwords for Gmail
-
-You must enable 2FA auth in your google account and create a password in "App passwords"
-
-In Gmail > Settings > Forwarding and POP/IMAP, enable POP and IMAP
-
+1. Enable 2FA auth in your google account
+1. In Gmail > Settings > Forwarding and POP/IMAP, enable POP and IMAP
+1. Generate a [app_password](https://support.google.com/accounts/answer/185833?hl=en), go to [Google Account](https://myaccount.google.com/) > Security > 2-Step Verification > App passwords
+1. Add a file in `<NIX_CONFIG_PATH>/secrets/mail/<EMAIL>`, and paste the password/token/app_password (e.g. 16 digits)
