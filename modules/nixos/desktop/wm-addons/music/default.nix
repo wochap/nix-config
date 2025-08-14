@@ -1,10 +1,22 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.desktop.music;
-  inherit (config._custom.globals) userName themeColors configDirectory;
+  inherit (config._custom.globals)
+    userName themeColorsLight themeColorsDark preferDark;
   hmConfig = config.home-manager.users.${userName};
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
+
+  catppuccin-cava-light-theme = ''
+    ${lib.fileContents ./dotfiles/cava/config}
+    ${lib.fileContents
+    "${inputs.catppuccin-cava}/themes/${themeColorsLight.flavour}-transparent.cava"}
+  '';
+  catppuccin-cava-dark-theme = ''
+    ${lib.fileContents ./dotfiles/cava/config}
+    ${lib.fileContents
+    "${inputs.catppuccin-cava}/themes/${themeColorsDark.flavour}-transparent.cava"}
+  '';
 in {
   options._custom.desktop.music.enable = lib.mkEnableOption { };
 
@@ -14,7 +26,7 @@ in {
 
     _custom.hm = {
       home.packages = with pkgs; [
-        # cava # visualizer
+        cava # visualizer
         mpc_cli # mpd cli
         (pkgs.ncmpcpp.override {
           visualizerSupport = true;
@@ -27,9 +39,15 @@ in {
       ];
 
       xdg.configFile = {
-        "cava/config".source = pkgs.replaceVars ./dotfiles/cava/config {
-          inherit (themeColors) red maroon peach yellow green teal sky sapphire;
+        "cava/config" = {
+          text = if preferDark then
+            catppuccin-cava-dark-theme
+          else
+            catppuccin-cava-light-theme;
+          force = true;
         };
+        "cava/config-light".text = catppuccin-cava-light-theme;
+        "cava/config-dark".text = catppuccin-cava-dark-theme;
         "ncmpcpp/config".source = ./dotfiles/ncmpcpp/config;
       };
 

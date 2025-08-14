@@ -28,6 +28,10 @@ set_light_theme() {
   # khal
   ln -sf ~/.config/khal/config-light ~/.config/khal/config
 
+  # cava
+  ln -sf ~/.config/cava/config-light ~/.config/cava/config
+  pkill -USR2 cava
+
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # Hyprland
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
@@ -63,6 +67,10 @@ set_dark_theme() {
 
   # khal
   ln -sf ~/.config/khal/config-dark ~/.config/khal/config
+
+  # cava
+  ln -sf ~/.config/cava/config-dark ~/.config/cava/config
+  pkill -USR2 cava
 
   # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then

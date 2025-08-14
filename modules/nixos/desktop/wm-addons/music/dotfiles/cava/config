@@ -55,7 +55,7 @@
 ; method = pulse
 ; source = auto
 
- method = pulse
+ method = pipewire
  source = auto
 
 ; method = fifo
@@ -121,15 +121,15 @@
 # background must also be defined in hex  or remain commented out. 1 = on, 0 = off.
 # You can define as many as 8 different colors. They range from bottom to top of screen
 
-gradient = 1
-gradient_color_1 = '@sapphire@'
-gradient_color_2 = '@sky@'
-gradient_color_3 = '@teal@'
-gradient_color_4 = '@green@'
-gradient_color_5 = '@yellow@'
-gradient_color_6 = '@peach@'
-gradient_color_7 = '@maroon@'
-gradient_color_8 = '@red@'
+# gradient = 1
+# gradient_color_1 = '@sapphire@'
+# gradient_color_2 = '@sky@'
+# gradient_color_3 = '@teal@'
+# gradient_color_4 = '@green@'
+# gradient_color_5 = '@yellow@'
+# gradient_color_6 = '@peach@'
+# gradient_color_7 = '@maroon@'
+# gradient_color_8 = '@red@'
 
 [smoothing]
 

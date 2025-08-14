@@ -124,6 +124,8 @@
     # themes
     catppuccin-lsd.url = "github:catppuccin/lsd";
     catppuccin-lsd.flake = false;
+    catppuccin-cava.url = "github:catppuccin/cava";
+    catppuccin-cava.flake = false;
     catppuccin-qt5ct.url = "github:catppuccin/qt5ct";
     catppuccin-qt5ct.flake = false;
     catppuccin-fzf.url = "github:catppuccin/fzf";
