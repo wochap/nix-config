@@ -2,7 +2,8 @@
 
 let
   cfg = config._custom.programs.tmux;
-  inherit (config._custom.globals) configDirectory themeColors userName;
+  inherit (config._custom.globals)
+    configDirectory themeColorsLight themeColorsDark preferDark userName;
   hmConfig = config.home-manager.users.${userName};
 
   fzfDefaultOptsStr = lib.strings.concatStringsSep " "
@@ -12,6 +13,23 @@ let
       "--padding '0,1'"
     ]);
 
+  mkThemeTmux = themeColors: ''
+    set -g popup-border-style "bg=default,fg=${themeColors.primary}"
+    set -g @catppuccin_flavour "${themeColors.flavour}"
+    set -g @catppuccin_pane_active_border_style "fg=${themeColors.primary}"
+    set -g @catppuccin_pane_border_style "fg=${themeColors.border}"
+    set -g @catppuccin_status_default "off"
+    set -g @catppuccin_status_background 'default'
+
+    set -g pane-border-lines single
+    set -g popup-border-lines rounded
+    set -g status off
+
+    run-shell ~/.config/tmux/plugins/catppuccin/catppuccin.tmux
+    run-shell ~/.config/tmux/plugins/status-bar/status-bar.tmux
+  '';
+  catppuccin-tmux-light-theme = mkThemeTmux themeColorsLight;
+  catppuccin-tmux-dark-theme = mkThemeTmux themeColorsDark;
   tmux-final = cfg.package;
   tmux-sessionx =
     inputs.tmux-sessionx.packages.${pkgs.system}.default.overrideAttrs
@@ -97,13 +115,15 @@ in {
         "tmux/plugins/tmux-sessionx".source =
           "${tmux-sessionx}/share/tmux-plugins/sessionx";
         "tmux/plugins/catppuccin".source = inputs.catppuccin-tmux;
+        "tmux/tmux-light.conf".text = catppuccin-tmux-light-theme;
+        "tmux/tmux-dark.conf".text = catppuccin-tmux-dark-theme;
         "tmux/tmux.conf".text = ''
           set -gu default-command
           set -g default-shell ${pkgs.zsh}/bin/zsh
-          set -g popup-border-style "bg=default,fg=${themeColors.primary}"
-          set -g @catppuccin_flavour "${themeColors.flavour}"
-          set -g @catppuccin_pane_active_border_style "fg=${themeColors.primary}"
-          set -g @catppuccin_pane_border_style "fg=${themeColors.border}"
+          ${if preferDark then
+            catppuccin-tmux-dark-theme
+          else
+            catppuccin-tmux-light-theme}
           source-file $HOME/.config/tmux/config.conf
         '';
         "tmux/config.conf".source =

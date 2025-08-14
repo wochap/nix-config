@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# source theme colors
+source "$HOME/.config/scripts/theme-colors.sh"
+
 get_tmux_option() {
   local option=$1
   local default_value="$2"
@@ -12,9 +15,6 @@ get_tmux_option() {
   echo "$default_value"
 }
 
-lavender="#B4BEFE"
-surface1="#45475A"
-base="#1E1E2E"
 windows_icon=""
 window_icon="󰓩"
 session_icon=""

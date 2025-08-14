@@ -476,11 +476,11 @@
     "catppuccin-tmux": {
       "flake": false,
       "locked": {
-        "lastModified": 1731583456,
-        "narHash": "sha256-f3mBAkE32vjekOa9iPzuYp5cTSl0ZnHd5ixHjQBpbqY=",
+        "lastModified": 1752340508,
+        "narHash": "sha256-Xk3LogY3B2bZbUWyTHa2nap4Rn0bU2QgYlHlkngMPsk=",
         "owner": "catppuccin",
         "repo": "tmux",
-        "rev": "eb78ade9dc1f6cd8ba654572f51ddcae3c6e7fd7",
+        "rev": "9d21d7ccd50df82bd732be2850ce2798e78b6391",
         "type": "github"
       },
       "original": {
