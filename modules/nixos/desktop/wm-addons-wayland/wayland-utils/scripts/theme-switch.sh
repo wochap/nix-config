@@ -25,9 +25,13 @@ set_light_theme() {
   # lsd
   ln -sf ~/.config/lsd/light.yaml ~/.config/lsd/colors.yaml
 
-  # Hyprland
-  ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
-  hyprctl reload
+  if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
+    # Hyprland
+    ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
+    hyprctl reload
+
+    hyprshade on oled-saver
+  fi
 }
 
 set_dark_theme() {
@@ -55,8 +59,10 @@ set_dark_theme() {
   ln -sf ~/.config/lsd/dark.yaml ~/.config/lsd/colors.yaml
 
   # Hyprland
-  ln -sf ~/.config/hypr/colors-dark.conf ~/.config/hypr/colors.conf
-  hyprctl reload
+  if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
+    ln -sf ~/.config/hypr/colors-dark.conf ~/.config/hypr/colors.conf
+    hyprctl reload
+  fi
 }
 
 # Check for command-line arguments (e.g., ./script.sh dark)

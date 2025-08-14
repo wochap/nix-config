@@ -92,7 +92,7 @@ in {
         '';
       in {
         "scripts/hyprland".source =
-          lib._custom.relativeSymlink ./scripts/automation;
+          lib._custom.relativeSymlink configDirectory ./scripts/automation;
 
         "remmina/hypr-glegion.remmina".source =
           lib._custom.relativeSymlink configDirectory
