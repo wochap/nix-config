@@ -3,7 +3,7 @@
 let
   cfg = config._custom.programs.kitty;
   inherit (config._custom.globals)
-    themeColorsLight themeColorsDark configDirectory preferDark;
+    themeColorsLight themeColorsDark preferDark configDirectory;
   inherit (lib._custom) relativeSymlink unwrapHex;
 
   kitty-final = pkgs.nixpkgs-unstable.kitty;
