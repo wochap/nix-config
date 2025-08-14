@@ -173,6 +173,8 @@ Reboot into NixOS, login with the user you created
   $ theme-switch light
   ```
 
+  > IMPORTANT: For some CLI/TUI tools, I use rod, which can break automation scripts. To prevent this, set the NO_ROD environment variable to true before running any automation script.
+
 ## Upgrating NixOS
 
 Update inputs on `flake.nix`, then:
