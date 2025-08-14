@@ -58,7 +58,7 @@ function killport {
 
 # automation scripts picker
 function opro() {
-  scripts=$(find ~/.config/scripts /etc/scripts/projects -type l,f -name "*.sh")
+  scripts=$(find -L ~/.config/scripts /etc/scripts/projects -type l,f -name "*.sh")
 
   selected=$(echo "$scripts" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" fzf)
 
