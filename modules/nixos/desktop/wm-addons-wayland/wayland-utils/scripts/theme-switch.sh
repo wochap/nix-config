@@ -38,6 +38,8 @@ set_light_theme() {
     hyprctl reload
 
     hyprshade on oled-saver
+
+    hyprctl hyprsunset temperature 4000
   fi
 }
 
