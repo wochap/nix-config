@@ -11,6 +11,7 @@ in {
     _custom.globals.userName = userName;
     _custom.globals.homeDirectory = "/home/${userName}";
     _custom.globals.configDirectory = configDirectory;
+    _custom.globals.preferDark = true;
 
     # fix blurry cursor on GTK 3 apps
     # update catppuccin cursor NOMINAL_SIZE
@@ -18,7 +19,7 @@ in {
     # source: https://blogs.kde.org/2024/10/09/cursor-size-problems-in-wayland-explained/#my-fix-or-shall-we-say-workaround
     # source: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/7722
     # source: https://bbs.archlinux.org/viewtopic.php?id=299624
-    _custom.globals.cursor.package =
+    _custom.desktop.cursor.package =
       pkgs.catppuccin-cursors.mochaDark.overrideAttrs (oldAttrs: rec {
         patches = [
           (pkgs.fetchpatch {
@@ -28,8 +29,7 @@ in {
           })
         ];
       });
-    _custom.globals.cursor.size = 28;
-    _custom.globals.preferDark = true;
+    _custom.desktop.cursor.size = 28;
 
     _custom.programs.weeb.enable = true;
 

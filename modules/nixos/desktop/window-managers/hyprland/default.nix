@@ -23,6 +23,11 @@ let
     (builtins.readFile ./scripts/hyprland-previous-ws.sh);
   hyprland-socket = pkgs.writeScriptBin "hyprland-socket"
     (builtins.readFile ./scripts/hyprland-socket.sh);
+  hyprcursor-conf = ''
+    # hyprcursor config
+    env = HYPRCURSOR_THEME,${config._custom.desktop.cursor.name}
+    env = HYPRCURSOR_SIZE,${toString config._custom.desktop.cursor.size}
+  '';
 in {
   options._custom.desktop.hyprland = {
     enable = lib.mkEnableOption { };
@@ -138,9 +143,7 @@ in {
           source=~/.config/hypr/rules.conf
           source=~/.config/hypr/binds-kiosk.conf
 
-          # hyprcursor config
-          env = HYPRCURSOR_THEME,${globals.cursor.name}
-          env = HYPRCURSOR_SIZE,${toString globals.cursor.size}
+          ${hyprcursor-conf}
         '';
 
         "uwsm/env-hyprland".text = ''
@@ -184,9 +187,7 @@ in {
           source=~/.config/hypr/rules.conf
           source=~/.config/hypr/binds-main.conf
 
-          # hyprcursor config
-          env = HYPRCURSOR_THEME,${globals.cursor.name}
-          env = HYPRCURSOR_SIZE,${toString globals.cursor.size}
+          ${hyprcursor-conf}
         '';
       };
     };

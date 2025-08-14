@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.desktop.dwl;
-  inherit (config._custom.globals) themeColors cursor userName configDirectory;
+  inherit (config._custom.globals) themeColors userName configDirectory;
   inherit (lib._custom) unwrapHex;
 
   scenefx-final = inputs.scenefx.packages."${system}".scenefx;
@@ -20,8 +20,8 @@ let
       red = unwrapHex themeColors.red;
       shadow = unwrapHex themeColors.shadow;
       surface0 = unwrapHex themeColors.surface0;
-      cursorName = cursor.name;
-      cursorSize = toString cursor.size;
+      cursorName = config._custom.desktop.cursor.name;
+      cursorSize = toString config._custom.desktop.cursor.size;
     });
   });
   dwl-start = pkgs.writeScriptBin "dwl-start"
