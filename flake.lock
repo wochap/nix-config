@@ -188,11 +188,11 @@
     "catppuccin-bottom": {
       "flake": false,
       "locked": {
-        "lastModified": 1726591156,
-        "narHash": "sha256-Vi438I+YVvoD2xzq2t9hJ9R3a+2TlDdbakjFYFtjtXQ=",
+        "lastModified": 1745016081,
+        "narHash": "sha256-dfukdk70ug1lRGADKBnvMhkl+3tsY7F+UAwTS2Qyapk=",
         "owner": "catppuccin",
         "repo": "bottom",
-        "rev": "ed09bd5a5dd78d83acdc8ff5fdec40a6340ed1c2",
+        "rev": "eadd75acd0ecad4a58ade9a1d6daa3b97ccec07c",
         "type": "github"
       },
       "original": {

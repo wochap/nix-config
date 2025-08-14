@@ -1,0 +1,17 @@
+[flags]
+basic = true
+group_processes = false
+mem_as_value = true
+process_command = true
+tree = false
+
+[processes]
+columns = [
+    "PID",
+    "Name",
+    "CPU%",
+    "Mem%",
+    "User",
+    "State",
+]
+

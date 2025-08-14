@@ -32,6 +32,9 @@ set_light_theme() {
   ln -sf ~/.config/cava/config-light ~/.config/cava/config
   pkill -USR2 cava
 
+  # bottom
+  ln -sf ~/.config/bottom/bottom-light.toml ~/.config/bottom/bottom.toml
+
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # Hyprland
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
@@ -73,6 +76,9 @@ set_dark_theme() {
   # cava
   ln -sf ~/.config/cava/config-dark ~/.config/cava/config
   pkill -USR2 cava
+
+  # bottom
+  ln -sf ~/.config/bottom/bottom-dark.toml ~/.config/bottom/bottom.toml
 
   # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
