@@ -178,7 +178,7 @@ source $HOME/.config/scripts/theme-colors.sh
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR=' '
   if [[ $POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR != ' ' ]]; then
     # The color of the filler.
-    typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=#cba6f7
+    typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=$mauve
     # Add a space between the end of left prompt and the filler.
     typeset -g POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=' '
     # Add a space between the filler and the start of right prompt.
@@ -803,10 +803,10 @@ source $HOME/.config/scripts/theme-colors.sh
   typeset -g POWERLEVEL9K_VI_MODE_FOREGROUND=$mantle
   # Text and color for normal (a.k.a. command) vi mode.
   typeset -g POWERLEVEL9K_VI_COMMAND_MODE_STRING="%B NOR %b%k "
-  typeset -g POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND="#89b4fa"
+  typeset -g POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND=$blue
   # Text and color for visual vi mode.
   typeset -g POWERLEVEL9K_VI_VISUAL_MODE_STRING="%B VIS %b%k "
-  typeset -g POWERLEVEL9K_VI_MODE_VISUAL_BACKGROUND="#cba6f7"
+  typeset -g POWERLEVEL9K_VI_MODE_VISUAL_BACKGROUND=$mauve
   # Text and color for overtype (a.k.a. overwrite and replace) vi mode.
   typeset -g POWERLEVEL9K_VI_OVERWRITE_MODE_STRING="%B REP %b%k "
   typeset -g POWERLEVEL9K_VI_MODE_OVERWRITE_BACKGROUND=3
