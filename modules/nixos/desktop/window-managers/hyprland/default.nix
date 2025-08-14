@@ -91,10 +91,8 @@ in {
           # export QT_FONT_DPI=96
         '';
       in {
-        "scripts/hyprland" = {
-          recursive = true;
-          source = ./scripts/automation;
-        };
+        "scripts/hyprland".source =
+          lib._custom.relativeSymlink ./scripts/automation;
 
         "remmina/hypr-glegion.remmina".source =
           lib._custom.relativeSymlink configDirectory

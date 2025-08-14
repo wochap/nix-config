@@ -61,6 +61,7 @@ in {
 
     _custom.hm = {
       home.packages = with pkgs; [
+        mpvpaper # mpv as wallpaper
         grim # screenshoot utility
         hyprpicker # color picker
         showmethekey
