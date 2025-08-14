@@ -25,6 +25,9 @@ set_light_theme() {
   # lsd
   ln -sf ~/.config/lsd/light.yaml ~/.config/lsd/colors.yaml
 
+  # khal
+  ln -sf ~/.config/khal/config-light ~/.config/khal/config
+
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # Hyprland
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
@@ -57,6 +60,9 @@ set_dark_theme() {
 
   # lsd
   ln -sf ~/.config/lsd/dark.yaml ~/.config/lsd/colors.yaml
+
+  # khal
+  ln -sf ~/.config/khal/config-dark ~/.config/khal/config
 
   # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
