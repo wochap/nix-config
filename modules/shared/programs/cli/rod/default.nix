@@ -6,6 +6,10 @@ let
 in {
   options._custom.programs.rod = {
     enable = lib.mkEnableOption { };
+    aliases = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+    };
     config = lib.mkOption {
       type = tomlFormat.type;
       default = { };
@@ -40,6 +44,11 @@ in {
       # NOTE: `rod env` BREAKS automation (e.g. tmuxinator)
       programs.zsh.initContent =
         lib.mkOrder 1000 (builtins.readFile ./dotfiles/rod.zsh);
+
+      programs.bash.shellAliases =
+        lib.attrsets.genAttrs cfg.aliases (alias: ''rod run ${alias} -- "$@"'');
+      programs.zsh.shellAliases =
+        lib.attrsets.genAttrs cfg.aliases (alias: ''rod run ${alias} -- "$@"'');
     };
   };
 }

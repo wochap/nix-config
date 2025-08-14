@@ -20,20 +20,21 @@ in {
   options._custom.programs.fzf.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    _custom.programs.rod.config = {
-      cmds.fzf.light = {
-        pre_args = [ "--color=light" ] ++ catppuccin-fzf-light-theme-args;
-        pos_args = [ ];
-      };
-      cmds.fzf.dark = {
-        pre_args = [ "--color=dark" ] ++ catppuccin-fzf-dark-theme-args;
-        pos_args = [ ];
+    _custom.programs.rod = {
+      aliases = [ "fzf" ];
+      config = {
+        cmds.fzf.light = {
+          pre_args = [ "--color=light" ] ++ catppuccin-fzf-light-theme-args;
+          pos_args = [ ];
+        };
+        cmds.fzf.dark = {
+          pre_args = [ "--color=dark" ] ++ catppuccin-fzf-dark-theme-args;
+          pos_args = [ ];
+        };
       };
     };
 
     _custom.hm = {
-      programs.zsh.shellAliases.fzf = ''rod run fzf -- "$@"'';
-
       programs.fzf = {
         enable = true;
         enableBashIntegration = false;
