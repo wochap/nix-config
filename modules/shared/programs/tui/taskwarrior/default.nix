@@ -2,11 +2,12 @@
 
 let
   cfg = config._custom.programs.taskwarrior;
-  inherit (config._custom.globals) userName;
+  inherit (config._custom.globals) userName configDirectory;
   hmConfig = config.home-manager.users.${userName};
+
   timewarriorConfigPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
-  taskwarriorConfigPath =
+  taskwarriorDataPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/taskwarrior";
   taskwarrior-final = pkgs.taskwarrior3;
   stop-tasks = pkgs.writeScriptBin "stop-tasks" ''
@@ -22,20 +23,19 @@ in {
         packages = with pkgs; [
           taskwarrior-tui
           timewarrior
-          # TODO: setup bugwarrior
-          python311Packages.bugwarrior
+          pkgs._custom.pythonPackages.bugwarrior
         ];
 
         sessionVariables.TIMEWARRIORDB = timewarriorConfigPath;
 
         file = {
           "${timewarriorConfigPath}/timewarrior.cfg".text = ''
-            import ${pkgs.timewarrior}/share/doc/timew/doc/themes/dark_green.theme
-            import ${pkgs.timewarrior}/share/doc/timew/doc/holidays/holidays.en-US
+            import ${pkgs.timewarrior}/share/doc/timew/themes/dark_green.theme
+            import ${pkgs.timewarrior}/share/doc/timew/holidays/holidays.en-US
             ${builtins.readFile ./dotfiles/timewarrior.cfg}
           '';
 
-          "${taskwarriorConfigPath}/hooks/on-modify.timewarrior" = {
+          "${taskwarriorDataPath}/hooks/on-modify.timewarrior" = {
             executable = true;
             source =
               "${pkgs.timewarrior}/share/doc/timew/ext/on-modify.timewarrior";
@@ -44,23 +44,60 @@ in {
 
         shellAliases.twt = "taskwarrior-tui";
       };
+      xdg.configFile."bugwarrior/bugwarrior.toml".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/bugwarriorrc;
 
       programs.taskwarrior = {
         enable = true;
         package = taskwarrior-final;
-        colorTheme = "dark-green-256";
-        dataLocation = taskwarriorConfigPath;
+        colorTheme = "${taskwarrior-final}/share/doc/task/rc/dark-green-256";
+        dataLocation = taskwarriorDataPath;
         config = { };
         extraConfig = builtins.readFile ./dotfiles/taskrc;
       };
 
+      # stop timewarrior on shutdown|logout|suspend
       systemd.user.services = {
-        stop-taskwarrior = lib._custom.mkGraphicalService {
+        stop-taskwarrior-on-glogout = lib._custom.mkGraphicalService {
           Service = {
             Environment = [ "TIMEWARRIORDB=${timewarriorConfigPath}" ];
             Type = "oneshot";
             ExecStop = "${stop-tasks}/bin/stop-tasks";
             RemainAfterExit = true;
+          };
+        };
+        stop-taskwarrior-on-sleep = {
+          Unit.Before = [
+            "sleep.target"
+            "suspend.target"
+            "hibernate.target"
+            "hybrid-sleep.target"
+          ];
+          Install.WantedBy = [
+            "sleep.target"
+            "suspend.target"
+            "hibernate.target"
+            "hybrid-sleep.target"
+          ];
+          Service = {
+            User = userName;
+            Environment = [ "TIMEWARRIORDB=${timewarriorConfigPath}" ];
+            Type = "oneshot";
+            ExecStart = "${stop-tasks}/bin/stop-tasks";
+          };
+        };
+        stop-taskwarrior-on-shutdown = {
+          Unit = {
+            DefaultDependencies = "no";
+            Before = [ "shutdown.target" "reboot.target" "halt.target" ];
+          };
+          Install.WantedBy =
+            [ "shutdown.target" "reboot.target" "halt.target" ];
+          Service = {
+            User = userName;
+            Environment = [ "TIMEWARRIORDB=${timewarriorConfigPath}" ];
+            Type = "oneshot";
+            ExecStart = "${stop-tasks}/bin/stop-tasks";
           };
         };
       };

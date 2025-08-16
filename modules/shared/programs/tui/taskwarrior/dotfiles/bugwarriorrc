@@ -1,0 +1,19 @@
+[general]
+targets = ["jira_se"]
+
+[jira_se]
+service = "jira"
+base_uri = "https://socex-charts.atlassian.net"
+username = "gean.bonifacio@socialexplorer.com"
+password = "@oracle:eval:cat /home/gean/.config/secrets/jira/gean.bonifacio@socialexplorer.com"
+query = "assignee = currentUser() AND statusCategory != Done AND sprint in openSprints() ORDER BY created DESC"
+add_tags = ["se"]
+project_template = "se"
+description_template = "{{ jiraid }} {{ jirasummary }}"
+
+[notifications]
+notifications = true
+backend = "gobject"
+only_on_new_tasks = true
+
+# vim: ft=toml
