@@ -10,6 +10,7 @@ in {
         anki # mnemonic tool
         kdePackages.filelight # view disk usage
         qbittorrent
+        wireshark # network analyzer
 
         kdePackages.kalgebra
         kdePackages.kdenlive
