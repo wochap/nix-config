@@ -13,12 +13,15 @@ notify() {
   notify-send "Color picker" "$COLOR_CODE" --icon="$FNAME" --replace-id=697 --expire-time="$EXPIRE_TIME" --app-name="Hyprpicker"
 }
 
-color=$(hyprpicker -r -f hex -n)
+if [[ -n $(pgrep hyprpicker) ]]; then
+  exit 0
+fi
+
+color=$(hyprpicker -l -r -f hex -n)
 
 if [ -z "$color" ]; then
-  exit 1
+  exit 0
 fi
 
 echo $color | wl-copy -n
 notify $color
-
