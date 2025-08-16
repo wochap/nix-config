@@ -38,6 +38,9 @@ set_light_theme() {
   # newsboat
   ln -sf ~/.config/newsboat/theme-light ~/.config/newsboat/theme
 
+  # tofi
+  ln -sf ~/.config/tofi/one-line-theme-light ~/.config/tofi/one-line-theme
+
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # Hyprland
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
@@ -85,6 +88,9 @@ set_dark_theme() {
 
   # newsboat
   ln -sf ~/.config/newsboat/theme-dark ~/.config/newsboat/theme
+
+  # tofi
+  ln -sf ~/.config/tofi/one-line-theme-dark ~/.config/tofi/one-line-theme
 
   # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
