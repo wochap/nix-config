@@ -44,6 +44,9 @@ set_light_theme() {
   # dircolors
   ln -sf ~/.dir_colors-light ~/.dir_colors
 
+  # presenterm
+  ln -sf ~/.config/presenterm/config-light.yaml ~/.config/presenterm/config.yaml
+
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # Hyprland
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
@@ -97,6 +100,9 @@ set_dark_theme() {
 
   # dircolors
   ln -sf ~/.dir_colors-dark ~/.dir_colors
+
+  # presenterm
+  ln -sf ~/.config/presenterm/config-dark.yaml ~/.config/presenterm/config.yaml
 
   # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then

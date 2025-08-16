@@ -1,6 +1,3 @@
-defaults:
-  theme: catppuccin-@flavour@
-
 options:
   # whether slides are automatically terminated when a slide title is found.
   implicit_slide_ends: true
