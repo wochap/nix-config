@@ -45,7 +45,7 @@ in {
         shellAliases.twt = "taskwarrior-tui";
       };
       xdg.configFile."bugwarrior/bugwarrior.toml".source =
-        lib._custom.relativeSymlink configDirectory ./dotfiles/bugwarriorrc;
+        lib._custom.relativeSymlink configDirectory ./dotfiles/bugwarrior.toml;
 
       programs.taskwarrior = {
         enable = true;
