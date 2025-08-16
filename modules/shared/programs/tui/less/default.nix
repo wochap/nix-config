@@ -7,7 +7,7 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home.sessionVariables = {
-        LESS = "--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT";
+        LESS = "--ignore-case --RAW-CONTROL-CHARS --LONG-PROMPT --jump-target 4";
         LESSCHARSET = "utf-8";
       };
 
