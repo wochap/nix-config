@@ -26,6 +26,7 @@ let
       icalendar
       pytz
       tzlocal
+      pygobject3
     ]));
 in {
   options._custom.programs.lang-python.enable = lib.mkEnableOption { };
