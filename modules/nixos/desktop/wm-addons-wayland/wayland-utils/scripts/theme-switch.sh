@@ -41,6 +41,9 @@ set_light_theme() {
   # tofi
   ln -sf ~/.config/tofi/one-line-theme-light ~/.config/tofi/one-line-theme
 
+  # dircolors
+  ln -sf ~/.dir_colors-light ~/.dir_colors
+
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # Hyprland
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
@@ -91,6 +94,9 @@ set_dark_theme() {
 
   # tofi
   ln -sf ~/.config/tofi/one-line-theme-dark ~/.config/tofi/one-line-theme
+
+  # dircolors
+  ln -sf ~/.dir_colors-dark ~/.dir_colors
 
   # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then

@@ -62,7 +62,7 @@ in {
     # TODO: remove themeColors or replace with prefered dark/light
     themeColors = lib.mkOption {
       type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
-      default = catppuccinMochaTheme;
+      default = if preferDark then themeColorsDark else themeColorsLight;
       example = "{}";
       description = "Theme colors";
     };

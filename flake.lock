@@ -236,11 +236,11 @@
     "catppuccin-dircolors": {
       "flake": false,
       "locked": {
-        "lastModified": 1755043942,
-        "narHash": "sha256-LS1RHLzesAxwbxtScmkEWv+RjOF/8LtwRQDOwmSouC8=",
+        "lastModified": 1755266519,
+        "narHash": "sha256-Y2WsVUXG+R6zz1EhGw/NePwgKxf6pY/wPAl6rv7ZMsU=",
         "owner": "wochap",
         "repo": "dircolors",
-        "rev": "4f3f47ee7c0ff7e2af047e77311563851743cfe4",
+        "rev": "7e2ea7c058e920ef5298345737b8e47697cb92c2",
         "type": "github"
       },
       "original": {
