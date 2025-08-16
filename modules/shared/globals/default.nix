@@ -78,6 +78,12 @@ in {
       example = "{}";
       description = "Theme colors dark";
     };
+
+    secrets = lib.mkOption {
+      type = lib.types.attrs;
+      default = import ../../../secrets/nix/default.nix;
+      example = "{}";
+    };
   };
 
   config = {

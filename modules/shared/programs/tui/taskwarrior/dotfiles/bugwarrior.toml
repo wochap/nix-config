@@ -4,8 +4,8 @@ targets = ["jira_se"]
 [jira_se]
 service = "jira"
 base_uri = "https://socex-charts.atlassian.net"
-username = "gean.bonifacio@socialexplorer.com"
-password = "@oracle:eval:cat /home/gean/.config/secrets/jira/gean.bonifacio@socialexplorer.com"
+username = "@seEmail@"
+password = "@oracle:eval:cat /home/gean/.config/secrets/jira/se"
 query = "assignee = currentUser() AND statusCategory != Done AND sprint in openSprints() ORDER BY created DESC"
 add_tags = ["se"]
 project_template = "se"

@@ -24,7 +24,9 @@ in {
     realName = mkDefault "Gean Marroquin";
     userName = mkDefault address;
     passwordCommand = mkDefault
-      "${pkgs.coreutils}/bin/cat ${hmConfig.xdg.configHome}/secrets/mail/${address}";
+      "${pkgs.coreutils}/bin/cat ${hmConfig.xdg.configHome}/secrets/mail/${
+        lib.toLower name
+      }";
 
     mbsync = {
       enable = true;

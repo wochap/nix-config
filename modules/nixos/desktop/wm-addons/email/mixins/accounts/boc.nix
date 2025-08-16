@@ -3,9 +3,10 @@
 with lib;
 let
   cfg = config._custom.desktop.email;
+  inherit (config._custom.globals) secrets;
   helper = import ./helper.nix { inherit config pkgs lib; };
   accountConfig = {
-    address = "geanb@bandofcoders.com";
+    address = secrets.boc.email;
     name = "BOC";
     color = "blue";
     pgpKey = "391E628A";

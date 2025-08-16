@@ -3,9 +3,10 @@
 with lib;
 let
   cfg = config._custom.desktop.email;
+  inherit (config._custom.globals) secrets;
   helper = import ./helper.nix { inherit config pkgs lib; };
   accountConfig = {
-    address = "gean.bonifacio@socialexplorer.com";
+    address = secrets.se.email;
     name = "SE";
     color = "yellow";
     pgpKey = "00F9FB30";

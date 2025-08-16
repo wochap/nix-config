@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.programs.git;
-  inherit (config._custom.globals) themeColorsLight themeColorsDark;
+  inherit (config._custom.globals) themeColorsLight themeColorsDark secrets;
   git-final = pkgs.gitAndTools.gitFull;
 in {
   options._custom.programs.git = {
@@ -115,9 +115,9 @@ in {
               condition = "gitdir:~/Projects/boc/**/.git";
               contents = {
                 user = {
-                  email = "geanb@bandofcoders.com";
+                  email = secrets.boc.email;
                   name = "Gean";
-                  signingKey = "geanb@bandofcoders.com";
+                  signingKey = secrets.boc.email;
                 };
                 commit.gpgSign = true;
               };
@@ -126,9 +126,9 @@ in {
               condition = "gitdir:~/Projects/se/**/.git";
               contents = {
                 user = {
-                  email = "gean.bonifacio@socialexplorer.com";
+                  email = secrets.se.email;
                   name = "Gean";
-                  signingKey = "gean.bonifacio@socialexplorer.com";
+                  signingKey = secrets.se.email;
                 };
                 commit.gpgSign = true;
               };

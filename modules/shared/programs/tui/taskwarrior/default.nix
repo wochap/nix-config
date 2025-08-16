@@ -2,7 +2,7 @@
 
 let
   cfg = config._custom.programs.taskwarrior;
-  inherit (config._custom.globals) userName configDirectory;
+  inherit (config._custom.globals) userName secrets;
   hmConfig = config.home-manager.users.${userName};
 
   timewarriorConfigPath =
@@ -45,7 +45,9 @@ in {
         shellAliases.twt = "taskwarrior-tui";
       };
       xdg.configFile."bugwarrior/bugwarrior.toml".source =
-        lib._custom.relativeSymlink configDirectory ./dotfiles/bugwarrior.toml;
+        pkgs.replaceVars ./dotfiles/bugwarrior.toml {
+          seEmail = secrets.se.email;
+        };
 
       programs.taskwarrior = {
         enable = true;
