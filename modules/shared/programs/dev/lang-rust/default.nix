@@ -5,7 +5,7 @@ in {
   options._custom.programs.lang-rust.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ cargo cargo-tauri ];
+    environment.systemPackages = with pkgs; [ rustc cargo cargo-tauri ];
   };
 }
 
