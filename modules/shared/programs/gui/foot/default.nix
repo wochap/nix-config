@@ -42,13 +42,14 @@ in {
           "${config._custom.programs.tmux.package}/bin/tmux";
         include =
           "${lib._custom.relativeSymlink configDirectory ./dotfiles/foot.ini}";
-        initial-color-theme = if preferDark then 2 else 1;
+        initial-color-theme = if preferDark then 1 else 2;
       };
-      colors.cursor = "${lib._custom.unwrapHex themeColorsLight.base} ${
-          lib._custom.unwrapHex themeColorsLight.green
-        }";
-      colors2.cursor = "${lib._custom.unwrapHex themeColorsDark.base} ${
+      # NOTE: colors is considered dark and colors2 light
+      colors.cursor = "${lib._custom.unwrapHex themeColorsDark.base} ${
           lib._custom.unwrapHex themeColorsDark.green
+        }";
+      colors2.cursor = "${lib._custom.unwrapHex themeColorsLight.base} ${
+          lib._custom.unwrapHex themeColorsLight.green
         }";
     };
 
@@ -57,9 +58,9 @@ in {
 
       xdg.configFile."foot/foot.ini".text = ''
         # themes
-        ${builtins.readFile catppuccin-foot-light-theme-path}
+        ${builtins.readFile catppuccin-foot-dark-theme-path}
         ${lib.strings.replaceStrings [ "[colors]" ] [ "[colors2]" ]
-        (builtins.readFile catppuccin-foot-dark-theme-path)}
+        (builtins.readFile catppuccin-foot-light-theme-path)}
 
         # nixos options
         ${builtins.readFile
