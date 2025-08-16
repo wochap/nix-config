@@ -2,8 +2,10 @@ rec {
   flavour = "latte";
 
   primary = mauve;
-  secondary = peach;
-  border = surface2;
+  secondary = green;
+  tertiary = peach;
+  border = "#585b70";
+  borderSecondary = "#313244";
   background = base;
   backgroundOverlay = mantle;
   shadow = "#11111b";

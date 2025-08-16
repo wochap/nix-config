@@ -2,8 +2,10 @@ rec {
   flavour = "mocha";
 
   primary = mauve;
-  secondary = peach;
+  secondary = green;
+  tertiary = peach;
   border = surface2;
+  borderSecondary = surface0;
   background = base;
   backgroundOverlay = mantle;
   shadow = crust;

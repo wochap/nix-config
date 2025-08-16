@@ -3,7 +3,7 @@
 # source theme colors
 source "$HOME/.config/scripts/theme-colors.sh"
 active_border_color="${primary#\#}"
-active_border_color_single="${surface0#\#}"
+active_border_color_single="${borderSecondary#\#}"
 
 function handle() {
   input="$1"
