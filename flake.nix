@@ -101,7 +101,7 @@
     powerlevel10k.flake = false;
     smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim?rev=2b5dda43b3de5d13b56c4606f7d19db78637e527"; # v2.0.3
     smart-splits-nvim.flake = false;
-    zsh-autocomplete.url = "github:marlonrichert/zsh-autocomplete?rev=316c588a92e3444e919ca9a341fc8894c82800a2"; # (26 jul 2025)
+    zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=5aedb496754c867e949c144e19c74bfccbbef1a2"; # (16 aug 2025)
     zsh-autocomplete.flake = false;
     zsh-defer.url = "github:romkatv/zsh-defer?rev=1c75faff4d8584afe090b06db11991c8c8d62055"; # (05 nov 2023)
     zsh-defer.flake = false;

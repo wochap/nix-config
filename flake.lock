@@ -3736,17 +3736,17 @@
     "zsh-autocomplete": {
       "flake": false,
       "locked": {
-        "lastModified": 1752058246,
-        "narHash": "sha256-7v8dkrwhEszl8mVIMe8oJdaqK0ZZtODdWaaO1Z4Ldhk=",
-        "owner": "marlonrichert",
+        "lastModified": 1702241496,
+        "narHash": "sha256-PB0u783u2d72VxT8FeCmjUTa+DBr087ToOT2dleKpH4=",
+        "owner": "wochap",
         "repo": "zsh-autocomplete",
-        "rev": "316c588a92e3444e919ca9a341fc8894c82800a2",
+        "rev": "5aedb496754c867e949c144e19c74bfccbbef1a2",
         "type": "github"
       },
       "original": {
-        "owner": "marlonrichert",
+        "owner": "wochap",
         "repo": "zsh-autocomplete",
-        "rev": "316c588a92e3444e919ca9a341fc8894c82800a2",
+        "rev": "5aedb496754c867e949c144e19c74bfccbbef1a2",
         "type": "github"
       }
     },
