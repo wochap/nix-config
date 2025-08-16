@@ -27,7 +27,7 @@ touch ~/.config/remind/remind.rem
 
    ```
    # remove any token file in
-   $ cd ~/.local/share/vdirsyncer
+   $ cd ~/.local/share/vdirsyncer/*_token_file
 
    # restart vdirsyncer service
    # a browser should open automatically asking for google credentials, otherwise run:
