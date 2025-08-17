@@ -5,24 +5,62 @@ let
   inherit (config._custom.globals) userName secrets;
   hmConfig = config.home-manager.users.${userName};
 
+  timewarrior-final = pkgs.timewarrior;
   timewarriorConfigPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
   taskwarriorDataPath =
     "${hmConfig.home.homeDirectory}/Sync/.config/taskwarrior";
   taskwarrior-final = pkgs.taskwarrior3;
   stop-tasks = pkgs.writeScriptBin "stop-tasks" ''
-    #!/usr/bin/env bash
+    #!${pkgs.bash}/bin/bash
     echo y | ${taskwarrior-final}/bin/task status:pending stop
   '';
 in {
   options._custom.programs.taskwarrior.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    # stop timewarrior on shutdown and suspend
+    systemd.services = {
+      stop-taskwarrior-on-sleep = {
+        wantedBy = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+          "hybrid-sleep.target"
+        ];
+        before = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+          "hybrid-sleep.target"
+        ];
+        environment.TIMEWARRIORDB = timewarriorConfigPath;
+        path = [ pkgs.python314 timewarrior-final ];
+        serviceConfig = {
+          Type = "oneshot";
+          User = userName;
+        };
+        script = "${stop-tasks}/bin/stop-tasks";
+      };
+      stop-taskwarrior-on-shutdown = {
+        before = [ "shutdown.target" "reboot.target" "halt.target" ];
+        wantedBy = [ "shutdown.target" "reboot.target" "halt.target" ];
+        environment.TIMEWARRIORDB = timewarriorConfigPath;
+        path = [ pkgs.python314 timewarrior-final ];
+        unitConfig.defaultDependencies = false;
+        serviceConfig = {
+          Type = "oneshot";
+          User = userName;
+        };
+        script = "${stop-tasks}/bin/stop-tasks";
+      };
+    };
+
     _custom.hm = {
       home = {
         packages = with pkgs; [
           taskwarrior-tui
-          timewarrior
+          timewarrior-final
           pkgs._custom.pythonPackages.bugwarrior
         ];
 
@@ -30,15 +68,15 @@ in {
 
         file = {
           "${timewarriorConfigPath}/timewarrior.cfg".text = ''
-            import ${pkgs.timewarrior}/share/doc/timew/themes/dark_green.theme
-            import ${pkgs.timewarrior}/share/doc/timew/holidays/holidays.en-US
+            import ${timewarrior-final}/share/doc/timew/themes/dark_green.theme
+            import ${timewarrior-final}/share/doc/timew/holidays/holidays.en-US
             ${builtins.readFile ./dotfiles/timewarrior.cfg}
           '';
 
           "${taskwarriorDataPath}/hooks/on-modify.timewarrior" = {
             executable = true;
             source =
-              "${pkgs.timewarrior}/share/doc/timew/ext/on-modify.timewarrior";
+              "${timewarrior-final}/share/doc/timew/ext/on-modify.timewarrior";
           };
         };
 
@@ -58,7 +96,7 @@ in {
         extraConfig = builtins.readFile ./dotfiles/taskrc;
       };
 
-      # stop timewarrior on shutdown|logout|suspend
+      # stop timewarrior on logout
       systemd.user.services = {
         stop-taskwarrior-on-glogout = lib._custom.mkGraphicalService {
           Service = {
@@ -66,40 +104,6 @@ in {
             Type = "oneshot";
             ExecStop = "${stop-tasks}/bin/stop-tasks";
             RemainAfterExit = true;
-          };
-        };
-        stop-taskwarrior-on-sleep = {
-          Unit.Before = [
-            "sleep.target"
-            "suspend.target"
-            "hibernate.target"
-            "hybrid-sleep.target"
-          ];
-          Install.WantedBy = [
-            "sleep.target"
-            "suspend.target"
-            "hibernate.target"
-            "hybrid-sleep.target"
-          ];
-          Service = {
-            User = userName;
-            Environment = [ "TIMEWARRIORDB=${timewarriorConfigPath}" ];
-            Type = "oneshot";
-            ExecStart = "${stop-tasks}/bin/stop-tasks";
-          };
-        };
-        stop-taskwarrior-on-shutdown = {
-          Unit = {
-            DefaultDependencies = "no";
-            Before = [ "shutdown.target" "reboot.target" "halt.target" ];
-          };
-          Install.WantedBy =
-            [ "shutdown.target" "reboot.target" "halt.target" ];
-          Service = {
-            User = userName;
-            Environment = [ "TIMEWARRIORDB=${timewarriorConfigPath}" ];
-            Type = "oneshot";
-            ExecStart = "${stop-tasks}/bin/stop-tasks";
           };
         };
       };
