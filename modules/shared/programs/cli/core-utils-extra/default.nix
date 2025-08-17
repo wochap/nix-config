@@ -24,6 +24,7 @@ in {
         qpdf # removes password of pdf
         reader # blog post reader
 
+        chawan # tui browser
         termshark # tui wireshark
         gdu # tui disk usage
 
