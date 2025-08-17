@@ -12,7 +12,6 @@ in {
     _custom.hm = {
       home = {
         # Fix vscode delete
-        packages = with pkgs; [ trash-cli ];
         sessionVariables.ELECTRON_TRASH = "trash-cli";
       };
 

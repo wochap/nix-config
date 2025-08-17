@@ -35,6 +35,7 @@ in {
       poppler_utils # pdftotext
       qpdf # manipulate pdfs
       streamlink # download hsl stream
+      trash-cli
     ];
 
     _custom.hm = {
@@ -45,6 +46,7 @@ in {
         cp = "xcp";
         tree = "tree -a -C -L 1";
         weather = "curl wttr.in";
+        rm = "trash-put";
       };
 
       programs = {

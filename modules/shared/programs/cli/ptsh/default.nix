@@ -26,7 +26,7 @@ in {
           ppwd = "ptpwd";
           pmkdir = "ptmkdir";
           touch = "pttouch";
-          rm = "ptrm";
+          # rm = "ptrm";
           # cp = "ptcp";
         };
       };
