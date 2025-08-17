@@ -2,8 +2,14 @@
 
 let
   cfg = config._custom.desktop.quickshell;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals)
+    themeColorsLight themeColorsDark preferDark configDirectory;
   quickshell-final = inputs.quickshell.packages.${pkgs.system}.default;
+
+  mkThemeQuickshell = themeColors:
+    pkgs.writeText "theme.json" (builtins.toJSON themeColors);
+  catppuccin-quickshell-light-theme-path = mkThemeQuickshell themeColorsLight;
+  catppuccin-quickshell-dark-theme-path = mkThemeQuickshell themeColorsDark;
 in {
   options._custom.desktop.quickshell = {
     enable = lib.mkEnableOption { };
@@ -30,8 +36,19 @@ in {
 
     _custom.hm = {
       xdg.configFile = {
-        "quickshell".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles;
+        "quickshell/shell".source =
+          lib._custom.relativeSymlink configDirectory ./dotfiles/shell;
+        "quickshell/theme.json" = {
+          source = if preferDark then
+            catppuccin-quickshell-dark-theme-path
+          else
+            catppuccin-quickshell-light-theme-path;
+          force = true;
+        };
+        "quickshell/theme-light.json".source =
+          catppuccin-quickshell-light-theme-path;
+        "quickshell/theme-dark.json".source =
+          catppuccin-quickshell-dark-theme-path;
       };
     };
   };
