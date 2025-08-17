@@ -20,7 +20,7 @@ set_light_theme() {
   crudini --set ~/.config/qt5ct/qt5ct.conf Appearance icon_theme "Tela-catppuccin_mocha_blue-light"
 
   # Foot
-  killall -SIGUSR1 foot
+  killall -SIGUSR2 foot
 
   # lsd
   ln -sf ~/.config/lsd/light.yaml ~/.config/lsd/colors.yaml
@@ -77,7 +77,7 @@ set_dark_theme() {
   crudini --set ~/.config/qt5ct/qt5ct.conf Appearance icon_theme "Tela-catppuccin_mocha_blue-dark"
 
   # Foot
-  killall -SIGUSR2 foot
+  killall -SIGUSR1 foot
 
   # lsd
   ln -sf ~/.config/lsd/dark.yaml ~/.config/lsd/colors.yaml
