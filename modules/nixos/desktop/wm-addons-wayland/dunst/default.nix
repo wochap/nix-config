@@ -2,10 +2,17 @@
 
 let
   cfg = config._custom.desktop.dunst;
-  inherit (config._custom.globals) themeColors;
+  inherit (config._custom.globals) themeColorsLight themeColorsDark preferDark;
 
   dunst-toggle-mode = pkgs.writeScriptBin "dunst-toggle-mode"
     (builtins.readFile ./scripts/dunst-toggle-mode.sh);
+  mkThemeDunst = themeColors:
+    pkgs.replaceVars ./dotfiles/dunstrc {
+      inherit (themeColors)
+        backgroundOverlay text border lavender textDimmed red;
+    };
+  catppuccin-dunst-light-theme-path = mkThemeDunst themeColorsLight;
+  catppuccin-dunst-dark-theme-path = mkThemeDunst themeColorsDark;
 in {
   options._custom.desktop.dunst.enable = lib.mkEnableOption { };
 
@@ -29,14 +36,14 @@ in {
       xdg.configFile = {
         "dunst/assets/notification.flac".source = ./assets/notification.flac;
         "dunst/dunstrc" = {
-          source = pkgs.replaceVars ./dotfiles/dunstrc {
-            inherit (themeColors)
-              backgroundOverlay text border lavender textDimmed red;
-          };
-          onChange = ''
-            ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
-          '';
+          source = if preferDark then
+            catppuccin-dunst-dark-theme-path
+          else
+            catppuccin-dunst-light-theme-path;
+          force = true;
         };
+        "dunst/dunstrc-light".source = catppuccin-dunst-light-theme-path;
+        "dunst/dunstrc-dark".source = catppuccin-dunst-dark-theme-path;
         "dunst-nctui/config.toml".source = ./dotfiles/dunst-nctui.toml;
       };
 

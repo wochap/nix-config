@@ -41,6 +41,10 @@ set_light_theme() {
   # tofi
   ln -sf ~/.config/tofi/one-line-theme-light ~/.config/tofi/one-line-theme
 
+  # dunst
+  ln -sf ~/.config/dunst/dunstrc-light ~/.config/dunst/dunstrc
+  pkill -u "$USER" dunst
+
   # dircolors
   ln -sf ~/.dir_colors-light ~/.dir_colors
 
@@ -100,6 +104,10 @@ set_dark_theme() {
 
   # tofi
   ln -sf ~/.config/tofi/one-line-theme-dark ~/.config/tofi/one-line-theme
+
+  # dunst
+  ln -sf ~/.config/dunst/dunstrc-dark ~/.config/dunst/dunstrc
+  pkill -u "$USER" dunst
 
   # dircolors
   ln -sf ~/.dir_colors-dark ~/.dir_colors
