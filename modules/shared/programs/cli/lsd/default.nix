@@ -40,7 +40,7 @@ in {
           symlink-arrow = "->";
           layout = "grid";
           hyperlink = "auto";
-          blocks = [ "permission" "user" "group" "size" "date" "git" "name" ];
+          blocks = [ "permission" "user" "group" "size" "date" "name" ];
           date = "+%a %d %b %H:%M %Y";
         };
       };
