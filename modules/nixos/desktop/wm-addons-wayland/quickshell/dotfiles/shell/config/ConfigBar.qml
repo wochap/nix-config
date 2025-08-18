@@ -6,4 +6,6 @@ import Quickshell
 
 Singleton {
   id: root
+
+  property real barHeight: 40
 }

@@ -8,7 +8,7 @@ import Quickshell.Io
 Singleton {
   id: root
 
-  property alias options: adapter
+  property alias options: jsonAdapter
   property bool ready: false
 
   FileView {
@@ -24,17 +24,17 @@ Singleton {
     }
 
     JsonAdapter {
-      id: adapter
+      id: jsonAdapter
 
       property string flavour: "mocha"
-      property string primary: adapter.mauve
-      property string secondary: adapter.green
-      property string tertiary: adapter.peach
-      property string border: adapter.surface2
-      property string borderSecondary: adapter.surface0
-      property string background: adapter.base
-      property string backgroundOverlay: adapter.mantle
-      property string shadow: adapter.crust
+      property string primary: jsonAdapter.mauve
+      property string secondary: jsonAdapter.green
+      property string tertiary: jsonAdapter.peach
+      property string border: jsonAdapter.surface2
+      property string borderSecondary: jsonAdapter.surface0
+      property string background: jsonAdapter.base
+      property string backgroundOverlay: jsonAdapter.mantle
+      property string shadow: jsonAdapter.crust
       property string textDimmed: overlay0
       property string rosewater: "#f5e0dc"
       property string flamingo: "#f2cdcd"
