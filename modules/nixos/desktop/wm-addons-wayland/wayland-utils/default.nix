@@ -59,6 +59,15 @@ in {
       })
     ];
 
+    # allow gpu-screen-recorder to run as root
+    security.wrappers.gsr-kms-server = {
+      source = "${pkgs.gpu-screen-recorder}/bin/gsr-kms-server";
+      capabilities = "cap_sys_admin+ep";
+      owner = "root";
+      group = "root";
+      setuid = false;
+    };
+
     _custom.hm = {
       home.packages = with pkgs; [
         mpvpaper # mpv as wallpaper
@@ -73,6 +82,7 @@ in {
         wf-recorder # screen recorder utility
         wl-mirror # mirror outputs
         wl-screenrec # screen recorder utility (faster)
+        gpu-screen-recorder # screen recorder
         wlr-randr
         wlrctl # control keyboard, mouse and wm from cli
         tesseract5 # ocr
