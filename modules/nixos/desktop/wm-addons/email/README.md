@@ -28,4 +28,4 @@ Mails are saved to `~/Mail` folder
 1. Enable 2FA auth in your google account
 1. In Gmail > Settings > Forwarding and POP/IMAP, enable POP and IMAP
 1. Generate a [app_password](https://support.google.com/accounts/answer/185833?hl=en), go to [Google Account](https://myaccount.google.com/) > Security > 2-Step Verification > App passwords
-1. Add a file in `<NIX_CONFIG_PATH>/secrets/mail/<EMAIL>`, and paste the password/token/app_password (e.g. 16 digits)
+1. Add a file in `<NIX_CONFIG_PATH>/secrets/mail/<BOX_NAME>`, and paste the password/token/app_password (e.g. 16 digits)
