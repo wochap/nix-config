@@ -3,7 +3,7 @@
     # channels
     nixpkgs.url = "github:nixos/nixpkgs?rev=4792576cb003c994bd7cc1edada3129def20b27d"; # nixos-25.05 (07 jun 2025)
     nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=c87b95e25065c028d31a94f06a62927d18763fdf"; # nixos-unstable (20 jul 2025)
-    nixpkgs-master.url = "github:nixos/nixpkgs?rev=3b998b4adb33a0a8f1a340a66a6757b206d6d3b7"; # master (05 jan 2025)
+    nixpkgs-master.url = "github:nixos/nixpkgs?rev=58f3c8b331269776bf25b8725a2ea9c184bd6fe5"; # master (18 aug 2025)
     nixpkgs-24-11.url = "github:nixos/nixpkgs?rev=b75693fb46bfaf09e662d09ec076c5a162efa9f6"; # nixos-24.11 (20 mar 2025)
     prevstable-chrome.url = "github:nixos/nixpkgs?rev=4792576cb003c994bd7cc1edada3129def20b27d"; # nixos-25.05 (07 jun 2025)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=7fd36ee82c0275fb545775cc5e4d30542899511d"; # nixos-25.05 (27 jul 2025)
