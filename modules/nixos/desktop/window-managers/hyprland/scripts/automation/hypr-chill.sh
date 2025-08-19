@@ -7,12 +7,11 @@ VIDEO_URL="https://www.youtube.com/watch?v=sX6J4t2lRu0"
 # picked by nvim to enable transparent hls
 export TRANSPARENT=true
 
-if [[ "$CURRENT_SCHEME" == "dark" ]]; then
-  kitty --app-id=kitty-chill --override background=#1e1e2e --override background_opacity=0.75 &
-else
-  # TODO: manually run `export TRANSPARENT=true`
-  footclient --app-id=footclient-chill --override colors.background=1e1e2e --override colors.alpha=0.75 &
-fi
+# open terminal
+# TODO: manually run `export TRANSPARENT=true`
+footclient --app-id=footclient-chill --override colors.alpha=0.75 &
+# kitty --app-id=kitty-chill --override background_opacity=0.75 &
+# foot --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=1 &
 
 # NOTE: foot disables opacity when in fullscreen
 # so we fake its state
