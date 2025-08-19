@@ -2,8 +2,8 @@
 
 let
   cfg = config._custom.desktop.hyprlock;
-  inherit (config._custom.globals) configDirectory themeColors;
-  inherit (lib._custom) relativeSymlink unwrapHex;
+  inherit (config._custom.globals) configDirectory;
+  inherit (lib._custom) relativeSymlink;
   hyprlock-start = pkgs.writeScriptBin "hyprlock-start"
     (builtins.readFile ./scripts/hyprlock-start.sh);
 in {
@@ -21,17 +21,9 @@ in {
         hyprlock-start
       ];
 
-      xdg.configFile = {
-        "hypr/hyprlock.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hyprlock.conf;
-        "hypr/catppuccin-theme.conf".source =
-          "${inputs.catppuccin-hyprland}/themes/${themeColors.flavour}.conf";
-        "hypr/theme-colors.conf".text = ''
-          ${lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
-            (key: value: "\$${key} = rgb(${unwrapHex value})")
-            (builtins.removeAttrs themeColors [ "flavour" ]))}
-        '';
-      };
+      # NOTE: we use hyprland module colors.conf
+      xdg.configFile."hypr/hyprlock.conf".source =
+        relativeSymlink configDirectory ./dotfiles/hyprlock.conf;
     };
   };
 }
