@@ -17,13 +17,23 @@ import qs.services
 RowLayout {
   id: root
 
-  // readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
+  readonly property int workspacesShown: 9
+  property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
+  property list<bool> workspaceOccupied: Array.from({
+    length: root.workspacesShown
+  }, (_, i) => {
+    return Hyprland.workspaces.values.some(workspace => workspace.id === i + 1);
+  })
 
   spacing: ConfigBar.modulesSpacing
 
   Repeater {
-    model: 9
+    model: root.workspacesShown
 
-    delegate: HyprWorkspace {}
+    delegate: HyprWorkspace {
+      workspace: modelData
+      monitor: root.monitor
+      occupied: root.workspaceOccupied?.[index] ?? true
+    }
   }
 }
