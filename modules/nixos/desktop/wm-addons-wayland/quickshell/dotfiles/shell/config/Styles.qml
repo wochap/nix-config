@@ -8,6 +8,7 @@ Singleton {
   id: root
 
   property QtObject font
+  property QtObject rounding
   property QtObject animationCurves
   property QtObject animation
 
@@ -16,17 +17,30 @@ Singleton {
       property string main: "Iosevka NF"
       property string iconMaterial: "Material Symbols Rounded"
     }
-    property QtObject sizes: QtObject {
-      property int smallest: 10
-      property int smaller: 12
-      property int small: 15
-      property int normal: 16
-      property int large: 17
-      property int larger: 19
+    property QtObject pixelSize: QtObject {
+      // property int smallest: 10
+      property int smaller: 10
+      property int small: 12
+      property int normal: 14
+      property int large: 16
+      property int larger: 18
       property int huge: 22
-      property int hugeass: 23
+      property int hugeass: 24
       property int title: huge
     }
+  }
+
+  rounding: QtObject {
+    property int unsharpen: 2
+    property int unsharpenmore: 6
+    property int verysmall: 8
+    property int small: 12
+    property int normal: 17
+    property int large: 23
+    property int verylarge: 30
+    property int full: 9999
+    property int screenRounding: large
+    property int windowRounding: 18
   }
 
   animationCurves: QtObject {
