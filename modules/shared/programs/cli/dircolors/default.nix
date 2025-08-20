@@ -14,7 +14,10 @@ in {
     enable = lib.mkEnableOption { };
     package = lib.mkPackageOption pkgs "dircolors" { default = "coreutils"; };
     enableBashIntegration = lib.mkEnableOption { };
-    enableZshIntegration = lib.mkEnableOption { };
+    enableZshIntegration = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable {
