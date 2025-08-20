@@ -9,9 +9,13 @@ export TRANSPARENT=true
 
 # open terminal
 # TODO: manually run `export TRANSPARENT=true`
-footclient --app-id=footclient-chill --override colors.alpha=0.75 &
-# kitty --app-id=kitty-chill --override background_opacity=0.75 &
-# foot --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=1 &
+if [[ "$CURRENT_SCHEME" == "dark" ]]; then
+  footclient --app-id=footclient-chill --override colors.alpha=0.75 &
+  # footclient --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=1 &
+  # foot --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=1 &
+else
+  kitty --app-id=kitty-chill --override background_opacity=0.75 &
+fi
 
 # NOTE: foot disables opacity when in fullscreen
 # so we fake its state
