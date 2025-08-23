@@ -16,7 +16,7 @@ Loader {
   sourceComponent: Component {
     MaterialIcon {
       icon: "keyboard_capslock_badge"
-      size: Styles.font.pixelSize.hugeass
+      size: Styles.font.pixelSize.huge
       color: Theme.options.peach
     }
   }

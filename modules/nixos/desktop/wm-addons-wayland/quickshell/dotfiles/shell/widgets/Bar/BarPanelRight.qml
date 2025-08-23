@@ -13,16 +13,29 @@ RowLayout {
 
   spacing: ConfigBar.modulesSpacing
 
-  Capslock {
-    Layout.fillHeight: true
-  }
-
-  Idle {
-    Layout.fillHeight: true
-  }
-
   SysTray {
     Layout.fillHeight: true
+  }
+
+  RowLayout {
+    Layout.fillHeight: true
+
+    Layout.leftMargin: -ConfigBar.modulesSpacing / 3
+    Layout.rightMargin: -ConfigBar.modulesSpacing / 3
+    spacing: 0
+    visible: capslock.isLock || idle.isIdle
+
+    Capslock {
+      id: capslock
+
+      Layout.fillHeight: true
+    }
+
+    Idle {
+      id: idle
+
+      Layout.fillHeight: true
+    }
   }
 
   Control {

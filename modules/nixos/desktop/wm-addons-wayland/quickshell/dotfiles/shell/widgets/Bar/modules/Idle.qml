@@ -15,7 +15,7 @@ Loader {
   sourceComponent: Component {
     MaterialIcon {
       icon: "emoji_food_beverage"
-      size: Styles.font.pixelSize.hugeass
+      size: Styles.font.pixelSize.huge
       color: Theme.options.red
     }
   }
