@@ -17,6 +17,7 @@ Singleton {
   property var workspaces: []
   property var workspacesIds: []
   property var workspacesById: ({})
+  property var workspacesByMonitorId: []
   property var activeWorkspace: null
   property var monitors: []
   property var monitorsById: ({})
@@ -44,6 +45,14 @@ Singleton {
     updateWorkspaces();
   }
 
+  Timer {
+    id: debounceTimer
+
+    interval: 50
+    repeat: false
+    onTriggered: root.updateAll()
+  }
+
   Component.onCompleted: {
     root.updateAll();
   }
@@ -52,7 +61,7 @@ Singleton {
     target: Hyprland
 
     function onRawEvent(event) {
-      root.updateAll();
+      debounceTimer.restart();
       if (event.name === "submap") {
         root.submap = event.data;
       }
@@ -117,6 +126,9 @@ Singleton {
               [workspace.id]: workspace
             })), {});
         root.workspacesIds = root.workspaces.map(workspace => workspace.id);
+        root.workspacesByMonitorId = root.workspaces.reduce((result, workspace) => (Object.assign(result, {
+              [workspace.monitorID]: (result?.[workspace.monitorID] ?? []).concat(workspace)
+            })), {});
       }
     }
   }

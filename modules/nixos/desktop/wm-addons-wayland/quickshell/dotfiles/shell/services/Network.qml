@@ -20,7 +20,7 @@ Singleton {
   // A debounce timer to prevent rapid updates when many signals are received
   Timer {
     id: debounceTimer
-    interval: 100
+    interval: 50
     repeat: false
     onTriggered: root.update()
   }

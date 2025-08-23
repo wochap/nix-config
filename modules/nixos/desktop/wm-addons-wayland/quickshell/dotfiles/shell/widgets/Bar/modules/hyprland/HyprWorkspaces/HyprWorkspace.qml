@@ -46,7 +46,7 @@ Button {
     id: taskbar
 
     RowLayout {
-      spacing: ConfigBar.modulesSpacing / 2
+      spacing: ConfigBar.modulesSpacing / 4
 
       Repeater {
         model: root.taskBarItems
@@ -55,7 +55,7 @@ Button {
           Layout.fillHeight: true
 
           icon: modelData.customClass
-          size: Styles.font.pixelSize.huge
+          size: 28
           opacity: modelData.focused ? 1 : 0.5
           layer.enabled: modelData.floating
           layer.effect: MultiEffect {
