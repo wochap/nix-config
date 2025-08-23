@@ -9,7 +9,7 @@ import qs.widgets.common
 import qs.widgets.Bar.config
 import qs.services
 
-import "utils.js" as Utils
+import "../Utils.js" as Utils
 
 RowLayout {
   id: root

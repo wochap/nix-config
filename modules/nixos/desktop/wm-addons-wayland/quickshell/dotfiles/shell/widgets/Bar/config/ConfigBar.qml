@@ -17,4 +17,5 @@ Singleton {
   property real modulesPaddingX: Styles.font.pixelSize.normal * 0.4
   property bool isBlurEnabled: Global.isBlurEnabled
   property bool isBarAtBottom: false
+  property int clientIcon: 28
 }

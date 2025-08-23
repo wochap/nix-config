@@ -55,7 +55,7 @@ Button {
           Layout.fillHeight: true
 
           icon: modelData.customClass
-          size: 28
+          size: ConfigBar.clientIcon
           opacity: modelData.focused ? 1 : 0.5
           layer.enabled: modelData.floating
           layer.effect: MultiEffect {
