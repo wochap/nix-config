@@ -1,7 +1,6 @@
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
-import QtQuick.Effects
 
 import qs.config
 import qs.widgets.common
@@ -22,9 +21,14 @@ PanelWindow {
   }
 
   screen: root.modelData
+  // HACK: add enought space for shadow
   implicitHeight: ConfigBar.barHeight + ConfigBar.shadowHeight
   exclusiveZone: ConfigBar.barHeight
   color: "transparent"
+
+  StyledRectangularShadow {
+    target: rectangle
+  }
 
   Rectangle {
     id: rectangle
@@ -38,13 +42,36 @@ PanelWindow {
     height: ConfigBar.barHeight
     color: Theme.addAlpha(Theme.options.background, ConfigBar.isBlurEnabled ? 0.65 : 1)
 
-    BarPanelLeft {}
-    BarPanelCenter {}
-    BarPanelRight {}
-  }
+    BarPanelLeft {
+      anchors {
+        left: rectangle.left
+        leftMargin: ConfigBar.barPaddingX
+        top: rectangle.top
+        topMargin: ConfigBar.barPaddingY
+        bottom: rectangle.bottom
+        bottomMargin: ConfigBar.barPaddingY
+      }
+    }
 
-  StyledRectangularShadow {
-    target: rectangle
-    z: -1
+    BarPanelCenter {
+      anchors {
+        horizontalCenter: rectangle.horizontalCenter
+        top: rectangle.top
+        topMargin: ConfigBar.barPaddingY
+        bottom: rectangle.bottom
+        bottomMargin: ConfigBar.barPaddingY
+      }
+    }
+
+    BarPanelRight {
+      anchors {
+        right: rectangle.right
+        rightMargin: ConfigBar.barPaddingX
+        top: rectangle.top
+        topMargin: ConfigBar.barPaddingY
+        bottom: rectangle.bottom
+        bottomMargin: ConfigBar.barPaddingY
+      }
+    }
   }
 }

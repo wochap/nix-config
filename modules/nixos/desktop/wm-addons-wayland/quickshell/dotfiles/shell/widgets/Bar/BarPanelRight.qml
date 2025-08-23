@@ -10,15 +10,6 @@ import qs.widgets.Bar.modules.SysTray
 RowLayout {
   id: root
 
-  anchors {
-    right: parent.right
-    rightMargin: ConfigBar.barPaddingX
-    top: parent.top
-    topMargin: ConfigBar.barPaddingY
-    bottom: parent.bottom
-    bottomMargin: ConfigBar.barPaddingY
-  }
-
   spacing: ConfigBar.modulesSpacing
 
   SysTray {
