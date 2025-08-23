@@ -428,6 +428,7 @@ $ sudo lsof /dev/nvidia*
 
 ### Rice resources
 
+- https://fonts.google.com/icons?icon.category=Android&icon.query=low&icon.size=24&icon.color=%23e3e3e3&icon.style=Rounded
 - https://bennymeg.github.io/ngx-fluent-ui/
 - https://fontawesome.com/cheatsheet
 - https://fontdrop.info/
