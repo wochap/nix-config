@@ -19,6 +19,7 @@ in {
     # source: https://blogs.kde.org/2024/10/09/cursor-size-problems-in-wayland-explained/#my-fix-or-shall-we-say-workaround
     # source: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/7722
     # source: https://bbs.archlinux.org/viewtopic.php?id=299624
+    _custom.desktop.cursor.name = "catppuccin-mocha-dark-cursors";
     _custom.desktop.cursor.package =
       pkgs.catppuccin-cursors.mochaDark.overrideAttrs (oldAttrs: rec {
         patches = [
