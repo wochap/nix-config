@@ -1,12 +1,7 @@
-pragma ComponentBehavior: Bound
-
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
 import Quickshell.Hyprland
-import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 
 import qs.widgets.common
@@ -31,6 +26,8 @@ RowLayout {
     model: root.workspacesShown
 
     delegate: HyprWorkspace {
+      Layout.fillHeight: true
+
       workspace: modelData
       monitor: root.monitor
       occupied: root.workspaceOccupied?.[index] ?? true

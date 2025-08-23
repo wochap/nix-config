@@ -28,6 +28,7 @@ PanelWindow {
 
   Rectangle {
     id: rectangle
+
     anchors {
       left: parent.left
       right: parent.right

@@ -1,8 +1,5 @@
-pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 import Quickshell.Hyprland
 
 import qs.config
@@ -18,9 +15,7 @@ Button {
   property int workspaceId: index + 1
   property bool focused: monitor?.activeWorkspace?.id === workspaceId
 
-  Layout.fillHeight: true
-
-  onPressed: Hyprland.dispatch(`workspace ${workspaceId}`)
+  onClicked: Hyprland.dispatch(`workspace ${workspaceId}`)
   verticalPadding: 0
   horizontalPadding: styledText.font.pixelSize * 0.4
   background: Rectangle {
@@ -33,7 +28,5 @@ Button {
     color: focused && occupied ? Theme.options.primary : (occupied ? Theme.options.text : Theme.options.textDimmed)
     text: workspaceId
     anchors.centerIn: parent
-    verticalAlignment: Text.AlignVCenter
-    // font.weight: Font.Normal
   }
 }
