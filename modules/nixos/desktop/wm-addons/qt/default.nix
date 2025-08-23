@@ -97,6 +97,7 @@ in {
         kdePackages.libplasma # provides Kirigami platform theme
         kdePackages.plasma-integration # provides Qt platform theme
         kdePackages.kservice # query DE info, kbuildsycoca6
+        kdePackages.qt3d # required by quickshell
         # kdePackages.plasma-workspace
 
         # kde/qt themes
@@ -118,6 +119,8 @@ in {
 
         # qt deps
         libsForQt5.kconfig
+        libsForQt5.qt5.qtgraphicaleffects # required by quickshell
+        libsForQt5.qt3d # required by quickshell
       ];
 
     qt = {

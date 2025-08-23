@@ -6,4 +6,6 @@ import Quickshell
 
 Singleton {
   id: root
+
+  property bool isBlurEnabled: true
 }
