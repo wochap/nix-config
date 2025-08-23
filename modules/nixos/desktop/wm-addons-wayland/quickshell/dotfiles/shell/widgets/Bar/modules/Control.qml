@@ -13,8 +13,8 @@ import qs.widgets.Bar.modules
 WrapperRectangle {
   id: root
 
-  leftMargin: ConfigBar.modulesPaddingX
-  rightMargin: ConfigBar.modulesPaddingX
+  leftMargin: ConfigBar.modulesPaddingX / 2
+  rightMargin: ConfigBar.modulesPaddingX / 2
   color: Theme.options.surface0
   radius: 4
 
