@@ -1,6 +1,23 @@
 { config, lib, pkgs, ... }:
 
-let cfg = config._custom.desktop.cursor;
+let
+  cfg = config._custom.desktop.cursor;
+  inherit (config._custom) globals;
+  inherit (globals) themeColorsLight themeColorsDark preferDark;
+
+  mkThemeCursor = themeColors: scheme: {
+    name = "catppuccin-${themeColors.flavour}-${scheme}-cursors";
+    package = pkgs.catppuccin-cursors."${themeColors.flavour}${
+        lib._custom.capitalize scheme
+      }";
+  };
+  catppuccin-cursor-light-theme = mkThemeCursor themeColorsLight "light";
+  catppuccin-cursor-dark-theme = mkThemeCursor themeColorsLight "dark";
+  catppuccin-cursor-theme = if preferDark then
+    catppuccin-cursor-dark-theme
+  else
+    catppuccin-cursor-light-theme;
+
 in {
   options._custom.desktop.cursor = {
     enable = lib.mkEnableOption { };
@@ -9,11 +26,11 @@ in {
     # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
     name = lib.mkOption {
       type = lib.types.str;
-      default = "catppuccin-mocha-dark-cursors";
+      default = catppuccin-cursor-theme.name;
     };
     package = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.catppuccin-cursors.mochaDark;
+      default = catppuccin-cursor-theme.package;
     };
     size = lib.mkOption {
       type = lib.types.int;
