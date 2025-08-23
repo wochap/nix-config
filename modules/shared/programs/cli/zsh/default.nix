@@ -140,21 +140,14 @@ in {
             # docs: https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Character-Highlighting
             zle_highlight=('paste:fg=white,bold')
 
+            # TODO: use rod
+            # TODO: add automation to hotreload
             # set catppuccin theme for zsh-fast-syntax-highlighting
-            if [[ -z "$NO_ROD" ]]; then
-              # TODO: add automation to hotreload
-              if [[ "$(rod print)" == "Dark" ]]; then
-                FAST_WORK_DIR="${catppuccin-fsh-dark-theme}"
-              else
-                FAST_WORK_DIR="${catppuccin-fsh-light-theme}"
-              fi
+            CURRENT_SCHEME=$(color-scheme print)
+            if [[ "$CURRENT_SCHEME" == "dark" ]]; then
+              FAST_WORK_DIR="${catppuccin-fsh-dark-theme}"
             else
-              FAST_WORK_DIR="${
-                if preferDark then
-                  catppuccin-fsh-dark-theme
-                else
-                  catppuccin-fsh-light-theme
-              }"
+              FAST_WORK_DIR="${catppuccin-fsh-light-theme}"
             fi
             source ${fshPlugin.src}/${fshPlugin.file}
 
