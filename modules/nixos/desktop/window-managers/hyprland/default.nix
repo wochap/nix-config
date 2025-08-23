@@ -13,7 +13,7 @@ let
   catppuccin-hyprland-dark-theme = mkThemeHyprland themeColorsDark;
   hyprplugins = inputs.hyprland-plugins.packages.${pkgs.system};
   hyprland-final = inputs.hyprland.packages."${system}".hyprland;
-  hyprland-xdp-final =
+  hyprland-xdph-final =
     inputs.hyprland.packages."${system}".xdg-desktop-portal-hyprland;
   hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad"
     (builtins.readFile ./scripts/hyprland-scratchpad.sh);
@@ -54,7 +54,6 @@ in {
       };
     };
 
-    _custom.desktop.ags.systemdEnable = lib.mkIf cfg.isDefault true;
     _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
     services.displayManager.defaultSession =
@@ -63,13 +62,14 @@ in {
     programs.hyprland = {
       enable = true;
       package = hyprland-final;
-      portalPackage = hyprland-xdp-final;
+      portalPackage = hyprland-xdph-final;
       withUWSM = false;
       systemd.setPath.enable = false;
     };
 
     # NOTE: not sure why xdg-desktop-portal picks
     # "hyprland" and not "Hyprland"
+    # maybe because of uwsm?
     xdg.portal.config.Hyprland.default = [ "gtk" "hyprland" ];
     xdg.portal.config.hyprland.default = [ "gtk" "hyprland" ];
 
@@ -87,6 +87,7 @@ in {
       ];
 
       xdg.configFile = let
+        # TODO: convert to options
         common-env-hyprland = ''
           # toolkit-specific scale
           export GDK_SCALE=2
@@ -115,18 +116,27 @@ in {
         };
         "hypr/colors-light.conf".text = catppuccin-hyprland-light-theme;
         "hypr/colors-dark.conf".text = catppuccin-hyprland-dark-theme;
-        "hypr/binds-kiosk.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hypr/binds-kiosk.conf;
-        "hypr/binds-main.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hypr/binds-main.conf;
-        "hypr/keywords-main.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hypr/keywords-main.conf;
-        "hypr/keywords.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hypr/keywords.conf;
-        "hypr/rules.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hypr/rules.conf;
-        "hypr/variables.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hypr/variables.conf;
+        "hypr/hyprland/binds-kiosk.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/binds-kiosk.conf;
+        "hypr/hyprland/binds-main.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/binds-main.conf;
+        "hypr/hyprland/keywords-main.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/keywords-main.conf;
+        "hypr/hyprland/keywords.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/keywords.conf;
+        "hypr/hyprland/rules.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/rules.conf;
+        "hypr/hyprland/variables.conf".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/variables.conf;
+        "hypr/hyprland/kiosk.conf".text = ''
+          source=~/.config/hypr/colors.conf
+          source=~/.config/hypr/hyprland/variables.conf
+          source=~/.config/hypr/hyprland/keywords.conf
+          source=~/.config/hypr/hyprland/rules.conf
+          source=~/.config/hypr/hyprland/binds-kiosk.conf
+
+          ${hyprcursor-conf}
+        '';
 
         "hypr/shaders".source =
           relativeSymlink configDirectory ./dotfiles/shaders;
@@ -136,22 +146,11 @@ in {
         "hypr/libinput-gestures.conf".source =
           ./dotfiles/libinput-gestures.conf;
 
-        "hypr/kiosk.conf".text = ''
-          source=~/.config/hypr/colors.conf
-          source=~/.config/hypr/variables.conf
-          source=~/.config/hypr/keywords.conf
-          source=~/.config/hypr/rules.conf
-          source=~/.config/hypr/binds-kiosk.conf
-
-          ${hyprcursor-conf}
-        '';
-
         "uwsm/env-hyprland".text = ''
           ${common-env-hyprland}
 
           export AQ_DRM_DEVICES=$IGPU_CARD
         '';
-
         "uwsm/env-hyprland-dgpu".text = ''
           ${common-env-hyprland}
 
@@ -181,11 +180,11 @@ in {
           ];
         extraConfig = ''
           source=~/.config/hypr/colors.conf
-          source=~/.config/hypr/variables.conf
-          source=~/.config/hypr/keywords.conf
-          source=~/.config/hypr/keywords-main.conf
-          source=~/.config/hypr/rules.conf
-          source=~/.config/hypr/binds-main.conf
+          source=~/.config/hypr/hyprland/variables.conf
+          source=~/.config/hypr/hyprland/keywords.conf
+          source=~/.config/hypr/hyprland/keywords-main.conf
+          source=~/.config/hypr/hyprland/rules.conf
+          source=~/.config/hypr/hyprland/binds-main.conf
 
           ${hyprcursor-conf}
         '';
