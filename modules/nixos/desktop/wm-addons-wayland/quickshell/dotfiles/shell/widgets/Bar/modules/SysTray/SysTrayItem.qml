@@ -13,7 +13,7 @@ WrapperMouseArea {
 
   required property SystemTrayItem modelData
   required property SystemTrayItem item
-  property var window: root.QsWindow.window
+  property var window: QsWindow.window
   property int size: Styles.font.pixelSize.large
 
   child: trayIcon
