@@ -16,6 +16,7 @@ Singleton {
     property QtObject family: QtObject {
       property string main: "Iosevka NF"
       property string materialIcon: "Material Symbols Rounded"
+      property string woosIcon: "woos"
     }
     property QtObject pixelSize: QtObject {
       // property int smallest: 10
