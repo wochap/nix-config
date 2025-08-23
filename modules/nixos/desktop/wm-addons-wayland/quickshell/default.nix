@@ -8,6 +8,9 @@ let
 
   shell-capslock = pkgs.writeScriptBin "shell-capslock"
     (builtins.readFile ./scripts/shell-capslock.sh);
+  shell-hypr-ws-special-count =
+    pkgs.writeScriptBin "shell-hypr-ws-special-count"
+    (builtins.readFile ./scripts/shell-hypr-ws-special-count.sh);
   mkThemeQuickshell = themeColors:
     pkgs.writeText "theme.json" (builtins.toJSON themeColors);
   catppuccin-quickshell-light-theme-path = mkThemeQuickshell themeColorsLight;
@@ -37,7 +40,7 @@ in {
     fonts.packages = with pkgs; [ nixpkgs-unstable.material-symbols ];
 
     _custom.hm = {
-      home.packages = with pkgs; [ shell-capslock ];
+      home.packages = with pkgs; [ shell-capslock shell-hypr-ws-special-count ];
 
       xdg.configFile = {
         "quickshell/shell".source =

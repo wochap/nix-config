@@ -14,6 +14,7 @@ RowLayout {
 
   Capslock {
     Layout.fillHeight: true
+    Layout.preferredWidth: item ? item.implicitWidth : 0
   }
 
   SysTray {
