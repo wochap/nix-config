@@ -3,9 +3,10 @@
 let
   cfg = config._custom.desktop.quickshell;
   inherit (config._custom.globals)
-    themeColorsLight themeColorsDark preferDark configDirectory;
-  quickshell-final = inputs.quickshell.packages.${pkgs.system}.default;
+    themeColorsLight themeColorsDark preferDark configDirectory userName;
+  hmConfig = config.home-manager.users.${userName};
 
+  quickshell-final = inputs.quickshell.packages.${pkgs.system}.default;
   shell-capslock = pkgs.writeScriptBin "shell-capslock"
     (builtins.readFile ./scripts/shell-capslock.sh);
   shell-hypr-ws-special-count =
@@ -24,6 +25,7 @@ let
 in {
   options._custom.desktop.quickshell = {
     enable = lib.mkEnableOption { };
+    systemdEnable = lib.mkEnableOption { };
     package = lib.mkOption {
       type = lib.types.package;
       default = quickshell-final;
@@ -69,6 +71,26 @@ in {
         "quickshell/theme-dark.json".source =
           catppuccin-quickshell-dark-theme-path;
       };
+
+      systemd.user.services.shell = lib.mkIf cfg.systemdEnable
+        (lib._custom.mkWaylandService {
+          Unit = {
+            Description =
+              "Flexible toolkit for making desktop shells with QtQuick, for Wayland and X11";
+            Documentation = "https://github.com/quickshell-mirror/quickshell";
+          };
+          Service = {
+            Environment = [
+              # NOTE: this or use `dbus-update-activation-environment --systemd <env_var_name>`
+              "TIMEWARRIORDB=${hmConfig.home.sessionVariables.TIMEWARRIORDB}"
+            ];
+            PassEnvironment = [ "HYPRLAND_INSTANCE_SIGNATURE" ];
+            ExecStart =
+              "${quickshell-final}/bin/quickshell -p ${hmConfig.xdg.configHome}/quickshell/shell";
+            Restart = "on-failure";
+            KillMode = "mixed";
+          };
+        });
     };
   };
 }
