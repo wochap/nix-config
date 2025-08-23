@@ -5,6 +5,7 @@ import qs.config
 Text {
   id: root
 
+  property string weight: Font.ExtraLight
   required property string icon
   property int size: Styles?.font.pixelSize.normal
   property real fill: 0 // 0 or 1
@@ -18,7 +19,7 @@ Text {
   font {
     family: Styles?.font.family.materialIcon
     pixelSize: size
-    weight: Font.ExtraLight
+    weight: root.weight
     hintingPreference: Font.PreferFullHinting
     variableAxes: {
       "FILL": truncatedFill,

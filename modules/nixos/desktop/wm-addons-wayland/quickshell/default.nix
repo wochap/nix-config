@@ -13,6 +13,8 @@ let
     (builtins.readFile ./scripts/shell-hypr-ws-special-count.sh);
   shell-network = pkgs.writeScriptBin "shell-network"
     (builtins.readFile ./scripts/shell-network.sh);
+  shell-bluetooth = pkgs.writeScriptBin "shell-bluetooth"
+    (builtins.readFile ./scripts/shell-bluetooth.sh);
   mkThemeQuickshell = themeColors:
     pkgs.writeText "theme.json" (builtins.toJSON themeColors);
   catppuccin-quickshell-light-theme-path = mkThemeQuickshell themeColorsLight;
@@ -46,6 +48,7 @@ in {
         shell-capslock
         shell-hypr-ws-special-count
         shell-network
+        shell-bluetooth
       ];
 
       xdg.configFile = {

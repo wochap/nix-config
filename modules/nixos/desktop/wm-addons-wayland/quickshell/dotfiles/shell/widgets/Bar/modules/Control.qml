@@ -21,6 +21,16 @@ WrapperRectangle {
   RowLayout {
     spacing: ConfigBar.modulesSpacing
 
+    MaterialIcon {
+      property string bluetoothIcon: Bluetooth.getIcon()
+
+      Layout.fillHeight: true
+
+      icon: bluetoothIcon
+      size: Styles.font.pixelSize.larger
+      weight: Font.Light
+    }
+
     SystemIcon {
       property string networkIcon: Network.getIcon()
 
