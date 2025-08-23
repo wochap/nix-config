@@ -17,6 +17,7 @@ WrapperRectangle {
   property string icon: ""
   property int iconSize
   property string iconSystem: ""
+  property int spacing: 8
 
   leftMargin: paddingX
   rightMargin: paddingX
@@ -24,7 +25,7 @@ WrapperRectangle {
   radius: 4
 
   RowLayout {
-    spacing: 2
+    spacing: root.spacing
 
     SystemIcon {
       icon: root.iconSystem
