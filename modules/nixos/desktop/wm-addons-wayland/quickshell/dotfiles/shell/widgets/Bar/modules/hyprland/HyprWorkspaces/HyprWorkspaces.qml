@@ -4,8 +4,8 @@ import Quickshell
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
 
-import qs.widgets.common
 import qs.config
+import qs.widgets.common
 import qs.widgets.Bar.config
 import qs.services
 
