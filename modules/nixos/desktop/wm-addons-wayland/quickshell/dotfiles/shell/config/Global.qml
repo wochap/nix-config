@@ -7,5 +7,6 @@ import Quickshell
 Singleton {
   id: root
 
-  property bool isBlurEnabled: true
+  property bool isBlurEnabled: false
+  property bool areAnimationsEnabled: false
 }
