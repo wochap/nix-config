@@ -15,6 +15,7 @@ WrapperRectangle {
   property string bgColor: Theme.options.surface0
   property string label: ""
   property string icon: ""
+  property string materialIcon: ""
   property int iconSize
   property string iconSystem: ""
   property int spacing: 8
@@ -40,12 +41,20 @@ WrapperRectangle {
       size: root.iconSize
     }
 
+    MaterialIcon {
+      icon: root.materialIcon
+      visible: root.materialIcon.length > 0
+      color: root.fgColor
+      size: root.iconSize
+    }
+
     StyledText {
       id: labelText
 
       text: root.label
       visible: root.label.length > 0
       color: root.fgColor
+      verticalAlignment: Text.AlignVCenter
     }
   }
 }

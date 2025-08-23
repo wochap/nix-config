@@ -9,9 +9,10 @@ Loader {
   id: root
 
   property bool isIdle: false
+  property bool isVisible: isIdle
 
-  active: isIdle
-  visible: isIdle
+  active: isVisible
+  visible: isVisible
   sourceComponent: Component {
     MaterialIcon {
       icon: "emoji_food_beverage"

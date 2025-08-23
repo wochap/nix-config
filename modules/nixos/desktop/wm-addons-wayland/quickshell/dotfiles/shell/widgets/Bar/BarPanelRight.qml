@@ -23,7 +23,7 @@ RowLayout {
     Layout.leftMargin: -ConfigBar.modulesSpacing / 3
     Layout.rightMargin: -ConfigBar.modulesSpacing / 3
     spacing: 0
-    visible: capslock.isLock || idle.isIdle
+    visible: capslock.isVisible || timewarrior.isVisible || idle.isVisible
 
     Capslock {
       id: capslock
@@ -33,6 +33,12 @@ RowLayout {
 
     Idle {
       id: idle
+
+      Layout.fillHeight: true
+    }
+
+    Timewarrior {
+      id: timewarrior
 
       Layout.fillHeight: true
     }
