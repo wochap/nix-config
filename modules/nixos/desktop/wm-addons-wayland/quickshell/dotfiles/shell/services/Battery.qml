@@ -31,7 +31,7 @@ Singleton {
       const icon = icons.find(([threshold, _]) => percent >= threshold);
       return icon?.[1] ?? "battery-missing";
     }
-    if (root.energyRate === 0) {
+    if (root.energyRate < 0.1) {
       return `battery-full-charged`;
     }
     const icons = [[100, "battery-full"], [80, "battery-good"], [60, "battery-good"], [40, "battery-low"], [20, "battery-caution"], [0, "battery-empty"]];
