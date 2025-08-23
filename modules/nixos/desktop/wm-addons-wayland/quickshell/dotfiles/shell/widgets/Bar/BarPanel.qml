@@ -39,7 +39,7 @@ PanelWindow {
       top: parent.top
     }
 
-    height: ConfigBar.barHeight
+    implicitHeight: ConfigBar.barHeight
     color: Theme.addAlpha(Theme.options.background, ConfigBar.isBlurEnabled ? 0.65 : 1)
 
     BarPanelLeft {

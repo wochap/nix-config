@@ -12,6 +12,10 @@ RowLayout {
 
   spacing: ConfigBar.modulesSpacing
 
+  Capslock {
+    Layout.fillHeight: true
+  }
+
   SysTray {
     Layout.fillHeight: true
   }

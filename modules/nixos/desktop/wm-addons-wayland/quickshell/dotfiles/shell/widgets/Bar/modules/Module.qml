@@ -15,6 +15,7 @@ WrapperRectangle {
   property string bgColor: Theme.options.surface0
   property string label: ""
   property string icon: ""
+  property int iconSize
   property string iconSystem: ""
 
   leftMargin: paddingX
@@ -35,6 +36,7 @@ WrapperRectangle {
       icon: root.icon
       visible: root.icon.length > 0
       color: root.fgColor
+      size: root.iconSize
     }
 
     StyledText {

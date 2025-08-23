@@ -6,6 +6,8 @@ let
     themeColorsLight themeColorsDark preferDark configDirectory;
   quickshell-final = inputs.quickshell.packages.${pkgs.system}.default;
 
+  shell-capslock = pkgs.writeScriptBin "shell-capslock"
+    (builtins.readFile ./scripts/shell-capslock.sh);
   mkThemeQuickshell = themeColors:
     pkgs.writeText "theme.json" (builtins.toJSON themeColors);
   catppuccin-quickshell-light-theme-path = mkThemeQuickshell themeColorsLight;
@@ -35,6 +37,8 @@ in {
     fonts.packages = with pkgs; [ nixpkgs-unstable.material-symbols ];
 
     _custom.hm = {
+      home.packages = with pkgs; [ shell-capslock ];
+
       xdg.configFile = {
         "quickshell/shell".source =
           lib._custom.relativeSymlink configDirectory ./dotfiles/shell;
