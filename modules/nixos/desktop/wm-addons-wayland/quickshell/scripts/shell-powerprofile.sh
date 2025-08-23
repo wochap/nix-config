@@ -53,61 +53,6 @@ restore_hyprland_settings() {
   echo "Settings restored and backup file removed."
 }
 
-performance() {
-  echo "Switching to Performance Mode..."
-
-  if [ ! -f "$CHOICES_BACKUP_FILE" ]; then
-    echo "No saved state from battery-saver mode found. No specific components to re-enable."
-  else
-    echo "Restoring components based on saved state..."
-    while IFS= read -r choice; do
-      case "$choice" in
-      powerprofile)
-        powerprofilesctl set performance
-        ;;
-      hyprland)
-        restore_hyprland_settings
-        ;;
-      systemd)
-        echo "Starting services..."
-        systemctl start docker.service
-        ;;
-      theme)
-        if [ -f "$THEME_BACKUP_FILE" ]; then
-          local saved_theme
-          saved_theme=$(<"$THEME_BACKUP_FILE")
-          local current_scheme=$(color-scheme print)
-          if [[ "$current_scheme" != "$saved_theme" ]]; then
-            echo "Restoring theme to '$saved_theme'..."
-            theme-switch "$saved_theme"
-          fi
-          rm "$THEME_BACKUP_FILE"
-        else
-          echo "No saved theme found to restore."
-        fi
-        ;;
-      wifi)
-        echo "Turning on Wi-Fi..."
-        nmcli radio wifi on
-        ;;
-      bluetooth)
-        echo "Turning on Bluetooth..."
-        echo "power on" | bluetoothctl
-        ;;
-      mic)
-        pactl set-source-mute @DEFAULT_SOURCE@ false
-        ;;
-      esac
-    done <"$CHOICES_BACKUP_FILE"
-
-    rm "$CHOICES_BACKUP_FILE"
-
-    echo "Component state restored."
-  fi
-
-  echo "Performance Mode activated."
-}
-
 battery_saver() {
   echo "Switching to Battery-Saver Mode..."
 
@@ -168,15 +113,68 @@ battery_saver() {
   echo "Battery-Saver Mode activated for selected components."
 }
 
-case "$MODE" in
-performance)
-  performance
-  ;;
+performance() {
+  echo "Switching to Performance Mode..."
 
+  if [ ! -f "$CHOICES_BACKUP_FILE" ]; then
+    echo "No saved state from battery-saver mode found. No specific components to re-enable."
+  else
+    echo "Restoring components based on saved state..."
+    while IFS= read -r choice; do
+      case "$choice" in
+      powerprofile)
+        powerprofilesctl set performance
+        ;;
+      hyprland)
+        restore_hyprland_settings
+        ;;
+      systemd)
+        echo "Starting services..."
+        systemctl start docker.service
+        ;;
+      theme)
+        if [ -f "$THEME_BACKUP_FILE" ]; then
+          local saved_theme
+          saved_theme=$(<"$THEME_BACKUP_FILE")
+          local current_scheme=$(color-scheme print)
+          if [[ "$current_scheme" != "$saved_theme" ]]; then
+            echo "Restoring theme to '$saved_theme'..."
+            theme-switch "$saved_theme"
+          fi
+          rm "$THEME_BACKUP_FILE"
+        else
+          echo "No saved theme found to restore."
+        fi
+        ;;
+      wifi)
+        echo "Turning on Wi-Fi..."
+        nmcli radio wifi on
+        ;;
+      bluetooth)
+        echo "Turning on Bluetooth..."
+        echo "power on" | bluetoothctl
+        ;;
+      mic)
+        pactl set-source-mute @DEFAULT_SOURCE@ false
+        ;;
+      esac
+    done <"$CHOICES_BACKUP_FILE"
+
+    rm "$CHOICES_BACKUP_FILE"
+
+    echo "Component state restored."
+  fi
+
+  echo "Performance Mode activated."
+}
+
+case "$MODE" in
 battery | battery-saver)
   battery_saver
   ;;
-
+performance)
+  performance
+  ;;
 *)
   echo "Error: Invalid argument '$MODE'."
   echo "Usage: $0 [performance|battery-saver]"
