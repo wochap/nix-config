@@ -103,6 +103,8 @@ battery_saver() {
     bluetooth)
       echo "Turning off Bluetooth..."
       echo "power off" | bluetoothctl
+      mv ~/.config/wireplumber/wireplumber.conf.d/51-disable-suspension.conf /tmp/51-disable-suspension.conf
+      systemctl --user restart pipewire.service
       ;;
     mic)
       pactl set-source-mute @DEFAULT_SOURCE@ true
@@ -153,6 +155,8 @@ performance() {
       bluetooth)
         echo "Turning on Bluetooth..."
         echo "power on" | bluetoothctl
+        mv /tmp/51-disable-suspension.conf ~/.config/wireplumber/wireplumber.conf.d/51-disable-suspension.conf
+        systemctl --user restart pipewire.service
         ;;
       mic)
         pactl set-source-mute @DEFAULT_SOURCE@ false
