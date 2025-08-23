@@ -18,11 +18,13 @@ Text {
   font {
     family: Styles?.font.family.materialIcon
     pixelSize: size
+    weight: Font.ExtraLight
+    hintingPreference: Font.PreferFullHinting
     variableAxes: {
       "FILL": truncatedFill,
-      "opsz": size
+      "opsz": fontInfo.pixelSize,
+      "wght": fontInfo.weight,
+      "GRAD": 0
     }
-    weight: Font.Normal + (Font.DemiBold - Font.Normal) * fill
-    hintingPreference: Font.PreferFullHinting
   }
 }
