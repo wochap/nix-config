@@ -170,8 +170,6 @@ in {
       path = "/sys/class/backlight/amdgpu_bl1";
       capturer = "wayland";
     }];
-    _custom.desktop.dwl.enable = false;
-    _custom.desktop.dwl.isDefault = false;
     _custom.desktop.hyprland.enable = true;
     _custom.desktop.hyprland.isDefault = true;
     _custom.archetypes.wm-wayland-desktop.enable = true;

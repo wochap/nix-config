@@ -8,7 +8,6 @@
     ./desktop/desktop-managers/gnome
     ./desktop/desktop-managers/kde
 
-    ./desktop/window-managers/dwl
     ./desktop/window-managers/hyprland
 
     ./desktop/wm-addons/audio
