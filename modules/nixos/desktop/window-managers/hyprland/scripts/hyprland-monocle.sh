@@ -257,6 +257,29 @@ function cycle() {
   hyprctl dispatch alterzorder top
 }
 
+function get_status() {
+  local json_string=""
+  for file in /tmp/hyprland-*-monocle-ws-"$HYPRLAND_INSTANCE_SIGNATURE"; do
+    # Check if the file exists, is a regular file, and is not empty.
+    if [[ -f "$file" && -s "$file" ]]; then
+      # The filename format is: /tmp/hyprland-{monitor_name}-monocle-ws-{signature}
+      local monitor_name
+      monitor_name=$(basename "$file" | sed -e "s/^hyprland-//" -e "s/-monocle-ws-$HYPRLAND_INSTANCE_SIGNATURE$//")
+
+      local ws_ids
+      ws_ids=$(paste -sd, "$file")
+
+      json_string+="\"$monitor_name\":[$ws_ids],"
+    fi
+  done
+
+  if [[ -n "$json_string" ]]; then
+    json_string=${json_string%,}
+  fi
+
+  echo "{$json_string}"
+}
+
 case "$1" in
 --init)
   init_monocle
@@ -283,6 +306,9 @@ case "$1" in
     exit 1
   fi
   cycle "$2" "$3"
+  ;;
+--status)
+  get_status
   ;;
 *)
   echo "Usage: $0 [--init | --start | --finish | togglefloating | --movetows <workspace_id> | --cycle <dir> <scope>]"
