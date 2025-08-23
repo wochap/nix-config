@@ -140,7 +140,8 @@ Singleton {
     stdout: StdioCollector {
       id: activeWorkspaceCollector
       onStreamFinished: {
-        root.activeWorkspace = JSON.parse(activeWorkspaceCollector.text);
+        const _activeWorkspace = JSON.parse(activeWorkspaceCollector.text);
+        root.activeWorkspace = _activeWorkspace?.monitor ? _activeWorkspace : null;
       }
     }
   }
@@ -152,7 +153,8 @@ Singleton {
     stdout: StdioCollector {
       id: activeWindowCollector
       onStreamFinished: {
-        root.activeWindow = JSON.parse(activeWindowCollector.text);
+        const _activeWindow = JSON.parse(activeWindowCollector.text);
+        root.activeWindow = _activeWindow?.address ? _activeWindow : null;
       }
     }
   }
