@@ -21,32 +21,29 @@ WrapperRectangle {
   RowLayout {
     spacing: ConfigBar.modulesSpacing
 
-    Module {
+    SystemIcon {
       Layout.fillHeight: true
 
-      paddingX: 0
-      bgColor: "transparent"
-      iconSystem: "network-wireless-signal-good"
+      icon: "network-wireless-signal-good"
+      size: Styles.font.pixelSize.hugeass
     }
 
-    Module {
+    SystemIcon {
       property string volumeIcon: Audio.getIcon()
 
       Layout.fillHeight: true
 
-      paddingX: 0
-      bgColor: "transparent"
-      iconSystem: volumeIcon
+      icon: volumeIcon
+      size: Styles.font.pixelSize.hugeass
     }
 
-    Module {
+    SystemIcon {
       property string batteryIcon: Battery.getIcon()
 
       Layout.fillHeight: true
 
-      paddingX: 0
-      bgColor: "transparent"
-      iconSystem: batteryIcon
+      icon: batteryIcon
+      size: Styles.font.pixelSize.hugeass
     }
   }
 }
