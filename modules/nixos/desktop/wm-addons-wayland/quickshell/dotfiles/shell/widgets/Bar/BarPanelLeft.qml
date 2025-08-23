@@ -15,12 +15,18 @@ RowLayout {
 
   HyprWsSpecialCount {
     Layout.fillHeight: true
+
     namespace: "scratchpads"
   }
 
   HyprWsSpecialCount {
     Layout.fillHeight: true
+
     namespace: "tmpscratchpads"
     fgColor: Theme.options.red
+  }
+
+  HyprTitle {
+    Layout.fillHeight: true
   }
 }
