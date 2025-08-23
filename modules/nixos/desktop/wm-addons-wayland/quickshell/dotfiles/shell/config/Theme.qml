@@ -12,7 +12,7 @@ Singleton {
   property bool ready: false
 
   FileView {
-    path: `${Paths.stringify(Paths.config)}/theme.json`
+    path: `${Qt.resolvedUrl(Paths.config)}/theme.json`
     watchChanges: true
     onFileChanged: reload()
     onAdapterUpdated: writeAdapter()

@@ -52,7 +52,8 @@ set_light_theme() {
   ln -sf ~/.config/presenterm/config-light.yaml ~/.config/presenterm/config.yaml
 
   # quickshell
-  ln -sf ~/.config/quickshell/theme-light.json ~/.config/quickshell/theme.json
+  rm -rf ~/.config/quickshell/theme.json
+  cp -L ~/.config/quickshell/theme-light.json ~/.config/quickshell/theme.json
 
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # Hyprland
@@ -116,7 +117,8 @@ set_dark_theme() {
   ln -sf ~/.config/presenterm/config-dark.yaml ~/.config/presenterm/config.yaml
 
   # quickshell
-  ln -sf ~/.config/quickshell/theme-dark.json ~/.config/quickshell/theme.json
+  rm -rf ~/.config/quickshell/theme.json
+  cp -L ~/.config/quickshell/theme-dark.json ~/.config/quickshell/theme.json
 
   # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
