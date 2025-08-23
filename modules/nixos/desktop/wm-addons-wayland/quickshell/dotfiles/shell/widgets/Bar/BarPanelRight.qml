@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import qs.config
+import qs.widgets.common
 import qs.widgets.Bar.config
 import qs.widgets.Bar.modules
 import qs.widgets.Bar.modules.SysTray
@@ -14,12 +15,10 @@ RowLayout {
 
   Capslock {
     Layout.fillHeight: true
-    Layout.preferredWidth: item ? item.implicitWidth : 0
   }
 
   Idle {
     Layout.fillHeight: true
-    Layout.preferredWidth: item ? item.implicitWidth : 0
   }
 
   SysTray {
@@ -30,16 +29,15 @@ RowLayout {
     Layout.fillHeight: true
   }
 
-  Module {
+  StyledText {
     id: clock
+
+    Layout.fillHeight: true
+    text: Qt.formatDateTime(clockService.date, "ddd dd MMM HH:mm")
 
     SystemClock {
       id: clockService
       precision: SystemClock.Minutes
     }
-
-    Layout.fillHeight: true
-    bgColor: "transparent"
-    label: Qt.formatDateTime(clockService.date, "ddd dd MMM HH:mm")
   }
 }

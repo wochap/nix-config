@@ -19,7 +19,7 @@ WrapperRectangle {
   radius: 4
 
   RowLayout {
-    spacing: ConfigBar.modulesSpacing
+    spacing: ConfigBar.modulesSpacing / 2
 
     MaterialIcon {
       property string bluetoothIcon: Bluetooth.getIcon()

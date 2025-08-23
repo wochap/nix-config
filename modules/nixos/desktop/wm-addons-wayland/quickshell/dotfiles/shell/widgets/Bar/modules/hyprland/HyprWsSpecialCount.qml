@@ -13,8 +13,8 @@ Loader {
   property string namespace: ""
   property int count: 0
 
-  Layout.preferredWidth: item ? item.implicitWidth : 0
   active: root.count > 0
+  visible: root.count > 0
   sourceComponent: Component {
     Module {
       iconSize: Styles.font.pixelSize.normal

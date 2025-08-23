@@ -11,6 +11,7 @@ Loader {
   property bool isIdle: false
 
   active: isIdle
+  visible: isIdle
   sourceComponent: Component {
     MaterialIcon {
       icon: "emoji_food_beverage"

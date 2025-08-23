@@ -12,8 +12,8 @@ Singleton {
   property real barHeight: 40
   property real shadowHeight: barHeight
   property real barPaddingY: 4
-  property real barPaddingX: barPaddingY
-  property real modulesSpacing: barPaddingY
+  property real barPaddingX: 8
+  property real modulesSpacing: 8
   property real modulesPaddingX: Styles.font.pixelSize.normal * 0.4
   property bool isBlurEnabled: Global.isBlurEnabled
   property bool isBarAtBottom: false

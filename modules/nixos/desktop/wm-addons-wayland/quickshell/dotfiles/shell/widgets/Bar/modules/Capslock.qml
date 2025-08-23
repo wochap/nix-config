@@ -12,6 +12,7 @@ Loader {
   property bool isLock: false
 
   active: isLock
+  visible: isLock
   sourceComponent: Component {
     MaterialIcon {
       icon: "keyboard_capslock_badge"
