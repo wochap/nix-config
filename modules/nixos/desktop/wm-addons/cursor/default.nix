@@ -12,7 +12,7 @@ let
       }";
   };
   catppuccin-cursor-light-theme = mkThemeCursor themeColorsLight "light";
-  catppuccin-cursor-dark-theme = mkThemeCursor themeColorsLight "dark";
+  catppuccin-cursor-dark-theme = mkThemeCursor themeColorsDark "dark";
   catppuccin-cursor-theme = if preferDark then
     catppuccin-cursor-dark-theme
   else
