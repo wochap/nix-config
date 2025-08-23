@@ -21,6 +21,7 @@ Singleton {
   property var monitors: []
   property var monitorsById: ({})
   property var layers: ({})
+  property string submap: ""
 
   function updateClientList() {
     getClients.running = true;
@@ -52,6 +53,9 @@ Singleton {
 
     function onRawEvent(event) {
       root.updateAll();
+      if (event.name === "submap") {
+        root.submap = event.data;
+      }
     }
   }
 

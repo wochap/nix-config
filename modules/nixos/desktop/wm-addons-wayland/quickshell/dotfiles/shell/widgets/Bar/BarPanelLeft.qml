@@ -26,6 +26,10 @@ RowLayout {
     fgColor: Theme.options.red
   }
 
+  HyprSubmap {
+    Layout.fillHeight: true
+  }
+
   HyprTitle {
     Layout.fillHeight: true
   }
