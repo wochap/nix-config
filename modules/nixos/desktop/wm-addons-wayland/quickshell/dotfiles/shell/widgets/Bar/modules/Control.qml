@@ -38,6 +38,8 @@ WrapperRectangle {
 
       icon: networkIcon
       size: Styles.font.pixelSize.hugeass
+      enableColoriser: true
+      color: Theme.options.text
     }
 
     SystemIcon {
@@ -47,6 +49,8 @@ WrapperRectangle {
 
       icon: volumeIcon
       size: Styles.font.pixelSize.hugeass
+      enableColoriser: true
+      color: Theme.options.text
     }
 
     SystemIcon {
