@@ -17,14 +17,13 @@ RowLayout {
     Layout.preferredWidth: item ? item.implicitWidth : 0
   }
 
-  SysTray {
+  Idle {
     Layout.fillHeight: true
+    Layout.preferredWidth: item ? item.implicitWidth : 0
   }
 
-  Module {
-    paddingX: 0
-    bgColor: "transparent"
-    iconSystem: "user-idle"
+  SysTray {
+    Layout.fillHeight: true
   }
 
   Control {

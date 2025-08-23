@@ -29,10 +29,10 @@ if [ "$BACKGROUND" = "1" ]; then
 EOF
 fi
 
-# disable matcha idle inhibidor
-matcha_status=$(matcha-toggle-mode --read | jq -r '.class')
-if [[ "$matcha_status" == "enabled" ]]; then
-  matcha-toggle-mode --toggle
+# disable idle inhibidor
+shell_idle_status=$(shell-idle --get-status)
+if [[ "$shell_idle_status" == "true" ]]; then
+  shell-idle --toggle
 fi
 
 exec hyprlock -c "$tmpfile" "$@"

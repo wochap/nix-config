@@ -331,7 +331,7 @@ static const Key keys[] = {
   { MODKEY, Key_b, spawn, SHCMD("toggle-bars") },
 
   // Toggle idle inhibitor
-  { MODKEY, Key_m, spawn, SHCMD("matcha-toggle-mode --toggle") },
+  { MODKEY, Key_m, spawn, SHCMD("shell-idle --toggle") },
 
   // Toggle offlinemsmtp
   { MODKEY, Key_o, spawn, SHCMD("offlinemsmtp-toggle-mode --toggle") },

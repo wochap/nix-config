@@ -20,8 +20,6 @@
     # third party nixpkgs|overlays|modules
     chaotic.url = "github:chaotic-cx/nyx?rev=491e18a40a19d7c9d63d92bcbfb6d3f316631b00"; # nyxpkgs-unstable (17 may 2025)
     chaotic.inputs.nixpkgs.follows = "nixpkgs-unstable";
-    matcha.url = "git+https://codeberg.org/QuincePie/matcha";
-    matcha.inputs.nixpkgs.follows = "nixpkgs";
     nix-gaming.url = "github:fufexan/nix-gaming?rev=bafc474d9d2ac0f97411b48679b00811fff39cfa"; # master (17 may 2024)
     nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=52b72b12c456a5c0c87c40941ef79335e8d61104"; # master (03 sep 2024)

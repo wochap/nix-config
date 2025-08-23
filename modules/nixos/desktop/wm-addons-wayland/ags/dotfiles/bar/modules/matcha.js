@@ -1,9 +1,9 @@
-const Matcha = Variable(
+const Idle = Variable(
   { text: "", class: "" },
   {
     poll: [
       1000,
-      ["bash", "-c", "matcha-toggle-mode --read"],
+      ["bash", "-c", "shell-idle --get-status"],
       (out) => JSON.parse(out),
     ],
   },
@@ -11,12 +11,15 @@ const Matcha = Variable(
 
 export const matcha = () =>
   Widget.Button({
-    class_names: Matcha.bind().as((value) => ["matcha", value.class]),
-    visible: Matcha.bind().as((value) => value.class.includes("enabled")),
+    class_names: Idle.bind().as((value) => [
+      "matcha",
+      value ? "enabled" : "disabled",
+    ]),
+    visible: Idle.bind().as((value) => value),
     on_clicked: () => {
-      Utils.execAsync(["bash", "-c", "matcha-toggle-mode --toggle"]);
+      Utils.execAsync(["bash", "-c", "shell-idle --toggle"]);
     },
     child: Widget.Label({
-      label: Matcha.bind().as((value) => value.text),
+      label: "",
     }),
   });

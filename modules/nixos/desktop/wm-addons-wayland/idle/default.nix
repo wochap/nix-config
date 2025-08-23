@@ -3,9 +3,6 @@
 let
   cfg = config._custom.desktop.idle;
   inherit (config._custom.globals) userName configDirectory;
-  matcha = inputs.matcha.packages.${system}.default;
-  matcha-toggle-mode = pkgs.writeScriptBin "matcha-toggle-mode"
-    (builtins.readFile ./scripts/matcha-toggle-mode.sh);
   backlight-restore = pkgs.writeScriptBin "backlight-restore" # sh
     (builtins.readFile ./scripts/backlight-restore.sh);
   close-overlays = pkgs.writeScriptBin "close-overlays" # sh
@@ -18,8 +15,7 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home.packages = with pkgs; [
-        matcha # control idle inhibit
-        matcha-toggle-mode
+        wlinhibit # control idle inhibit
         sway-audio-idle-inhibit # complement to swayidle
 
         backlight-restore
@@ -52,22 +48,6 @@ in {
           Service = {
             ExecStart =
               "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
-            Type = "simple";
-          };
-        };
-
-        matcha = lib._custom.mkWaylandService {
-          Unit = {
-            Description = "An Idle Inhibitor for Wayland";
-            Documentation = "https://codeberg.org/QuincePie/matcha";
-            Requires = [ "hypridle.service" ];
-            Wants = [ "hypridle.service" ];
-            PartOf = [ ];
-          };
-          Service = {
-            ExecStartPre =
-              "${pkgs.coreutils}/bin/rm -f /home/${userName}/tmp/matcha";
-            ExecStart = "${matcha}/bin/matcha --daemon --off";
             Type = "simple";
           };
         };
