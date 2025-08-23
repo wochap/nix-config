@@ -13,6 +13,10 @@ RowLayout {
 
   spacing: ConfigBar.modulesSpacing
 
+  HyprMonocle {
+    Layout.fillHeight: true
+  }
+
   HyprWsSpecialCount {
     Layout.fillHeight: true
 

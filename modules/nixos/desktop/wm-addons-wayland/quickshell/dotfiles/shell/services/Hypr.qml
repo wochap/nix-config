@@ -9,6 +9,7 @@ import Quickshell.Hyprland
 Singleton {
   id: root
 
+  property var monocleState: ({})
   property var activeWindow: null
   property var clients: []
   property var clientsByWorkspaceId: ({})
@@ -24,6 +25,9 @@ Singleton {
   property var layers: ({})
   property string submap: ""
 
+  function updateMonocleState() {
+    getMonocleState.running = true;
+  }
   function updateClientList() {
     getClients.running = true;
     getActiveWindow.running = true;
@@ -39,6 +43,7 @@ Singleton {
     getActiveWorkspace.running = true;
   }
   function updateAll() {
+    updateMonocleState();
     updateClientList();
     updateMonitors();
     updateLayers();
@@ -155,6 +160,18 @@ Singleton {
       onStreamFinished: {
         const _activeWindow = JSON.parse(activeWindowCollector.text);
         root.activeWindow = _activeWindow?.address ? _activeWindow : null;
+      }
+    }
+  }
+
+  Process {
+    id: getMonocleState
+
+    command: ["hyprland-monocle", "--status"]
+    stdout: StdioCollector {
+      id: monocleStateCollector
+      onStreamFinished: {
+        root.monocleState = JSON.parse(monocleStateCollector.text);
       }
     }
   }
