@@ -18,6 +18,8 @@ let
     (builtins.readFile ./scripts/shell-bluetooth.sh);
   shell-idle = pkgs.writeScriptBin "shell-idle"
     (builtins.readFile ./scripts/shell-idle.sh);
+  shell-powerprofile = pkgs.writeScriptBin "shell-powerprofile"
+    (builtins.readFile ./scripts/shell-powerprofile.sh);
   mkThemeQuickshell = themeColors:
     pkgs.writeText "theme.json" (builtins.toJSON themeColors);
   catppuccin-quickshell-light-theme-path = mkThemeQuickshell themeColorsLight;
@@ -54,6 +56,7 @@ in {
         shell-network
         shell-bluetooth
         shell-idle
+        shell-powerprofile
       ];
 
       xdg.configFile = {
