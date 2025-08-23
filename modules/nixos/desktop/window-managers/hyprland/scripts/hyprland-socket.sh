@@ -13,6 +13,7 @@ function handle() {
   # use different active border colors for when
   # there's only 1 tiling window or not
   if [[ "$event" == "activewindow" ]]; then
+    IFS=',' read -r class title <<<"$payload"
     ws=$(hyprctl activeworkspace -j | jq -cr '.id')
     monitor=$(hyprctl activeworkspace -j | jq -r .monitorID)
     tiling_windows_count=$(hyprctl -j clients | jq "[.[] | select(.workspace.id == $ws and .floating == false and .monitor == $monitor and .hidden == false)] | length")
