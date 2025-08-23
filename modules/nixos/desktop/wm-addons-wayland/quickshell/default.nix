@@ -11,6 +11,8 @@ let
   shell-hypr-ws-special-count =
     pkgs.writeScriptBin "shell-hypr-ws-special-count"
     (builtins.readFile ./scripts/shell-hypr-ws-special-count.sh);
+  shell-network = pkgs.writeScriptBin "shell-network"
+    (builtins.readFile ./scripts/shell-network.sh);
   mkThemeQuickshell = themeColors:
     pkgs.writeText "theme.json" (builtins.toJSON themeColors);
   catppuccin-quickshell-light-theme-path = mkThemeQuickshell themeColorsLight;
@@ -40,7 +42,11 @@ in {
     fonts.packages = with pkgs; [ nixpkgs-unstable.material-symbols ];
 
     _custom.hm = {
-      home.packages = with pkgs; [ shell-capslock shell-hypr-ws-special-count ];
+      home.packages = with pkgs; [
+        shell-capslock
+        shell-hypr-ws-special-count
+        shell-network
+      ];
 
       xdg.configFile = {
         "quickshell/shell".source =

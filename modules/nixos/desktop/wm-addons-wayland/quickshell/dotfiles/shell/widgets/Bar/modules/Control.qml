@@ -22,9 +22,11 @@ WrapperRectangle {
     spacing: ConfigBar.modulesSpacing
 
     SystemIcon {
+      property string networkIcon: Network.getIcon()
+
       Layout.fillHeight: true
 
-      icon: "network-wireless-signal-good"
+      icon: networkIcon
       size: Styles.font.pixelSize.hugeass
     }
 
