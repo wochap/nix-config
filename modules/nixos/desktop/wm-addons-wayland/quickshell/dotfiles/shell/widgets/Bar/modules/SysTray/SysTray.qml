@@ -9,7 +9,7 @@ import qs.widgets.Bar.config
 RowLayout {
   id: gridLayout
 
-  spacing: ConfigBar.modulesSpacing
+  spacing: ConfigBar.modulesSpacing * 2
 
   Repeater {
     model: SystemTray.items

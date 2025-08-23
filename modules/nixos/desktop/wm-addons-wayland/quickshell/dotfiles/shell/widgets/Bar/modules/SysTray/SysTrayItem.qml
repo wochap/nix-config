@@ -14,12 +14,11 @@ WrapperMouseArea {
   required property SystemTrayItem modelData
   required property SystemTrayItem item
   property var window: QsWindow.window
-  property int size: Styles.font.pixelSize.large
+  property int size: Styles.font.pixelSize.small
 
   child: trayIcon
   acceptedButtons: Qt.LeftButton | Qt.RightButton
-  leftMargin: size * 0.2
-  rightMargin: size * 0.2
+  margin: 0
   onClicked: event => {
     switch (event.button) {
     case Qt.LeftButton:
