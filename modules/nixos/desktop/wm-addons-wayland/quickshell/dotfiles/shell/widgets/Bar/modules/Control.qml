@@ -43,7 +43,18 @@ WrapperRectangle {
     }
 
     SystemIcon {
-      property string volumeIcon: Audio.getIcon()
+      property string volumeIcon: Audio.getOutputIcon()
+
+      Layout.fillHeight: true
+
+      icon: volumeIcon
+      size: Styles.font.pixelSize.hugeass
+      enableColoriser: true
+      color: Theme.options.text
+    }
+
+    SystemIcon {
+      property string volumeIcon: Audio.getInputIcon()
 
       Layout.fillHeight: true
 
