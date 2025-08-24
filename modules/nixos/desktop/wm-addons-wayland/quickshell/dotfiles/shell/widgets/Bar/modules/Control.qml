@@ -62,6 +62,16 @@ WrapperRectangle {
       color: Theme.options.text
     }
 
+    MaterialIcon {
+      Layout.fillHeight: true
+      Layout.leftMargin: -1
+      Layout.rightMargin: 3
+
+      icon: PowerProfile.icon
+      size: Styles.font.pixelSize.huge
+      weight: Font.Light
+    }
+
     SystemIcon {
       property string batteryIcon: Battery.getIcon()
 
