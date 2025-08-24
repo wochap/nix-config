@@ -20,8 +20,9 @@ RowLayout {
   RowLayout {
     Layout.fillHeight: true
 
-    Layout.leftMargin: -ConfigBar.modulesSpacing / 3
-    Layout.rightMargin: -ConfigBar.modulesSpacing / 3
+    // HACK: MaterialIcon offset
+    Layout.leftMargin: -3
+    Layout.rightMargin: 0
     spacing: 0
     visible: capslock.isVisible || timewarrior.isVisible || idle.isVisible
 
@@ -52,6 +53,7 @@ RowLayout {
     id: clock
 
     Layout.fillHeight: true
+
     text: Qt.formatDateTime(clockService.date, "ddd dd MMM HH:mm")
 
     SystemClock {

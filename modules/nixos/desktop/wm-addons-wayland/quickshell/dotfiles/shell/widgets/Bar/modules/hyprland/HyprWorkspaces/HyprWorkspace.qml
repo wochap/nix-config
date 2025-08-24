@@ -11,7 +11,7 @@ import qs.widgets.Bar.config
 Button {
   id: root
 
-  required property var taskBarItems
+  required property var clients
   required property int index
   required property var workspace
   required property HyprlandMonitor monitor
@@ -21,13 +21,13 @@ Button {
 
   onClicked: Hyprland.dispatch(`workspace ${workspaceId}`)
   verticalPadding: 0
-  horizontalPadding: Styles.font.pixelSize.normal * (root.focused && taskBarItems.length > 0 ? 0.2 : 0.4)
+  horizontalPadding: root.focused && clients.length > 0 ? 3 : 6
   background: Rectangle {
     color: focused ? Theme.options.surface0 : "transparent"
-    radius: 4
+    radius: ConfigBar.modulesRadius
   }
   contentItem: Loader {
-    sourceComponent: root.focused && taskBarItems.length > 0 ? taskbar : number
+    sourceComponent: root.focused && clients.length > 0 ? taskbar : number
   }
 
   Component {
@@ -46,10 +46,10 @@ Button {
     id: taskbar
 
     RowLayout {
-      spacing: ConfigBar.modulesSpacing / 4
+      spacing: 1.5
 
       Repeater {
-        model: root.taskBarItems
+        model: root.clients
 
         delegate: SystemIcon {
           Layout.fillHeight: true

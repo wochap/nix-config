@@ -9,13 +9,14 @@ import qs.widgets.Bar.config
 RowLayout {
   id: gridLayout
 
-  spacing: ConfigBar.modulesSpacing * 2
+  spacing: 6
 
   Repeater {
     model: SystemTray.items
 
     SysTrayItem {
       item: modelData
+      size: Styles.font.pixelSize.small
     }
   }
 }

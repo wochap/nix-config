@@ -1,7 +1,5 @@
-import Quickshell
 import Quickshell.Widgets
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import qs.config
@@ -13,13 +11,13 @@ import qs.widgets.Bar.modules
 WrapperRectangle {
   id: root
 
-  leftMargin: ConfigBar.modulesPaddingX / 2
-  rightMargin: ConfigBar.modulesPaddingX / 2
+  leftMargin: 2
+  rightMargin: root.leftMargin + 1
   color: Theme.options.surface0
-  radius: 4
+  radius: ConfigBar.modulesRadius
 
   RowLayout {
-    spacing: ConfigBar.modulesSpacing / 2
+    spacing: 0
 
     MaterialIcon {
       property string bluetoothIcon: Bluetooth.getIcon()

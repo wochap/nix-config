@@ -36,5 +36,6 @@ RowLayout {
 
   HyprTitle {
     Layout.fillHeight: true
+    Layout.leftMargin: -1
   }
 }

@@ -50,7 +50,7 @@ RowLayout {
       workspace: modelData
       monitor: root.monitor
       occupied: root.workspaceOccupied?.[index] ?? true
-      taskBarItems: root.clientsByWorkspaceId?.[index + 1] ?? []
+      clients: root.clientsByWorkspaceId?.[index + 1] ?? []
     }
   }
 }

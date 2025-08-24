@@ -18,12 +18,12 @@ WrapperRectangle {
   property string materialIcon: ""
   property int iconSize
   property string iconSystem: ""
-  property int spacing: 8
+  property int spacing: icon.length > 0 ? ConfigBar.modulesSpacing / 2 : ConfigBar.modulesSpacing / 4
 
   leftMargin: paddingX
   rightMargin: paddingX
   color: bgColor
-  radius: 4
+  radius: ConfigBar.modulesRadius
 
   RowLayout {
     spacing: root.spacing
@@ -49,8 +49,6 @@ WrapperRectangle {
     }
 
     StyledText {
-      id: labelText
-
       text: root.label
       visible: root.label.length > 0
       color: root.fgColor

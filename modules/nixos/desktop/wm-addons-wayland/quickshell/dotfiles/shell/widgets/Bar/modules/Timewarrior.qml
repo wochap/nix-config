@@ -19,8 +19,7 @@ Loader {
       materialIcon: "punch_clock"
       iconSize: Styles.font.pixelSize.huge
       label: value
-      spacing: 4
-      paddingX: 2
+      paddingX: 0
       bgColor: "transparent"
       fgColor: Theme.options.green
     }

@@ -21,7 +21,7 @@ WrapperRectangle {
   RowLayout {
     anchors.fill: parent
 
-    spacing: ConfigBar.modulesSpacing / 2
+    spacing: (ConfigBar.modulesSpacing / 2) - 1
 
     SystemIcon {
       Layout.fillHeight: true
