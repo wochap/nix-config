@@ -53,6 +53,20 @@ restore_hyprland_settings() {
   echo "Settings restored and backup file removed."
 }
 
+listen() {
+  local profile=$(powerprofilesctl get)
+  echo "$profile"
+  dbus-monitor --system "type='signal',interface='org.freedesktop.DBus.Properties',path='/net/hadess/PowerProfiles',member='PropertiesChanged',arg0='net.hadess.PowerProfiles'" 2>/dev/null |
+    while read -r line; do
+      # The line check is a simple way to make sure we react to the right signal block.
+      # The output of dbus-monitor includes the property name "ActiveProfile".
+      if [[ "$line" == *"ActiveProfile"* ]]; then
+        local new_profile=$(powerprofilesctl get)
+        echo "$new_profile"
+      fi
+    done
+}
+
 battery_saver() {
   echo "Switching to Battery-Saver Mode..."
 
@@ -173,15 +187,18 @@ performance() {
 }
 
 case "$MODE" in
-battery | battery-saver)
+--listen)
+  listen
+  ;;
+--battery | --battery-saver)
   battery_saver
   ;;
-performance)
+--performance)
   performance
   ;;
 *)
   echo "Error: Invalid argument '$MODE'."
-  echo "Usage: $0 [performance|battery-saver]"
+  echo "Usage: $0 [--listen|performance|battery-saver]"
   exit 1
   ;;
 esac
