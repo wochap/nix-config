@@ -6,15 +6,28 @@
 import Quickshell
 
 import qs.config
+import qs.widgets
 import qs.widgets.Bar
 
 ShellRoot {
   id: root
 
   property bool renderBar: true
+  property bool renderBacklight: true
+  property bool renderOutput: true
 
   LazyLoader {
-    active: renderBar && Theme.ready
+    active: root.renderBar && Theme.ready
     component: Bar {}
+  }
+
+  LazyLoader {
+    active: root.renderBacklight && Theme.ready
+    component: Backlight {}
+  }
+
+  LazyLoader {
+    active: root.renderOutput && Theme.ready
+    component: Output {}
   }
 }

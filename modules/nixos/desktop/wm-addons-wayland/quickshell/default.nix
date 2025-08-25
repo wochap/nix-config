@@ -9,6 +9,8 @@ let
   quickshell-final = inputs.quickshell.packages.${pkgs.system}.default;
   shell-capslock = pkgs.writeScriptBin "shell-capslock"
     (builtins.readFile ./scripts/shell-capslock.sh);
+  shell-backlight = pkgs.writeScriptBin "shell-backlight"
+    (builtins.readFile ./scripts/shell-backlight.sh);
   shell-hypr-ws-special-count =
     pkgs.writeScriptBin "shell-hypr-ws-special-count"
     (builtins.readFile ./scripts/shell-hypr-ws-special-count.sh);
@@ -57,6 +59,7 @@ in {
         shell-bluetooth
         shell-idle
         shell-powerprofile
+        shell-backlight
       ];
 
       xdg.configFile = {
