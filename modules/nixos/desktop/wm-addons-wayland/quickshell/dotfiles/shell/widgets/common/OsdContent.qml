@@ -18,19 +18,30 @@ PanelWindow {
 
   WlrLayershell.namespace: root.namespace
   WlrLayershell.layer: WlrLayer.Overlay
-  anchors.left: true
-  margins.left: 8
+  // TODO: add screen
+  anchors {
+    top: true
+    left: true
+    bottom: true
+    right: true
+  }
   exclusionMode: ExclusionMode.Ignore
   exclusiveZone: 0
-  implicitWidth: 40
-  implicitHeight: root.implicitWidth * 4
   color: "transparent"
   mask: Region {}
+
+  StyledRectangularShadow {
+    target: osd
+  }
 
   Rectangle {
     id: osd
 
-    anchors.fill: parent
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: 8
+    implicitWidth: 40
+    implicitHeight: osd.implicitWidth * 4
     radius: width / 4
     color: Theme.addAlpha(Theme.options.backgroundOverlay, Global.isBlurEnabled ? 0.65 : 1)
     border {
