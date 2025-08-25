@@ -11,6 +11,9 @@ export const osd = (monitor) =>
     anchor: ["top", "bottom", "right", "left"],
     child: Widget.Overlay({
       child: Widget.Box(),
-      overlays: [capslockOsd(), progressOsd()],
+      overlays: [
+        capslockOsd(),
+        // progressOsd()
+      ],
     }),
   });
