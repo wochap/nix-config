@@ -4,11 +4,10 @@
 
 if [ "$#" -ne 1 ]; then
   echo "Error: Incorrect number of arguments."
-  echo "Usage: $0 [performance|battery-saver]"
+  echo "Usage: $0 [--listen|--performance|--balanced|--battery]"
   exit 1
 fi
 
-MODE=$1
 CHOICES_BACKUP_FILE="/tmp/shell_powerprofile_choices"
 THEME_BACKUP_FILE="/tmp/shell_powerprofile_theme"
 HYPR_BACKUP_FILE="/tmp/shell_powerprofile_hyprland_settings"
@@ -70,6 +69,7 @@ listen() {
 battery_saver() {
   echo "Switching to Battery-Saver Mode..."
 
+  local PROFILE="$1"
   local options=("powerprofile" "systemd" "theme" "wifi" "bluetooth" "mic" "hyprland")
   local selected_options
   selected_options=$(
@@ -87,7 +87,7 @@ battery_saver() {
   while IFS= read -r choice; do
     case "$choice" in
     powerprofile)
-      powerprofilesctl set power-saver
+      powerprofilesctl set "$PROFILE"
       ;;
     hyprland)
       save_hyprland_settings
@@ -134,6 +134,7 @@ performance() {
 
   if [ ! -f "$CHOICES_BACKUP_FILE" ]; then
     echo "No saved state from battery-saver mode found. No specific components to re-enable."
+    powerprofilesctl set performance
   else
     echo "Restoring components based on saved state..."
     while IFS= read -r choice; do
@@ -186,19 +187,22 @@ performance() {
   echo "Performance Mode activated."
 }
 
-case "$MODE" in
+case "$1" in
 --listen)
   listen
   ;;
---battery | --battery-saver)
-  battery_saver
+--battery)
+  battery_saver "battery-saver"
+  ;;
+--balanced)
+  battery_saver "balanced"
   ;;
 --performance)
   performance
   ;;
 *)
   echo "Error: Invalid argument '$MODE'."
-  echo "Usage: $0 [--listen|performance|battery-saver]"
+  echo "Usage: $0 [--listen|--performance|--balanced|--battery]"
   exit 1
   ;;
 esac
