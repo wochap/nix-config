@@ -1,0 +1,15 @@
+import QtQuick
+
+import qs.services
+import qs.widgets.common
+
+Item {
+  OsdStatus {
+    service: Audio
+    serviceSignalName: "isOutputMutedChanged"
+    serviceFlagKey: "isOutputMuted"
+    namespace: "quickshell:output-mute-osd"
+    iconOff: "volume_up"
+    iconOn: "volume_off"
+  }
+}

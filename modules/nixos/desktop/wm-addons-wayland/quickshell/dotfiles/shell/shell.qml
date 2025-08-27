@@ -4,6 +4,7 @@
 //@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
 
 import Quickshell
+import QtQuick
 
 import qs.config
 import qs.widgets
@@ -15,6 +16,9 @@ ShellRoot {
   property bool renderBar: true
   property bool renderBacklight: true
   property bool renderOutput: true
+  property bool renderCapslock: true
+  property bool renderOutputMuted: true
+  property bool renderInputMuted: true
 
   LazyLoader {
     active: root.renderBar && Theme.ready
@@ -29,5 +33,20 @@ ShellRoot {
   LazyLoader {
     active: root.renderOutput && Theme.ready
     component: Output {}
+  }
+
+  LazyLoader {
+    active: root.renderCapslock && Theme.ready
+    component: Capslock {}
+  }
+
+  LazyLoader {
+    active: root.renderOutputMuted && Theme.ready
+    component: OutputMuted {}
+  }
+
+  LazyLoader {
+    active: root.renderInputMuted && Theme.ready
+    component: InputMuted {}
   }
 }
