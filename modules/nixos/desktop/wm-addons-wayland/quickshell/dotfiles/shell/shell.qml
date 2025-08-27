@@ -4,6 +4,7 @@
 //@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
 
 import Quickshell
+import Quickshell.Io
 import QtQuick
 
 import qs.config
@@ -48,5 +49,13 @@ ShellRoot {
   LazyLoader {
     active: root.renderInputMuted && Theme.ready
     component: InputMuted {}
+  }
+
+  IpcHandler {
+    target: "bar"
+
+    function toggle() {
+      root.renderBar = !root.renderBar
+    }
   }
 }
