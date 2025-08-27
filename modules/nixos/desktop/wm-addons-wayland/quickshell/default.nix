@@ -81,6 +81,9 @@ in {
           catppuccin-quickshell-dark-theme-path;
       };
 
+      # Install custom icon theme
+      xdg.dataFile."icons/Reversal-Extra".source = "${inputs.reversal-extra}";
+
       systemd.user.services.shell = lib.mkIf cfg.systemdEnable
         (lib._custom.mkWaylandService {
           Unit = {
