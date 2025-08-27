@@ -1,6 +1,8 @@
 import QtQuick
 import Quickshell
 
+import qs.services
+
 Scope {
   id: root
 
@@ -18,8 +20,14 @@ Scope {
     if (!isReady) {
       return;
     }
+    OsdManager.requestShow(root);
     root.isOpen = true;
     timer.restart();
+  }
+
+  function forceClose() {
+    timer.stop();
+    root.isOpen = false;
   }
 
   Component.onCompleted: {
