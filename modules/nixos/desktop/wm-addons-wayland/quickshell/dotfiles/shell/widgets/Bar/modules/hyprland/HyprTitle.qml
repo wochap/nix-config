@@ -25,9 +25,10 @@ WrapperRectangle {
 
     SystemIcon {
       Layout.fillHeight: true
+      Layout.leftMargin: -3
 
       icon: Utils.mapAppId(Hypr.activeWindow?.class ?? "")
-      size: ConfigBar.clientIcon
+      size: ConfigBar.barHeight - ConfigBar.barPaddingY
     }
 
     ColumnLayout {

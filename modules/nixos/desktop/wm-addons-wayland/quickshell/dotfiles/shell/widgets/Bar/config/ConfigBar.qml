@@ -18,5 +18,4 @@ Singleton {
   property real modulesPaddingX: 6
   property bool isBlurEnabled: Global.isBlurEnabled
   property bool isBarAtBottom: false
-  property int clientIcon: 28
 }
