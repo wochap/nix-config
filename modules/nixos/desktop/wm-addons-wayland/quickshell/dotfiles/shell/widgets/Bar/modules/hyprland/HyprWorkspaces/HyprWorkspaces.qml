@@ -47,7 +47,7 @@ RowLayout {
     delegate: HyprWorkspace {
       Layout.fillHeight: true
 
-      workspace: modelData
+      workspace: Hypr.workspacesById[index + 1]
       monitor: root.monitor
       occupied: root.workspaceOccupied?.[index] ?? true
       clients: root.clientsByWorkspaceId?.[index + 1] ?? []
