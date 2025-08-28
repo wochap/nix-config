@@ -7,7 +7,9 @@ Singleton {
   id: root
 
   readonly property url config: `${StandardPaths.standardLocations(StandardPaths.GenericConfigLocation)[0]}`
+  readonly property url cache: `${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}`
   property string shellConfig: `${config}/quickshell`
+  property string notificationsCache: `${cache}/notifications.json`
 
   function stringify(path: url): string {
     let str = path.toString();

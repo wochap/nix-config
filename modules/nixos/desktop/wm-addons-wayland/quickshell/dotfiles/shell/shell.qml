@@ -7,9 +7,11 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 
+import qs.services.SNotifications
 import qs.config
 import qs.widgets
 import qs.widgets.Bar
+import qs.widgets.Notifications
 
 ShellRoot {
   id: root
@@ -20,6 +22,7 @@ ShellRoot {
   property bool renderCapslock: true
   property bool renderOutputMuted: true
   property bool renderInputMuted: true
+  property bool renderNotifications: false
 
   LazyLoader {
     active: root.renderBar && Theme.ready
@@ -51,11 +54,16 @@ ShellRoot {
     component: InputMuted {}
   }
 
+  LazyLoader {
+    active: root.renderNotifications && Theme.ready && SNotifications.isReady
+    component: Notifications {}
+  }
+
   IpcHandler {
     target: "bar"
 
     function toggle() {
-      root.renderBar = !root.renderBar
+      root.renderBar = !root.renderBar;
     }
   }
 }
