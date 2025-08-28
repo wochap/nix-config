@@ -37,7 +37,7 @@ Singleton {
   }
 
   FileView {
-    path: `${Qt.resolvedUrl(Paths.config)}/theme.json`
+    path: `${Qt.resolvedUrl(Paths.shellConfig)}/theme.json`
     watchChanges: true
     onFileChanged: reload()
     onAdapterUpdated: writeAdapter()

@@ -6,7 +6,8 @@ import Qt.labs.platform
 Singleton {
   id: root
 
-  readonly property url config: `${StandardPaths.standardLocations(StandardPaths.GenericConfigLocation)[0]}/quickshell`
+  readonly property url config: `${StandardPaths.standardLocations(StandardPaths.GenericConfigLocation)[0]}`
+  property string shellConfig: `${config}/quickshell`
 
   function stringify(path: url): string {
     let str = path.toString();
