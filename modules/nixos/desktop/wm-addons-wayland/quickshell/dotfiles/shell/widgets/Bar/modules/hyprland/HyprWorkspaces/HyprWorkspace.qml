@@ -41,15 +41,6 @@ Button {
     ColumnLayout {
       spacing: -(Styles.font.pixelSize.small / 2)
 
-      StyledText {
-        id: styledText
-
-        Layout.alignment: Qt.AlignHCenter
-        color: focused && occupied ? Theme.options.primary : (occupied ? Theme.options.text : Theme.options.textDimmed)
-        text: workspaceId
-        font.pixelSize: root.hasLastClient ? Styles?.font.pixelSize.smaller : Styles?.font.pixelSize.normal
-      }
-
       SystemIcon {
         Layout.alignment: Qt.AlignHCenter
         visible: root.hasLastClient
@@ -62,6 +53,15 @@ Button {
           shadowBlur: 0.25
           shadowColor: Theme.options.primary
         }
+      }
+
+      StyledText {
+        id: styledText
+
+        Layout.alignment: Qt.AlignHCenter
+        color: focused && occupied ? Theme.options.primary : (occupied ? Theme.options.text : Theme.options.textDimmed)
+        text: workspaceId
+        font.pixelSize: root.hasLastClient ? Styles?.font.pixelSize.smaller : Styles?.font.pixelSize.normal
       }
     }
   }
