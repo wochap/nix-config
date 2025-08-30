@@ -32,6 +32,10 @@ in {
   options._custom.desktop.hyprland = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
+    uwsmSessionVariables = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.nullOr lib.types.str);
+      default = { };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -42,12 +46,6 @@ in {
     _custom.desktop.uwsm.waylandCompositors = {
       hyprland = {
         prettyName = "hyprland";
-        comment = "Hyprland compositor managed by UWSM";
-        binPath = "/run/current-system/sw/bin/Hyprland";
-        xdgCurrentDesktop = "Hyprland";
-      };
-      hyprland-dgpu = {
-        prettyName = "hyprland-dgpu";
         comment = "Hyprland compositor managed by UWSM";
         binPath = "/run/current-system/sw/bin/Hyprland";
         xdgCurrentDesktop = "Hyprland";
@@ -86,17 +84,7 @@ in {
         nixpkgs-unstable.hyprshade
       ];
 
-      xdg.configFile = let
-        # TODO: convert to options
-        common-env-hyprland = ''
-          # toolkit-specific scale
-          export GDK_SCALE=2
-          # export QT_AUTO_SCREEN_SCALE_FACTOR=0
-          # export QT_ENABLE_HIGHDPI_SCALING=0
-          # export QT_SCALE_FACTOR=2
-          # export QT_FONT_DPI=96
-        '';
-      in {
+      xdg.configFile = {
         "scripts/hyprland".source =
           lib._custom.relativeSymlink configDirectory ./scripts/automation;
 
@@ -121,7 +109,8 @@ in {
         "hypr/hyprland/binds-main.conf".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/binds-main.conf;
         "hypr/hyprland/keywords-main.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/keywords-main.conf;
+          relativeSymlink configDirectory
+          ./dotfiles/hyprland/keywords-main.conf;
         "hypr/hyprland/keywords.conf".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/keywords.conf;
         "hypr/hyprland/rules.conf".source =
@@ -147,18 +136,16 @@ in {
           ./dotfiles/libinput-gestures.conf;
 
         "uwsm/env-hyprland".text = ''
-          ${common-env-hyprland}
+          # toolkit-specific scale
+          export GDK_SCALE=2
+          # export QT_AUTO_SCREEN_SCALE_FACTOR=0
+          # export QT_ENABLE_HIGHDPI_SCALING=0
+          # export QT_SCALE_FACTOR=2
+          # export QT_FONT_DPI=96
 
-          export AQ_DRM_DEVICES=$IGPU_CARD
-        '';
-        "uwsm/env-hyprland-dgpu".text = ''
-          ${common-env-hyprland}
-
-          # env variables for starting hyprland with discrete gpu
-          # NOTE: This is specific to glegion host with nvidia
-          # to enable using the HDMI port connected directly to the dGPU
-          export __EGL_VENDOR_LIBRARY_FILENAMES=
-          export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
+          ${lib.concatStringsSep "\n"
+          (lib.attrsets.mapAttrsToList (key: value: "export ${key}=${value}")
+            cfg.uwsmSessionVariables)}
         '';
       };
 

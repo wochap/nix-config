@@ -173,6 +173,25 @@ in {
     }];
     _custom.desktop.hyprland.enable = true;
     _custom.desktop.hyprland.isDefault = true;
+    _custom.desktop.hyprland.uwsmSessionVariables = {
+      AQ_DRM_DEVICES = "$IGPU_CARD";
+
+      # Tells every app to use my iGPU unless I specially instruct it not to
+      # I would have to use the `nvidia-offload` command
+      # This also speeds up the startup time of apps using GPU, because my nvidia card is always powered off
+      # source: https://sw.kovidgoyal.net/kitty/faq/#why-does-kitty-sometimes-start-slowly-on-my-linux-system
+      # source: https://github.com/Einjerjar/nix/blob/172d17410cd0849f7028f80c0e2084b4eab27cc7/home/vars.nix#L30
+      # source: https://github.com/NixOS/nixpkgs/pull/139354#issuecomment-926942682
+      __EGL_VENDOR_LIBRARY_FILENAMES =
+        "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:${config.hardware.nvidia.package}/share/glvnd/egl_vendor.d/10_nvidia.json";
+      __GLX_VENDOR_LIBRARY_NAME = "mesa";
+
+      # env variables for starting hyprland with discrete gpu
+      # NOTE: This is specific to glegion host with nvidia
+      # to enable using the HDMI port connected directly to the dGPU
+      # export __EGL_VENDOR_LIBRARY_FILENAMES=
+      # export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
+    };
     _custom.archetypes.wm-wayland-desktop.enable = true;
     _custom.security.gnome-keyring.enable = true;
     _custom.security.kwallet.enable = false;
