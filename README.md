@@ -204,6 +204,9 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 ```sh
 # close any program listed in
 $ sudo lsof /dev/nvidia*
+
+# check if nvidia is deep sleep
+$ watch -n 3 cat /sys/class/drm/card*/device/power_state
 ```
 
 - Identify shutdown service timeout
