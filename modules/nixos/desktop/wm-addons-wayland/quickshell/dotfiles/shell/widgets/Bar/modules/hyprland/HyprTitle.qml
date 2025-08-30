@@ -1,4 +1,6 @@
+import Quickshell
 import Quickshell.Widgets
+import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 
@@ -10,43 +12,42 @@ import qs.widgets.Bar.config
 import "Utils.js" as Utils
 
 WrapperRectangle {
-  property bool isVisible: Hypr.activeWindow ? true : false
+  id: root
+
+  property HyprlandMonitor monitor: Hyprland.monitorFor(QsWindow.window?.screen)
+  property var workspaceId: root.monitor?.activeWorkspace?.id ?? 0
+  property var activeWindow: Hypr.activeWindowByWorkspaceId[root.workspaceId]
+  property bool isVisible: root.activeWindow ? true : false
 
   Layout.maximumWidth: 300 + 28
-
   color: "transparent"
   margin: 0
-  visible: isVisible
+  visible: root.isVisible
 
   RowLayout {
     anchors.fill: parent
-
     spacing: (ConfigBar.modulesSpacing / 2) - 1
 
     SystemIcon {
       Layout.fillHeight: true
       Layout.leftMargin: -3
-
-      icon: Utils.mapAppId(Hypr.activeWindow?.class ?? "")
+      icon: Utils.mapAppId(root.activeWindow?.class ?? "")
       size: ConfigBar.barHeight - ConfigBar.barPaddingY
     }
 
     ColumnLayout {
       Layout.fillHeight: true
-
       spacing: 0
 
       StyledText {
         Layout.fillWidth: true
-
-        text: Hypr.activeWindow?.class ?? ""
+        text: root.activeWindow?.class ?? ""
         font.pixelSize: Styles?.font.pixelSize.small
         elide: Text.ElideMiddle
       }
       StyledText {
         Layout.fillWidth: true
-
-        text: Hypr.activeWindow?.title ?? ""
+        text: root.activeWindow?.title ?? ""
         font.pixelSize: Styles?.font.pixelSize.small
         elide: Text.ElideMiddle
       }

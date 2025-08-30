@@ -6,11 +6,14 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
+import "./HyprUtils.js" as HyprUtils
+
 Singleton {
   id: root
 
   property var monocleState: ([])
   property var activeWindow: null
+  property var activeWindowByWorkspaceId: ({})
   property var clients: []
   property var clientsByWorkspaceId: ({})
   property var addresses: []
@@ -160,6 +163,11 @@ Singleton {
       onStreamFinished: {
         const _activeWindow = JSON.parse(activeWindowCollector.text);
         root.activeWindow = _activeWindow?.address ? _activeWindow : null;
+        root.activeWindowByWorkspaceId = Object.entries(root.workspacesById).reduce((result, [workspaceId, workspace]) => {
+          return Object.assign(result, {
+            [workspaceId]: root.clientsByAddress?.[workspace.lastwindow] ?? null
+          });
+        }, {});
       }
     }
   }
