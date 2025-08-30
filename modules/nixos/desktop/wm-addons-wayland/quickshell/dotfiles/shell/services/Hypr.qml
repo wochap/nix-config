@@ -9,7 +9,7 @@ import Quickshell.Hyprland
 Singleton {
   id: root
 
-  property var monocleState: ({})
+  property var monocleState: ([])
   property var activeWindow: null
   property var clients: []
   property var clientsByWorkspaceId: ({})
@@ -160,6 +160,16 @@ Singleton {
       onStreamFinished: {
         const _activeWindow = JSON.parse(activeWindowCollector.text);
         root.activeWindow = _activeWindow?.address ? _activeWindow : null;
+      }
+    }
+  }
+
+  Process {
+    command: ["hyprland-monocle", "--listen"]
+    running: true
+    stdout: SplitParser {
+      onRead: data => {
+        root.updateMonocleState();
       }
     }
   }

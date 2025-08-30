@@ -15,7 +15,7 @@ Loader {
   property var workspace: Hypr.workspacesById[workspaceId]
   property var clients: Hypr.clientsByWorkspaceId[workspaceId]?.filter?.(window => !window.floating)
   property int windowsCount: clients?.length ?? 0
-  property bool isMonocle: Hypr.monocleState[monitor?.name]?.includes?.(workspaceId) ?? false
+  property bool isMonocle: Hypr.monocleState?.includes?.(workspaceId) ?? false
 
   active: isMonocle
   visible: isMonocle
