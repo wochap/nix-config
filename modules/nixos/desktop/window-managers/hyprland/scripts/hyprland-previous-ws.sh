@@ -4,46 +4,51 @@ PROG=$(basename $0)
 TEMP=$(getopt --options h --longoptions help,init -- "$@") || exit 1
 eval set -- "$TEMP"
 
-function get_last_ws_file_name() {
+# Returns state filepath
+function get_filepath() {
   local hyprland_signature="$HYPRLAND_INSTANCE_SIGNATURE"
-  local monitor_name="$1"
+  local monitor_name monitor_id
+  monitor_id=$(hyprctl activeworkspace -j | jq -r .monitorID)
+  monitor_name=$(hyprctl activeworkspace -j | jq -r .monitor)
 
-  echo "/tmp/hyprland-$monitor_name-last-ws-$hyprland_signature"
+  echo "/tmp/hyprland-last-ws-$monitor_id-$monitor_name-$hyprland_signature"
 }
 
-function focus_last_ws() {
-  monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-  file=$(get_last_ws_file_name "$monitor")
-
-  if [[ -f "$file" ]] && [[ $(wc -l <"$file") -eq 2 ]]; then
-    prev_ws=$(sed -n '2p' "$file")
-    hyprctl dispatch focusworkspaceoncurrentmonitor "$prev_ws"
-  else
-    hyprctl dispatch focusworkspaceoncurrentmonitor previous
-  fi
-}
-
-function focus_last_ws_init() {
+function init() {
   function handle() {
-    input="$1"
-    event="${input%%>>*}"
-    payload="${input#*>>}"
+    local input="$1"
+    local event="${input%%>>*}"
+    local payload="${input#*>>}"
 
     # save last normal/special workspace
     if [[ "$event" == "workspacev2" ]]; then
+      local ws_id ws_name
       IFS=',' read -r ws_id ws_name <<<"$payload"
-      monitor=$(hyprctl activeworkspace -j | jq -r .monitor)
-      file=$(get_last_ws_file_name "$monitor")
+      local filepath
+      filepath=$(get_filepath)
+
       if [[ -n "$ws_id" ]]; then
         {
           echo "$ws_id"
-          cat "$file" 2>/dev/null
-        } | head -n 2 >"$file.tmp" && mv "$file.tmp" "$file"
+          cat "$filepath" 2>/dev/null
+        } | head -n 2 >"$filepath.tmp" && mv "$filepath.tmp" "$filepath"
       fi
     fi
   }
 
   socat -U - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while read -r line; do handle "$line"; done
+}
+
+function focus_previous_ws() {
+  local filepath
+  filepath=$(get_filepath)
+
+  if [[ -f "$filepath" ]] && [[ $(wc -l <"$filepath") -eq 2 ]]; then
+    prev_ws=$(sed -n '2p' "$filepath")
+    hyprctl dispatch focusworkspaceoncurrentmonitor "$prev_ws"
+  else
+    hyprctl dispatch focusworkspaceoncurrentmonitor previous
+  fi
 }
 
 while true; do
@@ -62,7 +67,7 @@ EOF
     exit 0
     ;;
   --init)
-    focus_last_ws_init
+    init
     shift
     ;;
   --)
@@ -78,5 +83,5 @@ EOF
 done
 
 if [[ $# -eq 0 ]]; then
-  focus_last_ws
+  focus_previous_ws
 fi

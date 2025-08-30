@@ -6,14 +6,16 @@ active_border_color="${primary#\#}"
 active_border_color_single="${borderSecondary#\#}"
 
 function handle() {
-  input="$1"
-  event="${input%%>>*}"
-  payload="${input#*>>}"
+  local input="$1"
+  local event="${input%%>>*}"
+  local payload="${input#*>>}"
 
   # use different active border colors for when
   # there's only 1 tiling window or not
   if [[ "$event" == "activewindow" ]]; then
+    local class title
     IFS=',' read -r class title <<<"$payload"
+    local ws monitor tiling_windows_count
     ws=$(hyprctl activeworkspace -j | jq -cr '.id')
     monitor=$(hyprctl activeworkspace -j | jq -r .monitorID)
     tiling_windows_count=$(hyprctl -j clients | jq "[.[] | select(.workspace.id == $ws and .floating == false and .monitor == $monitor and .hidden == false)] | length")
