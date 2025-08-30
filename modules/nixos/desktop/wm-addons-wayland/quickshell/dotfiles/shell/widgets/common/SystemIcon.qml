@@ -14,7 +14,7 @@ IconImage {
   property string icon
   property int size: Styles.font.pixelSize.normal
 
-  source: Quickshell.iconPath(icon.length > 0 ? icon : "image-missing")
+  source: Quickshell.iconPath(icon.length > 0 ? icon : "image-missing", "image-missing")
   width: size
   height: size
   layer.enabled: root.enableColoriser
