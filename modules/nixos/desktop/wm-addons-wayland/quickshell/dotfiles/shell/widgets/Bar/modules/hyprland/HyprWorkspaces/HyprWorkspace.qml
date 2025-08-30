@@ -46,7 +46,6 @@ Button {
         visible: root.hasLastClient
         icon: Utils.mapAppId(root.lastClient?.class ?? "")
         size: Styles.font.pixelSize.normal
-        opacity: 0.5
         layer.enabled: root.lastClient?.floating ?? false
         layer.effect: MultiEffect {
           shadowEnabled: true
