@@ -23,7 +23,6 @@ WrapperRectangle {
       property string bluetoothIcon: Bluetooth.getIcon()
 
       Layout.fillHeight: true
-
       icon: bluetoothIcon
       size: Styles.font.pixelSize.larger
       weight: Font.Light
@@ -33,7 +32,6 @@ WrapperRectangle {
       property string networkIcon: Network.getIcon()
 
       Layout.fillHeight: true
-
       icon: networkIcon
       size: Styles.font.pixelSize.hugeass
       enableColoriser: true
@@ -41,33 +39,29 @@ WrapperRectangle {
     }
 
     SystemIcon {
-      property string volumeIcon: Audio.getOutputIcon()
 
       Layout.fillHeight: true
-
-      icon: volumeIcon
+      icon: Audio.outputIcon
       size: Styles.font.pixelSize.hugeass
       enableColoriser: true
-      color: Theme.options.text
+      color: Audio.outputIconColor
     }
 
     SystemIcon {
-      property string volumeIcon: Audio.getInputIcon()
 
       Layout.fillHeight: true
-
-      icon: volumeIcon
+      icon: Audio.inputIcon
       size: Styles.font.pixelSize.hugeass
       enableColoriser: true
-      color: Theme.options.text
+      color: Audio.inputIconColor
     }
 
     MaterialIcon {
       Layout.fillHeight: true
       Layout.leftMargin: -1
       Layout.rightMargin: 3
-
       icon: PowerProfile.icon
+      color: PowerProfile.iconColor
       size: Styles.font.pixelSize.huge
       weight: Font.Light
     }
@@ -76,7 +70,6 @@ WrapperRectangle {
       property string batteryIcon: Battery.getIcon()
 
       Layout.fillHeight: true
-
       icon: batteryIcon
       size: Styles.font.pixelSize.hugeass
     }
