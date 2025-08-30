@@ -15,19 +15,14 @@ RowLayout {
   id: root
 
   readonly property int workspacesShown: 9
-  property HyprlandMonitor monitor: Hyprland.monitorFor(QsWindow.window?.screen)
-  property list<bool> workspaceOccupied: Array.from({
+  readonly property HyprlandMonitor monitor: Hyprland.monitorFor(QsWindow.window?.screen)
+  readonly property list<bool> workspacesOccupied: Array.from({
     length: root.workspacesShown
   }, (_, i) => {
     return Hyprland.workspaces.values.some(workspace => workspace.id === i + 1);
   })
   readonly property var clientsByWorkspaceId: {
-    const _monitor = Hypr.monitorsById[monitor?.id ?? 0];
-    const workspaces = Hypr.workspacesByMonitorId[_monitor?.id ?? 0];
-    if (!workspaces?.length) {
-      return {};
-    }
-    const result = workspaces.reduce((result, workspace) => {
+    const result = Object.entries(Hypr.workspacesById).reduce((result, [workspaceId, workspace]) => {
       const clients = (Hypr.clientsByWorkspaceId?.[workspace.id] ?? []).map(client => (Object.assign(client, {
             focused: client.address === Hypr.activeWindow?.address,
             customClass: Utils.mapAppId(client.class)
@@ -46,10 +41,9 @@ RowLayout {
 
     delegate: HyprWorkspace {
       Layout.fillHeight: true
-
       workspace: Hypr.workspacesById[index + 1]
       monitor: root.monitor
-      occupied: root.workspaceOccupied?.[index] ?? true
+      occupied: root.workspacesOccupied?.[index] ?? true
       clients: root.clientsByWorkspaceId?.[index + 1] ?? []
     }
   }

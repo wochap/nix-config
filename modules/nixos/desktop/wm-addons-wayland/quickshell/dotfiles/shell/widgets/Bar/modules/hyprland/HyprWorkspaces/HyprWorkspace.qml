@@ -76,7 +76,6 @@ Button {
 
         delegate: SystemIcon {
           Layout.fillHeight: true
-
           icon: modelData.customClass
           size: 28
           opacity: modelData.focused ? 1 : 0.5

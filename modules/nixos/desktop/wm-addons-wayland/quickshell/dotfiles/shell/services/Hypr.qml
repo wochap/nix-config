@@ -6,8 +6,6 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
-import "./HyprUtils.js" as HyprUtils
-
 Singleton {
   id: root
 
@@ -21,7 +19,6 @@ Singleton {
   property var workspaces: []
   property var workspacesIds: []
   property var workspacesById: ({})
-  property var workspacesByMonitorId: []
   property var activeWorkspace: null
   property var monitors: []
   property var monitorsById: ({})
@@ -32,8 +29,8 @@ Singleton {
     getMonocleState.running = true;
   }
   function updateClientList() {
-    getClients.running = true;
     getActiveWindow.running = true;
+    getClients.running = true;
   }
   function updateLayers() {
     getLayers.running = true;
@@ -70,6 +67,7 @@ Singleton {
 
     function onRawEvent(event) {
       debounceTimer.restart();
+
       if (event.name === "submap") {
         root.submap = event.data;
       }
@@ -134,9 +132,6 @@ Singleton {
               [workspace.id]: workspace
             })), {});
         root.workspacesIds = root.workspaces.map(workspace => workspace.id);
-        root.workspacesByMonitorId = root.workspaces.reduce((result, workspace) => (Object.assign(result, {
-              [workspace.monitorID]: (result?.[workspace.monitorID] ?? []).concat(workspace)
-            })), {});
       }
     }
   }
