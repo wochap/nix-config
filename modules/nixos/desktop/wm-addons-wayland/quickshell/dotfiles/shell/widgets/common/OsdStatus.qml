@@ -17,7 +17,6 @@ Scope {
   property bool isReady: false
 
   function handleChange() {
-    print("nope")
     if (!isReady) {
       return;
     }
