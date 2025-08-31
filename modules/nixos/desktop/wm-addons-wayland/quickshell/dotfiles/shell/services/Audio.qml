@@ -4,7 +4,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
-
 import qs.config
 
 Singleton {
@@ -12,15 +11,15 @@ Singleton {
 
   property PwNode defaultSink: Pipewire.defaultAudioSink
   property PwNode defaultSource: Pipewire.defaultAudioSource
-  property bool outputReady: root.defaultSink?.ready ?? false
-  property real outputVolume: root.defaultSink?.audio?.volume ?? 0
-  property bool isOutputMuted: root.defaultSink?.audio?.muted ?? false
-  property bool inputReady: root.defaultSource?.ready ?? false
-  property real inputVolume: root.defaultSource?.audio?.volume ?? 0
-  property bool isInputMuted: root.defaultSource?.audio?.muted ?? false
-  property string outputIcon: "audio-volume-muted"
+  property bool outputReady: defaultSink?.ready ?? false
+  property real outputVolume: defaultSink?.audio?.volume ?? 0
+  property bool isOutputMuted: defaultSink?.audio?.muted ?? false
+  property bool inputReady: defaultSource?.ready ?? false
+  property real inputVolume: defaultSource?.audio?.volume ?? 0
+  property bool isInputMuted: defaultSource?.audio?.muted ?? false
+  property string outputIcon: "audio-volume-high"
   property string outputIconColor: Theme.options.text
-  property string inputIcon: "microphone-sensitivity-muted"
+  property string inputIcon: "microphone-sensitivity-high"
   property string inputIconColor: Theme.options.text
 
   signal sinkProtectionTriggered(string reason)

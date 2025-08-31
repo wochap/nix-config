@@ -19,7 +19,7 @@ Singleton {
       property string woosIcon: "woos"
     }
     property QtObject pixelSize: QtObject {
-      // property int smallest: 10
+      property int smallest: 8
       property int smaller: 10
       property int small: 12
       property int normal: 14

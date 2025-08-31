@@ -1,4 +1,5 @@
 pragma Singleton
+pragma ComponentBehavior: Bound
 
 import Quickshell
 import Qt.labs.platform
@@ -21,6 +22,6 @@ Singleton {
   }
 
   function strip(path: url): string {
-    return stringify(path).replace("file://", "");
+    return root.stringify(path).replace("file://", "");
   }
 }

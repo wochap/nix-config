@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.config
 
 Singleton {
   id: root
@@ -12,6 +13,8 @@ Singleton {
   property string type: "Disconnected"
   property string ssid: ""
   property int signalStrength: 0
+  property string icon: "network-offline"
+  property string iconColor: Theme.options.text
 
   function update() {
     getStatus.running = true;
@@ -59,22 +62,34 @@ Singleton {
           root.signalStrength = 0;
           root.connected = false;
         }
+        root.updateIcon();
       }
     }
   }
 
-  function getIcon() {
+  function updateIcon() {
     const strength = root.signalStrength;
     if (root.type === "wifi") {
       if (!root.connected) {
-        return "network-wireless-signal-none";
+        root.icon = "network-wireless-signal-none";
+        root.iconColor = Theme.options.red;
+        return;
       }
       const icons = [[75, "network-wireless-signal-excellent"], [50, "network-wireless-signal-good"], [25, "network-wireless-signal-ok"], [0, "network-wireless-signal-weak"],];
       const icon = icons.find(([threshold, _]) => strength >= threshold);
-      return icon?.[1] ?? "network-wireless-signal-none";
+      root.icon = icon?.[1] ?? "network-wireless-signal-none";
+      root.iconColor = Theme.options.text;
+      return;
     } else if (root.type === "wired") {
-      return "network-wired";
+      if (!root.connected) {
+        root.icon = "network-offline";
+        return;
+      }
+      root.icon = "wired";
+      root.iconColor = Theme.options.text;
+      return;
     }
-    return "network-offline";
+    root.icon = "network-offline";
+    root.iconColor = Theme.options.textDimmed;
   }
 }

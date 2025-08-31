@@ -20,22 +20,20 @@ WrapperRectangle {
     spacing: 0
 
     MaterialIcon {
-      property string bluetoothIcon: Bluetooth.getIcon()
 
       Layout.fillHeight: true
-      icon: bluetoothIcon
+      icon: Bluetooth.icon
       size: Styles.font.pixelSize.larger
       weight: Font.Light
+      color: Bluetooth.iconColor
     }
 
     SystemIcon {
-      property string networkIcon: Network.getIcon()
-
       Layout.fillHeight: true
-      icon: networkIcon
+      icon: Network.icon
       size: Styles.font.pixelSize.hugeass
       enableColoriser: true
-      color: Theme.options.text
+      color: Network.iconColor
     }
 
     SystemIcon {

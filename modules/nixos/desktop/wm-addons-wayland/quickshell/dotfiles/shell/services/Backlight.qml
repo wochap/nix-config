@@ -9,7 +9,6 @@ Singleton {
   id: root
 
   property int percentage: 0
-
   signal changed
 
   Process {

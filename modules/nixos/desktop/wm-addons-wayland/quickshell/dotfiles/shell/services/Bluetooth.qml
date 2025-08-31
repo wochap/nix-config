@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.config
 
 Singleton {
   id: root
@@ -11,6 +12,8 @@ Singleton {
   property bool powered: false
   property bool scanning: false
   property int connectedDevices: 0
+  property string icon: "bluetooth"
+  property string iconColor: Theme.options.text
 
   function update() {
     getStatus.running = true;
@@ -56,20 +59,28 @@ Singleton {
           root.scanning = false;
           root.connectedDevices = 0;
         }
+        root.updateIcon();
       }
     }
   }
 
-  function getIcon() {
+  function updateIcon() {
     if (!root.powered) {
-      return "bluetooth_disabled";
+      root.icon = "bluetooth_disabled";
+      root.iconColor = Theme.options.textDimmed;
+      return;
     }
     if (root.connectedDevices > 0) {
-      return "bluetooth_connected";
+      root.icon = "bluetooth_connected";
+      root.iconColor = Theme.options.text;
+      return;
     }
     if (root.scanning) {
-      return "bluetooth_searching";
+      root.icon = "bluetooth_searching";
+      root.iconColor = Theme.options.green;
+      return;
     }
-    return "bluetooth";
+    root.icon = "bluetooth";
+    root.iconColor = Theme.options.text;
   }
 }
