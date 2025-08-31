@@ -1,7 +1,6 @@
 import Quickshell
 import Quickshell.Widgets
 import QtQuick
-
 import qs.config
 import qs.widgets.common
 
@@ -31,7 +30,6 @@ IconImage {
     implicitWidth: 32
     implicitHeight: 32
     visible: false
-
     onPaint: {
       if (!root.layer.enabled)
         return;
