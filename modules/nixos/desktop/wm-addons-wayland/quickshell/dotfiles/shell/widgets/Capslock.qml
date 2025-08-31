@@ -7,6 +7,6 @@ OsdStatus {
   serviceSignalName: "isLockChanged"
   serviceFlagKey: "isLock"
   namespace: "quickshell:capslock-osd"
-  iconOn: "keyboard_capslock_badge"
+  materialIconOn: "keyboard_capslock_badge"
   showIconOn: false
 }

@@ -8,7 +8,7 @@ Item {
     serviceSignalName: "isOutputMutedChanged"
     serviceFlagKey: "isOutputMuted"
     namespace: "quickshell:output-mute-osd"
-    iconOff: "volume_up"
-    iconOn: "volume_off"
+    iconOff: ""
+    iconOn: ""
   }
 }

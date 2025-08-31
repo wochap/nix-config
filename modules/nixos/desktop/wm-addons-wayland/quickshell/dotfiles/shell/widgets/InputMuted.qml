@@ -8,7 +8,7 @@ Item {
     serviceSignalName: "isInputMutedChanged"
     serviceFlagKey: "isInputMuted"
     namespace: "quickshell:input-mute-osd"
-    iconOff: "mic"
-    iconOn: "mic_off"
+    iconOff: ""
+    iconOn: ""
   }
 }

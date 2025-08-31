@@ -11,6 +11,8 @@ Scope {
   property string namespace: ""
   property string iconOn: ""
   property string iconOff: ""
+  property string materialIconOn: ""
+  property string materialIconOff: ""
   property bool showIconOn: true
   property bool isOpen: false
   property bool isReady: false
@@ -69,6 +71,8 @@ Scope {
       namespace: root.namespace
       iconOn: root.iconOn
       iconOff: root.iconOff
+      materialIconOn: root.materialIconOn
+      materialIconOff: root.materialIconOff
     }
   }
 }

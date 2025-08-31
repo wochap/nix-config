@@ -20,7 +20,7 @@ Singleton {
         const profile = data;
         if (profile === "performance") {
           root.icon = "rocket";
-          root.iconColor = Theme.options.red;
+          root.iconColor = Theme.options.text;
         } else if (profile === "balanced") {
           root.icon = "energy_savings_leaf";
           root.iconColor = Theme.options.yellow;

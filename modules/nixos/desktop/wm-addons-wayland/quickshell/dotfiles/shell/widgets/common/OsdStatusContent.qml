@@ -12,6 +12,8 @@ PanelWindow {
   property real flagValue: root.service[root.serviceFlagKey]
   property string iconOn: ""
   property string iconOff: ""
+  property string materialIconOn: ""
+  property string materialIconOff: ""
 
   WlrLayershell.namespace: root.namespace
   WlrLayershell.layer: WlrLayer.Overlay
@@ -46,12 +48,21 @@ PanelWindow {
       color: Theme.options.border
     }
 
-    MaterialIcon {
+    WoosIcon {
+      visible: root.icon.length > 0
       anchors.centerIn: parent
       color: Theme.options.peach
-      size: osd.width
-      icon: flagValue ? root.iconOn : root.iconOff
-      weight: Font.Thin
+      size: osd.width / 1.25
+      icon: root.flagValue ? root.iconOn : root.iconOff
+    }
+
+    MaterialIcon {
+      visible: root.materialIconOn.length > 0
+      anchors.centerIn: parent
+      color: Theme.options.peach
+      size: osd.width / 1.2
+      icon: root.flagValue ? root.materialIconOn : root.materialIconOff
+      weight: Font.Normal
     }
   }
 }
