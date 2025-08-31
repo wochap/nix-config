@@ -6,7 +6,6 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
-
 import qs.config
 import qs.services.SNotifications
 import qs.widgets
@@ -63,6 +62,7 @@ ShellRoot {
     target: "bar"
 
     function toggle() {
+      // TODO: toggle per monitor
       root.renderBar = !root.renderBar;
     }
   }
