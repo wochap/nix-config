@@ -49,7 +49,7 @@ PanelWindow {
     }
 
     WoosIcon {
-      visible: root.icon.length > 0
+      visible: root.iconOn.length > 0
       anchors.centerIn: parent
       color: Theme.options.peach
       size: osd.width / 1.25
