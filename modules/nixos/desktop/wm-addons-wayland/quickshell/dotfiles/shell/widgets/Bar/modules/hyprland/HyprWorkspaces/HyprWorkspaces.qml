@@ -22,9 +22,9 @@ RowLayout {
     return Hyprland.workspaces.values.some(workspace => workspace.id === i + 1);
   })
   readonly property var clientsByWorkspaceId: {
-    const result = Object.entries(Hypr.workspacesById).reduce((result, [workspaceId, workspace]) => {
-      const clients = (Hypr.clientsByWorkspaceId?.[workspace.id] ?? []).map(client => (Object.assign(client, {
-            focused: client.address === Hypr.activeWindow?.address,
+    const result = Object.entries(SHyprland.workspacesById).reduce((result, [workspaceId, workspace]) => {
+      const clients = (SHyprland.clientsByWorkspaceId?.[workspace.id] ?? []).map(client => (Object.assign(client, {
+            focused: client.address === SHyprland.activeWindow?.address,
             customClass: Utils.mapAppId(client.class)
           })));
       return Object.assign(result, {
@@ -41,7 +41,7 @@ RowLayout {
 
     delegate: HyprWorkspace {
       Layout.fillHeight: true
-      workspace: Hypr.workspacesById[index + 1]
+      workspace: SHyprland.workspacesById[index + 1]
       monitor: root.monitor
       occupied: root.workspacesOccupied?.[index] ?? true
       clients: root.clientsByWorkspaceId?.[index + 1] ?? []

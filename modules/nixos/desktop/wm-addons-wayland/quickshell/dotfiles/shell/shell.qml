@@ -7,8 +7,8 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 
-import qs.services.SNotifications
 import qs.config
+import qs.services.SNotifications
 import qs.widgets
 import qs.widgets.Bar
 import qs.widgets.Notifications

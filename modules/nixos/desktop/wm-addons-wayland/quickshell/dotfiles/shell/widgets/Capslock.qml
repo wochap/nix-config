@@ -4,7 +4,7 @@ import qs.services
 import qs.widgets.common
 
 OsdStatus {
-  service: CapslockService
+  service: SCapslock
   serviceSignalName: "isLockChanged"
   serviceFlagKey: "isLock"
   namespace: "quickshell:capslock-osd"

@@ -16,7 +16,7 @@ WrapperRectangle {
 
   property HyprlandMonitor monitor: Hyprland.monitorFor(QsWindow.window?.screen)
   property var workspaceId: root.monitor?.activeWorkspace?.id ?? 0
-  property var activeWindow: Hypr.activeWindowByWorkspaceId[root.workspaceId]
+  property var activeWindow: SHyprland.activeWindowByWorkspaceId[root.workspaceId]
   property bool isVisible: root.activeWindow ? true : false
 
   Layout.maximumWidth: 300 + 28

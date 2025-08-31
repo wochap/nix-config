@@ -21,7 +21,7 @@ Button {
   required property bool occupied
   property int workspaceId: index + 1
   property bool focused: monitor?.activeWorkspace?.id === workspaceId
-  property var lastClient: Hypr.clientsByAddress[root.workspace?.lastwindow]
+  property var lastClient: SHyprland.clientsByAddress[root.workspace?.lastwindow]
   property bool hasLastClient: !!root.lastClient
 
   onClicked: Hyprland.dispatch(`workspace ${workspaceId}`)

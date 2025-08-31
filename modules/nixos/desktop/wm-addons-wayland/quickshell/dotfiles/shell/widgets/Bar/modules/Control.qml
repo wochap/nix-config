@@ -22,18 +22,18 @@ WrapperRectangle {
     MaterialIcon {
 
       Layout.fillHeight: true
-      icon: Bluetooth.icon
+      icon: SBluetooth.icon
       size: Styles.font.pixelSize.larger
       weight: Font.Light
-      color: Bluetooth.iconColor
+      color: SBluetooth.iconColor
     }
 
     SystemIcon {
       Layout.fillHeight: true
-      icon: Network.icon
+      icon: SNetwork.icon
       size: Styles.font.pixelSize.hugeass
       enableColoriser: true
-      color: Network.iconColor
+      color: SNetwork.iconColor
     }
 
     SystemIcon {
@@ -58,14 +58,14 @@ WrapperRectangle {
       Layout.fillHeight: true
       Layout.leftMargin: -1
       Layout.rightMargin: 3
-      icon: PowerProfile.icon
-      color: PowerProfile.iconColor
+      icon: SPowerProfile.icon
+      color: SPowerProfile.iconColor
       size: Styles.font.pixelSize.huge
       weight: Font.Light
     }
 
     SystemIcon {
-      property string batteryIcon: Battery.getIcon()
+      property string batteryIcon: SUpower.getIcon()
 
       Layout.fillHeight: true
       icon: batteryIcon

@@ -4,7 +4,7 @@ import qs.services
 import qs.widgets.common
 
 Osd {
-  service: Backlight
+  service: SBacklight
   serviceSignalName: "changed"
   serviceValueKey: "percentage"
   namespace: "quickshell:backlight-osd"

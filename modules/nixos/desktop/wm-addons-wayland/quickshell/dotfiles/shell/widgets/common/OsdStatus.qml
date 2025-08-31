@@ -21,7 +21,7 @@ Scope {
       return;
     }
     if (service[serviceFlagKey] || root.showIconOn) {
-      OsdStatusManager.requestShow(root);
+      SOsdStatus.requestShow(root);
       root.isOpen = true;
       timer.restart();
     } else {

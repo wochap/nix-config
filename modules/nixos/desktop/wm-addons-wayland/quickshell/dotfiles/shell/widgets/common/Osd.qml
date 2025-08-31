@@ -20,7 +20,7 @@ Scope {
     if (!isReady) {
       return;
     }
-    OsdManager.requestShow(root);
+    SOsd.requestShow(root);
     root.isOpen = true;
     timer.restart();
   }

@@ -8,7 +8,7 @@ import qs.widgets.Bar.config
 Loader {
   id: root
 
-  property bool isLock: CapslockService.isLock
+  property bool isLock: SCapslock.isLock
   property bool isVisible: isLock
 
   active: isVisible

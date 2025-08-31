@@ -8,11 +8,11 @@ import qs.widgets.Bar.modules
 Loader {
   id: root
 
-  active: Hypr.submap.length > 0
-  visible: Hypr.submap.length > 0
+  active: SHyprland.submap.length > 0
+  visible: SHyprland.submap.length > 0
   sourceComponent: Component {
     Module {
-      label: Hypr.submap.toUpperCase()
+      label: SHyprland.submap.toUpperCase()
       fgColor: Theme.options.peach
     }
   }
