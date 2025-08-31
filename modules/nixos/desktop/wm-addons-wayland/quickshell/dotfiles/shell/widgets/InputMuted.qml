@@ -5,7 +5,7 @@ import qs.widgets.common
 
 Item {
   OsdStatus {
-    service: Audio
+    service: SPipewire
     serviceSignalName: "isInputMutedChanged"
     serviceFlagKey: "isInputMuted"
     namespace: "quickshell:input-mute-osd"

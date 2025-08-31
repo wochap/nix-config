@@ -4,7 +4,7 @@ import qs.services
 import qs.widgets.common
 
 Osd {
-  service: Audio
+  service: SPipewire
   serviceSignalName: "outputVolumeChanged"
   serviceValueKey: "outputVolume"
   serviceValueTransformer: value => value * 100

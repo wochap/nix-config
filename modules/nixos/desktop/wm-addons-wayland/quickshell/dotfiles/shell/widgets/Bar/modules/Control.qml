@@ -39,19 +39,19 @@ WrapperRectangle {
     SystemIcon {
 
       Layout.fillHeight: true
-      icon: Audio.outputIcon
+      icon: SPipewire.outputIcon
       size: Styles.font.pixelSize.hugeass
       enableColoriser: true
-      color: Audio.outputIconColor
+      color: SPipewire.outputIconColor
     }
 
     SystemIcon {
 
       Layout.fillHeight: true
-      icon: Audio.inputIcon
+      icon: SPipewire.inputIcon
       size: Styles.font.pixelSize.hugeass
       enableColoriser: true
-      color: Audio.inputIconColor
+      color: SPipewire.inputIconColor
     }
 
     MaterialIcon {
