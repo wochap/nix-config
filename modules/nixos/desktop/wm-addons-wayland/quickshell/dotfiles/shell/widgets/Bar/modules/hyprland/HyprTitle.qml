@@ -15,9 +15,14 @@ WrapperRectangle {
   id: root
 
   property HyprlandMonitor monitor: Hyprland.monitorFor(QsWindow.window?.screen)
-  property var workspaceId: root.monitor?.activeWorkspace?.id ?? 0
-  property var activeWindow: SHyprland.activeWindowByWorkspaceId[root.workspaceId]
-  property bool isVisible: root.activeWindow ? true : false
+  property var workspaceId: monitor?.activeWorkspace?.id ?? 0
+  property var activeWindowByWorkspaceId: Object.entries(SHyprland.workspacesById).reduce((result, [workspaceId, workspace]) => {
+    return Object.assign(result, {
+      [workspaceId]: SHyprland.clientsByAddress?.[workspace.lastwindow] ?? null
+    });
+  }, {})
+  property var activeWindow: activeWindowByWorkspaceId[workspaceId]
+  property bool isVisible: activeWindow ? true : false
 
   Layout.maximumWidth: 300 + 28
   color: "transparent"
