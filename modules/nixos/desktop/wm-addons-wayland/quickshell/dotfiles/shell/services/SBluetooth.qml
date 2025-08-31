@@ -19,6 +19,26 @@ Singleton {
     getStatus.running = true;
   }
 
+  function updateIcon() {
+    if (!root.powered) {
+      root.icon = "bluetooth_disabled";
+      root.iconColor = Theme.options.textDimmed;
+      return;
+    }
+    if (root.connectedDevices > 0) {
+      root.icon = "bluetooth_connected";
+      root.iconColor = Theme.options.text;
+      return;
+    }
+    if (root.scanning) {
+      root.icon = "bluetooth_searching";
+      root.iconColor = Theme.options.green;
+      return;
+    }
+    root.icon = "bluetooth";
+    root.iconColor = Theme.options.text;
+  }
+
   // A debounce timer to prevent rapid updates when many signals are received
   Timer {
     id: debounceTimer
@@ -62,25 +82,5 @@ Singleton {
         root.updateIcon();
       }
     }
-  }
-
-  function updateIcon() {
-    if (!root.powered) {
-      root.icon = "bluetooth_disabled";
-      root.iconColor = Theme.options.textDimmed;
-      return;
-    }
-    if (root.connectedDevices > 0) {
-      root.icon = "bluetooth_connected";
-      root.iconColor = Theme.options.text;
-      return;
-    }
-    if (root.scanning) {
-      root.icon = "bluetooth_searching";
-      root.iconColor = Theme.options.green;
-      return;
-    }
-    root.icon = "bluetooth";
-    root.iconColor = Theme.options.text;
   }
 }

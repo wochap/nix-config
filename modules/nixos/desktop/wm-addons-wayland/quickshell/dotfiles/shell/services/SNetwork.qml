@@ -20,6 +20,32 @@ Singleton {
     getStatus.running = true;
   }
 
+  function updateIcon() {
+    const strength = root.signalStrength;
+    if (root.type === "wifi") {
+      if (!root.connected) {
+        root.icon = "network-wireless-signal-none";
+        root.iconColor = Theme.options.red;
+        return;
+      }
+      const icons = [[75, "network-wireless-signal-excellent"], [50, "network-wireless-signal-good"], [25, "network-wireless-signal-ok"], [0, "network-wireless-signal-weak"],];
+      const icon = icons.find(([threshold, _]) => strength >= threshold);
+      root.icon = icon?.[1] ?? "network-wireless-signal-none";
+      root.iconColor = Theme.options.text;
+      return;
+    } else if (root.type === "wired") {
+      if (!root.connected) {
+        root.icon = "network-offline";
+        return;
+      }
+      root.icon = "wired";
+      root.iconColor = Theme.options.text;
+      return;
+    }
+    root.icon = "network-offline";
+    root.iconColor = Theme.options.textDimmed;
+  }
+
   // A debounce timer to prevent rapid updates when many signals are received
   Timer {
     id: debounceTimer
@@ -65,31 +91,5 @@ Singleton {
         root.updateIcon();
       }
     }
-  }
-
-  function updateIcon() {
-    const strength = root.signalStrength;
-    if (root.type === "wifi") {
-      if (!root.connected) {
-        root.icon = "network-wireless-signal-none";
-        root.iconColor = Theme.options.red;
-        return;
-      }
-      const icons = [[75, "network-wireless-signal-excellent"], [50, "network-wireless-signal-good"], [25, "network-wireless-signal-ok"], [0, "network-wireless-signal-weak"],];
-      const icon = icons.find(([threshold, _]) => strength >= threshold);
-      root.icon = icon?.[1] ?? "network-wireless-signal-none";
-      root.iconColor = Theme.options.text;
-      return;
-    } else if (root.type === "wired") {
-      if (!root.connected) {
-        root.icon = "network-offline";
-        return;
-      }
-      root.icon = "wired";
-      root.iconColor = Theme.options.text;
-      return;
-    }
-    root.icon = "network-offline";
-    root.iconColor = Theme.options.textDimmed;
   }
 }
