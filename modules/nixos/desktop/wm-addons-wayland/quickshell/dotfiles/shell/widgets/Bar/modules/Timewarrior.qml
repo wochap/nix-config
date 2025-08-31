@@ -1,7 +1,5 @@
 import Quickshell.Io
 import QtQuick
-import QtQuick.Layouts
-
 import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config

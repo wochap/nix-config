@@ -1,7 +1,6 @@
 import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
-
 import qs.config
 import qs.services
 import qs.widgets.common
@@ -20,7 +19,6 @@ WrapperRectangle {
     spacing: 0
 
     MaterialIcon {
-
       Layout.fillHeight: true
       icon: SBluetooth.icon
       size: Styles.font.pixelSize.larger
@@ -37,7 +35,6 @@ WrapperRectangle {
     }
 
     SystemIcon {
-
       Layout.fillHeight: true
       icon: SPipewire.outputIcon
       size: Styles.font.pixelSize.hugeass
@@ -46,7 +43,6 @@ WrapperRectangle {
     }
 
     SystemIcon {
-
       Layout.fillHeight: true
       icon: SPipewire.inputIcon
       size: Styles.font.pixelSize.hugeass

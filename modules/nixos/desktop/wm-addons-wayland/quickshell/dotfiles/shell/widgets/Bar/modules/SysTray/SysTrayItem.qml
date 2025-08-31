@@ -3,7 +3,6 @@ import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
-
 import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config
@@ -16,7 +15,6 @@ WrapperMouseArea {
   property var window: QsWindow.window
   property int size: Styles.font.pixelSize.small
 
-  child: trayIcon
   acceptedButtons: Qt.LeftButton | Qt.RightButton
   margin: 0
   onClicked: event => {

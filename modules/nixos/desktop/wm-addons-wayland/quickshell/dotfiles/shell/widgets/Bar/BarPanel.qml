@@ -1,7 +1,6 @@
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
-
 import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config
@@ -19,7 +18,6 @@ PanelWindow {
     left: true
     right: true
   }
-
   screen: root.modelData
   // HACK: add enought space for shadow
   implicitHeight: ConfigBar.barHeight + ConfigBar.shadowHeight
@@ -38,7 +36,6 @@ PanelWindow {
       right: parent.right
       top: parent.top
     }
-
     implicitHeight: ConfigBar.barHeight
     color: Theme.addAlpha(Theme.options.background, ConfigBar.isBlurEnabled ? 0.65 : 1)
 

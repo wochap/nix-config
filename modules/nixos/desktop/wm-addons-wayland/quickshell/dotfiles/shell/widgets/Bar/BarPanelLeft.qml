@@ -1,7 +1,5 @@
-import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
-
 import qs.config
 import qs.widgets.Bar.config
 import qs.widgets.Bar.modules
@@ -19,13 +17,11 @@ RowLayout {
 
   HyprWsSpecialCount {
     Layout.fillHeight: true
-
     namespace: "scratchpads"
   }
 
   HyprWsSpecialCount {
     Layout.fillHeight: true
-
     namespace: "tmpscratchpads"
     fgColor: Theme.options.red
   }

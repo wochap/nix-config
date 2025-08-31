@@ -3,12 +3,10 @@ import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
-
 import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config
 import qs.services
-
 import "../Utils.js" as Utils
 
 RowLayout {

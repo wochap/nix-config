@@ -1,12 +1,9 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Io
 import Quickshell
 import Quickshell.Wayland
-import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
-
 import qs.services
 import qs.services.SNotifications
 

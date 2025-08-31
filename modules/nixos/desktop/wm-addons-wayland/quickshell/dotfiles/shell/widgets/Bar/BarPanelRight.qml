@@ -1,7 +1,6 @@
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
-
 import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config
@@ -19,7 +18,6 @@ RowLayout {
 
   RowLayout {
     Layout.fillHeight: true
-
     // HACK: MaterialIcon offset
     Layout.leftMargin: -3
     Layout.rightMargin: 0
@@ -53,11 +51,11 @@ RowLayout {
     id: clock
 
     Layout.fillHeight: true
-
     text: Qt.formatDateTime(clockService.date, "ddd dd MMM HH:mm")
 
     SystemClock {
       id: clockService
+
       precision: SystemClock.Minutes
     }
   }

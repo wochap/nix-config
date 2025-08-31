@@ -3,12 +3,10 @@ import Quickshell.Widgets
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
-
 import qs.config
 import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
-
 import "Utils.js" as Utils
 
 WrapperRectangle {

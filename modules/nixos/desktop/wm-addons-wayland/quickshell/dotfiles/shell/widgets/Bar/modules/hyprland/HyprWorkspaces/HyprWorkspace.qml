@@ -3,12 +3,10 @@ import QtQuick.Effects
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Hyprland
-
 import qs.services
 import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config
-
 import "../Utils.js" as Utils
 
 Button {
