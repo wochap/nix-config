@@ -54,14 +54,16 @@ PanelWindow {
         z: 1
 
         StyledText {
+          Layout.fillWidth: true
           text: "Notifications"
+          font.pixelSize: Styles.font.pixelSize.small
         }
 
-        Button {
+        NotificationButton {
           text: "DND"
         }
 
-        Button {
+        NotificationButton {
           text: "Clear All"
         }
       }

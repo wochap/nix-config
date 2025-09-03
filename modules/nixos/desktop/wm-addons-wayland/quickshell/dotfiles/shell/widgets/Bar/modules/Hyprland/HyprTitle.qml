@@ -45,13 +45,13 @@ WrapperRectangle {
       StyledText {
         Layout.fillWidth: true
         text: root.activeWindow?.class ?? ""
-        font.pixelSize: Styles?.font.pixelSize.small
+        font.pixelSize: Styles.font.pixelSize.small
         elide: Text.ElideMiddle
       }
       StyledText {
         Layout.fillWidth: true
         text: root.activeWindow?.title ?? ""
-        font.pixelSize: Styles?.font.pixelSize.small
+        font.pixelSize: Styles.font.pixelSize.small
         elide: Text.ElideMiddle
       }
     }

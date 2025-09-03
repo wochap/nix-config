@@ -5,7 +5,6 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
 import QtQuick
-
 import qs.config
 
 // Manages the full lifecycle of notifications, including:
@@ -27,6 +26,8 @@ Singleton {
   property bool isSilent: false // User-toggled "Do Not Disturb"
   property bool isIdle: false // Should be controlled by an external service like hypridle
   property bool isLocked: false // TODO: create lock service
+  property bool arePopupsHovered: false
+  property bool arePopupsPaused: isIdle || isLocked || arePopupsHovered
   readonly property int maxPopups: 5 // The maximum number of pop-ups to show on screen at once.
   readonly property int defaultPopupTimeout: 5000
   property int idOffset // ensure unique notification id
@@ -50,10 +51,11 @@ Singleton {
       root.popupList.push(notification);
 
       // Start its timeout timer if applicable.
-      if (notification.notification && notification.notification.expireTimeout !== 0) {
+      if (notification?.notification?.expireTimeout !== 0) {
         notification.timer = notificationTimerComponent.createObject(root, {
           "notificationId": notification.notificationId,
-          "interval": notification.notification.expireTimeout < 0 ? defaultPopupTimeout : notification.notification.expireTimeout
+          "duration": notification?.notification?.expireTimeout > 0 ? notification.notification.expireTimeout : defaultPopupTimeout,
+          "paused": Qt.binding(() => root.arePopupsPaused)
         });
       }
     }
@@ -177,7 +179,6 @@ Singleton {
     id: notificationTimerComponent
 
     SNotificationTimer {
-      interval: root.defaultPopupTimeout
       onTimeout: notificationId => {
         root.timeoutNotification(notificationId);
       }

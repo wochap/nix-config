@@ -18,7 +18,6 @@ WrapperRectangle {
   required property bool isPopup
 
   color: "transparent"
-
   child: Notification {
     isPopup: root.isPopup
     notification: root.modelData

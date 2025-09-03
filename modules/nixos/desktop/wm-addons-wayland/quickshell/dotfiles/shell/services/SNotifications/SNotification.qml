@@ -17,7 +17,7 @@ QtObject {
   property string summary: notification?.summary ?? ""
   property double time
   property string urgency: notification?.urgency.toString() ?? "normal"
-  property Timer timer
+  property SNotificationTimer timer: null
 
   signal discard(notificationId: int)
 

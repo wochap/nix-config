@@ -58,7 +58,7 @@ Button {
         Layout.alignment: Qt.AlignHCenter
         color: focused && occupied ? Theme.options.primary : (occupied ? Theme.options.text : Theme.options.textDimmed)
         text: workspaceId
-        font.pixelSize: root.hasLastClient ? Styles?.font.pixelSize.smaller : Styles?.font.pixelSize.normal
+        font.pixelSize: root.hasLastClient ? Styles.font.pixelSize.smaller : Styles.font.pixelSize.normal
       }
     }
   }

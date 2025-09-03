@@ -44,5 +44,11 @@ PanelWindow {
       anchors.left: parent?.left
       anchors.right: parent?.right
     }
+
+    HoverHandler {
+      onHoveredChanged: {
+        SNotifications.arePopupsHovered = hovered;
+      }
+    }
   }
 }

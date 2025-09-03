@@ -5,7 +5,7 @@ Text {
   id: root
 
   required property string icon
-  property int size: Styles?.font.pixelSize.normal
+  property int size: Styles.font.pixelSize.normal
   property real fill: 0 // 0 or 1
   readonly property real truncatedFill: Math.round(fill * 100) / 100 // Reduce memory consumption spikes from constant font remapping
 
@@ -15,7 +15,7 @@ Text {
   text: icon
 
   font {
-    family: Styles?.font.family.woosIcon
+    family: Styles.font.family.woosIcon
     pixelSize: size
     variableAxes: {
       "FILL": truncatedFill,
