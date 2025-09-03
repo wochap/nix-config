@@ -13,7 +13,7 @@ RowLayout {
   Repeater {
     model: SystemTray.items
 
-    SysTrayItem {
+    delegate: SysTrayItem {
       item: modelData
       size: Styles.font.pixelSize.small
     }

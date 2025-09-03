@@ -23,6 +23,9 @@ PanelWindow {
   implicitHeight: ConfigBar.barHeight + ConfigBar.shadowHeight
   exclusiveZone: ConfigBar.barHeight
   color: "transparent"
+  mask: Region {
+    item: rectangle
+  }
 
   StyledRectangularShadow {
     target: rectangle
