@@ -4,7 +4,7 @@ import QtQuick
 import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config
-import qs.widgets.Bar.modules.hyprland.HyprWorkspaces
+import qs.widgets.Bar.modules.Hyprland.HyprWorkspaces
 
 PanelWindow {
   id: root

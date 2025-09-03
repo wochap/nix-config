@@ -3,8 +3,8 @@ import QtQuick.Layouts
 import qs.config
 import qs.widgets.Bar.config
 import qs.widgets.Bar.modules
-import qs.widgets.Bar.modules.hyprland
-import qs.widgets.Bar.modules.hyprland.HyprWorkspaces
+import qs.widgets.Bar.modules.Hyprland
+import qs.widgets.Bar.modules.Hyprland.HyprWorkspaces
 
 RowLayout {
   id: root
