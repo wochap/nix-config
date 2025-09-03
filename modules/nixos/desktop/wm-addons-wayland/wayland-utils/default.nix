@@ -110,7 +110,10 @@ in {
         tui-rss
       ];
 
-      home.shellAliases."cpi" = ''wl-copy -t text/uri-list <<<file:/"$@"'';
+      home.shellAliases = {
+        "cpi" = ''wl-copy -t text/uri-list <<<file:/"$@"'';
+        "cpt" = ''wl-copy "$@"'';
+      };
 
       xdg.configFile."satty/config.toml".source = ./dotfiles/satty-config.toml;
       xdg.dataFile."assets/notification.flac".source =

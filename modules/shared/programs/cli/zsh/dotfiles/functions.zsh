@@ -146,12 +146,12 @@ function help() {
 
 # Prints real path of bin
 function rp() {
-  realpath $(which $@)
+  realpath $(which -- "$@")
 }
 
 # add file content to clipboard
 function cpfc() {
-  local filepath=$(realpath "$1")
+  local filepath=$(realpath -- "$@")
   cat "$filepath" | wl-copy --type text
 }
 compdef _cpf_files_only cpfc
@@ -159,7 +159,7 @@ compdef _cpf_files_only cpfc
 # add file to clipboard
 # NOTE: doesn't work on thunar
 function cpf() {
-  local filepath=$(realpath "$1")
+  local filepath=$(realpath -- "$@")
   printf 'file://%s\n' "$filepath" | wl-copy -t text/uri-list
 }
 compdef _cpf_files_only cpf
