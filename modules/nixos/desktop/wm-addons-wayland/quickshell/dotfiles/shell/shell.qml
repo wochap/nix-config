@@ -21,7 +21,7 @@ ShellRoot {
   property bool renderCapslock: true
   property bool renderOutputMuted: true
   property bool renderInputMuted: true
-  property bool renderNotifications: false
+  property bool renderNotifications: true
 
   LazyLoader {
     active: root.renderBar && Theme.ready

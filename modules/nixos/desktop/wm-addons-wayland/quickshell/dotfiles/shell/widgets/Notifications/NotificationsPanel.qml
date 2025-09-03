@@ -4,8 +4,10 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Qt5Compat.GraphicalEffects
+import qs.config
 import qs.services
 import qs.services.SNotifications
+import qs.widgets.common
 
 PanelWindow {
   id: root
@@ -14,22 +16,67 @@ PanelWindow {
   WlrLayershell.layer: WlrLayer.Overlay
   anchors {
     top: true
-    right: true
+    left: true
     bottom: true
+    right: true
   }
   exclusionMode: ExclusionMode.Ignore
-  visible: true
   exclusiveZone: 0
-  implicitWidth: 460
-  color: "#5cffffff"
+  color: "transparent"
+  mask: Region {
+    item: rectangle
+  }
 
-  ColumnLayout {
+  StyledRectangularShadow {
+    target: rectangle
+  }
 
-    Repeater {
-      model: SNotifications.list
+  Rectangle {
+    id: rectangle
 
-      Text {
-        text: JSON.stringify(modelData)
+    anchors {
+      top: parent.top
+      bottom: parent.bottom
+      right: parent.right
+    }
+    implicitWidth: ConfigNotifications.notificationsPanelWidth
+    color: Theme.options.backgroundOverlay
+
+    ColumnLayout {
+      anchors.fill: parent
+      spacing: 8
+
+      // top
+      RowLayout {
+        Layout.topMargin: ConfigNotifications.notificationsPanelPaddingY
+        Layout.rightMargin: ConfigNotifications.notificationsPanelPaddingX
+        Layout.leftMargin: ConfigNotifications.notificationsPanelPaddingX
+
+        StyledText {
+          text: "Notifications"
+        }
+
+        Button {
+          text: "DND"
+        }
+
+        Button {
+          text: "Clear All"
+        }
+      }
+
+      // body
+      ListView {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.rightMargin: ConfigNotifications.notificationsPanelPaddingX
+        Layout.leftMargin: ConfigNotifications.notificationsPanelPaddingX
+        spacing: ConfigNotifications.notificationsSpacing
+        model: SNotifications.list
+        delegate: Notification {
+          anchors.left: parent?.left
+          anchors.right: parent?.right
+        }
       }
     }
   }

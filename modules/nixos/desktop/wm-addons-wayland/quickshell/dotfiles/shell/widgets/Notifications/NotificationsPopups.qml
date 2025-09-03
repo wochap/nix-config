@@ -1,0 +1,45 @@
+import QtQuick
+import QtQuick.Controls
+import Quickshell
+import Quickshell.Wayland
+import Qt5Compat.GraphicalEffects
+import qs.config
+import qs.services
+import qs.services.SNotifications
+import qs.widgets.common
+
+PanelWindow {
+  id: root
+
+  WlrLayershell.namespace: "quickshell:notifications-popups"
+  WlrLayershell.layer: WlrLayer.Overlay
+  anchors {
+    top: true
+    bottom: true
+    right: true
+    left: true
+  }
+  exclusionMode: ExclusionMode.Normal
+  exclusiveZone: 0
+  color: "transparent"
+  mask: Region {
+    item: listview.contentItem
+  }
+
+  ListView {
+    id: listview
+
+    anchors {
+      top: parent.top
+      bottom: parent.bottom
+      right: parent.right
+    }
+    implicitWidth: ConfigNotifications.notificationsPopupsWidth
+    spacing: ConfigNotifications.notificationsSpacing
+    model: SNotifications.popupList
+    delegate: Notification {
+      anchors.left: parent?.left
+      anchors.right: parent?.right
+    }
+  }
+}
