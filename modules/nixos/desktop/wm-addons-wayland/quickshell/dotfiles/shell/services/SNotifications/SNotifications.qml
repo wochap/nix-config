@@ -39,13 +39,10 @@ Singleton {
       return;
     }
 
-    // Move notifications from the incoming queue to the display queue if there's space.
+    // Move notifications from the incoming queue to the popup list if there's space.
     while (root.incomingQueue.length > 0 && root.popupList.length < root.maxPopups) {
       // Get the next notification from the incoming queue.
       const notification = root.incomingQueue.shift();
-
-      // Add it to the main history list (for the sidebar).
-      root.list.push(notification);
 
       // Add it to the on-screen popup list.
       root.popupList.push(notification);
@@ -59,9 +56,6 @@ Singleton {
         });
       }
     }
-
-    // Persist the history list to the file.
-    notificationFileView.setText(root.stringifyList(root.list));
   }
 
   // Whenever a state changes, re-evaluate the notification queue.
@@ -114,11 +108,19 @@ Singleton {
   }
 
   // Called when a notification pop-up times out.
-  // It is removed from the screen but remains in the history.
+  // It is moved from the popup list to the history list.
   function timeoutNotification(id) {
     const index = root.popupList.findIndex(notification => notification.notificationId === id);
     if (index !== -1) {
-      root.popupList.splice(index, 1);
+      // Remove the notification from the visible popups.
+      const [timedOutNotification] = root.popupList.splice(index, 1);
+
+      // Add it to the history list.
+      if (timedOutNotification) {
+        root.list.unshift(timedOutNotification);
+        // Persist the updated history list.
+        notificationFileView.setText(root.stringifyList(root.list));
+      }
     }
     // A space has opened up, so process the queue for the next notification.
     root.processQueues();

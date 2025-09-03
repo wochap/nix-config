@@ -74,7 +74,7 @@ Item {
               materialIcon: "close"
               onClicked: {
                 // TODO: when in panel it takes much time to delete
-                print(root.notification.notificationId)
+                print(root.notification.notificationId);
                 SNotifications.discardNotification(root.notification.notificationId);
               }
             }
@@ -95,6 +95,20 @@ Item {
             color: Theme.options.subtext0
             font.pixelSize: Styles.font.pixelSize.small
             wrapMode: Text.WordWrap
+          }
+
+          RowLayout {
+            spacing: ConfigNotifications.notificationPadding
+
+            Repeater {
+              model: root.notification.actions
+              delegate: NotificationButton {
+                text: modelData.text
+                onClicked: {
+                  SNotifications.attemptInvokeAction(root.notification.notificationId, modelData.identifier);
+                }
+              }
+            }
           }
         }
       }
