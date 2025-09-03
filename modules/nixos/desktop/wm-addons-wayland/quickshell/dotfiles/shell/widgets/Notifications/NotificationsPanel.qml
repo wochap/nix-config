@@ -46,11 +46,12 @@ PanelWindow {
       anchors.fill: parent
       spacing: 8
 
-      // top
+      // header
       RowLayout {
         Layout.topMargin: ConfigNotifications.notificationsPanelPaddingY
         Layout.rightMargin: ConfigNotifications.notificationsPanelPaddingX
         Layout.leftMargin: ConfigNotifications.notificationsPanelPaddingX
+        z: 1
 
         StyledText {
           text: "Notifications"
@@ -73,7 +74,8 @@ PanelWindow {
         Layout.leftMargin: ConfigNotifications.notificationsPanelPaddingX
         spacing: ConfigNotifications.notificationsSpacing
         model: SNotifications.list
-        delegate: Notification {
+        delegate: NotificationItem {
+          isPopup: false
           anchors.left: parent?.left
           anchors.right: parent?.right
         }

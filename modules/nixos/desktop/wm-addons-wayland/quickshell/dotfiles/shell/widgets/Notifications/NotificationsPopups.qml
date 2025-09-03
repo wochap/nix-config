@@ -33,11 +33,14 @@ PanelWindow {
       top: parent.top
       bottom: parent.bottom
       right: parent.right
+      topMargin: 8
+      rightMargin: anchors.topMargin
     }
     implicitWidth: ConfigNotifications.notificationsPopupsWidth
     spacing: ConfigNotifications.notificationsSpacing
     model: SNotifications.popupList
-    delegate: Notification {
+    delegate: NotificationItem {
+      isPopup: true
       anchors.left: parent?.left
       anchors.right: parent?.right
     }
