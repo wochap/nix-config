@@ -38,7 +38,11 @@ PanelWindow {
     }
     implicitWidth: ConfigNotifications.notificationsPopupsWidth
     spacing: ConfigNotifications.notificationsSpacing
-    model: SNotifications.popupList
+    clip: true
+    // PERF: do granular updates with ScriptModel
+    model: ScriptModel {
+      values: SNotifications.popupList
+    }
     delegate: NotificationItem {
       isPopup: true
       anchors.left: parent?.left

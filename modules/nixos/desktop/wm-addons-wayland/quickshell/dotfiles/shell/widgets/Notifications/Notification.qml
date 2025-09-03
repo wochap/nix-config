@@ -73,8 +73,6 @@ Item {
             NotificationButton {
               materialIcon: "close"
               onClicked: {
-                // TODO: when in panel it takes much time to delete
-                print(root.notification.notificationId);
                 SNotifications.discardNotification(root.notification.notificationId);
               }
             }

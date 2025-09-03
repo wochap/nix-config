@@ -16,9 +16,9 @@ Singleton {
   id: root
 
   // The main history of all notifications received. Used by the sidebar.
-  property list<SNotification> list: []
+  property var list: []
   // A manually managed list of notifications currently visible as pop-ups.
-  property list<SNotification> popupList: []
+  property var popupList: []
   // A temporary queue for all new notifications before they are processed.
   property list<SNotification> incomingQueue: []
   property bool isReady: false
@@ -39,15 +39,20 @@ Singleton {
       return;
     }
 
-    // Move notifications from the incoming queue to the popup list if there's space.
-    while (root.incomingQueue.length > 0 && root.popupList.length < root.maxPopups) {
-      // Get the next notification from the incoming queue.
-      const notification = root.incomingQueue.shift();
+    const spaceAvailable = root.maxPopups - root.popupList.length;
+    if (spaceAvailable <= 0 || root.incomingQueue.length === 0) {
+      return;
+    }
 
-      // Add it to the on-screen popup list.
-      root.popupList.push(notification);
+    // Determine which notifications to move without mutating the original queue yet.
+    const notificationsToMove = root.incomingQueue.slice(0, spaceAvailable);
 
-      // Start its timeout timer if applicable.
+    // Create the new state for both lists.
+    root.popupList = [...root.popupList, ...notificationsToMove];
+    root.incomingQueue = root.incomingQueue.slice(notificationsToMove.length);
+
+    // Create timers for the newly added popups.
+    notificationsToMove.forEach(notification => {
       if (notification?.notification?.expireTimeout !== 0) {
         notification.timer = notificationTimerComponent.createObject(root, {
           "notificationId": notification.notificationId,
@@ -55,7 +60,7 @@ Singleton {
           "paused": Qt.binding(() => root.arePopupsPaused)
         });
       }
-    }
+    });
   }
 
   // Whenever a state changes, re-evaluate the notification queue.
@@ -71,20 +76,12 @@ Singleton {
   // Removes a notification entirely from the system.
   // Called when the user explicitly dismisses it.
   function discardNotification(id) {
-    // Remove from history list.
-    let historyIndex = root.list.findIndex(notification => notification.notificationId === id);
-    if (historyIndex !== -1) {
-      root.list.splice(historyIndex, 1);
-    }
-
-    // Remove from popup list if it's currently displayed.
-    let popupIndex = root.popupList.findIndex(notification => notification.notificationId === id);
-    if (popupIndex !== -1) {
-      root.popupList.splice(popupIndex, 1);
-    }
+    // Create new lists by filtering out the discarded notification.
+    root.list = root.list.filter(n => n.notificationId !== id);
+    root.popupList = root.popupList.filter(n => n.notificationId !== id);
 
     // Tell the original notification server it was dismissed.
-    const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(notification => notification.id + root.idOffset === id);
+    const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(n => n.id + root.idOffset === id);
     if (notificationServerIndex !== -1) {
       notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
     }
@@ -110,18 +107,18 @@ Singleton {
   // Called when a notification pop-up times out.
   // It is moved from the popup list to the history list.
   function timeoutNotification(id) {
-    const index = root.popupList.findIndex(notification => notification.notificationId === id);
-    if (index !== -1) {
-      // Remove the notification from the visible popups.
-      const [timedOutNotification] = root.popupList.splice(index, 1);
+    const timedOutNotification = root.popupList.find(n => n.notificationId === id);
 
-      // Add it to the history list.
-      if (timedOutNotification) {
-        root.list.unshift(timedOutNotification);
-        // Persist the updated history list.
-        notificationFileView.setText(root.stringifyList(root.list));
-      }
+    if (timedOutNotification) {
+      // Create a new popupList without the timed-out notification.
+      root.popupList = root.popupList.filter(n => n.notificationId !== id);
+      // Create a new history list with the timed-out notification at the beginning.
+      root.list = [timedOutNotification, ...root.list];
+
+      // Persist the updated history list.
+      notificationFileView.setText(root.stringifyList(root.list));
     }
+
     // A space has opened up, so process the queue for the next notification.
     root.processQueues();
   }
@@ -161,8 +158,8 @@ Singleton {
         "time": Date.now()
       });
 
-      // Add to the incoming queue and let the gatekeeper handle it.
-      root.incomingQueue.push(_notification);
+      // Add to the incoming queue by creating a new array.
+      root.incomingQueue = [...root.incomingQueue, _notification];
       root.processQueues();
     }
   }

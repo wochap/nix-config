@@ -75,7 +75,11 @@ PanelWindow {
         Layout.rightMargin: ConfigNotifications.notificationsPanelPaddingX
         Layout.leftMargin: ConfigNotifications.notificationsPanelPaddingX
         spacing: ConfigNotifications.notificationsSpacing
-        model: SNotifications.list
+        clip: true
+        // PERF: do granular updates with ScriptModel
+        model: ScriptModel {
+          values: SNotifications.list
+        }
         delegate: NotificationItem {
           isPopup: false
           anchors.left: parent?.left
