@@ -6,7 +6,7 @@
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=58f3c8b331269776bf25b8725a2ea9c184bd6fe5"; # master (18 aug 2025)
     nixpkgs-24-11.url = "github:nixos/nixpkgs?rev=b75693fb46bfaf09e662d09ec076c5a162efa9f6"; # nixos-24.11 (20 mar 2025)
     prevstable-chrome.url = "github:nixos/nixpkgs?rev=4792576cb003c994bd7cc1edada3129def20b27d"; # nixos-25.05 (07 jun 2025)
-    prevstable-neovim.url = "github:nixos/nixpkgs?rev=7fd36ee82c0275fb545775cc5e4d30542899511d"; # nixos-25.05 (27 jul 2025)
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=84577351974736371ddb9d36d788b6e34247b891"; # master (02 sep 2025)
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=4792576cb003c994bd7cc1edada3129def20b27d"; # nixos-25.05 (07 jun 2025)
