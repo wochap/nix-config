@@ -20,7 +20,7 @@ PanelWindow {
     bottom: true
     right: true
   }
-  exclusionMode: ExclusionMode.Ignore
+  exclusionMode: ExclusionMode.Normal
   exclusiveZone: 0
   color: "transparent"
   mask: Region {
@@ -38,9 +38,17 @@ PanelWindow {
       top: parent.top
       bottom: parent.bottom
       right: parent.right
+      topMargin: 8
+      bottomMargin: 8
+      rightMargin: 8
     }
+    radius: 8
     implicitWidth: ConfigNotifications.notificationsPanelWidth
     color: Theme.options.backgroundOverlay
+    border {
+      width: 1
+      color: Theme.options.borderSecondary
+    }
 
     ColumnLayout {
       anchors.fill: parent
@@ -56,15 +64,21 @@ PanelWindow {
         StyledText {
           Layout.fillWidth: true
           text: "Notifications"
-          font.pixelSize: Styles.font.pixelSize.small
+          font.pixelSize: Styles.font.pixelSize.normal
         }
 
-        NotificationButton {
-          text: "DND"
+        NotificationButtonMd {
+          materialIcon: SNotifications.isSilent ? "do_not_disturb_on" : "do_not_disturb_off"
+          onClicked: {
+            SNotifications.toggleIsSilent();
+          }
         }
 
-        NotificationButton {
-          text: "Clear All"
+        NotificationButtonMd {
+          materialIcon: "clear_all"
+          onClicked: {
+            SNotifications.discardAllNotifications();
+          }
         }
       }
 
@@ -74,6 +88,7 @@ PanelWindow {
         Layout.fillHeight: true
         Layout.rightMargin: ConfigNotifications.notificationsPanelPaddingX
         Layout.leftMargin: ConfigNotifications.notificationsPanelPaddingX
+        Layout.bottomMargin: ConfigNotifications.notificationsPanelPaddingX
         spacing: ConfigNotifications.notificationsSpacing
         clip: true
         // PERF: do granular updates with ScriptModel

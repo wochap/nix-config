@@ -76,6 +76,14 @@ Item {
                 SNotifications.discardNotification(root.notification.notificationId);
               }
             }
+
+            NotificationButton {
+              visible: root.isPopup
+              materialIcon: "chevron_right"
+              onClicked: {
+                SNotifications.timeoutNotification(root.notification.notificationId);
+              }
+            }
           }
 
           StyledText {
@@ -86,24 +94,28 @@ Item {
             wrapMode: root.isExpanded ? Text.WordWrap : Text.NoWrap
           }
 
-          StyledText {
-            visible: root.notification.body.length > 0
-            Layout.fillWidth: true
-            text: root.notification.body
-            color: Theme.options.subtext0
-            font.pixelSize: Styles.font.pixelSize.small
-            wrapMode: Text.WordWrap
-          }
+          ColumnLayout {
+            spacing: 3
 
-          RowLayout {
-            spacing: ConfigNotifications.notificationPadding
+            StyledText {
+              visible: root.notification.body.length > 0
+              Layout.fillWidth: true
+              text: root.notification.body
+              color: Theme.options.subtext0
+              font.pixelSize: Styles.font.pixelSize.small
+              wrapMode: Text.WordWrap
+            }
 
-            Repeater {
-              model: root.notification.actions
-              delegate: NotificationButton {
-                text: modelData.text
-                onClicked: {
-                  SNotifications.attemptInvokeAction(root.notification.notificationId, modelData.identifier);
+            RowLayout {
+              spacing: ConfigNotifications.notificationPadding
+
+              Repeater {
+                model: root.notification.actions
+                delegate: NotificationButtonMd {
+                  text: modelData.text
+                  onClicked: {
+                    SNotifications.attemptInvokeAction(root.notification.notificationId, modelData.identifier);
+                  }
                 }
               }
             }

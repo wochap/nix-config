@@ -11,6 +11,7 @@ Singleton {
   property QtObject rounding
   property QtObject animationCurves
   property QtObject animation
+  property QtObject animations
 
   font: QtObject {
     property QtObject family: QtObject {
@@ -64,6 +65,11 @@ Singleton {
   }
 
   animation: QtObject {
+    property int duration: 150
+    property int easingType: Easing.OutCubic
+  }
+
+  animations: QtObject {
     property QtObject elementMove: QtObject {
       property int duration: root.animationCurves.expressiveDefaultSpatialDuration
       property int type: Easing.BezierSpline

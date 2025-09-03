@@ -7,13 +7,13 @@ Scope {
 
   property bool renderNotificationsPanel: false
 
-  NotificationsPopups {}
-
   Loader {
     active: root.renderNotificationsPanel
 
     sourceComponent: NotificationsPanel {}
   }
+
+  NotificationsPopups {}
 
   IpcHandler {
     target: "notificationsPanel"

@@ -133,6 +133,10 @@ Singleton {
     root.discardNotification(id);
   }
 
+  function toggleIsSilent() {
+    root.isSilent = !root.isSilent;
+  }
+
   function stringifyList(list) {
     return JSON.stringify(list.map(notification => notification.toJSON()), null, 2);
   }
