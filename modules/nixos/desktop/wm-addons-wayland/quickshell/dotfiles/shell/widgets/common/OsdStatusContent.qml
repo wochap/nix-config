@@ -45,7 +45,7 @@ PanelWindow {
     color: Theme.addAlpha(Theme.options.backgroundOverlay, Global.isBlurEnabled ? 0.65 : 1)
     border {
       width: 1
-      color: Theme.options.border
+      color: Theme.options.borderSecondary
     }
 
     WoosIcon {
