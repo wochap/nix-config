@@ -32,13 +32,18 @@ Item {
     anchors.fill: parent
     color: Theme.addAlpha(root.isPopup ? Theme.options.backgroundOverlay : Theme.options.background, root.isPopup && Global.isBlurEnabled ? 0.65 : 1)
     radius: 8
-    margin: ConfigNotifications.notificationPadding
+    leftMargin: ConfigNotifications.notificationPadding
+    rightMargin: ConfigNotifications.notificationPadding
+    topMargin: ConfigNotifications.notificationPadding * 2
+    bottomMargin: isPopup ? 0 : ConfigNotifications.notificationPadding * 2
     border {
       width: 1
       color: Theme.options.borderSecondary
     }
 
     child: ColumnLayout {
+      id: notificationContent
+
       spacing: ConfigNotifications.notificationPadding
 
       RowLayout {
@@ -47,11 +52,14 @@ Item {
         spacing: ConfigNotifications.notificationPadding
 
         SystemIcon {
+          Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
           icon: root.notification.appIcon
-          size: 32
+          size: 36
         }
 
         ColumnLayout {
+          id: right
+
           spacing: 0
 
           RowLayout {
@@ -112,7 +120,7 @@ Item {
               Repeater {
                 model: root.notification.actions
                 delegate: NotificationButtonMd {
-                  text: modelData.text
+                  text: modelData.text.trim().length > 0 ? modelData.text : "Default"
                   onClicked: {
                     SNotifications.attemptInvokeAction(root.notification.notificationId, modelData.identifier);
                   }
@@ -124,6 +132,7 @@ Item {
       }
 
       Rectangle {
+        Layout.topMargin: wrapperRectangle.topMargin - notificationContent.spacing
         visible: root.isPopup
         implicitWidth: parent.width * (root.notification?.timer?.progress ?? 0.5)
         implicitHeight: 1

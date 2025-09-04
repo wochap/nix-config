@@ -6,6 +6,6 @@ NotificationButton {
 
   materialIconSize: Styles.font.pixelSize.large
   textSize: Styles.font.pixelSize.small
-  verticalPadding: 2
-  horizontalPadding: 4
+  verticalPadding: root.text.length > 0 ? 4 : 2
+  horizontalPadding: root.text.length > 0 ? 6 : 4
 }
