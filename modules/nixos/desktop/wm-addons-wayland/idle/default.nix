@@ -1,14 +1,12 @@
-{ config, pkgs, lib, inputs, system, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config._custom.desktop.idle;
-  inherit (config._custom.globals) userName configDirectory;
-  backlight-restore = pkgs.writeScriptBin "backlight-restore" # sh
-    (builtins.readFile ./scripts/backlight-restore.sh);
-  close-overlays = pkgs.writeScriptBin "close-overlays" # sh
-    (builtins.readFile ./scripts/close-overlays.sh);
-  dpms = pkgs.writeScriptBin "dpms" # sh
-    (builtins.readFile ./scripts/dpms.sh);
+  inherit (config._custom.globals) configDirectory;
+  idle-backlight = pkgs.writeScriptBin "idle-backlight"
+    (builtins.readFile ./scripts/idle-backlight.sh);
+  idle-close-overlays = pkgs.writeScriptBin "idle-close-overlays"
+    (builtins.readFile ./scripts/idle-close-overlays.sh);
 in {
   options._custom.desktop.idle.enable = lib.mkEnableOption { };
 
@@ -17,13 +15,12 @@ in {
       home.packages = with pkgs; [
         wlinhibit # control idle inhibit
         sway-audio-idle-inhibit # complement to swayidle
-
-        backlight-restore
-        close-overlays
-        dpms
-
+        wayidle # idle cli
         chayang # gradually dim the screen
         wlopm # toggle screen
+
+        idle-backlight
+        idle-close-overlays
       ];
 
       xdg.configFile."hypr/hypridle.conf".source =
