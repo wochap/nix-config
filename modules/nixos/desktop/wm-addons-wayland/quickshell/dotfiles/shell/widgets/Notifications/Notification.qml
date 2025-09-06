@@ -78,14 +78,14 @@ Item {
               font.pixelSize: Styles.font.pixelSize.smaller
             }
 
-            NotificationButton {
+            NotificationButtonSm {
               materialIcon: "close"
               onClicked: {
                 SNotifications.discardNotification(root.notification.notificationId);
               }
             }
 
-            NotificationButton {
+            NotificationButtonSm {
               visible: root.isPopup
               materialIcon: "chevron_right"
               onClicked: {
@@ -111,10 +111,15 @@ Item {
               text: root.notification.body
               color: Theme.options.subtext0
               font.pixelSize: Styles.font.pixelSize.small
-              wrapMode: Text.WordWrap
+              elide: Text.ElideMiddle
+              wrapMode: root.isExpanded ? Text.WordWrap : Text.NoWrap
+              maximumLineCount: root.isExpanded ? 0 : 1
+              clip: true
             }
 
             RowLayout {
+              visible: root.notification.actions.length > 0
+              Layout.topMargin: ConfigNotifications.notificationPadding / 2
               spacing: ConfigNotifications.notificationPadding
 
               Repeater {

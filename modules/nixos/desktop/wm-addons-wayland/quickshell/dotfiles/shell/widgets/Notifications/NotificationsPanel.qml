@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Widgets
 import Quickshell.Wayland
 import Qt5Compat.GraphicalEffects
 import qs.config
@@ -86,9 +87,10 @@ PanelWindow {
       ListView {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.rightMargin: ConfigNotifications.notificationsPanelPaddingX
-        Layout.leftMargin: ConfigNotifications.notificationsPanelPaddingX
-        Layout.bottomMargin: ConfigNotifications.notificationsPanelPaddingX
+        Layout.bottomMargin: rectangle.border.width
+        rightMargin: ConfigNotifications.notificationsPanelPaddingX
+        leftMargin: ConfigNotifications.notificationsPanelPaddingX
+        bottomMargin: ConfigNotifications.notificationsPanelPaddingX
         spacing: ConfigNotifications.notificationsSpacing
         clip: true
         // PERF: do granular updates with ScriptModel
@@ -100,6 +102,7 @@ PanelWindow {
           anchors.left: parent?.left
           anchors.right: parent?.right
         }
+        ScrollIndicator.vertical: ScrollIndicator {}
       }
     }
   }
