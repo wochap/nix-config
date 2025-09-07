@@ -59,7 +59,7 @@ Scope {
   Loader {
     active: root.isOpen
 
-    sourceComponent: OsdContent {
+    sourceComponent: OsdProgressContent {
       service: root.service
       serviceValueKey: root.serviceValueKey
       namespace: root.namespace

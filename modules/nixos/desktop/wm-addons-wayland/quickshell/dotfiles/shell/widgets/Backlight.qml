@@ -2,7 +2,7 @@ import QtQuick
 import qs.services
 import qs.widgets.common
 
-Osd {
+OsdProgress {
   service: SBacklight
   serviceSignalName: "changed"
   serviceValueKey: "percentage"

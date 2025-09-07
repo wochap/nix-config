@@ -2,7 +2,7 @@ import QtQuick
 import qs.services
 import qs.widgets.common
 
-Osd {
+OsdProgress {
   service: SPipewire
   serviceSignalName: "outputVolumeChanged"
   serviceValueKey: "outputVolume"
