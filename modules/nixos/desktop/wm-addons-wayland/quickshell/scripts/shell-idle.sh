@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
-# A single script to manage and monitor a command inhibition lock.
+# A script to manage and monitor the idle state for hypridle.
 #
-# This script combines a listener (using inotifywait) and a wrapper
-# to create/remove a lock file, signaling when an inhibited process
-# is running.
+# This script uses a lock file to signal whether idling should be inhibited.
+# It can set the state, get the current state, or listen for state changes.
 
 LOCK_DIR="/tmp"
-LOCK_FILENAME="wlinhibit.lock"
+LOCK_FILENAME="hypridle.lock"
 LOCKFILE="$LOCK_DIR/$LOCK_FILENAME"
 
 ##
@@ -15,39 +14,45 @@ LOCKFILE="$LOCK_DIR/$LOCK_FILENAME"
 ##
 usage() {
   cat <<EOF
-Usage: $(basename "$0") [OPTION | COMMAND]
+Usage: $(basename "$0") [OPTION]
 
-A tool to manage and monitor a simple inhibition lock.
+A tool to manage and monitor idle status for hypridle.
 
 Options:
-  --listen        👂 Listen for inhibit start/stop events and print them.
-  --get-status    ❓ Check if the inhibition lock is currently active.
-  --toggle        🔄 Toggle inhibition lock.
-  -h, --help      📄 Display this help message.
+  --set <on|off>      ✍️  Set the idle status.
+                        'on' creates a lock file to inhibit idle.
+                        'off' removes the lock file to allow idle.
+  --status            ❓  Print the current status ('true' if inhibited, 'false' otherwise).
+  --listen            👂  Listen for status changes and print them continuously.
+  -h, --help          📄  Display this help message.
 EOF
 }
 
 ##
-# Listens for the creation and deletion of the lock file.
+# Creates or removes the lock file to set the idle state.
+# @param $1 - The desired state ('on' or 'off').
 ##
-listen() {
-  mkdir -p "$LOCK_DIR" # Ensure the directory exists
-
-  get_status
-  while true; do
-    inotifywait -q -e create -e delete "$LOCK_DIR" |
-      while read -r directory event filename; do
-        if [[ "$filename" == "$LOCK_FILENAME" ]]; then
-          get_status
-        fi
-      done
-  done
+set_status() {
+  case "$1" in
+    on)
+      touch "$LOCKFILE"
+      ;;
+    off)
+      rm -f "$LOCKFILE"
+      ;;
+    *)
+      echo "Error: Invalid argument for '--set'. Use 'on' or 'off'." >&2
+      exit 1
+      ;;
+  esac
 }
 
 ##
-# Checks if the lock file exists and reports the status.
+# Checks if the lock file exists and prints the status.
+# 'true' means idle is inhibited.
+# 'false' means idle is allowed.
 ##
-get_status() {
+print_status() {
   if [[ -f "$LOCKFILE" ]]; then
     printf -- 'true\n'
   else
@@ -56,18 +61,25 @@ get_status() {
 }
 
 ##
-# Manually creates or deletes the lock file.
+# Listens for the creation and deletion of the lock file and prints the status.
 ##
-toggle() {
-  notify="notify-send --urgency=low --replace-id=695 wlinhibit"
-  if [[ -f "$LOCKFILE" ]]; then
-    pkill wlinhibit
-    $notify "Idle inhibidor is disabled"
-  else
-    touch "$LOCKFILE"
-    (wlinhibit && rm -f "$LOCKFILE") &
-    $notify "Idle inhibidor is enabled"
-  fi
+listen() {
+  # Ensure the directory exists so inotifywait can watch it.
+  mkdir -p "$LOCK_DIR"
+
+  # Print the initial status before starting the loop
+  print_status
+
+  # Watch the directory for file creation and deletion events
+  while true; do
+    inotifywait -q -e create -e delete "$LOCK_DIR" |
+      while read -r directory event filename; do
+        # If the event is for our specific lock file, print the new status
+        if [[ "$filename" == "$LOCK_FILENAME" ]]; then
+          print_status
+        fi
+      done
+  done
 }
 
 # If no arguments are provided, show usage.
@@ -76,23 +88,31 @@ if [[ $# -eq 0 ]]; then
   exit 1
 fi
 
-# Parse the first argument to determine the mode of operation.
+# Parse the option.
 case "$1" in
---listen)
-  listen
-  ;;
---get-status)
-  get_status
-  ;;
---toggle)
-  toggle
-  ;;
--h | --help)
-  usage
-  ;;
-*)
-  usage
-  ;;
+  --set)
+    # Check if a second argument ('on' or 'off') was provided
+    if [[ -z "$2" ]]; then
+      echo "Error: '--set' option requires an argument ('on' or 'off')." >&2
+      usage
+      exit 1
+    fi
+    set_status "$2"
+    ;;
+  --status)
+    print_status
+    ;;
+  --listen)
+    listen
+    ;;
+  -h | --help)
+    usage
+    ;;
+  *)
+    echo "Error: Unknown option '$1'" >&2
+    usage
+    exit 1
+    ;;
 esac
 
 exit 0

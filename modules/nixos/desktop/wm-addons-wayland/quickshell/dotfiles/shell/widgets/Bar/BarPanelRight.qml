@@ -22,7 +22,7 @@ RowLayout {
     Layout.leftMargin: -3
     Layout.rightMargin: 0
     spacing: 0
-    visible: capslock.isVisible || timewarrior.isVisible || idle.isVisible
+    visible: capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible
 
     Capslock {
       id: capslock
@@ -30,8 +30,8 @@ RowLayout {
       Layout.fillHeight: true
     }
 
-    Idle {
-      id: idle
+    IdleInhibit {
+      id: idleInhibit
 
       Layout.fillHeight: true
     }

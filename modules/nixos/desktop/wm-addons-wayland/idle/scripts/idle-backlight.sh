@@ -20,6 +20,13 @@ if [ "$1" = "--on" ]; then
     fi
   done
 elif [ "$1" = "--off" ]; then
+  is_dpms_off=$(hyprctl monitors -j | jq 'any(.[]; .dpmsStatus? == false)')
+
+  if [[ "$is_dpms_off" == "true" ]]; then
+    # backlight already off
+    return 0
+  fi
+
   brightnessctl --save
 
   if [ "$XDG_SESSION_DESKTOP" = "Hyprland" ]; then

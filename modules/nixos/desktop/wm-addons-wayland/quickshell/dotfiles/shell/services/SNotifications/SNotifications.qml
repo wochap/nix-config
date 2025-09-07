@@ -6,6 +6,7 @@ import Quickshell.Io
 import Quickshell.Services.Notifications
 import QtQuick
 import qs.config
+import qs.services
 
 // Manages the full lifecycle of notifications, including:
 // - A central queue for all incoming notifications.
@@ -24,18 +25,23 @@ Singleton {
   property bool isReady: false
   // State Flags to control notification flow
   property bool isSilent: false // User-toggled "Do Not Disturb"
-  property bool isIdle: false // Should be controlled by an external service like hypridle
-  property bool isLocked: false // TODO: create lock service
+  property bool isIdle: SIdle.isIdle
+  property bool isLocked: SLock.isLock
   property bool arePopupsHovered: false
-  property bool arePopupsPaused: isIdle || isLocked || arePopupsHovered
+  property bool arePopupsPaused: isIdle || isLocked || arePopupsHovered || isPanelOpen
   readonly property int maxPopups: 5 // The maximum number of pop-ups to show on screen at once.
   readonly property int defaultPopupTimeout: 5000
   property int idOffset // ensure unique notification id
+  property bool isPanelOpen: false
+
+  function togglePanel() {
+    root.isPanelOpen = !isPanelOpen;
+  }
 
   // The central "gatekeeper" function. It decides when to show notifications
   // from the incomingQueue based on the current system state.
   function processQueues() {
-    if (root.isSilent || root.isIdle || root.isLocked) {
+    if (root.isSilent || root.isIdle || root.isLocked || root.isPanelOpen) {
       return;
     }
 
@@ -48,7 +54,7 @@ Singleton {
     const notificationsToMove = root.incomingQueue.slice(0, spaceAvailable);
 
     // Create the new state for both lists.
-    root.popupList = [...root.popupList, ...notificationsToMove];
+    root.popupList = [...notificationsToMove, ...root.popupList];
     root.incomingQueue = root.incomingQueue.slice(notificationsToMove.length);
 
     // Create timers for the newly added popups.
@@ -64,12 +70,17 @@ Singleton {
   }
 
   // Whenever a state changes, re-evaluate the notification queue.
-  onIsSilentChanged: root.processQueues()
-  onIsIdleChanged: root.processQueues()
+  onIsSilentChanged: processQueues()
+  onIsIdleChanged: processQueues()
   onIsLockedChanged: {
     // If the screen becomes unlocked, process any notifications that arrived while it was locked.
     if (!root.isLocked) {
-      root.processQueues();
+      processQueues();
+    }
+  }
+  onIsPanelOpenChanged: {
+    if (!root.isPanelOpen) {
+      processQueues();
     }
   }
 

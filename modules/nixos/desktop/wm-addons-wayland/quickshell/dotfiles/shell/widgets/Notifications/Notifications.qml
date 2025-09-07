@@ -1,25 +1,23 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import qs.services.SNotifications
 
 Scope {
   id: root
 
-  property bool renderNotificationsPanel: false
-
   Loader {
-    active: root.renderNotificationsPanel
-
+    active: SNotifications.isPanelOpen
     sourceComponent: NotificationsPanel {}
   }
 
   NotificationsPopups {}
 
   IpcHandler {
-    target: "notificationsPanel"
+    target: "notifications"
 
-    function toggle() {
-      root.renderNotificationsPanel = !root.renderNotificationsPanel;
+    function togglePanel() {
+      SNotifications.togglePanel()
     }
   }
 }

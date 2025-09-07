@@ -7,8 +7,8 @@ import qs.widgets.Bar.config
 Loader {
   id: root
 
-  property bool isIdle: false
-  property bool isVisible: isIdle
+  property bool isIdleInhibit: false
+  property bool isVisible: isIdleInhibit
 
   active: isVisible
   visible: isVisible
@@ -21,12 +21,12 @@ Loader {
   }
 
   Process {
-    command: ["shell-idle", "--listen"]
+    command: ["shell-idle-inhibit", "--listen"]
     running: true
     stdout: SplitParser {
       onRead: data => {
-        const isIdle = JSON.parse(data);
-        root.isIdle = isIdle;
+        const isIdleInhibit = JSON.parse(data);
+        root.isIdleInhibit = isIdleInhibit;
       }
     }
   }

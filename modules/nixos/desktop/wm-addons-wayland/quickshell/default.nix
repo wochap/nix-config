@@ -20,10 +20,14 @@ let
     (builtins.readFile ./scripts/shell-network.sh);
   shell-bluetooth = pkgs.writeScriptBin "shell-bluetooth"
     (builtins.readFile ./scripts/shell-bluetooth.sh);
+  shell-idle-inhibit = pkgs.writeScriptBin "shell-idle-inhibit"
+    (builtins.readFile ./scripts/shell-idle-inhibit.sh);
   shell-idle = pkgs.writeScriptBin "shell-idle"
     (builtins.readFile ./scripts/shell-idle.sh);
   shell-powerprofile = pkgs.writeScriptBin "shell-powerprofile"
     (builtins.readFile ./scripts/shell-powerprofile.sh);
+  shell-lock = pkgs.writeScriptBin "shell-lock"
+    (builtins.readFile ./scripts/shell-lock.sh);
   mkThemeQuickshell = themeColors:
     pkgs.writeText "theme.json" (builtins.toJSON themeColors);
   catppuccin-quickshell-light-theme-path = mkThemeQuickshell themeColorsLight;
@@ -59,10 +63,12 @@ in {
         shell-hypr-ws-special-count
         shell-network
         shell-bluetooth
+        shell-idle-inhibit
         shell-idle
         shell-powerprofile
         shell-backlight
         shell-osd
+        shell-lock
       ];
 
       xdg.configFile = {

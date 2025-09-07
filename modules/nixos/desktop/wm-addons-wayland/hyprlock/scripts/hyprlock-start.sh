@@ -30,9 +30,9 @@ EOF
 fi
 
 # disable idle inhibidor
-shell_idle_status=$(shell-idle --get-status)
+shell_idle_status=$(shell-idle-inhibit --status)
 if [[ "$shell_idle_status" == "true" ]]; then
-  shell-idle --toggle
+  shell-idle-inhibit --toggle
 fi
 
 exec hyprlock -c "$tmpfile" "$@"

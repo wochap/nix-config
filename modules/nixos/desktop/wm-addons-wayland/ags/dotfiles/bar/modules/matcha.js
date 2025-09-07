@@ -3,7 +3,7 @@ const Idle = Variable(
   {
     poll: [
       1000,
-      ["bash", "-c", "shell-idle --get-status"],
+      ["bash", "-c", "shell-idle-inhibit --status"],
       (out) => JSON.parse(out),
     ],
   },
@@ -17,7 +17,7 @@ export const matcha = () =>
     ]),
     visible: Idle.bind().as((value) => value),
     on_clicked: () => {
-      Utils.execAsync(["bash", "-c", "shell-idle --toggle"]);
+      Utils.execAsync(["bash", "-c", "shell-idle-inhibit --toggle"]);
     },
     child: Widget.Label({
       label: "",
