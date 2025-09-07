@@ -41,94 +41,18 @@ Singleton {
     property int easingType: Easing.OutCubic
   }
 
-  // animations: QtObject {
-  //   property QtObject elementMove: QtObject {
-  //     property int duration: root.animationCurves.expressiveDefaultSpatialDuration
-  //     property int type: Easing.BezierSpline
-  //     property list<real> bezierCurve: root.animationCurves.expressiveDefaultSpatial
-  //     property int velocity: 650
-  //     property Component numberAnimation: Component {
-  //       NumberAnimation {
-  //         duration: root.animation.elementMove.duration
-  //         easing.type: root.animation.elementMove.type
-  //         easing.bezierCurve: root.animation.elementMove.bezierCurve
-  //       }
-  //     }
-  //     property Component colorAnimation: Component {
-  //       ColorAnimation {
-  //         duration: root.animation.elementMove.duration
-  //         easing.type: root.animation.elementMove.type
-  //         easing.bezierCurve: root.animation.elementMove.bezierCurve
-  //       }
-  //     }
-  //   }
-  //   property QtObject elementMoveEnter: QtObject {
-  //     property int duration: 400
-  //     property int type: Easing.BezierSpline
-  //     property list<real> bezierCurve: root.animationCurves.emphasizedDecel
-  //     property int velocity: 650
-  //     property Component numberAnimation: Component {
-  //       NumberAnimation {
-  //         duration: root.animation.elementMoveEnter.duration
-  //         easing.type: root.animation.elementMoveEnter.type
-  //         easing.bezierCurve: root.animation.elementMoveEnter.bezierCurve
-  //       }
-  //     }
-  //   }
-  //   property QtObject elementMoveExit: QtObject {
-  //     property int duration: 200
-  //     property int type: Easing.BezierSpline
-  //     property list<real> bezierCurve: root.animationCurves.emphasizedAccel
-  //     property int velocity: 650
-  //     property Component numberAnimation: Component {
-  //       NumberAnimation {
-  //         duration: root.animation.elementMoveExit.duration
-  //         easing.type: root.animation.elementMoveExit.type
-  //         easing.bezierCurve: root.animation.elementMoveExit.bezierCurve
-  //       }
-  //     }
-  //   }
-  //   property QtObject elementMoveFast: QtObject {
-  //     property int duration: root.animationCurves.expressiveEffectsDuration
-  //     property int type: Easing.BezierSpline
-  //     property list<real> bezierCurve: root.animationCurves.expressiveEffects
-  //     property int velocity: 850
-  //     property Component colorAnimation: Component {
-  //       ColorAnimation {
-  //         duration: root.animation.elementMoveFast.duration
-  //         easing.type: root.animation.elementMoveFast.type
-  //         easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
-  //       }
-  //     }
-  //     property Component numberAnimation: Component {
-  //       NumberAnimation {
-  //         duration: root.animation.elementMoveFast.duration
-  //         easing.type: root.animation.elementMoveFast.type
-  //         easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
-  //       }
-  //     }
-  //   }
-  //   property QtObject clickBounce: QtObject {
-  //     property int duration: 200
-  //     property int type: Easing.BezierSpline
-  //     property list<real> bezierCurve: root.animationCurves.expressiveFastSpatial
-  //     property int velocity: 850
-  //     property Component numberAnimation: Component {
-  //       NumberAnimation {
-  //         duration: root.animation.clickBounce.duration
-  //         easing.type: root.animation.clickBounce.type
-  //         easing.bezierCurve: root.animation.clickBounce.bezierCurve
-  //       }
-  //     }
-  //   }
-  //   property QtObject scroll: QtObject {
-  //     property int duration: 200
-  //     property int type: Easing.BezierSpline
-  //     property list<real> bezierCurve: root.animationCurves.standardDecel
-  //   }
-  //   property QtObject menuDecel: QtObject {
-  //     property int duration: 350
-  //     property int type: Easing.OutExpo
-  //   }
-  // }
+  animations: QtObject {
+    property Component numberAnimation: Component {
+      NumberAnimation {
+        duration: animation.duration
+        easing.type: animation.easingType
+      }
+    }
+    property Component colorAnimation: Component {
+      ColorAnimation {
+        duration: animation.duration
+        easing.type: animation.easingType
+      }
+    }
+  }
 }

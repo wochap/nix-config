@@ -17,7 +17,15 @@ Scope {
     target: "notifications"
 
     function togglePanel() {
-      SNotifications.togglePanel()
+      SNotifications.togglePanel();
+    }
+
+    function discardPopups() {
+      SNotifications.discardAllPopups();
+    }
+
+    function dismissPopups() {
+      SNotifications.timeoutAllPopups();
     }
   }
 }

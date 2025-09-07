@@ -7,9 +7,6 @@ Rectangle {
   color: "transparent"
 
   Behavior on color {
-    ColorAnimation {
-      duration: Styles.animation.duration
-      easing.type: Styles.animation.easingType
-    }
+    animation: Styles.animations.colorAnimation.createObject(this)
   }
 }

@@ -70,6 +70,10 @@ PanelWindow {
         radius: osd.radius - osdWrapper.offset
         color: isOverflowing ? Theme.options.blue : Theme.options.lavender
         implicitHeight: parent.height * percentage / 100
+
+        Behavior on implicitHeight {
+          animation: Styles.animations.numberAnimation.createObject(this)
+        }
       }
     }
 
@@ -77,7 +81,7 @@ PanelWindow {
       anchors.horizontalCenter: osd.horizontalCenter
       anchors.bottom: osd.bottom
       anchors.bottomMargin: size / 8
-      color: percentage < 15 ? progressBar.color : Theme.options.backgroundOverlay
+      color: percentage <= 10 ? progressBar.color : Theme.options.backgroundOverlay
       size: osd.width / 1.5
       icon: root.icon
     }

@@ -32,10 +32,7 @@ Button {
   }
 
   Behavior on scale {
-    NumberAnimation {
-      duration: Styles.animation.duration
-      easing.type: Styles.animation.easingType
-    }
+    animation: Styles.animations.numberAnimation.createObject(this)
   }
 
   Component {

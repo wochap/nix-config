@@ -34,6 +34,21 @@ Singleton {
   property int idOffset // ensure unique notification id
   property bool isPanelOpen: false
 
+  // Whenever a state changes, re-evaluate the notification queue.
+  onIsSilentChanged: processQueues()
+  onIsIdleChanged: processQueues()
+  onIsLockedChanged: {
+    // If the screen becomes unlocked, process any notifications that arrived while it was locked.
+    if (!root.isLocked) {
+      processQueues();
+    }
+  }
+  onIsPanelOpenChanged: {
+    if (!root.isPanelOpen) {
+      processQueues();
+    }
+  }
+
   function togglePanel() {
     root.isPanelOpen = !isPanelOpen;
   }
@@ -67,21 +82,6 @@ Singleton {
         });
       }
     });
-  }
-
-  // Whenever a state changes, re-evaluate the notification queue.
-  onIsSilentChanged: processQueues()
-  onIsIdleChanged: processQueues()
-  onIsLockedChanged: {
-    // If the screen becomes unlocked, process any notifications that arrived while it was locked.
-    if (!root.isLocked) {
-      processQueues();
-    }
-  }
-  onIsPanelOpenChanged: {
-    if (!root.isPanelOpen) {
-      processQueues();
-    }
   }
 
   // Removes a notification entirely from the system.
@@ -131,6 +131,42 @@ Singleton {
     }
 
     // A space has opened up, so process the queue for the next notification.
+    root.processQueues();
+  }
+
+  // Removes all currently visible popups without affecting history.
+  function discardAllPopups() {
+    // Tell the notification server to dismiss each popup.
+    root.popupList.forEach(popup => {
+      const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(n => n.id + root.idOffset === popup.notificationId);
+      if (notificationServerIndex !== -1) {
+        notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
+      }
+    });
+
+    // Clear the list of popups.
+    root.popupList = [];
+
+    // A space has opened up, so process the queue for the next notification(s).
+    root.processQueues();
+  }
+
+  // Moves all currently visible pop-ups to the history list.
+  function timeoutAllPopups() {
+    if (root.popupList.length === 0) {
+      return;
+    }
+
+    // Move all current popups to the main history list.
+    root.list = [...root.popupList, ...root.list];
+
+    // Clear the list of popups.
+    root.popupList = [];
+
+    // Persist the updated history list.
+    notificationFileView.setText(root.stringifyList(root.list));
+
+    // Check for new notifications to display.
     root.processQueues();
   }
 
@@ -201,47 +237,47 @@ Singleton {
 
   // Grouping logic
 
-  property var latestTimeForApp: ({})
-  property var groupsByAppName: root.groupsForList(root.list)
-  property var popupGroupsByAppName: root.groupsForList(root.popupList)
-  property var appNameList: root.appNameListForGroups(root.groupsByAppName)
-  property var popupAppNameList: root.appNameListForGroups(root.popupGroupsByAppName)
-
-  onListChanged: {
-    root.list.forEach(notification => {
-      if (!root.latestTimeForApp[notification.appName] || notification.time > root.latestTimeForApp[notification.appName]) {
-        root.latestTimeForApp[notification.appName] = Math.max(root.latestTimeForApp[notification.appName] || 0, notification.time);
-      }
-    });
-    Object.keys(root.latestTimeForApp).forEach(appName => {
-      if (!root.list.some(notification => notification.appName === appName)) {
-        delete root.latestTimeForApp[appName];
-      }
-    });
-  }
-
-  function appNameListForGroups(groups) {
-    return Object.keys(groups).sort((a, b) => {
-      return groups[b].time - groups[a].time;
-    });
-  }
-
-  function groupsForList(list) {
-    const groups = {};
-    list.forEach(notification => {
-      if (!groups[notification.appName]) {
-        groups[notification.appName] = {
-          appName: notification.appName,
-          appIcon: notification.appIcon,
-          notifications: [],
-          time: 0
-        };
-      }
-      groups[notification.appName].notifications.push(notification);
-      groups[notification.appName].time = latestTimeForApp[notification.appName] || notification.time;
-    });
-    return groups;
-  }
+  // property var latestTimeForApp: ({})
+  // property var groupsByAppName: root.groupsForList(root.list)
+  // property var popupGroupsByAppName: root.groupsForList(root.popupList)
+  // property var appNameList: root.appNameListForGroups(root.groupsByAppName)
+  // property var popupAppNameList: root.appNameListForGroups(root.popupGroupsByAppName)
+  //
+  // onListChanged: {
+  //   root.list.forEach(notification => {
+  //     if (!root.latestTimeForApp[notification.appName] || notification.time > root.latestTimeForApp[notification.appName]) {
+  //       root.latestTimeForApp[notification.appName] = Math.max(root.latestTimeForApp[notification.appName] || 0, notification.time);
+  //     }
+  //   });
+  //   Object.keys(root.latestTimeForApp).forEach(appName => {
+  //     if (!root.list.some(notification => notification.appName === appName)) {
+  //       delete root.latestTimeForApp[appName];
+  //     }
+  //   });
+  // }
+  //
+  // function appNameListForGroups(groups) {
+  //   return Object.keys(groups).sort((a, b) => {
+  //     return groups[b].time - groups[a].time;
+  //   });
+  // }
+  //
+  // function groupsForList(list) {
+  //   const groups = {};
+  //   list.forEach(notification => {
+  //     if (!groups[notification.appName]) {
+  //       groups[notification.appName] = {
+  //         appName: notification.appName,
+  //         appIcon: notification.appIcon,
+  //         notifications: [],
+  //         time: 0
+  //       };
+  //     }
+  //     groups[notification.appName].notifications.push(notification);
+  //     groups[notification.appName].time = latestTimeForApp[notification.appName] || notification.time;
+  //   });
+  //   return groups;
+  // }
 
   // File Persistence
 

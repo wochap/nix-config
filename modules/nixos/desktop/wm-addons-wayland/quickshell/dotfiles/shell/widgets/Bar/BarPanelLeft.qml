@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.config
+import qs.services
 import qs.widgets.Bar.config
 import qs.widgets.Bar.modules
 import qs.widgets.Bar.modules.Hyprland

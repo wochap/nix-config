@@ -64,6 +64,7 @@ Scope {
 
   Loader {
     active: root.isOpen
+    visible: root.isOpen
 
     sourceComponent: OsdStatusContent {
       service: root.service

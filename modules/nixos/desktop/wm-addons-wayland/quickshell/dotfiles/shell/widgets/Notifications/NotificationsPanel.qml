@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Qt5Compat.GraphicalEffects
 import qs.config
@@ -84,7 +83,7 @@ PanelWindow {
       }
 
       // body
-      ListView {
+      StyledListView {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.bottomMargin: rectangle.border.width

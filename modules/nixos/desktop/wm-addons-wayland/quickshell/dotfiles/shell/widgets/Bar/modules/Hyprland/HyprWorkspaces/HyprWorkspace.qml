@@ -3,8 +3,8 @@ import QtQuick.Effects
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Hyprland
-import qs.services
 import qs.config
+import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
 import "../Utils.js" as Utils
@@ -25,8 +25,8 @@ Button {
   onClicked: Hyprland.dispatch(`workspace ${workspaceId}`)
   verticalPadding: 0
   horizontalPadding: root.focused && clients.length > 0 ? 3 : 6
-  background: Rectangle {
-    color: focused ? Theme.options.surface0 : "transparent"
+  background: StyledRect {
+    color: focused ? Theme.options.surface0 : Theme.options.base
     radius: ConfigBar.modulesRadius
   }
   contentItem: Loader {
@@ -83,6 +83,14 @@ Button {
             shadowBlur: 0.25
             shadowColor: Theme.options.primary
           }
+
+          // TODO: doesn't work
+          // Behavior on opacity {
+          //   NumberAnimation {
+          //     duration: 500
+          //     easing.type: Easing.InOutQuad
+          //   }
+          // }
         }
       }
     }

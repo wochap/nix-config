@@ -1,8 +1,6 @@
 import Quickshell
-import Quickshell.Wayland
 import Quickshell.Widgets
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import qs.config
@@ -144,5 +142,18 @@ Item {
         color: Theme.options.primary
       }
     }
+  }
+
+  MouseArea {
+    anchors.fill: wrapperRectangle
+    acceptedButtons: Qt.RightButton
+    onClicked: mouse => {
+      SNotifications.timeoutNotification(root.notification.notificationId);
+    }
+  }
+
+  RetainableLock {
+    object: root.notification.notification
+    locked: true
   }
 }

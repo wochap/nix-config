@@ -1,7 +1,8 @@
 import QtQuick
 import qs.config
+import qs.widgets.common
 
-Text {
+StyledText {
   id: root
 
   property string weight: Font.ExtraLight
@@ -14,7 +15,6 @@ Text {
   verticalAlignment: Text.AlignVCenter
   color: Theme.options.text
   text: icon
-
   font {
     family: Styles.font.family.materialIcon
     pixelSize: size

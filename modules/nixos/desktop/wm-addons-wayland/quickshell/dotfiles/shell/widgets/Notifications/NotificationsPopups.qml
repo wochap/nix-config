@@ -26,7 +26,7 @@ PanelWindow {
     item: listview.contentItem
   }
 
-  ListView {
+  StyledListView {
     id: listview
 
     anchors {

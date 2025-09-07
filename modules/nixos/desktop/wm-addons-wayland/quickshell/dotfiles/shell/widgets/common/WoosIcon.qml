@@ -1,7 +1,8 @@
 import QtQuick
 import qs.config
+import qs.widgets.common
 
-Text {
+StyledText {
   id: root
 
   required property string icon
