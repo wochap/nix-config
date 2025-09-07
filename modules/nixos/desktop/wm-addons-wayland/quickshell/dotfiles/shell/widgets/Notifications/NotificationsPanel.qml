@@ -43,7 +43,7 @@ PanelWindow {
       bottomMargin: 8
       rightMargin: 8
     }
-    radius: 8
+    radius: Styles.radius.windowRounding
     implicitWidth: ConfigNotifications.notificationsPanelWidth
     color: Theme.options.backgroundOverlay
     border {

@@ -41,7 +41,7 @@ PanelWindow {
     anchors.bottomMargin: Styles.font.pixelSize.normal * 2
     implicitWidth: 150
     implicitHeight: osd.implicitWidth
-    radius: 8
+    radius: Styles.radius.windowRounding
     color: Theme.addAlpha(Theme.options.backgroundOverlay, Global.isBlurEnabled ? 0.65 : 1)
     border {
       width: 1

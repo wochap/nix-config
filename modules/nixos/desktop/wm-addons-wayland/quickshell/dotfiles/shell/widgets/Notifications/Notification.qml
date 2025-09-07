@@ -31,7 +31,7 @@ Item {
 
     anchors.fill: parent
     color: Theme.addAlpha(root.isPopup ? Theme.options.backgroundOverlay : Theme.options.background, root.isPopup && Global.isBlurEnabled ? 0.65 : 1)
-    radius: 8
+    radius: Styles.radius.windowRounding
     leftMargin: ConfigNotifications.notificationPadding
     rightMargin: ConfigNotifications.notificationPadding
     topMargin: ConfigNotifications.notificationPadding * 2
