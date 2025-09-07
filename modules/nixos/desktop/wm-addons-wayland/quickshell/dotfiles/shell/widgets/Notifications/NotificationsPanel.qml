@@ -84,6 +84,7 @@ PanelWindow {
 
       // body
       StyledListView {
+        visible: SNotifications.list.length > 0
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.bottomMargin: rectangle.border.width
@@ -102,6 +103,14 @@ PanelWindow {
           anchors.right: parent?.right
         }
         ScrollIndicator.vertical: ScrollIndicator {}
+      }
+
+      StyledText {
+        visible: SNotifications.list.length === 0
+        Layout.fillHeight: true
+        text: "No notifications"
+        color: Theme.options.textDimmed
+        anchors.horizontalCenter: parent.horizontalCenter
       }
     }
   }

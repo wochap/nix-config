@@ -135,7 +135,7 @@ Item {
       }
 
       Rectangle {
-        Layout.topMargin: wrapperRectangle.topMargin - notificationContent.spacing
+        Layout.topMargin: wrapperRectangle.topMargin - notificationContent.spacing + 1
         visible: root.isPopup
         implicitWidth: parent.width * (root.notification?.timer?.progress ?? 0.5)
         implicitHeight: 1
@@ -148,7 +148,11 @@ Item {
     anchors.fill: wrapperRectangle
     acceptedButtons: Qt.RightButton
     onClicked: mouse => {
-      SNotifications.timeoutNotification(root.notification.notificationId);
+      if (root.isPopup) {
+        SNotifications.timeoutNotification(root.notification.notificationId);
+      } else {
+        SNotifications.discardNotification(root.notification.notificationId);
+      }
     }
   }
 
