@@ -27,8 +27,6 @@ in {
       ncdu # disk usage
       notify-desktop # send notifications
       pciutils # inspect/manipulate PCI devices, e.g. lspci
-      pulseaudio
-      pulsemixer # pulseaudio
       socat
       systemd
       vdpauinfo # verifying VDPAU

@@ -10,8 +10,6 @@ in {
         blanket # play rain, waves, etc sounds
         d-spy # dbus gui
         inkscape # photo editor cli/gui
-        # pavucontrol # pulseaudio gui
-        pwvucontrol # pipewire gui
         # pinta # image editor
         remmina # vnc client
 

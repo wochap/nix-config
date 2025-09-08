@@ -1,4 +1,4 @@
-{ config, lib, inputs, ... }:
+{ config, lib, inputs, pkgs, ... }:
 
 let cfg = config._custom.desktop.audio;
 in {
@@ -6,6 +6,14 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "audio" ];
+
+    environment.systemPackages = with pkgs; [
+      pulseaudio
+      pulsemixer # pulseaudio
+      nixpkgs-unstable.wiremix
+      # pavucontrol # pulseaudio gui
+      pwvucontrol # pipewire gui
+    ];
 
     services.pulseaudio.enable = false;
 
