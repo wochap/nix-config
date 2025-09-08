@@ -37,6 +37,7 @@ PanelWindow {
       topMargin: 8
       rightMargin: anchors.topMargin
     }
+    bottomMargin: anchors.topMargin
     implicitWidth: ConfigNotifications.notificationsPopupsWidth
     // TODO: find why spacing between items is being blur out
     spacing: ConfigNotifications.notificationsSpacing

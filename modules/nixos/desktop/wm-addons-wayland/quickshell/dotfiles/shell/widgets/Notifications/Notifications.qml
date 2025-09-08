@@ -6,9 +6,9 @@ import qs.services.SNotifications
 Scope {
   id: root
 
-  Loader {
+  LazyLoader {
     active: SNotifications.isPanelOpen
-    sourceComponent: NotificationsPanel {}
+    component: NotificationsPanel {}
   }
 
   NotificationsPopups {}

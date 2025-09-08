@@ -39,8 +39,8 @@ PanelWindow {
       bottom: parent.bottom
       right: parent.right
       topMargin: 8
-      bottomMargin: 8
-      rightMargin: 8
+      bottomMargin: anchors.topMargin
+      rightMargin: anchors.topMargin
     }
     radius: Styles.radius.windowRounding
     implicitWidth: ConfigNotifications.notificationsPanelWidth
@@ -52,7 +52,7 @@ PanelWindow {
 
     ColumnLayout {
       anchors.fill: parent
-      spacing: 8
+      spacing: rectangle.anchors.topMargin
 
       // header
       RowLayout {

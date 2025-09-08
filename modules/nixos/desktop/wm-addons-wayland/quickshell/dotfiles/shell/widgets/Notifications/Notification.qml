@@ -113,6 +113,7 @@ Item {
               wrapMode: root.isExpanded ? Text.WordWrap : Text.NoWrap
               maximumLineCount: root.isExpanded ? 0 : 1
               clip: true
+              textFormat: Text.RichText
             }
 
             RowLayout {

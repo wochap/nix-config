@@ -33,6 +33,9 @@ ListView {
   removeDisplaced: Transition {
     animations: [Styles.animations.numberAnimation.createObject(this, {
         property: "y"
+      }), Styles.animations.numberAnimation.createObject(this, {
+        properties: root.popIn ? "opacity,scale" : "opacity",
+        to: 1
       })]
   }
 }
