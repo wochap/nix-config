@@ -27,10 +27,9 @@ PanelWindow {
     item: listview.contentItem
   }
 
-  WrapperRectangle {
-    id: rectangle
+  StyledListView {
+    id: listview
 
-    color: "transparent"
     anchors {
       top: parent.top
       bottom: parent.bottom
@@ -38,27 +37,23 @@ PanelWindow {
       topMargin: 8
       rightMargin: anchors.topMargin
     }
+    implicitWidth: ConfigNotifications.notificationsPopupsWidth
+    // TODO: find why spacing between items is being blur out
+    spacing: ConfigNotifications.notificationsSpacing
+    clip: false
+    // PERF: do granular updates with ScriptModel
+    model: ScriptModel {
+      values: SNotifications.popupList
+    }
+    delegate: NotificationItem {
+      isPopup: true
+      anchors.left: parent?.left
+      anchors.right: parent?.right
+    }
 
-    StyledListView {
-      id: listview
-
-      implicitWidth: ConfigNotifications.notificationsPopupsWidth
-      spacing: ConfigNotifications.notificationsSpacing
-      clip: false
-      // PERF: do granular updates with ScriptModel
-      model: ScriptModel {
-        values: SNotifications.popupList
-      }
-      delegate: NotificationItem {
-        isPopup: true
-        anchors.left: parent?.left
-        anchors.right: parent?.right
-      }
-
-      HoverHandler {
-        onHoveredChanged: {
-          SNotifications.arePopupsHovered = hovered;
-        }
+    HoverHandler {
+      onHoveredChanged: {
+        SNotifications.arePopupsHovered = hovered;
       }
     }
   }
