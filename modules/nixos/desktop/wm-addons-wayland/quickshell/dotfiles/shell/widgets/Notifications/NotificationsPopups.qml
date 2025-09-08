@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
+import Quickshell.Widgets
 import Quickshell.Wayland
 import Qt5Compat.GraphicalEffects
 import qs.config
@@ -26,9 +27,10 @@ PanelWindow {
     item: listview.contentItem
   }
 
-  StyledListView {
-    id: listview
+  WrapperRectangle {
+    id: rectangle
 
+    color: "transparent"
     anchors {
       top: parent.top
       bottom: parent.bottom
@@ -36,22 +38,27 @@ PanelWindow {
       topMargin: 8
       rightMargin: anchors.topMargin
     }
-    implicitWidth: ConfigNotifications.notificationsPopupsWidth
-    spacing: ConfigNotifications.notificationsSpacing
-    clip: false
-    // PERF: do granular updates with ScriptModel
-    model: ScriptModel {
-      values: SNotifications.popupList
-    }
-    delegate: NotificationItem {
-      isPopup: true
-      anchors.left: parent?.left
-      anchors.right: parent?.right
-    }
 
-    HoverHandler {
-      onHoveredChanged: {
-        SNotifications.arePopupsHovered = hovered;
+    StyledListView {
+      id: listview
+
+      implicitWidth: ConfigNotifications.notificationsPopupsWidth
+      spacing: ConfigNotifications.notificationsSpacing
+      clip: false
+      // PERF: do granular updates with ScriptModel
+      model: ScriptModel {
+        values: SNotifications.popupList
+      }
+      delegate: NotificationItem {
+        isPopup: true
+        anchors.left: parent?.left
+        anchors.right: parent?.right
+      }
+
+      HoverHandler {
+        onHoveredChanged: {
+          SNotifications.arePopupsHovered = hovered;
+        }
       }
     }
   }
