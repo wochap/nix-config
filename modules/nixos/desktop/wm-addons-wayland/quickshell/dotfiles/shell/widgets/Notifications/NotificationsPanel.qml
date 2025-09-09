@@ -108,9 +108,9 @@ PanelWindow {
       StyledText {
         visible: SNotifications.list.length === 0
         Layout.fillHeight: true
+        Layout.alignment: Qt.AlignHCenter
         text: "No notifications"
         color: Theme.options.textDimmed
-        anchors.horizontalCenter: parent.horizontalCenter
       }
     }
   }
