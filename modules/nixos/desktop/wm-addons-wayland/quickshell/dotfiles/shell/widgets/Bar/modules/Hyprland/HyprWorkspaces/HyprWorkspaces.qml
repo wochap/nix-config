@@ -13,7 +13,7 @@ RowLayout {
   id: root
 
   readonly property int workspacesShown: 9
-  readonly property HyprlandMonitor monitor: Hyprland.monitorFor(QsWindow.window?.screen)
+  readonly property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(QsWindow.window?.screen)
   readonly property list<bool> workspacesOccupied: Array.from({
     length: root.workspacesShown
   }, (_, i) => {
@@ -22,7 +22,7 @@ RowLayout {
   readonly property var clientsByWorkspaceId: {
     const result = Object.entries(SHyprland.workspacesById).reduce((result, [workspaceId, workspace]) => {
       const clients = (SHyprland.clientsByWorkspaceId?.[workspace.id] ?? []).map(client => (Object.assign(client, {
-            focused: client.address === SHyprland.activeWindow?.address,
+            isFocused: client.address === SHyprland.activeWindow?.address,
             customClass: Utils.mapAppId(client.class)
           })));
       return Object.assign(result, {
@@ -36,13 +36,12 @@ RowLayout {
 
   Repeater {
     model: root.workspacesShown
-
     delegate: HyprWorkspace {
       Layout.fillHeight: true
-      workspace: SHyprland.workspacesById[index + 1]
-      monitor: root.monitor
-      occupied: root.workspacesOccupied?.[index] ?? true
       clients: root.clientsByWorkspaceId?.[index + 1] ?? []
+      workspace: SHyprland.workspacesById[index + 1]
+      isOccupied: root.workspacesOccupied?.[index] ?? true
+      hyprlandMonitor: root.hyprlandMonitor
     }
   }
 }

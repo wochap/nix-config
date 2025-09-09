@@ -12,8 +12,8 @@ import "Utils.js" as Utils
 WrapperRectangle {
   id: root
 
-  property HyprlandMonitor monitor: Hyprland.monitorFor(QsWindow.window?.screen)
-  property var workspaceId: monitor?.activeWorkspace?.id ?? 0
+  property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(QsWindow.window?.screen)
+  property var workspaceId: hyprlandMonitor?.activeWorkspace?.id ?? 0
   property var activeWindowByWorkspaceId: Object.entries(SHyprland.workspacesById).reduce((result, [workspaceId, workspace]) => {
     return Object.assign(result, {
       [workspaceId]: SHyprland.clientsByAddress?.[workspace.lastwindow] ?? null

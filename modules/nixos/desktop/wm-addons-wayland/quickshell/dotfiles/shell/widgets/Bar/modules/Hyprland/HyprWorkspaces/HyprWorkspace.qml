@@ -12,25 +12,25 @@ import "../Utils.js" as Utils
 Button {
   id: root
 
-  required property var clients
   required property int index
+  required property var clients
   required property var workspace
-  required property HyprlandMonitor monitor
-  required property bool occupied
+  required property bool isOccupied
+  required property HyprlandMonitor hyprlandMonitor
   property int workspaceId: index + 1
-  property bool focused: monitor?.activeWorkspace?.id === workspaceId
+  property bool isFocused: hyprlandMonitor?.activeWorkspace?.id === workspaceId
   property var lastClient: SHyprland.clientsByAddress[root.workspace?.lastwindow]
   property bool hasLastClient: !!root.lastClient
 
   onClicked: Hyprland.dispatch(`workspace ${workspaceId}`)
   verticalPadding: 0
-  horizontalPadding: root.focused && clients.length > 0 ? 3 : 6
+  horizontalPadding: root.isFocused && clients.length > 0 ? 3 : 6
   background: StyledRect {
-    color: focused ? Theme.options.surface0 : Theme.options.base
+    color: root.isFocused ? Theme.options.surface0 : Theme.options.base
     radius: ConfigBar.modulesRadius
   }
   contentItem: Loader {
-    sourceComponent: root.focused && clients.length > 0 ? taskbar : number
+    sourceComponent: root.isFocused && root.clients.length > 0 ? taskbar : number
   }
 
   Component {
@@ -56,7 +56,7 @@ Button {
         id: styledText
 
         Layout.alignment: Qt.AlignHCenter
-        color: focused && occupied ? Theme.options.primary : (occupied ? Theme.options.text : Theme.options.textDimmed)
+        color: root.isFocused && root.isOccupied ? Theme.options.primary : (root.isOccupied ? Theme.options.text : Theme.options.textDimmed)
         text: workspaceId
         font.pixelSize: root.hasLastClient ? Styles.font.pixelSize.smaller : Styles.font.pixelSize.normal
       }
@@ -76,7 +76,7 @@ Button {
           Layout.fillHeight: true
           icon: modelData.customClass
           size: 28
-          opacity: modelData.focused ? 1 : 0.5
+          opacity: modelData.isFocused ? 1 : 0.5
           layer.enabled: modelData.floating
           layer.effect: MultiEffect {
             shadowEnabled: true

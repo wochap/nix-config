@@ -9,8 +9,8 @@ import qs.widgets.Bar.modules
 Loader {
   id: root
 
-  property HyprlandMonitor monitor: Hyprland.monitorFor(QsWindow.window?.screen)
-  property var workspaceId: monitor?.activeWorkspace?.id
+  property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(QsWindow.window?.screen)
+  property var workspaceId: hyprlandMonitor?.activeWorkspace?.id
   property var workspace: SHyprland.workspacesById[workspaceId]
   property var clients: SHyprland.clientsByWorkspaceId[workspaceId]?.filter?.(window => !window.floating)
   property int windowsCount: clients?.length ?? 0
