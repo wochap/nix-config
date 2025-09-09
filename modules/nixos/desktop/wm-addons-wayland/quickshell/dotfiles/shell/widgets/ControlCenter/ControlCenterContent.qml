@@ -1,0 +1,86 @@
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Quickshell
+import Quickshell.Widgets
+import Quickshell.Wayland
+import Qt5Compat.GraphicalEffects
+import qs.config
+import qs.services
+import qs.services.SNotifications
+import qs.widgets.common
+
+PanelWindow {
+  id: root
+
+  WlrLayershell.namespace: "quickshell:control-center"
+  WlrLayershell.layer: WlrLayer.Overlay
+  anchors {
+    top: true
+    left: true
+    bottom: true
+    right: true
+  }
+  exclusionMode: ExclusionMode.Normal
+  exclusiveZone: 0
+  color: "transparent"
+  mask: Region {
+    item: rectangle
+  }
+
+  StyledRectangularShadow {
+    target: rectangle
+  }
+
+  WrapperRectangle {
+    id: rectangle
+
+    anchors {
+      top: parent.top
+      right: parent.right
+      topMargin: 8
+      rightMargin: 8
+    }
+    radius: Styles.radius.windowRounding
+    color: Theme.options.backgroundOverlay
+    border {
+      width: 1
+      color: Theme.options.borderSecondary
+    }
+    margin: ConfigControlCenter.controlCenterPadding
+    implicitWidth: ConfigControlCenter.controlCenterWidth
+
+    child: ColumnLayout {
+      spacing: ConfigControlCenter.controlCenterSpacing
+
+      RowLayout {
+        Layout.fillWidth: true
+
+        ControlCenterButton {
+          Layout.fillWidth: true
+          Layout.preferredWidth: 1
+          label: SNetwork.ssid
+          systemIcon: SNetwork.icon
+        }
+        ControlCenterButton {
+          Layout.fillWidth: true
+          Layout.preferredWidth: 1
+          label: SBluetooth.label
+          materialIcon: SBluetooth.icon
+          isActive: SBluetooth.powered
+        }
+        ControlCenterButton {
+          Layout.fillWidth: true
+          Layout.preferredWidth: 1
+          label: "wifi"
+          woosIcon: ""
+        }
+      }
+      RowLayout {
+        ControlCenterButton {}
+        ControlCenterButton {}
+        ControlCenterButton {}
+      }
+    }
+  }
+}

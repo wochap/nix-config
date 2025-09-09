@@ -11,6 +11,7 @@ import qs.services.SNotifications
 import qs.widgets
 import qs.widgets.Bar
 import qs.widgets.Notifications
+import qs.widgets.ControlCenter
 
 ShellRoot {
   id: root
@@ -22,6 +23,7 @@ ShellRoot {
   property bool renderOutputMuted: true
   property bool renderInputMuted: true
   property bool renderNotifications: true
+  property bool renderControlCenter: true
 
   LazyLoader {
     active: root.renderBar && Theme.ready
@@ -56,6 +58,11 @@ ShellRoot {
   LazyLoader {
     active: root.renderNotifications && Theme.ready && SNotifications.isReady
     component: Notifications {}
+  }
+
+  LazyLoader {
+    active: root.renderControlCenter && Theme.ready
+    component: ControlCenter {}
   }
 
   IpcHandler {
