@@ -12,10 +12,10 @@ IconImage {
   property string sourceColor: "white"
   property string icon
   property int size: Styles.font.pixelSize.normal
+  property string iconFallback: "image-missing"
 
-  source: Quickshell.iconPath(icon.length > 0 ? icon : "image-missing", "image-missing")
-  width: size
-  height: size
+  source: Quickshell.iconPath(icon.length > 0 ? icon : iconFallback, iconFallback)
+  implicitSize: size
   layer.enabled: root.enableColoriser
   layer.effect: Coloriser {
     sourceColor: root.sourceColor
