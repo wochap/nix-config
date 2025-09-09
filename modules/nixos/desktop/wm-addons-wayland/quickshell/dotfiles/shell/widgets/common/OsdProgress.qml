@@ -19,7 +19,7 @@ Scope {
     if (!isReady) {
       return;
     }
-    SOsd.requestShow(root);
+    SOsdProgress.requestShow(root);
     root.isOpen = true;
     timer.restart();
   }
