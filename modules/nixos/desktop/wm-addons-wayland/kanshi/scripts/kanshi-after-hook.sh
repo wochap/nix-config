@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # restart ags
-systemctl --user restart ags.service &
+# systemctl --user restart ags.service &
 
-# restart wallpapaer
+# restart wallpaper
 systemctl --user restart swww-daemon.service &
