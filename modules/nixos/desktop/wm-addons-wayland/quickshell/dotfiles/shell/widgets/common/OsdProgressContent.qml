@@ -1,11 +1,13 @@
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Wayland
 import qs.config
 
 PanelWindow {
   id: root
 
+  property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
   property var service: null
   required property string serviceValueKey
   property var serviceValueTransformer: value => value
@@ -24,6 +26,7 @@ PanelWindow {
     bottom: true
     right: true
   }
+  screen: focusedScreen
   exclusionMode: ExclusionMode.Ignore
   exclusiveZone: 0
   color: "transparent"

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Wayland
 import Qt5Compat.GraphicalEffects
 import qs.config
@@ -12,6 +13,8 @@ import qs.widgets.common
 PanelWindow {
   id: root
 
+  property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
+
   WlrLayershell.namespace: "quickshell:notifications-panel"
   WlrLayershell.layer: WlrLayer.Overlay
   anchors {
@@ -20,6 +23,7 @@ PanelWindow {
     bottom: true
     right: true
   }
+  screen: focusedScreen
   exclusionMode: ExclusionMode.Normal
   exclusiveZone: 0
   color: "transparent"
