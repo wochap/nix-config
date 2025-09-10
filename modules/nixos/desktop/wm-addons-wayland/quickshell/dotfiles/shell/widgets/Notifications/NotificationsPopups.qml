@@ -13,6 +13,10 @@ PanelWindow {
   id: root
 
   property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
+  property var hyprlandMonitor: SHyprland.monitorsByName?.[focusedScreen?.name] ?? null
+  property var focusedWorkspace: SHyprland.workspacesById?.[hyprlandMonitor?.activeWorkspace?.id] ?? null
+  property var focusedClient: SHyprland.clientsByAddress?.[focusedWorkspace?.lastwindow] ?? null
+  property bool isFocusedClientFullScreen: (focusedClient?.fullscreen ?? null) === 2
 
   WlrLayershell.namespace: "quickshell:notifications-popups"
   WlrLayershell.layer: WlrLayer.Overlay
@@ -23,7 +27,7 @@ PanelWindow {
     left: true
   }
   screen: focusedScreen
-  exclusionMode: ExclusionMode.Normal
+  exclusionMode: isFocusedClientFullScreen ? ExclusionMode.Ignore : ExclusionMode.Normal
   exclusiveZone: 0
   color: "transparent"
   mask: Region {

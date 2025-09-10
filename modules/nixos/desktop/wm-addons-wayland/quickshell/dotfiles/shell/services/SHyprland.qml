@@ -20,6 +20,7 @@ Singleton {
   property var workspacesById: ({})
   property var activeWorkspace: null
   property var monitors: []
+  property var monitorsByName: ({})
   property var monitorsById: ({})
   property var layers: ({})
   property string submap: ""
@@ -102,6 +103,9 @@ Singleton {
         root.monitors = JSON.parse(monitorsCollector.text);
         root.monitorsById = root.monitors.reduce((result, monitor) => (Object.assign(result, {
               [monitor.id]: monitor
+            })), {});
+        root.monitorsByName = root.monitors.reduce((result, monitor) => (Object.assign(result, {
+              [monitor.name]: monitor
             })), {});
       }
     }
