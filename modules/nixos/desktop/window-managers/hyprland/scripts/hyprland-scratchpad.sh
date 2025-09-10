@@ -43,6 +43,9 @@ function raise_or_run() {
       batch_args="dispatch movetoworkspace $current_ws,class:^($class)$;"
       batch_args="$batch_args dispatch focuswindow class:^($class)$;"
       batch_args="$batch_args dispatch alterzorder top,address:$window_address;"
+      if [[ "$window_monitor" != "$current_monitor" ]]; then
+        batch_args="$batch_args dispatch centerwindow;"
+      fi
       hyprctl --batch "$batch_args" -q
     fi
   else
@@ -115,13 +118,13 @@ function toggle_scratchpad() {
   # if focused window is scratchpad, hide it
   # otherwise show all tmpscratchpads
 
-  # process scratchpads created by hyprland-focus-toggle.sh
+  # process scratchpads created by --raise-or-run
   mapfile -t scratchpads_windows < <(hyprctl clients -j | jq -c ".[] | select(.monitor == $current_monitor and .workspace.id == $current_ws and (.tags[]? | test(\"^scratchpad\")))")
   for window in "${scratchpads_windows[@]}"; do
     process_scratchpad "$window" "scratchpads"
   done
 
-  # process scratchpads created by hyprland-scratch-toggle.sh
+  # process scratchpads created by --toggle and --toggle-in
   mapfile -t tmpscratchpads_windows < <(hyprctl clients -j | jq -c "[.[] | select(.monitor == $current_monitor and .workspace.id == $current_ws and (.tags[]? | test(\"^tmpscratchpad\")))] | sort_by(.focusHistoryID) | .[]")
   for window in "${tmpscratchpads_windows[@]}"; do
     process_scratchpad "$window" "tmpscratchpads"
@@ -133,7 +136,11 @@ function toggle_scratchpad() {
   batch_args=""
   for window in "${tmpscratchpads_windows[@]}"; do
     window_address=$(echo "$window" | jq -r ".address")
+    window_monitor_id=$(echo "$window" | jq -r ".monitor")
     batch_args="$batch_args dispatch movetoworkspace $current_ws,address:$window_address;"
+    if [[ "$current_monitor" != "$window_monitor_id" ]]; then
+      batch_args="$batch_args dispatch centerwindow;"
+    fi
   done
   batch_args="$batch_args dispatch focuswindow address:$recent_tmpscratchpad_window_address;"
   batch_args="$batch_args dispatch alterzorder top,address:$recent_tmpscratchpad_window_address;"
