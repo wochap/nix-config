@@ -28,6 +28,8 @@ let
     (builtins.readFile ./scripts/shell-powerprofile.sh);
   shell-lock = pkgs.writeScriptBin "shell-lock"
     (builtins.readFile ./scripts/shell-lock.sh);
+  shell-steam-icons = pkgs.writeScriptBin "shell-steam-icons"
+    (builtins.readFile ./scripts/shell-steam-icons.sh);
   mkThemeQuickshell = themeColors:
     pkgs.writeText "theme.json" (builtins.toJSON themeColors);
   catppuccin-quickshell-light-theme-path = mkThemeQuickshell themeColorsLight;
@@ -69,6 +71,7 @@ in {
         shell-backlight
         shell-osd
         shell-lock
+        shell-steam-icons
       ];
 
       xdg.configFile = {

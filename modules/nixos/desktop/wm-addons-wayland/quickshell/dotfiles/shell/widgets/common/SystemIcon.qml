@@ -2,6 +2,7 @@ import Quickshell
 import Quickshell.Widgets
 import QtQuick
 import qs.config
+import qs.services
 import qs.widgets.common
 
 IconImage {
@@ -14,12 +15,22 @@ IconImage {
   property int size: Styles.font.pixelSize.normal
   property string iconFallback: "image-missing"
 
-  source: Quickshell.iconPath(icon.length > 0 ? icon : iconFallback, iconFallback)
+  source: getIconPath()
   implicitSize: size
   layer.enabled: root.enableColoriser
   layer.effect: Coloriser {
     sourceColor: root.sourceColor
     colorizationColor: root.color
+  }
+
+  function getIconPath() {
+    if (icon.startsWith("steam_app_")) {
+      const steamIconPath = SSteamIcons.getIconPath(icon.replace("steam_app_", ""));
+      if (steamIconPath) {
+        return SSteamIcons.getIconPath(icon.replace("steam_app_", ""));
+      }
+    }
+    return Quickshell.iconPath(icon.length > 0 ? icon : iconFallback, iconFallback);
   }
 
   Canvas {
