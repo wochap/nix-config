@@ -132,8 +132,6 @@ in {
 
         "hypr/pyprland.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
-        "hypr/libinput-gestures.conf".source =
-          ./dotfiles/libinput-gestures.conf;
 
         "uwsm/env-hyprland".text = ''
           # toolkit-specific scale
