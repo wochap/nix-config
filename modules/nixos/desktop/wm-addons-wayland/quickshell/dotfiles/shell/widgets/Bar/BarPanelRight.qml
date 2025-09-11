@@ -10,9 +10,12 @@ import qs.widgets.Bar.modules.SysTray
 RowLayout {
   id: root
 
+  required property bool isFocused
+
   spacing: ConfigBar.modulesSpacing
 
   SysTray {
+    visible: isFocused
     Layout.fillHeight: true
   }
 
@@ -22,7 +25,7 @@ RowLayout {
     Layout.leftMargin: -3
     Layout.rightMargin: 0
     spacing: 0
-    visible: capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible
+    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible)
 
     Capslock {
       id: capslock
@@ -44,6 +47,7 @@ RowLayout {
   }
 
   Control {
+    visible: isFocused
     Layout.fillHeight: true
   }
 

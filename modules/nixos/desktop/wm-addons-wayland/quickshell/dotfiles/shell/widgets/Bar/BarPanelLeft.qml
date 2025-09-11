@@ -10,6 +10,8 @@ import qs.widgets.Bar.modules.Hyprland.HyprWorkspaces
 RowLayout {
   id: root
 
+  required property bool isFocused
+
   spacing: ConfigBar.modulesSpacing
 
   HyprMonocle {
@@ -34,5 +36,6 @@ RowLayout {
   HyprTitle {
     Layout.fillHeight: true
     Layout.leftMargin: -1
+    opacity: root.isFocused ? 1 : 0.5
   }
 }
