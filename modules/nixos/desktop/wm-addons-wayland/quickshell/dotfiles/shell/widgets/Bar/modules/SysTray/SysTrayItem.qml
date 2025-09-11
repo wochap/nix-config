@@ -7,16 +7,16 @@ import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config
 
-WrapperMouseArea {
+MouseArea {
   id: root
 
   required property SystemTrayItem modelData
   required property SystemTrayItem item
-  property var window: QsWindow.window
   property int size: Styles.font.pixelSize.small
 
   acceptedButtons: Qt.LeftButton | Qt.RightButton
-  margin: 0
+  implicitWidth: size
+  implicitHeight: size
   onClicked: event => {
     switch (event.button) {
     case Qt.LeftButton:
@@ -33,19 +33,18 @@ WrapperMouseArea {
   IconImage {
     id: trayIcon
 
+    anchors.centerIn: parent
     source: root.item.icon
     implicitSize: root.size
-  }
 
-  QsMenuAnchor {
-    id: menu
+    QsMenuAnchor {
+      id: menu
 
-    menu: root.item.menu
-    anchor.window: window
-    anchor.rect.x: root.x + (window?.width)
-    anchor.rect.y: root.y
-    anchor.rect.height: root.height
-    anchor.rect.width: root.width
-    anchor.edges: ConfigBar.isBarAtBottom ? (Edges.Top | Edges.Left) : (Edges.Bottom | Edges.Right)
+      menu: root.item.menu
+      anchor.item: trayIcon
+      anchor.rect.x: 0
+      anchor.rect.y: trayIcon.y + trayIcon.height + 4
+      anchor.edges: ConfigBar.isBarAtBottom ? (Edges.Top | Edges.Left) : (Edges.Bottom | Edges.Left)
+    }
   }
 }
