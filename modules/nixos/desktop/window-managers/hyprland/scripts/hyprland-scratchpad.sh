@@ -45,6 +45,8 @@ function raise_or_run() {
       batch_args="$batch_args dispatch alterzorder top,address:$window_address;"
       if [[ "$window_monitor" != "$current_monitor" ]]; then
         batch_args="$batch_args dispatch centerwindow;"
+        # HACK: move cursor to window after it has been centered
+        batch_args="$batch_args dispatch focuswindow class:^($class)$;"
       fi
       hyprctl --batch "$batch_args" -q
     fi
