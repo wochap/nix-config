@@ -34,10 +34,7 @@ WrapperMouseArea {
     id: trayIcon
 
     source: root.item.icon
-    implicitWidth: root.size
-    implicitHeight: root.size
-    width: root.size
-    height: root.size
+    implicitSize: root.size
   }
 
   QsMenuAnchor {
