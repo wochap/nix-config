@@ -37,14 +37,21 @@ Singleton {
   }
 
   FileView {
+    id: fileView
+
     path: `${Qt.resolvedUrl(Paths.shellConfig)}/theme.json`
     watchChanges: true
-    onFileChanged: reload()
-    onAdapterUpdated: writeAdapter()
-    onLoaded: root.ready = true
+    onLoaded: {
+      fileView.reload();
+      root.ready = true;
+    }
+    onFileChanged: {
+      fileView.reload();
+    }
     onLoadFailed: error => {
       if (error == FileViewError.FileNotFound) {
-        writeAdapter();
+        fileView.writeAdapter();
+        root.ready = true;
       }
     }
 
