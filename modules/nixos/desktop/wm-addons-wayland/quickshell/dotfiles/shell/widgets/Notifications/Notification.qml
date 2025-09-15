@@ -15,6 +15,7 @@ Item {
   required property SNotification notification
   required property bool isPopup
   property bool isExpanded: true
+  property bool hasTimeout: (root.notification?.timer ?? null) !== null && root.notification.time > 0
 
   implicitWidth: wrapperRectangle.implicitWidth
   implicitHeight: wrapperRectangle.implicitHeight
@@ -33,7 +34,7 @@ Item {
     leftMargin: ConfigNotifications.notificationPadding
     rightMargin: ConfigNotifications.notificationPadding
     topMargin: ConfigNotifications.notificationPadding * 2
-    bottomMargin: isPopup ? 0 : ConfigNotifications.notificationPadding * 2
+    bottomMargin: isPopup && hasTimeout ? 0 : ConfigNotifications.notificationPadding * 2
     border {
       width: 1
       color: Theme.options.borderSecondary
@@ -137,8 +138,8 @@ Item {
 
       Rectangle {
         Layout.topMargin: wrapperRectangle.topMargin - notificationContent.spacing + 1
-        visible: root.isPopup
-        implicitWidth: parent.width * (root.notification?.timer?.progress ?? 0.5)
+        visible: root.isPopup && root.hasTimeout
+        implicitWidth: parent.width * (root.notification?.timer?.progress ?? 1)
         implicitHeight: 1
         color: Theme.options.primary
       }
