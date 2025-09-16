@@ -12,7 +12,18 @@ Singleton {
   property string icon: ""
   property string iconColor: ""
 
+  Connections {
+    target: Theme
+
+    function onChanged(event) {
+      process.running = false;
+      process.running = true;
+    }
+  }
+
   Process {
+    id: process
+
     command: ["shell-powerprofile", "--listen"]
     running: true
     stdout: SplitParser {

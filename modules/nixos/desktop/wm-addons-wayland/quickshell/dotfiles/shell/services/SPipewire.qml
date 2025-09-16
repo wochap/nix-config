@@ -33,6 +33,15 @@ Singleton {
     root.updateInputIcon();
   }
 
+  Connections {
+    target: Theme
+
+    function onChanged(event) {
+      root.updateOutputIcon();
+      root.updateInputIcon();
+    }
+  }
+
   onOutputReadyChanged: {
     root.updateOutputIcon();
   }

@@ -10,6 +10,7 @@ Singleton {
 
   property alias options: jsonAdapter
   property bool ready: false
+  signal changed
 
   function addAlpha(hexColor, alpha) {
     // 1. Sanitize the hex color input
@@ -44,15 +45,18 @@ Singleton {
     onLoaded: {
       fileView.reload();
       root.ready = true;
+      root.changed();
     }
     onFileChanged: {
       fileView.reload();
+      root.changed();
     }
     onLoadFailed: error => {
-      if (error == FileViewError.FileNotFound) {
-        fileView.writeAdapter();
-        root.ready = true;
-      }
+      // TODO: doesn't work well
+      // if (error == FileViewError.FileNotFound) {
+      //   fileView.writeAdapter();
+      //   root.ready = true;
+      // }
     }
 
     JsonAdapter {

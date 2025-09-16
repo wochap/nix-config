@@ -51,6 +51,14 @@ Singleton {
     root.update();
   }
 
+  Connections {
+    target: Theme
+
+    function onChanged(event) {
+      root.update();
+    }
+  }
+
   Process {
     command: ["shell-bluetooth", "--listen"]
     running: true
