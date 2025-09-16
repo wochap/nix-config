@@ -6,6 +6,7 @@ eval set -- "$TEMP"
 
 current_ws="$(hyprctl activeworkspace -j | jq -r '.id')"
 current_monitor="$(hyprctl activeworkspace -j | jq -r '.monitorID')"
+current_monitor_name="$(hyprctl activeworkspace -j | jq -r '.monitor')"
 
 # NOTE: add windowrule so those scratchpads
 # have the tag scratchpad
@@ -40,6 +41,10 @@ function raise_or_run() {
       fi
     else
       # focus
+      if [[ "$window_monitor" != "$current_monitor" ]]; then
+        # HACK: move scratchpads ws to current monitor
+        batch_args="dispatch moveworkspacetomonitor special:scratchpads $current_monitor_name;"
+      fi
       batch_args="dispatch movetoworkspace $current_ws,class:^($class)$;"
       batch_args="$batch_args dispatch focuswindow class:^($class)$;"
       batch_args="$batch_args dispatch alterzorder top,address:$window_address;"
