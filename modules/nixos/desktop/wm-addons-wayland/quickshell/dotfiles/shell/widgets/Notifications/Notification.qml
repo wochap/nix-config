@@ -54,6 +54,7 @@ Item {
           Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
           icon: root.notification.appIcon
           size: 36
+          iconFallback: "org.xfce.notification"
         }
 
         ColumnLayout {
