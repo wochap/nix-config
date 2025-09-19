@@ -20,6 +20,10 @@ Item {
   implicitWidth: wrapperRectangle.implicitWidth
   implicitHeight: wrapperRectangle.implicitHeight
 
+  Component.onCompleted: {
+    root.isExpanded = !isPopup;
+  }
+
   StyledRectangularShadow {
     visible: isPopup
     target: wrapperRectangle
@@ -79,9 +83,10 @@ Item {
             }
 
             NotificationButtonSm {
-              materialIcon: "close"
+              visible: root.isPopup
+              materialIcon: root.isExpanded ? "unfold_less" : "unfold_more"
               onClicked: {
-                SNotifications.discardNotification(root.notification.notificationId);
+                root.isExpanded = !root.isExpanded;
               }
             }
 
@@ -90,6 +95,13 @@ Item {
               materialIcon: "chevron_right"
               onClicked: {
                 SNotifications.timeoutNotification(root.notification.notificationId);
+              }
+            }
+
+            NotificationButtonSm {
+              materialIcon: "close"
+              onClicked: {
+                SNotifications.discardNotification(root.notification.notificationId);
               }
             }
           }
@@ -149,13 +161,23 @@ Item {
 
   MouseArea {
     anchors.fill: wrapperRectangle
-    acceptedButtons: Qt.RightButton
-    onClicked: mouse => {
-      if (root.isPopup) {
-        SNotifications.timeoutNotification(root.notification.notificationId);
-      } else {
-        SNotifications.discardNotification(root.notification.notificationId);
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
+    onClicked: event => {
+      switch (event.button) {
+      case Qt.LeftButton:
+        if (root.isPopup) {
+          root.isExpanded = !root.isExpanded;
+        }
+        break;
+      case Qt.RightButton:
+        if (root.isPopup) {
+          SNotifications.timeoutNotification(root.notification.notificationId);
+        } else {
+          SNotifications.discardNotification(root.notification.notificationId);
+        }
+        break;
       }
+      event.accepted = true;
     }
   }
 

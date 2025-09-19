@@ -37,6 +37,7 @@ PanelWindow {
   StyledListView {
     id: listview
 
+    popIn: true
     anchors {
       top: parent.top
       bottom: parent.bottom

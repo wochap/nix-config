@@ -92,6 +92,7 @@ PanelWindow {
 
       // body
       StyledListView {
+        popIn: true
         visible: SNotifications.list.length > 0
         Layout.fillWidth: true
         Layout.fillHeight: true

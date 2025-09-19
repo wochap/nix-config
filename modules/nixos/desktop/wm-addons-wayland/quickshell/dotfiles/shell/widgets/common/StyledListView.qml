@@ -8,33 +8,26 @@ ListView {
 
   add: Transition {
     animations: [Styles.animations.numberAnimation.createObject(this, {
-        properties: root.popIn ? "opacity,scale" : "opacity",
+        properties: root.popIn ? "scale,opacity" : "opacity",
         from: 0,
-        to: 1
-      })]
-  }
-
-  addDisplaced: Transition {
-    animations: [Styles.animations.numberAnimation.createObject(this, {
-        property: "y"
-      }), Styles.animations.numberAnimation.createObject(this, {
-        properties: root.popIn ? "opacity,scale" : "opacity",
         to: 1
       })]
   }
 
   remove: Transition {
     animations: [Styles.animations.numberAnimation.createObject(this, {
-        property: "opacity",
+        properties: root.popIn ? "scale,opacity" : "opacity",
+        from: 1,
         to: 0
       })]
   }
 
-  removeDisplaced: Transition {
+  // handles move, addDisplaced, removeDisplaced
+  displaced: Transition {
     animations: [Styles.animations.numberAnimation.createObject(this, {
         property: "y"
       }), Styles.animations.numberAnimation.createObject(this, {
-        properties: root.popIn ? "opacity,scale" : "opacity",
+        properties: root.popIn ? "scale,opacity" : "opacity",
         to: 1
       })]
   }
