@@ -7,13 +7,17 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "audio" ];
 
-    environment.systemPackages = with pkgs; [
-      pulseaudio
-      pulsemixer # pulseaudio
-      nixpkgs-unstable.wiremix
-      # pavucontrol # pulseaudio gui
-      pwvucontrol # pipewire gui
-    ];
+    environment = {
+      systemPackages = with pkgs; [
+        pulseaudio
+        pulsemixer # pulseaudio
+        nixpkgs-unstable.wiremix
+        # pavucontrol # pulseaudio gui
+        pwvucontrol # pipewire gui
+      ];
+
+      shellAliases.atui = "wiremix";
+    };
 
     services.pulseaudio.enable = false;
 
