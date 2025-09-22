@@ -192,7 +192,7 @@ case "$1" in
   listen
   ;;
 --battery)
-  battery_saver "battery-saver"
+  battery_saver "power-saver"
   ;;
 --balanced)
   battery_saver "balanced"
