@@ -33,7 +33,7 @@ in {
     # TODO: use services.gnome.gcr-ssh-agent.enable
     # this sets SSH_AUTH_SOCK
     systemd = {
-      packages = [ pkgs.nixpkgs-unstable.gcr_4 ];
+      packages = [ pkgs.gcr_4 ];
       user.services.gcr-ssh-agent.wantedBy = [ "default.target" ];
       user.sockets.gcr-ssh-agent.wantedBy = [ "sockets.target" ];
     };

@@ -28,8 +28,8 @@
 
     # Mesa 25.1.7
     hardware.graphics = {
-      package = pkgs.nixpkgs-unstable.mesa;
-      package32 = pkgs.nixpkgs-unstable.pkgsi686Linux.mesa;
+      package = pkgs.prevstable-kernel.mesa;
+      package32 = pkgs.prevstable-kernel.pkgsi686Linux.mesa;
       extraPackages = with pkgs.nixpkgs-unstable; [
         # https://discourse.nixos.org/t/unable-to-find-gpu/19818/4
         vulkan-loader
@@ -39,7 +39,7 @@
         # NVIDIA VA-API support
         # nvidia-vaapi-driver
       ];
-      extraPackages32 = with pkgs.nixpkgs-unstable.pkgsi686Linux;
+      extraPackages32 = with pkgs.prevstable-kernel.pkgsi686Linux;
         [ vulkan-loader ];
     };
 
@@ -117,7 +117,7 @@
       [ lenovo-legion-module ];
 
     # NOTE: kernel 6.12.x gives me a lot of DRM issues
-    boot.kernelPackages = lib.mkForce pkgs.nixpkgs-unstable.linuxPackages_6_15;
+    boot.kernelPackages = lib.mkForce pkgs.prevstable-kernel.linuxPackages_6_15;
 
     boot.kernelParams = [
       # this doesn't fix my ACPI Bios errors :c

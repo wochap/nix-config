@@ -11,12 +11,12 @@ in {
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
-        nixpkgs-24-11 = import inputs.nixpkgs-24-11 {
+        nixpkgs-unstable = import inputs.nixpkgs-unstable {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;
         };
-        nixpkgs-unstable = import inputs.nixpkgs-unstable {
+        prevstable-kernel = import inputs.prevstable-kernel {
           inherit (prev) system;
           inherit (config.nixpkgs) config;
           overlays = overlaysWithoutCustomChannels;

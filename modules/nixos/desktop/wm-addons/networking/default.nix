@@ -9,7 +9,7 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
-        nixpkgs-master.impala
+        nixpkgs-unstable.impala
         iw
         wireless-regdb
         zbar # scan wifi QR codes

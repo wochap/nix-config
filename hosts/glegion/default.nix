@@ -20,17 +20,7 @@ in {
     # source: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/7722
     # source: https://bbs.archlinux.org/viewtopic.php?id=299624
     _custom.desktop.cursor.name = "catppuccin-mocha-dark-cursors";
-    _custom.desktop.cursor.package =
-      pkgs.catppuccin-cursors.mochaDark.overrideAttrs (oldAttrs: rec {
-        patches = [
-          (pkgs.fetchpatch {
-            url =
-              "https://github.com/wochap/cursors/commit/243becf94ad2ae52eb8be55fc36f329ca7f2ce3b.patch";
-            sha256 = "sha256-fQnE9HHRG8PoNGAeax+KAeWV8XR81jwVAJ3Yrt7UYQc=";
-          })
-        ];
-      });
-    _custom.desktop.cursor.size = 28;
+    _custom.desktop.cursor.size = 24;
 
     _custom.programs.weeb.enable = true;
 
