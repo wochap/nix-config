@@ -4,7 +4,6 @@
     nixpkgs.url = "github:nixos/nixpkgs?rev=b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20"; # nixos-25.05 (21 sep 2025)
     nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=8eaee110344796db060382e15d3af0a9fc396e0e"; # nixos-unstable (21 sep 2025)
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=58f3c8b331269776bf25b8725a2ea9c184bd6fe5"; # master (18 aug 2025)
-    prevstable-kernel.url = "github:nixos/nixpkgs?rev=c87b95e25065c028d31a94f06a62927d18763fdf"; # nixos-unstable (20 jul 2025)
     prevstable-chrome.url = "github:nixos/nixpkgs?rev=4792576cb003c994bd7cc1edada3129def20b27d"; # nixos-25.05 (07 jun 2025)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=84577351974736371ddb9d36d788b6e34247b891"; # master (02 sep 2025)
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
@@ -36,7 +35,7 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-alien.inputs.nixpkgs.follows = "nixpkgs";
     # everytime you update hyprland flake, run `sudo nix flake lock --update-input hyprland`
-    hyprland.url = "github:hyprwm/Hyprland?rev=46174f78b374b6cea669c48880877a8bdcf7802f"; # v0.51
+    hyprland.url = "github:hyprwm/Hyprland?rev=71a1216abcc7031776630a6d88f105605c4dc1c9"; # v0.51.1
     hyprland.inputs.nixpkgs.follows = "nixpkgs-unstable";
     hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=d723e5b153b7990d36e62a425bda3768c41dd9eb"; # v0.50.0
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
