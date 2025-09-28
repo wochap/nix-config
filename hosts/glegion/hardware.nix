@@ -120,7 +120,7 @@
 
     # NOTE: kernel 6.12.x gives me a lot of DRM issues
     # install kernel v6.16.8
-    boot.kernelPackages = lib.mkForce pkgs.nixpkgs-unstable.linuxPackages_6_16;
+    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_16;
 
     boot.kernelParams = [
       # this doesn't fix my ACPI Bios errors :c
