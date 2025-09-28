@@ -12,7 +12,7 @@ WrapperRectangle {
 
   leftMargin: 2
   rightMargin: root.leftMargin + 1
-  color: Theme.options.surface0
+  color: "transparent"
   radius: ConfigBar.modulesRadius
 
   RowLayout {
