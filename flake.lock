@@ -2907,19 +2907,19 @@
         "type": "github"
       }
     },
-    "prevstable-kernel": {
+    "prevstable-mesa": {
       "locked": {
-        "lastModified": 1758346548,
-        "narHash": "sha256-afXE7AJ7MY6wY1pg/Y6UPHNYPy5GtUKeBkrZZ/gC71E=",
+        "lastModified": 1752950548,
+        "narHash": "sha256-NS6BLD0lxOrnCiEOcvQCDVPXafX1/ek1dfJHX1nUIzc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20",
+        "rev": "c87b95e25065c028d31a94f06a62927d18763fdf",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20",
+        "rev": "c87b95e25065c028d31a94f06a62927d18763fdf",
         "type": "github"
       }
     },
@@ -3152,7 +3152,7 @@
         "prevstable-chrome": "prevstable-chrome",
         "prevstable-gaming": "prevstable-gaming",
         "prevstable-intune": "prevstable-intune",
-        "prevstable-kernel": "prevstable-kernel",
+        "prevstable-mesa": "prevstable-mesa",
         "prevstable-msedge": "prevstable-msedge",
         "prevstable-neovim": "prevstable-neovim",
         "prevstable-nodejs": "prevstable-nodejs",

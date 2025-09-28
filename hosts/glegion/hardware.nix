@@ -26,11 +26,13 @@
       DGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)";
     };
 
-    # Mesa 25.1.7
+    # Mesa 25.1.6
+    # update to v25.2.x when the following is fixed
+    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/13719
     hardware.graphics = {
-      package = pkgs.nixpkgs-unstable.mesa;
-      package32 = pkgs.nixpkgs-unstable.pkgsi686Linux.mesa;
-      extraPackages = with pkgs.nixpkgs-unstable; [
+      package = pkgs.prevstable-mesa.mesa;
+      package32 = pkgs.prevstable-mesa.pkgsi686Linux.mesa;
+      extraPackages = with pkgs.prevstable-mesa; [
         # https://discourse.nixos.org/t/unable-to-find-gpu/19818/4
         vulkan-loader
         # video acceleration libs
@@ -39,7 +41,7 @@
         # NVIDIA VA-API support
         # nvidia-vaapi-driver
       ];
-      extraPackages32 = with pkgs.nixpkgs-unstable.pkgsi686Linux;
+      extraPackages32 = with pkgs.prevstable-mesa.pkgsi686Linux;
         [ vulkan-loader ];
     };
 
