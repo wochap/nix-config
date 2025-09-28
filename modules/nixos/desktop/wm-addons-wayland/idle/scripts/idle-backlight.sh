@@ -29,15 +29,22 @@ elif [ "$1" = "--off" ]; then
 
   brightnessctl --save
 
-  if [ "$XDG_SESSION_DESKTOP" = "Hyprland" ]; then
-    if [[ -n "$(pgrep hyprlock)" ]]; then
-      # decrease brightness to zero
-      # set the power mode of the output to off
-      backlight "0%" && hyprctl dispatch dpms off
-    else
-      # decrease brightness to zero
-      # set the power mode of the output to off
-      chayang -d 5 && backlight "0%" && hyprctl dispatch dpms off
+  if [[ -n "$(pgrep hyprlock)" ]]; then
+    # decrease brightness to zero
+    backlight "0%"
+
+    # set the power mode of the output to off
+    if [ "$XDG_SESSION_DESKTOP" = "Hyprland" ]; then
+      hyprctl dispatch dpms off
     fi
+  else
+    # decrease brightness to zero
+    chayang -d 5 && backlight "0%"
+    # set the power mode of the output to off
+    # NOTE: turning dpms off before running hyprlock
+    # will cause hyprlock to crash
+    # if [ "$XDG_SESSION_DESKTOP" = "Hyprland" ]; then
+    #   hyprctl dispatch dpms off
+    # fi
   fi
 fi
