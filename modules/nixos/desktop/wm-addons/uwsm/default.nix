@@ -48,7 +48,7 @@ in {
     # make wayland compositors great again
     # better resource management
     programs.uwsm.enable = true;
-    programs.uwsm.waylandCompositors = { };
+    programs.uwsm.waylandCompositors = lib.mkForce { };
 
     environment.etc."greetd/environments".text = lib.mkAfter ''
       uwsm

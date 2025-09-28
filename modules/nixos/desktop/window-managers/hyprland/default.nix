@@ -61,7 +61,8 @@ in {
       enable = true;
       package = hyprland-final;
       portalPackage = hyprland-xdph-final;
-      withUWSM = false;
+      # HACK: prevent adding vanilla Hyprland into `services.displayManager.sessionPackages`
+      withUWSM = true;
       systemd.setPath.enable = false;
     };
 
