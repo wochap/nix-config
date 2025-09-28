@@ -26,6 +26,10 @@ in {
         setSocketVariable = true;
         # enable storage driver containerd
         # daemon.settings.features.containerd-snapshotter = true;
+
+        # rootless container can't access host systemd-resolved
+        # https://forums.docker.com/t/facing-issue-with-creating-angular-application-image-using-docker/87270/2
+        daemon.settings.dns = config.networking.nameservers;
       };
       extraOptions = lib.mkIf cfg.enableNvidia
         "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
