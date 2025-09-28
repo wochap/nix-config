@@ -33,7 +33,6 @@
 
     ./desktop/wm-addons-wayland/ags
     ./desktop/wm-addons-wayland/cliphist
-    ./desktop/wm-addons-wayland/dunst
     ./desktop/wm-addons-wayland/electron-support
     ./desktop/wm-addons-wayland/gammastep
     ./desktop/wm-addons-wayland/hyprlock

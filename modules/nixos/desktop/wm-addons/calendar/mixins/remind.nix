@@ -7,7 +7,7 @@ let
   inherit (hmConfig.xdg) dataHome configHome;
   remFilePath = "${configHome}/remind/remind.rem";
   remindScript = pkgs.writeShellScript "remind" ''
-    ${pkgs.remind}/bin/remind -z -k'${pkgs.dunst}/bin/dunstify --appname "Remind" -i "kalarm" "Reminder" "%s" &' ${remFilePath}
+    ${pkgs.remind}/bin/remind -z -k'${pkgs.libnotify}/bin/notify-send --app-name=Remind --icon=kalarm "Reminder" "%s" &' ${remFilePath}
   '';
   python-remind-final = pkgs._custom.pythonPackages.python-remind;
   ics2remScript = pkgs.writeShellScript "ics2rem" ''

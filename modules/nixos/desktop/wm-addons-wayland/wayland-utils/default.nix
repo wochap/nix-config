@@ -32,8 +32,6 @@ let
     pkgs.writeScriptBin "tui-notes" (builtins.readFile ./scripts/tui-notes.sh);
   tui-notes-obsidian = pkgs.writeScriptBin "tui-notes-obsidian"
     (builtins.readFile ./scripts/tui-notes-obsidian.sh);
-  tui-notification-center = pkgs.writeScriptBin "tui-notification-center"
-    (builtins.readFile ./scripts/tui-notification-center.sh);
   tui-rss =
     pkgs.writeScriptBin "tui-rss" (builtins.readFile ./scripts/tui-rss.sh);
   theme-switch = pkgs.writeScriptBin "theme-switch"
@@ -106,7 +104,6 @@ in {
         tui-music
         tui-notes
         tui-notes-obsidian
-        tui-notification-center
         tui-rss
       ];
 

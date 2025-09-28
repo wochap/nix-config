@@ -52,7 +52,6 @@
       _custom.desktop.ags.enable = lib.mkDefault false;
       _custom.desktop.ags.systemdEnable = lib.mkDefault true;
       _custom.desktop.cliphist.enable = true;
-      _custom.desktop.dunst.enable = lib.mkDefault false;
       _custom.desktop.electron-support.enable = true;
       _custom.desktop.gammastep.enable = lib.mkDefault true;
       _custom.desktop.hyprlock.enable = lib.mkDefault true;

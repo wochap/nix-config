@@ -7,7 +7,6 @@ let
     fcitx5-fbterm = pkgs.callPackage ./fcitx5-fbterm { };
     clipboard-sync = pkgs.callPackage ./clipboard-sync { };
     advcpmv = pkgs.callPackage ./advcpmv { };
-    dunst-nctui = pkgs.callPackage ./dunst-nctui { };
     generate-ssc = pkgs.callPackage ./generate-ssc { };
     gh-prx = pkgs.callPackage ./gh-prx { };
     wochap-ssc = generate-ssc {
