@@ -13,6 +13,7 @@ in {
       goverlay
       mangohud
       gamemode
+      dualsensectl # ps5 controller cli
 
       prevstable-gaming.protontricks
       protonup-qt
@@ -27,10 +28,14 @@ in {
     # see https://github.com/fufexan/nix-gaming/#pipewire-low-latency
     services.pipewire.lowLatency.enable = true;
 
+    services.udev.packages = with pkgs; [ game-devices-udev-rules ];
+
     programs.gamemode = {
       enable = true;
       settings.general.inhibit_screensaver = 0;
     };
+
+    hardware.uinput.enable = true;
 
     # TODO: add mangohud, gamescope
     hardware.graphics = {

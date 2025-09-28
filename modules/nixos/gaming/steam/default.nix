@@ -40,8 +40,11 @@ in {
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
       gamescopeSession.enable = true;
+      extest.enable = true;
       # extraCompatPackages = with pkgs;
       #   [ inputs.nix-gaming.packages.${system}.proton-ge ];
     };
+
+    hardware.steam-hardware.enable = true;
   };
 }
