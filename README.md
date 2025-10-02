@@ -132,7 +132,6 @@ Reboot into NixOS, login with the user you created
    Read instructions to change theme in `modules/nixos/desktop/wm-addons/qt/README.md`
 
    Open `qt5ct and qt6ct` and update style and fonts
-
    - style: Darkly
    - change font size to 10
 
@@ -199,6 +198,12 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Eval value of a nixos option
+
+```sh
+$ nix eval .#nixosConfigurations.laptop.config.services.gnome.gcr-ssh-agent.enable
+```
+
 - Nvidia doesn't enter deep sleep
 
 ```sh
@@ -231,7 +236,6 @@ $ watch -n 3 cat /sys/class/drm/card*/device/power_state
   ```
 
 - Galaxy Buds
-
   - Connecting
     - Disconnect the Galaxy Buds case from the power source
     - Close the Galaxy Buds case
