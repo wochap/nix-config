@@ -9,8 +9,8 @@
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=84577351974736371ddb9d36d788b6e34247b891"; # master (02 sep 2025)
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
     prevstable-nodejs.url = "github:nixos/nixpkgs?rev=1e409aeb5a9798a36e1cca227b7f8b8f3176e04d"; # Node v20
-    prevstable-gaming.url = "github:nixos/nixpkgs?rev=4792576cb003c994bd7cc1edada3129def20b27d"; # nixos-25.05 (07 jun 2025)
-    prevstable-intune.url = "github:kahlstrm/nixpkgs?rev=9c71553dfe5e77329fc4f3b4f18f9483b52f0ccc"; # master (05 jun 2025)
+    prevstable-gaming.url = "github:nixos/nixpkgs?rev=b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20"; # nixos-25.05 (21 sep 2025)
+    prevstable-intune.url = "github:kahlstrm/nixpkgs?rev=8eaee110344796db060382e15d3af0a9fc396e0e"; # nixos-unstable (21 sep 2025)
     prevstable-msedge.url = "github:Daholli/nixpkgs?rev=fe6e79e571fa7eb7693cda131b68fe9891078adf"; # master (07 jun 2025)
 
     # home-manager

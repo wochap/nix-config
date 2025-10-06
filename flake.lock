@@ -2877,33 +2877,33 @@
     },
     "prevstable-gaming": {
       "locked": {
-        "lastModified": 1749086602,
-        "narHash": "sha256-DJcgJMekoxVesl9kKjfLPix2Nbr42i7cpEHJiTnBUwU=",
+        "lastModified": 1758346548,
+        "narHash": "sha256-afXE7AJ7MY6wY1pg/Y6UPHNYPy5GtUKeBkrZZ/gC71E=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "4792576cb003c994bd7cc1edada3129def20b27d",
+        "rev": "b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "4792576cb003c994bd7cc1edada3129def20b27d",
+        "rev": "b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20",
         "type": "github"
       }
     },
     "prevstable-intune": {
       "locked": {
-        "lastModified": 1749091535,
-        "narHash": "sha256-7qV5n8UraFSyBEpiXrlf8h4eeVnSXjt8EWraxczD0Lg=",
+        "lastModified": 1758277210,
+        "narHash": "sha256-iCGWf/LTy+aY0zFu8q12lK8KuZp7yvdhStehhyX1v8w=",
         "owner": "kahlstrm",
         "repo": "nixpkgs",
-        "rev": "9c71553dfe5e77329fc4f3b4f18f9483b52f0ccc",
+        "rev": "8eaee110344796db060382e15d3af0a9fc396e0e",
         "type": "github"
       },
       "original": {
         "owner": "kahlstrm",
         "repo": "nixpkgs",
-        "rev": "9c71553dfe5e77329fc4f3b4f18f9483b52f0ccc",
+        "rev": "8eaee110344796db060382e15d3af0a9fc396e0e",
         "type": "github"
       }
     },
