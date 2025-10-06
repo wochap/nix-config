@@ -23,6 +23,7 @@ in {
         entr # run something on file change
         qpdf # removes password of pdf
         reader # blog post reader
+        pastel # color utils
 
         chawan # tui browser
         termshark # tui wireshark
