@@ -13,6 +13,18 @@ let
       ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/lsp.log
       ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/nvim-tree.log
     '';
+
+  # final-nvim = lib.mkDefault inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+  final-nvim = pkgs.prevstable-neovim.neovim-unwrapped.overrideAttrs
+    (oldAttrs: rec {
+      patches = (oldAttrs.patches or [ ])
+        ++ [
+          # apply https://github.com/neovim/neovim/pull/35195
+          # source: https://github.com/nvim-neotest/neotest/issues/527
+          # source: https://github.com/neovim/neovim/issues/35071
+          ./neovim-mark-nvim_create_autocmd-as-api-fast.patch
+        ];
+    }); # 0.11.1
 in {
   imports = [ ./options.nix ];
 
@@ -20,8 +32,7 @@ in {
     _custom.programs.neovim = {
       setBuildEnv = true;
       withBuildTools = true;
-      package = lib.mkDefault pkgs.prevstable-neovim.neovim-unwrapped; # 0.11.1
-      # package = lib.mkDefault inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+      package = lib.mkDefault final-nvim;
     };
 
     environment = {

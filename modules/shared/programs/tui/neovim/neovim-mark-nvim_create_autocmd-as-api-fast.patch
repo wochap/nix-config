@@ -1,0 +1,22 @@
+From 47d07cc57cba033c35415c1f8ecbf45150e9a0c7 Mon Sep 17 00:00:00 2001
+From: Riley Bruins <ribru17@hotmail.com>
+Date: Wed, 6 Aug 2025 10:55:35 -0700
+Subject: [PATCH] feat(api): mark nvim_create_autocmd as |api-fast|
+
+Co-authored-by: Justin M. Keyes <justinkz@gmail.com>
+---
+ src/nvim/api/autocmd.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/nvim/api/autocmd.c b/src/nvim/api/autocmd.c
+index f215b0c1c860ae..554f75498f6a58 100644
+--- a/src/nvim/api/autocmd.c
++++ b/src/nvim/api/autocmd.c
+@@ -393,6 +393,7 @@ ArrayOf(DictAs(get_autocmds__ret)) nvim_get_autocmds(Dict(get_autocmds) *opts, A
+ Integer nvim_create_autocmd(uint64_t channel_id, Object event, Dict(create_autocmd) *opts,
+                             Arena *arena, Error *err)
+   FUNC_API_SINCE(9)
++  FUNC_API_FAST
+ {
+   int64_t autocmd_id = -1;
+   char *desc = NULL;
