@@ -1,6 +1,6 @@
 import Quickshell
+import Quickshell.Io
 import QtQuick
-import qs.services.SNotifications
 
 Scope {
   id: root
@@ -10,5 +10,13 @@ Scope {
   LazyLoader {
     active: isOpen
     component: ControlCenterContent {}
+  }
+
+  IpcHandler {
+    target: "control-center"
+
+    function toggle() {
+      root.isOpen = !root.isOpen;
+    }
   }
 }
