@@ -14,29 +14,34 @@ Singleton {
   property int connectedDevices: 0
   property string icon: "bluetooth"
   property string iconColor: Theme.options.text
+  property string label: "On"
 
   function update() {
     getStatus.running = true;
   }
 
-  function updateIcon() {
+  function updateViewState() {
     if (!root.powered) {
       root.icon = "bluetooth_disabled";
       root.iconColor = Theme.options.textDimmed;
-      return;
-    }
-    if (root.connectedDevices > 0) {
-      root.icon = "bluetooth_connected";
-      root.iconColor = Theme.options.text;
+      root.label = "Off";
       return;
     }
     if (root.scanning) {
       root.icon = "bluetooth_searching";
       root.iconColor = Theme.options.green;
+      root.label = "Scanning...";
+      return;
+    }
+    if (root.connectedDevices > 0) {
+      root.icon = "bluetooth_connected";
+      root.iconColor = Theme.options.text;
+      root.label = `Connected (${root.connectedDevices})`;
       return;
     }
     root.icon = "bluetooth";
     root.iconColor = Theme.options.text;
+    root.label = "On";
   }
 
   // A debounce timer to prevent rapid updates when many signals are received
@@ -87,7 +92,7 @@ Singleton {
           root.scanning = false;
           root.connectedDevices = 0;
         }
-        root.updateIcon();
+        root.updateViewState();
       }
     }
   }
