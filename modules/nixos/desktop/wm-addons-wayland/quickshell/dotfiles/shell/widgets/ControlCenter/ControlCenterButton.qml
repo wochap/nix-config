@@ -18,6 +18,8 @@ ColumnLayout {
   property string fg: isActive ? Theme.options.base : Theme.options.text
   property real lighterIncrement: isActive ? 1.1 : 1.25
 
+  signal clicked
+
   Button {
     id: button
 
@@ -38,6 +40,9 @@ ColumnLayout {
     }
     contentItem: Loader {
       sourceComponent: root.systemIcon.length > 0 ? systemIconComponent : root.materialIcon.length > 0 ? materialIconComponent : woosIconComponent
+    }
+    onClicked: {
+      root.clicked();
     }
 
     Component {

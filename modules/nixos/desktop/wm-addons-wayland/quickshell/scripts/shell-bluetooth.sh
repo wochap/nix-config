@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 # A function to get the current bluetooth status and print it as JSON
-get_status() {
-  POWERED="false"
-  SCANNING="false"
-  CONNECTED_DEVICES=0
+print_status() {
+  local powered="false"
+  local scanning="false"
+  local connected_devices=0
 
   # Check if bluetoothctl is available
   if ! command -v bluetoothctl &>/dev/null; then
     printf '{"powered": %s, "scanning": %s, "connected_devices": %d}\n' \
-      "$POWERED" "$SCANNING" "$CONNECTED_DEVICES"
+      "$powered" "$scanning" "$connected_devices"
     exit 1
   fi
 
@@ -20,22 +20,30 @@ get_status() {
 
   # Check if the controller is powered on
   if echo "$controller_info" | grep -q "Powered: yes"; then
-    POWERED="true"
+    powered="true"
   fi
 
   # Check if the controller is scanning for devices
   if echo "$controller_info" | grep -q "Discovering: yes"; then
-    SCANNING="true"
+    scanning="true"
   fi
 
   # Count the number of connected devices
   # 'bluetoothctl devices Connected' lists only connected devices.
   # We count the lines to get the number.
-  CONNECTED_DEVICES=$(bluetoothctl devices Connected | wc -l)
+  connected_devices=$(bluetoothctl devices Connected | wc -l)
 
   # Print the status as a JSON object
   printf '{"powered": %s, "scanning": %s, "connected_devices": %d}\n' \
-    "$POWERED" "$SCANNING" "$CONNECTED_DEVICES"
+    "$powered" "$scanning" "$connected_devices"
+}
+
+# A function to set the bluetooth power state to 'on' or 'off'
+set_power() {
+  local state=$1
+  # The 'power' command in bluetoothctl is idempotent, so no need to check state first.
+  # It won't do anything if Bluetooth is already in the desired state.
+  echo "power $state" | bluetoothctl >/dev/null
 }
 
 case "$1" in
@@ -49,13 +57,36 @@ case "$1" in
     printf -- 'true\n'
   done
   ;;
---get-status | '')
-  # If '--get-status' is passed or no arguments are given,
+--status | '')
+  # If '--status' is passed or no arguments are given,
   # just get the current status and exit.
-  get_status
+  print_status
+  ;;
+--toggle)
+  # Handle the second argument for on/off, or toggle if no argument
+  case "$2" in
+  on)
+    set_power "on"
+    ;;
+  off)
+    set_power "off"
+    ;;
+  '')
+    # No argument given, so perform a classic toggle
+    if bluetoothctl show | grep -q "Powered: yes"; then
+      set_power "off"
+    else
+      set_power "on"
+    fi
+    ;;
+  *)
+    echo "Error: Invalid argument '$2' for --toggle. Use 'on', 'off', or no argument." >&2
+    exit 1
+    ;;
+  esac
   ;;
 *)
-  echo "Usage: $0 [--listen | --get-status]" >&2
+  echo "Usage: $0 [--listen | --status | --toggle [on|off]]" >&2
   exit 1
   ;;
 esac

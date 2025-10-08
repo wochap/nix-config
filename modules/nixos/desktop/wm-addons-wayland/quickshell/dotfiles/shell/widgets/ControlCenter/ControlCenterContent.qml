@@ -68,6 +68,11 @@ PanelWindow {
           label: SBluetooth.label
           materialIcon: SBluetooth.icon
           isActive: SBluetooth.powered
+          onClicked: {
+            Quickshell.execDetached({
+              command: ["shell-bluetooth", "--toggle"]
+            });
+          }
         }
         ControlCenterButton {
           Layout.fillWidth: true

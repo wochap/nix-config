@@ -77,7 +77,7 @@ Singleton {
   Process {
     id: getStatus
 
-    command: ["shell-bluetooth", "--get-status"]
+    command: ["shell-bluetooth", "--status"]
     stdout: StdioCollector {
       id: statusCollector
 
