@@ -59,8 +59,14 @@ PanelWindow {
         ControlCenterButton {
           Layout.fillWidth: true
           Layout.preferredWidth: 1
-          label: SNetwork.ssid
-          systemIcon: SNetwork.icon
+          label: SNetwork.wifiLabel
+          systemIcon: SNetwork.wifiIcon
+          isActive: SNetwork.wifi.powered
+          onClicked: {
+            Quickshell.execDetached({
+              command: ["shell-network", "--toggle-wifi"]
+            });
+          }
         }
         ControlCenterButton {
           Layout.fillWidth: true

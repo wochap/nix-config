@@ -58,8 +58,6 @@ case "$1" in
   done
   ;;
 --status | '')
-  # If '--status' is passed or no arguments are given,
-  # just get the current status and exit.
   print_status
   ;;
 --toggle)
