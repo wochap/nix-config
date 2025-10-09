@@ -117,4 +117,8 @@ Singleton {
       }
     }
   }
+
+  function toggleWifiPower() {
+    Quickshell.execDetached(["bash", "-c", "shell-network --toggle-wifi"]);
+  }
 }

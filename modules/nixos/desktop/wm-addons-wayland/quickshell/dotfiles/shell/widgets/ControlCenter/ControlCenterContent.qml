@@ -64,9 +64,7 @@ PanelWindow {
           systemIcon: SNetwork.wifiIcon
           isActive: SNetwork.wifi.powered
           onClicked: {
-            Quickshell.execDetached({
-              command: ["shell-network", "--toggle-wifi"]
-            });
+            SNetwork.toggleWifiPower();
           }
         }
 
@@ -77,9 +75,7 @@ PanelWindow {
           materialIcon: SBluetooth.icon
           isActive: SBluetooth.powered
           onClicked: {
-            Quickshell.execDetached({
-              command: ["shell-bluetooth", "--toggle"]
-            });
+            SBluetooth.togglePower();
           }
         }
 

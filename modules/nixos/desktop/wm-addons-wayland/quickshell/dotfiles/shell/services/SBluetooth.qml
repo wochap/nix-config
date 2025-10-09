@@ -96,4 +96,8 @@ Singleton {
       }
     }
   }
+
+  function togglePower() {
+    Quickshell.execDetached(["bash", "-c", "shell-bluetooth --toggle"]);
+  }
 }
