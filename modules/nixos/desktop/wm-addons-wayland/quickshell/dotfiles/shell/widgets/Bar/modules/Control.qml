@@ -63,10 +63,8 @@ WrapperRectangle {
     }
 
     SystemIcon {
-      property string batteryIcon: SUpower.getIcon()
-
       Layout.fillHeight: true
-      icon: batteryIcon
+      icon: SUpower.batteryIcon
       size: Styles.font.pixelSize.hugeass
     }
 

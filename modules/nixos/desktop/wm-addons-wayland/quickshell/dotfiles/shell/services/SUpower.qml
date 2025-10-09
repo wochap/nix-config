@@ -17,6 +17,8 @@ Singleton {
   property real energyRate: UPower.displayDevice.changeRate
   property real timeToEmpty: UPower.displayDevice.timeToEmpty
   property real timeToFull: UPower.displayDevice.timeToFull
+  property string batteryIcon: getIcon()
+  property string batteryLabel: getLabel()
 
   function getIcon() {
     const percent = root.percentage * 100;
@@ -37,5 +39,22 @@ Singleton {
     const icons = [[100, "battery-full"], [80, "battery-good"], [60, "battery-good"], [40, "battery-low"], [20, "battery-caution"], [0, "battery-empty"]];
     const icon = icons.find(([threshold, _]) => percent >= threshold);
     return icon?.[1] ?? "battery-missing";
+  }
+
+  function getLabel() {
+    const percent = root.percentage * 100;
+    if (!root.available) {
+      return "Missing";
+    }
+    if (root.isFullyCharged) {
+      return "Full charged";
+    }
+    if (root.isCharging) {
+      return "Charging";
+    }
+    if (root.energyRate < 0.1) {
+      return "Full charged";
+    }
+    return "Discharging";
   }
 }

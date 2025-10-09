@@ -135,6 +135,22 @@ PanelWindow {
       OutputField {}
 
       InputField {}
+
+      RowLayout {
+        spacing: 4
+
+        SystemIcon {
+          Layout.fillHeight: true
+          icon: SUpower.batteryIcon
+          size: 32
+          enableColoriser: true
+          color: Theme.options.text
+        }
+
+        StyledText {
+          text: `${Math.round(SUpower.percentage * 100)}% (${SUpower.batteryLabel})`
+        }
+      }
     }
   }
 }
