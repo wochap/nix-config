@@ -86,8 +86,12 @@ PanelWindow {
         ControlCenterButton {
           Layout.fillWidth: true
           Layout.preferredWidth: 1
-          label: "wifi"
-          woosIcon: ""
+          label: "Silent mode"
+          woosIcon: ""
+          isActive: SNotifications.isSilent
+          onClicked: {
+            SNotifications.toggleIsSilent();
+          }
         }
       }
 
