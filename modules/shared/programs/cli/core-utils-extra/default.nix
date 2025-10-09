@@ -24,6 +24,7 @@ in {
         qpdf # removes password of pdf
         reader # blog post reader
         pastel # color utils
+        cloc # count lines of code
 
         chawan # tui browser
         termshark # tui wireshark
