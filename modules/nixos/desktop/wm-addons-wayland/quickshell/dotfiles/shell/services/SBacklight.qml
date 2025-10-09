@@ -11,6 +11,10 @@ Singleton {
   property int percentage: 0
   signal changed
 
+  function set(value) {
+    Quickshell.execDetached(["bash", "-c", `shell-backlight --set ${value}`]);
+  }
+
   Process {
     command: ["shell-backlight", "--listen"]
     running: true

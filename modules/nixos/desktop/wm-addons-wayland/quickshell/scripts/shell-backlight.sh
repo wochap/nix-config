@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
-# Monitors backlight changes using udevadm and jc.
-# When a change event is detected, it reads the current brightness
-# from sysfs and prints it as a percentage.
-
 # Function to get the current backlight brightness information.
-get_backlight_info() {
+print_status() {
   # Find the first available backlight device.
   # This is usually sufficient as most systems have one.
   local backlight_device
@@ -39,18 +35,32 @@ get_backlight_info() {
 }
 
 case "$1" in
+# Monitors backlight changes using udevadm and jc.
+# When a change event is detected, it reads the current brightness
+# from sysfs and prints it as a percentage.
 --listen)
-  get_backlight_info
+  print_status
 
   # Start monitoring for udev events related to the backlight subsystem.
   udevadm monitor --subsystem-match=backlight --property |
     while IFS= read -r line; do
       # The udev event simply acts as a trigger.
-      get_backlight_info
+      print_status
     done
   ;;
+--status | '')
+  print_status
+  ;;
+--set)
+  if [ -z "$2" ]; then
+    echo "Error: --set requires a percentage value." >&2
+    echo "Usage: $0 --set <percentage>" >&2
+    exit 1
+  fi
+  backlight "$2%"
+  ;;
 *)
-  echo "Usage: $0 [--listen]" >&2
+  echo "Usage: $0 [--listen | --status | --set <percentage>]" >&2
   exit 1
   ;;
 esac

@@ -47,19 +47,15 @@ set_light_theme() {
   # presenterm
   ln -sf ~/.config/presenterm/config-light.yaml ~/.config/presenterm/config.yaml
 
-  # quickshell
-  rm -rf ~/.config/quickshell/theme.json
-  cp -L ~/.config/quickshell/theme-light.json ~/.config/quickshell/theme.json
-
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # Hyprland
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
     hyprctl reload
-
-    hyprshade on oled-saver
-
-    hyprctl hyprsunset temperature 4000
   fi
+
+  # quickshell
+  rm -rf ~/.config/quickshell/theme.json && sleep 0.1
+  cp -L ~/.config/quickshell/theme-light.json ~/.config/quickshell/theme.json
 }
 
 set_dark_theme() {
@@ -108,18 +104,21 @@ set_dark_theme() {
   # presenterm
   ln -sf ~/.config/presenterm/config-dark.yaml ~/.config/presenterm/config.yaml
 
-  # quickshell
-  rm -rf ~/.config/quickshell/theme.json
-  cp -L ~/.config/quickshell/theme-dark.json ~/.config/quickshell/theme.json
-
   # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     ln -sf ~/.config/hypr/colors-dark.conf ~/.config/hypr/colors.conf
     hyprctl reload
   fi
+
+  # quickshell
+  rm -rf ~/.config/quickshell/theme.json && sleep 0.1
+  cp -L ~/.config/quickshell/theme-dark.json ~/.config/quickshell/theme.json
 }
 
-# Check for command-line arguments (e.g., ./script.sh dark)
+print_status() {
+  color-scheme print
+}
+
 case "$1" in
 dark)
   set_dark_theme
@@ -127,19 +126,19 @@ dark)
 light)
   set_light_theme
   ;;
-*)
-  # If no argument, toggle the theme automatically
-  echo "🤔 Checking current theme to toggle..."
-  CURRENT_SCHEME=$(color-scheme print)
-
+--status | '')
+  print_status
+  ;;
+--toggle)
+  CURRENT_SCHEME=$(print_status)
   if [[ "$CURRENT_SCHEME" == "dark" ]]; then
-    # If currently dark, switch to light
     set_light_theme
   else
-    # Otherwise, switch to dark
     set_dark_theme
   fi
   ;;
+*)
+  echo "Usage: $0 [dark | light | --toggle | --status]" >&2
+  exit 1
+  ;;
 esac
-
-echo "✅ Done."
