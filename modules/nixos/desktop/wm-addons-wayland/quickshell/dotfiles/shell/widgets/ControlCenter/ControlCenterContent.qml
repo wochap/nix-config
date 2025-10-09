@@ -119,6 +119,12 @@ PanelWindow {
         ControlCenterButton {
           Layout.fillWidth: true
           Layout.preferredWidth: 1
+          label: "Dark mode"
+          materialIcon: "dark_mode"
+          isActive: STheme.isDarkModeActive
+          onClicked: {
+            STheme.toggleDarkMode();
+          }
         }
       }
 
