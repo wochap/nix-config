@@ -9,6 +9,7 @@ import qs.config
 import qs.services
 import qs.services.SNotifications
 import qs.widgets.common
+import qs.widgets.ControlCenter.widgets
 
 PanelWindow {
   id: root
@@ -68,6 +69,7 @@ PanelWindow {
             });
           }
         }
+
         ControlCenterButton {
           Layout.fillWidth: true
           Layout.preferredWidth: 1
@@ -80,6 +82,7 @@ PanelWindow {
             });
           }
         }
+
         ControlCenterButton {
           Layout.fillWidth: true
           Layout.preferredWidth: 1
@@ -87,11 +90,33 @@ PanelWindow {
           woosIcon: ""
         }
       }
+
       RowLayout {
-        ControlCenterButton {}
-        ControlCenterButton {}
-        ControlCenterButton {}
+        Layout.fillWidth: true
+
+        ControlCenterButton {
+          Layout.fillWidth: true
+          Layout.preferredWidth: 1
+          label: "Night light"
+          materialIcon: "moon_stars"
+          isActive: SHyprsunset.active
+          onClicked: {
+            SHyprsunset.toggle();
+          }
+        }
+
+        ControlCenterButton {
+          Layout.fillWidth: true
+          Layout.preferredWidth: 1
+        }
+
+        ControlCenterButton {
+          Layout.fillWidth: true
+          Layout.preferredWidth: 1
+        }
       }
+
+      HyprsunsetField {}
     }
   }
 }
