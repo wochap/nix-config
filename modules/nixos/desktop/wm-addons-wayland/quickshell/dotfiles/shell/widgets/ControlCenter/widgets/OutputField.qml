@@ -8,10 +8,12 @@ import qs.widgets.common
 RowLayout {
   id: root
 
+  property int outputVolumePercentage: Math.round(SPipewire.outputVolume * 100)
+
   spacing: 16
 
   MaterialIcon {
-    icon: "sunny"
+    icon: "speaker"
     size: Styles.font.pixelSize.huge
     weight: Font.Light
   }
@@ -21,15 +23,15 @@ RowLayout {
 
     Layout.fillWidth: true
     from: 0
-    to: 100
+    to: 200
     stepSize: 5
-    value: SBacklight.percentage
+    value: root.outputVolumePercentage
     snapMode: Slider.SnapAlways
     onValueChanged: {
-      if (SBacklight.percentage === value) {
+      if (root.outputVolumePercentage === value) {
         return;
       }
-      SBacklight.set(value);
+      SPipewire.setOutputVolume(value);
     }
   }
 

@@ -135,6 +135,10 @@ PanelWindow {
       HyprsunsetField {}
 
       BacklightField {}
+
+      OutputField {}
+
+      InputField {}
     }
   }
 }

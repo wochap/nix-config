@@ -7,13 +7,15 @@
 # N%- : Rounds the volume DOWN to the previous multiple of N.
 #       e.g., if volume is 7% and you run with 5%-, it goes to 5%.
 
-# Function to get the current volume as an integer percentage (0-100).
+# Function to print the current volume as an integer percentage (0-100).
 # wpctl returns a decimal (e.g., 0.75), so we convert it.
-get_current_volume_percent() {
+print_current_volume_percent() {
+  local id="$1"
+
   # The output from wpctl is like "Volume: 0.75" or "Volume: 1.00 [MUTED]".
   # We extract the numeric value.
   local volume_decimal
-  volume_decimal=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}')
+  volume_decimal=$(wpctl get-volume "$id" | awk '{print $2}')
 
   # Use awk to handle floating-point math and convert to a whole number percentage.
   local volume_percent
@@ -23,13 +25,25 @@ get_current_volume_percent() {
 }
 
 change_volume() {
-  # First, if the sink is muted, unmute it before changing the volume.
-  if [[ "$(pactl get-sink-mute @DEFAULT_SINK@)" == "Mute: yes" ]]; then
-    wpctl set-mute @DEFAULT_SINK@ toggle
+  local id="$1"
+  local vol="$2"
+
+  if [[ "$id" == "@DEFAULT_SINK@" ]]; then
+    # First, if the sink is muted, unmute it before changing the volume.
+    if [[ "$(pactl get-sink-mute "$id")" == "Mute: yes" ]]; then
+      wpctl set-mute "$id" toggle
+    fi
+  fi
+
+  if [[ "$id" == "@DEFAULT_SOURCE@" ]]; then
+    # First, if the source is muted, unmute it before changing the volume.
+    if [[ "$(pactl get-source-mute "$id")" == "Mute: yes" ]]; then
+      wpctl set-mute "$id" toggle
+    fi
   fi
 
   # Check if the volume argument matches the new "N%+" or "N%-" format.
-  if [[ "$1" =~ ^([0-9]+)%([+-])$ ]]; then
+  if [[ "$vol" =~ ^([0-9]+)%([+-])$ ]]; then
     # The regex matches and captures the parts of the argument.
     # BASH_REMATCH[1] will be the number (N).
     # BASH_REMATCH[2] will be the operator (+ or -).
@@ -38,7 +52,7 @@ change_volume() {
 
     # Get the current volume as an integer (e.g., 75).
     local current_vol
-    current_vol=$(get_current_volume_percent)
+    current_vol=$(print_current_volume_percent "$id")
 
     # Avoid division by zero if the multiplier is 0.
     if ((multiplier == 0)); then
@@ -69,16 +83,23 @@ change_volume() {
     fi
 
     # Set the newly calculated volume.
-    wpctl set-volume -l 2 @DEFAULT_AUDIO_SINK@ "${new_vol}%"
+    wpctl set-volume -l 2 "$id" "${new_vol}%"
   else
     # If the argument doesn't match the new format, fall back to the original behavior.
     # This allows standard commands like "5%+" or "50%" to still work.
-    wpctl set-volume -l 2 @DEFAULT_AUDIO_SINK@ "$1"
+    wpctl set-volume -l 2 "$id" "$vol"
   fi
 }
 
-if [[ "$1" == "--volume" ]]; then
-  change_volume "$2"
-else
-  echo -e "Available Options : --volume"
-fi
+case "$1" in
+--volume-input)
+  change_volume "@DEFAULT_SOURCE@" "$2"
+  ;;
+--volume-output)
+  change_volume "@DEFAULT_SINK@" "$2"
+  ;;
+*)
+  echo "Usage: $0 [--volume-input <value> | --volume-output <value>]" >&2
+  exit 1
+  ;;
+esac

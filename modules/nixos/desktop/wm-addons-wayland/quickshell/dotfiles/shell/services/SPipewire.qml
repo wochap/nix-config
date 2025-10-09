@@ -97,4 +97,12 @@ Singleton {
     root.inputIcon = icon?.[1] ?? "microphone-sensitivity-muted";
     root.inputIconColor = Theme.options.text;
   }
+
+  function setInputVolume(value) {
+    Quickshell.execDetached(["bash", "-c", `shell-osd --volume-input ${value}%`]);
+  }
+
+  function setOutputVolume(value) {
+    Quickshell.execDetached(["bash", "-c", `shell-osd --volume-output ${value}%`]);
+  }
 }
