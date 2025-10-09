@@ -108,6 +108,12 @@ PanelWindow {
         ControlCenterButton {
           Layout.fillWidth: true
           Layout.preferredWidth: 1
+          label: "Bedtime mode"
+          materialIcon: "filter_b_and_w"
+          isActive: SHyprshade.isGrayScaleActive
+          onClicked: {
+            SHyprshade.toggleGrayScale();
+          }
         }
 
         ControlCenterButton {
