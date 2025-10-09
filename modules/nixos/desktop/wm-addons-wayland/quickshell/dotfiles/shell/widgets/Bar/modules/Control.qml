@@ -10,9 +10,11 @@ import qs.widgets.Bar.modules
 WrapperRectangle {
   id: root
 
+  property bool isHovered: false
+
   leftMargin: 2
   rightMargin: root.leftMargin + 1
-  color: "transparent"
+  color: root.isHovered ? Theme.options.surface1 : SControlCenter.isOpen ? Theme.options.surface0 : "transparent"
   radius: ConfigBar.modulesRadius
 
   RowLayout {
@@ -66,6 +68,25 @@ WrapperRectangle {
       Layout.fillHeight: true
       icon: batteryIcon
       size: Styles.font.pixelSize.hugeass
+    }
+
+    MouseArea {
+      anchors.fill: parent
+      acceptedButtons: Qt.LeftButton
+      onClicked: event => {
+        switch (event.button) {
+        case Qt.LeftButton:
+          SControlCenter.toggle();
+          break;
+        }
+        event.accepted = true;
+      }
+    }
+
+    HoverHandler {
+      onHoveredChanged: {
+        root.isHovered = hovered;
+      }
     }
   }
 }

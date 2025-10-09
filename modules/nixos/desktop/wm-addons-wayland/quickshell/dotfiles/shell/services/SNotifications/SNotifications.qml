@@ -50,7 +50,7 @@ Singleton {
   }
 
   function togglePanel() {
-    root.isPanelOpen = !isPanelOpen;
+    root.isPanelOpen = !root.isPanelOpen;
   }
 
   // The central "gatekeeper" function. It decides when to show notifications

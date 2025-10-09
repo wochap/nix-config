@@ -1,14 +1,13 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import qs.services
 
 Scope {
   id: root
 
-  property bool isOpen: false
-
   LazyLoader {
-    active: isOpen
+    active: SControlCenter.isOpen
     component: ControlCenterContent {}
   }
 
@@ -16,7 +15,7 @@ Scope {
     target: "control-center"
 
     function toggle() {
-      root.isOpen = !root.isOpen;
+      SControlCenter.toggle();
     }
   }
 }
