@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Qt5Compat.GraphicalEffects
@@ -14,6 +15,12 @@ import qs.widgets.ControlCenter.widgets
 PanelWindow {
   id: root
 
+  property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
+  property var hyprlandMonitor: SHyprland.monitorsByName?.[focusedScreen?.name] ?? null
+  property var focusedWorkspace: SHyprland.workspacesById?.[hyprlandMonitor?.activeWorkspace?.id] ?? null
+  property var focusedClient: SHyprland.clientsByAddress?.[focusedWorkspace?.lastwindow] ?? null
+  property bool isFocusedClientFullScreen: (focusedClient?.fullscreen ?? null) === 2
+
   WlrLayershell.namespace: "quickshell:control-center"
   WlrLayershell.layer: WlrLayer.Overlay
   anchors {
@@ -22,7 +29,7 @@ PanelWindow {
     bottom: true
     right: true
   }
-  exclusionMode: ExclusionMode.Normal
+  exclusionMode: isFocusedClientFullScreen ? ExclusionMode.Ignore : ExclusionMode.Normal
   exclusiveZone: 0
   color: "transparent"
   mask: Region {
