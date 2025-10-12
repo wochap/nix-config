@@ -39,7 +39,7 @@ Singleton {
     id: getStateProcess
 
     running: true
-    command: ["bash", "-c", , `[[ "$(systemctl --user is-active docker)" == "active" ]] && echo true || echo false`]
+    command: ["bash", "-c", `[[ "$(systemctl --user is-active docker)" == "active" ]] && echo true || echo false`]
     stdout: StdioCollector {
       id: getStateCollector
 
