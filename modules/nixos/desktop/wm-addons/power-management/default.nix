@@ -5,6 +5,9 @@ let
   inherit (config._custom.globals) configDirectory;
   inherit (config.boot.kernelPackages) cpupower;
   batty = pkgs.writeScriptBin "batty" (builtins.readFile ./scripts/batty.sh);
+  legion-battery-conservation =
+    pkgs.writeScriptBin "legion-battery-conservation"
+    (builtins.readFile ./scripts/legion-battery-conservation.sh);
 in {
   options._custom.desktop.power-management = {
     enable = lib.mkEnableOption { };
@@ -32,6 +35,7 @@ in {
       cpupower
       powertop # only use it to check current power usage
       batty
+      legion-battery-conservation
       lm_sensors
     ];
 

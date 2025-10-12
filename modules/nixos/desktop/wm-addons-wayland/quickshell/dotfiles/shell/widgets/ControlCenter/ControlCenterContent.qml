@@ -135,6 +135,31 @@ PanelWindow {
         }
       }
 
+      RowLayout {
+        Layout.fillWidth: true
+
+        ControlCenterButton {
+          Layout.fillWidth: true
+          Layout.preferredWidth: 1
+          label: "Battery conservation"
+          materialIcon: "shield"
+          isActive: SLegionBatteryConservation.isActive
+          onClicked: {
+            SLegionBatteryConservation.toggle();
+          }
+        }
+
+        Item {
+          Layout.fillWidth: true
+          Layout.preferredWidth: 1
+        }
+
+        Item {
+          Layout.fillWidth: true
+          Layout.preferredWidth: 1
+        }
+      }
+
       HyprsunsetField {}
 
       BacklightField {}
