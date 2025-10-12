@@ -8,23 +8,42 @@ import Quickshell.Io
 Singleton {
   id: root
 
+  property string grayScaleFilterName: "grayscale"
+  property string oledSaverFilterName: "oled-saver"
   property bool isGrayScaleActive: false
+  property bool isOledSaverActive: false
 
-  function disableGrayScale() {
+  function disableAll() {
     root.isGrayScaleActive = false;
+    root.isOledSaverActive = false;
     Quickshell.execDetached(["bash", "-c", "hyprshade off"]);
   }
 
   function enableGrayScale() {
+    root.isOledSaverActive = false;
     root.isGrayScaleActive = true;
-    Quickshell.execDetached(["bash", "-c", "hyprshade on grayscale"]);
+    Quickshell.execDetached(["bash", "-c", `hyprshade on ${root.grayScaleFilterName}`]);
+  }
+
+  function enableOledSaver() {
+    root.isGrayScaleActive = false;
+    root.isOledSaverActive = true;
+    Quickshell.execDetached(["bash", "-c", `hyprshade on ${root.oledSaverFilterName}`]);
   }
 
   function toggleGrayScale() {
     if (root.isGrayScaleActive) {
-      disableGrayScale();
+      disableAll();
     } else {
       enableGrayScale();
+    }
+  }
+
+  function toggleOledSaver() {
+    if (root.isOledSaverActive) {
+      disableAll();
+    } else {
+      enableOledSaver();
     }
   }
 
@@ -42,7 +61,8 @@ Singleton {
 
       onStreamFinished: {
         const output = statusCollector.text.trim();
-        root.isGrayScaleActive = output === "grayscale";
+        root.isGrayScaleActive = output === root.grayScaleFilterName;
+        root.isOledSaverActive = output === root.oledSaverFilterName;
       }
     }
   }

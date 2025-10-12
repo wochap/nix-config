@@ -115,7 +115,7 @@ PanelWindow {
         ControlCenterButton {
           Layout.fillWidth: true
           Layout.preferredWidth: 1
-          label: "Bedtime mode"
+          label: "Grayscale filter"
           materialIcon: "filter_b_and_w"
           isActive: SHyprshade.isGrayScaleActive
           onClicked: {
@@ -149,9 +149,15 @@ PanelWindow {
           }
         }
 
-        Item {
+        ControlCenterButton {
           Layout.fillWidth: true
           Layout.preferredWidth: 1
+          label: "OLED saver"
+          materialIcon: "blur_on"
+          isActive: SHyprshade.isOledSaverActive
+          onClicked: {
+            SHyprshade.toggleOledSaver();
+          }
         }
 
         Item {
