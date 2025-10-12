@@ -173,14 +173,26 @@ PanelWindow {
 
         SystemIcon {
           Layout.fillHeight: true
+          Layout.alignment: Qt.AlignVCenter
           icon: SUpower.batteryIcon
-          size: 32
+          size: Styles.font.pixelSize.hugeass
           enableColoriser: true
           color: Theme.options.text
         }
 
         StyledText {
-          text: `${Math.round(SUpower.percentage * 100)}% (${SUpower.batteryLabel})`
+          Layout.alignment: Qt.AlignVCenter
+          Layout.fillWidth: true
+          text: `${Math.round(SUpower.percentage * 100)}%`
+          font.pixelSize: Styles.font.pixelSize.small
+        }
+
+        StyledText {
+          property bool isDischarging: SUpower.batteryLabel === "Discharging"
+
+          Layout.alignment: Qt.AlignVCenter
+          text: `${SUpower.batteryLabel} · ${Global.formatTimeRemaining(isDischarging ? SUpower.timeToEmpty : SUpower.timeToFull)} left`
+          font.pixelSize: Styles.font.pixelSize.small
         }
       }
     }

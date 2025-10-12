@@ -93,6 +93,6 @@ ColumnLayout {
     horizontalAlignment: Text.AlignHCenter
     text: root.label
     elide: Text.ElideMiddle
-    // font.pixelSize: Styles.font.pixelSize.small
+    font.pixelSize: Styles.font.pixelSize.small
   }
 }
