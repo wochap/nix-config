@@ -142,6 +142,10 @@ PanelWindow {
           Layout.fillWidth: true
 
           ControlCenterButton {
+            Component.onCompleted: {
+              SLegionBatteryConservation.getState();
+            }
+
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             label: "Charge Limit"
