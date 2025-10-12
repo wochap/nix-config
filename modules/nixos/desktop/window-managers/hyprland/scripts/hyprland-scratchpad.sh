@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROG=$(basename $0)
+PROG=$(basename "$0")
 TEMP=$(getopt --options h --longoptions help,raise-or-run-uwsm:,raise-or-run:,focus-last,toggle,toggle-in -- "$@") || exit 1
 eval set -- "$TEMP"
 
@@ -12,12 +12,14 @@ current_monitor_name="$(hyprctl activeworkspace -j | jq -r '.monitor')"
 # have the tag scratchpad
 # e.g.: windowrule = tag +scratchpad, class:kitty-scratch
 function raise_or_run() {
-  class="$1"
-  runstr="$2"
-  has_uwsm="$3"
-
+  local class="$1"
+  local runstr="$2"
+  local has_uwsm="$3"
+  local window
   window=$(hyprctl clients -j | jq "first(.[] | select(.class == \"$class\"))")
+
   if [[ "$window" ]]; then
+    local window_ws window_address window_monitor is_focused is_visible
     window_ws=$(echo "$window" | jq -j ".workspace.name")
     window_address=$(echo "$window" | jq -j ".address")
     window_monitor=$(echo "$window" | jq -j ".monitor")
@@ -25,9 +27,10 @@ function raise_or_run() {
     is_visible=$([[ "$window_monitor" == "$current_monitor" && "$window_ws" == "$current_ws" ]] && echo "true" || echo "false")
     if [[ "$is_visible" == "true" ]]; then
       if [[ "$is_focused" == "true" ]]; then
+        local batch_args=""
+        local is_window_grouped
         # hide
         is_window_grouped=$(echo "$window" | jq '.grouped | length > 0')
-        batch_args=""
         if [ "$is_window_grouped" = "true" ]; then
           batch_args="dispatch moveoutofgroup active;"
         fi
@@ -41,11 +44,12 @@ function raise_or_run() {
       fi
     else
       # focus
+      local batch_args=""
       if [[ "$window_monitor" != "$current_monitor" ]]; then
         # HACK: move scratchpads ws to current monitor
         batch_args="dispatch moveworkspacetomonitor special:scratchpads $current_monitor_name;"
       fi
-      batch_args="dispatch movetoworkspace $current_ws,class:^($class)$;"
+      batch_args="$batch_args dispatch movetoworkspace $current_ws,class:^($class)$;"
       batch_args="$batch_args dispatch focuswindow class:^($class)$;"
       batch_args="$batch_args dispatch alterzorder top,address:$window_address;"
       if [[ "$window_monitor" != "$current_monitor" ]]; then
@@ -67,6 +71,7 @@ function raise_or_run() {
   fi
 
   # hide all others scratchpads
+  local windows_addresses
   windows_addresses=$(hyprctl clients -j | jq -r ".[] | select(.monitor == $current_monitor and .workspace.id == $current_ws and .class != \"$class\" and (.tags[]? | test(\"^scratchpad\"))) | .address")
   batch_args=""
   for window_address in $windows_addresses; do
@@ -76,15 +81,17 @@ function raise_or_run() {
 }
 
 function focus_last() {
+  local window_class
   window_class=$(hyprctl clients -j | jq -r "[.[] | select((.tags[]? | test(\"^scratchpad\")))] | sort_by(.focusHistoryID) | .[0] | .class")
   raise_or_run "$window_class" ""
 }
 
 function process_scratchpad() {
-  window="$1"
-  ws_name="$2"
+  local window="$1"
+  local ws_name="$2"
 
   if [ -n "$window" ]; then
+    local window_ws window_monitor window_address is_focused is_visible
     window_ws=$(echo "$window" | jq -r ".workspace.name")
     window_monitor=$(echo "$window" | jq -r ".monitor")
     window_address=$(echo "$window" | jq -r ".address")
@@ -95,9 +102,11 @@ function process_scratchpad() {
       if [[ "$is_focused" == "true" ]]; then
         if [[ "$ws_name" == tmpscratchpad* ]]; then
           # hide all
+          local -a tmpscratchpads_windows
+          local batch_args=""
           mapfile -t tmpscratchpads_windows < <(hyprctl clients -j | jq -c ".[] | select(.monitor == $current_monitor and .workspace.id == $current_ws and (.tags[]? | test(\"^tmpscratchpad\")))")
-          batch_args=""
           for window in "${tmpscratchpads_windows[@]}"; do
+            local window_address
             window_address=$(echo "$window" | jq -r ".address")
             batch_args="$batch_args dispatch movetoworkspacesilent special:$ws_name,address:$window_address;"
           done
@@ -111,7 +120,7 @@ function process_scratchpad() {
       else
         if [[ "$ws_name" == tmpscratchpad* ]]; then
           # focus
-          batch_args="dispatch focuswindow address:$window_address;"
+          local batch_args="dispatch focuswindow address:$window_address;"
           batch_args="$batch_args dispatch alterzorder top,address:$window_address;"
           hyprctl --batch "$batch_args" -q
           exit 0
@@ -126,21 +135,24 @@ function toggle_scratchpad() {
   # otherwise show all tmpscratchpads
 
   # process scratchpads created by --raise-or-run
+  local -a scratchpads_windows
   mapfile -t scratchpads_windows < <(hyprctl clients -j | jq -c ".[] | select(.monitor == $current_monitor and .workspace.id == $current_ws and (.tags[]? | test(\"^scratchpad\")))")
   for window in "${scratchpads_windows[@]}"; do
     process_scratchpad "$window" "scratchpads"
   done
 
   # process scratchpads created by --toggle and --toggle-in
+  local -a tmpscratchpads_windows
   mapfile -t tmpscratchpads_windows < <(hyprctl clients -j | jq -c "[.[] | select(.monitor == $current_monitor and .workspace.id == $current_ws and (.tags[]? | test(\"^tmpscratchpad\")))] | sort_by(.focusHistoryID) | .[]")
   for window in "${tmpscratchpads_windows[@]}"; do
     process_scratchpad "$window" "tmpscratchpads"
   done
 
   # show all tmpscratchpads and focus last tmpscratchpads
+  local recent_tmpscratchpad_window_address window_address window_monitor_id
+  local batch_args=""
   mapfile -t tmpscratchpads_windows < <(hyprctl clients -j | jq -c "[.[] | select((.monitor != $current_monitor or .workspace.id != $current_ws) and (.tags[]? | test(\"^tmpscratchpad\")))] | sort_by(.focusHistoryID) | .[]")
   recent_tmpscratchpad_window_address=$(echo "${tmpscratchpads_windows[0]}" | jq -r '.address')
-  batch_args=""
   for window in "${tmpscratchpads_windows[@]}"; do
     window_address=$(echo "$window" | jq -r ".address")
     window_monitor_id=$(echo "$window" | jq -r ".monitor")
@@ -158,18 +170,20 @@ function toggle_scratchpad() {
 function toggle_in_scratchpad() {
   # move in or move out window from scratchpad
 
+  local focused_window_in_tmpscratchpad
   focused_window_in_tmpscratchpad=$(hyprctl clients -j | jq -r ".[] | select(.focusHistoryID == 0 and (.tags[]? | test(\"^tmpscratchpad\")))")
   if [ -n "$focused_window_in_tmpscratchpad" ]; then
     # focused window is in scratchpad
 
     # move out from scratchpad
-    batch_args="dispatch tagwindow -tmpscratchpad;"
+    local batch_args="dispatch tagwindow -tmpscratchpad;"
     batch_args="$batch_args dispatch movetoworkspacesilent $current_ws;"
     hyprctl --batch "$batch_args" -q
   else
+    local is_focused_window_grouped
     is_focused_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
     # move in to scratchpad
-    batch_args="dispatch tagwindow +tmpscratchpad;"
+    local batch_args="dispatch tagwindow +tmpscratchpad;"
     if [ "$is_focused_window_grouped" = "true" ]; then
       batch_args="$batch_args dispatch moveoutofgroup active;"
     fi
@@ -186,11 +200,11 @@ while true; do
 Usage: $PROG [OPTIONS]
 
 Options:
-  -h, --help                      Show this help message.
-  --raise-or-run CLASS CMD        Raise or run a window with given CLASS, launching CMD if not found.
-  --focus-last                    Focus the last used scratchpad window.
-  --toggle                        Toggle visibility of scratchpad windows.
-  --toggle-in                     Toggle the currently focused window in/out of the scratchpad.
+  -h, --help                  Show this help message.
+  --raise-or-run CLASS CMD    Raise or run a window with given CLASS, launching CMD if not found.
+  --focus-last                Focus the last used scratchpad window.
+  --toggle                    Toggle visibility of scratchpad windows.
+  --toggle-in                 Toggle the currently focused window in/out of the scratchpad.
 EOF
     exit 0
     ;;
