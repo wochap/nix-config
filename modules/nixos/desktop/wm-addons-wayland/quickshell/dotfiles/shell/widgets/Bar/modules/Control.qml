@@ -91,7 +91,9 @@ WrapperRectangle {
       SystemIcon {
         Layout.fillHeight: true
         icon: SUpower.batteryIcon
+        color: SUpower.batteryIconColor
         size: Styles.font.pixelSize.hugeass
+        enableColoriser: true
       }
     }
   }

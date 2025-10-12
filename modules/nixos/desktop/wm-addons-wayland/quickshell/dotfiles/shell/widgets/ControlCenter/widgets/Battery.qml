@@ -12,8 +12,8 @@ RowLayout {
     Layout.alignment: Qt.AlignVCenter
     icon: SUpower.batteryIcon
     size: Styles.font.pixelSize.hugeass
+    color: SUpower.batteryIconColor
     enableColoriser: true
-    color: Theme.options.text
   }
 
   StyledText {

@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Services.UPower
+import qs.config
 
 Singleton {
   id: root
@@ -18,6 +19,7 @@ Singleton {
   property real timeToEmpty: UPower.displayDevice.timeToEmpty
   property real timeToFull: UPower.displayDevice.timeToFull
   property string batteryIcon: getIcon()
+  property string batteryIconColor: getIconColor()
   property string batteryLabel: getLabel()
 
   function getIcon() {
@@ -29,7 +31,7 @@ Singleton {
       return "battery-full-charged";
     }
     if (root.isCharging) {
-      const icons = [[100, "battery-full-charging"], [80, "battery-good-charging"], [60, "battery-good-charging"], [40, "battery-low-charging"], [20, "battery-caution-charging"]];
+      const icons = [[100, "battery-full-charging"], [80, "battery-good-charging"], [60, "battery-good-charging"], [40, "battery-low-charging"], [20, "battery-caution-charging"], [0, "battery-caution-charging"]];
       const icon = icons.find(([threshold, _]) => percent >= threshold);
       return icon?.[1] ?? "battery-missing";
     }
@@ -39,6 +41,26 @@ Singleton {
     const icons = [[100, "battery-full"], [80, "battery-good"], [60, "battery-good"], [40, "battery-low"], [20, "battery-caution"], [0, "battery-empty"]];
     const icon = icons.find(([threshold, _]) => percent >= threshold);
     return icon?.[1] ?? "battery-missing";
+  }
+
+  function getIconColor() {
+    const percent = root.percentage * 100;
+    if (!root.available) {
+      return Theme.options.red;
+    }
+    if (root.isFullyCharged) {
+      return Theme.options.green;
+    }
+    if (root.isCharging) {
+      return Theme.options.text;
+    }
+    if (root.energyRate < 0.1) {
+      return Theme.options.green;
+    }
+    return Theme.options.text;
+    const iconColors = [[16, Theme.options.text], [15, Theme.options.red], [0, Theme.options.red]];
+    const iconColor = icons.find(([threshold, _]) => percent >= threshold);
+    return iconColor?.[1] ?? Theme.options.red;
   }
 
   function getLabel() {
