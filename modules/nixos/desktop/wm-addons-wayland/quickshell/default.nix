@@ -9,8 +9,8 @@ let
   quickshell-final = inputs.quickshell.packages.${pkgs.system}.default;
   shell-capslock = pkgs.writeScriptBin "shell-capslock"
     (builtins.readFile ./scripts/shell-capslock.sh);
-  shell-osd =
-    pkgs.writeScriptBin "shell-osd" (builtins.readFile ./scripts/shell-osd.sh);
+  shell-pipewire = pkgs.writeScriptBin "shell-pipewire"
+    (builtins.readFile ./scripts/shell-pipewire.sh);
   shell-backlight = pkgs.writeScriptBin "shell-backlight"
     (builtins.readFile ./scripts/shell-backlight.sh);
   shell-hypr-ws-special-count =
@@ -71,7 +71,7 @@ in {
         shell-idle
         shell-powerprofile
         shell-backlight
-        shell-osd
+        shell-pipewire
         shell-lock
         shell-steam-icons
         shell-theme

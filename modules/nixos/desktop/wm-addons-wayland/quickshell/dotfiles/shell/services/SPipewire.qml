@@ -99,10 +99,10 @@ Singleton {
   }
 
   function setInputVolume(value) {
-    Quickshell.execDetached(["bash", "-c", `shell-osd --volume-input ${value}%`]);
+    Quickshell.execDetached(["bash", "-c", `shell-pipewire --volume-input ${value}%`]);
   }
 
   function setOutputVolume(value) {
-    Quickshell.execDetached(["bash", "-c", `shell-osd --volume-output ${value}%`]);
+    Quickshell.execDetached(["bash", "-c", `shell-pipewire --volume-output ${value}%`]);
   }
 }
