@@ -13,7 +13,7 @@ in {
 
       # required by https://github.com/sickcodes/Docker-OSX
       bison
-      bridge-utils
+      iproute2
       dnsmasq
       flex
       libvirt

@@ -39,6 +39,7 @@ in {
       xorg.xev # get pressed key name
       lazyjournal # journalctl tui
       systemctl-tui # systemd/systemctl tui
+      iproute2 # brctl, etc
 
       ffmpegthumbnailer # video thumbnailer
       graphicsmagick # image editor

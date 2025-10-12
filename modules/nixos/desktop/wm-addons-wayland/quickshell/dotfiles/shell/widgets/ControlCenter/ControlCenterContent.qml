@@ -163,9 +163,15 @@ PanelWindow {
             }
           }
 
-          Item {
+          ControlCenterButton {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
+            label: SDocker.isActive ? "On" : "Off"
+            woosIcon: ""
+            isActive: SDocker.isActive
+            onClicked: {
+              SDocker.toggle();
+            }
           }
         }
       }
