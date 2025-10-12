@@ -118,22 +118,22 @@ PanelWindow {
           ControlCenterButton {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            label: "Grayscale filter"
-            materialIcon: "filter_b_and_w"
-            isActive: SHyprshade.isGrayScaleActive
+            label: "Dark mode"
+            materialIcon: "dark_mode"
+            isActive: STheme.isDarkModeActive
             onClicked: {
-              SHyprshade.toggleGrayScale();
+              STheme.toggleDarkMode();
             }
           }
 
           ControlCenterButton {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            label: "Dark mode"
-            materialIcon: "dark_mode"
-            isActive: STheme.isDarkModeActive
+            label: "Docker"
+            woosIcon: ""
+            isActive: SDocker.isActive
             onClicked: {
-              STheme.toggleDarkMode();
+              SDocker.toggle();
             }
           }
         }
@@ -144,8 +144,8 @@ PanelWindow {
           ControlCenterButton {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            label: "Battery conservation"
-            materialIcon: "shield"
+            label: "Charge Limit"
+            woosIcon: "󱞜"
             isActive: SLegionBatteryConservation.isActive
             onClicked: {
               SLegionBatteryConservation.toggle();
@@ -155,22 +155,22 @@ PanelWindow {
           ControlCenterButton {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            label: "OLED saver"
-            materialIcon: "blur_on"
-            isActive: SHyprshade.isOledSaverActive
+            label: "Gray filter"
+            materialIcon: "filter_b_and_w"
+            isActive: SHyprshade.isGrayScaleActive
             onClicked: {
-              SHyprshade.toggleOledSaver();
+              SHyprshade.toggleGrayScale();
             }
           }
 
           ControlCenterButton {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            label: SDocker.isActive ? "On" : "Off"
-            woosIcon: ""
-            isActive: SDocker.isActive
+            label: "OLED filter"
+            materialIcon: "blur_on"
+            isActive: SHyprshade.isOledSaverActive
             onClicked: {
-              SDocker.toggle();
+              SHyprshade.toggleOledSaver();
             }
           }
         }
