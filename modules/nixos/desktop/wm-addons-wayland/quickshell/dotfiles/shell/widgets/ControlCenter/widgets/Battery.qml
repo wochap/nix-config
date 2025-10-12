@@ -25,9 +25,10 @@ RowLayout {
 
   StyledText {
     property bool isDischarging: SUpower.batteryLabel === "Discharging"
+    property bool isFullCharged: SUpower.batteryLabel === "Full charged"
 
     Layout.alignment: Qt.AlignVCenter
-    text: `${SUpower.batteryLabel} · ${Global.formatTimeRemaining(isDischarging ? SUpower.timeToEmpty : SUpower.timeToFull)} left`
+    text: `${SUpower.batteryLabel}${isFullCharged ? "" : ` · ${Global.formatTimeRemaining(isDischarging ? SUpower.timeToEmpty : SUpower.timeToFull)} left`}`
     font.pixelSize: Styles.font.pixelSize.small
   }
 }
