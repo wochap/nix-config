@@ -59,148 +59,130 @@ PanelWindow {
     implicitWidth: ConfigControlCenter.controlCenterWidth
 
     child: ColumnLayout {
-      spacing: ConfigControlCenter.controlCenterSpacing
+      spacing: ConfigControlCenter.controlCenterSpacing * 2
 
-      RowLayout {
-        Layout.fillWidth: true
+      ColumnLayout {
+        spacing: ConfigControlCenter.controlCenterSpacing
 
-        ControlCenterButton {
+        RowLayout {
           Layout.fillWidth: true
-          Layout.preferredWidth: 1
-          label: SNetwork.wifiLabel
-          systemIcon: SNetwork.wifiIcon
-          isActive: SNetwork.wifi.powered
-          onClicked: {
-            SNetwork.toggleWifiPower();
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: SNetwork.wifiLabel
+            systemIcon: SNetwork.wifiIcon
+            isActive: SNetwork.wifi.powered
+            onClicked: {
+              SNetwork.toggleWifiPower();
+            }
+          }
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: SBluetooth.label
+            materialIcon: SBluetooth.icon
+            isActive: SBluetooth.powered
+            onClicked: {
+              SBluetooth.togglePower();
+            }
+          }
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Silent mode"
+            woosIcon: ""
+            isActive: SNotifications.isSilent
+            onClicked: {
+              SNotifications.toggleIsSilent();
+            }
           }
         }
 
-        ControlCenterButton {
+        RowLayout {
           Layout.fillWidth: true
-          Layout.preferredWidth: 1
-          label: SBluetooth.label
-          materialIcon: SBluetooth.icon
-          isActive: SBluetooth.powered
-          onClicked: {
-            SBluetooth.togglePower();
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Night light"
+            materialIcon: "moon_stars"
+            isActive: SHyprsunset.active
+            onClicked: {
+              SHyprsunset.toggle();
+            }
+          }
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Grayscale filter"
+            materialIcon: "filter_b_and_w"
+            isActive: SHyprshade.isGrayScaleActive
+            onClicked: {
+              SHyprshade.toggleGrayScale();
+            }
+          }
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Dark mode"
+            materialIcon: "dark_mode"
+            isActive: STheme.isDarkModeActive
+            onClicked: {
+              STheme.toggleDarkMode();
+            }
           }
         }
 
-        ControlCenterButton {
+        RowLayout {
           Layout.fillWidth: true
-          Layout.preferredWidth: 1
-          label: "Silent mode"
-          woosIcon: ""
-          isActive: SNotifications.isSilent
-          onClicked: {
-            SNotifications.toggleIsSilent();
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Battery conservation"
+            materialIcon: "shield"
+            isActive: SLegionBatteryConservation.isActive
+            onClicked: {
+              SLegionBatteryConservation.toggle();
+            }
+          }
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "OLED saver"
+            materialIcon: "blur_on"
+            isActive: SHyprshade.isOledSaverActive
+            onClicked: {
+              SHyprshade.toggleOledSaver();
+            }
+          }
+
+          Item {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
           }
         }
       }
 
-      RowLayout {
-        Layout.fillWidth: true
+      ColumnLayout {
+        spacing: ConfigControlCenter.controlCenterSpacing
 
-        ControlCenterButton {
-          Layout.fillWidth: true
-          Layout.preferredWidth: 1
-          label: "Night light"
-          materialIcon: "moon_stars"
-          isActive: SHyprsunset.active
-          onClicked: {
-            SHyprsunset.toggle();
-          }
-        }
+        HyprsunsetField {}
 
-        ControlCenterButton {
-          Layout.fillWidth: true
-          Layout.preferredWidth: 1
-          label: "Grayscale filter"
-          materialIcon: "filter_b_and_w"
-          isActive: SHyprshade.isGrayScaleActive
-          onClicked: {
-            SHyprshade.toggleGrayScale();
-          }
-        }
+        BacklightField {}
 
-        ControlCenterButton {
-          Layout.fillWidth: true
-          Layout.preferredWidth: 1
-          label: "Dark mode"
-          materialIcon: "dark_mode"
-          isActive: STheme.isDarkModeActive
-          onClicked: {
-            STheme.toggleDarkMode();
-          }
-        }
+        OutputField {}
+
+        InputField {}
       }
 
-      RowLayout {
-        Layout.fillWidth: true
-
-        ControlCenterButton {
-          Layout.fillWidth: true
-          Layout.preferredWidth: 1
-          label: "Battery conservation"
-          materialIcon: "shield"
-          isActive: SLegionBatteryConservation.isActive
-          onClicked: {
-            SLegionBatteryConservation.toggle();
-          }
-        }
-
-        ControlCenterButton {
-          Layout.fillWidth: true
-          Layout.preferredWidth: 1
-          label: "OLED saver"
-          materialIcon: "blur_on"
-          isActive: SHyprshade.isOledSaverActive
-          onClicked: {
-            SHyprshade.toggleOledSaver();
-          }
-        }
-
-        Item {
-          Layout.fillWidth: true
-          Layout.preferredWidth: 1
-        }
-      }
-
-      HyprsunsetField {}
-
-      BacklightField {}
-
-      OutputField {}
-
-      InputField {}
-
-      RowLayout {
-        spacing: 4
-
-        SystemIcon {
-          Layout.fillHeight: true
-          Layout.alignment: Qt.AlignVCenter
-          icon: SUpower.batteryIcon
-          size: Styles.font.pixelSize.hugeass
-          enableColoriser: true
-          color: Theme.options.text
-        }
-
-        StyledText {
-          Layout.alignment: Qt.AlignVCenter
-          Layout.fillWidth: true
-          text: `${Math.round(SUpower.percentage * 100)}%`
-          font.pixelSize: Styles.font.pixelSize.small
-        }
-
-        StyledText {
-          property bool isDischarging: SUpower.batteryLabel === "Discharging"
-
-          Layout.alignment: Qt.AlignVCenter
-          text: `${SUpower.batteryLabel} · ${Global.formatTimeRemaining(isDischarging ? SUpower.timeToEmpty : SUpower.timeToFull)} left`
-          font.pixelSize: Styles.font.pixelSize.small
-        }
-      }
+      Battery {}
     }
   }
 }
