@@ -79,7 +79,8 @@ in {
         systemd_loadkey = {
           enable = cfg.enablePamSystemdLoadkey;
           order =
-            config.security.pam.services.greetd.rules.auth.gnome_keyring.order - 1;
+            config.security.pam.services.greetd.rules.auth.gnome_keyring.order
+            - 1;
           control = "optional";
           modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
         };
