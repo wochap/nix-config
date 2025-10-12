@@ -189,9 +189,23 @@ performance() {
   echo "Performance Mode activated."
 }
 
+print_list() {
+  # 1. `powerprofilesctl list`: Gets the list of profiles.
+  # 2. `awk -F'[: ]+' '/:$/ {print $2}'`: Extracts just the profile names.
+  #    - -F'[: ]+': Sets the field separator to a colon or one or more spaces.
+  #    - /:$/:      Processes only lines ending with a colon.
+  #    - {print $2}: Prints the second field, which is the profile name.
+  # 3. `jq -R .`: Wraps each line of input into a JSON string.
+  # 4. `jq -s .`: "Slurps" all the JSON strings into a single JSON array.
+  powerprofilesctl list | awk -F'[: ]+' '/:$/ {print $2}' | jq -R . | jq -s .
+}
+
 case "$1" in
 --listen)
   listen
+  ;;
+--list)
+  print_list
   ;;
 --battery)
   battery_saver "power-saver"

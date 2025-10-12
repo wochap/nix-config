@@ -24,8 +24,8 @@ let
     (builtins.readFile ./scripts/shell-idle-inhibit.sh);
   shell-idle = pkgs.writeScriptBin "shell-idle"
     (builtins.readFile ./scripts/shell-idle.sh);
-  shell-powerprofile = pkgs.writeScriptBin "shell-powerprofile"
-    (builtins.readFile ./scripts/shell-powerprofile.sh);
+  shell-powerprofiles = pkgs.writeScriptBin "shell-powerprofiles"
+    (builtins.readFile ./scripts/shell-powerprofiles.sh);
   shell-lock = pkgs.writeScriptBin "shell-lock"
     (builtins.readFile ./scripts/shell-lock.sh);
   shell-steam-icons = pkgs.writeScriptBin "shell-steam-icons"
@@ -69,7 +69,7 @@ in {
         shell-bluetooth
         shell-idle-inhibit
         shell-idle
-        shell-powerprofile
+        shell-powerprofiles
         shell-backlight
         shell-pipewire
         shell-lock

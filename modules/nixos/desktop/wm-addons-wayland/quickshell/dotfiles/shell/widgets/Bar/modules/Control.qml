@@ -82,8 +82,8 @@ WrapperRectangle {
         Layout.fillHeight: true
         Layout.leftMargin: -1
         Layout.rightMargin: 3
-        icon: SPowerProfile.icon
-        color: SPowerProfile.iconColor
+        icon: SPowerProfiles.icon
+        color: SPowerProfiles.iconColor
         size: Styles.font.pixelSize.huge
         weight: Font.Light
       }

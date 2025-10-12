@@ -3,7 +3,7 @@ charging:
     - "notify-send --replace-id=693 --app-name=batty --urgency=normal --icon=battery-good-charging 'Battery Nearing Full' 'Your battery is at 90%.'"
   95:
     - "notify-send --replace-id=693 --app-name=batty --urgency=normal --icon=battery-full-charged 'Battery Nearing Full' 'Your battery is at 95%.'"
-    - "pkexec legion_cli --donotexpecthwmon batteryconservation-enable"
+    - "legion-battery-conservation --toggle on"
   100:
     - "notify-send --replace-id=693 --app-name=batty --urgency=normal --icon=battery-full-charged 'Battery Charged' 'You can unplug your charger.'"
 
