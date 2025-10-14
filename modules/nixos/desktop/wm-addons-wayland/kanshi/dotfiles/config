@@ -2,6 +2,10 @@ profile glegion-undocked {
   output "Samsung Display Corp. 0x4188 Unknown" enable scale 2 position 0,0
 }
 
+profile glegion-undocked-power-saver {
+  output "Samsung Display Corp. 0x4188 Unknown" enable scale 2 position 0,0 mode 2880x1800@60.000999Hz
+}
+
 profile glegion-docked {
   output "Samsung Display Corp. 0x4188 Unknown" disable
   output "LG Electronics LG ULTRAGEAR 112NTLEL9832" enable scale 1 position 0,0 mode 3440x1440@143.923Hz adaptive_sync off
