@@ -64,6 +64,16 @@ in {
                 delta --detect-dark-light=always --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"'';
             };
           };
+          keybinding = {
+            universal = {
+              prevPage = "<c-b>";
+              nextPage = "<c-f>";
+              gotoTop = "g";
+              gotoBottom = "G";
+            };
+            commits = { viewResetOptions = "E"; };
+            stash = { popStash = "<space>"; };
+          };
         };
       };
     };
