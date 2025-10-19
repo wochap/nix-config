@@ -120,9 +120,6 @@
 
     boot.extraModulePackages = with config.boot.kernelPackages;
       [ lenovo-legion-module ];
-    # blacklist ideapad_laptop to avoid conflicts with lenovo-legion-module.
-    # NOTE: this also breaks the microphone mute key functionality.
-    boot.blacklistedKernelModules = [ "ideapad_laptop" ];
 
     # NOTE: kernel 6.12.x gives me a lot of DRM issues
     # install kernel v6.16.8
