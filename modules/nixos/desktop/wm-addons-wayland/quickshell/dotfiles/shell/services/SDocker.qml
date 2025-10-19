@@ -13,9 +13,6 @@ Singleton {
   function disable() {
     root.isActive = false;
     Quickshell.execDetached(["bash", "-c", "systemctl --user stop docker.service"]);
-    // TODO: is this network bridge linked to docker?
-    // NOTE: it uses a lot of power
-    Quickshell.execDetached(["bash", "-c", "pkexec ip link set br-c700d6064c27 down"]);
   }
 
   function enable() {
