@@ -192,7 +192,9 @@ PanelWindow {
         InputField {}
       }
 
-      PowerProfilesField {}
+      PowerProfilesField {
+        Layout.fillWidth: true
+      }
 
       Battery {}
     }
