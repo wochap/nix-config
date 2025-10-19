@@ -38,14 +38,14 @@ Singleton {
           root.iconColor = Theme.options.text;
           root.label = root.wifi.ssid;
         }
-        root.wifiIcon = root.icon;
-        root.wifiIconColor = root.iconColor;
-        root.wifiLabel = root.label;
       } else {
-        root.wifiIcon = "network-offline";
-        root.wifiIconColor = Theme.options.textDimmed;
-        root.wifiLabel = "Off";
+        root.icon = "network-offline";
+        root.iconColor = Theme.options.textDimmed;
+        root.label = "Off";
       }
+      root.wifiIcon = root.icon;
+      root.wifiIconColor = root.iconColor;
+      root.wifiLabel = root.label;
     }
 
     if (root.wired && root.wired.powered) {
