@@ -178,6 +178,35 @@ PanelWindow {
             }
           }
         }
+
+        RowLayout {
+          Layout.fillWidth: true
+
+          ControlCenterButton {
+            Component.onCompleted: {
+              SBatterySaver.getState();
+            }
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Battery saver"
+            materialIcon: "eco"
+            isActive: SBatterySaver.isActive
+            onClicked: {
+              SBatterySaver.toggle();
+            }
+          }
+
+          Item {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+          }
+
+          Item {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+          }
+        }
       }
 
       ColumnLayout {

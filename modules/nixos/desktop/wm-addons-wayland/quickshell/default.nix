@@ -24,6 +24,8 @@ let
     (builtins.readFile ./scripts/shell-idle-inhibit.sh);
   shell-idle = pkgs.writeScriptBin "shell-idle"
     (builtins.readFile ./scripts/shell-idle.sh);
+  shell-battery-saver = pkgs.writeScriptBin "shell-battery-saver"
+    (builtins.readFile ./scripts/shell-battery-saver.sh);
   shell-powerprofiles = pkgs.writeScriptBin "shell-powerprofiles"
     (builtins.readFile ./scripts/shell-powerprofiles.sh);
   shell-lock = pkgs.writeScriptBin "shell-lock"
@@ -75,6 +77,7 @@ in {
         shell-lock
         shell-steam-icons
         shell-theme
+        shell-battery-saver
       ];
 
       xdg.configFile = {
