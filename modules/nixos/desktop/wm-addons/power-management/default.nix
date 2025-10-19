@@ -64,7 +64,7 @@ in {
     # enable powertop auto tuning on startup
     services.udev.extraRules = lib.mkIf cfg.keyboard.enable ''
       # disable USB auto-suspend for keyboard controller
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="${cfg.keyboard.idVendor}", ATTR{idProduct}=="${cfg.keyboard.idProduct}", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="${cfg.keyboard.delayMs}"
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="${cfg.keyboard.idVendor}", ATTR{idProduct}=="${cfg.keyboard.idProduct}", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="${toString cfg.keyboard.delayMs}"
     '';
     powerManagement.powertop = {
       enable = lib.mkDefault true;
