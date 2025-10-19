@@ -53,7 +53,17 @@ print_status() {
 # A function to set the wifi power state to 'on' or 'off'
 set_wifi_power() {
   local state=$1
-  iwctl device wlan0 set-property Powered "$state"
+  if [[ "$state" == "on" ]]; then
+    # Unblocks the wireless device
+    rfkill unblock wlan
+    # Then power on the software controller
+    # iwctl device wlan0 set-property Powered "$state"
+  elif [[ "$state" == "off" ]]; then
+    # Power off the software controller first
+    # iwctl device wlan0 set-property Powered "$state"
+    # Blocks the wireless device
+    rfkill block wlan
+  fi
 }
 
 case "$1" in

@@ -41,9 +41,18 @@ print_status() {
 # A function to set the bluetooth power state to 'on' or 'off'
 set_power() {
   local state=$1
-  # The 'power' command in bluetoothctl is idempotent, so no need to check state first.
-  # It won't do anything if Bluetooth is already in the desired state.
-  echo "power $state" | bluetoothctl >/dev/null
+
+  if [ "$state" = "on" ]; then
+    # Unblock the hardware kill switch first
+    rfkill unblock bluetooth
+    # Then power on the software controller
+    # echo "power on" | bluetoothctl >/dev/null
+  elif [ "$state" = "off" ]; then
+    # Power off the software controller first
+    # echo "power off" | bluetoothctl >/dev/null
+    # Then block the hardware kill switch
+    rfkill block bluetooth
+  fi
 }
 
 case "$1" in
