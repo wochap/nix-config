@@ -15,8 +15,10 @@ in {
       ++ lib.optionals cfg.enableNvidia [ nvidia-docker ];
 
     virtualisation.docker = {
-      # TODO: reduce power usage of docker
       enable = true;
+      # PERF: fast boot up
+      # TODO: disable docker rootless on boot
+      enableOnBoot = false;
       # enable storage driver containerd
       # NOTE: it change the location of where your containers are saved
       # daemon.settings.features.containerd-snapshotter = true;
