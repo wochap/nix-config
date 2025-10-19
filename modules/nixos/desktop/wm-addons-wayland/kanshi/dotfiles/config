@@ -1,5 +1,5 @@
 profile glegion-undocked {
-  output "Samsung Display Corp. 0x4188 Unknown" enable scale 2 position 0,0
+  output "Samsung Display Corp. 0x4188 Unknown" enable scale 2 position 0,0 mode 2880x1800@120.000999Hz
 }
 
 profile glegion-undocked-power-saver {
