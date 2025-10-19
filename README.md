@@ -216,6 +216,13 @@ $ sudo lsof /dev/nvidia*
 $ watch -n 3 cat /sys/class/drm/card*/device/power_state
 ```
 
+- Keyboard doesn't enter autosuspend
+
+```
+$ grep -l "c104" /sys/bus/usb/devices/*/idProduct | sed 's|idProduct|power|'
+$ watch -n 0.5 "cat /sys/bus/usb/devices/3-1/power/runtime_status"
+```
+
 - Identify shutdown service timeout
 
   ```sh
