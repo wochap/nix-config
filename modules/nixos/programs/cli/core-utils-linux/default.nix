@@ -21,6 +21,7 @@ in {
       inotify-tools # C module, inotifywait
       inxi # log OS info
       keyutils # inspect kernel keyring
+      evemu
       libinput # input devices helper
       libinput-gestures # handle swipe events
       libva-utils # verifying VA-API
