@@ -32,12 +32,20 @@ print_is_iface_up() {
   echo "$output" | jq -r '.[0].flags | contains(["UP"])'
 }
 
+# Returns "true" if keyboard autosuspend is on
+print_is_keyboard_autosuspend_on() {
+  # Checks if the status is "on" (meaning power saving is active)
+  [[ "$(legion-keyboard-autosuspend --status)" == "on" ]] && echo "true" || echo "false"
+}
+
 print_status() {
   # Returns "true" only if the system is already in power-saver mode.
-  # This means the interface is down, blur is off, and the power-saver profile is active.
+  # This means the interface is down, blur is off, power-saver profile is active,
+  # and keyboard autosuspend is on.
   if [[ "$(print_is_iface_up)" == "false" ]] &&
     [[ "$(print_is_hyprland_blur_enabled)" == "false" ]] &&
-    [[ "$(print_is_kanshi_power_saver_profile_active)" == "true" ]]; then
+    [[ "$(print_is_kanshi_power_saver_profile_active)" == "true" ]] &&
+    [[ "$(print_is_keyboard_autosuspend_on)" == "true" ]]; then
     echo "true"
   else
     echo "false"
@@ -46,40 +54,50 @@ print_status() {
 
 toggle() {
   # Toggles the system's power state.
-  # If print_status is "false", it means we are NOT in power-saver mode, so we activate it.
-  # If print_status is "true", it means we ARE in power-saver mode, so we deactivate it.
   if [[ "$(print_status)" == "false" ]]; then
     echo "Activating power saver mode..."
 
-    # Bring down the network interface only if it's currently up
+    # Bring down the network interface
     if [[ "$(print_is_iface_up)" == "true" ]]; then
       echo " -> Bringing down network interface"
       pkexec ip link set br-c700d6064c27 down
     fi
 
-    # Disable Hyprland blur only if it's currently enabled
+    # Disable Hyprland blur
     if [[ "$(print_is_hyprland_blur_enabled)" == "true" ]]; then
       echo " -> Disabling hyprland blur"
       hyprctl keyword decoration:blur:enabled 0
     fi
 
-    # Activate kanshi power saver profile only if it's not already active
+    # Activate kanshi power saver profile
     if [[ "$(print_is_kanshi_power_saver_profile_active)" == "false" ]]; then
       echo " -> Switching to kanshi power-saver profile"
       kanshictl switch glegion-undocked-power-saver
     fi
+
+    # Enable keyboard autosuspend
+    if [[ "$(print_is_keyboard_autosuspend_on)" == "false" ]]; then
+      echo " -> Enabling keyboard autosuspend"
+      legion-keyboard-autosuspend --toggle on
+    fi
   else
     echo "Deactivating power saver mode..."
-    # Enable Hyprland blur only if it's currently disabled
+    # Enable Hyprland blur
     if [[ "$(print_is_hyprland_blur_enabled)" == "false" ]]; then
       echo " -> Enabling hyprland blur"
       hyprctl keyword decoration:blur:enabled 1
     fi
 
-    # Activate standard kanshi profile only if the power saver is currently active
+    # Activate standard kanshi profile
     if [[ "$(print_is_kanshi_power_saver_profile_active)" == "true" ]]; then
       echo " -> Switching to standard kanshi profile"
       kanshictl switch glegion-undocked
+    fi
+
+    # Disable keyboard autosuspend
+    if [[ "$(print_is_keyboard_autosuspend_on)" == "true" ]]; then
+      echo " -> Disabling keyboard autosuspend"
+      legion-keyboard-autosuspend --toggle off
     fi
   fi
 }

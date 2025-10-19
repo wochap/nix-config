@@ -8,6 +8,9 @@ let
   legion-battery-conservation =
     pkgs.writeScriptBin "legion-battery-conservation"
     (builtins.readFile ./scripts/legion-battery-conservation.sh);
+  legion-keyboard-autosuspend =
+    pkgs.writeScriptBin "legion-keyboard-autosuspend"
+    (builtins.readFile ./scripts/legion-keyboard-autosuspend.sh);
 in {
   options._custom.desktop.power-management = {
     enable = lib.mkEnableOption { };
@@ -16,8 +19,13 @@ in {
       default = [ ];
     };
     enableBatty = lib.mkEnableOption { };
+    # tune keyboard to prevent aggressive autosuspend
     keyboard = {
       enable = lib.mkEnableOption { };
+      delayMs = lib.mkOption {
+        type = lib.types.int;
+        default = 15000;
+      };
       idVendor = lib.mkOption {
         type = lib.types.str;
         default = "";
@@ -34,8 +42,10 @@ in {
       cpupower-gui
       cpupower
       powertop # only use it to check current power usage
+      powerstat # power usage
       batty
       legion-battery-conservation
+      legion-keyboard-autosuspend
       lm_sensors
     ];
 
@@ -54,7 +64,7 @@ in {
     # enable powertop auto tuning on startup
     services.udev.extraRules = lib.mkIf cfg.keyboard.enable ''
       # disable USB auto-suspend for keyboard controller
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="${cfg.keyboard.idVendor}", ATTR{idProduct}=="${cfg.keyboard.idProduct}", ATTR{power/control}="on"
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="${cfg.keyboard.idVendor}", ATTR{idProduct}=="${cfg.keyboard.idProduct}", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="${cfg.keyboard.delayMs}"
     '';
     powerManagement.powertop = {
       enable = lib.mkDefault true;
