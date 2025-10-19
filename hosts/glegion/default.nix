@@ -26,6 +26,8 @@ in {
     _custom.desktop.audio.enableEasyeffects = false;
     _custom.desktop.audio.enableNoisetorch = false;
 
+    # _custom.desktop.mouseless.enable = true;
+
     _custom.programs.weeb.enable = true;
 
     # cli
