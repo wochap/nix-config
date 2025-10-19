@@ -59,7 +59,7 @@ RowLayout {
           if (parent.checked) {
             return Theme.options.primary;
           }
-          return "transparent";
+          return Theme.options.surface1;
         }
       }
     }
