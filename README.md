@@ -73,6 +73,8 @@ Reboot into NixOS, login with the user you created
    $ nixos-rebuild boot --flake .#gdesktop
    # or if you want to switch to a specialisation
    # $ nixos-rebuild switch --flake .#gdesktop --specialisation hyprland-specialisation
+   # or if you want to generate a new profile
+   # $ nixos-rebuild switch --flake .#gdesktop --profile-name hyprland-specialisation
    # or with nh
    # $ nh os switch .#nixosConfigurations.gdesktop
    ```
