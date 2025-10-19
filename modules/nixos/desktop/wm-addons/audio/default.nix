@@ -2,7 +2,11 @@
 
 let cfg = config._custom.desktop.audio;
 in {
-  options._custom.desktop.audio.enable = lib.mkEnableOption { };
+  options._custom.desktop.audio = {
+    enable = lib.mkEnableOption { };
+    enableEasyeffects = lib.mkEnableOption { };
+    enableNoisetorch = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "audio" ];
@@ -24,7 +28,7 @@ in {
     hardware.enableAllFirmware = true;
 
     # suppress background noice
-    programs.noisetorch.enable = true;
+    programs.noisetorch.enable = cfg.enableNoisetorch;
 
     # Enable audio
     security.rtkit.enable = true;
@@ -40,7 +44,7 @@ in {
       wireplumber.enable = true;
     };
 
-    _custom.hm = {
+    _custom.hm = lib.mkIf cfg.enableEasyeffects {
       # alternative to Dolby Atmos
       services.easyeffects = {
         enable = true;

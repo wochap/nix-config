@@ -23,6 +23,8 @@
       _custom.system.windows.enableSamba = lib.mkDefault true;
 
       _custom.desktop.audio.enable = true;
+      _custom.desktop.audio.enableEasyeffects = lib.mkDefault true;
+      _custom.desktop.audio.enableNoisetorch = lib.mkDefault true;
       _custom.desktop.backlight.enable = true;
       _custom.desktop.bluetooth.enable = true;
       _custom.desktop.calendar.enable = true;
@@ -109,6 +111,8 @@
       _custom.archetypes.de-wayland-desktop.enable = true;
 
       _custom.desktop.audio.enable = true;
+      _custom.desktop.audio.enableEasyeffects = lib.mkDefault true;
+      _custom.desktop.audio.enableNoisetorch = lib.mkDefault true;
       _custom.desktop.bluetooth.enable = true;
 
       _custom.desktop.kde.enable = lib.mkForce true;

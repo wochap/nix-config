@@ -22,6 +22,10 @@ in {
     _custom.desktop.cursor.name = "catppuccin-mocha-dark-cursors";
     _custom.desktop.cursor.size = 24;
 
+    # reduce power usage
+    _custom.desktop.audio.enableEasyeffects = false;
+    _custom.desktop.audio.enableNoisetorch = false;
+
     _custom.programs.weeb.enable = true;
 
     # cli
