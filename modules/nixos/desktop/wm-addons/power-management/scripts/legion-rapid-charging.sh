@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 print_status() {
-  if legion_cli --donotexpecthwmon batteryconservation-status 2>/dev/null | grep -q "True"; then
+  if legion_cli --donotexpecthwmon rapid-charging-status 2>/dev/null | grep -q "True"; then
     echo "true"
   else
     echo "false"
@@ -15,7 +15,7 @@ toggle() {
     local is_active
     is_active=$(print_status)
     if [[ "$is_active" == "false" ]]; then
-      pkexec legion_cli --donotexpecthwmon batteryconservation-enable
+      pkexec legion_cli --donotexpecthwmon rapid-charging-enable
     fi
     print_status
     ;;
@@ -23,7 +23,7 @@ toggle() {
     local is_active
     is_active=$(print_status)
     if [[ "$is_active" == "true" ]]; then
-      pkexec legion_cli --donotexpecthwmon batteryconservation-disable
+      pkexec legion_cli --donotexpecthwmon rapid-charging-disable
     fi
     print_status
     ;;
@@ -31,9 +31,9 @@ toggle() {
     local is_active
     is_active=$(print_status)
     if [[ "$is_active" == "true" ]]; then
-      pkexec legion_cli --donotexpecthwmon batteryconservation-disable
+      pkexec legion_cli --donotexpecthwmon rapid-charging-disable
     else
-      pkexec legion_cli --donotexpecthwmon batteryconservation-enable
+      pkexec legion_cli --donotexpecthwmon rapid-charging-enable
     fi
     print_status
     ;;

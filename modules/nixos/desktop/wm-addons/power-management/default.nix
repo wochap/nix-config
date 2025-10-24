@@ -8,6 +8,9 @@ let
   legion-battery-conservation =
     pkgs.writeScriptBin "legion-battery-conservation"
     (builtins.readFile ./scripts/legion-battery-conservation.sh);
+  legion-rapid-charging =
+    pkgs.writeScriptBin "legion-rapid-charging"
+    (builtins.readFile ./scripts/legion-rapid-charging.sh);
   legion-keyboard-autosuspend =
     pkgs.writeScriptBin "legion-keyboard-autosuspend"
     (builtins.readFile ./scripts/legion-keyboard-autosuspend.sh);
@@ -45,6 +48,7 @@ in {
       powerstat # power usage
       batty
       legion-battery-conservation
+      legion-rapid-charging
       legion-keyboard-autosuspend
       lm_sensors
     ];

@@ -157,6 +157,40 @@ PanelWindow {
           }
 
           ControlCenterButton {
+            Component.onCompleted: {
+              SBatterySaver.getState();
+            }
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Battery saver"
+            materialIcon: "eco"
+            isActive: SBatterySaver.isActive
+            onClicked: {
+              SBatterySaver.toggle();
+            }
+          }
+
+          ControlCenterButton {
+            Component.onCompleted: {
+              SLegionRapidCharging.getState();
+            }
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Rapid Charging"
+            woosIcon: "󰂄"
+            isActive: SLegionRapidCharging.isActive
+            onClicked: {
+              SLegionRapidCharging.toggle();
+            }
+          }
+        }
+
+        RowLayout {
+          Layout.fillWidth: true
+
+          ControlCenterButton {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             label: "Gray filter"
@@ -176,30 +210,6 @@ PanelWindow {
             onClicked: {
               SHyprshade.toggleOledSaver();
             }
-          }
-        }
-
-        RowLayout {
-          Layout.fillWidth: true
-
-          ControlCenterButton {
-            Component.onCompleted: {
-              SBatterySaver.getState();
-            }
-
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            label: "Battery saver"
-            materialIcon: "eco"
-            isActive: SBatterySaver.isActive
-            onClicked: {
-              SBatterySaver.toggle();
-            }
-          }
-
-          Item {
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
           }
 
           Item {
