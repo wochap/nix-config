@@ -42,7 +42,7 @@ toggle() {
   local current_status
   current_status=$(cat "$kbd_path")
 
-  case "$2" in
+  case "$1" in
   on) # Enable autosuspend (power saving)
     if [[ "$current_status" != "auto" ]]; then
       pkexec bash -c "echo auto > $kbd_path"
@@ -63,7 +63,7 @@ toggle() {
     fi
     ;;
   *)
-    echo "Error: Invalid argument '$2' for --toggle. Use 'on', 'off', or no argument." >&2
+    echo "Error: Invalid argument '$1' for --toggle. Use 'on', 'off', or no argument." >&2
     exit 1
     ;;
   esac
@@ -76,7 +76,7 @@ case "$1" in
   print_status
   ;;
 --toggle)
-  toggle "$@"
+  toggle "$2"
   ;;
 *)
   echo "Usage: $0 [--status | --toggle [on|off]]" >&2

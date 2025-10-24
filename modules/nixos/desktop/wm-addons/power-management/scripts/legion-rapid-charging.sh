@@ -10,7 +10,7 @@ print_status() {
 
 toggle() {
   # Handle the second argument for on/off, or toggle if no argument
-  case "$2" in
+  case "$1" in
   on)
     local is_active
     is_active=$(print_status)
@@ -38,7 +38,7 @@ toggle() {
     print_status
     ;;
   *)
-    echo "Error: Invalid argument '$2' for --toggle. Use 'on', 'off', or no argument." >&2
+    echo "Error: Invalid argument '$1' for --toggle. Use 'on', 'off', or no argument." >&2
     exit 1
     ;;
   esac
