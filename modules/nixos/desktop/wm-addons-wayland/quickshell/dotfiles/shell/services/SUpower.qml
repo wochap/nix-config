@@ -57,9 +57,8 @@ Singleton {
     if (root.energyRate < 0.1) {
       return Theme.options.green;
     }
-    return Theme.options.text;
     const iconColors = [[16, Theme.options.text], [15, Theme.options.red], [0, Theme.options.red]];
-    const iconColor = icons.find(([threshold, _]) => percent >= threshold);
+    const iconColor = iconColors.find(([threshold, _]) => percent >= threshold);
     return iconColor?.[1] ?? Theme.options.red;
   }
 
