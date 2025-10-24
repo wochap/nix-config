@@ -111,6 +111,8 @@
       # force lenovo-legion-module
       options legion_laptop force=1
 
+      # enable audio codec power management
+      # source: google gemini
       options snd_hda_intel power_save=1
 
       # prevents apps from crashing when GPU powers down and wakes back up
