@@ -25,6 +25,7 @@ in {
         reader # blog post reader
         pastel # color utils
         cloc # count lines of code
+        graphviz # dependency graphing
 
         chawan # tui browser
         termshark # tui wireshark
