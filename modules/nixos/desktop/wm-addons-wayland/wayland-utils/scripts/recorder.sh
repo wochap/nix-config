@@ -94,6 +94,7 @@ if [[ -f "$stopfile" ]]; then
   if [[ $(ps aux | grep "$pid" | wc -l) -eq 2 ]]; then
     # TODO: use $pid
     killall -s 2 wl-screenrec
+    rm -f $stopfile
     exit 0
   else
     rm -f $stopfile
