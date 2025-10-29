@@ -7,19 +7,6 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
-        robo3t = prev.runCommandNoCC "robo3t" {
-          buildInputs = with pkgs; [ makeWrapper ];
-        } ''
-          makeWrapper ${prev.robo3t}/bin/robo3t $out/bin/robo3t \
-            --set "QT_QPA_PLATFORM" "xcb" \
-            --set "QT_FONT_DPI" "${
-              toString
-              (if config._custom.desktop.hyprland.enable then 192 else 96)
-            }"
-
-          ln -sf ${prev.robo3t}/share $out/share
-        '';
-
         mongodb-compass = prev.runCommandNoCC "mongodb-compass" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
@@ -36,7 +23,6 @@ in {
     environment.systemPackages = with pkgs; [
       mongodb-compass
       mongodb-tools
-      robo3t
       _custom.nodePackages."migrate-mongo-9.0.0"
 
       redisinsight
