@@ -7,7 +7,10 @@ in {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home = {
-        packages = with pkgs; [ perl538Packages.WWWYoutubeViewer yt-dlp ];
+        packages = with pkgs; [
+          perl538Packages.WWWYoutubeViewer
+          nixpkgs-unstable.yt-dlp
+        ];
         shellAliases = {
           # youtube-dl is buggy
           youtube-dl = "yt-dlp";
