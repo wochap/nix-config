@@ -111,7 +111,9 @@ windows:
         # 5557
         - currency-editor:
             - cd ./currency-editor
+            # <%- if @settings["workspaces"].split(',').include?("currency") %>
             - gulp
+            # <%- end %>
         # 3000
         - organizations:
             - cd ./organizations
@@ -137,6 +139,12 @@ windows:
             - cd ./layout-editor
             # <%- if @settings["workspaces"].split(',').include?("layout-editor") %>
             - yarn start:widget
+            # <%- end %>
+        # 3220
+        - layout-editor-widget:
+            - cd ./layout-editor
+            # <%- if @settings["workspaces"].split(',').include?("layout-editor") %>
+            - yarn start:widget-umd
             # <%- end %>
         # 3003
         - surveys-renderer:

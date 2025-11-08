@@ -9,7 +9,7 @@ windows:
       root: ~/Projects/se/viz-omni/backend
       layout: tiled
 
-  # <%- if @settings["workspaces"].split(',').include?("charts") %>
+  # <%- if @settings["workspaces"].split(',').include?("charts") || @settings["workspaces"].split(',').include?("currency") %>
   - frontend:
       root: ~/Projects/se/viz-omni/frontend
       layout: tiled
