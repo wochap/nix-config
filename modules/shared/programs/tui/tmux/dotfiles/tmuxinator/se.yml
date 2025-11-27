@@ -114,6 +114,12 @@ windows:
             # <%- if @settings["workspaces"].split(',').include?("currency") %>
             - gulp
             # <%- end %>
+        # 5178
+        - currency-spa-parcel:
+            - cd ./currency-editor/spa-parcel
+            # <%- if @settings["workspaces"].split(',').include?("currency") %>
+            - yarn dev
+            # <%- end %>
         # 3000
         - organizations:
             - cd ./organizations
