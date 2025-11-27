@@ -53,7 +53,7 @@ function apro() {
 zle -N apro
 
 function killport {
-  kill $(lsof -t -i:"$1") > /dev/null 2>&1
+  kill -9 $(lsof -t -i:"$1") > /dev/null 2>&1
 }
 
 # automation scripts picker
