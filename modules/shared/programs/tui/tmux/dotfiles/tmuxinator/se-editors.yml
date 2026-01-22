@@ -59,6 +59,12 @@ windows:
       layout: tiled
   # <%- end %>
 
+  # <%- if @settings["workspaces"].split(',').include?("new-dashboard") %>
+  - viz-dashboard:
+      root: ~/Projects/se/viz-dashboard
+      layout: tiled
+  # <%- end %>
+
   # - viz-websites:
   #     root: ~/Projects/se/viz-websites
   #     layout: tiled

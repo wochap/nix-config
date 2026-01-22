@@ -107,18 +107,24 @@ windows:
         - frontend:
             # <%- if @settings["workspaces"].split(',').include?("charts") %>
             - yarn run gulp glu-vizwiz:local
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "yarn run gulp glu-vizwiz:local"
             # <%- end %>
         # 5557
         - currency-editor:
             - cd ./currency-editor
             # <%- if @settings["workspaces"].split(',').include?("currency") %>
             - gulp
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "gulp"
             # <%- end %>
         # 5178
         - currency-spa-parcel:
             - cd ./currency-editor/spa-parcel
-            # <%- if @settings["workspaces"].split(',').include?("currency") %>
+            # <%- if @settings["workspaces"].split(',').include?("currency") || @settings["workspaces"].split(',').include?("new-dashboard") %>
             - yarn dev
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "yarn dev"
             # <%- end %>
         # 3000
         - organizations:
@@ -139,24 +145,32 @@ windows:
             - cd ./layout-editor
             # <%- if @settings["workspaces"].split(',').include?("layout-editor") %>
             - yarn start
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "yarn start"
             # <%- end %>
         # 3210
         - layout-editor-widget:
             - cd ./layout-editor
             # <%- if @settings["workspaces"].split(',').include?("layout-editor") %>
             - yarn start:widget
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "yarn start:widget"
             # <%- end %>
         # 3220
         - layout-editor-widget:
             - cd ./layout-editor
             # <%- if @settings["workspaces"].split(',').include?("layout-editor") %>
             - yarn start:widget-umd
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "yarn start:widget-umd"
             # <%- end %>
         # 3003
         - surveys-renderer:
             - cd ./surveys-renderer
             # <%- if @settings["workspaces"].split(',').include?("surveys") %>
             - sh ./run.sh -e local start
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "sh ./run.sh -e local start"
             # <%- end %>
 
   # 5
@@ -171,6 +185,8 @@ windows:
         - viz_help:
             # <%- if !@settings["workspaces"].split(',').include?("surveys") %>
             - NODE_ENV=local APP=viz_help gulp
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "NODE_ENV=local APP=viz_help gulp"
             # <%- end %>
         # 4002
         - charts:
@@ -194,18 +210,24 @@ windows:
             - cd ./pearson-surveys
             # <%- if @settings["workspaces"].split(',').include?("surveys") %>
             - npx gulp
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "npx gulp"
             # <%- end %>
         # 5173
         - pearson-surveys-spa-parcel:
             - cd ./pearson-surveys/helper-scripts/spa-parcel
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
             - yarn dev
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "yarn dev"
             # <%- end %>
         # 5002
         - socialexplorer-surveys:
             - cd ./socialexplorer-surveys
             # <%- if @settings["workspaces"].split(',').include?("surveys") %>
             - npx gulp
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "npx gulp"
             # <%- end %>
 
   # 7
@@ -217,25 +239,29 @@ windows:
         - single-spa-app:
             - cd ./single-spa-demo/single-spa-app
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
-            # - yarn run dev
+            - tmux send-keys -t "$TMUX_PANE" "yarn run dev"
             # <%- end %>
         # 9000
         - single-spa-root-config:
             - cd ./single-spa-demo/single-spa-root-config
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
-            # - yarn run start
+            - tmux send-keys -t "$TMUX_PANE" "yarn run start"
             # <%- end %>
         # 8080
         - single-spa-root-html:
             - cd ./single-spa-demo/single-spa-root-html
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
             - yarn run dev
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "yarn run dev"
             # <%- end %>
         # 3008
         - viz-api:
             - cd ./viz-api
             # <%- if @settings["workspaces"].split(',').include?("microfrontends") || @settings["workspaces"].split(',').include?("lti") %>
             - yarn run dev
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "yarn run dev"
             # <%- end %>
         # 5432
         # 8080
@@ -243,4 +269,20 @@ windows:
             - cd ./viz-api/src/db/pg-lti-docker
             # <%- if @settings["workspaces"].split(',').include?("lti") %>
             - docker-compose up
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "docker-compose up"
+            # <%- end %>
+
+  # 8
+  - viz-dashboard:
+      root: ~/Projects/se
+      layout: tiled
+      panes:
+        # 5173
+        - viz-dashboard:
+            - cd ./viz-dashboard
+            # <%- if @settings["workspaces"].split(',').include?("new-dashboard") %>
+            - yarn run dev
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "yarn run dev"
             # <%- end %>
