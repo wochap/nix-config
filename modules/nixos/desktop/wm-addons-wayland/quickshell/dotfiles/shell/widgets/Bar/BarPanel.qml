@@ -13,6 +13,7 @@ PanelWindow {
   required property ShellScreen modelData
   property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(rectangle.QsWindow.window?.screen)
   property bool isFocused: hyprlandMonitor?.id === Hyprland.focusedMonitor?.id
+  readonly property int maxContainerWidth: 1720
 
   WlrLayershell.namespace: "quickshell:bar"
   WlrLayershell.layer: WlrLayer.Bottom
@@ -45,37 +46,49 @@ PanelWindow {
     implicitHeight: ConfigBar.barHeight
     color: Theme.addAlpha(Theme.options.background, ConfigBar.isBlurEnabled ? 0.65 : 1)
 
-    BarPanelLeft {
-      isFocused: root.isFocused
-      anchors {
-        left: rectangle.left
-        leftMargin: ConfigBar.barPaddingX
-        top: rectangle.top
-        topMargin: ConfigBar.barPaddingY
-        bottom: rectangle.bottom
-        bottomMargin: ConfigBar.barPaddingY
-      }
-    }
+    Item {
+      id: contentContainer
 
-    BarPanelCenter {
+      width: Math.min(parent.width, root.maxContainerWidth)
       anchors {
-        horizontalCenter: rectangle.horizontalCenter
-        top: rectangle.top
-        topMargin: ConfigBar.barPaddingY
-        bottom: rectangle.bottom
-        bottomMargin: ConfigBar.barPaddingY
+        top: parent.top
+        bottom: parent.bottom
+        // Center the content "margin: 0 auto"
+        horizontalCenter: parent.horizontalCenter
       }
-    }
 
-    BarPanelRight {
-      isFocused: root.isFocused
-      anchors {
-        right: rectangle.right
-        rightMargin: ConfigBar.barPaddingX
-        top: rectangle.top
-        topMargin: ConfigBar.barPaddingY
-        bottom: rectangle.bottom
-        bottomMargin: ConfigBar.barPaddingY
+      BarPanelLeft {
+        isFocused: root.isFocused
+        anchors {
+          left: contentContainer.left // Anchor to the constrained wrapper
+          leftMargin: ConfigBar.barPaddingX
+          top: contentContainer.top
+          topMargin: ConfigBar.barPaddingY
+          bottom: contentContainer.bottom
+          bottomMargin: ConfigBar.barPaddingY
+        }
+      }
+
+      BarPanelCenter {
+        anchors {
+          horizontalCenter: contentContainer.horizontalCenter
+          top: contentContainer.top
+          topMargin: ConfigBar.barPaddingY
+          bottom: contentContainer.bottom
+          bottomMargin: ConfigBar.barPaddingY
+        }
+      }
+
+      BarPanelRight {
+        isFocused: root.isFocused
+        anchors {
+          right: contentContainer.right // Anchor to the constrained wrapper
+          rightMargin: ConfigBar.barPaddingX
+          top: contentContainer.top
+          topMargin: ConfigBar.barPaddingY
+          bottom: contentContainer.bottom
+          bottomMargin: ConfigBar.barPaddingY
+        }
       }
     }
   }
