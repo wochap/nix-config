@@ -22,7 +22,7 @@ PanelWindow {
     right: true
   }
   screen: root.modelData ?? null
-  // HACK: add enought space for shadow
+  // HACK: add enough space for shadow
   implicitHeight: ConfigBar.barHeight + ConfigBar.shadowHeight
   exclusiveZone: ConfigBar.barHeight
   color: "transparent"
