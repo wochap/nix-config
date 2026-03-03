@@ -130,10 +130,6 @@ windows:
         - organizations:
             - cd ./organizations
             - yarn start
-        # 5556
-        - geobuffer:
-            - cd ./geobuffer
-            - gulp
 
   # 4
   - viz-omni-frontend-neo:
@@ -216,7 +212,7 @@ windows:
         # 5173
         - pearson-surveys-spa-parcel:
             - cd ./pearson-surveys/helper-scripts/spa-parcel
-            # <%- if @settings["workspaces"].split(',').include?("microfrontends") %>
+            # <%- if @settings["workspaces"].split(',').include?("surveys") && @settings["workspaces"].split(',').include?("microfrontends") %>
             - yarn dev
             # <%- else %>
             - tmux send-keys -t "$TMUX_PANE" "yarn dev"
@@ -285,4 +281,26 @@ windows:
             - yarn run dev
             # <%- else %>
             - tmux send-keys -t "$TMUX_PANE" "yarn run dev"
+            # <%- end %>
+
+  # 9
+  - viz-maps:
+      root: ~/Projects/se
+      layout: tiled
+      panes:
+        # 5556
+        - geobuffer:
+            - cd ./viz-omni/frontend/geobuffer
+            # <%- if @settings["workspaces"].split(',').include?("maps") %>
+            - npx gulp
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "npx gulp"
+            # <%- end %>
+        # 5003
+        - mapspice-ui:
+            - cd ./mapspice-ui
+            # <%- if @settings["workspaces"].split(',').include?("maps") %>
+            - npx gulp
+            # <%- else %>
+            - tmux send-keys -t "$TMUX_PANE" "npx gulp"
             # <%- end %>
