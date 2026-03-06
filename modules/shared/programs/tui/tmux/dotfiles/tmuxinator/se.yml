@@ -176,20 +176,20 @@ windows:
       panes:
         # 4000
         - accounts:
-            - NODE_ENV=local APP=accounts gulp
+            - NODE_ENV=local APP=accounts npx gulp
         # 5002
         - viz_help:
             # <%- if !@settings["workspaces"].split(',').include?("surveys") %>
-            - NODE_ENV=local APP=viz_help gulp
+            - NODE_ENV=local APP=viz_help npx gulp
             # <%- else %>
-            - tmux send-keys -t "$TMUX_PANE" "NODE_ENV=local APP=viz_help gulp"
+            - tmux send-keys -t "$TMUX_PANE" "NODE_ENV=local APP=viz_help npx gulp"
             # <%- end %>
         # 4002
         - charts:
-            - NODE_ENV=local APP=charts gulp
+            - NODE_ENV=local APP=charts npx gulp
         # 4005
         - vizualist:
-            - NODE_ENV=local APP=vizualist gulp
+            - NODE_ENV=local APP=vizualist npx gulp
         # - se_help:
         #     - NODE_ENV=local APP=se_help gulp
 
