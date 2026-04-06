@@ -240,7 +240,6 @@ in {
             "file://${hmConfig.home.homeDirectory}/Videos"
             "file://${hmConfig.home.homeDirectory}/nix-config"
             "file://${hmConfig.home.homeDirectory}/Projects"
-            "file://${hmConfig.home.homeDirectory}/Projects/boc"
             "file://${hmConfig.home.homeDirectory}/Videos/Recordings"
             "file://${hmConfig.home.homeDirectory}/Pictures/Screenshots"
             "file://${hmConfig.home.homeDirectory}/Sync"

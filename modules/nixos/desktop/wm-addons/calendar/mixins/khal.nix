@@ -14,10 +14,6 @@ let
       path = ${dataHome}/vdirsyncer/personal-calendars/*
       type = discover
 
-      [[boc_calendar_local]]
-      path = ${dataHome}/vdirsyncer/boc-calendars/*
-      type = discover
-
       [[se_calendar_local]]
       path = ${dataHome}/vdirsyncer/se-calendars/*
       type = discover
