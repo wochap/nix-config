@@ -38,7 +38,10 @@ in {
             AddressRandomizationRange = "full";
             EnableNetworkConfiguration = true;
           };
-          Scan.DisablePeriodicScan = true;
+          Scan = {
+            DisablePeriodicScan = true;
+            DisableHE = true;
+          };
           Network = {
             EnableIPv6 = false;
             NameResolvingService = "systemd";
