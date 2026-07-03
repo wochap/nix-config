@@ -145,6 +145,7 @@ in {
     _custom.system.windows.enable = true;
     _custom.system.windows.enableSamba = false;
 
+    _custom.desktop.networking.localSendEnable = true;
     _custom.desktop.plymouth.enable = false;
     _custom.desktop.xwaylandvideobridge.enable = false;
     _custom.desktop.power-management.cpupowerGuiArgs =

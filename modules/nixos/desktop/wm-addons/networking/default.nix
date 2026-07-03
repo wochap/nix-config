@@ -2,7 +2,10 @@
 
 let cfg = config._custom.desktop.networking;
 in {
-  options._custom.desktop.networking.enable = lib.mkEnableOption { };
+  options._custom.desktop.networking = {
+    enable = lib.mkEnableOption { };
+    localSendEnable = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "networkmanager" ];
@@ -117,5 +120,10 @@ in {
 
     # service discovery, airplay, chromecast, vnc, etc
     services.avahi.enable = true;
+
+    programs.localsend = lib.mkIf cfg.localSendEnable {
+      enable = true;
+      openFirewall = true;
+    };
   };
 }
