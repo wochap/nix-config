@@ -13,6 +13,10 @@ in {
 
     _custom.hm = {
       home = {
+        # TODO: make ruby gems binaries available
+        # sessionPath =
+        #   [ "$HOME/.gem/ruby/3.3.0/bin" "$HOME/.gem/ruby/2.3.0/bin" ];
+
         # Gemfile for LSP, formatters, linters, etc
         # It is used by my neovim config
         sessionVariables.GLOBAL_GEMFILE = "$HOME/.gem/global/Gemfile";
