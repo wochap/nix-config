@@ -11,5 +11,5 @@ It is designed to be paired with `pixiecore` to temporarily turn this machine in
 Inside this directory, build the Flake to generate the kernel (`bzImage`) and RAM disk (`initrd`):
 
 ```bash
-$ start-pxe
+$ sudo start-pxe
 ```

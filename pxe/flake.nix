@@ -29,7 +29,7 @@
         echo "=> Press Ctrl+C to stop the server."
 
         # Run pixiecore using the absolute path from the nix store
-        sudo ${pkgs.pixiecore}/bin/pixiecore boot $ARTIFACTS/bzImage $ARTIFACTS/initrd --port 8086 --cmdline "$INIT_PATH loglevel=4"
+        ${pkgs.pixiecore}/bin/pixiecore boot $ARTIFACTS/bzImage $ARTIFACTS/initrd --port 8086 --cmdline "$INIT_PATH loglevel=4"
       '';
     in {
       devShells.${system}.default = pkgs.mkShell {
