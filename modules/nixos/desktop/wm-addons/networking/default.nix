@@ -117,12 +117,12 @@ in {
           # TCP 8086 is the custom HTTP port you chose for Pixiecore
           8086
         ];
+        allowedUDPPorts = lib.mkIf cfg.pixieCoreEnable [
+          67 # DHCP server port
+          69 # TFTP port (for the initial iPXE bootloader)
+          4011 # ProxyDHCP port (Pixiecore's magic trick)
+        ];
       };
-      allowedUDPPorts = lib.mkIf cfg.pixieCoreEnable [
-        67 # DHCP server port
-        69 # TFTP port (for the initial iPXE bootloader)
-        4011 # ProxyDHCP port (Pixiecore's magic trick)
-      ];
     };
 
     hardware.wirelessRegulatoryDatabase = true;
