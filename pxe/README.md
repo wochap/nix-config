@@ -13,10 +13,13 @@ Inside this directory, build the Flake to generate the kernel (`bzImage`) and RA
 ```bash
 $ sudo start-pxe
 
-# in a new terminal
+# check that remote server is accessible
 $ ssh root@192.168.x.x
 
-# in a new terminal
+# install NixOS for the first time
 $ nixos-anywhere --flake ../#gasus root@192.168.x.x
-# $ nixos-rebuild switch --flake ../#gasus --target-host gean@192.168.x.x --use-remote-sudo
+
+# after NixOS has been installed
+# use nixos-rebuild for subsequent updates
+$ nixos-rebuild switch --flake ../#gasus --target-host gean@192.168.x.x --use-remote-sudo
 ```
