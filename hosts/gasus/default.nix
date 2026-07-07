@@ -144,7 +144,7 @@ in {
     # _custom.desktop.wluma.enable = false;
     # _custom.desktop.hyprland.enable = false;
     # _custom.desktop.hyprland.isDefault = false;
-    _custom.archetypes.server.enable = false;
+    _custom.archetypes.server.enable = true;
     # _custom.security.gnome-keyring.enable = true;
     # _custom.security.kwallet.enable = false;
 

@@ -9,6 +9,8 @@
 
   config = lib.mkMerge [
     (lib.mkIf config._custom.archetypes.server.enable {
+      services.xserver.displayManager.lightdm.enable = lib.mkDefault false;
+
       _custom.security.doas.enable = true;
       # _custom.security.gnome-keyring.enable = lib.mkDefault true;
       _custom.security.gpg.enable = true;
