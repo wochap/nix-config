@@ -12,4 +12,7 @@ Inside this directory, build the Flake to generate the kernel (`bzImage`) and RA
 
 ```bash
 $ sudo start-pxe
+
+# in a new terminal
+$ ssh root@192.168.x.x
 ```

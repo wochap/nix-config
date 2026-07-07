@@ -216,6 +216,7 @@
         };
     in {
       nixosConfigurations = {
+        gasus = mkNixosSystem inputs.nixpkgs "x86_64-linux" "gasus";
         gdesktop = mkNixosSystem inputs.nixpkgs "x86_64-linux" "gdesktop";
         glegion = mkNixosSystem inputs.nixpkgs "x86_64-linux" "glegion";
       };
