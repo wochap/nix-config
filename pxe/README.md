@@ -18,4 +18,5 @@ $ ssh root@192.168.x.x
 
 # in a new terminal
 $ nixos-anywhere --flake ../#gasus root@192.168.x.x
+# $ nixos-rebuild switch --flake ../#gasus --target-host gean@192.168.x.x --use-remote-sudo
 ```
