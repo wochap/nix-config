@@ -15,4 +15,7 @@ $ sudo start-pxe
 
 # in a new terminal
 $ ssh root@192.168.x.x
+
+# in a new terminal
+$ nixos-anywhere --flake ../#gasus root@192.168.x.x
 ```

@@ -33,7 +33,7 @@
       '';
     in {
       devShells.${system}.default = pkgs.mkShell {
-        packages = [ pkgs.pixiecore start-pxe ];
+        packages = with pkgs; [ pixiecore nixos-anywhere start-pxe ];
         shellHook = ''
           echo "🚀 PXE Server Environment Loaded!"
           echo "   Run 'start-pxe' to instantly provision the network boot environment."

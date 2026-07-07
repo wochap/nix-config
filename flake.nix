@@ -17,6 +17,10 @@
     home-manager.url = "github:nix-community/home-manager?rev=7b5a978e00273b8676c530c03d315f5b75fae564"; # release-25.05 (25 jul 2025)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # disko
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
     # third party nixpkgs|overlays|modules
     chaotic.url = "github:chaotic-cx/nyx?rev=491e18a40a19d7c9d63d92bcbfb6d3f316631b00"; # nyxpkgs-unstable (17 may 2025)
     chaotic.inputs.nixpkgs.follows = "nixpkgs-unstable";
