@@ -6,6 +6,7 @@ in {
     enable = lib.mkEnableOption { };
     localSendEnable = lib.mkEnableOption { };
     pixieCoreEnable = lib.mkEnableOption { };
+    wolEnable = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -13,6 +14,7 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
+        wakeonlan
         nixpkgs-unstable.impala
         iw
         wireless-regdb
@@ -117,11 +119,11 @@ in {
           # TCP 8086 is the custom HTTP port you chose for Pixiecore
           8086
         ];
-        allowedUDPPorts = lib.mkIf cfg.pixieCoreEnable [
+        allowedUDPPorts = [ ] ++ lib.optionals cfg.pixieCoreEnable [
           67 # DHCP server port
           69 # TFTP port (for the initial iPXE bootloader)
           4011 # ProxyDHCP port (Pixiecore's magic trick)
-        ];
+        ] ++ lib.optionals cfg.wolEnable [ 9 ];
       };
     };
 
