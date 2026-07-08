@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   options._custom.archetypes.server.enable = lib.mkEnableOption { };
@@ -9,7 +9,13 @@
 
   config = lib.mkMerge [
     (lib.mkIf config._custom.archetypes.server.enable {
+      # TODO: move to a headless server module
       services.xserver.displayManager.lightdm.enable = lib.mkForce false;
+      environment.systemPackages = with pkgs;
+        [ ] ++ lib.optionals (!config._custom.programs.kitty.enable)
+        [ kitty.terminfo ]
+        ++ lib.optionals (!config._custom.programs.foot.enable)
+        [ foot.terminfo ];
 
       _custom.security.doas.enable = true;
       # _custom.security.gnome-keyring.enable = lib.mkDefault true;
