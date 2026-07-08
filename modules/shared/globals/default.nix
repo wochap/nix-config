@@ -91,7 +91,11 @@ in {
       xdg.configFile = {
         "scripts/theme-colors.sh" = {
           text = ''
-            CURRENT_SCHEME=$(color-scheme print)
+            if (( $+commands[color-scheme] )); then
+              CURRENT_SCHEME=$(color-scheme print)
+            else
+              CURRENT_SCHEME="dark"
+            fi
             if [[ "$CURRENT_SCHEME" == "dark" ]]; then
               ${mkThemeScript themeColorsDark}
             else
