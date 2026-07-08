@@ -9,7 +9,7 @@
 
   config = lib.mkMerge [
     (lib.mkIf config._custom.archetypes.server.enable {
-      services.xserver.displayManager.lightdm.enable = lib.mkDefault false;
+      services.xserver.displayManager.lightdm.enable = lib.mkForce false;
 
       _custom.security.doas.enable = true;
       # _custom.security.gnome-keyring.enable = lib.mkDefault true;
@@ -21,7 +21,7 @@
       _custom.security.ssh.enable = true;
 
       _custom.system.console.enable = true;
-      _custom.system.fhs-compat.enable = true;
+      # _custom.system.fhs-compat.enable = true;
       # _custom.system.windows.enable = lib.mkDefault true;
       # _custom.system.windows.enableSamba = lib.mkDefault true;
 
@@ -51,7 +51,7 @@
       # _custom.desktop.qt.enableTheme = true;
       # _custom.desktop.qt.enableQt6ctKde = lib.mkDefault true;
       # _custom.desktop.qt.enableQt5Integration = lib.mkDefault true;
-      _custom.desktop.xdg.enable = true;
+      # _custom.desktop.xdg.enable = true;
       # _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 
       # _custom.desktop.ags.enable = lib.mkDefault false;

@@ -24,6 +24,13 @@ in {
   config = {
     home.activation.symlinks = hm.dag.entryAfter [ "writeBoundary" ]
       (concatStringsSep "\n" (mapAttrsToList toSymlinkCmd cfg));
+
+    # clone nix-config repository so that symlinks resolve
+    home.activation.cloneConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
+      if [ ! -d "$HOME/nix-config" ]; then
+        ${lib.getExe pkgs.git} clone https://github.com/wochap/nix-config.git $HOME/nix-config
+      fi
+    '';
   };
 }
 

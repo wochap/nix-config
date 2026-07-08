@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config._custom.security.doas;
@@ -25,5 +25,7 @@ in {
 
     # Add an alias to the shell for backward-compat and convenience.
     environment.shellAliases.sudo = "doas";
+    environment.systemPackages =
+      [ (pkgs.writeScriptBin "sudo" ''exec doas "$@"'') ];
   };
 }

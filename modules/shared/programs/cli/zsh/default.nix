@@ -143,7 +143,11 @@ in {
             # TODO: use rod
             # TODO: add automation to hotreload
             # set catppuccin theme for zsh-fast-syntax-highlighting
-            CURRENT_SCHEME=$(color-scheme print)
+            if (( $+commands[color-scheme] )); then
+              CURRENT_SCHEME=$(color-scheme print)
+            else
+              CURRENT_SCHEME="dark"
+            fi
             if [[ "$CURRENT_SCHEME" == "dark" ]]; then
               FAST_WORK_DIR="${catppuccin-fsh-dark-theme}"
             else

@@ -14,6 +14,7 @@ Inside this directory, build the Flake to generate the kernel (`bzImage`) and RA
 $ sudo start-pxe
 
 # check that remote server is accessible
+# $ ssh-keygen -R 192.168.x.x
 $ ssh root@192.168.x.x
 
 # install NixOS for the first time
