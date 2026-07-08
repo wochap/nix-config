@@ -23,4 +23,7 @@ $ nixos-anywhere --flake ../#gasus root@192.168.x.x
 # after NixOS has been installed
 # use nixos-rebuild for subsequent updates
 $ nixos-rebuild switch --flake ../#gasus --target-host gean@192.168.x.x --use-remote-sudo
+
+$ sudo poweroff
+$ wakeonlan 54:A0:50:04:B1:69
 ```
