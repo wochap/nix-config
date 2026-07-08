@@ -2,7 +2,10 @@
 
 let cfg = config._custom.desktop.logind;
 in {
-  options._custom.desktop.logind.enable = lib.mkEnableOption { };
+  options._custom.desktop.logind = {
+    enable = lib.mkEnableOption { };
+    enableIgnoreLidSwitch = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     services.logind = {
@@ -14,9 +17,10 @@ in {
       powerKey = "poweroff";
       hibernateKeyLongPress = "ignore";
       hibernateKey = "ignore";
-      lidSwitchExternalPower = "suspend";
+      lidSwitchExternalPower =
+        if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
       lidSwitchDocked = "ignore";
-      lidSwitch = "suspend";
+      lidSwitch = if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
     };
   };
 }
