@@ -26,4 +26,5 @@ $ nixos-rebuild switch --flake ../#gasus --target-host gean@192.168.x.x --use-re
 
 $ sudo poweroff
 $ wakeonlan 54:A0:50:04:B1:69
+# wakeonlan -i 192.168.0.241 54:A0:50:04:B1:69
 ```
