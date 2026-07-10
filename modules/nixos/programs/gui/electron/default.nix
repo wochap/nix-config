@@ -36,7 +36,6 @@ in {
       freetube
       slack
       obsidian
-      inputs.figma-linux.packages.${stdenv.hostPlatform.system}.default
     ];
 
     _custom.hm = {
