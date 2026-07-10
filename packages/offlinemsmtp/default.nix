@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.flit-core
     gobject-introspection
     python3Packages.setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [ libnotify ];
