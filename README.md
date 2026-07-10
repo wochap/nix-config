@@ -122,6 +122,14 @@ Reboot into NixOS, login with the user you created
    ```sh
    $ sudo touch /etc/security/autologin.conf
    ```
+1. Install npm packages
+
+  ```sh
+  npm i -g webtorrent-cli gulp migrate-mongo claude-code
+
+  # required by personal nvim config
+  npm i -g ts-node @styled/typescript-styled-plugin
+  ```
 
 1. Setup Syncthing (http://localhost:8384)
 1. Setup desktop wallpaper (optional)

@@ -9,24 +9,19 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       bun
-      corepack_20 # yarn, pnpm
+      corepack_24 # yarn, pnpm
       dart-sass
       deno
       hugo
       netlify-cli
-      nodePackages.prettier
-      nodePackages.eas-cli
-      nodePackages.firebase-tools
-      nodePackages.gulp
-      nodePackages.http-server
-      nodePackages.node2nix
-      nodePackages.nodemon
-      _custom.nodePackages."webtorrent-cli-4.1.0"
-      nodejs_20
+      prettier
+      eas-cli
+      firebase-tools
+      http-server
+      nodemon
+      nodejs_24
 
       # required by personal nvim config
-      nodePackages.ts-node # nvim-dap
-      _custom.nodePackages."@styled/typescript-styled-plugin" # nvim-lspconfig
       typescript # nvim-lspconfig
     ];
 

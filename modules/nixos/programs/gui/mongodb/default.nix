@@ -23,7 +23,6 @@ in {
     environment.systemPackages = with pkgs; [
       mongodb-compass
       mongodb-tools
-      _custom.nodePackages."migrate-mongo-9.0.0"
 
       redisinsight
 
