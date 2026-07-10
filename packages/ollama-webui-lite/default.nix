@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub, runtimeShell, nodePackages }:
+{ lib, buildNpmPackage, fetchFromGitHub, runtimeShell, serve }:
 
 buildNpmPackage rec {
   pname = "ollama-webui-lite";
@@ -22,7 +22,7 @@ buildNpmPackage rec {
     mkdir -p $out/bin
     cat <<EOF >>$out/bin/${pname}
     #!${runtimeShell}
-    ${nodePackages.serve}/bin/serve $out/lib/static --single "\$@"
+    ${serve}/bin/serve $out/lib/static --single "\$@"
     EOF
     chmod +x $out/bin/${pname}
   '';
