@@ -40,7 +40,6 @@ in {
     _custom.programs.electron.enable = true;
     _custom.programs.gtk.enable = true;
     _custom.programs.imv.enable = true;
-    _custom.programs.imv.enableInsecureFreeImage = true;
     _custom.programs.mongodb.enable = true;
     _custom.programs.obs-studio.enable = true;
     _custom.programs.thunar.enable = true;
