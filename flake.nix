@@ -1,19 +1,19 @@
 {
   inputs = {
     # channels
-    nixpkgs.url = "github:nixos/nixpkgs?rev=b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20"; # nixos-25.05 (21 sep 2025)
-    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=8eaee110344796db060382e15d3af0a9fc396e0e"; # nixos-unstable (21 sep 2025)
-    nixpkgs-master.url = "github:nixos/nixpkgs?rev=58f3c8b331269776bf25b8725a2ea9c184bd6fe5"; # master (18 aug 2025)
-    prevstable-mesa.url = "github:nixos/nixpkgs?rev=c87b95e25065c028d31a94f06a62927d18763fdf"; # mesa v25.1.6
-    prevstable-chrome.url = "github:nixos/nixpkgs?rev=4792576cb003c994bd7cc1edada3129def20b27d"; # nixos-25.05 (07 jun 2025)
+    nixpkgs.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
+    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=0bb7ec54c8483066ec9d7720e780a5caa71f8612"; # nixos-unstable (10 jul 2026)
+    nixpkgs-master.url = "github:nixos/nixpkgs?rev=12ccf3e6a73accd6f85aaf857b909d1d63563064"; # master (10 jul 2026)
+    prevstable-mesa.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # TODO: mesa v25.1.6
+    prevstable-chrome.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
     prevstable-neovim.url = "github:nixos/nixpkgs?rev=84577351974736371ddb9d36d788b6e34247b891"; # master (02 sep 2025)
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
-    prevstable-gaming.url = "github:nixos/nixpkgs?rev=b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20"; # nixos-25.05 (21 sep 2025)
-    prevstable-intune.url = "github:kahlstrm/nixpkgs?rev=8eaee110344796db060382e15d3af0a9fc396e0e"; # nixos-unstable (21 sep 2025)
-    prevstable-msedge.url = "github:Daholli/nixpkgs?rev=fe6e79e571fa7eb7693cda131b68fe9891078adf"; # master (07 jun 2025)
+    prevstable-gaming.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
+    prevstable-intune.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
+    prevstable-msedge.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
 
     # home-manager
-    home-manager.url = "github:nix-community/home-manager?rev=7b5a978e00273b8676c530c03d315f5b75fae564"; # release-25.05 (25 jul 2025)
+    home-manager.url = "github:nix-community/home-manager?rev=af2beae5f0fae0a4310cc0e6aef2572f56090353"; # release-26.05 (10 jul 2026)
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # disko
@@ -25,7 +25,7 @@
     chaotic.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nix-gaming.url = "github:fufexan/nix-gaming?rev=bafc474d9d2ac0f97411b48679b00811fff39cfa"; # master (17 may 2024)
     nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
-    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland?rev=52b72b12c456a5c0c87c40941ef79335e8d61104"; # master (03 sep 2024)
+    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4"; # (08 mar 2022)
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
@@ -38,6 +38,8 @@
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-alien.inputs.nixpkgs.follows = "nixpkgs";
+
+    # hyprland
     # everytime you update hyprland flake, run `sudo nix flake lock --update-input hyprland`
     hyprland.url = "github:hyprwm/Hyprland?rev=71a1216abcc7031776630a6d88f105605c4dc1c9"; # v0.51.1
     hyprland.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -52,31 +54,29 @@
     # everytime you update hyprland flake, `sudo nix flake lock --update-input hyprlock`
     hyprlock.url = "github:hyprwm/hyprlock?rev=c48279d1e0f0a4399b5a2d56c16f2ec677ba18f8"; # v0.9.2
     hyprlock.inputs.nixpkgs.follows = "nixpkgs";
-    pyprland.url = "github:hyprland-community/pyprland?rev=33dc0f5c4bef4b3f094e641f0e31c6e3f9fe5a2d"; # v2.4.7
+    pyprland.url = "github:hyprland-community/pyprland?rev=b96410834fa1ec9a06bec8076a03435bbd243e5d"; # v2.6.2
     pyprland.inputs.nixpkgs.follows = "nixpkgs";
-    hyprmag.url = "github:SIMULATAN/hyprmag?rev=a58f3715ab1b097343bda0918ebc450ffcae4627"; # main (20 jul 2025)
-    hyprmag.inputs.nixpkgs.follows = "nixpkgs";
     hyprgrass.url = "github:horriblename/hyprgrass?rev=427690aec574fec75f5b7b800ac4a0b4c8e4b1d5"; # v0.8.1
+
+    # third party nixpkgs|overlays|modules
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
-    scenefx.url = "github:wochap/scenefx?rev=5991e3979dd81349f35eecb7f03cbcbece6bc24d"; # main (17 feb 2024)
-    scenefx.inputs.nixpkgs.follows = "nixpkgs";
     wayfreeze.url = "github:Jappie3/wayfreeze?rev=dc41ae1662c4c760f3deba9f826ba605e99971cc"; # master (08 jul 2025)
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
-    zen-browser.url = "github:0xc000022070/zen-browser-flake?rev=ebeabdb79392f3dfac8c6019754e76997e4d5dfa"; # 1.13t#1747739974
-    cpu-microcodes.url = "github:platomav/CPUMicrocodes/ec5200961ecdf78cf00e55d73902683e835edefd";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    zen-browser.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    zen-browser.inputs.home-manager.follows = "home-manager";
+    cpu-microcodes.url = "github:platomav/CPUMicrocodes?rev=49aa6bd56d1019c1e8b47321d2eb66913a2da876"; # master (10 jul 2026)
     cpu-microcodes.flake = false;
-    ucodenix.url = "github:e-tho/ucodenix?rev=98c0b8ec151ee6495711d2dd902112b4f2a30ceb"; # main (04 aug 2025)
+    ucodenix.url = "github:e-tho/ucodenix?rev=5c9a1202884f7f455119f35df03c66f6a98ce5f9"; # main (10 jul 2026)
     ucodenix.inputs.cpu-microcodes.follows = "cpu-microcodes";
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
-    figma-linux.url = "github:HelloWorld017/figma-linux-nixos?rev=11d282f45c5acb90660db7d0d989fe0d9eec8813"; # v0.11.5
-    figma-linux.inputs.nixpkgs.follows = "nixpkgs";
-    quickshell.url = "github:quickshell-mirror/quickshell?rev=a5431dd02dc23d9ef1680e67777fed00fe5f7cda"; # v0.2.0
+    quickshell.url = "github:quickshell-mirror/quickshell?rev=59e9c47b0eb48a9e4bcf9631fa062ee939bd2e83"; # v0.3.0
     quickshell.inputs.nixpkgs.follows = "nixpkgs";
-    rod.url = "github:leiserfg/rod?rev=05601eaa09f08830613c41b6bdc35e34336880a5"; # master (12 aug 2025)
+    rod.url = "github:leiserfg/rod?rev=5d378a226a3a0108f657eccc3dc457cf3e374b73"; # master (10 jul 2026)
     rod.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
@@ -86,7 +86,7 @@
     retroarch-shaders.flake = false;
     reversal-extra.url = "github:wochap/Reversal-Extra";
     reversal-extra.flake = false;
-    wluma.url = "github:maximbaz/wluma?rev=ea4c8c6ae689655950ccbc1c2c214f5c0e4562ee"; # 4.9.0
+    wluma.url = "github:maximbaz/wluma?rev=259a874af6b4d854073d340cccb1852f63635fd3"; # 4.11.1
     wluma.flake = false;
 
     # terminal tools
@@ -190,7 +190,6 @@
         pkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            inputs.nur.nixosModules.nur
             inputs.ucodenix.nixosModules.default
             ./overlays
             ./modules/archetypes
@@ -201,11 +200,14 @@
             {
               nixpkgs.config.allowUnfree = true;
               nixpkgs.config.permittedInsecurePackages = [
-                "freeimage-3.18.0-unstable-2024-04-18"
-                "freeimage-unstable-2021-11-01"
-                "nodejs-14.21.3"
-                "openssl-1.1.1u"
-                "openssl-1.1.1v"
+                # "freeimage-3.18.0-unstable-2024-04-18"
+                # "freeimage-unstable-2021-11-01"
+                # "nodejs-14.21.3"
+                # "nodejs-slim-20.20.2"
+                # "nodejs-20.20.2"
+                "electron-39.8.10" # required by bitwarden-desktop
+                # "openssl-1.1.1u"
+                # "openssl-1.1.1v"
               ];
               networking.hostName = hostName;
             }
