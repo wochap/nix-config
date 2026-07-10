@@ -2,7 +2,8 @@
 
 let cfg = config._custom.system.fhs-compat;
 in {
-  imports = [ inputs.nix-ld.nixosModules.nix-ld ];
+  # TODO: fix nix-ld build
+  # imports = [ inputs.nix-ld.nixosModules.nix-ld ];
   options._custom.system.fhs-compat.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -19,7 +20,7 @@ in {
     # run unpatched dynamic binaries on NixOS
     programs.nix-ld = {
       enable = true;
-      dev.enable = false;
+      # dev.enable = false;
       libraries = with pkgs; [
         # nix-ld adds the following libs by default
         zlib
