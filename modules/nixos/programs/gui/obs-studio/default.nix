@@ -21,7 +21,7 @@ in {
           obs-studio-plugins.obs-source-record
           obs-studio-plugins.obs-shaderfilter
           obs-studio-plugins.obs-gradient-source
-          obs-studio-plugins.obs-rgb-levels-filter
+          # obs-studio-plugins.obs-rgb-levels-filter
           # obs-studio-plugins.obs-backgroundremoval # takes too long to build
         ];
       };
