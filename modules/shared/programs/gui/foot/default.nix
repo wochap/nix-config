@@ -7,9 +7,9 @@ let
 
   iniFormat = pkgs.formats.ini { };
   catppuccin-foot-light-theme-path =
-    "${inputs.catppuccin-foot}/themes/catppuccin-${themeColorsLight.flavour}.ini";
+    "${inputs.catppuccin-foot}/themes/static/catppuccin-${themeColorsLight.flavour}.ini";
   catppuccin-foot-dark-theme-path =
-    "${inputs.catppuccin-foot}/themes/catppuccin-${themeColorsDark.flavour}.ini";
+    "${inputs.catppuccin-foot}/themes/static/catppuccin-${themeColorsDark.flavour}.ini";
 in {
   options._custom.programs.foot = {
     enable = lib.mkEnableOption { };
