@@ -41,7 +41,7 @@ in {
         fortune # print fortune text
         jp2a # image to ascii
 
-        inputs.lobster.packages.${system}.lobster
+        inputs.lobster.packages.${stdenv.hostPlatform.system}.lobster
       ];
     };
   };

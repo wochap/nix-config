@@ -14,7 +14,7 @@ let
       ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/nvim-tree.log
     '';
 
-  # final-nvim = lib.mkDefault inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+  # final-nvim = lib.mkDefault inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
   final-nvim = pkgs.prevstable-neovim.neovim-unwrapped.overrideAttrs
     (oldAttrs: rec {
       patches = (oldAttrs.patches or [ ])
@@ -67,7 +67,7 @@ in {
       };
 
       programs.git = {
-        extraConfig.core.editor = "nvim";
+        settings.core.editor = "nvim";
         ignores = [ ".nolazy.lua" ".lazy.lua" ];
       };
 

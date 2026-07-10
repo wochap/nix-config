@@ -32,7 +32,7 @@ let
   catppuccin-tmux-dark-theme = mkThemeTmux themeColorsDark;
   tmux-final = cfg.package;
   tmux-sessionx =
-    inputs.tmux-sessionx.packages.${pkgs.system}.default.overrideAttrs
+    inputs.tmux-sessionx.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs
     (oldAttrs: { postInstall = ""; });
   tmux-kill-unnamed-sessions = pkgs.writeScriptBin "tmux-kill-unnamed-sessions"
     (builtins.readFile ./scripts/tmux-kill-unnamed-sessions.sh);

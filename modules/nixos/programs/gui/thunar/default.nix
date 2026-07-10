@@ -4,11 +4,11 @@ let
   inherit (config._custom.globals) configDirectory;
   cfg = config._custom.programs.thunar;
   plugins = with pkgs; [
-    xfce.thunar-archive-plugin
-    xfce.thunar-media-tags-plugin
-    xfce.thunar-volman # auto mont devices
+    thunar-archive-plugin
+    thunar-media-tags-plugin
+    thunar-volman # auto mont devices
   ];
-  thunar-final = pkgs.xfce.thunar.override { thunarPlugins = plugins; };
+  thunar-final = pkgs.thunar.override { thunarPlugins = plugins; };
 in {
   options._custom.programs.thunar.enable = lib.mkEnableOption { };
 

@@ -55,27 +55,28 @@ in {
       (final: prev: {
         # override qt6ct with qt6ct-kde to fix style in kde apps
         # https://aur.archlinux.org/packages/qt6ct-kde
+        # patch for qt6ct v0.11
         kdePackages = prev.kdePackages.overrideScope (kdeSelf: kdePrev: {
           qt6ct = kdePrev.qt6ct.overrideAttrs (oldAttrs: rec {
-            version = "23a985f45cf793ce7ce05811411d2374b4f979c4";
+            version = "00823e41aa60e8fe266d5aee328e82ad1ad94348";
             src = pkgs.fetchFromGitLab {
               domain = "opencode.net";
               owner = "trialuser";
               repo = "qt6ct";
               rev = version;
-              sha256 = "sha256-AUl2Se+8fUIeiYutObiM31VLbfJv09tpzJr3/2kB54c=";
+              sha256 = "sha256-aQmqLpM0vogMsYaDS9OeKVI3N53uY4NBC4FF10hK8Uw=";
             };
           });
         });
         qt6Packages = prev.qt6Packages.overrideScope (qt6Self: qt6Prev: {
           qt6ct = qt6Prev.qt6ct.overrideAttrs (oldAttrs: rec {
-            version = "23a985f45cf793ce7ce05811411d2374b4f979c4";
+            version = "00823e41aa60e8fe266d5aee328e82ad1ad94348";
             src = pkgs.fetchFromGitLab {
               domain = "opencode.net";
               owner = "trialuser";
               repo = "qt6ct";
               rev = version;
-              sha256 = "sha256-AUl2Se+8fUIeiYutObiM31VLbfJv09tpzJr3/2kB54c=";
+              sha256 = "sha256-aQmqLpM0vogMsYaDS9OeKVI3N53uY4NBC4FF10hK8Uw=";
             };
           });
         });

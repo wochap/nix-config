@@ -49,8 +49,6 @@
 
     hardware.amdgpu.initrd.enable = true;
     hardware.amdgpu.opencl.enable = true;
-    # NOTE: amdvlk can introduce black artifacts on GTK apps
-    hardware.amdgpu.amdvlk.enable = true;
 
     hardware.nvidia = {
       open = false;

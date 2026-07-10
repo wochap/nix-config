@@ -9,18 +9,22 @@ in {
 
   config = lib.mkIf cfg.enable {
     services.logind = {
-      suspendKeyLongPress = "ignore";
-      suspendKey = "ignore";
-      rebootKeyLongPress = "ignore";
-      rebootKey = "ignore";
-      powerKeyLongPress = "poweroff";
-      powerKey = "poweroff";
-      hibernateKeyLongPress = "ignore";
-      hibernateKey = "ignore";
-      lidSwitchExternalPower =
-        if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
-      lidSwitchDocked = "ignore";
-      lidSwitch = if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
+      enable = true;
+      settings.Login = {
+        HandleSuspendKeyLongPress = "ignore";
+        HandleSuspendKey = "ignore";
+        HandleRebootKeyLongPress = "ignore";
+        HandleRebootKey = "ignore";
+        HandlePowerKeyLongPress = "poweroff";
+        HandlePowerKey = "poweroff";
+        HandleHibernateKeyLongPress = "ignore";
+        HandleHibernateKey = "ignore";
+        HandleLidSwitchExternalPower =
+          if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
+        HandleLidSwitchDocked = "ignore";
+        HandleLidSwitch =
+          if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
+      };
     };
   };
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, system, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.desktop.hyprland;
@@ -11,10 +11,10 @@ let
       (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}") colors);
   catppuccin-hyprland-light-theme = mkThemeHyprland themeColorsLight;
   catppuccin-hyprland-dark-theme = mkThemeHyprland themeColorsDark;
-  hyprplugins = inputs.hyprland-plugins.packages.${pkgs.system};
-  hyprland-final = inputs.hyprland.packages."${system}".hyprland;
+  hyprplugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
+  hyprland-final = inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".hyprland;
   hyprland-xdph-final =
-    inputs.hyprland.packages."${system}".xdg-desktop-portal-hyprland;
+    inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".xdg-desktop-portal-hyprland;
   hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad"
     (builtins.readFile ./scripts/hyprland-scratchpad.sh);
   hyprland-monocle = pkgs.writeScriptBin "hyprland-monocle"
@@ -78,7 +78,7 @@ in {
         hyprland-monocle
         hyprland-previous-ws
         hyprland-socket
-        inputs.pyprland.packages.${pkgs.system}.default
+        inputs.pyprland.packages.${stdenv.hostPlatform.system}.default
         hyprland-qt-support
         hyprland-qtutils
         hyprpaper
@@ -153,16 +153,17 @@ in {
         package = hyprland-final;
         portalPackage = null;
         systemd.enable = false;
+        configType = "hyprlang";
         plugins = with hyprplugins;
           [
             # better preview all workspaces
-            # inputs.hyprspace.packages.${pkgs.system}.Hyprspace
+            # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
 
             # preview all workspaces
             # hyprexpo
 
             # touch screen support gestures
-            # inputs.hyprgrass.packages.${pkgs.system}.default
+            # inputs.hyprgrass.packages.${pkgs.stdenv.hostPlatform.system}.default
           ];
         extraConfig = ''
           source=~/.config/hypr/colors.conf

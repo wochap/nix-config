@@ -20,7 +20,7 @@ in {
 
       # winetricks
       prevstable-gaming.winetricks
-      prevstable-gaming.wineWowPackages.waylandFull
+      prevstable-gaming.wineWow64Packages.waylandFull
 
       bottles
     ];

@@ -7,7 +7,7 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
-        mongodb-compass = prev.runCommandNoCC "mongodb-compass" {
+        mongodb-compass = prev.runCommand "mongodb-compass" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
           makeWrapper ${prev.mongodb-compass}/bin/mongodb-compass $out/bin/mongodb-compass \

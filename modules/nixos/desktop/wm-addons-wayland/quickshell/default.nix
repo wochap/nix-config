@@ -6,7 +6,7 @@ let
     themeColorsLight themeColorsDark preferDark configDirectory userName;
   hmConfig = config.home-manager.users.${userName};
 
-  quickshell-final = inputs.quickshell.packages.${pkgs.system}.default;
+  quickshell-final = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default;
   shell-capslock = pkgs.writeScriptBin "shell-capslock"
     (builtins.readFile ./scripts/shell-capslock.sh);
   shell-pipewire = pkgs.writeScriptBin "shell-pipewire"

@@ -3,7 +3,7 @@
 let
   cfg = config._custom.programs.git;
   inherit (config._custom.globals) themeColorsLight themeColorsDark secrets;
-  git-final = pkgs.gitAndTools.gitFull;
+  git-final = pkgs.gitFull;
 in {
   options._custom.programs.git = {
     enable = lib.mkEnableOption { };
@@ -34,7 +34,7 @@ in {
       home.packages = with pkgs; [
         commitizen
         git-town
-        gitAndTools.gh # github cli
+        gh # github cli
         gitflow
         gut # alternative git cli
       ];
@@ -61,21 +61,7 @@ in {
           skipSmudge = true;
         };
 
-        delta = {
-          enable = true;
-          options = {
-            features = "side-by-side line-numbers decorations word-diff";
-            navigate = true;
-            file-modified-label = "modified:";
-            decorations.commit-decoration-style = "yellow box ul";
-            line-numbers = {
-              line-numbers-minus-style = "124";
-              line-numbers-plus-style = "28";
-            };
-          };
-        };
-
-        extraConfig = {
+        settings = {
           diff = {
             tool = "delta";
             colorMoved = "default";
@@ -134,6 +120,21 @@ in {
               };
             }
           ];
+      };
+
+      programs.delta = {
+        enable = true;
+        enableGitIntegration = true;
+        options = {
+          features = "side-by-side line-numbers decorations word-diff";
+          navigate = true;
+          file-modified-label = "modified:";
+          decorations.commit-decoration-style = "yellow box ul";
+          line-numbers = {
+            line-numbers-minus-style = "124";
+            line-numbers-plus-style = "28";
+          };
+        };
       };
     };
   };

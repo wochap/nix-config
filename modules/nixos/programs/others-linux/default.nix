@@ -7,7 +7,7 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = lib.mkIf config._custom.security.gnome-keyring.enable [
       (final: prev: {
-        brave = prev.runCommandNoCC "brave" {
+        brave = prev.runCommand "brave" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
           makeWrapper ${prev.brave}/bin/brave $out/bin/brave \
@@ -21,7 +21,7 @@ in {
       brave
       prevstable-chrome.google-chrome
       prevstable-msedge.microsoft-edge
-      inputs.zen-browser.packages."${system}".beta
+      inputs.zen-browser.packages."${stdenv.hostPlatform.system}".beta
       galaxy-buds-client
       zoom-us
       # teamviewer

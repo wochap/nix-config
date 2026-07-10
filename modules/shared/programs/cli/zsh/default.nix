@@ -3,8 +3,9 @@
 let
   cfg = config._custom.programs.zsh;
   inherit (config._custom.globals)
-    configDirectory themeColorsLight themeColorsDark preferDark;
+    configDirectory themeColorsLight themeColorsDark preferDark userName;
   inherit (lib._custom) relativeSymlink;
+  hmConfig = config.home-manager.users.${userName};
 
   fshPlugin = {
     name = "zsh-fast-syntax-highlighting";
@@ -74,7 +75,7 @@ in {
 
       programs.zsh = {
         enable = true;
-        dotDir = ".config/zsh";
+        dotDir = "${hmConfig.xdg.configHome}/zsh";
         envExtra = ''
           ## misc
 

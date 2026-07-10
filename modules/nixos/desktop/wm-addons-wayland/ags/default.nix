@@ -1,10 +1,10 @@
-{ config, lib, inputs, pkgs, system, ... }:
+{ config, lib, inputs, pkgs, ... }:
 
 let
   cfg = config._custom.desktop.ags;
   inherit (config._custom.globals) configDirectory userName;
   hmConfig = config.home-manager.users.${userName};
-  ags-final = inputs.ags.packages.${system}.default;
+  ags-final = inputs.ags.packages.${pkgs.stdenv.hostPlatform.system}.default;
   capslock =
     pkgs.writeScriptBin "capslock" (builtins.readFile ./scripts/capslock.sh);
   progress-osd = pkgs.writeScriptBin "progress-osd"

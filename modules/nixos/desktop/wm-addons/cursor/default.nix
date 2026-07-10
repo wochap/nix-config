@@ -57,7 +57,7 @@ in {
         Service = {
           Type = "oneshot";
           ExecStart =
-            "${pkgs.xorg.xsetroot}/bin/xsetroot -cursor_name left_ptr";
+            "${pkgs.xsetroot}/bin/xsetroot -cursor_name left_ptr";
         };
       };
     };

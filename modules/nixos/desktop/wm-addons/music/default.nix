@@ -27,7 +27,7 @@ in {
     _custom.hm = {
       home.packages = with pkgs; [
         cava # visualizer
-        mpc_cli # mpd cli
+        mpc # mpd cli
         (pkgs.ncmpcpp.override {
           visualizerSupport = true;
           clockSupport = true;
