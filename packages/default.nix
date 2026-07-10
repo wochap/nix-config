@@ -3,7 +3,6 @@
 let
   customPkgs = rec {
     tmuxinator = pkgs.callPackage ./tmuxinator { };
-    pseint = pkgs.callPackage ./pseint { };
     fcitx5-fbterm = pkgs.callPackage ./fcitx5-fbterm { };
     clipboard-sync = pkgs.callPackage ./clipboard-sync { };
     advcpmv = pkgs.callPackage ./advcpmv { };
@@ -26,7 +25,6 @@ let
     usbfluxd = pkgs.callPackage ./usbfluxd { };
     pythonPackages =
       lib.dontRecurseIntoAttrs (pkgs.callPackage ./python-packages { });
-    wlroots = pkgs.callPackage ./wlroots { };
   };
 in {
   config = { nixpkgs.overlays = [ (final: prev: { _custom = customPkgs; }) ]; };
