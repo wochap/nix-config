@@ -13,7 +13,7 @@ in {
         unblock-bluetooth
 
         bluetuith # bluetooth TUI
-        blueberry # bluetooth GUI
+        blueman # bluetooth GUI
         # modemmanager # cellular service 3G/4G/5G
 
         bluez
