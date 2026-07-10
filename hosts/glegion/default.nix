@@ -136,7 +136,7 @@ in {
     _custom.services.virt.enable = false;
     _custom.services.waydroid.enable = false;
 
-    _custom.gaming.emulators.enable = true;
+    _custom.gaming.emulators.enable = false;
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
 
