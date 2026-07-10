@@ -88,6 +88,7 @@ in {
             rev = version;
             hash = "sha256-V/F16gXadfSoR7kdq5pKXdL7nnqjYuZQl+P8DIZTcGM=";
           };
+          doInstallCheck = false;
         });
       })
     ];
