@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-fbterm";
-    rev = "620980bc6dc491448fe22e853b3e1b188996bba1";
-    sha256 = "08h538xzfgw05az63px5m41qy9vsbiy3wndpifc12basnr13fwkj";
+    rev = "6067ed2d573a0f5a24dc43e7fad0beb72104446b";
+    sha256 = "sha256-kVwGkBP0Ttu1QsSjLWEbLhuUmelkGlzdAsQi4J4VS08=";
   };
 
   nativeBuildInputs = [ cmake gnumake pkg-config ];
