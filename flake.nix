@@ -200,14 +200,7 @@
             {
               nixpkgs.config.allowUnfree = true;
               nixpkgs.config.permittedInsecurePackages = [
-                # "freeimage-3.18.0-unstable-2024-04-18"
-                # "freeimage-unstable-2021-11-01"
-                # "nodejs-14.21.3"
-                # "nodejs-slim-20.20.2"
-                # "nodejs-20.20.2"
                 "electron-39.8.10" # required by bitwarden-desktop
-                # "openssl-1.1.1u"
-                # "openssl-1.1.1v"
               ];
               networking.hostName = hostName;
             }
