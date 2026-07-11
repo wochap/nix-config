@@ -215,47 +215,9 @@ function cycle() {
 
   if [[ "$is_focused_window_grouped" == "true" ]]; then
     if [[ "$dir" == "next" ]]; then
-      local is_last
-      is_last=$(hyprctl activewindow -j | jq '. as $window | $window.grouped | length > 0 and .[-1] == $window.address')
-      if [[ "$is_last" == "true" ]]; then
-        local focused_ws_id focused_window_address others_windows_count
-        focused_ws_id=$(hyprctl activeworkspace -j | jq -r '.name')
-        focused_window_address=$(hyprctl activewindow -j | jq -r .address)
-        if [[ "$scope" == "tiled" ]]; then
-          others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$focused_ws_id\" and .hidden == false and .address != \"$focused_window_address\" and .floating == false)] | length")
-        else
-          others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$focused_ws_id\" and .hidden == false and .address != \"$focused_window_address\")] | length")
-        fi
-
-        if ((others_windows_count > 0)); then
-          hyprctl dispatch cyclenext next "$scope"
-        else
-          hyprctl dispatch changegroupactive f
-        fi
-      else
-        hyprctl dispatch changegroupactive f
-      fi
+      hyprctl dispatch changegroupactive f
     elif [[ "$dir" == "prev" ]]; then
-      local is_first
-      is_first=$(hyprctl activewindow -j | jq '. as $window | $window.grouped | length > 0 and .[0] == $window.address')
-      if [[ "$is_first" == "true" ]]; then
-        local focused_ws_id focused_window_address others_windows_count
-        focused_ws_id=$(hyprctl activeworkspace -j | jq -r '.name')
-        focused_window_address=$(hyprctl activewindow -j | jq -r .address)
-        if [[ "$scope" == "tiled" ]]; then
-          others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$focused_ws_id\" and .hidden == false and .address != \"$focused_window_address\" and .floating == false)] | length")
-        else
-          others_windows_count=$(hyprctl clients -j | jq "[.[] | select(.workspace.name == \"$focused_ws_id\" and .hidden == false and .address != \"$focused_window_address\")] | length")
-        fi
-
-        if ((others_windows_count > 0)); then
-          hyprctl dispatch cyclenext prev "$scope"
-        else
-          hyprctl dispatch changegroupactive b
-        fi
-      else
-        hyprctl dispatch changegroupactive b
-      fi
+      hyprctl dispatch changegroupactive b
     fi
   else
     if [[ "$dir" == "next" ]]; then

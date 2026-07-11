@@ -11,8 +11,12 @@ let
       (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}") colors);
   catppuccin-hyprland-light-theme = mkThemeHyprland themeColorsLight;
   catppuccin-hyprland-dark-theme = mkThemeHyprland themeColorsDark;
-  hyprplugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
-  hyprland-final = inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".hyprland;
+  hyprland-guiutils =
+    inputs.hyprland-guiutils.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-guiutils;
+  hyprplugins =
+    inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
+  hyprland-final =
+    inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".hyprland;
   hyprland-xdph-final =
     inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".xdg-desktop-portal-hyprland;
   hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad"
@@ -81,9 +85,9 @@ in {
         hyprland-socket
         inputs.pyprland.packages.${stdenv.hostPlatform.system}.default
         hyprland-qt-support
-        hyprland-qtutils
+        hyprland-guiutils
         hyprpaper
-        nixpkgs-unstable.hyprshade
+        hyprshade # NOTE: v5 is buggy
       ];
 
       xdg.configFile = {
@@ -132,7 +136,7 @@ in {
         "hypr/shaders".source =
           relativeSymlink configDirectory ./dotfiles/shaders;
 
-        "hypr/pyprland.toml".source =
+        "pypr/config.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
 
         "uwsm/env-hyprland".text = ''
