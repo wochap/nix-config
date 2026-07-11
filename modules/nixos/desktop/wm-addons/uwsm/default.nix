@@ -13,7 +13,7 @@ let
         Comment=${opts.comment}
         Exec=${
           lib.getExe cfg.package
-        } start -S -F -N ${opts.prettyName} -D ${opts.xdgCurrentDesktop} -- ${opts.binPath} > /dev/null
+        } start -F -N ${opts.prettyName} -e -D ${opts.xdgCurrentDesktop} -- ${opts.binPath} > /dev/null
         Type=Application
       '';
       destination = "/share/wayland-sessions/${opts.name}-uwsm.desktop";
@@ -37,7 +37,7 @@ in {
         hyprland = {
           prettyName = "Hyprland";
           comment = "Hyprland compositor managed by UWSM";
-          binPath = "/run/current-system/sw/bin/Hyprland";
+          binPath = "/run/current-system/sw/bin/start-hyprland";
           xdgCurrentDesktop = "Hyprland";
         };
       '';

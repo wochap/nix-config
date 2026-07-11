@@ -41,13 +41,14 @@ in {
   config = lib.mkIf cfg.enable {
     environment.etc."greetd/environments".text = lib.mkAfter ''
       Hyprland
+      start-hyprland
     '';
 
     _custom.desktop.uwsm.waylandCompositors = {
       hyprland = {
         prettyName = "hyprland";
         comment = "Hyprland compositor managed by UWSM";
-        binPath = "/run/current-system/sw/bin/Hyprland";
+        binPath = "/run/current-system/sw/bin/start-hyprland";
         xdgCurrentDesktop = "Hyprland";
       };
     };
