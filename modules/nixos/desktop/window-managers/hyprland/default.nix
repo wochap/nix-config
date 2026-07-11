@@ -21,8 +21,6 @@ let
     inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".xdg-desktop-portal-hyprland;
   hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad"
     (builtins.readFile ./scripts/hyprland-scratchpad.sh);
-  hyprland-monocle = pkgs.writeScriptBin "hyprland-monocle"
-    (builtins.readFile ./scripts/hyprland-monocle.sh);
   hyprland-previous-ws = pkgs.writeScriptBin "hyprland-previous-ws"
     (builtins.readFile ./scripts/hyprland-previous-ws.sh);
   hyprland-socket = pkgs.writeScriptBin "hyprland-socket"
@@ -80,7 +78,6 @@ in {
     _custom.hm = {
       home.packages = with pkgs; [
         hyprland-scratchpad
-        hyprland-monocle
         hyprland-previous-ws
         hyprland-socket
         inputs.pyprland.packages.${stdenv.hostPlatform.system}.default

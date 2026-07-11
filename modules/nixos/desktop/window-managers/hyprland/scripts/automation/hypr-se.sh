@@ -86,7 +86,7 @@ function start() {
   hyprctl dispatch focusworkspaceoncurrentmonitor 2
 
   # Change to monocle layout
-  hyprland-monocle --start
+  hyprctl keyword workspace 2,layout:monocle
 
   # Start new foot terminal with tmux session
   echo "Starting tmux session: se"
