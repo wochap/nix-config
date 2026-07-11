@@ -88,6 +88,7 @@ in {
         hyprland-guiutils
         hyprpaper
         hyprshade # NOTE: v5 is buggy
+        hyprshutdown
       ];
 
       xdg.configFile = {
