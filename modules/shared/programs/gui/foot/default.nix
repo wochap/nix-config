@@ -21,34 +21,18 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        foot = prev.foot.overrideAttrs (oldAttrs: rec {
-          version = "72d9a13c0c6b6ee4b56a38f508c2e8d5c56616b5";
-          src = pkgs.fetchFromGitea {
-            domain = "codeberg.org";
-            owner = "dnkl";
-            repo = "foot";
-            rev = version;
-            hash = "sha256-cUUoAVBtlhnZJWfuCYqHjjYKIpKf9JBHcE5YCi5WscI=";
-          };
-        });
-      })
-    ];
-
     _custom.programs.foot.settings = {
       main = {
         shell = lib.mkIf config._custom.programs.tmux.enable
           "${config._custom.programs.tmux.package}/bin/tmux";
         include =
           "${lib._custom.relativeSymlink configDirectory ./dotfiles/foot.ini}";
-        initial-color-theme = if preferDark then 1 else 2;
+        initial-color-theme = if preferDark then "dark" else "light";
       };
-      # NOTE: colors is considered dark and colors2 light
-      colors.cursor = "${lib._custom.unwrapHex themeColorsDark.base} ${
+      colors-dark.cursor = "${lib._custom.unwrapHex themeColorsDark.base} ${
           lib._custom.unwrapHex themeColorsDark.green
         }";
-      colors2.cursor = "${lib._custom.unwrapHex themeColorsLight.base} ${
+      colors-light.cursor = "${lib._custom.unwrapHex themeColorsLight.base} ${
           lib._custom.unwrapHex themeColorsLight.green
         }";
     };
@@ -59,7 +43,7 @@ in {
       xdg.configFile."foot/foot.ini".text = ''
         # themes
         ${builtins.readFile catppuccin-foot-dark-theme-path}
-        ${lib.strings.replaceStrings [ "[colors]" ] [ "[colors2]" ]
+        ${lib.strings.replaceStrings [ "[colors-dark]" ] [ "[colors-light]" ]
         (builtins.readFile catppuccin-foot-light-theme-path)}
 
         # nixos options
