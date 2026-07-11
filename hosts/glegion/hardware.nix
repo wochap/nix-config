@@ -26,9 +26,6 @@
       DGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)";
     };
 
-    # Mesa 25.1.6
-    # update to v25.2.x when the following is fixed
-    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/13719
     hardware.graphics = {
       package = pkgs.prevstable-mesa.mesa;
       package32 = pkgs.prevstable-mesa.pkgsi686Linux.mesa;
@@ -121,9 +118,8 @@
     boot.extraModulePackages = with config.boot.kernelPackages;
       [ lenovo-legion-module ];
 
-    # NOTE: kernel 6.12.x gives me a lot of DRM issues
-    # install kernel v6.16.8
-    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_16;
+    # install kernel 6.18.38
+    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_18;
 
     boot.kernelParams = [
       # this doesn't fix my ACPI Bios errors :c
