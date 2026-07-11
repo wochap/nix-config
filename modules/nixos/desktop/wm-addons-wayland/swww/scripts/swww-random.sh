@@ -42,7 +42,7 @@ while true; do
     done |
     sort -n | cut -d':' -f2- |
     while read -r img; do
-      swww img "$img"
+      awww img "$img"
       if [[ $oneshot ]]; then
         exit 0
       fi

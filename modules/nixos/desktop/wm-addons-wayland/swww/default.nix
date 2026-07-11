@@ -10,7 +10,7 @@ let
     pkgs.writeScriptBin "swww-pick" (builtins.readFile ./scripts/swww-pick.sh);
   swww-unsplash = pkgs.writeScriptBin "swww-unsplash"
     (builtins.readFile ./scripts/swww-unsplash.sh);
-  inherit (pkgs) swww;
+  inherit (pkgs) awww;
 in {
   options._custom.desktop.swww.enable = lib.mkEnableOption { };
 
@@ -22,7 +22,7 @@ in {
             "${hmConfig.home.homeDirectory}/Sync/backgrounds";
         };
 
-        packages = [ swww swww-random swww-pick swww-unsplash ];
+        packages = [ awww swww-random swww-pick swww-unsplash ];
         sessionVariables = {
           SWWW_TRANSITION_TYPE = "simple";
           SWWW_TRANSITION_STEP = "45";
@@ -43,8 +43,8 @@ in {
             "SWWW_TRANSITION_FPS"
             "SWWW_TRANSITION_BEZIER"
           ];
-          ExecStart = "${swww}/bin/swww init";
-          ExecStop = "${swww}/bin/swww kill";
+          ExecStart = "${awww}/bin/awww-daemon";
+          ExecStop = "${awww}/bin/awww kill";
           Type = "oneshot";
           RemainAfterExit = true;
           KillMode = "mixed";

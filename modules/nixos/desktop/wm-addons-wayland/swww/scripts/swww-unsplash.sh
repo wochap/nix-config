@@ -51,4 +51,4 @@ echo "Image downloaded as '${image_tmp_path}'"
 # Change wallpaper
 image_path="${HOME}/Pictures/backgrounds/unsplash_wallpaper"
 cp "${image_tmp_path}" "${image_path}"
-swww img "${image_path}"
+awww img "${image_path}"

@@ -134,7 +134,7 @@ Reboot into NixOS, login with the user you created
 1. Setup Syncthing (http://localhost:8384)
 1. Setup desktop wallpaper (optional)
    ```
-   $ swww img ~/Pictures/backgrounds/<IMAGE_NAME>
+   $ awww img ~/Pictures/backgrounds/<IMAGE_NAME>
    ```
 1. Setup [Neovim](https://github.com/wochap/nvim) configuration
 1. Setup qt look and feel
