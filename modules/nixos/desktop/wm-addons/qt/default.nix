@@ -112,14 +112,12 @@ in {
         hicolor-icon-theme # fallback icons
       ] ++ lib.optionals cfg.enableQt5Integration [
         # custom themes
-        darkly-qt5
         # catppuccin-qt5ct
 
         # kde/qt themes
         kdePackages.breeze.qt5
 
         # qt deps
-        libsForQt5.kconfig
         libsForQt5.qt5.qtgraphicaleffects # required by quickshell
         libsForQt5.qt3d # required by quickshell
       ];
