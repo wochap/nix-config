@@ -1,7 +1,15 @@
-{ config, lib, inputs, pkgs, ... }:
+{
+  config,
+  lib,
+  inputs,
+  pkgs,
+  ...
+}:
 
-let cfg = config._custom.desktop.audio;
-in {
+let
+  cfg = config._custom.desktop.audio;
+in
+{
   options._custom.desktop.audio = {
     enable = lib.mkEnableOption { };
     enableEasyeffects = lib.mkEnableOption { };
@@ -42,6 +50,16 @@ in {
       # jack.enable = true;
 
       wireplumber.enable = true;
+
+      # NOTE: this fixes glitches in my audio
+      extraConfig.pipewire."92-low-latency" = {
+        "context.properties" = {
+          "default.clock.rate" = 48000;
+          "default.clock.quantum" = 256;
+          "default.clock.min-quantum" = 512;
+          "default.clock.max-quantum" = 8192;
+        };
+      };
     };
 
     _custom.hm = lib.mkIf cfg.enableEasyeffects {
@@ -50,8 +68,7 @@ in {
         enable = true;
         preset = "Perfect EQ";
       };
-      xdg.configFile = lib._custom.linkContents "easyeffects/output"
-        "${inputs.easy-effects-presets}";
+      xdg.configFile = lib._custom.linkContents "easyeffects/output" "${inputs.easy-effects-presets}";
     };
   };
 }
