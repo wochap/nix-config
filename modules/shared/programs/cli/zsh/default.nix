@@ -1,9 +1,20 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.zsh;
   inherit (config._custom.globals)
-    configDirectory themeColorsLight themeColorsDark preferDark userName;
+    configDirectory
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    userName
+    ;
   inherit (lib._custom) relativeSymlink;
   hmConfig = config.home-manager.users.${userName};
 
@@ -36,7 +47,8 @@ let
       EOF
     '';
   };
-in {
+in
+{
   options._custom.programs.zsh = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
@@ -61,8 +73,11 @@ in {
 
     _custom.hm = {
       xdg.configFile = {
-        "zsh/.p10k.zsh".source =
-          relativeSymlink configDirectory ./dotfiles/.p10k.zsh;
+        "zsh/.p10k.zsh".source = relativeSymlink configDirectory ./dotfiles/.p10k.zsh;
+        "fsh" = {
+          source = "${inputs.catppuccin-zsh-fsh}/themes";
+          recursive = true;
+        };
       };
 
       home.packages = with pkgs; [
@@ -107,9 +122,7 @@ in {
             source ${relativeSymlink configDirectory ./dotfiles/functions.zsh}
 
             function load_key_bindings() {
-              source ${
-                relativeSymlink configDirectory ./dotfiles/key-bindings-vi.zsh
-              }
+              source ${relativeSymlink configDirectory ./dotfiles/key-bindings-vi.zsh}
             }
 
             ## zsh-auto-notify
@@ -166,10 +179,13 @@ in {
             fi
             if [[ "$CURRENT_SCHEME" == "dark" ]]; then
               FAST_WORK_DIR="${catppuccin-fsh-dark-theme}"
+              FSH_THEME="${catppuccin-fsh-dark-theme}/current_theme.zsh"
             else
               FAST_WORK_DIR="${catppuccin-fsh-light-theme}"
+              FSH_THEME="${catppuccin-fsh-light-theme}/current_theme.zsh"
             fi
             source ${fshPlugin.src}/${fshPlugin.file}
+            source $FSH_THEME
 
             ## zsh-vi-mode
 
