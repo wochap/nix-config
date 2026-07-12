@@ -65,7 +65,7 @@ WrapperRectangle {
       SystemIcon {
         Layout.fillHeight: true
         icon: SPipewire.outputIcon
-        size: Styles.font.pixelSize.hugeass
+        size: Styles.font.pixelSize.huge
         enableColoriser: true
         color: SPipewire.outputIconColor
       }
@@ -73,7 +73,7 @@ WrapperRectangle {
       SystemIcon {
         Layout.fillHeight: true
         icon: SPipewire.inputIcon
-        size: Styles.font.pixelSize.hugeass
+        size: Styles.font.pixelSize.huge
         enableColoriser: true
         color: SPipewire.inputIconColor
       }
