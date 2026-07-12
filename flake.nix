@@ -108,8 +108,8 @@
     zsh-defer.flake = false;
     zsh-history-substring-search.url = "github:zsh-users/zsh-history-substring-search?rev=87ce96b1862928d84b1afe7c173316614b30e301"; # (17 may 2025)
     zsh-history-substring-search.flake = false;
-    zsh-notify.url = "github:marzocchi/zsh-notify?rev=9c1dac81a48ec85d742ebf236172b4d92aab2f3f"; # (30 apr 2023)
-    zsh-notify.flake = false;
+    zsh-auto-notify.url = "github:MichaelAquilina/zsh-auto-notify";
+    zsh-auto-notify.flake = false;
     zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=425e4293e243bccf8da3439a25a7699fe4ab3b1b"; # (26 jul 2025)
     zsh-vi-mode.flake = false;
     zsh-pnpm-shell-completion.url = "github:g-plane/pnpm-shell-completion";

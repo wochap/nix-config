@@ -3224,10 +3224,10 @@
         "wayfreeze": "wayfreeze",
         "wluma": "wluma",
         "zen-browser": "zen-browser",
+        "zsh-auto-notify": "zsh-auto-notify",
         "zsh-autocomplete": "zsh-autocomplete",
         "zsh-defer": "zsh-defer",
         "zsh-history-substring-search": "zsh-history-substring-search",
-        "zsh-notify": "zsh-notify",
         "zsh-pnpm-shell-completion": "zsh-pnpm-shell-completion",
         "zsh-vi-mode": "zsh-vi-mode"
       }
@@ -3628,6 +3628,22 @@
         "type": "github"
       }
     },
+    "zsh-auto-notify": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1750669386,
+        "narHash": "sha256-s3TBAsXOpmiXMAQkbaS5de0t0hNC1EzUUb0ZG+p9keE=",
+        "owner": "MichaelAquilina",
+        "repo": "zsh-auto-notify",
+        "rev": "b51c934d88868e56c1d55d0a2a36d559f21cb2ee",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MichaelAquilina",
+        "repo": "zsh-auto-notify",
+        "type": "github"
+      }
+    },
     "zsh-autocomplete": {
       "flake": false,
       "locked": {
@@ -3676,23 +3692,6 @@
         "owner": "zsh-users",
         "repo": "zsh-history-substring-search",
         "rev": "87ce96b1862928d84b1afe7c173316614b30e301",
-        "type": "github"
-      }
-    },
-    "zsh-notify": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1682877959,
-        "narHash": "sha256-ovmnl+V1B7J/yav0ep4qVqlZOD3Ex8sfrkC92dXPLFI=",
-        "owner": "marzocchi",
-        "repo": "zsh-notify",
-        "rev": "9c1dac81a48ec85d742ebf236172b4d92aab2f3f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "marzocchi",
-        "repo": "zsh-notify",
-        "rev": "9c1dac81a48ec85d742ebf236172b4d92aab2f3f",
         "type": "github"
       }
     },

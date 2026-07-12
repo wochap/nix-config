@@ -112,17 +112,32 @@ in {
               }
             }
 
-            ## zsh-notify
+            ## zsh-auto-notify
 
-            zstyle ':notify:*' app-name zsh-notify
-            zstyle ':notify:*' error-icon "gksu-root-terminal"
-            zstyle ':notify:*' error-title "wow such #fail (#{time_elapsed}s)"
-            zstyle ':notify:*' success-icon "terminal-tango"
-            zstyle ':notify:*' success-title "very #success. wow (#{time_elapsed}s)"
-            zstyle ':notify:*' disable-urgent yes
+            export AUTO_NOTIFY_THRESHOLD=10
+            export AUTO_NOTIFY_EXPIRE_TIME=6000
+            export AUTO_NOTIFY_ENABLE_SSH=1
+            export AUTO_NOTIFY_ENABLE_TRANSIENT=1
+            export AUTO_NOTIFY_CANCEL_ON_SIGINT=0
+            export AUTO_NOTIFY_IGNORE=(
+              'vim'
+              'nvim'
+              'less'
+              'more'
+              'man'
+              'tig'
+              'watch'
+              'git commit'
+              'top'
+              'htop'
+              'ssh'
+              'nano'
+              'lazygit'
+            )
+            # export AUTO_NOTIFY_ICON_SUCCESS=/path/to/success/icon.png
+            # export AUTO_NOTIFY_ICON_FAILURE=/path/to/failure/icon.png
 
-            # TODO: write wayland support
-            # zsh-defer source ${inputs.zsh-notify}/notify.plugin.zsh
+            zsh-defer source ${inputs.zsh-auto-notify}/auto-notify.plugin.zsh
 
             ## zsh-autosuggestions
 
