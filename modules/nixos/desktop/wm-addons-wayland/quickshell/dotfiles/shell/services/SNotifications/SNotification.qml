@@ -17,6 +17,7 @@ QtObject {
   property string image: notification?.image ?? ""
   property string summary: notification?.summary ?? ""
   property double time
+  property bool isTransient: notification?.transient ?? false
   property string urgency: notification?.urgency.toString() ?? "normal"
   property SNotificationTimer timer: null
 
@@ -27,6 +28,11 @@ QtObject {
       root.discard(root.notificationId);
     }
   }
+
+   property var retainableLock: RetainableLock {
+     object: root.notification
+     locked: root.notification !== null
+   }
 
   function toJSON() {
     return {

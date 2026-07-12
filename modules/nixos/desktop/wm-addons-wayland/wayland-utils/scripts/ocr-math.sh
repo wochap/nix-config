@@ -47,7 +47,7 @@ main() {
   rm "$grim_dest"
   result=$(wl-paste)
   if [[ -n "$result" ]]; then
-    notify-send --app-name="ocr math" --expire-time=5000 --replace-id=689 "OCR Math Completed" "Math Text Extracted and Copied"
+    notify-send --app-name="ocr math" --replace-id=689 "OCR Math Completed" "Math Text Extracted and Copied"
   fi
 }
 
