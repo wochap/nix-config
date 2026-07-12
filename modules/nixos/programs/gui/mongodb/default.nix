@@ -23,8 +23,7 @@ in {
     environment.systemPackages = with pkgs; [
       mongodb-compass
       mongodb-tools
-
-      redisinsight
+      nixpkgs-unstable.redisinsight
 
       # PostgreSQL
       postgresql

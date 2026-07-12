@@ -201,6 +201,7 @@
               nixpkgs.config.allowUnfree = true;
               nixpkgs.config.permittedInsecurePackages = [
                 "electron-39.8.10" # required by bitwarden-desktop
+                "nodejs-slim-20.20.2" # required by redisinsight
               ];
               networking.hostName = hostName;
             }
