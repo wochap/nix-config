@@ -2,10 +2,15 @@
 
 [NixOS](https://nixos.org/) and [home-manager](https://github.com/nix-community/home-manager) config files are merged.
 
-## DWL
+<details>
+  <summary>DWL</summary>
 
-![](https://i.imgur.com/TmgUC5J.jpg)
-![](https://i.imgur.com/jBtseU6.jpg)
+  [DWL](https://github.com/wochap/nix-config/tree/dwl-ags)
+
+  ![](https://i.imgur.com/TmgUC5J.jpg)
+  ![](https://i.imgur.com/jBtseU6.jpg)
+</details>
+
 
 ## Installaion
 
