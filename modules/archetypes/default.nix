@@ -61,8 +61,6 @@
       # _custom.desktop.xdg.enable = true;
       # _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 
-      # _custom.desktop.ags.enable = lib.mkDefault false;
-      # _custom.desktop.ags.systemdEnable = lib.mkDefault true;
       # _custom.desktop.cliphist.enable = true;
       # _custom.desktop.electron-support.enable = true;
       # _custom.desktop.gammastep.enable = lib.mkDefault true;
@@ -127,8 +125,6 @@
       _custom.desktop.xdg.enable = true;
       _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 
-      _custom.desktop.ags.enable = lib.mkDefault false;
-      _custom.desktop.ags.systemdEnable = lib.mkDefault true;
       _custom.desktop.cliphist.enable = true;
       _custom.desktop.electron-support.enable = true;
       _custom.desktop.gammastep.enable = lib.mkDefault true;
