@@ -52,7 +52,7 @@ notify_user() {
   ffmpegthumbnailer -i "$dest" -o "$thumbnail" -s "$thumbnail_size"
   magick "$thumbnail" -resize "$last_thumbnail_size>" -gravity center -background transparent -extent "$last_thumbnail_size" "$thumbnail"
 
-  action=$(notify-send --app-name="Recorder" --expire-time="$EXPIRE_TIME" --replace-id=691 --icon="$thumbnail" "Video recording" "Recording saved" --action="open=Open" --action="open_in_fm=Open in file manager")
+  action=$(notify-send --app-name="Recorder" --expire-time="$EXPIRE_TIME" --replace-id=691 --app-icon="$thumbnail" --icon="$thumbnail" "Video recording" "Recording saved" --action="open=Open" --action="open_in_fm=Open in file manager")
 
   # TODO: Open in video editor?
   case $action in
@@ -72,7 +72,7 @@ copy_to_cb() {
 # countdown
 countdown() {
   for sec in $(seq $1 -1 1); do
-    notify-send --app-name="Recorder" --expire-time=1000 --replace-id=692 --icon="screenrecorder" "Recording in $sec"
+    notify-send --app-name="Recorder" --expire-time=1000 --replace-id=692 --app-icon="screenrecorder" --icon="screenrecorder" "Recording in $sec"
     sleep 1
   done
 }

@@ -56,4 +56,4 @@ fi
 printf "%s" "$area" | wl-copy --trim-newline --type text/plain
 
 # show notification
-notify-send --app-name="Ruler" --icon="accessories-screenshot" --expire-time="$EXPIRE_TIME" --replace-id=690 "width:height" "$area"
+notify-send --app-name="Ruler" --app-icon="accessories-screenshot" --icon="accessories-screenshot" --expire-time="$EXPIRE_TIME" --replace-id=690 "width:height" "$area"
