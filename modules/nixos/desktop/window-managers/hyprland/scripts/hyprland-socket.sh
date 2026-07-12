@@ -20,9 +20,10 @@ function handle() {
     ws=$(hyprctl activeworkspace -j | jq -cr '.id')
     monitor=$(hyprctl activeworkspace -j | jq -r .monitorID)
     tiling_windows_count=$(hyprctl -j clients | jq "[.[] | select(.workspace.id == $ws and .floating == false and .monitor == $monitor and .hidden == false)] | length")
+    floating_windows_count=$(hyprctl -j clients | jq "[.[] | select(.workspace.id == $ws and .floating == true and .monitor == $monitor and .hidden == false)] | length")
     is_ws_monocle=$(hyprctl activeworkspace -j | jq -r '.tiledLayout == "monocle"')
 
-    if [ "$tiling_windows_count" -eq 1 ]; then
+    if [[ ( "$tiling_windows_count" -eq 1 || "$is_ws_monocle" == "true" ) && "$floating_windows_count" -eq 0 ]]; then
       hyprctl keyword "general:col.active_border" "rgb($active_border_color_single)"
     elif [ "$is_ws_monocle" == "true" ]; then
       hyprctl keyword "general:col.active_border" "rgb($active_border_color_monocle)"
