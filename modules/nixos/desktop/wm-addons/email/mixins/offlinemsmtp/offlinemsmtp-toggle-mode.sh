@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-ENABLED=
-DISABLED=
 FILE="$HOME/tmp/offlinemsmtp-sendmail"
+DIR="$(dirname "$FILE")"
+FILENAME="$(basename "$FILE")"
 
 reload_waybar() {
   pkill -SIGRTMIN+8 waybar
@@ -16,24 +16,38 @@ toggle() {
     $notify "Offlinemsmtp is disabled"
     reload_waybar
   else
+    mkdir -p "$DIR"
     touch "$FILE"
     $notify "Offlinemsmtp is enabled"
     reload_waybar
   fi
 }
 
-read() {
+print_status() {
   if test -f "$FILE"; then
-    printf '{ "text": "%s", "class": "enabled" }' "$ENABLED"
+    printf -- 'true\n'
   else
-    printf '{ "text": "%s", "class": "disabled" }' "$DISABLED"
+    printf -- 'false\n'
   fi
+}
+
+listen_status() {
+  mkdir -p "$DIR"
+  print_status
+
+  inotifywait -m -e create -e delete "$DIR" 2>/dev/null | while read -r target_dir action event_file; do
+    if [[ "$event_file" == "$FILENAME" ]]; then
+      print_status
+    fi
+  done
 }
 
 if [[ "$1" == "--toggle" ]]; then
   toggle
-elif [[ "$1" == "--read" ]]; then
-  read
+elif [[ "$1" == "--status" ]]; then
+  print_status
+elif [[ "$1" == "--listen" ]]; then
+  listen_status
 else
-  echo -e "Available Options : --toggle --read"
+  echo -e "Available Options : --toggle --status --listen"
 fi

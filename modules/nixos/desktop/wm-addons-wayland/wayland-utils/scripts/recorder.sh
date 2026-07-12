@@ -10,6 +10,26 @@ file="Recording_${time}.mp4"
 EXPIRE_TIME=5000
 dest="$dir/$file"
 
+print_status() {
+  if [[ -f "$stopfile" ]]; then
+    printf -- 'true\n'
+  else
+    printf -- 'false\n'
+  fi
+}
+
+listen_status() {
+  # Print the initial state
+  print_status
+
+  # Wait for events and call print_status every time the file changes
+  inotifywait -m -e create -e delete /tmp/ 2>/dev/null | while read -r target_dir action event_file; do
+    if [[ "$event_file" == "_stop" ]]; then
+      print_status
+    fi
+  done
+}
+
 wait_recording() {
   pid=$!
   echo $pid >$stopfile
@@ -101,14 +121,18 @@ if [[ -f "$stopfile" ]]; then
   fi
 fi
 
-if [[ "$1" == "--now" ]]; then
+if [[ "$1" == "--status" ]]; then
+  print_status
+elif [[ "$1" == "--listen" ]]; then
+  listen_status
+elif [[ "$1" == "--now" ]]; then
   shotnow
 elif [[ "$1" == "--in5" ]]; then
   shot5
 elif [[ "$1" == "--area" ]]; then
   shotarea
 else
-  echo -e "Available Options : --now --in5 --area"
+  echo -e "Available Options : --now --in5 --area --status --listen"
 fi
 
 exit 0

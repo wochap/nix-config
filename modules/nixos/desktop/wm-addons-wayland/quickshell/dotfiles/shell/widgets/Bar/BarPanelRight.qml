@@ -25,7 +25,7 @@ RowLayout {
     Layout.leftMargin: -3
     Layout.rightMargin: 0
     spacing: 0
-    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible)
+    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible)
 
     Capslock {
       id: capslock
@@ -41,6 +41,24 @@ RowLayout {
 
     Timewarrior {
       id: timewarrior
+
+      Layout.fillHeight: true
+    }
+
+    Offlinemsmtp {
+      id: offlinemsmtp
+
+      Layout.fillHeight: true
+    }
+
+    Recorder {
+      id: recorder
+
+      Layout.fillHeight: true
+    }
+
+    Wireguard {
+      id: wireguard
 
       Layout.fillHeight: true
     }
