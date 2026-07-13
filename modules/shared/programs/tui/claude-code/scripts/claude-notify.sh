@@ -3,9 +3,13 @@
 # claude-notify.sh — Claude Code "Notification" hook
 #
 # Reads the hook's JSON payload from stdin and sends a custom desktop
-# notification. Customize the CASE block below to change the title/message
-# per notification type, or wire in a webhook (Slack/Discord/ntfy) instead
-# of a desktop popup — see the commented example at the bottom.
+# notification. Title carries the session name (from the transcript),
+# body carries the message, pretty cwd, and — for permission prompts —
+# the description of the tool call Claude wants to run.
+#
+# Install:
+#   chmod +x claude-notify.sh
+#   Put it somewhere like ~/.claude/hooks/claude-notify.sh
 #
 # Register in ~/.claude/settings.json (or .claude/settings.json for a
 # single project):
@@ -16,7 +20,7 @@
 #       {
 #         "matcher": "",
 #         "hooks": [
-#           { "type": "command", "command": "path/to/claude-notify.sh" }
+#           { "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }
 #         ]
 #       }
 #     ]
@@ -36,36 +40,62 @@ INPUT=$(cat)
 MESSAGE=$(echo "$INPUT" | jq -r '.message // "Claude Code notification"')
 TYPE=$(echo "$INPUT" | jq -r '.notification_type // "unknown"')
 CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
+TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path // ""')
+
+# Pretty cwd: /home/gean/Projects/... -> ~/Projects/...
+PRETTY_CWD="${CWD/#$HOME/\~}"
 PROJECT=$(basename "$CWD" 2>/dev/null || echo "project")
 
-# Build a custom title/body per notification type. Edit these to taste.
-TITLE="Claude Code"
+# Session name: last ai-title / custom-title entry in the transcript.
+# Renaming a session appends a new title line, so the last one wins.
+SESSION_NAME=""
+if [[ -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
+  SESSION_NAME=$(tac "$TRANSCRIPT" 2>/dev/null |
+    grep -m1 -oE '"(aiTitle|customTitle)":"([^"\\]|\\.)*"' |
+    head -1 | sed -E 's/^"(aiTitle|customTitle)":"//; s/"$//') || true
+fi
+
+# Last tool call Claude attempted: tool name + its `description` input
+# (Bash calls always carry a short human summary there).
+LAST_TOOL=""
+if [[ -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
+  LAST_TOOL=$(tail -n 400 "$TRANSCRIPT" 2>/dev/null | jq -rs '
+    [ .[]
+      | select(.type == "assistant")
+      | .message.content[]?
+      | select(.type == "tool_use")
+    ] | last
+    | if . == null then ""
+      elif (.input.description // "") != "" then "\(.name): \(.input.description)"
+      elif .name == "Bash" then "Bash: \(.input.command // "" | .[0:120])"
+      else .name
+      end' 2>/dev/null) || true
+fi
+
+# Build a custom title/body per notification type.
+TITLE="Claude Code${SESSION_NAME:+ ($SESSION_NAME)}"
 BODY="$MESSAGE"
 
 case "$TYPE" in
 permission_prompt)
-  TITLE="Claude needs permission — $PROJECT"
-  BODY="Approve or deny: $MESSAGE"
-  ;;
-idle_prompt)
-  TITLE="Claude is waiting — $PROJECT"
-  BODY="Ready for your next prompt."
-  ;;
-auth_success)
-  TITLE="Claude Code"
-  BODY="Authentication succeeded."
+  BODY="Claude needs your permission"$'\n'"$PRETTY_CWD"
+  [[ -n "$LAST_TOOL" ]] && BODY+=$'\n'"($LAST_TOOL)"
   ;;
 agent_needs_input)
-  TITLE="Background agent needs input — $PROJECT"
-  BODY="$MESSAGE"
+  BODY="Claude is waiting for your input"$'\n'"$PRETTY_CWD"
+  [[ -n "$LAST_TOOL" ]] && BODY+=$'\n'"($LAST_TOOL)"
+  ;;
+idle_prompt)
+  BODY="Ready for your next prompt."$'\n'"$PRETTY_CWD"
+  ;;
+auth_success)
+  BODY="Authentication succeeded."
   ;;
 agent_completed)
-  TITLE="Background agent finished — $PROJECT"
-  BODY="$MESSAGE"
+  BODY="Background agent finished"$'\n'"$PRETTY_CWD"
   ;;
 *)
-  TITLE="Claude Code — $PROJECT"
-  BODY="$MESSAGE"
+  TITLE="Claude Code${SESSION_NAME:+ ($SESSION_NAME)} — $PROJECT"
   ;;
 esac
 
@@ -76,7 +106,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
 elif command -v notify-send >/dev/null 2>&1; then
   # Linux (requires libnotify-bin: apt-get install libnotify-bin)
-  notify-send "$TITLE" "$BODY"
+  notify-send --app-name="claude-code" "$TITLE" "$BODY"
 
 elif command -v powershell.exe >/dev/null 2>&1; then
   # WSL / Windows
