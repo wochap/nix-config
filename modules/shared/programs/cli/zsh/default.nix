@@ -135,6 +135,7 @@ in
             export AUTO_NOTIFY_IGNORE=(
               'vim'
               'nvim'
+              'nv'
               'less'
               'more'
               'man'
