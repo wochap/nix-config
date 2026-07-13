@@ -56,7 +56,7 @@ in {
         package = git-final;
         enable = true;
 
-        ignores = [ ".direnv" ".envrc" ".cache" ".aider*" ];
+        ignores = [ ".direnv" ".envrc" ".cache" ".aider*" ".claude" ];
 
         # enable Git Large File Storage
         lfs = {
