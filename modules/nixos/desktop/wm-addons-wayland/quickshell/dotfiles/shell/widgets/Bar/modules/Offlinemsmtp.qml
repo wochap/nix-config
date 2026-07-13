@@ -14,8 +14,8 @@ Loader {
   visible: isVisible
   sourceComponent: Component {
     MaterialIcon {
-      icon: "forward_to_inbox"
-      size: Styles.font.pixelSize.huge
+      icon: "schedule_send"
+      size: Styles.font.pixelSize.hugeass
       color: Theme.options.blue
     }
   }
