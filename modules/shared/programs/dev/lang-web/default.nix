@@ -20,6 +20,9 @@ in {
       http-server
       nodemon
       nodejs_24
+      gitleaks
+      trufflehog
+      semgrep
 
       # required by personal nvim config
       typescript # nvim-lspconfig
