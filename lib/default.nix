@@ -29,6 +29,7 @@ rec {
       name = lib.home-manager.strings.storeFileName (baseNameOf pathStr);
     in pkgs.runCommandLocal name { } "ln -s ${lib.escapeShellArg pathStr} $out";
 
+  # NOTE: it doesn't work if you add `executable = true;`
   # source: https://github.com/nix-community/home-manager/issues/257#issuecomment-1646557848
   relativeSymlink = configDirectory: path:
     mkOutOfStoreSymlink (runtimePath configDirectory path);
