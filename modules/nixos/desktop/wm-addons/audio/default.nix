@@ -52,10 +52,11 @@ in
       wireplumber.enable = true;
 
       # NOTE: this fixes glitches in my audio
+      # pw-metadata -n settings 0 clock.force-quantum 512
       extraConfig.pipewire."92-low-latency" = {
         "context.properties" = {
           "default.clock.rate" = 48000;
-          "default.clock.quantum" = 256;
+          "default.clock.quantum" = 512;
           "default.clock.min-quantum" = 512;
           "default.clock.max-quantum" = 8192;
         };
