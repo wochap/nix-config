@@ -1,0 +1,47 @@
+{
+  "env": {
+    "DISABLE_AUTOUPDATER": "1"
+  },
+  "model": "claude-fable-5[1m]",
+  "enabledPlugins": {
+    "plugin-dev@claude-plugins-official": true,
+    "caveman@caveman": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-code"
+      }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    }
+  },
+  "effortLevel": "medium",
+  "theme": "auto",
+  "editorMode": "vim",
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"/home/gean/.claude/plugins/cache/caveman/caveman/0d95a81d35a9/src/hooks/caveman-statusline.sh\""
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          { "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }
+        ]
+      },
+      {
+        "matcher": "agent_needs_input",
+        "hooks": [
+          { "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }
+        ]
+      }
+    ]
+  }
+}

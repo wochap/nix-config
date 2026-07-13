@@ -113,6 +113,7 @@ in {
     _custom.programs.tmux.systemdEnable = true;
     _custom.programs.urlscan.enable = true;
     _custom.programs.youtube.enable = true;
+    _custom.programs.claude-code.enable = true;
 
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;

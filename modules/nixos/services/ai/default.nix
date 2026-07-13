@@ -4,8 +4,6 @@ let
   cfg = config._custom.services.ai;
   inherit (config._custom.globals) configDirectory;
   inherit (pkgs._custom) wochap-ssc;
-  claude-session-duration = pkgs.writeScriptBin "claude-session-duration"
-    (builtins.readFile ./scripts/claude-session-duration.sh);
   makeVirtualHost = port: {
     forceSSL = true;
     sslTrustedCertificate = "${wochap-ssc}/rootCA.pem";
@@ -48,7 +46,7 @@ in {
     # nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
     environment.systemPackages = with pkgs;
-      [ python314Packages.huggingface-hub oterm claude-session-duration ]
+      [ python314Packages.huggingface-hub oterm ]
       ++ lib.optionals cfg.enableWhisper
       [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
       ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ];
