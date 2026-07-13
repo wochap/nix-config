@@ -9,7 +9,7 @@ reload_waybar() {
 }
 
 toggle() {
-  notify="notify-send --urgency=low --replace-id=694 offlinemsmtp"
+  notify="notify-send --urgency=low --replace-id=694 --hint=int:transient:1 offlinemsmtp"
 
   if test -f "$FILE"; then
     rm "$FILE"

@@ -59,7 +59,7 @@ print_status() {
 # Manually creates or deletes the lock file.
 ##
 toggle() {
-  notify="notify-send --urgency=low --replace-id=695 wlinhibit"
+  notify="notify-send --urgency=low --replace-id=695 --hint=int:transient:1 wlinhibit"
   if [[ -f "$LOCKFILE" ]]; then
     pkill wlinhibit
     $notify "Idle inhibidor is disabled"
