@@ -2,7 +2,8 @@
 
 let
   cfg = config._custom.programs.git;
-  inherit (config._custom.globals) themeColorsLight themeColorsDark secrets;
+  inherit (config._custom.globals) themeColorsLight themeColorsDark secrets configDirectory;
+  inherit (lib._custom) relativeSymlink;
   git-final = pkgs.gitFull;
 in {
   options._custom.programs.git = {
@@ -40,7 +41,9 @@ in {
       ];
 
       programs.zsh.initContent =
-        lib.mkOrder 1000 (builtins.readFile ./dotfiles/git.zsh);
+        lib.mkOrder 1000 ''
+          source ${relativeSymlink configDirectory ./dotfiles/git.zsh}
+        '';
 
       programs.gh = {
         enable = true;
