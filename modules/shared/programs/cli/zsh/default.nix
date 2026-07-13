@@ -149,6 +149,8 @@ in
               'nano'
               'lazygit'
               'claude'
+              'tmux'
+              'twt'
             )
             # export AUTO_NOTIFY_ICON_SUCCESS=/path/to/success/icon.png
             # export AUTO_NOTIFY_ICON_FAILURE=/path/to/failure/icon.png

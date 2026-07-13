@@ -61,7 +61,9 @@ in {
     enable = lib.mkEnableOption { };
     package = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.tmux;
+      default = pkgs.nixpkgs-unstable.tmux.overrideAttrs (oldAttrs: {
+        patches = (oldAttrs.patches or []) ++ [ ./patches/tmux-osc777.patch ];
+      });
     };
     systemdEnable = lib.mkEnableOption { };
   };
@@ -76,19 +78,6 @@ in {
             substituteInPlace bin/fzf-tmux \
               --replace "opt=\"-B" "# opt=\"-B"
           '';
-        });
-
-        # NOTE: fix newline pasting broken in neovim
-        # source: https://github.com/tmux/tmux/issues/4163
-        tmux = prev.tmux.overrideAttrs (oldAttrs: rec {
-          version = "b13005e802df23652e87c98f136f9eb13f096374";
-          src = pkgs.fetchFromGitHub {
-            owner = "tmux";
-            repo = "tmux";
-            rev = version;
-            hash = "sha256-V/F16gXadfSoR7kdq5pKXdL7nnqjYuZQl+P8DIZTcGM=";
-          };
-          doInstallCheck = false;
         });
       })
     ];

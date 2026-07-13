@@ -1,0 +1,25 @@
+diff --git a/input.c b/input.c
+index ae503e50..6fea8bfa 100644
+--- a/input.c
++++ b/input.c
+@@ -2749,6 +2749,20 @@ input_exit_osc(struct input_ctx *ictx)
+ 	case 133:
+ 		input_osc_133(ictx, p);
+ 		break;
++	case 777:
++		if (wp != NULL && strncmp(p, "notify;", 7) == 0) {
++			struct client *c;
++
++			/* Forward the notification to any client viewing a session that contains this window */
++			TAILQ_FOREACH(c, &clients, entry) {
++				if (c->session != NULL && session_has(c->session, wp->window)) {
++					tty_puts(&c->tty, "\033]777;");
++					tty_puts(&c->tty, p);
++					tty_puts(&c->tty, "\033\\"); /* ST terminator */
++				}
++			}
++		}
++		break;
+ 	default:
+ 		log_debug("%s: unknown '%u'", __func__, option);
+ 		break;
