@@ -6,7 +6,7 @@
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=12ccf3e6a73accd6f85aaf857b909d1d63563064"; # master (10 jul 2026)
     prevstable-mesa.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # mesa v26.1.4
     prevstable-chrome.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
-    prevstable-neovim.url = "github:nixos/nixpkgs?rev=84577351974736371ddb9d36d788b6e34247b891"; # master (02 sep 2025)
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=b6018f87da91d19d0ab4cf979885689b469cdd41"; # neovim v0.11.7
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
     prevstable-intune.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)

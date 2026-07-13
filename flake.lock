@@ -2994,17 +2994,17 @@
     },
     "prevstable-neovim": {
       "locked": {
-        "lastModified": 1756868953,
-        "narHash": "sha256-IpbVq45uFc44CPnDTxqyb0w1FdFfzjCBkRT6dYzkNeU=",
+        "lastModified": 1782847189,
+        "narHash": "sha256-twXPFqFsrrY5r28Zh7Homgcp2gUMBgQ6WDS98Q/3xFI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "84577351974736371ddb9d36d788b6e34247b891",
+        "rev": "b6018f87da91d19d0ab4cf979885689b469cdd41",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "84577351974736371ddb9d36d788b6e34247b891",
+        "rev": "b6018f87da91d19d0ab4cf979885689b469cdd41",
         "type": "github"
       }
     },
