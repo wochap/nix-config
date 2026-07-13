@@ -136,6 +136,7 @@ in
               'vim'
               'nvim'
               'nv'
+              'run-without-kpadding'
               'less'
               'more'
               'man'
@@ -147,6 +148,7 @@ in
               'ssh'
               'nano'
               'lazygit'
+              'claude'
             )
             # export AUTO_NOTIFY_ICON_SUCCESS=/path/to/success/icon.png
             # export AUTO_NOTIFY_ICON_FAILURE=/path/to/failure/icon.png
