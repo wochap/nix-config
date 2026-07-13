@@ -22,8 +22,11 @@ in
       home = {
         sessionVariables.CAVEMAN_LEVEL = "ultra";
         file = {
-          ".claude/hooks/claude-notify.sh".source =
-            lib._custom.relativeSymlink configDirectory ./scripts/claude-notify.sh;
+          ".claude/hooks/claude-notify.sh" = {
+            source = ./scripts/claude-notify.sh;
+            executable = true;
+          };
+
           ".claude/settings.json".source =
             lib._custom.relativeSymlink configDirectory ./dotfiles/claude-settings.json;
         };
