@@ -73,26 +73,26 @@ if [[ -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
 fi
 
 # Build a custom title/body per notification type.
-TITLE="Claude Code${SESSION_NAME:+ ($SESSION_NAME)}"
+TITLE="${SESSION_NAME:-Claude Code}"
 BODY="$MESSAGE"
 
 case "$TYPE" in
 permission_prompt)
-  BODY="Claude needs your permission"$'\n'"$PRETTY_CWD"
-  [[ -n "$LAST_TOOL" ]] && BODY+=$'\n'"($LAST_TOOL)"
+  BODY="Claude needs your permission<br>$PRETTY_CWD"
+  [[ -n "$LAST_TOOL" ]] && BODY+="<br><i>$LAST_TOOL</i>"
   ;;
 agent_needs_input)
-  BODY="Claude is waiting for your input"$'\n'"$PRETTY_CWD"
-  [[ -n "$LAST_TOOL" ]] && BODY+=$'\n'"($LAST_TOOL)"
+  BODY="Claude is waiting for your input<br>$PRETTY_CWD"
+  [[ -n "$LAST_TOOL" ]] && BODY+="<br><i>$LAST_TOOL</i>"
   ;;
 idle_prompt)
-  BODY="Ready for your next prompt."$'\n'"$PRETTY_CWD"
+  BODY="Ready for your next prompt.<br>$PRETTY_CWD"
   ;;
 auth_success)
   BODY="Authentication succeeded."
   ;;
 agent_completed)
-  BODY="Background agent finished"$'\n'"$PRETTY_CWD"
+  BODY="Background agent finished<br>$PRETTY_CWD"
   ;;
 *)
   TITLE="Claude Code${SESSION_NAME:+ ($SESSION_NAME)} — $PROJECT"
