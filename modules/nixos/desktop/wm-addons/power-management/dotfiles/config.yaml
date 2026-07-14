@@ -9,6 +9,6 @@ charging:
 
 discharging:
   15:
-    - "notify-send --replace-id=693 --app-name=batty --urgency=critical --app-icon=battery-low --icon=battery-low --hint=int:transient:1 'Battery Low' 'Your battery is at 15%.'"
+    - "notify-send --replace-id=693 --app-name=batty --urgency=critical --app-icon=battery-low --icon=battery-low --hint=int:transient:1 --hint=string:custom-sound:dialog-warning 'Battery Low' 'Your battery is at 15%.'"
   5:
-    - "notify-send --replace-id=693 --app-name=batty --urgency=critical --app-icon=battery-caution --icon=battery-caution --hint=int:transient:1 'Battery Critically Low!' 'Plug in your charger. 5% remaining.'"
+    - "notify-send --replace-id=693 --app-name=batty --urgency=critical --app-icon=battery-caution --icon=battery-caution --hint=int:transient:1 --hint=string:custom-sound:dialog-error 'Battery Critically Low!' 'Plug in your charger. 5% remaining.'"
