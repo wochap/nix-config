@@ -1,6 +1,7 @@
 {
   "env": {
-    "DISABLE_AUTOUPDATER": "1"
+    "DISABLE_AUTOUPDATER": "1",
+    "CAVEMAN_DEFAULT_MODE": "ultra"
   },
   "model": "claude-fable-5[1m]",
   "enabledPlugins": {
@@ -28,16 +29,11 @@
     "type": "command",
     "command": "bash \"/home/gean/.claude/plugins/cache/caveman/caveman/0d95a81d35a9/src/hooks/caveman-statusline.sh\""
   },
+  "preferredNotifChannel": "notifications_disabled",
   "hooks": {
     "Notification": [
       {
-        "matcher": "permission_prompt",
-        "hooks": [
-          { "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }
-        ]
-      },
-      {
-        "matcher": "agent_needs_input",
+        "matcher": "",
         "hooks": [
           { "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }
         ]

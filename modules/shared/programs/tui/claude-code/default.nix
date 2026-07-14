@@ -20,7 +20,10 @@ in
 
     _custom.hm = {
       home = {
-        sessionVariables.CAVEMAN_LEVEL = "ultra";
+        sessionVariables = {
+          OPENSPEC_TELEMETRY = "0";
+        };
+
         file = {
           ".claude/hooks/claude-notify.sh" = {
             source = ./scripts/claude-notify.sh;
