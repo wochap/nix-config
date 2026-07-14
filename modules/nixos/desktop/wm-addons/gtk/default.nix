@@ -124,6 +124,7 @@ in {
       systemPackages = with pkgs; [
         dconf-editor
         nwg-look
+        libcanberra-gtk3 # play XDG Sound Theme
 
         # gtk deps
         glib # for gsettings program
@@ -184,6 +185,9 @@ in {
         # Open GTK inspector with Ctrl + Shift + D
         # GTK_DEBUG=interactive <app>
         "org/gtk/Settings/Debug".enable-inspector-keybinding = true;
+
+        # required by canberra-gtk-play
+        "org/gnome/desktop/sound".event-sounds = true;
       };
 
       # Prevent home-manager service to fail
@@ -234,6 +238,7 @@ in {
             gtk-xft-antialias = 1;
             gtk-xft-hinting = 1;
             gtk-xft-hintstyle = "hintfull";
+            gtk-enable-event-sounds = 1; # required by canberra-gtk-play
           };
           bookmarks = [
             "file://${hmConfig.home.homeDirectory}/Downloads"

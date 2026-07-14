@@ -33,6 +33,8 @@ Singleton {
   readonly property int defaultPopupTimeout: 5000
   property int idOffset // ensure unique notification id
   property bool isPanelOpen: false
+  property real lastSoundPlayedTime: 0
+  readonly property int soundCooldownMs: 1000 // Only play a sound at most once per second
 
   // Whenever a state changes, re-evaluate the notification queue.
   onIsSilentChanged: processQueues()
@@ -74,6 +76,19 @@ Singleton {
 
     // Create timers for the newly added popups.
     notificationsToMove.forEach(notification => {
+      const hints = notification.notification?.hints ?? {};
+      const wantsCustomSound = !!hints["custom-sound"];
+      const suppressSound = !!hints["suppress-sound"];
+
+      if (wantsCustomSound && !suppressSound) {
+        const now = Date.now();
+        // Only play if enough time has passed since the last sound
+        if (now - root.lastSoundPlayedTime > root.soundCooldownMs) {
+          Quickshell.execDetached(["canberra-gtk-play", "-i", "message"]);
+          root.lastSoundPlayedTime = now;
+        }
+      }
+
       if (notification?.notification?.expireTimeout !== 0) {
         notification.timer = notificationTimerComponent.createObject(root, {
           "notificationId": notification.notificationId,
