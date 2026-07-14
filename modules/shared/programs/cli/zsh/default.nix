@@ -150,8 +150,8 @@ in
               'lazygit'
               'claude'
               'tmux'
-              'twt'
-              'wtui'
+              'taskwarrior-tui'
+              'impala'
             )
             export AUTO_NOTIFY_ICON_SUCCESS='zsh'
             export AUTO_NOTIFY_ICON_FAILURE='zsh'
