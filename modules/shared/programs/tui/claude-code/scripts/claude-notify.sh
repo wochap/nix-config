@@ -106,7 +106,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
 elif command -v notify-send >/dev/null 2>&1; then
   # Linux (requires libnotify-bin: apt-get install libnotify-bin)
-  notify-send --app-name="claude-code" --hint=string:custom-sound:message "$TITLE" "$BODY"
+  notify-send --app-name="claude-code" --app-icon="claude-code" --icon="claude-code" --hint=string:custom-sound:message "$TITLE" "$BODY"
 
 elif command -v powershell.exe >/dev/null 2>&1; then
   # WSL / Windows
