@@ -130,7 +130,7 @@ Reboot into NixOS, login with the user you created
 1. Install npm packages
 
   ```sh
-  npm i -g webtorrent-cli gulp migrate-mongo claude-code
+  npm i -g webtorrent-cli gulp migrate-mongo claude-code @fission-ai/openspec@latest
 
   # required by personal nvim config
   npm i -g ts-node @styled/typescript-styled-plugin
@@ -226,6 +226,7 @@ $ nix eval .#nixosConfigurations.laptop.config.services.gnome.gcr-ssh-agent.enab
 $ sudo lsof /dev/nvidia*
 
 # check if nvidia is deep sleep
+# D3cold is Deep Sleep
 $ watch -n 3 cat /sys/class/drm/card*/device/power_state
 ```
 
