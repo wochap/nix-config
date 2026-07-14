@@ -3631,15 +3631,15 @@
     "zsh-auto-notify": {
       "flake": false,
       "locked": {
-        "lastModified": 1750669386,
-        "narHash": "sha256-s3TBAsXOpmiXMAQkbaS5de0t0hNC1EzUUb0ZG+p9keE=",
-        "owner": "MichaelAquilina",
+        "lastModified": 1784000012,
+        "narHash": "sha256-o4IfNbrV6Cf0cf1zjgTxyCNfC4WuF9Obb3Wjazvs2fA=",
+        "owner": "wochap",
         "repo": "zsh-auto-notify",
-        "rev": "b51c934d88868e56c1d55d0a2a36d559f21cb2ee",
+        "rev": "131dab4bf75554a0b4014456ee69050634d37822",
         "type": "github"
       },
       "original": {
-        "owner": "MichaelAquilina",
+        "owner": "wochap",
         "repo": "zsh-auto-notify",
         "type": "github"
       }

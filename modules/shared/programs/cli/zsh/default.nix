@@ -153,8 +153,8 @@ in
               'twt'
               'wtui'
             )
-            # export AUTO_NOTIFY_ICON_SUCCESS=/path/to/success/icon.png
-            # export AUTO_NOTIFY_ICON_FAILURE=/path/to/failure/icon.png
+            export AUTO_NOTIFY_ICON_SUCCESS='zsh'
+            export AUTO_NOTIFY_ICON_FAILURE='zsh'
 
             zsh-defer source ${inputs.zsh-auto-notify}/auto-notify.plugin.zsh
 
