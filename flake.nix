@@ -76,6 +76,8 @@
     quickshell.inputs.nixpkgs.follows = "nixpkgs";
     rod.url = "github:leiserfg/rod?rev=5d378a226a3a0108f657eccc3dc457cf3e374b73"; # master (10 jul 2026)
     rod.inputs.nixpkgs.follows = "nixpkgs";
+    antigravity-nix.url = "github:jacopone/antigravity-nix";
+    antigravity-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
