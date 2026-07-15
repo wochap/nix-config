@@ -66,6 +66,11 @@ Reboot into NixOS, login with the user you created
    ```
    [safe]
      directory = /home/gean/nix-config
+     directory = /home/gean/.cache/nix/tarball-cache-v2
+   ```
+
+   ```
+   $ sudo chown -R gean:gean ~/.cache/nix
    ```
 
 1. Rebuild nixos with the host's specific config, for example, heres's a rebuild for my `gdesktop`
