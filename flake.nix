@@ -20,23 +20,6 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    # third party nixpkgs|overlays|modules
-    chaotic.url = "github:chaotic-cx/nyx?rev=bb52c6c8936353a03000929d37146bc636f4673f"; # main (10 jul 2026)
-    chaotic.inputs.nixpkgs.follows = "nixpkgs-unstable";
-    nix-gaming.url = "github:fufexan/nix-gaming?rev=ea13b9c4aa381fba9513ebf438a38ea344320b09"; # master (10 jul 2026)
-    nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
-    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland";
-    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4"; # (08 mar 2022)
-    android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
-    nur.url = "github:nix-community/NUR";
-    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=9368056b73efb46eb14fd4667b99e0f81b805f28"; # master (05 aug 2025)
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=204823393e14fede7e69cacbccdb94882ac75822"; # (10 jul 2026)
-    nix-ld.url = "github:Mic92/nix-ld";
-    nix-ld.inputs.nixpkgs.follows = "nixpkgs";
-    nix-alien.url = "github:thiagokokada/nix-alien";
-    nix-alien.inputs.nixpkgs.follows = "nixpkgs";
-
     # hyprland
     # everytime you update hyprland flake, run `sudo nix flake lock --update-input hyprland`
     hyprland.url = "github:hyprwm/Hyprland?rev=a0136d8c04687bb36eb8a28eb9d1ff92aea99704"; # v0.55.4
@@ -59,6 +42,21 @@
     hyprland-guiutils.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
+    chaotic.url = "github:chaotic-cx/nyx?rev=bb52c6c8936353a03000929d37146bc636f4673f"; # main (10 jul 2026)
+    chaotic.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    nix-gaming.url = "github:fufexan/nix-gaming?rev=ea13b9c4aa381fba9513ebf438a38ea344320b09"; # master (10 jul 2026)
+    nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
+    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland";
+    nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
+    android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4"; # (08 mar 2022)
+    android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
+    nur.url = "github:nix-community/NUR";
+    nixos-hardware.url = "github:NixOS/nixos-hardware?rev=9368056b73efb46eb14fd4667b99e0f81b805f28"; # master (05 aug 2025)
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=204823393e14fede7e69cacbccdb94882ac75822"; # (10 jul 2026)
+    nix-ld.url = "github:Mic92/nix-ld";
+    nix-ld.inputs.nixpkgs.follows = "nixpkgs";
+    nix-alien.url = "github:thiagokokada/nix-alien";
+    nix-alien.inputs.nixpkgs.follows = "nixpkgs";
     lobster.url = "github:justchokingaround/lobster";
     lobster.inputs.nixpkgs.follows = "nixpkgs";
     wayfreeze.url = "github:Jappie3/wayfreeze?rev=8f813abc5082e1375326ca0f888834f79f872006"; # master (10 jul 2026)
