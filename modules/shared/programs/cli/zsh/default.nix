@@ -152,6 +152,7 @@ in
               'tmux'
               'taskwarrior-tui'
               'impala'
+              'wtui'
             )
             export AUTO_NOTIFY_ICON_SUCCESS='zsh'
             export AUTO_NOTIFY_ICON_FAILURE='zsh'
