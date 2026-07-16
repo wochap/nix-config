@@ -18,6 +18,7 @@ let
   inherit (lib._custom) relativeSymlink;
   hmConfig = config.home-manager.users.${userName};
 
+  clean-history = pkgs.writeScriptBin "clean-history" (builtins.readFile ./scripts/clean-history.sh);
   fshPlugin = {
     name = "zsh-fast-syntax-highlighting";
     src = pkgs.zsh-fast-syntax-highlighting;
@@ -81,6 +82,8 @@ in
       };
 
       home.packages = with pkgs; [
+        clean-history
+
         # completions and manpage install
         zsh-abbr
 
