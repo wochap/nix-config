@@ -37,6 +37,24 @@ set -euo pipefail
 INPUT=$(cat)
 
 # Pull fields out of the JSON payload
+EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // ""')
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
+STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/claude-notify"
+
+# PreToolUse: the Notification event fires *before* the pending tool_use
+# is flushed to the transcript, so reading the transcript there yields the
+# penultimate tool. Instead, record every attempted tool call here and let
+# the Notification branch read it back.
+if [[ "$EVENT" == "PreToolUse" ]]; then
+  mkdir -p "$STATE_DIR"
+  echo "$INPUT" | jq -r '
+    if (.tool_input.description // "") != "" then "\(.tool_name): \(.tool_input.description)"
+    elif .tool_name == "Bash" then "Bash: \(.tool_input.command // "" | .[0:120])"
+    else .tool_name
+    end' > "$STATE_DIR/last-tool-$SESSION_ID" 2>/dev/null || true
+  exit 0
+fi
+
 MESSAGE=$(echo "$INPUT" | jq -r '.message // "Claude Code notification"')
 TYPE=$(echo "$INPUT" | jq -r '.notification_type // "unknown"')
 CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
@@ -55,10 +73,14 @@ if [[ -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
     head -1 | sed -E 's/^"(aiTitle|customTitle)":"//; s/"$//') || true
 fi
 
-# Last tool call Claude attempted: tool name + its `description` input
-# (Bash calls always carry a short human summary there).
+# Last tool call Claude attempted: prefer the PreToolUse state file (always
+# current, even for the not-yet-flushed pending call); fall back to the
+# transcript if the PreToolUse hook isn't registered.
 LAST_TOOL=""
-if [[ -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
+if [[ -r "$STATE_DIR/last-tool-$SESSION_ID" ]]; then
+  LAST_TOOL=$(<"$STATE_DIR/last-tool-$SESSION_ID")
+fi
+if [[ -z "$LAST_TOOL" && -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
   LAST_TOOL=$(tail -n 400 "$TRANSCRIPT" 2>/dev/null | jq -rs '
     [ .[]
       | select(.type == "assistant")

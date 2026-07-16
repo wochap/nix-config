@@ -1,7 +1,6 @@
 {
   "env": {
-    "DISABLE_AUTOUPDATER": "1",
-    "CAVEMAN_DEFAULT_MODE": "ultra"
+    "DISABLE_AUTOUPDATER": "1"
   },
   "model": "claude-fable-5[1m]",
   "enabledPlugins": {
@@ -32,6 +31,14 @@
   "preferredNotifChannel": "notifications_disabled",
   "hooks": {
     "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          { "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }
+        ]
+      }
+    ],
+    "PreToolUse": [
       {
         "matcher": "",
         "hooks": [

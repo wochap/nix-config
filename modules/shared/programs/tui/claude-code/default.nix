@@ -29,6 +29,7 @@ in
       home = {
         sessionVariables = {
           OPENSPEC_TELEMETRY = "0";
+          CAVEMAN_DEFAULT_MODE = "ultra";
         };
 
         file = {
