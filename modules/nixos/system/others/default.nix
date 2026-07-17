@@ -1,7 +1,17 @@
-{ lib, pkgs, ... }:
-
 {
-  config = {
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+
+let
+  cfg = config._custom.system.others;
+in
+{
+  options._custom.system.others.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     # minimum amount of swapping without disabling it entirely
     boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 1;
 
@@ -55,4 +65,3 @@
     '';
   };
 }
-
