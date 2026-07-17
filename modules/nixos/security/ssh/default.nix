@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.security.ssh;
-  inherit (config._custom.globals) configDirectory;
-in {
+  inherit (config._custom.globals) configDirectory isSandbox;
+in
+{
   options._custom.security.ssh.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -29,9 +35,9 @@ in {
     _custom.hm = {
       # NOTE: ssh agent managed by gnome-keyring
       home.file = {
-        ".ssh/config".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/config;
-        ".ssh/config.d/boc".source = ../../../../secrets/dotfiles/ssh/boc;
+        ".ssh/config".source = lib._custom.relativeSymlink configDirectory ./dotfiles/config;
+        ".ssh/config.d/default".source = lib.mkIf (!isSandbox) ./dotfiles/default;
+        ".ssh/config.d/boc".source = lib.mkIf (!isSandbox) ../../../../secrets/dotfiles/ssh/boc;
       };
     };
   };
