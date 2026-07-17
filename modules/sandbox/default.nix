@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 
@@ -65,49 +66,76 @@ in
           isReadOnly = false;
         };
       };
-
-      config = { config, pkgs, ... }: {
-        system.stateVersion = "23.11";
-
-        systemd.services."container-getty@1" = {
-          enable = true;
-        };
-
-        # Enable DNS resolution inside the sandbox
-        networking.nameservers = [
-          "8.8.8.8"
-          "1.1.1.1"
-        ];
-        networking.useHostResolvConf = lib.mkForce false;
-
-        users.users.${userName} = {
-          isNormalUser = true;
-          uid = cfg.hostUserUid;
-          extraGroups = [
-            "video"
-            "audio"
-            "wheel"
-            "render"
-          ];
-          initialPassword = "sandbox";
-        };
-
-        hardware.graphics.enable = true;
-
-        environment.variables = {
-          WAYLAND_DISPLAY = "/mnt/host-run/wayland-1";
-          PIPEWIRE_RUNTIME_DIR = "/mnt/host-run";
-          QT_QPA_PLATFORM = "wayland";
-          GDK_BACKEND = "wayland";
-          MOZ_ENABLE_WAYLAND = "1";
-        };
-
-        environment.systemPackages = with pkgs; [
-          firefox
-          foot
-          python3
-        ];
+      specialArgs = {
+        inherit inputs;
+        inherit lib;
       };
+
+      config =
+        { config, ... }:
+        let
+          hmConfig = config.home-manager.users.${userName};
+          configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
+        in
+        {
+          imports = [
+            # ../shared/home
+            # ../nixos/globals
+            # ../shared/globals
+            # ../shared/programs/gui/foot
+
+            ../archetypes
+            ../nixos
+            ../shared
+          ];
+
+          config = {
+            _custom.globals.userName = userName;
+            _custom.globals.homeDirectory = "/home/${userName}";
+            _custom.globals.configDirectory = configDirectory;
+            _custom.globals.preferDark = true;
+
+            nixpkgs.pkgs = pkgs;
+
+            system.stateVersion = "23.11";
+            home-manager.users.${userName}.home.stateVersion = "23.11";
+
+            systemd.services."container-getty@1" = {
+              enable = true;
+            };
+
+            # Enable DNS resolution inside the sandbox
+            networking.nameservers = [
+              "8.8.8.8"
+              "1.1.1.1"
+            ];
+            networking.useHostResolvConf = lib.mkForce false;
+
+            users.users.${userName} = {
+              uid = cfg.hostUserUid;
+              extraGroups = [
+                "audio"
+                "render"
+              ];
+            };
+
+            hardware.graphics.enable = true;
+
+            environment.variables = {
+              WAYLAND_DISPLAY = "/mnt/host-run/wayland-1";
+              PIPEWIRE_RUNTIME_DIR = "/mnt/host-run";
+              QT_QPA_PLATFORM = "wayland";
+              GDK_BACKEND = "wayland";
+              MOZ_ENABLE_WAYLAND = "1";
+            };
+
+            environment.systemPackages = with pkgs; [
+              firefox
+              foot
+              python3
+            ];
+          };
+        };
     };
   };
 }
