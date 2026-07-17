@@ -4,6 +4,8 @@ let
   cfg = config._custom.programs.neovim;
   inherit (config._custom.globals) userName configDirectory;
   hmConfig = config.home-manager.users.${userName};
+  clear-nvim = pkgs.writeScriptBin "clear-nvim"
+    (builtins.readFile ./scripts/clear-nvim.sh);
   clear-nvim-state = pkgs.writeScriptBin "clear-nvim-state"
     # zsh
     ''
@@ -37,6 +39,7 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
+        clear-nvim
         neovide # gui
 
         marksman # required by nvim-lspconfig
