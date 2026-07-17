@@ -14,7 +14,7 @@ fi
 hyprctl dispatch focusworkspaceoncurrentmonitor 2
 
 # Change to monocle layout
-hyprland-monocle --start
+hyprctl keyword workspace 2,layout:monocle
 
 echo "Starting tmux session: dp"
 footclient --app-id=footclient-dp tmux new-session zsh -i -c "tmuxinator start dp" &

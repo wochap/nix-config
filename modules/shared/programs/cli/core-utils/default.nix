@@ -6,7 +6,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      aria # like wget but supports torrents, sftp
+      aria2 # like wget but supports torrents, sftp
       atool # file archives (tar, tar+gzip, zip etc)
       file # print filetype
       getopt # fix macos getopt
@@ -32,14 +32,14 @@ in {
       silver-searcher # ag, ack like
       gum # shell scripting ui
       just # like make but better
-      poppler_utils # pdftotext
+      poppler-utils # pdftotext
       qpdf # manipulate pdfs
       streamlink # download hsl stream
       trash-cli
     ];
 
     _custom.hm = {
-      imports = [ inputs.nix-index-database.hmModules.nix-index ];
+      imports = [ inputs.nix-index-database.homeModules.nix-index ];
 
       home.shellAliases = {
         ".." = "cd ..";
@@ -51,7 +51,7 @@ in {
 
       programs = {
         # corrects previous console cmd
-        thefuck = {
+        pay-respects = {
           enable = true;
           enableBashIntegration = false;
           enableZshIntegration = false;

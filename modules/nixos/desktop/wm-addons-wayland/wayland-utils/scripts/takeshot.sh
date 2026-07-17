@@ -25,7 +25,7 @@ notify_user() {
   trap 'rm -f "$thumbnail"' exit
   magick "$grim_dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
 
-  action=$(notify-send --app-name="Takeshot" --expire-time="$EXPIRE_TIME" --replace-id=699 --icon="$thumbnail" "Screen shooter" "Screenshot Saved" --action="open=Open" --action="edit=Edit" --action="png=Copy PNG")
+  action=$(notify-send --app-name="Takeshot" --replace-id=699 --app-icon="$thumbnail" --icon="$thumbnail" "Screen shooter" "Screenshot Saved" --action="open=Open" --action="edit=Edit" --action="png=Copy PNG")
 
   case $action in
   "edit")
@@ -56,7 +56,7 @@ copy_to_cb() {
 # countdown
 countdown() {
   for sec in $(seq $1 -1 1); do
-    notify-send --app-name="Takeshot" --expire-time=1000 --replace-id=698 --icon="accessories-screenshot" "Taking shot in $sec"
+    notify-send --app-name="Takeshot" --expire-time=1000 --replace-id=698 --app-icon="accessories-screenshot" --icon="accessories-screenshot" --hint=int:transient:1 "Taking shot in $sec"
     sleep 1
   done
 }

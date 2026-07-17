@@ -12,6 +12,7 @@ in {
         inkscape # photo editor cli/gui
         # pinta # image editor
         remmina # vnc client
+        file-roller # Required by gnome file managers
 
         # APPS
         pantheon.elementary-camera # camera app
@@ -24,9 +25,6 @@ in {
         zenity # GUI for terminal
       ];
     };
-
-    # Required by gnome file managers
-    programs.file-roller.enable = true;
 
     programs.gnome-disks.enable = true;
   };

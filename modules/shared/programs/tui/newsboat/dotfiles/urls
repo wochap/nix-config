@@ -48,3 +48,8 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UC-8QAzbLcRglXeN_MY9blyw "~B
 https://www.youtube.com/feeds/videos.xml?channel_id=UCzoVCacndDCfGDf41P-z0iA "~JSConf's YouTube Videos"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA "~Fireship's YouTube Videos"
 
+-9 "~News"
+https://www.coindesk.com/arc/outboundfeeds/rss/ "~Coindesk"
+https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.atom "~USGS Significant Earthquakes"
+https://www.marktechpost.com/feed/ "~MarkTechPost"
+

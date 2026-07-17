@@ -14,7 +14,8 @@ Singleton {
 
   function addAlpha(hexColor, alpha) {
     // 1. Sanitize the hex color input
-    let cleanHex = hexColor.startsWith('#') ? hexColor.slice(1) : hexColor;
+    let colorStr = String(hexColor);
+    let cleanHex = colorStr.startsWith('#') ? colorStr.slice(1) : colorStr;
 
     // 2. Validate the hex color
     if (!/^[0-9A-F]{6}$/i.test(cleanHex)) {

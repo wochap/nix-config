@@ -1,15 +1,30 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.zsh;
   inherit (config._custom.globals)
-    configDirectory themeColorsLight themeColorsDark preferDark;
+    configDirectory
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    userName
+    ;
   inherit (lib._custom) relativeSymlink;
+  hmConfig = config.home-manager.users.${userName};
 
+  clear-zsh-history = pkgs.writeScriptBin "clear-zsh-history" (
+    builtins.readFile ./scripts/clear-zsh-history.sh
+  );
   fshPlugin = {
     name = "zsh-fast-syntax-highlighting";
     src = pkgs.zsh-fast-syntax-highlighting;
-    file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
+    file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
   };
   catppuccin-fsh-light-theme = pkgs.stdenvNoCC.mkDerivation {
     name = "catppuccin-fsh-light-theme";
@@ -35,7 +50,8 @@ let
       EOF
     '';
   };
-in {
+in
+{
   options._custom.programs.zsh = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
@@ -60,11 +76,16 @@ in {
 
     _custom.hm = {
       xdg.configFile = {
-        "zsh/.p10k.zsh".source =
-          relativeSymlink configDirectory ./dotfiles/.p10k.zsh;
+        "zsh/.p10k.zsh".source = relativeSymlink configDirectory ./dotfiles/.p10k.zsh;
+        "fsh" = {
+          source = "${inputs.catppuccin-zsh-fsh}/themes";
+          recursive = true;
+        };
       };
 
       home.packages = with pkgs; [
+        clear-zsh-history
+
         # completions and manpage install
         zsh-abbr
 
@@ -74,7 +95,7 @@ in {
 
       programs.zsh = {
         enable = true;
-        dotDir = ".config/zsh";
+        dotDir = "${hmConfig.xdg.configHome}/zsh";
         envExtra = ''
           ## misc
 
@@ -106,22 +127,42 @@ in {
             source ${relativeSymlink configDirectory ./dotfiles/functions.zsh}
 
             function load_key_bindings() {
-              source ${
-                relativeSymlink configDirectory ./dotfiles/key-bindings-vi.zsh
-              }
+              source ${relativeSymlink configDirectory ./dotfiles/key-bindings-vi.zsh}
             }
 
-            ## zsh-notify
+            ## zsh-auto-notify
 
-            zstyle ':notify:*' app-name zsh-notify
-            zstyle ':notify:*' error-icon "gksu-root-terminal"
-            zstyle ':notify:*' error-title "wow such #fail (#{time_elapsed}s)"
-            zstyle ':notify:*' success-icon "terminal-tango"
-            zstyle ':notify:*' success-title "very #success. wow (#{time_elapsed}s)"
-            zstyle ':notify:*' disable-urgent yes
+            export AUTO_NOTIFY_THRESHOLD=10
+            export AUTO_NOTIFY_EXPIRE_TIME=6000
+            export AUTO_NOTIFY_ENABLE_SSH=1
+            export AUTO_NOTIFY_ENABLE_TRANSIENT=1
+            export AUTO_NOTIFY_CANCEL_ON_SIGINT=0
+            export AUTO_NOTIFY_IGNORE=(
+              'vim'
+              'nvim'
+              'nv'
+              'run-without-kpadding'
+              'less'
+              'more'
+              'man'
+              'tig'
+              'watch'
+              'git commit'
+              'top'
+              'htop'
+              'ssh'
+              'nano'
+              'lazygit'
+              'claude'
+              'tmux'
+              'taskwarrior-tui'
+              'impala'
+              'wtui'
+            )
+            export AUTO_NOTIFY_ICON_SUCCESS='zsh'
+            export AUTO_NOTIFY_ICON_FAILURE='zsh'
 
-            # TODO: write wayland support
-            # zsh-defer source ${inputs.zsh-notify}/notify.plugin.zsh
+            zsh-defer source ${inputs.zsh-auto-notify}/auto-notify.plugin.zsh
 
             ## zsh-autosuggestions
 
@@ -143,17 +184,20 @@ in {
             # TODO: use rod
             # TODO: add automation to hotreload
             # set catppuccin theme for zsh-fast-syntax-highlighting
-            if (( $+commands[color-scheme] )); then
+            if command -v color-scheme >/dev/null 2>&1; then
               CURRENT_SCHEME=$(color-scheme print)
             else
               CURRENT_SCHEME="dark"
             fi
             if [[ "$CURRENT_SCHEME" == "dark" ]]; then
               FAST_WORK_DIR="${catppuccin-fsh-dark-theme}"
+              FSH_THEME="${catppuccin-fsh-dark-theme}/current_theme.zsh"
             else
               FAST_WORK_DIR="${catppuccin-fsh-light-theme}"
+              FSH_THEME="${catppuccin-fsh-light-theme}/current_theme.zsh"
             fi
             source ${fshPlugin.src}/${fshPlugin.file}
+            source $FSH_THEME
 
             ## zsh-vi-mode
 

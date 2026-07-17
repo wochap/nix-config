@@ -35,7 +35,7 @@ in {
         Service = {
           Type = "oneshot";
           ExecStart =
-            "${pkgs.libnotify}/bin/notify-send --app-name vdirsyncer --icon apport 'Service failed'";
+            "${pkgs.libnotify}/bin/notify-send --app-name vdirsyncer --app-icon apport --icon apport --hint=int:transient:1 'Service failed'";
         };
       };
 

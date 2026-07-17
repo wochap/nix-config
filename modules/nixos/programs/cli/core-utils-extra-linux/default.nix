@@ -5,19 +5,19 @@ in {
   options._custom.programs.core-utils-extra-linux.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        heimdall = prev.heimdall.overrideAttrs (_: {
-          version = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
-          src = prev.fetchFromSourcehut {
-            owner = "~grimler";
-            repo = "Heimdall";
-            rev = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
-            sha256 = "sha256-tcAE83CEHXCvHSn/S9pWu6pUiqGmukMifEadqPDTkQ0=";
-          };
-        });
-      })
-    ];
+    # nixpkgs.overlays = [
+    #   (final: prev: {
+    #     heimdall = prev.heimdall.overrideAttrs (_: {
+    #       version = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
+    #       src = prev.fetchFromSourcehut {
+    #         owner = "~grimler";
+    #         repo = "Heimdall";
+    #         rev = "02b577ec774f2ce66bcb4cf96cf15d8d3d4c7720";
+    #         sha256 = "sha256-tcAE83CEHXCvHSn/S9pWu6pUiqGmukMifEadqPDTkQ0=";
+    #       };
+    #     });
+    #   })
+    # ];
 
     environment.systemPackages = with pkgs; [
       tor

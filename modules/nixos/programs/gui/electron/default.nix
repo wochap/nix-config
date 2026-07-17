@@ -7,7 +7,7 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
-        bruno = prev.runCommandNoCC "bruno" {
+        bruno = prev.runCommand "bruno" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
           makeWrapper ${prev.bruno}/bin/bruno $out/bin/bruno \
@@ -17,7 +17,7 @@ in {
           ln -sf ${prev.bruno}/share $out/share
         '';
 
-        freetube = prev.runCommandNoCC "freetube" {
+        freetube = prev.runCommand "freetube" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
           makeWrapper ${prev.freetube}/bin/freetube $out/bin/freetube \
@@ -30,13 +30,12 @@ in {
     ];
 
     environment.systemPackages = with pkgs; [
-      bitwarden
+      bitwarden-desktop
       bruno # like postman
       element-desktop
       freetube
       slack
       obsidian
-      inputs.figma-linux.packages.${system}.default
     ];
 
     _custom.hm = {

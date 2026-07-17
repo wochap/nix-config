@@ -13,7 +13,7 @@ in {
 
       programs.less = {
         enable = true;
-        keys = ''
+        config = ''
           f forw-line 4j
           b back-line 4k
         '';

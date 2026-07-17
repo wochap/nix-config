@@ -33,7 +33,7 @@ in {
         packages = with pkgs; [
           # NOTE: uncommenting causes rofi to slow down
           corefonts # basic fonts for office
-          vistafonts # more ms fonts
+          vista-fonts # more ms fonts
 
           # common
           inter
@@ -44,7 +44,7 @@ in {
           noto-fonts-cjk-sans # jp, kr, sc, tc, hk chars
 
           # emojis
-          noto-fonts-emoji
+          noto-fonts-color-emoji
           symbola # i18n
           twitter-color-emoji
         ];

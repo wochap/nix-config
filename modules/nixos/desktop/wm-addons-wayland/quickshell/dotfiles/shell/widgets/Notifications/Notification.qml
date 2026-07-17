@@ -187,8 +187,8 @@ Item {
     }
   }
 
-  RetainableLock {
-    object: root.notification.notification
-    locked: true
-  }
+  // RetainableLock {
+  //   object: root.notification.notification
+  //   locked: true
+  // }
 }

@@ -17,7 +17,8 @@ in {
         # glaxnimate
 
         # APPS MEDIA (Comment on first install)
-        stremio
+        stremio-linux-shell
+
         # nomacs # image viewer/editor
         # olive-editor # video editor
         # openshot-qt # video editor

@@ -1,21 +1,25 @@
-{ config, lib, inputs, ... }:
+{
+  config,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.lazygit;
   inherit (config._custom.globals) themeColorsLight themeColorsDark;
-in {
+in
+{
   options._custom.programs.lazygit.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     # TODO: wait for https://github.com/jesseduffield/lazygit/issues/4366
     _custom.programs.rod.config = {
       light.env = {
-        LG_CONFIG_FILE =
-          "$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/config-${themeColorsLight.flavour}.yml";
+        LG_CONFIG_FILE = "$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/config-${themeColorsLight.flavour}.yml";
       };
       dark.env = {
-        LG_CONFIG_FILE =
-          "$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/config-${themeColorsDark.flavour}.yml";
+        LG_CONFIG_FILE = "$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/config-${themeColorsDark.flavour}.yml";
       };
     };
 
@@ -41,6 +45,7 @@ in {
               "xdg-open {{filename}} >/dev/null";
           };
           gui = {
+            useHunkModeInStagingView = false;
             statusPanelView = "allBranchesLog";
             showCommandLog = false; # @ toggles it
             showBottomLine = false;
@@ -58,11 +63,12 @@ in {
           git = {
             autoFetch = false;
             overrideGpg = true;
-            paging = {
-              colorArg = "always";
-              pager = ''
-                delta --detect-dark-light=always --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"'';
-            };
+            pagers = [
+              {
+                colorArg = "always";
+                pager = ''delta --detect-dark-light=always --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"'';
+              }
+            ];
           };
           keybinding = {
             universal = {
@@ -71,12 +77,15 @@ in {
               gotoTop = "g";
               gotoBottom = "G";
             };
-            commits = { viewResetOptions = "E"; };
-            stash = { popStash = "<space>"; };
+            commits = {
+              viewResetOptions = "E";
+            };
+            stash = {
+              popStash = "<space>";
+            };
           };
         };
       };
     };
   };
 }
-

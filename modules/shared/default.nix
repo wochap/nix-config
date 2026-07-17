@@ -45,6 +45,7 @@
 
     ./programs/tui/amfora
     ./programs/tui/bottom
+    ./programs/tui/claude-code
     ./programs/tui/less
     ./programs/tui/lynx
     ./programs/tui/neovim

@@ -11,6 +11,7 @@ Singleton {
   readonly property url cache: `${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}`
   property string shellConfig: `${config}/quickshell`
   property string notificationsCache: `${cache}/notifications.json`
+  property string notificationsimageCache: `${cache}/images`
 
   function stringify(path: url): string {
     let str = path.toString();

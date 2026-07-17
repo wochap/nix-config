@@ -17,7 +17,7 @@ in {
 
     _custom.hm = {
       home.packages = with pkgs; [
-        inputs.hyprlock.packages.${system}.hyprlock
+        inputs.hyprlock.packages.${stdenv.hostPlatform.system}.hyprlock
         hyprlock-start
       ];
 

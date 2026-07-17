@@ -1,7 +1,18 @@
-{ lib, pkgs, ... }:
-
 {
-  config = {
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+
+let
+  cfg = config._custom.system.others;
+  inherit (config._custom.globals) isSandbox;
+in
+{
+  options._custom.system.others.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     # minimum amount of swapping without disabling it entirely
     boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 1;
 
@@ -19,14 +30,12 @@
     programs.bash.vteIntegration = lib.mkDefault true;
     programs.zsh.vteIntegration = lib.mkDefault true;
 
-    services.xserver = {
+    services.xserver = lib.mkIf (!isSandbox) {
       enable = true;
       exportConfiguration = true;
     };
 
-    systemd.extraConfig = ''
-      DefaultTimeoutStopSec=30s
-    '';
+    systemd.settings.Manager.DefaultTimeoutStopSec = "30s";
 
     services.journald.extraConfig = ''
       SystemMaxUse=1G
@@ -37,7 +46,7 @@
 
     # run sysctl after the graphical session has started
     # otherwise, rules in sysctl files won't be applied
-    systemd.services.custom-sysctl = {
+    systemd.services.custom-sysctl = lib.mkIf (!isSandbox) {
       description = "Apply sysctl settings";
       wantedBy = [ "graphical.target" ];
       after = [ "graphical.target" ];
@@ -57,4 +66,3 @@
     '';
   };
 }
-

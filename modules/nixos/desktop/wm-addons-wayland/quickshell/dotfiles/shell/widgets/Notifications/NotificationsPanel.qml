@@ -91,7 +91,7 @@ PanelWindow {
       }
 
       // body
-      StyledListView {
+      SmoothListView {
         popIn: true
         visible: SNotifications.list.length > 0
         Layout.fillWidth: true
@@ -111,7 +111,6 @@ PanelWindow {
           anchors.left: parent?.left
           anchors.right: parent?.right
         }
-        ScrollIndicator.vertical: ScrollIndicator {}
       }
 
       StyledText {

@@ -38,7 +38,7 @@ in {
     services.greetd = {
       enable = true;
       settings = {
-        terminal.vt = "1";
+        terminal.vt = 1;
         restart = !cfg.enableAutoLogin;
         # TODO: greetd autologin doesn't unlock keyring
         # source: https://github.com/viperML/dotfiles/blob/77c91f02baed99bb0e62d9a5d8bb8ed02d50b035/misc/nixos/greetd/default.nix#L27
@@ -51,7 +51,7 @@ in {
         default_session = {
           command = ''
             ${
-              lib.getExe pkgs.greetd.tuigreet
+              lib.getExe pkgs.tuigreet
             } --user-menu --window-padding 2 --remember-session --time --time-format "%a %d %b %H:%M %Y" --sessions "${sessionsBasePath}/share/wayland-sessions" --xsessions "${sessionsBasePath}/share/xsessions"'';
           user = "greeter";
         };

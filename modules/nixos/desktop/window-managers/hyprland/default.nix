@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, system, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.desktop.hyprland;
@@ -11,14 +11,16 @@ let
       (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}") colors);
   catppuccin-hyprland-light-theme = mkThemeHyprland themeColorsLight;
   catppuccin-hyprland-dark-theme = mkThemeHyprland themeColorsDark;
-  hyprplugins = inputs.hyprland-plugins.packages.${pkgs.system};
-  hyprland-final = inputs.hyprland.packages."${system}".hyprland;
+  hyprland-guiutils =
+    inputs.hyprland-guiutils.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-guiutils;
+  hyprplugins =
+    inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
+  hyprland-final =
+    inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".hyprland;
   hyprland-xdph-final =
-    inputs.hyprland.packages."${system}".xdg-desktop-portal-hyprland;
+    inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".xdg-desktop-portal-hyprland;
   hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad"
     (builtins.readFile ./scripts/hyprland-scratchpad.sh);
-  hyprland-monocle = pkgs.writeScriptBin "hyprland-monocle"
-    (builtins.readFile ./scripts/hyprland-monocle.sh);
   hyprland-previous-ws = pkgs.writeScriptBin "hyprland-previous-ws"
     (builtins.readFile ./scripts/hyprland-previous-ws.sh);
   hyprland-socket = pkgs.writeScriptBin "hyprland-socket"
@@ -41,13 +43,14 @@ in {
   config = lib.mkIf cfg.enable {
     environment.etc."greetd/environments".text = lib.mkAfter ''
       Hyprland
+      start-hyprland
     '';
 
     _custom.desktop.uwsm.waylandCompositors = {
       hyprland = {
         prettyName = "hyprland";
         comment = "Hyprland compositor managed by UWSM";
-        binPath = "/run/current-system/sw/bin/Hyprland";
+        binPath = "/run/current-system/sw/bin/start-hyprland";
         xdgCurrentDesktop = "Hyprland";
       };
     };
@@ -75,14 +78,14 @@ in {
     _custom.hm = {
       home.packages = with pkgs; [
         hyprland-scratchpad
-        hyprland-monocle
         hyprland-previous-ws
         hyprland-socket
-        inputs.pyprland.packages.${pkgs.system}.default
+        inputs.pyprland.packages.${stdenv.hostPlatform.system}.default
         hyprland-qt-support
-        hyprland-qtutils
+        hyprland-guiutils
         hyprpaper
-        nixpkgs-unstable.hyprshade
+        hyprshade # NOTE: v5 is buggy
+        hyprshutdown
       ];
 
       xdg.configFile = {
@@ -131,7 +134,7 @@ in {
         "hypr/shaders".source =
           relativeSymlink configDirectory ./dotfiles/shaders;
 
-        "hypr/pyprland.toml".source =
+        "pypr/config.toml".source =
           relativeSymlink configDirectory ./dotfiles/pyprland.toml;
 
         "uwsm/env-hyprland".text = ''
@@ -153,16 +156,17 @@ in {
         package = hyprland-final;
         portalPackage = null;
         systemd.enable = false;
+        configType = "hyprlang";
         plugins = with hyprplugins;
           [
             # better preview all workspaces
-            # inputs.hyprspace.packages.${pkgs.system}.Hyprspace
+            # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
 
             # preview all workspaces
             # hyprexpo
 
             # touch screen support gestures
-            # inputs.hyprgrass.packages.${pkgs.system}.default
+            # inputs.hyprgrass.packages.${pkgs.stdenv.hostPlatform.system}.default
           ];
         extraConfig = ''
           source=~/.config/hypr/colors.conf

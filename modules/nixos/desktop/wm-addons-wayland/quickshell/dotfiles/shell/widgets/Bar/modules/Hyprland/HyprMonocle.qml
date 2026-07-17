@@ -14,7 +14,7 @@ Loader {
   property var workspace: SHyprland.workspacesById[workspaceId]
   property var clients: SHyprland.clientsByWorkspaceId[workspaceId]?.filter?.(window => !window.floating)
   property int windowsCount: clients?.length ?? 0
-  property bool isMonocle: SHyprland.monocleState?.includes?.(workspaceId) ?? false
+  property bool isMonocle: workspace?.tiledLayout === "monocle"
 
   active: isMonocle
   visible: isMonocle

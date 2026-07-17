@@ -170,20 +170,24 @@ function toggle_scratchpad() {
 function toggle_in_scratchpad() {
   # move in or move out window from scratchpad
 
-  local focused_window_in_tmpscratchpad
+  local focused_window_in_tmpscratchpad window_address
   focused_window_in_tmpscratchpad=$(hyprctl clients -j | jq -r ".[] | select(.focusHistoryID == 0 and (.tags[]? | test(\"^tmpscratchpad\")))")
   if [ -n "$focused_window_in_tmpscratchpad" ]; then
     # focused window is in scratchpad
 
     # move out from scratchpad
-    local batch_args="dispatch tagwindow -tmpscratchpad;"
+    window_address=$(echo "$focused_window_in_tmpscratchpad" | jq -r ".address")
+    local batch_args="dispatch tagwindow -tmpscratchpad address:$window_address;"
     batch_args="$batch_args dispatch movetoworkspacesilent $current_ws;"
     hyprctl --batch "$batch_args" -q
   else
     local is_focused_window_grouped
     is_focused_window_grouped=$(hyprctl activewindow -j | jq '.grouped | length > 0')
+    # TODO: remove workaround (address:...)
+    # source https://github.com/hyprwm/Hyprland/discussions/14754
+    window_address=$(hyprctl activewindow -j | jq -r '.address')
     # move in to scratchpad
-    local batch_args="dispatch tagwindow +tmpscratchpad;"
+    local batch_args="dispatch tagwindow +tmpscratchpad address:$window_address;"
     if [ "$is_focused_window_grouped" = "true" ]; then
       batch_args="$batch_args dispatch moveoutofgroup active;"
     fi

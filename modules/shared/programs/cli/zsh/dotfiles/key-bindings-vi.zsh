@@ -33,7 +33,16 @@ function kill-blank-word() {
 }
 zle -N kill-blank-word
 
-function .recover-line() { LBUFFER+=$ZLE_LINE_ABORTED }
+typeset -g LAST_ABORTED_LINE=""
+# stash it, but never overwrite with an empty abort
+_stash-aborted-line() {
+  [[ -n $ZLE_LINE_ABORTED ]] && LAST_ABORTED_LINE=$ZLE_LINE_ABORTED
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _stash-aborted-line
+function .recover-line() {
+  LBUFFER+=$LAST_ABORTED_LINE
+}
 zle -N .recover-line
 
 custom-forward-char() {

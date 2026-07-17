@@ -8,10 +8,11 @@ let
   hmConfig = config.home-manager.users.${userName};
 
   # source: https://aur.archlinux.org/packages/libadwaita-without-adwaita-git
+  # patch for libadwaita v1.9.1
   libadwaitaWithoutAdwaitaAurRepo = pkgs.fetchgit {
-    url = "https://aur.archlinux.org/libadwaita-without-adwaita-git.git";
-    rev = "d98b5bc68b2eba95104ee36661af788701f43219";
-    hash = "sha256-a2yzF9kqycEo44Hmy/Tg+c2UpONiOiU/7KAnCMdpTFY=";
+    url = "https://aur.archlinux.org/libadwaita-without-adwaita.git";
+    rev = "b658afcefb513a68d67f146c76045b4479b85029";
+    hash = "sha256-tL+yAJf3UZkXd/cSQBkkgJ0yjobKPkWi4p1gS4gEEbA=";
   };
   catppuccin-adw-light-theme-path =
     "${inputs.catppuccin-adw}/adw/themes/${themeColorsLight.flavour}/catppuccin-${themeColorsLight.flavour}-${cfg.theme.accent}.css";
@@ -123,6 +124,7 @@ in {
       systemPackages = with pkgs; [
         dconf-editor
         nwg-look
+        libcanberra-gtk3 # play XDG Sound Theme
 
         # gtk deps
         glib # for gsettings program
@@ -138,7 +140,7 @@ in {
         whitesur-icon-theme
         numix-icon-theme-circle
         numix-icon-theme-square
-        xfce.xfce4-icon-theme
+        xfce4-icon-theme
         reversal-icon-theme
         adwaita-icon-theme
         hicolor-icon-theme
@@ -183,6 +185,9 @@ in {
         # Open GTK inspector with Ctrl + Shift + D
         # GTK_DEBUG=interactive <app>
         "org/gtk/Settings/Debug".enable-inspector-keybinding = true;
+
+        # required by canberra-gtk-play
+        "org/gnome/desktop/sound".event-sounds = true;
       };
 
       # Prevent home-manager service to fail
@@ -233,6 +238,7 @@ in {
             gtk-xft-antialias = 1;
             gtk-xft-hinting = 1;
             gtk-xft-hintstyle = "hintfull";
+            gtk-enable-event-sounds = 1; # required by canberra-gtk-play
           };
           bookmarks = [
             "file://${hmConfig.home.homeDirectory}/Downloads"
@@ -245,7 +251,10 @@ in {
             "file://${hmConfig.home.homeDirectory}/Sync"
           ];
         };
-        gtk4.extraCss = extraCss;
+        gtk4 = {
+          theme = hmConfig.gtk.theme;
+          extraCss = extraCss;
+        };
       };
     };
   };

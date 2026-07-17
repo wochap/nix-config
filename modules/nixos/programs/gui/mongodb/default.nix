@@ -7,7 +7,7 @@ in {
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
-        mongodb-compass = prev.runCommandNoCC "mongodb-compass" {
+        mongodb-compass = prev.runCommand "mongodb-compass" {
           buildInputs = with pkgs; [ makeWrapper ];
         } ''
           makeWrapper ${prev.mongodb-compass}/bin/mongodb-compass $out/bin/mongodb-compass \
@@ -23,9 +23,7 @@ in {
     environment.systemPackages = with pkgs; [
       mongodb-compass
       mongodb-tools
-      _custom.nodePackages."migrate-mongo-9.0.0"
-
-      redisinsight
+      nixpkgs-unstable.redisinsight
 
       # PostgreSQL
       postgresql

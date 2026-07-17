@@ -21,10 +21,10 @@ in {
               libpulseaudio
               libvorbis
               stdenv.cc.cc.lib
-              xorg.libXScrnSaver
-              xorg.libXcursor
-              xorg.libXi
-              xorg.libXinerama
+              libxscrnsaver
+              libxcursor
+              libxi
+              libxinerama
             ];
         };
       })
@@ -42,7 +42,7 @@ in {
       gamescopeSession.enable = true;
       extest.enable = true;
       # extraCompatPackages = with pkgs;
-      #   [ inputs.nix-gaming.packages.${system}.proton-ge ];
+      #   [ inputs.nix-gaming.packages.${stdenv.hostPlatform.system}.proton-ge ];
     };
 
     hardware.steam-hardware.enable = true;

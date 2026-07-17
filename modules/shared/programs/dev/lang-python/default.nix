@@ -32,7 +32,15 @@ in {
   options._custom.programs.lang-python.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ pipx poetry pipenv python-final ];
+    environment.systemPackages = with pkgs; [
+      (pipx.overridePythonAttrs (old: {
+        disabledTests = (old.disabledTests or [ ])
+          ++ [ "test_fix_package_name" "test_parse_specifier_for_metadata" ];
+      }))
+      poetry
+      pipenv
+      python-final
+    ];
 
     _custom.hm = {
       # adds ~/.local/bin folder to the PATH env var

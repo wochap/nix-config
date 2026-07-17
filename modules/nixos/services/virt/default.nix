@@ -20,7 +20,7 @@ in {
       nftables
       qemu
       virt-manager
-      xorg.xhost
+      xhost
     ];
 
     # this is needed to get a bridge with DHCP enabled

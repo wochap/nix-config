@@ -33,7 +33,7 @@ in {
         Service = {
           Type = "oneshot";
           ExecStart =
-            "${pkgs.libnotify}/bin/notify-send --app-name mbsync --icon apport 'Service failed'";
+            "${pkgs.libnotify}/bin/notify-send --app-name mbsync --app-icon apport --icon apport --replace-id=696 --hint=int:transient:1 'Service failed'";
         };
       };
     };

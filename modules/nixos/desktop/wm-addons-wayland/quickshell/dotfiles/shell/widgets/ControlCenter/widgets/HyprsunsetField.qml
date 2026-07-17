@@ -23,16 +23,16 @@ RowLayout {
     weight: Font.Light
   }
 
-  StyledSlider {
+  CustomSlider {
     id: slider
 
     Layout.fillWidth: true
-    from: 3000
-    to: 6500
-    stepSize: 100
+    implicitHeight: 2
+    minimum: 3000
+    maximum: 6500
+    step: 100
     value: SHyprsunset.temperature
-    snapMode: Slider.SnapAlways
-    onValueChanged: {
+    onSliderValueChanged: {
       if (!root.hasCompleted || value === 0) {
         return;
       }

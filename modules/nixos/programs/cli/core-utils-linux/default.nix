@@ -17,7 +17,7 @@ in {
       dnsutils # test dns
       efivar # manipulate efi vars
       evtest # input debugging
-      glxinfo # opengl utils
+      mesa-demos # opengl utils
       inotify-tools # C module, inotifywait
       inxi # log OS info
       keyutils # inspect kernel keyring
@@ -36,8 +36,8 @@ in {
       wev # wayland like xev
       wirelesstools
       wtype # wayland like xdotool
-      xorg.xdpyinfo
-      xorg.xev # get pressed key name
+      xdpyinfo
+      xev # get pressed key name
       lazyjournal # journalctl tui
       systemctl-tui # systemd/systemctl tui
       iproute2 # brctl, etc

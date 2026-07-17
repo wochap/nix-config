@@ -103,6 +103,8 @@ in {
         enable = true;
         package = cfg.package;
 
+        initLua = "";
+        sideloadInitLua = true;
         withNodeJs = false;
         withPython3 = false;
         withRuby = false;

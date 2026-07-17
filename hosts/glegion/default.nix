@@ -40,7 +40,6 @@ in {
     _custom.programs.electron.enable = true;
     _custom.programs.gtk.enable = true;
     _custom.programs.imv.enable = true;
-    _custom.programs.imv.enableInsecureFreeImage = true;
     _custom.programs.mongodb.enable = true;
     _custom.programs.obs-studio.enable = true;
     _custom.programs.thunar.enable = true;
@@ -114,6 +113,7 @@ in {
     _custom.programs.tmux.systemdEnable = true;
     _custom.programs.urlscan.enable = true;
     _custom.programs.youtube.enable = true;
+    _custom.programs.claude-code.enable = true;
 
     _custom.services.android.enable = true;
     _custom.services.android.sdk.enable = false;
@@ -137,7 +137,7 @@ in {
     _custom.services.virt.enable = false;
     _custom.services.waydroid.enable = false;
 
-    _custom.gaming.emulators.enable = true;
+    _custom.gaming.emulators.enable = false;
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
 
@@ -194,6 +194,7 @@ in {
     _custom.archetypes.wm-wayland-desktop.enable = true;
     _custom.security.gnome-keyring.enable = true;
     _custom.security.kwallet.enable = false;
+    _custom.sandbox.enable = true;
 
     # Setup keyboard
     services.xserver.xkb = {

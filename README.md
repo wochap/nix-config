@@ -2,10 +2,15 @@
 
 [NixOS](https://nixos.org/) and [home-manager](https://github.com/nix-community/home-manager) config files are merged.
 
-## DWL
+<details>
+  <summary>DWL</summary>
 
-![](https://i.imgur.com/TmgUC5J.jpg)
-![](https://i.imgur.com/jBtseU6.jpg)
+  [DWL](https://github.com/wochap/nix-config/tree/dwl-ags)
+
+  ![](https://i.imgur.com/TmgUC5J.jpg)
+  ![](https://i.imgur.com/jBtseU6.jpg)
+</details>
+
 
 ## Installaion
 
@@ -61,6 +66,11 @@ Reboot into NixOS, login with the user you created
    ```
    [safe]
      directory = /home/gean/nix-config
+     directory = /home/gean/.cache/nix/tarball-cache-v2
+   ```
+
+   ```
+   $ sudo chown -R gean:gean ~/.cache/nix
    ```
 
 1. Rebuild nixos with the host's specific config, for example, heres's a rebuild for my `gdesktop`
@@ -122,11 +132,19 @@ Reboot into NixOS, login with the user you created
    ```sh
    $ sudo touch /etc/security/autologin.conf
    ```
+1. Install npm packages
+
+  ```sh
+  npm i -g webtorrent-cli gulp migrate-mongo claude-code @fission-ai/openspec@latest
+
+  # required by personal nvim config
+  npm i -g ts-node @styled/typescript-styled-plugin
+  ```
 
 1. Setup Syncthing (http://localhost:8384)
 1. Setup desktop wallpaper (optional)
    ```
-   $ swww img ~/Pictures/backgrounds/<IMAGE_NAME>
+   $ awww img ~/Pictures/backgrounds/<IMAGE_NAME>
    ```
 1. Setup [Neovim](https://github.com/wochap/nvim) configuration
 1. Setup qt look and feel
@@ -213,6 +231,7 @@ $ nix eval .#nixosConfigurations.laptop.config.services.gnome.gcr-ssh-agent.enab
 $ sudo lsof /dev/nvidia*
 
 # check if nvidia is deep sleep
+# D3cold is Deep Sleep
 $ watch -n 3 cat /sys/class/drm/card*/device/power_state
 ```
 

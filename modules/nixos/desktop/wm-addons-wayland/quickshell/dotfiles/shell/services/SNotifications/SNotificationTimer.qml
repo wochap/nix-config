@@ -20,7 +20,7 @@ Scope {
     paused: root.paused
     onFinished: {
       root.timeout(root.notificationId);
-      destroy();
+      root.destroy();
     }
   }
 }

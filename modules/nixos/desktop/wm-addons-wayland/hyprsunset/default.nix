@@ -3,7 +3,7 @@
 let
   cfg = config._custom.desktop.hyprsunset;
   inherit (config._custom.globals) configDirectory;
-  hyprsunset-final = inputs.hyprsunset.packages.${pkgs.system}.hyprsunset;
+  hyprsunset-final = inputs.hyprsunset.packages.${pkgs.stdenv.hostPlatform.system}.hyprsunset;
 in {
   options._custom.desktop.hyprsunset.enable = lib.mkEnableOption { };
 

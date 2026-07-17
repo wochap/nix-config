@@ -43,7 +43,7 @@ main() {
   kill_hyprpicker
   result=$(wl-paste)
   if [[ -n "$result" ]]; then
-    notify-send --app-name="ocr" --expire-time=5000 --replace-id=689 "OCR Completed" "Text Extracted and Copied"
+    notify-send --app-name="ocr" --replace-id=689 --hint=int:transient:1 "OCR Completed" "Text Extracted and Copied"
   fi
 }
 

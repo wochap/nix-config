@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, system, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   cfg = config._custom.services.android;
@@ -8,28 +8,29 @@ let
   phoneId = "04e8";
 
   android-studio-stable = pkgs.androidStudioPackages.stable;
-  android-sdk = inputs.android-nixpkgs.sdk.${system} (sdkPkgs:
-    with sdkPkgs; [
-      cmdline-tools-latest
-      emulator
-      platform-tools
+  android-sdk = inputs.android-nixpkgs.sdk.${pkgs.stdenv.hostPlatform.system}
+    (sdkPkgs:
+      with sdkPkgs; [
+        cmdline-tools-latest
+        emulator
+        platform-tools
 
-      # Android 30
-      build-tools-30-0-2
-      platforms-android-30
+        # Android 30
+        build-tools-30-0-2
+        platforms-android-30
 
-      # Required by android emulator
-      sources-android-30
-      system-images-android-30-google-apis-playstore-x86
-      system-images-android-30-google-apis-x86
+        # Required by android emulator
+        sources-android-30
+        system-images-android-30-google-apis-playstore-x86
+        system-images-android-30-google-apis-x86
 
-      # Android 29
-      # build-tools-29-0-3
-      # platforms-android-29
-      # sources-android-29
-      # system-images-android-29-google-apis-playstore-x86-64
-      # system-images-android-29-google-apis-x86-64
-    ]);
+        # Android 29
+        # build-tools-29-0-3
+        # platforms-android-29
+        # sources-android-29
+        # system-images-android-29-google-apis-playstore-x86-64
+        # system-images-android-29-google-apis-x86-64
+      ]);
 in {
   options._custom.services.android = {
     enable = lib.mkEnableOption { };
@@ -38,7 +39,6 @@ in {
 
   config = lib.mkIf cfg.enable {
     # Enable android device debugging
-    programs.adb.enable = true;
     _custom.user.extraGroups = [ "adbusers" ];
     services.udev.extraRules = ''
       SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", TAG+="uaccess"
@@ -51,6 +51,7 @@ in {
             "${android-sdk}/share/android-sdk";
 
           packages = with pkgs; [
+            android-tools
             android-sdk
             android-studio-stable
             gradle

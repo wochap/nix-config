@@ -87,7 +87,7 @@ in {
     # required by cpupower-gui
     services.dbus.packages = [ pkgs.cpupower-gui ];
     systemd = {
-      sleep.extraConfig = "HibernateDelaySec=2h";
+      sleep.settings.Sleep.HibernateDelaySec = "2h";
       user.services.cpupower-gui-user =
         lib.mkIf (builtins.length cfg.cpupowerGuiArgs > 0) {
           description = "Apply cpupower-gui config at user login";

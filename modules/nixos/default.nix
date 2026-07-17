@@ -31,7 +31,6 @@
     ./desktop/wm-addons/uwsm
     ./desktop/wm-addons/xdg
 
-    ./desktop/wm-addons-wayland/ags
     ./desktop/wm-addons-wayland/cliphist
     ./desktop/wm-addons-wayland/electron-support
     ./desktop/wm-addons-wayland/gammastep

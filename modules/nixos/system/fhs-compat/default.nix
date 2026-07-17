@@ -8,7 +8,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      inputs.nix-alien.packages.${pkgs.system}.nix-alien
+      inputs.nix-alien.packages.${stdenv.hostPlatform.system}.nix-alien
       appimage-run
       # NOTE: you can also run non nix pkgs apps with `steam-run`
     ];

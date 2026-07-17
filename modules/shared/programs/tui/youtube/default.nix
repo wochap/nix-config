@@ -8,7 +8,7 @@ in {
     _custom.hm = {
       home = {
         packages = with pkgs; [
-          perl538Packages.WWWYoutubeViewer
+          perl5Packages.WWWYoutubeViewer
           nixpkgs-unstable.yt-dlp
         ];
         shellAliases = {

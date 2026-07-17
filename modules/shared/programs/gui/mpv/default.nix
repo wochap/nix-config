@@ -66,7 +66,7 @@ in {
           mpvScripts.uosc
           mpvScripts.cutter
           mpvScripts.quality-menu
-          mpvScripts.mpv-cheatsheet
+          # mpvScripts.mpv-cheatsheet
           # pkgs.mpvScripts.sponsorblock
         ];
       };

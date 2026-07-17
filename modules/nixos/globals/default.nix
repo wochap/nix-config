@@ -27,5 +27,7 @@
       example = "xorg"; # xorg, wayland
       description = "Display server type, used by common config files.";
     };
+
+    isSandbox = lib.mkEnableOption { };
   };
 }

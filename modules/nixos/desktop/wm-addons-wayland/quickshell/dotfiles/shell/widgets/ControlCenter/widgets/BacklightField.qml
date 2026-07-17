@@ -16,16 +16,16 @@ RowLayout {
     weight: Font.Light
   }
 
-  StyledSlider {
+  CustomSlider {
     id: slider
 
     Layout.fillWidth: true
-    from: 0
-    to: 100
-    stepSize: 5
+    implicitHeight: 2
+    minimum: 0
+    maximum: 100
+    step: 5
     value: SBacklight.percentage
-    snapMode: Slider.SnapAlways
-    onValueChanged: {
+    onSliderValueChanged: {
       if (SBacklight.percentage === value) {
         return;
       }

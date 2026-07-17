@@ -33,6 +33,8 @@ Singleton {
   readonly property int defaultPopupTimeout: 5000
   property int idOffset // ensure unique notification id
   property bool isPanelOpen: false
+  property real lastSoundPlayedTime: 0
+  readonly property int soundCooldownMs: 1000 // Only play a sound at most once per second
 
   // Whenever a state changes, re-evaluate the notification queue.
   onIsSilentChanged: processQueues()
@@ -74,6 +76,19 @@ Singleton {
 
     // Create timers for the newly added popups.
     notificationsToMove.forEach(notification => {
+      const hints = notification.notification?.hints ?? {};
+      const wantsCustomSound = !!hints["custom-sound"];
+      const suppressSound = !!hints["suppress-sound"];
+
+      if (wantsCustomSound && !suppressSound) {
+        const now = Date.now();
+        // Only play if enough time has passed since the last sound
+        if (now - root.lastSoundPlayedTime > root.soundCooldownMs) {
+          Quickshell.execDetached(["canberra-gtk-play", "-i", "message"]);
+          root.lastSoundPlayedTime = now;
+        }
+      }
+
       if (notification?.notification?.expireTimeout !== 0) {
         notification.timer = notificationTimerComponent.createObject(root, {
           "notificationId": notification.notificationId,
@@ -87,6 +102,8 @@ Singleton {
   // Removes a notification entirely from the system.
   // Called when the user explicitly dismisses it.
   function discardNotification(id) {
+    const notificationToDiscard = root.popupList.find(n => n.notificationId === id) || root.list.find(n => n.notificationId === id);
+
     // Create new lists by filtering out the discarded notification.
     root.list = root.list.filter(n => n.notificationId !== id);
     root.popupList = root.popupList.filter(n => n.notificationId !== id);
@@ -96,6 +113,13 @@ Singleton {
     if (notificationServerIndex !== -1) {
       notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
     }
+    // // Free memory
+    // if (notificationToDiscard) {
+    //   if (notificationToDiscard.timer) {
+    //     notificationToDiscard.timer.destroy();
+    //   }
+    //   notificationToDiscard.destroy();
+    // }
 
     // Save changes and check if a new popup can be shown.
     notificationFileView.setText(root.stringifyList(root.list));
@@ -121,13 +145,35 @@ Singleton {
     const timedOutNotification = root.popupList.find(n => n.notificationId === id);
 
     if (timedOutNotification) {
+      // // Free memory
+      // if (timedOutNotification.timer) {
+      //   timedOutNotification.timer.destroy();
+      // }
+
       // Create a new popupList without the timed-out notification.
       root.popupList = root.popupList.filter(n => n.notificationId !== id);
-      // Create a new history list with the timed-out notification at the beginning.
-      root.list = [timedOutNotification, ...root.list];
+      if (!timedOutNotification.isTransient) {
+        // If the app explicitly requested a timeout, its action listener is probably dead.
+        // Overwrite the actions array to remove the dead buttons before saving to history.
+        if (timedOutNotification.notification && timedOutNotification.notification.expireTimeout > 0) {
+          timedOutNotification.actions = [];
+        }
 
-      // Persist the updated history list.
-      notificationFileView.setText(root.stringifyList(root.list));
+        // Create a new history list with the timed-out notification at the beginning.
+        root.list = [timedOutNotification, ...root.list];
+
+        // Persist the updated history list.
+        notificationFileView.setText(root.stringifyList(root.list));
+      } else {
+        // Dismiss transient from server and free memory
+        const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(n => n.id + root.idOffset === id);
+        if (notificationServerIndex !== -1) {
+          notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
+        }
+
+        // // Free memory
+        // timedOutNotification.destroy();
+      }
     }
 
     // A space has opened up, so process the queue for the next notification.
@@ -142,6 +188,12 @@ Singleton {
       if (notificationServerIndex !== -1) {
         notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
       }
+
+      // // Free memory
+      // if (popup.timer) {
+      //   popup.timer.destroy();
+      // }
+      // popup.destroy();
     });
 
     // Clear the list of popups.
@@ -157,8 +209,31 @@ Singleton {
       return;
     }
 
-    // Move all current popups to the main history list.
-    root.list = [...root.popupList, ...root.list];
+    // Move all non-transient popups to the main history list.
+    const nonTransientPopups = [];
+    root.popupList.forEach(popup => {
+      if (popup.timer) {
+        // // Free memory
+        // popup.timer.destroy();
+      }
+      if (!popup.isTransient) {
+        // Strip actions from explicitly timed-out apps
+        if (popup.notification && popup.notification.expireTimeout > 0) {
+          popup.actions = [];
+        }
+
+        nonTransientPopups.push(popup);
+      } else {
+        const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(n => n.id + root.idOffset === popup.notificationId);
+        if (notificationServerIndex !== -1) {
+          notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
+        }
+
+        // // Free memory
+        // popup.destroy();
+      }
+    });
+    root.list = [...nonTransientPopups, ...root.list];
 
     // Clear the list of popups.
     root.popupList = [];
@@ -206,7 +281,8 @@ Singleton {
       const _notification = notificationComponent.createObject(root, {
         "notificationId": notification.id + root.idOffset,
         "notification": notification,
-        "time": Date.now()
+        "time": Date.now(),
+        "isTransient": notification.transient
       });
 
       // Add to the incoming queue by creating a new array.

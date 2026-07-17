@@ -36,5 +36,5 @@ selected=$(
     --preview-window "left:50%:noborder"
 )
 if [[ -n "$selected" ]]; then
-  swww img "$selected"
+  awww img "$selected"
 fi

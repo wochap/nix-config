@@ -27,7 +27,7 @@ in {
         extraPackages = with pkgs;
           [
             # dragdrop dependencies
-            xdragon
+            dragon-drop
 
             # nuke dependencies
             atool # file archives
@@ -50,7 +50,7 @@ in {
             imagemagick
             mediainfo
             mktemp
-            poppler_utils
+            poppler-utils
             unzip
           ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer ];
         plugins = {

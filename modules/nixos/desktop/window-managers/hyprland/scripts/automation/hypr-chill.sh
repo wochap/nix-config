@@ -11,8 +11,8 @@ export TRANSPARENT=true
 # TODO: manually run `export TRANSPARENT=true`
 if [[ "$current_scheme" == "dark" ]]; then
   footclient --app-id=footclient-chill --override colors.alpha=0.75 &
-  # footclient --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=1 &
-  # foot --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=1 &
+  # footclient --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=dark &
+  # foot --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=dark &
 else
   kitty --app-id=kitty-chill --override background_opacity=0.75 &
 fi

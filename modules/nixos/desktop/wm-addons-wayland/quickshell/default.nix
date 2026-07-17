@@ -6,7 +6,7 @@ let
     themeColorsLight themeColorsDark preferDark configDirectory userName;
   hmConfig = config.home-manager.users.${userName};
 
-  quickshell-final = inputs.quickshell.packages.${pkgs.system}.default;
+  quickshell-final = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default;
   shell-capslock = pkgs.writeScriptBin "shell-capslock"
     (builtins.readFile ./scripts/shell-capslock.sh);
   shell-pipewire = pkgs.writeScriptBin "shell-pipewire"
@@ -34,6 +34,12 @@ let
     (builtins.readFile ./scripts/shell-steam-icons.sh);
   shell-theme = pkgs.writeScriptBin "shell-theme"
     (builtins.readFile ./scripts/shell-theme.sh);
+  shell-recorder = pkgs.writeScriptBin "shell-recorder"
+    (builtins.readFile ./scripts/shell-recorder.sh);
+  shell-offlinemsmtp = pkgs.writeScriptBin "shell-offlinemsmtp"
+    (builtins.readFile ./scripts/shell-offlinemsmtp.sh);
+  shell-wireguard = pkgs.writeScriptBin "shell-wireguard"
+    (builtins.readFile ./scripts/shell-wireguard.sh);
   mkThemeQuickshell = themeColors:
     pkgs.writeText "theme.json" (builtins.toJSON themeColors);
   catppuccin-quickshell-light-theme-path = mkThemeQuickshell themeColorsLight;
@@ -77,6 +83,9 @@ in {
         shell-lock
         shell-steam-icons
         shell-theme
+        shell-recorder
+        shell-offlinemsmtp
+        shell-wireguard
         shell-battery-saver
       ];
 

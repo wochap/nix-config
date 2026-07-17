@@ -24,6 +24,7 @@ in {
 
       programs.firefox = {
         enable = true;
+        configPath = ".mozilla/firefox";
         package = firefox-final;
         arkenfox = {
           enable = true;

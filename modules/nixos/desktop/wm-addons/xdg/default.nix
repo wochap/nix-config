@@ -42,6 +42,7 @@ in {
       xdg.enable = true;
       xdg.systemDirs.data = [ "/usr/share" "/usr/local/share" ];
       xdg.userDirs.enable = true;
+      xdg.userDirs.setSessionVariables = true;
 
       xdg.configFile."mimeapps.list".force = true;
       xdg.configFile."xdg-desktop-portal-wlr/config".text = ''

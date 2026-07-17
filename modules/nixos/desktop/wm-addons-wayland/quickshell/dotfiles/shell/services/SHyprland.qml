@@ -25,9 +25,6 @@ Singleton {
   property var layers: ({})
   property string submap: ""
 
-  function updateMonocleState() {
-    getMonocleState.running = true;
-  }
   function updateClientList() {
     getActiveWindow.running = true;
     getClients.running = true;
@@ -43,7 +40,6 @@ Singleton {
     getActiveWorkspace.running = true;
   }
   function updateAll() {
-    updateMonocleState();
     updateClientList();
     updateMonitors();
     updateLayers();
@@ -161,28 +157,6 @@ Singleton {
       onStreamFinished: {
         const _activeWindow = JSON.parse(activeWindowCollector.text);
         root.activeWindow = _activeWindow?.address ? _activeWindow : null;
-      }
-    }
-  }
-
-  Process {
-    command: ["hyprland-monocle", "--listen"]
-    running: true
-    stdout: SplitParser {
-      onRead: data => {
-        root.updateMonocleState();
-      }
-    }
-  }
-
-  Process {
-    id: getMonocleState
-
-    command: ["hyprland-monocle", "--status"]
-    stdout: StdioCollector {
-      id: monocleStateCollector
-      onStreamFinished: {
-        root.monocleState = JSON.parse(monocleStateCollector.text);
       }
     }
   }

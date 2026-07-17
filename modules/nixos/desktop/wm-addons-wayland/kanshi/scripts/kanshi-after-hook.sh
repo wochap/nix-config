@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# restart ags
-# systemctl --user restart ags.service &
+# TODO: restart quickshell?
 
 # restart wallpaper
 systemctl --user restart swww-daemon.service &

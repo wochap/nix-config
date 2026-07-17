@@ -2,6 +2,7 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 import qs.config
+import qs.services.SNotifications
 import qs.widgets.common
 import qs.widgets.Bar.config
 import qs.widgets.Bar.modules
@@ -25,7 +26,7 @@ RowLayout {
     Layout.leftMargin: -3
     Layout.rightMargin: 0
     spacing: 0
-    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible)
+    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible || notifications.isVisible)
 
     Capslock {
       id: capslock
@@ -41,6 +42,40 @@ RowLayout {
 
     Timewarrior {
       id: timewarrior
+
+      Layout.fillHeight: true
+    }
+
+    Loader {
+      id: notifications
+
+      Layout.fillHeight: true
+      property bool isVisible: SNotifications.isSilent
+      active: isVisible
+      visible: isVisible
+      sourceComponent: Component {
+        WoosIcon {
+          icon: ""
+          size: Styles.font.pixelSize.larger
+          color: Theme.options.red
+        }
+      }
+    }
+
+    Offlinemsmtp {
+      id: offlinemsmtp
+
+      Layout.fillHeight: true
+    }
+
+    Recorder {
+      id: recorder
+
+      Layout.fillHeight: true
+    }
+
+    Wireguard {
+      id: wireguard
 
       Layout.fillHeight: true
     }

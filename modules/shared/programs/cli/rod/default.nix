@@ -34,7 +34,7 @@ in {
     };
 
     _custom.hm = {
-      home.packages = with pkgs; [ inputs.rod.packages."${system}".default ];
+      home.packages = with pkgs; [ inputs.rod.packages."${stdenv.hostPlatform.system}".default ];
 
       xdg.configFile."rod/config.toml" = {
         source = tomlFormat.generate "config.toml" cfg.config;

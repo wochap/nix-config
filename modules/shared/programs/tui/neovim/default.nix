@@ -4,6 +4,8 @@ let
   cfg = config._custom.programs.neovim;
   inherit (config._custom.globals) userName configDirectory;
   hmConfig = config.home-manager.users.${userName};
+  clear-nvim = pkgs.writeScriptBin "clear-nvim"
+    (builtins.readFile ./scripts/clear-nvim.sh);
   clear-nvim-state = pkgs.writeScriptBin "clear-nvim-state"
     # zsh
     ''
@@ -14,17 +16,18 @@ let
       ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/nvim-tree.log
     '';
 
-  # final-nvim = lib.mkDefault inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
-  final-nvim = pkgs.prevstable-neovim.neovim-unwrapped.overrideAttrs
-    (oldAttrs: rec {
-      patches = (oldAttrs.patches or [ ])
-        ++ [
-          # apply https://github.com/neovim/neovim/pull/35195
-          # source: https://github.com/nvim-neotest/neotest/issues/527
-          # source: https://github.com/neovim/neovim/issues/35071
-          ./neovim-mark-nvim_create_autocmd-as-api-fast.patch
-        ];
-    }); # 0.11.1
+  final-nvim = pkgs.prevstable-neovim.neovim-unwrapped;
+  # final-nvim = lib.mkDefault inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  # final-nvim = pkgs.prevstable-neovim.neovim-unwrapped.overrideAttrs
+  #   (oldAttrs: rec {
+  #     patches = (oldAttrs.patches or [ ])
+  #       ++ [
+  #         # apply https://github.com/neovim/neovim/pull/35195
+  #         # source: https://github.com/nvim-neotest/neotest/issues/527
+  #         # source: https://github.com/neovim/neovim/issues/35071
+  #         ./neovim-mark-nvim_create_autocmd-as-api-fast.patch
+  #       ];
+  #   }); # 0.11.1
 in {
   imports = [ ./options.nix ];
 
@@ -37,6 +40,7 @@ in {
 
     environment = {
       systemPackages = with pkgs; [
+        clear-nvim
         neovide # gui
 
         marksman # required by nvim-lspconfig
@@ -67,7 +71,7 @@ in {
       };
 
       programs.git = {
-        extraConfig.core.editor = "nvim";
+        settings.core.editor = "nvim";
         ignores = [ ".nolazy.lua" ".lazy.lua" ];
       };
 
