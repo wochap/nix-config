@@ -1,4 +1,4 @@
-{ pkgs, python3Packages, fetchFromGitHub, fetchurl }:
+{ pkgs, python3Packages, fetchFromGitHub, fetchurl, fetchpatch }:
 
 with python3Packages;
 let
@@ -18,7 +18,37 @@ let
     nativeBuildInputs = [ ];
     propagatedBuildInputs = [ ];
   };
-
+  taskw3 = buildPythonPackage rec {
+    pname = "taskw";
+    version = "2.0.0";
+    pyproject = true;
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-EQm9+b3nqbMqUAejAsh4MD/2UYi2QiWsdKMomkxUi90=";
+    };
+    doCheck = false;
+    patches = [
+      (fetchpatch {
+        url =
+          "https://raw.githubusercontent.com/NixOS/nixpkgs/refs/heads/master/pkgs/development/python-modules/taskw/support-relative-path-in-taskrc.patch";
+        sha256 = "sha256-9LXsGdB/g+YhvjP2rr1btsXBFo534htQXIq3bUSzER8=";
+      })
+      # Remove when https://github.com/ralphbean/taskw/pull/151 is merged.
+      (fetchpatch {
+        url =
+          "https://raw.githubusercontent.com/NixOS/nixpkgs/refs/heads/master/pkgs/development/python-modules/taskw/use-template-for-taskwarrior-install-path.patch";
+        sha256 = "sha256-onU6h1nMTPKNpPH1M0/uGYtFXE5Y9KuYg7mDSSMPSoM=";
+      })
+    ];
+    postPatch = ''
+      substituteInPlace taskw/warrior.py \
+        --replace '@@taskwarrior@@' '${pkgs.taskwarrior3}'
+    '';
+    build-system = [ setuptools ];
+    buildInputs = [ pkgs.taskwarrior3 distutils ];
+    dependencies = [ kitchen python-dateutil pytz ];
+    nativeCheckInputs = [ pytest7CheckHook ];
+  };
 in buildPythonPackage rec {
   pname = "bugwarrior";
   version = "2.0.0-unstable-2025-08-11";
@@ -55,7 +85,7 @@ in buildPythonPackage rec {
     python-dateutil
     pytz
     requests
-    taskw
+    taskw3
     tomli
     pygobject3
     pkgs.libnotify
