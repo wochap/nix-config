@@ -194,6 +194,7 @@ in {
     _custom.archetypes.wm-wayland-desktop.enable = true;
     _custom.security.gnome-keyring.enable = true;
     _custom.security.kwallet.enable = false;
+    _custom.sandbox.enable = true;
 
     # Setup keyboard
     services.xserver.xkb = {

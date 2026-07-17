@@ -194,6 +194,7 @@
             ./overlays
             ./modules/archetypes
             ./modules/nixos
+            ./modules/sandbox
             ./modules/shared
             ./packages
             (./. + "/hosts/${hostName}")
