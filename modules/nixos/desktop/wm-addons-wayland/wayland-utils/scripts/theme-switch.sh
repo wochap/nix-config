@@ -54,8 +54,7 @@ set_light_theme() {
   fi
 
   # quickshell
-  rm -rf ~/.config/quickshell/theme.json && sleep 0.1
-  cp -L ~/.config/quickshell/theme-light.json ~/.config/quickshell/theme.json
+  quickshell -p ~/.config/quickshell/shell ipc call theme setMode light
 
   # zsh
   killall -USR1 zsh
@@ -114,8 +113,7 @@ set_dark_theme() {
   fi
 
   # quickshell
-  rm -rf ~/.config/quickshell/theme.json && sleep 0.1
-  cp -L ~/.config/quickshell/theme-dark.json ~/.config/quickshell/theme.json
+  quickshell -p ~/.config/quickshell/shell ipc call theme setMode dark
 
   # zsh
   killall -USR1 zsh

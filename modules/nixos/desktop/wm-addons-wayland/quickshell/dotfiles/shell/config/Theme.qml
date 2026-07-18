@@ -101,4 +101,14 @@ Singleton {
       property string crust: "#11111b"
     }
   }
+
+  IpcHandler {
+    target: "theme"
+
+    function setMode(mode: string): void {
+      if (mode === "dark" || mode === "light") {
+        fileView.path = `${Qt.resolvedUrl(Paths.shellConfig)}/theme-${mode}.json`;
+      }
+    }
+  }
 }
