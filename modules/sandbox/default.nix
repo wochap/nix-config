@@ -65,9 +65,7 @@ in
         # %t resolves to the user's runtime dir (e.g., /run/user/1000)
         # --filter drops all access by default
         # --talk allows sending messages to the notification daemon
-        # ExecStart = "${pkgs.xdg-dbus-proxy}/bin/xdg-dbus-proxy unix:path=%t/bus %t/sandbox-bus --filter --talk=org.freedesktop.Notifications";
         ExecStart = "${pkgs.xdg-dbus-proxy}/bin/xdg-dbus-proxy unix:path=%t/bus %t/sandbox-bus --filter --talk=org.freedesktop.Notifications --call=org.freedesktop.portal.Desktop=org.freedesktop.portal.FileChooser --call=org.freedesktop.portal.Desktop=org.freedesktop.portal.OpenURI --call=org.freedesktop.portal.Desktop=org.freedesktop.portal.Settings";
-        # ExecStart = "${pkgs.xdg-dbus-proxy}/bin/xdg-dbus-proxy unix:path=%t/bus %t/sandbox-bus --filter --talk=ca.desrt.dconf --talk=org.freedesktop.Notifications --call=org.freedesktop.portal.Desktop=org.freedesktop.portal.FileChooser --call=org.freedesktop.portal.Desktop=org.freedesktop.portal.OpenURI --call=org.freedesktop.portal.Desktop=org.freedesktop.portal.Settings";
         Restart = "on-failure";
       };
     };
@@ -155,10 +153,9 @@ in
             _custom.sandbox.userName = userName;
 
             _custom.user = {
-              linger = true;
+              linger = true; # start user systemd services
               uid = cfg.hostUserUid;
               extraGroups = [
-                # "audio"
                 "render"
               ];
             };
