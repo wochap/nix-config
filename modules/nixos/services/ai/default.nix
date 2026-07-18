@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.services.ai;
@@ -26,7 +31,8 @@ let
       }
     ];
   };
-in {
+in
+{
   imports = [ ./ollama-webui-lite.nix ];
 
   options._custom.services.ai = {
@@ -45,10 +51,13 @@ in {
     # maybe this is unnecessary for ollama but necessary for docker
     # nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
-    environment.systemPackages = with pkgs;
-      [ python314Packages.huggingface-hub oterm ]
-      ++ lib.optionals cfg.enableWhisper
-      [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
+    environment.systemPackages =
+      with pkgs;
+      [
+        python314Packages.huggingface-hub
+        oterm
+      ]
+      ++ lib.optionals cfg.enableWhisper [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
       ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ];
 
     services.ollama = lib.mkIf cfg.enableOllama {
@@ -76,13 +85,12 @@ in {
       port = 11444;
     };
 
-    services.nextjs-ollama-llm-ui.enable =
-      lib.mkIf cfg.enableNextjsOllamaLlmUi {
-        enable = true;
-        package = pkgs.nextjs-ollama-llm-ui;
-        hostname = wochap-ssc.meta.address;
-        port = 11464;
-      };
+    services.nextjs-ollama-llm-ui.enable = lib.mkIf cfg.enableNextjsOllamaLlmUi {
+      enable = true;
+      package = pkgs.nextjs-ollama-llm-ui;
+      hostname = wochap-ssc.meta.address;
+      port = 11464;
+    };
 
     services.open-webui = lib.mkIf cfg.enableOpenWebui {
       enable = true;
@@ -90,7 +98,9 @@ in {
       openFirewall = false;
       host = wochap-ssc.meta.address;
       port = 11454;
-      environment = { WEBUI_AUTH = "False"; };
+      environment = {
+        WEBUI_AUTH = "False";
+      };
     };
 
     services.nginx = {
@@ -103,47 +113,46 @@ in {
     # you also might need to add certificate to your browsers
     security.pki.certificateFiles = [ "${wochap-ssc}/rootCA.pem" ];
 
-    networking.hosts.${wochap-ssc.meta.address} = [ ]
-      ++ lib.optional cfg.enableOllamaWebuiLite
-      "ollama.${wochap-ssc.meta.domain}"
-      ++ lib.optional cfg.enableNextjsOllamaLlmUi
-      "nolui.${wochap-ssc.meta.domain}"
+    networking.hosts.${wochap-ssc.meta.address} =
+      [ ]
+      ++ lib.optional cfg.enableOllamaWebuiLite "ollama.${wochap-ssc.meta.domain}"
+      ++ lib.optional cfg.enableNextjsOllamaLlmUi "nolui.${wochap-ssc.meta.domain}"
       ++ lib.optional cfg.enableOpenWebui "openwebui.${wochap-ssc.meta.domain}";
 
     services.nginx.virtualHosts = {
       # Make ollama-webui-lite accessible at https://ollama.wochap.local
-      "ollama.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOllamaWebuiLite
-        (makeVirtualHost config.services.ollama-webui-lite.port);
+      "ollama.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOllamaWebuiLite (
+        makeVirtualHost config.services.ollama-webui-lite.port
+      );
 
       # Make nextjs-ollama-llm-ui accessible at https://nolui.wochap.local
-      "nolui.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableNextjsOllamaLlmUi
-        (makeVirtualHost config.services.nextjs-ollama-llm-ui.port);
+      "nolui.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableNextjsOllamaLlmUi (
+        makeVirtualHost config.services.nextjs-ollama-llm-ui.port
+      );
 
       # Make openwebui accessible at https://openwebui.wochap.local
-      "openwebui.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOpenWebui
-        (makeVirtualHost config.services.open-webui.port);
+      "openwebui.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOpenWebui (
+        makeVirtualHost config.services.open-webui.port
+      );
     };
 
     _custom.hm = {
       home = {
         shellAliases = {
           # transform wav 16kHz to vtt
-          wis =
-            "whisper-cli --model ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin --output-vtt --file";
+          wis = "whisper-cli --model ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin --output-vtt --file";
           # downloads youtube video and also generates a wav 16kHz format
-          ytaw =
-            "yt-dlp -f bestvideo+bestaudio --keep-video --add-metadata --xattrs --merge-output-format mp4 --extract-audio --audio-format wav --postprocessor-args 'ffmpeg:-ar 16000'";
+          ytaw = "yt-dlp -f bestvideo+bestaudio --keep-video --add-metadata --xattrs --merge-output-format mp4 --extract-audio --audio-format wav --postprocessor-args 'ffmpeg:-ar 16000'";
         };
 
         file = {
           "Models/.keep".text = "";
-          ".aider.conf.yml".source = lib._custom.relativeSymlink configDirectory
-            ../../../../secrets/dotfiles/aider/.aider.conf.yml;
+          ".aider.conf.yml".source =
+            lib._custom.relativeSymlink configDirectory ../../../../secrets/dotfiles/aider/.aider.conf.yml;
         };
       };
 
-      programs.zsh.initContent =
-        lib.mkOrder 1000 (builtins.readFile ./dotfiles/whisper.zsh);
+      programs.zsh.initContent = lib.mkOrder 1000 (builtins.readFile ./dotfiles/whisper.zsh);
     };
   };
 }
