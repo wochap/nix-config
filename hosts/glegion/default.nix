@@ -4,8 +4,12 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
-in {
-  imports = [ ./hardware-configuration.nix ./hardware.nix ];
+in
+{
+  imports = [
+    ./hardware-configuration.nix
+    ./hardware.nix
+  ];
 
   config = {
     _custom.globals.userName = userName;
@@ -13,19 +17,7 @@ in {
     _custom.globals.configDirectory = configDirectory;
     _custom.globals.preferDark = true;
 
-    # fix blurry cursor on GTK 3 apps
-    # update catppuccin cursor NOMINAL_SIZE
-    # TODO: remove after updating gtk to 4.18
-    # source: https://blogs.kde.org/2024/10/09/cursor-size-problems-in-wayland-explained/#my-fix-or-shall-we-say-workaround
-    # source: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/7722
-    # source: https://bbs.archlinux.org/viewtopic.php?id=299624
-    _custom.desktop.cursor.name = "catppuccin-mocha-dark-cursors";
-    _custom.desktop.cursor.size = 24;
-
-    # reduce power usage
-    _custom.desktop.audio.enableEasyeffects = false;
-    _custom.desktop.audio.enableNoisetorch = false;
-    # _custom.desktop.mouseless.enable = true;
+    _custom.archetypes.wm-wayland-desktop.enable = true;
 
     _custom.programs.weeb.enable = true;
 
@@ -140,35 +132,17 @@ in {
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
 
+    _custom.security.gnome-keyring.enable = true;
+    _custom.security.kwallet.enable = false;
+
     _custom.system.apple.enable = false;
     _custom.system.windows.enable = true;
     _custom.system.windows.enableSamba = false;
 
-    _custom.desktop.networking.localSendEnable = true;
-    _custom.desktop.plymouth.enable = false;
-    _custom.desktop.xwaylandvideobridge.enable = false;
-    _custom.desktop.power-management.cpupowerGuiArgs =
-      [ "--performance" "profile" "Performance" ];
-    _custom.desktop.power-management.keyboard = {
-      enable = true;
-      idVendor = "048d";
-      idProduct = "c104";
-    };
     _custom.desktop.greetd.enable = true;
     _custom.desktop.greetd.enableAutoLogin = false;
     _custom.desktop.greetd.enablePamAutoLogin = true;
-    _custom.desktop.udev-rules.enable = true;
-    _custom.desktop.udev-rules.canDisableGlegionKbd = false;
-    _custom.desktop.gammastep.enable = false;
-    _custom.desktop.hyprsunset.enable = true;
-    _custom.desktop.wluma.enable = false;
-    _custom.desktop.wluma.systemdEnable = true;
-    _custom.desktop.wluma.config.als.none = { };
-    _custom.desktop.wluma.config.output.backlight = [{
-      name = "Samsung Display Corp. 0x4188 Unknown";
-      path = "/sys/class/backlight/amdgpu_bl1";
-      capturer = "wayland";
-    }];
+
     _custom.desktop.hyprland.enable = true;
     _custom.desktop.hyprland.isDefault = true;
     _custom.desktop.hyprland.uwsmSessionVariables = {
@@ -180,8 +154,7 @@ in {
       # source: https://sw.kovidgoyal.net/kitty/faq/#why-does-kitty-sometimes-start-slowly-on-my-linux-system
       # source: https://github.com/Einjerjar/nix/blob/172d17410cd0849f7028f80c0e2084b4eab27cc7/home/vars.nix#L30
       # source: https://github.com/NixOS/nixpkgs/pull/139354#issuecomment-926942682
-      __EGL_VENDOR_LIBRARY_FILENAMES =
-        "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:${config.hardware.nvidia.package}/share/glvnd/egl_vendor.d/10_nvidia.json";
+      __EGL_VENDOR_LIBRARY_FILENAMES = "${config.hardware.graphics.package}/share/glvnd/egl_vendor.d/50_mesa.json:${config.hardware.nvidia.package}/share/glvnd/egl_vendor.d/10_nvidia.json";
       __GLX_VENDOR_LIBRARY_NAME = "mesa";
 
       # env variables for starting hyprland with discrete gpu
@@ -190,9 +163,46 @@ in {
       # export __EGL_VENDOR_LIBRARY_FILENAMES=
       # export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
     };
-    _custom.archetypes.wm-wayland-desktop.enable = true;
-    _custom.security.gnome-keyring.enable = true;
-    _custom.security.kwallet.enable = false;
+
+    _custom.desktop.audio.enableEasyeffects = false;
+    _custom.desktop.audio.enableNoisetorch = false;
+    # _custom.desktop.mouseless.enable = true;
+    _custom.desktop.networking.localSendEnable = true;
+    _custom.desktop.plymouth.enable = false;
+    _custom.desktop.xwaylandvideobridge.enable = false;
+    _custom.desktop.power-management.cpupowerGuiArgs = [
+      "--performance"
+      "profile"
+      "Performance"
+    ];
+    _custom.desktop.power-management.keyboard = {
+      enable = true;
+      idVendor = "048d";
+      idProduct = "c104";
+    };
+    _custom.desktop.udev-rules.enable = true;
+    _custom.desktop.udev-rules.canDisableGlegionKbd = false;
+    _custom.desktop.gammastep.enable = false;
+    _custom.desktop.hyprsunset.enable = true;
+    _custom.desktop.wluma.enable = false;
+    _custom.desktop.wluma.systemdEnable = true;
+    _custom.desktop.wluma.config.als.none = { };
+    _custom.desktop.wluma.config.output.backlight = [
+      {
+        name = "Samsung Display Corp. 0x4188 Unknown";
+        path = "/sys/class/backlight/amdgpu_bl1";
+        capturer = "wayland";
+      }
+    ];
+    # fix blurry cursor on GTK 3 apps
+    # update catppuccin cursor NOMINAL_SIZE
+    # TODO: remove after updating gtk to 4.18
+    # source: https://blogs.kde.org/2024/10/09/cursor-size-problems-in-wayland-explained/#my-fix-or-shall-we-say-workaround
+    # source: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/7722
+    # source: https://bbs.archlinux.org/viewtopic.php?id=299624
+    _custom.desktop.cursor.name = "catppuccin-mocha-dark-cursors";
+    _custom.desktop.cursor.size = 24;
+
     _custom.sandbox.enable = true;
     _custom.sandbox.internetInterface = "wlan0";
 
@@ -231,4 +241,3 @@ in {
     home-manager.users.${userName}.home.stateVersion = "23.11";
   };
 }
-
