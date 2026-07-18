@@ -629,6 +629,7 @@
       "original": {
         "owner": "nix-community",
         "repo": "disko",
+        "rev": "ff8702b4de27f72b4c78573dfb89ec74e36abdf1",
         "type": "github"
       }
     },
@@ -2366,17 +2367,17 @@
     "kitty-scrollback-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1737397484,
-        "narHash": "sha256-0OPNHWR/qCbMKDQE6Pbt0Ew9QCm2ZSeZq4s9OL2rj04=",
+        "lastModified": 1778640956,
+        "narHash": "sha256-M/sd8lUv7leapzI3uD0VNkMAwaFhPmXsktFnHMPJz0U=",
         "owner": "mikesmithgh",
         "repo": "kitty-scrollback.nvim",
-        "rev": "fd9f83f3f1141ef65de73fbe962f6c606ef02da8",
+        "rev": "db7ab6676774e3d33ef0d7833c96251456eecaa2",
         "type": "github"
       },
       "original": {
         "owner": "mikesmithgh",
         "repo": "kitty-scrollback.nvim",
-        "rev": "fd9f83f3f1141ef65de73fbe962f6c606ef02da8",
+        "rev": "db7ab6676774e3d33ef0d7833c96251456eecaa2",
         "type": "github"
       }
     },
@@ -3293,17 +3294,17 @@
     "smart-splits-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1752523537,
-        "narHash": "sha256-zfuBaSnudCWw0N1XAms9CeVrAuPEAPDXxLLg1rTX7FE=",
+        "lastModified": 1776209328,
+        "narHash": "sha256-IuJNQT0bN68K5lnw0ixyU/heG8V1+zUwlvm0mNvvHOw=",
         "owner": "mrjones2014",
         "repo": "smart-splits.nvim",
-        "rev": "2b5dda43b3de5d13b56c4606f7d19db78637e527",
+        "rev": "ba2850ff3d3b09785a7105c69d06a12117d4b97d",
         "type": "github"
       },
       "original": {
         "owner": "mrjones2014",
         "repo": "smart-splits.nvim",
-        "rev": "2b5dda43b3de5d13b56c4606f7d19db78637e527",
+        "rev": "ba2850ff3d3b09785a7105c69d06a12117d4b97d",
         "type": "github"
       }
     },
@@ -3508,17 +3509,17 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1714250662,
-        "narHash": "sha256-TO5OG7lqcN2sKRtdF7DgFeZ2wx9O1FVh1MSp+6EoYxc=",
+        "lastModified": 1776544171,
+        "narHash": "sha256-ve1nZslZil30yWfrlzYGEMY9hRH2lJjoPuEBjwHvBz4=",
         "owner": "omerxx",
         "repo": "tmux-sessionx",
-        "rev": "ac9b0ec219c2e36ce6beb3f900ef852ba8888095",
+        "rev": "c9aaa1d309791871b5e8c1f9bfb91ecc5fa7da3a",
         "type": "github"
       },
       "original": {
         "owner": "omerxx",
         "repo": "tmux-sessionx",
-        "rev": "ac9b0ec219c2e36ce6beb3f900ef852ba8888095",
+        "rev": "c9aaa1d309791871b5e8c1f9bfb91ecc5fa7da3a",
         "type": "github"
       }
     },

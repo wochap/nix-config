@@ -17,7 +17,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # disko
-    disko.url = "github:nix-community/disko";
+    disko.url = "github:nix-community/disko?rev=ff8702b4de27f72b4c78573dfb89ec74e36abdf1"; # master (10 jul 2026)
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     # hyprland
@@ -92,7 +92,7 @@
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f"; # master (06 apr 2023)
     fuzzy-sys.flake = false;
-    kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim?rev=fd9f83f3f1141ef65de73fbe962f6c606ef02da8"; # v6.2.2
+    kitty-scrollback-nvim.url = "github:mikesmithgh/kitty-scrollback.nvim?rev=db7ab6676774e3d33ef0d7833c96251456eecaa2"; # v9.2.0
     kitty-scrollback-nvim.flake = false;
     kitty-smart-scroll.url = "github:yurikhan/kitty-smart-scroll";
     kitty-smart-scroll.flake = false;
@@ -100,7 +100,7 @@
     kitty-smart-tab.flake = false;
     powerlevel10k.url = "github:romkatv/powerlevel10k?rev=35833ea15f14b71dbcebc7e54c104d8d56ca5268"; # v1.20.0
     powerlevel10k.flake = false;
-    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim?rev=2b5dda43b3de5d13b56c4606f7d19db78637e527"; # v2.0.3
+    smart-splits-nvim.url = "github:mrjones2014/smart-splits.nvim?rev=ba2850ff3d3b09785a7105c69d06a12117d4b97d"; # v2.1.0
     smart-splits-nvim.flake = false;
     zsh-autocomplete.url = "github:wochap/zsh-autocomplete?rev=5aedb496754c867e949c144e19c74bfccbbef1a2"; # (16 aug 2025)
     zsh-autocomplete.flake = false;
@@ -118,7 +118,7 @@
     figlet-fonts.flake = false;
     ipwebcam-gst.url = "github:agarciadom/ipwebcam-gst?rev=5a02ffae8597ab1cc7461f096f86ca233f925a07";
     ipwebcam-gst.flake = false;
-    tmux-sessionx.url = "github:omerxx/tmux-sessionx?rev=ac9b0ec219c2e36ce6beb3f900ef852ba8888095"; # (27 apr 2024)
+    tmux-sessionx.url = "github:omerxx/tmux-sessionx?rev=c9aaa1d309791871b5e8c1f9bfb91ecc5fa7da3a"; # (17 jul 2026)
     nnn-cppath.url = "github:raffaem/nnn-cppath?rev=1d3f4f64d43533d203af82c61f4a93afc8d5aaf5"; # (31 dec 2023)
     nnn-cppath.flake = false;
 
