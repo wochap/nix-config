@@ -14,6 +14,7 @@ let
     themeColorsDark
     preferDark
     userName
+    isSandbox
     ;
   inherit (lib._custom) relativeSymlink;
   hmConfig = config.home-manager.users.${userName};
@@ -120,6 +121,8 @@ in
             source ${relativeSymlink configDirectory ./dotfiles/theme-hooks.zsh}
 
             ## powerlevel10k
+
+            export SHOW_HOSTNAME_IN_PROMPT="${if isSandbox then "true" else "false"}"
 
             _apply_powerlevel10k() {
               source $HOME/.config/scripts/theme-colors.sh
