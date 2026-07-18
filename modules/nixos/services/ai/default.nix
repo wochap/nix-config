@@ -9,28 +9,6 @@ let
   cfg = config._custom.services.ai;
   inherit (config._custom.globals) configDirectory;
   inherit (pkgs._custom) wochap-ssc;
-  makeVirtualHost = port: {
-    forceSSL = true;
-    sslTrustedCertificate = "${wochap-ssc}/rootCA.pem";
-    sslCertificateKey = "${wochap-ssc}/${wochap-ssc.meta.domain}+4-key.pem";
-    sslCertificate = "${wochap-ssc}/${wochap-ssc.meta.domain}+4.pem";
-    locations."/" = {
-      recommendedProxySettings = true;
-      proxyPass = "http://${wochap-ssc.meta.address}:${toString port}";
-      proxyWebsockets = true;
-    };
-    listen = [
-      {
-        addr = wochap-ssc.meta.address;
-        port = 443;
-        ssl = true;
-      }
-      {
-        addr = wochap-ssc.meta.address;
-        port = 80;
-      }
-    ];
-  };
 in
 {
   imports = [ ./ollama-webui-lite.nix ];
@@ -78,18 +56,43 @@ in
     #     [ "${config.services.ollama.host}:${toString config.services.ollama.port}" ];
     # };
 
+    # Register Web Proxies mapping configuration
+    _custom.services.web-proxies = {
+      # Make ollama-webui-lite accessible at https://ollama.wochap.local
+      ollama-webui-lite = {
+        enable = cfg.enableOllamaWebuiLite;
+        subdomain = "ollama";
+        publicPort = 11444;
+        lazy = true;
+      };
+      # Make nextjs-ollama-llm-ui accessible at https://nolui.wochap.local
+      nextjs-ollama-llm-ui = {
+        enable = cfg.enableNextjsOllamaLlmUi;
+        subdomain = "nolui";
+        publicPort = 11464;
+        lazy = true;
+      };
+      # Make openwebui accessible at https://openwebui.wochap.local
+      open-webui = {
+        enable = cfg.enableOpenWebui;
+        subdomain = "openwebui";
+        publicPort = 11454;
+        lazy = true;
+      };
+    };
+
     services.ollama-webui-lite = lib.mkIf cfg.enableOllamaWebuiLite {
       enable = true;
       package = pkgs._custom.ollama-webui-lite;
       host = wochap-ssc.meta.address;
-      port = 11444;
+      port = config._custom.services.web-proxies.ollama-webui-lite.backendPort;
     };
 
-    services.nextjs-ollama-llm-ui.enable = lib.mkIf cfg.enableNextjsOllamaLlmUi {
+    services.nextjs-ollama-llm-ui = lib.mkIf cfg.enableNextjsOllamaLlmUi {
       enable = true;
       package = pkgs.nextjs-ollama-llm-ui;
       hostname = wochap-ssc.meta.address;
-      port = 11464;
+      port = config._custom.services.web-proxies.nextjs-ollama-llm-ui.backendPort;
     };
 
     services.open-webui = lib.mkIf cfg.enableOpenWebui {
@@ -97,43 +100,10 @@ in
       package = pkgs.open-webui;
       openFirewall = false;
       host = wochap-ssc.meta.address;
-      port = 11454;
+      port = config._custom.services.web-proxies.open-webui.backendPort;
       environment = {
         WEBUI_AUTH = "False";
       };
-    };
-
-    services.nginx = {
-      enable = true;
-      enableReload = true;
-      recommendedTlsSettings = true;
-    };
-
-    # NOTE: restart after changing certificate
-    # you also might need to add certificate to your browsers
-    security.pki.certificateFiles = [ "${wochap-ssc}/rootCA.pem" ];
-
-    networking.hosts.${wochap-ssc.meta.address} =
-      [ ]
-      ++ lib.optional cfg.enableOllamaWebuiLite "ollama.${wochap-ssc.meta.domain}"
-      ++ lib.optional cfg.enableNextjsOllamaLlmUi "nolui.${wochap-ssc.meta.domain}"
-      ++ lib.optional cfg.enableOpenWebui "openwebui.${wochap-ssc.meta.domain}";
-
-    services.nginx.virtualHosts = {
-      # Make ollama-webui-lite accessible at https://ollama.wochap.local
-      "ollama.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOllamaWebuiLite (
-        makeVirtualHost config.services.ollama-webui-lite.port
-      );
-
-      # Make nextjs-ollama-llm-ui accessible at https://nolui.wochap.local
-      "nolui.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableNextjsOllamaLlmUi (
-        makeVirtualHost config.services.nextjs-ollama-llm-ui.port
-      );
-
-      # Make openwebui accessible at https://openwebui.wochap.local
-      "openwebui.${wochap-ssc.meta.domain}" = lib.mkIf cfg.enableOpenWebui (
-        makeVirtualHost config.services.open-webui.port
-      );
     };
 
     _custom.hm = {

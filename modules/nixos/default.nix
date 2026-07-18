@@ -94,6 +94,7 @@
     ./services/syncthing
     ./services/virt
     ./services/waydroid
+    ./services/web-proxies
 
     ./system/apple
     ./system/boot
