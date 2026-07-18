@@ -143,10 +143,11 @@ in
             networking.useHostResolvConf = lib.mkForce false;
 
             environment.variables = {
+              # TODO: maybe use cage?
               WAYLAND_DISPLAY = "/mnt/host-run/wayland-1";
               PIPEWIRE_RUNTIME_DIR = "/mnt/host-run";
               PULSE_SERVER = "unix:/mnt/host-run/pulse/native";
-              # TODO: set pinentry-tty
+              # TODO: set pinentry-tty?
               DBUS_SESSION_BUS_ADDRESS = "unix:path=/mnt/host-run/bus";
             };
 
