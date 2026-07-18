@@ -123,7 +123,7 @@ in {
           ./dotfiles/status-bar.tmux;
       };
 
-      programs.fzf.tmux.enableShellIntegration = true;
+      programs.fzf.tmux.enableShellIntegration = false;
 
       # systemd service required by tmux-continuum
       systemd.user.services.tmux-server = lib.mkIf cfg.systemdEnable {
