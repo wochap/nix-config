@@ -14,15 +14,6 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ git-final ];
 
-    # TODO: wait for https://github.com/dandavison/delta/issues/1976
-    _custom.programs.rod.config = {
-      # TODO: cmds.delta.light.env didn't work
-      light.env = {
-        DELTA_FEATURES = "+catppuccin-${themeColorsLight.flavour}";
-      };
-      dark.env = { DELTA_FEATURES = "+catppuccin-${themeColorsDark.flavour}"; };
-    };
-
     _custom.hm = {
       home.shellAliases = {
         gst = "git status";
@@ -43,6 +34,17 @@ in {
       programs.zsh.initContent =
         lib.mkOrder 1000 ''
           source ${relativeSymlink configDirectory ./dotfiles/git.zsh}
+
+          # TODO: wait for https://github.com/dandavison/delta/issues/1976
+          _apply_delta_theme() {
+            if [[ "$1" == "dark" ]]; then
+                export DELTA_FEATURES="+catppuccin-${themeColorsDark.flavour}"
+            else
+                export DELTA_FEATURES="+catppuccin-${themeColorsLight.flavour}"
+            fi
+          }
+          add-theme-hook _apply_delta_theme
+          _apply_delta_theme $CURRENT_SCHEME
         '';
 
       programs.gh = {

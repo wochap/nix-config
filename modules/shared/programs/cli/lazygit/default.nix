@@ -13,16 +13,6 @@ in
   options._custom.programs.lazygit.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    # TODO: wait for https://github.com/jesseduffield/lazygit/issues/4366
-    _custom.programs.rod.config = {
-      light.env = {
-        LG_CONFIG_FILE = "$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/config-${themeColorsLight.flavour}.yml";
-      };
-      dark.env = {
-        LG_CONFIG_FILE = "$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/config-${themeColorsDark.flavour}.yml";
-      };
-    };
-
     _custom.hm = {
       xdg.configFile = {
         "lazygit/config-${themeColorsLight.flavour}.yml".source =
@@ -31,8 +21,23 @@ in
           "${inputs.catppuccin-lazygit}/themes-mergable/${themeColorsDark.flavour}/mauve.yml";
       };
 
-      programs.zsh.shellAliases = {
-        lg = ''run-without-kpadding lazygit "$@"'';
+      programs.zsh = {
+        shellAliases = {
+          lg = ''run-without-kpadding lazygit "$@"'';
+        };
+
+        # TODO: wait for https://github.com/jesseduffield/lazygit/issues/4366
+        initContent = lib.mkOrder 1000 ''
+          _apply_lazygit_theme() {
+            if [[ "$1" == "dark" ]]; then
+                export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/config-${themeColorsDark.flavour}.yml"
+            else
+                export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/config-${themeColorsLight.flavour}.yml"
+            fi
+          }
+          add-theme-hook _apply_lazygit_theme
+          _apply_lazygit_theme $CURRENT_SCHEME
+        '';
       };
 
       programs.lazygit = {

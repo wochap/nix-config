@@ -92,9 +92,9 @@ in {
         "scripts/theme-colors.sh" = {
           text = ''
             if command -v color-scheme >/dev/null 2>&1; then
-              CURRENT_SCHEME=$(color-scheme print)
+              export CURRENT_SCHEME=$(color-scheme print)
             else
-              CURRENT_SCHEME="dark"
+              export CURRENT_SCHEME="${if preferDark then "dark" else "light"}"
             fi
             if [[ "$CURRENT_SCHEME" == "dark" ]]; then
               ${mkThemeScript themeColorsDark}
@@ -102,15 +102,6 @@ in {
               ${mkThemeScript themeColorsLight}
             fi
           '';
-          executable = true;
-        };
-        # TODO: do we need these?
-        "scripts/theme-colors-light.sh" = {
-          text = mkThemeScript themeColorsLight;
-          executable = true;
-        };
-        "scripts/theme-colors-dark.sh" = {
-          text = mkThemeScript themeColorsDark;
           executable = true;
         };
 

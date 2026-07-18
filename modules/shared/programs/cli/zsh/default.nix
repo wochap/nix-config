@@ -113,12 +113,24 @@ in
             fi
           '')
           (lib.mkOrder 550 ''
+            ## theme-hooks
+
+            export DEFAULT_COLOR_SCHEME="${if preferDark then "dark" else "light"}"
+
+            source ${relativeSymlink configDirectory ./dotfiles/theme-hooks.zsh}
+
             ## powerlevel10k
 
-            # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-            [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+            _apply_powerlevel10k() {
+              source $HOME/.config/scripts/theme-colors.sh
 
-            source ${inputs.powerlevel10k}/powerlevel10k.zsh-theme
+              # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+              [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+              source ${inputs.powerlevel10k}/powerlevel10k.zsh-theme
+            }
+            add-theme-hook _apply_powerlevel10k
+            _apply_powerlevel10k
           '')
           ''
             ## load our scripts
@@ -181,23 +193,24 @@ in
             # docs: https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Character-Highlighting
             zle_highlight=('paste:fg=white,bold')
 
-            # TODO: use rod
-            # TODO: add automation to hotreload
             # set catppuccin theme for zsh-fast-syntax-highlighting
-            if command -v color-scheme >/dev/null 2>&1; then
-              CURRENT_SCHEME=$(color-scheme print)
-            else
-              CURRENT_SCHEME="dark"
-            fi
             if [[ "$CURRENT_SCHEME" == "dark" ]]; then
               FAST_WORK_DIR="${catppuccin-fsh-dark-theme}"
-              FSH_THEME="${catppuccin-fsh-dark-theme}/current_theme.zsh"
             else
               FAST_WORK_DIR="${catppuccin-fsh-light-theme}"
-              FSH_THEME="${catppuccin-fsh-light-theme}/current_theme.zsh"
             fi
             source ${fshPlugin.src}/${fshPlugin.file}
-            source $FSH_THEME
+
+            _apply_fsh_theme() {
+              if [[ "$1" == "dark" ]]; then
+                  FSH_THEME="${catppuccin-fsh-dark-theme}/current_theme.zsh"
+              else
+                  FSH_THEME="${catppuccin-fsh-light-theme}/current_theme.zsh"
+              fi
+              source $FSH_THEME
+            }
+            add-theme-hook _apply_fsh_theme
+            _apply_fsh_theme $CURRENT_SCHEME
 
             ## zsh-vi-mode
 

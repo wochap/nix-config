@@ -40,8 +40,12 @@ in {
 
       # Set `LS_COLORS` before Oh My Zsh and `initExtra`.
       programs.zsh.initContent = lib.mkIf cfg.enableZshIntegration
-        (lib.mkOrder 550 ''
-          eval $(${lib.getExe' cfg.package "dircolors"} -b ${dircolorsPath})
+        (lib.mkOrder 551 ''
+          _apply_dircolors_theme() {
+            eval $(${lib.getExe' cfg.package "dircolors"} -b ${dircolorsPath})
+          }
+          add-theme-hook _apply_dircolors_theme
+          _apply_dircolors_theme
         '');
 
       programs.dircolors.enable = false;

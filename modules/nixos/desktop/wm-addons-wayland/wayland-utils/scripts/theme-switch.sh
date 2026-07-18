@@ -56,6 +56,9 @@ set_light_theme() {
   # quickshell
   rm -rf ~/.config/quickshell/theme.json && sleep 0.1
   cp -L ~/.config/quickshell/theme-light.json ~/.config/quickshell/theme.json
+
+  # zsh
+  killall -USR1 zsh
 }
 
 set_dark_theme() {
@@ -113,6 +116,9 @@ set_dark_theme() {
   # quickshell
   rm -rf ~/.config/quickshell/theme.json && sleep 0.1
   cp -L ~/.config/quickshell/theme-dark.json ~/.config/quickshell/theme.json
+
+  # zsh
+  killall -USR1 zsh
 }
 
 print_status() {
