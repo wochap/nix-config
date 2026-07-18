@@ -27,17 +27,48 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    networking.nat = {
-      enable = true;
-      # Tell NAT to listen to all systemd-nspawn virtual interfaces
-      internalInterfaces = [ "ve-+" ];
+    networking = {
+      nat = {
+        enable = true;
+        # Tell NAT to listen to all systemd-nspawn virtual interfaces
+        internalInterfaces = [ "ve-+" ];
 
-      # IMPORTANT: Change this to your actual host internet interface
-      # (Check using `ip a` or `ip link`, e.g., "enp4s0" or "wlp3s0")
-      externalInterface = cfg.internetInterface;
+        # IMPORTANT: Change this to your actual host internet interface
+        # (Check using `ip a` or `ip link`, e.g., "enp4s0" or "wlp3s0")
+        externalInterface = cfg.internetInterface;
+      };
+
+      firewall = {
+        trustedInterfaces = [ "ve-+" ];
+        # prevent sandbox from reaching local network devices
+        extraCommands = ''
+          # Create a custom chain for the sandbox
+          iptables -N SANDBOX-ISOLATION || true
+
+          # Route all forwarding traffic originating from the sandbox to this chain
+          # (Using index 1 ensures this is evaluated before NixOS's default NAT ACCEPT rules)
+          iptables -I FORWARD 1 -s 192.168.100.11/32 -j SANDBOX-ISOLATION
+
+          # 1. ALLOW: The sandbox must be able to talk to the host to use it as a gateway
+          iptables -A SANDBOX-ISOLATION -d 192.168.100.10/32 -j ACCEPT
+
+          # 2. DROP: Block the sandbox from reaching anything else on your physical LAN
+          iptables -A SANDBOX-ISOLATION -d 10.0.0.0/8 -j DROP
+          iptables -A SANDBOX-ISOLATION -d 172.16.0.0/12 -j DROP
+          iptables -A SANDBOX-ISOLATION -d 192.168.0.0/16 -j DROP
+
+          # 3. RETURN: Anything not dropped (e.g., public internet IPs) returns to normal routing
+          iptables -A SANDBOX-ISOLATION -j RETURN
+        '';
+
+        extraStopCommands = ''
+          # Safely clean up our custom rules when the firewall restarts
+          iptables -D FORWARD -s 192.168.100.11/32 -j SANDBOX-ISOLATION || true
+          iptables -F SANDBOX-ISOLATION || true
+          iptables -X SANDBOX-ISOLATION || true
+        '';
+      };
     };
-
-    networking.firewall.trustedInterfaces = [ "ve-+" ];
 
     # Stop these annoyings polkit popups when typing sandbox name
     security.polkit.extraConfig = ''
