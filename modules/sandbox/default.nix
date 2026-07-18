@@ -191,6 +191,8 @@ in
                 "render"
               ];
             };
+
+            _custom.programs.foot.settings.main = config._custom.programs.foot.settings.main;
           };
         };
     };
