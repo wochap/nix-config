@@ -12,7 +12,6 @@ in {
       home.packages = with pkgs; [
         cliphist
         wl-clip-persist
-        wl-clipboard
         clipboard-manager
       ];
 

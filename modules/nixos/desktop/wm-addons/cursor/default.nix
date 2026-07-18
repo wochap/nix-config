@@ -3,7 +3,7 @@
 let
   cfg = config._custom.desktop.cursor;
   inherit (config._custom) globals;
-  inherit (globals) themeColorsLight themeColorsDark preferDark;
+  inherit (globals) themeColorsLight themeColorsDark preferDark isSandbox;
 
   mkThemeCursor = themeColors: scheme: {
     name = "catppuccin-${themeColors.flavour}-${scheme}-cursors";
@@ -53,13 +53,13 @@ in {
         inherit (cfg) package name size;
       };
 
-      systemd.user.services.xsetroot = lib._custom.mkWaylandService {
+      systemd.user.services.xsetroot = lib.mkIf (!isSandbox) (lib._custom.mkWaylandService {
         Service = {
           Type = "oneshot";
           ExecStart =
             "${pkgs.xsetroot}/bin/xsetroot -cursor_name left_ptr";
         };
-      };
+      });
     };
   };
 }

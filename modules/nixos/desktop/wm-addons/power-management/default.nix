@@ -83,6 +83,7 @@ in {
       '';
     };
 
+    # TODO: add option to enable cpupower-gui
     # select cpu profile
     # required by cpupower-gui
     services.dbus.packages = [ pkgs.cpupower-gui ];
@@ -111,19 +112,18 @@ in {
       };
     };
 
-    _custom.hm = {
+    _custom.hm = lib.mkIf cfg.enableBatty {
       xdg.configFile."batty/config.yaml".source =
         lib._custom.relativeSymlink configDirectory ./dotfiles/config.yaml;
 
-      systemd.user.services.batty = lib.mkIf cfg.enableBatty
-        (lib._custom.mkWaylandService {
-          Unit.Description = "A Customizable Battery Notifier Script";
-          Service = {
-            ExecStart = "${batty}/bin/batty";
-            Restart = "on-failure";
-            KillMode = "mixed";
-          };
-        });
+      systemd.user.services.batty = lib._custom.mkWaylandService {
+        Unit.Description = "A Customizable Battery Notifier Script";
+        Service = {
+          ExecStart = "${batty}/bin/batty";
+          Restart = "on-failure";
+          KillMode = "mixed";
+        };
+      };
     };
   };
 }

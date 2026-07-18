@@ -36,8 +36,12 @@ in
       # NOTE: ssh agent managed by gnome-keyring
       home.file = {
         ".ssh/config".source = lib._custom.relativeSymlink configDirectory ./dotfiles/config;
-        ".ssh/config.d/default".source = lib.mkIf (!isSandbox) ./dotfiles/default;
-        ".ssh/config.d/boc".source = lib.mkIf (!isSandbox) ../../../../secrets/dotfiles/ssh/boc;
+        ".ssh/config.d/default" = lib.mkIf (!isSandbox) {
+          source = ./dotfiles/default;
+        };
+        ".ssh/config.d/boc" = lib.mkIf (!isSandbox) {
+          source = ../../../../secrets/dotfiles/ssh/boc;
+        };
       };
     };
   };

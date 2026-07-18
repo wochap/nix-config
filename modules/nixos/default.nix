@@ -54,6 +54,8 @@
 
     ./globals
 
+    ./headless-server
+
     ./programs/cli/core-utils-extra-linux
     ./programs/cli/core-utils-linux
 

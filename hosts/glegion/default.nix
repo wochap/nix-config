@@ -25,7 +25,6 @@ in {
     # reduce power usage
     _custom.desktop.audio.enableEasyeffects = false;
     _custom.desktop.audio.enableNoisetorch = false;
-
     # _custom.desktop.mouseless.enable = true;
 
     _custom.programs.weeb.enable = true;
@@ -195,6 +194,7 @@ in {
     _custom.security.gnome-keyring.enable = true;
     _custom.security.kwallet.enable = false;
     _custom.sandbox.enable = true;
+    _custom.sandbox.internetInterface = "wlan0";
 
     # Setup keyboard
     services.xserver.xkb = {

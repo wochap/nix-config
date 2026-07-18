@@ -12,10 +12,6 @@ in
   options._custom.desktop.dbus.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      libnotify # send notifications
-    ];
-
     services.dbus.enable = true;
     services.gnome.glib-networking.enable = true;
     services.udisks2.enable = true; # interact with disks

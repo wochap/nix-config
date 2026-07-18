@@ -12,57 +12,61 @@ in
 {
   options._custom.system.others.enable = lib.mkEnableOption { };
 
-  config = lib.mkIf cfg.enable {
-    # minimum amount of swapping without disabling it entirely
-    boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 1;
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      # Links those paths from derivations to /run/current-system/sw
+      environment.pathsToLink = [
+        "/share"
+        # binaries
+        "/libexec"
+        # C libs
+        "/lib"
+      ];
 
-    # Links those paths from derivations to /run/current-system/sw
-    environment.pathsToLink = [
-      "/share"
-      # binaries
-      "/libexec"
-      # C libs
-      "/lib"
-    ];
+      # Shell integration for VTE terminals
+      # Required for some gtk apps
+      programs.bash.vteIntegration = lib.mkDefault true;
+      programs.zsh.vteIntegration = lib.mkDefault true;
 
-    # Shell integration for VTE terminals
-    # Required for some gtk apps
-    programs.bash.vteIntegration = lib.mkDefault true;
-    programs.zsh.vteIntegration = lib.mkDefault true;
+      systemd.settings.Manager.DefaultTimeoutStopSec = "30s";
 
-    services.xserver = lib.mkIf (!isSandbox) {
-      enable = true;
-      exportConfiguration = true;
-    };
+      services.journald.extraConfig = ''
+        SystemMaxUse=1G
+        MaxRetentionSec=7days
+      '';
 
-    systemd.settings.Manager.DefaultTimeoutStopSec = "30s";
+      hardware.graphics.enable = true;
+    })
 
-    services.journald.extraConfig = ''
-      SystemMaxUse=1G
-      MaxRetentionSec=7days
-    '';
+    (lib.mkIf (cfg.enable && (!isSandbox)) {
+      # minimum amount of swapping without disabling it entirely
+      boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 1;
 
-    hardware.graphics.enable = true;
-
-    # run sysctl after the graphical session has started
-    # otherwise, rules in sysctl files won't be applied
-    systemd.services.custom-sysctl = lib.mkIf (!isSandbox) {
-      description = "Apply sysctl settings";
-      wantedBy = [ "graphical.target" ];
-      after = [ "graphical.target" ];
-      partOf = [ "graphical.target" ];
-
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.procps}/bin/sysctl --system";
+      services.xserver = {
+        enable = true;
+        exportConfiguration = true;
       };
-    };
 
-    systemd.user.extraConfig = ''
-      # update PATH for user systemd services
-      DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
+      # run sysctl after the graphical session has started
+      # otherwise, rules in sysctl files won't be applied
+      systemd.services.custom-sysctl = {
+        description = "Apply sysctl settings";
+        wantedBy = [ "graphical.target" ];
+        after = [ "graphical.target" ];
+        partOf = [ "graphical.target" ];
 
-      DefaultTimeoutStopSec=30s
-    '';
-  };
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.procps}/bin/sysctl --system";
+        };
+      };
+
+      systemd.user.extraConfig = ''
+        # update PATH for user systemd services
+        DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
+
+        DefaultTimeoutStopSec=30s
+      '';
+    })
+  ];
 }
