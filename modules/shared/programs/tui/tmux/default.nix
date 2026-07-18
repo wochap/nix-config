@@ -3,15 +3,16 @@
 let
   cfg = config._custom.programs.tmux;
   inherit (config._custom.globals)
-    configDirectory themeColorsLight themeColorsDark preferDark userName;
-  hmConfig = config.home-manager.users.${userName};
+    configDirectory themeColorsLight themeColorsDark preferDark;
 
-  fzfDefaultOptsStr = lib.strings.concatStringsSep " "
-    (hmConfig.programs.fzf.defaultOptions ++ [
+  fzfDefaultOptsStr = lib.strings.concatStringsSep " " (
+    config._custom.programs.fzf.defaultOptions
+    ++ [
       # remove border added by fzf-tmux
       "--border 'none'"
       "--padding '0,1'"
-    ]);
+    ]
+  );
 
   mkThemeTmux = themeColors: ''
     set -g popup-border-style "bg=default,fg=${themeColors.primary}"
