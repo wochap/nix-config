@@ -173,7 +173,9 @@ in
             networking.hostName = sandboxName;
             networking.useHostResolvConf = lib.mkForce false;
 
-            environment.variables = {
+            environment.sessionVariables = {
+              # used by others apps to show indicator that we are in sandbox
+              IN_SANDBOX = "true";
               # TODO: maybe use cage?
               WAYLAND_DISPLAY = "/mnt/host-run/wayland-1";
               PIPEWIRE_RUNTIME_DIR = "/mnt/host-run";
