@@ -16,6 +16,7 @@ in
     localSendEnable = lib.mkEnableOption { };
     pixieCoreEnable = lib.mkEnableOption { };
     wolEnable = lib.mkEnableOption { };
+    enableOpenSnitch = lib.mkEnableOption "OpenSnitch application firewall";
   };
 
   config = lib.mkMerge [
@@ -167,6 +168,11 @@ in
         enable = true;
         openFirewall = true;
       };
+    })
+
+    (lib.mkIf (cfg.enable && cfg.enableOpenSnitch) {
+      services.opensnitch.enable = true;
+      environment.systemPackages = [ pkgs.opensnitch-ui ];
     })
   ];
 }

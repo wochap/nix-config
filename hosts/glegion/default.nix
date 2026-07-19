@@ -168,6 +168,7 @@ in
     _custom.desktop.audio.enableNoisetorch = false;
     # _custom.desktop.mouseless.enable = true;
     _custom.desktop.networking.localSendEnable = true;
+    _custom.desktop.networking.enableOpenSnitch = true;
     _custom.desktop.plymouth.enable = false;
     _custom.desktop.xwaylandvideobridge.enable = false;
     _custom.desktop.power-management.cpupowerGuiArgs = [
