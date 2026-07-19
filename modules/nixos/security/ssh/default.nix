@@ -28,6 +28,8 @@ in
       };
     };
 
+    services.fail2ban.enable = true;
+
     _custom.user.openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMJslBuXKtnHU0vniaw1zedoRB9WhREYLT9kb/oDqo1a gean.marroquin@gmail.com"
     ];
