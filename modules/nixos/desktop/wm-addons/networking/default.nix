@@ -53,8 +53,10 @@ in
       services.resolved = {
         enable = true;
         # configure systemd-resolved for DoT and DNSSEC
-        dnsovertls = "true";
-        dnssec = "true";
+        settings.Resolve = {
+          DNSOverTLS = "true";
+          DNSSEC = "true";
+        };
       };
       networking.resolvconf.enable = false;
 
