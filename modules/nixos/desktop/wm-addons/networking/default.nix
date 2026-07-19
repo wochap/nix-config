@@ -49,7 +49,12 @@ in
       };
 
       # enable systemd-resolved
-      services.resolved.enable = true;
+      services.resolved = {
+        enable = true;
+        # configure systemd-resolved for DoT and DNSSEC
+        dnsovertls = "true";
+        dnssec = "true";
+      };
       networking.resolvconf.enable = false;
 
       networking = {
