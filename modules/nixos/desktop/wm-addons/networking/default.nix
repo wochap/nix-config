@@ -23,12 +23,15 @@ in
     (lib.mkIf cfg.enable {
       _custom.user.extraGroups = [ "networkmanager" ];
 
-      networking.nameservers = [
-        "1.1.1.1"
-        "1.0.0.1"
-        "8.8.8.8"
-        "8.8.4.4"
-      ];
+      networking = {
+        nameservers = [
+          "1.1.1.1"
+          "1.0.0.1"
+          "8.8.8.8"
+          "8.8.4.4"
+        ];
+        enableIPv6 = false;
+      };
     })
 
     (lib.mkIf (cfg.enable && isSandbox) {
@@ -61,8 +64,6 @@ in
       networking.resolvconf.enable = false;
 
       networking = {
-        enableIPv6 = false;
-
         # Disable wpa_supplicant
         wireless.enable = false;
 
