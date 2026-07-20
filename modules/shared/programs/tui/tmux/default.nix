@@ -24,7 +24,6 @@ let
 
     set -g pane-border-lines single
     set -g popup-border-lines rounded
-    set -g status off
 
     run-shell ~/.config/tmux/plugins/catppuccin/catppuccin.tmux
     run-shell ~/.config/tmux/plugins/status-bar/status-bar.tmux
