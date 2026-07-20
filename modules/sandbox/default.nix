@@ -83,7 +83,7 @@ in
     # Create shared directory
     systemd.tmpfiles.rules = [
       "d /home/${userName}/Sandboxes 0755 ${userName} users -"
-      "d /home/${userName}/Sandboxes/${userName} 0755 ${userName} users -"
+      "d /home/${userName}/Sandboxes/${sandboxName} 0755 ${userName} users -"
     ];
 
     # Proxy dbus
@@ -112,7 +112,7 @@ in
       localAddress = "192.168.100.11";
       bindMounts = {
         "shared" = {
-          hostPath = "/home/${userName}/Sandboxes/${userName}";
+          hostPath = "/home/${userName}/Sandboxes/${sandboxName}";
           mountPoint = "/home/${userName}/Shared";
           isReadOnly = false;
         };
