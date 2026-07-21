@@ -35,6 +35,7 @@ in
         wt
       ];
 
+      programs.bash.initExtra = lib.mkOrder 1000 (builtins.readFile ./scripts/wt.plugin.sh);
       programs.zsh.initContent =
         lib.mkOrder 1000 ''
           source ${relativeSymlink configDirectory ./dotfiles/git.zsh}
@@ -49,6 +50,8 @@ in
           }
           add-theme-hook _apply_delta_theme
           _apply_delta_theme $CURRENT_SCHEME
+
+          source ${./scripts/wt.plugin.sh}
         '';
 
       programs.gh = {
@@ -150,9 +153,6 @@ in
           };
         };
       };
-
-      programs.bash.initExtra = lib.mkOrder 1000 (builtins.readFile ./scripts/wt.plugin.sh);
-      programs.zsh.initExtra = lib.mkOrder 1000 (builtins.readFile ./scripts/wt.plugin.sh);
     };
   };
 }
