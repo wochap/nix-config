@@ -5,7 +5,9 @@ let
   inherit (config._custom.globals) themeColorsLight themeColorsDark secrets configDirectory;
   inherit (lib._custom) relativeSymlink;
   git-final = pkgs.gitFull;
-in {
+  wt = pkgs.writeScriptBin "wt" (builtins.readFile ./scripts/wt.sh);
+in
+{
   options._custom.programs.git = {
     enable = lib.mkEnableOption { };
     enableUser = lib.mkEnableOption { };
@@ -30,6 +32,7 @@ in {
         gh # github cli
         gitflow
         gut # alternative git cli
+        wt
       ];
 
       programs.zsh.initContent =
@@ -147,6 +150,9 @@ in {
           };
         };
       };
+
+      programs.bash.initExtra = lib.mkOrder 1000 (builtins.readFile ./scripts/wt.plugin.sh);
+      programs.zsh.initExtra = lib.mkOrder 1000 (builtins.readFile ./scripts/wt.plugin.sh);
     };
   };
 }
