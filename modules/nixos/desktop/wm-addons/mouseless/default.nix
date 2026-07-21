@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.mouseless;
@@ -10,7 +15,8 @@ let
     destination = "/etc/udev/rules.d/80-hints.rules";
   };
   hints-final = pkgs._custom.pythonPackages.hints;
-in {
+in
+{
   options._custom.desktop.mouseless.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -27,16 +33,18 @@ in {
 
     services.udev.packages = [ hints-rules ];
 
+    services.gnome.at-spi2-core.enable = true;
+
     _custom.user.extraGroups = [ "input" ];
 
-    _custom.hm = {
-      systemd.user.services.hintsd = lib._custom.mkWaylandService {
-        Unit.Description = "Hints daemon";
-        Service = {
-          Type = "simple";
-          ExecStart = "${hints-final}/bin/hintsd";
-        };
-      };
-    };
+    # _custom.hm = {
+    #   systemd.user.services.hintsd = lib._custom.mkWaylandService {
+    #     Unit.Description = "Hints daemon";
+    #     Service = {
+    #       Type = "simple";
+    #       ExecStart = "${hints-final}/bin/hintsd";
+    #     };
+    #   };
+    # };
   };
 }

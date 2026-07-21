@@ -166,7 +166,7 @@ in
 
     _custom.desktop.audio.enableEasyeffects = false;
     _custom.desktop.audio.enableNoisetorch = false;
-    # _custom.desktop.mouseless.enable = true;
+    _custom.desktop.mouseless.enable = true;
     _custom.desktop.networking.localSendEnable = true;
     _custom.desktop.networking.enableOpenSnitch = true;
     _custom.desktop.plymouth.enable = false;
