@@ -9,6 +9,7 @@ in {
   options._custom.programs.git = {
     enable = lib.mkEnableOption { };
     enableUser = lib.mkEnableOption { };
+    enableSandboxUser = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -97,6 +98,11 @@ in {
             signingKey = "gean.marroquin@gmail.com";
           };
           commit.gpgSign = true;
+        } // lib.optionalAttrs cfg.enableSandboxUser {
+          user = {
+            email = "sandbox@localhost";
+            name = "sandbox";
+          };
         };
 
         includes =
