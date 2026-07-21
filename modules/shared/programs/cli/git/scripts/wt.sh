@@ -14,7 +14,7 @@ find_project_root() {
     echo "error: not inside a git repository" >&2
     return 1
   }
-  git_common=$(cd "$git_common" && pwd)
+  git_common=$(cd "$git_common" && pwd -P)
 
   if [[ "$(git -C "$git_common" rev-parse --is-bare-repository 2>/dev/null)" != "true" ]]; then
     echo "error: not a wt project (expected bare repo)" >&2
@@ -194,7 +194,7 @@ cmd_clone() {
   local default_branch
   default_branch=$(get_default_branch "$git_dir") || die "cannot detect default branch"
 
-  git -C "$git_dir" worktree add "$abs_dir/$default_branch" "$default_branch" ||
+  git -C "$git_dir" worktree add "$abs_dir/$default_branch" "$default_branch" >&2 ||
     die "failed to create default worktree"
 
   echo "Cloned into $dir/" >&2
@@ -230,7 +230,7 @@ cmd_switch() {
       die "directory '$dir_name' already exists"
     fi
 
-    git -C "$git_dir" worktree add -b "$branch" "$root/$dir_name" "$from" ||
+    git -C "$git_dir" worktree add -b "$branch" "$root/$dir_name" "$from" >&2 ||
       die "failed to create worktree"
     local short_from
     short_from=$(git -C "$git_dir" rev-parse --short=8 "$from" 2>/dev/null) || short_from="$from"
@@ -275,7 +275,7 @@ cmd_switch() {
 
   # create worktree
   if [[ -n "$name" ]]; then
-    git -C "$git_dir" worktree add --detach "$root/$dir_name" "$ref" ||
+    git -C "$git_dir" worktree add --detach "$root/$dir_name" "$ref" >&2 ||
       die "failed to create worktree"
     if [[ "$ref_type" == "commit" ]]; then
       local short
@@ -285,11 +285,11 @@ cmd_switch() {
       echo "Created worktree: $dir_name (detached at $ref HEAD)" >&2
     fi
   elif [[ "$ref_type" == "commit" ]]; then
-    git -C "$git_dir" worktree add --detach "$root/$dir_name" "$ref" ||
+    git -C "$git_dir" worktree add --detach "$root/$dir_name" "$ref" >&2 ||
       die "failed to create worktree"
     echo "Created worktree: $dir_name (detached)" >&2
   else
-    git -C "$git_dir" worktree add "$root/$dir_name" "$ref" ||
+    git -C "$git_dir" worktree add "$root/$dir_name" "$ref" >&2 ||
       die "failed to create worktree"
     echo "Created worktree: $dir_name (branch: $ref)" >&2
   fi
@@ -518,4 +518,5 @@ main() {
 }
 
 main "$@"
+
 
