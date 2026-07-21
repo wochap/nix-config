@@ -52,6 +52,7 @@ in
           _apply_delta_theme $CURRENT_SCHEME
 
           source ${./scripts/wt.plugin.sh}
+          zsh-defer source ${./scripts/wt.completions.zsh}
         '';
 
       programs.gh = {
