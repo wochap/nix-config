@@ -1,9 +1,38 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
+# ── Colors ─────────────────────────────────────────────────────────────
+
+if [[ -n "${NO_COLOR:-}" ]]; then
+  C_RESET="" C_BOLD="" C_DIM="" C_RED="" C_GREEN="" C_YELLOW="" C_CYAN=""
+else
+  C_RESET=$'\e[0m'
+  C_BOLD=$'\e[1m'
+  C_DIM=$'\e[2m'
+  C_RED=$'\e[31m'
+  C_GREEN=$'\e[32m'
+  C_YELLOW=$'\e[33m'
+  C_CYAN=$'\e[36m'
+fi
+
 die() {
-  echo "error: $*" >&2
+  echo "${C_RED}error: $*${C_RESET}" >&2
   exit 1
+}
+
+# Pad a string to a minimum visible width (ignores ANSI escape sequences in length calc)
+pad() {
+  local str="$1" width="$2"
+  local stripped
+  stripped=$'\e'
+  stripped="${stripped}["
+  local visible="${str//${stripped}[^m]*m/}"
+  local len=${#visible}
+  printf '%s' "$str"
+  while ((len < width)); do
+    printf ' '
+    ((len++))
+  done
 }
 
 # ── Discovery ──────────────────────────────────────────────────────────
@@ -197,9 +226,9 @@ cmd_clone() {
   git -C "$git_dir" worktree add "$abs_dir/$default_branch" "$default_branch" >&2 ||
     die "failed to create default worktree"
 
-  echo "Cloned into $dir/" >&2
-  echo "  .git/   (bare)" >&2
-  echo "  $default_branch/   (worktree)" >&2
+  echo "Cloned into ${C_GREEN}${dir}/${C_RESET}" >&2
+  echo "  ${C_DIM}.git/${C_RESET}   (bare)" >&2
+  echo "  ${C_GREEN}${default_branch}/${C_RESET}   (worktree)" >&2
   echo "$abs_dir/$default_branch"
 }
 
@@ -234,7 +263,7 @@ cmd_switch() {
       die "failed to create worktree"
     local short_from
     short_from=$(git -C "$git_dir" rev-parse --short=8 "$from" 2>/dev/null) || short_from="$from"
-    echo "Created worktree: $dir_name (new branch: $branch from $short_from)" >&2
+    echo "Created worktree: ${C_GREEN}${dir_name}${C_RESET} (new branch: ${C_CYAN}${branch}${C_RESET} from ${C_YELLOW}${short_from}${C_RESET})" >&2
     echo "$root/$dir_name"
     return 0
   fi
@@ -280,18 +309,18 @@ cmd_switch() {
     if [[ "$ref_type" == "commit" ]]; then
       local short
       short=$(git -C "$git_dir" rev-parse --short=8 "$ref")
-      echo "Created worktree: $dir_name (detached at $short)" >&2
+      echo "Created worktree: ${C_GREEN}${dir_name}${C_RESET} (detached at ${C_YELLOW}${short}${C_RESET})" >&2
     else
-      echo "Created worktree: $dir_name (detached at $ref HEAD)" >&2
+      echo "Created worktree: ${C_GREEN}${dir_name}${C_RESET} (detached at ${C_YELLOW}${ref} HEAD${C_RESET})" >&2
     fi
   elif [[ "$ref_type" == "commit" ]]; then
     git -C "$git_dir" worktree add --detach "$root/$dir_name" "$ref" >&2 ||
       die "failed to create worktree"
-    echo "Created worktree: $dir_name (detached)" >&2
+    echo "Created worktree: ${C_GREEN}${dir_name}${C_RESET} (detached)" >&2
   else
     git -C "$git_dir" worktree add "$root/$dir_name" "$ref" >&2 ||
       die "failed to create worktree"
-    echo "Created worktree: $dir_name (branch: $ref)" >&2
+    echo "Created worktree: ${C_GREEN}${dir_name}${C_RESET} (branch: ${C_CYAN}${ref}${C_RESET})" >&2
   fi
 
   echo "$root/$dir_name"
@@ -394,24 +423,68 @@ cmd_list() {
   done
 
   # phase 5: render
-  printf '  %-*s  %-*s  %-*s  %-*s  %-*s  %-*s  %s\n' \
-    "$w_br" "Branch" "$w_st" "Status" "$w_df" "HEAD±" \
-    "$w_pa" "Path" "$w_co" "Commit" "$w_ag" "Age" "Message"
+  printf '  %s  %s  %s  %s  %s  %s  %s\n' \
+    "$(pad "${C_BOLD}Branch${C_RESET}" "$w_br")" \
+    "$(pad "${C_BOLD}Status${C_RESET}" "$w_st")" \
+    "$(pad "${C_BOLD}HEAD±${C_RESET}" "$w_df")" \
+    "$(pad "${C_BOLD}Path${C_RESET}" "$w_pa")" \
+    "$(pad "${C_BOLD}Commit${C_RESET}" "$w_co")" \
+    "$(pad "${C_BOLD}Age${C_RESET}" "$w_ag")" \
+    "${C_BOLD}Message${C_RESET}"
 
   for i in "${!branches[@]}"; do
-    printf '%s %-*s  %-*s  %-*s  %-*s  %-*s  %-*s  %s\n' \
-      "${gutters[$i]}" \
-      "$w_br" "${branches[$i]}" \
-      "$w_st" "${statuses[$i]}" \
-      "$w_df" "${diffs[$i]}" \
-      "$w_pa" "${paths[$i]}" \
-      "$w_co" "${commits[$i]}" \
-      "$w_ag" "${ages[$i]}" \
+    # gutter
+    local gutter
+    if [[ "${gutters[$i]}" == "@" ]]; then
+      gutter="${C_BOLD}${C_GREEN}@${C_RESET}"
+    else
+      gutter=" "
+    fi
+
+    # branch
+    local br="${C_CYAN}${branches[$i]}${C_RESET}"
+
+    # status
+    local st
+    if [[ "${statuses[$i]}" == "✓" ]]; then
+      st="${C_GREEN}✓${C_RESET}"
+    else
+      st="${C_YELLOW}M${C_RESET}"
+    fi
+
+    # diff stats: color + part green, - part red
+    local df=""
+    if [[ -n "${diffs[$i]}" ]]; then
+      local raw="${diffs[$i]}"
+      local plus="${raw%%-*}"
+      local minus="${raw#*+}"
+      minus="${minus#*-}"
+      if [[ -n "$minus" ]]; then
+        df="${C_GREEN}${plus}${C_RESET}${C_RED}-${minus}${C_RESET}"
+      else
+        df="${C_GREEN}${plus}${C_RESET}"
+      fi
+    fi
+
+    # commit
+    local co="${C_YELLOW}${commits[$i]}${C_RESET}"
+
+    # age
+    local ag="${C_DIM}${ages[$i]}${C_RESET}"
+
+    printf ' %s %s  %s  %s  %s  %s  %s  %s\n' \
+      "$gutter" \
+      "$(pad "$br" "$w_br")" \
+      "$(pad "$st" "$w_st")" \
+      "$(pad "$df" "$w_df")" \
+      "$(pad "${paths[$i]}" "$w_pa")" \
+      "$(pad "$co" "$w_co")" \
+      "$(pad "$ag" "$w_ag")" \
       "${messages[$i]}"
   done
 
   echo ""
-  echo "○ $count worktree$([[ $count -ne 1 ]] && echo s)"
+  echo "${C_DIM}○${C_RESET} $count worktree$([[ $count -ne 1 ]] && echo s)"
 }
 
 cmd_rm() {
@@ -457,17 +530,17 @@ cmd_rm() {
   fi
 
   # summary
-  echo "Remove worktree: $wt_path" >&2
+  echo "Remove worktree: ${C_GREEN}${wt_path}${C_RESET}" >&2
   if [[ -n "$wt_branch" ]]; then
-    echo "  Branch: $wt_branch (will be deleted)" >&2
+    echo "  Branch: ${C_CYAN}${wt_branch}${C_RESET} (will be deleted)" >&2
     if [[ $remote -eq 1 ]]; then
-      echo "  Remote: origin/$wt_branch (will be deleted)" >&2
+      echo "  Remote: ${C_CYAN}origin/${wt_branch}${C_RESET} (will be deleted)" >&2
     fi
   else
     echo "  Detached (no branch to delete)" >&2
   fi
   if [[ $dirty -eq 1 ]]; then
-    echo "  ⚠ worktree has uncommitted changes" >&2
+    echo "  ${C_YELLOW}⚠${C_RESET} worktree has uncommitted changes" >&2
   fi
 
   # confirm
@@ -488,16 +561,16 @@ cmd_rm() {
     die "failed to remove worktree"
   git -C "$git_dir" worktree prune
 
-  echo "Removed worktree: $dir_name" >&2
+  echo "Removed worktree: ${C_GREEN}${dir_name}${C_RESET}" >&2
 
   if [[ -n "$wt_branch" ]]; then
     git -C "$git_dir" branch -D "$wt_branch" 2>/dev/null
-    echo "Deleted branch: $wt_branch" >&2
+    echo "Deleted branch: ${C_CYAN}${wt_branch}${C_RESET}" >&2
 
     if [[ $remote -eq 1 ]]; then
       git -C "$git_dir" push origin --delete "$wt_branch" ||
         echo "warning: failed to delete remote branch" >&2
-      echo "Deleted remote branch: origin/$wt_branch" >&2
+      echo "Deleted remote branch: ${C_CYAN}origin/${wt_branch}${C_RESET}" >&2
     fi
   fi
 }
@@ -518,5 +591,6 @@ main() {
 }
 
 main "$@"
+
 
 
