@@ -1,10 +1,21 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.gtk;
   inherit (config._custom) globals;
   inherit (globals)
-    userName configDirectory themeColorsLight themeColorsDark preferDark;
+    userName
+    configDirectory
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    ;
   hmConfig = config.home-manager.users.${userName};
 
   # source: https://aur.archlinux.org/packages/libadwaita-without-adwaita-git
@@ -14,24 +25,18 @@ let
     rev = "b658afcefb513a68d67f146c76045b4479b85029";
     hash = "sha256-tL+yAJf3UZkXd/cSQBkkgJ0yjobKPkWi4p1gS4gEEbA=";
   };
-  catppuccin-adw-light-theme-path =
-    "${inputs.catppuccin-adw}/adw/themes/${themeColorsLight.flavour}/catppuccin-${themeColorsLight.flavour}-${cfg.theme.accent}.css";
-  catppuccin-adw-dark-theme-path =
-    "${inputs.catppuccin-adw}/adw/themes/${themeColorsDark.flavour}/catppuccin-${themeColorsDark.flavour}-${cfg.theme.accent}.css";
+  catppuccin-adw-light-theme-path = "${inputs.catppuccin-adw}/adw/themes/${themeColorsLight.flavour}/catppuccin-${themeColorsLight.flavour}-${cfg.theme.accent}.css";
+  catppuccin-adw-dark-theme-path = "${inputs.catppuccin-adw}/adw/themes/${themeColorsDark.flavour}/catppuccin-${themeColorsDark.flavour}-${cfg.theme.accent}.css";
   extraCss = lib.concatLines [
     ''
-      @import url("file://${
-        lib._custom.relativeSymlink configDirectory ./dotfiles/gtk-custom.css
-      }");
+      @import url("file://${lib._custom.relativeSymlink configDirectory ./dotfiles/gtk-custom.css}");
     ''
     (lib.optionalString (!cfg.enableCsd) ''
-      @import url("file://${
-        lib._custom.relativeSymlink configDirectory
-        ./dotfiles/gtk-remove-csd.css
-      }");
+      @import url("file://${lib._custom.relativeSymlink configDirectory ./dotfiles/gtk-remove-csd.css}");
     '')
   ];
-in {
+in
+{
   options._custom.desktop.gtk = {
     enable = lib.mkEnableOption { };
     enableCsd = lib.mkEnableOption { };
@@ -62,10 +67,11 @@ in {
       (final: prev: {
         libadwaita-without-adwaita = prev.libadwaita.overrideAttrs (oldAttrs: {
           doCheck = false;
-          patches = (oldAttrs.patches or [ ])
-            ++ [ "${libadwaitaWithoutAdwaitaAurRepo}/theming_patch.diff" ];
-          mesonFlags = (oldAttrs.mesonFlags or [ ])
-            ++ [ "--buildtype=release" "-Dexamples=false" ];
+          patches = (oldAttrs.patches or [ ]) ++ [ "${libadwaitaWithoutAdwaitaAurRepo}/theming_patch.diff" ];
+          mesonFlags = (oldAttrs.mesonFlags or [ ]) ++ [
+            "--buildtype=release"
+            "-Dexamples=false"
+          ];
         });
 
         # HACK: inject catppuccin dark/light themes directly into the pkg
@@ -80,7 +86,11 @@ in {
             tag = "v6.2";
             hash = "sha256-YYaqSEnIYHHkY4L3UhFBkR3DehoB6QADhSGOP/9NKx8=";
           };
-          nativeBuildInputs = with pkgs; [ meson ninja dart-sass ];
+          nativeBuildInputs = with pkgs; [
+            meson
+            ninja
+            dart-sass
+          ];
           postPatch = ''
             echo "🎨 Applying custom border radius settings..."
             local settingsFile="src/sass/_settings.scss"
@@ -114,11 +124,14 @@ in {
         });
       })
     ];
-    system.replaceDependencies.replacements = with pkgs;
-      lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [{
-        oldDependency = libadwaita.out;
-        newDependency = libadwaita-without-adwaita.out;
-      }];
+    system.replaceDependencies.replacements =
+      with pkgs;
+      lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [
+        {
+          oldDependency = libadwaita.out;
+          newDependency = libadwaita-without-adwaita.out;
+        }
+      ];
 
     environment = {
       systemPackages = with pkgs; [
@@ -176,8 +189,7 @@ in {
       ];
 
       dconf.settings = {
-        "org/gnome/desktop/interface".color-scheme =
-          if preferDark then "prefer-dark" else "default";
+        "org/gnome/desktop/interface".color-scheme = if preferDark then "prefer-dark" else "default";
 
         # Hide window buttons from CSD applications (e.g., Nautilus).
         "org/gnome/desktop/wm/preferences".button-layout = "";
@@ -221,15 +233,11 @@ in {
           inherit (globals.fonts) size;
         };
         iconTheme = {
-          name = if preferDark then
-            "${globals.iconTheme.name}-dark"
-          else
-            "${globals.iconTheme.name}-light";
+          name = if preferDark then "${globals.iconTheme.name}-dark" else "${globals.iconTheme.name}-light";
           inherit (globals.iconTheme) package;
         };
         theme = {
-          name =
-            if preferDark then "${cfg.theme.name}-dark" else cfg.theme.name;
+          name = if preferDark then "${cfg.theme.name}-dark" else cfg.theme.name;
           inherit (cfg.theme) package;
         };
         gtk3 = {
