@@ -53,7 +53,7 @@ notify() {
   local title="$1" body="$2" urgency="${3:-normal}"
 
   if command -v notify-send >/dev/null 2>&1; then
-    notify-send --app-name="qwen-code" --urgency="$urgency" "$title" "$body"
+    notify-send --app-name="qwen-code" --app-icon="qwen-code" ---icon="qwen-code" --urgency="$urgency" --hint=string:custom-sound:message "$title" "$body"
   elif [[ "$OSTYPE" == "darwin"* ]]; then
     osascript -e "display notification \"$body\" with title \"$title\""
   elif command -v powershell.exe >/dev/null 2>&1; then
