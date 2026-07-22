@@ -56,18 +56,13 @@ _wt() {
 
       # Local branches
       while IFS= read -r line; do
-        line="${line#\* }"
-        line="${line## }"
         [[ -n "$line" ]] && branches+=("$line")
-      done < <(git -C "$git_dir" branch 2>/dev/null)
+      done < <(git -C "$git_dir" branch --format='%(refname:short)' 2>/dev/null)
 
       # Remote branches
       while IFS= read -r line; do
-        line="${line## }"
-        line="${line#origin/}"
-        line="${line#refs/remotes/origin/}"
         [[ -n "$line" && "$line" != "HEAD" ]] && remotes+=("$line")
-      done < <(git -C "$git_dir" branch -r 2>/dev/null)
+      done < <(git -C "$git_dir" branch -r --format='%(refname:lstrip=3)' 2>/dev/null)
 
       # Commit hashes (recent 20)
       while IFS= read -r line; do
@@ -143,4 +138,3 @@ _wt() {
 }
 
 compdef _wt wt
-
