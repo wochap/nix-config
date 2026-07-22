@@ -23,10 +23,14 @@ die() {
 # Pad a string to a minimum visible width (ignores ANSI escape sequences in length calc)
 pad() {
   local str="$1" width="$2"
-  local stripped
-  stripped=$'\e'
-  stripped="${stripped}["
-  local visible="${str//${stripped}[^m]*m/}"
+  local visible="$str"
+  local esc=$'\e['
+  while [[ "$visible" == *"$esc"* ]]; do
+    local before="${visible%%"$esc"*}"
+    local after="${visible#*"$esc"}"
+    after="${after#*m}"
+    visible="${before}${after}"
+  done
   local len=${#visible}
   printf '%s' "$str"
   while ((len < width)); do
@@ -423,7 +427,8 @@ cmd_list() {
   done
 
   # phase 5: render
-  printf '  %s  %s  %s  %s  %s  %s  %s\n' \
+  printf ' %s %s  %s  %s  %s  %s  %s  %s\n' \
+    " " \
     "$(pad "${C_BOLD}Branch${C_RESET}" "$w_br")" \
     "$(pad "${C_BOLD}Status${C_RESET}" "$w_st")" \
     "$(pad "${C_BOLD}HEAD±${C_RESET}" "$w_df")" \
@@ -591,6 +596,8 @@ main() {
 }
 
 main "$@"
+
+
 
 
 
