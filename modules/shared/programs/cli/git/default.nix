@@ -19,6 +19,9 @@ in
 
     _custom.hm = {
       home.shellAliases = {
+        wts = "wt switch";
+        wtc = "wt clone";
+        wtl = "wt list";
         gst = "git status";
         gc = "git clone";
         gco = "git checkout";
