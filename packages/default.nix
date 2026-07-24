@@ -15,7 +15,6 @@ let
     };
     interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock { };
     mailnotify = pkgs.callPackage ./mailnotify { };
-    mangadesk = pkgs.callPackage ./mangadesk { };
     offlinemsmtp = pkgs.callPackage ./offlinemsmtp { };
     ollama-webui-lite = pkgs.callPackage ./ollama-webui-lite { };
     pam-autologin = pkgs.callPackage ./pam-autologin { };
