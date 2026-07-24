@@ -126,6 +126,7 @@ in
     # _custom.system.apple.enable = false;
     # _custom.system.windows.enable = false;
     # _custom.system.windows.enableSamba = false;
+    _custom.system.user.password = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
 
     _custom.desktop.networking.enableLocalSend = true;
     _custom.desktop.networking.enableWol = true;

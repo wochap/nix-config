@@ -5,12 +5,19 @@ let
   cfg = config._custom.system.user;
 in
 {
-  options._custom.system.user.enable = lib.mkEnableOption { };
+  options._custom.system.user = {
+    enable = lib.mkEnableOption { };
+    # generate password with `mkpasswd -m sha-512`
+    password = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     # create user
     _custom.user = {
-      hashedPassword = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
+      hashedPassword = cfg.password;
       isNormalUser = true;
       isSystemUser = false;
       extraGroups = [
