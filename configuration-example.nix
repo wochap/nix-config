@@ -98,7 +98,6 @@ in
     home = "/home/gean";
     extraGroups = [
       "input"
-      "audio"
       "disk"
       "networkmanager"
       "storage"
