@@ -10,7 +10,10 @@ let
   inherit (config._custom.globals) userName;
 in
 {
-  options._custom.security.doas.enable = lib.mkEnableOption { };
+  options._custom.security.doas = {
+    enable = lib.mkEnableOption { };
+    requirePassword = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     _custom.user.extraGroups = [ "wheel" ];
@@ -21,11 +24,11 @@ in
     # Enable and configure `doas`.
     security.doas = {
       enable = true;
-      wheelNeedsPassword = false;
+      wheelNeedsPassword = cfg.requirePassword;
       extraRules = [
         {
           users = [ userName ];
-          noPass = true;
+          noPass = !cfg.requirePassword;
           keepEnv = true;
         }
       ];

@@ -14,6 +14,7 @@
     _custom.globals.enable = true;
 
     _custom.security.doas.enable = true;
+    _custom.security.doas.requirePassword = true;
     # _custom.security.gnome-keyring.enable = lib.mkDefault true;
     _custom.security.gpg.enable = true;
     # _custom.security.kwallet.enable = lib.mkDefault false;
