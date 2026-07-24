@@ -12,14 +12,14 @@ in
 {
   options._custom.desktop.ydotool = {
     enable = lib.mkEnableOption { };
-    systemdEnable = lib.mkEnableOption { };
+    enableSystemd = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ ydotool ];
 
     _custom.hm = {
-      systemd.user.services.ydotoold = lib.mkIf cfg.systemdEnable (
+      systemd.user.services.ydotoold = lib.mkIf cfg.enableSystemd (
         lib._custom.mkWaylandService {
           Unit = {
             Description = "Generic command-line automation tool (no X!)";

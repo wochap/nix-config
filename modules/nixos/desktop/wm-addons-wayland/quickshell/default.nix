@@ -65,7 +65,7 @@ in
 {
   options._custom.desktop.quickshell = {
     enable = lib.mkEnableOption { };
-    systemdEnable = lib.mkEnableOption { };
+    enableSystemd = lib.mkEnableOption { };
     package = lib.mkOption {
       type = lib.types.package;
       default = quickshell-final;
@@ -124,7 +124,7 @@ in
       # Install custom icon theme
       xdg.dataFile."icons/Reversal-Extra".source = "${inputs.reversal-extra}";
 
-      systemd.user.services.shell = lib.mkIf cfg.systemdEnable (
+      systemd.user.services.shell = lib.mkIf cfg.enableSystemd (
         lib._custom.mkWaylandService {
           Unit = {
             Description = "Flexible toolkit for making desktop shells with QtQuick, for Wayland and X11";

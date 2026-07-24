@@ -61,7 +61,7 @@
     _custom.desktop.hyprsunset.enable = lib.mkDefault false;
     _custom.desktop.kanshi.enable = true;
     _custom.desktop.quickshell.enable = lib.mkDefault true;
-    _custom.desktop.quickshell.systemdEnable = lib.mkDefault true;
+    _custom.desktop.quickshell.enableSystemd = lib.mkDefault true;
     _custom.desktop.idle.enable = lib.mkDefault true;
     _custom.desktop.swww.enable = true;
     _custom.desktop.tofi.enable = true;

@@ -44,7 +44,7 @@
     # _custom.desktop.mouseless.enable = lib.mkDefault false;
     # _custom.desktop.music.enable = true;
     _custom.desktop.networking.enable = true;
-    _custom.desktop.networking.enableWifi = true;
+    # _custom.desktop.networking.enableWifi = true;
     # _custom.desktop.plymouth.enable = lib.mkDefault true;
     # _custom.desktop.power-management.enable = true;
     # _custom.desktop.power-management.enableBatty = true;
@@ -62,7 +62,7 @@
     # _custom.desktop.hyprsunset.enable = lib.mkDefault false;
     # _custom.desktop.kanshi.enable = true;
     # _custom.desktop.quickshell.enable = lib.mkDefault true;
-    # _custom.desktop.quickshell.systemdEnable = lib.mkDefault true;
+    # _custom.desktop.quickshell.enableSystemd = lib.mkDefault true;
     # _custom.desktop.idle.enable = lib.mkDefault true;
     # _custom.desktop.swww.enable = true;
     # _custom.desktop.tofi.enable = true;

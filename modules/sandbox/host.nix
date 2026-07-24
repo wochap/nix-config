@@ -87,7 +87,7 @@ in
     # _custom.programs.discord.enable = true;
     _custom.programs.firefox.enable = true;
     _custom.programs.foot.enable = true;
-    # _custom.programs.foot.systemdEnable = true;
+    # _custom.programs.foot.enableSystemd = true;
     # _custom.programs.foot.settings.main = {
     #   initial-window-size-pixels = "1440x900";
     #   workers = 8;
@@ -108,7 +108,7 @@ in
     # _custom.programs.presenterm.enable = true;
     # _custom.programs.taskwarrior.enable = true;
     _custom.programs.tmux.enable = true;
-    # _custom.programs.tmux.systemdEnable = true;
+    # _custom.programs.tmux.enableSystemd = true;
     # _custom.programs.urlscan.enable = true;
     # _custom.programs.youtube.enable = true;
     _custom.programs.ai-agents.enable = true;

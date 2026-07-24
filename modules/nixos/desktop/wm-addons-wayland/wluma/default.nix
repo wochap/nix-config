@@ -25,7 +25,7 @@ in
 {
   options._custom.desktop.wluma = {
     enable = lib.mkEnableOption { };
-    systemdEnable = lib.mkEnableOption { };
+    enableSystemd = lib.mkEnableOption { };
     config = lib.mkOption {
       type = tomlFormat.type;
       default = { };
@@ -50,7 +50,7 @@ in
 
       xdg.configFile."wluma/config.toml".source = tomlFormat.generate "config.toml" cfg.config;
 
-      systemd.user.services.wluma = lib.mkIf cfg.systemdEnable (
+      systemd.user.services.wluma = lib.mkIf cfg.enableSystemd (
         lib._custom.mkWaylandService {
           Unit = {
             Description = "Adjusting screen brightness based on screen contents and amount of ambient light";

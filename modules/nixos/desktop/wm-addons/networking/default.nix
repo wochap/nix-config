@@ -13,9 +13,9 @@ in
   options._custom.desktop.networking = {
     enable = lib.mkEnableOption { };
     enableWifi = lib.mkEnableOption { };
-    localSendEnable = lib.mkEnableOption { };
-    pixieCoreEnable = lib.mkEnableOption { };
-    wolEnable = lib.mkEnableOption { };
+    enableLocalSend = lib.mkEnableOption { };
+    enablePixieCore = lib.mkEnableOption { };
+    enableWol = lib.mkEnableOption { };
     enableOpenSnitch = lib.mkEnableOption "OpenSnitch application firewall";
   };
 
@@ -147,18 +147,18 @@ in
             # se layout-editor
             5601
           ]
-          ++ lib.optionals cfg.pixieCoreEnable [
+          ++ lib.optionals cfg.enablePixieCore [
             # TCP 8086 is the custom HTTP port you chose for Pixiecore
             8086
           ];
           allowedUDPPorts =
             [ ]
-            ++ lib.optionals cfg.pixieCoreEnable [
+            ++ lib.optionals cfg.enablePixieCore [
               67 # DHCP server port
               69 # TFTP port (for the initial iPXE bootloader)
               4011 # ProxyDHCP port (Pixiecore's magic trick)
             ]
-            ++ lib.optionals cfg.wolEnable [ 9 ];
+            ++ lib.optionals cfg.enableWol [ 9 ];
         };
       };
 
@@ -167,7 +167,7 @@ in
       # service discovery, airplay, chromecast, vnc, etc
       services.avahi.enable = true;
 
-      programs.localsend = lib.mkIf cfg.localSendEnable {
+      programs.localsend = lib.mkIf cfg.enableLocalSend {
         enable = true;
         openFirewall = true;
       };

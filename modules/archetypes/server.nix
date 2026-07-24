@@ -19,7 +19,7 @@
     _custom.security.ssh.enable = true;
 
     # _custom.system.console.enable = true;
-    # _custom.system.fhs-compat.enable = true;
+    _custom.system.fhs-compat.enable = true;
     _custom.system.others.enable = true;
     # _custom.system.windows.enable = lib.mkDefault true;
     # _custom.system.windows.enableSamba = lib.mkDefault true;
@@ -31,7 +31,7 @@
     # _custom.desktop.bluetooth.enable = true;
     # _custom.desktop.calendar.enable = true;
     # _custom.desktop.cursor.enable = true;
-    _custom.desktop.dbus.enable = true;
+    # _custom.desktop.dbus.enable = true;
     # _custom.desktop.email.enable = true;
     _custom.desktop.fastfetch.enable = true;
     _custom.desktop.fonts.enable = true;
@@ -62,7 +62,7 @@
     # _custom.desktop.hyprsunset.enable = lib.mkDefault false;
     # _custom.desktop.kanshi.enable = true;
     # _custom.desktop.quickshell.enable = lib.mkDefault true;
-    # _custom.desktop.quickshell.systemdEnable = lib.mkDefault true;
+    # _custom.desktop.quickshell.enableSystemd = lib.mkDefault true;
     # _custom.desktop.idle.enable = lib.mkDefault true;
     # _custom.desktop.swww.enable = true;
     # _custom.desktop.tofi.enable = true;

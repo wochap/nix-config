@@ -27,7 +27,7 @@ in
 {
   options._custom.programs.foot = {
     enable = lib.mkEnableOption { };
-    systemdEnable = lib.mkEnableOption { };
+    enableSystemd = lib.mkEnableOption { };
     settings = lib.mkOption {
       type = iniFormat.type;
       default = { };
@@ -71,7 +71,7 @@ in
         };
       };
 
-      systemd.user.services.foot-server = lib.mkIf cfg.systemdEnable {
+      systemd.user.services.foot-server = lib.mkIf cfg.enableSystemd {
         Unit = {
           Description = "Foot terminal server mode";
           Documentation = "man:foot(1)";
@@ -88,7 +88,7 @@ in
         Install.WantedBy = [ "graphical-session.target" ];
       };
 
-      systemd.user.sockets.foot-server = lib.mkIf cfg.systemdEnable {
+      systemd.user.sockets.foot-server = lib.mkIf cfg.enableSystemd {
         Socket.ListenStream = "%t/foot.sock";
         Unit = {
           PartOf = "graphical-session.target";

@@ -79,7 +79,7 @@ in
         patches = (oldAttrs.patches or [ ]) ++ [ ./patches/tmux-osc777.patch ];
       });
     };
-    systemdEnable = lib.mkEnableOption { };
+    enableSystemd = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -129,7 +129,7 @@ in
       programs.fzf.tmux.enableShellIntegration = false;
 
       # systemd service required by tmux-continuum
-      systemd.user.services.tmux-server = lib.mkIf cfg.systemdEnable {
+      systemd.user.services.tmux-server = lib.mkIf cfg.enableSystemd {
         Unit = {
           Description = "tmux default session (detached)";
           Documentation = "man:tmux(1)";
