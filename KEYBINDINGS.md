@@ -130,7 +130,7 @@
 | <kbd>m</kbd>                                      | System monitor |
 | <kbd>e</kbd>                                      | Neomutt        |
 | <kbd>r</kbd>                                      | Newsboat       |
-| <kbd>u</kbd>                                      | Ncmpcpp        |
+| <kbd>u</kbd>                                      | Rmpc        |
 | <kbd>b</kbd>                                      | Buku select    |
 | <kbd>Shift</kbd> + <kbd>b</kbd>                   | Buku add       |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>b</kbd> | Buku edit      |

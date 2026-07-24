@@ -37,11 +37,6 @@ in
       home.packages = with pkgs; [
         cava # visualizer
         mpc # mpd cli
-        (pkgs.ncmpcpp.override {
-          visualizerSupport = true;
-          clockSupport = true;
-          taglibSupport = true;
-        })
         playerctl # media player cli
         sacad # search and download album covert
         # ueberzugpp
@@ -54,8 +49,11 @@ in
         };
         "cava/config-light".text = catppuccin-cava-light-theme;
         "cava/config-dark".text = catppuccin-cava-dark-theme;
-        "ncmpcpp/config".source = ./dotfiles/ncmpcpp/config;
+
+        "rmpc/config.ron".source = ./dotfiles/rmpc/config.ron;
       };
+
+      programs.rmpc.enable = true;
 
       # media keys
       services.playerctld.enable = true;
