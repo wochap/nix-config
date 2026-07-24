@@ -26,7 +26,7 @@ in
     user = lib.mkOption {
       type = lib.types.attrs;
       default = { };
-      description = "Options to pass directly to users.extraUsers primary user.";
+      description = "Options to pass directly to users.users primary user.";
     };
   };
 
@@ -62,7 +62,7 @@ in
     # hm -> home-manager.users.<primary user>
     home-manager.users.${userName} = lib.mkAliasDefinitions options._custom.hm;
 
-    # user -> users.extraUsers.<primary user>
-    users.extraUsers.${userName} = lib.mkAliasDefinitions options._custom.user;
+    # user -> users.users.<primary user>
+    users.users.${userName} = lib.mkAliasDefinitions options._custom.user;
   };
 }
