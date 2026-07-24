@@ -10,15 +10,13 @@ let
   cfg = config._custom.system.fhs-compat;
 in
 {
-  # TODO: fix nix-ld build
-  # imports = [ inputs.nix-ld.nixosModules.nix-ld ];
   options._custom.system.fhs-compat.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       inputs.nix-alien.packages.${stdenv.hostPlatform.system}.nix-alien
-      appimage-run
       # NOTE: you can also run non nix pkgs apps with `steam-run`
+      appimage-run
     ];
 
     # populates contents of /bin and /usr/bin/
@@ -28,7 +26,6 @@ in
     # run unpatched dynamic binaries on NixOS
     programs.nix-ld = {
       enable = true;
-      # dev.enable = false;
       libraries = with pkgs; [
         # nix-ld adds the following libs by default
         zlib
