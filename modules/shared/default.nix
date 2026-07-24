@@ -61,7 +61,7 @@
   ];
 
   config._custom.hm.imports = [
-    ./symlinks
+    ./home-manager/symlinks
     ./home-manager/copy-files
   ];
 }
