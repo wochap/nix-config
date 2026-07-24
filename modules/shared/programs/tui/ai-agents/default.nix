@@ -13,6 +13,7 @@ let
   claude-session-duration = pkgs.writeScriptBin "claude-session-duration" (
     builtins.readFile ./scripts/claude-session-duration.sh
   );
+  antigravity-nix-pkgs = inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   options._custom.programs.ai-agents.enable = lib.mkEnableOption { };
@@ -20,9 +21,9 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       claude-session-duration
-      inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default # Base App
-      inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.google-antigravity-ide # IDE
-      inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.google-antigravity-cli # CLI
+      antigravity-nix-pkgs.default # Base App
+      antigravity-nix-pkgs.google-antigravity-ide # IDE
+      antigravity-nix-pkgs.google-antigravity-cli # CLI
     ];
 
     _custom.hm = {
