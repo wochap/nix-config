@@ -53,26 +53,12 @@ in
 
       services.xserver.enable = true;
 
-      # HACK: allow manually start graphical-session-pre.target
+      # HACK: allow manually start these targets
       systemd.user.targets.graphical-session-pre.unitConfig = {
         RefuseManualStart = "no";
       };
-      # HACK: allow manually start graphical-session.target
       systemd.user.targets.graphical-session.unitConfig = {
         RefuseManualStart = "no";
-      };
-
-      _custom.hm = {
-        # wayland.systemd.target = "graphical-session.target";
-
-        # fake a tray to let apps start
-        # https://github.com/nix-community/home-manager/issues/2064
-        systemd.user.targets.tray = {
-          Unit = {
-            Description = "Home Manager System Tray";
-            Requires = [ "graphical-session-pre.target" ];
-          };
-        };
       };
     })
   ];
