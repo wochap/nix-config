@@ -55,10 +55,7 @@ in
       # pw-metadata -n settings 0 clock.force-quantum 512
       extraConfig.pipewire."92-low-latency" = {
         "context.properties" = {
-          "default.clock.rate" = 48000;
-          "default.clock.quantum" = 512;
-          "default.clock.min-quantum" = 512;
-          "default.clock.max-quantum" = 512;
+          "clock.force-quantum" = 512;
         };
       };
     };
