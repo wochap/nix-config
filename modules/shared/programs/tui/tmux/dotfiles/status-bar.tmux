@@ -46,7 +46,7 @@ tmux set-option -g status-position "bottom"
 tmux set-option -g status-style bg=default,fg=default
 tmux set-option -g status-justify "absolute-centre"
 tmux set-option -g status-left "#[bg=default,fg=${surface1}] ${pane_index}${pane_icon} #{b:pane_title}"
-tmux set-option -g status-right "#[bg=default,fg=${lavender}]${user_module}${host_module}${prefix_module}${sync_module}${zoom_module}#[bg=default,fg=${surface1}]${windows_icon} #{window_panes}  ${session_icon} #S "
+tmux set-option -g status-right "#[bg=default,fg=${lavender}]${prefix_module}${sync_module}${zoom_module}#[bg=default,fg=${red}]${user_module}${host_module}#[bg=default,fg=${surface1}]${windows_icon} #{window_panes}  ${session_icon} #S "
 tmux set-option -g window-status-format "#[bg=default,fg=${surface1}]  ${window_index} ${window_icon} ${window_name}  #[bg=default,fg=default]"
 tmux set-option -g window-status-current-format "#[bg=default,fg=${lavender}]#[bg=${lavender},fg=${base}] ${window_index} ${window_icon} ${window_name} #[bg=default,fg=${lavender}]#[bg=default,fg=default]"
 
