@@ -28,6 +28,7 @@
     # _custom.system.windows.enable = lib.mkDefault true;
     # _custom.system.windows.enableSamba = lib.mkDefault true;
     _custom.system.internationalization.enable = true;
+    _custom.system.user.enable = true;
 
     # _custom.desktop.audio.enable = true;
     # _custom.desktop.audio.enableEasyeffects = lib.mkDefault true;

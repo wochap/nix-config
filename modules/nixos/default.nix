@@ -103,7 +103,6 @@
     ./system/internationalization
     ./system/others
     ./system/windows
-
-    ./user
+    ./system/user
   ];
 }
