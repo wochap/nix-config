@@ -7,7 +7,7 @@
 }:
 
 let
-  cfg = config._custom.programs.claude-code;
+  cfg = config._custom.programs.ai-agents;
   inherit (config._custom.globals) configDirectory userName;
   hmConfig = config.home-manager.users.${userName};
   claude-session-duration = pkgs.writeScriptBin "claude-session-duration" (
@@ -15,7 +15,7 @@ let
   );
 in
 {
-  options._custom.programs.claude-code.enable = lib.mkEnableOption { };
+  options._custom.programs.ai-agents.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
