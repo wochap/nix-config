@@ -23,6 +23,7 @@
     _custom.system.others.enable = true;
     _custom.system.windows.enable = lib.mkDefault true;
     _custom.system.windows.enableSamba = lib.mkDefault true;
+    _custom.system.internationalization.enable = true;
 
     _custom.desktop.fastfetch.enable = true;
     _custom.desktop.fonts.enable = true;

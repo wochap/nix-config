@@ -1,7 +1,17 @@
-{ pkgs, ... }:
-
 {
-  config = {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+
+let
+  cfg = config._custom.system.internationalization;
+in
+{
+  options._custom.system.internationalization.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       nuspell
       hyphen
