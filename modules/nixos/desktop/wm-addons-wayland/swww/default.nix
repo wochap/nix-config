@@ -1,17 +1,20 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.swww;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
-  swww-random = pkgs.writeScriptBin "swww-random"
-    (builtins.readFile ./scripts/swww-random.sh);
-  swww-pick =
-    pkgs.writeScriptBin "swww-pick" (builtins.readFile ./scripts/swww-pick.sh);
-  swww-unsplash = pkgs.writeScriptBin "swww-unsplash"
-    (builtins.readFile ./scripts/swww-unsplash.sh);
+  swww-random = pkgs.writeScriptBin "swww-random" (builtins.readFile ./scripts/swww-random.sh);
+  swww-pick = pkgs.writeScriptBin "swww-pick" (builtins.readFile ./scripts/swww-pick.sh);
+  swww-unsplash = pkgs.writeScriptBin "swww-unsplash" (builtins.readFile ./scripts/swww-unsplash.sh);
   inherit (pkgs) awww;
-in {
+in
+{
   options._custom.desktop.swww.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -22,7 +25,12 @@ in {
             "${hmConfig.home.homeDirectory}/Sync/backgrounds";
         };
 
-        packages = [ awww swww-random swww-pick swww-unsplash ];
+        packages = [
+          awww
+          swww-random
+          swww-pick
+          swww-unsplash
+        ];
         sessionVariables = {
           SWWW_TRANSITION_TYPE = "simple";
           SWWW_TRANSITION_STEP = "45";

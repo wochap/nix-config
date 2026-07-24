@@ -1,6 +1,10 @@
 # source: https://github.com/sumnerevans/home-manager-config/blob/master/pkgs/mailnotify.nix
 
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "mailnotify";

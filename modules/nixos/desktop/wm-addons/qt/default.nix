@@ -1,26 +1,35 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.qt;
   inherit (config._custom) globals;
   inherit (config._custom.globals)
-    userName themeColorsLight themeColorsDark preferDark iconTheme;
+    userName
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    iconTheme
+    ;
   hmConfig = config.home-manager.users.${userName};
 
   catppuccin-kde-final = pkgs.catppuccin-kde.override {
-    flavour = [ themeColorsLight.flavour themeColorsDark.flavour ];
+    flavour = [
+      themeColorsLight.flavour
+      themeColorsDark.flavour
+    ];
     accents = [ cfg.theme.accent ];
     winDecStyles = [ "modern" ];
   };
-  catppuccin-kde-light-theme-path =
-    "${catppuccin-kde-final}/share/color-schemes/Catppuccin${
-      lib._custom.capitalize themeColorsLight.flavour
-    }${lib._custom.capitalize cfg.theme.accent}.colors";
-  catppuccin-kde-dark-theme-path =
-    "${catppuccin-kde-final}/share/color-schemes/Catppuccin${
-      lib._custom.capitalize themeColorsDark.flavour
-    }${lib._custom.capitalize cfg.theme.accent}.colors";
-in {
+  catppuccin-kde-light-theme-path = "${catppuccin-kde-final}/share/color-schemes/Catppuccin${lib._custom.capitalize themeColorsLight.flavour}${lib._custom.capitalize cfg.theme.accent}.colors";
+  catppuccin-kde-dark-theme-path = "${catppuccin-kde-final}/share/color-schemes/Catppuccin${lib._custom.capitalize themeColorsDark.flavour}${lib._custom.capitalize cfg.theme.accent}.colors";
+in
+{
   options._custom.desktop.qt = {
     enable = lib.mkEnableOption "setup qt theme and apps";
     enableTheme = lib.mkEnableOption { };
@@ -51,41 +60,50 @@ in {
           };
         });
       })
-    ] ++ lib.optionals cfg.enableQt6ctKde [
+    ]
+    ++ lib.optionals cfg.enableQt6ctKde [
       (final: prev: {
         # override qt6ct with qt6ct-kde to fix style in kde apps
         # https://aur.archlinux.org/packages/qt6ct-kde
         # patch for qt6ct v0.11
-        kdePackages = prev.kdePackages.overrideScope (kdeSelf: kdePrev: {
-          qt6ct = kdePrev.qt6ct.overrideAttrs (oldAttrs: rec {
-            version = "00823e41aa60e8fe266d5aee328e82ad1ad94348";
-            src = pkgs.fetchFromGitLab {
-              domain = "opencode.net";
-              owner = "trialuser";
-              repo = "qt6ct";
-              rev = version;
-              sha256 = "sha256-aQmqLpM0vogMsYaDS9OeKVI3N53uY4NBC4FF10hK8Uw=";
-            };
-          });
-        });
-        qt6Packages = prev.qt6Packages.overrideScope (qt6Self: qt6Prev: {
-          qt6ct = qt6Prev.qt6ct.overrideAttrs (oldAttrs: rec {
-            version = "00823e41aa60e8fe266d5aee328e82ad1ad94348";
-            src = pkgs.fetchFromGitLab {
-              domain = "opencode.net";
-              owner = "trialuser";
-              repo = "qt6ct";
-              rev = version;
-              sha256 = "sha256-aQmqLpM0vogMsYaDS9OeKVI3N53uY4NBC4FF10hK8Uw=";
-            };
-          });
-        });
+        kdePackages = prev.kdePackages.overrideScope (
+          kdeSelf: kdePrev: {
+            qt6ct = kdePrev.qt6ct.overrideAttrs (oldAttrs: rec {
+              version = "00823e41aa60e8fe266d5aee328e82ad1ad94348";
+              src = pkgs.fetchFromGitLab {
+                domain = "opencode.net";
+                owner = "trialuser";
+                repo = "qt6ct";
+                rev = version;
+                sha256 = "sha256-aQmqLpM0vogMsYaDS9OeKVI3N53uY4NBC4FF10hK8Uw=";
+              };
+            });
+          }
+        );
+        qt6Packages = prev.qt6Packages.overrideScope (
+          qt6Self: qt6Prev: {
+            qt6ct = qt6Prev.qt6ct.overrideAttrs (oldAttrs: rec {
+              version = "00823e41aa60e8fe266d5aee328e82ad1ad94348";
+              src = pkgs.fetchFromGitLab {
+                domain = "opencode.net";
+                owner = "trialuser";
+                repo = "qt6ct";
+                rev = version;
+                sha256 = "sha256-aQmqLpM0vogMsYaDS9OeKVI3N53uY4NBC4FF10hK8Uw=";
+              };
+            });
+          }
+        );
       })
     ];
 
-    fonts.packages = with pkgs; [ noto-fonts source-sans-pro ];
+    fonts.packages = with pkgs; [
+      noto-fonts
+      source-sans-pro
+    ];
 
-    environment.systemPackages = with pkgs;
+    environment.systemPackages =
+      with pkgs;
       [
         # custom themes
         darkly
@@ -110,7 +128,8 @@ in {
         kdePackages.qqc2-desktop-style
         catppuccin-kde-final
         hicolor-icon-theme # fallback icons
-      ] ++ lib.optionals cfg.enableQt5Integration [
+      ]
+      ++ lib.optionals cfg.enableQt5Integration [
         # custom themes
         # catppuccin-qt5ct
 
@@ -144,9 +163,7 @@ in {
 
         symlinks = {
           "${hmConfig.home.homeDirectory}/.config/kdeglobals" =
-            "${hmConfig.home.homeDirectory}/.config/kdeglobals-${
-              if preferDark then "dark" else "light"
-            }";
+            "${hmConfig.home.homeDirectory}/.config/kdeglobals-${if preferDark then "dark" else "light"}";
         };
       };
 

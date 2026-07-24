@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.programs.lang-web;
-in {
+in
+{
   options._custom.programs.lang-web.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -29,7 +35,10 @@ in {
 
     _custom.hm = {
       home = {
-        sessionPath = [ "$HOME/.npm-packages/bin" "$HOME/.bun/bin" ];
+        sessionPath = [
+          "$HOME/.npm-packages/bin"
+          "$HOME/.bun/bin"
+        ];
 
         sessionVariables = {
           NODE_PATH = "$HOME/.npm-packages/lib/node_modules:$NODE_PATH";
@@ -51,4 +60,3 @@ in {
     };
   };
 }
-

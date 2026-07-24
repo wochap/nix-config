@@ -1,9 +1,19 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.tmux;
   inherit (config._custom.globals)
-    configDirectory themeColorsLight themeColorsDark preferDark;
+    configDirectory
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    ;
 
   fzfDefaultOptsStr = lib.strings.concatStringsSep " " (
     config._custom.programs.fzf.defaultOptions
@@ -33,12 +43,15 @@ let
   tmux-final = cfg.package;
   tmux-sessionx =
     inputs.tmux-sessionx.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs
-    (oldAttrs: { postInstall = ""; });
-  tmux-kill-unnamed-sessions = pkgs.writeScriptBin "tmux-kill-unnamed-sessions"
-    (builtins.readFile ./scripts/tmux-kill-unnamed-sessions.sh);
-  tmux-kill-unattached-sessions =
-    pkgs.writeScriptBin "tmux-kill-unattached-sessions"
-    (builtins.readFile ./scripts/tmux-kill-unattached-sessions.sh);
+      (oldAttrs: {
+        postInstall = "";
+      });
+  tmux-kill-unnamed-sessions = pkgs.writeScriptBin "tmux-kill-unnamed-sessions" (
+    builtins.readFile ./scripts/tmux-kill-unnamed-sessions.sh
+  );
+  tmux-kill-unattached-sessions = pkgs.writeScriptBin "tmux-kill-unattached-sessions" (
+    builtins.readFile ./scripts/tmux-kill-unattached-sessions.sh
+  );
   start-tmux-server = pkgs.writeScriptBin "start-tmux-server" ''
     #!/usr/bin/env bash
 
@@ -56,13 +69,14 @@ let
     # ${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh
     ${tmux-final}/bin/tmux -L default kill-server
   '';
-in {
+in
+{
   options._custom.programs.tmux = {
     enable = lib.mkEnableOption { };
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.nixpkgs-unstable.tmux.overrideAttrs (oldAttrs: {
-        patches = (oldAttrs.patches or []) ++ [ ./patches/tmux-osc777.patch ];
+        patches = (oldAttrs.patches or [ ]) ++ [ ./patches/tmux-osc777.patch ];
       });
     };
     systemdEnable = lib.mkEnableOption { };
@@ -92,35 +106,24 @@ in {
 
     _custom.hm = {
       xdg.configFile = {
-        "tmuxinator".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/tmuxinator;
-        "tmux/plugins/sensible".source =
-          "${pkgs.tmuxPlugins.sensible}/share/tmux-plugins/sensible";
-        "tmux/plugins/yank".source =
-          "${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank";
-        "tmux/plugins/resurrect".source =
-          "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect";
-        "tmux/plugins/continuum".source =
-          "${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum";
-        "tmux/plugins/tmux-sessionx".source =
-          "${tmux-sessionx}/share/tmux-plugins/sessionx";
+        "tmuxinator".source = lib._custom.relativeSymlink configDirectory ./dotfiles/tmuxinator;
+        "tmux/plugins/sensible".source = "${pkgs.tmuxPlugins.sensible}/share/tmux-plugins/sensible";
+        "tmux/plugins/yank".source = "${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank";
+        "tmux/plugins/resurrect".source = "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect";
+        "tmux/plugins/continuum".source = "${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum";
+        "tmux/plugins/tmux-sessionx".source = "${tmux-sessionx}/share/tmux-plugins/sessionx";
         "tmux/plugins/catppuccin".source = inputs.catppuccin-tmux;
         "tmux/tmux-light.conf".text = catppuccin-tmux-light-theme;
         "tmux/tmux-dark.conf".text = catppuccin-tmux-dark-theme;
         "tmux/tmux.conf".text = ''
           set -gu default-command
           set -g default-shell ${pkgs.zsh}/bin/zsh
-          ${if preferDark then
-            catppuccin-tmux-dark-theme
-          else
-            catppuccin-tmux-light-theme}
+          ${if preferDark then catppuccin-tmux-dark-theme else catppuccin-tmux-light-theme}
           source-file $HOME/.config/tmux/config.conf
         '';
-        "tmux/config.conf".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/config.conf;
+        "tmux/config.conf".source = lib._custom.relativeSymlink configDirectory ./dotfiles/config.conf;
         "tmux/plugins/status-bar/status-bar.tmux".source =
-          lib._custom.relativeSymlink configDirectory
-          ./dotfiles/status-bar.tmux;
+          lib._custom.relativeSymlink configDirectory ./dotfiles/status-bar.tmux;
       };
 
       programs.fzf.tmux.enableShellIntegration = false;

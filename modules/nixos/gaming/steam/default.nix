@@ -1,7 +1,9 @@
 { config, lib, ... }:
 
-let cfg = config._custom.gaming.steam;
-in {
+let
+  cfg = config._custom.gaming.steam;
+in
+{
   options._custom.gaming.steam.enable = lib.mkEnableOption { };
 
   # inspiration: https://www.reddit.com/r/NixOS/comments/15dokde/problems_with_steam_and_gamescope_in_hyprland/
@@ -9,8 +11,8 @@ in {
     nixpkgs.overlays = [
       (final: prev: {
         steam = prev.steam.override {
-          extraPkgs = pkgs:
-            with pkgs; [
+          extraPkgs =
+            pkgs: with pkgs; [
               openssl
               gamescope
               mangohud
@@ -32,8 +34,9 @@ in {
 
     _custom.gaming.utils.enable = lib.mkDefault true;
 
-    environment.sessionVariables.STEAM_EXTRA_COMPAT_TOOLS_PATHS =
-      [ "$HOME/.local/share/Steam/compatibilitytools.d" ];
+    environment.sessionVariables.STEAM_EXTRA_COMPAT_TOOLS_PATHS = [
+      "$HOME/.local/share/Steam/compatibilitytools.d"
+    ];
 
     programs.steam = {
       enable = true;

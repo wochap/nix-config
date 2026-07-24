@@ -1,23 +1,32 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.music;
   inherit (config._custom.globals)
-    userName themeColorsLight themeColorsDark preferDark;
+    userName
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    ;
   hmConfig = config.home-manager.users.${userName};
   musicDirectory = "${hmConfig.home.homeDirectory}/Music";
 
   catppuccin-cava-light-theme = ''
     ${lib.fileContents ./dotfiles/cava/config}
-    ${lib.fileContents
-    "${inputs.catppuccin-cava}/themes/${themeColorsLight.flavour}-transparent.cava"}
+    ${lib.fileContents "${inputs.catppuccin-cava}/themes/${themeColorsLight.flavour}-transparent.cava"}
   '';
   catppuccin-cava-dark-theme = ''
     ${lib.fileContents ./dotfiles/cava/config}
-    ${lib.fileContents
-    "${inputs.catppuccin-cava}/themes/${themeColorsDark.flavour}-transparent.cava"}
+    ${lib.fileContents "${inputs.catppuccin-cava}/themes/${themeColorsDark.flavour}-transparent.cava"}
   '';
-in {
+in
+{
   options._custom.desktop.music.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -40,10 +49,7 @@ in {
 
       xdg.configFile = {
         "cava/config" = {
-          text = if preferDark then
-            catppuccin-cava-dark-theme
-          else
-            catppuccin-cava-light-theme;
+          text = if preferDark then catppuccin-cava-dark-theme else catppuccin-cava-light-theme;
           force = true;
         };
         "cava/config-light".text = catppuccin-cava-light-theme;

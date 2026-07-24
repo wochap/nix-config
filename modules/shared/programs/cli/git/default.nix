@@ -1,8 +1,19 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.git;
-  inherit (config._custom.globals) themeColorsLight themeColorsDark secrets configDirectory;
+  inherit (config._custom.globals)
+    themeColorsLight
+    themeColorsDark
+    secrets
+    configDirectory
+    ;
   inherit (lib._custom) relativeSymlink;
   git-final = pkgs.gitFull;
   wt = pkgs.writeScriptBin "wt" (builtins.readFile ./scripts/wt.sh);
@@ -39,37 +50,44 @@ in
       ];
 
       programs.bash.initExtra = lib.mkOrder 1000 (builtins.readFile ./scripts/wt.plugin.sh);
-      programs.zsh.initContent =
-        lib.mkOrder 1000 ''
-          source ${relativeSymlink configDirectory ./dotfiles/git.zsh}
+      programs.zsh.initContent = lib.mkOrder 1000 ''
+        source ${relativeSymlink configDirectory ./dotfiles/git.zsh}
 
-          # TODO: wait for https://github.com/dandavison/delta/issues/1976
-          _apply_delta_theme() {
-            if [[ "$1" == "dark" ]]; then
-                export DELTA_FEATURES="+catppuccin-${themeColorsDark.flavour}"
-            else
-                export DELTA_FEATURES="+catppuccin-${themeColorsLight.flavour}"
-            fi
-          }
-          add-theme-hook _apply_delta_theme
-          _apply_delta_theme $CURRENT_SCHEME
+        # TODO: wait for https://github.com/dandavison/delta/issues/1976
+        _apply_delta_theme() {
+          if [[ "$1" == "dark" ]]; then
+              export DELTA_FEATURES="+catppuccin-${themeColorsDark.flavour}"
+          else
+              export DELTA_FEATURES="+catppuccin-${themeColorsLight.flavour}"
+          fi
+        }
+        add-theme-hook _apply_delta_theme
+        _apply_delta_theme $CURRENT_SCHEME
 
-          source ${./scripts/wt.plugin.sh}
-          zsh-defer source ${./scripts/wt.completions.zsh}
-        '';
+        source ${./scripts/wt.plugin.sh}
+        zsh-defer source ${./scripts/wt.completions.zsh}
+      '';
 
       programs.gh = {
         enable = true;
         extensions = [ pkgs._custom.gh-prx ];
       };
 
-      programs.gh-dash = { enable = true; };
+      programs.gh-dash = {
+        enable = true;
+      };
 
       programs.git = {
         package = git-final;
         enable = true;
 
-        ignores = [ ".direnv" ".envrc" ".cache" ".aider*" ".claude" ];
+        ignores = [
+          ".direnv"
+          ".envrc"
+          ".cache"
+          ".aider*"
+          ".claude"
+        ];
 
         # enable Git Large File Storage
         lfs = {
@@ -101,46 +119,49 @@ in
           color.ui = "auto";
           pull.rebase = false;
           init.defaultBranch = "main";
-        } // lib.optionalAttrs cfg.enableUser {
+        }
+        // lib.optionalAttrs cfg.enableUser {
           user = {
             email = "gean.marroquin@gmail.com";
             name = "wochap";
             signingKey = "gean.marroquin@gmail.com";
           };
           commit.gpgSign = true;
-        } // lib.optionalAttrs cfg.enableSandboxUser {
+        }
+        // lib.optionalAttrs cfg.enableSandboxUser {
           user = {
             email = "sandbox@localhost";
             name = "sandbox";
           };
         };
 
-        includes =
-          [{ path = "${inputs.catppuccin-delta}/catppuccin.gitconfig"; }]
-          ++ lib.optionals cfg.enableUser [
-            {
-              condition = "gitdir:~/Projects/boc/**/.git";
-              contents = {
-                user = {
-                  email = secrets.boc.email;
-                  name = "Gean";
-                  signingKey = secrets.boc.email;
-                };
-                commit.gpgSign = true;
+        includes = [
+          { path = "${inputs.catppuccin-delta}/catppuccin.gitconfig"; }
+        ]
+        ++ lib.optionals cfg.enableUser [
+          {
+            condition = "gitdir:~/Projects/boc/**/.git";
+            contents = {
+              user = {
+                email = secrets.boc.email;
+                name = "Gean";
+                signingKey = secrets.boc.email;
               };
-            }
-            {
-              condition = "gitdir:~/Projects/se/**/.git";
-              contents = {
-                user = {
-                  email = secrets.se.email;
-                  name = "Gean";
-                  signingKey = secrets.se.email;
-                };
-                commit.gpgSign = true;
+              commit.gpgSign = true;
+            };
+          }
+          {
+            condition = "gitdir:~/Projects/se/**/.git";
+            contents = {
+              user = {
+                email = secrets.se.email;
+                name = "Gean";
+                signingKey = secrets.se.email;
               };
-            }
-          ];
+              commit.gpgSign = true;
+            };
+          }
+        ];
       };
 
       programs.delta = {

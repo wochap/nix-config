@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.gnome;
@@ -10,13 +15,16 @@ let
     workspace-indicator
     just-perfection # customize GNOME Shell
   ];
-in {
+in
+{
   options._custom.desktop.gnome.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.gnome.excludePackages = with pkgs; [ epiphany gnome-tour ];
-    environment.systemPackages = with pkgs;
-      [ gnome.gnome-tweaks ] ++ extensionsPkgs;
+    environment.gnome.excludePackages = with pkgs; [
+      epiphany
+      gnome-tour
+    ];
+    environment.systemPackages = with pkgs; [ gnome.gnome-tweaks ] ++ extensionsPkgs;
 
     # Required for app indicators
     services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
@@ -30,8 +38,7 @@ in {
     _custom.hm.dconf.settings = {
       "org/gnome/shell" = {
         disable-user-extensions = false;
-        enabled-extensions =
-          (builtins.map (extension: extension.extensionUuid) extensionsPkgs);
+        enabled-extensions = (builtins.map (extension: extension.extensionUuid) extensionsPkgs);
       };
 
       "org/gnome/desktop/wm/keybindings" = {

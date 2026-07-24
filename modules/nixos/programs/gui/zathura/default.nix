@@ -1,9 +1,16 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.zathura;
   inherit (config._custom.globals) themeColors;
-in {
+in
+{
   options._custom.programs.zathura.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -14,14 +21,10 @@ in {
       };
 
       xdg.configFile = {
-        "zathura/catppuccin-latte".source =
-          "${inputs.catppuccin-zathura}/src/catppuccin-latte";
-        "zathura/catppuccin-frappe".source =
-          "${inputs.catppuccin-zathura}/src/catppuccin-frappe";
-        "zathura/catppuccin-macchiato".source =
-          "${inputs.catppuccin-zathura}/src/catppuccin-macchiato";
-        "zathura/catppuccin-mocha".source =
-          "${inputs.catppuccin-zathura}/src/catppuccin-mocha";
+        "zathura/catppuccin-latte".source = "${inputs.catppuccin-zathura}/src/catppuccin-latte";
+        "zathura/catppuccin-frappe".source = "${inputs.catppuccin-zathura}/src/catppuccin-frappe";
+        "zathura/catppuccin-macchiato".source = "${inputs.catppuccin-zathura}/src/catppuccin-macchiato";
+        "zathura/catppuccin-mocha".source = "${inputs.catppuccin-zathura}/src/catppuccin-mocha";
         "zathura/zathurarc".source = pkgs.replaceVars ./dotfiles/zathurarc {
           inherit (themeColors) backgroundOverlay crust text;
           themeFile = "catppuccin-${themeColors.flavour}";

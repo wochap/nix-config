@@ -1,8 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
-let cfg = config.services.ollama-webui-lite;
-in {
+let
+  cfg = config.services.ollama-webui-lite;
+in
+{
   options = {
     services.ollama-webui-lite = {
       enable = mkEnableOption { };
@@ -30,17 +37,13 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart =
-          "${cfg.package}/bin/ollama-webui-lite --listen tcp://${cfg.host}:${
-            toString cfg.port
-          }";
+        ExecStart = "${cfg.package}/bin/ollama-webui-lite --listen tcp://${cfg.host}:${toString cfg.port}";
         DynamicUser = "true";
         Type = "simple";
         Restart = "on-failure";
       };
     };
 
-    networking.firewall =
-      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 }

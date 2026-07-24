@@ -1,13 +1,21 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.email;
-  icalviewScript =
-    pkgs.writeScript "icalview" (builtins.readFile ./icalview.py);
-in {
+  icalviewScript = pkgs.writeScript "icalview" (builtins.readFile ./icalview.py);
+in
+{
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [ lynx catdoc ];
+      home.packages = with pkgs; [
+        lynx
+        catdoc
+      ];
 
       xdg.configFile."neomutt/mailcap".text = ''
         # MS Word documents

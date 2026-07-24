@@ -1,7 +1,9 @@
 { config, lib, ... }:
 
-let cfg = config._custom.security.gpg;
-in {
+let
+  cfg = config._custom.security.gpg;
+in
+{
   options._custom.security.gpg.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

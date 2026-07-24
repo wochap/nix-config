@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -12,7 +17,8 @@ let
     pgpKey = "00F9FB30";
     signatureLines = [ [ "GPG: 00F9FB30" ] ];
   };
-in {
+in
+{
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       accounts.email.accounts.SE = mkMerge [

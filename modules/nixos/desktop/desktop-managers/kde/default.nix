@@ -1,7 +1,9 @@
 { config, lib, ... }:
 
-let cfg = config._custom.desktop.kde;
-in {
+let
+  cfg = config._custom.desktop.kde;
+in
+{
   options._custom.desktop.kde.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -15,4 +17,3 @@ in {
     programs.dconf.enable = true;
   };
 }
-

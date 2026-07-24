@@ -38,4 +38,3 @@ rec {
   mantle = "#e6e9ef";
   crust = "#dce0e8";
 }
-

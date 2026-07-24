@@ -1,7 +1,15 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
-let cfg = config._custom.programs.discord;
-in {
+let
+  cfg = config._custom.programs.discord;
+in
+{
   options._custom.programs.discord.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

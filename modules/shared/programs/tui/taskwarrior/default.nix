@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.programs.taskwarrior;
@@ -6,16 +11,15 @@ let
   hmConfig = config.home-manager.users.${userName};
 
   timewarrior-final = pkgs.timewarrior;
-  timewarriorConfigPath =
-    "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
-  taskwarriorDataPath =
-    "${hmConfig.home.homeDirectory}/Sync/.config/taskwarrior";
+  timewarriorConfigPath = "${hmConfig.home.homeDirectory}/Sync/.config/timewarrior";
+  taskwarriorDataPath = "${hmConfig.home.homeDirectory}/Sync/.config/taskwarrior";
   taskwarrior-final = pkgs.taskwarrior3;
   stop-tasks = pkgs.writeScriptBin "stop-tasks" ''
     #!${pkgs.bash}/bin/bash
     echo y | ${taskwarrior-final}/bin/task status:pending stop
   '';
-in {
+in
+{
   options._custom.programs.taskwarrior.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -35,7 +39,10 @@ in {
           "hybrid-sleep.target"
         ];
         environment.TIMEWARRIORDB = timewarriorConfigPath;
-        path = [ pkgs.python314 timewarrior-final ];
+        path = [
+          pkgs.python314
+          timewarrior-final
+        ];
         serviceConfig = {
           Type = "oneshot";
           User = userName;
@@ -43,10 +50,21 @@ in {
         script = "${stop-tasks}/bin/stop-tasks";
       };
       stop-taskwarrior-on-shutdown = {
-        before = [ "shutdown.target" "reboot.target" "halt.target" ];
-        wantedBy = [ "shutdown.target" "reboot.target" "halt.target" ];
+        before = [
+          "shutdown.target"
+          "reboot.target"
+          "halt.target"
+        ];
+        wantedBy = [
+          "shutdown.target"
+          "reboot.target"
+          "halt.target"
+        ];
         environment.TIMEWARRIORDB = timewarriorConfigPath;
-        path = [ pkgs.python314 timewarrior-final ];
+        path = [
+          pkgs.python314
+          timewarrior-final
+        ];
         unitConfig.defaultDependencies = false;
         serviceConfig = {
           Type = "oneshot";
@@ -75,17 +93,15 @@ in {
 
           "${taskwarriorDataPath}/hooks/on-modify.timewarrior" = {
             executable = true;
-            source =
-              "${timewarrior-final}/share/doc/timew/ext/on-modify.timewarrior";
+            source = "${timewarrior-final}/share/doc/timew/ext/on-modify.timewarrior";
           };
         };
 
         shellAliases.twt = "taskwarrior-tui";
       };
-      xdg.configFile."bugwarrior/bugwarrior.toml".source =
-        pkgs.replaceVars ./dotfiles/bugwarrior.toml {
-          seEmail = secrets.se.email;
-        };
+      xdg.configFile."bugwarrior/bugwarrior.toml".source = pkgs.replaceVars ./dotfiles/bugwarrior.toml {
+        seEmail = secrets.se.email;
+      };
 
       programs.taskwarrior = {
         enable = true;
@@ -110,4 +126,3 @@ in {
     };
   };
 }
-

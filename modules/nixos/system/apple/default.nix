@@ -1,8 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.system.apple;
-in {
-  options._custom.system.apple = { enable = lib.mkEnableOption { }; };
+let
+  cfg = config._custom.system.apple;
+in
+{
+  options._custom.system.apple = {
+    enable = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
@@ -17,4 +26,3 @@ in {
     services.usbmuxd.enable = true;
   };
 }
-

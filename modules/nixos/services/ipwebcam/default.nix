@@ -1,12 +1,21 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.services.ipwebcam;
 
-  run-videochat = pkgs.writeScriptBin "run-videochat"
-    (builtins.replaceStrings [ "#!/bin/bash" ] [ "#!/usr/bin/env bash" ]
-      (builtins.readFile "${inputs.ipwebcam-gst}/run-videochat.sh"));
-in {
+  run-videochat = pkgs.writeScriptBin "run-videochat" (
+    builtins.replaceStrings [ "#!/bin/bash" ] [ "#!/usr/bin/env bash" ] (
+      builtins.readFile "${inputs.ipwebcam-gst}/run-videochat.sh"
+    )
+  );
+in
+{
   options._custom.services.ipwebcam.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -33,8 +42,7 @@ in {
     ];
 
     _custom.hm = {
-      programs.obs-studio.plugins = with pkgs;
-        [ obs-studio-plugins.droidcam-obs ];
+      programs.obs-studio.plugins = with pkgs; [ obs-studio-plugins.droidcam-obs ];
     };
   };
 }

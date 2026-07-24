@@ -1,4 +1,8 @@
-{ pkgs, python3Packages, fetchFromGitHub }:
+{
+  pkgs,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -15,7 +19,10 @@ buildPythonApplication rec {
 
   patches = [ ./disable-systemd-install.patch ];
 
-  build-system = with pkgs; [ setuptools gtk-layer-shell ];
+  build-system = with pkgs; [
+    setuptools
+    gtk-layer-shell
+  ];
 
   propagatedBuildInputs = with pkgs; [
     pygobject3

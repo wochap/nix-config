@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule, }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "gh-prx";
@@ -14,8 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-1yT08y/0MONtIkZGzV2MSzoZFLiZ5Kwy79zgDVv0h7Y=";
 
   meta = {
-    description =
-      "A GitHub CLI extension to automate the daily work with branches, commits and pull requests.";
+    description = "A GitHub CLI extension to automate the daily work with branches, commits and pull requests.";
     homepage = "https://github.com/ilaif/gh-prx";
     license = lib.licenses.mit;
   };

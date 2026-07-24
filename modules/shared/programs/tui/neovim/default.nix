@@ -1,20 +1,26 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.neovim;
   inherit (config._custom.globals) userName configDirectory;
   hmConfig = config.home-manager.users.${userName};
-  clear-nvim = pkgs.writeScriptBin "clear-nvim"
-    (builtins.readFile ./scripts/clear-nvim.sh);
-  clear-nvim-state = pkgs.writeScriptBin "clear-nvim-state"
-    # zsh
-    ''
-      #!/usr/bin/env bash
+  clear-nvim = pkgs.writeScriptBin "clear-nvim" (builtins.readFile ./scripts/clear-nvim.sh);
+  clear-nvim-state =
+    pkgs.writeScriptBin "clear-nvim-state"
+      # zsh
+      ''
+        #!/usr/bin/env bash
 
-      ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/conform.log
-      ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/lsp.log
-      ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/nvim-tree.log
-    '';
+        ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/conform.log
+        ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/lsp.log
+        ${pkgs.coreutils}/bin/rm -f ${hmConfig.xdg.stateHome}/nvim/nvim-tree.log
+      '';
 
   final-nvim = pkgs.prevstable-neovim.neovim-unwrapped;
   # final-nvim = lib.mkDefault inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
@@ -28,7 +34,8 @@ let
   #         ./neovim-mark-nvim_create_autocmd-as-api-fast.patch
   #       ];
   #   }); # 0.11.1
-in {
+in
+{
   imports = [ ./options.nix ];
 
   config = lib.mkIf cfg.enable {
@@ -72,7 +79,10 @@ in {
 
       programs.git = {
         settings.core.editor = "nvim";
-        ignores = [ ".nolazy.lua" ".lazy.lua" ];
+        ignores = [
+          ".nolazy.lua"
+          ".lazy.lua"
+        ];
       };
 
       programs.lazygit.settings.os = {
@@ -96,16 +106,17 @@ in {
       xdg.configFile."neovide/config.toml".source =
         lib._custom.relativeSymlink configDirectory ./dotfiles/neovide.toml;
 
-      home.file.".config/zsh/.zshrc".text = lib.mkAfter # zsh
-        ''
-          # Prevent nested nvim in nvim terminal
-          if [ -n "$NVIM" ]; then
-            alias nvim='nvr -l --remote-wait-silent "$@"'
-            alias nv='nvr -l --remote-wait-silent "$@"'
-            export VISUAL="nvr -l --remote-wait-silent"
-            export EDITOR="nvr -l --remote-wait-silent"
-          fi
-        '';
+      home.file.".config/zsh/.zshrc".text =
+        lib.mkAfter # zsh
+          ''
+            # Prevent nested nvim in nvim terminal
+            if [ -n "$NVIM" ]; then
+              alias nvim='nvr -l --remote-wait-silent "$@"'
+              alias nv='nvr -l --remote-wait-silent "$@"'
+              export VISUAL="nvr -l --remote-wait-silent"
+              export EDITOR="nvr -l --remote-wait-silent"
+            fi
+          '';
 
       systemd.user.services.clear-nvim-state = lib._custom.mkWaylandService {
         Service = {

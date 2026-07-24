@@ -1,4 +1,10 @@
-{ config, inputs, lib, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -38,8 +44,7 @@
         # NVIDIA VA-API support
         # nvidia-vaapi-driver
       ];
-      extraPackages32 = with pkgs.prevstable-mesa.pkgsi686Linux;
-        [ vulkan-loader ];
+      extraPackages32 = with pkgs.prevstable-mesa.pkgsi686Linux; [ vulkan-loader ];
     };
 
     hardware.enableRedistributableFirmware = true;
@@ -75,7 +80,10 @@
     # fixes wrong powertop energy report
     networking.wireless.iwd.settings.DriverQuirks.PowerSaveDisable = "mt7921e";
 
-    services.xserver.videoDrivers = lib.mkForce [ "modesetting" "nvidia" ];
+    services.xserver.videoDrivers = lib.mkForce [
+      "modesetting"
+      "nvidia"
+    ];
 
     # nvidia prime is better
     services.switcherooControl.enable = false;
@@ -115,8 +123,7 @@
       options nvidia "NVreg_PreserveVideoMemoryAllocations=1"
     '';
 
-    boot.extraModulePackages = with config.boot.kernelPackages;
-      [ lenovo-legion-module ];
+    boot.extraModulePackages = with config.boot.kernelPackages; [ lenovo-legion-module ];
 
     # install kernel 6.18.38
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_18;
@@ -131,10 +138,8 @@
     ];
 
     # improve performance on SSDs
-    boot.initrd.luks.devices."luks-4fa1d0c5-2c4a-478f-a9ce-099e36b3b390".bypassWorkqueues =
-      true;
-    boot.initrd.luks.devices."luks-f73c3c32-9bc9-4a22-ab24-bd456988a628".bypassWorkqueues =
-      true;
+    boot.initrd.luks.devices."luks-4fa1d0c5-2c4a-478f-a9ce-099e36b3b390".bypassWorkqueues = true;
+    boot.initrd.luks.devices."luks-f73c3c32-9bc9-4a22-ab24-bd456988a628".bypassWorkqueues = true;
 
     # improve RAM usage
     zramSwap.enable = true;

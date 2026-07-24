@@ -1,21 +1,27 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.mpv;
   isWayland = config._custom.globals.displayServer == "wayland";
   inherit (config._custom.globals) themeColors;
-in {
+in
+{
   options._custom.programs.mpv.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home.sessionVariables.VIDEO = "mpv";
 
-      home.packages = with pkgs;
-        [
-          subdl # cli to download subtitles
-          # python39Packages.subdownloader
-        ];
+      home.packages = with pkgs; [
+        subdl # cli to download subtitles
+        # python39Packages.subdownloader
+      ];
 
       xdg.configFile = {
         "mpv/script-opts/osc.conf".text = ''

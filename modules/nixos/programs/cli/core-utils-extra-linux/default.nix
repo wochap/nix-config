@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.programs.core-utils-extra-linux;
-in {
+let
+  cfg = config._custom.programs.core-utils-extra-linux;
+in
+{
   options._custom.programs.core-utils-extra-linux.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -40,4 +47,3 @@ in {
     };
   };
 }
-

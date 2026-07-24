@@ -1,24 +1,31 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.cursor;
   inherit (config._custom) globals;
-  inherit (globals) themeColorsLight themeColorsDark preferDark isSandbox;
+  inherit (globals)
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    isSandbox
+    ;
 
   mkThemeCursor = themeColors: scheme: {
     name = "catppuccin-${themeColors.flavour}-${scheme}-cursors";
-    package = pkgs.catppuccin-cursors."${themeColors.flavour}${
-        lib._custom.capitalize scheme
-      }";
+    package = pkgs.catppuccin-cursors."${themeColors.flavour}${lib._custom.capitalize scheme}";
   };
   catppuccin-cursor-light-theme = mkThemeCursor themeColorsLight "light";
   catppuccin-cursor-dark-theme = mkThemeCursor themeColorsDark "dark";
-  catppuccin-cursor-theme = if preferDark then
-    catppuccin-cursor-dark-theme
-  else
-    catppuccin-cursor-light-theme;
+  catppuccin-cursor-theme =
+    if preferDark then catppuccin-cursor-dark-theme else catppuccin-cursor-light-theme;
 
-in {
+in
+{
   options._custom.desktop.cursor = {
     enable = lib.mkEnableOption { };
     # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
@@ -53,13 +60,14 @@ in {
         inherit (cfg) package name size;
       };
 
-      systemd.user.services.xsetroot = lib.mkIf (!isSandbox) (lib._custom.mkWaylandService {
-        Service = {
-          Type = "oneshot";
-          ExecStart =
-            "${pkgs.xsetroot}/bin/xsetroot -cursor_name left_ptr";
-        };
-      });
+      systemd.user.services.xsetroot = lib.mkIf (!isSandbox) (
+        lib._custom.mkWaylandService {
+          Service = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.xsetroot}/bin/xsetroot -cursor_name left_ptr";
+          };
+        }
+      );
     };
   };
 }

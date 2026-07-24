@@ -1,7 +1,14 @@
-{ config, lib, inputs, ... }:
+{
+  config,
+  lib,
+  inputs,
+  ...
+}:
 
-let inherit (config._custom.globals) themeColors;
-in {
+let
+  inherit (config._custom.globals) themeColors;
+in
+{
   config.boot = {
     loader = {
       grub = {
@@ -10,8 +17,7 @@ in {
         device = "nodev";
         efiSupport = true;
         enableCryptodisk = true;
-        theme = lib.mkDefault
-          "${inputs.catppuccin-grub}/src/catppuccin-${themeColors.flavour}-grub-theme";
+        theme = lib.mkDefault "${inputs.catppuccin-grub}/src/catppuccin-${themeColors.flavour}-grub-theme";
         useOSProber = true;
       };
 

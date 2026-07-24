@@ -1,9 +1,16 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.nnn;
   isDarwin = pkgs.stdenv.isDarwin;
-in {
+in
+{
   options._custom.programs.nnn.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -18,13 +25,13 @@ in {
         source = "${pkgs.nnn}/share/plugins";
         recursive = true;
       };
-      xdg.configFile."nnn/plugins/cppath".source =
-        "${inputs.nnn-cppath}/cppath";
+      xdg.configFile."nnn/plugins/cppath".source = "${inputs.nnn-cppath}/cppath";
 
       programs.nnn = {
         enable = true;
         package = pkgs.nnn.override { withNerdIcons = true; };
-        extraPackages = with pkgs;
+        extraPackages =
+          with pkgs;
           [
             # dragdrop dependencies
             dragon-drop
@@ -52,7 +59,8 @@ in {
             mktemp
             poppler-utils
             unzip
-          ] ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer ];
+          ]
+          ++ lib.optionals (!isDarwin) [ ffmpegthumbnailer ];
         plugins = {
           mappings = {
             y = "cppath";
@@ -67,8 +75,7 @@ in {
           src = null;
         };
       };
-      programs.zsh.initContent =
-        lib.mkOrder 1000 (builtins.readFile ./dotfiles/f.zsh);
+      programs.zsh.initContent = lib.mkOrder 1000 (builtins.readFile ./dotfiles/f.zsh);
     };
   };
 }

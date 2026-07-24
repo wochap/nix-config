@@ -1,4 +1,9 @@
-{ config, lib, inputs, ... }:
+{
+  config,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.bottom;
@@ -7,12 +12,12 @@ let
   # TODO: wait for https://github.com/ClementTsang/bottom/issues/1284
   mkThemeBottom = themeColors: ''
     ${lib.fileContents ./dotfiles/bottom.toml}
-    ${lib.fileContents
-    "${inputs.catppuccin-bottom}/themes/${themeColors.flavour}.toml"}
+    ${lib.fileContents "${inputs.catppuccin-bottom}/themes/${themeColors.flavour}.toml"}
   '';
   catppuccin-bottom-light-theme = mkThemeBottom themeColorsLight;
   catppuccin-bottom-dark-theme = mkThemeBottom themeColorsDark;
-in {
+in
+{
   options._custom.programs.bottom.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -21,10 +26,7 @@ in {
 
       xdg.configFile = {
         "bottom/bottom.toml" = {
-          text = if preferDark then
-            catppuccin-bottom-dark-theme
-          else
-            catppuccin-bottom-light-theme;
+          text = if preferDark then catppuccin-bottom-dark-theme else catppuccin-bottom-light-theme;
           force = true;
         };
         "bottom/bottom-light.toml".text = catppuccin-bottom-light-theme;

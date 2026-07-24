@@ -1,4 +1,10 @@
-{ config, inputs, lib, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_16;
@@ -20,4 +26,3 @@
     "nvidia-modeset"
   ];
 }
-

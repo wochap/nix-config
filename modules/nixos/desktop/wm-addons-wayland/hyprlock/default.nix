@@ -1,12 +1,20 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.hyprlock;
   inherit (config._custom.globals) configDirectory;
   inherit (lib._custom) relativeSymlink;
-  hyprlock-start = pkgs.writeScriptBin "hyprlock-start"
-    (builtins.readFile ./scripts/hyprlock-start.sh);
-in {
+  hyprlock-start = pkgs.writeScriptBin "hyprlock-start" (
+    builtins.readFile ./scripts/hyprlock-start.sh
+  );
+in
+{
   options._custom.desktop.hyprlock.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -27,4 +35,3 @@ in {
     };
   };
 }
-

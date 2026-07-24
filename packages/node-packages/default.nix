@@ -1,8 +1,14 @@
-{ pkgs, nodejs, stdenv, fetchFromGitHub }:
+{
+  pkgs,
+  nodejs,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 let
   super = import ./composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-in super
+in
+super

@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.programs.texlive;
-in {
+let
+  cfg = config._custom.programs.texlive;
+in
+{
   options._custom.programs.texlive.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

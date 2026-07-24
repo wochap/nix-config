@@ -1,15 +1,20 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.dircolors;
   inherit (config._custom.globals) themeColorsLight themeColorsDark preferDark;
 
   dircolorsPath = "~/.dir_colors";
-  catppuccin-dircolors-light-theme-path =
-    "${inputs.catppuccin-dircolors}/themes/catppuccin-${themeColorsLight.flavour}/.dircolors";
-  catppuccin-dircolors-dark-theme-path =
-    "${inputs.catppuccin-dircolors}/themes/catppuccin-${themeColorsDark.flavour}/.dircolors";
-in {
+  catppuccin-dircolors-light-theme-path = "${inputs.catppuccin-dircolors}/themes/catppuccin-${themeColorsLight.flavour}/.dircolors";
+  catppuccin-dircolors-dark-theme-path = "${inputs.catppuccin-dircolors}/themes/catppuccin-${themeColorsDark.flavour}/.dircolors";
+in
+{
   options._custom.programs.dircolors = {
     enable = lib.mkEnableOption { };
     package = lib.mkPackageOption pkgs "dircolors" { default = "coreutils"; };
@@ -24,10 +29,8 @@ in {
     _custom.hm = {
       home.file = {
         ".dir_colors" = {
-          source = if preferDark then
-            catppuccin-dircolors-dark-theme-path
-          else
-            catppuccin-dircolors-light-theme-path;
+          source =
+            if preferDark then catppuccin-dircolors-dark-theme-path else catppuccin-dircolors-light-theme-path;
           force = true;
         };
         ".dir_colors-light".source = catppuccin-dircolors-light-theme-path;
@@ -39,17 +42,17 @@ in {
       '';
 
       # Set `LS_COLORS` before Oh My Zsh and `initExtra`.
-      programs.zsh.initContent = lib.mkIf cfg.enableZshIntegration
-        (lib.mkOrder 551 ''
+      programs.zsh.initContent = lib.mkIf cfg.enableZshIntegration (
+        lib.mkOrder 551 ''
           _apply_dircolors_theme() {
             eval $(${lib.getExe' cfg.package "dircolors"} -b ${dircolorsPath})
           }
           add-theme-hook _apply_dircolors_theme
           _apply_dircolors_theme
-        '');
+        ''
+      );
 
       programs.dircolors.enable = false;
     };
   };
 }
-

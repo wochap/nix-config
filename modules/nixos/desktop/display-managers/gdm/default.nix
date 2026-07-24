@@ -3,30 +3,32 @@
 let
   cfg = config._custom.desktop.gdm;
   inherit (config._custom.globals) userName;
-in {
+in
+{
   options._custom.desktop.gdm = {
     enable = lib.mkEnableOption { };
     enableAutoLogin = lib.mkEnableOption { };
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
-    {
-      services.xserver.displayManager.gdm.enable = true;
-      services.xserver.displayManager.gdm.wayland = true;
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        services.xserver.displayManager.gdm.enable = true;
+        services.xserver.displayManager.gdm.wayland = true;
 
-    }
-    (lib.mkIf cfg.enableAutoLogin {
+      }
+      (lib.mkIf cfg.enableAutoLogin {
 
-      # Enable automatic login for the user.
-      services.displayManager.autoLogin = {
-        enable = true;
-        user = userName;
-      };
+        # Enable automatic login for the user.
+        services.displayManager.autoLogin = {
+          enable = true;
+          user = userName;
+        };
 
-      # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-      systemd.services."getty@tty1".enable = false;
-      systemd.services."autovt@tty1".enable = false;
-    })
-  ]);
+        # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+        systemd.services."getty@tty1".enable = false;
+        systemd.services."autovt@tty1".enable = false;
+      })
+    ]
+  );
 }
-

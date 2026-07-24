@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.services.docker;
-in {
+let
+  cfg = config._custom.services.docker;
+in
+{
   options._custom.services.docker = {
     enable = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
@@ -10,8 +17,12 @@ in {
   config = lib.mkIf cfg.enable {
     programs.zsh.shellAliases.lD = ''run-without-kpadding lazydocker "$@"'';
 
-    environment.systemPackages = with pkgs;
-      [ docker-compose lazydocker ]
+    environment.systemPackages =
+      with pkgs;
+      [
+        docker-compose
+        lazydocker
+      ]
       ++ lib.optionals cfg.enableNvidia [ nvidia-docker ];
 
     virtualisation.docker = {
@@ -33,8 +44,7 @@ in {
         # https://forums.docker.com/t/facing-issue-with-creating-angular-application-image-using-docker/87270/2
         daemon.settings.dns = config.networking.nameservers;
       };
-      extraOptions = lib.mkIf cfg.enableNvidia
-        "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
+      extraOptions = lib.mkIf cfg.enableNvidia "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
     };
 
     hardware.nvidia-container-toolkit.enable = lib.mkIf cfg.enableNvidia true;

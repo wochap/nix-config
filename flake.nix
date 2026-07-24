@@ -24,7 +24,7 @@
     # everytime you update hyprland flake, run `sudo nix flake lock --update-input hyprland`
     hyprland.url = "github:hyprwm/Hyprland?rev=a0136d8c04687bb36eb8a28eb9d1ff92aea99704"; # v0.55.4
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland-plugins.url ="github:hyprwm/hyprland-plugins?rev=90e66baf99c9025b1d5e9c9e58dd3c80d0911ea2"; # v0.55.0
+    hyprland-plugins.url = "github:hyprwm/hyprland-plugins?rev=90e66baf99c9025b1d5e9c9e58dd3c80d0911ea2"; # v0.55.0
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprspace.url = "github:KZDKM/Hyprspace?rev=c109256f5a79a8694acd6176971c4a273d32264c"; # main (10 jul 2026)
     hyprspace.inputs.hyprland.follows = "hyprland";
@@ -46,7 +46,7 @@
     chaotic.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nix-gaming.url = "github:fufexan/nix-gaming?rev=ea13b9c4aa381fba9513ebf438a38ea344320b09"; # master (10 jul 2026)
     nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
-    nixpkgs-wayland.url  = "github:nix-community/nixpkgs-wayland";
+    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
     android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4"; # (08 mar 2022)
     android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
@@ -173,20 +173,26 @@
     catppuccin-hyprland.flake = false;
   };
 
-  outputs = inputs:
+  outputs =
+    inputs:
     let
-      mkLib = pkgs: system:
+      mkLib =
+        pkgs: system:
         let
-          lib = pkgs.lib.extend (final: prev: {
-            home-manager = inputs.home-manager.lib.hm;
-            _custom = import ./lib {
-              pkgs = import pkgs { inherit system; };
-              inherit inputs;
-              inherit lib;
-            };
-          });
-        in lib;
-      mkNixosSystem = pkgs: system: hostName:
+          lib = pkgs.lib.extend (
+            final: prev: {
+              home-manager = inputs.home-manager.lib.hm;
+              _custom = import ./lib {
+                pkgs = import pkgs { inherit system; };
+                inherit inputs;
+                inherit lib;
+              };
+            }
+          );
+        in
+        lib;
+      mkNixosSystem =
+        pkgs: system: hostName:
         pkgs.lib.nixosSystem {
           inherit system;
           modules = [
@@ -214,7 +220,8 @@
             nixpkgs = pkgs;
           };
         };
-    in {
+    in
+    {
       nixosConfigurations = {
         gasus = mkNixosSystem inputs.nixpkgs "x86_64-linux" "gasus";
         gdesktop = mkNixosSystem inputs.nixpkgs "x86_64-linux" "gdesktop";

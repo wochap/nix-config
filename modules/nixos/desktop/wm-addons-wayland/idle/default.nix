@@ -1,13 +1,21 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.idle;
   inherit (config._custom.globals) configDirectory;
-  idle-backlight = pkgs.writeScriptBin "idle-backlight"
-    (builtins.readFile ./scripts/idle-backlight.sh);
-  idle-close-overlays = pkgs.writeScriptBin "idle-close-overlays"
-    (builtins.readFile ./scripts/idle-close-overlays.sh);
-in {
+  idle-backlight = pkgs.writeScriptBin "idle-backlight" (
+    builtins.readFile ./scripts/idle-backlight.sh
+  );
+  idle-close-overlays = pkgs.writeScriptBin "idle-close-overlays" (
+    builtins.readFile ./scripts/idle-close-overlays.sh
+  );
+in
+{
   options._custom.desktop.idle.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -34,17 +42,14 @@ in {
       systemd.user.services = {
         sway-audio-idle-inhibit = lib._custom.mkWaylandService {
           Unit = {
-            Description =
-              "Prevents swayidle from sleeping while any application is outputting or receiving audio.";
-            Documentation =
-              "https://github.com/ErikReider/SwayAudioIdleInhibit";
+            Description = "Prevents swayidle from sleeping while any application is outputting or receiving audio.";
+            Documentation = "https://github.com/ErikReider/SwayAudioIdleInhibit";
             Requires = [ "hypridle.service" ];
             Wants = [ "hypridle.service" ];
             PartOf = [ ];
           };
           Service = {
-            ExecStart =
-              "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
+            ExecStart = "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
             Type = "simple";
           };
         };
@@ -56,4 +61,3 @@ in {
     };
   };
 }
-

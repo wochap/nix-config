@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.desktop.xwaylandvideobridge;
-in {
+let
+  cfg = config._custom.desktop.xwaylandvideobridge;
+in
+{
   options._custom.desktop.xwaylandvideobridge.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -10,12 +17,10 @@ in {
     _custom.hm = {
       systemd.user.services.xwaylandvideobridge = lib._custom.mkWaylandService {
         Unit = {
-          Description =
-            "Utility to allow streaming Wayland windows to X applications";
+          Description = "Utility to allow streaming Wayland windows to X applications";
           Documentation = "https://invent.kde.org/system/xwaylandvideobridge";
         };
-        Service.ExecStart =
-          "${pkgs.xwaylandvideobridge}/bin/xwaylandvideobridge";
+        Service.ExecStart = "${pkgs.xwaylandvideobridge}/bin/xwaylandvideobridge";
       };
     };
   };

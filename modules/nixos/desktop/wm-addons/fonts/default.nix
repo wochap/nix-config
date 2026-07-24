@@ -1,10 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.fonts;
   isDarwin = pkgs.stdenv.isDarwin;
   inherit (config._custom.globals) fonts;
-in {
+in
+{
   options._custom.desktop.fonts.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -54,13 +60,16 @@ in {
             serif = [ fonts.serif ];
             sansSerif = [ fonts.sans ];
             monospace = [ fonts.monospace ];
-            emoji = [ "Twemoji" "Noto Color Emoji" "Symbola" ];
+            emoji = [
+              "Twemoji"
+              "Noto Color Emoji"
+              "Symbola"
+            ];
           };
         };
       })
     ];
 
-    _custom.hm.home.file.".local/share/fonts/woos.ttf".source =
-      ./assets/woos/fonts/woos.ttf;
+    _custom.hm.home.file.".local/share/fonts/woos.ttf".source = ./assets/woos/fonts/woos.ttf;
   };
 }

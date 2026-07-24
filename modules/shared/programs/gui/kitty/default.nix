@@ -1,9 +1,19 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.kitty;
   inherit (config._custom.globals)
-    themeColorsLight themeColorsDark preferDark configDirectory;
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    configDirectory
+    ;
   inherit (lib._custom) relativeSymlink unwrapHex;
 
   kitty-final = pkgs.nixpkgs-unstable.kitty;
@@ -37,7 +47,8 @@ let
   '';
   catppuccin-kitty-light-theme = mkKittyTheme themeColorsLight;
   catppuccin-kitty-dark-theme = mkKittyTheme themeColorsDark;
-in {
+in
+{
   options._custom.programs.kitty.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -65,30 +76,28 @@ in {
       programs.zsh.initContent = lib.mkOrder 1000 shellIntegrationInit.zsh;
 
       xdg.configFile = {
-        "kitty/diff.conf".text = let
-          rawContent = builtins.readFile
-            "${inputs.catppuccin-kitty}/themes/diff-${themeColorsDark.flavour}.conf";
-          lines = lib.strings.splitString "\n" rawContent;
-          processedLines = map (line:
-            let match = builtins.match "^([a-zA-Z0-9_-]+)(.*)" line;
-            in if match == null then
-              line
-            else
-              "dark_${builtins.elemAt match 0}${builtins.elemAt match 1}")
-            lines;
-          darkDiff = lib.strings.concatStringsSep "\n" processedLines;
-        in ''
-          ${builtins.readFile
-          "${inputs.catppuccin-kitty}/themes/diff-${themeColorsLight.flavour}.conf"}
-          ${darkDiff}
-          ${builtins.readFile ./dotfiles/kitty-diff.conf}
-        '';
+        "kitty/diff.conf".text =
+          let
+            rawContent = builtins.readFile "${inputs.catppuccin-kitty}/themes/diff-${themeColorsDark.flavour}.conf";
+            lines = lib.strings.splitString "\n" rawContent;
+            processedLines = map (
+              line:
+              let
+                match = builtins.match "^([a-zA-Z0-9_-]+)(.*)" line;
+              in
+              if match == null then line else "dark_${builtins.elemAt match 0}${builtins.elemAt match 1}"
+            ) lines;
+            darkDiff = lib.strings.concatStringsSep "\n" processedLines;
+          in
+          ''
+            ${builtins.readFile "${inputs.catppuccin-kitty}/themes/diff-${themeColorsLight.flavour}.conf"}
+            ${darkDiff}
+            ${builtins.readFile ./dotfiles/kitty-diff.conf}
+          '';
         "kitty/light-theme.auto.conf".text = catppuccin-kitty-light-theme;
         "kitty/dark-theme.auto.conf".text = catppuccin-kitty-dark-theme;
-        "kitty/no-preference-theme.auto.conf".text = if preferDark then
-          catppuccin-kitty-dark-theme
-        else
-          catppuccin-kitty-light-theme;
+        "kitty/no-preference-theme.auto.conf".text =
+          if preferDark then catppuccin-kitty-dark-theme else catppuccin-kitty-light-theme;
         "kitty/kitty.conf".text = ''
           shell ${pkgs.zsh}/bin/zsh
           include ${relativeSymlink configDirectory ./dotfiles/kitty.conf}
@@ -97,13 +106,7 @@ in {
           # currently we can't because it doesn't work there
           # color0 is surface1
           tab_title_template "{fmt.bg.default}{fmt.fg.color0}  {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
-          active_tab_title_template "{fmt.bg.default}{fmt.fg._${
-            unwrapHex themeColorsDark.lavender
-          }}{fmt.bg._${
-            unwrapHex themeColorsDark.lavender
-          }}{fmt.fg.color0} {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${
-            unwrapHex themeColorsDark.lavender
-          }}{fmt.bg.default}{fmt.fg.default}"
+          active_tab_title_template "{fmt.bg.default}{fmt.fg._${unwrapHex themeColorsDark.lavender}}{fmt.bg._${unwrapHex themeColorsDark.lavender}}{fmt.fg.color0} {sup.index} 󰓩 {title[:30]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${unwrapHex themeColorsDark.lavender}}{fmt.bg.default}{fmt.fg.default}"
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;

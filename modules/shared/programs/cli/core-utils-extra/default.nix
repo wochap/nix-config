@@ -1,7 +1,15 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
-let cfg = config._custom.programs.core-utils-extra;
-in {
+let
+  cfg = config._custom.programs.core-utils-extra;
+in
+{
   options._custom.programs.core-utils-extra.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

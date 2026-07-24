@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.security.kwallet;
-in {
+let
+  cfg = config._custom.security.kwallet;
+in
+{
   options._custom.security.kwallet.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -34,8 +41,7 @@ in {
       };
     };
     _custom.security.pam.enablePamSystemdLoadkey = true;
-    _custom.desktop.greetd.enablePamSystemdLoadkey =
-      config._custom.desktop.greetd.enable;
+    _custom.desktop.greetd.enablePamSystemdLoadkey = config._custom.desktop.greetd.enable;
 
     # GnuPG integration
     programs.gnupg.agent = {
@@ -45,18 +51,17 @@ in {
     };
 
     # SSH integration
-    programs.ssh.askPassword =
-      "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
+    programs.ssh.askPassword = "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     xdg.portal.config = {
       common."org.freedesktop.impl.portal.Secret" = [ "kwallet" ];
-      Hyprland."org.freedesktop.impl.portal.Secret" =
-        lib.mkIf config._custom.desktop.hyprland.enable [ "kwallet" ];
+      Hyprland."org.freedesktop.impl.portal.Secret" = lib.mkIf config._custom.desktop.hyprland.enable [
+        "kwallet"
+      ];
     };
 
     systemd.user.services."dbus-org.freedesktop.secrets.kwallet" = {
-      description =
-        "Allow KWallet to be D-Bus activated for the generic org.freedesktop.secrets API";
+      description = "Allow KWallet to be D-Bus activated for the generic org.freedesktop.secrets API";
       serviceConfig = {
         Type = "dbus";
         ExecStart = "${pkgs.kdePackages.kwallet}/bin/kwalletd6";
@@ -90,8 +95,7 @@ in {
           PartOf = [ "graphical-session-pre.target" ];
         };
         Service = {
-          ExecStart =
-            "${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init";
+          ExecStart = "${pkgs.kdePackages.kwallet-pam}/libexec/pam_kwallet_init";
           Restart = "on-abort";
         };
         Install.WantedBy = [ "graphical-session-pre.target" ];

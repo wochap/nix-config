@@ -1,8 +1,10 @@
 # source: https://github.com/fufexan/dotfiles/blob/main/system/core/security.nix
 { config, lib, ... }:
 
-let cfg = config._custom.security.network;
-in {
+let
+  cfg = config._custom.security.network;
+in
+{
   options._custom.security.network.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

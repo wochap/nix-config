@@ -1,7 +1,16 @@
-{ config, lib, options, inputs, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  inputs,
+  pkgs,
+  ...
+}:
 
-let inherit (config._custom.globals) userName homeDirectory;
-in {
+let
+  inherit (config._custom.globals) userName homeDirectory;
+in
+{
   imports = [ inputs.home-manager.nixosModules.home-manager ];
 
   options = {
@@ -14,8 +23,7 @@ in {
     _custom.user = lib.mkOption {
       type = lib.types.attrs;
       default = { };
-      description =
-        "Options to pass directly to users.extraUsers primary user.";
+      description = "Options to pass directly to users.extraUsers primary user.";
     };
   };
 

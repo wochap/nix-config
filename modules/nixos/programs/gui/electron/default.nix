@@ -1,31 +1,46 @@
-{ config, pkgs, lib, inputs, system, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  system,
+  ...
+}:
 
-let cfg = config._custom.programs.electron;
-in {
+let
+  cfg = config._custom.programs.electron;
+in
+{
   options._custom.programs.electron.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
-        bruno = prev.runCommand "bruno" {
-          buildInputs = with pkgs; [ makeWrapper ];
-        } ''
-          makeWrapper ${prev.bruno}/bin/bruno $out/bin/bruno \
-          --add-flags "--enable-features=UseOzonePlatform" \
-          --add-flags "--ozone-platform=wayland"
+        bruno =
+          prev.runCommand "bruno"
+            {
+              buildInputs = with pkgs; [ makeWrapper ];
+            }
+            ''
+              makeWrapper ${prev.bruno}/bin/bruno $out/bin/bruno \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
 
-          ln -sf ${prev.bruno}/share $out/share
-        '';
+              ln -sf ${prev.bruno}/share $out/share
+            '';
 
-        freetube = prev.runCommand "freetube" {
-          buildInputs = with pkgs; [ makeWrapper ];
-        } ''
-          makeWrapper ${prev.freetube}/bin/freetube $out/bin/freetube \
-          --add-flags "--enable-features=UseOzonePlatform" \
-          --add-flags "--ozone-platform=wayland"
+        freetube =
+          prev.runCommand "freetube"
+            {
+              buildInputs = with pkgs; [ makeWrapper ];
+            }
+            ''
+              makeWrapper ${prev.freetube}/bin/freetube $out/bin/freetube \
+              --add-flags "--enable-features=UseOzonePlatform" \
+              --add-flags "--ozone-platform=wayland"
 
-          ln -sf ${prev.freetube}/share $out/share
-        '';
+              ln -sf ${prev.freetube}/share $out/share
+            '';
       })
     ];
 
@@ -46,8 +61,7 @@ in {
         };
         figma-pwa = {
           name = "Figma PWA";
-          exec =
-            "google-chrome-stable --profile-directory=Default --app=https://www.figma.com";
+          exec = "google-chrome-stable --profile-directory=Default --app=https://www.figma.com";
         };
         freetube = {
           name = "Freetube";

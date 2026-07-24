@@ -1,7 +1,9 @@
 { config, lib, ... }:
 
-let cfg = config._custom.services.syncthing;
-in {
+let
+  cfg = config._custom.services.syncthing;
+in
+{
   options._custom.services.syncthing.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

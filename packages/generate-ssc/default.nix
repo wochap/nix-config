@@ -4,7 +4,8 @@ metadata:
 let
   domain = metadata.domain;
   address = metadata.address;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "generate-ssc";
   version = "1.0.0";
   src = ./.;
@@ -24,7 +25,11 @@ in stdenv.mkDerivation {
     cp ./* $out
   '';
 
-  nativeBuildInputs = with pkgs; [ openssl nssTools mkcert ];
+  nativeBuildInputs = with pkgs; [
+    openssl
+    nssTools
+    mkcert
+  ];
 
   meta = { inherit domain address; };
 }

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, pkgs }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkgs,
+}:
 
 stdenv.mkDerivation rec {
   pname = "interception-both-shift-capslock";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s7balwqczqazb8f4b9w1nhycczx5r7ahkaj7l2hcqbgkrp67smk";
   };
 
-  nativeBuildInputs = [];
+  nativeBuildInputs = [ ];
 
   preConfigure = ''
     export PREFIX=$out

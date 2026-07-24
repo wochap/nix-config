@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.services.android;
@@ -8,30 +14,31 @@ let
   phoneId = "04e8";
 
   android-studio-stable = pkgs.androidStudioPackages.stable;
-  android-sdk = inputs.android-nixpkgs.sdk.${pkgs.stdenv.hostPlatform.system}
-    (sdkPkgs:
-      with sdkPkgs; [
-        cmdline-tools-latest
-        emulator
-        platform-tools
+  android-sdk = inputs.android-nixpkgs.sdk.${pkgs.stdenv.hostPlatform.system} (
+    sdkPkgs: with sdkPkgs; [
+      cmdline-tools-latest
+      emulator
+      platform-tools
 
-        # Android 30
-        build-tools-30-0-2
-        platforms-android-30
+      # Android 30
+      build-tools-30-0-2
+      platforms-android-30
 
-        # Required by android emulator
-        sources-android-30
-        system-images-android-30-google-apis-playstore-x86
-        system-images-android-30-google-apis-x86
+      # Required by android emulator
+      sources-android-30
+      system-images-android-30-google-apis-playstore-x86
+      system-images-android-30-google-apis-x86
 
-        # Android 29
-        # build-tools-29-0-3
-        # platforms-android-29
-        # sources-android-29
-        # system-images-android-29-google-apis-playstore-x86-64
-        # system-images-android-29-google-apis-x86-64
-      ]);
-in {
+      # Android 29
+      # build-tools-29-0-3
+      # platforms-android-29
+      # sources-android-29
+      # system-images-android-29-google-apis-playstore-x86-64
+      # system-images-android-29-google-apis-x86-64
+    ]
+  );
+in
+{
   options._custom.services.android = {
     enable = lib.mkEnableOption { };
     sdk.enable = lib.mkEnableOption { default = true; };
@@ -47,8 +54,7 @@ in {
     _custom.hm = lib.mkIf cfg.sdk.enable {
       config = {
         home = {
-          file.${android-sdk-home-path}.source =
-            "${android-sdk}/share/android-sdk";
+          file.${android-sdk-home-path}.source = "${android-sdk}/share/android-sdk";
 
           packages = with pkgs; [
             android-tools
@@ -67,8 +73,7 @@ in {
             ANDROID_SDK_ROOT = "/home/${userName}/${android-sdk-home-path}";
 
             # Fix react-native aapt2 errors
-            GRADLE_OPTS =
-              "-Dorg.gradle.project.android.aapt2FromMavenOverride=${android-sdk}/share/android-sdk/build-tools/30.0.2/aapt2";
+            GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${android-sdk}/share/android-sdk/build-tools/30.0.2/aapt2";
           };
         };
 

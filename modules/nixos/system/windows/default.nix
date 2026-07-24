@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.system.windows;
   inherit (config._custom.globals) homeDirectory;
-in {
+in
+{
   options._custom.system.windows = {
     enable = lib.mkEnableOption { };
     enableSamba = lib.mkEnableOption { };
@@ -55,4 +61,3 @@ in {
     };
   };
 }
-

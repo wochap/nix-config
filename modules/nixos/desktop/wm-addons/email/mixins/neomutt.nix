@@ -1,33 +1,37 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.email;
   inherit (config._custom.globals)
-    userName themeColorsLight themeColorsDark preferDark;
+    userName
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    ;
   hmConfig = config.home-manager.users.${userName};
   aliasfile = "${hmConfig.xdg.configHome}/neomutt/aliases";
   mailboxfile = "${hmConfig.xdg.configHome}/neomutt/mailboxes";
   syncthingdir = "${hmConfig.home.homeDirectory}/Sync";
 
   catppuccin-neomutt-light-theme-path = "${inputs.catppuccin-neomutt}/${
-      if themeColorsLight.flavour == "latte" then
-        "latte-neomuttrc"
-      else
-        "neomuttrc"
-    }";
+    if themeColorsLight.flavour == "latte" then "latte-neomuttrc" else "neomuttrc"
+  }";
   catppuccin-neomutt-dark-theme-path = "${inputs.catppuccin-neomutt}/${
-      if themeColorsDark.flavour == "latte" then
-        "latte-neomuttrc"
-      else
-        "neomuttrc"
-    }";
-in {
+    if themeColorsDark.flavour == "latte" then "latte-neomuttrc" else "neomuttrc"
+  }";
+in
+{
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs;
-        [
-          urlscan # extract urls from emails/txt files
-        ];
+      home.packages = with pkgs; [
+        urlscan # extract urls from emails/txt files
+      ];
 
       home.symlinks = {
         "${aliasfile}" = "${syncthingdir}/.config/neomutt/aliases";
@@ -36,10 +40,8 @@ in {
 
       xdg.configFile = {
         "neomutt/neomuttrc-theme" = {
-          source = if preferDark then
-            catppuccin-neomutt-dark-theme-path
-          else
-            catppuccin-neomutt-light-theme-path;
+          source =
+            if preferDark then catppuccin-neomutt-dark-theme-path else catppuccin-neomutt-light-theme-path;
           force = true;
         };
         "neomutt/neomuttrc-light".source = catppuccin-neomutt-light-theme-path;
@@ -58,22 +60,34 @@ in {
           {
             action = "group-reply";
             key = "R";
-            map = [ "index" "pager" ];
+            map = [
+              "index"
+              "pager"
+            ];
           }
           {
             action = "sidebar-prev";
             key = "[";
-            map = [ "index" "pager" ];
+            map = [
+              "index"
+              "pager"
+            ];
           }
           {
             action = "sidebar-next";
             key = "]";
-            map = [ "index" "pager" ];
+            map = [
+              "index"
+              "pager"
+            ];
           }
           {
             action = "sidebar-open";
             key = "\\Co";
-            map = [ "index" "pager" ];
+            map = [
+              "index"
+              "pager"
+            ];
           }
         ];
         macros = [
@@ -83,14 +97,12 @@ in {
             map = [ "index" ];
           }
           {
-            action =
-              "<change-folder>${hmConfig.accounts.email.accounts.Personal.maildir.absPath}/INBOX<enter>";
+            action = "<change-folder>${hmConfig.accounts.email.accounts.Personal.maildir.absPath}/INBOX<enter>";
             key = "P";
             map = [ "index" ];
           }
           {
-            action =
-              "<change-folder>${hmConfig.accounts.email.accounts.SE.maildir.absPath}/INBOX<enter>";
+            action = "<change-folder>${hmConfig.accounts.email.accounts.SE.maildir.absPath}/INBOX<enter>";
             key = "S";
             map = [ "index" ];
           }
@@ -102,12 +114,18 @@ in {
           {
             action = "<pipe-message>urlscan -dc<Enter>";
             key = "\\Cl";
-            map = [ "index" "pager" ];
+            map = [
+              "index"
+              "pager"
+            ];
           }
           {
             action = "<pipe-entry>urlscan -dc<Enter>";
             key = "\\Cl";
-            map = [ "attach" "compose" ];
+            map = [
+              "attach"
+              "compose"
+            ];
           }
         ];
 
@@ -138,8 +156,7 @@ in {
           markers = "no"; # show '+' at start of wrapped lines
           move = "no"; # gmail does that
           pager_context = "3";
-          pager_index_lines =
-            "10"; # shows 10 lines of index when pager is active
+          pager_index_lines = "10"; # shows 10 lines of index when pager is active
           pager_stop = "yes";
           quit = "yes"; # don't ask, just do!!
           reply_to = "yes"; # reply to Reply to: field

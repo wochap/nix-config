@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.programs.tools;
-in {
+let
+  cfg = config._custom.programs.tools;
+in
+{
   options._custom.programs.tools.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

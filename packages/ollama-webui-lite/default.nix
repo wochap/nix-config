@@ -1,4 +1,10 @@
-{ lib, buildNpmPackage, fetchFromGitHub, runtimeShell, serve }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  runtimeShell,
+  serve,
+}:
 
 buildNpmPackage rec {
   pname = "ollama-webui-lite";

@@ -1,7 +1,15 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
-let cfg = config._custom.programs.core-utils;
-in {
+let
+  cfg = config._custom.programs.core-utils;
+in
+{
   options._custom.programs.core-utils.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -88,4 +96,3 @@ in {
     };
   };
 }
-

@@ -1,20 +1,26 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.power-management;
   inherit (config._custom.globals) configDirectory;
   inherit (config.boot.kernelPackages) cpupower;
   batty = pkgs.writeScriptBin "batty" (builtins.readFile ./scripts/batty.sh);
-  legion-battery-conservation =
-    pkgs.writeScriptBin "legion-battery-conservation"
-    (builtins.readFile ./scripts/legion-battery-conservation.sh);
-  legion-rapid-charging =
-    pkgs.writeScriptBin "legion-rapid-charging"
-    (builtins.readFile ./scripts/legion-rapid-charging.sh);
-  legion-keyboard-autosuspend =
-    pkgs.writeScriptBin "legion-keyboard-autosuspend"
-    (builtins.readFile ./scripts/legion-keyboard-autosuspend.sh);
-in {
+  legion-battery-conservation = pkgs.writeScriptBin "legion-battery-conservation" (
+    builtins.readFile ./scripts/legion-battery-conservation.sh
+  );
+  legion-rapid-charging = pkgs.writeScriptBin "legion-rapid-charging" (
+    builtins.readFile ./scripts/legion-rapid-charging.sh
+  );
+  legion-keyboard-autosuspend = pkgs.writeScriptBin "legion-keyboard-autosuspend" (
+    builtins.readFile ./scripts/legion-keyboard-autosuspend.sh
+  );
+in
+{
   options._custom.desktop.power-management = {
     enable = lib.mkEnableOption { };
     cpupowerGuiArgs = lib.mkOption {
@@ -89,25 +95,21 @@ in {
     services.dbus.packages = [ pkgs.cpupower-gui ];
     systemd = {
       sleep.settings.Sleep.HibernateDelaySec = "2h";
-      user.services.cpupower-gui-user =
-        lib.mkIf (builtins.length cfg.cpupowerGuiArgs > 0) {
-          description = "Apply cpupower-gui config at user login";
-          wantedBy = [ "graphical-session.target" ];
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${pkgs.cpupower-gui}/bin/cpupower-gui ${
-                lib.concatStringsSep " " cfg.cpupowerGuiArgs
-              }";
-          };
+      user.services.cpupower-gui-user = lib.mkIf (builtins.length cfg.cpupowerGuiArgs > 0) {
+        description = "Apply cpupower-gui config at user login";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.cpupower-gui}/bin/cpupower-gui ${lib.concatStringsSep " " cfg.cpupowerGuiArgs}";
         };
+      };
       services.cpupower-gui-helper = {
         description = "cpupower-gui system helper";
         aliases = [ "dbus-org.rnd2.cpupower_gui.helper.service" ];
         serviceConfig = {
           Type = "dbus";
           BusName = "org.rnd2.cpupower_gui.helper";
-          ExecStart =
-            "${pkgs.cpupower-gui}/lib/cpupower-gui/cpupower-gui-helper";
+          ExecStart = "${pkgs.cpupower-gui}/lib/cpupower-gui/cpupower-gui-helper";
         };
       };
     };

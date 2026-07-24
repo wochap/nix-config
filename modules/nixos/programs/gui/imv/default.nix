@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.programs.imv;
   inherit (config._custom.globals) themeColors;
-in {
+in
+{
   options._custom.programs.imv.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -23,8 +29,7 @@ in {
           };
           binds = {
             gy = ''exec echo "$imv_current_file" | wl-copy'';
-            e = ''
-              exec satty -f "$imv_current_file" -o "$imv_current_file" &; quit'';
+            e = ''exec satty -f "$imv_current_file" -o "$imv_current_file" &; quit'';
             r = ''exec mogrify -rotate 90 "$imv_current_file" &;'';
             "<Ctrl+Shift+D>" = ''exec rm "$imv_current_file"; quit'';
             "<Shift+D>" = ''exec rm "$imv_current_file"; close'';

@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, fetchpatch }:
+{
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 
 let
   advcpmv_owner = "jarun";

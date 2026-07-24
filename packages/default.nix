@@ -13,8 +13,7 @@ let
       # NOTE: don't use 127.0.0.1 to prevent conflicts with localhost
       address = "127.0.1.1";
     };
-    interception-both-shift-capslock =
-      pkgs.callPackage ./interception-both-shift-capslock { };
+    interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock { };
     mailnotify = pkgs.callPackage ./mailnotify { };
     mangadesk = pkgs.callPackage ./mangadesk { };
     offlinemsmtp = pkgs.callPackage ./offlinemsmtp { };
@@ -23,9 +22,11 @@ let
     ptsh = pkgs.callPackage ./ptsh { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };
-    pythonPackages =
-      lib.dontRecurseIntoAttrs (pkgs.callPackage ./python-packages { });
+    pythonPackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./python-packages { });
   };
-in {
-  config = { nixpkgs.overlays = [ (final: prev: { _custom = customPkgs; }) ]; };
+in
+{
+  config = {
+    nixpkgs.overlays = [ (final: prev: { _custom = customPkgs; }) ];
+  };
 }

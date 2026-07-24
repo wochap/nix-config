@@ -4,8 +4,12 @@ let
   cfg = config._custom.desktop.email;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
-in {
-  imports = [ ./personal.nix ./se.nix ];
+in
+{
+  imports = [
+    ./personal.nix
+    ./se.nix
+  ];
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {

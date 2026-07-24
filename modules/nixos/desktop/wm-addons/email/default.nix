@@ -1,7 +1,9 @@
 { config, lib, ... }:
 
-let cfg = config._custom.desktop.email;
-in {
+let
+  cfg = config._custom.desktop.email;
+in
+{
   imports = [
     ./mixins/accounts
     ./mixins/mailcap

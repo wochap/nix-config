@@ -1,4 +1,4 @@
-{ pkgs, python3Packages, }:
+{ pkgs, python3Packages }:
 
 with python3Packages;
 buildPythonPackage rec {
@@ -11,7 +11,10 @@ buildPythonPackage rec {
     hash = "sha256-XXuS5mp2xDIAmrqQ1RXqeogqrlc0FafFJp42F9+QHB8=";
   };
 
-  nativeBuildInputs = with pkgs; [ setuptools wheel ];
+  nativeBuildInputs = with pkgs; [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = with pkgs; [
     huggingface-hub
@@ -23,4 +26,3 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "timm" ];
 }
-

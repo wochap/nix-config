@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.programs.qt;
-in {
+let
+  cfg = config._custom.programs.qt;
+in
+{
   options._custom.programs.qt.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -26,4 +33,3 @@ in {
     };
   };
 }
-

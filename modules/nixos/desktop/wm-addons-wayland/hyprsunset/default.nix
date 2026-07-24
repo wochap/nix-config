@@ -1,10 +1,17 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.hyprsunset;
   inherit (config._custom.globals) configDirectory;
   hyprsunset-final = inputs.hyprsunset.packages.${pkgs.stdenv.hostPlatform.system}.hyprsunset;
-in {
+in
+{
   options._custom.desktop.hyprsunset.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

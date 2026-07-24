@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (config._custom.globals) configDirectory;
@@ -9,7 +14,8 @@ let
     thunar-volman # auto mont devices
   ];
   thunar-final = pkgs.thunar.override { thunarPlugins = plugins; };
-in {
+in
+{
   options._custom.programs.thunar.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -47,8 +53,12 @@ in {
       };
 
       xdg.mimeApps = {
-        defaultApplications = { "inode/directory" = [ "thunar.desktop" ]; };
-        associations.added = { "inode/directory" = [ "thunar.desktop" ]; };
+        defaultApplications = {
+          "inode/directory" = [ "thunar.desktop" ];
+        };
+        associations.added = {
+          "inode/directory" = [ "thunar.desktop" ];
+        };
       };
 
       # fast thunar

@@ -1,7 +1,9 @@
 { config, lib, ... }:
 
-let cfg = config._custom.desktop.electron-support;
-in {
+let
+  cfg = config._custom.desktop.electron-support;
+in
+{
   options._custom.desktop.electron-support.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

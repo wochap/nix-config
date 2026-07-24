@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, libxcb }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libxcb,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "clipboard-sync";

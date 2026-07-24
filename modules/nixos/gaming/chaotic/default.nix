@@ -1,7 +1,15 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
-let cfg = config._custom.gaming.chaotic;
-in {
+let
+  cfg = config._custom.gaming.chaotic;
+in
+{
   imports = [ inputs.chaotic.nixosModules.default ];
 
   options._custom.gaming.chaotic.enable = lib.mkEnableOption { };

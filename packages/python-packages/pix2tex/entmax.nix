@@ -1,4 +1,4 @@
-{ pkgs, python3Packages, }:
+{ pkgs, python3Packages }:
 
 with python3Packages;
 buildPythonPackage rec {
@@ -11,7 +11,10 @@ buildPythonPackage rec {
     hash = "sha256-HNlyHDSTWCTgccjCCQBxHK1gw9hLyeRmjzt6iHO/Ys8=";
   };
 
-  nativeBuildInputs = [ setuptools wheel ];
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [ torch ];
 

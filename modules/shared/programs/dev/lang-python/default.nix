@@ -1,41 +1,50 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.programs.lang-python;
-  packageOverrides =
-    pkgs.prevstable-python.callPackage ./pip2nix/python-packages.nix {
-      pkgs = pkgs.prevstable-python;
-    };
-  python =
-    pkgs.prevstable-python.python311.override { inherit packageOverrides; };
-  python-final = (python.withPackages (ps:
-    with ps; [
-      pylint-venv
-      uv # better pip
-      pip
-      pynvim # required by nvim
+  packageOverrides = pkgs.prevstable-python.callPackage ./pip2nix/python-packages.nix {
+    pkgs = pkgs.prevstable-python;
+  };
+  python = pkgs.prevstable-python.python311.override { inherit packageOverrides; };
+  python-final = (
+    python.withPackages (
+      ps: with ps; [
+        pylint-venv
+        uv # better pip
+        pip
+        pynvim # required by nvim
 
-      # NOTE: add here any python package you need globally
-      matplotlib
-      python-dotenv
-      requests
-      datetime
-      ics
-      pdf2image
-      html2text
-      icalendar
-      pytz
-      tzlocal
-      pygobject3
-    ]));
-in {
+        # NOTE: add here any python package you need globally
+        matplotlib
+        python-dotenv
+        requests
+        datetime
+        ics
+        pdf2image
+        html2text
+        icalendar
+        pytz
+        tzlocal
+        pygobject3
+      ]
+    )
+  );
+in
+{
   options._custom.programs.lang-python.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       (pipx.overridePythonAttrs (old: {
-        disabledTests = (old.disabledTests or [ ])
-          ++ [ "test_fix_package_name" "test_parse_specifier_for_metadata" ];
+        disabledTests = (old.disabledTests or [ ]) ++ [
+          "test_fix_package_name"
+          "test_parse_specifier_for_metadata"
+        ];
       }))
       poetry
       pipenv
@@ -63,4 +72,3 @@ in {
     };
   };
 }
-

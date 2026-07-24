@@ -1,4 +1,12 @@
-{ stdenv, glib, fcitx5, fcitx5-gtk, cmake, gnumake, pkg-config, fetchFromGitHub,
+{
+  stdenv,
+  glib,
+  fcitx5,
+  fcitx5-gtk,
+  cmake,
+  gnumake,
+  pkg-config,
+  fetchFromGitHub,
 }:
 stdenv.mkDerivation rec {
   pname = "fcitx5-fbterm";
@@ -10,8 +18,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kVwGkBP0Ttu1QsSjLWEbLhuUmelkGlzdAsQi4J4VS08=";
   };
 
-  nativeBuildInputs = [ cmake gnumake pkg-config ];
-  buildInputs = [ fcitx5 fcitx5-gtk glib.dev ];
+  nativeBuildInputs = [
+    cmake
+    gnumake
+    pkg-config
+  ];
+  buildInputs = [
+    fcitx5
+    fcitx5-gtk
+    glib.dev
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

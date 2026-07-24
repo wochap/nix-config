@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.desktop.backlight;
-in {
+let
+  cfg = config._custom.desktop.backlight;
+in
+{
   options._custom.desktop.backlight.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -9,8 +16,7 @@ in {
       systemPackages = with pkgs; [
         brightnessctl
         (writeScriptBin "backlight" (builtins.readFile ./scripts/backlight.sh))
-        (writeScriptBin "kbd-backlight"
-          (builtins.readFile ./scripts/kbd-backlight.sh))
+        (writeScriptBin "kbd-backlight" (builtins.readFile ./scripts/kbd-backlight.sh))
       ];
     };
 

@@ -1,7 +1,15 @@
-{ lib, config, inputs, pkgs, ... }:
+{
+  lib,
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 
-let overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
-in {
+let
+  overlaysWithoutCustomChannels = lib.tail config.nixpkgs.overlays;
+in
+{
   config = {
     nixpkgs.overlays = [
       # Custom channels
@@ -55,4 +63,3 @@ in {
     ];
   };
 }
-

@@ -1,12 +1,18 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.programs.dolphin;
   dolphin-final = pkgs.kdePackages.dolphin;
-  dolphin-sync-gtk3-bookmarks =
-    pkgs.writeScriptBin "dolphin-sync-gtk3-bookmarks"
-    (builtins.readFile ./scripts/dolphin-sync-gtk3-bookmarks.py);
-in {
+  dolphin-sync-gtk3-bookmarks = pkgs.writeScriptBin "dolphin-sync-gtk3-bookmarks" (
+    builtins.readFile ./scripts/dolphin-sync-gtk3-bookmarks.py
+  );
+in
+{
   options._custom.programs.dolphin.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

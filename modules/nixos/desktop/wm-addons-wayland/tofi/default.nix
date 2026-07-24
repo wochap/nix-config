@@ -1,17 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.tofi;
   inherit (config._custom.globals) themeColorsLight themeColorsDark preferDark;
 
-  tofi-launcher = pkgs.writeScriptBin "tofi-launcher"
-    (builtins.readFile ./scripts/tofi-launcher.sh);
-  tofi-powermenu = pkgs.writeScriptBin "tofi-powermenu"
-    (builtins.readFile ./scripts/tofi-powermenu.sh);
-  tofi-emoji = pkgs.writeScriptBin "tofi-emoji"
-    (builtins.readFile ./scripts/tofi-emoji.sh);
-  tofi-calc =
-    pkgs.writeScriptBin "tofi-calc" (builtins.readFile ./scripts/tofi-calc.sh);
+  tofi-launcher = pkgs.writeScriptBin "tofi-launcher" (builtins.readFile ./scripts/tofi-launcher.sh);
+  tofi-powermenu = pkgs.writeScriptBin "tofi-powermenu" (
+    builtins.readFile ./scripts/tofi-powermenu.sh
+  );
+  tofi-emoji = pkgs.writeScriptBin "tofi-emoji" (builtins.readFile ./scripts/tofi-emoji.sh);
+  tofi-calc = pkgs.writeScriptBin "tofi-calc" (builtins.readFile ./scripts/tofi-calc.sh);
   mkThemeTofi = themeColors: ''
     # Fonts
     font = "Iosevka NF"
@@ -31,7 +34,8 @@ let
   '';
   catppuccin-tofi-light-theme = mkThemeTofi themeColorsLight;
   catppuccin-tofi-dark-theme = mkThemeTofi themeColorsDark;
-in {
+in
+{
   options._custom.desktop.tofi.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -50,10 +54,7 @@ in {
         "tofi/multi-line".source = ./dotfiles/multi-line;
         "tofi/one-line".source = ./dotfiles/one-line;
         "tofi/one-line-theme" = {
-          text = if preferDark then
-            catppuccin-tofi-dark-theme
-          else
-            catppuccin-tofi-light-theme;
+          text = if preferDark then catppuccin-tofi-dark-theme else catppuccin-tofi-light-theme;
           force = true;
         };
         "tofi/one-line-theme-light".text = catppuccin-tofi-light-theme;

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pam, ... }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pam,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "pam_autologin";
@@ -23,4 +29,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

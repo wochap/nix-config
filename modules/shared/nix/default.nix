@@ -1,7 +1,15 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
-let inherit (config._custom.globals) configDirectory;
-in {
+let
+  inherit (config._custom.globals) configDirectory;
+in
+{
   config = {
     environment.systemPackages = with pkgs; [ nix-tree ];
 
@@ -11,12 +19,15 @@ in {
       # pin the registry to avoid downloading and evaling a new nixpkgs version every time
       registry = lib.mapAttrs (_: v: { flake = v; }) inputs;
       # set the path for channels compat
-      nixPath =
-        lib.mapAttrsToList (key: _: "${key}=flake:${key}") config.nix.registry;
+      nixPath = lib.mapAttrsToList (key: _: "${key}=flake:${key}") config.nix.registry;
 
       settings = {
         # Enable flakes
-        experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
+        experimental-features = [
+          "nix-command"
+          "flakes"
+          "recursive-nix"
+        ];
 
         # Auto clear nixos store
         auto-optimise-store = false;
@@ -45,7 +56,10 @@ in {
           "https://devenv.cachix.org"
         ];
 
-        trusted-users = [ "@wheel" "root" ];
+        trusted-users = [
+          "@wheel"
+          "root"
+        ];
 
         system-features = [
           # default values
@@ -65,4 +79,3 @@ in {
     };
   };
 }
-

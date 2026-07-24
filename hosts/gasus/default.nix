@@ -4,9 +4,13 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
-in {
-  imports =
-    [ ./hardware-configuration.nix ./disk-configuration.nix ./hardware.nix ];
+in
+{
+  imports = [
+    ./hardware-configuration.nix
+    ./disk-configuration.nix
+    ./hardware.nix
+  ];
 
   config = {
     _custom.globals.userName = userName;
@@ -127,8 +131,11 @@ in {
     _custom.desktop.networking.wolEnable = true;
     # _custom.desktop.plymouth.enable = false;
     # _custom.desktop.xwaylandvideobridge.enable = false;
-    _custom.desktop.power-management.cpupowerGuiArgs =
-      [ "--performance" "profile" "Performance" ];
+    _custom.desktop.power-management.cpupowerGuiArgs = [
+      "--performance"
+      "profile"
+      "Performance"
+    ];
     # _custom.desktop.power-management.keyboard = {
     #   enable = true;
     #   idVendor = "048d";
@@ -183,4 +190,3 @@ in {
     home-manager.users.${userName}.home.stateVersion = "25.05";
   };
 }
-

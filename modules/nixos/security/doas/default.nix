@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config._custom.security.doas;
   inherit (config._custom.globals) userName;
-in {
+in
+{
   options._custom.security.doas.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -16,11 +22,13 @@ in {
     security.doas = {
       enable = true;
       wheelNeedsPassword = false;
-      extraRules = [{
-        users = [ userName ];
-        noPass = true;
-        keepEnv = true;
-      }];
+      extraRules = [
+        {
+          users = [ userName ];
+          noPass = true;
+          keepEnv = true;
+        }
+      ];
     };
 
     # Add an alias to the shell for backward-compat and convenience.

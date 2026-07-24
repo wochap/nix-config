@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.programs.lang-qt;
-in {
+let
+  cfg = config._custom.programs.lang-qt;
+in
+{
   options._custom.programs.lang-qt.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -11,9 +18,9 @@ in {
     ];
 
     _custom.hm = {
-      home.sessionVariables.QMLLS_BUILD_DIRS = with pkgs;
+      home.sessionVariables.QMLLS_BUILD_DIRS =
+        with pkgs;
         "${kdePackages.qtdeclarative}/lib/qt-6/qml/:${config._custom.desktop.quickshell.package}/lib/qt-6/qml/";
     };
   };
 }
-

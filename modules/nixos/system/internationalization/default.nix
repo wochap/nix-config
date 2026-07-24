@@ -36,4 +36,3 @@
     _custom.hm.home.language.collate = "C.UTF-8";
   };
 }
-

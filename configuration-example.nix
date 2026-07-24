@@ -3,8 +3,10 @@
 let
   userName = "gean";
   wifiInterface = "wlp4s0";
-in {
-  imports = [ # Include the results of the hardware scan.
+in
+{
+  imports = [
+    # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
 
@@ -47,13 +49,22 @@ in {
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [ git vim wget git-crypt ];
+  environment.systemPackages = with pkgs; [
+    git
+    vim
+    wget
+    git-crypt
+  ];
 
   networking.firewall.enable = false;
 
   nix.settings = {
     # Enable flakes
-    experimental-features = [ "nix-command" "flakes" "recursive-nix" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+      "recursive-nix"
+    ];
 
     # Enable cachix
     trusted-public-keys = [
@@ -74,7 +85,10 @@ in {
       # "http://192.168.1.100:8080"
     ];
 
-    trusted-users = [ "@wheel" "root" ];
+    trusted-users = [
+      "@wheel"
+      "root"
+    ];
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -82,8 +96,15 @@ in {
     isNormalUser = true;
     description = "gean";
     home = "/home/gean";
-    extraGroups =
-      [ "input" "audio" "disk" "networkmanager" "storage" "video" "wheel" ];
+    extraGroups = [
+      "input"
+      "audio"
+      "disk"
+      "networkmanager"
+      "storage"
+      "video"
+      "wheel"
+    ];
   };
 
   # This value determines the NixOS release from which the default

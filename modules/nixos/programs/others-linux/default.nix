@@ -1,19 +1,31 @@
-{ config, pkgs, lib, inputs, system, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  system,
+  ...
+}:
 
-let cfg = config._custom.programs.others-linux;
-in {
+let
+  cfg = config._custom.programs.others-linux;
+in
+{
   options._custom.programs.others-linux.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = lib.mkIf config._custom.security.gnome-keyring.enable [
       (final: prev: {
-        brave = prev.runCommand "brave" {
-          buildInputs = with pkgs; [ makeWrapper ];
-        } ''
-          makeWrapper ${prev.brave}/bin/brave $out/bin/brave \
-          --add-flags "--password-store=gnome-libsecret"
-          ln -sf ${prev.brave}/share $out/share
-        '';
+        brave =
+          prev.runCommand "brave"
+            {
+              buildInputs = with pkgs; [ makeWrapper ];
+            }
+            ''
+              makeWrapper ${prev.brave}/bin/brave $out/bin/brave \
+              --add-flags "--password-store=gnome-libsecret"
+              ln -sf ${prev.brave}/share $out/share
+            '';
       })
     ];
 
@@ -35,13 +47,12 @@ in {
     programs.java.enable = true;
 
     _custom.hm = {
-      xdg.desktopEntries =
-        lib.mkIf config._custom.security.gnome-keyring.enable {
-          brave-browser = {
-            name = "Brave Web Browser";
-            exec = "brave %U";
-          };
+      xdg.desktopEntries = lib.mkIf config._custom.security.gnome-keyring.enable {
+        brave-browser = {
+          name = "Brave Web Browser";
+          exec = "brave %U";
         };
+      };
     };
   };
 }

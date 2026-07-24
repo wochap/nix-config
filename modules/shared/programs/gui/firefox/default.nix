@@ -1,10 +1,20 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.firefox;
-  firefox-final =
-    pkgs.firefox.override (old: { cfg = { pipewireSupport = true; }; });
-in {
+  firefox-final = pkgs.firefox.override (old: {
+    cfg = {
+      pipewireSupport = true;
+    };
+  });
+in
+{
   options._custom.programs.firefox.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -15,10 +25,8 @@ in {
       home.sessionVariables.MOZ_USE_XINPUT2 = "1";
 
       home.file = {
-        ".mozilla/firefox/default/chrome/userChrome.css".source =
-          ./assets/userChrome.css;
-        ".mozilla/firefox/default/chrome/customChrome.css".source =
-          ./assets/customChrome.css;
+        ".mozilla/firefox/default/chrome/userChrome.css".source = ./assets/userChrome.css;
+        ".mozilla/firefox/default/chrome/customChrome.css".source = ./assets/customChrome.css;
         ".mozilla/firefox/default/chrome/userContent.css".text = "";
       };
 
@@ -47,9 +55,15 @@ in {
             "amazondotcom@search.mozilla.org" = {
               installation_mode = "blocked";
             };
-            "bing@search.mozilla.org" = { installation_mode = "blocked"; };
-            "ddg@search.mozilla.org" = { installation_mode = "blocked"; };
-            "ebay@search.mozilla.org" = { installation_mode = "blocked"; };
+            "bing@search.mozilla.org" = {
+              installation_mode = "blocked";
+            };
+            "ddg@search.mozilla.org" = {
+              installation_mode = "blocked";
+            };
+            "ebay@search.mozilla.org" = {
+              installation_mode = "blocked";
+            };
           };
         };
         profiles = {
@@ -66,8 +80,7 @@ in {
               "0300".enable = true; # QUIETER FOX
               "0400".enable = true; # SAFE BROWSING (SB)
               "0600".enable = true; # BLOCK IMPLICIT OUTBOUND
-              "0800".enable =
-                true; # LOCATION BAR / SEARCH BAR / SUGGESTIONS / HISTORY / FORMS
+              "0800".enable = true; # LOCATION BAR / SEARCH BAR / SUGGESTIONS / HISTORY / FORMS
               "0900".enable = true; # PASSWORDS
               "1200".enable = true; # HTTPS (SSL/TLS / OCSP / CERTS / HPKP)
               "1600".enable = true; # REFERERS

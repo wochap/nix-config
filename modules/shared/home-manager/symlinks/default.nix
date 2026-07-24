@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -10,7 +15,8 @@ let
     $DRY_RUN_CMD ${cu}/ln -sfnT $VERBOSE_ARG \
       ${target} ${destination}
   '';
-in {
+in
+{
   options = {
     home.symlinks = mkOption {
       type = types.attrsOf (types.str);
@@ -22,8 +28,9 @@ in {
   # TODO Convert to config.lib.file.mkOutOfStoreSymlink ./path/to/file/to/link;
   # https://github.com/nix-community/home-manager/issues/257#issuecomment-831300021
   config = {
-    home.activation.symlinks = hm.dag.entryAfter [ "writeBoundary" ]
-      (concatStringsSep "\n" (mapAttrsToList toSymlinkCmd cfg));
+    home.activation.symlinks = hm.dag.entryAfter [ "writeBoundary" ] (
+      concatStringsSep "\n" (mapAttrsToList toSymlinkCmd cfg)
+    );
 
     # clone nix-config repository so that symlinks resolve
     home.activation.cloneConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -33,4 +40,3 @@ in {
     '';
   };
 }
-

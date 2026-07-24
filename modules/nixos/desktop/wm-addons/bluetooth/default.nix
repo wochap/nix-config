@@ -1,10 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.bluetooth;
-  unblock-bluetooth = pkgs.writeScriptBin "unblock-bluetooth"
-    (builtins.readFile ./scripts/unblock-bluetooth.sh);
-in {
+  unblock-bluetooth = pkgs.writeScriptBin "unblock-bluetooth" (
+    builtins.readFile ./scripts/unblock-bluetooth.sh
+  );
+in
+{
   options._custom.desktop.bluetooth.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -44,16 +51,14 @@ in {
     };
 
     # Fix "ConfigurationDirectory 'bluetooth' already exists but the mode is different"
-    systemd.services.bluetooth.serviceConfig.ConfigurationDirectoryMode =
-      "0755";
+    systemd.services.bluetooth.serviceConfig.ConfigurationDirectoryMode = "0755";
 
     _custom.hm = {
       # prevents bluetooth speaker to turn off
-      xdg.configFile."wireplumber/wireplumber.conf.d/51-disable-suspension.conf" =
-        {
-          source = ./dotfiles/51-disable-suspension.conf;
-          force = true;
-        };
+      xdg.configFile."wireplumber/wireplumber.conf.d/51-disable-suspension.conf" = {
+        source = ./dotfiles/51-disable-suspension.conf;
+        force = true;
+      };
 
       # proxy forwarding Bluetooth MIDI controls via MPRIS2 to control media players
       services.mpris-proxy.enable = true;

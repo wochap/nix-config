@@ -1,10 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.programs.lynx;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
-in {
+in
+{
   options._custom.programs.lynx.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

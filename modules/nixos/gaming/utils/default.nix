@@ -1,9 +1,16 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.gaming.utils;
   inherit (config._custom.globals) configDirectory;
-in {
+in
+{
   imports = [ inputs.nix-gaming.nixosModules.pipewireLowLatency ];
   options._custom.gaming.utils.enable = lib.mkEnableOption { };
 
@@ -53,4 +60,3 @@ in {
     };
   };
 }
-

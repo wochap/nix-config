@@ -5,15 +5,22 @@ let
 
   catppuccinLatteTheme = import ./catppuccin-latte.nix;
   catppuccinMochaTheme = import ./catppuccin-mocha.nix;
-  mkThemeScript = colors:
-    lib.concatStringsSep "\n"
-    (lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'')
-      (builtins.removeAttrs colors [ "flavour" ]));
-  mkThemeGtk = colors:
-    lib.concatStringsSep "\n"
-    (lib.attrsets.mapAttrsToList (key: value: "@define-color ${key} ${value};")
-      (builtins.removeAttrs colors [ "flavour" ]));
-in {
+  mkThemeScript =
+    colors:
+    lib.concatStringsSep "\n" (
+      lib.attrsets.mapAttrsToList (key: value: ''${key}="${value}"'') (
+        builtins.removeAttrs colors [ "flavour" ]
+      )
+    );
+  mkThemeGtk =
+    colors:
+    lib.concatStringsSep "\n" (
+      lib.attrsets.mapAttrsToList (key: value: "@define-color ${key} ${value};") (
+        builtins.removeAttrs colors [ "flavour" ]
+      )
+    );
+in
+{
   # https://discourse.nixos.org/t/using-mkif-with-nested-if/5221/4
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
   # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
@@ -105,8 +112,7 @@ in {
           executable = true;
         };
 
-        "theme-colors-gtk.css".text =
-          mkThemeGtk (if preferDark then themeColorsDark else themeColorsLight);
+        "theme-colors-gtk.css".text = mkThemeGtk (if preferDark then themeColorsDark else themeColorsLight);
         "theme-colors-gtk-light.css".text = mkThemeGtk themeColorsLight;
         "theme-colors-gtk-dark.css".text = mkThemeGtk themeColorsDark;
       };

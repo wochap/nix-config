@@ -1,36 +1,51 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.hyprland;
   inherit (config._custom) globals;
-  inherit (globals) themeColorsLight themeColorsDark preferDark configDirectory;
+  inherit (globals)
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    configDirectory
+    ;
   inherit (lib._custom) relativeSymlink;
 
-  mkThemeHyprland = colors:
-    lib.concatStringsSep "\n" (lib.attrsets.mapAttrsToList
-      (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}") colors);
+  mkThemeHyprland =
+    colors:
+    lib.concatStringsSep "\n" (
+      lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}") colors
+    );
   catppuccin-hyprland-light-theme = mkThemeHyprland themeColorsLight;
   catppuccin-hyprland-dark-theme = mkThemeHyprland themeColorsDark;
   hyprland-guiutils =
     inputs.hyprland-guiutils.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-guiutils;
-  hyprplugins =
-    inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
-  hyprland-final =
-    inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".hyprland;
+  hyprplugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
+  hyprland-final = inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".hyprland;
   hyprland-xdph-final =
     inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".xdg-desktop-portal-hyprland;
-  hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad"
-    (builtins.readFile ./scripts/hyprland-scratchpad.sh);
-  hyprland-previous-ws = pkgs.writeScriptBin "hyprland-previous-ws"
-    (builtins.readFile ./scripts/hyprland-previous-ws.sh);
-  hyprland-socket = pkgs.writeScriptBin "hyprland-socket"
-    (builtins.readFile ./scripts/hyprland-socket.sh);
+  hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad" (
+    builtins.readFile ./scripts/hyprland-scratchpad.sh
+  );
+  hyprland-previous-ws = pkgs.writeScriptBin "hyprland-previous-ws" (
+    builtins.readFile ./scripts/hyprland-previous-ws.sh
+  );
+  hyprland-socket = pkgs.writeScriptBin "hyprland-socket" (
+    builtins.readFile ./scripts/hyprland-socket.sh
+  );
   hyprcursor-conf = ''
     # hyprcursor config
     env = HYPRCURSOR_THEME,${config._custom.desktop.cursor.name}
     env = HYPRCURSOR_SIZE,${toString config._custom.desktop.cursor.size}
   '';
-in {
+in
+{
   options._custom.desktop.hyprland = {
     enable = lib.mkEnableOption { };
     isDefault = lib.mkEnableOption { };
@@ -57,8 +72,7 @@ in {
 
     _custom.desktop.ydotool.systemdEnable = lib.mkIf cfg.isDefault true;
 
-    services.displayManager.defaultSession =
-      lib.mkIf cfg.isDefault "hyprland-uwsm";
+    services.displayManager.defaultSession = lib.mkIf cfg.isDefault "hyprland-uwsm";
 
     programs.hyprland = {
       enable = true;
@@ -72,8 +86,14 @@ in {
     # NOTE: not sure why xdg-desktop-portal picks
     # "hyprland" and not "Hyprland"
     # maybe because of uwsm?
-    xdg.portal.config.Hyprland.default = [ "gtk" "hyprland" ];
-    xdg.portal.config.hyprland.default = [ "gtk" "hyprland" ];
+    xdg.portal.config.Hyprland.default = [
+      "gtk"
+      "hyprland"
+    ];
+    xdg.portal.config.hyprland.default = [
+      "gtk"
+      "hyprland"
+    ];
 
     _custom.hm = {
       home.packages = with pkgs; [
@@ -89,21 +109,15 @@ in {
       ];
 
       xdg.configFile = {
-        "scripts/hyprland".source =
-          lib._custom.relativeSymlink configDirectory ./scripts/automation;
+        "scripts/hyprland".source = lib._custom.relativeSymlink configDirectory ./scripts/automation;
 
         "remmina/hypr-glegion.remmina".source =
-          lib._custom.relativeSymlink configDirectory
-          ./dotfiles/hypr-glegion.remmina;
+          lib._custom.relativeSymlink configDirectory ./dotfiles/hypr-glegion.remmina;
 
-        "hypr/xdph.conf".source =
-          lib._custom.relativeSymlink configDirectory ./dotfiles/xdph.conf;
+        "hypr/xdph.conf".source = lib._custom.relativeSymlink configDirectory ./dotfiles/xdph.conf;
 
         "hypr/colors.conf" = {
-          text = if preferDark then
-            catppuccin-hyprland-dark-theme
-          else
-            catppuccin-hyprland-light-theme;
+          text = if preferDark then catppuccin-hyprland-dark-theme else catppuccin-hyprland-light-theme;
           force = true;
         };
         "hypr/colors-light.conf".text = catppuccin-hyprland-light-theme;
@@ -113,12 +127,10 @@ in {
         "hypr/hyprland/binds-main.conf".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/binds-main.conf;
         "hypr/hyprland/keywords-main.conf".source =
-          relativeSymlink configDirectory
-          ./dotfiles/hyprland/keywords-main.conf;
+          relativeSymlink configDirectory ./dotfiles/hyprland/keywords-main.conf;
         "hypr/hyprland/keywords.conf".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/keywords.conf;
-        "hypr/hyprland/rules.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/rules.conf;
+        "hypr/hyprland/rules.conf".source = relativeSymlink configDirectory ./dotfiles/hyprland/rules.conf;
         "hypr/hyprland/variables.conf".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/variables.conf;
         "hypr/hyprland/kiosk.conf".text = ''
@@ -131,11 +143,9 @@ in {
           ${hyprcursor-conf}
         '';
 
-        "hypr/shaders".source =
-          relativeSymlink configDirectory ./dotfiles/shaders;
+        "hypr/shaders".source = relativeSymlink configDirectory ./dotfiles/shaders;
 
-        "pypr/config.toml".source =
-          relativeSymlink configDirectory ./dotfiles/pyprland.toml;
+        "pypr/config.toml".source = relativeSymlink configDirectory ./dotfiles/pyprland.toml;
 
         "uwsm/env-hyprland".text = ''
           # toolkit-specific scale
@@ -145,9 +155,9 @@ in {
           # export QT_SCALE_FACTOR=2
           # export QT_FONT_DPI=96
 
-          ${lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList (key: value: "export ${key}=${value}")
-            cfg.uwsmSessionVariables)}
+          ${lib.concatStringsSep "\n" (
+            lib.attrsets.mapAttrsToList (key: value: "export ${key}=${value}") cfg.uwsmSessionVariables
+          )}
         '';
       };
 
@@ -157,17 +167,16 @@ in {
         portalPackage = null;
         systemd.enable = false;
         configType = "hyprlang";
-        plugins = with hyprplugins;
-          [
-            # better preview all workspaces
-            # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
+        plugins = with hyprplugins; [
+          # better preview all workspaces
+          # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
 
-            # preview all workspaces
-            # hyprexpo
+          # preview all workspaces
+          # hyprexpo
 
-            # touch screen support gestures
-            # inputs.hyprgrass.packages.${pkgs.stdenv.hostPlatform.system}.default
-          ];
+          # touch screen support gestures
+          # inputs.hyprgrass.packages.${pkgs.stdenv.hostPlatform.system}.default
+        ];
         extraConfig = ''
           source=~/.config/hypr/colors.conf
           source=~/.config/hypr/hyprland/variables.conf

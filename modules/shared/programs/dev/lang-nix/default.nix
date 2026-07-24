@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.programs.lang-nix;
-in {
+let
+  cfg = config._custom.programs.lang-nix;
+in
+{
   options._custom.programs.lang-nix.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

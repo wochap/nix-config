@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.calendar;
@@ -15,7 +20,8 @@ let
     ${pkgs.findutils}/bin/find ${dataHome}/vdirsyncer -name '*.ics' -exec ${python-remind-final}/bin/ics2rem {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > ${remFilePath}
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
   '';
-in {
+in
+{
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home.packages = with pkgs; [

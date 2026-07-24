@@ -1,7 +1,9 @@
 { config, lib, ... }:
 
-let cfg = config._custom.desktop.logind;
-in {
+let
+  cfg = config._custom.desktop.logind;
+in
+{
   options._custom.desktop.logind = {
     enable = lib.mkEnableOption { };
     enableIgnoreLidSwitch = lib.mkEnableOption { };
@@ -19,11 +21,9 @@ in {
         HandlePowerKey = "poweroff";
         HandleHibernateKeyLongPress = "ignore";
         HandleHibernateKey = "ignore";
-        HandleLidSwitchExternalPower =
-          if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
+        HandleLidSwitchExternalPower = if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
         HandleLidSwitchDocked = "ignore";
-        HandleLidSwitch =
-          if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
+        HandleLidSwitch = if cfg.enableIgnoreLidSwitch then "ignore" else "suspend";
       };
     };
   };

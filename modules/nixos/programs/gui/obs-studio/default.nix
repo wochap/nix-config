@@ -1,13 +1,20 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
-let cfg = config._custom.programs.obs-studio;
-in {
+let
+  cfg = config._custom.programs.obs-studio;
+in
+{
   options._custom.programs.obs-studio.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      xdg.configFile."obs-studio/themes".source =
-        "${inputs.catppuccin-obs}/themes";
+      xdg.configFile."obs-studio/themes".source = "${inputs.catppuccin-obs}/themes";
 
       programs.obs-studio = {
         enable = true;

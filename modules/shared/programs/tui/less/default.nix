@@ -1,7 +1,9 @@
 { config, lib, ... }:
 
-let cfg = config._custom.programs.less;
-in {
+let
+  cfg = config._custom.programs.less;
+in
+{
   options._custom.programs.less.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -21,4 +23,3 @@ in {
     };
   };
 }
-

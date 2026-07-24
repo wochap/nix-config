@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.programs.zk;
   inherit (config._custom.globals) configDirectory;
-in {
+in
+{
   options._custom.programs.zk.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

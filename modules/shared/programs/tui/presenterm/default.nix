@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.programs.presenterm;
@@ -11,7 +16,8 @@ let
   '';
   catppuccin-presenterm-light-theme = mkThemePresenterm themeColorsLight;
   catppuccin-presenterm-dark-theme = mkThemePresenterm themeColorsDark;
-in {
+in
+{
   options._custom.programs.presenterm.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -31,17 +37,13 @@ in {
 
       xdg.configFile = {
         "presenterm/config.yaml" = {
-          text = if preferDark then
-            catppuccin-presenterm-dark-theme
-          else
-            catppuccin-presenterm-light-theme;
+          text = if preferDark then catppuccin-presenterm-dark-theme else catppuccin-presenterm-light-theme;
           force = true;
         };
         "presenterm/config-light.yaml".text = catppuccin-presenterm-light-theme;
         "presenterm/config-dark.yaml".text = catppuccin-presenterm-dark-theme;
       };
-      programs.zsh.initContent =
-        lib.mkOrder 1000 (builtins.readFile ./dotfiles/p.zsh);
+      programs.zsh.initContent = lib.mkOrder 1000 (builtins.readFile ./dotfiles/p.zsh);
     };
   };
 }

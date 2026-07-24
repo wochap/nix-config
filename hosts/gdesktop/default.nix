@@ -4,7 +4,8 @@ let
   userName = "gean";
   hmConfig = config.home-manager.users.${userName};
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
-in {
+in
+{
   imports = [ ./hardware-configuration.nix ];
 
   config = {

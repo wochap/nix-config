@@ -1,4 +1,10 @@
-{ config, inputs, lib, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   services.adguardhome = {
@@ -10,7 +16,10 @@
         # This ensures AdGuard Home listens for DNS queries on port 53
         bind_host = "0.0.0.0";
         # Upstream servers
-        upstream_dns = [ "9.9.9.9" "149.112.112.112" ];
+        upstream_dns = [
+          "9.9.9.9"
+          "149.112.112.112"
+        ];
       };
     };
   };
@@ -19,4 +28,3 @@
   # networking.firewall.allowedTCPPorts = [ 3000 53 ];
   # networking.firewall.allowedUDPPorts = [ 53 ];
 }
-

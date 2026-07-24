@@ -1,8 +1,8 @@
 {
-  inputs.nixpkgs.url =
-    "github:nixos/nixpkgs?rev=b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20"; # nixos-25.05 (21 sep 2025)
+  inputs.nixpkgs.url = "github:nixos/nixpkgs?rev=b2a3852bd078e68dd2b3dfa8c00c67af1f0a7d20"; # nixos-25.05 (21 sep 2025)
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -31,9 +31,14 @@
         # Run pixiecore using the absolute path from the nix store
         ${pkgs.pixiecore}/bin/pixiecore boot $ARTIFACTS/bzImage $ARTIFACTS/initrd --port 8086 --cmdline "$INIT_PATH loglevel=4"
       '';
-    in {
+    in
+    {
       devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [ pixiecore nixos-anywhere start-pxe ];
+        packages = with pkgs; [
+          pixiecore
+          nixos-anywhere
+          start-pxe
+        ];
         shellHook = ''
           echo "🚀 PXE Server Environment Loaded!"
           echo "   Run 'sudo start-pxe' to instantly provision the network boot environment."

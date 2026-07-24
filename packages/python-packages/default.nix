@@ -20,4 +20,3 @@
     pkgs = pkgs.prevstable-python;
   };
 }
-

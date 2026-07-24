@@ -1,9 +1,16 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.rod;
   tomlFormat = pkgs.formats.toml { };
-in {
+in
+{
   options._custom.programs.rod = {
     enable = lib.mkEnableOption { };
     aliases = lib.mkOption {
@@ -29,8 +36,12 @@ in {
 
   config = lib.mkIf cfg.enable {
     _custom.programs.rod.config = {
-      dark.env = { THEME = "dark"; };
-      light.env = { THEME = "light"; };
+      dark.env = {
+        THEME = "dark";
+      };
+      light.env = {
+        THEME = "light";
+      };
     };
 
     _custom.hm = {
@@ -42,13 +53,12 @@ in {
       };
 
       # NOTE: `rod env` BREAKS automation (e.g. tmuxinator)
-      programs.zsh.initContent =
-        lib.mkOrder 1000 (builtins.readFile ./dotfiles/rod.zsh);
+      programs.zsh.initContent = lib.mkOrder 1000 (builtins.readFile ./dotfiles/rod.zsh);
 
-      programs.bash.shellAliases =
-        lib.attrsets.genAttrs cfg.aliases (alias: ''rod run ${alias} -- "$@"'');
-      programs.zsh.shellAliases =
-        lib.attrsets.genAttrs cfg.aliases (alias: ''rod run ${alias} -- "$@"'');
+      programs.bash.shellAliases = lib.attrsets.genAttrs cfg.aliases (
+        alias: ''rod run ${alias} -- "$@"''
+      );
+      programs.zsh.shellAliases = lib.attrsets.genAttrs cfg.aliases (alias: ''rod run ${alias} -- "$@"'');
     };
   };
 }

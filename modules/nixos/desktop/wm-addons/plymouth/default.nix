@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.desktop.plymouth;
-in {
+let
+  cfg = config._custom.desktop.plymouth;
+in
+{
   options._custom.desktop.plymouth.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -38,4 +45,3 @@ in {
     # boot.consoleLogLevel = 3;
   };
 }
-

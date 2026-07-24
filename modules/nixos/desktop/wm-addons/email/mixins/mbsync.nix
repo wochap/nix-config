@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.email;
@@ -16,7 +21,8 @@ let
       exit 1
     fi
   '';
-in {
+in
+{
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       programs.mbsync.enable = true;
@@ -32,8 +38,7 @@ in {
       systemd.user.services.mbsync-on-failure = {
         Service = {
           Type = "oneshot";
-          ExecStart =
-            "${pkgs.libnotify}/bin/notify-send --app-name mbsync --app-icon apport --icon apport --replace-id=696 --hint=int:transient:1 'Service failed'";
+          ExecStart = "${pkgs.libnotify}/bin/notify-send --app-name mbsync --app-icon apport --icon apport --replace-id=696 --hint=int:transient:1 'Service failed'";
         };
       };
     };

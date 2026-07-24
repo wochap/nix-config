@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.security.gnome-keyring;
-in {
+let
+  cfg = config._custom.security.gnome-keyring;
+in
+{
   options._custom.security.gnome-keyring.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -21,13 +28,13 @@ in {
       greetd.enableGnomeKeyring = config._custom.desktop.greetd.enable;
     };
     _custom.security.pam.enablePamSystemdLoadkey = true;
-    _custom.desktop.greetd.enablePamSystemdLoadkey =
-      config._custom.desktop.greetd.enable;
+    _custom.desktop.greetd.enablePamSystemdLoadkey = config._custom.desktop.greetd.enable;
 
     xdg.portal.config = {
       common."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
-      Hyprland."org.freedesktop.impl.portal.Secret" =
-        lib.mkIf config._custom.desktop.hyprland.enable [ "gnome-keyring" ];
+      Hyprland."org.freedesktop.impl.portal.Secret" = lib.mkIf config._custom.desktop.hyprland.enable [
+        "gnome-keyring"
+      ];
     };
 
     # this sets SSH_AUTH_SOCK
@@ -49,8 +56,7 @@ in {
         };
         Service = {
           # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
-          ExecStart =
-            "/run/wrappers/bin/gnome-keyring-daemon --start --foreground --components=secrets";
+          ExecStart = "/run/wrappers/bin/gnome-keyring-daemon --start --foreground --components=secrets";
           Restart = "on-abort";
         };
         Install.WantedBy = [ "graphical-session-pre.target" ];

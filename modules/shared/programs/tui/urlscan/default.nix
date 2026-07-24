@@ -1,7 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let cfg = config._custom.programs.urlscan;
-in {
+let
+  cfg = config._custom.programs.urlscan;
+in
+{
   options._custom.programs.urlscan.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {

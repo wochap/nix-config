@@ -1,15 +1,28 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.greetd;
   inherit (config._custom.globals) userName;
   sessionsBasePath = config.services.displayManager.sessionData.desktops;
-  run-desktop = pkgs.writers.writePerlBin "run-desktop" {
-    libraries = with pkgs.perlPackages; [ ConfigINI ];
-  } (lib.fileContents (pkgs.replaceVars ./dotfiles/run-desktop.pl {
-    waylandSessionsPath = "${sessionsBasePath}/share/wayland-sessions";
-  }));
-in {
+  run-desktop =
+    pkgs.writers.writePerlBin "run-desktop"
+      {
+        libraries = with pkgs.perlPackages; [ ConfigINI ];
+      }
+      (
+        lib.fileContents (
+          pkgs.replaceVars ./dotfiles/run-desktop.pl {
+            waylandSessionsPath = "${sessionsBasePath}/share/wayland-sessions";
+          }
+        )
+      );
+in
+{
   options._custom.desktop.greetd = {
     enable = lib.mkEnableOption { };
     enableAutoLogin = lib.mkEnableOption { };
@@ -43,22 +56,18 @@ in {
         # TODO: greetd autologin doesn't unlock keyring
         # source: https://github.com/viperML/dotfiles/blob/77c91f02baed99bb0e62d9a5d8bb8ed02d50b035/misc/nixos/greetd/default.nix#L27
         initial_session = lib.mkIf cfg.enableAutoLogin {
-          command = "${
-              lib.getExe run-desktop
-            } --silent ${config.services.displayManager.defaultSession}";
+          command = "${lib.getExe run-desktop} --silent ${config.services.displayManager.defaultSession}";
           inherit (config.services.displayManager.autoLogin) user;
         };
         default_session = {
-          command = ''
-            ${
-              lib.getExe pkgs.tuigreet
-            } --user-menu --window-padding 2 --remember-session --time --time-format "%a %d %b %H:%M %Y" --sessions "${sessionsBasePath}/share/wayland-sessions" --xsessions "${sessionsBasePath}/share/xsessions"'';
+          command = ''${lib.getExe pkgs.tuigreet} --user-menu --window-padding 2 --remember-session --time --time-format "%a %d %b %H:%M %Y" --sessions "${sessionsBasePath}/share/wayland-sessions" --xsessions "${sessionsBasePath}/share/xsessions"'';
           user = "greeter";
         };
       };
     };
-    systemd.services.greetd.serviceConfig.KeyringMode =
-      lib.mkIf cfg.enablePamSystemdLoadkey (lib.mkForce "inherit");
+    systemd.services.greetd.serviceConfig.KeyringMode = lib.mkIf cfg.enablePamSystemdLoadkey (
+      lib.mkForce "inherit"
+    );
 
     security.pam.services.greetd.rules = {
       password.gnome_keyring.settings.use_authtok = cfg.enablePamSystemdLoadkey;
@@ -68,19 +77,15 @@ in {
         # docs: https://wiki.archlinux.org/title/Pam_autologin
         autologin = {
           enable = cfg.enablePamAutoLogin;
-          order =
-            config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
+          order = config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
           control = "required";
-          modulePath =
-            "${pkgs._custom.pam-autologin}/lib/security/pam_autologin.so";
+          modulePath = "${pkgs._custom.pam-autologin}/lib/security/pam_autologin.so";
         };
 
         # unlock keyring using luks passphrase
         systemd_loadkey = {
           enable = cfg.enablePamSystemdLoadkey;
-          order =
-            config.security.pam.services.greetd.rules.auth.gnome_keyring.order
-            - 1;
+          order = config.security.pam.services.greetd.rules.auth.gnome_keyring.order - 1;
           control = "optional";
           modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
         };

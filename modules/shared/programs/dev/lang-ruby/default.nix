@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.programs.lang-ruby;
   inherit (config._custom.globals) configDirectory;
-in {
+in
+{
   options._custom.programs.lang-ruby.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -22,11 +28,9 @@ in {
         sessionVariables.GLOBAL_GEMFILE = "$HOME/.gem/global/Gemfile";
 
         file = {
-          ".gem/global/Gemfile".source =
-            lib._custom.relativeSymlink configDirectory ./dotfiles/Gemfile;
+          ".gem/global/Gemfile".source = lib._custom.relativeSymlink configDirectory ./dotfiles/Gemfile;
         };
       };
     };
   };
 }
-

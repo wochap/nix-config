@@ -1,9 +1,15 @@
-{ config, lib, inputs, ... }:
+{
+  config,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config._custom.programs.lsd;
   inherit (config._custom.globals) themeColorsLight themeColorsDark preferDark;
-in {
+in
+{
   options._custom.programs.lsd.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -15,11 +21,8 @@ in {
           "${inputs.catppuccin-lsd}/themes/catppuccin-${themeColorsDark.flavour}/colors.yaml";
         "lsd/colors.yaml" = {
           source = "${inputs.catppuccin-lsd}/themes/catppuccin-${
-              if preferDark then
-                themeColorsDark.flavour
-              else
-                themeColorsLight.flavour
-            }/colors.yaml";
+            if preferDark then themeColorsDark.flavour else themeColorsLight.flavour
+          }/colors.yaml";
           force = true;
         };
         "lsd/icons.yaml".text = ''
@@ -40,7 +43,14 @@ in {
           symlink-arrow = "->";
           layout = "grid";
           hyperlink = "auto";
-          blocks = [ "permission" "user" "group" "size" "date" "name" ];
+          blocks = [
+            "permission"
+            "user"
+            "group"
+            "size"
+            "date"
+            "name"
+          ];
           date = "+%a %d %b %H:%M %Y";
         };
       };

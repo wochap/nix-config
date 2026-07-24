@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config._custom.desktop.calendar;
@@ -6,7 +11,8 @@ let
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) dataHome;
 
-  mkThemeKhal = theme: # toml
+  mkThemeKhal =
+    theme: # toml
     ''
       [calendars]
 
@@ -37,17 +43,15 @@ let
     '';
   catppuccin-khal-light-theme = mkThemeKhal "light";
   catppuccin-khal-dark-theme = mkThemeKhal "dark";
-in {
+in
+{
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home.packages = with pkgs; [ khal ];
 
       xdg.configFile = {
         "khal/config" = {
-          text = if preferDark then
-            catppuccin-khal-dark-theme
-          else
-            catppuccin-khal-light-theme;
+          text = if preferDark then catppuccin-khal-dark-theme else catppuccin-khal-light-theme;
           force = true;
         };
         "khal/config-light".text = catppuccin-khal-light-theme;

@@ -1,9 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 # NOTE: don't forget to install spice on guest
 # https://www.spice-space.org/download.html
-let cfg = config._custom.services.virt;
-in {
+let
+  cfg = config._custom.services.virt;
+in
+{
   options._custom.services.virt.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
@@ -34,7 +41,10 @@ in {
       };
     };
 
-    _custom.user.extraGroups = [ "libvirtd" "kvm" ];
+    _custom.user.extraGroups = [
+      "libvirtd"
+      "kvm"
+    ];
 
     boot.extraModprobeConfig = ''
       options kvm_amd nested=1

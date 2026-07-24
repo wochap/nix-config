@@ -1,4 +1,10 @@
-{ lib, buildRubyGem, ruby, installShellFiles, fetchFromGitHub, }:
+{
+  lib,
+  buildRubyGem,
+  ruby,
+  installShellFiles,
+  fetchFromGitHub,
+}:
 
 # Cannot use bundleEnv because bundleEnv create stub with
 # BUNDLE_FROZEN='1' environment variable set, which broke everything
@@ -23,8 +29,7 @@ buildRubyGem rec {
     name = "ruby${ruby.version}-${gemName}-${version}";
     gemName = "erubi";
     version = "1.13.0";
-    source.sha256 =
-      "fca61b47daefd865d0fb50d168634f27ad40181867445badf6427c459c33cd62";
+    source.sha256 = "fca61b47daefd865d0fb50d168634f27ad40181867445badf6427c459c33cd62";
   };
 
   thor = buildRubyGem rec {
@@ -43,7 +48,11 @@ buildRubyGem rec {
     source.sha256 = "04xr4cavnzxlk926pkji7b5yiqy4qsd3gdvv8mg6jliq6sczg9gk";
   };
 
-  propagatedBuildInputs = [ erubi thor xdg ];
+  propagatedBuildInputs = [
+    erubi
+    thor
+    xdg
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

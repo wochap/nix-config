@@ -1,11 +1,17 @@
 # source: https://github.com/SimonYde/pix2tex.nix/blob/master/nix/default.nix
 # source: https://github.com/CHN-beta/mirror-test/blob/2bc088ce85dde041382310dc8ebf395505770aa5/local/pkgs/pix2tex/default.nix
-{ pkgs, python3Packages, fetchFromGitHub, enableCuda ? false }:
+{
+  pkgs,
+  python3Packages,
+  fetchFromGitHub,
+  enableCuda ? false,
+}:
 
 let
   timm_0_5_4 = pkgs.callPackage ./timm.nix { inherit pkgs; };
   x-transformers = pkgs.callPackage ./x-transformers.nix { inherit pkgs; };
-in with python3Packages;
+in
+with python3Packages;
 buildPythonPackage {
   name = "pix2tex";
 
@@ -78,4 +84,3 @@ buildPythonPackage {
                 "torch.load(os.path.join(os.path.dirname(self.args.checkpoint), 'image_resizer.pth'), map_location=self.args.device, weights_only=True)"
   '';
 }
-
