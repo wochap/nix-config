@@ -41,15 +41,22 @@ in
     };
 
     _custom.hm = {
-      # Let Home Manager install and manage itself.
-      programs.home-manager.enable = true;
-      programs.home-manager.package =
-        inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      imports = [
+        ./symlinks
+        ./copy-files
+      ];
 
-      # Home Manager needs a bit of information about you and the
-      # paths it should manage.
-      home.username = userName;
-      home.homeDirectory = homeDirectory;
+      config = {
+        # Let Home Manager install and manage itself.
+        programs.home-manager.enable = true;
+        programs.home-manager.package =
+          inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
+        # Home Manager needs a bit of information about you and the
+        # paths it should manage.
+        home.username = userName;
+        home.homeDirectory = homeDirectory;
+      };
     };
 
     # hm -> home-manager.users.<primary user>

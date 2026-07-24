@@ -59,9 +59,4 @@
 
     ./programs/weeb
   ];
-
-  config._custom.hm.imports = [
-    ./home-manager/symlinks
-    ./home-manager/copy-files
-  ];
 }
