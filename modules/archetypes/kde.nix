@@ -21,5 +21,8 @@
     _custom.desktop.bluetooth.enable = true;
 
     _custom.desktop.kde.enable = lib.mkForce true;
+
+    _custom.system.internationalization.enable = true;
+    _custom.system.user.enable = true;
   };
 }

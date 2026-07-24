@@ -18,5 +18,8 @@
     _custom.security.gnome-keyring.enable = lib.mkDefault true;
 
     _custom.desktop.gnome.enable = lib.mkForce true;
+
+    _custom.system.internationalization.enable = true;
+    _custom.system.user.enable = true;
   };
 }
