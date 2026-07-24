@@ -12,7 +12,6 @@ let
     themeColorsLight
     themeColorsDark
     preferDark
-    isSandbox
     ;
 
   mkThemeCursor = themeColors: scheme: {
@@ -52,22 +51,16 @@ in
     _custom.hm = {
       home.pointerCursor = {
         inherit (cfg) name package size;
-        x11.enable = true;
+        x11 = {
+          enable = true;
+          defaultCursor = "left_ptr";
+        };
         gtk.enable = config._custom.desktop.gtk.enableTheme;
       };
 
       gtk.cursorTheme = lib.mkIf config._custom.desktop.gtk.enableTheme {
         inherit (cfg) package name size;
       };
-
-      systemd.user.services.xsetroot = lib.mkIf (!isSandbox) (
-        lib._custom.mkWaylandService {
-          Service = {
-            Type = "oneshot";
-            ExecStart = "${pkgs.xsetroot}/bin/xsetroot -cursor_name left_ptr";
-          };
-        }
-      );
     };
   };
 }
