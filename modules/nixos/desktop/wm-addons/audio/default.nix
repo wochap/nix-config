@@ -42,14 +42,6 @@ in
       # jack.enable = true;
 
       wireplumber.enable = true;
-
-      # NOTE: this fixes glitches in my audio
-      # pw-metadata -n settings 0 clock.force-quantum 512
-      extraConfig.pipewire."92-low-latency" = {
-        "context.properties" = {
-          "clock.force-quantum" = 512;
-        };
-      };
     };
 
     _custom.hm = lib.mkIf cfg.enableEasyeffects {
@@ -59,6 +51,21 @@ in
         preset = "Perfect EQ";
       };
       xdg.configFile = lib._custom.linkContents "easyeffects/output" "${inputs.easy-effects-presets}";
+
+      # this fixes glitches in my audio
+      systemd.user.services.pipewire-force-quantum = {
+        Unit = {
+          Description = "Force PipeWire quantum size to 512";
+          After = [ "pipewire.service" ];
+          PartOf = [ "pipewire.service" ];
+        };
+        Install.WantedBy = [ "pipewire.service" ];
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.pipewire}/bin/pw-metadata -n settings 0 clock.force-quantum 512";
+          RemainAfterExit = true;
+        };
+      };
     };
   };
 }
