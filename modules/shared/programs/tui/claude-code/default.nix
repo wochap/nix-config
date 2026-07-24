@@ -38,6 +38,11 @@ in
             executable = true;
           };
 
+          ".qwen/hooks/qwen-notify.sh" = {
+            source = ./scripts/qwen-notify.sh;
+            executable = true;
+          };
+
           ".claude/settings.json".source =
             lib._custom.relativeSymlink configDirectory ./dotfiles/claude-settings.json;
         };
