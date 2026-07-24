@@ -3,7 +3,7 @@
   "env": {
     "DISABLE_AUTOUPDATER": "1"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "claude-opus-4-8[1m]",
   "enabledPlugins": {
     "plugin-dev@claude-plugins-official": true,
     "caveman@caveman": true
@@ -22,7 +22,7 @@
       }
     }
   },
-  "effortLevel": "medium",
+  "effortLevel": "high",
   "theme": "auto",
   "editorMode": "vim",
   "statusLine": {
