@@ -35,6 +35,7 @@ in
         MaxRetentionSec=7days
       '';
 
+      # Enables to run hardware-accelerated apps
       hardware.graphics.enable = true;
     })
 
