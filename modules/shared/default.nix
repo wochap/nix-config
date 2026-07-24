@@ -3,7 +3,7 @@
 {
   imports = [
     ./globals
-    ./home
+    ./home-manager
     ./nix
 
     ./programs/cli/bat
