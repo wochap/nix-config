@@ -165,8 +165,8 @@ in
       # export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
     };
 
-    _custom.desktop.audio.enableEasyeffects = false;
-    _custom.desktop.audio.enableNoisetorch = false;
+    _custom.desktop.audio.enableEasyeffects = true;
+    _custom.desktop.audio.enableNoisetorch = true;
     _custom.desktop.mouseless.enable = true;
     _custom.desktop.networking.enableLocalSend = true;
     _custom.desktop.networking.enableOpenSnitch = true;
