@@ -72,18 +72,10 @@ _wt() {
       [[ -n "$line" ]] && commits+=("$line")
     done < <(git -C "$git_dir" log --oneline -20 --format='%h' 2>/dev/null)
 
-    local -a all_completions
-    if ((${#branches})); then
-      all_completions+=("${branches[@]/%/:local branch}")
-    fi
-    if ((${#remotes})); then
-      all_completions+=("${remotes[@]/%/:remote branch}")
-    fi
-    if ((${#commits})); then
-      all_completions+=("${commits[@]/%/:commit}")
-    fi
-
-    _describe 'ref' all_completions
+    # Named groups via compadd — render separately regardless of group-name style
+    ((${#branches})) && compadd -V wt-local -X '-- local branch --' -a branches
+    ((${#remotes})) && compadd -V wt-remote -X '-- remote branch --' -a remotes
+    ((${#commits})) && compadd -V wt-commit -X '-- commit --' -a commits
 
     # Also offer -b flag
     local -a flags
