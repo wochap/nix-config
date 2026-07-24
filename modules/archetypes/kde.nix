@@ -9,6 +9,8 @@
   options._custom.archetypes.kde.enable = lib.mkEnableOption { };
 
   config = lib.mkIf config._custom.archetypes.kde.enable {
+    _custom.home-manager.enable = true;
+
     _custom.archetypes.de-wayland-desktop.enable = true;
 
     _custom.desktop.audio.enable = true;

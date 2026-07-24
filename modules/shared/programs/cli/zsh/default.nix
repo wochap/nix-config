@@ -63,6 +63,8 @@ in
     # NOTE: tmux and kitty use pkgs.zsh
     _custom.user.shell = lib.mkIf cfg.isDefault pkgs.zsh;
 
+    programs.bash.enable = true;
+
     programs.zsh = {
       enable = true;
       enableCompletion = true;

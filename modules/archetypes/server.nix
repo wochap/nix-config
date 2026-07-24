@@ -9,6 +9,8 @@
   options._custom.archetypes.server.enable = lib.mkEnableOption { };
 
   config = lib.mkIf config._custom.archetypes.server.enable {
+    _custom.home-manager.enable = true;
+
     _custom.security.doas.enable = true;
     # _custom.security.gnome-keyring.enable = lib.mkDefault true;
     _custom.security.gpg.enable = true;

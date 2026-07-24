@@ -9,47 +9,47 @@
 
 let
   inherit (config._custom.globals) userName homeDirectory;
+  cfg = config._custom.home-manager;
 in
 {
   imports = [ inputs.home-manager.nixosModules.home-manager ];
 
-  options = {
-    _custom.hm = lib.mkOption {
+  options._custom = {
+    home-manager.enable = lib.mkEnableOption { };
+
+    hm = lib.mkOption {
       type = lib.types.attrs;
       default = { };
       description = "Options to pass directly to home-manager primary user.";
     };
 
-    _custom.user = lib.mkOption {
+    user = lib.mkOption {
       type = lib.types.attrs;
       default = { };
       description = "Options to pass directly to users.extraUsers primary user.";
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     _custom.user.home = homeDirectory;
 
-    home-manager.useGlobalPkgs = true;
-    # Speed up home-manager service
-    home-manager.useUserPackages = true;
-    home-manager.backupFileExtension = "hm-bak";
+    home-manager = {
+      useGlobalPkgs = true;
+      # Speed up home-manager service
+      useUserPackages = true;
+      backupFileExtension = "hm-bak";
+    };
 
     _custom.hm = {
       # Let Home Manager install and manage itself.
       programs.home-manager.enable = true;
+      programs.home-manager.package =
+        inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
       # Home Manager needs a bit of information about you and the
       # paths it should manage.
       home.username = userName;
       home.homeDirectory = homeDirectory;
-
-      # TODO: programs.home-manager.enable should add this pkg
-      home.packages = [
-        inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.default
-      ];
-
-      programs.bash.enable = true;
     };
 
     # hm -> home-manager.users.<primary user>
