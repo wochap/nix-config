@@ -10,6 +10,7 @@ let
   cfg = config._custom.sandbox;
   inherit (config._custom.globals) userName;
   sandboxName = "sandbox";
+  enter-sandbox = pkgs.writeScriptBin "enter-sandbox" (builtins.readFile ./scripts/enter-sandbox.sh);
 in
 {
   options._custom.sandbox = {
@@ -87,7 +88,7 @@ in
     ];
 
     # Proxy dbus
-    environment.systemPackages = [ pkgs.xdg-dbus-proxy ];
+    environment.systemPackages = with pkgs; [ xdg-dbus-proxy ];
     systemd.user.services.sandbox-dbus-proxy = {
       description = "Filtered D-Bus proxy for sandbox";
       wantedBy = [ "default.target" ];
@@ -102,8 +103,6 @@ in
     };
 
     containers.${sandboxName} = {
-      # Start manually using `sudo nixos-container start <container_name>`
-      # Enter manually using `sudo machinectl shell <user_name>@<container_name>`
       autoStart = false;
       # NOTE: More security but breaks opening GUI on host from sandbox
       # extraFlags = [ "-U" ]; # Tells systemd-nspawn to use user namespaces
@@ -180,7 +179,6 @@ in
               WAYLAND_DISPLAY = "/mnt/host-run/wayland-1";
               PIPEWIRE_RUNTIME_DIR = "/mnt/host-run";
               PULSE_SERVER = "unix:/mnt/host-run/pulse/native";
-              # TODO: set pinentry-tty?
               DBUS_SESSION_BUS_ADDRESS = "unix:path=/mnt/host-run/bus";
             };
 
