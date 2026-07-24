@@ -9,6 +9,8 @@
 {
   # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_16;
 
+  hardware.enableAllFirmware = true;
+
   # zramSwap.enable = true;
 
   networking = {

@@ -17,23 +17,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    _custom.user.extraGroups = [ "audio" ];
-
     environment = {
       systemPackages = with pkgs; [
-        pulseaudio
-        pulsemixer # pulseaudio
         nixpkgs-unstable.wiremix
-        # pavucontrol # pulseaudio gui
-        pwvucontrol # pipewire gui
+        pwvucontrol # pavucontrol like, pipewire gui
       ];
 
       shellAliases.atui = "wiremix";
     };
 
     services.pulseaudio.enable = false;
-
-    hardware.enableAllFirmware = true;
 
     # suppress background noice
     programs.noisetorch.enable = cfg.enableNoisetorch;
@@ -44,7 +37,6 @@ in
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
-      # TODO: disable pulse
       pulse.enable = true;
       # If you want to use JACK applications, uncomment this
       # jack.enable = true;

@@ -47,6 +47,8 @@
       extraPackages32 = with pkgs.prevstable-mesa.pkgsi686Linux; [ vulkan-loader ];
     };
 
+    hardware.enableAllFirmware = true;
+
     hardware.enableRedistributableFirmware = true;
 
     hardware.amdgpu.initrd.enable = true;
