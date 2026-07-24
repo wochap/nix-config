@@ -8,7 +8,7 @@
 
 let
   cfg = config._custom.programs.ai-agents;
-  inherit (config._custom.globals) userName;
+  inherit (config._custom.globals) userName configDirectory;
   hmConfig = config.home-manager.users.${userName};
   claude-session-duration = pkgs.writeScriptBin "claude-session-duration" (
     builtins.readFile ./scripts/claude-session-duration.sh
@@ -41,6 +41,8 @@ in
             source = ./scripts/agy-notify.sh;
             executable = true;
           };
+          ".gemini/antigravity-cli/hooks.json".source =
+            lib._custom.relativeSymlink configDirectory ./dotfiles/agy-hooks.json;
           ".qwen/hooks/qwen-notify.sh" = {
             source = ./scripts/qwen-notify.sh;
             executable = true;
