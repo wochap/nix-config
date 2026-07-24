@@ -47,8 +47,6 @@ in
     ];
 
     _custom.hm = {
-      imports = [ inputs.nix-index-database.homeModules.nix-index ];
-
       home.shellAliases = {
         ".." = "cd ..";
         cp = "xcp";
@@ -71,14 +69,6 @@ in
           enableBashIntegration = false;
           enableZshIntegration = false;
         };
-
-        # locale nix pkgs
-        nix-index = {
-          enable = true;
-          enableBashIntegration = false;
-          enableZshIntegration = false;
-        };
-        nix-index-database.comma.enable = true;
 
         command-not-found.enable = lib.mkForce false;
 

@@ -8,9 +8,12 @@
 
 let
   inherit (config._custom.globals) configDirectory;
+  cfg = config._custom.nix;
 in
 {
-  config = {
+  options._custom.nix.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ nix-tree ];
 
     nix = {
@@ -76,6 +79,22 @@ in
       enable = true;
       clean.enable = false;
       flake = configDirectory;
+    };
+
+    _custom.hm = {
+      imports = [ inputs.nix-index-database.homeModules.nix-index ];
+
+      config = {
+        programs = {
+          # locale nix pkgs
+          nix-index = {
+            enable = true;
+            enableBashIntegration = false;
+            enableZshIntegration = false;
+          };
+          nix-index-database.comma.enable = true;
+        };
+      };
     };
   };
 }
