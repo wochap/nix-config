@@ -2,7 +2,6 @@
 
 let
   cfg = config._custom.programs.lang-web;
-  inherit (config._custom.globals) configDirectory;
 in {
   options._custom.programs.lang-web.enable = lib.mkEnableOption { };
 
@@ -41,11 +40,11 @@ in {
         };
 
         file = {
-          ".npmrc".source =
-            lib._custom.relativeSymlink configDirectory ./dotfiles/.npmrc;
           ".npm-packages/.keep".text = "";
           ".npm-packages/lib/.keep".text = "";
         };
+
+        copyFiles.".npmrc".source = ./dotfiles/.npmrc;
       };
 
       xdg.configFile.".bunfig.toml".source = ./dotfiles/.bunfig.toml;
