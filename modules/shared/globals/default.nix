@@ -3,6 +3,7 @@
 let
   inherit (config._custom.globals) themeColorsLight themeColorsDark preferDark;
 
+  cfg = config._custom.globals;
   catppuccinLatteTheme = import ./catppuccin-latte.nix;
   catppuccinMochaTheme = import ./catppuccin-mocha.nix;
   mkThemeScript =
@@ -25,6 +26,8 @@ in
   # https://discourse.nixos.org/t/best-resources-for-learning-about-the-nixos-module-system/1177/4
   # https://nixos.org/manual/nixos/stable/index.html#sec-option-types
   options._custom.globals = {
+    enable = lib.mkEnableOption { };
+
     userName = lib.mkOption {
       type = lib.types.str;
       default = "gean";
@@ -93,7 +96,7 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     _custom.hm = {
       xdg.configFile = {
         "scripts/theme-colors.sh" = {

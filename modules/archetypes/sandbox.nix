@@ -11,6 +11,7 @@
   config = lib.mkIf config._custom.archetypes.sandbox.enable {
     _custom.home-manager.enable = true;
     _custom.nix.enable = true;
+    _custom.globals.enable = true;
 
     _custom.security.doas.enable = true;
     # _custom.security.gnome-keyring.enable = lib.mkDefault true;
