@@ -87,6 +87,8 @@ Reboot into NixOS, login with the user you created
    # $ nixos-rebuild switch --flake .#gdesktop --profile-name hyprland-specialisation
    # or with nh
    # $ nh os switch .#nixosConfigurations.gdesktop
+
+   $ nh os switch . -H glegion
    ```
 
    Reboot so changes take effect
