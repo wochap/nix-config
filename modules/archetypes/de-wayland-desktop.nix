@@ -14,10 +14,14 @@
     _custom.globals.enable = true;
 
     _custom.security.doas.enable = true;
+    # _custom.security.gnome-keyring.enable = lib.mkDefault true;
     _custom.security.gpg.enable = true;
+    # _custom.security.kwallet.enable = false;
+    _custom.security.network.enable = true;
+    # _custom.security.pam.enable = true;
+    # _custom.security.polkit.enable = true;
     _custom.security.ssh.enable = true;
 
-    _custom.system.apple.enable = lib.mkDefault false;
     _custom.system.console.enable = true;
     _custom.system.fhs-compat.enable = true;
     _custom.system.others.enable = true;
@@ -26,19 +30,50 @@
     _custom.system.internationalization.enable = true;
     _custom.system.user.enable = true;
 
+    # _custom.desktop.audio.enable = true;
+    # _custom.desktop.audio.enableEasyeffects = lib.mkDefault true;
+    # _custom.desktop.audio.enableNoisetorch = lib.mkDefault true;
+    # _custom.desktop.backlight.enable = true;
+    # _custom.desktop.bluetooth.enable = true;
+    # _custom.desktop.calendar.enable = true;
+    # _custom.desktop.cursor.enable = true;
+    # _custom.desktop.dbus.enable = true;
+    # _custom.desktop.email.enable = true;
     _custom.desktop.fastfetch.enable = true;
     _custom.desktop.fonts.enable = true;
     _custom.desktop.gtk.enable = true;
     _custom.desktop.gtk.enableCsd = true;
     _custom.desktop.gtk.enableTheme = false;
+    # _custom.desktop.logind.enable = true;
+    # _custom.desktop.mouseless.enable = lib.mkDefault false;
+    # _custom.desktop.music.enable = true;
     _custom.desktop.networking.enable = true;
-    _custom.desktop.networking.enableWifi = true;
     _custom.desktop.plymouth.enable = true;
     _custom.desktop.power-management.enable = true;
     _custom.desktop.qt.enable = true;
     _custom.desktop.qt.enableTheme = false;
+    # _custom.desktop.xdg.enable = true;
+    # _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 
+    # _custom.desktop.cliphist.enable = true;
     _custom.desktop.electron-support.enable = true;
+    # _custom.desktop.gammastep.enable = lib.mkDefault true;
+    # _custom.desktop.hyprlock.enable = lib.mkDefault true;
+    # _custom.desktop.hyprsunset.enable = lib.mkDefault false;
+    # _custom.desktop.kanshi.enable = true;
+    # _custom.desktop.quickshell.enable = lib.mkDefault true;
+    # _custom.desktop.quickshell.enableSystemd = lib.mkDefault true;
+    # _custom.desktop.idle.enable = lib.mkDefault true;
+    # _custom.desktop.swww.enable = true;
+    # _custom.desktop.tofi.enable = true;
+    # _custom.desktop.uwsm.enable = true;
+    # _custom.desktop.wayland-session.enable = true;
     _custom.desktop.wayland-utils.enable = true;
+    # _custom.desktop.wluma.enable = lib.mkDefault false;
+    # _custom.desktop.ydotool.enable = lib.mkDefault true;
+
+    # _custom.desktop.greetd.enable = lib.mkDefault true;
+
+    # _custom.headless-server.enable = true;
   };
 }

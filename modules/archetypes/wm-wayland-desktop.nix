@@ -16,7 +16,7 @@
     _custom.security.doas.enable = true;
     _custom.security.gnome-keyring.enable = lib.mkDefault true;
     _custom.security.gpg.enable = true;
-    _custom.security.kwallet.enable = lib.mkDefault false;
+    # _custom.security.kwallet.enable = false;
     _custom.security.network.enable = true;
     _custom.security.pam.enable = true;
     _custom.security.polkit.enable = true;
@@ -49,7 +49,6 @@
     _custom.desktop.mouseless.enable = lib.mkDefault false;
     _custom.desktop.music.enable = true;
     _custom.desktop.networking.enable = true;
-    _custom.desktop.networking.enableWifi = true;
     _custom.desktop.plymouth.enable = lib.mkDefault true;
     _custom.desktop.power-management.enable = true;
     _custom.desktop.power-management.enableBatty = true;
@@ -78,5 +77,7 @@
     _custom.desktop.ydotool.enable = lib.mkDefault true;
 
     _custom.desktop.greetd.enable = lib.mkDefault true;
+
+    # _custom.headless-server.enable = true;
   };
 }

@@ -27,13 +27,10 @@
     _custom.system.fhs-compat.enable = true;
     _custom.system.others.enable = true;
     # _custom.system.windows.enable = lib.mkDefault true;
-    # _custom.system.windows.enableSamba = lib.mkDefault true;
     _custom.system.internationalization.enable = true;
     _custom.system.user.enable = true;
 
     # _custom.desktop.audio.enable = true;
-    # _custom.desktop.audio.enableEasyeffects = lib.mkDefault true;
-    # _custom.desktop.audio.enableNoisetorch = lib.mkDefault true;
     # _custom.desktop.backlight.enable = true;
     # _custom.desktop.bluetooth.enable = true;
     # _custom.desktop.calendar.enable = true;
@@ -43,22 +40,14 @@
     _custom.desktop.fastfetch.enable = true;
     _custom.desktop.fonts.enable = true;
     # _custom.desktop.gtk.enable = true;
-    # _custom.desktop.gtk.enableCsd = false;
-    # _custom.desktop.gtk.enableTheme = true;
-    # _custom.desktop.gtk.enableLibadwaitaWithoutAdwaita = true;
     _custom.desktop.logind.enable = true;
     _custom.desktop.logind.enableIgnoreLidSwitch = true;
     # _custom.desktop.mouseless.enable = lib.mkDefault false;
     # _custom.desktop.music.enable = true;
     _custom.desktop.networking.enable = true;
-    # _custom.desktop.networking.enableWifi = true;
     # _custom.desktop.plymouth.enable = lib.mkDefault true;
     _custom.desktop.power-management.enable = true;
-    # _custom.desktop.power-management.enableBatty = true;
     # _custom.desktop.qt.enable = true;
-    # _custom.desktop.qt.enableTheme = true;
-    # _custom.desktop.qt.enableQt6ctKde = lib.mkDefault true;
-    # _custom.desktop.qt.enableQt5Integration = lib.mkDefault true;
     # _custom.desktop.xdg.enable = true;
     # _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 
@@ -69,7 +58,6 @@
     # _custom.desktop.hyprsunset.enable = lib.mkDefault false;
     # _custom.desktop.kanshi.enable = true;
     # _custom.desktop.quickshell.enable = lib.mkDefault true;
-    # _custom.desktop.quickshell.enableSystemd = lib.mkDefault true;
     # _custom.desktop.idle.enable = lib.mkDefault true;
     # _custom.desktop.swww.enable = true;
     # _custom.desktop.tofi.enable = true;
