@@ -87,8 +87,9 @@ in
       "d /home/${userName}/Sandboxes/${sandboxName} 0755 ${userName} users -"
     ];
 
+    environment.systemPackages = with pkgs; [ xdg-dbus-proxy enter-sandbox ];
+
     # Proxy dbus
-    environment.systemPackages = with pkgs; [ xdg-dbus-proxy ];
     systemd.user.services.sandbox-dbus-proxy = {
       description = "Filtered D-Bus proxy for sandbox";
       wantedBy = [ "default.target" ];
