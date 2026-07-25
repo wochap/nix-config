@@ -108,7 +108,6 @@ in
     _custom.programs.ai-agents.enable = true;
 
     _custom.services.android.enable = true;
-    _custom.services.android.sdk.enable = false;
     _custom.services.docker.enable = true;
     _custom.services.docker.enableNvidia = true;
     _custom.services.flatpak.enable = false;

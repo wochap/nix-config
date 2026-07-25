@@ -41,7 +41,7 @@ in
 {
   options._custom.services.android = {
     enable = lib.mkEnableOption { };
-    sdk.enable = lib.mkEnableOption { default = true; };
+    enableSdk = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -51,7 +51,7 @@ in
       SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", TAG+="uaccess"
     '';
 
-    _custom.hm = lib.mkIf cfg.sdk.enable {
+    _custom.hm = lib.mkIf cfg.enableSdk {
       config = {
         home = {
           file.${android-sdk-home-path}.source = "${android-sdk}/share/android-sdk";

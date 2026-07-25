@@ -106,7 +106,6 @@ in
     _custom.programs.youtube.enable = true;
 
     # _custom.services.android.enable = true;
-    # _custom.services.android.sdk.enable = false;
     _custom.services.docker.enable = true;
     _custom.services.docker.enableNvidia = false;
     # _custom.services.flatpak.enable = false;
