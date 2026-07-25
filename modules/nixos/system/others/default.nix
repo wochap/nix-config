@@ -43,6 +43,15 @@ in
       # minimum amount of swapping without disabling it entirely
       boot.kernel.sysctl."vm.swappiness" = lib.mkDefault 1;
 
+      # security camera for your system. Doesn't prevent anything. Records everything.
+      security.auditd.enable = true;
+
+      # kill processes before OOM kernel panic
+      services.earlyoom.enable = true;
+
+      # rotate and compress system logs
+      services.logrotate.enable = true;
+
       services.xserver = {
         enable = true;
         exportConfiguration = true;
