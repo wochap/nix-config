@@ -35,7 +35,7 @@ in
       programs.lsd = {
         enable = true;
         # adds ls ll la lt ll
-        enableBashIntegration = true;
+        enableBashIntegration = false;
         enableZshIntegration = config._custom.programs.zsh.enable;
         settings = {
           color.theme = "custom";
