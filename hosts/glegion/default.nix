@@ -56,7 +56,7 @@ in
     _custom.programs.lazygit.enable = true;
     _custom.programs.lsd.enable = true;
     _custom.programs.ptsh.enable = true;
-    _custom.programs.rod.enable = true;
+    # _custom.programs.rod.enable = true;
     _custom.programs.texlive.enable = true;
     _custom.programs.zk.enable = true;
     _custom.programs.zoxide.enable = true;
