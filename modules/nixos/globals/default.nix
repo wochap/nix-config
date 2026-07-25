@@ -27,6 +27,11 @@
       example = "xorg"; # xorg, wayland
       description = "Display server type, used by common config files.";
     };
+    systemdTarget = lib.mkOption {
+      type = lib.types.str;
+      default = "graphical-session.target";
+      description = "Systemd target to bind to.";
+    };
 
     isSandbox = lib.mkEnableOption { };
   };

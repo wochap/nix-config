@@ -7,7 +7,7 @@
 
 let
   cfg = config._custom.desktop.idle;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) configDirectory systemdTarget;
   idle-backlight = pkgs.writeScriptBin "idle-backlight" (
     builtins.readFile ./scripts/idle-backlight.sh
   );
@@ -22,8 +22,7 @@ in
     _custom.hm = {
       home.packages = with pkgs; [
         wlinhibit # control idle inhibit
-        sway-audio-idle-inhibit # complement to swayidle
-        wayidle # idle cli
+        wayland-pipewire-idle-inhibit # complement to swayidle
         chayang # gradually dim the screen
         wlopm # toggle screen
 
@@ -37,26 +36,29 @@ in
       services.hypridle = {
         enable = true;
         settings = { };
+        inherit systemdTarget;
       };
 
       systemd.user.services = {
-        sway-audio-idle-inhibit = lib._custom.mkWaylandService {
+        wayland-pipewire-idle-inhibit = lib._custom.mkWaylandService {
           Unit = {
-            Description = "Prevents swayidle from sleeping while any application is outputting or receiving audio.";
-            Documentation = "https://github.com/ErikReider/SwayAudioIdleInhibit";
-            Requires = [ "hypridle.service" ];
-            Wants = [ "hypridle.service" ];
-            PartOf = [ ];
+            Description = "Inhibit Wayland idling when media is played through pipewire";
+            Documentation = "https://github.com/rafaelrc7/wayland-pipewire-idle-inhibit";
+            After = [
+              "pipewire.service"
+              systemdTarget
+            ];
+            Wants = [ "pipewire.service" ];
           };
+          Install.WantedBy = [ systemdTarget ];
           Service = {
-            ExecStart = "${pkgs.sway-audio-idle-inhibit}/bin/sway-audio-idle-inhibit";
-            Type = "simple";
+            ExecStart = "${lib.getExe pkgs.wayland-pipewire-idle-inhibit}";
+            Restart = "always";
+            RestartSec = 10;
           };
         };
 
-        hypridle = lib._custom.mkWaylandService {
-          Unit.ConditionEnvironment = lib.mkForce "";
-        };
+        hypridle = lib._custom.mkWaylandService { };
       };
     };
   };
