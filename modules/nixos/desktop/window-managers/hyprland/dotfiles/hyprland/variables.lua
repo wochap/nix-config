@@ -1,6 +1,6 @@
----- VARIABLES
-
 local colors = require("colors")
+
+---- VARIABLES
 
 hl.config({
   general = {
