@@ -1,4 +1,6 @@
 local constants = require("hyprland.constants")
+local scratchpad = require("hyprland.lib.scratchpad")
+local previous_ws = require("hyprland.lib.previous_ws")
 local mod = "SUPER"
 
 hl.bind(mod .. " + mouse:272", hl.dsp.window.float(), { mouse = true, click = true })
@@ -9,7 +11,9 @@ hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 ---- SYSTEM KEYBINDINGS
 
 -- Open scratchpad terminal
-hl.bind(mod .. " + i", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm kitty-scratch $HOME/.config/kitty/scripts/kitty-scratch.sh"))
+hl.bind(mod .. " + i", function()
+  scratchpad.raise_or_run("kitty-scratch", "$HOME/.config/kitty/scripts/kitty-scratch.sh", { use_uwsm = true })
+end)
 
 -- Lock screen
 hl.bind(mod .. " + l", hl.dsp.exec_cmd("loginctl lock-session"))
@@ -166,7 +170,7 @@ hl.bind(mod .. " + SHIFT + 7", hl.dsp.window.move({ workspace = 7 }))
 hl.bind(mod .. " + SHIFT + 8", hl.dsp.window.move({ workspace = 8 }))
 hl.bind(mod .. " + SHIFT + 9", hl.dsp.window.move({ workspace = 9 }))
 
-hl.bind(mod .. " + grave", hl.dsp.exec_cmd("hyprland-previous-ws"))
+hl.bind(mod .. " + grave", previous_ws.focus_previous)
 
 --- WM ALTTAB
 
