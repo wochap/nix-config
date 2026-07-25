@@ -28,6 +28,7 @@ let
     if [ ! -e "$HOME/${destination}" ]; then
       $DRY_RUN_CMD ${cu}/mkdir -p $(${cu}/dirname "$HOME/${destination}")
       $DRY_RUN_CMD ${cu}/cp $VERBOSE_ARG ${toString opts.source} "$HOME/${destination}"
+      $DRY_RUN_CMD ${cu}/chmod u+w "$HOME/${destination}"
       ${optionalString opts.executable ''
         $DRY_RUN_CMD ${cu}/chmod +x "$HOME/${destination}"
       ''}
