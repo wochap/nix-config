@@ -48,9 +48,8 @@ set_light_theme() {
   ln -sf ~/.config/presenterm/config-light.yaml ~/.config/presenterm/config.yaml
 
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
-    # Hyprland
+    # hyprlock
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
-    hyprctl reload
   fi
 
   # quickshell
@@ -106,10 +105,9 @@ set_dark_theme() {
   # presenterm
   ln -sf ~/.config/presenterm/config-dark.yaml ~/.config/presenterm/config.yaml
 
-  # Hyprland
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
+    # hyprlock
     ln -sf ~/.config/hypr/colors-dark.conf ~/.config/hypr/colors.conf
-    hyprctl reload
   fi
 
   # quickshell

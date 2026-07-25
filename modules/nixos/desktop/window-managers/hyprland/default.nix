@@ -132,7 +132,6 @@ in
         "hypr/hyprland/lib/scratchpad.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/scratchpad.lua;
         "hypr/kiosk.lua".text = ''
-          require("colors")
           require("hyprland.variables")
           require("hyprland.keywords")
           require("hyprland.rules")
@@ -176,7 +175,6 @@ in
           # inputs.hyprgrass.packages.${pkgs.stdenv.hostPlatform.system}.default
         ];
         extraConfig = ''
-          require("colors")
           require("hyprland.variables")
           require("hyprland.keywords")
           require("hyprland.keywords-main")
