@@ -77,6 +77,7 @@
     ./security/doas
     ./security/gnome-keyring
     ./security/gpg
+    ./security/kernel
     ./security/kwallet
     ./security/network
     ./security/pam

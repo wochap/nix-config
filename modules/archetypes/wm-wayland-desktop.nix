@@ -16,6 +16,7 @@
     _custom.security.apparmor.enable = true;
     _custom.security.doas.enable = true;
     _custom.security.gnome-keyring.enable = lib.mkDefault true;
+    _custom.security.kernel.enable = true;
     _custom.security.gpg.enable = true;
     # _custom.security.kwallet.enable = false;
     _custom.security.network.enable = true;
