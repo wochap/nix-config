@@ -133,7 +133,8 @@ in
     _custom.desktop.networking.enableWol = true;
     # _custom.desktop.plymouth.enable = false;
     # _custom.desktop.xwaylandvideobridge.enable = false;
-    _custom.desktop.power-management.cpupowerGuiArgs = [
+    _custom.desktop.power-management.cpupowerGui.enable = true;
+    _custom.desktop.power-management.cpupowerGui.args = [
       "--performance"
       "profile"
       "Performance"
