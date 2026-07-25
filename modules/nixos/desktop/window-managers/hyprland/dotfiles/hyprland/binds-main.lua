@@ -8,7 +8,6 @@ hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- hl.bind(mod .. " + SHIFT + mouse:273", hl.dsp.window.resize({ keep_aspect_ratio = true }), { mouse = true })
 
-
 --- SYSTEM KEYBINDINGS
 
 -- Open scratchpad terminal
@@ -54,7 +53,6 @@ hl.bind(
   mod .. " + SHIFT + c",
   hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call control-center toggle")
 )
-
 
 --- WM KEYBINDINGS
 
@@ -202,7 +200,6 @@ hl.bind(mod .. " + SHIFT + 9", hl.dsp.window.move({ workspace = 9, follow = fals
 
 hl.bind(mod .. " + grave", previous_ws.focus_previous)
 
-
 --- WM ALTTAB
 
 hl.bind(mod .. " + TAB", hl.dsp.window.cycle_next({ tiled = true }))
@@ -215,7 +212,6 @@ hl.bind("ALT + SHIFT + TAB", function()
   hl.dispatch(hl.dsp.window.cycle_next({ next = false, floating = true }))
   hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
 end)
-
 
 --- WM SCRATCHPAD
 
@@ -254,7 +250,6 @@ hl.define_submap("group", "reset", function()
   hl.bind("escape", hl.dsp.submap("reset"))
 end)
 
-
 --- APPLICATION KEYBINDINGS (Super + Alt + Key)
 
 -- Open primary terminal
@@ -286,7 +281,6 @@ hl.bind(mod .. " + ALT + c", hl.dsp.exec_cmd("uwsm-app -- color-picker"))
 -- Magnifying glass
 hl.bind(mod .. " + ALT + z", hl.dsp.exec_cmd("uwsm-app -- pypr zoom"))
 
-
 --- MEDIA KEYBINDINGS
 
 hl.bind(
@@ -313,7 +307,6 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("backlight 5%-"), { locked = tr
 
 hl.bind("XF86KbdBrightnessDown", hl.dsp.exec_cmd("kbd-backlight 5%-"), { locked = true, repeating = true })
 hl.bind("XF86KbdBrightnessUp", hl.dsp.exec_cmd("kbd-backlight 5%+"), { locked = true, repeating = true })
-
 
 --- OTHERS
 
@@ -355,7 +348,7 @@ hl.define_submap("layout", "reset", function()
   )
   hl.bind("1", function()
     hl.dispatch(hl.dsp.window.move({ out_of_group = true }))
-    hl.dispatch(hl.dsp.window.float({ action = "set" }))
+    hl.dispatch(hl.dsp.window.float({ action = "on" }))
     hl.dispatch(hl.dsp.window.resize({ x = 1200, y = 800 }))
     hl.dispatch(hl.dsp.window.center())
   end)
