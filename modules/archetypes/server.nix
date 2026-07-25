@@ -13,6 +13,7 @@
     _custom.nix.enable = true;
     _custom.globals.enable = true;
 
+    _custom.security.apparmor.enable = true;
     _custom.security.doas.enable = true;
     _custom.security.doas.requirePassword = true;
     # _custom.security.gnome-keyring.enable = lib.mkDefault true;

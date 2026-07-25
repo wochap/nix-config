@@ -73,6 +73,7 @@
     ./programs/tui/figlet
     ./programs/tui/fontpreview-kik
 
+    ./security/apparmor
     ./security/doas
     ./security/gnome-keyring
     ./security/gpg
