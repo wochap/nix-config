@@ -121,6 +121,8 @@
     nnn-cppath.flake = false;
 
     # themes
+    catppuccin-yazi.url = "github:catppuccin/yazi";
+    catppuccin-yazi.flake = false;
     catppuccin-lsd.url = "github:catppuccin/lsd";
     catppuccin-lsd.flake = false;
     catppuccin-cava.url = "github:catppuccin/cava";

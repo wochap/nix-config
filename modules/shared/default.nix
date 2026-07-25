@@ -55,6 +55,7 @@
     ./programs/tui/taskwarrior
     ./programs/tui/tmux
     ./programs/tui/urlscan
+    ./programs/tui/yazi
     ./programs/tui/youtube
 
     ./programs/weeb

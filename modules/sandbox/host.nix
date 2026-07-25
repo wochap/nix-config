@@ -111,6 +111,7 @@ in
     _custom.programs.tmux.enable = true;
     # _custom.programs.tmux.enableSystemd = true;
     # _custom.programs.urlscan.enable = true;
+    _custom.programs.yazi.enable = true;
     # _custom.programs.youtube.enable = true;
     _custom.programs.ai-agents.enable = true;
 

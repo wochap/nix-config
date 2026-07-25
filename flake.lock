@@ -521,6 +521,22 @@
         "type": "github"
       }
     },
+    "catppuccin-yazi": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781379314,
+        "narHash": "sha256-L6SApM07CSQk0znEsFP8WaxW+ZHcindXo612r1XcwIg=",
+        "owner": "catppuccin",
+        "repo": "yazi",
+        "rev": "baaf5d1c9427b836fbefd126aa855f9eab7a9d0d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "yazi",
+        "type": "github"
+      }
+    },
     "catppuccin-zathura": {
       "flake": false,
       "locked": {
@@ -3192,6 +3208,7 @@
         "catppuccin-qt5ct": "catppuccin-qt5ct",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
         "catppuccin-tmux": "catppuccin-tmux",
+        "catppuccin-yazi": "catppuccin-yazi",
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",
         "chaotic": "chaotic",
