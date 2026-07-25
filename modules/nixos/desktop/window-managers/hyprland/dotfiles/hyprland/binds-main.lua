@@ -1,17 +1,10 @@
+local constants = require("hyprland.constants")
 local mod = "SUPER"
-
-local bitwarden_appid = "Bitwarden"
-local bing_gpt_appid = "msedge-www.bing.com__chat-Default"
-local chat_gpt_appid = "chrome-chat.openai.com__-Default"
-local gemini_appid = "chrome-gemini.google.com__app-Default"
-local ollama_appid = "chrome-ollama.wochap.local__-Default"
-local openwebui_appid = "chrome-openwebui.wochap.local__-Default"
-local ytmusic_appid = "chrome-music.youtube.com__-Default"
 
 hl.bind(mod .. " + mouse:272", hl.dsp.window.float(), { mouse = true, click = true })
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
-hl.bind(mod .. " + SHIFT + mouse:273", hl.dsp.window.resize({ keep_aspect_ratio = true }), { mouse = true })
+-- hl.bind(mod .. " + SHIFT + mouse:273", hl.dsp.window.resize({ keep_aspect_ratio = true }), { mouse = true })
 
 ---- SYSTEM KEYBINDINGS
 
@@ -139,8 +132,8 @@ hl.gesture({ fingers = 3, direction = "up", action = function()
 end })
 
 -- Send focused window to the next/previous workspace
-hl.bind(mod .. " + SHIFT + comma", hl.dsp.window.move({ workspace = "r-1" }))
-hl.bind(mod .. " + SHIFT + period", hl.dsp.window.move({ workspace = "r+1" }))
+hl.bind(mod .. " + SHIFT + comma", hl.dsp.window.move({ workspace = "r-1", follow = false }))
+hl.bind(mod .. " + SHIFT + period", hl.dsp.window.move({ workspace = "r+1", follow = false }))
 
 -- Bump focused window to the top of the layout stack
 hl.bind(mod .. " + return", hl.dsp.layout("swapwithmaster"))
@@ -149,9 +142,9 @@ hl.bind(mod .. " + return", hl.dsp.layout("swapwithmaster"))
 hl.bind(mod .. " + bracketleft", hl.dsp.focus({ monitor = "-1" }))
 hl.bind(mod .. " + bracketright", hl.dsp.focus({ monitor = "+1" }))
 
--- Focus next/prev monitor
-hl.bind(mod .. " + SHIFT + bracketleft", hl.dsp.window.move({ monitor = "-1" }))
-hl.bind(mod .. " + SHIFT + bracketright", hl.dsp.window.move({ monitor = "+1" }))
+-- Move focused window to next/prev monitor
+hl.bind(mod .. " + SHIFT + bracketleft", hl.dsp.window.move({ monitor = "-1", follow = false }))
+hl.bind(mod .. " + SHIFT + bracketright", hl.dsp.window.move({ monitor = "+1", follow = false }))
 
 hl.bind(mod .. " + 1", hl.dsp.focus({ workspace = 1, on_current_monitor = true }))
 hl.bind(mod .. " + 2", hl.dsp.focus({ workspace = 2, on_current_monitor = true }))
@@ -215,15 +208,15 @@ hl.define_submap("group", "reset", function()
   hl.bind("p", hl.dsp.group.prev())
   hl.bind("SHIFT + n", hl.dsp.group.move_window({ forward = true }))
   hl.bind("SHIFT + p", hl.dsp.group.move_window({ forward = false }))
-  hl.bind("SHIFT + 1", hl.dsp.window.move({ workspace = 1 }))
-  hl.bind("SHIFT + 2", hl.dsp.window.move({ workspace = 2 }))
-  hl.bind("SHIFT + 3", hl.dsp.window.move({ workspace = 3 }))
-  hl.bind("SHIFT + 4", hl.dsp.window.move({ workspace = 4 }))
-  hl.bind("SHIFT + 5", hl.dsp.window.move({ workspace = 5 }))
-  hl.bind("SHIFT + 6", hl.dsp.window.move({ workspace = 6 }))
-  hl.bind("SHIFT + 7", hl.dsp.window.move({ workspace = 7 }))
-  hl.bind("SHIFT + 8", hl.dsp.window.move({ workspace = 8 }))
-  hl.bind("SHIFT + 9", hl.dsp.window.move({ workspace = 9 }))
+  hl.bind("SHIFT + 1", hl.dsp.window.move({ workspace = 1, follow = false }))
+  hl.bind("SHIFT + 2", hl.dsp.window.move({ workspace = 2, follow = false }))
+  hl.bind("SHIFT + 3", hl.dsp.window.move({ workspace = 3, follow = false }))
+  hl.bind("SHIFT + 4", hl.dsp.window.move({ workspace = 4, follow = false }))
+  hl.bind("SHIFT + 5", hl.dsp.window.move({ workspace = 5, follow = false }))
+  hl.bind("SHIFT + 6", hl.dsp.window.move({ workspace = 6, follow = false }))
+  hl.bind("SHIFT + 7", hl.dsp.window.move({ workspace = 7, follow = false }))
+  hl.bind("SHIFT + 8", hl.dsp.window.move({ workspace = 8, follow = false }))
+  hl.bind("SHIFT + 9", hl.dsp.window.move({ workspace = 9, follow = false }))
   hl.bind("escape", hl.dsp.submap("reset"))
 end)
 
@@ -315,17 +308,17 @@ end)
 hl.bind(mod .. " + ALT + b", hl.dsp.submap("browser"))
 hl.define_submap("browser", "reset", function()
   -- TODO: find workaround for exec rules + uwsm-app
-  hl.bind("f", hl.dsp.exec_cmd("uwsm-app -- firefox", { workspace = "5 silent" }))
-  hl.bind("b", hl.dsp.exec_cmd("uwsm-app -- brave", { workspace = "8 silent" }))
-  hl.bind("g", hl.dsp.exec_cmd("uwsm-app -- google-chrome-stable", { workspace = "1 silent" }))
-  hl.bind("m", hl.dsp.exec_cmd("uwsm-app -- microsoft-edge", { workspace = "9 silent" }))
-  hl.bind("t", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. bitwarden_appid .. ' "bitwarden"'))
-  hl.bind("SHIFT + i", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. bing_gpt_appid .. ' "microsoft-edge --profile-directory=Default --app=https://www.bing.com/chat"'))
-  hl.bind("i", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. chat_gpt_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://chat.openai.com"'))
-  hl.bind("e", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. gemini_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://gemini.google.com/app"'))
-  hl.bind("o", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. ollama_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local"'))
-  hl.bind("w", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. openwebui_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://openwebui.wochap.local"'))
-  hl.bind("u", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. ytmusic_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com"'))
+  hl.bind("f", hl.dsp.exec_cmd("uwsm-app -- firefox"))
+  hl.bind("b", hl.dsp.exec_cmd("uwsm-app -- brave"))
+  hl.bind("g", hl.dsp.exec_cmd("uwsm-app -- google-chrome-stable"))
+  hl.bind("m", hl.dsp.exec_cmd("uwsm-app -- microsoft-edge"))
+  hl.bind("t", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. constants.bitwarden_appid .. ' "bitwarden"'))
+  hl.bind("SHIFT + i", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. constants.bing_gpt_appid .. ' "microsoft-edge --profile-directory=Default --app=https://www.bing.com/chat"'))
+  hl.bind("i", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. constants.chat_gpt_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://chat.openai.com"'))
+  hl.bind("e", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. constants.gemini_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://gemini.google.com/app"'))
+  hl.bind("o", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. constants.ollama_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local"'))
+  hl.bind("w", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. constants.openwebui_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://openwebui.wochap.local"'))
+  hl.bind("u", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run-uwsm " .. constants.ytmusic_appid .. ' "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com"'))
   hl.bind("escape", hl.dsp.submap("reset"))
 end)
 

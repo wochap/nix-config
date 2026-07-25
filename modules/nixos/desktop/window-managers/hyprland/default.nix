@@ -135,12 +135,14 @@ in
         "hypr/hyprland/rules.lua".source = relativeSymlink configDirectory ./dotfiles/hyprland/rules.lua;
         "hypr/hyprland/variables.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/variables.lua;
+        "hypr/hyprland/constants.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/constants.lua;
         "hypr/kiosk.lua".text = ''
           require("colors")
-          require("hyprland/variables")
-          require("hyprland/keywords")
-          require("hyprland/rules")
-          require("hyprland/binds-kiosk")
+          require("hyprland.variables")
+          require("hyprland.keywords")
+          require("hyprland.rules")
+          require("hyprland.binds-kiosk")
 
           ${hyprcursor-conf}
         '';
@@ -181,11 +183,11 @@ in
         ];
         extraConfig = ''
           require("colors")
-          require("hyprland/variables")
-          require("hyprland/keywords")
-          require("hyprland/keywords-main")
-          require("hyprland/rules")
-          require("hyprland/binds-main")
+          require("hyprland.variables")
+          require("hyprland.keywords")
+          require("hyprland.keywords-main")
+          require("hyprland.rules")
+          require("hyprland.binds-main")
 
           ${hyprcursor-conf}
         '';

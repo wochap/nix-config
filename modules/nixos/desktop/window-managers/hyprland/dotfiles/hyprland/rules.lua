@@ -1,8 +1,9 @@
+local colors = require("colors")
+local constants = require("hyprland.constants")
+
+
 ---- MONITOR
 
-local colors = require("colors")
-
--- monitor=name,resolution,position,scale
 hl.monitor({ output = "", mode = "highres", position = "auto", scale = "auto", bitdepth = 8, cm = "auto" })
 hl.monitor({ output = "", reserved_area = { top = 0, bottom = 0, left = 0, right = 0 } })
 
@@ -11,14 +12,6 @@ hl.monitor({ output = "WAYLAND-1", disabled = true })
 
 
 ---- WINDOW
-
-local bitwarden_appid = "Bitwarden"
-local bing_gpt_appid = "msedge-www.bing.com__chat-Default"
-local chat_gpt_appid = "chrome-chat.openai.com__-Default"
-local gemini_appid = "chrome-gemini.google.com__app-Default"
-local ollama_appid = "chrome-ollama.wochap.local__-Default"
-local openwebui_appid = "chrome-openwebui.wochap.local__-Default"
-local ytmusic_appid = "chrome-music.youtube.com__-Default"
 
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 hl.window_rule({ match = { class = "^$", title = "^$", xwayland = true, float = true, fullscreen = false, pin = false }, no_focus = true })
@@ -56,20 +49,20 @@ hl.window_rule({ match = { class = "tui-calendar" }, tag = "+float_md" })
 hl.window_rule({ match = { class = "tui-calendar" }, tag = "+scratchpad" })
 hl.window_rule({ match = { class = "tui-bookmarks" }, tag = "+float_md" })
 hl.window_rule({ match = { class = "tui-bookmarks" }, tag = "+scratchpad" })
-hl.window_rule({ match = { class = "^(" .. bitwarden_appid .. ")$" }, tag = "+float_md", no_screen_share = true })
-hl.window_rule({ match = { class = "^(" .. bitwarden_appid .. ")$" }, tag = "+scratchpad" })
-hl.window_rule({ match = { class = "^(" .. bing_gpt_appid .. ")$" }, tag = "+float_md" })
-hl.window_rule({ match = { class = "^(" .. bing_gpt_appid .. ")$" }, tag = "+scratchpad" })
-hl.window_rule({ match = { class = "^(" .. chat_gpt_appid .. ")$" }, tag = "+float_md" })
-hl.window_rule({ match = { class = "^(" .. chat_gpt_appid .. ")$" }, tag = "+scratchpad" })
-hl.window_rule({ match = { class = "^(" .. gemini_appid .. ")$" }, tag = "+float_md" })
-hl.window_rule({ match = { class = "^(" .. gemini_appid .. ")$" }, tag = "+scratchpad" })
-hl.window_rule({ match = { class = "^(" .. ollama_appid .. ")$" }, tag = "+float_md" })
-hl.window_rule({ match = { class = "^(" .. ollama_appid .. ")$" }, tag = "+scratchpad" })
-hl.window_rule({ match = { class = "^(" .. openwebui_appid .. ")$" }, tag = "+float_md" })
-hl.window_rule({ match = { class = "^(" .. openwebui_appid .. ")$" }, tag = "+scratchpad" })
-hl.window_rule({ match = { class = "^(" .. ytmusic_appid .. ")$" }, tag = "+float_md" })
-hl.window_rule({ match = { class = "^(" .. ytmusic_appid .. ")$" }, tag = "+scratchpad" })
+hl.window_rule({ match = { class = "^(" .. constants.bitwarden_appid .. ")$" }, tag = "+float_md", no_screen_share = true })
+hl.window_rule({ match = { class = "^(" .. constants.bitwarden_appid .. ")$" }, tag = "+scratchpad" })
+hl.window_rule({ match = { class = "^(" .. constants.bing_gpt_appid .. ")$" }, tag = "+float_md" })
+hl.window_rule({ match = { class = "^(" .. constants.bing_gpt_appid .. ")$" }, tag = "+scratchpad" })
+hl.window_rule({ match = { class = "^(" .. constants.chat_gpt_appid .. ")$" }, tag = "+float_md" })
+hl.window_rule({ match = { class = "^(" .. constants.chat_gpt_appid .. ")$" }, tag = "+scratchpad" })
+hl.window_rule({ match = { class = "^(" .. constants.gemini_appid .. ")$" }, tag = "+float_md" })
+hl.window_rule({ match = { class = "^(" .. constants.gemini_appid .. ")$" }, tag = "+scratchpad" })
+hl.window_rule({ match = { class = "^(" .. constants.ollama_appid .. ")$" }, tag = "+float_md" })
+hl.window_rule({ match = { class = "^(" .. constants.ollama_appid .. ")$" }, tag = "+scratchpad" })
+hl.window_rule({ match = { class = "^(" .. constants.openwebui_appid .. ")$" }, tag = "+float_md" })
+hl.window_rule({ match = { class = "^(" .. constants.openwebui_appid .. ")$" }, tag = "+scratchpad" })
+hl.window_rule({ match = { class = "^(" .. constants.ytmusic_appid .. ")$" }, tag = "+float_md" })
+hl.window_rule({ match = { class = "^(" .. constants.ytmusic_appid .. ")$" }, tag = "+scratchpad" })
 hl.window_rule({ match = { class = "^([tT]hunar)$" }, tag = "+scratchpad", float = true })
 
 -- custom
