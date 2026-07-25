@@ -363,31 +363,31 @@ hl.define_submap("browser", "reset", function()
   hl.bind("m", hl.dsp.exec_cmd("microsoft-edge"))
   hl.bind("SHIFT + i", function()
     scratchpad.raise_or_run(
-      bing_gpt_appid,
+      constants.bing_gpt_appid,
       "microsoft-edge --profile-directory=Default --app=https://www.bing.com/chat"
     )
   end)
   hl.bind("i", function()
     scratchpad.raise_or_run(
-      chat_gpt_appid,
+      constants.chat_gpt_appid,
       "google-chrome-stable --profile-directory=Default --app=https://chat.openai.com"
     )
   end)
   hl.bind("o", function()
     scratchpad.raise_or_run(
-      ollama_appid,
+      constants.ollama_appid,
       "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local"
     )
   end)
   hl.bind("w", function()
     scratchpad.raise_or_run(
-      openwebui_appid,
+      constants.openwebui_appid,
       "google-chrome-stable --profile-directory=Default --app=https://openwebui.wochap.local"
     )
   end)
   hl.bind("u", function()
     scratchpad.raise_or_run(
-      ytmusic_appid,
+      constants.ytmusic_appid,
       "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com"
     )
   end)
