@@ -324,28 +324,33 @@ hl.bind(mod .. " + CTRL + SHIFT + q", hl.dsp.exec_cmd("hyprshutdown"))
 hl.bind(mod .. " + r", hl.dsp.submap("layout"))
 hl.define_submap("layout", "reset", function()
   hl.bind("c", hl.dsp.window.center())
-  hl.bind(
-    "e",
-    hl.dsp.exec_cmd(
-      'hyprctl keyword workspace $(hyprctl activeworkspace -j | jq -r ".name"),layout:master && hyprctl dispatch layoutmsg orientationcenter'
-    )
-  )
-  hl.bind(
-    "t",
-    hl.dsp.exec_cmd(
-      'hyprctl keyword workspace $(hyprctl activeworkspace -j | jq -r ".name"),layout:master && hyprctl dispatch layoutmsg orientationleft'
-    )
-  )
-  hl.bind(
-    "f",
-    hl.dsp.exec_cmd(
-      'hyprctl keyword workspace $(hyprctl activeworkspace -j | jq -r ".name"),layout:master && hyprctl dispatch layoutmsg orientationtop'
-    )
-  )
-  hl.bind(
-    "m",
-    hl.dsp.exec_cmd('hyprctl keyword workspace $(hyprctl activeworkspace -j | jq -r ".name"),layout:monocle')
-  )
+  hl.bind("e", function()
+    hl.workspace_rule({
+      workspace = hl.get_active_workspace().name,
+      layout = "master",
+      layout_opts = { orientation = "center" },
+    })
+  end)
+  hl.bind("t", function()
+    hl.workspace_rule({
+      workspace = hl.get_active_workspace().name,
+      layout = "master",
+      layout_opts = { orientation = "left" },
+    })
+  end)
+  hl.bind("f", function()
+    hl.workspace_rule({
+      workspace = hl.get_active_workspace().name,
+      layout = "master",
+      layout_opts = { orientation = "top" },
+    })
+  end)
+  hl.bind("m", function()
+    hl.workspace_rule({
+      workspace = hl.get_active_workspace().name,
+      layout = "monocle",
+    })
+  end)
   hl.bind("1", function()
     hl.dispatch(hl.dsp.window.move({ out_of_group = true }))
     hl.dispatch(hl.dsp.window.float({ action = "on" }))

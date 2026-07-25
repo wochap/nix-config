@@ -8,7 +8,6 @@ hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- hl.bind(mod .. " + SHIFT + mouse:273", hl.dsp.window.resize({ keep_aspect_ratio = true }), { mouse = true })
 
-
 --- SYSTEM KEYBINDINGS
 
 -- Open scratchpad terminal
@@ -51,7 +50,6 @@ hl.bind(mod .. " + e", hl.dsp.exec_cmd("tofi-emoji"))
 
 -- Toggle control center
 -- hl.bind(mod .. " + SHIFT + c", hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call control-center toggle"))
-
 
 --- WM KEYBINDINGS
 
@@ -199,7 +197,6 @@ hl.bind(mod .. " + SHIFT + 9", hl.dsp.window.move({ workspace = 9, follow = fals
 
 hl.bind(mod .. " + grave", previous_ws.focus_previous)
 
-
 --- WM ALTTAB
 
 hl.bind(mod .. " + TAB", hl.dsp.window.cycle_next({ tiled = true }))
@@ -213,7 +210,6 @@ hl.bind("ALT + SHIFT + TAB", function()
   hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
 end)
 
-
 --- WM SCRATCHPAD
 
 -- Open scratchpad
@@ -224,7 +220,6 @@ hl.bind(mod .. " + SHIFT + d", scratchpad.toggle_in)
 
 -- Open last scratchpad
 hl.bind(mod .. " + SHIFT + grave", scratchpad.focus_last)
-
 
 -- WM GROUPS
 
@@ -251,7 +246,6 @@ hl.define_submap("group", "reset", function()
   hl.bind("SHIFT + 9", hl.dsp.window.move({ workspace = 9, follow = false }))
   hl.bind("escape", hl.dsp.submap("reset"))
 end)
-
 
 --- APPLICATION KEYBINDINGS (Super + Alt + Key)
 
@@ -284,7 +278,6 @@ hl.bind(mod .. " + ALT + c", hl.dsp.exec_cmd("color-picker"))
 -- Magnifying glass
 hl.bind(mod .. " + ALT + z", hl.dsp.exec_cmd("pypr zoom"))
 
-
 --- MEDIA KEYBINDINGS
 
 -- hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("shell-pipewire --volume-output 5%+"), { locked = true, repeating = true })
@@ -304,7 +297,6 @@ hl.bind(mod .. " + ALT + z", hl.dsp.exec_cmd("pypr zoom"))
 -- hl.bind("XF86KbdBrightnessDown", hl.dsp.exec_cmd("kbd-backlight 5%-"), { locked = true, repeating = true })
 -- hl.bind("XF86KbdBrightnessUp", hl.dsp.exec_cmd("kbd-backlight 5%+"), { locked = true, repeating = true })
 
-
 --- OTHERS
 
 -- hl.bind(mod .. " + CTRL + ALT + m", hl.dsp.exec_cmd('hyprctl output create headless "HEADLESS-2"'))
@@ -319,28 +311,33 @@ hl.bind(mod .. " + CTRL + SHIFT + q", hl.dsp.exec_cmd("hyprshutdown"))
 hl.bind(mod .. " + r", hl.dsp.submap("layout"))
 hl.define_submap("layout", "reset", function()
   hl.bind("c", hl.dsp.window.center())
-  hl.bind(
-    "e",
-    hl.dsp.exec_cmd(
-      'hyprctl keyword workspace $(hyprctl activeworkspace -j | jq -r ".name"),layout:master && hyprctl dispatch layoutmsg orientationcenter'
-    )
-  )
-  hl.bind(
-    "t",
-    hl.dsp.exec_cmd(
-      'hyprctl keyword workspace $(hyprctl activeworkspace -j | jq -r ".name"),layout:master && hyprctl dispatch layoutmsg orientationleft'
-    )
-  )
-  hl.bind(
-    "f",
-    hl.dsp.exec_cmd(
-      'hyprctl keyword workspace $(hyprctl activeworkspace -j | jq -r ".name"),layout:master && hyprctl dispatch layoutmsg orientationtop'
-    )
-  )
-  hl.bind(
-    "m",
-    hl.dsp.exec_cmd('hyprctl keyword workspace $(hyprctl activeworkspace -j | jq -r ".name"),layout:monocle')
-  )
+  hl.bind("e", function()
+    hl.workspace_rule({
+      workspace = hl.get_active_workspace().name,
+      layout = "master",
+      layout_opts = { orientation = "center" },
+    })
+  end)
+  hl.bind("t", function()
+    hl.workspace_rule({
+      workspace = hl.get_active_workspace().name,
+      layout = "master",
+      layout_opts = { orientation = "left" },
+    })
+  end)
+  hl.bind("f", function()
+    hl.workspace_rule({
+      workspace = hl.get_active_workspace().name,
+      layout = "master",
+      layout_opts = { orientation = "top" },
+    })
+  end)
+  hl.bind("m", function()
+    hl.workspace_rule({
+      workspace = hl.get_active_workspace().name,
+      layout = "monocle",
+    })
+  end)
   hl.bind("1", function()
     hl.dispatch(hl.dsp.window.move({ out_of_group = true }))
     hl.dispatch(hl.dsp.window.float({ action = "on" }))
