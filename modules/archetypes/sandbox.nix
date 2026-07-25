@@ -59,7 +59,6 @@
 
     # _custom.desktop.cliphist.enable = true;
     _custom.desktop.electron-support.enable = true;
-    # _custom.desktop.gammastep.enable = lib.mkDefault true;
     # _custom.desktop.hyprlock.enable = lib.mkDefault true;
     # _custom.desktop.hyprsunset.enable = lib.mkDefault false;
     # _custom.desktop.kanshi.enable = true;

@@ -186,7 +186,6 @@ in
     };
     _custom.desktop.udev-rules.enable = true;
     _custom.desktop.udev-rules.canDisableGlegionKbd = false;
-    _custom.desktop.gammastep.enable = false;
     _custom.desktop.hyprsunset.enable = true;
     _custom.desktop.wluma.enable = false;
     _custom.desktop.wluma.enableSystemd = true;

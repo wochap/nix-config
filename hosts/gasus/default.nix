@@ -149,7 +149,6 @@ in
     # _custom.desktop.greetd.enablePamAutoLogin = false;
     # _custom.desktop.udev-rules.enable = false;
     # _custom.desktop.udev-rules.canDisableGlegionKbd = false;
-    # _custom.desktop.gammastep.enable = false;
     # _custom.desktop.hyprsunset.enable = false;
     # _custom.desktop.wluma.enable = false;
     # _custom.desktop.hyprland.enable = false;
