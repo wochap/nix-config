@@ -8,7 +8,6 @@
 
 let
   cfg = config._custom.desktop.qt;
-  inherit (config._custom) globals;
   inherit (config._custom.globals)
     userName
     themeColorsLight
