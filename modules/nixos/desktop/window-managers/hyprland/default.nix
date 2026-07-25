@@ -17,13 +17,15 @@ let
     ;
   inherit (lib._custom) relativeSymlink;
 
-  mkThemeHyprland =
+  mkThemeLua =
     colors:
-    lib.concatStringsSep "\n" (
-      lib.attrsets.mapAttrsToList (key: value: "${"$"}${key}=${lib._custom.unwrapHex value}") colors
-    );
-  catppuccin-hyprland-light-theme = mkThemeHyprland themeColorsLight;
-  catppuccin-hyprland-dark-theme = mkThemeHyprland themeColorsDark;
+    "return {\n"
+    + lib.concatStringsSep ",\n" (
+      lib.attrsets.mapAttrsToList (key: value: "  ${key} = \"#${lib._custom.unwrapHex value}\"") colors
+    )
+    + ",\n}\n";
+  catppuccin-hyprland-light-theme = mkThemeLua themeColorsLight;
+  catppuccin-hyprland-dark-theme = mkThemeLua themeColorsDark;
   hyprland-guiutils =
     inputs.hyprland-guiutils.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-guiutils;
   hyprplugins = inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system};
@@ -40,9 +42,9 @@ let
     builtins.readFile ./scripts/hyprland-socket.sh
   );
   hyprcursor-conf = ''
-    # hyprcursor config
-    env = HYPRCURSOR_THEME,${config._custom.desktop.cursor.name}
-    env = HYPRCURSOR_SIZE,${toString config._custom.desktop.cursor.size}
+    -- hyprcursor config
+    hl.env("HYPRCURSOR_THEME", "${config._custom.desktop.cursor.name}")
+    hl.env("HYPRCURSOR_SIZE", "${toString config._custom.desktop.cursor.size}")
   '';
 in
 {
@@ -116,29 +118,29 @@ in
 
         "hypr/xdph.conf".source = lib._custom.relativeSymlink configDirectory ./dotfiles/xdph.conf;
 
-        "hypr/colors.conf" = {
+        "hypr/colors.lua" = {
           text = if preferDark then catppuccin-hyprland-dark-theme else catppuccin-hyprland-light-theme;
           force = true;
         };
-        "hypr/colors-light.conf".text = catppuccin-hyprland-light-theme;
-        "hypr/colors-dark.conf".text = catppuccin-hyprland-dark-theme;
-        "hypr/hyprland/binds-kiosk.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/binds-kiosk.conf;
-        "hypr/hyprland/binds-main.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/binds-main.conf;
-        "hypr/hyprland/keywords-main.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/keywords-main.conf;
-        "hypr/hyprland/keywords.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/keywords.conf;
-        "hypr/hyprland/rules.conf".source = relativeSymlink configDirectory ./dotfiles/hyprland/rules.conf;
-        "hypr/hyprland/variables.conf".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/variables.conf;
-        "hypr/hyprland/kiosk.conf".text = ''
-          source=~/.config/hypr/colors.conf
-          source=~/.config/hypr/hyprland/variables.conf
-          source=~/.config/hypr/hyprland/keywords.conf
-          source=~/.config/hypr/hyprland/rules.conf
-          source=~/.config/hypr/hyprland/binds-kiosk.conf
+        "hypr/colors-light.lua".text = catppuccin-hyprland-light-theme;
+        "hypr/colors-dark.lua".text = catppuccin-hyprland-dark-theme;
+        "hypr/hyprland/binds-kiosk.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/binds-kiosk.lua;
+        "hypr/hyprland/binds-main.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/binds-main.lua;
+        "hypr/hyprland/keywords-main.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/keywords-main.lua;
+        "hypr/hyprland/keywords.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/keywords.lua;
+        "hypr/hyprland/rules.lua".source = relativeSymlink configDirectory ./dotfiles/hyprland/rules.lua;
+        "hypr/hyprland/variables.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/variables.lua;
+        "hypr/kiosk.lua".text = ''
+          require("colors")
+          require("hyprland/variables")
+          require("hyprland/keywords")
+          require("hyprland/rules")
+          require("hyprland/binds-kiosk")
 
           ${hyprcursor-conf}
         '';
@@ -166,7 +168,7 @@ in
         package = hyprland-final;
         portalPackage = null;
         systemd.enable = false;
-        configType = "hyprlang";
+        configType = "lua";
         plugins = with hyprplugins; [
           # better preview all workspaces
           # inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace
@@ -178,12 +180,12 @@ in
           # inputs.hyprgrass.packages.${pkgs.stdenv.hostPlatform.system}.default
         ];
         extraConfig = ''
-          source=~/.config/hypr/colors.conf
-          source=~/.config/hypr/hyprland/variables.conf
-          source=~/.config/hypr/hyprland/keywords.conf
-          source=~/.config/hypr/hyprland/keywords-main.conf
-          source=~/.config/hypr/hyprland/rules.conf
-          source=~/.config/hypr/hyprland/binds-main.conf
+          require("colors")
+          require("hyprland/variables")
+          require("hyprland/keywords")
+          require("hyprland/keywords-main")
+          require("hyprland/rules")
+          require("hyprland/binds-main")
 
           ${hyprcursor-conf}
         '';
