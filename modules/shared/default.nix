@@ -50,7 +50,6 @@
     ./programs/tui/lynx
     ./programs/tui/neovim
     ./programs/tui/newsboat
-    ./programs/tui/nnn
     ./programs/tui/presenterm
     ./programs/tui/taskwarrior
     ./programs/tui/tmux

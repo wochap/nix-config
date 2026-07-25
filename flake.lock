@@ -2823,23 +2823,6 @@
         "type": "github"
       }
     },
-    "nnn-cppath": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1704035601,
-        "narHash": "sha256-Mm6AlzUWEPTJjBtXUrKsoQn7jxtpEyOZ/VEHdKa8Z40=",
-        "owner": "raffaem",
-        "repo": "nnn-cppath",
-        "rev": "1d3f4f64d43533d203af82c61f4a93afc8d5aaf5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "raffaem",
-        "repo": "nnn-cppath",
-        "rev": "1d3f4f64d43533d203af82c61f4a93afc8d5aaf5",
-        "type": "github"
-      }
-    },
     "nur": {
       "inputs": {
         "flake-parts": "flake-parts_3",
@@ -3240,7 +3223,6 @@
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixpkgs-wayland": "nixpkgs-wayland",
-        "nnn-cppath": "nnn-cppath",
         "nur": "nur",
         "powerlevel10k": "powerlevel10k",
         "prevstable-chrome": "prevstable-chrome",

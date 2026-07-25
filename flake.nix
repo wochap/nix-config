@@ -117,8 +117,6 @@
     ipwebcam-gst.url = "github:agarciadom/ipwebcam-gst?rev=5a02ffae8597ab1cc7461f096f86ca233f925a07";
     ipwebcam-gst.flake = false;
     tmux-sessionx.url = "github:omerxx/tmux-sessionx?rev=c9aaa1d309791871b5e8c1f9bfb91ecc5fa7da3a"; # (17 jul 2026)
-    nnn-cppath.url = "github:raffaem/nnn-cppath?rev=1d3f4f64d43533d203af82c61f4a93afc8d5aaf5"; # (31 dec 2023)
-    nnn-cppath.flake = false;
 
     # themes
     catppuccin-yazi.url = "github:catppuccin/yazi";
