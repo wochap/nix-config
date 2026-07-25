@@ -17,13 +17,13 @@ cat <<EOF >"$tmpfile"
 EOF
 
 if [ "$BACKGROUND" = "1" ]; then
-  swww_image_path=$(swww query | sed 's/.*image: //')
-  if ! [ -e "$swww_image_path" ]; then
-    swww_image_path="$HOME/Pictures/backgrounds/lock.jpg"
+  awww_image_path=$(awww query | sed 's/.*image: //')
+  if ! [ -e "$awww_image_path" ]; then
+    awww_image_path="$HOME/Pictures/backgrounds/lock.jpg"
   fi
   cat <<EOF >>"$tmpfile"
     background {
-      path = ${swww_image_path}
+      path = ${awww_image_path}
       blur_passes = 0
     }
 EOF

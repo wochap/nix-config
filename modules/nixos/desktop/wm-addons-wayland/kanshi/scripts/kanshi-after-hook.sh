@@ -3,4 +3,4 @@
 # TODO: restart quickshell?
 
 # restart wallpaper
-systemctl --user restart swww-daemon.service &
+systemctl --user restart awww-daemon.service &

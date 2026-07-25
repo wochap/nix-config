@@ -64,7 +64,7 @@
     # _custom.desktop.kanshi.enable = true;
     # _custom.desktop.quickshell.enable = lib.mkDefault true;
     # _custom.desktop.idle.enable = lib.mkDefault true;
-    # _custom.desktop.swww.enable = true;
+    # _custom.desktop.awww.enable = true;
     # _custom.desktop.tofi.enable = true;
     # _custom.desktop.uwsm.enable = true;
     _custom.desktop.wayland-session.enable = true;

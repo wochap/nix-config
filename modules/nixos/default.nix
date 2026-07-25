@@ -38,7 +38,7 @@
     ./desktop/wm-addons-wayland/kanshi
     ./desktop/wm-addons-wayland/quickshell
     ./desktop/wm-addons-wayland/idle
-    ./desktop/wm-addons-wayland/swww
+    ./desktop/wm-addons-wayland/awww
     ./desktop/wm-addons-wayland/tofi
     ./desktop/wm-addons-wayland/wayland-utils
     ./desktop/wm-addons-wayland/wluma
