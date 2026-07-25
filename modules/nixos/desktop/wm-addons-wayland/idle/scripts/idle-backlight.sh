@@ -3,7 +3,7 @@
 if [ "$1" = "--on" ]; then
   # set the power mode of the output to on
   if [ "$XDG_SESSION_DESKTOP" = "Hyprland" ]; then
-    hyprctl dispatch dpms on
+    hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'
   fi
 
   brightnessctl --restore
@@ -35,7 +35,7 @@ elif [ "$1" = "--off" ]; then
 
     # set the power mode of the output to off
     if [ "$XDG_SESSION_DESKTOP" = "Hyprland" ]; then
-      hyprctl dispatch dpms off
+      hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'
     fi
   else
     # decrease brightness to zero
@@ -44,7 +44,7 @@ elif [ "$1" = "--off" ]; then
     # NOTE: turning dpms off before running hyprlock
     # will cause hyprlock to crash
     # if [ "$XDG_SESSION_DESKTOP" = "Hyprland" ]; then
-    #   hyprctl dispatch dpms off
+    #   hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'
     # fi
   fi
 fi

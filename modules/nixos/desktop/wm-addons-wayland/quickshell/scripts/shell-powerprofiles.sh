@@ -11,22 +11,17 @@ fi
 CHOICES_BACKUP_FILE="/tmp/shell_powerprofile_choices"
 THEME_BACKUP_FILE="/tmp/shell_powerprofile_theme"
 HYPR_BACKUP_FILE="/tmp/shell_powerprofile_hyprland_settings"
-HYPRLAND_SETTINGS_TO_SAVE=(
-  "animations:enabled"
-  "decoration:shadow:enabled"
-  "decoration:blur:enabled"
-  "decoration:rounding"
-)
 
 save_hyprland_settings() {
   echo "Saving current Hyprland settings..."
-  # Clear previous backup file
-  >"$HYPR_BACKUP_FILE"
 
-  for setting in "${HYPRLAND_SETTINGS_TO_SAVE[@]}"; do
-    # Get the integer value of the setting and append it to the backup file
-    hyprctl getoption "$setting" -j | jq '.int' >>"$HYPR_BACKUP_FILE"
-  done
+  local anim shadow blur rounding
+  anim=$(hyprctl getoption animations.enabled -j | jq '.bool')
+  shadow=$(hyprctl getoption decoration.shadow.enabled -j | jq '.bool')
+  blur=$(hyprctl getoption decoration.blur.enabled -j | jq '.bool')
+  rounding=$(hyprctl getoption decoration.rounding -j | jq '.int')
+
+  echo "hl.config({ animations = { enabled = $anim }, decoration = { shadow = { enabled = $shadow }, blur = { enabled = $blur }, rounding = $rounding } })" >"$HYPR_BACKUP_FILE"
 
   echo "Settings saved to $HYPR_BACKUP_FILE"
 }
@@ -38,16 +33,7 @@ restore_hyprland_settings() {
   fi
 
   echo "Restoring Hyprland settings..."
-
-  # Read the saved values line by line
-  mapfile -t values <"$HYPR_BACKUP_FILE"
-
-  local batch_command=""
-  for i in "${!HYPRLAND_SETTINGS_TO_SAVE[@]}"; do
-    batch_command+="keyword ${HYPRLAND_SETTINGS_TO_SAVE[$i]} ${values[$i]};"
-  done
-  hyprctl --batch "$batch_command" &>/dev/null
-
+  hyprctl eval "$(cat "$HYPR_BACKUP_FILE")" &>/dev/null
   rm "$HYPR_BACKUP_FILE"
   echo "Settings restored and backup file removed."
 }
@@ -91,11 +77,7 @@ battery_saver() {
       ;;
     hyprland)
       save_hyprland_settings
-      hyprctl --batch "\
-            keyword animations:enabled 0;\
-            keyword decoration:shadow:enabled 0;\
-            keyword decoration:blur:enabled 0;\
-            keyword decoration:rounding 0;" &>/dev/null
+      hyprctl eval 'hl.config({ animations = { enabled = false }, decoration = { shadow = { enabled = false }, blur = { enabled = false }, rounding = 0 } })' &>/dev/null
       ;;
     systemd)
       echo "Stopping systemd services..."
@@ -224,3 +206,5 @@ case "$1" in
 esac
 
 exit 0
+
+

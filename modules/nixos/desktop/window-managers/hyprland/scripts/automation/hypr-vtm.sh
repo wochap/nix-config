@@ -11,10 +11,10 @@ if tmux has-session -t vtm-editors 2>/dev/null; then
 fi
 
 # Focus workspace 2
-hyprctl dispatch focusworkspaceoncurrentmonitor 2
+hyprctl dispatch 'hl.dsp.focus({ workspace = 2, on_current_monitor = true })'
 
 # Change to monocle layout
-hyprctl keyword workspace 2,layout:monocle
+hyprctl eval 'hl.workspace_rule({ workspace = "2", layout = "monocle" })'
 
 echo "Starting tmux session: vtm"
 footclient --app-id=footclient-vtm tmux new-session zsh -i -c "tmuxinator start vtm" &

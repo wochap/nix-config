@@ -10,9 +10,9 @@ print_is_kanshi_power_saver_profile_active() {
   print_kanshi_profile | grep -q "power-saver" && echo "true" || echo "false"
 }
 
-# Returns "true" if Hyprland's blur is enabled (value is 1)
+# Returns "true" if Hyprland's blur is enabled
 print_is_hyprland_blur_enabled() {
-  [[ "$(hyprctl getoption decoration:blur:enabled -j | jq -r '.int')" -eq 1 ]] && echo "true" || echo "false"
+  hyprctl getoption decoration.blur.enabled -j | jq -r '.bool'
 }
 
 # specific to my glegion profile
@@ -66,7 +66,7 @@ toggle() {
     # Disable Hyprland blur
     if [[ "$(print_is_hyprland_blur_enabled)" == "true" ]]; then
       echo " -> Disabling hyprland blur"
-      hyprctl keyword decoration:blur:enabled 0
+      hyprctl eval 'hl.config({ decoration = { blur = { enabled = false } } })'
     fi
 
     # Activate kanshi power saver profile
@@ -85,7 +85,7 @@ toggle() {
     # Enable Hyprland blur
     if [[ "$(print_is_hyprland_blur_enabled)" == "false" ]]; then
       echo " -> Enabling hyprland blur"
-      hyprctl keyword decoration:blur:enabled 1
+      hyprctl eval 'hl.config({ decoration = { blur = { enabled = true } } })'
     fi
 
     # Activate standard kanshi profile

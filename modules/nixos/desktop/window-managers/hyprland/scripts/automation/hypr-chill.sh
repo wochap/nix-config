@@ -19,7 +19,9 @@ fi
 
 # NOTE: foot disables opacity when in fullscreen
 # so we fake its state
-hyprctl dispatch fullscreenstate 2 1 class:kitty-chill class:footclient-chill class:foot-chill
+hyprctl eval 'hl.dispatch(hl.dsp.window.fullscreen_state({ internal = 2, client = 1, window = "class:kitty-chill" }))'
+hyprctl eval 'hl.dispatch(hl.dsp.window.fullscreen_state({ internal = 2, client = 1, window = "class:footclient-chill" }))'
+hyprctl eval 'hl.dispatch(hl.dsp.window.fullscreen_state({ internal = 2, client = 1, window = "class:foot-chill" }))'
 
 mpvpaper ALL --mpv-options "ytdl-raw-options-append=format=bestvideo no-audio panscan=1 start=5% pause=no loop input-ipc-server=/tmp/mpvpaper-socket" "$video_url"
 # NOTE: to switch to a different video

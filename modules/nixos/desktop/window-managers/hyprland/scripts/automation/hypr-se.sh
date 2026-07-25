@@ -83,10 +83,10 @@ function start() {
   fi
 
   # Focus workspace 2
-  hyprctl dispatch focusworkspaceoncurrentmonitor 2
+  hyprctl dispatch 'hl.dsp.focus({ workspace = 2, on_current_monitor = true })'
 
   # Change to monocle layout
-  hyprctl keyword workspace 2,layout:monocle
+  hyprctl eval 'hl.workspace_rule({ workspace = "2", layout = "monocle" })'
 
   # Start new foot terminal with tmux session
   echo "Starting tmux session: se"
