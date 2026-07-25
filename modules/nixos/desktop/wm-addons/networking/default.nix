@@ -40,16 +40,20 @@ in
 
     (lib.mkIf (cfg.enable && (!isSandbox)) {
       environment = {
-        systemPackages = with pkgs; [
-          wakeonlan
-          nixpkgs-unstable.impala
-          iw
-          wireless-regdb
-          zbar # scan wifi QR codes
-          wireguard-tools # wg-quick
-        ];
+        systemPackages =
+          with pkgs;
+          [
+            wakeonlan
+          ]
+          ++ lib.optionals cfg.enableWifi [
+            nixpkgs-unstable.impala
+            iw
+            wireless-regdb
+            wireguard-tools # wg-quick
+            zbar # scan wifi QR codes
+          ];
 
-        shellAliases.wtui = "impala";
+        shellAliases.wtui = lib.mkIf cfg.enableWifi "impala";
       };
 
       # enable systemd-resolved
@@ -68,7 +72,7 @@ in
         wireless.enable = false;
 
         wireless.iwd = {
-          enable = true;
+          enable = cfg.enableWifi;
           settings = {
             # MAC address randomization
             General = {
@@ -92,7 +96,7 @@ in
         networkmanager = {
           enable = true;
           # increase boot speed
-          wifi.backend = "iwd";
+          wifi.backend = lib.mkIf cfg.enableWifi "iwd";
         };
 
         firewall = {
