@@ -13,6 +13,7 @@ let
     themeColorsLight
     themeColorsDark
     preferDark
+    systemdTarget
     ;
 
   fzfDefaultOptsStr = lib.strings.concatStringsSep " " (
@@ -133,8 +134,8 @@ in
         Unit = {
           Description = "tmux default session (detached)";
           Documentation = "man:tmux(1)";
-          PartOf = "graphical-session.target";
-          After = "graphical-session.target";
+          PartOf = systemdTarget;
+          After = systemdTarget;
           ConditionEnvironment = "WAYLAND_DISPLAY";
         };
         Service = {
@@ -155,7 +156,7 @@ in
           KillMode = "mixed";
           RestartSec = 2;
         };
-        Install.WantedBy = [ "graphical-session.target" ];
+        Install.WantedBy = [ systemdTarget ];
       };
     };
   };

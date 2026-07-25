@@ -13,6 +13,7 @@ let
     themeColorsDark
     configDirectory
     preferDark
+    systemdTarget
     ;
   foot-without-tmux = pkgs.writeScriptBin "foot-without-tmux" ''
     #!/usr/bin/env bash
@@ -76,8 +77,8 @@ in
           Description = "Foot terminal server mode";
           Documentation = "man:foot(1)";
           Requires = "%N.socket";
-          PartOf = "graphical-session.target";
-          After = "graphical-session.target";
+          PartOf = systemdTarget;
+          After = systemdTarget;
           ConditionEnvironment = "WAYLAND_DISPLAY";
         };
         Service = {
@@ -85,17 +86,17 @@ in
           UnsetEnvironment = "LISTEN_PID LISTEN_FDS LISTEN_FDNAMES";
           NonBlocking = true;
         };
-        Install.WantedBy = [ "graphical-session.target" ];
+        Install.WantedBy = [ systemdTarget ];
       };
 
       systemd.user.sockets.foot-server = lib.mkIf cfg.enableSystemd {
         Socket.ListenStream = "%t/foot.sock";
         Unit = {
-          PartOf = "graphical-session.target";
-          After = "graphical-session.target";
+          PartOf = systemdTarget;
+          After = systemdTarget;
           ConditionEnvironment = "WAYLAND_DISPLAY";
         };
-        Install.WantedBy = [ "graphical-session.target" ];
+        Install.WantedBy = [ systemdTarget ];
       };
     };
   };

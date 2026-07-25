@@ -7,7 +7,7 @@
 
 let
   cfg = config._custom.desktop.power-management;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) configDirectory systemdTarget;
   inherit (config.boot.kernelPackages) cpupower;
   batty = pkgs.writeScriptBin "batty" (builtins.readFile ./scripts/batty.sh);
   legion-battery-conservation = pkgs.writeScriptBin "legion-battery-conservation" (
@@ -119,7 +119,7 @@ in
         sleep.settings.Sleep.HibernateDelaySec = "2h";
         user.services.cpupower-gui-user = lib.mkIf (builtins.length cfg.cpupowerGui.args > 0) {
           description = "Apply cpupower-gui config at user login";
-          wantedBy = [ "graphical-session.target" ];
+          wantedBy = [ systemdTarget ];
           serviceConfig = {
             Type = "oneshot";
             ExecStart = "${pkgs.cpupower-gui}/bin/cpupower-gui ${lib.concatStringsSep " " cfg.cpupowerGui.args}";

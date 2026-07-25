@@ -7,7 +7,7 @@
 
 let
   cfg = config._custom.desktop.kanshi;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) configDirectory systemdTarget;
   kanshi-after-hook = pkgs.writeScriptBin "kanshi-after-hook" (
     builtins.readFile ./scripts/kanshi-after-hook.sh
   );
@@ -29,7 +29,7 @@ in
         Unit = {
           Description = "Dynamic output configuration";
           Documentation = "man:kanshi(1)";
-          Requires = "graphical-session.target";
+          Requires = systemdTarget;
         };
         Service = {
           Type = "simple";
