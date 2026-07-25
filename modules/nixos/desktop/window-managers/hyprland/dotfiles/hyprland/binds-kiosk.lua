@@ -302,7 +302,9 @@ hl.bind(mod .. " + ALT + z", hl.dsp.exec_cmd("pypr zoom"))
 -- hl.bind(mod .. " + CTRL + ALT + m", hl.dsp.exec_cmd('hyprctl output create headless "HEADLESS-2"'))
 -- hl.bind(mod .. " + CTRL + SHIFT + ALT + m", hl.dsp.exec_cmd('hyprctl output remove "HEADLESS-2"'))
 hl.bind(mod .. " + CTRL + SHIFT + l", hl.dsp.exec_cmd("hyprctl switchxkblayout all next"), { locked = true })
--- hl.bind(mod .. " + ALT + x", hl.dsp.exec_cmd("hyprland-scratchpad --raise-or-run xwaylandvideobridge xwaylandvideobridge"))
+-- hl.bind(mod .. " + ALT + x", function()
+--   scratchpad.raise_or_run("xwaylandvideobridge", "xwaylandvideobridge")
+-- end)
 hl.bind(mod .. " + CTRL + SHIFT + q", hl.dsp.exec_cmd("hyprshutdown"))
 
 -- SUBMAPS

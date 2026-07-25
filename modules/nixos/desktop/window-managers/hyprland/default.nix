@@ -32,15 +32,6 @@ let
   hyprland-final = inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".hyprland;
   hyprland-xdph-final =
     inputs.hyprland.packages."${pkgs.stdenv.hostPlatform.system}".xdg-desktop-portal-hyprland;
-  hyprland-scratchpad = pkgs.writeScriptBin "hyprland-scratchpad" (
-    builtins.readFile ./scripts/hyprland-scratchpad.sh
-  );
-  hyprland-previous-ws = pkgs.writeScriptBin "hyprland-previous-ws" (
-    builtins.readFile ./scripts/hyprland-previous-ws.sh
-  );
-  hyprland-socket = pkgs.writeScriptBin "hyprland-socket" (
-    builtins.readFile ./scripts/hyprland-socket.sh
-  );
   hyprcursor-conf = ''
     -- hyprcursor config
     hl.env("HYPRCURSOR_THEME", "${config._custom.desktop.cursor.name}")
@@ -99,9 +90,6 @@ in
 
     _custom.hm = {
       home.packages = with pkgs; [
-        hyprland-scratchpad
-        hyprland-previous-ws
-        hyprland-socket
         inputs.pyprland.packages.${stdenv.hostPlatform.system}.default
         hyprland-qt-support
         hyprland-guiutils
