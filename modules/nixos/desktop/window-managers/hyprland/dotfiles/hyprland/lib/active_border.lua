@@ -3,12 +3,14 @@
 -- monocle -> secondary
 -- otherwise -> primary
 
-local colors = require("colors")
+local theme = require("hyprland.lib.theme")
 
 local M = {}
 
 function M.setup()
   hl.on("window.active", function()
+    local colors = theme.colors
+
     local ws = hl.get_active_workspace()
     if not ws then
       return

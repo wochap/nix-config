@@ -50,6 +50,9 @@ set_light_theme() {
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # hyprlock
     ln -sf ~/.config/hypr/colors-light.conf ~/.config/hypr/colors.conf
+
+    # hyprland
+    hyprctl eval 'require("hyprland.lib.theme").apply("light")'
   fi
 
   # quickshell
@@ -108,6 +111,9 @@ set_dark_theme() {
   if [[ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]]; then
     # hyprlock
     ln -sf ~/.config/hypr/colors-dark.conf ~/.config/hypr/colors.conf
+
+    # hyprland
+    hyprctl eval 'require("hyprland.lib.theme").apply("dark")'
   fi
 
   # quickshell

@@ -125,6 +125,8 @@ in
           relativeSymlink configDirectory ./dotfiles/hyprland/variables.lua;
         "hypr/hyprland/constants.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/constants.lua;
+        "hypr/hyprland/lib/theme.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/lib/theme.lua;
         "hypr/hyprland/lib/active_border.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/active_border.lua;
         "hypr/hyprland/lib/previous_ws.lua".source =
