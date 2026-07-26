@@ -72,10 +72,22 @@ _wt() {
       [[ -n "$line" ]] && commits+=("$line")
     done < <(git -C "$git_dir" log --oneline -20 --format='%h' 2>/dev/null)
 
-    # Named groups via compadd — render separately regardless of group-name style
-    ((${#branches})) && compadd -V wt-local -X '-- local branch --' -a branches
-    ((${#remotes})) && compadd -V wt-remote -X '-- remote branch --' -a remotes
-    ((${#commits})) && compadd -V wt-commit -X '-- commit --' -a commits
+    # Named groups via compadd — render separately regardless of group-name style.
+    # Headers built by _description so they inherit the descriptions format style,
+    # matching _describe's '-- flag --' header color.
+    local expl
+    if ((${#branches})); then
+      _description wt-local expl 'local branch'
+      compadd "$expl[@]" -V wt-local -a branches
+    fi
+    if ((${#remotes})); then
+      _description wt-remote expl 'remote branch'
+      compadd "$expl[@]" -V wt-remote -a remotes
+    fi
+    if ((${#commits})); then
+      _description wt-commit expl 'commit'
+      compadd "$expl[@]" -V wt-commit -a commits
+    fi
 
     # Also offer -b flag
     local -a flags
