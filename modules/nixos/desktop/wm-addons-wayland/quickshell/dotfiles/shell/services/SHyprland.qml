@@ -24,6 +24,7 @@ Singleton {
   property var monitorsById: ({})
   property var layers: ({})
   property string submap: ""
+  property int wsOffset: 0
 
   function updateClientList() {
     getActiveWindow.running = true;
@@ -66,6 +67,15 @@ Singleton {
 
       if (event.name === "submap") {
         root.submap = event.data;
+      }
+
+      if (event.name === "custom") {
+        if (event.data) {
+          const [key, value] = event.data.split(">>");
+          if (key === "ws_offset") {
+            root.wsOffset = parseInt(value)
+          }
+        }
       }
     }
   }

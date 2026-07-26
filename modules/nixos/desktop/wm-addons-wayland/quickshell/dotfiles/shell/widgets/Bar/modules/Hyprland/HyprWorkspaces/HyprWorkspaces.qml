@@ -17,7 +17,7 @@ RowLayout {
   readonly property list<bool> workspacesOccupied: Array.from({
     length: root.workspacesShown
   }, (_, i) => {
-    return Hyprland.workspaces.values.some(workspace => workspace.id === i + 1);
+    return Hyprland.workspaces.values.some(workspace => workspace.id === SHyprland.wsOffset + i + 1);
   })
   readonly property var clientsByWorkspaceId: {
     const result = Object.entries(SHyprland.workspacesById).reduce((result, [workspaceId, workspace]) => {
@@ -38,8 +38,8 @@ RowLayout {
     model: root.workspacesShown
     delegate: HyprWorkspace {
       Layout.fillHeight: true
-      clients: root.clientsByWorkspaceId?.[index + 1] ?? []
-      workspace: SHyprland.workspacesById[index + 1]
+      clients: root.clientsByWorkspaceId?.[SHyprland.wsOffset + index + 1] ?? []
+      workspace: SHyprland.workspacesById[SHyprland.wsOffset + index + 1]
       isOccupied: root.workspacesOccupied?.[index] ?? true
       hyprlandMonitor: root.hyprlandMonitor
     }

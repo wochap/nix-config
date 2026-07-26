@@ -17,12 +17,12 @@ Button {
   required property var workspace
   required property bool isOccupied
   required property HyprlandMonitor hyprlandMonitor
-  property int workspaceId: index + 1
+  property int workspaceId: SHyprland.wsOffset + index + 1
   property bool isFocused: hyprlandMonitor?.activeWorkspace?.id === workspaceId
   property var lastClient: SHyprland.clientsByAddress[root.workspace?.lastwindow]
   property bool hasLastClient: !!root.lastClient
 
-  onClicked: Hyprland.dispatch(`workspace ${workspaceId}`)
+  onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${workspaceId}, on_current_monitor = true })`)
   verticalPadding: 0
   horizontalPadding: root.isFocused && clients.length > 0 ? 3 : 6
   background: StyledRect {

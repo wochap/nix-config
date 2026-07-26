@@ -1,6 +1,6 @@
 -- workspace "page" offset: number keys 1-9 map to workspace (key + offset).
 -- cycle the offset to reach workspaces beyond 1-9 without extra keys.
--- emits a "wsoffset>>N" event to socket2 on change, so external programs
+-- emits a "ws_offset>>N" event to socket2 on change, so external programs
 -- (e.g. bars) can subscribe and show the current page.
 
 local M = {}
@@ -9,7 +9,7 @@ local steps = { 0, 10 }
 local index = 1
 
 local function emit()
-  hl.dispatch(hl.dsp.event("wsoffset>>" .. steps[index]))
+  hl.dispatch(hl.dsp.event("ws_offset>>" .. steps[index]))
 end
 
 -- current offset (the value added to number keys)

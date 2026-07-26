@@ -190,7 +190,16 @@ for key = 1, 9 do
 end
 
 -- cycle workspace page (offset added to number keys 1-9)
-hl.bind(mod .. " + SHIFT + 0", ws_offset.cycle)
+hl.bind(mod .. " + 0", ws_offset.cycle)
+hl.bind(mod .. " + SHIFT + 0", function()
+  ws_offset.cycle()
+  local ws_id = hl.get_active_workspace().id
+  local next_ws_id = ws_offset.get() + ws_id
+  if ws_id > 10 then
+    next_ws_id = ws_id - 10
+  end
+  hl.dispatch(hl.dsp.focus({ workspace = next_ws_id, on_current_monitor = true }))
+end)
 
 hl.bind(mod .. " + grave", previous_ws.focus_previous)
 
