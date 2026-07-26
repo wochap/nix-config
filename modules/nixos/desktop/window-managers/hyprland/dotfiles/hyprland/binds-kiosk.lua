@@ -1,6 +1,7 @@
 local constants = require("hyprland.constants")
 local scratchpad = require("hyprland.lib.scratchpad")
 local previous_ws = require("hyprland.lib.previous_ws")
+local ws_offset = require("hyprland.lib.ws_offset")
 local mod = "SUPER"
 
 hl.bind(mod .. " + mouse:272", hl.dsp.window.float(), { mouse = true, click = true })
@@ -175,25 +176,18 @@ hl.bind(mod .. " + bracketright", hl.dsp.focus({ monitor = "+1" }))
 hl.bind(mod .. " + SHIFT + bracketleft", hl.dsp.window.move({ monitor = "-1", follow = false }))
 hl.bind(mod .. " + SHIFT + bracketright", hl.dsp.window.move({ monitor = "+1", follow = false }))
 
-hl.bind(mod .. " + 1", hl.dsp.focus({ workspace = 1, on_current_monitor = true }))
-hl.bind(mod .. " + 2", hl.dsp.focus({ workspace = 2, on_current_monitor = true }))
-hl.bind(mod .. " + 3", hl.dsp.focus({ workspace = 3, on_current_monitor = true }))
-hl.bind(mod .. " + 4", hl.dsp.focus({ workspace = 4, on_current_monitor = true }))
-hl.bind(mod .. " + 5", hl.dsp.focus({ workspace = 5, on_current_monitor = true }))
-hl.bind(mod .. " + 6", hl.dsp.focus({ workspace = 6, on_current_monitor = true }))
-hl.bind(mod .. " + 7", hl.dsp.focus({ workspace = 7, on_current_monitor = true }))
-hl.bind(mod .. " + 8", hl.dsp.focus({ workspace = 8, on_current_monitor = true }))
-hl.bind(mod .. " + 9", hl.dsp.focus({ workspace = 9, on_current_monitor = true }))
+-- number keys focus/move to workspace (key + page offset); see lib/ws_offset.lua
+for key = 1, 9 do
+  hl.bind(mod .. " + " .. key, function()
+    hl.dispatch(hl.dsp.focus({ workspace = ws_offset.ws(key), on_current_monitor = true }))
+  end)
+  hl.bind(mod .. " + SHIFT + " .. key, function()
+    hl.dispatch(hl.dsp.window.move({ workspace = ws_offset.ws(key), follow = false }))
+  end)
+end
 
-hl.bind(mod .. " + SHIFT + 1", hl.dsp.window.move({ workspace = 1, follow = false }))
-hl.bind(mod .. " + SHIFT + 2", hl.dsp.window.move({ workspace = 2, follow = false }))
-hl.bind(mod .. " + SHIFT + 3", hl.dsp.window.move({ workspace = 3, follow = false }))
-hl.bind(mod .. " + SHIFT + 4", hl.dsp.window.move({ workspace = 4, follow = false }))
-hl.bind(mod .. " + SHIFT + 5", hl.dsp.window.move({ workspace = 5, follow = false }))
-hl.bind(mod .. " + SHIFT + 6", hl.dsp.window.move({ workspace = 6, follow = false }))
-hl.bind(mod .. " + SHIFT + 7", hl.dsp.window.move({ workspace = 7, follow = false }))
-hl.bind(mod .. " + SHIFT + 8", hl.dsp.window.move({ workspace = 8, follow = false }))
-hl.bind(mod .. " + SHIFT + 9", hl.dsp.window.move({ workspace = 9, follow = false }))
+-- cycle workspace page (offset added to number keys 1-9)
+hl.bind(mod .. " + SHIFT + 0", ws_offset.cycle)
 
 hl.bind(mod .. " + grave", previous_ws.focus_previous)
 
@@ -235,15 +229,11 @@ hl.define_submap("group", "reset", function()
   hl.bind("p", hl.dsp.group.prev())
   hl.bind("SHIFT + n", hl.dsp.group.move_window({ forward = true }))
   hl.bind("SHIFT + p", hl.dsp.group.move_window({ forward = false }))
-  hl.bind("SHIFT + 1", hl.dsp.window.move({ workspace = 1, follow = false }))
-  hl.bind("SHIFT + 2", hl.dsp.window.move({ workspace = 2, follow = false }))
-  hl.bind("SHIFT + 3", hl.dsp.window.move({ workspace = 3, follow = false }))
-  hl.bind("SHIFT + 4", hl.dsp.window.move({ workspace = 4, follow = false }))
-  hl.bind("SHIFT + 5", hl.dsp.window.move({ workspace = 5, follow = false }))
-  hl.bind("SHIFT + 6", hl.dsp.window.move({ workspace = 6, follow = false }))
-  hl.bind("SHIFT + 7", hl.dsp.window.move({ workspace = 7, follow = false }))
-  hl.bind("SHIFT + 8", hl.dsp.window.move({ workspace = 8, follow = false }))
-  hl.bind("SHIFT + 9", hl.dsp.window.move({ workspace = 9, follow = false }))
+  for key = 1, 9 do
+    hl.bind("SHIFT + " .. key, function()
+      hl.dispatch(hl.dsp.window.move({ workspace = ws_offset.ws(key), follow = false }))
+    end)
+  end
   hl.bind("escape", hl.dsp.submap("reset"))
 end)
 
@@ -446,3 +436,4 @@ hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("kb_inhibit"))
 hl.define_submap("kb_inhibit", function()
   hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("reset"))
 end)
+

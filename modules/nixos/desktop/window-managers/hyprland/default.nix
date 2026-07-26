@@ -133,6 +133,8 @@ in
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/previous_ws.lua;
         "hypr/hyprland/lib/scratchpad.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/scratchpad.lua;
+        "hypr/hyprland/lib/ws_offset.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/lib/ws_offset.lua;
         "hypr/kiosk.lua".text = ''
           require("hyprland.variables")
           require("hyprland.keywords")
