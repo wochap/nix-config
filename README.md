@@ -220,6 +220,16 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Low CPU MHz on glegion after sleep
+
+  ```
+  # common Embedded Controller bug on AMD Ryzen laptops
+  # shutdown, disconnect all cables and press power on button for 60s
+  # connect to power and turn on
+
+  # to prevent this, connect laptop to power before wake up
+  ```
+
 - Eval value of a nixos option
 
 ```sh
