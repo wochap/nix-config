@@ -34,6 +34,7 @@ in
       nixpkgs-unstable.fbv # wallpaper, image viewer
       mplayer # video player
       _custom.fcitx5-fbterm
+      kmscon
 
       start-fbterm
     ];
