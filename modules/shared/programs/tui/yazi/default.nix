@@ -18,12 +18,11 @@ in
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.shellAliases.f = "yazi";
-
       programs.yazi = {
         enable = true;
         package = pkgs.nixpkgs-unstable.yazi;
         enableZshIntegration = true;
+        shellWrapperName = "f";
       };
 
       xdg.configFile = {
