@@ -104,7 +104,7 @@ in
       home.sessionVariables.UWSM_APP_UNIT_TYPE = "service";
 
       xdg.configFile."uwsm/env".text = lib.concatMapStrings (
-        env: "export ${env}=\\$${env}\n"
+        env: "export ${env}=${"$"}${env};\n"
       ) cfg.inheritEnvs;
 
       # HACK: start app-daemon
