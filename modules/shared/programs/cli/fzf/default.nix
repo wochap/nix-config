@@ -51,6 +51,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    _custom.desktop.uwsm.inheritEnvs = [
+      "FZF_DEFAULT_OPTS"
+    ];
+
     _custom.hm = {
       home.sessionVariables.FZF_DEFAULT_OPTS = toString cfg.defaultOptions;
 

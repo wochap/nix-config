@@ -133,6 +133,11 @@ in
         }
       ];
 
+    _custom.desktop.uwsm.inheritEnvs = [
+      "NO_AT_BRIDGE"
+      "GTK_CSD"
+    ];
+
     environment = {
       systemPackages = with pkgs; [
         dconf-editor

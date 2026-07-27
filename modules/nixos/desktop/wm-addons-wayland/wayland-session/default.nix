@@ -43,6 +43,15 @@ in
     })
 
     (lib.mkIf (cfg.enable && (!isSandbox)) {
+      _custom.desktop.uwsm.inheritEnvs = [
+        "WAYLAND_DISPLAY"
+        "GDK_BACKEND"
+        "CLUTTER_BACKEND"
+        "SDL_VIDEODRIVER"
+        "QT_QPA_PLATFORM"
+        "QT_WAYLAND_DISABLE_WINDOWDECORATION"
+      ];
+
       xdg.portal.extraPortals = with pkgs; [
         xdg-desktop-portal-wlr
         kdePackages.xdg-desktop-portal-kde

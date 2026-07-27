@@ -30,6 +30,14 @@ in
   options._custom.desktop.uwsm = {
     enable = lib.mkEnableOption { };
     package = lib.mkPackageOption pkgs "uwsm" { };
+    inheritEnvs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = ''
+        Environment variables to inherit into uwsm/env.
+        Each variable `FOO` will result in `export FOO=$FOO`.
+      '';
+    };
     # slightly similar to https://search.nixos.org/options?channel=25.05&show=programs.uwsm.waylandCompositors&from=0&size=50&sort=relevance&type=packages&query=uwsm
     waylandCompositors = lib.mkOption {
       type = lib.types.attrsOf (
@@ -56,6 +64,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    _custom.desktop.uwsm.inheritEnvs = [
+      "HOME"
+      "UWSM_USE_SESSION_SLICE"
+      "UWSM_APP_UNIT_TYPE"
+      "XDG_SESSION_DESKTOP"
+      "XDG_SESSION_TYPE"
+    ];
+
     # make wayland compositors great again
     # better resource management
     programs.uwsm.enable = true;
@@ -87,12 +103,9 @@ in
       home.sessionVariables.UWSM_USE_SESSION_SLICE = "true";
       home.sessionVariables.UWSM_APP_UNIT_TYPE = "service";
 
-      xdg.configFile."uwsm/env".text = ''
-        export XCURSOR_THEME=$XCURSOR_THEME
-        export XCURSOR_SIZE=$XCURSOR_SIZE
-        export HOME=$HOME
-        export QT_QPA_PLATFORMTHEME=$QT_QPA_PLATFORMTHEME
-      '';
+      xdg.configFile."uwsm/env".text = lib.concatMapStrings (
+        env: "export ${env}=\\$${env}\n"
+      ) cfg.inheritEnvs;
 
       # HACK: start app-daemon
       systemd.user.services.start-uwsm-app-daemon = lib._custom.mkWaylandService {
