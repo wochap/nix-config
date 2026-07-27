@@ -21,7 +21,7 @@ in
       programs.yazi = {
         enable = true;
         package = pkgs.nixpkgs-unstable.yazi;
-        enableZshIntegration = true;
+        enableZshIntegration = config._custom.programs.zsh.enable;
         shellWrapperName = "f";
       };
 

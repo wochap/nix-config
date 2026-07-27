@@ -22,10 +22,6 @@ in
       };
 
       programs.zsh = {
-        shellAliases = {
-          lg = ''run-without-kpadding lazygit "$@"'';
-        };
-
         # TODO: wait for https://github.com/jesseduffield/lazygit/issues/4366
         initContent = lib.mkOrder 1000 ''
           _apply_lazygit_theme() {
@@ -42,6 +38,8 @@ in
 
       programs.lazygit = {
         enable = true;
+        shellWrapperName = "lg";
+        enableZshIntegration = config._custom.programs.zsh.enable;
         settings = {
           update.method = "never";
           disableStartupPopups = true;
