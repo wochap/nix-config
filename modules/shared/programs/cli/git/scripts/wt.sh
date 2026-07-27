@@ -179,6 +179,57 @@ find_worktree_by_path() {
   return 1
 }
 
+verify_same_repo() {
+  local target_dir="$1" source_dir="$2"
+  local -a target_roots=() source_roots=()
+  while IFS= read -r sha; do
+    target_roots+=("$sha")
+  done < <(git -C "$target_dir" rev-list --max-parents=0 HEAD 2>/dev/null | sort)
+  while IFS= read -r sha; do
+    source_roots+=("$sha")
+  done < <(git -C "$source_dir" rev-list --max-parents=0 HEAD 2>/dev/null | sort)
+  for s in "${source_roots[@]}"; do
+    for t in "${target_roots[@]}"; do
+      [[ "$s" == "$t" ]] && return 0
+    done
+  done
+  return 1
+}
+
+find_common_ancestor() {
+  local source_dir="$1"
+  while IFS= read -r sha; do
+    if git cat-file -e "$sha" 2>/dev/null; then
+      echo "$sha"
+      return 0
+    fi
+  done < <(git -C "$source_dir" rev-list HEAD 2>/dev/null)
+  return 1
+}
+
+resolve_pull_source() {
+  local root="$1" git_dir="$2" arg="$3"
+
+  # try as worktree folder name in current project
+  local candidate="$root/$arg"
+  if [[ -d "$candidate" ]] && find_worktree_by_path "$git_dir" "$candidate"; then
+    echo "$candidate"
+    return 0
+  fi
+
+  # fall back to filesystem path
+  if [[ -d "$arg" ]]; then
+    local resolved
+    resolved=$(cd "$arg" && pwd -P) || die "cannot resolve path: $arg"
+    git -C "$resolved" rev-parse --git-dir &>/dev/null ||
+      die "not a git repository: $arg"
+    echo "$resolved"
+    return 0
+  fi
+
+  die "source not found: $arg (not a worktree name or valid path)"
+}
+
 # ── Commands ───────────────────────────────────────────────────────────
 
 cmd_help() {
@@ -192,11 +243,13 @@ Usage:
   wt switch -b <branch> [from]      Create new branch + worktree
   wt list                           List all worktrees
   wt rm <name> [--remote] [--force] Remove worktree + branch
+  wt pull <source> [--staged]       Pull changes from worktree/repo
   wt doctor                         Repair broken worktree links
 
 Options:
   --remote    Also delete remote branch (rm)
   --force     Allow removing dirty worktree (rm)
+  --staged    Pull only staged changes from source (pull)
 
 Dir naming:
   branch           → {branch}              (slashes flattened)
@@ -619,6 +672,75 @@ cmd_rm() {
   fi
 }
 
+cmd_pull() {
+  local root git_dir
+  root=$(find_project_root) || return 1
+  git_dir="$root/.git"
+
+  local staged=0 source_arg=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    --staged) staged=1 ;;
+    -*) die "unknown option: $1" ;;
+    *) source_arg="$1" ;;
+    esac
+    shift
+  done
+
+  [[ -z "$source_arg" ]] && die "usage: wt pull <source> [--staged]"
+
+  local source_path
+  source_path=$(resolve_pull_source "$root" "$git_dir" "$source_arg") || return 1
+
+  verify_same_repo "." "$source_path" ||
+    die "source and target are not the same repository"
+
+  # dirty target check
+  if [[ -n "$(git status --porcelain 2>/dev/null)" ]]; then
+    echo "${C_YELLOW}warning: target worktree has uncommitted changes${C_RESET}" >&2
+    local confirm
+    read -r -p "Continue? [y/N] " confirm || return 1
+    if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+      echo "Aborted" >&2
+      return 0
+    fi
+  fi
+
+  # --staged mode: always patch
+  if [[ $staged -eq 1 ]]; then
+    local patch
+    patch=$(git -C "$source_path" diff --cached) || die "failed to get staged diff from source"
+    [[ -z "$patch" ]] && die "nothing staged in source"
+    echo "$patch" | git apply >&2 || die "patch apply failed"
+    echo "${C_GREEN}Applied staged changes from ${source_path##*/}${C_RESET}" >&2
+    return 0
+  fi
+
+  # default mode: detect same-project vs cross-clone
+  local target_common source_common
+  target_common=$(git rev-parse --git-common-dir 2>/dev/null | xargs realpath 2>/dev/null || git rev-parse --git-common-dir)
+  source_common=$(git -C "$source_path" rev-parse --git-common-dir 2>/dev/null | xargs realpath 2>/dev/null || git -C "$source_path" rev-parse --git-common-dir)
+
+  if [[ "$target_common" == "$source_common" ]]; then
+    # same project: native squash merge
+    local source_sha
+    source_sha=$(git -C "$source_path" rev-parse HEAD) || die "cannot resolve source HEAD"
+    git merge --squash "$source_sha" >&2 || {
+      echo "${C_RED}Merge produced conflicts — resolve manually${C_RESET}" >&2
+      return 1
+    }
+    echo "${C_GREEN}Squashed changes from ${source_path##*/} — staged, ready to commit${C_RESET}" >&2
+  else
+    # cross-clone: patch via common ancestor walk
+    local base
+    base=$(find_common_ancestor "$source_path") ||
+      die "no common ancestor found between source and target"
+    git -C "$source_path" diff "$base"..HEAD | git apply >&2 ||
+      die "patch apply failed"
+    echo "${C_GREEN}Applied changes from ${source_path##*/}${C_RESET}" >&2
+  fi
+}
+
 # ── Main ───────────────────────────────────────────────────────────────
 
 main() {
@@ -629,6 +751,7 @@ main() {
   switch) cmd_switch "$@" ;;
   list) cmd_list "$@" ;;
   rm) cmd_rm "$@" ;;
+  pull) cmd_pull "$@" ;;
   doctor) cmd_doctor "$@" ;;
   help | --help | -h) cmd_help ;;
   *) die "unknown command: $cmd (see: wt help)" ;;

@@ -7,6 +7,7 @@ _wt() {
     'switch:Switch to worktree (create if missing)'
     'list:List all worktrees'
     'rm:Remove worktree + branch'
+    'pull:Pull changes from worktree/repo'
     'doctor:Repair broken worktree links'
     'help:Show help message'
   )
@@ -15,7 +16,7 @@ _wt() {
   local subcmd
   for ((i = 2; i < CURRENT; i++)); do
     case "${words[i]}" in
-    clone | switch | list | rm | doctor | help)
+    clone | switch | list | rm | pull | doctor | help)
       subcmd="${words[i]}"
       break
       ;;
@@ -34,7 +35,7 @@ _wt() {
 
   switch)
     # Flags
-    if [[ "$words[CURRENT-1]" == -* ]]; then
+    if [[ "$words[CURRENT - 1]" == -* ]]; then
       return
     fi
 
@@ -141,6 +142,39 @@ _wt() {
 
   doctor)
     # No arguments
+    ;;
+
+  pull)
+    local -a flags
+    flags=('--staged:pull only staged changes from source')
+
+    local has_source=0
+    for ((i = 2; i < CURRENT; i++)); do
+      [[ "${words[i]}" != -* ]] && has_source=1
+    done
+
+    if [[ $has_source -eq 0 ]]; then
+      local git_dir
+      git_dir=$(git rev-parse --git-common-dir 2>/dev/null) || return
+      git_dir=$(cd "$git_dir" && pwd -P)
+      [[ "$(git -C "$git_dir" rev-parse --is-bare-repository 2>/dev/null)" != "true" ]] && return
+
+      local root
+      root=$(dirname "$git_dir")
+
+      local -a worktrees
+      while IFS= read -r line; do
+        local path="${line#worktree }"
+        local rel="${path#"$root"/}"
+        [[ -n "$rel" && "$rel" != "$path" ]] && worktrees+=("$rel")
+      done < <(git -C "$git_dir" worktree list --porcelain 2>/dev/null | grep '^worktree ')
+
+      if ((${#worktrees})); then
+        _describe 'worktree' worktrees
+      fi
+    fi
+
+    _describe 'flag' flags
     ;;
 
   help)
