@@ -192,6 +192,7 @@ Usage:
   wt switch -b <branch> [from]      Create new branch + worktree
   wt list                           List all worktrees
   wt rm <name> [--remote] [--force] Remove worktree + branch
+  wt doctor                         Repair broken worktree links
 
 Options:
   --remote    Also delete remote branch (rm)
@@ -492,6 +493,44 @@ cmd_list() {
   echo "${C_DIM}○${C_RESET} $count worktree$([[ $count -ne 1 ]] && echo s)"
 }
 
+cmd_doctor() {
+  local root git_dir
+  root=$(find_project_root) || return 1
+  git_dir="$root/.git"
+
+  local -a wt_dirs=()
+  for d in "$root"/*/; do
+    [[ -f "${d}.git" ]] && wt_dirs+=("${d%/}")
+  done
+
+  local count=${#wt_dirs[@]}
+  if [[ $count -eq 0 ]]; then
+    echo "No worktrees found" >&2
+    return 1
+  fi
+
+  local repaired=0
+  for p in "${wt_dirs[@]}"; do
+    local rel="${p#"$root"/}"
+    local output
+    output=$(git -C "$git_dir" worktree repair "$p" 2>&1)
+    if [[ -n "$output" ]]; then
+      echo "$output" >&2
+      echo "  ${C_GREEN}repaired${C_RESET} ${rel}" >&2
+      ((repaired++))
+    else
+      echo "  ${C_GREEN}✓${C_RESET} ${rel}" >&2
+    fi
+  done
+
+  echo "" >&2
+  if [[ $repaired -gt 0 ]]; then
+    echo "${C_GREEN}Repaired $repaired worktree$([[ $repaired -ne 1 ]] && echo s)${C_RESET}" >&2
+  else
+    echo "${C_DIM}All $count worktrees healthy${C_RESET}" >&2
+  fi
+}
+
 cmd_rm() {
   local root git_dir
   root=$(find_project_root) || return 1
@@ -590,6 +629,7 @@ main() {
   switch) cmd_switch "$@" ;;
   list) cmd_list "$@" ;;
   rm) cmd_rm "$@" ;;
+  doctor) cmd_doctor "$@" ;;
   help | --help | -h) cmd_help ;;
   *) die "unknown command: $cmd (see: wt help)" ;;
   esac
