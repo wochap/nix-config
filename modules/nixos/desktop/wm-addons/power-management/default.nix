@@ -19,6 +19,9 @@ let
   legion-keyboard-autosuspend = pkgs.writeScriptBin "legion-keyboard-autosuspend" (
     builtins.readFile ./scripts/legion-keyboard-autosuspend.sh
   );
+  legion-ec-monitor = pkgs.writeScriptBin "legion-ec-monitor" (
+    builtins.readFile ./scripts/legion-ec-monitor.sh
+  );
 in
 {
   options._custom.desktop.power-management = {
@@ -58,6 +61,7 @@ in
         legion-battery-conservation
         legion-rapid-charging
         legion-keyboard-autosuspend
+        legion-ec-monitor
         lm_sensors
         cpupower
       ];
