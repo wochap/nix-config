@@ -40,20 +40,36 @@ pane_index="#{s/0/⁰/g;s/1/¹/g;s/2/²/g;s/3/³/g;s/4/⁴/g;s/5/⁵/g;s/6/⁶/g
 inactive_color="#{?window_bell_flag,${red},#{?window_activity_flag,${yellow},${surface1}}}"
 active_color="#{?window_bell_flag,${red},#{?window_activity_flag,${yellow},${lavender}}}"
 # args passed to tmux-tab-name: path, command, pane_title, window_name,
-# automatic-rename flag, host, window count
-tab_args="\"#{pane_current_path}\" \"#{pane_current_command}\" \"#{pane_title}\" \"#{window_name}\" \"#{automatic-rename}\" \"#{host}\" \"#{session_windows}\""
+# automatic-rename flag, host, window count, client width
+tab_args="\"#{pane_current_path}\" \"#{pane_current_command}\" \"#{pane_title}\" \"#{window_name}\" \"#{automatic-rename}\" \"#{host}\" \"#{session_windows}\" \"#{client_width}\""
 # automatic-rename-format computes window_name, so window_name/auto-rename are
 # dummied out here to avoid a self-reference (active mode ignores them anyway)
-rename_args="\"#{pane_current_path}\" \"#{pane_current_command}\" \"#{pane_title}\" \"\" \"on\" \"#{host}\" \"#{session_windows}\""
+rename_args="\"#{pane_current_path}\" \"#{pane_current_command}\" \"#{pane_title}\" \"\" \"on\" \"#{host}\" \"#{session_windows}\" \"#{client_width}\""
 host_module="#{?#{!=:#{host},${hostname}},${host_icon} #H  ,}"
 user_module="#{?#{!=:#(whoami),${username}},${user_icon} #(whoami)  ,}"
 prefix_module="#{?client_prefix,prefix  ,}"
 sync_module="#{?synchronize-panes,sync  ,}"
 zoom_module="#{?window_zoomed_flag,${layout_icon_by_name["zoom"]} zoom  ,}"
 
+tmux set-option -g pane-border-lines single
+tmux set-option -g popup-border-lines rounded
+
+tmux set-option -g message-style "fg=${teal},bg=${overlay0},align=centre"
+tmux set-option -g message-command-style "fg=${teal},bg=${overlay0},align=centre"
+tmux set-option -g menu-selected-style "fg=${text},bold,bg=${overlay0}"
+tmux set-option -g pane-border-style "fg=${border}"
+tmux set-option -g pane-active-border-style "fg=${primary}"
+tmux set-option -g popup-style "bg=${base},fg=${text}"
+tmux set-option -g popup-border-style "fg=${surface1}"
+tmux set-option -g mode-style "bg=${surface0},bold"
+tmux set-option -g clock-mode-colour "${blue}"
+
 tmux set-option -g status-position "bottom"
 tmux set-option -g status-style bg=default,fg=default
 tmux set-option -g status-justify "absolute-centre"
+# tmux truncates status-left/right to 10 chars by default; allow the full path
+tmux set-option -g status-left-length 200
+tmux set-option -g status-right-length 200
 tmux set-option -g status-left "#[bg=default,fg=${surface1}] ${pane_index}${pane_icon} #(tmux-tab-name left ${tab_args})"
 tmux set-option -g status-right "#[bg=default,fg=${lavender}]${prefix_module}${sync_module}${zoom_module}#[bg=default,fg=${red}]${user_module}${host_module}#[bg=default,fg=${surface1}]${windows_icon} #{window_panes}  ${session_icon} #S "
 tmux set-option -g automatic-rename-format "#(tmux-tab-name active ${rename_args})"

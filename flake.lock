@@ -505,22 +505,6 @@
         "type": "github"
       }
     },
-    "catppuccin-tmux": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1775690893,
-        "narHash": "sha256-3CJRQCgS8NAN7vOLBjNGiHbGXTIrIyY/FLmfZrXcEYc=",
-        "owner": "catppuccin",
-        "repo": "tmux",
-        "rev": "d2d25bd3393fe43f19eb4fff6cdd2bdf5578e622",
-        "type": "github"
-      },
-      "original": {
-        "owner": "catppuccin",
-        "repo": "tmux",
-        "type": "github"
-      }
-    },
     "catppuccin-yazi": {
       "flake": false,
       "locked": {
@@ -3190,7 +3174,6 @@
         "catppuccin-obs": "catppuccin-obs",
         "catppuccin-qt5ct": "catppuccin-qt5ct",
         "catppuccin-qutebrowser": "catppuccin-qutebrowser",
-        "catppuccin-tmux": "catppuccin-tmux",
         "catppuccin-yazi": "catppuccin-yazi",
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",

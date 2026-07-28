@@ -159,8 +159,6 @@
     catppuccin-zathura.flake = false;
     catppuccin-zsh-fsh.url = "github:catppuccin/zsh-fsh";
     catppuccin-zsh-fsh.flake = false;
-    catppuccin-tmux.url = "github:catppuccin/tmux";
-    catppuccin-tmux.flake = false;
     catppuccin-mpv.url = "github:catppuccin/mpv";
     catppuccin-mpv.flake = false;
     catppuccin-foot.url = "github:catppuccin/foot";

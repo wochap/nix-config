@@ -3,11 +3,13 @@
 # Compute a compact title for a tmux window/tab (or the status-left path).
 #
 # usage: tmux-tab-name <mode> <path> <command> <pane_title> <window_name> \
-#                      <auto_rename> <host> <num_windows>
+#                      <auto_rename> <host> <num_windows> <client_width>
 #   mode: active   -> focused tab, capped at 40 chars
 #         inactive -> background tab, small budget that shrinks as tabs grow
-#         left     -> status-left, always the cwd; grows when few tabs leave
-#                     space, shrinks as tabs fill the bar
+#         left     -> status-left, always the cwd; budget is derived from the
+#                     free space on the line (client width minus the centred
+#                     window list), so it fills the bar when few tabs are open
+#                     and trims down as tabs pile up
 #
 # Precedence:
 #   - inactive tab: a custom title wins, trimmed to the budget. A custom title
@@ -29,24 +31,33 @@ auto_rename="${6:-on}"
 host="${7:-}"
 num_windows="${8:-1}"
 [[ "$num_windows" =~ ^[0-9]+$ ]] || num_windows=1
+client_width="${9:-80}"
+[[ "$client_width" =~ ^[0-9]+$ ]] || client_width=80
 command_base="${command##*/}"
 
 ellipsis="…"
 result=""
 
-# Character budget per mode; inactive/left shrink as more windows are open.
+# Base budgets: the active tab is capped; inactive tabs shrink as windows grow.
+active_budget=40
+inactive_budget=$((30 - 2 * num_windows))
+((inactive_budget < 8)) && inactive_budget=8
+((inactive_budget > 22)) && inactive_budget=22
+
+# Character budget per mode.
 case "$mode" in
-active) budget=40 ;;
+active) budget=$active_budget ;;
+inactive) budget=$inactive_budget ;;
 left)
-  # status-left cwd: grows when few windows leave space, shrinks as they fill.
-  budget=$((56 - 3 * num_windows))
+  # Space-aware: estimate the width of the centred window list, then take half
+  # of what's left on the line. Tabs draw over the edges anyway, so this only
+  # sets where trimming *starts* - tmux clips the rest. Few tabs + wide client
+  # -> near-full path; many tabs -> trimmed down.
+  tab_overhead=6 # index + icon + padding per tab
+  windows_width=$((active_budget + tab_overhead + (num_windows - 1) * (inactive_budget + tab_overhead)))
+  budget=$(((client_width - windows_width) / 2))
   ((budget < 16)) && budget=16
-  ((budget > 48)) && budget=48
-  ;;
-*)
-  budget=$((30 - 2 * num_windows))
-  ((budget < 8)) && budget=8
-  ((budget > 22)) && budget=22
+  ((budget > 80)) && budget=80
   ;;
 esac
 
@@ -93,21 +104,31 @@ compact_path() {
     return
   fi
 
-  # Abbreviate every middle component to its first char, keep root + basename.
-  local out="${parts[0]}" i c
-  for ((i = 1; i < n - 1; i++)); do
-    c="${parts[i]}"
-    [[ -z "$c" ]] && continue
-    out+="/${c:0:1}"
+  # Progressively abbreviate middle dirs, farthest from the basename first,
+  # stopping as soon as the path fits. This keeps the informative near-basename
+  # dirs full for as long as the budget allows instead of collapsing everything
+  # to initials at once.
+  local num_middle=$((n - 2)) abbrev out i c
+  for ((abbrev = 1; abbrev <= num_middle; abbrev++)); do
+    out="${parts[0]}"
+    for ((i = 1; i < n - 1; i++)); do
+      c="${parts[i]}"
+      [[ -z "$c" ]] && continue
+      if ((i <= abbrev)); then
+        out+="/${c:0:1}"
+      else
+        out+="/$c"
+      fi
+    done
+    out+="/${parts[n - 1]}"
+    if ((${#out} <= max)); then
+      result="$out"
+      return
+    fi
   done
-  out+="/${parts[n - 1]}"
 
-  if ((${#out} <= max)); then
-    result="$out"
-    return
-  fi
-
-  # Still too long: keep the abbreviated prefix, shrink the basename.
+  # Every middle dir abbreviated and still too long: keep the abbreviated
+  # prefix, shrink the basename.
   local prefix="${out%/*}/" base="${out##*/}"
   if ((${#prefix} >= max)); then
     truncate_mid "$out" "$max"
