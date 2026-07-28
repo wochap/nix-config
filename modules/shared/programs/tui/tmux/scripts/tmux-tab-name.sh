@@ -4,9 +4,10 @@
 #
 # usage: tmux-tab-name <mode> <path> <command> <pane_title> <window_name> \
 #                      <auto_rename> <host> <num_windows>
-#   mode: active   -> focused tab, generous budget (full title, capped)
+#   mode: active   -> focused tab, capped at 40 chars
 #         inactive -> background tab, small budget that shrinks as tabs grow
-#         left     -> status-left path, medium budget that shrinks as tabs grow
+#         left     -> status-left, always the cwd; grows when few tabs leave
+#                     space, shrinks as tabs fill the bar
 #
 # Precedence:
 #   - inactive tab: a custom title wins, trimmed to the budget. A custom title
@@ -35,17 +36,18 @@ result=""
 
 # Character budget per mode; inactive/left shrink as more windows are open.
 case "$mode" in
-  active) budget=50 ;;
-  left)
-    budget=$((40 - 2 * num_windows))
-    ((budget < 16)) && budget=16
-    ((budget > 32)) && budget=32
-    ;;
-  *)
-    budget=$((30 - 2 * num_windows))
-    ((budget < 8)) && budget=8
-    ((budget > 22)) && budget=22
-    ;;
+active) budget=40 ;;
+left)
+  # status-left cwd: grows when few windows leave space, shrinks as they fill.
+  budget=$((56 - 3 * num_windows))
+  ((budget < 16)) && budget=16
+  ((budget > 48)) && budget=48
+  ;;
+*)
+  budget=$((30 - 2 * num_windows))
+  ((budget < 8)) && budget=8
+  ((budget > 22)) && budget=22
+  ;;
 esac
 
 # Truncate $1 to $2 chars with a middle ellipsis. Sets result.
@@ -73,10 +75,10 @@ truncate_mid() {
 compact_path() {
   local p="$1" max="$2"
   case "$p" in
-    "$HOME") p="~" ;;
-    "$HOME"/*) p="~${p#"$HOME"}" ;;
+  "$HOME") p="~" ;;
+  "$HOME"/*) p="~${p#"$HOME"}" ;;
   esac
-  if (( ${#p} <= max )); then
+  if ((${#p} <= max)); then
     result="$p"
     return
   fi
@@ -100,14 +102,14 @@ compact_path() {
   done
   out+="/${parts[n - 1]}"
 
-  if (( ${#out} <= max )); then
+  if ((${#out} <= max)); then
     result="$out"
     return
   fi
 
   # Still too long: keep the abbreviated prefix, shrink the basename.
   local prefix="${out%/*}/" base="${out##*/}"
-  if (( ${#prefix} >= max )); then
+  if ((${#prefix} >= max)); then
     truncate_mid "$out" "$max"
     return
   fi
@@ -117,8 +119,8 @@ compact_path() {
 
 is_shell() {
   case "${1##*/}" in
-    zsh | bash | fish | sh | ash | dash | -zsh | -bash | -fish | nix-shell) return 0 ;;
-    *) return 1 ;;
+  zsh | bash | fish | sh | ash | dash | -zsh | -bash | -fish | nix-shell) return 0 ;;
+  *) return 1 ;;
   esac
 }
 
@@ -137,7 +139,10 @@ if [[ "$auto_rename" != "on" && -n "$window_name" && "$window_name" != "$host" &
   window_custom=1
 fi
 
-if [[ "$mode" == "inactive" ]]; then
+if [[ "$mode" == "left" ]]; then
+  # status-left always shows the current working directory.
+  compact_path "$path" "$budget"
+elif [[ "$mode" == "inactive" ]]; then
   # Unfocused tab: a custom title (pane or window) takes precedence.
   if ((pane_title_meaningful)); then
     truncate_mid "$pane_title" "$budget"
