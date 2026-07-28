@@ -2,7 +2,6 @@
 
 notify() {
   TEMP_DIR=/tmp/xcolor
-  EXPIRE_TIME=5000
   HEX_COLOR="$1"
   mkdir -p $TEMP_DIR
   HEX="${HEX_COLOR#\#}"
@@ -17,7 +16,7 @@ if [[ -n $(pgrep hyprpicker) ]]; then
   exit 0
 fi
 
-color=$(hyprpicker -l -r -f hex -n)
+color=$(hyprpicker -l -r -f hex)
 
 if [ -z "$color" ]; then
   exit 0
