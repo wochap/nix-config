@@ -2,14 +2,20 @@
 
 # Compute a compact title for a tmux window/tab (or the status-left path).
 #
-# usage: tmux-tab-name <mode> <path> <command> <pane_title> <host> <num_windows>
-#   mode: active   -> active tab, generous budget (full title, capped)
+# usage: tmux-tab-name <mode> <path> <command> <pane_title> <window_name> \
+#                      <auto_rename> <host> <num_windows>
+#   mode: active   -> focused tab, generous budget (full title, capped)
 #         inactive -> background tab, small budget that shrinks as tabs grow
 #         left     -> status-left path, medium budget that shrinks as tabs grow
 #
-# At a shell prompt the current path is shown (middle dirs abbreviated to
-# initials). Inside a TUI/app the title the app set (pane_title) is preferred,
-# falling back to the command name.
+# Precedence:
+#   - inactive tab: a custom title wins, trimmed to the budget. A custom title
+#     is a meaningful pane_title (set via `select-pane -T` or an app OSC title),
+#     or a window_name whose automatic-rename was turned off (i.e. set manually
+#     via `rename-window` or by an app escape sequence).
+#   - active tab / fallback: at a shell prompt the current path is shown (middle
+#     dirs abbreviated to initials); inside a TUI/app the pane_title is used if
+#     meaningful, else the command name.
 
 set -u
 
@@ -17,9 +23,12 @@ mode="${1:-inactive}"
 path="${2:-}"
 command="${3:-}"
 pane_title="${4:-}"
-host="${5:-}"
-num_windows="${6:-1}"
+window_name="${5:-}"
+auto_rename="${6:-on}"
+host="${7:-}"
+num_windows="${8:-1}"
 [[ "$num_windows" =~ ^[0-9]+$ ]] || num_windows=1
+command_base="${command##*/}"
 
 ellipsis="…"
 result=""
@@ -113,16 +122,40 @@ is_shell() {
   esac
 }
 
-if is_shell "$command"; then
-  compact_path "$path" "$budget"
-else
-  # TUI/app: prefer the title the app set, else the command name.
-  if [[ -n "$pane_title" && "$pane_title" != "$host" && "$pane_title" != "$command" ]]; then
-    result="$pane_title"
+# pane_title is "meaningful" when an app/user actually set it (not the default
+# hostname or the bare command name).
+pane_title_meaningful=0
+if [[ -n "$pane_title" && "$pane_title" != "$host" && "$pane_title" != "$command" && "$pane_title" != "$command_base" ]]; then
+  pane_title_meaningful=1
+fi
+
+# window_name is a genuine custom name only when automatic-rename was disabled
+# for the window (tmux does this on `rename-window` or an app escape sequence);
+# otherwise it just holds our own automatic-rename-format output.
+window_custom=0
+if [[ "$auto_rename" != "on" && -n "$window_name" && "$window_name" != "$host" && "$window_name" != "$command_base" ]]; then
+  window_custom=1
+fi
+
+if [[ "$mode" == "inactive" ]]; then
+  # Unfocused tab: a custom title (pane or window) takes precedence.
+  if ((pane_title_meaningful)); then
+    truncate_mid "$pane_title" "$budget"
+  elif ((window_custom)); then
+    truncate_mid "$window_name" "$budget"
+  elif is_shell "$command"; then
+    compact_path "$path" "$budget"
   else
-    result="${command##*/}"
+    truncate_mid "$command_base" "$budget"
   fi
-  truncate_mid "$result" "$budget"
+elif is_shell "$command"; then
+  # Focused shell: show the current path.
+  compact_path "$path" "$budget"
+elif ((pane_title_meaningful)); then
+  # Focused TUI/app: prefer the title the app set.
+  truncate_mid "$pane_title" "$budget"
+else
+  truncate_mid "$command_base" "$budget"
 fi
 
 printf '%s' "$result"
