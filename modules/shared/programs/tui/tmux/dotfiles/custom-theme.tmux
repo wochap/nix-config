@@ -38,7 +38,7 @@ pane_index="#{s/0/⁰/g;s/1/¹/g;s/2/²/g;s/3/³/g;s/4/⁴/g;s/5/⁵/g;s/6/⁶/g
 # signal bell/activity by colour (the nerd-font bell glyphs render as boxes in
 # foot): bell -> red, activity -> yellow, else the normal tab colour
 inactive_color="#{?window_bell_flag,${peach},#{?window_activity_flag,${yellow},${surface1}}}"
-inactive_bg="#{?window_bell_flag,${base},#{?window_activity_flag,${base},default}}"
+inactive_bg="#{?window_bell_flag,${background},#{?window_activity_flag,${background},default}}"
 active_color="#{?window_bell_flag,${peach},#{?window_activity_flag,${yellow},${lavender}}}"
 # args passed to tmux-tab-name: path, command, pane_title, window_name,
 # automatic-rename flag, host, window count, client width
@@ -55,12 +55,12 @@ zoom_module="#{?window_zoomed_flag,${layout_icon_by_name["zoom"]} zoom  ,}"
 tmux set-option -g pane-border-lines single
 tmux set-option -g popup-border-lines rounded
 
-tmux set-option -g message-style "fg=${teal},bg=${overlay0},align=centre"
-tmux set-option -g message-command-style "fg=${teal},bg=${overlay0},align=centre"
-tmux set-option -g menu-selected-style "fg=${text},bold,bg=${overlay0}"
+tmux set-option -g message-style "fg=${teal},bg=${backgroundOverlay},align=centre"
+tmux set-option -g message-command-style "fg=${teal},bg=${backgroundOverlay},align=centre"
+tmux set-option -g menu-selected-style "fg=${text},bold,bg=${backgroundOverlay}"
 tmux set-option -g pane-border-style "fg=${border}"
 tmux set-option -g pane-active-border-style "fg=${primary}"
-tmux set-option -g popup-style "bg=${base},fg=${text}"
+tmux set-option -g popup-style "bg=${background},fg=${text}"
 tmux set-option -g popup-border-style "fg=${surface1}"
 tmux set-option -g mode-style "bg=${surface0},bold"
 tmux set-option -g clock-mode-colour "${blue}"
@@ -80,6 +80,6 @@ tmux set-option -g status-right "#[bg=default,fg=${lavender}]${prefix_module}${s
 tmux set-option -g automatic-rename-format "#(tmux-tab-name active ${rename_args})"
 bell_module="#{?window_bell_flag, ${bell_icon},}"
 tmux set-option -g window-status-format "#[bg=${inactive_bg},fg=${inactive_color}]  ${window_index} ${window_icon} #(tmux-tab-name inactive ${tab_args})${bell_module}  #[bg=default,fg=default]"
-tmux set-option -g window-status-current-format "#[bg=default,fg=${active_color}]#[bg=${active_color},fg=${base}] ${window_index} ${window_icon} #(tmux-tab-name active ${tab_args})${bell_module} #[bg=default,fg=${active_color}]#[bg=default,fg=default]"
+tmux set-option -g window-status-current-format "#[bg=default,fg=${active_color}]#[bg=${active_color},fg=${background}] ${window_index} ${window_icon} #(tmux-tab-name active ${tab_args})${bell_module} #[bg=default,fg=${active_color}]#[bg=default,fg=default]"
 
 # vim: ft=bash

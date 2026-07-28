@@ -4,7 +4,7 @@
 #
 # usage: tmux-tab-name <mode> <path> <command> <pane_title> <window_name> \
 #                      <auto_rename> <host> <num_windows> <client_width>
-#   mode: active   -> focused tab, capped at 40 chars
+#   mode: active   -> focused tab, same as inactive
 #         inactive -> background tab, small budget that shrinks as tabs grow
 #         left     -> status-left, always the cwd; budget is derived from the
 #                     free space on the line (client width minus the centred
@@ -45,10 +45,10 @@ ellipsis="…"
 result=""
 
 # Base budgets: the active tab is capped; inactive tabs shrink as windows grow.
-active_budget=40
 inactive_budget=$((30 - 2 * num_windows))
 ((inactive_budget < 8)) && inactive_budget=8
 ((inactive_budget > 22)) && inactive_budget=22
+active_budget=$inactive_budget
 
 # Character budget per mode.
 case "$mode" in
