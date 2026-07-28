@@ -10,6 +10,7 @@
 #                     free space on the line (client width minus the centred
 #                     window list), so it fills the bar when few tabs are open
 #                     and trims down as tabs pile up
+#   auto_rename: #{automatic-rename} expands to 1/0; on/off also accepted
 #
 # Precedence:
 #   - inactive tab: a custom title wins, trimmed to the budget. A custom title
@@ -28,6 +29,11 @@ command="${3:-}"
 pane_title="${4:-}"
 window_name="${5:-}"
 auto_rename="${6:-on}"
+# tmux expands the automatic-rename boolean as 1/0, not on/off
+case "$auto_rename" in
+on | 1) auto_rename=on ;;
+*) auto_rename=off ;;
+esac
 host="${7:-}"
 num_windows="${8:-1}"
 [[ "$num_windows" =~ ^[0-9]+$ ]] || num_windows=1
