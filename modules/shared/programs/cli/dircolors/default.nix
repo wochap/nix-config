@@ -19,10 +19,12 @@ in
     enable = lib.mkEnableOption { };
     package = lib.mkPackageOption pkgs "dircolors" { default = "coreutils"; };
     enableBashIntegration = lib.mkEnableOption { };
-    enableZshIntegration = lib.mkEnableOption { default = config._custom.programs.zsh.enable; };
+    enableZshIntegration = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
+    _custom.programs.dircolors.enableZshIntegration = config._custom.programs.zsh.enable;
+
     _custom.hm = {
       home.file = {
         ".dir_colors" = {

@@ -49,7 +49,6 @@ in
     _custom.programs.core-utils-extra.enable = true;
     _custom.programs.core-utils.enable = true;
     _custom.programs.dircolors.enable = true;
-    _custom.programs.dircolors.enableZshIntegration = true;
     _custom.programs.fzf.enable = true;
     _custom.programs.git.enable = true;
     _custom.programs.git.enableUser = true;
