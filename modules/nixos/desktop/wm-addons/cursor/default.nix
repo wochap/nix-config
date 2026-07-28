@@ -48,11 +48,6 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    _custom.desktop.uwsm.inheritEnvs = [
-      "XCURSOR_THEME"
-      "XCURSOR_SIZE"
-    ];
-
     _custom.hm = {
       home.pointerCursor = {
         inherit (cfg) name package size;

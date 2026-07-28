@@ -96,12 +96,6 @@ in
       })
     ];
 
-    _custom.desktop.uwsm.inheritEnvs = [
-      "QT_QPA_PLATFORMTHEME"
-      "QT_SCALE_FACTOR_ROUNDING_POLICY"
-      "QT_STYLE_OVERRIDE"
-    ];
-
     fonts.packages = with pkgs; [
       noto-fonts
       source-sans-pro

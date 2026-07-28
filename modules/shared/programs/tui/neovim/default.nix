@@ -45,11 +45,6 @@ in
       package = lib.mkDefault final-nvim;
     };
 
-    _custom.desktop.uwsm.inheritEnvs = [
-      "EDITOR"
-      "VISUAL"
-    ];
-
     environment = {
       systemPackages = with pkgs; [
         clear-nvim

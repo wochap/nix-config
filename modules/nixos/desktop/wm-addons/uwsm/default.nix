@@ -7,6 +7,8 @@
 
 let
   cfg = config._custom.desktop.uwsm;
+  hmSessionVarsPkg =
+    config.home-manager.users.${config._custom.globals.userName}.home.sessionVariablesPackage;
 
   # Helper function to create desktop entry files for UWSM-managed compositors
   mk_uwsm_desktop_entry =
@@ -30,14 +32,6 @@ in
   options._custom.desktop.uwsm = {
     enable = lib.mkEnableOption { };
     package = lib.mkPackageOption pkgs "uwsm" { };
-    inheritEnvs = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      description = ''
-        Environment variables to inherit into uwsm/env.
-        Each variable `FOO` will result in `export FOO=$FOO`.
-      '';
-    };
     # slightly similar to https://search.nixos.org/options?channel=25.05&show=programs.uwsm.waylandCompositors&from=0&size=50&sort=relevance&type=packages&query=uwsm
     waylandCompositors = lib.mkOption {
       type = lib.types.attrsOf (
@@ -64,14 +58,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    _custom.desktop.uwsm.inheritEnvs = [
-      "HOME"
-      "UWSM_USE_SESSION_SLICE"
-      "UWSM_APP_UNIT_TYPE"
-      "XDG_SESSION_DESKTOP"
-      "XDG_SESSION_TYPE"
-    ];
-
     # make wayland compositors great again
     # better resource management
     programs.uwsm.enable = true;
@@ -100,12 +86,18 @@ in
     ) cfg.waylandCompositors;
 
     _custom.hm = {
-      home.sessionVariables.UWSM_USE_SESSION_SLICE = "true";
-      home.sessionVariables.UWSM_APP_UNIT_TYPE = "service";
+      xdg.configFile."uwsm/env".text = ''
+        # greetd does not source login profile before uwsm start,
+        # so the saved login env lacks NixOS/HM session variables.
+        if [ -z "$__UWSM_ENV_PROFILE_SOURCED" ]; then
+          __UWSM_ENV_PROFILE_SOURCED=1
+          [ -f /etc/profile ] && . /etc/profile
+          . "${hmSessionVarsPkg}/etc/profile.d/hm-session-vars.sh"
+        fi
 
-      xdg.configFile."uwsm/env".text = lib.concatMapStrings (
-        env: "export ${env}=${"$"}${env};\n"
-      ) cfg.inheritEnvs;
+        export UWSM_USE_SESSION_SLICE=true
+        export UWSM_APP_UNIT_TYPE=service
+      '';
 
       # HACK: start app-daemon
       systemd.user.services.start-uwsm-app-daemon = lib._custom.mkWaylandService {
