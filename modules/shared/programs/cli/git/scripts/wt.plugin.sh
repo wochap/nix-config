@@ -9,10 +9,11 @@ wt() {
     dir="$(command wt "$@")" && cd "$dir"
     ;;
   rm)
+    local fallback_dir
+    fallback_dir="$(command wt switch)"
     command wt "$@"
     if [[ ! -d "$PWD" ]]; then
-      local default_dir
-      default_dir="$(command wt switch)" && cd "$default_dir"
+      cd "$fallback_dir"
     fi
     ;;
   *)
