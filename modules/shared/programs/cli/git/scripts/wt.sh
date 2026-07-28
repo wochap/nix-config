@@ -210,11 +210,13 @@ find_common_ancestor() {
 resolve_pull_source() {
   local root="$1" git_dir="$2" arg="$3"
 
-  # try as worktree folder name in current project
-  local candidate="$root/$arg"
-  if [[ -d "$candidate" ]] && find_worktree_by_path "$git_dir" "$candidate"; then
-    echo "$candidate"
-    return 0
+  # try as worktree folder name in current project (only if inside a wt project)
+  if [[ -n "$root" && -n "$git_dir" ]]; then
+    local candidate="$root/$arg"
+    if [[ -d "$candidate" ]] && find_worktree_by_path "$git_dir" "$candidate"; then
+      echo "$candidate"
+      return 0
+    fi
   fi
 
   # fall back to filesystem path
@@ -673,10 +675,6 @@ cmd_rm() {
 }
 
 cmd_pull() {
-  local root git_dir
-  root=$(find_project_root) || return 1
-  git_dir="$root/.git"
-
   local staged=0 source_arg=""
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -689,15 +687,37 @@ cmd_pull() {
 
   [[ -z "$source_arg" ]] && die "usage: wt pull <source> [--staged]"
 
+  # detect target context
+  local in_git_repo=0
+  if git rev-parse --git-dir &>/dev/null; then
+    in_git_repo=1
+  fi
+
+  if [[ $in_git_repo -eq 0 && $staged -eq 0 ]]; then
+    die "default mode requires a git repository as target (use --staged for non-repo directories)"
+  fi
+
+  # optionally detect wt project for folder-name source resolution
+  local root="" git_dir=""
+  if [[ $in_git_repo -eq 1 ]]; then
+    root=$(find_project_root 2>/dev/null) || root=""
+    if [[ -n "$root" ]]; then
+      git_dir="$root/.git"
+    fi
+  fi
+
   local source_path
   source_path=$(resolve_pull_source "$root" "$git_dir" "$source_arg") || return 1
 
-  verify_same_repo "." "$source_path" ||
-    die "source and target are not the same repository"
+  # same-repo verification (only when target is a git repo)
+  if [[ $in_git_repo -eq 1 ]]; then
+    verify_same_repo "." "$source_path" ||
+      die "source and target are not the same repository"
+  fi
 
-  # dirty target check
-  if [[ -n "$(git status --porcelain 2>/dev/null)" ]]; then
-    echo "${C_YELLOW}warning: target worktree has uncommitted changes${C_RESET}" >&2
+  # dirty target check (only when target is a git repo)
+  if [[ $in_git_repo -eq 1 && -n "$(git status --porcelain 2>/dev/null)" ]]; then
+    echo "${C_YELLOW}warning: target has uncommitted changes${C_RESET}" >&2
     local confirm
     read -r -p "Continue? [y/N] " confirm || return 1
     if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
@@ -706,7 +726,7 @@ cmd_pull() {
     fi
   fi
 
-  # --staged mode: always patch
+  # --staged mode: always patch (works in any directory)
   if [[ $staged -eq 1 ]]; then
     local patch
     patch=$(git -C "$source_path" diff --cached) || die "failed to get staged diff from source"
