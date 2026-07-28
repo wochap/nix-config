@@ -113,7 +113,7 @@ in
       bindMounts = {
         "shared" = {
           hostPath = "/home/${userName}/Sandboxes/${sandboxName}";
-          mountPoint = "/home/${userName}/Shared";
+          mountPoint = "/home/${userName}/Sandboxes/${sandboxName}";
           isReadOnly = false;
         };
         "dri" = {
