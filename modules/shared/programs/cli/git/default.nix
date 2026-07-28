@@ -82,6 +82,7 @@ in
         enable = true;
 
         ignores = [
+          ".playwright-mcp"
           ".direnv"
           ".envrc"
           ".cache"
