@@ -20,6 +20,8 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      playwright-mcp
+      playwright-driver
       claude-session-duration
       antigravity-nix-pkgs.default # Base App
       antigravity-nix-pkgs.google-antigravity-ide # IDE
