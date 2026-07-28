@@ -150,14 +150,14 @@ in
 
         "uwsm/env-hyprland".text = ''
           # toolkit-specific scale
-          export GDK_SCALE=2
-          # export QT_AUTO_SCREEN_SCALE_FACTOR=0
-          # export QT_ENABLE_HIGHDPI_SCALING=0
-          # export QT_SCALE_FACTOR=2
-          # export QT_FONT_DPI=96
+          export GDK_SCALE=2;
+          # export QT_AUTO_SCREEN_SCALE_FACTOR=0;
+          # export QT_ENABLE_HIGHDPI_SCALING=0;
+          # export QT_SCALE_FACTOR=2;
+          # export QT_FONT_DPI=96;
 
           ${lib.concatStringsSep "\n" (
-            lib.attrsets.mapAttrsToList (key: value: "export ${key}=${value}") cfg.uwsmSessionVariables
+            lib.attrsets.mapAttrsToList (key: value: "export ${key}=${value};") cfg.uwsmSessionVariables
           )}
         '';
       };
