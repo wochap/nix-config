@@ -46,7 +46,6 @@ in
     # cli
     _custom.programs.bat.enable = true;
     _custom.programs.buku.enable = true;
-    _custom.programs.cht.enable = true;
     _custom.programs.core-utils-extra.enable = true;
     _custom.programs.core-utils.enable = true;
     _custom.programs.dircolors.enable = true;
