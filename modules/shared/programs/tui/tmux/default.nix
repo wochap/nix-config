@@ -34,7 +34,6 @@ let
   tmux-kill-unattached-sessions = pkgs.writeScriptBin "tmux-kill-unattached-sessions" (
     builtins.readFile ./scripts/tmux-kill-unattached-sessions.sh
   );
-  tmux-tab-name = pkgs.writeScriptBin "tmux-tab-name" (builtins.readFile ./scripts/tmux-tab-name.sh);
   start-tmux-server = pkgs.writeScriptBin "start-tmux-server" ''
     #!/usr/bin/env bash
 
@@ -83,7 +82,6 @@ in
       tmux-final
       tmux-kill-unattached-sessions
       tmux-kill-unnamed-sessions
-      tmux-tab-name
       _custom.tmuxinator # session manager
       tmuxp # session manager
     ];
