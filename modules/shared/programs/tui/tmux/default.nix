@@ -57,7 +57,15 @@ in
     enable = lib.mkEnableOption { };
     package = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.nixpkgs-unstable.tmux.overrideAttrs (oldAttrs: {
+      default = pkgs.tmux.overrideAttrs (oldAttrs: rec {
+        # PERF: 3.7 give performance issues on nvim and in general
+        version = "3.6b";
+        src = pkgs.fetchFromGitHub {
+          owner = "tmux";
+          repo = "tmux";
+          tag = version;
+          hash = "sha256-iW4K/OxSVpxVkyI5Dy6lzwVf/8nXyjcHtL76Ezmxavc=";
+        };
         patches = (oldAttrs.patches or [ ]) ++ [ ./patches/tmux-osc777.patch ];
       });
     };
