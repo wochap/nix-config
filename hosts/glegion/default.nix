@@ -86,6 +86,7 @@ in
       workers = 8;
     };
     _custom.programs.kitty.enable = true;
+    _custom.programs.kitty.enableSystemd = true;
     _custom.programs.mpv.enable = true;
     _custom.programs.qutebrowser.enable = true;
     _custom.programs.vscode.enable = true;

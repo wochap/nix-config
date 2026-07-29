@@ -14,7 +14,7 @@ if [[ "$current_scheme" == "dark" ]]; then
   # footclient --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=dark &
   # foot --app-id=footclient-chill --override colors.alpha=0.75 --override main.initial-color-theme=dark &
 else
-  kitty --app-id=kitty-chill --override background_opacity=0.75 &
+  kitty --single-instance --app-id=kitty-chill --override background_opacity=0.75 &
 fi
 
 # NOTE: foot disables opacity when in fullscreen

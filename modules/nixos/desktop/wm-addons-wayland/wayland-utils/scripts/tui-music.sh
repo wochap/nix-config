@@ -5,4 +5,4 @@ kitty_session="$(
 launch zsh -c 'rmpc'
 EOF
 )"
-echo "$kitty_session" | kitty --class tui-music --session - &
+echo "$kitty_session" | kitty --single-instance --class tui-music --session - &

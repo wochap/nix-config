@@ -13,6 +13,7 @@ let
     themeColorsDark
     preferDark
     configDirectory
+    systemdTarget
     ;
   inherit (lib._custom) relativeSymlink unwrapHex;
 
@@ -49,7 +50,10 @@ let
   catppuccin-kitty-dark-theme = mkKittyTheme themeColorsDark;
 in
 {
-  options._custom.programs.kitty.enable = lib.mkEnableOption { };
+  options._custom.programs.kitty = {
+    enable = lib.mkEnableOption { };
+    enableSystemd = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     # env variable to be used within neovim config
@@ -65,10 +69,10 @@ in
         };
 
         shellAliases = {
-          kdiff = "kitty +kitten diff";
-          icat = "kitty +kitten icat";
+          kdiff = "kitten diff";
+          icat = "kitten icat";
           # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
-          sshk = "kitty +kitten ssh";
+          sshk = "kitten ssh";
         };
       };
 
@@ -157,6 +161,19 @@ in
         };
       };
 
+      xdg.desktopEntries = {
+        kitty-client = {
+          name = "Kitty Client";
+          exec = "${kitty-final}/bin/kitty --single-instance";
+        };
+      };
+
+      systemd.user.services.kitty-server = lib.mkIf cfg.enableSystemd (lib._custom.mkWaylandService {
+        Unit.Description = "Kitty terminal server (single instance)";
+        Service = {
+          ExecStart = "${kitty-final}/bin/kitty --single-instance --start-as hidden";
+        };
+      });
     };
   };
 }

@@ -3,7 +3,7 @@
 set -xe
 
 if [[ $# == 0 ]]; then
-  kitty --class tui-email --title neomutt -e sh -c neomutt
+  kitty --single-instance --class tui-email --title neomutt -e sh -c neomutt
 else
-  echo "$@" | xargs -I {} kitty --class tui-email --title neomutt -e sh -c "neomutt {}"
+  echo "$@" | xargs -I {} kitty --single-instance --class tui-email --title neomutt -e sh -c "neomutt {}"
 fi
