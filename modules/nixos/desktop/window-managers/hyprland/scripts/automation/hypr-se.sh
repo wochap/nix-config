@@ -39,9 +39,9 @@ fi
 
 function cleanup() {
   # Kill previous tmux session
-  if tmux has-session -t se 2>/dev/null; then
+  if tmux -L se_server has-session -t se 2>/dev/null; then
     echo "Killing tmux session: se"
-    tmux kill-session -t se
+    tmux -L se_server kill-session -t se
   fi
   if tmux has-session -t se-editors 2>/dev/null; then
     echo "Killing tmux session: se-editors"
@@ -90,9 +90,9 @@ function start() {
 
   # Start new foot terminal with tmux session
   echo "Starting tmux session: se"
-  footclient --app-id=footclient-se tmux new-session zsh -i -c "tmuxinator start se workspaces=$workspaces --suppress-tmux-version-warning" &
+  footclient --app-id=footclient-se zsh -i -c "tmuxinator start se workspaces=$workspaces --suppress-tmux-version-warning" &
   echo "Starting tmux session: se-editors"
-  footclient --app-id=footclient-se-editors tmux new-session zsh -i -c "tmuxinator start se-editors workspaces=$workspaces --suppress-tmux-version-warning" &
+  footclient --app-id=footclient-se-editors zsh -i -c "tmuxinator start se-editors workspaces=$workspaces --suppress-tmux-version-warning" &
 }
 
 cleanup

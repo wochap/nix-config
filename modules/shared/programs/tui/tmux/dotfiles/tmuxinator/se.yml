@@ -1,10 +1,16 @@
 name: se
 
-# HACK:
-# https://github.com/leiserfg/rod/
-on_project_start:
-  - tmux new-session -d -s se
-  - tmux set-environment -t se NO_ROD "TRUE"
+# PERF: Since these generate a lot of logs,
+# we keep them in a separate socket so they don't
+# cause lag in my main editor windows.
+# This forces tmuxinator to use a separate tmux server
+socket_name: se_server
+
+# # HACK:
+# # https://github.com/leiserfg/rod/
+# on_project_start:
+#   - tmux new-session -d -s se
+#   - tmux set-environment -t se NO_ROD "TRUE"
 
 windows:
   # 1
