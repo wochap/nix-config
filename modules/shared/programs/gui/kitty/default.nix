@@ -113,8 +113,8 @@ in
           # TODO: move into *-theme.auto.conf
           # currently we can't because it doesn't work there
           # color0 is surface1
-          tab_title_template "{fmt.bg.default}{fmt.fg.color0}  {sup.index} 󰓩 {title[:40]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
-          active_tab_title_template "{fmt.bg.default}{fmt.fg._${unwrapHex themeColorsDark.lavender}}{fmt.bg._${unwrapHex themeColorsDark.lavender}}{fmt.fg.color0} {sup.index} 󰓩 {title[:40]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${unwrapHex themeColorsDark.lavender}}{fmt.bg.default}{fmt.fg.default}"
+          tab_title_template "{fmt.bg.default}{fmt.fg.color0}  {sup.index} 󰓩 {tab.active_wd.rsplit('/', 1)[-1] or title[:40]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
+          active_tab_title_template "{fmt.bg.default}{fmt.fg._${unwrapHex themeColorsDark.lavender}}{fmt.bg._${unwrapHex themeColorsDark.lavender}}{fmt.fg.color0} {sup.index} 󰓩 {tab.active_wd.rsplit('/', 1)[-1] or title[:40]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${unwrapHex themeColorsDark.lavender}}{fmt.bg.default}{fmt.fg.default}"
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;

@@ -1,6 +1,5 @@
 # source: https://github.com/kovidgoyal/kitty/blob/master/kitty/tab_bar.py
 
-from pathlib import Path
 from kitty.boss import get_boss
 from kitty.fast_data_types import Screen, get_options
 from kitty.tab_bar import (
@@ -28,9 +27,8 @@ layout_icon_by_name = {
 }
 active_tab_layout_name = ""
 active_tab_num_windows = 1
-left_status_length = 0
-left_indicator = "<"
-right_indicator = ">"
+left_indicator = ""
+right_indicator = ""
 
 _layout_tab_widths: list[int] = []
 _active_tab_idx = 0
@@ -42,7 +40,6 @@ _tabs_draw_x = 0
 
 
 def _calculate_viewport(available_width: int) -> None:
-    """Calculate visible tab range, keeping active tab centered."""
     global _viewport_start, _viewport_end
 
     num_tabs = len(_layout_tab_widths)
@@ -51,7 +48,6 @@ def _calculate_viewport(available_width: int) -> None:
         _viewport_end = 0
         return
 
-    # Reserve for "< " and " >" separators (2 chars each)
     width = max(1, available_width - 4)
     active = _active_tab_idx
 
@@ -59,8 +55,7 @@ def _calculate_viewport(available_width: int) -> None:
     end = active + 1
     used = min(_layout_tab_widths[active], width)
 
-    # Ensure active is never adjacent to indicators:
-    # add 1 neighbor on each side first (if they exist and fit)
+    # Active never adjacent to indicators: seed 1 neighbor each side
     if start > 0 and used + _layout_tab_widths[start - 1] <= width:
         start -= 1
         used += _layout_tab_widths[start]
@@ -68,14 +63,10 @@ def _calculate_viewport(available_width: int) -> None:
         used += _layout_tab_widths[end]
         end += 1
 
-    # Expand alternately, preferring the side with fewer tabs
-    # so active stays centered in the viewport
+    # Expand preferring side with fewer tabs (keeps active centered)
     while True:
         expanded = False
-        left_count = active - start
-        right_count = end - active - 1
-
-        if left_count <= right_count:
+        if (active - start) <= (end - active - 1):
             if start > 0 and used + _layout_tab_widths[start - 1] <= width:
                 start -= 1
                 used += _layout_tab_widths[start]
@@ -93,7 +84,6 @@ def _calculate_viewport(available_width: int) -> None:
                 start -= 1
                 used += _layout_tab_widths[start]
                 expanded = True
-
         if not expanded:
             break
 
@@ -116,7 +106,6 @@ def draw_tab(
     global active_tab_background
     global inactive_tab_foreground
     global tab_bar_background
-    global left_status_length
     global _layout_tab_widths
     global _active_tab_idx
     global _viewport_start
@@ -124,10 +113,6 @@ def draw_tab(
     global _num_tabs
     global _right_space
     global _tabs_draw_x
-
-    active_tab_background = as_rgb(color_as_int(draw_data.active_bg))
-    inactive_tab_foreground = as_rgb(color_as_int(draw_data.inactive_fg))
-    tab_bar_background = as_rgb(color_as_int(draw_data.default_bg))
 
     if tab.is_active:
         active_tab_layout_name = tab.layout_name
@@ -147,11 +132,16 @@ def draw_tab(
         return screen.cursor.x
 
     # --- Real drawing pass ---
+    # Colors: compute once per frame (draw_data constant across tabs)
+    if index == 1:
+        active_tab_background = as_rgb(color_as_int(draw_data.active_bg))
+        inactive_tab_foreground = as_rgb(color_as_int(draw_data.inactive_fg))
+        tab_bar_background = as_rgb(color_as_int(draw_data.default_bg))
+
     tab_idx = index - 1
 
-    # Reset cursor colors so padding/status/indicator spaces use
-    # tab_bar_background, not the current tab's bg (fixes color bleed
-    # when active tab is first and overlaps left status area).
+    # Default cursor for padding/status/indicators (prevents active
+    # tab bg bleeding into leading spaces)
     screen.cursor.fg = inactive_tab_foreground
     screen.cursor.bg = tab_bar_background
 
@@ -160,7 +150,6 @@ def draw_tab(
         total_ideal = sum(_layout_tab_widths)
 
         if total_ideal <= screen.columns:
-            # All tabs fit — center in full width
             _viewport_start = 0
             _viewport_end = _num_tabs
             content_start = (screen.columns - total_ideal) // 2
@@ -168,66 +157,47 @@ def draw_tab(
             has_left_indicator = False
             has_right_indicator = False
         else:
-            # Viewport mode with < > indicators
             _calculate_viewport(screen.columns)
             viewport_total = sum(_layout_tab_widths[_viewport_start:_viewport_end])
             has_left_indicator = _viewport_start > 0
             has_right_indicator = _viewport_end < _num_tabs
-            # "< " = 2 chars, " >" = 2 chars
             indicator_w = (2 if has_left_indicator else 0) + (
                 2 if has_right_indicator else 0
             )
             content_start = max(0, (screen.columns - viewport_total - indicator_w) // 2)
             content_end = content_start + indicator_w + viewport_total
 
-        # Left status: fill space before content (1 char gap from tabs)
         left_space = content_start - 1
         if left_space > 0:
             _draw_left_status(screen, left_space)
 
-        # Pad cursor to content start
         if screen.cursor.x < content_start:
             screen.draw(" " * (content_start - screen.cursor.x))
 
-        # "< " indicator with separator space
         if has_left_indicator:
-            screen.cursor.fg = inactive_tab_foreground
-            screen.cursor.bg = tab_bar_background
             screen.draw(left_indicator + " ")
-            screen.cursor.fg = 0
-            screen.cursor.bg = 0
 
-        # Remember where visible tabs should start drawing
         _tabs_draw_x = screen.cursor.x
-
-        # Space available for right status (1 char gap from tabs)
         _right_space = max(0, screen.columns - content_end - 1)
 
-    # Non-visible tabs: park extent at (before, -1) — inverted range
-    # never matches any click position.
+    # Non-visible tabs: inverted extent, never matches clicks
     if tab_idx < _viewport_start or tab_idx >= _viewport_end:
         screen.cursor.x = 0
         return -1
 
-    # First visible tab: restore cursor to the correct draw position
-    # (non-visible tabs parked it at 0).
     if tab_idx == _viewport_start and screen.cursor.x < _tabs_draw_x:
         screen.cursor.x = _tabs_draw_x
 
-    # Draw tab at full ideal width
     draw_tab_with_separator(
         draw_data, screen, tab, before, screen.columns, index, is_last, extra_data
     )
     tab_end = screen.cursor.x
 
-    # After last visible tab: " >" indicator + right status
     if tab_idx == _viewport_end - 1:
         if _viewport_end < _num_tabs:
             screen.cursor.fg = inactive_tab_foreground
             screen.cursor.bg = tab_bar_background
             screen.draw(" " + right_indicator)
-            screen.cursor.fg = 0
-            screen.cursor.bg = 0
         if _right_space > 0:
             _draw_right_status(screen, _right_space)
 
@@ -235,18 +205,12 @@ def draw_tab(
 
 
 def _draw_left_status(screen: Screen, max_width: int):
-    global left_status_length
-
-    cwd = get_cwd()
+    cwd = _get_parent_cwd()
     if len(cwd) > max_width:
         cwd = cwd[:max_width]
-    left_status_length = len(cwd)
-
     screen.cursor.fg = inactive_tab_foreground
     screen.cursor.bg = tab_bar_background
     screen.draw(cwd)
-    screen.cursor.fg = 0
-    screen.cursor.bg = 0
 
 
 def _draw_right_status(screen: Screen, max_width: int):
@@ -257,76 +221,59 @@ def _draw_right_status(screen: Screen, max_width: int):
     )
     layout_icon = layout_icon_by_name.get(active_tab_layout_name) or default_layout_icon
     cells = [
-        (layout_fg, tab_bar_background, " " + layout_icon + " "),
-        (layout_fg, tab_bar_background, active_tab_layout_name + " "),
-        (inactive_tab_foreground, tab_bar_background, " " + windows_icon + " "),
-        (inactive_tab_foreground, tab_bar_background, str(active_tab_num_windows)),
+        (layout_fg, " " + layout_icon + " "),
+        (layout_fg, active_tab_layout_name + " "),
+        (inactive_tab_foreground, " " + windows_icon + " "),
+        (inactive_tab_foreground, str(active_tab_num_windows)),
     ]
 
-    total_width = sum(len(c) for _, _, c in cells)
+    total_width = sum(len(c) for _, c in cells)
 
     if total_width <= max_width:
-        # Right-align full display in available space
         leading = max_width - total_width
         if leading > 0:
             screen.draw(" " * leading)
-        for fg, bg, cell in cells:
+        for fg, cell in cells:
             screen.cursor.fg = fg
-            screen.cursor.bg = bg
+            screen.cursor.bg = tab_bar_background
             screen.draw(cell)
     else:
-        # Truncate: keep last max_width chars
-        full_str = "".join(c for _, _, c in cells)
+        full_str = "".join(c for _, c in cells)
         screen.cursor.fg = inactive_tab_foreground
         screen.cursor.bg = tab_bar_background
         screen.draw(full_str[-max_width:])
 
-    screen.cursor.fg = 0
-    screen.cursor.bg = 0
+
+def _truncate_seg(s: str, max_len: int = 10) -> str:
+    if len(s) <= max_len:
+        return s
+    half = max_len // 2
+    return s[:half] + "…" + s[-half:]
 
 
-def truncate_str(input_str, max_length):
-    if len(input_str) > max_length:
-        half = max_length // 2
-        return input_str[:half] + "…" + input_str[-half:]
-    else:
-        return input_str
-
-
-def get_cwd():
+def _get_parent_cwd() -> str:
+    """Active tab cwd without basename (parent directory), formatted."""
     cwd = ""
-    tab_manager = get_boss().active_tab_manager
-    if tab_manager is not None:
-        window = tab_manager.active_window
-        if window is not None:
-            cwd = window.cwd_of_child
+    tm = get_boss().active_tab_manager
+    if tm is not None:
+        w = tm.active_window
+        if w is not None:
+            cwd = w.cwd_of_child
 
-    cwd_parts = list(Path(cwd).parts)
-    if len(cwd_parts) > 1:
-        if cwd_parts[1] == "home":
-            # replace /home/{{username}}
-            cwd_parts = ["~"] + cwd_parts[3:]
-            if len(cwd_parts) > 1:
-                cwd_parts[0] = "~/"
-        else:
-            cwd_parts[0] = "/"
+    parent = cwd.rsplit("/", 1)[0] or "/"
+    parts = [p for p in parent.split("/") if p]
+
+    if not parts:
+        return folder_icon + " /"
+
+    if parts[0] == "home" and len(parts) > 1:
+        parts = ["~"] + parts[2:]
     else:
-        cwd_parts[0] = "/"
+        parts[0] = "/" + parts[0]
 
-    max_length = 10
-    if len(cwd_parts) < 3:
-        cwd = cwd_parts[0] + "/".join(
-            [
-                s if len(s) <= max_length else truncate_str(s, max_length)
-                for s in cwd_parts[1:]
-            ]
-        )
+    if len(parts) > 2:
+        display = "…/" + "/".join(_truncate_seg(s) for s in parts[-2:])
     else:
-        cwd = "…/" + "/".join(
-            [
-                s if len(s) <= max_length else truncate_str(s, max_length)
-                for s in cwd_parts[-2:]
-            ]
-        )
+        display = "/".join(_truncate_seg(s) for s in parts)
 
-    return folder_icon + " " + cwd
+    return folder_icon + " " + display
