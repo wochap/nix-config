@@ -13,11 +13,12 @@ _wt() {
   )
 
   # Find current subcommand
-  local subcmd
+  local subcmd subcmd_idx=0
   for ((i = 2; i < CURRENT; i++)); do
     case "${words[i]}" in
     clone | switch | list | rm | pull | doctor | help)
       subcmd="${words[i]}"
+      subcmd_idx=$i
       break
       ;;
     esac
@@ -41,7 +42,7 @@ _wt() {
 
     # Check if -b mode — complete from-ref or nothing
     local has_b=0
-    for ((i = 2; i < CURRENT; i++)); do
+    for ((i = subcmd_idx + 1; i < CURRENT; i++)); do
       [[ "${words[i]}" == "-b" ]] && has_b=1
     done
 
@@ -51,50 +52,60 @@ _wt() {
       return
     fi
 
-    # Dynamic branch + commit completions
-    local git_dir
-    git_dir=$(git rev-parse --git-common-dir 2>/dev/null) || return
-    git_dir=$(cd "$git_dir" && pwd -P)
-    [[ "$(git -C "$git_dir" rev-parse --is-bare-repository 2>/dev/null)" != "true" ]] && return
+    # Check if positional arg already given
+    local has_name=0
+    for ((i = subcmd_idx + 1; i < CURRENT; i++)); do
+      [[ "${words[i]}" != -* ]] && has_name=1
+    done
 
-    local -a branches remotes commits
+    if [[ $has_name -eq 0 ]]; then
+      # Dynamic branch + commit completions
+      local git_dir
+      git_dir=$(git rev-parse --git-common-dir 2>/dev/null) || return
+      git_dir=$(cd "$git_dir" && pwd -P)
+      [[ "$(git -C "$git_dir" rev-parse --is-bare-repository 2>/dev/null)" != "true" ]] && return
 
-    # Local branches
-    while IFS= read -r line; do
-      [[ -n "$line" ]] && branches+=("$line")
-    done < <(git -C "$git_dir" branch --format='%(refname:short)' 2>/dev/null)
+      local -a branches remotes commits
 
-    # Remote branches
-    while IFS= read -r line; do
-      [[ -n "$line" && "$line" != "HEAD" ]] && remotes+=("$line")
-    done < <(git -C "$git_dir" branch -r --format='%(refname:lstrip=3)' 2>/dev/null)
+      # Local branches
+      while IFS= read -r line; do
+        [[ -n "$line" ]] && branches+=("$line")
+      done < <(git -C "$git_dir" branch --format='%(refname:short)' 2>/dev/null)
 
-    # Commit hashes (recent 20)
-    while IFS= read -r line; do
-      [[ -n "$line" ]] && commits+=("$line")
-    done < <(git -C "$git_dir" log --oneline -20 --format='%h' 2>/dev/null)
+      # Remote branches
+      while IFS= read -r line; do
+        [[ -n "$line" && "$line" != "HEAD" ]] && remotes+=("$line")
+      done < <(git -C "$git_dir" branch -r --format='%(refname:lstrip=3)' 2>/dev/null)
 
-    # Named groups via compadd — render separately regardless of group-name style.
-    # Headers built by _description so they inherit the descriptions format style,
-    # matching _describe's '-- flag --' header color.
-    local expl
-    if ((${#branches})); then
-      _description wt-local expl 'local branch'
-      compadd "$expl[@]" -V wt-local -a branches
+      # Commit hashes (recent 20)
+      while IFS= read -r line; do
+        [[ -n "$line" ]] && commits+=("$line")
+      done < <(git -C "$git_dir" log --oneline -20 --format='%h' 2>/dev/null)
+
+      # Named groups via compadd — render separately regardless of group-name style.
+      # Headers built by _description so they inherit the descriptions format style,
+      # matching _describe's '-- flag --' header color.
+      local expl
+      if ((${#branches})); then
+        _description wt-local expl 'local branch'
+        compadd "$expl[@]" -V wt-local -a branches
+      fi
+      if ((${#remotes})); then
+        _description wt-remote expl 'remote branch'
+        compadd "$expl[@]" -V wt-remote -a remotes
+      fi
+      if ((${#commits})); then
+        _description wt-commit expl 'commit'
+        compadd "$expl[@]" -V wt-commit -a commits
+      fi
     fi
-    if ((${#remotes})); then
-      _description wt-remote expl 'remote branch'
-      compadd "$expl[@]" -V wt-remote -a remotes
-    fi
-    if ((${#commits})); then
-      _description wt-commit expl 'commit'
-      compadd "$expl[@]" -V wt-commit -a commits
-    fi
 
-    # Also offer -b flag
-    local -a flags
-    flags=('-b:create new branch')
-    _describe 'flag' flags
+    # Offer -b flag only after positional given
+    if [[ $has_name -eq 1 ]]; then
+      local -a flags
+      flags=('-b:create new branch')
+      _describe 'flag' flags
+    fi
     ;;
 
   list)
@@ -111,7 +122,7 @@ _wt() {
 
     # Check if first positional arg already given
     local has_name=0
-    for ((i = 2; i < CURRENT; i++)); do
+    for ((i = subcmd_idx + 1; i < CURRENT; i++)); do
       [[ "${words[i]}" != -* ]] && has_name=1
     done
 
@@ -137,7 +148,9 @@ _wt() {
       fi
     fi
 
-    _describe 'flag' flags
+    if [[ $has_name -eq 1 ]]; then
+      _describe 'flag' flags
+    fi
     ;;
 
   doctor)
@@ -149,32 +162,37 @@ _wt() {
     flags=('--staged:pull only staged changes from source')
 
     local has_source=0
-    for ((i = 2; i < CURRENT; i++)); do
+    for ((i = subcmd_idx + 1; i < CURRENT; i++)); do
       [[ "${words[i]}" != -* ]] && has_source=1
     done
 
     if [[ $has_source -eq 0 ]]; then
+      _files -/
+
       local git_dir
-      git_dir=$(git rev-parse --git-common-dir 2>/dev/null) || return
-      git_dir=$(cd "$git_dir" && pwd -P)
-      [[ "$(git -C "$git_dir" rev-parse --is-bare-repository 2>/dev/null)" != "true" ]] && return
+      if git_dir=$(git rev-parse --git-common-dir 2>/dev/null); then
+        git_dir=$(cd "$git_dir" && pwd -P)
+        if [[ "$(git -C "$git_dir" rev-parse --is-bare-repository 2>/dev/null)" == "true" ]]; then
+          local root
+          root=$(dirname "$git_dir")
 
-      local root
-      root=$(dirname "$git_dir")
+          local -a worktrees
+          while IFS= read -r line; do
+            local path="${line#worktree }"
+            local rel="${path#"$root"/}"
+            [[ -n "$rel" && "$rel" != "$path" ]] && worktrees+=("$rel")
+          done < <(git -C "$git_dir" worktree list --porcelain 2>/dev/null | grep '^worktree ')
 
-      local -a worktrees
-      while IFS= read -r line; do
-        local path="${line#worktree }"
-        local rel="${path#"$root"/}"
-        [[ -n "$rel" && "$rel" != "$path" ]] && worktrees+=("$rel")
-      done < <(git -C "$git_dir" worktree list --porcelain 2>/dev/null | grep '^worktree ')
-
-      if ((${#worktrees})); then
-        _describe 'worktree' worktrees
+          if ((${#worktrees})); then
+            _describe 'worktree' worktrees
+          fi
+        fi
       fi
     fi
 
-    _describe 'flag' flags
+    if [[ $has_source -eq 1 ]]; then
+      _describe 'flag' flags
+    fi
     ;;
 
   help)

@@ -298,12 +298,17 @@ cmd_switch() {
   git_dir="$root/.git"
 
   local new_branch=0
-  if [[ "${1:-}" == "-b" ]]; then
-    new_branch=1
+  local -a positionals=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    -b) new_branch=1 ;;
+    -*) die "unknown option: $1" ;;
+    *) positionals+=("$1") ;;
+    esac
     shift
-  fi
+  done
 
-  local ref="${1:-}" arg2="${2:-}"
+  local ref="${positionals[0]:-}" arg2="${positionals[1]:-}"
 
   # ── -b mode: new branch + worktree ──
   if [[ $new_branch -eq 1 ]]; then

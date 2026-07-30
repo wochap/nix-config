@@ -33,6 +33,7 @@ in
         wts = "wt switch";
         wtc = "wt clone";
         wtl = "wt list";
+        wtp = "wt pull";
         gst = "git status";
         gc = "git clone";
         gco = "git checkout";
