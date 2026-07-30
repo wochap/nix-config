@@ -22,5 +22,5 @@ if [ -z "$color" ]; then
   exit 0
 fi
 
-echo $color | wl-copy -n
+echo $color | wl-copy --trim-newline
 notify $color

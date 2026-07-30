@@ -4,7 +4,7 @@ if [[ "$1" == "--select" ]]; then
   selected=$(buku -p -f 4 | fzf --preview "buku --nostdin -p {1}" --reverse --preview-window=wrap | cut -f 2)
 
   if [[ -n "$selected" ]]; then
-    echo -n "$selected" | wl-copy
+    echo -n "$selected" | wl-copy --trim-newline
   fi
 elif [[ "$1" == "--add" ]]; then
   # https://github.com/jarun/buku/issues/837

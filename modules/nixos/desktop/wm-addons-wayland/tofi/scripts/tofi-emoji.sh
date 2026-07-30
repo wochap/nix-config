@@ -9,5 +9,5 @@ selected="$(echo -e "$options" |
     --config "$HOME/.config/tofi/one-line")"
 
 if [[ -n "$selected" ]]; then
-  echo -n "${selected:0:1}" | wl-copy
+  echo -n "${selected:0:1}" | wl-copy --trim-newline
 fi

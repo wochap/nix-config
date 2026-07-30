@@ -39,7 +39,7 @@ main() {
     kill_hyprpicker
     exit
   fi
-  grim -g "$area" -t ppm - | tesseract -l "eng+spa" - - | wl-copy
+  grim -g "$area" -t ppm - | tesseract -l "eng+spa" - - | wl-copy --trim-newline
   kill_hyprpicker
   result=$(wl-paste)
   if [[ -n "$result" ]]; then

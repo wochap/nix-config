@@ -27,5 +27,5 @@ if [[ -n "$selected" ]]; then
   mv "$temp_file" "$history_file_path"
 
   # copy result to clipboard
-  echo -n "$result" | wl-copy
+  echo -n "$result" | wl-copy --trim-newline
 fi

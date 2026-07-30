@@ -42,7 +42,7 @@ main() {
   grim_dest=$(mktemp /tmp/ocr-math-XXXXXX.png)
   grim -g "$area" "$grim_dest"
   kill_hyprpicker
-  pix2tex "$grim_dest" | awk -F': ' '{print $2}' | wl-copy
+  pix2tex "$grim_dest" | awk -F': ' '{print $2}' | wl-copy --trim-newline
   # TODO: https://github.com/qwinsi/tex2typst
   rm "$grim_dest"
   result=$(wl-paste)
