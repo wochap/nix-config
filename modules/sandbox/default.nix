@@ -11,6 +11,15 @@ let
   inherit (config._custom.globals) userName;
   sandboxName = "sandbox";
   enter-sandbox = pkgs.writeScriptBin "enter-sandbox" (builtins.readFile ./scripts/enter-sandbox.sh);
+  wayland-firewall = inputs.wayland-firewall.packages.${pkgs.system}.default;
+  # Proxy socket the sandbox binds to instead of the raw host Wayland socket
+  waylandFirewallSocket = "/run/user/${toString cfg.hostUserUid}/wl-firewall/wayland-1";
+  # Policy (mode + allowlist) lives in wayland-firewall.toml; only the uid-dependent
+  # socket paths are injected here.
+  waylandFirewallConfig = pkgs.replaceVars ./wayland-firewall.toml {
+    listen = waylandFirewallSocket;
+    upstream = "/run/user/${toString cfg.hostUserUid}/wayland-1";
+  };
 in
 {
   options._custom.sandbox = {
@@ -81,6 +90,12 @@ in
       });
     '';
 
+    # Allow sandbox to launch kiosk wayland
+    # Grant DRM access at the systemd service level
+    systemd.services."container@${sandboxName}".serviceConfig.DeviceAllow = [
+      "char-drm rw"
+    ];
+
     # Create shared directory
     systemd.tmpfiles.rules = [
       "d /home/${userName}/Sandboxes 0755 ${userName} users -"
@@ -106,6 +121,18 @@ in
       };
     };
 
+    # Proxy Wayland: sandbox connects to the filtered socket instead of the host compositor socket
+    systemd.user.services.wayland-firewall = {
+      description = "Wayland protocol-filtering proxy for sandbox";
+      wantedBy = [ "default.target" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${wayland-firewall}/bin/wayland-firewall --config ${waylandFirewallConfig}";
+        Restart = "on-failure";
+        RestartSec = 2;
+      };
+    };
+
     containers.${sandboxName} = {
       autoStart = false;
       # NOTE: More security but breaks opening GUI on host from sandbox
@@ -124,8 +151,10 @@ in
           mountPoint = "/dev/dri";
           isReadOnly = false;
         };
+        # Filtered Wayland socket served by the host's wayland-firewall proxy,
+        # NOT the raw host compositor socket
         "wayland" = {
-          hostPath = "/run/user/${toString cfg.hostUserUid}/wayland-1";
+          hostPath = waylandFirewallSocket;
           mountPoint = "/mnt/host-run/wayland-1";
           isReadOnly = false;
         };

@@ -77,6 +77,10 @@
     antigravity-nix.url = "github:jacopone/antigravity-nix";
     antigravity-nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # local
+    wayland-firewall.url = "path:/home/gean/Sandboxes/sandbox/wayland-firewall";
+    wayland-firewall.inputs.nixpkgs.follows = "nixpkgs";
+
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
     easy-effects-presets.flake = false;

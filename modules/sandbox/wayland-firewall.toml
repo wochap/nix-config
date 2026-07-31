@@ -1,0 +1,84 @@
+# wayland-firewall policy for the sandbox.
+# @listen@ and @upstream@ are injected by pkgs.replaceVars from modules/sandbox/default.nix.
+#
+# Allowlist mode: only the interfaces listed below are forwarded to the host
+# compositor; everything else is blocked (fail-closed).
+#
+# The list mirrors wayland-firewall's built-in default allowlist, made explicit
+# here so the policy is visible and editable in one place.
+
+[firewall]
+listen = "@listen@"
+upstream = "@upstream@"
+mode = "allowlist"
+log_blocked = true
+
+[allowlist]
+interfaces = [
+  # Core
+  "wl_compositor",
+  "wl_subcompositor",
+  "wl_shm",
+  "wl_seat",
+  "wl_output",
+  # XDG shell
+  "xdg_wm_base",
+  "xdg_wm_dialog_v1",
+  "xdg_activation_v1",
+  "xdg_toplevel_tag_manager_v1",
+  "xdg_system_bell_v1",
+  # Viewport / scaling
+  "wp_viewporter",
+  "wp_fractional_scale_manager_v1",
+  # Decorations
+  "zxdg_decoration_manager_v1",
+  "org_kde_kwin_server_decoration_manager",
+  # Cursor
+  "wp_cursor_shape_manager_v1",
+  # Presentation / timing
+  "wp_presentation",
+  "wp_commit_timing_manager_v1",
+  # Buffers / GPU
+  "wp_single_pixel_buffer_manager_v1",
+  "wl_drm",
+  "zwp_linux_dmabuf_v1",
+  "wp_linux_drm_syncobj_manager_v1",
+  "wp_fifo_manager_v1",
+  # Pointer
+  "zwp_relative_pointer_manager_v1",
+  "zwp_pointer_constraints_v1",
+  "zwp_pointer_gestures_v1",
+  "wp_pointer_warp_v1",
+  # Idle
+  "zwp_idle_inhibit_manager_v1",
+  "ext_idle_notifier_v1",
+  # Tearing control (games)
+  "wp_tearing_control_manager_v1",
+  # Text input (IME)
+  "zwp_text_input_manager_v1",
+  "zwp_text_input_manager_v3",
+  # Tablet / touch
+  "zwp_tablet_manager_v2",
+  # Content type / alpha
+  "wp_content_type_manager_v1",
+  "wp_alpha_modifier_v1",
+  # Color management
+  "wp_color_manager_v1",
+  # Output info (read-only)
+  "zxdg_output_manager_v1",
+  # Workspace
+  "ext_workspace_manager_v1",
+  # XWayland
+  "xwayland_shell_v1",
+  # Security context
+  "wp_security_context_manager_v1",
+  # Hyprland-specific (non-sensitive)
+  "hyprland_lock_notifier_v1",
+  "hyprland_ctm_control_manager_v1",
+  "hyprland_surface_manager_v1",
+  # Background effects
+  "ext_background_effect_manager_v1",
+  # XDG export/import
+  "zxdg_exporter_v2",
+  "zxdg_importer_v2",
+]
