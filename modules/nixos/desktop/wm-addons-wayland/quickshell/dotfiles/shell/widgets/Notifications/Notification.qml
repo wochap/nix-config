@@ -81,9 +81,31 @@ Item {
 
           spacing: ConfigNotifications.notificationPadding
 
-          SystemIcon {
+          Image {
+            id: notificationImage
+
+            visible: root.notification.displayAppIcon === "" && root.notification.displayImage !== ""
             Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
-            icon: root.notification.appIcon
+            Layout.preferredWidth: 36
+            Layout.preferredHeight: 36
+            source: root.notification.displayImage
+            fillMode: Image.PreserveAspectFit
+            smooth: true
+            asynchronous: true
+            layer.enabled: true
+            layer.effect: OpacityMask {
+              maskSource: Rectangle {
+                width: notificationImage.width
+                height: notificationImage.height
+                radius: 2
+              }
+            }
+          }
+
+          SystemIcon {
+            visible: root.notification.displayAppIcon !== "" || root.notification.displayImage === ""
+            Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
+            icon: root.notification.displayAppIcon || root.notification.appName
             size: 36
             iconFallback: "org.xfce.notification"
           }
