@@ -16,7 +16,7 @@ let
   waylandFirewallSocket = "/run/user/${toString cfg.hostUserUid}/wl-firewall/wayland-1";
   # Policy (mode + allowlist) lives in wayland-firewall.toml; only the uid-dependent
   # socket paths are injected here.
-  waylandFirewallConfig = pkgs.replaceVars ./wayland-firewall.toml {
+  waylandFirewallConfig = pkgs.replaceVars ./dotfiles/wayland-firewall.toml {
     listen = waylandFirewallSocket;
     upstream = "/run/user/${toString cfg.hostUserUid}/wayland-1";
   };
