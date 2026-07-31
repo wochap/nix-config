@@ -13,9 +13,8 @@ let
     themeColorsDark
     preferDark
     configDirectory
-    systemdTarget
     ;
-  inherit (lib._custom) relativeSymlink unwrapHex;
+  inherit (lib._custom) relativeSymlink;
 
   kitty-final = cfg.package;
   shellIntegrationInit = {
@@ -45,6 +44,14 @@ let
     inactive_tab_foreground ${themeColors.surface1}
     active_tab_background ${themeColors.lavender}
     active_tab_foreground ${themeColors.base}
+
+    # reserved palette slots referenced by the tab title templates as
+    # fmt.fg/bg.colorNN. Using palette indices (not hardcoded hexes) keeps the
+    # tab bar in sync with the active dark/light theme.
+    #   color16 = peach    (bell styling)
+    #   color17 = lavender (active tab pill)
+    color16 ${themeColors.peach}
+    color17 ${themeColors.lavender}
   '';
   catppuccin-kitty-light-theme = mkKittyTheme themeColorsLight;
   catppuccin-kitty-dark-theme = mkKittyTheme themeColorsDark;
@@ -110,11 +117,11 @@ in
           shell ${pkgs.zsh}/bin/zsh
           include ${relativeSymlink configDirectory ./dotfiles/kitty.conf}
 
-          # TODO: move into *-theme.auto.conf
-          # currently we can't because it doesn't work there
-          # color0 is surface1
-          tab_title_template "{fmt.bg.default}{fmt.fg.color0}  {sup.index} 󰓩 {tab.active_wd.rsplit('/', 1)[-1] or title[:40]}{bell_symbol}{activity_symbol}  {fmt.fg.default}"
-          active_tab_title_template "{fmt.bg.default}{fmt.fg._${unwrapHex themeColorsDark.lavender}}{fmt.bg._${unwrapHex themeColorsDark.lavender}}{fmt.fg.color0} {sup.index} 󰓩 {tab.active_wd.rsplit('/', 1)[-1] or title[:40]}{bell_symbol}{activity_symbol} {fmt.bg.default}{fmt.fg._${unwrapHex themeColorsDark.lavender}}{fmt.bg.default}{fmt.fg.default}"
+          # color0 = surface1
+          # color16 = peach
+          # color17 = lavender
+          tab_title_template "{fmt.bg.default}{fmt.fg.color16 if bell_symbol else fmt.fg.color0}  {sup.index} 󰓩 {tab.active_wd.rsplit('/', 1)[-1] or title[:40]}{activity_symbol}{bell_symbol}  {fmt.fg.default}"
+          active_tab_title_template "{fmt.bg.default}{fmt.fg.color16 if bell_symbol else fmt.fg.color17}{fmt.bg.color16 if bell_symbol else fmt.bg.color17}{fmt.fg.tab} {sup.index} 󰓩 {tab.active_wd.rsplit('/', 1)[-1] or title[:40]}{activity_symbol}{bell_symbol} {fmt.bg.default}{fmt.fg.color16 if bell_symbol else fmt.fg.color17}{fmt.bg.default}{fmt.fg.default}"
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;
