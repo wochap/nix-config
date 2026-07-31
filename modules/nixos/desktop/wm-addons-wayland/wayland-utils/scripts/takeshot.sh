@@ -25,7 +25,7 @@ notify_user() {
   trap 'rm -f "$thumbnail"' exit
   magick "$grim_dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
 
-  action=$(notify-send --app-name="Takeshot" --replace-id=699 --app-icon="$thumbnail" --icon="$thumbnail" "Screen shooter" "Screenshot Saved" --action="open=Open" --action="edit=Edit" --action="png=Copy PNG")
+  action=$(notify-send --app-name="Takeshot" --replace-id=699 --app-icon="$thumbnail" --icon="$thumbnail" --hint="string:image-path:$thumbnail" "Screen shooter" "Screenshot Saved" --action="open=Open" --action="edit=Edit" --action="png=Copy PNG")
 
   case $action in
   "edit")

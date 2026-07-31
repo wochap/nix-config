@@ -52,7 +52,7 @@ notify_user() {
   ffmpegthumbnailer -i "$dest" -o "$thumbnail" -s "$thumbnail_size"
   magick "$thumbnail" -resize "$last_thumbnail_size>" -gravity center -background transparent -extent "$last_thumbnail_size" "$thumbnail"
 
-  action=$(notify-send --app-name="Recorder" --replace-id=691 --app-icon="$thumbnail" --icon="$thumbnail" "Video recording" "Recording saved" --action="open=Open" --action="open_in_fm=Open in file manager")
+  action=$(notify-send --app-name="Recorder" --replace-id=691 --app-icon="$thumbnail" --icon="$thumbnail" --hint="string:image-path:$thumbnail" "Video recording" "Recording saved" --action="open=Open" --action="open_in_fm=Open in file manager")
 
   # TODO: Open in video editor?
   case $action in
