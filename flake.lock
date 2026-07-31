@@ -3569,14 +3569,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1785448169,
-        "narHash": "sha256-yUl6XbRnma4Y5KdH/7RaNMy8+0vmDDcuZrVIiSg6oWE=",
-        "path": "/home/gean/Sandboxes/sandbox/wayland-firewall",
-        "type": "path"
+        "lastModified": 1785452137,
+        "narHash": "sha256-sjZXJPWBMEWM8saTBxGdklUTxGpmLlmhisf+rSBQpSM=",
+        "owner": "wochap",
+        "repo": "wayland-firewall",
+        "rev": "a466a41d24310a8e4b9844897d2e4f0dbdcce1a9",
+        "type": "github"
       },
       "original": {
-        "path": "/home/gean/Sandboxes/sandbox/wayland-firewall",
-        "type": "path"
+        "owner": "wochap",
+        "repo": "wayland-firewall",
+        "type": "github"
       }
     },
     "wluma": {

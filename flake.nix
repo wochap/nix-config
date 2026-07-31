@@ -76,9 +76,7 @@
     rod.inputs.nixpkgs.follows = "nixpkgs";
     antigravity-nix.url = "github:jacopone/antigravity-nix";
     antigravity-nix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # local
-    wayland-firewall.url = "path:/home/gean/Sandboxes/sandbox/wayland-firewall";
+    wayland-firewall.url = "github:wochap/wayland-firewall";
     wayland-firewall.inputs.nixpkgs.follows = "nixpkgs";
 
     # others

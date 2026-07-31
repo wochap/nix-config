@@ -83,6 +83,7 @@ interfaces = [
   "zxdg_importer_v2",
   # Clipboard / selection
   "wl_data_device_manager",
+  # Without these protocols, the windows flicker every time you copy
   "zwp_primary_selection_device_manager_v1",
   "zwlr_data_control_manager_v1",
   "ext_data_control_manager_v1",
