@@ -8,7 +8,7 @@ local M = {}
 local steps = { 0, 10 }
 local index = 1
 
-local function emit()
+function M.emit()
   hl.dispatch(hl.dsp.event("ws_offset>>" .. steps[index]))
 end
 
@@ -25,7 +25,7 @@ end
 -- advance to the next page, wrapping around; returns the new offset
 function M.cycle()
   index = index % #steps + 1
-  emit()
+  M.emit()
   return steps[index]
 end
 

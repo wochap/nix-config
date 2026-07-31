@@ -32,6 +32,10 @@ RowLayout {
     return result;
   }
 
+  Component.onCompleted: {
+    Quickshell.execDetached(["bash", "-c", `hyprctl eval 'require("hyprland.lib.ws_offset").emit()'`]);
+  }
+
   spacing: ConfigBar.modulesSpacing
 
   Repeater {

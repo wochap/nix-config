@@ -73,7 +73,7 @@ Singleton {
         if (event.data) {
           const [key, value] = event.data.split(">>");
           if (key === "ws_offset") {
-            root.wsOffset = parseInt(value)
+            root.wsOffset = parseInt(value);
           }
         }
       }
