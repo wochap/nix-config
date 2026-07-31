@@ -76,6 +76,11 @@ in
       systemd.setPath.enable = false;
     };
 
+    xdg.portal.config = {
+      common."org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+      Hyprland."org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+    };
+
     # NOTE: not sure why xdg-desktop-portal picks
     # "hyprland" and not "Hyprland"
     # maybe because of uwsm?
