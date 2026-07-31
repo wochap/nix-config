@@ -1,7 +1,6 @@
-import Quickshell.Io
 import QtQuick
 import qs.config
-import qs.widgets.Bar.config
+import qs.services
 import qs.widgets.Bar.modules
 
 Loader {
@@ -9,26 +8,34 @@ Loader {
 
   property string fgColor: Theme.options.lavender
   property string namespace: ""
-  property int count: 0
+  readonly property var clients: SHyprland.clients.filter(client => client.workspace.name === "special:" + root.namespace)
+  readonly property int count: root.clients.length
 
   active: root.count > 0
   visible: root.count > 0
   sourceComponent: Component {
-    Module {
-      iconSize: Styles.font.pixelSize.normal
-      fgColor: root.fgColor
-      icon: " "
-      label: root.count
-    }
-  }
+    MouseArea {
+      id: clickArea
 
-  Process {
-    command: ["shell-hypr-ws-special-count", root.namespace]
-    running: true
-    stdout: SplitParser {
-      onRead: data => {
-        const count = JSON.parse(data);
-        root.count = count;
+      implicitWidth: module.implicitWidth
+      implicitHeight: module.implicitHeight
+      onClicked: popup.visible = !popup.visible
+
+      Module {
+        id: module
+
+        anchors.fill: parent
+        iconSize: Styles.font.pixelSize.normal
+        fgColor: root.fgColor
+        icon: " "
+        label: root.count
+      }
+
+      HyprWsSpecialCountPopup {
+        id: popup
+
+        anchorItem: module
+        clients: root.clients
       }
     }
   }

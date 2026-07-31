@@ -27,9 +27,6 @@ let
   shell-backlight = pkgs.writeScriptBin "shell-backlight" (
     builtins.readFile ./scripts/shell-backlight.sh
   );
-  shell-hypr-ws-special-count = pkgs.writeScriptBin "shell-hypr-ws-special-count" (
-    builtins.readFile ./scripts/shell-hypr-ws-special-count.sh
-  );
   shell-network = pkgs.writeScriptBin "shell-network" (builtins.readFile ./scripts/shell-network.sh);
   shell-bluetooth = pkgs.writeScriptBin "shell-bluetooth" (
     builtins.readFile ./scripts/shell-bluetooth.sh
@@ -90,7 +87,6 @@ in
     _custom.hm = {
       home.packages = with pkgs; [
         shell-capslock
-        shell-hypr-ws-special-count
         shell-network
         shell-bluetooth
         shell-idle-inhibit
