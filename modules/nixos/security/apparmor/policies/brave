@@ -1,0 +1,27 @@
+# AppArmor profile for Brave (Chromium), adapted from ubuntu 20.04's
+# usr.bin.chromium-browser profile, reworked for NixOS store paths.
+# Tokens are substituted at eval time:
+#   @brave_dir@   ${pkg}/${dir}, e.g. <store-path>/opt/brave.com/brave
+#   @brave_exec@  main ELF name; bin/brave is a bash wrapper that execs it,
+#                 so the profile attaches to the ELF path
+# No unix/network/ptrace/signal rules on purpose: absence keeps those classes
+# unmediated, file/capability confinement is the main win.
+#include <tunables/global>
+
+@{app_dir} = @brave_dir@
+@{app_exec} = @brave_exec@
+
+profile brave @{app_dir}/@{app_exec} flags=(attach_disconnected) {
+  #include <abstractions/base>
+  #include <abstractions/fonts>
+  #include <abstractions/nix-gui>
+  #include <abstractions/nix-chromium>
+
+  # Brave-specific writable data
+  owner @{HOME}/.cache/BraveSoftware/ rw,
+  owner @{HOME}/.cache/BraveSoftware/** rwk,
+  owner @{HOME}/.cache/BraveSoftware/**/Cache/** mrw,
+  owner @{HOME}/.config/BraveSoftware/ rw,
+  owner @{HOME}/.config/BraveSoftware/** rwk,
+  owner @{HOME}/.config/BraveSoftware/**/Cache/** mrw,
+}

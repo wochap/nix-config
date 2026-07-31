@@ -1,0 +1,26 @@
+# AppArmor profile for Discord (Electron), adapted from ubuntu 20.04's
+# usr.bin.chromium-browser profile, reworked for NixOS store paths.
+# Tokens are substituted at eval time:
+#   @discord_dir@   ${pkg}/${dir}, e.g. <store-path>/opt/Discord
+#   @discord_exec@  .<binary>-wrapped, the real ELF behind the nixpkgs wrapper
+# No unix/network/ptrace/signal rules on purpose: absence keeps those classes
+# unmediated, file/capability confinement is the main win.
+#include <tunables/global>
+
+@{app_dir} = @discord_dir@
+@{app_exec} = @discord_exec@
+
+profile discord @{app_dir}/@{app_exec} flags=(attach_disconnected) {
+  #include <abstractions/base>
+  #include <abstractions/fonts>
+  #include <abstractions/nix-gui>
+  #include <abstractions/nix-chromium>
+
+  # Discord-specific writable data
+  owner @{HOME}/.cache/discord/ rw,
+  owner @{HOME}/.cache/discord/** rwk,
+  owner @{HOME}/.cache/discord/**/Cache/** mrw,
+  owner @{HOME}/.config/discord/ rw,
+  owner @{HOME}/.config/discord/** rwk,
+  owner @{HOME}/.config/discord/**/Cache/** mrw,
+}

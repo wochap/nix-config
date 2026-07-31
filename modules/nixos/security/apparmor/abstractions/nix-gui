@@ -1,0 +1,62 @@
+# Shared substrate for NixOS GUI apps (browsers, electron, media players).
+# The nix store is immutable and root-owned, so broad read + executable-mmap
+# grants are safe: a confined app cannot poison store content, only load it.
+
+  # Store: libraries, GL/Vulkan drivers, fonts, icons
+  /nix/ r,
+  /nix/store/ r,
+  /nix/store/** r,
+  /nix/store/** m,
+
+  # GPU
+  /dev/dri/ r,
+  /dev/dri/** rw,
+  /dev/nvidia* rw,
+  /run/opengl-driver/ r,
+  /run/opengl-driver/** mr,
+  /run/opengl-driver-32/ r,
+  /run/opengl-driver-32/** mr,
+  /sys/bus/** r,
+  /sys/class/** r,
+  /sys/dev/** r,
+  /sys/devices/** r,
+
+  # Audio and shared memory
+  /dev/snd/ r,
+  /dev/snd/* rw,
+  /dev/shm/ rw,
+  owner /dev/shm/** mrw,
+  owner /{dev,run}/shm/pulse-shm* mrwk,
+
+  # User session sockets
+  owner /run/user/[0-9]*/ r,
+  owner /run/user/[0-9]*/bus rw,
+  owner /run/user/[0-9]*/dconf/ rw,
+  owner /run/user/[0-9]*/dconf/user rw,
+  owner /run/user/[0-9]*/pipewire-[0-9]* rw,
+  owner /run/user/[0-9]*/pulse/ r,
+  owner /run/user/[0-9]*/pulse/** rw,
+  owner /run/user/[0-9]*/wayland-[0-9]* rw,
+
+  # X11
+  /tmp/.X11-unix/ r,
+  /tmp/.X11-unix/* rw,
+  /tmp/.X[0-9]*-lock r,
+
+  # Shared system configuration
+  /etc/fonts/** r,
+  /etc/gtk-*/** r,
+  /etc/ssl/** r,
+  /etc/xdg/** r,
+  /var/cache/fontconfig/** r,
+
+  # System packages and xdg helpers
+  /run/current-system/ r,
+  /run/current-system/sw/ r,
+  /run/current-system/sw/** r,
+  /run/current-system/sw/bin/gio Ux,
+  /run/current-system/sw/bin/xdg-* Ux,
+
+  # D-Bus
+  dbus (send, receive, bind) bus=session,
+  dbus (send, receive) bus=system,

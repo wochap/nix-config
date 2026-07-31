@@ -1,0 +1,136 @@
+# Common confinement for chromium-based apps on NixOS (electron, brave).
+# The including profile must define these variables before the include:
+#   @{app_dir}   install directory holding the app binaries
+#   @{app_exec}  filename of the main ELF inside @{app_dir}
+
+  # chromium sandbox uses unprivileged user namespaces (apparmor 4)
+  userns,
+
+  capability sys_admin,
+  capability sys_chroot,
+  capability sys_ptrace,
+
+  # App's own tree
+  @{app_dir}/ r,
+  @{app_dir}/** mr,
+  @{app_dir}/@{app_exec} ix,
+  @{app_dir}/chrome_crashpad_handler ix,
+  @{app_dir}/chrome-sandbox cx -> chromium_sandbox,
+
+  # System configuration
+  /etc/gai.conf r,
+  /etc/group r,
+  /etc/hosts r,
+  /etc/ld.so.cache r,
+  /etc/lsb-release r,
+  /etc/machine-id r,
+  /etc/mailcap r,
+  /etc/mime.types r,
+  /etc/mtab r,
+  /etc/nsswitch.conf r,
+  /etc/os-release r,
+  /etc/passwd r,
+  /etc/resolv.conf r,
+  /run/systemd/resolve/** r,
+
+  # /proc
+  @{PROC}/ r,
+  @{PROC}/cmdline r,
+  @{PROC}/cpuinfo r,
+  @{PROC}/filesystems r,
+  @{PROC}/meminfo r,
+  @{PROC}/stat r,
+  @{PROC}/uptime r,
+  @{PROC}/vmstat r,
+  @{PROC}/sys/kernel/shmmax r,
+  @{PROC}/sys/kernel/yama/ptrace_scope r,
+  @{PROC}/sys/net/ipv4/tcp_fastopen r,
+  @{PROC}/@{pid}/ r,
+  @{PROC}/@{pid}/fd/ r,
+  @{PROC}/@{pid}/net/if_inet6 r,
+  @{PROC}/@{pid}/net/ipv6_route r,
+  @{PROC}/@{pid}/smaps r,
+  @{PROC}/@{pid}/stat r,
+  @{PROC}/@{pid}/statm r,
+  @{PROC}/@{pid}/status r,
+  @{PROC}/@{pid}/task/ r,
+  @{PROC}/@{pid}/task/@{tid}/stat r,
+  @{PROC}/@{pid}/task/@{tid}/status r,
+  owner @{PROC}/@{pid}/auxv r,
+  owner @{PROC}/@{pid}/cmdline r,
+  owner @{PROC}/@{pid}/io r,
+  owner @{PROC}/@{pid}/setgroups w,
+  owner @{PROC}/@{pid}/{uid,gid}_map w,
+  deny @{PROC}/@{pid}/oom_{,score_}adj w,
+
+  # /dev basics
+  /dev/ r,
+  /dev/full rw,
+  /dev/null rw,
+  /dev/random r,
+  /dev/tty rw,
+  /dev/urandom r,
+  /dev/zero rw,
+
+  # /tmp scratch (chromium singleton sockets live here)
+  /tmp/ r,
+  owner /tmp/** m,
+  owner /tmp/** rw,
+
+  # File pickers: traverse anywhere, read own files
+  / r,
+  /**/ r,
+  owner @{HOME}/ r,
+  owner @{HOME}/** r,
+
+  # Shared writable user data
+  owner @{HOME}/.cache/ rw,
+  owner @{HOME}/.cache/mesa_shader_cache/ rw,
+  owner @{HOME}/.cache/mesa_shader_cache/** rw,
+  owner @{HOME}/.config/ rw,
+  owner @{HOME}/.pki/ rw,
+  owner @{HOME}/.pki/nssdb/ rw,
+  owner @{HOME}/.pki/nssdb/** rwk,
+  owner @{HOME}/Downloads/ r,
+  owner @{HOME}/Downloads/** rw,
+
+  /run/current-system/sw/bin/ps Uxr,
+
+  # Chromium namespace sandbox helper
+  profile chromium_sandbox {
+    userns,
+
+    mount,
+    remount,
+    umount,
+
+    capability sys_admin,
+    capability sys_chroot,
+    capability sys_ptrace,
+    capability chown,
+    capability fsetid,
+    capability setgid,
+    capability setuid,
+    capability dac_override,
+
+    ptrace (read, readby, trace, tracedby),
+
+    /nix/store/** mr,
+    /etc/ld.so.cache r,
+
+    @{PROC}/ r,
+    @{PROC}/@{pid}/ r,
+    @{PROC}/@{pid}/fd/ r,
+    @{PROC}/@{pid}/status r,
+    @{PROC}/@{pid}/task/@{tid}/stat r,
+    owner @{PROC}/@{pid}/setgroups w,
+    owner @{PROC}/@{pid}/{uid,gid}_map w,
+    deny @{PROC}/@{pid}/oom_adj w,
+    deny @{PROC}/@{pid}/oom_score_adj w,
+
+    @{app_dir}/@{app_exec} Px,
+    @{app_dir}/chrome-sandbox mr,
+
+    /dev/null rw,
+    owner /tmp/** rw,
+  }

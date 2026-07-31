@@ -10,13 +10,26 @@ let
   cfg = config._custom.programs.discord;
 in
 {
-  options._custom.programs.discord.enable = lib.mkEnableOption { };
+  options._custom.programs.discord = {
+    enable = lib.mkEnableOption { };
+
+    pkg = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.discord;
+      description = "Discord package to install and confine. For variants like discord-canary, also override _custom.security.apparmor.policies.discord.dir and binary.";
+    };
+  };
 
   config = lib.mkIf cfg.enable {
+    _custom.security.apparmor.policies.discord = {
+      enable = lib.mkDefault true;
+      pkg = lib.mkDefault cfg.pkg;
+    };
+
     _custom.hm = {
       home.packages = with pkgs; [
         betterdiscordctl
-        discord
+        cfg.pkg
         legcord # discord client
         equicord # discord client mod
       ];

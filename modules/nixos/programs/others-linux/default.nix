@@ -9,6 +9,7 @@
 
 let
   cfg = config._custom.programs.others-linux;
+  brave-final = pkgs.brave;
 in
 {
   options._custom.programs.others-linux.enable = lib.mkEnableOption { };
@@ -29,8 +30,13 @@ in
       })
     ];
 
+    _custom.security.apparmor.policies.discord = {
+      enable = lib.mkDefault true;
+      pkg = brave-final;
+    };
+
     environment.systemPackages = with pkgs; [
-      brave
+      brave-final
       prevstable-chrome.google-chrome
       prevstable-msedge.microsoft-edge
       inputs.zen-browser.packages."${stdenv.hostPlatform.system}".beta
