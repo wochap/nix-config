@@ -138,16 +138,16 @@ Reboot into NixOS, login with the user you created
 
   ```sh
   # tools
-  npm i -g webtorrent-cli gulp migrate-mongo
+  npm i -g --ignore-scripts webtorrent-cli gulp migrate-mongo
 
   # agents
-  npm i -g claude-code @openai/codex opencode-ai
+  npm i -g --ignore-scripts claude-code @openai/codex opencode-ai
 
   # agents tools
-  npm i -g @fission-ai/openspec@latest
+  npm i -g --ignore-scripts @fission-ai/openspec@latest
 
   # required by personal nvim config
-  npm i -g ts-node @styled/typescript-styled-plugin
+  npm i -g --ignore-scripts ts-node @styled/typescript-styled-plugin
   ```
 
 1. Setup Syncthing (http://localhost:8384)
