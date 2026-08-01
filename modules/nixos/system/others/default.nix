@@ -29,10 +29,14 @@ in
       programs.zsh.vteIntegration = lib.mkDefault true;
 
       systemd.settings.Manager.DefaultTimeoutStopSec = "30s";
+      systemd.coredump.settings.Coredump = {
+        MaxUse = "500M";
+        MaxRetentionSec = "7d";
+      };
 
       services.journald.extraConfig = ''
         SystemMaxUse=1G
-        MaxRetentionSec=7days
+        MaxRetentionSec=7d
       '';
 
       # Enables to run hardware-accelerated apps
