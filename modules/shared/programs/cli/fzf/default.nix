@@ -71,6 +71,7 @@ in
         enableBashIntegration = false;
         enableZshIntegration = config._custom.programs.zsh.enable;
         # CTRL-T - Paste the selected file path(s) into the command line
+        fileWidgetCommand = "fd --hidden --exclude .git";
         fileWidgetOptions = [
           "--preview '(bat --style=numbers --color=always {} || lsd -l -A --ignore-glob=.git --tree --depth=2 --color=always --blocks=size,name {}) 2> /dev/null | head -200'"
           "--preview-window 'right:border-left:50%:<40(right:border-left:50%:hidden)'"
@@ -81,6 +82,7 @@ in
           "--preview-window 'down:border-top:4:<4(down:border-top:4:hidden)'"
         ];
         # ALT-C - cd into the selected directory
+        changeDirWidgetCommand = "fd --type d --hidden --exclude .git";
         changeDirWidgetOptions = [
           "--preview 'lsd -l -A --ignore-glob=.git --tree --depth=2 --color=always --blocks=size,name {} | head -200'"
           "--preview-window 'right:border-left:50%:<40(right:border-left:50%:hidden)'"
