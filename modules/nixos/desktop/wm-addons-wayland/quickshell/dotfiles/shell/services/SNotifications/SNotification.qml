@@ -15,15 +15,17 @@ QtObject {
       })) ?? []
   property string appIcon: notification?.appIcon ?? ""
   property string originalAppIcon: notification?.appIcon ?? ""
-  // Render source for the icon: live value during the session, cached path after restore.
-  readonly property string displayAppIcon: root.originalAppIcon !== "" ? root.originalAppIcon : root.appIcon
+  // What the icon slot renders. appIcon starts as the live value and is swapped
+  // for the cached path once SImageCache signals it is on disk, so this tracks it.
+  readonly property string displayAppIcon: root.appIcon
   property string appName: notification?.appName ?? ""
   property string body: sanitizeText(notification?.body ?? "")
   property string image: notification?.image ?? ""
   property string originalImage: notification?.image ?? ""
-  // What to render now: the live source while the session owns it, falling back
-  // to the cached file once restored from disk (originalImage is empty then).
-  readonly property string displayImage: root.originalImage !== "" ? root.originalImage : root.image
+  // What the image slot renders. image starts as the live source and is swapped
+  // for the cached path once SImageCache signals it is on disk (the original is
+  // often an ephemeral temp file or in-memory handle), so this tracks it.
+  readonly property string displayImage: root.image
   property string summary: sanitizeText(notification?.summary ?? "")
   property double time
   property bool isTransient: notification?.transient ?? false
@@ -38,22 +40,17 @@ QtObject {
     }
   }
 
-  // Materialize the image to a stable cached file so it survives reload/restore.
+  // Kick off caching. SImageCache emits cached() once each file is on disk and
+  // imageCacheConnection swaps image/appIcon to the stable path then, so the UI
+  // never points at a half-written or already-deleted source.
   Component.onCompleted: {
     if (root.notification) {
-      if (root.originalImage !== "") {
-        const cachedUrl = SImageCache.cache(root.originalImage);
-        if (cachedUrl !== "" && cachedUrl !== root.originalImage)
-          root.image = cachedUrl;
-      }
+      if (root.originalImage !== "")
+        SImageCache.cache(root.originalImage);
       // appIcon is either a themed icon name (persistent) or an image file path
-      // (ephemeral) - only cache the latter. iconPath()/QIcon want a plain path,
-      // not a file:// url, so strip it.
-      if (SImageCache.isImagePath(root.originalAppIcon)) {
-        const cachedIcon = SImageCache.cache(root.originalAppIcon);
-        if (cachedIcon !== "" && cachedIcon !== root.originalAppIcon)
-          root.appIcon = Paths.strip(cachedIcon);
-      }
+      // (ephemeral) - only cache the latter.
+      if (SImageCache.isImagePath(root.originalAppIcon))
+        SImageCache.cache(root.originalAppIcon);
     }
   }
 

@@ -2,6 +2,7 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import Quickshell
+import Quickshell.Io
 import QtQuick
 import qs.config
 
@@ -22,6 +23,10 @@ Singleton {
   property var grabQueue: []
   property bool grabBusy: false
   property string currentGrabSource: ""
+  // file copies awaiting completion (serialized through copyProcess)
+  property var copyQueue: []
+  property bool copyBusy: false
+  property var currentCopyJob: null
 
   // Emitted once `source` has been materialized to a cached file.
   signal cached(source: string, url: string)
@@ -103,6 +108,9 @@ Singleton {
     return root.isFilePath(source) && root.isImageExtension(root.extensionOf(Paths.strip(source)));
   }
 
+  // Queue a copy and return the eventual cached url. `cached()` fires only once
+  // the file is actually on disk, so consumers can switch to it race-free (the
+  // source is often an ephemeral temp file the sender deletes right after).
   function cacheFile(source: string): string {
     const srcPath = Paths.strip(source);
     const ext = root.extensionOf(srcPath);
@@ -110,14 +118,24 @@ Singleton {
     const destPath = `${root.cacheDirectory()}/${root.hashString(srcPath)}.${destExt}`;
     const destUrl = `file://${destPath}`;
     root.cacheMap[source] = destUrl;
-    // mkdir + cp in one shot: the singleton is created lazily on first use, so a
-    // separate async mkdir could lose the race against this first copy. Paths are
-    // passed as positional args so spaces/quotes in srcPath stay safe.
-    Quickshell.execDetached([
-      "sh", "-c", "mkdir -p \"$1\" && cp -f \"$2\" \"$3\"", "sh", root.cacheDirectory(), srcPath, destPath,
-    ]);
-    root.cached(source, destUrl);
+    root.copyQueue.push({
+      "source": source,
+      "srcPath": srcPath,
+      "destPath": destPath,
+      "destUrl": destUrl,
+    });
+    root.processCopyQueue();
     return destUrl;
+  }
+
+  function processCopyQueue() {
+    if (root.copyBusy || root.copyQueue.length === 0)
+      return;
+    root.copyBusy = true;
+    root.currentCopyJob = root.copyQueue.shift();
+    const job = root.currentCopyJob;
+    // mkdir + cp in one shot; paths passed positionally so spaces/quotes stay safe.
+    copyProcess.exec(["sh", "-c", "mkdir -p \"$1\" && cp -f \"$2\" \"$3\"", "sh", root.cacheDirectory(), job.srcPath, job.destPath]);
   }
 
   function enqueueGrab(source: string) {
@@ -138,6 +156,21 @@ Singleton {
     root.grabBusy = false;
     root.currentGrabSource = "";
     root.processGrabQueue();
+  }
+
+  // Serializes file copies; emits cached() only after the copy exits so the
+  // destination is guaranteed to exist when consumers switch to it.
+  Process {
+    id: copyProcess
+
+    onExited: {
+      const job = root.currentCopyJob;
+      if (job)
+        root.cached(job.source, job.destUrl);
+      root.currentCopyJob = null;
+      root.copyBusy = false;
+      root.processCopyQueue();
+    }
   }
 
   // Offscreen rasterizer for in-memory provider images.

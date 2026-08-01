@@ -84,7 +84,7 @@ Item {
           Image {
             id: notificationImage
 
-            visible: root.notification.displayAppIcon === "" && root.notification.displayImage !== ""
+            visible: root.notification.displayImage !== ""
             Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
             Layout.preferredWidth: 36
             Layout.preferredHeight: 36
@@ -103,7 +103,7 @@ Item {
           }
 
           SystemIcon {
-            visible: root.notification.displayAppIcon !== "" || root.notification.displayImage === ""
+            visible: root.notification.displayImage === ""
             Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
             icon: root.notification.displayAppIcon || root.notification.appName
             size: 36
