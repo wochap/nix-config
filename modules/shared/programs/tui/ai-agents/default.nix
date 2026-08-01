@@ -16,7 +16,10 @@ let
   antigravity-nix-pkgs = inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
-  options._custom.programs.ai-agents.enable = lib.mkEnableOption { };
+  options._custom.programs.ai-agents = {
+    enable = lib.mkEnableOption { };
+    enableHandy = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
@@ -30,7 +33,9 @@ in
 
     _custom.hm = {
       home = {
-        packages = with pkgs; [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
+        packages =
+          with pkgs;
+          [ ] ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
 
         sessionVariables = {
           OPENSPEC_TELEMETRY = "0";

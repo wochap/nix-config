@@ -105,6 +105,7 @@ in
     _custom.programs.yazi.enable = true;
     _custom.programs.youtube.enable = true;
     _custom.programs.ai-agents.enable = true;
+    _custom.programs.ai-agents.enableHandy = true;
 
     _custom.services.android.enable = true;
     _custom.services.docker.enable = true;
