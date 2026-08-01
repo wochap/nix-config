@@ -118,7 +118,6 @@
     figlet-fonts.flake = false;
     ipwebcam-gst.url = "github:agarciadom/ipwebcam-gst?rev=5a02ffae8597ab1cc7461f096f86ca233f925a07";
     ipwebcam-gst.flake = false;
-    tmux-sessionx.url = "github:omerxx/tmux-sessionx?rev=c9aaa1d309791871b5e8c1f9bfb91ecc5fa7da3a"; # (17 jul 2026)
 
     # themes
     catppuccin-yazi.url = "github:catppuccin/yazi";

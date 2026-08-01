@@ -23,11 +23,6 @@ let
   );
 
   tmux-final = cfg.package;
-  tmux-sessionx =
-    inputs.tmux-sessionx.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs
-      (oldAttrs: {
-        postInstall = "";
-      });
   tmux-kill-unnamed-sessions = pkgs.writeScriptBin "tmux-kill-unnamed-sessions" (
     builtins.readFile ./scripts/tmux-kill-unnamed-sessions.sh
   );
@@ -101,7 +96,6 @@ in
         "tmux/plugins/yank".source = "${pkgs.tmuxPlugins.yank}/share/tmux-plugins/yank";
         "tmux/plugins/resurrect".source = "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect";
         "tmux/plugins/continuum".source = "${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum";
-        "tmux/plugins/tmux-sessionx".source = "${tmux-sessionx}/share/tmux-plugins/sessionx";
         "tmux/tmux.conf".text = ''
           set -gu default-command
           set -g default-shell ${pkgs.zsh}/bin/zsh
