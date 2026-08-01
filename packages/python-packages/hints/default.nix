@@ -7,14 +7,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "hints";
-  version = "8ae81d866a991a7751b3818014a0cad015b6a440";
+  version = "1b23d729d59f5946426c0dc747cc722b2621b6ca";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AlfredoSequeida";
     repo = "hints";
     rev = version;
-    hash = "sha256-c46EmdIVyAYmDhRgVc8Roump/DwHynKpj2/7mzxaNiY=";
+    hash = "sha256-JhHoXnZeGBu9m2o3cRUky6Nc5uSc1DkS9V8420jEw+o=";
   };
 
   patches = [ ./disable-systemd-install.patch ];
@@ -24,7 +24,7 @@ buildPythonApplication rec {
     gtk-layer-shell
   ];
 
-  propagatedBuildInputs = with pkgs; [
+  propagatedBuildInputs = [
     pygobject3
     pillow
     pyscreenshot
@@ -32,6 +32,7 @@ buildPythonApplication rec {
     evdev
     dbus-python
     pyatspi
+    rich
   ];
 
   nativeBuildInputs = with pkgs; [
