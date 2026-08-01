@@ -29,6 +29,12 @@ let
   tmux-kill-unattached-sessions = pkgs.writeScriptBin "tmux-kill-unattached-sessions" (
     builtins.readFile ./scripts/tmux-kill-unattached-sessions.sh
   );
+  tmux-fzf-panes = pkgs.writeScriptBin "tmux-fzf-panes" (
+    builtins.readFile ./scripts/tmux-fzf-panes.sh
+  );
+  tmux-fzf-sessions = pkgs.writeScriptBin "tmux-fzf-sessions" (
+    builtins.readFile ./scripts/tmux-fzf-sessions.sh
+  );
   start-tmux-server = pkgs.writeScriptBin "start-tmux-server" ''
     #!/usr/bin/env bash
 
@@ -82,6 +88,8 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
+      tmux-fzf-panes
+      tmux-fzf-sessions
       tmux-final
       tmux-kill-unattached-sessions
       tmux-kill-unnamed-sessions
