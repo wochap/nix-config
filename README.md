@@ -137,7 +137,14 @@ Reboot into NixOS, login with the user you created
 1. Install npm packages
 
   ```sh
-  npm i -g webtorrent-cli gulp migrate-mongo claude-code @fission-ai/openspec@latest
+  # tools
+  npm i -g webtorrent-cli gulp migrate-mongo
+
+  # agents
+  npm i -g claude-code @openai/codex opencode-ai
+
+  # agents tools
+  npm i -g @fission-ai/openspec@latest
 
   # required by personal nvim config
   npm i -g ts-node @styled/typescript-styled-plugin
