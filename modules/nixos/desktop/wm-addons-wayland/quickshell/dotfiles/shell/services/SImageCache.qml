@@ -17,6 +17,8 @@ import qs.config
 Singleton {
   id: root
 
+  readonly property string cacheDir: Paths.strip(Paths.notificationsimageCache)
+
   // source string -> stable cached file:// url
   property var cacheMap: ({})
   // image://qsimage sources awaiting a grab (serialized through grabImage)
@@ -31,16 +33,12 @@ Singleton {
   // Emitted once `source` has been materialized to a cached file.
   signal cached(source: string, url: string)
 
-  readonly property var imageExtensions: [
-    "png", "jpg", "jpeg", "gif", "webp", "bmp", "svg", "ico", "tiff", "tif", "avif",
-  ]
+  readonly property var imageExtensions: ["png", "jpg", "jpeg", "gif", "webp", "bmp", "svg", "ico", "tiff", "tif", "avif",]
 
+  // Copies create the dir themselves (install -D); this only covers the grab path,
+  // whose saveToFile cannot create directories.
   Component.onCompleted: {
-    Quickshell.execDetached(["mkdir", "-p", root.cacheDirectory()]);
-  }
-
-  function cacheDirectory(): string {
-    return Paths.strip(Paths.notificationsimageCache);
+    Quickshell.execDetached(["mkdir", "-p", root.cacheDir]);
   }
 
   // djb2 + sdbm combined into a 16-char hex digest.
@@ -78,11 +76,8 @@ Singleton {
     if (root.cacheMap[source])
       return root.cacheMap[source];
 
-    const cachePrefix = root.cacheDirectory();
-    if (source.startsWith(`${cachePrefix}/`) || source.startsWith(`file://${cachePrefix}/`))
-      return source;
-
-    if (source.startsWith("image://icon/"))
+    // already one of our cached files
+    if (source.startsWith(`${root.cacheDir}/`) || source.startsWith(`file://${root.cacheDir}/`))
       return source;
 
     if (source.startsWith("image://qsimage/") || source.startsWith("image://qspixmap/")) {
@@ -93,7 +88,7 @@ Singleton {
     if (root.isFilePath(source))
       return root.cacheFile(source);
 
-    // themed icon name or anything unrecognized: nothing to cache
+    // themed icon (name or image://icon/ url) or unrecognized: nothing to cache
     return source;
   }
 
@@ -115,14 +110,14 @@ Singleton {
     const srcPath = Paths.strip(source);
     const ext = root.extensionOf(srcPath);
     const destExt = root.isImageExtension(ext) ? ext : "png";
-    const destPath = `${root.cacheDirectory()}/${root.hashString(srcPath)}.${destExt}`;
+    const destPath = `${root.cacheDir}/${root.hashString(srcPath)}.${destExt}`;
     const destUrl = `file://${destPath}`;
     root.cacheMap[source] = destUrl;
     root.copyQueue.push({
       "source": source,
       "srcPath": srcPath,
       "destPath": destPath,
-      "destUrl": destUrl,
+      "destUrl": destUrl
     });
     root.processCopyQueue();
     return destUrl;
@@ -134,8 +129,8 @@ Singleton {
     root.copyBusy = true;
     root.currentCopyJob = root.copyQueue.shift();
     const job = root.currentCopyJob;
-    // mkdir + cp in one shot; paths passed positionally so spaces/quotes stay safe.
-    copyProcess.exec(["sh", "-c", "mkdir -p \"$1\" && cp -f \"$2\" \"$3\"", "sh", root.cacheDirectory(), job.srcPath, job.destPath]);
+    // install -D creates any missing parent dirs and copies in one process (no shell).
+    copyProcess.exec(["install", "-D", "-m", "644", job.srcPath, job.destPath]);
   }
 
   function enqueueGrab(source: string) {
@@ -158,15 +153,19 @@ Singleton {
     root.processGrabQueue();
   }
 
-  // Serializes file copies; emits cached() only after the copy exits so the
-  // destination is guaranteed to exist when consumers switch to it.
+  // Emits cached() only after a successful copy so consumers never switch to a
+  // missing file; on failure the source is left live.
   Process {
     id: copyProcess
 
     onExited: {
       const job = root.currentCopyJob;
-      if (job)
-        root.cached(job.source, job.destUrl);
+      if (job) {
+        if (exitCode === 0)
+          root.cached(job.source, job.destUrl);
+        else
+          root.cacheMap[job.source] = job.source;
+      }
       root.currentCopyJob = null;
       root.copyBusy = false;
       root.processCopyQueue();
@@ -188,7 +187,7 @@ Singleton {
         return;
 
       const source = root.currentGrabSource;
-      const destPath = `${root.cacheDirectory()}/${root.hashString(source)}.png`;
+      const destPath = `${root.cacheDir}/${root.hashString(source)}.png`;
       const destUrl = `file://${destPath}`;
       const size = Qt.size(grabImage.sourceSize.width, grabImage.sourceSize.height);
       grabImage.grabToImage(result => {

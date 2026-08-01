@@ -15,17 +15,10 @@ QtObject {
       })) ?? []
   property string appIcon: notification?.appIcon ?? ""
   property string originalAppIcon: notification?.appIcon ?? ""
-  // What the icon slot renders. appIcon starts as the live value and is swapped
-  // for the cached path once SImageCache signals it is on disk, so this tracks it.
-  readonly property string displayAppIcon: root.appIcon
   property string appName: notification?.appName ?? ""
   property string body: sanitizeText(notification?.body ?? "")
   property string image: notification?.image ?? ""
   property string originalImage: notification?.image ?? ""
-  // What the image slot renders. image starts as the live source and is swapped
-  // for the cached path once SImageCache signals it is on disk (the original is
-  // often an ephemeral temp file or in-memory handle), so this tracks it.
-  readonly property string displayImage: root.image
   property string summary: sanitizeText(notification?.summary ?? "")
   property double time
   property bool isTransient: notification?.transient ?? false
@@ -62,6 +55,8 @@ QtObject {
         return;
       if (source === root.originalImage)
         root.image = url;
+      // appIcon renders through Quickshell.iconPath/QIcon, which want a plain
+      // path rather than a file:// url, so strip it.
       if (source === root.originalAppIcon)
         root.appIcon = Paths.strip(url);
     }

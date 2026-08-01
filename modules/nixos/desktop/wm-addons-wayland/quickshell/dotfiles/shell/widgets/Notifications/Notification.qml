@@ -84,11 +84,11 @@ Item {
           Image {
             id: notificationImage
 
-            visible: root.notification.displayImage !== ""
+            visible: root.notification.image !== ""
             Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
             Layout.preferredWidth: 36
             Layout.preferredHeight: 36
-            source: root.notification.displayImage
+            source: root.notification.image
             fillMode: Image.PreserveAspectFit
             smooth: true
             asynchronous: true
@@ -103,9 +103,9 @@ Item {
           }
 
           SystemIcon {
-            visible: root.notification.displayImage === ""
+            visible: root.notification.image === ""
             Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
-            icon: root.notification.displayAppIcon || root.notification.appName
+            icon: root.notification.appIcon || root.notification.appName
             size: 36
             iconFallback: "org.xfce.notification"
           }
