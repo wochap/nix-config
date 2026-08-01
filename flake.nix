@@ -78,6 +78,8 @@
     antigravity-nix.inputs.nixpkgs.follows = "nixpkgs";
     wayland-firewall.url = "github:wochap/wayland-firewall";
     wayland-firewall.inputs.nixpkgs.follows = "nixpkgs";
+    handy.url = "github:cjpais/Handy";
+    handy.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";

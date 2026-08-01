@@ -30,6 +30,8 @@ in
 
     _custom.hm = {
       home = {
+        packages = with pkgs; [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
+
         sessionVariables = {
           OPENSPEC_TELEMETRY = "0";
           CAVEMAN_DEFAULT_MODE = "ultra";

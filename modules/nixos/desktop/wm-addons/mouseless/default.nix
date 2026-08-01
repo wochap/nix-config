@@ -8,12 +8,6 @@
 let
   cfg = config._custom.desktop.mouseless;
 
-  # https://github.com/AlfredoSequeida/hints/wiki/Window-Manager-and-Desktop-Environment-Setup-Guide#x11-general
-  hints-rules = pkgs.writeTextFile {
-    name = "80-hints.rules";
-    text = ''KERNEL=="uinput", GROUP="input", MODE:="0660"'';
-    destination = "/etc/udev/rules.d/80-hints.rules";
-  };
   hints-final = pkgs._custom.pythonPackages.hints;
 in
 {
@@ -30,8 +24,6 @@ in
       QT_ACCESSIBILITY = "1";
       QT_LINUX_ACCESSIBILITY_ALWAYS_ON = "1";
     };
-
-    services.udev.packages = [ hints-rules ];
 
     services.gnome.at-spi2-core.enable = true;
 

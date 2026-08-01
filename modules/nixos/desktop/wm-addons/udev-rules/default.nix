@@ -37,6 +37,10 @@ in
       cornekbd
       chocofikbd
     ];
+    # allow users in the input group to read and write uinput devices
+    services.udev.extraRules = ''
+      KERNEL=="uinput", GROUP="input", MODE="0660"
+    '';
 
     systemd.services.cornekbd-disable-glegion-builtin-kbd = lib.mkIf cfg.canDisableGlegionKbd {
       description = "Disable glegion builtin kbd when Corne kbd is connected";
