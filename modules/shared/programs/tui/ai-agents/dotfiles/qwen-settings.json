@@ -1,65 +1,199 @@
 {
   "ui": {
-    "autoModeAcknowledged": true
+    "autoModeAcknowledged": true,
+    "feedbackLastShownTimestamp": 1784673327282
   },
   "env": {},
   "modelProviders": {
     "openai": [
       {
-        "id": "qwen3.8-max-preview",
-        "name": "[Token Plan Personal] qwen3.8-max-preview",
+        "id": "qwen3.7-plus",
+        "name": "[ModelStudio Token Plan for Global/Intl] qwen3.7-plus",
         "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
         "generationConfig": {
           "extra_body": {
             "enable_thinking": true
+          },
+          "contextWindowSize": 1000000,
+          "modalities": {
+            "image": true,
+            "video": true
+          }
+        }
+      },
+      {
+        "id": "qwen3.6-plus",
+        "name": "[ModelStudio Token Plan for Global/Intl] qwen3.6-plus",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "contextWindowSize": 1000000,
+          "modalities": {
+            "image": true,
+            "video": true
           }
         }
       },
       {
         "id": "qwen3.7-max",
-        "name": "[Token Plan Personal] qwen3.7-max",
+        "name": "[ModelStudio Token Plan for Global/Intl] qwen3.7-max",
         "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
         "generationConfig": {
           "extra_body": {
             "enable_thinking": true
-          }
+          },
+          "contextWindowSize": 1000000
         }
       },
       {
-        "id": "qwen3.7-plus",
-        "name": "[Token Plan Personal] qwen3.7-plus",
+        "id": "qwen3.8-max-preview",
+        "name": "[ModelStudio Token Plan for Global/Intl] qwen3.8-max-preview",
         "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
         "generationConfig": {
           "extra_body": {
             "enable_thinking": true
+          },
+          "thinkingMandatory": true,
+          "contextWindowSize": 1000000,
+          "modalities": {
+            "image": true,
+            "video": true
           }
         }
       },
       {
         "id": "qwen3.6-flash",
-        "name": "[Token Plan Personal] qwen3.6-flash",
+        "name": "[ModelStudio Token Plan for Global/Intl] qwen3.6-flash",
         "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
         "generationConfig": {
           "extra_body": {
             "enable_thinking": true
+          },
+          "contextWindowSize": 1000000
+        }
+      },
+      {
+        "id": "deepseek-v4-pro",
+        "name": "[ModelStudio Token Plan for Global/Intl] deepseek-v4-pro",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "contextWindowSize": 1000000
+        }
+      },
+      {
+        "id": "deepseek-v4-flash",
+        "name": "[ModelStudio Token Plan for Global/Intl] deepseek-v4-flash",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "contextWindowSize": 1000000
+        }
+      },
+      {
+        "id": "deepseek-v3.2",
+        "name": "[ModelStudio Token Plan for Global/Intl] deepseek-v3.2",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "contextWindowSize": 131072
+        }
+      },
+      {
+        "id": "kimi-k2.7-code",
+        "name": "[ModelStudio Token Plan for Global/Intl] kimi-k2.7-code",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "contextWindowSize": 262144,
+          "modalities": {
+            "image": true,
+            "video": true
+          }
+        }
+      },
+      {
+        "id": "kimi-k2.6",
+        "name": "[ModelStudio Token Plan for Global/Intl] kimi-k2.6",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "contextWindowSize": 262144
+        }
+      },
+      {
+        "id": "kimi-k2.5",
+        "name": "[ModelStudio Token Plan for Global/Intl] kimi-k2.5",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "contextWindowSize": 262144,
+          "modalities": {
+            "image": true,
+            "video": true
           }
         }
       },
       {
         "id": "glm-5.2",
-        "name": "[Token Plan Personal] glm-5.2",
+        "name": "[ModelStudio Token Plan for Global/Intl] glm-5.2",
         "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
-        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "contextWindowSize": 1000000
+        }
       },
       {
-        "id": "deepseek-v4-pro",
-        "name": "[Token Plan Personal] deepseek-v4-pro",
+        "id": "glm-5.1",
+        "name": "[ModelStudio Token Plan for Global/Intl] glm-5.1",
         "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
-        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "contextWindowSize": 202752
+        }
+      },
+      {
+        "id": "glm-5",
+        "name": "[ModelStudio Token Plan for Global/Intl] glm-5",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "contextWindowSize": 202752
+        }
+      },
+      {
+        "id": "MiniMax-M2.5",
+        "name": "[ModelStudio Token Plan for Global/Intl] MiniMax-M2.5",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "contextWindowSize": 196608
+        }
       }
     ]
   },
@@ -70,12 +204,13 @@
   },
   "model": {
     "name": "qwen3.8-max-preview",
-    "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+    "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+    "reasoningEffort": "medium"
   },
   "providerMetadata": {
     "token-plan": {
-      "version": "cf634ca401e093aab04d90921cd2bfd6d2eeb5d6babcf4ea76da1fdd2b6c5f0d",
-      "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+      "version": "7e09128431797dac21fcef938a2478b51b7801c2a90e71bdd5ace7f0a12a5e12",
+      "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
       "ignoredVersion": "cf634ca401e093aab04d90921cd2bfd6d2eeb5d6babcf4ea76da1fdd2b6c5f0d"
     }
   },
@@ -88,7 +223,10 @@
       {
         "matcher": "",
         "hooks": [
-          { "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh" }
+          {
+            "type": "command",
+            "command": "~/.qwen/hooks/qwen-notify.sh"
+          }
         ]
       }
     ],
@@ -96,7 +234,10 @@
       {
         "matcher": "",
         "hooks": [
-          { "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh" }
+          {
+            "type": "command",
+            "command": "~/.qwen/hooks/qwen-notify.sh"
+          }
         ]
       }
     ],
@@ -127,7 +268,10 @@
       {
         "matcher": "",
         "hooks": [
-          { "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh" }
+          {
+            "type": "command",
+            "command": "~/.qwen/hooks/qwen-notify.sh"
+          }
         ]
       }
     ],
@@ -167,5 +311,6 @@
         ]
       }
     ]
-  }
+  },
+  "fastModel": "openai:MiniMax-M2.5"
 }

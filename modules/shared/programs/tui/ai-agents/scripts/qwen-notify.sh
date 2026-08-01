@@ -3,8 +3,18 @@
 # qwen-notify.sh — Qwen Code desktop notification hook
 #
 # Reads the hook's JSON payload from stdin and sends a desktop notification.
-# Handles: permission requests, idle/waiting, turn completion, session
-# lifecycle, subagent completion, API errors, and todo progress.
+# Title carries the session title (from the transcript), falling back to
+# "Qwen Code". Body carries the event description, pretty cwd, and —
+# depending on event — the pending tool, context %, or error type.
+#
+# Fires only for events that need your attention:
+#   - Notification(permission_prompt) — Qwen blocked on tool approval
+#   - Notification(idle_prompt)       — Qwen idle, waiting for input
+#   - Stop                            — turn finished
+#   - StopFailure                     — turn ended due to API error
+# PreToolUse is handled silently to record the last tool (enriches the
+# permission_prompt body — the Notification fires before the pending
+# tool_use is flushed to the transcript).
 #
 # Install:
 #   chmod +x ~/.qwen/hooks/qwen-notify.sh
@@ -14,10 +24,8 @@
 # {
 #   "hooks": {
 #     "Notification": [
-#       { "matcher": "", "hooks": [{ "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh" }] }
-#     ],
-#     "PermissionRequest": [
-#       { "matcher": "", "hooks": [{ "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh" }] }
+#       { "matcher": "permission_prompt", "hooks": [{ "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh" }] },
+#       { "matcher": "idle_prompt", "hooks": [{ "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh", "async": true }] }
 #     ],
 #     "PreToolUse": [
 #       { "matcher": "", "hooks": [{ "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh", "async": true }] }
@@ -27,15 +35,6 @@
 #     ],
 #     "StopFailure": [
 #       { "matcher": "", "hooks": [{ "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh" }] }
-#     ],
-#     "SessionStart": [
-#       { "matcher": "", "hooks": [{ "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh", "async": true }] }
-#     ],
-#     "SessionEnd": [
-#       { "matcher": "", "hooks": [{ "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh", "async": true }] }
-#     ],
-#     "SubagentStop": [
-#       { "matcher": "", "hooks": [{ "type": "command", "command": "~/.qwen/hooks/qwen-notify.sh", "async": true }] }
 #     ]
 #   }
 # }
@@ -47,32 +46,6 @@ INPUT=$(cat)
 EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // ""')
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
 STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/qwen-notify"
-
-# --- Helper: send notification ---
-notify() {
-  local title="$1" body="$2" urgency="${3:-normal}"
-
-  if command -v notify-send >/dev/null 2>&1; then
-    notify-send --app-name="qwen-code" --app-icon="qwen-code" --icon="qwen-code" --urgency="$urgency" --hint=string:custom-sound:message "$title" "$body"
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
-    osascript -e "display notification \"$body\" with title \"$title\""
-  elif command -v powershell.exe >/dev/null 2>&1; then
-    powershell.exe -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('$body', '$title')"
-  else
-    echo "qwen-notify: no notification backend found" >&2
-  fi
-}
-
-# --- Helper: pretty cwd ---
-pretty_cwd() {
-  local cwd="$1"
-  echo "${cwd/#$HOME/\~}"
-}
-
-# --- Helper: project name from cwd ---
-project_name() {
-  basename "$1" 2>/dev/null || echo "project"
-}
 
 # --- Helper: describe a tool call ---
 describe_tool() {
@@ -89,12 +62,6 @@ describe_tool() {
     end' 2>/dev/null || echo "unknown tool"
 }
 
-# --- Helper: read last tool from state ---
-last_tool() {
-  local f="$STATE_DIR/last-tool-$SESSION_ID"
-  [[ -r "$f" ]] && cat "$f" || echo ""
-}
-
 # ============================================================
 # PreToolUse: record the tool Qwen is about to run (silent)
 # ============================================================
@@ -104,142 +71,76 @@ if [[ "$EVENT" == "PreToolUse" ]]; then
   exit 0
 fi
 
-# ============================================================
-# PermissionRequest: Qwen needs approval for a tool call
-# ============================================================
-if [[ "$EVENT" == "PermissionRequest" ]]; then
-  CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
-  TOOL_DESC=$(describe_tool)
-  PROJECT=$(project_name "$CWD")
+# --- Common fields ---
+CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
+TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path // ""')
+PRETTY_CWD="${CWD/#$HOME/\~}"
 
-  TITLE="Qwen Code — $PROJECT"
-  BODY="⚠️ Permission needed\n$(pretty_cwd "$CWD")"
-  [[ -n "$TOOL_DESC" ]] && BODY+="\n$TOOL_DESC"
-
-  notify "$TITLE" "$BODY" "critical"
-  exit 0
+# Session title: last custom_title system record in the transcript JSONL.
+# Renaming a session appends a new record, so the last one wins.
+SESSION_NAME=""
+if [[ -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
+  SESSION_NAME=$(tac "$TRANSCRIPT" 2>/dev/null |
+    grep -m1 '"subtype":"custom_title"' |
+    jq -r '.systemPayload.customTitle // empty' 2>/dev/null) || true
 fi
 
-# ============================================================
-# Notification: permission_prompt, idle_prompt, auth_success
-# ============================================================
-if [[ "$EVENT" == "Notification" ]]; then
-  MESSAGE=$(echo "$INPUT" | jq -r '.message // "Qwen Code notification"')
+# Last tool Qwen attempted (from PreToolUse state file)
+LAST_TOOL=""
+if [[ -r "$STATE_DIR/last-tool-$SESSION_ID" ]]; then
+  LAST_TOOL=$(<"$STATE_DIR/last-tool-$SESSION_ID")
+fi
+
+TITLE="${SESSION_NAME:-Qwen Code}"
+BODY=""
+
+case "$EVENT" in
+Notification)
   TYPE=$(echo "$INPUT" | jq -r '.notification_type // "unknown"')
-  CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
-  PRETTY=$(pretty_cwd "$CWD")
-  PROJECT=$(project_name "$CWD")
-  TOOL=$(last_tool)
-
-  TITLE="Qwen Code — $PROJECT"
-  URGENCY="normal"
-
   case "$TYPE" in
   permission_prompt)
-    BODY="⚠️ Qwen needs your permission\n$PRETTY"
-    [[ -n "$TOOL" ]] && BODY+="\n$TOOL"
-    URGENCY="critical"
+    BODY="Qwen needs your permission\n$PRETTY_CWD"
+    [[ -n "$LAST_TOOL" ]] && BODY+="\n$LAST_TOOL"
     ;;
   idle_prompt)
-    BODY="💬 Ready for your next prompt\n$PRETTY"
-    ;;
-  auth_success)
-    BODY="✅ Authentication succeeded"
-    URGENCY="low"
+    BODY="Ready for your next prompt\n$PRETTY_CWD"
     ;;
   *)
-    BODY="$MESSAGE\n$PRETTY"
+    MESSAGE=$(echo "$INPUT" | jq -r '.message // "Qwen Code notification"')
+    BODY="$MESSAGE\n$PRETTY_CWD"
     ;;
   esac
-
-  notify "$TITLE" "$BODY" "$URGENCY"
-  exit 0
-fi
-
-# ============================================================
-# Stop: Qwen finished its turn
-# ============================================================
-if [[ "$EVENT" == "Stop" ]]; then
-  CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
+  ;;
+Stop)
   CONTEXT_USAGE=$(echo "$INPUT" | jq -r '.context_usage // empty')
-  PROJECT=$(project_name "$CWD")
-  TOOL=$(last_tool)
-
-  TITLE="Qwen Code — $PROJECT"
-  BODY="✅ Finished\n$(pretty_cwd "$CWD")"
-  [[ -n "$TOOL" ]] && BODY+="\nLast: $TOOL"
+  BODY="Finished\n$PRETTY_CWD"
   [[ -n "$CONTEXT_USAGE" ]] && BODY+="\nContext: $(echo "$CONTEXT_USAGE" | awk '{printf "%.0f%%", $1 * 100}')"
-
-  notify "$TITLE" "$BODY" "normal"
+  ;;
+StopFailure)
+  ERROR_TYPE=$(echo "$INPUT" | jq -r '.error // "unknown"')
+  BODY="Stopped due to an error ($ERROR_TYPE)\n$PRETTY_CWD"
+  ;;
+*)
+  # Settings only register the events above; this should never fire.
   exit 0
+  ;;
+esac
+
+# --- Send the notification (auto-detects OS) ---
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # macOS
+  osascript -e "display notification \"$BODY\" with title \"$TITLE\""
+
+elif command -v notify-send >/dev/null 2>&1; then
+  # Linux (requires libnotify)
+  notify-send --app-name="qwen-code" --app-icon="qwen-code" --icon="qwen-code" --hint=string:custom-sound:message "$TITLE" "$BODY"
+
+elif command -v powershell.exe >/dev/null 2>&1; then
+  # WSL / Windows
+  powershell.exe -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('$BODY', '$TITLE')"
+
+else
+  echo "No supported notification backend found (osascript/notify-send/powershell.exe)" >&2
 fi
-
-# ============================================================
-# StopFailure: turn ended due to API error
-# ============================================================
-if [[ "$EVENT" == "StopFailure" ]]; then
-  CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
-  PROJECT=$(project_name "$CWD")
-
-  TITLE="Qwen Code — $PROJECT"
-  BODY="❌ Stopped due to an error\n$(pretty_cwd "$CWD")"
-
-  notify "$TITLE" "$BODY" "critical"
-  exit 0
-fi
-
-# ============================================================
-# SessionStart: session started/resumed
-# ============================================================
-if [[ "$EVENT" == "SessionStart" ]]; then
-  CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
-  SOURCE=$(echo "$INPUT" | jq -r '.source // "startup"')
-  MODEL=$(echo "$INPUT" | jq -r '.model // ""')
-  PROJECT=$(project_name "$CWD")
-
-  TITLE="Qwen Code — $PROJECT"
-  BODY="🚀 Session ${SOURCE}\n$(pretty_cwd "$CWD")"
-  [[ -n "$MODEL" ]] && BODY+="\nModel: $MODEL"
-
-  notify "$TITLE" "$BODY" "low"
-  exit 0
-fi
-
-# ============================================================
-# SessionEnd: session ended
-# ============================================================
-if [[ "$EVENT" == "SessionEnd" ]]; then
-  CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
-  REASON=$(echo "$INPUT" | jq -r '.reason // "unknown"')
-  PROJECT=$(project_name "$CWD")
-
-  TITLE="Qwen Code — $PROJECT"
-  BODY="👋 Session ended ($REASON)\n$(pretty_cwd "$CWD")"
-
-  notify "$TITLE" "$BODY" "low"
-  exit 0
-fi
-
-# ============================================================
-# SubagentStop: a background agent finished
-# ============================================================
-if [[ "$EVENT" == "SubagentStop" ]]; then
-  CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
-  AGENT_TYPE=$(echo "$INPUT" | jq -r '.agent_type // "agent"')
-  PROJECT=$(project_name "$CWD")
-
-  TITLE="Qwen Code — $PROJECT"
-  BODY="🤖 Subagent ($AGENT_TYPE) finished\n$(pretty_cwd "$CWD")"
-
-  notify "$TITLE" "$BODY" "normal"
-  exit 0
-fi
-
-# ============================================================
-# Fallback: unknown event
-# ============================================================
-CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
-PROJECT=$(project_name "$CWD")
-notify "Qwen Code — $PROJECT" "Event: $EVENT\n$(pretty_cwd "$CWD")" "low"
 
 exit 0
