@@ -8,7 +8,7 @@
         "baseURL": "http://localhost:11434/v1",
       },
       "models": {
-        "my-opencode-model": {
+        "glegion-qwen3.5:4b": {
           "name": "glegion-qwen3.5:4b",
           "limit": {
             "context": 32768,
@@ -18,5 +18,4 @@
       },
     },
   },
-  "model": "ollama/glegion-qwen3.5:4b",
 }
