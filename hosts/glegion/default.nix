@@ -118,6 +118,7 @@ in
     _custom.services.ai.enableWhisper = true;
     _custom.services.ai.enablePix2tex = true;
     _custom.services.ai.enableOllama = true;
+    _custom.services.ai.enableOllamaFlashAttention = true;
     _custom.services.ai.enableNvidia = true;
     _custom.services.ai.enableOllamaWebuiLite = false;
     _custom.services.ai.enableNextjsOllamaLlmUi = false;

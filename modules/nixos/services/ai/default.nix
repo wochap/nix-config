@@ -22,6 +22,7 @@ in
     enableOpenWebui = lib.mkEnableOption { };
     enableOllamaWebuiLite = lib.mkEnableOption { };
     enableNextjsOllamaLlmUi = lib.mkEnableOption { };
+    enableOllamaFlashAttention = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -41,7 +42,12 @@ in
     services.ollama = lib.mkIf cfg.enableOllama {
       enable = true;
       package = if cfg.enableNvidia then pkgs.ollama-cuda else pkgs.ollama;
-      environmentVariables.OLLAMA_ORIGINS = "*";
+      environmentVariables = {
+        OLLAMA_ORIGINS = "*";
+      }
+      // lib.optionalAttrs cfg.enableOllamaFlashAttention {
+        OLLAMA_FLASH_ATTENTION = "1";
+      };
     };
     systemd.services.ollama = {
       wantedBy = lib.mkForce [ ];
