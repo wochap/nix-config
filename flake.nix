@@ -11,6 +11,7 @@
     prevstable-gaming.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
     prevstable-intune.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
     prevstable-msedge.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
+    prevstable-hyprland.url = "github:nixos/nixpkgs?rev=0bb7ec54c8483066ec9d7720e780a5caa71f8612"; # nixos-unstable (10 jul 2026)
 
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=af2beae5f0fae0a4310cc0e6aef2572f56090353"; # release-26.05 (10 jul 2026)
@@ -22,24 +23,24 @@
 
     # hyprland
     # everytime you update hyprland flake, run `sudo nix flake lock --update-input hyprland`
-    hyprland.url = "github:hyprwm/Hyprland?rev=a0136d8c04687bb36eb8a28eb9d1ff92aea99704"; # v0.55.4
-    hyprland.inputs.nixpkgs.follows = "nixpkgs";
+    hyprland.url = "github:hyprwm/Hyprland?rev=5c9377c15f85c50648f35ca5a213754f95b93ca0"; # v0.56.1
+    hyprland.inputs.nixpkgs.follows = "prevstable-hyprland";
     hyprland-plugins.url = "github:hyprwm/hyprland-plugins?rev=90e66baf99c9025b1d5e9c9e58dd3c80d0911ea2"; # v0.55.0
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
     hyprspace.url = "github:KZDKM/Hyprspace?rev=c109256f5a79a8694acd6176971c4a273d32264c"; # main (10 jul 2026)
     hyprspace.inputs.hyprland.follows = "hyprland";
     hyprpicker.url = "github:hyprwm/hyprpicker?rev=8c163ce9b8a40f85babe4dd6e23a238787351164"; # v0.4.7
-    hyprpicker.inputs.nixpkgs.follows = "nixpkgs";
+    hyprpicker.inputs.nixpkgs.follows = "prevstable-hyprland";
     hyprsunset.url = "github:hyprwm/hyprsunset?rev=057feb7a724b7fc0f3a406d6db08b59734db006a"; # v0.3.3
-    hyprsunset.inputs.nixpkgs.follows = "nixpkgs";
+    hyprsunset.inputs.nixpkgs.follows = "prevstable-hyprland";
     # everytime you update hyprland flake, `sudo nix flake lock --update-input hyprlock`
     hyprlock.url = "github:hyprwm/hyprlock?rev=d75e93f8ee1721d70549d96f4d14bf2948aab70c"; # v0.9.5
-    hyprlock.inputs.nixpkgs.follows = "nixpkgs";
+    hyprlock.inputs.nixpkgs.follows = "prevstable-hyprland";
     pyprland.url = "github:hyprland-community/pyprland?rev=b8cf62fe52f19804e34e7d3afb10df68fcfe9a3f"; # v3.4.3
-    pyprland.inputs.nixpkgs.follows = "nixpkgs";
+    pyprland.inputs.nixpkgs.follows = "prevstable-hyprland";
     hyprgrass.url = "github:horriblename/hyprgrass?rev=e28346f49144e058b0e2d9dc66313c0a57c3d423"; # main (10 jul 2026)
     hyprland-guiutils.url = "github:hyprwm/hyprland-guiutils?rev=c2e906261142f5dd1ee0bfc44abba23e2754c660"; # v0.2.1
-    hyprland-guiutils.inputs.nixpkgs.follows = "nixpkgs";
+    hyprland-guiutils.inputs.nixpkgs.follows = "prevstable-hyprland";
 
     # third party nixpkgs|overlays|modules
     chaotic.url = "github:chaotic-cx/nyx?rev=bb52c6c8936353a03000929d37146bc636f4673f"; # main (10 jul 2026)
