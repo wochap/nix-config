@@ -71,6 +71,9 @@ in
           ".qwen/settings.json".source = ./dotfiles/qwen-settings.json;
         };
       };
+
+      xdg.configFile."opencode/opencode.jsonc".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/opencode-settings.jsonc;
     };
   };
 }
