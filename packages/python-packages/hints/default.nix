@@ -21,7 +21,6 @@ buildPythonApplication rec {
 
   build-system = with pkgs; [
     setuptools
-    gtk-layer-shell
   ];
 
   propagatedBuildInputs = [
@@ -44,6 +43,8 @@ buildPythonApplication rec {
 
   buildInputs = with pkgs; [
     at-spi2-core
+    gtk3
+    gtk-layer-shell
     libwnck # for X11
     libevdev # For python-evdev
     dbus # For dbus-python
