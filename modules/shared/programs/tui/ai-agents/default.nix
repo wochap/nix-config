@@ -53,6 +53,8 @@ in
           };
           ".gemini/antigravity-cli/hooks.json".source =
             lib._custom.relativeSymlink configDirectory ./dotfiles/agy-hooks.json;
+          ".gemini/config/hooks.json".source =
+            lib._custom.relativeSymlink configDirectory ./dotfiles/agy-hooks.json;
           ".qwen/hooks/qwen-notify.sh" = {
             source = ./scripts/qwen-notify.sh;
             executable = true;
