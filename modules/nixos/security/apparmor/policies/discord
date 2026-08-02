@@ -7,10 +7,14 @@
 # unmediated, file/capability confinement is the main win.
 #include <tunables/global>
 
+# For the nix-chromium abstraction rules (variables work in rules)
 @{app_dir} = @discord_dir@
 @{app_exec} = @discord_exec@
 
-profile discord @{app_dir}/@{app_exec} flags=(attach_disconnected) {
+# Attachment spec must use the literal substituted paths: the parser does
+# not expand @{variables} in profile attachments (profile loads but never
+# attaches, silently leaving the app unconfined).
+profile discord @discord_dir@/@discord_exec@ flags=(attach_disconnected) {
   #include <abstractions/base>
   #include <abstractions/fonts>
   #include <abstractions/nix-gui>
