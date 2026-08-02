@@ -1,0 +1,19 @@
+{
+  "providers": {
+    "ollama": {
+      "baseUrl": "http://localhost:11434/v1",
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "models": [
+        {
+          "id": "glegion-qwen3.5:4b",
+          "name": "Glegion Qwen 3.5 4B (Thinking Mode)",
+          "reasoning": true,
+          "compat": {
+            "thinkingFormat": "qwen-chat-template"
+          }
+        }
+      ]
+    }
+  }
+}

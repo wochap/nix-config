@@ -1,0 +1,6 @@
+{
+  "lastChangelogVersion": "0.83.0",
+  "theme": "light/dark",
+  "defaultProvider": "ollama",
+  "defaultModel": "glegion-qwen3.5:4b"
+}

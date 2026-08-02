@@ -59,6 +59,9 @@ in
             source = ./scripts/qwen-notify.sh;
             executable = true;
           };
+
+          ".pi/agent/models.json".source =
+            lib._custom.relativeSymlink configDirectory ./dotfiles/pi/models.json;
         };
 
         symlinks = {
@@ -69,6 +72,7 @@ in
         copyFiles = {
           ".claude/settings.json".source = ./dotfiles/claude-settings.json;
           ".qwen/settings.json".source = ./dotfiles/qwen-settings.json;
+          ".pi/agent/settings.json".source = ./dotfiles/pi/settings.json;
         };
       };
 
