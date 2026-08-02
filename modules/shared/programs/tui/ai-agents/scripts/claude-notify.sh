@@ -1,70 +1,79 @@
 #!/usr/bin/env bash
 #
-# claude-notify.sh — Claude Code "Notification" hook
+# claude-notify.sh — Claude Code desktop notification hook
 #
-# Reads the hook's JSON payload from stdin and sends a custom desktop
-# notification. Title carries the session name (from the transcript),
-# body carries the message, pretty cwd, and — for permission prompts —
-# the description of the tool call Claude wants to run.
+# Reads the hook's JSON payload from stdin and sends a desktop notification.
+# Title carries the session title (from the transcript), falling back to
+# "Claude Code". Body carries the event description, pretty cwd, and —
+# depending on event — the pending tool, the last assistant message, or
+# the error type.
+#
+# Fires only for events that need your attention:
+#   - Notification(permission_prompt) — Claude blocked on tool approval
+#   - Notification(idle_prompt)       — Claude idle, waiting for input
+#   - Notification(agent_needs_input) — background agent blocked on you
+#   - Stop                            — turn finished
+#   - StopFailure                     — turn ended due to API error
+# PreToolUse is handled silently to record the last tool (enriches the
+# permission_prompt body — the Notification fires before the pending
+# tool_use is flushed to the transcript).
 #
 # Install:
-#   chmod +x claude-notify.sh
-#   Put it somewhere like ~/.claude/hooks/claude-notify.sh
+#   chmod +x ~/.claude/hooks/claude-notify.sh
 #
-# Register in ~/.claude/settings.json (or .claude/settings.json for a
-# single project):
+# Register in ~/.claude/settings.json:
 #
 # {
 #   "hooks": {
 #     "Notification": [
-#       {
-#         "matcher": "",
-#         "hooks": [
-#           { "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }
-#         ]
-#       }
+#       { "matcher": "permission_prompt", "hooks": [{ "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }] },
+#       { "matcher": "idle_prompt", "hooks": [{ "type": "command", "command": "~/.claude/hooks/claude-notify.sh", "async": true }] },
+#       { "matcher": "agent_needs_input", "hooks": [{ "type": "command", "command": "~/.claude/hooks/claude-notify.sh", "async": true }] }
+#     ],
+#     "PreToolUse": [
+#       { "matcher": "", "hooks": [{ "type": "command", "command": "~/.claude/hooks/claude-notify.sh", "async": true }] }
+#     ],
+#     "Stop": [
+#       { "hooks": [{ "type": "command", "command": "~/.claude/hooks/claude-notify.sh", "async": true }] }
+#     ],
+#     "StopFailure": [
+#       { "matcher": "", "hooks": [{ "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }] }
 #     ]
 #   }
 # }
-#
-# matcher "" fires on every notification type. To only fire on specific
-# types, set matcher to one of: permission_prompt, idle_prompt,
-# auth_success, elicitation_dialog, elicitation_complete,
-# elicitation_response, agent_needs_input, agent_completed
 
 set -euo pipefail
 
 INPUT=$(cat)
 
-# Pull fields out of the JSON payload
 EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // ""')
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
 STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/claude-notify"
 
-# PreToolUse: the Notification event fires *before* the pending tool_use
-# is flushed to the transcript, so reading the transcript there yields the
-# penultimate tool. Instead, record every attempted tool call here and let
-# the Notification branch read it back.
-if [[ "$EVENT" == "PreToolUse" ]]; then
-  mkdir -p "$STATE_DIR"
+# --- Helper: describe a tool call ---
+describe_tool() {
   echo "$INPUT" | jq -r '
     if (.tool_input.description // "") != "" then "\(.tool_name): \(.tool_input.description)"
     elif .tool_name == "Bash" then "Bash: \(.tool_input.command // "" | .[0:120])"
     else .tool_name
-    end' > "$STATE_DIR/last-tool-$SESSION_ID" 2>/dev/null || true
+    end' 2>/dev/null || echo "unknown tool"
+}
+
+# ============================================================
+# PreToolUse: record the tool Claude is about to run (silent)
+# ============================================================
+if [[ "$EVENT" == "PreToolUse" ]]; then
+  mkdir -p "$STATE_DIR"
+  describe_tool >"$STATE_DIR/last-tool-$SESSION_ID" 2>/dev/null || true
   exit 0
 fi
 
-MESSAGE=$(echo "$INPUT" | jq -r '.message // "Claude Code notification"')
-TYPE=$(echo "$INPUT" | jq -r '.notification_type // "unknown"')
+# --- Common fields ---
 CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
 TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path // ""')
-
-# Pretty cwd: /home/gean/Projects/... -> ~/Projects/...
 PRETTY_CWD="${CWD/#$HOME/\~}"
-PROJECT=$(basename "$CWD" 2>/dev/null || echo "project")
 
-# Session name: last ai-title / custom-title entry in the transcript.
+# Session title: last ai-title / custom-title entry in the transcript.
 # Renaming a session appends a new title line, so the last one wins.
 SESSION_NAME=""
 if [[ -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
@@ -73,51 +82,52 @@ if [[ -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
     head -1 | sed -E 's/^"(aiTitle|customTitle)":"//; s/"$//') || true
 fi
 
-# Last tool call Claude attempted: prefer the PreToolUse state file (always
-# current, even for the not-yet-flushed pending call); fall back to the
-# transcript if the PreToolUse hook isn't registered.
+# Last tool Claude attempted (from PreToolUse state file)
 LAST_TOOL=""
 if [[ -r "$STATE_DIR/last-tool-$SESSION_ID" ]]; then
   LAST_TOOL=$(<"$STATE_DIR/last-tool-$SESSION_ID")
 fi
-if [[ -z "$LAST_TOOL" && -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
-  LAST_TOOL=$(tail -n 400 "$TRANSCRIPT" 2>/dev/null | jq -rs '
-    [ .[]
-      | select(.type == "assistant")
-      | .message.content[]?
-      | select(.type == "tool_use")
-    ] | last
-    | if . == null then ""
-      elif (.input.description // "") != "" then "\(.name): \(.input.description)"
-      elif .name == "Bash" then "Bash: \(.input.command // "" | .[0:120])"
-      else .name
-      end' 2>/dev/null) || true
-fi
 
-# Build a custom title/body per notification type.
 TITLE="${SESSION_NAME:-Claude Code}"
-BODY="$MESSAGE"
+BODY=""
 
-case "$TYPE" in
-permission_prompt)
-  BODY="Claude needs your permission<br>$PRETTY_CWD"
-  [[ -n "$LAST_TOOL" ]] && BODY+="<br><i>$LAST_TOOL</i>"
+case "$EVENT" in
+Notification)
+  TYPE=$(echo "$INPUT" | jq -r '.notification_type // "unknown"')
+  case "$TYPE" in
+  permission_prompt)
+    BODY="Claude needs your permission<br>$PRETTY_CWD"
+    [[ -n "$LAST_TOOL" ]] && BODY+="<br><i>$LAST_TOOL</i>"
+    ;;
+  agent_needs_input)
+    BODY="Claude is waiting for your input<br>$PRETTY_CWD"
+    [[ -n "$LAST_TOOL" ]] && BODY+="<br><i>$LAST_TOOL</i>"
+    ;;
+  idle_prompt)
+    BODY="Ready for your next prompt<br>$PRETTY_CWD"
+    ;;
+  *)
+    MESSAGE=$(echo "$INPUT" | jq -r '.message // "Claude Code notification"')
+    BODY="$MESSAGE<br>$PRETTY_CWD"
+    ;;
+  esac
   ;;
-agent_needs_input)
-  BODY="Claude is waiting for your input<br>$PRETTY_CWD"
-  [[ -n "$LAST_TOOL" ]] && BODY+="<br><i>$LAST_TOOL</i>"
+Stop)
+  # stop_hook_active=true means a Stop hook already re-triggered this turn;
+  # skip to avoid a duplicate ping on the loop.
+  STOP_HOOK_ACTIVE=$(echo "$INPUT" | jq -r '.stop_hook_active // false')
+  [[ "$STOP_HOOK_ACTIVE" == "true" ]] && exit 0
+  LAST_MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // ""' | head -c 80)
+  BODY="Finished<br>$PRETTY_CWD"
+  [[ -n "$LAST_MSG" ]] && BODY+="<br><i>$LAST_MSG</i>"
   ;;
-idle_prompt)
-  BODY="Ready for your next prompt.<br>$PRETTY_CWD"
-  ;;
-auth_success)
-  BODY="Authentication succeeded."
-  ;;
-agent_completed)
-  BODY="Background agent finished<br>$PRETTY_CWD"
+StopFailure)
+  ERROR_TYPE=$(echo "$INPUT" | jq -r '.error // "unknown"')
+  BODY="Stopped due to an error ($ERROR_TYPE)<br>$PRETTY_CWD"
   ;;
 *)
-  TITLE="Claude Code${SESSION_NAME:+ ($SESSION_NAME)} — $PROJECT"
+  # Settings only register the events above; this should never fire.
+  exit 0
   ;;
 esac
 
@@ -127,7 +137,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   osascript -e "display notification \"$BODY\" with title \"$TITLE\""
 
 elif command -v notify-send >/dev/null 2>&1; then
-  # Linux (requires libnotify-bin: apt-get install libnotify-bin)
+  # Linux (requires libnotify)
   notify-send --app-name="claude-code" --app-icon="claude-code" --icon="claude-code" --hint=string:custom-sound:message "$TITLE" "$BODY"
 
 elif command -v powershell.exe >/dev/null 2>&1; then
@@ -137,13 +147,5 @@ elif command -v powershell.exe >/dev/null 2>&1; then
 else
   echo "No supported notification backend found (osascript/notify-send/powershell.exe)" >&2
 fi
-
-# --- Optional: also/instead push to a webhook, e.g. ntfy.sh ---
-# curl -s -d "$BODY" -H "Title: $TITLE" "https://ntfy.sh/your-topic-name" >/dev/null
-#
-# --- Optional: Slack webhook ---
-# curl -s -X POST -H 'Content-type: application/json' \
-#   --data "{\"text\":\"*$TITLE*\n$BODY\"}" \
-#   "https://hooks.slack.com/services/XXX/YYY/ZZZ" >/dev/null
 
 exit 0

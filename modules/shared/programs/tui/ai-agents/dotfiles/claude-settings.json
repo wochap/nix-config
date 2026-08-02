@@ -33,13 +33,56 @@
   "hooks": {
     "Notification": [
       {
-        "matcher": "",
+        "matcher": "permission_prompt",
         "hooks": [
           { "type": "command", "command": "~/.claude/hooks/claude-notify.sh" }
+        ]
+      },
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/claude-notify.sh",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "agent_needs_input",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/claude-notify.sh",
+            "async": true
+          }
         ]
       }
     ],
     "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/claude-notify.sh",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/claude-notify.sh",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
       {
         "matcher": "",
         "hooks": [
