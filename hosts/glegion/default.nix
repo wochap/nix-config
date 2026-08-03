@@ -195,6 +195,13 @@ in
       color = "yellow";
       pgpKey = "00F9FB30";
       signatureLines = [ [ "GPG: 00F9FB30" ] ];
+      # ALL pearson mails (read/unread), not only the ones in inbox
+      virtualFolders = [
+        {
+          name = "pearson";
+          query = "from:*@pearson.com";
+        }
+      ];
     };
     _custom.desktop.audio.enableEasyeffects = true;
     _custom.desktop.audio.enableNoisetorch = true;

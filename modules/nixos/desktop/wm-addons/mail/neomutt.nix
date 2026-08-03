@@ -31,20 +31,32 @@ let
   vfolderLine = name: query: ''named-mailboxes "${name}" "notmuch://?query=${lib.escapeURL query}"'';
   accountVfolders =
     name: acc:
-    if acc.sync == "lieer" then
-      [
-        (vfolderLine "${name}/inbox" "tag:inbox and folder:${name}/mail${sinceClause}")
-        (vfolderLine "${name}/unread" "tag:unread and folder:${name}/mail${sinceClause}")
-        (vfolderLine "${name}/flagged" "tag:flagged and folder:${name}/mail${sinceClause}")
-        (vfolderLine "${name}/sent" "tag:sent and folder:${name}/mail${sinceClause}")
-      ]
-    else
-      [
-        (vfolderLine "${name}/inbox" "folder:${name}/INBOX${sinceClause}")
-        (vfolderLine "${name}/unread" "tag:unread and folder:${name}/INBOX${sinceClause}")
-        (vfolderLine "${name}/flagged" "tag:flagged and folder:${name}/INBOX${sinceClause}")
-        (vfolderLine "${name}/sent" "folder:${name}/Sent${sinceClause}")
-      ];
+    let
+      # lieer (gmail) keeps everything under <account>/mail, other accounts under <account>/INBOX
+      accountFolder = if acc.sync == "lieer" then "${name}/mail" else "${name}/INBOX";
+      # extra virtual folders defined per-account (e.g. sender filters),
+      # always scoped to the account's mail folder
+      extraVfolders = map (
+        vf: vfolderLine "${name}/${vf.name}" "${vf.query} and folder:${accountFolder}${sinceClause}"
+      ) acc.virtualFolders;
+    in
+    (
+      if acc.sync == "lieer" then
+        [
+          (vfolderLine "${name}/inbox" "tag:inbox and folder:${accountFolder}${sinceClause}")
+          (vfolderLine "${name}/unread" "tag:unread and folder:${accountFolder}${sinceClause}")
+          (vfolderLine "${name}/flagged" "tag:flagged and folder:${accountFolder}${sinceClause}")
+          (vfolderLine "${name}/sent" "tag:sent and folder:${accountFolder}${sinceClause}")
+        ]
+      else
+        [
+          (vfolderLine "${name}/inbox" "folder:${accountFolder}${sinceClause}")
+          (vfolderLine "${name}/unread" "tag:unread and folder:${accountFolder}${sinceClause}")
+          (vfolderLine "${name}/flagged" "tag:flagged and folder:${accountFolder}${sinceClause}")
+          (vfolderLine "${name}/sent" "folder:${name}/Sent${sinceClause}")
+        ]
+    )
+    ++ extraVfolders;
   vfolders = lib.concatStringsSep "\n" (
     [ (vfolderLine "all/unread" "tag:unread${sinceClause}") ]
     ++ lib.concatLists (lib.mapAttrsToList accountVfolders cfg.accounts)

@@ -103,6 +103,24 @@ in
                 is kept. Set explicitly to override.
               '';
             };
+            virtualFolders = lib.mkOption {
+              type = lib.types.listOf (
+                lib.types.submodule {
+                  options = {
+                    name = lib.mkOption {
+                      type = lib.types.str;
+                      description = "Name of the virtual folder, shown in neomutt's sidebar as <account>/<name>.";
+                    };
+                    query = lib.mkOption {
+                      type = lib.types.str;
+                      description = "Notmuch query for the virtual folder (e.g. \"from:*@pearson.com\"). Automatically restricted to this account's mail folder and to _custom.desktop.mail.querySince.";
+                    };
+                  };
+                }
+              );
+              default = [ ];
+              description = "Extra notmuch virtual folders for this account, shown in neomutt's sidebar.";
+            };
           };
         }
       );
