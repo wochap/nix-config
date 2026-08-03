@@ -8,14 +8,14 @@
 
 buildGoModule rec {
   pname = "mailnotify";
-  version = "206290eadf323ce60f6abfd0a6f968af60c0ccca";
+  version = "ac66c4a4bad09dfdb55d6dd9543035f780d031af";
   vendorHash = "sha256-8COiuVhQQ8aBDT5/q8Pt6ZTGbB3+xKDlKVA3BsFkF/A=";
 
   src = fetchFromGitHub {
     owner = "wochap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3kn6tq3RIS0dYP1XqcuLu2uQWgqb461q759oFfp5HcI=";
+    sha256 = "sha256-PQdQBCWtqD0Czg+vTv43dGskXCr2uubJXwuo6TZwdhk=";
   };
 
   meta = with lib; {
