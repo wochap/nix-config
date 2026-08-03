@@ -62,6 +62,9 @@ in
 
           ".pi/agent/models.json".source =
             lib._custom.relativeSymlink configDirectory ./dotfiles/pi/models.json;
+
+          ".codex/model-catalog.local.json".source =
+            lib._custom.relativeSymlink configDirectory ./dotfiles/codex/model-catalog.local.json;
         };
 
         symlinks = {
@@ -73,6 +76,7 @@ in
           ".claude/settings.json".source = ./dotfiles/claude-settings.json;
           ".qwen/settings.json".source = ./dotfiles/qwen-settings.json;
           ".pi/agent/settings.json".source = ./dotfiles/pi/settings.json;
+          ".codex/config.toml".source = ./dotfiles/codex/config.toml;
         };
       };
 
