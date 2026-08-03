@@ -247,6 +247,7 @@ Usage:
   wt rm <name> [--remote] [--force] Remove worktree + branch
   wt pull <source> [--staged]       Pull changes from worktree/repo
   wt doctor                         Repair broken worktree links
+  wt rename <new-name>              Rename current worktree directory
 
 Options:
   --remote    Also delete remote branch (rm)
@@ -766,6 +767,49 @@ cmd_pull() {
   fi
 }
 
+cmd_rename() {
+  local root git_dir
+  root=$(find_project_root) || return 1
+  git_dir="$root/.git"
+
+  local new_name=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    -*) die "unknown option: $1" ;;
+    *) new_name="$1" ;;
+    esac
+    shift
+  done
+
+  [[ -z "$new_name" ]] && die "usage: wt rename <new-name>"
+  case "$new_name" in
+  */*) die "invalid name: '$new_name' (cannot contain '/')" ;;
+  . | ..) die "invalid name: '$new_name'" ;;
+  esac
+
+  local wt_path
+  wt_path=$(git rev-parse --show-toplevel 2>/dev/null) ||
+    die "rename must be run from inside a worktree"
+  find_worktree_by_path "$git_dir" "$wt_path" ||
+    die "'${wt_path#"$root"/}' is not a registered worktree of this project"
+
+  local old_name="${wt_path##*/}"
+  if [[ "$new_name" == "$old_name" ]]; then
+    echo "$wt_path"
+    return 0
+  fi
+
+  if [[ -d "$root/$new_name" ]]; then
+    die "directory '$new_name' already exists"
+  fi
+
+  git -C "$git_dir" worktree move "$wt_path" "$root/$new_name" ||
+    die "failed to rename worktree"
+
+  echo "Renamed worktree: ${C_GREEN}${old_name}${C_RESET} to ${C_GREEN}${new_name}${C_RESET}" >&2
+  echo "$root/$new_name"
+}
+
 # ── Main ───────────────────────────────────────────────────────────────
 
 main() {
@@ -778,6 +822,7 @@ main() {
   rm) cmd_rm "$@" ;;
   pull) cmd_pull "$@" ;;
   doctor) cmd_doctor "$@" ;;
+  rename) cmd_rename "$@" ;;
   help | --help | -h) cmd_help ;;
   *) die "unknown command: $cmd (see: wt help)" ;;
   esac

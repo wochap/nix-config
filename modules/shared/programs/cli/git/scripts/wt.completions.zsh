@@ -9,6 +9,7 @@ _wt() {
     'rm:Remove worktree + branch'
     'pull:Pull changes from worktree/repo'
     'doctor:Repair broken worktree links'
+    'rename:Rename current worktree directory'
     'help:Show help message'
   )
 
@@ -16,7 +17,7 @@ _wt() {
   local subcmd subcmd_idx=0
   for ((i = 2; i < CURRENT; i++)); do
     case "${words[i]}" in
-    clone | switch | list | rm | pull | doctor | help)
+    clone | switch | list | rm | pull | doctor | rename | help)
       subcmd="${words[i]}"
       subcmd_idx=$i
       break
@@ -193,6 +194,10 @@ _wt() {
     if [[ $has_source -eq 1 ]]; then
       _describe 'flag' flags
     fi
+    ;;
+
+  rename)
+    # No dynamic completions for rename (free-form new name)
     ;;
 
   help)

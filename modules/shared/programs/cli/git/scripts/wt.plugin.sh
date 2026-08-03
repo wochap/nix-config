@@ -4,7 +4,7 @@
 
 wt() {
   case "${1:-}" in
-  switch | clone)
+  switch | clone | rename)
     local dir
     dir="$(command wt "$@")" && cd "$dir"
     ;;
