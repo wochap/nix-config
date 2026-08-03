@@ -81,6 +81,8 @@
     wayland-firewall.inputs.nixpkgs.follows = "nixpkgs";
     handy.url = "github:cjpais/Handy";
     handy.inputs.nixpkgs.follows = "nixpkgs";
+    offlinemsmtp.url = "github:sumnerevans/offlinemsmtp?rev=9f1cbeb31392e511ee8e17fba7a1448e9dd0bc90"; # master (22 jul 2026)
+    offlinemsmtp.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
