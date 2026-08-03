@@ -80,6 +80,8 @@ in
           ".config/opencode/opencode.jsonc".source = ./dotfiles/opencode-settings.jsonc;
         };
       };
+
+      xdg.configFile."opencode/plugins/opencode-notify.ts".source = ./scripts/opencode-notify.ts;
     };
   };
 }
