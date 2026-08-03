@@ -62,11 +62,11 @@ RowLayout {
       }
     }
 
-    Mail {
-      id: mail
-
-      Layout.fillHeight: true
-    }
+    // Mail {
+    //   id: mail
+    //
+    //   Layout.fillHeight: true
+    // }
 
     Offlinemsmtp {
       id: offlinemsmtp

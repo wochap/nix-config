@@ -39,7 +39,7 @@
     # _custom.desktop.calendar.enable = true;
     _custom.desktop.cursor.enable = true;
     # _custom.desktop.dbus.enable = true;
-    # _custom.desktop.email.enable = true;
+    # _custom.desktop.mail.enable = true;
     # _custom.desktop.fastfetch.enable = true;
     _custom.desktop.fonts.enable = true;
     _custom.desktop.gtk.enable = true;

@@ -1,0 +1,64 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  cfg = config._custom.desktop.mail;
+  inherit (config._custom.globals) userName;
+  hmConfig = config.home-manager.users.${userName};
+
+  mkSignatureScript =
+    signatureLines:
+    pkgs.writeScript "signature" # python
+      ''
+        #!/usr/bin/env python
+        lines = [
+          ${lib.concatMapStringsSep ", " (l: "[${lib.concatMapStringsSep ", " (i: ''"${i}"'') l}]") signatureLines}
+        ];
+        print('\n'.join('{:32}{}'.format(*x) for x in lines))
+      '';
+in
+{
+  config = lib.mkIf cfg.enable {
+    _custom.hm = {
+      accounts.email.maildirBasePath = "${hmConfig.home.homeDirectory}/Mail";
+
+      accounts.email.accounts = lib.mapAttrs (name: acc: {
+        address = acc.address;
+        userName = acc.address;
+        realName = lib.mkDefault "Gean Marroquin";
+        flavor = acc.flavor;
+        primary = acc.primary;
+
+        passwordCommand =
+          if acc.passwordCommand != "" then
+            acc.passwordCommand
+          else
+            "${pkgs.coreutils}/bin/cat ${hmConfig.xdg.configHome}/secrets/mail/${lib.toLower acc.name}";
+
+        msmtp.enable = true;
+        smtp = {
+          port = 587;
+          tls.useStartTls = true;
+        };
+
+        gpg = {
+          key = acc.pgpKey;
+          signByDefault = true;
+          encryptByDefault = true;
+        };
+
+        signature = lib.mkIf (acc.signatureLines != [ ]) {
+          showSignature = "append";
+          command = mkSignatureScript acc.signatureLines;
+        };
+
+        folders.inbox = "INBOX";
+
+      }) cfg.accounts;
+    };
+  };
+}
