@@ -23,7 +23,7 @@ let
   accountInboxAction =
     name: account:
     if account.sync == "lieer" then
-      "<change-folder>notmuch://${maildirBasePath}?query=${lib.escapeURL "tag:inbox and folder:${name}"}<enter>"
+      "<change-folder>notmuch://${maildirBasePath}?query=${lib.escapeURL "tag:inbox and folder:${name}/mail"}<enter>"
     else
       "<change-folder>${maildirBasePath}/${name}/INBOX<enter>";
 
@@ -33,10 +33,10 @@ let
     name: acc:
     if acc.sync == "lieer" then
       [
-        (vfolderLine "${name}/inbox" "tag:inbox and folder:${name}")
-        (vfolderLine "${name}/unread" "tag:unread and folder:${name}")
-        (vfolderLine "${name}/flagged" "tag:flagged and folder:${name}")
-        (vfolderLine "${name}/sent" "tag:sent and folder:${name}")
+        (vfolderLine "${name}/inbox" "tag:inbox and folder:${name}/mail")
+        (vfolderLine "${name}/unread" "tag:unread and folder:${name}/mail")
+        (vfolderLine "${name}/flagged" "tag:flagged and folder:${name}/mail")
+        (vfolderLine "${name}/sent" "tag:sent and folder:${name}/mail")
       ]
     else
       [
@@ -74,7 +74,7 @@ in
       accounts.email.accounts = lib.mapAttrs (name: acc: {
         neomutt = {
           enable = true;
-          sendMailCommand = "${pkgs._custom.offlinemsmtp}/bin/offlinemsmtp -a ${acc.name}";
+          sendMailCommand = "${pkgs._custom.offlinemsmtp}/bin/offlinemsmtp -a ${name}";
           showDefaultMailbox = acc.sync != "lieer";
           extraConfig = lib.concatStringsSep "\n" (
             [
