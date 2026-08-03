@@ -15,13 +15,16 @@ in
     _custom.hm.systemd.user.services.mailnotify = lib._custom.mkWaylandService {
       Unit = {
         Description = "mailnotify daemon";
-        Documentation = "https://github.com/sumnerevans/mailnotify";
+        Documentation = "https://github.com/wochap/mailnotify";
       };
       Service = {
         ExecStart = ''
           ${pkgs._custom.mailnotify}/bin/mailnotify \
-            ${hmConfig.accounts.email.maildirBasePath} \
-            ${pkgs.reversal-icon-theme}/share/icons/Reversal/apps/scalable/internet-mail.svg
+            --app-name=mailnotify \
+            --app-icon=internet-mail \
+            --icon=internet-mail \
+            --hint=string:custom-sound:message \
+            ${hmConfig.accounts.email.maildirBasePath}
         '';
         Restart = "always";
         RestartSec = 5;
