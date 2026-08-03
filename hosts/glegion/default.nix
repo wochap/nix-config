@@ -174,6 +174,7 @@ in
       address = "gean.marroquin@gmail.com";
       name = "Personal";
       sync = "lieer";
+      inboxKey = "P";
       color = "red";
       pgpKey = "E73095E1";
       signatureLines = [
@@ -190,6 +191,7 @@ in
       address = config._custom.globals.secrets.se.email;
       name = "SE";
       sync = "lieer";
+      inboxKey = "S";
       color = "yellow";
       pgpKey = "00F9FB30";
       signatureLines = [ [ "GPG: 00F9FB30" ] ];

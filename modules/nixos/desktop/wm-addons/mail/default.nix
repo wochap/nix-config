@@ -76,6 +76,11 @@ in
               type = lib.types.str;
               default = "";
             };
+            inboxKey = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "If set, bind an index macro to this key that jumps to the account's inbox virtual folder.";
+            };
           };
         }
       );

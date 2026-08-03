@@ -22,7 +22,7 @@ let
   sinceClause = lib.optionalString (cfg.querySince != null) " and date:${cfg.querySince}..";
 
   accountInboxAction =
-    name: _account:
+    name:
     # Open the *named* inbox vfolder (defined via `named-mailboxes` below)
     # instead of the raw notmuch:// URI, so the status line's %D shows the
     # friendly name ("personal/inbox") instead of the full query URI.
@@ -42,6 +42,8 @@ let
       [
         (vfolderLine "${name}/inbox" "folder:${name}/INBOX${sinceClause}")
         (vfolderLine "${name}/unread" "tag:unread and folder:${name}/INBOX${sinceClause}")
+        (vfolderLine "${name}/flagged" "tag:flagged and folder:${name}/INBOX${sinceClause}")
+        (vfolderLine "${name}/sent" "folder:${name}/Sent${sinceClause}")
       ];
   vfolders = lib.concatStringsSep "\n" (
     [ (vfolderLine "all/unread" "tag:unread${sinceClause}") ]
@@ -170,16 +172,11 @@ in
             map = [ "index" ];
           }
         ]
-        ++ (lib.optional (cfg.accounts ? personal) {
-          action = accountInboxAction "personal" cfg.accounts.personal;
-          key = "P";
+        ++ (lib.mapAttrsToList (name: acc: {
+          action = accountInboxAction name;
+          key = acc.inboxKey;
           map = [ "index" ];
-        })
-        ++ (lib.optional (cfg.accounts ? se) {
-          action = accountInboxAction "se" cfg.accounts.se;
-          key = "S";
-          map = [ "index" ];
-        })
+        }) (lib.filterAttrs (_: acc: acc.inboxKey != null) cfg.accounts))
         ++ [
           {
             action = "<save-message>?<tab>";
