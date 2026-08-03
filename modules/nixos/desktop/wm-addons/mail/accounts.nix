@@ -16,7 +16,9 @@ let
       ''
         #!/usr/bin/env python
         lines = [
-          ${lib.concatMapStringsSep ", " (l: "[${lib.concatMapStringsSep ", " (i: ''"${i}"'') l}]") signatureLines}
+          ${lib.concatMapStringsSep ", " (
+            l: "[${lib.concatMapStringsSep ", " (i: ''"${i}"'') l}]"
+          ) signatureLines}
         ];
         print('\n'.join('{:32}{}'.format(*x) for x in lines))
       '';
@@ -56,7 +58,12 @@ in
           command = mkSignatureScript acc.signatureLines;
         };
 
-        folders.inbox = "INBOX";
+        folders = {
+          inbox = lib.mkForce (if acc.sync == "lieer" then "mail" else "INBOX");
+          drafts = lib.mkForce (if acc.sync == "lieer" then "mail/drafts" else "Drafts");
+          sent = lib.mkForce (if acc.sync == "lieer" then "mail/sent" else "Sent");
+          trash = lib.mkForce (if acc.sync == "lieer" then "mail/trash" else "Trash");
+        };
 
       }) cfg.accounts;
     };

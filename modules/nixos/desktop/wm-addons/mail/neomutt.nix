@@ -21,14 +21,14 @@ let
   maildirBasePath = hmConfig.accounts.email.maildirBasePath;
 
   accountInboxAction =
-    account:
+    name: account:
     if account.sync == "lieer" then
-      "<change-folder>notmuch://${maildirBasePath}?query=${lib.escapeURL "tag:inbox and folder:${account.name}"}<enter>"
+      "<change-folder>notmuch://${maildirBasePath}?query=${lib.escapeURL "tag:inbox and folder:${name}"}<enter>"
     else
-      "<change-folder>${maildirBasePath}/${account.name}/INBOX<enter>";
+      "<change-folder>${maildirBasePath}/${name}/INBOX<enter>";
 
   vfolderLine =
-    name: query: ''virtual-mailboxes "${name}" "notmuch://?query=${lib.escapeURL query}"'';
+    name: query: ''named-mailboxes "${name}" "notmuch://?query=${lib.escapeURL query}"'';
   accountVfolders =
     name: acc:
     if acc.sync == "lieer" then
@@ -48,13 +48,6 @@ let
     ++ lib.concatLists (lib.mapAttrsToList accountVfolders cfg.accounts)
   );
 
-  catppuccin-neomutt-light-theme-path = "${inputs.catppuccin-neomutt}/${
-    if themeColorsLight.flavour == "latte" then "latte-neomuttrc" else "neomuttrc"
-  }";
-  catppuccin-neomutt-dark-theme-path = "${inputs.catppuccin-neomutt}/${
-    if themeColorsDark.flavour == "latte" then "latte-neomuttrc" else "neomuttrc"
-  }";
-
   notmuch-address =
     pkgs.writeScriptBin "notmuch-address" # sh
       ''
@@ -68,6 +61,12 @@ let
           }'
       '';
 
+  catppuccin-neomutt-light-theme-path = "${inputs.catppuccin-neomutt}/${
+    if themeColorsLight.flavour == "latte" then "latte-neomuttrc" else "neomuttrc"
+  }";
+  catppuccin-neomutt-dark-theme-path = "${inputs.catppuccin-neomutt}/${
+    if themeColorsDark.flavour == "latte" then "latte-neomuttrc" else "neomuttrc"
+  }";
 in
 {
   config = lib.mkIf cfg.enable {
@@ -113,36 +112,112 @@ in
         enable = true;
         vimKeys = true;
         binds = [
-          { action = "complete-query"; key = "<Tab>"; map = [ "editor" ]; }
-          { action = "group-reply"; key = "R"; map = [ "index" "pager" ]; }
-          { action = "sidebar-prev"; key = "["; map = [ "index" "pager" ]; }
-          { action = "sidebar-next"; key = "]"; map = [ "index" "pager" ]; }
-          { action = "sidebar-open"; key = "\\Co"; map = [ "index" "pager" ]; }
-          { action = "vfolder-from-query"; key = "\\Cs"; map = [ "index" ]; }
-          { action = "modify-labels"; key = "f"; map = [ "index" "pager" ]; }
+          {
+            action = "complete-query";
+            key = "<Tab>";
+            map = [ "editor" ];
+          }
+          {
+            action = "group-reply";
+            key = "R";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "sidebar-prev";
+            key = "[";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "sidebar-next";
+            key = "]";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "sidebar-open";
+            key = "\\Co";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "vfolder-from-query";
+            key = "\\Cs";
+            map = [ "index" ];
+          }
+          {
+            action = "modify-labels";
+            key = "f";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
         ];
         macros = [
-          { action = "!email-sync &^M"; key = "<F5>"; map = [ "index" ]; }
-        ] ++ (lib.optional (cfg.accounts ? Personal) {
-          action = accountInboxAction cfg.accounts.Personal;
+          {
+            action = "!email-sync &^M";
+            key = "<F5>";
+            map = [ "index" ];
+          }
+        ]
+        ++ (lib.optional (cfg.accounts ? personal) {
+          action = accountInboxAction "personal" cfg.accounts.personal;
           key = "P";
           map = [ "index" ];
-        }) ++ (lib.optional (cfg.accounts ? SE) {
-          action = accountInboxAction cfg.accounts.SE;
+        })
+        ++ (lib.optional (cfg.accounts ? se) {
+          action = accountInboxAction "se" cfg.accounts.se;
           key = "S";
           map = [ "index" ];
-        }) ++ [
-          { action = "<save-message>?<tab>"; key = "s"; map = [ "index" ]; }
-          { action = "<modify-labels-then-hide>+trash<enter>"; key = "D"; map = [ "index" ]; }
-          { action = "<modify-labels-then-hide>-inbox<enter>"; key = "A"; map = [ "index" ]; }
-          { action = "<pipe-message>urlscan -dc<Enter>"; key = "\\Cl"; map = [ "index" "pager" ]; }
-          { action = "<pipe-entry>urlscan -dc<Enter>"; key = "\\Cl"; map = [ "attach" "compose" ]; }
+        })
+        ++ [
+          {
+            action = "<save-message>?<tab>";
+            key = "s";
+            map = [ "index" ];
+          }
+          {
+            action = "<modify-labels-then-hide>+trash<enter>";
+            key = "D";
+            map = [ "index" ];
+          }
+          {
+            action = "<modify-labels-then-hide>-inbox<enter>";
+            key = "A";
+            map = [ "index" ];
+          }
+          {
+            action = "<pipe-message>urlscan -dc<Enter>";
+            key = "\\Cl";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "<pipe-entry>urlscan -dc<Enter>";
+            key = "\\Cl";
+            map = [
+              "attach"
+              "compose"
+            ];
+          }
         ];
 
         sidebar = {
           enable = true;
           width = 40;
-          format = "%B%?F? [%F]?%* %?N?%N/?%S";
+          format = "%D%?F? [%F]?%* %?N?%N/?%S";
           shortPath = false;
         };
 
@@ -171,7 +246,7 @@ in
           quit = "yes";
           reply_to = "yes";
           reverse_name = "yes";
-          query_command = "notmuch-address %s";
+          query_command = ''"notmuch-address '%s'"'';
           sort = "threads";
           sort_aux = "reverse-last-date-received";
           sort_re = "yes";
@@ -186,7 +261,7 @@ in
           source ${aliasfile}
           source ${mailboxfile}
 
-          # Notmuch virtual folders
+          # Global Notmuch virtual folders
           set nm_default_uri = "notmuch://${maildirBasePath}"
           ${vfolders}
 

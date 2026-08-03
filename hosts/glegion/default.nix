@@ -166,8 +166,10 @@ in
       # export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
     };
 
-    _custom.desktop.mail.enable = false;
+    # _custom.desktop.email.enable = false;
+    _custom.desktop.mail.enable = true;
     _custom.desktop.mail.accounts.personal = {
+      primary = true;
       flavor = "gmail.com";
       address = "gean.marroquin@gmail.com";
       name = "Personal";
@@ -183,15 +185,15 @@ in
         [ "GPG: E73095E1" ]
       ];
     };
-    # _custom.desktop.mail.accounts.SE = {
-    #   flavor = "gmail.com";
-    #   address = config._custom.globals.secrets.se.email;
-    #   name = "SE";
-    #   sync = "lieer";
-    #   color = "yellow";
-    #   pgpKey = "00F9FB30";
-    #   signatureLines = [ [ "GPG: 00F9FB30" ] ];
-    # };
+    _custom.desktop.mail.accounts.se = {
+      flavor = "gmail.com";
+      address = config._custom.globals.secrets.se.email;
+      name = "SE";
+      sync = "lieer";
+      color = "yellow";
+      pgpKey = "00F9FB30";
+      signatureLines = [ [ "GPG: 00F9FB30" ] ];
+    };
     _custom.desktop.audio.enableEasyeffects = true;
     _custom.desktop.audio.enableNoisetorch = true;
     _custom.desktop.mouseless.enable = true;

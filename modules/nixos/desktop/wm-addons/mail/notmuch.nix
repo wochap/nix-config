@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -10,6 +11,8 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && notmuchAccounts != { }) {
+    _custom.programs.neovim.extraDependentPackages = [ pkgs.notmuch ];
+
     _custom.hm = {
       programs.notmuch = {
         enable = true;
@@ -24,6 +27,7 @@ in
 
       accounts.email.accounts = lib.mapAttrs (name: acc: {
         notmuch.enable = true;
+        notmuch.neomutt.enable = false;
       }) notmuchAccounts;
     };
   };
