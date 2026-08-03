@@ -99,26 +99,26 @@ Notification)
   TYPE=$(echo "$INPUT" | jq -r '.notification_type // "unknown"')
   case "$TYPE" in
   permission_prompt)
-    BODY="Qwen needs your permission\n$PRETTY_CWD"
-    [[ -n "$LAST_TOOL" ]] && BODY+="\n$LAST_TOOL"
+    BODY="Qwen needs your permission<br>$PRETTY_CWD"
+    [[ -n "$LAST_TOOL" ]] && BODY+="<br>$LAST_TOOL"
     ;;
   idle_prompt)
-    BODY="Ready for your next prompt\n$PRETTY_CWD"
+    BODY="Ready for your next prompt<br>$PRETTY_CWD"
     ;;
   *)
     MESSAGE=$(echo "$INPUT" | jq -r '.message // "Qwen Code notification"')
-    BODY="$MESSAGE\n$PRETTY_CWD"
+    BODY="$MESSAGE<br>$PRETTY_CWD"
     ;;
   esac
   ;;
 Stop)
   CONTEXT_USAGE=$(echo "$INPUT" | jq -r '.context_usage // empty')
-  BODY="Finished\n$PRETTY_CWD"
-  [[ -n "$CONTEXT_USAGE" ]] && BODY+="\nContext: $(echo "$CONTEXT_USAGE" | awk '{printf "%.0f%%", $1 * 100}')"
+  BODY="Finished<br>$PRETTY_CWD"
+  [[ -n "$CONTEXT_USAGE" ]] && BODY+="<br>Context: $(echo "$CONTEXT_USAGE" | awk '{printf "%.0f%%", $1 * 100}')"
   ;;
 StopFailure)
   ERROR_TYPE=$(echo "$INPUT" | jq -r '.error // "unknown"')
-  BODY="Stopped due to an error ($ERROR_TYPE)\n$PRETTY_CWD"
+  BODY="Stopped due to an error ($ERROR_TYPE)<br>$PRETTY_CWD"
   ;;
 *)
   # Settings only register the events above; this should never fire.
