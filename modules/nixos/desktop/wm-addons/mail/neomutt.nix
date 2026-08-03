@@ -22,14 +22,13 @@ let
   sinceClause = lib.optionalString (cfg.querySince != null) " and date:${cfg.querySince}..";
 
   accountInboxAction =
-    name: account:
-    if account.sync == "lieer" then
-      "<change-folder>notmuch://${maildirBasePath}?query=${lib.escapeURL "tag:inbox and folder:${name}/mail${sinceClause}"}<enter>"
-    else
-      "<change-folder>${maildirBasePath}/${name}/INBOX<enter>";
+    name: _account:
+    # Open the *named* inbox vfolder (defined via `named-mailboxes` below)
+    # instead of the raw notmuch:// URI, so the status line's %D shows the
+    # friendly name ("personal/inbox") instead of the full query URI.
+    "<change-vfolder>${name}/inbox<enter>";
 
-  vfolderLine =
-    name: query: ''named-mailboxes "${name}" "notmuch://?query=${lib.escapeURL query}"'';
+  vfolderLine = name: query: ''named-mailboxes "${name}" "notmuch://?query=${lib.escapeURL query}"'';
   accountVfolders =
     name: acc:
     if acc.sync == "lieer" then
