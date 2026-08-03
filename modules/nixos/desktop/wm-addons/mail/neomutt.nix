@@ -41,8 +41,8 @@ let
       ]
     else
       [
-        (vfolderLine "${name}/inbox" "folder:${name}/INBOX")
-        (vfolderLine "${name}/unread" "tag:unread and folder:${name}/INBOX")
+        (vfolderLine "${name}/inbox" "folder:${name}/INBOX${sinceClause}")
+        (vfolderLine "${name}/unread" "tag:unread and folder:${name}/INBOX${sinceClause}")
       ];
   vfolders = lib.concatStringsSep "\n" (
     [ (vfolderLine "all/unread" "tag:unread${sinceClause}") ]
