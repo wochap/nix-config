@@ -65,6 +65,12 @@ in
 
           ".codex/model-catalog.local.json".source =
             lib._custom.relativeSymlink configDirectory ./dotfiles/codex/model-catalog.local.json;
+          ".codex/hooks.json".source =
+            lib._custom.relativeSymlink configDirectory ./dotfiles/codex/hooks.json;
+          ".codex/hooks/codex-notify.sh" = {
+            source = ./scripts/codex-notify.sh;
+            executable = true;
+          };
         };
 
         symlinks = {

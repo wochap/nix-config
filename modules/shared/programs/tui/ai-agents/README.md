@@ -2,12 +2,21 @@
 
 ## Post Install
 
+### Claude
+
 ```sh
 # add playwright mcp
 claude mcp add playwright --scope user -- \
     playwright-mcp \
     --executable-path /run/current-system/sw/bin/google-chrome-stable \
     --user-data-dir ~/.cache/playwright-mcp-profile
+```
+
+### Codex
+
+```sh
+# enable hooks:
+# run `codex`, open /hooks and trust the 3 entries (Codex then writes ~/.codex/config.toml)
 ```
 
 ## Qwen
