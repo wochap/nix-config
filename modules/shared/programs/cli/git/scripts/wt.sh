@@ -318,6 +318,20 @@ cmd_switch() {
     local from="${arg2:-HEAD}"
     local dir_name="${branch//\//-}"
 
+    # default base: current worktree's HEAD when inside one (bare repo HEAD
+    # always points at the default branch, never at the worktree we're in)
+    if [[ -z "$arg2" ]]; then
+      local cur_top
+      cur_top=$(git rev-parse --show-toplevel 2>/dev/null) || cur_top=""
+      if [[ -n "$cur_top" ]]; then
+        cur_top=$(cd "$cur_top" && pwd -P)
+        if find_worktree_by_path "$git_dir" "$cur_top"; then
+          from=$(git -C "$cur_top" rev-parse HEAD) ||
+            die "cannot resolve HEAD of worktree '${cur_top#"$root"/}'"
+        fi
+      fi
+    fi
+
     if git -C "$git_dir" rev-parse --verify "refs/heads/$branch" &>/dev/null; then
       die "branch '$branch' already exists"
     fi
