@@ -37,13 +37,6 @@ in
       userName = mkDefault address;
       passwordCommand = mkDefault "${pkgs.coreutils}/bin/cat ${hmConfig.xdg.configHome}/secrets/mail/${lib.toLower name}";
 
-      mbsync = {
-        enable = true;
-        create = "both";
-        remove = "both";
-        expunge = "both";
-      };
-
       msmtp.enable = true;
 
       smtp = {
@@ -73,13 +66,63 @@ in
     signByDefault = true;
   };
 
-  imapnotifyConfig = { name, ... }: {
-    imapnotify = {
-      enable = true;
-      boxes = [ "INBOX" ];
-      onNotify = "${pkgs.isync}/bin/mbsync ${name}:%s";
-    };
-  };
+  # syncConfig picks the synchronization stack per account:
+  # - "lieer": Gmail API + notmuch (flat maildir, labels synced as tags)
+  # - "mbsync": classic IMAP <-> maildir folder sync
+  syncConfig =
+    {
+      name,
+      sync,
+      ...
+    }:
+    if sync == "lieer" then
+      {
+        lieer = {
+          enable = true;
+          sync.enable = true;
+
+          settings = {
+            # workaround for a gmail api quirk where an empty change history
+            # is sometimes returned, failing the sync otherwise
+            # https://github.com/gauteh/lieer/issues/120
+            ignore_empty_history = true;
+          };
+        };
+
+        notmuch.enable = true;
+
+        # lieer keeps a flat maildir, the default INBOX mailbox doesn't exist
+        neomutt.showDefaultMailbox = false;
+
+        folders = {
+          drafts = "Drafts";
+          sent = null; # gmail keeps a copy of sent mails (lieer syncs it back as tag:sent)
+          trash = "Trash";
+        };
+
+        imapnotify = {
+          enable = true;
+          boxes = [ "INBOX" ];
+          onNotify = "${pkgs.systemd}/bin/systemctl --user start lieer-${name}.service &";
+        };
+      }
+    else
+      {
+        mbsync = {
+          enable = true;
+          create = "both";
+          remove = "both";
+          expunge = "both";
+        };
+
+        notmuch.enable = true;
+
+        imapnotify = {
+          enable = true;
+          boxes = [ "INBOX" ];
+          onNotify = "${pkgs.isync}/bin/mbsync ${name}:%s && ${pkgs.notmuch}/bin/notmuch new";
+        };
+      };
 
   signatureConfig = { signatureLines, ... }: {
     signature = {

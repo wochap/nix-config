@@ -52,6 +52,7 @@ let
   shell-offlinemsmtp = pkgs.writeScriptBin "shell-offlinemsmtp" (
     builtins.readFile ./scripts/shell-offlinemsmtp.sh
   );
+  shell-mail = pkgs.writeScriptBin "shell-mail" (builtins.readFile ./scripts/shell-mail.sh);
   shell-wireguard = pkgs.writeScriptBin "shell-wireguard" (
     builtins.readFile ./scripts/shell-wireguard.sh
   );
@@ -99,6 +100,7 @@ in
         shell-theme
         shell-recorder
         shell-offlinemsmtp
+        shell-mail
         shell-wireguard
         shell-battery-saver
       ];

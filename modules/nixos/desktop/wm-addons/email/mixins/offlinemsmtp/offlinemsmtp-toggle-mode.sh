@@ -4,22 +4,16 @@ FILE="$HOME/tmp/offlinemsmtp-sendmail"
 DIR="$(dirname "$FILE")"
 FILENAME="$(basename "$FILE")"
 
-reload_waybar() {
-  pkill -SIGRTMIN+8 waybar
-}
-
 toggle() {
   notify="notify-send --urgency=low --hint=int:transient:1 offlinemsmtp"
 
   if test -f "$FILE"; then
     rm "$FILE"
     $notify "Offlinemsmtp is disabled"
-    reload_waybar
   else
     mkdir -p "$DIR"
     touch "$FILE"
     $notify "Offlinemsmtp is enabled"
-    reload_waybar
   fi
 }
 

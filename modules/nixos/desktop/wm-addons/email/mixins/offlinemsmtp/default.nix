@@ -16,7 +16,10 @@ in
 {
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = [ offlinemsmtp-toggle-mode ];
+      home.packages = [
+        offlinemsmtp-toggle-mode
+        pkgs._custom.offlinemsmtp
+      ];
 
       systemd.user.services.offlinemsmtp = lib._custom.mkWaylandService {
         Unit = {

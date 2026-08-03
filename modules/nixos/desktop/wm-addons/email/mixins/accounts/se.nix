@@ -13,6 +13,7 @@ let
   accountConfig = {
     address = secrets.se.email;
     name = "SE";
+    sync = "lieer";
     color = "yellow";
     pgpKey = "00F9FB30";
     signatureLines = [ [ "GPG: 00F9FB30" ] ];
@@ -20,18 +21,15 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
+    _custom.desktop.email.accounts.${accountConfig.name} = accountConfig.sync;
+
     _custom.hm = {
       accounts.email.accounts.SE = mkMerge [
         (helper.commonConfig accountConfig)
-        (helper.imapnotifyConfig accountConfig)
+        (helper.syncConfig accountConfig)
         helper.gpgConfig
         {
           flavor = "gmail.com";
-          folders = {
-            drafts = "[Gmail]/Drafts";
-            sent = "[Gmail]/Sent Mail";
-            trash = "[Gmail]/Trash";
-          };
         }
       ];
     };

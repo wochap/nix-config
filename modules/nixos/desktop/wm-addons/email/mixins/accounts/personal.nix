@@ -12,6 +12,7 @@ let
   accountConfig = {
     address = "gean.marroquin@gmail.com";
     name = "Personal";
+    sync = "lieer";
     color = "red";
     pgpKey = "E73095E1";
     signatureLines = [
@@ -26,20 +27,17 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
+    _custom.desktop.email.accounts.${accountConfig.name} = accountConfig.sync;
+
     _custom.hm = {
       accounts.email.accounts.Personal = mkMerge [
         (helper.commonConfig accountConfig)
-        (helper.imapnotifyConfig accountConfig)
+        (helper.syncConfig accountConfig)
         (helper.signatureConfig accountConfig)
         helper.gpgConfig
         {
           primary = true;
           flavor = "gmail.com";
-          folders = {
-            drafts = "[Gmail]/Drafts";
-            sent = "[Gmail]/Sent Mail";
-            trash = "[Gmail]/Trash";
-          };
         }
       ];
     };

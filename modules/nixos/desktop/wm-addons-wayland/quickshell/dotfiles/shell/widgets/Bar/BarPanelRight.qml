@@ -26,7 +26,7 @@ RowLayout {
     Layout.leftMargin: -3
     Layout.rightMargin: 0
     spacing: 0
-    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible || notifications.isVisible)
+    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible || mail.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible || notifications.isVisible)
 
     Capslock {
       id: capslock
@@ -60,6 +60,12 @@ RowLayout {
           color: Theme.options.red
         }
       }
+    }
+
+    Mail {
+      id: mail
+
+      Layout.fillHeight: true
     }
 
     Offlinemsmtp {
