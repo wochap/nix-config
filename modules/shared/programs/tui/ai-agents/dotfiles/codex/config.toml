@@ -6,3 +6,6 @@ model = "qwen3.8-max-preview"
 name = "Model_Studio_Token_Plan_Personal"
 base_url = "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
 wire_api = "responses"
+
+[tui.keymap.editor]
+insert_newline = ["alt-enter", "shift-enter"]
