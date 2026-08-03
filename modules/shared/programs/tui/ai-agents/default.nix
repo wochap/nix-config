@@ -35,7 +35,8 @@ in
       home = {
         packages =
           with pkgs;
-          [ ] ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
+          [ bubblewrap ]
+          ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
 
         sessionVariables = {
           OPENSPEC_TELEMETRY = "0";
