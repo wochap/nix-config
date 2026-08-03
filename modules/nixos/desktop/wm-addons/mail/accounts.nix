@@ -42,7 +42,9 @@ in
             "${pkgs.coreutils}/bin/cat ${hmConfig.xdg.configHome}/secrets/mail/${lib.toLower acc.name}";
 
         msmtp.enable = true;
+        imap.host = lib.mkIf (acc.imapHost != null) (lib.mkForce acc.imapHost);
         smtp = {
+          host = lib.mkIf (acc.smtpHost != null) (lib.mkForce acc.smtpHost);
           port = 587;
           tls.useStartTls = true;
         };

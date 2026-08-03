@@ -81,6 +81,28 @@ in
               default = null;
               description = "If set, bind an index macro to this key that jumps to the account's inbox virtual folder.";
             };
+            imapHost = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = ''
+                IMAP server hostname, forwarded to the home-manager account
+                (used by mbsync and imapnotify). When null, the value already
+                provided by the account's flavor (e.g. imap.gmail.com) or set
+                directly on the home-manager account is kept. Set explicitly
+                to override.
+              '';
+            };
+            smtpHost = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = ''
+                SMTP server hostname, forwarded to the home-manager account
+                (used by msmtp, which offlinemsmtp wraps). When null, the
+                value already provided by the account's flavor (e.g.
+                smtp.gmail.com) or set directly on the home-manager account
+                is kept. Set explicitly to override.
+              '';
+            };
           };
         }
       );
