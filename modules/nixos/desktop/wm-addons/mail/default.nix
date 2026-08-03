@@ -33,6 +33,11 @@ in
 
   options._custom.desktop.mail = {
     enable = lib.mkEnableOption "Mail setup";
+    querySince = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = "6months";
+      description = "Restrict neomutt's notmuch (lieer) folders to messages newer than this relative notmuch date (e.g. \"6months\", \"1y\"). null disables the restriction.";
+    };
     accounts = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule {

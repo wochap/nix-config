@@ -19,11 +19,12 @@ let
   mailboxfile = "${hmConfig.xdg.configHome}/neomutt/mailboxes";
   syncthingdir = "${hmConfig.home.homeDirectory}/Sync";
   maildirBasePath = hmConfig.accounts.email.maildirBasePath;
+  sinceClause = lib.optionalString (cfg.querySince != null) " and date:${cfg.querySince}..";
 
   accountInboxAction =
     name: account:
     if account.sync == "lieer" then
-      "<change-folder>notmuch://${maildirBasePath}?query=${lib.escapeURL "tag:inbox and folder:${name}/mail"}<enter>"
+      "<change-folder>notmuch://${maildirBasePath}?query=${lib.escapeURL "tag:inbox and folder:${name}/mail${sinceClause}"}<enter>"
     else
       "<change-folder>${maildirBasePath}/${name}/INBOX<enter>";
 
@@ -33,10 +34,10 @@ let
     name: acc:
     if acc.sync == "lieer" then
       [
-        (vfolderLine "${name}/inbox" "tag:inbox and folder:${name}/mail")
-        (vfolderLine "${name}/unread" "tag:unread and folder:${name}/mail")
-        (vfolderLine "${name}/flagged" "tag:flagged and folder:${name}/mail")
-        (vfolderLine "${name}/sent" "tag:sent and folder:${name}/mail")
+        (vfolderLine "${name}/inbox" "tag:inbox and folder:${name}/mail${sinceClause}")
+        (vfolderLine "${name}/unread" "tag:unread and folder:${name}/mail${sinceClause}")
+        (vfolderLine "${name}/flagged" "tag:flagged and folder:${name}/mail${sinceClause}")
+        (vfolderLine "${name}/sent" "tag:sent and folder:${name}/mail${sinceClause}")
       ]
     else
       [
@@ -44,7 +45,7 @@ let
         (vfolderLine "${name}/unread" "tag:unread and folder:${name}/INBOX")
       ];
   vfolders = lib.concatStringsSep "\n" (
-    [ (vfolderLine "all/unread" "tag:unread") ]
+    [ (vfolderLine "all/unread" "tag:unread${sinceClause}") ]
     ++ lib.concatLists (lib.mapAttrsToList accountVfolders cfg.accounts)
   );
 
