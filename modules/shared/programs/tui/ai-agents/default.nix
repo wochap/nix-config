@@ -77,11 +77,9 @@ in
           ".qwen/settings.json".source = ./dotfiles/qwen-settings.json;
           ".pi/agent/settings.json".source = ./dotfiles/pi/settings.json;
           ".codex/config.toml".source = ./dotfiles/codex/config.toml;
+          ".config/opencode/opencode.jsonc".source = ./dotfiles/opencode-settings.jsonc;
         };
       };
-
-      xdg.configFile."opencode/opencode.jsonc".source =
-        lib._custom.relativeSymlink configDirectory ./dotfiles/opencode-settings.jsonc;
     };
   };
 }
