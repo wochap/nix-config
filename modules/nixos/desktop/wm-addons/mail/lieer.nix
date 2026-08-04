@@ -7,8 +7,11 @@
 
 let
   cfg = config._custom.desktop.mail;
+  inherit (config._custom.globals) userName;
+  hmConfig = config.home-manager.users.${userName};
   lieerAccounts = lib.filterAttrs (_: acc: acc.sync == "lieer") cfg.accounts;
   lieerNames = lib.attrNames lieerAccounts;
+  gmi = "${hmConfig.programs.lieer.package}/bin/gmi";
 in
 {
   config = lib.mkIf (cfg.enable && lieerNames != [ ]) {
@@ -17,9 +20,48 @@ in
       services.lieer.enable = true;
 
       systemd.user.services = lib.mkMerge [
-        (lib.genAttrs (map (name: "lieer-${name}") lieerNames) (_: {
-          Unit.OnFailure = "lieer-on-failure.service";
-        }))
+        (lib.listToAttrs (map (
+          name:
+          let
+            maildir = hmConfig.accounts.email.accounts.${name}.maildir.absPath;
+          in
+          {
+            name = "lieer-${name}";
+            value = {
+              Unit = {
+                OnFailure = "lieer-on-failure.service";
+
+                # home-manager only conditions on .gmailieer.json, which
+                # already exists on a fresh setup, so the timer would kick
+                # off its own (unresumable) full sync in the background
+                # before the manual initial `gmi pull` has been done. Also
+                # require the state file, which only exists once that
+                # initial pull has completed.
+                ConditionPathExists = lib.mkForce [
+                  "${maildir}/.gmailieer.json"
+                  "${maildir}/.state.gmailieer.json"
+                ];
+              };
+
+              # home-manager's service runs `gmi sync`, which pushes *before*
+              # it pulls. The push scans every local change since the notmuch
+              # revision stored in .state.gmailieer.json (lastmod) and
+              # fetches remote metadata for each one; when that revision is
+              # stale/zero it walks the whole mailbox through the (heavily
+              # rate limited) Gmail API, blocking the pull — and with it mail
+              # delivery and mailnotify notifications — for hours.
+              #
+              # Run the fast, history-based pull first so new mail always
+              # lands, then push local tag changes. Pulling first also
+              # refreshes the historyId used by the push conflict check, so
+              # lastmod advances reliably instead of getting stuck.
+              Service.ExecStart = lib.mkForce [
+                "${gmi} pull"
+                "${gmi} push"
+              ];
+            };
+          }
+        ) lieerNames))
         {
           lieer-on-failure = {
             Service = {

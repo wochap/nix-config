@@ -68,12 +68,34 @@ Lieer syncs through the Gmail API using OAuth, while `goimapnotify` watches IMAP
    gmi auth
    ```
    This will open your browser and request OAuth access. The access token is stored in `.credentials.gmailieer.json`.
-8. Run the initial sync. This may take a while for large mailboxes. You should stop `mailnotify` during this time so you aren't bombarded with notifications:
+
+   Note that `.gmailieer.json` is managed by Home Manager (a symlink into the
+   Nix store), so do not edit it by hand or with `gmi set` — change
+   `_custom.hm.accounts.email.accounts.<name>.lieer.settings` in your Nix
+   config instead (any manual change is reverted on the next activation).
+8. Run the initial sync. This is a full synchronization and can take hours on
+   large mailboxes (the Gmail API is heavily rate limited). Stop `mailnotify`
+   so you aren't bombarded with notifications while the pull downloads
+   everything, and stop the account's sync units so nothing interferes (the
+   `lieer-<AccountName>` service additionally refuses to run until
+   `.state.gmailieer.json` exists, i.e. until this initial pull has
+   completed, but stopping the rest keeps things quiet):
    ```sh
-   systemctl --user stop mailnotify
+   systemctl --user stop mailnotify lieer-<AccountName>.timer lieer-<AccountName>.service imapnotify-<AccountName>.service
+   cd ~/Mail/<AccountName>
    gmi pull
-   systemctl --user start mailnotify
    ```
+   - Let it finish: the sync cursors in `.state.gmailieer.json` are only
+     written when the pull completes. If it gets interrupted anyway, continue
+     with `gmi pull --resume`, and do not start the sync services until the
+     initial pull has fully completed.
+   - If you have several accounts, initialize them one at a time.
+   - When done, verify the state is healthy before re-enabling the services:
+     ```sh
+     cat .state.gmailieer.json    # both last_historyId and lastmod must be non-zero
+     gmi push                     # should print "push: everything is up-to-date."
+     systemctl --user start mailnotify lieer-<AccountName>.timer imapnotify-<AccountName>.service
+     ```
 9. (Optional) Apply initial tags directly in the notmuch database:
    ```sh
    notmuch config set --database new.tags unread inbox
@@ -97,3 +119,35 @@ The initial synchronization can also be kicked off using `email-sync`.
   The status bar shows a mail badge with your unread inbox count.
 - **Neovim (notmuch.nvim):**
   Reads the exact same notmuch database. Sends are routed through `offlinemsmtp` so your workflow remains robust even when offline.
+
+## Troubleshooting
+
+### Sync takes hours and notifications arrive late (or never)
+
+`gmi` keeps two cursors in `~/Mail/<AccountName>/.state.gmailieer.json`:
+
+- `last_historyId`: how far remote changes have been **pulled** (history based, cheap).
+- `lastmod`: the notmuch database revision up to which local tag changes have been **pushed**.
+
+If `lastmod` falls far behind the current database revision, the push phase
+queries every message changed since then and fetches its metadata from the
+(heavily rate limited) Gmail API. On a large mailbox that takes hours, and
+since `gmi sync` pushes *before* it pulls, the pull — and with it mail
+delivery and mailnotify notifications — is blocked the whole time. Worse, a
+push only advances `lastmod` when nothing was skipped, so once stuck it tends
+to stay stuck. The sync service is configured to pull first and push second
+to keep mail flowing, but a badly stale `lastmod` still needs a one-time
+repair:
+
+```sh
+systemctl --user stop lieer-personal.service lieer-personal.timer
+cd ~/Mail/personal
+rev=$(NOTMUCH_CONFIG=~/.config/notmuch/default/config notmuch count --lastmod | cut -f2)
+python3 -c "import json; s = json.load(open('.state.gmailieer.json')); s['lastmod'] = $rev; json.dump(s, open('.state.gmailieer.json', 'w'))"
+gmi push   # should now print "push: everything is up-to-date."
+systemctl --user start lieer-personal.timer
+```
+
+This skips pushing any local tag changes made before the repair, which is
+safe right after a successful `gmi pull` (local tags already mirror the
+remote labels).
