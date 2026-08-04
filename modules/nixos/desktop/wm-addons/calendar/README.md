@@ -49,9 +49,15 @@ check the `displayname` files inside the collection subdirectories of
    docs: https://vdirsyncer.pimutils.org/en/stable/config.html?highlight=google#google
 1. In `<NIX_CONFIG_PATH>/secrets/vdirsyncer` add 2 files: `vda_client_id` and `vda_client_secret`, you get those from [Google Console](https://vdirsyncer.pimutils.org/en/stable/config.html?highlight=google#google), then
 
-   ```
+   ```sh
+   # clean current state
+   systemctl --user stop vdirsyncer.timer vdirsyncer.service ics2rem.service
+   rm -rf ~/.local/share/vdirsyncer
+   rm -rf ~/.local/share/khal ~/.cache/khal
+   rm -f ~/.config/remind/calendar-generated.rem
+
    # a browser should open automatically asking for google credentials, otherwise run:
-   $ vdirsyncer discover
+   vdirsyncer discover
    ```
 
 #### Remind
@@ -66,7 +72,7 @@ Files:
 - `~/.config/remind/manual.rem`:
   your own hand-written reminders. create it once:
 
-  ```
+  ```sh
   touch ~/.config/remind/manual.rem
   ```
 
