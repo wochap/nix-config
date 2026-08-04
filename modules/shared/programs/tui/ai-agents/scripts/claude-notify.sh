@@ -43,9 +43,13 @@
 #   }
 # }
 #
-# Terminal bell: the BEL is written to /dev/tty, not stdout, because Claude
-# Code captures hook stdout and it would never reach the terminal. For the
-# tab to actually highlight, the terminal must react to BEL:
+# Terminal bell: Claude Code spawns hooks detached, without a controlling
+# terminal — inside a hook /dev/tty fails with "No such device or address"
+# and stdout is captured anyway. So the BEL is written straight to the pty
+# Claude Code itself is attached to, located by walking up the process tree
+# (hook → claude → your shell). Override the target device with
+# CLAUDE_BELL_TTY ("none" disables the bell entirely). For the tab to
+# actually highlight, the terminal must react to BEL:
 #   tmux             set -g monitor-bell on; set -g bell-action any
 #                    set -g visual-bell off; set -g allow-passthrough on
 #   kitty            enable_audio_bell no; bell_on_tab "🔔 "
@@ -57,12 +61,41 @@ INPUT=$(cat)
 EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // ""')
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
 STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/claude-notify"
+# --- Helper: find the terminal Claude Code is attached to ---
+# Hooks are spawned detached — no controlling tty — so locate the pty by
+# walking up the process tree until a process with a real tty shows up
+# (Claude Code itself, or the shell it was launched from). Prints a device
+# path like /dev/pts/3; fails when there is no terminal at all (e.g. CI).
+find_claude_tty() {
+  local pid=$$ tty
+  while [[ -n "$pid" && "$pid" != "0" && "$pid" != "1" ]]; do
+    tty=$(ps -o tty= -p "$pid" 2>/dev/null | tr -d '[:space:]')
+    case "$tty" in
+    pts/*) printf '/dev/%s' "$tty"; return 0 ;;                          # Linux pty
+    tty[0-9]*) printf '/dev/%s' "$tty"; return 0 ;;                      # Linux console
+    s[0-9]* | ttys[0-9]*) printf '/dev/tty%s' "${tty#ttys}"; return 0 ;; # macOS
+    esac
+    pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d '[:space:]')
+  done
+  return 1
+}
 # --- Helper: ring the terminal bell ---
-# Goes straight to the controlling tty (Claude Code swallows hook stdout).
-# Guarded because a session without a tty (e.g. `claude -p` in CI) would
-# otherwise trip set -e.
+# Writes BEL straight to Claude Code's pty (see find_claude_tty). Guarded
+# because headless sessions have no terminal and the failure would otherwise
+# trip set -e and kill the notification.
 ring_bell() {
-  { printf '\a' >/dev/tty; } 2>/dev/null || true
+  local tty_dev="${CLAUDE_BELL_TTY:-}"
+  if [[ "$tty_dev" == "none" ]]; then
+    return 0
+  fi
+  if [[ -z "$tty_dev" ]]; then
+    if [[ -w /dev/tty ]]; then
+      tty_dev=/dev/tty # manual runs outside Claude Code keep their tty
+    else
+      tty_dev=$(find_claude_tty) || return 0
+    fi
+  fi
+  { printf '\a' >"$tty_dev"; } 2>/dev/null || true
 }
 # --- Helper: describe a tool call ---
 describe_tool() {
