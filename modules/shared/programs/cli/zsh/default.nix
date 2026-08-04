@@ -282,6 +282,16 @@ in
 
             source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/aliases/aliases.plugin.zsh
             source ${pkgs.oh-my-zsh}/share/oh-my-zsh/lib/clipboard.zsh
+
+            # oh-my-zsh's clipboard.zsh pipes into `wl-copy` without --trim-newline, so
+            # copied text carries a trailing newline; redefine clipcopy to trim it.
+            # NOTE: both clipcopy and clippaste must be redefined, otherwise the lazy
+            # detection wrapper from clipboard.zsh re-runs detect-clipboard on the first
+            # clippaste call and silently overwrites this override
+            if [[ -n "''${WAYLAND_DISPLAY:-}" ]] && (( ''${+commands[wl-copy]} )) && (( ''${+commands[wl-paste]} )); then
+              function clipcopy() { cat "''${1:-/dev/stdin}" | wl-copy --trim-newline &>/dev/null &|; }
+              function clippaste() { wl-paste --no-newline; }
+            fi
             source ${./dotfiles/plugins/dirhistory.zsh}
             source ${inputs.fuzzy-sys}/fuzzy-sys.plugin.zsh
             source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
