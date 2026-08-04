@@ -184,6 +184,12 @@ in
         [ "https://geanmar.com" ]
         [ "GPG: E73095E1" ]
       ];
+      # hooks.arrive = [
+      #   {
+      #     from = "*@gmail.com";
+      #     command = "";
+      #   }
+      # ];
     };
     _custom.desktop.mail.accounts.se = {
       flavor = "gmail.com";
