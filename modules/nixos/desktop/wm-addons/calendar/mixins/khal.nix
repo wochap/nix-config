@@ -35,7 +35,9 @@ let
       [default]
       # PERF: highlight_event_days slows start up
       highlight_event_days = False
-      # enable_mouse = False
+      enable_mouse = True
+      # calendar used by `khal new`
+      default_calendar = personal_calendar_local
 
       [view]
       event_view_always_visible = True
@@ -48,6 +50,8 @@ in
   config = lib.mkIf cfg.enable {
     _custom.hm = {
       home.packages = with pkgs; [ khal ];
+
+      home.shellAliases.ktoday = "khal list now +1d";
 
       xdg.configFile = {
         "khal/config" = {

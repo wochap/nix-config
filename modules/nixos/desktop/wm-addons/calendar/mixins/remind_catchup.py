@@ -1,0 +1,101 @@
+"""Notify reminders that triggered while the remind daemon could not run
+(machine suspended or powered off).
+
+The state file stores the epoch of the last successful check. When the
+gap since then exceeds a threshold, remind is asked for all triggers
+inside the gap window and each missed one is notified once.
+
+Usage: remind_catchup.py REMIND_BIN NOTIFY_SEND_BIN REM_FILE STATE_FILE
+"""
+
+import json
+import os
+import subprocess
+import sys
+from datetime import datetime, timedelta
+
+REMIND_BIN, NOTIFY_SEND_BIN, REM_FILE, STATE_FILE = sys.argv[1:5]
+# gaps below this are normal timer jitter, not suspend/shutdown
+GAP_THRESHOLD_S = 5 * 60
+# don't notify about events missed longer ago than this
+MAX_LOOKBACK_DAYS = 7
+
+
+def read_state():
+    try:
+        with open(STATE_FILE, encoding="utf-8") as f:
+            return float(f.read().strip())
+    except (FileNotFoundError, ValueError):
+        return None
+
+
+def write_state(ts):
+    os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
+    with open(STATE_FILE, "w", encoding="utf-8") as f:
+        f.write(f"{ts:.0f}")
+
+
+def main():
+    now = datetime.now().astimezone()
+    tz = now.tzinfo
+    now_ts = now.timestamp()
+    last_ts = read_state()
+
+    if last_ts is None:
+        write_state(now_ts)
+        print("remind-catchup: first run, initialized state")
+        return 0
+
+    gap_s = now_ts - last_ts
+    if gap_s < GAP_THRESHOLD_S:
+        write_state(now_ts)
+        return 0
+
+    start = datetime.fromtimestamp(max(last_ts, now_ts - MAX_LOOKBACK_DAYS * 86400), tz)
+    proc = subprocess.run(
+        # -ppp2: machine-readable JSON for two months, so windows
+        # crossing a month boundary are covered
+        [REMIND_BIN, "-ppp2", "-b2", REM_FILE, start.strftime("%Y-%m-%d")],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        # keep the old state so the window is retried on the next run
+        print(f"remind-catchup: remind failed: {proc.stderr.strip()}", file=sys.stderr)
+        return 1
+
+    notified = 0
+    for month in json.loads(proc.stdout or "[]"):
+        for entry in month.get("entries", []):
+            triggers = []
+            if entry.get("eventstart"):
+                event = datetime.strptime(entry["eventstart"], "%Y-%m-%dT%H:%M").replace(tzinfo=tz)
+                tdelta = int(entry.get("tdelta", 0))
+                if tdelta:
+                    triggers.append(event - timedelta(minutes=tdelta))
+                triggers.append(event)
+            else:  # all-day event: triggers at local midnight
+                triggers.append(datetime.strptime(entry["date"], "%Y-%m-%d").replace(tzinfo=tz))
+            if any(last_ts < t.timestamp() <= now_ts for t in triggers):
+                body = entry.get("body") or entry.get("rawbody") or "reminder"
+                subprocess.run(
+                    [
+                        NOTIFY_SEND_BIN,
+                        "--app-name=Remind",
+                        "--app-icon=kalarm",
+                        "--icon=kalarm",
+                        "Missed reminder",
+                        body,
+                    ],
+                    check=False,
+                )
+                notified += 1
+
+    write_state(now_ts)
+    print(f"remind-catchup: gap={gap_s:.0f}s notified={notified}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

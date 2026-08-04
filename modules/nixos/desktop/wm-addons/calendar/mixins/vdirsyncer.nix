@@ -11,8 +11,10 @@ let
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) dataHome configHome;
   vdirsyncer = "${pkgs.vdirsyncer}/bin/vdirsyncer";
+  # no `discover` here: new collections are created implicitly during sync
+  # (implicit = "create" below). run `vdirsyncer discover` manually only for
+  # initial setup, re-authentication or troubleshooting.
   vdirsyncerScript = pkgs.writeShellScript "vdirsyncer" ''
-    ${vdirsyncer} discover
     ${vdirsyncer} sync
     ${vdirsyncer} metasync
   '';
@@ -30,6 +32,7 @@ in
         Unit = {
           Description = "Synchronize Calendar and Contacts";
           OnFailure = "vdirsyncer-on-failure.service";
+          OnSuccess = "ics2rem.service";
         };
         Service = {
           Type = "oneshot";
@@ -48,6 +51,8 @@ in
         Unit.Description = "Synchronize Calendar and Contacts";
         Timer = {
           OnCalendar = "*:0/15"; # Every 15 minutes
+          # run once at boot/login if the last scheduled sync was missed
+          Persistent = true;
           Unit = "vdirsyncer.service";
         };
         Install.WantedBy = [ "timers.target" ];
@@ -62,6 +67,9 @@ in
             collections = ["from a", "from b"]
             conflict_resolution = "b wins"
             metadata = [ "displayname", "color" ]
+            # create collections that appear on either side during sync,
+            # so `vdirsyncer discover` is not needed for new calendars
+            implicit = "create"
 
             [storage ${name}_google_calendar_local]
             type = "filesystem"
