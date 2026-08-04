@@ -2,7 +2,8 @@
 #
 # claude-notify.sh — Claude Code desktop notification hook
 #
-# Reads the hook's JSON payload from stdin and sends a desktop notification.
+# Reads the hook's JSON payload from stdin and sends a desktop notification,
+# plus a terminal bell so the terminal tab highlights.
 # Title carries the session title (from the transcript), falling back to
 # "Claude Code". Body carries the event description, pretty cwd, and —
 # depending on event — the pending tool, the last assistant message, or
@@ -41,15 +42,28 @@
 #     ]
 #   }
 # }
-
+#
+# Terminal bell: the BEL is written to /dev/tty, not stdout, because Claude
+# Code captures hook stdout and it would never reach the terminal. For the
+# tab to actually highlight, the terminal must react to BEL:
+#   tmux             set -g monitor-bell on; set -g bell-action any
+#                    set -g visual-bell off; set -g allow-passthrough on
+#   kitty            enable_audio_bell no; bell_on_tab "🔔 "
+#   iTerm2           "Silence bell" still shows the tab indicator
+#   Windows Terminal "bellStyle": "window"
+# Sanity check outside Claude Code: printf '\a' > /dev/tty
 set -euo pipefail
-
 INPUT=$(cat)
-
 EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // ""')
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
 STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/claude-notify"
-
+# --- Helper: ring the terminal bell ---
+# Goes straight to the controlling tty (Claude Code swallows hook stdout).
+# Guarded because a session without a tty (e.g. `claude -p` in CI) would
+# otherwise trip set -e.
+ring_bell() {
+  { printf '\a' >/dev/tty; } 2>/dev/null || true
+}
 # --- Helper: describe a tool call ---
 describe_tool() {
   echo "$INPUT" | jq -r '
@@ -58,7 +72,6 @@ describe_tool() {
     else .tool_name
     end' 2>/dev/null || echo "unknown tool"
 }
-
 # ============================================================
 # PreToolUse: record the tool Claude is about to run (silent)
 # ============================================================
@@ -67,12 +80,10 @@ if [[ "$EVENT" == "PreToolUse" ]]; then
   describe_tool >"$STATE_DIR/last-tool-$SESSION_ID" 2>/dev/null || true
   exit 0
 fi
-
 # --- Common fields ---
 CWD=$(echo "$INPUT" | jq -r '.cwd // ""')
 TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path // ""')
 PRETTY_CWD="${CWD/#$HOME/\~}"
-
 # Session title: last ai-title / custom-title entry in the transcript.
 # Renaming a session appends a new title line, so the last one wins.
 SESSION_NAME=""
@@ -81,16 +92,13 @@ if [[ -n "$TRANSCRIPT" && -r "$TRANSCRIPT" ]]; then
     grep -m1 -oE '"(aiTitle|customTitle)":"([^"\\]|\\.)*"' |
     head -1 | sed -E 's/^"(aiTitle|customTitle)":"//; s/"$//') || true
 fi
-
 # Last tool Claude attempted (from PreToolUse state file)
 LAST_TOOL=""
 if [[ -r "$STATE_DIR/last-tool-$SESSION_ID" ]]; then
   LAST_TOOL=$(<"$STATE_DIR/last-tool-$SESSION_ID")
 fi
-
 TITLE="${SESSION_NAME:-Claude Code}"
 BODY=""
-
 case "$EVENT" in
 Notification)
   TYPE=$(echo "$INPUT" | jq -r '.notification_type // "unknown"')
@@ -130,22 +138,21 @@ StopFailure)
   exit 0
   ;;
 esac
-
+# --- Ring the terminal bell ---
+# Everything reaching this point needs your attention: PreToolUse exited
+# above, and unknown events exited in the case's catch-all branch.
+ring_bell
 # --- Send the notification (auto-detects OS) ---
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS
   osascript -e "display notification \"$BODY\" with title \"$TITLE\""
-
 elif command -v notify-send >/dev/null 2>&1; then
   # Linux (requires libnotify)
   notify-send --app-name="claude-code" --app-icon="claude-code" --icon="claude-code" --hint=string:custom-sound:message "$TITLE" "$BODY"
-
 elif command -v powershell.exe >/dev/null 2>&1; then
   # WSL / Windows
   powershell.exe -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('$BODY', '$TITLE')"
-
 else
   echo "No supported notification backend found (osascript/notify-send/powershell.exe)" >&2
 fi
-
 exit 0
