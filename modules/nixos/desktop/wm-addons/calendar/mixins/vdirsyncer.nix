@@ -10,24 +10,6 @@ let
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) dataHome;
-
-  # the move to programs.vdirsyncer renamed the pairs from
-  # <name>_google_calendar to calendar_<name>. rename the matching status
-  # entries once so the per-item sync state is preserved (no full
-  # re-download; `vdirsyncer discover` is still needed once because the
-  # discovery cache key changed). idempotent.
-  statusMigrationScript = pkgs.writeShellScript "vdirsyncer-status-migration" ''
-    status_dir="${dataHome}/vdirsyncer/status"
-    migrate_pair() {
-      if [ -d "$status_dir/$1" ] && [ ! -e "$status_dir/$2" ]; then
-        ${pkgs.coreutils}/bin/mv -f "$status_dir/$1" "$status_dir/$2"
-      fi
-      if [ -f "$status_dir/$1.collections" ] && [ ! -e "$status_dir/$2.collections" ]; then
-        ${pkgs.coreutils}/bin/mv -f "$status_dir/$1.collections" "$status_dir/$2.collections"
-      fi
-    }
-    ${lib.concatMapStringsSep "\n" (acc: ''migrate_pair "${acc.name}_google_calendar" "calendar_${acc.name}"'') (lib.attrValues cfg.accounts)}
-  '';
 in
 {
   config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
@@ -96,7 +78,6 @@ in
           # regenerate the remind notifications from the synced ics files
           OnSuccess = "ics2rem.service";
         };
-        Service.ExecStartPre = "${statusMigrationScript}";
       };
 
       systemd.user.services.vdirsyncer-on-failure = {
