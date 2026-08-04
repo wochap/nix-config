@@ -38,7 +38,16 @@
 #   }
 # }
 
-set -euo pipefail
+set -Eeuo pipefail
+
+# Contract: this hook is observe-only — it must never print to stdout and
+# must always exit 0, so it can never block a turn or be parsed as a
+# permission decision. If anything below goes wrong, exit cleanly instead of
+# surfacing a hook error.
+trap 'exit 0' ERR
+# Ignore SIGPIPE so an early-exiting reader becomes a write error (handled by
+# the ERR trap above) instead of killing the script with exit code 141.
+trap '' PIPE
 
 INPUT=$(cat)
 
@@ -85,7 +94,12 @@ Stop)
   # skip to avoid a duplicate ping on the loop.
   STOP_HOOK_ACTIVE=$(echo "$INPUT" | jq -r '.stop_hook_active // false')
   [[ "$STOP_HOOK_ACTIVE" == "true" ]] && exit 0
-  LAST_MSG=$(echo "$INPUT" | jq -r '.last_assistant_message // ""' | head -c 80)
+  # Truncate inside jq: piping into `head -c 80` makes head close the pipe
+  # early, so jq dies of SIGPIPE (hook exit 141) whenever the message is
+  # longer than 80 bytes.
+  LAST_MSG=$(echo "$INPUT" | jq -r '
+    def trunc($n): tostring | if length > $n then .[0:$n] + "…" else . end;
+    (.last_assistant_message // "") | trunc(80)')
   BODY="Finished<br>$PRETTY_CWD"
   [[ -n "$MODEL" ]] && BODY+=" ($MODEL)"
   [[ -n "$LAST_MSG" ]] && BODY+="<br><i>$LAST_MSG</i>"
