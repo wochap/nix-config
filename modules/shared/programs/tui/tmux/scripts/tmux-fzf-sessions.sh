@@ -6,7 +6,22 @@ set -euo pipefail
 get_sessions() {
   local curr
   curr="$(tmux display-message -p '#{session_id}')"
-  tmux list-sessions -F "#{?#{==:#{session_id},${curr}},*, }|Session #{session_name}|(#{session_windows} windows)|#{?session_attached,(attached),}|#{session_id}" |
+  awk -v curr="$curr" -F'|' '
+    NR == FNR {
+      panes[$1]++
+      next
+    }
+    $2 == "tmux-server" { next }
+    {
+      sid = $1
+      name = $2
+      win = $3
+      att = $4
+      p = panes[sid] + 0
+      star = (sid == curr) ? "*" : " "
+      printf "%s|Session %s|(%s windows)|(%d panes)|%s|%s\n", star, name, win, p, att, sid
+    }
+  ' <(tmux list-panes -a -F '#{session_id}') <(tmux list-sessions -F '#{session_id}|#{session_name}|#{session_windows}|#{?session_attached,(attached),}') |
     column -t -s '|'
 }
 
