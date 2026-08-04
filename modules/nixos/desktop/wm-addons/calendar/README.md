@@ -23,9 +23,9 @@ accounts get no calendar stack at all. example (see `hosts/glegion`):
 _custom.desktop.calendar.accounts.personal = {
   name = "personal"; # defaults to the attribute name
   primary = true;
-  # displayname of the main google calendar collection, once set it
-  # becomes khal's default_calendar (used by `khal new`)
-  # $ cat ~/.local/share/vdirsyncer/personal-calendars/*/displayname
+  # displayname of the main google calendar collection, becomes khal's
+  # default_calendar (used by `khal new`). find it with:
+  #   cat ~/.local/share/vdirsyncer/personal-calendars/*/displayname
   primaryCollection = "Holydays";
 };
 ```
