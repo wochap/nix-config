@@ -202,6 +202,20 @@ in
         }
       ];
     };
+
+    # calendar accounts are per host, only hosts that define accounts get
+    # the calendar stack (vdirsyncer/khal/remind) set up
+    _custom.desktop.calendar.accounts.personal = {
+      name = "personal";
+      primary = true;
+      # displayname of the main google calendar collection, becomes khal's
+      # default_calendar (used by `khal new`). find it with:
+      #   cat ~/.local/share/vdirsyncer/personal-calendars/*/displayname
+      #primaryCollection = "...";
+    };
+    _custom.desktop.calendar.accounts.se = {
+      name = "se";
+    };
     _custom.desktop.audio.enableEasyeffects = true;
     _custom.desktop.audio.enableNoisetorch = true;
     _custom.desktop.mouseless.enable = true;

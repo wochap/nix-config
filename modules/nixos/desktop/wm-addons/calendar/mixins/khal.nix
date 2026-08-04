@@ -1,66 +1,47 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }:
 
 let
   cfg = config._custom.desktop.calendar;
-  inherit (config._custom.globals) userName preferDark;
-  hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.xdg) dataHome;
-
-  mkThemeKhal =
-    theme: # toml
-    ''
-      [calendars]
-
-      [[personal_calendar_local]]
-      path = ${dataHome}/vdirsyncer/personal-calendars/*
-      type = discover
-
-      [[se_calendar_local]]
-      path = ${dataHome}/vdirsyncer/se-calendars/*
-      type = discover
-
-      [locale]
-      timeformat = %H:%M
-      dateformat = %a %d %b
-      longdateformat = %a %d %b %Y
-      datetimeformat = %a %d %b %H:%M
-      longdatetimeformat = %a %d %b %Y %H:%M
-      firstweekday = 0
-
-      [default]
-      # PERF: highlight_event_days slows start up
-      highlight_event_days = False
-      enable_mouse = True
-      # calendar used by `khal new`
-      default_calendar = personal_calendar_local
-
-      [view]
-      event_view_always_visible = True
-      theme = ${theme}
-    '';
-  catppuccin-khal-light-theme = mkThemeKhal "light";
-  catppuccin-khal-dark-theme = mkThemeKhal "dark";
+  inherit (config._custom.globals) preferDark;
 in
 {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
     _custom.hm = {
-      home.packages = with pkgs; [ khal ];
+      # generates ~/.config/khal/config; the [[...]] calendar sections come
+      # from accounts.calendar.accounts (see vdirsyncer.nix).
+      # `default_calendar` (used by `khal new`) is injected by home-manager
+      # from the primary account's primaryCollection, once set.
+      programs.khal = {
+        enable = true;
+
+        locale = {
+          timeformat = "%H:%M";
+          dateformat = "%a %d %b";
+          longdateformat = "%a %d %b %Y";
+          datetimeformat = "%a %d %b %H:%M";
+          longdatetimeformat = "%a %d %b %Y %H:%M";
+          firstweekday = 0;
+        };
+
+        settings = {
+          default = {
+            # PERF: highlight_event_days slows start up; overrides the
+            # `true` home-manager sets when a primary account exists
+            highlight_event_days = false;
+            enable_mouse = true;
+          };
+          view = {
+            event_view_always_visible = true;
+            theme = if preferDark then "dark" else "light";
+          };
+        };
+      };
 
       home.shellAliases.ktoday = "khal list now +1d";
-
-      xdg.configFile = {
-        "khal/config" = {
-          text = if preferDark then catppuccin-khal-dark-theme else catppuccin-khal-light-theme;
-          force = true;
-        };
-        "khal/config-light".text = catppuccin-khal-light-theme;
-        "khal/config-dark".text = catppuccin-khal-dark-theme;
-      };
     };
   };
 }

@@ -9,35 +9,94 @@ let
   cfg = config._custom.desktop.calendar;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.xdg) dataHome configHome;
-  vdirsyncer = "${pkgs.vdirsyncer}/bin/vdirsyncer";
-  # no `discover` here: new collections are created implicitly during sync
-  # (implicit = "create" below). run `vdirsyncer discover` manually only for
-  # initial setup, re-authentication or troubleshooting.
-  vdirsyncerScript = pkgs.writeShellScript "vdirsyncer" ''
-    ${vdirsyncer} sync
-    ${vdirsyncer} metasync
+  inherit (hmConfig.xdg) dataHome;
+
+  # the move to programs.vdirsyncer renamed the pairs from
+  # <name>_google_calendar to calendar_<name>. rename the matching status
+  # entries once so the per-item sync state is preserved (no full
+  # re-download; `vdirsyncer discover` is still needed once because the
+  # discovery cache key changed). idempotent.
+  statusMigrationScript = pkgs.writeShellScript "vdirsyncer-status-migration" ''
+    status_dir="${dataHome}/vdirsyncer/status"
+    migrate_pair() {
+      if [ -d "$status_dir/$1" ] && [ ! -e "$status_dir/$2" ]; then
+        ${pkgs.coreutils}/bin/mv -f "$status_dir/$1" "$status_dir/$2"
+      fi
+      if [ -f "$status_dir/$1.collections" ] && [ ! -e "$status_dir/$2.collections" ]; then
+        ${pkgs.coreutils}/bin/mv -f "$status_dir/$1.collections" "$status_dir/$2.collections"
+      fi
+    }
+    ${lib.concatMapStringsSep "\n" (acc: ''migrate_pair "${acc.name}_google_calendar" "calendar_${acc.name}"'') (lib.attrValues cfg.accounts)}
   '';
-  passwordFetchCommand =
-    passwordName:
-    ''["command", "${pkgs.coreutils}/bin/cat", "${configHome}/secrets/vdirsyncer/${passwordName}"]'';
 in
 {
-
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
     _custom.hm = {
-      home.packages = [ pkgs.vdirsyncer ];
+      # per-host calendar accounts (_custom.desktop.calendar.accounts)
+      # mapped to home-manager calendar accounts with vdirsyncer and khal
+      # enabled
+      accounts.calendar = {
+        basePath = "${dataHome}/vdirsyncer";
+        accounts = lib.mapAttrs' (
+          _: acc:
+          lib.nameValuePair acc.name {
+            # home-manager injects khal's default_calendar from the primary
+            # account; only mark it primary once primaryCollection is set,
+            # because with discover-type calendars khal expands collections
+            # by their displayname and rejects the account name itself
+            primary = acc.primary && acc.primaryCollection != null;
+            inherit (acc) primaryCollection;
 
+            local = {
+              path = acc.localPath;
+              type = "filesystem";
+              fileExt = ".ics";
+            };
+
+            remote.type = "google_calendar";
+
+            vdirsyncer = {
+              enable = true;
+              inherit (acc)
+                collections
+                conflictResolution
+                metadata
+                tokenFile
+                clientIdCommand
+                clientSecretCommand
+                ;
+            };
+
+            khal = {
+              enable = true;
+              type = "discover";
+              inherit (acc)
+                glob
+                color
+                readOnly
+                ;
+            };
+          }
+        ) cfg.accounts;
+      };
+
+      # generates ~/.config/vdirsyncer/config from the accounts above
+      programs.vdirsyncer.enable = true;
+
+      # vdirsyncer.service + timer running `vdirsyncer metasync` + `sync`
+      services.vdirsyncer = {
+        enable = true;
+        frequency = cfg.frequency;
+      };
+
+      # merged into the home-manager generated units
       systemd.user.services.vdirsyncer = {
         Unit = {
-          Description = "Synchronize Calendar and Contacts";
           OnFailure = "vdirsyncer-on-failure.service";
+          # regenerate the remind notifications from the synced ics files
           OnSuccess = "ics2rem.service";
         };
-        Service = {
-          Type = "oneshot";
-          ExecStart = "${vdirsyncerScript}";
-        };
+        Service.ExecStartPre = "${statusMigrationScript}";
       };
 
       systemd.user.services.vdirsyncer-on-failure = {
@@ -47,51 +106,8 @@ in
         };
       };
 
-      systemd.user.timers.vdirsyncer = {
-        Unit.Description = "Synchronize Calendar and Contacts";
-        Timer = {
-          OnCalendar = "*:0/15"; # Every 15 minutes
-          # run once at boot/login if the last scheduled sync was missed
-          Persistent = true;
-          Unit = "vdirsyncer.service";
-        };
-        Install.WantedBy = [ "timers.target" ];
-      };
-
-      xdg.configFile."vdirsyncer/config".text =
-        let
-          mkGoogleCalendarPair = { name }: ''
-            [pair ${name}_google_calendar]
-            a = "${name}_google_calendar_local"
-            b = "${name}_google_calendar_remote"
-            collections = ["from a", "from b"]
-            conflict_resolution = "b wins"
-            metadata = [ "displayname", "color" ]
-            # create collections that appear on either side during sync,
-            # so `vdirsyncer discover` is not needed for new calendars
-            implicit = "create"
-
-            [storage ${name}_google_calendar_local]
-            type = "filesystem"
-            path = "${dataHome}/vdirsyncer/${name}-calendars/"
-            fileext = ".ics"
-
-            [storage ${name}_google_calendar_remote]
-            type = "google_calendar"
-            token_file = "${dataHome}/vdirsyncer/${name}_google_calendar_token_file"
-            # vda (vdirsyncer_desktop_app) the name of the OAuth client
-            client_id.fetch = ${passwordFetchCommand "vda_client_id"}
-            client_secret.fetch = ${passwordFetchCommand "vda_client_secret"}
-          '';
-        in
-        ''
-          [general]
-          # A folder where vdirsyncer can store some metadata about each pair.
-          status_path = "${dataHome}/vdirsyncer/status/"
-
-          ${mkGoogleCalendarPair { name = "personal"; }}
-          ${mkGoogleCalendarPair { name = "se"; }}
-        '';
+      # run once at boot/login if the last scheduled sync was missed
+      systemd.user.timers.vdirsyncer.Timer.Persistent = true;
     };
   };
 }

@@ -23,12 +23,12 @@ let
   '';
 
   python-remind-final = pkgs._custom.pythonPackages.python-remind;
-  # --posttime "+15": timed events additionally notify 15 minutes before
-  # start (remind always notifies at the event start itself too)
+  # --posttime: timed events additionally notify cfg.preAlert (default 15
+  # minutes) before start (remind always notifies at the event start too)
   ics2remScript = pkgs.writeShellScript "ics2rem" ''
     ${pkgs.coreutils-full}/bin/echo "ics2rem start"
     ${pkgs.coreutils}/bin/mkdir -p ${configHome}/remind
-    ${pkgs.findutils}/bin/find ${dataHome}/vdirsyncer -name '*.ics' -exec ${python-remind-final}/bin/ics2rem --posttime "+15" {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > "${genRemFile}.tmp"
+    ${pkgs.findutils}/bin/find ${dataHome}/vdirsyncer -name '*.ics' -exec ${python-remind-final}/bin/ics2rem --posttime "${cfg.preAlert}" {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > "${genRemFile}.tmp"
     # atomic replace so the running remind daemon never reads a partial file
     ${pkgs.coreutils}/bin/mv -f "${genRemFile}.tmp" "${genRemFile}"
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
@@ -43,7 +43,7 @@ let
   '';
 in
 {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
     _custom.hm = {
       home.packages = with pkgs; [
         remind
