@@ -150,6 +150,10 @@ in
 
             # se layout-editor
             5601
+
+            # se maps
+            5003
+            11001
           ]
           ++ lib.optionals cfg.enablePixieCore [
             # TCP 8086 is the custom HTTP port you chose for Pixiecore
