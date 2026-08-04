@@ -122,45 +122,47 @@ in
               default = [ ];
               description = "Extra notmuch virtual folders for this account, shown in neomutt's sidebar.";
             };
+            hooks = lib.mkOption {
+              default = { };
+              description = "Mail event hooks for this account, run from notmuch's post-new hook. Queries are scoped to this account's mail folder.";
+              type = lib.types.submodule {
+                options = {
+                  arrive = lib.mkOption {
+                    default = [ ];
+                    description = "Commands run when new mail arrives in this account. Each entry fires once per new message matching its `from` pattern, with the message id, From, Subject and Date as $1..$4 and the full message text on stdin.";
+                    type = lib.types.listOf (
+                      lib.types.submodule {
+                        options = {
+                          from = lib.mkOption {
+                            type = lib.types.nonEmptyStr;
+                            example = "*@github.com";
+                            description = "Sender glob matched against new messages (notmuch `from:` prefix, e.g. \"*@github.com\").";
+                          };
+                          command = lib.mkOption {
+                            type = lib.types.nonEmptyStr;
+                            description = "Bash command to run. Use absolute paths for binaries (e.g. \${pkgs.libnotify}/bin/notify-send); runs in the environment of the sync unit that invoked notmuch new.";
+                          };
+                        };
+                      }
+                    );
+                  };
+                };
+              };
+            };
           };
         }
       );
       default = { };
       description = "Mail accounts configuration.";
     };
-    hooks = lib.mkOption {
-      default = { };
-      description = "Mail event hooks, run from notmuch's post-new hook (fire on every sync path that imports new mail).";
-      type = lib.types.submodule {
-        options = {
-          arrive = lib.mkOption {
-            default = [ ];
-            description = "Commands run when new mail arrives. Each entry fires once per new message matching its `from` pattern, with the message id, From, Subject and Date as $1..$4 and the full message text on stdin.";
-            type = lib.types.listOf (
-              lib.types.submodule {
-                options = {
-                  from = lib.mkOption {
-                    type = lib.types.nonEmptyStr;
-                    example = "*@github.com";
-                    description = "Sender glob matched against new messages (notmuch `from:` prefix, e.g. \"*@github.com\").";
-                  };
-                  command = lib.mkOption {
-                    type = lib.types.nonEmptyStr;
-                    description = "Bash command to run. Use absolute paths for binaries (e.g. \${pkgs.libnotify}/bin/notify-send); runs in the environment of the sync unit that invoked notmuch new.";
-                  };
-                };
-              }
-            );
-          };
-        };
-      };
-    };
   };
 
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = (cfg.accounts == { }) || (lib.length (lib.filter (a: a.primary) (lib.attrValues cfg.accounts)) == 1);
+        assertion =
+          (cfg.accounts == { })
+          || (lib.length (lib.filter (a: a.primary) (lib.attrValues cfg.accounts)) == 1);
         message = "Exactly one mail account in _custom.desktop.mail.accounts must be set as primary (primary = true;).";
       }
     ];

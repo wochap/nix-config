@@ -63,16 +63,19 @@ Lieer syncs through the Gmail API using OAuth, while `goimapnotify` watches IMAP
    notmuch new
    ```
 7. Authorize lieer for the first time. Since Home Manager already "initialized" the repo with the config file and you created the maildir folders, you only need to run the OAuth flow:
+
    ```sh
    cd ~/Mail/<AccountName>
    gmi auth
    ```
+
    This will open your browser and request OAuth access. The access token is stored in `.credentials.gmailieer.json`.
 
    Note that `.gmailieer.json` is managed by Home Manager (a symlink into the
    Nix store), so do not edit it by hand or with `gmi set` — change
    `_custom.hm.accounts.email.accounts.<name>.lieer.settings` in your Nix
    config instead (any manual change is reverted on the next activation).
+
 8. Run the initial sync. This is a full synchronization and can take hours on
    large mailboxes (the Gmail API is heavily rate limited). Stop `mailnotify`
    so you aren't bombarded with notifications while the pull downloads
@@ -80,11 +83,13 @@ Lieer syncs through the Gmail API using OAuth, while `goimapnotify` watches IMAP
    `lieer-<AccountName>` service additionally refuses to run until
    `.state.gmailieer.json` exists, i.e. until this initial pull has
    completed, but stopping the rest keeps things quiet):
+
    ```sh
    systemctl --user stop mailnotify lieer-<AccountName>.timer lieer-<AccountName>.service imapnotify-<AccountName>.service
    cd ~/Mail/<AccountName>
    gmi pull
    ```
+
    - Let it finish: the sync cursors in `.state.gmailieer.json` are only
      written when the pull completes. If it gets interrupted anyway, continue
      with `gmi pull --resume`, and do not start the sync services until the
@@ -96,6 +101,7 @@ Lieer syncs through the Gmail API using OAuth, while `goimapnotify` watches IMAP
      gmi push                     # should print "push: everything is up-to-date."
      systemctl --user start mailnotify lieer-<AccountName>.timer imapnotify-<AccountName>.service
      ```
+
 9. (Optional) Apply initial tags directly in the notmuch database:
    ```sh
    notmuch config set --database new.tags unread inbox
@@ -122,16 +128,18 @@ The initial synchronization can also be kicked off using `email-sync`.
 
 ## Hooks
 
-`_custom.desktop.mail.hooks` runs arbitrary commands in response to mail
-events. Hooks are implemented as a notmuch post-new hook, so they fire on
-every sync path that imports new mail — lieer (`gmi pull`) and mbsync
-(`mbsync ... && notmuch new`). That means seconds after arrival (IMAP IDLE
-push triggers the sync), with the sync timers as fallback.
+`_custom.desktop.mail.accounts.<name>.hooks` runs arbitrary commands in
+response to mail events of that account. Hooks are implemented as a notmuch
+post-new hook, so they fire on every sync path that imports new mail — lieer
+(`gmi pull`) and mbsync (`mbsync ... && notmuch new`). That means seconds
+after arrival (IMAP IDLE push triggers the sync), with the sync timers as
+fallback.
 
 ### `hooks.arrive`
 
-A list of `{ from, command }` entries. For each new message matching the
-`from` sender glob, the command runs once with:
+A per-account list of `{ from, command }` entries. For each new message in
+the account's mail folder matching the `from` sender glob, the command runs
+once with:
 
 - `$1`: notmuch message id
 - `$2`: From header
@@ -141,18 +149,25 @@ A list of `{ from, command }` entries. For each new message matching the
 - same values exported as `MAIL_ID`, `MAIL_FROM`, `MAIL_SUBJECT`, `MAIL_DATE`
 
 ```nix
-_custom.desktop.mail.hooks.arrive = [
-  {
-    from = "*@github.com";
-    command = "${pkgs.libnotify}/bin/notify-send 'New GitHub notification'";
-  }
-];
+_custom.desktop.mail.accounts.personal = {
+  # ...
+  hooks.arrive = [
+    {
+      from = "*@github.com";
+      command = "${pkgs.libnotify}/bin/notify-send 'New GitHub notification'";
+    }
+  ];
+};
 ```
 
 Notes:
 
+- Queries are scoped to the account's mail folder (same scoping as the
+  neomutt virtual folders), so hooks only fire for this account's mail.
+  Requires `sync = "lieer"` or `"mbsync"` (mail of `sync = "none"` accounts
+  is never imported).
 - `from` is a notmuch sender glob (e.g. `*@github.com`, `alice@example.org`);
-  the guard query is `tag:new and from:<glob>`.
+  the guard query is `tag:new and from:<glob> and folder:<account-folder>`.
 - `command` is executed by bash inside the post-new hook. Use **absolute
   paths** for any binaries so the hook works regardless of the PATH inherited
   from the sync unit that triggered it.
@@ -174,7 +189,7 @@ Notes:
 If `lastmod` falls far behind the current database revision, the push phase
 queries every message changed since then and fetches its metadata from the
 (heavily rate limited) Gmail API. On a large mailbox that takes hours, and
-since `gmi sync` pushes *before* it pulls, the pull — and with it mail
+since `gmi sync` pushes _before_ it pulls, the pull — and with it mail
 delivery and mailnotify notifications — is blocked the whole time. Worse, a
 push only advances `lastmod` when nothing was skipped, so once stuck it tends
 to stay stuck. The sync service is configured to pull first and push second
