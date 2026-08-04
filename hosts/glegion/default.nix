@@ -166,7 +166,6 @@ in
       # export AQ_DRM_DEVICES=$IGPU_CARD:$DGPU_CARD
     };
 
-    # _custom.desktop.email.enable = false;
     _custom.desktop.mail.enable = true;
     _custom.desktop.mail.accounts.personal = {
       primary = true;

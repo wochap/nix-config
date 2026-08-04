@@ -16,7 +16,6 @@
     ./desktop/wm-addons/calendar
     ./desktop/wm-addons/cursor
     ./desktop/wm-addons/dbus
-    ./desktop/wm-addons/email
     ./desktop/wm-addons/mail
     ./desktop/wm-addons/fastfetch
     ./desktop/wm-addons/fonts
