@@ -152,7 +152,7 @@ function rp() {
 # add file content to clipboard
 function cpfc() {
   local filepath=$(realpath -- "$@")
-  cat "$filepath" | wl-copy --type text
+  cat "$filepath" | wl-copy --type text --trim-newline
 }
 compdef _cpf_files_only cpfc
 

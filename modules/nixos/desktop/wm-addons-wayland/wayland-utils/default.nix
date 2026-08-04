@@ -49,7 +49,7 @@ in
 
         home.shellAliases = {
           "cpi" = ''wl-copy -t text/uri-list <<<file:/"$@"'';
-          "cpt" = ''wl-copy "$@"'';
+          "cpt" = ''wl-copy --trim-newline "$@"'';
         };
       };
     })
