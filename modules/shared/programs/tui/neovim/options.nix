@@ -9,8 +9,6 @@
 with lib;
 let
   cfg = config._custom.programs.neovim;
-  inherit (config._custom.globals) userName;
-  hmConfig = config.home-manager.users.${userName};
 
   # Inspired from https://github.com/NixOS/nixpkgs/blob/nixos-unstable/nixos/modules/programs/nix-ld.nix
   build-dependent-pkgs =
@@ -45,6 +43,30 @@ let
     extraPrefix = "/lib/nvim-depends";
     pathsToLink = [ "/lib" ];
     ignoreCollisions = true;
+    # dlopen()/ffi.load() look up libraries by their unversioned name
+    # (`libfoo.so`), but most nixpkgs packages only ship versioned files
+    # (`libfoo.so.<n>`). Create the missing unversioned symlinks so runtime
+    # lookups through `LD_LIBRARY_PATH` succeed (e.g. notmuch.nvim doing
+    # `ffi.load("notmuch")` -> `libnotmuch.so`).
+    postBuild = ''
+      cd "$out/lib/nvim-depends/lib"
+      for libfile in *; do
+        case "$libfile" in
+          *.so | *.so.*) ;;
+          *) continue ;;
+        esac
+        case "$libfile" in
+          *.so) continue ;;
+        esac
+        # only numeric version suffixes (libfoo.so.1, libfoo.so.1.2.3)
+        version="''${libfile##*.so.}"
+        case "$version" in
+          *[!0-9.]* | "") continue ;;
+        esac
+        unversioned="''${libfile%%.so.*}.so"
+        [ -e "$unversioned" ] || ln -s "$libfile" "$unversioned"
+      done
+    '';
   };
   nvim-depends-include = pkgs.buildEnv {
     name = "nvim-depends-include";
@@ -58,14 +80,45 @@ let
     extraPrefix = "/lib/nvim-depends/pkgconfig";
     ignoreCollisions = true;
   };
-  buildEnv = [
-    "CPATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/include"
-    "CPLUS_INCLUDE_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/include/c++/v1"
-    "LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
-    "LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
-    "NIX_LD_LIBRARY_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/lib"
-    "PKG_CONFIG_PATH=${hmConfig.home.profileDirectory}/lib/nvim-depends/pkgconfig"
-  ];
+
+  # Env vars are injected into the nvim *wrapper* (makeWrapper args) instead
+  # of a shell alias: an alias only applies to `nvim` typed in an
+  # interactive shell and is bypassed by the `nv`/`nvl`/`lc` zsh functions
+  # (they exec "$@", which never expands aliases), neovide, $EDITOR calls,
+  # desktop entries, etc. Wrapping the binary makes `extraDependentPackages`
+  # work for runtime dlopen()/ffi.load() regardless of how nvim is launched.
+  wrapperEnvArgs =
+    optionals cfg.setBuildEnv [
+      "--suffix"
+      "CPATH"
+      ":"
+      "${nvim-depends-include}/lib/nvim-depends/include"
+      "--suffix"
+      "CPLUS_INCLUDE_PATH"
+      ":"
+      "${nvim-depends-include}/lib/nvim-depends/include/c++/v1"
+      "--suffix"
+      "LD_LIBRARY_PATH"
+      ":"
+      "${nvim-depends-library}/lib/nvim-depends/lib"
+      "--suffix"
+      "LIBRARY_PATH"
+      ":"
+      "${nvim-depends-library}/lib/nvim-depends/lib"
+      "--suffix"
+      "NIX_LD_LIBRARY_PATH"
+      ":"
+      "${nvim-depends-library}/lib/nvim-depends/lib"
+      "--suffix"
+      "PKG_CONFIG_PATH"
+      ":"
+      "${nvim-depends-pkgconfig}/lib/nvim-depends/pkgconfig"
+    ]
+    ++ [
+      "--set-default"
+      "SQLITE_CLIB_PATH"
+      "${pkgs.sqlite.out}/lib/libsqlite3.so"
+    ];
 in
 {
   options = {
@@ -88,7 +141,13 @@ in
         type = with types; listOf package;
         default = [ ];
         example = literalExpression "[ pkgs.openssl ]";
-        description = "Extra build depends to add `LIBRARY_PATH` and `CPATH`.";
+        description = ''
+          Extra dependencies to add to `LIBRARY_PATH`, `CPATH` and friends.
+          Their library directories are also added to the nvim wrapper's
+          `LD_LIBRARY_PATH`, so plugins can load them at runtime via
+          dlopen()/LuaJIT `ffi.load()` (e.g. notmuch.nvim loading
+          `libnotmuch.so`).
+        '';
       };
     };
   };
@@ -105,10 +164,6 @@ in
           patchelf
         ];
       home.extraOutputsToInstall = optional cfg.setBuildEnv "nvim-depends";
-      home.shellAliases.nvim =
-        optionalString cfg.setBuildEnv (concatStringsSep " " buildEnv)
-        + " SQLITE_CLIB_PATH=${pkgs.sqlite.out}/lib/libsqlite3.so "
-        + "nvim";
 
       programs.neovim = {
         enable = true;
@@ -119,6 +174,8 @@ in
         withNodeJs = false;
         withPython3 = false;
         withRuby = false;
+
+        extraWrapperArgs = wrapperEnvArgs;
 
         extraPackages =
           with pkgs;
