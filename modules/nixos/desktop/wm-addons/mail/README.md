@@ -120,6 +120,48 @@ The initial synchronization can also be kicked off using `email-sync`.
 - **Neovim (notmuch.nvim):**
   Reads the exact same notmuch database. Sends are routed through `offlinemsmtp` so your workflow remains robust even when offline.
 
+## Hooks
+
+`_custom.desktop.mail.hooks` runs arbitrary commands in response to mail
+events. Hooks are implemented as a notmuch post-new hook, so they fire on
+every sync path that imports new mail — lieer (`gmi pull`) and mbsync
+(`mbsync ... && notmuch new`). That means seconds after arrival (IMAP IDLE
+push triggers the sync), with the sync timers as fallback.
+
+### `hooks.arrive`
+
+A list of `{ from, command }` entries. For each new message matching the
+`from` sender glob, the command runs once with:
+
+- `$1`: notmuch message id
+- `$2`: From header
+- `$3`: Subject header
+- `$4`: Date header
+- stdin: full message text (headers + body)
+- same values exported as `MAIL_ID`, `MAIL_FROM`, `MAIL_SUBJECT`, `MAIL_DATE`
+
+```nix
+_custom.desktop.mail.hooks.arrive = [
+  {
+    from = "*@github.com";
+    command = "${pkgs.libnotify}/bin/notify-send 'New GitHub notification'";
+  }
+];
+```
+
+Notes:
+
+- `from` is a notmuch sender glob (e.g. `*@github.com`, `alice@example.org`);
+  the guard query is `tag:new and from:<glob>`.
+- `command` is executed by bash inside the post-new hook. Use **absolute
+  paths** for any binaries so the hook works regardless of the PATH inherited
+  from the sync unit that triggered it.
+- All matching entries fire, in declaration order.
+- Command failures are absorbed (`|| true`) so they cannot fail `notmuch new`
+  and break the sync unit; check `journalctl --user -u lieer-<name>` for
+  their stderr.
+- Keep commands cheap — the hook runs inline before the sync finishes.
+
 ## Troubleshooting
 
 ### Sync takes hours and notifications arrive late (or never)
