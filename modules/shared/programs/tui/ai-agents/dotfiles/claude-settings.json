@@ -22,7 +22,7 @@
       }
     }
   },
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "theme": "auto",
   "editorMode": "vim",
   "statusLine": {
