@@ -53,9 +53,9 @@ in
             executable = true;
           };
           ".gemini/antigravity-cli/hooks.json".source =
-            lib._custom.relativeSymlink configDirectory ./dotfiles/agy-hooks.json;
+            lib._custom.relativeSymlink configDirectory ./dotfiles/agy/hooks.json;
           ".gemini/config/hooks.json".source =
-            lib._custom.relativeSymlink configDirectory ./dotfiles/agy-hooks.json;
+            lib._custom.relativeSymlink configDirectory ./dotfiles/agy/hooks.json;
           ".qwen/hooks/qwen-notify.sh" = {
             source = ./scripts/qwen-notify.sh;
             executable = true;
@@ -85,6 +85,7 @@ in
           ".pi/agent/settings.json".source = ./dotfiles/pi/settings.json;
           ".codex/config.toml".source = ./dotfiles/codex/config.toml;
           ".config/opencode/opencode.jsonc".source = ./dotfiles/opencode-settings.jsonc;
+          ".gemini/antigravity-cli/settings.json".source = ./dotfiles/agy/settings.json;
         };
       };
 

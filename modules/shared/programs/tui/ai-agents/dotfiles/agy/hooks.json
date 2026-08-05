@@ -1,0 +1,21 @@
+{
+  "notifications": {
+    "PreToolUse": [
+      {
+        "matcher": "ask_question|ask_permission|run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.gemini/antigravity-cli/hooks/agy-notify.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "~/.gemini/antigravity-cli/hooks/agy-notify.sh"
+      }
+    ]
+  }
+}

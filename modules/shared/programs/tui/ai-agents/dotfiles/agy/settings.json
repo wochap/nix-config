@@ -1,0 +1,8 @@
+{
+  "colorScheme": "dark",
+  "enableTelemetry": false,
+  "notifications": true,
+  "statusLine": {
+    "enabled": true
+  }
+}
