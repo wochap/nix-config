@@ -217,6 +217,15 @@ in
     _custom.desktop.calendar.accounts.se = {
       name = "se";
     };
+
+    _custom.desktop.contacts.enable = true;
+    _custom.desktop.contacts.accounts.personal = {
+      name = "personal";
+    };
+    _custom.desktop.contacts.accounts.se = {
+      name = "se";
+    };
+
     _custom.desktop.audio.enableEasyeffects = true;
     _custom.desktop.audio.enableNoisetorch = true;
     _custom.desktop.mouseless.enable = true;
