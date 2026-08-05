@@ -183,9 +183,9 @@ in
   };
 
   imports = [
-    ./mixins/khal.nix
-    ./mixins/remind.nix
-    ./mixins/vdirsyncer.nix
+    ./remind
+    ./khal.nix
+    ./vdirsyncer.nix
   ];
 
   config = lib.mkIf cfg.enable {
