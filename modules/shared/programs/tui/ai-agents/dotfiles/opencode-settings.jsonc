@@ -29,12 +29,15 @@
           "name": "Qwen3.8 Max",
           "contextWindow": 983616,
           "maxOutputTokens": 131072,
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"],
+          },
           "options": {
             "thinking": {
               "type": "enabled",
-              "budgetTokens": 99072,
+              "budgetTokens": 262144,
             },
-            "temperature": 0.6,
             "reasoning": true,
           },
         },
@@ -42,6 +45,10 @@
           "name": "Qwen3.8 Max Preview",
           "contextWindow": 983616,
           "maxOutputTokens": 131072,
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"],
+          },
           "options": {
             "thinking": {
               "type": "enabled",

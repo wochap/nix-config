@@ -3,9 +3,51 @@
     "autoModeAcknowledged": true,
     "feedbackLastShownTimestamp": 1784673327282
   },
-  "env": {},
+  "env": {
+    "BAILIAN_TOKEN_PLAN_API_KEY": "YOUR_API_KEY"
+  },
   "modelProviders": {
     "openai": [
+      {
+        "id": "qwen3.8-max",
+        "name": "[Token Plan Personal] qwen3.8-max",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "contextWindowSize": 1000000,
+          "modalities": {
+            "image": true,
+            "video": true
+          }
+        }
+      },
+      {
+        "id": "qwen3.8-max-preview",
+        "name": "[ModelStudio Token Plan for Global/Intl] qwen3.8-max-preview",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "thinkingMandatory": true
+        }
+      },
+      {
+        "id": "qwen3.7-max",
+        "name": "[ModelStudio Token Plan for Global/Intl] qwen3.7-max",
+        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          },
+          "contextWindowSize": 1000000
+        }
+      },
       {
         "id": "qwen3.7-plus",
         "name": "[ModelStudio Token Plan for Global/Intl] qwen3.7-plus",
@@ -31,35 +73,6 @@
           "extra_body": {
             "enable_thinking": true
           },
-          "contextWindowSize": 1000000,
-          "modalities": {
-            "image": true,
-            "video": true
-          }
-        }
-      },
-      {
-        "id": "qwen3.7-max",
-        "name": "[ModelStudio Token Plan for Global/Intl] qwen3.7-max",
-        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
-        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
-        "generationConfig": {
-          "extra_body": {
-            "enable_thinking": true
-          },
-          "contextWindowSize": 1000000
-        }
-      },
-      {
-        "id": "qwen3.8-max-preview",
-        "name": "[ModelStudio Token Plan for Global/Intl] qwen3.8-max-preview",
-        "baseUrl": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
-        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
-        "generationConfig": {
-          "extra_body": {
-            "enable_thinking": true
-          },
-          "thinkingMandatory": true,
           "contextWindowSize": 1000000,
           "modalities": {
             "image": true,
