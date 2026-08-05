@@ -24,7 +24,7 @@ Contacts are saved to `~/.local/share/vdirsyncer` folder
 
 #### Google Contacts
 
-1. enable the Google People API in the same GCP project the calendar
+1. enable the Google Contacts CardDAV API , Google People API in the same GCP project the calendar
    module already uses (the OAuth client id/secret under
    `~/.config/secrets/vdirsyncer/vda_client_id|secret`). without it the
    first sync fails with a recognizable `googleapi` 403/PERMISSION_DENIED

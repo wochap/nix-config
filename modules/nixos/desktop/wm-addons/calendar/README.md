@@ -47,6 +47,7 @@ check the `displayname` files inside the collection subdirectories of
 
 1. create a project in google cloud console
    docs: https://vdirsyncer.pimutils.org/en/stable/config.html?highlight=google#google
+   enable the Google CalDAV API
 1. In `<NIX_CONFIG_PATH>/secrets/vdirsyncer` add 2 files: `vda_client_id` and `vda_client_secret`, you get those from [Google Console](https://vdirsyncer.pimutils.org/en/stable/config.html?highlight=google#google), then
 
    ```sh
