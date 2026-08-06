@@ -1,3 +1,11 @@
+scrollback_editor "env LITE=true IN_VI_EDIT=true nvim"
+show_startup_tips false
+default_shell "zsh"
+
+// explicit copy via scroll mode y/c, no auto-copy on mouse select
+copy_on_select false
+copy_command "wl-copy --trim-newline"
+
 keybinds {
   shared_except "locked" {
     // pane navigation (ctrl+arrows)
@@ -21,18 +29,35 @@ keybinds {
     bind "Alt 9" { GoToTab 9; }
     bind "Alt 0" { GoToTab 10; }
 
-    // enter scroll/copy mode (tmux: C-S-l > v)
-    bind "Ctrl Shift l" { SwitchToMode "Scroll"; }
+    bind "Ctrl Shift l" { SwitchToMode "Tmux"; }
   }
 
   scroll {
-    // copy selection and exit (like tmux copy-mode-vi y)
+    // copy selection and exit
     bind "y" { Copy; SwitchToMode "Normal"; }
-    // copy selection and stay (like tmux copy-mode-vi c)
+    // copy selection and stay
     bind "c" { Copy; }
   }
-}
 
-// explicit copy via scroll mode y/c, no auto-copy on mouse select
-copy_on_select false
-copy_command "wl-copy"
+  tmux {
+    // enter scroll/copy mode
+    bind "v" { SwitchToMode "Scroll"; }
+
+    bind "n" {
+      LaunchOrFocusPlugin "session-manager" {
+        floating true
+        move_to_focused_tab true
+      };
+      SwitchToMode "Normal";
+    }
+    bind "r" {
+      LaunchOrFocusPlugin "session-manager" {
+        floating true
+        move_to_focused_tab true
+      };
+      SwitchToMode "Normal";
+    }
+    bind "d" { Detach; }
+    bind "D" { Quit; }
+  }
+}

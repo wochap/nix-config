@@ -29,8 +29,8 @@ in
       xdg.configFile = {
         "zellij/config.kdl".text = ''
           theme "${if preferDark then themeColorsDark.flavour else themeColorsLight.flavour}"
-          theme_dark "${themeColorsDark.flavour}"
-          theme_light "${themeColorsLight.flavour}"
+          theme_dark "catppuccin-${themeColorsDark.flavour}"
+          theme_light "catppuccin-${themeColorsLight.flavour}"
 
           ${builtins.readFile ./dotfiles/config.kdl}
         '';
