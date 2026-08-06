@@ -55,6 +55,7 @@
     ./programs/tui/urlscan
     ./programs/tui/yazi
     ./programs/tui/youtube
+    ./programs/tui/zellij
 
     ./programs/weeb
   ];

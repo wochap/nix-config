@@ -1,0 +1,38 @@
+keybinds {
+  shared_except "locked" {
+    // pane navigation (ctrl+arrows)
+    bind "Ctrl Left" { MoveFocus "Left"; }
+    bind "Ctrl Right" { MoveFocus "Right"; }
+    bind "Ctrl Up" { MoveFocus "Up"; }
+    bind "Ctrl Down" { MoveFocus "Down"; }
+
+    // new pane
+    bind "Ctrl Shift Enter" { NewPane; }
+
+    // tab switching (alt+number)
+    bind "Alt 1" { GoToTab 1; }
+    bind "Alt 2" { GoToTab 2; }
+    bind "Alt 3" { GoToTab 3; }
+    bind "Alt 4" { GoToTab 4; }
+    bind "Alt 5" { GoToTab 5; }
+    bind "Alt 6" { GoToTab 6; }
+    bind "Alt 7" { GoToTab 7; }
+    bind "Alt 8" { GoToTab 8; }
+    bind "Alt 9" { GoToTab 9; }
+    bind "Alt 0" { GoToTab 10; }
+
+    // enter scroll/copy mode (tmux: C-S-l > v)
+    bind "Ctrl Shift l" { SwitchToMode "Scroll"; }
+  }
+
+  scroll {
+    // copy selection and exit (like tmux copy-mode-vi y)
+    bind "y" { Copy; SwitchToMode "Normal"; }
+    // copy selection and stay (like tmux copy-mode-vi c)
+    bind "c" { Copy; }
+  }
+}
+
+// explicit copy via scroll mode y/c, no auto-copy on mouse select
+copy_on_select false
+copy_command "wl-copy"
