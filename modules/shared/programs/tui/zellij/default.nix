@@ -32,7 +32,7 @@ in
           theme_dark "${themeColorsDark.flavour}"
           theme_light "${themeColorsLight.flavour}"
 
-          ${./dotfiles/config.kdl}
+          ${builtins.readFile ./dotfiles/config.kdl}
         '';
       };
     };
