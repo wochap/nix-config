@@ -1,7 +1,21 @@
 {
   "ui": {
     "autoModeAcknowledged": true,
-    "feedbackLastShownTimestamp": 1784673327282
+    "feedbackLastShownTimestamp": 1784673327282,
+    "statusLine": {
+      "type": "preset",
+      "useThemeColors": true,
+      "items": [
+        "project-name",
+        "git-branch",
+        "model-with-reasoning",
+        "total-input-tokens",
+        "total-output-tokens",
+        "current-dir",
+        "context-used",
+        "used-tokens"
+      ]
+    }
   },
   "env": {
     "BAILIAN_TOKEN_PLAN_API_KEY": "YOUR_API_KEY"
