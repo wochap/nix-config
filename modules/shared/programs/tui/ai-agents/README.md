@@ -1,5 +1,9 @@
 # ai-agents
 
+## Tips
+
+- Never continue or resume a large conversation after you've exited it. Doing so will consume a lot of tokens just to restore the context.
+
 ## Post Install
 
 ### Claude

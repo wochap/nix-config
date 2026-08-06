@@ -141,7 +141,7 @@ Reboot into NixOS, login with the user you created
   npm i -g --ignore-scripts webtorrent-cli gulp migrate-mongo
 
   # agents
-  npm i -g --ignore-scripts claude-code @openai/codex opencode-ai
+  npm i -g --ignore-scripts claude-code @openai/codex opencode-ai @qwen-code/qwen-code
 
   # agents tools
   npm i -g --ignore-scripts @fission-ai/openspec@latest
