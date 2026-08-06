@@ -180,8 +180,8 @@ in
   };
 
   imports = [
-    ./mixins/khard.nix
-    ./mixins/vdirsyncer.nix
+    ./khard.nix
+    ./vdirsyncer.nix
   ];
 
   config = lib.mkIf cfg.enable {
