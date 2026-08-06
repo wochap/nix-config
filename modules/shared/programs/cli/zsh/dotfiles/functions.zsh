@@ -83,7 +83,21 @@ zle -N cdfzf
 # run npm script (requires jq)
 function fns() {
   local script
-  script=$(cat ./package.json | jq -r '.scripts | keys[] ' | sort | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_R_OPTS-}" fzf --preview "cat package.json | jq -r '.scripts.\"{}\"' | bat --plain --language=sh --color=always")
+  local extra_args=()
+
+  if [[ -n "$TMUX" ]]; then
+    extra_args=(
+      --bind "alt-enter:execute-silent(tmux split-window 'npm run {}')"
+      --header "  [Enter] Run | [Alt-Enter] Run in new tmux pane"
+    )
+  elif [[ -n "$KITTY_PID" || "$TERM" == "xterm-kitty" ]]; then
+    extra_args=(
+      --bind "alt-enter:execute-silent(kitty @ launch --type=window npm run {})"
+      --header "  [Enter] Run | [Alt-Enter] Run in new kitty pane"
+    )
+  fi
+
+  script=$(cat ./package.json | jq -r '.scripts | keys[] ' | sort | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_R_OPTS-}" fzf --preview "cat package.json | jq -r '.scripts.\"{}\"' | bat --plain --language=sh --color=always" "${extra_args[@]}")
   if [[ -n "$script" ]]; then
     npm run $(echo "$script")
   fi
