@@ -19,7 +19,7 @@ let
   catchupStateFile = "${stateHome}/remind/last-check";
 
   remindScript = pkgs.writeShellScript "remind" ''
-    ${pkgs.remind}/bin/remind -z -k'${pkgs.libnotify}/bin/notify-send --app-name=Remind --app-icon=kalarm --icon=kalarm --hint=int:transient:1 "Reminder" "%s" &' ${remFilePath}
+    ${pkgs.remind}/bin/remind -z -k'${pkgs.libnotify}/bin/notify-send --app-name=Remind --app-icon=kalarm --icon=kalarm --hint=string:custom-sound:message "Reminder" "%s" &' ${remFilePath}
   '';
 
   python-remind-final = pkgs._custom.pythonPackages.python-remind;

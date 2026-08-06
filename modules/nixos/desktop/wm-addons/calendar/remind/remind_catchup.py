@@ -85,6 +85,7 @@ def main():
                         "--app-name=Remind",
                         "--app-icon=kalarm",
                         "--icon=kalarm",
+                        "--hint=string:custom-sound:message",
                         "Missed reminder",
                         body,
                     ],
