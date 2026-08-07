@@ -27,7 +27,7 @@ in
     enable = lib.mkEnableOption { };
     enableAutoLogin = lib.mkEnableOption { };
     enablePamAutoLogin = lib.mkEnableOption { };
-    enablePamSystemdLoadkey = lib.mkEnableOption { };
+    enableLuksIntegration = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -65,12 +65,12 @@ in
         };
       };
     };
-    systemd.services.greetd.serviceConfig.KeyringMode = lib.mkIf cfg.enablePamSystemdLoadkey (
+    systemd.services.greetd.serviceConfig.KeyringMode = lib.mkIf cfg.enableLuksIntegration (
       lib.mkForce "inherit"
     );
 
     security.pam.services.greetd.rules = {
-      password.gnome_keyring.settings.use_authtok = cfg.enablePamSystemdLoadkey;
+      password.gnome_keyring.settings.use_authtok = cfg.enableLuksIntegration;
 
       auth = {
         # autologin with Pam_autologin
@@ -84,10 +84,18 @@ in
 
         # unlock keyring using luks passphrase
         systemd_loadkey = {
-          enable = cfg.enablePamSystemdLoadkey;
-          order = config.security.pam.services.greetd.rules.auth.gnome_keyring.order - 1;
+          enable = cfg.enableLuksIntegration;
+          order = 10;
           control = "optional";
           modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
+        };
+
+        # permit login if user just presses Enter in tuigreet
+        permit = {
+          enable = true;
+          order = 999;
+          control = "sufficient";
+          modulePath = "${pkgs.linux-pam}/lib/security/pam_permit.so";
         };
       };
     };
