@@ -1,8 +1,9 @@
 package main
 
 import (
-	"bufio"
+	"encoding/binary"
 	"encoding/json"
+	"io"
 	"net"
 	"os"
 	"syscall"
@@ -17,12 +18,12 @@ func execFallback() {
 }
 
 func main() {
-	if _, err := os.Stat("/run/greetd_autologin_done"); err == nil {
+	if _, err := os.Stat("/run/greetd/autologin_done"); err == nil {
 		execFallback()
 		return
 	}
 
-	os.WriteFile("/run/greetd_autologin_done", []byte("done"), 0644)
+	os.WriteFile("/run/greetd/autologin_done", []byte("done"), 0644)
 
 	sockPath := os.Getenv("GREETD_SOCK")
 	if sockPath == "" {
@@ -51,19 +52,30 @@ func main() {
 		logFile.WriteString(msg + "\n")
 	}
 
-	reader := bufio.NewReader(conn)
 	sendMsg := func(msg map[string]interface{}) map[string]interface{} {
 		b, _ := json.Marshal(msg)
 		log("Sending: " + string(b))
-		conn.Write(append(b, '\n'))
 
-		line, _ := reader.ReadString('\n')
-		log("Received: " + line)
-		if line == "" {
+		length := uint32(len(b))
+		lenBuf := make([]byte, 4)
+		binary.LittleEndian.PutUint32(lenBuf, length)
+		conn.Write(lenBuf)
+		conn.Write(b)
+
+		readLenBuf := make([]byte, 4)
+		if _, err := io.ReadFull(conn, readLenBuf); err != nil {
 			return nil
 		}
+
+		readLen := binary.LittleEndian.Uint32(readLenBuf)
+		readBuf := make([]byte, readLen)
+		if _, err := io.ReadFull(conn, readBuf); err != nil {
+			return nil
+		}
+
+		log("Received: " + string(readBuf))
 		var resp map[string]interface{}
-		json.Unmarshal([]byte(line), &resp)
+		json.Unmarshal(readBuf, &resp)
 		return resp
 	}
 
