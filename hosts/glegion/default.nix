@@ -135,12 +135,9 @@ in
     _custom.gaming.utils.enable = true;
 
     _custom.security.gpg.enableLuksIntegration = true;
-    _custom.security.ssh.enableLuksIntegration = true;
-    _custom.security.ssh.luksUnlockedKeys = [
-      "id_ed25519"
-      "id_ed25519_se"
-    ];
+    _custom.security.gpg.enableGpgAgent = true;
     _custom.security.gnome-keyring.enable = true;
+    _custom.security.gnome-keyring.enableSshAgent = true;
     _custom.security.gnome-keyring.enableLuksIntegration = true;
     _custom.security.kwallet.enable = false;
 
