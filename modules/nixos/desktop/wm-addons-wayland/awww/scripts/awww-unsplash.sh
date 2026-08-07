@@ -31,7 +31,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # UNSPLASH_API_KEY=${UNSPLASH_API_KEY:-your_unsplash_api_key}
-UNSPLASH_API_KEY=$(cat ~/nix-config/secrets/unsplash/gean.marroquin@gmail.com/access_key)
+UNSPLASH_API_KEY=$(cat /run/secrets/personal-unsplash-access-key)
 download_path=$(mktemp -d)
 width="3840" # value between 1920 and 3840, snap up to nearest 240 for improved caching
 topic_id=${topicIdByType[$TOPIC]}

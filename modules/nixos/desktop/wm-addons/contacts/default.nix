@@ -6,6 +6,7 @@
 }:
 
 let
+  globalConfig = config;
   cfg = config._custom.desktop.contacts;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
@@ -53,10 +54,10 @@ in
                 type = lib.types.listOf lib.types.str;
                 default = [
                   "${pkgs.coreutils}/bin/cat"
-                  "${configHome}/secrets/vdirsyncer/vda_client_id"
+                  globalConfig.sops.secrets."personal-vdirsyncer-client-id".path
                 ];
                 defaultText = lib.literalExpression ''
-                  [ "\''${pkgs.coreutils}/bin/cat" "\''${configHome}/secrets/vdirsyncer/vda_client_id" ]
+                  [ "\''${pkgs.coreutils}/bin/cat" "\''${config.sops.secrets."personal-vdirsyncer-client-id".path}" ]
                 '';
                 description = "Command that prints the Google OAuth client id to stdout.";
               };
@@ -65,10 +66,10 @@ in
                 type = lib.types.listOf lib.types.str;
                 default = [
                   "${pkgs.coreutils}/bin/cat"
-                  "${configHome}/secrets/vdirsyncer/vda_client_secret"
+                  globalConfig.sops.secrets."personal-vdirsyncer-client-secret".path
                 ];
                 defaultText = lib.literalExpression ''
-                  [ "\''${pkgs.coreutils}/bin/cat" "\''${configHome}/secrets/vdirsyncer/vda_client_secret" ]
+                  [ "\''${pkgs.coreutils}/bin/cat" "\''${config.sops.secrets."personal-vdirsyncer-client-secret".path}" ]
                 '';
                 description = "Command that prints the Google OAuth client secret to stdout.";
               };

@@ -36,8 +36,6 @@ in
         "Videos/Recordings/.keep".text = "";
         "Videos/OBS/.keep".text = "";
       };
-
-      xdg.configFile."secrets".source = lib._custom.mkOutOfStoreSymlink "${configDirectory}/secrets";
     };
   };
 }

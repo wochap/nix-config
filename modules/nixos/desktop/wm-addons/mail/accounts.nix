@@ -39,7 +39,7 @@ in
           if acc.passwordCommand != "" then
             acc.passwordCommand
           else
-            "${pkgs.coreutils}/bin/cat ${hmConfig.xdg.configHome}/secrets/mail/${lib.toLower acc.name}";
+            "${pkgs.coreutils}/bin/cat ${config.sops.secrets."${lib.toLower acc.name}-mail-password".path}";
 
         msmtp.enable = true;
         imap.host = lib.mkIf (acc.imapHost != null) (lib.mkForce acc.imapHost);
