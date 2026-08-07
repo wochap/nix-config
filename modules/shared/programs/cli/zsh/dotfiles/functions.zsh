@@ -15,6 +15,7 @@ function timezsh() {
 }
 
 function projects() {
+  local projects _projects
   projects=$(find ~ ~/.config -maxdepth 2 -name ".git" -type d -execdir pwd \;)
   if [ -n "$projects" ]; then
     _projects=$(find ~/Projects -maxdepth 3 -name ".git" -type d -execdir pwd \;)
@@ -29,6 +30,7 @@ function projects() {
 # cd into git repository
 # git repo in projects dir
 function pro() {
+  local selected
   selected=$(projects | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name {} | head -200'" fzf)
 
   if [[ -n "$selected" ]]; then
@@ -41,6 +43,7 @@ zle -N pro
 # cd into git repository
 # any git repo in home dir
 function apro() {
+  local projects selected
   projects=$(find ~ -maxdepth 4 -name ".git" -type d -execdir pwd \;)
 
   selected=$(echo "$projects" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name {} | head -200'" fzf)
@@ -58,6 +61,7 @@ function killport {
 
 # automation scripts picker
 function opro() {
+  local scripts selected
   scripts=$(find -L ~/.config/scripts /etc/scripts/projects -type l,f -name "*.sh")
 
   selected=$(echo "$scripts" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-}" fzf)
@@ -69,6 +73,7 @@ function opro() {
 zle -N opro
 
 function cdfzf() {
+  local dirs selected
   dirs=$(fd --type d --max-depth 1 --fixed-strings --no-ignore --hidden --exclude node_modules --exclude .git --exclude .direnv)
 
   selected=$(echo "$dirs" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_ALT_C_OPTS-}" fzf)
@@ -82,6 +87,11 @@ zle -N cdfzf
 
 # run npm script (requires jq)
 function fns() {
+  if [[ ! -f ./package.json ]]; then
+    echo "No package.json found in current directory."
+    return 1
+  fi
+
   local script
   local extra_args=()
 
@@ -97,9 +107,9 @@ function fns() {
     )
   fi
 
-  script=$(cat ./package.json | jq -r '.scripts | keys[] ' | sort | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_R_OPTS-}" fzf --preview "cat package.json | jq -r '.scripts.\"{}\"' | bat --plain --language=sh --color=always" "${extra_args[@]}")
+  script=$(jq -r '.scripts | keys[]?' ./package.json | sort | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_R_OPTS-}" fzf --preview "jq -r '.scripts.\"{}\"' package.json | bat --plain --language=sh --color=always" "${extra_args[@]}")
   if [[ -n "$script" ]]; then
-    npm run $(echo "$script")
+    npm run "$script"
   fi
 }
 
@@ -125,6 +135,7 @@ function run-without-kpadding() {
 
 # switch between nvim configurations
 function nvims() {
+  local items selected
   items=$(find $HOME/.config -maxdepth 2 -name "init.lua" -type f -execdir sh -c 'pwd | xargs basename' \;)
   selected=$(printf "%s\n" "${items[@]}" | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS-} ${FZF_CTRL_T_OPTS-} --preview 'lsd -l -A --tree --depth=1 --color=always --blocks=size,name ~/.config/{} | head -200'" fzf )
   if [[ -z $selected ]]; then
