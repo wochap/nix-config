@@ -49,8 +49,14 @@ in
 
       (lib.mkIf cfg.enableLuksIntegration {
         security.pam.services = {
-          login.enableGnomeKeyring = true;
-          greetd.enableGnomeKeyring = config._custom.desktop.greetd.enable;
+          login = {
+            enableGnomeKeyring = true;
+            rules.auth.gnome_keyring.order = 98;
+          };
+          greetd = lib.mkIf config._custom.desktop.greetd.enable {
+            enableGnomeKeyring = true;
+            rules.auth.gnome_keyring.order = 98;
+          };
         };
         _custom.security.pam.enableLuksIntegration = true;
         _custom.desktop.greetd.enableLuksIntegration = config._custom.desktop.greetd.enable;
