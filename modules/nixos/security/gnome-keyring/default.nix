@@ -11,23 +11,28 @@ in
 {
   options._custom.security.gnome-keyring = {
     enable = lib.mkEnableOption { };
+    enableSshAgent = lib.mkEnableOption { };
     enableLuksIntegration = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        environment.systemPackages = with pkgs; [
-          libgnome-keyring
-          libsecret # secret-tool
-        ];
+        environment = {
+          systemPackages = with pkgs; [
+            libgnome-keyring
+            libsecret # secret-tool
+          ];
+
+          variables.SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
+        };
 
         programs.seahorse.enable = true;
 
         services.gnome.gnome-keyring.enable = true;
 
-        # Disable gcr-ssh-agent since we use standard ssh-agent via pam_ssh
-        services.gnome.gcr-ssh-agent.enable = false;
+        # enable gcr-ssh-agent to automatically manage SSH keys via GNOME Keyring
+        services.gnome.gcr-ssh-agent.enable = cfg.enableSshAgent;
 
         xdg.portal.config = {
           common."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
