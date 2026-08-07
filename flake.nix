@@ -71,6 +71,8 @@
     ucodenix.inputs.cpu-microcodes.follows = "cpu-microcodes";
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     quickshell.url = "github:quickshell-mirror/quickshell?rev=59e9c47b0eb48a9e4bcf9631fa062ee939bd2e83"; # v0.3.0
     quickshell.inputs.nixpkgs.follows = "nixpkgs";
     rod.url = "github:leiserfg/rod?rev=5d378a226a3a0108f657eccc3dc457cf3e374b73"; # master (10 jul 2026)

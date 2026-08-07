@@ -83,6 +83,7 @@
     ./security/network
     ./security/pam
     ./security/polkit
+    ./security/sops
     ./security/ssh
 
     ./services/ai

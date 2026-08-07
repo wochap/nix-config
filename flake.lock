@@ -3392,6 +3392,7 @@
         "rod": "rod",
         "showmethekey": "showmethekey",
         "smart-splits-nvim": "smart-splits-nvim",
+        "sops-nix": "sops-nix",
         "ucodenix": "ucodenix",
         "vdirsyncer": "vdirsyncer",
         "wayfreeze": "wayfreeze",
@@ -3455,6 +3456,26 @@
         "owner": "mrjones2014",
         "repo": "smart-splits.nvim",
         "rev": "ba2850ff3d3b09785a7105c69d06a12117d4b97d",
+        "type": "github"
+      }
+    },
+    "sops-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783174389,
+        "narHash": "sha256-aCWC8ngycU7OdJrU2+Je3qf+1a2ykuBvpPhZT/9tXMc=",
+        "owner": "Mic92",
+        "repo": "sops-nix",
+        "rev": "f1406619a3884cd5c47992a70b8b35c9c0fcb4c9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "sops-nix",
         "type": "github"
       }
     },
