@@ -237,7 +237,7 @@ in
           beep = "no";
           beep_new = "no";
           confirmappend = "no";
-          delete = "yes";
+          delete = "ask-yes";
           edit_headers = "yes";
           fast_reply = "yes";
           fcc_attach = "yes";
