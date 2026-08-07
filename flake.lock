@@ -3750,11 +3750,11 @@
     "vdirsyncer": {
       "flake": false,
       "locked": {
-        "lastModified": 1785981559,
-        "narHash": "sha256-yYH3/7qMWm0I5cF46pPzObUTt4XIR4eVr/tZTSJ02z0=",
+        "lastModified": 1786113346,
+        "narHash": "sha256-hC8FOCBV5tky2F/TCFsUFIRlm41l59thXvywfvw2n2I=",
         "owner": "wochap",
         "repo": "vdirsyncer",
-        "rev": "7def5a8a746dc0939827fc7c6e0777b2d886defd",
+        "rev": "3bc0d862ba8d47c27a0acca6e2879b8401812e71",
         "type": "github"
       },
       "original": {
