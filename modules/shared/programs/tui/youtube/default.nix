@@ -15,7 +15,6 @@ in
     _custom.hm = {
       home = {
         packages = with pkgs; [
-          perl5Packages.WWWYoutubeViewer
           nixpkgs-unstable.yt-dlp
         ];
         shellAliases = {
@@ -29,9 +28,6 @@ in
           ytc = "yt-dlp --skip-download --write-sub --write-auto-sub --convert-subs srt --sub-lang en";
         };
       };
-
-      xdg.configFile."youtube-viewer/api.json".source =
-        ../../../../../secrets/dotfiles/youtube-viewer/api.json;
     };
   };
 }

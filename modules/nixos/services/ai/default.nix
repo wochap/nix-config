@@ -123,8 +123,6 @@ in
 
         file = {
           "Models/.keep".text = "";
-          ".aider.conf.yml".source =
-            lib._custom.relativeSymlink configDirectory ../../../../secrets/dotfiles/aider/.aider.conf.yml;
         };
       };
 
