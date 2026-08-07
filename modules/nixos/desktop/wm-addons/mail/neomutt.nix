@@ -271,6 +271,7 @@ in
           sort = "threads";
           sort_aux = "reverse-last-date-received";
           sort_re = "yes";
+          spool_file = "personal/inbox";
           text_flowed = "yes";
           timeout = "0";
           tmpdir = "${hmConfig.xdg.configHome}/neomutt/tmp";
