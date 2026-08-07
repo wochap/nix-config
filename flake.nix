@@ -95,6 +95,14 @@
     wluma.flake = false;
     vdirsyncer.url = "github:wochap/vdirsyncer/v0.20.0-fork";
     vdirsyncer.flake = false;
+    showmethekey.url = "github:AlynxZhou/showmethekey/v1.15.1";
+    showmethekey.flake = false;
+    buku.url = "github:jarun/buku/v5.1.1";
+    buku.flake = false;
+    adw-gtk3.url = "github:lassekongo83/adw-gtk3/v6.2";
+    adw-gtk3.flake = false;
+    qt6ct.url = "gitlab:trialuser/qt6ct/00823e41aa60e8fe266d5aee328e82ad1ad94348?host=opencode.net";
+    qt6ct.flake = false;
 
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f"; # master (06 apr 2023)
@@ -133,7 +141,7 @@
     catppuccin-lsd.flake = false;
     catppuccin-cava.url = "github:catppuccin/cava";
     catppuccin-cava.flake = false;
-    catppuccin-qt5ct.url = "github:catppuccin/qt5ct";
+    catppuccin-qt5ct.url = "github:catppuccin/qt5ct/cb585307edebccf74b8ae8f66ea14f21e6666535";
     catppuccin-qt5ct.flake = false;
     catppuccin-fzf.url = "github:catppuccin/fzf";
     catppuccin-fzf.flake = false;

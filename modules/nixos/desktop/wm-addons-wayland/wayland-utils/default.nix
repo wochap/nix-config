@@ -58,13 +58,8 @@ in
       nixpkgs.overlays = [
         (final: prev: {
           showmethekey = prev.showmethekey.overrideAttrs (oldAttrs: rec {
-            version = "v1.15.1";
-            src = prev.fetchFromGitHub {
-              owner = "AlynxZhou";
-              repo = "showmethekey";
-              rev = version;
-              hash = "sha256-odlIgWFmhDqju7U5Y9q6apUEAqZUvMUA7/eU7LMltQs=";
-            };
+            version = "v1.15.1+g${inputs.showmethekey.shortRev or "dirty"}";
+            src = inputs.showmethekey;
             patches = [ ./patches/showmethekey-remove-header.patch ];
           });
         })

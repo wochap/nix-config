@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -18,12 +19,8 @@ in
     nixpkgs.overlays = [
       (final: prev: {
         buku = prev.buku.overrideAttrs (oldAttrs: {
-          src = prev.fetchFromGitHub {
-            owner = "jarun";
-            repo = "buku";
-            rev = "641024baa68fa853bf53e593765ca9701a1e3ccb";
-            sha256 = "sha256-PODFG9zBiyLOie1v0Anypxso6jMqVE2L/Vm/oQ/AEXI=";
-          };
+          version = "v5.1.1+g${inputs.buku.shortRev or "dirty"}";
+          src = inputs.buku;
         });
       })
     ];

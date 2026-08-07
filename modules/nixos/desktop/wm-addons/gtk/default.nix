@@ -79,13 +79,8 @@ in
         # @define-color accent_bg_color mix(@mauve, @base, 0.75);
         # @define-color accent_color @mauve;
         adw-gtk3 = prev.adw-gtk3.overrideAttrs (oldAttrs: {
-          version = "catppuccin-6.2";
-          src = pkgs.fetchFromGitHub {
-            owner = "lassekongo83";
-            repo = "adw-gtk3";
-            tag = "v6.2";
-            hash = "sha256-YYaqSEnIYHHkY4L3UhFBkR3DehoB6QADhSGOP/9NKx8=";
-          };
+          version = "v6.2+g${inputs.adw-gtk3.shortRev or "dirty"}";
+          src = inputs.adw-gtk3;
           nativeBuildInputs = with pkgs; [
             meson
             ninja

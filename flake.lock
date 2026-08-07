@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "adw-gtk3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1746730013,
+        "narHash": "sha256-YYaqSEnIYHHkY4L3UhFBkR3DehoB6QADhSGOP/9NKx8=",
+        "owner": "lassekongo83",
+        "repo": "adw-gtk3",
+        "rev": "1fe75126e1e8b056c817daf513f363e8877d3e36",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lassekongo83",
+        "ref": "v6.2",
+        "repo": "adw-gtk3",
+        "type": "github"
+      }
+    },
     "android-nixpkgs": {
       "inputs": {
         "devshell": "devshell",
@@ -166,6 +183,23 @@
       "original": {
         "owner": "dwarfmaster",
         "repo": "arkenfox-nixos",
+        "type": "github"
+      }
+    },
+    "buku": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767423324,
+        "narHash": "sha256-7dxe1GUdBDP/mNfYKkJzKNTgzXLfVQxp4REEkFIh4Bs=",
+        "owner": "jarun",
+        "repo": "buku",
+        "rev": "e232ac357cbba22fe69d6d6dfc0d35512a4cd313",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jarun",
+        "ref": "v5.1.1",
+        "repo": "buku",
         "type": "github"
       }
     },
@@ -512,6 +546,7 @@
       "original": {
         "owner": "catppuccin",
         "repo": "qt5ct",
+        "rev": "cb585307edebccf74b8ae8f66ea14f21e6666535",
         "type": "github"
       }
     },
@@ -3182,6 +3217,25 @@
         "type": "github"
       }
     },
+    "qt6ct": {
+      "flake": false,
+      "locked": {
+        "host": "opencode.net",
+        "lastModified": 1758983208,
+        "narHash": "sha256-aQmqLpM0vogMsYaDS9OeKVI3N53uY4NBC4FF10hK8Uw=",
+        "owner": "trialuser",
+        "repo": "qt6ct",
+        "rev": "00823e41aa60e8fe266d5aee328e82ad1ad94348",
+        "type": "gitlab"
+      },
+      "original": {
+        "host": "opencode.net",
+        "owner": "trialuser",
+        "repo": "qt6ct",
+        "rev": "00823e41aa60e8fe266d5aee328e82ad1ad94348",
+        "type": "gitlab"
+      }
+    },
     "quickshell": {
       "inputs": {
         "nixpkgs": [
@@ -3260,9 +3314,11 @@
     },
     "root": {
       "inputs": {
+        "adw-gtk3": "adw-gtk3",
         "android-nixpkgs": "android-nixpkgs",
         "antigravity-nix": "antigravity-nix",
         "arkenfox": "arkenfox",
+        "buku": "buku",
         "catppuccin-adw": "catppuccin-adw",
         "catppuccin-amfora": "catppuccin-amfora",
         "catppuccin-bat": "catppuccin-bat",
@@ -3329,12 +3385,15 @@
         "prevstable-neovim": "prevstable-neovim",
         "prevstable-python": "prevstable-python",
         "pyprland": "pyprland",
+        "qt6ct": "qt6ct",
         "quickshell": "quickshell",
         "retroarch-shaders": "retroarch-shaders",
         "reversal-extra": "reversal-extra",
         "rod": "rod",
+        "showmethekey": "showmethekey",
         "smart-splits-nvim": "smart-splits-nvim",
         "ucodenix": "ucodenix",
+        "vdirsyncer": "vdirsyncer",
         "wayfreeze": "wayfreeze",
         "wayland-firewall": "wayland-firewall",
         "wluma": "wluma",
@@ -3362,6 +3421,23 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "showmethekey": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1731380685,
+        "narHash": "sha256-odlIgWFmhDqju7U5Y9q6apUEAqZUvMUA7/eU7LMltQs=",
+        "owner": "AlynxZhou",
+        "repo": "showmethekey",
+        "rev": "683d8debe3275b588fed63f1ddb0d178fbc22467",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AlynxZhou",
+        "ref": "v1.15.1",
+        "repo": "showmethekey",
         "type": "github"
       }
     },
@@ -3647,6 +3723,23 @@
         "owner": "e-tho",
         "repo": "ucodenix",
         "rev": "5c9a1202884f7f455119f35df03c66f6a98ce5f9",
+        "type": "github"
+      }
+    },
+    "vdirsyncer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785981559,
+        "narHash": "sha256-yYH3/7qMWm0I5cF46pPzObUTt4XIR4eVr/tZTSJ02z0=",
+        "owner": "wochap",
+        "repo": "vdirsyncer",
+        "rev": "7def5a8a746dc0939827fc7c6e0777b2d886defd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "ref": "v0.20.0-fork",
+        "repo": "vdirsyncer",
         "type": "github"
       }
     },
