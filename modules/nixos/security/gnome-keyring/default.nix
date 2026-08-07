@@ -44,19 +44,6 @@ in
         _custom.hm = {
           # disable kwallet
           xdg.configFile."kwalletrc".source = ./dotfiles/kwalletrc;
-
-          systemd.user.services.gnome-keyring = {
-            Unit = {
-              Description = "GNOME Keyring";
-              PartOf = [ "graphical-session-pre.target" ];
-            };
-            Service = {
-              # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
-              ExecStart = lib.mkForce "/run/wrappers/bin/gnome-keyring-daemon --start --foreground --components=secrets";
-              Restart = "on-abort";
-            };
-            Install.WantedBy = [ "graphical-session-pre.target" ];
-          };
         };
       }
 

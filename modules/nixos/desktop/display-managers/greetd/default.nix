@@ -26,7 +26,6 @@ in
   options._custom.desktop.greetd = {
     enable = lib.mkEnableOption { };
     enableAutoLogin = lib.mkEnableOption { };
-    enablePamAutoLogin = lib.mkEnableOption { };
     enableLuksIntegration = lib.mkEnableOption { };
   };
 
@@ -73,15 +72,6 @@ in
       password.gnome_keyring.settings.use_authtok = cfg.enableLuksIntegration;
 
       auth = {
-        # autologin with Pam_autologin
-        # docs: https://wiki.archlinux.org/title/Pam_autologin
-        autologin = {
-          enable = cfg.enablePamAutoLogin;
-          order = config.security.pam.services.greetd.rules.auth.unix-early.order - 2;
-          control = "required";
-          modulePath = "${pkgs._custom.pam-autologin}/lib/security/pam_autologin.so";
-        };
-
         # unlock keyring using luks passphrase
         systemd_loadkey = {
           enable = cfg.enableLuksIntegration;

@@ -148,7 +148,6 @@ in
 
     _custom.desktop.greetd.enable = true;
     _custom.desktop.greetd.enableAutoLogin = false;
-    _custom.desktop.greetd.enablePamAutoLogin = false;
     _custom.desktop.greetd.enableLuksIntegration = true;
 
     _custom.desktop.hyprland.enable = true;
