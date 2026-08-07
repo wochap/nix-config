@@ -22,6 +22,7 @@
     _custom.security.network.enable = true;
     # _custom.security.pam.enable = true;
     # _custom.security.polkit.enable = true;
+    _custom.security.sops.enable = true;
     _custom.security.ssh.enable = true;
 
     _custom.system.console.enable = true;

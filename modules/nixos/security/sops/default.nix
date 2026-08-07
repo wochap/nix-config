@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   inputs,
   ...
 }:
@@ -23,6 +24,8 @@ in
   options._custom.security.sops.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [ sops ];
+
     sops = {
       age = {
         keyFile = "${hmConfig.xdg.configHome}/sops/age/keys.txt";
