@@ -53,9 +53,9 @@ in
     _custom.programs.git.enable = true;
     _custom.programs.git.settings = {
       user = {
-        email = "gean.marroquin@gmail.com";
+        email = config._custom.globals.secrets.personal.email;
         name = "wochap";
-        signingKey = "gean.marroquin@gmail.com";
+        signingKey = config._custom.globals.secrets.personal.email;
       };
       commit.gpgSign = true;
       core.sshCommand = "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes";
@@ -197,7 +197,7 @@ in
     _custom.desktop.mail.accounts.personal = {
       primary = true;
       flavor = "gmail.com";
-      address = "gean.marroquin@gmail.com";
+      address = config._custom.globals.secrets.personal.email;
       name = "Personal";
       sync = "lieer";
       inboxKey = "P";
@@ -239,7 +239,7 @@ in
     _custom.desktop.calendar.accounts.personal = {
       name = "personal";
       primary = true;
-      primaryCollection = "gean.marroquin@gmail.com";
+      primaryCollection = config._custom.globals.secrets.personal.email;
     };
     _custom.desktop.calendar.accounts.se = {
       name = "se";
