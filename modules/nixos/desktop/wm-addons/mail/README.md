@@ -53,12 +53,12 @@ Lieer syncs through the Gmail API using OAuth, while `goimapnotify` watches IMAP
 1. Enable 2FA in your Google account.
 2. In Gmail > Settings > Forwarding and POP/IMAP, enable POP and IMAP.
 3. Generate an [App Password](https://support.google.com/accounts/answer/185833?hl=en).
-4. Save the app password to your secrets folder matching the lowercase account name (e.g. `~/.config/secrets/mail/<AccountName>`).
+4. Save the app password to sops yaml file matching the lowercase account name (e.g. `<AccountName>-mail-password`).
 5. Create the `~/Mail/<AccountName>` directory along with the nested `mail/` Maildir structure if it doesn't exist:
    ```sh
    mkdir -p ~/Mail/<AccountName>/mail/{cur,new,tmp}
    ```
-6. Initialize the Notmuch database:
+6. Initialize the Notmuch database (once works for all accounts):
    ```sh
    notmuch new
    ```

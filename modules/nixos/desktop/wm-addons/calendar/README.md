@@ -32,7 +32,7 @@ _custom.desktop.calendar.accounts.personal = {
 
 per-account options (all optional): `primaryCollection`, `localPath`,
 `tokenFile`, `clientIdCommand`/`clientSecretCommand` (default to the shared
-`~/.config/secrets/vdirsyncer/vda_client_id|secret`), `collections`,
+`personal-vdirsyncer-client-secret` `personal-vdirsyncer-client-id` sops secrets), `collections`,
 `conflictResolution` (default `"remote wins"`), `metadata`, `color`,
 `readOnly`, `glob`. module-level: `frequency` (default `"*:0/15"`),
 `preAlert` (default `"+15"`, remind tdelta for the pre-alert).
@@ -48,7 +48,7 @@ check the `displayname` files inside the collection subdirectories of
 1. create a project in google cloud console
    docs: https://vdirsyncer.pimutils.org/en/stable/config.html?highlight=google#google
    enable the Google CalDAV API
-1. In `<NIX_CONFIG_PATH>/secrets/vdirsyncer` add 2 files: `vda_client_id` and `vda_client_secret`, you get those from [Google Console](https://vdirsyncer.pimutils.org/en/stable/config.html?highlight=google#google), then
+1. In sops secret yaml file add 2 keys: `personal-vdirsyncer-client-id` and `personal-vdirsyncer-client-secret`, you get those from [Google Console](https://vdirsyncer.pimutils.org/en/stable/config.html?highlight=google#google), then
 
    ```sh
    # clean current state
