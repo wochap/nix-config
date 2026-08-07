@@ -9,18 +9,7 @@ let
   cfg = config._custom.desktop.greetd;
   inherit (config._custom.globals) userName;
   sessionsBasePath = config.services.displayManager.sessionData.desktops;
-  run-desktop =
-    pkgs.writers.writePerlBin "run-desktop"
-      {
-        libraries = with pkgs.perlPackages; [ ConfigINI ];
-      }
-      (
-        lib.fileContents (
-          pkgs.replaceVars ./dotfiles/run-desktop.pl {
-            waylandSessionsPath = "${sessionsBasePath}/share/wayland-sessions";
-          }
-        )
-      );
+  tuigreetCmd = ''${lib.getExe pkgs.tuigreet} --user-menu --window-padding 2 --remember-session --time --time-format "%a %d %b %H:%M %Y" --sessions "${sessionsBasePath}/share/wayland-sessions" --xsessions "${sessionsBasePath}/share/xsessions"'';
 in
 {
   options._custom.desktop.greetd = {
@@ -32,11 +21,12 @@ in
   config = lib.mkIf cfg.enable {
     # binaries to whitelist in greetd
     environment = {
-      systemPackages = with pkgs; [ run-desktop ];
+      systemPackages = [ pkgs._custom.run-desktop ];
       etc."greetd/environments".text = ''
         bash
         zsh
         run-desktop
+        greetd-autologin
       '';
     };
 
@@ -52,14 +42,12 @@ in
       settings = {
         terminal.vt = 1;
         restart = !cfg.enableAutoLogin;
-        # TODO: greetd autologin doesn't unlock keyring
-        # source: https://github.com/viperML/dotfiles/blob/77c91f02baed99bb0e62d9a5d8bb8ed02d50b035/misc/nixos/greetd/default.nix#L27
-        initial_session = lib.mkIf cfg.enableAutoLogin {
-          command = "${lib.getExe run-desktop} --silent ${config.services.displayManager.defaultSession}";
-          inherit (config.services.displayManager.autoLogin) user;
-        };
         default_session = {
-          command = ''${lib.getExe pkgs.tuigreet} --user-menu --window-padding 2 --remember-session --time --time-format "%a %d %b %H:%M %Y" --sessions "${sessionsBasePath}/share/wayland-sessions" --xsessions "${sessionsBasePath}/share/xsessions"'';
+          command =
+            if cfg.enableAutoLogin then
+              "${lib.getExe pkgs._custom.greetd-autologin} '${tuigreetCmd}' ${config.services.displayManager.autoLogin.user} env WAYLAND_SESSIONS_PATH=${sessionsBasePath}/share/wayland-sessions ${lib.getExe pkgs._custom.run-desktop} --silent ${config.services.displayManager.defaultSession}"
+            else
+              tuigreetCmd;
           user = "greeter";
         };
       };
@@ -97,6 +85,7 @@ in
       Type = "idle";
 
       StandardInput = "tty";
+      # StandardOutput = "journal";
       StandardOutput = "tty";
       StandardError = "journal"; # Without this errors will spam on screen
 

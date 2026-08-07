@@ -19,6 +19,8 @@ let
     ollama-webui-lite = pkgs.callPackage ./ollama-webui-lite { };
     pam-autologin = pkgs.callPackage ./pam-autologin { };
     pam-ssh = pkgs.callPackage ./pam-ssh { };
+    greetd-autologin = pkgs.callPackage ./greetd-autologin { };
+    run-desktop = pkgs.callPackage ./run-desktop { };
     ptsh = pkgs.callPackage ./ptsh { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };

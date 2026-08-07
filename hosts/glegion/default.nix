@@ -147,7 +147,7 @@ in
     _custom.system.user.password = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
 
     _custom.desktop.greetd.enable = true;
-    _custom.desktop.greetd.enableAutoLogin = false;
+    _custom.desktop.greetd.enableAutoLogin = true;
     _custom.desktop.greetd.enableLuksIntegration = true;
 
     _custom.desktop.hyprland.enable = true;
