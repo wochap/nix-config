@@ -93,6 +93,8 @@
     reversal-extra.flake = false;
     wluma.url = "github:maximbaz/wluma?rev=259a874af6b4d854073d340cccb1852f63635fd3"; # 4.11.1
     wluma.flake = false;
+    vdirsyncer.url = "github:wochap/vdirsyncer/v0.20.0-fork";
+    vdirsyncer.flake = false;
 
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f"; # master (06 apr 2023)

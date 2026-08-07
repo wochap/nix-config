@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -13,6 +14,15 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
+    nixpkgs.overlays = [
+      (final: prev: {
+        vdirsyncer = prev.vdirsyncer.overrideAttrs (oldAttrs: {
+          version = "0.20.0+g${inputs.vdirsyncer.shortRev or "dirty"}";
+          src = inputs.vdirsyncer;
+        });
+      })
+    ];
+
     _custom.hm = {
       # per-host calendar accounts (_custom.desktop.calendar.accounts)
       # mapped to home-manager calendar accounts with vdirsyncer and khal
