@@ -112,7 +112,9 @@ Reboot into NixOS, login with the user you created
    $ ssh-add <PATH_TO_PRIVATE_KEY>
    ```
 
-   https://www.freecodecamp.org/news/how-to-manage-multiple-ssh-keys/
+1. Install sops age key
+
+  Restore `~/.config/sops/age/keys.txt`
 
 1. Unlock secrets folder
 
