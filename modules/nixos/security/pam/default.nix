@@ -11,14 +11,14 @@ in
 {
   options._custom.security.pam = {
     enable = lib.mkEnableOption { };
-    enablePamSystemdLoadkey = lib.mkEnableOption { };
+    enableLuksIntegration = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
     # unlock keyring using luks passphrase
     security.pam.services.login.rules.auth.systemd_loadkey = {
-      enable = cfg.enablePamSystemdLoadkey;
-      order = config.security.pam.services.login.rules.auth.gnome_keyring.order - 1;
+      enable = cfg.enableLuksIntegration;
+      order = 10;
       control = "optional";
       modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
     };

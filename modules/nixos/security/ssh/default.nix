@@ -12,13 +12,18 @@ in
 {
   options._custom.security.ssh.enable = lib.mkEnableOption { };
 
+  # NOTE: ssh agent is managed by gnome-keyring
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      sshfs
+    environment = {
+      systemPackages = with pkgs; [
+        sshfs
 
-      # TUI for ssh
-      sshs
-    ];
+        # TUI for ssh
+        sshs
+      ];
+
+      variables.SSH_ASKPASS_REQUIRE = "prefer";
+    };
 
     services.openssh = {
       enable = true;
@@ -36,7 +41,6 @@ in
     ];
 
     _custom.hm = {
-      # NOTE: ssh agent managed by gnome-keyring
       home.file = {
         ".ssh/config".source = lib._custom.relativeSymlink configDirectory ./dotfiles/config;
       };

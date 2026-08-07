@@ -143,7 +143,6 @@ in
     # };
     # _custom.desktop.greetd.enable = true;
     # _custom.desktop.greetd.enableAutoLogin = false;
-    # _custom.desktop.greetd.enablePamAutoLogin = false;
     # _custom.desktop.udev-rules.enable = false;
     # _custom.desktop.udev-rules.canDisableGlegionKbd = false;
     # _custom.desktop.hyprsunset.enable = false;

@@ -134,7 +134,11 @@ in
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
 
+    _custom.security.gpg.enableLuksIntegration = true;
+    _custom.security.gpg.enableGpgAgent = true;
     _custom.security.gnome-keyring.enable = true;
+    _custom.security.gnome-keyring.enableSshAgent = true;
+    _custom.security.gnome-keyring.enableLuksIntegration = true;
     _custom.security.kwallet.enable = false;
 
     _custom.system.apple.enable = false;
@@ -143,8 +147,8 @@ in
     _custom.system.user.password = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
 
     _custom.desktop.greetd.enable = true;
-    _custom.desktop.greetd.enableAutoLogin = false;
-    _custom.desktop.greetd.enablePamAutoLogin = true;
+    _custom.desktop.greetd.enableAutoLogin = true;
+    _custom.desktop.greetd.enableLuksIntegration = true;
 
     _custom.desktop.hyprland.enable = true;
     _custom.desktop.hyprland.isDefault = true;

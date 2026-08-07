@@ -9,58 +9,58 @@ let
   cfg = config._custom.security.gnome-keyring;
 in
 {
-  options._custom.security.gnome-keyring.enable = lib.mkEnableOption { };
-
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      libgnome-keyring
-      libsecret # secret-tool
-    ];
-
-    programs.seahorse.enable = true;
-
-    services.gnome.gnome-keyring.enable = true;
-
-    security.pam.services = {
-      login.enableGnomeKeyring = true;
-
-      # unlock gnome-keyring with password entered in greetd
-      greetd.enableGnomeKeyring = config._custom.desktop.greetd.enable;
-    };
-    _custom.security.pam.enablePamSystemdLoadkey = true;
-    _custom.desktop.greetd.enablePamSystemdLoadkey = config._custom.desktop.greetd.enable;
-
-    xdg.portal.config = {
-      common."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
-      Hyprland."org.freedesktop.impl.portal.Secret" = lib.mkIf config._custom.desktop.hyprland.enable [
-        "gnome-keyring"
-      ];
-    };
-
-    # this sets SSH_AUTH_SOCK
-    services.gnome.gcr-ssh-agent.enable = true;
-
-    _custom.hm = {
-      # GnuPG integration
-      home.file.".gnupg/gpg-agent.conf".text = ''
-        pinentry-program ${pkgs.pinentry-gnome3}/bin/pinentry
-      '';
-
-      # disable kwallet
-      xdg.configFile."kwalletrc".source = ./dotfiles/kwalletrc;
-
-      systemd.user.services.gnome-keyring = {
-        Unit = {
-          Description = "GNOME Keyring";
-          PartOf = [ "graphical-session-pre.target" ];
-        };
-        Service = {
-          # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
-          ExecStart = "/run/wrappers/bin/gnome-keyring-daemon --start --foreground --components=secrets";
-          Restart = "on-abort";
-        };
-        Install.WantedBy = [ "graphical-session-pre.target" ];
-      };
-    };
+  options._custom.security.gnome-keyring = {
+    enable = lib.mkEnableOption { };
+    enableSshAgent = lib.mkEnableOption { };
+    enableLuksIntegration = lib.mkEnableOption { };
   };
+
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        environment = {
+          systemPackages = with pkgs; [
+            libgnome-keyring
+            libsecret # secret-tool
+          ];
+
+          variables.SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
+        };
+
+        programs.seahorse.enable = true;
+
+        services.gnome.gnome-keyring.enable = true;
+
+        # enable gcr-ssh-agent to automatically manage SSH keys via GNOME Keyring
+        services.gnome.gcr-ssh-agent.enable = cfg.enableSshAgent;
+
+        xdg.portal.config = {
+          common."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+          Hyprland."org.freedesktop.impl.portal.Secret" = lib.mkIf config._custom.desktop.hyprland.enable [
+            "gnome-keyring"
+          ];
+        };
+
+        _custom.hm = {
+          # disable kwallet
+          xdg.configFile."kwalletrc".source = ./dotfiles/kwalletrc;
+        };
+      }
+
+      (lib.mkIf cfg.enableLuksIntegration {
+        security.pam.services = {
+          login = {
+            enableGnomeKeyring = true;
+            rules.auth.gnome_keyring.order = 98;
+          };
+          greetd = lib.mkIf config._custom.desktop.greetd.enable {
+            enableGnomeKeyring = true;
+            rules.auth.gnome_keyring.order = 98;
+          };
+        };
+        _custom.security.pam.enableLuksIntegration = true;
+        _custom.desktop.greetd.enableLuksIntegration = config._custom.desktop.greetd.enable;
+      })
+    ]
+  );
 }
