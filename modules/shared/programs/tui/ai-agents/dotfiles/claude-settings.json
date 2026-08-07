@@ -6,7 +6,7 @@
     "ANTHROPIC_BASE_URL": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/apps/anthropic",
     "ANTHROPIC_MODEL": "qwen3.8-max",
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.6-flash",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.8-max",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.7-max",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-max",
     "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.7-max",
     "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "983616"
