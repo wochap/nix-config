@@ -18,6 +18,7 @@ let
     offlinemsmtp = inputs.offlinemsmtp.packages.${pkgs.system}.default;
     ollama-webui-lite = pkgs.callPackage ./ollama-webui-lite { };
     pam-autologin = pkgs.callPackage ./pam-autologin { };
+    pam-ssh = pkgs.callPackage ./pam-ssh { };
     ptsh = pkgs.callPackage ./ptsh { };
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };
