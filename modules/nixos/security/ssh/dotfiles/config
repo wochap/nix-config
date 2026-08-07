@@ -1,7 +1,7 @@
 Host *
   AddKeysToAgent yes
 
-  # options MacOS specific
+  # MacOS specific options
   IgnoreUnknown UseKeychain
   UseKeychain yes
 

@@ -121,6 +121,7 @@ in
           color.ui = "auto";
           pull.rebase = false;
           init.defaultBranch = "main";
+          core.sshCommand = "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes";
         }
         // lib.optionalAttrs cfg.enableUser {
           user = {
@@ -150,6 +151,7 @@ in
                 signingKey = secrets.se.email;
               };
               commit.gpgSign = true;
+              core.sshCommand = "ssh -i ~/.ssh/id_ed25519_se -o IdentitiesOnly=yes";
             };
           }
         ];
