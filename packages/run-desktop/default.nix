@@ -13,6 +13,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "A fast session launcher written in Go";
+    mainProgram = "run-desktop";
     license = licenses.mit;
     platforms = platforms.linux;
   };

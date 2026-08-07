@@ -24,7 +24,7 @@ in
           services.gpg-agent = lib.mkIf cfg.enableGpgAgent {
             enable = true;
             enableSshSupport = false; # ssh-agent is handled by gcr-ssh-agent
-            pinentryPackage = pkgs.pinentry-gnome3;
+            pinentry.package = pkgs.pinentry-gnome3;
           };
         };
       }

@@ -13,6 +13,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "A fast greetd autologin greeter written in Go";
+    mainProgram = "greetd-autologin";
     license = licenses.mit;
     platforms = platforms.linux;
   };
