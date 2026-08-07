@@ -34,38 +34,38 @@ in
 
       # secrets land in /run/secrets/<name>, owned by the user, mode 0400
       secrets = {
-        "openrouter-api-key" = {
+        "personal-openrouter-api-key" = {
           sopsFile = sharedSopsFile;
           owner = userName;
         };
-        "qwen-api-key" = {
+        "personal-qwen-token-plan-api-key" = {
           sopsFile = sharedSopsFile;
           owner = userName;
         };
       }
       // lib.optionalAttrs (!isSandbox) {
         # personal
-        "deepseek-api-key" = {
+        "personal-deepseek-api-key" = {
           owner = userName;
           sopsFile = personalSopsFile;
         };
-        "google-ai-studio-api-key" = {
+        "personal-google-ai-studio-api-key" = {
           owner = userName;
           sopsFile = personalSopsFile;
         };
-        "groq-api-key" = {
+        "personal-groq-api-key" = {
           owner = userName;
           sopsFile = personalSopsFile;
         };
-        "together-api-key" = {
+        "personal-together-api-key" = {
           owner = userName;
           sopsFile = personalSopsFile;
         };
-        "unsplash-access-key" = {
+        "personal-unsplash-access-key" = {
           owner = userName;
           sopsFile = personalSopsFile;
         };
-        "unsplash-secret-key" = {
+        "personal-unsplash-secret-key" = {
           owner = userName;
           sopsFile = personalSopsFile;
         };
@@ -73,11 +73,11 @@ in
           owner = userName;
           sopsFile = personalSopsFile;
         };
-        "vdirsyncer-client-id" = lib.mkIf vdirsyncerEnabled {
+        "personal-vdirsyncer-client-id" = lib.mkIf vdirsyncerEnabled {
           owner = userName;
           sopsFile = personalSopsFile;
         };
-        "vdirsyncer-client-secret" = lib.mkIf vdirsyncerEnabled {
+        "personal-vdirsyncer-client-secret" = lib.mkIf vdirsyncerEnabled {
           owner = userName;
           sopsFile = personalSopsFile;
         };
