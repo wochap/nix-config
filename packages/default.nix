@@ -1,4 +1,9 @@
-{ inputs, pkgs, lib, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   customPkgs = rec {
@@ -17,8 +22,6 @@ let
     mailnotify = pkgs.callPackage ./mailnotify { };
     offlinemsmtp = inputs.offlinemsmtp.packages.${pkgs.system}.default;
     ollama-webui-lite = pkgs.callPackage ./ollama-webui-lite { };
-    pam-autologin = pkgs.callPackage ./pam-autologin { };
-    pam-ssh = pkgs.callPackage ./pam-ssh { };
     greetd-autologin = pkgs.callPackage ./greetd-autologin { };
     run-desktop = pkgs.callPackage ./run-desktop { };
     ptsh = pkgs.callPackage ./ptsh { };
