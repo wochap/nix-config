@@ -72,6 +72,10 @@ func main() {
 		if execCmd != "" {
 			if !isSilent {
 				fmt.Printf("Exec: %s\n", execCmd)
+			} else {
+				nullFile, _ := os.OpenFile("/dev/null", os.O_WRONLY, 0666)
+				syscall.Dup2(int(nullFile.Fd()), 1)
+				syscall.Dup2(int(nullFile.Fd()), 2)
 			}
 			syscall.Exec("/bin/sh", []string{"sh", "-c", execCmd}, os.Environ())
 			fmt.Fprintf(os.Stderr, "Failed to execute '%s'\n", execCmd)

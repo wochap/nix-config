@@ -17,12 +17,12 @@ func execFallback() {
 }
 
 func main() {
-	if _, err := os.Stat("/tmp/greetd_autologin_done"); err == nil {
+	if _, err := os.Stat("/run/greetd_autologin_done"); err == nil {
 		execFallback()
 		return
 	}
 
-	os.WriteFile("/tmp/greetd_autologin_done", []byte("done"), 0644)
+	os.WriteFile("/run/greetd_autologin_done", []byte("done"), 0644)
 
 	sockPath := os.Getenv("GREETD_SOCK")
 	if sockPath == "" {
@@ -45,12 +45,20 @@ func main() {
 	username := os.Args[2]
 	cmdArgs := os.Args[3:]
 
+	logFile, _ := os.OpenFile("/tmp/greetd_autologin.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	defer logFile.Close()
+	log := func(msg string) {
+		logFile.WriteString(msg + "\n")
+	}
+
+	reader := bufio.NewReader(conn)
 	sendMsg := func(msg map[string]interface{}) map[string]interface{} {
 		b, _ := json.Marshal(msg)
+		log("Sending: " + string(b))
 		conn.Write(append(b, '\n'))
 
-		reader := bufio.NewReader(conn)
 		line, _ := reader.ReadString('\n')
+		log("Received: " + line)
 		if line == "" {
 			return nil
 		}
