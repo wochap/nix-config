@@ -51,7 +51,29 @@ in
     _custom.programs.dircolors.enable = true;
     _custom.programs.fzf.enable = true;
     _custom.programs.git.enable = true;
-    _custom.programs.git.enableUser = true;
+    _custom.programs.git.settings = {
+      user = {
+        email = "gean.marroquin@gmail.com";
+        name = "wochap";
+        signingKey = "gean.marroquin@gmail.com";
+      };
+      commit.gpgSign = true;
+      core.sshCommand = "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes";
+    };
+    _custom.programs.git.includes = [
+      {
+        condition = "gitdir:~/Projects/se/**/.git";
+        contents = {
+          user = {
+            email = config._custom.globals.secrets.se.email;
+            name = "Gean";
+            signingKey = config._custom.globals.secrets.se.email;
+          };
+          commit.gpgSign = true;
+          core.sshCommand = "ssh -i ~/.ssh/id_ed25519_se -o IdentitiesOnly=yes";
+        };
+      }
+    ];
     _custom.programs.lazygit.enable = true;
     _custom.programs.lsd.enable = true;
     _custom.programs.ptsh.enable = true;

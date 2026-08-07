@@ -11,7 +11,6 @@ let
   inherit (config._custom.globals)
     themeColorsLight
     themeColorsDark
-    secrets
     configDirectory
     ;
   inherit (lib._custom) relativeSymlink;
@@ -21,8 +20,14 @@ in
 {
   options._custom.programs.git = {
     enable = lib.mkEnableOption { };
-    enableUser = lib.mkEnableOption { };
-    enableSandboxUser = lib.mkEnableOption { };
+    settings = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+    };
+    includes = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      default = [ ];
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -121,40 +126,13 @@ in
           color.ui = "auto";
           pull.rebase = false;
           init.defaultBranch = "main";
-          core.sshCommand = "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes";
         }
-        // lib.optionalAttrs cfg.enableUser {
-          user = {
-            email = "gean.marroquin@gmail.com";
-            name = "wochap";
-            signingKey = "gean.marroquin@gmail.com";
-          };
-          commit.gpgSign = true;
-        }
-        // lib.optionalAttrs cfg.enableSandboxUser {
-          user = {
-            email = "sandbox@localhost";
-            name = "sandbox";
-          };
-        };
+        // cfg.settings;
 
         includes = [
           { path = "${inputs.catppuccin-delta}/catppuccin.gitconfig"; }
         ]
-        ++ lib.optionals cfg.enableUser [
-          {
-            condition = "gitdir:~/Projects/se/**/.git";
-            contents = {
-              user = {
-                email = secrets.se.email;
-                name = "Gean";
-                signingKey = secrets.se.email;
-              };
-              commit.gpgSign = true;
-              core.sshCommand = "ssh -i ~/.ssh/id_ed25519_se -o IdentitiesOnly=yes";
-            };
-          }
-        ];
+        ++ cfg.includes;
       };
 
       programs.delta = {

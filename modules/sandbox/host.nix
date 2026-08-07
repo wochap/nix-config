@@ -57,8 +57,12 @@ in
     _custom.programs.dircolors.enable = true;
     _custom.programs.fzf.enable = true;
     _custom.programs.git.enable = true;
-    _custom.programs.git.enableUser = false;
-    _custom.programs.git.enableSandboxUser = true;
+    _custom.programs.git.settings = {
+      user = {
+        email = "sandbox@localhost";
+        name = "sandbox";
+      };
+    };
     _custom.programs.lazygit.enable = true;
     _custom.programs.lsd.enable = true;
     _custom.programs.ptsh.enable = true;
