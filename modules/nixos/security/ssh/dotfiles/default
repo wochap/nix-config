@@ -10,12 +10,6 @@ Host github.com-se
   IdentitiesOnly yes
   IdentityFile ~/.ssh/id_ed25519_se
 
-Host github.com-boc
-  HostName github.com
-  User git
-  IdentitiesOnly yes
-  IdentityFile ~/.ssh/id_ed25519_boc
-
 Host 192.168.x.x
   HostName %h
   User gean

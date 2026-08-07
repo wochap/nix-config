@@ -142,17 +142,6 @@ in
         ]
         ++ lib.optionals cfg.enableUser [
           {
-            condition = "gitdir:~/Projects/boc/**/.git";
-            contents = {
-              user = {
-                email = secrets.boc.email;
-                name = "Gean";
-                signingKey = secrets.boc.email;
-              };
-              commit.gpgSign = true;
-            };
-          }
-          {
             condition = "gitdir:~/Projects/se/**/.git";
             contents = {
               user = {

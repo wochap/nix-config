@@ -42,9 +42,6 @@ in
         ".ssh/config.d/default" = lib.mkIf (!isSandbox) {
           source = ./dotfiles/default;
         };
-        ".ssh/config.d/boc" = lib.mkIf (!isSandbox) {
-          source = ../../../../secrets/dotfiles/ssh/boc;
-        };
       };
     };
   };
