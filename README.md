@@ -5,14 +5,17 @@
 <details>
   <summary>DWL</summary>
 
-  [DWL](https://github.com/wochap/nix-config/tree/dwl-ags)
+[DWL](https://github.com/wochap/nix-config/tree/dwl-ags)
 
-  ![](https://i.imgur.com/TmgUC5J.jpg)
-  ![](https://i.imgur.com/jBtseU6.jpg)
+![](https://i.imgur.com/TmgUC5J.jpg)
+![](https://i.imgur.com/jBtseU6.jpg)
+
 </details>
 
-
 ## Installaion
+
+<details>
+  <summary>Install from scratch</summary>
 
 ### Install NixOS
 
@@ -101,7 +104,16 @@ Reboot into NixOS, login with the user you created
    $ passwd gean
    ```
 
-### Post install
+</details>
+
+<details>
+  <summary>Install from another NixOS machine</summary>
+
+Check [pxe/README.md](/pxe/README.md)
+
+</details>
+
+## Post install
 
 1. Install ssh keys
 
@@ -114,7 +126,7 @@ Reboot into NixOS, login with the user you created
 
 1. Install sops age key
 
-  Restore `~/.config/sops/age/keys.txt`
+   Restore `~/.config/sops/age/keys.txt`
 
 1. Unlock secrets folder
 
@@ -131,26 +143,21 @@ Reboot into NixOS, login with the user you created
    $ gpg --import private.key
    ```
 
-1. Enable autologin (optional)
-
-   ```sh
-   $ sudo touch /etc/security/autologin.conf
-   ```
 1. Install npm packages
 
-  ```sh
-  # tools
-  npm i -g --ignore-scripts webtorrent-cli gulp migrate-mongo
+   ```sh
+   # tools
+   npm i -g --ignore-scripts webtorrent-cli gulp migrate-mongo
 
-  # agents
-  npm i -g --ignore-scripts claude-code @openai/codex opencode-ai @qwen-code/qwen-code
+   # agents
+   npm i -g --ignore-scripts claude-code @openai/codex opencode-ai @qwen-code/qwen-code
 
-  # agents tools
-  npm i -g --ignore-scripts @fission-ai/openspec@latest
+   # agents tools
+   npm i -g --ignore-scripts @fission-ai/openspec@latest
 
-  # required by personal nvim config
-  npm i -g --ignore-scripts ts-node @styled/typescript-styled-plugin
-  ```
+   # required by personal nvim config
+   npm i -g --ignore-scripts ts-node @styled/typescript-styled-plugin
+   ```
 
 1. Setup Syncthing (http://localhost:8384)
 1. Setup desktop wallpaper (optional)
@@ -179,13 +186,17 @@ Reboot into NixOS, login with the user you created
 
    > NOTE: Default theme for firefox and chrome have better dark/light theme support
 
-1. Setup mail
+1. Setup mail (optional)
 
    Read instruction in `modules/nixos/desktop/wm-addons/email/README.md`
 
-1. Setup calendar
+1. Setup calendar (optional)
 
    Read instruction in `modules/nixos/desktop/wm-addons/calendar/README.md`
+
+1. Setup contacts (optional)
+
+   Read instruction in `modules/nixos/desktop/wm-addons/contacts/README.md`
 
 1. [Waydroid](https://nixos.wiki/wiki/WayDroid) (optional)
 1. [Flatpak](https://nixos.wiki/wiki/Flatpak) (optional)
@@ -241,27 +252,27 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 - Eval value of a nixos option
 
-```sh
-$ nix eval .#nixosConfigurations.laptop.config.services.gnome.gcr-ssh-agent.enable
-```
+  ```sh
+  $ nix eval .#nixosConfigurations.laptop.config.services.gnome.gcr-ssh-agent.enable
+  ```
 
 - Nvidia doesn't enter deep sleep
 
-```sh
-# close any program listed in
-$ sudo lsof /dev/nvidia*
+  ```sh
+  # close any program listed in
+  $ sudo lsof /dev/nvidia*
 
-# check if nvidia is deep sleep
-# D3cold is Deep Sleep
-$ watch -n 3 cat /sys/class/drm/card*/device/power_state
-```
+  # check if nvidia is deep sleep
+  # D3cold is Deep Sleep
+  $ watch -n 3 cat /sys/class/drm/card*/device/power_state
+  ```
 
 - Keyboard doesn't enter autosuspend
 
-```
-$ grep -l "c104" /sys/bus/usb/devices/*/idProduct | sed 's|idProduct|power|'
-$ watch -n 0.5 "cat /sys/bus/usb/devices/3-1/power/runtime_status"
-```
+  ```
+  $ grep -l "c104" /sys/bus/usb/devices/*/idProduct | sed 's|idProduct|power|'
+  $ watch -n 0.5 "cat /sys/bus/usb/devices/3-1/power/runtime_status"
+  ```
 
 - Identify shutdown service timeout
 
@@ -409,25 +420,6 @@ $ watch -n 0.5 "cat /sys/bus/usb/devices/3-1/power/runtime_status"
   ```
   $ echo -ne "\uE8E4" | xclip -selection clipboard
   $ echo -ne "\ue92a" | wl-copy
-  ```
-
-- Transform svg icons to png
-
-  ```
-  $ for file in *.svg; do inkscape $file -o ${file%svg}png -h 128; done
-  ```
-
-  ```
-  #!/usr/bin/env bash
-
-  symlinks=$(find ./ -lname "*.svg");
-
-  for file in $symlinks; do
-    linkpath=$(readlink $file);
-    newlinkcontent=${linkpath/svg/png};
-    newlinkpath=${file/svg/png};
-    ln -sf $newlinkcontent $newlinkpath;
-  done
   ```
 
 - Get key terminal code
