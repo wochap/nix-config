@@ -62,11 +62,23 @@ let
     ++ lib.concatLists (lib.mapAttrsToList accountVfolders cfg.accounts)
   );
 
-  notmuch-address =
-    pkgs.writeScriptBin "notmuch-address" # sh
+  query-addresses =
+    pkgs.writeScriptBin "query-addresses" # sh
       ''
         #!/usr/bin/env bash
-        ${pkgs.notmuch}/bin/notmuch address --output=sender --output=recipients --deduplicate=address --format=text "$@" |
+        query="$1"
+        shift
+
+        # Neomutt expects an empty line or status on the first line
+        echo "Searching for '$query'..."
+
+        ${lib.optionalString config._custom.desktop.contacts.enable ''
+          # Khard (skip the first empty line it generates for neomutt)
+          ${pkgs.khard}/bin/khard email --parsable -- "$query" | ${pkgs.coreutils}/bin/tail -n +2
+        ''}
+
+        # Notmuch
+        ${pkgs.notmuch}/bin/notmuch address --output=sender --output=recipients --deduplicate=address --format=text "$query" "$@" 2>/dev/null |
           ${pkgs.gawk}/bin/awk -F'[<>]' 'NF >= 2 {
             addr = $2; name = $1;
             gsub(/^[ \t]+|[ \t]+$/, "", addr);
@@ -102,7 +114,7 @@ in
       }) cfg.accounts;
 
       home.packages = with pkgs; [
-        notmuch-address
+        query-addresses
         urlscan
         w3m
       ];
@@ -255,7 +267,7 @@ in
           quit = "yes";
           reply_to = "yes";
           reverse_name = "yes";
-          query_command = ''"notmuch-address '%s'"'';
+          query_command = ''"query-addresses '%s'"'';
           sort = "threads";
           sort_aux = "reverse-last-date-received";
           sort_re = "yes";

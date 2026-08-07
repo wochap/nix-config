@@ -60,11 +60,7 @@ in
         }
       ) cfg.accounts;
 
-      # neomutt compose-mode address completion via khard; only when the
-      # mail module is enabled so contacts never touches neomutt otherwise
-      programs.neomutt.extraConfig = lib.mkIf mailCfg.enable ''
-        set query_command = "${pkgs.khard}/bin/khard email --parsable -- %s"
-      '';
+
     };
   };
 }
