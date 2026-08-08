@@ -1,3 +1,7 @@
+[tui]
+status_line = ["model-with-reasoning", "project-name", "git-branch", "run-state", "permissions", "approval-mode", "context-used", "used-tokens", "total-input-tokens", "total-output-tokens", "thread-title"]
+status_line_use_colors = true
+
 [tui.keymap.editor]
 insert_newline = ["alt-enter", "shift-enter"]
 
