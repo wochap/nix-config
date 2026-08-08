@@ -222,12 +222,12 @@ in
           }
           {
             action = "collapse-thread";
-            key = "z";
+            key = "zc";
             map = [ "index" ];
           }
           {
             action = "collapse-all";
-            key = "Z";
+            key = "zC";
             map = [ "index" ];
           }
           {
