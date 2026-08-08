@@ -230,6 +230,14 @@ in
             key = "Z";
             map = [ "index" ];
           }
+          {
+            action = "view-attachments";
+            key = "v";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
         ];
         macros = [
           {
@@ -276,12 +284,40 @@ in
             ];
           }
           {
-            action = "<view-attachments><search>text/html<Enter><view-mailcap><exit>";
-            key = "\\Cb";
+            action = "<view-attachments><search>text/html<Enter><pipe-entry>smart-open --gui --mime text/html -<Enter><exit>";
+            key = "B";
             map = [
               "index"
               "pager"
             ];
+          }
+          {
+            action = "<view-attachments><search>text/html<Enter><pipe-entry>smart-open --tui --mime text/html -<Enter><exit>";
+            key = "T";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "<pipe-entry>smart-open --auto -<Enter>";
+            key = "o";
+            map = [ "attach" ];
+          }
+          {
+            action = "<pipe-entry>smart-open --auto -<Enter>";
+            key = "<Enter>";
+            map = [ "attach" ];
+          }
+          {
+            action = "<pipe-entry>smart-open --gui -<Enter>";
+            key = "B";
+            map = [ "attach" ];
+          }
+          {
+            action = "<pipe-entry>smart-open --tui -<Enter>";
+            key = "T";
+            map = [ "attach" ];
           }
         ];
 

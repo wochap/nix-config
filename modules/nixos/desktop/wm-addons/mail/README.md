@@ -120,7 +120,9 @@ The initial synchronization can also be kicked off using `email-sync`.
   - `f`: Edit notmuch tags
   - `D`: Add trash tag
   - `A`: Archive (remove inbox tag)
-  - `Ctrl-b`: Open the current email's HTML part in the default browser
+  - `v`: Select attachments
+  - `o` / `Enter`: Open the selected attachment according to the session
+  - `B` / `T`: Open HTML or the selected attachment graphically / in the terminal
   - `J` / `K`: Next / previous unread message
   - `}` / `{`: Next / previous thread
   - `z` / `Z`: Collapse the current thread / all threads

@@ -16,7 +16,6 @@ let
     ;
 
   qndl = pkgs.writeShellScriptBin "qndl" (builtins.readFile ./scripts/qndl.sh);
-  linkhandler = pkgs.writeShellScriptBin "linkhandler" (builtins.readFile ./scripts/linkhandler.sh);
   mkThemeNewsboat =
     themeColors:
     "${inputs.catppuccin-newsboat}/themes/${
@@ -33,7 +32,6 @@ in
       home.packages = with pkgs; [
         newsboat
         qndl
-        linkhandler
         urlscan # extract urls from emails/txt files
       ];
 

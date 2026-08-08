@@ -3,7 +3,7 @@ reload-threads 5
 auto-reload yes
 reload-time 60
 prepopulate-query-feeds yes
-external-url-viewer "urlscan -dc -r 'linkhandler {}'"
+external-url-viewer "urlscan -dc -r 'smart-open {}'"
 goto-next-feed no
 
 # Key navigation
@@ -18,20 +18,17 @@ bind-key G end article
 bind-key a toggle-article-read
 bind-key n next-unread
 bind-key N prev-unread
-bind-key U show-urls
+bind-key v show-urls
 bind-key o open-in-browser-and-mark-read
 bind-key O open-in-browser
 
-browser linkhandler
-macro t set browser "qndl" ; open-in-browser ; set browser linkhandler
-macro a set browser "tsp yt-dlp --embed-metadata -xic -f bestaudio/best --restrict-filenames" ; open-in-browser ; set browser linkhandler
-macro v set browser "setsid -f mpv" ; open-in-browser ; set browser linkhandler
-macro w set browser "kitty @ launch --type=tab sh -c 'reader --image-mode kitty %u && kitty @ scroll-window start && zsh'" ; open-in-browser ; toggle-article-read "read" ; set browser linkhandler
-macro W set browser "lynx" ; open-in-browser ; set browser linkhandler
-# macro d set browser "dmenuhandler" ; open-in-browser ; set browser linkhandler
-macro c set browser "echo %u | wl-copy" ; open-in-browser ; set browser linkhandler
-# macro p set browser "peertubetorrent %u 480" ; open-in-browser ; set browser linkhandler
-# macro P set browser "peertubetorrent %u 1080" ; open-in-browser ; set browser linkhandler
+browser smart-open
+macro B set browser "smart-open --gui" ; open-in-browser ; set browser smart-open
+macro T set browser "smart-open --tui" ; open-in-browser ; set browser smart-open
+macro a set browser "tsp yt-dlp --embed-metadata -xic -f bestaudio/best --restrict-filenames" ; open-in-browser ; set browser smart-open
+macro m set browser "setsid -f mpv" ; open-in-browser ; set browser smart-open
+macro w set browser "kitty @ launch --type=tab sh -c 'reader --image-mode kitty %u && kitty @ scroll-window start && zsh'" ; open-in-browser ; toggle-article-read "read" ; set browser smart-open
+macro c set browser "echo %u | wl-copy --trim-newline" ; open-in-browser ; set browser smart-open
 
 include ~/.config/newsboat/theme
 

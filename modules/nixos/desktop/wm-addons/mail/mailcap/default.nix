@@ -24,18 +24,18 @@ in
         application/vnd.ms-powerpoint; catppt %s; copiousoutput;
 
         # HTML
-        text/html; xdg-open %s >/dev/null 2>&1; nametemplate=%s.html
+        text/html; smart-open %s; nametemplate=%s.html
         text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -dump %s; nametemplate=%s.html; copiousoutput
 
         # PDF documents
-        application/pdf; zathura %s
+        application/pdf; smart-open %s
 
         # Images
-        image/jpg; imv %s
-        image/jpeg; imv %s
-        image/pjpeg; imv %s
-        image/png; imv %s
-        image/gif; imv %s
+        image/jpg; smart-open %s
+        image/jpeg; smart-open %s
+        image/pjpeg; smart-open %s
+        image/png; smart-open %s
+        image/gif; smart-open %s
 
         # iCal
         text/calendar; ${icalviewScript}; copiousoutput

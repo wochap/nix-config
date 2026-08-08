@@ -9,6 +9,40 @@ let
   cfg = config._custom.desktop.xdg;
   inherit (config._custom.globals) themeColors isSandbox;
   mimeTypes = import ./mixins/mimeTypes.nix;
+  smartOpenMimeTypes = lib.unique (
+    mimeTypes.text
+    ++ mimeTypes.images
+    ++ mimeTypes.media
+    ++ mimeTypes.archives
+    ++ mimeTypes.html
+    ++ [
+      "text/*"
+      "application/json"
+      "application/xml"
+      "application/javascript"
+      "application/pdf"
+      "application/msword"
+      "application/vnd.ms-excel"
+      "application/vnd.ms-powerpoint"
+      "inode/directory"
+    ]
+  );
+  smart-open = pkgs.writeShellApplication {
+    name = "smart-open";
+    runtimeInputs = with pkgs; [
+      coreutils
+      file
+      util-linux
+      less
+      lynx
+      chafa
+      poppler-utils
+      mpv
+      catdoc
+      atool
+    ];
+    text = builtins.readFile ./scripts/smart-open.sh;
+  };
 in
 {
   options._custom.desktop.xdg.enable = lib.mkEnableOption { };
@@ -18,12 +52,13 @@ in
       environment = {
         systemPackages = with pkgs; [
           desktop-file-utils
+          smart-open
         ];
 
         etc."mime.types".source = ./dotfiles/mime.types;
 
-        shellAliases.open = "xdg-open";
-        shellAliases.o = "xdg-open";
+        shellAliases.open = "smart-open";
+        shellAliases.o = "smart-open";
 
         pathsToLink = [
           "/share/xdg-desktop-portal"
@@ -36,6 +71,21 @@ in
       xdg.terminal-exec.enable = true;
 
       _custom.hm = {
+        xdg.desktopEntries = {
+          smart-open = {
+            name = "Smart Open";
+            exec = "smart-open %F";
+            terminal = false;
+            mimeType = smartOpenMimeTypes;
+          };
+          smart-open-url = {
+            name = "Smart Open URL";
+            exec = "smart-open %U";
+            terminal = false;
+            mimeType = mimeTypes.web;
+          };
+        };
+
         xdg.enable = true;
         xdg.systemDirs.data = [
           "/usr/share"
@@ -53,12 +103,6 @@ in
             with mimeTypes;
             mkMerge (
               mapAttrsToList (n: ms: genAttrs ms (_: [ "${n}.desktop" ])) {
-                # TODO: make nvim use kitty as terminal
-                "kitty-open" = text ++ [ "text/*" ];
-                "google-chrome" = html ++ web;
-                "imv" = images;
-                "mpv" = media;
-                "org.gnome.FileRoller" = archives;
                 "kitty" = [ "application/x-shellscript" ];
                 "amfora" = [ "x-scheme-handler/gemini" ];
                 "Postman" = [ "x-scheme-handler/postman" ];
@@ -75,6 +119,10 @@ in
                 # transmission-gtk =
                 #   [ "application/x-bittorrent" "x-scheme-handler/magnet" ];
               }
+              ++ [
+                (genAttrs smartOpenMimeTypes (_: mkForce [ "smart-open.desktop" ]))
+                (genAttrs mimeTypes.web (_: mkForce [ "smart-open-url.desktop" ]))
+              ]
             );
         };
       };
