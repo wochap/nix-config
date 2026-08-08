@@ -96,6 +96,9 @@ in
         '';
       };
 
+      # Make powertop non-blocking during boot by overriding the Type
+      systemd.services.powertop.serviceConfig.Type = lib.mkForce "simple";
+
       _custom.hm = lib.mkIf cfg.enableBatty {
         xdg.configFile."batty/config.yaml".source =
           lib._custom.relativeSymlink configDirectory ./dotfiles/config.yaml;

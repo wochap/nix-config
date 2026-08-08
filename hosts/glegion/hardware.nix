@@ -135,6 +135,9 @@
       # source: https://discordapp.com/channels/761178912230473768/1159412133117833286
       "acpi_osi=Linux"
 
+      # Fixes the ~10s boot delay from TPM hardware interrupts timeout
+      "tpm_tis.interrupts=0"
+
       # TODO: change to deep when on battery
       # "mem_sleep_default=deep"
     ];

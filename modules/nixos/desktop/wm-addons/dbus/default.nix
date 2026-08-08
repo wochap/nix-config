@@ -17,6 +17,7 @@ in
     services.udisks2.enable = true; # interact with disks
     services.hardware.bolt.enable = true; # Thunderbolt
     services.fwupd.enable = true; # allows applications to update firmware
+    systemd.services.fwupd.wantedBy = lib.mkForce []; # start asynchronously via dbus/socket activation instead of blocking boot
     services.xserver.updateDbusEnvironment = true; # call dbus-update-activation-environment on login
   };
 }
