@@ -205,32 +205,6 @@ in
             ];
           }
           {
-            action = "next-thread";
-            key = "}";
-            map = [
-              "index"
-              "pager"
-            ];
-          }
-          {
-            action = "previous-thread";
-            key = "{";
-            map = [
-              "index"
-              "pager"
-            ];
-          }
-          {
-            action = "collapse-thread";
-            key = "zc";
-            map = [ "index" ];
-          }
-          {
-            action = "collapse-all";
-            key = "zC";
-            map = [ "index" ];
-          }
-          {
             action = "view-attachments";
             key = "v";
             map = [

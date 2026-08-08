@@ -124,8 +124,8 @@ The initial synchronization can also be kicked off using `email-sync`.
   - `o` / `Enter`: Open the selected attachment according to the session
   - `B` / `T`: Open HTML or the selected attachment graphically / in the terminal
   - `J` / `K`: Next / previous unread message
-  - `}` / `{`: Next / previous thread
-  - `zc` / `zC`: Collapse the current thread / all threads
+  - `gt` / `gT`: Next / previous thread
+  - `za` / `zA`: Collapse the current thread / all threads
   - `<Tab>` in To/Cc fields: Auto-completes contacts from your entire mail history via `notmuch address`.
 - **System Tray / Bar:**
   The status bar shows a mail badge with your unread inbox count.

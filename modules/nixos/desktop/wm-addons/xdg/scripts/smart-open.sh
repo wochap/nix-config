@@ -89,12 +89,30 @@ materialize_stdin() {
   image/gif) suffix=.gif ;;
   image/webp) suffix=.webp ;;
   text/calendar) suffix=.ics ;;
+  application/vnd.openxmlformats-officedocument.wordprocessingml.document) suffix=.docx ;;
+  application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) suffix=.xlsx ;;
+  application/vnd.openxmlformats-officedocument.presentationml.presentation) suffix=.pptx ;;
   *) suffix= ;;
   esac
 
-  target=$raw$suffix
-  mv -- "$raw" "$target"
+  target=$raw
+  if [[ -n $suffix ]]; then
+    target=$raw$suffix
+    mv -- "$raw" "$target"
+  fi
   printf '%s\n' "$target"
+}
+
+office_to_text() {
+  local target=$1 runtime_dir output_dir pdf
+  require libreoffice
+  require pdftotext
+  runtime_dir=${XDG_RUNTIME_DIR:-/tmp}/smart-open
+  output_dir=$(mktemp -d "$runtime_dir/office.XXXXXX")
+  trap 'rm -rf -- "$output_dir"' RETURN
+  libreoffice --headless --convert-to pdf --outdir "$output_dir" "$target" >/dev/null
+  pdf=$output_dir/$(basename "${target%.*}").pdf
+  pdftotext "$pdf" - | less
 }
 
 open_tui() {
@@ -146,6 +164,9 @@ open_tui() {
     require catppt
     catppt "$target" | less
     ;;
+  application/vnd.openxmlformats-officedocument.wordprocessingml.document | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | application/vnd.openxmlformats-officedocument.presentationml.presentation)
+    office_to_text "$target"
+    ;;
   application/zip | application/gzip | application/zstd | application/x-7z* | application/x-bzip* | application/x-compressed-tar | application/x-rar* | application/x-tar | application/x-xz*)
     require atool
     atool --list -- "$target" | less
@@ -192,7 +213,7 @@ open_gui() {
     require mpv
     launch mpv "$target"
     ;;
-  application/msword | application/vnd.ms-excel | application/vnd.ms-powerpoint)
+  application/msword | application/vnd.ms-excel | application/vnd.ms-powerpoint | application/vnd.openxmlformats-officedocument.wordprocessingml.document | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | application/vnd.openxmlformats-officedocument.presentationml.presentation)
     if command -v libreoffice >/dev/null 2>&1; then
       launch libreoffice "$target"
     else
