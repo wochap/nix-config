@@ -24,8 +24,8 @@ khard new --addressbook <addressbook> --edit
 - khal birthdays:
   contact birthdays shown as calendars in khal, only when the calendar
   module is enabled (per-account `khalBirthdays`, default `true`, no-op
-  without the calendar stack) and the account's `collections` is set
-  (see notes)
+  without the calendar stack). Uses the concrete `localCollection`
+  (Google's default is `"default"`).
 
 ### Setup
 
@@ -58,12 +58,11 @@ setting `remote.type = "carddav"` plus `remote.url`, `remote.userName` and
 
 - new google contact lists are not picked up automatically, run
   `vdirsyncer discover` after adding a contact list on google.
-- khard and khal birthdays read the discovered collections (subdirectories
-  of the account's `localPath`), check them after the first sync.
-- khal birthdays need the account's `collections` set to the discovered
-  collection names (mirrors how the calendar module's `primaryCollection`
-  is discovered):
-  `ls ~/.local/share/vdirsyncer/<name>-contacts/` after the first sync.
-  until then birthdays stay disabled (a nixos warning says so).
+- khard automatically discovers concrete collections below each account's
+  local path. Native khard discovery names them from the collection itself,
+  so equal names from different accounts may still receive a `-1` suffix.
+- `localCollection` is only for khal birthdays and must be a concrete
+  collection such as Google's `default`; vdirsyncer's `from a` / `from b`
+  discovery directives are not passed to khal.
 - `conflictResolution = "remote wins"`: on concurrent edits the remote
   side wins, same posture as the calendar module.

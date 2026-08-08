@@ -91,6 +91,17 @@ in
                 '';
               };
 
+              localCollection = lib.mkOption {
+                type = lib.types.str;
+                default = "default";
+                description = ''
+                  Concrete local collection directory used by khal
+                  birthdays. This is separate from `collections`, whose
+                  `from a` and `from b` values are vdirsyncer discovery
+                  directives, not collection names.
+                '';
+              };
+
               conflictResolution = lib.mkOption {
                 type = lib.types.enum [
                   "remote wins"
@@ -150,10 +161,8 @@ in
                 default = true;
                 description = ''
                   Show this account's contact birthdays in khal. requires
-                  the calendar module's khal setup to be active and
-                  `collections` to be set (the collection names are only
-                  known after the first `vdirsyncer discover`); otherwise
-                  this option is a no-op.
+                  the calendar module's khal setup to be active; otherwise
+                  this option is a no-op. Uses `localCollection`.
                 '';
               };
             };
@@ -191,15 +200,5 @@ in
       message = "Contacts account '${name}' uses remote.type = \"carddav\" and must set remote.url.";
     }) cfg.accounts;
 
-    warnings = lib.concatLists (
-      lib.mapAttrsToList (
-        name: acc:
-        lib.optional (acc.khalBirthdays && acc.collections == null) ''
-          Contacts account '${name}': khal birthdays stay disabled until
-          `collections` is set. check the collection subdirectories of the
-          account's localPath after the first `vdirsyncer discover`.
-        ''
-      ) cfg.accounts
-    );
   };
 }

@@ -38,28 +38,20 @@ in
         lib.nameValuePair acc.name {
           khard = {
             enable = true;
-            # the sync discovers one collection (subdirectory) per contact
-            # list under localPath, so khard must discover the vdirs
-            # instead of reading localPath as a single vdir
+            # Discover all concrete collections below the account's local
+            # vdirsyncer root. Khard itself does not retain the parent account
+            # name when it expands these directories.
             type = "discover";
           };
 
-          # contact birthdays in khal (home-manager generates a `birthdays`
-          # calendar per account from the collections); no-op when the
-          # calendar stack is absent. the collection names (subdirectories
-          # of localPath) are only known after the first `vdirsyncer
-          # discover`, and home-manager names the birthday calendar after
-          # the contact account unless collections are given — which would
-          # collide with and replace the same-named calendar account's
-          # khal section. birthdays therefore stay off until `collections`
-          # is set.
+          # Birthdays use the same concrete collection. Never pass
+          # vdirsyncer's `from a` / `from b` discovery directives here.
           khal = lib.mkIf calendarActive {
-            enable = acc.khalBirthdays && acc.collections != null;
-            inherit (acc) collections;
+            enable = acc.khalBirthdays;
+            collections = [ acc.localCollection ];
           };
         }
       ) cfg.accounts;
-
 
     };
   };
