@@ -103,17 +103,17 @@ materialize_stdin() {
   printf '%s\n' "$target"
 }
 
-office_to_text() {
+office_to_text() (
   local target=$1 runtime_dir output_dir pdf
   require libreoffice
   require pdftotext
   runtime_dir=${XDG_RUNTIME_DIR:-/tmp}/smart-open
   output_dir=$(mktemp -d "$runtime_dir/office.XXXXXX")
-  trap 'rm -rf -- "$output_dir"' RETURN
+  trap 'rm -rf -- "$output_dir"' EXIT
   libreoffice --headless --convert-to pdf --outdir "$output_dir" "$target" >/dev/null
   pdf=$output_dir/$(basename "${target%.*}").pdf
   pdftotext "$pdf" - | less
-}
+)
 
 open_tui() {
   local target=$1 mime=$2

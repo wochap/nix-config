@@ -316,6 +316,7 @@ in
           folder = "${hmConfig.home.homeDirectory}/Mail";
           forward_quote = "yes";
           include = "yes";
+          index_format = ''"%4C %zs %<X?󰁦& >%zc%zt %<[y?%<[d?     %[%H:%M]&    %[%b %d]>&%[%Y-%m-%d]> %-20.20L (%<l?%4l&%4c>) %<s?%s&[no subject]>"'';
           mail_check = "0";
           mailcap_path = "${hmConfig.xdg.configHome}/neomutt/mailcap";
           mark_old = "no";
