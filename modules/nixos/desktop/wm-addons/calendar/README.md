@@ -2,6 +2,15 @@
 
 Calendar are saved to `~/.local/share/vdirsyncer` folder
 
+### Getting started
+
+```sh
+khal printcalendars
+khal new -a <calendar> --interactive
+khal new -a <calendar> tomorrow 10:00 11:00 "Personal appointment"
+khal new --interactive
+```
+
 ### Stack
 
 - vdirsyncer:

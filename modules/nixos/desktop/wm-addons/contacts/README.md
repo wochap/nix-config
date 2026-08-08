@@ -2,6 +2,13 @@
 
 Contacts are saved to `~/.local/share/vdirsyncer` folder
 
+### Getting started
+
+```sh
+khard addressbooks
+khard new --addressbook <addressbook> --edit
+```
+
 ### Stack
 
 - vdirsyncer:
