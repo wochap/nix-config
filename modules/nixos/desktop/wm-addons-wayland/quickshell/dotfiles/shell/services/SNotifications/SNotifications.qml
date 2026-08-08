@@ -368,14 +368,7 @@ Singleton {
       root.list = JSON.parse(fileContents).map(notification => {
         return notificationComponent.createObject(root, {
           "notificationId": notification.notificationId,
-          "actions": [],
-          "appIcon": notification.appIcon,
-          "appName": notification.appName,
-          "body": notification.body,
-          "image": notification.image,
-          "summary": notification.summary,
-          "time": notification.time,
-          "urgency": notification.urgency
+          "cachedNotification": notification
         });
       });
       let maxId = 0;

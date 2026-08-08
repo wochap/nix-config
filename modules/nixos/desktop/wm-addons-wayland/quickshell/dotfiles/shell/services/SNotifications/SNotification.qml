@@ -9,20 +9,21 @@ QtObject {
 
   required property int notificationId
   property Notification notification
+  property var cachedNotification: null
   property list<var> actions: notification?.actions.map(action => ({
         "identifier": action.identifier,
         "text": action.text
       })) ?? []
-  property string appIcon: notification?.appIcon ?? ""
-  property string originalAppIcon: notification?.appIcon ?? ""
-  property string appName: notification?.appName ?? ""
-  property string body: sanitizeText(notification?.body ?? "")
-  property string image: notification?.image ?? ""
-  property string originalImage: notification?.image ?? ""
-  property string summary: sanitizeText(notification?.summary ?? "")
-  property double time
+  property string appIcon: notification?.appIcon ?? cachedNotification?.appIcon ?? ""
+  property string originalAppIcon: notification?.appIcon ?? cachedNotification?.appIcon ?? ""
+  property string appName: notification?.appName ?? cachedNotification?.appName ?? ""
+  property string body: sanitizeText(notification?.body ?? cachedNotification?.body ?? "")
+  property string image: notification?.image ?? cachedNotification?.image ?? ""
+  property string originalImage: notification?.image ?? cachedNotification?.image ?? ""
+  property string summary: sanitizeText(notification?.summary ?? cachedNotification?.summary ?? "")
+  property double time: cachedNotification?.time ?? 0
   property bool isTransient: notification?.transient ?? false
-  property string urgency: notification?.urgency.toString() ?? "normal"
+  property string urgency: notification?.urgency.toString() ?? cachedNotification?.urgency ?? "normal"
   property SNotificationTimer timer: null
 
   signal discard(notificationId: int)
@@ -89,7 +90,10 @@ QtObject {
       };
       return entities[name] || match;
     });
-    return clean;
+    // 3. Trim surrounding whitespace and trailing line breaks, which otherwise
+    // add empty space below the notification body.
+    clean = clean.trim().replace(/(?:<br\b[^>]*>\s*)+$/gi, "");
+    return clean.trim();
   }
 
   function toJSON() {
