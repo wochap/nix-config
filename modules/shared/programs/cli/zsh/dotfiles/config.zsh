@@ -36,7 +36,9 @@ zstyle ':completion:*' remote-access no
 
 # Rice completion system
 # https://zsh.sourceforge.io/Doc/Release/Completion-System.html
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS} 'ma=48;5;2;38;5;16;1'
+# Palette index 16 is terminal-specific (peach in kitty and black in foot).
+# Index 232 is a consistent near-black in the 256-color palette.
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS} 'ma=48;5;2;38;5;232;1'
 
 # https://github.com/Phantas0s/.dotfiles/blob/master/zsh/completion.zsh
 # https://thevaluable.dev/zsh-completion-guide-examples/
@@ -90,4 +92,3 @@ export PS2="%_❯❯ "
 alias %= \$=
 
 alias ~="cd ~"
-
