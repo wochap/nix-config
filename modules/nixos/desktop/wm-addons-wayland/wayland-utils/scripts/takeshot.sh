@@ -73,10 +73,10 @@ shot5() {
   shotnow
 }
 
-kill_hyprpicker() {
-  hyprpicker_pid=$(pgrep hyprpicker)
-  if [ -n "$hyprpicker_pid" ]; then
-    kill $hyprpicker_pid
+kill_wayfreeze() {
+  wayfreeze_pid=$(pgrep wayfreeze)
+  if [ -n "$wayfreeze_pid" ]; then
+    kill $wayfreeze_pid
   fi
 
 }
@@ -89,11 +89,11 @@ kill_slurp() {
 }
 
 freeze_screen() {
-  hyprpicker -r -z &
-  hyprpicker_pid=$!
-  wait $hyprpicker_pid
+  wayfreeze --hide-cursor &
+  wayfreeze_pid=$!
+  wait $wayfreeze_pid
 
-  # if hyprpicker is killed
+  # if wayfreeze is killed
   # kill slurp
   kill_slurp
 }
@@ -106,11 +106,11 @@ shotarea() {
   sleep 0.1
   area=$(slurp -d -b "${background}bf" -c "$primary" -F "Iosevka NF" -w 1)
   if [[ -z $area ]]; then
-    kill_hyprpicker
+    kill_wayfreeze
     exit
   fi
   grim -g "$area" "$grim_dest"
-  kill_hyprpicker
+  kill_wayfreeze
   notify_user
 }
 

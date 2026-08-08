@@ -3,10 +3,10 @@
 # source theme colors
 source "$HOME/.config/scripts/theme-colors.sh"
 
-kill_hyprpicker() {
-  hyprpicker_pid=$(pgrep hyprpicker)
-  if [ -n "$hyprpicker_pid" ]; then
-    kill $hyprpicker_pid
+kill_wayfreeze() {
+  wayfreeze_pid=$(pgrep wayfreeze)
+  if [ -n "$wayfreeze_pid" ]; then
+    kill $wayfreeze_pid
   fi
 
 }
@@ -19,11 +19,11 @@ kill_slurp() {
 }
 
 freeze_screen() {
-  hyprpicker -r -z &
-  hyprpicker_pid=$!
-  wait $hyprpicker_pid
+  wayfreeze --hide-cursor &
+  wayfreeze_pid=$!
+  wait $wayfreeze_pid
 
-  # if hyprpicker is killed
+  # if wayfreeze is killed
   # kill slurp
   kill_slurp
 }
@@ -36,11 +36,11 @@ main() {
   sleep 0.1
   area=$(slurp -d -b "${background}bf" -c "$primary" -F "Iosevka NF" -w 1)
   if [[ -z $area ]]; then
-    kill_hyprpicker
+    kill_wayfreeze
     exit
   fi
   grim -g "$area" -t ppm - | tesseract -l "eng+spa" - - | wl-copy --trim-newline
-  kill_hyprpicker
+  kill_wayfreeze
   result=$(wl-paste)
   if [[ -n "$result" ]]; then
     notify-send --app-name="ocr" --hint=int:transient:1 "OCR Completed" "Text Extracted and Copied"
