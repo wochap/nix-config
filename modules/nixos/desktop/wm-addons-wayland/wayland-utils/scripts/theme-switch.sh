@@ -26,7 +26,7 @@ set_light_theme() {
   ln -sf ~/.config/lsd/light.yaml ~/.config/lsd/colors.yaml
 
   # khal
-  ln -sf ~/.config/khal/config-light ~/.config/khal/config
+  # ln -sf ~/.config/khal/config-light ~/.config/khal/config
 
   # cava
   ln -sf ~/.config/cava/config-light ~/.config/cava/config
@@ -87,7 +87,7 @@ set_dark_theme() {
   ln -sf ~/.config/lsd/dark.yaml ~/.config/lsd/colors.yaml
 
   # khal
-  ln -sf ~/.config/khal/config-dark ~/.config/khal/config
+  # ln -sf ~/.config/khal/config-dark ~/.config/khal/config
 
   # cava
   ln -sf ~/.config/cava/config-dark ~/.config/cava/config
