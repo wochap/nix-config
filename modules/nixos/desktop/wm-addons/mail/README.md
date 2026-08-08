@@ -120,6 +120,10 @@ The initial synchronization can also be kicked off using `email-sync`.
   - `f`: Edit notmuch tags
   - `D`: Add trash tag
   - `A`: Archive (remove inbox tag)
+  - `Ctrl-b`: Open the current email's HTML part in the default browser
+  - `J` / `K`: Next / previous unread message
+  - `}` / `{`: Next / previous thread
+  - `z` / `Z`: Collapse the current thread / all threads
   - `<Tab>` in To/Cc fields: Auto-completes contacts from your entire mail history via `notmuch address`.
 - **System Tray / Bar:**
   The status bar shows a mail badge with your unread inbox count.

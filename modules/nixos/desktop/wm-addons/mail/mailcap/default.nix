@@ -24,6 +24,7 @@ in
         application/vnd.ms-powerpoint; catppt %s; copiousoutput;
 
         # HTML
+        text/html; xdg-open %s >/dev/null 2>&1; nametemplate=%s.html
         text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -dump %s; nametemplate=%s.html; copiousoutput
 
         # PDF documents

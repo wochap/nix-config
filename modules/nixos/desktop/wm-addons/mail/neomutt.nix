@@ -188,6 +188,48 @@ in
               "pager"
             ];
           }
+          {
+            action = "next-unread";
+            key = "J";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "previous-unread";
+            key = "K";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "next-thread";
+            key = "}";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "previous-thread";
+            key = "{";
+            map = [
+              "index"
+              "pager"
+            ];
+          }
+          {
+            action = "collapse-thread";
+            key = "z";
+            map = [ "index" ];
+          }
+          {
+            action = "collapse-all";
+            key = "Z";
+            map = [ "index" ];
+          }
         ];
         macros = [
           {
@@ -231,6 +273,14 @@ in
             map = [
               "attach"
               "compose"
+            ];
+          }
+          {
+            action = "<view-attachments><search>text/html<Enter><view-mailcap><exit>";
+            key = "\\Cb";
+            map = [
+              "index"
+              "pager"
             ];
           }
         ];
@@ -294,6 +344,10 @@ in
           # Use N to toggle new
           unbind index N
           bind index N toggle-new
+
+          ignore *
+          unignore From: To: Cc: Reply-To: Date: Subject: List-Id:
+          hdr_order From: To: Cc: Reply-To: Date: Subject: List-Id:
 
           lists .*@lists.sr.ht
 
