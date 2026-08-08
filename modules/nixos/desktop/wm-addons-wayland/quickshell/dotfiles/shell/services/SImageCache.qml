@@ -10,35 +10,42 @@ import qs.config
 // they survive shell reloads and history restore.
 //
 // `notification.image` can be one of:
-//   - a real file path / file:// url   -> copied into the cache
-//   - image://qsimage/<n>/<m>          -> in-memory decoded pixels, rasterized to disk via a grab
+//   - a local, remote, or relative URL -> rasterized into the cache
+//   - image://<runtime-provider>/...   -> in-memory/provider pixels, rasterized into the cache
+//   - data:image/...                   -> embedded pixels, rasterized into the cache
 //   - image://icon/<name>              -> themed icon, already persistent, left untouched
 //   - ""                               -> nothing to do
 Singleton {
   id: root
 
   readonly property string cacheDir: Paths.strip(Paths.notificationsimageCache)
+  readonly property string indexPath: `${root.cacheDir}/index.json`
 
-  // source string -> stable cached file:// url
+  // Persisted source string -> stable cached file:// URL.
   property var cacheMap: ({})
+  // Sources requested before the persistent index has finished loading.
+  property var pendingSources: []
+  // Sources currently being rasterized. Incomplete jobs are never persisted.
+  property var inFlight: ({})
+  property int pendingJobCount: 0
+  property bool indexReady: false
   // image://qsimage sources awaiting a grab (serialized through grabImage)
   property var grabQueue: []
   property bool grabBusy: false
-  property string currentGrabSource: ""
-  // file copies awaiting completion (serialized through copyProcess)
-  property var copyQueue: []
-  property bool copyBusy: false
-  property var currentCopyJob: null
+  property var currentGrabJob: null
+  property bool cacheDirReady: false
+  property var cleanupQueue: []
+  property var currentCleanupJob: null
+  property bool cleanupBusy: false
 
   // Emitted once `source` has been materialized to a cached file.
   signal cached(source: string, url: string)
 
-  readonly property var imageExtensions: ["png", "jpg", "jpeg", "gif", "webp", "bmp", "svg", "ico", "tiff", "tif", "avif",]
+  readonly property var imageExtensions: ["png", "jpg", "jpeg", "gif", "webp", "bmp", "svg", "ico", "tiff", "tif", "avif"]
+  readonly property int maxImageSize: 100
 
-  // Copies create the dir themselves (install -D); this only covers the grab path,
-  // whose saveToFile cannot create directories.
   Component.onCompleted: {
-    Quickshell.execDetached(["mkdir", "-p", root.cacheDir]);
+    cacheDirProcess.exec(["mkdir", "-p", root.cacheDir]);
   }
 
   // djb2 + sdbm combined into a 16-char hex digest.
@@ -73,20 +80,26 @@ Singleton {
     if (!source || source === "")
       return "";
 
+    if (!root.indexReady) {
+      if (!root.pendingSources.includes(source))
+        root.pendingSources.push(source);
+      return source;
+    }
+
     if (root.cacheMap[source])
       return root.cacheMap[source];
+
+    if (root.inFlight[source])
+      return source;
 
     // already one of our cached files
     if (source.startsWith(`${root.cacheDir}/`) || source.startsWith(`file://${root.cacheDir}/`))
       return source;
 
-    if (source.startsWith("image://qsimage/") || source.startsWith("image://qspixmap/")) {
+    if (root.isCacheable(source)) {
       root.enqueueGrab(source);
       return source;
     }
-
-    if (root.isFilePath(source))
-      return root.cacheFile(source);
 
     // themed icon (name or image://icon/ url) or unrecognized: nothing to cache
     return source;
@@ -96,107 +109,203 @@ Singleton {
     return source.startsWith("/") || source.startsWith("file:");
   }
 
-  // True only for a real file path that points at a recognizable image format.
-  // Used to decide whether an appIcon (which may also be a themed icon name) is
-  // worth caching.
-  function isImagePath(source: string): bool {
-    return root.isFilePath(source) && root.isImageExtension(root.extensionOf(Paths.strip(source)));
+  function isCacheable(source: string): bool {
+    // Theme icons are stable symbolic references. Other image providers are
+    // assumed to be runtime-owned and therefore unsafe to persist directly.
+    if (source.startsWith("image://icon/"))
+      return false;
+    if (source.startsWith("image://") || source.startsWith("data:image/"))
+      return true;
+    if (source.startsWith("http://") || source.startsWith("https://") || root.isFilePath(source))
+      return true;
+    // Other schemes include persistent providers such as image://icon and
+    // resources such as root:/ and qrc:/.
+    if (source.includes(":"))
+      return false;
+    // A slash, ./ or ../, or a known extension distinguishes a relative path
+    // from an icon-theme name such as "firefox".
+    return source.startsWith("./") || source.startsWith("../") || source.includes("/") || root.isImageExtension(root.extensionOf(source));
   }
 
-  // Queue a copy and return the eventual cached url. `cached()` fires only once
-  // the file is actually on disk, so consumers can switch to it race-free (the
-  // source is often an ephemeral temp file the sender deletes right after).
-  function cacheFile(source: string): string {
-    const srcPath = Paths.strip(source);
-    const ext = root.extensionOf(srcPath);
-    const destExt = root.isImageExtension(ext) ? ext : "png";
-    const destPath = `${root.cacheDir}/${root.hashString(srcPath)}.${destExt}`;
-    const destUrl = `file://${destPath}`;
-    root.cacheMap[source] = destUrl;
-    root.copyQueue.push({
-      "source": source,
-      "srcPath": srcPath,
-      "destPath": destPath,
-      "destUrl": destUrl
-    });
-    root.processCopyQueue();
-    return destUrl;
-  }
-
-  function processCopyQueue() {
-    if (root.copyBusy || root.copyQueue.length === 0)
-      return;
-    root.copyBusy = true;
-    root.currentCopyJob = root.copyQueue.shift();
-    const job = root.currentCopyJob;
-    // install -D creates any missing parent dirs and copies in one process (no shell).
-    copyProcess.exec(["install", "-D", "-m", "644", job.srcPath, job.destPath]);
+  function loadUrl(source: string): string {
+    if (source.startsWith("./") || source.startsWith("../") || (!source.includes(":") && !source.startsWith("/")))
+      return `file://${Quickshell.workingDirectory}/${source}`;
+    return source;
   }
 
   function enqueueGrab(source: string) {
-    root.cacheMap[source] = source; // reserve so the same source is not queued twice
-    root.grabQueue.push(source);
+    root.inFlight[source] = true;
+    root.pendingJobCount++;
+    root.grabQueue.push({
+      "source": source,
+      "loadUrl": root.loadUrl(source)
+    });
     root.processGrabQueue();
   }
 
   function processGrabQueue() {
-    if (root.grabBusy || root.grabQueue.length === 0)
+    if (!root.cacheDirReady || root.grabBusy || root.grabQueue.length === 0)
       return;
     root.grabBusy = true;
-    root.currentGrabSource = root.grabQueue.shift();
-    grabImage.source = root.currentGrabSource;
+    root.currentGrabJob = root.grabQueue.shift();
+    grabImage.source = root.currentGrabJob.loadUrl;
   }
 
   function finishGrab() {
+    root.pendingJobCount = Math.max(0, root.pendingJobCount - 1);
     root.grabBusy = false;
-    root.currentGrabSource = "";
+    root.currentGrabJob = null;
+    grabImage.source = "";
     root.processGrabQueue();
   }
 
-  // Emits cached() only after a successful copy so consumers never switch to a
-  // missing file; on failure the source is left live.
+  function finishIndexLoad(entries: var) {
+    root.cacheMap = entries ?? {};
+    root.indexReady = true;
+    const sources = root.pendingSources;
+    root.pendingSources = [];
+    sources.forEach(source => {
+      const cachedUrl = root.cache(source);
+      // Consumers are still holding the original while the index loads. Notify
+      // them immediately when the persistent index already has the answer.
+      if (cachedUrl !== source)
+        root.cached(source, cachedUrl);
+    });
+  }
+
+  function saveIndex() {
+    if (root.indexReady && root.cacheDirReady)
+      cacheIndexFile.setText(JSON.stringify(root.cacheMap, null, 2));
+  }
+
+  // Remove completed cache entries that are not referenced by any live
+  // notification. Both file:// URLs and plain app-icon paths are accepted.
+  function cleanup(usedUrls: var) {
+    const usedPaths = {};
+    usedUrls.forEach(url => {
+      if (url)
+        usedPaths[Paths.strip(url)] = true;
+    });
+
+    Object.keys(root.cacheMap).forEach(source => {
+      const cachedUrl = root.cacheMap[source];
+      const cachedPath = Paths.strip(cachedUrl);
+      if (usedPaths[cachedPath])
+        return;
+      // Never allow a malformed or edited index to delete outside our cache.
+      if (!cachedPath.startsWith(`${root.cacheDir}/`) || !cachedPath.endsWith(".png"))
+        return;
+      if (root.cleanupQueue.some(job => job.source === source) || root.currentCleanupJob?.source === source)
+        return;
+      root.cleanupQueue.push({
+        "source": source,
+        "path": cachedPath
+      });
+    });
+    root.processCleanupQueue();
+  }
+
+  function processCleanupQueue() {
+    if (root.cleanupBusy || root.cleanupQueue.length === 0)
+      return;
+    root.cleanupBusy = true;
+    root.currentCleanupJob = root.cleanupQueue.shift();
+    cleanupProcess.exec(["rm", "-f", "--", root.currentCleanupJob.path]);
+  }
+
   Process {
-    id: copyProcess
+    id: cacheDirProcess
 
     onExited: {
-      const job = root.currentCopyJob;
-      if (job) {
-        if (exitCode === 0)
-          root.cached(job.source, job.destUrl);
-        else
-          root.cacheMap[job.source] = job.source;
+      root.cacheDirReady = exitCode === 0;
+      if (root.cacheDirReady) {
+        if (root.indexReady)
+          root.saveIndex();
+        root.processGrabQueue();
       }
-      root.currentCopyJob = null;
-      root.copyBusy = false;
-      root.processCopyQueue();
     }
   }
 
-  // Offscreen rasterizer for in-memory provider images.
+  Process {
+    id: cleanupProcess
+
+    onExited: {
+      const job = root.currentCleanupJob;
+      if (job && exitCode === 0 && root.cacheMap[job.source] && Paths.strip(root.cacheMap[job.source]) === job.path) {
+        delete root.cacheMap[job.source];
+        root.saveIndex();
+      }
+      root.currentCleanupJob = null;
+      root.cleanupBusy = false;
+      root.processCleanupQueue();
+    }
+  }
+
+  FileView {
+    id: cacheIndexFile
+
+    path: Qt.resolvedUrl(root.indexPath)
+
+    onLoaded: {
+      try {
+        root.finishIndexLoad(JSON.parse(cacheIndexFile.text()));
+      } catch (error) {
+        console.warn(`Failed to parse image cache index: ${error}`);
+        root.finishIndexLoad({});
+      }
+    }
+
+    onLoadFailed: error => {
+      if (error !== FileViewError.FileNotFound)
+        console.warn(`Failed to load image cache index: ${error}`);
+      root.finishIndexLoad({});
+    }
+  }
+
+  // Offscreen rasterizer shared by local, remote, and in-memory images.
   Image {
     id: grabImage
 
     visible: false
+    width: 1
+    height: 1
+    fillMode: Image.PreserveAspectFit
 
     onStatusChanged: {
       if (grabImage.status === Image.Error) {
+        if (root.currentGrabJob)
+          delete root.inFlight[root.currentGrabJob.source];
         root.finishGrab();
         return;
       }
       if (grabImage.status !== Image.Ready)
         return;
 
-      const source = root.currentGrabSource;
+      const job = root.currentGrabJob;
+      if (!job)
+        return;
+      const source = job.source;
       const destPath = `${root.cacheDir}/${root.hashString(source)}.png`;
       const destUrl = `file://${destPath}`;
-      const size = Qt.size(grabImage.sourceSize.width, grabImage.sourceSize.height);
-      grabImage.grabToImage(result => {
-        if (result.saveToFile(destPath)) {
-          root.cacheMap[source] = destUrl;
-          root.cached(source, destUrl);
-        }
-        root.finishGrab();
-      }, size);
+      const sourceWidth = grabImage.implicitWidth;
+      const sourceHeight = grabImage.implicitHeight;
+      const scale = Math.min(1, root.maxImageSize / Math.max(sourceWidth, sourceHeight));
+      grabImage.width = Math.max(1, Math.round(sourceWidth * scale));
+      grabImage.height = Math.max(1, Math.round(sourceHeight * scale));
+      const size = Qt.size(grabImage.width, grabImage.height);
+      Qt.callLater(() => {
+        grabImage.grabToImage(result => {
+          if (result.saveToFile(destPath)) {
+            root.cacheMap[source] = destUrl;
+            delete root.inFlight[source];
+            root.saveIndex();
+            root.cached(source, destUrl);
+          } else {
+            delete root.inFlight[source];
+          }
+          root.finishGrab();
+        }, size);
+      });
     }
   }
 }

@@ -15,11 +15,9 @@ QtObject {
         "text": action.text
       })) ?? []
   property string appIcon: notification?.appIcon ?? cachedNotification?.appIcon ?? ""
-  property string originalAppIcon: notification?.appIcon ?? cachedNotification?.appIcon ?? ""
   property string appName: notification?.appName ?? cachedNotification?.appName ?? ""
   property string body: sanitizeText(notification?.body ?? cachedNotification?.body ?? "")
   property string image: notification?.image ?? cachedNotification?.image ?? ""
-  property string originalImage: notification?.image ?? cachedNotification?.image ?? ""
   property string summary: sanitizeText(notification?.summary ?? cachedNotification?.summary ?? "")
   property double time: cachedNotification?.time ?? 0
   property bool isTransient: notification?.transient ?? false
@@ -39,12 +37,12 @@ QtObject {
   // never points at a half-written or already-deleted source.
   Component.onCompleted: {
     if (root.notification) {
-      if (root.originalImage !== "")
-        SImageCache.cache(root.originalImage);
-      // appIcon is either a themed icon name (persistent) or an image file path
-      // (ephemeral) - only cache the latter.
-      if (SImageCache.isImagePath(root.originalAppIcon))
-        SImageCache.cache(root.originalAppIcon);
+      if (root.image !== "")
+        root.image = SImageCache.cache(root.image);
+      // cache() leaves persistent themed icon names unchanged, but materializes
+      // both file-backed and in-memory app icons.
+      if (root.appIcon !== "")
+        root.appIcon = root.iconSource(SImageCache.cache(root.appIcon));
     }
   }
 
@@ -54,12 +52,14 @@ QtObject {
     function onCached(source, url) {
       if (!root.notification)
         return;
-      if (source === root.originalImage)
+      // The property still contains the source while either a copy or an
+      // in-memory grab is pending, so it also identifies the completed job.
+      if (source === root.image)
         root.image = url;
       // appIcon renders through Quickshell.iconPath/QIcon, which want a plain
       // path rather than a file:// url, so strip it.
-      if (source === root.originalAppIcon)
-        root.appIcon = Paths.strip(url);
+      if (source === root.appIcon)
+        root.appIcon = root.iconSource(url);
     }
   }
 
@@ -67,6 +67,11 @@ QtObject {
     object: root.notification
     locked: root.notification !== null
   }
+
+  function iconSource(source: string): string {
+    return source.startsWith("file:") ? Paths.strip(source) : source;
+  }
+
   // HTML & Tracking Pixel Stripper
   function sanitizeText(s) {
     if (!s)
