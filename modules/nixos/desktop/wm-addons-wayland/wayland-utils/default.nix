@@ -33,9 +33,13 @@ let
   tui-rss = pkgs.writeScriptBin "tui-rss" (builtins.readFile ./scripts/tui-rss.sh);
   theme-switch = pkgs.writeScriptBin "theme-switch" (builtins.readFile ./scripts/theme-switch.sh);
   color-scheme = pkgs.writeScriptBin "color-scheme" (builtins.readFile ./scripts/color-scheme.sh);
+  tts-clipboard = pkgs.writeScriptBin "tts-clipboard" (builtins.readFile ./scripts/tts-clipboard.sh);
 in
 {
-  options._custom.desktop.wayland-utils.enable = lib.mkEnableOption { };
+  options._custom.desktop.wayland-utils = {
+    enable = lib.mkEnableOption { };
+    enableTts = lib.mkEnableOption "the local Supertonic text-to-speech service";
+  };
 
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
@@ -114,6 +118,29 @@ in
 
         xdg.configFile."satty/config.toml".source = ./dotfiles/satty-config.toml;
         xdg.dataFile."assets/notification.flac".source = ./assets/notification.flac;
+      };
+    })
+
+    (lib.mkIf (cfg.enable && cfg.enableTts) {
+      _custom.hm = {
+        home.packages = [
+          pkgs._custom.supertonic
+          tts-clipboard
+        ];
+
+        systemd.user.services.supertonic = {
+          Unit = {
+            Description = "Supertonic text-to-speech service";
+            Documentation = "https://supertone-inc.github.io/supertonic-py/quickstart/#local-server";
+            PartOf = [ "graphical-session.target" ];
+          };
+          Service = {
+            ExecStart = "${lib.getExe pkgs._custom.supertonic} serve --host 127.0.0.1 --port 7788";
+            Restart = "on-failure";
+            RestartSec = 2;
+            Environment = [ "HF_HUB_DISABLE_TELEMETRY=1" ];
+          };
+        };
       };
     })
   ];
