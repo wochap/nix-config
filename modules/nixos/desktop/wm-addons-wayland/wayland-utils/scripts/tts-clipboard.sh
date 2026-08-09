@@ -32,7 +32,7 @@ ensure_supertonic() {
       return 1
     fi
 
-    if (( SECONDS - started_at >= 600 )); then
+    if ((SECONDS - started_at >= 600)); then
       notify "Supertonic startup timed out" "Check the user service journal"
       return 1
     fi
@@ -88,20 +88,21 @@ read_clipboard() {
 
 normalize_text() {
   case $format in
-    html)
-      text=$(printf '%s' "$text" | pandoc --from=html --to=plain --wrap=none)
-      ;;
-    markdown)
-      text=$(printf '%s' "$text" | pandoc --from=gfm --to=plain --wrap=none)
-      ;;
-    raw)
-      ;;
+  html)
+    text=$(printf '%s' "$text" | pandoc --from=html --to=plain --wrap=none)
+    ;;
+  markdown)
+    text=$(printf '%s' "$text" | pandoc --from=gfm --to=plain --wrap=none)
+    ;;
+  raw) ;;
   esac
 }
 
 speak() {
   local selection=$1
   local format=$2
+  local speed=$3
+  local voice=$4
   local text
   local audio_file
 
@@ -120,7 +121,7 @@ speak() {
     exit 1
   fi
 
-  if (( ${#text} > 20000 )); then
+  if ((${#text} > 20000)); then
     notify "Text is too long" "Clipboard TTS is limited to 20,000 characters"
     exit 1
   fi
@@ -130,12 +131,14 @@ speak() {
   audio_file=$(mktemp --tmpdir="${XDG_RUNTIME_DIR:-/tmp}" tts-clipboard.XXXXXX.wav)
   trap 'rm -f "$audio_file"' EXIT
 
-  notify "Generating speech" "${#text} characters"
+  notify "Generating speech" "${#text} characters, voice $voice at ${speed}x speed"
 
   jq -cn \
     --arg input "$text" \
-    '{model: "supertonic-3", input: $input, voice: "M1", response_format: "wav"}' \
-    | curl \
+    --arg voice "$voice" \
+    --argjson speed "$speed" \
+    '{model: "supertonic-3", input: $input, voice: $voice, response_format: "wav", speed: $speed}' |
+    curl \
       --fail \
       --show-error \
       --silent \
@@ -150,6 +153,8 @@ speak() {
 toggle() {
   local selection=$1
   local format=$2
+  local speed=$3
+  local voice=$4
 
   if systemctl --user is-active --quiet "$playback_unit"; then
     systemctl --user stop "$playback_unit"
@@ -157,6 +162,7 @@ toggle() {
     exit 0
   fi
 
+  # Pass arguments using strict --key=value format to the worker
   systemd-run \
     --user \
     --unit="${playback_unit%.service}" \
@@ -164,34 +170,132 @@ toggle() {
     --quiet \
     --service-type=exec \
     --setenv=PATH="$PATH" \
-    "$0" --worker "$selection" "$format"
+    "$0" --worker --selection="$selection" --format="$format" --speed="$speed" --voice="$voice"
 }
 
+usage() {
+  cat <<EOF >&2
+Usage: ${0##*/} [clipboard|primary] [OPTIONS]
+
+Positional Arguments:
+  clipboard           Use the standard clipboard (default)
+  primary             Use the primary selection (middle-click)
+
+Options:
+  --format=FORMAT     Input format: auto, raw, markdown, html (default: auto)
+  --voice=NAME        Voice identifier (default: M1)
+  --speed=SPEED       Playback speed 0.7-2.0 (default: 1.0)
+  --stop              Stop any currently playing speech
+  -h, --help          Show this help message
+
+Examples:
+  ${0##*/} primary --format=markdown --speed=1.5
+  ${0##*/} --voice=M2 --speed=2.0
+  ${0##*/} --stop
+EOF
+  exit "${1:-2}"
+}
+
+# --- Internal Worker Entry Point ---
 if [[ ${1:-} == "--worker" ]]; then
-  speak "${2:-clipboard}" "${3:-auto}"
+  shift
+  w_selection="clipboard"
+  w_format="auto"
+  w_speed="1.0"
+  w_voice="M1"
+
+  while (($# > 0)); do
+    case $1 in
+    --selection=*) w_selection=${1#*=} ;;
+    --format=*) w_format=${1#*=} ;;
+    --speed=*) w_speed=${1#*=} ;;
+    --voice=*) w_voice=${1#*=} ;;
+    *)
+      echo "Worker: unknown arg: $1" >&2
+      exit 2
+      ;;
+    esac
+    shift
+  done
+
+  speak "$w_selection" "$w_format" "$w_speed" "$w_voice"
   exit
 fi
 
-selection=clipboard
-format=auto
+# --- Main CLI Parsing ---
+selection=""
+format="auto"
+speed="1.0"
+voice="M1"
 
-for argument in "$@"; do
-  case $argument in
-    clipboard | primary)
-      selection=$argument
-      ;;
-    auto | raw | markdown | html)
-      format=$argument
-      ;;
-    stop)
-      systemctl --user stop "$playback_unit"
-      exit
-      ;;
-    *)
-      printf 'Usage: %s [clipboard|primary] [auto|raw|markdown|html|stop]\n' "${0##*/}" >&2
-      exit 2
-      ;;
+while (($# > 0)); do
+  case $1 in
+  # Positional: Selection (only allowed if not yet set)
+  clipboard | primary)
+    if [[ -n $selection ]]; then
+      printf 'Error: selection already set to "%s"\n' "$selection" >&2
+      usage
+    fi
+    selection=$1
+    ;;
+
+  # Strict Options
+  --format=*)
+    format=${1#*=}
+    ;;
+  --voice=*)
+    voice=${1#*=}
+    ;;
+  --speed=*)
+    speed=${1#*=}
+    ;;
+  --stop)
+    systemctl --user stop "$playback_unit" 2>/dev/null || true
+    notify "Speech stopped"
+    exit 0
+    ;;
+  -h | --help)
+    usage 0
+    ;;
+
+  # Reject bare --key without =value
+  --format | --voice | --speed)
+    printf 'Error: %s requires a value. Use %s=VALUE\n' "$1" "$1" >&2
+    usage
+    ;;
+
+  # Reject anything else
+  *)
+    printf 'Error: Unknown argument "%s"\n' "$1" >&2
+    usage
+    ;;
   esac
+  shift
 done
 
-toggle "$selection" "$format"
+# Default selection if none provided
+selection=${selection:-clipboard}
+
+# Validate format
+case $format in
+auto | raw | markdown | html) ;;
+*)
+  printf 'Error: Invalid format "%s"\n' "$format" >&2
+  usage
+  ;;
+esac
+
+# Validate voice
+if [[ -z $voice ]]; then
+  printf 'Error: --voice cannot be empty\n' >&2
+  usage
+fi
+
+# Validate speed
+if ! [[ $speed =~ ^[0-9]+(\.[0-9]+)?$ ]] ||
+  ! awk -v s="$speed" 'BEGIN { exit !(s >= 0.7 && s <= 2.0) }'; then
+  printf 'Error: --speed must be a number between 0.7 and 2.0\n' >&2
+  usage
+fi
+
+toggle "$selection" "$format" "$speed" "$voice"
