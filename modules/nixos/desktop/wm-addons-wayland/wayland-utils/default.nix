@@ -138,6 +138,9 @@ in
             ExecStart = "${lib.getExe pkgs._custom.supertonic} serve --host 127.0.0.1 --port 7788";
             Restart = "on-failure";
             RestartSec = 2;
+            # PERF: test those env vars
+            # "SUPERTONIC_INTRA_OP_THREADS=8"
+            # "SUPERTONIC_INTER_OP_THREADS=8"
             Environment = [ "HF_HUB_DISABLE_TELEMETRY=1" ];
           };
         };
