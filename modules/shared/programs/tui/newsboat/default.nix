@@ -15,7 +15,6 @@ let
     configDirectory
     ;
 
-  qndl = pkgs.writeShellScriptBin "qndl" (builtins.readFile ./scripts/qndl.sh);
   mkThemeNewsboat =
     themeColors:
     "${inputs.catppuccin-newsboat}/themes/${
@@ -31,7 +30,6 @@ in
     _custom.hm = {
       home.packages = with pkgs; [
         newsboat
-        qndl
         urlscan # extract urls from emails/txt files
       ];
 
