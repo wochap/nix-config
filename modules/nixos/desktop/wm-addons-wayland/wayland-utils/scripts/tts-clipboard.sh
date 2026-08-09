@@ -74,6 +74,11 @@ normalize_text() {
     ;;
   raw) ;;
   esac
+
+  # Rich clipboard content can contain Unicode object replacement characters
+  # (U+FFFC) for embedded images or other non-text objects. They are not
+  # speakable and can cause the TTS backend to reject the request.
+  text=${text//$'\uFFFC'/}
 }
 
 split_text() {
@@ -200,7 +205,10 @@ speak() {
 
   notify "Generating speech" "${#text} characters in ${#chunks[@]} chunks, voice $voice at ${speed}x speed with $steps steps"
 
-  generate_audio "${chunks[0]}" "$work_dir/0.wav" "$speed" "$voice" "$steps"
+  if ! generate_audio "${chunks[0]}" "$work_dir/0.wav" "$speed" "$voice" "$steps"; then
+    notify "Could not generate speech" "Supertonic failed while preparing the first chunk"
+    return 1
+  fi
 
   for ((i = 0; i < ${#chunks[@]}; i++)); do
     if ((i + 1 < ${#chunks[@]})); then
