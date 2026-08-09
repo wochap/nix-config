@@ -15,6 +15,25 @@ let
     configDirectory
     ;
 
+  articlePython = pkgs.python3.withPackages (pythonPackages: [ pythonPackages.trafilatura ]);
+  summaryHeader = pkgs.writeText "newsboat-summary-header.html" ''
+    <style>
+    ${builtins.readFile ./summary/summary.css}
+    </style>
+  '';
+  newsboat-summary = pkgs.writeShellApplication {
+    name = "newsboat-summary";
+    runtimeInputs = with pkgs; [
+      pandoc
+      articlePython
+    ];
+    runtimeEnv = {
+      EXTRACTOR = ./summary/extract.py;
+      RENDERER = ./summary/render.py;
+      HEADER = summaryHeader;
+    };
+    text = builtins.readFile ./summary/newsboat-summary.sh;
+  };
   mkThemeNewsboat =
     themeColors:
     "${inputs.catppuccin-newsboat}/themes/${
@@ -30,6 +49,7 @@ in
     _custom.hm = {
       home.packages = with pkgs; [
         newsboat
+        newsboat-summary
         urlscan # extract urls from emails/txt files
       ];
 
