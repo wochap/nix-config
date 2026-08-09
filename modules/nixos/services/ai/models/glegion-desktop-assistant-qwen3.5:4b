@@ -1,0 +1,21 @@
+FROM qwen3.5:4b
+
+# Context window (Model max is 262k, but 8k keeps VRAM usage low and TTFT fast)
+PARAMETER num_ctx 8192
+PARAMETER num_gpu 99
+
+# Increase num_predict significantly!
+# Because it thinks before acting, a 256 limit will cut it off mid-tool call.
+PARAMETER num_predict 2048
+
+# Qwen's officially recommended parameters for precise coding/tool tasks
+PARAMETER temperature 0.6
+PARAMETER top_p 0.95
+PARAMETER top_k 20
+PARAMETER repeat_penalty 1.0
+
+SYSTEM """
+You are a fast, precise, and autonomous desktop assistant.
+Execute tools immediately without conversational filler.
+"""
+# vim: filetype=Dockerfile
