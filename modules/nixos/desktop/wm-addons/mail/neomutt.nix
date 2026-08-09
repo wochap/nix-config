@@ -316,7 +316,7 @@ in
           folder = "${hmConfig.home.homeDirectory}/Mail";
           forward_quote = "yes";
           include = "yes";
-          index_format = ''"%4C %zs %<X?󰁦& >%zc%zt %<[y?%<[d?     %[%H:%M]&    %[%b %d]>&%[%Y-%m-%d]> %-20.20L (%<l?%4l&%4c>) %<s?%s&[no subject]>"'';
+          index_format = ''"%4C %zs %<X?󰁦& >%zc%zt %<[y?%<[d?     %[%H:%M]&    %[%b %d]>&%[%Y-%m-%d]> %-20.20L (%<l?%4l&%4c>) %@subject@"'';
           mail_check = "0";
           mailcap_path = "${hmConfig.xdg.configHome}/neomutt/mailcap";
           mark_old = "no";
@@ -361,6 +361,11 @@ in
           hdr_order From: To: Cc: Reply-To: Date: Subject: List-Id:
 
           lists .*@lists.sr.ht
+
+          # String expandos such as %s cannot be used as boolean conditionals.
+          # Match messages with a non-empty subject, then fall back for the rest.
+          index-format-hook subject "~s ." "%s"
+          index-format-hook subject "~A" "[no subject]"
 
           # Theme formats
           set date_format = "%d %h %H:%M";
