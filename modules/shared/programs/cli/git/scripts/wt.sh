@@ -284,6 +284,18 @@ cmd_clone() {
   local default_branch
   default_branch=$(get_default_branch "$git_dir") || die "cannot detect default branch"
 
+  git -C "$git_dir" config remote.origin.fetch \
+    '+refs/heads/*:refs/remotes/origin/*' ||
+    die "failed to configure remote tracking"
+
+  git -C "$git_dir" fetch origin >&2 ||
+    die "failed to configure remote tracking"
+
+  git -C "$git_dir" branch \
+    --set-upstream-to="origin/$default_branch" \
+    "$default_branch" >&2 ||
+    die "failed to configure upstream"
+
   git -C "$git_dir" worktree add "$abs_dir/$default_branch" "$default_branch" >&2 ||
     die "failed to create default worktree"
 
@@ -843,3 +855,4 @@ main() {
 }
 
 main "$@"
+
