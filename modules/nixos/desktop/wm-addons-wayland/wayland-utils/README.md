@@ -18,10 +18,13 @@ voice files into `~/.cache/supertonic3`:
 $ supertonic download
 ```
 
-This setup step is optional. If the model is missing, the first
-`tts-clipboard` invocation starts `supertonic.service`, which downloads the
-same files automatically. The initial download is about 400 MB, so the first
-invocation can take longer than usual.
+This setup step is optional. Starting `supertonic.service` with a missing model
+downloads the same files automatically. The initial download is about 400 MB,
+so the service can take longer than usual to become ready the first time.
+
+Start Supertonic from the Quickshell Control Center before invoking
+`tts-clipboard`. The command reports an error instead of starting the service
+itself when the service is disabled.
 
 ### Usage
 
@@ -66,6 +69,31 @@ $ tts-clipboard --speed=1.5
 $ tts-clipboard primary --speed=1.8
 ```
 
+### Inference quality
+
+Set the number of inference steps with `--steps`. Supertonic accepts integers
+from `1` through `100`; this command defaults to `3` for low latency. Higher
+values generally improve quality at the cost of generation time. Upstream
+describes `5` through `12` as the typical quality range.
+
+```console
+$ tts-clipboard --steps=2               # Faster, lower quality
+$ tts-clipboard --steps=3               # Default
+$ tts-clipboard --steps=8               # Upstream default quality
+```
+
+### Chunked playback
+
+Application-level chunking is enabled by default. It starts playing the first
+sentence-aware chunk while generating the next one. Disable it to submit the
+entire selection in one request and wait for the complete response before
+playback:
+
+```console
+$ tts-clipboard --chunking=on            # Default, lower perceived latency
+$ tts-clipboard --chunking=off           # One request and one audio file
+```
+
 ### Voice
 
 Supertonic 3 includes five male and five female built-in voices, named `M1`
@@ -82,8 +110,12 @@ The same option accepts the name of an imported custom Supertonic voice.
 ### Toggle behavior
 
 Invoking `tts-clipboard` while it is already generating or playing also stops
-the active operation. The Supertonic service starts on demand and remains
-running for faster subsequent requests. Stop it manually when desired:
+the active operation. Long selections are generated in sentence-aware chunks.
+Playback begins after the first chunk, while the following chunk is generated
+concurrently. Requests use the native Supertonic endpoint.
+
+The Supertonic service remains running for faster subsequent requests. Stop it
+from the Quickshell Control Center or manually when desired:
 
 ```console
 $ systemctl --user stop supertonic.service

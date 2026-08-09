@@ -13,32 +13,10 @@ notify() {
 }
 
 ensure_supertonic() {
-  local started_at=$SECONDS
-
-  if curl --fail --silent --max-time 1 http://127.0.0.1:7788/v1/health >/dev/null; then
-    return
-  fi
-
-  notify "Starting Supertonic" "The first start may download about 400 MB"
-
-  if ! systemctl --user start supertonic.service; then
-    notify "Supertonic failed to start" "Check the user service journal"
+  if ! curl --fail --silent --max-time 1 http://127.0.0.1:7788/v1/health >/dev/null; then
+    notify "Supertonic is not running" "Enable it from the Control Center"
     return 1
   fi
-
-  until curl --fail --silent --max-time 1 http://127.0.0.1:7788/v1/health >/dev/null; do
-    if systemctl --user is-failed --quiet supertonic.service; then
-      notify "Supertonic failed to start" "Check the user service journal"
-      return 1
-    fi
-
-    if ((SECONDS - started_at >= 600)); then
-      notify "Supertonic startup timed out" "Check the user service journal"
-      return 1
-    fi
-
-    sleep 0.5
-  done
 }
 
 read_clipboard() {
@@ -98,13 +76,92 @@ normalize_text() {
   esac
 }
 
+split_text() {
+  # Keep sentence boundaries where practical while limiting the time until the
+  # first playable chunk. Long individual sentences are split at word boundaries.
+  printf '%s\n' "$text" | awk -v max=400 '
+    function flush() {
+      if (length(chunk) > 0) {
+        print chunk
+        chunk = ""
+      }
+    }
+
+    function add(part, words, count, i, candidate) {
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", part)
+      if (length(part) == 0)
+        return
+
+      if (length(part) > max) {
+        count = split(part, words, /[[:space:]]+/)
+        for (i = 1; i <= count; i++) {
+          candidate = length(chunk) > 0 ? chunk " " words[i] : words[i]
+          if (length(candidate) > max && length(chunk) > 0)
+            flush()
+          chunk = length(chunk) > 0 ? chunk " " words[i] : words[i]
+        }
+        return
+      }
+
+      candidate = length(chunk) > 0 ? chunk " " part : part
+      if (length(candidate) > max)
+        flush()
+      chunk = length(chunk) > 0 ? chunk " " part : part
+    }
+
+    {
+      remaining = $0
+      while (match(remaining, /[^.!?]*[.!?]+([[:space:]]+|$)/)) {
+        add(substr(remaining, RSTART, RLENGTH))
+        remaining = substr(remaining, RSTART + RLENGTH)
+      }
+      add(remaining)
+
+      if (NF == 0)
+        flush()
+    }
+
+    END { flush() }
+  '
+}
+
+generate_audio() {
+  local chunk=$1
+  local output=$2
+  local speed=$3
+  local voice=$4
+  local steps=$5
+
+  # For English-only input, add `lang: "en"` to this object and compare it
+  # with Supertonic's automatic language handling.
+  jq -cn \
+    --arg text "$chunk" \
+    --arg voice "$voice" \
+    --argjson speed "$speed" \
+    --argjson steps "$steps" \
+    '{text: $text, voice: $voice, steps: $steps, speed: $speed, max_chunk_length: 400, silence_duration: 0.15, response_format: "wav"}' |
+    curl \
+      --fail \
+      --show-error \
+      --silent \
+      --header "content-type: application/json" \
+      --data-binary @- \
+      --output "$output" \
+      http://127.0.0.1:7788/v1/tts
+}
+
 speak() {
   local selection=$1
   local format=$2
   local speed=$3
   local voice=$4
+  local chunking=$5
+  local steps=$6
   local text
-  local audio_file
+  local work_dir
+  local generation_pid
+  local i
+  local -a chunks
 
   read_clipboard "$selection" "$format" || {
     notify "Nothing to speak" "The $selection does not contain text"
@@ -128,26 +185,38 @@ speak() {
 
   ensure_supertonic
 
-  audio_file=$(mktemp --tmpdir="${XDG_RUNTIME_DIR:-/tmp}" tts-clipboard.XXXXXX.wav)
-  trap 'rm -f "$audio_file"' EXIT
+  if [[ $chunking == "on" ]]; then
+    mapfile -t chunks < <(split_text)
+  else
+    chunks=("$text")
+  fi
+  if ((${#chunks[@]} == 0)); then
+    notify "Nothing to speak" "The selected text is empty"
+    exit 1
+  fi
 
-  notify "Generating speech" "${#text} characters, voice $voice at ${speed}x speed"
+  work_dir=$(mktemp --directory --tmpdir="${XDG_RUNTIME_DIR:-/tmp}" tts-clipboard.XXXXXX)
+  trap 'rm -rf "$work_dir"' EXIT
 
-  jq -cn \
-    --arg input "$text" \
-    --arg voice "$voice" \
-    --argjson speed "$speed" \
-    '{model: "supertonic-3", input: $input, voice: $voice, response_format: "wav", speed: $speed}' |
-    curl \
-      --fail \
-      --show-error \
-      --silent \
-      --header "content-type: application/json" \
-      --data-binary @- \
-      --output "$audio_file" \
-      http://127.0.0.1:7788/v1/audio/speech
+  notify "Generating speech" "${#text} characters in ${#chunks[@]} chunks, voice $voice at ${speed}x speed with $steps steps"
 
-  pw-play "$audio_file"
+  generate_audio "${chunks[0]}" "$work_dir/0.wav" "$speed" "$voice" "$steps"
+
+  for ((i = 0; i < ${#chunks[@]}; i++)); do
+    if ((i + 1 < ${#chunks[@]})); then
+      generate_audio "${chunks[i + 1]}" "$work_dir/$((i + 1)).wav" "$speed" "$voice" "$steps" &
+      generation_pid=$!
+    else
+      generation_pid=""
+    fi
+
+    pw-play "$work_dir/$i.wav"
+
+    if [[ -n $generation_pid ]] && ! wait "$generation_pid"; then
+      notify "Could not generate speech" "Supertonic failed while preparing the next chunk"
+      return 1
+    fi
+  done
 }
 
 toggle() {
@@ -155,6 +224,8 @@ toggle() {
   local format=$2
   local speed=$3
   local voice=$4
+  local chunking=$5
+  local steps=$6
 
   if systemctl --user is-active --quiet "$playback_unit"; then
     systemctl --user stop "$playback_unit"
@@ -170,7 +241,7 @@ toggle() {
     --quiet \
     --service-type=exec \
     --setenv=PATH="$PATH" \
-    "$0" --worker --selection="$selection" --format="$format" --speed="$speed" --voice="$voice"
+    "$0" --worker --selection="$selection" --format="$format" --speed="$speed" --voice="$voice" --chunking="$chunking" --steps="$steps"
 }
 
 usage() {
@@ -185,12 +256,15 @@ Options:
   --format=FORMAT     Input format: auto, raw, markdown, html (default: auto)
   --voice=NAME        Voice identifier (default: M1)
   --speed=SPEED       Playback speed 0.7-2.0 (default: 1.0)
+  --chunking=MODE     Pipelined playback: on or off (default: on)
+  --steps=STEPS       Inference steps 1-100 (default: 3)
   --stop              Stop any currently playing speech
   -h, --help          Show this help message
 
 Examples:
   ${0##*/} primary --format=markdown --speed=1.5
-  ${0##*/} --voice=M2 --speed=2.0
+  ${0##*/} --voice=M2 --speed=2.0 --steps=2
+  ${0##*/} --chunking=off --steps=8
   ${0##*/} --stop
 EOF
   exit "${1:-2}"
@@ -203,6 +277,8 @@ if [[ ${1:-} == "--worker" ]]; then
   w_format="auto"
   w_speed="1.0"
   w_voice="M1"
+  w_chunking="on"
+  w_steps="3"
 
   while (($# > 0)); do
     case $1 in
@@ -210,6 +286,8 @@ if [[ ${1:-} == "--worker" ]]; then
     --format=*) w_format=${1#*=} ;;
     --speed=*) w_speed=${1#*=} ;;
     --voice=*) w_voice=${1#*=} ;;
+    --chunking=*) w_chunking=${1#*=} ;;
+    --steps=*) w_steps=${1#*=} ;;
     *)
       echo "Worker: unknown arg: $1" >&2
       exit 2
@@ -218,7 +296,7 @@ if [[ ${1:-} == "--worker" ]]; then
     shift
   done
 
-  speak "$w_selection" "$w_format" "$w_speed" "$w_voice"
+  speak "$w_selection" "$w_format" "$w_speed" "$w_voice" "$w_chunking" "$w_steps"
   exit
 fi
 
@@ -227,6 +305,8 @@ selection=""
 format="auto"
 speed="1.0"
 voice="M1"
+chunking="on"
+steps="3"
 
 while (($# > 0)); do
   case $1 in
@@ -249,6 +329,12 @@ while (($# > 0)); do
   --speed=*)
     speed=${1#*=}
     ;;
+  --chunking=*)
+    chunking=${1#*=}
+    ;;
+  --steps=*)
+    steps=${1#*=}
+    ;;
   --stop)
     systemctl --user stop "$playback_unit" 2>/dev/null || true
     notify "Speech stopped"
@@ -259,7 +345,7 @@ while (($# > 0)); do
     ;;
 
   # Reject bare --key without =value
-  --format | --voice | --speed)
+  --format | --voice | --speed | --chunking | --steps)
     printf 'Error: %s requires a value. Use %s=VALUE\n' "$1" "$1" >&2
     usage
     ;;
@@ -298,4 +384,20 @@ if ! [[ $speed =~ ^[0-9]+(\.[0-9]+)?$ ]] ||
   usage
 fi
 
-toggle "$selection" "$format" "$speed" "$voice"
+# Validate chunking
+case $chunking in
+on | off) ;;
+*)
+  printf 'Error: --chunking must be either on or off\n' >&2
+  usage
+  ;;
+esac
+
+# Validate inference steps against the native Supertonic API range
+if ! [[ $steps =~ ^[0-9]+$ ]] || ((10#$steps < 1 || 10#$steps > 100)); then
+  printf 'Error: --steps must be an integer between 1 and 100\n' >&2
+  usage
+fi
+steps=$((10#$steps))
+
+toggle "$selection" "$format" "$speed" "$voice" "$chunking" "$steps"
