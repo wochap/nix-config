@@ -9,21 +9,35 @@ debug=false
 usage() { echo "usage: newsboat-summary [--force] [--debug] URL" >&2; }
 while (($#)); do
   case "$1" in
-    --force) force=true ;;
-    --debug) debug=true ;;
-    --help|-h) usage; exit 0 ;;
-    --*) usage; exit 2 ;;
-    *) break ;;
+  --force) force=true ;;
+  --debug) debug=true ;;
+  --help | -h)
+    usage
+    exit 0
+    ;;
+  --*)
+    usage
+    exit 2
+    ;;
+  *) break ;;
   esac
   shift
 done
-if (($# != 1)); then usage; exit 2; fi
+if (($# != 1)); then
+  usage
+  exit 2
+fi
 article_url=$1
 
 cache_root="${XDG_CACHE_HOME:-$HOME/.cache}/newsboat-summaries"
 mkdir -p "$cache_root"
 work_dir=$(mktemp -d "${TMPDIR:-/tmp}/newsboat-summary.XXXXXX")
 trap 'rm -rf "$work_dir"' EXIT
+
+notify() {
+  local title=$1 message=$2
+  notify-send --app-name=newsboat-summary --app-icon="tui-rss" --hint=int:transient:1 "$title" "$message" || true
+}
 
 open_page() {
   local page=$1
@@ -49,6 +63,7 @@ diagnose() {
       [$stage,$message,$suggestion,$url,$link,$timestamp] | map(@html) |
       "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Summary error</title><style>html{color-scheme:light dark;font:18px/1.6 system-ui}body{max-width:46rem;margin:auto;padding:2rem}code{overflow-wrap:anywhere}.error{border-left:.3rem solid #e64553;padding-left:1rem}</style></head><body><h1>Article summary failed</h1><div class=\"error\"><p><strong>Stage:</strong> \(.[0])</p><p>\(.[1])</p></div><p><strong>Suggested action:</strong> \(.[2])</p><p><strong>Article:</strong> <a href=\"\(.[4])\">\(.[3])</a></p><p><small>\(.[5])</small></p></body></html>"' >"$work_dir/diagnostic.html"
   mv "$work_dir/diagnostic.html" "$diagnostic"
+  notify "Newsboat summary failed" "$stage: $message"
   open_page "$diagnostic" || true
   echo "newsboat-summary: $stage: $message" >&2
   exit 1
@@ -61,12 +76,16 @@ fi
 # Fast path for the common case. Redirect aliases intentionally are not guessed.
 input_key=$(printf '%s' "$article_url" | sha256sum | cut -d' ' -f1)
 input_cache="$cache_root/$input_key.html"
-if [[ $force == false && -s $input_cache ]]; then open_page "$input_cache"; exit 0; fi
+if [[ $force == false && -s $input_cache ]]; then
+  notify "Newsboat summary" "Opening cached summary"
+  open_page "$input_cache"
+  exit 0
+fi
 
 curl_error="$work_dir/curl.error"
 if ! effective_url=$(curl --fail --silent --show-error --location --max-redirs 5 \
-    --connect-timeout 15 --max-time 45 --user-agent "newsboat-summary/1.0 (local RSS reader)" \
-    --output "$work_dir/article.html" --write-out '%{url_effective}' "$article_url" 2>"$curl_error"); then
+  --connect-timeout 15 --max-time 45 --user-agent "newsboat-summary/1.0 (local RSS reader)" \
+  --output "$work_dir/article.html" --write-out '%{url_effective}' "$article_url" 2>"$curl_error"); then
   diagnose fetch "$(head -c 500 "$curl_error")" "Check the network and open the original article to confirm it is available."
 fi
 
@@ -79,11 +98,18 @@ canonical_url=$(jq -r '.canonical_url' "$work_dir/article.json")
 if [[ ! $canonical_url =~ ^https?://[^[:space:]]+$ ]]; then canonical_url=$effective_url; fi
 cache_key=$(printf '%s' "$canonical_url" | sha256sum | cut -d' ' -f1)
 cached_html="$cache_root/$cache_key.html"
-if [[ $force == false && -s $cached_html ]]; then open_page "$cached_html"; exit 0; fi
+if [[ $force == false && -s $cached_html ]]; then
+  notify "Newsboat summary" "Opening cached summary"
+  open_page "$cached_html"
+  exit 0
+fi
+
+article_title=$(jq -r '(.title // "Untitled article")[0:160]' "$work_dir/article.json")
+notify "Newsboat summary started" "$article_title"
 
 body_chars=$(jq -r '.body | length' "$work_dir/article.json")
 # Four characters/token is optimistic for code and non-English text; 3 chars/token is conservative.
-estimated_tokens=$(( (body_chars + 2) / 3 ))
+estimated_tokens=$(((body_chars + 2) / 3))
 if ((estimated_tokens > 6500)); then
   diagnose validation "The extracted article is about $estimated_tokens tokens, above the safe 6,500-token input limit; it was not truncated." "Use a shorter source. Chunked summarization can be added later."
 fi
@@ -102,8 +128,8 @@ user_prompt=$(jq -r '"Summarize the article below using exactly this structure:\
 jq -n --arg model "$model" --arg system "$system_prompt" --arg prompt "$user_prompt" '{model:$model,stream:false,think:false,messages:[{role:"system",content:$system},{role:"user",content:$prompt}],options:{temperature:0.2,top_p:0.8,num_ctx:8192,num_predict:500,repeat_penalty:1.05}}' >"$work_dir/request.json"
 
 if ! curl --fail --silent --show-error --connect-timeout 5 --max-time 120 \
-    --header 'Content-Type: application/json' --data-binary @"$work_dir/request.json" \
-    "$ollama_url/api/chat" >"$work_dir/response.json" 2>"$work_dir/ollama.error"; then
+  --header 'Content-Type: application/json' --data-binary @"$work_dir/request.json" \
+  "$ollama_url/api/chat" >"$work_dir/response.json" 2>"$work_dir/ollama.error"; then
   diagnose Ollama "$(head -c 500 "$work_dir/ollama.error")" "Start Ollama and confirm that glegion-qwen3.5:4b is installed."
 fi
 if ! summary=$(jq -er '.message.content | select(type == "string" and length > 0)' "$work_dir/response.json" 2>"$work_dir/jq.error"); then
@@ -112,8 +138,8 @@ fi
 if ((${#summary} > 20000)); then diagnose parsing "Ollama returned an unreasonably large response."; fi
 first_line=$(printf '%s\n' "$summary" | head -n 1)
 last_line=$(printf '%s\n' "$summary" | tail -n 1)
-if [[ $first_line =~ ^[[:space:]]*\`\`\`(markdown|md)?[[:space:]]*$ ]] \
-    && [[ $last_line =~ ^[[:space:]]*\`\`\`[[:space:]]*$ ]]; then
+if [[ $first_line =~ ^[[:space:]]*\`\`\`(markdown|md)?[[:space:]]*$ ]] &&
+  [[ $last_line =~ ^[[:space:]]*\`\`\`[[:space:]]*$ ]]; then
   summary=$(printf '%s\n' "$summary" | sed '1d;$d')
 fi
 summary=$(printf '%s' "$summary" | sed -E '/<think>/,/<\/think>/d')
@@ -123,10 +149,11 @@ if [[ -z ${summary//[[:space:]]/} ]]; then diagnose parsing "The response was em
 # Python JSON decoding safely transports metadata; Pandoc's raw_html extension is disabled below.
 python3 "$RENDERER" "$work_dir/article.json" "$work_dir/summary.md" "$model" "$canonical_url" "$summary"
 if ! pandoc --from=markdown-raw_html --to=html5 --standalone \
-    --include-in-header="$HEADER" --metadata title="Article summary" "$work_dir/summary.md" \
-    --output="$work_dir/summary.html" 2>"$work_dir/pandoc.error"; then
+  --include-in-header="$HEADER" --metadata title="Article summary" "$work_dir/summary.md" \
+  --output="$work_dir/summary.html" 2>"$work_dir/pandoc.error"; then
   diagnose Pandoc "$(head -c 500 "$work_dir/pandoc.error")" "Check the extracted metadata and retry."
 fi
 mv "$work_dir/summary.html" "$cached_html"
 [[ $debug == true ]] && echo "newsboat-summary: cached $cached_html" >&2
 open_page "$cached_html" || diagnose "browser launch" "xdg-open could not be launched." "Check your XDG default browser configuration."
+notify "Newsboat summary finished" "$article_title"
