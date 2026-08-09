@@ -157,6 +157,8 @@
     catppuccin-bat.flake = false;
     catppuccin-bottom.url = "github:catppuccin/bottom";
     catppuccin-bottom.flake = false;
+    catppuccin-btop.url = "github:catppuccin/btop";
+    catppuccin-btop.flake = false;
     catppuccin-dircolors.url = "github:wochap/dircolors";
     catppuccin-dircolors.flake = false;
     catppuccin-discord.url = "github:catppuccin/discord";

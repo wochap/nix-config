@@ -1,0 +1,41 @@
+{
+  config,
+  lib,
+  inputs,
+  pkgs,
+  ...
+}:
+
+let
+  cfg = config._custom.programs.btop;
+  inherit (config._custom.globals)
+    themeColorsLight
+    themeColorsDark
+    preferDark
+    configDirectory
+    ;
+
+  # # TODO: wait for https://github.com/ClementTsang/btop/issues/1284
+  # mkThemeBottom = themeColors: ''
+  #   ${lib.fileContents ./dotfiles/btop.toml}
+  #   ${lib.fileContents "${inputs.catppuccin-btop}/themes/${themeColors.flavour}.toml"}
+  # '';
+  # catppuccin-btop = mkThemeBottom themeColorsLight;
+  # catppuccin-btop = mkThemeBottom themeColorsDark;
+in
+{
+  options._custom.programs.btop.enable = lib.mkEnableOption { };
+
+  config = lib.mkIf cfg.enable {
+    _custom.hm = {
+      home.packages = with pkgs; [ btop ];
+
+      home.shellAliases.top = "btop";
+
+      xdg.configFile = {
+        "btop/btop.conf".source = lib._custom.relativeSymlink configDirectory ./dotfiles/btop.conf;
+        "btop/themes".source = "${inputs.catppuccin-btop}/themes";
+      };
+    };
+  };
+}
