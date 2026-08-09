@@ -126,15 +126,9 @@ PanelWindow {
             }
           }
 
-          ControlCenterButton {
+          Item {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            label: "Docker"
-            woosIcon: ""
-            isActive: SDocker.isActive
-            onClicked: {
-              SDocker.toggle();
-            }
           }
         }
 
@@ -183,6 +177,43 @@ PanelWindow {
             isActive: SLegionRapidCharging.isActive
             onClicked: {
               SLegionRapidCharging.toggle();
+            }
+          }
+        }
+
+        RowLayout {
+          Layout.fillWidth: true
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Ollama"
+            materialIcon: "smart_toy"
+            isActive: SOllama.isActive
+            onClicked: {
+              SOllama.toggle();
+            }
+          }
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Supertonic"
+            materialIcon: "voice_selection"
+            isActive: SSupertonic.isActive
+            onClicked: {
+              SSupertonic.toggle();
+            }
+          }
+
+          ControlCenterButton {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Docker"
+            woosIcon: ""
+            isActive: SDocker.isActive
+            onClicked: {
+              SDocker.toggle();
             }
           }
         }
