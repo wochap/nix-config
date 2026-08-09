@@ -34,6 +34,8 @@ in
         pastel # color utils
         cloc # count lines of code
         graphviz # dependency graphing
+        chafa # open images in terminal
+        catdoc # ms word/excel to text
 
         chawan # tui browser
         termshark # tui wireshark

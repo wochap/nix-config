@@ -19,6 +19,7 @@ in
       cached-nix-shell # fast nix-shell scripts
       clinfo # print info about OpenCL
       coreutils-full # GNU utils commands
+      util-linux
       dex # execute DesktopEntry files (xdg/autostart)
       dmidecode # log hw info
       dnsutils # test dns

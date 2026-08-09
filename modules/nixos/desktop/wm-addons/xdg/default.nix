@@ -30,18 +30,7 @@ let
       "inode/directory"
     ]
   );
-  smart-open = pkgs.writeShellApplication {
-    name = "smart-open";
-    runtimeInputs = with pkgs; [
-      util-linux
-      less
-      lynx
-      chafa
-      mpv
-      catdoc
-    ];
-    text = builtins.readFile ./scripts/smart-open.sh;
-  };
+  smart-open = pkgs.writeScriptBin "smart-open" (builtins.readFile ./scripts/smart-open.sh);
 in
 {
   options._custom.desktop.xdg.enable = lib.mkEnableOption { };
