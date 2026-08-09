@@ -33,16 +33,12 @@ let
   smart-open = pkgs.writeShellApplication {
     name = "smart-open";
     runtimeInputs = with pkgs; [
-      coreutils
-      file
       util-linux
       less
       lynx
       chafa
-      poppler-utils
       mpv
       catdoc
-      atool
     ];
     text = builtins.readFile ./scripts/smart-open.sh;
   };
