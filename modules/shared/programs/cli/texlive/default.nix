@@ -15,7 +15,6 @@ in
     environment.systemPackages = with pkgs; [
       # latex
       texlive.combined.scheme-full
-      pandoc
       biber
 
       # typst

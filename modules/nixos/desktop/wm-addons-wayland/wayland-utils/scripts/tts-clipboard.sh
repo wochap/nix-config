@@ -41,22 +41,79 @@ ensure_supertonic() {
   done
 }
 
+read_clipboard() {
+  local selection=$1
+  local requested_format=$2
+  local mime_types
+  local mime_type
+  local -a selection_args=()
+
+  if [[ $selection == "primary" ]]; then
+    selection_args+=(--primary)
+  fi
+
+  mime_types=$(wl-paste "${selection_args[@]}" --list-types 2>/dev/null) || return 1
+  format=$requested_format
+
+  if [[ $format == "auto" ]]; then
+    mime_type=$(printf '%s\n' "$mime_types" | awk '/^text\/html(;|$)/ { print; exit }')
+    if [[ -n $mime_type ]]; then
+      format=html
+      text=$(wl-paste "${selection_args[@]}" --no-newline --type "$mime_type")
+      return
+    fi
+
+    mime_type=$(printf '%s\n' "$mime_types" | awk '/^text\/(x-)?markdown(;|$)/ { print; exit }')
+    if [[ -n $mime_type ]]; then
+      format=markdown
+      text=$(wl-paste "${selection_args[@]}" --no-newline --type "$mime_type")
+      return
+    fi
+
+    # Plain text may itself contain Markdown copied from an editor. Pandoc's
+    # GFM reader leaves ordinary prose intact while removing readable markup.
+    format=markdown
+  fi
+
+  if [[ $format == "html" ]]; then
+    mime_type=$(printf '%s\n' "$mime_types" | awk '/^text\/html(;|$)/ { print; exit }')
+    if [[ -n $mime_type ]]; then
+      text=$(wl-paste "${selection_args[@]}" --no-newline --type "$mime_type")
+      return
+    fi
+  fi
+
+  text=$(wl-paste "${selection_args[@]}" --no-newline --type text)
+}
+
+normalize_text() {
+  case $format in
+    html)
+      text=$(printf '%s' "$text" | pandoc --from=html --to=plain --wrap=none)
+      ;;
+    markdown)
+      text=$(printf '%s' "$text" | pandoc --from=gfm --to=plain --wrap=none)
+      ;;
+    raw)
+      ;;
+  esac
+}
+
 speak() {
   local selection=$1
+  local format=$2
   local text
   local audio_file
 
-  if [[ $selection == "primary" ]]; then
-    text=$(wl-paste --primary --no-newline --type text 2>/dev/null) || {
-      notify "Nothing to speak" "The primary selection does not contain text"
-      exit 1
-    }
-  else
-    text=$(wl-paste --no-newline --type text 2>/dev/null) || {
-      notify "Nothing to speak" "The clipboard does not contain text"
-      exit 1
-    }
-  fi
+  read_clipboard "$selection" "$format" || {
+    notify "Nothing to speak" "The $selection does not contain text"
+    exit 1
+  }
+
+  normalize_text || {
+    notify "Could not prepare text" "Pandoc failed to convert the $format input"
+    exit 1
+  }
 
   if [[ -z ${text//[[:space:]]/} ]]; then
     notify "Nothing to speak" "The selected text is empty"
@@ -92,6 +149,7 @@ speak() {
 
 toggle() {
   local selection=$1
+  local format=$2
 
   if systemctl --user is-active --quiet "$playback_unit"; then
     systemctl --user stop "$playback_unit"
@@ -106,24 +164,34 @@ toggle() {
     --quiet \
     --service-type=exec \
     --setenv=PATH="$PATH" \
-    "$0" --worker "$selection"
+    "$0" --worker "$selection" "$format"
 }
 
-case ${1:-clipboard} in
-  clipboard)
-    toggle clipboard
-    ;;
-  primary)
-    toggle primary
-    ;;
-  stop)
-    systemctl --user stop "$playback_unit"
-    ;;
-  --worker)
-    speak "${2:-clipboard}"
-    ;;
-  *)
-    printf 'Usage: %s [clipboard|primary|stop]\n' "${0##*/}" >&2
-    exit 2
-    ;;
-esac
+if [[ ${1:-} == "--worker" ]]; then
+  speak "${2:-clipboard}" "${3:-auto}"
+  exit
+fi
+
+selection=clipboard
+format=auto
+
+for argument in "$@"; do
+  case $argument in
+    clipboard | primary)
+      selection=$argument
+      ;;
+    auto | raw | markdown | html)
+      format=$argument
+      ;;
+    stop)
+      systemctl --user stop "$playback_unit"
+      exit
+      ;;
+    *)
+      printf 'Usage: %s [clipboard|primary] [auto|raw|markdown|html|stop]\n' "${0##*/}" >&2
+      exit 2
+      ;;
+  esac
+done
+
+toggle "$selection" "$format"

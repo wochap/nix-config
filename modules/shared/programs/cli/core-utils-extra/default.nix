@@ -48,6 +48,7 @@ in
         cowsay # print animals with message
         fortune # print fortune text
         jp2a # image to ascii
+        pandoc
 
         inputs.lobster.packages.${stdenv.hostPlatform.system}.lobster
       ];
