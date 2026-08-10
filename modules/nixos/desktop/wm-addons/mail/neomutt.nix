@@ -306,6 +306,7 @@ in
           abort_key = "<Esc>";
           alias_file = aliasfile;
           allow_ansi = "yes";
+          ascii_chars = "no";
           beep = "no";
           beep_new = "no";
           confirmappend = "no";
@@ -316,12 +317,13 @@ in
           folder = "${hmConfig.home.homeDirectory}/Mail";
           forward_quote = "yes";
           include = "yes";
-          index_format = ''"%4C %zs %<X?󰁦& >%zc%zt %<[y?%<[d?     %[%H:%M]&    %[%b %d]>&%[%Y-%m-%d]> %-20.20L (%<l?%4l&%4c>) %@subject@"'';
+          index_format = ''"%4C %zs %<X?󰁦& >%zc%zt %<[y?%<[d?     %[%H:%M]&    %[%b %d]>&%[%Y-%m-%d]> %-20.20L (%<l?%4l&%4c>) %s%@subject-fallback@"'';
           mail_check = "0";
           mailcap_path = "${hmConfig.xdg.configHome}/neomutt/mailcap";
           mark_old = "no";
           markers = "no";
           move = "no";
+          narrow_tree = "no";
           pager_context = "3";
           pager_index_lines = "10";
           pager_stop = "yes";
@@ -362,10 +364,7 @@ in
 
           lists .*@lists.sr.ht
 
-          # String expandos such as %s cannot be used as boolean conditionals.
-          # Match messages with a non-empty subject, then fall back for the rest.
-          index-format-hook subject "~s ." "%s"
-          index-format-hook subject "~A" "[no subject]"
+          index-format-hook subject-fallback "~s ^$" "[no subject]"
 
           # Theme formats
           set date_format = "%d %h %H:%M";
@@ -378,6 +377,7 @@ in
 
           # Theme
           source ${hmConfig.xdg.configHome}/neomutt/neomuttrc-theme
+          color tree color0 default
           color index color0 default '~R'
         '';
       };
