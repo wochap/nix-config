@@ -2,6 +2,7 @@
 set -euo pipefail
 
 model="glegion-qwen3.5:4b"
+cache_version="2"
 ollama_url="${OLLAMA_HOST:-http://127.0.0.1:11434}"
 force=false
 debug=false
@@ -74,7 +75,7 @@ if [[ ! $article_url =~ ^https?://[^/?#[:space:]]+[^[:space:]]*$ ]]; then
 fi
 
 # Fast path for the common case. Redirect aliases intentionally are not guessed.
-input_key=$(printf '%s' "$article_url" | sha256sum | cut -d' ' -f1)
+input_key=$(printf '%s\n%s' "$cache_version" "$article_url" | sha256sum | cut -d' ' -f1)
 input_cache="$cache_root/$input_key.html"
 if [[ $force == false && -s $input_cache ]]; then
   notify "Newsboat summary" "Opening cached summary"
@@ -96,7 +97,7 @@ rm -f "$work_dir/article.html"
 
 canonical_url=$(jq -r '.canonical_url' "$work_dir/article.json")
 if [[ ! $canonical_url =~ ^https?://[^[:space:]]+$ ]]; then canonical_url=$effective_url; fi
-cache_key=$(printf '%s' "$canonical_url" | sha256sum | cut -d' ' -f1)
+cache_key=$(printf '%s\n%s' "$cache_version" "$canonical_url" | sha256sum | cut -d' ' -f1)
 cached_html="$cache_root/$cache_key.html"
 if [[ $force == false && -s $cached_html ]]; then
   notify "Newsboat summary" "Opening cached summary"
@@ -152,6 +153,10 @@ if ! pandoc --from=markdown-raw_html --to=html5 --standalone \
   --include-in-header="$HEADER" --metadata title="Article summary" "$work_dir/summary.md" \
   --output="$work_dir/summary.html" 2>"$work_dir/pandoc.error"; then
   diagnose Pandoc "$(head -c 500 "$work_dir/pandoc.error")" "Check the extracted metadata and retry."
+fi
+printf '%s' "$summary" >"$work_dir/copy.md"
+if ! python3 "$INJECTOR" "$work_dir/summary.html" "$work_dir/copy.md"; then
+  diagnose rendering "Could not add the Markdown copy controls." "Check the summary renderer and retry."
 fi
 mv "$work_dir/summary.html" "$cached_html"
 [[ $debug == true ]] && echo "newsboat-summary: cached $cached_html" >&2

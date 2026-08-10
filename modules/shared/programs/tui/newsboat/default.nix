@@ -30,6 +30,7 @@ let
     runtimeEnv = {
       EXTRACTOR = ./summary/extract.py;
       RENDERER = ./summary/render.py;
+      INJECTOR = ./summary/inject_controls.py;
       HEADER = summaryHeader;
     };
     text = builtins.readFile ./summary/newsboat-summary.sh;

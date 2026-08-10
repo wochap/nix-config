@@ -10,4 +10,8 @@ pre, code { background: var(--panel); border-radius: .25rem; } code { padding: .
 pre { overflow-x: auto; padding: 1rem; } table { width: 100%; border-collapse: collapse; overflow-x: auto; }
 th, td { border: 1px solid var(--border); padding: .4rem .6rem; text-align: left; }
 .original { display: inline-block; margin: 1.5rem 0; padding: .65rem 1rem; border-radius: .4rem; background: var(--accent); color: var(--bg); font-weight: 700; text-decoration: none; }
+.copy-summary { margin-left: .6rem; padding: .65rem 1rem; border: 1px solid var(--border); border-radius: .4rem; background: var(--panel); color: var(--fg); font: inherit; font-weight: 700; cursor: pointer; }
+.copy-summary:hover { border-color: var(--accent); }
+.copy-status { margin-left: .6rem; color: var(--muted); font-size: .9rem; }
+.summary-markdown { position: fixed; left: -10000px; top: 0; width: 1px; height: 1px; opacity: 0; }
 .footer { border-top: 1px solid var(--border); margin-top: 2rem; padding-top: 1rem; }
