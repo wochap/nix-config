@@ -32,9 +32,6 @@ set_light_theme() {
   ln -sf ~/.config/cava/config-light ~/.config/cava/config
   pkill -USR2 cava
 
-  # bottom
-  ln -sf ~/.config/bottom/bottom-light.toml ~/.config/bottom/bottom.toml
-
   # newsboat
   ln -sf ~/.config/newsboat/theme-light ~/.config/newsboat/theme
 
@@ -92,9 +89,6 @@ set_dark_theme() {
   # cava
   ln -sf ~/.config/cava/config-dark ~/.config/cava/config
   pkill -USR2 cava
-
-  # bottom
-  ln -sf ~/.config/bottom/bottom-dark.toml ~/.config/bottom/bottom.toml
 
   # newsboat
   ln -sf ~/.config/newsboat/theme-dark ~/.config/newsboat/theme

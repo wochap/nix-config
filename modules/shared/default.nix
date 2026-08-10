@@ -44,7 +44,6 @@
 
     ./programs/tui/ai-agents
     ./programs/tui/amfora
-    ./programs/tui/bottom
     ./programs/tui/btop
     ./programs/tui/less
     ./programs/tui/lynx

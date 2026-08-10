@@ -155,8 +155,6 @@
     catppuccin-amfora.flake = false;
     catppuccin-bat.url = "github:catppuccin/bat";
     catppuccin-bat.flake = false;
-    catppuccin-bottom.url = "github:catppuccin/bottom";
-    catppuccin-bottom.flake = false;
     catppuccin-btop.url = "github:catppuccin/btop";
     catppuccin-btop.flake = false;
     catppuccin-dircolors.url = "github:wochap/dircolors";
