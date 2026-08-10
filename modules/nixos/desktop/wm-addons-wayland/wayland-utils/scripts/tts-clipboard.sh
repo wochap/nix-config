@@ -75,10 +75,27 @@ normalize_text() {
   raw) ;;
   esac
 
+  if [[ $format != "raw" ]]; then
+    # Pandoc represents list items with a leading "- ". That structural marker
+    # can make Supertonic omit the first sentence of an item.
+    text=$(printf '%s' "$text" | sed -E 's/^[[:space:]]*([-+*]|[0-9]+[.)])[[:space:]]+//')
+
+    # Quotes are visual structure rather than spoken content. In particular,
+    # a sentence-ending period before a closing quote (dot-quote) can make
+    # Supertonic discard the audio generated up to that point.
+    text=${text//\"/}
+    text=${text//$'\u201c'/}
+    text=${text//$'\u201d'/}
+  fi
+
   # Rich clipboard content can contain Unicode object replacement characters
   # (U+FFFC) for embedded images or other non-text objects. They are not
   # speakable and can cause the TTS backend to reject the request.
   text=${text//$'\uFFFC'/}
+
+  # A dot attached inside a word can destabilize Supertonic's synthesis (for
+  # example, "Lindy.ai"). Spell it out so domain-style names remain speakable.
+  text=$(printf '%s' "$text" | sed -E 's/([[:alnum:]])\.([[:alpha:]])/\1 dot \2/g')
 }
 
 split_text() {
@@ -115,15 +132,17 @@ split_text() {
     }
 
     {
+      # Pandoc renders headings as short standalone lines. Keep them with the
+      # following prose so TTS backends do not receive one-word audio requests.
+      if (NF > 0 && length($0) <= 80 && $0 !~ /[.!?][[:space:]]*$/)
+        $0 = $0 "."
+
       remaining = $0
       while (match(remaining, /[^.!?]*[.!?]+([[:space:]]+|$)/)) {
         add(substr(remaining, RSTART, RLENGTH))
         remaining = substr(remaining, RSTART + RLENGTH)
       }
       add(remaining)
-
-      if (NF == 0)
-        flush()
     }
 
     END { flush() }
