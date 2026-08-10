@@ -58,8 +58,8 @@ hl.config({
   },
 
   input = {
-    kb_layout = "us,us,ru",
-    kb_options = ",compose:ralt,",
+    kb_layout = "us,ru",
+    kb_options = "compose:ralt",
     accel_profile = "adaptive",
     repeat_delay = 300,
     repeat_rate = 50,
@@ -218,4 +218,14 @@ hl.config({
   --     -- },
   --   },
   -- },
+})
+
+-- disable compose:ralt on chocofi
+hl.device({
+  name = "chocochap-keyboard",
+  kb_options = "",
+})
+hl.device({
+  name = "handy-keys-passthrough:-chocochap-keyboard",
+  kb_options = "",
 })
