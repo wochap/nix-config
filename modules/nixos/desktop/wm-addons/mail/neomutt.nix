@@ -367,6 +367,7 @@ in
           index-format-hook subject-fallback "~s ^$" "[no subject]"
 
           # Theme formats
+          set sidebar_format="%D%?F?  %F?%* %?N?%N/?%S"
           set date_format = "%d %h %H:%M";
           set status_chars = " 󰁦";
           set status_format = "[ %D ] %?r?[ 󰇰 %m ] ?%?n?[ 󰇮 %n ] ?%?d?[ 󰩹 %d ] ?%?t?[  %t ] ?%?F?[  %F ] ?%?p?[  %p ]?%|─";
