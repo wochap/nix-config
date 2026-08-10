@@ -277,22 +277,6 @@
         "type": "github"
       }
     },
-    "catppuccin-bottom": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1745016081,
-        "narHash": "sha256-dfukdk70ug1lRGADKBnvMhkl+3tsY7F+UAwTS2Qyapk=",
-        "owner": "catppuccin",
-        "repo": "bottom",
-        "rev": "eadd75acd0ecad4a58ade9a1d6daa3b97ccec07c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "catppuccin",
-        "repo": "bottom",
-        "type": "github"
-      }
-    },
     "catppuccin-btop": {
       "flake": false,
       "locked": {
@@ -3338,7 +3322,6 @@
         "catppuccin-adw": "catppuccin-adw",
         "catppuccin-amfora": "catppuccin-amfora",
         "catppuccin-bat": "catppuccin-bat",
-        "catppuccin-bottom": "catppuccin-bottom",
         "catppuccin-btop": "catppuccin-btop",
         "catppuccin-cava": "catppuccin-cava",
         "catppuccin-delta": "catppuccin-delta",
