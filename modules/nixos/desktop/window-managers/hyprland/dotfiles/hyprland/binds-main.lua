@@ -280,8 +280,10 @@ hl.bind(mod .. " + ALT + c", hl.dsp.exec_cmd("uwsm-app -- color-picker"))
 -- Magnifying glass
 hl.bind(mod .. " + ALT + z", hl.dsp.exec_cmd("uwsm-app -- pypr zoom"))
 
-hl.bind(mod .. " + ALT + v", hl.dsp.exec_cmd("uwsm-app -- tts-clipboard primary --voice=F1 --speed=1.5 --steps=5 --chunking=on"))
-
+hl.bind(
+  mod .. " + ALT + v",
+  hl.dsp.exec_cmd("uwsm-app -- tts-clipboard primary --voice=F1 --speed=1.5 --steps=5 --chunking=on")
+)
 
 --- MEDIA KEYBINDINGS
 
