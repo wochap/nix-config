@@ -94,6 +94,16 @@ $ tts-clipboard --chunking=on            # Default, lower perceived latency
 $ tts-clipboard --chunking=off           # One request and one audio file
 ```
 
+To inspect the exact text of every request sent to Supertonic, run playback in
+the foreground with `--debug`:
+
+```console
+$ tts-clipboard --debug --chunking=on
+```
+
+The selected clipboard representation and normalization mode are reported
+first. Each final chunk is then printed immediately before its request.
+
 ### Voice
 
 Supertonic 3 includes five male and five female built-in voices, named `M1`

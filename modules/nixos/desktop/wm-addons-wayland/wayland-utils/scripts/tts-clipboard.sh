@@ -26,6 +26,8 @@ read_clipboard() {
   local mime_type
   local -a selection_args=()
 
+  source_format="plain text"
+
   if [[ $selection == "primary" ]]; then
     selection_args+=(--primary)
   fi
@@ -37,6 +39,7 @@ read_clipboard() {
     mime_type=$(printf '%s\n' "$mime_types" | awk '/^text\/html(;|$)/ { print; exit }')
     if [[ -n $mime_type ]]; then
       format=html
+      source_format="HTML"
       text=$(wl-paste "${selection_args[@]}" --no-newline --type "$mime_type")
       return
     fi
@@ -44,6 +47,7 @@ read_clipboard() {
     mime_type=$(printf '%s\n' "$mime_types" | awk '/^text\/(x-)?markdown(;|$)/ { print; exit }')
     if [[ -n $mime_type ]]; then
       format=markdown
+      source_format="Markdown"
       text=$(wl-paste "${selection_args[@]}" --no-newline --type "$mime_type")
       return
     fi
@@ -56,6 +60,7 @@ read_clipboard() {
   if [[ $format == "html" ]]; then
     mime_type=$(printf '%s\n' "$mime_types" | awk '/^text\/html(;|$)/ { print; exit }')
     if [[ -n $mime_type ]]; then
+      source_format="HTML"
       text=$(wl-paste "${selection_args[@]}" --no-newline --type "$mime_type")
       return
     fi
@@ -75,27 +80,10 @@ normalize_text() {
   raw) ;;
   esac
 
-  if [[ $format != "raw" ]]; then
-    # Pandoc represents list items with a leading "- ". That structural marker
-    # can make Supertonic omit the first sentence of an item.
-    text=$(printf '%s' "$text" | sed -E 's/^[[:space:]]*([-+*]|[0-9]+[.)])[[:space:]]+//')
-
-    # Quotes are visual structure rather than spoken content. In particular,
-    # a sentence-ending period before a closing quote (dot-quote) can make
-    # Supertonic discard the audio generated up to that point.
-    text=${text//\"/}
-    text=${text//$'\u201c'/}
-    text=${text//$'\u201d'/}
-  fi
-
   # Rich clipboard content can contain Unicode object replacement characters
   # (U+FFFC) for embedded images or other non-text objects. They are not
   # speakable and can cause the TTS backend to reject the request.
   text=${text//$'\uFFFC'/}
-
-  # A dot attached inside a word can destabilize Supertonic's synthesis (for
-  # example, "Lindy.ai"). Spell it out so domain-style names remain speakable.
-  text=$(printf '%s' "$text" | sed -E 's/([[:alnum:]])\.([[:alpha:]])/\1 dot \2/g')
 }
 
 split_text() {
@@ -139,7 +127,10 @@ split_text() {
 
       remaining = $0
       while (match(remaining, /[^.!?]*[.!?]+([[:space:]]+|$)/)) {
-        add(substr(remaining, RSTART, RLENGTH))
+        # The match can start after a non-boundary period in text such as
+        # "e.g.", "Lindy.ai", or a period followed by a closing quote. Include
+        # that unmatched prefix instead of silently discarding it.
+        add(substr(remaining, 1, RSTART + RLENGTH - 1))
         remaining = substr(remaining, RSTART + RLENGTH)
       }
       add(remaining)
@@ -155,6 +146,12 @@ generate_audio() {
   local speed=$3
   local voice=$4
   local steps=$5
+  local debug=$6
+
+  if [[ $debug == "on" ]]; then
+    printf '\n--- Supertonic input (%d characters) ---\n%s\n--- End Supertonic input ---\n' \
+      "${#chunk}" "$chunk" >&2
+  fi
 
   # For English-only input, add `lang: "en"` to this object and compare it
   # with Supertonic's automatic language handling.
@@ -181,7 +178,9 @@ speak() {
   local voice=$4
   local chunking=$5
   local steps=$6
+  local debug=$7
   local text
+  local source_format
   local work_dir
   local generation_pid
   local i
@@ -191,6 +190,10 @@ speak() {
     notify "Nothing to speak" "The $selection does not contain text"
     exit 1
   }
+
+  if [[ $debug == "on" ]]; then
+    printf 'Clipboard input: %s; normalization: %s\n' "$source_format" "$format" >&2
+  fi
 
   normalize_text || {
     notify "Could not prepare text" "Pandoc failed to convert the $format input"
@@ -224,14 +227,14 @@ speak() {
 
   notify "Generating speech" "${#text} characters in ${#chunks[@]} chunks, voice $voice at ${speed}x speed with $steps steps"
 
-  if ! generate_audio "${chunks[0]}" "$work_dir/0.wav" "$speed" "$voice" "$steps"; then
+  if ! generate_audio "${chunks[0]}" "$work_dir/0.wav" "$speed" "$voice" "$steps" "$debug"; then
     notify "Could not generate speech" "Supertonic failed while preparing the first chunk"
     return 1
   fi
 
   for ((i = 0; i < ${#chunks[@]}; i++)); do
     if ((i + 1 < ${#chunks[@]})); then
-      generate_audio "${chunks[i + 1]}" "$work_dir/$((i + 1)).wav" "$speed" "$voice" "$steps" &
+      generate_audio "${chunks[i + 1]}" "$work_dir/$((i + 1)).wav" "$speed" "$voice" "$steps" "$debug" &
       generation_pid=$!
     else
       generation_pid=""
@@ -253,11 +256,17 @@ toggle() {
   local voice=$4
   local chunking=$5
   local steps=$6
+  local debug=$7
 
   if systemctl --user is-active --quiet "$playback_unit"; then
     systemctl --user stop "$playback_unit"
     notify "Speech stopped"
     exit 0
+  fi
+
+  if [[ $debug == "on" ]]; then
+    speak "$selection" "$format" "$speed" "$voice" "$chunking" "$steps" "$debug"
+    return
   fi
 
   # Pass arguments using strict --key=value format to the worker
@@ -285,6 +294,7 @@ Options:
   --speed=SPEED       Playback speed 0.7-2.0 (default: 1.0)
   --chunking=MODE     Pipelined playback: on or off (default: on)
   --steps=STEPS       Inference steps 1-100 (default: 3)
+  --debug             Run in foreground and print every Supertonic input
   --stop              Stop any currently playing speech
   -h, --help          Show this help message
 
@@ -292,6 +302,7 @@ Examples:
   ${0##*/} primary --format=markdown --speed=1.5
   ${0##*/} --voice=M2 --speed=2.0 --steps=2
   ${0##*/} --chunking=off --steps=8
+  ${0##*/} --debug --chunking=on
   ${0##*/} --stop
 EOF
   exit "${1:-2}"
@@ -323,7 +334,7 @@ if [[ ${1:-} == "--worker" ]]; then
     shift
   done
 
-  speak "$w_selection" "$w_format" "$w_speed" "$w_voice" "$w_chunking" "$w_steps"
+  speak "$w_selection" "$w_format" "$w_speed" "$w_voice" "$w_chunking" "$w_steps" "off"
   exit
 fi
 
@@ -334,6 +345,7 @@ speed="1.0"
 voice="M1"
 chunking="on"
 steps="3"
+debug="off"
 
 while (($# > 0)); do
   case $1 in
@@ -361,6 +373,9 @@ while (($# > 0)); do
     ;;
   --steps=*)
     steps=${1#*=}
+    ;;
+  --debug)
+    debug="on"
     ;;
   --stop)
     systemctl --user stop "$playback_unit" 2>/dev/null || true
@@ -427,4 +442,4 @@ if ! [[ $steps =~ ^[0-9]+$ ]] || ((10#$steps < 1 || 10#$steps > 100)); then
 fi
 steps=$((10#$steps))
 
-toggle "$selection" "$format" "$speed" "$voice" "$chunking" "$steps"
+toggle "$selection" "$format" "$speed" "$voice" "$chunking" "$steps" "$debug"
