@@ -234,6 +234,10 @@ in
           name = "pearson";
           query = "from:*@pearson.com";
         }
+        {
+          name = "jira mentions";
+          query = ''from:*.atlassian.net and subject:"mentioned you on"'';
+        }
       ];
     };
 
