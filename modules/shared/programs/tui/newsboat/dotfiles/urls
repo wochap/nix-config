@@ -9,6 +9,7 @@ https://dotfyle.com/neovim/plugins/rss.xml
 https://www.reddit.com/r/neovim/.rss
 https://www.reddit.com/r/unixporn/.rss
 https://www.reddit.com/r/zsh/.rss
+https://www.reddit.com/r/linux/.rss
 https://www.reddit.com/r/nixos/.rss
 
 -4 "~The Giants"
@@ -19,6 +20,7 @@ https://javascriptweekly.com/rss "~JS Weekly"
 https://feedpress.me/cssweekly "~CSS Weekly"
 https://css-tricks.com/feed/ "~CSS-Tricks"
 https://dev.to/feed/ "~DEV Community"
+https://techcrunch.com/category/artificial-intelligence/feed/ "~TechCrunch AI"
 
 -5 "~Top Front-end Bloggers"
 https://wattenberger.com/rss "~Amelia Wattenberger"
@@ -26,9 +28,12 @@ https://feeds.feedburner.com/brad-frosts-blog "~Brad Frost"
 https://overreacted.io/rss.xml "~Dan Abramov"
 https://feeds.feedburner.com/csswizardry "~Harry Roberts"
 
--6 "~Libraries, Frameworks, etc."
+-6 "~Languages, Libraries, Frameworks, etc."
 https://reactjs.org/feed.xml "~ReactJS"
 https://news.vuejs.org/feed.xml "~VueJS"
+https://blog.rust-lang.org/feed.xml "~Rust"
+https://blog.python.org/rss.xml "~Python Insider"
+https://bun.sh/rss.xml "~Bun"
 
 -7 "~Company & Startup Blogs"
 https://github.com/neovim/neovim/tags.atom "~NeoVim"
@@ -53,3 +58,11 @@ https://www.coindesk.com/arc/outboundfeeds/rss/ "~Coindesk"
 https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.atom "~USGS Significant Earthquakes"
 https://www.marktechpost.com/feed/ "~MarkTechPost"
 
+-10 "~ AI / ML
+https://openai.com/news/rss.xml "~OpenAI"
+https://huggingface.co/blog/feed.xml "~Hugging Face"
+https://blog.google/technology/ai/rss/ "~Google AI"
+https://arxiv.org/rss/cs.AI "~arXiv CS.AI"
+# https://lastweekin.ai/feed "~Last Week in AI"
+# https://blog.langchain.com/rss/ "~LangChain"
+https://www.microsoft.com/en-us/research/feed/ "~Microsoft Research"

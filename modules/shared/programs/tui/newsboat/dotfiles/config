@@ -2,6 +2,7 @@ max-items 0
 reload-threads 5
 auto-reload yes
 reload-time 60
+user-agent "newsboat/2.43 (personal RSS reader)"
 prepopulate-query-feeds yes
 external-url-viewer "urlscan -dc -r 'smart-open {}'"
 goto-next-feed no
