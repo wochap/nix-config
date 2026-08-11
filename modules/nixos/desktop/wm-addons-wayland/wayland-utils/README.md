@@ -69,6 +69,10 @@ $ tts-clipboard --speed=1.5
 $ tts-clipboard primary --speed=1.8
 ```
 
+Supertonic always synthesizes at `1.0` speed so changing playback speed does
+not reduce model quality. The generated audio is played through `mpv`, which
+applies pitch-corrected time stretching at the requested speed.
+
 ### Inference quality
 
 Set the number of inference steps with `--steps`. Supertonic accepts integers

@@ -143,10 +143,9 @@ split_text() {
 generate_audio() {
   local chunk=$1
   local output=$2
-  local speed=$3
-  local voice=$4
-  local steps=$5
-  local debug=$6
+  local voice=$3
+  local steps=$4
+  local debug=$5
 
   if [[ $debug == "on" ]]; then
     printf '\n--- Supertonic input (%d characters) ---\n%s\n--- End Supertonic input ---\n' \
@@ -158,9 +157,8 @@ generate_audio() {
   jq -cn \
     --arg text "$chunk" \
     --arg voice "$voice" \
-    --argjson speed "$speed" \
     --argjson steps "$steps" \
-    '{text: $text, voice: $voice, steps: $steps, speed: $speed, max_chunk_length: 400, silence_duration: 0.15, response_format: "wav"}' |
+    '{text: $text, voice: $voice, steps: $steps, speed: 1.0, max_chunk_length: 400, silence_duration: 0.15, response_format: "wav"}' |
     curl \
       --fail \
       --show-error \
@@ -225,22 +223,29 @@ speak() {
   work_dir=$(mktemp --directory --tmpdir="${XDG_RUNTIME_DIR:-/tmp}" tts-clipboard.XXXXXX)
   trap 'rm -rf "$work_dir"' EXIT
 
-  notify "Generating speech" "${#text} characters in ${#chunks[@]} chunks, voice $voice at ${speed}x speed with $steps steps"
+  notify "Generating speech" "${#text} characters in ${#chunks[@]} chunks, voice $voice with ${speed}x playback and $steps steps"
 
-  if ! generate_audio "${chunks[0]}" "$work_dir/0.wav" "$speed" "$voice" "$steps" "$debug"; then
+  if ! generate_audio "${chunks[0]}" "$work_dir/0.wav" "$voice" "$steps" "$debug"; then
     notify "Could not generate speech" "Supertonic failed while preparing the first chunk"
     return 1
   fi
 
   for ((i = 0; i < ${#chunks[@]}; i++)); do
     if ((i + 1 < ${#chunks[@]})); then
-      generate_audio "${chunks[i + 1]}" "$work_dir/$((i + 1)).wav" "$speed" "$voice" "$steps" "$debug" &
+      generate_audio "${chunks[i + 1]}" "$work_dir/$((i + 1)).wav" "$voice" "$steps" "$debug" &
       generation_pid=$!
     else
       generation_pid=""
     fi
 
-    pw-play "$work_dir/$i.wav"
+    mpv \
+      --no-config \
+      --no-video \
+      --no-terminal \
+      --really-quiet \
+      --audio-pitch-correction=yes \
+      --speed="$speed" \
+      "$work_dir/$i.wav"
 
     if [[ -n $generation_pid ]] && ! wait "$generation_pid"; then
       notify "Could not generate speech" "Supertonic failed while preparing the next chunk"
