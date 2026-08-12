@@ -36,6 +36,7 @@ in
         graphviz # dependency graphing
         chafa # open images in terminal
         catdoc # ms word/excel to text
+        sox # audio util
 
         chawan # tui browser
         termshark # tui wireshark
