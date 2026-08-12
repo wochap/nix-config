@@ -18,10 +18,33 @@ let
   # epoch of the last successful remind-catchup run
   catchupStateFile = "${stateHome}/remind/last-check";
 
-  remindScript = pkgs.writeShellScript "remind" ''
-    ${pkgs.remind}/bin/remind -z -k'${pkgs.libnotify}/bin/notify-send --app-name=Remind --app-icon=kalarm --icon=kalarm --hint=string:custom-sound:message "Reminder" "%s" &' ${remFilePath}
-  '';
+  notifyScript = pkgs.writeShellScript "remind-notify" ''
+    minutes="$1"
+    body="$2"
 
+    if [ "$minutes" -gt 0 ]; then
+      exec ${pkgs.libnotify}/bin/notify-send \
+        --app-name="remind" \
+        --app-icon=kalarm \
+        --icon=kalarm \
+        --hint=string:custom-sound:message \
+        "Upcoming reminder (in $minutes minutes)" \
+        "$body"
+    fi
+
+    exec ${pkgs.libnotify}/bin/notify-send \
+      --app-name=remind \
+      --app-icon=kalarm \
+      --icon=kalarm \
+      --urgency=critical \
+      --hint=string:custom-sound:message \
+      "Reminder — starting now" \
+      "$body"
+  '';
+  remindScript = pkgs.writeShellScript "remind" ''
+    # %4 is the number of minutes from delivery to the event's AT time.
+    ${pkgs.remind}/bin/remind -z -k'${notifyScript} %4 "%s" &' ${remFilePath}
+  '';
   python-remind-final = pkgs._custom.pythonPackages.python-remind;
   # --posttime: timed events additionally notify cfg.preAlert (default 15
   # minutes) before start (remind always notifies at the event start too)
@@ -33,7 +56,6 @@ let
     ${pkgs.coreutils}/bin/mv -f "${genRemFile}.tmp" "${genRemFile}"
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
   '';
-
   catchupScript = pkgs.writeShellScript "remind-catchup" ''
     exec ${pkgs.python3}/bin/python3 ${./remind_catchup.py} \
       ${pkgs.remind}/bin/remind \

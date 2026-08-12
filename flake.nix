@@ -105,6 +105,8 @@
     adw-gtk3.flake = false;
     qt6ct.url = "gitlab:trialuser/qt6ct/00823e41aa60e8fe266d5aee328e82ad1ad94348?host=opencode.net";
     qt6ct.flake = false;
+    python-remind.url = "github:wochap/python-remind/master-fork";
+    python-remind.flake = false;
 
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f"; # master (06 apr 2023)

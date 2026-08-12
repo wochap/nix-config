@@ -3217,6 +3217,23 @@
         "type": "github"
       }
     },
+    "python-remind": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786553274,
+        "narHash": "sha256-vp4mog2mR9EIz6HUy3sS8LZ1CZaIRXE0FRac3215wHE=",
+        "owner": "wochap",
+        "repo": "python-remind",
+        "rev": "d1feb21ebb704e21e5f97aadc3fcaeb63115ebfb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "ref": "master-fork",
+        "repo": "python-remind",
+        "type": "github"
+      }
+    },
     "qt6ct": {
       "flake": false,
       "locked": {
@@ -3385,6 +3402,7 @@
         "prevstable-neovim": "prevstable-neovim",
         "prevstable-python": "prevstable-python",
         "pyprland": "pyprland",
+        "python-remind": "python-remind",
         "qt6ct": "qt6ct",
         "quickshell": "quickshell",
         "retroarch-shaders": "retroarch-shaders",

@@ -28,7 +28,7 @@ let
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };
     supertonic = pkgs.callPackage ./supertonic { };
-    pythonPackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./python-packages { });
+    pythonPackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./python-packages { inherit inputs; });
   };
 in
 {

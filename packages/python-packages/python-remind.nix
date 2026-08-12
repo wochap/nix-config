@@ -2,6 +2,7 @@
   pkgs,
   python3Packages,
   fetchurl,
+  inputs,
 }:
 
 with python3Packages;
@@ -66,40 +67,19 @@ let
       six
     ];
   };
-
-  # tzdata = buildPythonPackage rec {
-  #   pname = "tzdata";
-  #   version = "2021.5-t";
-  #   src = fetchurl {
-  #     url =
-  #       "https://files.pythonhosted.org/packages/a5/3a/0d12fac5618ff5396095a139b9c77cad79b65ed78c58bf7162cd512f52d5/tzdata-2021.5-py2.py3-none-any.whl";
-  #     sha256 = "1xd8bgh4v12ajbw82k8lb7795w3hrlvl2yn9zif1xzpb48g4kviy";
-  #   };
-  #   format = "wheel";
-  #   doCheck = false;
-  #   buildInputs = [ ];
-  #   checkInputs = [ ];
-  #   nativeBuildInputs = [ ];
-  #   propagatedBuildInputs = [ ];
-  #   postInstall = ''
-  #     ln -s /etc/localtime $out/lib/python3.10/site-packages/tzdata/zoneinfo/localtime
-  #   '';
-  # };
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "remind";
-  version = "0.19.2";
-  src = fetchurl {
-    url = "https://files.pythonhosted.org/packages/ae/73/8890665a5f86c71dbe8250463788fd4c736c099bd1195f109e5c3acb93ef/remind-0.19.2-py3-none-any.whl";
-    sha256 = "16p1fv4wpbjjddnwpcdkrm1zpndylih47nfnlymngvn1yapvn1gs";
-  };
-  format = "wheel";
+  version = "0.19.2+g${inputs.python-remind.shortRev or "dirty"}";
+  src = inputs.python-remind;
   doCheck = false;
   buildInputs = [ ];
   checkInputs = [ ];
   nativeBuildInputs = [ ];
   propagatedBuildInputs = [
     python-dateutil
+    pytz
+    tzlocal
     vobject
   ];
 }

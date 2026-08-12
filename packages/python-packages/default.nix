@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   bt-dualboot = pkgs.prevstable-python.callPackage ./bt-dualboot.nix {
@@ -12,6 +12,7 @@
   };
   python-remind = pkgs.prevstable-python.callPackage ./python-remind.nix {
     pkgs = pkgs.prevstable-python;
+    inherit inputs;
   };
   pix2tex = pkgs.prevstable-python.callPackage ./pix2tex {
     pkgs = pkgs.prevstable-python;
