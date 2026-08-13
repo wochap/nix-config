@@ -98,6 +98,17 @@ hl.window_rule({
   pin = true,
   move = { "(monitor_w-window_w-7)", "(monitor_h-window_h-7)" },
 })
+hl.window_rule({
+  match = { class = "^(kb-hud)$", title = ".*overlay$" },
+  float = true,
+  no_focus = true,
+  no_blur = true,
+  decorate = false,
+  pin = true,
+  move = { "(monitor_w - 600) / 2", "monitor_h - window_h" },
+  size = { "600", "window_h" },
+  no_initial_focus = true,
+})
 hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, float = true, persistent_size = true })
 hl.window_rule({
   match = { class = "^(org.freedesktop.impl.portal.desktop.kde)$" },

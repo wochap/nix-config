@@ -321,6 +321,27 @@ hl.bind(mod .. " + ALT + x", function()
   scratchpad.raise_or_run("xwaylandvideobridge", "xwaylandvideobridge", { use_uwsm = true })
 end)
 hl.bind(mod .. " + CTRL + SHIFT + q", hl.dsp.exec_cmd("hyprshutdown"))
+hl.bind(mod .. " + k", function()
+  local window
+  for _, candidate in ipairs(hl.get_windows({ class = "kb-hud" })) do
+    if candidate.title == "kb-hud overlay" then
+      window = candidate
+      break
+    end
+  end
+  if not window then
+    return
+  end
+
+  if window.workspace and window.workspace.name == "special:kb-hud-minimized" then
+    hl.dispatch(hl.dsp.window.move({ workspace = hl.get_active_workspace(), window = window, follow = false }))
+    hl.dispatch(hl.dsp.window.pin({ action = "set", window = window }))
+    hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top", window = window }))
+  else
+    hl.dispatch(hl.dsp.window.pin({ action = "unset", window = window }))
+    hl.dispatch(hl.dsp.window.move({ workspace = "special:kb-hud-minimized", window = window, follow = false }))
+  end
+end)
 
 -- SUBMAPS
 

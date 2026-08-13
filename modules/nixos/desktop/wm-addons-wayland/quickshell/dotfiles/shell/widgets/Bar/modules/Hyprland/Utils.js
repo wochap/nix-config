@@ -7,7 +7,7 @@ const ignoredInMapAppId = [
   "msedge-www.bing.com__chat-Default",
 ];
 
-const ignoredInWorkspaces = ["showmethekey-gtk"];
+const ignoredInWorkspaces = ["showmethekey-gtk", "kb-hud"];
 
 const isIgnoredInWorkspaces = (appId) => ignoredInWorkspaces.includes(appId);
 
