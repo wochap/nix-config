@@ -238,6 +238,10 @@ in
           name = "jira mentions";
           query = ''from:*.atlassian.net and subject:"mentioned you on"'';
         }
+        {
+          name = "jira assigned";
+          query = ''from:*.atlassian.net and subject:"/assigned.*to you$/"'';
+        }
       ];
     };
 
