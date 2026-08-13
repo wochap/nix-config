@@ -38,7 +38,11 @@ in
           sopsFile = sharedSopsFile;
           owner = userName;
         };
-        "personal-qwen-token-plan-api-key" = {
+        "personal-a-qwen-token-plan-api-key" = {
+          sopsFile = sharedSopsFile;
+          owner = userName;
+        };
+        "personal-b-qwen-token-plan-api-key" = {
           sopsFile = sharedSopsFile;
           owner = userName;
         };
