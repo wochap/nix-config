@@ -32,6 +32,10 @@ print_is_iface_up() {
   echo "$output" | jq -r '.[0].flags | contains(["UP"])'
 }
 
+print_iface_exists() {
+  ip link show br-c700d6064c27 &>/dev/null && echo "true" || echo "false"
+}
+
 # Returns "true" if keyboard autosuspend is on
 print_is_keyboard_autosuspend_on() {
   # Checks if the status is "on" (meaning power saving is active)
@@ -52,53 +56,72 @@ print_status() {
   fi
 }
 
+enable() {
+  echo "Activating power saver mode..."
+
+  # Bring down the network interface
+  if [[ "$(print_is_iface_up)" == "true" ]]; then
+    echo " -> Bringing down network interface"
+    pkexec ip link set br-c700d6064c27 down
+  fi
+
+  # Disable Hyprland blur
+  if [[ "$(print_is_hyprland_blur_enabled)" == "true" ]]; then
+    echo " -> Disabling hyprland blur"
+    hyprctl eval 'hl.config({ decoration = { blur = { enabled = false } } })'
+  fi
+
+  # Activate kanshi power saver profile
+  if [[ "$(print_is_kanshi_power_saver_profile_active)" == "false" ]]; then
+    echo " -> Switching to kanshi power-saver profile"
+    kanshictl switch glegion-undocked-power-saver
+  fi
+
+  # Enable keyboard autosuspend
+  if [[ "$(print_is_keyboard_autosuspend_on)" == "false" ]]; then
+    echo " -> Enabling keyboard autosuspend"
+    legion-keyboard-autosuspend --toggle on
+  fi
+}
+
+disable() {
+  echo "Deactivating power saver mode..."
+
+  # Bring up the network interface if it exists
+  if [[ "$(print_iface_exists)" == "true" ]] && [[ "$(print_is_iface_up)" == "false" ]]; then
+    echo " -> Bringing up network interface"
+    pkexec ip link set br-c700d6064c27 up
+  fi
+
+  # Enable Hyprland blur
+  if [[ "$(print_is_hyprland_blur_enabled)" == "false" ]]; then
+    echo " -> Enabling hyprland blur"
+    hyprctl eval 'hl.config({ decoration = { blur = { enabled = true } } })'
+  fi
+
+  # Activate standard kanshi profile
+  if [[ "$(print_is_kanshi_power_saver_profile_active)" == "true" ]]; then
+    echo " -> Switching to standard kanshi profile"
+    kanshictl switch glegion-undocked
+  fi
+
+  # Disable keyboard autosuspend
+  if [[ "$(print_is_keyboard_autosuspend_on)" == "true" ]]; then
+    echo " -> Disabling keyboard autosuspend"
+    legion-keyboard-autosuspend --toggle off
+  fi
+}
+
 toggle() {
-  # Toggles the system's power state.
-  if [[ "$(print_status)" == "false" ]]; then
-    echo "Activating power saver mode..."
-
-    # Bring down the network interface
-    if [[ "$(print_is_iface_up)" == "true" ]]; then
-      echo " -> Bringing down network interface"
-      pkexec ip link set br-c700d6064c27 down
-    fi
-
-    # Disable Hyprland blur
-    if [[ "$(print_is_hyprland_blur_enabled)" == "true" ]]; then
-      echo " -> Disabling hyprland blur"
-      hyprctl eval 'hl.config({ decoration = { blur = { enabled = false } } })'
-    fi
-
-    # Activate kanshi power saver profile
-    if [[ "$(print_is_kanshi_power_saver_profile_active)" == "false" ]]; then
-      echo " -> Switching to kanshi power-saver profile"
-      kanshictl switch glegion-undocked-power-saver
-    fi
-
-    # Enable keyboard autosuspend
-    if [[ "$(print_is_keyboard_autosuspend_on)" == "false" ]]; then
-      echo " -> Enabling keyboard autosuspend"
-      legion-keyboard-autosuspend --toggle on
-    fi
+  # Do not use the aggregate status to choose a direction: one failed or delayed
+  # component would otherwise make repeated toggles keep enabling power saver.
+  # These two settings are explicit power-saver markers; if either is active,
+  # reconcile every component to the disabled state.
+  if [[ "$(print_is_kanshi_power_saver_profile_active)" == "true" ]] ||
+    [[ "$(print_is_keyboard_autosuspend_on)" == "true" ]]; then
+    disable
   else
-    echo "Deactivating power saver mode..."
-    # Enable Hyprland blur
-    if [[ "$(print_is_hyprland_blur_enabled)" == "false" ]]; then
-      echo " -> Enabling hyprland blur"
-      hyprctl eval 'hl.config({ decoration = { blur = { enabled = true } } })'
-    fi
-
-    # Activate standard kanshi profile
-    if [[ "$(print_is_kanshi_power_saver_profile_active)" == "true" ]]; then
-      echo " -> Switching to standard kanshi profile"
-      kanshictl switch glegion-undocked
-    fi
-
-    # Disable keyboard autosuspend
-    if [[ "$(print_is_keyboard_autosuspend_on)" == "true" ]]; then
-      echo " -> Disabling keyboard autosuspend"
-      legion-keyboard-autosuspend --toggle off
-    fi
+    enable
   fi
 }
 
@@ -113,6 +136,12 @@ case "$1" in
 --toggle)
   toggle
   ;;
+--enable)
+  enable
+  ;;
+--disable)
+  disable
+  ;;
 --listen)
   listen
   ;;
@@ -120,7 +149,7 @@ case "$1" in
   print_status
   ;;
 *)
-  echo "Usage: $0 [--toggle | --status]" >&2
+  echo "Usage: $0 [--toggle | --enable | --disable | --status]" >&2
   exit 1
   ;;
 esac
