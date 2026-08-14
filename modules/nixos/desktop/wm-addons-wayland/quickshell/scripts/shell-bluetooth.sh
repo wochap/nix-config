@@ -57,19 +57,14 @@ set_power() {
 
 case "$1" in
 --listen)
-  # Only refresh for property changes. Listening to every line emitted by
-  # BlueZ creates a feedback loop: `bluetoothctl devices Connected` briefly
-  # registers an advertisement monitor, which emits more BlueZ signals and
-  # causes this script to query the status again.
-  dbus-monitor --system \
-    "type='signal',sender='org.bluez',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged',path_namespace='/org/bluez'" \
-    | while read -r line; do
-      # dbus-monitor prints a multi-line payload for each signal. Emit exactly
-      # once per signal instead of once per output line.
-      if [[ $line == signal\ * ]]; then
-        printf -- 'true\n'
-      fi
-    done
+  # Monitor the D-Bus system bus for signals from the BlueZ service.
+  # Any change in connection, power state, or scanning status will
+  # emit a signal from 'org.bluez'.
+  dbus-monitor --system "sender='org.bluez'" | while read -r line; do
+    # When a signal is detected, print 'true' to indicate a change.
+    # This allows other scripts or widgets to know when to refresh the status.
+    printf -- 'true\n'
+  done
   ;;
 --status | '')
   print_status
