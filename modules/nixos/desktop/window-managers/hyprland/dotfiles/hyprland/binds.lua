@@ -221,34 +221,8 @@ hl.bind(mod .. " + grave", previous_ws.focus_previous)
 
 harpoon.setup({
   leader = mod .. " + h",
-  keys = {
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-  },
+  keys = constants.alphabet_keys,
+})
 })
 
 --- WM ALTTAB
