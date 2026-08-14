@@ -19,7 +19,7 @@ function M.setup()
 
     local tiling, floating = 0, 0
     for _, w in ipairs(hl.get_windows({ workspace = ws, monitor = monitor, mapped = true })) do
-      if not w.hidden then
+      if not w.hidden and not w.pinned then
         if w.floating then
           floating = floating + 1
         else
