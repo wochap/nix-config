@@ -64,7 +64,7 @@ function M.setup(opts)
   opts = opts or {}
   local leader = opts.leader or "SUPER + a"
   local keys = opts.keys or {}
-  local submap = opts.submap or "harpoon-scratchpad"
+  local submap = opts.submap or "scratchpad"
 
   hl.bind(leader, hl.dsp.submap(submap))
   hl.define_submap(submap, "reset", function()
