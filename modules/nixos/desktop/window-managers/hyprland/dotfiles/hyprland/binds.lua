@@ -1,4 +1,5 @@
 local constants = require("hyprland.constants")
+local harpoon = require("hyprland.lib.harpoon")
 local scratchpad = require("hyprland.lib.scratchpad")
 local previous_ws = require("hyprland.lib.previous_ws")
 local ws_offset = require("hyprland.lib.ws_offset")
@@ -215,6 +216,40 @@ hl.bind(mod .. " + SHIFT + 0", function()
 end)
 
 hl.bind(mod .. " + grave", previous_ws.focus_previous)
+
+--- WM HARPOON
+
+harpoon.setup({
+  leader = mod .. " + h",
+  keys = {
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+  },
+})
 
 --- WM ALTTAB
 

@@ -135,6 +135,8 @@ in
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/theme.lua;
         "hypr/hyprland/lib/active_border.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/active_border.lua;
+        "hypr/hyprland/lib/harpoon.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/lib/harpoon.lua;
         "hypr/hyprland/lib/previous_ws.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/previous_ws.lua;
         "hypr/hyprland/lib/scratchpad.lua".source =
