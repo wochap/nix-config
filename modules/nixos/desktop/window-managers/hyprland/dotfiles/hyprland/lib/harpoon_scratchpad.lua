@@ -31,6 +31,9 @@ function M.toggle(key)
     return false
   end
   if is_visible_here(window) then
+    if same_window(window, hl.get_active_window()) then
+      return common.hide(window, common.workspaces.harpoon)
+    end
     return common.raise(window)
   end
   return common.show(window)

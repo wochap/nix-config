@@ -72,6 +72,23 @@ function M.clear(slot, window)
   return true
 end
 
+-- Remove the focused window (or a supplied window) from every harpoon slot.
+function M.remove(window)
+  window = window or hl.get_active_window()
+  if not window then
+    return false
+  end
+
+  local removed = false
+  for _, tag in ipairs(window.tags or {}) do
+    if tag:sub(1, #tag_prefix) == tag_prefix then
+      hl.dispatch(hl.dsp.window.tag({ tag = "-" .. tag, window = window }))
+      removed = true
+    end
+  end
+  return removed
+end
+
 -- Focus a marked window. Normal workspaces are visited on their owning
 -- monitor. A hidden special-workspace window is instead brought to the
 -- workspace and monitor from which harpoon was invoked.
@@ -108,10 +125,12 @@ end
 function M.setup(opts)
   opts = opts or {}
   local leader = opts.leader or "SUPER + h"
+  local remove_binding = opts.remove_binding or "SUPER + SHIFT + h"
   local keys = opts.keys or {}
   local submap = opts.submap or "harpoon"
 
   hl.bind(leader, hl.dsp.submap(submap))
+  hl.bind(remove_binding, M.remove)
   hl.define_submap(submap, "reset", function()
     for _, key in ipairs(keys) do
       local slot = opts.slots and opts.slots[key] or key
