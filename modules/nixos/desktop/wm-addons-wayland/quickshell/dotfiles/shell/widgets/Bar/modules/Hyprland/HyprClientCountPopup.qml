@@ -5,12 +5,14 @@ import QtQuick.Layouts
 import qs.config
 import qs.widgets.Bar.config
 import qs.widgets.common
+import "Utils.js" as Utils
 
 PopupWindow {
   id: root
 
   required property Item anchorItem
   required property var clients
+  required property var bindingForClient
 
   anchor.item: root.anchorItem
   anchor.edges: ConfigBar.isBarAtBottom ? (Edges.Top | Edges.Left) : (Edges.Bottom | Edges.Left)
@@ -46,10 +48,33 @@ PopupWindow {
       Repeater {
         model: root.clients
 
-        StyledText {
-          text: modelData.class
-          color: Theme.options.text
-          font.pixelSize: Styles.font.pixelSize.small
+        RowLayout {
+          spacing: 6
+
+          StyledText {
+            id: bindingLabel
+
+            Layout.alignment: Qt.AlignVCenter
+            text: root.bindingForClient(modelData)
+            visible: bindingLabel.text.length > 0
+            color: Theme.options.text
+            font.pixelSize: Styles.font.pixelSize.small
+          }
+
+          SystemIcon {
+            Layout.alignment: Qt.AlignVCenter
+            icon: Utils.mapAppId(modelData.class ?? "")
+            size: Styles.font.pixelSize.normal
+          }
+
+          StyledText {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.maximumWidth: 140
+            text: modelData.class ?? ""
+            color: Theme.options.text
+            font.pixelSize: Styles.font.pixelSize.small
+            elide: Text.ElideMiddle
+          }
         }
       }
     }
