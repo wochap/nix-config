@@ -1,5 +1,7 @@
 local M = {}
 
+M.is_kiosk = false
+
 M.bing_gpt_appid = "msedge-www.bing.com__chat-Default"
 M.chat_gpt_appid = "chrome-chat.openai.com__-Default"
 M.gemini_appid = "chrome-gemini.google.com__app-Default"

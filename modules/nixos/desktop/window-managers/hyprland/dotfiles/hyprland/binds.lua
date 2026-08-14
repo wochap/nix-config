@@ -3,6 +3,17 @@ local scratchpad = require("hyprland.lib.scratchpad")
 local previous_ws = require("hyprland.lib.previous_ws")
 local ws_offset = require("hyprland.lib.ws_offset")
 local mod = "SUPER"
+local scratchpad_opts
+if not constants.is_kiosk then
+  scratchpad_opts = { use_uwsm = true }
+end
+
+local function session_cmd(command)
+  if constants.is_kiosk then
+    return command
+  end
+  return "uwsm-app -- " .. command
+end
 
 hl.bind(mod .. " + mouse:272", hl.dsp.window.float(), { mouse = true, click = true })
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
@@ -13,44 +24,49 @@ hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Open scratchpad terminal
 hl.bind(mod .. " + i", function()
-  scratchpad.raise_or_run("kitty-scratch", "$HOME/.config/kitty/scripts/kitty-scratch.sh")
+  scratchpad.raise_or_run("kitty-scratch", "$HOME/.config/kitty/scripts/kitty-scratch.sh", scratchpad_opts)
 end)
 
 -- Lock screen
 hl.bind(mod .. " + l", hl.dsp.exec_cmd("loginctl lock-session"))
 
 -- Open power menu
-hl.bind(mod .. " + Escape", hl.dsp.exec_cmd("tofi-powermenu"))
+hl.bind(mod .. " + Escape", hl.dsp.exec_cmd(session_cmd("tofi-powermenu")))
 
 -- Open app launcher
-hl.bind(mod .. " + space", hl.dsp.exec_cmd("tofi-launcher"))
+hl.bind(mod .. " + space", hl.dsp.exec_cmd(constants.is_kiosk and "tofi-launcher" or "tofi-launcher --uwsm"))
 
 -- Take fullscreen screenshot
-hl.bind(mod .. " + Print", hl.dsp.exec_cmd("takeshot --now"))
+hl.bind(mod .. " + Print", hl.dsp.exec_cmd(session_cmd("takeshot --now")))
 
 -- Open calc
-hl.bind(mod .. " + c", hl.dsp.exec_cmd("tofi-calc"))
+hl.bind(mod .. " + c", hl.dsp.exec_cmd(session_cmd("tofi-calc")))
 
 -- Show clipboard
-hl.bind(mod .. " + v", hl.dsp.exec_cmd("clipboard-manager --menu"))
+hl.bind(mod .. " + v", hl.dsp.exec_cmd(session_cmd("clipboard-manager --menu")))
 
 -- Clear clipboard
 hl.bind(mod .. " + SHIFT + v", hl.dsp.exec_cmd("clipboard-manager --clear"))
 
 -- Show emojis
-hl.bind(mod .. " + e", hl.dsp.exec_cmd("tofi-emoji"))
+hl.bind(mod .. " + e", hl.dsp.exec_cmd(session_cmd("tofi-emoji")))
 
--- Toggle bar
--- hl.bind(mod .. " + b", hl.dsp.exec_cmd("quickshell -p ~/.config/quickshell/shell ipc call bar toggle"))
+if not constants.is_kiosk then
+  -- Toggle bar
+  hl.bind(mod .. " + b", hl.dsp.exec_cmd("quickshell -p ~/.config/quickshell/shell ipc call bar toggle"))
 
--- Toggle idle inhibitor
--- hl.bind(mod .. " + m", hl.dsp.exec_cmd("shell-idle-inhibit --toggle"))
+  -- Toggle idle inhibitor
+  hl.bind(mod .. " + m", hl.dsp.exec_cmd("shell-idle-inhibit --toggle"))
 
--- Toggle offlinemsmtp
--- hl.bind(mod .. " + o", hl.dsp.exec_cmd("offlinemsmtp-toggle-mode --toggle"))
+  -- Toggle offlinemsmtp
+  hl.bind(mod .. " + o", hl.dsp.exec_cmd("offlinemsmtp-toggle-mode --toggle"))
 
--- Toggle control center
--- hl.bind(mod .. " + SHIFT + c", hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call control-center toggle"))
+  -- Toggle control center
+  hl.bind(
+    mod .. " + SHIFT + c",
+    hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call control-center toggle")
+  )
+end
 
 --- WM KEYBINDINGS
 
@@ -120,14 +136,14 @@ hl.gesture({
   fingers = 3,
   direction = "right",
   action = function()
-    hl.dispatch(hl.dsp.focus({ workspace = "r-1", on_current_monitor = true }))
+    hl.dispatch(hl.dsp.focus({ workspace = "m-1", on_current_monitor = true }))
   end,
 })
 hl.gesture({
   fingers = 3,
   direction = "left",
   action = function()
-    hl.dispatch(hl.dsp.focus({ workspace = "r+1", on_current_monitor = true }))
+    hl.dispatch(hl.dsp.focus({ workspace = "m+1", on_current_monitor = true }))
   end,
 })
 hl.gesture({
@@ -135,7 +151,7 @@ hl.gesture({
   direction = "right",
   mods = "SUPER",
   action = function()
-    hl.dispatch(hl.dsp.focus({ workspace = "m-1", on_current_monitor = true }))
+    hl.dispatch(hl.dsp.focus({ workspace = "r-1", on_current_monitor = true }))
   end,
 })
 hl.gesture({
@@ -143,7 +159,7 @@ hl.gesture({
   direction = "left",
   mods = "SUPER",
   action = function()
-    hl.dispatch(hl.dsp.focus({ workspace = "m+1", on_current_monitor = true }))
+    hl.dispatch(hl.dsp.focus({ workspace = "r+1", on_current_monitor = true }))
   end,
 })
 hl.gesture({
@@ -203,7 +219,7 @@ hl.bind(mod .. " + grave", previous_ws.focus_previous)
 --- WM ALTTAB
 
 hl.bind(mod .. " + TAB", hl.dsp.window.cycle_next({ tiled = true }))
-hl.bind(mod .. " + SHIFT + TAB", hl.dsp.window.cycle_next({ next = false, tiled = true }))
+hl.bind(mod .. " + SHIFT + TAB", hl.dsp.layout("cycleprev"))
 hl.bind("ALT + TAB", function()
   hl.dispatch(hl.dsp.window.cycle_next({ floating = true }))
   hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
@@ -249,62 +265,102 @@ end)
 --- APPLICATION KEYBINDINGS (Super + Alt + Key)
 
 -- Open primary terminal
-hl.bind(mod .. " + ALT + t", hl.dsp.exec_cmd("foot"))
+hl.bind(mod .. " + ALT + t", hl.dsp.exec_cmd(constants.is_kiosk and "foot" or "uwsm-app -- footclient"))
 
 -- Open file manager
 hl.bind(mod .. " + ALT + f", function()
-  scratchpad.raise_or_run("Thunar", "thunar --name Thunar")
+  scratchpad.raise_or_run("Thunar", "thunar --name Thunar", scratchpad_opts)
 end)
 
 -- Show ruler
-hl.bind(mod .. " + ALT + m", hl.dsp.exec_cmd("ruler"))
+hl.bind(mod .. " + ALT + m", hl.dsp.exec_cmd(session_cmd("ruler")))
 
 -- Screencast/record region to mp4
-hl.bind(mod .. " + ALT + r", hl.dsp.exec_cmd("recorder --area"))
+hl.bind(mod .. " + ALT + r", hl.dsp.exec_cmd(session_cmd("recorder --area")))
 
 -- Open screenshoot utility
-hl.bind(mod .. " + ALT + s", hl.dsp.exec_cmd("takeshot --area"))
+hl.bind(mod .. " + ALT + s", hl.dsp.exec_cmd(session_cmd("takeshot --area")))
 
 -- Open ocr utility
-hl.bind(mod .. " + ALT + o", hl.dsp.exec_cmd("ocr"))
+hl.bind(mod .. " + ALT + o", hl.dsp.exec_cmd(session_cmd("ocr")))
 
 -- Open ocr-math utility
-hl.bind(mod .. " + ALT + h", hl.dsp.exec_cmd("ocr-math"))
+hl.bind(mod .. " + ALT + h", hl.dsp.exec_cmd(session_cmd("ocr-math")))
 
 -- Open color picker
-hl.bind(mod .. " + ALT + c", hl.dsp.exec_cmd("color-picker"))
+hl.bind(mod .. " + ALT + c", hl.dsp.exec_cmd(session_cmd("color-picker")))
 
 -- Magnifying glass
-hl.bind(mod .. " + ALT + z", hl.dsp.exec_cmd("pypr zoom"))
+hl.bind(mod .. " + ALT + z", hl.dsp.exec_cmd(session_cmd("pypr zoom")))
+
+hl.bind(
+  mod .. " + ALT + v",
+  hl.dsp.exec_cmd(session_cmd("tts-clipboard primary --voice=F1 --speed=1.5 --steps=5 --chunking=on"))
+)
 
 --- MEDIA KEYBINDINGS
 
--- hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("shell-pipewire --volume-output 5%+"), { locked = true, repeating = true })
--- hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("shell-pipewire --volume-output 5%-"), { locked = true, repeating = true })
--- hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SINK@ toggle"), { locked = true })
---
--- hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SOURCE@ toggle"), { locked = true })
---
--- hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
--- hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
--- hl.bind("XF86AudioStop", hl.dsp.exec_cmd("playerctl pause"), { locked = true })
--- hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
---
--- hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("backlight 5%+"), { locked = true, repeating = true })
--- hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("backlight 5%-"), { locked = true, repeating = true })
---
--- hl.bind("XF86KbdBrightnessDown", hl.dsp.exec_cmd("kbd-backlight 5%-"), { locked = true, repeating = true })
--- hl.bind("XF86KbdBrightnessUp", hl.dsp.exec_cmd("kbd-backlight 5%+"), { locked = true, repeating = true })
+if not constants.is_kiosk then
+  hl.bind(
+    "XF86AudioRaiseVolume",
+    hl.dsp.exec_cmd("shell-pipewire --volume-output 5%+"),
+    { locked = true, repeating = true }
+  )
+  hl.bind(
+    "XF86AudioLowerVolume",
+    hl.dsp.exec_cmd("shell-pipewire --volume-output 5%-"),
+    { locked = true, repeating = true }
+  )
+  hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SINK@ toggle"), { locked = true })
+
+  hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SOURCE@ toggle"), { locked = true })
+
+  hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
+  hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
+  hl.bind("XF86AudioStop", hl.dsp.exec_cmd("playerctl pause"), { locked = true })
+  hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+
+  hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("backlight 5%+"), { locked = true, repeating = true })
+  hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("backlight 5%-"), { locked = true, repeating = true })
+
+  hl.bind("XF86KbdBrightnessDown", hl.dsp.exec_cmd("kbd-backlight 5%-"), { locked = true, repeating = true })
+  hl.bind("XF86KbdBrightnessUp", hl.dsp.exec_cmd("kbd-backlight 5%+"), { locked = true, repeating = true })
+end
 
 --- OTHERS
 
--- hl.bind(mod .. " + CTRL + ALT + m", hl.dsp.exec_cmd('hyprctl output create headless "HEADLESS-2"'))
--- hl.bind(mod .. " + CTRL + SHIFT + ALT + m", hl.dsp.exec_cmd('hyprctl output remove "HEADLESS-2"'))
+if not constants.is_kiosk then
+  hl.bind(mod .. " + CTRL + ALT + m", hl.dsp.exec_cmd('hyprctl output create headless "HEADLESS-2"'))
+  hl.bind(mod .. " + CTRL + SHIFT + ALT + m", hl.dsp.exec_cmd('hyprctl output remove "HEADLESS-2"'))
+end
 hl.bind(mod .. " + CTRL + SHIFT + l", hl.dsp.exec_cmd("hyprctl switchxkblayout all next"), { locked = true })
--- hl.bind(mod .. " + ALT + x", function()
---   scratchpad.raise_or_run("xwaylandvideobridge", "xwaylandvideobridge")
--- end)
+if not constants.is_kiosk then
+  hl.bind(mod .. " + ALT + x", function()
+    scratchpad.raise_or_run("xwaylandvideobridge", "xwaylandvideobridge", scratchpad_opts)
+  end)
+end
 hl.bind(mod .. " + CTRL + SHIFT + q", hl.dsp.exec_cmd("hyprshutdown"))
+hl.bind(mod .. " + k", function()
+  local window
+  for _, candidate in ipairs(hl.get_windows({ class = "kb-hud" })) do
+    if candidate.title == "kb-hud overlay" then
+      window = candidate
+      break
+    end
+  end
+  if not window then
+    return
+  end
+
+  if window.workspace and window.workspace.name == "special:kb-hud-minimized" then
+    hl.dispatch(hl.dsp.window.move({ workspace = hl.get_active_workspace(), window = window, follow = false }))
+    hl.dispatch(hl.dsp.window.pin({ action = "set", window = window }))
+    hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top", window = window }))
+  else
+    hl.dispatch(hl.dsp.window.pin({ action = "unset", window = window }))
+    hl.dispatch(hl.dsp.window.move({ workspace = "special:kb-hud-minimized", window = window, follow = false }))
+  end
+end)
 
 -- SUBMAPS
 
@@ -358,38 +414,55 @@ end)
 hl.bind(mod .. " + ALT + b", hl.dsp.submap("browser"))
 hl.define_submap("browser", "reset", function()
   -- TODO: find workaround for exec rules + uwsm-app
-  hl.bind("f", hl.dsp.exec_cmd("firefox"))
-  hl.bind("b", hl.dsp.exec_cmd("brave"))
-  hl.bind("g", hl.dsp.exec_cmd("google-chrome-stable"))
-  hl.bind("m", hl.dsp.exec_cmd("microsoft-edge"))
+  hl.bind("f", hl.dsp.exec_cmd(session_cmd("firefox")))
+  hl.bind("b", hl.dsp.exec_cmd(session_cmd("brave")))
+  hl.bind("g", hl.dsp.exec_cmd(session_cmd("google-chrome-stable")))
+  hl.bind("m", hl.dsp.exec_cmd(session_cmd("microsoft-edge")))
+  if not constants.is_kiosk then
+    hl.bind("t", function()
+      scratchpad.raise_or_run(constants.bitwarden_appid, "bitwarden", scratchpad_opts)
+    end)
+  end
   hl.bind("SHIFT + i", function()
     scratchpad.raise_or_run(
       constants.bing_gpt_appid,
-      "microsoft-edge --profile-directory=Default --app=https://www.bing.com/chat"
+      "microsoft-edge --profile-directory=Default --app=https://www.bing.com/chat",
+      scratchpad_opts
     )
   end)
   hl.bind("i", function()
     scratchpad.raise_or_run(
       constants.chat_gpt_appid,
-      "google-chrome-stable --profile-directory=Default --app=https://chat.openai.com"
+      "google-chrome-stable --profile-directory=Default --app=https://chat.openai.com",
+      scratchpad_opts
+    )
+  end)
+  hl.bind("e", function()
+    scratchpad.raise_or_run(
+      constants.gemini_appid,
+      "google-chrome-stable --profile-directory=Default --app=https://gemini.google.com/app",
+      scratchpad_opts
     )
   end)
   hl.bind("o", function()
     scratchpad.raise_or_run(
       constants.ollama_appid,
-      "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local"
+      "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local",
+      scratchpad_opts
     )
   end)
   hl.bind("w", function()
     scratchpad.raise_or_run(
       constants.openwebui_appid,
-      "google-chrome-stable --profile-directory=Default --app=https://openwebui.wochap.local"
+      "google-chrome-stable --profile-directory=Default --app=https://openwebui.wochap.local",
+      scratchpad_opts
     )
   end)
   hl.bind("u", function()
     scratchpad.raise_or_run(
       constants.ytmusic_appid,
-      "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com"
+      "google-chrome-stable --profile-directory=Default --app=https://music.youtube.com",
+      scratchpad_opts
     )
   end)
   hl.bind("escape", hl.dsp.submap("reset"))
@@ -399,50 +472,54 @@ end)
 hl.bind(mod .. " + ALT + u", hl.dsp.submap("tui"))
 hl.define_submap("tui", "reset", function()
   hl.bind("n", function()
-    scratchpad.raise_or_run("tui-notes", "tui-notes")
+    scratchpad.raise_or_run("tui-notes", "tui-notes", scratchpad_opts)
   end)
   hl.bind("i", function()
-    scratchpad.raise_or_run("tui-notes-obsidian", "tui-notes-obsidian")
+    scratchpad.raise_or_run("tui-notes-obsidian", "tui-notes-obsidian", scratchpad_opts)
   end)
   hl.bind("m", function()
-    scratchpad.raise_or_run("tui-monitor", "tui-monitor")
+    scratchpad.raise_or_run("tui-monitor", "tui-monitor", scratchpad_opts)
   end)
   hl.bind("e", function()
-    scratchpad.raise_or_run("tui-email", "tui-email")
+    scratchpad.raise_or_run("tui-email", "tui-email", scratchpad_opts)
   end)
   hl.bind("r", function()
-    scratchpad.raise_or_run("tui-rss", "tui-rss")
+    scratchpad.raise_or_run("tui-rss", "tui-rss", scratchpad_opts)
   end)
   hl.bind("u", function()
-    scratchpad.raise_or_run("tui-music", "tui-music")
+    scratchpad.raise_or_run("tui-music", "tui-music", scratchpad_opts)
   end)
   hl.bind("c", function()
-    scratchpad.raise_or_run("tui-calendar", "tui-calendar")
+    scratchpad.raise_or_run("tui-calendar", "tui-calendar", scratchpad_opts)
   end)
   hl.bind("b", function()
-    scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --select")
+    scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --select", scratchpad_opts)
   end)
   hl.bind("SHIFT + b", function()
-    scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --add")
+    scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --add", scratchpad_opts)
   end)
   hl.bind("CTRL + SHIFT + b", function()
-    scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --edit")
+    scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --edit", scratchpad_opts)
   end)
   hl.bind("escape", hl.dsp.submap("reset"))
 end)
 
 -- Notification
--- hl.bind(mod .. " + ALT + n", hl.dsp.submap("notification"))
--- hl.define_submap("notification", "reset", function()
---   hl.bind("n", hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications togglePanel"))
---   hl.bind("c", hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications dismissPopups"))
---   hl.bind("SHIFT + C", hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications discardPopups"))
---   hl.bind("escape", hl.dsp.submap("reset"))
--- end)
+if not constants.is_kiosk then
+  hl.bind(mod .. " + ALT + n", hl.dsp.submap("notification"))
+  hl.define_submap("notification", "reset", function()
+    hl.bind("n", hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications togglePanel"))
+    hl.bind("c", hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications dismissPopups"))
+    hl.bind(
+      "SHIFT + C",
+      hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications discardPopups")
+    )
+    hl.bind("escape", hl.dsp.submap("reset"))
+  end)
+end
 
 -- HACK: disable all hyprland keymappings
 hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("kb_inhibit"))
 hl.define_submap("kb_inhibit", function()
   hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("reset"))
 end)
-

@@ -117,6 +117,7 @@ in
         };
         "hypr/colors-light.lua".text = catppuccin-hyprland-light-theme;
         "hypr/colors-dark.lua".text = catppuccin-hyprland-dark-theme;
+        "hypr/hyprland/binds.lua".source = relativeSymlink configDirectory ./dotfiles/hyprland/binds.lua;
         "hypr/hyprland/binds-kiosk.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/binds-kiosk.lua;
         "hypr/hyprland/binds-main.lua".source =
@@ -141,10 +142,13 @@ in
         "hypr/hyprland/lib/ws_offset.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/ws_offset.lua;
         "hypr/kiosk.lua".text = ''
+          local constants = require("hyprland.constants")
+          constants.is_kiosk = true
+
           require("hyprland.variables")
           require("hyprland.keywords")
           require("hyprland.rules")
-          require("hyprland.binds-kiosk")
+          require("hyprland.binds")
 
           ${hyprcursor-conf}
         '';
@@ -186,9 +190,8 @@ in
         extraConfig = ''
           require("hyprland.variables")
           require("hyprland.keywords")
-          require("hyprland.keywords-main")
           require("hyprland.rules")
-          require("hyprland.binds-main")
+          require("hyprland.binds")
 
           ${hyprcursor-conf}
         '';
