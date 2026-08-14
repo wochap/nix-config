@@ -14,6 +14,8 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
+    _custom.desktop.networking.userUnitsOnConnect = [ "vdirsyncer.service" ];
+
     nixpkgs.overlays = [
       (final: prev: {
         vdirsyncer = prev.vdirsyncer.overrideAttrs (oldAttrs: {
@@ -88,6 +90,9 @@ in
           # regenerate the remind notifications from the synced ics files
           OnSuccess = "ics2rem.service";
         };
+        Service.ExecCondition = "${lib._custom.mkNetworkCheckScript "vdirsyncer-network-check" [
+          "www.googleapis.com"
+        ]}";
       };
 
       systemd.user.services.vdirsyncer-on-failure = {

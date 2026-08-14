@@ -27,6 +27,10 @@ khard new --addressbook <addressbook> --edit
   without the calendar stack). Uses the concrete `localCollection`
   (Google's default is `"default"`).
 
+The shared `vdirsyncer.service` is also started whenever NetworkManager
+brings a connection up. Its network condition silently skips timer runs while
+offline, including contacts-only configurations.
+
 ### Setup
 
 #### Google Contacts

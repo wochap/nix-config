@@ -21,6 +21,10 @@ khal new --interactive
   notifies on events (at event start and 15 minutes before; a catch-up
   service notifies events missed while suspended or powered off)
 
+In addition to its timer, `vdirsyncer.service` starts whenever NetworkManager
+brings a connection up. Offline timer runs are skipped without failing the
+unit or sending a failure notification.
+
 ### Accounts (per host)
 
 Accounts are defined per host through `_custom.desktop.calendar.accounts`,

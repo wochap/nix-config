@@ -12,6 +12,7 @@ let
   lieerAccounts = lib.filterAttrs (_: acc: acc.sync == "lieer") cfg.accounts;
   lieerNames = lib.attrNames lieerAccounts;
   gmi = "${hmConfig.programs.lieer.package}/bin/gmi";
+  networkCheck = lib._custom.mkNetworkCheckScript "lieer-network-check" [ "oauth2.googleapis.com" ];
 in
 {
   config = lib.mkIf (cfg.enable && lieerNames != [ ]) {
@@ -42,6 +43,10 @@ in
                   "${maildir}/.state.gmailieer.json"
                 ];
               };
+
+              # An ExecCondition exit in the 1..254 range skips the run
+              # without failing the unit or firing lieer-on-failure.
+              Service.ExecCondition = "${networkCheck}";
 
               # home-manager's service runs `gmi sync`, which pushes *before*
               # it pulls. The push scans every local change since the notmuch

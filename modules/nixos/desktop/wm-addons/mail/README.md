@@ -24,6 +24,13 @@ This module sets up a complete email environment using standard NixOS and home-m
 - **Offlinemsmtp:**
   Queues outgoing email using msmtp. Useful if you try to send emails while disconnected from the internet.
 
+## Syncing
+
+Mail sync units run periodically and are also started whenever
+NetworkManager brings a connection up, so they do not wait for the next timer
+after boot, resume, or reconnect. An `ExecCondition` skips timer runs while
+offline without marking the unit failed or firing its failure notification.
+
 ## Configuration
 
 You can enable and configure mail accounts per-host. For example:

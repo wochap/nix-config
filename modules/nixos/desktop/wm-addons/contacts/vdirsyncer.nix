@@ -22,6 +22,8 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
+    _custom.desktop.networking.userUnitsOnConnect = [ "vdirsyncer.service" ];
+
     _custom.hm = {
       # per-host contacts accounts (_custom.desktop.contacts.accounts)
       # mapped to home-manager contact accounts with vdirsyncer enabled
@@ -68,6 +70,12 @@ in
         enable = true;
         frequency = lib.mkIf (!calendarActive) cfg.frequency;
       };
+
+      # When calendars are active their module owns the shared service
+      # customization. Contacts-only setups need the same offline guard.
+      systemd.user.services.vdirsyncer.Service.ExecCondition =
+        lib.mkIf (!calendarActive)
+          "${lib._custom.mkNetworkCheckScript "vdirsyncer-network-check" [ "one.one.one.one" ]}";
     };
   };
 }

@@ -158,6 +158,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    _custom.desktop.networking.userUnitsOnConnect = syncUnits;
+
     assertions = [
       {
         assertion =

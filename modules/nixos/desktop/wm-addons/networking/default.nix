@@ -7,7 +7,7 @@
 
 let
   cfg = config._custom.desktop.networking;
-  inherit (config._custom.globals) isSandbox;
+  inherit (config._custom.globals) isSandbox userName;
 in
 {
   options._custom.desktop.networking = {
@@ -17,6 +17,20 @@ in
     enablePixieCore = lib.mkEnableOption { };
     enableWol = lib.mkEnableOption { };
     enableOpenSnitch = lib.mkEnableOption "OpenSnitch application firewall";
+    userUnitsOnConnect = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "lieer-personal.service"
+        "vdirsyncer.service"
+      ];
+      description = ''
+        Systemd user units to start whenever NetworkManager brings up a
+        connection. This lets network-bound services run immediately after
+        boot, resume, or reconnect instead of waiting for their next timer.
+        Nothing is started when the user's systemd manager is not running.
+      '';
+    };
   };
 
   config = lib.mkMerge [
@@ -179,6 +193,30 @@ in
         enable = true;
         openFirewall = true;
       };
+    })
+
+    (lib.mkIf (cfg.enable && (!isSandbox) && cfg.userUnitsOnConnect != [ ]) {
+      networking.networkmanager.dispatcherScripts = [
+        {
+          type = "basic";
+          source = pkgs.writeShellScript "start-user-units-on-connect" ''
+            # NetworkManager passes the interface as $1 and the action as $2.
+            [ "$2" = "up" ] || exit 0
+
+            uid=$(${pkgs.coreutils}/bin/id -u ${lib.escapeShellArg userName}) || exit 0
+            runtime="/run/user/$uid"
+
+            # No logged-in user manager means there is nothing to start yet.
+            [ -S "$runtime/bus" ] || exit 0
+
+            export XDG_RUNTIME_DIR="$runtime"
+            export DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime/bus"
+            ${pkgs.util-linux}/bin/runuser -u ${lib.escapeShellArg userName} -- \
+              ${pkgs.systemd}/bin/systemctl --user start --no-block \
+                ${lib.concatStringsSep " " (map lib.escapeShellArg (lib.unique cfg.userUnitsOnConnect))}
+          '';
+        }
+      ];
     })
 
     (lib.mkIf (cfg.enable && cfg.enableOpenSnitch) {

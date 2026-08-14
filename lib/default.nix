@@ -72,4 +72,17 @@ rec {
     Install.WantedBy = [ "graphical-session.target" ];
     Service.Slice = "app-graphical.slice";
   };
+
+  # Use as a systemd ExecCondition for network-bound services. A failed
+  # ExecCondition skips the run without putting the unit in the failed state,
+  # so OnFailure handlers do not notify about expected offline runs.
+  mkNetworkCheckScript =
+    name: hosts:
+    pkgs.writeShellScript name ''
+      ${lib.concatMapStringsSep "\n" (host: ''
+        if ${pkgs.coreutils}/bin/timeout 10 ${pkgs.systemd}/bin/resolvectl query --legend=no ${lib.escapeShellArg host} >/dev/null 2>&1; then
+          exit 0
+        fi'') hosts}
+      exit 1
+    '';
 }
