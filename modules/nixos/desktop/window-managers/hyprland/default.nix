@@ -137,10 +137,14 @@ in
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/active_border.lua;
         "hypr/hyprland/lib/harpoon.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/harpoon.lua;
+        "hypr/hyprland/lib/harpoon_scratchpad.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/lib/harpoon_scratchpad.lua;
         "hypr/hyprland/lib/previous_ws.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/previous_ws.lua;
         "hypr/hyprland/lib/scratchpad.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/scratchpad.lua;
+        "hypr/hyprland/lib/scratchpad_common.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/lib/scratchpad_common.lua;
         "hypr/hyprland/lib/ws_offset.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/ws_offset.lua;
         "hypr/kiosk.lua".text = ''

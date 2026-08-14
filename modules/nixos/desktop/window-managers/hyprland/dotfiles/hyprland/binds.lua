@@ -1,5 +1,6 @@
 local constants = require("hyprland.constants")
 local harpoon = require("hyprland.lib.harpoon")
+local harpoon_scratchpad = require("hyprland.lib.harpoon_scratchpad")
 local scratchpad = require("hyprland.lib.scratchpad")
 local previous_ws = require("hyprland.lib.previous_ws")
 local ws_offset = require("hyprland.lib.ws_offset")
@@ -223,6 +224,10 @@ harpoon.setup({
   leader = mod .. " + h",
   keys = constants.alphabet_keys,
 })
+
+harpoon_scratchpad.setup({
+  leader = mod .. " + a",
+  keys = constants.alphabet_keys,
 })
 
 --- WM ALTTAB

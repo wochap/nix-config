@@ -2,16 +2,13 @@
 -- NOTE: add windowrule so those scratchpads have the tag scratchpad
 -- e.g.: hl.window_rule({ match = { class = "kitty-scratch" }, tag = "+scratchpad" })
 
-local M = {}
+local common = require("hyprland.lib.scratchpad_common")
 
-local function has_tag_prefix(w, prefix)
-  for _, tag in ipairs(w.tags or {}) do
-    if tag:sub(1, #prefix) == prefix then
-      return true
-    end
-  end
-  return false
-end
+local M = {}
+local tags = common.tags
+local workspaces = common.workspaces
+local has_tag_prefix = common.has_tag_prefix
+local same_monitor = common.same_monitor
 
 local function sort_by_focus(wins)
   table.sort(wins, function(a, b)
@@ -20,8 +17,16 @@ local function sort_by_focus(wins)
   return wins
 end
 
-local function same_monitor(a, b)
-  return a and b and a.id == b.id
+local function is_tmp_scratchpad(w)
+  return common.has_tag_prefix(w, tags.temporary)
+end
+
+local function is_harpoon_scratchpad(w)
+  return common.has_tag_prefix(w, tags.harpoon)
+end
+
+local function is_temporary_scratchpad(w)
+  return is_tmp_scratchpad(w) or is_harpoon_scratchpad(w)
 end
 
 -- raise a window of the given class, or run cmd if none exists.
@@ -50,7 +55,7 @@ function M.raise_or_run(class, cmd, opts)
           hl.dispatch(hl.dsp.window.move({ out_of_group = true, window = window, follow = false }))
         end
         hl.dispatch(hl.dsp.window.move({
-          workspace = "special:scratchpads",
+          workspace = "special:" .. workspaces.persistent,
           window = "class:^(" .. class .. ")$",
           follow = false,
         }))
@@ -65,7 +70,7 @@ function M.raise_or_run(class, cmd, opts)
       if other_monitor then
         -- HACK: move scratchpads ws to current monitor
         hl.dispatch(hl.dsp.workspace.move({
-          workspace = "special:scratchpads",
+          workspace = "special:" .. workspaces.persistent,
           monitor = current_monitor,
           follow = false,
         }))
@@ -100,9 +105,13 @@ function M.raise_or_run(class, cmd, opts)
       and w.workspace.id == current_ws
       and same_monitor(w.monitor, current_monitor)
       and w.class ~= class
-      and has_tag_prefix(w, "scratchpad")
+      and has_tag_prefix(w, tags.persistent)
     then
-      hl.dispatch(hl.dsp.window.move({ workspace = "special:scratchpads", window = w, follow = false }))
+      hl.dispatch(hl.dsp.window.move({
+        workspace = "special:" .. workspaces.persistent,
+        window = w,
+        follow = false,
+      }))
     end
   end
 end
@@ -110,7 +119,7 @@ end
 function M.focus_last()
   local matched = {}
   for _, w in ipairs(hl.get_windows({ mapped = true })) do
-    if has_tag_prefix(w, "scratchpad") then
+    if has_tag_prefix(w, tags.persistent) then
       table.insert(matched, w)
     end
   end
@@ -136,14 +145,14 @@ local function process_scratchpad(window, ws_name, ctx)
   end
 
   if is_focused then
-    if ws_name:sub(1, #"tmpscratchpad") == "tmpscratchpad" then
+    if ws_name == workspaces.temporary then
       -- hide all tmpscratchpads on the current workspace
       for _, w in ipairs(hl.get_windows({ mapped = true })) do
         if
           w.workspace
           and w.workspace.id == ctx.current_ws
           and same_monitor(w.monitor, ctx.current_monitor)
-          and has_tag_prefix(w, "tmpscratchpad")
+          and is_temporary_scratchpad(w)
         then
           hl.dispatch(hl.dsp.window.move({ workspace = "special:" .. ws_name, window = w, follow = false }))
         end
@@ -155,7 +164,7 @@ local function process_scratchpad(window, ws_name, ctx)
       return true
     end
   else
-    if ws_name:sub(1, #"tmpscratchpad") == "tmpscratchpad" then
+    if ws_name == workspaces.temporary then
       -- focus
       hl.dispatch(hl.dsp.focus({ window = window }))
       hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top", window = window }))
@@ -177,9 +186,9 @@ function M.toggle()
       w.workspace
       and w.workspace.id == ctx.current_ws
       and same_monitor(w.monitor, current_monitor)
-      and has_tag_prefix(w, "scratchpad")
+      and has_tag_prefix(w, tags.persistent)
     then
-      if process_scratchpad(w, "scratchpads", ctx) then
+      if process_scratchpad(w, workspaces.persistent, ctx) then
         return
       end
     end
@@ -192,14 +201,14 @@ function M.toggle()
       w.workspace
       and w.workspace.id == ctx.current_ws
       and same_monitor(w.monitor, current_monitor)
-      and has_tag_prefix(w, "tmpscratchpad")
+      and is_temporary_scratchpad(w)
     then
       table.insert(visible_tmp, w)
     end
   end
   sort_by_focus(visible_tmp)
   for _, w in ipairs(visible_tmp) do
-    if process_scratchpad(w, "tmpscratchpads", ctx) then
+    if process_scratchpad(w, workspaces.temporary, ctx) then
       return
     end
   end
@@ -209,7 +218,7 @@ function M.toggle()
   for _, w in ipairs(hl.get_windows({ mapped = true })) do
     if
       (not same_monitor(w.monitor, current_monitor) or (w.workspace and w.workspace.id ~= ctx.current_ws))
-      and has_tag_prefix(w, "tmpscratchpad")
+      and is_tmp_scratchpad(w)
     then
       table.insert(hidden_tmp, w)
     end
@@ -234,20 +243,22 @@ function M.toggle_in()
   local current_ws = active_ws.id
 
   local focused = hl.get_active_window()
-  if focused and has_tag_prefix(focused, "tmpscratchpad") then
+  if focused and is_harpoon_scratchpad(focused) then
+    -- Generic scratchpad removal may unassign a harpoon scratchpad, but only
+    -- its letter binding is allowed to restore it once hidden.
+    common.remove_tags_with_prefix(focused, tags.harpoon)
+    hl.dispatch(hl.dsp.window.move({ workspace = current_ws, window = focused, follow = false }))
+  elseif focused and is_tmp_scratchpad(focused) then
     -- move out of scratchpad
-    hl.dispatch(hl.dsp.window.tag({ tag = "-tmpscratchpad", window = focused }))
+    common.remove_tags_with_prefix(focused, tags.temporary)
     hl.dispatch(hl.dsp.window.move({ workspace = current_ws, window = focused, follow = false }))
   else
     if not focused then
       return
     end
     -- move into scratchpad
-    hl.dispatch(hl.dsp.window.tag({ tag = "+tmpscratchpad", window = focused }))
-    if focused.group then
-      hl.dispatch(hl.dsp.window.move({ out_of_group = true, window = focused, follow = false }))
-    end
-    hl.dispatch(hl.dsp.window.move({ workspace = "special:tmpscratchpads", window = focused, follow = false }))
+    hl.dispatch(hl.dsp.window.tag({ tag = "+" .. tags.temporary, window = focused }))
+    common.hide(focused, workspaces.temporary)
   end
 end
 

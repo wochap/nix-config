@@ -37,28 +37,34 @@ function M.get(slot)
   end
 end
 
--- Assign the active window to slot, replacing any previous assignment.
-function M.mark(slot)
-  local active = hl.get_active_window()
-  if not active then
+-- Assign a particular window to a slot. This is useful for callers which need
+-- to focus or move other windows before completing the assignment.
+function M.assign(slot, window)
+  if not window then
     return false
   end
 
   local tag = tag_for(slot)
-  for _, window in ipairs(hl.get_windows()) do
-    if has_tag(window, tag) and window ~= active then
-      hl.dispatch(hl.dsp.window.tag({ tag = "-" .. tag, window = window }))
+  for _, candidate in ipairs(hl.get_windows()) do
+    if has_tag(candidate, tag) and candidate.address ~= window.address then
+      hl.dispatch(hl.dsp.window.tag({ tag = "-" .. tag, window = candidate }))
     end
   end
 
-  if not has_tag(active, tag) then
-    hl.dispatch(hl.dsp.window.tag({ tag = "+" .. tag, window = active }))
+  if not has_tag(window, tag) then
+    hl.dispatch(hl.dsp.window.tag({ tag = "+" .. tag, window = window }))
   end
   return true
 end
 
-function M.clear(slot)
-  local window = M.get(slot)
+-- Assign the active window to slot, replacing any previous assignment.
+function M.mark(slot)
+  local active = hl.get_active_window()
+  return M.assign(slot, active)
+end
+
+function M.clear(slot, window)
+  window = window or M.get(slot)
   if not window then
     return false
   end
