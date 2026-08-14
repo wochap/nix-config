@@ -116,6 +116,10 @@ PanelWindow {
           }
 
           ControlCenterButton {
+            Component.onCompleted: {
+              STheme.getState();
+            }
+
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             label: "Dark mode"
@@ -127,6 +131,10 @@ PanelWindow {
           }
 
           ControlCenterButton {
+            Component.onCompleted: {
+              SSandbox.getState();
+            }
+
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             label: "Sandbox"
@@ -142,6 +150,10 @@ PanelWindow {
           Layout.fillWidth: true
 
           ControlCenterButton {
+            Component.onCompleted: {
+              SOllama.getState();
+            }
+
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             label: "Ollama"
@@ -153,6 +165,10 @@ PanelWindow {
           }
 
           ControlCenterButton {
+            Component.onCompleted: {
+              SSupertonic.getState();
+            }
+
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             label: "Supertonic"
@@ -164,6 +180,10 @@ PanelWindow {
           }
 
           ControlCenterButton {
+            Component.onCompleted: {
+              SDocker.getState();
+            }
+
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             label: "Docker"
@@ -228,6 +248,10 @@ PanelWindow {
           Layout.fillWidth: true
 
           ControlCenterButton {
+            Component.onCompleted: {
+              SHyprshade.getState();
+            }
+
             Layout.fillWidth: true
             Layout.preferredWidth: 1
             label: "Gray filter"
