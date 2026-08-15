@@ -33,13 +33,14 @@ RowLayout {
     Layout.fillHeight: true
     tagPrefix: "harpoon-"
     excludedTagPrefix: "harpoon-scratchpad-"
+    fgColor: Theme.options.blue
   }
 
   HyprHarpoonCount {
     Layout.fillHeight: true
     tagPrefix: "harpoon-scratchpad-"
-    fgColor: Theme.options.red
-    icon: " "
+    fgColor: Theme.options.maroon
+    icon: "󱡁 "
   }
 
   HyprSubmap {
