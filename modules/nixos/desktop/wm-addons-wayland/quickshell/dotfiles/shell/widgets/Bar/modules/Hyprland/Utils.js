@@ -7,9 +7,17 @@ const ignoredInMapAppId = [
   "msedge-www.bing.com__chat-Default",
 ];
 
-const ignoredInWorkspaces = ["showmethekey-gtk", "kb-hud"];
+const ignoredInWorkspaces = [
+  "showmethekey-gtk",
+  { class: "kb-hud", title: /.*overlay$/ },
+];
 
-const isIgnoredInWorkspaces = (appId) => ignoredInWorkspaces.includes(appId);
+const isIgnoredInWorkspaces = (appId, title) =>
+  ignoredInWorkspaces.some((ignored) =>
+    typeof ignored === "string"
+      ? ignored === appId
+      : ignored.class === appId && ignored.title.test(title ?? ""),
+  );
 
 const mapAppId = (appId) => {
   if (/^kitty-/.test(appId)) {
