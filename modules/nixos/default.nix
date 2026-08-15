@@ -94,6 +94,7 @@
     ./services/ipwebcam
     ./services/kdeconnect
     ./services/ms-intune
+    ./services/searxng
     ./services/syncthing
     ./services/virt
     ./services/waydroid
