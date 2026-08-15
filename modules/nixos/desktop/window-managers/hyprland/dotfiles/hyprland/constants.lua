@@ -31,6 +31,19 @@ M.alphabet_keys = {
   "z",
 }
 
+M.number_keys = {
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "0",
+}
+
 M.bing_gpt_appid = "msedge-www.bing.com__chat-Default"
 M.chat_gpt_appid = "chrome-chat.openai.com__-Default"
 M.gemini_appid = "chrome-gemini.google.com__app-Default"

@@ -220,14 +220,21 @@ hl.bind(mod .. " + grave", previous_ws.focus_previous)
 
 --- WM HARPOON
 
+local harpoon_keys = {}
+for _, keys in ipairs({ constants.alphabet_keys, constants.number_keys }) do
+  for _, key in ipairs(keys) do
+    table.insert(harpoon_keys, key)
+  end
+end
+
 harpoon.setup({
   leader = mod .. " + h",
-  keys = constants.alphabet_keys,
+  keys = harpoon_keys,
 })
 
 harpoon_scratchpad.setup({
   leader = mod .. " + a",
-  keys = constants.alphabet_keys,
+  keys = harpoon_keys,
 })
 
 --- WM ALTTAB
