@@ -41,6 +41,7 @@ in
       RestrictAddressFamilies = [
         "AF_INET"
         "AF_INET6"
+        "AF_NETLINK"
         "AF_UNIX"
       ];
     };
