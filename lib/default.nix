@@ -73,6 +73,54 @@ rec {
     Service.Slice = "app-graphical.slice";
   };
 
+  # Filesystem, device, and syscall exceptions stay service-local.
+  strictNetworkService = {
+    NoNewPrivileges = true;
+    PrivateDevices = true;
+    PrivateTmp = true;
+    ProtectSystem = "strict";
+    ProtectHome = true;
+    ProtectClock = true;
+    ProtectControlGroups = true;
+    ProtectHostname = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    LockPersonality = true;
+    CapabilityBoundingSet = "";
+    AmbientCapabilities = "";
+    SystemCallArchitectures = "native";
+    UMask = "0077";
+  };
+
+  # Callers must explicitly expose each required home path.
+  userServiceHardening = {
+    NoNewPrivileges = true;
+    PrivateDevices = true;
+    PrivateTmp = true;
+    ProtectSystem = "strict";
+    ProtectClock = true;
+    ProtectControlGroups = true;
+    ProtectHostname = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    RestrictNamespaces = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    LockPersonality = true;
+    CapabilityBoundingSet = "";
+    AmbientCapabilities = "";
+    SystemCallArchitectures = "native";
+    UMask = "0077";
+
+    # User-owned SOPS secrets need masking from unrelated user units.
+    # Credentialed units bind back only their required files.
+    TemporaryFileSystem = [ "/run/secrets:ro" ];
+  };
+
   # Use as a systemd ExecCondition for network-bound services. A failed
   # ExecCondition skips the run without putting the unit in the failed state,
   # so OnFailure handlers do not notify about expected offline runs.

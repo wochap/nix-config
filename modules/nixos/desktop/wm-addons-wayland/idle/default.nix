@@ -55,6 +55,11 @@ in
             ExecStart = "${lib.getExe pkgs.wayland-pipewire-idle-inhibit}";
             Restart = "always";
             RestartSec = 10;
+          }
+          // lib._custom.userServiceHardening
+          // {
+            ProtectHome = "tmpfs";
+            RestrictAddressFamilies = [ "AF_UNIX" ];
           };
         };
 

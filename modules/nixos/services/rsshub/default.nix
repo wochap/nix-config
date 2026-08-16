@@ -35,6 +35,16 @@ in
       };
     };
 
+    systemd.services.rsshub.serviceConfig = lib._custom.strictNetworkService // {
+      # Chromium needs user/mount namespaces for renderer isolation.
+      # V8 JIT needs executable memory.
+      RestrictAddressFamilies = [
+        "AF_INET"
+        "AF_INET6"
+        "AF_UNIX"
+      ];
+    };
+
     _custom.services.web-proxies.rsshub = {
       enable = true;
       subdomain = "rsshub";

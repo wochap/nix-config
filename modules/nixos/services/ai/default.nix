@@ -53,6 +53,16 @@ in
       wantedBy = lib.mkForce [ ];
       # unitConfig.stopWhenUnneeded = true;
     };
+
+    systemd.services.open-webui.serviceConfig = lib.mkIf cfg.enableOpenWebui {
+      # Preserve the upstream GPU device allow-list; PrivateDevices breaks acceleration.
+      NoNewPrivileges = true;
+      ProtectSystem = "strict";
+      ProtectHome = true;
+      RestrictSUIDSGID = true;
+      CapabilityBoundingSet = "";
+      AmbientCapabilities = "";
+    };
     # TODO: enable socket activation
     # source: https://github.com/ollama/ollama/pull/8072
     # systemd.sockets.ollama = {

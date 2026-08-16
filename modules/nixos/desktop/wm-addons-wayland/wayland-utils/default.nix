@@ -147,6 +147,16 @@ in
             # "SUPERTONIC_INTRA_OP_THREADS=8"
             # "SUPERTONIC_INTER_OP_THREADS=8"
             Environment = [ "HF_HUB_DISABLE_TELEMETRY=1" ];
+          }
+          // lib._custom.userServiceHardening
+          // {
+            ProtectHome = "tmpfs";
+            CacheDirectory = "huggingface";
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_UNIX"
+            ];
           };
         };
       };

@@ -98,7 +98,18 @@ in
             after = [ "${proxy.serviceName}.service" ];
             serviceConfig = {
               ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${wochap-ssc.meta.address}:${toString proxy.backendPort}";
-              PrivateTmp = true;
+            }
+            // lib._custom.strictNetworkService
+            // {
+              RestrictAddressFamilies = [
+                "AF_INET"
+                "AF_INET6"
+                "AF_UNIX"
+              ];
+              RestrictNamespaces = true;
+              MemoryDenyWriteExecute = true;
+              ProtectProc = "invisible";
+              ProcSubset = "pid";
             };
           }
         )

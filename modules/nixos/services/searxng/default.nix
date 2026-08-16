@@ -61,6 +61,18 @@ in
       };
     };
 
+    systemd.services.searx.serviceConfig = lib._custom.strictNetworkService // {
+      RestrictAddressFamilies = [
+        "AF_INET"
+        "AF_INET6"
+        "AF_UNIX"
+      ];
+      RestrictNamespaces = true;
+      MemoryDenyWriteExecute = true;
+      ProtectProc = "invisible";
+      ProcSubset = "pid";
+    };
+
     _custom.services.web-proxies.searxng = {
       enable = true;
       subdomain = "searxng";
