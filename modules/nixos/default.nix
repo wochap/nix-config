@@ -90,6 +90,7 @@
     ./services/ai
     ./services/android
     ./services/docker
+    ./services/podman
     ./services/flatpak
     ./services/interception-tools
     ./services/ipwebcam
