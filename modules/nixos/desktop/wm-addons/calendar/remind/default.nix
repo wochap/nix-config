@@ -102,6 +102,9 @@ in
         Unit = {
           Description = "Remind is a sophisticated calendar and alarm program.";
           Documentation = "https://dianne.skoll.ca/projects/remind/";
+          # Avoid notification storms if remind repeatedly crashes.
+          StartLimitIntervalSec = 60;
+          StartLimitBurst = 3;
         };
         Service = {
           # remind rejects missing INCLUDE targets.
