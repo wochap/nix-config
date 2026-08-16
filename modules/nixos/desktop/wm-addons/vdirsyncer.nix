@@ -9,8 +9,7 @@
 let
   calendarCfg = config._custom.desktop.calendar;
   contactsCfg = config._custom.desktop.contacts;
-  sopsEnabled = config._custom.security.sops.enable;
-  inherit (config._custom.globals) userName isSandbox;
+  inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) configHome dataHome;
 
@@ -110,14 +109,7 @@ in
       })
     ];
 
-    assertions = [
-      {
-        assertion = !googleActive || (sopsEnabled && !isSandbox);
-        message = "Google vdirsyncer accounts require _custom.security.sops.enable and are unavailable in sandbox configurations.";
-      }
-    ];
-
-    sops.secrets = lib.mkIf (googleActive && sopsEnabled && !isSandbox) {
+    sops.secrets = lib.mkIf googleActive {
       "personal-vdirsyncer-client-id" = {
         owner = userName;
         sopsFile = personalSopsFile;

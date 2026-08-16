@@ -195,7 +195,7 @@ in
       };
     })
 
-    (lib.mkIf (cfg.enable && (!isSandbox) && cfg.userUnitsOnConnect != [ ]) {
+    (lib.mkIf (cfg.enable && cfg.userUnitsOnConnect != [ ]) {
       networking.networkmanager.dispatcherScripts = [
         {
           type = "basic";
