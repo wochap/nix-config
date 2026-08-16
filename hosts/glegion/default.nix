@@ -147,7 +147,7 @@ in
     _custom.services.ai.enableNextjsOllamaLlmUi = false;
     _custom.services.ai.enableOpenWebui = true;
     _custom.services.ms-intune.enable = true;
-
+    _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
 
     _custom.services.syncthing.enable = true;

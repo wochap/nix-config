@@ -13,6 +13,8 @@ https://www.reddit.com/r/linux/.rss
 https://www.reddit.com/r/nixos/.rss
 
 -4 "~The Giants"
+https://rsshub.wochap.local/github/trending/weekly/any "~GH Weekly repositories"
+https://rsshub.wochap.local/github/trending/montly/any "~GH Montly repositories"
 https://hnrss.org/frontpage "~Hacker News"
 https://lobste.rs/rss "~Lobsters"
 https://isocpp.org/blog/rss/category/news "~C++ News"

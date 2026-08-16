@@ -94,6 +94,7 @@
     ./services/ipwebcam
     ./services/kdeconnect
     ./services/ms-intune
+    ./services/rsshub
     ./services/searxng
     ./services/syncthing
     ./services/virt
