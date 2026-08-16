@@ -30,6 +30,7 @@ menu() {
 
   if [ -n "$selected" ]; then
     printf "%s" "$selected" | wl-copy --trim-newline --type text/plain
+    printf "%s" "$selected" | wl-copy --primary --trim-newline --type text/plain
   fi
 }
 
