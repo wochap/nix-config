@@ -6,7 +6,7 @@ readonly playback_unit="tts-clipboard-player.service"
 
 notify() {
   notify-send \
-    --app-name="TTS" \
+    --app-name="tts-clipboard" \
     --hint=int:transient:1 \
     "$1" \
     "${2:-}"
