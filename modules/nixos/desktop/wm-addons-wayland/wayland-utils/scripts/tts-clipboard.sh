@@ -84,6 +84,34 @@ normalize_text() {
   # (U+FFFC) for embedded images or other non-text objects. They are not
   # speakable and can cause the TTS backend to reject the request.
   text=${text//$'\uFFFC'/}
+
+  # Supertonic currently returns HTTP 500 for emoji input. Replace emoji and
+  # their sequence helpers (variation selectors, joiners, and keycaps) with
+  # spaces before chunking so removing one cannot accidentally join two words.
+  text=$(jq -Rrs '
+    explode
+    | map(
+        if . == 8205
+          or (. >= 65024 and . <= 65039)
+          or . == 8419
+          or . == 169 or . == 174
+          or . == 8252 or . == 8265
+          or . == 8482 or . == 8505
+          or (. >= 8592 and . <= 8703)
+          or (. >= 8960 and . <= 9215)
+          or (. >= 9312 and . <= 9471)
+          or (. >= 9632 and . <= 10175)
+          or (. >= 10548 and . <= 10549)
+          or (. >= 11008 and . <= 11263)
+          or . == 12336 or . == 12349
+          or . == 12951 or . == 12953
+          or (. >= 126976 and . <= 129791)
+        then 32
+        else .
+        end
+      )
+    | implode
+  ' <<<"$text")
 }
 
 split_text() {
