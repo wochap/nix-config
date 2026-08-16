@@ -12,6 +12,8 @@ let
   lieerAccounts = lib.filterAttrs (_: acc: acc.sync == "lieer") cfg.accounts;
   lieerNames = lib.attrNames lieerAccounts;
   gmi = "${hmConfig.programs.lieer.package}/bin/gmi";
+  maildirBasePath = hmConfig.accounts.email.maildirBasePath;
+  notmuchConfigDir = "${hmConfig.xdg.configHome}/notmuch";
   networkCheck = lib._custom.mkNetworkCheckScript "lieer-network-check" [ "oauth2.googleapis.com" ];
 in
 {
@@ -48,7 +50,8 @@ in
                     "${gmi} push"
                   ];
                   ProtectHome = "tmpfs";
-                  BindPaths = [ maildir ];
+                  BindPaths = [ maildirBasePath ];
+                  BindReadOnlyPaths = [ notmuchConfigDir ];
                   RestrictAddressFamilies = [
                     "AF_INET"
                     "AF_INET6"
