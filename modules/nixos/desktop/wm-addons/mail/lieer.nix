@@ -33,30 +33,14 @@ in
                 Unit = {
                   OnFailure = "lieer-on-failure.service";
 
-                  # home-manager only conditions on .gmailieer.json, which
-                  # already exists on a fresh setup, so the timer would kick
-                  # off its own (unresumable) full sync in the background
-                  # before the manual initial `gmi pull` has been done. Also
-                  # require the state file, which only exists once that
-                  # initial pull has completed.
+                  # The first full pull must finish before timer-driven syncs.
                   ConditionPathExists = lib.mkForce [
                     "${maildir}/.gmailieer.json"
                     "${maildir}/.state.gmailieer.json"
                   ];
                 };
 
-                # home-manager's service runs `gmi sync`, which pushes *before*
-                # it pulls. The push scans every local change since the notmuch
-                # revision stored in .state.gmailieer.json (lastmod) and
-                # fetches remote metadata for each one; when that revision is
-                # stale/zero it walks the whole mailbox through the (heavily
-                # rate limited) Gmail API, blocking the pull — and with it mail
-                # delivery and mailnotify notifications — for hours.
-                #
-                # Run the fast, history-based pull first so new mail always
-                # lands, then push local tag changes. Pulling first also
-                # refreshes the historyId used by the push conflict check, so
-                # lastmod advances reliably instead of getting stuck.
+                # A stale push can block delivery on Gmail's rate-limited API.
                 Service = lib._custom.userServiceHardening // {
                   ExecCondition = "${networkCheck}";
                   ExecStart = lib.mkForce [

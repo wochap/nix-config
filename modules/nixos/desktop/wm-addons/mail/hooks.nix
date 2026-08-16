@@ -13,17 +13,9 @@ let
 
   escape = lib.replaceStrings [ "'" ] [ "'\\''" ];
 
-  # same scoping as neomutt.nix's virtual folders: lieer (gmail) keeps
-  # everything under <account>/mail, other accounts under <account>/INBOX
   accountFolder = name: acc: if acc.sync == "lieer" then "${name}/mail" else "${name}/INBOX";
 
-  # One guarded block per entry: for every new message in the account's mail
-  # folder matching the from glob, run the command once with
-  # id/From/Subject/Date as $1..$4 and the full message text on stdin.
-  # `|| true` keeps a failing user command from failing `notmuch new` (and
-  # with it the sync unit that invoked it).
-  # NOTE: `search --output=messages` emits ids already prefixed with "id:",
-  # so MAIL_ID is used as-is in queries.
+  # Hook failures must not fail notmuch new and its parent sync unit.
   arriveBlock = name: acc: h: ''
     # mail arrive hook (account:${name} from:${h.from})
     while IFS= read -r MAIL_ID; do

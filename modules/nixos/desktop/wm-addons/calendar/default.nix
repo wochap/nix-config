@@ -17,8 +17,6 @@ in
     accounts = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule (
-          # `config` here is the account submodule config (shadows the
-          # outer one, which is not needed inside)
           { name, config, ... }:
           {
             options = {
@@ -26,21 +24,15 @@ in
                 type = lib.types.str;
                 default = name;
                 defaultText = lib.literalExpression "name of the account attribute";
-                description = ''
-                  Unique identifier of the calendar account. becomes the
-                  home-manager `accounts.calendar.accounts.<name>` key, the
-                  vdirsyncer pair `calendar_<name>`, the khal calendar name,
-                  and is used to build the default local/token paths.
-                '';
+                description = "Account identifier used in generated paths and calendar configuration.";
               };
 
               primary = lib.mkOption {
                 type = lib.types.bool;
                 default = false;
                 description = ''
-                  Whether this is the primary account. exactly one account
-                  must be primary. together with `primaryCollection` it
-                  becomes khal's `default_calendar` (used by `khal new`).
+                  Exactly one configured account must be primary.
+                  `primaryCollection` is also required for khal's default.
                 '';
               };
 
@@ -48,15 +40,8 @@ in
                 type = lib.types.nullOr lib.types.str;
                 default = null;
                 description = ''
-                  Name of the primary collection of this account, as khal
-                  displays it. because the local calendars are `discover`ed,
-                  khal expands them into one calendar per collection named
-                  after the collection's displayname (synced from google via
-                  metasync), so this must be that displayname (check the
-                  `displayname` files inside the collection subdirectories
-                  of `localPath`). only when this is set does the primary
-                  account
-                  become khal's `default_calendar` (required by `khal new`).
+                  Must match the synced collection display name in
+                  `localPath/*/displayname`.
                 '';
               };
 
@@ -64,14 +49,14 @@ in
                 type = lib.types.str;
                 default = "${dataHome}/vdirsyncer/${config.name}-calendars";
                 defaultText = lib.literalExpression "\${dataHome}/vdirsyncer/\${name}-calendars";
-                description = "Directory holding the synced local calendar collections.";
+                description = "Directory containing the synchronized calendar collections.";
               };
 
               tokenFile = lib.mkOption {
                 type = lib.types.str;
                 default = "${dataHome}/vdirsyncer/${config.name}_google_calendar_token_file";
                 defaultText = lib.literalExpression "\${dataHome}/vdirsyncer/\${name}_google_calendar_token_file";
-                description = "File where the Google OAuth access/refresh tokens are stored.";
+                description = "Path storing Google OAuth access and refresh tokens.";
               };
 
               remote = {
@@ -81,13 +66,13 @@ in
                     "caldav"
                   ];
                   default = "google_calendar";
-                  description = "Type of the remote calendar storage.";
+                  description = "Remote storage type for this calendar account.";
                 };
 
                 url = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
                   default = null;
-                  description = "URL of the CalDAV storage, required for `caldav`.";
+                  description = "CalDAV server URL; required for CalDAV accounts.";
                 };
 
                 userName = lib.mkOption {
@@ -143,10 +128,7 @@ in
                 ];
                 default = "remote wins";
                 description = ''
-                  Which side wins when the same event was edited on both
-                  sides since the last sync. with "remote wins" edits made
-                  on google are safe, local khal edits to concurrently
-                  changed events are overwritten.
+                  Concurrent edits on the losing side are overwritten.
                 '';
               };
 
@@ -163,49 +145,39 @@ in
                 type = lib.types.nullOr lib.types.str;
                 default = null;
                 example = "light green";
-                description = "Color in which khal displays events of this calendar.";
+                description = "Color used by khal for this calendar.";
               };
 
               readOnly = lib.mkOption {
                 type = lib.types.bool;
                 default = false;
-                description = "Keep khal from making any changes to this calendar.";
+                description = "Whether khal must treat this calendar as read-only.";
               };
 
               glob = lib.mkOption {
                 type = lib.types.str;
                 default = "*";
-                description = "Glob khal uses to discover the collections inside `localPath`.";
+                description = "Glob used by khal to discover local collections.";
               };
             };
           }
         )
       );
       default = { };
-      description = ''
-        Calendar accounts, defined per host. they are mapped to
-        home-manager's `accounts.calendar.accounts` with vdirsyncer and
-        khal enabled. hosts without accounts get no calendar stack
-        (vdirsyncer/khal/remind are not set up).
-      '';
+      description = "Calendar accounts synchronized by vdirsyncer and exposed to khal.";
     };
 
     frequency = lib.mkOption {
       type = lib.types.str;
       default = "*:0/15";
-      description = ''
-        How often to synchronize, systemd OnCalendar expression passed to
-        `services.vdirsyncer.frequency`.
-      '';
+      description = "Systemd calendar expression controlling synchronization frequency.";
     };
 
     preAlert = lib.mkOption {
       type = lib.types.str;
       default = "+15";
       description = ''
-        remind tdelta passed to `ics2rem --posttime`: how long before an
-        event a pre-alert notification is sent ("+15" = 15 minutes
-        before). see `man remind` for the tdelta syntax.
+        Remind tdelta passed to `ics2rem --posttime`; see `man remind`.
       '';
     };
   };

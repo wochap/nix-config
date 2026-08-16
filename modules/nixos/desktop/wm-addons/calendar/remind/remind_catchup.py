@@ -15,9 +15,8 @@ import sys
 from datetime import datetime, timedelta
 
 REMIND_BIN, NOTIFY_SEND_BIN, REM_FILE, STATE_FILE = sys.argv[1:5]
-# gaps below this are normal timer jitter, not suspend/shutdown
+# Ignore ordinary timer jitter.
 GAP_THRESHOLD_S = 5 * 60
-# don't notify about events missed longer ago than this
 MAX_LOOKBACK_DAYS = 7
 
 
@@ -53,15 +52,14 @@ def main():
 
     start = datetime.fromtimestamp(max(last_ts, now_ts - MAX_LOOKBACK_DAYS * 86400), tz)
     proc = subprocess.run(
-        # -ppp2: machine-readable JSON for two months, so windows
-        # crossing a month boundary are covered
+        # Two months covers windows crossing a month boundary.
         [REMIND_BIN, "-ppp2", "-b2", REM_FILE, start.strftime("%Y-%m-%d")],
         capture_output=True,
         text=True,
         check=False,
     )
     if proc.returncode != 0:
-        # keep the old state so the window is retried on the next run
+        # Preserve state so the window is retried.
         print(f"remind-catchup: remind failed: {proc.stderr.strip()}", file=sys.stderr)
         return 1
 

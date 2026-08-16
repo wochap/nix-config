@@ -54,7 +54,7 @@ let
     ${pkgs.coreutils-full}/bin/echo "ics2rem start"
     ${pkgs.coreutils}/bin/mkdir -p ${remindConfigDir}
     ${pkgs.findutils}/bin/find ${vdirsyncerDataDir} -name '*.ics' -exec ${python-remind-final}/bin/ics2rem --posttime "${cfg.preAlert}" {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > "${genRemFile}.tmp"
-    # atomic replace so the running remind daemon never reads a partial file
+    # The daemon may read this file during regeneration.
     ${pkgs.coreutils}/bin/mv -f "${genRemFile}.tmp" "${genRemFile}"
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
   '';
@@ -74,7 +74,6 @@ in
         python-remind-final # ics2rem
       ];
 
-      # the daemon reads this file; generated and manual reminders are INCLUDEd
       xdg.configFile."remind/remind.rem".text = ''
         # This file is managed, put your own reminders into ${manualRemFile}.
         INCLUDE ${genRemFile}
@@ -84,7 +83,6 @@ in
       systemd.user.services.ics2rem = {
         Unit = {
           Description = "Convert ics files to rem";
-          # started via OnSuccess= of vdirsyncer.service
           After = [ "vdirsyncer.service" ];
         };
         Service = {
@@ -106,7 +104,7 @@ in
           Documentation = "https://dianne.skoll.ca/projects/remind/";
         };
         Service = {
-          # the INCLUDEd files must exist, remind errors out otherwise
+          # remind rejects missing INCLUDE targets.
           ExecStartPre = [
             "${pkgs.coreutils}/bin/touch ${genRemFile}"
             "${pkgs.coreutils}/bin/touch ${manualRemFile}"

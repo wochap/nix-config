@@ -39,22 +39,30 @@ in
     querySince = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = "6months";
-      description = "Restrict neomutt's notmuch (lieer) folders to messages newer than this relative notmuch date (e.g. \"6months\", \"1y\"). null disables the restriction.";
+      description = "Relative notmuch date limiting neomutt folders; `null` disables the limit.";
     };
     accounts = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule (
           { name, config, ... }: {
             options = {
-              address = lib.mkOption { type = lib.types.str; };
-              name = lib.mkOption { type = lib.types.str; };
+              address = lib.mkOption {
+                type = lib.types.str;
+                description = "Email address for this account.";
+              };
+              name = lib.mkOption {
+                type = lib.types.str;
+                description = "Display name for this account.";
+              };
               flavor = lib.mkOption {
                 type = lib.types.str;
                 default = "plain";
+                description = "Home Manager email-provider flavor.";
               };
               primary = lib.mkOption {
                 type = lib.types.bool;
                 default = false;
+                description = "Whether this is the primary mail account.";
               };
               sync = lib.mkOption {
                 type = lib.types.enum [
@@ -63,18 +71,22 @@ in
                   "none"
                 ];
                 default = "none";
+                description = "Backend used to synchronize incoming mail.";
               };
               color = lib.mkOption {
                 type = lib.types.str;
                 default = "";
+                description = "Neomutt status color for this account; empty disables it.";
               };
               pgpKey = lib.mkOption {
                 type = lib.types.str;
                 default = "";
+                description = "OpenPGP key used to sign mail; empty disables signing.";
               };
               signatureLines = lib.mkOption {
                 type = lib.types.listOf (lib.types.listOf lib.types.str);
                 default = [ ];
+                description = "Rows of text used to build the account signature.";
               };
               passwordSecret.sopsFile = lib.mkOption {
                 type = lib.types.path;
@@ -90,33 +102,22 @@ in
                 internal = true;
                 readOnly = true;
                 default = systemConfig.sops.secrets.${config.passwordSecret.sopsKey}.path;
+                description = "Resolved runtime path of the account password secret.";
               };
               inboxKey = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
                 default = null;
-                description = "If set, bind an index macro to this key that jumps to the account's inbox virtual folder.";
+                description = "Optional neomutt key binding that opens this account's inbox.";
               };
               imapHost = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
                 default = null;
-                description = ''
-                  IMAP server hostname, forwarded to the home-manager account
-                  (used by mbsync and imapnotify). When null, the value already
-                  provided by the account's flavor (e.g. imap.gmail.com) or set
-                  directly on the home-manager account is kept. Set explicitly
-                  to override.
-                '';
+                description = "Optional IMAP hostname overriding the provider flavor's value.";
               };
               smtpHost = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
                 default = null;
-                description = ''
-                  SMTP server hostname, forwarded to the home-manager account
-                  (used by msmtp, which offlinemsmtp wraps). When null, the
-                  value already provided by the account's flavor (e.g.
-                  smtp.gmail.com) or set directly on the home-manager account
-                  is kept. Set explicitly to override.
-                '';
+                description = "Optional SMTP hostname overriding the provider flavor's value.";
               };
               virtualFolders = lib.mkOption {
                 type = lib.types.listOf (
@@ -124,37 +125,37 @@ in
                     options = {
                       name = lib.mkOption {
                         type = lib.types.str;
-                        description = "Name of the virtual folder, shown in neomutt's sidebar as <account>/<name>.";
+                        description = "Virtual-folder name shown as `<account>/<name>`.";
                       };
                       query = lib.mkOption {
                         type = lib.types.str;
-                        description = "Notmuch query for the virtual folder (e.g. \"from:*@github.com\"). Automatically restricted to this account's mail folder and to _custom.desktop.mail.querySince.";
+                        description = "Notmuch query, automatically scoped to this account and `querySince`.";
                       };
                     };
                   }
                 );
                 default = [ ];
-                description = "Extra notmuch virtual folders for this account, shown in neomutt's sidebar.";
+                description = "Additional notmuch virtual folders shown in neomutt.";
               };
               hooks = lib.mkOption {
                 default = { };
-                description = "Mail event hooks for this account, run from notmuch's post-new hook. Queries are scoped to this account's mail folder.";
+                description = "Mail-event hooks scoped to this account's folder.";
                 type = lib.types.submodule {
                   options = {
                     arrive = lib.mkOption {
                       default = [ ];
-                      description = "Commands run when new mail arrives in this account. Each entry fires once per new message matching its `from` pattern, with the message id, From, Subject and Date as $1..$4 and the full message text on stdin.";
+                      description = "Commands run once per newly arrived message matching their sender pattern.";
                       type = lib.types.listOf (
                         lib.types.submodule {
                           options = {
                             from = lib.mkOption {
                               type = lib.types.nonEmptyStr;
                               example = "*@github.com";
-                              description = "Sender glob matched against new messages (notmuch `from:` prefix, e.g. \"*@github.com\").";
+                              description = "Notmuch sender glob matched against new messages.";
                             };
                             command = lib.mkOption {
                               type = lib.types.nonEmptyStr;
-                              description = "Bash command to run. Use absolute paths for binaries (e.g. \${pkgs.libnotify}/bin/notify-send); runs in the environment of the sync unit that invoked notmuch new.";
+                              description = "Bash command; executable paths must be absolute.";
                             };
                           };
                         }

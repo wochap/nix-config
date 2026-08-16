@@ -17,8 +17,6 @@ in
     accounts = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule (
-          # `config` here is the account submodule config (shadows the
-          # outer one, which is not needed inside)
           { name, config, ... }:
           {
             options = {
@@ -26,12 +24,7 @@ in
                 type = lib.types.str;
                 default = name;
                 defaultText = lib.literalExpression "name of the account attribute";
-                description = ''
-                  Unique identifier of the contacts account. becomes the
-                  home-manager `accounts.contact.accounts.<name>` key, the
-                  vdirsyncer pair `contacts_<name>`, and is used to build
-                  the default local/token paths.
-                '';
+                description = "Account identifier used in generated paths and vdirsyncer configuration.";
               };
 
               localPath = lib.mkOption {
@@ -57,11 +50,8 @@ in
                   "from b"
                 ];
                 description = ''
-                  Collections to synchronize between the storages. null
-                  syncs everything `vdirsyncer discover` finds. the
-                  collection names (local subdirectories of `localPath`)
-                  are also what khal uses for contact birthdays: until
-                  this is set, `khalBirthdays` stays without effect.
+                  `null` syncs everything found by `vdirsyncer discover`.
+                  These values are not used for khal birthdays.
                 '';
               };
 
@@ -69,10 +59,8 @@ in
                 type = lib.types.str;
                 default = "default";
                 description = ''
-                  Concrete local collection directory used by khal
-                  birthdays. This is separate from `collections`, whose
-                  `from a` and `from b` values are vdirsyncer discovery
-                  directives, not collection names.
+                  Concrete collection used for khal birthdays; discovery
+                  directives such as `from a` are invalid here.
                 '';
               };
 
@@ -82,11 +70,7 @@ in
                   "local wins"
                 ];
                 default = "remote wins";
-                description = ''
-                  Which side wins when the same contact was edited on both
-                  sides since the last sync. same posture as the calendar
-                  module.
-                '';
+                description = "Side retained when the same contact is changed locally and remotely.";
               };
 
               metadata = lib.mkOption {
@@ -102,12 +86,7 @@ in
                     "carddav"
                   ];
                   default = "google_contacts";
-                  description = ''
-                    Type of the remote storage. `google_contacts` uses the
-                    shared OAuth client credentials from the vdirsyncer
-                    module; `carddav` additionally requires `remote.url`,
-                    `remote.userName`, and `remote.passwordFile`.
-                  '';
+                  description = "CardDAV requires `url`, `userName`, and `passwordFile`.";
                 };
 
                 url = lib.mkOption {
@@ -157,9 +136,7 @@ in
                 type = lib.types.bool;
                 default = true;
                 description = ''
-                  Show this account's contact birthdays in khal. requires
-                  the calendar module's khal setup to be active; otherwise
-                  this option is a no-op. Uses `localCollection`.
+                  Requires an active calendar stack and uses `localCollection`.
                 '';
               };
             };
@@ -167,21 +144,13 @@ in
         )
       );
       default = { };
-      description = ''
-        Contacts accounts, defined per host. they are mapped to
-        home-manager's `accounts.contact.accounts` with vdirsyncer and
-        khard enabled. hosts without accounts get no contacts stack.
-      '';
+      description = "Contact accounts synchronized by vdirsyncer and exposed to khard.";
     };
 
     frequency = lib.mkOption {
       type = lib.types.str;
       default = "*:0/15";
-      description = ''
-        How often to synchronize, systemd OnCalendar expression passed to
-        `services.vdirsyncer.frequency`. The shared vdirsyncer module uses
-        this only when no calendar accounts are active.
-      '';
+      description = "Sync timer schedule, used only when no calendar accounts are active.";
     };
   };
 

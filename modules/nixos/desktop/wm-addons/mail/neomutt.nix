@@ -23,9 +23,7 @@ let
 
   accountInboxAction =
     name:
-    # Open the *named* inbox vfolder (defined via `named-mailboxes` below)
-    # instead of the raw notmuch:// URI, so the status line's %D shows the
-    # friendly name ("personal/inbox") instead of the full query URI.
+    # A raw notmuch URI makes status-line %D display the full query.
     "<change-vfolder>${name}/inbox<enter>";
 
   vfolderLine = name: query: ''named-mailboxes "${name}" "notmuch://?query=${lib.escapeURL query}"'';
@@ -73,7 +71,7 @@ let
         echo "Searching for '$query'..."
 
         ${lib.optionalString config._custom.desktop.contacts.enable ''
-          # Khard (skip the first empty line it generates for neomutt)
+          # Khard emits a leading empty line in neomutt mode.
           ${pkgs.khard}/bin/khard email --parsable -- "$query" | ${pkgs.coreutils}/bin/tail -n +2
         ''}
 

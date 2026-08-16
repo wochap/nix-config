@@ -11,10 +11,6 @@ in
 {
   config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
     _custom.hm = {
-      # generates ~/.config/khal/config; the [[...]] calendar sections come
-      # from accounts.calendar.accounts (see the shared vdirsyncer module).
-      # `default_calendar` (used by `khal new`) is injected by home-manager
-      # from the primary account's primaryCollection, once set.
       programs.khal = {
         enable = true;
 
@@ -29,8 +25,7 @@ in
 
         settings = {
           default = {
-            # PERF: highlight_event_days slows start up; overrides the
-            # `true` home-manager sets when a primary account exists
+            # PERF: Home Manager enables this for primary accounts; it slows startup.
             highlight_event_days = false;
             enable_mouse = true;
           };
