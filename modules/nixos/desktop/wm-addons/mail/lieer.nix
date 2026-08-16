@@ -12,8 +12,6 @@ let
   lieerAccounts = lib.filterAttrs (_: acc: acc.sync == "lieer") cfg.accounts;
   lieerNames = lib.attrNames lieerAccounts;
   gmi = "${hmConfig.programs.lieer.package}/bin/gmi";
-  maildirBasePath = hmConfig.accounts.email.maildirBasePath;
-  notmuchConfigDir = "${hmConfig.xdg.configHome}/notmuch";
   networkCheck = lib._custom.mkNetworkCheckScript "lieer-network-check" [ "oauth2.googleapis.com" ];
 in
 {
@@ -43,19 +41,11 @@ in
                 };
 
                 # A stale push can block delivery on Gmail's rate-limited API.
-                Service = lib._custom.userServiceHardening // {
+                Service = {
                   ExecCondition = "${networkCheck}";
                   ExecStart = lib.mkForce [
                     "${gmi} pull"
                     "${gmi} push"
-                  ];
-                  ProtectHome = "tmpfs";
-                  BindPaths = [ maildirBasePath ];
-                  BindReadOnlyPaths = [ notmuchConfigDir ];
-                  RestrictAddressFamilies = [
-                    "AF_INET"
-                    "AF_INET6"
-                    "AF_UNIX"
                   ];
                 };
               };

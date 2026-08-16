@@ -88,13 +88,6 @@ in
         Service = {
           Type = "oneshot";
           ExecStart = "${ics2remScript}";
-        }
-        // lib._custom.userServiceHardening
-        // {
-          ProtectHome = "tmpfs";
-          BindReadOnlyPaths = [ vdirsyncerDataDir ];
-          BindPaths = [ remindConfigDir ];
-          RestrictAddressFamilies = [ ];
         };
       };
 
@@ -116,12 +109,6 @@ in
           Restart = "on-failure";
           RestartSec = 5;
           KillMode = "mixed";
-        }
-        // lib._custom.userServiceHardening
-        // {
-          ProtectHome = "tmpfs";
-          BindPaths = [ remindConfigDir ];
-          RestrictAddressFamilies = [ "AF_UNIX" ];
         };
       };
 
@@ -132,13 +119,7 @@ in
         Service = {
           Type = "oneshot";
           ExecStart = "${catchupScript}";
-        }
-        // lib._custom.userServiceHardening
-        // {
-          ProtectHome = "tmpfs";
-          BindReadOnlyPaths = [ remindConfigDir ];
           StateDirectory = "remind";
-          RestrictAddressFamilies = [ "AF_UNIX" ];
         };
       };
 

@@ -11,7 +11,7 @@ let
   contactsCfg = config._custom.desktop.contacts;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
-  inherit (hmConfig.xdg) configHome dataHome;
+  inherit (hmConfig.xdg) dataHome;
 
   calendarAccounts = lib.optionalAttrs calendarCfg.enable calendarCfg.accounts;
   contactAccounts = lib.optionalAttrs contactsCfg.enable contactsCfg.accounts;
@@ -35,9 +35,6 @@ let
   davAccounts =
     lib.attrValues (lib.filterAttrs (_: acc: acc.remote.type == "caldav") calendarAccounts)
     ++ lib.attrValues (lib.filterAttrs (_: acc: acc.remote.type == "carddav") contactAccounts);
-  davPasswordFiles = map (acc: acc.remote.passwordFile) davAccounts;
-  davCertificateFiles = lib.filter (path: path != null) (map (acc: acc.remote.verify) davAccounts);
-
   mkRemote =
     acc:
     {
@@ -178,26 +175,10 @@ in
           OnFailure = "vdirsyncer-on-failure.service";
           OnSuccess = lib.mkIf calendarActive "ics2rem.service";
         };
-        Service = lib._custom.userServiceHardening // {
+        Service = {
           ExecCondition = "${lib._custom.mkNetworkCheckScript "vdirsyncer-network-check" [
             "one.one.one.one"
           ]}";
-          ProtectHome = "tmpfs";
-          BindReadOnlyPaths = lib.unique (
-            [ "${configHome}/vdirsyncer/config" ]
-            ++ lib.optionals googleActive [
-              clientIdPath
-              clientSecretPath
-            ]
-            ++ davPasswordFiles
-            ++ davCertificateFiles
-          );
-          BindPaths = [ "${dataHome}/vdirsyncer" ];
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
-          ];
         };
       };
 

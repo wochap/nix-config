@@ -16,6 +16,8 @@ in
       Unit = {
         Description = "mailnotify daemon";
         Documentation = "https://github.com/wochap/mailnotify";
+        StartLimitIntervalSec = 60;
+        StartLimitBurst = 3;
       };
       Service = {
         ExecStart = ''
@@ -28,12 +30,6 @@ in
         '';
         Restart = "always";
         RestartSec = 5;
-      }
-      // lib._custom.userServiceHardening
-      // {
-        ProtectHome = "tmpfs";
-        BindReadOnlyPaths = [ hmConfig.accounts.email.maildirBasePath ];
-        RestrictAddressFamilies = [ "AF_UNIX" ];
       };
     };
   };

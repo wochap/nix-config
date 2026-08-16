@@ -121,6 +121,12 @@ rec {
     TemporaryFileSystem = [ "/run/secrets:ro" ];
   };
 
+  # Minimal mount namespace for services that otherwise run without the
+  # general sandbox. Callers bind back only the SOPS files they require.
+  userServiceSecretIsolation = {
+    TemporaryFileSystem = [ "/run/secrets:ro" ];
+  };
+
   # Use as a systemd ExecCondition for network-bound services. A failed
   # ExecCondition skips the run without putting the unit in the failed state,
   # so OnFailure handlers do not notify about expected offline runs.

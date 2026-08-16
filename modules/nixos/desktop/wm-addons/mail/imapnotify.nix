@@ -19,21 +19,6 @@ in
         package = pkgs.goimapnotify;
       };
 
-      systemd.user.services = lib.mapAttrs' (
-        name: acc:
-        lib.nameValuePair "imapnotify-${name}" {
-          Service = lib._custom.userServiceHardening // {
-            ProtectHome = "tmpfs";
-            BindReadOnlyPaths = [ acc.passwordSecret.path ];
-            RestrictAddressFamilies = [
-              "AF_INET"
-              "AF_INET6"
-              "AF_UNIX"
-            ];
-          };
-        }
-      ) imapnotifyAccounts;
-
       accounts.email.accounts = lib.mapAttrs (name: acc: {
         imapnotify = {
           enable = true;
