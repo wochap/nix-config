@@ -240,6 +240,28 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Open WebUI returns `500 Internal Server Error` after an upgrade
+
+  Check logs:
+
+  ```sh
+  journalctl -u open-webui.service -n 150 --no-pager
+  ```
+
+  Open WebUI 0.9.6 may corrupt `user.settings` during SQLite migration, causing a Pydantic `ValidationError` and HTTP 500 on sign-in.
+
+  If old data is not needed, reset it:
+
+  ```sh
+  sudo systemctl stop open-webui.service open-webui-proxy.service open-webui-proxy.socket
+  sudo rm -rf -- /var/lib/private/open-webui /var/lib/open-webui
+  sudo systemctl start open-webui-proxy.socket
+  ```
+
+  **Warning:** Deletes Open WebUI users, chats, uploads, settings, and caches. Ollama models are unaffected.
+
+  Reopen the site, wait about a minute for initialization, and hard-refresh if needed.
+
 - Low CPU MHz on glegion after sleep
 
   ```
