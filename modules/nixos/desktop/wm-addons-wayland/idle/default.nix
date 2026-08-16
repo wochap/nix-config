@@ -59,6 +59,12 @@ in
           // lib._custom.userServiceHardening
           // {
             ProtectHome = "tmpfs";
+            BindPaths = [
+              "%h/.config/wayland-pipewire-idle-inhibit"
+            ];
+            BindReadOnlyPaths = [
+              "%t"
+            ];
             RestrictAddressFamilies = [ "AF_UNIX" ];
           };
         };

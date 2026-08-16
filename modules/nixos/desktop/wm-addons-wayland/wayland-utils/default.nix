@@ -151,7 +151,10 @@ in
           // lib._custom.userServiceHardening
           // {
             ProtectHome = "tmpfs";
-            CacheDirectory = "huggingface";
+            BindPaths = [
+              "%h/.cache/supertonic3"
+              "%h/.cache/huggingface"
+            ];
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
