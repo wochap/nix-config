@@ -202,6 +202,8 @@ in
       flavor = "gmail.com";
       address = config._custom.globals.secrets.personal.email;
       name = "Personal";
+      passwordSecret.sopsFile = ../../secrets-sops/personal.yaml;
+      passwordSecret.sopsKey = "personal-mail-password";
       sync = "lieer";
       inboxKey = "P";
       color = "red";
@@ -225,6 +227,8 @@ in
       flavor = "gmail.com";
       address = config._custom.globals.secrets.se.email;
       name = "SE";
+      passwordSecret.sopsFile = ../../secrets-sops/se.yaml;
+      passwordSecret.sopsKey = "se-mail-password";
       sync = "lieer";
       inboxKey = "S";
       color = "yellow";

@@ -14,9 +14,6 @@ let
   personalSopsFile = ../../../../secrets-sops/personal.yaml;
   seSopsFile = ../../../../secrets-sops/se.yaml;
 
-  mailEnabled = config._custom.desktop.mail.enable;
-  vdirsyncerEnabled =
-    config._custom.desktop.calendar.enable || config._custom.desktop.contacts.enable;
 in
 {
   imports = [ inputs.sops-nix.nixosModules.sops ];
@@ -73,29 +70,12 @@ in
           owner = userName;
           sopsFile = personalSopsFile;
         };
-        "personal-mail-password" = lib.mkIf mailEnabled {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-        "personal-vdirsyncer-client-id" = lib.mkIf vdirsyncerEnabled {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-        "personal-vdirsyncer-client-secret" = lib.mkIf vdirsyncerEnabled {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-
         # se
         "se-gh-token" = {
           owner = userName;
           sopsFile = seSopsFile;
         };
         "se-jira-api-token" = {
-          owner = userName;
-          sopsFile = seSopsFile;
-        };
-        "se-mail-password" = lib.mkIf mailEnabled {
           owner = userName;
           sopsFile = seSopsFile;
         };

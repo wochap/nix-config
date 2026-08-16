@@ -15,6 +15,7 @@
     ./desktop/wm-addons/bluetooth
     ./desktop/wm-addons/calendar
     ./desktop/wm-addons/contacts
+    ./desktop/wm-addons/vdirsyncer.nix
     ./desktop/wm-addons/cursor
     ./desktop/wm-addons/dbus
     ./desktop/wm-addons/mail

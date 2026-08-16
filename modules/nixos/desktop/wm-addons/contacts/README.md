@@ -13,9 +13,9 @@ khard new --addressbook <addressbook> --edit
 
 - vdirsyncer:
   synchronize contacts from google (or a CardDAV server) to local vcf
-  files. reuses the calendar module's OAuth client secrets and shares the
-  calendar module's vdirsyncer timer when the calendar stack is active
-  (otherwise this module owns the timer with its own `frequency`)
+  files. Google accounts reuse the shared OAuth client secrets. The shared
+  timer uses the calendar frequency when calendars are active, otherwise it
+  uses the contacts frequency
 - khard:
   address book TUI, reads the synced local vdirs
 - neomutt:
@@ -35,8 +35,8 @@ offline, including contacts-only configurations.
 
 #### Google Contacts
 
-1. enable the Google Contacts CardDAV API , Google People API in the same GCP project the calendar
-   module already uses (the OAuth client id/secret under
+1. enable the Google Contacts CardDAV API , Google People API in the same GCP project the shared
+   vdirsyncer module uses (the OAuth client id/secret under
    `personal-vdirsyncer-client-id` and `personal-vdirsyncer-client-secret` sops keys). without it the
    first sync fails with a recognizable `googleapi` 403/PERMISSION_DENIED
    error.
@@ -56,7 +56,10 @@ offline, including contacts-only configurations.
 
 Accounts can point at a self-hosted CardDAV server instead of google by
 setting `remote.type = "carddav"` plus `remote.url`, `remote.userName` and
-`remote.passwordCommand` on the account. no OAuth setup needed.
+`remote.passwordFile` on the account. The password file is exposed read-only
+inside the hardened vdirsyncer service. Optional DAV settings include
+`remote.auth`, `remote.verify`, and `remote.verifyFingerprint`; no OAuth setup
+is needed.
 
 ### Notes
 

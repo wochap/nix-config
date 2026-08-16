@@ -28,6 +28,12 @@ in
         '';
         Restart = "always";
         RestartSec = 5;
+      }
+      // lib._custom.userServiceHardening
+      // {
+        ProtectHome = "tmpfs";
+        BindReadOnlyPaths = [ hmConfig.accounts.email.maildirBasePath ];
+        RestrictAddressFamilies = [ "AF_UNIX" ];
       };
     };
   };

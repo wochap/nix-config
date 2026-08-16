@@ -1,12 +1,10 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
 let
-  globalConfig = config;
   cfg = config._custom.desktop.contacts;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
@@ -48,30 +46,6 @@ in
                 default = "${dataHome}/vdirsyncer/${config.name}_google_contacts_token_file";
                 defaultText = lib.literalExpression "\${dataHome}/vdirsyncer/\${name}_google_contacts_token_file";
                 description = "File where the Google OAuth access/refresh tokens are stored.";
-              };
-
-              clientIdCommand = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [
-                  "${pkgs.coreutils}/bin/cat"
-                  globalConfig.sops.secrets."personal-vdirsyncer-client-id".path
-                ];
-                defaultText = lib.literalExpression ''
-                  [ "\''${pkgs.coreutils}/bin/cat" "\''${config.sops.secrets."personal-vdirsyncer-client-id".path}" ]
-                '';
-                description = "Command that prints the Google OAuth client id to stdout.";
-              };
-
-              clientSecretCommand = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [
-                  "${pkgs.coreutils}/bin/cat"
-                  globalConfig.sops.secrets."personal-vdirsyncer-client-secret".path
-                ];
-                defaultText = lib.literalExpression ''
-                  [ "\''${pkgs.coreutils}/bin/cat" "\''${config.sops.secrets."personal-vdirsyncer-client-secret".path}" ]
-                '';
-                description = "Command that prints the Google OAuth client secret to stdout.";
               };
 
               collections = lib.mkOption {
@@ -130,10 +104,9 @@ in
                   default = "google_contacts";
                   description = ''
                     Type of the remote storage. `google_contacts` uses the
-                    shared OAuth client credentials of the calendar module;
-                    `carddav` (self-hosted servers) additionally requires
-                    `remote.url` and takes `remote.userName` /
-                    `remote.passwordCommand`.
+                    shared OAuth client credentials from the vdirsyncer
+                    module; `carddav` additionally requires `remote.url`,
+                    `remote.userName`, and `remote.passwordFile`.
                   '';
                 };
 
@@ -149,10 +122,34 @@ in
                   description = "User name for CardDAV authentication.";
                 };
 
-                passwordCommand = lib.mkOption {
-                  type = lib.types.nullOr (lib.types.listOf lib.types.str);
+                passwordFile = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
                   default = null;
-                  description = "Command that prints the CardDAV password to stdout.";
+                  description = "File containing the CardDAV password.";
+                };
+
+                auth = lib.mkOption {
+                  type = lib.types.nullOr (
+                    lib.types.enum [
+                      "basic"
+                      "digest"
+                      "guess"
+                    ]
+                  );
+                  default = null;
+                  description = "CardDAV authentication method.";
+                };
+
+                verify = lib.mkOption {
+                  type = lib.types.nullOr lib.types.path;
+                  default = null;
+                  description = "Custom CA certificate used to verify the DAV server.";
+                };
+
+                verifyFingerprint = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = "Expected DAV server certificate fingerprint.";
                 };
               };
 
@@ -182,22 +179,22 @@ in
       default = "*:0/15";
       description = ''
         How often to synchronize, systemd OnCalendar expression passed to
-        `services.vdirsyncer.frequency`. only used when the calendar
-        module is not active (when it is, the calendar module owns the
-        shared vdirsyncer timer).
+        `services.vdirsyncer.frequency`. The shared vdirsyncer module uses
+        this only when no calendar accounts are active.
       '';
     };
   };
 
   imports = [
     ./khard.nix
-    ./vdirsyncer.nix
   ];
 
   config = lib.mkIf cfg.enable {
     assertions = lib.mapAttrsToList (name: acc: {
-      assertion = acc.remote.type != "carddav" || acc.remote.url != null;
-      message = "Contacts account '${name}' uses remote.type = \"carddav\" and must set remote.url.";
+      assertion =
+        acc.remote.type != "carddav"
+        || (acc.remote.url != null && acc.remote.userName != null && acc.remote.passwordFile != null);
+      message = "Contacts account '${name}' uses `carddav` and must set remote.url, remote.userName, and remote.passwordFile.";
     }) cfg.accounts;
 
   };

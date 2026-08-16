@@ -35,11 +35,7 @@ in
         flavor = acc.flavor;
         primary = acc.primary;
 
-        passwordCommand =
-          if acc.passwordCommand != "" then
-            acc.passwordCommand
-          else
-            "${pkgs.coreutils}/bin/cat ${config.sops.secrets."${lib.toLower acc.name}-mail-password".path}";
+        passwordCommand = "${pkgs.coreutils}/bin/cat ${acc.passwordSecret.path}";
 
         msmtp.enable = true;
         imap.host = lib.mkIf (acc.imapHost != null) (lib.mkForce acc.imapHost);

@@ -10,11 +10,13 @@ let
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) dataHome configHome stateHome;
-  remFilePath = "${configHome}/remind/remind.rem";
+  remindConfigDir = "${configHome}/remind";
+  vdirsyncerDataDir = "${dataHome}/vdirsyncer";
+  remFilePath = "${remindConfigDir}/remind.rem";
   # regenerated from the synced ics files after every vdirsyncer sync
-  genRemFile = "${configHome}/remind/calendar-generated.rem";
+  genRemFile = "${remindConfigDir}/calendar-generated.rem";
   # user-managed file for hand-written reminders (see README)
-  manualRemFile = "${configHome}/remind/manual.rem";
+  manualRemFile = "${remindConfigDir}/manual.rem";
   # epoch of the last successful remind-catchup run
   catchupStateFile = "${stateHome}/remind/last-check";
 
@@ -50,8 +52,8 @@ let
   # minutes) before start (remind always notifies at the event start too)
   ics2remScript = pkgs.writeShellScript "ics2rem" ''
     ${pkgs.coreutils-full}/bin/echo "ics2rem start"
-    ${pkgs.coreutils}/bin/mkdir -p ${configHome}/remind
-    ${pkgs.findutils}/bin/find ${dataHome}/vdirsyncer -name '*.ics' -exec ${python-remind-final}/bin/ics2rem --posttime "${cfg.preAlert}" {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > "${genRemFile}.tmp"
+    ${pkgs.coreutils}/bin/mkdir -p ${remindConfigDir}
+    ${pkgs.findutils}/bin/find ${vdirsyncerDataDir} -name '*.ics' -exec ${python-remind-final}/bin/ics2rem --posttime "${cfg.preAlert}" {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > "${genRemFile}.tmp"
     # atomic replace so the running remind daemon never reads a partial file
     ${pkgs.coreutils}/bin/mv -f "${genRemFile}.tmp" "${genRemFile}"
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
@@ -88,6 +90,13 @@ in
         Service = {
           Type = "oneshot";
           ExecStart = "${ics2remScript}";
+        }
+        // lib._custom.userServiceHardening
+        // {
+          ProtectHome = "tmpfs";
+          BindReadOnlyPaths = [ vdirsyncerDataDir ];
+          BindPaths = [ remindConfigDir ];
+          RestrictAddressFamilies = [ ];
         };
       };
 
@@ -106,6 +115,12 @@ in
           Restart = "on-failure";
           RestartSec = 5;
           KillMode = "mixed";
+        }
+        // lib._custom.userServiceHardening
+        // {
+          ProtectHome = "tmpfs";
+          BindPaths = [ remindConfigDir ];
+          RestrictAddressFamilies = [ "AF_UNIX" ];
         };
       };
 
@@ -116,6 +131,13 @@ in
         Service = {
           Type = "oneshot";
           ExecStart = "${catchupScript}";
+        }
+        // lib._custom.userServiceHardening
+        // {
+          ProtectHome = "tmpfs";
+          BindReadOnlyPaths = [ remindConfigDir ];
+          StateDirectory = "remind";
+          RestrictAddressFamilies = [ "AF_UNIX" ];
         };
       };
 

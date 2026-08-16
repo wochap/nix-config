@@ -36,6 +36,22 @@ in
           '';
           Restart = "always";
           RestartSec = 5;
+        }
+        // lib._custom.userServiceHardening
+        // {
+          ProtectHome = "tmpfs";
+          BindReadOnlyPaths = lib.unique (
+            [ "${hmConfig.xdg.configHome}/msmtp/config" ]
+            ++ lib.mapAttrsToList (_: acc: acc.passwordSecret.path) cfg.accounts
+          );
+          # The daemon creates this IPC endpoint and mail clients open it
+          # later, so its containing queue directory must be shared.
+          BindPaths = [ "${hmConfig.home.homeDirectory}/tmp" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
         };
       };
     };

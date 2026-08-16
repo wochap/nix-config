@@ -1,12 +1,10 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
 let
-  globalConfig = config;
   cfg = config._custom.desktop.calendar;
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
@@ -76,28 +74,57 @@ in
                 description = "File where the Google OAuth access/refresh tokens are stored.";
               };
 
-              clientIdCommand = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [
-                  "${pkgs.coreutils}/bin/cat"
-                  globalConfig.sops.secrets."personal-vdirsyncer-client-id".path
-                ];
-                defaultText = lib.literalExpression ''
-                  [ "\''${pkgs.coreutils}/bin/cat" "\''${config.sops.secrets."personal-vdirsyncer-client-id".path}" ]
-                '';
-                description = "Command that prints the Google OAuth client id to stdout.";
-              };
+              remote = {
+                type = lib.mkOption {
+                  type = lib.types.enum [
+                    "google_calendar"
+                    "caldav"
+                  ];
+                  default = "google_calendar";
+                  description = "Type of the remote calendar storage.";
+                };
 
-              clientSecretCommand = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [
-                  "${pkgs.coreutils}/bin/cat"
-                  globalConfig.sops.secrets."personal-vdirsyncer-client-secret".path
-                ];
-                defaultText = lib.literalExpression ''
-                  [ "\''${pkgs.coreutils}/bin/cat" "\''${config.sops.secrets."personal-vdirsyncer-client-secret".path}" ]
-                '';
-                description = "Command that prints the Google OAuth client secret to stdout.";
+                url = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = "URL of the CalDAV storage, required for `caldav`.";
+                };
+
+                userName = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = "User name for CalDAV authentication.";
+                };
+
+                passwordFile = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = "File containing the CalDAV password.";
+                };
+
+                auth = lib.mkOption {
+                  type = lib.types.nullOr (
+                    lib.types.enum [
+                      "basic"
+                      "digest"
+                      "guess"
+                    ]
+                  );
+                  default = null;
+                  description = "CalDAV authentication method.";
+                };
+
+                verify = lib.mkOption {
+                  type = lib.types.nullOr lib.types.path;
+                  default = null;
+                  description = "Custom CA certificate used to verify the DAV server.";
+                };
+
+                verifyFingerprint = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = "Expected DAV server certificate fingerprint.";
+                };
               };
 
               collections = lib.mkOption {
@@ -186,7 +213,6 @@ in
   imports = [
     ./remind
     ./khal.nix
-    ./vdirsyncer.nix
   ];
 
   config = lib.mkIf cfg.enable {
@@ -197,6 +223,12 @@ in
           || (lib.length (lib.filter (a: a.primary) (lib.attrValues cfg.accounts)) == 1);
         message = "Exactly one calendar account in _custom.desktop.calendar.accounts must be set as primary (primary = true;).";
       }
-    ];
+    ]
+    ++ lib.mapAttrsToList (name: acc: {
+      assertion =
+        acc.remote.type != "caldav"
+        || (acc.remote.url != null && acc.remote.userName != null && acc.remote.passwordFile != null);
+      message = "Calendar account '${name}' uses `caldav` and must set remote.url, remote.userName, and remote.passwordFile.";
+    }) cfg.accounts;
   };
 }

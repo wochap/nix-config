@@ -44,11 +44,12 @@ _custom.desktop.calendar.accounts.personal = {
 ```
 
 per-account options (all optional): `primaryCollection`, `localPath`,
-`tokenFile`, `clientIdCommand`/`clientSecretCommand` (default to the shared
-`personal-vdirsyncer-client-secret` `personal-vdirsyncer-client-id` sops secrets), `collections`,
-`conflictResolution` (default `"remote wins"`), `metadata`, `color`,
-`readOnly`, `glob`. module-level: `frequency` (default `"*:0/15"`),
-`preAlert` (default `"+15"`, remind tdelta for the pre-alert).
+`tokenFile`, `collections`, `conflictResolution` (default `"remote wins"`),
+`metadata`, `color`, `readOnly`, `glob`, and `remote`. Google Calendar is the
+default remote and uses the shared `personal-vdirsyncer-client-id` and
+`personal-vdirsyncer-client-secret` SOPS secrets. module-level: `frequency`
+(default `"*:0/15"`), `preAlert` (default `"+15"`, remind tdelta for the
+pre-alert).
 
 `primaryCollection` must be the displayname google gave the collection:
 check the `displayname` files inside the collection subdirectories of
@@ -73,6 +74,14 @@ check the `displayname` files inside the collection subdirectories of
    # a browser should open automatically asking for google credentials, otherwise run:
    vdirsyncer discover
    ```
+
+#### CalDAV
+
+Accounts can use a generic CalDAV server by setting `remote.type = "caldav"`
+plus `remote.url`, `remote.userName`, and `remote.passwordFile`. The password
+file is exposed read-only inside the hardened vdirsyncer service. Optional
+DAV settings include `remote.auth`, `remote.verify`, and
+`remote.verifyFingerprint`.
 
 #### Remind
 

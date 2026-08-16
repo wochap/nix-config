@@ -12,7 +12,7 @@ in
   config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
     _custom.hm = {
       # generates ~/.config/khal/config; the [[...]] calendar sections come
-      # from accounts.calendar.accounts (see vdirsyncer.nix).
+      # from accounts.calendar.accounts (see the shared vdirsyncer module).
       # `default_calendar` (used by `khal new`) is injected by home-manager
       # from the primary account's primaryCollection, once set.
       programs.khal = {

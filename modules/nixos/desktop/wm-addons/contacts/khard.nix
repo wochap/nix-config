@@ -10,8 +10,8 @@ let
   calendarCfg = config._custom.desktop.calendar;
   mailCfg = config._custom.desktop.mail;
 
-  # same predicate as the vdirsyncer frequency ownership in
-  # mixins/vdirsyncer.nix: khal birthdays need the calendar module's khal
+  # Same calendar-active predicate as the shared vdirsyncer module: khal
+  # birthdays need the calendar module's khal
   # setup; without it there is nothing to show birthdays in and the
   # per-account `khalBirthdays` option is a no-op.
   calendarActive = calendarCfg.enable && calendarCfg.accounts != { };
@@ -23,7 +23,7 @@ in
     _custom.hm = {
       # address book TUI reading the synced local vdirs; the
       # [[addressbooks]] sections come from accounts.contact.accounts
-      # (see vdirsyncer.nix)
+      # (see the shared wm-addons/vdirsyncer.nix)
       programs.khard = {
         enable = true;
         settings.general = {
