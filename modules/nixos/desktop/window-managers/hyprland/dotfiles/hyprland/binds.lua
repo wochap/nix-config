@@ -319,6 +319,11 @@ hl.bind(
   hl.dsp.exec_cmd(session_cmd("tts-clipboard primary --voice=F1 --speed=1.5 --steps=5 --chunking=on"))
 )
 
+hl.bind(
+  mod .. " + ALT + d",
+  hl.dsp.exec_cmd(session_cmd("voice-clean"))
+)
+
 --- MEDIA KEYBINDINGS
 
 if not constants.is_kiosk then

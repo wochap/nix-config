@@ -34,6 +34,7 @@ let
   theme-switch = pkgs.writeScriptBin "theme-switch" (builtins.readFile ./scripts/theme-switch.sh);
   color-scheme = pkgs.writeScriptBin "color-scheme" (builtins.readFile ./scripts/color-scheme.sh);
   tts-clipboard = pkgs.writeScriptBin "tts-clipboard" (builtins.readFile ./scripts/tts-clipboard.sh);
+  voice-clean = pkgs.writeScriptBin "voice-clean" (builtins.readFile ./scripts/voice-clean.sh);
 in
 {
   options._custom.desktop.wayland-utils = {
@@ -79,42 +80,46 @@ in
       };
 
       _custom.hm = {
-        home.packages = with pkgs; [
-          mpvpaper # mpv as wallpaper
-          grim # screenshoot utility
-          hyprpicker # color picker
-          showmethekey
-          slurp # screenshoot utility
-          satty # image editor
-          swaybg
-          wayfreeze # freeze display, only works on hyprland
-          wdisplays # control display outputs
-          wf-recorder # screen recorder utility
-          wl-mirror # mirror outputs
-          wl-screenrec # screen recorder utility (faster)
-          gpu-screen-recorder # screen recorder
-          wlr-randr
-          wlrctl # control keyboard, mouse and wm from cli
-          tesseract5 # ocr
-          cage # wm
+        home.packages =
+          with pkgs;
+          [
+            mpvpaper # mpv as wallpaper
+            grim # screenshoot utility
+            hyprpicker # color picker
+            showmethekey
+            slurp # screenshoot utility
+            satty # image editor
+            swaybg
+            wayfreeze # freeze display, only works on hyprland
+            wdisplays # control display outputs
+            wf-recorder # screen recorder utility
+            wl-mirror # mirror outputs
+            wl-screenrec # screen recorder utility (faster)
+            gpu-screen-recorder # screen recorder
+            wlr-randr
+            wlrctl # control keyboard, mouse and wm from cli
+            tesseract5 # ocr
+            cage # wm
 
-          play-notification-sound
-          color-picker
-          ruler
-          recorder
-          takeshot
-          ocr
-          ocr-math
+            play-notification-sound
+            color-picker
+            ruler
+            recorder
+            takeshot
+            ocr
+            ocr-math
 
-          tui-bookmarks
-          tui-calendar
-          tui-email
-          tui-monitor
-          tui-music
-          tui-notes
-          tui-notes-obsidian
-          tui-rss
-        ];
+            tui-bookmarks
+            tui-calendar
+            tui-email
+            tui-monitor
+            tui-music
+            tui-notes
+            tui-notes-obsidian
+            tui-rss
+            voice-clean
+          ]
+          ++ lib.optionals (config._custom.programs.ai-agents.enableHandy) [ voice-clean ];
 
         xdg.configFile."satty/config.toml".source = ./dotfiles/satty-config.toml;
         xdg.dataFile."assets/notification.flac".source = ./assets/notification.flac;
