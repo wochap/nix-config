@@ -3,7 +3,7 @@ keys:
   - &sandbox age14m8va53kyyzve9vedmq0rn052t8y2esjjr72q8y6gzpegq090ddqacquk5
 
 creation_rules:
-  - path_regex: secrets-sops/shared.yaml$
+  - path_regex: secrets-sops/(local|shared).yaml$
     key_groups:
       - age:
           - *default

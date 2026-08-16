@@ -1,4 +1,5 @@
 personal-openrouter-api-key: ENC[AES256_GCM,data:7O+2476Okw93tDpsjxKtRCXtLqojsRBhrCvrvm0DByJz/vFS0yIyty4s6dTAiHdfGTYYJCtq1/5MqL1161IX4vz5GzjidaMl+A==,iv:v+7w1jeOnpCVDB3OiAtX54TFdW1EMh6uz3PL9Xcp4u0=,tag:jTRn5NBOmbZn+noLrdbeLQ==,type:str]
+personal-ollama-cloud-api-key: ENC[AES256_GCM,data:014hjGlQgD6e5ZF2jMRgkbu9znLJ/p0jp38Mr8ZsVx4f7B/kCP13Z6RYdauKUXdCCqH4IVCeQaww,iv:Q+evd+3WPXAQAOmcWzlnb8Kzjr93JrGc33pDhOyHfKw=,tag:W18XWmhQmWqks2FCmzem+Q==,type:str]
 personal-a-qwen-token-plan-api-key: ENC[AES256_GCM,data:fOzWEMfQkhuINZKaXy7P+yA1a5deDiyfA8foccWmn6YuwQwZez6OslvtWvB+Mkj0zhkYyveAnnXY/l5foZtmeePnqkT8upE7Cejg4ajWFpM814kkpJWW4QA1pP1DnAt//OFUNSFd0hVddXJ3rfzDe4U=,iv:ImbO4klZyiR1Ve5HxJGws3M3Msn6YgpXVUb228E/M5o=,tag:49hXS3pwAKaJkWLFx7K9/A==,type:str]
 personal-b-qwen-token-plan-api-key: ENC[AES256_GCM,data:kEGC+H11pFjXu9J2CK/NZcQgfKFuCE+OY9wCruBExrLVdl+QJWAjqZ5RRBEEPHLVepuRsogxfwn98QmN5U2TJKUfSnPelWT+8qP+FgdUn0VX/8KSKfy+q3HX0la+fv75VdQxPSuWwow1TSUusY4Ixdc=,iv:v6id6pZbu3cPoPy9lI18pGmtaBgJvIBDdtEmIcGhB+U=,tag:i4xhCWbC73wwgBtFLg/DEA==,type:str]
 sops:
@@ -21,7 +22,7 @@ sops:
             t9mx/YAfgTDwDaBvm0qEEfFt/kT/BvjmdSIZVaFBJFrugJJvyWtDsw==
             -----END AGE ENCRYPTED FILE-----
           recipient: age14m8va53kyyzve9vedmq0rn052t8y2esjjr72q8y6gzpegq090ddqacquk5
-    lastmodified: "2026-08-15T23:37:38Z"
-    mac: ENC[AES256_GCM,data:PIlgQ5s+g6Im2fp9vmRWiAJcdz7pJFlCZytPSeqNqMOCMasrT2aVpRwysc2Y6y6yGibqps3ZlbgAjBwqh6Hc2Tb2lJv4fHGVW+cESwUEGPBhWphTfm2Guflaj2bOVXnIC3KcPo0eL8SNmsKhtkJD4SBvbao+a3OlkocVfpK1rRc=,iv:19dQ/VkoT7H4kfuPEuxJc9lK6kORgs/s7JrfFhHyMp0=,tag:2g8PHW6qiGzTE5JTiF77+Q==,type:str]
+    lastmodified: "2026-08-16T22:34:33Z"
+    mac: ENC[AES256_GCM,data:s/F4Vav3BxkFcfysPrypZiXc7tsVIWMNpH+s9KYPoSE5qjoqwn4I7A37ctnRceFnUaahXKweRHDn8CjyJ9R1BxNmh8rW1CEGVBxRRt67dk6V6bArQjePuvmZAvm5qHoBi/mU/i+gPXnbhGWF1nqlq6CWVv8hopil86leKcC63so=,iv:OX8aWdKZjWFNKGAPm1IjBVG8iurensILFIQtzspxoUY=,tag:c30iyejpi0flr9OQ17xv5Q==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.1
