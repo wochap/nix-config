@@ -7,16 +7,26 @@
 
 let
   cfg = config._custom.services.ai;
-  inherit (config._custom.globals) configDirectory userName;
+  inherit (config._custom.globals) userName;
   inherit (pkgs._custom) wochap-ssc;
   omniroute-chat = pkgs.writeScriptBin "omniroute-chat" (
     builtins.readFile ./scripts/omniroute-chat.sh
   );
-  tts-clipboard = pkgs.writeScriptBin "tts-clipboard" (
-    builtins.readFile ./scripts/tts-clipboard.sh
+  tts-clipboard = pkgs.writeScriptBin "tts-clipboard" (builtins.readFile ./scripts/tts-clipboard.sh);
+  voice-clean = pkgs.writeScriptBin "voice-clean" (builtins.readFile ./scripts/voice-clean.sh);
+  qwen3-asr-transformers = pkgs.writeText "qwen3-asr-transformers.py" (
+    builtins.readFile ./scripts/qwen3-asr-transformers.py
   );
-  voice-clean = pkgs.writeScriptBin "voice-clean" (
-    builtins.readFile ./scripts/voice-clean.sh
+  qwen3-asr-transcribe = pkgs.writeShellApplication {
+    name = "qwen3-asr-transcribe";
+    runtimeEnv = {
+      QWEN3_ASR_IMAGE = "docker.io/qwenllm/qwen3-asr@sha256:fb75b775f089e06e5a1aaebffd421e37505cc630d50c86d889d95ffa45a7e16a";
+      QWEN3_ASR_SCRIPT = qwen3-asr-transformers;
+    };
+    text = builtins.readFile ./scripts/qwen3-asr-transcribe.sh;
+  };
+  qwen3-asr-video = pkgs.writeScriptBin "qwen3-asr-video" (
+    builtins.readFile ./scripts/qwen3-asr-video.sh
   );
 in
 {
@@ -34,6 +44,7 @@ in
     enableOmniRoute = lib.mkEnableOption "the local OmniRoute AI gateway";
     enableOllamaFlashAttention = lib.mkEnableOption { };
     enableSupertonic = lib.mkEnableOption "the local Supertonic text-to-speech service";
+    enableQwen3Asr = lib.mkEnableOption "on-demand Qwen3-ASR-1.7B transcription with Transformers";
   };
 
   config = lib.mkIf cfg.enable {
@@ -54,7 +65,11 @@ in
       ]
       ++ lib.optionals cfg.enableWhisper [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
       ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ]
-      ++ lib.optionals cfg.enableOmniRoute [ omniroute-chat ];
+      ++ lib.optionals cfg.enableOmniRoute [ omniroute-chat ]
+      ++ lib.optionals cfg.enableQwen3Asr [
+        qwen3-asr-transcribe
+        qwen3-asr-video
+      ];
 
     services.ollama = lib.mkIf cfg.enableOllama {
       enable = true;
@@ -175,7 +190,7 @@ in
     };
 
     # The image runs as uid 1000 and needs this directory for mutable state.
-    systemd.tmpfiles.rules = lib.mkIf cfg.enableOmniRoute [
+    systemd.tmpfiles.rules = lib.optionals cfg.enableOmniRoute [
       "d /var/lib/omniroute 0700 1000 1000 -"
     ];
 
@@ -215,12 +230,13 @@ in
     };
 
     _custom.hm = {
-      home.packages =
-        [ voice-clean ]
-        ++ lib.optionals cfg.enableSupertonic [
-          pkgs._custom.supertonic
-          tts-clipboard
-        ];
+      home.packages = [
+        voice-clean
+      ]
+      ++ lib.optionals cfg.enableSupertonic [
+        pkgs._custom.supertonic
+        tts-clipboard
+      ];
 
       home = {
         shellAliases = {

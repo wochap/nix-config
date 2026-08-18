@@ -131,6 +131,8 @@ in
     _custom.programs.ai-agents.enableHandy = true;
 
     _custom.services.android.enable = true;
+    _custom.services.podman.enable = true;
+    _custom.services.podman.rootless = true;
     _custom.services.docker.enable = true;
     _custom.services.docker.enableNvidia = true;
     _custom.services.flatpak.enable = false;
@@ -147,6 +149,7 @@ in
     _custom.services.ai.enableNextjsOllamaLlmUi = false;
     _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;
+    _custom.services.ai.enableQwen3Asr = true;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ms-intune.enable = true;
     _custom.services.rsshub.enable = true;

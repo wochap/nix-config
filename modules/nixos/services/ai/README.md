@@ -114,6 +114,56 @@ $ whisper-cli -m /path-to/whisper.cpp/models/ggml-large-v3.bin -f audio.wav
 
 [Available models](https://github.com/ggerganov/whisper.cpp/blob/master/models/README.md#available-models)
 
+## Qwen3-ASR-1.7B
+
+Enable on-demand transcription with the Transformers backend:
+
+```nix
+_custom.services.ai = {
+  enable = true;
+  enableNvidia = true;
+  enableQwen3Asr = true;
+};
+```
+
+Each command starts Qwen's official CUDA container, runs Transformers inference
+on the NVIDIA GPU, and removes the container afterward. VRAM is therefore
+released when transcription finishes; there is no persistent API server.
+
+The pinned image is about 14 GB and the model download is about 4.7 GB. Rootless
+Podman stores the image in the user's container storage and model files persist
+in `~/.cache/qwen3-asr`.
+
+Transcribe a local audio file:
+
+```console
+$ qwen3-asr-transcribe recording.wav
+$ qwen3-asr-transcribe --language English recording.mp3
+```
+
+For a video, the helper extracts mono 16 kHz audio with FFmpeg and writes a
+plain-text transcript next to the input video:
+
+```console
+$ qwen3-asr-video video.mp4
+$ qwen3-asr-video --language English --output subtitles.txt video.mkv
+```
+
+Qwen3-ASR performs speech-to-text. This helper produces a plain transcript,
+not timed SRT/VTT subtitles; Qwen's separate ForcedAligner model is required
+for timestamps and is intentionally not loaded alongside the ASR model on an
+8 GB RTX 4060.
+
+The container receives only three mounts: the individual audio file read-only,
+the inference script read-only, and the dedicated model cache. It does not
+receive the containing video directory, the home directory, SSH/GPG keys, or a
+Podman socket. No port is opened. After the model has been downloaded once, set
+`QWEN3_ASR_OFFLINE=1` to disable container networking as well:
+
+```console
+$ QWEN3_ASR_OFFLINE=1 qwen3-asr-video video.mp4
+```
+
 ## Clipboard text to speech
 
 Enable the local Supertonic service and clipboard command:
