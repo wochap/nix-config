@@ -23,6 +23,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      _custom.rtk
       playwright-mcp
       playwright-driver
       claude-session-duration
