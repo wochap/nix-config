@@ -51,13 +51,33 @@ fi
 work_dir=$(mktemp -d "${TMPDIR:-/tmp}/qwen3-asr-video.XXXXXX")
 trap 'rm -rf "$work_dir"' EXIT
 
-echo "Extracting audio from $video_file" >&2
+# Keep each inference small enough for an 8 GB GPU. This does not change the
+# audio format, model, or precision; it only bounds the temporary memory used
+# while the model is generating a transcript.
+chunk_seconds=${QWEN3_ASR_CHUNK_SECONDS:-240}
+if [[ ! $chunk_seconds =~ ^[1-9][0-9]*$ ]]; then
+  echo "qwen3-asr-video: QWEN3_ASR_CHUNK_SECONDS must be a positive integer" >&2
+  exit 2
+fi
+
+echo "Extracting audio from $video_file in ${chunk_seconds}-second chunks" >&2
 ffmpeg -nostdin -hide_banner -loglevel error -y \
-  -i "$video_file" -vn -ac 1 -ar 16000 -c:a pcm_s16le "$work_dir/audio.wav"
+  -i "$video_file" -map 0:a:0 -vn -ac 1 -ar 16000 -c:a pcm_s16le \
+  -f segment -segment_time "$chunk_seconds" -reset_timestamps 1 \
+  "$work_dir/audio-%05d.wav"
 
 transcribe_args=()
 [[ -z $language ]] || transcribe_args+=(--language "$language")
 
-echo "Transcribing with Qwen3-ASR-1.7B on the local NVIDIA service" >&2
-qwen3-asr-transcribe "${transcribe_args[@]}" "$work_dir/audio.wav" >"$output_file"
+audio_chunks=("$work_dir"/audio-*.wav)
+transcript_file="$work_dir/transcript.txt"
+: >"$transcript_file"
+
+echo "Transcribing ${#audio_chunks[@]} chunks with Qwen3-ASR-1.7B on the local NVIDIA service" >&2
+for i in "${!audio_chunks[@]}"; do
+  echo "Transcribing chunk $((i + 1))/${#audio_chunks[@]}" >&2
+  qwen3-asr-transcribe "${transcribe_args[@]}" "${audio_chunks[$i]}" >>"$transcript_file"
+done
+
+mv "$transcript_file" "$output_file"
 echo "Transcript written to $output_file" >&2

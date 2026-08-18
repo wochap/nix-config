@@ -52,6 +52,7 @@ container_args=(
   --cap-drop=all
   --security-opt=no-new-privileges
   --read-only
+  --entrypoint=python3
   "--tmpfs=/tmp:rw,nosuid,nodev,size=4g"
   --pids-limit=2048
   --shm-size=4g
@@ -70,7 +71,6 @@ if [[ ${QWEN3_ASR_OFFLINE:-0} == 1 ]]; then
 fi
 
 python_args=(
-  python3
   /opt/qwen3-asr/transcribe.py
   /input/audio
 )

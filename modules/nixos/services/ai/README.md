@@ -149,6 +149,15 @@ $ qwen3-asr-video video.mp4
 $ qwen3-asr-video --language English --output subtitles.txt video.mkv
 ```
 
+Long audio is transcribed in four-minute chunks to keep inference within an
+8 GB GPU. Override the chunk duration if needed with
+`QWEN3_ASR_CHUNK_SECONDS`; smaller values use less VRAM without changing the
+model or audio quality:
+
+```console
+$ QWEN3_ASR_CHUNK_SECONDS=180 qwen3-asr-video long-video.mp4
+```
+
 Qwen3-ASR performs speech-to-text. This helper produces a plain transcript,
 not timed SRT/VTT subtitles; Qwen's separate ForcedAligner model is required
 for timestamps and is intentionally not loaded alongside the ASR model on an
