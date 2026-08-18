@@ -77,7 +77,7 @@ in
 
       systemd.user.extraConfig = ''
         # update PATH for user systemd services
-        DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
+        DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin"
 
         DefaultTimeoutStopSec=30s
       '';
