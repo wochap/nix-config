@@ -12,6 +12,12 @@ let
   omniroute-chat = pkgs.writeScriptBin "omniroute-chat" (
     builtins.readFile ./scripts/omniroute-chat.sh
   );
+  tts-clipboard = pkgs.writeScriptBin "tts-clipboard" (
+    builtins.readFile ./scripts/tts-clipboard.sh
+  );
+  voice-clean = pkgs.writeScriptBin "voice-clean" (
+    builtins.readFile ./scripts/voice-clean.sh
+  );
 in
 {
   imports = [ ./ollama-webui-lite.nix ];
@@ -209,6 +215,13 @@ in
     };
 
     _custom.hm = {
+      home.packages =
+        [ voice-clean ]
+        ++ lib.optionals cfg.enableSupertonic [
+          pkgs._custom.supertonic
+          tts-clipboard
+        ];
+
       home = {
         shellAliases = {
           # transform wav 16kHz to vtt

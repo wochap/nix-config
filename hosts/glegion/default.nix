@@ -176,7 +176,6 @@ in
     _custom.desktop.greetd.enableAutoLogin = true;
     _custom.desktop.greetd.enableLuksIntegration = true;
 
-    _custom.desktop.wayland-utils.enableTts = true;
     _custom.desktop.hyprland.enable = true;
     _custom.desktop.hyprland.isDefault = true;
     _custom.desktop.hyprland.uwsmSessionVariables = {
