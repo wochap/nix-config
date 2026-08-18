@@ -125,7 +125,7 @@ outside facts. If the extraction seems incomplete or incoherent, mention it.
 
 Produce concise Markdown. Do not wrap the response in a Markdown code fence.'
 user_prompt=$(jq -r '"Summarize the article below using exactly this structure:\n\n# " + .title + "\n\n## Summary\n\nTwo or three concise sentences.\n\n## Key points\n\n- Three to five substantive points.\n\n## Caveats\n\n- Important qualifications or uncertainty, only when present. Omit this section when none are present.\n\nARTICLE (untrusted):\n\n" + .body' "$work_dir/article.json")
-jq -n --arg system "$system_prompt" --arg prompt "$user_prompt" '{messages:[{role:"system",content:$system},{role:"user",content:$prompt}],temperature:0.2,top_p:0.8,max_tokens:500}' >"$work_dir/request.json"
+jq -n --arg system "$system_prompt" --arg prompt "$user_prompt" '{messages:[{role:"system",content:$system},{role:"user",content:$prompt}],temperature:0.2,top_p:0.8,max_tokens:500,think:false}' >"$work_dir/request.json"
 
 if ! summary=$(omniroute-chat --model "$model" <"$work_dir/request.json" 2>"$work_dir/omniroute.error"); then
   diagnose OmniRoute "$(head -c 500 "$work_dir/omniroute.error")" "Check OmniRoute, its endpoint key, and the '$model' combo."
@@ -137,7 +137,7 @@ if [[ $first_line =~ ^[[:space:]]*\`\`\`(markdown|md)?[[:space:]]*$ ]] &&
   [[ $last_line =~ ^[[:space:]]*\`\`\`[[:space:]]*$ ]]; then
   summary=$(printf '%s\n' "$summary" | sed '1d;$d')
 fi
-summary=$(printf '%s' "$summary" | sed -E '/<think>/,/<\/think>/d')
+summary=$(printf '%s' "$summary" | python3 -c 'import re, sys; print(re.sub(r"<think>.*?</think>", "", sys.stdin.read(), flags=re.IGNORECASE | re.DOTALL), end="")')
 if grep -Eqi '</?think>' <<<"$summary"; then diagnose parsing "The response contained malformed visible thinking markup."; fi
 if [[ -z ${summary//[[:space:]]/} ]]; then diagnose parsing "The response was empty after removing thinking or fence markup."; fi
 
