@@ -97,7 +97,8 @@ in
       };
 
       # Make powertop non-blocking during boot by overriding the Type
-      systemd.services.powertop.serviceConfig.Type = lib.mkForce "simple";
+      # Makes postStart run at the same time as powertop
+      # systemd.services.powertop.serviceConfig.Type = lib.mkForce "simple";
 
       _custom.hm = lib.mkIf cfg.enableBatty {
         xdg.configFile."batty/config.yaml".source =
