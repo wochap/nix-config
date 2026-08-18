@@ -139,6 +139,7 @@ Transcribe a local audio file:
 ```console
 $ qwen3-asr-transcribe recording.wav
 $ qwen3-asr-transcribe --language English recording.mp3
+$ qwen3-asr-transcribe --language Spanish part-*.wav
 ```
 
 For a video, the helper extracts mono 16 kHz audio with FFmpeg and writes a

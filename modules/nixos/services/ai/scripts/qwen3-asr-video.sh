@@ -70,14 +70,9 @@ transcribe_args=()
 [[ -z $language ]] || transcribe_args+=(--language "$language")
 
 audio_chunks=("$work_dir"/audio-*.wav)
-transcript_file="$work_dir/transcript.txt"
-: >"$transcript_file"
+: >"$output_file"
 
 echo "Transcribing ${#audio_chunks[@]} chunks with Qwen3-ASR-1.7B on the local NVIDIA service" >&2
-for i in "${!audio_chunks[@]}"; do
-  echo "Transcribing chunk $((i + 1))/${#audio_chunks[@]}" >&2
-  qwen3-asr-transcribe "${transcribe_args[@]}" "${audio_chunks[$i]}" >>"$transcript_file"
-done
+qwen3-asr-transcribe "${transcribe_args[@]}" "${audio_chunks[@]}" >>"$output_file"
 
-mv "$transcript_file" "$output_file"
 echo "Transcript written to $output_file" >&2

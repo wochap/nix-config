@@ -2,9 +2,10 @@
 set -euo pipefail
 
 language=""
+audio_files=()
 
 usage() {
-  echo "usage: qwen3-asr-transcribe [--language LANGUAGE] AUDIO_FILE" >&2
+  echo "usage: qwen3-asr-transcribe [--language LANGUAGE] AUDIO_FILE..." >&2
 }
 
 while (($#)); do
@@ -26,22 +27,25 @@ while (($#)); do
     exit 2
     ;;
   *)
-    if [[ -n ${audio_file:-} ]]; then
-      usage
-      exit 2
-    fi
-    audio_file=$1
+    audio_files+=("$1")
     shift
     ;;
   esac
 done
 
-if [[ -z ${audio_file:-} || ! -f $audio_file ]]; then
-  echo "qwen3-asr-transcribe: audio file does not exist: ${audio_file:-<missing>}" >&2
+if ((${#audio_files[@]} == 0)); then
+  echo "qwen3-asr-transcribe: no audio files provided" >&2
   exit 2
 fi
 
-audio_file=$(realpath "$audio_file")
+for i in "${!audio_files[@]}"; do
+  if [[ ! -f ${audio_files[i]} ]]; then
+    echo "qwen3-asr-transcribe: audio file does not exist: ${audio_files[i]}" >&2
+    exit 2
+  fi
+  audio_files[i]=$(realpath "${audio_files[i]}")
+done
+
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/qwen3-asr"
 mkdir -p "$cache_dir"
 
@@ -57,10 +61,16 @@ container_args=(
   --pids-limit=2048
   --shm-size=4g
   --env=HF_HUB_DISABLE_TELEMETRY=1
-  --volume="$audio_file:/input/audio:ro"
   --volume="$cache_dir:/root/.cache:rw"
   --volume="$QWEN3_ASR_SCRIPT:/opt/qwen3-asr/transcribe.py:ro"
 )
+
+python_args=(/opt/qwen3-asr/transcribe.py)
+for i in "${!audio_files[@]}"; do
+  container_audio=$(printf '/input/audio-%05d' "$i")
+  container_args+=(--volume="${audio_files[i]}:$container_audio:ro")
+  python_args+=("$container_audio")
+done
 
 if [[ ${QWEN3_ASR_OFFLINE:-0} == 1 ]]; then
   container_args+=(
@@ -70,10 +80,6 @@ if [[ ${QWEN3_ASR_OFFLINE:-0} == 1 ]]; then
   )
 fi
 
-python_args=(
-  /opt/qwen3-asr/transcribe.py
-  /input/audio
-)
 [[ -z $language ]] || python_args+=(--language "$language")
 
 exec podman "${container_args[@]}" "$QWEN3_ASR_IMAGE" "${python_args[@]}"
