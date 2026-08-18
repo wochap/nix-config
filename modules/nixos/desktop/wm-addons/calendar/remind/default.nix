@@ -77,7 +77,7 @@ in
         };
         Service = {
           Type = "oneshot";
-          ExecStart = "${ics2remScript}";
+          ExecStart = "${pkgs.util-linux}/bin/flock %t/vdirsyncer-calendar.lock ${ics2remScript}";
           # Daemon mode queues timed reminders in memory. Reload that queue
           # after an event is added, removed, or moved by a calendar sync.
           ExecStartPost = "${pkgs.systemd}/bin/systemctl --user try-reload-or-restart remind.service";

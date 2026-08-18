@@ -3277,18 +3277,18 @@
     "remind": {
       "flake": false,
       "locked": {
-        "lastModified": 1785957340,
-        "narHash": "sha256-lt7Zaj6rk1qCJHYAeBizpQQ1tJmdwVK21SK4q2U0zV8=",
-        "ref": "refs/tags/06.02.10",
-        "rev": "a59a3ecb161d70646b9216ec15888d0295b0fcc5",
-        "revCount": 3493,
-        "type": "git",
-        "url": "https://salsa.debian.org/dskoll/remind.git"
+        "lastModified": 1787078559,
+        "narHash": "sha256-qj6NH9RsGXRXUKjbFNSHEmaP/x+Q1jj/B3/iFVaXU/c=",
+        "owner": "wochap",
+        "repo": "remind",
+        "rev": "1dc7054ddfbaef0676a5c8b0fc299d83a1194a18",
+        "type": "github"
       },
       "original": {
-        "ref": "refs/tags/06.02.10",
-        "type": "git",
-        "url": "https://salsa.debian.org/dskoll/remind.git"
+        "owner": "wochap",
+        "ref": "06.02.10-fork",
+        "repo": "remind",
+        "type": "github"
       }
     },
     "retroarch-shaders": {

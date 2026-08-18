@@ -107,7 +107,7 @@
     qt6ct.flake = false;
     python-remind.url = "github:wochap/python-remind/master-fork";
     python-remind.flake = false;
-    remind.url = "git+https://salsa.debian.org/dskoll/remind.git?ref=refs/tags/06.02.10";
+    remind.url = "github:wochap/remind/06.02.10-fork";
     remind.flake = false;
 
     # terminal tools

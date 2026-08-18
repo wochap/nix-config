@@ -12,6 +12,11 @@ let
   inherit (config._custom.globals) userName;
   hmConfig = config.home-manager.users.${userName};
   inherit (hmConfig.xdg) dataHome;
+  vdirsyncerCfg = hmConfig.services.vdirsyncer;
+  vdirsyncerOptions =
+    lib.optional (vdirsyncerCfg.verbosity != null) "--verbosity ${vdirsyncerCfg.verbosity}"
+    ++ lib.optional (vdirsyncerCfg.configFile != null) "--config ${vdirsyncerCfg.configFile}";
+  vdirsyncerOptionString = lib.concatStringsSep " " vdirsyncerOptions;
 
   calendarAccounts = lib.optionalAttrs calendarCfg.enable calendarCfg.accounts;
   contactAccounts = lib.optionalAttrs contactsCfg.enable contactsCfg.accounts;
@@ -179,6 +184,14 @@ in
           ExecCondition = "${lib._custom.mkNetworkCheckScript "vdirsyncer-network-check" [
             "one.one.one.one"
           ]}";
+          # Do not update calendar files while ics2rem is reading them. Keep
+          # Home Manager's metasync + sync sequence under the shared lock.
+          ExecStart = lib.mkIf calendarActive (
+            lib.mkForce [
+              "${pkgs.util-linux}/bin/flock %t/vdirsyncer-calendar.lock ${vdirsyncerCfg.package}/bin/vdirsyncer ${vdirsyncerOptionString} metasync"
+              "${pkgs.util-linux}/bin/flock %t/vdirsyncer-calendar.lock ${vdirsyncerCfg.package}/bin/vdirsyncer ${vdirsyncerOptionString} sync"
+            ]
+          );
         };
       };
 

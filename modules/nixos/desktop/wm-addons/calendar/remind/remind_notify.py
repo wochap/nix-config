@@ -8,7 +8,7 @@ import json
 import signal
 import subprocess
 import sys
-from datetime import date, datetime
+from datetime import datetime
 
 
 REMIND_BIN, NOTIFY_SEND_BIN, REM_FILE = sys.argv[1:4]
@@ -16,9 +16,8 @@ REMIND_BIN, NOTIFY_SEND_BIN, REM_FILE = sys.argv[1:4]
 
 def minutes_until(entry):
     event = datetime.fromisoformat(entry["tdatetime"])
-    now_time = datetime.strptime(entry["now"], "%H:%M").time()
-    now = datetime.combine(date.today(), now_time)
-    return int((event - now).total_seconds() // 60)
+    now = datetime.now().replace(second=0, microsecond=0)
+    return round((event - now).total_seconds() / 60)
 
 
 def notify(entry):
