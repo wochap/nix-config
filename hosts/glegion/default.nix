@@ -180,7 +180,10 @@ in
     _custom.desktop.hyprland.enable = true;
     _custom.desktop.hyprland.isDefault = true;
     _custom.desktop.hyprland.uwsmSessionVariables = {
-      AQ_DRM_DEVICES = "$IGPU_CARD";
+      IGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:06:00.0-card)";
+      DGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)";
+      # Use iGPU for hyprland
+      AQ_DRM_DEVICES = "$(readlink -f /dev/dri/by-path/pci-0000:06:00.0-card)";
 
       # Tells every app to use my iGPU unless I specially instruct it not to
       # I would have to use the `nvidia-offload` command

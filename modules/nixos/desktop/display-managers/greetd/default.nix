@@ -56,6 +56,11 @@ in
       lib.mkForce "inherit"
     );
 
+    # Persist the marker across greetd sessions; /run clears it on reboot.
+    systemd.tmpfiles.rules = lib.mkIf cfg.enableAutoLogin [
+      "d /run/greetd-autologin 0700 greeter greeter -"
+    ];
+
     security.pam.services.greetd.rules = {
       password.gnome_keyring.settings.use_authtok = cfg.enableLuksIntegration;
 

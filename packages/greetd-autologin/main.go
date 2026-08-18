@@ -9,6 +9,8 @@ import (
 	"syscall"
 )
 
+const autologinMarker = "/run/greetd-autologin/autologin_done"
+
 func execFallback() {
 	if len(os.Args) > 1 {
 		fallbackCmd := os.Args[1]
@@ -18,12 +20,19 @@ func execFallback() {
 }
 
 func main() {
-	if _, err := os.Stat("/run/greetd/autologin_done"); err == nil {
+	if _, err := os.Stat(autologinMarker); err == nil {
+		execFallback()
+		return
+	} else if !os.IsNotExist(err) {
 		execFallback()
 		return
 	}
 
-	os.WriteFile("/run/greetd/autologin_done", []byte("done"), 0644)
+	// Without a marker, a failed desktop would cause repeated autologins.
+	if err := os.WriteFile(autologinMarker, []byte("done"), 0600); err != nil {
+		execFallback()
+		return
+	}
 
 	sockPath := os.Getenv("GREETD_SOCK")
 	if sockPath == "" {
