@@ -7,8 +7,11 @@
 
 let
   cfg = config._custom.services.ai;
-  inherit (config._custom.globals) configDirectory;
+  inherit (config._custom.globals) configDirectory userName;
   inherit (pkgs._custom) wochap-ssc;
+  omniroute-chat = pkgs.writeScriptBin "omniroute-chat" (
+    builtins.readFile ./scripts/omniroute-chat.sh
+  );
 in
 {
   imports = [ ./ollama-webui-lite.nix ];
@@ -32,6 +35,11 @@ in
     # maybe this is unnecessary for ollama but necessary for docker
     # nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
+    sops.secrets.local-omniroute-secret-key = lib.mkIf cfg.enableOmniRoute {
+      sopsFile = ../../../../secrets-sops/local.yaml;
+      owner = userName;
+    };
+
     environment.systemPackages =
       with pkgs;
       [
@@ -39,7 +47,8 @@ in
         oterm
       ]
       ++ lib.optionals cfg.enableWhisper [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
-      ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ];
+      ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ]
+      ++ lib.optionals cfg.enableOmniRoute [ omniroute-chat ];
 
     services.ollama = lib.mkIf cfg.enableOllama {
       enable = true;

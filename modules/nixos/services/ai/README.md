@@ -63,6 +63,39 @@ $ curl http://localhost:11434/api/generate -d '{
 
 To calculate how fast the response is generated in tokens per second (token/s), divide eval_count / (eval_duration / 1000000000)
 
+## OmniRoute chat helper
+
+`omniroute-chat` sends an OpenAI-compatible chat request to the local OmniRoute instance. It is installed system-wide when `_custom.services.ai.enableOmniRoute` is enabled and is used by `voice-clean` and `newsboat-summary`.
+
+Configure OmniRoute before using the helper:
+
+1. In **Dashboard → Endpoints**, create an endpoint API key and store its value in the SOPS secret `local-omniroute-secret-key`.
+2. In **Dashboard → Combos**, create a persisted combo named `desktop-free`.
+3. Select the **Priority** strategy for strict cloud-first ordering. **Fill First** can be used instead when each provider's available quota should be consumed before advancing.
+4. Add the preferred free cloud provider models first, in desired order.
+5. Add `glegion-qwen3.5:4b` through the Ollama provider as the final target.
+6. In **Dashboard → Settings → Resilience**, enable connection cooldown, upstream retry hints, rate-limit auto-detection, and the provider circuit breaker. These allow quota, rate-limit, connection, and provider failures to advance through the combo.
+
+By default, the helper uses:
+
+- Base URL: `https://omniroute.wochap.local/v1`
+- Model/combo: `desktop-free`
+- API key file: `/run/secrets/local-omniroute-secret-key`
+
+Override the combo used by an existing consumer:
+
+```sh
+$ OMNIROUTE_MODEL=another-combo voice-clean
+```
+
+Override the endpoint and API key, or invoke the helper directly:
+
+```sh
+$ OMNIROUTE_BASE_URL=http://127.0.1.1:20128/v1 \
+    OMNIROUTE_API_KEY=... \
+    omniroute-chat --model desktop-free < request.json
+```
+
 ## Whisper cpp
 
 Downloading models for whisper-cpp

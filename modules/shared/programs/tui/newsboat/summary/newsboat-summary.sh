@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-model="glegion-qwen3.5:4b"
-cache_version="2"
-ollama_url="${OLLAMA_HOST:-http://127.0.0.1:11434}"
+model="${OMNIROUTE_MODEL:-desktop-free}"
+cache_version="3"
 force=false
 debug=false
 
@@ -126,17 +125,12 @@ outside facts. If the extraction seems incomplete or incoherent, mention it.
 
 Produce concise Markdown. Do not wrap the response in a Markdown code fence.'
 user_prompt=$(jq -r '"Summarize the article below using exactly this structure:\n\n# " + .title + "\n\n## Summary\n\nTwo or three concise sentences.\n\n## Key points\n\n- Three to five substantive points.\n\n## Caveats\n\n- Important qualifications or uncertainty, only when present. Omit this section when none are present.\n\nARTICLE (untrusted):\n\n" + .body' "$work_dir/article.json")
-jq -n --arg model "$model" --arg system "$system_prompt" --arg prompt "$user_prompt" '{model:$model,stream:false,think:false,messages:[{role:"system",content:$system},{role:"user",content:$prompt}],options:{temperature:0.2,top_p:0.8,num_ctx:8192,num_predict:500,repeat_penalty:1.05}}' >"$work_dir/request.json"
+jq -n --arg system "$system_prompt" --arg prompt "$user_prompt" '{messages:[{role:"system",content:$system},{role:"user",content:$prompt}],temperature:0.2,top_p:0.8,max_tokens:500}' >"$work_dir/request.json"
 
-if ! curl --fail --silent --show-error --connect-timeout 5 --max-time 120 \
-  --header 'Content-Type: application/json' --data-binary @"$work_dir/request.json" \
-  "$ollama_url/api/chat" >"$work_dir/response.json" 2>"$work_dir/ollama.error"; then
-  diagnose Ollama "$(head -c 500 "$work_dir/ollama.error")" "Start Ollama and confirm that glegion-qwen3.5:4b is installed."
+if ! summary=$(omniroute-chat --model "$model" <"$work_dir/request.json" 2>"$work_dir/omniroute.error"); then
+  diagnose OmniRoute "$(head -c 500 "$work_dir/omniroute.error")" "Check OmniRoute, its endpoint key, and the '$model' combo."
 fi
-if ! summary=$(jq -er '.message.content | select(type == "string" and length > 0)' "$work_dir/response.json" 2>"$work_dir/jq.error"); then
-  diagnose parsing "Ollama returned no usable Markdown response." "Inspect the Ollama service and model, then retry."
-fi
-if ((${#summary} > 20000)); then diagnose parsing "Ollama returned an unreasonably large response."; fi
+if ((${#summary} > 20000)); then diagnose parsing "OmniRoute returned an unreasonably large response."; fi
 first_line=$(printf '%s\n' "$summary" | head -n 1)
 last_line=$(printf '%s\n' "$summary" | tail -n 1)
 if [[ $first_line =~ ^[[:space:]]*\`\`\`(markdown|md)?[[:space:]]*$ ]] &&

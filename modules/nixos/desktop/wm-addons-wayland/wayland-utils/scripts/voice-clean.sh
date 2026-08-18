@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-model="glegion-qwen3.5:4b"
-ollama_url="${OLLAMA_HOST:-http://127.0.0.1:11434}"
+model="${OMNIROUTE_MODEL:-desktop-free}"
 
 notify() {
   notify-send \
@@ -31,15 +30,6 @@ if [[ -z $transcript ]]; then
   fail "transcript is empty"
 fi
 
-if ! tags=$(curl --fail --silent --show-error --connect-timeout 2 --max-time 5 \
-  "$ollama_url/api/tags"); then
-  fail "Ollama is unavailable at $ollama_url"
-fi
-if ! jq -e --arg model "$model" '.models | any(.name == $model or .model == $model)' \
-  >/dev/null <<<"$tags"; then
-  fail "Ollama model '$model' is not installed"
-fi
-
 system_prompt='You are a voice-dictation post-processor.
 
 Transform the raw speech transcript into the text the speaker intended to dictate.
@@ -58,26 +48,17 @@ Rules:
 - Do not summarize.
 - Do not explain your changes.'
 
-request=$(jq -n --arg model "$model" --arg system "$system_prompt" --arg transcript "$transcript" '
+request=$(jq -n --arg system "$system_prompt" --arg transcript "$transcript" '
   {
-    model: $model,
-    stream: false,
-    think: false,
     messages: [
       {role: "system", content: $system},
       {role: "user", content: ("Raw transcript:\n" + $transcript)}
     ],
-    options: {temperature: 0.1}
+    temperature: 0.1
   }')
 
-if ! response=$(curl --fail --silent --show-error --connect-timeout 5 --max-time 120 \
-  --header 'Content-Type: application/json' --data-binary "$request" \
-  "$ollama_url/api/chat"); then
-  fail "Ollama post-processing failed"
-fi
-if ! cleaned=$(jq -er '.message.content | select(type == "string" and length > 0)' \
-  <<<"$response"); then
-  fail "Ollama returned no cleaned text"
+if ! cleaned=$(omniroute-chat --model "$model" <<<"$request"); then
+  fail "OmniRoute post-processing failed; check its endpoint key and the '$model' combo"
 fi
 
 if ! printf '%s' "$cleaned" | wl-copy --trim-newline; then
