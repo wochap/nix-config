@@ -169,7 +169,7 @@ in
 
     frequency = lib.mkOption {
       type = lib.types.str;
-      default = "*:0/15";
+      default = "*:0/5";
       description = "Systemd calendar expression controlling synchronization frequency.";
     };
 

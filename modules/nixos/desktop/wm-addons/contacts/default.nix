@@ -149,7 +149,7 @@ in
 
     frequency = lib.mkOption {
       type = lib.types.str;
-      default = "*:0/15";
+      default = "*:0/5";
       description = "Sync timer schedule, used only when no calendar accounts are active.";
     };
   };
