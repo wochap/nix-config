@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   pkgs,
   lib,
   ...
@@ -68,6 +69,15 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
+    nixpkgs.overlays = [
+      (_final: prev: {
+        remind = prev.remind.overrideAttrs (_oldAttrs: {
+          version = "06.02.10";
+          src = inputs.remind;
+        });
+      })
+    ];
+
     _custom.hm = {
       home.packages = with pkgs; [
         remind
@@ -88,6 +98,9 @@ in
         Service = {
           Type = "oneshot";
           ExecStart = "${ics2remScript}";
+          # Daemon mode queues timed reminders in memory. Reload that queue
+          # after an event is added, removed, or moved by a calendar sync.
+          ExecStartPost = "${pkgs.systemd}/bin/systemctl --user try-reload-or-restart remind.service";
         };
       };
 
@@ -106,6 +119,7 @@ in
             "${pkgs.coreutils}/bin/touch ${manualRemFile}"
           ];
           ExecStart = "${remindScript}";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-failure";
           RestartSec = 5;
           KillMode = "mixed";
