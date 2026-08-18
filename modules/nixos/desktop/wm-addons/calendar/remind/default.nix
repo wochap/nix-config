@@ -21,32 +21,11 @@ let
   # epoch of the last successful remind-catchup run
   catchupStateFile = "${stateHome}/remind/last-check";
 
-  notifyScript = pkgs.writeShellScript "remind-notify" ''
-    minutes="$1"
-    body="$2"
-
-    if [ "$minutes" -gt 0 ]; then
-      exec ${pkgs.libnotify}/bin/notify-send \
-        --app-name="remind" \
-        --app-icon=kalarm \
-        --icon=kalarm \
-        --hint=string:custom-sound:message \
-        "Upcoming reminder (in $minutes minutes)" \
-        "$body"
-    fi
-
-    exec ${pkgs.libnotify}/bin/notify-send \
-      --app-name=remind \
-      --app-icon=kalarm \
-      --icon=kalarm \
-      --urgency=critical \
-      --hint=string:custom-sound:message \
-      "Reminder — starting now" \
-      "$body"
-  '';
   remindScript = pkgs.writeShellScript "remind" ''
-    # %4 is the number of minutes from delivery to the event's AT time.
-    ${pkgs.remind}/bin/remind -z -k'${notifyScript} %4 "%s" &' ${remFilePath}
+    exec ${pkgs.python3}/bin/python3 ${./remind_notify.py} \
+      ${pkgs.remind}/bin/remind \
+      ${pkgs.libnotify}/bin/notify-send \
+      ${remFilePath}
   '';
   python-remind-final = pkgs._custom.pythonPackages.python-remind;
   # --posttime: timed events additionally notify cfg.preAlert (default 15
@@ -54,7 +33,8 @@ let
   ics2remScript = pkgs.writeShellScript "ics2rem" ''
     ${pkgs.coreutils-full}/bin/echo "ics2rem start"
     ${pkgs.coreutils}/bin/mkdir -p ${remindConfigDir}
-    ${pkgs.findutils}/bin/find ${vdirsyncerDataDir} -name '*.ics' -exec ${python-remind-final}/bin/ics2rem --posttime "${cfg.preAlert}" {} \; | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > "${genRemFile}.tmp"
+    ${pkgs.findutils}/bin/find ${vdirsyncerDataDir} -name '*.ics' -exec ${python-remind-final}/bin/ics2rem --posttime "${cfg.preAlert}" {} \; \
+      | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > "${genRemFile}.tmp"
     # The daemon may read this file during regeneration.
     ${pkgs.coreutils}/bin/mv -f "${genRemFile}.tmp" "${genRemFile}"
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
