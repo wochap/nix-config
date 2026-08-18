@@ -97,6 +97,14 @@ in
             requires = [ "${proxy.serviceName}.service" ];
             after = [ "${proxy.serviceName}.service" ];
             serviceConfig = {
+              ExecStartPre = pkgs.writeShellScript "wait-for-${proxy.serviceName}" ''
+                for attempt in {1..120}; do
+                  ${lib.getExe pkgs.netcat-openbsd} -z -w 1 ${wochap-ssc.meta.address} ${toString proxy.backendPort} && exit 0
+                  ${lib.getExe' pkgs.coreutils "sleep"} 0.5
+                done
+                echo "Timed out waiting for ${proxy.serviceName} on port ${toString proxy.backendPort}" >&2
+                exit 1
+              '';
               ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${wochap-ssc.meta.address}:${toString proxy.backendPort}";
             }
             // lib._custom.strictNetworkService
