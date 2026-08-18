@@ -50,7 +50,7 @@ in
     _custom.programs.dircolors.enable = true;
     _custom.programs.fzf.enable = true;
     _custom.programs.git.enable = true;
-    _custom.programs.git.enableUser = true;
+    # _custom.programs.git.enableUser = true;
     _custom.programs.lazygit.enable = true;
     _custom.programs.lsd.enable = true;
     _custom.programs.ptsh.enable = true;
