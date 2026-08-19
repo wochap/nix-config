@@ -2,15 +2,21 @@
 set -euo pipefail
 
 model="${OMNIROUTE_MODEL:-desktop-free}"
-cache_version="3"
+cache_version="4"
 force=false
 debug=false
+render=false
+forced_render=false
 
-usage() { echo "usage: newsboat-summary [--force] [--debug] URL" >&2; }
+usage() { echo "usage: newsboat-summary [--force] [--debug] [--render] URL" >&2; }
 while (($#)); do
   case "$1" in
   --force) force=true ;;
   --debug) debug=true ;;
+  --render)
+    render=true
+    forced_render=true
+    ;;
   --help | -h)
     usage
     exit 0
@@ -76,21 +82,45 @@ fi
 # Fast path for the common case. Redirect aliases intentionally are not guessed.
 input_key=$(printf '%s\n%s' "$cache_version" "$article_url" | sha256sum | cut -d' ' -f1)
 input_cache="$cache_root/$input_key.html"
-if [[ $force == false && -s $input_cache ]]; then
+if [[ $force == false && $forced_render == false && -s $input_cache ]]; then
   notify "Newsboat summary" "Opening cached summary"
   open_page "$input_cache"
   exit 0
 fi
 
-curl_error="$work_dir/curl.error"
-if ! effective_url=$(curl --fail --silent --show-error --location --max-redirs 5 \
-  --connect-timeout 15 --max-time 45 --user-agent "newsboat-summary/1.0 (local RSS reader)" \
-  --output "$work_dir/article.html" --write-out '%{url_effective}' "$article_url" 2>"$curl_error"); then
-  diagnose fetch "$(head -c 500 "$curl_error")" "Check the network and open the original article to confirm it is available."
+effective_url=$article_url
+static_error=""
+if [[ $render == false ]]; then
+  curl_error="$work_dir/curl.error"
+  if ! effective_url=$(curl --fail --silent --show-error --location --max-redirs 5 \
+    --connect-timeout 15 --max-time 45 --user-agent "newsboat-summary/1.0 (local RSS reader)" \
+    --output "$work_dir/article.html" --write-out '%{url_effective}' "$article_url" 2>"$curl_error"); then
+    diagnose fetch "$(head -c 500 "$curl_error")" "Check the network and open the original article to confirm it is available."
+  fi
+
+  if ! python3 "$EXTRACTOR" "$effective_url" "$work_dir/article.html" >"$work_dir/article.json" 2>"$work_dir/extract.error"; then
+    static_error=$(head -c 240 "$work_dir/extract.error")
+    render=true
+  fi
 fi
 
-if ! python3 "$EXTRACTOR" "$effective_url" "$work_dir/article.html" >"$work_dir/article.json" 2>"$work_dir/extract.error"; then
-  diagnose extraction "$(head -c 500 "$work_dir/extract.error")" "The page may require login or JavaScript, or may not contain a full article."
+if [[ $render == true ]]; then
+  browser=${NEWSBOAT_SUMMARY_BROWSER:-$NEWSBOAT_SUMMARY_BROWSER_DEFAULT}
+  [[ $debug == true ]] && echo "newsboat-summary: rendering with $browser" >&2
+  if ! effective_url=$(python3 "$PAGE_RENDERER" "$effective_url" "$work_dir/article.html" 2>"$work_dir/browser.error"); then
+    browser_error=$(head -c 240 "$work_dir/browser.error")
+    if [[ -n $static_error ]]; then
+      browser_error="Static extraction: $static_error Browser rendering: $browser_error"
+    fi
+    diagnose rendering "$browser_error" "The page may require login or unsupported interaction; open the original article to confirm it is public."
+  fi
+  if ! python3 "$EXTRACTOR" "$effective_url" "$work_dir/article.html" >"$work_dir/article.json" 2>"$work_dir/extract.error"; then
+    rendered_error=$(head -c 240 "$work_dir/extract.error")
+    if [[ -n $static_error ]]; then
+      rendered_error="Static extraction: $static_error Rendered extraction: $rendered_error"
+    fi
+    diagnose extraction "$rendered_error" "The rendered page may require login or interaction, or may not contain a full article."
+  fi
 fi
 rm -f "$work_dir/article.html"
 
@@ -98,7 +128,7 @@ canonical_url=$(jq -r '.canonical_url' "$work_dir/article.json")
 if [[ ! $canonical_url =~ ^https?://[^[:space:]]+$ ]]; then canonical_url=$effective_url; fi
 cache_key=$(printf '%s\n%s' "$cache_version" "$canonical_url" | sha256sum | cut -d' ' -f1)
 cached_html="$cache_root/$cache_key.html"
-if [[ $force == false && -s $cached_html ]]; then
+if [[ $force == false && $forced_render == false && -s $cached_html ]]; then
   notify "Newsboat summary" "Opening cached summary"
   open_page "$cached_html"
   exit 0

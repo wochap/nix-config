@@ -15,7 +15,11 @@ let
     configDirectory
     ;
 
-  articlePython = pkgs.python3.withPackages (pythonPackages: [ pythonPackages.trafilatura ]);
+  chrome = pkgs.prevstable-chrome.google-chrome;
+  articlePython = pkgs.python3.withPackages (pythonPackages: [
+    pythonPackages.playwright
+    pythonPackages.trafilatura
+  ]);
   summaryHeader = pkgs.writeText "newsboat-summary-header.html" ''
     <style>
     ${builtins.readFile ./summary/summary.css}
@@ -26,12 +30,15 @@ let
     runtimeInputs = with pkgs; [
       pandoc
       articlePython
+      chrome
     ];
     runtimeEnv = {
       EXTRACTOR = ./summary/extract.py;
+      PAGE_RENDERER = ./summary/fetch_rendered.py;
       RENDERER = ./summary/render.py;
       INJECTOR = ./summary/inject_controls.py;
       HEADER = summaryHeader;
+      NEWSBOAT_SUMMARY_BROWSER_DEFAULT = lib.getExe pkgs.prevstable-chrome.google-chrome;
     };
     text = builtins.readFile ./summary/newsboat-summary.sh;
   };
