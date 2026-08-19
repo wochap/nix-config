@@ -58,11 +58,11 @@ in
     enablePix2tex = lib.mkEnableOption { };
     enableWhisper = lib.mkEnableOption { };
     enableOllama = lib.mkEnableOption { };
+    enableOllamaFlashAttention = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
     enableOpenWebui = lib.mkEnableOption { };
     enableNextjsOllamaLlmUi = lib.mkEnableOption { };
     enableOmniRoute = lib.mkEnableOption "the local OmniRoute AI gateway";
-    enableOllamaFlashAttention = lib.mkEnableOption { };
     enableSupertonic = lib.mkEnableOption "the local Supertonic text-to-speech service";
     enableQwen3Asr = lib.mkEnableOption "on-demand Qwen3-ASR-1.7B transcription with Transformers";
   };
