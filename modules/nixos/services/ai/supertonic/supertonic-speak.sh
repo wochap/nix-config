@@ -5,12 +5,19 @@ set -euo pipefail
 readonly playback_unit="supertonic-player.service"
 
 notify() {
-  notify-send \
+  local -a args=(
     --app-name="supertonic-speak" \
     --app-icon="preferences-desktop-text-to-speech" \
     --hint=int:transient:1 \
     "$1" \
     "${2:-}"
+  )
+
+  if [[ -n ${3:-} ]]; then
+    args+=(--hint="string:custom-sound:$3")
+  fi
+
+  notify-send "${args[@]}"
 }
 
 ensure_supertonic() {
@@ -234,6 +241,8 @@ speak() {
       return 1
     fi
   done
+
+  notify "Speech complete" "${#text} characters spoken" "dialog-information"
 }
 
 toggle() {
@@ -247,7 +256,7 @@ toggle() {
 
   if systemctl --user is-active --quiet "$playback_unit"; then
     systemctl --user stop "$playback_unit"
-    notify "Speech stopped"
+    notify "Speech stopped" "" "dialog-error"
     exit 0
   fi
 
@@ -360,7 +369,7 @@ while (($# > 0)); do
     ;;
   --stop)
     systemctl --user stop "$playback_unit" 2>/dev/null || true
-    notify "Speech stopped"
+    notify "Speech stopped" "" "dialog-error"
     exit 0
     ;;
   -h | --help)
