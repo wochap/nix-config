@@ -70,8 +70,6 @@ hl.window_rule({ match = { class = "^(" .. constants.chat_gpt_appid .. ")$" }, t
 hl.window_rule({ match = { class = "^(" .. constants.chat_gpt_appid .. ")$" }, tag = "+scratchpad" })
 hl.window_rule({ match = { class = "^(" .. constants.gemini_appid .. ")$" }, tag = "+float_md" })
 hl.window_rule({ match = { class = "^(" .. constants.gemini_appid .. ")$" }, tag = "+scratchpad" })
-hl.window_rule({ match = { class = "^(" .. constants.ollama_appid .. ")$" }, tag = "+float_md" })
-hl.window_rule({ match = { class = "^(" .. constants.ollama_appid .. ")$" }, tag = "+scratchpad" })
 hl.window_rule({ match = { class = "^(" .. constants.openwebui_appid .. ")$" }, tag = "+float_md" })
 hl.window_rule({ match = { class = "^(" .. constants.openwebui_appid .. ")$" }, tag = "+scratchpad" })
 hl.window_rule({ match = { class = "^(" .. constants.ytmusic_appid .. ")$" }, tag = "+float_md" })

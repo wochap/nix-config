@@ -470,13 +470,6 @@ hl.define_submap("browser", "reset", function()
       scratchpad_opts
     )
   end)
-  hl.bind("o", function()
-    scratchpad.raise_or_run(
-      constants.ollama_appid,
-      "google-chrome-stable --profile-directory=Default --app=https://ollama.wochap.local",
-      scratchpad_opts
-    )
-  end)
   hl.bind("w", function()
     scratchpad.raise_or_run(
       constants.openwebui_appid,

@@ -53,8 +53,6 @@ let
   };
 in
 {
-  imports = [ ./ollama-webui-lite.nix ];
-
   options._custom.services.ai = {
     enable = lib.mkEnableOption { };
     enablePix2tex = lib.mkEnableOption { };
@@ -62,7 +60,6 @@ in
     enableOllama = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
     enableOpenWebui = lib.mkEnableOption { };
-    enableOllamaWebuiLite = lib.mkEnableOption { };
     enableNextjsOllamaLlmUi = lib.mkEnableOption { };
     enableOmniRoute = lib.mkEnableOption "the local OmniRoute AI gateway";
     enableOllamaFlashAttention = lib.mkEnableOption { };
@@ -159,13 +156,6 @@ in
 
     # Register Web Proxies mapping configuration
     _custom.services.web-proxies = {
-      # Make ollama-webui-lite accessible at https://ollama.wochap.local
-      ollama-webui-lite = {
-        enable = cfg.enableOllamaWebuiLite;
-        subdomain = "ollama";
-        publicPort = 11444;
-        lazy = true;
-      };
       # Make nextjs-ollama-llm-ui accessible at https://nolui.wochap.local
       nextjs-ollama-llm-ui = {
         enable = cfg.enableNextjsOllamaLlmUi;
@@ -225,13 +215,6 @@ in
         UMask = "0077";
         ProtectHome = true;
       };
-    };
-
-    services.ollama-webui-lite = lib.mkIf cfg.enableOllamaWebuiLite {
-      enable = true;
-      package = pkgs._custom.ollama-webui-lite;
-      host = wochap-ssc.meta.address;
-      port = config._custom.services.web-proxies.ollama-webui-lite.backendPort;
     };
 
     services.nextjs-ollama-llm-ui = lib.mkIf cfg.enableNextjsOllamaLlmUi {

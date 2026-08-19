@@ -128,7 +128,6 @@ in
     # _custom.services.ai.enablePix2tex = true;
     # _custom.services.ai.enableOllama = true;
     # _custom.services.ai.enableNvidia = true;
-    # _custom.services.ai.enableOllamaWebuiLite = false;
     # _custom.services.ai.enableNextjsOllamaLlmUi = false;
     # _custom.services.ai.enableOpenWebui = true;
     # _custom.services.ms-intune.enable = true;

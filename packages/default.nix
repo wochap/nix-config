@@ -21,7 +21,6 @@ let
     interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock { };
     mailnotify = pkgs.callPackage ./mailnotify { };
     offlinemsmtp = inputs.offlinemsmtp.packages.${pkgs.system}.default;
-    ollama-webui-lite = pkgs.callPackage ./ollama-webui-lite { };
     greetd-autologin = pkgs.callPackage ./greetd-autologin { };
     run-desktop = pkgs.callPackage ./run-desktop { };
     ptsh = pkgs.callPackage ./ptsh { };
