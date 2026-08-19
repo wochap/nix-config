@@ -13,6 +13,8 @@ def main() -> None:
     parser.add_argument("--language")
     args = parser.parse_args()
 
+    # TODO: Make the accelerator and dtype configurable. cuda:0 and bfloat16
+    # are tuned for the RTX 4060 and do not support AMD/ROCm or CPU-only hosts.
     model = Qwen3ASRModel.from_pretrained(
         "Qwen/Qwen3-ASR-1.7B",
         dtype=torch.bfloat16,

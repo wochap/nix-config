@@ -146,11 +146,15 @@ mkdir -p "$cache_dir"
 container_args=(
   run
   --rm
+  # TODO: Make GPU passthrough configurable and support AMD/ROCm devices; this
+  # CDI selector requires an NVIDIA GPU and the NVIDIA container toolkit.
   --device=nvidia.com/gpu=all
   --cap-drop=all
   --security-opt=no-new-privileges
   --read-only
   --entrypoint=python3
+  # TODO: Make these memory limits configurable for hosts with resources that
+  # differ from the 8 GB RTX 4060 machine this workflow was tuned on.
   "--tmpfs=/tmp:rw,nosuid,nodev,size=4g"
   --pids-limit=2048
   --shm-size=4g

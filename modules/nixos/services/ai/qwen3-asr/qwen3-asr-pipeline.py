@@ -264,6 +264,8 @@ def infer(args: argparse.Namespace) -> None:
     chunk_records: list[dict[str, Any]] = []
     offset = 0.0
 
+    # TODO: Make the accelerator and dtype configurable. cuda:0 and bfloat16
+    # are tuned for the RTX 4060 and do not support AMD/ROCm or CPU-only hosts.
     print("Loading Qwen3-ASR-1.7B", file=sys.stderr)
     asr_model = Qwen3ASRModel.from_pretrained(
         "Qwen/Qwen3-ASR-1.7B",
@@ -328,6 +330,8 @@ def infer(args: argparse.Namespace) -> None:
         "pyannote/speaker-diarization-community-1",
         token=token,
     )
+    # TODO: Use the configurable accelerator here too so diarization supports
+    # AMD/ROCm and CPU-only hosts instead of unconditionally requiring CUDA.
     diarizer.to(torch.device("cuda"))
     waveform, sample_rate = load_pcm_wav(full_audio)
     diarization_kwargs = {
