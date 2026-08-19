@@ -5,16 +5,11 @@ https://github.com/LazyVim/LazyVim/commits/main.atom
 https://dotfyle.com/this-week-in-neovim/rss.xml
 https://dotfyle.com/neovim/plugins/rss.xml
 
--3 "~Reddit"
-https://www.reddit.com/r/neovim/.rss
-https://www.reddit.com/r/unixporn/.rss
-https://www.reddit.com/r/zsh/.rss
-https://www.reddit.com/r/linux/.rss
-https://www.reddit.com/r/nixos/.rss
-
--4 "~The Giants"
+-3 "~Github trending"
 https://rsshub.wochap.local/github/trending/weekly/any "~GH Weekly repositories"
 https://rsshub.wochap.local/github/trending/montly/any "~GH Montly repositories"
+
+-4 "~The Giants"
 https://hnrss.org/frontpage "~Hacker News"
 https://lobste.rs/rss "~Lobsters"
 https://isocpp.org/blog/rss/category/news "~C++ News"
@@ -24,43 +19,48 @@ https://css-tricks.com/feed/ "~CSS-Tricks"
 https://dev.to/feed/ "~DEV Community"
 https://techcrunch.com/category/artificial-intelligence/feed/ "~TechCrunch AI"
 
--5 "~Top Front-end Bloggers"
+-5 "~YouTube Channels"
+# yt-dlp --print channel_id 'https://www.youtube.com/@<channel_name>'
+https://www.youtube.com/feeds/videos.xml?channel_id=UC0m81bQuthaQZmFbXEY9QSw "~AICodeKing"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2WmuBuFq6gL08QYG-JjXKw "~WorldofAI"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC7YOGHUfC1Tb6E4pudI9STA "~Mental Outlaw"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA "~Luke Smith"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC-8QAzbLcRglXeN_MY9blyw "~Ben Awad"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCzoVCacndDCfGDf41P-z0iA "~JSConf"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA "~Fireship"
+
+-6 "~Reddit"
+https://www.reddit.com/r/neovim/.rss
+https://www.reddit.com/r/unixporn/.rss
+https://www.reddit.com/r/zsh/.rss
+https://www.reddit.com/r/linux/.rss
+https://www.reddit.com/r/nixos/.rss
+
+-7 "~Top Front-end Bloggers"
 https://wattenberger.com/rss "~Amelia Wattenberger"
 https://feeds.feedburner.com/brad-frosts-blog "~Brad Frost"
 https://overreacted.io/rss.xml "~Dan Abramov"
 https://feeds.feedburner.com/csswizardry "~Harry Roberts"
 
--6 "~Languages, Libraries, Frameworks, etc."
+-8 "~Languages, Libraries, Frameworks, etc."
 https://reactjs.org/feed.xml "~ReactJS"
 https://news.vuejs.org/feed.xml "~VueJS"
 https://blog.rust-lang.org/feed.xml "~Rust"
 https://blog.python.org/rss.xml "~Python Insider"
 https://bun.sh/rss.xml "~Bun"
 
--7 "~Company & Startup Blogs"
+-9 "~Company & Startup Blogs"
 https://github.com/neovim/neovim/tags.atom "~NeoVim"
 https://netflixtechblog.com/feed "~Netflix TechBlog"
 https://stackoverflow.blog/feed/ "~Stackoverflow"
 https://weekly.nixos.org/feeds/all.rss.xml
 
--8 "~Q&A Sites & Forums"
-https://stackoverflow.com/feeds/tag?tagnames=javascript&sort=newest "~Stack Overflow - JavaScript"
-https://stackoverflow.com/feeds/tag?tagnames=reactjs&sort=newest "~Stack Overflow - React"
-https://stackoverflow.com/feeds/tag?tagnames=vue.js&sort=newest "~Stack Overflow - Vue"
-
--9 "~YouTube Channels"
-https://www.youtube.com/feeds/videos.xml?channel_id=UC7YOGHUfC1Tb6E4pudI9STA "~Mental Outlaw's YouTube Videos"
-https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA "~Luke Smith's YouTube Videos"
-https://www.youtube.com/feeds/videos.xml?channel_id=UC-8QAzbLcRglXeN_MY9blyw "~Ben Awad's YouTube Videos"
-https://www.youtube.com/feeds/videos.xml?channel_id=UCzoVCacndDCfGDf41P-z0iA "~JSConf's YouTube Videos"
-https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA "~Fireship's YouTube Videos"
-
--9 "~News"
+-10 "~News"
 https://www.coindesk.com/arc/outboundfeeds/rss/ "~Coindesk"
 https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.atom "~USGS Significant Earthquakes"
 https://www.marktechpost.com/feed/ "~MarkTechPost"
 
--10 "~ AI / ML
+-11 "~ AI / ML
 https://openai.com/news/rss.xml "~OpenAI"
 https://huggingface.co/blog/feed.xml "~Hugging Face"
 https://blog.google/technology/ai/rss/ "~Google AI"
