@@ -146,7 +146,9 @@ For a video, the helper extracts mono 16 kHz audio with FFmpeg, transcribes it,
 adds token timestamps with Qwen3-ForcedAligner-0.6B, and assigns speakers with
 the local pyannote Community-1 pipeline. Before the first run, accept the model
 conditions at <https://huggingface.co/pyannote/speaker-diarization-community-1>
-and export a Hugging Face access token:
+and configure `personal-huggingface-local-read-token` in
+`secrets-sops/personal.yaml`. An explicitly exported `HF_TOKEN` overrides the
+configured secret:
 
 ```console
 $ export HF_TOKEN=hf_...

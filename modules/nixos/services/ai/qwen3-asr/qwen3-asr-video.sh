@@ -106,6 +106,11 @@ chunk_seconds=${QWEN3_ASR_CHUNK_SECONDS:-240}
 [[ $chunk_seconds =~ ^[1-9][0-9]*$ ]] || \
   die "QWEN3_ASR_CHUNK_SECONDS must be a positive integer"
 
+if [[ -z ${HF_TOKEN:-} && -n ${QWEN3_ASR_HF_TOKEN_FILE:-} && -r $QWEN3_ASR_HF_TOKEN_FILE ]]; then
+  HF_TOKEN=$(<"$QWEN3_ASR_HF_TOKEN_FILE")
+  export HF_TOKEN
+fi
+
 if [[ ${QWEN3_ASR_OFFLINE:-0} != 1 && -z ${HF_TOKEN:-} ]]; then
   die "HF_TOKEN is required; accept the pyannote Community-1 model terms first"
 fi

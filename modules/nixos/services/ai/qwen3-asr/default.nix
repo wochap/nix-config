@@ -7,6 +7,7 @@
 
 let
   cfg = config._custom.services.ai;
+  inherit (config._custom.globals) userName;
   transformers = pkgs.writeText "qwen3-asr-transformers.py" (
     builtins.readFile ./qwen3-asr-transformers.py
   );
@@ -38,6 +39,7 @@ let
     runtimeEnv = {
       QWEN3_ASR_DIARIZATION_CONTEXT = container-context;
       QWEN3_ASR_DIARIZATION_IMAGE = "localhost/qwen3-asr-diarization:${container-version}";
+      QWEN3_ASR_HF_TOKEN_FILE = config.sops.secrets.personal-huggingface-local-read-token.path;
       QWEN3_ASR_PIPELINE_SCRIPT = pipeline;
     };
     text = builtins.readFile ./qwen3-asr-video.sh;
@@ -45,6 +47,11 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && cfg.enableQwen3Asr) {
+    sops.secrets.personal-huggingface-local-read-token = {
+      sopsFile = ../../../../../secrets-sops/personal.yaml;
+      owner = userName;
+    };
+
     environment.systemPackages = [
       transcribe
       video
