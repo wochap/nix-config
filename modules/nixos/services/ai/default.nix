@@ -17,6 +17,17 @@ let
   qwen3-asr-transformers = pkgs.writeText "qwen3-asr-transformers.py" (
     builtins.readFile ./scripts/qwen3-asr-transformers.py
   );
+  qwen3-asr-pipeline = pkgs.writeText "qwen3-asr-pipeline.py" (
+    builtins.readFile ./scripts/qwen3-asr-pipeline.py
+  );
+  qwen3-asr-container-file = ./container/qwen3-asr-diarization.Containerfile;
+  qwen3-asr-container-version = builtins.substring 0 16 (
+    builtins.hashString "sha256" (builtins.readFile qwen3-asr-container-file)
+  );
+  qwen3-asr-container-context = pkgs.runCommand "qwen3-asr-diarization-context" { } ''
+    mkdir -p "$out"
+    cp ${qwen3-asr-container-file} "$out/Containerfile"
+  '';
   qwen3-asr-transcribe = pkgs.writeShellApplication {
     name = "qwen3-asr-transcribe";
     runtimeEnv = {
@@ -25,9 +36,21 @@ let
     };
     text = builtins.readFile ./scripts/qwen3-asr-transcribe.sh;
   };
-  qwen3-asr-video = pkgs.writeScriptBin "qwen3-asr-video" (
-    builtins.readFile ./scripts/qwen3-asr-video.sh
-  );
+  qwen3-asr-video = pkgs.writeShellApplication {
+    name = "qwen3-asr-video";
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.ffmpeg
+      pkgs.podman
+      pkgs.python3
+    ];
+    runtimeEnv = {
+      QWEN3_ASR_DIARIZATION_CONTEXT = qwen3-asr-container-context;
+      QWEN3_ASR_DIARIZATION_IMAGE = "localhost/qwen3-asr-diarization:${qwen3-asr-container-version}";
+      QWEN3_ASR_PIPELINE_SCRIPT = qwen3-asr-pipeline;
+    };
+    text = builtins.readFile ./scripts/qwen3-asr-video.sh;
+  };
 in
 {
   imports = [ ./ollama-webui-lite.nix ];

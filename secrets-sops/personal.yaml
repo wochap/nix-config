@@ -8,6 +8,7 @@ personal-unsplash-secret-key: ENC[AES256_GCM,data:oe3UKo3MGb4D9AdEXE2hgnose2iii/
 personal-mail-password: ENC[AES256_GCM,data:kedbPFhfFP2a2EOFR6LeEQ==,iv:S8BuP7uICRfXgOI3wJD/PLURwsS2pDCeWg5Enj2jBIc=,tag:eeXGoNkDfWOv802i1pDwkg==,type:str]
 personal-vdirsyncer-client-id: ENC[AES256_GCM,data:9WyNVLp739jpKjQ6aS4r/7XrgM3te1hdUQUmcNu8ZVaiqBIiDqIFsVF1uRYxxnoqNWdEe8tMCmbiYsdDfVdGK3/95QgwAJN1,iv:4JbvNxmacUbwTMtZYy8UwPO4u3dGe4ZWqta4CVs8KMs=,tag:8peJJ6GfP8SuLfudqVKTew==,type:str]
 personal-vdirsyncer-client-secret: ENC[AES256_GCM,data:309QLs8axuGTs7JJzoYp1p8I9la1noqZIKgQ3JO5+YktwzY=,iv:VkzDquQNM3innCpKU3y/blicoh3dtdrO9myx0BuJLIM=,tag:O+oj434+Yk7+5DkupPBWLw==,type:str]
+personal-huggingface-local-read-token: ENC[AES256_GCM,data:REH/0docqiaaD0+B7THWXqvUQeuq5PkW+OaBMEjg4xgNchDkIQ==,iv:dmGFsLNShJvk93jjjsYcCbgdpAEPCWukMYhKWhaW6fw=,tag:aiNxxowSwPCA9ifnM/gY+w==,type:str]
 sops:
     age:
         - enc: |
@@ -19,7 +20,7 @@ sops:
             VUuyVVDlurT8HJj+PyjdY+0K2qsZ4N/FuMAfyPl6d5N0glcZYf9zyw==
             -----END AGE ENCRYPTED FILE-----
           recipient: age182hl2gfu8zj2dxjdvtfktv9ay57htc20ugjrlmwmv8l806lntdxqgeje73
-    lastmodified: "2026-08-16T00:59:10Z"
-    mac: ENC[AES256_GCM,data:eABxn/JvNwWK65u5XKjpDHCd85Dv3k/7LTPogGC1sO89GSE8KZr4Mdx3/b3JZxxyGQ975Y4T/7PtiFbwsTqPSuWE2UPB0f18DKNKwD43wbL67qsXfjswBALWOybF4700NdUbfuVhAiXZZU71UYsedftvaOOkKko1tqTRGgtaOVk=,iv:m+ZjtrrJwRPZi4IsdNDHFQMm52qlpNu7jIYVDRR+Drk=,tag:Xc1zSWU8SW+/43rMCSJRbQ==,type:str]
+    lastmodified: "2026-08-19T01:04:40Z"
+    mac: ENC[AES256_GCM,data:CGc7fJIjk2hetGFjlAzxWvP/PHOep9A5hkJASY3YEgC5HCKqactsFPPgesE7qefbguxJq6XBizlkIh+L5kWag37A60kKrsXjvxnPyO03bh8to8b2zub6gRL617pji9uWtRJEDISs4yPEB8/9kXNVnGpW6pV+7NSZAaeMqkys2LE=,iv:fwqbhn+KKfrkZ4xnayCHOrHGRF/IY72gGiaEl2LmeOU=,tag:I4fn+m4njZvmFjNapUPtNA==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.1
