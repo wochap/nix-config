@@ -2,11 +2,11 @@
 
 set -euo pipefail
 
-readonly playback_unit="tts-clipboard-player.service"
+readonly playback_unit="supertonic-player.service"
 
 notify() {
   notify-send \
-    --app-name="tts-clipboard" \
+    --app-name="supertonic-speak" \
     --hint=int:transient:1 \
     "$1" \
     "${2:-}"
@@ -17,56 +17,6 @@ ensure_supertonic() {
     notify "Supertonic is not running" "Enable it from the Control Center"
     return 1
   fi
-}
-
-read_clipboard() {
-  local selection=$1
-  local requested_format=$2
-  local mime_types
-  local mime_type
-  local -a selection_args=()
-
-  source_format="plain text"
-
-  if [[ $selection == "primary" ]]; then
-    selection_args+=(--primary)
-  fi
-
-  mime_types=$(wl-paste "${selection_args[@]}" --list-types 2>/dev/null) || return 1
-  format=$requested_format
-
-  if [[ $format == "auto" ]]; then
-    mime_type=$(printf '%s\n' "$mime_types" | awk '/^text\/html(;|$)/ { print; exit }')
-    if [[ -n $mime_type ]]; then
-      format=html
-      source_format="HTML"
-      text=$(wl-paste "${selection_args[@]}" --no-newline --type "$mime_type")
-      return
-    fi
-
-    mime_type=$(printf '%s\n' "$mime_types" | awk '/^text\/(x-)?markdown(;|$)/ { print; exit }')
-    if [[ -n $mime_type ]]; then
-      format=markdown
-      source_format="Markdown"
-      text=$(wl-paste "${selection_args[@]}" --no-newline --type "$mime_type")
-      return
-    fi
-
-    # Plain text may itself contain Markdown copied from an editor. Pandoc's
-    # GFM reader leaves ordinary prose intact while removing readable markup.
-    format=markdown
-  fi
-
-  if [[ $format == "html" ]]; then
-    mime_type=$(printf '%s\n' "$mime_types" | awk '/^text\/html(;|$)/ { print; exit }')
-    if [[ -n $mime_type ]]; then
-      source_format="HTML"
-      text=$(wl-paste "${selection_args[@]}" --no-newline --type "$mime_type")
-      return
-    fi
-  fi
-
-  text=$(wl-paste "${selection_args[@]}" --no-newline --type text)
 }
 
 normalize_text() {
@@ -80,7 +30,7 @@ normalize_text() {
   raw) ;;
   esac
 
-  # Rich clipboard content can contain Unicode object replacement characters
+  # Rich content can contain Unicode object replacement characters
   # (U+FFFC) for embedded images or other non-text objects. They are not
   # speakable and can cause the TTS backend to reject the request.
   text=${text//$'\uFFFC'/}
@@ -198,7 +148,7 @@ generate_audio() {
 }
 
 speak() {
-  local selection=$1
+  local input=$1
   local format=$2
   local speed=$3
   local voice=$4
@@ -206,19 +156,22 @@ speak() {
   local steps=$6
   local debug=$7
   local text
-  local source_format
   local work_dir
   local generation_pid
   local i
   local -a chunks
 
-  read_clipboard "$selection" "$format" || {
-    notify "Nothing to speak" "The $selection does not contain text"
-    exit 1
-  }
+  if [[ -f $input ]]; then
+    text=$(<"$input") || {
+      notify "Could not read text" "$input"
+      exit 1
+    }
+  else
+    text=$input
+  fi
 
   if [[ $debug == "on" ]]; then
-    printf 'Clipboard input: %s; normalization: %s\n' "$source_format" "$format" >&2
+    printf 'Input normalization: %s\n' "$format" >&2
   fi
 
   normalize_text || {
@@ -232,7 +185,7 @@ speak() {
   fi
 
   if ((${#text} > 20000)); then
-    notify "Text is too long" "Clipboard TTS is limited to 20,000 characters"
+    notify "Text is too long" "Supertonic speech is limited to 20,000 characters"
     exit 1
   fi
 
@@ -248,7 +201,7 @@ speak() {
     exit 1
   fi
 
-  work_dir=$(mktemp --directory --tmpdir="${XDG_RUNTIME_DIR:-/tmp}" tts-clipboard.XXXXXX)
+  work_dir=$(mktemp --directory --tmpdir="${XDG_RUNTIME_DIR:-/tmp}" supertonic-speak.XXXXXX)
   trap 'rm -rf "$work_dir"' EXIT
 
   notify "Generating speech" "${#text} characters in ${#chunks[@]} chunks, voice $voice with ${speed}x playback and $steps steps"
@@ -283,7 +236,7 @@ speak() {
 }
 
 toggle() {
-  local selection=$1
+  local input=$1
   local format=$2
   local speed=$3
   local voice=$4
@@ -298,7 +251,7 @@ toggle() {
   fi
 
   if [[ $debug == "on" ]]; then
-    speak "$selection" "$format" "$speed" "$voice" "$chunking" "$steps" "$debug"
+    speak "$input" "$format" "$speed" "$voice" "$chunking" "$steps" "$debug"
     return
   fi
 
@@ -310,32 +263,32 @@ toggle() {
     --quiet \
     --service-type=exec \
     --setenv=PATH="$PATH" \
-    "$0" --worker --selection="$selection" --format="$format" --speed="$speed" --voice="$voice" --chunking="$chunking" --steps="$steps"
+    "$0" --worker --input="$input" --format="$format" --speed="$speed" --voice="$voice" --chunking="$chunking" --steps="$steps"
 }
 
 usage() {
   cat <<EOF >&2
-Usage: ${0##*/} [clipboard|primary] [OPTIONS]
+Usage: ${0##*/} TEXT_OR_FILE [OPTIONS]
 
 Positional Arguments:
-  clipboard           Use the standard clipboard (default)
-  primary             Use the primary selection (middle-click)
+  TEXT_OR_FILE        Text to speak, or the path to a text file
 
 Options:
-  --format=FORMAT     Input format: auto, raw, markdown, html (default: auto)
+  --format=FORMAT     Input format: raw, markdown, html
+                      (default: raw text; inferred for files)
   --voice=NAME        Voice identifier (default: M1)
   --speed=SPEED       Playback speed 0.7-2.0 (default: 1.0)
   --chunking=MODE     Pipelined playback: on or off (default: on)
-  --steps=STEPS       Inference steps 1-100 (default: 3)
+  --steps=STEPS       Inference steps 1-100 (default: 5)
   --debug             Run in foreground and print every Supertonic input
   --stop              Stop any currently playing speech
   -h, --help          Show this help message
 
 Examples:
-  ${0##*/} primary --format=markdown --speed=1.5
-  ${0##*/} --voice=M2 --speed=2.0 --steps=2
-  ${0##*/} --chunking=off --steps=8
-  ${0##*/} --debug --chunking=on
+  ${0##*/} 'Text to speak' --speed=1.5
+  ${0##*/} article.md --voice=M2 --steps=2
+  ${0##*/} page.html --format=html --chunking=off
+  ${0##*/} 'Debug this' --debug
   ${0##*/} --stop
 EOF
   exit "${1:-2}"
@@ -344,16 +297,16 @@ EOF
 # --- Internal Worker Entry Point ---
 if [[ ${1:-} == "--worker" ]]; then
   shift
-  w_selection="clipboard"
-  w_format="auto"
+  w_input=""
+  w_format="markdown"
   w_speed="1.0"
   w_voice="M1"
   w_chunking="on"
-  w_steps="3"
+  w_steps="5"
 
   while (($# > 0)); do
     case $1 in
-    --selection=*) w_selection=${1#*=} ;;
+    --input=*) w_input=${1#*=} ;;
     --format=*) w_format=${1#*=} ;;
     --speed=*) w_speed=${1#*=} ;;
     --voice=*) w_voice=${1#*=} ;;
@@ -367,33 +320,27 @@ if [[ ${1:-} == "--worker" ]]; then
     shift
   done
 
-  speak "$w_selection" "$w_format" "$w_speed" "$w_voice" "$w_chunking" "$w_steps" "off"
+  speak "$w_input" "$w_format" "$w_speed" "$w_voice" "$w_chunking" "$w_steps" "off"
   exit
 fi
 
 # --- Main CLI Parsing ---
-selection=""
-format="auto"
+input=""
+input_set="no"
+format="raw"
+format_set="no"
 speed="1.0"
 voice="M1"
 chunking="on"
-steps="3"
+steps="5"
 debug="off"
 
 while (($# > 0)); do
   case $1 in
-  # Positional: Selection (only allowed if not yet set)
-  clipboard | primary)
-    if [[ -n $selection ]]; then
-      printf 'Error: selection already set to "%s"\n' "$selection" >&2
-      usage
-    fi
-    selection=$1
-    ;;
-
   # Strict Options
   --format=*)
     format=${1#*=}
+    format_set="yes"
     ;;
   --voice=*)
     voice=${1#*=}
@@ -425,21 +372,54 @@ while (($# > 0)); do
     usage
     ;;
 
-  # Reject anything else
-  *)
+  --)
+    shift
+    if (($# != 1)) || [[ $input_set == "yes" ]]; then
+      printf 'Error: -- must be followed by exactly one input\n' >&2
+      usage
+    fi
+    input=$1
+    input_set="yes"
+    shift
+    continue
+    ;;
+  -*)
     printf 'Error: Unknown argument "%s"\n' "$1" >&2
     usage
     ;;
+  *)
+    if [[ $input_set == "yes" ]]; then
+      printf 'Error: input already provided\n' >&2
+      usage
+    fi
+    input=$1
+    input_set="yes"
+    ;;
+
   esac
   shift
 done
 
-# Default selection if none provided
-selection=${selection:-clipboard}
+if [[ $input_set == "no" ]]; then
+  printf 'Error: TEXT_OR_FILE is required\n' >&2
+  usage
+fi
+
+if [[ $format_set == "no" && -f $input ]]; then
+  mime_type=$(file --brief --mime-type -- "$input" 2>/dev/null) || mime_type=""
+  if [[ $mime_type == "text/html" ]]; then
+    format="html"
+  else
+    case ${input,,} in
+    *.md | *.markdown) format="markdown" ;;
+    *) format="raw" ;;
+    esac
+  fi
+fi
 
 # Validate format
 case $format in
-auto | raw | markdown | html) ;;
+raw | markdown | html) ;;
 *)
   printf 'Error: Invalid format "%s"\n' "$format" >&2
   usage
@@ -475,4 +455,4 @@ if ! [[ $steps =~ ^[0-9]+$ ]] || ((10#$steps < 1 || 10#$steps > 100)); then
 fi
 steps=$((10#$steps))
 
-toggle "$selection" "$format" "$speed" "$voice" "$chunking" "$steps" "$debug"
+toggle "$input" "$format" "$speed" "$voice" "$chunking" "$steps" "$debug"

@@ -7,14 +7,18 @@
 
 let
   cfg = config._custom.services.ai;
-  tts-clipboard = pkgs.writeScriptBin "tts-clipboard" (builtins.readFile ./tts-clipboard.sh);
+  supertonic-speak = pkgs.writeScriptBin "supertonic-speak" (builtins.readFile ./supertonic-speak.sh);
+  supertonic-clipboard = pkgs.writeScriptBin "supertonic-clipboard" (
+    builtins.readFile ./supertonic-clipboard.sh
+  );
 in
 {
   config = lib.mkIf (cfg.enable && cfg.enableSupertonic) {
     _custom.hm = {
       home.packages = [
         pkgs._custom.supertonic
-        tts-clipboard
+        supertonic-speak
+        supertonic-clipboard
       ];
 
       systemd.user.services.supertonic = {

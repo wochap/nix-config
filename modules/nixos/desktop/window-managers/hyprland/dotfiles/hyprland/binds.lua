@@ -316,7 +316,7 @@ hl.bind(mod .. " + ALT + z", hl.dsp.exec_cmd(session_cmd("pypr zoom")))
 
 hl.bind(
   mod .. " + ALT + v",
-  hl.dsp.exec_cmd(session_cmd("tts-clipboard primary --voice=F1 --speed=1.5 --steps=5 --chunking=on"))
+  hl.dsp.exec_cmd(session_cmd("supertonic-clipboard primary --voice=F1 --speed=1.5 --steps=5 --chunking=on"))
 )
 
 hl.bind(
