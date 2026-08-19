@@ -6,6 +6,7 @@ user-agent "newsboat/2.43 (personal RSS reader)"
 prepopulate-query-feeds yes
 external-url-viewer "urlscan -dc -r 'smart-open {}'"
 goto-next-feed no
+scrolloff 4
 
 # Compact lists with the feed category kept visible as the first column.
 feedlist-title-format "Feeds  •  %t sources  •  %U unread"
@@ -14,14 +15,21 @@ articlelist-title-format "%T  •  %u unread"
 articlelist-format " %4i  %f  %D  %t"
 
 # Key navigation
+bind-key j down
+bind-key k up
+bind-key h quit
+bind-key l open
 bind-key d pagedown
 bind-key u pageup
-bind-key g home feedlist
-bind-key g home articlelist
-bind-key g home article
-bind-key G end feedlist
-bind-key G end articlelist
-bind-key G end article
+bind-key ^D halfpagedown
+bind-key ^U halfpageup
+bind-key ^F pagedown
+bind-key ^B pageup
+bind gg feedlist,articlelist,article home -- "Go to top"
+bind G feedlist,articlelist,article end -- "Go to bottom"
+bind-key J next-feed articlelist
+bind-key K prev-feed articlelist
+bind-key SPACE toggle-article-read articlelist
 bind-key a toggle-article-read
 bind-key n next-unread
 bind-key N prev-unread
