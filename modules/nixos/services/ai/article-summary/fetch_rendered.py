@@ -16,15 +16,15 @@ QUIET_PERIOD_MILLISECONDS = 1000
 
 
 def browser_executable():
-    executable = os.environ.get("NEWSBOAT_SUMMARY_BROWSER") or os.environ.get(
-        "NEWSBOAT_SUMMARY_BROWSER_DEFAULT"
+    executable = os.environ.get("ARTICLE_SUMMARY_BROWSER") or os.environ.get(
+        "ARTICLE_SUMMARY_BROWSER_DEFAULT"
     )
     if not executable:
         raise RuntimeError(
-            "no browser configured; set NEWSBOAT_SUMMARY_BROWSER to an absolute Chrome executable path"
+            "no browser configured; set ARTICLE_SUMMARY_BROWSER to an absolute Chrome executable path"
         )
     if not os.path.isabs(executable):
-        raise RuntimeError("NEWSBOAT_SUMMARY_BROWSER must be an absolute path")
+        raise RuntimeError("ARTICLE_SUMMARY_BROWSER must be an absolute path")
     if not os.path.isfile(executable) or not os.access(executable, os.X_OK):
         raise RuntimeError(f"browser is missing or not executable: {executable}")
     return executable

@@ -13,7 +13,7 @@ in
   imports = [
     ./omniroute
     ./qwen3-asr
-    ./summary
+    ./article-summary
     ./supertonic
   ];
 

@@ -65,7 +65,7 @@ To calculate how fast the response is generated in tokens per second (token/s), 
 
 ## OmniRoute chat helper
 
-`omniroute-chat` sends an OpenAI-compatible chat request to the local OmniRoute instance. It is installed system-wide when `_custom.services.ai.enableOmniRoute` is enabled and is used by `voice-clean` and `newsboat-summary`.
+`omniroute-chat` sends an OpenAI-compatible chat request to the local OmniRoute instance. It is installed system-wide when `_custom.services.ai.enableOmniRoute` is enabled and is used by `voice-clean` and `article-summary`.
 
 Configure OmniRoute before using the helper:
 
@@ -98,7 +98,7 @@ $ OMNIROUTE_BASE_URL=http://127.0.1.1:20128/v1 \
 
 ### Article summaries
 
-Enable the system-wide `newsboat-summary` command with:
+Enable the system-wide `article-summary` command with:
 
 ```nix
 _custom.services.ai = {

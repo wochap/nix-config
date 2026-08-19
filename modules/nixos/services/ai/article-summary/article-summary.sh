@@ -8,7 +8,7 @@ debug=false
 render=false
 forced_render=false
 
-usage() { echo "usage: newsboat-summary [--force] [--debug] [--render] URL" >&2; }
+usage() { echo "usage: article-summary [--force] [--debug] [--render] URL" >&2; }
 while (($#)); do
   case "$1" in
   --force) force=true ;;
@@ -37,12 +37,12 @@ article_url=$1
 
 cache_root="${XDG_CACHE_HOME:-$HOME/.cache}/newsboat-summaries"
 mkdir -p "$cache_root"
-work_dir=$(mktemp -d "${TMPDIR:-/tmp}/newsboat-summary.XXXXXX")
+work_dir=$(mktemp -d "${TMPDIR:-/tmp}/article-summary.XXXXXX")
 trap 'rm -rf "$work_dir"' EXIT
 
 notify() {
   local title=$1 message=$2
-  notify-send --app-name=newsboat-summary --app-icon="tui-rss" --hint=int:transient:1 "$title" "$message" || true
+  notify-send --app-name=article-summary --app-icon="tui-rss" --hint=int:transient:1 "$title" "$message" || true
 }
 
 open_page() {
@@ -52,7 +52,7 @@ open_page() {
   sleep 1
   if ! kill -0 "$opener_pid" 2>/dev/null; then
     if ! wait "$opener_pid"; then
-      echo "newsboat-summary: could not launch xdg-open" >&2
+      echo "article-summary: could not launch xdg-open" >&2
       return 1
     fi
   fi
@@ -71,7 +71,7 @@ diagnose() {
   mv "$work_dir/diagnostic.html" "$diagnostic"
   notify "Newsboat summary failed" "$stage: $message"
   open_page "$diagnostic" || true
-  echo "newsboat-summary: $stage: $message" >&2
+  echo "article-summary: $stage: $message" >&2
   exit 1
 }
 
@@ -93,7 +93,7 @@ static_error=""
 if [[ $render == false ]]; then
   curl_error="$work_dir/curl.error"
   if ! effective_url=$(curl --fail --silent --show-error --location --max-redirs 5 \
-    --connect-timeout 15 --max-time 45 --user-agent "newsboat-summary/1.0 (local RSS reader)" \
+    --connect-timeout 15 --max-time 45 --user-agent "article-summary/1.0 (local article summarizer)" \
     --output "$work_dir/article.html" --write-out '%{url_effective}' "$article_url" 2>"$curl_error"); then
     diagnose fetch "$(head -c 500 "$curl_error")" "Check the network and open the original article to confirm it is available."
   fi
@@ -105,8 +105,8 @@ if [[ $render == false ]]; then
 fi
 
 if [[ $render == true ]]; then
-  browser=${NEWSBOAT_SUMMARY_BROWSER:-$NEWSBOAT_SUMMARY_BROWSER_DEFAULT}
-  [[ $debug == true ]] && echo "newsboat-summary: rendering with $browser" >&2
+  browser=${ARTICLE_SUMMARY_BROWSER:-$ARTICLE_SUMMARY_BROWSER_DEFAULT}
+  [[ $debug == true ]] && echo "article-summary: rendering with $browser" >&2
   if ! effective_url=$(python3 "$PAGE_RENDERER" "$effective_url" "$work_dir/article.html" 2>"$work_dir/browser.error"); then
     browser_error=$(head -c 240 "$work_dir/browser.error")
     if [[ -n $static_error ]]; then
@@ -183,6 +183,6 @@ if ! python3 "$INJECTOR" "$work_dir/summary.html" "$work_dir/copy.md"; then
   diagnose rendering "Could not add the Markdown copy controls." "Check the summary renderer and retry."
 fi
 mv "$work_dir/summary.html" "$cached_html"
-[[ $debug == true ]] && echo "newsboat-summary: cached $cached_html" >&2
+[[ $debug == true ]] && echo "article-summary: cached $cached_html" >&2
 open_page "$cached_html" || diagnose "browser launch" "xdg-open could not be launched." "Check your XDG default browser configuration."
 notify "Newsboat summary finished" "$article_title"

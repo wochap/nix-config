@@ -14,11 +14,11 @@ let
   ]);
   summaryHeader = pkgs.writeText "article-summary-header.html" ''
     <style>
-    ${builtins.readFile ./summary.css}
+    ${builtins.readFile ./article-summary.css}
     </style>
   '';
-  newsboat-summary = pkgs.writeShellApplication {
-    name = "newsboat-summary";
+  article-summary = pkgs.writeShellApplication {
+    name = "article-summary";
     runtimeInputs = with pkgs; [
       coreutils
       curl
@@ -37,9 +37,9 @@ let
       RENDERER = ./render.py;
       INJECTOR = ./inject_controls.py;
       HEADER = summaryHeader;
-      NEWSBOAT_SUMMARY_BROWSER_DEFAULT = lib.getExe chrome;
+      ARTICLE_SUMMARY_BROWSER_DEFAULT = lib.getExe chrome;
     };
-    text = builtins.readFile ./newsboat-summary.sh;
+    text = builtins.readFile ./article-summary.sh;
   };
 in
 {
@@ -51,6 +51,6 @@ in
       }
     ];
 
-    environment.systemPackages = [ newsboat-summary ];
+    environment.systemPackages = [ article-summary ];
   };
 }
