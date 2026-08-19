@@ -7,7 +7,6 @@
 
 let
   cfg = config._custom.services.ai;
-  chrome = pkgs.prevstable-chrome.google-chrome;
   articlePython = pkgs.python3.withPackages (pythonPackages: [
     pythonPackages.playwright
     pythonPackages.trafilatura
@@ -20,16 +19,7 @@ let
   article-summary = pkgs.writeShellApplication {
     name = "article-summary";
     runtimeInputs = with pkgs; [
-      coreutils
-      curl
-      gnugrep
-      gnused
-      jq
-      libnotify
-      pandoc
-      xdg-utils
       articlePython
-      chrome
     ];
     runtimeEnv = {
       EXTRACTOR = ./extract.py;
@@ -37,7 +27,7 @@ let
       RENDERER = ./render.py;
       INJECTOR = ./inject_controls.py;
       HEADER = summaryHeader;
-      ARTICLE_SUMMARY_BROWSER_DEFAULT = lib.getExe chrome;
+      ARTICLE_SUMMARY_BROWSER_DEFAULT = lib.getExe pkgs.prevstable-chrome.google-chrome;
     };
     text = builtins.readFile ./article-summary.sh;
   };

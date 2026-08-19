@@ -30,12 +30,6 @@ let
   };
   video = pkgs.writeShellApplication {
     name = "qwen3-asr-video";
-    runtimeInputs = [
-      pkgs.coreutils
-      pkgs.ffmpeg
-      pkgs.podman
-      pkgs.python3
-    ];
     runtimeEnv = {
       QWEN3_ASR_DIARIZATION_CONTEXT = container-context;
       QWEN3_ASR_DIARIZATION_IMAGE = "localhost/qwen3-asr-diarization:${container-version}";
