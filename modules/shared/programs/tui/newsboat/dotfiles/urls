@@ -1,70 +1,70 @@
--1 "~Commits"
-https://github.com/LazyVim/LazyVim/commits/main.atom
+# Commits
+https://github.com/LazyVim/LazyVim/commits/main.atom "~LazyVim" Commits
 
--2 "~Neovim"
-https://dotfyle.com/this-week-in-neovim/rss.xml
-https://dotfyle.com/neovim/plugins/rss.xml
+# Neovim
+https://dotfyle.com/this-week-in-neovim/rss.xml "~This Week in Neovim" Neovim
+https://dotfyle.com/neovim/plugins/rss.xml "~New Plugins" Neovim
 
--3 "~Github trending"
-https://rsshub.wochap.local/github/trending/weekly/any "~GH Weekly repositories"
-https://rsshub.wochap.local/github/trending/montly/any "~GH Montly repositories"
+# GitHub
+https://rsshub.wochap.local/github/trending/weekly/any "~Weekly repositories" GitHub
+https://rsshub.wochap.local/github/trending/monthly/any "~Monthly repositories" GitHub
 
--4 "~The Giants"
-https://hnrss.org/frontpage "~Hacker News"
-https://lobste.rs/rss "~Lobsters"
-https://isocpp.org/blog/rss/category/news "~C++ News"
-https://javascriptweekly.com/rss "~JS Weekly"
-https://feedpress.me/cssweekly "~CSS Weekly"
-https://css-tricks.com/feed/ "~CSS-Tricks"
-https://dev.to/feed/ "~DEV Community"
-https://techcrunch.com/category/artificial-intelligence/feed/ "~TechCrunch AI"
+# Tech
+https://hnrss.org/frontpage "~Hacker News" Tech
+https://lobste.rs/rss "~Lobsters" Tech
+https://isocpp.org/blog/rss/category/news "~C++ News" Tech
+https://javascriptweekly.com/rss "~JavaScript Weekly" Tech
+https://feedpress.me/cssweekly "~CSS Weekly" Tech
+https://css-tricks.com/feed/ "~CSS-Tricks" Tech
+https://dev.to/feed/ "~DEV Community" Tech
+https://techcrunch.com/category/artificial-intelligence/feed/ "~TechCrunch AI" Tech
 
--5 "~YouTube Channels"
-# yt-dlp --print channel_id 'https://www.youtube.com/@<channel_name>'
-https://www.youtube.com/feeds/videos.xml?channel_id=UC0m81bQuthaQZmFbXEY9QSw "~AICodeKing"
-https://www.youtube.com/feeds/videos.xml?channel_id=UC2WmuBuFq6gL08QYG-JjXKw "~WorldofAI"
-https://www.youtube.com/feeds/videos.xml?channel_id=UC7YOGHUfC1Tb6E4pudI9STA "~Mental Outlaw"
-https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA "~Luke Smith"
-https://www.youtube.com/feeds/videos.xml?channel_id=UC-8QAzbLcRglXeN_MY9blyw "~Ben Awad"
-https://www.youtube.com/feeds/videos.xml?channel_id=UCzoVCacndDCfGDf41P-z0iA "~JSConf"
-https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA "~Fireship"
+# YouTube
+# Find an ID with: yt-dlp --print channel_id 'https://www.youtube.com/@<channel_name>'
+https://www.youtube.com/feeds/videos.xml?channel_id=UC0m81bQuthaQZmFbXEY9QSw "~AICodeKing" YouTube
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2WmuBuFq6gL08QYG-JjXKw "~WorldofAI" YouTube
+https://www.youtube.com/feeds/videos.xml?channel_id=UC7YOGHUfC1Tb6E4pudI9STA "~Mental Outlaw" YouTube
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA "~Luke Smith" YouTube
+https://www.youtube.com/feeds/videos.xml?channel_id=UC-8QAzbLcRglXeN_MY9blyw "~Ben Awad" YouTube
+https://www.youtube.com/feeds/videos.xml?channel_id=UCzoVCacndDCfGDf41P-z0iA "~JSConf" YouTube
+https://www.youtube.com/feeds/videos.xml?channel_id=UCsBjURrPoezykLs9EqgamOA "~Fireship" YouTube
 
--6 "~Reddit"
-https://www.reddit.com/r/neovim/.rss
-https://www.reddit.com/r/unixporn/.rss
-https://www.reddit.com/r/zsh/.rss
-https://www.reddit.com/r/linux/.rss
-https://www.reddit.com/r/nixos/.rss
+# Reddit
+https://www.reddit.com/r/neovim/.rss "~r/neovim" Reddit
+https://www.reddit.com/r/unixporn/.rss "~r/unixporn" Reddit
+https://www.reddit.com/r/zsh/.rss "~r/zsh" Reddit
+https://www.reddit.com/r/linux/.rss "~r/linux" Reddit
+https://www.reddit.com/r/nixos/.rss "~r/nixos" Reddit
 
--7 "~Top Front-end Bloggers"
-https://wattenberger.com/rss "~Amelia Wattenberger"
-https://feeds.feedburner.com/brad-frosts-blog "~Brad Frost"
-https://overreacted.io/rss.xml "~Dan Abramov"
-https://feeds.feedburner.com/csswizardry "~Harry Roberts"
+# Frontend
+https://wattenberger.com/rss "~Amelia Wattenberger" Frontend
+https://feeds.feedburner.com/brad-frosts-blog "~Brad Frost" Frontend
+https://overreacted.io/rss.xml "~Dan Abramov" Frontend
+https://feeds.feedburner.com/csswizardry "~Harry Roberts" Frontend
 
--8 "~Languages, Libraries, Frameworks, etc."
-https://reactjs.org/feed.xml "~ReactJS"
-https://news.vuejs.org/feed.xml "~VueJS"
-https://blog.rust-lang.org/feed.xml "~Rust"
-https://blog.python.org/rss.xml "~Python Insider"
-https://bun.sh/rss.xml "~Bun"
+# Development
+https://reactjs.org/feed.xml "~React" Development
+https://news.vuejs.org/feed.xml "~Vue" Development
+https://blog.rust-lang.org/feed.xml "~Rust" Development
+https://blog.python.org/rss.xml "~Python Insider" Development
+https://bun.sh/rss.xml "~Bun" Development
 
--9 "~Company & Startup Blogs"
-https://github.com/neovim/neovim/tags.atom "~NeoVim"
-https://netflixtechblog.com/feed "~Netflix TechBlog"
-https://stackoverflow.blog/feed/ "~Stackoverflow"
-https://weekly.nixos.org/feeds/all.rss.xml
+# Engineering
+https://github.com/neovim/neovim/tags.atom "~Neovim Releases" Engineering
+https://netflixtechblog.com/feed "~Netflix TechBlog" Engineering
+https://stackoverflow.blog/feed/ "~Stack Overflow" Engineering
+https://weekly.nixos.org/feeds/all.rss.xml "~NixOS Weekly" Engineering
 
--10 "~News"
-https://www.coindesk.com/arc/outboundfeeds/rss/ "~Coindesk"
-https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.atom "~USGS Significant Earthquakes"
-https://www.marktechpost.com/feed/ "~MarkTechPost"
+# News
+https://www.coindesk.com/arc/outboundfeeds/rss/ "~CoinDesk" News
+https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.atom "~USGS Earthquakes" News
+https://www.marktechpost.com/feed/ "~MarkTechPost" News
 
--11 "~ AI / ML
-https://openai.com/news/rss.xml "~OpenAI"
-https://huggingface.co/blog/feed.xml "~Hugging Face"
-https://blog.google/technology/ai/rss/ "~Google AI"
-https://arxiv.org/rss/cs.AI "~arXiv CS.AI"
-# https://lastweekin.ai/feed "~Last Week in AI"
-# https://blog.langchain.com/rss/ "~LangChain"
-https://www.microsoft.com/en-us/research/feed/ "~Microsoft Research"
+# AI
+https://openai.com/news/rss.xml "~OpenAI" AI
+https://huggingface.co/blog/feed.xml "~Hugging Face" AI
+https://blog.google/technology/ai/rss/ "~Google AI" AI
+https://arxiv.org/rss/cs.AI "~arXiv CS.AI" AI
+# https://lastweekin.ai/feed "~Last Week in AI" AI
+# https://blog.langchain.com/rss/ "~LangChain" AI
+https://www.microsoft.com/en-us/research/feed/ "~Microsoft Research" AI

@@ -7,6 +7,12 @@ prepopulate-query-feeds yes
 external-url-viewer "urlscan -dc -r 'smart-open {}'"
 goto-next-feed no
 
+# Compact lists with the feed category kept visible as the first column.
+feedlist-title-format "Feeds  •  %t sources  •  %U unread"
+feedlist-format " %3i  %n  %-12T │ %t%> %5U / %-5c"
+articlelist-title-format "%T  •  %u unread"
+articlelist-format " %4i  %f  %D  %t"
+
 # Key navigation
 bind-key d pagedown
 bind-key u pageup
