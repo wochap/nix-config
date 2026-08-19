@@ -34,12 +34,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    _custom.hm.home.packages = [ clean-voice ];
-
-    # NOTE: cudaSupport rebuild opencv everytime nixpkgs changes
-    # maybe this is unnecessary for ollama but necessary for docker
-    # nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
-
     environment.systemPackages =
       with pkgs;
       [
@@ -121,6 +115,8 @@ in
 
     _custom.hm = {
       home = {
+        packages = [ clean-voice ];
+
         shellAliases = {
           # transform wav 16kHz to vtt
           wis = "whisper-cli --model ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin --output-vtt --file";
