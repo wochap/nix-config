@@ -78,14 +78,15 @@ Singleton {
     // Create timers for the newly added popups.
     notificationsToMove.forEach(notification => {
       const hints = notification.notification?.hints ?? {};
-      const wantsCustomSound = !!hints["custom-sound"];
+      const wantsCustomSound = hints["custom-sound"] !== undefined;
+      const customSound = hints["custom-sound"] || "message";
       const suppressSound = !!hints["suppress-sound"];
 
       if (wantsCustomSound && !suppressSound) {
         const now = Date.now();
         // Only play if enough time has passed since the last sound
         if (now - root.lastSoundPlayedTime > root.soundCooldownMs) {
-          Quickshell.execDetached(["canberra-gtk-play", "-i", "message"]);
+          Quickshell.execDetached(["canberra-gtk-play", "-i", customSound]);
           root.lastSoundPlayedTime = now;
         }
       }
