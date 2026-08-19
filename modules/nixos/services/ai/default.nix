@@ -7,52 +7,15 @@
 
 let
   cfg = config._custom.services.ai;
-  inherit (config._custom.globals) userName;
   inherit (pkgs._custom) wochap-ssc;
-  omniroute-chat = pkgs.writeScriptBin "omniroute-chat" (
-    builtins.readFile ./scripts/omniroute-chat.sh
-  );
-  tts-clipboard = pkgs.writeScriptBin "tts-clipboard" (builtins.readFile ./scripts/tts-clipboard.sh);
-  voice-clean = pkgs.writeScriptBin "voice-clean" (builtins.readFile ./scripts/voice-clean.sh);
-  qwen3-asr-transformers = pkgs.writeText "qwen3-asr-transformers.py" (
-    builtins.readFile ./scripts/qwen3-asr-transformers.py
-  );
-  qwen3-asr-pipeline = pkgs.writeText "qwen3-asr-pipeline.py" (
-    builtins.readFile ./scripts/qwen3-asr-pipeline.py
-  );
-  qwen3-asr-container-file = ./container/qwen3-asr-diarization.Containerfile;
-  qwen3-asr-container-version = builtins.substring 0 16 (
-    builtins.hashString "sha256" (builtins.readFile qwen3-asr-container-file)
-  );
-  qwen3-asr-container-context = pkgs.runCommand "qwen3-asr-diarization-context" { } ''
-    mkdir -p "$out"
-    cp ${qwen3-asr-container-file} "$out/Containerfile"
-  '';
-  qwen3-asr-transcribe = pkgs.writeShellApplication {
-    name = "qwen3-asr-transcribe";
-    runtimeEnv = {
-      QWEN3_ASR_IMAGE = "docker.io/qwenllm/qwen3-asr@sha256:fb75b775f089e06e5a1aaebffd421e37505cc630d50c86d889d95ffa45a7e16a";
-      QWEN3_ASR_SCRIPT = qwen3-asr-transformers;
-    };
-    text = builtins.readFile ./scripts/qwen3-asr-transcribe.sh;
-  };
-  qwen3-asr-video = pkgs.writeShellApplication {
-    name = "qwen3-asr-video";
-    runtimeInputs = [
-      pkgs.coreutils
-      pkgs.ffmpeg
-      pkgs.podman
-      pkgs.python3
-    ];
-    runtimeEnv = {
-      QWEN3_ASR_DIARIZATION_CONTEXT = qwen3-asr-container-context;
-      QWEN3_ASR_DIARIZATION_IMAGE = "localhost/qwen3-asr-diarization:${qwen3-asr-container-version}";
-      QWEN3_ASR_PIPELINE_SCRIPT = qwen3-asr-pipeline;
-    };
-    text = builtins.readFile ./scripts/qwen3-asr-video.sh;
-  };
 in
 {
+  imports = [
+    ./omniroute
+    ./qwen3-asr
+    ./supertonic
+  ];
+
   options._custom.services.ai = {
     enable = lib.mkEnableOption { };
     enablePix2tex = lib.mkEnableOption { };
@@ -72,11 +35,6 @@ in
     # maybe this is unnecessary for ollama but necessary for docker
     # nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;
 
-    sops.secrets.local-omniroute-secret-key = lib.mkIf cfg.enableOmniRoute {
-      sopsFile = ../../../../secrets-sops/local.yaml;
-      owner = userName;
-    };
-
     environment.systemPackages =
       with pkgs;
       [
@@ -84,12 +42,7 @@ in
         oterm
       ]
       ++ lib.optionals cfg.enableWhisper [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
-      ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ]
-      ++ lib.optionals cfg.enableOmniRoute [ omniroute-chat ]
-      ++ lib.optionals cfg.enableQwen3Asr [
-        qwen3-asr-transcribe
-        qwen3-asr-video
-      ];
+      ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ];
 
     services.ollama = lib.mkIf cfg.enableOllama {
       enable = true;
@@ -116,35 +69,6 @@ in
       AmbientCapabilities = "";
     };
 
-    _custom.hm.systemd.user.services.supertonic = lib.mkIf cfg.enableSupertonic {
-      Unit = {
-        Description = "Supertonic text-to-speech service";
-        Documentation = "https://supertone-inc.github.io/supertonic-py/quickstart/#local-server";
-        PartOf = [ "graphical-session.target" ];
-      };
-      Service = {
-        ExecStart = "${lib.getExe pkgs._custom.supertonic} serve --host 127.0.0.1 --port 7788";
-        Restart = "on-failure";
-        RestartSec = 2;
-        # PERF: test those env vars
-        # "SUPERTONIC_INTRA_OP_THREADS=8"
-        # "SUPERTONIC_INTER_OP_THREADS=8"
-        Environment = [ "HF_HUB_DISABLE_TELEMETRY=1" ];
-      }
-      // lib._custom.userServiceHardening
-      // {
-        ProtectHome = "tmpfs";
-        BindPaths = [
-          "%h/.cache/supertonic3"
-          "%h/.cache/huggingface"
-        ];
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
-      };
-    };
     # TODO: enable socket activation
     # source: https://github.com/ollama/ollama/pull/8072
     # systemd.sockets.ollama = {
@@ -170,51 +94,6 @@ in
         publicPort = 11454;
         lazy = true;
       };
-      # Make OmniRoute accessible at https://omniroute.wochap.local
-      omniroute = {
-        enable = cfg.enableOmniRoute;
-        subdomain = "omniroute";
-        publicPort = 20128;
-        backendPort = 20129;
-        serviceName = "podman-omniroute";
-        lazy = true;
-      };
-    };
-
-    virtualisation.oci-containers.containers.omniroute = lib.mkIf cfg.enableOmniRoute {
-      image = "ghcr.io/diegosouzapw/omniroute:3.8.49@sha256:92c768c56e2de32c51a0621ef182835018b00b288c9bb235c5c5e4514658c1a1";
-      volumes = [ "/var/lib/omniroute:/app/data" ];
-      environment = {
-        DATA_DIR = "/app/data";
-        HOSTNAME = wochap-ssc.meta.address;
-        PORT = toString config._custom.services.web-proxies.omniroute.backendPort;
-        NEXT_PUBLIC_BASE_URL = "https://omniroute.${wochap-ssc.meta.domain}";
-        OMNIROUTE_ALLOW_LOCAL_PROVIDER_URLS = "true";
-      };
-      extraOptions = [
-        "--network=host"
-        "--user=1000:1000"
-        "--cap-drop=all"
-        "--security-opt=no-new-privileges"
-        "--read-only"
-        "--tmpfs=/tmp:rw,nosuid,nodev,size=256m"
-        "--pids-limit=512"
-      ];
-    };
-
-    # The image runs as uid 1000 and needs this directory for mutable state.
-    systemd.tmpfiles.rules = lib.optionals cfg.enableOmniRoute [
-      "d /var/lib/omniroute 0700 1000 1000 -"
-    ];
-
-    systemd.services.podman-omniroute = lib.mkIf cfg.enableOmniRoute {
-      serviceConfig = {
-        Restart = "on-failure";
-        RestartSec = 2;
-        TimeoutStopSec = lib.mkForce 45;
-        UMask = "0077";
-        ProtectHome = true;
-      };
     };
 
     services.nextjs-ollama-llm-ui = lib.mkIf cfg.enableNextjsOllamaLlmUi {
@@ -236,14 +115,6 @@ in
     };
 
     _custom.hm = {
-      home.packages = [
-        voice-clean
-      ]
-      ++ lib.optionals cfg.enableSupertonic [
-        pkgs._custom.supertonic
-        tts-clipboard
-      ];
-
       home = {
         shellAliases = {
           # transform wav 16kHz to vtt
