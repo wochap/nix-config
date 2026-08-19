@@ -6,6 +6,7 @@
 }:
 
 let
+  inherit (config._custom.globals) configDirectory;
   cfg = config._custom.programs.lang-web;
 in
 {
@@ -56,7 +57,8 @@ in
         copyFiles.".npmrc".source = ./dotfiles/.npmrc;
       };
 
-      xdg.configFile.".bunfig.toml".source = ./dotfiles/.bunfig.toml;
+      xdg.configFile.".bunfig.toml".source =
+        lib._custom.relativeSymlink configDirectory ./dotfiles/.bunfig.toml;
     };
   };
 }

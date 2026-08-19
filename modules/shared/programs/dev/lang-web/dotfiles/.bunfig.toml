@@ -1,10 +1,11 @@
+# NOTE: Don't use `$HOME` or `~`; Bun uses them literally.
 [install]
 # where `bun install --global` installs packages
-globalDir = "~/.bun/install/global"
+# globalDir = "$HOME/.bun/install/global"
 
 # where globally-installed package bins are linked
-globalBinDir = "~/.bun/bin"
+# globalBinDir = "$HOME/.bun/bin"
 
 [install.cache]
 # the directory to use for the cache
-dir = "~/.bun/install/cache"
+# dir = "$HOME/.bun/install/cache"
