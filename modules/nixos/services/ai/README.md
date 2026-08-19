@@ -96,6 +96,22 @@ $ OMNIROUTE_BASE_URL=http://127.0.1.1:20128/v1 \
     omniroute-chat --model desktop-free < request.json
 ```
 
+### Article summaries
+
+Enable the system-wide `newsboat-summary` command with:
+
+```nix
+_custom.services.ai = {
+  enable = true;
+  enableOmniRoute = true;
+  enableArticleSummary = true;
+};
+```
+
+The command accepts an HTTP or HTTPS article URL, summarizes it through
+OmniRoute, renders the result as HTML, and opens it with the configured XDG
+browser. Newsboat's `s` macro invokes this command for the selected article.
+
 ## Whisper cpp
 
 Downloading models for whisper-cpp

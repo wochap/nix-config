@@ -150,6 +150,7 @@ in
     _custom.services.ai.enableSupertonic = true;
     _custom.services.ai.enableQwen3Asr = true;
     _custom.services.ai.enableOmniRoute = true;
+    _custom.services.ai.enableArticleSummary = true;
     _custom.services.ms-intune.enable = true;
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
