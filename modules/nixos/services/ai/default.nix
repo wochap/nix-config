@@ -8,6 +8,7 @@
 let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
+  clean-voice = pkgs.writeScriptBin "clean-voice" (builtins.readFile ./scripts/clean-voice.sh);
 in
 {
   imports = [
@@ -33,6 +34,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    _custom.hm.home.packages = [ clean-voice ];
+
     # NOTE: cudaSupport rebuild opencv everytime nixpkgs changes
     # maybe this is unnecessary for ollama but necessary for docker
     # nixpkgs.config.cudaSupport = lib.mkIf cfg.enableNvidia true;

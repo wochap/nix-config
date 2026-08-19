@@ -321,7 +321,7 @@ hl.bind(
 
 hl.bind(
   mod .. " + ALT + d",
-  hl.dsp.exec_cmd(session_cmd("voice-clean"))
+    hl.dsp.exec_cmd(session_cmd("clean-voice"))
 )
 
 --- MEDIA KEYBINDINGS

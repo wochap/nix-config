@@ -10,7 +10,6 @@ let
   inherit (config._custom.globals) userName;
   inherit (pkgs._custom) wochap-ssc;
   omniroute-chat = pkgs.writeScriptBin "omniroute-chat" (builtins.readFile ./omniroute-chat.sh);
-  voice-clean = pkgs.writeScriptBin "voice-clean" (builtins.readFile ./voice-clean.sh);
 in
 {
   config = lib.mkIf cfg.enable {
@@ -20,7 +19,6 @@ in
     };
 
     environment.systemPackages = lib.optionals cfg.enableOmniRoute [ omniroute-chat ];
-    _custom.hm.home.packages = [ voice-clean ];
 
     _custom.services.web-proxies.omniroute = {
       enable = cfg.enableOmniRoute;

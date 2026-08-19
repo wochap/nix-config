@@ -65,7 +65,7 @@ To calculate how fast the response is generated in tokens per second (token/s), 
 
 ## OmniRoute chat helper
 
-`omniroute-chat` sends an OpenAI-compatible chat request to the local OmniRoute instance. It is installed system-wide when `_custom.services.ai.enableOmniRoute` is enabled and is used by `voice-clean` and `article-summary`.
+`omniroute-chat` sends an OpenAI-compatible chat request to the local OmniRoute instance. It is installed system-wide when `_custom.services.ai.enableOmniRoute` is enabled and is used by `clean-voice` and `article-summary`.
 
 Configure OmniRoute before using the helper:
 
@@ -85,7 +85,7 @@ By default, the helper uses:
 Override the combo used by an existing consumer:
 
 ```sh
-$ OMNIROUTE_MODEL=another-combo voice-clean
+$ OMNIROUTE_MODEL=another-combo clean-voice
 ```
 
 Override the endpoint and API key, or invoke the helper directly:

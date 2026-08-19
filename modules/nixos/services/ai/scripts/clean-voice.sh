@@ -5,7 +5,7 @@ model="${OMNIROUTE_MODEL:-desktop-free}"
 
 notify() {
   notify-send \
-    --app-name="voice-clean" \
+    --app-name="clean-voice" \
     --hint=int:transient:1 \
     "$1" \
     "${2:-}" || true
@@ -13,13 +13,13 @@ notify() {
 
 fail() {
   local message=$1
-  echo "voice-clean: $message" >&2
+  echo "clean-voice: $message" >&2
   notify "Voice cleanup failed" "$message"
   exit "${2:-1}"
 }
 
 if (($#)); then
-  fail "usage: voice-clean" 2
+  fail "usage: clean-voice" 2
 fi
 
 if ! transcript=$(wl-paste --no-newline --type text 2>/dev/null); then
