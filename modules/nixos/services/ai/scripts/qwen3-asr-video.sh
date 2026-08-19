@@ -150,6 +150,7 @@ container_args=(
   --pids-limit=2048
   --shm-size=4g
   --env=HF_HUB_DISABLE_TELEMETRY=1
+  --env=MPLCONFIGDIR=/tmp/matplotlib
   --volume="$cache_dir:/root/.cache:rw"
   --volume="$work_dir:/input:ro"
   --volume="$QWEN3_ASR_PIPELINE_SCRIPT:/opt/qwen3-asr/pipeline.py:ro"

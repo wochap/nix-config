@@ -36,11 +36,86 @@ class PipelineTest(unittest.TestCase):
         PIPELINE.assign_speakers(tokens, regions)
         self.assertEqual(tokens[0]["speaker"], "SPEAKER_01")
 
+    def test_zero_duration_token_inside_region(self):
+        tokens = [{"start": 0.5, "end": 0.5}]
+        regions = [{"start": 0.0, "end": 1.0, "speaker": "SPEAKER_00"}]
+        PIPELINE.assign_speakers(tokens, regions)
+        self.assertEqual(tokens[0]["speaker"], "SPEAKER_00")
+
+    def test_small_gap_between_regions_of_same_speaker(self):
+        tokens = [{"start": 1.1, "end": 1.1}]
+        regions = [
+            {"start": 0.0, "end": 1.0, "speaker": "SPEAKER_00"},
+            {"start": 1.2, "end": 2.0, "speaker": "SPEAKER_00"},
+        ]
+        PIPELINE.assign_speakers(tokens, regions)
+        self.assertEqual(tokens[0]["speaker"], "SPEAKER_00")
+
     def test_speaker_assignment_marks_non_overlap_unknown(self):
         tokens = [{"start": 3.0, "end": 3.2}]
         regions = [{"start": 0.0, "end": 1.0, "speaker": "SPEAKER_00"}]
         PIPELINE.assign_speakers(tokens, regions)
         self.assertEqual(tokens[0]["speaker"], "UNKNOWN")
+
+    def test_smooths_unknown_sequence_between_same_speaker(self):
+        tokens = [
+            {"start": 0.0, "end": 0.2, "speaker": "SPEAKER_00"},
+            {"start": 0.3, "end": 0.3, "speaker": "UNKNOWN"},
+            {"start": 0.4, "end": 0.5, "speaker": "UNKNOWN"},
+            {"start": 0.6, "end": 0.8, "speaker": "SPEAKER_00"},
+        ]
+        PIPELINE.smooth_unknown_speakers(tokens)
+        self.assertEqual([token["speaker"] for token in tokens], ["SPEAKER_00"] * 4)
+
+    def test_gap_between_different_speakers_uses_proximity(self):
+        tokens = [
+            {"start": 0.0, "end": 0.2, "speaker": "SPEAKER_00"},
+            {"start": 0.7, "end": 0.7, "speaker": "UNKNOWN"},
+            {"start": 0.8, "end": 1.0, "speaker": "SPEAKER_01"},
+        ]
+        PIPELINE.smooth_unknown_speakers(tokens)
+        self.assertEqual(tokens[1]["speaker"], "SPEAKER_01")
+
+    def test_gap_tie_between_different_speakers_prefers_previous(self):
+        tokens = [
+            {"start": 0.0, "end": 0.2, "speaker": "SPEAKER_00"},
+            {"start": 0.5, "end": 0.5, "speaker": "UNKNOWN"},
+            {"start": 0.8, "end": 1.0, "speaker": "SPEAKER_01"},
+        ]
+        PIPELINE.smooth_unknown_speakers(tokens)
+        self.assertEqual(tokens[1]["speaker"], "SPEAKER_00")
+
+    def test_isolated_unknown_stays_unknown(self):
+        tokens = [
+            {"start": 0.0, "end": 0.2, "speaker": "SPEAKER_00"},
+            {"start": 1.0, "end": 1.0, "speaker": "UNKNOWN"},
+        ]
+        PIPELINE.smooth_unknown_speakers(tokens)
+        self.assertEqual(tokens[1]["speaker"], "UNKNOWN")
+
+    def test_long_gap_between_same_speaker_is_not_hidden(self):
+        tokens = [
+            {"start": 0.0, "end": 0.2, "speaker": "SPEAKER_00"},
+            {"start": 2.0, "end": 2.0, "speaker": "UNKNOWN"},
+            {"start": 4.0, "end": 4.2, "speaker": "SPEAKER_00"},
+        ]
+        PIPELINE.smooth_unknown_speakers(tokens)
+        self.assertEqual(tokens[1]["speaker"], "UNKNOWN")
+
+    def test_interleaved_regression_builds_one_turn(self):
+        words = ["todos lados por ejemplo ", "en ", "Chipre ", "creo que es de ", "veinte ", "mil ", "así que depende un poco del país"]
+        starts = [1196.80, 1197.68, 1197.76, 1198.24, 1198.24, 1199.28, 1200.48]
+        ends = [1197.60, 1197.76, 1198.20, 1198.24, 1199.20, 1199.60, 1201.00]
+        speakers = ["SPEAKER_01", "UNKNOWN", "SPEAKER_01", "UNKNOWN", "SPEAKER_01", "UNKNOWN", "SPEAKER_01"]
+        tokens = [
+            {"start": start, "end": end, "speaker": speaker, "text": word.strip(), "display": word}
+            for start, end, speaker, word in zip(starts, ends, speakers, words)
+        ]
+        PIPELINE.smooth_unknown_speakers(tokens)
+        turns = PIPELINE.build_turns(tokens)
+        self.assertEqual(len(turns), 1)
+        self.assertEqual(turns[0]["speaker"], "SPEAKER_01")
+        self.assertEqual(turns[0]["text"], "".join(words).strip())
 
     def test_turns_split_on_speaker_and_long_gap(self):
         tokens = [

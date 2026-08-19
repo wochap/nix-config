@@ -127,7 +127,22 @@ def needs_space(left: str, right: str) -> bool:
     )
 
 
-def assign_speakers(tokens: list[dict[str, Any]], regions: list[dict[str, Any]]) -> None:
+MAX_SPEAKER_DISTANCE = 0.5
+
+
+def point_region_distance(point: float, region: dict[str, Any]) -> float:
+    if point < region["start"]:
+        return region["start"] - point
+    if point > region["end"]:
+        return point - region["end"]
+    return 0.0
+
+
+def assign_speakers(
+    tokens: list[dict[str, Any]],
+    regions: list[dict[str, Any]],
+    max_distance: float = MAX_SPEAKER_DISTANCE,
+) -> None:
     for token in tokens:
         best_region = None
         best_overlap = 0.0
@@ -139,7 +154,59 @@ def assign_speakers(tokens: list[dict[str, Any]], regions: list[dict[str, Any]])
             if overlap > best_overlap:
                 best_overlap = overlap
                 best_region = region
+        if best_region is None:
+            midpoint = (token["start"] + token["end"]) / 2
+            nearest = min(
+                regions,
+                key=lambda region: (
+                    point_region_distance(midpoint, region),
+                    region["start"] > midpoint,
+                    region["start"],
+                    region["end"],
+                    region["speaker"],
+                ),
+                default=None,
+            )
+            if nearest is not None and point_region_distance(midpoint, nearest) <= max_distance:
+                best_region = nearest
         token["speaker"] = best_region["speaker"] if best_region is not None else "UNKNOWN"
+
+
+def token_distance(point: float, token: dict[str, Any]) -> float:
+    if point < token["start"]:
+        return token["start"] - point
+    if point > token["end"]:
+        return point - token["end"]
+    return 0.0
+
+
+def smooth_unknown_speakers(
+    tokens: list[dict[str, Any]], max_distance: float = MAX_SPEAKER_DISTANCE
+) -> None:
+    index = 0
+    while index < len(tokens):
+        if tokens[index]["speaker"] != "UNKNOWN":
+            index += 1
+            continue
+
+        start = index
+        while index < len(tokens) and tokens[index]["speaker"] == "UNKNOWN":
+            index += 1
+        end = index
+        previous = tokens[start - 1] if start > 0 else None
+        following = tokens[end] if end < len(tokens) else None
+
+        for token in tokens[start:end]:
+            midpoint = (token["start"] + token["end"]) / 2
+            candidates = []
+            if previous is not None:
+                candidates.append((token_distance(midpoint, previous), 0, previous["speaker"]))
+            if following is not None:
+                candidates.append((token_distance(midpoint, following), 1, following["speaker"]))
+            if candidates:
+                distance, _, speaker = min(candidates)
+                if distance <= max_distance:
+                    token["speaker"] = speaker
 
 
 def build_turns(tokens: list[dict[str, Any]], gap_seconds: float = 1.0) -> list[dict[str, Any]]:
@@ -288,6 +355,7 @@ def infer(args: argparse.Namespace) -> None:
     regions.sort(key=lambda item: (item["start"], item["end"], item["speaker"]))
 
     assign_speakers(aligned_tokens, regions)
+    smooth_unknown_speakers(aligned_tokens)
     turns = build_turns(aligned_tokens)
     for chunk in chunk_records:
         del chunk["path"]
