@@ -7,6 +7,7 @@ readonly playback_unit="supertonic-player.service"
 notify() {
   notify-send \
     --app-name="supertonic-speak" \
+    --app-icon="preferences-desktop-text-to-speech" \
     --hint=int:transient:1 \
     "$1" \
     "${2:-}"

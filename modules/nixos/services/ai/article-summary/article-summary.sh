@@ -35,14 +35,14 @@ if (($# != 1)); then
 fi
 article_url=$1
 
-cache_root="${XDG_CACHE_HOME:-$HOME/.cache}/newsboat-summaries"
+cache_root="${XDG_CACHE_HOME:-$HOME/.cache}/article-summaries"
 mkdir -p "$cache_root"
 work_dir=$(mktemp -d "${TMPDIR:-/tmp}/article-summary.XXXXXX")
 trap 'rm -rf "$work_dir"' EXIT
 
 notify() {
   local title=$1 message=$2
-  notify-send --app-name=article-summary --app-icon="tui-rss" --hint=int:transient:1 "$title" "$message" || true
+  notify-send --app-name=article-summary --app-icon="accessories-thesaurus" --hint=int:transient:1 "$title" "$message" || true
 }
 
 open_page() {
@@ -69,21 +69,21 @@ diagnose() {
       [$stage,$message,$suggestion,$url,$link,$timestamp] | map(@html) |
       "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Summary error</title><style>html{color-scheme:light dark;font:18px/1.6 system-ui}body{max-width:46rem;margin:auto;padding:2rem}code{overflow-wrap:anywhere}.error{border-left:.3rem solid #e64553;padding-left:1rem}</style></head><body><h1>Article summary failed</h1><div class=\"error\"><p><strong>Stage:</strong> \(.[0])</p><p>\(.[1])</p></div><p><strong>Suggested action:</strong> \(.[2])</p><p><strong>Article:</strong> <a href=\"\(.[4])\">\(.[3])</a></p><p><small>\(.[5])</small></p></body></html>"' >"$work_dir/diagnostic.html"
   mv "$work_dir/diagnostic.html" "$diagnostic"
-  notify "Newsboat summary failed" "$stage: $message"
+  notify "Article summary failed" "$stage: $message"
   open_page "$diagnostic" || true
   echo "article-summary: $stage: $message" >&2
   exit 1
 }
 
 if [[ ! $article_url =~ ^https?://[^/?#[:space:]]+[^[:space:]]*$ ]]; then
-  diagnose validation "The command requires one plausible HTTP or HTTPS URL." "Select a normal web article in Newsboat."
+  diagnose validation "The command requires one plausible HTTP or HTTPS URL." "Provide a normal web article URL."
 fi
 
 # Fast path for the common case. Redirect aliases intentionally are not guessed.
 input_key=$(printf '%s\n%s' "$cache_version" "$article_url" | sha256sum | cut -d' ' -f1)
 input_cache="$cache_root/$input_key.html"
 if [[ $force == false && $forced_render == false && -s $input_cache ]]; then
-  notify "Newsboat summary" "Opening cached summary"
+  notify "Article summary" "Opening cached summary"
   open_page "$input_cache"
   exit 0
 fi
@@ -129,13 +129,13 @@ if [[ ! $canonical_url =~ ^https?://[^[:space:]]+$ ]]; then canonical_url=$effec
 cache_key=$(printf '%s\n%s' "$cache_version" "$canonical_url" | sha256sum | cut -d' ' -f1)
 cached_html="$cache_root/$cache_key.html"
 if [[ $force == false && $forced_render == false && -s $cached_html ]]; then
-  notify "Newsboat summary" "Opening cached summary"
+  notify "Article summary" "Opening cached summary"
   open_page "$cached_html"
   exit 0
 fi
 
 article_title=$(jq -r '(.title // "Untitled article")[0:160]' "$work_dir/article.json")
-notify "Newsboat summary started" "$article_title"
+notify "Article summary started" "$article_title"
 
 body_chars=$(jq -r '.body | length' "$work_dir/article.json")
 # Four characters/token is optimistic for code and non-English text; 3 chars/token is conservative.
@@ -185,4 +185,4 @@ fi
 mv "$work_dir/summary.html" "$cached_html"
 [[ $debug == true ]] && echo "article-summary: cached $cached_html" >&2
 open_page "$cached_html" || diagnose "browser launch" "xdg-open could not be launched." "Check your XDG default browser configuration."
-notify "Newsboat summary finished" "$article_title"
+notify "Article summary finished" "$article_title"

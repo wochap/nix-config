@@ -110,7 +110,7 @@ _custom.services.ai = {
 
 The command accepts an HTTP or HTTPS article URL, summarizes it through
 OmniRoute, renders the result as HTML, and opens it with the configured XDG
-browser. Newsboat's `s` macro invokes this command for the selected article.
+browser. It can be invoked directly or integrated with an RSS reader.
 
 ## Whisper cpp
 

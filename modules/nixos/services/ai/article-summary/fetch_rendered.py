@@ -61,9 +61,9 @@ def render(url, destination):
             page.evaluate(
                 """
                 () => {
-                  window.__newsboatSummaryLastMutation = performance.now();
+                  window.__articleSummaryLastMutation = performance.now();
                   new MutationObserver(() => {
-                    window.__newsboatSummaryLastMutation = performance.now();
+                    window.__articleSummaryLastMutation = performance.now();
                   }).observe(document.documentElement, {
                     attributes: true,
                     characterData: true,
@@ -78,7 +78,7 @@ def render(url, destination):
             while time.monotonic() < deadline:
                 elapsed = time.monotonic() - settling_started
                 quiet_for = page.evaluate(
-                    "performance.now() - window.__newsboatSummaryLastMutation"
+                    "performance.now() - window.__articleSummaryLastMutation"
                 )
                 if (
                     elapsed >= MINIMUM_WAIT_SECONDS
