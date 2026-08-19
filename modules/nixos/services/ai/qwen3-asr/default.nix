@@ -20,7 +20,7 @@ let
     mkdir -p "$out"
     cp ${container-file} "$out/Containerfile"
   '';
-  transcribe = pkgs.writeShellApplication {
+  qwen3-asr-transcribe = pkgs.writeShellApplication {
     name = "qwen3-asr-transcribe";
     runtimeEnv = {
       QWEN3_ASR_IMAGE = "docker.io/qwenllm/qwen3-asr@sha256:fb75b775f089e06e5a1aaebffd421e37505cc630d50c86d889d95ffa45a7e16a";
@@ -28,7 +28,7 @@ let
     };
     text = builtins.readFile ./qwen3-asr-transcribe.sh;
   };
-  video = pkgs.writeShellApplication {
+  qwen3-asr-video = pkgs.writeShellApplication {
     name = "qwen3-asr-video";
     runtimeEnv = {
       QWEN3_ASR_DIARIZATION_CONTEXT = container-context;
@@ -47,8 +47,8 @@ in
     };
 
     environment.systemPackages = [
-      transcribe
-      video
+      qwen3-asr-transcribe
+      qwen3-asr-video
     ];
   };
 }
