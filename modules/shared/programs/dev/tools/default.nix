@@ -7,6 +7,7 @@
 
 let
   cfg = config._custom.programs.tools;
+  jira-ticket = pkgs.writeScriptBin "jira-ticket" (builtins.readFile ./scripts/jira-ticket.sh);
 in
 {
   options._custom.programs.tools.enable = lib.mkEnableOption { };
@@ -20,7 +21,7 @@ in
         ngrok # expose web server
         stripe-cli
         watchman # required by react native
-        jira-cli-go
+        jira-ticket
       ];
     };
   };
