@@ -3220,11 +3220,11 @@
     "python-remind": {
       "flake": false,
       "locked": {
-        "lastModified": 1786553274,
-        "narHash": "sha256-vp4mog2mR9EIz6HUy3sS8LZ1CZaIRXE0FRac3215wHE=",
+        "lastModified": 1787231253,
+        "narHash": "sha256-91NsXJ5Brl0h8OQCerqVNyCT836zbad7bFsvy+D/JHE=",
         "owner": "wochap",
         "repo": "python-remind",
-        "rev": "d1feb21ebb704e21e5f97aadc3fcaeb63115ebfb",
+        "rev": "c4c68d24dfb09b97f575d41b9deccc496adbf25b",
         "type": "github"
       },
       "original": {
