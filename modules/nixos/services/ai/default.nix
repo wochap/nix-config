@@ -9,6 +9,7 @@ let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
   clean-voice = pkgs.writeScriptBin "clean-voice" (builtins.readFile ./scripts/clean-voice.sh);
+  summary = pkgs.writeScriptBin "summary" (builtins.readFile ./scripts/summary.sh);
 in
 {
   imports = [
@@ -39,6 +40,7 @@ in
       [
         python314Packages.huggingface-hub
         oterm
+        summary
       ]
       ++ lib.optionals cfg.enableWhisper [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
       ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ];
