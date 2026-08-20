@@ -10,6 +10,7 @@ let
   inherit (pkgs._custom) wochap-ssc;
   clean-voice = pkgs.writeScriptBin "clean-voice" (builtins.readFile ./scripts/clean-voice.sh);
   summary = pkgs.writeScriptBin "summary" (builtins.readFile ./scripts/summary.sh);
+  asr-videos = pkgs.writeScriptBin "asr-videos" (builtins.readFile ./scripts/asr-videos.sh);
 in
 {
   imports = [
@@ -39,6 +40,7 @@ in
       with pkgs;
       [
         python314Packages.huggingface-hub
+        asr-videos
         oterm
         summary
       ]
