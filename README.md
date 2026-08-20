@@ -150,7 +150,7 @@ Check [pxe/README.md](/pxe/README.md)
    npm i -g --ignore-scripts webtorrent-cli gulp migrate-mongo
 
    # agents
-   npm i -g --ignore-scripts claude-code @openai/codex opencode-ai @qwen-code/qwen-code
+   npm i -g --ignore-scripts @anthropic-ai/claude-code @openai/codex opencode-ai @qwen-code/qwen-code
 
    # agents tools
    npm i -g --ignore-scripts @fission-ai/openspec@latest
