@@ -66,6 +66,7 @@ tmux set-option -g message-command-style "fg=${teal},bg=${backgroundOverlay},ali
 tmux set-option -g menu-selected-style "fg=${text},bold,bg=${backgroundOverlay}"
 tmux set-option -g pane-border-style "fg=${border}"
 tmux set-option -g pane-active-border-style "fg=${primary}"
+tmux set-option -g pane-border-format "#[bg=default,fg=${surface1}] ${pane_index} ${pane_icon} ${tab_title} #[default]"
 tmux set-option -g popup-style "bg=${background},fg=${text}"
 tmux set-option -g popup-border-style "fg=${surface1}"
 tmux set-option -g mode-style "bg=${surface0},bold"
