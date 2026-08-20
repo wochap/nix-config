@@ -140,7 +140,7 @@ notify "Article summary started" "$article_title"
 body_chars=$(jq -r '.body | length' "$work_dir/article.json")
 # Four characters/token is optimistic for code and non-English text; 3 chars/token is conservative.
 estimated_tokens=$(((body_chars + 2) / 3))
-if ((estimated_tokens > 6500)); then
+if ((estimated_tokens > 6500)) && [[ $force == false ]]; then
   diagnose validation "The extracted article is about $estimated_tokens tokens, above the safe 6,500-token input limit; it was not truncated." "Use a shorter source. Chunked summarization can be added later."
 fi
 
