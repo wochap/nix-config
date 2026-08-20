@@ -11,6 +11,9 @@ let
   hmConfig = config.home-manager.users.${userName};
   awww-random = pkgs.writeScriptBin "awww-random" (builtins.readFile ./scripts/awww-random.sh);
   awww-pick = pkgs.writeScriptBin "awww-pick" (builtins.readFile ./scripts/awww-pick.sh);
+  awww-kansallisgalleria = pkgs.writeScriptBin "awww-kansallisgalleria" (
+    builtins.readFile ./scripts/awww-kansallisgalleria.sh
+  );
   awww-unsplash = pkgs.writeScriptBin "awww-unsplash" (builtins.readFile ./scripts/awww-unsplash.sh);
   inherit (pkgs) awww;
 in
@@ -29,6 +32,7 @@ in
           awww
           awww-random
           awww-pick
+          awww-kansallisgalleria
           awww-unsplash
         ];
         sessionVariables = {

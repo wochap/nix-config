@@ -70,6 +70,10 @@ in
           owner = userName;
           sopsFile = personalSopsFile;
         };
+        "personal-kansallisgalleria-token" = {
+          owner = userName;
+          sopsFile = personalSopsFile;
+        };
         # se
         "se-gh-token" = {
           owner = userName;
