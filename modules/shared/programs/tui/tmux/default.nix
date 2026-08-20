@@ -35,6 +35,9 @@ let
   tmux-fzf-sessions = pkgs.writeScriptBin "tmux-fzf-sessions" (
     builtins.readFile ./scripts/tmux-fzf-sessions.sh
   );
+  tmux-accordion = pkgs.writeScriptBin "tmux-accordion" (
+    builtins.readFile ./scripts/tmux-accordion.sh
+  );
   start-tmux-server = pkgs.writeScriptBin "start-tmux-server" ''
     #!/usr/bin/env bash
 
@@ -88,6 +91,7 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
+      tmux-accordion
       tmux-fzf-panes
       tmux-fzf-sessions
       tmux-final
