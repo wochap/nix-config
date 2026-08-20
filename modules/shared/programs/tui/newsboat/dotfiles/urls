@@ -6,6 +6,7 @@ https://dotfyle.com/this-week-in-neovim/rss.xml "~This Week in Neovim" Neovim
 https://dotfyle.com/neovim/plugins/rss.xml "~New Plugins" Neovim
 
 # GitHub
+https://rsshub.wochap.local/github/trending/daily/any "~Daily repositories" GitHub
 https://rsshub.wochap.local/github/trending/weekly/any "~Weekly repositories" GitHub
 https://rsshub.wochap.local/github/trending/monthly/any "~Monthly repositories" GitHub
 
