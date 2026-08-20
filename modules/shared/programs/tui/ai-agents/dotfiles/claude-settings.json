@@ -35,7 +35,7 @@
   "editorMode": "vim",
   "statusLine": {
     "type": "command",
-    "command": "bash \"/home/gean/.claude/plugins/cache/caveman/caveman/0d95a81d35a9/src/hooks/caveman-statusline.sh\""
+    "command": "bash \"/home/gean/.claude/statusline.sh\""
   },
   "preferredNotifChannel": "terminal_bell",
   "hooks": {

@@ -39,12 +39,18 @@ in
           [ bubblewrap ]
           ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
 
+        shellAliases.cl = "claude";
+
         sessionVariables = {
           OPENSPEC_TELEMETRY = "0";
           CAVEMAN_DEFAULT_MODE = "ultra";
         };
 
         file = {
+          ".claude/statusline.sh" = {
+            source = ./scripts/claude-statusline.sh;
+            executable = true;
+          };
           ".claude/hooks/claude-notify.sh" = {
             source = ./scripts/claude-notify.sh;
             executable = true;

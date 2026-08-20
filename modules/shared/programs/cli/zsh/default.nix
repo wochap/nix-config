@@ -264,6 +264,7 @@ in
 
               if [[ ! -e "$ABBR_USER_ABBREVIATIONS_FILE" || ! -s "$ABBR_USER_ABBREVIATIONS_FILE" ]]; then
                 abbr import-aliases --quiet
+                # Don't expand these abbreviations
                 abbr erase --quiet sudo
                 abbr erase --quiet nv
                 abbr erase --quiet nvim
