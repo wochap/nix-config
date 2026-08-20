@@ -48,6 +48,9 @@ tab_title="#{?#{==:#{pane_title},#{host}},${shell_or_cmd},#{pane_title}}"
 # shows the new name immediately; a manual `rename-window` turns automatic-rename
 # off, in which case the custom window name (#W) is shown instead.
 tab_display="#{?#{automatic-rename},${tab_title},#W}"
+# Limit status-bar tab titles to 30 characters (29 characters plus an ellipsis).
+# pane-border-format uses tab_title directly and remains untruncated.
+tab_display="#{=/29/…:${tab_display}}"
 # status-left cwd with $HOME collapsed to ~ (baked once, tmux swaps natively)
 status_left_path="#{s|${HOME}|~|:pane_current_path}"
 host_module="#{?#{!=:#{host},${hostname}},${host_icon} #H  ,}"
@@ -66,7 +69,7 @@ tmux set-option -g message-command-style "fg=${teal},bg=${backgroundOverlay},ali
 tmux set-option -g menu-selected-style "fg=${text},bold,bg=${backgroundOverlay}"
 tmux set-option -g pane-border-style "fg=${border}"
 tmux set-option -g pane-active-border-style "fg=${primary}"
-tmux set-option -g pane-border-format "#[bg=default,fg=${surface1}] ${pane_index} ${pane_icon} ${tab_title} #[default]"
+tmux set-option -g pane-border-format "#[bg=default,fg=${border}] ${pane_index} ${pane_icon} ${tab_title} #[default]"
 tmux set-option -g popup-style "bg=${background},fg=${text}"
 tmux set-option -g popup-border-style "fg=${surface1}"
 tmux set-option -g mode-style "bg=${surface0},bold"

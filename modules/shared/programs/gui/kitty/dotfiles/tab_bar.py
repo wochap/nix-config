@@ -39,6 +39,18 @@ _right_space = 0
 _tabs_draw_x = 0
 
 
+def draw_title(data: dict) -> str:
+    """Prefer an application's title, falling back to the cwd at a shell prompt."""
+    tab = data["tab"]
+    cwd = tab.active_wd.rsplit("/", 1)[-1]
+    shells = {"bash", "dash", "fish", "nu", "sh", "zsh"}
+    title = data["title"] if tab.active_exe not in shells else cwd
+    title = title or cwd or data["title"]
+    if len(title) <= 30:
+        return title
+    return title[:15] + "…" + title[-14:]
+
+
 def _calculate_viewport(available_width: int) -> None:
     global _viewport_start, _viewport_end
 

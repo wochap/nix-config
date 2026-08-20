@@ -120,8 +120,8 @@ in
           # color0 = surface1
           # color16 = peach
           # color17 = lavender
-          tab_title_template "{fmt.bg.default}{fmt.fg.color16 if bell_symbol else fmt.fg.color0}  {sup.index} 󰓩 {tab.active_wd.rsplit('/', 1)[-1] or title[:40]}{activity_symbol}{bell_symbol}  {fmt.fg.default}"
-          active_tab_title_template "{fmt.bg.default}{fmt.fg.color16 if bell_symbol else fmt.fg.color17}{fmt.bg.color16 if bell_symbol else fmt.bg.color17}{fmt.fg.tab} {sup.index} 󰓩 {tab.active_wd.rsplit('/', 1)[-1] or title[:40]}{activity_symbol}{bell_symbol} {fmt.bg.default}{fmt.fg.color16 if bell_symbol else fmt.fg.color17}{fmt.bg.default}{fmt.fg.default}"
+          tab_title_template "{fmt.bg.default}{fmt.fg.color16 if bell_symbol else fmt.fg.color0}  {sup.index} 󰓩 {custom}{activity_symbol}{bell_symbol}  {fmt.fg.default}"
+          active_tab_title_template "{fmt.bg.default}{fmt.fg.color16 if bell_symbol else fmt.fg.color17}{fmt.bg.color16 if bell_symbol else fmt.bg.color17}{fmt.fg.tab} {sup.index} 󰓩 {custom}{activity_symbol}{bell_symbol} {fmt.bg.default}{fmt.fg.color16 if bell_symbol else fmt.fg.color17}{fmt.bg.default}{fmt.fg.default}"
         '';
         "kitty/open-actions.conf".source = ./dotfiles/open-actions.conf;
         "kitty/mime.types".source = ./dotfiles/mime.types;
