@@ -36,8 +36,6 @@
     # everytime you update hyprland flake, `sudo nix flake lock --update-input hyprlock`
     hyprlock.url = "github:hyprwm/hyprlock?rev=d75e93f8ee1721d70549d96f4d14bf2948aab70c"; # v0.9.5
     hyprlock.inputs.nixpkgs.follows = "prevstable-hyprland";
-    pyprland.url = "github:hyprland-community/pyprland?rev=b8cf62fe52f19804e34e7d3afb10df68fcfe9a3f"; # v3.4.3
-    pyprland.inputs.nixpkgs.follows = "prevstable-hyprland";
     hyprgrass.url = "github:horriblename/hyprgrass?rev=e28346f49144e058b0e2d9dc66313c0a57c3d423"; # main (10 jul 2026)
     hyprland-guiutils.url = "github:hyprwm/hyprland-guiutils?rev=c2e906261142f5dd1ee0bfc44abba23e2754c660"; # v0.2.1
     hyprland-guiutils.inputs.nixpkgs.follows = "prevstable-hyprland";

@@ -10,10 +10,6 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 
 active_border.setup()
 
-hl.on("hyprland.start", function()
-  hl.exec_cmd("pypr")
-end)
-
 if not constants.is_kiosk then
   -- We set XDG_* manually because the UWSM session may use a different name.
   hl.on("hyprland.start", function()

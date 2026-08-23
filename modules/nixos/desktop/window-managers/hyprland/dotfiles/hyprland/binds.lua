@@ -4,6 +4,7 @@ local harpoon_scratchpad = require("hyprland.lib.harpoon_scratchpad")
 local scratchpad = require("hyprland.lib.scratchpad")
 local previous_ws = require("hyprland.lib.previous_ws")
 local ws_offset = require("hyprland.lib.ws_offset")
+local zoom = require("hyprland.lib.zoom")
 local mod = "SUPER"
 local scratchpad_opts
 if not constants.is_kiosk then
@@ -312,7 +313,7 @@ hl.bind(mod .. " + ALT + h", hl.dsp.exec_cmd(session_cmd("ocr-math")))
 hl.bind(mod .. " + ALT + c", hl.dsp.exec_cmd(session_cmd("color-picker")))
 
 -- Magnifying glass
-hl.bind(mod .. " + ALT + z", hl.dsp.exec_cmd(session_cmd("pypr zoom")))
+hl.bind(mod .. " + ALT + z", zoom.zoom)
 
 hl.bind(
   mod .. " + ALT + v",

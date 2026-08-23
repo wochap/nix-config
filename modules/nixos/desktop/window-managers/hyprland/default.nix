@@ -95,7 +95,6 @@ in
 
     _custom.hm = {
       home.packages = with pkgs; [
-        inputs.pyprland.packages.${stdenv.hostPlatform.system}.default
         hyprland-qt-support
         hyprland-guiutils
         hyprpaper
@@ -147,6 +146,8 @@ in
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/scratchpad_common.lua;
         "hypr/hyprland/lib/ws_offset.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/ws_offset.lua;
+        "hypr/hyprland/lib/zoom.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/lib/zoom.lua;
         "hypr/kiosk.lua".text = ''
           local constants = require("hyprland.constants")
           constants.is_kiosk = true
@@ -160,8 +161,6 @@ in
         '';
 
         "hypr/shaders".source = relativeSymlink configDirectory ./dotfiles/shaders;
-
-        "pypr/config.toml".source = relativeSymlink configDirectory ./dotfiles/pyprland.toml;
 
         "uwsm/env-hyprland".text = ''
           # toolkit-specific scale
