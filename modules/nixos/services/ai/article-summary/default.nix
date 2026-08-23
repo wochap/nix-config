@@ -11,11 +11,6 @@ let
     pythonPackages.playwright
     pythonPackages.trafilatura
   ]);
-  summaryHeader = pkgs.writeText "article-summary-header.html" ''
-    <style>
-    ${builtins.readFile ./article-summary.css}
-    </style>
-  '';
   article-summary = pkgs.writeShellApplication {
     name = "article-summary";
     runtimeInputs = with pkgs; [
@@ -26,7 +21,6 @@ let
       PAGE_RENDERER = ./fetch_rendered.py;
       RENDERER = ./render.py;
       INJECTOR = ./inject_controls.py;
-      HEADER = summaryHeader;
       ARTICLE_SUMMARY_BROWSER_DEFAULT = lib.getExe pkgs.prevstable-chrome.google-chrome;
     };
     text = builtins.readFile ./article-summary.sh;

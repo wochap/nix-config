@@ -2,13 +2,20 @@
 @media (prefers-color-scheme: dark) { :root { --bg: #1e1e2e; --fg: #cdd6f4; --muted: #a6adc8; --panel: #313244; --accent: #89b4fa; --border: #585b70; } }
 html { background: var(--bg); color: var(--fg); font: 18px/1.65 system-ui, sans-serif; }
 body { max-width: 48rem; margin: 0 auto; padding: clamp(1.2rem, 4vw, 3rem); }
-h1, h2 { line-height: 1.2; } h1 { margin-bottom: .4rem; }
-a { color: var(--accent); } .metadata, .footer { color: var(--muted); font-size: .9rem; }
-.lead-image { display: block; width: auto; max-width: 100%; max-height: 28rem; object-fit: contain; margin: 1.5rem auto; border-radius: .5rem; }
+h1, h2 { line-height: 1.2; }
+h1 { margin-bottom: .4rem; }
+a { color: var(--accent); }
+img { max-width: 100%; height: auto; }
 blockquote { border-left: .25rem solid var(--accent); margin-left: 0; padding-left: 1rem; color: var(--muted); }
-pre, code { background: var(--panel); border-radius: .25rem; } code { padding: .1rem .25rem; }
-pre { overflow-x: auto; padding: 1rem; } table { width: 100%; border-collapse: collapse; overflow-x: auto; }
+pre, code { background: var(--panel); border-radius: .25rem; }
+code { padding: .1rem .25rem; }
+pre { overflow-x: auto; padding: 1rem; }
+table { width: 100%; border-collapse: collapse; overflow-x: auto; }
 th, td { border: 1px solid var(--border); padding: .4rem .6rem; text-align: left; }
+
+/* Optional conventions used by article-summary and available to other producers. */
+.metadata, .footer { color: var(--muted); font-size: .9rem; }
+.lead-image { display: block; width: auto; max-height: 28rem; object-fit: contain; margin: 1.5rem auto; border-radius: .5rem; }
 .original { display: inline-block; margin: 1.5rem 0; padding: .65rem 1rem; border-radius: .4rem; background: var(--accent); color: var(--bg); font-weight: 700; text-decoration: none; }
 .copy-summary { margin-left: .6rem; padding: .65rem 1rem; border: 1px solid var(--border); border-radius: .4rem; background: var(--panel); color: var(--fg); font: inherit; font-weight: 700; cursor: pointer; }
 .copy-summary:hover { border-color: var(--accent); }

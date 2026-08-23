@@ -16,6 +16,7 @@ in
   imports = [
     ./omniroute
     ./qwen3-asr
+    ./article-page
     ./article-summary
     ./supertonic
   ];
@@ -30,6 +31,7 @@ in
     enableOpenWebui = lib.mkEnableOption { };
     enableNextjsOllamaLlmUi = lib.mkEnableOption { };
     enableOmniRoute = lib.mkEnableOption "the local OmniRoute AI gateway";
+    enableArticlePage = lib.mkEnableOption "the system-wide Markdown-to-HTML article-page renderer";
     enableArticleSummary = lib.mkEnableOption "system-wide article summarization and HTML rendering";
     enableSupertonic = lib.mkEnableOption "the local Supertonic text-to-speech service";
     enableQwen3Asr = lib.mkEnableOption "on-demand Qwen3-ASR-1.7B transcription with Transformers";

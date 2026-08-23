@@ -146,9 +146,8 @@ fi
 
 # Python JSON decoding safely transports metadata; Pandoc's raw_html extension is disabled below.
 python3 "$RENDERER" "$work_dir/article.json" "$work_dir/summary.md" "$model" "$canonical_url" "$summary"
-if ! pandoc --from=markdown-raw_html --to=html5 --standalone \
-  --include-in-header="$HEADER" --metadata title="Article summary" "$work_dir/summary.md" \
-  --output="$work_dir/summary.html" 2>"$work_dir/pandoc.error"; then
+if ! article-page --title "Article summary" --output "$work_dir/summary.html" \
+  "$work_dir/summary.md" >/dev/null 2>"$work_dir/pandoc.error"; then
   diagnose Pandoc "$(head -c 500 "$work_dir/pandoc.error")" "Check the extracted metadata and retry."
 fi
 printf '%s' "$summary" >"$work_dir/copy.md"
