@@ -17,6 +17,7 @@ in
     ./omniroute
     ./qwen3-asr
     ./article-page
+    ./article-scrape
     ./article-summary
     ./supertonic
   ];

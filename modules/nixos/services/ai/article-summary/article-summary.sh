@@ -5,7 +5,6 @@ model="${OMNIROUTE_MODEL:-desktop-free}"
 cache_version="4"
 force=false
 debug=false
-render=false
 forced_render=false
 
 usage() { echo "usage: article-summary [--force] [--debug] [--render] URL" >&2; }
@@ -14,7 +13,6 @@ while (($#)); do
   --force) force=true ;;
   --debug) debug=true ;;
   --render)
-    render=true
     forced_render=true
     ;;
   --help | -h)
@@ -88,44 +86,17 @@ if [[ $force == false && $forced_render == false && -s $input_cache ]]; then
   exit 0
 fi
 
-effective_url=$article_url
-static_error=""
-if [[ $render == false ]]; then
-  curl_error="$work_dir/curl.error"
-  if ! effective_url=$(curl --fail --silent --show-error --location --max-redirs 5 \
-    --connect-timeout 15 --max-time 45 --user-agent "article-summary/1.0 (local article summarizer)" \
-    --output "$work_dir/article.html" --write-out '%{url_effective}' "$article_url" 2>"$curl_error"); then
-    diagnose fetch "$(head -c 500 "$curl_error")" "Check the network and open the original article to confirm it is available."
-  fi
-
-  if ! python3 "$EXTRACTOR" "$effective_url" "$work_dir/article.html" >"$work_dir/article.json" 2>"$work_dir/extract.error"; then
-    static_error=$(head -c 240 "$work_dir/extract.error")
-    render=true
-  fi
+scrape_args=()
+[[ $debug == true ]] && scrape_args+=(--debug)
+[[ $forced_render == true ]] && scrape_args+=(--render)
+if ! article-scrape "${scrape_args[@]}" "$article_url" \
+  >"$work_dir/article.json" 2>"$work_dir/scrape.error"; then
+  diagnose scraping "$(head -c 500 "$work_dir/scrape.error")" \
+    "The page may be unavailable, require login or interaction, or may not contain a full article."
 fi
-
-if [[ $render == true ]]; then
-  browser=${ARTICLE_SUMMARY_BROWSER:-$ARTICLE_SUMMARY_BROWSER_DEFAULT}
-  [[ $debug == true ]] && echo "article-summary: rendering with $browser" >&2
-  if ! effective_url=$(python3 "$PAGE_RENDERER" "$effective_url" "$work_dir/article.html" 2>"$work_dir/browser.error"); then
-    browser_error=$(head -c 240 "$work_dir/browser.error")
-    if [[ -n $static_error ]]; then
-      browser_error="Static extraction: $static_error Browser rendering: $browser_error"
-    fi
-    diagnose rendering "$browser_error" "The page may require login or unsupported interaction; open the original article to confirm it is public."
-  fi
-  if ! python3 "$EXTRACTOR" "$effective_url" "$work_dir/article.html" >"$work_dir/article.json" 2>"$work_dir/extract.error"; then
-    rendered_error=$(head -c 240 "$work_dir/extract.error")
-    if [[ -n $static_error ]]; then
-      rendered_error="Static extraction: $static_error Rendered extraction: $rendered_error"
-    fi
-    diagnose extraction "$rendered_error" "The rendered page may require login or interaction, or may not contain a full article."
-  fi
-fi
-rm -f "$work_dir/article.html"
 
 canonical_url=$(jq -r '.canonical_url' "$work_dir/article.json")
-if [[ ! $canonical_url =~ ^https?://[^[:space:]]+$ ]]; then canonical_url=$effective_url; fi
+if [[ ! $canonical_url =~ ^https?://[^[:space:]]+$ ]]; then canonical_url=$article_url; fi
 cache_key=$(printf '%s\n%s' "$cache_version" "$canonical_url" | sha256sum | cut -d' ' -f1)
 cached_html="$cache_root/$cache_key.html"
 if [[ $force == false && $forced_render == false && -s $cached_html ]]; then

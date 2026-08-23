@@ -7,21 +7,12 @@
 
 let
   cfg = config._custom.services.ai;
-  articlePython = pkgs.python3.withPackages (pythonPackages: [
-    pythonPackages.playwright
-    pythonPackages.trafilatura
-  ]);
   article-summary = pkgs.writeShellApplication {
     name = "article-summary";
-    runtimeInputs = with pkgs; [
-      articlePython
-    ];
+    runtimeInputs = [ pkgs.python3 ];
     runtimeEnv = {
-      EXTRACTOR = ./extract.py;
-      PAGE_RENDERER = ./fetch_rendered.py;
       RENDERER = ./render.py;
       INJECTOR = ./inject_controls.py;
-      ARTICLE_SUMMARY_BROWSER_DEFAULT = lib.getExe pkgs.prevstable-chrome.google-chrome;
     };
     text = builtins.readFile ./article-summary.sh;
   };
