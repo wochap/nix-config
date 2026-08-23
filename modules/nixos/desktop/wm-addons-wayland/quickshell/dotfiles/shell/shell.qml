@@ -12,6 +12,7 @@ import qs.widgets
 import qs.widgets.Bar
 import qs.widgets.Notifications
 import qs.widgets.ControlCenter
+import qs.widgets.WindowSwitcher
 
 ShellRoot {
   id: root
@@ -24,6 +25,7 @@ ShellRoot {
   property bool renderInputMuted: true
   property bool renderNotifications: true
   property bool renderControlCenter: true
+  property bool renderWindowSwitcher: true
 
   LazyLoader {
     active: root.renderBar && Theme.ready
@@ -63,6 +65,13 @@ ShellRoot {
   LazyLoader {
     active: root.renderControlCenter && Theme.ready
     component: ControlCenter {}
+  }
+
+  LazyLoader {
+    // Loaded unconditionally at startup (not gated on Theme.ready) so the
+    // SWindowSwitcher focus-history singleton is tracking from the beginning.
+    active: root.renderWindowSwitcher
+    component: WindowSwitcher {}
   }
 
   IpcHandler {
