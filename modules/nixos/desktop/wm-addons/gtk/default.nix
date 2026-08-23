@@ -42,6 +42,11 @@ in
     enableCsd = lib.mkEnableOption { };
     enableTheme = lib.mkEnableOption { };
     enableLibadwaitaWithoutAdwaita = lib.mkEnableOption { };
+    bookmarks = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "file:///mnt/storage Storage" ];
+    };
     # NOTE: theme is highly coupled to catppuccin and adw-gtk3
     theme = {
       name = lib.mkOption {
@@ -245,14 +250,14 @@ in
           };
           bookmarks = [
             "file://${hmConfig.home.homeDirectory}/Downloads"
+            "file://${hmConfig.home.homeDirectory}/Documents"
             "file://${hmConfig.home.homeDirectory}/Pictures"
             "file://${hmConfig.home.homeDirectory}/Videos"
-            "file://${hmConfig.home.homeDirectory}/nix-config"
-            "file://${hmConfig.home.homeDirectory}/Projects"
-            "file://${hmConfig.home.homeDirectory}/Videos/Recordings"
             "file://${hmConfig.home.homeDirectory}/Pictures/Screenshots"
+            "file://${hmConfig.home.homeDirectory}/Videos/Recordings"
             "file://${hmConfig.home.homeDirectory}/Sync"
-          ];
+          ]
+          ++ cfg.bookmarks;
         };
         gtk4 = {
           theme = hmConfig.gtk.theme;
