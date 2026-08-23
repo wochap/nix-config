@@ -19,6 +19,7 @@ in
         qbittorrent
         wireshark # network analyzer
 
+        kdePackages.partitionmanager
         kdePackages.kalgebra
         kdePackages.kdenlive
         # glaxnimate
