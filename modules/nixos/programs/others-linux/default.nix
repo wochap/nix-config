@@ -3,7 +3,6 @@
   pkgs,
   lib,
   inputs,
-  system,
   ...
 }:
 
@@ -40,6 +39,7 @@ in
       prevstable-chrome.google-chrome
       prevstable-msedge.microsoft-edge
       inputs.zen-browser.packages."${stdenv.hostPlatform.system}".beta
+      inputs.kb-hud.packages."${stdenv.hostPlatform.system}".default
       galaxy-buds-client
       zoom-us
       # teamviewer
