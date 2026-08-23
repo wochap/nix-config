@@ -48,6 +48,11 @@ done
 
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/qwen3-asr"
 mkdir -p "$cache_dir"
+asr_snapshot="$cache_dir/huggingface/hub/models--Qwen--Qwen3-ASR-1.7B/snapshots/$QWEN3_ASR_ASR_REVISION"
+asr_cached=0
+if [[ -e $asr_snapshot/model-00001-of-00002.safetensors && -e $asr_snapshot/model-00002-of-00002.safetensors ]]; then
+  asr_cached=1
+fi
 
 container_args=(
   run
@@ -65,6 +70,8 @@ container_args=(
   --pids-limit=2048
   --shm-size=4g
   --env=HF_HUB_DISABLE_TELEMETRY=1
+  --env=HF_HUB_ETAG_TIMEOUT=2
+  --env=QWEN3_ASR_ASR_REVISION
   --volume="$cache_dir:/root/.cache:rw"
   --volume="$QWEN3_ASR_SCRIPT:/opt/qwen3-asr/transcribe.py:ro"
 )
@@ -76,12 +83,15 @@ for i in "${!audio_files[@]}"; do
   python_args+=("$container_audio")
 done
 
-if [[ ${QWEN3_ASR_OFFLINE:-0} == 1 ]]; then
+if [[ ${QWEN3_ASR_OFFLINE:-0} == 1 || $asr_cached == 1 ]]; then
   container_args+=(
     --network=none
     --env=HF_HUB_OFFLINE=1
     --env=TRANSFORMERS_OFFLINE=1
   )
+  if [[ ${QWEN3_ASR_OFFLINE:-0} != 1 ]]; then
+    echo "Pinned ASR model is cached; running without Hugging Face network access" >&2
+  fi
 fi
 
 [[ -z $language ]] || python_args+=(--language "$language")

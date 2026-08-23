@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 
 import importlib.util
+import contextlib
+import io
+import json
 import pathlib
+import tempfile
+import types
 import unittest
 
 
@@ -130,6 +135,63 @@ class PipelineTest(unittest.TestCase):
     def test_timestamp_format(self):
         self.assertEqual(PIPELINE.transcript_timestamp(0.52), "00:00.52")
         self.assertEqual(PIPELINE.transcript_timestamp(3661.25), "01:01:01.25")
+
+    def test_chunk_plan_prefers_latest_nearby_silence(self):
+        boundaries = PIPELINE.plan_chunk_boundaries(
+            duration=700.0,
+            silences=[205.0, 235.0, 450.0, 472.0],
+            max_seconds=240.0,
+            search_seconds=30.0,
+        )
+        self.assertEqual(boundaries, [235.0, 472.0])
+        lengths = [boundaries[0], boundaries[1] - boundaries[0], 700.0 - boundaries[1]]
+        self.assertTrue(all(length <= 240.0 for length in lengths))
+
+    def test_chunk_plan_avoids_tiny_final_chunk(self):
+        self.assertEqual(
+            PIPELINE.plan_chunk_boundaries(241.0, [], max_seconds=240.0),
+            [211.0],
+        )
+
+    def test_chunk_plan_uses_hard_limit_without_silence(self):
+        boundaries = PIPELINE.plan_chunk_boundaries(600.0, [], max_seconds=240.0)
+        self.assertEqual(boundaries, [240.0, 480.0])
+
+    def test_validation_reports_quality_signals(self):
+        document = {
+            "schema_version": 1,
+            "source": {"duration": 2.0},
+            "chunks": [{"start": 0.0, "end": 2.0, "text": ""}],
+            "tokens": [{"start": 0.1, "end": 0.2, "speaker": "UNKNOWN"}],
+            "exclusive_diarization": [
+                {"start": 0.1, "end": 0.15, "speaker": "SPEAKER_00"}
+            ],
+            "turns": [{"start": 0.1, "end": 0.2}],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "result.json"
+            path.write_text(json.dumps(document), encoding="utf-8")
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                PIPELINE.validate(types.SimpleNamespace(input=str(path)))
+        self.assertIn("1 chunks (1 empty)", stderr.getvalue())
+        self.assertIn("1 tokens (1 UNKNOWN)", stderr.getvalue())
+        self.assertIn("1 under 100 ms", stderr.getvalue())
+
+    def test_validation_rejects_non_finite_timestamp(self):
+        document = {
+            "schema_version": 1,
+            "source": {"duration": 2.0},
+            "chunks": [{"start": 0.0, "end": float("nan"), "text": "hello"}],
+            "tokens": [],
+            "exclusive_diarization": [],
+            "turns": [],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "result.json"
+            path.write_text(json.dumps(document), encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "not finite"):
+                PIPELINE.validate(types.SimpleNamespace(input=str(path)))
 
 
 if __name__ == "__main__":

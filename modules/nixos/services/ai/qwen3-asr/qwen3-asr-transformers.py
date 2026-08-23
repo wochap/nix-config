@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import sys
 
 import torch
@@ -17,6 +18,7 @@ def main() -> None:
     # are tuned for the RTX 4060 and do not support AMD/ROCm or CPU-only hosts.
     model = Qwen3ASRModel.from_pretrained(
         "Qwen/Qwen3-ASR-1.7B",
+        revision=os.environ["QWEN3_ASR_ASR_REVISION"],
         dtype=torch.bfloat16,
         device_map="cuda:0",
         max_inference_batch_size=1,
