@@ -63,7 +63,7 @@ hl.config({
     accel_profile = "adaptive",
     repeat_delay = 300,
     repeat_rate = 50,
-    sensitivity = -0.2,
+    sensitivity = 0.0,
     scroll_method = "2fg",
     natural_scroll = true,
     follow_mouse = 1,
