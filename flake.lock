@@ -3730,11 +3730,11 @@
     "vdirsyncer": {
       "flake": false,
       "locked": {
-        "lastModified": 1787352431,
-        "narHash": "sha256-f4S0km9SpuOm/8lfeKczY9wHKq99dta1lyJiftyx7ig=",
+        "lastModified": 1787592515,
+        "narHash": "sha256-p5dNXj0jQqbxhiFFf2ffcP6Vn6LCYVEjI1E97ztpCiI=",
         "owner": "wochap",
         "repo": "vdirsyncer",
-        "rev": "7de8c6a942a06645340e2f574e4215f6a61da929",
+        "rev": "acc5efa5d4834950987154d36f3fd55c5da2ea07",
         "type": "github"
       },
       "original": {

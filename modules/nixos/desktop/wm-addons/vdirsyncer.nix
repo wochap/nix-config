@@ -104,9 +104,13 @@ in
   config = lib.mkIf active {
     nixpkgs.overlays = [
       (_final: prev: {
-        vdirsyncer = prev.vdirsyncer.overrideAttrs (_oldAttrs: {
+        vdirsyncer = prev.vdirsyncer.overrideAttrs (oldAttrs: {
           version = "0.20.0+g${inputs.vdirsyncer.shortRev or "dirty"}";
           src = inputs.vdirsyncer;
+          doCheck = false;
+          propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or [ ]) ++ [
+            prev.python3Packages.tenacity
+          ];
         });
       })
     ];
