@@ -7,8 +7,8 @@ Rectangle {
 
   required property string label
 
-  implicitWidth: keyLabel.implicitWidth + 12
-  implicitHeight: keyLabel.implicitHeight + 6
+  implicitHeight: keyLabel.implicitHeight + 2 * ConfigWhichKeys.keycapPadding
+  implicitWidth: Math.max(implicitHeight, keyLabel.implicitWidth + 2 * ConfigWhichKeys.keycapPadding)
   radius: 4
   color: Theme.options.surface0
   border {

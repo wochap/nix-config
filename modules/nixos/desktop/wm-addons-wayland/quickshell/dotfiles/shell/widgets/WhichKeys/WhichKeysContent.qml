@@ -13,7 +13,7 @@ PanelWindow {
   readonly property int columns: Math.max(1, Math.floor((width - 2 * ConfigWhichKeys.panelPadding + ConfigWhichKeys.columnSpacing) / (ConfigWhichKeys.minimumCellWidth + ConfigWhichKeys.columnSpacing)))
 
   screen: backend.screen
-  implicitHeight: content.implicitHeight + 2 * ConfigWhichKeys.panelPadding
+  implicitHeight: content.implicitHeight + ConfigWhichKeys.panelPadding + ConfigWhichKeys.bottomMargin
   color: "transparent"
   exclusionMode: ExclusionMode.Ignore
   exclusiveZone: 0
@@ -29,27 +29,25 @@ PanelWindow {
   WlrLayershell.layer: WlrLayer.Overlay
   WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
-  Rectangle {
-    anchors.fill: parent
-    color: Theme.addAlpha(Theme.options.backgroundOverlay, ConfigWhichKeys.backgroundOpacity)
-  }
-
   ColumnLayout {
     id: content
 
     anchors {
       fill: parent
       margins: ConfigWhichKeys.panelPadding
+      bottomMargin: ConfigWhichKeys.bottomMargin
     }
     spacing: ConfigWhichKeys.rowSpacing
 
     RowLayout {
+      Layout.alignment: Qt.AlignHCenter
       spacing: ConfigWhichKeys.keycapSpacing
 
       StyledText {
         visible: root.backend.submap.length > 0
         text: root.backend.submap.toUpperCase()
         color: Theme.options.peach
+        font.pixelSize: Styles.font.pixelSize.small
         font.weight: Font.Bold
       }
 
@@ -76,8 +74,7 @@ PanelWindow {
         delegate: WhichKeysBinding {
           required property var modelData
 
-          Layout.fillWidth: true
-          Layout.preferredWidth: ConfigWhichKeys.minimumCellWidth
+          Layout.alignment: Qt.AlignLeft
           keycaps: modelData.keycaps
           description: modelData.description
         }
