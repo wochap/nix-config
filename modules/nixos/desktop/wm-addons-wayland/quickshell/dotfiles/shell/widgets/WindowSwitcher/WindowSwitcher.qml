@@ -35,24 +35,24 @@ Scope {
       compositorBackend.toggle();
     }
 
-    function show(mode: string) {
-      compositorBackend.show(mode);
+    function show(mode: string, sessionId: string) {
+      compositorBackend.show(mode, sessionId);
     }
 
     function hide() {
       compositorBackend.hide();
     }
 
-    function advance(mode: string) {
-      compositorBackend.advance(mode);
+    function advance(mode: string, sessionId: string) {
+      compositorBackend.advance(mode, sessionId);
     }
 
-    function reverse(mode: string) {
-      compositorBackend.reverse(mode);
+    function reverse(mode: string, sessionId: string) {
+      compositorBackend.reverse(mode, sessionId);
     }
 
-    function confirm() {
-      compositorBackend.confirm();
+    function confirm(sessionId: string) {
+      compositorBackend.confirm(sessionId);
     }
   }
 }

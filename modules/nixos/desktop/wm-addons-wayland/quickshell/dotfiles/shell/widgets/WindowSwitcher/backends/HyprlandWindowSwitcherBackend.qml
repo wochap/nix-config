@@ -9,6 +9,8 @@ Scope {
 
   property bool isOpen: false
   property bool pendingConfirm: false
+  property string pendingSessionId: ""
+  property string sessionId: ""
   property var mru: []
   property string selectedId: ""
   property string openedFrom: ""
@@ -108,22 +110,25 @@ Scope {
       root.show();
   }
 
-  function show(requestedMode) {
+  function show(requestedMode, requestedSessionId) {
     if (root.isOpen)
       return;
     root.mode = root.normalizedMode(requestedMode);
     if (root.orderedToplevels.length === 0) {
       root.pendingConfirm = false;
+      root.pendingSessionId = "";
       pendingConfirmTimer.stop();
       return;
     }
+    root.sessionId = requestedSessionId ?? "";
     root.isOpen = true;
     root.openedFrom = Hyprland.activeToplevel?.address ?? "";
     root.selectedId = root.orderedToplevels[0]?.address ?? "";
-    if (root.pendingConfirm) {
+    if (root.pendingConfirm && root.pendingSessionId === root.sessionId) {
       root.pendingConfirm = false;
+      root.pendingSessionId = "";
       pendingConfirmTimer.stop();
-      root.confirm();
+      root.confirm(root.sessionId);
     }
   }
 
@@ -131,28 +136,34 @@ Scope {
     root.isOpen = false;
     root.selectedId = "";
     root.openedFrom = "";
+    root.sessionId = "";
   }
 
-  function advance(requestedMode) {
+  function advance(requestedMode, requestedSessionId) {
     if (!root.isOpen)
-      root.show(requestedMode);
-    else
+      root.show(requestedMode, requestedSessionId);
+    else if (!requestedSessionId || requestedSessionId === root.sessionId)
       root.moveSelection(1);
   }
 
-  function reverse(requestedMode) {
+  function reverse(requestedMode, requestedSessionId) {
     if (!root.isOpen)
-      root.show(requestedMode);
-    else
+      root.show(requestedMode, requestedSessionId);
+    else if (!requestedSessionId || requestedSessionId === root.sessionId)
       root.moveSelection(-1);
   }
 
-  function confirm() {
+  function confirm(requestedSessionId) {
     if (!root.isOpen) {
+      if (!requestedSessionId)
+        return;
       root.pendingConfirm = true;
+      root.pendingSessionId = requestedSessionId;
       pendingConfirmTimer.restart();
       return;
     }
+    if (requestedSessionId && requestedSessionId !== root.sessionId)
+      return;
     const id = root.selectedId;
     const known = root.indexOfId(root.orderedToplevels, id) !== -1;
     root.hide();
@@ -165,7 +176,10 @@ Scope {
   Timer {
     id: pendingConfirmTimer
     interval: 300
-    onTriggered: root.pendingConfirm = false
+    onTriggered: {
+      root.pendingConfirm = false;
+      root.pendingSessionId = "";
+    }
   }
 
   Timer {

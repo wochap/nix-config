@@ -80,9 +80,8 @@ PanelWindow {
     onClicked: root.backend.hide()
   }
 
-  // Esc cancels, Enter confirms, releasing Alt confirms (the switcher holds
-  // exclusive keyboard focus, so the Alt release reaches us; binds.lua also
-  // sends `confirm` on Alt release as a fallback).
+  // Esc cancels and Enter confirms. Modifier release is handled only by the
+  // compositor binding so a single gesture cannot send duplicate confirms.
   Item {
     id: keyCatcher
     anchors.fill: parent
@@ -92,12 +91,6 @@ PanelWindow {
         event.accepted = true;
         root.backend.hide();
       } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-        event.accepted = true;
-        root.backend.confirm();
-      }
-    }
-    Keys.onReleased: event => {
-      if (event.key === Qt.Key_Alt || event.key === Qt.Key_Meta) {
         event.accepted = true;
         root.backend.confirm();
       }
