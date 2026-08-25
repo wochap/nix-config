@@ -66,7 +66,7 @@ function M.setup(opts)
   local keys = opts.keys or {}
   local submap = opts.submap or "scratchpad"
 
-  hl.bind(leader, hl.dsp.submap(submap))
+  hl.bind(leader, hl.dsp.submap(submap), { description = "+Harpoon Scratchpads" })
   hl.define_submap(submap, "reset", function()
     for _, key in ipairs(keys) do
       hl.bind(key, function()
@@ -76,7 +76,7 @@ function M.setup(opts)
         M.toggle_in(key)
       end)
     end
-    hl.bind("escape", hl.dsp.submap("reset"))
+    hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
   end)
 end
 

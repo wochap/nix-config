@@ -340,7 +340,7 @@ hl.bind(mod .. " + SHIFT + grave", scratchpad.focus_last, { description = "Last 
 
 -- WM GROUPS
 
-hl.bind(mod .. " + g", hl.dsp.submap("group"), { description = "Groups" })
+hl.bind(mod .. " + g", hl.dsp.submap("group"), { description = "+Groups" })
 hl.define_submap("group", "reset", function()
   hl.bind("g", hl.dsp.group.toggle(), { description = "Toggle" })
   -- TODO: verify into_or_create_group matches old movewindoworgroup behavior
@@ -357,7 +357,7 @@ hl.define_submap("group", "reset", function()
       hl.dispatch(hl.dsp.window.move({ workspace = ws_offset.ws(key), follow = false }))
     end)
   end
-  hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
+  hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
 end)
 
 --- APPLICATION KEYBINDINGS (Super + Alt + Key)
@@ -506,7 +506,7 @@ end, { description = "Keyboard HUD" })
 -- SUBMAPS
 
 -- Layout
-hl.bind(mod .. " + r", hl.dsp.submap("layout"), { description = "Layout" })
+hl.bind(mod .. " + r", hl.dsp.submap("layout"), { description = "+Layout" })
 hl.define_submap("layout", "reset", function()
   hl.bind("c", hl.dsp.window.center(), { description = "Center" })
   hl.bind("e", function()
@@ -548,11 +548,11 @@ hl.define_submap("layout", "reset", function()
   hl.bind("SHIFT + down", hl.dsp.window.resize({ x = 0, y = 40, relative = true }), { description = "Grow Height" })
   hl.bind("SHIFT + up", hl.dsp.window.resize({ x = 0, y = -40, relative = true }), { description = "Shrink Height" })
   hl.bind("SHIFT + right", hl.dsp.window.resize({ x = 40, y = 0, relative = true }), { description = "Grow Width" })
-  hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
+  hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
 end)
 
 -- Open Browser
-hl.bind(mod .. " + ALT + b", hl.dsp.submap("browser"), { description = "Browsers" })
+hl.bind(mod .. " + ALT + b", hl.dsp.submap("browser"), { description = "+Browsers" })
 hl.define_submap("browser", "reset", function()
   -- TODO: find workaround for exec rules + uwsm-app
   hl.bind("f", hl.dsp.exec_cmd(session_cmd("firefox")), { description = "Firefox" })
@@ -599,11 +599,11 @@ hl.define_submap("browser", "reset", function()
       scratchpad_opts
     )
   end, { description = "YouTube Music" })
-  hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
+  hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
 end)
 
 -- Terminal TUI
-hl.bind(mod .. " + ALT + u", hl.dsp.submap("tui"), { description = "TUIs" })
+hl.bind(mod .. " + ALT + u", hl.dsp.submap("tui"), { description = "+TUIs" })
 hl.define_submap("tui", "reset", function()
   hl.bind("n", function()
     scratchpad.raise_or_run("tui-notes", "tui-notes", scratchpad_opts)
@@ -635,12 +635,12 @@ hl.define_submap("tui", "reset", function()
   hl.bind("CTRL + SHIFT + b", function()
     scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --edit", scratchpad_opts)
   end, { description = "Edit Bookmarks" })
-  hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
+  hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
 end)
 
 -- Notification
 if not constants.is_kiosk then
-  hl.bind(mod .. " + ALT + n", hl.dsp.submap("notification"), { description = "Notifications" })
+  hl.bind(mod .. " + ALT + n", hl.dsp.submap("notification"), { description = "+Notifications" })
   hl.define_submap("notification", "reset", function()
     hl.bind(
       "n",
@@ -657,12 +657,12 @@ if not constants.is_kiosk then
       hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications discardPopups"),
       { description = "Discard" }
     )
-    hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
+    hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
   end)
 end
 
 -- HACK: disable all hyprland keymappings
-hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("kb_inhibit"), { description = "Inhibit Keys" })
+hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("kb_inhibit"), { description = "+Inhibit Keys" })
 hl.define_submap("kb_inhibit", function()
-  hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("reset"), { description = "Restore Keys" })
+  hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("reset"), { description = "+Restore Keys" })
 end)

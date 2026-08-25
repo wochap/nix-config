@@ -64,7 +64,8 @@ Item {
 
       StyledText {
         Layout.maximumWidth: ConfigWhichKeys.maximumDescriptionWidth
-        text: root.description
+        text: root.description.startsWith("+") ? root.description.slice(1) : root.description
+        color: root.description.startsWith("+") ? Theme.options.peach : Theme.options.text
         elide: Text.ElideRight
         font.pixelSize: Styles.font.pixelSize.small
       }
