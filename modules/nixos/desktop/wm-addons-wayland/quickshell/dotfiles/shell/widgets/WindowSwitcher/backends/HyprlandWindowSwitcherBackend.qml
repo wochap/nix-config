@@ -118,7 +118,7 @@ Scope {
       root.pendingSessionId = "";
       pendingConfirmTimer.stop();
     }
-    if (list.length > 1) {
+    if (list.length > 0) {
       focusTimer.address = list[0]?.address ?? "";
       focusTimer.restart();
     }
