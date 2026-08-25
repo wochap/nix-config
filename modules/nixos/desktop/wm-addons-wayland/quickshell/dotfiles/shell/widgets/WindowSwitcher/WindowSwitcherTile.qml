@@ -23,12 +23,8 @@ Item {
   }
 
   ColumnLayout {
-    anchors {
-      fill: parent
-      topMargin: 10
-      bottomMargin: 10
-    }
-    spacing: 10
+    anchors.fill: parent
+    spacing: 4
 
     StyledRect {
       Layout.fillWidth: true

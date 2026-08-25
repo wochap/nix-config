@@ -11,10 +11,10 @@ PanelWindow {
   required property var backend
 
   readonly property real screenPadding: 64
-  readonly property real panelPadding: 28
-  readonly property real gap: 14
-  // Space below and around the preview: tile margins, layout spacing, caption.
-  readonly property real tileChromeHeight: 48
+  readonly property real panelPadding: 8
+  readonly property real gap: 8
+  // Space below the preview: layout spacing and caption.
+  readonly property real tileChromeHeight: 22
   readonly property int maxColumns: 5
   readonly property int maxBoxWidth: 280
 
