@@ -10,6 +10,7 @@ Scope {
   property bool isOpen: false
   property bool pendingConfirm: false
   property string pendingSessionId: ""
+  property string bypassedSessionId: ""
   property string sessionId: ""
   property var mru: []
   property string selectedId: ""
@@ -103,6 +104,27 @@ Scope {
     root.selectedId = list[next]?.address ?? "";
   }
 
+  function bypassOverlay(requestedMode, requestedSessionId) {
+    root.mode = root.normalizedMode(requestedMode);
+    const list = root.orderedToplevels;
+    if (list.length >= 3)
+      return false;
+
+    // Consume the modifier-release confirmation for this gesture: no switcher
+    // session was opened, so it must not become a pending confirmation.
+    root.bypassedSessionId = requestedSessionId ?? "";
+    if (root.pendingSessionId === root.bypassedSessionId) {
+      root.pendingConfirm = false;
+      root.pendingSessionId = "";
+      pendingConfirmTimer.stop();
+    }
+    if (list.length > 1) {
+      focusTimer.address = list[0]?.address ?? "";
+      focusTimer.restart();
+    }
+    return true;
+  }
+
   function toggle() {
     if (root.isOpen)
       root.hide();
@@ -140,6 +162,8 @@ Scope {
   }
 
   function advance(requestedMode, requestedSessionId) {
+    if (!root.isOpen && root.bypassOverlay(requestedMode, requestedSessionId))
+      return;
     if (!root.isOpen)
       root.show(requestedMode, requestedSessionId);
     else if (!requestedSessionId || requestedSessionId === root.sessionId)
@@ -147,6 +171,8 @@ Scope {
   }
 
   function reverse(requestedMode, requestedSessionId) {
+    if (!root.isOpen && root.bypassOverlay(requestedMode, requestedSessionId))
+      return;
     if (!root.isOpen)
       root.show(requestedMode, requestedSessionId);
     else if (!requestedSessionId || requestedSessionId === root.sessionId)
@@ -157,6 +183,10 @@ Scope {
     if (!root.isOpen) {
       if (!requestedSessionId)
         return;
+      if (requestedSessionId === root.bypassedSessionId) {
+        root.bypassedSessionId = "";
+        return;
+      }
       root.pendingConfirm = true;
       root.pendingSessionId = requestedSessionId;
       pendingConfirmTimer.restart();
