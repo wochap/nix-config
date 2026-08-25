@@ -9,6 +9,7 @@ Scope {
   id: root
 
   property var rawBindings: []
+  property var dynamicHints: ({})
   property int heldModifierMask: 0
   property bool holdReady: false
 
@@ -84,12 +85,45 @@ Scope {
         description: String(binding?.description ?? "")
       };
     });
+    const submapHints = root.dynamicHints[activeSubmap] ?? {};
+    for (const key of Object.keys(submapHints)) {
+      result.push({
+        keycaps: [root.normalizedKey(key)],
+        description: String(submapHints[key] ?? "")
+      });
+    }
     result.sort((left, right) => {
       const leftKey = left.keycaps.join("+");
       const rightKey = right.keycaps.join("+");
       return leftKey.localeCompare(rightKey);
     });
     return result;
+  }
+
+  function updateHint(payload) {
+    const parts = payload.split(">>");
+    const action = parts[0];
+    const submap = decodeURIComponent(parts[1] ?? "");
+    if (submap.length === 0)
+      return;
+
+    const hints = Object.assign({}, root.dynamicHints);
+    if (action === "clear") {
+      delete hints[submap];
+    } else {
+      const key = decodeURIComponent(parts[2] ?? "");
+      if (key.length === 0)
+        return;
+      const submapHints = Object.assign({}, hints[submap] ?? {});
+      if (action === "set")
+        submapHints[key] = decodeURIComponent(parts[3] ?? "");
+      else if (action === "remove")
+        delete submapHints[key];
+      else
+        return;
+      hints[submap] = submapHints;
+    }
+    root.dynamicHints = hints;
   }
 
   function updateModifierMask(mask) {
@@ -144,6 +178,8 @@ Scope {
     function onRawEvent(event) {
       if (event.name === "custom" && event.data?.startsWith("which_keys>>"))
         root.updateModifierMask(event.data.slice("which_keys>>".length));
+      else if (event.name === "custom" && event.data?.startsWith("which_keys_hint>>"))
+        root.updateHint(event.data.slice("which_keys_hint>>".length));
       else if (event.name === "configreloaded")
         root.reloadBindings();
     }

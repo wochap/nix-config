@@ -1,10 +1,40 @@
 local M = {}
+local which_keys = require("hyprland.lib.which_keys")
 
 local tag_prefix = "harpoon-"
+local hint_slots = {}
+
+local function window_description(window)
+  for _, value in ipairs({ window.title, window.class, window.initialTitle, window.initialClass }) do
+    if type(value) == "string" and value ~= "" then
+      return value
+    end
+  end
+  return "Occupied"
+end
+
+local function update_hint(slot, window)
+  local hint = hint_slots[slot]
+  if not hint then
+    return
+  end
+  if window then
+    which_keys.add_hint(hint.submap, hint.key, window_description(window))
+  else
+    which_keys.remove_hint(hint.submap, hint.key)
+  end
+end
 
 local function tag_for(slot)
   assert(type(slot) == "string" and slot:match("^[%w_-]+$"), "harpoon slot must contain only letters, digits, _ or -")
   return tag_prefix .. slot
+end
+
+function M.register_hint(slot, submap, key)
+  tag_for(slot)
+  assert(type(submap) == "string" and submap ~= "", "harpoon hint submap is required")
+  assert(type(key) == "string" and key ~= "", "harpoon hint key is required")
+  hint_slots[slot] = { submap = submap, key = key }
 end
 
 local function has_tag(window, wanted)
@@ -37,6 +67,18 @@ function M.get(slot)
   end
 end
 
+function M.sync_hints(submap)
+  which_keys.clear_hints(submap)
+  for slot, hint in pairs(hint_slots) do
+    if hint.submap == submap then
+      local window = M.get(slot)
+      if window then
+        update_hint(slot, window)
+      end
+    end
+  end
+end
+
 -- Assign a particular window to a slot. This is useful for callers which need
 -- to focus or move other windows before completing the assignment.
 function M.assign(slot, window)
@@ -54,6 +96,7 @@ function M.assign(slot, window)
   if not has_tag(window, tag) then
     hl.dispatch(hl.dsp.window.tag({ tag = "+" .. tag, window = window }))
   end
+  update_hint(slot, window)
   return true
 end
 
@@ -69,6 +112,7 @@ function M.clear(slot, window)
     return false
   end
   hl.dispatch(hl.dsp.window.tag({ tag = "-" .. tag_for(slot), window = window }))
+  update_hint(slot, nil)
   return true
 end
 
@@ -83,6 +127,7 @@ function M.remove(window)
   for _, tag in ipairs(window.tags or {}) do
     if tag:sub(1, #tag_prefix) == tag_prefix then
       hl.dispatch(hl.dsp.window.tag({ tag = "-" .. tag, window = window }))
+      update_hint(tag:sub(#tag_prefix + 1), nil)
       removed = true
     end
   end
@@ -129,8 +174,16 @@ function M.setup(opts)
   local keys = opts.keys or {}
   local submap = opts.submap or "harpoon"
 
-  hl.bind(leader, hl.dsp.submap(submap))
-  hl.bind(remove_binding, M.remove)
+  for _, key in ipairs(keys) do
+    local slot = opts.slots and opts.slots[key] or key
+    M.register_hint(slot, submap, key)
+  end
+
+  hl.bind(leader, function()
+    M.sync_hints(submap)
+    hl.dispatch(hl.dsp.submap(submap))
+  end, { description = "+Harpoon" })
+  hl.bind(remove_binding, M.remove, { description = "Harpoon Remove" })
   hl.define_submap(submap, "reset", function()
     for _, key in ipairs(keys) do
       local slot = opts.slots and opts.slots[key] or key
@@ -141,7 +194,7 @@ function M.setup(opts)
         M.mark(slot)
       end)
     end
-    hl.bind("escape", hl.dsp.submap("reset"))
+    hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
   end)
 end
 

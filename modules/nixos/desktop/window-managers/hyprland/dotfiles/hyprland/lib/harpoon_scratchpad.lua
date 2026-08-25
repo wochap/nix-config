@@ -66,7 +66,14 @@ function M.setup(opts)
   local keys = opts.keys or {}
   local submap = opts.submap or "scratchpad"
 
-  hl.bind(leader, hl.dsp.submap(submap), { description = "+Harpoon Scratchpads" })
+  for _, key in ipairs(keys) do
+    harpoon.register_hint(slot_for(key), submap, key)
+  end
+
+  hl.bind(leader, function()
+    harpoon.sync_hints(submap)
+    hl.dispatch(hl.dsp.submap(submap))
+  end, { description = "+Harpoon Scratchpads" })
   hl.define_submap(submap, "reset", function()
     for _, key in ipairs(keys) do
       hl.bind(key, function()

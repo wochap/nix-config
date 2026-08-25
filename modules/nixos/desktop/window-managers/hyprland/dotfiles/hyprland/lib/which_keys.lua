@@ -14,6 +14,24 @@ local modifiers = {
 
 local pressed = {}
 
+local function encode(value)
+  local encoded = tostring(value):gsub("([^%w_.~-])", function(char)
+    return string.format("%%%02X", string.byte(char))
+  end)
+  return encoded
+end
+
+local function emit_hint(action, submap, key, description)
+  local parts = { "which_keys_hint", action, encode(submap) }
+  if key ~= nil then
+    table.insert(parts, encode(key))
+  end
+  if description ~= nil then
+    table.insert(parts, encode(description))
+  end
+  hl.dispatch(hl.dsp.event(table.concat(parts, ">>")))
+end
+
 local function emit()
   local mask = 0
   for _, modifier in ipairs(modifiers) do
@@ -53,6 +71,25 @@ function M.setup()
       })
     end
   end
+end
+
+-- Add or replace a runtime-only hint. These hints complement the bindings
+-- reported by `hyprctl binds` and are useful for stateful submaps.
+function M.add_hint(submap, key, description)
+  assert(type(submap) == "string" and submap ~= "", "which-keys submap is required")
+  assert(type(key) == "string" and key ~= "", "which-keys hint key is required")
+  emit_hint("set", submap, key, description or "")
+end
+
+function M.remove_hint(submap, key)
+  assert(type(submap) == "string" and submap ~= "", "which-keys submap is required")
+  assert(type(key) == "string" and key ~= "", "which-keys hint key is required")
+  emit_hint("remove", submap, key)
+end
+
+function M.clear_hints(submap)
+  assert(type(submap) == "string" and submap ~= "", "which-keys submap is required")
+  emit_hint("clear", submap)
 end
 
 return M
