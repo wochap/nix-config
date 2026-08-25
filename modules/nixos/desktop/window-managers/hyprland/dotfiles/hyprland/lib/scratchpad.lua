@@ -25,10 +25,6 @@ local function is_harpoon_scratchpad(w)
   return common.has_tag_prefix(w, tags.harpoon)
 end
 
-local function is_temporary_scratchpad(w)
-  return is_tmp_scratchpad(w) or is_harpoon_scratchpad(w)
-end
-
 -- raise a window of the given class, or run cmd if none exists.
 -- opts.use_uwsm: launch cmd via uwsm-app (default false)
 function M.raise_or_run(class, cmd, opts)
@@ -152,7 +148,7 @@ local function process_scratchpad(window, ws_name, ctx)
           w.workspace
           and w.workspace.id == ctx.current_ws
           and same_monitor(w.monitor, ctx.current_monitor)
-          and is_temporary_scratchpad(w)
+          and is_tmp_scratchpad(w)
         then
           hl.dispatch(hl.dsp.window.move({ workspace = "special:" .. ws_name, window = w, follow = false }))
         end
@@ -194,14 +190,24 @@ function M.toggle()
     end
   end
 
-  -- process scratchpads created by toggle / toggle_in
+  -- A focused harpoon scratchpad behaves like a raise_or_run scratchpad: hide
+  -- only that window. Harpoon scratchpads are otherwise controlled exclusively
+  -- by their letter bindings and must not participate in generic cycling.
+  local focused = hl.get_active_window()
+  if focused and is_harpoon_scratchpad(focused) then
+    if process_scratchpad(focused, workspaces.harpoon, ctx) then
+      return
+    end
+  end
+
+  -- Process only generic scratchpads created by toggle / toggle_in.
   local visible_tmp = {}
   for _, w in ipairs(hl.get_windows({ mapped = true })) do
     if
       w.workspace
       and w.workspace.id == ctx.current_ws
       and same_monitor(w.monitor, current_monitor)
-      and is_temporary_scratchpad(w)
+      and is_tmp_scratchpad(w)
     then
       table.insert(visible_tmp, w)
     end
