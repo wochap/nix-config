@@ -14,6 +14,7 @@ Item {
 
   StyledRectangularShadow {
     target: card
+    cached: false
   }
 
   Rectangle {
