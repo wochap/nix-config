@@ -12,6 +12,7 @@ import qs.widgets
 import qs.widgets.Bar
 import qs.widgets.Notifications
 import qs.widgets.ControlCenter
+import qs.widgets.Harpoon
 import qs.widgets.WindowSwitcher
 import qs.widgets.WhichKeys
 
@@ -26,6 +27,7 @@ ShellRoot {
   property bool renderInputMuted: true
   property bool renderNotifications: true
   property bool renderControlCenter: true
+  property bool renderHarpoon: true
   property bool renderWindowSwitcher: true
   property bool renderWhichKeys: true
 
@@ -67,6 +69,11 @@ ShellRoot {
   LazyLoader {
     active: root.renderControlCenter && Theme.ready
     component: ControlCenter {}
+  }
+
+  LazyLoader {
+    active: root.renderHarpoon && Theme.ready
+    component: Harpoon {}
   }
 
   LazyLoader {

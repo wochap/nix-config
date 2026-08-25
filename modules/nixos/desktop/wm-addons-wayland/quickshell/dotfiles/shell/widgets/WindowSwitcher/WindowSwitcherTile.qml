@@ -13,12 +13,15 @@ Item {
   property real previewAspect: 16.0 / 9.0
   property string title: ""
   property bool selected: false
+  property bool interactive: true
+  property string badge: ""
   signal clicked
 
   MouseArea {
     anchors.fill: parent
+    enabled: tile.interactive
     hoverEnabled: true
-    cursorShape: Qt.PointingHandCursor
+    cursorShape: tile.interactive ? Qt.PointingHandCursor : Qt.ArrowCursor
     onClicked: tile.clicked()
   }
 
@@ -50,6 +53,32 @@ Item {
         captureSource: tile.captureSource
         live: false
         visible: tile.captureSource !== null
+      }
+
+      Rectangle {
+        visible: tile.badge.length > 0
+        anchors {
+          top: parent.top
+          left: parent.left
+          margins: 8
+        }
+        implicitWidth: Math.max(implicitHeight, badgeLabel.implicitWidth + 12)
+        implicitHeight: badgeLabel.implicitHeight + 8
+        radius: 5
+        color: Theme.options.backgroundOverlay
+        border {
+          width: 1
+          color: Theme.options.primary
+        }
+
+        StyledText {
+          id: badgeLabel
+          anchors.centerIn: parent
+          text: tile.badge.toUpperCase()
+          color: Theme.options.primary
+          font.pixelSize: Styles.font.pixelSize.small
+          font.weight: Font.Bold
+        }
       }
 
       // StyledText {

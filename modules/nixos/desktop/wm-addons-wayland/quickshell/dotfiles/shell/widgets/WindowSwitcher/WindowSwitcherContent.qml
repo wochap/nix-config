@@ -12,52 +12,13 @@ PanelWindow {
 
   readonly property real screenPadding: 64
   readonly property real panelPadding: 8
-  readonly property real gap: 8
-  // Space below the preview: layout spacing and caption.
-  readonly property real tileChromeHeight: 22
-  readonly property int maxColumns: 5
-  readonly property int maxBoxWidth: 280
 
   // Switcher only ever operates on the focused monitor, so every preview uses
   // that monitor's aspect ratio.
   readonly property real previewAspect: root.backend.focusedMonitorAspect
 
   readonly property var toplevels: root.backend.windows
-  readonly property int count: root.toplevels?.length ?? 0
-
-  // Boxes keep a small, fixed size; the panel caps at ~80% of the monitor,
-  // wraps overflow onto new rows, and centers every row horizontally.
   readonly property real maxInnerWidth: Math.max(0, 0.8 * root.width - 2 * root.panelPadding)
-  readonly property real boxWidth: Math.min(root.maxBoxWidth, root.maxInnerWidth)
-  readonly property real boxHeight: root.boxWidth / root.previewAspect + root.tileChromeHeight
-  readonly property int perRow: Math.max(1, Math.floor((root.maxInnerWidth + root.gap) / (root.boxWidth + root.gap)))
-  readonly property int rows: root.count === 0 ? 1 : Math.ceil(root.count / root.perRow)
-  readonly property real innerWidth: {
-    const n = Math.min(root.count || 1, root.perRow);
-    return n * root.boxWidth + root.gap * (n - 1);
-  }
-  readonly property real innerHeight: {
-    const n = Math.max(root.rows, 1);
-    return n * root.boxHeight + root.gap * (n - 1);
-  }
-  readonly property real panelWidth: root.innerWidth + 2 * root.panelPadding
-  readonly property real panelHeight: root.innerHeight + 2 * root.panelPadding
-
-  function tilesInRow(row) {
-    return Math.max(0, Math.min(root.perRow, root.count - row * root.perRow));
-  }
-  function rowWidth(row) {
-    const n = root.tilesInRow(row);
-    return n > 0 ? n * root.boxWidth + root.gap * (n - 1) : 0;
-  }
-  function tileX(index) {
-    const row = Math.floor(index / root.perRow);
-    const col = index - row * root.perRow;
-    return (root.innerWidth - root.rowWidth(row)) / 2 + col * (root.boxWidth + root.gap);
-  }
-  function tileY(index) {
-    return Math.floor(index / root.perRow) * (root.boxHeight + root.gap);
-  }
 
   WlrLayershell.namespace: "quickshell:window-switcher"
   WlrLayershell.layer: WlrLayer.Overlay
@@ -102,8 +63,8 @@ PanelWindow {
   Item {
     id: panel
     anchors.centerIn: parent
-    width: root.panelWidth
-    height: root.panelHeight
+    width: previewGrid.contentWidth + 2 * root.panelPadding
+    height: previewGrid.contentHeight + 2 * root.panelPadding
 
     StyledRect {
       anchors.fill: parent
@@ -115,31 +76,18 @@ PanelWindow {
       }
     }
 
-    // Window tiles, wrapped into rows, every row centered horizontally.
-    Item {
+    WindowPreviewGrid {
+      id: previewGrid
       x: root.panelPadding
       y: root.panelPadding
-      width: root.innerWidth
-      height: root.innerHeight
-
-      Repeater {
-        model: root.toplevels
-
-        delegate: WindowSwitcherTile {
-          x: root.tileX(index)
-          y: root.tileY(index)
-          width: root.boxWidth
-          height: root.boxHeight
-          previewAspect: root.previewAspect
-          captureSource: modelData?.captureSource ?? null
-          icon: modelData?.icon ?? ""
-          title: modelData?.title ?? ""
-          selected: modelData?.id === root.backend.selectedId
-          onClicked: {
-            root.backend.select(modelData?.id ?? "");
-            root.backend.confirm();
-          }
-        }
+      windows: root.toplevels
+      previewAspect: root.previewAspect
+      availableWidth: root.maxInnerWidth
+      selectedId: root.backend.selectedId
+      interactive: true
+      onTileClicked: windowId => {
+        root.backend.select(windowId);
+        root.backend.confirm();
       }
     }
   }
