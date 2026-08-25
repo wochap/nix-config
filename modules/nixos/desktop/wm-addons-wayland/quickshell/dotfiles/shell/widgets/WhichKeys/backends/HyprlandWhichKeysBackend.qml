@@ -21,13 +21,17 @@ Scope {
   function modifierLabels(mask) {
     const labels = [];
     if (mask & 64)
-      labels.push("◆ Super");
+      // labels.push("◆ Super");
+      labels.push("◆");
     if (mask & 4)
-      labels.push("⌃ Ctrl");
+      // labels.push("⌃ Ctrl");
+      labels.push("⌃");
     if (mask & 8)
-      labels.push("⌥ Alt");
+      // labels.push("⌥ Alt");
+      labels.push("⌥");
     if (mask & 1)
-      labels.push("⇧ Shift");
+      // labels.push("⇧ Shift");
+      labels.push("⇧");
     return labels;
   }
 
