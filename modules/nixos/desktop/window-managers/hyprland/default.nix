@@ -142,6 +142,8 @@ in
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/ws_offset.lua;
         "hypr/hyprland/lib/window_switcher.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/window_switcher.lua;
+        "hypr/hyprland/lib/which_keys.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/lib/which_keys.lua;
         "hypr/hyprland/lib/zoom.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/zoom.lua;
         "hypr/kiosk.lua".text = ''

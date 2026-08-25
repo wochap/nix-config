@@ -13,6 +13,7 @@ import qs.widgets.Bar
 import qs.widgets.Notifications
 import qs.widgets.ControlCenter
 import qs.widgets.WindowSwitcher
+import qs.widgets.WhichKeys
 
 ShellRoot {
   id: root
@@ -26,6 +27,7 @@ ShellRoot {
   property bool renderNotifications: true
   property bool renderControlCenter: true
   property bool renderWindowSwitcher: true
+  property bool renderWhichKeys: true
 
   LazyLoader {
     active: root.renderBar && Theme.ready
@@ -72,6 +74,11 @@ ShellRoot {
     // compositor backend tracks focus history from the beginning.
     active: root.renderWindowSwitcher
     component: WindowSwitcher {}
+  }
+
+  LazyLoader {
+    active: root.renderWhichKeys && Theme.ready
+    component: WhichKeys {}
   }
 
   IpcHandler {

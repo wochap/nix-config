@@ -5,6 +5,7 @@ local scratchpad = require("hyprland.lib.scratchpad")
 local previous_ws = require("hyprland.lib.previous_ws")
 local ws_offset = require("hyprland.lib.ws_offset")
 local window_switcher = require("hyprland.lib.window_switcher")
+local which_keys = require("hyprland.lib.which_keys")
 local zoom = require("hyprland.lib.zoom")
 local mod = "SUPER"
 local scratchpad_opts
@@ -18,6 +19,8 @@ local function session_cmd(command)
   end
   return "uwsm-app -- " .. command
 end
+
+which_keys.setup()
 
 hl.bind(mod .. " + mouse:272", hl.dsp.window.float(), { mouse = true, click = true, description = "Float" })
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true, description = "Move" })
