@@ -1,14 +1,14 @@
 import Quickshell
-import Quickshell.Hyprland
 import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
 import qs.config
-import qs.services
 import qs.widgets.common
 
 PanelWindow {
   id: root
+
+  required property var backend
 
   readonly property real screenPadding: 64
   readonly property real panelPadding: 28
@@ -20,14 +20,9 @@ PanelWindow {
 
   // Switcher only ever operates on the focused monitor, so every preview uses
   // that monitor's aspect ratio.
-  readonly property var focusedMonitor: Hyprland.focusedMonitor
-  readonly property real previewAspect: {
-    const w = root.focusedMonitor?.width ?? 16;
-    const h = root.focusedMonitor?.height ?? 9;
-    return h > 0 ? w / h : 16.0 / 9.0;
-  }
+  readonly property real previewAspect: root.backend.focusedMonitorAspect
 
-  readonly property var toplevels: SWindowSwitcher.orderedToplevels
+  readonly property var toplevels: root.backend.windows
   readonly property int count: root.toplevels?.length ?? 0
 
   // Boxes keep a small, fixed size; the panel caps at ~80% of the monitor,
@@ -82,7 +77,7 @@ PanelWindow {
   MouseArea {
     id: backdrop
     anchors.fill: parent
-    onClicked: SWindowSwitcher.hide()
+    onClicked: root.backend.hide()
   }
 
   // Esc cancels, Enter confirms, releasing Alt confirms (the switcher holds
@@ -95,16 +90,16 @@ PanelWindow {
     Keys.onPressed: event => {
       if (event.key === Qt.Key_Escape) {
         event.accepted = true;
-        SWindowSwitcher.hide();
+        root.backend.hide();
       } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
         event.accepted = true;
-        SWindowSwitcher.confirm();
+        root.backend.confirm();
       }
     }
     Keys.onReleased: event => {
-      if (event.key === Qt.Key_Alt) {
+      if (event.key === Qt.Key_Alt || event.key === Qt.Key_Meta) {
         event.accepted = true;
-        SWindowSwitcher.confirm();
+        root.backend.confirm();
       }
     }
     Component.onCompleted: forceActiveFocus()
@@ -138,23 +133,18 @@ PanelWindow {
         model: root.toplevels
 
         delegate: WindowSwitcherTile {
-          readonly property string hyprlandAddress: {
-            const address = modelData?.address ?? "";
-            return address.startsWith("0x") ? address : `0x${address}`;
-          }
-
           x: root.tileX(index)
           y: root.tileY(index)
           width: root.boxWidth
           height: root.boxHeight
           previewAspect: root.previewAspect
-          captureSource: modelData?.wayland ?? null
-          appId: SHyprland.clientsByAddress?.[hyprlandAddress]?.class ?? ""
+          captureSource: modelData?.captureSource ?? null
+          icon: modelData?.icon ?? ""
           title: modelData?.title ?? ""
-          selected: modelData?.address === SWindowSwitcher.selectedAddress
+          selected: modelData?.id === root.backend.selectedId
           onClicked: {
-            SWindowSwitcher.selectedAddress = modelData?.address ?? "";
-            SWindowSwitcher.confirm();
+            root.backend.select(modelData?.id ?? "");
+            root.backend.confirm();
           }
         }
       }

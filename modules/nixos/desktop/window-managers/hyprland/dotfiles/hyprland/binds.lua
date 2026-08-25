@@ -4,6 +4,7 @@ local harpoon_scratchpad = require("hyprland.lib.harpoon_scratchpad")
 local scratchpad = require("hyprland.lib.scratchpad")
 local previous_ws = require("hyprland.lib.previous_ws")
 local ws_offset = require("hyprland.lib.ws_offset")
+local window_switcher = require("hyprland.lib.window_switcher")
 local zoom = require("hyprland.lib.zoom")
 local mod = "SUPER"
 local scratchpad_opts
@@ -238,62 +239,19 @@ harpoon_scratchpad.setup({
   keys = harpoon_keys,
 })
 
---- WM ALTTAB
+--- WM WINDOW SWITCHER
 
-hl.bind(mod .. " + TAB", hl.dsp.window.cycle_next({ tiled = true }))
-hl.bind(mod .. " + SHIFT + TAB", hl.dsp.layout("cycleprev"))
+window_switcher.setup({
+  modifier = "ALT",
+  mode = "floating",
+  release_keys = { "ALT_L", "ALT_R" },
+})
 
--- Quickshell window switcher. Pressing Alt+Tab opens it and selects the most
--- recently focused window; tapping Tab again while Alt is still held advances
--- the selection. Releasing Alt (or Enter/click) confirms and closes.
--- `advance` opens if closed, otherwise moves the selection forward/backward.
-do
-  local switcher_cmd = "quickshell --path ~/.config/quickshell/shell ipc call window-switcher "
-  local switcher_open = false
-
-  local function call(arg)
-    hl.dispatch(hl.dsp.exec_cmd(switcher_cmd .. arg))
-  end
-
-  hl.bind("ALT + TAB", function()
-    switcher_open = true
-    call("advance")
-  end)
-  hl.bind("ALT + SHIFT + TAB", function()
-    switcher_open = true
-    call("reverse")
-  end)
-
-  -- Confirm when Alt is released. `non_consuming` lets the Alt press/release
-  -- still reach clients; the `switcher_open` guard avoids spawning quickshell
-  -- on every unrelated Alt release. The switcher panel also confirms on Alt
-  -- release itself (it holds exclusive keyboard focus while open); whichever
-  -- fires first wins, the other is a no-op once the switcher is closed.
-  --
-  -- The flags matter (hyprland 0.56 KeybindManager.cpp):
-  --   - transparent: without it this bind is SHADOWED the moment ALT+TAB
-  --     fires (shadowKeybinds shadows every bind whose key is still held,
-  --     except the triggering bind's own key), so it would never fire on
-  --     release while Alt is held.
-  --   - ignore_mods: this bind has modmask 0, but at Alt release time Alt
-  --     still counts as an active modifier (m_lastMods is updated by the
-  --     modifiers event, which arrives after the key release event), so the
-  --     modmask check would skip it.
-  --
-  -- Each call spawns a separate quickshell process, so on a fast Alt+Tab tap
-  -- (Alt released before `advance` was delivered) the `confirm` ipc can beat
-  -- `advance` to the daemon and would find the switcher still closed. The
-  -- service side handles that: a `confirm` received while closed is held
-  -- briefly and fires as soon as the switcher opens.
-  for _, key in ipairs({ "ALT_L", "ALT_R" }) do
-    hl.bind(key, function()
-      if switcher_open then
-        switcher_open = false
-        call("confirm")
-      end
-    end, { release = true, non_consuming = true, transparent = true, ignore_mods = true })
-  end
-end
+window_switcher.setup({
+  modifier = mod,
+  mode = "tiling",
+  release_keys = { "SUPER_L", "SUPER_R" },
+})
 
 --- WM SCRATCHPAD
 

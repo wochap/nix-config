@@ -1,52 +1,58 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import qs.services
+import "backends"
 
 // Quickshell window switcher.
 //
-// Hyprland (binds.lua) maps ALT+TAB to `ipc call window-switcher advance`:
+// The compositor maps its window-switcher bindings to the IPC methods below:
 //   - if the switcher is closed, `advance` opens it (selection = previous window)
 //   - if it is already open, `advance` moves the selection to the next window
-// Repeating Alt+Tab therefore cycles while Alt is held. Releasing Alt calls
-// `confirm`, which focuses the selected window and closes the switcher; the
-// panel itself also confirms on Alt release, Enter, or tile click, and Escape
-// or clicking outside cancels.
+// Repeating the binding cycles while its modifier is held. Releasing that
+// modifier calls `confirm`, which focuses the selected window and closes the
+// switcher; Enter and tile clicks also confirm, while Escape or clicking
+// outside cancels.
 
 Scope {
   id: root
 
+  HyprlandWindowSwitcherBackend {
+    id: compositorBackend
+  }
+
   LazyLoader {
     id: loader
-    active: SWindowSwitcher.isOpen
-    component: WindowSwitcherContent {}
+    active: compositorBackend.isOpen
+    component: WindowSwitcherContent {
+      backend: compositorBackend
+    }
   }
 
   IpcHandler {
     target: "window-switcher"
 
     function toggle() {
-      SWindowSwitcher.toggle();
+      compositorBackend.toggle();
     }
 
-    function show() {
-      SWindowSwitcher.show();
+    function show(mode: string) {
+      compositorBackend.show(mode);
     }
 
     function hide() {
-      SWindowSwitcher.hide();
+      compositorBackend.hide();
     }
 
-    function advance() {
-      SWindowSwitcher.advance();
+    function advance(mode: string) {
+      compositorBackend.advance(mode);
     }
 
-    function reverse() {
-      SWindowSwitcher.reverse();
+    function reverse(mode: string) {
+      compositorBackend.reverse(mode);
     }
 
     function confirm() {
-      SWindowSwitcher.confirm();
+      compositorBackend.confirm();
     }
   }
 }

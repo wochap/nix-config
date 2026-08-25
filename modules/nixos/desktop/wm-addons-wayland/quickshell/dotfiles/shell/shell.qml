@@ -69,7 +69,7 @@ ShellRoot {
 
   LazyLoader {
     // Loaded unconditionally at startup (not gated on Theme.ready) so the
-    // SWindowSwitcher focus-history singleton is tracking from the beginning.
+    // compositor backend tracks focus history from the beginning.
     active: root.renderWindowSwitcher
     component: WindowSwitcher {}
   }

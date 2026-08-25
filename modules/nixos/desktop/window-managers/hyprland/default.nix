@@ -140,6 +140,8 @@ in
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/scratchpad_common.lua;
         "hypr/hyprland/lib/ws_offset.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/ws_offset.lua;
+        "hypr/hyprland/lib/window_switcher.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/lib/window_switcher.lua;
         "hypr/hyprland/lib/zoom.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/zoom.lua;
         "hypr/kiosk.lua".text = ''

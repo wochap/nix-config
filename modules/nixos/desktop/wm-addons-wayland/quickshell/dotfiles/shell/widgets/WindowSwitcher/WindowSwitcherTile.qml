@@ -4,13 +4,12 @@ import QtQuick
 import QtQuick.Layouts
 import qs.config
 import qs.widgets.common
-import "../Bar/modules/Hyprland/Utils.js" as Utils
 
 Item {
   id: tile
 
   property var captureSource: null
-  property string appId: ""
+  property string icon: ""
   property real previewAspect: 16.0 / 9.0
   property string title: ""
   property bool selected: false
@@ -77,7 +76,7 @@ Item {
 
       SystemIcon {
         Layout.alignment: Qt.AlignVCenter
-        icon: Utils.mapAppId(tile.appId)
+        icon: tile.icon
         size: Styles.font.pixelSize.large
       }
 
