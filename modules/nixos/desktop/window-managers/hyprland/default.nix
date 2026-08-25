@@ -117,12 +117,6 @@ in
         "hypr/colors-light.lua".text = catppuccin-hyprland-light-theme;
         "hypr/colors-dark.lua".text = catppuccin-hyprland-dark-theme;
         "hypr/hyprland/binds.lua".source = relativeSymlink configDirectory ./dotfiles/hyprland/binds.lua;
-        "hypr/hyprland/binds-kiosk.lua".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/binds-kiosk.lua;
-        "hypr/hyprland/binds-main.lua".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/binds-main.lua;
-        "hypr/hyprland/keywords-main.lua".source =
-          relativeSymlink configDirectory ./dotfiles/hyprland/keywords-main.lua;
         "hypr/hyprland/keywords.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/keywords.lua;
         "hypr/hyprland/rules.lua".source = relativeSymlink configDirectory ./dotfiles/hyprland/rules.lua;
