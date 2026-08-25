@@ -23,7 +23,7 @@
 
     # hyprland
     # everytime you update hyprland flake, run `sudo nix flake lock --update-input hyprland`
-    hyprland.url = "github:hyprwm/Hyprland?rev=5c9377c15f85c50648f35ca5a213754f95b93ca0"; # v0.56.1
+    hyprland.url = "github:hyprwm/Hyprland/v0.56.2";
     hyprland.inputs.nixpkgs.follows = "prevstable-hyprland";
     hyprland-plugins.url = "github:hyprwm/hyprland-plugins?rev=90e66baf99c9025b1d5e9c9e58dd3c80d0911ea2"; # v0.55.0
     hyprland-plugins.inputs.hyprland.follows = "hyprland";
@@ -71,7 +71,7 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-    quickshell.url = "github:quickshell-mirror/quickshell?rev=59e9c47b0eb48a9e4bcf9631fa062ee939bd2e83"; # v0.3.0
+    quickshell.url = "github:quickshell-mirror/quickshell/v0.3.1";
     quickshell.inputs.nixpkgs.follows = "nixpkgs";
     rod.url = "github:leiserfg/rod?rev=5d378a226a3a0108f657eccc3dc457cf3e374b73"; # master (10 jul 2026)
     rod.inputs.nixpkgs.follows = "nixpkgs";
