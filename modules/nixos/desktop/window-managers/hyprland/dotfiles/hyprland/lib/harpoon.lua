@@ -93,6 +93,16 @@ function M.assign(slot, window)
   end
 
   local tag = tag_for(slot)
+
+  -- A window may occupy only one harpoon slot across both regular and
+  -- scratchpad bindings. Remove any previous assignment before moving it.
+  for _, existing_tag in ipairs(window.tags or {}) do
+    if existing_tag:sub(1, #tag_prefix) == tag_prefix and existing_tag ~= tag then
+      hl.dispatch(hl.dsp.window.tag({ tag = "-" .. existing_tag, window = window }))
+      update_hint(existing_tag:sub(#tag_prefix + 1), nil)
+    end
+  end
+
   for _, candidate in ipairs(hl.get_windows()) do
     if has_tag(candidate, tag) and candidate.address ~= window.address then
       hl.dispatch(hl.dsp.window.tag({ tag = "-" .. tag, window = candidate }))
