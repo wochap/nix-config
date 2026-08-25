@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import qs.config
 import qs.widgets.common
@@ -37,27 +38,61 @@ PanelWindow {
       margins: ConfigWhichKeys.panelPadding
       bottomMargin: ConfigWhichKeys.bottomMargin
     }
-    spacing: ConfigWhichKeys.rowSpacing
+    spacing: 32
 
     RowLayout {
       Layout.alignment: Qt.AlignHCenter
-      spacing: ConfigWhichKeys.keycapSpacing
+      spacing: 16
 
       StyledText {
         visible: root.backend.submap.length > 0
         text: root.backend.submap.toUpperCase()
         color: Theme.options.peach
-        font.pixelSize: Styles.font.pixelSize.small
+        font.pixelSize: Styles.font.pixelSize.small * 2
         font.weight: Font.Bold
+
+        layer.enabled: true
+        layer.effect: MultiEffect {
+          shadowEnabled: true
+          shadowBlur: 0.75
+          shadowColor: Theme.options.shadow
+          shadowHorizontalOffset: 1
+          shadowVerticalOffset: 1
+        }
       }
 
       Repeater {
         model: root.backend.submap.length > 0 ? [] : root.backend.heldModifiers
 
-        delegate: WhichKeysKeycap {
-          required property string modelData
+        delegate: RowLayout {
+          id: modifierGroup
 
-          label: modelData
+          required property int index
+          required property string modelData
+          spacing: 16
+
+          WhichKeysKeycap {
+            label: modifierGroup.modelData
+            sizeMultiplier: 2
+            borderColor: Theme.options.borderSecondary
+          }
+
+          StyledText {
+            visible: modifierGroup.index < root.backend.heldModifiers.length - 1
+            text: "+"
+            color: Theme.options.text
+            font.pixelSize: Styles.font.pixelSize.small * 2
+            font.weight: Font.Bold
+
+            layer.enabled: true
+            layer.effect: MultiEffect {
+              shadowEnabled: true
+              shadowBlur: 0.75
+              shadowColor: Theme.options.shadow
+              shadowHorizontalOffset: 1
+              shadowVerticalOffset: 1
+            }
+          }
         }
       }
     }

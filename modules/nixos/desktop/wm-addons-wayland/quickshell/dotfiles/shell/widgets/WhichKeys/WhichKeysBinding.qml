@@ -10,64 +10,61 @@ Item {
   required property string description
 
   implicitWidth: ConfigWhichKeys.minimumCellWidth
-  implicitHeight: card.implicitHeight
+  implicitHeight: bindingRow.implicitHeight
 
-  StyledRectangularShadow {
-    target: card
-    cached: false
-  }
-
-  Rectangle {
-    id: card
+  RowLayout {
+    id: bindingRow
 
     x: ConfigWhichKeys.keyLaneWidth - keycapsRow.implicitWidth
     anchors.verticalCenter: parent.verticalCenter
-    implicitWidth: bindingRow.implicitWidth + 2 * ConfigWhichKeys.bindingPadding
-    implicitHeight: bindingRow.implicitHeight + 2 * ConfigWhichKeys.bindingPadding
-    radius: Styles.radius.windowRounding
-    color: Theme.addAlpha(Theme.options.backgroundOverlay, ConfigWhichKeys.bindingBackgroundOpacity)
-    border {
-      width: 1
-      color: Theme.options.borderSecondary
-    }
+    spacing: 8
 
     RowLayout {
-      id: bindingRow
+      id: keycapsRow
 
-      anchors {
-        fill: parent
-        margins: ConfigWhichKeys.bindingPadding
-      }
-      spacing: 4
+      spacing: ConfigWhichKeys.keycapSpacing
 
-      RowLayout {
-        id: keycapsRow
+      Repeater {
+        model: root.keycaps
 
-        spacing: ConfigWhichKeys.keycapSpacing
+        delegate: WhichKeysKeycap {
+          required property string modelData
 
-        Repeater {
-          model: root.keycaps
-
-          delegate: WhichKeysKeycap {
-            required property string modelData
-
-            label: modelData
-          }
+          label: modelData
         }
       }
+    }
 
-      StyledText {
-        text: "→"
-        color: Theme.options.textDimmed
-        font.pixelSize: Styles.font.pixelSize.small
+    Rectangle {
+      id: descriptionPill
+
+      Layout.maximumWidth: ConfigWhichKeys.maximumDescriptionWidth
+      implicitWidth: Math.min(descriptionLabel.implicitWidth + 12, ConfigWhichKeys.maximumDescriptionWidth)
+      implicitHeight: descriptionLabel.implicitHeight + 4
+      radius: 4
+      color: "transparent"
+
+      StyledRectangularShadow {
+        target: descriptionPill
+        z: -1
+        blur: 8
+        spread: 1
+        cached: false
       }
 
       StyledText {
-        Layout.maximumWidth: ConfigWhichKeys.maximumDescriptionWidth
+        id: descriptionLabel
+
+        anchors {
+          fill: parent
+          leftMargin: 6
+          rightMargin: 6
+        }
         text: root.description.startsWith("+") ? root.description.slice(1) : root.description
         color: root.description.startsWith("+") ? Theme.options.peach : Theme.options.text
         elide: Text.ElideRight
         font.pixelSize: Styles.font.pixelSize.small
+        font.weight: Font.Bold
       }
     }
   }

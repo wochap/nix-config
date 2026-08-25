@@ -154,7 +154,7 @@ hl.window_rule({
 ---- LAYER
 hl.layer_rule({ match = { namespace = "quickshell:.*" }, blur = true, blur_popups = true, ignore_alpha = 0.4 })
 hl.layer_rule({ match = { namespace = "quickshell:notifications-popups" }, ignore_alpha = 0.5 })
-hl.layer_rule({ match = { namespace = "quickshell:which-keys" }, ignore_alpha = 0.5, no_anim = true })
+hl.layer_rule({ match = { namespace = "quickshell:which-keys" }, ignore_alpha = 0.9, no_anim = true })
 -- hl.layer_rule({ match = { namespace = "quickshell:notifications" }, no_anim = true })
 
 ---- WORKSPACE
