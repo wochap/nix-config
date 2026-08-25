@@ -112,6 +112,11 @@ Scope {
     if (root.isOpen)
       return;
     root.mode = root.normalizedMode(requestedMode);
+    if (root.orderedToplevels.length === 0) {
+      root.pendingConfirm = false;
+      pendingConfirmTimer.stop();
+      return;
+    }
     root.isOpen = true;
     root.openedFrom = Hyprland.activeToplevel?.address ?? "";
     root.selectedId = root.orderedToplevels[0]?.address ?? "";
