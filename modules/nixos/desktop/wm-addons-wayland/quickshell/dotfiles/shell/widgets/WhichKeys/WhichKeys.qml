@@ -11,10 +11,7 @@ Scope {
     id: compositorBackend
   }
 
-  LazyLoader {
-    active: compositorBackend.isOpen
-    component: WhichKeysContent {
-      backend: compositorBackend
-    }
+  WhichKeysContent {
+    backend: compositorBackend
   }
 }

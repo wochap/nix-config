@@ -205,7 +205,7 @@ function M.setup(opts)
         M.mark(slot)
       end)
     end
-    hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
+    hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
   end)
 end
 

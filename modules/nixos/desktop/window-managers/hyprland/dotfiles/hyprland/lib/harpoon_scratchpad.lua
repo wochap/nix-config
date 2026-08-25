@@ -83,7 +83,7 @@ function M.setup(opts)
         M.toggle_in(key)
       end)
     end
-    hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
+    hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
   end)
 end
 

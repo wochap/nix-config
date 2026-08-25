@@ -11,9 +11,29 @@ PanelWindow {
 
   required property var backend
 
+  property var shownBindings: []
+  property var shownModifiers: []
+  property string shownSubmap: ""
+  property bool panelVisible: false
+  property real fadeOpacity: 0
+
+  function showPanel() {
+    root.shownBindings = root.backend.bindings;
+    root.shownModifiers = root.backend.heldModifiers;
+    root.shownSubmap = root.backend.submap;
+    root.panelVisible = true;
+    revealTimer.restart();
+  }
+
+  function hidePanel() {
+    revealTimer.stop();
+    root.fadeOpacity = 0;
+  }
+
   readonly property int columns: Math.max(1, Math.floor((width - 2 * ConfigWhichKeys.panelPadding + ConfigWhichKeys.columnSpacing) / (ConfigWhichKeys.minimumCellWidth + ConfigWhichKeys.columnSpacing)))
 
   screen: backend.screen
+  visible: panelVisible
   implicitHeight: content.implicitHeight + ConfigWhichKeys.panelPadding + ConfigWhichKeys.bottomMargin
   color: "transparent"
   exclusionMode: ExclusionMode.Ignore
@@ -30,8 +50,60 @@ PanelWindow {
   WlrLayershell.layer: WlrLayer.Overlay
   WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
+  Component.onCompleted: {
+    if (root.backend.isOpen)
+      root.showPanel();
+  }
+
+  Connections {
+    target: root.backend
+
+    function onBindingsChanged() {
+      if (root.backend.isOpen)
+        root.shownBindings = root.backend.bindings;
+    }
+
+    function onHeldModifiersChanged() {
+      if (root.backend.isOpen)
+        root.shownModifiers = root.backend.heldModifiers;
+    }
+
+    function onSubmapChanged() {
+      if (root.backend.isOpen)
+        root.shownSubmap = root.backend.submap;
+    }
+
+    function onIsOpenChanged() {
+      if (root.backend.isOpen)
+        root.showPanel();
+      else
+        root.hidePanel();
+    }
+  }
+
+  Timer {
+    id: revealTimer
+
+    // Give layer-shell two frames to configure the final anchored geometry.
+    interval: 34
+    onTriggered: root.fadeOpacity = 1
+  }
+
+  Behavior on fadeOpacity {
+    NumberAnimation {
+      duration: 140
+      easing.type: Easing.OutCubic
+      onFinished: {
+        if (root.fadeOpacity === 0)
+          root.panelVisible = false;
+      }
+    }
+  }
+
   ColumnLayout {
     id: content
+
+    opacity: root.fadeOpacity
 
     anchors {
       fill: parent
@@ -45,8 +117,8 @@ PanelWindow {
       spacing: 16
 
       StyledText {
-        visible: root.backend.submap.length > 0
-        text: root.backend.submap.toUpperCase()
+        visible: root.shownSubmap.length > 0
+        text: root.shownSubmap.toUpperCase()
         color: Theme.options.peach
         font.pixelSize: Styles.font.pixelSize.small * 2
         font.weight: Font.Bold
@@ -62,7 +134,7 @@ PanelWindow {
       }
 
       Repeater {
-        model: root.backend.submap.length > 0 ? [] : root.backend.heldModifiers
+        model: root.shownSubmap.length > 0 ? [] : root.shownModifiers
 
         delegate: RowLayout {
           id: modifierGroup
@@ -78,7 +150,7 @@ PanelWindow {
           }
 
           StyledText {
-            visible: modifierGroup.index < root.backend.heldModifiers.length - 1
+            visible: modifierGroup.index < root.shownModifiers.length - 1
             text: "+"
             color: Theme.options.text
             font.pixelSize: Styles.font.pixelSize.small * 2
@@ -104,7 +176,7 @@ PanelWindow {
       rowSpacing: ConfigWhichKeys.rowSpacing
 
       Repeater {
-        model: root.backend.bindings
+        model: root.shownBindings
 
         delegate: WhichKeysBinding {
           required property var modelData
