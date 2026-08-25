@@ -32,13 +32,13 @@ hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true, descripti
 -- Open scratchpad terminal
 hl.bind(mod .. " + i", function()
   scratchpad.raise_or_run("kitty-scratch", "$HOME/.config/kitty/scripts/kitty-scratch.sh", scratchpad_opts)
-end, { description = "Terminal" })
+end, { description = "Terminal Scratchpad" })
 
 -- Lock screen
 hl.bind(mod .. " + l", hl.dsp.exec_cmd("loginctl lock-session"), { description = "Lock" })
 
 -- Open power menu
-hl.bind(mod .. " + Escape", hl.dsp.exec_cmd(session_cmd("tofi-powermenu")), { description = "Power" })
+hl.bind(mod .. " + Escape", hl.dsp.exec_cmd(session_cmd("tofi-powermenu")), { description = "Power Menu" })
 
 -- Open app launcher
 hl.bind(
@@ -48,7 +48,7 @@ hl.bind(
 )
 
 -- Take fullscreen screenshot
-hl.bind(mod .. " + Print", hl.dsp.exec_cmd(session_cmd("takeshot --now")), { description = "Screenshot" })
+hl.bind(mod .. " + Print", hl.dsp.exec_cmd(session_cmd("takeshot --now")), { description = "Screenshot Monitor" })
 
 -- Open calc
 hl.bind(mod .. " + c", hl.dsp.exec_cmd(session_cmd("tofi-calc")), { description = "Calculator" })
@@ -74,13 +74,13 @@ if not constants.is_kiosk then
   hl.bind(mod .. " + m", hl.dsp.exec_cmd("shell-idle-inhibit --toggle"), { description = "Idle" })
 
   -- Toggle offlinemsmtp
-  hl.bind(mod .. " + o", hl.dsp.exec_cmd("offlinemsmtp-toggle-mode --toggle"), { description = "Mail" })
+  hl.bind(mod .. " + o", hl.dsp.exec_cmd("offlinemsmtp-toggle-mode --toggle"), { description = "Offlinemsmtp" })
 
   -- Toggle control center
   hl.bind(
     mod .. " + SHIFT + c",
     hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call control-center toggle"),
-    { description = "Controls" }
+    { description = "Control Center" }
   )
 end
 
@@ -107,32 +107,32 @@ hl.bind(
 hl.bind(mod .. " + CTRL + y", hl.dsp.window.pin(), { description = "Pin" })
 
 -- Focus direction
-hl.bind(mod .. " + n", hl.dsp.layout("cyclenext"), { description = "Next" })
-hl.bind(mod .. " + p", hl.dsp.layout("cycleprev"), { description = "Previous" })
+hl.bind(mod .. " + n", hl.dsp.layout("cyclenext"), { description = "Focus Next" })
+hl.bind(mod .. " + p", hl.dsp.layout("cycleprev"), { description = "Focus Previous" })
 hl.bind(mod .. " + left", function()
   hl.dispatch(hl.dsp.focus({ direction = "l" }))
   hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
-end, { description = "Left" })
+end, { description = "Focus Left" })
 hl.bind(mod .. " + down", function()
   hl.dispatch(hl.dsp.focus({ direction = "d" }))
   hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
-end, { description = "Down" })
+end, { description = "Focus Down" })
 hl.bind(mod .. " + up", function()
   hl.dispatch(hl.dsp.focus({ direction = "u" }))
   hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
-end, { description = "Up" })
+end, { description = "Focus Up" })
 hl.bind(mod .. " + right", function()
   hl.dispatch(hl.dsp.focus({ direction = "r" }))
   hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
-end, { description = "Right" })
+end, { description = "Focus Right" })
 
 -- Swap direction
-hl.bind(mod .. " + SHIFT + n", hl.dsp.layout("swapnext"), { description = "Next" })
-hl.bind(mod .. " + SHIFT + p", hl.dsp.layout("swapprev"), { description = "Previous" })
-hl.bind(mod .. " + SHIFT + left", hl.dsp.window.swap({ direction = "l" }), { description = "Left" })
-hl.bind(mod .. " + SHIFT + down", hl.dsp.window.swap({ direction = "d" }), { description = "Down" })
-hl.bind(mod .. " + SHIFT + up", hl.dsp.window.swap({ direction = "u" }), { description = "Up" })
-hl.bind(mod .. " + SHIFT + right", hl.dsp.window.swap({ direction = "r" }), { description = "Right" })
+hl.bind(mod .. " + SHIFT + n", hl.dsp.layout("swapnext"), { description = "Swap Next" })
+hl.bind(mod .. " + SHIFT + p", hl.dsp.layout("swapprev"), { description = "Swap Previous" })
+hl.bind(mod .. " + SHIFT + left", hl.dsp.window.swap({ direction = "l" }), { description = "Swap Left" })
+hl.bind(mod .. " + SHIFT + down", hl.dsp.window.swap({ direction = "d" }), { description = "Swap Down" })
+hl.bind(mod .. " + SHIFT + up", hl.dsp.window.swap({ direction = "u" }), { description = "Swap Up" })
+hl.bind(mod .. " + SHIFT + right", hl.dsp.window.swap({ direction = "r" }), { description = "Swap Right" })
 
 -- Resize tiling/floating windows
 hl.bind(
@@ -157,23 +157,31 @@ hl.bind(
 )
 
 -- Move floating windows
-hl.bind(mod .. " + ALT + left", hl.dsp.window.move({ x = -40, y = 0, relative = true }), { description = "Left" })
-hl.bind(mod .. " + ALT + down", hl.dsp.window.move({ x = 0, y = 40, relative = true }), { description = "Down" })
-hl.bind(mod .. " + ALT + up", hl.dsp.window.move({ x = 0, y = -40, relative = true }), { description = "Up" })
-hl.bind(mod .. " + ALT + right", hl.dsp.window.move({ x = 40, y = 0, relative = true }), { description = "Right" })
+hl.bind(mod .. " + ALT + left", hl.dsp.window.move({ x = -40, y = 0, relative = true }), { description = "Move Left" })
+hl.bind(mod .. " + ALT + down", hl.dsp.window.move({ x = 0, y = 40, relative = true }), { description = "Move Down" })
+hl.bind(mod .. " + ALT + up", hl.dsp.window.move({ x = 0, y = -40, relative = true }), { description = "Move Up" })
+hl.bind(mod .. " + ALT + right", hl.dsp.window.move({ x = 40, y = 0, relative = true }), { description = "Move Right" })
 
 -- Focus next/previous workspace
-hl.bind(mod .. " + comma", hl.dsp.focus({ workspace = "r-1", on_current_monitor = true }), { description = "Previous" })
-hl.bind(mod .. " + period", hl.dsp.focus({ workspace = "r+1", on_current_monitor = true }), { description = "Next" })
+hl.bind(
+  mod .. " + comma",
+  hl.dsp.focus({ workspace = "r-1", on_current_monitor = true }),
+  { description = "Focus Prev Workspace" }
+)
+hl.bind(
+  mod .. " + period",
+  hl.dsp.focus({ workspace = "r+1", on_current_monitor = true }),
+  { description = "Focus Next Workspace" }
+)
 hl.bind(
   mod .. " + CTRL + comma",
   hl.dsp.focus({ workspace = "m-1", on_current_monitor = true }),
-  { description = "Previous" }
+  { description = "Focus Prev Busy Workspace" }
 )
 hl.bind(
   mod .. " + CTRL + period",
   hl.dsp.focus({ workspace = "m+1", on_current_monitor = true }),
-  { description = "Next" }
+  { description = "Focus Next Busy Workspace" }
 )
 hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
 hl.gesture({
@@ -225,45 +233,55 @@ hl.gesture({
 hl.bind(
   mod .. " + SHIFT + comma",
   hl.dsp.window.move({ workspace = "r-1", follow = false }),
-  { description = "Send previous" }
+  { description = "Send To Prev Workspace" }
 )
 hl.bind(
   mod .. " + SHIFT + period",
   hl.dsp.window.move({ workspace = "r+1", follow = false }),
-  { description = "Send next" }
+  { description = "Send To Next Workspace" }
+)
+hl.bind(
+  mod .. " + SHIFT + comma",
+  hl.dsp.window.move({ workspace = "m-1", follow = false }),
+  { description = "Send To Prev Busy Workspace" }
+)
+hl.bind(
+  mod .. " + SHIFT + period",
+  hl.dsp.window.move({ workspace = "m+1", follow = false }),
+  { description = "Send To Next Busy Workspace" }
 )
 
 -- Bump focused window to the top of the layout stack
 hl.bind(mod .. " + return", hl.dsp.layout("swapwithmaster"), { description = "Promote" })
 
 -- Focus next/prev monitor
-hl.bind(mod .. " + bracketleft", hl.dsp.focus({ monitor = "-1" }), { description = "Previous monitor" })
-hl.bind(mod .. " + bracketright", hl.dsp.focus({ monitor = "+1" }), { description = "Next monitor" })
+hl.bind(mod .. " + bracketleft", hl.dsp.focus({ monitor = "-1" }), { description = "Focus Prev Monitor" })
+hl.bind(mod .. " + bracketright", hl.dsp.focus({ monitor = "+1" }), { description = "Focus Next Monitor" })
 
 -- Move focused window to next/prev monitor
 hl.bind(
   mod .. " + SHIFT + bracketleft",
   hl.dsp.window.move({ monitor = "-1", follow = false }),
-  { description = "Send monitor" }
+  { description = "Send To Prev Monitor" }
 )
 hl.bind(
   mod .. " + SHIFT + bracketright",
   hl.dsp.window.move({ monitor = "+1", follow = false }),
-  { description = "Send monitor" }
+  { description = "Send To Next Monitor" }
 )
 
 -- number keys focus/move to workspace (key + page offset); see lib/ws_offset.lua
 for key = 1, 9 do
   hl.bind(mod .. " + " .. key, function()
     hl.dispatch(hl.dsp.focus({ workspace = ws_offset.ws(key), on_current_monitor = true }))
-  end, { description = "Workspace" })
+  end)
   hl.bind(mod .. " + SHIFT + " .. key, function()
     hl.dispatch(hl.dsp.window.move({ workspace = ws_offset.ws(key), follow = false }))
-  end, { description = "Send workspace" })
+  end)
 end
 
 -- cycle workspace page (offset added to number keys 1-9)
-hl.bind(mod .. " + 0", ws_offset.cycle, { description = "Workspace page" })
+hl.bind(mod .. " + 0", ws_offset.cycle, { description = "Workspace Page" })
 hl.bind(mod .. " + SHIFT + 0", function()
   ws_offset.cycle()
   local ws_id = hl.get_active_workspace().id
@@ -272,9 +290,9 @@ hl.bind(mod .. " + SHIFT + 0", function()
     next_ws_id = ws_id - 10
   end
   hl.dispatch(hl.dsp.focus({ workspace = next_ws_id, on_current_monitor = true }))
-end, { description = "Follow page" })
+end, { description = "Follow Workspace Page" })
 
-hl.bind(mod .. " + grave", previous_ws.focus_previous, { description = "Last workspace" })
+hl.bind(mod .. " + grave", previous_ws.focus_previous, { description = "Focus Last Workspace" })
 
 --- WM HARPOON
 
@@ -312,13 +330,13 @@ window_switcher.setup({
 --- WM SCRATCHPAD
 
 -- Open scratchpad
-hl.bind(mod .. " + d", scratchpad.toggle, { description = "Scratchpad" })
+hl.bind(mod .. " + d", scratchpad.toggle, { description = "Toggle Scratchpad" })
 
 -- Send to scratchpad
-hl.bind(mod .. " + SHIFT + d", scratchpad.toggle_in, { description = "Stash" })
+hl.bind(mod .. " + SHIFT + d", scratchpad.toggle_in, { description = "Stash Scratchpad" })
 
 -- Open last scratchpad
-hl.bind(mod .. " + SHIFT + grave", scratchpad.focus_last, { description = "Last scratchpad" })
+hl.bind(mod .. " + SHIFT + grave", scratchpad.focus_last, { description = "Last Scratchpad" })
 
 -- WM GROUPS
 
@@ -326,18 +344,18 @@ hl.bind(mod .. " + g", hl.dsp.submap("group"), { description = "Groups" })
 hl.define_submap("group", "reset", function()
   hl.bind("g", hl.dsp.group.toggle(), { description = "Toggle" })
   -- TODO: verify into_or_create_group matches old movewindoworgroup behavior
-  hl.bind("left", hl.dsp.window.move({ into_or_create_group = "l" }), { description = "Group left" })
-  hl.bind("down", hl.dsp.window.move({ into_or_create_group = "d" }), { description = "Group down" })
-  hl.bind("up", hl.dsp.window.move({ into_or_create_group = "u" }), { description = "Group up" })
-  hl.bind("right", hl.dsp.window.move({ into_or_create_group = "r" }), { description = "Group right" })
-  hl.bind("n", hl.dsp.group.next(), { description = "Next" })
-  hl.bind("p", hl.dsp.group.prev(), { description = "Previous" })
-  hl.bind("SHIFT + n", hl.dsp.group.move_window({ forward = true }), { description = "Move next" })
-  hl.bind("SHIFT + p", hl.dsp.group.move_window({ forward = false }), { description = "Move previous" })
+  hl.bind("left", hl.dsp.window.move({ into_or_create_group = "l" }), { description = "Move Left" })
+  hl.bind("down", hl.dsp.window.move({ into_or_create_group = "d" }), { description = "Move Down" })
+  hl.bind("up", hl.dsp.window.move({ into_or_create_group = "u" }), { description = "Move Up" })
+  hl.bind("right", hl.dsp.window.move({ into_or_create_group = "r" }), { description = "Move Right" })
+  hl.bind("n", hl.dsp.group.next(), { description = "Focus Next" })
+  hl.bind("p", hl.dsp.group.prev(), { description = "Focus Previous" })
+  hl.bind("SHIFT + n", hl.dsp.group.move_window({ forward = true }), { description = "Move Next" })
+  hl.bind("SHIFT + p", hl.dsp.group.move_window({ forward = false }), { description = "Move Previous" })
   for key = 1, 9 do
     hl.bind("SHIFT + " .. key, function()
       hl.dispatch(hl.dsp.window.move({ workspace = ws_offset.ws(key), follow = false }))
-    end, { description = "Send workspace" })
+    end)
   end
   hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
 end)
@@ -383,7 +401,7 @@ hl.bind(
   { description = "Speak" }
 )
 
-hl.bind(mod .. " + ALT + d", hl.dsp.exec_cmd(session_cmd("clean-voice")), { description = "Clean voice" })
+hl.bind(mod .. " + ALT + d", hl.dsp.exec_cmd(session_cmd("clean-voice")), { description = "Clean Voice" })
 
 --- MEDIA KEYBINDINGS
 
@@ -391,12 +409,12 @@ if not constants.is_kiosk then
   hl.bind(
     "XF86AudioRaiseVolume",
     hl.dsp.exec_cmd("shell-pipewire --volume-output 5%+"),
-    { locked = true, repeating = true, description = "Volume up" }
+    { locked = true, repeating = true, description = "Volume Up" }
   )
   hl.bind(
     "XF86AudioLowerVolume",
     hl.dsp.exec_cmd("shell-pipewire --volume-output 5%-"),
-    { locked = true, repeating = true, description = "Volume down" }
+    { locked = true, repeating = true, description = "Volume Down" }
   )
   hl.bind(
     "XF86AudioMute",
@@ -407,7 +425,7 @@ if not constants.is_kiosk then
   hl.bind(
     "XF86AudioMicMute",
     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SOURCE@ toggle"),
-    { locked = true, description = "Mic mute" }
+    { locked = true, description = "Mic Mute" }
   )
 
   hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true, description = "Next" })
@@ -429,12 +447,12 @@ if not constants.is_kiosk then
   hl.bind(
     "XF86KbdBrightnessDown",
     hl.dsp.exec_cmd("kbd-backlight 5%-"),
-    { locked = true, repeating = true, description = "Keys dimmer" }
+    { locked = true, repeating = true, description = "Keys Dimmer" }
   )
   hl.bind(
     "XF86KbdBrightnessUp",
     hl.dsp.exec_cmd("kbd-backlight 5%+"),
-    { locked = true, repeating = true, description = "Keys brighter" }
+    { locked = true, repeating = true, description = "Keys Brighter" }
   )
 end
 
@@ -444,24 +462,24 @@ if not constants.is_kiosk then
   hl.bind(
     mod .. " + CTRL + ALT + m",
     hl.dsp.exec_cmd('hyprctl output create headless "HEADLESS-2"'),
-    { description = "Add monitor" }
+    { description = "Add Headless Monitor" }
   )
   hl.bind(
     mod .. " + CTRL + SHIFT + ALT + m",
     hl.dsp.exec_cmd('hyprctl output remove "HEADLESS-2"'),
-    { description = "Remove monitor" }
+    { description = "Remove Headless Monitor" }
   )
 end
 hl.bind(
   mod .. " + CTRL + SHIFT + l",
   hl.dsp.exec_cmd("hyprctl switchxkblayout all next"),
-  { locked = true, description = "Keyboard layout" }
+  { locked = true, description = "Switch Keyboard Layout" }
 )
-if not constants.is_kiosk then
-  hl.bind(mod .. " + ALT + x", function()
-    scratchpad.raise_or_run("xwaylandvideobridge", "xwaylandvideobridge", scratchpad_opts)
-  end, { description = "XWayland video" })
-end
+-- if not constants.is_kiosk then
+--   hl.bind(mod .. " + ALT + x", function()
+--     scratchpad.raise_or_run("xwaylandvideobridge", "xwaylandvideobridge", scratchpad_opts)
+--   end, { description = "XWayland Video" })
+-- end
 hl.bind(mod .. " + CTRL + SHIFT + q", hl.dsp.exec_cmd("hyprshutdown"), { description = "Shutdown" })
 hl.bind(mod .. " + k", function()
   local window
@@ -504,14 +522,14 @@ hl.define_submap("layout", "reset", function()
       layout = "master",
       layout_opts = { orientation = "left" },
     })
-  end, { description = "Left" })
+  end, { description = "Tall" })
   hl.bind("f", function()
     hl.workspace_rule({
       workspace = hl.get_active_workspace().name,
       layout = "master",
       layout_opts = { orientation = "top" },
     })
-  end, { description = "Top" })
+  end, { description = "Fat" })
   hl.bind("m", function()
     hl.workspace_rule({
       workspace = hl.get_active_workspace().name,
@@ -523,13 +541,13 @@ hl.define_submap("layout", "reset", function()
     hl.dispatch(hl.dsp.window.float({ action = "on" }))
     hl.dispatch(hl.dsp.window.resize({ x = 1200, y = 800 }))
     hl.dispatch(hl.dsp.window.center())
-  end, { description = "Float preset" })
-  hl.bind("left", hl.dsp.layout("addmaster"), { description = "Add master" })
-  hl.bind("right", hl.dsp.layout("removemaster"), { description = "Remove master" })
-  hl.bind("SHIFT + left", hl.dsp.window.resize({ x = -40, y = 0, relative = true }), { description = "Shrink width" })
-  hl.bind("SHIFT + down", hl.dsp.window.resize({ x = 0, y = 40, relative = true }), { description = "Grow height" })
-  hl.bind("SHIFT + up", hl.dsp.window.resize({ x = 0, y = -40, relative = true }), { description = "Shrink height" })
-  hl.bind("SHIFT + right", hl.dsp.window.resize({ x = 40, y = 0, relative = true }), { description = "Grow width" })
+  end, { description = "Float Preset" })
+  hl.bind("left", hl.dsp.layout("addmaster"), { description = "Add Master" })
+  hl.bind("right", hl.dsp.layout("removemaster"), { description = "Remove Master" })
+  hl.bind("SHIFT + left", hl.dsp.window.resize({ x = -40, y = 0, relative = true }), { description = "Shrink Width" })
+  hl.bind("SHIFT + down", hl.dsp.window.resize({ x = 0, y = 40, relative = true }), { description = "Grow Height" })
+  hl.bind("SHIFT + up", hl.dsp.window.resize({ x = 0, y = -40, relative = true }), { description = "Shrink Height" })
+  hl.bind("SHIFT + right", hl.dsp.window.resize({ x = 40, y = 0, relative = true }), { description = "Grow Width" })
   hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
 end)
 
@@ -573,7 +591,7 @@ hl.define_submap("browser", "reset", function()
       "google-chrome-stable --profile-directory=Default --app=https://openwebui.wochap.local",
       scratchpad_opts
     )
-  end, { description = "Open WebUI" })
+  end, { description = "OpenWebUI" })
   hl.bind("u", function()
     scratchpad.raise_or_run(
       constants.ytmusic_appid,
@@ -613,10 +631,10 @@ hl.define_submap("tui", "reset", function()
   end, { description = "Bookmarks" })
   hl.bind("SHIFT + b", function()
     scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --add", scratchpad_opts)
-  end, { description = "Add bookmark" })
+  end, { description = "Add Bookmark" })
   hl.bind("CTRL + SHIFT + b", function()
     scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --edit", scratchpad_opts)
-  end, { description = "Edit bookmarks" })
+  end, { description = "Edit Bookmarks" })
   hl.bind("escape", hl.dsp.submap("reset"), { description = "Exit" })
 end)
 
@@ -644,7 +662,7 @@ if not constants.is_kiosk then
 end
 
 -- HACK: disable all hyprland keymappings
-hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("kb_inhibit"), { description = "Inhibit keys" })
+hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("kb_inhibit"), { description = "Inhibit Keys" })
 hl.define_submap("kb_inhibit", function()
-  hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("reset"), { description = "Restore keys" })
+  hl.bind(mod .. " + ALT + CTRL + g", hl.dsp.submap("reset"), { description = "Restore Keys" })
 end)
