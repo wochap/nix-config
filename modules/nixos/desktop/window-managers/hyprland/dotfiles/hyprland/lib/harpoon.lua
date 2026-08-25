@@ -4,6 +4,12 @@ local which_keys = require("hyprland.lib.which_keys")
 local tag_prefix = "harpoon-"
 local hint_slots = {}
 
+-- Hyprland does not emit a socket2 event when static window tags change.
+-- Notify consumers such as Quickshell so they can refresh `hyprctl clients`.
+local function emit_changed()
+  hl.dispatch(hl.dsp.event("harpoon_changed"))
+end
+
 local function window_description(window)
   for _, value in ipairs({ window.title, window.class, window.initialTitle, window.initialClass }) do
     if type(value) == "string" and value ~= "" then
@@ -97,6 +103,7 @@ function M.assign(slot, window)
     hl.dispatch(hl.dsp.window.tag({ tag = "+" .. tag, window = window }))
   end
   update_hint(slot, window)
+  emit_changed()
   return true
 end
 
@@ -113,6 +120,7 @@ function M.clear(slot, window)
   end
   hl.dispatch(hl.dsp.window.tag({ tag = "-" .. tag_for(slot), window = window }))
   update_hint(slot, nil)
+  emit_changed()
   return true
 end
 
@@ -130,6 +138,9 @@ function M.remove(window)
       update_hint(tag:sub(#tag_prefix + 1), nil)
       removed = true
     end
+  end
+  if removed then
+    emit_changed()
   end
   return removed
 end
