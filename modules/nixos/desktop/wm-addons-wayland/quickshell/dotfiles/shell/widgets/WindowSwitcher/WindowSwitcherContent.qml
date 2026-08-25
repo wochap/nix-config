@@ -13,12 +13,13 @@ PanelWindow {
   readonly property real screenPadding: 64
   readonly property real panelPadding: 28
   readonly property real gap: 14
-  readonly property real captionHeight: 24
+  // Space below and around the preview: tile margins, layout spacing, caption.
+  readonly property real tileChromeHeight: 48
   readonly property int maxColumns: 5
   readonly property int maxBoxWidth: 280
 
-  // Switcher only ever operates on the focused monitor, so every shown window
-  // lives on it. Boxes therefore share that monitor's aspect ratio.
+  // Switcher only ever operates on the focused monitor, so every preview uses
+  // that monitor's aspect ratio.
   readonly property var focusedMonitor: Hyprland.focusedMonitor
   readonly property real previewAspect: {
     const w = root.focusedMonitor?.width ?? 16;
@@ -33,7 +34,7 @@ PanelWindow {
   // wraps overflow onto new rows, and centers every row horizontally.
   readonly property real maxInnerWidth: Math.max(0, 0.8 * root.width - 2 * root.panelPadding)
   readonly property real boxWidth: Math.min(root.maxBoxWidth, root.maxInnerWidth)
-  readonly property real boxHeight: root.boxWidth / root.previewAspect + root.captionHeight
+  readonly property real boxHeight: root.boxWidth / root.previewAspect + root.tileChromeHeight
   readonly property int perRow: Math.max(1, Math.floor((root.maxInnerWidth + root.gap) / (root.boxWidth + root.gap)))
   readonly property int rows: root.count === 0 ? 1 : Math.ceil(root.count / root.perRow)
   readonly property real innerWidth: {
@@ -137,11 +138,18 @@ PanelWindow {
         model: root.toplevels
 
         delegate: WindowSwitcherTile {
+          readonly property string hyprlandAddress: {
+            const address = modelData?.address ?? "";
+            return address.startsWith("0x") ? address : `0x${address}`;
+          }
+
           x: root.tileX(index)
           y: root.tileY(index)
           width: root.boxWidth
           height: root.boxHeight
+          previewAspect: root.previewAspect
           captureSource: modelData?.wayland ?? null
+          appId: SHyprland.clientsByAddress?.[hyprlandAddress]?.class ?? ""
           title: modelData?.title ?? ""
           selected: modelData?.address === SWindowSwitcher.selectedAddress
           onClicked: {

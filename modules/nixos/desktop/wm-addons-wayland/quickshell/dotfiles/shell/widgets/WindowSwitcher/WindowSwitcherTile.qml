@@ -4,11 +4,14 @@ import QtQuick
 import QtQuick.Layouts
 import qs.config
 import qs.widgets.common
+import "../Bar/modules/Hyprland/Utils.js" as Utils
 
 Item {
   id: tile
 
   property var captureSource: null
+  property string appId: ""
+  property real previewAspect: 16.0 / 9.0
   property string title: ""
   property bool selected: false
   signal clicked
@@ -30,7 +33,7 @@ Item {
 
     StyledRect {
       Layout.fillWidth: true
-      Layout.fillHeight: true
+      Layout.preferredHeight: width / tile.previewAspect
       radius: Styles.radius.windowRounding
       color: Theme.options.surface0
       border {
@@ -50,29 +53,42 @@ Item {
         }
         clip: true
         captureSource: tile.captureSource
-        live: true
+        live: false
         visible: tile.captureSource !== null
       }
 
-      StyledText {
-        anchors.centerIn: parent
-        width: parent.width - 16
-        visible: tile.captureSource === null || !capture.hasContent
-        text: tile.title
-        font.pixelSize: Styles.font.pixelSize.large
-        elide: Text.ElideMiddle
-        horizontalAlignment: Text.AlignHCenter
-      }
+      // StyledText {
+      //   anchors.centerIn: parent
+      //   width: parent.width - 16
+      //   visible: tile.captureSource === null || !capture.hasContent
+      //   text: tile.title
+      //   font.pixelSize: Styles.font.pixelSize.large
+      //   elide: Text.ElideMiddle
+      //   horizontalAlignment: Text.AlignHCenter
+      // }
     }
 
-    StyledText {
+    RowLayout {
       Layout.fillWidth: true
       Layout.preferredHeight: 18
-      elide: Text.ElideMiddle
-      horizontalAlignment: Text.AlignHCenter
-      font.pixelSize: Styles.font.pixelSize.small
-      color: tile.selected ? Theme.options.text : Theme.options.textDimmed
-      text: tile.title
+      Layout.leftMargin: 8
+      Layout.rightMargin: 8
+      spacing: 4
+
+      SystemIcon {
+        Layout.alignment: Qt.AlignVCenter
+        icon: Utils.mapAppId(tile.appId)
+        size: Styles.font.pixelSize.large
+      }
+
+      StyledText {
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignVCenter
+        elide: Text.ElideMiddle
+        font.pixelSize: Styles.font.pixelSize.small
+        color: tile.selected ? Theme.options.text : Theme.options.textDimmed
+        text: tile.title
+      }
     }
   }
 }
