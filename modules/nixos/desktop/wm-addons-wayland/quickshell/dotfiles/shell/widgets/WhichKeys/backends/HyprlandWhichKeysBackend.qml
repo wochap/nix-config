@@ -71,6 +71,9 @@ Scope {
 
   function filteredBindings() {
     const activeSubmap = root.submap;
+    if (ConfigWhichKeys.onlyShowInSubmap && activeSubmap.length === 0)
+      return [];
+
     const heldMask = root.heldModifierMask;
     const result = root.rawBindings.filter(binding => {
       if (!root.isDescribed(binding))
