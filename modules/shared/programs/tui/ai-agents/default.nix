@@ -43,7 +43,7 @@ in
         shellAliases = {
           cl = "sessiontap claude";
           cx = "sessiontap codex";
-          qw = "sessiontap codex";
+          qw = "sessiontap qwen";
         };
 
         sessionVariables = {
