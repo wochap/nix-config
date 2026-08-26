@@ -26,7 +26,7 @@ RowLayout {
     Layout.leftMargin: -3
     Layout.rightMargin: 0
     spacing: 0
-    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible || mail.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible || notifications.isVisible)
+    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || idleInhibit.isVisible || agents.isVisible || mail.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible || notifications.isVisible)
 
     Capslock {
       id: capslock
@@ -36,6 +36,12 @@ RowLayout {
 
     IdleInhibit {
       id: idleInhibit
+
+      Layout.fillHeight: true
+    }
+
+    Agents {
+      id: agents
 
       Layout.fillHeight: true
     }
