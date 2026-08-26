@@ -224,7 +224,7 @@ Update inputs on `flake.nix`, then:
 $ cd /home/<username>/.config/nix-config
 $ nix flake update --recreate-lock-file
 # update 1 single input
-# $ sudo nix flake lock --update-input hyprland
+# $ nix flake update hyprland
 $ sudo nixos-rebuild boot --flake .#gdesktop
 ```
 

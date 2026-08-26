@@ -22,7 +22,7 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     # hyprland
-    # everytime you update hyprland flake, run `sudo nix flake lock --update-input hyprland`
+    # everytime you update hyprland flake, run `nix flake update hyprland`
     hyprland.url = "github:hyprwm/Hyprland/v0.56.2";
     hyprland.inputs.nixpkgs.follows = "prevstable-hyprland";
     hyprland-plugins.url = "github:hyprwm/hyprland-plugins?rev=90e66baf99c9025b1d5e9c9e58dd3c80d0911ea2"; # v0.55.0
@@ -33,7 +33,7 @@
     hyprpicker.inputs.nixpkgs.follows = "prevstable-hyprland";
     hyprsunset.url = "github:hyprwm/hyprsunset?rev=057feb7a724b7fc0f3a406d6db08b59734db006a"; # v0.3.3
     hyprsunset.inputs.nixpkgs.follows = "prevstable-hyprland";
-    # everytime you update hyprland flake, `sudo nix flake lock --update-input hyprlock`
+    # everytime you update hyprland flake, `nix flake update hyprlock`
     hyprlock.url = "github:hyprwm/hyprlock?rev=d75e93f8ee1721d70549d96f4d14bf2948aab70c"; # v0.9.5
     hyprlock.inputs.nixpkgs.follows = "prevstable-hyprland";
     hyprgrass.url = "github:horriblename/hyprgrass?rev=e28346f49144e058b0e2d9dc66313c0a57c3d423"; # main (10 jul 2026)
