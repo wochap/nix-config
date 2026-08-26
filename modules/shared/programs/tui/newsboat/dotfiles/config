@@ -45,6 +45,7 @@ macro m set browser "setsid -f mpv" ; open-in-browser ; set browser smart-open
 macro w set browser "kitty @ launch --type=tab sh -c 'reader --image-mode kitty %u && kitty @ scroll-window start && zsh'" ; open-in-browser ; toggle-article-read "read" ; set browser smart-open
 macro c set browser "echo %u | wl-copy --trim-newline" ; open-in-browser ; set browser smart-open
 macro s set browser "article-summary %u </dev/null >/dev/null 2>&1 &" ; open-in-browser-noninteractively ; toggle-article-read "read" ; set browser smart-open
+macro S set browser "article-summary --force %u </dev/null >/dev/null 2>&1 &" ; open-in-browser-noninteractively ; toggle-article-read "read" ; set browser smart-open
 
 include ~/.config/newsboat/theme
 
