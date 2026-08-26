@@ -322,7 +322,9 @@ in
           markers = "no";
           move = "no";
           narrow_tree = "no";
-          pager_context = "3";
+          pager_context = "4";
+          menu_scroll = "yes";
+          menu_context = "4";
           pager_index_lines = "10";
           pager_stop = "yes";
           quit = "yes";
