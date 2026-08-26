@@ -73,8 +73,6 @@ in
 
           ".codex/model-catalog.local.json".source =
             lib._custom.relativeSymlink configDirectory ./dotfiles/codex/model-catalog.local.json;
-          ".codex/hooks.json".source =
-            lib._custom.relativeSymlink configDirectory ./dotfiles/codex/hooks.json;
           ".codex/hooks/codex-notify.sh" = {
             source = ./scripts/codex-notify.sh;
             executable = true;
@@ -91,6 +89,7 @@ in
           ".qwen/settings.json".source = ./dotfiles/qwen-settings.json;
           ".pi/agent/settings.json".source = ./dotfiles/pi/settings.json;
           ".codex/config.toml".source = ./dotfiles/codex/config.toml;
+          ".codex/hooks.json".source = ./dotfiles/codex/hooks.json;
           ".config/opencode/opencode.jsonc".source = ./dotfiles/opencode-settings.jsonc;
           ".gemini/antigravity-cli/settings.json".source = ./dotfiles/agy/settings.json;
         };
