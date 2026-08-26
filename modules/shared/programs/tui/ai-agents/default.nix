@@ -40,7 +40,11 @@ in
           [ bubblewrap ]
           ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
 
-        shellAliases.cl = "claude";
+        shellAliases = {
+          cl = "sessiontap claude";
+          cx = "sessiontap codex";
+          qw = "sessiontap codex";
+        };
 
         sessionVariables = {
           OPENSPEC_TELEMETRY = "0";
