@@ -58,6 +58,19 @@ in
               type = lib.types.str;
               default = name;
             };
+            serviceScope = lib.mkOption {
+              type = lib.types.enum [
+                "system"
+                "user"
+              ];
+              default = "system";
+              description = "Whether serviceName belongs to the system or user service manager.";
+            };
+            userName = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = "User that owns a user-scoped service.";
+            };
             lazy = lib.mkOption {
               type = lib.types.bool;
               default = false;
@@ -75,6 +88,20 @@ in
   };
 
   config = lib.mkIf (enabledProxies != { }) {
+    assertions = lib.mapAttrsToList (name: proxy: {
+      assertion = proxy.serviceScope != "user" || proxy.userName != null;
+      message = "web-proxies.${name}: userName is required for user-scoped services";
+    }) enabledProxies;
+
+    users.users = lib.foldl' lib.recursiveUpdate { } (
+      lib.mapAttrsToList (
+        name: proxy:
+        lib.optionalAttrs (proxy.lazy && proxy.serviceScope == "user") {
+          ${proxy.userName}.linger = true;
+        }
+      ) enabledProxies
+    );
+
     # 1. Generate systemd sockets for lazy services
     systemd.sockets = lib.mapAttrs' (
       name: proxy:
@@ -94,10 +121,13 @@ in
         lib.nameValuePair "${proxy.serviceName}-proxy" (
           lib.mkIf proxy.lazy {
             description = "${proxy.serviceName} socket proxy";
-            requires = [ "${proxy.serviceName}.service" ];
-            after = [ "${proxy.serviceName}.service" ];
+            requires = lib.optionals (proxy.serviceScope == "system") [ "${proxy.serviceName}.service" ];
+            after = lib.optionals (proxy.serviceScope == "system") [ "${proxy.serviceName}.service" ];
             serviceConfig = {
               ExecStartPre = pkgs.writeShellScript "wait-for-${proxy.serviceName}" ''
+                ${lib.optionalString (proxy.serviceScope == "user") ''
+                  ${pkgs.systemd}/bin/systemctl --machine=${lib.escapeShellArg "${proxy.userName}@"} --user start ${lib.escapeShellArg "${proxy.serviceName}.service"}
+                ''}
                 for attempt in {1..120}; do
                   ${lib.getExe pkgs.netcat-openbsd} -z -w 1 ${wochap-ssc.meta.address} ${toString proxy.backendPort} && exit 0
                   ${lib.getExe' pkgs.coreutils "sleep"} 0.5
@@ -129,7 +159,7 @@ in
             wantedBy = lib.mkForce [ ];
           }
         )
-      ) enabledProxies);
+      ) (lib.filterAttrs (name: proxy: proxy.serviceScope == "system") enabledProxies));
 
     # 3. Nginx Virtual Hosts
     services.nginx.virtualHosts = lib.mapAttrs' (

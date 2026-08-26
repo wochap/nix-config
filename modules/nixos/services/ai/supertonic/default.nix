@@ -7,6 +7,8 @@
 
 let
   cfg = config._custom.services.ai;
+  inherit (pkgs._custom) wochap-ssc;
+  inherit (config._custom.globals) userName;
   supertonic-speak = pkgs.writeScriptBin "supertonic-speak" (builtins.readFile ./supertonic-speak.sh);
   supertonic-clipboard = pkgs.writeScriptBin "supertonic-clipboard" (
     builtins.readFile ./supertonic-clipboard.sh
@@ -14,6 +16,16 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && cfg.enableSupertonic) {
+    _custom.services.web-proxies.supertonic = {
+      enable = true;
+      subdomain = "supertonic";
+      publicPort = 7788;
+      backendPort = 7789;
+      lazy = true;
+      serviceScope = "user";
+      inherit userName;
+    };
+
     _custom.hm = {
       home.packages = [
         pkgs._custom.supertonic
@@ -28,7 +40,7 @@ in
           PartOf = [ "graphical-session.target" ];
         };
         Service = {
-          ExecStart = "${lib.getExe pkgs._custom.supertonic} serve --host 127.0.0.1 --port 7788";
+          ExecStart = "${lib.getExe pkgs._custom.supertonic} serve --host ${wochap-ssc.meta.address} --port ${toString config._custom.services.web-proxies.supertonic.backendPort}";
           Restart = "on-failure";
           RestartSec = 2;
           # PERF: test those env vars

@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-readonly endpoint="${SUPERTONIC_URL:-http://127.0.0.1:7788/v1/tts}"
+readonly supertonic_url="${SUPERTONIC_URL:-https://supertonic.wochap.local}"
+readonly endpoint="$supertonic_url/v1/tts"
 readonly output_dir="${1:-./supertonic-eg-test}"
 readonly voice="${SUPERTONIC_VOICE:-M1}"
 

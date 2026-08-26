@@ -3,6 +3,7 @@
 set -euo pipefail
 
 readonly playback_unit="supertonic-player.service"
+readonly supertonic_url="${SUPERTONIC_URL:-https://supertonic.wochap.local}"
 
 notify() {
   local -a args=(
@@ -21,7 +22,7 @@ notify() {
 }
 
 ensure_supertonic() {
-  if ! curl --fail --silent --max-time 1 http://127.0.0.1:7788/v1/health >/dev/null; then
+  if ! curl --fail --silent --max-time 1 "$supertonic_url/v1/health" >/dev/null; then
     notify "Supertonic is not running" "Enable it from the Control Center"
     return 1
   fi
@@ -152,7 +153,7 @@ generate_audio() {
       --header "content-type: application/json" \
       --data-binary @- \
       --output "$output" \
-      http://127.0.0.1:7788/v1/tts
+      "$supertonic_url/v1/tts"
 }
 
 speak() {
@@ -197,7 +198,7 @@ speak() {
     exit 1
   fi
 
-  ensure_supertonic
+  # ensure_supertonic
 
   if [[ $chunking == "on" ]]; then
     mapfile -t chunks < <(split_text)
