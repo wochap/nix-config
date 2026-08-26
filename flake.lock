@@ -3385,6 +3385,7 @@
         "retroarch-shaders": "retroarch-shaders",
         "reversal-extra": "reversal-extra",
         "rod": "rod",
+        "session-tap": "session-tap",
         "showmethekey": "showmethekey",
         "smart-splits-nvim": "smart-splits-nvim",
         "sops-nix": "sops-nix",
@@ -3417,6 +3418,26 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "session-tap": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787709167,
+        "narHash": "sha256-jkodyOIAmsxYBG3fxHAWLD7rA9HDyBp3tD2goLguQMw=",
+        "owner": "wochap",
+        "repo": "session-tap",
+        "rev": "7be530f696b5606e2633b27be0933abc5b41b31e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "session-tap",
         "type": "github"
       }
     },

@@ -23,6 +23,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      inputs.session-tap.packages."${stdenv.hostPlatform.system}".default
       _custom.rtk
       playwright-mcp
       playwright-driver

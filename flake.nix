@@ -85,6 +85,8 @@
     offlinemsmtp.inputs.nixpkgs.follows = "nixpkgs";
     kb-hud.url = "github:wochap/kb-hud";
     kb-hud.inputs.nixpkgs.follows = "nixpkgs";
+    session-tap.url = "github:wochap/session-tap";
+    session-tap.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
