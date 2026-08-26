@@ -39,8 +39,15 @@ Singleton {
 
   // Whenever a state changes, re-evaluate the notification queue.
   onIsSilentChanged: processQueues()
-  onIsIdleChanged: processQueues()
+  onIsIdleChanged: {
+    // Layershell surfaces may miss pointer-leave events while blanked or
+    // locked, leaving popup timers paused indefinitely.
+    if (root.isIdle)
+      root.arePopupsHovered = false;
+    root.processQueues();
+  }
   onIsLockedChanged: {
+    root.arePopupsHovered = false;
     // If the screen becomes unlocked, process any notifications that arrived while it was locked.
     if (!root.isLocked) {
       processQueues();
@@ -54,6 +61,10 @@ Singleton {
 
   function togglePanel() {
     root.isPanelOpen = !root.isPanelOpen;
+  }
+
+  function resetPopupHover() {
+    root.arePopupsHovered = false;
   }
 
   // The central "gatekeeper" function. It decides when to show notifications
@@ -109,6 +120,8 @@ Singleton {
     // Create new lists by filtering out the discarded notification.
     root.list = root.list.filter(n => n.notificationId !== id);
     root.popupList = root.popupList.filter(n => n.notificationId !== id);
+    if (root.popupList.length === 0)
+      root.resetPopupHover();
 
     // Tell the original notification server it was dismissed.
     const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(n => n.id + root.idOffset === id);
@@ -134,6 +147,7 @@ Singleton {
     root.list = [];
     root.popupList = [];
     root.incomingQueue = [];
+    root.resetPopupHover();
 
     notificationServer.trackedNotifications.values.forEach(notification => {
       notification.dismiss();
@@ -227,6 +241,7 @@ Singleton {
 
     // Clear the list of popups.
     root.popupList = [];
+    root.resetPopupHover();
 
     // A space has opened up, so process the queue for the next notification(s).
     root.processQueues();
@@ -266,6 +281,7 @@ Singleton {
 
     // Clear the list of popups.
     root.popupList = [];
+    root.resetPopupHover();
 
     // Persist the updated history list.
     notificationFileView.setText(root.stringifyList(root.list));

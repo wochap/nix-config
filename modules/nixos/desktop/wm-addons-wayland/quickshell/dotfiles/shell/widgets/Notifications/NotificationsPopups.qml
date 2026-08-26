@@ -12,6 +12,8 @@ import qs.widgets.common
 PanelWindow {
   id: root
 
+  Component.onDestruction: SNotifications.resetPopupHover()
+
   property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
   property var hyprlandMonitor: SHyprland.monitorsByName?.[focusedScreen?.name] ?? null
   property var focusedWorkspace: SHyprland.workspacesById?.[hyprlandMonitor?.activeWorkspace?.id] ?? null
