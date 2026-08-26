@@ -2467,11 +2467,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787353675,
-        "narHash": "sha256-aLT9PtcgwXyiM3ZungCc6xyFNv2yQYUNtIJProk7Xy8=",
+        "lastModified": 1787699611,
+        "narHash": "sha256-QjhnwcXC+fkvVumViCKO2i5xuKIy4vHnHj1j8kgJN/k=",
         "owner": "wochap",
         "repo": "kb-hud",
-        "rev": "a42a442872051e4ce4355e59987f94ecc1b8a893",
+        "rev": "76869e36f3086c5fb496926606c0d4d1836311bf",
         "type": "github"
       },
       "original": {
