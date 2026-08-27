@@ -11,10 +11,8 @@ Scope {
     component: NotificationsPanel {}
   }
 
-  LazyLoader {
-    active: SNotifications.popupList.length > 0
-    component: NotificationsPopups {}
-  }
+  // Keep the window alive so the first add and last removal can animate.
+  NotificationsPopups {}
 
   IpcHandler {
     target: "notifications"

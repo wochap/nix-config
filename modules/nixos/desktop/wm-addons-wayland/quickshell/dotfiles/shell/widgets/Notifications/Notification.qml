@@ -17,6 +17,14 @@ Item {
   property bool isExpanded: true
   property bool hasTimeout: (root.notification?.timer ?? null) !== null && (root.notification?.time ?? 0) > 0
 
+  function timeoutNotification() {
+    SNotifications.timeoutNotification(root.notification?.notificationId ?? -1);
+  }
+
+  function discardNotification() {
+    SNotifications.discardNotification(root.notification?.notificationId ?? -1);
+  }
+
   implicitWidth: wrapperRectangle.implicitWidth
   implicitHeight: wrapperRectangle.implicitHeight
 
@@ -62,9 +70,9 @@ Item {
             break;
           case Qt.RightButton:
             if (root.isPopup) {
-              SNotifications.timeoutNotification(root.notification?.notificationId ?? -1);
+              root.timeoutNotification();
             } else {
-              SNotifications.discardNotification(root.notification?.notificationId ?? -1);
+              root.discardNotification();
             }
             break;
           }
@@ -145,14 +153,14 @@ Item {
                 visible: root.isPopup
                 materialIcon: "chevron_right"
                 onClicked: {
-                  SNotifications.timeoutNotification(root.notification?.notificationId ?? -1);
+                  root.timeoutNotification();
                 }
               }
 
               NotificationButtonSm {
                 materialIcon: "close"
                 onClicked: {
-                  SNotifications.discardNotification(root.notification?.notificationId ?? -1);
+                  root.discardNotification();
                 }
               }
             }

@@ -33,6 +33,7 @@ Singleton {
   readonly property int maxHistory: 100
   readonly property int defaultPopupTimeout: 5000
   property int idOffset // ensure unique notification id
+  property int popupExitBatchCounter: 0
   property bool isPanelOpen: false
   property real lastSoundPlayedTime: 0
   readonly property int soundCooldownMs: 1000 // Only play a sound at most once per second
@@ -85,7 +86,6 @@ Singleton {
 
     notification.isDisposing = true;
     root.stopNotificationTimer(notification);
-
     const original = dismissOriginal ? root.trackedNotification(notification.notificationId) : null;
     notification.destroy();
     if (original)
@@ -148,40 +148,79 @@ Singleton {
     });
   }
 
-  // Removes a notification entirely from the system.
-  // Called when the user explicitly dismisses it.
-  function discardNotification(id) {
-    const notificationToDiscard = root.popupList.find(n => n.notificationId === id)
-        || root.list.find(n => n.notificationId === id)
-        || root.incomingQueue.find(n => n.notificationId === id);
+  function requestPopupRemoval(id, discard, sourceTimer = null) {
+    const notification = root.popupList.find(popup => popup.notificationId === id);
+    if (!notification)
+      return false;
 
-    // Create new lists by filtering out the discarded notification.
-    root.list = root.list.filter(n => n.notificationId !== id);
-    root.popupList = root.popupList.filter(n => n.notificationId !== id);
-    root.incomingQueue = root.incomingQueue.filter(n => n.notificationId !== id);
+    if (sourceTimer && notification.timer === sourceTimer)
+      notification.timer = null;
+    else
+      root.stopNotificationTimer(notification);
+
+    // Preserve content if the original notification disappears during exit.
+    notification.cachedNotification = notification.toJSON();
+    notification.discardAfterPopupExit = notification.discardAfterPopupExit || discard;
+    notification.isPopupExiting = true;
+    return true;
+  }
+
+  function finalizePopupRemoval(id) {
+    const notification = root.popupList.find(popup => popup.notificationId === id);
+    if (!notification || !notification.isPopupExiting)
+      return;
+
+    root.popupList = root.popupList.filter(popup => popup.notificationId !== id);
     if (root.popupList.length === 0)
       root.resetPopupHover();
 
-    // Tell the original notification server it was dismissed.
-    root.disposeNotification(notificationToDiscard);
+    if (notification.discardAfterPopupExit) {
+      root.disposeNotification(notification);
+    } else if (!notification.isTransient) {
+      if (notification.notification && notification.notification.expireTimeout > 0)
+        notification.actions = [];
 
-    // Save changes and check if a new popup can be shown.
+      if (notification.popupExitBatchId > 0) {
+        const batch = [notification, ...root.list.filter(item => item.popupExitBatchId === notification.popupExitBatchId)];
+        const previousHistory = root.list.filter(item => item.popupExitBatchId !== notification.popupExitBatchId);
+        batch.sort((a, b) => a.popupExitHistoryOrder - b.popupExitHistoryOrder);
+        root.setHistory([...batch, ...previousHistory]);
+      } else {
+        root.setHistory([notification, ...root.list]);
+      }
+    } else {
+      root.disposeNotification(notification);
+    }
+
+    root.schedulePersist();
+    root.processQueues();
+  }
+
+  // Removes a notification entirely from the system.
+  // Called when the user explicitly dismisses it.
+  function discardNotification(id) {
+    if (root.requestPopupRemoval(id, true))
+      return;
+
+    const notificationToDiscard = root.list.find(n => n.notificationId === id)
+        || root.incomingQueue.find(n => n.notificationId === id);
+
+    root.list = root.list.filter(n => n.notificationId !== id);
+    root.incomingQueue = root.incomingQueue.filter(n => n.notificationId !== id);
+    root.disposeNotification(notificationToDiscard);
     root.schedulePersist();
     root.processQueues();
   }
 
   // Removes all notifications from history and popups.
   function discardAllNotifications() {
-    const notifications = [...root.list, ...root.popupList, ...root.incomingQueue];
+    const notifications = [...root.list, ...root.incomingQueue];
+    const popups = [...root.popupList];
     root.list = [];
-    root.popupList = [];
     root.incomingQueue = [];
-    root.resetPopupHover();
 
-    notifications.forEach(notification => root.disposeNotification(notification, false));
-    [...notificationServer.trackedNotifications.values].forEach(notification => {
-      notification.dismiss();
-    });
+    notifications.forEach(notification => root.disposeNotification(notification));
+    popups.forEach(notification => root.requestPopupRemoval(notification.notificationId, true));
 
     root.schedulePersist();
   }
@@ -189,84 +228,24 @@ Singleton {
   // Called when a notification pop-up times out.
   // It is moved from the popup list to the history list.
   function timeoutNotification(id, sourceTimer = null) {
-    const timedOutNotification = root.popupList.find(n => n.notificationId === id);
-
-    if (timedOutNotification) {
-      if (sourceTimer && timedOutNotification.timer === sourceTimer)
-        timedOutNotification.timer = null;
-      else
-        root.stopNotificationTimer(timedOutNotification);
-
-      // Create a new popupList without the timed-out notification.
-      root.popupList = root.popupList.filter(n => n.notificationId !== id);
-      if (!timedOutNotification.isTransient) {
-        // If the app explicitly requested a timeout, its action listener is probably dead.
-        // Overwrite the actions array to remove the dead buttons before saving to history.
-        if (timedOutNotification.notification && timedOutNotification.notification.expireTimeout > 0) {
-          timedOutNotification.actions = [];
-        }
-
-        // Create a new history list with the timed-out notification at the beginning.
-        root.setHistory([timedOutNotification, ...root.list]);
-
-        // Persist the updated history list.
-        root.schedulePersist();
-      } else {
-        root.disposeNotification(timedOutNotification);
-      }
-    }
-
-    // A space has opened up, so process the queue for the next notification.
-    root.processQueues();
+    root.requestPopupRemoval(id, false, sourceTimer);
   }
 
   // Removes all currently visible popups without affecting history.
   function discardAllPopups() {
     const popups = [...root.popupList];
-
-    // Clear first so synchronous server callbacks cannot process an old popup.
-    root.popupList = [];
-    root.resetPopupHover();
-
-    // Tell the notification server to dismiss each popup.
-    popups.forEach(popup => root.disposeNotification(popup));
-
-    // A space has opened up, so process the queue for the next notification(s).
-    root.processQueues();
+    popups.forEach(popup => root.requestPopupRemoval(popup.notificationId, true));
   }
 
   // Moves all currently visible pop-ups to the history list.
   function timeoutAllPopups() {
-    if (root.popupList.length === 0) {
-      return;
-    }
-
-    // Move all non-transient popups to the main history list.
-    const nonTransientPopups = [];
-    root.popupList.forEach(popup => {
-      root.stopNotificationTimer(popup);
-      if (!popup.isTransient) {
-        // Strip actions from explicitly timed-out apps
-        if (popup.notification && popup.notification.expireTimeout > 0) {
-          popup.actions = [];
-        }
-
-        nonTransientPopups.push(popup);
-      } else {
-        root.disposeNotification(popup);
-      }
+    const popups = [...root.popupList];
+    const batchId = ++root.popupExitBatchCounter;
+    popups.forEach((popup, index) => {
+      popup.popupExitBatchId = batchId;
+      popup.popupExitHistoryOrder = index;
+      root.requestPopupRemoval(popup.notificationId, false);
     });
-    root.setHistory([...nonTransientPopups, ...root.list]);
-
-    // Clear the list of popups.
-    root.popupList = [];
-    root.resetPopupHover();
-
-    // Persist the updated history list.
-    root.schedulePersist();
-
-    // Check for new notifications to display.
-    root.processQueues();
   }
 
   function attemptInvokeAction(id, actionIdentifier) {

@@ -23,6 +23,10 @@ QtObject {
   property string urgency: notification?.urgency.toString() ?? cachedNotification?.urgency ?? "normal"
   property SNotificationTimer timer: null
   property bool isDisposing: false
+  property bool isPopupExiting: false
+  property bool discardAfterPopupExit: false
+  property int popupExitBatchId: 0
+  property int popupExitHistoryOrder: -1
 
   signal discard(notificationId: int)
 
