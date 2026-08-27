@@ -12,7 +12,7 @@ import json
 import os
 import subprocess
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 
 REMIND_BIN, NOTIFY_SEND_BIN, REM_FILE, STATE_FILE = sys.argv[1:5]
 # Ignore ordinary timer jitter.
@@ -66,16 +66,14 @@ def main():
     notified = 0
     for month in json.loads(proc.stdout or "[]"):
         for entry in month.get("entries", []):
-            triggers = []
             if entry.get("eventstart"):
-                event = datetime.strptime(entry["eventstart"], "%Y-%m-%dT%H:%M").replace(tzinfo=tz)
-                tdelta = int(entry.get("tdelta", 0))
-                if tdelta:
-                    triggers.append(event - timedelta(minutes=tdelta))
-                triggers.append(event)
+                # Missed pre-alerts must not be replayed after resume.
+                trigger = datetime.strptime(entry["eventstart"], "%Y-%m-%dT%H:%M").replace(
+                    tzinfo=tz
+                )
             else:  # all-day event: triggers at local midnight
-                triggers.append(datetime.strptime(entry["date"], "%Y-%m-%d").replace(tzinfo=tz))
-            if any(last_ts < t.timestamp() <= now_ts for t in triggers):
+                trigger = datetime.strptime(entry["date"], "%Y-%m-%d").replace(tzinfo=tz)
+            if last_ts < trigger.timestamp() <= now_ts:
                 body = entry.get("body") or entry.get("rawbody") or "reminder"
                 subprocess.run(
                     [
