@@ -102,7 +102,13 @@ PanelWindow {
     width: previewGrid.contentWidth + 2 * root.panelPadding
     height: previewGrid.contentHeight + 2 * root.panelPadding
 
+    StyledRectangularShadow {
+      target: panelBackground
+    }
+
     StyledRect {
+      id: panelBackground
+
       anchors.fill: parent
       radius: Math.round(Styles.radius.windowRounding + 6)
       color: Theme.options.backgroundOverlay
