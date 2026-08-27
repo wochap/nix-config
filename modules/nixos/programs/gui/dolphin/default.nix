@@ -13,7 +13,10 @@ let
   );
 in
 {
-  options._custom.programs.dolphin.enable = lib.mkEnableOption { };
+  options._custom.programs.dolphin = {
+    enable = lib.mkEnableOption { };
+    daemonEnable = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
@@ -33,7 +36,7 @@ in
       kdePackages.ffmpegthumbs # thumbnails
     ];
 
-    _custom.hm = {
+    _custom.hm = lib.mkIf cfg.daemonEnable {
       systemd.user.services.dolphin-server = lib._custom.mkWaylandService {
         Unit.Description = "Dolphin file manager";
         Service = {
