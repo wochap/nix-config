@@ -9,27 +9,9 @@ let
   cfg = config._custom.desktop.xdg;
   inherit (config._custom.globals) themeColors isSandbox;
   mimeTypes = import ./mixins/mimeTypes.nix;
-  smartOpenMimeTypes = lib.unique (
-    mimeTypes.text
-    ++ mimeTypes.images
-    ++ mimeTypes.media
-    ++ mimeTypes.archives
-    ++ mimeTypes.html
-    ++ [
-      "text/*"
-      "application/json"
-      "application/xml"
-      "application/javascript"
-      "application/pdf"
-      "application/msword"
-      "application/vnd.ms-excel"
-      "application/vnd.ms-powerpoint"
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-      "inode/directory"
-    ]
-  );
+  smartOpenMimeTypes =
+    with mimeTypes;
+    lib.unique (text ++ images ++ media ++ archives ++ html ++ pdf ++ office ++ directories);
   smart-open = pkgs.writeScriptBin "smart-open" (builtins.readFile ./scripts/smart-open.sh);
 in
 {
@@ -91,9 +73,9 @@ in
             with mimeTypes;
             mkMerge (
               mapAttrsToList (n: ms: genAttrs ms (_: [ "${n}.desktop" ])) {
-                "kitty" = [ "application/x-shellscript" ];
-                "amfora" = [ "x-scheme-handler/gemini" ];
-                "Postman" = [ "x-scheme-handler/postman" ];
+                # "kitty" = [ "application/x-shellscript" ];
+                # "amfora" = [ "x-scheme-handler/gemini" ];
+                # "Postman" = [ "x-scheme-handler/postman" ];
                 # "neomutt" = [
                 #   "message/rfc822"
                 #   "x-scheme-handler/mailto"

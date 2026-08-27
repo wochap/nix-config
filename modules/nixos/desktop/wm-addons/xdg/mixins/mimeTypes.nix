@@ -1,19 +1,23 @@
 {
   text = [
-    "text/english"
+    "application/javascript"
+    "application/json"
+    "application/xml"
     "text/plain"
-    "text/x-c"
-    "text/x-c++"
-    "text/x-c++hdr"
-    "text/x-c++src"
-    "text/x-chdr"
-    "text/x-csrc"
-    "text/x-java"
-    "text/x-makefile"
-    "text/x-moc"
-    "text/x-pascal"
-    "text/x-tcl"
-    "text/x-tex"
+  ];
+  pdf = [
+    "application/pdf"
+  ];
+  office = [
+    "application/msword"
+    "application/vnd.ms-excel"
+    "application/vnd.ms-powerpoint"
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  ];
+  directories = [
+    "inode/directory"
   ];
   images = [
     "image/svg+xml"

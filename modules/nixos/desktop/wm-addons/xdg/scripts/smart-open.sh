@@ -2,6 +2,17 @@
 
 set -euo pipefail
 
+if [[ ${SMART_OPEN_DEBUG:-} ]]; then
+  log_dir=${XDG_RUNTIME_DIR:-/tmp}/smart-open
+  if mkdir -p -- "$log_dir" 2>/dev/null; then
+    {
+      printf '%(%Y-%m-%dT%H:%M:%S%z)T pid=%d argv:' -1 "$$"
+      printf ' %q' "$@"
+      printf '\n'
+    } >>"$log_dir/argv.log" 2>/dev/null || :
+  fi
+fi
+
 mode=auto
 mime_override=
 
@@ -178,60 +189,72 @@ open_tui() {
   esac
 }
 
-open_gui() {
-  local target=$1 mime=$2 terminal
-
-  if [[ $target =~ ^https?:// ]]; then
-    require google-chrome-stable
-    launch google-chrome-stable "$target"
-    return
-  fi
+gui_handler() {
+  local mime=$1
 
   case "$mime" in
-  inode/directory)
-    require Thunar
-    launch Thunar "$target"
-    ;;
-  text/html | application/xhtml+xml)
+  x-scheme-handler/http | text/html | application/xhtml+xml) printf 'web\n' ;;
+  inode/directory) printf 'directory\n' ;;
+  text/* | application/json | application/xml | application/javascript | application/x-subrip | application/x-srt) printf 'text\n' ;;
+  image/*) printf 'image\n' ;;
+  application/pdf) printf 'pdf\n' ;;
+  audio/* | video/*) printf 'media\n' ;;
+  application/msword | application/vnd.ms-excel | application/vnd.ms-powerpoint | application/vnd.openxmlformats-officedocument.wordprocessingml.document | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | application/vnd.openxmlformats-officedocument.presentationml.presentation) printf 'office\n' ;;
+  application/zip | application/gzip | application/zstd | application/x-7z* | application/x-bzip* | application/x-compressed-tar | application/x-rar* | application/x-tar | application/x-xz*) printf 'archive\n' ;;
+  *) printf 'fallback:%s\n' "$mime" ;;
+  esac
+}
+
+open_gui() {
+  local handler=$1 terminal
+  shift
+
+  case "$handler" in
+  web)
     require google-chrome-stable
-    launch google-chrome-stable "$target"
+    launch google-chrome-stable "$@"
     ;;
-  text/* | application/json | application/xml | application/javascript)
-    terminal=${TERMINAL:-kitty}
-    require "$terminal"
-    launch "$terminal" -e nvim "$target"
+  directory)
+    require Thunar
+    launch Thunar "$@"
     ;;
-  image/*)
+  text)
+    require kitty
+    launch kitty --single-instance -o window_padding_width=0 -e nvim "$@"
+    ;;
+  image)
     require imv
-    launch imv "$target"
+    launch imv "$@"
     ;;
-  application/pdf)
+  pdf)
     require zathura
-    launch zathura "$target"
+    launch zathura "$@"
     ;;
-  audio/* | video/*)
+  media)
     require mpv
-    launch mpv "$target"
+    launch mpv "$@"
     ;;
-  application/msword | application/vnd.ms-excel | application/vnd.ms-powerpoint | application/vnd.openxmlformats-officedocument.wordprocessingml.document | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | application/vnd.openxmlformats-officedocument.presentationml.presentation)
+  office)
     if command -v libreoffice >/dev/null 2>&1; then
-      launch libreoffice "$target"
+      launch libreoffice "$@"
     else
       terminal=${TERMINAL:-kitty}
       require "$terminal"
-      launch "$terminal" -e "$0" --tui "$target"
+      launch "$terminal" -e "$0" --tui "$@"
     fi
     ;;
-  application/zip | application/gzip | application/zstd | application/x-7z* | application/x-bzip* | application/x-compressed-tar | application/x-rar* | application/x-tar | application/x-xz*)
+  archive)
     require file-roller
-    launch file-roller "$target"
+    launch file-roller "$@"
     ;;
-  *)
-    printf 'smart-open: no graphical opener for %s\n' "$mime" >&2
-    return 1
+  fallback:*)
+    printf 'smart-open: no graphical opener for %s\n' "${handler#fallback:}" >&2
     ;;
   esac
 }
+
+gui_targets=()
+gui_handlers=()
 
 for original_target in "$@"; do
   target=$original_target
@@ -240,7 +263,7 @@ for original_target in "$@"; do
   fi
 
   if [[ $target =~ ^https?:// ]]; then
-    mime=text/html
+    mime=x-scheme-handler/http
   elif [[ -d $target ]]; then
     mime=inode/directory
   elif [[ -e $target ]]; then
@@ -251,8 +274,23 @@ for original_target in "$@"; do
   fi
 
   if [[ $mode == gui ]]; then
-    open_gui "$target" "$mime"
+    gui_targets+=("$target")
+    gui_handlers+=("$(gui_handler "$mime")")
   else
     open_tui "$target" "$mime"
   fi
+done
+
+processed=()
+for ((i = 0; i < ${#gui_targets[@]}; i++)); do
+  [[ ${processed[i]:-} ]] && continue
+
+  batch=()
+  for ((j = i; j < ${#gui_targets[@]}; j++)); do
+    if [[ ${gui_handlers[j]} == "${gui_handlers[i]}" ]]; then
+      batch+=("${gui_targets[j]}")
+      processed[j]=1
+    fi
+  done
+  open_gui "${gui_handlers[i]}" "${batch[@]}"
 done
