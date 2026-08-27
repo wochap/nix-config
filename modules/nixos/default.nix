@@ -22,6 +22,7 @@
     ./desktop/wm-addons/fastfetch
     ./desktop/wm-addons/fonts
     ./desktop/wm-addons/gtk
+    ./desktop/wm-addons/home-screen
     ./desktop/wm-addons/logind
     ./desktop/wm-addons/mouseless
     ./desktop/wm-addons/music

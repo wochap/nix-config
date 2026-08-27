@@ -276,6 +276,7 @@ in
       name = "se";
     };
 
+    _custom.desktop.home-screen.enable = true;
     _custom.desktop.audio.enableEasyeffects = true;
     _custom.desktop.audio.enableNoisetorch = true;
     _custom.desktop.mouseless.enable = true;
