@@ -14,6 +14,7 @@ let
     builtins.readFile ./scripts/claude-session-duration.sh
   );
   antigravity-nix-pkgs = inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system};
+  session-tap = inputs.session-tap.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   options._custom.programs.ai-agents = {
@@ -23,7 +24,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      inputs.session-tap.packages."${stdenv.hostPlatform.system}".default
+      session-tap
       _custom.rtk
       playwright-mcp
       playwright-driver
@@ -101,6 +102,15 @@ in
       };
 
       xdg.configFile."opencode/plugins/opencode-notify.ts".source = ./scripts/opencode-notify.ts;
+
+      systemd.user.services.sessiontapd = lib._custom.mkWaylandService {
+        Unit.Description = "SessionTap broker daemon";
+        Service = {
+          ExecStart = "${session-tap}/bin/sessiontapd";
+          Restart = "on-failure";
+          RestartSec = 2;
+        };
+      };
     };
   };
 }
