@@ -29,7 +29,7 @@ hl.config({
     rounding = 8,
 
     blur = {
-      enabled = true,
+      enabled = false,
       size = 5,
       passes = 3,
       noise = 0.02,
@@ -38,7 +38,7 @@ hl.config({
       vibrancy_darkness = 0.0,
       ignore_opacity = true,
       new_optimizations = true,
-      popups = true,
+      popups = false,
       popups_ignorealpha = 0.2,
       input_methods = true,
     },
@@ -170,6 +170,7 @@ hl.config({
 
   cursor = {
     no_warps = false,
+    no_hardware_cursors = 2,
     hide_on_key_press = false,
     inactive_timeout = 10,
   },
@@ -188,7 +189,7 @@ hl.config({
   },
 
   debug = {
-    damage_tracking = false,
+    damage_tracking = 2,
     disable_logs = false,
     enable_stdout_logs = true,
   },
