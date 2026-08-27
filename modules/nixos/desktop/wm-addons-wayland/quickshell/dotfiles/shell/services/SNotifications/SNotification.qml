@@ -22,11 +22,12 @@ QtObject {
   property bool isTransient: notification?.transient ?? false
   property string urgency: notification?.urgency.toString() ?? cachedNotification?.urgency ?? "normal"
   property SNotificationTimer timer: null
+  property bool isDisposing: false
 
   signal discard(notificationId: int)
 
   onNotificationChanged: {
-    if (root.notification === null) {
+    if (root.notification === null && !root.isDisposing) {
       root.discard(root.notificationId);
     }
   }

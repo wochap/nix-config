@@ -30,6 +30,7 @@ Singleton {
   property bool arePopupsHovered: false
   property bool arePopupsPaused: isIdle || isLocked || arePopupsHovered || isPanelOpen
   readonly property int maxPopups: 5 // The maximum number of pop-ups to show on screen at once.
+  readonly property int maxHistory: 100
   readonly property int defaultPopupTimeout: 5000
   property int idOffset // ensure unique notification id
   property bool isPanelOpen: false
@@ -64,6 +65,42 @@ Singleton {
 
   function resetPopupHover() {
     root.arePopupsHovered = false;
+  }
+
+  function trackedNotification(id) {
+    return notificationServer.trackedNotifications.values.find(notification => notification.id + root.idOffset === id) ?? null;
+  }
+
+  function stopNotificationTimer(notification) {
+    const timer = notification?.timer ?? null;
+    if (!timer)
+      return;
+    notification.timer = null;
+    timer.destroy();
+  }
+
+  function disposeNotification(notification, dismissOriginal = true) {
+    if (!notification || notification.isDisposing)
+      return;
+
+    notification.isDisposing = true;
+    root.stopNotificationTimer(notification);
+
+    const original = dismissOriginal ? root.trackedNotification(notification.notificationId) : null;
+    notification.destroy();
+    if (original)
+      original.dismiss();
+  }
+
+  function setHistory(notifications) {
+    const next = notifications.slice(0, root.maxHistory);
+    const evicted = notifications.slice(root.maxHistory);
+    root.list = next;
+    evicted.forEach(notification => root.disposeNotification(notification));
+  }
+
+  function schedulePersist() {
+    persistTimer.restart();
   }
 
   // The central "gatekeeper" function. It decides when to show notifications
@@ -114,56 +151,51 @@ Singleton {
   // Removes a notification entirely from the system.
   // Called when the user explicitly dismisses it.
   function discardNotification(id) {
-    const notificationToDiscard = root.popupList.find(n => n.notificationId === id) || root.list.find(n => n.notificationId === id);
+    const notificationToDiscard = root.popupList.find(n => n.notificationId === id)
+        || root.list.find(n => n.notificationId === id)
+        || root.incomingQueue.find(n => n.notificationId === id);
 
     // Create new lists by filtering out the discarded notification.
     root.list = root.list.filter(n => n.notificationId !== id);
     root.popupList = root.popupList.filter(n => n.notificationId !== id);
+    root.incomingQueue = root.incomingQueue.filter(n => n.notificationId !== id);
     if (root.popupList.length === 0)
       root.resetPopupHover();
 
     // Tell the original notification server it was dismissed.
-    const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(n => n.id + root.idOffset === id);
-    if (notificationServerIndex !== -1) {
-      notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
-    }
-    // // Free memory
-    // if (notificationToDiscard) {
-    //   if (notificationToDiscard.timer) {
-    //     notificationToDiscard.timer.destroy();
-    //   }
-    //   notificationToDiscard.destroy();
-    // }
+    root.disposeNotification(notificationToDiscard);
 
     // Save changes and check if a new popup can be shown.
-    notificationFileView.setText(root.stringifyList(root.list));
+    root.schedulePersist();
     root.processQueues();
   }
 
   // Removes all notifications from history and popups.
   function discardAllNotifications() {
+    const notifications = [...root.list, ...root.popupList, ...root.incomingQueue];
     root.list = [];
     root.popupList = [];
     root.incomingQueue = [];
     root.resetPopupHover();
 
-    notificationServer.trackedNotifications.values.forEach(notification => {
+    notifications.forEach(notification => root.disposeNotification(notification, false));
+    [...notificationServer.trackedNotifications.values].forEach(notification => {
       notification.dismiss();
     });
 
-    notificationFileView.setText(root.stringifyList(root.list));
+    root.schedulePersist();
   }
 
   // Called when a notification pop-up times out.
   // It is moved from the popup list to the history list.
-  function timeoutNotification(id) {
+  function timeoutNotification(id, sourceTimer = null) {
     const timedOutNotification = root.popupList.find(n => n.notificationId === id);
 
     if (timedOutNotification) {
-      // // Free memory
-      // if (timedOutNotification.timer) {
-      //   timedOutNotification.timer.destroy();
-      // }
+      if (sourceTimer && timedOutNotification.timer === sourceTimer)
+        timedOutNotification.timer = null;
+      else
+        root.stopNotificationTimer(timedOutNotification);
 
       // Create a new popupList without the timed-out notification.
       root.popupList = root.popupList.filter(n => n.notificationId !== id);
@@ -175,19 +207,12 @@ Singleton {
         }
 
         // Create a new history list with the timed-out notification at the beginning.
-        root.list = [timedOutNotification, ...root.list];
+        root.setHistory([timedOutNotification, ...root.list]);
 
         // Persist the updated history list.
-        notificationFileView.setText(root.stringifyList(root.list));
+        root.schedulePersist();
       } else {
-        // Dismiss transient from server and free memory
-        const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(n => n.id + root.idOffset === id);
-        if (notificationServerIndex !== -1) {
-          notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
-        }
-
-        // // Free memory
-        // timedOutNotification.destroy();
+        root.disposeNotification(timedOutNotification);
       }
     }
 
@@ -197,23 +222,14 @@ Singleton {
 
   // Removes all currently visible popups without affecting history.
   function discardAllPopups() {
-    // Tell the notification server to dismiss each popup.
-    root.popupList.forEach(popup => {
-      const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(n => n.id + root.idOffset === popup.notificationId);
-      if (notificationServerIndex !== -1) {
-        notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
-      }
+    const popups = [...root.popupList];
 
-      // // Free memory
-      // if (popup.timer) {
-      //   popup.timer.destroy();
-      // }
-      // popup.destroy();
-    });
-
-    // Clear the list of popups.
+    // Clear first so synchronous server callbacks cannot process an old popup.
     root.popupList = [];
     root.resetPopupHover();
+
+    // Tell the notification server to dismiss each popup.
+    popups.forEach(popup => root.disposeNotification(popup));
 
     // A space has opened up, so process the queue for the next notification(s).
     root.processQueues();
@@ -228,10 +244,7 @@ Singleton {
     // Move all non-transient popups to the main history list.
     const nonTransientPopups = [];
     root.popupList.forEach(popup => {
-      if (popup.timer) {
-        // // Free memory
-        // popup.timer.destroy();
-      }
+      root.stopNotificationTimer(popup);
       if (!popup.isTransient) {
         // Strip actions from explicitly timed-out apps
         if (popup.notification && popup.notification.expireTimeout > 0) {
@@ -240,23 +253,17 @@ Singleton {
 
         nonTransientPopups.push(popup);
       } else {
-        const notificationServerIndex = notificationServer.trackedNotifications.values.findIndex(n => n.id + root.idOffset === popup.notificationId);
-        if (notificationServerIndex !== -1) {
-          notificationServer.trackedNotifications.values[notificationServerIndex].dismiss();
-        }
-
-        // // Free memory
-        // popup.destroy();
+        root.disposeNotification(popup);
       }
     });
-    root.list = [...nonTransientPopups, ...root.list];
+    root.setHistory([...nonTransientPopups, ...root.list]);
 
     // Clear the list of popups.
     root.popupList = [];
     root.resetPopupHover();
 
     // Persist the updated history list.
-    notificationFileView.setText(root.stringifyList(root.list));
+    root.schedulePersist();
 
     // Check for new notifications to display.
     root.processQueues();
@@ -278,6 +285,13 @@ Singleton {
 
   function stringifyList(list) {
     return JSON.stringify(list.map(notification => notification.toJSON()), null, 2);
+  }
+
+  Timer {
+    id: persistTimer
+
+    interval: 250
+    onTriggered: notificationFileView.setText(root.stringifyList(root.list))
   }
 
   NotificationServer {
@@ -322,8 +336,8 @@ Singleton {
     id: notificationTimerComponent
 
     SNotificationTimer {
-      onTimeout: notificationId => {
-        root.timeoutNotification(notificationId);
+      onTimeout: (notificationId, timer) => {
+        root.timeoutNotification(notificationId, timer);
       }
     }
   }
@@ -382,7 +396,8 @@ Singleton {
     path: Qt.resolvedUrl(root.filePath)
     onLoaded: {
       const fileContents = notificationFileView.text();
-      root.list = JSON.parse(fileContents).map(notification => {
+      const cachedNotifications = JSON.parse(fileContents);
+      root.list = cachedNotifications.slice(0, root.maxHistory).map(notification => {
         return notificationComponent.createObject(root, {
           "notificationId": notification.notificationId,
           "cachedNotification": notification
@@ -394,6 +409,8 @@ Singleton {
       });
       root.idOffset = maxId;
       root.isReady = true;
+      if (cachedNotifications.length > root.maxHistory)
+        root.schedulePersist();
     }
     onLoadFailed: error => {
       if (error == FileViewError.FileNotFound) {

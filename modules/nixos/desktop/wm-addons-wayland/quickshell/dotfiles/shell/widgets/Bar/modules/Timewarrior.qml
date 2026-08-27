@@ -1,13 +1,13 @@
-import Quickshell.Io
 import QtQuick
 import qs.config
+import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
 
 Loader {
   id: root
 
-  property string value: ""
+  property string value: STimewarrior.value
   property bool isVisible: value.length > 0
 
   active: isVisible
@@ -20,31 +20,6 @@ Loader {
       paddingX: 0
       bgColor: "transparent"
       fgColor: Theme.options.green
-    }
-  }
-
-  Process {
-    id: process
-
-    command: ["bash", "-c", `timew | grep 'Total' | awk '{split($2, a, ":"); print a[1] ":" a[2]}'`]
-    running: true
-    stdout: StdioCollector {
-      id: stdioCollector
-
-      onStreamFinished: data => {
-        root.value = stdioCollector.text?.trim?.();
-      }
-    }
-  }
-
-  Timer {
-    id: timer
-
-    interval: 1000
-    running: true
-    repeat: true
-    onTriggered: {
-      process.running = true;
     }
   }
 }

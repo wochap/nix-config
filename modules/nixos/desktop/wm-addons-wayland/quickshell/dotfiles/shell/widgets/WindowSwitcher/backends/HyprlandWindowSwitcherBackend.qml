@@ -86,9 +86,15 @@ Scope {
   function pushFocus(id) {
     if (!id)
       return;
-    const list = root.mru.filter(candidate => candidate !== id);
+    const liveIds = (Hyprland.toplevels?.values ?? []).map(toplevel => toplevel?.address ?? "");
+    const list = root.mru.filter(candidate => candidate !== id && liveIds.includes(candidate));
     list.unshift(id);
     root.mru = list;
+  }
+
+  function removeFocus(id) {
+    if (id)
+      root.mru = root.mru.filter(candidate => candidate !== id);
   }
 
   function select(id) {
@@ -231,6 +237,8 @@ Scope {
     function onRawEvent(event) {
       if (event.name === "activewindowv2" && event.data)
         root.pushFocus(event.data);
+      else if (event.name === "closewindow")
+        root.removeFocus(event.data);
     }
   }
 }

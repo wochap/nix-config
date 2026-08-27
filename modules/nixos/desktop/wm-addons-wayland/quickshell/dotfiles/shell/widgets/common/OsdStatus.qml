@@ -38,6 +38,11 @@ Scope {
   Component.onCompleted: {
     service[root.serviceSignalName].connect(handleChange);
   }
+  Component.onDestruction: {
+    service[root.serviceSignalName].disconnect(handleChange);
+    if (SOsdStatus.currentOsd === root)
+      SOsdStatus.currentOsd = null;
+  }
 
   Timer {
     id: timer

@@ -8,7 +8,7 @@ Scope {
   required property int duration
   property bool paused: false
   property real progress: 1.0
-  signal timeout(notificationId: int)
+  signal timeout(notificationId: int, timer: var)
 
   NumberAnimation {
     target: root
@@ -19,7 +19,7 @@ Scope {
     running: true
     paused: root.paused
     onFinished: {
-      root.timeout(root.notificationId);
+      root.timeout(root.notificationId, root);
       root.destroy();
     }
   }

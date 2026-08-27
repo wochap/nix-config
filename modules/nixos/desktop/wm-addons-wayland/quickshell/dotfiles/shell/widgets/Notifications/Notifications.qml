@@ -11,7 +11,10 @@ Scope {
     component: NotificationsPanel {}
   }
 
-  NotificationsPopups {}
+  LazyLoader {
+    active: SNotifications.popupList.length > 0
+    component: NotificationsPopups {}
+  }
 
   IpcHandler {
     target: "notifications"
@@ -26,6 +29,10 @@ Scope {
 
     function dismissPopups() {
       SNotifications.timeoutAllPopups();
+    }
+
+    function discard(id: int) {
+      SNotifications.discardNotification(id);
     }
   }
 }

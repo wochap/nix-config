@@ -15,7 +15,7 @@ Item {
   required property SNotification notification
   required property bool isPopup
   property bool isExpanded: true
-  property bool hasTimeout: (root.notification?.timer ?? null) !== null && root.notification.time > 0
+  property bool hasTimeout: (root.notification?.timer ?? null) !== null && (root.notification?.time ?? 0) > 0
 
   implicitWidth: wrapperRectangle.implicitWidth
   implicitHeight: wrapperRectangle.implicitHeight
@@ -52,6 +52,8 @@ Item {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: event => {
+          if (!root.notification)
+            return;
           switch (event.button) {
           case Qt.LeftButton:
             if (root.isPopup) {
@@ -60,9 +62,9 @@ Item {
             break;
           case Qt.RightButton:
             if (root.isPopup) {
-              SNotifications.timeoutNotification(root.notification.notificationId);
+              SNotifications.timeoutNotification(root.notification?.notificationId ?? -1);
             } else {
-              SNotifications.discardNotification(root.notification.notificationId);
+              SNotifications.discardNotification(root.notification?.notificationId ?? -1);
             }
             break;
           }
@@ -84,11 +86,11 @@ Item {
           Image {
             id: notificationImage
 
-            visible: root.notification.image !== ""
+            visible: (root.notification?.image ?? "") !== ""
             Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
             Layout.preferredWidth: 36
             Layout.preferredHeight: 36
-            source: root.notification.image
+            source: root.notification?.image ?? ""
             fillMode: Image.PreserveAspectFit
             smooth: true
             asynchronous: true
@@ -103,9 +105,9 @@ Item {
           }
 
           SystemIcon {
-            visible: root.notification.image === ""
+            visible: (root.notification?.image ?? "") === ""
             Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
-            icon: root.notification.appIcon || root.notification.appName
+            icon: root.notification?.appIcon || root.notification?.appName || ""
             size: 36
             iconFallback: "org.xfce.notification"
           }
@@ -126,7 +128,7 @@ Item {
               }
 
               StyledText {
-                text: Util.formatTimeAgo(root.notification.time)
+                text: Util.formatTimeAgo(root.notification?.time ?? 0)
                 color: Theme.options.overlay0
                 font.pixelSize: Styles.font.pixelSize.smaller
               }
@@ -143,21 +145,21 @@ Item {
                 visible: root.isPopup
                 materialIcon: "chevron_right"
                 onClicked: {
-                  SNotifications.timeoutNotification(root.notification.notificationId);
+                  SNotifications.timeoutNotification(root.notification?.notificationId ?? -1);
                 }
               }
 
               NotificationButtonSm {
                 materialIcon: "close"
                 onClicked: {
-                  SNotifications.discardNotification(root.notification.notificationId);
+                  SNotifications.discardNotification(root.notification?.notificationId ?? -1);
                 }
               }
             }
 
             StyledText {
               Layout.fillWidth: true
-              text: root.notification.summary
+              text: root.notification?.summary ?? ""
               font.pixelSize: Styles.font.pixelSize.small
               elide: Text.ElideMiddle
               wrapMode: root.isExpanded ? Text.WordWrap : Text.NoWrap
@@ -167,9 +169,9 @@ Item {
               spacing: 3
 
               StyledText {
-                visible: root.notification.body.length > 0
+                visible: (root.notification?.body?.length ?? 0) > 0
                 Layout.fillWidth: true
-                text: root.notification.body
+                text: root.notification?.body ?? ""
                 color: Theme.options.subtext0
                 font.pixelSize: Styles.font.pixelSize.small
                 elide: Text.ElideMiddle
@@ -180,16 +182,16 @@ Item {
               }
 
               RowLayout {
-                visible: root.notification.actions.length > 0
+                visible: (root.notification?.actions?.length ?? 0) > 0
                 Layout.topMargin: ConfigNotifications.notificationPadding / 2
                 spacing: ConfigNotifications.notificationPadding
 
                 Repeater {
-                  model: root.notification.actions
+                  model: root.notification?.actions ?? []
                   delegate: NotificationButtonMd {
                     text: modelData.text.trim().length > 0 ? modelData.text : "Default"
                     onClicked: {
-                      SNotifications.attemptInvokeAction(root.notification.notificationId, modelData.identifier);
+                      SNotifications.attemptInvokeAction(root.notification?.notificationId ?? -1, modelData.identifier);
                     }
                   }
                 }
