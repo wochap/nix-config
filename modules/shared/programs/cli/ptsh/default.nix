@@ -26,8 +26,8 @@ in
 
         shellAliases = {
           # Setup ptSh
-          ppwd = "ptpwd";
-          pmkdir = "ptmkdir";
+          # ppwd = "ptpwd";
+          # pmkdir = "ptmkdir";
           touch = "pttouch";
           # rm = "ptrm";
           # cp = "ptcp";
