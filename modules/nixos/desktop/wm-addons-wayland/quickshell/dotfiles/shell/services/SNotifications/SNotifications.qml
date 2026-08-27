@@ -34,7 +34,6 @@ Singleton {
   property int idOffset // ensure unique notification id
   property bool isPanelOpen: false
   property real lastSoundPlayedTime: 0
-  property bool imageCleanupPending: false
   readonly property int soundCooldownMs: 1000 // Only play a sound at most once per second
 
   // Whenever a state changes, re-evaluate the notification queue.
@@ -138,7 +137,6 @@ Singleton {
 
     // Save changes and check if a new popup can be shown.
     notificationFileView.setText(root.stringifyList(root.list));
-    root.requestImageCleanup();
     root.processQueues();
   }
 
@@ -154,32 +152,6 @@ Singleton {
     });
 
     notificationFileView.setText(root.stringifyList(root.list));
-    root.requestImageCleanup();
-  }
-
-  function referencedImageUrls() {
-    const urls = [];
-    const notifications = [...root.list, ...root.popupList, ...root.incomingQueue];
-    notifications.forEach(notification => {
-      if (notification.image)
-        urls.push(notification.image);
-      if (notification.appIcon)
-        urls.push(notification.appIcon);
-    });
-    return urls;
-  }
-
-  function requestImageCleanup() {
-    root.imageCleanupPending = true;
-    root.runImageCleanup();
-  }
-
-  function runImageCleanup() {
-    if (!root.imageCleanupPending || !SImageCache.indexReady)
-      return;
-    SImageCache.cleanup(root.referencedImageUrls());
-    if (SImageCache.pendingJobCount === 0)
-      root.imageCleanupPending = false;
   }
 
   // Called when a notification pop-up times out.
@@ -333,29 +305,6 @@ Singleton {
       // Add to the incoming queue by creating a new array.
       root.incomingQueue = [...root.incomingQueue, _notification];
       root.processQueues();
-    }
-  }
-
-  // Caching is asynchronous. If an image finishes after its notification has
-  // already entered history, persist the newly assigned durable URL as well.
-  Connections {
-    target: SImageCache
-
-    function onIndexReadyChanged() {
-      if (SImageCache.indexReady)
-        Qt.callLater(root.runImageCleanup);
-    }
-
-    function onPendingJobCountChanged() {
-      if (SImageCache.pendingJobCount === 0)
-        Qt.callLater(root.runImageCleanup);
-    }
-
-    function onCached(source, url) {
-      Qt.callLater(() => {
-        notificationFileView.setText(root.stringifyList(root.list));
-        root.runImageCleanup();
-      });
     }
   }
 

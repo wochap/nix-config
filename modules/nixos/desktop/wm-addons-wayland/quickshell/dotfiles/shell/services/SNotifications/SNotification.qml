@@ -1,7 +1,6 @@
 import Quickshell
 import QtQuick
 import Quickshell.Services.Notifications
-import qs.config
 import qs.services
 
 QtObject {
@@ -32,44 +31,9 @@ QtObject {
     }
   }
 
-  // Kick off caching. SImageCache emits cached() once each file is on disk and
-  // imageCacheConnection swaps image/appIcon to the stable path then, so the UI
-  // never points at a half-written or already-deleted source.
-  Component.onCompleted: {
-    if (root.notification) {
-      if (root.image !== "")
-        root.image = SImageCache.cache(root.image);
-      // cache() leaves persistent themed icon names unchanged, but materializes
-      // both file-backed and in-memory app icons.
-      if (root.appIcon !== "")
-        root.appIcon = root.iconSource(SImageCache.cache(root.appIcon));
-    }
-  }
-
-  property var imageCacheConnection: Connections {
-    target: SImageCache
-
-    function onCached(source, url) {
-      if (!root.notification)
-        return;
-      // The property still contains the source while either a copy or an
-      // in-memory grab is pending, so it also identifies the completed job.
-      if (source === root.image)
-        root.image = url;
-      // appIcon renders through Quickshell.iconPath/QIcon, which want a plain
-      // path rather than a file:// url, so strip it.
-      if (source === root.appIcon)
-        root.appIcon = root.iconSource(url);
-    }
-  }
-
   property var retainableLock: RetainableLock {
     object: root.notification
     locked: root.notification !== null
-  }
-
-  function iconSource(source: string): string {
-    return source.startsWith("file:") ? Paths.strip(source) : source;
   }
 
   // HTML & Tracking Pixel Stripper
