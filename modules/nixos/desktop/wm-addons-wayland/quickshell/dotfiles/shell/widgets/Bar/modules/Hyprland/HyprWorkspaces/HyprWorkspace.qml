@@ -7,7 +7,6 @@ import qs.config
 import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
-import "../Utils.js" as Utils
 
 Button {
   id: root
@@ -19,8 +18,8 @@ Button {
   required property HyprlandMonitor hyprlandMonitor
   property int workspaceId: SHyprland.wsOffset + index + 1
   property bool isFocused: hyprlandMonitor?.activeWorkspace?.id === workspaceId
-  property var lastClient: SHyprland.clientsByAddress[root.workspace?.lastwindow]
-  property bool hasLastClient: !!root.lastClient
+  property var representativeClient: root.clients.find(client => client.address === root.workspace?.lastwindow) ?? root.clients[0] ?? null
+  property bool hasRepresentativeClient: !!root.representativeClient
 
   onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${workspaceId}, on_current_monitor = true })`)
   verticalPadding: 0
@@ -41,10 +40,10 @@ Button {
 
       SystemIcon {
         Layout.alignment: Qt.AlignHCenter
-        visible: root.hasLastClient
-        icon: Utils.mapAppId(root.lastClient?.class ?? "")
+        visible: root.hasRepresentativeClient
+        icon: root.representativeClient?.customClass ?? ""
         size: Styles.font.pixelSize.normal
-        layer.enabled: root.lastClient?.floating ?? false
+        layer.enabled: root.representativeClient?.floating ?? false
         layer.effect: MultiEffect {
           shadowEnabled: true
           shadowBlur: 0.25
@@ -58,7 +57,7 @@ Button {
         Layout.alignment: Qt.AlignHCenter
         color: root.isFocused && root.isOccupied ? Theme.options.primary : (root.isOccupied ? Theme.options.text : Theme.options.textDimmed)
         text: workspaceId
-        font.pixelSize: root.hasLastClient ? Styles.font.pixelSize.smaller : Styles.font.pixelSize.normal
+        font.pixelSize: root.hasRepresentativeClient ? Styles.font.pixelSize.smaller : Styles.font.pixelSize.normal
       }
     }
   }
