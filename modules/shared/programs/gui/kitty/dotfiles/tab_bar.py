@@ -226,18 +226,22 @@ def _draw_left_status(screen: Screen, max_width: int):
 
 
 def _draw_right_status(screen: Screen, max_width: int):
+    keyboard_mode = get_boss().mappings.current_keyboard_mode_name
     layout_fg = (
         inactive_tab_foreground
         if active_tab_layout_name == "fat"
         else active_tab_background
     )
     layout_icon = layout_icon_by_name.get(active_tab_layout_name) or default_layout_icon
-    cells = [
+    cells = []
+    if keyboard_mode and not keyboard_mode.startswith("__"):
+        cells.append((active_tab_background, f" {keyboard_mode} "))
+    cells.extend([
         (layout_fg, " " + layout_icon + " "),
         (layout_fg, active_tab_layout_name + " "),
         (inactive_tab_foreground, " " + windows_icon + " "),
         (inactive_tab_foreground, str(active_tab_num_windows)),
-    ]
+    ])
 
     total_width = sum(len(c) for _, c in cells)
 
