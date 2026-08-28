@@ -89,6 +89,8 @@ function start() {
   hyprctl eval 'hl.workspace_rule({ workspace = "2", layout = "monocle" })'
 
   # Start new foot terminal with tmux session
+  tmux -L se_server start-server
+  tmux -L se_server set-option -g history-limit 500
   echo "Starting tmux session: se"
   footclient --app-id=footclient-se zsh -i -c "tmuxinator start se workspaces=$workspaces --suppress-tmux-version-warning" &
   echo "Starting tmux session: se-editors"
