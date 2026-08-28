@@ -24,6 +24,7 @@ QtObject {
   property SNotificationTimer timer: null
   property bool isDisposing: false
   property bool isPopupExiting: false
+  property bool isPanelExiting: false
   property bool discardAfterPopupExit: false
   property int popupExitBatchId: 0
   property int popupExitHistoryOrder: -1

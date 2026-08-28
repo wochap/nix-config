@@ -3,7 +3,7 @@ import QtQuick
 import QtQuick.Controls
 import "ScrollConstants.js" as Scroll
 
-StyledListView {
+ListView {
   id: listView
 
   // Custom configuration properties

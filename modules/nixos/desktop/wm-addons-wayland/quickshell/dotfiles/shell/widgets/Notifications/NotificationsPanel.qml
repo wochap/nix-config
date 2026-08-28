@@ -13,6 +13,8 @@ import qs.widgets.common
 PanelWindow {
   id: root
 
+  Component.onDestruction: SNotifications.finalizePendingPanelRemovals()
+
   property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
   property var hyprlandMonitor: SHyprland.monitorsByName?.[focusedScreen?.name] ?? null
   property var focusedWorkspace: SHyprland.workspacesById?.[hyprlandMonitor?.activeWorkspace?.id] ?? null
@@ -92,7 +94,22 @@ PanelWindow {
 
       // body
       SmoothListView {
-        popIn: true
+        addDisplaced: Transition {
+          id: addDisplacedTransition
+
+          NumberAnimation {
+            property: "y"
+            duration: addDisplacedTransition.ViewTransition.item?.isEntering ? 0 : Styles.animation.duration
+            easing.type: Styles.animation.easingType
+          }
+        }
+        removeDisplaced: Transition {
+          NumberAnimation {
+            property: "y"
+            duration: Styles.animation.duration
+            easing.type: Styles.animation.easingType
+          }
+        }
         visible: SNotifications.list.length > 0
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -106,11 +123,7 @@ PanelWindow {
         model: ScriptModel {
           values: SNotifications.list
         }
-        delegate: NotificationItem {
-          isPopup: false
-          anchors.left: parent?.left
-          anchors.right: parent?.right
-        }
+        delegate: NotificationPanelDelegate {}
       }
 
       StyledText {

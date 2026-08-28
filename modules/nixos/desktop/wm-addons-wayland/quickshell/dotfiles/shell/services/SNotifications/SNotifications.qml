@@ -196,14 +196,52 @@ Singleton {
     root.processQueues();
   }
 
+  function requestPanelRemoval(id) {
+    const notification = root.list.find(item => item.notificationId === id);
+    if (!notification || notification.isPanelExiting)
+      return false;
+
+    notification.cachedNotification = notification.toJSON();
+    notification.isPanelExiting = true;
+    return true;
+  }
+
+  function finalizePanelRemoval(id) {
+    const notification = root.list.find(item => item.notificationId === id);
+    if (!notification || !notification.isPanelExiting)
+      return;
+
+    root.list = root.list.filter(item => item.notificationId !== id);
+    root.disposeNotification(notification);
+    root.schedulePersist();
+    root.processQueues();
+  }
+
+  function finalizePendingPanelRemovals() {
+    const exiting = root.list.filter(notification => notification.isPanelExiting);
+    if (exiting.length === 0)
+      return;
+
+    root.list = root.list.filter(notification => !notification.isPanelExiting);
+    exiting.forEach(notification => root.disposeNotification(notification));
+    root.schedulePersist();
+    root.processQueues();
+  }
+
   // Removes a notification entirely from the system.
   // Called when the user explicitly dismisses it.
   function discardNotification(id) {
     if (root.requestPopupRemoval(id, true))
       return;
 
-    const notificationToDiscard = root.list.find(n => n.notificationId === id)
-        || root.incomingQueue.find(n => n.notificationId === id);
+    const historyNotification = root.list.find(notification => notification.notificationId === id);
+    if (historyNotification && root.isPanelOpen) {
+      root.requestPanelRemoval(id);
+      return;
+    }
+
+    const notificationToDiscard = historyNotification
+        || root.incomingQueue.find(notification => notification.notificationId === id);
 
     root.list = root.list.filter(n => n.notificationId !== id);
     root.incomingQueue = root.incomingQueue.filter(n => n.notificationId !== id);
@@ -214,12 +252,19 @@ Singleton {
 
   // Removes all notifications from history and popups.
   function discardAllNotifications() {
-    const notifications = [...root.list, ...root.incomingQueue];
+    const history = [...root.list];
+    const queued = [...root.incomingQueue];
     const popups = [...root.popupList];
-    root.list = [];
     root.incomingQueue = [];
 
-    notifications.forEach(notification => root.disposeNotification(notification));
+    if (root.isPanelOpen)
+      history.forEach(notification => root.requestPanelRemoval(notification.notificationId));
+    else {
+      root.list = [];
+      history.forEach(notification => root.disposeNotification(notification));
+    }
+
+    queued.forEach(notification => root.disposeNotification(notification));
     popups.forEach(notification => root.requestPopupRemoval(notification.notificationId, true));
 
     root.schedulePersist();
