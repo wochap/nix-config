@@ -130,6 +130,13 @@ in
     _custom.programs.zellij.enable = true;
     _custom.programs.ai-agents.enable = true;
     _custom.programs.ai-agents.enableHandy = true;
+    _custom.programs.ai-agents.sessionTap = {
+      enable = true;
+      sourceId = "host";
+      sourceName = "Host";
+      hubUrl = "http://127.0.0.1:8931/ingest";
+      enableHub = true;
+    };
 
     _custom.services.android.enable = true;
     _custom.services.podman.enable = true;

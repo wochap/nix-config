@@ -39,16 +39,20 @@ Singleton {
 
     if (envelope.type === "snapshot") {
       const nextInvocations = {};
-      for (const invocation of envelope.invocations ?? []) {
-        if (invocation.status !== "stopped")
-          nextInvocations[invocation.invocation_id] = invocation;
+      for (const sourceInvocation of envelope.invocations ?? []) {
+        const invocation = sourceInvocation.snapshot;
+        if (invocation?.status !== "stopped") {
+          const key = `${sourceInvocation.source_id}:${invocation.invocation_id}`;
+          nextInvocations[key] = invocation;
+        }
       }
       root.invocations = nextInvocations;
     } else if (envelope.type === "update" && envelope.snapshot?.invocation_id) {
+      const key = `${envelope.source_id}:${envelope.snapshot.invocation_id}`;
       if (envelope.snapshot.status === "stopped")
-        delete root.invocations[envelope.snapshot.invocation_id];
+        delete root.invocations[key];
       else
-        root.invocations[envelope.snapshot.invocation_id] = envelope.snapshot;
+        root.invocations[key] = envelope.snapshot;
     } else {
       return;
     }
@@ -64,7 +68,7 @@ Singleton {
   Process {
     id: listener
 
-    command: ["sessiontap", "listen"]
+    command: ["sessiontap-hub", "listen"]
     running: true
     stdout: SplitParser {
       onRead: data => root.readEnvelope(data)

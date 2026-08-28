@@ -115,6 +115,14 @@ in
     _custom.programs.yazi.enable = true;
     # _custom.programs.youtube.enable = true;
     _custom.programs.ai-agents.enable = true;
+    _custom.programs.ai-agents.sessionTap = {
+      enable = true;
+      sourceId = "sandbox";
+      sourceName = "Sandbox";
+      hubUrl = "http://192.168.100.10:8931/ingest";
+      trustedAddresses = [ "192.168.100.10" ];
+      enableHub = false;
+    };
 
     # _custom.services.android.enable = true;
     # _custom.services.docker.enable = true;

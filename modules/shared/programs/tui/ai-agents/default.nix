@@ -14,17 +14,45 @@ let
     builtins.readFile ./scripts/claude-session-duration.sh
   );
   antigravity-nix-pkgs = inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system};
-  session-tap = inputs.session-tap.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
+  imports = [ ./sessiontap.nix ];
+
   options._custom.programs.ai-agents = {
     enable = lib.mkEnableOption { };
     enableHandy = lib.mkEnableOption { };
+    sessionTap = {
+      enable = lib.mkEnableOption "SessionTap agent session tracking";
+      sourceId = lib.mkOption {
+        type = lib.types.str;
+        default = "host";
+        description = "Stable source identifier sent to the SessionTap hub.";
+      };
+      sourceName = lib.mkOption {
+        type = lib.types.str;
+        default = "Host";
+        description = "Human-readable SessionTap source name.";
+      };
+      hubUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "http://127.0.0.1:8931/ingest";
+        description = "SessionTap hub ingestion URL.";
+      };
+      trustedAddresses = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "Non-loopback cleartext hub addresses trusted by sessiontapd.";
+      };
+      enableHub = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Whether to run the SessionTap hub for this user.";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      session-tap
       _custom.rtk
       playwright-mcp
       playwright-driver
@@ -40,12 +68,6 @@ in
           with pkgs;
           [ bubblewrap ]
           ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
-
-        shellAliases = {
-          cl = "sessiontap claude";
-          cx = "sessiontap codex";
-          qw = "sessiontap qwen";
-        };
 
         sessionVariables = {
           OPENSPEC_TELEMETRY = "0";
@@ -102,16 +124,6 @@ in
       };
 
       xdg.configFile."opencode/plugins/opencode-notify.ts".source = ./scripts/opencode-notify.ts;
-
-      systemd.user.services.sessiontapd = {
-        Unit.Description = "SessionTap broker daemon";
-        Install.WantedBy = [ "default.target" ];
-        Service = {
-          ExecStart = "${session-tap}/bin/sessiontapd";
-          Restart = "on-failure";
-          RestartSec = 2;
-        };
-      };
     };
   };
 }
