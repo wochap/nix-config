@@ -21,6 +21,57 @@ notify() {
   notify-send "${args[@]}"
 }
 
+control_playback() {
+  local action=$1
+  local main_pid
+  local process_state
+  local signal
+  local message
+
+  if ! systemctl --user is-active --quiet "$playback_unit"; then
+    if [[ $action == "toggle-pause" ]]; then
+      return 0
+    fi
+    notify "Nothing is playing" "There is no speech to $action"
+    return 1
+  fi
+
+  if [[ $action == "toggle-pause" ]]; then
+    if ! main_pid=$(systemctl --user show --property=MainPID --value "$playback_unit"); then
+      return 0
+    fi
+    process_state=""
+    if [[ -r /proc/$main_pid/status ]]; then
+      while read -r key value _; do
+        if [[ $key == "State:" ]]; then
+          process_state=$value
+          break
+        fi
+      done <"/proc/$main_pid/status"
+    fi
+
+    if [[ $process_state == "T" ]]; then
+      action="resume"
+    else
+      action="pause"
+    fi
+  fi
+
+  case $action in
+  pause)
+    signal=STOP
+    message="Speech paused"
+    ;;
+  resume)
+    signal=CONT
+    message="Speech resumed"
+    ;;
+  esac
+
+  systemctl --user kill --kill-whom=all --signal="$signal" "$playback_unit"
+  notify "$message"
+}
+
 ensure_supertonic() {
   if ! curl --fail --silent --max-time 1 "$supertonic_url/v1/health" >/dev/null; then
     notify "Supertonic is not running" "Enable it from the Control Center"
@@ -292,6 +343,9 @@ Options:
   --chunking=MODE     Pipelined playback: on or off (default: on)
   --steps=STEPS       Inference steps 1-100 (default: 5)
   --debug             Run in foreground and print every Supertonic input
+  --pause             Pause generation and playback
+  --resume            Resume paused generation and playback
+  --toggle-pause      Toggle between paused and playing; otherwise do nothing
   --stop              Stop any currently playing speech
   -h, --help          Show this help message
 
@@ -300,6 +354,9 @@ Examples:
   ${0##*/} article.md --voice=M2 --steps=2
   ${0##*/} page.html --format=html --chunking=off
   ${0##*/} 'Debug this' --debug
+  ${0##*/} --pause
+  ${0##*/} --resume
+  ${0##*/} --toggle-pause
   ${0##*/} --stop
 EOF
   exit "${1:-2}"
@@ -367,6 +424,18 @@ while (($# > 0)); do
     ;;
   --debug)
     debug="on"
+    ;;
+  --pause)
+    control_playback pause
+    exit
+    ;;
+  --resume)
+    control_playback resume
+    exit
+    ;;
+  --toggle-pause)
+    control_playback toggle-pause
+    exit
     ;;
   --stop)
     systemctl --user stop "$playback_unit" 2>/dev/null || true

@@ -17,6 +17,9 @@ Options:
   --chunking=MODE     Pipelined playback: on or off (default: on)
   --steps=STEPS       Inference steps 1-100 (default: 5)
   --debug             Run in foreground and print every Supertonic input
+  --pause             Pause generation and playback
+  --resume            Resume paused generation and playback
+  --toggle-pause      Toggle between paused and playing; otherwise do nothing
   --stop              Stop any currently playing speech
   -h, --help          Show this help message
 
@@ -26,6 +29,9 @@ Examples:
   ${0##*/}
   ${0##*/} primary --speed=1.5
   ${0##*/} --format=raw --voice=M2
+  ${0##*/} --pause
+  ${0##*/} --resume
+  ${0##*/} --toggle-pause
   ${0##*/} --stop
 EOF
   exit "${1:-2}"
@@ -64,9 +70,13 @@ auto | raw | markdown | html) ;;
   ;;
 esac
 
-# Commands without input do not need clipboard access.
-if [[ ${speak_args[0]:-} == "--stop" ]]; then
-  exec supertonic-speak "${speak_args[@]}"
+# Playback controls do not need clipboard access.
+if [[ ${#speak_args[@]} -eq 1 ]]; then
+  case ${speak_args[0]} in
+  --stop | --pause | --resume | --toggle-pause)
+    exec supertonic-speak "${speak_args[@]}"
+    ;;
+  esac
 fi
 
 declare -a selection_args=()

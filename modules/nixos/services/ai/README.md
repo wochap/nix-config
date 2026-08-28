@@ -257,6 +257,9 @@ $ supertonic-speak "Text to speak"
 $ supertonic-speak ./article.md          # Speak the contents of a file
 $ supertonic-clipboard                   # Speak the regular clipboard (default)
 $ supertonic-clipboard primary           # Speak the primary selection
+$ supertonic-speak --pause               # Pause generation and playback
+$ supertonic-speak --resume              # Resume generation and playback
+$ supertonic-speak --toggle-pause        # Toggle pause; no-op when idle
 $ supertonic-speak --stop                # Stop generation or playback
 ```
 

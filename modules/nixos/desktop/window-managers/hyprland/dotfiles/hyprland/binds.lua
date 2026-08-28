@@ -400,6 +400,11 @@ hl.bind(
   hl.dsp.exec_cmd(session_cmd("supertonic-clipboard primary --voice=F1 --speed=1.5 --steps=5 --chunking=on")),
   { description = "Speak" }
 )
+hl.bind(
+  mod .. " + ALT + SHIFT + v",
+  hl.dsp.exec_cmd(session_cmd("supertonic-clipboard --toggle-pause")),
+  { description = "Speak Pause" }
+)
 
 hl.bind(mod .. " + ALT + d", hl.dsp.exec_cmd(session_cmd("clean-voice")), { description = "Clean Voice" })
 
