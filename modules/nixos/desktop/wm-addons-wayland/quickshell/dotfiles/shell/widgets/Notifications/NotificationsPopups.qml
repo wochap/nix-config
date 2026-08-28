@@ -7,7 +7,6 @@ import Qt5Compat.GraphicalEffects
 import qs.config
 import qs.services
 import qs.services.SNotifications
-import qs.widgets.common
 
 PanelWindow {
   id: root
@@ -36,15 +35,30 @@ PanelWindow {
     item: listview.contentItem
   }
 
-  StyledListView {
+  ListView {
     id: listview
 
-    // Delegates own their entrance animation so rapid insertions cannot cancel
-    // an add transition when an entering item becomes displaced.
-    add: null
-    // The delegate owns its removal animation so delayRemove can keep the
-    // trailing item alive after the model's content height has shrunk.
-    remove: null
+    // Existing popups should move down when queued popups are inserted. A
+    // popup from the same rapidly inserted batch can also become displaced;
+    // place those directly so their entrance remains slide/fade-only.
+    addDisplaced: Transition {
+      id: popupAddDisplacedTransition
+
+      NumberAnimation {
+        property: "y"
+        duration: popupAddDisplacedTransition.ViewTransition.item?.isEntering ? 0 : Styles.animation.duration
+        easing.type: Styles.animation.easingType
+      }
+    }
+    // Once an exiting popup has finished its own animation and leaves the
+    // model, smoothly close the gap for the delegates that remain.
+    removeDisplaced: Transition {
+      NumberAnimation {
+        property: "y"
+        duration: Styles.animation.duration
+        easing.type: Styles.animation.easingType
+      }
+    }
     anchors {
       top: parent.top
       bottom: parent.bottom
@@ -54,8 +68,7 @@ PanelWindow {
     }
     bottomMargin: anchors.topMargin
     implicitWidth: ConfigNotifications.notificationsPopupsWidth
-    // Spacing is part of each delegate so it can collapse during removal.
-    spacing: 0
+    spacing: ConfigNotifications.notificationsSpacing
     clip: false
     // PERF: do granular updates with ScriptModel
     model: ScriptModel {
@@ -69,7 +82,8 @@ PanelWindow {
       // ScriptModel can invalidate modelData while retaining a removed row.
       property SNotification retainedModelData: modelData
       property real popupOffset: 0
-      property real layoutHeight: popupItem.implicitHeight + ConfigNotifications.notificationsSpacing
+      readonly property bool isEntering: popupAddAnimation.running
+
       property ParallelAnimation popupAddAnimation: ParallelAnimation {
         NumberAnimation {
           target: popupDelegate
@@ -97,13 +111,6 @@ PanelWindow {
           target: popupDelegate
           property: "popupOffset"
           to: listview.width
-          duration: Styles.animation.duration
-          easing.type: Styles.animation.easingType
-        }
-        NumberAnimation {
-          target: popupDelegate
-          property: "layoutHeight"
-          to: 0
           duration: Styles.animation.duration
           easing.type: Styles.animation.easingType
         }
@@ -140,6 +147,8 @@ PanelWindow {
         popupDelegate.opacity = 0;
         popupAddAnimation.start();
       }
+      // Preserve the slide/fade if a popup is unexpectedly removed directly
+      // from the model instead of through the notification service.
       ListView.delayRemove: popupRemoveAnimation.running
       ListView.onRemove: {
         // Service-managed removals finish before changing the model. This is
@@ -150,7 +159,7 @@ PanelWindow {
       }
 
       z: popupRemoveAnimation.running ? -1 : (popupAddAnimation.running ? 1 : 0)
-      implicitHeight: layoutHeight
+      implicitHeight: popupItem.implicitHeight
       anchors.left: parent?.left
       anchors.right: parent?.right
       transform: Translate {
