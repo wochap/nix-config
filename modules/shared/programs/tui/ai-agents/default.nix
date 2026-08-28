@@ -103,8 +103,9 @@ in
 
       xdg.configFile."opencode/plugins/opencode-notify.ts".source = ./scripts/opencode-notify.ts;
 
-      systemd.user.services.sessiontapd = lib._custom.mkWaylandService {
+      systemd.user.services.sessiontapd = {
         Unit.Description = "SessionTap broker daemon";
+        Install.WantedBy = [ "default.target" ];
         Service = {
           ExecStart = "${session-tap}/bin/sessiontapd";
           Restart = "on-failure";
