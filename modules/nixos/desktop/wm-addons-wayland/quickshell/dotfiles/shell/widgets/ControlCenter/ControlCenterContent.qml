@@ -273,9 +273,15 @@ PanelWindow {
             }
           }
 
-          Item {
+          ControlCenterButton {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
+            label: "Reader mode"
+            materialIcon: "menu_book"
+            isActive: SHyprshade.isReaderActive
+            onClicked: {
+              SHyprshade.toggleReader();
+            }
           }
         }
       }

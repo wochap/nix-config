@@ -98,7 +98,6 @@ in
         hyprland-qt-support
         hyprland-guiutils
         hyprpaper
-        hyprshade # NOTE: v5 is buggy
         hyprshutdown
       ];
 
