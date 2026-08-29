@@ -10,14 +10,14 @@ Singleton {
 
   property int runningCount: 0
   property int blockedCount: 0
-  property var invocations: ({})
+  property var agents: ({})
 
   function updateCounts() {
     let running = 0;
     let blocked = 0;
 
-    for (const invocationId in root.invocations) {
-      const status = root.invocations[invocationId]?.status;
+    for (const agentId in root.agents) {
+      const status = root.agents[agentId]?.status;
       if (status === "running")
         running++;
       else if (status === "blocked")
@@ -38,21 +38,21 @@ Singleton {
     }
 
     if (envelope.type === "snapshot") {
-      const nextInvocations = {};
-      for (const sourceInvocation of envelope.invocations ?? []) {
-        const invocation = sourceInvocation.snapshot;
-        if (invocation?.status !== "stopped") {
-          const key = `${sourceInvocation.source_id}:${invocation.invocation_id}`;
-          nextInvocations[key] = invocation;
+      const nextAgents = {};
+      for (const sourceAgent of envelope.agents ?? []) {
+        const agent = sourceAgent.view;
+        if (agent?.status !== "stopped") {
+          const key = `${sourceAgent.source_id}:${agent.invocation_id}`;
+          nextAgents[key] = agent;
         }
       }
-      root.invocations = nextInvocations;
-    } else if (envelope.type === "update" && envelope.snapshot?.invocation_id) {
-      const key = `${envelope.source_id}:${envelope.snapshot.invocation_id}`;
-      if (envelope.snapshot.status === "stopped")
-        delete root.invocations[key];
+      root.agents = nextAgents;
+    } else if (envelope.type === "update" && envelope.view?.invocation_id) {
+      const key = `${envelope.source_id}:${envelope.view.invocation_id}`;
+      if (envelope.view.status === "stopped")
+        delete root.agents[key];
       else
-        root.invocations[key] = envelope.snapshot;
+        root.agents[key] = envelope.view;
     } else {
       return;
     }
@@ -61,7 +61,7 @@ Singleton {
   }
 
   function reset() {
-    root.invocations = {};
+    root.agents = {};
     root.updateCounts();
   }
 

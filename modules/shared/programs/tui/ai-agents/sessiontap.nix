@@ -9,10 +9,16 @@
 let
   cfg = config._custom.programs.ai-agents;
   session-tap = inputs.session-tap.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  sessiontap-notify = pkgs.writeScriptBin "sessiontap-notify" (
+    builtins.readFile ./scripts/sessiontap-notify.sh
+  );
 in
 {
   config = lib.mkIf (cfg.enable && cfg.sessionTap.enable) {
-    environment.systemPackages = [ session-tap ];
+    environment.systemPackages = [
+      session-tap
+      sessiontap-notify
+    ];
 
     _custom.hm = {
       home.shellAliases = {
@@ -55,6 +61,20 @@ in
           Service = {
             ExecStart = "${session-tap}/bin/sessiontap-hub";
             Restart = "on-failure";
+            RestartSec = 2;
+          };
+        };
+
+        sessiontap-notify = lib.mkIf cfg.sessionTap.enableHub {
+          Unit = {
+            Description = "SessionTap agent notifications";
+            After = [ "sessiontap-hub.service" ];
+            Wants = [ "sessiontap-hub.service" ];
+          };
+          Install.WantedBy = [ "default.target" ];
+          Service = {
+            ExecStart = "${sessiontap-notify}/bin/sessiontap-notify";
+            Restart = "always";
             RestartSec = 2;
           };
         };
