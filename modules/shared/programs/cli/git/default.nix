@@ -15,7 +15,7 @@ let
     ;
   inherit (lib._custom) relativeSymlink;
   git-final = pkgs.gitFull;
-  wt = pkgs.writeScriptBin "wt" (builtins.readFile ./scripts/wt.sh);
+  wt = pkgs.writeScriptBin "wt" (builtins.readFile "${inputs.wt}/wt");
 in
 {
   options._custom.programs.git = {
@@ -31,7 +31,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ git-final ];
+    environment.systemPackages = with pkgs; [
+      git-final
+      git-filter-repo
+    ];
 
     _custom.hm = {
       home.shellAliases = {
@@ -55,7 +58,7 @@ in
         wt
       ];
 
-      programs.bash.initExtra = lib.mkOrder 1000 (builtins.readFile ./scripts/wt.plugin.sh);
+      programs.bash.initExtra = lib.mkOrder 1000 (builtins.readFile "${inputs.wt}/wt.plugin.sh");
       programs.zsh.initContent = lib.mkOrder 1000 ''
         source ${relativeSymlink configDirectory ./dotfiles/git.zsh}
 
@@ -70,8 +73,8 @@ in
         add-theme-hook _apply_delta_theme
         _apply_delta_theme $CURRENT_SCHEME
 
-        source ${./scripts/wt.plugin.sh}
-        zsh-defer source ${./scripts/wt.completions.zsh}
+        source ${inputs.wt}/wt.plugin.sh
+        zsh-defer source ${inputs.wt}/wt.completions.zsh
       '';
 
       programs.gh = {

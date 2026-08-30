@@ -111,6 +111,8 @@
     python-remind.flake = false;
     remind.url = "github:wochap/remind/06.02.10-fork";
     remind.flake = false;
+    wt.url = "github:wochap/wt";
+    wt.flake = false;
 
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f"; # master (06 apr 2023)

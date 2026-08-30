@@ -3394,6 +3394,7 @@
         "wayfreeze": "wayfreeze",
         "wayland-firewall": "wayland-firewall",
         "wluma": "wluma",
+        "wt": "wt",
         "zen-browser": "zen-browser",
         "zsh-auto-notify": "zsh-auto-notify",
         "zsh-autocomplete": "zsh-autocomplete",
@@ -3822,6 +3823,22 @@
         "owner": "maximbaz",
         "repo": "wluma",
         "rev": "259a874af6b4d854073d340cccb1852f63635fd3",
+        "type": "github"
+      }
+    },
+    "wt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788051649,
+        "narHash": "sha256-MoW9hfQKsTTtSXIZ+PHd6FtoQQqtu11GJwjIHLIAp+E=",
+        "owner": "wochap",
+        "repo": "wt",
+        "rev": "b2d969465870a96f4236339d2546cfa6ac7e5fc3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "wt",
         "type": "github"
       }
     },
