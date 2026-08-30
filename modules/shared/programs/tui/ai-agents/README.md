@@ -9,11 +9,17 @@
 ### Claude
 
 ```sh
-# add playwright mcp
+# add playwright-mcp
 claude mcp add playwright --scope user -- \
     playwright-mcp \
     --executable-path /run/current-system/sw/bin/google-chrome-stable \
     --user-data-dir ~/.cache/playwright-mcp-profile
+
+# add chrome-devtools-mcp
+claude mcp add chrome-devtools --scope user -- \
+    npx -y chrome-devtools-mcp@latest \
+    --executablePath /run/current-system/sw/bin/google-chrome-stable \
+    --isolated
 ```
 
 ### Codex
