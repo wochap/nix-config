@@ -97,12 +97,12 @@ function fns() {
 
   if [[ -n "$TMUX" ]]; then
     extra_args=(
-      --bind "alt-enter:execute-silent(tmux split-window 'npm run {}; $SHELL')"
+      --bind "alt-enter:execute-silent(tmux split-window -d 'npm run {}; $SHELL')"
       --header "  [Enter] Run | [Alt-Enter] Run in new tmux pane"
     )
   elif [[ -n "$KITTY_PID" || "$TERM" == "xterm-kitty" ]]; then
     extra_args=(
-      --bind "alt-enter:execute-silent(kitty @ launch --type=window $SHELL -c 'npm run {}; $SHELL')"
+      --bind "alt-enter:execute-silent(kitty @ launch --keep-focus --type=window $SHELL -c 'npm run {}; $SHELL')"
       --header "  [Enter] Run | [Alt-Enter] Run in new kitty pane"
     )
   fi
