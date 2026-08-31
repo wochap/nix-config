@@ -84,6 +84,58 @@ require() {
   }
 }
 
+is_text_file() {
+  local target=$1 encoding
+
+  [[ -f $target ]] || return 1
+  encoding=$(file --brief --mime-encoding -- "$target")
+  [[ $encoding != binary ]]
+}
+
+fallback_handler() {
+  local target=$1 probe_target probe line format= has_audio=false has_video=false
+
+  if is_text_file "$target"; then
+    printf 'text\n'
+    return
+  fi
+
+  if command -v ffprobe >/dev/null 2>&1; then
+    probe_target=$(realpath -- "$target")
+    probe=$(ffprobe -v error -show_entries stream=codec_type:format=format_name -of default=noprint_wrappers=1 "$probe_target" 2>/dev/null || :)
+    while IFS= read -r line; do
+      case "$line" in
+      codec_type=video) has_video=true ;;
+      codec_type=audio) has_audio=true ;;
+      format_name=*) format=${line#format_name=} ;;
+      esac
+    done <<<"$probe"
+
+    if [[ $has_video == true ]]; then
+      case "$format" in
+      *_pipe | image2*)
+        printf 'image\n'
+        ;;
+      *)
+        printf 'video\n'
+        ;;
+      esac
+      return
+    fi
+    if [[ $has_audio == true ]]; then
+      printf 'audio\n'
+      return
+    fi
+  fi
+
+  if command -v identify >/dev/null 2>&1 && identify -quiet "$target" >/dev/null 2>&1; then
+    printf 'image\n'
+    return
+  fi
+
+  printf 'unknown\n'
+}
+
 materialize_stdin() {
   local runtime_dir raw mime suffix target
   runtime_dir=${XDG_RUNTIME_DIR:-/tmp}/smart-open
@@ -183,6 +235,24 @@ open_tui() {
     atool --list -- "$target" | less
     ;;
   *)
+    case "$(fallback_handler "$target")" in
+    text)
+      require less
+      exec less -- "$target"
+      ;;
+    image)
+      require chafa
+      chafa -- "$target" | less -R
+      ;;
+    audio)
+      require mpv
+      exec mpv --no-video -- "$target"
+      ;;
+    video)
+      require mpv
+      exec mpv --vo=kitty -- "$target"
+      ;;
+    esac
     printf 'smart-open: no terminal opener for %s\n' "$mime" >&2
     return 1
     ;;
@@ -190,7 +260,7 @@ open_tui() {
 }
 
 gui_handler() {
-  local mime=$1
+  local mime=$1 target=$2
 
   case "$mime" in
   x-scheme-handler/http | text/html | application/xhtml+xml) printf 'web\n' ;;
@@ -201,7 +271,14 @@ gui_handler() {
   audio/* | video/*) printf 'media\n' ;;
   application/msword | application/vnd.ms-excel | application/vnd.ms-powerpoint | application/vnd.openxmlformats-officedocument.wordprocessingml.document | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | application/vnd.openxmlformats-officedocument.presentationml.presentation) printf 'office\n' ;;
   application/zip | application/gzip | application/zstd | application/x-7z* | application/x-bzip* | application/x-compressed-tar | application/x-rar* | application/x-tar | application/x-xz*) printf 'archive\n' ;;
-  *) printf 'fallback:%s\n' "$mime" ;;
+  *)
+    case "$(fallback_handler "$target")" in
+    text) printf 'text\n' ;;
+    image) printf 'image\n' ;;
+    audio | video) printf 'media\n' ;;
+    *) printf 'fallback:%s\n' "$mime" ;;
+    esac
+    ;;
   esac
 }
 
@@ -275,7 +352,7 @@ for original_target in "$@"; do
 
   if [[ $mode == gui ]]; then
     gui_targets+=("$target")
-    gui_handlers+=("$(gui_handler "$mime")")
+    gui_handlers+=("$(gui_handler "$mime" "$target")")
   else
     open_tui "$target" "$mime"
   fi
