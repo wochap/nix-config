@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 
@@ -9,6 +10,7 @@ let
   cfg = config._custom.desktop.tofi;
   inherit (config._custom.globals) themeColorsLight themeColorsDark preferDark;
 
+  tofi-final = inputs.tofi.packages.${pkgs.stdenv.hostPlatform.system}.default;
   tofi-launcher = pkgs.writeScriptBin "tofi-launcher" (builtins.readFile ./scripts/tofi-launcher.sh);
   tofi-powermenu = pkgs.writeScriptBin "tofi-powermenu" (
     builtins.readFile ./scripts/tofi-powermenu.sh
@@ -42,7 +44,7 @@ in
     _custom.hm = {
       home = {
         packages = with pkgs; [
-          tofi
+          tofi-final
           tofi-launcher
           tofi-powermenu
           tofi-emoji

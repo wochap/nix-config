@@ -3389,6 +3389,7 @@
         "showmethekey": "showmethekey",
         "smart-splits-nvim": "smart-splits-nvim",
         "sops-nix": "sops-nix",
+        "tofi": "tofi",
         "ucodenix": "ucodenix",
         "vdirsyncer": "vdirsyncer",
         "wayfreeze": "wayfreeze",
@@ -3703,6 +3704,27 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default-linux",
+        "type": "github"
+      }
+    },
+    "tofi": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788141812,
+        "narHash": "sha256-DLnjIW+Y7v9WNi3FI0K+RIvde+LWdR62uRs5kCi7M3g=",
+        "owner": "wochap",
+        "repo": "tofi",
+        "rev": "7ad57ee533fe8e9b6dc25092c30d408ec9ab7f8f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "ref": "master-fork",
+        "repo": "tofi",
         "type": "github"
       }
     },
