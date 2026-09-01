@@ -12,6 +12,15 @@ html_escape() {
   printf '%s' "$value"
 }
 
+# Format a raw token count with a unit suffix: 2 -> 2, 15300 -> 15.3k, 2400000 -> 2.4M
+humanize() {
+  awk -v n="$1" 'BEGIN {
+    if (n >= 1000000) printf "%.1fM", n / 1000000
+    else if (n >= 1000) printf "%.1fk", n / 1000
+    else printf "%d", n
+  }'
+}
+
 provider_details() {
   local provider=${1,,}
 
@@ -98,11 +107,11 @@ notify_update() {
   [[ -n "$context_percent" ]] && usage="Context: ${context_percent}%"
   if [[ -n "$input_tokens" ]]; then
     [[ -n "$usage" ]] && usage+=" · "
-    usage+="In: $input_tokens"
+    usage+="In: $(humanize "$input_tokens")"
   fi
   if [[ -n "$output_tokens" ]]; then
     [[ -n "$usage" ]] && usage+=" · "
-    usage+="Out: $output_tokens"
+    usage+="Out: $(humanize "$output_tokens")"
   fi
   [[ -n "$usage" ]] && body+="<br>$(html_escape "$usage")"
 
