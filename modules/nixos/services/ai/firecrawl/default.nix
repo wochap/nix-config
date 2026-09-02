@@ -22,15 +22,23 @@ let
     nuqPrefetchWorker = 20915;
     nuqReconcilerWorker = 20916;
     rabbitmqManagement = 20917;
+    rabbitmqPrometheus = 20918;
+    rabbitmqDistribution = 20919;
+    rabbitmqEpmd = 20920;
   };
 
   address = wochap-ssc.meta.address;
-  postgresUrl = "postgres://firecrawl:firecrawl@${address}:${toString ports.postgres}/firecrawl";
+  postgresUrl = "postgres://firecrawl:firecrawl@${address}:${toString ports.postgres}/postgres";
 
   rabbitmqConfig = pkgs.writeText "firecrawl-rabbitmq.conf" ''
     listeners.tcp.default = ${address}:${toString ports.rabbitmq}
     management.tcp.ip = ${address}
     management.tcp.port = ${toString ports.rabbitmqManagement}
+    prometheus.tcp.ip = ${address}
+    prometheus.tcp.port = ${toString ports.rabbitmqPrometheus}
+    distribution.listener.interface = ${address}
+    distribution.listener.port_range.min = ${toString ports.rabbitmqDistribution}
+    distribution.listener.port_range.max = ${toString ports.rabbitmqDistribution}
   '';
 
   # Firecrawl's auxiliary worker health servers call listen(port) without a
@@ -96,6 +104,7 @@ let
     wait_for_port RabbitMQ ${toString ports.rabbitmq}
     wait_for_port PostgreSQL ${toString ports.postgres}
   '';
+
 in
 {
   config = lib.mkIf (cfg.enable && cfg.enableFirecrawl) {
@@ -142,7 +151,7 @@ in
           PLAYWRIGHT_MICROSERVICE_URL = "http://${address}:${toString ports.playwright}/scrape";
           POSTGRES_HOST = address;
           POSTGRES_PORT = toString ports.postgres;
-          POSTGRES_DB = "firecrawl";
+          POSTGRES_DB = "postgres";
           POSTGRES_USER = "firecrawl";
           POSTGRES_PASSWORD = "firecrawl";
           NUQ_BACKEND = "pg";
@@ -201,6 +210,8 @@ in
           RABBITMQ_DEFAULT_USER = "firecrawl";
           RABBITMQ_DEFAULT_PASS = "firecrawl";
           RABBITMQ_NODENAME = "rabbit@firecrawl-rabbitmq";
+          ERL_EPMD_ADDRESS = address;
+          ERL_EPMD_PORT = toString ports.rabbitmqEpmd;
         };
         volumes = [
           "/var/lib/firecrawl/rabbitmq:/var/lib/rabbitmq:rw"
@@ -223,16 +234,13 @@ in
           "port=${toString ports.postgres}"
         ];
         environment = {
-          POSTGRES_DB = "firecrawl";
+          POSTGRES_DB = "postgres";
           POSTGRES_USER = "firecrawl";
           POSTGRES_PASSWORD = "firecrawl";
           PGDATA = "/var/lib/postgresql/data/pgdata";
         };
         volumes = [ "/var/lib/firecrawl/postgres:/var/lib/postgresql/data:rw" ];
-        extraOptions = commonOptions ++ [
-          "--pids-limit=512"
-          "--tmpfs=/var/run/postgresql:rw,nosuid,nodev,uid=999,gid=999,size=16m"
-        ];
+        extraOptions = commonOptions ++ [ "--pids-limit=512" ];
       };
     };
 
@@ -262,7 +270,7 @@ in
           ExecStartPre = [ waitForDependencies ];
           Restart = "on-failure";
           RestartSec = 2;
-          TimeoutStartSec = 180;
+          TimeoutStartSec = lib.mkForce 180;
           TimeoutStopSec = lib.mkForce 60;
           UMask = "0077";
           ProtectHome = true;
