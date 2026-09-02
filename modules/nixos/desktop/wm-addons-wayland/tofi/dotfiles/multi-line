@@ -4,6 +4,8 @@ include = one-line
 result-spacing = 13
 horizontal = false
 num-results = 10
+result-x-padding = 7
+result-full-width = true
 
 # Window theming
 # height = 332 + 11

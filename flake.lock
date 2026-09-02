@@ -3714,11 +3714,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788141812,
-        "narHash": "sha256-DLnjIW+Y7v9WNi3FI0K+RIvde+LWdR62uRs5kCi7M3g=",
+        "lastModified": 1788269210,
+        "narHash": "sha256-rowRiW++D8N6M6oYQjIAxQtnB3XCc6XT6+PSA/jmMcI=",
         "owner": "wochap",
         "repo": "tofi",
-        "rev": "7ad57ee533fe8e9b6dc25092c30d408ec9ab7f8f",
+        "rev": "4633f62a87b046e1946f2b78fbee11c5eb47b20b",
         "type": "github"
       },
       "original": {
