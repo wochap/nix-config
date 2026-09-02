@@ -1,0 +1,10 @@
+FROM qwen3-embedding:4b
+
+# Fill an 8 GB GPU while retaining headroom for Ollama's compute buffers.
+# At 24k: weights use ~2375 MiB, KV cache ~3456 MiB, and compute ~1301 MiB.
+PARAMETER num_ctx 24576
+
+# A value above the model's layer count asks Ollama to offload every layer.
+PARAMETER num_gpu 99
+
+# vim: filetype=Dockerfile
