@@ -182,9 +182,7 @@ function cpfc() {
 compdef _cpf_files_only cpfc
 
 # add file to clipboard
-# NOTE: doesn't work on thunar
 function cpf() {
-  local filepath=$(realpath -- "$@")
-  printf 'file://%s\n' "$filepath" | wl-copy -t text/uri-list
+  shotclip -- "$@"
 }
 compdef _cpf_files_only cpf

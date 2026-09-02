@@ -4,6 +4,27 @@ clear_db() {
   cliphist wipe
 }
 
+file_uri_to_path() {
+  local encoded="${1#file://}"
+  local decoded=""
+  local byte
+
+  # Accept both canonical file:///home/... URIs and legacy file://home/...
+  # entries produced by helpers that concatenate "file:/" with an absolute path.
+  if [[ "$encoded" != /* ]]; then
+    encoded="/$encoded"
+  fi
+
+  while [[ "$encoded" =~ ^([^%]*)%([[:xdigit:]]{2})(.*)$ ]]; do
+    decoded+="${BASH_REMATCH[1]}"
+    printf -v byte '%b' "\\x${BASH_REMATCH[2]}"
+    decoded+="$byte"
+    encoded="${BASH_REMATCH[3]}"
+  done
+
+  printf '%s%s' "$decoded" "$encoded"
+}
+
 copy_selection() {
   local selected="$1"
   local path
@@ -11,7 +32,7 @@ copy_selection() {
 
   case "$selected" in
   file://*)
-    path="${selected#file://}"
+    path="$(file_uri_to_path "$selected")"
     ;;
   /*)
     path="$selected"

@@ -19,7 +19,6 @@ in
       home.packages = with pkgs; [
         cliphist
         wl-clip-persist
-        pkgs._custom.shotclip
         clipboard-manager
       ];
 

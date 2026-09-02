@@ -50,7 +50,7 @@ optimize_image() {
 }
 
 copy_to_cb() {
-  printf 'file://%s\n' "$1" | wl-copy -t text/uri-list
+  shotclip -- "$1"
 }
 
 # countdown

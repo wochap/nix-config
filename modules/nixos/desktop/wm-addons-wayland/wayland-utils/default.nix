@@ -41,6 +41,7 @@ in
     (lib.mkIf cfg.enable {
       _custom.hm = {
         home.packages = with pkgs; [
+          pkgs._custom.shotclip
           libnotify # send notifications
           wl-clipboard
           theme-switch
@@ -48,7 +49,6 @@ in
         ];
 
         home.shellAliases = {
-          "cpi" = ''wl-copy -t text/uri-list <<<file:/"$@"'';
           "cpt" = ''wl-copy --trim-newline "$@"'';
         };
       };

@@ -78,6 +78,17 @@ hl.window_rule({ match = { class = "^([tT]hunar)$" }, tag = "+scratchpad", float
 
 -- custom
 hl.window_rule({
+  -- shotclip briefly focuses a 1x1 toplevel to obtain the serial required for
+  -- clipboard ownership. Keep it focusable, but make the helper invisible.
+  match = { class = "^(io.github.jq6l43d1.shotclip)$" },
+  float = true,
+  size = { 1, 1 },
+  no_anim = true,
+  no_blur = true,
+  decorate = false,
+  opacity = "0.0",
+})
+hl.window_rule({
   match = { class = "^(xwaylandvideobridge)$" },
   no_initial_focus = true,
   no_focus = true,
