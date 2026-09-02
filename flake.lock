@@ -3386,6 +3386,7 @@
         "reversal-extra": "reversal-extra",
         "rod": "rod",
         "session-tap": "session-tap",
+        "shotclip": "shotclip",
         "showmethekey": "showmethekey",
         "smart-splits-nvim": "smart-splits-nvim",
         "sops-nix": "sops-nix",
@@ -3440,6 +3441,23 @@
       "original": {
         "owner": "wochap",
         "repo": "session-tap",
+        "type": "github"
+      }
+    },
+    "shotclip": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779301765,
+        "narHash": "sha256-ThZDQDMM07xym5h9CtfErzT8I0ka694lgyM9lS/et+g=",
+        "owner": "jq6l43d1",
+        "repo": "shotclip",
+        "rev": "23b9ea386c40bc4d856320baa84fdeb81fc020c9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jq6l43d1",
+        "repo": "shotclip",
+        "rev": "23b9ea386c40bc4d856320baa84fdeb81fc020c9",
         "type": "github"
       }
     },
