@@ -43,11 +43,15 @@ let
 
   # Firecrawl's auxiliary worker health servers call listen(port) without a
   # host. Keep those inherited Node listeners on the same loopback address as
-  # the main API while retaining host networking for OmniRoute access.
+  # the main API while retaining host networking for OmniRoute access. The
+  # production harness also hard-codes localhost for its API readiness probe;
+  # redirect only that probe to the configured loopback address.
   bindLoopback = pkgs.writeText "firecrawl-bind-loopback.cjs" ''
     const net = require("node:net");
     const originalListen = net.Server.prototype.listen;
+    const originalConnect = net.Socket.prototype.connect;
     const host = process.env.HOST || "127.0.1.1";
+    const apiPort = Number(process.env.PORT);
 
     net.Server.prototype.listen = function (...args) {
       const endpoint = args[0];
@@ -67,6 +71,26 @@ let
       }
 
       return originalListen.apply(this, args);
+    };
+
+    net.Socket.prototype.connect = function (...args) {
+      const endpoint = args[0];
+
+      if (
+        Number(endpoint) === apiPort &&
+        args[1] === "localhost"
+      ) {
+        args[1] = host;
+      } else if (
+        endpoint &&
+        typeof endpoint === "object" &&
+        Number(endpoint.port) === apiPort &&
+        endpoint.host === "localhost"
+      ) {
+        args[0] = { ...endpoint, host };
+      }
+
+      return originalConnect.apply(this, args);
     };
   '';
 
