@@ -10,6 +10,11 @@ let
   inherit (pkgs._custom) wochap-ssc;
   apiProxy = config._custom.services.web-proxies.gpt-researcher-api;
   omniRouteProxy = config._custom.services.web-proxies.omniroute;
+  ollamaEmbeddingCompat = pkgs.writeText "langchain_ollama.py" ''
+    from langchain_community.embeddings import OllamaEmbeddings
+
+    __all__ = ["OllamaEmbeddings"]
+  '';
   searxProxy = config._custom.services.web-proxies.searxng;
   webProxy = config._custom.services.web-proxies.gpt-researcher;
 in
@@ -48,6 +53,7 @@ in
           (toString apiProxy.backendPort)
         ];
         volumes = [
+          "${ollamaEmbeddingCompat}:/usr/src/app/langchain_ollama.py:ro"
           "/var/lib/gpt-researcher/my-docs:/usr/src/app/my-docs:rw"
           "/var/lib/gpt-researcher/outputs:/usr/src/app/outputs:rw"
           "/var/lib/gpt-researcher/logs:/usr/src/app/logs:rw"
@@ -110,16 +116,56 @@ in
       mode = "0400";
       restartUnits = [ "podman-gpt-researcher-api.service" ];
       content = ''
+        # Local Ollama model used to embed and rank retrieved content.
         EMBEDDING=ollama:glegion-qwen3-embedding:4b
+        # OmniRoute alias for summaries and other lightweight tasks.
         FAST_LLM=openai:research-fast
-        LLM_KWARGS={"extra_body":{"enable_thinking":true,"reasoning_effort":"medium"}}
-        OLLAMA_BASE_URL=http://${wochap-ssc.meta.address}:11434
-        OPENAI_API_KEY=${config.sops.placeholder.local-omniroute-secret-key}
-        OPENAI_BASE_URL=http://${wochap-ssc.meta.address}:${toString omniRouteProxy.publicPort}/v1
-        RETRIEVER=searx
-        SEARX_URL=http://${wochap-ssc.meta.address}:${toString searxProxy.publicPort}
+        # Leaves reasoning and response headroom for fast-model calls.
+        FAST_TOKEN_LIMIT=12000
+        # OmniRoute alias used to write the final research report.
         SMART_LLM=openai:research-smart
+        # Prevents large structured reports from ending mid-response.
+        SMART_TOKEN_LIMIT=131072
+        # OmniRoute alias used for research planning and search queries.
         STRATEGIC_LLM=openai:research-smart
+        # Provides ample room for reasoning during research planning.
+        STRATEGIC_TOKEN_LIMIT=16000
+        # Keeps model reasoning enabled while limiting excessive deliberation.
+        LLM_KWARGS={"extra_body":{"enable_thinking":true,"reasoning_effort":"low"}}
+        # Requests comprehensive output without forcing the full token limit.
+        TOTAL_WORDS=20000
+        # Broadens coverage for every generated search query.
+        MAX_SEARCH_RESULTS_PER_QUERY=15
+        # Generates more focused queries for broad research topics.
+        MAX_ITERATIONS=8
+        # Allows detailed reports to cover more independent sections.
+        MAX_SUBTOPICS=8
+        # Limits concurrent fetches to avoid overwhelming fragile sites.
+        MAX_SCRAPER_WORKERS=8
+        # Retains more useful text from long official pages and documents.
+        BROWSE_CHUNK_MAX_LENGTH=24000
+        # Preserves more facts and citations in per-source summaries.
+        SUMMARY_TOKEN_LIMIT=2000
+        # Improves determinism and structured-output consistency.
+        TEMPERATURE=0.1
+        # Keeps generated reports consistently in English.
+        LANGUAGE=english
+        # Retains all gathered sources instead of selecting only the top ten.
+        CURATE_SOURCES=false
+        # Emits detailed pipeline events for future troubleshooting.
+        VERBOSE=true
+        # Connects the container to the host Ollama service.
+        OLLAMA_BASE_URL=http://127.0.0.1:11434
+        # Authenticates GPT Researcher to the local OmniRoute API.
+        OPENAI_API_KEY=${config.sops.placeholder.local-omniroute-secret-key}
+        # Routes OpenAI-compatible LLM calls through local OmniRoute.
+        OPENAI_BASE_URL=http://${wochap-ssc.meta.address}:${toString omniRouteProxy.publicPort}/v1
+        # Uses the self-hosted SearxNG metasearch retriever.
+        RETRIEVER=searx
+        # Extracts page text with lightweight Beautiful Soup scraping.
+        SCRAPER=bs
+        # Points the retriever at the local SearxNG proxy.
+        SEARX_URL=http://${wochap-ssc.meta.address}:${toString searxProxy.publicPort}
       '';
     };
 
