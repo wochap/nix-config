@@ -30,7 +30,7 @@ in
     };
 
     virtualisation.oci-containers.containers.omniroute = lib.mkIf cfg.enableOmniRoute {
-      image = "ghcr.io/diegosouzapw/omniroute:3.8.49@sha256:92c768c56e2de32c51a0621ef182835018b00b288c9bb235c5c5e4514658c1a1";
+      image = "ghcr.io/diegosouzapw/omniroute:3.8.50@sha256:085c57adf499a8aaa9f35ccde95c0df9c11bd9ecd18d6c9edbf3b68b8079ba9d";
       volumes = [ "/var/lib/omniroute:/app/data" ];
       environment = {
         DATA_DIR = "/app/data";
@@ -38,6 +38,7 @@ in
         PORT = toString config._custom.services.web-proxies.omniroute.backendPort;
         NEXT_PUBLIC_BASE_URL = "https://omniroute.${wochap-ssc.meta.domain}";
         OMNIROUTE_ALLOW_LOCAL_PROVIDER_URLS = "true";
+        OMNIROUTE_ALLOW_PRIVATE_PROVIDER_URLS = "true";
       };
       extraOptions = [
         "--network=host"
