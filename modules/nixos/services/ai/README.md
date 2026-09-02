@@ -96,6 +96,42 @@ $ OMNIROUTE_BASE_URL=http://127.0.1.1:20128/v1 \
     omniroute-chat --model desktop-free < request.json
 ```
 
+### Backing up and restoring OmniRoute
+
+The NixOS module creates `/var/lib/omniroute`, but it does not recreate the
+configuration stored there. OmniRoute keeps endpoint API keys, providers,
+combos, resilience settings, and other dashboard state in
+`/var/lib/omniroute/storage.sqlite`. A fresh installation therefore will not
+contain the `desktop-free`, `firecrawl`, `research-fast`, or `research-smart`
+combos used by these modules.
+
+Back up the complete state directory while OmniRoute is stopped so the SQLite
+database and its write-ahead log are captured consistently:
+
+```console
+$ sudo systemctl stop podman-omniroute.service
+$ sudo tar --acls --xattrs -C /var/lib -cpf /path/to/backup/omniroute.tar omniroute
+```
+
+Treat the archive as a secret because the database contains provider and
+endpoint credentials. Store it with the SOPS age private-key backup described
+in the repository installation instructions.
+
+After activating this NixOS configuration on the replacement machine, restore
+the state before starting OmniRoute:
+
+```console
+$ sudo systemctl stop podman-omniroute.service
+$ sudo tar --acls --xattrs -C /var/lib -xpf /path/to/backup/omniroute.tar
+$ sudo chown -R 1000:1000 /var/lib/omniroute
+$ sudo chmod 0700 /var/lib/omniroute
+$ sudo systemctl start podman-omniroute.service
+```
+
+The `local-omniroute-secret-key` value in `secrets-sops/local.yaml` must match
+the restored endpoint API key. Restore the SOPS age key first so NixOS can
+render that secret, then verify `omniroute-chat` and each named combo.
+
 ### Article summaries
 
 `article-page` is the reusable rendering layer. It turns any Markdown file into
@@ -181,6 +217,16 @@ $ curl --fail-with-body https://firecrawl.wochap.local/v2/scrape \
     --header 'Content-Type: application/json' \
     --data '{"url":"https://example.com","formats":["markdown"]}'
 ```
+
+Install the Firecrawl CLI and point it at the self-hosted API:
+
+```console
+$ npm install -g firecrawl-cli
+$ firecrawl config --api-url https://firecrawl.wochap.local
+```
+
+The unversioned npm command installs the current CLI release. Pin a tested
+`firecrawl-cli` version in this command if the CLI itself must be reproducible.
 
 PostgreSQL, Redis, and RabbitMQ state persists in
 `/var/lib/firecrawl/postgres`, `/var/lib/firecrawl/redis`, and
