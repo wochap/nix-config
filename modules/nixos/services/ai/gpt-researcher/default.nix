@@ -9,6 +9,10 @@ let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
   apiProxy = config._custom.services.web-proxies.gpt-researcher-api;
+  firecrawlPublicPort = lib.attrByPath [
+    "firecrawl"
+    "publicPort"
+  ] 20900 config._custom.services.web-proxies;
   omniRouteProxy = config._custom.services.web-proxies.omniroute;
   ollamaEmbeddingCompat = pkgs.writeText "langchain_ollama.py" ''
     from langchain_community.embeddings import OllamaEmbeddings
@@ -162,8 +166,10 @@ in
         OPENAI_BASE_URL=http://${wochap-ssc.meta.address}:${toString omniRouteProxy.publicPort}/v1
         # Uses the self-hosted SearxNG metasearch retriever.
         RETRIEVER=searx
-        # Extracts page text with lightweight Beautiful Soup scraping.
-        SCRAPER=bs
+        # Scrapes retrieved pages through the local, lazily started Firecrawl API.
+        SCRAPER=firecrawl
+        FIRECRAWL_SERVER_URL=http://${wochap-ssc.meta.address}:${toString firecrawlPublicPort}
+        FIRECRAWL_API_KEY=
         # Points the retriever at the local SearxNG proxy.
         SEARX_URL=http://${wochap-ssc.meta.address}:${toString searxProxy.publicPort}
       '';
