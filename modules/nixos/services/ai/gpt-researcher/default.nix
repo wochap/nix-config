@@ -9,6 +9,8 @@ let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
   apiProxy = config._custom.services.web-proxies.gpt-researcher-api;
+  omniRouteProxy = config._custom.services.web-proxies.omniroute;
+  searxProxy = config._custom.services.web-proxies.searxng;
   webProxy = config._custom.services.web-proxies.gpt-researcher;
 in
 {
@@ -57,9 +59,10 @@ in
           OUTPUT_PATH = "/usr/src/app/outputs";
           PORT = toString apiProxy.backendPort;
         };
-        environmentFiles = lib.optional (
-          cfg.gptResearcherEnvironmentFile != null
-        ) cfg.gptResearcherEnvironmentFile;
+        environmentFiles = [
+          config.sops.templates."gpt-researcher-omniroute.env".path
+        ]
+        ++ lib.optional (cfg.gptResearcherEnvironmentFile != null) cfg.gptResearcherEnvironmentFile;
         extraOptions = [
           "--network=host"
           "--cap-drop=all"
@@ -103,13 +106,34 @@ in
       "d /var/lib/gpt-researcher/outputs 0750 root root -"
     ];
 
+    sops.templates."gpt-researcher-omniroute.env" = {
+      mode = "0400";
+      restartUnits = [ "podman-gpt-researcher-api.service" ];
+      content = ''
+        EMBEDDING=ollama:glegion-qwen3-embedding:4b
+        FAST_LLM=openai:research-fast
+        LLM_KWARGS={"extra_body":{"enable_thinking":true,"reasoning_effort":"medium"}}
+        OLLAMA_BASE_URL=http://${wochap-ssc.meta.address}:11434
+        OPENAI_API_KEY=${config.sops.placeholder.local-omniroute-secret-key}
+        OPENAI_BASE_URL=http://${wochap-ssc.meta.address}:${toString omniRouteProxy.publicPort}/v1
+        RETRIEVER=searx
+        SEARX_URL=http://${wochap-ssc.meta.address}:${toString searxProxy.publicPort}
+        SMART_LLM=openai:research-smart
+        STRATEGIC_LLM=openai:research-smart
+      '';
+    };
+
     systemd.services = {
-      podman-gpt-researcher-api.serviceConfig = {
-        Restart = "on-failure";
-        RestartSec = 2;
-        TimeoutStopSec = lib.mkForce 45;
-        UMask = "0027";
-        ProtectHome = true;
+      podman-gpt-researcher-api = {
+        requires = [ "ollama.service" ];
+        after = [ "ollama.service" ];
+        serviceConfig = {
+          Restart = "on-failure";
+          RestartSec = 2;
+          TimeoutStopSec = lib.mkForce 45;
+          UMask = "0027";
+          ProtectHome = true;
+        };
       };
 
       podman-gpt-researcher-web.serviceConfig = {
