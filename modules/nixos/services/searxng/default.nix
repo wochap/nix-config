@@ -11,7 +11,19 @@ let
   proxy = config._custom.services.web-proxies.searxng;
 in
 {
-  options._custom.services.searxng.enable = lib.mkEnableOption { };
+  options._custom.services.searxng = {
+    enable = lib.mkEnableOption { };
+    googleProxy = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "socks5h://127.0.0.1:1080";
+      description = ''
+        Optional proxy used only by the Google engine. Prefer an
+        unauthenticated local proxy endpoint: values configured here are
+        copied to the Nix store.
+      '';
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     sops = {
@@ -41,14 +53,20 @@ in
         pass_searxng_org = false;
       };
       openFirewall = false;
-      redisCreateLocally = false;
+      redisCreateLocally = true;
       settings = {
+        outgoing = {
+          request_timeout = 5.0;
+          max_request_timeout = 15.0;
+          enable_http2 = true;
+          retries = 1;
+        };
         server = {
           base_url = "https://${proxy.subdomain}.${wochap-ssc.meta.domain}/";
           bind_address = wochap-ssc.meta.address;
           port = proxy.backendPort;
           secret_key = "$SEARX_SECRET_KEY";
-          limiter = false;
+          limiter = true;
         };
         search = {
           formats = [
@@ -58,6 +76,43 @@ in
           default_lang = "auto";
           autocomplete = "duckduckgo";
         };
+        engines = [
+          (
+            {
+              name = "google";
+              engine = "google";
+              shortcut = "go";
+              timeout = 8.0;
+              retries = 1;
+              retry_on_http_error = [
+                403
+                429
+              ];
+              display_error_messages = true;
+            }
+            // lib.optionalAttrs (cfg.googleProxy != null) {
+              proxies."all://" = [ cfg.googleProxy ];
+            }
+          )
+          {
+            name = "brave";
+            engine = "brave";
+            shortcut = "br";
+            disabled = false;
+          }
+          {
+            name = "startpage";
+            engine = "startpage";
+            shortcut = "sp";
+            disabled = false;
+          }
+          {
+            name = "mojeek";
+            engine = "mojeek";
+            shortcut = "mj";
+            disabled = false;
+          }
+        ];
       };
     };
 
