@@ -383,8 +383,11 @@ hl.bind(mod .. " + ALT + r", hl.dsp.exec_cmd(session_cmd("recorder --area")), { 
 -- Open screenshoot utility
 hl.bind(mod .. " + ALT + s", hl.dsp.exec_cmd(session_cmd("takeshot --area")), { description = "Screenshot" })
 
--- Open ocr utility
-hl.bind(mod .. " + ALT + o", hl.dsp.exec_cmd(session_cmd("ocr")), { description = "OCR" })
+-- Copy plain text from a selected region
+hl.bind(mod .. " + ALT + o", hl.dsp.exec_cmd(session_cmd("ocr rapid")), { description = "OCR" })
+
+-- Copy Markdown from a selected region
+hl.bind(mod .. " + ALT + SHIFT + o", hl.dsp.exec_cmd(session_cmd("ocr glm")), { description = "OCR Markdown" })
 
 -- Open ocr-math utility
 hl.bind(mod .. " + ALT + h", hl.dsp.exec_cmd(session_cmd("ocr-math")), { description = "Math OCR" })

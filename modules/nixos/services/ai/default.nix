@@ -22,6 +22,7 @@ in
     ./article-scrape
     ./article-summary
     ./supertonic
+    ./ocr
   ];
 
   options._custom.services.ai = {
@@ -29,6 +30,7 @@ in
     enablePix2tex = lib.mkEnableOption { };
     enableWhisper = lib.mkEnableOption { };
     enableOllama = lib.mkEnableOption { };
+    enableOcr = lib.mkEnableOption { };
     enableOllamaFlashAttention = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
     enableOpenWebui = lib.mkEnableOption { };
@@ -113,7 +115,7 @@ in
       };
     };
     systemd.services.ollama = {
-      wantedBy = lib.mkForce [ ];
+      wantedBy = lib.mkForce (lib.optional cfg.enableOcr "multi-user.target");
       # unitConfig.stopWhenUnneeded = true;
     };
 

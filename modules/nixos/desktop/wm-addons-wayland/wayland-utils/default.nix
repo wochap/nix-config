@@ -18,7 +18,6 @@ let
   color-picker = pkgs.writeScriptBin "color-picker" (builtins.readFile ./scripts/color-picker.sh);
   ruler = pkgs.writeScriptBin "ruler" (builtins.readFile ./scripts/ruler.sh);
   takeshot = pkgs.writeScriptBin "takeshot" (builtins.readFile ./scripts/takeshot.sh);
-  ocr = pkgs.writeScriptBin "ocr" (builtins.readFile ./scripts/ocr.sh);
   ocr-math = pkgs.writeScriptBin "ocr-math" (builtins.readFile ./scripts/ocr-math.sh);
   recorder = pkgs.writeScriptBin "recorder" (builtins.readFile ./scripts/recorder.sh);
   tui-bookmarks = pkgs.writeScriptBin "tui-bookmarks" (builtins.readFile ./scripts/tui-bookmarks.sh);
@@ -91,7 +90,6 @@ in
           gpu-screen-recorder # screen recorder
           wlr-randr
           wlrctl # control keyboard, mouse and wm from cli
-          tesseract5 # ocr
           cage # wm
 
           play-notification-sound
@@ -99,7 +97,6 @@ in
           ruler
           recorder
           takeshot
-          ocr
           ocr-math
 
           tui-bookmarks
