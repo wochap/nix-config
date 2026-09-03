@@ -14,6 +14,8 @@ let
   ociBackend = config.virtualisation.oci-containers.backend;
 
   apiServiceName = "${ociBackend}-gpt-researcher-api";
+  apiUid = 1000;
+  apiGid = 1000;
   webServiceName = "${ociBackend}-gpt-researcher-web";
   apiProxy = config._custom.services.web-proxies.gpt-researcher-api;
   firecrawlPublicPort = lib.attrByPath [
@@ -70,7 +72,6 @@ in
     virtualisation.oci-containers.containers = {
       gpt-researcher-api = {
         serviceName = apiServiceName;
-        user = "0:0";
         cmd = [
           "uvicorn"
           "main:app"
@@ -142,10 +143,11 @@ in
 
     systemd.tmpfiles.rules = [
       "d /var/lib/gpt-researcher 0750 root root -"
-      "d /var/lib/gpt-researcher/data 0750 root root -"
-      "d /var/lib/gpt-researcher/logs 0750 root root -"
-      "d /var/lib/gpt-researcher/my-docs 0750 root root -"
-      "d /var/lib/gpt-researcher/outputs 0750 root root -"
+      "d /var/lib/gpt-researcher/data 0750 ${toString apiUid} ${toString apiGid} -"
+      "d /var/lib/gpt-researcher/logs 0750 ${toString apiUid} ${toString apiGid} -"
+      "d /var/lib/gpt-researcher/my-docs 0750 ${toString apiUid} ${toString apiGid} -"
+      "d /var/lib/gpt-researcher/outputs 0750 ${toString apiUid} ${toString apiGid} -"
+      "Z /var/lib/gpt-researcher/* - ${toString apiUid} ${toString apiGid} -"
     ];
 
     sops.templates."gpt-researcher-omniroute.env" = {
@@ -173,9 +175,9 @@ in
         # Broadens coverage for every generated search query.
         MAX_SEARCH_RESULTS_PER_QUERY=15
         # Generates more focused queries for broad research topics.
-        MAX_ITERATIONS=8
+        MAX_ITERATIONS=4
         # Allows detailed reports to cover more independent sections.
-        MAX_SUBTOPICS=8
+        MAX_SUBTOPICS=4
         # Limits concurrent fetches to avoid overwhelming fragile sites.
         MAX_SCRAPER_WORKERS=8
         # Retains more useful text from long official pages and documents.
