@@ -124,7 +124,7 @@ in
           HOSTNAME = wochap-ssc.meta.address;
           LOGGING_LEVEL = "INFO";
           NEXT_PUBLIC_BACKEND_URL = "http://${wochap-ssc.meta.address}:${toString apiProxy.publicPort}";
-          NEXT_PUBLIC_GPTR_API_URL = "https://${apiProxy.subdomain}.${wochap-ssc.meta.domain}";
+          NEXT_PUBLIC_GPTR_API_URL = "http://${wochap-ssc.meta.address}:${toString apiProxy.publicPort}";
           PORT = toString webProxy.backendPort;
         };
         extraOptions = [
