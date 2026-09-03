@@ -84,16 +84,6 @@ in
         secrets, such as OPENAI_API_KEY and TAVILY_API_KEY.
       '';
     };
-    gptResearcherImage = lib.mkOption {
-      type = lib.types.str;
-      default = "docker.io/gptresearcher/gpt-researcher:latest@sha256:8e0975ec9aaddc49c17c59568a25618c8a5f75b7a5f1fab35bc90e6c6dc950c7";
-      description = "Pinned GPT Researcher API container image.";
-    };
-    gptResearcherWebImage = lib.mkOption {
-      type = lib.types.str;
-      default = "docker.io/gptresearcher/gptr-nextjs:latest@sha256:69e7e2fa02d23666e7c00774faed154af1684ac06dc97d2c29c8b6e77f98710a";
-      description = "Pinned GPT Researcher Next.js container image.";
-    };
     enableArticlePage = lib.mkEnableOption "the system-wide Markdown-to-HTML article-page renderer";
     enableArticleSummary = lib.mkEnableOption "system-wide article summarization and HTML rendering";
     enableSupertonic = lib.mkEnableOption "the local Supertonic text-to-speech service";

@@ -117,6 +117,8 @@
     wt.flake = false;
     shotclip.url = "github:jq6l43d1/shotclip?rev=23b9ea386c40bc4d856320baa84fdeb81fc020c9";
     shotclip.flake = false;
+    gpt-researcher.url = "github:assafelovic/gpt-researcher";
+    gpt-researcher.flake = false;
 
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f"; # master (06 apr 2023)

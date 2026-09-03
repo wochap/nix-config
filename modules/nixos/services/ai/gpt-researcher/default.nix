@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   pkgs,
   lib,
   ...
@@ -8,6 +9,66 @@
 let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
+  source = inputs."gpt-researcher";
+  revision = source.rev or (throw "The gpt-researcher flake input must be locked to a Git revision");
+  ociBackend = config.virtualisation.oci-containers.backend;
+  ociPackage =
+    if ociBackend == "podman" then
+      config.virtualisation.podman.package
+    else
+      config.virtualisation.docker.package;
+  ociExecutable = lib.getExe ociPackage;
+
+  mkLocalOciImage =
+    {
+      name,
+      imageName,
+      context,
+      dockerfile,
+    }:
+    let
+      image = "localhost/${imageName}:${revision}";
+      contextPath = if context == "." then toString source else "${source}/${context}";
+      ensureServiceName = "gpt-researcher-image-${name}";
+    in
+    {
+      inherit image ensureServiceName;
+      service = {
+        description = "Ensure the local ${imageName} OCI image exists";
+        requires = lib.optionals (ociBackend == "docker") [ "docker.service" ];
+        after = lib.optionals (ociBackend == "docker") [ "docker.service" ];
+        path = [ ociPackage ];
+        script = ''
+          if ${ociExecutable} image inspect ${lib.escapeShellArg image} >/dev/null 2>&1; then
+            exit 0
+          fi
+
+          exec ${ociExecutable} build \
+            --tag ${lib.escapeShellArg image} \
+            --file ${lib.escapeShellArg "${contextPath}/${dockerfile}"} \
+            ${lib.escapeShellArg contextPath}
+        '';
+        # Keep this unit inactive after it exits so every OCI service start
+        # checks the image store again, including after a manual image prune.
+        serviceConfig.Type = "oneshot";
+      };
+    };
+
+  backendImage = mkLocalOciImage {
+    name = "backend";
+    imageName = "gpt-researcher";
+    context = ".";
+    dockerfile = "Dockerfile";
+  };
+  frontendImage = mkLocalOciImage {
+    name = "frontend";
+    imageName = "gptr-nextjs";
+    context = "frontend/nextjs";
+    dockerfile = "Dockerfile.dev";
+  };
+
+  apiServiceName = "${ociBackend}-gpt-researcher-api";
+  webServiceName = "${ociBackend}-gpt-researcher-web";
   apiProxy = config._custom.services.web-proxies.gpt-researcher-api;
   firecrawlPublicPort = lib.attrByPath [
     "firecrawl"
@@ -28,7 +89,7 @@ in
       gpt-researcher = {
         enable = true;
         subdomain = "gpt-researcher";
-        serviceName = "podman-gpt-researcher-web";
+        serviceName = webServiceName;
         publicPort = 20300;
         backendPort = 20301;
         lazy = true;
@@ -37,7 +98,7 @@ in
       gpt-researcher-api = {
         enable = true;
         subdomain = "gpt-researcher-api";
-        serviceName = "podman-gpt-researcher-api";
+        serviceName = apiServiceName;
         publicPort = 20800;
         backendPort = 20801;
         lazy = true;
@@ -46,7 +107,9 @@ in
 
     virtualisation.oci-containers.containers = {
       gpt-researcher-api = {
-        image = cfg.gptResearcherImage;
+        image = backendImage.image;
+        pull = "never";
+        serviceName = apiServiceName;
         user = "0:0";
         cmd = [
           "uvicorn"
@@ -65,6 +128,9 @@ in
         environment = {
           DOC_PATH = "/usr/src/app/my-docs";
           HOST = wochap-ssc.meta.address;
+          IMAGE_GENERATION_ENABLED = "false";
+          IMAGE_GENERATION_MAX_IMAGES = "3";
+          IMAGE_GENERATION_MODEL = "gemini-2.0-flash-preview-image-generation";
           LOGGING_LEVEL = "INFO";
           OUTPUT_PATH = "/usr/src/app/outputs";
           PORT = toString apiProxy.backendPort;
@@ -82,7 +148,9 @@ in
       };
 
       gpt-researcher-web = {
-        image = cfg.gptResearcherWebImage;
+        image = frontendImage.image;
+        pull = "never";
+        serviceName = webServiceName;
         cmd = [
           "npm"
           "run"
@@ -96,6 +164,7 @@ in
         volumes = [ "/var/lib/gpt-researcher/outputs:/app/outputs:rw" ];
         environment = {
           HOSTNAME = wochap-ssc.meta.address;
+          LOGGING_LEVEL = "INFO";
           NEXT_PUBLIC_BACKEND_URL = "http://${wochap-ssc.meta.address}:${toString apiProxy.publicPort}";
           NEXT_PUBLIC_GPTR_API_URL = "https://${apiProxy.subdomain}.${wochap-ssc.meta.domain}";
           PORT = toString webProxy.backendPort;
@@ -118,7 +187,7 @@ in
 
     sops.templates."gpt-researcher-omniroute.env" = {
       mode = "0400";
-      restartUnits = [ "podman-gpt-researcher-api.service" ];
+      restartUnits = [ "${apiServiceName}.service" ];
       content = ''
         # Local Ollama model used to embed and rank retrieved content.
         EMBEDDING=ollama:glegion-qwen3-embedding:4b
@@ -176,9 +245,18 @@ in
     };
 
     systemd.services = {
-      podman-gpt-researcher-api = {
-        requires = [ "ollama.service" ];
-        after = [ "ollama.service" ];
+      ${backendImage.ensureServiceName} = backendImage.service;
+      ${frontendImage.ensureServiceName} = frontendImage.service;
+
+      ${apiServiceName} = {
+        requires = [
+          "${backendImage.ensureServiceName}.service"
+          "ollama.service"
+        ];
+        after = [
+          "${backendImage.ensureServiceName}.service"
+          "ollama.service"
+        ];
         serviceConfig = {
           Restart = "on-failure";
           RestartSec = 2;
@@ -188,12 +266,16 @@ in
         };
       };
 
-      podman-gpt-researcher-web.serviceConfig = {
-        Restart = "on-failure";
-        RestartSec = 2;
-        TimeoutStopSec = lib.mkForce 30;
-        UMask = "0027";
-        ProtectHome = true;
+      ${webServiceName} = {
+        requires = [ "${frontendImage.ensureServiceName}.service" ];
+        after = [ "${frontendImage.ensureServiceName}.service" ];
+        serviceConfig = {
+          Restart = "on-failure";
+          RestartSec = 2;
+          TimeoutStopSec = lib.mkForce 30;
+          UMask = "0027";
+          ProtectHome = true;
+        };
       };
     };
   };

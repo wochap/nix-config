@@ -1096,6 +1096,22 @@
         "type": "github"
       }
     },
+    "gpt-researcher": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787512597,
+        "narHash": "sha256-sPiP2ak4VUSYXm/EsSt/NuT3/54Xfuhz6UhxEzkcFms=",
+        "owner": "assafelovic",
+        "repo": "gpt-researcher",
+        "rev": "6f998577d547b1e54ec662dac63583aa11e3b84b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "assafelovic",
+        "repo": "gpt-researcher",
+        "type": "github"
+      }
+    },
     "handy": {
       "inputs": {
         "bun2nix": "bun2nix",
@@ -3342,6 +3358,7 @@
         "easy-effects-presets": "easy-effects-presets",
         "figlet-fonts": "figlet-fonts",
         "fuzzy-sys": "fuzzy-sys",
+        "gpt-researcher": "gpt-researcher",
         "handy": "handy",
         "home-manager": "home-manager_2",
         "hyprgrass": "hyprgrass",
