@@ -81,6 +81,7 @@ in
         ];
         volumes = [
           "${ollamaEmbeddingCompat}:/usr/src/app/langchain_ollama.py:ro"
+          "/var/lib/gpt-researcher/data:/usr/src/app/data:rw"
           "/var/lib/gpt-researcher/my-docs:/usr/src/app/my-docs:rw"
           "/var/lib/gpt-researcher/outputs:/usr/src/app/outputs:rw"
           "/var/lib/gpt-researcher/logs:/usr/src/app/logs:rw"
@@ -94,6 +95,7 @@ in
           LOGGING_LEVEL = "INFO";
           OUTPUT_PATH = "/usr/src/app/outputs";
           PORT = toString apiProxy.backendPort;
+          REPORT_STORE_PATH = "/usr/src/app/data/reports.json";
           REPORT_MAX_CONTINUATIONS = "3";
           REPORT_CONTINUATION_TAIL_CHARS = "65536";
         };
@@ -140,6 +142,7 @@ in
 
     systemd.tmpfiles.rules = [
       "d /var/lib/gpt-researcher 0750 root root -"
+      "d /var/lib/gpt-researcher/data 0750 root root -"
       "d /var/lib/gpt-researcher/logs 0750 root root -"
       "d /var/lib/gpt-researcher/my-docs 0750 root root -"
       "d /var/lib/gpt-researcher/outputs 0750 root root -"
