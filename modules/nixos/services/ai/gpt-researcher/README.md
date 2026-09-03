@@ -36,6 +36,12 @@ TAVILY_API_KEY=...
 The environment file accepts GPT Researcher's other provider, model,
 retriever, and scraper settings as well.
 
+Also required:
+
+- Define the `research-fast` and `research-smart` model combos in
+  [OmniRoute](../omniroute/README.md).
+- Pull the Ollama embedding model `glegion-qwen3-embedding:4b`.
+
 Both containers start lazily on the first request. Reports, logs, and
 uploaded documents persist below `/var/lib/gpt-researcher`.
 
