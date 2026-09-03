@@ -1,30 +1,26 @@
 # Article Summary
 
-`article-page` is the reusable rendering layer. It turns any Markdown file into
-a standalone HTML5 page and can optionally open it:
+`article-summary` takes an HTTP/HTTPS article URL, scrapes it, summarizes the
+content through OmniRoute, renders the summary as a standalone HTML page, and
+opens it with the configured XDG browser. It can be invoked directly or
+integrated with an RSS reader.
+
+## Stack
+
+| Component | Role |
+|-----------|------|
+| [article-scrape](../article-scrape/README.md) | URL → article JSON (static fetch with browser fallback) |
+| OmniRoute (`omniroute-chat`) | LLM summarization (default combo `desktop-free`) |
+| Pandoc + [article-page](../article-page/README.md) | Markdown summary → HTML page (`render.py`) |
+| Python 3 | Metadata injection and controls (`inject_controls.py`) |
+
+## Usage
 
 ```sh
-article-page --open notes.md
-cat notes.md | article-page --output notes.html -
-article-page --title "Weekly digest" --header header.html \
-  --footer footer.html --output digest.html digest.md
+article-summary https://example.com/long-post
 ```
 
-Use `--head` for additions to the document `<head>`, or
-`--no-default-style` when supplying all styling yourself. Enable it on its own
-with `_custom.services.ai.enableArticlePage = true`; enabling article summaries
-also installs it.
-
-Enable the system-wide `article-summary` command with:
-
-```nix
-_custom.services.ai = {
-  enable = true;
-  enableOmniRoute = true;
-  enableArticleSummary = true;
-};
-```
-
-The command accepts an HTTP or HTTPS article URL, summarizes it through
-OmniRoute, renders the result as HTML, and opens it with the configured XDG
-browser. It can be invoked directly or integrated with an RSS reader.
+The pipeline: `article-scrape` extracts the article, the summary model
+condenses it, `article-page` renders the result, and the page opens in your
+browser. Errors from scraping or summarization are reported on stderr with a
+suggested fix.
