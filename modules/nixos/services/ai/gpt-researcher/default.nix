@@ -94,6 +94,8 @@ in
           LOGGING_LEVEL = "INFO";
           OUTPUT_PATH = "/usr/src/app/outputs";
           PORT = toString apiProxy.backendPort;
+          REPORT_MAX_CONTINUATIONS = "3";
+          REPORT_CONTINUATION_TAIL_CHARS = "65536";
         };
         environmentFiles = [
           config.sops.templates."gpt-researcher-omniroute.env".path

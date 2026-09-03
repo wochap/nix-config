@@ -1099,15 +1099,15 @@
     "gpt-researcher": {
       "flake": false,
       "locked": {
-        "lastModified": 1787512597,
-        "narHash": "sha256-sPiP2ak4VUSYXm/EsSt/NuT3/54Xfuhz6UhxEzkcFms=",
-        "owner": "assafelovic",
+        "lastModified": 1788384994,
+        "narHash": "sha256-brNXMeoTYJKqizOXEugmwhCwibvocr0KccdVPhir7u8=",
+        "owner": "wochap",
         "repo": "gpt-researcher",
-        "rev": "6f998577d547b1e54ec662dac63583aa11e3b84b",
+        "rev": "816ac0b9b00ba18843d8816386bff81fde4468db",
         "type": "github"
       },
       "original": {
-        "owner": "assafelovic",
+        "owner": "wochap",
         "repo": "gpt-researcher",
         "type": "github"
       }
