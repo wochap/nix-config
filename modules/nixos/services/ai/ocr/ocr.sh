@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
 # source theme colors
+# shellcheck source=/dev/null
 source "$HOME/.config/scripts/theme-colors.sh"
 
 mode="${1:-rapid}"
 case "$mode" in
-  rapid | glm) ;;
-  *)
-    echo "usage: ocr [rapid|glm]" >&2
-    exit 2
-    ;;
+rapid | glm) ;;
+*)
+  echo "usage: ocr [rapid|glm]" >&2
+  exit 2
+  ;;
 esac
 
 notify_error() {
@@ -71,6 +72,8 @@ if ! kill -0 "$wayfreeze_pid" 2>/dev/null; then
   exit 1
 fi
 
+# background and primary are provided by theme-colors.sh.
+# shellcheck disable=SC2154
 if ! area="$(
   slurp \
     -d \
@@ -92,55 +95,55 @@ fi
 stop_wayfreeze
 
 case "$mode" in
-  rapid)
-    if ! "$OCR_RAPID_PYTHON" \
-      "$OCR_RAPID_ENTRYPOINT" \
-      "$image_file" \
-      >"$output_file" \
-      2>"$error_file"; then
-      notify_error "RapidOCR inference failed"
-      exit 1
-    fi
-    success_title="RapidOCR Completed"
-    ;;
-  glm)
-    request_file="$temp_dir/request.json"
-    response_file="$temp_dir/response.json"
-    if ! base64 --wrap=0 "$image_file" | jq --raw-input --slurp '{
+rapid)
+  if ! "$OCR_RAPID_PYTHON" \
+    "$OCR_RAPID_ENTRYPOINT" \
+    "$image_file" \
+    >"$output_file" \
+    2>"$error_file"; then
+    notify_error "RapidOCR inference failed"
+    exit 1
+  fi
+  success_title="RapidOCR Completed"
+  ;;
+glm)
+  request_file="$temp_dir/request.json"
+  response_file="$temp_dir/response.json"
+  if ! base64 --wrap=0 "$image_file" | jq --raw-input --slurp '{
       model: "glm-ocr:bf16",
       prompt: "Text Recognition:",
       images: [.],
       stream: false,
       keep_alive: "15m"
     }' >"$request_file"; then
-      notify_error "Could not prepare the GLM-OCR request"
-      exit 1
-    fi
-    if ! curl \
-      --silent \
-      --show-error \
-      --fail-with-body \
-      --connect-timeout 2 \
-      --header "Content-Type: application/json" \
-      --data-binary "@$request_file" \
-      "http://127.0.0.1:11434/api/generate" \
-      >"$response_file" \
-      2>"$error_file"; then
-      notify_error "GLM-OCR is unavailable or inference failed"
-      exit 1
-    fi
-    if ! jq \
-      --exit-status \
-      --join-output \
-      '.response | select(type == "string")' \
-      "$response_file" \
-      >"$output_file" \
-      2>"$error_file"; then
-      notify_error "GLM-OCR returned an invalid response"
-      exit 1
-    fi
-    success_title="GLM-OCR Completed"
-    ;;
+    notify_error "Could not prepare the GLM-OCR request"
+    exit 1
+  fi
+  if ! curl \
+    --silent \
+    --show-error \
+    --fail-with-body \
+    --connect-timeout 2 \
+    --header "Content-Type: application/json" \
+    --data-binary "@$request_file" \
+    "http://127.0.0.1:11434/api/generate" \
+    >"$response_file" \
+    2>"$error_file"; then
+    notify_error "GLM-OCR is unavailable or inference failed"
+    exit 1
+  fi
+  if ! jq \
+    --exit-status \
+    --join-output \
+    '.response | select(type == "string")' \
+    "$response_file" \
+    >"$output_file" \
+    2>"$error_file"; then
+    notify_error "GLM-OCR returned an invalid response"
+    exit 1
+  fi
+  success_title="GLM-OCR Completed"
+  ;;
 esac
 
 if ! jq --exit-status --raw-input --slurp 'test("\\S")' "$output_file" >/dev/null; then

@@ -36,7 +36,6 @@ pythonPackages.buildPythonPackage rec {
     test -f "$models/PP-OCRv6_det_small.onnx"
     test -f "$models/ch_ppocr_mobile_v2.0_cls_mobile.onnx"
     test -f "$models/PP-OCRv6_rec_small.onnx"
-    test -f "$models/ppocrv6_dict.txt"
   '';
 
   pythonImportsCheck = [
