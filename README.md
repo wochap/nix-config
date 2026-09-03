@@ -151,7 +151,8 @@ Check [pxe/README.md](/pxe/README.md)
 
    # agents
    npm i -g --ignore-scripts @anthropic-ai/claude-code @openai/codex opencode-ai @qwen-code/qwen-code
-   bun install -g @oh-my-pi/pi-coding-agent
+   bun add -g --ignore-scripts @oh-my-pi/pi-coding-agent
+   bun add -g --ignore-scripts @earendil-works/pi-coding-agent
 
    # agents tools
    npm i -g --ignore-scripts @fission-ai/openspec@latest
