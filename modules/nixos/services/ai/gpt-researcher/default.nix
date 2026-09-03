@@ -12,60 +12,6 @@ let
   source = inputs."gpt-researcher";
   revision = source.rev or (throw "The gpt-researcher flake input must be locked to a Git revision");
   ociBackend = config.virtualisation.oci-containers.backend;
-  ociPackage =
-    if ociBackend == "podman" then
-      config.virtualisation.podman.package
-    else
-      config.virtualisation.docker.package;
-  ociExecutable = lib.getExe ociPackage;
-
-  mkLocalOciImage =
-    {
-      name,
-      imageName,
-      context,
-      dockerfile,
-    }:
-    let
-      image = "localhost/${imageName}:${revision}";
-      contextPath = if context == "." then toString source else "${source}/${context}";
-      ensureServiceName = "gpt-researcher-image-${name}";
-    in
-    {
-      inherit image ensureServiceName;
-      service = {
-        description = "Ensure the local ${imageName} OCI image exists";
-        requires = lib.optionals (ociBackend == "docker") [ "docker.service" ];
-        after = lib.optionals (ociBackend == "docker") [ "docker.service" ];
-        path = [ ociPackage ];
-        script = ''
-          if ${ociExecutable} image inspect ${lib.escapeShellArg image} >/dev/null 2>&1; then
-            exit 0
-          fi
-
-          exec ${ociExecutable} build \
-            --tag ${lib.escapeShellArg image} \
-            --file ${lib.escapeShellArg "${contextPath}/${dockerfile}"} \
-            ${lib.escapeShellArg contextPath}
-        '';
-        # Keep this unit inactive after it exits so every OCI service start
-        # checks the image store again, including after a manual image prune.
-        serviceConfig.Type = "oneshot";
-      };
-    };
-
-  backendImage = mkLocalOciImage {
-    name = "backend";
-    imageName = "gpt-researcher";
-    context = ".";
-    dockerfile = "Dockerfile";
-  };
-  frontendImage = mkLocalOciImage {
-    name = "frontend";
-    imageName = "gptr-nextjs";
-    context = "frontend/nextjs";
-    dockerfile = "Dockerfile.dev";
-  };
 
   apiServiceName = "${ociBackend}-gpt-researcher-api";
   webServiceName = "${ociBackend}-gpt-researcher-web";
@@ -105,10 +51,24 @@ in
       };
     };
 
+    _custom.services.local-oci-images = {
+      gpt-researcher-api = {
+        inherit source;
+        tag = revision;
+        imageName = "gpt-researcher";
+      };
+
+      gpt-researcher-web = {
+        inherit source;
+        tag = revision;
+        imageName = "gptr-nextjs";
+        context = "frontend/nextjs";
+        dockerfile = "Dockerfile.dev";
+      };
+    };
+
     virtualisation.oci-containers.containers = {
       gpt-researcher-api = {
-        image = backendImage.image;
-        pull = "never";
         serviceName = apiServiceName;
         user = "0:0";
         cmd = [
@@ -148,8 +108,6 @@ in
       };
 
       gpt-researcher-web = {
-        image = frontendImage.image;
-        pull = "never";
         serviceName = webServiceName;
         cmd = [
           "npm"
@@ -245,18 +203,9 @@ in
     };
 
     systemd.services = {
-      ${backendImage.ensureServiceName} = backendImage.service;
-      ${frontendImage.ensureServiceName} = frontendImage.service;
-
       ${apiServiceName} = {
-        requires = [
-          "${backendImage.ensureServiceName}.service"
-          "ollama.service"
-        ];
-        after = [
-          "${backendImage.ensureServiceName}.service"
-          "ollama.service"
-        ];
+        requires = [ "ollama.service" ];
+        after = [ "ollama.service" ];
         serviceConfig = {
           Restart = "on-failure";
           RestartSec = 2;
@@ -267,8 +216,6 @@ in
       };
 
       ${webServiceName} = {
-        requires = [ "${frontendImage.ensureServiceName}.service" ];
-        after = [ "${frontendImage.ensureServiceName}.service" ];
         serviceConfig = {
           Restart = "on-failure";
           RestartSec = 2;
