@@ -27,6 +27,7 @@ let
     tela-icon-theme = pkgs.callPackage ./tela-icon-theme { };
     usbfluxd = pkgs.callPackage ./usbfluxd { };
     supertonic = pkgs.callPackage ./supertonic { };
+    rapidocr = pkgs.callPackage ./rapidocr { };
     shotclip = pkgs.callPackage ./shotclip { inherit inputs; };
     rtk = pkgs.callPackage ./rtk { };
     pythonPackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./python-packages { inherit inputs; });
