@@ -9,6 +9,7 @@ let
   cfg = config._custom.services.searxng;
   inherit (pkgs._custom) wochap-ssc;
   proxy = config._custom.services.web-proxies.searxng;
+  limiterToml = (pkgs.formats.toml { }).generate "searxng-limiter.toml" config.services.searx.limiterSettings;
 in
 {
   options._custom.services.searxng = {
@@ -117,7 +118,16 @@ in
     };
 
     systemd.services = {
-      searx-init.serviceConfig = lib._custom.strictNetworkService;
+      searx-init = {
+        serviceConfig = lib._custom.strictNetworkService;
+        # SearxNG resolves limiter.toml next to SEARXNG_SETTINGS_PATH
+        # (/run/searx), but the NixOS module only installs it under
+        # /etc/searxng, where SearxNG never reads it. Without this copy the
+        # pass_ip whitelist is silently ignored and local clients get 429.
+        preStart = ''
+          install -m 0400 ${limiterToml} /run/searx/limiter.toml
+        '';
+      };
 
       searx.serviceConfig = lib._custom.strictNetworkService // {
         RestrictAddressFamilies = [
