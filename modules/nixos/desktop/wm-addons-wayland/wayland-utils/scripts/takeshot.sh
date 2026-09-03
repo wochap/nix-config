@@ -9,6 +9,46 @@ filename="Screenshot_${time}"
 EXPIRE_TIME=5000
 grim_dest="$dir/grim_${filename}.png"
 dest="$dir/${filename}.webp"
+screen_shader=""
+screen_shader_disabled=false
+
+disable_screen_shader() {
+  if $screen_shader_disabled; then
+    return
+  fi
+
+  screen_shader=$(hyprctl getoption decoration.screen_shader | sed -n '1s/^str:[[:space:]]*//p')
+  if hyprctl keyword decoration:screen_shader "" >/dev/null; then
+    screen_shader_disabled=true
+    # Let Hyprland render an unfiltered frame before a screencopy client runs.
+    sleep 0.05
+  fi
+}
+
+restore_screen_shader() {
+  if ! $screen_shader_disabled; then
+    return
+  fi
+
+  if hyprctl keyword decoration:screen_shader "$screen_shader" >/dev/null; then
+    screen_shader_disabled=false
+    sleep 0.05
+  fi
+}
+
+capture_grim() {
+  local status
+
+  disable_screen_shader
+  grim "$@"
+  status=$?
+  restore_screen_shader
+  return "$status"
+}
+
+trap restore_screen_shader EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 # notify
 notify_user() {
@@ -63,7 +103,7 @@ countdown() {
 
 # take shots
 shotnow() {
-  grim "$grim_dest"
+  capture_grim "$grim_dest"
   notify_user
 }
 
@@ -102,14 +142,19 @@ shotarea() {
   if [[ -n $(pgrep slurp) ]]; then
     exit 0
   fi
-  sh $0 --freeze &
+
+  # wayfreeze stores a screencopy as its backing surface. Capture that surface
+  # without the shader, then restore the shader while the area is selected.
+  disable_screen_shader
+  sh "$0" --freeze &
   sleep 0.1
+  restore_screen_shader
   area=$(slurp -d -b "${background}bf" -c "$primary" -F "Iosevka NF" -w 1)
   if [[ -z $area ]]; then
     kill_wayfreeze
     exit
   fi
-  grim -g "$area" "$grim_dest"
+  capture_grim -g "$area" "$grim_dest"
   kill_wayfreeze
   notify_user
 }
