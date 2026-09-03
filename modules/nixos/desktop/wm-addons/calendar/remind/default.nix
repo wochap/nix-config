@@ -33,8 +33,11 @@ let
   ics2remScript = pkgs.writeShellScript "ics2rem" ''
     ${pkgs.coreutils-full}/bin/echo "ics2rem start"
     ${pkgs.coreutils}/bin/mkdir -p ${remindConfigDir}
-    ${pkgs.findutils}/bin/find ${vdirsyncerDataDir} -name '*.ics' -exec ${python-remind-final}/bin/ics2rem --posttime "${cfg.preAlert}" {} \; \
-      | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -k2,2M -k3,3n > "${genRemFile}.tmp"
+    # ics2rem PUSH/POP-OMIT-CONTEXT blocks must stay ordered.
+    ${pkgs.findutils}/bin/find ${vdirsyncerDataDir} -name '*.ics' -print0 \
+      | LC_ALL=C ${pkgs.coreutils-full}/bin/sort -z \
+      | ${pkgs.findutils}/bin/xargs -0 -r -n1 ${python-remind-final}/bin/ics2rem --posttime "${cfg.preAlert}" \
+      > "${genRemFile}.tmp"
     # The daemon may read this file during regeneration.
     ${pkgs.coreutils}/bin/mv -f "${genRemFile}.tmp" "${genRemFile}"
     ${pkgs.coreutils-full}/bin/echo "ics2rem finished"
