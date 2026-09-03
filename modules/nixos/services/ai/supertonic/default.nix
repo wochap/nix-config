@@ -15,6 +15,8 @@ let
   );
 in
 {
+  options._custom.services.ai.enableSupertonic = lib.mkEnableOption { };
+
   config = lib.mkIf (cfg.enable && cfg.enableSupertonic) {
     _custom.services.web-proxies.supertonic = {
       enable = true;

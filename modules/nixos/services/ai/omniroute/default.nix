@@ -12,6 +12,8 @@ let
   omniroute-chat = pkgs.writeScriptBin "omniroute-chat" (builtins.readFile ./omniroute-chat.sh);
 in
 {
+  options._custom.services.ai.enableOmniRoute = lib.mkEnableOption { };
+
   config = lib.mkIf cfg.enable {
     sops.secrets.local-omniroute-secret-key = lib.mkIf cfg.enableOmniRoute {
       sopsFile = ../../../../../secrets-sops/local.yaml;

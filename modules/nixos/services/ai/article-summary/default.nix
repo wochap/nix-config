@@ -18,6 +18,8 @@ let
   };
 in
 {
+  options._custom.services.ai.enableArticleSummary = lib.mkEnableOption { };
+
   config = lib.mkIf (cfg.enable && cfg.enableArticleSummary) {
     assertions = [
       {

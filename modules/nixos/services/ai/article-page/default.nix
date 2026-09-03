@@ -20,6 +20,8 @@ let
   };
 in
 {
+  options._custom.services.ai.enableArticlePage = lib.mkEnableOption { };
+
   config = lib.mkIf (cfg.enable && (cfg.enableArticlePage || cfg.enableArticleSummary)) {
     environment.systemPackages = [ article-page ];
   };

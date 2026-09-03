@@ -21,6 +21,8 @@ let
   };
 in
 {
+  options._custom.services.ai.enableOcr = lib.mkEnableOption { };
+
   config = lib.mkIf cfg.enableOcr {
     assertions = [
       {

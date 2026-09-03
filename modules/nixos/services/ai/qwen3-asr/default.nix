@@ -49,6 +49,8 @@ let
   };
 in
 {
+  options._custom.services.ai.enableQwen3Asr = lib.mkEnableOption { };
+
   config = lib.mkIf (cfg.enable && cfg.enableQwen3Asr) {
     sops.secrets.personal-huggingface-local-read-token = {
       sopsFile = ../../../../../secrets-sops/personal.yaml;

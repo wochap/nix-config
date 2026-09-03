@@ -32,6 +32,19 @@ let
   webProxy = config._custom.services.web-proxies.gpt-researcher;
 in
 {
+  options._custom.services.ai = {
+    enableGptResearcher = lib.mkEnableOption { };
+
+    gptResearcherEnvironmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Environment file containing GPT Researcher provider configuration and
+        secrets, such as OPENAI_API_KEY and TAVILY_API_KEY.
+      '';
+    };
+  };
+
   config = lib.mkIf (cfg.enable && cfg.enableGptResearcher) {
     _custom.services.web-proxies = {
       gpt-researcher = {
