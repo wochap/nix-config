@@ -23,14 +23,13 @@ in
     ./article-summary
     ./supertonic
     ./ocr
+    ./ollama
   ];
 
   options._custom.services.ai = {
     enable = lib.mkEnableOption { };
     enablePix2tex = lib.mkEnableOption { };
     enableWhisper = lib.mkEnableOption { };
-    enableOllama = lib.mkEnableOption { };
-    enableOllamaFlashAttention = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
     enableOpenWebui = lib.mkEnableOption { };
     enableNextjsOllamaLlmUi = lib.mkEnableOption { };
@@ -48,21 +47,6 @@ in
       ++ lib.optionals cfg.enableWhisper [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
       ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ];
 
-    services.ollama = lib.mkIf cfg.enableOllama {
-      enable = true;
-      package = if cfg.enableNvidia then pkgs.ollama-cuda else pkgs.ollama;
-      environmentVariables = {
-        OLLAMA_ORIGINS = "*";
-      }
-      // lib.optionalAttrs cfg.enableOllamaFlashAttention {
-        OLLAMA_FLASH_ATTENTION = "1";
-      };
-    };
-    systemd.services.ollama = {
-      wantedBy = lib.mkForce (lib.optional cfg.enableOcr "multi-user.target");
-      # unitConfig.stopWhenUnneeded = true;
-    };
-
     systemd.services.open-webui.serviceConfig = lib.mkIf cfg.enableOpenWebui {
       # Preserve the upstream GPU device allow-list; PrivateDevices breaks acceleration.
       NoNewPrivileges = true;
@@ -72,15 +56,6 @@ in
       CapabilityBoundingSet = "";
       AmbientCapabilities = "";
     };
-
-    # TODO: enable socket activation
-    # source: https://github.com/ollama/ollama/pull/8072
-    # systemd.sockets.ollama = {
-    #   description = "Ollama server socket";
-    #   wantedBy = [ "sockets.target" ];
-    #   listenStreams =
-    #     [ "${config.services.ollama.host}:${toString config.services.ollama.port}" ];
-    # };
 
     # Register Web Proxies mapping configuration
     _custom.services.web-proxies = {
