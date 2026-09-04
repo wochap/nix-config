@@ -12,7 +12,7 @@ function run-present-kmode() {
   fi
 }
 
-function p() {
+function pt() {
   session="$(
     cat <<EOF
 new_tab presenterm
