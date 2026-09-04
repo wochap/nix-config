@@ -28,7 +28,6 @@ in
 
   options._custom.services.ai = {
     enable = lib.mkEnableOption { };
-    enablePix2tex = lib.mkEnableOption { };
     enableWhisper = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
     enableOpenWebui = lib.mkEnableOption { };
@@ -44,8 +43,7 @@ in
         oterm
         summary
       ]
-      ++ lib.optionals cfg.enableWhisper [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ]
-      ++ lib.optionals cfg.enablePix2tex [ _custom.pythonPackages.pix2tex ];
+      ++ lib.optionals cfg.enableWhisper [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ];
 
     systemd.services.open-webui.serviceConfig = lib.mkIf cfg.enableOpenWebui {
       # Preserve the upstream GPU device allow-list; PrivateDevices breaks acceleration.

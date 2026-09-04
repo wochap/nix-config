@@ -14,7 +14,4 @@
     pkgs = pkgs.prevstable-python;
     inherit inputs;
   };
-  pix2tex = pkgs.prevstable-python.callPackage ./pix2tex {
-    pkgs = pkgs.prevstable-python;
-  };
 }

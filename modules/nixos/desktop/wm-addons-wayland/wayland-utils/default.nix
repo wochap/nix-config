@@ -18,7 +18,6 @@ let
   color-picker = pkgs.writeScriptBin "color-picker" (builtins.readFile ./scripts/color-picker.sh);
   ruler = pkgs.writeScriptBin "ruler" (builtins.readFile ./scripts/ruler.sh);
   takeshot = pkgs.writeScriptBin "takeshot" (builtins.readFile ./scripts/takeshot.sh);
-  ocr-math = pkgs.writeScriptBin "ocr-math" (builtins.readFile ./scripts/ocr-math.sh);
   recorder = pkgs.writeScriptBin "recorder" (builtins.readFile ./scripts/recorder.sh);
   tui-bookmarks = pkgs.writeScriptBin "tui-bookmarks" (builtins.readFile ./scripts/tui-bookmarks.sh);
   tui-calendar = pkgs.writeScriptBin "tui-calendar" (builtins.readFile ./scripts/tui-calendar.sh);
@@ -97,7 +96,6 @@ in
           ruler
           recorder
           takeshot
-          ocr-math
 
           tui-bookmarks
           tui-calendar

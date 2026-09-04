@@ -389,9 +389,6 @@ hl.bind(mod .. " + ALT + o", hl.dsp.exec_cmd(session_cmd("ocr rapid")), { descri
 -- Copy Markdown from a selected region
 hl.bind(mod .. " + ALT + SHIFT + o", hl.dsp.exec_cmd(session_cmd("ocr glm")), { description = "OCR Markdown" })
 
--- Open ocr-math utility
-hl.bind(mod .. " + ALT + h", hl.dsp.exec_cmd(session_cmd("ocr-math")), { description = "Math OCR" })
-
 -- Open color picker
 hl.bind(mod .. " + ALT + c", hl.dsp.exec_cmd(session_cmd("color-picker")), { description = "Color" })
 
