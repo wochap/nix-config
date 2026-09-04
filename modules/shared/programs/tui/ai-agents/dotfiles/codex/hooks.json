@@ -1,26 +1,4 @@
 {
   "description": "Desktop notifications when Codex needs attention (turn finished, permission needed, session ended)",
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          { "type": "command", "command": "~/.codex/hooks/codex-notify.sh" }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          { "type": "command", "command": "~/.codex/hooks/codex-notify.sh" }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          { "type": "command", "command": "~/.codex/hooks/codex-notify.sh", "timeout": 3 }
-        ]
-      }
-    ]
-  }
+  "hooks": {}
 }

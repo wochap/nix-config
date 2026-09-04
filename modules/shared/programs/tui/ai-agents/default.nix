@@ -79,10 +79,6 @@ in
             source = ./scripts/claude-statusline.sh;
             executable = true;
           };
-          ".claude/hooks/claude-notify.sh" = {
-            source = ./scripts/claude-notify.sh;
-            executable = true;
-          };
           ".gemini/antigravity-cli/hooks/agy-notify.sh" = {
             source = ./scripts/agy-notify.sh;
             executable = true;
@@ -101,10 +97,6 @@ in
 
           ".codex/model-catalog.local.json".source =
             lib._custom.relativeSymlink configDirectory ./dotfiles/codex/model-catalog.local.json;
-          ".codex/hooks/codex-notify.sh" = {
-            source = ./scripts/codex-notify.sh;
-            executable = true;
-          };
         };
 
         symlinks = {
