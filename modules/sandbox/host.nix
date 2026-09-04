@@ -132,7 +132,6 @@ in
     # _custom.services.ipwebcam.enable = true;
     # _custom.services.kdeconnect.enable = true;
     # _custom.services.ai.enable = true;
-    # _custom.services.ai.enableWhisper = true;
     # _custom.services.ai.enableOllama = true;
     # _custom.services.ai.enableNvidia = true;
     # _custom.services.ai.enableNextjsOllamaLlmUi = false;

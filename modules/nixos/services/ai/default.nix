@@ -28,22 +28,15 @@ in
 
   options._custom.services.ai = {
     enable = lib.mkEnableOption { };
-    enableWhisper = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
     enableOpenWebui = lib.mkEnableOption { };
     enableNextjsOllamaLlmUi = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages =
-      with pkgs;
-      [
-        python314Packages.huggingface-hub
-        asr-videos
-        oterm
-        summary
-      ]
-      ++ lib.optionals cfg.enableWhisper [ (whisper-cpp.override { cudaSupport = cfg.enableNvidia; }) ];
+    environment.systemPackages = with pkgs; [
+      python314Packages.huggingface-hub
+    ];
 
     systemd.services.open-webui.serviceConfig = lib.mkIf cfg.enableOpenWebui {
       # Preserve the upstream GPU device allow-list; PrivateDevices breaks acceleration.
@@ -91,20 +84,10 @@ in
       };
     };
 
-    _custom.hm = {
-      home = {
-        packages = [ clean-voice ];
-
-        shellAliases = {
-          # transform wav 16kHz to vtt
-          wis = "whisper-cli --model ~/Projects/wochap/whisper.cpp/models/ggml-large-v3.bin --output-vtt --file";
-          # downloads youtube video and also generates a wav 16kHz format
-          ytaw = "yt-dlp -f bestvideo+bestaudio --keep-video --add-metadata --xattrs --merge-output-format mp4 --extract-audio --audio-format wav --postprocessor-args 'ffmpeg:-ar 16000'";
-        };
-
-      };
-
-      programs.zsh.initContent = lib.mkOrder 1000 (builtins.readFile ./dotfiles/whisper.zsh);
-    };
+    _custom.hm.home.packages = [
+      clean-voice
+      asr-videos
+      summary
+    ];
   };
 }

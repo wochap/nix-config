@@ -62,13 +62,3 @@ asr-videos ./lectures
 asr-videos --language English ./lectures
 asr-videos --num-speakers 2 ./interviews
 ```
-
-### Shell aliases (with `enableWhisper`)
-
-- `wis FILE` — transcribe a 16 kHz WAV with whisper.cpp to VTT
-- `ytaw URL` — download a video and extract its audio as 16 kHz WAV
-
-```sh
-ytaw https://www.youtube.com/watch?v=...
-wis ./video_wis.wav
-```
