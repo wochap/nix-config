@@ -25,6 +25,7 @@ in
         cl = "sessiontap claude";
         cx = "sessiontap codex";
         qw = "sessiontap qwen";
+        sp = "sessiontap pi";
       };
 
       xdg.configFile = {
