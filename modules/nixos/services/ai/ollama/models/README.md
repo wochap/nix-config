@@ -1,7 +1,6 @@
 # Models
 
-Notes and Modelfiles for managing LLM models used by the AI services, plus
-whisper.cpp speech recognition.
+Notes and Modelfiles for managing LLM models used by the AI services.
 
 ## Model naming
 
@@ -75,24 +74,3 @@ curl http://localhost:11434/api/generate -d '{
 To calculate generation speed in tokens per second (token/s), divide
 `eval_count / (eval_duration / 1000000000)`.
 
-## whisper.cpp
-
-Download a ggml model:
-
-```sh
-git clone https://github.com/ggerganov/whisper.cpp.git
-cd whisper.cpp
-sh ./models/download-ggml-model.sh large-v3
-```
-
-Run it:
-
-```sh
-whisper-cli -m /path-to/whisper.cpp/models/ggml-large-v3.bin -f audio.wav
-```
-
-The AI bundle also ships the `wis` alias (transcribe to VTT) and the `ytaw`
-alias (download a video as 16 kHz WAV); see
-[../scripts/README.md](../scripts/README.md).
-
-[Available models](https://github.com/ggerganov/whisper.cpp/blob/master/models/README.md#available-models)

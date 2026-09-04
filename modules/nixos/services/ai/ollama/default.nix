@@ -39,5 +39,7 @@ in
     #   listenStreams =
     #     [ "${config.services.ollama.host}:${toString config.services.ollama.port}" ];
     # };
+
+    _custom.hm.home.file."Models/.keep".text = "";
   };
 }
