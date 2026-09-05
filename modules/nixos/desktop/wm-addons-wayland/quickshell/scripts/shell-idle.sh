@@ -70,16 +70,15 @@ listen() {
   # Print the initial status before starting the loop
   print_status
 
-  # Watch the directory for file creation and deletion events
-  while true; do
-    inotifywait -q -e create -e delete "$LOCK_DIR" |
-      while read -r directory event filename; do
-        # If the event is for our specific lock file, print the new status
-        if [[ "$filename" == "$LOCK_FILENAME" ]]; then
-          print_status
-        fi
-      done
-  done
+  # Keep one watcher alive continuously. Restarting a one-shot watcher after
+  # every /tmp event leaves a gap where the lock file's removal can be missed.
+  inotifywait -m -q -e create -e delete -e moved_to -e moved_from \
+    --format '%f' "$LOCK_DIR" |
+    while read -r filename; do
+      if [[ "$filename" == "$LOCK_FILENAME" ]]; then
+        print_status
+      fi
+    done
 }
 
 # If no arguments are provided, show usage.
