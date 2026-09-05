@@ -13,6 +13,9 @@ let
   claude-session-duration = pkgs.writeScriptBin "claude-session-duration" (
     builtins.readFile ./scripts/claude-session-duration.sh
   );
+  new-project = pkgs.writeScriptBin "new-project" (
+    builtins.readFile ./scripts/new-project.sh
+  );
   antigravity-nix-pkgs = inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
@@ -57,6 +60,7 @@ in
       playwright-mcp
       playwright-driver
       claude-session-duration
+      new-project
       antigravity-nix-pkgs.default # Base App
       antigravity-nix-pkgs.google-antigravity-ide # IDE
       antigravity-nix-pkgs.google-antigravity-cli # CLI
