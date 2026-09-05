@@ -77,9 +77,8 @@ disable_screen_shader() {
   fi
 
   screen_shader=$(hyprctl getoption decoration.screen_shader | sed -n '1s/^str:[[:space:]]*//p')
-  if hyprctl keyword decoration:screen_shader "" >/dev/null; then
+  if hyprctl eval 'hl.config({ decoration = { screen_shader = "" } })' >/dev/null; then
     screen_shader_disabled=true
-    # Let Hyprland render an unfiltered frame before a screencopy client runs.
     sleep 0.05
   fi
 }
@@ -89,7 +88,7 @@ restore_screen_shader() {
     return
   fi
 
-  if hyprctl keyword decoration:screen_shader "$screen_shader" >/dev/null; then
+  if hyprctl eval "hl.config({ decoration = { screen_shader = \"$screen_shader\" } })" >/dev/null; then
     screen_shader_disabled=false
     sleep 0.05
   fi
@@ -98,10 +97,8 @@ restore_screen_shader() {
 capture_grim() {
   local status
 
-  disable_screen_shader
   grim "$@"
   status=$?
-  restore_screen_shader
   return "$status"
 }
 
@@ -114,8 +111,8 @@ stop_wayfreeze() {
 }
 
 cleanup() {
-  restore_screen_shader
   stop_wayfreeze
+  restore_screen_shader
   if [[ -n "$temp_dir" ]]; then
     rm -f -- \
       "$temp_dir/capture.png" \
@@ -149,7 +146,7 @@ output_file="$temp_dir/output.txt"
 disable_screen_shader
 wayfreeze --hide-cursor &
 wayfreeze_pid=$!
-sleep 0.1
+sleep 0.05
 if ! kill -0 "$wayfreeze_pid" 2>/dev/null; then
   wait "$wayfreeze_pid" 2>/dev/null || true
   wayfreeze_pid=""
@@ -157,7 +154,6 @@ if ! kill -0 "$wayfreeze_pid" 2>/dev/null; then
   notify_error "Could not freeze the screen"
   exit 1
 fi
-restore_screen_shader
 
 # background and primary are provided by theme-colors.sh.
 # shellcheck disable=SC2154
@@ -176,10 +172,13 @@ if [[ -z "$area" ]]; then
 fi
 
 if ! capture_grim -g "$area" "$image_file" 2>"$error_file"; then
+  stop_wayfreeze
+  restore_screen_shader
   notify_error "Could not capture the selected region"
   exit 1
 fi
 stop_wayfreeze
+restore_screen_shader
 
 case "$mode" in
 rapid)

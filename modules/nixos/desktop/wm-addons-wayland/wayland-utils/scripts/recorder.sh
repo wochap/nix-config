@@ -7,7 +7,6 @@ stopfile=/tmp/_stop
 time=$(date +%Y-%m-%d_%I-%M-%S)
 dir="$(xdg-user-dir VIDEOS)/Recordings"
 file="Recording_${time}.mp4"
-EXPIRE_TIME=5000
 dest="$dir/$file"
 screen_shader=""
 screen_shader_disabled=false
@@ -18,9 +17,8 @@ disable_screen_shader() {
   fi
 
   screen_shader=$(hyprctl getoption decoration.screen_shader | sed -n '1s/^str:[[:space:]]*//p')
-  if hyprctl keyword decoration:screen_shader "" >/dev/null; then
+  if hyprctl eval 'hl.config({ decoration = { screen_shader = "" } })' >/dev/null; then
     screen_shader_disabled=true
-    # Let Hyprland render an unfiltered frame before a screencopy client runs.
     sleep 0.05
   fi
 }
@@ -30,7 +28,7 @@ restore_screen_shader() {
     return
   fi
 
-  if hyprctl keyword decoration:screen_shader "$screen_shader" >/dev/null; then
+  if hyprctl eval "hl.config({ decoration = { screen_shader = \"$screen_shader\" } })" >/dev/null; then
     screen_shader_disabled=false
     sleep 0.05
   fi
@@ -126,11 +124,12 @@ shotarea() {
   if [[ -n $(pgrep slurp) ]]; then
     exit 0
   fi
+  disable_screen_shader
   area=$(slurp -d -b "${background}bf" -c "$primary" -F "Iosevka NF" -w 1)
   if [[ -z $area ]]; then
+    restore_screen_shader
     exit
   fi
-  disable_screen_shader
   cd "$dir" && wl-screenrec -g "$area" -f "$file" &
   wait_recording
   restore_screen_shader
