@@ -9,7 +9,9 @@ let
   cfg = config._custom.services.searxng;
   inherit (pkgs._custom) wochap-ssc;
   proxy = config._custom.services.web-proxies.searxng;
-  limiterToml = (pkgs.formats.toml { }).generate "searxng-limiter.toml" config.services.searx.limiterSettings;
+  limiterToml =
+    (pkgs.formats.toml { }).generate "searxng-limiter.toml"
+      config.services.searx.limiterSettings;
 in
 {
   options._custom.services.searxng = {
@@ -33,12 +35,18 @@ in
         owner = "searx";
         group = "searx";
       };
+      secrets.personal-brave-search-api-key = {
+        sopsFile = ../../../../secrets-sops/personal.yaml;
+        owner = "searx";
+        group = "searx";
+      };
       templates."searxng.env" = {
         owner = "searx";
         group = "searx";
         mode = "0400";
         content = ''
           SEARX_SECRET_KEY=${config.sops.placeholder.local-searxng-secret-key}
+          BRAVE_SEARCH_API_KEY=${config.sops.placeholder.personal-brave-search-api-key}
         '';
       };
     };
@@ -97,9 +105,11 @@ in
           )
           {
             name = "brave";
-            engine = "brave";
+            engine = "braveapi";
             shortcut = "br";
+            api_key = "$BRAVE_SEARCH_API_KEY";
             disabled = false;
+            inactive = false;
           }
           {
             name = "startpage";
