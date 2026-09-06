@@ -17,6 +17,7 @@ in
       rustfmt
       cargo
       cargo-tauri
+      clippy
     ];
   };
 }
