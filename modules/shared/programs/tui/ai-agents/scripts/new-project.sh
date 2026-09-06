@@ -15,6 +15,8 @@ rtk init --codex
 
 openspec init --tools qwen,codex,pi,claude
 
+git init
+
 gitignore_entries=(
   'openspec/changes/archive'
   '.rtk'
