@@ -264,7 +264,7 @@ speak() {
   work_dir=$(mktemp --directory --tmpdir="${XDG_RUNTIME_DIR:-/tmp}" supertonic-speak.XXXXXX)
   trap 'rm -rf "$work_dir"' EXIT
 
-  notify "Generating speech" "${#text} characters in ${#chunks[@]} chunks, voice $voice with ${speed}x playback and $steps steps"
+  notify "Generating speech" "${#text} characters in ${#chunks[@]} chunks, voice $voice with ${speed}x playback and $steps steps<br>${text:0:100}"
 
   if ! generate_audio "${chunks[0]}" "$work_dir/0.wav" "$voice" "$steps" "$debug"; then
     notify "Could not generate speech" "Supertonic failed while preparing the first chunk"
