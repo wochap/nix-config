@@ -24,13 +24,6 @@ in
   options._custom.services.ai.enableOcr = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enableOcr {
-    assertions = [
-      {
-        assertion = cfg.enableOllama;
-        message = "_custom.services.ai.enableOcr requires _custom.services.ai.enableOllama";
-      }
-    ];
-
     environment.systemPackages = with pkgs; [
       ocr
     ];

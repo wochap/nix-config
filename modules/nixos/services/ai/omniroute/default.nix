@@ -38,7 +38,7 @@ in
         DATA_DIR = "/app/data";
         HOSTNAME = wochap-ssc.meta.address;
         PORT = toString config._custom.services.web-proxies.omniroute.backendPort;
-        NEXT_PUBLIC_BASE_URL = "https://omniroute.${wochap-ssc.meta.domain}";
+        NEXT_PUBLIC_BASE_URL = "https://${config._custom.services.web-proxies.omniroute.subdomain}.${wochap-ssc.meta.domain}";
         OMNIROUTE_ALLOW_LOCAL_PROVIDER_URLS = "true";
         OMNIROUTE_ALLOW_PRIVATE_PROVIDER_URLS = "true";
       };

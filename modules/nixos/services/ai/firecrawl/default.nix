@@ -184,13 +184,6 @@ in
   };
 
   config = lib.mkIf (cfg.enable && cfg.enableFirecrawl) {
-    assertions = [
-      {
-        assertion = cfg.enableOmniRoute;
-        message = "Firecrawl requires _custom.services.ai.enableOmniRoute.";
-      }
-    ];
-
     _custom.services.web-proxies.firecrawl = {
       enable = true;
       subdomain = "firecrawl";
@@ -392,6 +385,10 @@ in
           ProtectHome = true;
         };
       };
+    };
+
+    _custom.hm.home.shellAliases = {
+      fcl = "firecrawl --api-url https://${config._custom.services.web-proxies.firecrawl.subdomain}.${wochap-ssc.meta.domain}";
     };
   };
 }
