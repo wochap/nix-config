@@ -12,12 +12,16 @@ let
   sessiontap-notify = pkgs.writeScriptBin "sessiontap-notify" (
     builtins.readFile ./scripts/sessiontap-notify.sh
   );
+  sessiontap-notify-done = pkgs.writeScriptBin "sessiontap-notify-done" (
+    builtins.readFile ./scripts/sessiontap-notify-done.sh
+  );
 in
 {
   config = lib.mkIf (cfg.enable && cfg.sessionTap.enable) {
     environment.systemPackages = [
       session-tap
       sessiontap-notify
+      sessiontap-notify-done
     ];
 
     _custom.hm = {
