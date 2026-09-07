@@ -202,6 +202,35 @@ class ReconciliationTests(unittest.TestCase):
         relation = next(item for item in page["relationships"] if item["type"] == "caption_of")
         self.assertEqual(relation["to"], figure["id"])
 
+    def test_overlapping_figure_blocks_claim_embedded_image_once(self):
+        native = native_page(images=[{"xref": 1, "asset": "images/page-001-figure-01.jpeg", "bbox": [0, 0, 100, 80], "width": 10, "height": 10, "encoding": "jpeg"}])
+        paddle = paddle_page([paddle_block("figure", "", [0, 0, 100, 80]), paddle_block("figure", "", [5, 5, 105, 85])])
+        pdf.attach_rendered_assets(Path("unused.png"), paddle, native, Path("unused-assets"), 1, 200)
+        self.assertEqual(paddle["blocks"][0]["asset"], "images/page-001-figure-01.jpeg")
+        self.assertNotIn("asset", paddle["blocks"][1])
+
+    def test_split_table_merges_across_pages_and_renumbers_blocks(self):
+        def table_page(rows, number, extra_blocks=None):
+            table = {"bbox": [0, 0, 200, 100], "cells": pdf.normalize_grid(rows), "rows": len(rows), "columns": 2}
+            return pdf.reconcile_page(native_page(tables=[table]), paddle_page([paddle_block("table", "", [0, 0, 200, 100])] + (extra_blocks or [])), number)
+
+        pages = [
+            table_page([["Project", "Unit"], ["Laser", "nm"]], 1),
+            table_page([["Light", "lx"], ["Speed", "Hz"]], 2, [paddle_block("text", "Continued", [0, 120, 200, 140])]),
+        ]
+        relationships = pdf.finalize_document_structure(pages)
+        merged = pages[0]["blocks"][-1]["table"]
+        self.assertEqual(merged["rows"], 4)
+        self.assertEqual([cell["text"] for cell in merged["cells"] if cell["row"] == 2], ["Light", "lx"])
+        self.assertFalse(any(cell["header"] for cell in merged["cells"] if cell["row"] >= 2))
+        self.assertEqual(pages[1]["blocks"][0]["id"], "p0002-b0001")
+        self.assertEqual(pages[1]["blocks"][0]["text"], "Continued")
+        known = {block["id"] for page in pages for block in page["blocks"]}
+        for item in relationships:
+            self.assertNotIn("p0002-b0002", (item["from"], item["to"]))
+            if item["from"].startswith("p"):
+                self.assertIn(item["from"], known)
+
     def test_link_and_internal_target(self):
         links = [{"from": [0, 0, 100, 20], "uri": "https://example.test"}, {"from": [0, 0, 100, 20], "page": 2}]
         page = pdf.reconcile_page(native_page(links=links), paddle_page([paddle_block("text", "site", [0, 0, 100, 20])]), 1)
@@ -234,7 +263,7 @@ class RenderingAndValidationTests(unittest.TestCase):
         ])
         rendered = pdf.render_markdown(document)
         self.assertIn("<!-- page: page-001 -->", rendered)
-        self.assertIn('<a id="p0001-b0001"></a>', rendered)
+        self.assertIn("<!-- a: p0001-b0001 -->", rendered)
         self.assertIn("## Title", rendered)
         self.assertIn("| A | B |", rendered)
         self.assertIn("$$\nx^2\n$$", rendered)
@@ -244,6 +273,34 @@ class RenderingAndValidationTests(unittest.TestCase):
     def test_html_table_used_for_spans(self):
         table = {"rows": 1, "columns": 2, "cells": [{"row": 0, "column": 0, "row_span": 1, "column_span": 2, "header": True, "text": "H"}]}
         self.assertIn('<th colspan="2">H</th>', "\n".join(pdf.render_table(table)))
+
+    def test_multiline_cells_use_configurable_line_break(self):
+        table = {"rows": 2, "columns": 1, "cells": pdf.normalize_grid([["Minimum\nvalue"], ["Typical\nvalue"]])}
+        self.assertIn("| Minimum<br>value |", "\n".join(pdf.render_table(table)))
+        spanned = {"rows": 1, "columns": 2, "cells": [{"row": 0, "column": 0, "row_span": 1, "column_span": 2, "header": False, "text": "A & B\nC"}]}
+        self.assertIn('<td colspan="2">A &amp; B<br>C</td>', "\n".join(pdf.render_table(spanned)))
+
+    def test_image_alt_text_is_sanitized(self):
+        document = self.document([self.block(1, "figure", "2 | **Focus Camera**\nLaser", asset="images/page-001-figure-01.jpeg")])
+        self.assertIn("![2 Focus Camera Laser](images/page-001-figure-01.jpeg)", pdf.render_markdown(document))
+
+    def test_text_inside_embedded_image_renders_as_code_block(self):
+        document = self.document([
+            self.block(1, "heading", "user@host: ~$ ls\ntotal 0", heading={"level": 3}, bbox=[0.05, 0.05, 0.45, 0.45]),
+            self.block(2, "image", "", asset="images/page-001-figure-01.png", bbox=[0, 0, 0.5, 0.5]),
+        ])
+        rendered = pdf.render_markdown(document)
+        self.assertIn("```\nuser@host: ~$ ls\ntotal 0\n```", rendered)
+        self.assertNotIn("###", rendered)
+
+    def test_full_page_scan_text_is_not_fenced(self):
+        document = self.document([
+            self.block(1, "text", "scanned body text"),
+            self.block(2, "image", "", asset="images/page-001-figure-01.png", bbox=[0, 0, 1, 1]),
+        ])
+        rendered = pdf.render_markdown(document)
+        self.assertIn("scanned body text", rendered)
+        self.assertNotIn("```", rendered)
 
     def test_schema_rejects_unstable_ids(self):
         document = self.document([self.block(1)])

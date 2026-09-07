@@ -28,6 +28,9 @@ MODEL_NAME = "PaddleOCR-VL-1.6"
 CONTROL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]|\ufffd")
 SPACE_RE = re.compile(r"\s+")
 TEXT_TYPES = {"text", "title", "heading", "paragraph", "header", "footer", "reference", "footnote", "list_item"}
+# Separator used when a table cell contains hard line breaks.  Swap to " " to
+# flatten multi-line cells instead of preserving the visual break.
+CELL_LINE_BREAK = "<br>"
 
 
 def dump_json(path: Path, value: Any) -> None:
@@ -564,8 +567,34 @@ def relationships_for(blocks: list[dict[str, Any]]) -> list[dict[str, str]]:
     return relationships
 
 
-def finalize_document_structure(pages: list[dict[str, Any]], relationships: list[dict[str, str]]) -> list[dict[str, str]]:
-    """Apply document-wide heading ranks and section containment."""
+def merge_split_tables(pages: list[dict[str, Any]]) -> None:
+    """Rejoin a table whose continuation is the first block of the next page."""
+    for previous, current in zip(pages, pages[1:]):
+        if not previous["blocks"] or not current["blocks"]:
+            continue
+        head, tail = previous["blocks"][-1], current["blocks"][0]
+        if head["type"] != "table" or tail["type"] != "table":
+            continue
+        target, fragment = head.get("table"), tail.get("table")
+        if not target or not fragment or not target.get("columns") or target["columns"] != fragment.get("columns"):
+            continue
+        offset = target.get("rows", 0)
+        for cell in fragment.get("cells", []):
+            # The fragment's first row is a continuation, not a header.
+            target["cells"].append({**cell, "row": cell["row"] + offset, "header": False})
+        target["rows"] = offset + fragment.get("rows", 0)
+        current["blocks"].pop(0)
+
+
+def finalize_document_structure(pages: list[dict[str, Any]]) -> list[dict[str, str]]:
+    """Merge split tables, renumber blocks, and apply document-wide heading ranks."""
+    merge_split_tables(pages)
+    relationships: list[dict[str, str]] = []
+    for page in pages:
+        for order, block in enumerate(page["blocks"], 1):
+            block["id"] = stable_block_id(page["number"], order)
+            block["reading_order"] = order
+        relationships.extend(relationships_for(page["blocks"]))
     all_blocks = [block for page in pages for block in page["blocks"]]
     document_title = next((block for block in all_blocks if block["type"] == "title"), None)
     heading_sizes = sorted({block.get("heading", {}).get("native_font_size") for block in all_blocks if block is not document_title and block["type"] in {"title", "heading"} and block.get("heading", {}).get("native_font_size")}, reverse=True)
@@ -609,26 +638,44 @@ def validate_document(document: dict[str, Any]) -> None:
                 raise ValueError(f"invalid bbox for {block['id']}")
 
 
+def ocr_source_boxes(page: dict[str, Any]) -> list[list[float]]:
+    """Boxes of embedded figures; text OCR'd inside them renders as code."""
+    page_area = float(page.get("width") or 0) * float(page.get("height") or 0)
+    boxes = []
+    for block in page["blocks"]:
+        if block["type"] not in {"image", "figure", "chart"} or not block.get("asset"):
+            continue
+        # A full-page raster is a scan, not a figure: its text is ordinary body
+        # text, not content extracted from an embedded image.
+        if page_area and area(block["bbox"]) >= 0.8 * page_area:
+            continue
+        boxes.append(block["bbox"])
+    return boxes
+
+
 def render_markdown(document: dict[str, Any]) -> str:
     lines = []
     footnotes = []
     for page in document["pages"]:
+        ocr_boxes = ocr_source_boxes(page)
         lines.extend([f"<!-- page: {page['id']} -->", ""])
         for block in page["blocks"]:
-            lines.append(f"<a id=\"{block['id']}\"></a>")
+            lines.append(f"<!-- a: {block['id']} -->")
             kind, text = block["type"], block.get("text", "")
-            if kind in {"title", "heading"}:
-                lines.append(f"{'#' * block['heading']['level']} {text}")
-            elif kind == "list_item":
-                lines.append(f"- {text}")
+            if kind in {"image", "figure", "chart"} and block.get("asset"):
+                lines.append(f"![{sanitize_alt(text)}]({block['asset']})")
             elif kind == "table":
                 lines.extend(render_table(block["table"]))
             elif kind == "formula":
                 lines.extend(["$$", block["formula"]["latex"], "$$"])
-            elif kind in {"image", "figure", "chart"} and block.get("asset"):
-                lines.append(f"![{escape_markdown(text)}]({block['asset']})")
             elif kind == "footnote":
                 footnotes.append((block["id"], text))
+            elif text.strip() and any(intersection_ratio(block["bbox"], box) >= 0.6 for box in ocr_boxes):
+                lines.extend(["```", text.strip("\n"), "```"])
+            elif kind in {"title", "heading"}:
+                lines.append(f"{'#' * block['heading']['level']} {text}")
+            elif kind == "list_item":
+                lines.append(f"- {text}")
             elif text:
                 lines.append(render_links(text, block.get("links", [])))
             lines.append("")
@@ -640,6 +687,14 @@ def render_markdown(document: dict[str, Any]) -> str:
 
 def escape_markdown(value: str) -> str:
     return value.replace("[", "\\[").replace("]", "\\]")
+
+
+def sanitize_alt(value: str) -> str:
+    return SPACE_RE.sub(" ", re.sub(r"[|!*#\[\]`<>~]", " ", value)).strip()
+
+
+def cell_text(value: str) -> str:
+    return re.sub(r"\s*\n\s*", CELL_LINE_BREAK, str(value).strip())
 
 
 def render_links(text: str, links: list[dict[str, Any]]) -> str:
@@ -656,7 +711,8 @@ def render_table(table: dict[str, Any]) -> list[str]:
             for cell in [item for item in cells if item["row"] == row_number]:
                 tag = "th" if cell.get("header") else "td"
                 spans = (f' rowspan="{cell["row_span"]}"' if cell.get("row_span", 1) > 1 else "") + (f' colspan="{cell["column_span"]}"' if cell.get("column_span", 1) > 1 else "")
-                rows.append(f"    <{tag}{spans}>{html.escape(cell['text'])}</{tag}>")
+                # Escape first so the line-break separator stays literal markup.
+                rows.append(f"    <{tag}{spans}>{cell_text(html.escape(cell['text']))}</{tag}>")
             rows.append("  </tr>")
         return rows + ["</table>"]
     row_count, column_count = table.get("rows", 0), table.get("columns", 0)
@@ -664,7 +720,7 @@ def render_table(table: dict[str, Any]) -> list[str]:
         return ["<!-- empty table -->"]
     grid = [["" for _ in range(column_count)] for _ in range(row_count)]
     for cell in cells:
-        grid[cell["row"]][cell["column"]] = cell["text"].replace("|", "\\|")
+        grid[cell["row"]][cell["column"]] = cell_text(cell["text"]).replace("|", "\\|")
     return ["| " + " | ".join(row) + " |" for row in grid[:1]] + ["| " + " | ".join(["---"] * column_count) + " |"] + ["| " + " | ".join(row) + " |" for row in grid[1:]]
 
 
@@ -717,11 +773,18 @@ def render_page(document: Any, fitz: Any, index: int, dpi: int, target: Path) ->
 def attach_rendered_assets(rendered: Path, paddle: dict[str, Any], native: dict[str, Any], asset_dir: Path, page_number: int, dpi: int) -> None:
     figure_number = len(native["images"])
     page_image = None
+    claimed_embedded: dict[str, list[float]] = {}
     for block in paddle["blocks"]:
         if block["type"] not in {"figure", "chart"}:
             continue
         embedded = next((image for image in native["images"] if image.get("bbox") and intersection_ratio(block["bbox"], image["bbox"]) >= 0.65), None)
         if embedded:
+            # Layout detection can split one embedded image into several
+            # overlapping figure blocks; only the first may reference it.
+            previous = claimed_embedded.get(embedded["asset"])
+            if previous is not None and intersection_ratio(block["bbox"], previous) >= 0.65:
+                continue
+            claimed_embedded[embedded["asset"]] = block["bbox"]
             block["asset"] = embedded["asset"]
             continue
         figure_number += 1
@@ -820,8 +883,9 @@ def infer(args: argparse.Namespace) -> int:
 def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, state: Path) -> None:
     checkpoints = [load_json(state / "pages" / f"page-{number:03d}.json") for number in range(1, page_count + 1)]
     pages = [checkpoint["canonical"] for checkpoint in checkpoints]
-    relationships = [relationship for page in pages for relationship in page.pop("relationships")]
-    relationships = finalize_document_structure(pages, relationships)
+    for page in pages:
+        page.pop("relationships")
+    relationships = finalize_document_structure(pages)
     document = {
         "schema_version": SCHEMA_VERSION,
         "document": {"source": {"sha256": sha256_file(Path(args.source)), "original_name": args.source_name, "path": "source.pdf", "mime_type": "application/pdf"}, "page_count": page_count, "extraction_settings": settings(args)},

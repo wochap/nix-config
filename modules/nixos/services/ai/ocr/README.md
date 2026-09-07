@@ -121,7 +121,8 @@ provenance, and explicit relationships. Raw Paddle pixel coordinates and their
 render transform are retained in `raw/paddleocr-vl.json`; binary image data is
 stored once under `images/` and referenced relatively. `document.md` is rendered
 only from the completed canonical JSON and contains page comments and stable
-block anchors.
+block anchors as HTML comments. Multi-line table cells are joined with `<br>`,
+and text OCR'd from an embedded image region is rendered as a fenced code block.
 
 The final directory contains no absolute host paths, model cache, or partial
 state, so it can be copied to another machine as-is.
