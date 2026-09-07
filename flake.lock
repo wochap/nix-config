@@ -3402,6 +3402,7 @@
         "retroarch-shaders": "retroarch-shaders",
         "reversal-extra": "reversal-extra",
         "rod": "rod",
+        "rtk": "rtk",
         "session-tap": "session-tap",
         "shotclip": "shotclip",
         "showmethekey": "showmethekey",
@@ -3421,6 +3422,23 @@
         "zsh-history-substring-search": "zsh-history-substring-search",
         "zsh-pnpm-shell-completion": "zsh-pnpm-shell-completion",
         "zsh-vi-mode": "zsh-vi-mode"
+      }
+    },
+    "rtk": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788532482,
+        "narHash": "sha256-6iktqnF+TgBpl02YAcGGR5637WXT2Ht9BPihAIrP4AQ=",
+        "owner": "rtk-ai",
+        "repo": "rtk",
+        "rev": "fde0a8f185945556f51718de0f4c430bb62b3df6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rtk-ai",
+        "ref": "v0.48.0",
+        "repo": "rtk",
+        "type": "github"
       }
     },
     "rust-overlay": {

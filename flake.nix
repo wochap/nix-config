@@ -119,6 +119,8 @@
     shotclip.flake = false;
     gpt-researcher.url = "github:wochap/gpt-researcher";
     gpt-researcher.flake = false;
+    rtk.url = "github:rtk-ai/rtk/v0.48.0";
+    rtk.flake = false;
 
     # terminal tools
     fuzzy-sys.url = "github:NullSense/fuzzy-sys?rev=ddd8f87bee2260f1a27bd5f9b6362a4e904e1e8f"; # master (06 apr 2023)

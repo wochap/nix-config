@@ -1,21 +1,16 @@
 {
   lib,
-  fetchFromGitHub,
+  inputs,
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "rtk";
-  version = "0.45.0";
+  version = inputs.rtk.shortRev or "dirty";
 
-  src = fetchFromGitHub {
-    owner = "rtk-ai";
-    repo = "rtk";
-    tag = "v${version}";
-    hash = "sha256-weAyHM0nWLrM8JRbbXIfjUsHtAep3DOFyTO+M3BZ/iU=";
-  };
+  src = inputs.rtk;
 
-  cargoHash = "sha256-tgW6il/xLxt/xwhUBJ4MNVnk0JSZ7iFjJaEobj5+H4o=";
+  cargoHash = "sha256-UzTZOHdh/NuWtraPaZ75xsLBcdLSWHQGcE6gSp3AHDY=";
 
   # Several tests require writable user state and external commands unavailable
   # in the isolated Nix build environment.

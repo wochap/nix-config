@@ -29,7 +29,7 @@ let
     supertonic = pkgs.callPackage ./supertonic { };
     rapidocr = pkgs.callPackage ./rapidocr { };
     shotclip = pkgs.callPackage ./shotclip { inherit inputs; };
-    rtk = pkgs.callPackage ./rtk { };
+    rtk = pkgs.callPackage ./rtk { inherit inputs; };
     pythonPackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./python-packages { inherit inputs; });
   };
 in
