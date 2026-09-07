@@ -63,7 +63,9 @@ storage, plus temporary free space while it is pulled). It is PaddleOCR's
 CUDA 12.6 runtime for non-Blackwell NVIDIA GPUs. Ingestion always uses
 `--pull=never` and `--network=none`; after setup, no model or package download
 is possible. Rootless Podman, the NVIDIA container toolkit/CDI, and a compatible
-NVIDIA driver must be working on the host.
+NVIDIA driver must be working on the host. The process runs as container UID 0
+inside Podman's rootless user namespace so output files map back to the invoking
+host user; it still has all Linux capabilities dropped.
 
 ### Usage
 
@@ -123,6 +125,34 @@ block anchors.
 
 The final directory contains no absolute host paths, model cache, or partial
 state, so it can be copied to another machine as-is.
+
+### Isolation
+
+The inference container can read only the selected PDF, the immutable pipeline
+script, and files already inside its pinned image. Its only persistent writable
+mount is the selected output directory. The host home directory, SSH and GPG
+directories, agent sockets, Podman socket, and other sibling files are not
+mounted. Networking and Podman's automatic proxy-environment forwarding are
+disabled, PID/IPC/UTS/cgroup namespaces are private, Linux capabilities are
+dropped, privilege escalation is disabled, and the image filesystem is
+read-only. PaddleX's complete runtime cache is redirected to bounded `/tmp`,
+while its bundled models and fonts are linked back from their read-only image
+locations. The runtime cache and shared-memory filesystems are discarded with
+the container; bundled models under `/home/paddleocr/.paddlex` remain
+read-only.
+
+PyMuPDF extraction and page rendering run first with the Nix-provided PyMuPDF
+package in a separate Bubblewrap sandbox. That phase has an empty environment,
+no network namespace, and access only to the source PDF, output directory,
+minimal virtual `/proc` and `/dev`, temporary memory, and the read-only Nix
+store. It cannot see the host home directory or agent sockets either. The
+PaddleOCR image therefore does not need PyMuPDF installed and remains unchanged.
+
+NVIDIA CDI necessarily exposes the GPU and its driver interface. As with any
+container, isolation still depends on the host kernel, Podman, OCI runtime, and
+GPU driver being free of container-escape vulnerabilities. Rootless execution
+limits a successful escape to the invoking user's host permissions rather than
+granting host root access.
 
 ### Optional GPU smoke test
 

@@ -32,7 +32,10 @@ positional=()
 while (($#)); do
   case "$1" in
   --dpi | --min-dpi | --batch-size)
-    (($# >= 2)) || { usage; exit 2; }
+    (($# >= 2)) || {
+      usage
+      exit 2
+    }
     value=$2
     [[ $value =~ ^[1-9][0-9]*$ ]] || die "$1 must be a positive integer"
     case "$1" in
@@ -57,7 +60,10 @@ while (($#)); do
   esac
 done
 
-((${#positional[@]} >= 1 && ${#positional[@]} <= 2)) || { usage; exit 2; }
+((${#positional[@]} >= 1 && ${#positional[@]} <= 2)) || {
+  usage
+  exit 2
+}
 ((min_dpi <= dpi)) || die "--min-dpi cannot exceed --dpi"
 
 source_pdf=${positional[0]}
@@ -82,7 +88,7 @@ output_dir=$(realpath "$output_dir")
 
 probe_args=(probe --source "$source_pdf" --output "$output_dir" --dpi "$dpi" --min-dpi "$min_dpi" --batch-size "$batch_size" --image "$PDF_INGEST_IMAGE")
 set +e
-probe_output=$(python3 "$PDF_INGEST_PIPELINE" "${probe_args[@]}" 2>&1)
+probe_output=$("$PDF_INGEST_PYTHON" "$PDF_INGEST_PIPELINE" "${probe_args[@]}" 2>&1)
 probe_status=$?
 set -e
 case $probe_status in
@@ -102,20 +108,68 @@ esac
 state_dir="$output_dir/.pdf-ingest-state"
 mkdir -p -- "$state_dir"
 
+resume_hint() {
+  printf 'Resume with: pdf-ingest --dpi %q --min-dpi %q --batch-size %q %q %q\n' \
+    "$dpi" "$min_dpi" "$batch_size" "$source_pdf" "$output_dir" >&2
+}
+
+echo "pdf-ingest: extracting native PDF data and rendering pages" >&2
+set +e
+bwrap \
+  --clearenv \
+  --die-with-parent \
+  --new-session \
+  --unshare-all \
+  --hostname pdf-ingest-native \
+  --ro-bind /nix/store /nix/store \
+  --proc /proc \
+  --dev /dev \
+  --tmpfs /tmp \
+  --dir /input \
+  --ro-bind "$source_pdf" /input/source.pdf \
+  --bind "$output_dir" /output \
+  --setenv HOME /tmp \
+  --setenv PYTHONDONTWRITEBYTECODE 1 \
+  "$PDF_INGEST_PYTHON" "$PDF_INGEST_PIPELINE" prepare \
+  --source /input/source.pdf \
+  --source-name "$(basename "$source_pdf")" \
+  --output /output \
+  --dpi "$dpi" \
+  --min-dpi "$min_dpi" \
+  --batch-size "$batch_size" \
+  --image "$PDF_INGEST_IMAGE"
+prepare_status=$?
+set -e
+if ((prepare_status != 0)); then
+  echo "pdf-ingest: native extraction stopped; checkpoints were preserved" >&2
+  resume_hint
+  exit "$prepare_status"
+fi
+
 container_args=(
   run
   --rm
   --pull=never
   --network=none
+  --http-proxy=false
+  --ipc=private
+  --pid=private
+  --uts=private
+  --cgroupns=private
+  --hostname=pdf-ingest
   --device=nvidia.com/gpu=all
+  # Root in a rootless Podman user namespace maps to the invoking host user.
+  # The image's default service UID cannot write the host-owned output bind.
+  --user=0:0
   --cap-drop=all
   --security-opt=no-new-privileges
   --read-only
   --pids-limit=2048
   --shm-size=2g
   "--tmpfs=/tmp:rw,nosuid,nodev,size=4g"
-  "--tmpfs=/root/.cache:rw,nosuid,nodev,size=512m"
   --env=PYTHONDONTWRITEBYTECODE=1
+  --env=PADDLE_PDX_CACHE_HOME=/tmp/paddlex-cache
+  --env=XDG_CACHE_HOME=/tmp/cache
   --env=FLAGS_use_mkldnn=0
   --env=HF_HUB_OFFLINE=1
   --env=TRANSFORMERS_OFFLINE=1
@@ -129,7 +183,7 @@ container_args=(
 echo "pdf-ingest: extracting $(basename "$source_pdf") at ${dpi} DPI (offline)" >&2
 set +e
 podman "${container_args[@]}" "$PDF_INGEST_IMAGE" \
-  /opt/pdf-ingest/pdf-ingest.py ingest \
+  /opt/pdf-ingest/pdf-ingest.py infer \
   --source /input/source.pdf \
   --source-name "$(basename "$source_pdf")" \
   --output /output \
@@ -141,12 +195,11 @@ status=$?
 set -e
 if ((status != 0)); then
   echo "pdf-ingest: extraction stopped; checkpoints were preserved" >&2
-  printf 'Resume with: pdf-ingest --dpi %q --min-dpi %q --batch-size %q %q %q\n' \
-    "$dpi" "$min_dpi" "$batch_size" "$source_pdf" "$output_dir" >&2
+  resume_hint
   exit "$status"
 fi
 
-if ! python3 "$PDF_INGEST_PIPELINE" "${probe_args[@]}" >/dev/null; then
+if ! "$PDF_INGEST_PYTHON" "$PDF_INGEST_PIPELINE" "${probe_args[@]}" >/dev/null; then
   die "container exited successfully but the completed output failed validation; checkpoints were preserved"
 fi
 

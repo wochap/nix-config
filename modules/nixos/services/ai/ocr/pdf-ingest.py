@@ -108,15 +108,19 @@ def bbox_from_polygon(polygon: list[list[float]]) -> list[float]:
 def jsonable(value: Any) -> Any:
     if value is None or isinstance(value, (str, int, float, bool)):
         return value
+    # PaddleX result objects inherit from dict, but their raw mapping contains
+    # PaddleOCRVLBlock instances.  The public json view is what converts those
+    # blocks to the documented block_label/block_content/block_bbox mappings,
+    # so it must take precedence over generic dict traversal.
+    if hasattr(value, "json"):
+        candidate = value.json
+        return jsonable(candidate() if callable(candidate) else candidate)
     if isinstance(value, dict):
         return {str(key): jsonable(item) for key, item in value.items() if str(key) != "img" and not isinstance(item, bytes)}
     if isinstance(value, (list, tuple)):
         return [jsonable(item) for item in value]
     if hasattr(value, "tolist"):
         return jsonable(value.tolist())
-    if hasattr(value, "json"):
-        candidate = value.json
-        return jsonable(candidate() if callable(candidate) else candidate)
     if hasattr(value, "res"):
         return jsonable(value.res)
     return str(value)
@@ -135,6 +139,43 @@ def portable_raw(value: Any) -> Any:
     return value
 
 
+def initialize_paddle_cache(bundled: Path = Path("/home/paddleocr/.paddlex")) -> None:
+    """Create a writable runtime cache while retaining read-only bundled data."""
+    cache = Path(os.environ.get("PADDLE_PDX_CACHE_HOME", str(bundled)))
+    if cache == bundled:
+        return
+    if not bundled.is_dir():
+        raise RuntimeError(f"bundled PaddleX cache is missing: {bundled}")
+    cache.mkdir(parents=True, exist_ok=True)
+    for resource_name in ("official_models", "fonts"):
+        source = bundled / resource_name
+        target = cache / resource_name
+        if source.exists() and not target.exists():
+            target.symlink_to(source, target_is_directory=True)
+
+
+def point_values(value: Any) -> list[float]:
+    if hasattr(value, "x") and hasattr(value, "y"):
+        return [round(float(value.x), 4), round(float(value.y), 4)]
+    return [round(float(item), 4) for item in value]
+
+
+def serialize_link(link: dict[str, Any], display_box: Any) -> dict[str, Any]:
+    item = {}
+    for key, value in link.items():
+        if key not in {"kind", "from", "page", "to", "uri", "xref", "id"}:
+            continue
+        if key == "from":
+            # Convert PyMuPDF Rect objects before jsonable() falls back to
+            # their human-readable "Rect(...)" representation.
+            item[key] = display_box(value)
+        elif key == "to" and value is not None and not isinstance(value, (str, int, float, bool)):
+            item[key] = point_values(value)
+        else:
+            item[key] = jsonable(value)
+    return item
+
+
 class ParserAdapter:
     name = "parser"
 
@@ -146,7 +187,10 @@ class PyMuPDFAdapter(ParserAdapter):
     name = "pymupdf"
 
     def __init__(self, source: Path, asset_dir: Path):
-        import fitz
+        try:
+            import pymupdf as fitz
+        except ImportError:
+            import fitz
 
         self.fitz = fitz
         self.document = fitz.open(source)
@@ -159,6 +203,7 @@ class PyMuPDFAdapter(ParserAdapter):
     def parse_page(self, index: int) -> dict[str, Any]:
         page = self.document[index]
         rawdict = page.get_text("rawdict")
+
         def display_box(values: Iterable[float]) -> list[float]:
             rect = self.fitz.Rect(*values)
             if page.rotation:
@@ -225,12 +270,7 @@ class PyMuPDFAdapter(ParserAdapter):
 
         links = []
         for link in page.get_links():
-            item = {key: jsonable(value) for key, value in link.items() if key in {"kind", "from", "page", "to", "uri", "xref", "id"}}
-            if "from" in item:
-                item["from"] = display_box(item["from"])
-            if "to" in item and not isinstance(item["to"], (str, int, float, bool, type(None))):
-                item["to"] = list(item["to"])
-            links.append(item)
+            links.append(serialize_link(link, display_box))
 
         rect = page.rect
         return {
@@ -674,9 +714,9 @@ def render_page(document: Any, fitz: Any, index: int, dpi: int, target: Path) ->
     page.get_pixmap(matrix=matrix, alpha=False).save(target)
 
 
-def attach_rendered_assets(page: Any, fitz: Any, paddle: dict[str, Any], native: dict[str, Any], asset_dir: Path, page_number: int, dpi: int) -> None:
+def attach_rendered_assets(rendered: Path, paddle: dict[str, Any], native: dict[str, Any], asset_dir: Path, page_number: int, dpi: int) -> None:
     figure_number = len(native["images"])
-    matrix = fitz.Matrix(dpi / 72.0, dpi / 72.0)
+    page_image = None
     for block in paddle["blocks"]:
         if block["type"] not in {"figure", "chart"}:
             continue
@@ -686,18 +726,31 @@ def attach_rendered_assets(page: Any, fitz: Any, paddle: dict[str, Any], native:
             continue
         figure_number += 1
         filename = f"page-{page_number:03d}-figure-{figure_number:02d}.png"
-        display_clip = fitz.Rect(*block["bbox"]) & page.rect
-        clip = display_clip * page.derotation_matrix if page.rotation else display_clip
-        if not display_clip.is_empty:
-            page.get_pixmap(matrix=matrix, clip=clip, alpha=False).save(asset_dir / filename)
+        if page_image is None:
+            from PIL import Image
+
+            page_image = Image.open(rendered)
+        scale = dpi / 72.0
+        left, top, right, bottom = (
+            max(0, math.floor(block["bbox"][0] * scale)),
+            max(0, math.floor(block["bbox"][1] * scale)),
+            min(page_image.width, math.ceil(block["bbox"][2] * scale)),
+            min(page_image.height, math.ceil(block["bbox"][3] * scale)),
+        )
+        if right > left and bottom > top:
+            page_image.crop((left, top, right, bottom)).save(asset_dir / filename, format="PNG")
             block["asset"] = f"images/{filename}"
+    if page_image is not None:
+        page_image.close()
 
 
-def ingest(args: argparse.Namespace) -> int:
+def prepare(args: argparse.Namespace) -> int:
     source, output = Path(args.source), Path(args.output)
     state = output / ".pdf-ingest-state"
-    pages_dir, asset_dir = state / "pages", state / "images"
+    pages_dir, native_dir, render_dir, asset_dir = state / "pages", state / "native", state / "renders", state / "images"
     pages_dir.mkdir(parents=True, exist_ok=True)
+    native_dir.mkdir(parents=True, exist_ok=True)
+    render_dir.mkdir(parents=True, exist_ok=True)
     asset_dir.mkdir(parents=True, exist_ok=True)
     current_identity = identity(args)
     manifest_path = state / "manifest.json"
@@ -706,13 +759,36 @@ def ingest(args: argparse.Namespace) -> int:
     dump_json(manifest_path, {"state_version": STATE_VERSION, "identity": current_identity, "source_name": args.source_name})
 
     native_adapter = PyMuPDFAdapter(source, asset_dir)
+    dump_json(native_dir / "metadata.json", {"page_count": len(native_adapter.document), "package_version": native_adapter.version})
+    render_dpis = sorted({dpi for _, dpi in oom_attempts(args.batch_size, args.dpi, args.min_dpi)}, reverse=True)
+    for index in range(len(native_adapter.document)):
+        if (pages_dir / f"page-{index + 1:03d}.json").exists():
+            continue
+        native_path = native_dir / f"page-{index + 1:03d}.json"
+        if not native_path.exists():
+            dump_json(native_path, native_adapter.parse_page(index))
+        for page_dpi in render_dpis:
+            rendered = render_dir / f"page-{index + 1:03d}-{page_dpi}.png"
+            if not rendered.exists():
+                render_page(native_adapter.document, native_adapter.fitz, index, page_dpi, rendered)
+    return 0
+
+
+def infer(args: argparse.Namespace) -> int:
+    output = Path(args.output)
+    state = output / ".pdf-ingest-state"
+    pages_dir, native_dir, render_dir, asset_dir = state / "pages", state / "native", state / "renders", state / "images"
+    metadata = load_json(native_dir / "metadata.json")
+    if load_json(state / "manifest.json").get("identity") != identity(args):
+        raise RuntimeError("checkpoint identity mismatch")
+    initialize_paddle_cache()
     paddle_adapter: PaddleOCRVLAdapter | None = None
     loaded_batch = 0
-    for index in range(len(native_adapter.document)):
+    for index in range(metadata["page_count"]):
         checkpoint = pages_dir / f"page-{index + 1:03d}.json"
         if checkpoint.exists():
             continue
-        native = native_adapter.parse_page(index)
+        native = load_json(native_dir / f"page-{index + 1:03d}.json")
         page_result = None
         for attempt_batch, page_dpi in oom_attempts(args.batch_size, args.dpi, args.min_dpi):
             if paddle_adapter is None or loaded_batch != attempt_batch:
@@ -720,15 +796,12 @@ def ingest(args: argparse.Namespace) -> int:
                     paddle_adapter.clear_cache()
                 paddle_adapter = PaddleOCRVLAdapter(attempt_batch)
                 loaded_batch = attempt_batch
-            rendered = state / f"render-{index + 1:03d}-{page_dpi}.png"
-            render_page(native_adapter.document, native_adapter.fitz, index, page_dpi, rendered)
+            rendered = render_dir / f"page-{index + 1:03d}-{page_dpi}.png"
             try:
                 page_result = paddle_adapter.parse_page(rendered, page_dpi)
-                attach_rendered_assets(native_adapter.document[index], native_adapter.fitz, page_result, native, asset_dir, index + 1, page_dpi)
-                rendered.unlink(missing_ok=True)
+                attach_rendered_assets(rendered, page_result, native, asset_dir, index + 1, page_dpi)
                 break
             except Exception as error:
-                rendered.unlink(missing_ok=True)
                 if not is_cuda_oom(error):
                     raise
                 paddle_adapter.clear_cache()
@@ -737,8 +810,10 @@ def ingest(args: argparse.Namespace) -> int:
             raise RuntimeError(f"page {index + 1}: CUDA OOM persisted through {args.min_dpi} DPI")
         canonical = reconcile_page(native, page_result, index + 1)
         dump_json(checkpoint, {"native": native, "paddle": page_result, "canonical": canonical})
+        for rendered in render_dir.glob(f"page-{index + 1:03d}-*.png"):
+            rendered.unlink()
 
-    compact(args, native_adapter.version, len(native_adapter.document), state)
+    compact(args, metadata["package_version"], metadata["page_count"], state)
     return 0
 
 
@@ -780,7 +855,7 @@ def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, sta
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser()
     commands = root.add_subparsers(dest="command", required=True)
-    for command in ("probe", "ingest"):
+    for command in ("probe", "prepare", "infer"):
         sub = commands.add_parser(command)
         sub.add_argument("--source", required=True)
         sub.add_argument("--output", required=True)
@@ -788,19 +863,23 @@ def parser() -> argparse.ArgumentParser:
         sub.add_argument("--min-dpi", type=int, required=True)
         sub.add_argument("--batch-size", type=int, required=True)
         sub.add_argument("--image", required=True)
-        if command == "ingest":
+        if command in {"prepare", "infer"}:
             sub.add_argument("--source-name", required=True)
     return root
 
 
 def main() -> int:
     args = parser().parse_args()
-    return probe(args) if args.command == "probe" else ingest(args)
+    if args.command == "probe":
+        return probe(args)
+    if args.command == "prepare":
+        return prepare(args)
+    return infer(args)
 
 
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (OSError, ValueError, RuntimeError) as error:
+    except Exception as error:
         print(f"pdf-ingest: {error}", file=sys.stderr)
         raise SystemExit(2)
