@@ -332,8 +332,12 @@ class RenderingAndValidationTests(unittest.TestCase):
             "--shm-size=2g",
             "--env=PADDLE_PDX_CACHE_HOME=/tmp/paddlex-cache",
             "--env=XDG_CACHE_HOME=/tmp/cache",
+            '"--mount=type=bind,source=$source_pdf,target=/input/source.pdf,readonly"',
+            '"--mount=type=bind,source=$output_dir,target=/output,rw"',
+            '"--mount=type=bind,source=$PDF_INGEST_PIPELINE,target=/opt/pdf-ingest/pdf-ingest.py,readonly"',
         ):
             self.assertIn(flag, launcher)
+        self.assertNotIn('"--volume=$source_pdf:/input/source.pdf:ro"', launcher)
         for flag in ("--clearenv", "--unshare-all", "--ro-bind /nix/store /nix/store", "--ro-bind \"$source_pdf\" /input/source.pdf"):
             self.assertIn(flag, launcher)
         self.assertIn('"$PDF_INGEST_PIPELINE" prepare', launcher)

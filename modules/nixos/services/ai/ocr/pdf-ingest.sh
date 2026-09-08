@@ -175,9 +175,10 @@ container_args=(
   --env=TRANSFORMERS_OFFLINE=1
   --env=PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True
   --entrypoint=python3
-  "--volume=$source_pdf:/input/source.pdf:ro"
-  "--volume=$output_dir:/output:rw"
-  "--volume=$PDF_INGEST_PIPELINE:/opt/pdf-ingest/pdf-ingest.py:ro"
+  # Unlike --volume's colon-delimited format, --mount accepts colons in host paths.
+  "--mount=type=bind,source=$source_pdf,target=/input/source.pdf,readonly"
+  "--mount=type=bind,source=$output_dir,target=/output,rw"
+  "--mount=type=bind,source=$PDF_INGEST_PIPELINE,target=/opt/pdf-ingest/pdf-ingest.py,readonly"
 )
 
 echo "pdf-ingest: extracting $(basename "$source_pdf") at ${dpi} DPI (offline)" >&2
