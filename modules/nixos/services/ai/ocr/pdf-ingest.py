@@ -20,6 +20,7 @@ from pathlib import Path
 import re
 import shutil
 import sys
+import time
 from typing import Any, Iterable
 
 SCHEMA_VERSION = 1
@@ -31,6 +32,10 @@ TEXT_TYPES = {"text", "title", "heading", "paragraph", "header", "footer", "refe
 # Separator used when a table cell contains hard line breaks.  Swap to " " to
 # flatten multi-line cells instead of preserving the visual break.
 CELL_LINE_BREAK = "<br>"
+
+
+def log(message: str) -> None:
+    print(f"pdf-ingest: {message}", file=sys.stderr, flush=True)
 
 
 def dump_json(path: Path, value: Any) -> None:
@@ -822,9 +827,12 @@ def prepare(args: argparse.Namespace) -> int:
     dump_json(manifest_path, {"state_version": STATE_VERSION, "identity": current_identity, "source_name": args.source_name})
 
     native_adapter = PyMuPDFAdapter(source, asset_dir)
-    dump_json(native_dir / "metadata.json", {"page_count": len(native_adapter.document), "package_version": native_adapter.version})
+    page_count = len(native_adapter.document)
+    dump_json(native_dir / "metadata.json", {"page_count": page_count, "package_version": native_adapter.version})
     render_dpis = sorted({dpi for _, dpi in oom_attempts(args.batch_size, args.dpi, args.min_dpi)}, reverse=True)
-    for index in range(len(native_adapter.document)):
+    log(f"preparing {page_count} pages (native text + renders at {', '.join(str(dpi) for dpi in render_dpis)} DPI)")
+    started = time.monotonic()
+    for index in range(page_count):
         if (pages_dir / f"page-{index + 1:03d}.json").exists():
             continue
         native_path = native_dir / f"page-{index + 1:03d}.json"
@@ -834,6 +842,8 @@ def prepare(args: argparse.Namespace) -> int:
             rendered = render_dir / f"page-{index + 1:03d}-{page_dpi}.png"
             if not rendered.exists():
                 render_page(native_adapter.document, native_adapter.fitz, index, page_dpi, rendered)
+        log(f"prepared page {index + 1}/{page_count}")
+    log(f"prepare finished in {time.monotonic() - started:.1f}s")
     return 0
 
 
@@ -844,10 +854,15 @@ def infer(args: argparse.Namespace) -> int:
     metadata = load_json(native_dir / "metadata.json")
     if load_json(state / "manifest.json").get("identity") != identity(args):
         raise RuntimeError("checkpoint identity mismatch")
+    page_count = metadata["page_count"]
+    checkpointed = sum(1 for number in range(1, page_count + 1) if (pages_dir / f"page-{number:03d}.json").exists())
+    if checkpointed:
+        log(f"resuming with {checkpointed}/{page_count} pages already checkpointed")
     initialize_paddle_cache()
     paddle_adapter: PaddleOCRVLAdapter | None = None
     loaded_batch = 0
-    for index in range(metadata["page_count"]):
+    started = time.monotonic()
+    for index in range(page_count):
         checkpoint = pages_dir / f"page-{index + 1:03d}.json"
         if checkpoint.exists():
             continue
@@ -857,9 +872,13 @@ def infer(args: argparse.Namespace) -> int:
             if paddle_adapter is None or loaded_batch != attempt_batch:
                 if paddle_adapter is not None:
                     paddle_adapter.clear_cache()
+                log(f"loading PaddleOCR-VL model (batch {attempt_batch})")
                 paddle_adapter = PaddleOCRVLAdapter(attempt_batch)
                 loaded_batch = attempt_batch
+                log("model ready")
             rendered = render_dir / f"page-{index + 1:03d}-{page_dpi}.png"
+            log(f"page {index + 1}/{page_count}: recognizing at {page_dpi} DPI")
+            page_started = time.monotonic()
             try:
                 page_result = paddle_adapter.parse_page(rendered, page_dpi)
                 attach_rendered_assets(rendered, page_result, native, asset_dir, index + 1, page_dpi)
@@ -875,12 +894,15 @@ def infer(args: argparse.Namespace) -> int:
         dump_json(checkpoint, {"native": native, "paddle": page_result, "canonical": canonical})
         for rendered in render_dir.glob(f"page-{index + 1:03d}-*.png"):
             rendered.unlink()
+        log(f"page {index + 1}/{page_count}: done in {time.monotonic() - page_started:.1f}s ({len(canonical['blocks'])} blocks)")
 
-    compact(args, metadata["package_version"], metadata["page_count"], state)
+    log(f"inference finished in {time.monotonic() - started:.1f}s")
+    compact(args, metadata["package_version"], page_count, state)
     return 0
 
 
 def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, state: Path) -> None:
+    log(f"compacting {page_count} pages into the final document")
     checkpoints = [load_json(state / "pages" / f"page-{number:03d}.json") for number in range(1, page_count + 1)]
     pages = [checkpoint["canonical"] for checkpoint in checkpoints]
     for page in pages:

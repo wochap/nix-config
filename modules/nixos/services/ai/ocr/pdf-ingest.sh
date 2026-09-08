@@ -87,6 +87,7 @@ mkdir -p -- "$output_dir"
 output_dir=$(realpath "$output_dir")
 
 probe_args=(probe --source "$source_pdf" --output "$output_dir" --dpi "$dpi" --min-dpi "$min_dpi" --batch-size "$batch_size" --image "$PDF_INGEST_IMAGE")
+echo "pdf-ingest: checking destination state: $output_dir" >&2
 set +e
 probe_output=$("$PDF_INGEST_PYTHON" "$PDF_INGEST_PIPELINE" "${probe_args[@]}" 2>&1)
 probe_status=$?
