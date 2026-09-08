@@ -37,6 +37,7 @@ in
         chafa # open images in terminal
         catdoc # ms word/excel to text
         sox # audio util
+        nvme-cli
 
         chawan # tui browser
         termshark # tui wireshark
