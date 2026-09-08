@@ -15,7 +15,31 @@
         "context-used",
         "used-tokens"
       ]
+    },
+    "enableWelcomeBack": false,
+    "renderMode": "render",
+    "showResponseTokensPerSecond": true,
+    "useTerminalBuffer": false,
+    "mouseTracking": false
+  },
+  "tools": {
+    "approvalMode": "auto-edit",
+    "shell": {
+      "enableInteractiveShell": false
+    },
+    "webSearch": {
+      "enabled": true,
+      "model": ""
     }
+  },
+  "privacy": {
+    "usageStatisticsEnabled": true
+  },
+  "review": {
+    "attribution": false
+  },
+  "output": {
+    "showTimestamps": true
   },
   "env": {
     "BAILIAN_TOKEN_PLAN_API_KEY": "YOUR_API_KEY"
@@ -243,7 +267,13 @@
   },
   "$version": 4,
   "general": {
-    "vimMode": true
+    "vimMode": true,
+    "gitCoAuthor": {
+      "commit": false,
+      "pr": false
+    },
+    "enableAutoUpdate": false,
+    "notificationMode": "all"
   },
   "hooks": {
     "Notification": [
