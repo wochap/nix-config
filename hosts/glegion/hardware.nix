@@ -105,6 +105,26 @@
       ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{device}=="0x28a0", ATTR{power/control}="auto"
       # Automatically manage power state of NVIDIA Audio device
       ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{device}=="0x22be", ATTR{power/control}="auto"
+
+      # Keep NVMe endpoints out of PCI runtime suspend; see powertop.postStart
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{class}=="0x010802", TEST=="power/control", ATTR{power/control}="on"
+    '';
+
+    # powertop --auto-tune flips every PCI device to power/control=auto, and it
+    # runs after the udev rules above, so it undoes them. Re-pin the NVMe drives
+    # and their parent PCIe ports afterwards, otherwise the endpoint gets
+    # runtime-suspended (d3cold_allowed=1 on both) and fails to resume.
+    powerManagement.powertop.postStart = ''
+      for dev in /sys/bus/pci/devices/*; do
+        if [ "$(cat "$dev/class" 2>/dev/null)" != "0x010802" ]; then
+          continue
+        fi
+        echo on > "$dev/power/control"
+        port="$(dirname "$(readlink -f "$dev")")"
+        if [ -e "$port/power/control" ]; then
+          echo on > "$port/power/control"
+        fi
+      done
     '';
 
     # fix audio power saving
@@ -133,6 +153,12 @@
 
       # Fixes the ~10s boot delay from TPM hardware interrupts timeout
       "tpm_tis.interrupts=0"
+
+      # Disable NVMe APST. This laptop already gets the kernel's
+      # NVME_QUIRK_SIMPLE_SUSPEND platform quirk, and the SN850X still dropped
+      # off the bus (CSTS=0xffffffff, reset failed -19) after a long idle
+      # stretch, taking /mnt/storage read-only with it.
+      "nvme_core.default_ps_max_latency_us=0"
 
       # TODO: change to deep when on battery
       # "mem_sleep_default=deep"
