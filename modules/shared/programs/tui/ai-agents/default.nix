@@ -10,13 +10,7 @@ let
   cfg = config._custom.programs.ai-agents;
   inherit (config._custom.globals) userName configDirectory;
   hmConfig = config.home-manager.users.${userName};
-  claude-session-duration = pkgs.writeScriptBin "claude-session-duration" (
-    builtins.readFile ./scripts/claude-session-duration.sh
-  );
-  new-project = pkgs.writeScriptBin "new-project" (
-    builtins.readFile ./scripts/new-project.sh
-  );
-  antigravity-nix-pkgs = inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system};
+  new-project = pkgs.writeScriptBin "new-project" (builtins.readFile ./scripts/new-project.sh);
 in
 {
   imports = [ ./sessiontap.nix ];
@@ -24,34 +18,6 @@ in
   options._custom.programs.ai-agents = {
     enable = lib.mkEnableOption { };
     enableHandy = lib.mkEnableOption { };
-    sessionTap = {
-      enable = lib.mkEnableOption "SessionTap agent session tracking";
-      sourceId = lib.mkOption {
-        type = lib.types.str;
-        default = "host";
-        description = "Stable source identifier sent to the SessionTap hub.";
-      };
-      sourceName = lib.mkOption {
-        type = lib.types.str;
-        default = "Host";
-        description = "Human-readable SessionTap source name.";
-      };
-      hubUrl = lib.mkOption {
-        type = lib.types.str;
-        default = "http://127.0.0.1:8931/ingest";
-        description = "SessionTap hub ingestion URL.";
-      };
-      trustedAddresses = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [ ];
-        description = "Non-loopback cleartext hub addresses trusted by sessiontapd.";
-      };
-      enableHub = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to run the SessionTap hub for this user.";
-      };
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -59,11 +25,8 @@ in
       _custom.rtk
       playwright-mcp
       playwright-driver
-      claude-session-duration
+      inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.google-antigravity-cli # CLI
       new-project
-      antigravity-nix-pkgs.default # Base App
-      antigravity-nix-pkgs.google-antigravity-ide # IDE
-      antigravity-nix-pkgs.google-antigravity-cli # CLI
     ];
 
     _custom.hm = {

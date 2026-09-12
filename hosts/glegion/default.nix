@@ -132,9 +132,8 @@ in
     _custom.programs.ai-agents.enableHandy = true;
     _custom.programs.ai-agents.sessionTap = {
       enable = true;
-      sourceId = "host";
-      sourceName = "Host";
-      hubUrl = "http://127.0.0.1:8931/ingest";
+      sourceId = "glegion";
+      sourceName = "glegion";
       enableHub = true;
     };
 

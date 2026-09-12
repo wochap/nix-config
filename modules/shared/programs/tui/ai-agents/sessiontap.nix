@@ -17,6 +17,35 @@ let
   );
 in
 {
+  options._custom.programs.ai-agents.sessionTap = {
+    enable = lib.mkEnableOption { };
+    sourceId = lib.mkOption {
+      type = lib.types.str;
+      default = "host";
+      description = "Stable source identifier sent to the SessionTap hub.";
+    };
+    sourceName = lib.mkOption {
+      type = lib.types.str;
+      default = "Host";
+      description = "Human-readable SessionTap source name.";
+    };
+    hubUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "http://127.0.0.1:8931/ingest";
+      description = "SessionTap hub ingestion URL.";
+    };
+    trustedAddresses = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "Non-loopback cleartext hub addresses trusted by sessiontapd.";
+    };
+    enableHub = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to run the SessionTap hub for this user.";
+    };
+  };
+
   config = lib.mkIf (cfg.enable && cfg.sessionTap.enable) {
     environment.systemPackages = [
       session-tap
@@ -53,7 +82,7 @@ in
           text = ''
             version: 1
             listen: "0.0.0.0:8931"
-            retention_days: 7
+            retention_days: 3
             subscriptions: []
           '';
         };
