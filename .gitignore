@@ -3,3 +3,5 @@ modules/nixos/desktop/wm-addons-wayland/quickshell/dotfiles/hyprperks
 tmp
 /result
 __pycache__
+ignored
+AGENTS.md
