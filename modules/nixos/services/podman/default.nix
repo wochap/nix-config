@@ -16,9 +16,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      podman-compose
-    ];
+    environment.systemPackages =
+      with pkgs;
+      [
+        lazydocker
+      ]
+      ++ lib.optionals cfg.dockerCompat [ docker ];
 
     virtualisation.podman = {
       enable = true;
