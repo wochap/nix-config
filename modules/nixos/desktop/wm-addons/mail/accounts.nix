@@ -31,7 +31,7 @@ in
       accounts.email.accounts = lib.mapAttrs (name: acc: {
         address = acc.address;
         userName = acc.address;
-        realName = lib.mkDefault "Gean Marroquin";
+        realName = lib.mkDefault "Real Name";
         flavor = acc.flavor;
         primary = acc.primary;
 
