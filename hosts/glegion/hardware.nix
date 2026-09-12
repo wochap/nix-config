@@ -110,10 +110,10 @@
       ACTION=="add", SUBSYSTEM=="pci", ATTR{class}=="0x010802", TEST=="power/control", ATTR{power/control}="on"
     '';
 
-    # powertop --auto-tune flips every PCI device to power/control=auto, and it
-    # runs after the udev rules above, so it undoes them. Re-pin the NVMe drives
-    # and their parent PCIe ports afterwards, otherwise the endpoint gets
-    # runtime-suspended (d3cold_allowed=1 on both) and fails to resume.
+    # powertop --auto-tune flips every PCI device to power/control=auto and runs
+    # after the udev rules above, so it undoes them; re-pin the NVMe drives and
+    # their root ports here. This is hygiene, not a fix for the SN850X wedge --
+    # that happens with APST off and the drive sitting in Power State 0.
     powerManagement.powertop.postStart = ''
       for dev in /sys/bus/pci/devices/*; do
         if [ "$(cat "$dev/class" 2>/dev/null)" != "0x010802" ]; then
@@ -153,12 +153,6 @@
 
       # Fixes the ~10s boot delay from TPM hardware interrupts timeout
       "tpm_tis.interrupts=0"
-
-      # Disable NVMe APST. This laptop already gets the kernel's
-      # NVME_QUIRK_SIMPLE_SUSPEND platform quirk, and the SN850X still dropped
-      # off the bus (CSTS=0xffffffff, reset failed -19) after a long idle
-      # stretch, taking /mnt/storage read-only with it.
-      "nvme_core.default_ps_max_latency_us=0"
 
       # TODO: change to deep when on battery
       # "mem_sleep_default=deep"
