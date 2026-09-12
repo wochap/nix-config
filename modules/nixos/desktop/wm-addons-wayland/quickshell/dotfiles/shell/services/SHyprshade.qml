@@ -9,6 +9,7 @@ Singleton {
   id: root
 
   property string grayScaleFilterName: "grayscale"
+  // requires `damage_tracking = 0`
   property string oledSaverFilterName: "oled-saver"
   property string readerFilterName: "reader"
   property bool isGrayScaleActive: false
