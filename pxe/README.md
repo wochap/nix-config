@@ -25,6 +25,7 @@ $ nixos-anywhere --flake ../#gasus root@192.168.x.x
 $ nixos-rebuild switch --flake ../#gasus --target-host gean@192.168.x.x --use-remote-sudo
 
 $ sudo poweroff
+# turn on remotely
 $ wakeonlan 54:A0:50:04:B1:69
 # wakeonlan -i 192.168.0.241 54:A0:50:04:B1:69
 ```
