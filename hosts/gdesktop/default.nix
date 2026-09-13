@@ -6,7 +6,11 @@ let
   configDirectory = "${hmConfig.home.homeDirectory}/nix-config";
 in
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ./disk-configuration.nix
+    ./hardware.nix
+  ];
 
   config = {
     _custom.globals.userName = userName;
