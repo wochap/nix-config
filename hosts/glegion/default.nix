@@ -293,7 +293,6 @@ in
     _custom.desktop.networking.enableLocalSend = true;
     _custom.desktop.networking.enableOpenSnitch = true;
     _custom.desktop.plymouth.enable = false;
-    _custom.desktop.xwaylandvideobridge.enable = false;
     _custom.desktop.power-management.cpupowerGui.enable = true;
     _custom.desktop.power-management.cpupowerGui.args = [
       "--performance"

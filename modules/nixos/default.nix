@@ -46,7 +46,6 @@
     ./desktop/wm-addons-wayland/wayland-utils
     ./desktop/wm-addons-wayland/wluma
     ./desktop/wm-addons-wayland/wayland-session
-    ./desktop/wm-addons-wayland/xwaylandvideobridge
     ./desktop/wm-addons-wayland/ydotool
 
     ./gaming/chaotic

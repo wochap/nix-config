@@ -52,7 +52,6 @@
     _custom.desktop.power-management.enable = true;
     # _custom.desktop.qt.enable = true;
     # _custom.desktop.xdg.enable = true;
-    # _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 
     # _custom.desktop.cliphist.enable = true;
     # _custom.desktop.electron-support.enable = true;

@@ -480,11 +480,6 @@ hl.bind(
   hl.dsp.exec_cmd("hyprctl switchxkblayout all next"),
   { locked = true, description = "Switch Keyboard Layout" }
 )
--- if not constants.is_kiosk then
---   hl.bind(mod .. " + ALT + x", function()
---     scratchpad.raise_or_run("xwaylandvideobridge", "xwaylandvideobridge", scratchpad_opts)
---   end, { description = "XWayland Video" })
--- end
 hl.bind(mod .. " + CTRL + SHIFT + q", hl.dsp.exec_cmd("hyprshutdown"), { description = "Shutdown" })
 hl.bind(mod .. " + k", function()
   local window

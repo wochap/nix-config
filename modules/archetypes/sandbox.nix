@@ -58,7 +58,6 @@
     _custom.desktop.qt.enableQt6ctKde = lib.mkDefault true;
     _custom.desktop.qt.enableQt5Integration = lib.mkDefault true;
     _custom.desktop.xdg.enable = true;
-    # _custom.desktop.xwaylandvideobridge.enable = lib.mkDefault true;
 
     # _custom.desktop.cliphist.enable = true;
     _custom.desktop.electron-support.enable = true;

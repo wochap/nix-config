@@ -88,15 +88,6 @@ hl.window_rule({
   decorate = false,
   opacity = "0.0",
 })
-hl.window_rule({
-  match = { class = "^(xwaylandvideobridge)$" },
-  no_initial_focus = true,
-  no_focus = true,
-  no_anim = true,
-  no_blur = true,
-  max_size = { 1, 1 },
-  opacity = "0.0",
-})
 hl.window_rule({ match = { class = "^(org.gnome.Calculator)$" }, float = true })
 hl.window_rule({
   match = { class = "^(showmethekey-gtk)$" },
