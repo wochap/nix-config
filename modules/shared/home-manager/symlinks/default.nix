@@ -33,7 +33,7 @@ in
     );
 
     # clone nix-config repository so that symlinks resolve
-    home.activation.cloneConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
+    home.activation.cloneConfig = hm.dag.entryBefore [ "writeBoundary" ] ''
       if [ ! -d "$HOME/nix-config" ]; then
         ${lib.getExe pkgs.git} clone https://github.com/wochap/nix-config.git $HOME/nix-config
       fi
