@@ -91,7 +91,7 @@ in
 
     secrets = lib.mkOption {
       type = lib.types.attrs;
-      default = import ../../../secrets/nix/default.nix;
+      default = import ../../../secrets-git-crypt/nix/default.nix;
       example = "{}";
     };
   };
