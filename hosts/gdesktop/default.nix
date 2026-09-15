@@ -29,13 +29,14 @@ in
 
     # gui
     _custom.programs.dolphin.enable = true;
+    _custom.programs.dolphin.daemonEnable = true;
     _custom.programs.electron.enable = true;
     _custom.programs.gtk.enable = true;
     # _custom.desktop.gtk.bookmarks = [ "file:///mnt/storage Storage" ];
     _custom.programs.imv.enable = true;
     _custom.programs.mongodb.enable = true;
     _custom.programs.obs-studio.enable = true;
-    _custom.programs.thunar.enable = true;
+    # _custom.programs.thunar.enable = true;
     _custom.programs.qt.enable = true;
     _custom.programs.zathura.enable = true;
 

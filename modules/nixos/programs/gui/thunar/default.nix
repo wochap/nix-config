@@ -16,7 +16,10 @@ let
   thunar-final = pkgs.thunar.override { thunarPlugins = plugins; };
 in
 {
-  options._custom.programs.thunar.enable = lib.mkEnableOption { };
+  options._custom.programs.thunar = {
+    enable = lib.mkEnableOption { };
+    daemonEnable = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     programs.thunar = {
@@ -62,14 +65,16 @@ in
       };
 
       # fast thunar
-      systemd.user.services.thunar-server = lib._custom.mkWaylandService {
-        Unit.Description = "Thunar file manager";
-        Service = {
-          Type = "simple";
-          ExecStart = "${thunar-final}/bin/Thunar --daemon";
-          KillMode = "process";
-        };
-      };
+      systemd.user.services.thunar-server = lib.mkIf cfg.daemonEnable (
+        lib._custom.mkWaylandService {
+          Unit.Description = "Thunar file manager";
+          Service = {
+            Type = "simple";
+            ExecStart = "${thunar-final}/bin/Thunar --daemon";
+            KillMode = "process";
+          };
+        }
+      );
     };
   };
 }

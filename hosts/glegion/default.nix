@@ -35,6 +35,7 @@ in
     _custom.programs.mongodb.enable = true;
     _custom.programs.obs-studio.enable = true;
     _custom.programs.thunar.enable = true;
+    _custom.programs.thunar.daemonEnable = true;
     _custom.programs.qt.enable = true;
     _custom.programs.zathura.enable = true;
 
