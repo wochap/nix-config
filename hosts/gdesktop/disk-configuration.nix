@@ -29,15 +29,23 @@
                 size = "8G";
                 content = {
                   type = "swap";
-                  label = "swap";
+                  extraArgs = [
+                    "-L"
+                    "swap"
+                  ];
                 };
               };
               root = {
                 size = "100%";
                 content = {
-                  type = "filesystem";
-                  format = "ext4";
-                  mountpoint = "/";
+                  type = "luks";
+                  name = "container";
+                  passwordFile = "${../../secrets-git-crypt/user-password.key}"; # Used for non-interactive install
+                  content = {
+                    type = "filesystem";
+                    format = "ext4";
+                    mountpoint = "/";
+                  };
                 };
               };
             };
