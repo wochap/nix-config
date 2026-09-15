@@ -9,7 +9,10 @@
   ];
 
   # You can easily add more temporary tools to the live environment here
-  environment.systemPackages = with pkgs; [ git ];
+  environment.systemPackages = with pkgs; [
+    git
+    nettools
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

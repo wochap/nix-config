@@ -29,7 +29,13 @@
         echo "=> Press Ctrl+C to stop the server."
 
         # Run pixiecore using the absolute path from the nix store
-        ${pkgs.pixiecore}/bin/pixiecore boot $ARTIFACTS/bzImage $ARTIFACTS/initrd --port 8086 --cmdline "$INIT_PATH loglevel=4"
+        ${pkgs.pixiecore}/bin/pixiecore boot \
+          $ARTIFACTS/bzImage \
+          $ARTIFACTS/initrd \
+          --dhcp-no-bind \
+          --debug \
+          --port 8086 \
+          --cmdline "$INIT_PATH loglevel=4"
       '';
     in
     {
