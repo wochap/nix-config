@@ -11,6 +11,8 @@ It is designed to be paired with `pixiecore` to temporarily turn this machine in
 Inside this directory, build the Flake to generate the kernel (`bzImage`) and RAM disk (`initrd`):
 
 ```bash
+# NOTE: make sure ports used by PixieCore are open
+# or disable your firewall
 $ sudo start-pxe
 
 # check that remote server is accessible
