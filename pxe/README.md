@@ -23,6 +23,7 @@ $ ssh root@192.168.x.x
 $ nixos-anywhere --flake ../#gasus root@192.168.x.x
 
 # after NixOS has been installed
+# $ sudo chown -R gean:users /home/gean/.config
 # use nixos-rebuild for subsequent updates
 $ nixos-rebuild switch --flake ../#gasus --target-host gean@192.168.x.x --use-remote-sudo
 
