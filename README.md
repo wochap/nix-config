@@ -126,7 +126,8 @@ Check [pxe/README.md](/pxe/README.md)
 
 1. Install sops age key
 
-   Restore `~/.config/sops/age/keys.txt`
+   - Restore `~/.config/sops/age/keys.txt`
+   - Rebuild nixos
 
 1. Unlock secrets folder
 
@@ -147,15 +148,15 @@ Check [pxe/README.md](/pxe/README.md)
 
    ```sh
    # tools
-   npm i -g --ignore-scripts webtorrent-cli gulp migrate-mongo
+   npm i -g --ignore-scripts webtorrent-cli
 
    # agents
-   npm i -g --ignore-scripts @anthropic-ai/claude-code @openai/codex opencode-ai @qwen-code/qwen-code
-   bun add -g --ignore-scripts @oh-my-pi/pi-coding-agent
+   npm i -g --ignore-scripts @anthropic-ai/claude-code @openai/codex @qwen-code/qwen-code
+   # bun add -g --ignore-scripts @oh-my-pi/pi-coding-agent
    bun add -g --ignore-scripts @earendil-works/pi-coding-agent
 
    # agents tools
-   npm i -g --ignore-scripts @fission-ai/openspec@latest
+   npm i -g --ignore-scripts @fission-ai/openspec
 
    # required by personal nvim config
    npm i -g --ignore-scripts ts-node @styled/typescript-styled-plugin
@@ -190,7 +191,7 @@ Check [pxe/README.md](/pxe/README.md)
 
 1. Setup mail (optional)
 
-   Read instruction in `modules/nixos/desktop/wm-addons/email/README.md`
+   Read instruction in `modules/nixos/desktop/wm-addons/mail/README.md`
 
 1. Setup calendar (optional)
 
