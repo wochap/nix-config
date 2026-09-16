@@ -66,6 +66,7 @@ Lieer syncs through the Gmail API using OAuth, while `goimapnotify` watches IMAP
 5. Create the `~/Mail/<AccountName>` directory along with the nested `mail/` Maildir structure if it doesn't exist:
    ```sh
    mkdir -p ~/Mail/<AccountName>/mail/{cur,new,tmp}
+   # mkdir -p ~/Mail/personal/mail/{cur,new,tmp}
    ```
 6. Initialize the Notmuch database (once works for all accounts):
    ```sh
