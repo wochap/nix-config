@@ -73,6 +73,7 @@ check the `displayname` files inside the collection subdirectories of
 
    # a browser should open automatically asking for google credentials, otherwise run:
    vdirsyncer discover
+   systemctl --user start vdirsyncer.timer vdirsyncer.service ics2rem.service
    ```
 
 #### CalDAV
