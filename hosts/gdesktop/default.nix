@@ -116,8 +116,8 @@ in
     _custom.programs.yazi.enable = true;
     _custom.programs.youtube.enable = true;
     _custom.programs.zellij.enable = true;
-    # _custom.programs.ai-agents.enable = true;
-    _custom.programs.ai-agents.enableHandy = true;
+    _custom.programs.ai-agents.enable = true;
+    # _custom.programs.ai-agents.enableHandy = true;
     _custom.programs.ai-agents.sessionTap = {
       enable = true;
       sourceId = "gdesktop";
@@ -134,20 +134,20 @@ in
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
     _custom.services.kdeconnect.enable = true;
-    # _custom.services.ai.enable = true;
+    _custom.services.ai.enable = true;
+    _custom.services.ai.enableRocm = true;
     _custom.services.ai.enableOllama = true;
-    _custom.services.ai.enableOcr = true;
-    _custom.services.ai.enableOllamaFlashAttention = true;
-    _custom.services.ai.enableNvidia = true;
-    _custom.services.ai.enableNextjsOllamaLlmUi = false;
-    _custom.services.ai.enableOpenWebui = true;
+    # _custom.services.ai.enableOcr = true;
+    # _custom.services.ai.enableOllamaFlashAttention = true;
+    # _custom.services.ai.enableNextjsOllamaLlmUi = false;
+    # _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;
-    _custom.services.ai.enableQwen3Asr = true;
+    # _custom.services.ai.enableQwen3Asr = true;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
-    _custom.services.ai.enableGptResearcher = true;
+    # _custom.services.ai.enableGptResearcher = true;
     _custom.services.ai.enableArticleSummary = true;
-    _custom.services.ms-intune.enable = false;
+    # _custom.services.ms-intune.enable = false;
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
 
@@ -222,6 +222,7 @@ in
       name = "personal";
     };
 
+    _custom.desktop.backlight.enable = false;
     _custom.desktop.home-screen.enable = true;
     _custom.desktop.audio.enableEasyeffects = true;
     _custom.desktop.audio.enableNoisetorch = true;

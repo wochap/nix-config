@@ -36,7 +36,7 @@
     _custom.desktop.audio.enable = true;
     _custom.desktop.audio.enableEasyeffects = lib.mkDefault true;
     _custom.desktop.audio.enableNoisetorch = lib.mkDefault true;
-    _custom.desktop.backlight.enable = true;
+    _custom.desktop.backlight.enable = lib.mkDefault true;
     _custom.desktop.bluetooth.enable = true;
     _custom.desktop.calendar.enable = true;
     _custom.desktop.cursor.enable = true;

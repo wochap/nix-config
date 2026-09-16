@@ -104,7 +104,6 @@ in
 
     # _custom.services.android.enable = true;
     _custom.services.docker.enable = true;
-    _custom.services.docker.enableNvidia = false;
     # _custom.services.flatpak.enable = false;
     # _custom.services.interception-tools.enable = true;
     # _custom.services.ipwebcam.enable = true;

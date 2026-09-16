@@ -17,7 +17,11 @@ in
   config = lib.mkIf (cfg.enable && cfg.enableOllama) {
     services.ollama = {
       enable = true;
-      package = if cfg.enableNvidia then pkgs.ollama-cuda else pkgs.ollama;
+      package =
+        if cfg.enableNvidia then
+          pkgs.ollama-cuda
+        else
+          (if cfg.enableRocm then pkgs.ollama-rocm else pkgs.ollama);
       environmentVariables = {
         OLLAMA_ORIGINS = "*";
       }

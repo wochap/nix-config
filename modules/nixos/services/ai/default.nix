@@ -29,6 +29,7 @@ in
   options._custom.services.ai = {
     enable = lib.mkEnableOption { };
     enableNvidia = lib.mkEnableOption { };
+    enableRocm = lib.mkEnableOption { };
     enableOpenWebui = lib.mkEnableOption { };
     enableNextjsOllamaLlmUi = lib.mkEnableOption { };
   };
