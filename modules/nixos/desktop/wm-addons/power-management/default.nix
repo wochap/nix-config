@@ -26,6 +26,26 @@ in
 {
   options._custom.desktop.power-management = {
     enable = lib.mkEnableOption { };
+    enableLegion = lib.mkEnableOption { };
+    powertop = {
+      enable = lib.mkEnableOption { };
+      # tune keyboard to prevent aggressive autosuspend
+      keyboard = {
+        enable = lib.mkEnableOption { };
+        delayMs = lib.mkOption {
+          type = lib.types.int;
+          default = 15000;
+        };
+        idVendor = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+        };
+        idProduct = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+        };
+      };
+    };
     cpupowerGui = {
       enable = lib.mkEnableOption { };
       args = lib.mkOption {
@@ -34,37 +54,24 @@ in
       };
     };
     enableBatty = lib.mkEnableOption { };
-    # tune keyboard to prevent aggressive autosuspend
-    keyboard = {
-      enable = lib.mkEnableOption { };
-      delayMs = lib.mkOption {
-        type = lib.types.int;
-        default = 15000;
-      };
-      idVendor = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-      };
-      idProduct = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-      };
-    };
   };
 
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
-      environment.systemPackages = with pkgs; [
-        powertop # only use it to check current power usage
-        powerstat # power usage
-        batty
-        legion-battery-conservation
-        legion-rapid-charging
-        legion-keyboard-autosuspend
-        legion-ec-monitor
-        lm_sensors
-        cpupower
-      ];
+      environment.systemPackages =
+        with pkgs;
+        [
+          powerstat # power usage
+          lm_sensors
+          cpupower
+        ]
+        ++ lib.optionals cfg.enableBatty [ batty ]
+        ++ lib.optionals cfg.enableLegion [
+          legion-battery-conservation
+          legion-rapid-charging
+          legion-keyboard-autosuspend
+          legion-ec-monitor
+        ];
 
       # conflicts with power-profiles-daemon
       services.tlp.enable = lib.mkDefault false;
@@ -77,24 +84,6 @@ in
 
       # required by others apps
       services.upower.enable = true;
-
-      # enable powertop auto tuning on startup
-      services.udev.extraRules = lib.mkIf cfg.keyboard.enable ''
-        # disable USB auto-suspend for keyboard controller
-        ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="${cfg.keyboard.idVendor}", ATTR{idProduct}=="${cfg.keyboard.idProduct}", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="${toString cfg.keyboard.delayMs}"
-      '';
-      powerManagement.powertop = {
-        enable = lib.mkDefault true;
-        # NOTE: ' after getExe tells nixos to install the package
-        postStart = lib.mkIf cfg.keyboard.enable ''
-          # retrigger the udev rule for the keyboard after powertop's auto-tune
-          ${lib.getExe' config.systemd.package "udevadm"} trigger \
-            --action=add \
-            --subsystem-match=usb \
-            --attr-match=idVendor=${cfg.keyboard.idVendor} \
-            --attr-match=idProduct=${cfg.keyboard.idProduct}
-        '';
-      };
 
       # Make powertop non-blocking during boot by overriding the Type
       # Makes postStart run at the same time as powertop
@@ -112,6 +101,31 @@ in
             KillMode = "mixed";
           };
         };
+      };
+    })
+
+    (lib.mkIf (cfg.enable && cfg.powertop.enable) {
+      environment.systemPackages = with pkgs; [
+        powertop # only use it to check current power usage
+      ];
+
+      # enable powertop auto tuning on startup
+      services.udev.extraRules = lib.mkIf cfg.powertop.keyboard.enable ''
+        # disable USB auto-suspend for keyboard controller
+        ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="${cfg.powertop.keyboard.idVendor}", ATTR{idProduct}=="${cfg.powertop.keyboard.idProduct}", ATTR{power/control}="on", ATTR{power/autosuspend_delay_ms}="${toString cfg.powertop.keyboard.delayMs}"
+      '';
+
+      powerManagement.powertop = {
+        enable = lib.mkDefault true;
+        # NOTE: ' after getExe tells nixos to install the package
+        postStart = lib.mkIf cfg.powertop.keyboard.enable ''
+          # retrigger the udev rule for the keyboard after powertop's auto-tune
+          ${lib.getExe' config.systemd.package "udevadm"} trigger \
+            --action=add \
+            --subsystem-match=usb \
+            --attr-match=idVendor=${cfg.powertop.keyboard.idVendor} \
+            --attr-match=idProduct=${cfg.powertop.keyboard.idProduct}
+        '';
       };
     })
 

@@ -54,7 +54,6 @@
     _custom.desktop.networking.enable = true;
     _custom.desktop.plymouth.enable = lib.mkDefault true;
     _custom.desktop.power-management.enable = true;
-    _custom.desktop.power-management.enableBatty = true;
     _custom.desktop.qt.enable = true;
     _custom.desktop.qt.enableTheme = true;
     _custom.desktop.qt.enableQt6ctKde = lib.mkDefault true;

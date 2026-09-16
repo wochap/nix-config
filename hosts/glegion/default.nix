@@ -293,13 +293,16 @@ in
     _custom.desktop.networking.enableLocalSend = true;
     _custom.desktop.networking.enableOpenSnitch = true;
     _custom.desktop.plymouth.enable = false;
+    _custom.desktop.power-management.enableLegion = true;
+    _custom.desktop.power-management.enableBatty = true;
     _custom.desktop.power-management.cpupowerGui.enable = true;
     _custom.desktop.power-management.cpupowerGui.args = [
       "--performance"
       "profile"
       "Performance"
     ];
-    _custom.desktop.power-management.keyboard = {
+    _custom.desktop.power-management.powertop.enable = true;
+    _custom.desktop.power-management.powertop.keyboard = {
       enable = true;
       idVendor = "048d";
       idProduct = "c104";
