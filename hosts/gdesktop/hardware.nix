@@ -16,6 +16,8 @@
   config = {
     environment.systemPackages = with pkgs; [
       amdgpu_top
+      rocmPackages.rocm-smi
+      rocmPackages.rocminfo
     ];
 
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
