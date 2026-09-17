@@ -22,6 +22,7 @@ in
     ./article-page
     ./article-scrape
     ./article-summary
+    ./course-notes
     ./supertonic
     ./ocr
     ./ollama
