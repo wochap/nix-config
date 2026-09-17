@@ -84,6 +84,25 @@ require() {
   }
 }
 
+# Returns 0 if the URL's host is localhost-like or a raw IPv4 address.
+is_local_url() {
+  local url=$1 host=
+
+  if [[ $url =~ ^https?://([^/:]+)(:[0-9]+)?(/.*)?$ ]]; then
+    host=${BASH_REMATCH[1]}
+  else
+    return 1
+  fi
+
+  case "$host" in
+  localhost | *.localhost)
+    return 0
+    ;;
+  esac
+
+  [[ $host =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]
+}
+
 is_text_file() {
   local target=$1 encoding
 
@@ -263,7 +282,14 @@ gui_handler() {
   local mime=$1 target=$2
 
   case "$mime" in
-  x-scheme-handler/http | text/html | application/xhtml+xml) printf 'web\n' ;;
+  x-scheme-handler/http)
+    if is_local_url "$target"; then
+      printf 'web-local\n'
+    else
+      printf 'web\n'
+    fi
+    ;;
+  text/html | application/xhtml+xml) printf 'web\n' ;;
   inode/directory) printf 'directory\n' ;;
   text/* | application/json | application/xml | application/javascript | application/x-subrip | application/x-srt) printf 'text\n' ;;
   image/*) printf 'image\n' ;;
@@ -288,6 +314,10 @@ open_gui() {
 
   case "$handler" in
   web)
+    require firefox
+    launch firefox "$@"
+    ;;
+  web-local)
     require google-chrome-stable
     launch google-chrome-stable "$@"
     ;;
