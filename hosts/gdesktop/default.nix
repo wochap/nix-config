@@ -117,7 +117,6 @@ in
     _custom.programs.youtube.enable = true;
     _custom.programs.zellij.enable = true;
     _custom.programs.ai-agents.enable = true;
-    # _custom.programs.ai-agents.enableHandy = true;
     _custom.programs.ai-agents.sessionTap = {
       enable = true;
       sourceId = "gdesktop";
@@ -135,6 +134,7 @@ in
     _custom.services.ipwebcam.enable = false;
     _custom.services.kdeconnect.enable = true;
     _custom.services.ai.enable = true;
+    _custom.services.ai.enableHandy = true;
     _custom.services.ai.enableRocm = true;
     _custom.services.ai.enableOllama = true;
     # _custom.services.ai.enableOcr = true;

@@ -15,10 +15,7 @@ in
 {
   imports = [ ./sessiontap.nix ];
 
-  options._custom.programs.ai-agents = {
-    enable = lib.mkEnableOption { };
-    enableHandy = lib.mkEnableOption { };
-  };
+  options._custom.programs.ai-agents.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
@@ -31,10 +28,7 @@ in
 
     _custom.hm = {
       home = {
-        packages =
-          with pkgs;
-          [ bubblewrap ]
-          ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
+        packages = with pkgs; [ bubblewrap ];
 
         sessionVariables = {
           OPENSPEC_TELEMETRY = "0";

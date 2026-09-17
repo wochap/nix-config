@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -32,12 +33,16 @@ in
     enableRocm = lib.mkEnableOption { };
     enableOpenWebui = lib.mkEnableOption { };
     enableNextjsOllamaLlmUi = lib.mkEnableOption { };
+    enableHandy = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      python314Packages.huggingface-hub
-    ];
+    environment.systemPackages =
+      with pkgs;
+      [
+        python314Packages.huggingface-hub
+      ]
+      ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
 
     systemd.services.open-webui.serviceConfig = lib.mkIf cfg.enableOpenWebui {
       # Preserve the upstream GPU device allow-list; PrivateDevices breaks acceleration.
