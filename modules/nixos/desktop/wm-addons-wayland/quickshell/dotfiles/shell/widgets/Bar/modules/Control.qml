@@ -89,6 +89,7 @@ WrapperRectangle {
       }
 
       SystemIcon {
+        visible: SUpower.available
         Layout.fillHeight: true
         icon: SUpower.batteryIcon
         color: SUpower.batteryIconColor

@@ -13,7 +13,7 @@ PanelWindow {
   required property ShellScreen modelData
   property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(rectangle.QsWindow.window?.screen)
   property bool isFocused: hyprlandMonitor?.id === Hyprland.focusedMonitor?.id
-  readonly property int maxContainerWidth: 1720
+  readonly property int maxContainerWidth: 1920
 
   WlrLayershell.namespace: "quickshell:bar"
   WlrLayershell.layer: WlrLayer.Bottom

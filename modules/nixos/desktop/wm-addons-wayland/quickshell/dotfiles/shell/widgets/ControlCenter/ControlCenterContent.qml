@@ -196,6 +196,7 @@ PanelWindow {
         }
 
         RowLayout {
+          visible: SUpower.available
           Layout.fillWidth: true
 
           ControlCenterButton {
@@ -302,7 +303,9 @@ PanelWindow {
         Layout.fillWidth: true
       }
 
-      Battery {}
+      Battery {
+        visible: SUpower.available
+      }
     }
   }
 }
