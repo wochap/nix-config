@@ -117,6 +117,7 @@ in
     # tui
     _custom.programs.amfora.enable = true;
     _custom.programs.btop.enable = true;
+    _custom.programs.btop.enableNvidia = true;
     _custom.programs.less.enable = true;
     _custom.programs.lynx.enable = true;
     _custom.programs.neovim.enable = true;

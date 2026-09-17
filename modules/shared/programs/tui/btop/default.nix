@@ -16,11 +16,19 @@ let
     ;
 in
 {
-  options._custom.programs.btop.enable = lib.mkEnableOption { };
+  options._custom.programs.btop = {
+    enable = lib.mkEnableOption { };
+    enableNvidia = lib.mkEnableOption { };
+    enableRocm = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     _custom.hm = {
-      home.packages = with pkgs; [ btop ];
+      home.packages = with pkgs; [
+        (
+          if cfg.enableNvidia then pkgs.btop-cuda else (if cfg.enableRocm then pkgs.btop-rocm else pkgs.btop)
+        )
+      ];
 
       home.shellAliases.top = "btop";
 
