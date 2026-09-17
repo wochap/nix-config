@@ -137,8 +137,8 @@ in
     _custom.services.ai.enableHandy = true;
     _custom.services.ai.enableRocm = true;
     _custom.services.ai.enableOllama = true;
+    _custom.services.ai.enableOllamaFlashAttention = true;
     # _custom.services.ai.enableOcr = true;
-    # _custom.services.ai.enableOllamaFlashAttention = true;
     # _custom.services.ai.enableNextjsOllamaLlmUi = false;
     # _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;

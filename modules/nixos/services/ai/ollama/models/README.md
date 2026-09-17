@@ -41,6 +41,9 @@ Create them with `ollama create` (run from this directory):
 ollama create "glegion-qwen3.5:4b" -f ./glegion-qwen3.5:4b
 ollama create "glegion-desktop-assistant-qwen3.5:4b" -f ./glegion-desktop-assistant-qwen3.5:4b
 ollama create "glegion-qwen3-embedding:4b" -f ./glegion-qwen3-embedding:4b
+ollama create "gdesktop-minicpm:2b" -f ./gdesktop-minicpm:2b
+ollama create "gdesktop-qwen3-embedding:4b" -f ./gdesktop-qwen3-embedding:4b
+ollama create "gdesktop-qwen3.5:9b" -f ./gdesktop-qwen3.5:9b
 ```
 
 - `glegion-qwen3.5:4b` — final fallback target in the OmniRoute

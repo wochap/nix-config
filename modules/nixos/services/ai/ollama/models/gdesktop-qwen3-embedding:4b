@@ -1,0 +1,9 @@
+FROM qwen3-embedding:4b
+
+# Fill an 16 GB GPU while retaining headroom for Ollama's compute buffers.
+PARAMETER num_ctx 49152
+
+# A value above the model's layer count asks Ollama to offload every layer.
+PARAMETER num_gpu 99
+
+# vim: filetype=Dockerfile

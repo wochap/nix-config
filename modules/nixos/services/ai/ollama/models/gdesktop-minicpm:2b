@@ -1,0 +1,11 @@
+FROM oamazonasgabriel/minicpm-2b:q4_k_m
+
+PARAMETER num_ctx 8192
+PARAMETER num_gpu 99
+
+PARAMETER temperature 1.0
+PARAMETER top_p 0.95
+PARAMETER min_p 0.0
+PARAMETER num_predict 4096
+
+# vim: filetype=Dockerfile
