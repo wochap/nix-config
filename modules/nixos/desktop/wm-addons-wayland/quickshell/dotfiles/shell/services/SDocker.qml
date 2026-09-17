@@ -8,6 +8,7 @@ import Quickshell.Io
 Singleton {
   id: root
 
+  property bool available: false
   property bool isActive: false
 
   function disable() {
@@ -36,13 +37,24 @@ Singleton {
     id: getStateProcess
 
     running: true
-    command: ["bash", "-c", `[[ "$(systemctl --user is-active docker)" == "active" ]] && echo true || echo false`]
+    command: ["bash", "-c", `
+        if ! systemctl --user cat docker.service &>/dev/null; then
+          echo unavailable
+        elif [[ "$(systemctl --user is-active docker.service)" == "active" ]]; then
+          echo active
+        else
+          echo inactive
+        fi
+      `]
+
     stdout: StdioCollector {
       id: getStateCollector
 
       onStreamFinished: {
         const output = getStateCollector.text.trim();
-        root.isActive = output === "true";
+
+        root.available = output !== "unavailable";
+        root.isActive = output === "active";
       }
     }
   }

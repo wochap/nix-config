@@ -131,6 +131,7 @@ PanelWindow {
           }
 
           ControlCenterButton {
+            visible: SSandbox.available
             Component.onCompleted: {
               SSandbox.getState();
             }
@@ -143,6 +144,12 @@ PanelWindow {
             onClicked: {
               SSandbox.toggle();
             }
+          }
+
+          Item {
+            visible: !SSandbox.available
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
           }
         }
 
@@ -180,6 +187,7 @@ PanelWindow {
           }
 
           ControlCenterButton {
+            visible: SDocker.available
             Component.onCompleted: {
               SDocker.getState();
             }
@@ -192,6 +200,12 @@ PanelWindow {
             onClicked: {
               SDocker.toggle();
             }
+          }
+
+          Item {
+            visible: !SDocker.available
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
           }
         }
 

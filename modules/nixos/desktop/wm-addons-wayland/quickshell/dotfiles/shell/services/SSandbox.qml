@@ -8,6 +8,7 @@ import Quickshell.Io
 Singleton {
   id: root
 
+  property bool available: false
   property bool isActive: false
 
   function disable() {
@@ -36,12 +37,26 @@ Singleton {
     id: getStateProcess
 
     running: true
-    command: ["nixos-container", "status", "sandbox"]
+    command: ["bash", "-c", `
+        if ! command -v nixos-container &>/dev/null; then
+          echo unavailable
+        elif ! status="$(nixos-container status sandbox 2>/dev/null)"; then
+          echo unavailable
+        elif [[ "$status" == "up" ]]; then
+          echo active
+        else
+          echo inactive
+        fi
+      `]
+
     stdout: StdioCollector {
       id: getStateCollector
 
       onStreamFinished: {
-        root.isActive = getStateCollector.text.trim() === "up";
+        const output = getStateCollector.text.trim();
+
+        root.available = output !== "unavailable";
+        root.isActive = output === "active";
       }
     }
   }
