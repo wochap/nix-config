@@ -21,6 +21,7 @@
     ];
 
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+    boot.kernelModules = [ "msr" ];
 
     # enable ROCm
     boot.initrd.kernelModules = [ "amdgpu" ];
