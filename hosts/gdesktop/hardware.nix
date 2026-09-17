@@ -21,7 +21,14 @@
     ];
 
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
-    boot.kernelModules = [ "msr" ];
+    boot.kernelModules = [
+      "msr" # cpu telemetry
+      "k10temp" # ryzen 5900x
+      "nct6775" # b550 motherboard
+      "nvme"
+      "drivetemp" # sata drive temp
+      "hwmon_vid" # hw monitoring/power
+    ];
 
     # enable ROCm
     boot.initrd.kernelModules = [ "amdgpu" ];
