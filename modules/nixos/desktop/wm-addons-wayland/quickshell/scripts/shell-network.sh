@@ -2,20 +2,29 @@
 
 # A function to get the current network status and print it as JSON
 print_status() {
-  local wired_device
+  local wired_json
   local wifi_device
   local result="{}"
 
-  wired_device=$(ip -j link | jq -r '.[] | select(.ifname | test("^e(n|th)"))')
+  # Collect ALL wired interfaces into a JSON array, not just the first match
+  wired_json=$(ip -j link | jq -c '[.[] | select(.ifname | test("^e(n|th)"))]')
   wifi_device=$(ip -j link | jq -r '.[] | select(.ifname | test("^wl"))')
 
   # Check for an active wired connection first
-  if [ -n "$wired_device" ]; then
-    local connected
-    connected=$([ "$(echo "$wired_device" | jq -r '.operstate')" = "UP" ] && echo true || echo false)
+  if [ "$(echo "$wired_json" | jq 'length')" -gt 0 ]; then
+    local chosen connected ifname
+
+    # Prefer whichever interface is actually UP; fall back to the first one
+    chosen=$(echo "$wired_json" | jq -c '
+      (map(select(.operstate == "UP")) + .)[0]
+    ')
+    ifname=$(echo "$chosen" | jq -r '.ifname')
+    connected=$([ "$(echo "$chosen" | jq -r '.operstate')" = "UP" ] && echo true || echo false)
+
     result=$(echo "$result" | jq \
       --argjson connected "$connected" \
-      '.wired = {type: "wired", powered: true, connected: $connected}')
+      --arg ifname "$ifname" \
+      '.wired = {type: "wired", powered: true, connected: $connected, interface: $ifname}')
   fi
 
   if [ -n "$wifi_device" ]; then
