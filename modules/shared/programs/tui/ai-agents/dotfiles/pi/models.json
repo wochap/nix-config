@@ -14,6 +14,19 @@
           }
         }
       ]
+    },
+    "omniroute": {
+      "baseUrl": "https://omniroute.wochap.local/v1",
+      "api": "openai-completions",
+      "apiKey": "$OMNIROUTE_API_KEY",
+      "models": [
+        {
+          "id": "YOUR_COMBO_ID",
+          "name": "OmniRoute Combo",
+          "reasoning": true,
+          "input": ["text"]
+        }
+      ]
     }
   }
 }

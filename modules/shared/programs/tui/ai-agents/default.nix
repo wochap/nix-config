@@ -53,9 +53,6 @@ in
             executable = true;
           };
 
-          ".pi/agent/models.json".source =
-            lib._custom.relativeSymlink configDirectory ./dotfiles/pi/models.json;
-
           ".codex/model-catalog.local.json".source =
             lib._custom.relativeSymlink configDirectory ./dotfiles/codex/model-catalog.local.json;
         };
@@ -69,6 +66,7 @@ in
           ".claude/settings.json".source = ./dotfiles/claude-settings.json;
           ".qwen/settings.json".source = ./dotfiles/qwen-settings.json;
           ".pi/agent/settings.json".source = ./dotfiles/pi/settings.json;
+          ".pi/agent/models.json".source = ./dotfiles/pi/models.json;
           ".codex/config.toml".source = ./dotfiles/codex/config.toml;
           ".codex/hooks.json".source = ./dotfiles/codex/hooks.json;
           ".config/opencode/opencode.jsonc".source = ./dotfiles/opencode-settings.jsonc;

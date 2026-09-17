@@ -1,6 +1,16 @@
 {
-  "lastChangelogVersion": "0.83.0",
+  "lastChangelogVersion": "0.85.1",
   "theme": "light/dark",
   "defaultProvider": "ollama",
-  "defaultModel": "glegion-qwen3.5:4b"
+  "defaultModel": "glegion-qwen3.5:4b",
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "enableInstallTelemetry": false,
+  "tuiMode": "regular",
+  "compaction": {
+    "enabled": false
+  },
+  "showHardwareCursor": true,
+  "transport": "auto"
 }
