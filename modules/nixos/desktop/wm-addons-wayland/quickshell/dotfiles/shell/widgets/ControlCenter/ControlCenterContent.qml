@@ -306,7 +306,9 @@ PanelWindow {
 
         HyprsunsetField {}
 
-        BacklightField {}
+        BacklightField {
+          visible: SBacklight.available
+        }
 
         OutputField {}
 
