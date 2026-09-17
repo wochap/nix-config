@@ -1,4 +1,4 @@
 FROM qwen3.5:9b
 
-PARAMETER num_ctx 32000
+PARAMETER num_ctx 32768
 PARAMETER num_gpu 99
