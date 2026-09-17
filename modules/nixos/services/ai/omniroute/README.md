@@ -28,6 +28,11 @@ Configure OmniRoute before using it:
    breaker. These allow quota, rate-limit, connection, and provider failures
    to advance through the combo.
 
+### Sync
+
+Omniroute allows exporting db and json
+After imporing them, make sure API key has access to combos
+
 ## Usage
 
 `omniroute-chat` sends an OpenAI-compatible chat request to the local

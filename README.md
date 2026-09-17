@@ -185,7 +185,7 @@ Check [pxe/README.md](/pxe/README.md)
 
    Go to chrome://flags/ and enable `WebRTC PipeWire support`
 
-1. Sync `vscode`, `firefox`, `chrome` (optional)
+1. Sync `vscode`, `firefox`, `chrome`, `omniroute` (optional)
 
    > NOTE: Default theme for firefox and chrome have better dark/light theme support
 
