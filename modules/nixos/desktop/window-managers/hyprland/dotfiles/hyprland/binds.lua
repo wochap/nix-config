@@ -397,6 +397,11 @@ hl.bind(mod .. " + ALT + z", zoom.zoom, { description = "Zoom" })
 
 hl.bind(
   mod .. " + ALT + v",
+  hl.dsp.exec_cmd(session_cmd("supertonic-clipboard --voice=F1 --speed=1.5 --steps=5 --chunking=on")),
+  { description = "Speak" }
+)
+hl.bind(
+  mod .. " + ALT + CTRL + v",
   hl.dsp.exec_cmd(session_cmd("supertonic-clipboard primary --voice=F1 --speed=1.5 --steps=5 --chunking=on")),
   { description = "Speak" }
 )
