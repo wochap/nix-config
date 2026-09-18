@@ -65,7 +65,7 @@ hl.config({
     repeat_rate = 50,
     sensitivity = 0.0,
     scroll_method = "2fg",
-    natural_scroll = true,
+    natural_scroll = false,
     follow_mouse = 1,
     -- hover changes window focus
     mouse_refocus = true,
