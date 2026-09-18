@@ -79,7 +79,6 @@ in
         packages = with pkgs; [
           taskwarrior-tui
           timewarrior-final
-          pkgs._custom.pythonPackages.bugwarrior
         ];
 
         sessionVariables.TIMEWARRIORDB = timewarriorConfigPath;
@@ -98,9 +97,6 @@ in
         };
 
         shellAliases.twt = "taskwarrior-tui";
-      };
-      xdg.configFile."bugwarrior/bugwarrior.toml".source = pkgs.replaceVars ./dotfiles/bugwarrior.toml {
-        seEmail = secrets.se.email;
       };
 
       programs.taskwarrior = {
