@@ -127,9 +127,9 @@ in
     _custom.services.android.enable = true;
     _custom.services.android.enableSdk = false;
     _custom.services.podman.enable = true;
+    _custom.services.podman.dockerCompat = true;
     _custom.services.podman.rootless = true;
-    _custom.services.docker.enable = true;
-    _custom.services.docker.enableNvidia = true;
+    _custom.services.docker.enable = false;
     _custom.services.flatpak.enable = false;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
@@ -137,8 +137,8 @@ in
     _custom.services.ai.enable = true;
     _custom.services.ai.enableHandy = true;
     _custom.services.ai.enableOllama = true;
-    _custom.services.ai.enableOcr = true;
     _custom.services.ai.enableOllamaFlashAttention = true;
+    _custom.services.ai.enableOcr = true;
     _custom.services.ai.enableNvidia = true;
     _custom.services.ai.enableNextjsOllamaLlmUi = false;
     _custom.services.ai.enableOpenWebui = true;
@@ -265,15 +265,15 @@ in
     _custom.desktop.udev-rules.canDisableGlegionKbd = false;
     _custom.desktop.hyprsunset.enable = true;
     _custom.desktop.wluma.enable = false;
-    _custom.desktop.wluma.enableSystemd = true;
-    _custom.desktop.wluma.config.als.none = { };
-    _custom.desktop.wluma.config.output.backlight = [
-      {
-        name = "Samsung Display Corp. 0x4188 Unknown";
-        path = "/sys/class/backlight/amdgpu_bl1";
-        capturer = "wayland";
-      }
-    ];
+    # _custom.desktop.wluma.enableSystemd = true;
+    # _custom.desktop.wluma.config.als.none = { };
+    # _custom.desktop.wluma.config.output.backlight = [
+    #   {
+    #     name = "Samsung Display Corp. 0x4188 Unknown";
+    #     path = "/sys/class/backlight/amdgpu_bl1";
+    #     capturer = "wayland";
+    #   }
+    # ];
     # fix blurry cursor on GTK 3 apps
     # update catppuccin cursor NOMINAL_SIZE
     # TODO: remove after updating gtk to 4.18
