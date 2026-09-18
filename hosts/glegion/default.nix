@@ -62,20 +62,6 @@ in
       commit.gpgSign = true;
       core.sshCommand = "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes";
     };
-    _custom.programs.git.includes = [
-      {
-        condition = "gitdir:~/Projects/se/**/.git";
-        contents = {
-          user = {
-            email = config._custom.globals.secrets.se.email;
-            name = "Gean";
-            signingKey = config._custom.globals.secrets.se.email;
-          };
-          commit.gpgSign = true;
-          core.sshCommand = "ssh -i ~/.ssh/id_ed25519_se -o IdentitiesOnly=yes";
-        };
-      }
-    ];
     _custom.programs.lazygit.enable = true;
     _custom.programs.lsd.enable = true;
     _custom.programs.ptsh.enable = true;
@@ -241,49 +227,16 @@ in
       #   }
       # ];
     };
-    _custom.desktop.mail.accounts.se = {
-      flavor = "gmail.com";
-      address = config._custom.globals.secrets.se.email;
-      name = "SE";
-      passwordSecret.sopsFile = ../../secrets-sops/se.yaml;
-      passwordSecret.sopsKey = "se-mail-password";
-      sync = "lieer";
-      inboxKey = "S";
-      color = "yellow";
-      pgpKey = "00F9FB30";
-      signatureLines = [ [ "GPG: 00F9FB30" ] ];
-      # ALL pearson mails (read/unread), not only the ones in inbox
-      virtualFolders = [
-        {
-          name = "pearson";
-          query = "from:*@pearson.com";
-        }
-        {
-          name = "jira mentions";
-          query = ''from:*.atlassian.net and subject:"mentioned you on"'';
-        }
-        {
-          name = "jira assigned";
-          query = ''from:*.atlassian.net and subject:"/assigned.*to you$/"'';
-        }
-      ];
-    };
 
     _custom.desktop.calendar.accounts.personal = {
       name = "personal";
       primary = true;
       primaryCollection = config._custom.globals.secrets.personal.email;
     };
-    _custom.desktop.calendar.accounts.se = {
-      name = "se";
-    };
 
     _custom.desktop.contacts.enable = true;
     _custom.desktop.contacts.accounts.personal = {
       name = "personal";
-    };
-    _custom.desktop.contacts.accounts.se = {
-      name = "se";
     };
 
     _custom.desktop.home-screen.enable = true;

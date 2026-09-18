@@ -12,7 +12,6 @@ let
   hmConfig = config.home-manager.users.${userName};
   sharedSopsFile = ../../../../secrets-sops/shared.yaml;
   personalSopsFile = ../../../../secrets-sops/personal.yaml;
-  seSopsFile = ../../../../secrets-sops/se.yaml;
 
 in
 {
@@ -73,23 +72,6 @@ in
         "personal-kansallisgalleria-token" = {
           owner = userName;
           sopsFile = personalSopsFile;
-        };
-        # se
-        "se-gh-token" = {
-          owner = userName;
-          sopsFile = seSopsFile;
-        };
-        "se-jira-api-token" = {
-          owner = userName;
-          sopsFile = seSopsFile;
-        };
-        "se-slack-d-cookie" = {
-          owner = userName;
-          sopsFile = seSopsFile;
-        };
-        "se-slack-token" = {
-          owner = userName;
-          sopsFile = seSopsFile;
         };
       };
     };

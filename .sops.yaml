@@ -9,7 +9,7 @@ creation_rules:
           - *default
           - *sandbox
 
-  - path_regex: secrets-sops/(local|personal|se).yaml$
+  - path_regex: secrets-sops/(local|personal).yaml$
     key_groups:
       - age:
           - *default
