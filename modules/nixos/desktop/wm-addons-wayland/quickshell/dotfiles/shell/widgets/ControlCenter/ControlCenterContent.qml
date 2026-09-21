@@ -299,6 +299,36 @@ PanelWindow {
             }
           }
         }
+
+        RowLayout {
+          visible: SFirewall.available
+          Layout.fillWidth: true
+
+          ControlCenterButton {
+            Component.onCompleted: {
+              SFirewall.getState();
+            }
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Firewall"
+            materialIcon: "shield"
+            isActive: SFirewall.isActive
+            onClicked: {
+              SFirewall.toggle();
+            }
+          }
+
+          Item {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+          }
+
+          Item {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+          }
+        }
       }
 
       ColumnLayout {
