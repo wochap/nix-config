@@ -1,4 +1,5 @@
 {
+  "autoCompactEnabled": false,
   "hasCompletedOnboarding": true,
   "env": {
     "DISABLE_AUTOUPDATER": "1",
