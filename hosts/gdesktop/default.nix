@@ -147,12 +147,12 @@ in
     _custom.services.ai.qwen3Asr.chunkSeconds = 480;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
-    _custom.services.ai.enableGptResearcher = true;
-    _custom.services.ai.gptResearcherSmartModel = "deepseek-v4-flash";
-    _custom.services.ai.gptResearcherFastModel = "deepseek-v4-flash";
-    _custom.services.ai.gptResearcherStrategicModel = "deepseek-v4-flash";
+    _custom.services.ai.gptResearcher.enable = true;
+    _custom.services.ai.gptResearcher.smartModel = "deepseek-v4-flash";
+    _custom.services.ai.gptResearcher.fastModel = "deepseek-v4-flash";
+    _custom.services.ai.gptResearcher.strategicModel = "deepseek-v4-flash";
     _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
-    _custom.services.ai.ollamaEmbeddingContextTokens = 49152;
+    _custom.services.ai.gptResearcher.embeddingContextTokens = 49152;
     _custom.services.ai.enableArticleSummary = true;
     # _custom.services.ms-intune.enable = false;
     _custom.services.rsshub.enable = true;

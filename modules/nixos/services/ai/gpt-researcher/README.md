@@ -20,8 +20,10 @@ an autonomous research agent with a Next.js UI at
 ```nix
 _custom.services.ai = {
   enable = true;
-  enableGptResearcher = true;
-  gptResearcherEnvironmentFile = config.sops.templates."gpt-researcher.env".path;
+  gptResearcher = {
+    enable = true;
+    environmentFile = config.sops.templates."gpt-researcher.env".path;
+  };
 };
 ```
 
@@ -55,11 +57,11 @@ change here:
 
 ```nix
 _custom.services.ai = {
-  gptResearcherSmartModel = "deepseek-v4-flash"; # research-smart combo
-  gptResearcherFastModel = "deepseek-v4-flash"; # research-fast combo
-  # gptResearcherStrategicModel defaults to the smart model
+  gptResearcher.smartModel = "deepseek-v4-flash"; # research-smart combo
+  gptResearcher.fastModel = "deepseek-v4-flash"; # research-fast combo
+  # gptResearcher.strategicModel defaults to the smart model
   ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
-  ollamaEmbeddingContextTokens = 49152; # num_ctx of that Modelfile
+  gptResearcher.embeddingContextTokens = 49152; # num_ctx of that Modelfile
 };
 ```
 
@@ -86,7 +88,7 @@ model's remaining prompt budget, and three times the embedding context;
 `MAX_ITERATIONS`/`MAX_SUBTOPICS` are 4 above a 100k smart context, 3 above
 32k, and 2 otherwise.
 
-`_custom.services.ai.gptResearcherSettings` accepts raw environment
+`_custom.services.ai.gptResearcher.settings` accepts raw environment
 overrides (`attrsOf str`) merged after the derived values, for example
 `{ MAX_SUBTOPICS = "6"; }`.
 

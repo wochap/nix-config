@@ -146,12 +146,12 @@ in
     _custom.services.ai.enableQwen3Asr = true;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
-    _custom.services.ai.enableGptResearcher = true;
-    _custom.services.ai.gptResearcherSmartModel = "glegion-cloud-smart";
-    _custom.services.ai.gptResearcherFastModel = "glegion-cloud-fast";
-    _custom.services.ai.gptResearcherStrategicModel = "glegion-cloud-strategic";
+    _custom.services.ai.gptResearcher.enable = true;
+    _custom.services.ai.gptResearcher.smartModel = "glegion-cloud-smart";
+    _custom.services.ai.gptResearcher.fastModel = "glegion-cloud-fast";
+    _custom.services.ai.gptResearcher.strategicModel = "glegion-cloud-strategic";
     _custom.services.ai.ollamaEmbeddingModel = "glegion-qwen3-embedding:4b";
-    _custom.services.ai.ollamaEmbeddingContextTokens = 24576;
+    _custom.services.ai.gptResearcher.embeddingContextTokens = 24576;
     _custom.services.ai.enableArticleSummary = true;
     _custom.services.ms-intune.enable = true;
     _custom.services.rsshub.enable = true;

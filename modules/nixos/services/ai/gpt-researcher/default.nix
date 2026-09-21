@@ -8,6 +8,7 @@
 
 let
   cfg = config._custom.services.ai;
+  gcfg = cfg.gptResearcher;
   inherit (pkgs._custom) wochap-ssc;
   source = inputs."gpt-researcher";
   revision = source.rev or (throw "The gpt-researcher flake input must be locked to a Git revision");
@@ -96,10 +97,10 @@ let
         or (throw "gpt-researcher: unknown model preset \"${m}\"; known presets: ${presetNames}")
     else
       m;
-  smartModel = resolveModel cfg.gptResearcherSmartModel;
-  fastModel = resolveModel cfg.gptResearcherFastModel;
-  strategicModel = resolveModel cfg.gptResearcherStrategicModel;
-  embeddingCtx = cfg.ollamaEmbeddingContextTokens;
+  smartModel = resolveModel gcfg.smartModel;
+  fastModel = resolveModel gcfg.fastModel;
+  strategicModel = resolveModel gcfg.strategicModel;
+  embeddingCtx = gcfg.embeddingContextTokens;
 
   # gpt_researcher/utils/llm.py rejects max_tokens above 200000 as a typo
   # guard, and 131072 is the largest limit proven to work through OmniRoute.
@@ -183,13 +184,13 @@ let
     SEARX_URL = "http://${wochap-ssc.meta.address}:${toString searxProxy.publicPort}";
   };
 
-  researcherSettings = constantSettings // derivedSettings // cfg.gptResearcherSettings;
+  researcherSettings = constantSettings // derivedSettings // gcfg.settings;
 in
 {
-  options._custom.services.ai = {
-    enableGptResearcher = lib.mkEnableOption { };
+  options._custom.services.ai.gptResearcher = {
+    enable = lib.mkEnableOption { };
 
-    gptResearcherEnvironmentFile = lib.mkOption {
+    environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
@@ -198,7 +199,7 @@ in
       '';
     };
 
-    gptResearcherSmartModel = lib.mkOption {
+    smartModel = lib.mkOption {
       type = modelType;
       default = "glegion-cloud-smart";
       description = ''
@@ -207,20 +208,30 @@ in
       '';
     };
 
-    gptResearcherFastModel = lib.mkOption {
+    fastModel = lib.mkOption {
       type = modelType;
       default = "glegion-cloud-fast";
-      description = "Model behind the OmniRoute research-fast combo; same form as gptResearcherSmartModel.";
+      description = "Model behind the OmniRoute research-fast combo; same form as smartModel.";
     };
 
-    gptResearcherStrategicModel = lib.mkOption {
+    strategicModel = lib.mkOption {
       type = modelType;
-      default = cfg.gptResearcherSmartModel;
-      defaultText = lib.literalExpression "config._custom.services.ai.gptResearcherSmartModel";
+      default = gcfg.smartModel;
+      defaultText = lib.literalExpression "config._custom.services.ai.gptResearcher.smartModel";
       description = "Model used for research planning; defaults to the smart model.";
     };
 
-    gptResearcherSettings = lib.mkOption {
+    embeddingContextTokens = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = 24576;
+      description = ''
+        Context window of ollamaEmbeddingModel. Must match the num_ctx
+        parameter in its Modelfile; it bounds how much scraped text is
+        embedded per chunk.
+      '';
+    };
+
+    settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
       default = { };
       example = {
@@ -230,23 +241,23 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable && cfg.enableGptResearcher) {
+  config = lib.mkIf (cfg.enable && gcfg.enable) {
     assertions =
       map
         (
           name:
           let
-            value = cfg.${name};
+            value = gcfg.${name};
           in
           {
             assertion = !(builtins.isString value) || modelPresets ? ${value};
-            message = "_custom.services.ai.${name}: unknown preset \"${toString value}\"; known presets: ${presetNames}";
+            message = "_custom.services.ai.gptResearcher.${name}: unknown preset \"${toString value}\"; known presets: ${presetNames}";
           }
         )
         [
-          "gptResearcherSmartModel"
-          "gptResearcherFastModel"
-          "gptResearcherStrategicModel"
+          "smartModel"
+          "fastModel"
+          "strategicModel"
         ];
 
     _custom.services.web-proxies = {
@@ -319,7 +330,7 @@ in
         environmentFiles = [
           config.sops.templates."gpt-researcher-omniroute.env".path
         ]
-        ++ lib.optional (cfg.gptResearcherEnvironmentFile != null) cfg.gptResearcherEnvironmentFile;
+        ++ lib.optional (gcfg.environmentFile != null) gcfg.environmentFile;
         extraOptions = [
           "--network=host"
           "--cap-drop=all"
