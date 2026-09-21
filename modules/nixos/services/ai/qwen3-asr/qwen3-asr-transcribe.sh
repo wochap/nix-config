@@ -57,18 +57,14 @@ fi
 container_args=(
   run
   --rm
-  # TODO: Make GPU passthrough configurable and support AMD/ROCm devices; this
-  # CDI selector requires an NVIDIA GPU and the NVIDIA container toolkit.
-  --device=nvidia.com/gpu=all
+  "${gpu_args[@]}"
   --cap-drop=all
   --security-opt=no-new-privileges
   --read-only
   --entrypoint=python3
-  # TODO: Make these memory limits configurable for hosts with resources that
-  # differ from the 8 GB RTX 4060 machine this workflow was tuned on.
-  "--tmpfs=/tmp:rw,nosuid,nodev,size=4g"
+  "--tmpfs=/tmp:rw,nosuid,nodev,size=$QWEN3_ASR_TMP_SIZE"
   --pids-limit=2048
-  --shm-size=4g
+  --shm-size="$QWEN3_ASR_SHM_SIZE"
   --env=HF_HUB_DISABLE_TELEMETRY=1
   --env=HF_HUB_ETAG_TIMEOUT=2
   --env=QWEN3_ASR_ASR_REVISION
@@ -96,4 +92,5 @@ fi
 
 [[ -z $language ]] || python_args+=(--language "$language")
 
+ensure_image
 exec podman "${container_args[@]}" "$QWEN3_ASR_IMAGE" "${python_args[@]}"

@@ -51,6 +51,16 @@ ALIGNER_REVISION = os.environ.get("QWEN3_ASR_ALIGNER_REVISION", "")
 DIARIZER_REVISION = os.environ.get("QWEN3_ASR_DIARIZER_REVISION", "")
 
 
+def resolve_runtime(env: dict[str, str] | None = None) -> tuple[str, str]:
+    """Return the (device, dtype name) the inference steps should use."""
+    values = os.environ if env is None else env
+    device = values.get("QWEN3_ASR_DEVICE") or "cuda:0"
+    dtype_name = values.get("QWEN3_ASR_DTYPE") or "bfloat16"
+    if dtype_name not in ("bfloat16", "float16", "float32"):
+        raise RuntimeError(f"unsupported QWEN3_ASR_DTYPE: {dtype_name}")
+    return device, dtype_name
+
+
 def write_json_atomic(path: Path, value: Any) -> None:
     temporary = path.with_suffix(f"{path.suffix}.tmp")
     with open(temporary, "w", encoding="utf-8") as output:
@@ -348,6 +358,9 @@ def infer(args: argparse.Namespace) -> None:
     from pyannote.audio import Pipeline
     from qwen_asr import Qwen3ASRModel, Qwen3ForcedAligner
 
+    device, dtype_name = resolve_runtime()
+    dtype = getattr(torch, dtype_name)
+
     if not all((ASR_REVISION, ALIGNER_REVISION, DIARIZER_REVISION)):
         raise RuntimeError("model revision environment variables are required")
 
@@ -383,15 +396,13 @@ def infer(args: argparse.Namespace) -> None:
     if len(chunk_records) > len(chunks):
         chunk_records = []
 
-    # TODO: Make the accelerator and dtype configurable. cuda:0 and bfloat16
-    # are tuned for the RTX 4060 and do not support AMD/ROCm or CPU-only hosts.
     if len(chunk_records) < len(chunks):
         print("Loading Qwen3-ASR-1.7B", file=sys.stderr)
         asr_model = Qwen3ASRModel.from_pretrained(
             "Qwen/Qwen3-ASR-1.7B",
             revision=ASR_REVISION,
-            dtype=torch.bfloat16,
-            device_map="cuda:0",
+            dtype=dtype,
+            device_map=device,
             max_inference_batch_size=1,
             max_new_tokens=4096,
         )
@@ -427,8 +438,8 @@ def infer(args: argparse.Namespace) -> None:
         aligner = Qwen3ForcedAligner.from_pretrained(
             "Qwen/Qwen3-ForcedAligner-0.6B",
             revision=ALIGNER_REVISION,
-            dtype=torch.bfloat16,
-            device_map="cuda:0",
+            dtype=dtype,
+            device_map=device,
         )
     else:
         aligner = None
@@ -478,9 +489,7 @@ def infer(args: argparse.Namespace) -> None:
             revision=DIARIZER_REVISION,
             token=token,
         )
-        # TODO: Use the configurable accelerator here too so diarization supports
-        # AMD/ROCm and CPU-only hosts instead of unconditionally requiring CUDA.
-        diarizer.to(torch.device("cuda"))
+        diarizer.to(torch.device(device))
         waveform, sample_rate = load_pcm_wav(full_audio)
         diarization_kwargs = {
             key: value

@@ -108,7 +108,7 @@ json_output_dir=$(dirname "$json_output_file")
 [[ -d $output_dir ]] || die "output directory does not exist: $output_dir"
 [[ -d $json_output_dir ]] || die "JSON output directory does not exist: $json_output_dir"
 
-chunk_seconds=${QWEN3_ASR_CHUNK_SECONDS:-240}
+chunk_seconds=${QWEN3_ASR_CHUNK_SECONDS:-$QWEN3_ASR_DEFAULT_CHUNK_SECONDS}
 [[ $chunk_seconds =~ ^[1-9][0-9]*$ ]] || \
   die "QWEN3_ASR_CHUNK_SECONDS must be a positive integer"
 
@@ -167,27 +167,19 @@ else
   cp -- "$work_dir/full.wav" "$work_dir/chunk-00000.wav"
 fi
 
-if ! podman image exists "$QWEN3_ASR_DIARIZATION_IMAGE"; then
-  echo "Building the pinned Qwen + pyannote inference image (first run only)" >&2
-  podman build --pull=missing --tag "$QWEN3_ASR_DIARIZATION_IMAGE" \
-    "$QWEN3_ASR_DIARIZATION_CONTEXT"
-fi
+ensure_image
 
 container_args=(
   run
   --rm
-  # TODO: Make GPU passthrough configurable and support AMD/ROCm devices; this
-  # CDI selector requires an NVIDIA GPU and the NVIDIA container toolkit.
-  --device=nvidia.com/gpu=all
+  "${gpu_args[@]}"
   --cap-drop=all
   --security-opt=no-new-privileges
   --read-only
   --entrypoint=python3
-  # TODO: Make these memory limits configurable for hosts with resources that
-  # differ from the 8 GB RTX 4060 machine this workflow was tuned on.
-  "--tmpfs=/tmp:rw,nosuid,nodev,size=4g"
+  "--tmpfs=/tmp:rw,nosuid,nodev,size=$QWEN3_ASR_TMP_SIZE"
   --pids-limit=2048
-  --shm-size=4g
+  --shm-size="$QWEN3_ASR_SHM_SIZE"
   --env=HF_HUB_DISABLE_TELEMETRY=1
   # Prefer the cache quickly when Hugging Face is unreachable. Strict offline
   # operation remains available through QWEN3_ASR_OFFLINE=1.
@@ -223,7 +215,7 @@ python_args=(/opt/qwen3-asr/pipeline.py infer --audio-dir /input --state-dir /st
 [[ -z $max_speakers ]] || python_args+=(--max-speakers "$max_speakers")
 
 echo "Running ASR, forced alignment, and speaker diarization sequentially" >&2
-podman "${container_args[@]}" "$QWEN3_ASR_DIARIZATION_IMAGE" \
+podman "${container_args[@]}" "$QWEN3_ASR_IMAGE" \
   "${python_args[@]}" >"$json_tmp"
 
 if ((validate_output)); then

@@ -178,6 +178,19 @@ class PipelineTest(unittest.TestCase):
         self.assertIn("1 tokens (1 UNKNOWN)", stderr.getvalue())
         self.assertIn("1 under 100 ms", stderr.getvalue())
 
+    def test_runtime_defaults_to_cuda_bfloat16(self):
+        self.assertEqual(PIPELINE.resolve_runtime({}), ("cuda:0", "bfloat16"))
+
+    def test_runtime_reads_device_and_dtype_from_env(self):
+        self.assertEqual(
+            PIPELINE.resolve_runtime({"QWEN3_ASR_DEVICE": "cuda:1", "QWEN3_ASR_DTYPE": "float16"}),
+            ("cuda:1", "float16"),
+        )
+
+    def test_runtime_rejects_unknown_dtype(self):
+        with self.assertRaisesRegex(RuntimeError, "unsupported"):
+            PIPELINE.resolve_runtime({"QWEN3_ASR_DTYPE": "float8"})
+
     def test_validation_rejects_non_finite_timestamp(self):
         document = {
             "schema_version": 1,

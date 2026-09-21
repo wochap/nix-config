@@ -1,6 +1,5 @@
-# TODO: Make the base image configurable and provide an AMD/ROCm variant; this
-# image contains a CUDA-enabled PyTorch runtime intended for NVIDIA GPUs.
-FROM docker.io/qwenllm/qwen3-asr@sha256:fb75b775f089e06e5a1aaebffd421e37505cc630d50c86d889d95ffa45a7e16a
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
 
 # Keep the Qwen image's CUDA-enabled PyTorch installation. pip only adds the
 # missing Community-1 runtime and leaves an already compatible torch in place.

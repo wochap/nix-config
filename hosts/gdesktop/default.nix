@@ -143,7 +143,8 @@ in
     # _custom.services.ai.enableNextjsOllamaLlmUi = false;
     # _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;
-    # _custom.services.ai.enableQwen3Asr = true;
+    _custom.services.ai.enableQwen3Asr = true;
+    _custom.services.ai.qwen3Asr.chunkSeconds = 480;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
     _custom.services.ai.enableGptResearcher = true;
