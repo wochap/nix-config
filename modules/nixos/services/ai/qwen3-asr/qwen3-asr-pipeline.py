@@ -8,6 +8,7 @@ import math
 import os
 import re
 import sys
+import time
 import wave
 from pathlib import Path
 from typing import Any
@@ -59,6 +60,47 @@ def resolve_runtime(env: dict[str, str] | None = None) -> tuple[str, str]:
     if dtype_name not in ("bfloat16", "float16", "float32"):
         raise RuntimeError(f"unsupported QWEN3_ASR_DTYPE: {dtype_name}")
     return device, dtype_name
+
+
+START_TIME = time.monotonic()
+
+
+def elapsed() -> str:
+    seconds = int(time.monotonic() - START_TIME)
+    return f"{seconds // 60:02d}:{seconds % 60:02d}"
+
+
+def log(message: str) -> None:
+    print(f"[{elapsed()}] {message}", file=sys.stderr, flush=True)
+
+
+class Timed:
+    """Log how long a step took once it returns."""
+
+    def __init__(self, label: str) -> None:
+        self.label = label
+        self.started = time.monotonic()
+
+    def __enter__(self) -> "Timed":
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        log(f"{self.label} done in {int(time.monotonic() - self.started)} s")
+
+
+def diarization_progress(
+    step_name: str,
+    step_artifact: Any,
+    file: Any = None,
+    total: int | None = None,
+    completed: int | None = None,
+) -> None:
+    """pyannote hook: log each stage once and its chunk progress at 25 % steps."""
+    if completed is None or total is None:
+        log(f"Diarization stage {step_name}")
+        return
+    if completed == 0 or completed == total or completed % max(1, total // 4) == 0:
+        log(f"Diarization {step_name}: {completed}/{total}")
 
 
 def write_json_atomic(path: Path, value: Any) -> None:
@@ -397,7 +439,7 @@ def infer(args: argparse.Namespace) -> None:
         chunk_records = []
 
     if len(chunk_records) < len(chunks):
-        print("Loading Qwen3-ASR-1.7B", file=sys.stderr)
+        log("Loading Qwen3-ASR-1.7B")
         asr_model = Qwen3ASRModel.from_pretrained(
             "Qwen/Qwen3-ASR-1.7B",
             revision=ASR_REVISION,
@@ -408,13 +450,14 @@ def infer(args: argparse.Namespace) -> None:
         )
     else:
         asr_model = None
-        print(f"Reusing all {len(chunks)} ASR chunks", file=sys.stderr)
+        log(f"Reusing all {len(chunks)} ASR chunks")
     offset = sum(durations[: len(chunk_records)])
     for index, chunk in enumerate(chunks[len(chunk_records) :], start=len(chunk_records) + 1):
         duration = durations[index - 1]
-        print(f"Transcribing chunk {index}/{len(chunks)}", file=sys.stderr)
+        log(f"Transcribing chunk {index}/{len(chunks)} ({duration:.0f} s of audio)")
         assert asr_model is not None
-        result = asr_model.transcribe(audio=str(chunk), language=requested_language)[0]
+        with Timed(f"ASR chunk {index}/{len(chunks)}"):
+            result = asr_model.transcribe(audio=str(chunk), language=requested_language)[0]
         chunk_records.append(
             {
                 "start": round(offset, 3),
@@ -434,7 +477,7 @@ def infer(args: argparse.Namespace) -> None:
     if len(aligned_chunks) > len(chunk_records):
         aligned_chunks = []
     if len(aligned_chunks) < len(chunk_records):
-        print("Loading Qwen3-ForcedAligner-0.6B", file=sys.stderr)
+        log("Loading Qwen3-ForcedAligner-0.6B")
         aligner = Qwen3ForcedAligner.from_pretrained(
             "Qwen/Qwen3-ForcedAligner-0.6B",
             revision=ALIGNER_REVISION,
@@ -443,7 +486,7 @@ def infer(args: argparse.Namespace) -> None:
         )
     else:
         aligner = None
-        print(f"Reusing all {len(chunk_records)} aligned chunks", file=sys.stderr)
+        log(f"Reusing all {len(chunk_records)} aligned chunks")
     for index, chunk in enumerate(
         chunk_records[len(aligned_chunks) :], start=len(aligned_chunks) + 1
     ):
@@ -455,13 +498,14 @@ def infer(args: argparse.Namespace) -> None:
         language = chunk["language"]
         if language is None:
             raise RuntimeError(f"Qwen did not detect a language for chunk {index}")
-        print(f"Aligning chunk {index}/{len(chunk_records)}", file=sys.stderr)
+        log(f"Aligning chunk {index}/{len(chunk_records)}")
         assert aligner is not None
-        aligned = aligner.align(
-            audio=chunk["path"],
-            text=chunk["text"],
-            language=language,
-        )[0]
+        with Timed(f"Alignment chunk {index}/{len(chunk_records)}"):
+            aligned = aligner.align(
+                audio=chunk["path"],
+                text=chunk["text"],
+                language=language,
+            )[0]
         surfaces = display_units(chunk["text"], [item.text for item in aligned])
         for item, display in zip(aligned, surfaces):
             chunk_tokens.append(
@@ -482,7 +526,7 @@ def infer(args: argparse.Namespace) -> None:
     diarization_path = state_dir / "diarization.json"
     regions = read_json(diarization_path, None)
     if regions is None:
-        print("Loading pyannote Community-1", file=sys.stderr)
+        log("Loading pyannote Community-1")
         token = os.environ.get("HF_TOKEN")
         diarizer = Pipeline.from_pretrained(
             "pyannote/speaker-diarization-community-1",
@@ -500,10 +544,12 @@ def infer(args: argparse.Namespace) -> None:
             }.items()
             if value is not None
         }
-        diarization_output = diarizer(
-            {"waveform": waveform, "sample_rate": sample_rate},
-            **diarization_kwargs,
-        )
+        with Timed("Diarization"):
+            diarization_output = diarizer(
+                {"waveform": waveform, "sample_rate": sample_rate},
+                hook=diarization_progress,
+                **diarization_kwargs,
+            )
         annotation = diarization_output.exclusive_speaker_diarization
         regions = [
             {
@@ -516,7 +562,7 @@ def infer(args: argparse.Namespace) -> None:
         regions.sort(key=lambda item: (item["start"], item["end"], item["speaker"]))
         write_json_atomic(diarization_path, regions)
     else:
-        print("Reusing speaker diarization", file=sys.stderr)
+        log("Reusing speaker diarization")
 
     assign_speakers(aligned_tokens, regions)
     smooth_unknown_speakers(aligned_tokens)

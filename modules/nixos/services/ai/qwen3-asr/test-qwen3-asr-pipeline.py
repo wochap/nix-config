@@ -187,6 +187,17 @@ class PipelineTest(unittest.TestCase):
             ("cuda:1", "float16"),
         )
 
+    def test_diarization_progress_logs_stage_and_quarters(self):
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            PIPELINE.diarization_progress("segmentation", None)
+            for completed in range(0, 9):
+                PIPELINE.diarization_progress("segmentation", None, total=8, completed=completed)
+        lines = stderr.getvalue().splitlines()
+        self.assertEqual(len(lines), 6)
+        self.assertIn("Diarization stage segmentation", lines[0])
+        self.assertTrue(lines[-1].endswith("Diarization segmentation: 8/8"))
+
     def test_runtime_rejects_unknown_dtype(self):
         with self.assertRaisesRegex(RuntimeError, "unsupported"):
             PIPELINE.resolve_runtime({"QWEN3_ASR_DTYPE": "float8"})
