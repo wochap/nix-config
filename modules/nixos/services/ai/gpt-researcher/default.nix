@@ -101,9 +101,13 @@ let
   strategicModel = resolveModel cfg.gptResearcherStrategicModel;
   embeddingCtx = cfg.ollamaEmbeddingContextTokens;
 
+  # gpt_researcher/utils/llm.py rejects max_tokens above 200000 as a typo
+  # guard, and 131072 is the largest limit proven to work through OmniRoute.
+  maxOutputCap = 131072;
+
   # Never let a completion claim more than half the window; the prompt needs
   # the rest.
-  outLimit = m: lib.min m.maxOutputTokens (m.contextTokens / 2);
+  outLimit = m: lib.min maxOutputCap (lib.min m.maxOutputTokens (m.contextTokens / 2));
   fastTokenLimit = outLimit fastModel;
   smartTokenLimit = outLimit smartModel;
   strategicTokenLimit = outLimit strategicModel;

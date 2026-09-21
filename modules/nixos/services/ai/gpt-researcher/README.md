@@ -77,7 +77,8 @@ Each model option takes a preset name or an explicit
 | `glegion-cloud-fast` | 262144 | 12000 | glegion's hand-tuned fast limits |
 | `glegion-cloud-strategic` | 262144 | 16000 | glegion's hand-tuned strategic limits |
 
-Derivation: each `*_TOKEN_LIMIT` is `min maxOutputTokens (contextTokens / 2)`;
+Derivation: each `*_TOKEN_LIMIT` is `min maxOutputTokens (contextTokens / 2)`,
+capped at 131072 (GPT Researcher rejects `max_tokens` above 200000);
 `TOTAL_WORDS = min 20000 (SMART_TOKEN_LIMIT / 6)`;
 `SUMMARY_TOKEN_LIMIT = max 500 (FAST_TOKEN_LIMIT / 6)`;
 `BROWSE_CHUNK_MAX_LENGTH` is capped at 24000 characters, twice the fast
