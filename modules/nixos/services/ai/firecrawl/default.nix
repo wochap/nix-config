@@ -142,7 +142,8 @@ in
 
     firecrawlEmbeddingModel = lib.mkOption {
       type = lib.types.str;
-      default = "glegion-qwen3-embedding:4b";
+      default = cfg.ollamaEmbeddingModel;
+      defaultText = lib.literalExpression "config._custom.services.ai.ollamaEmbeddingModel";
       description = "OmniRoute model used by Firecrawl for embeddings.";
     };
 

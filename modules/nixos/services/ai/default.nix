@@ -35,6 +35,25 @@ in
     enableOpenWebui = lib.mkEnableOption { };
     enableNextjsOllamaLlmUi = lib.mkEnableOption { };
     enableHandy = lib.mkEnableOption { };
+
+    ollamaEmbeddingModel = lib.mkOption {
+      type = lib.types.str;
+      default = "glegion-qwen3-embedding:4b";
+      description = ''
+        Local Ollama model shared by Firecrawl and GPT Researcher for
+        embeddings. Its Modelfile lives in ./ollama/models.
+      '';
+    };
+
+    ollamaEmbeddingContextTokens = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = 24576;
+      description = ''
+        Context window of ollamaEmbeddingModel. Must match the num_ctx
+        parameter in its Modelfile; it bounds how much scraped text is
+        embedded per chunk.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {

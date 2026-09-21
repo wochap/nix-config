@@ -25,8 +25,9 @@ Configure OmniRoute before first use:
 1. In the OmniRoute dashboard, create a combo named `firecrawl` whose targets
    support the OpenAI Responses API and structured output. Rename it with
    `_custom.services.ai.firecrawlModel` if desired.
-2. Keep the `glegion-qwen3-embedding:4b` Ollama model available through
-   OmniRoute for embeddings; override it with
+2. Keep the Ollama model named by `_custom.services.ai.ollamaEmbeddingModel`
+   (default `glegion-qwen3-embedding:4b`) available through OmniRoute for
+   embeddings; override it per service with
    `_custom.services.ai.firecrawlEmbeddingModel` only when the replacement
    also supports the OpenAI embeddings endpoint.
 3. Optionally set `firecrawlEnvironmentFile` for additional overrides and

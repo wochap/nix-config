@@ -48,7 +48,12 @@ ollama create "gdesktop-qwen3.5:9b" -f ./gdesktop-qwen3.5:9b
 
 - `glegion-qwen3.5:4b` — final fallback target in the OmniRoute
   `desktop-free` combo
-- `glegion-qwen3-embedding:4b` — embeddings for Firecrawl
+- `glegion-qwen3-embedding:4b` — embeddings for Firecrawl and GPT Researcher
+  on glegion (`num_ctx 24576`, the `ollamaEmbeddingContextTokens` default)
+- `gdesktop-qwen3-embedding:4b` — embeddings for Firecrawl and GPT Researcher
+  on gdesktop (`num_ctx 49152`; set `ollamaEmbeddingContextTokens = 49152`)
+- `gdesktop-qwen3.5:9b` — local target for the OmniRoute `research-*` combos
+  on gdesktop (`qwen3-5-9b-local` GPT Researcher preset)
 
 You can also download community Modelfiles from <https://openwebui.com/>:
 

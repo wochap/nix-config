@@ -30,6 +30,156 @@ let
   '';
   searxProxy = config._custom.services.web-proxies.searxng;
   webProxy = config._custom.services.web-proxies.gpt-researcher;
+
+  # Named model presets: total context window and the largest completion the
+  # provider accepts. Token limits below derive from these; VRAM is never an
+  # input because it says nothing about how much context a model gets.
+  modelPresets = {
+    # https://api-docs.deepseek.com/quick_start/pricing (1M context, 384K max output)
+    deepseek-v4-flash = {
+      contextTokens = 1048576;
+      maxOutputTokens = 384000;
+    };
+    # https://ai.google.dev/gemma/docs/core (256K context);
+    # https://openrouter.ai/google/gemma-4-31b-it (32768 max completion)
+    gemma4-31b = {
+      contextTokens = 262144;
+      maxOutputTokens = 32768;
+    };
+    # https://openrouter.ai/qwen/qwen3.8-max-0902 (1M context, 131072 max output)
+    qwen3-8-max = {
+      contextTokens = 1000000;
+      maxOutputTokens = 131072;
+    };
+    # ../ollama/models/gdesktop-qwen3.5:9b (num_ctx 32768); output capped at
+    # a quarter of the window so prompts keep room for scraped context.
+    qwen3-5-9b-local = {
+      contextTokens = 32768;
+      maxOutputTokens = 8192;
+    };
+    # Reproduce the limits hand-tuned on glegion before presets existed:
+    # 131072 smart / 12000 fast / 16000 strategic with a 256K window.
+    glegion-cloud-smart = {
+      contextTokens = 262144;
+      maxOutputTokens = 131072;
+    };
+    glegion-cloud-fast = {
+      contextTokens = 262144;
+      maxOutputTokens = 12000;
+    };
+    glegion-cloud-strategic = {
+      contextTokens = 262144;
+      maxOutputTokens = 16000;
+    };
+  };
+
+  modelType = lib.types.either lib.types.str (
+    lib.types.submodule {
+      options = {
+        contextTokens = lib.mkOption {
+          type = lib.types.ints.positive;
+          description = "Total context window (prompt plus completion) in tokens.";
+        };
+        maxOutputTokens = lib.mkOption {
+          type = lib.types.ints.positive;
+          description = "Largest completion the provider accepts, in tokens.";
+        };
+      };
+    }
+  );
+
+  presetNames = lib.concatStringsSep ", " (builtins.attrNames modelPresets);
+  resolveModel =
+    m:
+    if builtins.isString m then
+      modelPresets.${m}
+        or (throw "gpt-researcher: unknown model preset \"${m}\"; known presets: ${presetNames}")
+    else
+      m;
+  smartModel = resolveModel cfg.gptResearcherSmartModel;
+  fastModel = resolveModel cfg.gptResearcherFastModel;
+  strategicModel = resolveModel cfg.gptResearcherStrategicModel;
+  embeddingCtx = cfg.ollamaEmbeddingContextTokens;
+
+  # Never let a completion claim more than half the window; the prompt needs
+  # the rest.
+  outLimit = m: lib.min m.maxOutputTokens (m.contextTokens / 2);
+  fastTokenLimit = outLimit fastModel;
+  smartTokenLimit = outLimit smartModel;
+  strategicTokenLimit = outLimit strategicModel;
+
+  # Scale the research shape with the smart model's window.
+  researchBreadth =
+    if smartModel.contextTokens >= 100000 then
+      4
+    else if smartModel.contextTokens >= 32768 then
+      3
+    else
+      2;
+
+  derivedSettings = {
+    # Local Ollama model used to embed and rank retrieved content.
+    EMBEDDING = "ollama:${cfg.ollamaEmbeddingModel}";
+    # FAST_TOKEN_LIMIT: leaves reasoning and response headroom for fast-model calls.
+    FAST_TOKEN_LIMIT = toString fastTokenLimit;
+    # SMART_TOKEN_LIMIT: prevents large structured reports from ending mid-response.
+    SMART_TOKEN_LIMIT = toString smartTokenLimit;
+    # STRATEGIC_TOKEN_LIMIT: provides room for reasoning during research planning.
+    STRATEGIC_TOKEN_LIMIT = toString strategicTokenLimit;
+    # TOTAL_WORDS: requests comprehensive output without forcing the full
+    # token limit (about 1.4 tokens per word, plus headroom).
+    TOTAL_WORDS = toString (lib.min 20000 (smartTokenLimit / 6));
+    # MAX_ITERATIONS: generates more focused queries for broad research topics.
+    MAX_ITERATIONS = toString researchBreadth;
+    # MAX_SUBTOPICS: allows detailed reports to cover more independent sections.
+    MAX_SUBTOPICS = toString researchBreadth;
+    # BROWSE_CHUNK_MAX_LENGTH (chars): retains more useful text from long pages
+    # while fitting both the fast model's prompt budget and the embedding window.
+    BROWSE_CHUNK_MAX_LENGTH = toString (
+      lib.min 24000 (lib.min ((fastModel.contextTokens - fastTokenLimit) * 2) (embeddingCtx * 3))
+    );
+    # SUMMARY_TOKEN_LIMIT: preserves more facts and citations in per-source summaries.
+    SUMMARY_TOKEN_LIMIT = toString (lib.max 500 (fastTokenLimit / 6));
+  };
+
+  constantSettings = {
+    # OmniRoute alias for summaries and other lightweight tasks.
+    FAST_LLM = "openai:research-fast";
+    # OmniRoute alias used to write the final research report.
+    SMART_LLM = "openai:research-smart";
+    # OmniRoute alias used for research planning and search queries.
+    STRATEGIC_LLM = "openai:research-smart";
+    # Keeps model reasoning enabled while limiting excessive deliberation.
+    LLM_KWARGS = ''{"extra_body":{"enable_thinking":true,"reasoning_effort":"low"}}'';
+    # Broadens coverage for every generated search query.
+    MAX_SEARCH_RESULTS_PER_QUERY = "15";
+    # Limits concurrent fetches to avoid overwhelming fragile sites.
+    MAX_SCRAPER_WORKERS = "8";
+    # Improves determinism and structured-output consistency.
+    TEMPERATURE = "0.1";
+    # Keeps generated reports consistently in English.
+    LANGUAGE = "english";
+    # Retains all gathered sources instead of selecting only the top ten.
+    CURATE_SOURCES = "false";
+    # Emits detailed pipeline events for future troubleshooting.
+    VERBOSE = "true";
+    # Connects the container to the host Ollama service.
+    OLLAMA_BASE_URL = "http://127.0.0.1:11434";
+    # Authenticates GPT Researcher to the local OmniRoute API.
+    OPENAI_API_KEY = config.sops.placeholder.local-omniroute-secret-key;
+    # Routes OpenAI-compatible LLM calls through local OmniRoute.
+    OPENAI_BASE_URL = "http://${wochap-ssc.meta.address}:${toString omniRouteProxy.publicPort}/v1";
+    # Uses the self-hosted SearxNG metasearch retriever.
+    RETRIEVER = "searx";
+    # Scrapes retrieved pages through the local, lazily started Firecrawl API.
+    SCRAPER = "firecrawl";
+    FIRECRAWL_SERVER_URL = "http://${wochap-ssc.meta.address}:${toString firecrawlPublicPort}";
+    FIRECRAWL_API_KEY = "";
+    # Points the retriever at the local SearxNG proxy.
+    SEARX_URL = "http://${wochap-ssc.meta.address}:${toString searxProxy.publicPort}";
+  };
+
+  researcherSettings = constantSettings // derivedSettings // cfg.gptResearcherSettings;
 in
 {
   options._custom.services.ai = {
@@ -43,9 +193,58 @@ in
         secrets, such as OPENAI_API_KEY and TAVILY_API_KEY.
       '';
     };
+
+    gptResearcherSmartModel = lib.mkOption {
+      type = modelType;
+      default = "glegion-cloud-smart";
+      description = ''
+        Model behind the OmniRoute research-smart combo: a preset name
+        (${presetNames}) or { contextTokens; maxOutputTokens; }.
+      '';
+    };
+
+    gptResearcherFastModel = lib.mkOption {
+      type = modelType;
+      default = "glegion-cloud-fast";
+      description = "Model behind the OmniRoute research-fast combo; same form as gptResearcherSmartModel.";
+    };
+
+    gptResearcherStrategicModel = lib.mkOption {
+      type = modelType;
+      default = cfg.gptResearcherSmartModel;
+      defaultText = lib.literalExpression "config._custom.services.ai.gptResearcherSmartModel";
+      description = "Model used for research planning; defaults to the smart model.";
+    };
+
+    gptResearcherSettings = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example = {
+        MAX_SUBTOPICS = "6";
+      };
+      description = "Raw GPT Researcher environment overrides, merged after the derived values.";
+    };
   };
 
   config = lib.mkIf (cfg.enable && cfg.enableGptResearcher) {
+    assertions =
+      map
+        (
+          name:
+          let
+            value = cfg.${name};
+          in
+          {
+            assertion = !(builtins.isString value) || modelPresets ? ${value};
+            message = "_custom.services.ai.${name}: unknown preset \"${toString value}\"; known presets: ${presetNames}";
+          }
+        )
+        [
+          "gptResearcherSmartModel"
+          "gptResearcherFastModel"
+          "gptResearcherStrategicModel"
+        ];
+
     _custom.services.web-proxies = {
       gpt-researcher = {
         enable = true;
@@ -166,60 +365,7 @@ in
     sops.templates."gpt-researcher-omniroute.env" = {
       mode = "0400";
       restartUnits = [ "${apiServiceName}.service" ];
-      content = ''
-        # Local Ollama model used to embed and rank retrieved content.
-        EMBEDDING=ollama:glegion-qwen3-embedding:4b
-        # OmniRoute alias for summaries and other lightweight tasks.
-        FAST_LLM=openai:research-fast
-        # Leaves reasoning and response headroom for fast-model calls.
-        FAST_TOKEN_LIMIT=12000
-        # OmniRoute alias used to write the final research report.
-        SMART_LLM=openai:research-smart
-        # Prevents large structured reports from ending mid-response.
-        SMART_TOKEN_LIMIT=131072
-        # OmniRoute alias used for research planning and search queries.
-        STRATEGIC_LLM=openai:research-smart
-        # Provides ample room for reasoning during research planning.
-        STRATEGIC_TOKEN_LIMIT=16000
-        # Keeps model reasoning enabled while limiting excessive deliberation.
-        LLM_KWARGS={"extra_body":{"enable_thinking":true,"reasoning_effort":"low"}}
-        # Requests comprehensive output without forcing the full token limit.
-        TOTAL_WORDS=20000
-        # Broadens coverage for every generated search query.
-        MAX_SEARCH_RESULTS_PER_QUERY=15
-        # Generates more focused queries for broad research topics.
-        MAX_ITERATIONS=4
-        # Allows detailed reports to cover more independent sections.
-        MAX_SUBTOPICS=4
-        # Limits concurrent fetches to avoid overwhelming fragile sites.
-        MAX_SCRAPER_WORKERS=8
-        # Retains more useful text from long official pages and documents.
-        BROWSE_CHUNK_MAX_LENGTH=24000
-        # Preserves more facts and citations in per-source summaries.
-        SUMMARY_TOKEN_LIMIT=2000
-        # Improves determinism and structured-output consistency.
-        TEMPERATURE=0.1
-        # Keeps generated reports consistently in English.
-        LANGUAGE=english
-        # Retains all gathered sources instead of selecting only the top ten.
-        CURATE_SOURCES=false
-        # Emits detailed pipeline events for future troubleshooting.
-        VERBOSE=true
-        # Connects the container to the host Ollama service.
-        OLLAMA_BASE_URL=http://127.0.0.1:11434
-        # Authenticates GPT Researcher to the local OmniRoute API.
-        OPENAI_API_KEY=${config.sops.placeholder.local-omniroute-secret-key}
-        # Routes OpenAI-compatible LLM calls through local OmniRoute.
-        OPENAI_BASE_URL=http://${wochap-ssc.meta.address}:${toString omniRouteProxy.publicPort}/v1
-        # Uses the self-hosted SearxNG metasearch retriever.
-        RETRIEVER=searx
-        # Scrapes retrieved pages through the local, lazily started Firecrawl API.
-        SCRAPER=firecrawl
-        FIRECRAWL_SERVER_URL=http://${wochap-ssc.meta.address}:${toString firecrawlPublicPort}
-        FIRECRAWL_API_KEY=
-        # Points the retriever at the local SearxNG proxy.
-        SEARX_URL=http://${wochap-ssc.meta.address}:${toString searxProxy.publicPort}
-      '';
+      content = lib.generators.toKeyValue { } researcherSettings;
     };
 
     systemd.services = {
