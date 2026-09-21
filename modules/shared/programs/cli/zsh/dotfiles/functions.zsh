@@ -18,7 +18,7 @@ function projects() {
   local projects _projects
   projects=$(find ~ ~/.config -maxdepth 2 -name ".git" -type d -execdir pwd \;)
   if [ -n "$projects" ]; then
-    _projects=$(find ~/Projects -maxdepth 3 -name ".git" -type d -execdir pwd \;)
+    _projects=$(find ~/Projects ~/Sandboxes/sandbox -maxdepth 3 -name ".git" -type d -execdir pwd \;)
     if [ -n "$_projects" ]; then
       projects+="\n"
       projects+="$_projects"
