@@ -147,8 +147,10 @@ def portable_raw(value: Any) -> Any:
     return value
 
 
-def initialize_paddle_cache(bundled: Path = Path("/home/paddleocr/.paddlex")) -> None:
+def initialize_paddle_cache(bundled: Path | None = None) -> None:
     """Create a writable runtime cache while retaining read-only bundled data."""
+    if bundled is None:
+        bundled = Path(os.environ.get("PDF_INGEST_BUNDLED_CACHE", "/home/paddleocr/.paddlex"))
     cache = Path(os.environ.get("PADDLE_PDX_CACHE_HOME", str(bundled)))
     if cache == bundled:
         return
@@ -300,12 +302,19 @@ class PaddleOCRVLAdapter(ParserAdapter):
     def __init__(self, batch_size: int):
         from paddleocr import PaddleOCRVL
 
-        # PaddleOCR 3.6's offline image contains PaddleOCR-VL-1.6 weights.  Keep
-        # geometry-affecting preprocessors off so pixel-to-point is affine.
-        kwargs = {
+        self.pipeline = PaddleOCRVL(**self.pipeline_kwargs())
+        self.batch_size = batch_size
+
+    @staticmethod
+    def pipeline_kwargs() -> dict[str, Any]:
+        # Both images contain PaddleOCR-VL-1.6 weights.  Keep geometry-affecting
+        # preprocessors off so pixel-to-point is affine.  "gpu:0" is passed
+        # explicitly on both backends: ROCm PyTorch presents the card through
+        # the CUDA API but torch.version.cuda is None there, so PaddleX would
+        # otherwise fall back to the CPU.
+        kwargs: dict[str, Any] = {
             "pipeline_version": "v1.6",
             "device": "gpu:0",
-            "precision": "fp16",
             "use_doc_orientation_classify": False,
             "use_doc_unwarping": False,
             "use_layout_detection": True,
@@ -314,8 +323,16 @@ class PaddleOCRVLAdapter(ParserAdapter):
             "vl_rec_backend": "native",
             "vl_rec_max_concurrency": 1,
         }
-        self.pipeline = PaddleOCRVL(**kwargs)
-        self.batch_size = batch_size
+        if engine_name() == "transformers":
+            # The ROCm image has no Paddle runtime; PaddleX loads the
+            # safetensors checkpoints with Transformers on top of ROCm torch.
+            kwargs["engine"] = "transformers"
+            kwargs["engine_config"] = {"dtype": model_dtype()}
+        else:
+            # The upstream CUDA image runs PaddleOCR 3.6, which rejects unknown
+            # keyword arguments, so its call stays exactly as before.
+            kwargs["precision"] = "fp16"
+        return kwargs
 
     def parse_page(self, image_path: Path, dpi: int) -> dict[str, Any]:
         try:
@@ -364,11 +381,39 @@ class PaddleOCRVLAdapter(ParserAdapter):
             paddle.device.cuda.empty_cache()
         except Exception:
             pass
+        try:
+            import torch
+            torch.cuda.empty_cache()
+        except Exception:
+            pass
+
+
+def engine_name() -> str:
+    return os.environ.get("PDF_INGEST_ENGINE", "paddle")
+
+
+def model_dtype() -> str:
+    return os.environ.get("PDF_INGEST_DTYPE", "float16")
+
+
+def accelerator_name() -> str:
+    return os.environ.get("PDF_INGEST_ACCELERATOR", "cuda")
+
+
+def paddleocr_version() -> str:
+    try:
+        from importlib.metadata import version
+
+        return version("paddleocr")
+    except Exception:
+        return "3.6"
 
 
 def is_cuda_oom(error: BaseException) -> bool:
     message = str(error).lower()
-    return "out of memory" in message and ("cuda" in message or "gpu" in message or "resource exhausted" in message)
+    if "out of memory" not in message:
+        return False
+    return any(token in message for token in ("cuda", "gpu", "hip", "hsa", "resource exhausted"))
 
 
 def retry_dpis(initial: int, minimum: int) -> list[int]:
@@ -887,9 +932,9 @@ def infer(args: argparse.Namespace) -> int:
                 if not is_cuda_oom(error):
                     raise
                 paddle_adapter.clear_cache()
-                print(f"pdf-ingest: page {index + 1}: CUDA OOM at batch {attempt_batch}, {page_dpi} DPI; retrying", file=sys.stderr)
+                print(f"pdf-ingest: page {index + 1}: GPU OOM at batch {attempt_batch}, {page_dpi} DPI; retrying", file=sys.stderr)
         if page_result is None:
-            raise RuntimeError(f"page {index + 1}: CUDA OOM persisted through {args.min_dpi} DPI")
+            raise RuntimeError(f"page {index + 1}: GPU OOM persisted through {args.min_dpi} DPI")
         canonical = reconcile_page(native, page_result, index + 1)
         dump_json(checkpoint, {"native": native, "paddle": page_result, "canonical": canonical})
         for rendered in render_dir.glob(f"page-{index + 1:03d}-*.png"):
@@ -913,7 +958,7 @@ def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, sta
         "document": {"source": {"sha256": sha256_file(Path(args.source)), "original_name": args.source_name, "path": "source.pdf", "mime_type": "application/pdf"}, "page_count": page_count, "extraction_settings": settings(args)},
         "parsers": [
             {"adapter": "pymupdf", "package_version": pymupdf_version, "device": "cpu", "settings": {"raw_characters": True, "links": True, "images": True, "tables": True}},
-            {"adapter": "paddleocr-vl", "package_version": "3.6", "model": MODEL_NAME, "image": args.image, "precision": "fp16", "device": "gpu:0", "settings": {"all_pages": True, "layout_detection": True, "chart_recognition": True, "orientation": False, "unwarping": False, "concurrency": 1}},
+            {"adapter": "paddleocr-vl", "package_version": paddleocr_version(), "model": MODEL_NAME, "image": args.image, "accelerator": accelerator_name(), "engine": engine_name(), "dtype": "float16" if engine_name() == "paddle" else model_dtype(), "device": "gpu:0", "settings": {"all_pages": True, "layout_detection": True, "chart_recognition": True, "orientation": False, "unwarping": False, "concurrency": 1}},
         ],
         "pages": pages,
         "relationships": relationships,

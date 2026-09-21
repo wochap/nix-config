@@ -316,7 +316,19 @@ class RenderingAndValidationTests(unittest.TestCase):
         self.assertEqual(raw["image"], {"path": "x.png"})
 
     def test_launcher_contains_offline_sandbox_controls(self):
+        # The NixOS module concatenates the prelude in front of the launcher.
+        prelude = (MODULE_PATH.parent / "pdf-ingest-image.sh").read_text()
         launcher = (MODULE_PATH.parent / "pdf-ingest.sh").read_text()
+        for flag in (
+            '"--device=$pdf_ingest_device_spec"',
+            "--group-add=keep-groups",
+            "--env=MIOPEN_USER_DB_PATH=/tmp/miopen/db",
+            "--env=MIOPEN_CUSTOM_CACHE_DIR=/tmp/miopen/cache",
+            "--env=HF_HOME=/tmp/hf",
+            "podman build --pull=missing",
+        ):
+            self.assertIn(flag, prelude)
+        self.assertNotIn("nvidia.com/gpu=all", prelude)
         for flag in (
             "--pull=never",
             "--network=none",
@@ -325,12 +337,17 @@ class RenderingAndValidationTests(unittest.TestCase):
             "--pid=private",
             "--uts=private",
             "--cgroupns=private",
-            "--device=nvidia.com/gpu=all",
+            '"${gpu_args[@]}"',
             "--user=0:0",
             "--cap-drop=all",
             "--read-only",
-            "--shm-size=2g",
+            '--shm-size="$PDF_INGEST_SHM_SIZE"',
+            '"--tmpfs=/tmp:rw,nosuid,nodev,size=$PDF_INGEST_TMP_SIZE"',
             "--env=PADDLE_PDX_CACHE_HOME=/tmp/paddlex-cache",
+            "--env=HF_HUB_OFFLINE=1",
+            '"--env=PDF_INGEST_ENGINE=$PDF_INGEST_ENGINE"',
+            '"--env=PDF_INGEST_DTYPE=$PDF_INGEST_DTYPE"',
+            '"--env=PDF_INGEST_BUNDLED_CACHE=$PDF_INGEST_BUNDLED_CACHE"',
             "--env=XDG_CACHE_HOME=/tmp/cache",
             '"--mount=type=bind,source=$source_pdf,target=/input/source.pdf,readonly"',
             '"--mount=type=bind,source=$output_dir,target=/output,rw"',
@@ -342,6 +359,60 @@ class RenderingAndValidationTests(unittest.TestCase):
             self.assertIn(flag, launcher)
         self.assertIn('"$PDF_INGEST_PIPELINE" prepare', launcher)
         self.assertIn("pdf-ingest.py infer", launcher)
+        self.assertNotIn("--device=nvidia.com/gpu=all", launcher)
+        self.assertLess(launcher.index("ensure_image\n"), launcher.index("pdf-ingest.py infer"))
+
+    def test_oom_detection_covers_cuda_and_rocm_messages(self):
+        for message in (
+            "ResourceExhaustedError: Out of memory error on GPU 0",
+            "CUDA out of memory. Tried to allocate 20.00 MiB",
+            "HIP out of memory. Tried to allocate 512.00 MiB (GPU 0; hipErrorOutOfMemory)",
+            "HSA_STATUS_ERROR_OUT_OF_RESOURCES: out of memory",
+        ):
+            self.assertTrue(pdf.is_cuda_oom(RuntimeError(message)), message)
+        self.assertFalse(pdf.is_cuda_oom(RuntimeError("out of memory")))
+        self.assertFalse(pdf.is_cuda_oom(RuntimeError("CUDA error: an illegal memory access")))
+
+    def test_adapter_kwargs_follow_engine_environment(self):
+        with mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "paddle"}):
+            kwargs = pdf.PaddleOCRVLAdapter.pipeline_kwargs()
+        self.assertEqual(kwargs["precision"], "fp16")
+        self.assertEqual(kwargs["device"], "gpu:0")
+        self.assertNotIn("engine", kwargs)
+        self.assertNotIn("engine_config", kwargs)
+
+        with mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float32"}):
+            kwargs = pdf.PaddleOCRVLAdapter.pipeline_kwargs()
+        self.assertEqual(kwargs["engine"], "transformers")
+        self.assertEqual(kwargs["engine_config"], {"dtype": "float32"})
+        self.assertEqual(kwargs["device"], "gpu:0")
+        self.assertNotIn("precision", kwargs)
+
+    def test_adapter_constructs_pipeline_from_kwargs(self):
+        import sys
+        import types
+
+        fake = types.ModuleType("paddleocr")
+        fake.PaddleOCRVL = mock.Mock(return_value="pipeline")
+        with mock.patch.dict(sys.modules, {"paddleocr": fake}), mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float16"}):
+            adapter = pdf.PaddleOCRVLAdapter(2)
+        self.assertEqual(adapter.pipeline, "pipeline")
+        self.assertEqual(adapter.batch_size, 2)
+        called = fake.PaddleOCRVL.call_args.kwargs
+        self.assertEqual(called["engine"], "transformers")
+        self.assertEqual(called["engine_config"], {"dtype": "float16"})
+        self.assertEqual(called["vl_rec_backend"], "native")
+
+    def test_bundled_cache_default_comes_from_environment(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            bundled = root / "rocm-bundled"
+            cache = root / "runtime"
+            (bundled / "official_models").mkdir(parents=True)
+            with mock.patch.dict("os.environ", {"PADDLE_PDX_CACHE_HOME": str(cache), "PDF_INGEST_BUNDLED_CACHE": str(bundled)}):
+                pdf.initialize_paddle_cache()
+            self.assertEqual((cache / "official_models").resolve(), bundled / "official_models")
+            self.assertFalse((cache / "fonts").exists())
 
     def test_writable_paddle_cache_links_bundled_resources(self):
         with tempfile.TemporaryDirectory() as temporary:

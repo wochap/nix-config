@@ -8,7 +8,7 @@ usage: pdf-ingest setup
 
 Options:
   --dpi DPI         Initial render resolution (default: 200)
-  --min-dpi DPI     Lowest resolution used after CUDA OOM (default: 120)
+  --min-dpi DPI     Lowest resolution used after GPU OOM (default: 120)
   --batch-size N    Initial inference batch size (default: 1)
   --help, -h        Show this help
 EOF
@@ -21,6 +21,10 @@ die() {
 
 if [[ ${1:-} == setup ]]; then
   (($# == 1)) || die "setup takes no arguments"
+  if [[ -n $PDF_INGEST_IMAGE_CONTEXT ]]; then
+    ensure_image
+    exit 0
+  fi
   echo "Pulling pinned PaddleOCR-VL offline image" >&2
   exec podman pull "$PDF_INGEST_IMAGE"
 fi
@@ -158,7 +162,7 @@ container_args=(
   --uts=private
   --cgroupns=private
   --hostname=pdf-ingest
-  --device=nvidia.com/gpu=all
+  "${gpu_args[@]}"
   # Root in a rootless Podman user namespace maps to the invoking host user.
   # The image's default service UID cannot write the host-owned output bind.
   --user=0:0
@@ -166,8 +170,8 @@ container_args=(
   --security-opt=no-new-privileges
   --read-only
   --pids-limit=2048
-  --shm-size=2g
-  "--tmpfs=/tmp:rw,nosuid,nodev,size=4g"
+  --shm-size="$PDF_INGEST_SHM_SIZE"
+  "--tmpfs=/tmp:rw,nosuid,nodev,size=$PDF_INGEST_TMP_SIZE"
   --env=PYTHONDONTWRITEBYTECODE=1
   --env=PADDLE_PDX_CACHE_HOME=/tmp/paddlex-cache
   --env=XDG_CACHE_HOME=/tmp/cache
@@ -175,6 +179,10 @@ container_args=(
   --env=HF_HUB_OFFLINE=1
   --env=TRANSFORMERS_OFFLINE=1
   --env=PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True
+  "--env=PDF_INGEST_ACCELERATOR=$PDF_INGEST_ACCELERATOR"
+  "--env=PDF_INGEST_ENGINE=$PDF_INGEST_ENGINE"
+  "--env=PDF_INGEST_DTYPE=$PDF_INGEST_DTYPE"
+  "--env=PDF_INGEST_BUNDLED_CACHE=$PDF_INGEST_BUNDLED_CACHE"
   --entrypoint=python3
   # Unlike --volume's colon-delimited format, --mount accepts colons in host paths.
   "--mount=type=bind,source=$source_pdf,target=/input/source.pdf,readonly"
@@ -182,6 +190,7 @@ container_args=(
   "--mount=type=bind,source=$PDF_INGEST_PIPELINE,target=/opt/pdf-ingest/pdf-ingest.py,readonly"
 )
 
+ensure_image
 echo "pdf-ingest: extracting $(basename "$source_pdf") at ${dpi} DPI (offline)" >&2
 set +e
 podman "${container_args[@]}" "$PDF_INGEST_IMAGE" \

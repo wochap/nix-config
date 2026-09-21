@@ -50,22 +50,65 @@ native PDF data from PyMuPDF with the reading order and layout produced by
 PaddleOCR-VL-1.6. It does not create embeddings, contact a vector database, or
 run an indexing service.
 
+### Accelerators
+
+The backend follows the host flags: `enableNvidia` selects `cuda`,
+`enableRocm` selects `rocm`, and enabling OCR with neither set fails
+evaluation. Options live under `_custom.services.ai.pdfIngest`:
+
+| Option | Default | Role |
+|--------|---------|------|
+| `accelerator` | from `enableNvidia`/`enableRocm` | `cuda` or `rocm`; selects image, engine, and devices |
+| `dtype` | `float16` | Torch dtype for both models on ROCm (`float16`, `bfloat16`, `float32`) |
+| `shmSize` | `2g` | `podman run --shm-size` |
+| `tmpSize` | `4g` | tmpfs size mounted at `/tmp` in the container |
+| `cuda.image` | pinned `paddleocr-vl` offline image | Upstream CUDA image, run directly |
+| `rocm.baseImage` | pinned `rocm/pytorch` | Base of the local ROCm image |
+| `rocm.gfxOverride` | `null` | `HSA_OVERRIDE_GFX_VERSION` inside the container |
+| `rocm.devices` | `["/dev/kfd" "/dev/dri"]` | Device nodes handed to Podman |
+
+| Accelerator | Image | Inference engine | Bundled cache |
+|-------------|-------|------------------|---------------|
+| `cuda` | upstream `paddleocr-vl:paddleocr3.6-nvidia-gpu-offline` | native Paddle, fp16 | `/home/paddleocr/.paddlex` |
+| `rocm` | local `pdf-ingest-rocm` built on `rocm/pytorch` | Transformers on ROCm PyTorch, `dtype` | `/root/.paddlex` |
+
+Baidu's own AMD image targets MI300X and the Paddle HIP wheels ship no
+gfx1030 kernels, so on ROCm the same PaddleOCR-VL-1.6 and PP-DocLayoutV3
+checkpoints are loaded through PaddleX's Transformers engine instead. The
+ROCm image pins `paddleocr[doc-parser]==3.7.0`, `paddlex==3.7.2`, and
+`transformers==5.17.0` on top of the base image's torch and bakes the
+safetensors weights in, so runtime still needs no network. ROCm's PyTorch
+exposes the GPU through the CUDA API; the pipeline keeps `device="gpu:0"`.
+The RX 6800 XT (gfx1030) has shipped kernels and needs no override; cards
+without them, such as gfx1031 or gfx1032, need `rocm.gfxOverride = "10.3.0"`.
+If a kernel rejects half precision on your card, set `dtype = "float32"`;
+the 16 GB RX 6800 XT has room for it.
+
 ### Setup
 
-Pull the immutable PaddleOCR 3.6 NVIDIA offline image once:
+Fetch the inference image once:
 
 ```sh
 pdf-ingest setup
 ```
 
-The image is pinned by SHA-256 and is large (allow roughly 20 GB of container
-storage, plus temporary free space while it is pulled). It is PaddleOCR's
-CUDA 12.6 runtime for non-Blackwell NVIDIA GPUs. Ingestion always uses
-`--pull=never` and `--network=none`; after setup, no model or package download
-is possible. Rootless Podman, the NVIDIA container toolkit/CDI, and a compatible
-NVIDIA driver must be working on the host. The process runs as container UID 0
-inside Podman's rootless user namespace so output files map back to the invoking
-host user; it still has all Linux capabilities dropped.
+On CUDA this pulls the immutable PaddleOCR 3.6 NVIDIA offline image. It is
+pinned by SHA-256 and is large (allow roughly 20 GB of container storage,
+plus temporary free space while it is pulled). It is PaddleOCR's CUDA 12.6
+runtime for non-Blackwell NVIDIA GPUs. Rootless Podman, the NVIDIA container
+toolkit/CDI, and a compatible NVIDIA driver must be working on the host.
+
+On ROCm this pulls the ~30 GB `rocm/pytorch` base (shared with `qwen3-asr`)
+and builds the local `pdf-ingest-rocm` image on top of it: it installs the
+pinned PaddleOCR stack, downloads about 2.5 GB of weights from Hugging Face,
+and verifies the pipeline offline on the CPU before the image is tagged. The
+first build takes a while; a later `pdf-ingest` call rebuilds only when the
+Containerfile or the base image changes.
+
+Ingestion always uses `--pull=never` and `--network=none`; after setup, no
+model or package download is possible. The process runs as container UID 0
+inside Podman's rootless user namespace so output files map back to the
+invoking host user; it still has all Linux capabilities dropped.
 
 ### Usage
 
@@ -88,11 +131,12 @@ the source SHA-256, extraction settings, and container digest. A completed
 matching destination is a successful no-op. The command refuses a non-PDF,
 an unrelated non-empty destination, or checkpoints made for other settings.
 
-On CUDA out-of-memory errors, the command clears the device cache, reduces a
-batch larger than one, and then retries the page at successively lower DPI down
-to `--min-dpi`. For an 8 GB RTX 4060, keep `--batch-size 1`; use 160 DPI when a
-dense or very large page cannot complete at 200 DPI. Lower DPI saves VRAM but
-can reduce small-text and formula accuracy.
+On GPU out-of-memory errors (CUDA or HIP), the command clears the device
+cache, reduces a batch larger than one, and then retries the page at
+successively lower DPI down to `--min-dpi`. For an 8 GB RTX 4060, keep
+`--batch-size 1`; use 160 DPI when a dense or very large page cannot complete
+at 200 DPI. The 16 GB RX 6800 XT completes the defaults with headroom. Lower
+DPI saves VRAM but can reduce small-text and formula accuracy.
 
 ### Output and schema
 
@@ -139,8 +183,9 @@ dropped, privilege escalation is disabled, and the image filesystem is
 read-only. PaddleX's complete runtime cache is redirected to bounded `/tmp`,
 while its bundled models and fonts are linked back from their read-only image
 locations. The runtime cache and shared-memory filesystems are discarded with
-the container; bundled models under `/home/paddleocr/.paddlex` remain
-read-only.
+the container; bundled models under `/home/paddleocr/.paddlex` (CUDA) or
+`/root/.paddlex` (ROCm) remain read-only. On ROCm the MIOpen kernel database
+and the Hugging Face cache are also redirected to `/tmp`.
 
 PyMuPDF extraction and page rendering run first with the Nix-provided PyMuPDF
 package in a separate Bubblewrap sandbox. That phase has an empty environment,
@@ -149,8 +194,8 @@ minimal virtual `/proc` and `/dev`, temporary memory, and the read-only Nix
 store. It cannot see the host home directory or agent sockets either. The
 PaddleOCR image therefore does not need PyMuPDF installed and remains unchanged.
 
-NVIDIA CDI necessarily exposes the GPU and its driver interface. As with any
-container, isolation still depends on the host kernel, Podman, OCI runtime, and
+NVIDIA CDI, or `/dev/kfd` and `/dev/dri` on ROCm, necessarily exposes the GPU
+and its driver interface. As with any container, isolation still depends on the host kernel, Podman, OCI runtime, and
 GPU driver being free of container-escape vulnerabilities. Rootless execution
 limits a successful escape to the invoking user's host permissions rather than
 granting host root access.
