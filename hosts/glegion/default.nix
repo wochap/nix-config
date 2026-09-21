@@ -103,7 +103,7 @@ in
     # tui
     _custom.programs.amfora.enable = true;
     _custom.programs.btop.enable = true;
-    _custom.programs.btop.enableNvidia = true;
+    _custom.programs.btop.enableCuda = true;
     _custom.programs.less.enable = true;
     _custom.programs.lynx.enable = true;
     _custom.programs.neovim.enable = true;
@@ -139,7 +139,7 @@ in
     _custom.services.ai.enableOllama = true;
     _custom.services.ai.enableOllamaFlashAttention = true;
     _custom.services.ai.enableOcr = true;
-    _custom.services.ai.enableNvidia = true;
+    _custom.services.ai.enableCuda = true;
     _custom.services.ai.enableNextjsOllamaLlmUi = false;
     _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;

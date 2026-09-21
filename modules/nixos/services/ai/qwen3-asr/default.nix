@@ -97,13 +97,13 @@ in
           ]
         );
         default =
-          if cfg.enableNvidia then
+          if cfg.enableCuda then
             "cuda"
           else if cfg.enableRocm then
             "rocm"
           else
             null;
-        defaultText = lib.literalExpression ''"cuda" when enableNvidia, "rocm" when enableRocm'';
+        defaultText = lib.literalExpression ''"cuda" when enableCuda, "rocm" when enableRocm'';
         description = ''
           GPU backend used for inference. It selects the container image and
           the devices handed to Podman.
@@ -185,7 +185,7 @@ in
         assertion = asrCfg.accelerator != null;
         message = ''
           _custom.services.ai.enableQwen3Asr needs a GPU backend: set
-          enableNvidia, enableRocm, or _custom.services.ai.qwen3Asr.accelerator.
+          enableCuda, enableRocm, or _custom.services.ai.qwen3Asr.accelerator.
         '';
       }
     ];

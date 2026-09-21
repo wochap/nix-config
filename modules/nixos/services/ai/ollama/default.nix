@@ -18,7 +18,7 @@ in
     services.ollama = {
       enable = true;
       package =
-        if cfg.enableNvidia then
+        if cfg.enableCuda then
           pkgs.ollama-cuda
         else
           (if cfg.enableRocm then pkgs.ollama-rocm else pkgs.ollama);

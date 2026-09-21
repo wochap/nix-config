@@ -19,13 +19,13 @@ finishes; there is no persistent API server.
 
 ## Accelerators
 
-The backend follows the host flags: `enableNvidia` selects `cuda`,
+The backend follows the host flags: `enableCuda` selects `cuda`,
 `enableRocm` selects `rocm`, and enabling Qwen3-ASR with neither set fails
 evaluation. Options live under `_custom.services.ai.qwen3Asr`:
 
 | Option | Default | Role |
 |--------|---------|------|
-| `accelerator` | from `enableNvidia`/`enableRocm` | `cuda` or `rocm`; selects image and devices |
+| `accelerator` | from `enableCuda`/`enableRocm` | `cuda` or `rocm`; selects image and devices |
 | `dtype` | `bfloat16` | Torch dtype for all models |
 | `chunkSeconds` | `240` | Default chunk length for `qwen3-asr-video` |
 | `shmSize` | `4g` | `podman run --shm-size` |

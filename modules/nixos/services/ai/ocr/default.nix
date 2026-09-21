@@ -87,13 +87,13 @@ in
           ]
         );
         default =
-          if cfg.enableNvidia then
+          if cfg.enableCuda then
             "cuda"
           else if cfg.enableRocm then
             "rocm"
           else
             null;
-        defaultText = lib.literalExpression ''"cuda" when enableNvidia, "rocm" when enableRocm'';
+        defaultText = lib.literalExpression ''"cuda" when enableCuda, "rocm" when enableRocm'';
         description = ''
           GPU backend used by pdf-ingest. It selects the container image, the
           inference engine, and the devices handed to Podman.
@@ -166,7 +166,7 @@ in
         assertion = pdfIngestCfg.accelerator != null;
         message = ''
           _custom.services.ai.enableOcr needs a GPU backend for pdf-ingest: set
-          enableNvidia, enableRocm, or _custom.services.ai.pdfIngest.accelerator.
+          enableCuda, enableRocm, or _custom.services.ai.pdfIngest.accelerator.
         '';
       }
     ];

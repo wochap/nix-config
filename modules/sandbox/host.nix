@@ -126,14 +126,14 @@ in
 
     # _custom.services.android.enable = true;
     # _custom.services.docker.enable = true;
-    # _custom.services.docker.enableNvidia = true;
+    # _custom.services.docker.enableCuda = true;
     # _custom.services.flatpak.enable = false;
     # _custom.services.interception-tools.enable = true;
     # _custom.services.ipwebcam.enable = true;
     # _custom.services.kdeconnect.enable = true;
     # _custom.services.ai.enable = true;
     # _custom.services.ai.enableOllama = true;
-    # _custom.services.ai.enableNvidia = true;
+    # _custom.services.ai.enableCuda = true;
     # _custom.services.ai.enableNextjsOllamaLlmUi = false;
     # _custom.services.ai.enableOpenWebui = true;
     # _custom.services.ms-intune.enable = true;

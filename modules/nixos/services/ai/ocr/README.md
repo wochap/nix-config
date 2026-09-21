@@ -52,13 +52,13 @@ run an indexing service.
 
 ### Accelerators
 
-The backend follows the host flags: `enableNvidia` selects `cuda`,
+The backend follows the host flags: `enableCuda` selects `cuda`,
 `enableRocm` selects `rocm`, and enabling OCR with neither set fails
 evaluation. Options live under `_custom.services.ai.pdfIngest`:
 
 | Option | Default | Role |
 |--------|---------|------|
-| `accelerator` | from `enableNvidia`/`enableRocm` | `cuda` or `rocm`; selects image, engine, and devices |
+| `accelerator` | from `enableCuda`/`enableRocm` | `cuda` or `rocm`; selects image, engine, and devices |
 | `dtype` | `float16` | Torch dtype for both models on ROCm (`float16`, `bfloat16`, `float32`) |
 | `shmSize` | `2g` | `podman run --shm-size` |
 | `tmpSize` | `4g` | tmpfs size mounted at `/tmp` in the container |

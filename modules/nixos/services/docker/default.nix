@@ -11,7 +11,7 @@ in
 {
   options._custom.services.docker = {
     enable = lib.mkEnableOption { };
-    enableNvidia = lib.mkEnableOption { };
+    enableCuda = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -41,10 +41,10 @@ in
         # https://forums.docker.com/t/facing-issue-with-creating-angular-application-image-using-docker/87270/2
         daemon.settings.dns = config.networking.nameservers;
       };
-      extraOptions = lib.mkIf cfg.enableNvidia "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
+      extraOptions = lib.mkIf cfg.enableCuda "--add-runtime nvidia=/run/current-system/sw/bin/nvidia-container-runtime";
     };
 
-    hardware.nvidia-container-toolkit.enable = lib.mkIf cfg.enableNvidia true;
+    hardware.nvidia-container-toolkit.enable = lib.mkIf cfg.enableCuda true;
 
     # when true, reduce gpu startup latency
     # prevents gpu to enter in low-power state

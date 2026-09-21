@@ -18,7 +18,7 @@ in
 {
   options._custom.programs.btop = {
     enable = lib.mkEnableOption { };
-    enableNvidia = lib.mkEnableOption { };
+    enableCuda = lib.mkEnableOption { };
     enableRocm = lib.mkEnableOption { };
   };
 
@@ -26,7 +26,7 @@ in
     _custom.hm = {
       home.packages = with pkgs; [
         (
-          if cfg.enableNvidia then pkgs.btop-cuda else (if cfg.enableRocm then pkgs.btop-rocm else pkgs.btop)
+          if cfg.enableCuda then pkgs.btop-cuda else (if cfg.enableRocm then pkgs.btop-rocm else pkgs.btop)
         )
       ];
 
