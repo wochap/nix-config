@@ -15,7 +15,9 @@ rtk init --codex
 
 openspec init --tools qwen,codex,pi,claude
 
-git init
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git init
+fi
 
 gitignore_entries=(
   'openspec/changes/archive'
