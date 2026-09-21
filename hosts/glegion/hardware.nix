@@ -145,6 +145,11 @@
 
     # install kernel 6.18.38
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_18;
+    boot.kernelModules = [
+      "msr" # cpu telemetry
+      "k10temp" # ryzen 5900x
+      "nvme"
+    ];
 
     boot.kernelParams = [
       # this doesn't fix my ACPI Bios errors :c

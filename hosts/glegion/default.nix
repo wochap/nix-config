@@ -62,20 +62,6 @@ in
       commit.gpgSign = true;
       core.sshCommand = "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes";
     };
-    _custom.programs.git.includes = [
-      {
-        condition = "gitdir:~/Projects/se/**/.git";
-        contents = {
-          user = {
-            email = config._custom.globals.secrets.se.email;
-            name = "Gean";
-            signingKey = config._custom.globals.secrets.se.email;
-          };
-          commit.gpgSign = true;
-          core.sshCommand = "ssh -i ~/.ssh/id_ed25519_se -o IdentitiesOnly=yes";
-        };
-      }
-    ];
     _custom.programs.lazygit.enable = true;
     _custom.programs.lsd.enable = true;
     _custom.programs.ptsh.enable = true;
@@ -141,9 +127,9 @@ in
     _custom.services.android.enable = true;
     _custom.services.android.enableSdk = false;
     _custom.services.podman.enable = true;
+    _custom.services.podman.dockerCompat = true;
     _custom.services.podman.rootless = true;
-    _custom.services.docker.enable = true;
-    _custom.services.docker.enableNvidia = true;
+    _custom.services.docker.enable = false;
     _custom.services.flatpak.enable = false;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
@@ -151,8 +137,8 @@ in
     _custom.services.ai.enable = true;
     _custom.services.ai.enableHandy = true;
     _custom.services.ai.enableOllama = true;
-    _custom.services.ai.enableOcr = true;
     _custom.services.ai.enableOllamaFlashAttention = true;
+    _custom.services.ai.enableOcr = true;
     _custom.services.ai.enableNvidia = true;
     _custom.services.ai.enableNextjsOllamaLlmUi = false;
     _custom.services.ai.enableOpenWebui = true;
@@ -246,49 +232,16 @@ in
       #   }
       # ];
     };
-    _custom.desktop.mail.accounts.se = {
-      flavor = "gmail.com";
-      address = config._custom.globals.secrets.se.email;
-      name = "SE";
-      passwordSecret.sopsFile = ../../secrets-sops/se.yaml;
-      passwordSecret.sopsKey = "se-mail-password";
-      sync = "lieer";
-      inboxKey = "S";
-      color = "yellow";
-      pgpKey = "00F9FB30";
-      signatureLines = [ [ "GPG: 00F9FB30" ] ];
-      # ALL pearson mails (read/unread), not only the ones in inbox
-      virtualFolders = [
-        {
-          name = "pearson";
-          query = "from:*@pearson.com";
-        }
-        {
-          name = "jira mentions";
-          query = ''from:*.atlassian.net and subject:"mentioned you on"'';
-        }
-        {
-          name = "jira assigned";
-          query = ''from:*.atlassian.net and subject:"/assigned.*to you$/"'';
-        }
-      ];
-    };
 
     _custom.desktop.calendar.accounts.personal = {
       name = "personal";
       primary = true;
       primaryCollection = config._custom.globals.secrets.personal.email;
     };
-    _custom.desktop.calendar.accounts.se = {
-      name = "se";
-    };
 
     _custom.desktop.contacts.enable = true;
     _custom.desktop.contacts.accounts.personal = {
       name = "personal";
-    };
-    _custom.desktop.contacts.accounts.se = {
-      name = "se";
     };
 
     _custom.desktop.home-screen.enable = true;
@@ -317,15 +270,15 @@ in
     _custom.desktop.udev-rules.canDisableGlegionKbd = false;
     _custom.desktop.hyprsunset.enable = true;
     _custom.desktop.wluma.enable = false;
-    _custom.desktop.wluma.enableSystemd = true;
-    _custom.desktop.wluma.config.als.none = { };
-    _custom.desktop.wluma.config.output.backlight = [
-      {
-        name = "Samsung Display Corp. 0x4188 Unknown";
-        path = "/sys/class/backlight/amdgpu_bl1";
-        capturer = "wayland";
-      }
-    ];
+    # _custom.desktop.wluma.enableSystemd = true;
+    # _custom.desktop.wluma.config.als.none = { };
+    # _custom.desktop.wluma.config.output.backlight = [
+    #   {
+    #     name = "Samsung Display Corp. 0x4188 Unknown";
+    #     path = "/sys/class/backlight/amdgpu_bl1";
+    #     capturer = "wayland";
+    #   }
+    # ];
     # fix blurry cursor on GTK 3 apps
     # update catppuccin cursor NOMINAL_SIZE
     # TODO: remove after updating gtk to 4.18

@@ -119,22 +119,17 @@ in
           allowedTCPPortRanges = [
             # servers
             {
-              from = 8080;
+              from = 8000;
               to = 8090;
             }
             {
               from = 3000;
-              to = 3010;
-            }
-            # ?
-            {
-              from = 19000;
-              to = 19020;
+              to = 3090;
             }
             # vite
             {
-              from = 5173;
-              to = 5179;
+              from = 5100;
+              to = 5200;
             }
           ];
           allowedTCPPorts = [
@@ -146,28 +141,6 @@ in
             # 110 # Post Office Protocol (POP3)
             # 143 # Internet Message Access Protocol (IMAP)
             443 # HTTP Secure (HTTPS)
-
-            3333
-            4444
-            8000
-
-            4000
-            9099
-            5000
-            5001
-
-            # se surveys
-            5555
-            10016
-            9005
-            10011
-
-            # se layout-editor
-            5601
-
-            # se maps
-            5003
-            11001
           ]
           ++ lib.optionals cfg.enablePixieCore [
             # TCP 8086 is the custom HTTP port you chose for Pixiecore
