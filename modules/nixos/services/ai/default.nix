@@ -12,6 +12,10 @@ let
   clean-voice = pkgs.writeScriptBin "clean-voice" (builtins.readFile ./scripts/clean-voice.sh);
   summary = pkgs.writeScriptBin "summary" (builtins.readFile ./scripts/summary.sh);
   asr-videos = pkgs.writeScriptBin "asr-videos" (builtins.readFile ./scripts/asr-videos.sh);
+  count-tokens = pkgs.writers.writePython3Bin "count-tokens" {
+    libraries = [ pkgs.python3Packages.tiktoken ];
+    flakeIgnore = [ "E501" ];
+  } (builtins.readFile ./scripts/count-tokens.py);
 in
 {
   imports = [
@@ -103,6 +107,7 @@ in
       clean-voice
       asr-videos
       summary
+      count-tokens
     ];
   };
 }

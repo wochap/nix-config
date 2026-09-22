@@ -11,6 +11,7 @@ All three are plain Bash scripts packaged with `writeShellApplication` /
 | `clean-voice` | OmniRoute (`omniroute-chat`), `jq`, `wl-paste`/`wl-copy`, `notify-send` | Clean a raw voice-dictation transcript from the clipboard |
 | `summary` | OmniRoute (`omniroute-chat`), `jq`, `pandoc`, `python3` | Summarize a file, inline text, or stdin through OmniRoute |
 | `asr-videos` | `qwen3-asr-video` (`qwen3Asr.enable`) | Batch-transcribe every MP4 below a directory |
+| `count-tokens` | `tiktoken` (Python, via `writePython3Bin`) | Print the tiktoken token count of a file |
 
 ## Setup
 
@@ -61,4 +62,14 @@ Spanish:
 asr-videos ./lectures
 asr-videos --language English ./lectures
 asr-videos --num-speakers 2 ./interviews
+```
+
+### count-tokens
+
+Prints the number of tokens in a file. Defaults to the `o200k_base`
+encoding (GPT-4o family):
+
+```sh
+count-tokens notes.md
+count-tokens --encoding cl100k_base notes.md
 ```
