@@ -1099,11 +1099,11 @@
     "gpt-researcher": {
       "flake": false,
       "locked": {
-        "lastModified": 1790089502,
-        "narHash": "sha256-HlL7a7ACvpJbJPwltMpdfLvFCmTcJ3T9SKP+JkbAKC0=",
+        "lastModified": 1790103528,
+        "narHash": "sha256-O3fnhZ/HeB3rkloJjtEMlAQQyigGtUzdIUR5OPaMODE=",
         "owner": "wochap",
         "repo": "gpt-researcher",
-        "rev": "97a59e13657319a3ca337b9188fd37ae6a73297a",
+        "rev": "6a82110c06bf3fdada10a591f1f4335d616b0392",
         "type": "github"
       },
       "original": {

@@ -143,11 +143,21 @@ samples `llamacpp:n_decode_total` on the server's `/metrics` every minute and
 stops the unit once that counter has stood still for the whole window. The
 socket proxy starts the server again on the next rerank, a few seconds later.
 `llamacpp:prompt_tokens_total` stays at 0 for pooling requests, which is why
-the decode counter is the activity signal. A batch in flight leaves a slot
-`is_processing`, and the watchdog never stops the server then.
+the decode counter is the activity signal. A rejected request never reaches
+decode, so a `send_error` line in the unit's journal also counts as activity.
+A batch in flight leaves a slot `is_processing`, and the watchdog never stops
+the server then.
+
+llama-server binds its port before the model has loaded and answers 503 until
+then. An `ExecStartPost` holds the unit in `activating` until `/health`
+returns 200, and the lazy proxy starts after the unit, so the first rerank of
+a run waits for the load instead of failing.
 
 `chunkSize` must fit `contextSize` together with the rerank template and the
-query (about 4 characters per token). With `local_gpu` each embedded input is
+query (about 4 characters per token). Pooling also needs each pair inside one
+physical batch, so the server runs with `--batch-size` and `--ubatch-size`
+equal to `contextSize`. With the default 512, every pair above 512 tokens
+fails with `input (N tokens) is too large to process`. With `local_gpu` each embedded input is
 one chunk, so `embeddingContextTokens` only needs to cover `chunkSize`.
 
 ### The GGUF

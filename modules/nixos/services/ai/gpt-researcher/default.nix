@@ -54,6 +54,13 @@ let
     "rank"
     "--ctx-size"
     (toString rcfg.contextSize)
+    # Pooling needs each query+document pair inside one physical batch, and
+    # llama-server clamps --batch-size to --ubatch-size (512 by default), which
+    # rejects any pair longer than 512 tokens.
+    "--batch-size"
+    (toString rcfg.contextSize)
+    "--ubatch-size"
+    (toString rcfg.contextSize)
     "--n-gpu-layers"
     (toString rcfg.gpuLayers)
     "--host"
@@ -134,6 +141,14 @@ let
       exit 0
     fi
 
+    # A rejected request never reaches decode, so the counter above misses it.
+    # The server still logs it, and a client retrying against errors is not idle.
+    if ${lib.getExe' pkgs.systemd "journalctl"} -q -o cat -u "$unit" --since "@$last_change" \
+      | ${lib.getExe pkgs.gnugrep} 'send_error' > /dev/null; then
+      echo "$served $now" > "$state"
+      exit 0
+    fi
+
     # Never stop mid-request: a batch in flight leaves a slot processing.
     if "$curl" -sf --max-time 5 "$base/slots" | "$jq" -e 'any(.[]; .is_processing)' > /dev/null; then
       echo "$served $now" > "$state"
@@ -145,6 +160,20 @@ let
       rm -f "$state"
       "$systemctl" stop "$unit"
     fi
+  '';
+
+  # llama-server binds its port before loading the model and answers 503 until
+  # the load finishes. The lazy proxy only waits for the port and starts after
+  # this unit, so holding the unit in "activating" until /health returns 200
+  # keeps the first rerank of a run from hitting the 503.
+  rerankerWaitHealthy = pkgs.writeShellScript "gpt-researcher-reranker-wait-healthy" ''
+    for attempt in {1..240}; do
+      ${lib.getExe pkgs.curl} -sf --max-time 2 \
+        http://${wochap-ssc.meta.address}:${toString rerankerProxy.backendPort}/health > /dev/null && exit 0
+      ${lib.getExe' pkgs.coreutils "sleep"} 0.5
+    done
+    echo "llama-server did not report healthy within 120 s" >&2
+    exit 1
   '';
 
   rerankerSettings = lib.optionalAttrs rcfg.enable {
@@ -814,6 +843,8 @@ in
         };
         serviceConfig = {
           ExecStart = lib.escapeShellArgs rerankerCmd;
+          ExecStartPost = rerankerWaitHealthy;
+          TimeoutStartSec = 150;
           Restart = "on-failure";
           RestartSec = 5;
           TimeoutStopSec = 60;
