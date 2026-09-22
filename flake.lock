@@ -3904,11 +3904,11 @@
     "wt": {
       "flake": false,
       "locked": {
-        "lastModified": 1788051649,
-        "narHash": "sha256-MoW9hfQKsTTtSXIZ+PHd6FtoQQqtu11GJwjIHLIAp+E=",
+        "lastModified": 1790100830,
+        "narHash": "sha256-0Qk32uDZ8z7NzSoIWKvRLtoOqTDNd+fkrgkGjBqMwlI=",
         "owner": "wochap",
         "repo": "wt",
-        "rev": "b2d969465870a96f4236339d2546cfa6ac7e5fc3",
+        "rev": "813a6f53ae60c6645e558a03094dbcadc8ab6d75",
         "type": "github"
       },
       "original": {
