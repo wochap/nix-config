@@ -20,7 +20,17 @@
       rocmPackages.rocminfo
     ];
 
+    # NOTE: bleeding-edge amdgpu. On 2026-09-21 S3 resume left the RX 6800 XT
+    # dead ("resume of IP block <gfx_v10_0> failed -110"); try LTS if it recurs.
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+
+    # s2idle keeps the dGPU's PCIe root port powered; S3 leaves it stuck in
+    # D3hot. Next steps if it still fails: "pcie_aspm=off", then BIOS ErP off.
+    boot.kernelParams = [ "mem_sleep_default=s2idle" ];
+
+    # 244 = REISUB keys only, no debug dumps. Overrides the hardened 0 in
+    # modules/nixos/security/network, so a wedged GPU still reboots cleanly.
+    boot.kernel.sysctl."kernel.sysrq" = lib.mkForce 244;
     boot.kernelModules = [
       "msr" # cpu telemetry
       "k10temp" # ryzen 5900x
