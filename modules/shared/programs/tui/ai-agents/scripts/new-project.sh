@@ -28,6 +28,7 @@ gitignore_entries=(
   '.qwen'
   '.direnv'
   '.pi'
+  '.agents'
 )
 
 missing_entries=()
