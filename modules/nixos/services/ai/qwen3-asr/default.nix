@@ -48,6 +48,7 @@ let
     QWEN3_ASR_HSA_OVERRIDE_GFX_VERSION =
       if isRocm && asrCfg.rocm.gfxOverride != null then asrCfg.rocm.gfxOverride else "";
     QWEN3_ASR_DTYPE = asrCfg.dtype;
+    QWEN3_ASR_BATCH_SIZE = toString asrCfg.batchSize;
     QWEN3_ASR_SHM_SIZE = asrCfg.shmSize;
     QWEN3_ASR_TMP_SIZE = asrCfg.tmpSize;
   };
@@ -86,9 +87,9 @@ let
 in
 {
   options._custom.services.ai = {
-    enableQwen3Asr = lib.mkEnableOption { };
-
     qwen3Asr = {
+      enable = lib.mkEnableOption { };
+
       accelerator = lib.mkOption {
         type = lib.types.nullOr (
           lib.types.enum [
@@ -118,6 +119,17 @@ in
         ];
         default = "bfloat16";
         description = "Torch dtype the models are loaded with.";
+      };
+
+      batchSize = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 1;
+        description = ''
+          Number of audio chunks qwen3-asr-video transcribes in one generate
+          call. Decoding is memory bound, so batching speeds it up nearly
+          linearly until VRAM runs out. Each extra chunk of chunkSeconds
+          audio costs roughly 1 GB at 480 s.
+        '';
       };
 
       chunkSeconds = lib.mkOption {
@@ -179,12 +191,12 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable && cfg.enableQwen3Asr) {
+  config = lib.mkIf (cfg.enable && asrCfg.enable) {
     assertions = [
       {
         assertion = asrCfg.accelerator != null;
         message = ''
-          _custom.services.ai.enableQwen3Asr needs a GPU backend: set
+          _custom.services.ai.qwen3Asr.enable needs a GPU backend: set
           enableCuda, enableRocm, or _custom.services.ai.qwen3Asr.accelerator.
         '';
       }

@@ -50,6 +50,7 @@ LANGUAGE_ALIASES = {
 ASR_REVISION = os.environ.get("QWEN3_ASR_ASR_REVISION", "")
 ALIGNER_REVISION = os.environ.get("QWEN3_ASR_ALIGNER_REVISION", "")
 DIARIZER_REVISION = os.environ.get("QWEN3_ASR_DIARIZER_REVISION", "")
+BATCH_SIZE = max(1, int(os.environ.get("QWEN3_ASR_BATCH_SIZE") or "1"))
 
 
 def resolve_runtime(env: dict[str, str] | None = None) -> tuple[str, str]:
@@ -445,29 +446,36 @@ def infer(args: argparse.Namespace) -> None:
             revision=ASR_REVISION,
             dtype=dtype,
             device_map=device,
-            max_inference_batch_size=1,
+            max_inference_batch_size=BATCH_SIZE,
             max_new_tokens=4096,
         )
     else:
         asr_model = None
         log(f"Reusing all {len(chunks)} ASR chunks")
     offset = sum(durations[: len(chunk_records)])
-    for index, chunk in enumerate(chunks[len(chunk_records) :], start=len(chunk_records) + 1):
-        duration = durations[index - 1]
-        log(f"Transcribing chunk {index}/{len(chunks)} ({duration:.0f} s of audio)")
+    # Chunks are transcribed BATCH_SIZE at a time; the state file is written
+    # after each batch so a resumed run repeats at most one batch.
+    for first in range(len(chunk_records), len(chunks), BATCH_SIZE):
+        batch = chunks[first : first + BATCH_SIZE]
+        last = first + len(batch)
+        batch_seconds = sum(durations[first:last])
+        log(f"Transcribing chunks {first + 1}-{last}/{len(chunks)} ({batch_seconds:.0f} s of audio)")
         assert asr_model is not None
-        with Timed(f"ASR chunk {index}/{len(chunks)}"):
-            result = asr_model.transcribe(audio=str(chunk), language=requested_language)[0]
-        chunk_records.append(
-            {
-                "start": round(offset, 3),
-                "end": round(offset + duration, 3),
-                "language": canonical_language(result.language) or requested_language,
-                "text": result.text,
-                "path": str(chunk),
-            }
-        )
-        offset += duration
+        with Timed(f"ASR chunks {first + 1}-{last}/{len(chunks)}"):
+            results = asr_model.transcribe(
+                audio=[str(chunk) for chunk in batch], language=requested_language
+            )
+        for chunk, duration, result in zip(batch, durations[first:last], results):
+            chunk_records.append(
+                {
+                    "start": round(offset, 3),
+                    "end": round(offset + duration, 3),
+                    "language": canonical_language(result.language) or requested_language,
+                    "text": result.text,
+                    "path": str(chunk),
+                }
+            )
+            offset += duration
         write_json_atomic(asr_path, chunk_records)
     del asr_model
     release_cuda_memory()

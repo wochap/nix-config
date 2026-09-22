@@ -10,7 +10,7 @@ All three are plain Bash scripts packaged with `writeShellApplication` /
 |---------|-----------|---------|
 | `clean-voice` | OmniRoute (`omniroute-chat`), `jq`, `wl-paste`/`wl-copy`, `notify-send` | Clean a raw voice-dictation transcript from the clipboard |
 | `summary` | OmniRoute (`omniroute-chat`), `jq`, `pandoc`, `python3` | Summarize a file, inline text, or stdin through OmniRoute |
-| `asr-videos` | `qwen3-asr-video` (`enableQwen3Asr`) | Batch-transcribe every MP4 below a directory |
+| `asr-videos` | `qwen3-asr-video` (`qwen3Asr.enable`) | Batch-transcribe every MP4 below a directory |
 
 ## Setup
 

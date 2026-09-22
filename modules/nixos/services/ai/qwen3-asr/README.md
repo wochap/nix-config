@@ -28,6 +28,7 @@ evaluation. Options live under `_custom.services.ai.qwen3Asr`:
 | `accelerator` | from `enableCuda`/`enableRocm` | `cuda` or `rocm`; selects image and devices |
 | `dtype` | `bfloat16` | Torch dtype for all models |
 | `chunkSeconds` | `240` | Default chunk length for `qwen3-asr-video` |
+| `batchSize` | `1` | Chunks transcribed per generate call in `qwen3-asr-video`; raise until VRAM runs out |
 | `shmSize` | `4g` | `podman run --shm-size` |
 | `tmpSize` | `4g` | tmpfs size mounted at `/tmp` in the container |
 | `cuda.image` | pinned `qwenllm/qwen3-asr` | Upstream CUDA image |

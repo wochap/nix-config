@@ -23,6 +23,7 @@ fi
 gpu_args+=(
   "--env=QWEN3_ASR_DEVICE=$qwen3_asr_device"
   "--env=QWEN3_ASR_DTYPE=$QWEN3_ASR_DTYPE"
+  "--env=QWEN3_ASR_BATCH_SIZE=$QWEN3_ASR_BATCH_SIZE"
 )
 if [[ -n $QWEN3_ASR_HSA_OVERRIDE_GFX_VERSION ]]; then
   gpu_args+=("--env=HSA_OVERRIDE_GFX_VERSION=$QWEN3_ASR_HSA_OVERRIDE_GFX_VERSION")

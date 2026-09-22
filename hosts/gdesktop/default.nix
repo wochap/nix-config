@@ -143,8 +143,11 @@ in
     # _custom.services.ai.enableNextjsOllamaLlmUi = false;
     # _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;
-    _custom.services.ai.enableQwen3Asr = true;
+    _custom.services.ai.qwen3Asr.enable = true;
     _custom.services.ai.qwen3Asr.chunkSeconds = 480;
+    # gfx1030 has no native bf16 matmul; fp16 runs on the fast path.
+    _custom.services.ai.qwen3Asr.dtype = "float16";
+    _custom.services.ai.qwen3Asr.batchSize = 4;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
     _custom.services.ai.gptResearcher.enable = true;
