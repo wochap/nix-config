@@ -31,7 +31,7 @@ in
     };
 
     systemd.services.ollama = {
-      wantedBy = lib.mkForce (lib.optional cfg.enableOcr "multi-user.target");
+      wantedBy = lib.mkForce (lib.optional cfg.ocr.enable "multi-user.target");
       # unitConfig.stopWhenUnneeded = true;
     };
 

@@ -7,7 +7,8 @@
 
 let
   cfg = config._custom.services.ai;
-  pdfIngestCfg = cfg.pdfIngest;
+  ocrCfg = cfg.ocr;
+  pdfIngestCfg = ocrCfg.pdfIngest;
   isRocm = pdfIngestCfg.accelerator == "rocm";
   python = pkgs.python3;
   rapidocrPython = python.withPackages (_: [ pkgs._custom.rapidocr ]);
@@ -75,10 +76,12 @@ let
   };
 in
 {
-  options._custom.services.ai = {
-    enableOcr = lib.mkEnableOption { };
+  options._custom.services.ai.ocr = {
+    enable = lib.mkEnableOption { };
 
     pdfIngest = {
+      enable = lib.mkEnableOption { };
+
       accelerator = lib.mkOption {
         type = lib.types.nullOr (
           lib.types.enum [
@@ -160,22 +163,25 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enableOcr {
-    assertions = [
-      {
-        assertion = pdfIngestCfg.accelerator != null;
-        message = ''
-          _custom.services.ai.enableOcr needs a GPU backend for pdf-ingest: set
-          enableCuda, enableRocm, or _custom.services.ai.pdfIngest.accelerator.
-        '';
-      }
-    ];
+  config = lib.mkMerge [
+    (lib.mkIf (cfg.enable && ocrCfg.enable) {
+      environment.systemPackages = [ ocr ];
 
-    environment.systemPackages = with pkgs; [
-      ocr
-      pdf-ingest
-    ];
+      services.ollama.loadModels = lib.mkAfter [ "glm-ocr:bf16" ];
+    })
 
-    services.ollama.loadModels = lib.mkAfter [ "glm-ocr:bf16" ];
-  };
+    (lib.mkIf (cfg.enable && ocrCfg.enable && pdfIngestCfg.enable) {
+      assertions = [
+        {
+          assertion = pdfIngestCfg.accelerator != null;
+          message = ''
+            _custom.services.ai.ocr.pdfIngest.enable needs a GPU backend: set
+            enableCuda, enableRocm, or _custom.services.ai.ocr.pdfIngest.accelerator.
+          '';
+        }
+      ];
+
+      environment.systemPackages = [ pdf-ingest ];
+    })
+  ];
 }
