@@ -156,6 +156,16 @@ in
     _custom.services.ai.gptResearcher.fastModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.strategicModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.embeddingContextTokens = 49152;
+    # 16 GB VRAM: the embedding model takes ~9.5 GB at its 40k context (2.4 GB
+    # weights, 5.6 GB KV cache, compute buffers) and the desktop another
+    # 1-2 GB. The Q8_0 reranker adds ~5.5 GB, so both models stay resident and
+    # no phase scheduling is needed.
+    _custom.services.ai.gptResearcher.reranker.enable = true;
+    _custom.services.ai.gptResearcher.reranker.model = "Qwen/Qwen3-Reranker-4B";
+    _custom.services.ai.gptResearcher.reranker.modelUrl =
+      "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q8_0.gguf";
+    _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 32;
+    _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 16;
     _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
     _custom.services.ai.enableArticleSummary = true;
     _custom.services.rsshub.enable = true;

@@ -154,6 +154,15 @@ in
     _custom.services.ai.gptResearcher.fastModel = "glegion-cloud-fast";
     _custom.services.ai.gptResearcher.strategicModel = "glegion-cloud-strategic";
     _custom.services.ai.gptResearcher.embeddingContextTokens = 24576;
+    # 8 GB VRAM (RTX 4060): the embedding model takes ~5 GB at 24k context, so
+    # the reranker gets the Q4_K_M GGUF (~2.5 GB) and both stay resident.
+    # Watch nvidia-smi after a change here; there is little headroom left.
+    _custom.services.ai.gptResearcher.reranker.enable = true;
+    _custom.services.ai.gptResearcher.reranker.model = "Qwen/Qwen3-Reranker-4B";
+    _custom.services.ai.gptResearcher.reranker.modelUrl =
+      "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q4_K_M.gguf";
+    _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 16;
+    _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 8;
     _custom.services.ai.ollamaEmbeddingModel = "glegion-qwen3-embedding:4b";
     _custom.services.ai.enableArticleSummary = true;
     _custom.services.rsshub.enable = true;

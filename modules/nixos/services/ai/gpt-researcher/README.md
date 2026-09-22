@@ -13,6 +13,8 @@ an autonomous research agent with a Next.js UI at
 | `gptr-nextjs` local OCI image | Next.js web UI |
 | SearxNG | Search retriever |
 | [Firecrawl](../firecrawl/README.md) | Page scraping |
+| Ollama | Embeddings for context retrieval |
+| llama.cpp (`llama-server`, built for this host's GPU) | Optional Qwen3 reranker |
 | SOPS | Provider keys without touching the Nix store |
 
 ## Setup
@@ -94,6 +96,97 @@ overrides (`attrsOf str`) merged after the derived values, for example
 
 Both containers start lazily on the first request. Reports, logs, and
 uploaded documents persist below `/var/lib/gpt-researcher`.
+
+## Reranker
+
+`gptResearcher.reranker.enable` switches retrieval to the fork's `local_gpu`
+pipeline, per sub-query:
+
+```
+scrape -> split (chunkSize chars)
+       -> Ollama embeddings -> cosine top embeddingTopK
+       -> llama-server /v1/rerank (Qwen3-Reranker) -> top rerankTopK -> LLM
+```
+
+It adds two units: `gpt-researcher-reranker-model`, a oneshot that downloads
+the GGUF into `/var/lib/gpt-researcher/reranker` at boot, and the lazy
+`gpt-researcher-reranker`, running `llama-server --rerank --pooling rank` on
+port 20820 (backend 20821). `reranker.accelerator` follows
+`enableCuda`/`enableRocm` and picks `reranker.package`: `llama-cpp-rocm` on
+ROCm, `llama-cpp.override { cudaSupport = true; }` on CUDA. `llama-cpp-rocm`
+comes from cache.nixos.org and carries kernels for every gfx target ROCm was
+built for, gfx1030 included. The CUDA build is not cached and compiles
+locally; set `package = pkgs.llama-cpp-vulkan` for a cached NVIDIA build at
+some throughput cost.
+
+```nix
+_custom.services.ai.gptResearcher.reranker = {
+  enable = true;
+  model = "Qwen/Qwen3-Reranker-4B";          # name sent in the request
+  modelUrl = "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q8_0.gguf";
+  # modelSha256 = "..."; # pin after the first download logs the hash
+  # package = pkgs.llama-cpp-vulkan; # cached, avoids the CUDA compile
+};
+```
+
+### Sharing one GPU with Ollama
+
+llama.cpp allocates weights plus KV cache and nothing more, so the reranker
+and the Ollama embedding model stay resident together and the rerank stage
+needs no phase scheduling, no model eviction and no sleep mode. Budget the
+quantization against the free VRAM: Q8_0 is about 5.5 GB resident, Q4_K_M
+about 2.5 GB.
+
+`chunkSize` must fit `contextSize` together with the rerank template and the
+query (about 4 characters per token). With `local_gpu` each embedded input is
+one chunk, so `embeddingContextTokens` only needs to cover `chunkSize`.
+
+### The GGUF
+
+The file must come from a conversion through llama.cpp's reranker path: it
+carries the `cls.output.weight` tensor and a `tokenizer.chat_template.rerank`
+metadata key. A plain causal-LM Qwen3-Reranker conversion has no classifier
+head and cannot rerank. `giladgd/Qwen3-Reranker-4B-GGUF` is verified working.
+
+llama-server applies that template itself, so client-side templating stays off
+(`reranker.applyQwen3Template = false`). Turning it on wraps every pair twice
+and flattens the score spread.
+
+### First start and verification
+
+The download runs at boot, independently of the socket proxy, but the first
+one takes a while. Watch it, then exercise the endpoint:
+
+```sh
+sudo journalctl -fu gpt-researcher-reranker-model
+sudo systemctl start gpt-researcher-reranker
+sudo journalctl -fu gpt-researcher-reranker
+```
+
+```sh
+curl http://127.0.1.1:20821/health
+curl -X POST http://127.0.1.1:20821/v1/rerank -H 'Content-Type: application/json' \
+  -d '{"model":"Qwen/Qwen3-Reranker-4B","query":"capital of France","documents":["Paris is the capital of France.","Bananas are yellow."],"top_n":2}'
+nvidia-smi                                # or rocm-smi --showmemuse
+curl http://127.0.0.1:11434/api/ps        # both models resident at once
+```
+
+A rerank request that fails logs a warning and the run continues in embedding
+order:
+
+```sh
+sudo journalctl -fu podman-gpt-researcher-api | grep -i rerank
+```
+
+Known limits:
+
+- `rocm.gfxOverride` cannot bridge a different ISA; it only helps a card that
+  can pass as one `llama-cpp-rocm` already covers.
+- The server holds its VRAM until the unit stops:
+  `sudo systemctl stop gpt-researcher-reranker` before gaming or loading a
+  large local LLM.
+- Changing `modelUrl` downloads the new file on the next boot; the old GGUF
+  stays in `/var/lib/gpt-researcher/reranker` until you delete it.
 
 ## Usage
 

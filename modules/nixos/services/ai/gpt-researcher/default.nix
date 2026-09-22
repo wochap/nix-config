@@ -32,6 +32,93 @@ let
   searxProxy = config._custom.services.web-proxies.searxng;
   webProxy = config._custom.services.web-proxies.gpt-researcher;
 
+  # llama.cpp reranker (gpt_researcher/context/reranker.py): a Qwen3-Reranker
+  # GGUF served by llama-server behind /v1/rerank. llama.cpp allocates only
+  # weights plus KV cache, so the reranker and the Ollama embedding model stay
+  # resident on the same GPU and need no phase scheduling.
+  rcfg = gcfg.reranker;
+  rerankerServiceName = "gpt-researcher-reranker";
+  rerankerModelServiceName = "${rerankerServiceName}-model";
+  rerankerProxy = config._custom.services.web-proxies.gpt-researcher-reranker;
+  rerankerIsRocm = rcfg.accelerator == "rocm";
+  rerankerModelDir = "/var/lib/gpt-researcher/reranker";
+  rerankerModelPath = "${rerankerModelDir}/${rcfg.modelFile}";
+  # --pooling rank selects the classifier head the reranker GGUF carries; the
+  # server applies the model's own tokenizer.chat_template.rerank per pair.
+  rerankerCmd = [
+    (lib.getExe' rcfg.package "llama-server")
+    "--model"
+    rerankerModelPath
+    "--rerank"
+    "--pooling"
+    "rank"
+    "--ctx-size"
+    (toString rcfg.contextSize)
+    "--n-gpu-layers"
+    (toString rcfg.gpuLayers)
+    "--host"
+    wochap-ssc.meta.address
+    "--port"
+    (toString rerankerProxy.backendPort)
+  ]
+  ++ rcfg.extraArgs;
+
+  # The GGUF lives outside the store: it is several GB, and pinning it there
+  # would re-download it on every URL change. Verified against modelSha256
+  # when one is set; the recorded hash doubles as the skip marker.
+  fetchRerankerModel = pkgs.writeShellScript "fetch-gpt-researcher-reranker-model" ''
+    set -euo pipefail
+    curl=${lib.getExe pkgs.curl}
+    sha256sum=${lib.getExe' pkgs.coreutils "sha256sum"}
+    model=${lib.escapeShellArg rerankerModelPath}
+    url=${lib.escapeShellArg rcfg.modelUrl}
+    want=${lib.escapeShellArg (if rcfg.modelSha256 == null then "" else rcfg.modelSha256)}
+    stamp="$model.sha256"
+
+    if [ -f "$model" ]; then
+      if [ -z "$want" ] || [ "$(cat "$stamp" 2>/dev/null || true)" = "$want" ]; then
+        exit 0
+      fi
+      echo "Reranker model present but does not match modelSha256; re-downloading" >&2
+    fi
+
+    "$curl" --location --fail --retry 5 --retry-delay 5 --continue-at - \
+      --output "$model.part" "$url"
+
+    got="$("$sha256sum" "$model.part" | cut -d' ' -f1)"
+    if [ -n "$want" ] && [ "$got" != "$want" ]; then
+      echo "Reranker model sha256 mismatch: expected $want, got $got" >&2
+      rm -f "$model.part"
+      exit 1
+    fi
+
+    mv "$model.part" "$model"
+    printf '%s' "$got" > "$stamp"
+    echo "Reranker model ready: $model (sha256 $got)"
+  '';
+
+  rerankerSettings = lib.optionalAttrs rcfg.enable {
+    # Replaces the stock embedding filter with chunking -> cosine top-K ->
+    # rerank (gpt_researcher/context/rerank_compression.py).
+    RETRIEVAL_PIPELINE = "local_gpu";
+    RERANKER_ENABLED = "true";
+    RERANKER_PROVIDER = "llamacpp";
+    # Goes through the lazy socket proxy so the first rerank starts llama-server.
+    RERANKER_BASE_URL = "http://${wochap-ssc.meta.address}:${toString rerankerProxy.publicPort}";
+    RERANKER_ENDPOINT = rcfg.endpoint;
+    RERANKER_MODEL = rcfg.model;
+    RERANKER_TOP_K = toString rcfg.rerankTopK;
+    RERANKER_BATCH_SIZE = toString rcfg.rerankBatchSize;
+    RERANKER_TIMEOUT = toString rcfg.timeoutSeconds;
+    # llama-server applies the GGUF's own rerank template, so wrapping the
+    # query and documents again would nest it twice.
+    RERANKER_APPLY_QWEN3_TEMPLATE = lib.boolToString rcfg.applyQwen3Template;
+    EMBEDDING_TOP_K = toString rcfg.embeddingTopK;
+    EMBEDDING_BATCH_SIZE = toString rcfg.embeddingBatchSize;
+    COMPRESSION_CHUNK_SIZE = toString rcfg.chunkSize;
+    COMPRESSION_CHUNK_OVERLAP = toString rcfg.chunkOverlap;
+  };
+
   # Named model presets: total context window and the largest completion the
   # provider accepts. Token limits below derive from these; VRAM is never an
   # input because it says nothing about how much context a model gets.
@@ -184,7 +271,7 @@ let
     SEARX_URL = "http://${wochap-ssc.meta.address}:${toString searxProxy.publicPort}";
   };
 
-  researcherSettings = constantSettings // derivedSettings // gcfg.settings;
+  researcherSettings = constantSettings // derivedSettings // rerankerSettings // gcfg.settings;
 in
 {
   options._custom.services.ai.gptResearcher = {
@@ -239,6 +326,186 @@ in
       };
       description = "Raw GPT Researcher environment overrides, merged after the derived values.";
     };
+
+    reranker = {
+      enable = lib.mkEnableOption "the llama-server reranker stage (RETRIEVAL_PIPELINE=local_gpu)";
+
+      accelerator = lib.mkOption {
+        type = lib.types.nullOr (
+          lib.types.enum [
+            "cuda"
+            "rocm"
+          ]
+        );
+        default =
+          if cfg.enableCuda then
+            "cuda"
+          else if cfg.enableRocm then
+            "rocm"
+          else
+            null;
+        defaultText = lib.literalExpression ''"cuda" when enableCuda, "rocm" when enableRocm'';
+        description = "GPU backend; selects the default llama.cpp package.";
+      };
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default =
+          if rerankerIsRocm then pkgs.llama-cpp-rocm else pkgs.llama-cpp.override { cudaSupport = true; };
+        defaultText = lib.literalExpression "pkgs.llama-cpp-rocm on ROCm, pkgs.llama-cpp.override { cudaSupport = true; } on CUDA";
+        example = lib.literalExpression "pkgs.llama-cpp-vulkan";
+        description = ''
+          llama.cpp build serving the reranker. llama-cpp-rocm comes from
+          cache.nixos.org and already covers every gfx target ROCm itself was
+          built for, gfx1030 included. The CUDA build is not cached and
+          compiles locally; pkgs.llama-cpp-vulkan is the cached alternative on
+          NVIDIA, at some throughput cost.
+        '';
+      };
+
+      model = lib.mkOption {
+        type = lib.types.str;
+        default = "Qwen/Qwen3-Reranker-4B";
+        description = ''
+          Model name sent in each rerank request. llama-server ignores it in
+          single-model mode; the served weights come from modelUrl.
+        '';
+      };
+
+      modelUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q8_0.gguf";
+        description = ''
+          GGUF downloaded once into ${rerankerModelDir}. It must come from a
+          conversion through llama.cpp's reranker path: such files carry the
+          cls.output.weight tensor and a tokenizer.chat_template.rerank key.
+          A plain causal-LM Qwen3-Reranker conversion has no classifier head
+          and cannot rerank.
+        '';
+      };
+
+      modelSha256 = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "0b1c…";
+        description = ''
+          Expected sha256 of the GGUF. null downloads without verification and
+          logs the hash it got, which is what you pin here afterwards.
+        '';
+      };
+
+      modelFile = lib.mkOption {
+        type = lib.types.str;
+        default = baseNameOf rcfg.modelUrl;
+        defaultText = lib.literalExpression "baseNameOf modelUrl";
+        description = "File name the GGUF is stored under inside ${rerankerModelDir}.";
+      };
+
+      endpoint = lib.mkOption {
+        type = lib.types.str;
+        default = "/v1/rerank";
+        description = ''
+          Rerank path on llama-server. Builds have exposed /rerank,
+          /v1/rerank and /v1/reranking; all take the same request shape.
+        '';
+      };
+
+      contextSize = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 4096;
+        description = ''
+          llama-server --ctx-size. Must cover the rerank template plus the
+          query plus one chunk of chunkSize characters.
+        '';
+      };
+
+      gpuLayers = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 99;
+        description = "llama-server --n-gpu-layers; 99 offloads the whole model.";
+      };
+
+      applyQwen3Template = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Wrap the query and documents in the Qwen3-Reranker chat template
+          client-side. Leave off for GGUFs carrying
+          tokenizer.chat_template.rerank: llama-server applies that itself and
+          templating twice flattens the score spread.
+        '';
+      };
+
+      timeoutSeconds = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 60;
+        description = ''
+          Timeout for each rerank request. llama-server loads a GGUF in
+          seconds, so this only has to cover the request itself plus the lazy
+          proxy's first start.
+        '';
+      };
+
+      embeddingTopK = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 30;
+        description = "Chunks kept by cosine similarity and handed to the reranker.";
+      };
+
+      embeddingBatchSize = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 16;
+        description = "Chunks per Ollama embedding request.";
+      };
+
+      rerankTopK = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 8;
+        description = "Reranked chunks handed to the LLM per sub-query.";
+      };
+
+      rerankBatchSize = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 8;
+        description = "Documents per rerank request.";
+      };
+
+      chunkSize = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 2000;
+        description = ''
+          Characters per chunk. Must fit contextSize together with the rerank
+          template and the query (about 4 characters per token).
+        '';
+      };
+
+      chunkOverlap = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 200;
+        description = "Characters shared by neighbouring chunks.";
+      };
+
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [
+          "--parallel"
+          "4"
+        ];
+        description = "Extra arguments appended to llama-server.";
+      };
+
+      rocm.gfxOverride = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "10.3.0";
+        description = ''
+          HSA_OVERRIDE_GFX_VERSION, for a card that needs to present itself as
+          another architecture. Unnecessary for any target llama-cpp-rocm
+          already covers.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf (cfg.enable && gcfg.enable) {
@@ -258,9 +525,35 @@ in
           "smartModel"
           "fastModel"
           "strategicModel"
-        ];
+        ]
+      ++ [
+        {
+          assertion = !rcfg.enable || rcfg.accelerator != null;
+          message = ''
+            _custom.services.ai.gptResearcher.reranker.enable needs a GPU backend: set
+            enableCuda, enableRocm, or _custom.services.ai.gptResearcher.reranker.accelerator.
+          '';
+        }
+        {
+          assertion = !rcfg.enable || (rcfg.chunkSize / 4 + 512 <= rcfg.contextSize);
+          message = "_custom.services.ai.gptResearcher.reranker: chunkSize ${toString rcfg.chunkSize} does not fit contextSize ${toString rcfg.contextSize} with the rerank template and query";
+        }
+        {
+          assertion = !rcfg.enable || lib.hasSuffix ".gguf" rcfg.modelFile;
+          message = "_custom.services.ai.gptResearcher.reranker.modelFile must name a .gguf; llama-server serves GGUF weights only";
+        }
+      ];
 
     _custom.services.web-proxies = {
+      gpt-researcher-reranker = lib.mkIf rcfg.enable {
+        enable = true;
+        subdomain = "gpt-researcher-reranker";
+        serviceName = rerankerServiceName;
+        publicPort = 20820;
+        backendPort = 20821;
+        lazy = true;
+      };
+
       gpt-researcher = {
         enable = true;
         subdomain = "gpt-researcher";
@@ -366,6 +659,7 @@ in
           "--pids-limit=512"
         ];
       };
+
     };
 
     systemd.tmpfiles.rules = [
@@ -375,6 +669,11 @@ in
       "d /var/lib/gpt-researcher/my-docs 0750 ${toString apiUid} ${toString apiGid} -"
       "d /var/lib/gpt-researcher/outputs 0750 ${toString apiUid} ${toString apiGid} -"
       "Z /var/lib/gpt-researcher/* - ${toString apiUid} ${toString apiGid} -"
+    ]
+    # llama-server runs as root; keep the GGUF out of the recursive chown above.
+    ++ lib.optionals rcfg.enable [
+      "d ${rerankerModelDir} 0750 root root -"
+      "Z ${rerankerModelDir} - root root -"
     ];
 
     sops.templates."gpt-researcher-omniroute.env" = {
@@ -403,6 +702,49 @@ in
           TimeoutStopSec = lib.mkForce 30;
           UMask = "0027";
           ProtectHome = true;
+        };
+      };
+
+      # Downloading several GB cannot happen inside the lazy proxy's start
+      # window, so the GGUF is fetched at boot, independently of the server.
+      ${rerankerModelServiceName} = lib.mkIf rcfg.enable {
+        description = "Download the GPT Researcher reranker GGUF";
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          TimeoutStartSec = "2h";
+          ExecStart = fetchRerankerModel;
+          UMask = "0027";
+          ProtectHome = true;
+        };
+      };
+
+      ${rerankerServiceName} = lib.mkIf rcfg.enable {
+        description = "Qwen3-Reranker served by llama-server for GPT Researcher";
+        requires = [ "${rerankerModelServiceName}.service" ];
+        after = [ "${rerankerModelServiceName}.service" ];
+        # A server that cannot start must not be restarted forever: it would
+        # hold VRAM in a loop while the embedding model needs it.
+        startLimitIntervalSec = 300;
+        startLimitBurst = 3;
+        environment = lib.optionalAttrs (rerankerIsRocm && rcfg.rocm.gfxOverride != null) {
+          HSA_OVERRIDE_GFX_VERSION = rcfg.rocm.gfxOverride;
+        };
+        serviceConfig = {
+          ExecStart = lib.escapeShellArgs rerankerCmd;
+          Restart = "on-failure";
+          RestartSec = 5;
+          TimeoutStopSec = 60;
+          UMask = "0027";
+          ProtectHome = true;
+          # The GGUF is the only state it touches, and only for reading.
+          ProtectSystem = "strict";
+          ReadOnlyPaths = [ rerankerModelDir ];
+          NoNewPrivileges = true;
+          PrivateTmp = true;
         };
       };
     };
