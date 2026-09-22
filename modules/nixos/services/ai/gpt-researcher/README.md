@@ -134,8 +134,17 @@ _custom.services.ai.gptResearcher.reranker = {
 llama.cpp allocates weights plus KV cache and nothing more, so the reranker
 and the Ollama embedding model stay resident together and the rerank stage
 needs no phase scheduling, no model eviction and no sleep mode. Budget the
-quantization against the free VRAM: Q8_0 is about 5.5 GB resident, Q4_K_M
+quantization against the free VRAM: Q8_0 is about 5.1 GB resident, Q4_K_M
 about 2.5 GB.
+
+Because llama.cpp never unloads on its own, `reranker.idleTimeout` (default 15
+minutes, `null` to disable) adds `gpt-researcher-reranker-idle`, a timer that
+samples `llamacpp:n_decode_total` on the server's `/metrics` every minute and
+stops the unit once that counter has stood still for the whole window. The
+socket proxy starts the server again on the next rerank, a few seconds later.
+`llamacpp:prompt_tokens_total` stays at 0 for pooling requests, which is why
+the decode counter is the activity signal. A batch in flight leaves a slot
+`is_processing`, and the watchdog never stops the server then.
 
 `chunkSize` must fit `contextSize` together with the rerank template and the
 query (about 4 characters per token). With `local_gpu` each embedded input is

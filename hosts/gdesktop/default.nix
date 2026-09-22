@@ -164,6 +164,7 @@ in
     _custom.services.ai.gptResearcher.reranker.model = "Qwen/Qwen3-Reranker-4B";
     _custom.services.ai.gptResearcher.reranker.modelUrl =
       "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q8_0.gguf";
+    _custom.services.ai.gptResearcher.reranker.modelSha256 = "d060a1bfb805debcd6c2258c70ba21c56ee1ea837bc23b0bc49e09d13115987c";
     _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 32;
     _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 16;
     _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";

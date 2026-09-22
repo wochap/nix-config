@@ -61,6 +61,8 @@ let
     "--port"
     (toString rerankerProxy.backendPort)
   ]
+  # /metrics carries the token counters the idle watchdog samples.
+  ++ lib.optional (rcfg.idleTimeout != null) "--metrics"
   ++ rcfg.extraArgs;
 
   # The GGUF lives outside the store: it is several GB, and pinning it there
@@ -95,6 +97,54 @@ let
     mv "$model.part" "$model"
     printf '%s' "$got" > "$stamp"
     echo "Reranker model ready: $model (sha256 $got)"
+  '';
+
+  # llama.cpp never unloads on its own, so the server would hold its VRAM
+  # until something stops it. Sample the served-token counter: while it stands
+  # still no rerank has been served, and after idleTimeout the unit stops. The
+  # lazy socket proxy starts it again on the next request, at a few seconds'
+  # cost.
+  rerankerIdleWatchdog = pkgs.writeShellScript "gpt-researcher-reranker-idle" ''
+    set -euo pipefail
+    curl=${lib.getExe pkgs.curl}
+    jq=${lib.getExe pkgs.jq}
+    systemctl=${lib.getExe' pkgs.systemd "systemctl"}
+    unit=${lib.escapeShellArg "${rerankerServiceName}.service"}
+    base=http://${wochap-ssc.meta.address}:${toString rerankerProxy.backendPort}
+    idle=${toString (rcfg.idleTimeout * 60)}
+    state=/run/gpt-researcher-reranker-idle
+
+    "$systemctl" is-active --quiet "$unit" || exit 0
+
+    # Rises once per decode batch. llamacpp:prompt_tokens_total stays at 0 for
+    # pooling requests, so it cannot serve as the activity signal here.
+    served="$("$curl" -sf --max-time 5 "$base/metrics" \
+      | ${lib.getExe pkgs.gawk} '/^llamacpp:n_decode_total /{print $2}')" || exit 0
+    [ -n "$served" ] || exit 0
+
+    now="$(date +%s)"
+    last_served=""
+    last_change="$now"
+    if [ -f "$state" ]; then
+      read -r last_served last_change < "$state" || true
+    fi
+
+    if [ "$served" != "$last_served" ]; then
+      echo "$served $now" > "$state"
+      exit 0
+    fi
+
+    # Never stop mid-request: a batch in flight leaves a slot processing.
+    if "$curl" -sf --max-time 5 "$base/slots" | "$jq" -e 'any(.[]; .is_processing)' > /dev/null; then
+      echo "$served $now" > "$state"
+      exit 0
+    fi
+
+    if [ "$((now - last_change))" -ge "$idle" ]; then
+      echo "No rerank served in ${toString rcfg.idleTimeout} min; stopping $unit to release its VRAM"
+      rm -f "$state"
+      "$systemctl" stop "$unit"
+    fi
   '';
 
   rerankerSettings = lib.optionalAttrs rcfg.enable {
@@ -419,6 +469,17 @@ in
         '';
       };
 
+      idleTimeout = lib.mkOption {
+        type = lib.types.nullOr lib.types.ints.positive;
+        default = 15;
+        example = lib.literalExpression "null";
+        description = ''
+          Minutes without a served rerank after which the server is stopped
+          and its VRAM released; the lazy proxy restarts it on the next
+          request. null keeps it resident once started.
+        '';
+      };
+
       gpuLayers = lib.mkOption {
         type = lib.types.ints.unsigned;
         default = 99;
@@ -676,6 +737,16 @@ in
       "Z ${rerankerModelDir} - root root -"
     ];
 
+    systemd.timers."${rerankerServiceName}-idle" = lib.mkIf (rcfg.enable && rcfg.idleTimeout != null) {
+      description = "Check whether the GPT Researcher reranker has gone idle";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "5min";
+        OnUnitActiveSec = "1min";
+        AccuracySec = "30s";
+      };
+    };
+
     sops.templates."gpt-researcher-omniroute.env" = {
       mode = "0400";
       restartUnits = [ "${apiServiceName}.service" ];
@@ -719,6 +790,14 @@ in
           ExecStart = fetchRerankerModel;
           UMask = "0027";
           ProtectHome = true;
+        };
+      };
+
+      "${rerankerServiceName}-idle" = lib.mkIf (rcfg.enable && rcfg.idleTimeout != null) {
+        description = "Stop the GPT Researcher reranker once it has gone idle";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = rerankerIdleWatchdog;
         };
       };
 
