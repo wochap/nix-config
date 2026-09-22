@@ -91,8 +91,8 @@ let
       echo "Reranker model present but does not match modelSha256; re-downloading" >&2
     fi
 
-    "$curl" --location --fail --retry 5 --retry-delay 5 --continue-at - \
-      --output "$model.part" "$url"
+    "$curl" --location --fail --retry 5 --retry-delay 5 --retry-connrefused \
+      --retry-all-errors --continue-at - --output "$model.part" "$url"
 
     got="$("$sha256sum" "$model.part" | cut -d' ' -f1)"
     if [ -n "$want" ] && [ "$got" != "$want" ]; then
@@ -806,10 +806,12 @@ in
       };
 
       # Downloading several GB cannot happen inside the lazy proxy's start
-      # window, so the GGUF is fetched at boot, independently of the server.
+      # window, so the GGUF is fetched by its own unit. It is deliberately not
+      # wanted by multi-user.target: switch-to-configuration would otherwise
+      # start it and block the whole switch for the length of the download.
+      # The server unit pulls it in on first use instead.
       ${rerankerModelServiceName} = lib.mkIf rcfg.enable {
         description = "Download the GPT Researcher reranker GGUF";
-        wantedBy = [ "multi-user.target" ];
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         serviceConfig = {

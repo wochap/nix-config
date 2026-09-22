@@ -41,6 +41,9 @@ in
         #   globalDiscoveryEnabled = false;
         # };
       };
+      # syncthing-init polls the GUI port once a second for ~17 minutes
+      # before giving up; switch-to-configuration waits on it. Cap it.
+      systemd.user.services.syncthing-init.Service.TimeoutStartSec = "60s";
     };
   };
 }
