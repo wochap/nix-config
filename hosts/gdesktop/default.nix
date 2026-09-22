@@ -155,16 +155,18 @@ in
     _custom.services.ai.gptResearcher.smartModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.fastModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.strategicModel = "deepseek-v4-flash";
-    _custom.services.ai.gptResearcher.embeddingContextTokens = 49152;
-    # 16 GB VRAM: the embedding model takes ~9.5 GB at its 40k context (2.4 GB
-    # weights, 5.6 GB KV cache, compute buffers) and the desktop another
-    # 1-2 GB. The Q8_0 reranker adds ~5.5 GB, so both models stay resident and
-    # no phase scheduling is needed.
+    _custom.services.ai.gptResearcher.embeddingContextTokens = 30720;
+    # 16 GB VRAM: at 40k context the embedding model left only ~6.5 GB free,
+    # and the Q8_0 reranker (~7.1 GB: 4.1 GB weights, 2.5 GB compute buffer
+    # and 0.6 GB KV cache at contextSize 4096) failed to load. At 30k context
+    # the embedding KV cache shrinks by ~1.4 GB, and the Q4_K_M reranker
+    # (~5.4 GB: 2.4 GB weights) leaves ~2.6 GB of headroom with both models
+    # resident.
     _custom.services.ai.gptResearcher.reranker.enable = true;
     _custom.services.ai.gptResearcher.reranker.model = "Qwen/Qwen3-Reranker-4B";
     _custom.services.ai.gptResearcher.reranker.modelUrl =
-      "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q8_0.gguf";
-    _custom.services.ai.gptResearcher.reranker.modelSha256 = "d060a1bfb805debcd6c2258c70ba21c56ee1ea837bc23b0bc49e09d13115987c";
+      "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q4_K_M.gguf";
+    _custom.services.ai.gptResearcher.reranker.modelSha256 = "941f7d1d1524251c026a797b803ac9575545c5d7aa19b26e0e49661d7720af49";
     _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 32;
     _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 16;
     _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";

@@ -1,7 +1,9 @@
 FROM qwen3-embedding:4b
 
-# Fill an 16 GB GPU while retaining headroom for Ollama's compute buffers.
-PARAMETER num_ctx 49152
+# Sized to leave room for the Q8_0 reranker on a 16 GB GPU. At 30k the KV
+# cache takes ~4.3 GB (~144 KiB per token); the model's trained maximum is
+# 40960.
+PARAMETER num_ctx 30720
 
 # A value above the model's layer count asks Ollama to offload every layer.
 PARAMETER num_gpu 99
