@@ -155,10 +155,9 @@ in
     _custom.services.ai.gptResearcher.smartModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.fastModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.strategicModel = "deepseek-v4-flash";
-    _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
     _custom.services.ai.gptResearcher.embeddingContextTokens = 49152;
+    _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
     _custom.services.ai.enableArticleSummary = true;
-    # _custom.services.ms-intune.enable = false;
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
 
