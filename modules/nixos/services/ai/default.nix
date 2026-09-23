@@ -22,6 +22,7 @@ in
     ./omniroute
     ./firecrawl
     ./gpt-researcher
+    ./open-design
     ./qwen3-asr
     ./article-page
     ./article-scrape

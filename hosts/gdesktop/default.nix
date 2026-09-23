@@ -152,6 +152,7 @@ in
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
     _custom.services.ai.gptResearcher.enable = true;
+    _custom.services.ai.openDesign.enable = true;
     _custom.services.ai.gptResearcher.smartModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.fastModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.strategicModel = "deepseek-v4-flash";

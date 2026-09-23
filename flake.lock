@@ -2976,6 +2976,23 @@
         "type": "github"
       }
     },
+    "open-design": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789994873,
+        "narHash": "sha256-3UKGWs4jNfXZLZsi6QiGsEfqDgOrMXPgeTEgg4TA4rs=",
+        "owner": "nexu-io",
+        "repo": "open-design",
+        "rev": "0d3a14c1df6dc5017f3cc3ef05b24558250c220b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nexu-io",
+        "ref": "open-design-v0.24.0",
+        "repo": "open-design",
+        "type": "github"
+      }
+    },
     "powerlevel10k": {
       "flake": false,
       "locked": {
@@ -3386,6 +3403,7 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nur": "nur",
         "offlinemsmtp": "offlinemsmtp",
+        "open-design": "open-design",
         "powerlevel10k": "powerlevel10k",
         "prevstable-chrome": "prevstable-chrome",
         "prevstable-gaming": "prevstable-gaming",
