@@ -8,7 +8,7 @@ OmniRoute for its text model.
 
 | Component                                                                    | Role                                                |
 | ---------------------------------------------------------------------------- | --------------------------------------------------- |
-| Open Design v0.24.0 (image built locally from upstream `deploy/Dockerfile`)  | Design daemon and web UI                            |
+| Open Design v0.24.0 fork (image built locally from `deploy/Dockerfile`)      | Design daemon and web UI                            |
 | Podman                                                                       | Container runtime (`podman-open-design.service`)    |
 | Data directory                                                               | Projects and state in `/var/lib/open-design`        |
 | Nginx                                                                        | Reverse proxy on port 20400                         |
@@ -37,13 +37,21 @@ OmniRoute for its text model.
    These settings are stored in browser localStorage, so repeat this step per
    browser profile.
 
+   The flake input tracks the fork
+   [wochap/open-design](https://github.com/wochap/open-design), branch
+   `open-design-v0.24.0-fork`. Upstream **Test** rejects OmniRoute combos with
+   `Model '<id>' not found on this endpoint.`, because OmniRoute echoes the
+   upstream model id instead of the requested alias. The fork accepts that
+   echo, shows it as detail, and raises the test timeout to 30 s.
+
 4. Image generation is optional. Leave **Media providers** unset. Add keys
    later through **Settings → Media providers** or through
    `_custom.services.ai.openDesign.environmentFile`.
 
 ## Upgrade
 
-1. Bump the tag of the `open-design` input in `flake.nix`.
+1. Rebase the fork branch onto the new upstream tag and push it (or point the
+   `open-design` input in `flake.nix` at a new fork branch).
 2. Run `nix flake lock --update-input open-design` and rebuild. A new
    revision produces a new image tag, so the image is rebuilt on start.
 3. Remove the old image:

@@ -119,7 +119,7 @@
     shotclip.flake = false;
     gpt-researcher.url = "github:wochap/gpt-researcher";
     gpt-researcher.flake = false;
-    open-design.url = "github:nexu-io/open-design/open-design-v0.24.0";
+    open-design.url = "github:wochap/open-design/open-design-v0.24.0-fork";
     open-design.flake = false;
     rtk.url = "github:rtk-ai/rtk/v0.48.0";
     rtk.flake = false;

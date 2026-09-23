@@ -2979,16 +2979,16 @@
     "open-design": {
       "flake": false,
       "locked": {
-        "lastModified": 1789994873,
-        "narHash": "sha256-3UKGWs4jNfXZLZsi6QiGsEfqDgOrMXPgeTEgg4TA4rs=",
-        "owner": "nexu-io",
+        "lastModified": 1790129848,
+        "narHash": "sha256-WKJJE/SbcA6ANV0+CLoGFrJ4O/rkEJmEjhhVWw4OAtU=",
+        "owner": "wochap",
         "repo": "open-design",
-        "rev": "0d3a14c1df6dc5017f3cc3ef05b24558250c220b",
+        "rev": "5e2484bdcf054225d432c4a1729397c1bd7e7f28",
         "type": "github"
       },
       "original": {
-        "owner": "nexu-io",
-        "ref": "open-design-v0.24.0",
+        "owner": "wochap",
+        "ref": "open-design-v0.24.0-fork",
         "repo": "open-design",
         "type": "github"
       }
