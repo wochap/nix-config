@@ -95,7 +95,9 @@ in
         "--cap-drop=all"
         "--security-opt=no-new-privileges"
         "--read-only"
-        "--tmpfs=/tmp:rw,nosuid,nodev,size=1g"
+        # notmpcopyup: don't copy root-owned build leftovers from the image's
+        # /tmp (OpenCode needs to write /tmp/opencode).
+        "--tmpfs=/tmp:rw,nosuid,nodev,notmpcopyup,size=1g"
         # Podman rejects uid=/gid= here; U chowns the tmpfs to the image USER.
         "--tmpfs=/home/open-design:rw,nosuid,nodev,U,mode=0700,size=256m"
         "--pids-limit=512"

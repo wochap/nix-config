@@ -2979,11 +2979,11 @@
     "open-design": {
       "flake": false,
       "locked": {
-        "lastModified": 1790186341,
-        "narHash": "sha256-HcCgZjvCxxyWBS1RWxjdjM9NoQGBN2eSYjq78/UJ9+U=",
+        "lastModified": 1790188318,
+        "narHash": "sha256-ESqrGtqsrHtnRBL1aI35MGsOIFL4NeqGAY7KA2MChIw=",
         "owner": "wochap",
         "repo": "open-design",
-        "rev": "ebba8af455c47ab334efb91109a2588dcd56f908",
+        "rev": "6867518148b164fe8270fb29d53ebd33d24ad78e",
         "type": "github"
       },
       "original": {
