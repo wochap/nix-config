@@ -62,6 +62,9 @@ OmniRoute for its text model.
 
 ## Notes
 
-- Agent CLIs (claude, codex, opencode) are not bundled in the image.
+- BYOK API runs execute through the OpenCode CLI. The fork's `deploy/Dockerfile`
+  bundles a pinned `opencode-ai` (`OPENCODE_VERSION`). Its state lives in the
+  tmpfs `$HOME`, so it never reads host OpenCode config and resets on restart.
+  Other agent CLIs (claude, codex) are not bundled.
 - Video and HyperFrames export are not available, because the image has no
   Chromium.
