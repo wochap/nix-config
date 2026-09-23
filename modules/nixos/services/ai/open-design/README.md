@@ -68,3 +68,8 @@ OmniRoute for its text model.
   Other agent CLIs (claude, codex) are not bundled.
 - Video and HyperFrames export are not available, because the image has no
   Chromium.
+- Screenshot export (`od export --format image`) returns
+  `screenshot export is only available in the desktop runtime`. It renders
+  through the Electron app, so agents skip the render check in the container.
+- The image bundles `python3` and `py3-pillow` so agents can inspect attached
+  images.
