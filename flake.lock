@@ -2979,11 +2979,11 @@
     "open-design": {
       "flake": false,
       "locked": {
-        "lastModified": 1790188318,
-        "narHash": "sha256-ESqrGtqsrHtnRBL1aI35MGsOIFL4NeqGAY7KA2MChIw=",
+        "lastModified": 1790195142,
+        "narHash": "sha256-4nml7Oh+NHdLKWQUztXloIUFIusfr9ydxxwjB8rLiVs=",
         "owner": "wochap",
         "repo": "open-design",
-        "rev": "6867518148b164fe8270fb29d53ebd33d24ad78e",
+        "rev": "5d157aa58df3b5a9dea804107baba74c7f298d19",
         "type": "github"
       },
       "original": {
@@ -3867,11 +3867,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790186773,
-        "narHash": "sha256-GczYvh6cwZz56KWwtTZDgki9X5jfXRZGk20VJUll4Oo=",
+        "lastModified": 1790194840,
+        "narHash": "sha256-j3ROJETkI0M7a54BxEWOaN8I0KvvWNj8tGv6C3w5CnU=",
         "owner": "wochap",
         "repo": "video-trimmer",
-        "rev": "da12949db72d5112adf224bc5f85bc24653a3890",
+        "rev": "298521a40389991d8d0a0cc7d47d0e188f12002a",
         "type": "github"
       },
       "original": {
