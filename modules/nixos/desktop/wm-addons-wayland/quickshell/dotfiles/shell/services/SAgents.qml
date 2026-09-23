@@ -12,12 +12,23 @@ Singleton {
   property int blockedCount: 0
   property var agents: ({})
 
+  // Child state never changes the root status, so a root can be stopped
+  // while a child is still active. Blocked wins over running, children first.
+  function effectiveStatus(view) {
+    const children = Array.isArray(view?.children) ? view.children : [];
+    if (children.some(child => child?.status === "blocked") || view?.status === "blocked")
+      return "blocked";
+    if (children.some(child => child?.status === "running") || view?.status === "running")
+      return "running";
+    return view?.status ?? "stopped";
+  }
+
   function replaceAgents(nextAgents) {
     let running = 0;
     let blocked = 0;
 
     for (const agentId in nextAgents) {
-      const status = nextAgents[agentId]?.status;
+      const status = root.effectiveStatus(nextAgents[agentId]);
       if (status === "running")
         running++;
       else if (status === "blocked")
@@ -60,7 +71,7 @@ Singleton {
       for (const sourceAgent of envelope.agents) {
         const agent = sourceAgent?.view;
         const key = root.agentKey(sourceAgent?.source_id, agent);
-        if (key !== "" && agent.status !== "stopped")
+        if (key !== "" && root.effectiveStatus(agent) !== "stopped")
           nextAgents[key] = agent;
       }
       root.replaceAgents(nextAgents);
@@ -74,7 +85,7 @@ Singleton {
       // Updates are complete resulting views. Copy the map before replacing
       // one entry so QML bindings also observe metadata-only changes.
       const nextAgents = Object.assign({}, root.agents);
-      if (envelope.view.status === "stopped")
+      if (root.effectiveStatus(envelope.view) === "stopped")
         delete nextAgents[key];
       else
         nextAgents[key] = envelope.view;
