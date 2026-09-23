@@ -224,10 +224,13 @@ Scope {
     property string address: ""
 
     onTriggered: {
-      if (Hyprland.usingLua)
+      if (Hyprland.usingLua) {
         Hyprland.dispatch(`hl.dsp.focus({ window = "address:0x${address}" })`);
-      else
+        Hyprland.dispatch(`hl.dsp.window.alter_zorder({ mode = "top", window = "address:0x${address}" })`);
+      } else {
         Hyprland.dispatch(`focuswindow address:0x${address}`);
+        Hyprland.dispatch(`alterzorder top,address:0x${address}`);
+      }
     }
   }
 
