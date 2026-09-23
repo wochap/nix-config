@@ -4,6 +4,21 @@
 
 - Never continue or resume a large conversation after you've exited it. Doing so will consume a lot of tokens just to restore the context.
 
+## openspec-pipeline
+
+Runs `apply -> sync -> archive` for OpenSpec changes, one fresh headless agent
+session per step, committing between steps. Re-run the same command to resume
+after an interruption. Source: `packages/openspec-pipeline/src/`.
+
+```sh
+openspec-pipeline export-formats-quality-config inspector-redesign
+openspec-pipeline --archive-model claude-opus-5-5 --gate 'npm test' my-change
+openspec-pipeline --help
+```
+
+To add an agent, implement `Adapter` (`adapters/types.ts`) in
+`adapters/<name>.ts` and register it in `adapters/index.ts`.
+
 ## Post Install
 
 ### Claude
