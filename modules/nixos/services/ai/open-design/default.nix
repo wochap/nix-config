@@ -96,7 +96,8 @@ in
         "--security-opt=no-new-privileges"
         "--read-only"
         "--tmpfs=/tmp:rw,nosuid,nodev,size=1g"
-        "--tmpfs=/home/open-design:rw,nosuid,nodev,uid=${toString uid},gid=${toString gid},size=256m"
+        # Podman rejects uid=/gid= here; U chowns the tmpfs to the image USER.
+        "--tmpfs=/home/open-design:rw,nosuid,nodev,U,mode=0700,size=256m"
         "--pids-limit=512"
       ];
     };
