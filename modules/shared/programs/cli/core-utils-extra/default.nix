@@ -38,6 +38,7 @@ in
         catdoc # ms word/excel to text
         sox # audio util
         nvme-cli
+        glow
 
         chawan # tui browser
         termshark # tui wireshark
