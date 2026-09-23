@@ -2,7 +2,7 @@
   inputs = {
     # channels
     nixpkgs.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
-    nixpkgs-unstable.url = "github:nixos/nixpkgs?rev=0bb7ec54c8483066ec9d7720e780a5caa71f8612"; # nixos-unstable (10 jul 2026)
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/6774f7bc253789b113a4f39285dc0fa100abeacc"; # nixos-unstable (21 sep 2026)
     nixpkgs-master.url = "github:nixos/nixpkgs?rev=12ccf3e6a73accd6f85aaf857b909d1d63563064"; # master (10 jul 2026)
     prevstable-mesa.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # mesa v26.1.4
     prevstable-chrome.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
@@ -241,6 +241,7 @@
             {
               nixpkgs.config.allowUnfree = true;
               nixpkgs.config.permittedInsecurePackages = [
+                "electron-41.10.6"
                 "electron-39.8.10" # required by bitwarden-desktop
                 "nodejs-slim-20.20.2" # required by redisinsight
               ];

@@ -18,8 +18,6 @@ in
           nixpkgs-unstable.yt-dlp
         ];
         shellAliases = {
-          # youtube-dl is buggy
-          youtube-dl = "yt-dlp";
           # download yt link audio
           yta = "yt-dlp --extract-audio --add-metadata --xattrs --embed-thumbnail --audio-quality 0 --audio-format mp3";
           # download yt link video
