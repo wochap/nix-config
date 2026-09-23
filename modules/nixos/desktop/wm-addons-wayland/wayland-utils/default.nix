@@ -11,6 +11,7 @@ let
   inherit (config._custom.globals) isSandbox;
 
   wayfreeze = inputs.wayfreeze.packages.${pkgs.stdenv.hostPlatform.system}.wayfreeze;
+  video-trimmer = inputs.video-trimmer.packages.${pkgs.stdenv.hostPlatform.system}.default;
   hyprpicker = inputs.hyprpicker.packages.${pkgs.stdenv.hostPlatform.system}.hyprpicker;
   play-notification-sound = pkgs.writeScriptBin "play-notification-sound" (
     builtins.readFile ./scripts/play-notification-sound.sh
@@ -82,6 +83,7 @@ in
           satty # image editor
           swaybg
           wayfreeze # freeze display, only works on hyprland
+          video-trimmer # trim MP4s
           wdisplays # control display outputs
           wf-recorder # screen recorder utility
           wl-mirror # mirror outputs

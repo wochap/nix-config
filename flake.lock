@@ -3429,6 +3429,7 @@
         "tofi": "tofi",
         "ucodenix": "ucodenix",
         "vdirsyncer": "vdirsyncer",
+        "video-trimmer": "video-trimmer",
         "wayfreeze": "wayfreeze",
         "wayland-firewall": "wayland-firewall",
         "wluma": "wluma",
@@ -3856,6 +3857,26 @@
         "owner": "wochap",
         "ref": "v0.20.0-fork",
         "repo": "vdirsyncer",
+        "type": "github"
+      }
+    },
+    "video-trimmer": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790186773,
+        "narHash": "sha256-GczYvh6cwZz56KWwtTZDgki9X5jfXRZGk20VJUll4Oo=",
+        "owner": "wochap",
+        "repo": "video-trimmer",
+        "rev": "da12949db72d5112adf224bc5f85bc24653a3890",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "video-trimmer",
         "type": "github"
       }
     },
