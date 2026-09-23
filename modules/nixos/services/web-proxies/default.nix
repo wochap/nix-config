@@ -157,6 +157,10 @@ in
         lib.nameValuePair proxy.serviceName (
           lib.mkIf proxy.lazy {
             wantedBy = lib.mkForce [ ];
+            # Restart after daemon-reload instead of stop-then-start. Otherwise a
+            # request hitting the socket between the stop and the reload starts
+            # the old unit again, and the switch never applies the new one.
+            stopIfChanged = false;
           }
         )
       ) (lib.filterAttrs (name: proxy: proxy.serviceScope == "system") enabledProxies));
