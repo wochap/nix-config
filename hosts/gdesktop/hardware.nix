@@ -27,6 +27,7 @@
     # s2idle keeps the dGPU's PCIe root port powered; S3 leaves it stuck in
     # D3hot. Next steps if it still fails: "pcie_aspm=off", then BIOS ErP off.
     boot.kernelParams = [ "mem_sleep_default=s2idle" ];
+    # boot.kernelParams = [ "pcie_aspm=off" "amdgpu.aspm=0" ];
 
     # 244 = REISUB keys only, no debug dumps. Overrides the hardened 0 in
     # modules/nixos/security/network, so a wedged GPU still reboots cleanly.
