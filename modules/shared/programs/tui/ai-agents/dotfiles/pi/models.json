@@ -1,28 +1,13 @@
 {
   "providers": {
-    "ollama": {
-      "baseUrl": "http://localhost:11434/v1",
-      "api": "openai-completions",
-      "apiKey": "ollama",
-      "models": [
-        {
-          "id": "glegion-qwen3.5:4b",
-          "name": "Glegion Qwen 3.5 4B (Thinking Mode)",
-          "reasoning": true,
-          "compat": {
-            "thinkingFormat": "qwen-chat-template"
-          }
-        }
-      ]
-    },
     "omniroute": {
       "baseUrl": "https://omniroute.wochap.local/v1",
       "api": "openai-completions",
       "apiKey": "$OMNIROUTE_API_KEY",
       "models": [
         {
-          "id": "YOUR_COMBO_ID",
-          "name": "OmniRoute Combo",
+          "id": "desktop-free",
+          "name": "desktop-free",
           "reasoning": true,
           "input": ["text"]
         }

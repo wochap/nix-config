@@ -1,8 +1,8 @@
 {
   "lastChangelogVersion": "0.85.1",
   "theme": "light/dark",
-  "defaultProvider": "ollama",
-  "defaultModel": "glegion-qwen3.5:4b",
+  "defaultProvider": "omniroute",
+  "defaultModel": "desktop-free",
   "terminal": {
     "showTerminalProgress": true
   },
