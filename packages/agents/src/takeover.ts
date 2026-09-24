@@ -157,6 +157,10 @@ function attach(sock: string): Promise<"detached" | "exited"> {
   });
 }
 
+// Taking over interrupts the agent mid-task; the TUI starts by resuming it.
+// Esc in the TUI stops it again to steer it instead.
+const CONTINUE = "The user took over this session, which interrupted you. Continue the task where you left off.";
+
 interface Options {
   agent: Adapter;
   id: string;
@@ -175,7 +179,7 @@ export async function takeOver({ agent, id, model, cwd, onEvent }: Options): Pro
   rmSync(sock, { force: true });
   // dtach -N copies the terminal's settings to the TUI's pty: cooked, not raw.
   keys.stop();
-  const tui = track(Bun.spawn([dtach, "-N", sock, ...agent.takeOverCmd(id, model)], { cwd, stdio: ["inherit", "inherit", "inherit"] }));
+  const tui = track(Bun.spawn([dtach, "-N", sock, ...agent.takeOverCmd(id, model, CONTINUE)], { cwd, stdio: ["inherit", "inherit", "inherit"] }));
   let exited = false;
   tui.exited.then(() => (exited = true));
   for (let i = 0; i < 50 && !existsSync(sock) && !exited; i++) await Bun.sleep(20);

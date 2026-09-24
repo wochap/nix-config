@@ -157,6 +157,8 @@ async function run() {
         rawLog: store.rawPath(id),
         signal: stop.signal,
         async onEvent(e) {
+          // After Ctrl-T the agent only reports its own interruption.
+          if (stop.signal.aborted) return;
           if (e.type === "result") last = e;
           await onEvent(e);
         },

@@ -129,13 +129,14 @@ export const claude: Adapter = {
 
   // Same model as the headless run keeps the prompt cache warm. Runs in the
   // session's cwd: claude looks sessions up per project directory.
-  takeOverCmd: (id, model) => [...cmd, "--resume", id, "--model", model, ...permFlags],
+  takeOverCmd: (id, model, prompt) => [...cmd, "--resume", id, "--model", model, ...permFlags, ...(prompt ? ["--", prompt] : [])],
 
   transcriptPath,
 
-  // Transcript assistant entries have the stream-json shape.
+  // Transcript assistant entries have the stream-json shape. Synthetic ones
+  // (e.g. "No response requested." after an interrupt) are claude's, not the model's.
   transcriptEvents(entry, root) {
-    if (entry.type !== "assistant") return { events: [], idle: false };
+    if (entry.type !== "assistant" || entry.message?.model === "<synthetic>") return { events: [], idle: false };
     return { events: toEvents(entry, root), idle: entry.message?.stop_reason === "end_turn" };
   },
 };

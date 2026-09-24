@@ -42,8 +42,11 @@ export interface Adapter {
    * covers turns made interactively after takeOver(). Null when unknown.
    */
   lastResponse(id: string): Promise<string | null>;
-  /** Argv that resumes the session interactively; the core runs it in the session's cwd. */
-  takeOverCmd(id: string, model: string): string[];
+  /**
+   * Argv that resumes the session interactively; the core runs it in the
+   * session's cwd. `prompt`, when given, is sent as the first message.
+   */
+  takeOverCmd(id: string, model: string, prompt?: string): string[];
   /** Native transcript of a session, which interactive turns also write. Null when not found. */
   transcriptPath(id: string): string | null;
   /**

@@ -20,7 +20,8 @@ agents last <id>                             # last agent message
 ```
 
 Take over a running session from its `run` view: `ctrl+t` stops the headless
-run and resumes the same session in the agent's TUI. Inside the TUI, `ctrl+z`
+run and resumes the same session in the agent's TUI, which starts by
+continuing the interrupted task (`esc` there stops it to steer). Inside the TUI, `ctrl+z`
 detaches back to the progress view while the TUI keeps working (it runs under
 `dtach`); the view then follows what the TUI does and rings the bell when the
 agent waits for you. `ctrl+t` attaches again. When you exit the TUI, pick

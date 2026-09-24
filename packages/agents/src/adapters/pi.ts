@@ -148,7 +148,7 @@ export const pi: Adapter = {
     return last;
   },
 
-  takeOverCmd: (id, model) => [...cmd, "--session-id", id, "--model", model, ...permFlags],
+  takeOverCmd: (id, model, prompt) => [...cmd, "--session-id", id, "--model", model, ...permFlags, ...(prompt ? ["--", prompt] : [])],
 
   transcriptPath,
 
