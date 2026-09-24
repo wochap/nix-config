@@ -26,6 +26,7 @@ $ nixos-anywhere --flake ../#gasus root@192.168.x.x
 # $ sudo chown -R gean:users /home/gean/.config
 # use nixos-rebuild for subsequent updates
 $ nixos-rebuild switch --flake ../#gasus --target-host gean@192.168.x.x --use-remote-sudo
+# nh os switch .. -H gasus --target-host gean@192.168.x.x
 
 $ sudo poweroff
 # turn on remotely

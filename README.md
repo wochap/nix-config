@@ -92,6 +92,7 @@ Reboot into NixOS, login with the user you created
    # $ nh os switch .#nixosConfigurations.gdesktop
 
    $ nh os switch . -H glegion
+   # $ nh os switch . -H glegion --target-host gean@192.168.x.x
    ```
 
    Reboot so changes take effect
