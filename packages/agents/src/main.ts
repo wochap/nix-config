@@ -178,8 +178,8 @@ async function run() {
     if (!stop.signal.aborted) break;
 
     await onEvent({ type: "takeover" });
-    await takeOver({ agent, id, model: session.model, cwd: session.cwd, onEvent });
-    if ((await askHandBack()) === "done") {
+    const how = await takeOver({ agent, id, model: session.model, cwd: session.cwd, onEvent });
+    if (how === "finished" || (await askHandBack()) === "done") {
       result = (await agent.lastResponse(id)) ?? "";
       last = null;
       break;

@@ -20,8 +20,9 @@ Each step runs through the `agents` CLI (`packages/agents/`), claude only for
 now. While a step runs, `ctrl+t` takes it over in the claude TUI, which
 continues the step (`esc` stops it to steer); `ctrl+z`
 inside the TUI detaches back to the progress view while it keeps working, and
-`ctrl+t` attaches again. Exit the TUI, then `c` continues headless or `d`
-finishes the step. `agents ls` lists the step sessions.
+`ctrl+t` attaches again. When the agent finishes while you are detached,
+the step ends and the pipeline goes on. Exit the TUI yourself, then `c`
+continues headless or `d` finishes the step. `agents ls` lists the step sessions.
 
 ## Post Install
 

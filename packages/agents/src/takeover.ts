@@ -161,6 +161,8 @@ function attach(sock: string): Promise<"detached" | "exited"> {
 // Esc in the TUI stops it again to steer it instead.
 const CONTINUE = "The user took over this session, which interrupted you. Continue the task where you left off.";
 
+const FINISH_AFTER_MS = 3000;
+
 interface Options {
   agent: Adapter;
   id: string;
@@ -170,10 +172,12 @@ interface Options {
 }
 
 /**
- * Runs the session's TUI until the user exits it; the user can detach
- * (Ctrl-Z) and attach again (Ctrl-T) any number of times.
+ * Runs the session's TUI until the user exits it ("exited"), or until the
+ * agent finishes its turn while the user is detached ("finished"): nobody is
+ * there to answer, so the TUI is closed and the run ends like a headless one.
+ * The user can detach (Ctrl-Z) and attach again (Ctrl-T) any number of times.
  */
-export async function takeOver({ agent, id, model, cwd, onEvent }: Options): Promise<void> {
+export async function takeOver({ agent, id, model, cwd, onEvent }: Options): Promise<"exited" | "finished"> {
   if (!dtach) throw new Error("dtach not found, cannot take over a running session");
   const sock = join(store.dir, `${id}.sock`);
   rmSync(sock, { force: true });
@@ -188,7 +192,9 @@ export async function takeOver({ agent, id, model, cwd, onEvent }: Options): Pro
   let read: (() => string[]) | null = null;
   const path = agent.transcriptPath(id);
   if (path) read = tail(path, true);
+  // Agent waits for the user, and when the transcript last grew.
   let idle = false;
+  let activeAt = Date.now();
   const follow = async () => {
     if (!read) {
       const p = agent.transcriptPath(id);
@@ -196,6 +202,7 @@ export async function takeOver({ agent, id, model, cwd, onEvent }: Options): Pro
       read = tail(p);
     }
     for (const line of read()) {
+      activeAt = Date.now();
       let entry: any;
       try {
         entry = JSON.parse(line);
@@ -204,10 +211,7 @@ export async function takeOver({ agent, id, model, cwd, onEvent }: Options): Pro
       }
       const r = agent.transcriptEvents(entry, cwd);
       for (const e of r.events) await onEvent(e);
-      if (r.events.length) {
-        if (r.idle && !idle) bell();
-        idle = r.idle;
-      }
+      if (r.events.length) idle = r.idle;
     }
   };
 
@@ -224,12 +228,22 @@ export async function takeOver({ agent, id, model, cwd, onEvent }: Options): Pro
     });
     while (!reattach && !exited) {
       await follow();
+      // Quiet for a while: a Stop hook may still resume the turn.
+      if (idle && Date.now() - activeAt > FINISH_AFTER_MS) {
+        keys.on(null);
+        tui.kill("SIGTERM"); // dtach hangs up the TUI's pty; the TUI exits
+        await tui.exited;
+        await follow();
+        rmSync(sock, { force: true });
+        return "finished";
+      }
       await Bun.sleep(300);
     }
     keys.on(null);
   }
   await follow();
   rmSync(sock, { force: true });
+  return "exited";
 }
 
 /** After the TUI exits: hand back to a headless run, or finish. */
