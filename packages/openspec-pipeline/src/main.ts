@@ -19,14 +19,12 @@
 //   - no apply commit, tasks open         -> run apply (told to resume if
 //     uncommitted code changes exist from an interrupted run)
 //
-// Agents are adapters (adapters/), each with its own default models.
+// Steps run through the agents CLI (agents.ts), claude only for now. Ctrl-T
+// takes a running step over, Ctrl-Z inside it detaches back.
 
-import { mkdirSync } from "node:fs";
-import { homedir } from "node:os";
-import { basename, join } from "node:path";
 import { parseArgs } from "node:util";
-import { getAdapter, adapters } from "./adapters";
-import type { Adapter, Step } from "./adapters/types";
+import * as agents from "./agents";
+import type { Step } from "./agents";
 import { ask, bell, interactive, log, warn } from "./term";
 import { changeExists, codeDirty, commit, hasCommit, readTasks, repoRoot, type Tasks } from "./repo";
 
@@ -36,19 +34,15 @@ Runs apply -> sync -> archive for each change, in the given order.
 Re-run with the same arguments to resume after an interruption.
 
 Options:
-  -a, --agent <name>        agent for every step (default: claude)
-      --apply-agent <name>  agent for apply   (default: --agent)
-      --sync-agent <name>   agent for sync    (default: --agent)
-      --archive-agent <name> agent for archive (default: --agent)
-      --apply-model <m>     model for apply   (default: the agent's)
-      --sync-model <m>      model for sync    (default: the agent's)
-      --archive-model <m>   model for archive (default: the agent's)
+      --apply-model <m>     model for apply   (default: ${agents.defaultModel("apply")})
+      --sync-model <m>      model for sync    (default: ${agents.defaultModel("sync")})
+      --archive-model <m>   model for archive (default: ${agents.defaultModel("archive")})
       --max-open <n>        open tasks above this hand the session to you (default: 5)
       --gate <cmd>          shell command that must pass after apply; repeatable
   -h, --help
 
-Agents: ${Object.keys(adapters).join(", ")}
-Logs:   \${XDG_STATE_HOME:-~/.local/state}/openspec-pipeline/<repo>/<timestamp>/`;
+Each step is an agents session (claude): ctrl+t takes a running step over,
+ctrl+z inside it detaches back. Sessions: agents ls`;
 
 const STEPS: Step[] = ["apply", "sync", "archive"];
 const STATUS_DONE = "PIPELINE_STATUS: DONE";
@@ -58,10 +52,6 @@ const NO_ASK = "Run non-interactively: never ask questions, pick sensible defaul
 const { values: opts, positionals: changes } = parseArgs({
   allowPositionals: true,
   options: {
-    agent: { type: "string", short: "a", default: "claude" },
-    "apply-agent": { type: "string" },
-    "sync-agent": { type: "string" },
-    "archive-agent": { type: "string" },
     "apply-model": { type: "string" },
     "sync-model": { type: "string" },
     "archive-model": { type: "string" },
@@ -87,26 +77,17 @@ process.on("unhandledRejection", (err) => {
 });
 
 const maxOpen = Number(opts["max-open"]);
-const agents = {} as Record<Step, Adapter>;
 const models = {} as Record<Step, string>;
-for (const step of STEPS) {
-  agents[step] = getAdapter(opts[`${step}-agent`] ?? opts.agent);
-  models[step] = opts[`${step}-model`] ?? agents[step].defaultModel(step);
-}
+for (const step of STEPS) models[step] = opts[`${step}-model`] ?? agents.defaultModel(step);
 
-const root = repoRoot();
-process.chdir(root);
-const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-const stateHome = process.env.XDG_STATE_HOME ?? join(homedir(), ".local", "state");
-const logDir = join(stateHome, "openspec-pipeline", basename(root), stamp);
-mkdirSync(logDir, { recursive: true });
+process.chdir(repoRoot());
 
 async function runStep(step: Step, change: string, instructions: string) {
-  const agent = agents[step];
-  const prompt = `${agent.invoke(step, change)} — ${instructions}`;
-  log(`${agent.name} (${models[step]}): ${prompt}`);
-  const n = STEPS.indexOf(step) + 1;
-  return agent.run({ prompt, model: models[step], logBase: join(logDir, `${change}-${n}-${step}`) });
+  const prompt = `${agents.invoke(step, change)} — ${instructions}`;
+  log(`${step} (${models[step]}): ${prompt}`);
+  const run = await agents.run(prompt, models[step]);
+  log(`[${change}] ${step} session: ${run.sessionId}`);
+  return run;
 }
 
 // Nothing open except manual checks.
@@ -137,14 +118,11 @@ ${resumeNote}When finished, end your final message with exactly one line:
 or a needed action was denied by permissions.`,
   );
   const { sessionId } = run;
-  if (!sessionId) throw new Error("apply run returned no session id");
-
-  const agent = agents.apply;
   let fallback = run.result;
   let tookOver = false;
 
   while (true) {
-    const resp = (await agent.lastResponse(sessionId)) ?? fallback;
+    const resp = (await agents.last(sessionId)) ?? fallback;
     log(`[${change}] apply agent last response:`);
     console.log(resp);
 
@@ -171,7 +149,7 @@ or a needed action was denied by permissions.`,
     }
     warn(`taking over apply session ${sessionId} — resolve it, then exit the agent to re-check`);
     bell();
-    await interactive(() => agent.takeOver(sessionId, models.apply));
+    await interactive(() => agents.attach(sessionId));
     tookOver = true;
     fallback = "";
   }
@@ -219,4 +197,4 @@ for (const change of changes) {
   await runStep("archive", change, `Archive now. Incomplete tasks are fine; specs are already synced. ${NO_ASK}`);
 }
 
-log(`done. logs in ${logDir}`);
+log("done");

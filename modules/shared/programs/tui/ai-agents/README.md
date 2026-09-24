@@ -16,8 +16,11 @@ openspec-pipeline --archive-model claude-opus-5-5 --gate 'npm test' my-change
 openspec-pipeline --help
 ```
 
-To add an agent, implement `Adapter` (`adapters/types.ts`) in
-`adapters/<name>.ts` and register it in `adapters/index.ts`.
+Each step runs through the `agents` CLI (`packages/agents/`), claude only for
+now. While a step runs, `ctrl+t` takes it over in the claude TUI; `ctrl+z`
+inside the TUI detaches back to the progress view while it keeps working, and
+`ctrl+t` attaches again. Exit the TUI, then `c` continues headless or `d`
+finishes the step. `agents ls` lists the step sessions.
 
 ## Post Install
 

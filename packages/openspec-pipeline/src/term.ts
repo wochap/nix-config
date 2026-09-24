@@ -1,6 +1,5 @@
-// Terminal output, prompts and child process tracking for Ctrl-C.
+// Terminal output, prompts and Ctrl-C.
 
-import type { Subprocess } from "bun";
 import { createInterface } from "node:readline/promises";
 
 export const color = {
@@ -32,17 +31,11 @@ export async function ask<T extends string>(question: string, answers: readonly 
   }
 }
 
-// Ctrl-C stops the whole run, including any running agent. While the user is
-// inside a taken-over interactive session, Ctrl-C belongs to that agent and
-// is ignored here.
-const children = new Set<Subprocess>();
+// Ctrl-C stops the whole run; the running agents child gets it from the
+// terminal too and cleans up after itself. While the user is inside a
+// taken-over interactive session, Ctrl-C belongs to that agent and is ignored
+// here.
 let inTakeover = false;
-
-export function track<T extends Subprocess>(child: T): T {
-  children.add(child);
-  child.exited.finally(() => children.delete(child));
-  return child;
-}
 
 export async function interactive<T>(fn: () => Promise<T>): Promise<T> {
   inTakeover = true;
@@ -56,7 +49,6 @@ export async function interactive<T>(fn: () => Promise<T>): Promise<T> {
 function onInterrupt() {
   if (inTakeover) return;
   process.stderr.write(`\n${color.yellow("==> interrupted, stopping agents")}\n`);
-  for (const child of children) child.kill("SIGTERM");
   process.exit(130);
 }
 process.on("SIGINT", onInterrupt);

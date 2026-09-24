@@ -71,7 +71,7 @@ export const claude: Adapter = {
 
   defaultModel: "claude-opus-5-5[1m]", // Opus 5.5, 1M context
 
-  async run({ id, prompt, model, cwd, resume, rawLog, onEvent }: RunOptions) {
+  async run({ id, prompt, model, cwd, resume, rawLog, signal, onEvent }: RunOptions) {
     const child = track(
       Bun.spawn(
         [
@@ -90,6 +90,7 @@ export const claude: Adapter = {
         { cwd, stdin: "ignore", stdout: "pipe", stderr: "inherit" },
       ),
     );
+    signal?.addEventListener("abort", () => child.kill("SIGINT"));
     let result = "";
 
     for await (const line of lines(child.stdout)) {
@@ -128,13 +129,13 @@ export const claude: Adapter = {
 
   // Same model as the headless run keeps the prompt cache warm. Runs in the
   // session's cwd: claude looks sessions up per project directory.
-  async takeOver(id, model, cwd) {
-    const child = Bun.spawn([...cmd, "--resume", id, "--model", model, ...permFlags], {
-      cwd,
-      stdin: "inherit",
-      stdout: "inherit",
-      stderr: "inherit",
-    });
-    await child.exited;
+  takeOverCmd: (id, model) => [...cmd, "--resume", id, "--model", model, ...permFlags],
+
+  transcriptPath,
+
+  // Transcript assistant entries have the stream-json shape.
+  transcriptEvents(entry, root) {
+    if (entry.type !== "assistant") return { events: [], idle: false };
+    return { events: toEvents(entry, root), idle: entry.message?.stop_reason === "end_turn" };
   },
 };

@@ -1,7 +1,8 @@
 // agents — one CLI for coding agent CLIs (claude, ...), for humans and agents.
 //
 //   run     headless run; live rendered progress on a TTY, only the final
-//           answer when piped (what an agent calling this wants)
+//           answer when piped (what an agent calling this wants). On a TTY,
+//           Ctrl-T takes the running session over (see takeover.ts)
 //   attach  resume a session interactively
 //   last    last agent message of a session (also after interactive turns)
 //   ls      list sessions
@@ -9,14 +10,15 @@
 //
 // Agents are adapters (adapters/); the core only sees normalized events.
 
-import { openSync, readSync, closeSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { adapters, getAdapter } from "./adapters";
 import type { Event } from "./adapters/types";
-import { header, render } from "./render";
+import { header, hint, render } from "./render";
 import * as store from "./store";
-import { bell, color, interactive, onInterruptCleanup, warn } from "./term";
+import { tail } from "./tail";
+import { askHandBack, CTRL_T, keys, takeOver } from "./takeover";
+import { bell, color, interactive, onInterruptCleanup, progressToStderr, warn } from "./term";
 
 const HELP = `Usage: agents <command> [options]
 
@@ -28,7 +30,10 @@ Commands:
     -r, --resume <id>    continue a session headless
     -q, --quiet          print only the final answer (default when stdout is not a TTY)
         --verbose        print live progress (default on a TTY)
-        --json           print {id,agent,model,result,costUsd,durationMs,status}
+        --json           print {id,agent,model,result,costUsd,durationMs,status};
+                         progress goes to stderr when it is a TTY or with --verbose
+    keys on a TTY: ctrl+t take over (the agent's TUI), ctrl+z inside it
+    detaches back here while it keeps working, ctrl+t attaches again
   attach [<id>]      take over a session interactively (default: latest)
   last [<id>]        last agent message (default: latest)
   ls                 list sessions
@@ -83,15 +88,24 @@ async function readPrompt(): Promise<string> {
   return "";
 }
 
+// Told to the agent when a user hands a taken-over session back.
+const HANDBACK = "The user took over and handed back. Continue the original task.";
+
 async function run() {
   type Mode = "json" | "quiet" | "verbose";
   const mode: Mode = opts.json ? "json" : opts.quiet ? "quiet" : opts.verbose ? "verbose" : process.stdout.isTTY ? "verbose" : "quiet";
+  // --json keeps stdout for the JSON; progress goes to stderr when a person
+  // (or --verbose) wants it.
+  const progress = mode === "verbose" || (mode === "json" && (opts.verbose || process.stderr.isTTY));
+  if (mode === "json" && progress) progressToStderr();
 
-  const prompt = await readPrompt();
+  let prompt = await readPrompt();
   if (!prompt) {
     console.error(HELP);
     process.exit(1);
   }
+  // Ctrl-T needs someone at the terminal who sees the progress.
+  const takeover = progress && keys.available();
 
   let session: store.Session;
   if (opts.resume) {
@@ -113,35 +127,66 @@ async function run() {
   const { id } = session;
   onInterruptCleanup(() => store.finishSession(id, "failed"));
 
-  if (mode === "verbose") header(agent.name, session.model, id);
+  if (progress) header(agent.name, session.model, id);
   else process.stderr.write(`session: ${id}\n`);
+
+  const onEvent = async (e: Event) => {
+    store.appendEvent(id, e);
+    if (progress) await render(e);
+  };
 
   let last: Extract<Event, { type: "result" }> | null = null;
   let status: store.Status = "done";
   let result = "";
-  try {
-    ({ result } = await agent.run({
-      id,
-      prompt,
-      model: session.model,
-      cwd: session.cwd,
-      resume: Boolean(opts.resume),
-      rawLog: store.rawPath(id),
-      async onEvent(e) {
+  let resume = Boolean(opts.resume);
+  // Headless attempts; Ctrl-T stops one and hands the session to the user.
+  while (true) {
+    const stop = new AbortController();
+    if (takeover) {
+      keys.start();
+      keys.on((key) => key === CTRL_T && stop.abort());
+      hint("ctrl+t take over");
+    }
+    try {
+      ({ result } = await agent.run({
+        id,
+        prompt,
+        model: session.model,
+        cwd: session.cwd,
+        resume,
+        rawLog: store.rawPath(id),
+        signal: stop.signal,
+        async onEvent(e) {
+          if (e.type === "result") last = e;
+          await onEvent(e);
+        },
+      }));
+    } catch (err) {
+      if (!stop.signal.aborted) {
+        status = "failed";
+        const message = err instanceof Error ? err.message : String(err);
+        const e: Event = { type: "error", message };
         store.appendEvent(id, e);
-        if (e.type === "result") last = e;
-        if (mode === "verbose") await render(e);
-      },
-    }));
-  } catch (err) {
-    status = "failed";
-    const message = err instanceof Error ? err.message : String(err);
-    const e: Event = { type: "error", message };
-    store.appendEvent(id, e);
-    if (mode === "verbose") await render(e);
-    else warn(`error: ${message}`);
-    result = (last as Extract<Event, { type: "result" }> | null)?.result ?? "";
+        if (progress) await render(e);
+        else warn(`error: ${message}`);
+        result = (last as Extract<Event, { type: "result" }> | null)?.result ?? "";
+      }
+    }
+    keys.on(null);
+    if (!stop.signal.aborted) break;
+
+    await onEvent({ type: "takeover" });
+    await takeOver({ agent, id, model: session.model, cwd: session.cwd, onEvent });
+    if ((await askHandBack()) === "done") {
+      result = (await agent.lastResponse(id)) ?? "";
+      last = null;
+      break;
+    }
+    await onEvent({ type: "handback" });
+    prompt = HANDBACK;
+    resume = true;
   }
+  keys.stop();
   store.finishSession(id, status);
   bell();
 
@@ -167,7 +212,8 @@ async function run() {
 async function attach() {
   const s = pick(args[0], store.latest);
   if (s.status === "running") throw new Error(`session ${s.id} is still running`);
-  await interactive(() => getAdapter(s.agent).takeOver(s.id, s.model, s.cwd));
+  const cmd = getAdapter(s.agent).takeOverCmd(s.id, s.model);
+  await interactive(() => Bun.spawn(cmd, { cwd: s.cwd, stdio: ["inherit", "inherit", "inherit"] }).exited);
 }
 
 async function last() {
@@ -192,28 +238,13 @@ function ls() {
 async function watch() {
   const s = pick(args[0], () => store.latestRunning() ?? store.latest());
   header(s.agent, s.model, s.id);
-  const path = store.eventsPath(s.id);
-  let offset = 0;
-  let buf = "";
-  const chunk = Buffer.alloc(64 * 1024);
+  const read = tail(store.eventsPath(s.id));
   while (true) {
     const running = store.readSession(s.id)?.status === "running";
-    if (existsSync(path)) {
-      const fd = openSync(path, "r");
-      let n: number;
-      while ((n = readSync(fd, chunk, 0, chunk.length, offset)) > 0) {
-        offset += n;
-        buf += chunk.toString("utf8", 0, n);
-      }
-      closeSync(fd);
-      let i: number;
-      while ((i = buf.indexOf("\n")) >= 0) {
-        const line = buf.slice(0, i);
-        buf = buf.slice(i + 1);
-        try {
-          await render(JSON.parse(line));
-        } catch {}
-      }
+    for (const line of read()) {
+      try {
+        await render(JSON.parse(line));
+      } catch {}
     }
     if (!running) return;
     await Bun.sleep(300);

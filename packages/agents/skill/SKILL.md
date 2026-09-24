@@ -27,3 +27,6 @@ agents ls                                # list sessions
 - Tell the user the session id: they can follow it live with `agents watch <id>`
   or take it over with `agents attach <id>`.
 - Never run `agents attach` or `agents watch` yourself; both are for the user's terminal.
+- Taking over a running session (`ctrl+t` in the `run` view, `ctrl+z` to detach
+  back) needs a person at a TTY. You never press these keys; with `-q` or
+  piped stdin there are none.

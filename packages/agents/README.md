@@ -19,13 +19,23 @@ agents attach <id>                           # take it over interactively
 agents last <id>                             # last agent message
 ```
 
+Take over a running session from its `run` view: `ctrl+t` stops the headless
+run and resumes the same session in the agent's TUI. Inside the TUI, `ctrl+z`
+detaches back to the progress view while the TUI keeps working (it runs under
+`dtach`); the view then follows what the TUI does and rings the bell when the
+agent waits for you. `ctrl+t` attaches again. When you exit the TUI, pick
+`c` to continue headless or `d` to finish with its last message. `--json`
+shows progress (and takes the keys) on stderr when stderr is a TTY or with
+`--verbose`, so a script can read the JSON while you watch.
+
 Pick the agent with `-a/--agent` (`claude` or `pi`, default `claude`); `-m`
 defaults to that agent's model. Resumed runs (`-r`), `attach` and `last` use
 the session's own agent, so they need no `-a`.
 
 Env: `CLAUDE_FLAGS` (default `--permission-mode auto`), `CLAUDE_CMD` (default
 `sessiontap claude`), `PI_FLAGS` (default none; `--approve` trusts
-project-local files), `PI_CMD` (default `sessiontap pi`).
+project-local files), `PI_CMD` (default `sessiontap pi`), `AGENTS_DTACH`
+(dtach binary, set by the package; default `dtach` on PATH).
 
 To add an agent, implement `Adapter` (`src/adapters/types.ts`, emits
 normalized events) in `src/adapters/<name>.ts` and register it in

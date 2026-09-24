@@ -100,7 +100,7 @@ export const pi: Adapter = {
   // pi takes a caller-chosen id: --session-id creates the session when
   // missing and continues it otherwise, so new and resumed runs match.
   // Sessions are looked up per cwd, hence cwd is always the session's.
-  async run({ id, prompt, model, cwd, rawLog, onEvent }: RunOptions) {
+  async run({ id, prompt, model, cwd, rawLog, signal, onEvent }: RunOptions) {
     const startedAt = Date.now();
     const child = track(
       Bun.spawn([...cmd, "--session-id", id, "--model", model, ...permFlags, "--mode", "json", "-p", prompt], {
@@ -110,6 +110,7 @@ export const pi: Adapter = {
         stderr: "inherit",
       }),
     );
+    signal?.addEventListener("abort", () => child.kill("SIGINT"));
     let result = "";
 
     for await (const line of lines(child.stdout)) {
@@ -147,13 +148,16 @@ export const pi: Adapter = {
     return last;
   },
 
-  async takeOver(id, model, cwd) {
-    const child = Bun.spawn([...cmd, "--session-id", id, "--model", model, ...permFlags], {
-      cwd,
-      stdin: "inherit",
-      stdout: "inherit",
-      stderr: "inherit",
-    });
-    await child.exited;
+  takeOverCmd: (id, model) => [...cmd, "--session-id", id, "--model", model, ...permFlags],
+
+  transcriptPath,
+
+  // Transcript message entries hold what message_end carries.
+  transcriptEvents(entry, root) {
+    if (entry.type !== "message" || entry.message?.role !== "assistant") return { events: [], idle: false };
+    return {
+      events: toEvents({ type: "message_end", message: entry.message }, root, 0),
+      idle: entry.message.stopReason !== "toolUse",
+    };
   },
 };
