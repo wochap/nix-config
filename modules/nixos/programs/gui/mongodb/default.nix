@@ -33,7 +33,7 @@ in
     environment.systemPackages = with pkgs; [
       mongodb-compass
       mongodb-tools
-      nixpkgs-unstable.redisinsight
+      # nixpkgs-unstable.redisinsight
 
       # PostgreSQL
       postgresql
