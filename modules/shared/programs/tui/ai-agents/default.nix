@@ -25,6 +25,7 @@ in
       inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.google-antigravity-cli # CLI
       new-project
       _custom.openspec-pipeline
+      _custom.agents
     ];
 
     _custom.hm = {
