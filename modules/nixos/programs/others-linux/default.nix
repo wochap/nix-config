@@ -40,6 +40,7 @@ in
       prevstable-msedge.microsoft-edge
       # inputs.zen-browser.packages."${stdenv.hostPlatform.system}".beta
       inputs.kb-hud.packages."${stdenv.hostPlatform.system}".default
+      inputs.fi.packages."${stdenv.hostPlatform.system}".default
       galaxy-buds-client
       zoom-us
       # teamviewer

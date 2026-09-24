@@ -89,6 +89,8 @@
     kb-hud.inputs.nixpkgs.follows = "nixpkgs";
     session-tap.url = "github:wochap/session-tap";
     session-tap.inputs.nixpkgs.follows = "nixpkgs";
+    fi.url = "github:wochap/fi";
+    fi.inputs.nixpkgs.follows = "nixpkgs";
     tofi.url = "github:wochap/tofi/master-fork";
     tofi.inputs.nixpkgs.follows = "nixpkgs";
 
