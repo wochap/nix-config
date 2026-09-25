@@ -8,10 +8,12 @@ import pathlib
 import tempfile
 import types
 import unittest
+import wave
+from unittest import mock
 
 
-SCRIPT = pathlib.Path(__file__).with_name("qwen3-asr-pipeline.py")
-SPEC = importlib.util.spec_from_file_location("qwen3_asr_pipeline", SCRIPT)
+SCRIPT = pathlib.Path(__file__).with_name("pipeline.py")
+SPEC = importlib.util.spec_from_file_location("asr_pipeline", SCRIPT)
 PIPELINE = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
 SPEC.loader.exec_module(PIPELINE)
@@ -183,7 +185,7 @@ class PipelineTest(unittest.TestCase):
 
     def test_runtime_reads_device_and_dtype_from_env(self):
         self.assertEqual(
-            PIPELINE.resolve_runtime({"QWEN3_ASR_DEVICE": "cuda:1", "QWEN3_ASR_DTYPE": "float16"}),
+            PIPELINE.resolve_runtime({"ASR_DEVICE": "cuda:1", "ASR_DTYPE": "float16"}),
             ("cuda:1", "float16"),
         )
 
@@ -200,7 +202,7 @@ class PipelineTest(unittest.TestCase):
 
     def test_runtime_rejects_unknown_dtype(self):
         with self.assertRaisesRegex(RuntimeError, "unsupported"):
-            PIPELINE.resolve_runtime({"QWEN3_ASR_DTYPE": "float8"})
+            PIPELINE.resolve_runtime({"ASR_DTYPE": "float8"})
 
     def test_validation_rejects_non_finite_timestamp(self):
         document = {
@@ -216,6 +218,92 @@ class PipelineTest(unittest.TestCase):
             path.write_text(json.dumps(document), encoding="utf-8")
             with self.assertRaisesRegex(RuntimeError, "not finite"):
                 PIPELINE.validate(types.SimpleNamespace(input=str(path)))
+
+STUB_ADAPTER = """
+from types import SimpleNamespace
+
+
+class Transcriber:
+    def transcribe(self, paths, language):
+        return [SimpleNamespace(text="Hello there.", language="en") for _ in paths]
+
+
+class Aligner:
+    def align(self, path, text, language):
+        return [SimpleNamespace(text="Hello", start=0.1, end=0.4),
+                SimpleNamespace(text="there", start=0.5, end=0.9)]
+
+
+def load_transcriber(device, dtype, batch_size):
+    return Transcriber()
+
+
+def load_aligner(device, dtype):
+    return Aligner()
+"""
+
+
+def write_silence(path, seconds):
+    with wave.open(str(path), "wb") as audio:
+        audio.setnchannels(1)
+        audio.setsampwidth(2)
+        audio.setframerate(16000)
+        audio.writeframes(b"\0\0" * int(16000 * seconds))
+
+
+class AdapterSeamTest(unittest.TestCase):
+    def test_infer_runs_with_stub_adapter(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            audio_dir = root / "input"
+            audio_dir.mkdir()
+            write_silence(audio_dir / "full.wav", 2.0)
+            write_silence(audio_dir / "chunk-00000.wav", 1.0)
+            write_silence(audio_dir / "chunk-00001.wav", 1.0)
+            adapter = root / "adapter.py"
+            adapter.write_text(STUB_ADAPTER, encoding="utf-8")
+            regions = [
+                {"start": 0.0, "end": 1.0, "speaker": "SPEAKER_00"},
+                {"start": 1.0, "end": 2.0, "speaker": "SPEAKER_01"},
+            ]
+            args = types.SimpleNamespace(
+                audio_dir=str(audio_dir),
+                state_dir=str(root / "state"),
+                source_name="stub.mp4",
+                source_id="stub",
+                language=None,
+                num_speakers=None,
+                min_speakers=None,
+                max_speakers=None,
+            )
+            stdout = io.StringIO()
+            with (
+                mock.patch.dict("os.environ", {"ASR_REVISION_ASR": "stub"}, clear=True),
+                mock.patch.multiple(
+                    PIPELINE,
+                    BACKEND="stub",
+                    ADAPTER_PATH=str(adapter),
+                    DIARIZER_REVISION="stub",
+                    diarize=lambda *_: regions,
+                ),
+                contextlib.redirect_stdout(stdout),
+                contextlib.redirect_stderr(io.StringIO()),
+            ):
+                PIPELINE.infer(args)
+        document = json.loads(stdout.getvalue())
+        self.assertEqual(document["backend"], "stub")
+        self.assertEqual(document["detected_languages"], ["English"])
+        self.assertEqual([token["start"] for token in document["tokens"]], [0.1, 0.5, 1.1, 1.5])
+        self.assertEqual(
+            [(turn["speaker"], turn["text"]) for turn in document["turns"]],
+            [("SPEAKER_00", "Hello there."), ("SPEAKER_01", "Hello there.")],
+        )
+
+    def test_adapter_revisions_reads_prefixed_env(self):
+        self.assertEqual(
+            PIPELINE.adapter_revisions({"ASR_REVISION_ALIGNER": "b", "ASR_REVISION_ASR": "a", "ASR_DTYPE": "x"}),
+            {"aligner": "b", "asr": "a"},
+        )
 
 
 if __name__ == "__main__":

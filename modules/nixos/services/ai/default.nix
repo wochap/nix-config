@@ -24,7 +24,7 @@ in
     ./gpt-researcher
     ./open-design
     ./comfyui
-    ./qwen3-asr
+    ./asr
     ./article-page
     ./article-scrape
     ./article-summary

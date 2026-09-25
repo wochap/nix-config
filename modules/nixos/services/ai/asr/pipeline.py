@@ -3,6 +3,7 @@
 import argparse
 import array
 import gc
+import importlib.util
 import json
 import math
 import os
@@ -47,20 +48,49 @@ LANGUAGE_ALIASES = {
     "zh": "Chinese",
 }
 
-ASR_REVISION = os.environ.get("QWEN3_ASR_ASR_REVISION", "")
-ALIGNER_REVISION = os.environ.get("QWEN3_ASR_ALIGNER_REVISION", "")
-DIARIZER_REVISION = os.environ.get("QWEN3_ASR_DIARIZER_REVISION", "")
-BATCH_SIZE = max(1, int(os.environ.get("QWEN3_ASR_BATCH_SIZE") or "1"))
+BACKEND = os.environ.get("ASR_BACKEND", "")
+ADAPTER_PATH = os.environ.get("ASR_ADAPTER", "/opt/asr/adapter.py")
+DIARIZER_REVISION = os.environ.get("ASR_DIARIZER_REVISION", "")
+BATCH_SIZE = max(1, int(os.environ.get("ASR_BATCH_SIZE") or "1"))
 
 
 def resolve_runtime(env: dict[str, str] | None = None) -> tuple[str, str]:
     """Return the (device, dtype name) the inference steps should use."""
     values = os.environ if env is None else env
-    device = values.get("QWEN3_ASR_DEVICE") or "cuda:0"
-    dtype_name = values.get("QWEN3_ASR_DTYPE") or "bfloat16"
+    device = values.get("ASR_DEVICE") or "cuda:0"
+    dtype_name = values.get("ASR_DTYPE") or "bfloat16"
     if dtype_name not in ("bfloat16", "float16", "float32"):
-        raise RuntimeError(f"unsupported QWEN3_ASR_DTYPE: {dtype_name}")
+        raise RuntimeError(f"unsupported ASR_DTYPE: {dtype_name}")
     return device, dtype_name
+
+
+def adapter_revisions(env: dict[str, str] | None = None) -> dict[str, str]:
+    """Return the ASR_REVISION_<KEY> pins the backend adapter exported."""
+    values = os.environ if env is None else env
+    prefix = "ASR_REVISION_"
+    return {
+        key[len(prefix) :].lower(): value
+        for key, value in sorted(values.items())
+        if key.startswith(prefix)
+    }
+
+
+def load_adapter(path: str) -> Any:
+    """Import the backend adapter module mounted into the container.
+
+    An adapter provides load_transcriber(device, dtype, batch_size), whose
+    result has transcribe(paths, language) returning objects with text and
+    language, and load_aligner(device, dtype), whose result has align(path,
+    text, language) returning units with text, start, and end relative to the
+    chunk. load_aligner may return None for a backend whose transcriber
+    produces timestamps itself; the pipeline does not support that yet.
+    """
+    spec = importlib.util.spec_from_file_location("asr_adapter", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load ASR adapter: {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 START_TIME = time.monotonic()
@@ -396,16 +426,53 @@ def transcript_timestamp(seconds: float) -> str:
     return f"{minutes:02d}:{secs:02d}.{fraction:02d}"
 
 
-def infer(args: argparse.Namespace) -> None:
+def diarize(full_audio: Path, device: str, args: argparse.Namespace) -> list[dict[str, Any]]:
     import torch
     from pyannote.audio import Pipeline
-    from qwen_asr import Qwen3ASRModel, Qwen3ForcedAligner
 
+    log("Loading pyannote Community-1")
+    diarizer = Pipeline.from_pretrained(
+        "pyannote/speaker-diarization-community-1",
+        revision=DIARIZER_REVISION,
+        token=os.environ.get("HF_TOKEN"),
+    )
+    diarizer.to(torch.device(device))
+    waveform, sample_rate = load_pcm_wav(full_audio)
+    diarization_kwargs = {
+        key: value
+        for key, value in {
+            "num_speakers": args.num_speakers,
+            "min_speakers": args.min_speakers,
+            "max_speakers": args.max_speakers,
+        }.items()
+        if value is not None
+    }
+    with Timed("Diarization"):
+        diarization_output = diarizer(
+            {"waveform": waveform, "sample_rate": sample_rate},
+            hook=diarization_progress,
+            **diarization_kwargs,
+        )
+    annotation = diarization_output.exclusive_speaker_diarization
+    regions = [
+        {
+            "start": round(turn.start, 3),
+            "end": round(turn.end, 3),
+            "speaker": speaker,
+        }
+        for turn, _, speaker in annotation.itertracks(yield_label=True)
+    ]
+    regions.sort(key=lambda item: (item["start"], item["end"], item["speaker"]))
+    return regions
+
+
+def infer(args: argparse.Namespace) -> None:
     device, dtype_name = resolve_runtime()
-    dtype = getattr(torch, dtype_name)
+    revisions = adapter_revisions()
 
-    if not all((ASR_REVISION, ALIGNER_REVISION, DIARIZER_REVISION)):
-        raise RuntimeError("model revision environment variables are required")
+    if not BACKEND or not revisions or not DIARIZER_REVISION:
+        raise RuntimeError("backend and model revision environment variables are required")
+    adapter = load_adapter(ADAPTER_PATH)
 
     audio_dir = Path(args.audio_dir)
     full_audio = audio_dir / "full.wav"
@@ -426,7 +493,8 @@ def infer(args: argparse.Namespace) -> None:
         "num_speakers": args.num_speakers,
         "min_speakers": args.min_speakers,
         "max_speakers": args.max_speakers,
-        "revisions": [ASR_REVISION, ALIGNER_REVISION, DIARIZER_REVISION],
+        "backend": BACKEND,
+        "revisions": {**revisions, "diarizer": DIARIZER_REVISION},
     }
     signature_path = state_dir / "signature.json"
     if read_json(signature_path, None) != signature:
@@ -440,17 +508,10 @@ def infer(args: argparse.Namespace) -> None:
         chunk_records = []
 
     if len(chunk_records) < len(chunks):
-        log("Loading Qwen3-ASR-1.7B")
-        asr_model = Qwen3ASRModel.from_pretrained(
-            "Qwen/Qwen3-ASR-1.7B",
-            revision=ASR_REVISION,
-            dtype=dtype,
-            device_map=device,
-            max_inference_batch_size=BATCH_SIZE,
-            max_new_tokens=4096,
-        )
+        log(f"Loading {BACKEND} ASR model")
+        transcriber = adapter.load_transcriber(device, dtype_name, BATCH_SIZE)
     else:
-        asr_model = None
+        transcriber = None
         log(f"Reusing all {len(chunks)} ASR chunks")
     offset = sum(durations[: len(chunk_records)])
     # Chunks are transcribed BATCH_SIZE at a time; the state file is written
@@ -460,11 +521,9 @@ def infer(args: argparse.Namespace) -> None:
         last = first + len(batch)
         batch_seconds = sum(durations[first:last])
         log(f"Transcribing chunks {first + 1}-{last}/{len(chunks)} ({batch_seconds:.0f} s of audio)")
-        assert asr_model is not None
+        assert transcriber is not None
         with Timed(f"ASR chunks {first + 1}-{last}/{len(chunks)}"):
-            results = asr_model.transcribe(
-                audio=[str(chunk) for chunk in batch], language=requested_language
-            )
+            results = transcriber.transcribe([str(chunk) for chunk in batch], requested_language)
         for chunk, duration, result in zip(batch, durations[first:last], results):
             chunk_records.append(
                 {
@@ -477,7 +536,7 @@ def infer(args: argparse.Namespace) -> None:
             )
             offset += duration
         write_json_atomic(asr_path, chunk_records)
-    del asr_model
+    del transcriber
     release_cuda_memory()
 
     alignment_path = state_dir / "alignment.json"
@@ -485,13 +544,12 @@ def infer(args: argparse.Namespace) -> None:
     if len(aligned_chunks) > len(chunk_records):
         aligned_chunks = []
     if len(aligned_chunks) < len(chunk_records):
-        log("Loading Qwen3-ForcedAligner-0.6B")
-        aligner = Qwen3ForcedAligner.from_pretrained(
-            "Qwen/Qwen3-ForcedAligner-0.6B",
-            revision=ALIGNER_REVISION,
-            dtype=dtype,
-            device_map=device,
-        )
+        log(f"Loading {BACKEND} aligner")
+        aligner = adapter.load_aligner(device, dtype_name)
+        if aligner is None:
+            raise NotImplementedError(
+                f"the {BACKEND} backend has no aligner; transcriber timestamps are not supported yet"
+            )
     else:
         aligner = None
         log(f"Reusing all {len(chunk_records)} aligned chunks")
@@ -505,22 +563,18 @@ def infer(args: argparse.Namespace) -> None:
             continue
         language = chunk["language"]
         if language is None:
-            raise RuntimeError(f"Qwen did not detect a language for chunk {index}")
+            raise RuntimeError(f"ASR model did not detect a language for chunk {index}")
         log(f"Aligning chunk {index}/{len(chunk_records)}")
         assert aligner is not None
         with Timed(f"Alignment chunk {index}/{len(chunk_records)}"):
-            aligned = aligner.align(
-                audio=chunk["path"],
-                text=chunk["text"],
-                language=language,
-            )[0]
-        surfaces = display_units(chunk["text"], [item.text for item in aligned])
-        for item, display in zip(aligned, surfaces):
+            aligned = aligner.align(chunk["path"], chunk["text"], language)
+        surfaces = display_units(chunk["text"], [unit.text for unit in aligned])
+        for unit, display in zip(aligned, surfaces):
             chunk_tokens.append(
                 {
-                    "start": round(chunk["start"] + item.start_time, 3),
-                    "end": round(chunk["start"] + item.end_time, 3),
-                    "text": item.text,
+                    "start": round(chunk["start"] + unit.start, 3),
+                    "end": round(chunk["start"] + unit.end, 3),
+                    "text": unit.text,
                     "display": display,
                     "speaker": None,
                 }
@@ -534,40 +588,7 @@ def infer(args: argparse.Namespace) -> None:
     diarization_path = state_dir / "diarization.json"
     regions = read_json(diarization_path, None)
     if regions is None:
-        log("Loading pyannote Community-1")
-        token = os.environ.get("HF_TOKEN")
-        diarizer = Pipeline.from_pretrained(
-            "pyannote/speaker-diarization-community-1",
-            revision=DIARIZER_REVISION,
-            token=token,
-        )
-        diarizer.to(torch.device(device))
-        waveform, sample_rate = load_pcm_wav(full_audio)
-        diarization_kwargs = {
-            key: value
-            for key, value in {
-                "num_speakers": args.num_speakers,
-                "min_speakers": args.min_speakers,
-                "max_speakers": args.max_speakers,
-            }.items()
-            if value is not None
-        }
-        with Timed("Diarization"):
-            diarization_output = diarizer(
-                {"waveform": waveform, "sample_rate": sample_rate},
-                hook=diarization_progress,
-                **diarization_kwargs,
-            )
-        annotation = diarization_output.exclusive_speaker_diarization
-        regions = [
-            {
-                "start": round(turn.start, 3),
-                "end": round(turn.end, 3),
-                "speaker": speaker,
-            }
-            for turn, _, speaker in annotation.itertracks(yield_label=True)
-        ]
-        regions.sort(key=lambda item: (item["start"], item["end"], item["speaker"]))
+        regions = diarize(full_audio, device, args)
         write_json_atomic(diarization_path, regions)
     else:
         log("Reusing speaker diarization")
@@ -580,6 +601,7 @@ def infer(args: argparse.Namespace) -> None:
 
     document = {
         "schema_version": 1,
+        "backend": BACKEND,
         "source": {"name": args.source_name, "duration": round(wav_duration(full_audio), 3)},
         "requested_language": requested_language,
         "detected_languages": list(
@@ -641,7 +663,7 @@ def render(args: argparse.Namespace) -> None:
     with open(args.input, encoding="utf-8") as input_file:
         document = json.load(input_file)
     if document.get("schema_version") != 1:
-        raise RuntimeError("unsupported qwen3-asr JSON schema")
+        raise RuntimeError("unsupported asr JSON schema")
     for turn in document["turns"]:
         print(f"[{transcript_timestamp(turn['start'])}] {turn['speaker']}: {turn['text']}")
 

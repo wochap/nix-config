@@ -5,7 +5,7 @@ language=""
 audio_files=()
 
 usage() {
-  echo "usage: qwen3-asr-transcribe [--language LANGUAGE] AUDIO_FILE..." >&2
+  echo "usage: asr-transcribe [--language LANGUAGE] AUDIO_FILE..." >&2
 }
 
 while (($#)); do
@@ -34,23 +34,21 @@ while (($#)); do
 done
 
 if ((${#audio_files[@]} == 0)); then
-  echo "qwen3-asr-transcribe: no audio files provided" >&2
+  echo "asr-transcribe: no audio files provided" >&2
   exit 2
 fi
 
 for i in "${!audio_files[@]}"; do
   if [[ ! -f ${audio_files[i]} ]]; then
-    echo "qwen3-asr-transcribe: audio file does not exist: ${audio_files[i]}" >&2
+    echo "asr-transcribe: audio file does not exist: ${audio_files[i]}" >&2
     exit 2
   fi
   audio_files[i]=$(realpath "${audio_files[i]}")
 done
 
-cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/qwen3-asr"
-mkdir -p "$cache_dir"
-asr_snapshot="$cache_dir/huggingface/hub/models--Qwen--Qwen3-ASR-1.7B/snapshots/$QWEN3_ASR_ASR_REVISION"
+read -r -a transcriber_files <<<"$ASR_TRANSCRIBER_FILES"
 asr_cached=0
-if [[ -e $asr_snapshot/model-00001-of-00002.safetensors && -e $asr_snapshot/model-00002-of-00002.safetensors ]]; then
+if files_cached "${transcriber_files[@]}"; then
   asr_cached=1
 fi
 
@@ -62,30 +60,29 @@ container_args=(
   --security-opt=no-new-privileges
   --read-only
   --entrypoint=python3
-  "--tmpfs=/tmp:rw,nosuid,nodev,size=$QWEN3_ASR_TMP_SIZE"
+  "--tmpfs=/tmp:rw,nosuid,nodev,size=$ASR_TMP_SIZE"
   --pids-limit=2048
-  --shm-size="$QWEN3_ASR_SHM_SIZE"
+  --shm-size="$ASR_SHM_SIZE"
   --env=HF_HUB_DISABLE_TELEMETRY=1
   --env=HF_HUB_ETAG_TIMEOUT=2
-  --env=QWEN3_ASR_ASR_REVISION
   --volume="$cache_dir:/root/.cache:rw"
-  --volume="$QWEN3_ASR_SCRIPT:/opt/qwen3-asr/transcribe.py:ro"
+  --volume="$ASR_SCRIPT:/opt/asr/transcribe.py:ro"
 )
 
-python_args=(/opt/qwen3-asr/transcribe.py)
+python_args=(/opt/asr/transcribe.py)
 for i in "${!audio_files[@]}"; do
   container_audio=$(printf '/input/audio-%05d' "$i")
   container_args+=(--volume="${audio_files[i]}:$container_audio:ro")
   python_args+=("$container_audio")
 done
 
-if [[ ${QWEN3_ASR_OFFLINE:-0} == 1 || $asr_cached == 1 ]]; then
+if [[ ${ASR_OFFLINE:-0} == 1 || $asr_cached == 1 ]]; then
   container_args+=(
     --network=none
     --env=HF_HUB_OFFLINE=1
     --env=TRANSFORMERS_OFFLINE=1
   )
-  if [[ ${QWEN3_ASR_OFFLINE:-0} != 1 ]]; then
+  if [[ ${ASR_OFFLINE:-0} != 1 ]]; then
     echo "Pinned ASR model is cached; running without Hugging Face network access" >&2
   fi
 fi
@@ -93,4 +90,4 @@ fi
 [[ -z $language ]] || python_args+=(--language "$language")
 
 ensure_image
-exec podman "${container_args[@]}" "$QWEN3_ASR_IMAGE" "${python_args[@]}"
+exec podman "${container_args[@]}" "$ASR_IMAGE" "${python_args[@]}"
