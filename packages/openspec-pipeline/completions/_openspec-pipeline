@@ -1,0 +1,41 @@
+#compdef openspec-pipeline
+
+_openspec_pipeline_changes() {
+  local root
+  root=$(git rev-parse --show-toplevel 2>/dev/null) || return 1
+  local -a changes
+  changes=($root/openspec/changes/*(N/:t))
+  changes=(${changes:#archive})
+  _describe 'change' changes
+}
+
+_openspec_pipeline_sessions() {
+  local dir=${XDG_STATE_HOME:-$HOME/.local/state}/agents/sessions
+  local -a ids
+  ids=($dir/*.json(N:t:r))
+  _describe 'session' ids
+}
+
+_openspec-pipeline() {
+  local -a efforts
+  efforts=(low medium high xhigh max)
+
+  _arguments -s \
+    '--apply-model[model for apply]:model:' \
+    '--sync-model[model for sync]:model:' \
+    '--archive-model[model for archive]:model:' \
+    "--apply-effort[effort for apply]:effort:($efforts)" \
+    "--sync-effort[effort for sync]:effort:($efforts)" \
+    "--archive-effort[effort for archive]:effort:($efforts)" \
+    '--max-open[open tasks above this need attention]:count:' \
+    '*--gate[shell command that must pass after apply]:command:_command_names -e' \
+    '--on-input[when apply needs attention]:mode:((ask\:"prompt you (needs a TTY)" stop\:"exit 3 with a report" auto\:"let the agent decide, then stop"))' \
+    '--auto-tries[headless resumes before stopping]:count:' \
+    '--resume[continue this apply session]:session:_openspec_pipeline_sessions' \
+    '--answer[message for the --resume session]:text:' \
+    '--json[one JSON result line on stdout]' \
+    '(- *)'{-h,--help}'[show help]' \
+    '*:change:_openspec_pipeline_changes'
+}
+
+_openspec-pipeline "$@"

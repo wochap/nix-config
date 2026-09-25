@@ -1,0 +1,51 @@
+#compdef agents
+
+_agents_sessions() {
+  local dir=${XDG_STATE_HOME:-$HOME/.local/state}/agents/sessions
+  local -a ids
+  ids=($dir/*.json(N:t:r))
+  _describe 'session' ids
+}
+
+_agents() {
+  local curcontext=$curcontext state line
+  local -a commands
+  commands=(
+    'run:headless run'
+    'attach:take over a session interactively'
+    'last:last agent message of a session'
+    'ls:list sessions'
+    'watch:follow a session'
+  )
+
+  _arguments -C \
+    '(-a --agent)'{-a,--agent}'[agent]:agent:(claude pi)' \
+    '(-m --model)'{-m,--model}'[model]:model:' \
+    '(-e --effort)'{-e,--effort}'[effort]:effort:(low medium high xhigh max)' \
+    '(-C --cwd)'{-C,--cwd}'[working directory]:directory:_directories' \
+    '(-r --resume)'{-r,--resume}'[continue a session headless]:session:_agents_sessions' \
+    '(-q --quiet --verbose)'{-q,--quiet}'[print only the final answer]' \
+    '(-q --quiet)--verbose[print live progress]' \
+    '--json[print JSON result]' \
+    '(-h --help)'{-h,--help}'[show help]' \
+    '1:command:->command' \
+    '*::arg:->args'
+
+  case $state in
+    command)
+      _describe 'command' commands
+      ;;
+    args)
+      case ${line[1]} in
+        attach|last|watch)
+          (( CURRENT == 2 )) && _agents_sessions
+          ;;
+        run)
+          _message 'prompt, or - for stdin'
+          ;;
+      esac
+      ;;
+  esac
+}
+
+_agents "$@"
