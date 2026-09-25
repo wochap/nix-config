@@ -13,8 +13,19 @@ const MODELS: Record<Step, string> = {
   archive: "claude-sonnet-5", // Sonnet 5
 };
 
+// Passed as `agents run --effort`, so a step never inherits the caller's
+// CLAUDE_EFFORT or the user's effortLevel setting.
+const EFFORTS: Record<Step, string> = {
+  apply: "medium",
+  sync: "medium",
+  archive: "low",
+};
+
 /** Default model per step; overridden by --<step>-model. */
 export const defaultModel = (step: Step) => MODELS[step];
+
+/** Default effort per step; overridden by --<step>-effort. */
+export const defaultEffort = (step: Step) => EFFORTS[step];
 
 /** Text that starts the OpenSpec skill, e.g. "/opsx:apply my-change". */
 export const invoke = (step: Step, change: string) => `/opsx:${step} ${change}`;
@@ -32,10 +43,10 @@ export interface RunOptions {
  * gets only "session: <id>". stdout carries agents' JSON result.
  * Rejects when the agent fails.
  */
-export async function run(prompt: string, model: string, o: RunOptions): Promise<{ sessionId: string; result: string }> {
+export async function run(prompt: string, model: string, effort: string, o: RunOptions): Promise<{ sessionId: string; result: string }> {
   const target = o.resume ? ["-r", o.resume] : ["-a", "claude", "-C", process.cwd()];
   const child = Bun.spawn(
-    [...cmd, "run", "--json", ...(o.tty ? ["--verbose"] : []), ...target, "-m", model, prompt],
+    [...cmd, "run", "--json", ...(o.tty ? ["--verbose"] : []), ...target, "-m", model, "-e", effort, prompt],
     { stdin: o.tty ? "inherit" : "ignore", stdout: "pipe", stderr: "inherit" },
   );
   const out = await new Response(child.stdout).text();

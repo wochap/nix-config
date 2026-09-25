@@ -6,7 +6,7 @@
 import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import type { Event } from "./adapters/types";
+import type { Effort, Event } from "./adapters/types";
 
 export type Status = "running" | "done" | "failed";
 
@@ -14,6 +14,7 @@ export interface Session {
   id: string;
   agent: string;
   model: string;
+  effort?: Effort;
   cwd: string;
   /** First 200 chars of the first prompt. */
   prompt: string;
@@ -42,8 +43,8 @@ export function createSession(s: Omit<Session, "startedAt" | "status" | "pid">):
 }
 
 /** Marks a session as running again for a resumed run. */
-export function restartSession(s: Session, model: string): Session {
-  const session: Session = { ...s, model, status: "running", pid: process.pid, endedAt: undefined };
+export function restartSession(s: Session, model: string, effort?: Effort): Session {
+  const session: Session = { ...s, model, effort, status: "running", pid: process.pid, endedAt: undefined };
   write(session);
   return session;
 }

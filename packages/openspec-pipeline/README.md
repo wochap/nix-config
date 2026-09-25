@@ -80,6 +80,24 @@ the step. `agents ls` lists the step sessions. For a headless run, follow a
 step with `agents watch <id>` or take it over with `agents attach <id>` from
 another terminal.
 
+## Use from an agent
+
+`skill/SKILL.md` teaches an agent to run the pipeline, read its JSON result and
+answer or relay the apply agent's questions. It is linked into
+`~/.claude/skills` and `~/.pi/agent/skills` when
+`_custom.programs.ai-agents.enableSkills` is on. The skill sets
+`disable-model-invocation: true`, so it never enters the agent's context until
+you call it:
+
+```text
+/openspec-pipeline <change>...          # Claude Code
+/skill:openspec-pipeline <change>...    # pi
+```
+
+Add instructions after the changes in plain words, e.g. `run unattended`
+(`--on-input auto`) or `gate with 'npm test'` (`--gate 'npm test'`). Do not
+edit the repository while it runs.
+
 ## Models
 
 | Step    | Default               | Flag              |
@@ -87,5 +105,14 @@ another terminal.
 | apply   | `claude-opus-5-5[1m]` | `--apply-model`   |
 | sync    | `claude-opus-5-5[1m]` | `--sync-model`    |
 | archive | `claude-sonnet-5`     | `--archive-model` |
+
+| Step    | Effort   | Flag               |
+| ------- | -------- | ------------------ |
+| apply   | `high`   | `--apply-effort`   |
+| sync    | `medium` | `--sync-effort`    |
+| archive | `low`    | `--archive-effort` |
+
+Effort goes through `agents run --effort`: `low`, `medium`, `high`, `xhigh`,
+`max`.
 
 Env: `AGENTS_CMD` (agents binary, set by the package).

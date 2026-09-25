@@ -17,11 +17,21 @@ export type Event =
   /** The user handed the session back to a headless run. */
   | { type: "handback" };
 
+/**
+ * Normalized reasoning effort. Each adapter maps every level to its agent's
+ * own flag and value (a Record<Effort, string>, so a new level fails to
+ * compile until every adapter maps it).
+ */
+export const EFFORTS = ["low", "medium", "high", "xhigh", "max"] as const;
+export type Effort = (typeof EFFORTS)[number];
+
 export interface RunOptions {
   /** Session id chosen by the core (uuid); used as native id when possible. */
   id: string;
   prompt: string;
   model: string;
+  /** Unset: the agent's own default. */
+  effort?: Effort;
   cwd: string;
   /** True: continue session `id` with `prompt`. */
   resume: boolean;
@@ -46,7 +56,7 @@ export interface Adapter {
    * Argv that resumes the session interactively; the core runs it in the
    * session's cwd. `prompt`, when given, is sent as the first message.
    */
-  takeOverCmd(id: string, model: string, prompt?: string): string[];
+  takeOverCmd(id: string, model: string, effort?: Effort, prompt?: string): string[];
   /** Native transcript of a session, which interactive turns also write. Null when not found. */
   transcriptPath(id: string): string | null;
   /**

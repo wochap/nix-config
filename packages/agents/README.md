@@ -34,6 +34,10 @@ Pick the agent with `-a/--agent` (`claude` or `pi`, default `claude`); `-m`
 defaults to that agent's model. Resumed runs (`-r`), `attach` and `last` use
 the session's own agent, so they need no `-a`.
 
+`-e/--effort` (`low`, `medium`, `high`, `xhigh`, `max`) maps to the agent's
+own flag: `--effort` for claude, `--thinking` for pi. Unset, the agent uses
+its own setting. The session keeps it for `-r` and `attach`.
+
 Env: `CLAUDE_FLAGS` (default `--permission-mode auto`), `CLAUDE_CMD` (default
 `sessiontap claude`), `PI_FLAGS` (default none; `--approve` trusts
 project-local files), `PI_CMD` (default `sessiontap pi`), `AGENTS_DTACH`
@@ -50,3 +54,19 @@ report=$(agents run -q -C ~/src/codex - < packages/agents/prompts/extract-adapte
 # 2. here: write the adapter from the report
 cat packages/agents/prompts/write-adapter.md "$report" | agents run -
 ```
+
+## Use from an agent
+
+`skill/SKILL.md` teaches an agent to delegate a task with `agents run` and read
+only the final answer. It is linked into `~/.claude/skills` and
+`~/.pi/agent/skills` when `_custom.programs.ai-agents.enableSkills` is on. The
+skill sets `disable-model-invocation: true`, so it never enters the agent's
+context until you call it:
+
+```text
+/agents <task>          # Claude Code
+/skill:agents <task>    # pi
+```
+
+Name the agent, model or directory in the task if needed, e.g.
+`/agents ask pi in ~/src/foo why the build fails`.

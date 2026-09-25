@@ -43,6 +43,10 @@ Options:
       --apply-model <m>     model for apply   (default: ${agents.defaultModel("apply")})
       --sync-model <m>      model for sync    (default: ${agents.defaultModel("sync")})
       --archive-model <m>   model for archive (default: ${agents.defaultModel("archive")})
+      --apply-effort <e>    effort for apply   (default: ${agents.defaultEffort("apply")})
+      --sync-effort <e>     effort for sync    (default: ${agents.defaultEffort("sync")})
+      --archive-effort <e>  effort for archive (default: ${agents.defaultEffort("archive")})
+                              low, medium, high, xhigh, max
       --max-open <n>        open tasks above this need attention (default: 5)
       --gate <cmd>          shell command that must pass after apply; repeatable
       --on-input <mode>     when apply needs attention (default: ask on a TTY, else stop)
@@ -80,6 +84,9 @@ const { values: opts, positionals: changes } = parseArgs({
     "apply-model": { type: "string" },
     "sync-model": { type: "string" },
     "archive-model": { type: "string" },
+    "apply-effort": { type: "string" },
+    "sync-effort": { type: "string" },
+    "archive-effort": { type: "string" },
     "max-open": { type: "string", default: "5" },
     gate: { type: "string", multiple: true, default: [] },
     "on-input": { type: "string" },
@@ -141,12 +148,14 @@ const maxOpen = Number(opts["max-open"]);
 const autoTries = Number(opts["auto-tries"]);
 const models = {} as Record<Step, string>;
 for (const step of STEPS) models[step] = opts[`${step}-model`] ?? agents.defaultModel(step);
+const efforts = {} as Record<Step, string>;
+for (const step of STEPS) efforts[step] = opts[`${step}-effort`] ?? agents.defaultEffort(step);
 
 process.chdir(repoRoot());
 
 async function runStep(step: Step, prompt: string, resume?: string) {
-  log(`${step} (${models[step]})${resume ? ` resuming ${resume}` : ""}: ${prompt}`);
-  const run = await agents.run(prompt, models[step], { resume, tty });
+  log(`${step} (${models[step]}, ${efforts[step]})${resume ? ` resuming ${resume}` : ""}: ${prompt}`);
+  const run = await agents.run(prompt, models[step], efforts[step], { resume, tty });
   log(`[${current.change}] ${step} session: ${run.sessionId}`);
   return run;
 }

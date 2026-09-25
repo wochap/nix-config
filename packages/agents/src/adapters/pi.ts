@@ -11,10 +11,13 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { track } from "../term";
 import { launcher } from "./launch";
-import type { Adapter, Event, RunOptions } from "./types";
+import type { Adapter, Effort, Event, RunOptions } from "./types";
 
 const cmd = launcher("pi");
 const permFlags = (process.env.PI_FLAGS ?? "").split(/\s+/).filter(Boolean);
+// Normalized effort to pi's --thinking levels (pi also has off, minimal).
+const EFFORT: Record<Effort, string> = { low: "low", medium: "medium", high: "high", xhigh: "xhigh", max: "max" };
+const effortFlags = (effort?: Effort) => (effort ? ["--thinking", EFFORT[effort]] : []);
 
 // Short label for a tool call: the agent's own description when it gave
 // one, else tool name plus path. Never the command itself.
@@ -100,10 +103,10 @@ export const pi: Adapter = {
   // pi takes a caller-chosen id: --session-id creates the session when
   // missing and continues it otherwise, so new and resumed runs match.
   // Sessions are looked up per cwd, hence cwd is always the session's.
-  async run({ id, prompt, model, cwd, rawLog, signal, onEvent }: RunOptions) {
+  async run({ id, prompt, model, effort, cwd, rawLog, signal, onEvent }: RunOptions) {
     const startedAt = Date.now();
     const child = track(
-      Bun.spawn([...cmd, "--session-id", id, "--model", model, ...permFlags, "--mode", "json", "-p", prompt], {
+      Bun.spawn([...cmd, "--session-id", id, "--model", model, ...effortFlags(effort), ...permFlags, "--mode", "json", "-p", prompt], {
         cwd,
         stdin: "ignore",
         stdout: "pipe",
@@ -148,7 +151,7 @@ export const pi: Adapter = {
     return last;
   },
 
-  takeOverCmd: (id, model, prompt) => [...cmd, "--session-id", id, "--model", model, ...permFlags, ...(prompt ? ["--", prompt] : [])],
+  takeOverCmd: (id, model, effort, prompt) => [...cmd, "--session-id", id, "--model", model, ...effortFlags(effort), ...permFlags, ...(prompt ? ["--", prompt] : [])],
 
   transcriptPath,
 

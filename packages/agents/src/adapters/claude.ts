@@ -9,10 +9,13 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { track } from "../term";
 import { launcher } from "./launch";
-import type { Adapter, Event, RunOptions } from "./types";
+import type { Adapter, Effort, Event, RunOptions } from "./types";
 
 const cmd = launcher("claude");
 const permFlags = (process.env.CLAUDE_FLAGS ?? "--permission-mode auto").split(/\s+/).filter(Boolean);
+// Normalized effort to claude's --effort levels.
+const EFFORT: Record<Effort, string> = { low: "low", medium: "medium", high: "high", xhigh: "xhigh", max: "max" };
+const effortFlags = (effort?: Effort) => (effort ? ["--effort", EFFORT[effort]] : []);
 
 // Short label for a tool call: the agent's own description when it gave
 // one, else tool name plus path. Never the command itself.
@@ -71,7 +74,7 @@ export const claude: Adapter = {
 
   defaultModel: "claude-opus-5-5[1m]", // Opus 5.5, 1M context
 
-  async run({ id, prompt, model, cwd, resume, rawLog, signal, onEvent }: RunOptions) {
+  async run({ id, prompt, model, effort, cwd, resume, rawLog, signal, onEvent }: RunOptions) {
     const child = track(
       Bun.spawn(
         [
@@ -80,6 +83,7 @@ export const claude: Adapter = {
           prompt,
           "--model",
           model,
+          ...effortFlags(effort),
           ...permFlags,
           "--output-format",
           "stream-json",
@@ -129,7 +133,7 @@ export const claude: Adapter = {
 
   // Same model as the headless run keeps the prompt cache warm. Runs in the
   // session's cwd: claude looks sessions up per project directory.
-  takeOverCmd: (id, model, prompt) => [...cmd, "--resume", id, "--model", model, ...permFlags, ...(prompt ? ["--", prompt] : [])],
+  takeOverCmd: (id, model, effort, prompt) => [...cmd, "--resume", id, "--model", model, ...effortFlags(effort), ...permFlags, ...(prompt ? ["--", prompt] : [])],
 
   transcriptPath,
 

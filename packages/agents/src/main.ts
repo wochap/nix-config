@@ -13,7 +13,7 @@
 import { resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { adapters, getAdapter } from "./adapters";
-import type { Event } from "./adapters/types";
+import { EFFORTS, type Effort, type Event } from "./adapters/types";
 import { header, hint, render } from "./render";
 import * as store from "./store";
 import { tail } from "./tail";
@@ -26,6 +26,8 @@ Commands:
   run [<prompt>|-]   headless run; prompt from stdin when "-" or piped
     -a, --agent <name>   agent (default: claude)
     -m, --model <m>      model (default: the agent's)
+    -e, --effort <e>     ${EFFORTS.join(", ")}; mapped to the agent's own
+                         flag (default: the agent's setting)
     -C, --cwd <dir>      working directory (default: current)
     -r, --resume <id>    continue a session headless
     -q, --quiet          print only the final answer (default when stdout is not a TTY)
@@ -48,6 +50,7 @@ const { values: opts, positionals } = parseArgs({
   options: {
     agent: { type: "string", short: "a" },
     model: { type: "string", short: "m" },
+    effort: { type: "string", short: "e" },
     cwd: { type: "string", short: "C" },
     resume: { type: "string", short: "r" },
     quiet: { type: "boolean", short: "q" },
@@ -99,6 +102,9 @@ async function run() {
   const progress = mode === "verbose" || (mode === "json" && (opts.verbose || process.stderr.isTTY));
   if (mode === "json" && progress) progressToStderr();
 
+  const effort = opts.effort as Effort | undefined;
+  if (effort && !EFFORTS.includes(effort)) throw new Error(`--effort: expected one of ${EFFORTS.join(", ")}`);
+
   let prompt = await readPrompt();
   if (!prompt) {
     console.error(HELP);
@@ -112,13 +118,14 @@ async function run() {
     const prev = store.resolveId(opts.resume);
     if (prev.status === "running") throw new Error(`session ${prev.id} is still running`);
     if (opts.agent && opts.agent !== prev.agent) throw new Error(`session ${prev.id} belongs to ${prev.agent}`);
-    session = store.restartSession(prev, opts.model ?? prev.model);
+    session = store.restartSession(prev, opts.model ?? prev.model, effort ?? prev.effort);
   } else {
     const agent = getAdapter(opts.agent ?? "claude");
     session = store.createSession({
       id: crypto.randomUUID(),
       agent: agent.name,
       model: opts.model ?? agent.defaultModel,
+      effort,
       cwd: opts.cwd ? resolve(opts.cwd) : process.cwd(),
       prompt,
     });
@@ -152,6 +159,7 @@ async function run() {
         id,
         prompt,
         model: session.model,
+        effort: session.effort,
         cwd: session.cwd,
         resume,
         rawLog: store.rawPath(id),
@@ -178,7 +186,7 @@ async function run() {
     if (!stop.signal.aborted) break;
 
     await onEvent({ type: "takeover" });
-    const how = await takeOver({ agent, id, model: session.model, cwd: session.cwd, onEvent });
+    const how = await takeOver({ agent, id, model: session.model, effort: session.effort, cwd: session.cwd, onEvent });
     if (how === "finished" || (await askHandBack()) === "done") {
       result = (await agent.lastResponse(id)) ?? "";
       last = null;
@@ -214,7 +222,7 @@ async function run() {
 async function attach() {
   const s = pick(args[0], store.latest);
   if (s.status === "running") throw new Error(`session ${s.id} is still running`);
-  const cmd = getAdapter(s.agent).takeOverCmd(s.id, s.model);
+  const cmd = getAdapter(s.agent).takeOverCmd(s.id, s.model, s.effort);
   await interactive(() => Bun.spawn(cmd, { cwd: s.cwd, stdio: ["inherit", "inherit", "inherit"] }).exited);
 }
 

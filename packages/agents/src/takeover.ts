@@ -14,7 +14,7 @@
 import { existsSync, rmSync } from "node:fs";
 import { connect } from "node:net";
 import { join } from "node:path";
-import type { Adapter, Event } from "./adapters/types";
+import type { Adapter, Effort, Event } from "./adapters/types";
 import { hint, render } from "./render";
 import * as store from "./store";
 import { tail } from "./tail";
@@ -167,6 +167,7 @@ interface Options {
   agent: Adapter;
   id: string;
   model: string;
+  effort?: Effort;
   cwd: string;
   onEvent(e: Event): Promise<void>;
 }
@@ -177,13 +178,13 @@ interface Options {
  * there to answer, so the TUI is closed and the run ends like a headless one.
  * The user can detach (Ctrl-Z) and attach again (Ctrl-T) any number of times.
  */
-export async function takeOver({ agent, id, model, cwd, onEvent }: Options): Promise<"exited" | "finished"> {
+export async function takeOver({ agent, id, model, effort, cwd, onEvent }: Options): Promise<"exited" | "finished"> {
   if (!dtach) throw new Error("dtach not found, cannot take over a running session");
   const sock = join(store.dir, `${id}.sock`);
   rmSync(sock, { force: true });
   // dtach -N copies the terminal's settings to the TUI's pty: cooked, not raw.
   keys.stop();
-  const tui = track(Bun.spawn([dtach, "-N", sock, ...agent.takeOverCmd(id, model, CONTINUE)], { cwd, stdio: ["inherit", "inherit", "inherit"] }));
+  const tui = track(Bun.spawn([dtach, "-N", sock, ...agent.takeOverCmd(id, model, effort, CONTINUE)], { cwd, stdio: ["inherit", "inherit", "inherit"] }));
   let exited = false;
   tui.exited.then(() => (exited = true));
   for (let i = 0; i < 50 && !existsSync(sock) && !exited; i++) await Bun.sleep(20);
