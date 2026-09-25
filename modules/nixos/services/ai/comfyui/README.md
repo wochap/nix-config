@@ -59,6 +59,51 @@ image.
    sudo podman image rm localhost/comfyui:<old-tag>
    ```
 
+## Hosts
+
+### gdesktop
+
+AMD RX 6800 XT (gfx1030, 16 GB VRAM), 32 GB RAM, ROCm. No
+`rocm.gfxOverride` needed and `comfy-aimdo` (dynamic VRAM) works.
+
+ComfyUI enables int8 compute on this card but not fp8. Use the `int8` or
+`w4a8` model files and skip `fp8`. Skip GGUF too: native int8 is faster and
+needs no custom node.
+
+#### Qwen-Image-2.1
+
+[Qwen-Image-2.1](https://huggingface.co/Comfy-Org/Qwen-Image-2.1) is supported
+natively and needs no custom nodes. It uses the Qwen Research License, which
+does not allow commercial use.
+
+1. Download the weights (about 17.3 GB) into the model folders:
+
+   ```sh
+   cd ~/ComfyUI/models
+   hf download Comfy-Org/Qwen-Image-2.1 \
+     diffusion_models/qwen_image_2.1_int8_convrot.safetensors \
+     text_encoders/qwen3vl_8b_int8_convrot.safetensors \
+     vae/qwen_image_2.1_vae_bf16.safetensors \
+     --local-dir .
+   ```
+
+2. Open **Templates** and pick **Qwen Image 2.1** (text to image, image edit,
+   or background removal). The templates already point at these files.
+3. Set the latent size to 1024×1024 for testing. The upstream default is
+   2048×2048 at 40 steps, which is slow on RDNA2.
+
+The first run fills the MIOpen and Triton caches in `~/ComfyUI/.cache`, so it
+is slower than the runs after it.
+
+If VRAM runs out, try these in order:
+
+- Use `text_encoders/qwen3vl_8b_w4a8.safetensors` (6.3 GB) as the text
+  encoder.
+- Add `--lowvram` to `extraArgs`.
+
+Do not use `qwen_image_2.1_bf16.safetensors` (14.2 GB). It is too big for
+16 GB.
+
 ## Options
 
 All options live under `_custom.services.ai.comfyui`.
