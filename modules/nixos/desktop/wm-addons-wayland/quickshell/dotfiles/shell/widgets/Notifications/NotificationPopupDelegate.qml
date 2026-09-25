@@ -81,8 +81,14 @@ Item {
 
   Component.onCompleted: {
     root.retainedModelData = root.modelData;
-    if (root.retainedModelData.isPopupExiting)
+    if (root.retainedModelData.isPopupExiting) {
       root.startExit();
+    } else {
+      // Popups already in the model when the window is recreated never get
+      // ListView.onAdd, so animate them in here.
+      root.xOffset = root.slideDistance;
+      enterAnimation.start();
+    }
   }
 
   ListView.onAdd: {
