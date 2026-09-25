@@ -12,7 +12,9 @@ def main() -> None:
     parser.add_argument("--language")
     args = parser.parse_args()
 
-    spec = importlib.util.spec_from_file_location("asr_adapter", "/opt/asr/adapter.py")
+    spec = importlib.util.spec_from_file_location(
+        "asr_adapter", os.environ.get("ASR_ADAPTER_MODULE", "/opt/asr/adapter.py")
+    )
     adapter = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(adapter)
     transcriber = adapter.load_transcriber(

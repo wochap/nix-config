@@ -211,7 +211,7 @@ python_args=(/opt/asr/pipeline.py infer --audio-dir /input --state-dir /state --
 [[ -z $max_speakers ]] || python_args+=(--max-speakers "$max_speakers")
 
 echo "Running ASR, forced alignment, and speaker diarization sequentially" >&2
-podman "${container_args[@]}" "$ASR_IMAGE" \
+podman "${container_args[@]}" "$AI_IMAGE" \
   "${python_args[@]}" >"$json_tmp"
 
 if ((validate_output)); then

@@ -48,8 +48,8 @@ LANGUAGE_ALIASES = {
     "zh": "Chinese",
 }
 
-BACKEND = os.environ.get("ASR_BACKEND", "")
-ADAPTER_PATH = os.environ.get("ASR_ADAPTER", "/opt/asr/adapter.py")
+ADAPTER = os.environ.get("ASR_ADAPTER", "")
+ADAPTER_MODULE = os.environ.get("ASR_ADAPTER_MODULE", "/opt/asr/adapter.py")
 DIARIZER_REVISION = os.environ.get("ASR_DIARIZER_REVISION", "")
 BATCH_SIZE = max(1, int(os.environ.get("ASR_BATCH_SIZE") or "1"))
 
@@ -65,7 +65,7 @@ def resolve_runtime(env: dict[str, str] | None = None) -> tuple[str, str]:
 
 
 def adapter_revisions(env: dict[str, str] | None = None) -> dict[str, str]:
-    """Return the ASR_REVISION_<KEY> pins the backend adapter exported."""
+    """Return the ASR_REVISION_<KEY> pins the adapter exported."""
     values = os.environ if env is None else env
     prefix = "ASR_REVISION_"
     return {
@@ -76,13 +76,13 @@ def adapter_revisions(env: dict[str, str] | None = None) -> dict[str, str]:
 
 
 def load_adapter(path: str) -> Any:
-    """Import the backend adapter module mounted into the container.
+    """Import the adapter module mounted into the container.
 
     An adapter provides load_transcriber(device, dtype, batch_size), whose
     result has transcribe(paths, language) returning objects with text and
     language, and load_aligner(device, dtype), whose result has align(path,
     text, language) returning units with text, start, and end relative to the
-    chunk. load_aligner may return None for a backend whose transcriber
+    chunk. load_aligner may return None for an adapter whose transcriber
     produces timestamps itself; the pipeline does not support that yet.
     """
     spec = importlib.util.spec_from_file_location("asr_adapter", path)
@@ -470,9 +470,9 @@ def infer(args: argparse.Namespace) -> None:
     device, dtype_name = resolve_runtime()
     revisions = adapter_revisions()
 
-    if not BACKEND or not revisions or not DIARIZER_REVISION:
-        raise RuntimeError("backend and model revision environment variables are required")
-    adapter = load_adapter(ADAPTER_PATH)
+    if not ADAPTER or not revisions or not DIARIZER_REVISION:
+        raise RuntimeError("adapter and model revision environment variables are required")
+    adapter = load_adapter(ADAPTER_MODULE)
 
     audio_dir = Path(args.audio_dir)
     full_audio = audio_dir / "full.wav"
@@ -493,7 +493,7 @@ def infer(args: argparse.Namespace) -> None:
         "num_speakers": args.num_speakers,
         "min_speakers": args.min_speakers,
         "max_speakers": args.max_speakers,
-        "backend": BACKEND,
+        "backend": ADAPTER,
         "revisions": {**revisions, "diarizer": DIARIZER_REVISION},
     }
     signature_path = state_dir / "signature.json"
@@ -508,7 +508,7 @@ def infer(args: argparse.Namespace) -> None:
         chunk_records = []
 
     if len(chunk_records) < len(chunks):
-        log(f"Loading {BACKEND} ASR model")
+        log(f"Loading {ADAPTER} ASR model")
         transcriber = adapter.load_transcriber(device, dtype_name, BATCH_SIZE)
     else:
         transcriber = None
@@ -544,11 +544,11 @@ def infer(args: argparse.Namespace) -> None:
     if len(aligned_chunks) > len(chunk_records):
         aligned_chunks = []
     if len(aligned_chunks) < len(chunk_records):
-        log(f"Loading {BACKEND} aligner")
+        log(f"Loading {ADAPTER} aligner")
         aligner = adapter.load_aligner(device, dtype_name)
         if aligner is None:
             raise NotImplementedError(
-                f"the {BACKEND} backend has no aligner; transcriber timestamps are not supported yet"
+                f"the {ADAPTER} adapter has no aligner; transcriber timestamps are not supported yet"
             )
     else:
         aligner = None
@@ -601,7 +601,7 @@ def infer(args: argparse.Namespace) -> None:
 
     document = {
         "schema_version": 1,
-        "backend": BACKEND,
+        "backend": ADAPTER,
         "source": {"name": args.source_name, "duration": round(wav_duration(full_audio), 3)},
         "requested_language": requested_language,
         "detected_languages": list(

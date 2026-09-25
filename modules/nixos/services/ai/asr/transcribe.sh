@@ -90,4 +90,4 @@ fi
 [[ -z $language ]] || python_args+=(--language "$language")
 
 ensure_image
-exec podman "${container_args[@]}" "$ASR_IMAGE" "${python_args[@]}"
+exec podman "${container_args[@]}" "$AI_IMAGE" "${python_args[@]}"

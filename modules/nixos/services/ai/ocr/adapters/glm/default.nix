@@ -16,7 +16,7 @@ let
   };
 in
 {
-  config._custom.services.ai.ocr.screenAdapters.glm = {
+  config._custom.services.ai.ocr.adapterRegistry.glm = {
     label = "GLM-OCR";
     command = lib.getExe command;
     ollamaModels = [ model ];

@@ -12,7 +12,7 @@ import wave
 from unittest import mock
 
 
-SCRIPT = pathlib.Path(__file__).with_name("pipeline.py")
+SCRIPT = pathlib.Path(__file__).parents[1] / "pipeline.py"
 SPEC = importlib.util.spec_from_file_location("asr_pipeline", SCRIPT)
 PIPELINE = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
@@ -281,8 +281,8 @@ class AdapterSeamTest(unittest.TestCase):
                 mock.patch.dict("os.environ", {"ASR_REVISION_ASR": "stub"}, clear=True),
                 mock.patch.multiple(
                     PIPELINE,
-                    BACKEND="stub",
-                    ADAPTER_PATH=str(adapter),
+                    ADAPTER="stub",
+                    ADAPTER_MODULE=str(adapter),
                     DIARIZER_REVISION="stub",
                     diarize=lambda *_: regions,
                 ),

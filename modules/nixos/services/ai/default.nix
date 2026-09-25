@@ -31,6 +31,7 @@ in
     ./course-notes
     ./supertonic
     ./ocr
+    ./pdf-ingest
     ./ollama
   ];
 
@@ -51,65 +52,71 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages =
-      with pkgs;
-      [
-        python314Packages.huggingface-hub
-      ]
-      ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
+  config = lib.mkMerge [
+    {
+      _module.args.aiLib = import ./lib { inherit pkgs lib; };
+    }
 
-    systemd.services.open-webui.serviceConfig = lib.mkIf cfg.enableOpenWebui {
-      # Preserve the upstream GPU device allow-list; PrivateDevices breaks acceleration.
-      NoNewPrivileges = true;
-      ProtectSystem = "strict";
-      ProtectHome = true;
-      RestrictSUIDSGID = true;
-      CapabilityBoundingSet = "";
-      AmbientCapabilities = "";
-    };
+    (lib.mkIf cfg.enable {
+      environment.systemPackages =
+        with pkgs;
+        [
+          python314Packages.huggingface-hub
+        ]
+        ++ lib.optionals cfg.enableHandy [ inputs.handy.packages.${stdenv.hostPlatform.system}.handy ];
 
-    # Register Web Proxies mapping configuration
-    _custom.services.web-proxies = {
-      # Make nextjs-ollama-llm-ui accessible at https://nolui.wochap.local
-      nextjs-ollama-llm-ui = {
-        enable = cfg.enableNextjsOllamaLlmUi;
-        subdomain = "nolui";
-        publicPort = 11464;
-        lazy = true;
+      systemd.services.open-webui.serviceConfig = lib.mkIf cfg.enableOpenWebui {
+        # Preserve the upstream GPU device allow-list; PrivateDevices breaks acceleration.
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        RestrictSUIDSGID = true;
+        CapabilityBoundingSet = "";
+        AmbientCapabilities = "";
       };
-      # Make openwebui accessible at https://openwebui.wochap.local
-      open-webui = {
-        enable = cfg.enableOpenWebui;
-        subdomain = "openwebui";
-        publicPort = 11454;
-        lazy = true;
+
+      # Register Web Proxies mapping configuration
+      _custom.services.web-proxies = {
+        # Make nextjs-ollama-llm-ui accessible at https://nolui.wochap.local
+        nextjs-ollama-llm-ui = {
+          enable = cfg.enableNextjsOllamaLlmUi;
+          subdomain = "nolui";
+          publicPort = 11464;
+          lazy = true;
+        };
+        # Make openwebui accessible at https://openwebui.wochap.local
+        open-webui = {
+          enable = cfg.enableOpenWebui;
+          subdomain = "openwebui";
+          publicPort = 11454;
+          lazy = true;
+        };
       };
-    };
 
-    services.nextjs-ollama-llm-ui = lib.mkIf cfg.enableNextjsOllamaLlmUi {
-      enable = true;
-      package = pkgs.nextjs-ollama-llm-ui;
-      hostname = wochap-ssc.meta.address;
-      port = config._custom.services.web-proxies.nextjs-ollama-llm-ui.backendPort;
-    };
-
-    services.open-webui = lib.mkIf cfg.enableOpenWebui {
-      enable = true;
-      package = pkgs.open-webui;
-      openFirewall = false;
-      host = wochap-ssc.meta.address;
-      port = config._custom.services.web-proxies.open-webui.backendPort;
-      environment = {
-        WEBUI_AUTH = "False";
+      services.nextjs-ollama-llm-ui = lib.mkIf cfg.enableNextjsOllamaLlmUi {
+        enable = true;
+        package = pkgs.nextjs-ollama-llm-ui;
+        hostname = wochap-ssc.meta.address;
+        port = config._custom.services.web-proxies.nextjs-ollama-llm-ui.backendPort;
       };
-    };
 
-    _custom.hm.home.packages = [
-      clean-voice
-      asr-videos
-      summary
-      count-tokens
-    ];
-  };
+      services.open-webui = lib.mkIf cfg.enableOpenWebui {
+        enable = true;
+        package = pkgs.open-webui;
+        openFirewall = false;
+        host = wochap-ssc.meta.address;
+        port = config._custom.services.web-proxies.open-webui.backendPort;
+        environment = {
+          WEBUI_AUTH = "False";
+        };
+      };
+
+      _custom.hm.home.packages = [
+        clean-voice
+        asr-videos
+        summary
+        count-tokens
+      ];
+    })
+  ];
 }

@@ -19,7 +19,7 @@ MODEL_NAME = "PaddleOCR-VL-1.6"
 def initialize_paddle_cache(bundled: Path | None = None) -> None:
     """Create a writable runtime cache while retaining read-only bundled data."""
     if bundled is None:
-        bundled = Path(os.environ.get("PDF_INGEST_BUNDLED_CACHE", "/home/paddleocr/.paddlex"))
+        bundled = Path(os.environ.get("PADDLEOCR_VL_BUNDLED_CACHE", "/home/paddleocr/.paddlex"))
     cache = Path(os.environ.get("PADDLE_PDX_CACHE_HOME", str(bundled)))
     if cache == bundled:
         return
@@ -34,7 +34,7 @@ def initialize_paddle_cache(bundled: Path | None = None) -> None:
 
 
 def engine_name() -> str:
-    return os.environ.get("PDF_INGEST_ENGINE", "paddle")
+    return os.environ.get("PADDLEOCR_VL_ENGINE", "paddle")
 
 
 def paddleocr_version() -> str:
@@ -117,7 +117,7 @@ class PaddleOCRVLAdapter(core.ParserAdapter):
         raw = core.portable_raw(raw)
         parsing = raw.get("parsing_res_list", []) if isinstance(raw, dict) else []
         blocks = []
-        for item in parsing:
+        for index, item in enumerate(parsing):
             item = core.jsonable(item)
             label = str(item.get("label", item.get("block_label", "text"))).lower()
             content = item.get("content", item.get("block_content", item.get("text", "")))
@@ -136,6 +136,7 @@ class PaddleOCRVLAdapter(core.ParserAdapter):
                 "bbox": point_box,
                 "polygon": point_polygon,
                 "parser_block_id": item.get("block_id", item.get("id")),
+                "raw_path": f"/parsing_res_list/{index}",
                 "raw": item,
             })
         return {"dpi": dpi, "render_transform": {"pixel_to_pdf_points": round(72.0 / dpi, 8), "origin": "top-left"}, "raw": raw, "blocks": blocks}

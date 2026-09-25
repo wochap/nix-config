@@ -1,4 +1,4 @@
-"""Qwen3-ASR backend: Qwen3-ASR-1.7B plus Qwen3-ForcedAligner-0.6B."""
+"""Qwen3-ASR adapter: Qwen3-ASR-1.7B plus Qwen3-ForcedAligner-0.6B."""
 
 import os
 from dataclasses import dataclass

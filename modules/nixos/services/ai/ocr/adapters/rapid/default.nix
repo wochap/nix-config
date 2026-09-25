@@ -12,7 +12,7 @@ let
   };
 in
 {
-  config._custom.services.ai.ocr.screenAdapters.rapid = {
+  config._custom.services.ai.ocr.adapterRegistry.rapid = {
     label = "RapidOCR";
     command = lib.getExe command;
   };

@@ -4,22 +4,15 @@
 {
   config,
   lib,
-  ocrLib,
+  aiLib,
   ...
 }:
 
 let
-  cfg = config._custom.services.ai.ocr.pdfIngest.paddleocrVl;
-  optionPrefix = [
-    "_custom"
-    "services"
-    "ai"
-    "ocr"
-    "pdfIngest"
-  ];
-  # The image name predates the adapter split; keeping it keeps the tag, so
-  # hosts reuse the image they already built.
-  rocmImage = ocrLib.mkContainerImage "pdf-ingest-rocm" ./rocm.Containerfile cfg.rocm.baseImage;
+  cfg = config._custom.services.ai.pdfIngest.paddleocrVl;
+  rocmImage =
+    aiLib.mkContainerImage "pdf-ingest-paddleocr-vl-rocm" ./rocm.Containerfile
+      "BASE_IMAGE=${cfg.rocm.baseImage}";
   # PaddleX keeps its runtime cache under /tmp and links the read-only models
   # and fonts back from the image.
   commonEnv = [
@@ -29,21 +22,7 @@ let
   ];
 in
 {
-  imports =
-    map
-      (path: lib.mkRenamedOptionModule (optionPrefix ++ path) (optionPrefix ++ [ "paddleocrVl" ] ++ path))
-      [
-        [
-          "cuda"
-          "image"
-        ]
-        [
-          "rocm"
-          "baseImage"
-        ]
-      ];
-
-  options._custom.services.ai.ocr.pdfIngest.paddleocrVl = {
+  options._custom.services.ai.pdfIngest.paddleocrVl = {
     cuda.image = lib.mkOption {
       type = lib.types.str;
       default = "ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddleocr-vl:paddleocr3.6-nvidia-gpu-offline@sha256:6c735bdf9e758ffdd58ccc067db0c2d84e37e5e6a2cbd47156069d4d7ea5d709";
@@ -54,12 +33,12 @@ in
       type = lib.types.str;
       default = "docker.io/rocm/pytorch@sha256:cc9b00f90b85c97b015b040fa55c8d1b404b7cacc6ad57d74ee3451c97508da1";
       description = ''
-        ROCm PyTorch image the local pdf-ingest-rocm image is built from.
+        ROCm PyTorch image the local pdf-ingest-paddleocr-vl-rocm image is built from.
       '';
     };
   };
 
-  config._custom.services.ai.ocr.pdfIngest.adapters.paddleocr-vl = {
+  config._custom.services.ai.pdfIngest.adapterRegistry.paddleocr-vl = {
     displayName = "PaddleOCR-VL";
     module = ./adapter.py;
 
@@ -76,12 +55,12 @@ in
     # baked into the image: the upstream image runs as the paddleocr user, the
     # rocm/pytorch base runs as root.
     containerEnv.cuda = commonEnv ++ [
-      "PDF_INGEST_ENGINE=paddle"
-      "PDF_INGEST_BUNDLED_CACHE=/home/paddleocr/.paddlex"
+      "PADDLEOCR_VL_ENGINE=paddle"
+      "PADDLEOCR_VL_BUNDLED_CACHE=/home/paddleocr/.paddlex"
     ];
     containerEnv.rocm = commonEnv ++ [
-      "PDF_INGEST_ENGINE=transformers"
-      "PDF_INGEST_BUNDLED_CACHE=/root/.paddlex"
+      "PADDLEOCR_VL_ENGINE=transformers"
+      "PADDLEOCR_VL_BUNDLED_CACHE=/root/.paddlex"
     ];
   };
 }

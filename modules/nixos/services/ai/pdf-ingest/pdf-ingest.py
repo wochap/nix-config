@@ -3,7 +3,7 @@
 
 The model-facing adapter deliberately ends at a small page/block contract.  The
 canonicalizer and renderer can therefore be tested without Paddle, PyMuPDF, or
-a GPU and future parser adapters do not need to change document schema v1.
+a GPU and future parser adapters do not need to change document schema v2.
 The layout adapter lives in its own file, mounted at /opt/pdf-ingest/adapter.py
 inside the inference container; see ParserAdapter for its contract.
 """
@@ -26,9 +26,9 @@ import sys
 import time
 from typing import Any, Iterable
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 ADAPTER_MODULE = "/opt/pdf-ingest/adapter.py"
-STATE_VERSION = 1
+STATE_VERSION = 2
 CONTROL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]|\ufffd")
 SPACE_RE = re.compile(r"\s+")
 TEXT_TYPES = {"text", "title", "heading", "paragraph", "header", "footer", "reference", "footnote", "list_item"}
@@ -178,7 +178,9 @@ class ParserAdapter:
     A layout adapter module exports ADAPTER, a subclass constructed as
     ADAPTER(batch_size) inside the inference container.  Its parse_page(image,
     dpi) returns {"dpi", "render_transform", "raw", "blocks"} with block
-    geometry already in PDF points.
+    geometry already in PDF points.  Each block carries "raw_path", a JSON
+    pointer into that page's "raw" result ("" for the whole result); the
+    document's provenance links each block back to it.
     """
 
     name = "parser"
@@ -400,18 +402,16 @@ def normalize_grid(rows: list[list[Any]]) -> list[dict[str, Any]]:
     return [{"row": row_number, "column": column_number, "row_span": 1, "column_span": 1, "header": row_number == 0, "text": str(value or "").strip()} for row_number, row in enumerate(rows) for column_number, value in enumerate(row)]
 
 
-# The "paddle_text" key and "paddle_empty" reason are schema v1 names; they
-# hold the layout adapter's text whichever adapter produced it.
-def choose_native(paddle_text: str, candidates: list[dict[str, Any]], layout_name: str = "paddleocr-vl") -> tuple[str, dict[str, Any]]:
+def choose_native(layout_text: str, candidates: list[dict[str, Any]], layout_name: str) -> tuple[str, dict[str, Any]]:
     candidates = [candidate for candidate in candidates if printable_native(candidate.get("text", ""))]
     if not candidates:
-        return paddle_text, {"selected": layout_name, "reason": "no_reliable_native_text", "paddle_text": paddle_text, "native_text": None}
+        return layout_text, {"selected": layout_name, "reason": "no_reliable_native_text", "layout_text": layout_text, "native_text": None}
     native_text = "\n".join(candidate["text"] for candidate in candidates)
-    similarity = text_similarity(native_text, paddle_text) if paddle_text.strip() else 1.0
-    if not paddle_text.strip() or similarity >= 0.60:
-        reason = "paddle_empty" if not paddle_text.strip() else "native_matches_ocr"
-        return native_text, {"selected": "pymupdf", "reason": reason, "similarity": round(similarity, 4), "paddle_text": paddle_text, "native_text": native_text}
-    return paddle_text, {"selected": layout_name, "reason": "candidate_mismatch", "similarity": round(similarity, 4), "paddle_text": paddle_text, "native_text": native_text}
+    similarity = text_similarity(native_text, layout_text) if layout_text.strip() else 1.0
+    if not layout_text.strip() or similarity >= 0.60:
+        reason = "layout_empty" if not layout_text.strip() else "native_matches_ocr"
+        return native_text, {"selected": "pymupdf", "reason": reason, "similarity": round(similarity, 4), "layout_text": layout_text, "native_text": native_text}
+    return layout_text, {"selected": layout_name, "reason": "candidate_mismatch", "similarity": round(similarity, 4), "layout_text": layout_text, "native_text": native_text}
 
 
 def duplicate(left: dict[str, Any], right: dict[str, Any]) -> bool:
@@ -420,10 +420,10 @@ def duplicate(left: dict[str, Any], right: dict[str, Any]) -> bool:
     return spatial and textual
 
 
-def reconcile_page(native: dict[str, Any], layout: dict[str, Any], page_number: int, layout_name: str = "paddleocr-vl") -> dict[str, Any]:
+def reconcile_page(native: dict[str, Any], layout: dict[str, Any], page_number: int, layout_name: str) -> dict[str, Any]:
     blocks = []
     matched_native: set[int] = set()
-    for layout_index, source in enumerate(layout["blocks"]):
+    for source in layout["blocks"]:
         intersecting = []
         native_pointers = []
         for native_index, candidate in enumerate(native["blocks"]):
@@ -431,7 +431,7 @@ def reconcile_page(native: dict[str, Any], layout: dict[str, Any], page_number: 
                 intersecting.append(candidate)
                 native_pointers.append(f"/pages/{page_number - 1}/blocks/{native_index}")
                 matched_native.add(native_index)
-        text, choice = choose_native(source.get("text", ""), intersecting, layout_name) if source["type"] in TEXT_TYPES | {"caption"} else (source.get("text", ""), {"selected": layout_name, "reason": "structural_block", "paddle_text": source.get("text", ""), "native_text": None})
+        text, choice = choose_native(source.get("text", ""), intersecting, layout_name) if source["type"] in TEXT_TYPES | {"caption"} else (source.get("text", ""), {"selected": layout_name, "reason": "structural_block", "layout_text": source.get("text", ""), "native_text": None})
         typed: dict[str, Any] = {}
         if source["type"] == "table":
             native_tables = [table for table in native["tables"] if table.get("bbox") and intersection_ratio(source["bbox"], table["bbox"]) >= 0.35]
@@ -449,7 +449,7 @@ def reconcile_page(native: dict[str, Any], layout: dict[str, Any], page_number: 
         block = {
             "type": source["type"], "text": text, "bbox": source["bbox"], "polygon": source.get("polygon"),
             "source_region": source.get("label"), "links": links_for_box(native["links"], source["bbox"]),
-            "provenance": {"selection": choice, "raw": {layout_name.replace("-", "_"): f"/pages/{page_number - 1}/result/parsing_res_list/{layout_index}", "pymupdf": native_pointers}},
+            "provenance": {"selection": choice, "raw": {"layout": f"/pages/{page_number - 1}/result{source['raw_path']}", "pymupdf": native_pointers}},
             **typed,
         }
         if native_sizes:
@@ -462,7 +462,7 @@ def reconcile_page(native: dict[str, Any], layout: dict[str, Any], page_number: 
 
     for native_index, source in enumerate(native["blocks"]):
         if native_index not in matched_native:
-            block = {"type": "text", "text": source["text"], "bbox": source["bbox"], "polygon": None, "source_region": "unmatched_native", "links": links_for_box(native["links"], source["bbox"]), "provenance": {"selection": {"selected": "pymupdf", "reason": "unmatched_native", "native_text": source["text"], "paddle_text": None}, "raw": {"pymupdf": f"/pages/{page_number - 1}/blocks/{native_index}"}}}
+            block = {"type": "text", "text": source["text"], "bbox": source["bbox"], "polygon": None, "source_region": "unmatched_native", "links": links_for_box(native["links"], source["bbox"]), "provenance": {"selection": {"selected": "pymupdf", "reason": "unmatched_native", "native_text": source["text"], "layout_text": None}, "raw": {"pymupdf": f"/pages/{page_number - 1}/blocks/{native_index}"}}}
             if printable_native(source["text"]) and not any(duplicate(block, existing) for existing in blocks):
                 blocks.append(block)
 
@@ -691,6 +691,9 @@ def render_table(table: dict[str, Any]) -> list[str]:
     return ["| " + " | ".join(row) + " |" for row in grid[:1]] + ["| " + " | ".join(["---"] * column_count) + " |"] + ["| " + " | ".join(row) + " |" for row in grid[1:]]
 
 
+OLDER_OUTPUT = "pdf-ingest: destination was made by an older pdf-ingest; re-ingest into a new directory"
+
+
 def probe(args: argparse.Namespace) -> int:
     output = Path(args.output)
     current = identity(args)
@@ -699,7 +702,12 @@ def probe(args: argparse.Namespace) -> int:
     if entries == complete_entries:
         try:
             document = load_json(output / "document.json")
-            actual = {"source_sha256": document["document"]["source"]["sha256"], "settings": document["document"]["extraction_settings"], "image": document["parsers"][1]["image"]}
+            version = document.get("schema_version")
+            if isinstance(version, int) and version < SCHEMA_VERSION:
+                print(OLDER_OUTPUT, file=sys.stderr)
+                return 2
+            layout = next(parser for parser in document["parsers"] if parser.get("role") == "layout")
+            actual = {"source_sha256": document["document"]["source"]["sha256"], "settings": document["document"]["extraction_settings"], "image": layout["image"]}
             validate_document(document)
         except Exception as error:
             print(f"pdf-ingest: destination looks complete but is invalid: {error}", file=sys.stderr)
@@ -715,6 +723,9 @@ def probe(args: argparse.Namespace) -> int:
             manifest = load_json(manifest_path)
         except Exception as error:
             print(f"pdf-ingest: unreadable checkpoint manifest: {error}", file=sys.stderr)
+            return 2
+        if manifest.get("state_version") != STATE_VERSION:
+            print(OLDER_OUTPUT, file=sys.stderr)
             return 2
         if manifest.get("identity") != current:
             print("pdf-ingest: checkpoint belongs to a different source or settings", file=sys.stderr)
@@ -867,8 +878,7 @@ def infer(args: argparse.Namespace) -> int:
 def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, state: Path, adapter: type[ParserAdapter]) -> None:
     log(f"compacting {page_count} pages into the final document")
     checkpoints = [load_json(state / "pages" / f"page-{number:03d}.json") for number in range(1, page_count + 1)]
-    # Checkpoints written before the adapter split keep the layout under "paddle".
-    layouts = [checkpoint["layout"] if "layout" in checkpoint else checkpoint["paddle"] for checkpoint in checkpoints]
+    layouts = [checkpoint["layout"] for checkpoint in checkpoints]
     pages = [checkpoint["canonical"] for checkpoint in checkpoints]
     for page in pages:
         page.pop("relationships")
@@ -877,8 +887,8 @@ def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, sta
         "schema_version": SCHEMA_VERSION,
         "document": {"source": {"sha256": sha256_file(Path(args.source)), "original_name": args.source_name, "path": "source.pdf", "mime_type": "application/pdf"}, "page_count": page_count, "extraction_settings": settings(args)},
         "parsers": [
-            {"adapter": "pymupdf", "package_version": pymupdf_version, "device": "cpu", "settings": {"raw_characters": True, "links": True, "images": True, "tables": True}},
-            {**adapter.metadata(), "adapter": adapter.name, "model": adapter.model, "image": args.image, "accelerator": accelerator_name()},
+            {"adapter": "pymupdf", "role": "native", "package_version": pymupdf_version, "device": "cpu", "settings": {"raw_characters": True, "links": True, "images": True, "tables": True}},
+            {**adapter.metadata(), "adapter": adapter.name, "role": "layout", "model": adapter.model, "image": args.image, "accelerator": accelerator_name()},
         ],
         "pages": pages,
         "relationships": relationships,
