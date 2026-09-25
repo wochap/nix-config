@@ -4,16 +4,29 @@ import argparse
 import importlib.util
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 from unittest import mock
 
 
 MODULE_PATH = Path(__file__).parents[1] / "pdf-ingest.py"
-SPEC = importlib.util.spec_from_file_location("pdf_ingest", MODULE_PATH)
-pdf = importlib.util.module_from_spec(SPEC)
-assert SPEC.loader
-SPEC.loader.exec_module(pdf)
+ADAPTER_PATH = Path(__file__).parents[1] / "adapters" / "pdf" / "paddleocr-vl" / "adapter.py"
+
+
+def load_module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    # Registered before execution so the adapter's `import pdf_ingest` finds
+    # this copy of the core.
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+pdf = load_module("pdf_ingest", MODULE_PATH)
+paddle = load_module("pdf_ingest_paddleocr_vl", ADAPTER_PATH)
 
 
 def native_page(blocks=None, tables=None, images=None, links=None, rotation=0):
@@ -105,7 +118,7 @@ class PaddleAdapterTests(unittest.TestCase):
             def predict(self, **kwargs):
                 return [PaddleResult(parsing_res_list=[PaddleBlock()])]
 
-        adapter = pdf.PaddleOCRVLAdapter.__new__(pdf.PaddleOCRVLAdapter)
+        adapter = paddle.PaddleOCRVLAdapter.__new__(paddle.PaddleOCRVLAdapter)
         adapter.pipeline = Pipeline()
         adapter.batch_size = 1
         page = adapter.parse_page(Path("render.png"), 200)
@@ -141,6 +154,21 @@ class ReconciliationTests(unittest.TestCase):
         selection = page["blocks"][0]["provenance"]["selection"]
         self.assertEqual(selection["selected"], "paddleocr-vl")
         self.assertEqual(selection["native_text"], "Completely different")
+
+    def test_provenance_names_follow_layout_adapter(self):
+        native = native_page([native_block("Different words", [0, 0, 100, 20])])
+        layout = paddle_page([paddle_block("text", "Expected", [0, 0, 100, 20]), paddle_block("table", "", [0, 50, 100, 80])])
+        # Schema v1 names from before the adapter split stay the default.
+        page = pdf.reconcile_page(native, layout, 1)
+        self.assertEqual(page["blocks"][0]["provenance"]["selection"]["selected"], "paddleocr-vl")
+        self.assertEqual(page["blocks"][0]["provenance"]["raw"], {"paddleocr_vl": "/pages/0/result/parsing_res_list/0", "pymupdf": ["/pages/0/blocks/0"]})
+        self.assertEqual(page["blocks"][1]["table"]["source"], "paddleocr-vl")
+        self.assertEqual(page, pdf.reconcile_page(native, layout, 1, "paddleocr-vl"))
+
+        page = pdf.reconcile_page(native, layout, 1, "other-parser")
+        self.assertEqual(page["blocks"][0]["provenance"]["selection"]["selected"], "other-parser")
+        self.assertIn("other_parser", page["blocks"][0]["provenance"]["raw"])
+        self.assertEqual(page["blocks"][1]["table"]["source"], "other-parser")
 
     def test_unmatched_native_is_preserved_and_duplicates_are_suppressed(self):
         native = native_page([
@@ -343,15 +371,15 @@ class RenderingAndValidationTests(unittest.TestCase):
             "--read-only",
             '--shm-size="$PDF_INGEST_SHM_SIZE"',
             '"--tmpfs=/tmp:rw,nosuid,nodev,size=$PDF_INGEST_TMP_SIZE"',
-            "--env=PADDLE_PDX_CACHE_HOME=/tmp/paddlex-cache",
             "--env=HF_HUB_OFFLINE=1",
-            '"--env=PDF_INGEST_ENGINE=$PDF_INGEST_ENGINE"',
             '"--env=PDF_INGEST_DTYPE=$PDF_INGEST_DTYPE"',
-            '"--env=PDF_INGEST_BUNDLED_CACHE=$PDF_INGEST_BUNDLED_CACHE"',
             "--env=XDG_CACHE_HOME=/tmp/cache",
             '"--mount=type=bind,source=$source_pdf,target=/input/source.pdf,readonly"',
             '"--mount=type=bind,source=$output_dir,target=/output,rw"',
             '"--mount=type=bind,source=$PDF_INGEST_PIPELINE,target=/opt/pdf-ingest/pdf-ingest.py,readonly"',
+            '"--mount=type=bind,source=$PDF_INGEST_ADAPTER_MODULE,target=/opt/pdf-ingest/adapter.py,readonly"',
+            '"--env=PDF_INGEST_ADAPTER=$PDF_INGEST_ADAPTER"',
+            'container_args+=("--env=$container_env_entry")',
         ):
             self.assertIn(flag, launcher)
         self.assertNotIn('"--volume=$source_pdf:/input/source.pdf:ro"', launcher)
@@ -360,6 +388,8 @@ class RenderingAndValidationTests(unittest.TestCase):
         self.assertIn('"$PDF_INGEST_PIPELINE" prepare', launcher)
         self.assertIn("pdf-ingest.py infer", launcher)
         self.assertNotIn("--device=nvidia.com/gpu=all", launcher)
+        # Adapter-specific environment comes from the NixOS adapter module.
+        self.assertNotIn("PADDLE", launcher)
         self.assertLess(launcher.index("ensure_image\n"), launcher.index("pdf-ingest.py infer"))
 
     def test_oom_detection_covers_cuda_and_rocm_messages(self):
@@ -375,14 +405,14 @@ class RenderingAndValidationTests(unittest.TestCase):
 
     def test_adapter_kwargs_follow_engine_environment(self):
         with mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "paddle"}):
-            kwargs = pdf.PaddleOCRVLAdapter.pipeline_kwargs()
+            kwargs = paddle.PaddleOCRVLAdapter.pipeline_kwargs()
         self.assertEqual(kwargs["precision"], "fp16")
         self.assertEqual(kwargs["device"], "gpu:0")
         self.assertNotIn("engine", kwargs)
         self.assertNotIn("engine_config", kwargs)
 
         with mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float32"}):
-            kwargs = pdf.PaddleOCRVLAdapter.pipeline_kwargs()
+            kwargs = paddle.PaddleOCRVLAdapter.pipeline_kwargs()
         self.assertEqual(kwargs["engine"], "transformers")
         self.assertEqual(kwargs["engine_config"], {"dtype": "float32"})
         self.assertEqual(kwargs["device"], "gpu:0")
@@ -395,7 +425,7 @@ class RenderingAndValidationTests(unittest.TestCase):
         fake = types.ModuleType("paddleocr")
         fake.PaddleOCRVL = mock.Mock(return_value="pipeline")
         with mock.patch.dict(sys.modules, {"paddleocr": fake}), mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float16"}):
-            adapter = pdf.PaddleOCRVLAdapter(2)
+            adapter = paddle.PaddleOCRVLAdapter(2)
         self.assertEqual(adapter.pipeline, "pipeline")
         self.assertEqual(adapter.batch_size, 2)
         called = fake.PaddleOCRVL.call_args.kwargs
@@ -410,7 +440,7 @@ class RenderingAndValidationTests(unittest.TestCase):
             cache = root / "runtime"
             (bundled / "official_models").mkdir(parents=True)
             with mock.patch.dict("os.environ", {"PADDLE_PDX_CACHE_HOME": str(cache), "PDF_INGEST_BUNDLED_CACHE": str(bundled)}):
-                pdf.initialize_paddle_cache()
+                paddle.initialize_paddle_cache()
             self.assertEqual((cache / "official_models").resolve(), bundled / "official_models")
             self.assertFalse((cache / "fonts").exists())
 
@@ -422,7 +452,7 @@ class RenderingAndValidationTests(unittest.TestCase):
             (bundled / "official_models").mkdir(parents=True)
             (bundled / "fonts").mkdir()
             with mock.patch.dict("os.environ", {"PADDLE_PDX_CACHE_HOME": str(cache)}):
-                pdf.initialize_paddle_cache(bundled)
+                paddle.initialize_paddle_cache(bundled)
             self.assertEqual((cache / "official_models").resolve(), bundled / "official_models")
             self.assertEqual((cache / "fonts").resolve(), bundled / "fonts")
             (cache / "func_ret").mkdir()
@@ -512,6 +542,8 @@ class RetryAndDestinationTests(unittest.TestCase):
                 paddle_page([paddle_block("text", "Scanned page", [0, 0, 100, 20])]),
                 1,
             )
+            # Checkpoints from before the adapter split store the layout
+            # result under "paddle"; an interrupted run must still compact.
             checkpoint = {
                 "native": native_page(),
                 "paddle": paddle_page([paddle_block("text", "Scanned page", [0, 0, 100, 20])]),
@@ -520,15 +552,33 @@ class RetryAndDestinationTests(unittest.TestCase):
             pdf.dump_json(state / "pages" / "page-001.json", checkpoint)
             args = self.args(source, output)
             args.source_name = source.name
-            pdf.compact(args, "test", 1, state)
+            with mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float32", "PDF_INGEST_ACCELERATOR": "rocm"}), mock.patch.object(paddle, "paddleocr_version", return_value="3.7.0"):
+                pdf.compact(args, "test", 1, state, paddle.PaddleOCRVLAdapter)
             self.assertEqual({item.name for item in output.iterdir()}, {"source.pdf", "document.json", "document.md", "images", "raw"})
+            self.assertEqual({item.name for item in (output / "raw").iterdir()}, {"pymupdf.json", "paddleocr-vl.json"})
             self.assertFalse(state.exists())
             document = json.loads((output / "document.json").read_text())
             pdf.validate_document(document)
+            self.assertEqual(document["parsers"][1], {
+                "adapter": "paddleocr-vl", "package_version": "3.7.0", "model": "PaddleOCR-VL-1.6", "image": self.IMAGE,
+                "accelerator": "rocm", "engine": "transformers", "dtype": "float32", "device": "gpu:0",
+                "settings": {"all_pages": True, "layout_detection": True, "chart_recognition": True, "orientation": False, "unwarping": False, "concurrency": 1},
+            })
+            raw = json.loads((output / "raw" / "paddleocr-vl.json").read_text())
+            self.assertEqual((raw["adapter"], raw["model"], raw["pages"][0]["dpi"]), ("paddleocr-vl", "PaddleOCR-VL-1.6", 200))
             self.assertIn("Scanned page", (output / "document.md").read_text())
 
+    def test_layout_adapter_is_loaded_from_module_path(self):
+        with mock.patch.dict("os.environ", {"PDF_INGEST_ADAPTER_MODULE": str(ADAPTER_PATH)}):
+            adapter = pdf.load_layout_adapter()
+        self.assertEqual((adapter.name, adapter.model), ("paddleocr-vl", "PaddleOCR-VL-1.6"))
+        self.assertTrue(issubclass(adapter, pdf.ParserAdapter))
+
     def test_inference_phase_does_not_require_pymupdf(self):
-        class FakePaddle:
+        class FakePaddle(pdf.ParserAdapter):
+            name = "paddleocr-vl"
+            model = "fake"
+
             def __init__(self, batch_size):
                 self.batch_size = batch_size
 
@@ -552,7 +602,7 @@ class RetryAndDestinationTests(unittest.TestCase):
             pdf.dump_json(state / "native" / "metadata.json", {"page_count": 1, "package_version": "test"})
             pdf.dump_json(state / "native" / "page-001.json", native_page())
             (state / "renders" / "page-001-200.png").write_bytes(b"unused by fake adapter")
-            with mock.patch.object(pdf, "initialize_paddle_cache"), mock.patch.object(pdf, "PaddleOCRVLAdapter", FakePaddle), mock.patch.object(
+            with mock.patch.object(pdf, "load_layout_adapter", return_value=FakePaddle), mock.patch.object(
                 pdf, "PyMuPDFAdapter", side_effect=AssertionError("container inference imported PyMuPDF")
             ):
                 self.assertEqual(pdf.infer(args), 0)

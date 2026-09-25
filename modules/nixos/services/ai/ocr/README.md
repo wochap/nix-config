@@ -1,16 +1,17 @@
 # OCR
 
 `ocr` freezes the screen, lets you select a region with `slurp`, recognizes
-the text inside it, and copies the result to the clipboard. Two backends are
-available: RapidOCR (fast, local CPU/GPU inference) and GLM-OCR (vision LLM
-through Ollama).
+the text inside it, and copies the result to the clipboard. Two screen
+adapters are available: RapidOCR (fast, local CPU inference) and GLM-OCR
+(vision LLM through Ollama).
 
 ## Stack
 
 | Component | Role |
 |-----------|------|
-| [RapidOCR](https://github.com/RapidAI/RapidOCR) | Default recognition engine (`rapidocr-text.py`) |
-| Ollama + `glm-ocr:bf16` | GLM mode, served at `127.0.0.1:11434` |
+| [RapidOCR](https://github.com/RapidAI/RapidOCR) | Default screen adapter (`adapters/screen/rapid`) |
+| Ollama + `glm-ocr:bf16` | GLM screen adapter (`adapters/screen/glm`), served at `127.0.0.1:11434` |
+| [PaddleOCR-VL](https://github.com/PaddlePaddle/PaddleOCR) | Default `pdf-ingest` layout adapter (`adapters/pdf/paddleocr-vl`) |
 
 ## Setup
 
@@ -34,10 +35,13 @@ Run `ocr` and select a screen region. Recognized text is copied to the
 clipboard:
 
 ```sh
-ocr          # RapidOCR (default, fast/local)
+ocr          # default adapter (RapidOCR, fast/local)
 ocr rapid    # RapidOCR explicitly
 ocr glm      # GLM-OCR through local Ollama
 ```
+
+`_custom.services.ai.ocr.defaultScreenAdapter` (default `rapid`) selects the
+adapter used without an argument.
 
 Only one OCR selection can run at a time (flock-protected). Use RapidOCR for
 everyday text capture; use GLM mode when the region needs vision-model
@@ -46,24 +50,25 @@ understanding (handwriting, tables, complex layouts).
 ## PDF ingestion
 
 `pdf-ingest` turns a local PDF into a portable document directory. It combines
-native PDF data from PyMuPDF with the reading order and layout produced by
-PaddleOCR-VL-1.6. It does not create embeddings, contact a vector database, or
-run an indexing service.
+native PDF data from PyMuPDF with the reading order and layout produced by a
+layout adapter, PaddleOCR-VL-1.6 by default. It does not create embeddings,
+contact a vector database, or run an indexing service.
 
 ### Accelerators
 
 The backend follows the host flags: `enableCuda` selects `cuda`,
 `enableRocm` selects `rocm`, and enabling OCR with neither set fails
-evaluation. Options live under `_custom.services.ai.pdfIngest`:
+evaluation. Options live under `_custom.services.ai.ocr.pdfIngest`:
 
 | Option | Default | Role |
 |--------|---------|------|
-| `accelerator` | from `enableCuda`/`enableRocm` | `cuda` or `rocm`; selects image, engine, and devices |
+| `adapter` | `paddleocr-vl` | Layout adapter under `adapters/pdf/` |
+| `accelerator` | from `enableCuda`/`enableRocm` | `cuda` or `rocm`; selects the adapter's image and environment, and the devices |
 | `dtype` | `float16` | Torch dtype for both models on ROCm (`float16`, `bfloat16`, `float32`) |
 | `shmSize` | `2g` | `podman run --shm-size` |
 | `tmpSize` | `4g` | tmpfs size mounted at `/tmp` in the container |
-| `cuda.image` | pinned `paddleocr-vl` offline image | Upstream CUDA image, run directly |
-| `rocm.baseImage` | pinned `rocm/pytorch` | Base of the local ROCm image |
+| `paddleocrVl.cuda.image` | pinned `paddleocr-vl` offline image | Upstream CUDA image, run directly (was `cuda.image`) |
+| `paddleocrVl.rocm.baseImage` | pinned `rocm/pytorch` | Base of the local ROCm image (was `rocm.baseImage`) |
 | `rocm.gfxOverride` | `null` | `HSA_OVERRIDE_GFX_VERSION` inside the container |
 | `rocm.devices` | `["/dev/kfd" "/dev/dri"]` | Device nodes handed to Podman |
 
@@ -174,7 +179,7 @@ state, so it can be copied to another machine as-is.
 ### Isolation
 
 The inference container can read only the selected PDF, the immutable pipeline
-script, and files already inside its pinned image. Its only persistent writable
+and adapter scripts, and files already inside its pinned image. Its only persistent writable
 mount is the selected output directory. The host home directory, SSH and GPG
 directories, agent sockets, Podman socket, and other sibling files are not
 mounted. Networking and Podman's automatic proxy-environment forwarding are
@@ -218,3 +223,59 @@ networking disabled unconditionally; `podman inspect` of a running container,
 when testing with a sufficiently long document, should report network mode
 `none`. Re-ingesting the same file and settings in a new empty destination
 should produce the same block IDs.
+
+## Adding an adapter
+
+Each adapter is a directory under `adapters/` holding a NixOS module. The
+module registers itself in an internal option; `default.nix` imports it.
+Add one import line there for a new directory.
+
+### Screen adapter
+
+1. Create `adapters/screen/<name>/default.nix` and set
+   `_custom.services.ai.ocr.screenAdapters.<name>`:
+   - `label`: name shown in notifications, as in "`<label>` Completed".
+   - `command`: store path of an executable. `ocr` calls it as
+     `command IMAGE`. It prints the recognized text on stdout and exits
+     nonzero on failure. The last stderr line becomes the failure
+     notification, so make it a short sentence.
+   - `ollamaModels` (optional): models added to `services.ollama.loadModels`.
+2. Keep temporary files inside the adapter (`mktemp` plus a trap). `ocr`
+   only owns the captured image and the output.
+
+`ocr <name>` then runs the adapter; an unknown name prints the registered
+names.
+
+### PDF layout adapter
+
+1. Create `adapters/pdf/<name>/default.nix`. Declare adapter-specific
+   options under `_custom.services.ai.ocr.pdfIngest.<camelName>` and set
+   `_custom.services.ai.ocr.pdfIngest.adapters.<name>`:
+   - `displayName`: name in log and build messages.
+   - `module`: the Python adapter, mounted at `/opt/pdf-ingest/adapter.py`.
+   - `image.<accelerator>`: `{ tag; context; buildArgs; }`. An empty
+     `context` runs `tag` as pulled; otherwise `pdf-ingest` builds the
+     Containerfile in `context` with `buildArgs` on first use. The
+     `ocrLib.mkContainerImage name file baseImage` module argument returns
+     such a set with a content-hashed tag. A missing accelerator fails
+     evaluation.
+   - `containerEnv.<accelerator>`: `KEY=VALUE` strings passed to the
+     container.
+2. Create the Python adapter. It does `import pdf_ingest as core` and exports
+   `ADAPTER`, a `core.ParserAdapter` subclass with:
+   - `name` (used in provenance and `raw/<name>.json`) and `model`.
+   - `prepare_runtime()`: static; sets up caches before the first load.
+   - `__init__(batch_size)`: loads the model.
+   - `parse_page(image_path, dpi)`: returns `dpi`, `render_transform`, `raw`,
+     and `blocks`. Each block has `type` (through `core.map_label`), `label`,
+     `text`, `bbox` and `polygon` in PDF points (`core.pixel_box_to_points`),
+     `parser_block_id`, and `raw`.
+   - `clear_cache()`: frees accelerator memory after an OOM.
+   - `metadata()`: static; extra fields of the adapter's `parsers` entry in
+     `document.json`.
+3. Set `pdfIngest.adapter = "<name>"`.
+
+The container image must contain Python, Pillow, and the adapter's own
+packages; PyMuPDF runs outside it. `tests/test_pdf_ingest.py` loads the
+PaddleOCR-VL adapter beside the core; use its fake adapter in
+`test_inference_phase_does_not_require_pymupdf` as a template.

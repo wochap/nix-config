@@ -25,7 +25,7 @@ if [[ ${1:-} == setup ]]; then
     ensure_image
     exit 0
   fi
-  echo "Pulling pinned PaddleOCR-VL offline image" >&2
+  echo "Pulling pinned $PDF_INGEST_ADAPTER_DISPLAY image" >&2
   exec podman pull "$PDF_INGEST_IMAGE"
 fi
 
@@ -173,22 +173,26 @@ container_args=(
   --shm-size="$PDF_INGEST_SHM_SIZE"
   "--tmpfs=/tmp:rw,nosuid,nodev,size=$PDF_INGEST_TMP_SIZE"
   --env=PYTHONDONTWRITEBYTECODE=1
-  --env=PADDLE_PDX_CACHE_HOME=/tmp/paddlex-cache
   --env=XDG_CACHE_HOME=/tmp/cache
-  --env=FLAGS_use_mkldnn=0
   --env=HF_HUB_OFFLINE=1
   --env=TRANSFORMERS_OFFLINE=1
-  --env=PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True
   "--env=PDF_INGEST_ACCELERATOR=$PDF_INGEST_ACCELERATOR"
-  "--env=PDF_INGEST_ENGINE=$PDF_INGEST_ENGINE"
   "--env=PDF_INGEST_DTYPE=$PDF_INGEST_DTYPE"
-  "--env=PDF_INGEST_BUNDLED_CACHE=$PDF_INGEST_BUNDLED_CACHE"
+  "--env=PDF_INGEST_ADAPTER=$PDF_INGEST_ADAPTER"
   --entrypoint=python3
   # Unlike --volume's colon-delimited format, --mount accepts colons in host paths.
   "--mount=type=bind,source=$source_pdf,target=/input/source.pdf,readonly"
   "--mount=type=bind,source=$output_dir,target=/output,rw"
   "--mount=type=bind,source=$PDF_INGEST_PIPELINE,target=/opt/pdf-ingest/pdf-ingest.py,readonly"
+  "--mount=type=bind,source=$PDF_INGEST_ADAPTER_MODULE,target=/opt/pdf-ingest/adapter.py,readonly"
 )
+# The adapter's own environment, one KEY=VALUE per line.
+mapfile -t container_env <<<"$PDF_INGEST_CONTAINER_ENV"
+for container_env_entry in "${container_env[@]}"; do
+  if [[ -n $container_env_entry ]]; then
+    container_args+=("--env=$container_env_entry")
+  fi
+done
 
 ensure_image
 echo "pdf-ingest: extracting $(basename "$source_pdf") at ${dpi} DPI (offline)" >&2

@@ -11,9 +11,7 @@ let
   pdfIngestCfg = ocrCfg.pdfIngest;
   isRocm = pdfIngestCfg.accelerator == "rocm";
   python = pkgs.python3;
-  rapidocrPython = python.withPackages (_: [ pkgs._custom.rapidocr ]);
   pdfIngestPython = python.withPackages (pythonPackages: [ pythonPackages.pymupdf ]);
-  rapidocrEntrypoint = pkgs.writeText "rapidocr-text.py" (builtins.readFile ./rapidocr-text.py);
   pdfIngestPipeline = pkgs.writeText "pdf-ingest.py" (builtins.readFile ./pdf-ingest.py);
 
   # One build context per Containerfile. The tag carries a hash of the
@@ -29,20 +27,29 @@ let
     '';
     buildArgs = "BASE_IMAGE=${baseImage}";
   };
-  rocmImage =
-    mkContainerImage "pdf-ingest-rocm" ./pdf-ingest-rocm.Containerfile
-      pdfIngestCfg.rocm.baseImage;
 
-  # CUDA runs the upstream offline image directly and builds nothing.
-  image = if isRocm then rocmImage else null;
+  screenAdapters = ocrCfg.screenAdapters;
+  # Bash declarations the ocr script reads its adapters from.
+  declareAdapters =
+    variable: attribute:
+    "declare -A ${variable}=(${
+      lib.concatMapStrings (
+        name: " [${name}]=${lib.escapeShellArg screenAdapters.${name}.${attribute}}"
+      ) (lib.attrNames screenAdapters)
+    } )\n";
+  ocrPrelude = ''
+    ${declareAdapters "OCR_ADAPTER_COMMANDS" "command"}
+    ${declareAdapters "OCR_ADAPTER_LABELS" "label"}
+    OCR_DEFAULT_ADAPTER=${lib.escapeShellArg ocrCfg.defaultScreenAdapter}
+  '';
+
+  pdfAdapter = pdfIngestCfg.adapters.${pdfIngestCfg.adapter} or null;
+  accelerator = if isRocm then "rocm" else "cuda";
+  image = if pdfAdapter == null then null else pdfAdapter.image.${accelerator} or null;
 
   ocr = pkgs.writeShellApplication {
     name = "ocr";
-    runtimeEnv = {
-      OCR_RAPID_ENTRYPOINT = rapidocrEntrypoint;
-      OCR_RAPID_PYTHON = "${rapidocrPython}/bin/python";
-    };
-    text = builtins.readFile ./ocr.sh;
+    text = ocrPrelude + builtins.readFile ./ocr.sh;
   };
   pdf-ingest = pkgs.writeShellApplication {
     name = "pdf-ingest";
@@ -50,7 +57,7 @@ let
       pdfIngestPython
     ];
     runtimeEnv = {
-      PDF_INGEST_ACCELERATOR = if isRocm then "rocm" else "cuda";
+      PDF_INGEST_ACCELERATOR = accelerator;
       PDF_INGEST_GPU_DEVICES =
         if isRocm then lib.concatStringsSep " " pdfIngestCfg.rocm.devices else "nvidia.com/gpu=all";
       PDF_INGEST_HSA_OVERRIDE_GFX_VERSION =
@@ -58,29 +65,133 @@ let
       PDF_INGEST_DTYPE = pdfIngestCfg.dtype;
       PDF_INGEST_SHM_SIZE = pdfIngestCfg.shmSize;
       PDF_INGEST_TMP_SIZE = pdfIngestCfg.tmpSize;
-      PDF_INGEST_IMAGE = if image == null then pdfIngestCfg.cuda.image else image.tag;
-      PDF_INGEST_IMAGE_CONTEXT = if image == null then "" else "${image.context}";
-      PDF_INGEST_IMAGE_BUILD_ARGS = if image == null then "" else image.buildArgs;
-      # The upstream image ships native Paddle inference; the ROCm image has
-      # no Paddle HIP build for gfx1030 and runs the models through
-      # Transformers on ROCm PyTorch instead.
-      PDF_INGEST_ENGINE = if isRocm then "transformers" else "paddle";
-      # Read-only model cache baked into the image. The upstream image runs as
-      # the paddleocr user; the rocm/pytorch base runs as root.
-      PDF_INGEST_BUNDLED_CACHE = if isRocm then "/root/.paddlex" else "/home/paddleocr/.paddlex";
+      PDF_INGEST_IMAGE = image.tag;
+      PDF_INGEST_IMAGE_CONTEXT = image.context;
+      PDF_INGEST_IMAGE_BUILD_ARGS = image.buildArgs;
+      PDF_INGEST_ADAPTER = pdfIngestCfg.adapter;
+      PDF_INGEST_ADAPTER_DISPLAY = pdfAdapter.displayName;
+      PDF_INGEST_ADAPTER_MODULE = pkgs.writeText "pdf-ingest-${pdfIngestCfg.adapter}-adapter.py" (
+        builtins.readFile pdfAdapter.module
+      );
+      # One KEY=VALUE per line, passed to the inference container.
+      PDF_INGEST_CONTAINER_ENV = lib.concatStringsSep "\n" (
+        pdfAdapter.containerEnv.${accelerator} or [ ]
+      );
       PDF_INGEST_PIPELINE = pdfIngestPipeline;
       PDF_INGEST_PYTHON = "${pdfIngestPython}/bin/python";
     };
     text = builtins.readFile ./pdf-ingest-image.sh + builtins.readFile ./pdf-ingest.sh;
     meta.description = "Extract a PDF into a portable canonical document directory";
   };
+
+  imageType = lib.types.submodule {
+    options = {
+      tag = lib.mkOption {
+        type = lib.types.str;
+        description = "Image reference passed to podman run.";
+      };
+      context = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+        description = "Build context holding a Containerfile; empty runs the tag as pulled.";
+      };
+      buildArgs = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+        description = "One KEY=VALUE podman build argument.";
+      };
+    };
+  };
 in
 {
+  imports = [
+    ./adapters/screen/rapid
+    ./adapters/screen/glm
+    ./adapters/pdf/paddleocr-vl
+  ];
+
   options._custom.services.ai.ocr = {
     enable = lib.mkEnableOption { };
 
+    screenAdapters = lib.mkOption {
+      internal = true;
+      default = { };
+      description = ''
+        Screen OCR adapters registered by the modules under
+        ./adapters/screen. `ocr NAME` runs the adapter NAME.
+      '';
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          options = {
+            label = lib.mkOption {
+              type = lib.types.str;
+              description = "Name shown in notifications.";
+            };
+            command = lib.mkOption {
+              type = lib.types.str;
+              description = ''
+                Executable called as `command IMAGE`. It prints the text on
+                stdout, exits nonzero on failure, and explains the failure on
+                the last stderr line.
+              '';
+            };
+            ollamaModels = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = "Models added to services.ollama.loadModels.";
+            };
+          };
+        }
+      );
+    };
+
+    defaultScreenAdapter = lib.mkOption {
+      type = lib.types.str;
+      default = "rapid";
+      description = "Screen adapter `ocr` runs without an argument.";
+    };
+
     pdfIngest = {
       enable = lib.mkEnableOption { };
+
+      adapter = lib.mkOption {
+        type = lib.types.str;
+        default = "paddleocr-vl";
+        description = ''
+          Layout adapter under ./adapters/pdf. It supplies the inference
+          image, its container environment, and the Python parser module.
+        '';
+      };
+
+      adapters = lib.mkOption {
+        internal = true;
+        default = { };
+        description = "PDF layout adapters registered by the modules under ./adapters/pdf.";
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              displayName = lib.mkOption {
+                type = lib.types.str;
+                description = "Name shown in log and build messages.";
+              };
+              module = lib.mkOption {
+                type = lib.types.path;
+                description = "Python adapter, mounted at /opt/pdf-ingest/adapter.py.";
+              };
+              image = lib.mkOption {
+                type = lib.types.attrsOf (lib.types.nullOr imageType);
+                default = { };
+                description = "Inference image per accelerator; a missing or null entry is unsupported.";
+              };
+              containerEnv = lib.mkOption {
+                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                default = { };
+                description = "KEY=VALUE environment passed to the container, per accelerator.";
+              };
+            };
+          }
+        );
+      };
 
       accelerator = lib.mkOption {
         type = lib.types.nullOr (
@@ -98,8 +209,8 @@ in
             null;
         defaultText = lib.literalExpression ''"cuda" when enableCuda, "rocm" when enableRocm'';
         description = ''
-          GPU backend used by pdf-ingest. It selects the container image, the
-          inference engine, and the devices handed to Podman.
+          GPU backend used by pdf-ingest. It selects the adapter's container
+          image, its environment, and the devices handed to Podman.
         '';
       };
 
@@ -128,20 +239,6 @@ in
         description = "Size of the tmpfs mounted at /tmp inside the container.";
       };
 
-      cuda.image = lib.mkOption {
-        type = lib.types.str;
-        default = "ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddleocr-vl:paddleocr3.6-nvidia-gpu-offline@sha256:6c735bdf9e758ffdd58ccc067db0c2d84e37e5e6a2cbd47156069d4d7ea5d709";
-        description = "Upstream PaddleOCR-VL offline CUDA image, run directly.";
-      };
-
-      rocm.baseImage = lib.mkOption {
-        type = lib.types.str;
-        default = "docker.io/rocm/pytorch@sha256:cc9b00f90b85c97b015b040fa55c8d1b404b7cacc6ad57d74ee3451c97508da1";
-        description = ''
-          ROCm PyTorch image the local pdf-ingest-rocm image is built from.
-        '';
-      };
-
       rocm.gfxOverride = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
@@ -164,10 +261,27 @@ in
   };
 
   config = lib.mkMerge [
+    {
+      _module.args.ocrLib = { inherit mkContainerImage; };
+    }
+
     (lib.mkIf (cfg.enable && ocrCfg.enable) {
+      assertions = [
+        {
+          assertion = screenAdapters ? ${ocrCfg.defaultScreenAdapter};
+          message = ''
+            _custom.services.ai.ocr.defaultScreenAdapter is
+            "${ocrCfg.defaultScreenAdapter}", which is not one of:
+            ${lib.concatStringsSep ", " (lib.attrNames screenAdapters)}.
+          '';
+        }
+      ];
+
       environment.systemPackages = [ ocr ];
 
-      services.ollama.loadModels = lib.mkAfter [ "glm-ocr:bf16" ];
+      services.ollama.loadModels = lib.mkAfter (
+        lib.concatMap (adapter: adapter.ollamaModels) (lib.attrValues screenAdapters)
+      );
     })
 
     (lib.mkIf (cfg.enable && ocrCfg.enable && pdfIngestCfg.enable) {
@@ -177,6 +291,21 @@ in
           message = ''
             _custom.services.ai.ocr.pdfIngest.enable needs a GPU backend: set
             enableCuda, enableRocm, or _custom.services.ai.ocr.pdfIngest.accelerator.
+          '';
+        }
+        {
+          assertion = pdfAdapter != null;
+          message = ''
+            _custom.services.ai.ocr.pdfIngest.adapter is "${pdfIngestCfg.adapter}",
+            which is not one of:
+            ${lib.concatStringsSep ", " (lib.attrNames pdfIngestCfg.adapters)}.
+          '';
+        }
+        {
+          assertion = pdfAdapter == null || pdfIngestCfg.accelerator == null || image != null;
+          message = ''
+            The pdf-ingest adapter "${pdfIngestCfg.adapter}" does not support
+            the ${toString pdfIngestCfg.accelerator} accelerator.
           '';
         }
       ];

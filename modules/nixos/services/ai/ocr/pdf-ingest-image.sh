@@ -25,12 +25,12 @@ if [[ $PDF_INGEST_ACCELERATOR == rocm ]]; then
   fi
 fi
 
-# Build the local inference image on first use. The CUDA path runs the
-# upstream image, receives an empty context, and builds nothing.
+# Build the local inference image on first use. An adapter that runs an
+# upstream image passes an empty context and builds nothing.
 ensure_image() {
   [[ -n $PDF_INGEST_IMAGE_CONTEXT ]] || return 0
   podman image exists "$PDF_INGEST_IMAGE" && return 0
-  echo "Building the pinned PaddleOCR-VL ROCm image (first run only; this downloads the model weights and takes a while)" >&2
+  echo "Building the pinned $PDF_INGEST_ADAPTER_DISPLAY $PDF_INGEST_ACCELERATOR image (first run only; this downloads the model weights and takes a while)" >&2
   local build_args=()
   [[ -z $PDF_INGEST_IMAGE_BUILD_ARGS ]] || build_args+=(--build-arg "$PDF_INGEST_IMAGE_BUILD_ARGS")
   podman build --pull=missing "${build_args[@]}" \
