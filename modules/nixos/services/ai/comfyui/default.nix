@@ -48,7 +48,8 @@ let
     "user"
     ".cache"
   ]
-  ++ map (m: "models/${m}") ccfg.modelSubdirs;
+  ++ map (m: "models/${m}") ccfg.modelSubdirs
+  ++ lib.optional (isRocm && ccfg.rocm.tunableOp) ".cache/tunableop";
 in
 {
   options._custom.services.ai.comfyui = {
@@ -106,6 +107,19 @@ in
       description = "Device nodes passed to the container on ROCm.";
     };
 
+    rocm.tunableOp = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Enable PyTorch TunableOp with rocBLAS only. It benchmarks every GEMM
+        shape once and keeps the fastest rocBLAS solution in
+        dataDir/.cache/tunableop. Useful on cards where the default rocBLAS
+        heuristic is slow and hipBLASLt ships no kernels (RDNA2). New shapes
+        (resolution, prompt length) are tuned on first use, which slows that
+        run.
+      '';
+    };
+
     extraPipPackages = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -113,6 +127,45 @@ in
       description = ''
         Extra pip requirements baked into the image, such as custom node
         dependencies. Changing the list changes the tag and rebuilds the image.
+      '';
+    };
+
+    unetDtype = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "fp32"
+          "fp16"
+          "bf16"
+          "fp8_e4m3fn"
+          "fp8_e5m2"
+        ]
+      );
+      default = null;
+      example = "bf16";
+      description = ''
+        Diffusion model dtype, passed as --<dtype>-unet. null lets ComfyUI
+        pick from the card and the model, which means fp32 on RDNA2 for
+        models that only support bf16.
+      '';
+    };
+
+    attention = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "pytorch"
+          "split"
+          "quad"
+          "sage"
+          "flash"
+          "ck"
+        ]
+      );
+      default = null;
+      example = "pytorch";
+      description = ''
+        Cross attention implementation, passed as --use-<name>-cross-attention
+        (--use-<name>-attention for sage, flash and ck). null lets ComfyUI
+        pick. sage and flash need their pip package in extraPipPackages.
       '';
     };
 
@@ -214,6 +267,19 @@ in
         "/opt/comfyui-image/extra_model_paths.yaml"
         "--disable-auto-launch"
       ]
+      ++ lib.optional (ccfg.unetDtype != null) "--${ccfg.unetDtype}-unet"
+      ++ lib.optional (ccfg.attention != null) (
+        if
+          lib.elem ccfg.attention [
+            "pytorch"
+            "split"
+            "quad"
+          ]
+        then
+          "--use-${ccfg.attention}-cross-attention"
+        else
+          "--use-${ccfg.attention}-attention"
+      )
       ++ ccfg.extraArgs;
       volumes = [ "${ccfg.dataDir}:/data:rw" ];
       environment = {
@@ -221,6 +287,12 @@ in
       }
       // lib.optionalAttrs (isRocm && ccfg.rocm.gfxOverride != null) {
         HSA_OVERRIDE_GFX_VERSION = ccfg.rocm.gfxOverride;
+      }
+      // lib.optionalAttrs (isRocm && ccfg.rocm.tunableOp) {
+        PYTORCH_TUNABLEOP_ENABLED = "1";
+        PYTORCH_TUNABLEOP_HIPBLASLT_ENABLED = "0";
+        PYTORCH_TUNABLEOP_ROCBLAS_ENABLED = "1";
+        PYTORCH_TUNABLEOP_FILENAME = "/data/.cache/tunableop/results%d.csv";
       };
       extraOptions = [
         "--network=host"

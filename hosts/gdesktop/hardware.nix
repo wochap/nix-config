@@ -26,7 +26,13 @@
 
     # s2idle keeps the dGPU's PCIe root port powered; S3 leaves it stuck in
     # D3hot. Next steps if it still fails: "pcie_aspm=off", then BIOS ErP off.
-    boot.kernelParams = [ "mem_sleep_default=s2idle" ];
+    boot.kernelParams = [
+      "mem_sleep_default=s2idle"
+      # lockup_timeout: long ComfyUI compute kernels (TunableOp tuning) starved the
+      # gfx ring past the 10 s default, forcing a mode1 GPU reset that killed
+      # Hyprland. 30 s turns that into a stall.
+      "amdgpu.lockup_timeout=30000"
+    ];
     # boot.kernelParams = [ "pcie_aspm=off" "amdgpu.aspm=0" ];
 
     # 244 = REISUB keys only, no debug dumps. Overrides the hardened 0 in

@@ -66,43 +66,91 @@ image.
 AMD RX 6800 XT (gfx1030, 16 GB VRAM), 32 GB RAM, ROCm. No
 `rocm.gfxOverride` needed and `comfy-aimdo` (dynamic VRAM) works.
 
-ComfyUI enables int8 compute on this card but not fp8. Use the `int8` or
-`w4a8` model files and skip `fp8`. Skip GGUF too: native int8 is faster and
-needs no custom node.
+The host sets three performance overrides. Newer AMD cards (RDNA3+) and NVIDIA
+cards likely need none of them.
+
+- `unetDtype = "fp16"`: ComfyUI treats RDNA2 as having no bf16
+  (`AMD_RDNA2_AND_OLDER_ARCH`), so it runs bf16-only models such as
+  Qwen-Image-2.1 in fp32. `bf16` does not help: gfx1030 has no fast bf16 path
+  (matmul: fp32 8.6, bf16 9.5, fp16 36.1 TFLOPS). `fp16` gave correct images
+  for Qwen-Image-2.1. If a model returns black images, set `unetDtype = null`.
+- `attention = "split"`: PyTorch has no fused attention kernels for gfx1030
+  (`No available kernel` for flash and memory-efficient SDPA). Per layer,
+  `split` takes 25 ms, `pytorch` 172 ms and `quad` 139 ms.
+- `rocm.tunableOp = true`: rocBLAS picks slow kernels for the large MLP
+  matmuls (about 4.7 TFLOPS). PyTorch TunableOp times every rocBLAS kernel
+  for each exact matrix shape once, keeps the fastest (about 27 TFLOPS), and
+  stores it in `~/ComfyUI/.cache/tunableop`.
+
+Shapes depend on the token count: output resolution, prompt length and
+reference images. A new seed, cfg, step count or a prompt with the same token
+count reuses the tuning. A new prompt length, resolution or edit input tunes
+about 15 new shapes, which adds roughly 6 minutes to that run.
+
+Long compute kernels during tuning can starve the desktop's gfx ring. With the
+default 10 s `amdgpu.lockup_timeout` this forced a full GPU reset that killed
+Hyprland, so `hardware.nix` raises it to 30 s.
+
+Use GGUF or plain bf16 files. Do not use `int8`, `w4a8` or `fp8` files.
+ComfyUI reports int8 compute as available on ROCm, but `torch._int_mm` runs
+through hipBLASLt, which ships no gfx1030 kernels. Sampling then fails with
+`HIPBLAS_STATUS_INVALID_VALUE when calling hipblasLtMatmulAlgoGetHeuristic`.
+
+GGUF dequantizes with plain torch ops, so it works on any GPU. It needs the
+[molbal/ComfyUI-GGUF](https://github.com/molbal/ComfyUI-GGUF) custom node (the
+upstream city96 node fails on ComfyUI 0.27+ with "Unknown model
+architecture!") and the `gguf` pip package, which gdesktop sets through
+`extraPipPackages`.
 
 #### Qwen-Image-2.1
 
-[Qwen-Image-2.1](https://huggingface.co/Comfy-Org/Qwen-Image-2.1) is supported
-natively and needs no custom nodes. It uses the Qwen Research License, which
-does not allow commercial use.
+[Qwen-Image-2.1](https://github.com/QwenLM/Qwen-Image-2.1) uses the Qwen
+Research License, which does not allow commercial use. The model only runs in
+bf16 or fp32.
 
-1. Download the weights (about 17.3 GB) into the model folders:
+1. Install the custom node:
+
+   ```sh
+   git clone https://github.com/molbal/ComfyUI-GGUF ~/ComfyUI/custom_nodes/ComfyUI-GGUF
+   sudo systemctl restart podman-comfyui
+   ```
+
+2. Download the weights (about 25.8 GB):
 
    ```sh
    cd ~/ComfyUI/models
+   hf download AlperKTS/Qwen-Image-2.1-GGUF qwen_image_2.1_Q8_0.gguf \
+     --local-dir diffusion_models
    hf download Comfy-Org/Qwen-Image-2.1 \
-     diffusion_models/qwen_image_2.1_int8_convrot.safetensors \
-     text_encoders/qwen3vl_8b_int8_convrot.safetensors \
+     text_encoders/qwen3vl_8b_bf16.safetensors \
      vae/qwen_image_2.1_vae_bf16.safetensors \
      --local-dir .
    ```
 
-2. Open **Templates** and pick **Qwen Image 2.1** (text to image, image edit,
-   or background removal). The templates already point at these files.
-3. Set the latent size to 1024×1024 for testing. The upstream default is
-   2048×2048 at 40 steps, which is slow on RDNA2.
+   | File                                  | Size    | Folder              |
+   | ------------------------------------- | ------- | ------------------- |
+   | `qwen_image_2.1_Q8_0.gguf`            | 7.6 GB  | `diffusion_models/` |
+   | `qwen3vl_8b_bf16.safetensors`         | 17.5 GB | `text_encoders/`    |
+   | `qwen_image_2.1_vae_bf16.safetensors` | 0.67 GB | `vae/`              |
 
-The first run fills the MIOpen and Triton caches in `~/ComfyUI/.cache`, so it
-is slower than the runs after it.
+3. Load the text-to-image workflow from
+   [AlperKTS/Qwen-Image-2.1-GGUF](https://huggingface.co/AlperKTS/Qwen-Image-2.1-GGUF/tree/main/workflows)
+   by dragging it into the UI. The built-in **Qwen Image 2.1** templates use
+   int8 files, so do not use them here.
+4. In the workflow, set `clip_name` to `qwen3vl_8b_bf16.safetensors` (it
+   defaults to an fp8 file) and keep the size at 1024×1024. Defaults: 25 steps,
+   cfg 1, euler, simple.
 
-If VRAM runs out, try these in order:
+Timings for a 1024×1024 image at 25 steps (Q8_0 fully in VRAM, GPU at 99%):
 
-- Use `text_encoders/qwen3vl_8b_w4a8.safetensors` (6.3 GB) as the text
-  encoder.
-- Add `--lowvram` to `extraArgs`.
+| Setup                                        | Time    |
+| -------------------------------------------- | ------- |
+| ComfyUI defaults (fp32, sub-quadratic)       | 17:51   |
+| `fp16`, `pytorch` attention                  | 11:43   |
+| `fp16`, `split`, TunableOp, tuned shapes     | 1:18    |
+| Same, first run of a new prompt length       | 7:38    |
 
-Do not use `qwen_image_2.1_bf16.safetensors` (14.2 GB). It is too big for
-16 GB.
+If VRAM runs out, add `--lowvram` to `extraArgs`.
 
 ## Options
 
@@ -116,7 +164,10 @@ All options live under `_custom.services.ai.comfyui`.
 | `rocm.baseImage`   | `rocm/pytorch` digest            | Same digest as qwen3-asr                                 |
 | `rocm.gfxOverride` | `null`                           | Sets `HSA_OVERRIDE_GFX_VERSION`                          |
 | `rocm.devices`     | `/dev/kfd`, `/dev/dri`           |                                                          |
+| `rocm.tunableOp`   | `false`                          | PyTorch TunableOp with rocBLAS; cache in `dataDir/.cache/tunableop` |
 | `extraPipPackages` | `[]`                             | Baked into the image; changes the tag                    |
+| `unetDtype`        | `null`                           | `fp32`, `fp16`, `bf16`, `fp8_e4m3fn`, `fp8_e5m2`; `--<dtype>-unet` |
+| `attention`        | `null`                           | `pytorch`, `split`, `quad`, `sage`, `flash`, `ck`        |
 | `extraArgs`        | `[]`                             | Appended to `main.py`, such as `--lowvram`               |
 | `dataDir`          | `~/ComfyUI`                      | Mounted at `/data`                                       |
 | `modelSubdirs`     | common model folders             | Created below `dataDir/models`                           |
