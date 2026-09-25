@@ -98,7 +98,7 @@ plus temporary free space while it is pulled). It is PaddleOCR's CUDA 12.6
 runtime for non-Blackwell NVIDIA GPUs. Rootless Podman, the NVIDIA container
 toolkit/CDI, and a compatible NVIDIA driver must be working on the host.
 
-On ROCm this pulls the ~30 GB `rocm/pytorch` base (shared with `qwen3-asr`)
+On ROCm this pulls the ~30 GB `rocm/pytorch` base (shared with `asr`)
 and builds the local `pdf-ingest-rocm` image on top of it: it installs the
 pinned PaddleOCR stack, downloads about 2.5 GB of weights from Hugging Face,
 and verifies the pipeline offline on the CPU before the image is tagged. The

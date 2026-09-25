@@ -7,88 +7,104 @@
 
 let
   cfg = config._custom.services.ai;
-  asrCfg = cfg.qwen3Asr;
+  asrCfg = cfg.asr;
   isRocm = asrCfg.accelerator == "rocm";
   inherit (config._custom.globals) userName;
-  asr-revision = "7278e1e70fe206f11671096ffdd38061171dd6e5";
-  aligner-revision = "c7cbfc2048c462b0d63a45797104fc9db3ad62b7";
+  adapter = import (./adapters + "/${asrCfg.backend}") { inherit pkgs lib; };
   diarizer-revision = "3533c8cf8e369892e6b79ff1bf80f7b0286a54ee";
-  transformers = pkgs.writeText "qwen3-asr-transformers.py" (
-    builtins.readFile ./qwen3-asr-transformers.py
-  );
-  pipeline = pkgs.writeText "qwen3-asr-pipeline.py" (builtins.readFile ./qwen3-asr-pipeline.py);
+  transcribeScript = pkgs.writeText "asr-transcribe.py" (builtins.readFile ./transcribe.py);
+  pipeline = pkgs.writeText "asr-pipeline.py" (builtins.readFile ./pipeline.py);
+  adapterModule = pkgs.writeText "asr-${adapter.name}-adapter.py" (builtins.readFile adapter.module);
 
   # One build context per Containerfile. The tag carries a hash of the
-  # Containerfile and its base image so a changed recipe rebuilds the image.
-  mkContainerImage = name: file: baseImage: rec {
+  # Containerfile and its build arguments so a changed recipe rebuilds the
+  # image. buildArgs holds one argument per line.
+  mkContainerImage = name: file: buildArgs: rec {
     version = builtins.substring 0 16 (
-      builtins.hashString "sha256" (builtins.readFile file + baseImage)
+      builtins.hashString "sha256" (builtins.readFile file + buildArgs)
     );
     tag = "localhost/${name}:${version}";
     context = pkgs.runCommand "${name}-context" { } ''
       mkdir -p "$out"
       cp ${file} "$out/Containerfile"
     '';
-    buildArgs = "BASE_IMAGE=${baseImage}";
+    inherit buildArgs;
   };
   diarizationImage =
-    mkContainerImage "qwen3-asr-diarization" ./qwen3-asr-diarization.Containerfile
-      asrCfg.cuda.image;
-  rocmImage = mkContainerImage "qwen3-asr-rocm" ./qwen3-asr-rocm.Containerfile asrCfg.rocm.baseImage;
+    mkContainerImage "asr-${adapter.name}-diarization" ./diarization.Containerfile
+      "BASE_IMAGE=${asrCfg.cuda.image}";
+  rocmImage = mkContainerImage "asr-${adapter.name}-rocm" ./rocm.Containerfile ''
+    BASE_IMAGE=${asrCfg.rocm.baseImage}
+    EXTRA_PIP_PACKAGES=${lib.concatStringsSep " " adapter.pipPackages}'';
 
-  # qwen3-asr-transcribe needs no extra packages on CUDA, so it runs the
-  # upstream image directly and builds nothing.
+  # asr-transcribe needs no extra packages on CUDA, so it runs the upstream
+  # backend image directly and builds nothing.
   transcribeImage = if isRocm then rocmImage else null;
   videoImage = if isRocm then rocmImage else diarizationImage;
 
-  gpuEnv = {
-    QWEN3_ASR_ACCELERATOR = if isRocm then "rocm" else "cuda";
-    QWEN3_ASR_GPU_DEVICES =
+  revisionEnv = lib.mapAttrs' (
+    key: value: lib.nameValuePair "ASR_REVISION_${lib.toUpper key}" value
+  ) adapter.revisions;
+
+  gpuEnv = revisionEnv // {
+    ASR_BACKEND = adapter.name;
+    ASR_ADAPTER = adapterModule;
+    ASR_REVISION_VARS = lib.concatStringsSep " " (lib.attrNames revisionEnv);
+    ASR_TRANSCRIBER_FILES = lib.concatStringsSep " " adapter.cachedFiles.transcriber;
+    ASR_ACCELERATOR = if isRocm then "rocm" else "cuda";
+    ASR_GPU_DEVICES =
       if isRocm then lib.concatStringsSep " " asrCfg.rocm.devices else "nvidia.com/gpu=all";
-    QWEN3_ASR_HSA_OVERRIDE_GFX_VERSION =
+    ASR_HSA_OVERRIDE_GFX_VERSION =
       if isRocm && asrCfg.rocm.gfxOverride != null then asrCfg.rocm.gfxOverride else "";
-    QWEN3_ASR_DTYPE = asrCfg.dtype;
-    QWEN3_ASR_BATCH_SIZE = toString asrCfg.batchSize;
-    QWEN3_ASR_SHM_SIZE = asrCfg.shmSize;
-    QWEN3_ASR_TMP_SIZE = asrCfg.tmpSize;
+    ASR_DTYPE = asrCfg.dtype;
+    ASR_BATCH_SIZE = toString asrCfg.batchSize;
+    ASR_SHM_SIZE = asrCfg.shmSize;
+    ASR_TMP_SIZE = asrCfg.tmpSize;
   };
   imageEnv = image: {
-    QWEN3_ASR_IMAGE = if image == null then asrCfg.cuda.image else image.tag;
-    QWEN3_ASR_IMAGE_CONTEXT = if image == null then "" else "${image.context}";
-    QWEN3_ASR_IMAGE_BUILD_ARGS = if image == null then "" else image.buildArgs;
+    ASR_IMAGE = if image == null then asrCfg.cuda.image else image.tag;
+    ASR_IMAGE_CONTEXT = if image == null then "" else "${image.context}";
+    ASR_IMAGE_BUILD_ARGS = if image == null then "" else image.buildArgs;
   };
 
-  qwen3-asr-transcribe = pkgs.writeShellApplication {
-    name = "qwen3-asr-transcribe";
+  asr-transcribe = pkgs.writeShellApplication {
+    name = "asr-transcribe";
     runtimeEnv =
       gpuEnv
       // imageEnv transcribeImage
       // {
-        QWEN3_ASR_ASR_REVISION = asr-revision;
-        QWEN3_ASR_SCRIPT = transformers;
+        ASR_SCRIPT = transcribeScript;
       };
-    text = builtins.readFile ./qwen3-asr-image.sh + builtins.readFile ./qwen3-asr-transcribe.sh;
+    text = builtins.readFile ./image.sh + builtins.readFile ./transcribe.sh;
   };
-  qwen3-asr-video = pkgs.writeShellApplication {
-    name = "qwen3-asr-video";
+  asr-video = pkgs.writeShellApplication {
+    name = "asr-video";
     runtimeEnv =
       gpuEnv
       // imageEnv videoImage
       // {
-        QWEN3_ASR_DEFAULT_CHUNK_SECONDS = toString asrCfg.chunkSeconds;
-        QWEN3_ASR_ASR_REVISION = asr-revision;
-        QWEN3_ASR_ALIGNER_REVISION = aligner-revision;
-        QWEN3_ASR_DIARIZER_REVISION = diarizer-revision;
-        QWEN3_ASR_HF_TOKEN_FILE = config.sops.secrets.personal-huggingface-local-read-token.path;
-        QWEN3_ASR_PIPELINE_SCRIPT = pipeline;
+        ASR_DEFAULT_CHUNK_SECONDS = toString asrCfg.chunkSeconds;
+        ASR_ALIGNER_FILES = lib.concatStringsSep " " adapter.cachedFiles.aligner;
+        ASR_DIARIZER_REVISION = diarizer-revision;
+        ASR_HF_TOKEN_FILE = config.sops.secrets.personal-huggingface-local-read-token.path;
+        ASR_PIPELINE_SCRIPT = pipeline;
       };
-    text = builtins.readFile ./qwen3-asr-image.sh + builtins.readFile ./qwen3-asr-video.sh;
+    text = builtins.readFile ./image.sh + builtins.readFile ./video.sh;
   };
 in
 {
   options._custom.services.ai = {
-    qwen3Asr = {
+    asr = {
       enable = lib.mkEnableOption { };
+
+      backend = lib.mkOption {
+        type = lib.types.enum [ "qwen3" ];
+        default = "qwen3";
+        description = ''
+          ASR backend adapter under ./adapters. It supplies the models, their
+          revisions, the CUDA image, and the extra ROCm pip packages.
+        '';
+      };
 
       accelerator = lib.mkOption {
         type = lib.types.nullOr (
@@ -125,7 +141,7 @@ in
         type = lib.types.ints.positive;
         default = 1;
         description = ''
-          Number of audio chunks qwen3-asr-video transcribes in one generate
+          Number of audio chunks asr-video transcribes in one generate
           call. Decoding is memory bound, so batching speeds it up nearly
           linearly until VRAM runs out. Each extra chunk of chunkSeconds
           audio costs roughly 1 GB at 480 s.
@@ -136,8 +152,8 @@ in
         type = lib.types.ints.positive;
         default = 240;
         description = ''
-          Default chunk length for qwen3-asr-video. Longer chunks need more
-          VRAM; QWEN3_ASR_CHUNK_SECONDS overrides it per run.
+          Default chunk length for asr-video. Longer chunks need more VRAM;
+          ASR_CHUNK_SECONDS overrides it per run.
         '';
       };
 
@@ -155,10 +171,11 @@ in
 
       cuda.image = lib.mkOption {
         type = lib.types.str;
-        default = "docker.io/qwenllm/qwen3-asr@sha256:fb75b775f089e06e5a1aaebffd421e37505cc630d50c86d889d95ffa45a7e16a";
+        default = adapter.cudaImage;
+        defaultText = lib.literalMD "the backend adapter's `cudaImage`";
         description = ''
-          Upstream CUDA image. qwen3-asr-transcribe runs it directly and
-          qwen3-asr-video builds the diarization image on top of it.
+          Upstream CUDA image. asr-transcribe runs it directly and asr-video
+          builds the diarization image on top of it.
         '';
       };
 
@@ -166,7 +183,7 @@ in
         type = lib.types.str;
         default = "docker.io/rocm/pytorch@sha256:cc9b00f90b85c97b015b040fa55c8d1b404b7cacc6ad57d74ee3451c97508da1";
         description = ''
-          ROCm PyTorch image the local qwen3-asr-rocm image is built from.
+          ROCm PyTorch image the local asr-<backend>-rocm image is built from.
         '';
       };
 
@@ -196,8 +213,8 @@ in
       {
         assertion = asrCfg.accelerator != null;
         message = ''
-          _custom.services.ai.qwen3Asr.enable needs a GPU backend: set
-          enableCuda, enableRocm, or _custom.services.ai.qwen3Asr.accelerator.
+          _custom.services.ai.asr.enable needs a GPU backend: set
+          enableCuda, enableRocm, or _custom.services.ai.asr.accelerator.
         '';
       }
     ];
@@ -208,8 +225,8 @@ in
     };
 
     environment.systemPackages = [
-      qwen3-asr-transcribe
-      qwen3-asr-video
+      asr-transcribe
+      asr-video
     ];
   };
 }

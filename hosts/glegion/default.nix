@@ -144,9 +144,9 @@ in
     _custom.services.ai.enableNextjsOllamaLlmUi = false;
     _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;
-    _custom.services.ai.qwen3Asr.enable = true;
+    _custom.services.ai.asr.enable = true;
     # 8 GB VRAM: the 1.7B model in bf16 leaves room for two 240 s chunks.
-    _custom.services.ai.qwen3Asr.batchSize = 2;
+    _custom.services.ai.asr.batchSize = 2;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
     _custom.services.ai.gptResearcher.enable = true;

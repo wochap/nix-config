@@ -6,7 +6,7 @@ usage() {
 usage: asr-videos [OPTIONS] [DIRECTORY]
 
 Transcribe every MP4 file below DIRECTORY (default: current directory).
-OPTIONS are passed to qwen3-asr-video:
+OPTIONS are passed to asr-video:
   --language LANGUAGE
   --output, -o FILE
   --json-output FILE
@@ -18,7 +18,7 @@ OPTIONS are passed to qwen3-asr-video:
 EOF
 }
 
-qwen_args=()
+asr_args=()
 dir=.
 directory_set=0
 language_set=0
@@ -30,11 +30,11 @@ while (($#)); do
     if [[ $1 == --language ]]; then
       language_set=1
     fi
-    qwen_args+=("$1" "$2")
+    asr_args+=("$1" "$2")
     shift 2
     ;;
   --validate)
-    qwen_args+=("$1")
+    asr_args+=("$1")
     shift
     ;;
   --help | -h)
@@ -54,7 +54,7 @@ while (($#)); do
   esac
 done
 
-((language_set == 1)) || qwen_args=(--language es "${qwen_args[@]}")
+((language_set == 1)) || asr_args=(--language es "${asr_args[@]}")
 
 mapfile -d '' files < <(find "$dir" -type f -name '*.mp4' -print0 | sort -zV)
 
@@ -65,5 +65,5 @@ for file in "${files[@]}"; do
     continue
   fi
   echo "Processing: $file" >&2
-  qwen3-asr-video "${qwen_args[@]}" "$file"
+  asr-video "${asr_args[@]}" "$file"
 done

@@ -161,7 +161,7 @@ All options live under `_custom.services.ai.comfyui`.
 | `enable`           | `false`                          |                                                          |
 | `accelerator`      | from `enableCuda` / `enableRocm` | `cuda` or `rocm`                                         |
 | `cuda.baseImage`   | `pytorch/pytorch` CUDA 13 digest |                                                          |
-| `rocm.baseImage`   | `rocm/pytorch` digest            | Same digest as qwen3-asr                                 |
+| `rocm.baseImage`   | `rocm/pytorch` digest            | Same digest as asr                                       |
 | `rocm.gfxOverride` | `null`                           | Sets `HSA_OVERRIDE_GFX_VERSION`                          |
 | `rocm.devices`     | `/dev/kfd`, `/dev/dri`           |                                                          |
 | `rocm.tunableOp`   | `false`                          | PyTorch TunableOp with rocBLAS; cache in `dataDir/.cache/tunableop` |
