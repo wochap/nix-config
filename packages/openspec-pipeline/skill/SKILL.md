@@ -1,6 +1,7 @@
 ---
 name: openspec-pipeline
 description: Run OpenSpec changes end to end (apply, sync, archive, with commits) headless via the openspec-pipeline CLI, keeping your context small; handle or relay questions from its apply agent.
+disable-model-invocation: true
 ---
 
 # openspec-pipeline

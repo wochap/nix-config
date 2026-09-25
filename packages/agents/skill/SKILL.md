@@ -1,6 +1,7 @@
 ---
 name: agents
 description: Run a coding agent (claude, pi) headless via the agents CLI and get only its final answer; resume or hand a session to the user.
+disable-model-invocation: true
 ---
 
 # agents

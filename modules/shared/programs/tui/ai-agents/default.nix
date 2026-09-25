@@ -11,11 +11,24 @@ let
   inherit (config._custom.globals) userName configDirectory;
   hmConfig = config.home-manager.users.${userName};
   new-project = pkgs.writeScriptBin "new-project" (builtins.readFile ./scripts/new-project.sh);
+  skills = {
+    agents = ../../../../../packages/agents/skill;
+    openspec-pipeline = ../../../../../packages/openspec-pipeline/skill;
+  };
+  mkSkillLinks =
+    dir:
+    lib.mapAttrs' (
+      name: path:
+      lib.nameValuePair "${dir}/${name}" { source = lib._custom.relativeSymlink configDirectory path; }
+    ) skills;
 in
 {
   imports = [ ./sessiontap.nix ];
 
-  options._custom.programs.ai-agents.enable = lib.mkEnableOption { };
+  options._custom.programs.ai-agents = {
+    enable = lib.mkEnableOption { };
+    enableSkills = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
@@ -37,27 +50,31 @@ in
           CAVEMAN_DEFAULT_MODE = "ultra";
         };
 
-        file = {
-          ".claude/statusline.sh" = {
-            source = ./scripts/claude-statusline.sh;
-            executable = true;
-          };
-          ".gemini/antigravity-cli/hooks/agy-notify.sh" = {
-            source = ./scripts/agy-notify.sh;
-            executable = true;
-          };
-          ".gemini/antigravity-cli/hooks.json".source =
-            lib._custom.relativeSymlink configDirectory ./dotfiles/agy/hooks.json;
-          ".gemini/config/hooks.json".source =
-            lib._custom.relativeSymlink configDirectory ./dotfiles/agy/hooks.json;
-          ".qwen/hooks/qwen-notify.sh" = {
-            source = ./scripts/qwen-notify.sh;
-            executable = true;
-          };
+        file =
+          lib.optionalAttrs cfg.enableSkills (
+            mkSkillLinks ".claude/skills" // mkSkillLinks ".pi/agent/skills"
+          )
+          // {
+            ".claude/statusline.sh" = {
+              source = ./scripts/claude-statusline.sh;
+              executable = true;
+            };
+            ".gemini/antigravity-cli/hooks/agy-notify.sh" = {
+              source = ./scripts/agy-notify.sh;
+              executable = true;
+            };
+            ".gemini/antigravity-cli/hooks.json".source =
+              lib._custom.relativeSymlink configDirectory ./dotfiles/agy/hooks.json;
+            ".gemini/config/hooks.json".source =
+              lib._custom.relativeSymlink configDirectory ./dotfiles/agy/hooks.json;
+            ".qwen/hooks/qwen-notify.sh" = {
+              source = ./scripts/qwen-notify.sh;
+              executable = true;
+            };
 
-          ".codex/model-catalog.local.json".source =
-            lib._custom.relativeSymlink configDirectory ./dotfiles/codex/model-catalog.local.json;
-        };
+            ".codex/model-catalog.local.json".source =
+              lib._custom.relativeSymlink configDirectory ./dotfiles/codex/model-catalog.local.json;
+          };
 
         symlinks = {
           "${hmConfig.home.homeDirectory}/.gemini/antigravity-cli/skills" =
