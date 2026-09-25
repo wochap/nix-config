@@ -25,6 +25,12 @@ let
         toString (if proxy.lazy then proxy.publicPort else proxy.backendPort)
       }";
       proxyWebsockets = true;
+      # nginx drops websockets idle for 60s by default; long jobs (e.g. ComfyUI
+      # model loads) stay silent longer than that
+      extraConfig = ''
+        proxy_read_timeout 1h;
+        proxy_send_timeout 1h;
+      '';
     };
     listen = [
       {
