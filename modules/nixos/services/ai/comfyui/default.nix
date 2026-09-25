@@ -39,6 +39,48 @@ let
   );
   tag = "${builtins.substring 0 7 revision}-${recipeHash}";
 
+  # ComfyUI keeps models in VRAM after a job. Once the queue has stayed empty
+  # and no new prompt has finished for idleTimeout, ask it to unload them.
+  # The container keeps running, so the UI stays connected.
+  idleWatchdog = pkgs.writeShellScript "comfyui-idle" ''
+    set -euo pipefail
+    curl=${lib.getExe pkgs.curl}
+    jq=${lib.getExe pkgs.jq}
+    unit=${lib.escapeShellArg "${serviceName}.service"}
+    base=http://${wochap-ssc.meta.address}:${toString proxy.backendPort}
+    idle=${toString (ccfg.idleTimeout * 60)}
+    state=/run/comfyui-idle
+
+    ${lib.getExe' pkgs.systemd "systemctl"} is-active --quiet "$unit" || exit 0
+
+    queue="$("$curl" -sf --max-time 5 "$base/api/queue")" || exit 0
+    # Prompt ids are UUIDs; the newest finished one changes after every job,
+    # even a job short enough to start and end between two checks.
+    last_prompt="$("$curl" -sf --max-time 5 "$base/api/history?max_items=1" \
+      | "$jq" -r 'keys[0] // "none"')" || exit 0
+
+    now="$(date +%s)"
+    seen_prompt=""
+    last_change="$now"
+    freed=0
+    if [ -f "$state" ]; then
+      read -r seen_prompt last_change freed < "$state" || true
+    fi
+
+    if [ "$last_prompt" != "$seen_prompt" ] \
+      || "$jq" -e '(.queue_running | length) + (.queue_pending | length) > 0' <<< "$queue" > /dev/null; then
+      echo "$last_prompt $now 0" > "$state"
+      exit 0
+    fi
+
+    if [ "$freed" = 0 ] && [ "$((now - last_change))" -ge "$idle" ]; then
+      echo "Idle for ${toString ccfg.idleTimeout} min; unloading models to release VRAM"
+      "$curl" -sf --max-time 30 -X POST -H 'Content-Type: application/json' \
+        -d '{"unload_models":true,"free_memory":true}' "$base/api/free" > /dev/null
+      echo "$last_prompt $last_change 1" > "$state"
+    fi
+  '';
+
   dataSubdirs = [
     "models"
     "custom_nodes"
@@ -222,6 +264,17 @@ in
       default = "4g";
       description = "Size of the tmpfs mounted at /tmp inside the container.";
     };
+
+    idleTimeout = lib.mkOption {
+      type = lib.types.nullOr lib.types.ints.positive;
+      default = 10;
+      example = lib.literalExpression "null";
+      description = ''
+        Minutes with an empty queue after which ComfyUI unloads its models
+        and releases their VRAM. The next job loads them again. null keeps
+        them resident.
+      '';
+    };
   };
 
   config = lib.mkIf (cfg.enable && ccfg.enable) {
@@ -325,7 +378,24 @@ in
 
     hardware.nvidia-container-toolkit.enable = lib.mkIf (!isRocm) true;
 
-    # The container keeps its VRAM while idle; stop the unit to free it.
+    systemd.timers."${serviceName}-idle" = lib.mkIf (ccfg.idleTimeout != null) {
+      description = "Check whether ComfyUI has gone idle";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "5min";
+        OnUnitActiveSec = "1min";
+        AccuracySec = "30s";
+      };
+    };
+
+    systemd.services."${serviceName}-idle" = lib.mkIf (ccfg.idleTimeout != null) {
+      description = "Unload ComfyUI models once it has gone idle";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = idleWatchdog;
+      };
+    };
+
     # No ProtectHome: dataDir is a bind mount below /home.
     systemd.services.${serviceName} = {
       wants = lib.optional (!isRocm) "nvidia-container-toolkit-cdi-generator.service";
