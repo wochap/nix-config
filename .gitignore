@@ -6,3 +6,11 @@ __pycache__
 ignored
 AGENTS.md
 .qwen
+
+openspec/changes/archive
+.rtk
+RTK.md
+.codex
+.direnv
+.pi
+.agents
