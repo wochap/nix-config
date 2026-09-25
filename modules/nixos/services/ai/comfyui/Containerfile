@@ -1,0 +1,34 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+ARG EXTRA_PIP_PACKAGES=""
+ENV PIP_NO_CACHE_DIR=1 PIP_ROOT_USER_ACTION=ignore PYTHONUNBUFFERED=1
+
+WORKDIR /opt/ComfyUI
+COPY ComfyUI/ /opt/ComfyUI/
+COPY extra_model_paths.yaml /opt/comfyui-image/extra_model_paths.yaml
+
+# Keep the base torch build (ROCm or CUDA 13). The constraints file stops
+# requirements.txt from pulling PyPI CUDA 12 wheels. pip list, not pip freeze,
+# because freeze prints file:// URLs for the preinstalled wheels.
+RUN python3 -m pip list --format=freeze \
+      | grep -iE '^(torch|torchaudio|torchvision|pytorch-triton-rocm|triton)==' > /tmp/torch-constraints.txt \
+    && test -s /tmp/torch-constraints.txt \
+    && python3 -m pip install -c /tmp/torch-constraints.txt -r /opt/ComfyUI/requirements.txt ${EXTRA_PIP_PACKAGES} \
+    && python3 -m pip check \
+    && python3 -m compileall -q /opt/ComfyUI \
+    && mkdir -p /data && chmod 0755 /data \
+    && rm -f /tmp/torch-constraints.txt
+
+# The root filesystem is read-only at runtime, so every cache goes to the
+# persistent /data mount.
+ENV HOME=/data \
+    XDG_CACHE_HOME=/data/.cache \
+    HF_HOME=/data/.cache/huggingface \
+    TORCH_HOME=/data/.cache/torch \
+    TRITON_CACHE_DIR=/data/.cache/triton \
+    MIOPEN_USER_DB_PATH=/data/.cache/miopen/db \
+    MIOPEN_CUSTOM_CACHE_DIR=/data/.cache/miopen/cache
+
+LABEL org.opencontainers.image.title="comfyui"
+ENTRYPOINT ["python3", "/opt/ComfyUI/main.py"]

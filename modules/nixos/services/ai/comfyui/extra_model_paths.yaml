@@ -1,0 +1,6 @@
+# --base-directory /data hides the model configs and example custom nodes
+# shipped in the repository. This re-exposes them from the image.
+comfyui_image:
+  base_path: /opt/ComfyUI
+  configs: models/configs
+  custom_nodes: custom_nodes

@@ -23,6 +23,7 @@ in
     ./firecrawl
     ./gpt-researcher
     ./open-design
+    ./comfyui
     ./qwen3-asr
     ./article-page
     ./article-scrape

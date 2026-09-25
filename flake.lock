@@ -637,6 +637,23 @@
         "type": "github"
       }
     },
+    "comfyui": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789918056,
+        "narHash": "sha256-hfpoQsu8xzKHCy2Qqw2BMGsorwizJEuhKXWjUUJzTHs=",
+        "owner": "comfy-org",
+        "repo": "ComfyUI",
+        "rev": "73c9bad4d21e7addbe1d13bc92eee0f1431b017d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "comfy-org",
+        "ref": "v0.37.0",
+        "repo": "ComfyUI",
+        "type": "github"
+      }
+    },
     "cpu-microcodes": {
       "flake": false,
       "locked": {
@@ -3409,6 +3426,7 @@
         "catppuccin-zathura": "catppuccin-zathura",
         "catppuccin-zsh-fsh": "catppuccin-zsh-fsh",
         "chaotic": "chaotic",
+        "comfyui": "comfyui",
         "cpu-microcodes": "cpu-microcodes",
         "disko": "disko",
         "easy-effects-presets": "easy-effects-presets",

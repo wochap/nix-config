@@ -125,6 +125,8 @@
     gpt-researcher.flake = false;
     open-design.url = "github:wochap/open-design/open-design-v0.24.0-fork";
     open-design.flake = false;
+    comfyui.url = "github:comfy-org/ComfyUI/v0.37.0";
+    comfyui.flake = false;
     rtk.url = "github:rtk-ai/rtk/v0.48.0";
     rtk.flake = false;
 

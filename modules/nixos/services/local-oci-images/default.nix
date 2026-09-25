@@ -36,6 +36,11 @@ let
         fi
 
         exec ${ociExecutable} build \
+          ${
+            lib.concatStringsSep " " (
+              lib.mapAttrsToList (k: v: "--build-arg ${lib.escapeShellArg "${k}=${v}"}") image.buildArgs
+            )
+          } \
           --tag ${lib.escapeShellArg reference} \
           --file ${lib.escapeShellArg "${contextPath}/${image.dockerfile}"} \
           ${lib.escapeShellArg contextPath}
@@ -96,6 +101,12 @@ in
               type = lib.types.str;
               default = "Dockerfile";
               description = "Dockerfile path relative to the build context.";
+            };
+
+            buildArgs = lib.mkOption {
+              type = lib.types.attrsOf lib.types.str;
+              default = { };
+              description = "Values passed to the image build with --build-arg.";
             };
           };
         }
