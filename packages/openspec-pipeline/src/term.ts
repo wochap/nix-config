@@ -2,19 +2,32 @@
 
 import { createInterface } from "node:readline/promises";
 
-export const color = {
-  blue: (s: string) => `\x1b[1;34m${s}\x1b[0m`,
-  yellow: (s: string) => `\x1b[1;33m${s}\x1b[0m`,
-  bold: (s: string) => `\x1b[1m${s}\x1b[0m`,
-  dim: (s: string) => `\x1b[2m${s}\x1b[0m`,
+// Log lines go to stdout, or to stderr with --json so stdout holds only the
+// final JSON result.
+let out: NodeJS.WriteStream = process.stdout;
+export const logToStderr = () => {
+  out = process.stderr;
 };
 
-export const log = (msg: string) => console.log(`\n${color.blue(`==> ${msg}`)}`);
-export const warn = (msg: string) => console.log(`\n${color.yellow(`==> ${msg}`)}`);
+const paint = (code: string) => (s: string) => (out.isTTY && !process.env.NO_COLOR ? `\x1b[${code}m${s}\x1b[0m` : s);
+
+export const color = {
+  blue: paint("1;34"),
+  yellow: paint("1;33"),
+  bold: paint("1"),
+  dim: paint("2"),
+};
+
+export const print = (text: string) => out.write(text.endsWith("\n") ? text : `${text}\n`);
+export const log = (msg: string) => print(`\n${color.blue(`==> ${msg}`)}`);
+export const warn = (msg: string) => print(`\n${color.yellow(`==> ${msg}`)}`);
 
 // Terminal bell (BEL). Rings when the run ends for any reason and whenever
 // the pipeline waits on the user; terminals turn it into urgency/notification.
-export const bell = () => process.stdout.write("\x07");
+// Only on a terminal, never into a log file or piped JSON.
+export const bell = () => {
+  if (process.stderr.isTTY) process.stderr.write("\x07");
+};
 process.on("exit", bell);
 
 /** Reads one of the given answers from the terminal. */

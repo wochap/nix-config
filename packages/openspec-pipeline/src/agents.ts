@@ -19,15 +19,24 @@ export const defaultModel = (step: Step) => MODELS[step];
 /** Text that starts the OpenSpec skill, e.g. "/opsx:apply my-change". */
 export const invoke = (step: Step, change: string) => `/opsx:${step} ${change}`;
 
+export interface RunOptions {
+  /** Continue this session instead of starting a new one. */
+  resume?: string;
+  /** Someone is at the terminal: show live progress and allow Ctrl-T. */
+  tty: boolean;
+}
+
 /**
- * Headless run in the current directory. Progress and the takeover keys stay
- * on the terminal (stdin, stderr); stdout carries agents' JSON result.
+ * Headless run in the current directory. With a TTY, progress and the
+ * takeover keys stay on the terminal (stdin, stderr); without one, stderr
+ * gets only "session: <id>". stdout carries agents' JSON result.
  * Rejects when the agent fails.
  */
-export async function run(prompt: string, model: string): Promise<{ sessionId: string; result: string }> {
+export async function run(prompt: string, model: string, o: RunOptions): Promise<{ sessionId: string; result: string }> {
+  const target = o.resume ? ["-r", o.resume] : ["-a", "claude", "-C", process.cwd()];
   const child = Bun.spawn(
-    [...cmd, "run", "--json", "--verbose", "-a", "claude", "-C", process.cwd(), "-m", model, prompt],
-    { stdin: "inherit", stdout: "pipe", stderr: "inherit" },
+    [...cmd, "run", "--json", ...(o.tty ? ["--verbose"] : []), ...target, "-m", model, prompt],
+    { stdin: o.tty ? "inherit" : "ignore", stdout: "pipe", stderr: "inherit" },
   );
   const out = await new Response(child.stdout).text();
   const code = await child.exited;
