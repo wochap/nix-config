@@ -25,16 +25,24 @@ let
     };
   };
 
-  # CUDA adds pyannote to the adapter's upstream image; ROCm builds the
-  # adapter's packages and pyannote on the ROCm PyTorch base.
+  # pip requirements of the core: the diarization runtime. Changing them
+  # changes the image tags, so both images rebuild.
+  corePipPackages = [
+    "pyannote.audio==4.0.4"
+    "protobuf<7"
+  ];
+
+  # CUDA adds the core packages to the adapter's upstream image; ROCm installs
+  # the adapter's and the core's packages on the ROCm PyTorch base.
   image =
     if isRocm then
       aiLib.mkContainerImage "asr-${adapterName}-rocm" ./rocm.Containerfile ''
         BASE_IMAGE=${asrCfg.rocm.baseImage}
-        EXTRA_PIP_PACKAGES=${lib.concatStringsSep " " adapter.pipPackages}''
+        PIP_PACKAGES=${lib.concatStringsSep " " (adapter.pipPackages ++ corePipPackages)}''
     else
-      aiLib.mkContainerImage "asr-${adapterName}-cuda" ./cuda.Containerfile
-        "BASE_IMAGE=${adapter.image.cuda.tag}";
+      aiLib.mkContainerImage "asr-${adapterName}-cuda" ./cuda.Containerfile ''
+        BASE_IMAGE=${adapter.image.cuda.tag}
+        PIP_PACKAGES=${lib.concatStringsSep " " corePipPackages}'';
 
   asr = pkgs.writeShellApplication {
     name = "asr";
