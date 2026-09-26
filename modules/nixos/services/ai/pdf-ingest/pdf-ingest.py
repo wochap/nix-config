@@ -3,12 +3,15 @@
 
 The model-facing adapter deliberately ends at a small page/block contract.  The
 canonicalizer and renderer can therefore be tested without Paddle, PyMuPDF, or
-a GPU and future parser adapters do not need to change document schema v1.
+a GPU and future parser adapters do not need to change document schema v2.
+The layout adapter lives in its own file, mounted at /opt/pdf-ingest/adapter.py
+inside the inference container; see ParserAdapter for its contract.
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import difflib
 import hashlib
 import html
@@ -23,9 +26,9 @@ import sys
 import time
 from typing import Any, Iterable
 
-SCHEMA_VERSION = 1
-STATE_VERSION = 1
-MODEL_NAME = "PaddleOCR-VL-1.6"
+SCHEMA_VERSION = 2
+ADAPTER_MODULE = "/opt/pdf-ingest/adapter.py"
+STATE_VERSION = 2
 CONTROL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]|\ufffd")
 SPACE_RE = re.compile(r"\s+")
 TEXT_TYPES = {"text", "title", "heading", "paragraph", "header", "footer", "reference", "footnote", "list_item"}
@@ -147,23 +150,6 @@ def portable_raw(value: Any) -> Any:
     return value
 
 
-def initialize_paddle_cache(bundled: Path | None = None) -> None:
-    """Create a writable runtime cache while retaining read-only bundled data."""
-    if bundled is None:
-        bundled = Path(os.environ.get("PDF_INGEST_BUNDLED_CACHE", "/home/paddleocr/.paddlex"))
-    cache = Path(os.environ.get("PADDLE_PDX_CACHE_HOME", str(bundled)))
-    if cache == bundled:
-        return
-    if not bundled.is_dir():
-        raise RuntimeError(f"bundled PaddleX cache is missing: {bundled}")
-    cache.mkdir(parents=True, exist_ok=True)
-    for resource_name in ("official_models", "fonts"):
-        source = bundled / resource_name
-        target = cache / resource_name
-        if source.exists() and not target.exists():
-            target.symlink_to(source, target_is_directory=True)
-
-
 def point_values(value: Any) -> list[float]:
     if hasattr(value, "x") and hasattr(value, "y"):
         return [round(float(value.x), 4), round(float(value.y), 4)]
@@ -187,10 +173,46 @@ def serialize_link(link: dict[str, Any], display_box: Any) -> dict[str, Any]:
 
 
 class ParserAdapter:
+    """Parser contract.
+
+    A layout adapter module exports ADAPTER, a subclass constructed as
+    ADAPTER(batch_size) inside the inference container.  Its parse_page(image,
+    dpi) returns {"dpi", "render_transform", "raw", "blocks"} with block
+    geometry already in PDF points.  Each block carries "raw_path", a JSON
+    pointer into that page's "raw" result ("" for the whole result); the
+    document's provenance links each block back to it.
+    """
+
     name = "parser"
+    model = "unknown"
 
     def parse_page(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
         raise NotImplementedError
+
+    @staticmethod
+    def prepare_runtime() -> None:
+        """Set up caches before the first model load."""
+
+    @staticmethod
+    def metadata() -> dict[str, Any]:
+        """Adapter fields of this parser's document.json parsers entry."""
+        return {}
+
+    def clear_cache(self) -> None:
+        """Release accelerator memory after an OOM or before a reload."""
+
+
+def load_layout_adapter() -> type[ParserAdapter]:
+    # The adapter imports this module as pdf_ingest, including when it runs
+    # as the __main__ script.
+    sys.modules.setdefault("pdf_ingest", sys.modules[__name__])
+    path = Path(os.environ.get("PDF_INGEST_ADAPTER_MODULE", ADAPTER_MODULE))
+    spec = importlib.util.spec_from_file_location("pdf_ingest_adapter", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load layout adapter: {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.ADAPTER
 
 
 class PyMuPDFAdapter(ParserAdapter):
@@ -296,117 +318,12 @@ class PyMuPDFAdapter(ParserAdapter):
         }
 
 
-class PaddleOCRVLAdapter(ParserAdapter):
-    name = "paddleocr-vl"
-
-    def __init__(self, batch_size: int):
-        from paddleocr import PaddleOCRVL
-
-        self.pipeline = PaddleOCRVL(**self.pipeline_kwargs())
-        self.batch_size = batch_size
-
-    @staticmethod
-    def pipeline_kwargs() -> dict[str, Any]:
-        # Both images contain PaddleOCR-VL-1.6 weights.  Keep geometry-affecting
-        # preprocessors off so pixel-to-point is affine.  "gpu:0" is passed
-        # explicitly on both backends: ROCm PyTorch presents the card through
-        # the CUDA API but torch.version.cuda is None there, so PaddleX would
-        # otherwise fall back to the CPU.
-        kwargs: dict[str, Any] = {
-            "pipeline_version": "v1.6",
-            "device": "gpu:0",
-            "use_doc_orientation_classify": False,
-            "use_doc_unwarping": False,
-            "use_layout_detection": True,
-            "use_chart_recognition": True,
-            "use_queues": False,
-            "vl_rec_backend": "native",
-            "vl_rec_max_concurrency": 1,
-        }
-        if engine_name() == "transformers":
-            # The ROCm image has no Paddle runtime; PaddleX loads the
-            # safetensors checkpoints with Transformers on top of ROCm torch.
-            kwargs["engine"] = "transformers"
-            kwargs["engine_config"] = {"dtype": model_dtype()}
-        else:
-            # The upstream CUDA image runs PaddleOCR 3.6, which rejects unknown
-            # keyword arguments, so its call stays exactly as before.
-            kwargs["precision"] = "fp16"
-        return kwargs
-
-    def parse_page(self, image_path: Path, dpi: int) -> dict[str, Any]:
-        try:
-            results = list(self.pipeline.predict(input=str(image_path), batch_size=self.batch_size, use_queues=False))
-        except TypeError:
-            results = list(self.pipeline.predict(input=str(image_path), use_queues=False))
-        raw = jsonable(results[0] if len(results) == 1 else results)
-        if isinstance(raw, str):
-            try:
-                raw = json.loads(raw)
-            except json.JSONDecodeError:
-                pass
-        if isinstance(raw, list) and len(raw) == 1 and isinstance(raw[0], dict):
-            raw = raw[0]
-        if isinstance(raw, dict) and isinstance(raw.get("res"), dict):
-            raw = raw["res"]
-        raw = portable_raw(raw)
-        parsing = raw.get("parsing_res_list", []) if isinstance(raw, dict) else []
-        blocks = []
-        for item in parsing:
-            item = jsonable(item)
-            label = str(item.get("label", item.get("block_label", "text"))).lower()
-            content = item.get("content", item.get("block_content", item.get("text", "")))
-            polygon = item.get("block_polygon", item.get("polygon", item.get("poly", item.get("dt_polys"))))
-            box = item.get("block_bbox", item.get("bbox", item.get("box", item.get("coordinate"))))
-            if polygon and isinstance(polygon, list) and polygon and isinstance(polygon[0], (list, tuple)):
-                point_polygon = pixel_polygon_to_points(polygon, dpi)
-                point_box = bbox_from_polygon(point_polygon)
-            else:
-                point_polygon = None
-                point_box = pixel_box_to_points(box, dpi) if box and len(box) == 4 else [0.0, 0.0, 0.0, 0.0]
-            blocks.append({
-                "type": map_label(label),
-                "label": label,
-                "text": str(content or ""),
-                "bbox": point_box,
-                "polygon": point_polygon,
-                "parser_block_id": item.get("block_id", item.get("id")),
-                "raw": item,
-            })
-        return {"dpi": dpi, "render_transform": {"pixel_to_pdf_points": round(72.0 / dpi, 8), "origin": "top-left"}, "raw": raw, "blocks": blocks}
-
-    def clear_cache(self) -> None:
-        try:
-            import paddle
-            paddle.device.cuda.empty_cache()
-        except Exception:
-            pass
-        try:
-            import torch
-            torch.cuda.empty_cache()
-        except Exception:
-            pass
-
-
-def engine_name() -> str:
-    return os.environ.get("PDF_INGEST_ENGINE", "paddle")
-
-
 def model_dtype() -> str:
     return os.environ.get("PDF_INGEST_DTYPE", "float16")
 
 
 def accelerator_name() -> str:
     return os.environ.get("PDF_INGEST_ACCELERATOR", "cuda")
-
-
-def paddleocr_version() -> str:
-    try:
-        from importlib.metadata import version
-
-        return version("paddleocr")
-    except Exception:
-        return "3.6"
 
 
 def is_cuda_oom(error: BaseException) -> bool:
@@ -485,16 +402,16 @@ def normalize_grid(rows: list[list[Any]]) -> list[dict[str, Any]]:
     return [{"row": row_number, "column": column_number, "row_span": 1, "column_span": 1, "header": row_number == 0, "text": str(value or "").strip()} for row_number, row in enumerate(rows) for column_number, value in enumerate(row)]
 
 
-def choose_native(paddle_text: str, candidates: list[dict[str, Any]]) -> tuple[str, dict[str, Any]]:
+def choose_native(layout_text: str, candidates: list[dict[str, Any]], layout_name: str) -> tuple[str, dict[str, Any]]:
     candidates = [candidate for candidate in candidates if printable_native(candidate.get("text", ""))]
     if not candidates:
-        return paddle_text, {"selected": "paddleocr-vl", "reason": "no_reliable_native_text", "paddle_text": paddle_text, "native_text": None}
+        return layout_text, {"selected": layout_name, "reason": "no_reliable_native_text", "layout_text": layout_text, "native_text": None}
     native_text = "\n".join(candidate["text"] for candidate in candidates)
-    similarity = text_similarity(native_text, paddle_text) if paddle_text.strip() else 1.0
-    if not paddle_text.strip() or similarity >= 0.60:
-        reason = "paddle_empty" if not paddle_text.strip() else "native_matches_ocr"
-        return native_text, {"selected": "pymupdf", "reason": reason, "similarity": round(similarity, 4), "paddle_text": paddle_text, "native_text": native_text}
-    return paddle_text, {"selected": "paddleocr-vl", "reason": "candidate_mismatch", "similarity": round(similarity, 4), "paddle_text": paddle_text, "native_text": native_text}
+    similarity = text_similarity(native_text, layout_text) if layout_text.strip() else 1.0
+    if not layout_text.strip() or similarity >= 0.60:
+        reason = "layout_empty" if not layout_text.strip() else "native_matches_ocr"
+        return native_text, {"selected": "pymupdf", "reason": reason, "similarity": round(similarity, 4), "layout_text": layout_text, "native_text": native_text}
+    return layout_text, {"selected": layout_name, "reason": "candidate_mismatch", "similarity": round(similarity, 4), "layout_text": layout_text, "native_text": native_text}
 
 
 def duplicate(left: dict[str, Any], right: dict[str, Any]) -> bool:
@@ -503,10 +420,10 @@ def duplicate(left: dict[str, Any], right: dict[str, Any]) -> bool:
     return spatial and textual
 
 
-def reconcile_page(native: dict[str, Any], paddle: dict[str, Any], page_number: int) -> dict[str, Any]:
+def reconcile_page(native: dict[str, Any], layout: dict[str, Any], page_number: int, layout_name: str) -> dict[str, Any]:
     blocks = []
     matched_native: set[int] = set()
-    for paddle_index, source in enumerate(paddle["blocks"]):
+    for source in layout["blocks"]:
         intersecting = []
         native_pointers = []
         for native_index, candidate in enumerate(native["blocks"]):
@@ -514,7 +431,7 @@ def reconcile_page(native: dict[str, Any], paddle: dict[str, Any], page_number: 
                 intersecting.append(candidate)
                 native_pointers.append(f"/pages/{page_number - 1}/blocks/{native_index}")
                 matched_native.add(native_index)
-        text, choice = choose_native(source.get("text", ""), intersecting) if source["type"] in TEXT_TYPES | {"caption"} else (source.get("text", ""), {"selected": "paddleocr-vl", "reason": "structural_block", "paddle_text": source.get("text", ""), "native_text": None})
+        text, choice = choose_native(source.get("text", ""), intersecting, layout_name) if source["type"] in TEXT_TYPES | {"caption"} else (source.get("text", ""), {"selected": layout_name, "reason": "structural_block", "layout_text": source.get("text", ""), "native_text": None})
         typed: dict[str, Any] = {}
         if source["type"] == "table":
             native_tables = [table for table in native["tables"] if table.get("bbox") and intersection_ratio(source["bbox"], table["bbox"]) >= 0.35]
@@ -523,7 +440,7 @@ def reconcile_page(native: dict[str, Any], paddle: dict[str, Any], page_number: 
                 typed["table"] = {"cells": table["cells"], "rows": table["rows"], "columns": table["columns"], "source": "pymupdf"}
             else:
                 cells = parse_table_markup(text)
-                typed["table"] = {"cells": cells, "rows": max((cell["row"] + cell["row_span"] for cell in cells), default=0), "columns": max((cell["column"] + cell["column_span"] for cell in cells), default=0), "source": "paddleocr-vl"}
+                typed["table"] = {"cells": cells, "rows": max((cell["row"] + cell["row_span"] for cell in cells), default=0), "columns": max((cell["column"] + cell["column_span"] for cell in cells), default=0), "source": layout_name}
         if source["type"] == "formula":
             typed["formula"] = {"latex": text.strip().strip("$")}
         if source["type"] == "list_item":
@@ -532,7 +449,7 @@ def reconcile_page(native: dict[str, Any], paddle: dict[str, Any], page_number: 
         block = {
             "type": source["type"], "text": text, "bbox": source["bbox"], "polygon": source.get("polygon"),
             "source_region": source.get("label"), "links": links_for_box(native["links"], source["bbox"]),
-            "provenance": {"selection": choice, "raw": {"paddleocr_vl": f"/pages/{page_number - 1}/result/parsing_res_list/{paddle_index}", "pymupdf": native_pointers}},
+            "provenance": {"selection": choice, "raw": {"layout": f"/pages/{page_number - 1}/result{source['raw_path']}", "pymupdf": native_pointers}},
             **typed,
         }
         if native_sizes:
@@ -545,7 +462,7 @@ def reconcile_page(native: dict[str, Any], paddle: dict[str, Any], page_number: 
 
     for native_index, source in enumerate(native["blocks"]):
         if native_index not in matched_native:
-            block = {"type": "text", "text": source["text"], "bbox": source["bbox"], "polygon": None, "source_region": "unmatched_native", "links": links_for_box(native["links"], source["bbox"]), "provenance": {"selection": {"selected": "pymupdf", "reason": "unmatched_native", "native_text": source["text"], "paddle_text": None}, "raw": {"pymupdf": f"/pages/{page_number - 1}/blocks/{native_index}"}}}
+            block = {"type": "text", "text": source["text"], "bbox": source["bbox"], "polygon": None, "source_region": "unmatched_native", "links": links_for_box(native["links"], source["bbox"]), "provenance": {"selection": {"selected": "pymupdf", "reason": "unmatched_native", "native_text": source["text"], "layout_text": None}, "raw": {"pymupdf": f"/pages/{page_number - 1}/blocks/{native_index}"}}}
             if printable_native(source["text"]) and not any(duplicate(block, existing) for existing in blocks):
                 blocks.append(block)
 
@@ -774,6 +691,9 @@ def render_table(table: dict[str, Any]) -> list[str]:
     return ["| " + " | ".join(row) + " |" for row in grid[:1]] + ["| " + " | ".join(["---"] * column_count) + " |"] + ["| " + " | ".join(row) + " |" for row in grid[1:]]
 
 
+OLDER_OUTPUT = "pdf-ingest: destination was made by an older pdf-ingest; re-ingest into a new directory"
+
+
 def probe(args: argparse.Namespace) -> int:
     output = Path(args.output)
     current = identity(args)
@@ -782,7 +702,12 @@ def probe(args: argparse.Namespace) -> int:
     if entries == complete_entries:
         try:
             document = load_json(output / "document.json")
-            actual = {"source_sha256": document["document"]["source"]["sha256"], "settings": document["document"]["extraction_settings"], "image": document["parsers"][1]["image"]}
+            version = document.get("schema_version")
+            if isinstance(version, int) and version < SCHEMA_VERSION:
+                print(OLDER_OUTPUT, file=sys.stderr)
+                return 2
+            layout = next(parser for parser in document["parsers"] if parser.get("role") == "layout")
+            actual = {"source_sha256": document["document"]["source"]["sha256"], "settings": document["document"]["extraction_settings"], "image": layout["image"]}
             validate_document(document)
         except Exception as error:
             print(f"pdf-ingest: destination looks complete but is invalid: {error}", file=sys.stderr)
@@ -798,6 +723,9 @@ def probe(args: argparse.Namespace) -> int:
             manifest = load_json(manifest_path)
         except Exception as error:
             print(f"pdf-ingest: unreadable checkpoint manifest: {error}", file=sys.stderr)
+            return 2
+        if manifest.get("state_version") != STATE_VERSION:
+            print(OLDER_OUTPUT, file=sys.stderr)
             return 2
         if manifest.get("identity") != current:
             print("pdf-ingest: checkpoint belongs to a different source or settings", file=sys.stderr)
@@ -820,11 +748,11 @@ def render_page(document: Any, fitz: Any, index: int, dpi: int, target: Path) ->
     page.get_pixmap(matrix=matrix, alpha=False).save(target)
 
 
-def attach_rendered_assets(rendered: Path, paddle: dict[str, Any], native: dict[str, Any], asset_dir: Path, page_number: int, dpi: int) -> None:
+def attach_rendered_assets(rendered: Path, layout: dict[str, Any], native: dict[str, Any], asset_dir: Path, page_number: int, dpi: int) -> None:
     figure_number = len(native["images"])
     page_image = None
     claimed_embedded: dict[str, list[float]] = {}
-    for block in paddle["blocks"]:
+    for block in layout["blocks"]:
         if block["type"] not in {"figure", "chart"}:
             continue
         embedded = next((image for image in native["images"] if image.get("bbox") and intersection_ratio(block["bbox"], image["bbox"]) >= 0.65), None)
@@ -903,8 +831,9 @@ def infer(args: argparse.Namespace) -> int:
     checkpointed = sum(1 for number in range(1, page_count + 1) if (pages_dir / f"page-{number:03d}.json").exists())
     if checkpointed:
         log(f"resuming with {checkpointed}/{page_count} pages already checkpointed")
-    initialize_paddle_cache()
-    paddle_adapter: PaddleOCRVLAdapter | None = None
+    adapter_class = load_layout_adapter()
+    adapter_class.prepare_runtime()
+    adapter: ParserAdapter | None = None
     loaded_batch = 0
     started = time.monotonic()
     for index in range(page_count):
@@ -914,41 +843,42 @@ def infer(args: argparse.Namespace) -> int:
         native = load_json(native_dir / f"page-{index + 1:03d}.json")
         page_result = None
         for attempt_batch, page_dpi in oom_attempts(args.batch_size, args.dpi, args.min_dpi):
-            if paddle_adapter is None or loaded_batch != attempt_batch:
-                if paddle_adapter is not None:
-                    paddle_adapter.clear_cache()
-                log(f"loading PaddleOCR-VL model (batch {attempt_batch})")
-                paddle_adapter = PaddleOCRVLAdapter(attempt_batch)
+            if adapter is None or loaded_batch != attempt_batch:
+                if adapter is not None:
+                    adapter.clear_cache()
+                log(f"loading {adapter_class.model} model (batch {attempt_batch})")
+                adapter = adapter_class(attempt_batch)
                 loaded_batch = attempt_batch
                 log("model ready")
             rendered = render_dir / f"page-{index + 1:03d}-{page_dpi}.png"
             log(f"page {index + 1}/{page_count}: recognizing at {page_dpi} DPI")
             page_started = time.monotonic()
             try:
-                page_result = paddle_adapter.parse_page(rendered, page_dpi)
+                page_result = adapter.parse_page(rendered, page_dpi)
                 attach_rendered_assets(rendered, page_result, native, asset_dir, index + 1, page_dpi)
                 break
             except Exception as error:
                 if not is_cuda_oom(error):
                     raise
-                paddle_adapter.clear_cache()
+                adapter.clear_cache()
                 print(f"pdf-ingest: page {index + 1}: GPU OOM at batch {attempt_batch}, {page_dpi} DPI; retrying", file=sys.stderr)
         if page_result is None:
             raise RuntimeError(f"page {index + 1}: GPU OOM persisted through {args.min_dpi} DPI")
-        canonical = reconcile_page(native, page_result, index + 1)
-        dump_json(checkpoint, {"native": native, "paddle": page_result, "canonical": canonical})
+        canonical = reconcile_page(native, page_result, index + 1, adapter_class.name)
+        dump_json(checkpoint, {"native": native, "layout": page_result, "canonical": canonical})
         for rendered in render_dir.glob(f"page-{index + 1:03d}-*.png"):
             rendered.unlink()
         log(f"page {index + 1}/{page_count}: done in {time.monotonic() - page_started:.1f}s ({len(canonical['blocks'])} blocks)")
 
     log(f"inference finished in {time.monotonic() - started:.1f}s")
-    compact(args, metadata["package_version"], page_count, state)
+    compact(args, metadata["package_version"], page_count, state, adapter_class)
     return 0
 
 
-def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, state: Path) -> None:
+def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, state: Path, adapter: type[ParserAdapter]) -> None:
     log(f"compacting {page_count} pages into the final document")
     checkpoints = [load_json(state / "pages" / f"page-{number:03d}.json") for number in range(1, page_count + 1)]
+    layouts = [checkpoint["layout"] for checkpoint in checkpoints]
     pages = [checkpoint["canonical"] for checkpoint in checkpoints]
     for page in pages:
         page.pop("relationships")
@@ -957,8 +887,8 @@ def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, sta
         "schema_version": SCHEMA_VERSION,
         "document": {"source": {"sha256": sha256_file(Path(args.source)), "original_name": args.source_name, "path": "source.pdf", "mime_type": "application/pdf"}, "page_count": page_count, "extraction_settings": settings(args)},
         "parsers": [
-            {"adapter": "pymupdf", "package_version": pymupdf_version, "device": "cpu", "settings": {"raw_characters": True, "links": True, "images": True, "tables": True}},
-            {"adapter": "paddleocr-vl", "package_version": paddleocr_version(), "model": MODEL_NAME, "image": args.image, "accelerator": accelerator_name(), "engine": engine_name(), "dtype": "float16" if engine_name() == "paddle" else model_dtype(), "device": "gpu:0", "settings": {"all_pages": True, "layout_detection": True, "chart_recognition": True, "orientation": False, "unwarping": False, "concurrency": 1}},
+            {"adapter": "pymupdf", "role": "native", "package_version": pymupdf_version, "device": "cpu", "settings": {"raw_characters": True, "links": True, "images": True, "tables": True}},
+            {**adapter.metadata(), "adapter": adapter.name, "role": "layout", "model": adapter.model, "image": args.image, "accelerator": accelerator_name()},
         ],
         "pages": pages,
         "relationships": relationships,
@@ -971,7 +901,7 @@ def compact(args: argparse.Namespace, pymupdf_version: str, page_count: int, sta
     shutil.copy2(args.source, staging / "source.pdf")
     shutil.copytree(state / "images", staging / "images")
     dump_json(staging / "raw" / "pymupdf.json", {"adapter": "pymupdf", "pages": [checkpoint["native"] for checkpoint in checkpoints]})
-    dump_json(staging / "raw" / "paddleocr-vl.json", {"adapter": "paddleocr-vl", "model": MODEL_NAME, "pages": [{"dpi": checkpoint["paddle"]["dpi"], "render_transform": checkpoint["paddle"]["render_transform"], "result": checkpoint["paddle"]["raw"]} for checkpoint in checkpoints]})
+    dump_json(staging / "raw" / f"{adapter.name}.json", {"adapter": adapter.name, "model": adapter.model, "pages": [{"dpi": layout["dpi"], "render_transform": layout["render_transform"], "result": layout["raw"]} for layout in layouts]})
     dump_json(staging / "document.json", document)
     (staging / "document.md").write_text(render_markdown(load_json(staging / "document.json")), encoding="utf-8")
     output = Path(args.output)

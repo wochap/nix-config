@@ -139,7 +139,7 @@ in
     _custom.services.ai.enableOllama = true;
     _custom.services.ai.enableOllamaFlashAttention = true;
     _custom.services.ai.ocr.enable = true;
-    _custom.services.ai.ocr.pdfIngest.enable = true;
+    _custom.services.ai.pdfIngest.enable = true;
     _custom.services.ai.enableCuda = true;
     _custom.services.ai.enableNextjsOllamaLlmUi = false;
     _custom.services.ai.enableOpenWebui = true;

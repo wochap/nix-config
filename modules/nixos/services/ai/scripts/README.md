@@ -10,7 +10,7 @@ All three are plain Bash scripts packaged with `writeShellApplication` /
 |---------|-----------|---------|
 | `clean-voice` | OmniRoute (`omniroute-chat`), `jq`, `wl-paste`/`wl-copy`, `notify-send` | Clean a raw voice-dictation transcript from the clipboard |
 | `summary` | OmniRoute (`omniroute-chat`), `jq`, `pandoc`, `python3` | Summarize a file, inline text, or stdin through OmniRoute |
-| `asr-videos` | `asr-video` (`asr.enable`) | Batch-transcribe every MP4 below a directory |
+| `asr-videos` | `asr` (`asr.enable`) | Batch-transcribe every MP4 below a directory |
 | `count-tokens` | `tiktoken` (Python, via `writePython3Bin`) | Print the tiktoken token count of a file |
 
 ## Setup
@@ -54,7 +54,7 @@ summary --system-prompt "You extract action items." \
 
 ### asr-videos
 
-Transcribes every `*.mp4` below a directory with `asr-video`, skipping
+Transcribes every `*.mp4` below a directory with `asr`, skipping
 files that already have `.txt` and `.json` outputs. Language defaults to
 Spanish:
 

@@ -21,12 +21,12 @@ die() {
 
 if [[ ${1:-} == setup ]]; then
   (($# == 1)) || die "setup takes no arguments"
-  if [[ -n $PDF_INGEST_IMAGE_CONTEXT ]]; then
+  if [[ -n $AI_IMAGE_CONTEXT ]]; then
     ensure_image
     exit 0
   fi
-  echo "Pulling pinned PaddleOCR-VL offline image" >&2
-  exec podman pull "$PDF_INGEST_IMAGE"
+  echo "Pulling the pinned $AI_IMAGE_LABEL image" >&2
+  exec podman pull "$AI_IMAGE"
 fi
 
 dpi=200
@@ -90,7 +90,7 @@ fi
 mkdir -p -- "$output_dir"
 output_dir=$(realpath "$output_dir")
 
-probe_args=(probe --source "$source_pdf" --output "$output_dir" --dpi "$dpi" --min-dpi "$min_dpi" --batch-size "$batch_size" --image "$PDF_INGEST_IMAGE")
+probe_args=(probe --source "$source_pdf" --output "$output_dir" --dpi "$dpi" --min-dpi "$min_dpi" --batch-size "$batch_size" --image "$AI_IMAGE")
 echo "pdf-ingest: checking destination state: $output_dir" >&2
 set +e
 probe_output=$("$PDF_INGEST_PYTHON" "$PDF_INGEST_PIPELINE" "${probe_args[@]}" 2>&1)
@@ -142,7 +142,7 @@ bwrap \
   --dpi "$dpi" \
   --min-dpi "$min_dpi" \
   --batch-size "$batch_size" \
-  --image "$PDF_INGEST_IMAGE"
+  --image "$AI_IMAGE"
 prepare_status=$?
 set -e
 if ((prepare_status != 0)); then
@@ -155,7 +155,7 @@ container_args=(
   run
   --rm
   --pull=never
-  --network=none
+  "${offline_args[@]}"
   --http-proxy=false
   --ipc=private
   --pid=private
@@ -166,34 +166,44 @@ container_args=(
   # Root in a rootless Podman user namespace maps to the invoking host user.
   # The image's default service UID cannot write the host-owned output bind.
   --user=0:0
-  --cap-drop=all
-  --security-opt=no-new-privileges
-  --read-only
-  --pids-limit=2048
-  --shm-size="$PDF_INGEST_SHM_SIZE"
-  "--tmpfs=/tmp:rw,nosuid,nodev,size=$PDF_INGEST_TMP_SIZE"
+  "${sandbox_args[@]}"
   --env=PYTHONDONTWRITEBYTECODE=1
-  --env=PADDLE_PDX_CACHE_HOME=/tmp/paddlex-cache
   --env=XDG_CACHE_HOME=/tmp/cache
-  --env=FLAGS_use_mkldnn=0
-  --env=HF_HUB_OFFLINE=1
-  --env=TRANSFORMERS_OFFLINE=1
-  --env=PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True
-  "--env=PDF_INGEST_ACCELERATOR=$PDF_INGEST_ACCELERATOR"
-  "--env=PDF_INGEST_ENGINE=$PDF_INGEST_ENGINE"
+  "--env=PDF_INGEST_ACCELERATOR=$AI_ACCELERATOR"
   "--env=PDF_INGEST_DTYPE=$PDF_INGEST_DTYPE"
-  "--env=PDF_INGEST_BUNDLED_CACHE=$PDF_INGEST_BUNDLED_CACHE"
+  "--env=PDF_INGEST_ADAPTER=$PDF_INGEST_ADAPTER"
   --entrypoint=python3
   # Unlike --volume's colon-delimited format, --mount accepts colons in host paths.
   "--mount=type=bind,source=$source_pdf,target=/input/source.pdf,readonly"
   "--mount=type=bind,source=$output_dir,target=/output,rw"
   "--mount=type=bind,source=$PDF_INGEST_PIPELINE,target=/opt/pdf-ingest/pdf-ingest.py,readonly"
+  "--mount=type=bind,source=$PDF_INGEST_ADAPTER_MODULE,target=/opt/pdf-ingest/adapter.py,readonly"
 )
+if [[ $AI_ACCELERATOR == rocm ]]; then
+  # MIOpen writes its user kernel database under ~/.config and its compiled
+  # kernel cache under ~/.cache; the Hugging Face libraries and Matplotlib
+  # also cache under the home directory. All of that is rejected by the
+  # read-only rootfs, so point it at the container's tmpfs. The model weights
+  # are baked into the image and never go through HF_HOME.
+  container_args+=(
+    --env=MIOPEN_USER_DB_PATH=/tmp/miopen/db
+    --env=MIOPEN_CUSTOM_CACHE_DIR=/tmp/miopen/cache
+    --env=HF_HOME=/tmp/hf
+    --env=MPLCONFIGDIR=/tmp/matplotlib
+  )
+fi
+# The adapter's own environment, one KEY=VALUE per line.
+mapfile -t container_env <<<"$PDF_INGEST_CONTAINER_ENV"
+for container_env_entry in "${container_env[@]}"; do
+  if [[ -n $container_env_entry ]]; then
+    container_args+=("--env=$container_env_entry")
+  fi
+done
 
 ensure_image
 echo "pdf-ingest: extracting $(basename "$source_pdf") at ${dpi} DPI (offline)" >&2
 set +e
-podman "${container_args[@]}" "$PDF_INGEST_IMAGE" \
+podman "${container_args[@]}" "$AI_IMAGE" \
   /opt/pdf-ingest/pdf-ingest.py infer \
   --source /input/source.pdf \
   --source-name "$(basename "$source_pdf")" \
@@ -201,7 +211,7 @@ podman "${container_args[@]}" "$PDF_INGEST_IMAGE" \
   --dpi "$dpi" \
   --min-dpi "$min_dpi" \
   --batch-size "$batch_size" \
-  --image "$PDF_INGEST_IMAGE"
+  --image "$AI_IMAGE"
 status=$?
 set -e
 if ((status != 0)); then

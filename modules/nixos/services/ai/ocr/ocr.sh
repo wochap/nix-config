@@ -4,14 +4,21 @@
 # shellcheck source=/dev/null
 source "$HOME/.config/scripts/theme-colors.sh"
 
-mode="${1:-rapid}"
-case "$mode" in
-rapid | glm) ;;
-*)
-  echo "usage: ocr [rapid|glm]" >&2
+# OCR_ADAPTER_COMMANDS, OCR_ADAPTER_LABELS, and OCR_DEFAULT_ADAPTER come from
+# the prelude the NixOS module puts in front of this script. An adapter
+# command takes the captured image, prints the text on stdout, and explains a
+# failure on the last stderr line.
+mode="${1:-$OCR_DEFAULT_ADAPTER}"
+mode_known=false
+for adapter in "${!OCR_ADAPTER_COMMANDS[@]}"; do
+  if [[ $adapter == "$mode" ]]; then
+    mode_known=true
+  fi
+done
+if ! $mode_known; then
+  echo "usage: ocr [$(printf '%s\n' "${!OCR_ADAPTER_COMMANDS[@]}" | sort | paste -sd '|')]" >&2
   exit 2
-  ;;
-esac
+fi
 
 notify_error() {
   notify-send \
@@ -20,50 +27,6 @@ notify_error() {
     --hint=int:transient:1 \
     "OCR Failed" \
     "$1"
-}
-
-sanitize_glm_output() {
-  local input_file="$1"
-  local sanitized_file="$2"
-
-  # GLM-OCR can get stuck emitting empty Markdown code fences. If the response
-  # ends with three or more standalone fences, keep the first one (normally the
-  # legitimate closing fence) and discard the repeated suffix.
-  awk '
-    { lines[NR] = $0 }
-    END {
-      last = NR
-      while (last > 0 && lines[last] ~ /^[[:space:]]*$/) {
-        last--
-      }
-
-      run_end = last
-      fence_count = 0
-      while (last > 0) {
-        if (lines[last] ~ /^[[:space:]]*```+[[:space:]]*$/) {
-          fence_count++
-          last--
-        } else if (lines[last] ~ /^[[:space:]]*$/) {
-          last--
-        } else {
-          break
-        }
-      }
-
-      if (fence_count >= 3) {
-        print_end = last + 1
-        while (print_end <= run_end && lines[print_end] ~ /^[[:space:]]*$/) {
-          print_end++
-        }
-      } else {
-        print_end = run_end
-      }
-
-      for (line = 1; line <= print_end; line++) {
-        print lines[line]
-      }
-    }
-  ' "$input_file" >"$sanitized_file"
 }
 
 wayfreeze_pid=""
@@ -117,10 +80,7 @@ cleanup() {
     rm -f -- \
       "$temp_dir/capture.png" \
       "$temp_dir/error.log" \
-      "$temp_dir/output.txt" \
-      "$temp_dir/request.json" \
-      "$temp_dir/response.json" \
-      "$temp_dir/sanitized.txt"
+      "$temp_dir/output.txt"
     rmdir -- "$temp_dir" 2>/dev/null || true
   fi
 }
@@ -180,67 +140,15 @@ fi
 stop_wayfreeze
 restore_screen_shader
 
-case "$mode" in
-rapid)
-  if ! "$OCR_RAPID_PYTHON" \
-    "$OCR_RAPID_ENTRYPOINT" \
-    "$image_file" \
-    >"$output_file" \
-    2>"$error_file"; then
-    notify_error "RapidOCR inference failed"
-    exit 1
-  fi
-  success_title="RapidOCR Completed"
-  ;;
-glm)
-  request_file="$temp_dir/request.json"
-  response_file="$temp_dir/response.json"
-  if ! base64 --wrap=0 "$image_file" | jq --raw-input --slurp '{
-      model: "glm-ocr:bf16",
-      prompt: "Text Recognition:",
-      images: [.],
-      stream: false,
-      keep_alive: "15m",
-      options: {
-        temperature: 0,
-        num_predict: 4096
-      }
-    }' >"$request_file"; then
-    notify_error "Could not prepare the GLM-OCR request"
-    exit 1
-  fi
-  if ! curl \
-    --silent \
-    --show-error \
-    --fail-with-body \
-    --connect-timeout 2 \
-    --header "Content-Type: application/json" \
-    --data-binary "@$request_file" \
-    "http://127.0.0.1:11434/api/generate" \
-    >"$response_file" \
-    2>"$error_file"; then
-    notify_error "GLM-OCR is unavailable or inference failed"
-    exit 1
-  fi
-  if ! jq \
-    --exit-status \
-    --join-output \
-    '.response | select(type == "string")' \
-    "$response_file" \
-    >"$output_file" \
-    2>"$error_file"; then
-    notify_error "GLM-OCR returned an invalid response"
-    exit 1
-  fi
-  sanitized_file="$temp_dir/sanitized.txt"
-  if ! sanitize_glm_output "$output_file" "$sanitized_file" ||
-    ! mv -- "$sanitized_file" "$output_file"; then
-    notify_error "Could not sanitize the GLM-OCR response"
-    exit 1
-  fi
-  success_title="GLM-OCR Completed"
-  ;;
-esac
+label="${OCR_ADAPTER_LABELS[$mode]}"
+if ! "${OCR_ADAPTER_COMMANDS[$mode]}" \
+  "$image_file" \
+  >"$output_file" \
+  2>"$error_file"; then
+  reason="$(tail -n 1 -- "$error_file")"
+  notify_error "$label failed${reason:+: $reason}"
+  exit 1
+fi
 
 if ! jq --exit-status --raw-input --slurp 'test("\\S")' "$output_file" >/dev/null; then
   notify_error "No text was recognized"
@@ -255,5 +163,5 @@ fi
 notify-send \
   --app-name="ocr" \
   --hint=int:transient:1 \
-  "$success_title" \
+  "$label Completed" \
   "Text extracted and copied"

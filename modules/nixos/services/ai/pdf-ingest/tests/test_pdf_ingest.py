@@ -2,18 +2,34 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import io
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 from unittest import mock
 
 
 MODULE_PATH = Path(__file__).parents[1] / "pdf-ingest.py"
-SPEC = importlib.util.spec_from_file_location("pdf_ingest", MODULE_PATH)
-pdf = importlib.util.module_from_spec(SPEC)
-assert SPEC.loader
-SPEC.loader.exec_module(pdf)
+ADAPTER_PATH = Path(__file__).parents[1] / "adapters" / "paddleocr-vl" / "adapter.py"
+CONTAINER_PRELUDE_PATH = Path(__file__).parents[2] / "lib" / "container.sh"
+LAYOUT = "test-layout"
+
+
+def load_module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    # Registered before execution so the adapter's `import pdf_ingest` finds
+    # this copy of the core.
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+pdf = load_module("pdf_ingest", MODULE_PATH)
+paddle = load_module("pdf_ingest_paddleocr_vl", ADAPTER_PATH)
 
 
 def native_page(blocks=None, tables=None, images=None, links=None, rotation=0):
@@ -34,15 +50,19 @@ def native_block(text, bbox, size=11):
     return {"type": "text", "text": text, "bbox": bbox, "spans": [{"text": text, "bbox": bbox, "size": size, "characters": []}]}
 
 
-def paddle_page(blocks):
+def layout_page(blocks):
     return {"dpi": 200, "render_transform": {"pixel_to_pdf_points": 0.36}, "raw": {"parsing_res_list": []}, "blocks": blocks}
 
 
-def paddle_block(kind, text, bbox, label=None, asset=None):
-    result = {"type": kind, "label": label or kind, "text": text, "bbox": bbox, "polygon": None, "raw": {}}
+def layout_block(kind, text, bbox, label=None, asset=None, raw_path=""):
+    result = {"type": kind, "label": label or kind, "text": text, "bbox": bbox, "polygon": None, "raw_path": raw_path, "raw": {}}
     if asset:
         result["asset"] = asset
     return result
+
+
+def reconcile(native, layout, page_number, layout_name=LAYOUT):
+    return pdf.reconcile_page(native, layout, page_number, layout_name)
 
 
 class GeometryTests(unittest.TestCase):
@@ -55,7 +75,7 @@ class GeometryTests(unittest.TestCase):
         self.assertEqual(pdf.stable_block_id(12, 3), "p0012-b0003")
 
     def test_rotated_page_keeps_displayed_coordinate_declaration(self):
-        page = pdf.reconcile_page(native_page(rotation=90), paddle_page([]), 1)
+        page = reconcile(native_page(rotation=90), layout_page([]), 1)
         self.assertEqual(page["rotation"], 90)
         self.assertEqual(page["coordinate_space"]["origin"], "top-left")
 
@@ -105,7 +125,7 @@ class PaddleAdapterTests(unittest.TestCase):
             def predict(self, **kwargs):
                 return [PaddleResult(parsing_res_list=[PaddleBlock()])]
 
-        adapter = pdf.PaddleOCRVLAdapter.__new__(pdf.PaddleOCRVLAdapter)
+        adapter = paddle.PaddleOCRVLAdapter.__new__(paddle.PaddleOCRVLAdapter)
         adapter.pipeline = Pipeline()
         adapter.batch_size = 1
         page = adapter.parse_page(Path("render.png"), 200)
@@ -113,34 +133,57 @@ class PaddleAdapterTests(unittest.TestCase):
         self.assertEqual(page["blocks"][0]["text"], "OCR text")
         self.assertEqual(page["blocks"][0]["bbox"], [0.0, 0.0, 36.0, 7.2])
         self.assertEqual(page["blocks"][0]["parser_block_id"], 7)
+        self.assertEqual(page["blocks"][0]["raw_path"], "/parsing_res_list/0")
 
 
 class ReconciliationTests(unittest.TestCase):
     def test_reliable_matching_native_text_wins(self):
-        page = pdf.reconcile_page(
+        page = reconcile(
             native_page([native_block("Clean digital text", [10, 10, 200, 30])]),
-            paddle_page([paddle_block("text", "Clean digital text", [10, 10, 200, 30])]), 1,
+            layout_page([layout_block("text", "Clean digital text", [10, 10, 200, 30])]), 1,
         )
         block = page["blocks"][0]
         self.assertEqual(block["text"], "Clean digital text")
         self.assertEqual(block["provenance"]["selection"]["selected"], "pymupdf")
 
     def test_corrupted_native_text_loses(self):
-        page = pdf.reconcile_page(
+        page = reconcile(
             native_page([native_block("bad\ufffdtext", [10, 10, 200, 30])]),
-            paddle_page([paddle_block("text", "Readable OCR", [10, 10, 200, 30])]), 1,
+            layout_page([layout_block("text", "Readable OCR", [10, 10, 200, 30])]), 1,
         )
         self.assertEqual(page["blocks"][0]["text"], "Readable OCR")
         self.assertEqual(page["blocks"][0]["provenance"]["selection"]["reason"], "no_reliable_native_text")
 
     def test_mismatching_native_candidate_is_retained_in_provenance(self):
-        page = pdf.reconcile_page(
+        page = reconcile(
             native_page([native_block("Completely different", [0, 0, 100, 20])]),
-            paddle_page([paddle_block("text", "Expected words", [0, 0, 100, 20])]), 1,
+            layout_page([layout_block("text", "Expected words", [0, 0, 100, 20])]), 1,
         )
         selection = page["blocks"][0]["provenance"]["selection"]
-        self.assertEqual(selection["selected"], "paddleocr-vl")
+        self.assertEqual(selection["selected"], LAYOUT)
         self.assertEqual(selection["native_text"], "Completely different")
+        self.assertEqual(selection["layout_text"], "Expected words")
+
+    def test_provenance_names_follow_layout_adapter(self):
+        native = native_page([native_block("Different words", [0, 0, 100, 20])])
+        layout = layout_page([
+            layout_block("text", "Expected", [0, 0, 100, 20], raw_path="/items/3"),
+            layout_block("table", "", [0, 50, 100, 80], raw_path="/items/4"),
+        ])
+        page = reconcile(native, layout, 2, "other-parser")
+        self.assertEqual(page["blocks"][0]["provenance"]["selection"]["selected"], "other-parser")
+        self.assertEqual(page["blocks"][0]["provenance"]["raw"], {"layout": "/pages/1/result/items/3", "pymupdf": ["/pages/1/blocks/0"]})
+        self.assertEqual(page["blocks"][1]["provenance"]["raw"]["layout"], "/pages/1/result/items/4")
+        self.assertEqual(page["blocks"][1]["provenance"]["selection"]["layout_text"], "")
+        self.assertEqual(page["blocks"][1]["table"]["source"], "other-parser")
+
+    def test_empty_layout_text_selects_native_as_layout_empty(self):
+        page = reconcile(
+            native_page([native_block("Native only", [0, 0, 100, 20])]),
+            layout_page([layout_block("text", "", [0, 0, 100, 20])]), 1,
+        )
+        selection = page["blocks"][0]["provenance"]["selection"]
+        self.assertEqual((selection["selected"], selection["reason"]), ("pymupdf", "layout_empty"))
 
     def test_unmatched_native_is_preserved_and_duplicates_are_suppressed(self):
         native = native_page([
@@ -148,21 +191,21 @@ class ReconciliationTests(unittest.TestCase):
             native_block("Unmatched", [0, 40, 100, 60]),
             native_block("Unmatched", [0, 40, 100, 60]),
         ])
-        page = pdf.reconcile_page(native, paddle_page([paddle_block("text", "Matched", [0, 0, 100, 20])]), 1)
+        page = reconcile(native, layout_page([layout_block("text", "Matched", [0, 0, 100, 20])]), 1)
         self.assertEqual([block["text"] for block in page["blocks"]], ["Matched", "Unmatched"])
 
     def test_multi_column_paddle_order_is_preserved(self):
         blocks = [
-            paddle_block("text", "right", [320, 10, 500, 40]),
-            paddle_block("text", "left", [10, 10, 200, 40]),
-            paddle_block("text", "below", [10, 70, 200, 90]),
+            layout_block("text", "right", [320, 10, 500, 40]),
+            layout_block("text", "left", [10, 10, 200, 40]),
+            layout_block("text", "below", [10, 70, 200, 90]),
         ]
-        page = pdf.reconcile_page(native_page(), paddle_page(blocks), 1)
+        page = reconcile(native_page(), layout_page(blocks), 1)
         self.assertEqual([item["text"] for item in page["blocks"]], ["right", "left", "below"])
 
     def test_native_table_grid_wins(self):
         table = {"bbox": [0, 0, 200, 100], "cells": pdf.normalize_grid([["A", "B"], ["1", "2"]]), "rows": 2, "columns": 2}
-        page = pdf.reconcile_page(native_page(tables=[table]), paddle_page([paddle_block("table", "<table><tr><td>x</td></tr></table>", [0, 0, 200, 100])]), 1)
+        page = reconcile(native_page(tables=[table]), layout_page([layout_block("table", "<table><tr><td>x</td></tr></table>", [0, 0, 200, 100])]), 1)
         self.assertEqual(page["blocks"][0]["table"]["source"], "pymupdf")
         self.assertEqual(page["blocks"][0]["table"]["cells"][0]["text"], "A")
 
@@ -172,7 +215,7 @@ class ReconciliationTests(unittest.TestCase):
         self.assertTrue(cells[0]["header"])
 
     def test_formula_is_typed_as_latex(self):
-        page = pdf.reconcile_page(native_page(), paddle_page([paddle_block("formula", "$x^2$", [0, 0, 50, 20])]), 1)
+        page = reconcile(native_page(), layout_page([layout_block("formula", "$x^2$", [0, 0, 50, 20])]), 1)
         self.assertEqual(page["blocks"][0]["formula"]["latex"], "x^2")
 
     def test_heading_levels_section_paths_and_contains(self):
@@ -180,12 +223,12 @@ class ReconciliationTests(unittest.TestCase):
             native_block("Document", [0, 0, 200, 30], 24),
             native_block("Section", [0, 50, 200, 70], 18),
         ])
-        paddle = paddle_page([
-            paddle_block("title", "Document", [0, 0, 200, 30]),
-            paddle_block("heading", "Section", [0, 50, 200, 70]),
-            paddle_block("text", "Body", [0, 90, 200, 110]),
+        paddle = layout_page([
+            layout_block("title", "Document", [0, 0, 200, 30]),
+            layout_block("heading", "Section", [0, 50, 200, 70]),
+            layout_block("text", "Body", [0, 90, 200, 110]),
         ])
-        page = pdf.reconcile_page(native, paddle, 1)
+        page = reconcile(native, paddle, 1)
         self.assertEqual(page["blocks"][0]["heading"]["level"], 1)
         self.assertEqual(page["blocks"][1]["heading"]["level"], 2)
         self.assertEqual(page["blocks"][2]["section_path"], ["Document", "Section"])
@@ -193,10 +236,10 @@ class ReconciliationTests(unittest.TestCase):
 
     def test_caption_relationship_and_image_asset(self):
         blocks = [
-            paddle_block("figure", "", [0, 0, 100, 80], asset="images/page-001-figure-01.png"),
-            paddle_block("caption", "Figure one", [0, 85, 100, 100]),
+            layout_block("figure", "", [0, 0, 100, 80], asset="images/page-001-figure-01.png"),
+            layout_block("caption", "Figure one", [0, 85, 100, 100]),
         ]
-        page = pdf.reconcile_page(native_page(), paddle_page(blocks), 1)
+        page = reconcile(native_page(), layout_page(blocks), 1)
         figure = page["blocks"][0]
         self.assertEqual(figure["asset"], "images/page-001-figure-01.png")
         relation = next(item for item in page["relationships"] if item["type"] == "caption_of")
@@ -204,7 +247,7 @@ class ReconciliationTests(unittest.TestCase):
 
     def test_overlapping_figure_blocks_claim_embedded_image_once(self):
         native = native_page(images=[{"xref": 1, "asset": "images/page-001-figure-01.jpeg", "bbox": [0, 0, 100, 80], "width": 10, "height": 10, "encoding": "jpeg"}])
-        paddle = paddle_page([paddle_block("figure", "", [0, 0, 100, 80]), paddle_block("figure", "", [5, 5, 105, 85])])
+        paddle = layout_page([layout_block("figure", "", [0, 0, 100, 80]), layout_block("figure", "", [5, 5, 105, 85])])
         pdf.attach_rendered_assets(Path("unused.png"), paddle, native, Path("unused-assets"), 1, 200)
         self.assertEqual(paddle["blocks"][0]["asset"], "images/page-001-figure-01.jpeg")
         self.assertNotIn("asset", paddle["blocks"][1])
@@ -212,11 +255,11 @@ class ReconciliationTests(unittest.TestCase):
     def test_split_table_merges_across_pages_and_renumbers_blocks(self):
         def table_page(rows, number, extra_blocks=None):
             table = {"bbox": [0, 0, 200, 100], "cells": pdf.normalize_grid(rows), "rows": len(rows), "columns": 2}
-            return pdf.reconcile_page(native_page(tables=[table]), paddle_page([paddle_block("table", "", [0, 0, 200, 100])] + (extra_blocks or [])), number)
+            return reconcile(native_page(tables=[table]), layout_page([layout_block("table", "", [0, 0, 200, 100])] + (extra_blocks or [])), number)
 
         pages = [
             table_page([["Project", "Unit"], ["Laser", "nm"]], 1),
-            table_page([["Light", "lx"], ["Speed", "Hz"]], 2, [paddle_block("text", "Continued", [0, 120, 200, 140])]),
+            table_page([["Light", "lx"], ["Speed", "Hz"]], 2, [layout_block("text", "Continued", [0, 120, 200, 140])]),
         ]
         relationships = pdf.finalize_document_structure(pages)
         merged = pages[0]["blocks"][-1]["table"]
@@ -233,7 +276,7 @@ class ReconciliationTests(unittest.TestCase):
 
     def test_link_and_internal_target(self):
         links = [{"from": [0, 0, 100, 20], "uri": "https://example.test"}, {"from": [0, 0, 100, 20], "page": 2}]
-        page = pdf.reconcile_page(native_page(links=links), paddle_page([paddle_block("text", "site", [0, 0, 100, 20])]), 1)
+        page = reconcile(native_page(links=links), layout_page([layout_block("text", "site", [0, 0, 100, 20])]), 1)
         self.assertEqual(page["blocks"][0]["links"][0]["uri"], "https://example.test")
         self.assertIn({"type": "internal_link", "from": "p0001-b0001", "to": "page-003"}, page["relationships"])
 
@@ -241,7 +284,7 @@ class ReconciliationTests(unittest.TestCase):
 class RenderingAndValidationTests(unittest.TestCase):
     def document(self, blocks):
         return {
-            "schema_version": 1,
+            "schema_version": pdf.SCHEMA_VERSION,
             "document": {"source": {}, "page_count": 1, "extraction_settings": {}},
             "parsers": [],
             "pages": [{"id": "page-001", "number": 1, "width": 1, "height": 1, "rotation": 0, "coordinate_space": {}, "blocks": blocks}],
@@ -317,21 +360,33 @@ class RenderingAndValidationTests(unittest.TestCase):
 
     def test_launcher_contains_offline_sandbox_controls(self):
         # The NixOS module concatenates the prelude in front of the launcher.
-        prelude = (MODULE_PATH.parent / "pdf-ingest-image.sh").read_text()
+        prelude = CONTAINER_PRELUDE_PATH.read_text()
         launcher = (MODULE_PATH.parent / "pdf-ingest.sh").read_text()
         for flag in (
-            '"--device=$pdf_ingest_device_spec"',
+            '"--device=$ai_device_spec"',
             "--group-add=keep-groups",
-            "--env=MIOPEN_USER_DB_PATH=/tmp/miopen/db",
-            "--env=MIOPEN_CUSTOM_CACHE_DIR=/tmp/miopen/cache",
-            "--env=HF_HOME=/tmp/hf",
+            '"--env=HSA_OVERRIDE_GFX_VERSION=$AI_HSA_OVERRIDE_GFX_VERSION"',
+            "ensure_image() {",
+            'done <<<"$AI_IMAGE_BUILD_ARGS"',
             "podman build --pull=missing",
+            "--cap-drop=all",
+            "--security-opt=no-new-privileges",
+            "--read-only",
+            '"--shm-size=$AI_SHM_SIZE"',
+            '"--tmpfs=/tmp:rw,nosuid,nodev,size=$AI_TMP_SIZE"',
+            "--network=none",
+            "--env=HF_HUB_OFFLINE=1",
         ):
             self.assertIn(flag, prelude)
         self.assertNotIn("nvidia.com/gpu=all", prelude)
         for flag in (
             "--pull=never",
-            "--network=none",
+            "--env=MIOPEN_USER_DB_PATH=/tmp/miopen/db",
+            "--env=MIOPEN_CUSTOM_CACHE_DIR=/tmp/miopen/cache",
+            "--env=HF_HOME=/tmp/hf",
+            "--env=MPLCONFIGDIR=/tmp/matplotlib",
+            '"--env=PDF_INGEST_ACCELERATOR=$AI_ACCELERATOR"',
+            '"${offline_args[@]}"',
             "--http-proxy=false",
             "--ipc=private",
             "--pid=private",
@@ -339,19 +394,15 @@ class RenderingAndValidationTests(unittest.TestCase):
             "--cgroupns=private",
             '"${gpu_args[@]}"',
             "--user=0:0",
-            "--cap-drop=all",
-            "--read-only",
-            '--shm-size="$PDF_INGEST_SHM_SIZE"',
-            '"--tmpfs=/tmp:rw,nosuid,nodev,size=$PDF_INGEST_TMP_SIZE"',
-            "--env=PADDLE_PDX_CACHE_HOME=/tmp/paddlex-cache",
-            "--env=HF_HUB_OFFLINE=1",
-            '"--env=PDF_INGEST_ENGINE=$PDF_INGEST_ENGINE"',
+            '"${sandbox_args[@]}"',
             '"--env=PDF_INGEST_DTYPE=$PDF_INGEST_DTYPE"',
-            '"--env=PDF_INGEST_BUNDLED_CACHE=$PDF_INGEST_BUNDLED_CACHE"',
             "--env=XDG_CACHE_HOME=/tmp/cache",
             '"--mount=type=bind,source=$source_pdf,target=/input/source.pdf,readonly"',
             '"--mount=type=bind,source=$output_dir,target=/output,rw"',
             '"--mount=type=bind,source=$PDF_INGEST_PIPELINE,target=/opt/pdf-ingest/pdf-ingest.py,readonly"',
+            '"--mount=type=bind,source=$PDF_INGEST_ADAPTER_MODULE,target=/opt/pdf-ingest/adapter.py,readonly"',
+            '"--env=PDF_INGEST_ADAPTER=$PDF_INGEST_ADAPTER"',
+            'container_args+=("--env=$container_env_entry")',
         ):
             self.assertIn(flag, launcher)
         self.assertNotIn('"--volume=$source_pdf:/input/source.pdf:ro"', launcher)
@@ -359,7 +410,10 @@ class RenderingAndValidationTests(unittest.TestCase):
             self.assertIn(flag, launcher)
         self.assertIn('"$PDF_INGEST_PIPELINE" prepare', launcher)
         self.assertIn("pdf-ingest.py infer", launcher)
+        self.assertIn('podman "${container_args[@]}" "$AI_IMAGE"', launcher)
         self.assertNotIn("--device=nvidia.com/gpu=all", launcher)
+        # Adapter-specific environment comes from the NixOS adapter module.
+        self.assertNotIn("PADDLE", launcher)
         self.assertLess(launcher.index("ensure_image\n"), launcher.index("pdf-ingest.py infer"))
 
     def test_oom_detection_covers_cuda_and_rocm_messages(self):
@@ -374,15 +428,15 @@ class RenderingAndValidationTests(unittest.TestCase):
         self.assertFalse(pdf.is_cuda_oom(RuntimeError("CUDA error: an illegal memory access")))
 
     def test_adapter_kwargs_follow_engine_environment(self):
-        with mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "paddle"}):
-            kwargs = pdf.PaddleOCRVLAdapter.pipeline_kwargs()
+        with mock.patch.dict("os.environ", {"PADDLEOCR_VL_ENGINE": "paddle"}):
+            kwargs = paddle.PaddleOCRVLAdapter.pipeline_kwargs()
         self.assertEqual(kwargs["precision"], "fp16")
         self.assertEqual(kwargs["device"], "gpu:0")
         self.assertNotIn("engine", kwargs)
         self.assertNotIn("engine_config", kwargs)
 
-        with mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float32"}):
-            kwargs = pdf.PaddleOCRVLAdapter.pipeline_kwargs()
+        with mock.patch.dict("os.environ", {"PADDLEOCR_VL_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float32"}):
+            kwargs = paddle.PaddleOCRVLAdapter.pipeline_kwargs()
         self.assertEqual(kwargs["engine"], "transformers")
         self.assertEqual(kwargs["engine_config"], {"dtype": "float32"})
         self.assertEqual(kwargs["device"], "gpu:0")
@@ -394,8 +448,8 @@ class RenderingAndValidationTests(unittest.TestCase):
 
         fake = types.ModuleType("paddleocr")
         fake.PaddleOCRVL = mock.Mock(return_value="pipeline")
-        with mock.patch.dict(sys.modules, {"paddleocr": fake}), mock.patch.dict("os.environ", {"PDF_INGEST_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float16"}):
-            adapter = pdf.PaddleOCRVLAdapter(2)
+        with mock.patch.dict(sys.modules, {"paddleocr": fake}), mock.patch.dict("os.environ", {"PADDLEOCR_VL_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float16"}):
+            adapter = paddle.PaddleOCRVLAdapter(2)
         self.assertEqual(adapter.pipeline, "pipeline")
         self.assertEqual(adapter.batch_size, 2)
         called = fake.PaddleOCRVL.call_args.kwargs
@@ -409,8 +463,8 @@ class RenderingAndValidationTests(unittest.TestCase):
             bundled = root / "rocm-bundled"
             cache = root / "runtime"
             (bundled / "official_models").mkdir(parents=True)
-            with mock.patch.dict("os.environ", {"PADDLE_PDX_CACHE_HOME": str(cache), "PDF_INGEST_BUNDLED_CACHE": str(bundled)}):
-                pdf.initialize_paddle_cache()
+            with mock.patch.dict("os.environ", {"PADDLE_PDX_CACHE_HOME": str(cache), "PADDLEOCR_VL_BUNDLED_CACHE": str(bundled)}):
+                paddle.initialize_paddle_cache()
             self.assertEqual((cache / "official_models").resolve(), bundled / "official_models")
             self.assertFalse((cache / "fonts").exists())
 
@@ -422,7 +476,7 @@ class RenderingAndValidationTests(unittest.TestCase):
             (bundled / "official_models").mkdir(parents=True)
             (bundled / "fonts").mkdir()
             with mock.patch.dict("os.environ", {"PADDLE_PDX_CACHE_HOME": str(cache)}):
-                pdf.initialize_paddle_cache(bundled)
+                paddle.initialize_paddle_cache(bundled)
             self.assertEqual((cache / "official_models").resolve(), bundled / "official_models")
             self.assertEqual((cache / "fonts").resolve(), bundled / "fonts")
             (cache / "func_ret").mkdir()
@@ -461,11 +515,30 @@ class RetryAndDestinationTests(unittest.TestCase):
             state = output / ".pdf-ingest-state"
             state.mkdir(parents=True)
             args = self.args(source, output)
-            (state / "manifest.json").write_text(json.dumps({"identity": pdf.identity(args)}))
+            (state / "manifest.json").write_text(json.dumps({"state_version": pdf.STATE_VERSION, "identity": pdf.identity(args)}))
             self.assertEqual(pdf.probe(args), 10)
             self.assertEqual(pdf.probe(self.args(source, output, dpi=201)), 2)
 
     def test_complete_matching_result_is_noop(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "input.pdf"
+            source.write_bytes(b"%PDF-1.7\n")
+            output = root / "out"
+            (output / "images").mkdir(parents=True)
+            (output / "raw").mkdir()
+            args = self.args(source, output)
+            document = {
+                "schema_version": pdf.SCHEMA_VERSION,
+                "document": {"source": {"sha256": pdf.sha256_file(source)}, "page_count": 0, "extraction_settings": pdf.settings(args)},
+                "parsers": [{"role": "native"}, {"role": "layout", "image": self.IMAGE}], "pages": [], "relationships": [],
+            }
+            (output / "source.pdf").write_bytes(source.read_bytes())
+            (output / "document.json").write_text(json.dumps(document))
+            (output / "document.md").write_text("")
+            self.assertEqual(pdf.probe(args), 0)
+
+    def test_older_schema_output_asks_for_reingest(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             source = root / "input.pdf"
@@ -482,7 +555,23 @@ class RetryAndDestinationTests(unittest.TestCase):
             (output / "source.pdf").write_bytes(source.read_bytes())
             (output / "document.json").write_text(json.dumps(document))
             (output / "document.md").write_text("")
-            self.assertEqual(pdf.probe(args), 0)
+            with mock.patch("sys.stderr", new_callable=io.StringIO) as stderr:
+                self.assertEqual(pdf.probe(args), 2)
+            self.assertIn("re-ingest into a new directory", stderr.getvalue())
+
+    def test_older_checkpoint_asks_for_reingest(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "input.pdf"
+            source.write_bytes(b"%PDF-1.7\n")
+            output = root / "out"
+            state = output / ".pdf-ingest-state"
+            state.mkdir(parents=True)
+            args = self.args(source, output)
+            (state / "manifest.json").write_text(json.dumps({"state_version": 1, "identity": pdf.identity(args)}))
+            with mock.patch("sys.stderr", new_callable=io.StringIO) as stderr:
+                self.assertEqual(pdf.probe(args), 2)
+            self.assertIn("re-ingest into a new directory", stderr.getvalue())
 
     def test_partial_finalization_with_matching_state_is_resumable(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -493,7 +582,7 @@ class RetryAndDestinationTests(unittest.TestCase):
             state = output / ".pdf-ingest-state"
             state.mkdir(parents=True)
             args = self.args(source, output)
-            (state / "manifest.json").write_text(json.dumps({"identity": pdf.identity(args)}))
+            (state / "manifest.json").write_text(json.dumps({"state_version": pdf.STATE_VERSION, "identity": pdf.identity(args)}))
             (output / "source.pdf").write_bytes(source.read_bytes())
             (output / "document.json").write_text("partial")
             self.assertEqual(pdf.probe(args), 10)
@@ -507,33 +596,47 @@ class RetryAndDestinationTests(unittest.TestCase):
             state = output / ".pdf-ingest-state"
             (state / "pages").mkdir(parents=True)
             (state / "images").mkdir()
-            page = pdf.reconcile_page(
-                native_page(),
-                paddle_page([paddle_block("text", "Scanned page", [0, 0, 100, 20])]),
-                1,
-            )
-            checkpoint = {
-                "native": native_page(),
-                "paddle": paddle_page([paddle_block("text", "Scanned page", [0, 0, 100, 20])]),
-                "canonical": page,
-            }
+            layout = layout_page([layout_block("text", "Scanned page", [0, 0, 100, 20], raw_path="/parsing_res_list/0")])
+            page = reconcile(native_page(), layout, 1, "paddleocr-vl")
+            checkpoint = {"native": native_page(), "layout": layout, "canonical": page}
             pdf.dump_json(state / "pages" / "page-001.json", checkpoint)
             args = self.args(source, output)
             args.source_name = source.name
-            pdf.compact(args, "test", 1, state)
+            with mock.patch.dict("os.environ", {"PADDLEOCR_VL_ENGINE": "transformers", "PDF_INGEST_DTYPE": "float32", "PDF_INGEST_ACCELERATOR": "rocm"}), mock.patch.object(paddle, "paddleocr_version", return_value="3.7.0"):
+                pdf.compact(args, "test", 1, state, paddle.PaddleOCRVLAdapter)
             self.assertEqual({item.name for item in output.iterdir()}, {"source.pdf", "document.json", "document.md", "images", "raw"})
+            self.assertEqual({item.name for item in (output / "raw").iterdir()}, {"pymupdf.json", "paddleocr-vl.json"})
             self.assertFalse(state.exists())
             document = json.loads((output / "document.json").read_text())
             pdf.validate_document(document)
+            self.assertEqual(document["schema_version"], 2)
+            self.assertEqual([parser["role"] for parser in document["parsers"]], ["native", "layout"])
+            self.assertEqual(document["pages"][0]["blocks"][0]["provenance"]["raw"]["layout"], "/pages/0/result/parsing_res_list/0")
+            self.assertEqual(document["parsers"][1], {
+                "adapter": "paddleocr-vl", "role": "layout", "package_version": "3.7.0", "model": "PaddleOCR-VL-1.6", "image": self.IMAGE,
+                "accelerator": "rocm", "engine": "transformers", "dtype": "float32", "device": "gpu:0",
+                "settings": {"all_pages": True, "layout_detection": True, "chart_recognition": True, "orientation": False, "unwarping": False, "concurrency": 1},
+            })
+            raw = json.loads((output / "raw" / "paddleocr-vl.json").read_text())
+            self.assertEqual((raw["adapter"], raw["model"], raw["pages"][0]["dpi"]), ("paddleocr-vl", "PaddleOCR-VL-1.6", 200))
             self.assertIn("Scanned page", (output / "document.md").read_text())
 
+    def test_layout_adapter_is_loaded_from_module_path(self):
+        with mock.patch.dict("os.environ", {"PDF_INGEST_ADAPTER_MODULE": str(ADAPTER_PATH)}):
+            adapter = pdf.load_layout_adapter()
+        self.assertEqual((adapter.name, adapter.model), ("paddleocr-vl", "PaddleOCR-VL-1.6"))
+        self.assertTrue(issubclass(adapter, pdf.ParserAdapter))
+
     def test_inference_phase_does_not_require_pymupdf(self):
-        class FakePaddle:
+        class FakePaddle(pdf.ParserAdapter):
+            name = "paddleocr-vl"
+            model = "fake"
+
             def __init__(self, batch_size):
                 self.batch_size = batch_size
 
             def parse_page(self, image_path, dpi):
-                return paddle_page([paddle_block("text", "OCR only", [0, 0, 100, 20])])
+                return layout_page([layout_block("text", "OCR only", [0, 0, 100, 20])])
 
             def clear_cache(self):
                 pass
@@ -548,11 +651,11 @@ class RetryAndDestinationTests(unittest.TestCase):
                 directory.mkdir(parents=True, exist_ok=True)
             args = self.args(source, output, batch_size=1)
             args.source_name = source.name
-            pdf.dump_json(state / "manifest.json", {"identity": pdf.identity(args)})
+            pdf.dump_json(state / "manifest.json", {"state_version": pdf.STATE_VERSION, "identity": pdf.identity(args)})
             pdf.dump_json(state / "native" / "metadata.json", {"page_count": 1, "package_version": "test"})
             pdf.dump_json(state / "native" / "page-001.json", native_page())
             (state / "renders" / "page-001-200.png").write_bytes(b"unused by fake adapter")
-            with mock.patch.object(pdf, "initialize_paddle_cache"), mock.patch.object(pdf, "PaddleOCRVLAdapter", FakePaddle), mock.patch.object(
+            with mock.patch.object(pdf, "load_layout_adapter", return_value=FakePaddle), mock.patch.object(
                 pdf, "PyMuPDFAdapter", side_effect=AssertionError("container inference imported PyMuPDF")
             ):
                 self.assertEqual(pdf.infer(args), 0)
