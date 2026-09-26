@@ -1,22 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# The NixOS module puts ../lib/container.sh, which sets up gpu_args,
+# sandbox_args, offline_args, and ensure_image, in front of this script.
+
 language=""
 output_file=""
 json_output_file=""
 num_speakers=""
 min_speakers=""
 max_speakers=""
+diarize=1
 validate_output=0
 
 usage() {
   cat >&2 <<'EOF'
-usage: asr-video [OPTIONS] VIDEO_FILE
+usage: asr [OPTIONS] MEDIA_FILE
+
+Transcribe the first audio stream of an audio or video file.
 
 Options:
-  --language LANGUAGE      Force a language name or ISO code (default: detect)
-  --output, -o FILE        Text transcript path (default: VIDEO_STEM.txt)
+  --language LANGUAGE      Force an ISO 639 code or English name (default: detect)
+  --output, -o FILE        Text transcript path (default: MEDIA_STEM.txt)
   --json-output FILE       Structured result path (default: OUTPUT_STEM.json)
+  --no-diarize             Skip word alignment and speaker diarization
   --num-speakers N         Force an exact speaker count
   --min-speakers N         Set the minimum detected speaker count
   --max-speakers N         Set the maximum detected speaker count
@@ -26,7 +33,7 @@ EOF
 }
 
 die() {
-  echo "asr-video: $*" >&2
+  echo "asr: $*" >&2
   exit 2
 }
 
@@ -46,6 +53,10 @@ while (($#)); do
     (($# >= 2)) || { usage; exit 2; }
     json_output_file=$2
     shift 2
+    ;;
+  --no-diarize)
+    diarize=0
+    shift
     ;;
   --num-speakers)
     (($# >= 2)) || { usage; exit 2; }
@@ -75,28 +86,34 @@ while (($#)); do
     exit 2
     ;;
   *)
-    [[ -z ${video_file:-} ]] || { usage; exit 2; }
-    video_file=$1
+    [[ -z ${media_file:-} ]] || { usage; exit 2; }
+    media_file=$1
     shift
     ;;
   esac
 done
 
-[[ -n ${video_file:-} && -f $video_file ]] || \
-  die "video file does not exist: ${video_file:-<missing>}"
+[[ -n ${media_file:-} && -f $media_file ]] || \
+  die "media file does not exist: ${media_file:-<missing>}"
 
 for value_name in num_speakers min_speakers max_speakers; do
   value=${!value_name}
   [[ -z $value || $value =~ ^[1-9][0-9]*$ ]] || \
     die "--${value_name//_/-} must be a positive integer"
+  [[ -z $value || $diarize == 1 ]] || \
+    die "--${value_name//_/-} cannot be combined with --no-diarize"
 done
 [[ -z $num_speakers || (-z $min_speakers && -z $max_speakers) ]] || \
   die "--num-speakers cannot be combined with --min-speakers or --max-speakers"
 [[ -z $min_speakers || -z $max_speakers || $min_speakers -le $max_speakers ]] || \
   die "--min-speakers cannot exceed --max-speakers"
 
+if [[ -n $language ]]; then
+  language=$(python3 "$ASR_PIPELINE_SCRIPT" language "$language") || exit 2
+fi
+
 if [[ -z $output_file ]]; then
-  output_file="${video_file%.*}.txt"
+  output_file="${media_file%.*}.txt"
 fi
 if [[ -z $json_output_file ]]; then
   json_output_file="${output_file%.*}.json"
@@ -112,15 +129,19 @@ chunk_seconds=${ASR_CHUNK_SECONDS:-$ASR_DEFAULT_CHUNK_SECONDS}
 [[ $chunk_seconds =~ ^[1-9][0-9]*$ ]] || \
   die "ASR_CHUNK_SECONDS must be a positive integer"
 
-read -r -a model_files <<<"$ASR_TRANSCRIBER_FILES $ASR_ALIGNER_FILES"
-diarizer_snapshot="huggingface/hub/models--pyannote--speaker-diarization-community-1/snapshots/$ASR_DIARIZER_REVISION"
-model_files+=(
-  "$diarizer_snapshot/config.yaml"
-  "$diarizer_snapshot/segmentation/pytorch_model.bin"
-  "$diarizer_snapshot/embedding/pytorch_model.bin"
-)
+# Pinned models by name, read by the pipeline on the host and in the
+# container.
+ASR_MODELS=$(<"$ASR_MODELS_FILE")
+export ASR_MODELS
+
+# Model cache shared by all runs of the selected adapter.
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/asr/$ASR_ADAPTER"
+mkdir -p "$cache_dir"
+
+roles=transcriber
+((diarize == 0)) || roles=transcriber,aligner,diarizer
 models_cached=0
-if files_cached "${model_files[@]}"; then
+if python3 "$ASR_PIPELINE_SCRIPT" models-cached --cache-dir "$cache_dir" --roles "$roles"; then
   models_cached=1
 fi
 
@@ -129,11 +150,11 @@ if [[ -z ${HF_TOKEN:-} && -n ${ASR_HF_TOKEN_FILE:-} && -r $ASR_HF_TOKEN_FILE ]];
   export HF_TOKEN
 fi
 
-if [[ ${ASR_OFFLINE:-0} != 1 && $models_cached != 1 && -z ${HF_TOKEN:-} ]]; then
+if [[ $diarize == 1 && ${ASR_OFFLINE:-0} != 1 && $models_cached != 1 && -z ${HF_TOKEN:-} ]]; then
   die "HF_TOKEN is required; accept the pyannote Community-1 model terms first"
 fi
 
-work_dir=$(mktemp -d "${TMPDIR:-/tmp}/asr-video.XXXXXX")
+work_dir=$(mktemp -d "${TMPDIR:-/tmp}/asr.XXXXXX")
 text_tmp=$(mktemp "$output_dir/.asr-text.XXXXXX")
 json_tmp=$(mktemp "$json_output_dir/.asr-json.XXXXXX")
 state_dir="${json_output_file}.asr-state"
@@ -145,9 +166,9 @@ cleanup() {
 }
 trap cleanup EXIT
 
-echo "Extracting mono 16 kHz audio from $video_file" >&2
+echo "Extracting mono 16 kHz audio from $media_file" >&2
 ffmpeg -nostdin -hide_banner -loglevel error -y \
-  -i "$video_file" -map 0:a:0 -vn -ac 1 -ar 16000 -c:a pcm_s16le \
+  -i "$media_file" -map 0:a:0 -vn -ac 1 -ar 16000 -c:a pcm_s16le \
   "$work_dir/full.wav"
 
 chunk_plan=$(python3 "$ASR_PIPELINE_SCRIPT" plan-chunks \
@@ -167,35 +188,39 @@ fi
 
 ensure_image
 
+# ROCm's PyTorch exposes AMD GPUs through the CUDA API, so both accelerators
+# use the same device string.
 container_args=(
   run
   --rm
   "${gpu_args[@]}"
-  --cap-drop=all
-  --security-opt=no-new-privileges
-  --read-only
+  "${sandbox_args[@]}"
   --entrypoint=python3
-  "--tmpfs=/tmp:rw,nosuid,nodev,size=$ASR_TMP_SIZE"
-  --pids-limit=2048
-  --shm-size="$ASR_SHM_SIZE"
+  --env=ASR_DEVICE=cuda:0
+  --env=ASR_DTYPE
+  --env=ASR_BATCH_SIZE
+  --env=ASR_ADAPTER
+  --env=ASR_MODELS
   --env=HF_HUB_DISABLE_TELEMETRY=1
   # Prefer the cache quickly when Hugging Face is unreachable. Strict offline
   # operation remains available through ASR_OFFLINE=1.
   --env=HF_HUB_ETAG_TIMEOUT=2
-  --env=ASR_DIARIZER_REVISION
   --env=MPLCONFIGDIR=/tmp/matplotlib
   --volume="$cache_dir:/root/.cache:rw"
   --volume="$work_dir:/input:ro"
   --volume="$state_dir:/state:rw"
   --volume="$ASR_PIPELINE_SCRIPT:/opt/asr/pipeline.py:ro"
+  --volume="$ASR_ADAPTER_MODULE:/opt/asr/adapter.py:ro"
 )
+if [[ $AI_ACCELERATOR == rocm ]]; then
+  # MIOpen writes its kernel databases under ~/.config by default, which the
+  # read-only rootfs rejects. Keep them next to the model cache so compiled
+  # kernels survive between runs.
+  container_args+=(--env=MIOPEN_USER_DB_PATH=/root/.cache/miopen/db)
+fi
 
 if [[ ${ASR_OFFLINE:-0} == 1 || $models_cached == 1 ]]; then
-  container_args+=(
-    --network=none
-    --env=HF_HUB_OFFLINE=1
-    --env=TRANSFORMERS_OFFLINE=1
-  )
+  container_args+=("${offline_args[@]}")
   if [[ ${ASR_OFFLINE:-0} != 1 ]]; then
     echo "Pinned models are cached; running without Hugging Face network access" >&2
   fi
@@ -203,14 +228,19 @@ elif [[ -n ${HF_TOKEN:-} ]]; then
   container_args+=(--env=HF_TOKEN)
 fi
 
-source_id="$(realpath "$video_file")|$(stat --format='%s:%Y' "$video_file")"
-python_args=(/opt/asr/pipeline.py infer --audio-dir /input --state-dir /state --source-name "$(basename "$video_file")" --source-id "$source_id")
+source_id="$(realpath "$media_file")|$(stat --format='%s:%Y' "$media_file")"
+python_args=(/opt/asr/pipeline.py infer --audio-dir /input --state-dir /state --source-name "$(basename "$media_file")" --source-id "$source_id")
 [[ -z $language ]] || python_args+=(--language "$language")
 [[ -z $num_speakers ]] || python_args+=(--num-speakers "$num_speakers")
 [[ -z $min_speakers ]] || python_args+=(--min-speakers "$min_speakers")
 [[ -z $max_speakers ]] || python_args+=(--max-speakers "$max_speakers")
+if ((diarize)); then
+  echo "Running ASR, word alignment, and speaker diarization sequentially" >&2
+else
+  python_args+=(--no-diarize)
+  echo "Running ASR" >&2
+fi
 
-echo "Running ASR, forced alignment, and speaker diarization sequentially" >&2
 podman "${container_args[@]}" "$AI_IMAGE" \
   "${python_args[@]}" >"$json_tmp"
 

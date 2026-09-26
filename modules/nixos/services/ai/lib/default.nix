@@ -128,6 +128,8 @@
       AI_GPU_DEVICES = if isRocm then lib.concatStringsSep " " gpu.rocm.devices else "nvidia.com/gpu=all";
       AI_HSA_OVERRIDE_GFX_VERSION =
         if isRocm && gpu.rocm.gfxOverride != null then gpu.rocm.gfxOverride else "";
+      AI_SHM_SIZE = gpu.shmSize;
+      AI_TMP_SIZE = gpu.tmpSize;
       AI_IMAGE = image.tag;
       AI_IMAGE_CONTEXT = "${image.context or ""}";
       AI_IMAGE_BUILD_ARGS = image.buildArgs or "";

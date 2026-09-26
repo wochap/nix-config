@@ -15,7 +15,10 @@ from pathlib import Path
 from typing import Any
 
 
-LANGUAGE_ALIASES = {
+SCHEMA_VERSION = 2
+
+# ISO 639 codes the pipeline stores, with the English names it also accepts.
+LANGUAGE_NAMES = {
     "ar": "Arabic",
     "cs": "Czech",
     "da": "Danish",
@@ -50,8 +53,12 @@ LANGUAGE_ALIASES = {
 
 ADAPTER = os.environ.get("ASR_ADAPTER", "")
 ADAPTER_MODULE = os.environ.get("ASR_ADAPTER_MODULE", "/opt/asr/adapter.py")
-DIARIZER_REVISION = os.environ.get("ASR_DIARIZER_REVISION", "")
+CACHE_DIR = Path(os.environ.get("ASR_CACHE_DIR", "/root/.cache"))
 BATCH_SIZE = max(1, int(os.environ.get("ASR_BATCH_SIZE") or "1"))
+
+# Roles a model can fill. The adapter provides the transcriber and aligner;
+# the core adds the diarizer.
+ROLES = ("transcriber", "aligner", "diarizer")
 
 
 def resolve_runtime(env: dict[str, str] | None = None) -> tuple[str, str]:
@@ -64,26 +71,62 @@ def resolve_runtime(env: dict[str, str] | None = None) -> tuple[str, str]:
     return device, dtype_name
 
 
-def adapter_revisions(env: dict[str, str] | None = None) -> dict[str, str]:
-    """Return the ASR_REVISION_<KEY> pins the adapter exported."""
+def load_models(env: dict[str, str] | None = None) -> dict[str, dict[str, str]]:
+    """Return the pinned models from ASR_MODELS, keyed by name.
+
+    Each entry has repo, revision, and role. The NixOS module writes the
+    adapter's models plus the core diarizer into that variable.
+    """
     values = os.environ if env is None else env
-    prefix = "ASR_REVISION_"
-    return {
-        key[len(prefix) :].lower(): value
-        for key, value in sorted(values.items())
-        if key.startswith(prefix)
-    }
+    models = json.loads(values.get("ASR_MODELS") or "{}")
+    for name, model in models.items():
+        if not model.get("repo") or not model.get("revision") or model.get("role") not in ROLES:
+            raise RuntimeError(f"invalid ASR_MODELS entry: {name}")
+    return models
+
+
+def models_with_roles(
+    models: dict[str, dict[str, str]], roles: tuple[str, ...]
+) -> dict[str, dict[str, str]]:
+    return {name: model for name, model in models.items() if model["role"] in roles}
+
+
+def verified_marker(cache_dir: Path, model: dict[str, str]) -> Path:
+    """Path of the file recording that a model loaded from this cache."""
+    return cache_dir / "asr-verified" / f"{model['repo'].replace('/', '--')}@{model['revision']}"
+
+
+def mark_verified(models: dict[str, dict[str, str]]) -> None:
+    """Record models that just loaded, so later runs can go offline."""
+    for model in models.values():
+        marker = verified_marker(CACHE_DIR, model)
+        marker.parent.mkdir(parents=True, exist_ok=True)
+        marker.touch()
+
+
+def models_cached(args: argparse.Namespace) -> None:
+    """Exit 0 when every model with one of the roles has loaded before."""
+    roles = tuple(role for role in args.roles.split(",") if role)
+    needed = models_with_roles(load_models(), roles)
+    cache_dir = Path(args.cache_dir)
+    cached = bool(needed) and all(
+        verified_marker(cache_dir, model).is_file() for model in needed.values()
+    )
+    sys.exit(0 if cached else 1)
 
 
 def load_adapter(path: str) -> Any:
     """Import the adapter module mounted into the container.
 
-    An adapter provides load_transcriber(device, dtype, batch_size), whose
-    result has transcribe(paths, language) returning objects with text and
-    language, and load_aligner(device, dtype), whose result has align(path,
-    text, language) returning units with text, start, and end relative to the
-    chunk. load_aligner may return None for an adapter whose transcriber
-    produces timestamps itself; the pipeline does not support that yet.
+    An adapter provides load_transcriber(device, dtype, batch_size, models),
+    whose result has transcribe(paths, language) returning objects with text
+    and language, and load_aligner(device, dtype, models), whose result has
+    align(path, text, language) returning units with text, start, and end
+    relative to the chunk. models maps the adapter's model names to their
+    repo and revision. Languages passed in are ISO 639 codes; returned ones
+    may be codes or English names. load_aligner may return None for an
+    adapter whose transcriber produces timestamps itself; the pipeline does
+    not support that yet.
     """
     spec = importlib.util.spec_from_file_location("asr_adapter", path)
     if spec is None or spec.loader is None:
@@ -150,13 +193,36 @@ def read_json(path: Path, default: Any) -> Any:
         return default
 
 
-def canonical_language(value: str | None) -> str | None:
+LANGUAGE_CODES = {name.casefold(): code for code, name in LANGUAGE_NAMES.items()}
+
+
+def canonical_language(value: str | None, strict: bool = True) -> str | None:
+    """Return the ISO 639 code of a code or English language name.
+
+    Unknown values raise ValueError in strict mode, which checks user input.
+    Otherwise they are kept lowercased, so an adapter reporting a language
+    outside the table does not stop the run.
+    """
     if value is None:
         return None
-    value = value.strip()
-    if not value:
+    key = value.strip().casefold()
+    if not key:
         return None
-    return LANGUAGE_ALIASES.get(value.casefold(), value.title())
+    if key in LANGUAGE_NAMES:
+        return key
+    if key in LANGUAGE_CODES:
+        return LANGUAGE_CODES[key]
+    if strict:
+        raise ValueError(f"unknown language: {value}")
+    return key
+
+
+def language_command(args: argparse.Namespace) -> None:
+    try:
+        print(canonical_language(args.value))
+    except ValueError as error:
+        print(error, file=sys.stderr)
+        sys.exit(2)
 
 
 def wav_duration(path: Path) -> float:
@@ -426,16 +492,20 @@ def transcript_timestamp(seconds: float) -> str:
     return f"{minutes:02d}:{secs:02d}.{fraction:02d}"
 
 
-def diarize(full_audio: Path, device: str, args: argparse.Namespace) -> list[dict[str, Any]]:
+def diarize(
+    full_audio: Path, device: str, models: dict[str, dict[str, str]], args: argparse.Namespace
+) -> list[dict[str, Any]]:
     import torch
     from pyannote.audio import Pipeline
 
-    log("Loading pyannote Community-1")
+    (model,) = models.values()
+    log(f"Loading {model['repo']}")
     diarizer = Pipeline.from_pretrained(
-        "pyannote/speaker-diarization-community-1",
-        revision=DIARIZER_REVISION,
+        model["repo"],
+        revision=model["revision"],
         token=os.environ.get("HF_TOKEN"),
     )
+    mark_verified(models)
     diarizer.to(torch.device(device))
     waveform, sample_rate = load_pcm_wav(full_audio)
     diarization_kwargs = {
@@ -466,90 +536,30 @@ def diarize(full_audio: Path, device: str, args: argparse.Namespace) -> list[dic
     return regions
 
 
-def infer(args: argparse.Namespace) -> None:
-    device, dtype_name = resolve_runtime()
-    revisions = adapter_revisions()
-
-    if not ADAPTER or not revisions or not DIARIZER_REVISION:
-        raise RuntimeError("adapter and model revision environment variables are required")
-    adapter = load_adapter(ADAPTER_MODULE)
-
-    audio_dir = Path(args.audio_dir)
-    full_audio = audio_dir / "full.wav"
-    chunks = sorted(audio_dir.glob("chunk-*.wav"))
-    if not full_audio.is_file() or not chunks:
-        raise RuntimeError("input directory must contain full.wav and chunk-*.wav")
-
-    requested_language = canonical_language(args.language)
-    state_dir = Path(args.state_dir)
-    state_dir.mkdir(parents=True, exist_ok=True)
-    durations = [wav_duration(chunk) for chunk in chunks]
-    signature = {
-        "schema_version": 1,
-        "source_name": args.source_name,
-        "source_id": args.source_id,
-        "durations": [round(duration, 3) for duration in durations],
-        "language": requested_language,
-        "num_speakers": args.num_speakers,
-        "min_speakers": args.min_speakers,
-        "max_speakers": args.max_speakers,
-        "backend": ADAPTER,
-        "revisions": {**revisions, "diarizer": DIARIZER_REVISION},
-    }
-    signature_path = state_dir / "signature.json"
-    if read_json(signature_path, None) != signature:
-        for name in ("asr.json", "alignment.json", "diarization.json"):
-            (state_dir / name).unlink(missing_ok=True)
-        write_json_atomic(signature_path, signature)
-
-    asr_path = state_dir / "asr.json"
-    chunk_records: list[dict[str, Any]] = read_json(asr_path, [])
-    if len(chunk_records) > len(chunks):
-        chunk_records = []
-
-    if len(chunk_records) < len(chunks):
-        log(f"Loading {ADAPTER} ASR model")
-        transcriber = adapter.load_transcriber(device, dtype_name, BATCH_SIZE)
-    else:
-        transcriber = None
-        log(f"Reusing all {len(chunks)} ASR chunks")
-    offset = sum(durations[: len(chunk_records)])
-    # Chunks are transcribed BATCH_SIZE at a time; the state file is written
-    # after each batch so a resumed run repeats at most one batch.
-    for first in range(len(chunk_records), len(chunks), BATCH_SIZE):
-        batch = chunks[first : first + BATCH_SIZE]
-        last = first + len(batch)
-        batch_seconds = sum(durations[first:last])
-        log(f"Transcribing chunks {first + 1}-{last}/{len(chunks)} ({batch_seconds:.0f} s of audio)")
-        assert transcriber is not None
-        with Timed(f"ASR chunks {first + 1}-{last}/{len(chunks)}"):
-            results = transcriber.transcribe([str(chunk) for chunk in batch], requested_language)
-        for chunk, duration, result in zip(batch, durations[first:last], results):
-            chunk_records.append(
-                {
-                    "start": round(offset, 3),
-                    "end": round(offset + duration, 3),
-                    "language": canonical_language(result.language) or requested_language,
-                    "text": result.text,
-                    "path": str(chunk),
-                }
-            )
-            offset += duration
-        write_json_atomic(asr_path, chunk_records)
-    del transcriber
-    release_cuda_memory()
-
+def align_and_diarize(
+    adapter: Any,
+    adapter_models: dict[str, dict[str, str]],
+    models: dict[str, dict[str, str]],
+    chunk_records: list[dict[str, Any]],
+    state_dir: Path,
+    full_audio: Path,
+    device: str,
+    dtype_name: str,
+    args: argparse.Namespace,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Add word timestamps to each chunk, then diarize the full audio."""
     alignment_path = state_dir / "alignment.json"
     aligned_chunks: list[list[dict[str, Any]]] = read_json(alignment_path, [])
     if len(aligned_chunks) > len(chunk_records):
         aligned_chunks = []
     if len(aligned_chunks) < len(chunk_records):
         log(f"Loading {ADAPTER} aligner")
-        aligner = adapter.load_aligner(device, dtype_name)
+        aligner = adapter.load_aligner(device, dtype_name, adapter_models)
         if aligner is None:
             raise NotImplementedError(
                 f"the {ADAPTER} adapter has no aligner; transcriber timestamps are not supported yet"
             )
+        mark_verified(models_with_roles(models, ("aligner",)))
     else:
         aligner = None
         log(f"Reusing all {len(chunk_records)} aligned chunks")
@@ -588,20 +598,124 @@ def infer(args: argparse.Namespace) -> None:
     diarization_path = state_dir / "diarization.json"
     regions = read_json(diarization_path, None)
     if regions is None:
-        regions = diarize(full_audio, device, args)
+        regions = diarize(full_audio, device, models_with_roles(models, ("diarizer",)), args)
         write_json_atomic(diarization_path, regions)
     else:
         log("Reusing speaker diarization")
 
-    assign_speakers(aligned_tokens, regions)
-    smooth_unknown_speakers(aligned_tokens)
-    turns = build_turns(aligned_tokens)
+    return aligned_tokens, regions
+
+
+def infer(args: argparse.Namespace) -> None:
+    device, dtype_name = resolve_runtime()
+    models = load_models()
+    roles = ("transcriber",) if args.no_diarize else ROLES
+    for role in roles:
+        if not models_with_roles(models, (role,)):
+            raise RuntimeError(f"ASR_MODELS has no {role} model")
+    if not ADAPTER:
+        raise RuntimeError("ASR_ADAPTER is required")
+    if len(models_with_roles(models, ("diarizer",))) > 1:
+        raise RuntimeError("ASR_MODELS has more than one diarizer")
+    adapter = load_adapter(ADAPTER_MODULE)
+    adapter_models = {
+        name: {"repo": model["repo"], "revision": model["revision"]}
+        for name, model in models_with_roles(models, ("transcriber", "aligner")).items()
+    }
+
+    audio_dir = Path(args.audio_dir)
+    full_audio = audio_dir / "full.wav"
+    chunks = sorted(audio_dir.glob("chunk-*.wav"))
+    if not full_audio.is_file() or not chunks:
+        raise RuntimeError("input directory must contain full.wav and chunk-*.wav")
+
+    requested_language = canonical_language(args.language)
+    state_dir = Path(args.state_dir)
+    state_dir.mkdir(parents=True, exist_ok=True)
+    durations = [wav_duration(chunk) for chunk in chunks]
+    signature = {
+        "schema_version": SCHEMA_VERSION,
+        "source_name": args.source_name,
+        "source_id": args.source_id,
+        "durations": [round(duration, 3) for duration in durations],
+        "language": requested_language,
+        "num_speakers": args.num_speakers,
+        "min_speakers": args.min_speakers,
+        "max_speakers": args.max_speakers,
+        "adapter": ADAPTER,
+        "models": models,
+    }
+    signature_path = state_dir / "signature.json"
+    if read_json(signature_path, None) != signature:
+        for name in ("asr.json", "alignment.json", "diarization.json"):
+            (state_dir / name).unlink(missing_ok=True)
+        write_json_atomic(signature_path, signature)
+
+    asr_path = state_dir / "asr.json"
+    chunk_records: list[dict[str, Any]] = read_json(asr_path, [])
+    if len(chunk_records) > len(chunks):
+        chunk_records = []
+
+    if len(chunk_records) < len(chunks):
+        log(f"Loading {ADAPTER} ASR model")
+        transcriber = adapter.load_transcriber(device, dtype_name, BATCH_SIZE, adapter_models)
+        mark_verified(models_with_roles(models, ("transcriber",)))
+    else:
+        transcriber = None
+        log(f"Reusing all {len(chunks)} ASR chunks")
+    offset = sum(durations[: len(chunk_records)])
+    # Chunks are transcribed BATCH_SIZE at a time; the state file is written
+    # after each batch so a resumed run repeats at most one batch.
+    for first in range(len(chunk_records), len(chunks), BATCH_SIZE):
+        batch = chunks[first : first + BATCH_SIZE]
+        last = first + len(batch)
+        batch_seconds = sum(durations[first:last])
+        log(f"Transcribing chunks {first + 1}-{last}/{len(chunks)} ({batch_seconds:.0f} s of audio)")
+        assert transcriber is not None
+        with Timed(f"ASR chunks {first + 1}-{last}/{len(chunks)}"):
+            results = transcriber.transcribe([str(chunk) for chunk in batch], requested_language)
+        for chunk, duration, result in zip(batch, durations[first:last], results):
+            chunk_records.append(
+                {
+                    "start": round(offset, 3),
+                    "end": round(offset + duration, 3),
+                    "language": canonical_language(result.language, strict=False)
+                    or requested_language,
+                    "text": result.text,
+                    "path": str(chunk),
+                }
+            )
+            offset += duration
+        write_json_atomic(asr_path, chunk_records)
+    del transcriber
+    release_cuda_memory()
+
+    if args.no_diarize:
+        aligned_tokens = []
+        regions = []
+        turns = [
+            {"start": chunk["start"], "end": chunk["end"], "speaker": None, "text": chunk["text"].strip()}
+            for chunk in chunk_records
+            if chunk["text"].strip()
+        ]
+    else:
+        aligned_tokens, regions = align_and_diarize(
+            adapter, adapter_models, models, chunk_records, state_dir, full_audio, device, dtype_name, args
+        )
+        assign_speakers(aligned_tokens, regions)
+        smooth_unknown_speakers(aligned_tokens)
+        turns = build_turns(aligned_tokens)
     for chunk in chunk_records:
         del chunk["path"]
 
     document = {
-        "schema_version": 1,
-        "backend": ADAPTER,
+        "schema_version": SCHEMA_VERSION,
+        "adapter": ADAPTER,
+        "models": {
+            name: {"repo": model["repo"], "revision": model["revision"], "role": model["role"]}
+            for name, model in models_with_roles(models, roles).items()
+        },
+        "diarized": not args.no_diarize,
         "source": {"name": args.source_name, "duration": round(wav_duration(full_audio), 3)},
         "requested_language": requested_language,
         "detected_languages": list(
@@ -620,7 +734,7 @@ def validate(args: argparse.Namespace) -> None:
     with open(args.input, encoding="utf-8") as input_file:
         document = json.load(input_file)
     errors = []
-    if document.get("schema_version") != 1:
+    if document.get("schema_version") != SCHEMA_VERSION:
         errors.append("unsupported schema_version")
     duration = document.get("source", {}).get("duration")
     if not isinstance(duration, (int, float)) or not math.isfinite(duration) or duration <= 0:
@@ -662,10 +776,11 @@ def validate(args: argparse.Namespace) -> None:
 def render(args: argparse.Namespace) -> None:
     with open(args.input, encoding="utf-8") as input_file:
         document = json.load(input_file)
-    if document.get("schema_version") != 1:
+    if document.get("schema_version") != SCHEMA_VERSION:
         raise RuntimeError("unsupported asr JSON schema")
     for turn in document["turns"]:
-        print(f"[{transcript_timestamp(turn['start'])}] {turn['speaker']}: {turn['text']}")
+        speaker = f" {turn['speaker']}:" if turn.get("speaker") else ""
+        print(f"[{transcript_timestamp(turn['start'])}]{speaker} {turn['text']}")
 
 
 def parse_args() -> argparse.Namespace:
@@ -690,7 +805,17 @@ def parse_args() -> argparse.Namespace:
     infer_parser.add_argument("--num-speakers", type=int)
     infer_parser.add_argument("--min-speakers", type=int)
     infer_parser.add_argument("--max-speakers", type=int)
+    infer_parser.add_argument("--no-diarize", action="store_true")
     infer_parser.set_defaults(func=infer)
+
+    language_parser = subparsers.add_parser("language")
+    language_parser.add_argument("value")
+    language_parser.set_defaults(func=language_command)
+
+    cached_parser = subparsers.add_parser("models-cached")
+    cached_parser.add_argument("--cache-dir", required=True)
+    cached_parser.add_argument("--roles", required=True)
+    cached_parser.set_defaults(func=models_cached)
 
     render_parser = subparsers.add_parser("render")
     render_parser.add_argument("--input", required=True)

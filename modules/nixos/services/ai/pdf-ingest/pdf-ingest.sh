@@ -155,7 +155,7 @@ container_args=(
   run
   --rm
   --pull=never
-  --network=none
+  "${offline_args[@]}"
   --http-proxy=false
   --ipc=private
   --pid=private
@@ -166,16 +166,9 @@ container_args=(
   # Root in a rootless Podman user namespace maps to the invoking host user.
   # The image's default service UID cannot write the host-owned output bind.
   --user=0:0
-  --cap-drop=all
-  --security-opt=no-new-privileges
-  --read-only
-  --pids-limit=2048
-  --shm-size="$PDF_INGEST_SHM_SIZE"
-  "--tmpfs=/tmp:rw,nosuid,nodev,size=$PDF_INGEST_TMP_SIZE"
+  "${sandbox_args[@]}"
   --env=PYTHONDONTWRITEBYTECODE=1
   --env=XDG_CACHE_HOME=/tmp/cache
-  --env=HF_HUB_OFFLINE=1
-  --env=TRANSFORMERS_OFFLINE=1
   "--env=PDF_INGEST_ACCELERATOR=$AI_ACCELERATOR"
   "--env=PDF_INGEST_DTYPE=$PDF_INGEST_DTYPE"
   "--env=PDF_INGEST_ADAPTER=$PDF_INGEST_ADAPTER"

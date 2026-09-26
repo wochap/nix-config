@@ -17,6 +17,25 @@ if [[ $AI_ACCELERATOR == rocm ]]; then
   fi
 fi
 
+# Hardening and resource limits every inference container gets: no
+# capabilities or privilege escalation, a read-only rootfs with a bounded
+# tmpfs at /tmp, and capped process count and shared memory.
+sandbox_args=(
+  --cap-drop=all
+  --security-opt=no-new-privileges
+  --read-only
+  --pids-limit=2048
+  "--shm-size=$AI_SHM_SIZE"
+  "--tmpfs=/tmp:rw,nosuid,nodev,size=$AI_TMP_SIZE"
+)
+
+# No network, and Hugging Face libraries told to use only local files.
+offline_args=(
+  --network=none
+  --env=HF_HUB_OFFLINE=1
+  --env=TRANSFORMERS_OFFLINE=1
+)
+
 # Build the local inference image on first use. An image run as pulled from
 # upstream has an empty context and builds nothing.
 ensure_image() {

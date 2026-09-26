@@ -9,4 +9,4 @@ RUN python3 -m pip install --no-cache-dir "pyannote.audio==4.0.4" "protobuf<7" \
     && python3 -m pip uninstall --yes pygobject \
     && python3 -m pip check
 
-LABEL org.opencontainers.image.title="asr-diarization"
+LABEL org.opencontainers.image.title="asr-cuda"

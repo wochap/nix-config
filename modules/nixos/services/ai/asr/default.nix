@@ -13,85 +13,69 @@ let
   inherit (config._custom.globals) userName;
   adapterName = asrCfg.adapter;
   adapter = asrCfg.adapterRegistry.${adapterName} or null;
-  diarizer-revision = "3533c8cf8e369892e6b79ff1bf80f7b0286a54ee";
-  transcribeScript = pkgs.writeText "asr-transcribe.py" (builtins.readFile ./transcribe.py);
   pipeline = pkgs.writeText "asr-pipeline.py" (builtins.readFile ./pipeline.py);
   adapterModule = pkgs.writeText "asr-${adapterName}-adapter.py" (builtins.readFile adapter.module);
 
-  diarizationImage =
-    aiLib.mkContainerImage "asr-${adapterName}-diarization" ./diarization.Containerfile
-      "BASE_IMAGE=${adapter.image.cuda.tag}";
-  rocmImage = aiLib.mkContainerImage "asr-${adapterName}-rocm" ./rocm.Containerfile ''
-    BASE_IMAGE=${asrCfg.rocm.baseImage}
-    EXTRA_PIP_PACKAGES=${lib.concatStringsSep " " adapter.pipPackages}'';
-
-  # asr-transcribe needs no extra packages on CUDA, so it runs the adapter's
-  # upstream image directly and builds nothing.
-  transcribeImage = if isRocm then rocmImage else adapter.image.cuda;
-  videoImage = if isRocm then rocmImage else diarizationImage;
-  imageEnv =
-    image: label:
-    aiLib.mkGpuEnv {
-      gpu = asrCfg;
-      inherit image label;
+  # The adapter supplies the transcriber and aligner; diarization is core.
+  models = adapter.models // {
+    diarizer = {
+      repo = "pyannote/speaker-diarization-community-1";
+      revision = "3533c8cf8e369892e6b79ff1bf80f7b0286a54ee";
+      role = "diarizer";
     };
-
-  revisionEnv = lib.mapAttrs' (
-    key: value: lib.nameValuePair "ASR_REVISION_${lib.toUpper key}" value
-  ) adapter.revisions;
-
-  asrEnv = revisionEnv // {
-    ASR_ADAPTER = adapterName;
-    ASR_ADAPTER_MODULE = adapterModule;
-    ASR_REVISION_VARS = lib.concatStringsSep " " (lib.attrNames revisionEnv);
-    ASR_TRANSCRIBER_FILES = lib.concatStringsSep " " adapter.cachedFiles.transcriber;
-    ASR_DTYPE = asrCfg.dtype;
-    ASR_BATCH_SIZE = toString asrCfg.batchSize;
-    ASR_SHM_SIZE = asrCfg.shmSize;
-    ASR_TMP_SIZE = asrCfg.tmpSize;
   };
-  gpuOptions = aiLib.mkGpuOptions {
-    inherit cfg;
-    dtype = "bfloat16";
-    shmSize = "4g";
-    tmpSize = "4g";
-  };
-  launcher =
-    script:
-    builtins.readFile ../lib/container.sh + builtins.readFile ./image.sh + builtins.readFile script;
 
-  asr-transcribe = pkgs.writeShellApplication {
-    name = "asr-transcribe";
+  # CUDA adds pyannote to the adapter's upstream image; ROCm builds the
+  # adapter's packages and pyannote on the ROCm PyTorch base.
+  image =
+    if isRocm then
+      aiLib.mkContainerImage "asr-${adapterName}-rocm" ./rocm.Containerfile ''
+        BASE_IMAGE=${asrCfg.rocm.baseImage}
+        EXTRA_PIP_PACKAGES=${lib.concatStringsSep " " adapter.pipPackages}''
+    else
+      aiLib.mkContainerImage "asr-${adapterName}-cuda" ./cuda.Containerfile
+        "BASE_IMAGE=${adapter.image.cuda.tag}";
+
+  asr = pkgs.writeShellApplication {
+    name = "asr";
+    runtimeInputs = [
+      pkgs.python3
+      pkgs.ffmpeg-headless
+    ];
     runtimeEnv =
-      asrEnv
-      // imageEnv transcribeImage "${adapterName} ${asrCfg.accelerator}"
+      aiLib.mkGpuEnv {
+        gpu = asrCfg;
+        inherit image;
+        label = "${adapterName} ${toString asrCfg.accelerator}";
+      }
       // {
-        ASR_SCRIPT = transcribeScript;
-      };
-    text = launcher ./transcribe.sh;
-  };
-  asr-video = pkgs.writeShellApplication {
-    name = "asr-video";
-    runtimeEnv =
-      asrEnv
-      // imageEnv videoImage "${adapterName} ${if isRocm then "rocm" else "diarization"}"
-      // {
+        ASR_ADAPTER = adapterName;
+        ASR_ADAPTER_MODULE = adapterModule;
+        ASR_MODELS_FILE = pkgs.writeText "asr-${adapterName}-models.json" (builtins.toJSON models);
+        ASR_DTYPE = asrCfg.dtype;
+        ASR_BATCH_SIZE = toString asrCfg.batchSize;
         ASR_DEFAULT_CHUNK_SECONDS = toString asrCfg.chunkSeconds;
-        ASR_ALIGNER_FILES = lib.concatStringsSep " " adapter.cachedFiles.aligner;
-        ASR_DIARIZER_REVISION = diarizer-revision;
         ASR_HF_TOKEN_FILE = config.sops.secrets.personal-huggingface-local-read-token.path;
         ASR_PIPELINE_SCRIPT = pipeline;
       };
-    text = launcher ./video.sh;
+    text = builtins.readFile ../lib/container.sh + builtins.readFile ./asr.sh;
+    meta.description = "Transcribe an audio or video file with speaker diarization";
   };
 in
 {
   imports = [
     ./adapters/qwen3
+    {
+      options._custom.services.ai.asr = aiLib.mkGpuOptions {
+        inherit cfg;
+        dtype = "bfloat16";
+        shmSize = "4g";
+        tmpSize = "4g";
+      };
+    }
   ];
 
-  # recursiveUpdate keeps rocm.baseImage beside the shared rocm options.
-  options._custom.services.ai.asr = lib.recursiveUpdate gpuOptions {
+  options._custom.services.ai.asr = {
     enable = lib.mkEnableOption { };
 
     adapter = lib.mkOption {
@@ -99,7 +83,7 @@ in
       default = "qwen3";
       description = ''
         ASR adapter under ./adapters. It supplies the models, their
-        revisions, the CUDA image, and the extra ROCm pip packages.
+        pins, the CUDA image, and the extra ROCm pip packages.
       '';
     };
 
@@ -118,8 +102,8 @@ in
               type = lib.types.nullOr aiLib.imageType;
               default = null;
               description = ''
-                Upstream CUDA image holding the adapter's packages; null means
-                CUDA is unsupported. ROCm builds the core image instead.
+                Upstream CUDA image holding the adapter's packages, extended
+                with pyannote; null means CUDA is unsupported.
               '';
             };
             pipPackages = lib.mkOption {
@@ -127,21 +111,32 @@ in
               default = [ ];
               description = "pip requirements added to the ROCm image.";
             };
-            revisions = lib.mkOption {
-              type = lib.types.attrsOf lib.types.str;
-              description = "Model pins, exported as ASR_REVISION_<KEY>.";
-            };
-            cachedFiles = {
-              transcriber = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
-                description = "Files, relative to the model cache, that asr-transcribe needs offline.";
-              };
-              aligner = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
-                description = "Files, relative to the model cache, that the aligner needs offline.";
-              };
+            models = lib.mkOption {
+              description = ''
+                Pinned Hugging Face models, keyed by the name the Python
+                adapter looks them up with. The core adds `diarizer`.
+              '';
+              type = lib.types.attrsOf (
+                lib.types.submodule {
+                  options = {
+                    repo = lib.mkOption {
+                      type = lib.types.str;
+                      description = "Hugging Face repository id.";
+                    };
+                    revision = lib.mkOption {
+                      type = lib.types.str;
+                      description = "Commit the model is pinned to.";
+                    };
+                    role = lib.mkOption {
+                      type = lib.types.enum [
+                        "transcriber"
+                        "aligner"
+                      ];
+                      description = "Pipeline step the model serves.";
+                    };
+                  };
+                }
+              );
             };
           };
         }
@@ -152,7 +147,7 @@ in
       type = lib.types.ints.positive;
       default = 1;
       description = ''
-        Number of audio chunks asr-video transcribes in one generate
+        Number of audio chunks asr transcribes in one generate
         call. Decoding is memory bound, so batching speeds it up nearly
         linearly until VRAM runs out. Each extra chunk of chunkSeconds
         audio costs roughly 1 GB at 480 s.
@@ -163,7 +158,7 @@ in
       type = lib.types.ints.positive;
       default = 240;
       description = ''
-        Default chunk length for asr-video. Longer chunks need more VRAM;
+        Default chunk length for asr. Longer chunks need more VRAM;
         ASR_CHUNK_SECONDS overrides it per run.
       '';
     };
@@ -194,6 +189,13 @@ in
         '';
       }
       {
+        assertion = adapter == null || !(adapter.models ? diarizer);
+        message = ''
+          The ASR adapter "${adapterName}" must not name a model `diarizer`;
+          the core provides it.
+        '';
+      }
+      {
         assertion = adapter == null || asrCfg.accelerator != "cuda" || adapter.image.cuda != null;
         message = ''
           The ASR adapter "${adapterName}" does not support the cuda accelerator.
@@ -206,9 +208,6 @@ in
       owner = userName;
     };
 
-    environment.systemPackages = [
-      asr-transcribe
-      asr-video
-    ];
+    environment.systemPackages = [ asr ];
   };
 }

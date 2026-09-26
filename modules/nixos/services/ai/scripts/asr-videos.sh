@@ -6,10 +6,11 @@ usage() {
 usage: asr-videos [OPTIONS] [DIRECTORY]
 
 Transcribe every MP4 file below DIRECTORY (default: current directory).
-OPTIONS are passed to asr-video:
+OPTIONS are passed to asr:
   --language LANGUAGE
   --output, -o FILE
   --json-output FILE
+  --no-diarize
   --num-speakers N
   --min-speakers N
   --max-speakers N
@@ -33,7 +34,7 @@ while (($#)); do
     asr_args+=("$1" "$2")
     shift 2
     ;;
-  --validate)
+  --validate | --no-diarize)
     asr_args+=("$1")
     shift
     ;;
@@ -65,5 +66,5 @@ for file in "${files[@]}"; do
     continue
   fi
   echo "Processing: $file" >&2
-  asr-video "${asr_args[@]}" "$file"
+  asr "${asr_args[@]}" "$file"
 done

@@ -27,8 +27,6 @@ let
       }
       // {
         PDF_INGEST_DTYPE = pdfIngestCfg.dtype;
-        PDF_INGEST_SHM_SIZE = pdfIngestCfg.shmSize;
-        PDF_INGEST_TMP_SIZE = pdfIngestCfg.tmpSize;
         PDF_INGEST_ADAPTER = pdfIngestCfg.adapter;
         PDF_INGEST_ADAPTER_MODULE = pkgs.writeText "pdf-ingest-${pdfIngestCfg.adapter}-adapter.py" (
           builtins.readFile adapter.module
@@ -45,6 +43,18 @@ in
 {
   imports = [
     ./adapters/paddleocr-vl
+    {
+      options._custom.services.ai.pdfIngest = aiLib.mkGpuOptions {
+        inherit cfg;
+        dtype = "float16";
+        shmSize = "2g";
+        tmpSize = "4g";
+        dtypeDescription = ''
+          Torch dtype the models are loaded with on ROCm. An adapter that runs
+          native inference on CUDA may keep its own precision there.
+        '';
+      };
+    }
   ];
 
   options._custom.services.ai.pdfIngest = {
@@ -88,16 +98,6 @@ in
         }
       );
     };
-  }
-  // aiLib.mkGpuOptions {
-    inherit cfg;
-    dtype = "float16";
-    shmSize = "2g";
-    tmpSize = "4g";
-    dtypeDescription = ''
-      Torch dtype the models are loaded with on ROCm. An adapter that runs
-      native inference on CUDA may keep its own precision there.
-    '';
   };
 
   config = lib.mkIf (cfg.enable && pdfIngestCfg.enable) {

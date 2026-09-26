@@ -20,10 +20,18 @@ SPEC.loader.exec_module(PIPELINE)
 
 
 class PipelineTest(unittest.TestCase):
-    def test_language_aliases(self):
-        self.assertEqual(PIPELINE.canonical_language("es"), "Spanish")
-        self.assertEqual(PIPELINE.canonical_language("ENGLISH"), "English")
+    def test_language_normalizes_to_iso_code(self):
+        self.assertEqual(PIPELINE.canonical_language("es"), "es")
+        self.assertEqual(PIPELINE.canonical_language("ENGLISH"), "en")
+        self.assertEqual(PIPELINE.canonical_language(" Cantonese "), "yue")
         self.assertIsNone(PIPELINE.canonical_language(None))
+
+    def test_language_rejects_unknown_input(self):
+        with self.assertRaisesRegex(ValueError, "unknown language"):
+            PIPELINE.canonical_language("Klingon")
+
+    def test_language_keeps_unknown_detected_value(self):
+        self.assertEqual(PIPELINE.canonical_language("Klingon", strict=False), "klingon")
 
     def test_display_units_preserves_punctuation(self):
         self.assertEqual(
@@ -161,7 +169,7 @@ class PipelineTest(unittest.TestCase):
 
     def test_validation_reports_quality_signals(self):
         document = {
-            "schema_version": 1,
+            "schema_version": 2,
             "source": {"duration": 2.0},
             "chunks": [{"start": 0.0, "end": 2.0, "text": ""}],
             "tokens": [{"start": 0.1, "end": 0.2, "speaker": "UNKNOWN"}],
@@ -206,7 +214,7 @@ class PipelineTest(unittest.TestCase):
 
     def test_validation_rejects_non_finite_timestamp(self):
         document = {
-            "schema_version": 1,
+            "schema_version": 2,
             "source": {"duration": 2.0},
             "chunks": [{"start": 0.0, "end": float("nan"), "text": "hello"}],
             "tokens": [],
@@ -224,8 +232,11 @@ from types import SimpleNamespace
 
 
 class Transcriber:
+    def __init__(self, models):
+        assert models["asr"]["repo"] == "stub/asr"
+
     def transcribe(self, paths, language):
-        return [SimpleNamespace(text="Hello there.", language="en") for _ in paths]
+        return [SimpleNamespace(text="Hello there.", language="English") for _ in paths]
 
 
 class Aligner:
@@ -234,11 +245,12 @@ class Aligner:
                 SimpleNamespace(text="there", start=0.5, end=0.9)]
 
 
-def load_transcriber(device, dtype, batch_size):
-    return Transcriber()
+def load_transcriber(device, dtype, batch_size, models):
+    return Transcriber(models)
 
 
-def load_aligner(device, dtype):
+def load_aligner(device, dtype, models):
+    assert models["aligner"]["revision"] == "b"
     return Aligner()
 """
 
@@ -251,8 +263,15 @@ def write_silence(path, seconds):
         audio.writeframes(b"\0\0" * int(16000 * seconds))
 
 
+STUB_MODELS = {
+    "asr": {"repo": "stub/asr", "revision": "a", "role": "transcriber"},
+    "aligner": {"repo": "stub/aligner", "revision": "b", "role": "aligner"},
+    "diarizer": {"repo": "stub/diarizer", "revision": "c", "role": "diarizer"},
+}
+
+
 class AdapterSeamTest(unittest.TestCase):
-    def test_infer_runs_with_stub_adapter(self):
+    def run_infer(self, no_diarize=False):
         with tempfile.TemporaryDirectory() as directory:
             root = pathlib.Path(directory)
             audio_dir = root / "input"
@@ -275,35 +294,82 @@ class AdapterSeamTest(unittest.TestCase):
                 num_speakers=None,
                 min_speakers=None,
                 max_speakers=None,
+                no_diarize=no_diarize,
             )
             stdout = io.StringIO()
             with (
-                mock.patch.dict("os.environ", {"ASR_REVISION_ASR": "stub"}, clear=True),
+                mock.patch.dict("os.environ", {"ASR_MODELS": json.dumps(STUB_MODELS)}, clear=True),
                 mock.patch.multiple(
                     PIPELINE,
                     ADAPTER="stub",
                     ADAPTER_MODULE=str(adapter),
-                    DIARIZER_REVISION="stub",
+                    CACHE_DIR=root / "cache",
                     diarize=lambda *_: regions,
                 ),
                 contextlib.redirect_stdout(stdout),
                 contextlib.redirect_stderr(io.StringIO()),
             ):
                 PIPELINE.infer(args)
-        document = json.loads(stdout.getvalue())
-        self.assertEqual(document["backend"], "stub")
-        self.assertEqual(document["detected_languages"], ["English"])
+            markers = sorted(path.name for path in (root / "cache" / "asr-verified").iterdir())
+        return json.loads(stdout.getvalue()), markers
+
+    def test_infer_runs_with_stub_adapter(self):
+        document, markers = self.run_infer()
+        self.assertEqual(document["schema_version"], 2)
+        self.assertEqual(document["adapter"], "stub")
+        self.assertTrue(document["diarized"])
+        self.assertEqual(sorted(document["models"]), ["aligner", "asr", "diarizer"])
+        self.assertEqual(document["detected_languages"], ["en"])
         self.assertEqual([token["start"] for token in document["tokens"]], [0.1, 0.5, 1.1, 1.5])
         self.assertEqual(
             [(turn["speaker"], turn["text"]) for turn in document["turns"]],
             [("SPEAKER_00", "Hello there."), ("SPEAKER_01", "Hello there.")],
         )
+        # The diarizer is stubbed out, so only the adapter's models load.
+        self.assertEqual(markers, ["stub--aligner@b", "stub--asr@a"])
 
-    def test_adapter_revisions_reads_prefixed_env(self):
+    def test_infer_without_diarization_emits_chunk_turns(self):
+        document, markers = self.run_infer(no_diarize=True)
+        self.assertFalse(document["diarized"])
+        self.assertEqual(sorted(document["models"]), ["asr"])
+        self.assertEqual(document["tokens"], [])
+        self.assertEqual(document["exclusive_diarization"], [])
         self.assertEqual(
-            PIPELINE.adapter_revisions({"ASR_REVISION_ALIGNER": "b", "ASR_REVISION_ASR": "a", "ASR_DTYPE": "x"}),
-            {"aligner": "b", "asr": "a"},
+            [(turn["start"], turn["speaker"], turn["text"]) for turn in document["turns"]],
+            [(0.0, None, "Hello there."), (1.0, None, "Hello there.")],
         )
+        self.assertEqual(markers, ["stub--asr@a"])
+
+    def test_models_cached_needs_every_marker_for_the_roles(self):
+        with tempfile.TemporaryDirectory() as directory:
+            cache = pathlib.Path(directory)
+
+            def cached(roles):
+                args = types.SimpleNamespace(cache_dir=str(cache), roles=roles)
+                with mock.patch.dict("os.environ", {"ASR_MODELS": json.dumps(STUB_MODELS)}, clear=True):
+                    with self.assertRaises(SystemExit) as exit_:
+                        PIPELINE.models_cached(args)
+                return exit_.exception.code == 0
+
+            self.assertFalse(cached("transcriber"))
+            with mock.patch.object(PIPELINE, "CACHE_DIR", cache):
+                PIPELINE.mark_verified({"asr": STUB_MODELS["asr"]})
+            self.assertTrue(cached("transcriber"))
+            self.assertFalse(cached("transcriber,aligner,diarizer"))
+
+    def test_load_models_rejects_unknown_role(self):
+        with self.assertRaisesRegex(RuntimeError, "invalid ASR_MODELS entry"):
+            PIPELINE.load_models({"ASR_MODELS": json.dumps({"x": {"repo": "a/b", "revision": "c", "role": "other"}})})
+
+    def test_render_omits_missing_speaker(self):
+        document = {"schema_version": 2, "turns": [{"start": 1.0, "speaker": None, "text": "hi"}]}
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "result.json"
+            path.write_text(json.dumps(document), encoding="utf-8")
+            stdout = io.StringIO()
+            with contextlib.redirect_stdout(stdout):
+                PIPELINE.render(types.SimpleNamespace(input=str(path)))
+        self.assertEqual(stdout.getvalue(), "[00:01.00] hi\n")
 
 
 if __name__ == "__main__":
