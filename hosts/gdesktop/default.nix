@@ -256,7 +256,6 @@ in
       name = "personal";
     };
 
-    _custom.desktop.backlight.enable = false;
     _custom.desktop.home-screen.enable = true;
     _custom.desktop.audio.enableEasyeffects = true;
     _custom.desktop.audio.enableNoisetorch = true;

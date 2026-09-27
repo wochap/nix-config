@@ -22,12 +22,12 @@
 
     # NOTE: bleeding-edge amdgpu. On 2026-09-21 S3 resume left the RX 6800 XT
     # dead ("resume of IP block <gfx_v10_0> failed -110"); try LTS if it recurs.
-    boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+    # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
 
     # s2idle keeps the dGPU's PCIe root port powered; S3 leaves it stuck in
     # D3hot. Next steps if it still fails: "pcie_aspm=off", then BIOS ErP off.
     boot.kernelParams = [
-      "mem_sleep_default=s2idle"
+      # "mem_sleep_default=s2idle"
       # lockup_timeout: long ComfyUI compute kernels (TunableOp tuning) starved the
       # gfx ring past the 10 s default, forcing a mode1 GPU reset that killed
       # Hyprland. 30 s turns that into a stall.
