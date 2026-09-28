@@ -14,11 +14,15 @@ in
 
   config = lib.mkIf cfg.enable {
     sops = {
-      secrets.personal-gh-token.sopsFile = ../../../../secrets-sops/personal.yaml;
+      secrets = {
+        personal-gh-token.sopsFile = ../../../../secrets-sops/personal.yaml;
+        personal-twitter-auth-token.sopsFile = ../../../../secrets-sops/personal.yaml;
+      };
       templates."rsshub.env" = {
         mode = "0400";
         content = ''
           GITHUB_ACCESS_TOKEN=${config.sops.placeholder.personal-gh-token}
+          TWITTER_AUTH_TOKEN=${config.sops.placeholder.personal-twitter-auth-token}
         '';
       };
     };
@@ -35,15 +39,18 @@ in
       };
     };
 
-    systemd.services.rsshub.serviceConfig = lib._custom.strictNetworkService // {
-      # Chromium needs user/mount namespaces for renderer isolation.
-      # V8 JIT needs executable memory.
-      RestrictAddressFamilies = [
-        "AF_INET"
-        "AF_INET6"
-        "AF_NETLINK"
-        "AF_UNIX"
-      ];
+    systemd.services.rsshub = {
+      restartTriggers = [ config.sops.templates."rsshub.env".content ];
+      serviceConfig = lib._custom.strictNetworkService // {
+        # Chromium needs user/mount namespaces for renderer isolation.
+        # V8 JIT needs executable memory.
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+      };
     };
 
     _custom.services.web-proxies.rsshub = {
