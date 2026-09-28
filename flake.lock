@@ -3490,6 +3490,7 @@
         "video-trimmer": "video-trimmer",
         "wayfreeze": "wayfreeze",
         "wayland-firewall": "wayland-firewall",
+        "webscoop": "webscoop",
         "wluma": "wluma",
         "wt": "wt",
         "zen-browser": "zen-browser",
@@ -3993,6 +3994,26 @@
       "original": {
         "owner": "wochap",
         "repo": "wayland-firewall",
+        "type": "github"
+      }
+    },
+    "webscoop": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790625010,
+        "narHash": "sha256-/AoPhmoH9/MZ/G1rYj3Y8wgzGCN4JH6rMCOoLH0idQ4=",
+        "owner": "wochap",
+        "repo": "webscoop",
+        "rev": "8c3047b36c530416f4995f463540704683fae9d3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "webscoop",
         "type": "github"
       }
     },

@@ -33,6 +33,7 @@ in
     ./ocr
     ./pdf-ingest
     ./ollama
+    ./webscoop
   ];
 
   options._custom.services.ai = {

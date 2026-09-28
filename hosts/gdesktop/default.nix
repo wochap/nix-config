@@ -152,6 +152,7 @@ in
     _custom.services.ai.asr.batchSize = 4;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
+    _custom.services.ai.enableWebscoop = true;
     _custom.services.ai.gptResearcher.enable = true;
     _custom.services.ai.openDesign.enable = true;
     _custom.services.ai.comfyui.enable = true;

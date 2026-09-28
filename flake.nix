@@ -60,6 +60,8 @@
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
     video-trimmer.url = "github:wochap/video-trimmer";
     video-trimmer.inputs.nixpkgs.follows = "nixpkgs";
+    webscoop.url = "github:wochap/webscoop";
+    webscoop.inputs.nixpkgs.follows = "nixpkgs";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
