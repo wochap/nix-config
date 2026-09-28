@@ -134,7 +134,7 @@ rec {
     name: hosts:
     pkgs.writeShellScript name ''
       ${lib.concatMapStringsSep "\n" (host: ''
-        if ${pkgs.coreutils}/bin/timeout 10 ${pkgs.systemd}/bin/resolvectl query --legend=no ${lib.escapeShellArg host} >/dev/null 2>&1; then
+        if ${pkgs.curl}/bin/curl --max-time 10 -s -o /dev/null ${lib.escapeShellArg "https://${host}/"}; then
           exit 0
         fi'') hosts}
       exit 1
