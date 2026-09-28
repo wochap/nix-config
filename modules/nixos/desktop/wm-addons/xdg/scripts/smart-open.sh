@@ -351,8 +351,8 @@ open_gui() {
     fi
     ;;
   archive)
-    require file-roller
-    launch file-roller "$@"
+    require ark
+    launch ark "$@"
     ;;
   fallback:*)
     printf 'smart-open: no graphical opener for %s\n' "${handler#fallback:}" >&2

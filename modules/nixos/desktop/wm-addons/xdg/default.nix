@@ -11,7 +11,7 @@ let
   mimeTypes = import ./mixins/mimeTypes.nix;
   smartOpenMimeTypes =
     with mimeTypes;
-    lib.unique (text ++ images ++ media ++ archives ++ html ++ pdf ++ office ++ directories);
+    lib.unique (text ++ images ++ media ++ html ++ pdf ++ office ++ directories);
   smart-open = pkgs.writeScriptBin "smart-open" (builtins.readFile ./scripts/smart-open.sh);
 in
 {
@@ -92,6 +92,7 @@ in
               ++ [
                 (genAttrs smartOpenMimeTypes (_: mkForce [ "smart-open.desktop" ]))
                 (genAttrs mimeTypes.web (_: mkForce [ "smart-open-url.desktop" ]))
+                (genAttrs mimeTypes.archives (_: mkForce [ "org.kde.ark.desktop" ]))
               ]
             );
         };

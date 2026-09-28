@@ -19,7 +19,7 @@ in
         inkscape # photo editor cli/gui
         # pinta # image editor
         remmina # vnc client
-        file-roller # Required by gnome file managers
+        # file-roller # Required by gnome file managers
 
         # APPS
         pantheon.elementary-camera # camera app
