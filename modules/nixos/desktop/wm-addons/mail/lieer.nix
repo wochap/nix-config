@@ -13,6 +13,23 @@ let
   lieerNames = lib.attrNames lieerAccounts;
   gmi = "${hmConfig.programs.lieer.package}/bin/gmi";
   networkCheck = lib._custom.mkNetworkCheckScript "lieer-network-check" [ "oauth2.googleapis.com" ];
+
+  # An unclean shutdown can truncate the state file mid-write. Restore it
+  # from lieer's own .bak before gmi runs, instead of crashing on invalid
+  # JSON every timer fire until someone notices and fixes it by hand.
+  restoreStateScript =
+    maildir:
+    pkgs.writeShellScript "lieer-restore-state" ''
+      state=${lib.escapeShellArg "${maildir}/.state.gmailieer.json"}
+      backup="$state.bak"
+      if [ -s "$state" ] && ${pkgs.jq}/bin/jq empty "$state" >/dev/null 2>&1; then
+        exit 0
+      fi
+      if [ -s "$backup" ] && ${pkgs.jq}/bin/jq empty "$backup" >/dev/null 2>&1; then
+        cp "$backup" "$state"
+      fi
+      exit 0
+    '';
 in
 {
   config = lib.mkIf (cfg.enable && lieerNames != [ ]) {
@@ -43,6 +60,7 @@ in
                 # A stale push can block delivery on Gmail's rate-limited API.
                 Service = {
                   ExecCondition = "${networkCheck}";
+                  ExecStartPre = "${restoreStateScript maildir}";
                   ExecStart = lib.mkForce [
                     "${gmi} pull"
                     "${gmi} push"
