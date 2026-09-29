@@ -131,30 +131,34 @@ PanelWindow {
           }
 
           ControlCenterButton {
-            visible: SSandbox.available
-            Component.onCompleted: {
-              SSandbox.getState();
-            }
-
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            label: "Sandbox"
-            materialIcon: "playground"
-            isActive: SSandbox.isActive
+            label: "Reader mode"
+            materialIcon: "menu_book"
+            isActive: SHyprshade.isReaderActive
             onClicked: {
-              SSandbox.toggle();
+              SHyprshade.toggleReader();
             }
-          }
-
-          Item {
-            visible: !SSandbox.available
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
           }
         }
 
         RowLayout {
           Layout.fillWidth: true
+
+          ControlCenterButton {
+            Component.onCompleted: {
+              SFirewall.getState();
+            }
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Firewall"
+            materialIcon: "shield"
+            isActive: SFirewall.isActive
+            onClicked: {
+              SFirewall.toggle();
+            }
+          }
 
           ControlCenterButton {
             Component.onCompleted: {
@@ -184,28 +188,6 @@ PanelWindow {
             onClicked: {
               SSupertonic.toggle();
             }
-          }
-
-          ControlCenterButton {
-            visible: SDocker.available
-            Component.onCompleted: {
-              SDocker.getState();
-            }
-
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
-            label: "Docker"
-            woosIcon: ""
-            isActive: SDocker.isActive
-            onClicked: {
-              SDocker.toggle();
-            }
-          }
-
-          Item {
-            visible: !SDocker.available
-            Layout.fillWidth: true
-            Layout.preferredWidth: 1
           }
         }
 
@@ -288,38 +270,55 @@ PanelWindow {
             }
           }
 
-          ControlCenterButton {
+          Item {
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            label: "Reader mode"
-            materialIcon: "menu_book"
-            isActive: SHyprshade.isReaderActive
-            onClicked: {
-              SHyprshade.toggleReader();
-            }
           }
         }
 
         RowLayout {
-          visible: SFirewall.available
           Layout.fillWidth: true
 
           ControlCenterButton {
+            visible: SSandbox.available
             Component.onCompleted: {
-              SFirewall.getState();
+              SSandbox.getState();
             }
 
             Layout.fillWidth: true
             Layout.preferredWidth: 1
-            label: "Firewall"
-            materialIcon: "shield"
-            isActive: SFirewall.isActive
+            label: "Sandbox"
+            materialIcon: "playground"
+            isActive: SSandbox.isActive
             onClicked: {
-              SFirewall.toggle();
+              SSandbox.toggle();
             }
           }
 
           Item {
+            visible: !SSandbox.available
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+          }
+
+          ControlCenterButton {
+            visible: SDocker.available
+            Component.onCompleted: {
+              SDocker.getState();
+            }
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 1
+            label: "Docker"
+            woosIcon: ""
+            isActive: SDocker.isActive
+            onClicked: {
+              SDocker.toggle();
+            }
+          }
+
+          Item {
+            visible: !SDocker.available
             Layout.fillWidth: true
             Layout.preferredWidth: 1
           }
