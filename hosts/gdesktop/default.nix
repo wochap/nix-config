@@ -146,7 +146,9 @@ in
     # _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;
     _custom.services.ai.asr.enable = true;
-    _custom.services.ai.asr.chunkSeconds = 480;
+    # Attention memory grows with chunkSeconds^2 * batchSize; 480 s x 4 OOMs
+    # on 16 GB (9.3 GiB attention alloc).
+    _custom.services.ai.asr.chunkSeconds = 240;
     # gfx1030 has no native bf16 matmul; fp16 runs on the fast path.
     _custom.services.ai.asr.dtype = "float16";
     _custom.services.ai.asr.batchSize = 4;

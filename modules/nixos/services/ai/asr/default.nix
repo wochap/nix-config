@@ -157,8 +157,9 @@ in
       description = ''
         Number of audio chunks asr transcribes in one generate
         call. Decoding is memory bound, so batching speeds it up nearly
-        linearly until VRAM runs out. Each extra chunk of chunkSeconds
-        audio costs roughly 1 GB at 480 s.
+        linearly until VRAM runs out. Attention memory grows with
+        chunkSeconds squared and linearly with batchSize: at 480 s each
+        extra chunk costs over 2 GB, at 240 s roughly a quarter of that.
       '';
     };
 
