@@ -173,6 +173,7 @@ in
     _custom.services.ai.enableArticleSummary = true;
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
+    _custom.services.webhook.enable = true;
 
     _custom.services.syncthing.enable = true;
     _custom.services.virt.enable = false;

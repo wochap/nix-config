@@ -102,6 +102,7 @@
     ./services/syncthing
     ./services/virt
     ./services/waydroid
+    ./services/webhook
     ./services/web-proxies
 
     ./system/apple

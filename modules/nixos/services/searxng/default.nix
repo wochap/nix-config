@@ -9,6 +9,20 @@ let
   cfg = config._custom.services.searxng;
   inherit (pkgs._custom) wochap-ssc;
   proxy = config._custom.services.web-proxies.searxng;
+  aiCfg = config._custom.services.ai;
+  webscoopWebhook = aiCfg.enable && aiCfg.webscoop.enable && aiCfg.webscoop.webhook.enable;
+  mkWebscoopEngine =
+    recipe: extra:
+    {
+      engine = "json_engine";
+      search_url = "http://${wochap-ssc.meta.address}:${toString config._custom.services.web-proxies.webhook.publicPort}/webscoop/${recipe}?query={query}";
+      url_query = "url";
+      title_query = "title";
+      content_query = "description";
+      timeout = 30.0;
+      categories = [ "general" ];
+    }
+    // extra;
   limiterToml =
     (pkgs.formats.toml { }).generate "searxng-limiter.toml"
       config.services.searx.limiterSettings;
@@ -66,7 +80,7 @@ in
       settings = {
         outgoing = {
           request_timeout = 5.0;
-          max_request_timeout = 15.0;
+          max_request_timeout = 30.0;
           enable_http2 = true;
           retries = 1;
         };
@@ -123,6 +137,20 @@ in
             shortcut = "mj";
             disabled = false;
           }
+        ]
+        ++ lib.optionals webscoopWebhook [
+          (mkWebscoopEngine "google-search-results" {
+            name = "google webscoop";
+            shortcut = "gw";
+          })
+          (mkWebscoopEngine "duckduckgo-search-results" {
+            name = "duckduckgo webscoop";
+            shortcut = "dw";
+          })
+          (mkWebscoopEngine "bing-search-results" {
+            name = "bing webscoop";
+            shortcut = "bw";
+          })
         ];
       };
     };

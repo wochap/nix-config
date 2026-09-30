@@ -9,11 +9,63 @@
 let
   cfg = config._custom.services.ai;
   webscoop = inputs.webscoop.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
+  # GET /webscoop/<recipe>?a=1&b=2 -> webscoop run <recipe> --var a=1 --var b=2
+  # Replies with the JSON array of rows.
+  webscoopRun = pkgs.writeShellScript "webscoop-run" ''
+    recipe=$1
+    # entire-query is a JSON object, turn each pair into "--var" "k=v"
+    mapfile -d "" vars < <(${lib.getExe pkgs.jq} -j 'to_entries[] | "--var\u0000\(.key)=\(.value | tostring)\u0000"' <<<"$2")
+    err=$(mktemp)
+    trap 'rm -f "$err"' EXIT
+    # webhook returns stdout+stderr together, keep stderr out of the JSON
+    ${lib.getExe webscoop} run "$recipe" --quiet \
+      --lock-timeout 40000 --guard-timeout 20000 \
+      "''${vars[@]}" 2>"$err" || { cat "$err" >&2; exit 1; }
+  '';
+
+  mkHook = recipe: {
+    id = "webscoop/${recipe}";
+    execute-command = "${webscoopRun}";
+    http-methods = [ "GET" ];
+    include-command-output-in-response = true;
+    response-headers = [
+      {
+        name = "Content-Type";
+        value = "application/json";
+      }
+    ];
+    pass-arguments-to-command = [
+      {
+        source = "string";
+        name = recipe;
+      }
+      { source = "entire-query"; }
+    ];
+  };
 in
 {
-  options._custom.services.ai.enableWebscoop = lib.mkEnableOption { };
+  options._custom.services.ai.webscoop = {
+    enable = lib.mkEnableOption { };
+    webhook = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Expose webscoop recipes through the webhook service.";
+      };
+      recipes = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "google-search-results"
+          "duckduckgo-search-results"
+          "bing-search-results"
+        ];
+        description = "Recipes served at https://webhook.<domain>/webscoop/<recipe>?<var>=<value>&...";
+      };
+    };
+  };
 
-  config = lib.mkIf (cfg.enable && cfg.enableWebscoop) {
+  config = lib.mkIf (cfg.enable && cfg.webscoop.enable) {
     environment.systemPackages = [ webscoop ];
 
     _custom.hm.xdg.configFile."webscoop/config.json".text = builtins.toJSON {
@@ -24,6 +76,11 @@ in
         locale = "en-US";
       };
       profiles.default = "default";
+    };
+
+    _custom.services.webhook = lib.mkIf cfg.webscoop.webhook.enable {
+      enable = lib.mkDefault true;
+      hooks = map mkHook cfg.webscoop.webhook.recipes;
     };
   };
 }
