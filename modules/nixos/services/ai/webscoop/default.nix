@@ -8,7 +8,19 @@
 
 let
   cfg = config._custom.services.ai;
-  webscoop = inputs.webscoop.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  inherit (pkgs._custom) wochap-ssc;
+  webscoopUnwrapped = inputs.webscoop.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  # Node ignores the system store, so trust the local CA used by omniroute.wochap.local
+  webscoop = pkgs.symlinkJoin {
+    name = "webscoop-wrapped";
+    paths = [ webscoopUnwrapped ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/webscoop \
+        --set NODE_EXTRA_CA_CERTS ${wochap-ssc}/rootCA.pem
+    '';
+    meta.mainProgram = "webscoop";
+  };
 
   # GET /webscoop/<recipe>?a=1&b=2 -> webscoop run <recipe> --var a=1 --var b=2
   # Replies with the JSON array of rows.
@@ -76,6 +88,13 @@ in
         locale = "en-US";
       };
       profiles.default = "default";
+      llm = lib.mkIf cfg.enableOmniRoute {
+        endpoint = "https://omniroute.wochap.local/v1";
+        model = "desktop-free";
+        apiKeyFile = config.sops.secrets.local-omniroute-secret-key.path;
+        contextTokens = 32768;
+        timeoutMs = 30000;
+      };
     };
 
     _custom.services.webhook = lib.mkIf cfg.webscoop.webhook.enable {
