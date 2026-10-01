@@ -9,17 +9,23 @@ let
   cfg = config._custom.services.searxng;
   inherit (pkgs._custom) wochap-ssc;
   proxy = config._custom.services.web-proxies.searxng;
+  webhookProxy = config._custom.services.web-proxies.webhook;
   aiCfg = config._custom.services.ai;
   webscoopWebhook = aiCfg.enable && aiCfg.webscoop.enable && aiCfg.webscoop.webhook.enable;
   mkWebscoopEngine =
     recipe: extra:
     {
       engine = "json_engine";
-      search_url = "http://${wochap-ssc.meta.address}:${toString config._custom.services.web-proxies.webhook.publicPort}/webscoop/${recipe}?query={query}";
+      # lazy socket on publicPort starts the user service; loopback, so plain HTTP
+      search_url = "http://${wochap-ssc.meta.address}:${toString webhookProxy.publicPort}/webscoop/${recipe}?query={query}";
+      # SearXNG refuses plain http engine URLs unless told otherwise
+      enable_http = true;
       url_query = "url";
       title_query = "title";
       content_query = "description";
       timeout = 30.0;
+      # a retry would launch a second browser run (and bot check)
+      retries = 0;
       categories = [ "general" ];
     }
     // extra;
