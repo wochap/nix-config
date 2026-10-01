@@ -14,7 +14,7 @@ Scope {
   property bool holdReady: false
 
   readonly property string submap: SHyprland.submap ?? ""
-  readonly property var screen: Quickshell.screens.find(candidate => candidate.name === Hyprland.focusedMonitor?.name) ?? null
+  readonly property var screen: SHyprland.focusedScreen
   readonly property var heldModifiers: root.modifierLabels(root.heldModifierMask)
   readonly property var bindings: root.filteredBindings()
   readonly property bool isOpen: root.bindings.length > 0 && (root.submap.length > 0 || (root.holdReady && root.heldModifierMask !== 0))

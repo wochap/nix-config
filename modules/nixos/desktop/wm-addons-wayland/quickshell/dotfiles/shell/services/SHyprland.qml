@@ -23,6 +23,7 @@ Singleton {
   property var monitorsByName: ({})
   property var monitorsById: ({})
   property string submap: ""
+  readonly property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
   property int wsOffset: 0
   property bool clientsDirty: false
   property bool monitorsDirty: false

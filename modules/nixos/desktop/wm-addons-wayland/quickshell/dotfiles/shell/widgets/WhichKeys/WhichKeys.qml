@@ -11,7 +11,12 @@ Scope {
     id: compositorBackend
   }
 
-  WhichKeysContent {
-    backend: compositorBackend
+  // Recreate the window when the output disappears: the compositor closes
+  // the layer surface with its output and Quickshell never remaps it.
+  LazyLoader {
+    active: compositorBackend.screen !== null
+    component: WhichKeysContent {
+      backend: compositorBackend
+    }
   }
 }
