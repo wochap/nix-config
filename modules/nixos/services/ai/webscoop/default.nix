@@ -39,7 +39,7 @@ let
     trap 'rm -f "$err"' EXIT
     # webhook returns stdout+stderr together, keep stderr out of the JSON
     ${lib.getExe webscoop} run "$recipe" --quiet \
-      --lock-timeout 40000 --guard-timeout 20000 \
+      --queue-timeout 40000 --guard-timeout 20000 \
       "''${vars[@]}" 2>"$err" || { cat "$err" >&2; exit 1; }
   '';
 
