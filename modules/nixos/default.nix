@@ -62,6 +62,7 @@
 
     ./programs/gui/dolphin
     ./programs/gui/electron
+    ./programs/gui/fi
     ./programs/gui/gtk
     ./programs/gui/imv
     ./programs/gui/mongodb

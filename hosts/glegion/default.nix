@@ -38,6 +38,9 @@ in
     _custom.programs.thunar.daemonEnable = true;
     _custom.programs.qt.enable = true;
     _custom.programs.zathura.enable = true;
+    _custom.programs.fi.enable = true;
+    _custom.programs.fi.openFirewall = true;
+    _custom.programs.fi.opensnitchRule = true;
 
     _custom.programs.others-linux.enable = true;
 
@@ -268,7 +271,6 @@ in
     _custom.desktop.mouseless.enable = true;
     _custom.desktop.networking.enableWifi = true;
     _custom.desktop.networking.enableLocalSend = true;
-    _custom.desktop.networking.enableFi = true;
     _custom.desktop.networking.enableOpenSnitch = true;
     _custom.desktop.plymouth.enable = false;
     _custom.desktop.power-management.enableLegion = true;
