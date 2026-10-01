@@ -130,6 +130,7 @@ hl.window_rule({
   pin = true,
   no_initial_focus = true,
 })
+hl.window_rule({ match = { class = "^(webscoop)$" }, workspace = "special:webscoop silent" })
 
 -- rules for xwayland apps
 hl.window_rule({

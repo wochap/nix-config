@@ -22,6 +22,13 @@ let
     meta.mainProgram = "webscoop";
   };
 
+  # Hyprland: keep the browser on a special workspace (webscoop adds the
+  # window rule at run time) and bring it to the current one only when needed.
+  webscoopWindow = pkgs.writeScriptBin "webscoop-window" (
+    builtins.readFile ./scripts/webscoop-window.sh
+  );
+  windowCmd = action: "${lib.getExe webscoopWindow} ${action}";
+
   # GET /webscoop/<recipe>?a=1&b=2 -> webscoop run <recipe> --var a=1 --var b=2
   # Replies with the JSON array of rows.
   webscoopRun = pkgs.writeShellScript "webscoop-run" ''
@@ -86,8 +93,17 @@ in
         channel = "chrome";
         timezone = "America/Panama";
         locale = "en-US";
+        args = [ "--class=webscoop" ];
       };
       profiles.default = "default";
+      hooks = {
+        "browser.show" = windowCmd "show";
+        "browser.hide" = windowCmd "hide";
+        "browser.started" = ''case "$WEBSCOOP_COMMAND" in run|test) ${windowCmd "hide"} ;; esac'';
+        "run.failed" = windowCmd "show";
+        "attention.needed" = windowCmd "show";
+        "attention.resolved" = windowCmd "hide";
+      };
       llm = lib.mkIf cfg.enableOmniRoute {
         endpoint = "https://omniroute.wochap.local/v1";
         model = "desktop-free";
