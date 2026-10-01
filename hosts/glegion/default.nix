@@ -128,6 +128,7 @@ in
     };
 
     _custom.services.android.enable = true;
+    # _custom.services.tailscale.enable = true;
     _custom.services.android.enableSdk = false;
     _custom.services.podman.enable = true;
     _custom.services.podman.dockerCompat = true;

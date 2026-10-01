@@ -88,11 +88,13 @@
     ./security/sops
     ./security/ssh
 
+    ./services/adguardhome
     ./services/ai
     ./services/android
     ./services/docker
     ./services/podman
     ./services/flatpak
+    ./services/headscale
     ./services/interception-tools
     ./services/ipwebcam
     ./services/kdeconnect
@@ -101,6 +103,7 @@
     ./services/rsshub
     ./services/searxng
     ./services/syncthing
+    ./services/tailscale
     ./services/virt
     ./services/waydroid
     ./services/webhook

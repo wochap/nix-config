@@ -7,7 +7,7 @@
 }:
 
 let
-  cfg = config._custom.services.ai;
+  cfg = config._custom.services.adguardhome;
 in
 {
   options._custom.services.adguardhome.enable = lib.mkEnableOption { };
@@ -15,7 +15,7 @@ in
   config = lib.mkIf cfg.enable {
     services.adguardhome = {
       enable = true;
-      openFirewall = true;
+      openFirewall = false;
       port = 3000;
       settings = {
         dns = {
@@ -30,8 +30,13 @@ in
       };
     };
 
-    # If you need to manually manage the firewall, ensure these are open:
-    # networking.firewall.allowedTCPPorts = [ 3000 53 ];
-    # networking.firewall.allowedUDPPorts = [ 53 ];
+    # DNS and web UI only reachable over the tailnet
+    networking.firewall.interfaces.tailscale0 = {
+      allowedTCPPorts = [
+        53
+        3000
+      ];
+      allowedUDPPorts = [ 53 ];
+    };
   };
 }
