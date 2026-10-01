@@ -42,3 +42,20 @@ const mapAppId = (appId) => {
   }
   return appId;
 };
+
+// Hyprland stableId is a hex counter assigned at window creation.
+const openOrderRank = (client) => {
+  const rank = parseInt(client?.stableId ?? "", 16);
+  return Number.isNaN(rank) ? Infinity : rank;
+};
+
+const compareOpenOrder = (a, b) => {
+  const rankA = openOrderRank(a);
+  const rankB = openOrderRank(b);
+  if (rankA !== rankB) {
+    return rankA < rankB ? -1 : 1;
+  }
+  const addressA = a?.address ?? "";
+  const addressB = b?.address ?? "";
+  return addressA < addressB ? -1 : addressA > addressB ? 1 : 0;
+};

@@ -6,6 +6,7 @@ Item {
   required property var windows
   property real previewAspect: 16.0 / 9.0
   property string selectedId: ""
+  property string focusedId: ""
   property bool interactive: false
   property real gap: 8
   property int maxBoxWidth: 280
@@ -59,6 +60,7 @@ Item {
       title: modelData?.title ?? ""
       badge: modelData?.key ?? ""
       selected: modelData?.id === root.selectedId
+      focused: root.focusedId.length > 0 && modelData?.id === root.focusedId
       interactive: root.interactive
       onClicked: root.tileClicked(modelData?.id ?? "")
     }

@@ -90,6 +90,7 @@ PanelWindow {
       previewAspect: root.previewAspect
       availableWidth: root.maxInnerWidth
       selectedId: root.backend.selectedId
+      focusedId: root.backend.openedFrom
       interactive: true
       onTileClicked: windowId => {
         root.backend.select(windowId);

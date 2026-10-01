@@ -3,8 +3,9 @@ local M = {}
 local switcher_cmd = "quickshell --path ~/.config/quickshell/shell ipc call window-switcher "
 local next_session_id = 0
 
-local function call(action, mode, session_id)
+local function call(action, mode, order, session_id)
   local args = mode and (" " .. mode) or ""
+  args = args .. (order and (" " .. order) or "")
   args = args .. (session_id and (" " .. session_id) or "")
   hl.dispatch(hl.dsp.exec_cmd(switcher_cmd .. action .. args))
 end
@@ -14,6 +15,8 @@ function M.setup(opts)
   local session_id
   local modifier = assert(opts.modifier, "window switcher modifier is required")
   local mode = assert(opts.mode, "window switcher mode is required")
+  -- "mru" cycles by focus history; "stable" cycles by window open order.
+  local order = opts.order or "mru"
 
   hl.bind(modifier .. " + TAB", function()
     if not switcher_open then
@@ -21,7 +24,7 @@ function M.setup(opts)
       session_id = tostring(next_session_id)
     end
     switcher_open = true
-    call("advance", mode, session_id)
+    call("advance", mode, order, session_id)
   end)
   hl.bind(modifier .. " + SHIFT + TAB", function()
     if not switcher_open then
@@ -29,7 +32,7 @@ function M.setup(opts)
       session_id = tostring(next_session_id)
     end
     switcher_open = true
-    call("reverse", mode, session_id)
+    call("reverse", mode, order, session_id)
   end)
 
   -- This is the sole modifier-release confirmation path. The QML panel must
@@ -39,7 +42,7 @@ function M.setup(opts)
     hl.bind(key, function()
       if switcher_open then
         switcher_open = false
-        call("confirm", nil, session_id)
+        call("confirm", nil, nil, session_id)
         session_id = nil
       end
     end, { release = true, non_consuming = true, transparent = true, ignore_mods = true })

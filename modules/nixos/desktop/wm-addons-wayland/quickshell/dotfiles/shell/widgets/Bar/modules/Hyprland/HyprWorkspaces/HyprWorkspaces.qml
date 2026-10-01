@@ -24,7 +24,7 @@ RowLayout {
       const clients = (SHyprland.clientsByWorkspaceId?.[workspace.id] ?? []).map(client => (Object.assign(client, {
             isFocused: client.address === SHyprland.activeWindow?.address,
             customClass: Utils.mapAppId(client.class)
-          }))).filter(client => !Utils.isIgnoredInWorkspaces(client.customClass, client.title));
+          }))).filter(client => !Utils.isIgnoredInWorkspaces(client.customClass, client.title)).sort(Utils.compareOpenOrder);
       return Object.assign(result, {
         [workspace.id]: clients
       });

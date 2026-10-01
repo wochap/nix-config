@@ -35,20 +35,20 @@ Scope {
       compositorBackend.toggle();
     }
 
-    function show(mode: string, sessionId: string) {
-      compositorBackend.show(mode, sessionId);
+    function show(mode: string, order: string, sessionId: string) {
+      compositorBackend.show(mode, order, sessionId);
     }
 
     function hide() {
       compositorBackend.hide();
     }
 
-    function advance(mode: string, sessionId: string) {
-      compositorBackend.advance(mode, sessionId);
+    function advance(mode: string, order: string, sessionId: string) {
+      compositorBackend.advance(mode, order, sessionId);
     }
 
-    function reverse(mode: string, sessionId: string) {
-      compositorBackend.reverse(mode, sessionId);
+    function reverse(mode: string, order: string, sessionId: string) {
+      compositorBackend.reverse(mode, order, sessionId);
     }
 
     function confirm(sessionId: string) {

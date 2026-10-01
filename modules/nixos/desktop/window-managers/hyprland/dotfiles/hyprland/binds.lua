@@ -318,12 +318,14 @@ harpoon_scratchpad.setup({
 window_switcher.setup({
   modifier = "ALT",
   mode = "floating",
+  order = "stable",
   release_keys = { "ALT_L", "ALT_R" },
 })
 
 window_switcher.setup({
   modifier = mod,
   mode = "tiling",
+  order = "stable",
   release_keys = { "SUPER_L", "SUPER_R" },
 })
 

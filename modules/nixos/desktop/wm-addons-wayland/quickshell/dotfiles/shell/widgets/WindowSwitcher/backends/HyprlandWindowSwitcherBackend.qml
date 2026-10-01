@@ -16,6 +16,7 @@ Scope {
   property string selectedId: ""
   property string openedFrom: ""
   property string mode: "all"
+  property string order: "mru"
 
   readonly property real focusedMonitorAspect: {
     const width = Hyprland.focusedMonitor?.width ?? 16;
@@ -37,6 +38,10 @@ Scope {
         return client.floating !== true;
       return true;
     });
+    if (root.order === "stable") {
+      list.sort((a, b) => Utils.compareOpenOrder(root.clientFor(a?.address ?? ""), root.clientFor(b?.address ?? "")));
+      return list;
+    }
     const rank = toplevel => {
       const index = root.findIndex(toplevel?.address ?? "");
       return index === -1 ? root.mru.length : index;
@@ -75,6 +80,20 @@ Scope {
     return requestedMode === "floating" || requestedMode === "tiling" ? requestedMode : "all";
   }
 
+  function normalizedOrder(requestedOrder) {
+    return requestedOrder === "stable" ? "stable" : "mru";
+  }
+
+  // MRU lists start at the previous window; stable lists step from the focused one.
+  function initialIndex(list, delta) {
+    if (root.order !== "stable" || list.length === 0)
+      return 0;
+    const index = root.indexOfId(list, Hyprland.activeToplevel?.address ?? "");
+    if (index === -1)
+      return 0;
+    return ((index + delta) % list.length + list.length) % list.length;
+  }
+
   function indexOfId(list, id) {
     for (let i = 0; i < list.length; i++) {
       if ((list[i]?.address ?? "") === id)
@@ -110,8 +129,9 @@ Scope {
     root.selectedId = list[next]?.address ?? "";
   }
 
-  function bypassOverlay(requestedMode, requestedSessionId) {
+  function bypassOverlay(requestedMode, requestedOrder, requestedSessionId, delta) {
     root.mode = root.normalizedMode(requestedMode);
+    root.order = root.normalizedOrder(requestedOrder);
     const list = root.orderedToplevels;
     if (list.length >= 3)
       return false;
@@ -125,7 +145,7 @@ Scope {
       pendingConfirmTimer.stop();
     }
     if (list.length > 0) {
-      focusTimer.address = list[0]?.address ?? "";
+      focusTimer.address = list[root.initialIndex(list, delta)]?.address ?? "";
       focusTimer.restart();
     }
     return true;
@@ -135,13 +155,14 @@ Scope {
     if (root.isOpen)
       root.hide();
     else
-      root.show();
+      root.show("", "", "", 1);
   }
 
-  function show(requestedMode, requestedSessionId) {
+  function show(requestedMode, requestedOrder, requestedSessionId, delta) {
     if (root.isOpen)
       return;
     root.mode = root.normalizedMode(requestedMode);
+    root.order = root.normalizedOrder(requestedOrder);
     if (root.orderedToplevels.length === 0) {
       root.pendingConfirm = false;
       root.pendingSessionId = "";
@@ -151,7 +172,8 @@ Scope {
     root.sessionId = requestedSessionId ?? "";
     root.isOpen = true;
     root.openedFrom = Hyprland.activeToplevel?.address ?? "";
-    root.selectedId = root.orderedToplevels[0]?.address ?? "";
+    const list = root.orderedToplevels;
+    root.selectedId = list[root.initialIndex(list, delta ?? 1)]?.address ?? "";
     if (root.pendingConfirm && root.pendingSessionId === root.sessionId) {
       root.pendingConfirm = false;
       root.pendingSessionId = "";
@@ -167,20 +189,20 @@ Scope {
     root.sessionId = "";
   }
 
-  function advance(requestedMode, requestedSessionId) {
-    if (!root.isOpen && root.bypassOverlay(requestedMode, requestedSessionId))
+  function advance(requestedMode, requestedOrder, requestedSessionId) {
+    if (!root.isOpen && root.bypassOverlay(requestedMode, requestedOrder, requestedSessionId, 1))
       return;
     if (!root.isOpen)
-      root.show(requestedMode, requestedSessionId);
+      root.show(requestedMode, requestedOrder, requestedSessionId, 1);
     else if (!requestedSessionId || requestedSessionId === root.sessionId)
       root.moveSelection(1);
   }
 
-  function reverse(requestedMode, requestedSessionId) {
-    if (!root.isOpen && root.bypassOverlay(requestedMode, requestedSessionId))
+  function reverse(requestedMode, requestedOrder, requestedSessionId) {
+    if (!root.isOpen && root.bypassOverlay(requestedMode, requestedOrder, requestedSessionId, -1))
       return;
     if (!root.isOpen)
-      root.show(requestedMode, requestedSessionId);
+      root.show(requestedMode, requestedOrder, requestedSessionId, -1);
     else if (!requestedSessionId || requestedSessionId === root.sessionId)
       root.moveSelection(-1);
   }

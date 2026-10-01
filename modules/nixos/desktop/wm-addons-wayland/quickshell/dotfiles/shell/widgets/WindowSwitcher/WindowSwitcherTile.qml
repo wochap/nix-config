@@ -13,6 +13,8 @@ Item {
   property real previewAspect: 16.0 / 9.0
   property string title: ""
   property bool selected: false
+  // Window that had focus when the switcher opened.
+  property bool focused: false
   property bool interactive: true
   property string badge: ""
   signal clicked
@@ -112,6 +114,15 @@ Item {
         font.pixelSize: Styles.font.pixelSize.small
         color: tile.selected ? Theme.options.text : Theme.options.textDimmed
         text: tile.title
+      }
+
+      Rectangle {
+        visible: tile.focused
+        Layout.alignment: Qt.AlignVCenter
+        implicitWidth: 8
+        implicitHeight: 8
+        radius: 4
+        color: Theme.options.primary
       }
     }
   }
