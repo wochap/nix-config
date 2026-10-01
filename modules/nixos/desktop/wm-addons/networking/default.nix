@@ -16,6 +16,7 @@ in
     enableLocalSend = lib.mkEnableOption { };
     enablePixieCore = lib.mkEnableOption { };
     enableWol = lib.mkEnableOption { };
+    enableFi = lib.mkEnableOption "firewall ports for fi (QUIC + mDNS)";
     enableOpenSnitch = lib.mkEnableOption "OpenSnitch application firewall";
     userUnitsOnConnect = lib.mkOption {
       type = lib.types.listOf lib.types.str;
@@ -153,7 +154,17 @@ in
               69 # TFTP port (for the initial iPXE bootloader)
               4011 # ProxyDHCP port (Pixiecore's magic trick)
             ]
-            ++ lib.optionals cfg.enableWol [ 9 ];
+            ++ lib.optionals cfg.enableWol [ 9 ]
+            ++ lib.optionals cfg.enableFi [
+              5353 # mDNS
+            ];
+          allowedUDPPortRanges = lib.optionals cfg.enableFi [
+            # fi QUIC
+            {
+              from = 47380;
+              to = 47389;
+            }
+          ];
         };
       };
 

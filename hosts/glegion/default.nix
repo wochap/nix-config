@@ -268,6 +268,7 @@ in
     _custom.desktop.mouseless.enable = true;
     _custom.desktop.networking.enableWifi = true;
     _custom.desktop.networking.enableLocalSend = true;
+    _custom.desktop.networking.enableFi = true;
     _custom.desktop.networking.enableOpenSnitch = true;
     _custom.desktop.plymouth.enable = false;
     _custom.desktop.power-management.enableLegion = true;
