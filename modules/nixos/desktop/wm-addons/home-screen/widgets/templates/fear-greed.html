@@ -1,0 +1,58 @@
+{{- /*
+  Fear & Greed: stock market (CNN, fetched in-template so a CNN failure does
+  not hide the crypto gauge) and crypto (alternative.me, main request).
+*/ -}}
+{{- $cnn := newRequest "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
+  | withHeader "User-Agent" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+  | withHeader "Referer" "https://edition.cnn.com/"
+  | withHeader "Origin" "https://edition.cnn.com"
+  | getResponse }}
+<div class="fg">
+  {{- if $cnn.JSON.Exists "fear_and_greed.score" }}
+  {{- $s := $cnn.JSON.Float "fear_and_greed.score" }}
+  {{- $prevS := $cnn.JSON.Float "fear_and_greed.previous_close" }}
+  <div class="cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+    <div data-popover-html>
+      <p class="sc-tip">@TIP_FEARGREED@</p>
+      <p class="sc-tip" style="margin-top: 6px">@TIP_FEARGREEDSTOCK@</p>
+      <p class="sc-now">Previous close {{ printf "%.0f" $prevS }}, 1 week {{ printf "%.0f" ($cnn.JSON.Float "fear_and_greed.previous_1_week") }}, 1 month {{ printf "%.0f" ($cnn.JSON.Float "fear_and_greed.previous_1_month") }}, 1 year {{ printf "%.0f" ($cnn.JSON.Float "fear_and_greed.previous_1_year") }}.</p>
+    </div>
+    <div class="fg-row">
+      <div>
+        <div class="size-h6 uppercase">Stocks</div>
+        <div class="color-highlight">{{ $cnn.JSON.String "fear_and_greed.rating" }}</div>
+      </div>
+      <div class="text-right">
+        <div class="fg-score {{ if le $s 25.0 }}color-negative{{ else if ge $s 75.0 }}color-positive{{ else }}color-highlight{{ end }}">{{ printf "%.0f" $s }}</div>
+        <div class="size-h6 {{ if ge $s $prevS }}color-positive{{ else }}color-negative{{ end }}">{{ printf "%+.0f" (sub $s $prevS) }} vs prev</div>
+      </div>
+    </div>
+    <div class="fg-bar"><div class="sc-bar-dot" style="left: {{ printf "%.0f" $s }}%"></div></div>
+  </div>
+  {{- else }}
+  <div class="color-subdue">Stock Fear &amp; Greed unavailable.</div>
+  {{- end }}
+
+  {{- if .JSON.Exists "data.0.value" }}
+  {{- $c := .JSON.Int "data.0.value" }}
+  {{- $prevC := .JSON.Int "data.1.value" }}
+  <div class="cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+    <div data-popover-html>
+      <p class="sc-tip">@TIP_FEARGREED@</p>
+      <p class="sc-tip" style="margin-top: 6px">@TIP_FEARGREEDCRYPTO@</p>
+      <p class="sc-now">Yesterday {{ $prevC }}.</p>
+    </div>
+    <div class="fg-row">
+      <div>
+        <div class="size-h6 uppercase">Crypto</div>
+        <div class="color-highlight">{{ .JSON.String "data.0.value_classification" }}</div>
+      </div>
+      <div class="text-right">
+        <div class="fg-score {{ if le $c 25 }}color-negative{{ else if ge $c 75 }}color-positive{{ else }}color-highlight{{ end }}">{{ $c }}</div>
+        <div class="size-h6 {{ if ge $c $prevC }}color-positive{{ else }}color-negative{{ end }}">{{ printf "%+d" (sub $c $prevC) }} vs yesterday</div>
+      </div>
+    </div>
+    <div class="fg-bar"><div class="sc-bar-dot" style="left: {{ $c }}%"></div></div>
+  </div>
+  {{- end }}
+</div>

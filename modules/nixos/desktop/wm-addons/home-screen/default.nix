@@ -9,13 +9,37 @@ let
   cfg = config._custom.desktop.home-screen;
   inherit (pkgs._custom) wochap-ssc;
   proxy = config._custom.services.web-proxies.home-screen;
+  personalSopsFile = ../../../../../secrets-sops/personal.yaml;
+  widgets = import ./widgets {
+    inherit lib;
+    finnhub = cfg.finnhub.enable;
+    fred = cfg.fred.enable;
+  };
+  inherit (widgets) markets mkMarketsWidget;
 in
 {
-  options._custom.desktop.home-screen.enable = lib.mkEnableOption { };
+  options._custom.desktop.home-screen = {
+    enable = lib.mkEnableOption { };
+
+    # Free API keys stored in secrets-sops/personal.yaml. Keep disabled until
+    # the key exists there, otherwise sops-nix activation fails.
+    finnhub.enable = lib.mkEnableOption "Finnhub valuation, analyst, news and earnings data (personal-finnhub-api-key)";
+    fred.enable = lib.mkEnableOption "FRED macro rates (personal-fred-api-key)";
+  };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = (cfg.finnhub.enable || cfg.fred.enable) -> config._custom.security.sops.enable;
+        message = "home-screen: finnhub/fred need _custom.security.sops.enable";
+      }
+    ];
+
     services.glance = {
       enable = true;
+      environmentFile = lib.mkIf (
+        cfg.finnhub.enable || cfg.fred.enable
+      ) config.sops.templates."glance.env".path;
       openFirewall = false;
       settings = {
         server = {
@@ -45,107 +69,25 @@ in
         pages = [
           {
             name = "Markets";
-            hide-desktop-navigation = true;
 
             columns = [
               # -----------------------------------------------------------------------
-              # LEFT: Macro / sector overview
+              # LEFT: Macro / sector overview + sentiment
               # -----------------------------------------------------------------------
               {
                 size = "small";
 
                 widgets = [
-                  {
-                    type = "markets";
-                    title = "Macro";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "SPY";
-                        name = "S&P 500";
-                      }
-                      {
-                        symbol = "QQQ";
-                        name = "Nasdaq 100";
-                      }
-                      {
-                        symbol = "IWM";
-                        name = "Russell 2000";
-                      }
-                      {
-                        symbol = "DX-Y.NYB";
-                        name = "US Dollar Index";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Semiconductors";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "SMH";
-                        name = "VanEck Semiconductor";
-                      }
-                      {
-                        symbol = "SOXX";
-                        name = "iShares Semiconductor";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Crypto";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "BTC-USD";
-                        name = "Bitcoin";
-                      }
-                      {
-                        symbol = "XMR-USD";
-                        name = "Monero";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Peru";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "PEN=X";
-                        name = "USD / PEN";
-                      }
-                    ];
-                  }
-
-                  # Official sources: low-noise, potentially high-impact.
-                  {
-                    type = "rss";
-                    title = "Fed / SEC";
-                    limit = 12;
-                    collapse-after = 6;
-                    cache = "15m";
-
-                    feeds = [
-                      {
-                        url = "https://www.federalreserve.gov/feeds/press_all.xml";
-                        title = "Federal Reserve";
-                      }
-                      {
-                        url = "https://www.sec.gov/news/pressreleases.rss";
-                        title = "SEC";
-                      }
-                    ];
-                  }
+                  widgets.styles
+                  (mkMarketsWidget markets.macro)
+                  widgets.fearGreed
+                ]
+                ++ lib.optional cfg.fred.enable widgets.macroRates
+                ++ [
+                  (mkMarketsWidget markets.semiconductors)
+                  (mkMarketsWidget markets.crypto)
+                  (mkMarketsWidget markets.peru)
+                  widgets.rss.fedSec
                 ];
               }
 
@@ -156,184 +98,17 @@ in
                 size = "full";
 
                 widgets = [
-                  # Main dashboard news stream.
-                  {
-                    type = "rss";
-                    title = "Market Moving News";
-                    style = "horizontal-cards";
-                    limit = 20;
-                    collapse-after = 10;
-                    cache = "10m";
-
-                    feeds = [
-                      {
-                        url = "https://feeds.bloomberg.com/markets/news.rss";
-                        title = "Bloomberg Markets";
-                      }
-                      {
-                        url = "https://moxie.foxbusiness.com/google-publisher/markets.xml";
-                        title = "Fox Business Markets";
-                      }
-                      {
-                        url = "https://feeds.a.dj.com/rss/RSSMarketsMain.xml";
-                        title = "WSJ Markets";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "rss";
-                    title = "AI / Semiconductor News";
-                    style = "horizontal-cards";
-                    limit = 16;
-                    collapse-after = 8;
-                    cache = "15m";
-
-                    feeds = [
-                      {
-                        url = "https://www.ft.com/technology?format=rss";
-                        title = "Financial Times Tech";
-                      }
-                      {
-                        url = "https://moxie.foxbusiness.com/google-publisher/technology.xml";
-                        title = "Fox Business Tech";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "AI Compute";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "NVDA";
-                        name = "NVIDIA";
-                      }
-                      {
-                        symbol = "AMD";
-                        name = "AMD";
-                      }
-                      {
-                        symbol = "INTC";
-                        name = "Intel";
-                      }
-                      {
-                        symbol = "AVGO";
-                        name = "Broadcom";
-                      }
-                      {
-                        symbol = "ARM";
-                        name = "Arm";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Foundries";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "TSM";
-                        name = "TSMC";
-                      }
-                      {
-                        symbol = "005930.KS";
-                        name = "Samsung Electronics";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "HBM / DRAM / NAND";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "MU";
-                        name = "Micron";
-                      }
-                      {
-                        symbol = "000660.KS";
-                        name = "SK Hynix";
-                      }
-                      {
-                        symbol = "005930.KS";
-                        name = "Samsung";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Semiconductor Equipment";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "ASML";
-                        name = "ASML";
-                      }
-                      {
-                        symbol = "AMAT";
-                        name = "Applied Materials";
-                      }
-                      {
-                        symbol = "LRCX";
-                        name = "Lam Research";
-                      }
-                      {
-                        symbol = "KLAC";
-                        name = "KLA";
-                      }
-                      {
-                        symbol = "TER";
-                        name = "Teradyne";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Networking / Interconnect";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "AVGO";
-                        name = "Broadcom";
-                      }
-                      {
-                        symbol = "MRVL";
-                        name = "Marvell";
-                      }
-                      {
-                        symbol = "ANET";
-                        name = "Arista Networks";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Packaging / Assembly";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "AMKR";
-                        name = "Amkor";
-                      }
-                      {
-                        symbol = "ASX";
-                        name = "ASE Technology";
-                      }
-                    ];
-                  }
+                  widgets.rss.marketNews
+                  widgets.rss.aiNews
+                ]
+                ++ lib.optional cfg.finnhub.enable widgets.earnings
+                ++ map mkMarketsWidget [
+                  markets.aiCompute
+                  markets.foundries
+                  markets.memory
+                  markets.equipment
+                  markets.networking
+                  markets.packaging
                 ];
               }
 
@@ -343,158 +118,73 @@ in
               {
                 size = "small";
 
+                widgets =
+                  map mkMarketsWidget [
+                    markets.hyperscalers
+                    markets.aiServers
+                    markets.power
+                    markets.commodities
+                    markets.food
+                  ]
+                  ++ [ widgets.rss.macroNews ];
+              }
+            ];
+          }
+
+          # Tall chart cards (1M / 3M / 1Y + signals) for every watchlist symbol.
+          {
+            name = "Charts";
+
+            columns = [
+              {
+                size = "full";
+
                 widgets = [
-                  {
-                    type = "markets";
-                    title = "Hyperscalers";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "MSFT";
-                        name = "Microsoft";
-                      }
-                      {
-                        symbol = "GOOGL";
-                        name = "Alphabet";
-                      }
-                      {
-                        symbol = "AMZN";
-                        name = "Amazon";
-                      }
-                      {
-                        symbol = "META";
-                        name = "Meta";
-                      }
-                      {
-                        symbol = "ORCL";
-                        name = "Oracle";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "AI Servers";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "SMCI";
-                        name = "Super Micro";
-                      }
-                      {
-                        symbol = "DELL";
-                        name = "Dell";
-                      }
-                      {
-                        symbol = "HPE";
-                        name = "HPE";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Power / Cooling";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "VRT";
-                        name = "Vertiv";
-                      }
-                      {
-                        symbol = "ETN";
-                        name = "Eaton";
-                      }
-                      {
-                        symbol = "GEV";
-                        name = "GE Vernova";
-                      }
-                      {
-                        symbol = "CEG";
-                        name = "Constellation Energy";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Commodities";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "GC=F";
-                        name = "Gold";
-                      }
-                      {
-                        symbol = "HG=F";
-                        name = "Copper";
-                      }
-                      {
-                        symbol = "CL=F";
-                        name = "Crude Oil";
-                      }
-                      {
-                        symbol = "NG=F";
-                        name = "Natural Gas";
-                      }
-                    ];
-                  }
-
-                  {
-                    type = "markets";
-                    title = "Food";
-                    chart-link-template = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
-
-                    markets = [
-                      {
-                        symbol = "ZC=F";
-                        name = "Corn";
-                      }
-                      {
-                        symbol = "ZW=F";
-                        name = "Wheat";
-                      }
-                      {
-                        symbol = "ZS=F";
-                        name = "Soybeans";
-                      }
-                      {
-                        symbol = "LE=F";
-                        name = "Live Cattle";
-                      }
-                    ];
-                  }
-
-                  # Compact secondary news stream for macro events affecting
-                  # commodities, currencies and indexes.
-                  {
-                    type = "rss";
-                    title = "Macro News";
-                    limit = 20;
-                    collapse-after = 8;
-                    cache = "15m";
-
-                    feeds = [
-                      {
-                        url = "https://feeds.bloomberg.com/markets/news.rss";
-                        title = "Bloomberg";
-                      }
-                      {
-                        url = "https://moxie.foxbusiness.com/google-publisher/markets.xml";
-                        title = "Fox Business";
-                      }
-                    ];
-                  }
+                  widgets.styles
+                ]
+                ++ widgets.mkChartSections [
+                  "macro"
+                  "aiCompute"
+                  "foundries"
+                  "memory"
+                  "equipment"
+                  "networking"
+                  "packaging"
+                  "hyperscalers"
+                  "aiServers"
+                  "power"
+                  "semiconductors"
+                  "crypto"
+                  "commodities"
+                  "food"
+                  "peru"
                 ];
               }
             ];
           }
         ];
       };
+    };
+
+    sops.secrets = lib.mkMerge [
+      (lib.mkIf cfg.finnhub.enable {
+        personal-finnhub-api-key.sopsFile = personalSopsFile;
+      })
+      (lib.mkIf cfg.fred.enable {
+        personal-fred-api-key.sopsFile = personalSopsFile;
+      })
+    ];
+
+    sops.templates."glance.env" = lib.mkIf (cfg.finnhub.enable || cfg.fred.enable) {
+      mode = "0400";
+      restartUnits = [ "glance.service" ];
+      content =
+        lib.optionalString cfg.finnhub.enable ''
+          FINNHUB_API_KEY=${config.sops.placeholder.personal-finnhub-api-key}
+        ''
+        + lib.optionalString cfg.fred.enable ''
+          FRED_API_KEY=${config.sops.placeholder.personal-fred-api-key}
+        '';
     };
 
     systemd.services.glance.serviceConfig = lib._custom.strictNetworkService // {

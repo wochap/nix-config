@@ -1,0 +1,37 @@
+{{- /* FRED series @SERIES@ (@LABEL@). Skips "." placeholders for missing days. */ -}}
+{{- $obs := newRequest "https://api.stlouisfed.org/fred/series/observations"
+  | withParameter "series_id" "@SERIES@"
+  | withParameter "units" "@UNITS@"
+  | withParameter "api_key" "@FRED_TOKEN@"
+  | withParameter "file_type" "json"
+  | withParameter "sort_order" "desc"
+  | withParameter "limit" "10"
+  | getResponse }}
+{{- $latest := 0.0 }}{{- $previous := 0.0 }}{{- $date := "" }}{{- $found := 0 }}
+{{- range $obs.JSON.Array "observations" }}
+  {{- if ne (.String "value") "." }}
+    {{- if eq $found 0 }}{{ $latest = .Float "value" }}{{ $date = .String "date" }}{{ else if eq $found 1 }}{{ $previous = .Float "value" }}{{ end }}
+    {{- $found = add $found 1 }}
+  {{- end }}
+{{- end }}
+<li class="fr-row cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+  <div data-popover-html>
+    <p class="sc-tip">@TIP@</p>
+    {{- if gt $found 1 }}
+    <p class="sc-now">Latest {{ printf "%.2f" $latest }}% ({{ $date }}), previous {{ printf "%.2f" $previous }}%.</p>
+    {{- end }}
+  </div>
+  <div class="min-width-0">
+    <a class="color-highlight block text-truncate" href="https://fred.stlouisfed.org/series/@SERIES@" target="_blank" rel="noreferrer">@LABEL@</a>
+    {{- if ne $date "" }}<div class="size-h6" {{ $date | parseRelativeTime "DateOnly" }}></div>{{ end }}
+  </div>
+  {{- if gt $found 1 }}
+  {{- $chg := sub $latest $previous }}
+  <div class="text-right shrink-0">
+    <div class="size-h4 color-highlight">{{ printf "%.2f" $latest }}%</div>
+    <div class="size-h6 {{ if gt $chg 0.0 }}color-@UP_COLOR@{{ else if lt $chg 0.0 }}color-@DOWN_COLOR@{{ end }}">{{ printf "%+.2f" $chg }}</div>
+  </div>
+  {{- else }}
+  <div class="color-subdue">&mdash;</div>
+  {{- end }}
+</li>

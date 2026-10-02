@@ -12,6 +12,8 @@ personal-vdirsyncer-client-secret: ENC[AES256_GCM,data:309QLs8axuGTs7JJzoYp1p8I9
 personal-huggingface-local-read-token: ENC[AES256_GCM,data:REH/0docqiaaD0+B7THWXqvUQeuq5PkW+OaBMEjg4xgNchDkIQ==,iv:dmGFsLNShJvk93jjjsYcCbgdpAEPCWukMYhKWhaW6fw=,tag:aiNxxowSwPCA9ifnM/gY+w==,type:str]
 personal-brave-search-api-key: ENC[AES256_GCM,data:Vf5ijqRP7v0jBWJOx5Calc6vOkRjKWXYZvdB+gecAA==,iv:bvN3vyxmHk7ho2sqWy5C3QN5Cnr07UrjQxXDeNUS7sE=,tag:AiEeZWt9RqdjIXO0jyAL+A==,type:str]
 personal-twitter-auth-token: ENC[AES256_GCM,data:dIptQbMo79Q87O/KPkvO/DROoE3balbqaa8WzceMdpV9ylZLaUUgmA==,iv:ljGyQVJlzugziB5mfXn5rpEkCClInjkV7UCrqMK4H2c=,tag:BsXwmDJ5SxNy4HIhK8AtVA==,type:str]
+personal-fred-api-key: ENC[AES256_GCM,data:vbAhvjnTMPnPNIUcjSZfdTZljLWAyvEvGHlNlhqLm00=,iv:79ofYQop3w15UyW3TzxDkgDpBjhr5j31RdnMGU4rozc=,tag:qCmY5rveJ056brahYr/M/Q==,type:str]
+personal-finnhub-api-key: ENC[AES256_GCM,data:quiRBCrj9GUrMNFWOjnU41v3hBQbJ0JKcMHx+toihIZiHXdiE5la7w==,iv:r6dYzTPg4wML321fd03ZL3PucfvgZwE3i10jCXZHzf4=,tag:lF7pFlEtK9RC9geowgIvZQ==,type:str]
 sops:
     age:
         - enc: |
@@ -23,7 +25,7 @@ sops:
             VUuyVVDlurT8HJj+PyjdY+0K2qsZ4N/FuMAfyPl6d5N0glcZYf9zyw==
             -----END AGE ENCRYPTED FILE-----
           recipient: age182hl2gfu8zj2dxjdvtfktv9ay57htc20ugjrlmwmv8l806lntdxqgeje73
-    lastmodified: "2026-09-28T18:05:23Z"
-    mac: ENC[AES256_GCM,data:BqsF3YamQGmi88zVpq5sfYCsfN3JmxtIuI2qVa02068FvRxeOqO+1AazBhq4FM4b68RCFn+o64ItxUbTQCFJSATbTD8TD3TpR6y8TIyJAvYEMxWYIVCUcetYDUDrfXS5FVkehvQVjKtfLBaBmaBlw9T4SKOk+PKmErNE8wrXIN0=,iv:oLP8V8XOPUufT6ymHZNpp7y/vtsA8jOz8JYY2Tyl9GI=,tag:N4LalfN2OdHWmTsfZIzKVg==,type:str]
+    lastmodified: "2026-10-02T03:08:56Z"
+    mac: ENC[AES256_GCM,data:xNHTKZ9BAGAb6KVZYDwQr7CroG8/UqR5mbLa2JRk3mVOGP+UBYgg7MHFJtXpzvE4Pa2O4uG1AL2AdsgScBAb5ysEmd13KfNzUs5v45qyl+gV4Qz2yHXeicVmi+EsAHUk33TfHaH9zGJ/Eb40FrLVsV4QtmjmjsUdj/Pq9A4YLjM=,iv:l4hylQCtoDYVoqSXA3/Xhn1L0PrBrRHOMSGRn3DyCIw=,tag:/BebbeOEqjFatSa87PjSdg==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.1

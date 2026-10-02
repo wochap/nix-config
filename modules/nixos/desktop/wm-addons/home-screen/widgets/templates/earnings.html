@@ -1,0 +1,43 @@
+{{- /*
+  Upcoming earnings for the watchlist (Finnhub). No main request: the date
+  window is computed at render time.
+  Options: symbols (regex alternation, e.g. "NVDA|AMD")
+*/ -}}
+{{- $pattern := printf "^(%s)$" (.Options.StringOr "symbols" "") }}
+{{- $res := newRequest "https://finnhub.io/api/v1/calendar/earnings"
+  | withParameter "from" (now | formatTime "DateOnly")
+  | withParameter "to" (offsetNow "336h" | formatTime "DateOnly")
+  | withParameter "token" "@FINNHUB_TOKEN@"
+  | getResponse }}
+{{- $rows := sortByString "date" "asc" ($res.JSON.Array "earningsCalendar") }}
+{{- $count := 0 }}
+<div class="size-h6 color-subdue cursor-help" style="width: fit-content" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+  <div data-popover-html><p class="sc-tip">@TIP_EARNINGS@</p></div>
+  Next 14 days <span class="sc-i">ⓘ</span>
+</div>
+<ul class="list list-gap-10 list-with-separator collapsible-container margin-top-10" data-collapse-after="6">
+  {{- range $rows }}
+  {{- $sym := .String "symbol" }}
+  {{- if ne (findMatch $pattern $sym) "" }}
+  {{- $count = add $count 1 }}
+  {{- $hour := .String "hour" }}
+  <li class="flex justify-between items-center gap-10">
+    <div class="min-width-0">
+      <a class="color-highlight size-h4" href="https://www.tradingview.com/symbols/{{ $sym }}/" target="_blank" rel="noreferrer">{{ $sym }}</a>
+      <div class="size-h6">
+        {{ .String "date" | parseTime "DateOnly" | formatTime "Mon Jan 2" }}
+        {{- if eq $hour "bmo" }} &middot; before open{{ else if eq $hour "amc" }} &middot; after close{{ end }}
+      </div>
+    </div>
+    <div class="text-right cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="260px">
+      <div data-popover-html><p class="sc-tip">@TIP_EPSESTIMATE@</p></div>
+      <div class="size-h6">EPS est.</div>
+      <div class="color-highlight">{{ if ne (.String "epsEstimate") "" }}{{ printf "%.2f" (.Float "epsEstimate") }}{{ else }}&mdash;{{ end }}</div>
+    </div>
+  </li>
+  {{- end }}
+  {{- end }}
+</ul>
+{{- if eq $count 0 }}
+<p class="color-subdue">No watchlist earnings in the next 14 days.</p>
+{{- end }}

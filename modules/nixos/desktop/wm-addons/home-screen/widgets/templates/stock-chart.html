@@ -1,0 +1,294 @@
+{{- /*
+  Stock chart card. Main request: Yahoo chart API, range=1y interval=1d.
+  Preprocessed by widgets/default.nix:
+    @TIP_*@          tooltip texts from glossary.nix
+    @RANGE_*@        per-range blocks from range-{calc,tab,chart}.html (1M / 3M / 1Y)
+    @FINNHUB_TOKEN@  Glance env reference to the Finnhub API key
+  Options: symbol, uid (symbol safe for HTML ids), fundamentals (bool)
+*/ -}}
+{{- $uid := .Options.StringOr "uid" "x" -}}
+{{- $sym := .Options.StringOr "symbol" "" -}}
+{{- $closes := .JSON.Array "chart.result.0.indicators.quote.0.close" -}}
+{{- $ts := .JSON.Array "chart.result.0.timestamp" -}}
+{{- $n := len $closes -}}
+{{- if eq $n 0 }}
+<p class="color-negative">No price data for {{ $sym }}.</p>
+{{- else }}
+{{- $lastTs := (index $ts (sub $n 1)).Int "" -}}
+{{- $price := .JSON.Float "chart.result.0.meta.regularMarketPrice" -}}
+{{- $currency := .JSON.String "chart.result.0.meta.currency" -}}
+{{- $hi52 := .JSON.Float "chart.result.0.meta.fiftyTwoWeekHigh" -}}
+{{- $lo52 := .JSON.Float "chart.result.0.meta.fiftyTwoWeekLow" -}}
+
+{{- /* One pass over valid closes: count, SMA sums, RSI (Wilder), previous close */ -}}
+{{- $valid := 0 -}}
+{{- range $closes }}{{ if gt (.Float "") 0.0 }}{{ $valid = add $valid 1 }}{{ end }}{{ end -}}
+{{- $k := 0 -}}
+{{- $sum50 := 0.0 -}}{{- $sum200 := 0.0 -}}
+{{- $prev := 0.0 -}}{{- $prevClose := 0.0 -}}
+{{- $avgGain := 0.0 -}}{{- $avgLoss := 0.0 -}}
+{{- range $closes -}}
+  {{- $v := .Float "" -}}
+  {{- if gt $v 0.0 -}}
+    {{- if ge $k (sub $valid 50) }}{{ $sum50 = add $sum50 $v }}{{ end -}}
+    {{- if ge $k (sub $valid 200) }}{{ $sum200 = add $sum200 $v }}{{ end -}}
+    {{- if gt $k 0 -}}
+      {{- $d := sub $v $prev -}}
+      {{- $gain := 0.0 -}}{{- $loss := 0.0 -}}
+      {{- if gt $d 0.0 }}{{ $gain = $d }}{{ else }}{{ $loss = sub 0.0 $d }}{{ end -}}
+      {{- if le $k 14 -}}
+        {{- $avgGain = add $avgGain (div $gain 14.0) -}}
+        {{- $avgLoss = add $avgLoss (div $loss 14.0) -}}
+      {{- else -}}
+        {{- $avgGain = div (add (mul $avgGain 13.0) $gain) 14.0 -}}
+        {{- $avgLoss = div (add (mul $avgLoss 13.0) $loss) 14.0 -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $prevClose = $prev -}}
+    {{- $prev = $v -}}
+    {{- $k = add $k 1 -}}
+  {{- end -}}
+{{- end -}}
+{{- if eq $price 0.0 }}{{ $price = $prev }}{{ end -}}
+{{- $dayChange := 0.0 -}}
+{{- if gt $prevClose 0.0 }}{{ $dayChange = percentChange $price $prevClose }}{{ end -}}
+{{- $rsi := -1.0 -}}
+{{- if gt $valid 15 -}}
+  {{- if eq $avgLoss 0.0 }}{{ $rsi = 100.0 }}{{ else }}{{ $rsi = sub 100.0 (div 100.0 (add 1.0 (div $avgGain $avgLoss))) }}{{ end -}}
+{{- end -}}
+{{- $sma50 := 0.0 -}}{{- if ge $valid 50 }}{{ $sma50 = div $sum50 50.0 }}{{ end -}}
+{{- $sma200 := 0.0 -}}{{- if ge $valid 200 }}{{ $sma200 = div $sum200 200.0 }}{{ end -}}
+@RANGE_CALCS@
+
+<div class="sc">
+  <input type="radio" class="sc-r sc-r1m" name="sc-{{ $uid }}" id="sc-{{ $uid }}-1m">
+  <input type="radio" class="sc-r sc-r3m" name="sc-{{ $uid }}" id="sc-{{ $uid }}-3m" checked>
+  <input type="radio" class="sc-r sc-r1y" name="sc-{{ $uid }}" id="sc-{{ $uid }}-1y">
+
+  <div class="sc-head cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="280px">
+    <div data-popover-html><p class="sc-tip">@TIP_PRICE@</p></div>
+    <div class="sc-price color-highlight">{{ printf "%.2f" $price }} <span class="sc-cur">{{ $currency }}</span></div>
+    <div class="sc-day {{ if ge $dayChange 0.0 }}color-positive{{ else }}color-negative{{ end }}">{{ printf "%+.2f" $dayChange }}% today</div>
+  </div>
+
+  <div class="sc-tabs">
+    @RANGE_TABS@
+  </div>
+  @RANGE_CHARTS@
+
+  <div class="sc-section cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+    <div data-popover-html><p class="sc-tip">@TIP_TECHNICAL@</p></div>
+    Technical <span class="sc-i">ⓘ</span>
+  </div>
+  <div class="sc-grid">
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html>
+        <p class="sc-tip">@TIP_RSI@</p>
+        {{- if ge $rsi 0.0 }}
+        <p class="sc-now">Now: {{ printf "%.0f" $rsi }} &mdash;
+          {{ if ge $rsi 70.0 }}overbought, consider waiting for a pullback.{{ else if le $rsi 30.0 }}oversold, possible entry if the business is healthy.{{ else }}neutral momentum.{{ end }}</p>
+        {{- end }}
+      </div>
+      <div class="sc-label">RSI 14</div>
+      {{- if ge $rsi 0.0 }}
+      <div class="sc-value {{ if ge $rsi 70.0 }}color-negative{{ else if le $rsi 30.0 }}color-positive{{ end }}">{{ printf "%.0f" $rsi }}</div>
+      {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html>
+        <p class="sc-tip">@TIP_SMA50@</p>
+        {{- if gt $sma50 0.0 }}
+        <p class="sc-now">Now: price is {{ printf "%+.1f" (percentChange $price $sma50) }}% vs SMA 50 &mdash; {{ if ge $price $sma50 }}above, short-term uptrend.{{ else }}below, short-term weakness.{{ end }}</p>
+        {{- end }}
+      </div>
+      <div class="sc-label">SMA 50</div>
+      {{- if gt $sma50 0.0 }}
+      <div class="sc-value {{ if ge $price $sma50 }}color-positive{{ else }}color-negative{{ end }}">{{ printf "%+.1f" (percentChange $price $sma50) }}%</div>
+      {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html>
+        <p class="sc-tip">@TIP_SMA200@</p>
+        {{- if gt $sma200 0.0 }}
+        <p class="sc-now">Now: SMA 200 = {{ printf "%.2f" $sma200 }}, price is {{ printf "%+.1f" (percentChange $price $sma200) }}% &mdash; {{ if ge $price $sma200 }}long-term uptrend.{{ else }}long-term downtrend.{{ end }}</p>
+        {{- else }}
+        <p class="sc-now">Not enough history (needs 200 sessions).</p>
+        {{- end }}
+      </div>
+      <div class="sc-label">SMA 200</div>
+      {{- if gt $sma200 0.0 }}
+      <div class="sc-value {{ if ge $price $sma200 }}color-positive{{ else }}color-negative{{ end }}">{{ printf "%+.1f" (percentChange $price $sma200) }}%</div>
+      {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html>
+        <p class="sc-tip">@TIP_TREND@</p>
+        {{- if and (gt $sma50 0.0) (gt $sma200 0.0) }}
+        <p class="sc-now">Now: SMA 50 {{ printf "%.2f" $sma50 }} vs SMA 200 {{ printf "%.2f" $sma200 }}.</p>
+        {{- end }}
+      </div>
+      <div class="sc-label">Trend</div>
+      {{- if and (gt $sma50 0.0) (gt $sma200 0.0) }}
+      {{- if ge $sma50 $sma200 }}<div class="sc-value color-positive">Golden</div>{{ else }}<div class="sc-value color-negative">Death</div>{{ end }}
+      {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html>
+        <p class="sc-tip">@TIP_DRAWDOWN@</p>
+        {{- if gt $hi52 0.0 }}
+        <p class="sc-now">Now: 52w high {{ printf "%.2f" $hi52 }}, price {{ printf "%.1f" (percentChange $price $hi52) }}% from it.</p>
+        {{- end }}
+      </div>
+      <div class="sc-label">From high</div>
+      {{- if gt $hi52 0.0 }}
+      {{- $dd := percentChange $price $hi52 }}
+      <div class="sc-value {{ if le $dd -20.0 }}color-negative{{ else if ge $dd -5.0 }}color-positive{{ end }}">{{ printf "%.1f" $dd }}%</div>
+      {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
+    </div>
+
+    <div class="sc-stat sc-stat-wide cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html>
+        <p class="sc-tip">@TIP_WEEK52@</p>
+        <p class="sc-now">Now: low {{ printf "%.2f" $lo52 }}, high {{ printf "%.2f" $hi52 }}, price {{ printf "%.2f" $price }}.</p>
+      </div>
+      <div class="sc-label">52w range</div>
+      {{- $pos := 50.0 }}
+      {{- if gt $hi52 $lo52 }}{{ $pos = mul (div (sub $price $lo52) (sub $hi52 $lo52)) 100.0 }}{{ end }}
+      {{- if lt $pos 0.0 }}{{ $pos = 0.0 }}{{ end }}{{ if gt $pos 100.0 }}{{ $pos = 100.0 }}{{ end }}
+      <div class="sc-bar"><div class="sc-bar-dot" style="left: {{ printf "%.0f" $pos }}%"></div></div>
+      <div class="sc-bar-labels"><span>{{ printf "%.2f" $lo52 }}</span><span>{{ printf "%.2f" $hi52 }}</span></div>
+    </div>
+  </div>
+
+  {{- if .Options.BoolOr "fundamentals" false }}
+  {{- $metric := newRequest "https://finnhub.io/api/v1/stock/metric" | withParameter "symbol" $sym | withParameter "metric" "all" | withParameter "token" "@FINNHUB_TOKEN@" | getResponse }}
+  {{- $m := $metric.JSON.Get "metric" }}
+  {{- if $metric.JSON.Exists "metric" }}
+  <div class="sc-section cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+    <div data-popover-html><p class="sc-tip">@TIP_VALUATION@</p></div>
+    Valuation <span class="sc-i">ⓘ</span>
+  </div>
+  <div class="sc-grid">
+    {{- $pe := $m.Float "peTTM" }}
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html><p class="sc-tip">@TIP_PE@</p></div>
+      <div class="sc-label">P/E</div>
+      <div class="sc-value">{{ if ne ($m.String "peTTM") "" }}{{ printf "%.1f" $pe }}{{ else }}&mdash;{{ end }}</div>
+    </div>
+
+    {{- $g5 := $m.Float "epsGrowth5Y" }}
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html>
+        <p class="sc-tip">@TIP_PEG@</p>
+        {{- if and (gt $pe 0.0) (gt $g5 0.0) }}
+        <p class="sc-now">Now: P/E {{ printf "%.1f" $pe }} &divide; 5y EPS growth {{ printf "%.1f" $g5 }}%.</p>
+        {{- end }}
+      </div>
+      <div class="sc-label">PEG</div>
+      {{- if and (gt $pe 0.0) (gt $g5 0.0) }}
+      {{- $peg := div $pe $g5 }}
+      <div class="sc-value {{ if lt $peg 1.0 }}color-positive{{ else if gt $peg 2.0 }}color-negative{{ end }}">{{ printf "%.2f" $peg }}</div>
+      {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html><p class="sc-tip">@TIP_PS@</p></div>
+      <div class="sc-label">P/S</div>
+      <div class="sc-value">{{ if ne ($m.String "psTTM") "" }}{{ printf "%.1f" ($m.Float "psTTM") }}{{ else }}&mdash;{{ end }}</div>
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html><p class="sc-tip">@TIP_PB@</p></div>
+      <div class="sc-label">P/B</div>
+      <div class="sc-value">{{ if ne ($m.String "pbAnnual") "" }}{{ printf "%.1f" ($m.Float "pbAnnual") }}{{ else }}&mdash;{{ end }}</div>
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html><p class="sc-tip">@TIP_EPSGROWTH@</p></div>
+      <div class="sc-label">EPS growth</div>
+      {{- if ne ($m.String "epsGrowthTTMYoy") "" }}
+      {{- $v := $m.Float "epsGrowthTTMYoy" }}
+      <div class="sc-value {{ if ge $v 0.0 }}color-positive{{ else }}color-negative{{ end }}">{{ printf "%+.0f" $v }}%</div>
+      {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html><p class="sc-tip">@TIP_REVGROWTH@</p></div>
+      <div class="sc-label">Rev growth</div>
+      {{- if ne ($m.String "revenueGrowthTTMYoy") "" }}
+      {{- $v := $m.Float "revenueGrowthTTMYoy" }}
+      <div class="sc-value {{ if ge $v 0.0 }}color-positive{{ else }}color-negative{{ end }}">{{ printf "%+.0f" $v }}%</div>
+      {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html><p class="sc-tip">@TIP_MARGIN@</p></div>
+      <div class="sc-label">Net margin</div>
+      <div class="sc-value">{{ if ne ($m.String "netProfitMarginTTM") "" }}{{ printf "%.0f" ($m.Float "netProfitMarginTTM") }}%{{ else }}&mdash;{{ end }}</div>
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html><p class="sc-tip">@TIP_ROE@</p></div>
+      <div class="sc-label">ROE</div>
+      {{- if ne ($m.String "roeTTM") "" }}
+      {{- $v := $m.Float "roeTTM" }}
+      <div class="sc-value {{ if ge $v 15.0 }}color-positive{{ else if lt $v 0.0 }}color-negative{{ end }}">{{ printf "%.0f" $v }}%</div>
+      {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html><p class="sc-tip">@TIP_BETA@</p></div>
+      <div class="sc-label">Beta</div>
+      <div class="sc-value">{{ if ne ($m.String "beta") "" }}{{ printf "%.2f" ($m.Float "beta") }}{{ else }}&mdash;{{ end }}</div>
+    </div>
+
+    <div class="sc-stat cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html><p class="sc-tip">@TIP_DIVIDEND@</p></div>
+      <div class="sc-label">Dividend</div>
+      <div class="sc-value">{{ if gt ($m.Float "dividendYieldIndicatedAnnual") 0.0 }}{{ printf "%.2f" ($m.Float "dividendYieldIndicatedAnnual") }}%{{ else }}&mdash;{{ end }}</div>
+    </div>
+
+    {{- $rec := newRequest "https://finnhub.io/api/v1/stock/recommendation" | withParameter "symbol" $sym | withParameter "token" "@FINNHUB_TOKEN@" | getResponse }}
+    {{- $r := $rec.JSON.Get "0" }}
+    {{- if $r.Exists "period" }}
+    {{- $buy := add ($r.Int "strongBuy") ($r.Int "buy") }}
+    {{- $hold := $r.Int "hold" }}
+    {{- $sell := add ($r.Int "strongSell") ($r.Int "sell") }}
+    <div class="sc-stat sc-stat-wide cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+      <div data-popover-html>
+        <p class="sc-tip">@TIP_ANALYSTS@</p>
+        <p class="sc-now">As of {{ $r.String "period" }}: {{ $buy }} buy, {{ $hold }} hold, {{ $sell }} sell.</p>
+      </div>
+      <div class="sc-label">Analysts</div>
+      <div class="sc-value"><span class="color-positive">{{ $buy }}</span> / {{ $hold }} / <span class="color-negative">{{ $sell }}</span></div>
+    </div>
+    {{- end }}
+  </div>
+
+  {{- $news := newRequest "https://finnhub.io/api/v1/company-news" | withParameter "symbol" $sym | withParameter "from" (offsetNow "-168h" | formatTime "DateOnly") | withParameter "to" (now | formatTime "DateOnly") | withParameter "token" "@FINNHUB_TOKEN@" | getResponse }}
+  {{- $items := $news.JSON.Array "" }}
+  {{- if gt (len $items) 0 }}
+  <div class="sc-section cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+    <div data-popover-html><p class="sc-tip">@TIP_NEWS@</p></div>
+    News <span class="sc-i">ⓘ</span>
+  </div>
+  <ul class="list list-gap-10 sc-news">
+    {{- range $i, $item := $items }}{{ if lt $i 3 }}
+    <li>
+      <a class="color-primary-if-not-visited text-truncate-2" href="{{ $item.String "url" }}" target="_blank" rel="noreferrer">{{ $item.String "headline" }}</a>
+      <ul class="list-horizontal-text size-h6">
+        <li>{{ $item.String "source" }}</li>
+        <li {{ $item.Int "datetime" | printf "%d" | parseRelativeTime "unix" }}></li>
+      </ul>
+    </li>
+    {{- end }}{{ end }}
+  </ul>
+  {{- end }}
+  {{- end }}
+  {{- end }}
+</div>
+{{- end }}

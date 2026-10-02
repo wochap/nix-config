@@ -1,0 +1,13 @@
+{{- /* Range @LABEL@: first index, min, max, first close inside the window */ -}}
+{{- $cut@KEY@ := sub $lastTs @SECONDS@ -}}
+{{- $start@KEY@ := -1 -}}{{- $min@KEY@ := 0.0 -}}{{- $max@KEY@ := 0.0 -}}{{- $first@KEY@ := 0.0 -}}
+{{- range $i, $c := $closes -}}
+  {{- $v := $c.Float "" -}}
+  {{- if and (gt $v 0.0) (ge ((index $ts $i).Int "") $cut@KEY@) -}}
+    {{- if lt $start@KEY@ 0 }}{{ $start@KEY@ = $i }}{{ $first@KEY@ = $v }}{{ $min@KEY@ = $v }}{{ $max@KEY@ = $v }}{{ end -}}
+    {{- if lt $v $min@KEY@ }}{{ $min@KEY@ = $v }}{{ end -}}
+    {{- if gt $v $max@KEY@ }}{{ $max@KEY@ = $v }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- $chg@KEY@ := 0.0 -}}
+{{- if gt $first@KEY@ 0.0 }}{{ $chg@KEY@ = percentChange $price $first@KEY@ }}{{ end -}}

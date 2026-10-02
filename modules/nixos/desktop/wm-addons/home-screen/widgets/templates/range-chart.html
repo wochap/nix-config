@@ -1,0 +1,13 @@
+<div class="sc-chart sc-c@KEY@ {{ if ge $chg@KEY@ 0.0 }}color-positive{{ else }}color-negative{{ end }}">
+  {{- $span := sub (sub $n 1) $start@KEY@ }}
+  {{- $rng := sub $max@KEY@ $min@KEY@ }}
+  {{- if le $rng 0.0 }}{{ $rng = 1.0 }}{{ end }}
+  {{- if and (ge $start@KEY@ 0) (gt $span 0) }}
+  <svg viewBox="0 0 300 80" preserveAspectRatio="none" width="100%" height="100%" aria-label="@LABEL@ price chart">
+    <polyline fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"
+      points="{{ range $i, $c := $closes }}{{ $v := $c.Float "" }}{{ if and (ge $i $start@KEY@) (gt $v 0.0) }}{{ printf "%.1f,%.1f " (div (mul (sub $i $start@KEY@) 300.0) $span) (add 4.0 (mul (div (sub $max@KEY@ $v) $rng) 72.0)) }}{{ end }}{{ end }}"/>
+  </svg>
+  <span class="sc-chart-max">{{ printf "%.2f" $max@KEY@ }}</span>
+  <span class="sc-chart-min">{{ printf "%.2f" $min@KEY@ }}</span>
+  {{- end }}
+</div>

@@ -1,0 +1,220 @@
+/* Shared styles for the custom home-screen widgets. Injected once per page
+   through a frameless custom-api widget (see widgets/default.nix). Popover
+   content is moved out of the card while visible, so tooltip classes must not
+   depend on card ancestors. */
+
+.sc {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sc-r {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sc-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.sc-price {
+  font-size: var(--font-size-h2);
+  font-weight: 600;
+}
+
+.sc-cur {
+  font-size: var(--font-size-h6);
+  color: var(--color-text-subdue);
+  font-weight: normal;
+}
+
+.sc-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sc-tab {
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-separator);
+  font-size: var(--font-size-h6);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.sc-tab:hover {
+  border-color: var(--color-text-subdue);
+}
+
+.sc-r1m:checked ~ .sc-tabs .sc-t1m,
+.sc-r3m:checked ~ .sc-tabs .sc-t3m,
+.sc-r1y:checked ~ .sc-tabs .sc-t1y {
+  background: var(--color-widget-background-highlight);
+  border-color: var(--color-primary);
+  color: var(--color-text-highlight);
+}
+
+.sc-r:focus-visible ~ .sc-tabs {
+  outline: 1px dashed var(--color-primary);
+  outline-offset: 2px;
+}
+
+.sc-chart {
+  display: none;
+  position: relative;
+  height: 80px;
+}
+
+.sc-r1m:checked ~ .sc-c1m,
+.sc-r3m:checked ~ .sc-c3m,
+.sc-r1y:checked ~ .sc-c1y {
+  display: block;
+}
+
+.sc-chart svg {
+  display: block;
+  overflow: visible;
+}
+
+.sc-chart-max,
+.sc-chart-min {
+  position: absolute;
+  right: 0;
+  font-size: 1rem;
+  color: var(--color-text-subdue);
+  background: var(--color-widget-background);
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.sc-chart-max { top: 0; }
+.sc-chart-min { bottom: 0; }
+
+.sc-section {
+  font-size: var(--font-size-h6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-subdue);
+  border-top: 1px solid var(--color-separator);
+  padding-top: 8px;
+  width: fit-content;
+}
+
+.sc-i {
+  opacity: 0.7;
+}
+
+.sc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px 12px;
+}
+
+.sc-stat {
+  min-width: 0;
+}
+
+.sc-stat-wide {
+  grid-column: span 2;
+}
+
+.sc-label {
+  font-size: var(--font-size-h6);
+  color: var(--color-text-subdue);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sc-value {
+  font-size: var(--font-size-h4);
+  color: var(--color-text-highlight);
+  white-space: nowrap;
+}
+
+.sc-value.color-positive { color: var(--color-positive); }
+.sc-value.color-negative { color: var(--color-negative); }
+
+.sc-bar {
+  position: relative;
+  height: 4px;
+  margin: 8px 0 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--color-negative), var(--color-separator), var(--color-positive));
+}
+
+.sc-bar-dot {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-text-highlight);
+  border: 2px solid var(--color-widget-background);
+}
+
+.sc-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: var(--color-text-subdue);
+}
+
+.sc-tip {
+  line-height: 1.5;
+}
+
+.sc-now {
+  margin-top: 6px;
+  color: var(--color-text-highlight);
+}
+
+/* Fear & Greed */
+.fg {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fg-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.fg-score {
+  font-size: var(--font-size-h1);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.fg-bar {
+  position: relative;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--color-negative), var(--color-separator), var(--color-positive));
+}
+
+/* Macro rates */
+.fr-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .sc-chart { height: 64px; }
+  .sc-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
+}
