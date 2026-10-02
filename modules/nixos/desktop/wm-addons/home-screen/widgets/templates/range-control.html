@@ -1,0 +1,25 @@
+{{- /*
+  Page-level range switch for every chart card. Glance injects page content
+  with innerHTML, so <script> tags never run; inline event handlers do. The
+  hidden image's onerror restores the last choice saved in localStorage.
+  Per-card tabs keep working; the last click wins.
+*/ -}}
+<div class="sc-ctl">
+  <span class="size-h6 uppercase color-subdue">All charts</span>
+  @RANGE_BUTTONS@
+</div>
+<img hidden alt="" src="data:," onerror="(function () {
+  var apply = function (range) {
+    document.querySelectorAll('.sc-r' + range).forEach(function (input) { input.checked = true; });
+    document.querySelectorAll('.sc-ctl-btn').forEach(function (button) { button.classList.toggle('sc-ctl-active', button.dataset.range === range); });
+  };
+  document.querySelectorAll('.sc-ctl-btn').forEach(function (button) {
+    button.addEventListener('click', function () {
+      apply(button.dataset.range);
+      try { localStorage.setItem('home-screen-chart-range', button.dataset.range); } catch (e) {}
+    });
+  });
+  var saved = null;
+  try { saved = localStorage.getItem('home-screen-chart-range'); } catch (e) {}
+  if (saved) apply(saved);
+})()">

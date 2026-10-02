@@ -4,6 +4,9 @@
 # `fundamentals` controls Finnhub valuation/news lookups. It defaults to true
 # for plain US tickers (no `=`, `-`, `.` or `^` in the symbol); ETFs must opt
 # out explicitly since Finnhub has no P/E or earnings for them.
+#
+# `signal = false` hides the buy-zone verdict for things you do not buy as an
+# investment (volatility index, yields, currency rates).
 {
   macro = {
     title = "Macro";
@@ -26,14 +29,17 @@
       {
         symbol = "^VIX";
         name = "Volatility Index";
+        signal = false;
       }
       {
         symbol = "^TNX";
         name = "US 10Y Yield";
+        signal = false;
       }
       {
         symbol = "DX-Y.NYB";
         name = "US Dollar Index";
+        signal = false;
       }
     ];
   };
@@ -74,6 +80,7 @@
       {
         symbol = "PEN=X";
         name = "USD / PEN";
+        signal = false;
       }
     ];
   };

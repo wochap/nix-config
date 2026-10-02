@@ -48,6 +48,11 @@ let
       seconds = 92 * 86400;
     }
     {
+      key = "6m";
+      label = "6M";
+      seconds = 183 * 86400;
+    }
+    {
       key = "1y";
       label = "1Y";
       seconds = 400 * 86400;
@@ -99,7 +104,7 @@ rec {
     markets = map (market: { inherit (market) symbol name; }) group.markets;
   };
 
-  # Tall card: 1M/3M/1Y chart, technical signals and, for US equities with a
+  # Tall card: 1M/3M/6M/1Y chart, technical signals and, for US equities with a
   # Finnhub key, valuation, analyst consensus and company news.
   mkStockChartWidget = market: {
     type = "custom-api";
@@ -117,9 +122,18 @@ rec {
       inherit (market) symbol;
       uid = htmlId market.symbol;
       fundamentals = hasFundamentals market;
+      signal = market.signal or true;
     };
     template = stockChartTemplate;
   };
+
+  # Page-level 1M/3M/6M/1Y switch for every chart card.
+  rangeControl = mkStatic (substitute {
+    "@RANGE_BUTTONS@" = lib.concatMapStrings (
+      range:
+      ''<button type="button" class="sc-ctl-btn${lib.optionalString (range.key == "3m") " sc-ctl-active"}" data-range="${range.key}">${range.label}</button>''
+    ) ranges;
+  } (readTemplate "range-control.html"));
 
   # Shared CSS for every custom widget; include once per page.
   styles = mkStatic "<style>${readTemplate "styles.css"}</style>";

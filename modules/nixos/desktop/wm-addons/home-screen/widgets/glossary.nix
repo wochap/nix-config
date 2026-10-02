@@ -26,6 +26,8 @@
   dividend = "<b>Dividend yield</b>: yearly dividends as a percent of the price.";
   analysts = "<b>Analyst consensus</b>: latest count of Wall Street ratings (strong buy + buy / hold / sell + strong sell). Useful as sentiment, often late on turns.";
 
+  verdict = "<b>Buy-zone checklist</b>: looks for a <i>pullback inside an uptrend</i>, a classic lower-risk entry. The long-term trend must be up, while the short term has cooled off. All checks passing earns the animated border.";
+
   news = "<b>Company news</b>: latest headlines from the last 7 days that mention this ticker.";
 
   earnings = "<b>Earnings calendar</b>: upcoming quarterly reports for your watchlist in the next 14 days. Prices often jump or drop 5 to 15% on these days. <i>BMO</i> = before market open, <i>AMC</i> = after market close.";

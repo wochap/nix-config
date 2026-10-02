@@ -2,9 +2,10 @@
   Stock chart card. Main request: Yahoo chart API, range=1y interval=1d.
   Preprocessed by widgets/default.nix:
     @TIP_*@          tooltip texts from glossary.nix
-    @RANGE_*@        per-range blocks from range-{calc,tab,chart}.html (1M / 3M / 1Y)
+    @RANGE_*@        per-range blocks from range-{calc,tab,chart}.html (1M / 3M / 6M / 1Y)
     @FINNHUB_TOKEN@  Glance env reference to the Finnhub API key
-  Options: symbol, uid (symbol safe for HTML ids), fundamentals (bool)
+  Options: symbol, uid (symbol safe for HTML ids), fundamentals (bool),
+           signal (bool, buy-zone verdict; off for indexes, yields, FX)
 */ -}}
 {{- $uid := .Options.StringOr "uid" "x" -}}
 {{- $sym := .Options.StringOr "symbol" "" -}}
@@ -63,6 +64,7 @@
 <div class="sc">
   <input type="radio" class="sc-r sc-r1m" name="sc-{{ $uid }}" id="sc-{{ $uid }}-1m">
   <input type="radio" class="sc-r sc-r3m" name="sc-{{ $uid }}" id="sc-{{ $uid }}-3m" checked>
+  <input type="radio" class="sc-r sc-r6m" name="sc-{{ $uid }}" id="sc-{{ $uid }}-6m">
   <input type="radio" class="sc-r sc-r1y" name="sc-{{ $uid }}" id="sc-{{ $uid }}-1y">
 
   <div class="sc-head cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="280px">
@@ -164,6 +166,8 @@
     </div>
   </div>
 
+  {{- /* Valuation inputs for the buy-zone verdict; -1 = unavailable */ -}}
+  {{- $pegVal := -1.0 -}}{{- $anBuy := -1 -}}{{- $anRest := 0 -}}
   {{- if .Options.BoolOr "fundamentals" false }}
   {{- $metric := newRequest "https://finnhub.io/api/v1/stock/metric" | withParameter "symbol" $sym | withParameter "metric" "all" | withParameter "token" "@FINNHUB_TOKEN@" | getResponse }}
   {{- $m := $metric.JSON.Get "metric" }}
@@ -190,7 +194,7 @@
       </div>
       <div class="sc-label">PEG</div>
       {{- if and (gt $pe 0.0) (gt $g5 0.0) }}
-      {{- $peg := div $pe $g5 }}
+      {{- $peg := div $pe $g5 }}{{ $pegVal = $peg }}
       <div class="sc-value {{ if lt $peg 1.0 }}color-positive{{ else if gt $peg 2.0 }}color-negative{{ end }}">{{ printf "%.2f" $peg }}</div>
       {{- else }}<div class="sc-value">&mdash;</div>{{ end }}
     </div>
@@ -258,6 +262,7 @@
     {{- $buy := add ($r.Int "strongBuy") ($r.Int "buy") }}
     {{- $hold := $r.Int "hold" }}
     {{- $sell := add ($r.Int "strongSell") ($r.Int "sell") }}
+    {{- $anBuy = $buy }}{{ $anRest = add $hold $sell }}
     <div class="sc-stat sc-stat-wide cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
       <div data-popover-html>
         <p class="sc-tip">@TIP_ANALYSTS@</p>
@@ -289,6 +294,56 @@
   </ul>
   {{- end }}
   {{- end }}
+  {{- end }}
+
+  {{- /*
+    Buy-zone verdict: "buy the dip in an uptrend" checklist. Rendered last so
+    every input is known; CSS `order` moves it under the header.
+  */ -}}
+  {{- if and (.Options.BoolOr "signal" true) (gt $sma200 0.0) (ge $rsi 0.0) (gt $hi52 0.0) }}
+  {{- $dd := percentChange $price $hi52 }}
+  {{- $okTrend := gt $price $sma200 }}
+  {{- $okGolden := gt $sma50 $sma200 }}
+  {{- $okRsi := le $rsi 50.0 }}
+  {{- $okPullback := le $price (mul $sma50 1.03) }}
+  {{- $okDiscount := and (le $dd -5.0) (ge $dd -30.0) }}
+  {{- $total := 5 }}{{ $pass := 0 }}
+  {{- if $okTrend }}{{ $pass = add $pass 1 }}{{ end }}
+  {{- if $okGolden }}{{ $pass = add $pass 1 }}{{ end }}
+  {{- if $okRsi }}{{ $pass = add $pass 1 }}{{ end }}
+  {{- if $okPullback }}{{ $pass = add $pass 1 }}{{ end }}
+  {{- if $okDiscount }}{{ $pass = add $pass 1 }}{{ end }}
+  {{- $okPeg := false }}{{ $okAnalysts := false }}
+  {{- if ge $pegVal 0.0 }}{{ $total = add $total 1 }}{{ $okPeg = lt $pegVal 1.5 }}{{ if $okPeg }}{{ $pass = add $pass 1 }}{{ end }}{{ end }}
+  {{- if ge $anBuy 0 }}{{ $total = add $total 1 }}{{ $okAnalysts = gt $anBuy $anRest }}{{ if $okAnalysts }}{{ $pass = add $pass 1 }}{{ end }}{{ end }}
+  {{- $missing := sub $total $pass }}
+  <div class="sc-verdict cursor-help {{ if eq $missing 0 }}sc-verdict-buy{{ else if eq $missing 1 }}sc-verdict-near{{ end }}" data-popover-type="html" data-popover-position="below" data-popover-max-width="320px">
+    <div data-popover-html>
+      <p class="sc-tip">@TIP_VERDICT@</p>
+      <ul class="sc-checks">
+        <li class="{{ if $okTrend }}color-positive{{ else }}color-negative{{ end }}">{{ if $okTrend }}&#10003;{{ else }}&#10007;{{ end }} Price above SMA 200 (long-term uptrend)</li>
+        <li class="{{ if $okGolden }}color-positive{{ else }}color-negative{{ end }}">{{ if $okGolden }}&#10003;{{ else }}&#10007;{{ end }} SMA 50 above SMA 200 (golden regime)</li>
+        <li class="{{ if $okRsi }}color-positive{{ else }}color-negative{{ end }}">{{ if $okRsi }}&#10003;{{ else }}&#10007;{{ end }} RSI {{ printf "%.0f" $rsi }} &le; 50 (cooled off, not overbought)</li>
+        <li class="{{ if $okPullback }}color-positive{{ else }}color-negative{{ end }}">{{ if $okPullback }}&#10003;{{ else }}&#10007;{{ end }} Price within 3% of SMA 50 or below (pulled back to support)</li>
+        <li class="{{ if $okDiscount }}color-positive{{ else }}color-negative{{ end }}">{{ if $okDiscount }}&#10003;{{ else }}&#10007;{{ end }} {{ printf "%.1f" $dd }}% from 52w high, within &minus;5% to &minus;30% (discount, not a collapse)</li>
+        {{- if ge $pegVal 0.0 }}
+        <li class="{{ if $okPeg }}color-positive{{ else }}color-negative{{ end }}">{{ if $okPeg }}&#10003;{{ else }}&#10007;{{ end }} PEG {{ printf "%.2f" $pegVal }} &lt; 1.5 (fair price for its growth)</li>
+        {{- end }}
+        {{- if ge $anBuy 0 }}
+        <li class="{{ if $okAnalysts }}color-positive{{ else }}color-negative{{ end }}">{{ if $okAnalysts }}&#10003;{{ else }}&#10007;{{ end }} Analysts: {{ $anBuy }} buy vs {{ $anRest }} hold/sell</li>
+        {{- end }}
+      </ul>
+      <p class="sc-now">Rule-based checklist, not financial advice. Check news and the earnings date before buying.</p>
+    </div>
+    {{- if eq $missing 0 }}
+    <span class="sc-verdict-label">&#9733; Buy zone</span>
+    {{- else if eq $missing 1 }}
+    <span class="sc-verdict-label">Near buy zone</span>
+    {{- else }}
+    <span class="sc-verdict-label">Buy setup</span>
+    {{- end }}
+    <span class="sc-verdict-score">{{ $pass }}/{{ $total }}</span>
+  </div>
   {{- end }}
 </div>
 {{- end }}

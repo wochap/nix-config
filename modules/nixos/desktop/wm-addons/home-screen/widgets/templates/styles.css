@@ -9,6 +9,12 @@
   gap: 10px;
 }
 
+/* The verdict is rendered last (it needs every metric) but shown under the
+   header. */
+.sc > * { order: 2; }
+.sc > .sc-head { order: 0; }
+.sc > .sc-verdict { order: 1; }
+
 .sc-r {
   position: absolute;
   opacity: 0;
@@ -56,6 +62,7 @@
 
 .sc-r1m:checked ~ .sc-tabs .sc-t1m,
 .sc-r3m:checked ~ .sc-tabs .sc-t3m,
+.sc-r6m:checked ~ .sc-tabs .sc-t6m,
 .sc-r1y:checked ~ .sc-tabs .sc-t1y {
   background: var(--color-widget-background-highlight);
   border-color: var(--color-primary);
@@ -75,6 +82,7 @@
 
 .sc-r1m:checked ~ .sc-c1m,
 .sc-r3m:checked ~ .sc-c3m,
+.sc-r6m:checked ~ .sc-c6m,
 .sc-r1y:checked ~ .sc-c1y {
   display: block;
 }
@@ -176,6 +184,101 @@
 .sc-now {
   margin-top: 6px;
   color: var(--color-text-highlight);
+}
+
+/* Buy-zone verdict */
+.sc-verdict {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-separator);
+  font-size: var(--font-size-h6);
+  color: var(--color-text-subdue);
+}
+
+.sc-verdict-score {
+  font-variant-numeric: tabular-nums;
+}
+
+.sc-verdict-near {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.sc-verdict-buy {
+  border-color: transparent;
+  color: var(--color-text-highlight);
+  font-weight: 600;
+  background:
+    linear-gradient(var(--color-widget-background), var(--color-widget-background)) padding-box,
+    conic-gradient(from var(--sc-angle), #ff5f6d, #ffc371, #f9f871, #5eead4, #60a5fa, #c084fc, #ff5f6d) border-box;
+  animation: sc-spin 4s linear infinite;
+}
+
+.sc-checks {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Animated rainbow border around the whole card when every check passes. */
+@property --sc-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes sc-spin {
+  to { --sc-angle: 360deg; }
+}
+
+.widget-content:has(> .sc > .sc-verdict-buy) {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--color-widget-background), var(--color-widget-background)) padding-box,
+    conic-gradient(from var(--sc-angle), #ff5f6d, #ffc371, #f9f871, #5eead4, #60a5fa, #c084fc, #ff5f6d) border-box;
+  animation: sc-spin 4s linear infinite;
+  box-shadow: 0 0 18px -6px #c084fc;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-verdict-buy,
+  .widget-content:has(> .sc > .sc-verdict-buy) {
+    animation: none;
+  }
+}
+
+/* Page-level range switch */
+.sc-ctl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  padding: 0 4px;
+}
+
+.sc-ctl-btn {
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-separator);
+  background: var(--color-widget-background);
+  color: var(--color-text-base);
+  font: inherit;
+}
+
+.sc-ctl-btn:hover {
+  border-color: var(--color-text-subdue);
+}
+
+.sc-ctl-btn.sc-ctl-active {
+  border-color: var(--color-primary);
+  color: var(--color-text-highlight);
+  background: var(--color-widget-background-highlight);
 }
 
 /* Fear & Greed */

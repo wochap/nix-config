@@ -141,6 +141,7 @@ in
 
                 widgets = [
                   widgets.styles
+                  widgets.rangeControl
                 ]
                 ++ widgets.mkChartSections [
                   "macro"
