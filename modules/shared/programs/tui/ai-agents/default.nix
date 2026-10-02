@@ -26,6 +26,7 @@ in
   imports = [
     ./sessiontap.nix
     ./cartridge
+    ./test-prompts
   ];
 
   options._custom.programs.ai-agents = {

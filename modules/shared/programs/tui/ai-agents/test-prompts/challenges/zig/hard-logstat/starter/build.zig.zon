@@ -1,0 +1,7 @@
+.{
+    .name = .logstat,
+    .version = "0.1.0",
+    .fingerprint = 0x236cf000ddca50d,
+    .minimum_zig_version = "0.16.0",
+    .paths = .{ "build.zig", "build.zig.zon", "src" },
+}

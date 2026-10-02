@@ -1,0 +1,4 @@
+neovim
+luajit
+luajitPackages.luacheck
+stylua

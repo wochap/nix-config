@@ -1,0 +1,5 @@
+debug=1 info=4 warn=1 error=3 invalid=4
+api 3
+db 3
+cache 2
+worker-1 1

@@ -1,0 +1,5 @@
+bash
+coreutils
+shellcheck
+shfmt
+bats

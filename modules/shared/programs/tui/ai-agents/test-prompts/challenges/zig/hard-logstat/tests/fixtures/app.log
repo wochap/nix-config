@@ -1,0 +1,14 @@
+INFO api: started
+DEBUG db: connect
+INFO db: query ok
+WARN  cache : miss
+ERROR db: timeout
+
+garbage line
+TRACE api: nope
+INFO api: request: GET /
+ERROR api:
+INFO bad source: x
+INFO :empty source
+ERROR worker-1: crashed
+INFO cache: hit
