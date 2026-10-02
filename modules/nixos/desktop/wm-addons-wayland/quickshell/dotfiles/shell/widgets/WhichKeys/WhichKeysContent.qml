@@ -1,7 +1,6 @@
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
-import QtQuick.Effects
 import QtQuick.Layouts
 import qs.config
 import qs.widgets.common
@@ -116,20 +115,31 @@ PanelWindow {
       Layout.alignment: Qt.AlignHCenter
       spacing: 16
 
-      StyledText {
-        visible: root.shownSubmap.length > 0
-        text: root.shownSubmap.toUpperCase()
-        color: Theme.options.peach
-        font.pixelSize: Styles.font.pixelSize.small * 2
-        font.weight: Font.Bold
+      Rectangle {
+        id: submapPill
 
-        layer.enabled: true
-        layer.effect: MultiEffect {
-          shadowEnabled: true
-          shadowBlur: 0.75
-          shadowColor: Theme.options.shadow
-          shadowHorizontalOffset: 1
-          shadowVerticalOffset: 1
+        visible: root.shownSubmap.length > 0
+        implicitWidth: submapLabel.implicitWidth + 24
+        implicitHeight: submapLabel.implicitHeight + 8
+        radius: 8
+        color: "transparent"
+
+        StyledRectangularShadow {
+          target: submapPill
+          z: -1
+          blur: 8
+          spread: 1
+          cached: false
+        }
+
+        StyledText {
+          id: submapLabel
+
+          anchors.centerIn: parent
+          text: root.shownSubmap.toUpperCase()
+          color: Theme.options.peach
+          font.pixelSize: Styles.font.pixelSize.small * 2
+          font.weight: Font.Bold
         }
       }
 
@@ -149,20 +159,31 @@ PanelWindow {
             borderColor: Theme.options.borderSecondary
           }
 
-          StyledText {
-            visible: modifierGroup.index < root.shownModifiers.length - 1
-            text: "+"
-            color: Theme.options.text
-            font.pixelSize: Styles.font.pixelSize.small * 2
-            font.weight: Font.Bold
+          Rectangle {
+            id: plusPill
 
-            layer.enabled: true
-            layer.effect: MultiEffect {
-              shadowEnabled: true
-              shadowBlur: 0.75
-              shadowColor: Theme.options.shadow
-              shadowHorizontalOffset: 1
-              shadowVerticalOffset: 1
+            visible: modifierGroup.index < root.shownModifiers.length - 1
+            implicitWidth: plusLabel.implicitWidth + 24
+            implicitHeight: plusLabel.implicitHeight + 8
+            radius: 8
+            color: "transparent"
+
+            StyledRectangularShadow {
+              target: plusPill
+              z: -1
+              blur: 8
+              spread: 1
+              cached: false
+            }
+
+            StyledText {
+              id: plusLabel
+
+              anchors.centerIn: parent
+              text: "+"
+              color: Theme.options.text
+              font.pixelSize: Styles.font.pixelSize.small * 2
+              font.weight: Font.Bold
             }
           }
         }
