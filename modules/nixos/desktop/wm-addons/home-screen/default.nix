@@ -16,6 +16,25 @@ let
     fred = cfg.fred.enable;
   };
   inherit (widgets) markets mkMarketsWidget;
+
+  # Watchlist groups in display order (Charts page, briefing podcast).
+  chartGroups = [
+    "macro"
+    "aiCompute"
+    "foundries"
+    "memory"
+    "equipment"
+    "networking"
+    "packaging"
+    "hyperscalers"
+    "aiServers"
+    "power"
+    "semiconductors"
+    "crypto"
+    "commodities"
+    "food"
+    "peru"
+  ];
 in
 {
   options._custom.desktop.home-screen = {
@@ -25,6 +44,19 @@ in
     # the key exists there, otherwise sops-nix activation fails.
     finnhub.enable = lib.mkEnableOption "Finnhub valuation, analyst, news and earnings data (personal-finnhub-api-key)";
     fred.enable = lib.mkEnableOption "FRED macro rates (personal-fred-api-key)";
+
+    # Dashboard data sources for other modules (e.g. the briefing podcast), so
+    # they follow the dashboard instead of scraping it.
+    data = lib.mkOption {
+      type = lib.types.attrs;
+      readOnly = true;
+      default = {
+        marketGroups = map (name: markets.${name}) chartGroups;
+        rssWidgets = lib.attrValues widgets.rss;
+        fredSeries = lib.optionals cfg.fred.enable widgets.fredSeries;
+        earningsSymbols = lib.optionals cfg.finnhub.enable widgets.earningsSymbols;
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -143,23 +175,7 @@ in
                   widgets.styles
                   widgets.rangeControl
                 ]
-                ++ widgets.mkChartSections [
-                  "macro"
-                  "aiCompute"
-                  "foundries"
-                  "memory"
-                  "equipment"
-                  "networking"
-                  "packaging"
-                  "hyperscalers"
-                  "aiServers"
-                  "power"
-                  "semiconductors"
-                  "crypto"
-                  "commodities"
-                  "food"
-                  "peru"
-                ];
+                ++ widgets.mkChartSections chartGroups;
               }
             ];
           }

@@ -189,6 +189,7 @@ in
     _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 16;
     _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
     _custom.services.ai.enableArticleSummary = true;
+    _custom.services.ai.briefing.enable = true;
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
     _custom.services.webhook.enable = true;

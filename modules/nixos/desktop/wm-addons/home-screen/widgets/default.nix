@@ -18,6 +18,7 @@ let
   markets = import ../markets.nix;
   glossary = import ./glossary.nix;
   rss = import ./rss.nix;
+  fredSeries = import ./fred.nix;
 
   chartLink = "https://www.tradingview.com/chart/?symbol={SYMBOL}";
 
@@ -94,7 +95,14 @@ let
   };
 in
 rec {
-  inherit markets rss;
+  inherit markets rss fredSeries;
+
+  # US equities with Finnhub coverage (earnings calendar, fundamentals).
+  earningsSymbols = lib.unique (
+    map (market: market.symbol) (
+      lib.filter hasFundamentals (lib.concatMap (group: group.markets) (lib.attrValues markets))
+    )
+  );
 
   # Compact rows with a 1-month sparkline (built-in Glance widget).
   mkMarketsWidget = group: {
@@ -154,13 +162,7 @@ rec {
     type = "custom-api";
     title = "Earnings Calendar";
     cache = "6h";
-    options.symbols = lib.concatStringsSep "|" (
-      lib.unique (
-        map (market: market.symbol) (
-          lib.filter hasFundamentals (lib.concatMap (group: group.markets) (lib.attrValues markets))
-        )
-      )
-    );
+    options.symbols = lib.concatStringsSep "|" earningsSymbols;
     template = render { } "earnings.html";
   };
 
@@ -184,34 +186,7 @@ rec {
               "@DOWN_COLOR@" = "positive";
             } "fred-row.html"
           )
-          [
-            {
-              id = "FEDFUNDS";
-              label = "Fed funds rate";
-              tip = "fedFunds";
-            }
-            {
-              id = "DGS10";
-              label = "10Y Treasury";
-              tip = "treasury10y";
-            }
-            {
-              id = "T10Y2Y";
-              label = "Yield curve 10Y-2Y";
-              tip = "yieldCurve";
-            }
-            {
-              id = "CPIAUCSL";
-              label = "CPI inflation YoY";
-              units = "pc1";
-              tip = "cpi";
-            }
-            {
-              id = "UNRATE";
-              label = "Unemployment";
-              tip = "unemployment";
-            }
-          ]
+          fredSeries
       + "</ul>";
   };
 

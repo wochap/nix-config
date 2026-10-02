@@ -28,6 +28,7 @@ in
     ./article-page
     ./article-scrape
     ./article-summary
+    ./briefing
     ./course-notes
     ./supertonic
     ./ocr
