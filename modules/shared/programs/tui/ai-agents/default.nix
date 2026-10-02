@@ -23,7 +23,10 @@ let
     ) skills;
 in
 {
-  imports = [ ./sessiontap.nix ];
+  imports = [
+    ./sessiontap.nix
+    ./cartridge
+  ];
 
   options._custom.programs.ai-agents = {
     enable = lib.mkEnableOption { };
