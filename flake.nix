@@ -47,8 +47,6 @@
     nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
     nixpkgs-wayland.inputs.nixpkgs.follows = "nixpkgs";
-    android-nixpkgs.url = "github:tadfisher/android-nixpkgs?rev=e2aec559a903ee1d94fd9935b4d558803adaf5a4"; # (08 mar 2022)
-    android-nixpkgs.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
     nixos-hardware.url = "github:NixOS/nixos-hardware?rev=9368056b73efb46eb14fd4667b99e0f81b805f28"; # master (05 aug 2025)
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay?rev=204823393e14fede7e69cacbccdb94882ac75822"; # (10 jul 2026)

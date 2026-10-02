@@ -2,41 +2,34 @@
   config,
   pkgs,
   lib,
-  inputs,
   ...
 }:
 
 let
   cfg = config._custom.services.android;
-  inherit (config._custom.globals) userName;
 
-  android-sdk-home-path = "Android/Sdk";
   phoneId = "04e8";
 
-  android-studio-stable = pkgs.androidStudioPackages.stable;
-  android-sdk = inputs.android-nixpkgs.sdk.${pkgs.stdenv.hostPlatform.system} (
-    sdkPkgs: with sdkPkgs; [
-      cmdline-tools-latest
-      emulator
-      platform-tools
+  buildToolsVersion = "36.0.0";
+  androidComposition = (pkgs.androidenv.override { licenseAccepted = true; }).composeAndroidPackages {
+    platformVersions = [
+      "36"
+      "37"
+    ];
+    buildToolsVersions = [
+      buildToolsVersion
+      "37.0.0"
+    ];
+    includeEmulator = true;
+    includeSystemImages = true;
+    systemImageTypes = [ "google_apis_playstore" ];
+    abiVersions = [ "x86_64" ];
+    includeSources = false;
+  };
+  androidSdk = androidComposition.androidsdk;
+  sdkRoot = "${androidSdk}/libexec/android-sdk";
 
-      # Android 30
-      build-tools-30-0-2
-      platforms-android-30
-
-      # Required by android emulator
-      sources-android-30
-      system-images-android-30-google-apis-playstore-x86
-      system-images-android-30-google-apis-x86
-
-      # Android 29
-      # build-tools-29-0-3
-      # platforms-android-29
-      # sources-android-29
-      # system-images-android-29-google-apis-playstore-x86-64
-      # system-images-android-29-google-apis-x86-64
-    ]
-  );
+  android-studio = pkgs.androidStudioPackages.stable.withSdk androidSdk;
 in
 {
   options._custom.services.android = {
@@ -44,40 +37,41 @@ in
     enableSdk = lib.mkEnableOption { };
   };
 
-  config = lib.mkIf cfg.enable {
-    # Enable android device debugging
-    _custom.user.extraGroups = [ "adbusers" ];
-    services.udev.extraRules = ''
-      SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", TAG+="uaccess"
-    '';
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        # Enable android device debugging
+        # NOTE: systemd 258 handles adb uaccess rules, adbusers group no longer exists
+        environment.systemPackages = [ pkgs.android-tools ];
+        services.udev.extraRules = ''
+          SUBSYSTEM=="usb", ATTR{idVendor}=="${phoneId}", MODE="0666", TAG+="uaccess"
+        '';
+      }
 
-    _custom.hm = lib.mkIf cfg.enableSdk {
-      config = {
-        home = {
-          file.${android-sdk-home-path}.source = "${android-sdk}/share/android-sdk";
+      (lib.mkIf cfg.enableSdk {
+        # Required by android emulator (/dev/kvm)
+        _custom.user.extraGroups = [ "kvm" ];
 
-          packages = with pkgs; [
-            android-tools
-            android-sdk
-            android-studio-stable
-            gradle
-            jdk11
+        _custom.hm.home = {
+          packages = [
+            android-studio
+            androidSdk
+            pkgs.jdk21
           ];
 
           sessionVariables = {
             # Required by android-studio on wm
             _JAVA_AWT_WM_NONREPARENTING = "1";
 
-            JAVA_HOME = pkgs.jdk11.home;
-            ANDROID_HOME = "/home/${userName}/${android-sdk-home-path}";
-            ANDROID_SDK_ROOT = "/home/${userName}/${android-sdk-home-path}";
+            JAVA_HOME = pkgs.jdk21.home;
+            ANDROID_HOME = sdkRoot;
+            ANDROID_SDK_ROOT = sdkRoot;
 
-            # Fix react-native aapt2 errors
-            GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${android-sdk}/share/android-sdk/build-tools/30.0.2/aapt2";
+            # Use nix aapt2 instead of the dynamically linked one gradle downloads from maven
+            GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${sdkRoot}/build-tools/${buildToolsVersion}/aapt2";
           };
         };
-
-      };
-    };
-  };
+      })
+    ]
+  );
 }
