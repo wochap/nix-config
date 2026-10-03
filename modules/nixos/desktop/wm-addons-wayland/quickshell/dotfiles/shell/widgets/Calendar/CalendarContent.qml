@@ -6,7 +6,6 @@ import Quickshell.Wayland
 import qs.config
 import qs.services
 import qs.widgets.common
-import qs.widgets.Bar.config
 
 PanelWindow {
   id: root
@@ -16,6 +15,9 @@ PanelWindow {
   property var focusedWorkspace: SHyprland.workspacesById?.[hyprlandMonitor?.activeWorkspace?.id] ?? null
   property var focusedClient: SHyprland.clientsByAddress?.[focusedWorkspace?.lastwindow] ?? null
   property bool isFocusedClientFullScreen: (focusedClient?.fullscreen ?? null) === 2
+  // space reserved by the bar (same method as the control center), the window
+  // ignores exclusive zones so the backdrop also covers the bar
+  readonly property real reservedTop: isFocusedClientFullScreen ? 0 : (hyprlandMonitor?.reserved?.[1] ?? 0)
 
   screen: root.focusedScreen
   WlrLayershell.namespace: "quickshell:calendar"
@@ -53,7 +55,7 @@ PanelWindow {
     anchors {
       top: parent.top
       right: parent.right
-      topMargin: (root.isFocusedClientFullScreen ? 0 : ConfigBar.barHeight) + ConfigCalendar.calendarMargin
+      topMargin: root.reservedTop + ConfigCalendar.calendarMargin
       rightMargin: ConfigCalendar.calendarMargin
     }
     implicitWidth: panel.implicitWidth

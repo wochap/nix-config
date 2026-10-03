@@ -114,7 +114,8 @@ Singleton {
           || event.name === "pin" || event.name === "urgent") {
         root.scheduleRefresh(true, false, false, false, true);
       } else if (event.name === "workspace" || event.name === "workspacev2"
-          || event.name === "focusedmon") {
+          || event.name === "focusedmon" || event.name === "activespecial"
+          || event.name === "activespecialv2") {
         root.scheduleRefresh(false, true, true, true, true);
       } else if (event.name === "createworkspace" || event.name === "createworkspacev2"
           || event.name === "destroyworkspace" || event.name === "destroyworkspacev2"

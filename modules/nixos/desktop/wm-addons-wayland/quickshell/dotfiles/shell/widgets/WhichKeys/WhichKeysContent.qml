@@ -88,10 +88,11 @@ PanelWindow {
     onTriggered: root.fadeOpacity = 1
   }
 
+  // same timing as the control center: enter 150ms OutCubic, exit 120ms InCubic
   Behavior on fadeOpacity {
     NumberAnimation {
-      duration: 140
-      easing.type: Easing.OutCubic
+      duration: root.backend.isOpen ? Styles.animation.duration : Styles.animation.exitDuration
+      easing.type: root.backend.isOpen ? Styles.animation.easingType : Styles.animation.exitEasingType
       onFinished: {
         if (root.fadeOpacity === 0)
           root.panelVisible = false;
