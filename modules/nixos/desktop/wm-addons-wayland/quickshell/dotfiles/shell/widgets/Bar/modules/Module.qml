@@ -16,6 +16,7 @@ WrapperRectangle {
   property string materialIcon: ""
   property int iconSize
   property string iconSystem: ""
+  property int iconSystemSize: Styles.font.pixelSize.hugeass
   property int spacing: icon.length > 0 ? ConfigBar.modulesSpacing / 2 : ConfigBar.modulesSpacing / 4
 
   leftMargin: paddingX
@@ -29,7 +30,9 @@ WrapperRectangle {
     SystemIcon {
       icon: root.iconSystem
       visible: root.iconSystem.length > 0
-      size: Styles.font.pixelSize.hugeass
+      enableColoriser: true
+      color: root.fgColor
+      size: root.iconSystemSize
     }
 
     WoosIcon {

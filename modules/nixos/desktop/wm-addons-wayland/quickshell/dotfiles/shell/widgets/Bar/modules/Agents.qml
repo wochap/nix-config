@@ -14,7 +14,7 @@ RowLayout {
   property bool isVisible: runningCount > 0 || blockedCount > 0
 
   visible: isVisible
-  spacing: ConfigBar.modulesSpacing
+  spacing: 0
 
   Loader {
     active: root.runningCount > 0

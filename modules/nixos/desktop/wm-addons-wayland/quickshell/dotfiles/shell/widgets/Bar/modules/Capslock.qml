@@ -13,9 +13,10 @@ Loader {
   active: isVisible
   visible: isVisible
   sourceComponent: Component {
-    MaterialIcon {
-      icon: "keyboard_capslock_badge"
-      size: Styles.font.pixelSize.huge
+    SystemIcon {
+      enableColoriser: true
+      icon: "capslock-enabled-symbolic"
+      size: Styles.font.pixelSize.hugeass
       color: Theme.options.peach
     }
   }

@@ -14,8 +14,8 @@ Loader {
   visible: isVisible
   sourceComponent: Component {
     Module {
-      materialIcon: "mail"
-      iconSize: Styles.font.pixelSize.huge
+      iconSystem: "mail-unread"
+      iconSystemSize: Styles.font.pixelSize.hugeass
       label: root.unread.toString()
       paddingX: 0
       bgColor: "transparent"

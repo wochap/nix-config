@@ -160,13 +160,13 @@ PanelWindow {
           animation: Styles.animations.colorAnimation.createObject(this)
         }
 
-        MaterialIcon {
+        SystemIcon {
+          enableColoriser: true
           anchors.horizontalCenter: parent.horizontalCenter
           anchors.bottom: parent.bottom
           anchors.bottomMargin: 8
           color: Theme.options.crust
-          size: Styles.font.pixelSize.larger
-          weight: Font.Normal
+          size: Styles.font.pixelSize.hugeass
           icon: root.isMuted && root.mutedIcon.length > 0 ? root.mutedIcon : root.icon
         }
       }

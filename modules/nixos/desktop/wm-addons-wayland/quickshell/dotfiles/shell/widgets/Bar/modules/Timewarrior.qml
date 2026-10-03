@@ -14,7 +14,8 @@ Loader {
   visible: isVisible
   sourceComponent: Component {
     Module {
-      materialIcon: "punch_clock"
+      iconSystem: "appointment-soon-symbolic"
+      iconSystemSize: Styles.font.pixelSize.large
       iconSize: Styles.font.pixelSize.huge
       label: value
       paddingX: 0

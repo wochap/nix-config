@@ -15,7 +15,7 @@ Loader {
   sourceComponent: Component {
     MaterialIcon {
       icon: "schedule_send"
-      size: Styles.font.pixelSize.hugeass
+      size: 28
       color: Theme.options.blue
     }
   }

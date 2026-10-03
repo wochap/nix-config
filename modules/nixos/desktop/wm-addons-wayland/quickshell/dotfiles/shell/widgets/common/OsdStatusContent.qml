@@ -15,8 +15,8 @@ PanelWindow {
   property bool flagValue: !!root.service[root.serviceFlagKey]
   property string iconOn: ""
   property string iconOff: ""
-  property string materialIconOn: ""
-  property string materialIconOff: ""
+  property string systemIconOn: ""
+  property string systemIconOff: ""
   property color colorOn: Theme.options.peach
   property color colorOff: Theme.options.text
   property bool isOpen: false
@@ -142,13 +142,13 @@ PanelWindow {
         icon: root.flagValue ? root.iconOn : root.iconOff
       }
 
-      MaterialIcon {
-        visible: root.materialIconOn.length > 0
+      SystemIcon {
+        enableColoriser: true
+        visible: root.systemIconOn.length > 0
         anchors.centerIn: parent
         color: root.flagValue ? root.colorOn : root.colorOff
         size: 44
-        icon: root.flagValue ? root.materialIconOn : root.materialIconOff
-        weight: Font.Normal
+        icon: root.flagValue ? root.systemIconOn : root.systemIconOff
       }
     }
   }

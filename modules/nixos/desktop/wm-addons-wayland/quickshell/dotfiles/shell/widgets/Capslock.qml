@@ -8,7 +8,8 @@ OsdStatus {
   serviceSignalName: "isLockChanged"
   serviceFlagKey: "isLock"
   namespace: "quickshell:capslock-osd"
-  materialIconOn: "keyboard_capslock"
+  systemIconOn: "capslock-enabled-symbolic"
+  systemIconOff: "capslock-disabled-symbolic"
   colorOn: Theme.options.yellow
   showIconOn: false
 }

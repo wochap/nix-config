@@ -13,9 +13,10 @@ Loader {
   active: isVisible
   visible: isVisible
   sourceComponent: Component {
-    MaterialIcon {
-      icon: "emoji_food_beverage"
-      size: Styles.font.pixelSize.huge
+    SystemIcon {
+      enableColoriser: true
+      icon: "caffeine-cup-full"
+      size: Styles.font.pixelSize.hugeass
       color: Theme.options.maroon
     }
   }

@@ -9,8 +9,8 @@ Item {
     serviceSignalName: "isOutputMutedChanged"
     serviceFlagKey: "isOutputMuted"
     namespace: "quickshell:output-mute-osd"
-    materialIconOn: "volume_off"
-    materialIconOff: "volume_up"
+    systemIconOn: "audio-volume-muted"
+    systemIconOff: "audio-volume-high"
     colorOn: Theme.options.peach
   }
 }

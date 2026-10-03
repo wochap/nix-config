@@ -12,8 +12,8 @@ Scope {
   property string namespace: ""
   property string iconOn: ""
   property string iconOff: ""
-  property string materialIconOn: ""
-  property string materialIconOff: ""
+  property string systemIconOn: ""
+  property string systemIconOff: ""
   property color colorOn: Theme.options.peach
   property color colorOff: Theme.options.text
   property bool showIconOn: true
@@ -85,8 +85,8 @@ Scope {
       namespace: root.namespace
       iconOn: root.iconOn
       iconOff: root.iconOff
-      materialIconOn: root.materialIconOn
-      materialIconOff: root.materialIconOff
+      systemIconOn: root.systemIconOn
+      systemIconOff: root.systemIconOff
       colorOn: root.colorOn
       colorOff: root.colorOff
       isOpen: root.isOpen

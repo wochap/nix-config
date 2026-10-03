@@ -10,7 +10,7 @@ OsdProgress {
   serviceValueTransformer: value => value * 100
   serviceMutedKey: "isOutputMuted"
   namespace: "quickshell:output-osd"
-  icon: "volume_up"
-  mutedIcon: "volume_off"
+  icon: "audio-volume-high"
+  mutedIcon: "audio-volume-muted"
   fillColor: Theme.options.lavender
 }

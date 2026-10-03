@@ -15,7 +15,8 @@ Loader {
   visible: isVisible
   sourceComponent: Component {
     Module {
-      materialIcon: "security"
+      iconSystem: "network-vpn"
+      iconSystemSize: Styles.font.pixelSize.huge
       iconSize: Styles.font.pixelSize.huge
       label: ip
       paddingX: 0
