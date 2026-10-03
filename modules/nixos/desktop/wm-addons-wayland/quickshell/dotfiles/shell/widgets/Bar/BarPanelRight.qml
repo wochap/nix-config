@@ -36,12 +36,6 @@ RowLayout {
       Layout.fillHeight: true
     }
 
-    IdleInhibit {
-      id: idleInhibit
-
-      Layout.fillHeight: true
-    }
-
     Agents {
       id: agents
 
@@ -90,6 +84,12 @@ RowLayout {
 
     Wireguard {
       id: wireguard
+
+      Layout.fillHeight: true
+    }
+
+    IdleInhibit {
+      id: idleInhibit
 
       Layout.fillHeight: true
     }
