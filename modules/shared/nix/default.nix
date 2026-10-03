@@ -85,6 +85,8 @@ in
       imports = [ inputs.nix-index-database.homeModules.nix-index ];
 
       config = {
+        home.shellAliases.nxd = "nix develop -c zsh";
+
         programs = {
           # locale nix pkgs
           nix-index = {
