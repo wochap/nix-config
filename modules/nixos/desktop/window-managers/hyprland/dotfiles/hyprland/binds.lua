@@ -326,7 +326,9 @@ window_switcher.setup({
   modifier = "ALT",
   mode = "floating",
   order = "stable",
-  release_keys = { "ALT_L", "ALT_R" },
+  -- Shift+Alt_L resolves to Meta_L, so releasing ALT while SHIFT is still
+  -- held (ALT + SHIFT + TAB) would otherwise leave the submap stuck.
+  release_keys = { "ALT_L", "ALT_R", "META_L", "META_R" },
 })
 
 window_switcher.setup({
