@@ -163,6 +163,7 @@ in
     _custom.services.ai.webscoop.enable = true;
     _custom.services.ai.gptResearcher.enable = true;
     _custom.services.ai.wosarcher.enable = true;
+    _custom.services.ai.wosarcher.jev.enable = true;
     _custom.services.ai.openDesign.enable = true;
     _custom.services.ai.comfyui.enable = true;
     # ComfyUI-GGUF (molbal fork) in ~/ComfyUI/custom_nodes; see comfyui/README.md.

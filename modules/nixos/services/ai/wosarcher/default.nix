@@ -71,6 +71,16 @@ let
     };
   };
 
+  # TypeSafe Jev: a cloud scorer with calibrated 0-3 usefulness scores. It
+  # sends every chunk to api.typesafe.ai, so it lives in its own profile and
+  # the local reranker stays the default.
+  jevScore = {
+    provider = "jev";
+    base_url = "https://api.typesafe.ai/v1";
+    concurrency = 16;
+    timeout = 120;
+  };
+
   profileFiles = lib.mapAttrs (name: settings: toml.generate "wosarcher-${name}.toml" settings) wcfg.profiles;
 
   # Declared profiles are copied in rather than symlinked: a link into
@@ -123,6 +133,12 @@ in
       description = "Research runs the server executes at once.";
     };
 
+    jev.enable = lib.mkEnableOption ''
+      the TypeSafe Jev scorer: adds a nixos-jev profile, the nixos profile with
+      score.provider = "jev", and passes personal-typesafe-api-key from
+      secrets-sops/personal.yaml as WOSARCHER_SCORE__API_KEY
+    '';
+
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
@@ -134,7 +150,12 @@ in
   };
 
   config = lib.mkIf (cfg.enable && wcfg.enable) {
-    _custom.services.ai.wosarcher.profiles.nixos = lib.mapAttrsRecursive (_: lib.mkDefault) defaultProfile;
+    _custom.services.ai.wosarcher.profiles = {
+      nixos = lib.mapAttrsRecursive (_: lib.mkDefault) defaultProfile;
+      nixos-jev = lib.mkIf wcfg.jev.enable (
+        lib.mapAttrsRecursive (_: lib.mkDefault) (defaultProfile // { score = jevScore; })
+      );
+    };
 
     _custom.services.web-proxies.wosarcher = {
       enable = true;
@@ -183,12 +204,23 @@ in
       ];
     };
 
+    sops.secrets.personal-typesafe-api-key = lib.mkIf wcfg.jev.enable {
+      sopsFile = ../../../../../secrets-sops/personal.yaml;
+      restartUnits = [ "${serviceName}.service" ];
+    };
+
     sops.templates."wosarcher.env" = {
       mode = "0400";
       restartUnits = [ "${serviceName}.service" ];
-      content = lib.generators.toKeyValue { } {
-        WOSARCHER_LLM__API_KEY = config.sops.placeholder.local-omniroute-secret-key;
-      };
+      content = lib.generators.toKeyValue { } (
+        {
+          WOSARCHER_LLM__API_KEY = config.sops.placeholder.local-omniroute-secret-key;
+        }
+        # Every profile's score block gets this key; llama-server ignores it.
+        // lib.optionalAttrs wcfg.jev.enable {
+          WOSARCHER_SCORE__API_KEY = config.sops.placeholder.personal-typesafe-api-key;
+        }
+      );
     };
 
     systemd.tmpfiles.rules = [
