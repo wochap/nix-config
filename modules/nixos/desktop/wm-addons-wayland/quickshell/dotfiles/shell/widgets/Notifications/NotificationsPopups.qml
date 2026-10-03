@@ -36,23 +36,10 @@ PanelWindow {
   ListView {
     id: listview
 
-    addDisplaced: Transition {
-      id: addDisplacedTransition
-
-      NumberAnimation {
-        property: "y"
-        duration: addDisplacedTransition.ViewTransition.item?.isEntering ? 0 : Styles.animation.duration
-        easing.type: Styles.animation.easingType
-      }
-    }
-    // siblings reflow after a toast exits
-    removeDisplaced: Transition {
-      NumberAnimation {
-        property: "y"
-        duration: Styles.animation.duration
-        easing.type: Styles.animation.easingType
-      }
-    }
+    // No add/remove displaced transitions: they freeze the target y when they
+    // start, so a sibling whose height settles mid-transition (wrapped text,
+    // async thumb) leaves cards overlapping. Delegates animate layout moves
+    // themselves, see NotificationPopupDelegate.layoutOffset.
     anchors {
       top: parent.top
       bottom: parent.bottom

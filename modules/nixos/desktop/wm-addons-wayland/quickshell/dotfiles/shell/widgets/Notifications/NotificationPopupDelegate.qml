@@ -13,6 +13,10 @@ Item {
   property SNotification retainedModelData: modelData
   property real xOffset: 0
   property real yOffset: 0
+  // Visual offset that eases layout moves (siblings added/removed/resized)
+  // to 0 while the real y stays exact, so cards never overlap.
+  property real layoutOffset: 0
+  property real lastY: 0
   readonly property bool isEntering: enterAnimation.running
 
   ParallelAnimation {
@@ -38,6 +42,16 @@ Item {
         root.opacity = 1;
       }
     }
+  }
+
+  NumberAnimation {
+    id: layoutAnimation
+
+    target: root
+    property: "layoutOffset"
+    to: 0
+    duration: Styles.animation.duration
+    easing.type: Styles.animation.easingType
   }
 
   ParallelAnimation {
@@ -79,10 +93,21 @@ Item {
   anchors.right: parent?.right
   transform: Translate {
     x: root.xOffset
-    y: root.yOffset
+    y: root.yOffset + root.layoutOffset
+  }
+
+  onYChanged: {
+    // Entering cards are placed directly, their slide/fade is the entrance
+    if (!root.isEntering) {
+      root.layoutOffset += root.lastY - root.y;
+      layoutAnimation.restart();
+    }
+    root.lastY = root.y;
   }
 
   Component.onCompleted: {
+    // y starts at 0 without yChanged, seed lastY so the first push animates
+    root.lastY = root.y;
     root.retainedModelData = root.modelData;
     if (root.retainedModelData.isPopupExiting) {
       root.startExit();
