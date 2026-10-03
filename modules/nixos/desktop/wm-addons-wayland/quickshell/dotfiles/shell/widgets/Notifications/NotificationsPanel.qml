@@ -41,9 +41,6 @@ PanelWindow {
 
   RectangularShadowLeft {
     target: rectangle
-    transform: Translate {
-      x: root.slideX
-    }
   }
 
   // enter: slide right → left, exit: slide back out, same timing as the control center
@@ -92,16 +89,16 @@ PanelWindow {
   Rectangle {
     id: rectangle
 
+    // slide with real geometry, not a Translate: the mask Region only tracks
+    // geometry, a transform leaves it stuck at a mid-slide rect
     anchors {
       top: parent.top
       bottom: parent.bottom
       right: parent.right
+      rightMargin: -root.slideX
     }
     implicitWidth: ConfigNotifications.notificationsPanelWidth
     color: Theme.options.backgroundOverlay
-    transform: Translate {
-      x: root.slideX
-    }
 
     // 1px left border
     Rectangle {
