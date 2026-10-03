@@ -3,7 +3,8 @@ import qs.config
 import qs.widgets.common
 import qs.widgets.ControlCenter
 
-// 28px circle button; destructive buttons need a confirm click while armed
+// 28px circle button; buttons with `needsConfirm` arm on the first click,
+// grow into a red "Label?" pill and only run on a second click while armed
 Item {
   id: root
 
@@ -12,26 +13,46 @@ Item {
   property bool isDestructive: false
   property bool needsConfirm: false
   property bool isArmed: false
+  // time the button armed, a confirm click must come after armGuard ms so a
+  // double click can't arm and confirm in one go
+  property real armedAt: 0
+  readonly property int armGuard: 400
   readonly property bool isHovered: mouseArea.containsMouse
+  readonly property bool isRed: root.isDestructive || root.isArmed
 
   signal activated
+  // emitted when the button arms, so siblings can disarm
+  signal armed
 
-  implicitWidth: ConfigControlCenter.headerButtonSize
+  function disarm() {
+    root.isArmed = false;
+    armTimer.stop();
+  }
+
+  implicitWidth: root.isArmed ? armedRow.implicitWidth + 20 : ConfigControlCenter.headerButtonSize
   implicitHeight: ConfigControlCenter.headerButtonSize
+
+  Behavior on implicitWidth {
+    NumberAnimation {
+      duration: Styles.animation.duration
+      easing.type: Styles.animation.easingType
+    }
+  }
 
   StyledRect {
     anchors.fill: parent
-    radius: width / 2
+    radius: height / 2
     color: {
-      if (root.isDestructive) {
-        return root.isHovered || root.isArmed ? Theme.options.red : Theme.addAlpha(Theme.options.red, 0.14);
-      }
       if (root.isArmed) {
-        return Theme.options.peach;
+        return root.isHovered ? Theme.options.maroon : Theme.options.red;
+      }
+      if (root.isDestructive) {
+        return root.isHovered ? Theme.options.red : Theme.addAlpha(Theme.options.red, 0.14);
       }
       return root.isHovered ? Theme.options.surface1 : Theme.options.surface0;
     }
     scale: mouseArea.pressed ? 0.92 : 1
+    clip: true
 
     Behavior on scale {
       NumberAnimation {
@@ -40,21 +61,66 @@ Item {
       }
     }
 
-    MaterialIcon {
+    Row {
+      id: armedRow
+
       anchors.centerIn: parent
-      icon: root.isArmed ? "check" : root.icon
-      size: 16
-      weight: Font.Normal
-      color: {
-        if (root.isDestructive) {
-          return root.isHovered || root.isArmed ? Theme.options.crust : Theme.options.red;
+      spacing: 4
+
+      MaterialIcon {
+        anchors.verticalCenter: parent.verticalCenter
+        icon: root.icon
+        size: 16
+        weight: Font.Normal
+        color: {
+          if (root.isArmed) {
+            return Theme.options.crust;
+          }
+          if (root.isDestructive) {
+            return root.isHovered ? Theme.options.crust : Theme.options.red;
+          }
+          return root.isHovered ? Theme.options.text : Theme.options.subtext1;
         }
-        if (root.isArmed) {
-          return Theme.options.crust;
-        }
-        return root.isHovered ? Theme.options.text : Theme.options.subtext1;
+      }
+
+      StyledText {
+        anchors.verticalCenter: parent.verticalCenter
+        visible: root.isArmed
+        text: `${root.tooltip}?`
+        color: Theme.options.crust
+        font.pixelSize: Styles.font.pixelSize.small
+        font.weight: Font.Medium
       }
     }
+
+    // remaining confirm time
+    Rectangle {
+      anchors {
+        left: parent.left
+        bottom: parent.bottom
+      }
+      height: 2
+      width: parent.width * armProgress.value
+      visible: root.isArmed
+      color: Theme.options.crust
+      opacity: 0.5
+    }
+  }
+
+  QtObject {
+    id: armProgress
+
+    property real value: 0
+  }
+
+  NumberAnimation {
+    id: armProgressAnimation
+
+    target: armProgress
+    property: "value"
+    from: 1
+    to: 0
+    duration: ConfigControlCenter.confirmTimeout
   }
 
   Timer {
@@ -73,10 +139,16 @@ Item {
     onClicked: {
       if (root.needsConfirm && !root.isArmed) {
         root.isArmed = true;
+        root.armedAt = Date.now();
         armTimer.restart();
+        armProgressAnimation.restart();
+        root.armed();
         return;
       }
-      root.isArmed = false;
+      if (root.needsConfirm && Date.now() - root.armedAt < root.armGuard) {
+        return;
+      }
+      root.disarm();
       root.activated();
     }
   }

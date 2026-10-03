@@ -8,7 +8,7 @@ Scope {
   id: root
 
   LazyLoader {
-    active: SNotifications.isPanelOpen
+    active: SNotifications.isPanelLoaded
     component: NotificationsPanel {}
   }
 

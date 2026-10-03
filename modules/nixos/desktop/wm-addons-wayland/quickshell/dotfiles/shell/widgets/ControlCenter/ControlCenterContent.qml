@@ -20,6 +20,9 @@ PanelWindow {
   property var focusedWorkspace: SHyprland.workspacesById?.[hyprlandMonitor?.activeWorkspace?.id] ?? null
   property var focusedClient: SHyprland.clientsByAddress?.[focusedWorkspace?.lastwindow] ?? null
   property bool isFocusedClientFullScreen: (focusedClient?.fullscreen ?? null) === 2
+  // space reserved by the bar, the window ignores exclusive zones so the
+  // backdrop also covers the bar and a click there closes the panel
+  readonly property real reservedTop: isFocusedClientFullScreen ? 0 : (hyprlandMonitor?.reserved?.[1] ?? 0)
   readonly property string bluetoothDevice: Bluetooth.devices.values.find(d => d.connected)?.name ?? ""
 
   screen: root.focusedScreen
@@ -32,8 +35,7 @@ PanelWindow {
     bottom: true
     right: true
   }
-  exclusionMode: isFocusedClientFullScreen ? ExclusionMode.Ignore : ExclusionMode.Normal
-  exclusiveZone: 0
+  exclusionMode: ExclusionMode.Ignore
   color: "transparent"
 
   Component.onCompleted: {
@@ -53,7 +55,8 @@ PanelWindow {
     }
   }
 
-  // click outside closes
+  // click outside closes, including clicks on the bar (and on the bar
+  // button that opened it, so it never closes and reopens)
   MouseArea {
     anchors.fill: parent
     enabled: SControlCenter.isOpen
@@ -73,7 +76,7 @@ PanelWindow {
     anchors {
       top: parent.top
       right: parent.right
-      topMargin: ConfigControlCenter.controlCenterMargin
+      topMargin: root.reservedTop + ConfigControlCenter.controlCenterMargin
       rightMargin: ConfigControlCenter.controlCenterMargin
     }
     width: panel.width
@@ -350,7 +353,7 @@ PanelWindow {
             enabled: SPipewire.outputReady
             icon: SPipewire.isOutputMuted ? "volume_off" : displayValue === 0 ? "volume_mute" : displayValue < 50 ? "volume_down" : "volume_up"
             minimum: 0
-            maximum: 150
+            maximum: 200
             step: 5
             overdriveFrom: 100
             value: Math.round(SPipewire.outputVolume * 100)

@@ -6,23 +6,32 @@ import Quickshell
 Singleton {
   id: root
 
+  // requested state, drives the enter/exit animation
   property bool isOpen: false
-  // A click on the bar clock first clears the popover focus grab (closing it),
-  // then reaches the clock and would reopen it; ignore toggles right after a close.
-  property double closedAt: 0
+  // keeps the window alive until the exit animation finishes
+  property bool isLoaded: false
 
-  function toggle() {
-    if (!root.isOpen && Date.now() - root.closedAt < 300)
-      return;
-    root.isOpen = !root.isOpen;
-    if (!root.isOpen)
-      root.closedAt = Date.now();
+  function open() {
+    root.isLoaded = true;
+    root.isOpen = true;
   }
 
   function close() {
-    if (!root.isOpen)
-      return;
     root.isOpen = false;
-    root.closedAt = Date.now();
+  }
+
+  function toggle() {
+    if (root.isOpen) {
+      root.close();
+    } else {
+      root.open();
+    }
+  }
+
+  // called by the content once the exit animation is done
+  function finalizeClose() {
+    if (!root.isOpen) {
+      root.isLoaded = false;
+    }
   }
 }

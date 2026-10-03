@@ -19,13 +19,13 @@ Singleton {
   // card
   property real notificationPaddingTop: 9
   property real notificationPaddingRight: 10
-  property real notificationPaddingBottom: 10
+  property real notificationPaddingBottom: 14
   property real notificationPaddingLeft: 12
   property real notificationSpacing: 6
+  property real notificationHeaderHeight: 18
   property real notificationThumbSize: 56
   property real notificationHeaderIconSize: 15
   property real notificationButtonSize: 22
   property real notificationTimeoutBarHeight: 2
   property real notificationExitDistance: 24
-  property bool isBlurEnabled: Global.isBlurEnabled
 }

@@ -20,6 +20,8 @@ PanelWindow {
   property var focusedClient: SHyprland.clientsByAddress?.[focusedWorkspace?.lastwindow] ?? null
   property bool isFocusedClientFullScreen: (focusedClient?.fullscreen ?? null) === 2
   readonly property bool isEmpty: SNotifications.list.length === 0
+  // horizontal offset of the sidebar, slides in from the right edge
+  property real slideX: ConfigNotifications.notificationsPanelWidth
 
   WlrLayershell.namespace: "quickshell:notifications-panel"
   WlrLayershell.layer: WlrLayer.Overlay
@@ -39,6 +41,52 @@ PanelWindow {
 
   RectangularShadowLeft {
     target: rectangle
+    transform: Translate {
+      x: root.slideX
+    }
+  }
+
+  // enter: slide right → left, exit: slide back out, same timing as the control center
+  Item {
+    id: slideState
+
+    states: State {
+      name: "open"
+      when: SNotifications.isPanelOpen
+
+      PropertyChanges {
+        root.slideX: 0
+      }
+    }
+
+    transitions: [
+      Transition {
+        to: "open"
+
+        NumberAnimation {
+          target: root
+          property: "slideX"
+          duration: Styles.animation.duration
+          easing.type: Styles.animation.easingType
+        }
+      },
+      Transition {
+        from: "open"
+
+        SequentialAnimation {
+          NumberAnimation {
+            target: root
+            property: "slideX"
+            duration: Styles.animation.exitDuration
+            easing.type: Styles.animation.exitEasingType
+          }
+
+          ScriptAction {
+            script: SNotifications.finalizePanelClose()
+          }
+        }
+      }
+    ]
   }
 
   Rectangle {
@@ -51,6 +99,9 @@ PanelWindow {
     }
     implicitWidth: ConfigNotifications.notificationsPanelWidth
     color: Theme.options.backgroundOverlay
+    transform: Translate {
+      x: root.slideX
+    }
 
     // 1px left border
     Rectangle {

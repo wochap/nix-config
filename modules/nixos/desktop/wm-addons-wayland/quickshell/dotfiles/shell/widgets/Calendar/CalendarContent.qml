@@ -6,6 +6,7 @@ import Quickshell.Wayland
 import qs.config
 import qs.services
 import qs.widgets.common
+import qs.widgets.Bar.config
 
 PanelWindow {
   id: root
@@ -19,83 +20,95 @@ PanelWindow {
   screen: root.focusedScreen
   WlrLayershell.namespace: "quickshell:calendar"
   WlrLayershell.layer: WlrLayer.Overlay
-  WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+  WlrLayershell.keyboardFocus: SCalendar.isOpen ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
   anchors {
     top: true
     left: true
     bottom: true
     right: true
   }
-  exclusionMode: root.isFocusedClientFullScreen ? ExclusionMode.Ignore : ExclusionMode.Normal
-  exclusiveZone: 0
+  // covers the bar too, so a click on the bar (including the clock chip that
+  // opened it) lands on the backdrop and closes the popover
+  exclusionMode: ExclusionMode.Ignore
   color: "transparent"
-  mask: Region {
-    item: popover
+
+  // click outside closes
+  MouseArea {
+    anchors.fill: parent
+    enabled: SCalendar.isOpen
+    onClicked: SCalendar.close()
   }
 
-  HyprlandFocusGrab {
-    // armed after the first frame so the click that opened the popover doesn't clear it
-    active: grabTimer.armed && SCalendar.isOpen
-    windows: [root]
-    onCleared: SCalendar.close()
-  }
+  Item {
+    id: keyCatcher
 
-  Timer {
-    id: grabTimer
-
-    property bool armed: false
-
-    interval: 50
-    running: true
-    onTriggered: armed = true
+    focus: true
+    Keys.onEscapePressed: SCalendar.close()
   }
 
   // grows from the bar clock: scale .96→1, y −8→0, opacity 0→1
   Item {
     id: popover
 
-    property bool shown: false
-    readonly property bool isVisible: popover.shown && SCalendar.isOpen
-    readonly property int duration: SCalendar.isOpen ? Styles.animation.duration : Styles.animation.exitDuration
-    readonly property int easingType: SCalendar.isOpen ? Styles.animation.easingType : Styles.animation.exitEasingType
-
     anchors {
       top: parent.top
       right: parent.right
-      topMargin: ConfigCalendar.calendarMargin
+      topMargin: (root.isFocusedClientFullScreen ? 0 : ConfigBar.barHeight) + ConfigCalendar.calendarMargin
       rightMargin: ConfigCalendar.calendarMargin
     }
     implicitWidth: panel.implicitWidth
     implicitHeight: panel.implicitHeight
     transformOrigin: Item.TopRight
-    opacity: popover.isVisible ? 1 : 0
-    scale: popover.isVisible ? 1 : 0.96
+    opacity: 0
+    scale: 0.96
     transform: Translate {
-      y: popover.isVisible ? 0 : -Styles.animation.slideDistance
+      id: slide
 
-      Behavior on y {
+      y: -Styles.animation.slideDistance
+    }
+
+    states: State {
+      name: "open"
+      when: SCalendar.isOpen
+
+      PropertyChanges {
+        popover.opacity: 1
+        popover.scale: 1
+        slide.y: 0
+      }
+    }
+
+    transitions: [
+      Transition {
+        to: "open"
+
         NumberAnimation {
-          duration: popover.duration
-          easing.type: popover.easingType
+          properties: "opacity,scale,y"
+          duration: Styles.animation.duration
+          easing.type: Styles.animation.easingType
+        }
+      },
+      Transition {
+        from: "open"
+
+        SequentialAnimation {
+          NumberAnimation {
+            properties: "opacity,scale,y"
+            duration: Styles.animation.exitDuration
+            easing.type: Styles.animation.exitEasingType
+          }
+
+          ScriptAction {
+            script: SCalendar.finalizeClose()
+          }
         }
       }
-    }
+    ]
 
-    Behavior on opacity {
-      NumberAnimation {
-        duration: popover.duration
-        easing.type: popover.easingType
-      }
+    // swallow clicks on the panel so they don't reach the backdrop
+    MouseArea {
+      anchors.fill: parent
     }
-
-    Behavior on scale {
-      NumberAnimation {
-        duration: popover.duration
-        easing.type: popover.easingType
-      }
-    }
-
-    Component.onCompleted: popover.shown = true
 
     StyledRectangularShadow {
       target: panel
@@ -113,12 +126,6 @@ PanelWindow {
       border {
         width: 1
         color: Theme.options.surface0
-      }
-
-      Item {
-        anchors.fill: parent
-        focus: true
-        Keys.onEscapePressed: SCalendar.close()
       }
 
       ColumnLayout {

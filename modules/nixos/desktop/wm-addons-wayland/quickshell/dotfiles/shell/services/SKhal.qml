@@ -17,13 +17,20 @@ Singleton {
   readonly property int upcomingCount: 3
   readonly property var fields: ["title", "start-date-long", "start-time", "end-date-long", "end-time", "all-day", "calendar-color"]
 
-  // "yyyy-MM-dd" -> [color, ...] for the range passed to loadRange()
+  readonly property string cachePath: `${Paths.strip(Paths.cache)}/khal.json`
+
+  // "yyyy-MM-dd" -> [color, ...]; merged across every range loaded so far and
+  // persisted, so the month grid renders dots immediately on open
   property var eventsByDay: ({})
   // [{title, start: Date, allDay, color}]
   property var upcoming: []
-  property date rangeStart: new Date()
-  property date rangeEnd: new Date()
   property bool available: true
+
+  // range queries are serialized: a request made while one is running waits
+  // here (deduplicated, in order), and results are always parsed against the range
+  // the finished process was started with
+  property var activeRange: null
+  property var pendingRanges: []
 
   function dayKey(date) {
     return Qt.formatDate(date, "yyyy-MM-dd");
@@ -79,19 +86,73 @@ Singleton {
   }
 
   function loadRange(start, end) {
-    root.rangeStart = start;
-    root.rangeEnd = end;
-    rangeProcess.running = false;
-    rangeProcess.command = root.command(start, end);
+    const range = {
+      start: new Date(start.getFullYear(), start.getMonth(), start.getDate()),
+      end: new Date(end.getFullYear(), end.getMonth(), end.getDate())
+    };
+    if (rangeProcess.running) {
+      const key = r => `${root.dayKey(r.start)}_${root.dayKey(r.end)}`;
+      root.pendingRanges = root.pendingRanges.filter(r => key(r) !== key(range)).concat([range]);
+      return;
+    }
+    root.activeRange = range;
+    rangeProcess.command = root.command(range.start, range.end);
     rangeProcess.running = true;
   }
 
-  function refresh() {
+  // start the range requested while the previous query was running
+  function runPending() {
+    root.activeRange = null;
+    const next = root.pendingRanges[0];
+    root.pendingRanges = root.pendingRanges.slice(1);
+    if (next)
+      Qt.callLater(() => root.loadRange(next.start, next.end));
+  }
+
+  // previous, current and next month grids, so navigating nearby is instant
+  function loadDefaultRange() {
     const today = new Date();
-    upcomingProcess.running = false;
-    upcomingProcess.command = root.command(today, root.addDays(today, root.upcomingDays));
-    upcomingProcess.running = true;
-    root.loadRange(root.rangeStart, root.rangeEnd);
+    const start = root.addDays(new Date(today.getFullYear(), today.getMonth() - 1, 1), -7);
+    const end = root.addDays(new Date(today.getFullYear(), today.getMonth() + 2, 0), 14);
+    root.loadRange(start, end);
+  }
+
+  function refresh() {
+    if (!upcomingProcess.running) {
+      const today = new Date();
+      upcomingProcess.command = root.command(today, root.addDays(today, root.upcomingDays));
+      upcomingProcess.running = true;
+    }
+    root.loadDefaultRange();
+  }
+
+  // replace every day of `range` with the new results, keep the rest
+  function mergeRange(range, byDay) {
+    const merged = Object.assign({}, root.eventsByDay);
+    for (let day = range.start; day <= range.end; day = root.addDays(day, 1))
+      delete merged[root.dayKey(day)];
+    root.eventsByDay = Object.assign(merged, byDay);
+    saveTimer.restart();
+  }
+
+  function save() {
+    const upcoming = root.upcoming.map(event => Object.assign({}, event, {
+          start: event.start.toISOString()
+        }));
+    cacheFile.setText(JSON.stringify({
+      eventsByDay: root.eventsByDay,
+      upcoming
+    }));
+  }
+
+  function load(text) {
+    try {
+      const cached = JSON.parse(text);
+      root.eventsByDay = cached.eventsByDay ?? {};
+      root.upcoming = (cached.upcoming ?? []).map(event => Object.assign({}, event, {
+            start: new Date(event.start)
+          })).filter(event => event.allDay ? root.addDays(event.start, 1) > new Date() : event.start > new Date());
+    } catch (e) {}
   }
 
   function command(start, end) {
@@ -108,16 +169,25 @@ Singleton {
       id: rangeCollector
 
       onStreamFinished: {
+        const range = root.activeRange;
+        if (!range)
+          return root.runPending();
         const byDay = {};
-        root.parseDays(rangeCollector.text, root.rangeStart, (day, event) => {
+        root.parseDays(rangeCollector.text, range.start, (day, event) => {
           const key = root.dayKey(day);
           byDay[key] = byDay[key] ?? [];
           byDay[key].push(root.paletteColor(event["calendar-color"]));
         });
-        root.eventsByDay = byDay;
+        root.mergeRange(range, byDay);
+        root.runPending();
       }
     }
-    onExited: code => root.available = code === 0
+    onExited: code => {
+      root.available = code === 0;
+      // output already handled, a request queued meanwhile can start now
+      if (!root.activeRange && root.pendingRanges.length > 0)
+        root.runPending();
+    }
   }
 
   Process {
@@ -146,9 +216,28 @@ Singleton {
           });
         });
         root.upcoming = list.sort((a, b) => a.start - b.start).slice(0, root.upcomingCount);
+        saveTimer.restart();
       }
     }
   }
+
+  FileView {
+    id: cacheFile
+
+    path: root.cachePath
+    blockLoading: true
+    printErrors: false
+  }
+
+  Timer {
+    id: saveTimer
+
+    interval: 500
+    onTriggered: root.save()
+  }
+
+  // blockLoading makes text() synchronous, so dots are there on first render
+  Component.onCompleted: root.load(cacheFile.text())
 
   Timer {
     interval: root.refreshInterval

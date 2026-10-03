@@ -16,6 +16,17 @@ Item {
   property bool hasPendingValue: false
   property int pendingValue: 0
   readonly property int displayValue: hasPendingValue ? pendingValue : value
+  // when set, values past it wrap: the fill restarts from 0 and covers
+  // wrapAt..maximum, e.g. over-amplified volume (0-100 then 100-200)
+  property int wrapAt: -1
+  readonly property bool hasWrap: wrapAt > minimum && wrapAt < maximum
+  readonly property bool isWrapped: hasWrap && displayValue > wrapAt
+  // range the track currently represents, fixed while dragging so the
+  // knob doesn't jump between laps mid-drag
+  property bool dragLapIsWrapped: false
+  readonly property bool lapIsWrapped: isDragging ? dragLapIsWrapped : isWrapped
+  readonly property int lapMinimum: hasWrap && lapIsWrapped ? wrapAt : minimum
+  readonly property int lapMaximum: hasWrap && !lapIsWrapped ? wrapAt : maximum
 
   // --- Theme Mappings ---
   property color trackColor: Theme.options.surface1
@@ -27,8 +38,8 @@ Item {
   property string tooltipText: `${slider.displayValue}`
 
   readonly property real ratio: {
-    const range = slider.maximum - slider.minimum;
-    return range === 0 ? 0 : Math.max(0, Math.min(1, (slider.displayValue - slider.minimum) / range));
+    const range = slider.lapMaximum - slider.lapMinimum;
+    return range === 0 ? 0 : Math.max(0, Math.min(1, (slider.displayValue - slider.lapMinimum) / range));
   }
   readonly property bool isActive: sliderMouseArea.containsMouse || sliderMouseArea.pressed || slider.isDragging
 
@@ -39,8 +50,16 @@ Item {
   implicitHeight: 28
 
   function updateValueFromPosition(x) {
+    // pushing past an edge while dragging moves to the other lap
+    if (isDragging && hasWrap) {
+      if (!dragLapIsWrapped && x > sliderTrack.width + 24) {
+        dragLapIsWrapped = true;
+      } else if (dragLapIsWrapped && x < -24) {
+        dragLapIsWrapped = false;
+      }
+    }
     const ratio = Math.max(0, Math.min(1, x / sliderTrack.width));
-    const rawValue = minimum + ratio * (maximum - minimum);
+    const rawValue = lapMinimum + ratio * (lapMaximum - lapMinimum);
     let newValue = step > 1 ? Math.round(rawValue / step) * step : Math.round(rawValue);
     setPendingValue(newValue);
   }
@@ -194,6 +213,7 @@ Item {
       preventStealing: true
       acceptedButtons: Qt.LeftButton
       onPressed: mouse => {
+        slider.dragLapIsWrapped = slider.isWrapped;
         slider.isDragging = true;
         slider.updateValueFromPosition(mouse.x - knob.width / 2);
       }

@@ -18,7 +18,8 @@ RowLayout {
   property string tooltipText: `${slider.displayValue}`
   // dimmed fill + red button, e.g. muted output
   property bool isMuted: false
-  // fill past this value turns peach, e.g. over-amplified volume
+  // values past this turn peach and the fill wraps to show the excess,
+  // e.g. over-amplified volume
   property int overdriveFrom: -1
   property color fillColor: Theme.options.primary
   property bool isButtonInteractive: false
@@ -75,6 +76,7 @@ RowLayout {
 
     Layout.fillWidth: true
     tooltipText: root.tooltipText
+    wrapAt: root.overdriveFrom
     fillColor: {
       if (!root.enabled) {
         return Theme.options.surface1;

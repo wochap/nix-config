@@ -50,7 +50,6 @@ Item {
 
   implicitWidth: ConfigNotifications.notificationsPopupsWidth
   implicitHeight: card.implicitHeight
-  opacity: root.isLow ? 0.92 : 1
 
   StyledRectangularShadow {
     visible: root.isPopup
@@ -65,10 +64,7 @@ Item {
     anchors.fill: parent
     implicitHeight: content.implicitHeight + ConfigNotifications.notificationPaddingTop + ConfigNotifications.notificationPaddingBottom
     radius: Styles.radius.windowRounding
-    color: {
-      const base = root.isPressed ? Theme.options.surface0 : root.isHovered ? Theme.tint(Theme.options.base, Theme.options.surface0, 0.5) : root.isCritical ? Theme.tint(Theme.options.base, Theme.options.red, 0.04) : Theme.options.base;
-      return root.isPopup && ConfigNotifications.isBlurEnabled ? Theme.addAlpha(base, 0.65) : base;
-    }
+    color: root.isPressed ? Theme.options.surface0 : root.isHovered ? Theme.tint(Theme.options.base, Theme.options.surface0, 0.5) : root.isCritical ? Theme.tint(Theme.options.base, Theme.options.red, 0.04) : Theme.options.base
     border {
       width: 1
       color: root.isCritical ? Theme.addAlpha(Theme.options.red, 0.6) : (root.isHovered || root.isPressed) ? Theme.options.surface1 : Theme.options.surface0
@@ -121,7 +117,8 @@ Item {
       // header: icon · app · time · CRITICAL ... expand close
       RowLayout {
         Layout.fillWidth: true
-        Layout.preferredHeight: 18
+        Layout.preferredHeight: ConfigNotifications.notificationHeaderHeight
+        Layout.maximumHeight: ConfigNotifications.notificationHeaderHeight
         spacing: 6
 
         SystemIcon {
@@ -169,15 +166,33 @@ Item {
           Layout.fillWidth: true
         }
 
-        NotificationButtonSm {
+        // 22px buttons overflow the 18px header row (as in the design),
+        // so they don't push the row height and unbalance the padding
+        Item {
           visible: bodyText.truncated || metaText.truncated || root.isExpanded
-          materialIcon: root.isExpanded ? "unfold_less" : "unfold_more"
-          onClicked: root.isExpanded = !root.isExpanded
+          implicitWidth: expandButton.implicitWidth
+          implicitHeight: ConfigNotifications.notificationHeaderHeight
+
+          NotificationButtonSm {
+            id: expandButton
+
+            anchors.centerIn: parent
+            materialIcon: root.isExpanded ? "unfold_less" : "unfold_more"
+            onClicked: root.isExpanded = !root.isExpanded
+          }
         }
 
-        NotificationButtonSm {
-          materialIcon: "close"
-          onClicked: root.discardNotification()
+        Item {
+          implicitWidth: closeButton.implicitWidth
+          implicitHeight: ConfigNotifications.notificationHeaderHeight
+
+          NotificationButtonSm {
+            id: closeButton
+
+            anchors.centerIn: parent
+            materialIcon: "close"
+            onClicked: root.discardNotification()
+          }
         }
       }
 

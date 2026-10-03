@@ -53,6 +53,17 @@ RowLayout {
   }
 
   RowLayout {
+    id: buttons
+
+    // only one destructive button armed at a time
+    function disarmOthers(button) {
+      for (const child of buttons.children) {
+        if (child !== button && child.disarm) {
+          child.disarm();
+        }
+      }
+    }
+
     spacing: 4
 
     HeaderButton {
@@ -68,24 +79,33 @@ RowLayout {
     }
 
     HeaderButton {
+      id: logoutButton
+
       icon: "logout"
       tooltip: "Log out"
       needsConfirm: true
+      onArmed: buttons.disarmOthers(logoutButton)
       onActivated: SControlCenter.runSessionAction("logout")
     }
 
     HeaderButton {
+      id: rebootButton
+
       icon: "restart_alt"
       tooltip: "Reboot"
       needsConfirm: true
+      onArmed: buttons.disarmOthers(rebootButton)
       onActivated: SControlCenter.runSessionAction("reboot")
     }
 
     HeaderButton {
+      id: powerButton
+
       icon: "power_settings_new"
       tooltip: "Power off"
       isDestructive: true
       needsConfirm: true
+      onArmed: buttons.disarmOthers(powerButton)
       onActivated: SControlCenter.runSessionAction("poweroff")
     }
   }

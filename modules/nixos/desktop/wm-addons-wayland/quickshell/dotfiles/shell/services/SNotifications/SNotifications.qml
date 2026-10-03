@@ -37,6 +37,8 @@ Singleton {
   property int idOffset // ensure unique notification id
   property int popupExitBatchCounter: 0
   property bool isPanelOpen: false
+  // keeps the sidebar window alive until its exit animation finishes
+  property bool isPanelLoaded: false
   property real lastSoundPlayedTime: 0
   readonly property int soundCooldownMs: 1000 // Only play a sound at most once per second
 
@@ -67,7 +69,15 @@ Singleton {
   }
 
   function togglePanel() {
+    if (!root.isPanelOpen)
+      root.isPanelLoaded = true;
     root.isPanelOpen = !root.isPanelOpen;
+  }
+
+  // called by the sidebar once its exit animation is done
+  function finalizePanelClose() {
+    if (!root.isPanelOpen)
+      root.isPanelLoaded = false;
   }
 
   function resetPopupHover() {
