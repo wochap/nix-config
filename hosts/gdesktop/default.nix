@@ -162,6 +162,7 @@ in
     _custom.services.ai.enableFirecrawl = true;
     _custom.services.ai.webscoop.enable = true;
     _custom.services.ai.gptResearcher.enable = true;
+    _custom.services.ai.wosarcher.enable = true;
     _custom.services.ai.openDesign.enable = true;
     _custom.services.ai.comfyui.enable = true;
     # ComfyUI-GGUF (molbal fork) in ~/ComfyUI/custom_nodes; see comfyui/README.md.
@@ -181,11 +182,11 @@ in
     # the embedding KV cache shrinks by ~1.4 GB, and the Q4_K_M reranker
     # (~5.4 GB: 2.4 GB weights) leaves ~2.6 GB of headroom with both models
     # resident.
-    _custom.services.ai.gptResearcher.reranker.enable = true;
-    _custom.services.ai.gptResearcher.reranker.model = "Qwen/Qwen3-Reranker-4B";
-    _custom.services.ai.gptResearcher.reranker.modelUrl =
+    _custom.services.ai.reranker.enable = true;
+    _custom.services.ai.reranker.model = "Qwen/Qwen3-Reranker-4B";
+    _custom.services.ai.reranker.modelUrl =
       "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q4_K_M.gguf";
-    _custom.services.ai.gptResearcher.reranker.modelSha256 =
+    _custom.services.ai.reranker.modelSha256 =
       "941f7d1d1524251c026a797b803ac9575545c5d7aa19b26e0e49661d7720af49";
     _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 32;
     _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 16;

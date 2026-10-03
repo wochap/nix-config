@@ -3403,6 +3403,7 @@
         "wayland-firewall": "wayland-firewall",
         "webscoop": "webscoop",
         "wluma": "wluma",
+        "wosarcher": "wosarcher",
         "wt": "wt",
         "zen-browser": "zen-browser",
         "zsh-auto-notify": "zsh-auto-notify",
@@ -3942,6 +3943,22 @@
         "owner": "maximbaz",
         "repo": "wluma",
         "rev": "259a874af6b4d854073d340cccb1852f63635fd3",
+        "type": "github"
+      }
+    },
+    "wosarcher": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791062154,
+        "narHash": "sha256-NamuQ2rJtjqLLrgMoOg7FxIV/GuhJ9tTCVzoYxqVxPE=",
+        "owner": "wochap",
+        "repo": "wosarcher",
+        "rev": "2c08e57d84c10b069dcedcbe4f920ba332a72b48",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "wosarcher",
         "type": "github"
       }
     },

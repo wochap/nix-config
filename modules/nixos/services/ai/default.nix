@@ -22,6 +22,7 @@ in
     ./omniroute
     ./firecrawl
     ./gpt-researcher
+    ./reranker
     ./open-design
     ./comfyui
     ./asr
@@ -35,6 +36,7 @@ in
     ./pdf-ingest
     ./ollama
     ./webscoop
+    ./wosarcher
   ];
 
   options._custom.services.ai = {

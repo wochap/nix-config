@@ -24,8 +24,9 @@ To keep the hash in SOPS instead, put `WOSARCHER_AUTH__PASSWORD_HASH` (from
 
 The `nixos` profile is generated from this host's proxies: SearxNG,
 Firecrawl, Ollama embeddings, OmniRoute (`research-smart`) and, when
-`gptResearcher.reranker.enable` is set, the shared llama-server reranker
-behind its lazy proxy. Without the reranker, scoring uses BM25.
+`_custom.services.ai.reranker.enable` is set, the shared llama-server
+reranker ([../reranker](../reranker/README.md)) behind its lazy proxy.
+Without the reranker, scoring uses BM25.
 
 Override single keys per host:
 

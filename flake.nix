@@ -123,6 +123,8 @@
     shotclip.flake = false;
     gpt-researcher.url = "github:wochap/gpt-researcher";
     gpt-researcher.flake = false;
+    wosarcher.url = "github:wochap/wosarcher";
+    wosarcher.flake = false;
     open-design.url = "github:wochap/open-design/open-design-v0.24.0-fork";
     open-design.flake = false;
     comfyui.url = "github:comfy-org/ComfyUI/v0.37.0";

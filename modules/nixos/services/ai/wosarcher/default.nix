@@ -29,8 +29,7 @@ let
     "firecrawl"
     "publicPort"
   ] 20900 config._custom.services.web-proxies;
-  rerankerEnabled = cfg.gptResearcher.enable && cfg.gptResearcher.reranker.enable;
-  rerankerProxy = config._custom.services.web-proxies.gpt-researcher-reranker;
+  rerankerProxy = config._custom.services.web-proxies.reranker;
   host = "http://${wochap-ssc.meta.address}";
 
   # Every provider goes through the host's proxies, so the container needs
@@ -53,13 +52,12 @@ let
       device = "local:gpu0";
     };
     score =
-      if rerankerEnabled then
+      if cfg.reranker.enable then
         {
           provider = "rerank";
           base_url = "${host}:${toString rerankerProxy.publicPort}/v1";
-          model = cfg.gptResearcher.reranker.model;
+          model = cfg.reranker.model;
           device = "local:gpu0";
-          batch_size = cfg.gptResearcher.reranker.rerankBatchSize;
           # Covers llama-server loading the GGUF on the first request.
           timeout = 120;
         }
@@ -113,7 +111,7 @@ in
       description = ''
         Profiles written to $XDG_CONFIG_HOME/wosarcher/profiles/<name>.toml.
         The nixos profile is wired to this host's SearxNG, Firecrawl, Ollama,
-        OmniRoute and, when enabled, the GPT Researcher reranker; each of its
+        OmniRoute and, when enabled, the shared reranker; each of its
         keys can be overridden. Never put secrets here: they land in the Nix
         store. Pass them through environmentFile instead.
       '';
