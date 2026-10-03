@@ -46,11 +46,11 @@ WrapperRectangle {
       anchors.fill: parent
       spacing: 0
 
-      MaterialIcon {
+      SystemIcon {
+        enableColoriser: true
         Layout.fillHeight: true
         icon: SBluetooth.icon
-        size: Styles.font.pixelSize.larger
-        weight: Font.Light
+        size: Styles.font.pixelSize.hugeass
         color: SBluetooth.iconColor
       }
 
@@ -65,7 +65,7 @@ WrapperRectangle {
       SystemIcon {
         Layout.fillHeight: true
         icon: SPipewire.outputIcon
-        size: Styles.font.pixelSize.huge
+        size: Styles.font.pixelSize.hugeass
         enableColoriser: true
         color: SPipewire.outputIconColor
       }
@@ -73,19 +73,17 @@ WrapperRectangle {
       SystemIcon {
         Layout.fillHeight: true
         icon: SPipewire.inputIcon
-        size: Styles.font.pixelSize.huge
+        size: Styles.font.pixelSize.hugeass
         enableColoriser: true
         color: SPipewire.inputIconColor
       }
 
-      MaterialIcon {
+      SystemIcon {
+        enableColoriser: true
         Layout.fillHeight: true
-        Layout.leftMargin: -1
-        Layout.rightMargin: 3
         icon: SPowerProfiles.icon
         color: SPowerProfiles.iconColor
-        size: Styles.font.pixelSize.huge
-        weight: Font.Light
+        size: Styles.font.pixelSize.hugeass
       }
 
       SystemIcon {

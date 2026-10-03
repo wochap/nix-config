@@ -31,16 +31,18 @@ Singleton {
       return "battery-full-charged";
     }
     if (root.isCharging) {
-      const icons = [[100, "battery-full-charging"], [80, "battery-good-charging"], [60, "battery-good-charging"], [40, "battery-low-charging"], [20, "battery-caution-charging"], [0, "battery-caution-charging"]];
-      const icon = icons.find(([threshold, _]) => percent >= threshold);
-      return icon?.[1] ?? "battery-missing";
+      return `battery-${root.getLevel(percent)}-charging`;
     }
     if (root.energyRate < 0.1) {
       return `battery-full-charged`;
     }
-    const icons = [[100, "battery-full"], [80, "battery-good"], [60, "battery-good"], [40, "battery-low"], [20, "battery-caution"], [0, "battery-empty"]];
-    const icon = icons.find(([threshold, _]) => percent >= threshold);
-    return icon?.[1] ?? "battery-missing";
+    return `battery-${root.getLevel(percent)}`;
+  }
+
+  // Round down to the nearest 10% step, zero padded: 0 -> "000", 57 -> "050", 100 -> "100"
+  function getLevel(percent) {
+    const step = Math.max(0, Math.min(100, Math.floor(percent / 10) * 10));
+    return String(step).padStart(3, "0");
   }
 
   function getIconColor() {

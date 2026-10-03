@@ -9,8 +9,8 @@ Item {
     serviceSignalName: "isInputMutedChanged"
     serviceFlagKey: "isInputMuted"
     namespace: "quickshell:input-mute-osd"
-    materialIconOn: "mic_off"
-    materialIconOff: "mic"
+    systemIconOn: "microphone-sensitivity-muted"
+    systemIconOff: "microphone-sensitivity-high"
     colorOn: Theme.options.red
   }
 }

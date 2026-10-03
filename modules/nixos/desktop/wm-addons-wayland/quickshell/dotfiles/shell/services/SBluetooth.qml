@@ -12,7 +12,7 @@ Singleton {
   property bool powered: false
   property bool scanning: false
   property int connectedDevices: 0
-  property string icon: "bluetooth"
+  property string icon: "bluetooth-active"
   property string iconColor: Theme.options.text
   property string label: "On"
 
@@ -22,24 +22,24 @@ Singleton {
 
   function updateViewState() {
     if (!root.powered) {
-      root.icon = "bluetooth_disabled";
+      root.icon = "bluetooth-disabled";
       root.iconColor = Theme.options.textDimmed;
       root.label = "Off";
       return;
     }
     if (root.scanning) {
-      root.icon = "bluetooth_searching";
+      root.icon = "bluetooth-acquiring-symbolic";
       root.iconColor = Theme.options.green;
       root.label = "Scanning...";
       return;
     }
     if (root.connectedDevices > 0) {
-      root.icon = "bluetooth_connected";
+      root.icon = "bluetooth-paired";
       root.iconColor = Theme.options.text;
       root.label = `Connected (${root.connectedDevices})`;
       return;
     }
-    root.icon = "bluetooth";
+    root.icon = "bluetooth-active";
     root.iconColor = Theme.options.text;
     root.label = "On";
   }

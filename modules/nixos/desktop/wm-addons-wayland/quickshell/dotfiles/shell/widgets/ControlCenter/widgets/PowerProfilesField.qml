@@ -17,9 +17,9 @@ StyledRect {
     })
   readonly property var order: ["power-saver", "balanced", "performance"]
   readonly property var icons: ({
-      "power-saver": "eco",
-      balanced: "balance",
-      performance: "rocket_launch"
+      "power-saver": "power-profile-power-saver-symbolic",
+      balanced: "power-profile-balanced-symbolic",
+      performance: "power-profile-performance-symbolic"
     })
 
   implicitHeight: 32
@@ -61,10 +61,10 @@ StyledRect {
           anchors.centerIn: parent
           spacing: 5
 
-          MaterialIcon {
+          SystemIcon {
+            enableColoriser: true
             icon: root.icons[segment.modelData.profile] ?? segment.modelData.icon
-            size: 15
-            weight: Font.Normal
+            size: Styles.font.pixelSize.hugeass
             color: label.color
           }
 

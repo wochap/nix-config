@@ -8,7 +8,8 @@ import qs.widgets.ControlCenter
 Item {
   id: root
 
-  required property string icon
+  property string icon: ""
+  property string iconSystem: ""
   required property string label
   property string sublabel: ""
   property bool isActive: false
@@ -60,6 +61,10 @@ Item {
     spacing: 8
 
     StyledRect {
+      id: iconWell
+
+      readonly property string iconColor: root.isActive || root.isPressed ? Theme.options.crust : root.enabled && root.isHovered ? Theme.options.text : Theme.options.subtext1
+
       Layout.preferredWidth: ConfigControlCenter.tileIconSize
       Layout.preferredHeight: ConfigControlCenter.tileIconSize
       radius: width / 2
@@ -75,10 +80,20 @@ Item {
 
       MaterialIcon {
         anchors.centerIn: parent
+        visible: root.icon.length > 0
         icon: root.icon
         size: 17
         weight: Font.Normal
-        color: root.isActive || root.isPressed ? Theme.options.crust : root.enabled && root.isHovered ? Theme.options.text : Theme.options.subtext1
+        color: iconWell.iconColor
+      }
+
+      SystemIcon {
+        anchors.centerIn: parent
+        visible: root.iconSystem.length > 0
+        enableColoriser: true
+        icon: root.iconSystem
+        size: Styles.font.pixelSize.hugeass
+        color: iconWell.iconColor
       }
     }
 

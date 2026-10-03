@@ -3270,11 +3270,11 @@
     "reversal-extra": {
       "flake": false,
       "locked": {
-        "lastModified": 1785857439,
-        "narHash": "sha256-NKInxUVd+wSmPmDZsu9dqXW8bfmKmFyu6gwgkDvrtAs=",
+        "lastModified": 1791062097,
+        "narHash": "sha256-inL98WgBSNc2l18KUipAwKahj114KIVjZgUmlcRxXu4=",
         "owner": "wochap",
         "repo": "Reversal-Extra",
-        "rev": "20f26be282621e2325133a14dce351d45e24e5b2",
+        "rev": "8ecfd8c071135fa841a491273e4f2842024a8016",
         "type": "github"
       },
       "original": {
@@ -3915,11 +3915,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790815531,
-        "narHash": "sha256-MdgdAhwCB8MshVZHdFVAuhIN+JYT/pnaGPgQgobXFXc=",
+        "lastModified": 1790974132,
+        "narHash": "sha256-upen7Oq71cGba3ztVAvSRygobdpdnkTDitYi5nxP85g=",
         "owner": "wochap",
         "repo": "webscoop",
-        "rev": "71b1e6c064048a9d06561f525210daf6dd4e8901",
+        "rev": "7621fbd629fe6986b48f17ca32a355f92f95eb03",
         "type": "github"
       },
       "original": {

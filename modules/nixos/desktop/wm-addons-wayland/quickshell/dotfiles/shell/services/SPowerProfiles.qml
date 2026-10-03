@@ -11,9 +11,9 @@ Singleton {
 
   property var list: []
   property var iconByProfile: ({
-      performance: "rocket",
-      balanced: "energy_savings_leaf",
-      ["power-saver"]: "nest_eco_leaf"
+      performance: "power-profile-performance-symbolic",
+      balanced: "power-profile-balanced-symbolic",
+      ["power-saver"]: "power-profile-power-saver-symbolic"
     })
   property string active: ""
   property string icon: ""

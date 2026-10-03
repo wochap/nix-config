@@ -41,11 +41,11 @@ RowLayout {
       return root.isButtonInteractive && buttonMouseArea.containsMouse ? Theme.options.surface1 : Theme.options.surface0;
     }
 
-    MaterialIcon {
+    SystemIcon {
+      enableColoriser: true
       anchors.centerIn: parent
       icon: root.icon
-      size: 16
-      weight: Font.Normal
+      size: Styles.font.pixelSize.hugeass
       color: {
         if (!root.enabled) {
           return Theme.options.surface2;

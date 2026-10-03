@@ -8,6 +8,6 @@ OsdProgress {
   serviceSignalName: "changed"
   serviceValueKey: "percentage"
   namespace: "quickshell:backlight-osd"
-  icon: "brightness_6"
+  icon: "display-brightness"
   fillColor: Theme.options.mauve
 }

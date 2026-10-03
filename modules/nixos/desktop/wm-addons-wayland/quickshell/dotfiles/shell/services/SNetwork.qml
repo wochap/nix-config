@@ -39,7 +39,7 @@ Singleton {
           root.label = root.wifi.ssid;
         }
       } else {
-        root.icon = "network-offline";
+        root.icon = "network-wireless-offline";
         root.iconColor = Theme.options.textDimmed;
         root.label = "Off";
       }
@@ -50,11 +50,11 @@ Singleton {
 
     if (root.wired && root.wired.powered) {
       if (!root.wired.connected) {
-        root.icon = "network-offline";
+        root.icon = "network-wired-offline";
         root.iconColor = Theme.options.textDimmed;
         root.label = "Disconnected";
       } else {
-        root.icon = "wired";
+        root.icon = "network-wired";
         root.iconColor = Theme.options.text;
         root.label = "Connected";
       }

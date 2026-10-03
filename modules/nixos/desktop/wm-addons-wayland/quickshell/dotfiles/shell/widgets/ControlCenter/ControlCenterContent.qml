@@ -172,7 +172,7 @@ PanelWindow {
 
           ControlCenterTile {
             Layout.fillWidth: true
-            icon: SNetwork.wifi?.powered ? "wifi" : "wifi_off"
+            iconSystem: SNetwork.wifi?.powered ? "network-wireless-signal-excellent" : "network-wireless-offline"
             label: "Wi-Fi"
             sublabel: SNetwork.wifi?.powered ? (SNetwork.wifi?.connected ? SNetwork.wifi.ssid : "Disconnected") : "Off"
             isActive: SNetwork.wifi?.powered ?? false
@@ -184,7 +184,7 @@ PanelWindow {
 
           ControlCenterTile {
             Layout.fillWidth: true
-            icon: SBluetooth.powered ? (root.bluetoothDevice ? "bluetooth_connected" : "bluetooth") : "bluetooth_disabled"
+            iconSystem: SBluetooth.powered ? (root.bluetoothDevice ? "bluetooth-paired" : "bluetooth-active") : "bluetooth-disabled"
             label: "Bluetooth"
             sublabel: SBluetooth.powered ? (root.bluetoothDevice || "On") : "Off"
             isActive: SBluetooth.powered
@@ -195,7 +195,7 @@ PanelWindow {
 
           ControlCenterTile {
             Layout.fillWidth: true
-            icon: "notifications_off"
+            iconSystem: "notification-disabled"
             label: "Silent mode"
             isActive: SNotifications.isSilent
             onClicked: SNotifications.toggleIsSilent()
@@ -203,7 +203,7 @@ PanelWindow {
 
           ControlCenterTile {
             Layout.fillWidth: true
-            icon: "nightlight"
+            iconSystem: "night-light-symbolic"
             label: "Night light"
             isActive: SHyprsunset.active
             onClicked: SHyprsunset.toggle()
@@ -227,7 +227,7 @@ PanelWindow {
 
           ControlCenterTile {
             Layout.fillWidth: true
-            icon: "shield"
+            iconSystem: "security-high"
             label: "Firewall"
             isActive: SFirewall.isActive
             onClicked: SFirewall.toggle()
@@ -252,7 +252,7 @@ PanelWindow {
           ControlCenterTile {
             Layout.fillWidth: true
             visible: SUpower.available
-            icon: "battery_status_good"
+            iconSystem: "battery-good"
             label: "Charge limit"
             isActive: SLegionBatteryConservation.isActive
             onClicked: SLegionBatteryConservation.toggle()
@@ -261,7 +261,7 @@ PanelWindow {
           ControlCenterTile {
             Layout.fillWidth: true
             visible: SUpower.available
-            icon: "battery_saver"
+            iconSystem: "battery-profile-powersave"
             label: "Battery saver"
             isActive: SBatterySaver.isActive
             onClicked: SBatterySaver.toggle()
@@ -270,7 +270,7 @@ PanelWindow {
           ControlCenterTile {
             Layout.fillWidth: true
             visible: SUpower.available
-            icon: "electric_bolt"
+            iconSystem: "battery-profile-performance"
             label: "Rapid charging"
             isActive: SLegionRapidCharging.isActive
             onClicked: SLegionRapidCharging.toggle()
@@ -318,7 +318,7 @@ PanelWindow {
 
           SliderField {
             Layout.fillWidth: true
-            icon: "nightlight"
+            icon: "night-light-symbolic"
             minimum: 3000
             maximum: 6500
             step: 100
@@ -338,7 +338,7 @@ PanelWindow {
           SliderField {
             Layout.fillWidth: true
             visible: SBacklight.available
-            icon: "brightness_6"
+            icon: "display-brightness"
             minimum: 0
             maximum: 100
             step: 5
@@ -351,7 +351,7 @@ PanelWindow {
 
             Layout.fillWidth: true
             enabled: SPipewire.outputReady
-            icon: SPipewire.isOutputMuted ? "volume_off" : displayValue === 0 ? "volume_mute" : displayValue < 50 ? "volume_down" : "volume_up"
+            icon: SPipewire.isOutputMuted ? "audio-volume-muted" : displayValue === 0 ? "audio-volume-low-zero-panel" : displayValue < 50 ? "audio-volume-medium" : "audio-volume-high"
             minimum: 0
             maximum: 200
             step: 5
@@ -373,7 +373,7 @@ PanelWindow {
 
             Layout.fillWidth: true
             enabled: SPipewire.inputReady
-            icon: SPipewire.isInputMuted ? "mic_off" : "mic"
+            icon: SPipewire.isInputMuted ? "microphone-sensitivity-muted" : "microphone-sensitivity-high"
             minimum: 0
             maximum: 100
             step: 5

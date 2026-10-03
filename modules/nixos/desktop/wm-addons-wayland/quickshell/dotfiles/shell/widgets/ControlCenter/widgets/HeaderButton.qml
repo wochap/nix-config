@@ -67,11 +67,11 @@ Item {
       anchors.centerIn: parent
       spacing: 4
 
-      MaterialIcon {
+      SystemIcon {
+        enableColoriser: true
         anchors.verticalCenter: parent.verticalCenter
         icon: root.icon
-        size: 16
-        weight: Font.Normal
+        size: Styles.font.pixelSize.hugeass
         color: {
           if (root.isArmed) {
             return Theme.options.crust;

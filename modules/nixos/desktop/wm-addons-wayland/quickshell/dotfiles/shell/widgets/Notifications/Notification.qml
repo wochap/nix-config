@@ -125,7 +125,7 @@ Item {
           Layout.alignment: Qt.AlignVCenter
           icon: root.notification?.headerIcon ?? ""
           size: ConfigNotifications.notificationHeaderIconSize
-          iconFallback: "org.xfce.notification"
+          iconFallback: "notification-inactive"
         }
 
         StyledText {

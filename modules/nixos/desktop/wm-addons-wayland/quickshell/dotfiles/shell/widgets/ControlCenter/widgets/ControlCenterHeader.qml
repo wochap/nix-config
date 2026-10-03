@@ -20,12 +20,11 @@ RowLayout {
       color: Theme.options.surface1
     }
 
-    MaterialIcon {
+    SystemIcon {
+      enableColoriser: true
       anchors.centerIn: parent
-      icon: "person"
-      size: 20
-      fill: 1
-      weight: Font.Normal
+      icon: "avatar-default-symbolic"
+      size: Styles.font.pixelSize.hugeass
       color: Theme.options.primary
     }
   }
@@ -67,13 +66,13 @@ RowLayout {
     spacing: 4
 
     HeaderButton {
-      icon: "lock"
+      icon: "system-lock-screen"
       tooltip: "Lock"
       onActivated: SControlCenter.runSessionAction("lock")
     }
 
     HeaderButton {
-      icon: "bedtime"
+      icon: "system-suspend"
       tooltip: "Suspend"
       onActivated: SControlCenter.runSessionAction("suspend")
     }
@@ -81,7 +80,7 @@ RowLayout {
     HeaderButton {
       id: logoutButton
 
-      icon: "logout"
+      icon: "system-log-out"
       tooltip: "Log out"
       needsConfirm: true
       onArmed: buttons.disarmOthers(logoutButton)
@@ -91,7 +90,7 @@ RowLayout {
     HeaderButton {
       id: rebootButton
 
-      icon: "restart_alt"
+      icon: "system-reboot"
       tooltip: "Reboot"
       needsConfirm: true
       onArmed: buttons.disarmOthers(rebootButton)
@@ -101,7 +100,7 @@ RowLayout {
     HeaderButton {
       id: powerButton
 
-      icon: "power_settings_new"
+      icon: "system-shutdown"
       tooltip: "Power off"
       isDestructive: true
       needsConfirm: true

@@ -52,12 +52,11 @@ StyledRect {
         RowLayout {
           spacing: 3
 
-          MaterialIcon {
+          SystemIcon {
+            enableColoriser: true
             visible: SUpower.isCharging
-            icon: "bolt"
-            size: 14
-            fill: 1
-            weight: Font.Normal
+            icon: "ac-adapter"
+            size: Styles.font.pixelSize.hugeass
             color: Theme.options.green
           }
 
