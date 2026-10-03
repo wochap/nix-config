@@ -1,7 +1,6 @@
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
-import QtQuick.Layouts
 import qs.config
 import qs.widgets.common
 
@@ -10,15 +9,30 @@ PanelWindow {
 
   required property var backend
 
-  readonly property real screenPadding: 64
-  readonly property real panelPadding: 8
-
-  // Switcher only ever operates on the focused monitor, so every preview uses
-  // that monitor's aspect ratio.
-  readonly property real previewAspect: root.backend.focusedMonitorAspect
-
   readonly property var toplevels: root.backend.windows
-  readonly property real maxInnerWidth: Math.max(0, 0.8 * root.width - 2 * root.panelPadding)
+  readonly property real maxInnerWidth: Math.max(0, 0.8 * root.width - 2 * panel.padding)
+  readonly property var selectedEntry: {
+    for (const entry of root.toplevels) {
+      if (entry?.id === root.backend.selectedId)
+        return entry;
+    }
+    return null;
+  }
+  readonly property string countText: {
+    const n = root.toplevels.length;
+    const order = root.backend.order === "stable" ? "open order" : "MRU order";
+    return `${n} window${n === 1 ? "" : "s"} · ${order}`;
+  }
+  readonly property string detailMeta: {
+    const entry = root.selectedEntry;
+    if (!entry)
+      return root.countText;
+    const parts = [entry.appClass, `ws ${entry.workspace}`];
+    if (!previewGrid.isStrip)
+      parts.push(`row ${previewGrid.rowOf(entry.id) + 1}/${previewGrid.rows}`);
+    parts.push(root.countText);
+    return parts.filter(part => part.length > 0).join(" · ");
+  }
 
   WlrLayershell.namespace: "quickshell:window-switcher"
   WlrLayershell.layer: WlrLayer.Overlay
@@ -33,12 +47,15 @@ PanelWindow {
   exclusiveZone: 0
   color: "transparent"
 
-  // Transparent background. Invisible full-screen click catcher: clicking
-  // anywhere outside the panel closes the switcher.
-  MouseArea {
-    id: backdrop
+  // Scrim: crust @ 60%. Clicking anywhere outside the panel closes the switcher.
+  Rectangle {
     anchors.fill: parent
-    onClicked: root.backend.hide()
+    color: Theme.addAlpha(Theme.options.crust, 0.6)
+
+    MouseArea {
+      anchors.fill: parent
+      onClicked: root.backend.hide()
+    }
   }
 
   // Esc cancels and Enter confirms. Modifier release is handled only by the
@@ -59,43 +76,28 @@ PanelWindow {
     Component.onCompleted: forceActiveFocus()
   }
 
-  // Centered panel that hugs the grid of window previews.
-  Item {
+  SwitcherPanel {
     id: panel
+
     anchors.centerIn: parent
-    width: previewGrid.contentWidth + 2 * root.panelPadding
-    height: previewGrid.contentHeight + 2 * root.panelPadding
-
-    StyledRectangularShadow {
-      target: panelBackground
-    }
-
-    StyledRect {
-      id: panelBackground
-
-      anchors.fill: parent
-      radius: Math.round(Styles.radius.windowRounding + 6)
-      color: Theme.options.backgroundOverlay
-      border {
-        width: 1
-        color: Theme.options.borderSecondary
-      }
-    }
 
     WindowPreviewGrid {
       id: previewGrid
-      x: root.panelPadding
-      y: root.panelPadding
+
       windows: root.toplevels
-      previewAspect: root.previewAspect
       availableWidth: root.maxInnerWidth
       selectedId: root.backend.selectedId
-      focusedId: root.backend.openedFrom
       interactive: true
       onTileClicked: windowId => {
         root.backend.select(windowId);
         root.backend.confirm();
       }
+    }
+
+    WindowSwitcherDetail {
+      width: previewGrid.contentWidth
+      entry: root.selectedEntry
+      meta: root.detailMeta
     }
   }
 }

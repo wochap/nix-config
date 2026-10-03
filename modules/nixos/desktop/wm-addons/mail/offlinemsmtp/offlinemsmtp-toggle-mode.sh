@@ -5,7 +5,7 @@ DIR="$(dirname "$FILE")"
 FILENAME="$(basename "$FILE")"
 
 toggle() {
-  notify="notify-send --urgency=low --hint=int:transient:1 offlinemsmtp"
+  notify="notify-send --urgency=low --hint=int:transient:1 --app-name=offlinemsmtp --app-icon=mail-queue offlinemsmtp"
 
   if test -f "$FILE"; then
     rm "$FILE"

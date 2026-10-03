@@ -201,7 +201,7 @@ in
 
       systemd.user.services.vdirsyncer-on-failure.Service = {
         Type = "oneshot";
-        ExecStart = "${pkgs.libnotify}/bin/notify-send --app-name vdirsyncer --app-icon apport --icon apport --hint=int:transient:1 'Service failed'";
+        ExecStart = "${pkgs.libnotify}/bin/notify-send --app-name vdirsyncer --app-icon apport --icon apport --hint=int:transient:1 --hint=string:x-shell-meta:vdirsyncer.service 'Calendar sync failed' 'Check journalctl --user -u vdirsyncer'";
       };
 
       systemd.user.timers.vdirsyncer.Timer.Persistent = true;

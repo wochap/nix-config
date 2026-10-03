@@ -55,7 +55,7 @@ mkdir -p "$run"
 
 notify() {
   if command -v notify-send >/dev/null && [[ -n ${DBUS_SESSION_BUS_ADDRESS:-} ]]; then
-    notify-send --app-name=briefing "$@" || true
+    notify-send --app-name=briefing --app-icon=news-feed "$@" || true
   fi
 }
 

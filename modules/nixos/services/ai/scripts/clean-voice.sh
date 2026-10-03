@@ -6,6 +6,7 @@ model="${OMNIROUTE_MODEL:-desktop-free}"
 notify() {
   notify-send \
     --app-name="clean-voice" \
+    --app-icon="audio-input-microphone" \
     --hint=int:transient:1 \
     "$1" \
     "${2:-}" || true

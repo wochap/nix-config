@@ -21,14 +21,25 @@ Item {
     easing.type: Styles.animation.easingType
   }
 
-  NumberAnimation {
+  property real xOffset: 0
+
+  ParallelAnimation {
     id: exitAnimation
 
-    target: root
-    property: "opacity"
-    to: 0
-    duration: Styles.animation.duration
-    easing.type: Styles.animation.easingType
+    NumberAnimation {
+      target: root
+      property: "opacity"
+      to: 0
+      duration: Styles.animation.exitDuration
+      easing.type: Styles.animation.exitEasingType
+    }
+    NumberAnimation {
+      target: root
+      property: "xOffset"
+      to: ConfigNotifications.notificationExitDistance
+      duration: Styles.animation.exitDuration
+      easing.type: Styles.animation.exitEasingType
+    }
     onStopped: {
       const notification = root.retainedModelData;
       if (notification?.isPanelExiting ?? false)
@@ -50,6 +61,9 @@ Item {
   implicitHeight: notificationItem.implicitHeight
   anchors.left: parent?.left
   anchors.right: parent?.right
+  transform: Translate {
+    x: root.xOffset
+  }
 
   Component.onCompleted: {
     root.retainedModelData = root.modelData;

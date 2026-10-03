@@ -1,4 +1,5 @@
 import QtQuick
+import qs.config
 import qs.services
 import qs.widgets.common
 
@@ -7,5 +8,6 @@ OsdProgress {
   serviceSignalName: "changed"
   serviceValueKey: "percentage"
   namespace: "quickshell:backlight-osd"
-  icon: "sunny"
+  icon: "brightness_6"
+  fillColor: Theme.options.mauve
 }

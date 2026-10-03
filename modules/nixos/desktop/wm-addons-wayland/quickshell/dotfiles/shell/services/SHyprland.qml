@@ -98,6 +98,9 @@ Singleton {
           const [key, value] = event.data.split(">>");
           if (key === "ws_offset") {
             root.wsOffset = parseInt(value);
+          } else if (key === "harpoon_changed") {
+            // window tags changed; hyprland emits no event for that
+            root.scheduleRefresh(true);
           }
         }
       } else if (event.name === "activewindow" || event.name === "activewindowv2") {

@@ -9,18 +9,23 @@ PanelWindow {
   id: root
 
   required property var backend
-  readonly property real panelPadding: 8
-  readonly property real maxInnerWidth: Math.max(0, 0.8 * width - 2 * panelPadding)
+  readonly property real maxInnerWidth: Math.max(0, 0.8 * width - 2 * panel.padding)
+  readonly property bool isScratchpad: root.shownSubmap === "scratchpad"
   property var shownWindows: []
+  property string shownSubmap: ""
   property bool panelVisible: false
   property real fadeOpacity: 0
+  readonly property var hoveredEntry: {
+    for (const entry of root.shownWindows) {
+      if (entry?.id === previewGrid.hoveredId)
+        return entry;
+    }
+    return null;
+  }
 
   function showPanel() {
-    if (root.backend.windows.length === 0) {
-      root.hidePanel();
-      return;
-    }
     root.shownWindows = root.backend.windows;
+    root.shownSubmap = root.backend.submap;
     root.panelVisible = true;
     revealTimer.restart();
   }
@@ -31,8 +36,7 @@ PanelWindow {
   }
 
   function syncPanel() {
-    if ((root.backend.submap === "harpoon" || root.backend.submap === "scratchpad")
-        && root.backend.windows.length > 0)
+    if (root.backend.isOpen)
       root.showPanel();
     else
       root.hidePanel();
@@ -47,7 +51,11 @@ PanelWindow {
   exclusionMode: ExclusionMode.Ignore
   exclusiveZone: 0
   color: "transparent"
-  mask: Region {}
+  // Only the panel takes pointer input; the rest of the screen stays usable.
+  // Keyboard input stays with the compositor's harpoon submap.
+  mask: Region {
+    item: panel
+  }
   visible: panelVisible
   WlrLayershell.namespace: "quickshell:harpoon"
   WlrLayershell.layer: WlrLayer.Overlay
@@ -85,8 +93,8 @@ PanelWindow {
 
   Behavior on fadeOpacity {
     NumberAnimation {
-      duration: 140
-      easing.type: Easing.OutCubic
+      duration: Styles.animation.duration
+      easing.type: Styles.animation.easingType
       onFinished: {
         if (root.fadeOpacity === 0) {
           root.panelVisible = false;
@@ -96,35 +104,43 @@ PanelWindow {
     }
   }
 
-  Item {
-    opacity: root.fadeOpacity
+  SwitcherPanel {
+    id: panel
+
     anchors.centerIn: parent
-    width: previewGrid.contentWidth + 2 * root.panelPadding
-    height: previewGrid.contentHeight + 2 * root.panelPadding
-
-    StyledRectangularShadow {
-      target: panelBackground
-    }
-
-    StyledRect {
-      id: panelBackground
-
-      anchors.fill: parent
-      radius: Math.round(Styles.radius.windowRounding + 6)
-      color: Theme.options.backgroundOverlay
-      border {
-        width: 1
-        color: Theme.options.borderSecondary
-      }
-    }
+    opacity: root.fadeOpacity
 
     WindowPreviewGrid {
       id: previewGrid
-      x: root.panelPadding
-      y: root.panelPadding
+
+      visible: root.shownWindows.length > 0
       windows: root.shownWindows
-      previewAspect: root.backend.focusedMonitorAspect
       availableWidth: root.maxInnerWidth
+      interactive: true
+      onTileClicked: windowId => {
+        const entry = root.shownWindows.find(candidate => candidate?.id === windowId);
+        if (entry?.key)
+          root.backend.focus(entry.key);
+      }
+    }
+
+    WindowSwitcherDetail {
+      visible: root.shownWindows.length > 0
+      width: previewGrid.contentWidth
+      entry: root.hoveredEntry
+      meta: {
+        const n = root.shownWindows.length;
+        const count = `${n} ${root.isScratchpad ? "scratchpad" : "window"}${n === 1 ? "" : "s"}`;
+        const entry = root.hoveredEntry;
+        return entry ? [entry.appClass, `ws ${entry.workspace}`, count].filter(part => part.length > 0).join(" · ") : count;
+      }
+      placeholder: "Click or press a key to focus"
+    }
+
+    WindowSwitcherEmpty {
+      visible: root.shownWindows.length === 0
+      title: root.isScratchpad ? "No scratchpads marked" : "No windows marked"
+      hint: "Shift+key marks the active window · Esc exits"
     }
   }
 }

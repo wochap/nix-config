@@ -25,6 +25,8 @@ Singleton {
   property bool isReady: false
   // State Flags to control notification flow
   property bool isSilent: false // User-toggled "Do Not Disturb"
+  // Notifications sent straight to history while silent, reset when DND turns off
+  property int silencedCount: 0
   property bool isIdle: SIdle.isIdle
   property bool isLocked: SLock.isLock
   property bool arePopupsHovered: false
@@ -39,7 +41,11 @@ Singleton {
   readonly property int soundCooldownMs: 1000 // Only play a sound at most once per second
 
   // Whenever a state changes, re-evaluate the notification queue.
-  onIsSilentChanged: processQueues()
+  onIsSilentChanged: {
+    if (!root.isSilent)
+      root.silencedCount = 0;
+    processQueues();
+  }
   onIsIdleChanged: {
     // Layershell surfaces may miss pointer-leave events while blanked or
     // locked, leaving popup timers paused indefinitely.
@@ -86,6 +92,7 @@ Singleton {
 
     notification.isDisposing = true;
     root.stopNotificationTimer(notification);
+    root.deletePersistedThumb(notification);
     const original = dismissOriginal ? root.trackedNotification(notification.notificationId) : null;
     notification.destroy();
     if (original)
@@ -99,6 +106,30 @@ Singleton {
     evicted.forEach(notification => root.disposeNotification(notification));
   }
 
+  function thumbCachePath(notification) {
+    return `${Paths.strip(Paths.notificationImagesCache)}/${notification.notificationId}.png`;
+  }
+
+  // Only removes thumbnails the shell wrote itself
+  function deletePersistedThumb(notification) {
+    const thumb = notification.persistedThumb ?? "";
+    const cacheDir = Paths.strip(Paths.notificationImagesCache);
+    if (!thumb.startsWith(`file://${cacheDir}/`))
+      return;
+    Quickshell.execDetached(["rm", "-f", thumb.replace("file://", "")]);
+  }
+
+  // Sends a notification to the sidebar without showing a popup
+  function silenceNotification(notification) {
+    if (notification.isTransient) {
+      root.disposeNotification(notification);
+      return;
+    }
+    root.silencedCount += 1;
+    root.setHistory([notification, ...root.list]);
+    root.schedulePersist();
+  }
+
   function schedulePersist() {
     persistTimer.restart();
   }
@@ -106,7 +137,14 @@ Singleton {
   // The central "gatekeeper" function. It decides when to show notifications
   // from the incomingQueue based on the current system state.
   function processQueues() {
-    if (root.isSilent || root.isIdle || root.isLocked || root.isPanelOpen) {
+    // DND: everything but critical notifications goes straight to history
+    if (root.isSilent && root.incomingQueue.some(notification => !notification.isCritical)) {
+      const silenced = root.incomingQueue.filter(notification => !notification.isCritical);
+      root.incomingQueue = root.incomingQueue.filter(notification => notification.isCritical);
+      silenced.forEach(notification => root.silenceNotification(notification));
+    }
+
+    if (root.isIdle || root.isLocked || root.isPanelOpen) {
       return;
     }
 
@@ -138,7 +176,8 @@ Singleton {
         }
       }
 
-      if (notification?.notification?.expireTimeout !== 0) {
+      // Critical notifications stay until dismissed
+      if (!notification.isCritical && notification?.notification?.expireTimeout !== 0) {
         notification.timer = notificationTimerComponent.createObject(root, {
           "notificationId": notification.notificationId,
           "duration": notification?.notification?.expireTimeout > 0 ? notification.notification.expireTimeout : defaultPopupTimeout,
@@ -305,6 +344,10 @@ Singleton {
 
   function toggleIsSilent() {
     root.isSilent = !root.isSilent;
+  }
+
+  Component.onCompleted: {
+    Quickshell.execDetached(["mkdir", "-p", Paths.strip(Paths.notificationImagesCache)]);
   }
 
   function stringifyList(list) {

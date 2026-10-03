@@ -8,7 +8,6 @@ Singleton {
   id: root
 
   property bool isBlurEnabled: false
-  property bool areAnimationsEnabled: false
 
   function formatTimeRemaining(totalSeconds) {
     // Ensure the input is a valid number, default to 0 if not.

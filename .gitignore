@@ -14,3 +14,4 @@ RTK.md
 .direnv
 .pi
 .agents
+modules/nixos/desktop/wm-addons-wayland/quickshell/catppuccin-mocha-hyprland-shell

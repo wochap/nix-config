@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import qs.config
 import qs.services
 
 Scope {
@@ -13,8 +14,12 @@ Scope {
   property string iconOff: ""
   property string materialIconOn: ""
   property string materialIconOff: ""
+  property color colorOn: Theme.options.peach
+  property color colorOff: Theme.options.text
   property bool showIconOn: true
+  // isOpen drives the enter/exit animation, isVisible keeps the window alive until the exit finishes
   property bool isOpen: false
+  property bool isVisible: false
   property bool isReady: false
 
   function handleChange() {
@@ -24,15 +29,19 @@ Scope {
     if (service[serviceFlagKey] || root.showIconOn) {
       SOsdStatus.requestShow(root);
       root.isOpen = true;
+      root.isVisible = true;
       timer.restart();
     } else {
-      root.forceClose();
+      // flag turned off: fade out instead of showing the off state
+      timer.stop();
+      root.isOpen = false;
     }
   }
 
   function forceClose() {
     timer.stop();
     root.isOpen = false;
+    root.isVisible = false;
   }
 
   Component.onCompleted: {
@@ -47,7 +56,7 @@ Scope {
   Timer {
     id: timer
 
-    interval: 1000
+    interval: 1200
     repeat: false
     running: false
     onTriggered: {
@@ -68,8 +77,7 @@ Scope {
   }
 
   Loader {
-    active: root.isOpen
-    visible: root.isOpen
+    active: root.isVisible
 
     sourceComponent: OsdStatusContent {
       service: root.service
@@ -79,6 +87,13 @@ Scope {
       iconOff: root.iconOff
       materialIconOn: root.materialIconOn
       materialIconOff: root.materialIconOff
+      colorOn: root.colorOn
+      colorOff: root.colorOff
+      isOpen: root.isOpen
+      onExited: {
+        if (!root.isOpen)
+          root.isVisible = false;
+      }
     }
   }
 }

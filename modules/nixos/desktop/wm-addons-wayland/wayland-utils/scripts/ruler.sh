@@ -56,4 +56,4 @@ fi
 printf "%s" "$area" | wl-copy --trim-newline --type text/plain
 
 # show notification
-notify-send --app-name="Ruler" --app-icon="accessories-screenshot" --icon="accessories-screenshot" --hint=int:transient:1 "width:height" "$area"
+notify-send --app-name="Ruler" --app-icon="accessories-screenshot" --icon="accessories-screenshot" --hint=int:transient:1 "Size copied" "$area" --hint="string:x-shell-meta:width × height"

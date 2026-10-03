@@ -1,4 +1,5 @@
 import QtQuick
+import qs.config
 import qs.services
 import qs.widgets.common
 
@@ -8,7 +9,8 @@ Item {
     serviceSignalName: "isOutputMutedChanged"
     serviceFlagKey: "isOutputMuted"
     namespace: "quickshell:output-mute-osd"
-    iconOff: ""
-    iconOn: ""
+    materialIconOn: "volume_off"
+    materialIconOff: "volume_up"
+    colorOn: Theme.options.peach
   }
 }

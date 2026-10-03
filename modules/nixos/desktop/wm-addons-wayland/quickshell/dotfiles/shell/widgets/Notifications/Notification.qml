@@ -2,20 +2,25 @@ import Quickshell
 import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import qs.config
 import qs.services
 import qs.services.SNotifications
 import qs.widgets.common
 import "./Utils.js" as Util
 
+// Notification card, used both as toast (isPopup) and as sidebar entry
 Item {
   id: root
 
   required property SNotification notification
   required property bool isPopup
-  property bool isExpanded: true
-  property bool hasTimeout: (root.notification?.timer ?? null) !== null && (root.notification?.time ?? 0) > 0
+  property bool isExpanded: false
+  readonly property bool isCritical: root.notification?.isCritical ?? false
+  readonly property bool isLow: root.notification?.isLow ?? false
+  readonly property bool hasTimeout: (root.notification?.timer ?? null) !== null && (root.notification?.time ?? 0) > 0
+  readonly property bool isHovered: hoverHandler.hovered
+  readonly property bool isPressed: mouseArea.pressed
+  readonly property color accent: root.isCritical ? Theme.options.red : Theme.options.primary
 
   function timeoutNotification() {
     SNotifications.timeoutNotification(root.notification?.notificationId ?? -1);
@@ -25,202 +30,295 @@ Item {
     SNotifications.discardNotification(root.notification?.notificationId ?? -1);
   }
 
-  implicitWidth: wrapperRectangle.implicitWidth
-  implicitHeight: wrapperRectangle.implicitHeight
-
-  Component.onCompleted: {
-    root.isExpanded = !isPopup;
+  // Copies short-lived thumbnails (image-data, /tmp files) into the cache dir
+  function persistThumb() {
+    const notification = root.notification;
+    if (!notification || notification.persistedThumb.length > 0)
+      return;
+    const thumb = notification.thumb;
+    if (!thumb.startsWith("image://qsimage") && !thumb.startsWith("file:///tmp/"))
+      return;
+    const path = SNotifications.thumbCachePath(notification);
+    const size = ConfigNotifications.notificationThumbSize * 2;
+    thumbImage.grabToImage(result => {
+      if (result.saveToFile(path)) {
+        notification.persistedThumb = `file://${path}`;
+        SNotifications.schedulePersist();
+      }
+    }, Qt.size(size, size));
   }
+
+  implicitWidth: ConfigNotifications.notificationsPopupsWidth
+  implicitHeight: card.implicitHeight
+  opacity: root.isLow ? 0.92 : 1
 
   StyledRectangularShadow {
-    visible: isPopup
-    target: wrapperRectangle
+    visible: root.isPopup
+    target: card
+    elevation: Styles.elevation.e2
   }
 
-  WrapperRectangle {
-    id: wrapperRectangle
+  // ClippingRectangle keeps the timeout bar inside the rounded corners
+  ClippingRectangle {
+    id: card
 
     anchors.fill: parent
-    color: Theme.addAlpha(root.isPopup ? Theme.options.backgroundOverlay : Theme.options.background, root.isPopup && Global.isBlurEnabled ? 0.65 : 1)
+    implicitHeight: content.implicitHeight + ConfigNotifications.notificationPaddingTop + ConfigNotifications.notificationPaddingBottom
     radius: Styles.radius.windowRounding
-    leftMargin: ConfigNotifications.notificationPadding
-    rightMargin: ConfigNotifications.notificationPadding
-    topMargin: ConfigNotifications.notificationPadding * 2
-    bottomMargin: isPopup && hasTimeout ? 0 : ConfigNotifications.notificationPadding * 2
+    color: {
+      const base = root.isPressed ? Theme.options.surface0 : root.isHovered ? Theme.tint(Theme.options.base, Theme.options.surface0, 0.5) : root.isCritical ? Theme.tint(Theme.options.base, Theme.options.red, 0.04) : Theme.options.base;
+      return root.isPopup && ConfigNotifications.isBlurEnabled ? Theme.addAlpha(base, 0.65) : base;
+    }
     border {
       width: 1
-      color: Theme.options.borderSecondary
+      color: root.isCritical ? Theme.addAlpha(Theme.options.red, 0.6) : (root.isHovered || root.isPressed) ? Theme.options.surface1 : Theme.options.surface0
     }
 
-    child: Item {
-      implicitWidth: notificationContent.implicitWidth
-      implicitHeight: notificationContent.implicitHeight
+    Behavior on color {
+      animation: Styles.animations.colorAnimation.createObject(this)
+    }
 
-      MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
-        onClicked: event => {
-          if (!root.notification)
-            return;
-          switch (event.button) {
-          case Qt.LeftButton:
-            if (root.isPopup) {
-              root.isExpanded = !root.isExpanded;
-            }
-            break;
-          case Qt.RightButton:
-            if (root.isPopup) {
-              root.timeoutNotification();
-            } else {
-              root.discardNotification();
-            }
-            break;
-          }
-          event.accepted = true;
+    HoverHandler {
+      id: hoverHandler
+    }
+
+    MouseArea {
+      id: mouseArea
+
+      anchors.fill: parent
+      acceptedButtons: Qt.LeftButton | Qt.RightButton
+      onClicked: event => {
+        if (!root.notification)
+          return;
+        switch (event.button) {
+        case Qt.LeftButton:
+          root.isExpanded = !root.isExpanded;
+          break;
+        case Qt.RightButton:
+          if (root.isPopup)
+            root.timeoutNotification();
+          else
+            root.discardNotification();
+          break;
         }
+        event.accepted = true;
       }
+    }
 
-      ColumnLayout {
-        id: notificationContent
+    ColumnLayout {
+      id: content
 
-        anchors.fill: parent
-        spacing: ConfigNotifications.notificationPadding
+      anchors {
+        top: parent.top
+        left: parent.left
+        right: parent.right
+        topMargin: ConfigNotifications.notificationPaddingTop
+        leftMargin: ConfigNotifications.notificationPaddingLeft
+        rightMargin: ConfigNotifications.notificationPaddingRight
+      }
+      spacing: ConfigNotifications.notificationSpacing
 
-        RowLayout {
-          id: rowLayout
+      // header: icon · app · time · CRITICAL ... expand close
+      RowLayout {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 18
+        spacing: 6
 
-          spacing: ConfigNotifications.notificationPadding
+        SystemIcon {
+          Layout.alignment: Qt.AlignVCenter
+          icon: root.notification?.headerIcon ?? ""
+          size: ConfigNotifications.notificationHeaderIconSize
+          iconFallback: "org.xfce.notification"
+        }
 
-          Image {
-            id: notificationImage
+        StyledText {
+          Layout.maximumWidth: 160
+          text: root.notification?.appName ?? ""
+          color: Theme.options.subtext0
+          font.pixelSize: Styles.font.pixelSize.smaller
+          font.letterSpacing: 0.2
+          elide: Text.ElideRight
+        }
 
-            visible: (root.notification?.image ?? "") !== ""
-            Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
-            Layout.preferredWidth: 36
-            Layout.preferredHeight: 36
-            source: root.notification?.image ?? ""
-            fillMode: Image.PreserveAspectFit
-            smooth: true
-            asynchronous: true
-            layer.enabled: true
-            layer.effect: OpacityMask {
-              maskSource: Rectangle {
-                width: notificationImage.width
-                height: notificationImage.height
-                radius: 2
-              }
-            }
-          }
-
-          SystemIcon {
-            visible: (root.notification?.image ?? "") === ""
-            Layout.alignment: right.implicitHeight > 80 ? Qt.AlignTop : Qt.AlignVCenter
-            icon: root.notification?.appIcon || root.notification?.appName || ""
-            size: 36
-            iconFallback: "org.xfce.notification"
-          }
-
-          ColumnLayout {
-            id: right
-
-            spacing: 0
-
-            RowLayout {
-              spacing: ConfigNotifications.notificationPadding
-
-              StyledText {
-                Layout.fillWidth: true
-                text: root.notification?.appName ?? ""
-                color: Theme.options.subtext1
-                font.pixelSize: Styles.font.pixelSize.smaller
-              }
-
-              StyledText {
-                text: Util.formatTimeAgo(root.notification?.time ?? 0)
-                color: Theme.options.overlay0
-                font.pixelSize: Styles.font.pixelSize.smaller
-              }
-
-              NotificationButtonSm {
-                visible: root.isPopup
-                materialIcon: root.isExpanded ? "unfold_less" : "unfold_more"
-                onClicked: {
-                  root.isExpanded = !root.isExpanded;
-                }
-              }
-
-              NotificationButtonSm {
-                visible: root.isPopup
-                materialIcon: "chevron_right"
-                onClicked: {
-                  root.timeoutNotification();
-                }
-              }
-
-              NotificationButtonSm {
-                materialIcon: "close"
-                onClicked: {
-                  root.discardNotification();
-                }
-              }
-            }
-
-            StyledText {
-              Layout.fillWidth: true
-              text: root.notification?.summary ?? ""
-              font.pixelSize: Styles.font.pixelSize.small
-              elide: Text.ElideMiddle
-              wrapMode: root.isExpanded ? Text.WordWrap : Text.NoWrap
-            }
-
-            ColumnLayout {
-              spacing: 3
-
-              StyledText {
-                visible: (root.notification?.body?.length ?? 0) > 0
-                Layout.fillWidth: true
-                text: root.notification?.body ?? ""
-                color: Theme.options.subtext0
-                font.pixelSize: Styles.font.pixelSize.small
-                elide: Text.ElideMiddle
-                wrapMode: root.isExpanded ? Text.WordWrap : Text.NoWrap
-                maximumLineCount: root.isExpanded ? 0 : 1
-                clip: true
-                textFormat: Text.RichText
-              }
-
-              RowLayout {
-                visible: (root.notification?.actions?.length ?? 0) > 0
-                Layout.topMargin: ConfigNotifications.notificationPadding / 2
-                spacing: ConfigNotifications.notificationPadding
-
-                Repeater {
-                  model: root.notification?.actions ?? []
-                  delegate: NotificationButtonMd {
-                    text: modelData.text.trim().length > 0 ? modelData.text : "Default"
-                    onClicked: {
-                      SNotifications.attemptInvokeAction(root.notification?.notificationId ?? -1, modelData.identifier);
-                    }
-                  }
-                }
-              }
-            }
-          }
+        StyledText {
+          text: `· ${Util.formatTimeAgo(root.notification?.time ?? 0)}`
+          color: Theme.options.overlay0
+          font.pixelSize: Styles.font.pixelSize.smaller
         }
 
         Rectangle {
-          Layout.topMargin: wrapperRectangle.topMargin - notificationContent.spacing + 1
-          visible: root.isPopup && root.hasTimeout
-          implicitWidth: parent.width * (root.notification?.timer?.progress ?? 1)
-          implicitHeight: 1
-          color: Theme.options.primary
+          visible: root.isCritical
+          implicitWidth: criticalText.implicitWidth + 12
+          implicitHeight: 16
+          radius: 8
+          color: Theme.addAlpha(Theme.options.red, 0.14)
+
+          StyledText {
+            id: criticalText
+
+            anchors.centerIn: parent
+            text: "CRITICAL"
+            color: Theme.options.red
+            font.pixelSize: Styles.font.pixelSize.smaller
+            font.weight: Font.Bold
+            font.letterSpacing: 0.6
+          }
+        }
+
+        Item {
+          Layout.fillWidth: true
+        }
+
+        NotificationButtonSm {
+          visible: bodyText.truncated || metaText.truncated || root.isExpanded
+          materialIcon: root.isExpanded ? "unfold_less" : "unfold_more"
+          onClicked: root.isExpanded = !root.isExpanded
+        }
+
+        NotificationButtonSm {
+          materialIcon: "close"
+          onClicked: root.discardNotification()
+        }
+      }
+
+      RowLayout {
+        Layout.fillWidth: true
+        spacing: 10
+
+        ColumnLayout {
+          Layout.fillWidth: true
+          Layout.alignment: Qt.AlignTop
+          spacing: 2
+
+          StyledText {
+            Layout.fillWidth: true
+            visible: text.length > 0
+            text: root.notification?.summary ?? ""
+            color: root.isLow ? Theme.options.subtext1 : Theme.options.text
+            font.pixelSize: Styles.font.pixelSize.normal
+            font.weight: Font.Medium
+            lineHeight: 18
+            lineHeightMode: Text.FixedHeight
+            wrapMode: Text.Wrap
+            textFormat: Text.PlainText
+          }
+
+          StyledText {
+            id: metaText
+
+            Layout.fillWidth: true
+            visible: text.length > 0
+            text: root.notification?.meta ?? ""
+            color: Theme.options.overlay1
+            font.pixelSize: Styles.font.pixelSize.smaller
+            lineHeight: 14
+            lineHeightMode: Text.FixedHeight
+            elide: root.isExpanded ? Text.ElideNone : Text.ElideRight
+            wrapMode: root.isExpanded ? Text.Wrap : Text.NoWrap
+            textFormat: Text.PlainText
+          }
+
+          StyledText {
+            id: bodyText
+
+            Layout.fillWidth: true
+            visible: text.length > 0
+            text: root.notification?.body ?? ""
+            color: root.isLow ? Theme.options.subtext0 : Theme.options.subtext1
+            font.pixelSize: Styles.font.pixelSize.small
+            lineHeight: 16
+            lineHeightMode: Text.FixedHeight
+            wrapMode: Text.Wrap
+            maximumLineCount: root.isExpanded ? 100 : 2
+            elide: Text.ElideRight
+            textFormat: Text.StyledText
+            onLinkActivated: link => Qt.openUrlExternally(link)
+          }
+
+          StyledText {
+            Layout.fillWidth: true
+            Layout.topMargin: 2
+            visible: text.length > 0
+            text: root.notification?.foot ?? ""
+            color: Theme.options.overlay0
+            font.pixelSize: Styles.font.pixelSize.smaller
+            lineHeight: 14
+            lineHeightMode: Text.FixedHeight
+            elide: Text.ElideRight
+            textFormat: Text.PlainText
+          }
+        }
+
+        ClippingRectangle {
+          id: thumb
+
+          visible: (root.notification?.thumb ?? "") !== "" && thumbImage.status !== Image.Error
+          Layout.alignment: Qt.AlignTop
+          implicitWidth: ConfigNotifications.notificationThumbSize
+          implicitHeight: ConfigNotifications.notificationThumbSize
+          radius: Styles.radius.small
+          color: Theme.options.mantle
+
+          Image {
+            id: thumbImage
+
+            anchors.fill: parent
+            source: root.notification?.thumb ?? ""
+            sourceSize: Qt.size(ConfigNotifications.notificationThumbSize * 2, ConfigNotifications.notificationThumbSize * 2)
+            fillMode: Image.PreserveAspectCrop
+            smooth: true
+            asynchronous: true
+            onStatusChanged: {
+              if (status === Image.Ready)
+                root.persistThumb();
+            }
+          }
+
+          Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+            radius: thumb.radius
+            border {
+              width: 1
+              color: Theme.options.surface0
+            }
+          }
+        }
+      }
+
+      Flow {
+        Layout.fillWidth: true
+        Layout.topMargin: 2
+        visible: (root.notification?.actions?.length ?? 0) > 0
+        spacing: 6
+
+        Repeater {
+          model: root.notification?.actions ?? []
+          delegate: NotificationButtonMd {
+            required property var modelData
+            required property int index
+
+            isPrimary: index === 0
+            accent: root.accent
+            text: modelData.text.trim().length > 0 ? modelData.text : "Default"
+            onClicked: SNotifications.attemptInvokeAction(root.notification?.notificationId ?? -1, modelData.identifier)
+          }
         }
       }
     }
-  }
 
-  // RetainableLock {
-  //   object: root.notification.notification
-  //   locked: true
-  // }
+    // timeout bar
+    Rectangle {
+      visible: root.isPopup && root.hasTimeout && !root.isCritical
+      anchors {
+        left: parent.left
+        bottom: parent.bottom
+      }
+      width: parent.width * (root.notification?.timer?.progress ?? 1)
+      height: ConfigNotifications.notificationTimeoutBarHeight
+      topRightRadius: height
+      bottomRightRadius: height
+      color: root.isLow ? Theme.options.overlay1 : Theme.options.primary
+    }
+  }
 }

@@ -14,8 +14,15 @@ let
     preferDark
     configDirectory
     userName
+    isSandbox
     ;
   hmConfig = config.home-manager.users.${userName};
+  personalSopsFile = ../../../../../secrets-sops/personal.yaml;
+  # sops-nix fails the build when a declared key is missing from the file,
+  # so the weather location secret is only declared once it has been added
+  hasWeatherLocation = lib.hasInfix "\npersonal-weather-location:" (
+    "\n" + builtins.readFile personalSopsFile
+  );
 
   quickshell-final = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default;
   shell-capslock = pkgs.writeScriptBin "shell-capslock" (
@@ -84,6 +91,15 @@ in
     ];
 
     fonts.packages = with pkgs; [ nixpkgs-unstable.material-symbols ];
+
+    # "lat,lon,City", read by SWeather.qml from /run/secrets/personal-weather-location,
+    # falls back to IP geolocation when missing
+    sops.secrets = lib.mkIf (config._custom.security.sops.enable && !isSandbox && hasWeatherLocation) {
+      "personal-weather-location" = {
+        owner = userName;
+        sopsFile = personalSopsFile;
+      };
+    };
 
     _custom.hm = {
       home.packages = with pkgs; [

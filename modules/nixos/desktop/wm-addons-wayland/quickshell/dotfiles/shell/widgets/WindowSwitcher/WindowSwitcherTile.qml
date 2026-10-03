@@ -1,25 +1,72 @@
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Widgets
 import QtQuick
-import QtQuick.Layouts
 import qs.config
 import qs.widgets.common
 
+// One window preview: a 16:10 capture, workspace badge and an icon + title row.
+// States: default, hovered, selected (2px ring + scale), urgent and special.
 Item {
   id: tile
 
-  property var captureSource: null
-  property string icon: ""
-  property real previewAspect: 16.0 / 9.0
-  property string title: ""
+  required property var entry
+  property real previewHeight: 140
   property bool selected: false
-  // Window that had focus when the switcher opened.
-  property bool focused: false
   property bool interactive: true
-  property string badge: ""
+  readonly property bool hovered: mouseArea.containsMouse
+  readonly property bool urgent: tile.entry?.urgent ?? false
+  readonly property bool special: tile.entry?.special ?? false
+  readonly property string key: tile.entry?.key ?? ""
+  readonly property real padding: 6
+
   signal clicked
 
+  implicitHeight: tile.padding * 3 + tile.previewHeight + 24
+  z: tile.selected ? 1 : 0
+  scale: tile.selected ? 1.04 : 1
+
+  Behavior on scale {
+    animation: Styles.animations.numberAnimation.createObject(tile)
+  }
+
+  // Soft outer ring of the selected tile.
+  StyledRect {
+    anchors {
+      fill: background
+      margins: -4
+    }
+    radius: Styles.radius.windowRounding + 4
+    color: tile.selected ? Theme.addAlpha(Theme.options.primary, 0.14) : "transparent"
+  }
+
+  StyledRect {
+    id: background
+
+    anchors.fill: parent
+    radius: Styles.radius.windowRounding
+    color: tile.selected ? Theme.options.surface0 : tile.hovered ? Theme.tint(Theme.options.background, Theme.options.surface0, 0.5) : Theme.options.background
+    border {
+      width: tile.selected ? 2 : 1
+      color: {
+        if (tile.selected)
+          return Theme.options.primary;
+        if (tile.hovered)
+          return Theme.options.surface1;
+        if (tile.urgent)
+          return Theme.addAlpha(Theme.options.red, 0.6);
+        return Theme.options.borderSecondary;
+      }
+    }
+
+    Behavior on border.color {
+      animation: Styles.animations.colorAnimation.createObject(tile)
+    }
+  }
+
   MouseArea {
+    id: mouseArea
+
     anchors.fill: parent
     enabled: tile.interactive
     hoverEnabled: true
@@ -27,102 +74,171 @@ Item {
     onClicked: tile.clicked()
   }
 
-  ColumnLayout {
-    anchors.fill: parent
-    spacing: 4
+  ClippingRectangle {
+    id: preview
 
-    StyledRect {
-      Layout.fillWidth: true
-      Layout.preferredHeight: width / tile.previewAspect
-      radius: Styles.radius.windowRounding
-      color: Theme.options.surface0
-      border {
-        width: tile.selected ? 3 : 1.5
-        color: tile.selected ? Theme.options.primary : Theme.options.borderSecondary
-      }
+    x: tile.padding
+    y: tile.padding
+    width: tile.width - 2 * tile.padding
+    height: tile.previewHeight
+    radius: Styles.radius.small
+    color: Theme.options.backgroundOverlay
 
-      Behavior on border.color {
-        animation: Styles.animations.colorAnimation.createObject(tile)
-      }
+    Item {
+      anchors.fill: parent
+      opacity: tile.special ? 0.55 : 1
 
+      // Cover the 16:10 box: scale the capture up and crop the overflow.
       ScreencopyView {
         id: capture
-        anchors {
-          fill: parent
-          margins: 8
+
+        readonly property real coverScale: {
+          const w = capture.sourceSize.width;
+          const h = capture.sourceSize.height;
+          return w > 0 && h > 0 ? Math.max(preview.width / w, preview.height / h) : 1;
         }
-        clip: true
-        captureSource: tile.captureSource
+
+        anchors.centerIn: parent
+        width: capture.sourceSize.width > 0 ? capture.sourceSize.width * capture.coverScale : parent.width
+        height: capture.sourceSize.height > 0 ? capture.sourceSize.height * capture.coverScale : parent.height
+        captureSource: tile.entry?.captureSource ?? null
         live: false
-        visible: tile.captureSource !== null
+        visible: capture.captureSource !== null
       }
-
-      Rectangle {
-        visible: tile.badge.length > 0
-        anchors {
-          top: parent.top
-          left: parent.left
-          margins: 8
-        }
-        implicitWidth: Math.max(implicitHeight, badgeLabel.implicitWidth + 12)
-        implicitHeight: badgeLabel.implicitHeight + 8
-        radius: 5
-        color: Theme.options.backgroundOverlay
-        border {
-          width: 1
-          color: Theme.options.primary
-        }
-
-        StyledText {
-          id: badgeLabel
-          anchors.centerIn: parent
-          text: tile.badge.toUpperCase()
-          color: Theme.options.primary
-          font.pixelSize: Styles.font.pixelSize.small
-          font.weight: Font.Bold
-        }
-      }
-
-      // StyledText {
-      //   anchors.centerIn: parent
-      //   width: parent.width - 16
-      //   visible: tile.captureSource === null || !capture.hasContent
-      //   text: tile.title
-      //   font.pixelSize: Styles.font.pixelSize.large
-      //   elide: Text.ElideMiddle
-      //   horizontalAlignment: Text.AlignHCenter
-      // }
-    }
-
-    RowLayout {
-      Layout.fillWidth: true
-      Layout.preferredHeight: 18
-      Layout.leftMargin: 8
-      Layout.rightMargin: 8
-      spacing: 4
 
       SystemIcon {
-        Layout.alignment: Qt.AlignVCenter
-        icon: tile.icon
-        size: Styles.font.pixelSize.large
+        anchors.centerIn: parent
+        visible: !capture.hasContent
+        opacity: 0.6
+        icon: tile.entry?.icon ?? ""
+        size: 32
       }
+    }
 
-      StyledText {
-        Layout.fillWidth: true
-        Layout.alignment: Qt.AlignVCenter
-        elide: Text.ElideMiddle
-        font.pixelSize: Styles.font.pixelSize.small
-        color: tile.selected ? Theme.options.text : Theme.options.textDimmed
-        text: tile.title
+    // Harpoon key and urgent dot share the top-left corner.
+    Row {
+      anchors {
+        top: parent.top
+        left: parent.left
+        margins: 5
+      }
+      spacing: 4
+
+      Keycap {
+        visible: tile.key.length > 0
+        text: tile.key.toUpperCase()
       }
 
       Rectangle {
-        visible: tile.focused
-        Layout.alignment: Qt.AlignVCenter
+        visible: tile.urgent
+        anchors.verticalCenter: parent.verticalCenter
         implicitWidth: 8
         implicitHeight: 8
         radius: 4
+        color: Theme.options.red
+        border {
+          width: 2
+          color: Theme.options.background
+        }
+      }
+    }
+
+    // Workspace badge.
+    Rectangle {
+      visible: badgeLabel.text.length > 0
+      anchors {
+        top: parent.top
+        right: parent.right
+        margins: 5
+      }
+      implicitWidth: Math.max(18, badgeLabel.implicitWidth + 10)
+      implicitHeight: 18
+      radius: 9
+      color: {
+        if (tile.selected)
+          return Theme.options.primary;
+        if (tile.urgent)
+          return Theme.options.red;
+        return Theme.addAlpha(Theme.options.crust, 0.85);
+      }
+      border {
+        width: tile.special && !tile.selected ? 1 : 0
         color: Theme.options.primary
+      }
+
+      StyledText {
+        id: badgeLabel
+
+        anchors.centerIn: parent
+        text: tile.entry?.workspace ?? ""
+        font.pixelSize: Styles.font.pixelSize.smaller
+        font.weight: Font.Bold
+        color: {
+          if (tile.selected || tile.urgent)
+            return Theme.options.crust;
+          if (tile.special)
+            return Theme.options.primary;
+          return Theme.options.text;
+        }
+      }
+    }
+
+    // Special workspace tag.
+    Rectangle {
+      visible: tile.special && specialLabel.text.length > 0
+      anchors {
+        left: parent.left
+        bottom: parent.bottom
+        margins: 5
+      }
+      width: Math.min(specialLabel.implicitWidth + 12, preview.width - 10)
+      implicitHeight: 16
+      radius: 8
+      color: Theme.addAlpha(Theme.options.crust, 0.85)
+
+      StyledText {
+        id: specialLabel
+
+        anchors {
+          fill: parent
+          leftMargin: 6
+          rightMargin: 6
+        }
+        text: tile.entry?.specialName ?? ""
+        elide: Text.ElideRight
+        font.pixelSize: Styles.font.pixelSize.smaller
+        color: Theme.options.primary
+      }
+    }
+  }
+
+  Row {
+    x: tile.padding + 2
+    y: preview.y + preview.height + tile.padding
+    width: tile.width - 2 * (tile.padding + 2)
+    height: 24
+    spacing: 8
+
+    SystemIcon {
+      anchors.verticalCenter: parent.verticalCenter
+      icon: tile.entry?.icon ?? ""
+      size: 20
+    }
+
+    StyledText {
+      anchors.verticalCenter: parent.verticalCenter
+      width: parent.width - 28
+      elide: Text.ElideRight
+      font.pixelSize: Styles.font.pixelSize.small
+      text: tile.entry?.title ?? ""
+      color: {
+        if (tile.selected || tile.hovered)
+          return Theme.options.text;
+        if (tile.urgent)
+          return Theme.options.red;
+        if (tile.special)
+          return Theme.options.overlay1;
+        return Theme.options.subtext0;
       }
     }
   }

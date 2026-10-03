@@ -74,7 +74,7 @@ in
           lieer-on-failure = {
             Service = {
               Type = "oneshot";
-              ExecStart = "${pkgs.libnotify}/bin/notify-send --app-name lieer --app-icon apport --icon apport --hint=int:transient:1 'Service failed'";
+              ExecStart = "${pkgs.libnotify}/bin/notify-send --app-name lieer --app-icon apport --icon apport --hint=int:transient:1 --hint=string:x-shell-meta:lieer 'Mail sync failed' 'Check journalctl --user for lieer units'";
             };
           };
         }

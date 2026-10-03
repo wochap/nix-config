@@ -82,6 +82,13 @@ if not constants.is_kiosk then
     hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call control-center toggle"),
     { description = "Control Center" }
   )
+
+  -- Toggle calendar
+  hl.bind(
+    mod .. " + SHIFT + t",
+    hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call calendar toggle"),
+    { description = "Calendar" }
+  )
 end
 
 --- WM KEYBINDINGS
@@ -633,6 +640,12 @@ hl.define_submap("tui", "reset", function()
   hl.bind("c", function()
     scratchpad.raise_or_run("tui-calendar", "tui-calendar", scratchpad_opts)
   end, { description = "Calendar" })
+  hl.bind("w", function()
+    scratchpad.raise_or_run("tui-wifi", "tui-wifi", scratchpad_opts)
+  end, { description = "Wi-Fi" })
+  hl.bind("y", function()
+    scratchpad.raise_or_run("tui-bluetooth", "tui-bluetooth", scratchpad_opts)
+  end, { description = "Bluetooth" })
   hl.bind("b", function()
     scratchpad.raise_or_run("tui-bookmarks", "tui-bookmarks --select", scratchpad_opts)
   end, { description = "Bookmarks" })

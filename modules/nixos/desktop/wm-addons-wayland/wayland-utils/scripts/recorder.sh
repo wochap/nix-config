@@ -72,15 +72,26 @@ notify_user() {
 
   copy_to_cb
 
-  # generate thumbnail
+  # generate thumbnail, kept in the cache dir so the notification history
+  # can still show it after this script exits
   thumbnail_size=500
   last_thumbnail_size="288x288"
-  thumbnail=$(mktemp --suffix .png) || exit 1
-  trap 'rm -f "$thumbnail"' exit
+  thumbnail_dir="${XDG_CACHE_HOME:-$HOME/.cache}/recorder/thumbs"
+  mkdir -p "$thumbnail_dir"
+  thumbnail="$thumbnail_dir/$(basename "$dest").png"
   ffmpegthumbnailer -i "$dest" -o "$thumbnail" -s "$thumbnail_size"
   magick "$thumbnail" -resize "$last_thumbnail_size>" -gravity center -background transparent -extent "$last_thumbnail_size" "$thumbnail"
+  # drop thumbnails older than a week
+  find "$thumbnail_dir" -type f -mtime +7 -delete
 
-  action=$(notify-send --app-name="Recorder" --app-icon="$thumbnail" --icon="$thumbnail" --hint="string:image-path:$thumbnail" "Video recording" "Recording saved" --action="open=Open" --action="open_in_fm=Open in file manager" --action="trim=Trim")
+  duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$dest" 2>/dev/null | cut -d. -f1)
+  size=$(du -h "$dest" | cut -f1)
+  body="${dest/#$HOME/\~} · ${size}"
+  if [[ -n "$duration" ]]; then
+    body="$body · $(date -u -d "@$duration" +%M:%S)"
+  fi
+
+  action=$(notify-send --app-name="Recorder" --app-icon="screenrecorder" --icon="screenrecorder" --hint="string:image-path:$thumbnail" --hint="string:x-shell-preview:$thumbnail" "Recording saved" "$body" --action="open=Open" --action="open_in_fm=Open in file manager" --action="trim=Trim")
 
   case $action in
   "open_in_fm")

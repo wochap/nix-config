@@ -1,65 +1,94 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import qs.config
 import qs.services
 import qs.widgets.common
-import qs.widgets.ControlCenter.widgets
 
-RowLayout {
-  spacing: 4
+// segmented control for power-profiles-daemon
+StyledRect {
+  id: root
 
-  ButtonGroup {
-    id: powerProfileGroup
+  readonly property var labels: ({
+      "power-saver": "Saver",
+      balanced: "Balanced",
+      performance: "Perform."
+    })
+  readonly property var order: ["power-saver", "balanced", "performance"]
+  readonly property var icons: ({
+      "power-saver": "eco",
+      balanced: "balance",
+      performance: "rocket_launch"
+    })
 
-    onCheckedButtonChanged: {
-      if (checkedButton) {
-        SPowerProfiles.set(checkedButton.profileValue);
-      }
-    }
+  implicitHeight: 32
+  radius: height / 2
+  color: Theme.options.mantle
+  border {
+    width: 1
+    color: Theme.options.surface0
   }
 
-  Repeater {
-    model: SPowerProfiles.list
-    delegate: ToolButton {
-      required property var modelData
-      property string profileValue: modelData.profile
+  RowLayout {
+    anchors {
+      fill: parent
+      margins: 2
+    }
+    spacing: 2
 
-      // ToolTip.visible: hovered
-      // ToolTip.text: modelData.profile
-      Layout.fillWidth: true
-      ButtonGroup.group: powerProfileGroup
-      checkable: true
-      checked: modelData.profile === SPowerProfiles.active
-      padding: 0
-      contentItem: Item {
-        MaterialIcon {
-          anchors.centerIn: parent
-          icon: modelData.icon
-          size: 20
-          color: {
-            if (parent.parent.checked || parent.parent.hovered) {
-              return Theme.options.background;
-            }
-            return Theme.options.text;
-          }
-          weight: Font.Light
+    Repeater {
+      // saver → balanced → performance, regardless of the daemon order
+      model: [...SPowerProfiles.list].sort((a, b) => root.order.indexOf(a.profile) - root.order.indexOf(b.profile))
+
+      delegate: StyledRect {
+        id: segment
+
+        required property var modelData
+        readonly property bool isSelected: modelData.profile === SPowerProfiles.active
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.preferredWidth: 1
+        radius: height / 2
+        color: segment.isSelected ? Theme.addAlpha(Theme.options.primary, Styles.tint.hover) : mouseArea.containsMouse ? Theme.options.surface0 : "transparent"
+        border {
+          width: segment.isSelected ? 1 : 0
+          color: Theme.addAlpha(Theme.options.primary, 0.5)
         }
-      }
-      background: StyledRect {
-        implicitWidth: 1
-        implicitHeight: 32
-        radius: Styles.radius.full
-        color: {
-          if (parent.hovered) {
-            return Qt.lighter(Theme.options.primary, 1.1);
+
+        RowLayout {
+          anchors.centerIn: parent
+          spacing: 5
+
+          MaterialIcon {
+            icon: root.icons[segment.modelData.profile] ?? segment.modelData.icon
+            size: 15
+            weight: Font.Normal
+            color: label.color
           }
-          if (parent.checked) {
-            return Theme.options.primary;
+
+          StyledText {
+            id: label
+
+            text: root.labels[segment.modelData.profile] ?? segment.modelData.profile
+            font.pixelSize: Styles.font.pixelSize.small
+            font.weight: segment.isSelected ? Font.Medium : Font.Normal
+            color: segment.isSelected ? Theme.options.primary : mouseArea.containsMouse ? Theme.options.text : Theme.options.subtext0
           }
-          return Theme.options.surface1;
+        }
+
+        MouseArea {
+          id: mouseArea
+
+          anchors.fill: parent
+          hoverEnabled: true
+          cursorShape: Qt.PointingHandCursor
+          onClicked: {
+            if (!segment.isSelected) {
+              SPowerProfiles.set(segment.modelData.profile);
+            }
+          }
         }
       }
     }

@@ -1,7 +1,9 @@
 import Quickshell
+import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 import qs.config
+import qs.services
 import qs.services.SNotifications
 import qs.widgets.common
 import qs.widgets.Bar.config
@@ -98,11 +100,40 @@ RowLayout {
     Layout.fillHeight: true
   }
 
-  StyledText {
+  // Clock, opens the calendar popover
+  WrapperRectangle {
     id: clock
 
+    property bool isHovered: false
+
     Layout.fillHeight: true
-    text: Qt.formatDateTime(clockService.date, "ddd dd MMM HH:mm")
+    leftMargin: 4
+    rightMargin: 4
+    color: clock.isHovered ? Theme.options.surface1 : SCalendar.isOpen ? Theme.options.surface0 : "transparent"
+    radius: ConfigBar.modulesRadius
+
+    child: Item {
+      implicitWidth: clockText.implicitWidth
+      implicitHeight: clockText.implicitHeight
+
+      StyledText {
+        id: clockText
+
+        anchors.fill: parent
+        text: Qt.formatDateTime(clockService.date, "ddd dd MMM HH:mm")
+      }
+
+      MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton
+        cursorShape: Qt.PointingHandCursor
+        onClicked: SCalendar.toggle()
+      }
+
+      HoverHandler {
+        onHoveredChanged: clock.isHovered = hovered
+      }
+    }
 
     SystemClock {
       id: clockService

@@ -58,6 +58,10 @@ hl.window_rule({ match = { class = "tui-calendar" }, tag = "+float_md" })
 hl.window_rule({ match = { class = "tui-calendar" }, tag = "+scratchpad" })
 hl.window_rule({ match = { class = "tui-bookmarks" }, tag = "+float_md" })
 hl.window_rule({ match = { class = "tui-bookmarks" }, tag = "+scratchpad" })
+hl.window_rule({ match = { class = "tui-wifi" }, tag = "+float_md" })
+hl.window_rule({ match = { class = "tui-wifi" }, tag = "+scratchpad" })
+hl.window_rule({ match = { class = "tui-bluetooth" }, tag = "+float_md" })
+hl.window_rule({ match = { class = "tui-bluetooth" }, tag = "+scratchpad" })
 hl.window_rule({
   match = { class = "^(" .. constants.bitwarden_appid .. ")$" },
   tag = "+float_md",
@@ -116,6 +120,7 @@ hl.window_rule({
   persistent_size = true,
 })
 hl.window_rule({ match = { class = "^(Slack)$" }, workspace = "4" })
+hl.window_rule({ match = { class = "^(chromium-browser)$" }, workspace = "9", no_initial_focus = true })
 hl.window_rule({ match = { class = "^(discord)$", title = "(Discord Updater)" }, float = true })
 hl.window_rule({ match = { class = "com.gabm.satty" }, float = true })
 hl.window_rule({ match = { title = "(?i).*\\.com is sharing your screen\\.$" }, tag = "+share_screen_popup" })

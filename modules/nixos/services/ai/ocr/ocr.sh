@@ -23,6 +23,7 @@ fi
 notify_error() {
   notify-send \
     --app-name="ocr" \
+    --app-icon="ocrfeeder" \
     --urgency=critical \
     --hint=int:transient:1 \
     "OCR Failed" \
@@ -162,6 +163,7 @@ fi
 
 notify-send \
   --app-name="ocr" \
+  --app-icon="ocrfeeder" \
   --hint=int:transient:1 \
-  "$label Completed" \
+  "$label completed" \
   "Text extracted and copied"

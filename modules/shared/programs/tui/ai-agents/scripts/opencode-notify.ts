@@ -130,8 +130,14 @@ function ring() {
   }
 }
 
-function send(title: string, body: string) {
+// meta and foot become the shell's small lines above and below the body
+type Message = { meta?: string; body?: string; foot?: string };
+
+function send(title: string, message: Message) {
   ring();
+  const body = [message.meta, message.body, message.foot]
+    .filter(Boolean)
+    .join("\n");
   try {
     if (process.platform === "darwin") {
       const escape = (value: string) => value.replace(/["\\]/g, "\\$&");
@@ -163,8 +169,10 @@ function send(title: string, body: string) {
           "--app-icon=opencode",
           "--icon=opencode",
           "--hint=string:custom-sound:message",
+          `--hint=string:x-shell-meta:${message.meta ?? ""}`,
+          `--hint=string:x-shell-foot:${message.foot ?? ""}`,
           title,
-          body,
+          message.body ?? "",
         ],
         { detached: true, stdio: "ignore" },
       ).unref();
@@ -202,10 +210,12 @@ export default (async ({ client, directory }) => {
   ) {
     const info = await sessionInfo(sessionID);
     const title = info?.title || "opencode";
-    const body = [reason, pretty(info?.directory ?? directory), extra]
-      .filter(Boolean)
-      .join("<br>");
-    send(title, body);
+    send(title, {
+      meta: [reason, pretty(info?.directory ?? directory)]
+        .filter(Boolean)
+        .join(" · "),
+      body: extra,
+    });
     return info;
   }
 
@@ -242,16 +252,12 @@ export default (async ({ client, directory }) => {
             (info?.tokens?.output ?? 0) +
             (info?.tokens?.reasoning ?? 0);
           if (total > 0) extras.push(`Tokens: ${(total / 1000).toFixed(1)}k`);
-          send(
-            info?.title || "opencode",
-            [
-              "Finished",
-              pretty(info?.directory ?? directory),
-              extras.join(" · "),
-            ]
+          send(info?.title || "opencode", {
+            meta: ["opencode finished", pretty(info?.directory ?? directory)]
               .filter(Boolean)
-              .join("<br>"),
-          );
+              .join(" · "),
+            foot: extras.join(" · "),
+          });
           return;
         }
 

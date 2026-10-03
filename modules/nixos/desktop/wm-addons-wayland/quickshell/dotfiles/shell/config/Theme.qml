@@ -38,6 +38,11 @@ Singleton {
     return `#${alphaHex}${cleanHex}`;
   }
 
+  // Blend `overlay` at `alpha` over the opaque `base` color, returns an opaque color
+  function tint(base, overlay, alpha) {
+    return Qt.tint(base, root.addAlpha(overlay, alpha));
+  }
+
   FileView {
     id: fileView
 

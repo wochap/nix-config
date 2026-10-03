@@ -3,6 +3,7 @@ import Quickshell.Hyprland
 import QtQuick
 import qs.services
 import "../../Bar/modules/Hyprland/Utils.js" as Utils
+import "../WindowEntry.js" as WindowEntry
 
 Scope {
   id: root
@@ -17,12 +18,6 @@ Scope {
   property string openedFrom: ""
   property string mode: "all"
   property string order: "mru"
-
-  readonly property real focusedMonitorAspect: {
-    const width = Hyprland.focusedMonitor?.width ?? 16;
-    const height = Hyprland.focusedMonitor?.height ?? 9;
-    return height > 0 ? width / height : 16.0 / 9.0;
-  }
 
   readonly property var orderedToplevels: {
     const list = [...(Hyprland.focusedWorkspace?.toplevels?.values ?? [])].filter(toplevel => {
@@ -55,12 +50,7 @@ Scope {
   readonly property var windows: root.orderedToplevels.map(toplevel => {
     const id = toplevel?.address ?? "";
     const client = root.clientFor(id);
-    return {
-      id: id,
-      title: toplevel?.title ?? "",
-      icon: Utils.mapAppId(client?.class ?? ""),
-      captureSource: toplevel?.wayland ?? null
-    };
+    return WindowEntry.make(id, toplevel, client, Utils.mapAppId(client?.class ?? ""));
   })
 
   function findIndex(id) {
@@ -183,6 +173,10 @@ Scope {
   }
 
   function hide() {
+    // Leave the compositor submap entered by the switcher bindings so global
+    // bindings work again even if the modifier release is never observed.
+    if (SHyprland.submap.startsWith("window-switcher"))
+      Hyprland.dispatch(Hyprland.usingLua ? `hl.dsp.submap("reset")` : "submap reset");
     root.isOpen = false;
     root.selectedId = "";
     root.openedFrom = "";

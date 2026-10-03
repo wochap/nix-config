@@ -12,9 +12,11 @@ import qs.widgets
 import qs.widgets.Bar
 import qs.widgets.Notifications
 import qs.widgets.ControlCenter
+import qs.widgets.Calendar
 import qs.widgets.Harpoon
 import qs.widgets.WindowSwitcher
 import qs.widgets.WhichKeys
+import qs.widgets.VBar
 
 ShellRoot {
   id: root
@@ -27,9 +29,11 @@ ShellRoot {
   property bool renderInputMuted: true
   property bool renderNotifications: true
   property bool renderControlCenter: true
+  property bool renderCalendar: true
   property bool renderHarpoon: true
   property bool renderWindowSwitcher: true
   property bool renderWhichKeys: true
+  property bool renderVBar: false
 
   LazyLoader {
     active: root.renderBar && Theme.ready
@@ -72,6 +76,11 @@ ShellRoot {
   }
 
   LazyLoader {
+    active: root.renderCalendar && Theme.ready
+    component: Calendar {}
+  }
+
+  LazyLoader {
     active: root.renderHarpoon && Theme.ready
     component: Harpoon {}
   }
@@ -86,6 +95,11 @@ ShellRoot {
   LazyLoader {
     active: root.renderWhichKeys && Theme.ready
     component: WhichKeys {}
+  }
+
+  LazyLoader {
+    active: root.renderVBar && Theme.ready
+    component: VBar {}
   }
 
   IpcHandler {

@@ -82,7 +82,7 @@ def main():
                         "--app-icon=kalarm",
                         "--icon=kalarm",
                         "--hint=string:custom-sound:message",
-                        "Missed reminder",
+                        "--hint=string:x-shell-meta:Missed reminder",
                         body,
                     ],
                     check=False,

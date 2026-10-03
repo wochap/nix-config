@@ -92,33 +92,38 @@ if [[ -r "$STATE_DIR/last-tool-$SESSION_ID" ]]; then
 fi
 
 TITLE="${SESSION_NAME:-Qwen Code}"
+# META/FOOT become the shell's small lines above and below BODY
+META=""
 BODY=""
+FOOT=""
 
 case "$EVENT" in
 Notification)
   TYPE=$(echo "$INPUT" | jq -r '.notification_type // "unknown"')
   case "$TYPE" in
   permission_prompt)
-    BODY="Qwen needs your permission<br>$PRETTY_CWD"
-    [[ -n "$LAST_TOOL" ]] && BODY+="<br>$LAST_TOOL"
+    META="Qwen needs your permission · $PRETTY_CWD"
+    BODY="$LAST_TOOL"
     ;;
   idle_prompt)
-    BODY="Ready for your next prompt<br>$PRETTY_CWD"
+    META="Qwen is ready for your next prompt · $PRETTY_CWD"
     ;;
   *)
     MESSAGE=$(echo "$INPUT" | jq -r '.message // "Qwen Code notification"')
-    BODY="$MESSAGE<br>$PRETTY_CWD"
+    META="Qwen Code · $PRETTY_CWD"
+    BODY="$MESSAGE"
     ;;
   esac
   ;;
 Stop)
   CONTEXT_USAGE=$(echo "$INPUT" | jq -r '.context_usage // empty')
-  BODY="Finished<br>$PRETTY_CWD"
-  [[ -n "$CONTEXT_USAGE" ]] && BODY+="<br>Context: $(echo "$CONTEXT_USAGE" | awk '{printf "%.0f%%", $1 * 100}')"
+  META="Qwen Code finished · $PRETTY_CWD"
+  [[ -n "$CONTEXT_USAGE" ]] && FOOT="Context $(echo "$CONTEXT_USAGE" | awk '{printf "%.0f%%", $1 * 100}')"
   ;;
 StopFailure)
   ERROR_TYPE=$(echo "$INPUT" | jq -r '.error // "unknown"')
-  BODY="Stopped due to an error ($ERROR_TYPE)<br>$PRETTY_CWD"
+  META="Qwen Code stopped · $PRETTY_CWD"
+  BODY="Stopped due to an error ($ERROR_TYPE)"
   ;;
 *)
   # Settings only register the events above; this should never fire.
@@ -126,18 +131,24 @@ StopFailure)
   ;;
 esac
 
+# Plain body for notifiers without hint support
+FULL_BODY="$META"
+[[ -n "$BODY" ]] && FULL_BODY+=$'\n'"$BODY"
+[[ -n "$FOOT" ]] && FULL_BODY+=$'\n'"$FOOT"
+
 # --- Send the notification (auto-detects OS) ---
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS
-  osascript -e "display notification \"$BODY\" with title \"$TITLE\""
+  osascript -e "display notification \"$FULL_BODY\" with title \"$TITLE\""
 
 elif command -v notify-send >/dev/null 2>&1; then
   # Linux (requires libnotify)
-  notify-send --app-name="qwen-code" --app-icon="qwen-code" --icon="qwen-code" --hint=string:custom-sound:message "$TITLE" "$BODY"
+  notify-send --app-name="qwen-code" --app-icon="qwen-code" --icon="qwen-code" --hint=string:custom-sound:message \
+    --hint="string:x-shell-meta:$META" --hint="string:x-shell-foot:$FOOT" "$TITLE" "$BODY"
 
 elif command -v powershell.exe >/dev/null 2>&1; then
   # WSL / Windows
-  powershell.exe -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('$BODY', '$TITLE')"
+  powershell.exe -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('$FULL_BODY', '$TITLE')"
 
 else
   echo "No supported notification backend found (osascript/notify-send/powershell.exe)" >&2

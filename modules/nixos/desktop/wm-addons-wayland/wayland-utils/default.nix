@@ -20,6 +20,7 @@ let
   ruler = pkgs.writeScriptBin "ruler" (builtins.readFile ./scripts/ruler.sh);
   takeshot = pkgs.writeScriptBin "takeshot" (builtins.readFile ./scripts/takeshot.sh);
   recorder = pkgs.writeScriptBin "recorder" (builtins.readFile ./scripts/recorder.sh);
+  tui-bluetooth = pkgs.writeScriptBin "tui-bluetooth" (builtins.readFile ./scripts/tui-bluetooth.sh);
   tui-bookmarks = pkgs.writeScriptBin "tui-bookmarks" (builtins.readFile ./scripts/tui-bookmarks.sh);
   tui-calendar = pkgs.writeScriptBin "tui-calendar" (builtins.readFile ./scripts/tui-calendar.sh);
   tui-email = pkgs.writeScriptBin "tui-email" (builtins.readFile ./scripts/tui-email.sh);
@@ -30,6 +31,7 @@ let
     builtins.readFile ./scripts/tui-notes-obsidian.sh
   );
   tui-rss = pkgs.writeScriptBin "tui-rss" (builtins.readFile ./scripts/tui-rss.sh);
+  tui-wifi = pkgs.writeScriptBin "tui-wifi" (builtins.readFile ./scripts/tui-wifi.sh);
   theme-switch = pkgs.writeScriptBin "theme-switch" (builtins.readFile ./scripts/theme-switch.sh);
   color-scheme = pkgs.writeScriptBin "color-scheme" (builtins.readFile ./scripts/color-scheme.sh);
 in
@@ -99,6 +101,7 @@ in
           recorder
           takeshot
 
+          tui-bluetooth
           tui-bookmarks
           tui-calendar
           tui-email
@@ -107,6 +110,7 @@ in
           tui-notes
           tui-notes-obsidian
           tui-rss
+          tui-wifi
         ];
 
         xdg.configFile."satty/config.toml".source = ./dotfiles/satty-config.toml;

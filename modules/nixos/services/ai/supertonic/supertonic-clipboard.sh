@@ -85,7 +85,7 @@ if [[ $selection == "primary" ]]; then
 fi
 
 if ! mime_types=$(wl-paste "${selection_args[@]}" --list-types 2>/dev/null); then
-  notify-send --app-name="supertonic-clipboard" --hint=int:transient:1 \
+  notify-send --app-name="supertonic-clipboard" --app-icon="preferences-desktop-text-to-speech" --hint=int:transient:1 \
     "Nothing to speak" "The $selection does not contain text"
   exit 1
 fi

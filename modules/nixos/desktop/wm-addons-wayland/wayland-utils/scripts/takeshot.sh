@@ -55,13 +55,21 @@ notify_user() {
   optimize_image
   copy_to_cb "$dest"
 
-  # generate thumbnail
+  # generate thumbnail, kept in the cache dir so the notification history
+  # can still show it after this script exits
   thumbnail_size="288x288"
-  thumbnail=$(mktemp --suffix .png) || exit 1
-  trap 'rm -f "$thumbnail"' exit
+  thumbnail_dir="${XDG_CACHE_HOME:-$HOME/.cache}/takeshot/thumbs"
+  mkdir -p "$thumbnail_dir"
+  thumbnail="$thumbnail_dir/${filename}.png"
   magick "$grim_dest" -resize "$thumbnail_size>" -gravity center -background transparent -extent "$thumbnail_size" "$thumbnail"
+  # drop thumbnails older than a week
+  find "$thumbnail_dir" -type f -mtime +7 -delete
 
-  action=$(notify-send --app-name="Takeshot" --app-icon="$thumbnail" --icon="$thumbnail" --hint="string:image-path:$thumbnail" "Screen shooter" "Screenshot Saved" --action="open=Open" --action="edit=Edit" --action="png=Copy PNG")
+  dimensions=$(magick identify -format "%wx%h" "$grim_dest" | sed 's/x/×/')
+  size=$(du -h "$dest" | cut -f1)
+  body="${dest/#$HOME/\~} · ${dimensions} · ${size}"
+
+  action=$(notify-send --app-name="Takeshot" --app-icon="accessories-screenshot" --icon="accessories-screenshot" --hint="string:image-path:$thumbnail" --hint="string:x-shell-preview:$thumbnail" "Screenshot saved" "$body" --action="open=Open" --action="edit=Edit" --action="png=Copy PNG")
 
   case $action in
   "edit")

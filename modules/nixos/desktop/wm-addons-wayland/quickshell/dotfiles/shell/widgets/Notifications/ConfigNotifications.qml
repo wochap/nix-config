@@ -8,11 +8,24 @@ import qs.config
 Singleton {
   id: root
 
-  property real notificationsPopupsWidth: 320
-  property real notificationsPanelWidth: notificationsPopupsWidth + notificationsPanelPaddingX * 2
-  property real notificationsPanelPaddingY: 8
-  property real notificationsPanelPaddingX: 8
+  // toasts
+  property real notificationsPopupsWidth: 380
+  // distance from the bar and the screen edge
+  property real notificationsPopupsMargin: 10
+  // sidebar
+  property real notificationsPanelPadding: 10
+  property real notificationsPanelWidth: notificationsPopupsWidth + notificationsPanelPadding * 2
   property real notificationsSpacing: 8
-  property real notificationPadding: 6
+  // card
+  property real notificationPaddingTop: 9
+  property real notificationPaddingRight: 10
+  property real notificationPaddingBottom: 10
+  property real notificationPaddingLeft: 12
+  property real notificationSpacing: 6
+  property real notificationThumbSize: 56
+  property real notificationHeaderIconSize: 15
+  property real notificationButtonSize: 22
+  property real notificationTimeoutBarHeight: 2
+  property real notificationExitDistance: 24
   property bool isBlurEnabled: Global.isBlurEnabled
 }

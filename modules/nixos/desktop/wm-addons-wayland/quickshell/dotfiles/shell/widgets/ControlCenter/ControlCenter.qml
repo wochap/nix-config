@@ -7,7 +7,8 @@ Scope {
   id: root
 
   LazyLoader {
-    active: SControlCenter.isOpen
+    // stays loaded while the exit animation runs
+    active: SControlCenter.isLoaded
     component: ControlCenterContent {}
   }
 
@@ -16,6 +17,14 @@ Scope {
 
     function toggle() {
       SControlCenter.toggle();
+    }
+
+    function open() {
+      SControlCenter.open();
+    }
+
+    function close() {
+      SControlCenter.close();
     }
   }
 }

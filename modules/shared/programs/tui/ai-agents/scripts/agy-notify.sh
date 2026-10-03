@@ -20,7 +20,10 @@ PRETTY_CWD="${WORKSPACE/#$HOME/\~}"
 SESSION_TITLE=$(echo "$INPUT" | jq -r '.sessionTitle // .conversationName // .title // empty' 2>/dev/null || true)
 TITLE="${SESSION_TITLE:-Antigravity CLI}"
 
+# META/FOOT become the shell's small lines above and below BODY
+META=""
 BODY=""
+FOOT=""
 
 # --- Helper: format tool description ---
 format_tool() {
@@ -46,10 +49,12 @@ if echo "$INPUT" | jq -e '.toolCall' >/dev/null; then
   TOOL_DESC=$(format_tool "$TOOL_NAME" "$TOOL_ARGS")
 
   if [[ "$TOOL_NAME" == "ask_question" || "$TOOL_NAME" == "ask_permission" ]]; then
-    BODY="Agy is waiting for your input<br>$TOOL_DESC...<br>$PRETTY_CWD"
+    META="Agy is waiting for your input · $PRETTY_CWD"
+    BODY="$TOOL_DESC..."
     OUTPUT='{"decision": "allow"}'
   else
-    BODY="Agy needs permission<br>$TOOL_DESC...<br>$PRETTY_CWD"
+    META="Agy needs permission · $PRETTY_CWD"
+    BODY="$TOOL_DESC..."
     OUTPUT='{"decision": "ask"}'
   fi
 
@@ -59,32 +64,39 @@ elif echo "$INPUT" | jq -e '.terminationReason' >/dev/null; then
   ERROR_MSG=$(echo "$INPUT" | jq -r '.error // empty')
 
   if [[ "$REASON" == "error" || -n "$ERROR_MSG" ]]; then
-    BODY="Stopped due to an error<br>${ERROR_MSG:0:50}...<br>$PRETTY_CWD"
+    META="Agy stopped due to an error · $PRETTY_CWD"
+    BODY="${ERROR_MSG:0:50}..."
   else
-    BODY="Finished<br>Reason: $REASON<br>$PRETTY_CWD"
+    META="Agy finished · $PRETTY_CWD"
+    BODY="Reason: $REASON"
   fi
   OUTPUT='{"decision": "allow_stop"}'
 else
-  BODY="Agy notification<br>$PRETTY_CWD"
+  META="Agy notification · $PRETTY_CWD"
 fi
 
 # Add additional useful info if available (e.g. token usage or cost)
 TOKENS=$(echo "$INPUT" | jq -r '.usage.totalTokens // empty')
 if [[ -n "$TOKENS" ]]; then
-  BODY+="<br>Tokens used: $TOKENS"
+  FOOT="Tokens used: $TOKENS"
 fi
 
 send_notification() {
   local TITLE=$1
   local BODY=$2
+  # plain body for notifiers without hint support
+  local FULL_BODY="$META"
+  [[ -n "$BODY" ]] && FULL_BODY+=$'\n'"$BODY"
+  [[ -n "$FOOT" ]] && FULL_BODY+=$'\n'"$FOOT"
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    osascript -e "display notification \"$BODY\" with title \"$TITLE\""
+    osascript -e "display notification \"$FULL_BODY\" with title \"$TITLE\""
   elif command -v notify-send >/dev/null 2>&1; then
-    notify-send --app-name="agy-cli" --app-icon="agy-cli" --icon="agy-cli" --hint=string:custom-sound:message  "$TITLE" "$BODY"
+    notify-send --app-name="agy-cli" --app-icon="agy-cli" --icon="agy-cli" --hint=string:custom-sound:message \
+      --hint="string:x-shell-meta:$META" --hint="string:x-shell-foot:$FOOT" "$TITLE" "$BODY"
   elif command -v powershell.exe >/dev/null 2>&1; then
     # PowerShell requires escaping newlines or joining them for MessageBox
-    local PS_BODY=$(echo "$BODY" | tr '\n' ' ')
+    local PS_BODY=$(echo "$FULL_BODY" | tr '\n' ' ')
     powershell.exe -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('$PS_BODY', '$TITLE')"
   fi
 }

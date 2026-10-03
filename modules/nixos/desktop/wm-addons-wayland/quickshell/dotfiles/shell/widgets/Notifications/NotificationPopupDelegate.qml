@@ -7,10 +7,12 @@ Item {
 
   required property int index
   required property SNotification modelData
-  required property real slideDistance
+  // exit slide, the enter slide is Styles.animation.slideDistance on y
+  property real slideDistance: ConfigNotifications.notificationExitDistance
   // ScriptModel may invalidate modelData before a retained delegate is destroyed.
   property SNotification retainedModelData: modelData
   property real xOffset: 0
+  property real yOffset: 0
   readonly property bool isEntering: enterAnimation.running
 
   ParallelAnimation {
@@ -18,7 +20,7 @@ Item {
 
     NumberAnimation {
       target: root
-      property: "xOffset"
+      property: "yOffset"
       to: 0
       duration: Styles.animation.duration
       easing.type: Styles.animation.easingType
@@ -32,7 +34,7 @@ Item {
     }
     onStopped: {
       if (!exitAnimation.running) {
-        root.xOffset = 0;
+        root.yOffset = 0;
         root.opacity = 1;
       }
     }
@@ -45,15 +47,15 @@ Item {
       target: root
       property: "xOffset"
       to: root.slideDistance
-      duration: Styles.animation.duration
-      easing.type: Styles.animation.easingType
+      duration: Styles.animation.exitDuration
+      easing.type: Styles.animation.exitEasingType
     }
     NumberAnimation {
       target: root
       property: "opacity"
       to: 0
-      duration: Styles.animation.duration
-      easing.type: Styles.animation.easingType
+      duration: Styles.animation.exitDuration
+      easing.type: Styles.animation.exitEasingType
     }
     onStopped: {
       const notification = root.retainedModelData;
@@ -77,6 +79,7 @@ Item {
   anchors.right: parent?.right
   transform: Translate {
     x: root.xOffset
+    y: root.yOffset
   }
 
   Component.onCompleted: {
@@ -86,19 +89,19 @@ Item {
     } else {
       // Popups already in the model when the window is recreated never get
       // ListView.onAdd, so animate them in here.
-      root.xOffset = root.slideDistance;
+      root.yOffset = -Styles.animation.slideDistance;
       enterAnimation.start();
     }
   }
 
   ListView.onAdd: {
-    root.xOffset = root.slideDistance;
+    root.yOffset = -Styles.animation.slideDistance;
     root.opacity = 0;
     enterAnimation.start();
   }
   ListView.delayRemove: exitAnimation.running
   ListView.onRemove: {
-    if (root.xOffset < root.slideDistance)
+    if (root.opacity > 0)
       root.startExit();
   }
 

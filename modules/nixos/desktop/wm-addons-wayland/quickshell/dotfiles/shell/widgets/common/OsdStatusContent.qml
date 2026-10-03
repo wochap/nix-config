@@ -4,6 +4,7 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 import qs.config
 
+// Square status tile, bottom-center
 PanelWindow {
   id: root
 
@@ -11,15 +12,43 @@ PanelWindow {
   property var service: null
   required property string serviceFlagKey
   property string namespace: ""
-  property real flagValue: root.service[root.serviceFlagKey]
+  property bool flagValue: !!root.service[root.serviceFlagKey]
   property string iconOn: ""
   property string iconOff: ""
   property string materialIconOn: ""
   property string materialIconOff: ""
+  property color colorOn: Theme.options.peach
+  property color colorOff: Theme.options.text
+  property bool isOpen: false
+
+  signal exited
+
+  function animateIn() {
+    exitAnimation.stop();
+    if (osdContainer.opacity === 0) {
+      enterAnimation.restart();
+    } else if (osdContainer.opacity < 1) {
+      // re-opened while fading out: restore in place
+      reenterAnimation.restart();
+    }
+  }
+
+  onIsOpenChanged: {
+    if (root.isOpen) {
+      root.animateIn();
+    } else {
+      enterAnimation.stop();
+      reenterAnimation.stop();
+      exitAnimation.restart();
+    }
+  }
+  Component.onCompleted: {
+    if (root.isOpen)
+      root.animateIn();
+  }
 
   WlrLayershell.namespace: root.namespace
   WlrLayershell.layer: WlrLayer.Overlay
-  // TODO: add screen
   anchors {
     top: true
     left: true
@@ -32,40 +61,95 @@ PanelWindow {
   color: "transparent"
   mask: Region {}
 
-  StyledRectangularShadow {
-    target: osd
+  ParallelAnimation {
+    id: enterAnimation
+
+    NumberAnimation {
+      target: osdContainer
+      property: "opacity"
+      from: 0
+      to: 1
+      duration: Styles.animation.duration
+      easing.type: Styles.animation.easingType
+    }
+    NumberAnimation {
+      target: slide
+      property: "y"
+      from: Styles.animation.slideDistance
+      to: 0
+      duration: Styles.animation.duration
+      easing.type: Styles.animation.easingType
+    }
   }
 
-  Rectangle {
-    id: osd
+  NumberAnimation {
+    id: reenterAnimation
+
+    target: osdContainer
+    property: "opacity"
+    to: 1
+    duration: Styles.animation.duration
+    easing.type: Styles.animation.easingType
+  }
+
+  NumberAnimation {
+    id: exitAnimation
+
+    target: osdContainer
+    property: "opacity"
+    to: 0
+    duration: Styles.animation.exitDuration
+    easing.type: Styles.animation.exitEasingType
+    onFinished: root.exited()
+  }
+
+  Item {
+    id: osdContainer
 
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
-    anchors.bottomMargin: Styles.font.pixelSize.normal * 2
-    implicitWidth: 150
-    implicitHeight: osd.implicitWidth
-    radius: Styles.radius.windowRounding
-    color: Theme.addAlpha(Theme.options.backgroundOverlay, Global.isBlurEnabled ? 0.65 : 1)
-    border {
-      width: 1
-      color: Theme.options.borderSecondary
+    anchors.bottomMargin: 96
+    implicitWidth: osd.implicitWidth
+    implicitHeight: osd.implicitHeight
+    opacity: 0
+    transform: Translate {
+      id: slide
     }
 
-    WoosIcon {
-      visible: root.iconOn.length > 0
-      anchors.centerIn: parent
-      color: Theme.options.peach
-      size: osd.width / 1.25
-      icon: root.flagValue ? root.iconOn : root.iconOff
+    StyledRectangularShadow {
+      target: osd
+      elevation: Styles.elevation.e2
     }
 
-    MaterialIcon {
-      visible: root.materialIconOn.length > 0
-      anchors.centerIn: parent
-      color: Theme.options.peach
-      size: osd.width / 1.2
-      icon: root.flagValue ? root.materialIconOn : root.materialIconOff
-      weight: Font.Normal
+    Rectangle {
+      id: osd
+
+      anchors.fill: parent
+      implicitWidth: 96
+      implicitHeight: 96
+      radius: Styles.radius.windowRounding
+      color: Theme.addAlpha(Theme.options.background, Global.isBlurEnabled ? 0.65 : 1)
+      border {
+        width: 1
+        color: Theme.options.surface0
+      }
+
+      WoosIcon {
+        visible: root.iconOn.length > 0
+        anchors.centerIn: parent
+        color: root.flagValue ? root.colorOn : root.colorOff
+        size: 44
+        icon: root.flagValue ? root.iconOn : root.iconOff
+      }
+
+      MaterialIcon {
+        visible: root.materialIconOn.length > 0
+        anchors.centerIn: parent
+        color: root.flagValue ? root.colorOn : root.colorOff
+        size: 44
+        icon: root.flagValue ? root.materialIconOn : root.materialIconOff
+        weight: Font.Normal
+      }
     }
   }
 }

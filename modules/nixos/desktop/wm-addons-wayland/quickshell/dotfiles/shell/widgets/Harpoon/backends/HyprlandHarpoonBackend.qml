@@ -3,6 +3,7 @@ import Quickshell.Hyprland
 import QtQuick
 import qs.services
 import "../../Bar/modules/Hyprland/Utils.js" as Utils
+import "../../WindowSwitcher/WindowEntry.js" as WindowEntry
 
 Scope {
   id: root
@@ -11,11 +12,6 @@ Scope {
   readonly property string scratchpadTagPrefix: "harpoon-scratchpad-"
   readonly property string submap: SHyprland.submap
   readonly property bool isOpen: root.submap === "harpoon" || root.submap === "scratchpad"
-  readonly property real focusedMonitorAspect: {
-    const width = Hyprland.focusedMonitor?.width ?? 16;
-    const height = Hyprland.focusedMonitor?.height ?? 9;
-    return height > 0 ? width / height : 16.0 / 9.0;
-  }
   readonly property var windows: {
     // Read the source submap once. Deriving the mode, prefix, and exclusions
     // from this one value avoids transient mixed modes during binding updates.
@@ -48,16 +44,20 @@ Scope {
         // the normal harpoon submap and show them only in `scratchpad`.
         if (!isScratchpad && tag.startsWith(root.scratchpadTagPrefix))
           continue;
-        result.push({
-          id: `${client.address}:${tag}`,
-          key: tag.slice(tagPrefix.length),
-          title: toplevel.title ?? client.title ?? "",
-          icon: Utils.mapAppId(client.class ?? ""),
-          captureSource: toplevel.wayland ?? null
-        });
+        result.push(WindowEntry.make(`${client.address}:${tag}`, toplevel, client, Utils.mapAppId(client.class ?? ""), {
+          key: tag.slice(tagPrefix.length)
+        }));
       }
     }
     result.sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }));
     return result;
+  }
+
+  // Focus a marked window through the compositor's harpoon module, which also
+  // brings hidden special-workspace windows here, then leave the submap.
+  function focus(key) {
+    const module = root.submap === "scratchpad" ? "harpoon_scratchpad" : "harpoon";
+    const call = root.submap === "scratchpad" ? `toggle("${key}")` : `focus("${key}")`;
+    Quickshell.execDetached(["hyprctl", "eval", `require("hyprland.lib.${module}").${call}; hl.dispatch(hl.dsp.submap("reset"))`]);
   }
 }

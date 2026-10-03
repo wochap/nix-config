@@ -45,6 +45,7 @@ PanelWindow {
         easing.type: Styles.animation.easingType
       }
     }
+    // siblings reflow after a toast exits
     removeDisplaced: Transition {
       NumberAnimation {
         property: "y"
@@ -56,7 +57,7 @@ PanelWindow {
       top: parent.top
       bottom: parent.bottom
       right: parent.right
-      topMargin: 8
+      topMargin: ConfigNotifications.notificationsPopupsMargin
       rightMargin: anchors.topMargin
     }
     bottomMargin: anchors.topMargin
@@ -67,9 +68,7 @@ PanelWindow {
     model: ScriptModel {
       values: SNotifications.popupList
     }
-    delegate: NotificationPopupDelegate {
-      slideDistance: listview.width
-    }
+    delegate: NotificationPopupDelegate {}
 
     HoverHandler {
       onHoveredChanged: {

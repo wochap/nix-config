@@ -9,7 +9,7 @@ notify() {
   magick -size 80x80 xc:"$HEX_COLOR" "$FNAME"
   COLOR_CODE="$HEX_COLOR"
 
-  notify-send "Color picker" "$COLOR_CODE" --app-icon="$FNAME" --icon="$FNAME" --hint="string:image-path:$FNAME" --app-name="Hyprpicker" --hint=int:transient:1
+  notify-send "Color copied" "$COLOR_CODE" --app-icon="gcolor3" --icon="gcolor3" --hint="string:image-path:$FNAME" --hint="string:x-shell-preview:$FNAME" --app-name="Hyprpicker" --hint=int:transient:1
 }
 
 if [[ -n $(pgrep hyprpicker) ]]; then

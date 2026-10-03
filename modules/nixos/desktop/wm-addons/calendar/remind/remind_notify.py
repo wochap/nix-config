@@ -30,13 +30,15 @@ def notify(entry):
         "--hint=string:custom-sound:message",
     ]
 
+    # the event text is the summary, the timing goes in the shell's meta line
     if minutes > 0:
-        title = f"Upcoming reminder (in {minutes} minutes)"
+        meta = f"Upcoming reminder · in {minutes} minutes"
     else:
         args.append("--urgency=critical")
-        title = "Reminder — starting now"
+        meta = "Reminder · starting now"
+    args.append(f"--hint=string:x-shell-meta:{meta}")
 
-    subprocess.run([*args, title, entry.get("body") or "reminder"], check=False)
+    subprocess.run([*args, entry.get("body") or "reminder"], check=False)
 
 
 def main():

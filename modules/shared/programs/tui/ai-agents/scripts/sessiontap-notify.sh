@@ -43,7 +43,7 @@ provider_details() {
 notify_update() {
   local envelope=$1
   local status reason_kind reason_summary provider cwd branch session_name
-  local context_percent input_tokens output_tokens provider_display icon title event body location usage urgency
+  local context_percent input_tokens output_tokens provider_display icon title event body meta location usage urgency
 
   status=$(jq -r '.view.status // empty' <<<"$envelope")
   reason_kind=$(jq -r '.view.reason.kind // empty' <<<"$envelope")
@@ -92,28 +92,29 @@ notify_update() {
     location+=$branch
   fi
 
-  body=$(html_escape "$event")
-  [[ -n "$location" ]] && body+="<br>$(html_escape "$location")"
+  # meta line: "<event> · <cwd> · <branch>", body: reason, foot: usage
+  meta=$event
+  [[ -n "$location" ]] && meta+=" · $location"
 
+  body=""
   reason_summary=$(jq -r '.view.reason.summary // empty' <<<"$envelope")
   if [[ -n "$reason_summary" ]]; then
-    body+="<br><i>$(html_escape "$reason_summary")</i>"
+    body=$(html_escape "$reason_summary")
   fi
 
   context_percent=$(jq -r '.view.usage.context_window_percent // empty' <<<"$envelope")
   input_tokens=$(jq -r '.view.usage.input_tokens // empty' <<<"$envelope")
   output_tokens=$(jq -r '.view.usage.output_tokens // empty' <<<"$envelope")
   usage=""
-  [[ -n "$context_percent" ]] && usage="Context: ${context_percent}%"
+  [[ -n "$context_percent" ]] && usage="Context ${context_percent}%"
   if [[ -n "$input_tokens" ]]; then
     [[ -n "$usage" ]] && usage+=" · "
-    usage+="In: $(humanize "$input_tokens")"
+    usage+="In $(humanize "$input_tokens")"
   fi
   if [[ -n "$output_tokens" ]]; then
     [[ -n "$usage" ]] && usage+=" · "
-    usage+="Out: $(humanize "$output_tokens")"
+    usage+="Out $(humanize "$output_tokens")"
   fi
-  [[ -n "$usage" ]] && body+="<br>$(html_escape "$usage")"
 
   notify-send \
     --app-name="sessiontap-notify" \
@@ -121,6 +122,8 @@ notify_update() {
     --icon="$icon" \
     --urgency="$urgency" \
     --hint=string:custom-sound:message \
+    --hint="string:x-shell-meta:$meta" \
+    --hint="string:x-shell-foot:$usage" \
     "$title" \
     "$body"
 }
