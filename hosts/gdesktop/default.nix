@@ -129,6 +129,7 @@ in
       sourceId = "gdesktop";
       sourceName = "gdesktop";
       enableHub = true;
+      remote.addresses = [ "192.168.0.165" ];
     };
 
     _custom.services.android.enable = true;

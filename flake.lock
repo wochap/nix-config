@@ -3456,11 +3456,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790284568,
-        "narHash": "sha256-cbNPj8pB8i11qmsfJDMIWRBNpvANIBxEyhcxNV8ubLw=",
+        "lastModified": 1791083123,
+        "narHash": "sha256-SfN89eon9ibR5Jo5fHNvTxBELxivVHefTFpIG2rzoAk=",
         "owner": "wochap",
         "repo": "session-tap",
-        "rev": "fec6f0f6c162fc8735859577ff2859360fde2eba",
+        "rev": "37a442708d276ec94bab1e39ef22241f5234a575",
         "type": "github"
       },
       "original": {
@@ -3949,11 +3949,11 @@
     "wosarcher": {
       "flake": false,
       "locked": {
-        "lastModified": 1791062154,
-        "narHash": "sha256-NamuQ2rJtjqLLrgMoOg7FxIV/GuhJ9tTCVzoYxqVxPE=",
+        "lastModified": 1791083558,
+        "narHash": "sha256-Bod898+YvklYCaKqP2fdBUM0aGKSAFuaphuxxlHTY04=",
         "owner": "wochap",
         "repo": "wosarcher",
-        "rev": "2c08e57d84c10b069dcedcbe4f920ba332a72b48",
+        "rev": "3c9896d4e386ae2e4ad14363ad81c5a0a4ae1852",
         "type": "github"
       },
       "original": {

@@ -12,6 +12,9 @@ let
   sessiontap-notify = pkgs.writeScriptBin "sessiontap-notify" (
     builtins.readFile ./scripts/sessiontap-notify.sh
   );
+  remote = cfg.sessionTap.remote;
+  remoteEnabled = cfg.sessionTap.enableHub && remote.addresses != [ ];
+  withPort = host: "${host}:${toString remote.port}";
   sessiontap-notify-done = pkgs.writeScriptBin "sessiontap-notify-done" (
     builtins.readFile ./scripts/sessiontap-notify-done.sh
   );
@@ -44,9 +47,42 @@ in
       default = false;
       description = "Whether to run the SessionTap hub for this user.";
     };
+    remote = {
+      name = lib.mkOption {
+        type = lib.types.str;
+        default = config.networking.hostName;
+        description = "Hub display name shown in the pairing QR code and the companion app.";
+      };
+      addresses = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "192.168.0.165" ];
+        description = "Concrete LAN/tailnet IPs the hub serves remote access on. Empty disables remote access.";
+      };
+      advertise = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "gdesktop.tailnet.ts.net" ];
+        description = "Extra hostnames added as endpoint hints to the pairing QR code.";
+      };
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 8932;
+        description = "Remote access TCP port.";
+      };
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to open the remote access port in the firewall.";
+      };
+    };
   };
 
   config = lib.mkIf (cfg.enable && cfg.sessionTap.enable) {
+    networking.firewall.allowedTCPPorts = lib.mkIf (
+      remoteEnabled && cfg.sessionTap.remote.openFirewall
+    ) [ cfg.sessionTap.remote.port ];
+
     environment.systemPackages = [
       session-tap
       sessiontap-notify
@@ -84,6 +120,12 @@ in
             listen: "0.0.0.0:8931"
             retention_days: 3
             subscriptions: []
+          ''
+          + lib.optionalString remoteEnabled ''
+            remote:
+              name: ${builtins.toJSON remote.name}
+              listen: ${builtins.toJSON (map withPort remote.addresses)}
+              advertise: ${builtins.toJSON (map withPort remote.advertise)}
           '';
         };
       };

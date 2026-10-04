@@ -22,7 +22,7 @@ RowLayout {
     sourceComponent: Component {
       Module {
         materialIcon: "smart_toy"
-        iconSize: Styles.font.pixelSize.huge
+        iconSize: 24
         label: root.runningCount > 1 ? root.runningCount.toString() : ""
         paddingX: 0
         bgColor: "transparent"
