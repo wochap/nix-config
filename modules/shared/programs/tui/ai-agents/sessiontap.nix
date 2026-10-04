@@ -13,8 +13,13 @@ let
     builtins.readFile ./scripts/sessiontap-notify.sh
   );
   remote = cfg.sessionTap.remote;
-  remoteEnabled = cfg.sessionTap.enableHub && remote.addresses != [ ];
+  remoteEnabled = cfg.sessionTap.enableHub && remote.interfaces != [ ];
   withPort = host: "${host}:${toString remote.port}";
+  # sops-nix places secrets at /run/secrets/<name> as regular files (owner
+  # only), which satisfies SessionTap's private, non-symlink token check
+  tokenSecret = sourceId: "local-sessiontap-hub-token-${sourceId}";
+  tokenPath = sourceId: config.sops.secrets.${tokenSecret sourceId}.path;
+  hubSourceIds = [ cfg.sessionTap.sourceId ] ++ cfg.sessionTap.hubSources;
   sessiontap-notify-done = pkgs.writeScriptBin "sessiontap-notify-done" (
     builtins.readFile ./scripts/sessiontap-notify-done.sh
   );
@@ -47,17 +52,25 @@ in
       default = false;
       description = "Whether to run the SessionTap hub for this user.";
     };
+    hubSources = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ "sandbox" ];
+      description = "Source IDs besides this host's own that the hub accepts; tokens come from local.yaml under local-sessiontap-hub-token-<sourceId>.";
+    };
     remote = {
       name = lib.mkOption {
         type = lib.types.str;
         default = config.networking.hostName;
         description = "Hub display name shown in the pairing QR code and the companion app.";
       };
-      addresses = lib.mkOption {
+      interfaces = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
-        example = [ "192.168.0.165" ];
-        description = "Concrete LAN/tailnet IPs the hub serves remote access on. Empty disables remote access.";
+        example = [
+          "enp42s0"
+          "tailscale0"
+        ];
+        description = "Interfaces whose firewall admits remote access. The hub binds the wildcard address, so the firewall is the only reachability limit. Empty disables remote access.";
       };
       advertise = lib.mkOption {
         type = lib.types.listOf lib.types.str;
@@ -70,18 +83,32 @@ in
         default = 8932;
         description = "Remote access TCP port.";
       };
-      openFirewall = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Whether to open the remote access port in the firewall.";
-      };
     };
   };
 
   config = lib.mkIf (cfg.enable && cfg.sessionTap.enable) {
-    networking.firewall.allowedTCPPorts = lib.mkIf (
-      remoteEnabled && cfg.sessionTap.remote.openFirewall
-    ) [ cfg.sessionTap.remote.port ];
+    assertions = [
+      {
+        assertion = config._custom.security.sops.enable;
+        message = "sessionTap: hub tokens need _custom.security.sops.enable";
+      }
+    ];
+
+    networking.firewall.interfaces = lib.mkIf remoteEnabled (
+      lib.genAttrs remote.interfaces (_: {
+        allowedTCPPorts = [ remote.port ];
+      })
+    );
+
+    sops.secrets =
+      lib.genAttrs
+        (map tokenSecret (
+          [ cfg.sessionTap.sourceId ] ++ lib.optionals cfg.sessionTap.enableHub cfg.sessionTap.hubSources
+        ))
+        (_: {
+          sopsFile = ../../../../../secrets-sops/local.yaml;
+          owner = config._custom.globals.userName;
+        });
 
     environment.systemPackages = [
       session-tap
@@ -110,6 +137,7 @@ in
           ${lib.optionalString (
             cfg.sessionTap.trustedAddresses != [ ]
           ) "trusted_addresses = ${builtins.toJSON cfg.sessionTap.trustedAddresses}"}
+          token_file = "${tokenPath cfg.sessionTap.sourceId}"
           timeout_ms = 3000
           max_payload_bytes = 262144
         '';
@@ -120,11 +148,15 @@ in
             listen: "0.0.0.0:8931"
             retention_days: 3
             subscriptions: []
+            sources:
           ''
+          + lib.concatMapStrings (
+            id: "  ${builtins.toJSON id}: { token_file: ${builtins.toJSON (tokenPath id)} }\n"
+          ) hubSourceIds
           + lib.optionalString remoteEnabled ''
             remote:
               name: ${builtins.toJSON remote.name}
-              listen: ${builtins.toJSON (map withPort remote.addresses)}
+              listen: ${builtins.toJSON [ (withPort "0.0.0.0") ]}
               advertise: ${builtins.toJSON (map withPort remote.advertise)}
           '';
         };
