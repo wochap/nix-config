@@ -15,11 +15,35 @@ let
   remote = cfg.sessionTap.remote;
   remoteEnabled = cfg.sessionTap.enableHub && remote.interfaces != [ ];
   withPort = host: "${host}:${toString remote.port}";
+  systemConfig = config;
   # sops-nix places secrets at /run/secrets/<name> as regular files (owner
   # only), which satisfies SessionTap's private, non-symlink token check
-  tokenSecret = sourceId: "local-sessiontap-hub-token-${sourceId}";
-  tokenPath = sourceId: config.sops.secrets.${tokenSecret sourceId}.path;
-  hubSourceIds = [ cfg.sessionTap.sourceId ] ++ cfg.sessionTap.hubSources;
+  tokenSecretType = lib.types.submodule (
+    { config, ... }:
+    {
+      options = {
+        sopsFile = lib.mkOption {
+          type = lib.types.path;
+          description = "SOPS file containing the hub token.";
+        };
+        sopsKey = lib.mkOption {
+          type = lib.types.nonEmptyStr;
+          description = "Key containing the hub token in the SOPS file.";
+        };
+        path = lib.mkOption {
+          type = lib.types.str;
+          internal = true;
+          readOnly = true;
+          default = systemConfig.sops.secrets.${config.sopsKey}.path;
+          description = "Resolved runtime path of the hub token secret.";
+        };
+      };
+    }
+  );
+  tokenSecrets = [
+    cfg.sessionTap.tokenSecret
+  ]
+  ++ lib.optionals cfg.sessionTap.enableHub (lib.attrValues cfg.sessionTap.hubSources);
   sessiontap-notify-done = pkgs.writeScriptBin "sessiontap-notify-done" (
     builtins.readFile ./scripts/sessiontap-notify-done.sh
   );
@@ -47,15 +71,19 @@ in
       default = [ ];
       description = "Non-loopback cleartext hub addresses trusted by sessiontapd.";
     };
+    tokenSecret = lib.mkOption {
+      type = tokenSecretType;
+      description = "Hub token this source's sessiontapd sends.";
+    };
     enableHub = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Whether to run the SessionTap hub for this user.";
     };
     hubSources = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ "sandbox" ];
-      description = "Source IDs besides this host's own that the hub accepts; tokens come from local.yaml under local-sessiontap-hub-token-<sourceId>.";
+      type = lib.types.attrsOf tokenSecretType;
+      default = { };
+      description = "Source IDs besides this host's own that the hub accepts, each with its token.";
     };
     remote = {
       name = lib.mkOption {
@@ -100,15 +128,15 @@ in
       })
     );
 
-    sops.secrets =
-      lib.genAttrs
-        (map tokenSecret (
-          [ cfg.sessionTap.sourceId ] ++ lib.optionals cfg.sessionTap.enableHub cfg.sessionTap.hubSources
-        ))
-        (_: {
-          sopsFile = ../../../../../secrets-sops/local.yaml;
+    sops.secrets = lib.listToAttrs (
+      map (
+        secret:
+        lib.nameValuePair secret.sopsKey {
           owner = config._custom.globals.userName;
-        });
+          inherit (secret) sopsFile;
+        }
+      ) tokenSecrets
+    );
 
     environment.systemPackages = [
       session-tap
@@ -137,7 +165,7 @@ in
           ${lib.optionalString (
             cfg.sessionTap.trustedAddresses != [ ]
           ) "trusted_addresses = ${builtins.toJSON cfg.sessionTap.trustedAddresses}"}
-          token_file = "${tokenPath cfg.sessionTap.sourceId}"
+          token_file = "${cfg.sessionTap.tokenSecret.path}"
           timeout_ms = 3000
           max_payload_bytes = 262144
         '';
@@ -150,9 +178,11 @@ in
             subscriptions: []
             sources:
           ''
-          + lib.concatMapStrings (
-            id: "  ${builtins.toJSON id}: { token_file: ${builtins.toJSON (tokenPath id)} }\n"
-          ) hubSourceIds
+          + lib.concatStrings (
+            lib.mapAttrsToList (
+              id: secret: "  ${builtins.toJSON id}: { token_file: ${builtins.toJSON secret.path} }\n"
+            ) ({ ${cfg.sessionTap.sourceId} = cfg.sessionTap.tokenSecret; } // cfg.sessionTap.hubSources)
+          )
           + lib.optionalString remoteEnabled ''
             remote:
               name: ${builtins.toJSON remote.name}

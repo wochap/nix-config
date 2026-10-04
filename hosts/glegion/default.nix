@@ -127,6 +127,12 @@ in
       sourceId = "glegion";
       sourceName = "glegion";
       enableHub = true;
+      tokenSecret.sopsFile = ../../secrets-sops/local.yaml;
+      tokenSecret.sopsKey = "local-sessiontap-hub-token-glegion";
+      hubSources.sandbox = {
+        sopsFile = ../../secrets-sops/local.yaml;
+        sopsKey = "local-sessiontap-hub-token-sandbox";
+      };
     };
 
     _custom.services.android.enable = true;

@@ -129,6 +129,12 @@ in
       sourceId = "gdesktop";
       sourceName = "gdesktop";
       enableHub = true;
+      tokenSecret.sopsFile = ../../secrets-sops/local.yaml;
+      tokenSecret.sopsKey = "local-sessiontap-hub-token-gdesktop";
+      hubSources.sandbox = {
+        sopsFile = ../../secrets-sops/local.yaml;
+        sopsKey = "local-sessiontap-hub-token-sandbox";
+      };
       remote.interfaces = [ "enp42s0" ];
     };
 

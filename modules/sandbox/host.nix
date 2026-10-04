@@ -122,6 +122,8 @@ in
       sourceName = "sandbox";
       hubUrl = "http://192.168.100.10:8931/ingest";
       trustedAddresses = [ "192.168.100.10" ];
+      tokenSecret.sopsFile = ../../secrets-sops/local.yaml;
+      tokenSecret.sopsKey = "local-sessiontap-hub-token-sandbox";
       enableHub = false;
     };
 
