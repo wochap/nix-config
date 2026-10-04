@@ -183,14 +183,14 @@ in
     _custom.services.ai.gptResearcher.fastModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.strategicModel = "deepseek-v4-flash";
     _custom.services.ai.gptResearcher.embeddingContextTokens = 30720;
+    _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 32;
+    _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 16;
     _custom.services.ai.reranker.enable = true;
     _custom.services.ai.reranker.model = "Qwen/Qwen3-Reranker-4B";
     _custom.services.ai.reranker.modelUrl =
       "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q4_K_M.gguf";
     _custom.services.ai.reranker.modelSha256 =
       "941f7d1d1524251c026a797b803ac9575545c5d7aa19b26e0e49661d7720af49";
-    _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 32;
-    _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 16;
     _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
     _custom.services.ai.enableArticleSummary = true;
     _custom.services.ai.briefing.enable = true;

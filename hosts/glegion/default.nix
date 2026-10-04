@@ -168,14 +168,14 @@ in
     _custom.services.ai.gptResearcher.fastModel = "glegion-cloud-fast";
     _custom.services.ai.gptResearcher.strategicModel = "glegion-cloud-strategic";
     _custom.services.ai.gptResearcher.embeddingContextTokens = 24576;
+    _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 16;
+    _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 8;
     # _custom.services.ai.reranker.enable = true;
     _custom.services.ai.reranker.model = "Qwen/Qwen3-Reranker-4B";
     _custom.services.ai.reranker.modelUrl =
       "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q4_K_M.gguf";
     _custom.services.ai.reranker.modelSha256 =
       "941f7d1d1524251c026a797b803ac9575545c5d7aa19b26e0e49661d7720af49";
-    _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 16;
-    _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 8;
     _custom.services.ai.ollamaEmbeddingModel = "glegion-qwen3-embedding:4b";
     _custom.services.ai.enableArticleSummary = true;
     # _custom.services.ai.briefing.enable = true;
