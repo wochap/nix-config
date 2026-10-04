@@ -166,6 +166,7 @@ in
             cfg.sessionTap.trustedAddresses != [ ]
           ) "trusted_addresses = ${builtins.toJSON cfg.sessionTap.trustedAddresses}"}
           token_file = "${cfg.sessionTap.tokenSecret.path}"
+          control = true
           timeout_ms = 3000
           max_payload_bytes = 262144
         '';
@@ -188,6 +189,7 @@ in
               name: ${builtins.toJSON remote.name}
               listen: ${builtins.toJSON [ (withPort "0.0.0.0") ]}
               advertise: ${builtins.toJSON (map withPort remote.advertise)}
+              control: true
           '';
         };
       };
