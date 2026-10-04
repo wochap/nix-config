@@ -15,8 +15,9 @@ PanelWindow {
   property var serviceValueTransformer: value => value
   property string namespace: ""
   property real value: root.serviceValueTransformer(root.service[root.serviceValueKey])
-  property real percentage: Math.max(0, Math.min(100, root.value))
   property bool isOverflowing: root.value > 100
+  // over-amplified values wrap around, e.g. 110 renders as 10% (in the overflow color)
+  property real percentage: Math.max(0, Math.min(100, root.isOverflowing ? root.value - 100 : root.value))
   property bool isMuted: root.serviceMutedKey.length > 0 && !!root.service[root.serviceMutedKey]
   property string icon: ""
   property string mutedIcon: ""
@@ -132,7 +133,7 @@ PanelWindow {
       implicitWidth: 44
       implicitHeight: 180
       radius: width / 2
-      color: Theme.addAlpha(Theme.options.background, Global.isBlurEnabled ? 0.65 : 1)
+      color: Theme.options.background
       border {
         width: 1
         color: Theme.options.surface0
@@ -151,7 +152,8 @@ PanelWindow {
         }
         radius: width / 2
         color: root.isMuted ? Theme.options.surface2 : root.isOverflowing ? Theme.options.peach : root.fillColor
-        implicitHeight: Math.max(width, trackHeight * root.percentage / 100)
+        // 0% is the icon-sized circle, 100% fills the track
+        implicitHeight: width + Math.max(0, trackHeight - width) * root.percentage / 100
 
         Behavior on implicitHeight {
           animation: Styles.animations.numberAnimation.createObject(this)
@@ -160,14 +162,20 @@ PanelWindow {
           animation: Styles.animations.colorAnimation.createObject(this)
         }
 
-        SystemIcon {
-          enableColoriser: true
-          anchors.horizontalCenter: parent.horizontalCenter
+        // square slot matching the bottom circle, so the icon stays centered in it
+        Item {
+          anchors.left: parent.left
+          anchors.right: parent.right
           anchors.bottom: parent.bottom
-          anchors.bottomMargin: 8
-          color: Theme.options.crust
-          size: Styles.font.pixelSize.hugeass
-          icon: root.isMuted && root.mutedIcon.length > 0 ? root.mutedIcon : root.icon
+          height: width
+
+          SystemIcon {
+            enableColoriser: true
+            anchors.centerIn: parent
+            color: Theme.options.crust
+            size: Styles.font.pixelSize.hugeass
+            icon: root.isMuted && root.mutedIcon.length > 0 ? root.mutedIcon : root.icon
+          }
         }
       }
     }
