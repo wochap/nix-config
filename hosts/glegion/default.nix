@@ -155,19 +155,20 @@ in
     _custom.services.ai.asr.batchSize = 2;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
-    _custom.services.ai.gptResearcher.enable = true;
-    _custom.services.ai.openDesign.enable = true;
-    _custom.services.ai.comfyui.enable = true;
-    _custom.services.ai.gptResearcher.smartModel = "glegion-cloud-smart";
-    _custom.services.ai.gptResearcher.fastModel = "glegion-cloud-fast";
-    _custom.services.ai.gptResearcher.strategicModel = "glegion-cloud-strategic";
-    _custom.services.ai.gptResearcher.embeddingContextTokens = 24576;
+    # _custom.services.ai.openDesign.enable = true;
+    # _custom.services.ai.comfyui.enable = true;
+    _custom.services.ai.comfyui.extraPipPackages = [ "gguf>=0.13.0" ];
     # 8 GB VRAM (RTX 4060): the embedding model takes ~7.1 GB at 24k context
     # (2.4 GB weights, 3.4 GB KV cache, 1.3 GB compute), and even the Q4_K_M
     # reranker needs ~5.4 GB, so both cannot stay resident. The reranker stays
     # off; retrieval uses embedding order. The settings below are kept for
     # reference.
-    _custom.services.ai.reranker.enable = false;
+    # _custom.services.ai.gptResearcher.enable = true;
+    _custom.services.ai.gptResearcher.smartModel = "glegion-cloud-smart";
+    _custom.services.ai.gptResearcher.fastModel = "glegion-cloud-fast";
+    _custom.services.ai.gptResearcher.strategicModel = "glegion-cloud-strategic";
+    _custom.services.ai.gptResearcher.embeddingContextTokens = 24576;
+    # _custom.services.ai.reranker.enable = true;
     _custom.services.ai.reranker.model = "Qwen/Qwen3-Reranker-4B";
     _custom.services.ai.reranker.modelUrl =
       "https://huggingface.co/giladgd/Qwen3-Reranker-4B-GGUF/resolve/main/Qwen3-Reranker-4B.Q4_K_M.gguf";
@@ -177,13 +178,13 @@ in
     _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 8;
     _custom.services.ai.ollamaEmbeddingModel = "glegion-qwen3-embedding:4b";
     _custom.services.ai.enableArticleSummary = true;
+    # _custom.services.ai.briefing.enable = true;
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
     _custom.services.webhook.enable = true;
 
     _custom.services.syncthing.enable = true;
     _custom.services.virt.enable = false;
-    _custom.services.waydroid.enable = false;
 
     _custom.gaming.emulators.enable = false;
     _custom.gaming.steam.enable = true;

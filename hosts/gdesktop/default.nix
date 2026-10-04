@@ -161,7 +161,6 @@ in
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
     _custom.services.ai.webscoop.enable = true;
-    _custom.services.ai.gptResearcher.enable = true;
     _custom.services.ai.wosarcher.enable = true;
     _custom.services.ai.wosarcher.jev.enable = true;
     _custom.services.ai.openDesign.enable = true;
@@ -173,16 +172,17 @@ in
     _custom.services.ai.comfyui.unetDtype = "fp16";
     _custom.services.ai.comfyui.attention = "split";
     _custom.services.ai.comfyui.rocm.tunableOp = true;
-    _custom.services.ai.gptResearcher.smartModel = "deepseek-v4-flash";
-    _custom.services.ai.gptResearcher.fastModel = "deepseek-v4-flash";
-    _custom.services.ai.gptResearcher.strategicModel = "deepseek-v4-flash";
-    _custom.services.ai.gptResearcher.embeddingContextTokens = 30720;
     # 16 GB VRAM: at 40k context the embedding model left only ~6.5 GB free,
     # and the Q8_0 reranker (~7.1 GB: 4.1 GB weights, 2.5 GB compute buffer
     # and 0.6 GB KV cache at contextSize 4096) failed to load. At 30k context
     # the embedding KV cache shrinks by ~1.4 GB, and the Q4_K_M reranker
     # (~5.4 GB: 2.4 GB weights) leaves ~2.6 GB of headroom with both models
     # resident.
+    _custom.services.ai.gptResearcher.enable = true;
+    _custom.services.ai.gptResearcher.smartModel = "deepseek-v4-flash";
+    _custom.services.ai.gptResearcher.fastModel = "deepseek-v4-flash";
+    _custom.services.ai.gptResearcher.strategicModel = "deepseek-v4-flash";
+    _custom.services.ai.gptResearcher.embeddingContextTokens = 30720;
     _custom.services.ai.reranker.enable = true;
     _custom.services.ai.reranker.model = "Qwen/Qwen3-Reranker-4B";
     _custom.services.ai.reranker.modelUrl =
