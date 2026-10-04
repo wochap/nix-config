@@ -3456,11 +3456,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791143446,
-        "narHash": "sha256-n+Ci1f3DVQ520hB0ZL0nVU3f0ErAZhR0rrXo7s98KuA=",
+        "lastModified": 1791156299,
+        "narHash": "sha256-GNR0++NFdzb5UA43CUMWnkXkHt08j7/T0m+WzRRQvXk=",
         "owner": "wochap",
         "repo": "session-tap",
-        "rev": "36955bc0e5d9bda7ee9bbc368c57420381a5a529",
+        "rev": "af0f1c7a82dbe23003bbb524c847b45a6e8747b9",
         "type": "github"
       },
       "original": {
