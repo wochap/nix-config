@@ -1,4 +1,5 @@
 local active_border = require("hyprland.lib.active_border")
+local float_guard = require("hyprland.lib.float_guard")
 local constants = require("hyprland.constants")
 
 ---- KEYWORDS
@@ -9,6 +10,7 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 ---- AUTOSTART
 
 active_border.setup()
+float_guard.setup()
 
 if not constants.is_kiosk then
   -- We set XDG_* manually because the UWSM session may use a different name.

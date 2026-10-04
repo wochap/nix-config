@@ -127,6 +127,8 @@ in
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/theme.lua;
         "hypr/hyprland/lib/active_border.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/active_border.lua;
+        "hypr/hyprland/lib/float_guard.lua".source =
+          relativeSymlink configDirectory ./dotfiles/hyprland/lib/float_guard.lua;
         "hypr/hyprland/lib/harpoon.lua".source =
           relativeSymlink configDirectory ./dotfiles/hyprland/lib/harpoon.lua;
         "hypr/hyprland/lib/harpoon_scratchpad.lua".source =
