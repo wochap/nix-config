@@ -79,27 +79,12 @@ in
     };
     # Render polkit, gpg, ssh and gnome-keyring prompts in the shell
     # (widgets/AuthPrompt), stock agents stay as fallback
-    enableAuthDialogs = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-    };
     authDialogs = {
-      polkit = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-      };
-      pinentry = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-      };
-      askpass = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-      };
-      prompter = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-      };
+      enable = lib.mkEnableOption { };
+      polkit = lib.mkEnableOption { };
+      pinentry = lib.mkEnableOption { };
+      askpass = lib.mkEnableOption { };
+      prompter = lib.mkEnableOption { };
       # resolved per backend switches, read by modules/nixos/security/*
       active = lib.mkOption {
         type = lib.types.attrsOf lib.types.bool;
@@ -107,7 +92,7 @@ in
         readOnly = true;
         default =
           let
-            isOn = cfg.enable && cfg.enableSystemd && cfg.enableAuthDialogs;
+            isOn = cfg.enable && cfg.enableSystemd && cfg.authDialogs.enable;
           in
           {
             polkit = isOn && cfg.authDialogs.polkit;
@@ -144,7 +129,7 @@ in
         };
       }
       # read by SAuth.qml from /run/secrets/personal-auth-phrase, chip hidden when missing
-      // lib.optionalAttrs (cfg.enableAuthDialogs && hasAuthPhrase) {
+      // lib.optionalAttrs (cfg.authDialogs.enable && hasAuthPhrase) {
         "personal-auth-phrase" = {
           owner = userName;
           mode = "0400";
@@ -174,7 +159,7 @@ in
           shell-wireguard
           shell-battery-saver
         ]
-        ++ lib.optional cfg.enableAuthDialogs pkgs._custom.shell-auth;
+        ++ lib.optional cfg.authDialogs.enable pkgs._custom.shell-auth;
 
       xdg.configFile = {
         "quickshell/shell".source = lib._custom.relativeSymlink configDirectory ./dotfiles/shell;

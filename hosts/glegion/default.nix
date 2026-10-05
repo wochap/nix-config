@@ -214,6 +214,13 @@ in
 
     _custom.desktop.hyprland.enable = true;
     _custom.desktop.hyprland.isDefault = true;
+
+    _custom.desktop.quickshell.authDialogs.enable = true;
+    _custom.desktop.quickshell.authDialogs.polkit = true;
+    _custom.desktop.quickshell.authDialogs.pinentry = true;
+    _custom.desktop.quickshell.authDialogs.askpass = true;
+    _custom.desktop.quickshell.authDialogs.prompter = true;
+
     _custom.desktop.hyprland.uwsmSessionVariables = {
       IGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:06:00.0-card)";
       DGPU_CARD = "$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card)";

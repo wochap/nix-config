@@ -233,6 +233,12 @@ in
     _custom.desktop.hyprland.enable = true;
     _custom.desktop.hyprland.isDefault = true;
 
+    _custom.desktop.quickshell.authDialogs.enable = true;
+    _custom.desktop.quickshell.authDialogs.polkit = true;
+    _custom.desktop.quickshell.authDialogs.pinentry = true;
+    _custom.desktop.quickshell.authDialogs.askpass = true;
+    _custom.desktop.quickshell.authDialogs.prompter = true;
+
     _custom.desktop.mail.enable = true;
     _custom.desktop.mail.accounts.personal = {
       primary = true;
