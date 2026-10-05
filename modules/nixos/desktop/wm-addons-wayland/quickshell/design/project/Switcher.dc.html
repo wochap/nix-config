@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/700.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>body{margin:0;font-family:'Iosevka Nerd Font','Iosevka','JetBrains Mono',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}</style>
+</helmet>
+<div style="{{ panel }}">
+  <sc-if value="{{ isTiles }}" hint-placeholder-val="{{ true }}">
+    <div style="{{ tilesBox }}">
+      <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="5">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+          <div style="width:{{ tw }}px;padding:6px;box-sizing:border-box;border-radius:8px;background:{{ t.bg }};box-shadow:{{ t.ring }};transform:{{ t.scale }};display:flex;flex-direction:column;gap:6px">
+            <div style="height:{{ ph }}px;border-radius:4px;overflow:hidden;background:#181825;position:relative">
+              <div style="position:absolute;inset:0;opacity:{{ t.pop }}">
+                <sc-if value="{{ t.img }}"><img src="{{ t.img }}" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></sc-if>
+                <sc-if value="{{ t.ph }}"><div style="position:absolute;inset:0;padding:10px;display:flex;flex-direction:column;gap:6px"><sc-for list="{{ t.lines }}" as="ln"><span style="height:4px;border-radius:2px;width:{{ ln.w }};background:{{ ln.c }}"></span></sc-for></div></sc-if>
+              </div>
+              <span style="position:absolute;top:5px;right:5px;min-width:18px;height:18px;line-height:18px;padding:0 5px;box-sizing:border-box;text-align:center;border-radius:9px;font-size:10px;font-weight:700;background:{{ t.bbg }};color:{{ t.bfg }};box-shadow:{{ t.bring }}">{{ t.ws }}</span>
+              <sc-if value="{{ t.urgent }}"><span style="position:absolute;top:6px;left:6px;width:8px;height:8px;border-radius:4px;background:#f38ba8;box-shadow:0 0 0 2px #1e1e2e"></span></sc-if>
+              <sc-if value="{{ t.special }}"><span style="position:absolute;left:5px;bottom:5px;height:16px;line-height:16px;padding:0 6px;border-radius:8px;font-size:10px;color:#cba6f7;background:rgba(17,17,27,.85)">special:scratch</span></sc-if>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;height:24px;padding:0 2px">
+              <span class="material-symbols-rounded" style="font-size:20px;color:{{ t.ic }}">{{ t.icon }}</span>
+              <span style="flex:1;min-width:0;font-size:12px;color:{{ t.tfg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.title }}</span>
+            </div>
+          </div>
+          <sc-if value="{{ t.cap }}"><span style="font-size:10px;letter-spacing:.08em;color:#7f849c">{{ t.cap }}</span></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isGrouped }}">
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="5">
+        <div style="display:flex;flex-direction:column;gap:8px;width:{{ tw }}px">
+          <div style="display:flex;align-items:center;gap:6px;height:22px;padding:0 2px">
+            <span style="min-width:18px;height:18px;line-height:18px;padding:0 5px;box-sizing:border-box;text-align:center;border-radius:9px;font-size:10px;font-weight:700;background:{{ g.hbg }};color:{{ g.hfg }};box-shadow:{{ g.hring }}">{{ g.ws }}</span>
+            <span style="font-size:12px;color:#bac2de">· {{ g.name }}</span><span style="flex:1"></span><span style="font-size:10px;color:#6c7086">{{ g.count }}</span>
+          </div>
+          <sc-for list="{{ g.items }}" as="t" hint-placeholder-count="1">
+            <div style="padding:6px;border-radius:8px;background:{{ t.bg }};box-shadow:{{ t.ring }};transform:{{ t.scale }};display:flex;flex-direction:column;gap:6px">
+              <div style="height:{{ ph }}px;border-radius:4px;overflow:hidden;background:#181825;position:relative">
+                <div style="position:absolute;inset:0;opacity:{{ t.pop }}">
+                  <sc-if value="{{ t.img }}"><img src="{{ t.img }}" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></sc-if>
+                  <sc-if value="{{ t.ph }}"><div style="position:absolute;inset:0;padding:10px;display:flex;flex-direction:column;gap:6px"><sc-for list="{{ t.lines }}" as="ln"><span style="height:4px;border-radius:2px;width:{{ ln.w }};background:{{ ln.c }}"></span></sc-for></div></sc-if>
+                </div>
+                <sc-if value="{{ t.urgent }}"><span style="position:absolute;top:6px;left:6px;width:8px;height:8px;border-radius:4px;background:#f38ba8;box-shadow:0 0 0 2px #1e1e2e"></span></sc-if>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;height:24px;padding:0 2px">
+                <span class="material-symbols-rounded" style="font-size:20px;color:{{ t.ic }}">{{ t.icon }}</span>
+                <span style="flex:1;min-width:0;font-size:12px;color:{{ t.tfg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.title }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isList }}">
+    <div style="display:flex;flex-direction:column;gap:2px;width:520px">
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="9">
+        <div style="display:flex;align-items:center;gap:10px;height:32px;padding:0 8px 0 10px;border-radius:6px;background:{{ r.bg }};box-shadow:{{ r.lring }};opacity:{{ r.op }}">
+          <span class="material-symbols-rounded" style="font-size:20px;color:{{ r.ic }}">{{ r.icon }}</span>
+          <span style="flex:1;min-width:0;font-size:12px;color:{{ r.tfg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.title }}</span>
+          <sc-if value="{{ r.urgent }}"><span style="width:8px;height:8px;border-radius:4px;background:#f38ba8"></span></sc-if>
+          <span style="font-size:10px;color:#7f849c">{{ r.cls }}</span>
+          <span style="min-width:18px;height:18px;line-height:18px;padding:0 5px;box-sizing:border-box;text-align:center;border-radius:9px;font-size:10px;font-weight:700;background:{{ r.bbg }};color:{{ r.bfg }};box-shadow:{{ r.bring }}">{{ r.ws }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isEmpty }}">
+    <div style="width:420px;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+      <span class="material-symbols-rounded" style="font-size:32px;color:#45475a">select_window_off</span>
+      <span style="font-size:12px;color:#a6adc8">No windows open</span>
+      <span style="font-size:10px;color:#7f849c">Super+Enter terminal · Super+Space launcher</span>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasSel }}">
+    <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:6px;background:#181825;box-shadow:inset 0 0 0 1px #313244">
+      <span class="material-symbols-rounded" style="font-size:18px;color:{{ sel.ic }}">{{ sel.icon }}</span>
+      <span style="flex:1;min-width:0;font-size:12px;line-height:18px;color:#cdd6f4;text-wrap:pretty;word-break:break-all">{{ sel.title }}</span>
+      <span style="font-size:10px;line-height:18px;color:#7f849c;white-space:nowrap">{{ sel.cls }} · ws {{ sel.ws }}{{ rowInfo }} · {{ countText }}</span>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showFooter }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;align-items:center;gap:14px;font-size:10px;color:#7f849c;padding:0 2px;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:6px"><span style="min-width:20px;height:20px;line-height:19px;padding:0 5px;box-sizing:border-box;text-align:center;border-radius:4px;background:#313244;box-shadow:inset 0 0 0 1px #45475a, inset 0 -2px 0 #45475a;font-size:12px;color:#cdd6f4">Tab</span>next</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="min-width:20px;height:20px;line-height:19px;padding:0 5px;box-sizing:border-box;text-align:center;border-radius:4px;background:#313244;box-shadow:inset 0 0 0 1px #45475a, inset 0 -2px 0 #45475a;font-size:12px;color:#cdd6f4">⇧</span><span style="min-width:20px;height:20px;line-height:19px;padding:0 5px;box-sizing:border-box;text-align:center;border-radius:4px;background:#313244;box-shadow:inset 0 0 0 1px #45475a, inset 0 -2px 0 #45475a;font-size:12px;color:#cdd6f4">Tab</span></span>prev</span>
+      <sc-if value="{{ isGrid }}"><span style="display:flex;align-items:center;gap:6px"><span style="min-width:20px;height:20px;line-height:19px;padding:0 5px;box-sizing:border-box;text-align:center;border-radius:4px;background:#313244;box-shadow:inset 0 0 0 1px #45475a, inset 0 -2px 0 #45475a;font-size:12px;color:#cdd6f4">←↑↓→</span>move</span></sc-if>
+      <span style="display:flex;align-items:center;gap:6px;opacity:{{ actOp }}"><span style="min-width:20px;height:20px;line-height:19px;padding:0 5px;box-sizing:border-box;text-align:center;border-radius:4px;background:#313244;box-shadow:inset 0 0 0 1px #45475a, inset 0 -2px 0 #45475a;font-size:12px;color:#cdd6f4">Enter</span>focus</span>
+      <span style="display:flex;align-items:center;gap:6px;opacity:{{ actOp }}"><span style="min-width:20px;height:20px;line-height:19px;padding:0 5px;box-sizing:border-box;text-align:center;border-radius:4px;background:#313244;box-shadow:inset 0 0 0 1px #45475a, inset 0 -2px 0 #45475a;font-size:12px;color:#cdd6f4">q</span>close window</span>
+      <span style="flex:1"></span>
+      <span>{{ countText }}</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1300,&quot;height&quot;:340},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;strip&quot;,&quot;grid&quot;,&quot;grouped&quot;,&quot;list&quot;,&quot;empty&quot;,&quot;states&quot;],&quot;default&quot;:&quot;strip&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;sel&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:5,&quot;tsType&quot;:&quot;number&quot;},&quot;longTitle&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const mode = p.mode ?? 'strip', long = !!p.longTitle;
+    const term = [70, 40, 88, 55, 30, 76, 62];
+    const W = (icon, ic, title, ws, cls, o = {}) => ({ icon, ic, title, ws, cls, img: o.img || null, ph: !o.img, kind: o.kind || 'default' });
+    const LONG = 'nvim · ~/src/dotfiles/quickshell/modules/notifications/NotificationPopupWindow.qml [+] — Neovim (kitty, ssh: hyprbox)';
+    const pool = {
+      ff1: W('public', '#fab387', 'Claude Design — Mozilla Firefox', 2, 'firefox', { img: 'assets/win1.png' }),
+      ff2: W('public', '#fab387', 'Mozilla Firefox', 2, 'firefox', { img: 'assets/win2.png' }),
+      ff3: W('public', '#fab387', 'Hyprland wiki — Mozilla Firefox', 2, 'firefox', { img: 'assets/win3.png' }),
+      nvim: W('terminal', '#89b4fa', 'nvim · Workspaces.qml', 1, 'kitty'),
+      kitty: W('terminal', '#89b4fa', 'kitty · ~/src/quickshell', 1, 'kitty'),
+      btop: W('monitoring', '#a6e3a1', 'btop', 3, 'kitty'),
+      signal: W('forum', '#94e2d5', 'Signal — 3 unread', 5, 'signal', { kind: 'urgent' }),
+      aerc: W('mail', '#74c7ec', 'aerc · INBOX (13)', 4, 'kitty'),
+      music: W('music_note', '#f5c2e7', 'ncmpcpp', 'S', 'kitty', { kind: 'special' }),
+      scratch: W('terminal', '#89b4fa', 'kitty · scratch', 'S', 'kitty', { kind: 'special' }),
+      obs: W('description', '#cba6f7', 'Obsidian — shell notes', 6, 'obsidian'),
+      rec: W('videocam', '#f38ba8', 'OBS — recording', 9, 'obs'),
+      git: W('commit', '#fab387', 'lazygit · quickshell', 1, 'kitty'),
+      zath: W('picture_as_pdf', '#f38ba8', 'zathura · wayland-protocols.pdf', 7, 'zathura'),
+      ff4: W('public', '#fab387', 'GitHub — quickshell/quickshell', 8, 'firefox', { img: 'assets/win1.png' }),
+    };
+    const style = (t, st, i) => {
+      const sel = st === 'selected', hov = st === 'hover', urg = t.kind === 'urgent', spc = t.kind === 'special';
+      return { ...t, urgent: urg, special: spc,
+        lines: term.map((w, k) => ({ w: `${(w + i * 7 + k * 3) % 80 + 15}%`, c: k === 0 ? '#cba6f7' : k % 3 === 0 ? '#a6e3a1' : '#45475a' })),
+        bg: sel ? '#313244' : hov ? '#28283a' : '#1e1e2e',
+        ring: sel ? 'inset 0 0 0 2px #cba6f7, 0 0 0 4px rgba(203,166,247,.14)' : hov ? 'inset 0 0 0 1px #45475a' : urg ? 'inset 0 0 0 1px rgba(243,139,168,.6)' : 'inset 0 0 0 1px #313244',
+        scale: sel ? 'scale(1.04)' : 'none', pop: spc ? 0.55 : 1,
+        tfg: sel || hov ? '#cdd6f4' : urg ? '#f38ba8' : spc ? '#7f849c' : '#a6adc8',
+        bbg: sel ? '#cba6f7' : urg ? '#f38ba8' : spc ? 'rgba(17,17,27,.85)' : 'rgba(17,17,27,.85)',
+        bfg: sel || urg ? '#11111b' : spc ? '#cba6f7' : '#cdd6f4',
+        bring: spc && !sel ? 'inset 0 0 0 1px #cba6f7' : 'none' };
+    };
+    let list = [], selIdx = -1, hovIdx = -1, tw = 236, ph = 126, cols = 0;
+    if (mode === 'strip') { list = [pool.nvim, pool.ff1, pool.ff2, pool.signal, pool.music]; selIdx = 2; hovIdx = 1; }
+    if (mode === 'grid') { list = [pool.ff2, pool.nvim, pool.ff1, pool.kitty, pool.signal, pool.ff3, pool.btop, pool.aerc, pool.obs, pool.git, pool.music, pool.scratch, pool.zath, pool.ff4, pool.rec]; selIdx = Number(p.sel ?? 5); tw = 188; ph = 106; cols = 5; }
+    if (mode === 'states') { list = [pool.nvim, pool.ff1, pool.ff2, pool.signal, pool.music]; }
+    if (long && selIdx >= 0) list = list.map((t, i) => i === selIdx ? { ...t, title: LONG, icon: 'terminal', ic: '#89b4fa', cls: 'kitty', ws: 1, img: null, ph: true } : t);
+    const caps = ['DEFAULT', 'HOVERED', 'SELECTED', 'URGENT', 'SPECIAL / HIDDEN'];
+    const stOf = (i) => mode === 'states' ? ['default', 'hover', 'selected', 'default', 'default'][i] : i === selIdx ? 'selected' : i === hovIdx ? 'hover' : 'default';
+    const tiles = list.map((t, i) => ({ ...style(t, stOf(i), i), cap: mode === 'states' ? caps[i] : '' }));
+    const groupsDef = [
+      { ws: 1, name: 'code', items: [pool.nvim, pool.kitty, pool.git] }, { ws: 2, name: 'web', items: [pool.ff1, pool.ff2, pool.ff3] },
+      { ws: 3, name: 'term', items: [pool.btop] }, { ws: 5, name: 'chat', items: [pool.signal] }, { ws: 'S', name: 'scratch', items: [pool.music, pool.scratch] },
+    ];
+    let gi = 0;
+    const groups = groupsDef.map((g, k) => ({ ...g, count: g.items.length,
+      hbg: k === 1 ? '#cba6f7' : g.ws === 'S' ? 'transparent' : '#313244', hfg: k === 1 ? '#11111b' : g.ws === 'S' ? '#cba6f7' : '#cdd6f4',
+      hring: g.ws === 'S' ? 'inset 0 0 0 1px #cba6f7' : 'none',
+      items: g.items.map((t, i) => style(t, k === 1 && i === 1 ? 'selected' : k === 0 && i === 0 ? 'hover' : 'default', gi++)) }));
+    if (mode === 'grouped') { tw = 188; ph = 100; }
+    const rowsDef = [pool.ff2, pool.nvim, pool.ff1, pool.signal, pool.kitty, pool.aerc, pool.btop, pool.obs, pool.music];
+    const rows = rowsDef.map((t, i) => { const sel = i === 0, hov = i === 2, urg = t.kind === 'urgent', spc = t.kind === 'special';
+      return { ...t, urgent: urg, bg: sel ? '#313244' : hov ? '#28283a' : 'transparent', lring: sel ? 'inset 0 0 0 1px rgba(203,166,247,.55)' : 'none',
+        op: spc ? 0.6 : 1, tfg: sel ? '#cdd6f4' : urg ? '#f38ba8' : '#bac2de',
+        bbg: sel ? '#cba6f7' : spc ? 'transparent' : '#45475a', bfg: sel ? '#11111b' : spc ? '#cba6f7' : '#cdd6f4', bring: spc ? 'inset 0 0 0 1px #cba6f7' : 'none' }; });
+    const isTiles = mode === 'strip' || mode === 'grid' || mode === 'states';
+    const sel = mode === 'grouped' ? groups[1].items[1] : mode === 'list' ? rows[0] : tiles[selIdx];
+    const n = mode === 'grouped' ? 10 : mode === 'list' ? rows.length : list.length;
+    const rowInfo = mode === 'grid' ? ` · row ${Math.floor(selIdx / cols) + 1}/${Math.ceil(list.length / cols)}` : '';
+    return {
+      panel: { display: 'flex', flexDirection: 'column', gap: 10, padding: 12, borderRadius: 8, background: '#1e1e2e', width: 'fit-content', boxSizing: 'border-box',
+        boxShadow: 'inset 0 0 0 1px #313244, 0 16px 40px rgba(17,17,27,.6), 0 2px 8px rgba(17,17,27,.4)' },
+      tilesBox: cols ? { display: 'grid', gridTemplateColumns: `repeat(${cols}, ${tw}px)`, gap: 8 } : { display: 'flex', gap: mode === 'states' ? 20 : 8, alignItems: 'flex-start' },
+      tiles, tw, ph, groups, rows, isTiles, isGrid: mode === 'grid', isGrouped: mode === 'grouped', isList: mode === 'list', isEmpty: mode === 'empty',
+      hasSel: !!sel && mode !== 'states' && mode !== 'empty', sel: sel || {}, rowInfo,
+      showFooter: false, actOp: mode === 'empty' ? 0.45 : 1,
+      countText: mode === 'empty' ? '0 windows' : mode === 'grouped' ? `${n} windows · 5 workspaces` : `${n} windows · MRU order` };
+  }
+}
+</script>
+</body>
+</html>

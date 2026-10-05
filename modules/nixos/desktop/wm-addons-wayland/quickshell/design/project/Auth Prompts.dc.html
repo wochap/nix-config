@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<style>
+body{margin:0;background:#181825}
+a{color:#b4befe}
+a:hover{color:#cdd6f4}
+</style>
+</helmet>
+<div style="width:max-content;padding:64px;display:flex;flex-direction:column;gap:48px;font-family:Inter,system-ui,sans-serif;color:#cdd6f4">
+  <div style="display:flex;flex-direction:column;gap:6px;max-width:900px">
+    <div style="font-size:28px;line-height:36px;font-weight:600">System prompts — auth &amp; secrets</div>
+    <div style="font-size:14px;line-height:22px;color:#a6adc8;text-wrap:pretty">One 440px dialog for polkit, gpg-agent, ssh and gnome-keyring. Header = badge + title + <span style="font-family:'JetBrains Mono',monospace">lock · source</span> + secret phrase; body = message, mono details box, one field; footer = actions with keycaps over a requester strip.</div>
+  </div>
+
+  <div style="display:flex;gap:48px;align-items:flex-start">
+    <div data-screen-label="Mocha" style="--bg:#1e1e2e;--mantle:#181825;--crust:#11111b;--s0:#313244;--s1:#45475a;--s2:#585b70;--field-br:#6c7086;--ov:#9399b2;--text:#cdd6f4;--sub:#a6adc8;--accent:#b4befe;--ink:#b4befe;--ink-h:#c6cdfe;--ink-p:#9ea9f2;--on-ink:#1e1e2e;--red:#f38ba8;--green:#a6e3a1;--yellow:#f9e2af;--peach:#fab387;--mauve:#cba6f7;--sky:#89dceb;--blue:#89b4fa;--shadow:0 16px 40px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.35);width:1000px;box-sizing:border-box;padding:40px;background:var(--crust);border-radius:16px;display:flex;flex-direction:column;gap:40px;color:var(--text)">
+      <div style="display:flex;align-items:baseline;gap:12px"><span style="font-size:20px;font-weight:600">Mocha</span><span style="font-size:13px;color:var(--sub)">dark · default</span></div>
+      <div style="padding:32px;background:var(--bg);border-radius:12px">
+        <dc-import name="AuthParts" theme="mocha" hint-size="100%,1400px"></dc-import>
+      </div>
+      <div style="display:grid;grid-template-columns:440px 440px;gap:40px 40px;align-items:start">
+        <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="12">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:16px;color:var(--sub)"><span style="color:var(--text)">{{ t.n }}</span><span>{{ t.name }}</span></div>
+            <dc-import name="AuthDialog" variant="{{ t.v }}" state="{{ t.s }}" hint-size="440px,380px"></dc-import>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div data-screen-label="Latte" style="--bg:#eff1f5;--mantle:#e6e9ef;--crust:#dce0e8;--s0:#ccd0da;--s1:#bcc0cc;--s2:#acb0be;--field-br:#7c7f93;--ov:#6c6f85;--text:#4c4f69;--sub:#5c5f77;--accent:#7287fd;--ink:#3f53d9;--ink-h:#5164e0;--ink-p:#3343bd;--on-ink:#eff1f5;--red:#d20f39;--green:#40a02b;--yellow:#df8e1d;--peach:#fe640b;--mauve:#8839ef;--sky:#04a5e5;--blue:#1e66f5;--shadow:0 16px 40px rgba(76,79,105,.22),0 2px 8px rgba(76,79,105,.14);width:1000px;box-sizing:border-box;padding:40px;background:var(--crust);border-radius:16px;display:flex;flex-direction:column;gap:40px;color:var(--text)">
+      <div style="display:flex;align-items:baseline;gap:12px"><span style="font-size:20px;font-weight:600">Latte</span><span style="font-size:13px;color:var(--sub)">light</span></div>
+      <div style="padding:32px;background:var(--bg);border-radius:12px">
+        <dc-import name="AuthParts" theme="latte" hint-size="100%,1400px"></dc-import>
+      </div>
+      <div style="display:grid;grid-template-columns:440px 440px;gap:40px 40px;align-items:start">
+        <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="12">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:16px;color:var(--sub)"><span style="color:var(--text)">{{ t.n }}</span><span>{{ t.name }}</span></div>
+            <dc-import name="AuthDialog" variant="{{ t.v }}" state="{{ t.s }}" hint-size="440px,380px"></dc-import>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div data-screen-label="Spec" style="width:2048px;box-sizing:border-box;padding:40px;background:#1e1e2e;border-radius:16px;display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;align-items:baseline;gap:12px"><span style="font-size:20px;font-weight:600">Toolkit mapping</span><span style="font-size:13px;color:#a6adc8">GTK CSS (gcr-prompter, pinentry-gnome3, seahorse ssh-askpass) · Qt palette / QSS (hyprpolkitagent)</span></div>
+    <table style="border-collapse:collapse;font-size:13px;line-height:20px;width:100%">
+      <thead>
+        <tr style="text-align:left;color:#a6adc8;font-size:12px">
+          <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500;width:150px">Role</th>
+          <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500;width:100px">Mocha</th>
+          <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500;width:100px">Latte</th>
+          <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500">GTK CSS (@define-color ctp_*)</th>
+          <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500">Qt — palette role · QSS</th>
+        </tr>
+      </thead>
+      <tbody style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:18px">
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Surface</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#1e1e2e</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#eff1f5</td><td style="padding:8px 12px;border-bottom:1px solid #313244">window.background { background-color: @ctp_base; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Window · QDialog { background: #1e1e2e; }</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Inset / footer</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#181825</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#e6e9ef</td><td style="padding:8px 12px;border-bottom:1px solid #313244">entry, .details, .footer { background-color: @ctp_mantle; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Base, AlternateBase</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Text · muted</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#cdd6f4 · #a6adc8</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#4c4f69 · #5c5f77</td><td style="padding:8px 12px;border-bottom:1px solid #313244">* { color: @ctp_text; } .dim-label { color: @ctp_subtext; opacity: 1; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">WindowText, Text, ButtonText · QLabel#subtitle { color: … }</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Placeholder</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#9399b2</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#6c6f85</td><td style="padding:8px 12px;border-bottom:1px solid #313244">entry &gt; text &gt; placeholder { color: @ctp_placeholder; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">PlaceholderText</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Field</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#6c7086</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#7c7f93</td><td style="padding:8px 12px;border-bottom:1px solid #313244">entry { border: 1px solid @ctp_field; border-radius: 8px; min-height: 34px; padding: 0 4px 0 12px; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Mid · QLineEdit { border: 1px solid #6c7086; border-radius: 8px; min-height: 34px; padding: 0 10px; }</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Focus ring</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#b4befe</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#3f53d9</td><td style="padding:8px 12px;border-bottom:1px solid #313244">entry:focus-within { border-color: @ctp_ink; box-shadow: 0 0 0 1px @ctp_ink; }  button:focus-visible { outline: 2px solid @ctp_ink; outline-offset: 2px; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Highlight · QLineEdit:focus { border: 2px solid #b4befe; padding: 0 9px; } — QSS has no outline</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Primary button</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#b4befe / #1e1e2e</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#3f53d9 / #eff1f5</td><td style="padding:8px 12px;border-bottom:1px solid #313244">button.suggested-action { background: @ctp_ink; color: @ctp_on_ink; border-radius: 8px; min-height: 30px; }  :hover { background: shade(@ctp_ink, 1.06); }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Highlight / HighlightedText · QPushButton:default { background: #b4befe; color: #1e1e2e; }</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Secondary · risky</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#313244 / #45475a</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#ccd0da / #bcc0cc</td><td style="padding:8px 12px;border-bottom:1px solid #313244">button { background: @ctp_surface0; border: 1px solid @ctp_surface1; }  button.flat.risky { background: none; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Button · QPushButton { background: #313244; border: 1px solid #45475a; border-radius: 8px; }</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Checkbox</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#6c7086 → #b4befe</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#7c7f93 → #3f53d9</td><td style="padding:8px 12px;border-bottom:1px solid #313244">check { border: 1px solid @ctp_field; border-radius: 4px; min-width: 14px; }  check:checked { background: @ctp_ink; color: @ctp_on_ink; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">QCheckBox::indicator { width: 14px; border: 1px solid #6c7086; border-radius: 4px; } ::checked { background: #b4befe; }</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Error · success</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#f38ba8 · #a6e3a1</td><td style="padding:8px 12px;border-bottom:1px solid #313244">#d20f39 · #40a02b</td><td style="padding:8px 12px;border-bottom:1px solid #313244">entry.error { border-color: @ctp_red; box-shadow: 0 0 0 1px @ctp_red; } label.error { color: @ctp_red; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">QLineEdit[error="true"] { border: 2px solid #f38ba8; } (dynamic property)</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Badge tint</td><td style="padding:8px 12px;border-bottom:1px solid #313244">16% of tint</td><td style="padding:8px 12px;border-bottom:1px solid #313244">16% of tint</td><td style="padding:8px 12px;border-bottom:1px solid #313244">.badge { background: alpha(@ctp_peach, 0.16); color: @ctp_peach; border-radius: 8px; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">rgba(250,179,135,0.16)</td></tr>
+        <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:Inter">Type</td><td style="padding:8px 12px;border-bottom:1px solid #313244" colspan="2">Inter 13px (≈10pt) · Mono 12px</td><td style="padding:8px 12px;border-bottom:1px solid #313244">* { font-family: "Inter"; font-size: 10pt; } .monospace { font-family: "JetBrains Mono"; font-size: 9pt; }</td><td style="padding:8px 12px;border-bottom:1px solid #313244">* { font-family: "Inter"; font-size: 10pt; } (QML: font.family)</td></tr>
+        <tr><td style="padding:8px 12px;font-family:Inter">Window edge</td><td style="padding:8px 12px">#b4befe</td><td style="padding:8px 12px">#7287fd</td><td style="padding:8px 12px" colspan="2">Hyprland, not the toolkit — 1px border, 12px rounding, shadow and dim are compositor rules (below)</td></tr>
+      </tbody>
+    </table>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#a6adc8">Hyprland rules — verify classes with hyprctl clients</div>
+        <div style="padding:16px;background:#181825;border:1px solid #313244;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:20px;white-space:pre;color:#cdd6f4">$prompt = class:^(gcr-prompter|hyprpolkitagent|ssh-askpass|seahorse)$
+windowrule = float, $prompt
+windowrule = center, $prompt
+windowrule = pin, $prompt
+windowrule = stayfocused, $prompt
+windowrule = dimaround, $prompt
+windowrule = rounding 12, $prompt
+windowrule = bordersize 1, $prompt
+windowrule = bordercolor rgb(b4befe), $prompt   # Latte: rgb(7287fd)
+windowrule = noblur, $prompt</div>
+        <div style="font-size:12px;line-height:18px;color:#a6adc8;text-wrap:pretty">Rule syntax differs between Hyprland releases — adapt to yours. <span style="font-family:'JetBrains Mono',monospace;color:#cdd6f4">pinentry-gnome3</span> hands the prompt to gcr's system prompter, so theming <span style="font-family:'JetBrains Mono',monospace;color:#cdd6f4">gcr-prompter</span> covers GPG too. GTK file: <span style="font-family:'JetBrains Mono',monospace;color:#cdd6f4">~/.config/gtk-4.0/gtk.css</span> (or gtk-3.0, depending on the build — check with ldd).</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#a6adc8">Hard to replicate — flagged</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:20px">
+          <div style="display:flex;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:20px;color:#f9e2af;font-variation-settings:'FILL' 1">warning</span><span style="text-wrap:pretty"><b style="font-weight:600">Layout is not themeable.</b> Badge, details box, keycaps in buttons, requester strip and phrase chip need source patches (GTK: gcr/seahorse UI files; QML: hyprpolkitagent). CSS/palette alone gets colors, radii, fonts and field/button states.</span></div>
+          <div style="display:flex;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:20px;color:#f9e2af;font-variation-settings:'FILL' 1">warning</span><span style="text-wrap:pretty"><b style="font-weight:600">hyprpolkitagent is Qt Quick</b> — QSS is ignored. Use palette roles (qt6ct / Hyprland Qt style config); QSS column applies only to Qt Widgets tools.</span></div>
+          <div style="display:flex;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:20px;color:#f9e2af;font-variation-settings:'FILL' 1">warning</span><span style="text-wrap:pretty"><b style="font-weight:600">Shake:</b> trivial in QML (NumberAnimation on x). Not reachable through GTK CSS — needs code; fallback is the static red ring + error row, which already carry the state.</span></div>
+          <div style="display:flex;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:20px;color:#f9e2af;font-variation-settings:'FILL' 1">warning</span><span style="text-wrap:pretty"><b style="font-weight:600">“Accept once”</b> — ssh askpass only returns yes/no, and yes writes known_hosts. A one-time accept needs a wrapper (e.g. temporary UserKnownHostsFile); otherwise ship Reject / Accept.</span></div>
+          <div style="display:flex;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:20px;color:#f9e2af;font-variation-settings:'FILL' 1">warning</span><span style="text-wrap:pretty"><b style="font-weight:600">Secret access request</b> — stock gnome-keyring has no per-app access prompt. This variant fits a broker that has one (e.g. KeePassXC's Secret Service “confirm access”).</span></div>
+          <div style="display:flex;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:20px;color:#a6e3a1;font-variation-settings:'FILL' 1">check_circle</span><span style="text-wrap:pretty"><b style="font-weight:600">Plain-widget safe:</b> spinner (GtkSpinner / BusyIndicator), countdown (2px progress bar), strength meter (level bar), combo box, checkbox — use the native widgets.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;font-size:13px;line-height:20px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#a6adc8">Keyboard &amp; focus</div>
+        <div style="text-wrap:pretty">Initial focus: the field (identity picker first only if it changed). Tab order: picker → field → eye → checkbox → secondary → risky → primary. <span style="font-family:'JetBrains Mono',monospace">↵</span> = primary from anywhere except the risky button; <span style="font-family:'JetBrains Mono',monospace">Esc</span> = cancel. “Always …” never gets initial focus or Enter.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#a6adc8">State timing</div>
+        <div style="text-wrap:pretty">Verifying: spinner after 150ms (no flicker), field + checkbox disabled, Cancel stays live. Error: clear, refocus, shake, row. Success: green check badge + row, close after 400ms. Timeout: 30s bar drains linearly, text from 0:30.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#a6adc8">Contrast</div>
+        <div style="text-wrap:pretty">Stock Latte lavender #7287fd is ≈2.9:1 on base — kept for the window border; primary fill, focus and checks use #3f53d9 (≈5.3:1). Field edges use overlay tones for ≥3:1. Yellow is never used for text.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      tiles: [
+        { n: '01', name: 'Polkit — password', v: 'polkit', s: 'default' },
+        { n: '02', name: 'Polkit — multiple identities', v: 'polkit-multi', s: 'default' },
+        { n: '03', name: 'GPG — passphrase · caps lock', v: 'gpg', s: 'default' },
+        { n: '04', name: 'SSH — key passphrase · revealed', v: 'ssh-key', s: 'default' },
+        { n: '05', name: 'SSH — host confirmation', v: 'ssh-host', s: 'default' },
+        { n: '06', name: 'Keyring — unlock', v: 'keyring', s: 'default' },
+        { n: '07', name: 'Keyring — new password', v: 'keyring-new', s: 'default' },
+        { n: '08', name: 'Secret access request', v: 'secret', s: 'default' },
+        { n: '09a', name: 'State — verifying', v: 'polkit', s: 'loading' },
+        { n: '09b', name: 'State — error (shake)', v: 'polkit', s: 'error' },
+        { n: '09c', name: 'State — success', v: 'polkit', s: 'success' },
+        { n: '09d', name: 'State — timeout', v: 'polkit', s: 'timeout' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

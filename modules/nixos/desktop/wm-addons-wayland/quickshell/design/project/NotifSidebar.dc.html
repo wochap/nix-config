@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/700.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>body{margin:0;font-family:'Iosevka Nerd Font','Iosevka','JetBrains Mono',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}</style>
+</helmet>
+<div style="{{ panel }}">
+  <div style="display:flex;align-items:center;gap:8px;height:28px;padding:0 2px 0 4px;flex:none">
+    <span style="font-size:14px;font-weight:500;color:#cdd6f4">Notifications</span>
+    <sc-if value="{{ notEmpty }}"><span style="font-size:10px;font-weight:700;color:#11111b;background:#cba6f7;height:16px;line-height:16px;padding:0 6px;border-radius:8px">9</span></sc-if>
+    <span style="flex:1"></span>
+    <div style="display:flex;align-items:center;gap:6px;height:24px;padding:0 4px 0 8px;border-radius:12px;background:{{ dndBg }};font-size:10px;color:{{ dndFg }};letter-spacing:.04em">
+      <span class="material-symbols-rounded" style="font-size:14px">do_not_disturb_on</span>DND
+      <span style="width:26px;height:16px;border-radius:8px;background:{{ trackBg }};position:relative;display:block"><span style="position:absolute;top:2px;left:{{ knobX }}px;width:12px;height:12px;border-radius:6px;background:{{ knobBg }}"></span></span>
+    </div>
+    <span title="Clear all" style="height:24px;padding:0 8px;border-radius:12px;display:flex;align-items:center;gap:4px;font-size:12px;color:{{ clearFg }};background:#313244"><span class="material-symbols-rounded" style="font-size:15px">clear_all</span>Clear</span>
+  </div>
+
+  <sc-if value="{{ dnd }}">
+    <div style="display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;border-radius:8px;background:rgba(203,166,247,.1);box-shadow:inset 0 0 0 1px rgba(203,166,247,.3);font-size:12px;color:#cba6f7;flex:none"><span class="material-symbols-rounded" style="font-size:15px;font-variation-settings:'FILL' 1">bedtime</span>Do not disturb until 08:00<span style="flex:1"></span><span style="font-size:10px;color:#a6adc8">7 silenced</span></div>
+  </sc-if>
+
+  <sc-if value="{{ notEmpty }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:8px;overflow:hidden;flex:1;min-height:0">
+      <sc-for list="{{ items }}" as="it" hint-placeholder-count="6">
+        <dc-import name="NotifCard" n="{{ it }}" mode="card" w="{{ cardW }}" hint-size="380px,96px"></dc-import>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ empty }}">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#6c7086">
+      <span class="material-symbols-rounded" style="font-size:32px;color:#45475a">notifications_off</span>
+      <span style="font-size:12px;color:#a6adc8">All caught up</span>
+      <span style="font-size:10px;color:#7f849c">New notifications land here · Super+N to toggle</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:400,&quot;height&quot;:1040},&quot;h&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1040,&quot;tsType&quot;:&quot;number&quot;},&quot;floating&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;empty&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;dnd&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const H = Number(p.h ?? 1040), floating = !!p.floating, empty = !!p.empty, dnd = !!p.dnd;
+    const panel = { width: 400, height: H, boxSizing: 'border-box', padding: 10, display: 'flex', flexDirection: 'column', gap: 10, overflow: 'hidden',
+      background: '#181825', borderRadius: floating ? 8 : 0,
+      boxShadow: floating ? 'inset 0 0 0 1px #313244, 0 12px 32px rgba(17,17,27,.55)' : 'inset 1px 0 0 #313244, -8px 0 24px rgba(17,17,27,.35)' };
+    const days = [['M', 28], ['T', 29], ['W', 30], ['T', 1], ['F', 2], ['S', 3], ['S', 4]];
+    const week = days.map(([l, n], i) => ({ l, n, bg: i === 3 ? '#cba6f7' : 'transparent', fg: i === 3 ? '#11111b' : i < 3 ? '#7f849c' : '#cdd6f4',
+      lc: i === 3 ? '#11111b' : '#6c7086', dot: i === 4 ? '#89b4fa' : i === 6 ? '#a6e3a1' : 'transparent' }));
+    const claude = (summary, meta, body, foot, time, o = {}) => ({ app: 'sessiontap-notify', icon: 'asterisk', iconColor: '#fab387', summary, meta, body, foot, time, actions: [], ...o });
+    const items = [
+      claude('Automerge conflict resolution behavior', 'Claude Code finished · ~/Sandboxes/sandbox/projects/fi · main', 'Mostly no. Facebook, Evernote and most mainstream apps do not use CRDTs like Automerge, or anything comparable, for sync.', 'In 2.2M · Out 22.0k', '10m'),
+      claude('Authentication flow with popup and form filling', 'Claude Code finished · ~/Sandboxes/sandbox/projects/webscoop · main', '`forms` is proposed, passes `validate --strict`, and is now running through the pipeline.', 'In 13.5M · Out 123.0k', '23m', { actions: ['Open session', 'Copy'] }),
+      { app: 'Takeshot', icon: 'screenshot_region', iconColor: '#89b4fa', time: '27m', summary: 'Screenshot saved', body: '~/Pictures/Screenshots/2026-10-01_20-40-12.png', image: 'assets/win2.png', actions: ['Open', 'Edit', 'Copy PNG'] },
+      { app: 'aerc', icon: 'mail', iconColor: '#74c7ec', time: '41m', summary: 'Re: Quickshell 0.2 release notes', meta: 'quickshell-devel', body: 'The new PanelWindow exclusion zones should fix the layer-shell overlap you were seeing on multi-monitor setups.', actions: [] },
+      { app: 'Timewarrior', icon: 'timer', iconColor: '#a6e3a1', time: '1h', urgency: 'low', summary: 'Stopped: shell-redesign', body: 'Tracked 2h 14m today across 3 intervals.', actions: [] },
+      claude('Spec archive complete', 'Claude Code finished · ~/Sandboxes/sandbox/projects/webscoop · main', 'Flows are now spec-driven and archived to openspec/changes/archive — 12 delta specs synced.', 'In 4.1M · Out 31.2k', '2h'),
+    ];
+    return { panel, week, items, empty, notEmpty: !empty, dnd, cardW: 380,
+      dndBg: dnd ? 'rgba(203,166,247,.16)' : '#313244', dndFg: dnd ? '#cba6f7' : '#a6adc8',
+      trackBg: dnd ? '#cba6f7' : '#45475a', knobBg: dnd ? '#11111b' : '#a6adc8', knobX: dnd ? 12 : 2,
+      clearFg: empty ? '#585b70' : '#cdd6f4' };
+  }
+}
+</script>
+</body>
+</html>

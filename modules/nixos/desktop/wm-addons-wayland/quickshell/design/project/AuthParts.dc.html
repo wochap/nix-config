@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+</helmet>
+<div style="display:flex;flex-direction:column;gap:32px;font-family:Inter,system-ui,sans-serif;font-size:13px;line-height:20px;color:var(--text)">
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub)">Color tokens</div>
+    <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px 12px">
+      <sc-for list="{{ tokens }}" as="tk" hint-placeholder-count="18">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="height:32px;border-radius:8px;border:1px solid var(--s1);background:{{ tk.hex }}"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:16px">{{ tk.name }}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;color:var(--sub)">{{ tk.hex }}</div>
+          <div style="font-size:11px;line-height:14px;color:var(--sub);text-wrap:pretty">{{ tk.role }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub)">Type scale</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;flex-direction:column"><span style="font-size:15px;line-height:20px;font-weight:600">Authentication required</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">title · Inter 15/20 · 600</span></div>
+        <div style="display:flex;flex-direction:column"><span style="font-size:13px;line-height:20px">Authentication is required to reload systemd.</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">body · Inter 13/20 · 400</span></div>
+        <div style="display:flex;flex-direction:column"><span style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub)">Confirm password</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">label / meta · Inter 12/16 · 500</span></div>
+        <div style="display:flex;flex-direction:column"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:18px">SHA256:q3VxN8c1KfR0pZ7m…</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">mono · JetBrains Mono 12/18 · 400</span></div>
+        <div style="display:flex;flex-direction:column"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;font-weight:500">Esc ↵ Tab</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">keycap · JetBrains Mono 11/14 · 500</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub)">Spacing · radius (4px grid)</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;color:var(--sub)">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:20px;height:8px;background:var(--ink);border-radius:2px"></div><span style="color:var(--text)">20</span><span>dialog padding</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:8px;background:var(--ink);border-radius:2px"></div><span style="color:var(--text)">16</span><span>header → body · actions → footer</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:12px;height:8px;background:var(--ink);border-radius:2px"></div><span style="color:var(--text)">12</span><span>body stack · badge → title</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:var(--ink);border-radius:2px"></div><span style="color:var(--text)">8</span><span>button gap · icon → text</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:4px;height:8px;background:var(--ink);border-radius:2px"></div><span style="color:var(--text)">4</span><span>label → field · segment gap</span></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:4px">
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:48px;height:36px;border:1px solid var(--accent);border-radius:12px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">12 window</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:48px;height:36px;border:1px solid var(--field-br);border-radius:8px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">8 control</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:48px;height:36px;border:1px solid var(--s1);border-radius:6px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">6 chip</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:48px;height:36px;border:1px solid var(--s1);border-radius:4px"></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">4 check · key</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub)">Password field · 36px</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;padding:0 4px 0 12px;background:var(--mantle);border:1px solid var(--field-br);border-radius:8px"><span style="flex:1;color:var(--ov)">Password</span><div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1">visibility</span></div></div>
+        <span style="font-size:11px;line-height:14px;color:var(--sub)">Default — 1px field-border, placeholder</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;padding:0 4px 0 12px;background:var(--mantle);border:1px solid var(--ink);box-shadow:0 0 0 1px var(--ink);border-radius:8px"><span style="width:1px;height:16px;background:var(--text);margin-right:1px"></span><span style="flex:1;color:var(--ov)">Password</span><div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1">visibility</span></div></div>
+        <span style="font-size:11px;line-height:14px;color:var(--sub)">Focus — 2px ink ring (1px border + 1px shadow)</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;padding:0 4px 0 12px;background:var(--mantle);border:1px solid var(--field-br);border-radius:8px"><span style="flex:1;font-size:15px;letter-spacing:1px">••••••••••</span><div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1">visibility</span></div></div>
+        <span style="font-size:11px;line-height:14px;color:var(--sub)">Filled, hidden</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;padding:0 4px 0 12px;background:var(--mantle);border:1px solid var(--field-br);border-radius:8px"><span style="flex:1;font-family:'JetBrains Mono',monospace">correct-horse-battery</span><div style="width:28px;height:28px;border-radius:6px;background:var(--s0);display:flex;align-items:center;justify-content:center;color:var(--text)"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1">visibility_off</span></div></div>
+        <span style="font-size:11px;line-height:14px;color:var(--sub)">Revealed — mono; eye hover = surface0 · toggle Alt+V</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;padding:0 4px 0 12px;background:var(--mantle);border:1px solid var(--red);box-shadow:0 0 0 1px var(--red);border-radius:8px"><span style="width:1px;height:16px;background:var(--text);margin-right:1px"></span><span style="flex:1;color:var(--ov)">Password</span><div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1">visibility</span></div></div>
+        <span style="font-size:11px;line-height:14px;color:var(--sub)">Error — red ring, cleared, refocused; always paired with error row</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;padding:0 4px 0 12px;background:var(--mantle);border:1px solid var(--field-br);border-radius:8px;opacity:.55"><span style="flex:1;font-size:15px;letter-spacing:1px">••••••••••</span><div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1">visibility</span></div></div>
+        <span style="font-size:11px;line-height:14px;color:var(--sub)">Disabled (verifying) — 55% opacity, not focusable</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub)">Buttons · 32px</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub)">Primary — the only filled button, Enter</span>
+        <div style="display:flex;flex-wrap:wrap;gap:12px 8px">
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;border-radius:8px;background:var(--ink);color:var(--on-ink);border:1px solid var(--ink);font-weight:500"><span>Unlock</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;padding:1px 5px;border-radius:4px;border:1px solid color-mix(in srgb, var(--on-ink) 45%, transparent)">↵</span></div><span style="font-size:11px;color:var(--sub)">default</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;border-radius:8px;background:var(--ink-h);color:var(--on-ink);border:1px solid var(--ink-h);font-weight:500"><span>Unlock</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;padding:1px 5px;border-radius:4px;border:1px solid color-mix(in srgb, var(--on-ink) 45%, transparent)">↵</span></div><span style="font-size:11px;color:var(--sub)">hover</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;border-radius:8px;background:var(--ink-p);color:var(--on-ink);border:1px solid var(--ink-p);font-weight:500"><span>Unlock</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;padding:1px 5px;border-radius:4px;border:1px solid color-mix(in srgb, var(--on-ink) 45%, transparent)">↵</span></div><span style="font-size:11px;color:var(--sub)">pressed</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;border-radius:8px;background:var(--ink);color:var(--on-ink);border:1px solid var(--ink);font-weight:500;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)"><span>Unlock</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;padding:1px 5px;border-radius:4px;border:1px solid color-mix(in srgb, var(--on-ink) 45%, transparent)">↵</span></div><span style="font-size:11px;color:var(--sub)">focus</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 14px;border-radius:8px;background:var(--ink);color:var(--on-ink);border:1px solid var(--ink);font-weight:500;opacity:.5"><span>Unlock</span></div><span style="font-size:11px;color:var(--sub)">disabled</span></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub)">Secondary — Cancel / Deny / Reject, Esc</span>
+        <div style="display:flex;flex-wrap:wrap;gap:12px 8px">
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;border-radius:8px;background:var(--s0);border:1px solid var(--s1);font-weight:500"><span>Cancel</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;padding:1px 5px;border-radius:4px;border:1px solid var(--field-br);color:var(--sub)">Esc</span></div><span style="font-size:11px;color:var(--sub)">default</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;border-radius:8px;background:var(--s1);border:1px solid var(--s2);font-weight:500"><span>Cancel</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;padding:1px 5px;border-radius:4px;border:1px solid var(--field-br);color:var(--sub)">Esc</span></div><span style="font-size:11px;color:var(--sub)">hover</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;border-radius:8px;background:var(--s2);border:1px solid var(--s2);font-weight:500"><span>Cancel</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;padding:1px 5px;border-radius:4px;border:1px solid var(--field-br);color:var(--sub)">Esc</span></div><span style="font-size:11px;color:var(--sub)">pressed</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;border-radius:8px;background:var(--s0);border:1px solid var(--s1);font-weight:500;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)"><span>Cancel</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;padding:1px 5px;border-radius:4px;border:1px solid var(--field-br);color:var(--sub)">Esc</span></div><span style="font-size:11px;color:var(--sub)">focus</span></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub)">Risky — Always trust / Always allow: outline, never default, no keycap</span>
+        <div style="display:flex;flex-wrap:wrap;gap:12px 8px">
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;padding:0 14px;border-radius:8px;border:1px solid var(--s1);font-weight:500"><span>Always trust</span></div><span style="font-size:11px;color:var(--sub)">default</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;padding:0 14px;border-radius:8px;background:var(--s0);border:1px solid var(--s1);font-weight:500"><span>Always trust</span></div><span style="font-size:11px;color:var(--sub)">hover</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start"><div style="height:32px;box-sizing:border-box;display:flex;align-items:center;padding:0 14px;border-radius:8px;border:1px solid var(--s1);font-weight:500;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)"><span>Always trust</span></div><span style="font-size:11px;color:var(--sub)">focus</span></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+        <span style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub)">Keycaps — standalone</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;font-weight:500;padding:1px 5px;border-radius:4px;border:1px solid var(--field-br);color:var(--sub)">Esc</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;font-weight:500;padding:1px 5px;border-radius:4px;border:1px solid var(--field-br);color:var(--sub)">↵</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;font-weight:500;padding:1px 5px;border-radius:4px;border:1px solid var(--field-br);color:var(--sub)">Tab</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;font-weight:500;padding:1px 5px;border-radius:4px;border:1px solid var(--field-br);color:var(--sub)">Alt V</span>
+          <span style="font-size:11px;color:var(--sub)">1px border · 4 radius · 1/5 padding</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub)">Checkbox · 16px</div>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 16px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;box-sizing:border-box;border-radius:4px;border:1px solid var(--field-br)"></div><span>Save in keyring</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;box-sizing:border-box;border-radius:4px;background:var(--ink);border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;color:var(--on-ink)"><span style="font-family:'Material Symbols Rounded';font-size:14px;line-height:1;font-variation-settings:'wght' 700">check</span></div><span>Checked</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:16px;height:16px;box-sizing:border-box;border-radius:4px;border:1px solid var(--field-br);box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)"></div><span>Focus</span></div>
+        <div style="display:flex;align-items:center;gap:8px;opacity:.55"><div style="width:16px;height:16px;box-sizing:border-box;border-radius:4px;border:1px solid var(--field-br)"></div><span>Disabled</span></div>
+      </div>
+      <div style="font-size:11px;line-height:14px;color:var(--sub)">Label is the hit target; Space toggles. Checked state uses glyph + fill, not fill alone.</div>
+
+      <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub);margin-top:12px">Inline status rows · 12/16</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px;line-height:16px;color:var(--red)"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;font-variation-settings:'FILL' 1">error</span><span>Wrong password. 2 attempts left.</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px;line-height:16px;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;font-variation-settings:'FILL' 1;color:var(--yellow)">keyboard_capslock</span><span>Caps Lock is on</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px;line-height:16px"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;font-variation-settings:'FILL' 1;color:var(--green)">check_circle</span><span>Authenticated — closing</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px;line-height:16px"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;font-variation-settings:'FILL' 1;color:var(--yellow)">warning</span><span>First connection — not in known_hosts</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:12px;line-height:16px;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1">timer</span><span>No response — cancels automatically in 0:24</span></div>
+      </div>
+      <div style="font-size:11px;line-height:14px;color:var(--sub);text-wrap:pretty">Every row = glyph + words; color is redundant. Rows are announced (role=status / AT-SPI live). Shake on error: translateX 0 → −6 → 6 → −4 → 4 → −2 → 0px, 300ms ease-out, once per failure; off under reduced motion.</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub)">Header badge · 32px, 16% tint</div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--peach);background:color-mix(in srgb, currentColor 16%, transparent)"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">admin_panel_settings</span></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">polkit</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--mauve);background:color-mix(in srgb, currentColor 16%, transparent)"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">key</span></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">gpg</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--sky);background:color-mix(in srgb, currentColor 16%, transparent)"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">terminal</span></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">ssh</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--yellow);background:color-mix(in srgb, currentColor 16%, transparent)"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">passkey</span></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">keyring</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--blue);background:color-mix(in srgb, currentColor 16%, transparent)"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">vpn_key</span></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">secret</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--green);background:color-mix(in srgb, currentColor 16%, transparent)"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">check_circle</span></div><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub)">success</span></div>
+      </div>
+
+      <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub);margin-top:12px">Trust cue (anti-spoofing)</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:12px;align-items:center;padding:12px;background:var(--bg);border:1px solid var(--accent);border-radius:12px">
+          <div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--peach);background:color-mix(in srgb, currentColor 16%, transparent)"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">admin_panel_settings</span></div>
+          <div style="flex:1;display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600">Authentication required</span><span style="display:flex;align-items:center;gap:4px;font-size:12px;line-height:16px;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:14px;line-height:1;font-variation-settings:'FILL' 1">lock</span><span style="font-family:'JetBrains Mono',monospace">polkit</span><span>· system prompt</span></span></div>
+          <div style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:16px;padding:2px 8px;border-radius:6px;border:1px solid var(--s1);color:var(--sub)">otter·lantern</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;padding:12px;background:var(--bg);border:1px solid var(--accent);border-radius:12px;box-shadow:inset 0 2px 0 var(--peach)">
+          <div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--peach);background:color-mix(in srgb, currentColor 16%, transparent)"><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">admin_panel_settings</span></div>
+          <div style="flex:1;display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600">Authentication required</span><span style="display:flex;align-items:center;gap:4px;font-size:12px;line-height:16px;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:14px;line-height:1;font-variation-settings:'FILL' 1">lock</span><span style="font-family:'JetBrains Mono',monospace">polkit</span><span>· system prompt</span></span></div>
+        </div>
+        <div style="font-size:11px;line-height:14px;color:var(--sub);text-wrap:pretty">A · lock + source label always (fixed position) and a user-chosen phrase chip. B · alternative: 2px accent line in a user-chosen color inside the top edge. Both are recognition aids, not a guarantee — keep the phrase file readable only by the agents.</div>
+      </div>
+
+      <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub);margin-top:12px">Identity picker · open</div>
+      <div style="display:flex;flex-direction:column;gap:4px;max-width:340px">
+        <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 8px;background:var(--mantle);border:1px solid var(--ink);box-shadow:0 0 0 1px var(--ink);border-radius:8px"><div style="width:22px;height:22px;border-radius:50%;background:var(--s0);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">g</div><span style="font-weight:500">gean</span><span style="font-size:12px;color:var(--sub)">wheel</span><span style="flex:1"></span><span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:var(--sub)">expand_less</span></div>
+        <div style="display:flex;flex-direction:column;padding:4px;background:var(--bg);border:1px solid var(--s1);border-radius:8px;box-shadow:var(--shadow)">
+          <div style="height:32px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:6px"><div style="width:22px;height:22px;border-radius:50%;background:var(--s0);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">r</div><span style="font-weight:500">root</span><span style="font-size:12px;color:var(--sub)">administrator</span></div>
+          <div style="height:32px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:6px;background:var(--s0)"><div style="width:22px;height:22px;border-radius:50%;background:var(--s1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">g</div><span style="font-weight:500">gean</span><span style="font-size:12px;color:var(--sub)">wheel</span><span style="flex:1"></span><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1;color:var(--ink)">check</span></div>
+          <div style="height:32px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:6px"><div style="width:22px;height:22px;border-radius:50%;background:var(--s0);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">o</div><span style="font-weight:500">ops</span><span style="font-size:12px;color:var(--sub)">wheel</span></div>
+        </div>
+        <span style="font-size:11px;line-height:14px;color:var(--sub)">Native combo box. Selected = surface0 row + check glyph. ↑/↓ moves, ↵ picks.</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:920,&quot;height&quot;:1400},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mocha&quot;,&quot;latte&quot;],&quot;default&quot;:&quot;mocha&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const latte = (this.props.theme ?? 'mocha') === 'latte';
+    const M = { base: '#1e1e2e', mantle: '#181825', crust: '#11111b', surface0: '#313244', surface1: '#45475a', 'field-border': '#6c7086', placeholder: '#9399b2', text: '#cdd6f4', subtext: '#a6adc8', lavender: '#b4befe', ink: '#b4befe', 'on-ink': '#1e1e2e', red: '#f38ba8', green: '#a6e3a1', yellow: '#f9e2af', peach: '#fab387', mauve: '#cba6f7', sky: '#89dceb' };
+    const L = { base: '#eff1f5', mantle: '#e6e9ef', crust: '#dce0e8', surface0: '#ccd0da', surface1: '#bcc0cc', 'field-border': '#7c7f93', placeholder: '#6c6f85', text: '#4c4f69', subtext: '#5c5f77', lavender: '#7287fd', ink: '#3f53d9', 'on-ink': '#eff1f5', red: '#d20f39', green: '#40a02b', yellow: '#df8e1d', peach: '#fe640b', mauve: '#8839ef', sky: '#04a5e5' };
+    const R = { base: 'dialog surface', mantle: 'field · details · footer', crust: 'dimmed desktop', surface0: 'secondary btn · divider', surface1: 'btn / chip border', 'field-border': latte ? 'field & check edge — overlay2, ≥3:1' : 'field & check edge — overlay0, ≥3:1', placeholder: latte ? 'placeholder — subtext0' : 'placeholder — overlay2', text: 'primary text', subtext: latte ? 'secondary text — subtext1, 5.5:1' : 'secondary text — 7.5:1', lavender: 'window border', ink: latte ? 'primary · focus — deepened lavender, 5.3:1' : 'primary · focus (= lavender), 9:1', 'on-ink': 'text on primary', red: 'error', green: 'success · strength', yellow: 'warning glyph only', peach: 'polkit badge', mauve: 'gpg badge', sky: 'ssh badge (blue: secret)' };
+    const T = latte ? L : M;
+    return { tokens: Object.keys(T).map(n => ({ name: n, hex: T[n], role: R[n] })) };
+  }
+}
+</script>
+</body>
+</html>

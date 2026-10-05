@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<style>
+@keyframes ad-spin{to{transform:rotate(360deg)}}
+@keyframes ad-shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-6px)}30%{transform:translateX(6px)}45%{transform:translateX(-4px)}60%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+</style>
+</helmet>
+<div role="dialog" style="width:440px;box-sizing:border-box;background:var(--bg);color:var(--text);border:1px solid var(--accent);border-radius:12px;box-shadow:var(--shadow);font-family:Inter,system-ui,sans-serif;font-size:13px;line-height:20px;overflow:hidden;animation:{{ shake }}">
+  <div style="display:flex;gap:12px;align-items:center;padding:20px 20px 0">
+    <div style="width:32px;height:32px;flex:none;border-radius:8px;display:flex;align-items:center;justify-content:center;color:{{ tint }};background:color-mix(in srgb, currentColor 16%, transparent)">
+      <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">{{ icon }}</span>
+    </div>
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+      <div style="font-size:15px;line-height:20px;font-weight:600">{{ c.title }}</div>
+      <div style="display:flex;align-items:center;gap:4px;font-size:12px;line-height:16px;color:var(--sub)">
+        <span style="font-family:'Material Symbols Rounded';font-size:14px;line-height:1;font-variation-settings:'FILL' 1">lock</span>
+        <span style="font-family:'JetBrains Mono',monospace">{{ c.source }}</span>
+        <span>· system prompt</span>
+      </div>
+    </div>
+    <sc-if value="{{ showPhrase }}" hint-placeholder-val="{{ true }}">
+      <div title="Your secret phrase" style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:16px;padding:2px 8px;border-radius:6px;border:1px solid var(--s1);color:var(--sub)">{{ phrase }}</div>
+    </sc-if>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;padding:16px 20px 20px">
+    <div style="text-wrap:pretty">{{ c.msg }}</div>
+    <sc-if value="{{ hasKv }}">
+      <div style="display:flex;flex-direction:column;gap:6px;padding:10px 12px;background:var(--mantle);border:1px solid var(--s0);border-radius:8px">
+        <sc-for list="{{ kv }}" as="r" hint-placeholder-count="2">
+          <div style="display:flex;gap:12px;align-items:baseline">
+            <div style="width:76px;flex:none;font-size:12px;line-height:18px;color:var(--sub)">{{ r.k }}</div>
+            <div style="flex:1;min-width:0;font-family:{{ r.font }};font-size:12px;line-height:18px;word-break:break-all;color:var(--text)">{{ r.v }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ c.identity }}">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--s0);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">g</div>
+        <span style="font-weight:500">gean</span>
+        <span style="font-size:12px;color:var(--sub)">unix-user · wheel</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{ c.picker }}">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub)">Authenticate as</div>
+        <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 8px;background:var(--mantle);border:1px solid var(--field-br);border-radius:8px">
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--s0);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">g</div>
+          <span style="font-weight:500">gean</span>
+          <span style="font-size:12px;color:var(--sub)">wheel</span>
+          <span style="flex:1"></span>
+          <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:var(--sub)">expand_more</span>
+        </div>
+      </div>
+    </sc-if>
+    <sc-for list="{{ fields }}" as="f" hint-placeholder-count="1">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <sc-if value="{{ f.label }}">
+          <div style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub)">{{ f.label }}</div>
+        </sc-if>
+        <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;gap:0;padding:0 4px 0 12px;background:var(--mantle);border:1px solid {{ f.br }};box-shadow:{{ f.ring }};border-radius:8px;opacity:{{ f.op }}">
+          <sc-if value="{{ f.caretBefore }}"><span style="width:1px;height:16px;background:var(--text);margin-right:1px"></span></sc-if>
+          <span style="flex:0 1 auto;min-width:0;overflow:hidden;white-space:nowrap;font-family:{{ f.font }};font-size:{{ f.fs }};letter-spacing:{{ f.ls }};color:{{ f.color }}">{{ f.text }}</span>
+          <sc-if value="{{ f.caretAfter }}"><span style="width:1px;height:16px;background:var(--text);margin-left:2px"></span></sc-if>
+          <span style="flex:1"></span>
+          <div title="Show / hide" style="width:28px;height:28px;flex:none;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--sub)">
+            <span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1">{{ f.eye }}</span>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+    <sc-if value="{{ hasStrength }}">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="flex:1;display:flex;gap:4px">
+          <sc-for list="{{ segs }}" as="s" hint-placeholder-count="4">
+            <div style="flex:1;height:4px;border-radius:2px;background:{{ s.bg }}"></div>
+          </sc-for>
+        </div>
+        <span style="font-size:12px;line-height:16px;color:var(--sub)">{{ strengthLabel }}</span>
+      </div>
+    </sc-if>
+    <sc-for list="{{ notes }}" as="n" hint-placeholder-count="0">
+      <div role="status" style="display:flex;gap:8px;align-items:center;font-size:12px;line-height:16px;color:{{ n.tc }}">
+        <span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;font-variation-settings:'FILL' 1;color:{{ n.ic }}">{{ n.icon }}</span>
+        <span>{{ n.text }}</span>
+      </div>
+    </sc-for>
+    <sc-if value="{{ c.check }}">
+      <div style="display:flex;align-items:center;gap:8px;opacity:{{ ctrlOp }}">
+        <div style="width:16px;height:16px;flex:none;box-sizing:border-box;border-radius:4px;border:1px solid {{ chkBr }};background:{{ chkBg }};display:flex;align-items:center;justify-content:center;color:var(--on-ink)">
+          <sc-if value="{{ c.checked }}"><span style="font-family:'Material Symbols Rounded';font-size:14px;line-height:1;font-variation-settings:'wght' 700">check</span></sc-if>
+        </div>
+        <span>{{ c.check }}</span>
+      </div>
+    </sc-if>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;padding:0 20px 16px">
+    <sc-for list="{{ buttons }}" as="b" hint-placeholder-count="2">
+      <div style="height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 {{ b.pr }} 0 14px;border-radius:8px;background:{{ b.bg }};color:{{ b.fg }};border:1px solid {{ b.br }};font-weight:500;white-space:nowrap;opacity:{{ b.op }}">
+        <sc-if value="{{ b.spin }}"><span style="width:14px;height:14px;box-sizing:border-box;border-radius:50%;border:2px solid color-mix(in srgb, currentColor 30%, transparent);border-top-color:currentColor;animation:ad-spin 800ms linear infinite"></span></sc-if>
+        <span>{{ b.label }}</span>
+        <sc-if value="{{ b.key }}"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:14px;font-weight:500;padding:1px 5px;border-radius:4px;border:1px solid {{ b.kbr }};color:{{ b.kfg }}">{{ b.key }}</span></sc-if>
+      </div>
+    </sc-for>
+  </div>
+  <div style="position:relative;display:flex;flex-wrap:wrap;gap:4px;align-items:baseline;padding:10px 20px;background:var(--mantle);border-top:1px solid var(--s0);font-size:12px;line-height:18px;color:var(--sub)">
+    <sc-if value="{{ c.timeout }}"><div style="position:absolute;left:0;top:-1px;height:2px;width:40%;background:var(--ink)"></div></sc-if>
+    <span>Requested by</span>
+    <span style="font-family:'JetBrains Mono',monospace;color:var(--text)">{{ c.by }}</span>
+    <span>(pid {{ c.pid }})</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:480,&quot;height&quot;:520},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;polkit&quot;,&quot;polkit-multi&quot;,&quot;gpg&quot;,&quot;ssh-key&quot;,&quot;ssh-host&quot;,&quot;keyring&quot;,&quot;keyring-new&quot;,&quot;secret&quot;],&quot;default&quot;:&quot;polkit&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;loading&quot;,&quot;error&quot;,&quot;success&quot;,&quot;timeout&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showPhrase&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;phrase&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;otter·lantern&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const v = this.props.variant ?? 'polkit', st = this.props.state ?? 'default';
+    const mono = "'JetBrains Mono',monospace";
+    const pair = (p) => [{ label: 'Cancel', kind: 'sec', key: 'Esc' }, { label: p, kind: 'pri', key: '↵' }];
+    const V = {
+      polkit: { icon: 'admin_panel_settings', tint: 'var(--peach)', title: 'Authentication required', source: 'polkit', msg: 'Authentication is required to reload the systemd state.', kv: [['Action', 'org.freedesktop.systemd1.reload-daemon', 1]], identity: true, fields: [{ ph: 'Password', focus: true }], buttons: pair('Authenticate'), by: 'systemctl daemon-reload', pid: '4821' },
+      'polkit-multi': { icon: 'admin_panel_settings', tint: 'var(--peach)', title: 'Authentication required', source: 'polkit', msg: 'Authentication is required to mount “Backup” for all users.', kv: [['Action', 'org.freedesktop.udisks2.filesystem-mount-system', 1]], picker: true, fields: [{ label: 'Password', value: 'hunter2hunter', focus: true }], buttons: pair('Authenticate'), by: 'udisksctl mount -b /dev/sdb1', pid: '5120' },
+      gpg: { icon: 'key', tint: 'var(--mauve)', title: 'Unlock OpenPGP key', source: 'gpg-agent', msg: 'Enter the passphrase to sign with this key.', kv: [['User ID', 'Gean Silva <gean@example.org>', 0], ['Key ID', 'ed25519 / 9F2C 41A8 7B3E D0C4', 1], ['Created', '2025-03-14', 0]], fields: [{ ph: 'Passphrase', value: 'Correcthorse', focus: true }], notes: [{ icon: 'keyboard_capslock', ic: 'var(--yellow)', text: 'Caps Lock is on', tc: 'var(--sub)' }], check: 'Save in keyring', checked: false, buttons: pair('Unlock'), by: 'git commit -S', pid: '7213' },
+      'ssh-key': { icon: 'terminal', tint: 'var(--sky)', title: 'Unlock SSH key', source: 'ssh', msg: 'Enter the passphrase for this private key.', kv: [['Key', '~/.ssh/id_ed25519', 1], ['Fingerprint', 'SHA256:q3VxN8c1KfR0pZ7mW2bT5yLh9dGs4jE6uA0oXi1CkYw', 1]], fields: [{ ph: 'Passphrase', value: 'correct-horse-battery', revealed: true, focus: true }], check: 'Remember for this session', checked: true, buttons: pair('Unlock'), by: 'ssh git@github.com', pid: '9932' },
+      'ssh-host': { icon: 'dns', tint: 'var(--sky)', title: 'Unknown host', source: 'ssh', msg: "This host isn't in your known hosts. Compare the fingerprint with one from the server's owner before you connect.", kv: [['Host', 'build.lan (192.168.1.40:22)', 1], ['Key type', 'ED25519', 0], ['Fingerprint', 'SHA256:Vb2x7kQe0rL9nM4pT1sYw8ZcH6uJ3fA5gD2iK7oP9qE', 1]], notes: [{ icon: 'warning', ic: 'var(--yellow)', text: 'First connection — not in ~/.ssh/known_hosts', tc: 'var(--text)' }], buttons: [{ label: 'Reject', kind: 'sec', key: 'Esc' }, { label: 'Always trust', kind: 'ghost' }, { label: 'Accept once', kind: 'pri', key: '↵' }], by: 'ssh deploy@build.lan', pid: '10288' },
+      keyring: { icon: 'passkey', tint: 'var(--yellow)', title: 'Unlock keyring', source: 'gnome-keyring', msg: 'An application wants access to the keyring “Login”, but it is locked.', kv: [['Keyring', 'Login', 1], ['App', 'Visual Studio Code', 0]], fields: [{ ph: 'Password for “Login”', focus: true }], check: 'Unlock automatically when I log in', checked: false, buttons: pair('Unlock'), by: '/usr/share/code/code', pid: '2741' },
+      'keyring-new': { icon: 'passkey', tint: 'var(--yellow)', title: 'Create keyring password', source: 'gnome-keyring', msg: 'Choose a password for the new keyring “Work”. You’ll need it to unlock the keyring.', fields: [{ label: 'Password', value: 'xxxxxxxxxxxxxx' }, { label: 'Confirm password', value: 'xxxxxxxxxxxxxx', focus: true }], strength: 3, strengthLabel: 'Good · 14 characters', notes: [{ icon: 'check_circle', ic: 'var(--green)', text: 'Passwords match', tc: 'var(--text)' }], buttons: pair('Create'), by: 'seahorse', pid: '6604' },
+      secret: { icon: 'vpn_key', tint: 'var(--blue)', title: 'Firefox wants to read a secret', source: 'gnome-keyring', msg: 'Firefox is asking for a secret stored in the keyring “Login”.', kv: [['Secret', 'GitHub token', 1], ['Attributes', 'service=github.com user=gean', 1], ['App', 'Firefox 141', 0]], buttons: [{ label: 'Deny', kind: 'sec', key: 'Esc' }, { label: 'Always allow', kind: 'ghost' }, { label: 'Allow once', kind: 'pri', key: '↵' }], by: '/usr/lib/firefox/firefox', pid: '3310' }
+    };
+    const c = { ...(V[v] || V.polkit) };
+    let shake = 'none', ctrlOp = '1', btnOp = '1';
+    if (v === 'polkit' && st !== 'default') {
+      if (st === 'loading') { c.fields = [{ value: 'xxxxxxxxxx', disabled: true }]; c.buttons = [{ label: 'Cancel', kind: 'sec', key: 'Esc' }, { label: 'Verifying…', kind: 'pri', spin: true }]; }
+      if (st === 'error') { c.fields = [{ ph: 'Password', focus: true, error: true }]; c.notes = [{ icon: 'error', ic: 'var(--red)', text: 'Wrong password. 2 attempts left.', tc: 'var(--red)' }]; shake = 'ad-shake 300ms ease-out 1'; }
+      if (st === 'success') { c.tint = 'var(--green)'; c.icon = 'check_circle'; c.fields = [{ value: 'xxxxxxxxxx', success: true }]; c.notes = [{ icon: 'check_circle', ic: 'var(--green)', text: 'Authenticated — closing', tc: 'var(--text)' }]; btnOp = '.5'; }
+      if (st === 'timeout') { c.fields = [{ ph: 'Password', focus: true }]; c.notes = [{ icon: 'timer', ic: 'var(--sub)', text: 'No response — cancels automatically in 0:24', tc: 'var(--sub)' }]; c.timeout = true; }
+    }
+    const fields = (c.fields || []).map(f => {
+      const has = !!f.value, hidden = has && !f.revealed;
+      const br = f.error ? 'var(--red)' : f.success ? 'var(--green)' : f.focus ? 'var(--ink)' : 'var(--field-br)';
+      return {
+        label: f.label || '', br, ring: (f.error || f.focus) ? `0 0 0 1px ${br}` : 'none',
+        text: has ? (hidden ? '•'.repeat(f.value.length) : f.value) : f.ph,
+        font: has && f.revealed ? mono : 'inherit', fs: hidden ? '15px' : '13px', ls: hidden ? '1px' : '0',
+        color: has ? 'var(--text)' : 'var(--ov)', caretBefore: !!f.focus && !has, caretAfter: !!f.focus && has,
+        op: f.disabled || f.success ? '.55' : '1', eye: f.revealed ? 'visibility_off' : 'visibility'
+      };
+    });
+    if (st === 'loading') ctrlOp = '.55';
+    const K = {
+      pri: { bg: 'var(--ink)', fg: 'var(--on-ink)', br: 'var(--ink)', kbr: 'color-mix(in srgb, var(--on-ink) 45%, transparent)', kfg: 'var(--on-ink)' },
+      sec: { bg: 'var(--s0)', fg: 'var(--text)', br: 'var(--s1)', kbr: 'var(--field-br)', kfg: 'var(--sub)' },
+      ghost: { bg: 'transparent', fg: 'var(--text)', br: 'var(--s1)', kbr: 'var(--s1)', kfg: 'var(--sub)' }
+    };
+    const buttons = c.buttons.map(b => ({ ...K[b.kind], label: b.label, key: b.key || '', spin: !!b.spin, pr: b.key ? '6px' : '14px', op: btnOp }));
+    const segs = [0, 1, 2, 3].map(i => ({ bg: i < (c.strength || 0) ? 'var(--green)' : 'var(--s0)' }));
+    return {
+      c, icon: c.icon, tint: c.tint, shake, ctrlOp,
+      kv: (c.kv || []).map(([k, val, m]) => ({ k, v: val, font: m ? mono : 'inherit' })), hasKv: !!(c.kv && c.kv.length),
+      fields, notes: c.notes || [], buttons, segs, hasStrength: !!c.strength, strengthLabel: c.strengthLabel || '',
+      chkBr: c.checked ? 'var(--ink)' : 'var(--field-br)', chkBg: c.checked ? 'var(--ink)' : 'transparent',
+      showPhrase: this.props.showPhrase ?? true, phrase: this.props.phrase ?? 'otter·lantern'
+    };
+  }
+}
+</script>
+</body>
+</html>

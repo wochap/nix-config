@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/700.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>html{background:#11111b}body{margin:0;min-width:max-content;background:#11111b;font-family:'Iosevka Nerd Font','Iosevka','JetBrains Mono',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}a{color:#cba6f7}a:hover{color:#b4befe}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}@keyframes recpulse{0%,100%{opacity:1}50%{opacity:.3}}.dv-turn{padding:40px 44px 36px;box-shadow:inset 0 -1px 0 #313244;scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:700 10px/1 inherit;padding:4px 7px;background:#cba6f7;color:#11111b;border-radius:4px;text-decoration:none}.dv-tname{font-size:16px;font-weight:500;color:#cdd6f4}.dv-opts{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}.dv-oid{font-size:10px;font-weight:700;padding:3px 7px;background:#313244;color:#cdd6f4;border-radius:4px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font-size:12px;color:#a6adc8}.dv-card{max-width:100%;background:#181825;border-radius:8px;box-shadow:inset 0 0 0 1px #313244;overflow:hidden}.dv-opt:target .dv-oid{background:#cba6f7;color:#11111b}.dv-next{margin:24px 0 0;font-size:12px;line-height:1.6;color:#7f849c}</style>
+</helmet>
+
+<header style="padding:48px 44px 28px;display:flex;flex-direction:column;gap:8px;box-shadow:inset 0 -1px 0 #313244">
+  <span style="font-size:10px;letter-spacing:.12em;color:#cba6f7">COMPONENT SHEETS · FLAT &amp; DENSE</span>
+  <h1 style="margin:0;font-size:22px;font-weight:500">Shell components &amp; states</h1>
+  <p style="margin:0;font-size:12px;line-height:18px;color:#a6adc8;max-width:760px">Each sheet: renders, state matrix, then a spec table (px on the 4px grid → Catppuccin token) for QML. Composites: <a href="Shell Overview.dc.html">Shell Overview</a>. Jump: <a href="#t2">bar</a> · <a href="#t3">vertical bar</a> · <a href="#t4">notifications</a> · <a href="#t5">control center</a> · <a href="#t6">switcher</a> · <a href="#t8">OSD</a></p>
+</header>
+
+<section class="dv-turn" id="t2">
+  <div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Top bar · 40px</span></div>
+  <div class="dv-opts" style="flex-direction:column">
+    <div class="dv-opt" id="2a">
+      <div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Variants · busy (every conditional module) · normal · minimal</div>
+      <div class="dv-card" style="width:1920px;position:relative;display:flex;flex-direction:column;gap:16px;padding:16px 0">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 12%">
+        <div style="position:relative;display:flex;flex-direction:column;gap:6px"><span style="font-size:10px;letter-spacing:.1em;color:#cdd6f4;padding-left:12px;text-shadow:0 1px 2px #11111b">BUSY</span><dc-import name="TopBar" variant="busy" hint-size="1920px,40px"></dc-import></div>
+        <div style="position:relative;display:flex;flex-direction:column;gap:6px"><span style="font-size:10px;letter-spacing:.1em;color:#cdd6f4;padding-left:12px;text-shadow:0 1px 2px #11111b">NORMAL · CONTROL CLUSTER OPEN</span><dc-import name="TopBar" variant="normal" cc-open="{{ true }}" hint-size="1920px,40px"></dc-import></div>
+        <div style="position:relative;display:flex;flex-direction:column;gap:6px"><span style="font-size:10px;letter-spacing:.1em;color:#cdd6f4;padding-left:12px;text-shadow:0 1px 2px #11111b">MINIMAL · ONLY OCCUPIED WORKSPACES, NO TRAY</span><dc-import name="TopBar" variant="minimal" hint-size="1920px,40px"></dc-import></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+      <div class="dv-opt" id="2g">
+        <div class="dv-olabel"><a class="dv-oid" href="#2g">2g</a>Focused title · hover tooltip (400ms delay, 150ms fade)</div>
+        <div class="dv-card" style="width:880px;height:130px;position:relative">
+          <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:20% 20%">
+          <div style="position:absolute;left:0;top:0"><dc-import name="TopBar" variant="busy" title-tip="{{ true }}" hint-size="1920px,40px"></dc-import></div>
+          <span style="position:absolute;left:12px;bottom:10px;font-size:10px;color:#cdd6f4;text-shadow:0 1px 2px #11111b">Triggered by hovering the title text only (not icon / app_id) · title brightens to text · tooltip base, 1px surface0, e2, r8, p 6/10, max 560w · full title only, wraps</span>
+        </div>
+      </div>
+      <div class="dv-opt" id="2b">
+        <div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Interaction states · 150ms OutCubic between fills</div>
+        <div class="dv-card" style="padding:16px 20px;display:grid;grid-template-columns:120px repeat(5,96px);gap:12px 8px;align-items:center;background:#181825">
+          <span></span>
+          <sc-for list="{{ stateCols }}" as="c" hint-placeholder-count="5"><span style="font-size:10px;letter-spacing:.08em;color:#7f849c">{{ c }}</span></sc-for>
+          <sc-for list="{{ stateRows }}" as="r" hint-placeholder-count="4">
+            <span style="font-size:12px;color:#a6adc8">{{ r.name }}</span>
+            <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5">
+              <div style="display:flex"><div style="{{ c }}"><sc-if value="{{ r.icon }}"><span class="material-symbols-rounded" style="font-size:15px">{{ r.icon }}</span></sc-if><sc-if value="{{ r.label }}"><span>{{ r.label }}</span></sc-if></div></div>
+            </sc-for>
+          </sc-for>
+          <span></span>
+          <sc-for list="{{ stateNotes }}" as="c" hint-placeholder-count="5"><span style="font-size:10px;line-height:14px;color:#6c7086">{{ c }}</span></sc-for>
+        </div>
+      </div>
+
+      <div class="dv-opt" id="2c">
+        <div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>Workspace pill states</div>
+        <div class="dv-card" style="padding:16px 20px;display:flex;gap:20px;background:#181825">
+          <sc-for list="{{ wsStates }}" as="w" hint-placeholder-count="7">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="width:{{ w.w }}px;height:22px;border-radius:11px;background:{{ w.bg }};color:{{ w.fg }};box-shadow:{{ w.ring }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:{{ w.fw }};line-height:12px"><span>{{ w.n }}</span><div style="display:flex;gap:2px;height:3px"><sc-for list="{{ w.dots }}" as="d"><span style="width:3px;height:3px;border-radius:2px;background:{{ w.dotc }}"></span></sc-for></div></div>
+              <span style="font-size:10px;color:#a6adc8;text-align:center;line-height:13px">{{ w.label }}</span>
+              <span style="font-size:10px;color:#6c7086;text-align:center;line-height:13px;max-width:88px">{{ w.tok }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div class="dv-opt" id="2d">
+        <div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>Chip anatomy · 4×</div>
+        <div class="dv-card" style="width:420px;height:236px;position:relative;background:#181825">
+          <div style="position:absolute;left:96px;top:56px;width:180px;height:88px;box-shadow:inset 0 0 0 1px rgba(137,220,235,.5)"></div>
+          <div style="position:absolute;left:96px;top:56px;transform:scale(4);transform-origin:0 0;display:flex;align-items:center;gap:4px;height:22px;padding:0 7px;border-radius:11px;background:#313244;color:#cdd6f4;font-size:12px"><span class="material-symbols-rounded" style="font-size:15px;color:#89b4fa">mail</span>13</div>
+          <div style="position:absolute;left:96px;top:56px;width:28px;height:88px;background:rgba(137,220,235,.12)"></div>
+          <div style="position:absolute;left:184px;top:56px;width:16px;height:88px;background:rgba(249,226,175,.14)"></div>
+          <div style="position:absolute;left:248px;top:56px;width:28px;height:88px;background:rgba(137,220,235,.12)"></div>
+          <span style="position:absolute;left:100px;top:36px;font-size:10px;color:#89dceb">px 7</span>
+          <span style="position:absolute;left:178px;top:36px;font-size:10px;color:#f9e2af">gap 4</span>
+          <span style="position:absolute;left:250px;top:36px;font-size:10px;color:#89dceb">px 7</span>
+          <div style="position:absolute;left:70px;top:56px;width:1px;height:88px;background:#89dceb"></div>
+          <span style="position:absolute;left:30px;top:92px;font-size:10px;color:#89dceb">h 22</span>
+          <span style="position:absolute;left:290px;top:62px;font-size:10px;color:#89dceb;line-height:14px">r 11 (pill)<br>icon 15 · blue<br>text 12/500 · text<br>fill surface0 (1c)<br>or none (1a/1b)</span>
+          <span style="position:absolute;left:20px;bottom:16px;right:20px;font-size:10px;line-height:14px;color:#7f849c">Chips sit 6px from the 40px rail edge, 4px apart. Fixed 28px height on every module keeps the baseline steady when modules appear or hide.</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+      <div class="dv-opt" id="2e">
+        <div class="dv-olabel"><a class="dv-oid" href="#2e">2e</a>Conditional modules · shown only while the condition holds</div>
+        <div class="dv-card" style="padding:12px 16px;display:grid;grid-template-columns:150px 170px 240px;gap:8px 16px;align-items:center;background:#181825;width:fit-content">
+          <span style="font-size:10px;letter-spacing:.08em;color:#7f849c">MODULE</span><span style="font-size:10px;letter-spacing:.08em;color:#7f849c">VISIBLE WHEN</span><span style="font-size:10px;letter-spacing:.08em;color:#7f849c">TOKENS</span>
+          <sc-for list="{{ modules }}" as="m" hint-placeholder-count="12">
+            <div style="display:flex"><div style="display:flex;align-items:center;gap:4px;height:22px;padding:0 7px;border-radius:11px;background:{{ m.bg }};color:{{ m.fg }};font-size:{{ m.fs }}px;font-weight:{{ m.fw }};letter-spacing:{{ m.ls }}"><sc-if value="{{ m.dot }}"><span style="width:7px;height:7px;border-radius:4px;background:#f38ba8;animation:recpulse 1.6s ease-in-out infinite"></span></sc-if><sc-if value="{{ m.icon }}"><span class="material-symbols-rounded" style="font-size:15px">{{ m.icon }}</span></sc-if>{{ m.label }}</div></div>
+            <span style="font-size:12px;color:#bac2de;line-height:16px">{{ m.when }}</span>
+            <span style="font-size:10px;color:#7f849c;line-height:14px">{{ m.tok }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <div class="dv-opt" id="2f">
+        <div class="dv-olabel"><a class="dv-oid" href="#2f">2f</a>Spec</div>
+        <div class="dv-card" style="padding:12px 16px;display:grid;grid-template-columns:150px 200px 220px;gap:6px 16px;background:#181825;width:fit-content">
+          <sc-for list="{{ specBar }}" as="s" hint-placeholder-count="10"><span style="font-size:12px;color:#cdd6f4">{{ s.el }}</span><span style="font-size:12px;color:#a6adc8">{{ s.size }}</span><span style="font-size:12px;color:#cba6f7">{{ s.tok }}</span></sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="dv-next">Try next: “hide window-count dots unless &gt;1” · “move the submap badge into the center zone” · “make <a class="dv-oid" href="#2a">2a</a> busy fit 1366px”</p>
+</section>
+
+<section class="dv-turn" id="t3">
+  <div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Vertical left bar · 44px</span></div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="3a">
+      <div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>Flat · busy</div>
+      <div class="dv-card" style="width:220px;height:900px;position:relative"><img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% 50%"><div style="position:absolute;left:0;top:0"><dc-import name="VBar" h="{{ 900 }}" direction="flat" variant="busy" hint-size="44px,900px"></dc-import></div></div>
+    </div>
+    <div class="dv-opt" id="3b">
+      <div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>Tray popover open</div>
+      <div class="dv-card" style="width:220px;height:900px;position:relative;overflow:visible"><img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:45% 50%;border-radius:8px"><div style="position:absolute;left:0;top:0"><dc-import name="VBar" h="{{ 900 }}" variant="busy" tray-open="{{ true }}" hint-size="44px,900px"></dc-import></div></div>
+    </div>
+    <div class="dv-opt" id="3c">
+      <div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a>Minimal · calendar (clock) open</div>
+      <div class="dv-card" style="width:220px;height:900px;position:relative"><img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 50%"><div style="position:absolute;left:0;top:0"><dc-import name="VBar" h="{{ 900 }}" direction="flat" variant="minimal" cal-open="{{ true }}" hint-size="44px,900px"></dc-import></div></div>
+    </div>
+    <div class="dv-opt" id="3d">
+      <div class="dv-olabel"><a class="dv-oid" href="#3d">3d</a>Pairing · left bar + right notification sidebar (50%)</div>
+      <div class="dv-card" style="width:960px;height:540px;position:relative"><div style="position:absolute;left:0;top:0;transform:scale(.5);transform-origin:0 0"><dc-import name="Desktop" layout="left" overlay="sidebar" variant="busy" hint-size="1920px,1080px"></dc-import></div></div>
+      <div style="display:grid;grid-template-columns:150px 260px 200px;gap:6px 16px;max-width:960px">
+        <sc-for list="{{ specV }}" as="s" hint-placeholder-count="8"><span style="font-size:12px;color:#cdd6f4">{{ s.el }}</span><span style="font-size:12px;color:#a6adc8">{{ s.size }}</span><span style="font-size:12px;color:#cba6f7">{{ s.tok }}</span></sc-for>
+      </div>
+    </div>
+  </div>
+  <p class="dv-next">Try next: “rotate the window title instead of the app icon” · “dock the bar on the right and the sidebar left”</p>
+</section>
+
+<section class="dv-turn" id="t4">
+  <div class="dv-thd"><a class="dv-tid" href="#t4">4</a><span class="dv-tname">Notifications · toasts + sidebar</span></div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="4a">
+      <div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a>Toast · urgency &amp; interaction states · 380w</div>
+      <div class="dv-card" style="padding:20px;display:grid;grid-template-columns:repeat(2,380px);gap:20px 24px;align-items:start;position:relative">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 30%">
+        <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="6">
+          <div style="position:relative;display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:10px;letter-spacing:.08em;color:#cdd6f4;text-shadow:0 1px 2px #11111b">{{ t.label }}</span>
+            <dc-import name="NotifCard" n="{{ t.n }}" mode="toast" state="{{ t.state }}" hint-size="380px,120px"></dc-import>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="4b">
+      <div class="dv-olabel"><a class="dv-oid" href="#4b">4b</a>Stack + enter / exit · top-right, 10px from bar &amp; edge, 8 gap</div>
+      <div class="dv-card" style="width:820px;padding:20px;display:flex;gap:24px;position:relative">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:80% 20%">
+        <div style="position:relative;display:flex;flex-direction:column;gap:8px">
+          <dc-import name="NotifCard" n="{{ toastA }}" mode="toast" hint-size="380px,140px"></dc-import>
+          <dc-import name="NotifCard" n="{{ toastB }}" mode="toast" hint-size="380px,80px"></dc-import>
+                  </div>
+        <div style="position:relative;display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ frames }}" as="f" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="width:58px;font-size:10px;color:#cdd6f4;text-shadow:0 1px 2px #11111b;line-height:13px">{{ f.t }}</span>
+              <div style="width:250px;height:52px;border-radius:8px;background:#1e1e2e;box-shadow:inset 0 0 0 1px #313244, 0 6px 18px rgba(17,17,27,.5);opacity:{{ f.o }};transform:translate({{ f.x }}px,{{ f.y }}px);display:flex;align-items:center;gap:8px;padding:0 10px;box-sizing:border-box"><span class="material-symbols-rounded" style="font-size:15px;color:#fab387;font-variation-settings:'FILL' 1">asterisk</span><span style="font-size:12px">Claude Code finished</span></div>
+            </div>
+          </sc-for>
+          <span style="font-size:10px;line-height:14px;color:#cdd6f4;max-width:320px;text-shadow:0 1px 2px #11111b">Enter: y −8→0, opacity 0→1, 150ms OutCubic. Exit: x 0→+24, opacity →0, 120ms InCubic; siblings reflow 150ms. Timeout bar: 2px mauve, pauses on hover.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="4c">
+      <div class="dv-olabel"><a class="dv-oid" href="#4c">4c</a>Sidebar · default</div>
+      <div class="dv-card" style="width:400px;height:960px"><dc-import name="NotifSidebar" h="{{ 960 }}" hint-size="400px,960px"></dc-import></div>
+    </div>
+    <div class="dv-opt" id="4d">
+      <div class="dv-olabel"><a class="dv-oid" href="#4d">4d</a>Sidebar · DND on</div>
+      <div class="dv-card" style="width:400px;height:960px"><dc-import name="NotifSidebar" h="{{ 960 }}" dnd="{{ true }}" hint-size="400px,960px"></dc-import></div>
+    </div>
+    <div class="dv-opt" id="4e">
+      <div class="dv-olabel"><a class="dv-oid" href="#4e">4e</a>Sidebar · empty</div>
+      <div class="dv-card" style="width:400px;height:960px"><dc-import name="NotifSidebar" h="{{ 960 }}" empty="{{ true }}" hint-size="400px,960px"></dc-import></div>
+    </div>
+    <div class="dv-opt" id="4f">
+      <div class="dv-olabel"><a class="dv-oid" href="#4f">4f</a>Spec · flat list, newest → oldest</div>
+      <div class="dv-card" style="width:420px;padding:12px;box-sizing:border-box;display:grid;grid-template-columns:110px 130px minmax(0,1fr);gap:6px 12px">
+        <sc-for list="{{ specN }}" as="s" hint-placeholder-count="11"><span style="font-size:12px;color:#cdd6f4">{{ s.el }}</span><span style="font-size:12px;color:#a6adc8">{{ s.size }}</span><span style="font-size:12px;color:#cba6f7">{{ s.tok }}</span></sc-for>
+      </div>
+    </div>
+  </div>
+  <p class="dv-next">Try next: “collapse sessiontap bodies to one line — they’re long” · “critical toasts pinned above the stack”</p>
+</section>
+
+
+<section class="dv-turn" id="t5">
+  <div class="dv-thd"><a class="dv-tid" href="#t5">5</a><span class="dv-tname">Control center · 380w popover</span></div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="5a">
+      <div class="dv-olabel"><a class="dv-oid" href="#5a">5a</a>Default</div>
+      <div class="dv-card" style="padding:16px;position:relative;background:transparent;box-shadow:none"><img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:75% 40%;border-radius:8px"><div style="position:relative"><dc-import name="ControlCenter" hint-size="380px,860px"></dc-import></div></div>
+    </div>
+    <div class="dv-opt" id="5b">
+      <div class="dv-olabel"><a class="dv-oid" href="#5b">5b</a>Calendar popover · opened from the bar clock · 320w</div>
+      <div class="dv-card" style="padding:16px;position:relative;background:transparent;box-shadow:none"><img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:20% 60%;border-radius:8px"><div style="position:relative"><dc-import name="Calendar" hint-size="320px,480px"></dc-import></div></div>
+      <div style="display:grid;grid-template-columns:90px 150px 140px;gap:6px 12px;width:352px">
+        <sc-for list="{{ specCal }}" as="s" hint-placeholder-count="9"><span style="font-size:12px;color:#cdd6f4">{{ s.el }}</span><span style="font-size:12px;color:#a6adc8">{{ s.size }}</span><span style="font-size:12px;color:#cba6f7">{{ s.tok }}</span></sc-for>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:32px">
+      <div class="dv-opt" id="5c">
+        <div class="dv-olabel"><a class="dv-oid" href="#5c">5c</a>Tile states</div>
+        <div class="dv-card" style="padding:16px;display:grid;grid-template-columns:repeat(3,183px);gap:14px 8px;background:#1e1e2e">
+          <sc-for list="{{ tileStates }}" as="t" hint-placeholder-count="6">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:10px;letter-spacing:.08em;color:#7f849c">{{ t.l }}</span>
+              <div style="height:40px;border-radius:20px;background:{{ t.bg }};opacity:{{ t.op }};display:flex;align-items:center;gap:8px;padding:0 4px">
+                <span style="width:32px;height:32px;border-radius:16px;background:{{ t.ibg }};color:{{ t.ifg }};display:flex;align-items:center;justify-content:center;flex:none"><span class="material-symbols-rounded" style="font-size:17px">wifi</span></span>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-size:12px;line-height:14px;font-weight:500;color:{{ t.lfg }}">Wi-Fi</span><span style="font-size:10px;line-height:13px;color:{{ t.sfg }}">{{ t.sub }}</span></div>
+                <span style="width:24px;height:32px;display:flex;align-items:center;justify-content:center;color:{{ t.sfg }};box-shadow:inset 1px 0 0 rgba(205,214,244,.12);margin-right:2px"><span class="material-symbols-rounded" style="font-size:16px">chevron_right</span></span>
+              </div>
+            </div>
+          </sc-for>
+          <span style="grid-column:1 / -1;font-size:10px;line-height:14px;color:#7f849c">Body click toggles; chevron zone (24w) opens a sub-page that slides in over the grid (x +16→0, 150ms). Hover lifts one tint step; pressed swaps icon well to lavender.</span>
+        </div>
+      </div>
+      <div class="dv-opt" id="5d">
+        <div class="dv-olabel"><a class="dv-oid" href="#5d">5d</a>Slider states</div>
+        <div class="dv-card" style="padding:16px;display:flex;flex-direction:column;gap:14px;width:380px;box-sizing:border-box;background:#1e1e2e">
+          <sc-for list="{{ sliderStates }}" as="s" hint-placeholder-count="5">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:10px;letter-spacing:.08em;color:#7f849c">{{ s.l }}</span>
+              <div style="display:flex;align-items:center;gap:8px;height:28px">
+                <span style="width:28px;height:28px;border-radius:14px;background:{{ s.bbg }};color:{{ s.bfg }};display:flex;align-items:center;justify-content:center;flex:none"><span class="material-symbols-rounded" style="font-size:16px">{{ s.icon }}</span></span>
+                <div style="flex:1;height:6px;border-radius:3px;background:#45475a;position:relative">
+                  <div style="position:absolute;left:0;top:0;bottom:0;width:{{ s.pct }};border-radius:3px;background:{{ s.fill }}"></div>
+                  <div style="position:absolute;top:-4px;left:{{ s.pct }};margin-left:-7px;width:14px;height:14px;border-radius:7px;background:{{ s.knob }};box-shadow:{{ s.ring }}"></div>
+                  <sc-if value="{{ s.tip }}"><span style="position:absolute;top:-30px;left:{{ s.pct }};transform:translateX(-50%);height:20px;line-height:20px;padding:0 6px;border-radius:10px;background:#cba6f7;color:#11111b;font-size:10px;font-weight:700">46</span></sc-if>
+                </div>
+                <span style="width:44px;text-align:right;font-size:12px;color:{{ s.vfg }}">{{ s.v }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div class="dv-opt" id="5e">
+        <div class="dv-olabel"><a class="dv-oid" href="#5e">5e</a>Segmented · header buttons · enter</div>
+        <div class="dv-card" style="padding:16px;display:flex;flex-direction:column;gap:14px;width:380px;box-sizing:border-box;background:#1e1e2e">
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;padding:2px;height:32px;box-sizing:border-box;border-radius:16px;background:#181825;box-shadow:inset 0 0 0 1px #313244">
+            <div style="display:flex;align-items:center;justify-content:center;gap:5px;border-radius:14px;font-size:12px;color:#cdd6f4;background:#313244"><span class="material-symbols-rounded" style="font-size:15px">eco</span>hover</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:5px;border-radius:14px;font-size:12px;color:#cba6f7;font-weight:500;background:rgba(203,166,247,.16);box-shadow:inset 0 0 0 1px rgba(203,166,247,.5)"><span class="material-symbols-rounded" style="font-size:15px">balance</span>selected</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:5px;border-radius:14px;font-size:12px;color:#585b70"><span class="material-symbols-rounded" style="font-size:15px">rocket_launch</span>disabled</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-end">
+            <sc-for list="{{ hdrBtns }}" as="b" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><span style="width:28px;height:28px;border-radius:14px;background:{{ b.bg }};color:{{ b.fg }};box-shadow:{{ b.ring }};display:flex;align-items:center;justify-content:center"><span class="material-symbols-rounded" style="font-size:16px">{{ b.icon }}</span></span><span style="font-size:10px;color:#7f849c">{{ b.l }}</span></div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start;padding-top:12px;box-shadow:inset 0 1px 0 #313244">
+            <sc-for list="{{ ccFrames }}" as="f" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:4px;align-items:center"><div style="width:100px;height:64px;border-radius:6px;background:#181825;position:relative;overflow:hidden"><div style="position:absolute;right:6px;top:{{ f.y }}px;width:56px;height:48px;border-radius:4px;background:#1e1e2e;box-shadow:inset 0 0 0 1px #45475a;opacity:{{ f.o }};transform:scale({{ f.s }});transform-origin:100% 0"></div><div style="position:absolute;right:6px;top:2px;width:22px;height:4px;border-radius:2px;background:#cba6f7"></div></div><span style="font-size:10px;color:#7f849c">{{ f.t }}</span></div>
+            </sc-for>
+          </div>
+          <span style="font-size:10px;line-height:14px;color:#7f849c">Grows from the cluster: scale .96→1, y −8→0, opacity 0→1 · 150ms OutCubic. Esc / click-outside closes in 120ms.</span>
+        </div>
+      </div>
+    </div>
+    <div class="dv-opt" id="5f">
+      <div class="dv-olabel"><a class="dv-oid" href="#5f">5f</a>Spec</div>
+      <div class="dv-card" style="padding:12px 16px;display:grid;grid-template-columns:110px 190px 230px;gap:6px 16px;background:#181825">
+        <sc-for list="{{ specCC }}" as="s" hint-placeholder-count="11"><span style="font-size:12px;color:#cdd6f4">{{ s.el }}</span><span style="font-size:12px;color:#a6adc8">{{ s.size }}</span><span style="font-size:12px;color:#cba6f7">{{ s.tok }}</span></sc-for>
+      </div>
+    </div>
+  </div>
+  <p class="dv-next">Try next: “3-column icon-only tiles to save height” · “wifi sub-page with network list” · “move battery card above tiles”</p>
+</section>
+
+<section class="dv-turn" id="t6">
+  <div class="dv-thd"><a class="dv-tid" href="#t6">6</a><span class="dv-tname">Window switcher · Alt-Tab · centered over crust@60%</span></div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="6a">
+      <div class="dv-olabel"><a class="dv-oid" href="#6a">6a</a>Tile states · default · hovered · selected (2px mauve + scale 1.04) · urgent · special/hidden</div>
+      <div class="dv-card" style="width:1400px;height:300px;position:relative;display:flex;align-items:center;justify-content:center">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% 50%">
+        <div style="position:absolute;inset:0;background:rgba(17,17,27,.6)"></div>
+        <div style="position:relative"><dc-import name="Switcher" mode="states" hint-size="1300px,220px"></dc-import></div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="6b">
+      <div class="dv-olabel"><a class="dv-oid" href="#6b">6b</a>Strip · 5 windows · selected in the middle · hover on 2</div>
+      <div class="dv-card" style="width:1400px;height:380px;position:relative;display:flex;align-items:center;justify-content:center">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%">
+        <div style="position:absolute;inset:0;background:rgba(17,17,27,.6)"></div>
+        <div style="position:relative"><dc-import name="Switcher" mode="strip" hint-size="1236px,300px"></dc-import></div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="6c">
+      <div class="dv-olabel"><a class="dv-oid" href="#6c">6c</a>Strip · long-title overflow · tile truncates, detail row wraps the full title</div>
+      <div class="dv-card" style="width:1400px;height:400px;position:relative;display:flex;align-items:center;justify-content:center">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 40%">
+        <div style="position:absolute;inset:0;background:rgba(17,17,27,.6)"></div>
+        <div style="position:relative"><dc-import name="Switcher" mode="strip" long-title="{{ true }}" hint-size="1236px,300px"></dc-import></div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="6d">
+      <div class="dv-olabel"><a class="dv-oid" href="#6d">6d</a>Grid · 15 windows · focus at end of row 1 (index 5)</div>
+      <div class="dv-card" style="width:1200px;height:720px;position:relative;display:flex;align-items:center;justify-content:center">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:40% 30%">
+        <div style="position:absolute;inset:0;background:rgba(17,17,27,.6)"></div>
+        <div style="position:relative"><dc-import name="Switcher" mode="grid" sel="{{ 4 }}" hint-size="1000px,600px"></dc-import></div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="6e">
+      <div class="dv-olabel"><a class="dv-oid" href="#6e">6e</a>Grid · → wraps focus to row 2 start</div>
+      <div class="dv-card" style="width:1200px;height:720px;position:relative;display:flex;align-items:center;justify-content:center">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 30%">
+        <div style="position:absolute;inset:0;background:rgba(17,17,27,.6)"></div>
+        <div style="position:relative"><dc-import name="Switcher" mode="grid" sel="{{ 5 }}" hint-size="1000px,600px"></dc-import></div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="6f">
+      <div class="dv-olabel"><a class="dv-oid" href="#6f">6f</a>Grouped by workspace · header per workspace, special last</div>
+      <div class="dv-card" style="width:1200px;height:680px;position:relative;display:flex;align-items:center;justify-content:center">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% 70%">
+        <div style="position:absolute;inset:0;background:rgba(17,17,27,.6)"></div>
+        <div style="position:relative"><dc-import name="Switcher" mode="grouped" hint-size="1012px,560px"></dc-import></div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="6h">
+      <div class="dv-olabel"><a class="dv-oid" href="#6h">6h</a>Empty · actions disabled</div>
+      <div class="dv-card" style="width:720px;height:360px;position:relative;display:flex;align-items:center;justify-content:center">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:20% 80%">
+        <div style="position:absolute;inset:0;background:rgba(17,17,27,.6)"></div>
+        <div style="position:relative"><dc-import name="Switcher" mode="empty" hint-size="444px,260px"></dc-import></div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="6i">
+      <div class="dv-olabel"><a class="dv-oid" href="#6i">6i</a>Spec</div>
+      <div class="dv-card" style="padding:12px 16px;display:grid;grid-template-columns:130px 230px 260px;gap:6px 16px;background:#181825;width:fit-content">
+        <sc-for list="{{ specSw }}" as="s" hint-placeholder-count="14"><span style="font-size:12px;color:#cdd6f4">{{ s.el }}</span><span style="font-size:12px;color:#a6adc8">{{ s.size }}</span><span style="font-size:12px;color:#cba6f7">{{ s.tok }}</span></sc-for>
+      </div>
+    </div>
+  </div>
+  <p class="dv-next">Try next: “live-updating previews only for the selected tile” · “group strip by app class instead of workspace”</p>
+</section>
+
+<section class="dv-turn" id="t8">
+  <div class="dv-thd"><a class="dv-tid" href="#t8">8</a><span class="dv-tname">OSDs · bottom-center, 96px above edge · auto-hide 1200ms</span></div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="8a">
+      <div class="dv-olabel"><a class="dv-oid" href="#8a">8a</a>Progress OSD · 300×44 · same pill-in-pill as <a class="dv-oid" href="#8c">8c</a> · track p4, fill r18, icon crust at fill end</div>
+      <div class="dv-card" style="padding:20px;display:flex;flex-direction:column;gap:14px;position:relative">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:40% 60%">
+        <sc-for list="{{ osds }}" as="o" hint-placeholder-count="4">
+          <div style="position:relative;display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:10px;letter-spacing:.08em;color:#cdd6f4;text-shadow:0 1px 2px #11111b">{{ o.l }}</span>
+            <div style="width:300px;height:44px;box-sizing:border-box;padding:4px;border-radius:22px;background:#1e1e2e;box-shadow:inset 0 0 0 1px #313244, 0 10px 28px rgba(17,17,27,.55);display:flex;align-items:center;position:relative">
+              <span style="position:absolute;right:16px;top:0;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:500;color:{{ o.vfg }}">{{ o.v }}</span>
+              <div style="position:relative;height:36px;width:{{ o.pct }};min-width:36px;border-radius:18px;background:{{ o.fill }};display:flex;align-items:center;justify-content:flex-end;padding-right:9px;box-sizing:border-box;color:#11111b"><span class="material-symbols-rounded" style="font-size:18px">{{ o.icon }}</span></div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div class="dv-opt" id="8b" style="width:100%">
+      <div class="dv-olabel"><a class="dv-oid" href="#8b">8b</a>Status OSD · mic muted / Caps Lock / output muted · center of screen, auto-hide 1200ms</div>
+      <div style="display:flex;flex-wrap:wrap;gap:24px">
+        <sc-for list="{{ stOpts }}" as="o" hint-placeholder-count="6">
+          <div id="{{ o.id }}" style="display:flex;flex-direction:column;gap:8px;scroll-margin-top:16px">
+            <div class="dv-olabel"><a class="dv-oid" href="#{{ o.id }}">{{ o.id }}</a><span style="color:#cdd6f4;font-weight:500">{{ o.name }}</span></div>
+            <div class="dv-card" style="width:560px;height:220px;position:relative;display:flex;align-items:center;justify-content:center;gap:20px">
+              <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ o.pos }}">
+              <sc-for list="{{ o.items }}" as="it" hint-placeholder-count="3">
+                <div style="position:relative;{{ it.box }}">
+                  <sc-if value="{{ it.hasWell }}"><span style="{{ it.well }}"><span class="material-symbols-rounded" style="{{ it.ico }}">{{ it.icon }}</span></span></sc-if>
+                  <sc-if value="{{ it.bare }}"><span class="material-symbols-rounded" style="{{ it.ico }}">{{ it.icon }}</span></sc-if>
+                  <sc-if value="{{ it.hasText }}"><div style="{{ it.textBox }}"><span style="{{ it.tStyle }}">{{ it.t }}</span><sc-if value="{{ it.hasSub }}"><span style="font-size:10px;line-height:13px;color:#a6adc8">{{ it.s }}</span></sc-if></div></sc-if>
+                  <sc-if value="{{ it.hasBar }}"><span style="position:absolute;left:12px;right:12px;bottom:8px;height:2px;border-radius:1px;background:#313244"><span style="position:absolute;left:0;top:0;bottom:0;width:60%;border-radius:1px;background:{{ it.c }}"></span></span></sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <span style="font-size:10px;line-height:14px;color:#7f849c;max-width:560px">{{ o.spec }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div class="dv-opt" id="8c">
+      <div class="dv-olabel"><a class="dv-oid" href="#8c">8c</a>Vertical OSD · 44×180 · for the left-bar layout (right edge, centered)</div>
+      <div class="dv-card" style="padding:20px 24px;display:flex;gap:24px;position:relative">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:10% 80%">
+        <sc-for list="{{ vosd }}" as="o" hint-placeholder-count="3">
+          <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="width:44px;height:180px;box-sizing:border-box;padding:4px;border-radius:22px;background:#1e1e2e;box-shadow:inset 0 0 0 1px #313244, 0 10px 28px rgba(17,17,27,.55);display:flex;flex-direction:column;justify-content:flex-end">
+              <div style="height:{{ o.h }};min-height:36px;border-radius:18px;background:{{ o.fill }};display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;box-sizing:border-box;color:#11111b"><span class="material-symbols-rounded" style="font-size:18px">{{ o.icon }}</span></div>
+            </div>
+            <span style="font-size:10px;color:#cdd6f4;text-shadow:0 1px 2px #11111b">{{ o.l }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div class="dv-opt" id="8d">
+      <div class="dv-olabel"><a class="dv-oid" href="#8d">8d</a>Enter / exit · repeated presses update in place, timer restarts</div>
+      <div class="dv-card" style="padding:20px;display:flex;flex-direction:column;gap:10px;width:380px;box-sizing:border-box">
+        <sc-for list="{{ osdFrames }}" as="f" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:12px"><span style="width:70px;font-size:10px;color:#7f849c">{{ f.t }}</span><div style="width:220px;height:32px;border-radius:16px;background:#1e1e2e;box-shadow:inset 0 0 0 1px #313244;opacity:{{ f.o }};transform:translateY({{ f.y }}px);padding:3px;box-sizing:border-box;display:flex"><div style="width:40%;border-radius:13px;background:#b4befe;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;color:#11111b"><span class="material-symbols-rounded" style="font-size:15px">volume_up</span></div></div></div>
+        </sc-for>
+        <span style="font-size:10px;line-height:14px;color:#7f849c">Enter y +8→0 · opacity 0→1 · 150ms OutCubic. Value changes animate the fill 150ms. Exit after 1200ms idle, opacity only, 120ms.</span>
+      </div>
+    </div>
+  </div>
+</section></x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const chip = (o) => ({ display: 'flex', alignItems: 'center', gap: 4, height: 22, padding: '0 7px', borderRadius: 11, fontSize: 12, boxSizing: 'border-box', transition: 'all 150ms', ...o });
+    const stateCols = ['DEFAULT', 'HOVER', 'PRESSED', 'ACTIVE / OPEN', 'DISABLED'];
+    const cells = (base) => [
+      chip({ background: 'transparent', color: '#cdd6f4', ...base }),
+      chip({ background: '#313244', color: '#cdd6f4', ...base }),
+      chip({ background: '#45475a', color: '#cdd6f4', ...base }),
+      chip({ background: '#313244', color: '#cba6f7', boxShadow: 'inset 0 0 0 1px rgba(203,166,247,.55)', ...base }),
+      chip({ background: 'transparent', color: '#585b70', ...base }),
+    ];
+    const stateRows = [
+      { name: 'Status chip', icon: 'mail', label: '13', cells: cells({}) },
+      { name: 'Workspace', label: '3', cells: cells({ width: 24, padding: 0, justifyContent: 'center' }) },
+      { name: 'Control cluster', icon: 'wifi', label: '82%', cells: cells({ height: 24, borderRadius: 12, padding: '0 9px' }) },
+      { name: 'Tray icon', icon: 'forum', cells: cells({ width: 22, padding: 0, justifyContent: 'center', color: '#a6adc8' }) },
+    ];
+    stateRows[1].cells[3] = chip({ width: 34, padding: 0, justifyContent: 'center', background: '#cba6f7', color: '#11111b', fontWeight: 700 });
+    const stateNotes = ['no fill · text', 'surface0', 'surface1', 'surface0 + 1px mauve@55% (popup open)', 'surface2 text · no hover'];
+    const W = (n, c, label, tok, o = {}) => ({ n, label, tok, w: 24, bg: 'transparent', fg: c ? '#cdd6f4' : '#585b70', fw: 500, ring: 'none', dots: Array(c).fill(0), dotc: '#7f849c', ...o });
+    const wsStates = [
+      W(9, 0, 'empty', 'surface2'), W(1, 1, 'occupied · 1', 'text · dot overlay1'), W(3, 3, 'occupied · 3+', 'max 3 dots 3×3 gap 2'),
+      W(5, 1, 'hover', 'surface0 fill', { bg: '#313244' }),
+      W(4, 1, 'focused', 'mauve fill · crust 700 · w34', { w: 34, bg: '#cba6f7', fg: '#11111b', fw: 700, dotc: '#11111b' }),
+      W(7, 1, 'urgent', 'red text · red@16% · ring red@55%', { bg: 'rgba(243,139,168,.16)', fg: '#f38ba8', ring: 'inset 0 0 0 1px rgba(243,139,168,.55)', dotc: '#f38ba8' }),
+      W(2, 2, 'special ws open', 'mauve text · ring mauve', { fg: '#cba6f7', ring: 'inset 0 0 0 1px rgba(203,166,247,.55)', dotc: '#cba6f7' }),
+    ];
+    const M = (icon, label, when, tok, fg, bg = 'transparent', o = {}) => ({ icon, label, when, tok, fg, bg, fs: 12, fw: 400, ls: 'normal', ...o });
+    const modules = [
+      M('', '[3]', 'Workspace in monocle layout', 'mauve 12/500 · [window count]', '#cba6f7', 'transparent', { fw: 500 }),
+      M('terminal', '1', 'Special workspace has windows', 'subtext1 · icon overlay2', '#bac2de'),
+      M('push_pin', '3', 'Harpoon has pinned windows', 'subtext1 · icon overlay2 (as special ws)', '#bac2de'),
+      M('open_with', 'RESIZE', 'Hyprland submap ≠ reset', 'mauve fill · crust 10/700', '#11111b', '#cba6f7', { fs: 10, fw: 700, ls: '.08em' }),
+      M('keyboard_capslock', 'CAPS', 'Caps Lock on', 'yellow · yellow@14%', '#f9e2af', 'rgba(249,226,175,.14)', { fs: 10, fw: 700, ls: '.06em' }),
+      M('coffee', '', 'Idle inhibitor active', 'peach (filled)', '#fab387'),
+      M('smart_toy', '2', 'AI agent sessions running', 'mauve', '#cba6f7'),
+      M('timer', 'shell 1:24', 'timew active interval', 'green icon · subtext1 tag', '#a6e3a1'),
+      M('mail', '13', 'Unread > 0', 'icon blue · text', '#cdd6f4'),
+      M('outbox', '2', 'offlinemsmtp queue > 0', 'yellow', '#f9e2af'),
+      M('', '03:12', 'Screen recording', 'red · red@16% · dot 1.6s pulse', '#f38ba8', 'rgba(243,139,168,.16)', { dot: true, fw: 500 }),
+      M('vpn_lock', 'wg0', 'WireGuard interface up', 'green icon · subtext1 name', '#a6e3a1'),
+    ];
+    const specBar = [
+      { el: 'Rail', size: 'h40 · px6', tok: 'mantle · bottom 1px surface0' },
+      { el: 'Zone gap', size: '4 (soft 5)', tok: '—' },
+      { el: 'Chip', size: 'h28 · px7 · r14 · gap4', tok: 'none / surface0' },
+      { el: 'Icon', size: '16 (window 18)', tok: 'semantic per module' },
+      { el: 'Workspace', size: '26×28 · focused 36', tok: 'see 2c' },
+      { el: 'Count dots', size: '3×3 · gap 2 · ≤3', tok: 'overlay1' },
+      { el: 'Window', size: 'icon 18 · h32 · app_id 10 over title 12', tok: 'app_id overlay1 · title subtext1' },
+      { el: 'Submap', size: 'h20 · px8 · 10/700', tok: 'mauve / crust' },
+      { el: 'Cluster', size: 'h32 · px10 · gap8 · wifi/vol/batt', tok: 'opens control center' },
+      { el: 'Clock', size: 'h32 · px10 · 12/500', tok: 'opens calendar · same open ring' },
+    ];
+    const specV = [
+      { el: 'Rail', size: 'w44 · py6 · zone gap 8', tok: 'mantle · right 1px surface0' },
+      { el: 'Workspace', size: '28×24 · focused 28×34 · gap 3', tok: 'same states as 2c' },
+      { el: 'Submap', size: 'w20 · vertical-rl · 10/700', tok: 'mauve / crust' },
+      { el: 'Title', size: 'replaced by 32 app icon', tok: 'surface0 · tooltip on hover' },
+      { el: 'Status', size: 'icon 16 + 10px value below', tok: 'semantic' },
+      { el: 'Tray', size: '28×22 → popover 3-col 28', tok: 'base · e2' },
+      { el: 'Clock', size: 'HH / MM 16/500 · date 10', tok: 'text / overlay1' },
+      { el: 'Sidebar', size: 'right 400w, full height', tok: 'mantle · left 1px surface0' },
+    ];
+    const T = (label, state, n) => ({ label, state, n });
+    const base = { app: 'Takeshot', icon: 'screenshot_region', iconColor: '#89b4fa', time: 'now', summary: 'Screenshot saved', body: '~/Pictures/Screenshots/2026-10-01_21-07-12.png · 2560×1440 · 1.8 MB', image: 'assets/win2.png', actions: ['Open', 'Edit', 'Copy PNG'], progress: 0.62 };
+    const toasts = [
+      T('NORMAL · IMAGE · ACTIONS · TIMEOUT', 'default', base),
+      T('LOW · NO ACTIONS', 'default', { app: 'Timewarrior', icon: 'timer', iconColor: '#a6e3a1', time: '2m', urgency: 'low', summary: 'Tracking started: shell-redesign', body: 'Tags: quickshell, design', progress: 0.3 }),
+      T('CRITICAL · PERSISTENT, NO TIMEOUT', 'default', { app: 'upower', icon: 'battery_alert', iconColor: '#f38ba8', time: 'now', urgency: 'critical', summary: 'Battery at 6%', body: 'About 9 minutes remaining. Plug in or the system will hibernate at 3%.', actions: ['Battery saver', 'Dismiss'] }),
+      T('HOVER · TIMEOUT PAUSED', 'hover', { ...base, progress: 0.62 }),
+      T('PRESSED', 'pressed', { app: 'sessiontap-notify', icon: 'asterisk', iconColor: '#fab387', time: '10m', summary: 'Automerge conflict resolution behavior', meta: 'Claude Code finished · ~/Sandboxes/sandbox/projects/fi · main', body: 'Mostly no. Facebook, Evernote and most mainstream apps do not use CRDTs like Automerge, or anything comparable, for sync.', progress: 0.8 }),
+      T('EXPANDED · FULL BODY', 'expanded', { app: 'sessiontap-notify', icon: 'asterisk', iconColor: '#fab387', time: '14m', summary: 'Automerge conflict resolution behavior', meta: 'Claude Code finished · ~/Sandboxes/sandbox/projects/fi · main', body: 'By "shared documents" I mean the Google Docs or Notion model. There are many separate documents, and each one syncs independently — so conflicts stay local to a document rather than the whole store.', foot: 'In 2.1M · Out 20.9k', actions: ['Open session', 'Copy'], progress: 0.5 }),
+    ];
+    const frames = [{ t: '0ms', o: 0.05, x: 0, y: -8 }, { t: '50ms', o: 0.55, x: 0, y: -3 }, { t: '150ms rest', o: 1, x: 0, y: 0 }, { t: 'exit 120ms', o: 0.35, x: 24, y: 0 }];
+    const groupStates = [
+      { label: 'EXPANDED', bg: 'transparent', ic: '#7f849c', chev: 'expand_less', xbg: 'transparent', op: 1 },
+      { label: 'HOVER · DISMISS-GROUP REVEALED', bg: '#1e1e2e', ic: '#cdd6f4', chev: 'expand_less', xbg: '#45475a', op: 1 },
+      { label: 'COLLAPSED · STACKED', bg: 'transparent', ic: '#7f849c', chev: 'expand_more', xbg: 'transparent', op: 1 },
+      { label: 'DISMISSING · 120MS', bg: 'transparent', ic: '#7f849c', chev: 'expand_less', xbg: 'transparent', op: 0.4 },
+    ];
+    const specN = [
+      { el: 'Sidebar', size: '400w · p10 · gap10', tok: 'mantle' },
+      { el: 'Header', size: 'h28 · title 14/500', tok: 'text · count mauve' },
+      { el: 'DND switch', size: '26×16 · knob 12', tok: 'off surface1 / on mauve' },
+      { el: 'List', size: 'gap 8 · newest first', tok: 'no grouping' },
+      { el: 'Dismiss', size: '22 · hover reveals', tok: 'card close · exit x+24 120ms' },
+      { el: 'Card / toast', size: '380w · p 9/10/10/12 · r8', tok: 'base · 1px surface0' },
+      { el: 'Summary', size: '14/500 · lh18', tok: 'text' },
+      { el: 'Body', size: '12 · lh16 · clamp 2', tok: 'subtext1' },
+      { el: 'Thumb', size: '56 · r4', tok: '1px surface0' },
+      { el: 'Action', size: 'h24 · px10 · r12', tok: '1st: mauve outline · rest surface0' },
+      { el: 'Timeout', size: '2px bottom', tok: 'mauve · low overlay1' },
+    ];
+    // ---- control center, switcher, which-key, osd
+    const tileStates = [
+      { l: 'OFF', bg: '#313244', ibg: '#45475a', ifg: '#bac2de', lfg: '#bac2de', sfg: '#7f849c', op: 1, sub: 'Off' },
+      { l: 'OFF · HOVER', bg: '#3a3b4e', ibg: '#585b70', ifg: '#cdd6f4', lfg: '#cdd6f4', sfg: '#a6adc8', op: 1, sub: 'Off' },
+      { l: 'ON', bg: '#3d3652', ibg: '#cba6f7', ifg: '#11111b', lfg: '#cdd6f4', sfg: '#cba6f7', op: 1, sub: 'Mocha-5G' },
+      { l: 'ON · HOVER', bg: '#463d5f', ibg: '#cba6f7', ifg: '#11111b', lfg: '#cdd6f4', sfg: '#cba6f7', op: 1, sub: 'Mocha-5G' },
+      { l: 'PRESSED', bg: '#524870', ibg: '#b4befe', ifg: '#11111b', lfg: '#cdd6f4', sfg: '#cba6f7', op: 1, sub: 'Connecting…' },
+      { l: 'DISABLED', bg: '#313244', ibg: '#45475a', ifg: '#bac2de', lfg: '#bac2de', sfg: '#7f849c', op: 0.45, sub: 'Unavailable' },
+    ];
+    const sliderStates = [
+      { l: 'DEFAULT', pct: '20%', fill: '#cba6f7', knob: '#cdd6f4', ring: '0 0 0 3px #1e1e2e', bbg: '#313244', bfg: '#bac2de', v: '20%', vfg: '#cdd6f4', icon: 'volume_up', tip: false },
+      { l: 'HOVER · DRAG', pct: '46%', fill: '#cba6f7', knob: '#cdd6f4', ring: '0 0 0 3px #1e1e2e, 0 0 0 7px rgba(203,166,247,.25)', bbg: '#313244', bfg: '#bac2de', v: '46%', vfg: '#cba6f7', icon: 'volume_up', tip: true },
+      { l: 'OVER-AMPLIFIED >100', pct: '100%', fill: '#fab387', knob: '#fab387', ring: '0 0 0 3px #1e1e2e', bbg: '#313244', bfg: '#fab387', v: '120%', vfg: '#fab387', icon: 'volume_up', tip: false },
+      { l: 'MUTED', pct: '20%', fill: '#585b70', knob: '#7f849c', ring: '0 0 0 3px #1e1e2e', bbg: 'rgba(243,139,168,.16)', bfg: '#f38ba8', v: 'muted', vfg: '#f38ba8', icon: 'volume_off', tip: false },
+      { l: 'DISABLED · NO DEVICE', pct: '0%', fill: '#45475a', knob: '#585b70', ring: '0 0 0 3px #1e1e2e', bbg: '#313244', bfg: '#585b70', v: '—', vfg: '#585b70', icon: 'mic', tip: false },
+    ];
+    const specCC = [
+      { el: 'Panel', size: '380w · p12 · gap12 · r8', tok: 'base · 1px surface0 · e2' },
+      { el: 'Anchor', size: 'bar+6 · under wifi/vol/batt', tok: 'clock opens calendar instead' },
+      { el: 'Header btn', size: '28 circle · icon 16', tok: 'surface0 · power red@14%' },
+      { el: 'Tile', size: 'h40 · r20 · gap 6 · 2-col', tok: 'off surface0 · on mauve-tint #3d3652' },
+      { el: 'Tile icon', size: '32 circle · 17', tok: 'off surface1 · on mauve/crust' },
+      { el: 'Tile label', size: '12/500 + 10 sub', tok: 'text · sub mauve / overlay1' },
+      { el: 'Chevron', size: '24w · 1px divider', tok: 'opens sub-page in-panel' },
+      { el: 'Slider', size: 'track 6 · knob 14 · ring 3', tok: 'surface1 · fill mauve' },
+      { el: 'Media card', size: 'p10 · art 40 · play 28', tok: 'mantle · play mauve/crust' },
+      { el: 'Segmented', size: 'h32 · r16 · p2', tok: 'mantle · sel mauve@16% + ring' },
+      { el: 'Battery card', size: 'p 10/12 · r8 · 22/500', tok: 'mantle · green fill · text limit tick' },
+    ];
+    const P = (img, icon, ic, title, ws, extra = {}) => ({ img, ph: !img, icon, ic, title, ws, ...extra });
+    const term = [70, 40, 88, 55, 30, 76, 62];
+    const strip = [
+      P('assets/win1.png', 'public', '#fab387', 'Claude Design — Mozilla Firefox', 1),
+      P('assets/win2.png', 'public', '#fab387', 'Mozilla Firefox', 2),
+      P('assets/win3.png', 'public', '#fab387', 'Mozilla Firefox', 2),
+      P(null, 'terminal', '#89b4fa', 'nvim · Workspaces.qml', 4),
+      P(null, 'terminal', '#89b4fa', 'kitty · ~/src/quickshell', 3),
+    ];
+    const styleTile = (t, i, sel, hov) => ({ ...t, lines: term.map((w, k) => ({ w: `${(w + i * 7 + k * 3) % 80 + 15}%`, c: k === 0 ? '#cba6f7' : k % 3 === 0 ? '#a6e3a1' : '#45475a' })),
+      bg: sel ? '#313244' : hov ? '#28283a' : '#1e1e2e', ring: sel ? 'inset 0 0 0 2px #cba6f7, 0 0 0 4px rgba(203,166,247,.14)' : 'inset 0 0 0 1px #313244',
+      tfg: sel ? '#cdd6f4' : '#a6adc8', wbg: sel ? '#cba6f7' : '#45475a', wfg: sel ? '#11111b' : '#cdd6f4' });
+    const switchStrip = strip.map((t, i) => styleTile(t, i, i === 1, i === 3));
+    const groups = [
+      { ws: 1, name: 'web', items: [strip[0]] }, { ws: 2, name: 'web', items: [strip[1], strip[2]] },
+      { ws: 3, name: 'term', items: [strip[4], P(null, 'terminal', '#89b4fa', 'btop', 3)] }, { ws: 4, name: 'code', items: [strip[3]] },
+      { ws: 5, name: 'chat', items: [P(null, 'forum', '#94e2d5', 'Signal', 5)] },
+    ].map((g, gi) => ({ ...g, count: g.items.length, items: g.items.map((t, i) => styleTile(t, gi + i, gi === 1 && i === 1, false)), hbg: gi === 1 ? '#cba6f7' : '#313244', hfg: gi === 1 ? '#11111b' : '#cdd6f4' }));
+    const manyBase = [strip[0], strip[1], strip[2], strip[3], strip[4], P(null, 'terminal', '#89b4fa', 'btop', 3), P(null, 'forum', '#94e2d5', 'Signal', 5), P(null, 'mail', '#74c7ec', 'aerc · INBOX (13)', 6),
+      P(null, 'music_note', '#f5c2e7', 'ncmpcpp', 'S'), P(null, 'terminal', '#89b4fa', 'kitty · scratch', 'S'), P(null, 'description', '#cba6f7', 'Obsidian — shell notes', 7), P('assets/win1.png', 'public', '#fab387', 'Hyprland wiki — Firefox', 8),
+      P(null, 'terminal', '#89b4fa', 'lazygit', 4), P(null, 'videocam', '#f38ba8', 'OBS — recording', 9)];
+    const many = manyBase.map((t, i) => styleTile(t, i, i === 6, false));
+    const K = (k, a, o = {}) => ({ k: k.split(' ').map(x => ({ x, w: x.length > 1 ? 'auto' : '20px' })), a, af: o.sub ? '#cba6f7' : o.dis ? '#6c7086' : '#cdd6f4', sub: !!o.sub, kop: o.dis ? 0.45 : 1 });
+    const wk = [
+      { title: 'FOCUS', keys: [K('h', 'focus left'), K('j', 'focus down'), K('k', 'focus up'), K('l', 'focus right'), K('Tab', 'last window')] },
+      { title: 'MOVE', keys: [K('⇧ h', 'swap left'), K('⇧ j', 'swap down'), K('⇧ k', 'swap up'), K('⇧ l', 'swap right'), K('c', 'center float')] },
+      { title: 'LAYOUT', keys: [K('f', 'fullscreen'), K('m', 'monocle'), K('t', 'toggle float'), K('p', 'pseudotile'), K('s', 'split ratio', { dis: true })] },
+      { title: 'WORKSPACE', keys: [K('1…0', 'go to N'), K('⇧ 1…0', 'send to N'), K('[ ]', 'prev / next'), K('`', 'special: scratch'), K('q', 'kill window')] },
+      { title: 'SUBMAPS', keys: [K('r', 'resize', { sub: 1 }), K('g', 'group', { sub: 1 }), K('x', 'special', { sub: 1 }), K('h', 'harpoon', { sub: 1 }), K('Space', 'launch', { sub: 1 })] },
+    ];
+    const wkTui = [
+      { title: 'APPS', keys: [K('b', 'Bookmarks'), K('c', 'Calendar'), K('e', 'Email'), K('i', 'Obsidian'), K('m', 'Monitor')] },
+      { title: '', keys: [K('n', 'Notes'), K('r', 'RSS'), K('u', 'Music'), K('⇧ b', 'Add bookmark'), K('^ ⇧ b', 'Edit bookmarks')] },
+    ];
+    const capStates = [
+      { l: 'DEFAULT', bg: '#313244', fg: '#cdd6f4', ring: 'inset 0 0 0 1px #45475a, inset 0 -2px 0 #45475a', op: 1, k: 'h' },
+      { l: 'MODIFIER', bg: '#313244', fg: '#a6adc8', ring: 'inset 0 0 0 1px #45475a, inset 0 -2px 0 #45475a', op: 1, k: '⇧' },
+      { l: 'PRESSED', bg: '#cba6f7', fg: '#11111b', ring: 'inset 0 0 0 1px #cba6f7', op: 1, k: 'r' },
+      { l: 'SUBMAP KEY', bg: 'rgba(203,166,247,.16)', fg: '#cba6f7', ring: 'inset 0 0 0 1px rgba(203,166,247,.55), inset 0 -2px 0 rgba(203,166,247,.55)', op: 1, k: 'g' },
+      { l: 'UNAVAILABLE', bg: '#313244', fg: '#cdd6f4', ring: 'inset 0 0 0 1px #45475a', op: 0.45, k: 's' },
+    ];
+    const osds = [
+      { icon: 'volume_up', pct: '30%', fill: '#b4befe', v: '30%', vfg: '#bac2de', l: 'VOLUME' },
+      { icon: 'brightness_6', pct: '72%', fill: '#cba6f7', v: '72%', vfg: '#bac2de', l: 'BRIGHTNESS' },
+      { icon: 'volume_up', pct: '100%', fill: '#fab387', v: '', vfg: '#bac2de', l: 'OVER-AMPLIFIED · 120%' },
+      { icon: 'volume_off', pct: '30%', fill: '#585b70', v: 'muted', vfg: '#f38ba8', l: 'OUTPUT MUTED (VALUE KEPT)' },
+    ];
+    const statusOsd = [
+      { icon: 'mic_off', ic: '#f38ba8', ibg: 'rgba(243,139,168,.16)', t: 'Microphone muted', s: 'Blue Yeti · Mono', l: 'MIC MUTED' },
+      { icon: 'keyboard_capslock', ic: '#f9e2af', ibg: 'rgba(249,226,175,.14)', t: 'Caps Lock on', s: 'Press again to release', l: 'CAPS LOCK' },
+      { icon: 'volume_off', ic: '#f38ba8', ibg: 'rgba(243,139,168,.16)', t: 'Output muted', s: 'Built-in Audio · Speakers', l: 'OUTPUT MUTED' },
+      { icon: 'headphones', ic: '#cba6f7', ibg: 'rgba(203,166,247,.16)', t: 'WH-1000XM4', s: 'Output switched · 80% battery', l: 'DEVICE SWITCH' },
+    ];
+    const stBase = [
+      { icon: 'mic_off', c: '#f38ba8', tint: 'rgba(243,139,168,.16)', t: 'Mic muted', s: 'Blue Yeti' },
+      { icon: 'keyboard_capslock', c: '#f9e2af', tint: 'rgba(249,226,175,.14)', t: 'Caps Lock', s: 'on' },
+      { icon: 'volume_off', c: '#fab387', tint: 'rgba(250,179,135,.16)', t: 'Muted', s: 'Speakers' },
+    ];
+    const surf = 'background:#1e1e2e;box-shadow:inset 0 0 0 1px #313244, 0 10px 28px rgba(17,17,27,.55), 0 2px 6px rgba(17,17,27,.4);';
+    const mk = (fn) => stBase.map(b => ({ hasWell: false, bare: false, hasText: false, hasSub: false, hasBar: false, ...b, ...fn(b) }));
+    const stOpts = [
+      { id: '8b1', name: 'Square tile · refined', pos: '20% 60%', spec: 'Your current shape, tightened: 96×96 · r8 · base + 1px surface0 · e2 · icon 44 semantic color. Smallest change from what you have.',
+        items: mk(b => ({ bare: true, box: surf + 'width:96px;height:96px;border-radius:8px;display:flex;align-items:center;justify-content:center;', ico: 'font-size:44px;color:' + b.c })) },
+    ];
+    const vosd = [{ h: '30%', l: 'VOLUME 30', icon: 'volume_up', fill: '#b4befe' }, { h: '72%', l: 'BRIGHTNESS 72', icon: 'brightness_6', fill: '#cba6f7' }, { h: '30%', l: 'MUTED', icon: 'volume_off', fill: '#585b70' }];
+    const osdFrames = [{ t: '0ms', o: 0.05, y: 8 }, { t: '50ms', o: 0.6, y: 3 }, { t: '150ms', o: 1, y: 0 }, { t: '+1200 exit', o: 0.3, y: 0 }];
+    const hdrBtns = [
+      { icon: 'lock', l: 'default', bg: '#313244', fg: '#bac2de', ring: 'none' },
+      { icon: 'lock', l: 'hover', bg: '#45475a', fg: '#cdd6f4', ring: 'none' },
+      { icon: 'lock', l: 'focus', bg: '#313244', fg: '#cdd6f4', ring: '0 0 0 2px #1e1e2e, 0 0 0 4px #cba6f7' },
+      { icon: 'power_settings_new', l: 'power', bg: 'rgba(243,139,168,.14)', fg: '#f38ba8', ring: 'none' },
+      { icon: 'power_settings_new', l: 'power hover', bg: '#f38ba8', fg: '#11111b', ring: 'none' },
+    ];
+    const ccFrames = [{ t: '0ms', o: 0.05, y: -2, s: 0.96 }, { t: '60ms', o: 0.6, y: 6, s: 0.98 }, { t: '150ms', o: 1, y: 10, s: 1 }];
+    const wkTuiFlat = wkTui.flatMap(g => g.keys);
+    const specCal = [
+      { el: 'Panel', size: '320w · p12 · r8', tok: 'base · e2' },
+      { el: 'Anchor', size: 'bar+6 · right 6', tok: 'under clock chip' },
+      { el: 'Time', size: '22/500 + 12', tok: 'text / subtext0' },
+      { el: 'Day cell', size: '34h · r17 · dot 3', tok: 'today mauve/crust' },
+      { el: 'Out of month', size: '12', tok: 'surface1' },
+      { el: 'Week no.', size: '10 · 24w col', tok: 'surface2' },
+      { el: 'Weather', size: 'icon 28 · temp 18/500', tok: 'mantle · semantic icon' },
+      { el: 'Forecast', size: '5-col · icon 16 · 10px', tok: 'today surface0' },
+      { el: 'Agenda', size: 'rows h22 · bar 3×14', tok: 'mantle · event color' },
+    ];
+    const specSw = [
+      { el: 'Scrim', size: 'full output', tok: 'crust @ 60%' },
+      { el: 'Panel', size: 'p12 · gap10 · r8 · centered', tok: 'base · 1px surface0 · e2' },
+      { el: 'Tile (strip)', size: '236w · p6 · gap8 · r8', tok: 'base · 1px surface0' },
+      { el: 'Tile (grid)', size: '188w · 5 cols · gap8', tok: 'same' },
+      { el: 'Preview', size: '16:9 · 224×126 / 176×106 · r4', tok: 'mantle while loading' },
+      { el: 'Hovered', size: '—', tok: '#28283a · 1px surface1' },
+      { el: 'Selected', size: 'scale 1.04 · 150ms', tok: 'surface0 · 2px mauve · 4px mauve@14%' },
+      { el: 'Urgent', size: 'dot 8 top-left', tok: 'red · ring red@60% · title red' },
+      { el: 'Special', size: 'preview 55% · tag 16h', tok: 'badge S mauve outline' },
+      { el: 'WS badge', size: '18h · r9 · 10/700 · top-right 5', tok: 'crust@85% / sel mauve / urgent red' },
+      { el: 'App icon', size: '20 · row h24 · gap8', tok: 'app identity color' },
+      { el: 'Title', size: '12 · 1-line ellipsis', tok: 'subtext0 · sel text' },
+      { el: 'Detail row', size: 'p 8/10 · r6 · wraps', tok: 'mantle · full title text' },
+    ];
+    const specWk = [
+      { el: 'Anchor', size: 'bottom-center · 24 above edge', tok: 'overlay layer · no backdrop' },
+      { el: 'Layout', size: 'column · gap 6 · centered', tok: 'islands hug content' },
+      { el: 'Header island', size: 'h28 · p4/12/4/4 · r14', tok: 'crust@92% · 1px surface0 · e1' },
+      { el: 'Submap pill', size: 'h20 · px8 · 10/700 · .08em', tok: 'mauve fill · crust' },
+      { el: 'Breadcrumb', size: '12 · › separators', tok: 'overlay1 · current text' },
+      { el: 'Group island', size: 'p 8/12/10 · r8 · gap 6 between', tok: 'crust@92% · 1px surface0 · e1' },
+      { el: 'Entries', size: '≤6 rows, then wrap to next column · col gap 16', tok: '—' },
+      { el: 'Group head', size: '10 · .1em · h16', tok: 'overlay0' },
+      { el: 'Keycap', size: 'h20 · min-w20 · px5 · r4 · gap2', tok: 'surface0 · 1px surface1 · 2px bottom' },
+      { el: 'Action', size: '12 · gap 8 from caps', tok: 'text' },
+      { el: 'Nested', size: '▸ after label', tok: 'mauve label · cap mauve@16% + ring' },
+      { el: 'Unavailable', size: 'row 45%', tok: 'label overlay0' },
+      { el: 'Footer island', size: 'h24 · px10 · r12 · 10px', tok: 'crust@92% · ⌫ 45% at root' },
+    ];
+    const kk = (keys, l, o = {}) => ({ keys, l, op: o.op ?? 1, bg: o.bg ?? '#313244', fg: o.fg ?? '#cdd6f4', ring: o.ring ?? 'inset 0 0 0 1px #45475a, inset 0 -2px 0 #45475a' });
+    const keyKinds = [
+      kk(['h'], 'SINGLE'), kk(['⇧', 'h'], 'MODIFIER + KEY'), kk(['Super', '⇧', 'H'], 'MULTI-MODIFIER'), kk(['^', '⇧', 'b'], 'CTRL SHIFT'),
+      kk(['Esc'], 'SPECIAL'), kk(['Enter'], 'SPECIAL'), kk(['Space'], 'SPECIAL'), kk(['←', '↑', '↓', '→'], 'ARROWS'),
+      kk(['w'], 'NESTED SUBMAP', { bg: 'rgba(203,166,247,.16)', fg: '#cba6f7', ring: 'inset 0 0 0 1px rgba(203,166,247,.55), inset 0 -2px 0 rgba(203,166,247,.55)' }),
+      kk(['r'], 'PRESSED · 80MS FLASH', { bg: '#cba6f7', fg: '#11111b', ring: 'inset 0 0 0 1px #cba6f7' }),
+      kk(['o'], 'UNAVAILABLE', { op: 0.45 }), kk(['1…0'], 'RANGE'),
+    ];
+    const wkFrames = [{ t: 'enter 0ms', o: 0, y: 8 }, { t: '50ms', o: 0.55, y: 4 }, { t: '150ms · rest', o: 1, y: 0 }, { t: 'exit 60ms', o: 0.45, y: 4 }, { t: 'exit 120ms', o: 0.05, y: 8 }];
+    return { stOpts, specSw, specWk, keyKinds, wkFrames, specCal, hdrBtns, ccFrames, wkTuiFlat, toastA: toasts[0].n, toastB: toasts[1].n, stateCols, stateRows, stateNotes, wsStates, modules, specBar, specV, toasts, frames, groupStates, specN,
+      tileStates, sliderStates, specCC, switchStrip, groups, many, wk, wkTui, capStates, osds, statusOsd, vosd, osdFrames };
+  }
+}
+</script>
+</body>
+</html>

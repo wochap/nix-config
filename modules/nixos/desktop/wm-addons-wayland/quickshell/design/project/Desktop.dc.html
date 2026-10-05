@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/700.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>body{margin:0;font-family:'Iosevka Nerd Font','Iosevka','JetBrains Mono',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}</style>
+</helmet>
+<div style="{{ screen }}">
+  <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+  <sc-if value="{{ top }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;left:0;top:0"><dc-import name="TopBar" variant="{{ variant }}" w="{{ W }}" cc-open="{{ ccOpen }}" cal-open="{{ calOpen }}" hint-size="1920px,40px"></dc-import></div>
+  </sc-if>
+  <sc-if value="{{ left }}">
+    <div style="position:absolute;left:0;top:0"><dc-import name="VBar" h="{{ H }}" variant="{{ variant }}" cc-open="{{ ccOpen }}" cal-open="{{ calOpen }}" hint-size="44px,1080px"></dc-import></div>
+  </sc-if>
+  <sc-if value="{{ showSidebar }}">
+    <div style="{{ sidebarPos }}"><dc-import name="NotifSidebar" h="{{ sideH }}" hint-size="400px,1000px"></dc-import></div>
+  </sc-if>
+  <sc-if value="{{ ccOpen }}">
+    <div style="{{ ccPos }}"><dc-import name="ControlCenter" hint-size="380px,900px"></dc-import></div>
+  </sc-if>
+  <sc-if value="{{ calOpen }}">
+    <div style="{{ calPos }}"><dc-import name="Calendar" hint-size="320px,480px"></dc-import></div>
+  </sc-if>
+  <sc-if value="{{ showSwitcher }}">
+    <div style="position:absolute;inset:0;background:rgba(17,17,27,.6);display:flex;align-items:center;justify-content:center"><dc-import name="Switcher" mode="{{ swMode }}" hint-size="1236px,300px"></dc-import></div>
+  </sc-if>
+  <sc-if value="{{ showToast }}">
+    <div style="{{ toastPos }}">
+      <dc-import name="NotifCard" n="{{ toast1 }}" mode="toast" hint-size="380px,140px"></dc-import>
+      <dc-import name="NotifCard" n="{{ toast2 }}" mode="toast" hint-size="380px,110px"></dc-import>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080},&quot;layout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;top&quot;,&quot;left&quot;],&quot;default&quot;:&quot;top&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;overlay&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;sidebar&quot;,&quot;cc&quot;,&quot;calendar&quot;,&quot;toast&quot;,&quot;switcher&quot;,&quot;whichkey&quot;,&quot;none&quot;],&quot;default&quot;:&quot;sidebar&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;swMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;strip&quot;,&quot;grid&quot;,&quot;grouped&quot;,&quot;list&quot;,&quot;empty&quot;],&quot;default&quot;:&quot;strip&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;wk&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;few&quot;,&quot;many&quot;,&quot;nested&quot;],&quot;default&quot;:&quot;many&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;minimal&quot;,&quot;normal&quot;,&quot;busy&quot;],&quot;default&quot;:&quot;normal&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;w&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1920,&quot;tsType&quot;:&quot;number&quot;},&quot;h&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1080,&quot;tsType&quot;:&quot;number&quot;},&quot;toasts&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const W = Number(p.w ?? 1920), H = Number(p.h ?? 1080);
+    const layout = p.layout ?? 'top', overlay = p.overlay ?? 'sidebar';
+    const top = layout === 'top';
+    const barH = top ? 40 : 0, barW = top ? 0 : 44;
+    const sidebarPos = { position: 'absolute', top: barH, right: 0 };
+    const ccPos = top ? { position: 'absolute', top: barH + 6, right: 150 } : { position: 'absolute', left: barW + 6, bottom: 70 };
+    const calPos = top ? { position: 'absolute', top: barH + 6, right: 6 } : { position: 'absolute', left: barW + 6, bottom: 6 };
+    const toastPos = { position: 'absolute', top: barH + 10, right: 10, display: 'flex', flexDirection: 'column', gap: 8 };
+    const toast1 = { app: 'sessiontap-notify', icon: 'asterisk', iconColor: '#fab387', time: 'now', summary: 'Claude Code finished', meta: '~/Sandboxes/sandbox/projects/webscoop · main', body: 'Archive complete. Flows are now spec-driven and archived to openspec/changes/archive — 12 delta specs synced.', actions: ['Open session', 'Dismiss'], progress: 0.7 };
+    const toast2 = { app: 'Takeshot', icon: 'screenshot_region', iconColor: '#89b4fa', time: '1m', summary: 'Screenshot saved', body: '~/Pictures/Screenshots/2026-10-01_21-07-12.png', image: 'assets/win2.png', actions: ['Open', 'Edit', 'Copy PNG'], progress: 0.35 };
+    return { screen: { width: W, height: H, position: 'relative', overflow: 'hidden', background: '#11111b' },
+      top, left: !top, W, H, variant: p.variant ?? 'normal',
+      showSwitcher: overlay === 'switcher', swMode: p.swMode ?? 'strip',
+      ccOpen: overlay === 'cc', calOpen: overlay === 'calendar', showSidebar: overlay === 'sidebar',
+      showToast: overlay === 'toast' || (overlay !== 'sidebar' && !!p.toasts),
+      sidebarPos, sideH: H - barH, ccPos, calPos, toastPos, toast1, toast2 };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/700.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>body{margin:0;font-family:'Iosevka Nerd Font','Iosevka','JetBrains Mono',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}</style>
+</helmet>
+<div style="width:380px;box-sizing:border-box;padding:12px;display:flex;flex-direction:column;gap:12px;background:#1e1e2e;border-radius:8px;box-shadow:inset 0 0 0 1px #313244, 0 16px 40px rgba(17,17,27,.6), 0 2px 8px rgba(17,17,27,.4)">
+
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:36px;height:36px;border-radius:18px;background:#313244;box-shadow:inset 0 0 0 1px #45475a;display:flex;align-items:center;justify-content:center;color:#cba6f7;flex:none"><span class="material-symbols-rounded" style="font-size:20px;font-variation-settings:'FILL' 1">person</span></div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:14px;font-weight:500;color:#cdd6f4">user@hyprbox</div>
+      <div style="font-size:10px;color:#a6adc8">up 3d 4h 12m · Hyprland 0.51</div>
+    </div>
+    <div style="display:flex;gap:4px">
+      <span title="Lock" style="width:28px;height:28px;border-radius:14px;background:#313244;color:#bac2de;display:flex;align-items:center;justify-content:center"><span class="material-symbols-rounded" style="font-size:16px">lock</span></span>
+      <span title="Log out" style="width:28px;height:28px;border-radius:14px;background:#313244;color:#bac2de;display:flex;align-items:center;justify-content:center"><span class="material-symbols-rounded" style="font-size:16px">logout</span></span>
+      <span title="Reboot" style="width:28px;height:28px;border-radius:14px;background:#313244;color:#bac2de;display:flex;align-items:center;justify-content:center"><span class="material-symbols-rounded" style="font-size:16px">restart_alt</span></span>
+      <span title="Power off" style="width:28px;height:28px;border-radius:14px;background:rgba(243,139,168,.14);color:#f38ba8;display:flex;align-items:center;justify-content:center"><span class="material-symbols-rounded" style="font-size:16px">power_settings_new</span></span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px">
+    <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="16">
+      <div style="height:40px;border-radius:20px;background:{{ t.bg }};opacity:{{ t.op }};display:flex;align-items:center;gap:8px;padding:0 4px;box-sizing:border-box;min-width:0">
+        <span style="width:32px;height:32px;border-radius:16px;background:{{ t.ibg }};color:{{ t.ifg }};display:flex;align-items:center;justify-content:center;flex:none"><span class="material-symbols-rounded" style="font-size:17px">{{ t.icon }}</span></span>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+          <span style="font-size:12px;line-height:14px;font-weight:500;color:{{ t.lfg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.label }}</span>
+          <sc-if value="{{ t.sub }}"><span style="font-size:10px;line-height:13px;color:{{ t.sfg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.sub }}</span></sc-if>
+        </div>
+        <sc-if value="{{ t.chev }}"><span style="width:24px;height:32px;display:flex;align-items:center;justify-content:center;color:{{ t.sfg }};box-shadow:inset 1px 0 0 {{ t.div }};flex:none;margin-right:2px"><span class="material-symbols-rounded" style="font-size:16px">chevron_right</span></span></sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <sc-for list="{{ sliders }}" as="s" hint-placeholder-count="4">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;align-items:center;gap:8px;height:28px">
+          <span style="width:28px;height:28px;border-radius:14px;background:{{ s.bbg }};color:{{ s.bfg }};display:flex;align-items:center;justify-content:center;flex:none"><span class="material-symbols-rounded" style="font-size:16px">{{ s.icon }}</span></span>
+          <div style="flex:1;height:6px;border-radius:3px;background:#45475a;position:relative">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:{{ s.pct }};border-radius:3px;background:{{ s.fill }}"></div>
+            <div style="position:absolute;top:-4px;left:{{ s.pct }};margin-left:-7px;width:14px;height:14px;border-radius:7px;background:{{ s.knob }};box-shadow:0 0 0 3px #1e1e2e"></div>
+          </div>
+          <span style="width:44px;text-align:right;font-size:12px;color:{{ s.vfg }};font-variant-numeric:tabular-nums">{{ s.value }}</span>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;padding:2px;height:32px;box-sizing:border-box;border-radius:16px;background:#181825;box-shadow:inset 0 0 0 1px #313244">
+    <div style="display:flex;align-items:center;justify-content:center;gap:5px;border-radius:14px;font-size:12px;color:#a6adc8"><span class="material-symbols-rounded" style="font-size:15px">eco</span>Saver</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:5px;border-radius:14px;font-size:12px;color:#cba6f7;font-weight:500;background:rgba(203,166,247,.16);box-shadow:inset 0 0 0 1px rgba(203,166,247,.5)"><span class="material-symbols-rounded" style="font-size:15px">balance</span>Balanced</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:5px;border-radius:14px;font-size:12px;color:#a6adc8"><span class="material-symbols-rounded" style="font-size:15px">rocket_launch</span>Perform.</div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:8px;background:#181825;box-shadow:inset 0 0 0 1px #313244">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:22px;font-weight:500;color:#cdd6f4;line-height:26px">82%</span>
+      <div style="display:flex;flex-direction:column;flex:1">
+        <span style="font-size:12px;color:#a6e3a1;display:flex;align-items:center;gap:3px"><span class="material-symbols-rounded" style="font-size:14px;font-variation-settings:'FILL' 1">bolt</span>Charging · 18.4 W</span>
+        <span style="font-size:10px;color:#a6adc8">Full in 1h 24m · limit 80%→ off</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;font-size:10px;color:#a6adc8;line-height:14px"><span>Health <span style="color:#cdd6f4">94%</span></span><span>Cycles <span style="color:#cdd6f4">412</span></span></div>
+    </div>
+    <div style="height:6px;border-radius:3px;background:#45475a;position:relative">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:82%;border-radius:3px;background:#a6e3a1"></div>
+      <div style="position:absolute;left:80%;top:-3px;width:2px;height:12px;border-radius:1px;background:#cdd6f4"></div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:8px;background:#181825;box-shadow:inset 0 0 0 1px #313244">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:40px;height:40px;border-radius:4px;background:#313244;display:flex;align-items:center;justify-content:center;color:#7f849c;flex:none"><span class="material-symbols-rounded" style="font-size:20px">album</span></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:500;color:#cdd6f4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Nightcall</div>
+        <div style="font-size:10px;color:#a6adc8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Kavinsky · mpd</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:2px;color:#bac2de">
+        <span class="material-symbols-rounded" style="font-size:18px;width:26px;height:26px;display:flex;align-items:center;justify-content:center">skip_previous</span>
+        <span class="material-symbols-rounded" style="font-size:18px;width:28px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#cba6f7;color:#11111b;font-variation-settings:'FILL' 1">pause</span>
+        <span class="material-symbols-rounded" style="font-size:18px;width:26px;height:26px;display:flex;align-items:center;justify-content:center">skip_next</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:10px;color:#7f849c"><span>1:42</span><div style="flex:1;height:3px;border-radius:2px;background:#45475a;position:relative"><div style="position:absolute;left:0;top:0;bottom:0;width:41%;border-radius:2px;background:#cba6f7"></div></div><span>4:18</span></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:380,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const sub = p.sub ?? 'none';
+    const T = (icon, label, on, sub, chev, dis) => ({ icon, label, sub, chev,
+      bg: on ? '#3d3652' : '#313244', op: dis ? 0.45 : 1,
+      ibg: on ? '#cba6f7' : '#45475a', ifg: on ? '#11111b' : '#bac2de',
+      lfg: on ? '#cdd6f4' : '#bac2de', sfg: on ? '#cba6f7' : '#7f849c', div: on ? 'rgba(203,166,247,.25)' : '#45475a' });
+    const tiles = [
+      T('wifi', 'Wi-Fi', 1, 'Mocha-5G', 1), T('bluetooth', 'Bluetooth', 1, 'WH-1000XM4', 1),
+      T('notifications_off', 'Silent mode', 0, 'Off'), T('nightlight', 'Night light', 1, '3700K · until 07:00'),
+      T('dark_mode', 'Dark mode', 1), T('chrome_reader_mode', 'Reader mode', 0),
+      T('shield', 'Firewall', 1, 'ufw · 12 rules', 1), T('neurology', 'Ollama', 1, 'qwen3:14b loaded', 1),
+      T('record_voice_over', 'Supertonic', 0, 'TTS · idle'), T('battery_status_good', 'Charge limit', 1, '80%', 1),
+      T('battery_saver', 'Battery saver', 0), T('electric_bolt', 'Rapid charging', 0, 'Needs USB-PD', 0, 1),
+      T('filter_b_and_w', 'Gray filter', 0), T('contrast', 'OLED filter', 0),
+      T('deployed_code', 'Sandbox', 1, '3 running', 1), T('sailing', 'Docker', 0, 'Stopped', 1),
+    ];
+    const S = (icon, pct, value, o = {}) => ({ icon, pct: pct + '%', value, fill: '#cba6f7', knob: '#cdd6f4', bbg: '#313244', bfg: '#bac2de', vfg: '#cdd6f4', dbg: '#313244', dchev: 'expand_more', ...o });
+    const sliders = [
+      S('nightlight', 46, '3700K', { fill: '#fab387' }),
+      S('brightness_6', 64, '64%'),
+      S('volume_up', 20, '20%'),
+      S('mic_off', 0, 'muted', { fill: '#585b70', knob: '#7f849c', bbg: 'rgba(243,139,168,.16)', bfg: '#f38ba8', vfg: '#f38ba8' }),
+    ];
+    return { tiles, sliders };
+  }
+}
+</script>
+</body>
+</html>

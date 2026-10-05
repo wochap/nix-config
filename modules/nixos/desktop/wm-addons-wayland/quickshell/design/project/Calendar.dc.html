@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/700.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>body{margin:0;font-family:'Iosevka Nerd Font','Iosevka','JetBrains Mono',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}</style>
+</helmet>
+<div style="width:320px;box-sizing:border-box;padding:12px;display:flex;flex-direction:column;gap:12px;background:#1e1e2e;border-radius:8px;box-shadow:inset 0 0 0 1px #313244, 0 16px 40px rgba(17,17,27,.6), 0 2px 8px rgba(17,17,27,.4)">
+  <div style="display:flex;align-items:flex-end;gap:8px">
+    <div style="display:flex;flex-direction:column;flex:1">
+      <span style="font-size:22px;font-weight:500;color:#cdd6f4;line-height:26px">21:07</span>
+      <span style="font-size:12px;color:#a6adc8">Thursday, 1 October 2026 · W40</span>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:4px;height:28px">
+    <span style="font-size:14px;font-weight:500;color:#cdd6f4;flex:1;padding-left:2px">October 2026</span>
+    <span style="width:28px;height:28px;border-radius:14px;background:#313244;color:#bac2de;display:flex;align-items:center;justify-content:center"><span class="material-symbols-rounded" style="font-size:16px">chevron_left</span></span>
+    <span style="height:28px;padding:0 10px;border-radius:14px;background:#313244;color:#bac2de;display:flex;align-items:center;font-size:12px">Today</span>
+    <span style="width:28px;height:28px;border-radius:14px;background:#313244;color:#bac2de;display:flex;align-items:center;justify-content:center"><span class="material-symbols-rounded" style="font-size:16px">chevron_right</span></span>
+  </div>
+  <div style="display:grid;grid-template-columns:24px repeat(7,minmax(0,1fr));gap:2px;align-items:center">
+    <span></span>
+    <sc-for list="{{ dow }}" as="d" hint-placeholder-count="7"><span style="font-size:10px;color:#6c7086;text-align:center;height:20px;line-height:20px">{{ d }}</span></sc-for>
+    <sc-for list="{{ weeks }}" as="w" hint-placeholder-count="5">
+      <span style="font-size:10px;color:#585b70;text-align:center">{{ w.n }}</span>
+      <sc-for list="{{ w.days }}" as="d" hint-placeholder-count="7">
+        <div style="height:34px;border-radius:17px;background:{{ d.bg }};box-shadow:{{ d.ring }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+          <span style="font-size:12px;font-weight:{{ d.fw }};color:{{ d.fg }};line-height:14px">{{ d.n }}</span>
+          <span style="width:3px;height:3px;border-radius:2px;background:{{ d.dot }}"></span>
+        </div>
+      </sc-for>
+    </sc-for>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:8px;background:#181825;box-shadow:inset 0 0 0 1px #313244">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="material-symbols-rounded" style="font-size:28px;color:#f9e2af;font-variation-settings:'FILL' 1">partly_cloudy_night</span>
+      <div style="display:flex;flex-direction:column;flex:1;min-width:0">
+        <span style="font-size:18px;font-weight:500;color:#cdd6f4;line-height:22px">14°<span style="font-size:12px;color:#a6adc8;font-weight:400"> feels 12°</span></span>
+        <span style="font-size:10px;color:#a6adc8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Partly cloudy · Berlin</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;font-size:10px;line-height:14px;color:#a6adc8">
+        <span style="display:flex;align-items:center;gap:3px"><span class="material-symbols-rounded" style="font-size:12px;color:#89b4fa">water_drop</span>20%</span>
+        <span style="display:flex;align-items:center;gap:3px"><span class="material-symbols-rounded" style="font-size:12px;color:#7f849c">air</span>11 km/h</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding-top:6px;box-shadow:inset 0 1px 0 #313244">
+      <sc-for list="{{ forecast }}" as="f" hint-placeholder-count="5">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;border-radius:8px;background:{{ f.bg }}">
+          <span style="font-size:10px;color:#6c7086">{{ f.d }}</span>
+          <span class="material-symbols-rounded" style="font-size:16px;color:{{ f.c }};font-variation-settings:'FILL' 1">{{ f.i }}</span>
+          <span style="font-size:10px;color:#cdd6f4">{{ f.hi }}°<span style="color:#7f849c"> {{ f.lo }}°</span></span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:8px;background:#181825;box-shadow:inset 0 0 0 1px #313244">
+    <span style="font-size:10px;letter-spacing:.1em;color:#7f849c">UPCOMING · khal</span>
+    <sc-for list="{{ events }}" as="e" hint-placeholder-count="3">
+      <div style="display:flex;align-items:center;gap:8px;height:22px">
+        <span style="width:3px;height:14px;border-radius:2px;background:{{ e.c }};flex:none"></span>
+        <span style="width:84px;font-size:10px;color:#a6adc8;flex:none">{{ e.when }}</span>
+        <span style="font-size:12px;color:#cdd6f4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ e.t }}</span>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:320,&quot;height&quot;:600}}">
+class Component extends DCLogic {
+  renderVals() {
+    const ev = { 2: '#89b4fa', 6: '#a6e3a1', 9: '#89b4fa', 14: '#fab387', 21: '#89b4fa', 28: '#cba6f7' };
+    const weeks = [];
+    let d = -2; // Mon 28 Sep
+    for (let w = 0; w < 5; w++) {
+      const days = [];
+      for (let i = 0; i < 7; i++, d++) {
+        const inMonth = d >= 1 && d <= 31, n = d < 1 ? 30 + d : d > 31 ? d - 31 : d;
+        const today = d === 1, wknd = i >= 5;
+        days.push({ n, bg: today ? '#cba6f7' : 'transparent', ring: 'none', fw: today ? 700 : 400,
+          fg: today ? '#11111b' : !inMonth ? '#45475a' : wknd ? '#a6adc8' : '#cdd6f4',
+          dot: inMonth && ev[d] ? (today ? '#11111b' : ev[d]) : 'transparent' });
+      }
+      weeks.push({ n: 40 + w, days });
+    }
+    const forecast = [
+      ['Thu', 'partly_cloudy_day', '#f9e2af', 16, 9], ['Fri', 'rainy', '#89b4fa', 13, 8], ['Sat', 'cloud', '#9399b2', 12, 7],
+      ['Sun', 'sunny', '#f9e2af', 15, 6], ['Mon', 'thunderstorm', '#cba6f7', 11, 7],
+    ].map(([d, i, c, hi, lo], k) => ({ d, i, c, hi, lo, bg: k === 0 ? '#313244' : 'transparent' }));
+    return { forecast, dow: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], weeks,
+      events: [
+        { when: 'Fri 09:30', t: 'Standup', c: '#89b4fa' },
+        { when: 'Tue 6 · 14:00', t: 'Dentist', c: '#a6e3a1' },
+        { when: 'Wed 14 · all day', t: 'Quickshell 0.2 release', c: '#fab387' },
+      ] };
+  }
+}
+</script>
+</body>
+</html>
