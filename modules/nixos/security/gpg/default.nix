@@ -7,6 +7,8 @@
 
 let
   cfg = config._custom.security.gpg;
+  # quickshell auth dialog, falls back to pinentry-gnome3 when the shell is down
+  useShellPinentry = config._custom.desktop.quickshell.authDialogs.active.pinentry;
 in
 {
   options._custom.security.gpg = {
@@ -24,7 +26,14 @@ in
           services.gpg-agent = lib.mkIf cfg.enableGpgAgent {
             enable = true;
             enableSshSupport = false; # ssh-agent is handled by gcr-ssh-agent
-            pinentry.package = pkgs.pinentry-gnome3;
+            pinentry =
+              if useShellPinentry then
+                {
+                  package = pkgs._custom.shell-auth;
+                  program = "pinentry-shell";
+                }
+              else
+                { package = pkgs.pinentry-gnome3; };
           };
         };
       }

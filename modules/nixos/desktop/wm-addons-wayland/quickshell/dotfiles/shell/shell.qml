@@ -7,6 +7,7 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 import qs.config
+import qs.services
 import qs.services.SNotifications
 import qs.widgets
 import qs.widgets.Bar
@@ -17,6 +18,7 @@ import qs.widgets.Harpoon
 import qs.widgets.WindowSwitcher
 import qs.widgets.WhichKeys
 import qs.widgets.VBar
+import qs.widgets.AuthPrompt
 
 ShellRoot {
   id: root
@@ -34,6 +36,11 @@ ShellRoot {
   property bool renderWindowSwitcher: true
   property bool renderWhichKeys: true
   property bool renderVBar: false
+  property bool renderAuthPrompt: true
+
+  // started eagerly, the polkit agent and the auth socket must exist before
+  // the first prompt arrives
+  Component.onCompleted: SAuth.socketPath
 
   LazyLoader {
     active: root.renderBar && Theme.ready
@@ -100,6 +107,11 @@ ShellRoot {
   LazyLoader {
     active: root.renderVBar && Theme.ready
     component: VBar {}
+  }
+
+  LazyLoader {
+    active: root.renderAuthPrompt && Theme.ready
+    component: AuthPrompt {}
   }
 
   IpcHandler {

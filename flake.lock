@@ -3949,11 +3949,11 @@
     "wosarcher": {
       "flake": false,
       "locked": {
-        "lastModified": 1791223196,
-        "narHash": "sha256-F9xs4lL7b5Pg1x+DxC1zyUGHaRiowU5qNhN/vNnO/I4=",
+        "lastModified": 1791227334,
+        "narHash": "sha256-meqylT6t2rKgn1LO9QWYEl3M2Ns7GkgQdRvoCP47LrI=",
         "owner": "wochap",
         "repo": "wosarcher",
-        "rev": "4ac3f4cf2c08af70cdf9a38ec06c57ad17c83c61",
+        "rev": "207ed72197f7ae0a1fe7640bcb118101b5cc58b6",
         "type": "github"
       },
       "original": {

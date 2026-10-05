@@ -30,6 +30,7 @@ let
     rapidocr = pkgs.callPackage ./rapidocr { };
     shotclip = pkgs.callPackage ./shotclip { inherit inputs; };
     rtk = pkgs.callPackage ./rtk { inherit inputs; };
+    shell-auth = pkgs.callPackage ./shell-auth { };
     openspec-pipeline = pkgs.callPackage ./openspec-pipeline { inherit agents; };
     agents = pkgs.callPackage ./agents { };
     pythonPackages = lib.dontRecurseIntoAttrs (pkgs.callPackage ./python-packages { inherit inputs; });

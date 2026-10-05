@@ -7,6 +7,7 @@
 
 let
   cfg = config._custom.security.gnome-keyring;
+  useShellAskpass = config._custom.desktop.quickshell.authDialogs.active.askpass;
 in
 {
   options._custom.security.gnome-keyring = {
@@ -24,8 +25,14 @@ in
             libsecret # secret-tool
           ];
 
-          variables.SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
+          variables.SSH_ASKPASS = lib.mkIf (!useShellAskpass) "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
         };
+
+        # quickshell auth dialog, falls back to seahorse when the shell is down
+        # (overrides the mkDefault from programs.seahorse)
+        programs.ssh.askPassword = lib.mkIf useShellAskpass (
+          lib.getExe' pkgs._custom.shell-auth "shell-askpass"
+        );
 
         programs.seahorse.enable = true;
 

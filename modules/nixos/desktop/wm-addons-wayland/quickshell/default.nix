@@ -23,6 +23,8 @@ let
   hasWeatherLocation = lib.hasInfix "\npersonal-weather-location:" (
     "\n" + builtins.readFile personalSopsFile
   );
+  # anti-spoofing phrase shown on auth dialogs, same rule as the weather location
+  hasAuthPhrase = lib.hasInfix "\npersonal-auth-phrase:" ("\n" + builtins.readFile personalSopsFile);
 
   quickshell-final = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default;
   shell-capslock = pkgs.writeScriptBin "shell-capslock" (
@@ -75,6 +77,46 @@ in
       type = lib.types.package;
       default = quickshell-final;
     };
+    # Render polkit, gpg, ssh and gnome-keyring prompts in the shell
+    # (widgets/AuthPrompt), stock agents stay as fallback
+    enableAuthDialogs = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+    };
+    authDialogs = {
+      polkit = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
+      pinentry = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
+      askpass = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
+      prompter = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
+      # resolved per backend switches, read by modules/nixos/security/*
+      active = lib.mkOption {
+        type = lib.types.attrsOf lib.types.bool;
+        internal = true;
+        readOnly = true;
+        default =
+          let
+            isOn = cfg.enable && cfg.enableSystemd && cfg.enableAuthDialogs;
+          in
+          {
+            polkit = isOn && cfg.authDialogs.polkit;
+            pinentry = isOn && cfg.authDialogs.pinentry;
+            askpass = isOn && cfg.authDialogs.askpass;
+            prompter = isOn && cfg.authDialogs.prompter;
+          };
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -94,32 +136,45 @@ in
 
     # "lat,lon,City", read by SWeather.qml from /run/secrets/personal-weather-location,
     # falls back to IP geolocation when missing
-    sops.secrets = lib.mkIf (config._custom.security.sops.enable && !isSandbox && hasWeatherLocation) {
-      "personal-weather-location" = {
-        owner = userName;
-        sopsFile = personalSopsFile;
-      };
-    };
+    sops.secrets = lib.mkIf (config._custom.security.sops.enable && !isSandbox) (
+      lib.optionalAttrs hasWeatherLocation {
+        "personal-weather-location" = {
+          owner = userName;
+          sopsFile = personalSopsFile;
+        };
+      }
+      # read by SAuth.qml from /run/secrets/personal-auth-phrase, chip hidden when missing
+      // lib.optionalAttrs (cfg.enableAuthDialogs && hasAuthPhrase) {
+        "personal-auth-phrase" = {
+          owner = userName;
+          mode = "0400";
+          sopsFile = personalSopsFile;
+        };
+      }
+    );
 
     _custom.hm = {
-      home.packages = with pkgs; [
-        shell-capslock
-        shell-network
-        shell-bluetooth
-        shell-idle-inhibit
-        shell-idle
-        shell-powerprofiles
-        shell-backlight
-        shell-pipewire
-        shell-lock
-        shell-steam-icons
-        shell-theme
-        shell-recorder
-        shell-offlinemsmtp
-        shell-mail
-        shell-wireguard
-        shell-battery-saver
-      ];
+      home.packages =
+        with pkgs;
+        [
+          shell-capslock
+          shell-network
+          shell-bluetooth
+          shell-idle-inhibit
+          shell-idle
+          shell-powerprofiles
+          shell-backlight
+          shell-pipewire
+          shell-lock
+          shell-steam-icons
+          shell-theme
+          shell-recorder
+          shell-offlinemsmtp
+          shell-mail
+          shell-wireguard
+          shell-battery-saver
+        ]
+        ++ lib.optional cfg.enableAuthDialogs pkgs._custom.shell-auth;
 
       xdg.configFile = {
         "quickshell/shell".source = lib._custom.relativeSymlink configDirectory ./dotfiles/shell;
@@ -148,11 +203,26 @@ in
             Environment = [
               # NOTE: this or use `dbus-update-activation-environment --systemd <env_var_name>`
               "TIMEWARRIORDB=${hmConfig.home.sessionVariables.TIMEWARRIORDB}"
-            ];
+            ]
+            # SAuth.qml registers the polkit agent only when set, two agents race
+            ++ lib.optional cfg.authDialogs.active.polkit "QS_AUTH_POLKIT=1";
             PassEnvironment = [ "HYPRLAND_INSTANCE_SIGNATURE" ];
             ExecStart = "${quickshell-final}/bin/quickshell -p ${hmConfig.xdg.configHome}/quickshell/shell";
             Restart = "on-failure";
             KillMode = "mixed";
+          };
+        }
+      );
+
+      # gnome-keyring system prompter, owns its D-Bus name only while the
+      # shell auth socket exists so gcr-prompter takes over otherwise
+      systemd.user.services.shell-auth-prompter = lib.mkIf cfg.authDialogs.active.prompter (
+        lib._custom.mkWaylandService {
+          Unit.Description = "Quickshell gnome-keyring prompter";
+          Service = {
+            ExecStart = "${lib.getExe pkgs._custom.shell-auth} prompter";
+            Restart = "always";
+            RestartSec = 1;
           };
         }
       );
