@@ -25,15 +25,20 @@
     # boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
 
     # s2idle keeps the dGPU's PCIe root port powered; S3 leaves it stuck in
-    # D3hot. Next steps if it still fails: "pcie_aspm=off", then BIOS ErP off.
+    # D3hot. On 2026-10-04 (6.18.38, S3) resume failed again: root port 00:03.1
+    # and the Navi switch ports 2b/2c stayed "D3hot to D0, device inaccessible",
+    # then gfx_v10_0 timed out (-110). Keep the ports out of D3 before S3 so the
+    # link retrains on resume; S3 cuts slot power anyway, so sleep draw is the
+    # same. Next steps if it recurs: "pcie_aspm=off" (costs idle watts while
+    # awake), then BIOS ErP off.
     boot.kernelParams = [
       # "mem_sleep_default=s2idle"
+      "pcie_port_pm=off"
       # lockup_timeout: long ComfyUI compute kernels (TunableOp tuning) starved the
       # gfx ring past the 10 s default, forcing a mode1 GPU reset that killed
       # Hyprland. 30 s turns that into a stall.
       "amdgpu.lockup_timeout=30000"
     ];
-    # boot.kernelParams = [ "pcie_aspm=off" "amdgpu.aspm=0" ];
 
     # 244 = REISUB keys only, no debug dumps. Overrides the hardened 0 in
     # modules/nixos/security/network, so a wedged GPU still reboots cleanly.
