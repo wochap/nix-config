@@ -78,12 +78,13 @@ Singleton {
         root._remove(entry);
       }
     } else if (entry.origin === "polkit") {
+      // entry.flow is null once the flow completed (it gets deleted)
       const flow = entry.flow;
-      if (isOk && flow && !flow.isCompleted) {
+      if (isOk && flow) {
         root.state = "verifying";
         flow.submit(password ?? "");
       } else {
-        if (flow && !flow.isCompleted) {
+        if (flow) {
           flow.cancelAuthenticationRequest();
         }
         root._remove(entry);
@@ -238,10 +239,6 @@ Singleton {
     }
   }
 
-  function _polkitEntry() {
-    return root._queue.find(e => e.origin === "polkit" && e.flow === root.polkitAgent?.flow) ?? null;
-  }
-
   // prefer the logged in user over polkit's default (often root)
   function _selectCurrentUser(flow) {
     const identities = flow?.identities ?? [];
@@ -253,6 +250,48 @@ Singleton {
     if (identity && identity !== flow.selectedIdentity) {
       root._selectPolkitIdentity(flow, identity);
     }
+  }
+
+  // Connected per flow instead of through `polkitAgent.flow`: on completion the
+  // agent clears `flow` (and deleteLater()s it) before authenticationSucceeded
+  // is emitted, a Connections bound to it would miss the result
+  function _watchFlow(entry) {
+    const flow = entry.flow;
+    flow.isCompletedChanged.connect(() => {
+      if (!flow.isCompleted || !entry.flow) {
+        return;
+      }
+      entry.flow = null;
+      if (flow.isSuccessful && root._currentEntry === entry) {
+        root.state = "success";
+        successTimer.entry = entry;
+        successTimer.restart();
+      } else {
+        root._remove(entry);
+      }
+    });
+    flow.authenticationFailed.connect(() => {
+      if (root._isSwitchingIdentity || !entry.flow) {
+        return;
+      }
+      const request = root._polkitRequest(flow);
+      request.error = flow.supplementaryIsError && flow.supplementaryMessage ? flow.supplementaryMessage : "Wrong password. Try again.";
+      root._update(entry, request, true);
+    });
+    flow.authenticationRequestCancelled.connect(() => {
+      entry.flow = null;
+      root._remove(entry);
+    });
+    flow.inputPromptChanged.connect(() => {
+      if (entry.flow && root.state !== "error") {
+        root._refreshPolkit(entry);
+      }
+    });
+    flow.responseVisibleChanged.connect(() => {
+      if (entry.flow) {
+        root._refreshPolkit(entry);
+      }
+    });
   }
 
   // assigning selectedIdentity restarts the session, which polkit reports as
@@ -277,63 +316,18 @@ Singleton {
     function onAuthenticationRequestStarted() {
       const flow = root.polkitAgent.flow;
       root._selectCurrentUser(flow);
-      root._enqueue({
+      const entry = {
         origin: "polkit",
         flow: flow,
         request: root._polkitRequest(flow)
-      });
+      };
+      root._watchFlow(entry);
+      root._enqueue(entry);
     }
 
     function onIsRegisteredChanged() {
       if (!root.polkitAgent.isRegistered) {
         console.warn("SAuth: polkit agent not registered, another agent may own the session");
-      }
-    }
-  }
-
-  Connections {
-    target: root.polkitAgent?.flow ?? null
-
-    function onAuthenticationFailed() {
-      const entry = root._polkitEntry();
-      if (root._isSwitchingIdentity || !entry) {
-        return;
-      }
-      const flow = entry.flow;
-      const request = root._polkitRequest(flow);
-      request.error = flow.supplementaryIsError && flow.supplementaryMessage ? flow.supplementaryMessage : "Wrong password. Try again.";
-      root._update(entry, request, true);
-    }
-
-    function onAuthenticationSucceeded() {
-      const entry = root._polkitEntry();
-      if (entry && root._currentEntry === entry) {
-        root.state = "success";
-        successTimer.entry = entry;
-        successTimer.restart();
-      } else if (entry) {
-        root._remove(entry);
-      }
-    }
-
-    function onAuthenticationRequestCancelled() {
-      const entry = root._polkitEntry();
-      if (entry) {
-        root._remove(entry);
-      }
-    }
-
-    function onInputPromptChanged() {
-      const entry = root._polkitEntry();
-      if (entry && root.state !== "error") {
-        root._refreshPolkit(entry);
-      }
-    }
-
-    function onResponseVisibleChanged() {
-      const entry = root._polkitEntry();
-      if (entry) {
-        root._refreshPolkit(entry);
       }
     }
   }
