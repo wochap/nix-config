@@ -13,7 +13,7 @@ IconImage {
   property string sourceColor: "white"
   property string icon
   property int size: Styles.font.pixelSize.normal
-  property string iconFallback: "image-missing"
+  property string iconFallback: "custom-image-missing"
 
   source: getIconPath()
   implicitSize: size
