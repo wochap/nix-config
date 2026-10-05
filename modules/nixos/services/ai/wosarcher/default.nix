@@ -35,7 +35,7 @@ let
   # Every provider goes through the host's proxies, so the container needs
   # --network=host. The reranker is reached through its lazy socket proxy: the
   # first rerank starts llama-server again after the idle watchdog stopped it.
-  defaultProfile = {
+  commonProfile = {
     run.gpu_policy = "shared";
     search = {
       provider = "searxng";
@@ -45,24 +45,6 @@ let
       provider = "firecrawl";
       base_url = "${host}:${toString firecrawlPublicPort}/v1";
     };
-    prefilter = {
-      provider = "embeddings";
-      base_url = "http://127.0.0.1:11434/v1";
-      model = cfg.ollamaEmbeddingModel;
-      device = "local:gpu0";
-    };
-    score =
-      if cfg.reranker.enable then
-        {
-          provider = "rerank";
-          base_url = "${host}:${toString rerankerProxy.publicPort}/v1";
-          model = cfg.reranker.model;
-          device = "local:gpu0";
-          # Covers llama-server loading the GGUF on the first request.
-          timeout = 120;
-        }
-      else
-        { provider = "bm25"; };
     llm = {
       provider = "llm";
       base_url = "${host}:${toString omniRouteProxy.publicPort}/v1";
@@ -71,14 +53,70 @@ let
     };
   };
 
+  embeddingsPrefilter = {
+    provider = "embeddings";
+    base_url = "http://127.0.0.1:11434/v1";
+    model = cfg.ollamaEmbeddingModel;
+    device = "local:gpu0";
+  };
+
+  # Without the shared reranker this falls back to BM25 scoring.
+  rerankScore =
+    if cfg.reranker.enable then
+      {
+        provider = "rerank";
+        base_url = "${host}:${toString rerankerProxy.publicPort}/v1";
+        model = cfg.reranker.model;
+        device = "local:gpu0";
+        # Covers llama-server loading the GGUF on the first request.
+        timeout = 120;
+      }
+    else
+      { provider = "bm25"; };
+
   # TypeSafe Jev: a cloud scorer with calibrated 0-3 usefulness scores. It
-  # sends every chunk to api.typesafe.ai, so it lives in its own profile and
-  # the local reranker stays the default.
+  # sends every chunk to api.typesafe.ai and needs an API key. In a replay of
+  # 9 questions it was judged at least as precise as the local reranker, with
+  # a 2-4 s score stage instead of 26-40 s on the GPU.
   jevScore = {
     provider = "jev";
     base_url = "https://api.typesafe.ai/v1";
     concurrency = 16;
     timeout = 120;
+  };
+
+  generatedProfiles = {
+    embeddings-rerank = commonProfile // {
+      prefilter = embeddingsPrefilter;
+      score = rerankScore;
+    };
+  }
+  // lib.optionalAttrs wcfg.jev.enable {
+    embeddings-jev = commonProfile // {
+      prefilter = embeddingsPrefilter;
+      score = jevScore;
+    };
+    # No embedding step: BM25 picks the candidates Jev scores.
+    bm25-jev = commonProfile // {
+      prefilter.provider = "bm25";
+      score = jevScore;
+    };
+    # Coverage over speed (not yet evaluated): Jev scores twice the
+    # candidates, keeps only "partly answers" (2.0 of 3) and above, and up to
+    # 25 per sub-query; the default 16k context is otherwise half used. Depth
+    # presets set score.top_k themselves and win over a profile, so use it
+    # with Standard depth and add rounds per run (--rounds 3, or Rounds in the
+    # web's Custom depth with Passages per query 25).
+    bm25-jev-wide = commonProfile // {
+      prefilter = {
+        provider = "bm25";
+        top_k = 100;
+      };
+      score = jevScore // {
+        min_score = 2.0;
+        top_k = 25;
+      };
+    };
   };
 
   profileFiles = lib.mapAttrs (name: settings: toml.generate "wosarcher-${name}.toml" settings) wcfg.profiles;
@@ -111,7 +149,7 @@ in
 
     profile = lib.mkOption {
       type = lib.types.str;
-      default = "nixos";
+      default = "embeddings-rerank";
       description = "Profile selected through WOSARCHER_PROFILE.";
     };
 
@@ -120,9 +158,10 @@ in
       default = { };
       description = ''
         Profiles written to $XDG_CONFIG_HOME/wosarcher/profiles/<name>.toml.
-        The nixos profile is wired to this host's SearxNG, Firecrawl, Ollama,
-        OmniRoute and, when enabled, the shared reranker; each of its
-        keys can be overridden. Never put secrets here: they land in the Nix
+        The generated profiles (embeddings-rerank, and with jev.enable
+        embeddings-jev and bm25-jev) are wired to this host's SearxNG,
+        Firecrawl, Ollama, OmniRoute and, when enabled, the shared reranker;
+        each of their keys can be overridden. Never put secrets here: they land in the Nix
         store. Pass them through environmentFile instead.
       '';
     };
@@ -134,9 +173,9 @@ in
     };
 
     jev.enable = lib.mkEnableOption ''
-      the TypeSafe Jev scorer: adds a nixos-jev profile, the nixos profile with
-      score.provider = "jev", and passes personal-typesafe-api-key from
-      secrets-sops/personal.yaml as WOSARCHER_SCORE__API_KEY
+      the TypeSafe Jev scorer: adds the embeddings-jev and bm25-jev profiles
+      and passes personal-typesafe-api-key from secrets-sops/personal.yaml as
+      WOSARCHER_SCORE__API_KEY
     '';
 
     environmentFile = lib.mkOption {
@@ -150,12 +189,9 @@ in
   };
 
   config = lib.mkIf (cfg.enable && wcfg.enable) {
-    _custom.services.ai.wosarcher.profiles = {
-      nixos = lib.mapAttrsRecursive (_: lib.mkDefault) defaultProfile;
-      nixos-jev = lib.mkIf wcfg.jev.enable (
-        lib.mapAttrsRecursive (_: lib.mkDefault) (defaultProfile // { score = jevScore; })
-      );
-    };
+    _custom.services.ai.wosarcher.profiles = lib.mapAttrs (
+      _: lib.mapAttrsRecursive (_: lib.mkDefault)
+    ) generatedProfiles;
 
     _custom.services.web-proxies.wosarcher = {
       enable = true;

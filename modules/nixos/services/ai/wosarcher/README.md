@@ -52,26 +52,29 @@ the `wosarcher.env` SOPS template.
 
 ## Profiles
 
-The `nixos` profile is generated from this host's proxies: SearxNG,
-Firecrawl, Ollama embeddings, OmniRoute (`research-smart`) and, when
-`_custom.services.ai.reranker.enable` is set, the shared llama-server
-reranker ([../reranker](../reranker/README.md)) behind its lazy proxy.
-Without the reranker, scoring uses BM25.
+Profiles are generated from this host's proxies: SearxNG, Firecrawl, Ollama
+embeddings, and OmniRoute (`research-smart`). They differ only in how
+passages are picked:
 
-`jev.enable = true` adds a `nixos-jev` profile: the `nixos` profile with
-`score.provider = "jev"` ([TypeSafe Jev](https://api.typesafe.ai/v1),
-calibrated 0-3 usefulness scores). It sends every scored chunk to TypeSafe,
-so it is picked per run in the UI's options rather than made the default.
-Set `profile = "nixos-jev"` to make it the default. The API key comes from
-`personal-typesafe-api-key` in `secrets-sops/personal.yaml` as
-`WOSARCHER_SCORE__API_KEY`. `nixos-jev` is built from the generated defaults,
-so host overrides of `profiles.nixos` must be repeated under
-`profiles.nixos-jev`.
+| Profile | Prefilter | Scorer | Notes |
+|---|---|---|---|
+| `embeddings-rerank` | Ollama embeddings | shared llama-server reranker ([../reranker](../reranker/README.md)) | Default without `jev.enable`; offline, no key. Scores with BM25 when `_custom.services.ai.reranker.enable` is off. |
+| `embeddings-jev` | Ollama embeddings | [TypeSafe Jev](https://api.typesafe.ai/v1) | gdesktop's default. |
+| `bm25-jev` | BM25 | Jev | No embedding step, the fastest. |
+| `bm25-jev-wide` | BM25, 100 candidates per sub-query | Jev, score at least 2.0, up to 25 per sub-query | Favours coverage over speed; not yet evaluated. Use it with Standard depth, because the other depth presets set their own passages per query. |
 
-Override single keys per host:
+`jev.enable = true` adds the three Jev profiles. Jev sends every scored chunk
+to TypeSafe. The API key comes from `personal-typesafe-api-key` in
+`secrets-sops/personal.yaml` as `WOSARCHER_SCORE__API_KEY`. In a replay of 9
+questions, Jev was judged at least as precise as the local reranker, with a
+2-4 s score stage instead of 26-40 s on the GPU (and no embedding step for
+`bm25-jev`).
+
+Pick the default with `profile`, or pick one per run in the UI's options.
+Override single keys per host and profile:
 
 ```nix
-_custom.services.ai.wosarcher.profiles.nixos.llm.model = "research-fast";
+_custom.services.ai.wosarcher.profiles.embeddings-jev.llm.model = "research-fast";
 ```
 
 Declared profiles are copied to `/var/lib/wosarcher/config/wosarcher/profiles`
