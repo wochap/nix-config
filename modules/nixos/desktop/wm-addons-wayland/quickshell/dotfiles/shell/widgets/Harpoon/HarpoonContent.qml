@@ -27,12 +27,14 @@ PanelWindow {
     root.shownWindows = root.backend.windows;
     root.shownSubmap = root.backend.submap;
     root.panelVisible = true;
+    fadeAnimation.stop();
     revealTimer.restart();
   }
 
   function hidePanel() {
     revealTimer.stop();
-    root.fadeOpacity = 0;
+    fadeAnimation.to = 0;
+    fadeAnimation.restart();
   }
 
   function syncPanel() {
@@ -88,18 +90,26 @@ PanelWindow {
   Timer {
     id: revealTimer
     interval: 34
-    onTriggered: root.fadeOpacity = 1
+    onTriggered: {
+      fadeAnimation.to = 1;
+      fadeAnimation.restart();
+    }
   }
 
-  Behavior on fadeOpacity {
-    NumberAnimation {
-      duration: Styles.animation.duration
-      easing.type: Styles.animation.easingType
-      onFinished: {
-        if (root.fadeOpacity === 0) {
-          root.panelVisible = false;
-          root.shownWindows = [];
-        }
+  // Standalone on purpose: Qt never emits finished for an animation inside a
+  // Behavior, which left the invisible panel mapped and its mask swallowing
+  // clicks at the center of the screen.
+  NumberAnimation {
+    id: fadeAnimation
+
+    target: root
+    property: "fadeOpacity"
+    duration: Styles.animation.duration
+    easing.type: Styles.animation.easingType
+    onFinished: {
+      if (root.fadeOpacity === 0) {
+        root.panelVisible = false;
+        root.shownWindows = [];
       }
     }
   }
