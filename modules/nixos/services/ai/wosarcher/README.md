@@ -53,8 +53,9 @@ the `wosarcher.env` SOPS template.
 ## Profiles
 
 Profiles are generated from this host's proxies: SearxNG, Firecrawl, Ollama
-embeddings, and OmniRoute (`research-smart`). They differ only in how
-passages are picked:
+embeddings, and OmniRoute. They differ in how passages are picked and in the
+LLM that plans and writes. Each scorer variant below exists once per entry of
+`llms`:
 
 | Profile | Prefilter | Scorer | Notes |
 |---|---|---|---|
@@ -63,18 +64,39 @@ passages are picked:
 | `bm25-jev` | BM25 | Jev | No embedding step, the fastest. |
 | `bm25-jev-wide` | BM25, 100 candidates per sub-query | Jev, score at least 2.0, up to 25 per sub-query | Favours coverage over speed; not yet evaluated. Use it with Standard depth, because the other depth presets set their own passages per query. |
 
-`jev.enable = true` adds the three Jev profiles. Jev sends every scored chunk
+`jev.enable = true` adds the three Jev variants. Jev sends every scored chunk
 to TypeSafe. The API key comes from `personal-typesafe-api-key` in
 `secrets-sops/personal.yaml` as `WOSARCHER_SCORE__API_KEY`. In a replay of 9
 questions, Jev was judged at least as precise as the local reranker, with a
 2-4 s score stage instead of 26-40 s on the GPU (and no embedding step for
 `bm25-jev`).
 
+The LLMs come from `llms`, with limits from the shared model presets in
+[../model-presets.nix](../model-presets.nix):
+
+| LLM | OmniRoute combo | Preset | `context_window` | `max_output_tokens` | `timeout` | `research.gap_context_tokens` |
+|---|---|---|---|---|---|---|
+| `deepseek` | `research-smart` | `deepseek-v4-flash` | 1048576 | 131072 | 300 | 200000 |
+| `free` | `desktop-free` | `qwen3-5-9b-local` | 32768 | 8192 | 600 | 4000 |
+
+The `defaultLlm` (`deepseek`) keeps the plain profile name, such as
+`embeddings-jev`. Every other LLM adds a suffix, such as `embeddings-jev-free`.
+`context_window` is the model's whole window, prompt plus completion:
+wosarcher subtracts its prompt reserve and the report's output allowance
+itself. `max_output_tokens` is the preset's limit, at most half the window and
+at most 131072, the largest limit proven through OmniRoute. `desktop-free`
+can fall back to the local 32k `gdesktop-qwen3.5:9b`, so it is sized for that
+model.
+
 Pick the default with `profile`, or pick one per run in the UI's options.
-Override single keys per host and profile:
+Override single keys per host and profile, or add an LLM:
 
 ```nix
 _custom.services.ai.wosarcher.profiles.embeddings-jev.llm.model = "research-fast";
+_custom.services.ai.wosarcher.llms.gemma = {
+  model = "gemma-combo";
+  preset = "gemma4-31b";
+};
 ```
 
 Declared profiles are copied to `/var/lib/wosarcher/config/wosarcher/profiles`

@@ -33,8 +33,10 @@ let
   # Replies with the JSON array of rows.
   webscoopRun = pkgs.writeShellScript "webscoop-run" ''
     recipe=$1
-    # entire-query is a JSON object, turn each pair into "--var" "k=v"
-    mapfile -d "" vars < <(${lib.getExe pkgs.jq} -j 'to_entries[] | "--var\u0000\(.key)=\(.value | tostring)\u0000"' <<<"$2")
+    # entire-query is a JSON object, turn each pair into "--var" "k=v".
+    # In "query", spaces become "+" so recipes build clean search URLs (q=a+b),
+    # otherwise the engines redirect to a URL with extra tracking params.
+    mapfile -d "" vars < <(${lib.getExe pkgs.jq} -j 'to_entries[] | .key as $k | (.value | tostring | if $k == "query" then gsub(" "; "+") else . end) as $v | "--var\u0000\($k)=\($v)\u0000"' <<<"$2")
     err=$(mktemp)
     trap 'rm -f "$err"' EXIT
     # webhook returns stdout+stderr together, keep stderr out of the JSON
