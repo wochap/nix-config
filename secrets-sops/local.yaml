@@ -3,6 +3,7 @@ local-omniroute-secret-key: ENC[AES256_GCM,data:aPmw+aE3TCl6PaXtIYraRM/8/pP4cOLc
 local-sessiontap-hub-token-gdesktop: ENC[AES256_GCM,data:h9iRCeLT7q4d3nhhM/ADA07gvCW2nRm2+WZ5gCu3yhSm+U8SK7sWY82ISjO1ZdedPkRlWpal0I9/SPdaAYlKhQ==,iv:sOBeIM+qbgrjPNBtNGR+CrVg29maw3aZZ3qJwTgavb4=,tag:qvbgKl3h8PPrILWYgT66UA==,type:str]
 local-sessiontap-hub-token-glegion: ENC[AES256_GCM,data:n9uoooXwhdLZtnYbaS26IA/qudICCb0UjnQIrXEU047GBBrYGsCjUB47DTmNex9YliGIof5vZIOp15TSziyPqw==,iv:X9xXcuwfdQci06U+DtZ8oMx77Imjg90C+7F7U73KzEA=,tag:pSPufhZI/pk/TboAHOcdxA==,type:str]
 local-sessiontap-hub-token-sandbox: ENC[AES256_GCM,data:AFvRw5YXa7IfXuzZLTWDA4xNMhUGvw9PUh+JUkUTjlAmIhwg9z8WyhZNzvLYvR5khIn/hn44QVWUaaMo3jSj1A==,iv:1yHf16D4Y1isZdiER1P8xgICsDGz82PBP3U01H12bmM=,tag:41pRRMiSNXwF0LBpcEDNQg==,type:str]
+local-auth-phrase: ENC[AES256_GCM,data:SsGxdNqtHTqEIOsHxdLX4Yc=,iv:cDur/z3o3mHG7q5I+8CGZsf83Rskjj9MIqYmrUnTa7A=,tag:D9WjYYW2andrrkwYbIsXbQ==,type:str]
 sops:
     age:
         - enc: |
@@ -14,7 +15,7 @@ sops:
             odnCpmDB5Y8BfSBhg8a6WutgWQBW5vOkcnteCq+Z1ShjN/k3TK6VqA==
             -----END AGE ENCRYPTED FILE-----
           recipient: age182hl2gfu8zj2dxjdvtfktv9ay57htc20ugjrlmwmv8l806lntdxqgeje73
-    lastmodified: "2026-10-04T14:41:02Z"
-    mac: ENC[AES256_GCM,data:BBpnI11aKiYy0DJZ4isywAAYVAVFm9cWEkz9Q5d5owJycV4mSXZjTCLNbNK8G+mbJ1mMHKpALSpeJL/z89+enSfL+bZgyeJMJxrNmjzV8FcpJU9U6OrqOy5vtmistHeSzINGvriFrjzZFYbiOxVD9oI54Ag6tVx7g7O1m6sLms8=,iv:N731rOdU25CqYd9EeGMTYoSrT3b14ceG5rP6HlwslUk=,tag:tpkihq2s/PhxYp/aBCEuvw==,type:str]
+    lastmodified: "2026-10-05T21:53:41Z"
+    mac: ENC[AES256_GCM,data:myZ9FEf92/Kg1EhVFldbCcwWSTZzb4nTQd5678iF5hh0zsafFhmUTTEx3Uik8yVYOTFvgPcw92G5XRGq6dapq1E/EdhI1RHciRr5sLS740E3EXheNu6AHmIsftTk+czssl0e6AZ/GT1z+i3EbM8zeLd30pgvB0g0z5SZdd6lPOg=,iv:iQG2f79itqJ4BRu36RLHGDbGDg+QaEfZGeovufk8WrI=,tag:6PKread3FrzInL1Dv1EoVw==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.1

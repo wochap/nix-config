@@ -395,7 +395,8 @@ Singleton {
   FileView {
     id: phraseFile
 
-    path: "/run/secrets/personal-auth-phrase"
+    // set by the nix module from authDialogs.phraseSecret
+    path: Quickshell.env("QS_AUTH_PHRASE_FILE") ?? ""
     printErrors: false
     onLoaded: root.phrase = phraseFile.text().trim()
   }

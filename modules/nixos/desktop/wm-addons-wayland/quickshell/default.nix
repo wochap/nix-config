@@ -17,14 +17,17 @@ let
     isSandbox
     ;
   hmConfig = config.home-manager.users.${userName};
+  hasPhraseSecret =
+    config._custom.security.sops.enable
+    && !isSandbox
+    && cfg.authDialogs.enable
+    && cfg.authDialogs.phraseSecret.sopsFile != null;
   personalSopsFile = ../../../../../secrets-sops/personal.yaml;
   # sops-nix fails the build when a declared key is missing from the file,
   # so the weather location secret is only declared once it has been added
   hasWeatherLocation = lib.hasInfix "\npersonal-weather-location:" (
     "\n" + builtins.readFile personalSopsFile
   );
-  # anti-spoofing phrase shown on auth dialogs, same rule as the weather location
-  hasAuthPhrase = lib.hasInfix "\npersonal-auth-phrase:" ("\n" + builtins.readFile personalSopsFile);
 
   quickshell-final = inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.default;
   shell-capslock = pkgs.writeScriptBin "shell-capslock" (
@@ -85,6 +88,17 @@ in
       pinentry = lib.mkEnableOption { };
       askpass = lib.mkEnableOption { };
       prompter = lib.mkEnableOption { };
+      # anti-spoofing phrase shown on every auth dialog, hidden when unset
+      phraseSecret.sopsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = "SOPS file containing the auth dialog phrase.";
+      };
+      phraseSecret.sopsKey = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "local-auth-phrase";
+        description = "Key containing the auth dialog phrase in the SOPS file.";
+      };
       # resolved per backend switches, read by modules/nixos/security/*
       active = lib.mkOption {
         type = lib.types.attrsOf lib.types.bool;
@@ -105,6 +119,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # sops-nix only notices a missing key at activation, where it aborts
+    # installing every secret, fail the build instead
+    assertions = lib.optional hasPhraseSecret {
+      assertion = lib.hasInfix "\n${cfg.authDialogs.phraseSecret.sopsKey}:" (
+        "\n" + builtins.readFile cfg.authDialogs.phraseSecret.sopsFile
+      );
+      message = "${cfg.authDialogs.phraseSecret.sopsKey} is missing from ${toString cfg.authDialogs.phraseSecret.sopsFile}, add it with `sops` or unset authDialogs.phraseSecret.sopsFile";
+    };
+
     environment.systemPackages = with pkgs; [
       # quickshell deps
       cfg.package
@@ -128,12 +151,12 @@ in
           sopsFile = personalSopsFile;
         };
       }
-      # read by SAuth.qml from /run/secrets/personal-auth-phrase, chip hidden when missing
-      // lib.optionalAttrs (cfg.authDialogs.enable && hasAuthPhrase) {
-        "personal-auth-phrase" = {
+      # read by SAuth.qml through QS_AUTH_PHRASE_FILE
+      // lib.optionalAttrs hasPhraseSecret {
+        ${cfg.authDialogs.phraseSecret.sopsKey} = {
           owner = userName;
           mode = "0400";
-          sopsFile = personalSopsFile;
+          sopsFile = cfg.authDialogs.phraseSecret.sopsFile;
         };
       }
     );
@@ -190,7 +213,10 @@ in
               "TIMEWARRIORDB=${hmConfig.home.sessionVariables.TIMEWARRIORDB}"
             ]
             # SAuth.qml registers the polkit agent only when set, two agents race
-            ++ lib.optional cfg.authDialogs.active.polkit "QS_AUTH_POLKIT=1";
+            ++ lib.optional cfg.authDialogs.active.polkit "QS_AUTH_POLKIT=1"
+            ++ lib.optional hasPhraseSecret "QS_AUTH_PHRASE_FILE=${
+              config.sops.secrets.${cfg.authDialogs.phraseSecret.sopsKey}.path
+            }";
             PassEnvironment = [ "HYPRLAND_INSTANCE_SIGNATURE" ];
             ExecStart = "${quickshell-final}/bin/quickshell -p ${hmConfig.xdg.configHome}/quickshell/shell";
             Restart = "on-failure";
