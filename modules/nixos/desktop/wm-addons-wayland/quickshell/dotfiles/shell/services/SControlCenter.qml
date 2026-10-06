@@ -2,6 +2,7 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import Quickshell
+import Quickshell.Hyprland
 
 Singleton {
   id: root
@@ -10,6 +11,10 @@ Singleton {
   property bool isOpen: false
   // keeps the window alive until the exit animation finishes
   property bool isLoaded: false
+  // logout | reboot | poweroff | "", waiting on the countdown confirm dialog
+  property string confirmAction: ""
+  // monitor focused when the confirm was requested
+  property string confirmScreenName: ""
 
   function open() {
     root.isLoaded = true;
@@ -43,6 +48,17 @@ Singleton {
     Quickshell.execDetached(["hyprctl", "eval", lua]);
   }
 
+  // closes the panel and asks for confirmation before running the action
+  function requestSessionAction(action) {
+    root.confirmScreenName = Hyprland.focusedMonitor?.name ?? "";
+    root.close();
+    root.confirmAction = action;
+  }
+
+  function cancelSessionAction() {
+    root.confirmAction = "";
+  }
+
   // session actions, same commands as tofi-powermenu
   function runSessionAction(action) {
     const commands = {
@@ -57,6 +73,7 @@ Singleton {
       return;
     }
     root.close();
+    root.confirmAction = "";
     Quickshell.execDetached(["bash", "-c", command]);
   }
 }
