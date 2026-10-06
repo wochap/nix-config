@@ -16,6 +16,7 @@ _agents() {
     'last:last agent message of a session'
     'ls:list sessions'
     'watch:follow a session'
+    'serve:OpenAI-compatible HTTP API'
   )
 
   _arguments -C \
@@ -27,6 +28,10 @@ _agents() {
     '(-q --quiet --verbose)'{-q,--quiet}'[print only the final answer]' \
     '(-q --quiet)--verbose[print live progress]' \
     '--json[print JSON result]' \
+    '--host[listen address]:host:' \
+    '--port[port]:port:' \
+    '--models[comma-separated agent/model ids]:models:' \
+    '--tool-events[stream tool calls]' \
     '(-h --help)'{-h,--help}'[show help]' \
     '1:command:->command' \
     '*::arg:->args'

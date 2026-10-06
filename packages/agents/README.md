@@ -55,6 +55,32 @@ report=$(agents run -q -C ~/src/codex - < packages/agents/prompts/extract-adapte
 cat packages/agents/prompts/write-adapter.md "$report" | agents run -
 ```
 
+## OpenAI-compatible server
+
+`agents serve` speaks `/v1/chat/completions` and `/v1/models`, so chat GUIs
+(open-webui, desktop clients, editors) can talk to the agents. Each request
+is one `agents run --json` in the `-C` directory (default: current).
+
+```sh
+agents serve --port 20940 -C ~/work --tool-events \
+  --models 'claude/claude-opus-5-5[1m],pi/omniroute/desktop-free'
+```
+
+- Model ids are `<agent>/<model>`, split at the first `/`
+  (`pi/omniroute/desktop-free` is pi with `omniroute/desktop-free`). A bare
+  `<agent>` uses its default model. `--models` only fills `/v1/models`.
+- `reasoning_effort` (or `reasoning.effort`) maps to `-e`; `none`, `minimal`
+  or unset keep the agent's own setting.
+- Multi-turn: a request whose history (up to the last user message) matches
+  a previous reply resumes that session with only the new message; otherwise
+  a new session starts with the history flattened into one prompt. The map
+  lives in `${XDG_STATE_HOME:-~/.local/state}/agents/serve-conversations.json`.
+  Every chat is a normal session: `agents ls`, `watch`, `attach` work on it.
+- `stream: true` sends each agent message as it lands (not token by token);
+  `--tool-events` adds tool calls as `_> label_` lines.
+- Any API key is accepted; bind to a local address only. Closing the
+  request stops the run.
+
 ## Use from an agent
 
 `skill/SKILL.md` teaches an agent to delegate a task with `agents run` and read

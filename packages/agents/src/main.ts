@@ -7,6 +7,7 @@
 //   last    last agent message of a session (also after interactive turns)
 //   ls      list sessions
 //   watch   follow a session's progress from another terminal
+//   serve   OpenAI-compatible HTTP API over `run` (see serve.ts)
 //
 // Agents are adapters (adapters/); the core only sees normalized events.
 
@@ -40,6 +41,13 @@ Commands:
   last [<id>]        last agent message (default: latest)
   ls                 list sessions
   watch [<id>]       follow a session (default: latest running, else latest)
+  serve              OpenAI-compatible API: /v1/chat/completions, /v1/models
+        --host <h>       listen address (default: 127.0.0.1)
+        --port <n>       port (default: 20940)
+    -C, --cwd <dir>      working directory of every run (default: current)
+        --models <list>  comma-separated <agent>/<model> ids for /v1/models
+                         (default: each agent's default model)
+        --tool-events    stream tool calls as italic lines
 
 Ids may be a unique prefix.
 Agents:   ${Object.keys(adapters).join(", ")}
@@ -56,6 +64,10 @@ const { values: opts, positionals } = parseArgs({
     quiet: { type: "boolean", short: "q" },
     verbose: { type: "boolean" },
     json: { type: "boolean" },
+    host: { type: "string" },
+    port: { type: "string" },
+    models: { type: "string" },
+    "tool-events": { type: "boolean" },
     help: { type: "boolean", short: "h" },
   },
 });
@@ -261,7 +273,24 @@ async function watch() {
   }
 }
 
-const commands: Record<string, () => unknown> = { run, attach, last, ls, watch };
+async function serve() {
+  // Lazy: loads the conversation map, only the server needs it.
+  const { serve: startServer } = await import("./serve");
+  const port = Number(opts.port ?? 20940);
+  if (!Number.isInteger(port) || port <= 0) throw new Error("--port: expected a port number");
+  startServer({
+    host: opts.host ?? "127.0.0.1",
+    port,
+    cwd: opts.cwd ? resolve(opts.cwd) : process.cwd(),
+    models: opts.models
+      ?.split(",")
+      .map((m) => m.trim())
+      .filter(Boolean),
+    toolEvents: Boolean(opts["tool-events"]),
+  });
+}
+
+const commands: Record<string, () => unknown> = { run, attach, last, ls, watch, serve };
 const fn = commands[command];
 if (!fn) {
   console.error(HELP);
