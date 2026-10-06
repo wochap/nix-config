@@ -10,6 +10,10 @@
 <helmet>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0&display=block">
+<style>
+@keyframes ad-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.9)}}
+@media (prefers-reduced-motion:reduce){[data-motion]{animation:none!important}}
+</style>
 </helmet>
 <div style="display:flex;flex-direction:column;gap:32px;font-family:Inter,system-ui,sans-serif;font-size:13px;line-height:20px;color:var(--text)">
   <div style="display:flex;flex-direction:column;gap:12px">
@@ -185,6 +189,41 @@
       </div>
     </div>
   </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub)">Fingerprint hint row · polkit only · 32px reserved</div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <sc-for list="{{ fpRows }}" as="r" hint-placeholder-count="9">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="min-height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 8px;border:1px dashed var(--s1);border-radius:4px;font-size:12px;line-height:16px;color:{{ r.tc }}">
+              <span data-motion="fprint" style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;flex:none;font-variation-settings:'FILL' 1;color:{{ r.ic }};animation:{{ r.anim }}">{{ r.icon }}</span>
+              <span style="flex:1;min-width:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-wrap:pretty">{{ r.text }}<span style="color:var(--sub)">{{ r.meta }}</span></span>
+            </div>
+            <div style="display:flex;gap:8px;font-size:11px;line-height:14px;color:var(--sub)"><span style="font-family:'JetBrains Mono',monospace;color:var(--text)">{{ r.k }}</span><span style="text-wrap:pretty">{{ r.note }}</span></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub)">In context — password error while the finger still listens</span>
+        <div style="display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--bg);border:1px solid var(--s1);border-radius:8px">
+          <div style="min-height:32px;display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;font-variation-settings:'FILL' 1">fingerprint</span><span>Touch the fingerprint reader or enter your password</span></div>
+          <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;padding:0 4px 0 12px;background:var(--mantle);border:1px solid var(--red);box-shadow:0 0 0 1px var(--red);border-radius:8px"><span style="width:1px;height:16px;background:var(--text);margin-right:1px"></span><span style="flex:1;color:var(--ov)">Password</span><div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--sub)"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:1">visibility</span></div></div>
+          <div style="display:flex;gap:8px;align-items:center;font-size:12px;line-height:16px;color:var(--red)"><span style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;font-variation-settings:'FILL' 1">error</span><span>Wrong password. 2 attempts left.</span></div>
+        </div>
+        <div style="font-size:11px;line-height:14px;color:var(--sub);text-wrap:pretty">Two channels, two places: fingerprint above the field, password results below it. Neither changes the other — a finger miss never touches the field border, a wrong password never resets the finger row.</div>
+        <span style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub);margin-top:8px">Anatomy</span>
+        <div style="display:flex;flex-direction:column;gap:4px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:16px;color:var(--sub)">
+          <span><span style="color:var(--text)">row</span> min-height 32 · align center · gap 8 · no fill, no border</span>
+          <span><span style="color:var(--text)">glyph</span> Material Symbols fingerprint 16 · FILL 1</span>
+          <span><span style="color:var(--text)">text</span> Inter 12/16 · 2 lines max, then clamp</span>
+          <span><span style="color:var(--text)">place</span> body · after details/identity · 12 above field</span>
+          <span><span style="color:var(--text)">a11y</span> role=status · aria-live=polite · glyph aria-hidden</span>
+        </div>
+        <div style="font-size:11px;line-height:14px;color:var(--sub);text-wrap:pretty">Not the security-key prompt: that one owns the header badge and is the dialog's only ask. The hint is a quiet body line that never replaces the field or the header, and only appears when a reader is present and the identity has enrolled prints.</div>
+      </div>
+    </div>
+  </div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:920,&quot;height&quot;:1400},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mocha&quot;,&quot;latte&quot;],&quot;default&quot;:&quot;mocha&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
@@ -195,7 +234,19 @@ class Component extends DCLogic {
     const L = { base: '#eff1f5', mantle: '#e6e9ef', crust: '#dce0e8', surface0: '#ccd0da', surface1: '#bcc0cc', 'field-border': '#7c7f93', placeholder: '#6c6f85', text: '#4c4f69', subtext: '#5c5f77', lavender: '#7287fd', ink: '#3f53d9', 'on-ink': '#eff1f5', red: '#d20f39', green: '#40a02b', yellow: '#df8e1d', peach: '#fe640b', mauve: '#8839ef', sky: '#04a5e5' };
     const R = { base: 'dialog surface', mantle: 'field · details · footer', crust: 'dimmed desktop', surface0: 'secondary btn · divider', surface1: 'btn / chip border', 'field-border': latte ? 'field & check edge — overlay2, ≥3:1' : 'field & check edge — overlay0, ≥3:1', placeholder: latte ? 'placeholder — subtext0' : 'placeholder — overlay2', text: 'primary text', subtext: latte ? 'secondary text — subtext1, 5.5:1' : 'secondary text — 7.5:1', lavender: 'window border', ink: latte ? 'primary · focus — deepened lavender, 5.3:1' : 'primary · focus (= lavender), 9:1', 'on-ink': 'text on primary', red: 'error', green: 'success · strength', yellow: 'warning glyph only', peach: 'polkit badge', mauve: 'gpg badge', sky: 'ssh badge (blue: secret)' };
     const T = latte ? L : M;
-    return { tokens: Object.keys(T).map(n => ({ name: n, hex: T[n], role: R[n] })) };
+    const F = (k, icon, ic, tc, text, meta, anim, note) => ({ k, icon, ic, tc, text, meta, anim, note });
+    const fpRows = [
+      F('idle', 'fingerprint', 'var(--sub)', 'var(--sub)', 'Touch the fingerprint reader or enter your password', '', 'none', 'Reader listening; field keeps focus'),
+      F('idle · PAM verbatim', 'fingerprint', 'var(--sub)', 'var(--sub)', 'Swipe your right index finger across the fingerprint reader', '', 'none', 'Swipe sensors: PAM string shown as-is, 2 lines max'),
+      F('scanning', 'fingerprint', 'var(--ink)', 'var(--text)', 'Reading fingerprint…', '', 'ad-pulse 1200ms ease-in-out infinite', 'Glyph pulses 1200ms · static under reduced motion'),
+      F('nomatch', 'fingerprint', 'var(--peach)', 'var(--text)', 'Fingerprint not recognized, try again', ' · 2 tries left', 'none', 'Peach glyph only · no shake, field untouched'),
+      F('nomatch · last', 'fingerprint', 'var(--peach)', 'var(--text)', 'Fingerprint not recognized, try again', ' · 1 try left', 'none', 'Singular at 1; at 0 → off'),
+      F('off · timeout', 'fingerprint', 'var(--ov)', 'var(--sub)', 'Verification timed out — use your password', '', 'none', 'Row stays, muted; dialog is a plain password prompt'),
+      F('off · exhausted', 'fingerprint', 'var(--ov)', 'var(--sub)', 'Fingerprint unavailable — use your password', '', 'none', 'Tries spent or fprintd error'),
+      F('off · unenrolled', 'fingerprint', 'var(--ov)', 'var(--sub)', 'No fingerprints enrolled for root — use the password', '', 'none', 'After identity switch to a user without prints'),
+      F('matched', 'check_circle', 'var(--green)', 'var(--text)', 'Fingerprint recognized — closing', '', 'none', 'Pops in 200ms, then the success close')
+    ];
+    return { fpRows, tokens: Object.keys(T).map(n => ({ name: n, hex: T[n], role: R[n] })) };
   }
 }
 </script>

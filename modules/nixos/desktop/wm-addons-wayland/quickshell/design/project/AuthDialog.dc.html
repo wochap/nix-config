@@ -13,9 +13,12 @@
 <style>
 @keyframes ad-spin{to{transform:rotate(360deg)}}
 @keyframes ad-shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-6px)}30%{transform:translateX(6px)}45%{transform:translateX(-4px)}60%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+@keyframes ad-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.9)}}
+@keyframes ad-pop{0%{opacity:0;transform:scale(.6)}100%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){[data-motion]{animation:none!important}}
 </style>
 </helmet>
-<div role="dialog" style="width:440px;box-sizing:border-box;background:var(--bg);color:var(--text);border:1px solid var(--accent);border-radius:12px;box-shadow:var(--shadow);font-family:Inter,system-ui,sans-serif;font-size:13px;line-height:20px;overflow:hidden;animation:{{ shake }}">
+<div role="dialog" data-motion="shake" style="width:440px;box-sizing:border-box;background:var(--bg);color:var(--text);border:1px solid var(--accent);border-radius:12px;box-shadow:var(--shadow);font-family:Inter,system-ui,sans-serif;font-size:13px;line-height:20px;overflow:hidden;animation:{{ shake }}">
   <div style="display:flex;gap:12px;align-items:center;padding:20px 20px 0">
     <div style="width:32px;height:32px;flex:none;border-radius:8px;display:flex;align-items:center;justify-content:center;color:{{ tint }};background:color-mix(in srgb, currentColor 16%, transparent)">
       <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;font-variation-settings:'FILL' 1">{{ icon }}</span>
@@ -55,12 +58,18 @@
       <div style="display:flex;flex-direction:column;gap:6px">
         <div style="font-size:12px;line-height:16px;font-weight:500;color:var(--sub)">Authenticate as</div>
         <div style="height:36px;box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:0 8px;background:var(--mantle);border:1px solid var(--field-br);border-radius:8px">
-          <div style="width:22px;height:22px;border-radius:50%;background:var(--s0);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">g</div>
-          <span style="font-weight:500">gean</span>
-          <span style="font-size:12px;color:var(--sub)">wheel</span>
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--s0);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">{{ u.i }}</div>
+          <span style="font-weight:500">{{ u.name }}</span>
+          <span style="font-size:12px;color:var(--sub)">{{ u.role }}</span>
           <span style="flex:1"></span>
           <span style="font-family:'Material Symbols Rounded';font-size:20px;line-height:1;color:var(--sub)">expand_more</span>
         </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ fp.show }}">
+      <div role="status" aria-live="polite" data-fprint="{{ fp.state }}" style="min-height:32px;box-sizing:border-box;display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;color:{{ fp.tc }}">
+        <span aria-hidden="true" data-motion="fprint" style="font-family:'Material Symbols Rounded';font-size:16px;line-height:1;flex:none;font-variation-settings:'FILL' 1;color:{{ fp.ic }};animation:{{ fp.anim }}">{{ fp.icon }}</span>
+        <span style="flex:1;min-width:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-wrap:pretty">{{ fp.text }}<span style="color:var(--sub)">{{ fp.meta }}</span></span>
       </div>
     </sc-if>
     <sc-for list="{{ fields }}" as="f" hint-placeholder-count="1">
@@ -121,7 +130,7 @@
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:480,&quot;height&quot;:520},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;polkit&quot;,&quot;polkit-multi&quot;,&quot;gpg&quot;,&quot;ssh-key&quot;,&quot;ssh-host&quot;,&quot;keyring&quot;,&quot;keyring-new&quot;,&quot;secret&quot;],&quot;default&quot;:&quot;polkit&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;loading&quot;,&quot;error&quot;,&quot;success&quot;,&quot;timeout&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showPhrase&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;phrase&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;otter·lantern&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:480,&quot;height&quot;:560},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;polkit&quot;,&quot;polkit-multi&quot;,&quot;gpg&quot;,&quot;ssh-key&quot;,&quot;ssh-host&quot;,&quot;keyring&quot;,&quot;keyring-new&quot;,&quot;secret&quot;],&quot;default&quot;:&quot;polkit&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;loading&quot;,&quot;error&quot;,&quot;success&quot;,&quot;timeout&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;fprint&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;off&quot;,&quot;idle&quot;,&quot;scanning&quot;,&quot;nomatch&quot;,&quot;matched&quot;],&quot;default&quot;:&quot;off&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fingerprint (polkit only)&quot;},&quot;fprintNote&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;timeout&quot;,&quot;exhausted&quot;,&quot;unenrolled&quot;],&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fingerprint (polkit only)&quot;},&quot;fprintText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fingerprint (polkit only)&quot;},&quot;fprintTries&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:2,&quot;min&quot;:0,&quot;max&quot;:3,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Fingerprint (polkit only)&quot;},&quot;who&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;gean&quot;,&quot;root&quot;,&quot;ops&quot;],&quot;default&quot;:&quot;gean&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fingerprint (polkit only)&quot;},&quot;showPhrase&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;phrase&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;otter·lantern&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
   renderVals() {
     const v = this.props.variant ?? 'polkit', st = this.props.state ?? 'default';
@@ -145,6 +154,22 @@ class Component extends DCLogic {
       if (st === 'success') { c.tint = 'var(--green)'; c.icon = 'check_circle'; c.fields = [{ value: 'xxxxxxxxxx', success: true }]; c.notes = [{ icon: 'check_circle', ic: 'var(--green)', text: 'Authenticated — closing', tc: 'var(--text)' }]; btnOp = '.5'; }
       if (st === 'timeout') { c.fields = [{ ph: 'Password', focus: true }]; c.notes = [{ icon: 'timer', ic: 'var(--sub)', text: 'No response — cancels automatically in 0:24', tc: 'var(--sub)' }]; c.timeout = true; }
     }
+    const p = this.props, isPk = v === 'polkit' || v === 'polkit-multi';
+    const U = { gean: { i: 'g', name: 'gean', role: 'wheel' }, root: { i: 'r', name: 'root', role: 'administrator' }, ops: { i: 'o', name: 'ops', role: 'wheel' } };
+    const u = U[p.who] || U.gean;
+    if (v === 'polkit-multi' && u.name !== 'gean') c.fields = [{ label: 'Password', ph: '', focus: true }];
+    const fs = isPk ? (p.fprint || 'off') : 'off', note = isPk ? (p.fprintNote || 'none') : 'none', tries = p.fprintTries ?? 2;
+    const FP = {
+      idle: { icon: 'fingerprint', ic: 'var(--sub)', tc: 'var(--sub)', text: p.fprintText || 'Touch the fingerprint reader or enter your password' },
+      scanning: { icon: 'fingerprint', ic: 'var(--ink)', tc: 'var(--text)', text: p.fprintText || 'Reading fingerprint…', anim: 'ad-pulse 1200ms ease-in-out infinite' },
+      nomatch: { icon: 'fingerprint', ic: 'var(--peach)', tc: 'var(--text)', text: 'Fingerprint not recognized, try again', meta: ` · ${tries} ${tries === 1 ? 'try' : 'tries'} left` },
+      matched: { icon: 'check_circle', ic: 'var(--green)', tc: 'var(--text)', text: 'Fingerprint recognized — closing', anim: 'ad-pop 200ms cubic-bezier(.34,1.56,.64,1) 1 both' }
+    };
+    const NOTE = { timeout: 'Verification timed out — use your password', exhausted: 'Fingerprint unavailable — use your password', unenrolled: `No fingerprints enrolled for ${u.name} — use the password` };
+    let fp = { show: false };
+    if (FP[fs]) fp = { show: true, state: fs, meta: '', anim: 'none', ...FP[fs] };
+    else if (NOTE[note]) fp = { show: true, state: 'off', icon: 'fingerprint', ic: 'var(--ov)', tc: 'var(--sub)', text: NOTE[note], meta: '', anim: 'none' };
+    if (fs === 'matched') { c.tint = 'var(--green)'; c.icon = 'check_circle'; c.fields = (c.fields || []).map(f => ({ label: f.label, ph: 'Password', disabled: true })); c.notes = []; btnOp = '.5'; shake = 'none'; }
     const fields = (c.fields || []).map(f => {
       const has = !!f.value, hidden = has && !f.revealed;
       const br = f.error ? 'var(--red)' : f.success ? 'var(--green)' : f.focus ? 'var(--ink)' : 'var(--field-br)';
@@ -165,7 +190,7 @@ class Component extends DCLogic {
     const buttons = c.buttons.map(b => ({ ...K[b.kind], label: b.label, key: b.key || '', spin: !!b.spin, pr: b.key ? '6px' : '14px', op: btnOp }));
     const segs = [0, 1, 2, 3].map(i => ({ bg: i < (c.strength || 0) ? 'var(--green)' : 'var(--s0)' }));
     return {
-      c, icon: c.icon, tint: c.tint, shake, ctrlOp,
+      c, icon: c.icon, tint: c.tint, shake, ctrlOp, fp, u,
       kv: (c.kv || []).map(([k, val, m]) => ({ k, v: val, font: m ? mono : 'inherit' })), hasKv: !!(c.kv && c.kv.length),
       fields, notes: c.notes || [], buttons, segs, hasStrength: !!c.strength, strengthLabel: c.strengthLabel || '',
       chkBr: c.checked ? 'var(--ink)' : 'var(--field-br)', chkBg: c.checked ? 'var(--ink)' : 'transparent',
