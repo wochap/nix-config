@@ -3899,11 +3899,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791133370,
-        "narHash": "sha256-KtrcTvYaeBOddaWpXwJRGmZzYxcrVWn7J2jpNqC103c=",
+        "lastModified": 1791249683,
+        "narHash": "sha256-YcG0kCSFOCzdIrvtP3X4gQWAi2o6CY2bpXsUD9YEjho=",
         "owner": "wochap",
         "repo": "webscoop",
-        "rev": "5427349e66d42a944bc07b01fc6e138ab7ae8d9f",
+        "rev": "7e84ae22eb6dc0eee328492b47ce51838ba737e9",
         "type": "github"
       },
       "original": {
