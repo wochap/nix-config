@@ -10,7 +10,7 @@ let
   cfg = config._custom.programs.ai-agents;
   session-tap = inputs.session-tap.packages.${pkgs.stdenv.hostPlatform.system}.default;
   sessiontap-notify = pkgs.writeScriptBin "sessiontap-notify" (
-    builtins.readFile ./scripts/sessiontap-notify.sh
+    builtins.readFile ../scripts/sessiontap-notify.sh
   );
   remote = cfg.sessionTap.remote;
   remoteEnabled = cfg.sessionTap.enableHub && remote.interfaces != [ ];
@@ -45,7 +45,7 @@ let
   ]
   ++ lib.optionals cfg.sessionTap.enableHub (lib.attrValues cfg.sessionTap.hubSources);
   sessiontap-notify-done = pkgs.writeScriptBin "sessiontap-notify-done" (
-    builtins.readFile ./scripts/sessiontap-notify-done.sh
+    builtins.readFile ../scripts/sessiontap-notify-done.sh
   );
 in
 {

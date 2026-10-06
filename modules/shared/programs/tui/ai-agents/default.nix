@@ -24,7 +24,7 @@ let
 in
 {
   imports = [
-    ./sessiontap.nix
+    ./sessiontap
     ./cartridge
     ./test-prompts
   ];
