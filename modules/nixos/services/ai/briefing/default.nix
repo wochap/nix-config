@@ -383,6 +383,8 @@ in
           Unit.Description = "Generate the ${mode} briefing podcast";
           Service = {
             Type = "oneshot";
+            # Timers catch up right after resume, before the network is back.
+            ExecStartPre = lib.optional config.networking.networkmanager.enable "${config.networking.networkmanager.package}/bin/nm-online -s -q -t 120";
             ExecStart = "${lib.getExe briefing} --mode ${mode}";
             StateDirectory = "briefing";
             Environment = [

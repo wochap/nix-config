@@ -38,11 +38,18 @@ def read_jsonl(path):
         return [json.loads(line) for line in handle if line.strip()]
 
 
+def _sync(handle):
+    # Flush to disk before the rename: a crash must not leave a 0-byte file behind.
+    handle.flush()
+    os.fsync(handle.fileno())
+
+
 def write_jsonl(path, rows):
     tmp = f"{path}.tmp"
     with open(tmp, "w", encoding="utf-8") as handle:
         for row in rows:
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+        _sync(handle)
     os.replace(tmp, path)
 
 
@@ -58,6 +65,7 @@ def write_json(path, data):
     with open(tmp, "w", encoding="utf-8") as handle:
         json.dump(data, handle, ensure_ascii=False, indent=2)
         handle.write("\n")
+        _sync(handle)
     os.replace(tmp, path)
 
 

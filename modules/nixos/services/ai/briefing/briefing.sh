@@ -64,12 +64,18 @@ trap 'notify --urgency=critical "Briefing $episode failed" "stage: ${failed_stag
 
 forcing=false
 
-# stage NAME OUTPUT COMMAND...: run COMMAND unless OUTPUT exists (or forced).
+# done_output OUTPUT: OUTPUT exists and holds no empty .json file (a crash
+# before the data reached disk leaves 0-byte files behind).
+done_output() {
+  [[ -e $1 ]] && [[ -z $(find "$1" -name '*.json' -size 0 -print -quit) ]]
+}
+
+# stage NAME OUTPUT COMMAND...: run COMMAND unless OUTPUT is done (or forced).
 stage() {
   local name=$1 output=$2
   shift 2
   [[ $name == "$from" ]] && forcing=true
-  if [[ $forcing == false && -e $output ]]; then
+  if [[ $forcing == false ]] && done_output "$output"; then
     echo "[briefing] $name: done (cached)" >&2
   else
     echo "[briefing] $name: running" >&2
@@ -92,6 +98,7 @@ do_collect() {
 do_dedup() {
   briefing-ledger seen --ledger "$ledger" --mode "$mode" --exclude-episode "$episode" \
     <"$run/collect/items.jsonl" >"$run/new.jsonl.tmp"
+  sync "$run/new.jsonl.tmp"
   mv "$run/new.jsonl.tmp" "$run/new.jsonl"
 }
 
