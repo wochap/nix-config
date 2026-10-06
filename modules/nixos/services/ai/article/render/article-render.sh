@@ -4,6 +4,7 @@ set -euo pipefail
 open=false
 output=""
 title=""
+metadata_file=""
 default_style=true
 copy_file=""
 head_files=()
@@ -18,6 +19,8 @@ Render a Markdown file as a standalone HTML5 page. Use - to read from stdin.
 
   -o, --output FILE   write to FILE (default: MARKDOWN.html or article.html for stdin)
       --title TITLE   set the HTML document title
+      --metadata-file FILE
+                       YAML/JSON metadata (parsed as Markdown, e.g. a linked title)
       --head FILE     append HTML to <head> (may be repeated)
       --header FILE   insert HTML before the rendered Markdown (may be repeated)
       --footer FILE   insert HTML after the rendered Markdown (may be repeated)
@@ -39,13 +42,14 @@ while (($#)); do
     output=$2
     shift 2
     ;;
-  --title | --head | --header | --footer | --copy)
+  --title | --metadata-file | --head | --header | --footer | --copy)
     (($# >= 2)) || {
       usage
       exit 2
     }
     case "$1" in
     --title) title=$2 ;;
+    --metadata-file) metadata_file=$2 ;;
     --head) head_files+=("$2") ;;
     --header) header_files+=("$2") ;;
     --footer) footer_files+=("$2") ;;
@@ -93,11 +97,12 @@ fi
 
 pandoc_args=(--from=markdown-raw_html --to=html5 --standalone --output="$output")
 if [[ $default_style == true ]]; then
-  pandoc_args+=(--include-in-header="$ARTICLE_RENDER_DEFAULT_HEAD")
+  pandoc_args+=(--include-in-header="$ARTICLE_RENDER_DEFAULT_HEAD" --metadata=document-css=false)
 fi
 for file in "${head_files[@]}"; do pandoc_args+=(--include-in-header="$file"); done
 for file in "${header_files[@]}"; do pandoc_args+=(--include-before-body="$file"); done
 for file in "${footer_files[@]}"; do pandoc_args+=(--include-after-body="$file"); done
+if [[ -n $metadata_file ]]; then pandoc_args+=(--metadata-file="$metadata_file"); fi
 if [[ -n $title ]]; then pandoc_args+=(--metadata "title=$title"); fi
 
 pandoc "${pandoc_args[@]}" "$markdown"

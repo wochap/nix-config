@@ -3,9 +3,9 @@
 
 usage: compose_summary.py ARTICLE_JSON SUMMARY_MD MODEL OUTPUT_MD
 
-Writes OUTPUT_MD (header, lead image, summary, original link, footer) and
-OUTPUT_MD with a .json suffix (the record `article-library add --meta`
-takes). Scraped metadata is escaped; the model's summary is used as is,
+Writes OUTPUT_MD (front matter, header, lead image, summary, original link,
+footer) and OUTPUT_MD with a .json suffix (the record `article-library add
+--meta` takes). Scraped metadata is escaped; the model's summary is used as is,
 since `article-render` disables raw HTML.
 """
 
@@ -38,7 +38,11 @@ if article.get("author"):
     metadata.append(f"**Author:** {markdown_text(article['author'])}")
 if article.get("date"):
     metadata.append(f"**Published:** {markdown_text(article['date'])}")
-parts = [f"# {markdown_text(article.get('title') or 'Untitled article')}", "", "::: metadata", " · ".join(metadata), ":::", ""]
+title = markdown_text(article.get("title") or "Untitled article")
+# The linked title becomes the "← All summaries" breadcrumb; pagetitle is the tab title.
+# JSON strings are valid YAML scalars, so json.dumps quotes them safely.
+front_matter = ["---", f"title: {json.dumps('[All summaries](../index.html)')}", f"pagetitle: {json.dumps(title)}", "---", ""]
+parts = front_matter + [f"# {title}", "", "::: metadata", " · ".join(metadata), ":::", ""]
 if article.get("image_url"):
     parts += [f"![Lead image](<{markdown_url(article['image_url'])}>){{.lead-image}}", ""]
 parts += [

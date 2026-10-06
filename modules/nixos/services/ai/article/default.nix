@@ -44,6 +44,13 @@ in
     # Only the front command is public; the tools are its internals.
     environment.systemPackages = [ article ];
 
+    # Faces the article-render stylesheet asks for; installed so pages render offline.
+    fonts.packages = with pkgs; [
+      source-serif
+      ibm-plex
+      jetbrains-mono
+    ];
+
     _custom.services.web-proxies.article-library = {
       enable = true;
       subdomain = "articles";

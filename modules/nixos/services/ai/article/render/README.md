@@ -18,6 +18,18 @@ Rendering the same file again replaces its library page.
 `article-render` (`article-render.sh`) is the renderer behind this and
 behind the library's list pages. It knows nothing about articles or the
 library. Besides `--title`, `--output` and `--open` it takes `--head`,
-`--header` and `--footer` files, `--no-default-style`, and `--copy FILE`,
+`--header` and `--footer` files, `--no-default-style`, `--metadata-file FILE`
+(YAML/JSON parsed as Markdown, so a title can be a link), and `--copy FILE`,
 which embeds FILE and places the copy button after an `a.original` link or
 at the top of the page (`copy_controls.py`).
+
+## Stylesheet
+
+`article-render.css` is adapted from the Claude Design handoff in
+`../design/project/summaries.css` (Catppuccin Latte/Mocha, light/dark).
+Pages with a top-level `.nav` block get the list layout (day headings with a
+`{count="N"}` badge, `.source`/`.author` spans, `.empty` state); every other
+page gets the reading layout. A title that is a link renders as a small
+"← back" breadcrumb. The faces (Source Serif 4, IBM Plex Sans, JetBrains
+Mono) are installed by the module; there are no web fonts.
+

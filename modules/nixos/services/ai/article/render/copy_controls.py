@@ -16,15 +16,16 @@ with open(markdown_path, encoding="utf-8") as source:
     markdown = source.read()
 
 controls = f"""
-<button class="copy-summary" id="copy-summary" type="button" hidden>Copy Markdown</button>
+<button class="copy-summary" id="copy-summary" type="button" aria-keyshortcuts="y" hidden>Copy Markdown</button>
 <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
-<textarea class="summary-markdown" id="summary-markdown" readonly tabindex="-1" aria-hidden="true">{html.escape(markdown)}</textarea>
+<textarea id="summary-markdown" hidden>{html.escape(markdown)}</textarea>
 <script>
 (() => {{
-  const markdown = document.querySelector('#summary-markdown');
+  const markdown = document.querySelector('#summary-markdown').value;
   const button = document.querySelector('#copy-summary');
   const status = document.querySelector('#copy-status');
   const original = document.querySelector('a.original');
+  let clear;
 
   if (original) {{
     original.insertAdjacentElement('afterend', button);
@@ -35,34 +36,22 @@ controls = f"""
   button.hidden = false;
 
   async function copyMarkdown() {{
-    let method = 'Clipboard API';
     try {{
-      await navigator.clipboard.writeText(markdown.value);
+      await navigator.clipboard.writeText(markdown);
+      status.textContent = 'Copied';
     }} catch {{
-      method = 'textarea fallback';
-      markdown.focus();
-      markdown.select();
-      if (!document.execCommand('copy')) {{
-        status.textContent = 'Copy failed';
-        return;
-      }}
+      status.textContent = 'Copy failed';
     }}
-    status.textContent = `Copied using ${{method}}`;
-    button.focus();
+    clearTimeout(clear);
+    clear = setTimeout(() => (status.textContent = ''), 2000);
   }}
 
   button.addEventListener('click', copyMarkdown);
   document.addEventListener('keydown', event => {{
-    const target = event.target;
-    const editing = target instanceof HTMLInputElement
-      || target instanceof HTMLTextAreaElement
-      || target instanceof HTMLSelectElement
-      || target.isContentEditable;
-    if (event.key === 'y' && !event.ctrlKey && !event.altKey
-        && !event.metaKey && !event.shiftKey && !editing) {{
-      event.preventDefault();
-      copyMarkdown();
-    }}
+    if (event.key !== 'y' || event.ctrlKey || event.altKey || event.metaKey || event.repeat) return;
+    if (event.target.closest?.('input, textarea, select, [contenteditable]')) return;
+    event.preventDefault();
+    copyMarkdown();
   }});
 }})();
 </script>

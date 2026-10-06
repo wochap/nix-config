@@ -25,10 +25,11 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-# Collection name -> its list page (relative to the root) and title; None means unlisted.
+# Collection name -> its list page (relative to the root), title and empty-list message;
+# None means unlisted.
 COLLECTIONS = {
-    "summaries": ("index.html", "Article summaries"),
-    "pages": ("pages/index.html", "Rendered pages"),
+    "summaries": ("index.html", "Article summaries", "No summaries yet. Summarised articles will appear here, newest day first."),
+    "pages": ("pages/index.html", "Rendered pages", "No rendered pages yet. Pages from `article render` will appear here, newest day first."),
     "errors": None,
 }
 
@@ -97,28 +98,27 @@ def records(collection):
             print(f"article-library: skipping unreadable {sidecar}", file=sys.stderr)
 
 
-def render_list(collection, list_path, title):
+def render_list(collection, list_path, title, empty_message):
+    """Markdown for one list page; the stylesheet keys list layout on the .nav block."""
     here = (ROOT / list_path).parent
     links = [
-        f"[{other_title}]({os.path.relpath(ROOT / other_path, here)})"
+        f"[{entry[1]}]({os.path.relpath(ROOT / entry[0], here)})"
         for name, entry in COLLECTIONS.items()
         if entry and name != collection
-        for other_path, other_title in [entry]
     ]
     lines = ["::: nav", " · ".join(links), ":::", ""]
-    day = None
     entries = sorted(records(collection), key=added, reverse=True)
+    days = {}
     for record in entries:
-        when = added(record)
-        if when.date() != day:
-            day = when.date()
-            lines += ["", f"## {when.strftime('%A, %-d %B %Y')}", ""]
-        href = os.path.relpath(ROOT / collection / f"{record['id']}.html", here)
-        details = [markdown_text(record[field]) for field in ("source", "author") if record.get(field)]
-        suffix = f" · {' · '.join(details)}" if details else ""
-        lines.append(f"- [{markdown_text(record.get('title') or 'Untitled')}]({href}){suffix}")
+        days.setdefault(added(record).date(), []).append(record)
+    for day, day_records in days.items():
+        lines += ["", f"## {day.strftime('%A, %-d %B %Y')} {{count=\"{len(day_records)}\"}}", ""]
+        for record in day_records:
+            href = os.path.relpath(ROOT / collection / f"{record['id']}.html", here)
+            spans = "".join(f" [{markdown_text(record[field])}]{{.{field}}}" for field in ("source", "author") if record.get(field))
+            lines.append(f"- [{markdown_text(record.get('title') or 'Untitled')}]({href}){spans}")
     if not entries:
-        lines.append("Nothing here yet.")
+        lines += ["::: empty", empty_message, ":::"]
 
     with tempfile.TemporaryDirectory() as work_dir:
         markdown = Path(work_dir, "list.md")

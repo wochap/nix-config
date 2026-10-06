@@ -102,7 +102,9 @@ render_markdown() {
     return
   fi
 
-  article-render --title "$title" --copy "$source" --output "$work_dir/page.html" "$source" >/dev/null
+  # Linked title: the "← Rendered pages" breadcrumb back to the library list.
+  jq -n --arg title "$title" '{title: "[Rendered pages](index.html)", pagetitle: $title}' >"$work_dir/page.yaml"
+  article-render --metadata-file "$work_dir/page.yaml" --copy "$source" --output "$work_dir/page.html" "$source" >/dev/null
   jq -n --arg title "$title" --arg source "$source" '{title: $title, source: $source}' >"$work_dir/page.json"
   location=$(article-library add --collection pages --key "$source" --meta "$work_dir/page.json" "$work_dir/page.html")
   jq -r '"url:  \(.url)\npath: \(.path)"' <<<"$location"
@@ -196,7 +198,7 @@ summarize_url() {
   fi
 
   python3 "$COMPOSE_SUMMARY" "$work_dir/article.json" "$work_dir/summary.md" "$model" "$work_dir/page.md"
-  if ! article-render --title "Article summary" --copy "$work_dir/summary.md" --output "$work_dir/page.html" \
+  if ! article-render --copy "$work_dir/summary.md" --output "$work_dir/page.html" \
     "$work_dir/page.md" >/dev/null 2>"$work_dir/render.error"; then
     fail rendering "$(head -c 500 "$work_dir/render.error")" "Check the extracted metadata and retry."
   fi
