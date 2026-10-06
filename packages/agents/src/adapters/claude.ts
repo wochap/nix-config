@@ -16,6 +16,9 @@ const permFlags = (process.env.CLAUDE_FLAGS ?? "--permission-mode auto").split(/
 // Normalized effort to claude's --effort levels.
 const EFFORT: Record<Effort, string> = { low: "low", medium: "medium", high: "high", xhigh: "xhigh", max: "max" };
 const effortFlags = (effort?: Effort) => (effort ? ["--effort", EFFORT[effort]] : []);
+// --tools "" drops the built-in tools; --strict-mcp-config without
+// --mcp-config loads no MCP servers.
+const noToolsFlags = ["--tools", "", "--strict-mcp-config"];
 
 // Short label for a tool call: the agent's own description when it gave
 // one, else tool name plus path. Never the command itself.
@@ -74,7 +77,9 @@ export const claude: Adapter = {
 
   defaultModel: "claude-opus-5-5[1m]", // Opus 5.5, 1M context
 
-  async run({ id, prompt, model, effort, cwd, resume, rawLog, signal, onEvent }: RunOptions) {
+  noToolsFlags,
+
+  async run({ id, prompt, model, effort, cwd, resume, noTools, rawLog, signal, onEvent }: RunOptions) {
     const child = track(
       Bun.spawn(
         [
@@ -85,6 +90,7 @@ export const claude: Adapter = {
           model,
           ...effortFlags(effort),
           ...permFlags,
+          ...(noTools ? noToolsFlags : []),
           "--output-format",
           "stream-json",
           "--verbose",

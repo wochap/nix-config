@@ -31,6 +31,8 @@ Commands:
                          flag (default: the agent's setting)
     -C, --cwd <dir>      working directory (default: current)
     -r, --resume <id>    continue a session headless
+        --no-tools       the agent gets no tools and only answers; per run,
+                         not kept for -r or attach
     -q, --quiet          print only the final answer (default when stdout is not a TTY)
         --verbose        print live progress (default on a TTY)
         --json           print {id,agent,model,result,costUsd,durationMs,status};
@@ -48,6 +50,7 @@ Commands:
         --models <list>  comma-separated <agent>/<model> ids for /v1/models
                          (default: each agent's default model)
         --tool-events    stream tool calls as italic lines
+        --no-tools       pass --no-tools to every run
 
 Ids may be a unique prefix.
 Agents:   ${Object.keys(adapters).join(", ")}
@@ -68,6 +71,7 @@ const { values: opts, positionals } = parseArgs({
     port: { type: "string" },
     models: { type: "string" },
     "tool-events": { type: "boolean" },
+    "no-tools": { type: "boolean" },
     help: { type: "boolean", short: "h" },
   },
 });
@@ -125,6 +129,11 @@ async function run() {
   // Ctrl-T needs someone at the terminal who sees the progress.
   const takeover = progress && keys.available();
 
+  if (opts["no-tools"]) {
+    const name = opts.resume ? store.resolveId(opts.resume).agent : (opts.agent ?? "claude");
+    if (!getAdapter(name).noToolsFlags) throw new Error(`--no-tools: ${name} cannot run without tools`);
+  }
+
   let session: store.Session;
   if (opts.resume) {
     const prev = store.resolveId(opts.resume);
@@ -144,6 +153,7 @@ async function run() {
   }
   const agent = getAdapter(session.agent);
   const { id } = session;
+
   onInterruptCleanup(() => store.finishSession(id, "failed"));
 
   if (progress) header(agent.name, session.model, id);
@@ -174,6 +184,7 @@ async function run() {
         effort: session.effort,
         cwd: session.cwd,
         resume,
+        noTools: Boolean(opts["no-tools"]),
         rawLog: store.rawPath(id),
         signal: stop.signal,
         async onEvent(e) {
@@ -287,6 +298,7 @@ async function serve() {
       .map((m) => m.trim())
       .filter(Boolean),
     toolEvents: Boolean(opts["tool-events"]),
+    noTools: Boolean(opts["no-tools"]),
   });
 }
 

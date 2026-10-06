@@ -26,6 +26,8 @@ export interface ServeOptions {
   models?: string[];
   /** Stream tool labels as italic lines. */
   toolEvents: boolean;
+  /** Every run gets --no-tools: the agents only answer. */
+  noTools: boolean;
   /** Working directory of every run. */
   cwd: string;
 }
@@ -101,7 +103,7 @@ interface Plan {
   messages: Message[];
 }
 
-function plan(body: any): Plan {
+function plan(body: any, noTools: boolean): Plan {
   if (typeof body?.model !== "string" || !body.model) throw new HttpError(400, "model is required");
   const model: string = body.model;
   const slash = model.indexOf("/");
@@ -112,6 +114,7 @@ function plan(body: any): Plan {
   } catch (err) {
     throw new HttpError(400, (err as Error).message);
   }
+  if (noTools && !adapter.noToolsFlags) throw new HttpError(400, `${adapter.name} cannot run without tools`);
   const agentModel = slash === -1 ? adapter.defaultModel : model.slice(slash + 1);
 
   const rawEffort = body.reasoning_effort ?? body.reasoning?.effort;
@@ -149,7 +152,7 @@ interface Run {
   kill(): void;
 }
 
-function spawn(p: Plan, cwd: string): Run {
+function spawn(p: Plan, cwd: string, noTools: boolean): Run {
   const proc = Bun.spawn(
     [
       process.execPath,
@@ -164,6 +167,7 @@ function spawn(p: Plan, cwd: string): Run {
       "-C",
       cwd,
       ...(p.resume ? ["-r", p.resume] : []),
+      ...(noTools ? ["--no-tools"] : []),
       "-",
     ],
     { stdin: "pipe", stdout: "pipe", stderr: "pipe", env: process.env },
@@ -221,8 +225,8 @@ function remembered(p: Plan, id: string, replies: string[]) {
   }
 }
 
-async function complete(p: Plan, cwd: string, signal: AbortSignal): Promise<Response> {
-  const run = spawn(p, cwd);
+async function complete(p: Plan, o: ServeOptions, signal: AbortSignal): Promise<Response> {
+  const run = spawn(p, o.cwd, o.noTools);
   signal.addEventListener("abort", run.kill);
   const out = await run.output();
   if (!out) throw new HttpError(500, run.error() || "agents run printed no result");
@@ -238,10 +242,10 @@ async function complete(p: Plan, cwd: string, signal: AbortSignal): Promise<Resp
   });
 }
 
-function stream(p: Plan, cwd: string, toolEvents: boolean, signal: AbortSignal): Response {
+function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
   // A resumed session already has events; follow only the new ones.
   let read = p.resume ? tail(store.eventsPath(p.resume), true) : null;
-  const run = spawn(p, cwd);
+  const run = spawn(p, o.cwd, o.noTools);
   signal.addEventListener("abort", run.kill);
   const encoder = new TextEncoder();
   const created = now();
@@ -284,7 +288,7 @@ function stream(p: Plan, cwd: string, toolEvents: boolean, signal: AbortSignal):
           sawText = true;
           lastText = e.text;
           content(`${e.text}\n\n`);
-        } else if (e.type === "tool" && toolEvents) {
+        } else if (e.type === "tool" && o.toolEvents) {
           content(`_> ${e.label}_\n\n`);
         } else if (e.type === "error") {
           content(e.message);
@@ -365,8 +369,8 @@ export function serve(o: ServeOptions) {
         } catch {
           throw new HttpError(400, "invalid JSON body");
         }
-        const p = plan(body);
-        return body.stream ? stream(p, o.cwd, o.toolEvents, req.signal) : complete(p, o.cwd, req.signal);
+        const p = plan(body, o.noTools);
+        return body.stream ? stream(p, o, req.signal) : complete(p, o, req.signal);
       }
       return json(errorBody(`no route ${req.method} ${pathname}`), 404);
     },
@@ -375,5 +379,5 @@ export function serve(o: ServeOptions) {
       return json(errorBody(err.message), status);
     },
   });
-  console.error(`agents serve: http://${server.hostname}:${server.port}/v1 (cwd ${o.cwd})`);
+  console.error(`agents serve: http://${server.hostname}:${server.port}/v1 (cwd ${o.cwd}${o.noTools ? ", no tools" : ""})`);
 }

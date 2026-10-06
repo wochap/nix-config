@@ -27,10 +27,15 @@ in
       ];
       description = "<agent>/<model> ids listed by /v1/models.";
     };
+    noTools = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Runs get no tools (agents run --no-tools): the agents only answer.";
+    };
     toolEvents = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Stream tool calls as italic lines.";
+      description = "Stream tool calls as italic lines (only with noTools off).";
     };
   };
 
@@ -65,6 +70,7 @@ in
             "--models"
             (lib.concatStringsSep "," cfg.agentsServer.models)
           ]
+          ++ lib.optional cfg.agentsServer.noTools "--no-tools"
           ++ lib.optional cfg.agentsServer.toolEvents "--tool-events"
         );
         Restart = "on-failure";

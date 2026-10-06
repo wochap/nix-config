@@ -28,6 +28,7 @@ _agents() {
     '(-q --quiet --verbose)'{-q,--quiet}'[print only the final answer]' \
     '(-q --quiet)--verbose[print live progress]' \
     '--json[print JSON result]' \
+    '--no-tools[run the agent without tools]' \
     '--host[listen address]:host:' \
     '--port[port]:port:' \
     '--models[comma-separated agent/model ids]:models:' \

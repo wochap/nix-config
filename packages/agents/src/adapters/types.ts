@@ -35,6 +35,8 @@ export interface RunOptions {
   cwd: string;
   /** True: continue session `id` with `prompt`. */
   resume: boolean;
+  /** True: the agent gets no tools (only with Adapter.noToolsFlags). */
+  noTools?: boolean;
   /** Path; the adapter appends its provider-native output here. */
   rawLog: string;
   /** Abort stops the agent with SIGINT, e.g. to take the session over. */
@@ -45,6 +47,11 @@ export interface RunOptions {
 export interface Adapter {
   name: string;
   defaultModel: string;
+  /**
+   * Flags that turn off every tool (built-in, MCP, extensions), so the agent
+   * only answers. Unset: the agent cannot run without tools.
+   */
+  noToolsFlags?: string[];
   /** Headless run. Resolves with the final answer; rejects on non-zero exit. */
   run(opts: RunOptions): Promise<{ result: string }>;
   /**

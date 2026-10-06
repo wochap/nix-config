@@ -10,6 +10,7 @@ _custom.services.ai.agentsServer.enable = true;
 # optional
 _custom.services.ai.agentsServer.cwd = "/home/gean/work";   # where runs happen
 _custom.services.ai.agentsServer.models = [ "claude/claude-sonnet-5" "pi/omniroute/desktop-free" ];
+_custom.services.ai.agentsServer.noTools = false;   # let the agents use tools
 _custom.services.ai.agentsServer.toolEvents = false;
 ```
 
@@ -33,9 +34,12 @@ same session (matched on the chat history), so `agents ls`, `agents watch
 id is `chatcmpl-<session id>`. Editing or regenerating an earlier message
 starts a new session with the history flattened into the prompt.
 
-The agents run with the same permissions as in a terminal
-(`CLAUDE_FLAGS` default `--permission-mode auto`) in `cwd`, so treat the
-endpoint like a shell: it listens on the local address only.
+By default the runs get no tools (`noTools`, `agents run --no-tools`): the
+agents only answer, nothing runs in `cwd`. With `noTools = false` they run
+with the same permissions as in a terminal (`CLAUDE_FLAGS` default
+`--permission-mode auto`; pi has no permission prompts) and never wait for
+approval, so treat the endpoint like a shell: it listens on the local
+address only.
 
 ```sh
 systemctl --user status agents-server

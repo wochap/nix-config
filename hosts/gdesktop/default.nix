@@ -196,6 +196,13 @@ in
     _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
     _custom.services.ai.enableArticle = true;
     _custom.services.ai.agentsServer.enable = true;
+    _custom.services.ai.agentsServer.models = [
+      "claude/claude-opus-5-5[1m]"
+      "claude/claude-sonnet-5-5"
+      "claude/claude-haiku-4-5-20251001"
+      "claude/claude-fable-5-1"
+      "pi/omniroute/desktop-free"
+    ];
     _custom.services.ai.briefing.enable = true;
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;

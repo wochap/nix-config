@@ -16,6 +16,7 @@ agents run -q -C ~/repo -m claude-sonnet-5 -e high "<prompt>"
 agents run -q -a pi "<prompt>"           # another agent (default: claude)
 echo "<long prompt>" | agents run -q -   # prompt from stdin
 agents run -q -r <id> "<follow-up>"      # continue a session headless
+agents run -q --no-tools "<question>"    # answer only, no tools (pass again on -r)
 agents last <id>                         # last message of a session
 agents ls                                # list sessions
 ```

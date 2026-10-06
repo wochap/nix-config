@@ -34,6 +34,12 @@ Pick the agent with `-a/--agent` (`claude` or `pi`, default `claude`); `-m`
 defaults to that agent's model. Resumed runs (`-r`), `attach` and `last` use
 the session's own agent, so they need no `-a`.
 
+`--no-tools` runs the agent with no tools at all (built-in, MCP,
+extensions), so it only answers: `--tools "" --strict-mcp-config` for
+claude, `--no-tools` for pi. It applies to that run only, not to `-r` or
+`attach`. An adapter declares it with `noToolsFlags`; agents without it
+refuse `--no-tools`.
+
 `-e/--effort` (`low`, `medium`, `high`, `xhigh`, `max`) maps to the agent's
 own flag: `--effort` for claude, `--thinking` for pi. Unset, the agent uses
 its own setting. The session keeps it for `-r` and `attach`.
@@ -62,7 +68,7 @@ cat packages/agents/prompts/write-adapter.md "$report" | agents run -
 is one `agents run --json` in the `-C` directory (default: current).
 
 ```sh
-agents serve --port 20940 -C ~/work --tool-events \
+agents serve --port 20940 -C ~/work --no-tools \
   --models 'claude/claude-opus-5-5[1m],pi/omniroute/desktop-free'
 ```
 
@@ -78,6 +84,7 @@ agents serve --port 20940 -C ~/work --tool-events \
   Every chat is a normal session: `agents ls`, `watch`, `attach` work on it.
 - `stream: true` sends each agent message as it lands (not token by token);
   `--tool-events` adds tool calls as `_> label_` lines.
+- `--no-tools` passes `--no-tools` to every run, so chats only answer.
 - Any API key is accepted; bind to a local address only. Closing the
   request stops the run.
 
