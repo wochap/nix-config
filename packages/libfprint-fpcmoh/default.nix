@@ -64,6 +64,10 @@ libfprint.overrideAttrs (old: {
       $out/lib/udev/rules.d/60-libfprint-2-device-fpc.rules
   '';
 
+  # meson runs tests/*.py at configure time even when they are skipped,
+  # upstream only provides that python through the install checks
+  nativeBuildInputs = old.nativeBuildInputs ++ (old.nativeInstallCheckInputs or [ ]);
+
   # upstream tests know nothing about the out of tree driver
   doInstallCheck = false;
 
