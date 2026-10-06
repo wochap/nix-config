@@ -23,6 +23,10 @@ FocusScope {
   readonly property bool isLocked: root.isVerifying || root.isSuccess
   readonly property bool isPolkit: root.request?.source === "polkit"
   readonly property var identities: root.request?.identities ?? []
+  readonly property var fprint: SAuth.fprint
+  readonly property bool isFprintMatched: root.fprint?.state === "matched"
+  // reserved for the whole dialog once a reader with prints is known
+  readonly property bool showsFprint: root.isPolkit && root.fprint !== null && (SAuth.hasEnrolledFingers || root.fprint.isSeen)
   readonly property bool doPasswordsMatch: confirmField.text !== "" && confirmField.text === passwordField.text
   readonly property bool canSubmit: !root.isLocked && (!root.isNewPassword || root.doPasswordsMatch)
   property bool isChoiceChecked: false
@@ -353,6 +357,17 @@ FocusScope {
           onSelected: index => SAuth.selectIdentity(index)
         }
 
+        // finger messages above the field, password messages below it
+        AuthFprintRow {
+          Layout.fillWidth: true
+          visible: root.showsFprint
+          fpState: root.fprint?.state ?? "idle"
+          note: root.fprint?.note ?? ""
+          pamText: root.fprint?.text ?? ""
+          triesLeft: Math.max(0, SAuth.maxFprintTries - (root.fprint?.misses ?? 0))
+          who: root.identities[root.request?.selectedIdentity ?? 0]?.name ?? ""
+        }
+
         ColumnLayout {
           Layout.fillWidth: true
           visible: root.hasInput
@@ -374,7 +389,7 @@ FocusScope {
             placeholder: root.isNewPassword ? "" : (root.request?.prompt ?? "Password")
             nextField: root.isNewPassword ? confirmField : null
             isError: root.isError
-            isSuccess: root.isSuccess
+            isSuccess: root.isSuccess && !root.isFprintMatched
             onAccepted: {
               if (root.isNewPassword && confirmField.text === "") {
                 confirmField.focusInput();
@@ -460,7 +475,7 @@ FocusScope {
 
         AuthStatusRow {
           Layout.fillWidth: true
-          visible: root.isSuccess
+          visible: root.isSuccess && !root.isFprintMatched
           icon: "check_circle"
           text: "Authenticated — closing"
           iconColor: Theme.options.green

@@ -31,6 +31,16 @@ Singleton {
   // anti-spoofing phrase shown in the dialog header
   property string phrase: ""
 
+  // set by the nix module when the polkit-1 PAM stack runs pam_fprintd
+  readonly property bool isFprintEnabled: Quickshell.env("QS_AUTH_FPRINT") === "1"
+  // pam_fprintd's default max-tries
+  readonly property int maxFprintTries: 3
+  // the logged in user has prints enrolled, refreshed on every polkit request
+  property bool hasEnrolledFingers: false
+  // fingerprint hint of the visible polkit dialog, null otherwise
+  // { state: idle|scanning|nomatch|matched|off, note, text, misses, isSeen }
+  property var fprint: null
+
   property var _queue: []
   property var _currentEntry: null
   property int _nextUid: 1
@@ -81,6 +91,7 @@ Singleton {
       // entry.flow is null once the flow completed (it gets deleted)
       const flow = entry.flow;
       if (isOk && flow) {
+        entry.hasSubmitted = true;
         root.state = "verifying";
         flow.submit(password ?? "");
       } else {
@@ -114,6 +125,10 @@ Singleton {
       return;
     }
     root._selectPolkitIdentity(entry.flow, identity);
+    // a new PAM session starts for that identity, fingerprint included
+    if (entry.fprint) {
+      root._setFprint(entry, root._newFprint());
+    }
     root._refreshPolkit(entry);
   }
 
@@ -141,6 +156,7 @@ Singleton {
     }
     const next = root._queue[0] ?? null;
     if (!next) {
+      root.fprint = null;
       root.current = null;
       return;
     }
@@ -150,6 +166,7 @@ Singleton {
     root._currentEntry = next;
     root.state = next.request.error ? "error" : "default";
     root.errorText = next.request.error ?? "";
+    root.fprint = next.fprint ?? null;
     root.current = next.request;
   }
 
@@ -213,6 +230,75 @@ Singleton {
 
   // polkit
 
+  function _newFprint() {
+    return {
+      state: "idle",
+      note: "",
+      text: "",
+      misses: 0,
+      isSeen: false
+    };
+  }
+
+  function _setFprint(entry, patch) {
+    entry.fprint = Object.assign({}, entry.fprint, patch);
+    if (root._currentEntry === entry) {
+      root.fprint = entry.fprint;
+    }
+  }
+
+  function _isFprintMessage(message) {
+    return /finger|swipe|sensor|reader|verification timed out/i.test(message);
+  }
+
+  // PAM only hands over text, so states come from pam_fprintd's wording
+  // (fprintd 1.94); unknown fingerprint text is shown as is
+  function _onFprintMessage(entry, message, isError) {
+    const fp = entry.fprint;
+    if (!message || !root._isFprintMessage(message) || fp.state === "off" || fp.state === "matched") {
+      return;
+    }
+    if (/timed out/i.test(message)) {
+      root._setFprint(entry, {
+        state: "off",
+        note: "timeout",
+        text: "",
+        isSeen: true
+      });
+    } else if (/failed to match|not match|no match/i.test(message)) {
+      const misses = fp.misses + 1;
+      root._setFprint(entry, {
+        state: misses >= root.maxFprintTries ? "off" : "nomatch",
+        note: misses >= root.maxFprintTries ? "exhausted" : "",
+        text: "",
+        misses: misses,
+        isSeen: true
+      });
+    } else if (/try again|too short|cent(er|re)d|remove your finger/i.test(message)) {
+      // retry hints from the reader, the finger is on the sensor
+      root._setFprint(entry, {
+        state: "scanning",
+        text: message,
+        isSeen: true
+      });
+    } else if (isError) {
+      root._setFprint(entry, {
+        state: "off",
+        note: "exhausted",
+        text: "",
+        isSeen: true
+      });
+    } else {
+      // "Place your finger…" starts every attempt, a miss stays visible;
+      // swipe sensors name the finger, worth showing verbatim
+      root._setFprint(entry, {
+        state: fp.state === "nomatch" ? "nomatch" : "idle",
+        text: /swipe/i.test(message) ? message : "",
+        isSeen: true
+      });
+    }
+  }
+
   function _polkitRequest(flow) {
     const identities = (flow.identities ?? []).map(i => ({
           name: i.displayName || i.string,
@@ -263,6 +349,14 @@ Singleton {
       }
       entry.flow = null;
       if (flow.isSuccessful && root._currentEntry === entry) {
+        // no password went in, the finger did it
+        const fp = entry.fprint;
+        if (fp && !entry.hasSubmitted && fp.state !== "off") {
+          root._setFprint(entry, {
+            state: "matched",
+            text: ""
+          });
+        }
         root.state = "success";
         successTimer.entry = entry;
         successTimer.restart();
@@ -275,8 +369,35 @@ Singleton {
         return;
       }
       const request = root._polkitRequest(flow);
-      request.error = flow.supplementaryIsError && flow.supplementaryMessage ? flow.supplementaryMessage : "Wrong password. Try again.";
+      const message = flow.supplementaryMessage;
+      // the last pam_fprintd text lingers, it says nothing about the password
+      const isPasswordError = flow.supplementaryIsError && message && !root._isFprintMessage(message);
+      request.error = isPasswordError ? message : "Wrong password. Try again.";
+      entry.hasSubmitted = false;
+      // the flow restarts PAM, pam_fprintd listens again (unenrolled stays unenrolled)
+      if (entry.fprint && entry.fprint.note !== "unenrolled") {
+        root._setFprint(entry, Object.assign(root._newFprint(), {
+          isSeen: entry.fprint.isSeen
+        }));
+      }
       root._update(entry, request, true);
+    });
+    flow.supplementaryMessageChanged.connect(() => {
+      if (entry.flow && entry.fprint) {
+        root._onFprintMessage(entry, flow.supplementaryMessage, flow.supplementaryIsError);
+      }
+    });
+    // pam_unix asks only once pam_fprintd gave up (or never ran for this identity)
+    flow.isResponseRequiredChanged.connect(() => {
+      const fp = entry.fprint;
+      if (!entry.flow || !flow.isResponseRequired || !fp || fp.state === "off" || fp.state === "matched") {
+        return;
+      }
+      root._setFprint(entry, {
+        state: "off",
+        note: fp.isSeen ? "exhausted" : "unenrolled",
+        text: ""
+      });
     });
     flow.authenticationRequestCancelled.connect(() => {
       entry.flow = null;
@@ -302,6 +423,17 @@ Singleton {
     root._isSwitchingIdentity = false;
   }
 
+  // `fprintd-list` prints " - #0: right-index-finger" per enrolled print
+  Process {
+    id: fprintCheck
+
+    running: root.isFprintEnabled
+    command: ["fprintd-list", Quickshell.env("USER") ?? ""]
+    stdout: StdioCollector {
+      onStreamFinished: root.hasEnrolledFingers = /^\s*-\s*#\d+:/m.test(text)
+    }
+  }
+
   LazyLoader {
     id: polkitLoader
 
@@ -319,8 +451,13 @@ Singleton {
       const entry = {
         origin: "polkit",
         flow: flow,
+        fprint: root.isFprintEnabled ? root._newFprint() : null,
+        hasSubmitted: false,
         request: root._polkitRequest(flow)
       };
+      if (root.isFprintEnabled) {
+        fprintCheck.running = true;
+      }
       root._watchFlow(entry);
       root._enqueue(entry);
     }
@@ -560,6 +697,26 @@ Singleton {
 
     function cancel(): void {
       root.cancel();
+    }
+
+    // fingerprint hint on the visible dialog: idle, scanning, nomatch,
+    // matched or off; note (off only): timeout, exhausted, unenrolled
+    function fprint(state: string, note: string): void {
+      const entry = root._currentEntry;
+      if (!entry) {
+        return;
+      }
+      root._setFprint(entry, Object.assign(root._newFprint(), {
+        state: state,
+        note: note,
+        misses: state === "nomatch" ? 1 : 0,
+        isSeen: true
+      }));
+      if (state === "matched") {
+        root.state = "success";
+        successTimer.entry = entry;
+        successTimer.restart();
+      }
     }
   }
 }

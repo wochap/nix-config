@@ -236,6 +236,13 @@ in
             ]
             # SAuth.qml registers the polkit agent only when set, two agents race
             ++ lib.optional cfg.authDialogs.active.polkit "QS_AUTH_POLKIT=1"
+            # SAuth.qml shows the fingerprint hint on polkit dialogs only when
+            # polkit-1 runs pam_fprintd
+            ++ lib.optional (
+              cfg.authDialogs.active.polkit
+              && config.services.fprintd.enable
+              && (config.security.pam.services.polkit-1.fprintAuth or false)
+            ) "QS_AUTH_FPRINT=1"
             ++ lib.optional hasPhraseSecret "QS_AUTH_PHRASE_FILE=${
               config.sops.secrets.${cfg.authDialogs.phraseSecret.sopsKey}.path
             }";
