@@ -56,3 +56,29 @@ OMNIROUTE_BASE_URL=http://127.0.0.1:20128/v1 \
     OMNIROUTE_API_KEY=... \
     omniroute-chat --model desktop-free < request.json
 ```
+
+## Upgrade
+
+The image is pinned by tag and digest in `default.nix`
+(`virtualisation.oci-containers.containers.omniroute.image`).
+
+1. Read the release notes at
+   <https://github.com/diegosouzapw/OmniRoute/releases>.
+2. Get the digest of the new tag:
+
+   ```sh
+   skopeo inspect --format '{{.Digest}}' docker://ghcr.io/diegosouzapw/omniroute:<version>
+   ```
+
+3. Replace both the tag and the `sha256:` digest in the `image` string.
+4. Rebuild and switch. The service starts lazily, so the first request
+   after the switch pulls the new image and starts it.
+5. Check the service and the API:
+
+   ```sh
+   sudo systemctl status podman-omniroute
+   sudo journalctl -u podman-omniroute -e
+   ```
+
+Data lives in `/var/lib/omniroute` and survives upgrades. To roll back,
+restore the previous tag and digest and rebuild.

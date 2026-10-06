@@ -32,7 +32,7 @@ in
     };
 
     virtualisation.oci-containers.containers.omniroute = {
-      image = "ghcr.io/diegosouzapw/omniroute:3.8.50@sha256:085c57adf499a8aaa9f35ccde95c0df9c11bd9ecd18d6c9edbf3b68b8079ba9d";
+      image = "ghcr.io/diegosouzapw/omniroute:3.8.51@sha256:8bd462c9f60d8eda79329cfbb6ea7ea723505fe7721beb944f3d43835409e218";
       volumes = [ "/var/lib/omniroute:/app/data" ];
       environment = {
         DATA_DIR = "/app/data";
