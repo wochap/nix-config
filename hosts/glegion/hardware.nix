@@ -86,6 +86,13 @@
     # nvidia prime is better
     services.switcherooControl.enable = false;
 
+    # FPC 10a5:9800 fingerprint sensor, unsupported by upstream libfprint,
+    # fprintd itself is enabled by the quickshell lock fingerprint option
+    services.fprintd.package = pkgs.fprintd.override {
+      libfprint = pkgs._custom.libfprint-fpcmoh;
+    };
+    services.udev.packages = [ pkgs._custom.libfprint-fpcmoh ];
+
     services.ucodenix = {
       enable = true;
       # docs: https://github.com/e-tho/ucodenix?tab=readme-ov-file#usage

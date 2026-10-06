@@ -1,0 +1,2280 @@
+diff --git a/data/autosuspend.hwdb b/data/autosuspend.hwdb
+index 6c15fb9..f52f098 100644
+--- a/data/autosuspend.hwdb
++++ b/data/autosuspend.hwdb
+@@ -201,6 +201,11 @@ usb:v10A5pC844*
+  ID_AUTOSUSPEND=1
+  ID_PERSIST=0
+ 
++# Supported by libfprint driver fpcmoh
++usb:v10A5p9800*
++ ID_AUTOSUSPEND=1
++ ID_PERSIST=0
++
+ # Supported by libfprint driver goodixmoc
+ usb:v27C6p5840*
+ usb:v27C6p6014*
+@@ -416,7 +421,6 @@ usb:v0A5Cp5867*
+ usb:v0BDAp5812*
+ usb:v10A5p0007*
+ usb:v10A5p9200*
+-usb:v10A5p9800*
+ usb:v10A5pA120*
+ usb:v10A5pA900*
+ usb:v10A5pE340*
+diff --git a/libfprint/drivers/fpcmoh/fpc.c b/libfprint/drivers/fpcmoh/fpc.c
+new file mode 100644
+index 0000000..e75baac
+--- /dev/null
++++ b/libfprint/drivers/fpcmoh/fpc.c
+@@ -0,0 +1,1701 @@
++/*
++ * Copyright (c) 2021 Fingerprint Cards AB <tech@fingerprints.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include "drivers_api.h"
++#include "fpc.h"
++#include <byteswap.h>
++
++G_DEFINE_TYPE (FpiDeviceFpcMoh, fpi_device_fpcmoh, FP_TYPE_DEVICE);
++
++typedef void (*SynCmdMsgCallback) (FpiDeviceFpcMoh *self,
++                                   guint8          *resp,
++                                   GError          *error);
++typedef struct
++{
++  FpcCmdType        cmdtype;
++  guint8            request;
++  guint16           value;
++  guint16           index;
++  guint8           *data;
++  gsize             data_len;
++  SynCmdMsgCallback callback;
++} CommandData;
++
++static const FpIdEntry id_table[] = {
++  { .vid = 0x10A5,  .pid = 0x9800,  },
++  { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
++};
++
++static void
++fpc_dev_release_interface (FpiDeviceFpcMoh *self,
++                           GError          *error)
++{
++  g_autoptr(GError) release_error = NULL;
++
++  /* Release usb interface */
++  g_usb_device_release_interface (fpi_device_get_usb_device (FP_DEVICE (self)),
++                                  0, 0, &release_error);
++  /* Retain passed error if set, otherwise propagate error from release. */
++  if (error)
++    {
++      fpi_device_close_complete (FP_DEVICE (self), error);
++      return;
++    }
++
++  /* Notify close complete */
++  fpi_device_close_complete (FP_DEVICE (self), release_error);
++
++}
++
++static gboolean
++parse_print_data (GVariant      *data,
++                  const guint8 **blob,
++                  gsize         *blob_size,
++                  const guint8 **user_id,
++                  gsize         *user_id_len)
++{
++  g_autoptr(GVariant) user_id_var = NULL;
++  g_autoptr(GVariant) blob_var = NULL;
++
++  g_return_val_if_fail (data, FALSE);
++  g_return_val_if_fail (user_id, FALSE);
++  g_return_val_if_fail (user_id_len, FALSE);
++
++  *user_id = NULL;
++  *user_id_len = 0;
++  *blob = NULL;
++  *blob_size = 0;
++
++  if (!g_variant_check_format_string (data, "(@ay@ay)", FALSE))
++    return FALSE;
++
++  fp_dbg ("%s: enter", G_STRFUNC);
++
++  g_variant_get (data,
++                 "(@ay@ay)",
++                 &blob_var,
++                 &user_id_var);
++
++  fp_dbg ("%s: blob_var %p, user_id_var %p", G_STRFUNC, blob_var, user_id_var);
++  *blob = g_variant_get_fixed_array (blob_var, blob_size, 1);
++  fp_dbg ("%s: blob_size %lu", G_STRFUNC, *blob_size);
++
++  *user_id = g_variant_get_fixed_array (user_id_var, user_id_len, 1);
++  fp_dbg ("%s: user_id_len %lu", G_STRFUNC, *user_id_len);
++
++  return TRUE;
++}
++
++
++static void
++fpc_write_ctrl (FpiSsm                *ssm,
++                FpDevice              *dev,
++                guint8                 cmdid,
++                guint8                 value,
++                guint8                *data,
++                guint32                data_len,
++                FpiUsbTransferCallback callback,
++                gpointer               user_data)
++{
++  FpiUsbTransfer *transfer = fpi_usb_transfer_new (dev);
++
++  fp_dbg ("send cmdid %02x", cmdid);
++  fpi_usb_transfer_fill_control (transfer,
++                                 G_USB_DEVICE_DIRECTION_HOST_TO_DEVICE,
++                                 G_USB_DEVICE_REQUEST_TYPE_VENDOR,
++                                 G_USB_DEVICE_RECIPIENT_DEVICE,
++                                 cmdid,
++                                 value,
++                                 0x00,
++                                 data_len);
++  if (data && data_len > 0)
++    memcpy (transfer->buffer, data, data_len);
++
++  transfer->ssm = ssm;
++
++  fpi_usb_transfer_submit (transfer, CTRL_TIMEOUT, NULL,
++                           callback, user_data);
++}
++
++static void
++fpc_read_dead_pixels (FpiUsbTransfer *transfer, FpDevice *device,
++                      gpointer unused_data, GError *error)
++{
++  fp_dbg ("enter --> %s", G_STRFUNC);
++  uint32_t remaining_samples;
++  guint32 g_finger_id = 0;
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++  gint result = 0;
++  int ssm_state;
++  static guint32 expect_len = 0;
++  static guint32 received_len = 0;
++
++  g_return_if_fail (self);
++  g_return_if_fail (transfer->ssm);
++  g_return_if_fail (transfer->buffer);
++
++  if (error)
++    {
++      fpi_ssm_mark_failed (transfer->ssm, error);
++      return;
++    }
++  if (transfer->actual_length <= sizeof (evt_hdr_t) && expect_len == 0)
++    {
++      fp_err ("%s: len %lu err!", G_STRFUNC, transfer->actual_length);
++      fpi_ssm_mark_failed (transfer->ssm,
++                           fpi_device_error_new (FP_DEVICE_ERROR_GENERAL));
++      return;
++    }
++
++  if (expect_len > received_len)
++    {
++      fpc_tls_buff_put (transfer->buffer, transfer->actual_length);
++      received_len += transfer->actual_length;
++      fp_dbg ("%s: received_len %u, expect len %u", G_STRFUNC, received_len, expect_len);
++    }
++
++  if (expect_len == 0)
++    {
++      //tls header
++      evt_hdr_t *evt = (evt_hdr_t *) transfer->buffer;
++      guint32 evt_id = GUINT32_FROM_BE (evt->cmdid);
++      guint32 img_len = GUINT32_FROM_BE (evt->length);
++      fp_dbg ("%s: evtid %u, img_len %u, enroll_cnt %u", G_STRFUNC, evt_id, img_len, self->enroll_count);
++
++      fpc_tls_buff_clear ();
++      fpc_tls_buff_put (transfer->buffer + sizeof (evt_hdr_t), transfer->actual_length - sizeof (evt_hdr_t));
++
++      expect_len = img_len;
++      received_len += transfer->actual_length;
++    }
++
++  if (received_len >= expect_len)
++    {
++      received_len = 0;
++      expect_len = 0;
++      fpc_enclave_process_data (self->dev_ctx->enclave);
++
++      if (self->enroll_count++ < MAX_ENROLL_SAMPLES)
++        {
++          result = fpc_tee_enroll (self->dev_ctx->bio, &remaining_samples);
++          fpi_device_enroll_progress (device, self->enroll_count, NULL, NULL);
++          fpi_ssm_jump_to_state (transfer->ssm, FP_ENROLL_CAPTURE);
++        }
++      else
++        {
++          result = fpc_tee_end_enroll (self->dev_ctx->bio, &g_finger_id);
++          fp_dbg ("%s: fpc_tee_end_enroll result %d, fingerid %u", G_STRFUNC, result, g_finger_id);
++          fpi_ssm_next_state (transfer->ssm);
++        }
++    }
++  else
++    {
++      ssm_state = fpi_ssm_get_cur_state (transfer->ssm);
++      fpi_ssm_jump_to_state (transfer->ssm, ssm_state);
++    }
++
++  fp_dbg ("exit <-- %s", G_STRFUNC);
++}
++
++static void
++fpc_enroll_wait4finger_cb (FpiUsbTransfer *transfer,
++                           FpDevice       *device,
++                           gpointer        user_data,
++                           GError         *error)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++
++  fp_dbg ("enter %s, suspend %u", G_STRFUNC, self->cmd_suspended);
++
++  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) && (self->cmd_suspended))
++    {
++      g_error_free (error);
++      fpi_ssm_jump_to_state (transfer->ssm, FP_ENROLL_SUSPENDED);
++      return;
++    }
++
++  if (error)
++    {
++      fp_dbg ("%s err message %s", G_STRFUNC, error->message);
++      fpi_ssm_mark_failed (transfer->ssm, error);
++      return;
++    }
++
++  fpi_ssm_next_state (transfer->ssm);
++}
++
++static void
++fpc_verify_wait4finger_cb (FpiUsbTransfer *transfer,
++                           FpDevice       *device,
++                           gpointer        user_data,
++                           GError         *error)
++{
++  fp_dbg ("enter %s", G_STRFUNC);
++
++  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) && (FPI_DEVICE_FPCMOH (device)->cmd_suspended))
++    {
++      g_error_free (error);
++      fpi_ssm_jump_to_state (transfer->ssm, FP_VERIFY_SUSPENDED);
++      return;
++    }
++
++  if (error)
++    {
++      fp_dbg ("%s err message %s", G_STRFUNC, error->message);
++      fpi_ssm_mark_failed (transfer->ssm, error);
++      return;
++    }
++
++  fpi_ssm_next_state (transfer->ssm);
++}
++
++static void
++sm_wait4finger (FpiSsm                *ssm,
++                FpDevice              *dev,
++                FpiUsbTransferCallback callback)
++{
++  FpiUsbTransfer *transfer = fpi_usb_transfer_new (dev);
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (dev);
++
++  fp_dbg ("enter %s", G_STRFUNC);
++  transfer->ssm = ssm;
++
++  fpi_usb_transfer_fill_bulk (transfer, EP_IN, EP_IN_MAX_BUF_SIZE);
++
++  fpi_usb_transfer_submit (transfer,
++                           0,
++                           self->interrupt_cancellable,
++                           callback,
++                           NULL);
++}
++
++static void
++fpc_ssm_img_read_cb (FpiUsbTransfer *transfer, FpDevice *device,
++                     gpointer data, GError *error)
++{
++  fp_dbg ("enter --> %s", G_STRFUNC);
++
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++  int ssm_state = 0;
++  static guint32 expect_len = 0;
++  static guint32 received_len = 0;
++
++  g_return_if_fail (self);
++  g_return_if_fail (transfer->ssm);
++  g_return_if_fail (transfer->buffer);
++
++  if (error)
++    {
++      fpi_ssm_mark_failed (transfer->ssm, error);
++      return;
++    }
++
++  if (transfer->actual_length <= sizeof (evt_hdr_t) && expect_len == 0)
++    {
++      fp_err ("%s: len %lu err!", G_STRFUNC, transfer->actual_length);
++      fpi_ssm_mark_failed (transfer->ssm,
++                           fpi_device_error_new (FP_DEVICE_ERROR_GENERAL));
++      return;
++    }
++
++  if (expect_len > received_len)
++    {
++      fpc_tls_buff_put (transfer->buffer, transfer->actual_length);
++      received_len += transfer->actual_length;
++      fp_dbg ("%s: received_len %u, expect len %u", G_STRFUNC, received_len, expect_len);
++    }
++
++  if (expect_len == 0)
++    {
++      //tls header
++      guint32 seq_1 = *((guint32 *) data);
++      evt_hdr_t *evt = (evt_hdr_t *) transfer->buffer;
++      guint32 evt_id = GUINT32_FROM_BE (evt->cmdid);
++      guint32 img_len = GUINT32_FROM_BE (evt->length);
++      fp_dbg ("%s: evtid %u, img_len %u, seq_1 %u", G_STRFUNC, evt_id, img_len, seq_1);
++
++      fpc_tls_buff_clear ();
++      fpc_tls_buff_put (transfer->buffer + sizeof (evt_hdr_t), transfer->actual_length - sizeof (evt_hdr_t));
++
++      expect_len = img_len;
++      received_len += transfer->actual_length;
++    }
++
++  if (received_len >= expect_len)
++    {
++      received_len = 0;
++      expect_len = 0;
++      fpc_enclave_process_data (self->dev_ctx->enclave);
++      fpi_ssm_next_state (transfer->ssm);
++    }
++  else
++    {
++      ssm_state = fpi_ssm_get_cur_state (transfer->ssm);
++      fpi_ssm_jump_to_state (transfer->ssm, ssm_state);
++    }
++
++  fp_dbg ("exit <-- %s", G_STRFUNC);
++}
++
++static void
++sm_wait4dead_pixel (FpiSsm   *ssm,
++                    FpDevice *dev)
++{
++  FpiUsbTransfer *transfer = fpi_usb_transfer_new (dev);
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (dev);
++
++  fp_dbg ("enter --> %s", G_STRFUNC);
++  transfer->ssm = ssm;
++
++  fpi_usb_transfer_fill_bulk (transfer, EP_IN, EP_IN_MAX_BUF_SIZE);
++
++  fpi_usb_transfer_submit (transfer,
++                           0,
++                           self->interrupt_cancellable,
++                           fpc_read_dead_pixels,
++                           NULL);
++  fp_dbg ("exit <-- %s", G_STRFUNC);
++}
++
++static void
++sm_wait4img (FpiSsm   *ssm,
++             FpDevice *dev,
++             guint32  *seq1)
++{
++  FpiUsbTransfer *transfer = fpi_usb_transfer_new (dev);
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (dev);
++
++  fp_dbg ("enter --> %s", G_STRFUNC);
++  transfer->ssm = ssm;
++
++  fpi_usb_transfer_fill_bulk (transfer, EP_IN, EP_IN_MAX_BUF_SIZE);
++
++  fpi_usb_transfer_submit (transfer,
++                           0,
++                           self->interrupt_cancellable,
++                           fpc_ssm_img_read_cb,
++                           seq1);
++  fp_dbg ("exit <-- %s", G_STRFUNC);
++}
++
++static int
++fpc_store_template_db (fpc_tee_bio_t * bio, FpPrint *print, guint32 update)
++{
++  GVariant *fpi_data = NULL;
++  GVariant *uid = NULL;
++  GVariant *blob_v = NULL;
++  g_autofree gchar *user_id = NULL;
++  gssize user_id_len;
++  fpc_tee_t * tee = &bio->tee;
++  int result = 0;
++  size_t blob_size = 0;
++  g_autofree guint8 *blob = NULL;
++
++  g_assert (print);
++
++  result = fpc_tee_get_db_blob_size (tee, &blob_size);
++  if (result < 0)
++    return result;
++  else if (blob_size == 0)
++    return -1;
++
++  // If open fails ensure that we always close. REE/TEE could get out of sync
++  result = fpc_tee_db_open (tee, FPC_TA_BIO_DB_RDONLY, blob_size);
++  if (result < 0)
++    {
++      fp_err ("%s - transfer_open failed with %d\n", G_STRFUNC, result);
++      return result;
++    }
++
++  blob = g_malloc0 (blob_size);
++  if (!blob)
++    {
++      result = -1;
++      fpc_tee_db_close (tee);
++      return result;
++    }
++  memset (blob, 0, blob_size);
++
++  // Transfer encrypted content from TA (chunk if necessary)
++  result = fpc_tee_send_db_read_commands (tee, blob, blob_size);
++  if (result < 0)
++    {
++      fpc_tee_db_close (tee);
++      return result;
++    }
++
++  fp_dbg ("%s: blob_size %lu", G_STRFUNC, blob_size);
++
++  user_id = fpi_print_generate_user_id (print);
++
++  user_id_len = strlen (user_id);
++  user_id_len = MIN (SECURITY_MAX_SID_SIZE, user_id_len);
++
++  uid = g_variant_new_fixed_array (G_VARIANT_TYPE_BYTE,
++                                   user_id,
++                                   user_id_len,
++                                   1);
++
++  blob_v = g_variant_new_fixed_array (G_VARIANT_TYPE_BYTE,
++                                      blob,
++                                      blob_size,
++                                      1);
++
++  fpi_data = g_variant_new ("(@ay@ay)",
++                            blob_v,
++                            uid);
++
++  if (!update)
++    fpi_print_set_type (print, FPI_PRINT_RAW);
++
++  fpi_print_set_device_stored (print, TRUE);
++  g_object_set (print, "fpi-data", fpi_data, NULL);
++  g_object_set (print, "description", user_id, NULL);
++
++  fp_dbg ("user_id: %s", user_id);
++
++  fpc_tee_db_close (tee);
++
++  return result;
++}
++
++static void
++fpc_enroll_suspend_resume_cb (FpiUsbTransfer *transfer,
++                              FpDevice       *device,
++                              gpointer        user_data,
++                              GError         *error)
++{
++  int ssm_state = fpi_ssm_get_cur_state (transfer->ssm);
++
++  fp_dbg ("%s current ssm state: %d", G_STRFUNC, ssm_state);
++
++  if (ssm_state == FP_ENROLL_SUSPENDED)
++    {
++      if (error)
++        fpi_ssm_mark_failed (transfer->ssm, error);
++
++      fpi_device_suspend_complete (device, error);
++      /* The resume handler continues to the next state! */
++    }
++  else if (ssm_state == FP_ENROLL_RESUME)
++    {
++      if (error)
++        fpi_ssm_mark_failed (transfer->ssm, error);
++      else
++        fpi_ssm_jump_to_state (transfer->ssm, FP_ENROLL_CAPTURE);
++
++      fpi_device_resume_complete (device, error);
++    }
++
++  return;
++}
++
++static void
++fpc_enroll_sm_run_state (FpiSsm *ssm, FpDevice *device)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++  gint result = 0;
++  FpiUsbTransfer *transfer = NULL;
++  guint32 capture_id = FPC_CAPTUREID_RESERVED;
++  guint32 g_seq1 = 0;
++
++  switch (fpi_ssm_get_cur_state (ssm))
++    {
++    case FP_ENROLL_BEGIN:
++      {
++        self->enroll_count = 0;
++        result = fpc_tee_load_empty_db (self->dev_ctx->bio);
++        if (result)
++          {
++            fp_err ("%s, fpc_tee_load_empty_db failed %d", G_STRFUNC, result);
++            fpi_ssm_mark_failed (ssm, fpi_device_error_new (FP_DEVICE_ERROR_DATA_INVALID));
++            break;
++          }
++
++        result = fpc_tee_begin_enroll (self->dev_ctx->bio);
++        if (result)
++          {
++            fp_err ("%s, begin enroll failed %d", G_STRFUNC, result);
++            fpi_ssm_mark_failed (ssm, fpi_device_error_new (FP_DEVICE_ERROR_DATA_INVALID));
++            break;
++          }
++        fpi_ssm_next_state (ssm);
++      }
++      break;
++
++    case FP_ENROLL_CAPTURE:
++      {
++        fpc_tls_buff_clear ();
++        fpc_write_ctrl (ssm, device, 0x02, 0x01, (guint8 *) &capture_id, sizeof (guint32), fpi_ssm_usb_transfer_cb, NULL);
++      }
++      break;
++
++    case FP_ENROLL_WAIT4FINGERDOWN:
++      {
++        fp_dbg ("FP_VERIFY_WAIT4FINGERDOWN!");
++        sm_wait4finger (ssm, device, fpc_enroll_wait4finger_cb);
++      }
++      break;
++
++    case FP_ENROLL_GET_IMG:
++      {
++        fpc_write_ctrl (ssm, device, FPC_CMD_GET_IMG, 0x00, NULL, 0, fpi_ssm_usb_transfer_cb, NULL);
++      }
++      break;
++
++    case FP_ENROLL_WAIT4IMG_SEQ1:
++    case FP_ENROLL_WAIT4IMG_SEQ2:
++    case FP_ENROLL_WAIT4IMG_SEQ3:
++    case FP_ENROLL_WAIT4IMG_SEQ4:
++    case FP_ENROLL_WAIT4IMG_SEQ5:
++    case FP_ENROLL_WAIT4IMG_SEQ6:
++    case FP_ENROLL_WAIT4IMG_SEQ7:
++    case FP_ENROLL_WAIT4IMG_SEQ8:
++    case FP_ENROLL_WAIT4IMG_SEQ9:
++    case FP_ENROLL_WAIT4IMG_SEQ10:
++    case FP_ENROLL_WAIT4IMG_SEQ11:
++      {
++        g_seq1 = FP_ENROLL_WAIT4IMG_SEQ1;
++
++        sm_wait4img (ssm, device, &g_seq1);
++      }
++      break;
++
++    case FP_ENROLL_SEND_DEAD_PIXEL:
++      {
++        fpc_write_ctrl (ssm, device, 0x0A, 0x00, NULL, 0, fpi_ssm_usb_transfer_cb, NULL);
++      }
++      break;
++
++    case FP_ENROLL_READ_DEAD_PIXEL:
++      {
++        sm_wait4dead_pixel (ssm, device);
++      }
++      break;
++
++    case FP_ENROLL_BINDID:
++      {
++        FpPrint *print = NULL;
++        fpi_device_get_enroll_data (device, &print);
++        fpc_store_template_db (self->dev_ctx->bio, print, 0);
++
++        fpi_ssm_mark_completed (self->enroll_ssm);
++      }
++      break;
++
++    case FP_ENROLL_SUSPENDED:
++      transfer = fpi_usb_transfer_new (device);
++      transfer->ssm = ssm;
++      fpi_usb_transfer_fill_control (transfer,
++                                     G_USB_DEVICE_DIRECTION_HOST_TO_DEVICE,
++                                     G_USB_DEVICE_REQUEST_TYPE_VENDOR,
++                                     G_USB_DEVICE_RECIPIENT_DEVICE,
++                                     FPC_CMD_INDICATE_S_STATE,
++                                     FPC_HOST_MS_SX,
++                                     0,
++                                     0);
++
++      fpi_usb_transfer_submit (transfer, CTRL_TIMEOUT, NULL,
++                               fpc_enroll_suspend_resume_cb, NULL);
++      break;
++
++    case FP_ENROLL_RESUME:
++      transfer = fpi_usb_transfer_new (device);
++      transfer->ssm = ssm;
++      fpi_usb_transfer_fill_control (transfer,
++                                     G_USB_DEVICE_DIRECTION_HOST_TO_DEVICE,
++                                     G_USB_DEVICE_REQUEST_TYPE_VENDOR,
++                                     G_USB_DEVICE_RECIPIENT_DEVICE,
++                                     FPC_CMD_INDICATE_S_STATE,
++                                     FPC_HOST_MS_S0,
++                                     0,
++                                     0);
++
++      fpi_usb_transfer_submit (transfer, CTRL_TIMEOUT, NULL,
++                               fpc_enroll_suspend_resume_cb, NULL);
++      fpi_ssm_jump_to_state (ssm, FP_ENROLL_CAPTURE);
++
++      break;
++
++
++    case FP_ENROLL_DISCARD:
++      {
++        fpi_ssm_next_state (self->enroll_ssm);
++      }
++      break;
++    }
++}
++
++static void
++fpc_enroll_ssm_done (FpiSsm *ssm, FpDevice *dev, GError *error)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (dev);
++  FpPrint *print = NULL;
++
++  fp_info ("Enrollment complete!");
++
++  self->enroll_ssm = NULL;
++
++  if (fpi_ssm_get_error (ssm))
++    error = fpi_ssm_get_error (ssm);
++
++  if (error)
++    {
++      fpi_device_enroll_complete (dev, NULL, error);
++      return;
++    }
++
++  fpi_device_get_enroll_data (FP_DEVICE (self), &print);
++  fpi_device_enroll_complete (FP_DEVICE (self), g_object_ref (print), NULL);
++}
++
++/******************************************************************************
++ *
++ *  fpc_verify_xxx function
++ *
++ *****************************************************************************/
++
++static int
++fpc_identify (FpDevice *device, guint32 *update)
++{
++  int result = 0;
++  guint32 ids[FPC_CONFIG_MAX_NR_TEMPLATES];
++  guint32 size = FPC_CONFIG_MAX_NR_TEMPLATES;
++  guint32 id = 0;
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++
++  memset (ids, 0, sizeof (ids));
++  result = fpc_tee_get_finger_ids (self->dev_ctx->bio, &size, ids);
++  if (size == 0)
++    {
++      fp_err ("no template to identify");
++      return -1;
++    }
++
++  for (int i = 0; i < size; i++)
++    fp_info ("ids[%d] = %u", i, ids[i]);
++
++  result = fpc_tee_identify (self->dev_ctx->bio, &id);
++  if (result)
++    {
++      fp_err ("%s, fpc_tee_identify failed %d", G_STRFUNC, result);
++      return -1;
++    }
++
++  result = fpc_tee_update_template (self->dev_ctx->bio, update);
++  if (result)
++    fp_err ("%s, fpc_tee_update_template failed %d", G_STRFUNC, result);
++
++  fp_dbg ("identify id = %u, update = %d", id, *update);
++
++  return id != 0;
++}
++
++static void
++fpc_report_result (FpDevice *device, FpPrint *print, gboolean is_match)
++{
++  if (is_match)
++    {
++      if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_VERIFY)
++        fpi_device_verify_report (device, FPI_MATCH_SUCCESS, NULL, NULL);
++      else
++        fpi_device_identify_report (device, print, NULL, NULL);
++
++      return;
++    }
++
++  if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_VERIFY)
++    fpi_device_verify_report (device, FPI_MATCH_FAIL, NULL, NULL);
++  else
++    fpi_device_identify_report (device, NULL, NULL, NULL);
++
++  return;
++}
++
++static int
++fpcmoh_match_report (FpDevice *device, fpc_tee_bio_t * bio)
++{
++  FpPrint *print = NULL;
++  fpc_tee_t * tee = &bio->tee;
++  gint result = 0;
++  gint cnt = 0;
++  const guint8 *user_id = NULL;
++  const guint8 *blob = NULL;
++  gsize user_id_len = 0;
++  gsize blob_size = 0;
++
++  g_autoptr(GPtrArray) templates = NULL;
++  g_autoptr(GVariant) fpi_data = NULL;
++  gboolean is_match = FALSE;
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++  guint32 update = 0;
++
++  if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_VERIFY)
++    {
++      templates = g_ptr_array_sized_new (1);
++      fpi_device_get_verify_data (device, &print);
++      g_ptr_array_add (templates, print);
++    }
++  else
++    {
++      fpi_device_get_identify_data (device, &templates);
++      g_ptr_array_ref (templates);
++    }
++
++  if (NULL == templates)
++    {
++      fp_err ("%s: templates  NULL", G_STRFUNC);
++      return -1;
++    }
++
++  fp_info ("%s: templates->len = %d", G_STRFUNC, templates->len);
++
++  for (cnt = 0; cnt < templates->len; cnt++)
++    {
++      result = fpc_tee_load_empty_db (self->dev_ctx->bio);
++      if (result)
++        {
++          fp_err ("%s, fpc_tee_load_empty_db failed %d", G_STRFUNC, result);
++          return -1;
++        }
++
++      print = g_ptr_array_index (templates, cnt);
++      g_object_get (print, "fpi-data", &fpi_data, NULL);
++      fp_dbg ("%s: fpi-data %p", G_STRFUNC, fpi_data);
++
++      parse_print_data (fpi_data, &blob,  &blob_size, &user_id, &user_id_len);
++      fp_dbg ("%s: user id: %s", G_STRFUNC, user_id);
++      if (blob_size > 0)
++        {
++          result = fpc_tee_db_open (tee, FPC_TA_BIO_DB_WRONLY, blob_size);
++          if (result < 0)
++            {
++              fp_err ("Failed to open transfer in write mode with %zu bytes of payload", blob_size);
++              fpc_tee_db_close (tee);
++              return result;
++            }
++        }
++      else
++        {
++          fp_err ("%s: blob size 0", G_STRFUNC);
++          result = -1;
++          return result;
++        }
++
++      result = fpc_tee_send_db_write_commands (tee, blob, blob_size);
++      if (result < 0)
++        {
++          fpc_tee_db_close (tee);
++          return result;
++        }
++      fpc_tee_db_close (tee);
++
++      if (fpc_identify (device, &update) > 0)
++        {
++          is_match = TRUE;
++          break;
++        }
++    }
++
++  if (is_match && update)
++    {
++      result = fpc_store_template_db (self->dev_ctx->bio, print, update);
++      if (result)
++        fp_err ("%s: fpc_store_template_db %d fail", G_STRFUNC, result);
++    }
++
++  fpc_report_result (device, print, is_match);
++
++  return result;
++}
++
++static void
++fpc_verify_suspend_resume_cb (FpiUsbTransfer *transfer,
++                              FpDevice       *device,
++                              gpointer        user_data,
++                              GError         *error)
++{
++  int ssm_state = fpi_ssm_get_cur_state (transfer->ssm);
++
++  fp_dbg ("%s current ssm state: %d", G_STRFUNC, ssm_state);
++
++  if (ssm_state == FP_VERIFY_SUSPENDED)
++    {
++      if (error)
++        fpi_ssm_mark_failed (transfer->ssm, error);
++
++      fpi_device_suspend_complete (device, error);
++    }
++  else if (ssm_state == FP_VERIFY_RESUME)
++    {
++      if (error)
++        fpi_ssm_mark_failed (transfer->ssm, error);
++      else
++        fpi_ssm_jump_to_state (transfer->ssm, FP_VERIFY_CAPTURE);
++
++      fpi_device_resume_complete (device, error);
++    }
++
++  return;
++}
++
++static void
++fpc_verify_sm_run_state (FpiSsm *ssm, FpDevice *device)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++  FpiUsbTransfer *transfer = NULL;
++  guint32 g_seq1 = 0;
++
++  switch (fpi_ssm_get_cur_state (ssm))
++    {
++    case FP_VERIFY_CAPTURE:
++      {
++        guint32 capture_id = FPC_CAPTUREID_RESERVED;
++        fpc_write_ctrl (ssm, device, 0x02, 0x01, (guint8 *) &capture_id, sizeof (guint32), fpi_ssm_usb_transfer_cb, NULL);
++      }
++      break;
++
++    case FP_VERIFY_WAIT4FINGERDOWN:
++      {
++        fp_dbg ("FP_VERIFY_WAIT4FINGERDOWN!");
++        sm_wait4finger (ssm, device, fpc_verify_wait4finger_cb);
++      }
++      break;
++
++    case FP_VERIFY_GET_IMG:
++      {
++        fpc_write_ctrl (ssm, device, FPC_CMD_GET_IMG, 0x00, NULL, 0, fpi_ssm_usb_transfer_cb, NULL);
++      }
++      break;
++
++    case FP_VERIFY_WAIT4IMG_SEQ1:
++    case FP_VERIFY_WAIT4IMG_SEQ2:
++    case FP_VERIFY_WAIT4IMG_SEQ3:
++    case FP_VERIFY_WAIT4IMG_SEQ4:
++    case FP_VERIFY_WAIT4IMG_SEQ5:
++    case FP_VERIFY_WAIT4IMG_SEQ6:
++    case FP_VERIFY_WAIT4IMG_SEQ7:
++    case FP_VERIFY_WAIT4IMG_SEQ8:
++    case FP_VERIFY_WAIT4IMG_SEQ9:
++    case FP_VERIFY_WAIT4IMG_SEQ10:
++    case FP_VERIFY_WAIT4IMG_SEQ11:
++      {
++        g_seq1 = FP_VERIFY_WAIT4IMG_SEQ1;
++        sm_wait4img (ssm, device, &g_seq1);
++      }
++      break;
++
++    case FP_VERIFY_IDENTIFY:
++      {
++        fpcmoh_match_report (device, self->dev_ctx->bio);
++        fpi_ssm_mark_completed (self->identify_ssm);
++      }
++      break;
++
++    case FP_VERIFY_SUSPENDED:
++      transfer = fpi_usb_transfer_new (device);
++      transfer->ssm = ssm;
++      fpi_usb_transfer_fill_control (transfer,
++                                     G_USB_DEVICE_DIRECTION_HOST_TO_DEVICE,
++                                     G_USB_DEVICE_REQUEST_TYPE_VENDOR,
++                                     G_USB_DEVICE_RECIPIENT_DEVICE,
++                                     FPC_CMD_INDICATE_S_STATE,
++                                     FPC_HOST_MS_SX,
++                                     0,
++                                     0);
++
++      fpi_usb_transfer_submit (transfer, CTRL_TIMEOUT, NULL,
++                               fpc_verify_suspend_resume_cb, NULL);
++      break;
++
++    case FP_VERIFY_RESUME:
++      fp_dbg ("%s Notify Dev to resume", G_STRFUNC);
++      transfer = fpi_usb_transfer_new (device);
++      transfer->ssm = ssm;
++      fpi_usb_transfer_fill_control (transfer,
++                                     G_USB_DEVICE_DIRECTION_HOST_TO_DEVICE,
++                                     G_USB_DEVICE_REQUEST_TYPE_VENDOR,
++                                     G_USB_DEVICE_RECIPIENT_DEVICE,
++                                     FPC_CMD_INDICATE_S_STATE,
++                                     FPC_HOST_MS_S0,
++                                     0,
++                                     0);
++
++      fpi_usb_transfer_submit (transfer, CTRL_TIMEOUT, NULL,
++                               fpc_verify_suspend_resume_cb, NULL);
++
++      break;
++
++    case FP_VERIFY_CANCEL:
++      {
++        fpc_write_ctrl (ssm, device, 0x03, 0x01, NULL, 0, fpi_ssm_usb_transfer_cb, NULL);
++      }
++      break;
++    }
++}
++
++static void
++fpc_verify_ssm_done (FpiSsm *ssm, FpDevice *dev, GError *error)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (dev);
++
++  fp_info ("Verify_identify complete!");
++
++  if (fpi_ssm_get_error (ssm))
++    error = fpi_ssm_get_error (ssm);
++
++  if (error && error->domain == FP_DEVICE_RETRY)
++    {
++      if (fpi_device_get_current_action (dev) == FPI_DEVICE_ACTION_VERIFY)
++        fpi_device_verify_report (dev, FPI_MATCH_ERROR, NULL, g_steal_pointer (&error));
++      else
++        fpi_device_identify_report (dev, NULL, NULL, g_steal_pointer (&error));
++    }
++
++  if (fpi_device_get_current_action (dev) == FPI_DEVICE_ACTION_VERIFY)
++    fpi_device_verify_complete (dev, error);
++
++  else
++    fpi_device_identify_complete (dev, error);
++
++  self->identify_ssm = NULL;
++}
++
++static int32_t
++fpc_connect_tls (FpDevice *device, PDEVICE_CONTEXT pDevCtx)
++{
++  int ret;
++
++  ret = fpc_tls_buff_init ();
++  if (ret)
++    {
++      fp_err ("%s: fpc_tls_buff_init fail ret %d!", G_STRFUNC, ret);
++      return -2;
++    }
++
++  ret = fpc_tls_write_buff_init ();
++  if (ret)
++    {
++      fp_err ("%s: fpc_tls_write_buff_init fail ret %d!", G_STRFUNC, ret);
++      fpc_tls_buff_release ();
++      return -4;
++    }
++
++  ret = fpc_enclave_handle_tls_connection (pDevCtx->enclave, pDevCtx->tls_data, pDevCtx->tls_data_len);
++  if (ret)
++    {
++      fp_err ("%s: fpc_enclave_handle_tls_connection, failded ret: %d", G_STRFUNC, ret);
++      return ret;
++    }
++
++  return 0;
++}
++
++static int32_t
++fpc_tls_ctx_init (PDEVICE_CONTEXT context)
++{
++  fp_dbg ("enter %s", G_STRFUNC);
++  context->enclave = fpc_create_enclave ();
++  fpc_start_enclave (context->enclave);
++
++  fp_dbg ("%s exit <--", G_STRFUNC);
++
++  return 0;
++}
++
++static void
++fpc_read_0b_cb (FpiUsbTransfer *transfer, FpDevice *device,
++                gpointer user_data, GError *error)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++
++  fp_dbg ("enter %s", G_STRFUNC);
++  if (error)
++    {
++      fp_err ("%s error: %s ", G_STRFUNC, error->message);
++      fpi_ssm_mark_failed (transfer->ssm, error);
++      return;
++    }
++
++  g_assert (self->dev_ctx->tls_data);
++  memcpy (self->dev_ctx->tls_data, transfer->buffer, 121);
++  fpi_ssm_next_state (transfer->ssm);
++}
++
++static void
++fpc_read_0b (FpiSsm *ssm, FpDevice *dev)
++{
++  FpiUsbTransfer *transfer = fpi_usb_transfer_new (dev);
++
++  fpi_usb_transfer_fill_control (transfer,
++                                 G_USB_DEVICE_DIRECTION_DEVICE_TO_HOST,
++                                 G_USB_DEVICE_REQUEST_TYPE_VENDOR,
++                                 G_USB_DEVICE_RECIPIENT_DEVICE,
++                                 0x0b,
++                                 0,
++                                 0x00,
++                                 121);
++  transfer->ssm = ssm;
++  transfer->short_is_error = TRUE;
++  fpi_usb_transfer_submit (transfer,
++                           CTRL_TIMEOUT,
++                           NULL,
++                           fpc_read_0b_cb,
++                           NULL);
++}
++
++
++static int
++fpc_init_evt_handler (FpDevice *device, uint8_t *data, uint32_t len)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++  evt_hdr_t *evt = (evt_hdr_t *) data;
++
++  if (len < sizeof (evt_initiated_t))
++    {
++      fp_err ("%s: len %u  struct len %lu err!", G_STRFUNC, len, sizeof (evt_initiated_t));
++      return -1;
++    }
++
++  evt->cmdid = GUINT32_FROM_BE (evt->cmdid);
++
++  if (0x02 != evt->cmdid)
++    {
++      fp_err ("%s: cmd id err (%u)", G_STRFUNC, evt->cmdid);
++      return -1;
++    }
++
++  evt_initiated_t *ini = (evt_initiated_t *) data;
++
++  PDEVICE_CONTEXT pDevCtx = self->dev_ctx;
++
++  pDevCtx->img_w = GUINT16_FROM_BE (ini->img_w);
++  pDevCtx->img_h = GUINT16_FROM_BE (ini->img_h);
++
++  uint16_t hwid = GUINT16_FROM_BE (ini->hw_id);
++
++  if (hwid)
++    {
++      if (pDevCtx->initialized == FALSE)
++        {
++          int status = fpc_enclave_init (pDevCtx->enclave, hwid);
++          if (status == 0)
++            pDevCtx->initialized = TRUE;
++          else
++            fp_err ("%s: fpc_enclave_init failed with %d (hwid=%d)", G_STRFUNC, status, hwid);
++        }
++    }
++
++  fp_dbg ("%s: hwid(%#04x), img_w %u, img_h %u", G_STRFUNC, hwid, pDevCtx->img_w, pDevCtx->img_h);
++  fp_dbg ("%s: version: %s", G_STRFUNC, ini->fw_version);
++
++  return 0;
++}
++
++static int
++fpc_hello_evt_handler (FpDevice *device, uint8_t *data, uint32_t len)
++{
++  static gint32 received_len = 0;
++  static gint32 expect_len = 0;
++
++  if (len < sizeof (evt_hdr_t))
++    {
++      fp_err ("%s: len %u struct len %lu err!", G_STRFUNC, len, sizeof (evt_hdr_t));
++      return -1;
++    }
++
++  if (expect_len > received_len)
++    {
++      received_len += len;
++      fp_dbg ("%s: tls data recevied len %u, expect len %u", G_STRFUNC, len, received_len);
++      fpc_tls_buff_put (data, len);
++    }
++
++  if (expect_len == 0)
++    {
++      evt_hdr_t *evt = (evt_hdr_t *) data;
++
++      evt->cmdid = GUINT32_FROM_BE (evt->cmdid);
++
++      if (0x05 != evt->cmdid)
++        {
++          fp_dbg ("%s: cmd id error %u", G_STRFUNC, evt->cmdid);
++          return -1;
++        }
++
++      expect_len = GUINT32_FROM_BE (evt->length);
++
++      received_len += len;
++
++      fp_dbg ("%s: evt 0x05 expect len %u (actual len %u) !", G_STRFUNC, expect_len, len);
++      fpc_tls_buff_put (data + sizeof (evt_hdr_t), len - sizeof (evt_hdr_t));
++    }
++
++  if (expect_len > received_len)
++    {
++      return 1;
++    }
++  else
++    {
++      received_len = 0;
++      expect_len = 0;
++    }
++
++  return 0;
++}
++
++static void
++fpi_ssm_hello_receive_cb (FpiUsbTransfer *transfer, FpDevice *device,
++                          gpointer unused_data, GError *error)
++{
++  g_return_if_fail (transfer->ssm);
++  g_return_if_fail (transfer->buffer);
++
++  fp_dbg ("%s: enter", G_STRFUNC);
++
++  int ssm_state = fpi_ssm_get_cur_state (transfer->ssm);
++
++  if (error)
++    {
++      fpi_ssm_mark_failed (transfer->ssm, error);
++      return;
++    }
++
++  if (transfer->actual_length == 0)
++    {
++      fpi_ssm_jump_to_state (transfer->ssm, ssm_state);
++      return;
++    }
++
++  int ret = fpc_hello_evt_handler (device, transfer->buffer, transfer->actual_length);
++
++  if (ret == 1)
++    {
++      fpi_ssm_jump_to_state (transfer->ssm, ssm_state);
++      return;
++    }
++  else if (ret == -1)
++    {
++      fpi_ssm_mark_failed (transfer->ssm,
++                           fpi_device_error_new (FP_DEVICE_ERROR_GENERAL));
++    }
++
++  fpi_ssm_next_state (transfer->ssm);
++
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++sm_wait4tls_data (FpiSsm *ssm, FpDevice *dev)
++{
++  FpiUsbTransfer *transfer = fpi_usb_transfer_new (dev);
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (dev);
++
++  fp_dbg ("enter %s", G_STRFUNC);
++
++  transfer->ssm = ssm;
++
++  fpi_usb_transfer_fill_bulk (transfer, EP_IN, EP_IN_MAX_BUF_SIZE);
++
++  fpi_usb_transfer_submit (transfer,
++                           0,
++                           self->interrupt_cancellable,
++                           fpi_ssm_hello_receive_cb,
++                           NULL);
++
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++fpc_cmd_init_cb (FpiUsbTransfer *transfer, FpDevice *device,
++                 gpointer unused_data, GError *error)
++{
++  g_return_if_fail (transfer->ssm);
++  int ssm_state = 0;
++
++  if (error)
++    {
++      fpi_ssm_mark_failed (transfer->ssm, error);
++      return;
++    }
++
++  ssm_state = fpi_ssm_get_cur_state (transfer->ssm);
++
++  if (transfer->actual_length == 0)
++    {
++      fpi_ssm_jump_to_state (transfer->ssm, ssm_state);
++      return;
++    }
++
++  int ret = fpc_init_evt_handler (device, transfer->buffer, transfer->actual_length);
++
++  if (ret)
++    fpi_ssm_mark_failed (transfer->ssm,
++                         fpi_device_error_new (FP_DEVICE_ERROR_GENERAL));
++
++  fpi_ssm_next_state (transfer->ssm);
++}
++
++static void
++sm_wait4init_result (FpiSsm *ssm, FpDevice *dev)
++{
++  FpiUsbTransfer *transfer = fpi_usb_transfer_new (dev);
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (dev);
++
++  fp_dbg ("enter %s", G_STRFUNC);
++
++  transfer->ssm = ssm;
++
++  fpi_usb_transfer_fill_bulk (transfer, EP_IN, EP_IN_MAX_BUF_SIZE);
++
++  fpi_usb_transfer_submit (transfer,
++                           0,
++                           self->interrupt_cancellable,
++                           fpc_cmd_init_cb,
++                           NULL);
++
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++fpc_init_sm_run_state (FpiSsm *ssm, FpDevice *device)
++{
++  int status = 0;
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++
++  switch (fpi_ssm_get_cur_state (ssm))
++    {
++    case FPC_INIT_CMD_INIT:
++      fpc_write_ctrl (ssm, device, 0x01, 0x01, (uint8_t *) &(self->dev_ctx->yasc_session_id), sizeof (self->dev_ctx->yasc_session_id), fpi_ssm_usb_transfer_cb, NULL);
++      break;
++
++    case FPC_INIT_WAIT4INIT_RESULT:
++      {
++        sm_wait4init_result (ssm, device);
++      }
++      break;
++
++    case FPC_INIT_WAKE_UP:
++      fpc_write_ctrl (ssm, device, 0x08, FPC_HOST_MS_S0, NULL, 0, fpi_ssm_usb_transfer_cb, NULL);
++      break;
++
++    case FPC_INIT_INIT:
++      fpc_read_0b (ssm, device);
++      break;
++
++    case FPC_INIT_TLS_CONNECT:
++      {
++        fpc_connect_tls (device, self->dev_ctx);
++        fpi_ssm_next_state (ssm);
++      }
++      break;
++
++    case FPC_INIT_TLS_HANDSHAKE_START:
++      {
++        fpc_write_ctrl (ssm, device, 0x05, 0x01, NULL, 0, fpi_ssm_usb_transfer_cb, NULL);
++      }
++      break;
++
++    case FPC_INIT_TLS_HANDSHAKE_WAIT4HELLO:
++      {
++        sm_wait4tls_data (ssm, device);
++      }
++      break;
++
++    case FPC_INIT_TLS_HANDSHAKE_PROCESS:
++      {
++        status = fpc_enclave_tls_init_handshake (self->dev_ctx->enclave);
++        fp_dbg ("%s: fpc_enclave_tls_init_handshake status %d", G_STRFUNC, status);
++
++        if (FPC_TLS_HANDSHAKE_COMPLETE == fpc_enclave_get_tls_status (self->dev_ctx->enclave, &self->dev_ctx->tls_status))
++          fpi_ssm_jump_to_state (ssm, FPC_INIT_TEE_INIT);
++        else if (!fpc_tls_write_buff_is_empty ())
++          fpi_ssm_next_state (ssm);
++        else if (8 == self->dev_ctx->tls_status || 10 == self->dev_ctx->tls_status || 11 == self->dev_ctx->tls_status)
++          fpi_ssm_jump_to_state (ssm, FPC_INIT_TLS_HANDSHAKE_WAIT4HELLO);
++        else
++          fpi_ssm_jump_to_state (ssm, FPC_INIT_TLS_HANDSHAKE_PROCESS);
++      }
++      break;
++
++    case FPC_INIT_TLS_HANDSHAKE_WRITE:
++      {
++        size_t tls_hs_wr_len = 0;
++        uint8_t hs_wr_buff[EP_IN_MAX_BUF_SIZE];
++        uint32_t sent_len = 0;
++        fpc_tls_write_buff_get ((uint8_t *) &tls_hs_wr_len, sizeof (size_t));
++        g_assert (tls_hs_wr_len <= EP_IN_MAX_BUF_SIZE);
++        sent_len = fpc_tls_write_buff_get (hs_wr_buff, tls_hs_wr_len);
++        fp_dbg ("%s: tls_hs_wr_len %lu sent_len %u", G_STRFUNC, tls_hs_wr_len, sent_len);
++        fpc_write_ctrl (ssm, device, 0x06, 0x01, hs_wr_buff, tls_hs_wr_len, fpi_ssm_usb_transfer_cb, NULL);
++      }
++      break;
++
++    case FPC_INIT_TLS_HANDSHAKE_WROTEN:
++      {
++        fp_dbg ("%s: tls state %u", G_STRFUNC, self->dev_ctx->tls_status);
++        if (!fpc_tls_write_buff_is_empty ())
++          fpi_ssm_jump_to_state (ssm, FPC_INIT_TLS_HANDSHAKE_WRITE);
++        else
++          fpi_ssm_jump_to_state (ssm, FPC_INIT_TLS_HANDSHAKE_PROCESS);
++      }
++      break;
++
++    case FPC_INIT_TEE_INIT:
++      {
++        self->dev_ctx->tee_handle = fpc_tee_init ();
++        fp_dbg ("%s, fpc_tee_init hdl %p", G_STRFUNC, self->dev_ctx->tee_handle);
++        if (!self->dev_ctx->tee_handle)
++          {
++            fp_err ("%s, fpc_tee_init failed", G_STRFUNC);
++            fpi_ssm_mark_failed (ssm,
++                                 fpi_device_error_new (FP_DEVICE_ERROR_GENERAL));
++          }
++        self->dev_ctx->bio = fpc_tee_bio_init (self->dev_ctx->tee_handle);
++        fp_dbg ("%s: bio %p, shb %p", G_STRFUNC, self->dev_ctx->bio, self->dev_ctx->bio->tee.shared_buffer);
++        if (!self->dev_ctx->bio)
++          {
++            fp_err ("%s, fpc_tee_bio_init failed", G_STRFUNC);
++            fpi_ssm_mark_failed (ssm,
++                                 fpi_device_error_new (FP_DEVICE_ERROR_NOT_SUPPORTED));
++          }
++        fpi_ssm_next_state (ssm);
++      }
++      break;
++    }
++}
++
++static void
++fpc_init_ssm_done (FpiSsm *ssm, FpDevice *dev, GError *error)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (dev);
++
++  if (fpi_ssm_get_error (ssm))
++    error = fpi_ssm_get_error (ssm);
++
++  fpi_device_open_complete (dev, error);
++  self->task_ssm = NULL;
++  self->enroll_ssm = NULL;
++  self->identify_ssm = NULL;
++}
++
++/******************************************************************************
++ *
++ *  Interface Function
++ *
++ *****************************************************************************/
++static void
++fpc_dev_probe (FpDevice *device)
++{
++  GUsbDevice *usb_dev;
++  GError *error = NULL;
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++  g_autofree gchar *product = NULL;
++  gint productid = 0;
++
++  fp_dbg ("%s enter --> ", G_STRFUNC);
++
++  /* Claim usb interface */
++  usb_dev = fpi_device_get_usb_device (device);
++  if (!g_usb_device_open (usb_dev, &error))
++    {
++      fp_dbg ("%s g_usb_device_open failed %s", G_STRFUNC, error->message);
++      fpi_device_probe_complete (device, NULL, NULL, error);
++      return;
++    }
++
++  if (!g_usb_device_reset (usb_dev, &error))
++    {
++      fp_dbg ("%s g_usb_device_reset failed %s", G_STRFUNC, error->message);
++
++      g_usb_device_close (usb_dev, NULL);
++      fpi_device_probe_complete (device, NULL, NULL, error);
++      return;
++    }
++
++  if (!g_usb_device_claim_interface (usb_dev, 0, 0, &error))
++    {
++      fp_dbg ("%s g_usb_device_claim_interface failed %s", G_STRFUNC, error->message);
++
++      g_usb_device_close (usb_dev, NULL);
++      fpi_device_probe_complete (device, NULL, NULL, error);
++      return;
++    }
++
++  product = g_usb_device_get_string_descriptor (usb_dev,
++                                                g_usb_device_get_product_index (usb_dev),
++                                                &error);
++  if (product)
++    fp_dbg ("Device name: %s", product);
++  if (error)
++    {
++      fp_dbg ("%s g_usb_device_get_string_descriptor failed %s", G_STRFUNC, error->message);
++      g_usb_device_release_interface (fpi_device_get_usb_device (FP_DEVICE (device)),
++                                      0, 0, NULL);
++      g_usb_device_close (usb_dev, NULL);
++      fpi_device_probe_complete (device, NULL, NULL, error);
++      return;
++    }
++
++  productid = g_usb_device_get_pid (usb_dev);
++  // Default enroll scheme
++  self->max_immobile_stage = 0;
++  switch (productid)
++    {
++    case 0x9800:
++      self->max_enroll_stage = MAX_ENROLL_SAMPLES;
++      break;
++
++    default:
++      fp_warn ("Device %x is not supported", productid);
++      self->max_enroll_stage = MAX_ENROLL_SAMPLES;
++      break;
++    }
++
++  fpi_device_set_nr_enroll_stages (device, self->max_enroll_stage);
++  g_usb_device_close (usb_dev, NULL);
++  fpi_device_probe_complete (device, NULL, product, error);
++
++  return;
++}
++
++static int32_t
++fpc_tls_init (FpDevice *device, PDEVICE_CONTEXT device_context)
++{
++  int32_t result = 0;
++
++  fp_dbg ("Enter %s, %d", G_STRFUNC, __LINE__);
++
++  //the key buffer is 1000 bytes. We will receive 121 bytes encrypted key
++  device_context->tls_data_len = 1000;
++  device_context->tls_data = g_malloc (device_context->tls_data_len);
++  if (!device_context->tls_data)
++    {
++      fp_err ("%s: tls_data g_malloc failed", G_STRFUNC);
++      return result;
++    }
++
++  fp_dbg ("Exit %s, %d", G_STRFUNC, __LINE__);
++  return result;
++}
++
++static void
++fpc_dev_init (FpDevice *device)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++
++  fp_dbg ("%s enter -->", G_STRFUNC);
++  GError *error = NULL;
++  int result = 0;
++
++  self->dev_ctx = (PDEVICE_CONTEXT) g_malloc (sizeof (DEVICE_CONTEXT));
++  if (!self->dev_ctx)
++    {
++      fp_err ("pDevCtx g_malloc failed\n");
++      return;
++    }
++  memset (self->dev_ctx, 0, sizeof (DEVICE_CONTEXT));
++
++  if (!g_usb_device_reset (fpi_device_get_usb_device (device), &error))
++    {
++      fp_err ("%s: g_usb_device_reset err %s\n", G_STRFUNC, error->message);
++      fpi_device_open_complete (FP_DEVICE (self), error);
++      return;
++    }
++
++  /* Claim usb interface */
++  if (!g_usb_device_claim_interface (fpi_device_get_usb_device (device), 0, 0, &error))
++    {
++      fp_err ("%s: g_usb_device_claim_interface err %s\n", G_STRFUNC, error->message);
++      fpi_device_open_complete (FP_DEVICE (self), error);
++      return;
++    }
++
++  fpc_tls_ctx_init (self->dev_ctx);
++  result = fpc_secure_random ((uint8_t *) &(self->dev_ctx->yasc_session_id),
++                              sizeof (self->dev_ctx->yasc_session_id));
++  if (result)
++    {
++      fp_err ("%s, failed to generate radom session id", G_STRFUNC);
++      return;
++    }
++
++  if (result)
++    {
++      fp_err ("%s, failed to generate radom capture id", G_STRFUNC);
++      return;
++    }
++
++  fpc_tls_init (device, self->dev_ctx);
++  self->interrupt_cancellable = g_cancellable_new ();
++  self->task_ssm = fpi_ssm_new (device, fpc_init_sm_run_state,
++                                FPC_INIT_NUM_STATES);
++  fpi_ssm_start (self->task_ssm, fpc_init_ssm_done);
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++fpc_dev_exit (FpDevice *device)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++
++  fp_dbg ("%s enter -->", G_STRFUNC);
++
++  fpc_tls_write_buff_release ();
++  fpc_tls_buff_release ();
++  g_clear_pointer (&self->dev_ctx->tls_data, g_free);
++
++  fpc_destroy_enclave (self->dev_ctx->enclave);
++
++  self->dev_ctx->initialized = FALSE;
++
++  g_clear_object (&self->interrupt_cancellable);
++  fpc_dev_release_interface (self, NULL);
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++fpc_dev_verify_identify (FpDevice *device)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++
++  fp_dbg ("%s enter -->", G_STRFUNC);
++  self->identify_ssm = fpi_ssm_new_full (device, fpc_verify_sm_run_state,
++                                         FP_VERIFY_NUM_STATES,
++                                         FP_VERIFY_CANCEL,
++                                         "verify_identify");
++  fpi_ssm_start (self->identify_ssm, fpc_verify_ssm_done);
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++fpc_dev_enroll (FpDevice *device)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++
++  fp_dbg ("%s enter -->", G_STRFUNC);
++
++  self->enroll_stage = 0;
++  self->immobile_stage = 0;
++  self->enroll_ssm = fpi_ssm_new_full (device, fpc_enroll_sm_run_state,
++                                       FP_ENROLL_NUM_STATES,
++                                       FP_ENROLL_DISCARD,
++                                       "enroll");
++  fpi_ssm_start (self->enroll_ssm, fpc_enroll_ssm_done);
++}
++
++static void
++fpc_dev_suspend (FpDevice *device)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++  FpiDeviceAction action = fpi_device_get_current_action (device);
++
++  fp_dbg ("%s: action %u", G_STRFUNC, action);
++
++  if (action != FPI_DEVICE_ACTION_VERIFY && action != FPI_DEVICE_ACTION_IDENTIFY && action != FPI_DEVICE_ACTION_ENROLL)
++    {
++      fpi_device_suspend_complete (device, fpi_device_error_new (FP_DEVICE_ERROR_NOT_SUPPORTED));
++      return;
++    }
++
++  g_assert ((self->enroll_ssm && FP_ENROLL_WAIT4FINGERDOWN == fpi_ssm_get_cur_state (self->enroll_ssm)) ||
++            (self->identify_ssm && FP_VERIFY_WAIT4FINGERDOWN == fpi_ssm_get_cur_state (self->identify_ssm)));
++
++  self->cmd_suspended = TRUE;
++  fp_dbg ("%s suspend %u", G_STRFUNC, self->cmd_suspended);
++  g_cancellable_cancel (self->interrupt_cancellable);
++  g_set_object (&self->interrupt_cancellable, g_cancellable_new ());
++
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++fpc_dev_resume (FpDevice *device)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++  FpiDeviceAction action = fpi_device_get_current_action (device);
++
++  fp_dbg ("%s enter -->", G_STRFUNC);
++
++  if (action != FPI_DEVICE_ACTION_VERIFY && action != FPI_DEVICE_ACTION_IDENTIFY && action != FPI_DEVICE_ACTION_ENROLL)
++    {
++      g_assert_not_reached ();
++      fpi_device_resume_complete (device, fpi_device_error_new (FP_DEVICE_ERROR_NOT_SUPPORTED));
++      return;
++    }
++
++  g_assert (self->cmd_suspended);
++  g_assert ((self->enroll_ssm && FP_ENROLL_SUSPENDED == fpi_ssm_get_cur_state (self->enroll_ssm)) ||
++            (self->identify_ssm && FP_VERIFY_SUSPENDED == fpi_ssm_get_cur_state (self->identify_ssm)));
++
++  self->cmd_suspended = FALSE;
++
++  if (self->enroll_ssm)
++    fpi_ssm_jump_to_state (self->enroll_ssm, FP_ENROLL_RESUME);
++  else if (self->identify_ssm)
++    fpi_ssm_jump_to_state (self->identify_ssm, FP_VERIFY_RESUME);
++
++  fpi_device_resume_complete (device, NULL);
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++fpc_dev_cancel (FpDevice *device)
++{
++  FpiDeviceFpcMoh *self = FPI_DEVICE_FPCMOH (device);
++
++  fp_dbg ("%s enter -->", G_STRFUNC);
++  g_cancellable_cancel (self->interrupt_cancellable);
++  g_set_object (&self->interrupt_cancellable, g_cancellable_new ());
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++fpi_device_fpcmoh_init (FpiDeviceFpcMoh *self)
++{
++  fp_dbg ("%s enter -->", G_STRFUNC);
++  G_DEBUG_HERE ();
++  fp_dbg ("%s exit <--", G_STRFUNC);
++}
++
++static void
++fpi_device_fpcmoh_class_init (FpiDeviceFpcMohClass *klass)
++{
++  FpDeviceClass *dev_class = FP_DEVICE_CLASS (klass);
++
++  dev_class->id =               FP_COMPONENT;
++  dev_class->full_name =        "FPC MOH Fingerprint Sensor";
++  dev_class->type =             FP_DEVICE_TYPE_USB;
++  dev_class->scan_type =        FP_SCAN_TYPE_PRESS;
++  dev_class->id_table =         id_table;
++  dev_class->nr_enroll_stages = MAX_ENROLL_SAMPLES;
++  dev_class->temp_hot_seconds = -1;
++
++  dev_class->open   =           fpc_dev_init;
++  dev_class->close  =           fpc_dev_exit;
++  dev_class->probe  =           fpc_dev_probe;
++  dev_class->enroll =           fpc_dev_enroll;
++  dev_class->verify   =         fpc_dev_verify_identify;
++  dev_class->identify =         fpc_dev_verify_identify;
++  dev_class->suspend =          fpc_dev_suspend;
++  dev_class->resume =           fpc_dev_resume;
++  dev_class->cancel =           fpc_dev_cancel;
++
++  fpi_device_class_auto_initialize_features (dev_class);
++  dev_class->features |= FP_DEVICE_FEATURE_DUPLICATES_CHECK;
++}
+diff --git a/libfprint/drivers/fpcmoh/fpc.h b/libfprint/drivers/fpcmoh/fpc.h
+new file mode 100644
+index 0000000..b652886
+--- /dev/null
++++ b/libfprint/drivers/fpcmoh/fpc.h
+@@ -0,0 +1,309 @@
++/*
++ * Copyright (c) 2021 Fingerprint Cards AB <tech@fingerprints.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#pragma once
++
++#include "fpi-device.h"
++#include "fpi-ssm.h"
++#include <stdio.h>
++#include <stdlib.h>
++#include "fpi-byte-reader.h"
++#include "fpclib_api.h"
++
++#define TEMPLATE_ID_SIZE (32)
++#define MAX_FW_VERSION_STR_LEN (16)
++
++#define FPC_CMD_INIT (0x01)
++#define FPC_CMD_ARM (0x02)
++#define FPC_CMD_ABORT (0x03)
++#define FPC_CMD_INDICATE_S_STATE (0x08)
++#define FPC_CMD_GET_IMG (0x09)
++#define FPC_CMD_GET_KPI (0x0C)
++
++#define FPC_CMD_LOAD_DB (0x60)
++#define FPC_CMD_STORE_DB (0x61)
++#define FPC_CMD_DELETE_DB (0x62)
++#define FPC_CMD_DELETE_TEMPLATE (0x63)
++#define FPC_CMD_BEGIN_ENROL (0x67)
++#define FPC_CMD_ENROL (0x68)
++#define FPC_CMD_END_ENROL (0x69)
++#define FPC_CMD_BIND_IDENTITY (0x6A)
++#define FPC_CMD_IDENTIFY (0x6B)
++#define FPC_CMD_ENUM (0x70)
++
++#define FPC_EVT_INIT_RESULT (0x02)
++#define FPC_EVT_FINGER_DWN (0x06)
++#define FPC_EVT_IMG (0x08)
++#define FPC_EVT_FID_DATA (0x31)
++
++#define FPC_DB_ID_LEN (16)
++
++#define FPC_IDENTITY_TYPE_WILDCARD (0x1)
++#define FPC_IDENTITY_TYPE_RESERVED (0x3)
++#define FPC_IDENTITY_WILDCARD (0x25066282)
++#define FPC_SUBTYPE_ANY (0xFF)
++#define FPC_SUBTYPE_RESERVED (0xF5)
++
++#define FPC_CAPTUREID_RESERVED (0x701100F)
++#define FPC_SESSIONID_RESERVED (0x0077FF12)
++#define FPC_TEMPLATES_MAX (10)
++#define SECURITY_MAX_SID_SIZE (68)
++
++#define FPC_HOST_MS_S0 (0x10)
++#define FPC_HOST_MS_SX (0x11)
++
++#define FP_COMPONENT "fpcmoh"
++#define MAX_ENROLL_SAMPLES (11)
++#define CTRL_TIMEOUT (1000)
++#define DATA_TIMEOUT (5000)
++
++/* Usb port setting */
++#define EP_IN (2 | FPI_USB_ENDPOINT_IN)
++#define EP_IN_MAX_BUF_SIZE (2048)
++
++
++G_DECLARE_FINAL_TYPE (FpiDeviceFpcMoh, fpi_device_fpcmoh, FPI,
++                      DEVICE_FPCMOH, FpDevice);
++
++typedef struct _FPC_FID_DATA
++{
++  guint32 identity_type;
++  guint32 reserved;
++  guint32 identity_size;
++  guint32 subfactor;
++  guint8  data[SECURITY_MAX_SID_SIZE];
++} FPC_FID_DATA, *PFPC_FID_DATA;
++
++typedef struct _FPC_LOAD_DB
++{
++  gint32  status;
++  guint32 reserved;
++  guint32 database_id_size;
++  guint8  data[FPC_DB_ID_LEN];
++} FPC_LOAD_DB, *PFPC_LOAD_DB;
++
++typedef union _FPC_DELETE_DB
++{
++  guint32 reserved;
++  guint32 database_id_size;
++  guint8  data[FPC_DB_ID_LEN];
++} FPC_DB_OP, *PFPC_DB_OP;
++
++typedef struct _FPC_BEGIN_ENROL
++{
++  gint32  status;
++  guint32 reserved1;
++  guint32 reserved2;
++} FPC_BEGIN_ENROL, *PFPC_BEGIN_ENROL;
++
++typedef struct _FPC_ENROL
++{
++  gint32  status;
++  guint32 remaining;
++} FPC_ENROL, *PFPC_ENROL;
++
++typedef struct _FPC_END_ENROL
++{
++  gint32  status;
++  guint32 fid;
++} FPC_END_ENROL, *PFPC_END_ENROL;
++
++typedef struct _FPC_IDENTIFY
++{
++  gint32  status;
++  guint32 identity_type;
++  guint32 identity_offset;
++  guint32 identity_size;
++  guint32 subfactor;
++  guint8  data[SECURITY_MAX_SID_SIZE];
++} FPC_IDENTIFY, *PFPC_IDENTIFY;
++
++#pragma pack(push, 1)
++typedef struct
++{
++  guint32 cmdid;
++  guint32 length;
++  guint32 status;
++} evt_hdr_t;
++
++typedef struct
++{
++  evt_hdr_t hdr;
++  guint16   sensor;
++  guint16   hw_id;
++  guint16   img_w;
++  guint16   img_h;
++  guint8    fw_version[MAX_FW_VERSION_STR_LEN];
++  guint16   fw_capabilities;
++} evt_initiated_t;
++#pragma pack(pop)
++
++typedef struct
++{
++  guint8  subfactor;
++  guint32 identity_type;
++  guint32 identity_size;
++  guint8  identity[SECURITY_MAX_SID_SIZE];
++} __attribute__((packed)) fpc_fid_data_t;
++
++typedef struct
++{
++  evt_hdr_t      hdr;
++  gint           status;
++  guint32        num_ids;
++  fpc_fid_data_t fid_data[FPC_TEMPLATES_MAX];
++} __attribute__((packed)) evt_enum_fids_t;
++
++typedef struct _fp_cmd_response
++{
++  union
++  {
++    evt_hdr_t       evt_hdr;
++    evt_initiated_t evt_inited;
++    evt_enum_fids_t evt_enum_fids;
++  };
++} fpc_cmd_response_t, *pfpc_cmd_response_t;
++
++enum {
++  FPC_ENROL_STATUS_COMPLETED = 0,
++  FPC_ENROL_STATUS_PROGRESS = 1,
++  FPC_ENROL_STATUS_FAILED_COULD_NOT_COMPLETE = 2,
++  FPC_ENROL_STATUS_FAILED_ALREADY_ENROLED = 3,
++  FPC_ENROL_STATUS_IMAGE_LOW_COVERAGE = 4,
++  FPC_ENROL_STATUS_IMAGE_TOO_SIMILAR = 5,
++  FPC_ENROL_STATUS_IMAGE_LOW_QUALITY = 6,
++};
++
++typedef enum {
++  FPC_CMDTYPE_UNKNOWN = 0,
++  FPC_CMDTYPE_TO_DEVICE,
++  FPC_CMDTYPE_TO_DEVICE_EVTDATA,
++  FPC_CMDTYPE_FROM_DEVICE,
++} FpcCmdType;
++
++typedef enum {
++  FP_CMD_SEND = 0,
++  FP_CMD_GET_DATA,
++  FP_CMD_SUSPENDED,
++  FP_CMD_RESUME,
++  FP_CMD_NUM_STATES,
++} FpCmdState;
++
++typedef enum {
++  FPC_INIT_CMD_INIT = 0,
++  FPC_INIT_WAIT4INIT_RESULT,
++  FPC_INIT_WAKE_UP,
++  FPC_INIT_INIT,
++  FPC_INIT_TLS_CONNECT,
++  FPC_INIT_TLS_HANDSHAKE_START,
++  FPC_INIT_TLS_HANDSHAKE_WAIT4HELLO,
++  FPC_INIT_TLS_HANDSHAKE_PROCESS,
++  FPC_INIT_TLS_HANDSHAKE_WRITE,
++  FPC_INIT_TLS_HANDSHAKE_WROTEN,
++  FPC_INIT_TEE_INIT,
++  FPC_INIT_NUM_STATES,
++} FpInitState;
++
++typedef enum {
++  FP_ENROLL_BEGIN = 0,
++  FP_ENROLL_CAPTURE,
++  FP_ENROLL_WAIT4FINGERDOWN,
++
++  FP_ENROLL_GET_IMG,
++
++  FP_ENROLL_WAIT4IMG_SEQ1,
++  FP_ENROLL_WAIT4IMG_SEQ2,
++  FP_ENROLL_WAIT4IMG_SEQ3,
++  FP_ENROLL_WAIT4IMG_SEQ4,
++  FP_ENROLL_WAIT4IMG_SEQ5,
++  FP_ENROLL_WAIT4IMG_SEQ6,
++  FP_ENROLL_WAIT4IMG_SEQ7,
++  FP_ENROLL_WAIT4IMG_SEQ8,
++  FP_ENROLL_WAIT4IMG_SEQ9,
++  FP_ENROLL_WAIT4IMG_SEQ10,
++  FP_ENROLL_WAIT4IMG_SEQ11,
++  FP_ENROLL_SEND_DEAD_PIXEL,
++  FP_ENROLL_READ_DEAD_PIXEL,
++
++  FP_ENROLL_BINDID,
++  FP_ENROLL_SUSPENDED,
++  FP_ENROLL_RESUME,
++  FP_ENROLL_DISCARD,
++  FP_ENROLL_NUM_STATES,
++} FpEnrollState;
++
++typedef enum {
++  FP_VERIFY_CAPTURE = 0,
++  FP_VERIFY_WAIT4FINGERDOWN,
++  FP_VERIFY_GET_IMG,
++  FP_VERIFY_WAIT4IMG_SEQ1,
++  FP_VERIFY_WAIT4IMG_SEQ2,
++  FP_VERIFY_WAIT4IMG_SEQ3,
++  FP_VERIFY_WAIT4IMG_SEQ4,
++  FP_VERIFY_WAIT4IMG_SEQ5,
++  FP_VERIFY_WAIT4IMG_SEQ6,
++  FP_VERIFY_WAIT4IMG_SEQ7,
++  FP_VERIFY_WAIT4IMG_SEQ8,
++  FP_VERIFY_WAIT4IMG_SEQ9,
++  FP_VERIFY_WAIT4IMG_SEQ10,
++  FP_VERIFY_WAIT4IMG_SEQ11,
++  FP_VERIFY_IDENTIFY,
++  FP_VERIFY_SUSPENDED,
++  FP_VERIFY_RESUME,
++  FP_VERIFY_CANCEL,
++  FP_VERIFY_NUM_STATES,
++} FpVerifyState;
++
++typedef enum {
++  FP_CLEAR_DELETE_DB = 0,
++  FP_CLEAR_CREATE_DB,
++  FP_CLEAR_NUM_STATES,
++} FpClearState;
++
++typedef struct _DEVICE_CONTEXT
++{
++  gboolean            initialized;
++  struct fpc_tee     *tee_handle;
++  struct fpc_tee_bio *bio;
++  guint32             img_w;
++  guint32             img_h;
++  guint8             *tls_data;
++  guint32             tls_data_len;
++  guint32             yasc_session_id;
++  fpc_enclave_t      *enclave;
++  fpc_tls_status_t    tls_status;
++} DEVICE_CONTEXT, *PDEVICE_CONTEXT;
++
++struct _FpiDeviceFpcMoh
++{
++  FpDevice        parent;
++  FpiSsm         *task_ssm;
++  FpiSsm         *enroll_ssm;
++  FpiSsm         *identify_ssm;
++
++  FpiSsm         *cmd_ssm;
++  gboolean        cmd_cancelable;
++  gboolean        cmd_suspended;
++  guint32         enroll_count;
++  gint            enroll_stage;
++  gint            immobile_stage;
++  gint            max_enroll_stage;
++  gint            max_immobile_stage;
++  PDEVICE_CONTEXT dev_ctx;
++  GCancellable   *interrupt_cancellable;
++};
+diff --git a/libfprint/drivers/fpcmoh/fpclib_api.h b/libfprint/drivers/fpcmoh/fpclib_api.h
+new file mode 100644
+index 0000000..ec5883d
+--- /dev/null
++++ b/libfprint/drivers/fpcmoh/fpclib_api.h
+@@ -0,0 +1,160 @@
++#ifndef __FPCLIB_API_H__
++#define __FPCLIB_API_H__
++
++#include <stdint.h>
++#include <stdbool.h>
++
++typedef enum fpc_enclave_status {
++  FPC_ENCLAVE_ACTIVE,
++  FPC_ENCLAVE_LOST
++} fpc_enclave_status_t;
++
++enum {
++  FPC_TLS_IN_PROGRESS,
++  FPC_TLS_HANDSHAKE_COMPLETE
++};
++typedef int                fpc_tls_status_t;
++
++typedef struct fpc_enclave fpc_enclave_t;
++
++fpc_enclave_t *fpc_create_enclave (void);
++int32_t fpc_destroy_enclave (fpc_enclave_t *enclave);
++//
++int32_t fpc_start_enclave (fpc_enclave_t *enclave);
++int32_t fpc_shutdown_enclave (fpc_enclave_t *enclave);
++//
++int32_t fpc_enclave_init (fpc_enclave_t *enclave,
++                          uint16_t       hwid);
++int32_t fpc_enclave_handle_tls_connection (fpc_enclave_t *enclave,
++                                           uint8_t       *sealed_tls_key,
++                                           uint32_t       sealed_tls_key_len);
++int32_t fpc_enclave_tls_init_handshake (fpc_enclave_t *enclave);
++int32_t fpc_enclave_get_tls_status (fpc_enclave_t    *enclave,
++                                    fpc_tls_status_t *status);
++int32_t fpc_enclave_get_status (fpc_enclave_t        *enclave,
++                                fpc_enclave_status_t *status);
++int32_t fpc_enclave_process_data (fpc_enclave_t *enclave);
++int fpc_tls_receive_usb_data (void   * param,
++                              uint8_t *data,
++                              size_t   len,
++                              uint32_t timeout_ms);
++int fpc_tls_send_usb_data (void         * param,
++                           const uint8_t *data,
++                           size_t         len);
++
++int32_t fpc_secure_random (uint8_t * data,
++                           uint32_t  data_size);
++
++typedef struct fpc_fifo_struct
++{
++  uint8_t *buffer;
++  uint16_t put_index;
++  uint16_t get_index;
++  uint32_t is_full;
++  uint32_t size;
++} fpc_fifo_t;
++
++bool         fpc_fifo_is_empty (fpc_fifo_t *fifo);
++void         fpc_fifo_clear (fpc_fifo_t *fifo);
++void         fpc_fifo_copy (fpc_fifo_t *dst,
++                            fpc_fifo_t *src);
++void         fpc_fifo_free (fpc_fifo_t *fifo);
++void         fpc_fifo_put (fpc_fifo_t *fifo,
++                           uint8_t    *data,
++                           uint32_t    len);
++uint32_t     fpc_fifo_get (fpc_fifo_t *fifo,
++                           uint8_t    *buff,
++                           uint32_t    len);
++fpc_fifo_t  *fpc_fifo_init (uint32_t size);
++
++#define FPC_CONFIG_MAX_NR_TEMPLATES 10
++#define FPC_TA_BIO_DB_RDONLY 0
++#define FPC_TA_BIO_DB_WRONLY 1
++
++typedef struct fpc_tac fpc_tac_t;
++
++typedef struct fpc_tac_shared_mem
++{
++  void * addr;
++} fpc_tac_shared_mem_t;
++
++struct fpc_tee
++{
++  fpc_tac_t            * tac;
++  fpc_tac_shared_mem_t * shared_buffer;
++};
++
++typedef struct fpc_tee fpc_tee_t;
++
++struct fpc_tee_bio
++{
++  fpc_tee_t tee;
++};
++
++typedef struct fpc_tee_bio fpc_tee_bio_t;
++
++fpc_tee_t *fpc_tee_init (void);
++void fpc_tee_release (fpc_tee_t * tee);
++
++/**
++ * @brief fpc_tac_open open a connection to the ta.
++ * @return the tac or NULL on failure.
++ */
++fpc_tac_t * fpc_tac_open (void);
++
++/**
++ * @brief fpc_tac_release close the connection to the ta.
++ */
++void fpc_tac_release (fpc_tac_t * tac);
++
++fpc_tee_bio_t * fpc_tee_bio_init (fpc_tee_t * tee);
++void fpc_tee_bio_release (fpc_tee_bio_t * tee);
++
++int fpc_tee_set_gid (fpc_tee_bio_t * tee,
++                     int32_t         gid);
++int fpc_tee_begin_enroll (fpc_tee_bio_t * tee);
++int fpc_tee_enroll (fpc_tee_bio_t * tee,
++                    uint32_t      * remaining);
++int fpc_tee_end_enroll (fpc_tee_bio_t * tee,
++                        uint32_t      * id);
++int fpc_tee_identify (fpc_tee_bio_t * tee,
++                      uint32_t      * id);
++int fpc_tee_qualify_image (fpc_tee_bio_t * tee);
++
++int fpc_tee_update_template (fpc_tee_bio_t * tee,
++                             uint32_t      * update);
++int fpc_tee_get_finger_ids (fpc_tee_bio_t * tee,
++                            uint32_t      * size,
++                            uint32_t      * ids);
++int fpc_tee_delete_template (fpc_tee_bio_t * tee,
++                             uint32_t        id);
++int fpc_tee_get_template_db_id (fpc_tee_bio_t * tee,
++                                uint64_t      * id);
++
++int fpc_tee_load_empty_db (fpc_tee_bio_t * tee);
++int fpc_tee_get_db_blob_size (fpc_tee_t * tee,
++                              size_t     *blob_size);
++int fpc_tee_db_open (fpc_tee_t *tee,
++                     uint32_t   mode,
++                     uint32_t   size);
++int fpc_tee_db_close (fpc_tee_t *tee);
++int fpc_tee_send_db_read_commands (fpc_tee_t * tee,
++                                   uint8_t    *blob,
++                                   size_t      blob_size);
++int fpc_tee_send_db_write_commands (fpc_tee_t    * tee,
++                                    const uint8_t *blob,
++                                    size_t         blob_size);
++
++int fpc_tls_buff_init (void);
++int fpc_tls_buff_release (void);
++int fpc_tls_buff_clear (void);
++int fpc_tls_buff_put (uint8_t *data,
++                      uint32_t len);
++int fpc_tls_write_buff_init (void);
++int fpc_tls_write_buff_release (void);
++int fpc_tls_write_buff_clear (void);
++uint8_t fpc_tls_write_buff_is_empty (void);
++uint32_t fpc_tls_write_buff_get (uint8_t *o_data,
++                                 uint32_t len);
++
++#endif // __FPCLIB_API_H__
+diff --git a/libfprint/fprint-list-udev-hwdb.c b/libfprint/fprint-list-udev-hwdb.c
+index 0527db1..77ec835 100644
+--- a/libfprint/fprint-list-udev-hwdb.c
++++ b/libfprint/fprint-list-udev-hwdb.c
+@@ -96,7 +96,6 @@ static const FpIdEntry allowlist_id_table[] = {
+   { .vid = 0x0bda, .pid = 0x5812 },
+   { .vid = 0x10a5, .pid = 0x0007 },
+   { .vid = 0x10a5, .pid = 0x9200 },
+-  { .vid = 0x10a5, .pid = 0x9800 },
+   { .vid = 0x10a5, .pid = 0xa120 },
+   { .vid = 0x10a5, .pid = 0xa900 },
+   { .vid = 0x10a5, .pid = 0xe340 },
+diff --git a/libfprint/meson.build b/libfprint/meson.build
+index 3449481..89e4f26 100644
+--- a/libfprint/meson.build
++++ b/libfprint/meson.build
+@@ -149,6 +149,8 @@ driver_sources = {
+         [ 'drivers/goodixmoc/goodix.c', 'drivers/goodixmoc/goodix_proto.c' ],
+     'fpcmoc' :
+         [ 'drivers/fpcmoc/fpc.c' ],
++    'fpcmoh' :
++        [ 'drivers/fpcmoh/fpc.c'],
+     'realtek' :
+         [ 'drivers/realtek/realtek.c' ],
+     'focaltech_moc' :
+@@ -166,6 +168,8 @@ helper_sources = {
+         [ ],
+     'udev' :
+         [ ],
++    'fpcbep' :
++        [ ],
+     'virtual' :
+         [ 'drivers/virtual-device-listener.c' ],
+ }
+diff --git a/meson.build b/meson.build
+index 14fb11f..b5fc33a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -142,6 +142,7 @@ default_drivers = [
+     'goodixmoc',
+     'nb1010',
+     'fpcmoc',
++    'fpcmoh',
+     'realtek',
+     'focaltech_moc',
+ ]
+@@ -211,6 +212,7 @@ driver_helper_mapping = {
+     'aes4000' : [ 'aeslib', 'aes3k' ],
+     'uru4000' : [ 'openssl' ],
+     'elanspi' : [ 'udev' ],
++    'fpcmoh' :  [ 'fpcbep' ],
+     'virtual_image'          : [ 'virtual' ],
+     'virtual_device'         : [ 'virtual' ],
+     'virtual_device_storage' : [ 'virtual' ],
+@@ -284,6 +286,13 @@ foreach i : driver_helpers
+         libfprint_conf.set10('HAVE_UDEV', true)
+ 
+         optional_deps += gudev_dep
++    elif i == 'fpcbep'
++        fpcbep_dep = cc.find_library('fpcbep', required: true)
++        if not fpcbep_dep.found()
++            error('fpcbep is required for @0@'.format(driver))
++        endif
++
++        optional_deps += fpcbep_dep
+     endif
+ endforeach
+ 
