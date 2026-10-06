@@ -15,12 +15,22 @@ let
     agents = ../../../../../packages/agents/skill;
     openspec-pipeline = ../../../../../packages/openspec-pipeline/skill;
   };
+  # Skills shipped inside packages, linked from the Nix store
+  aiCfg = config._custom.services.ai;
+  packageSkills =
+    lib.optionalAttrs (aiCfg.enable && aiCfg.webscoop.enable) {
+      webscoop-use-recipe = "${inputs.webscoop}/skills/webscoop-use-recipe";
+    }
+    // lib.optionalAttrs (aiCfg.enable && aiCfg.wosarcher.enable) {
+      wosarcher = "${inputs.wosarcher}/skill";
+    };
   mkSkillLinks =
     dir:
     lib.mapAttrs' (
       name: path:
       lib.nameValuePair "${dir}/${name}" { source = lib._custom.relativeSymlink configDirectory path; }
-    ) skills;
+    ) skills
+    // lib.mapAttrs' (name: path: lib.nameValuePair "${dir}/${name}" { source = path; }) packageSkills;
 in
 {
   imports = [
