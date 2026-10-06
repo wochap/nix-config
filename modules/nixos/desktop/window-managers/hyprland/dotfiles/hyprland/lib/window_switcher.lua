@@ -26,8 +26,10 @@ function M.setup(opts)
     if not switcher_open then
       next_session_id = next_session_id + 1
       session_id = tostring(next_session_id)
-      hl.dispatch(hl.dsp.submap(submap))
     end
+    -- Re-enter every step: Quickshell resets the submap when it bypasses the
+    -- overlay, possibly before the modifier is released.
+    hl.dispatch(hl.dsp.submap(submap))
     switcher_open = true
     call(action, mode, order, session_id)
   end

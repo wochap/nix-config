@@ -119,12 +119,21 @@ Scope {
     root.selectedId = list[next]?.address ?? "";
   }
 
+  function resetSubmap() {
+    if (SHyprland.submap.startsWith("window-switcher"))
+      Hyprland.dispatch(Hyprland.usingLua ? `hl.dsp.submap("reset")` : "submap reset");
+  }
+
   function bypassOverlay(requestedMode, requestedOrder, requestedSessionId, delta) {
     root.mode = root.normalizedMode(requestedMode);
     root.order = root.normalizedOrder(requestedOrder);
     const list = root.orderedToplevels;
     if (list.length >= 3)
       return false;
+
+    // No overlay means no Escape fallback, so leave the submap now instead of
+    // relying solely on the modifier-release binding, which can be missed.
+    root.resetSubmap();
 
     // Consume the modifier-release confirmation for this gesture: no switcher
     // session was opened, so it must not become a pending confirmation.
@@ -175,8 +184,7 @@ Scope {
   function hide() {
     // Leave the compositor submap entered by the switcher bindings so global
     // bindings work again even if the modifier release is never observed.
-    if (SHyprland.submap.startsWith("window-switcher"))
-      Hyprland.dispatch(Hyprland.usingLua ? `hl.dsp.submap("reset")` : "submap reset");
+    root.resetSubmap();
     root.isOpen = false;
     root.selectedId = "";
     root.openedFrom = "";
