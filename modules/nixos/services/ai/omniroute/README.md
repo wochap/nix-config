@@ -37,7 +37,7 @@ After imporing them, make sure API key has access to combos
 
 `omniroute-chat` sends an OpenAI-compatible chat request to the local
 instance. It is installed system-wide and is used by `clean-voice` and
-`article-summary`. Defaults:
+`article-summarize`. Defaults:
 
 - Base URL: `https://omniroute.wochap.local/v1`
 - Model/combo: `desktop-free`

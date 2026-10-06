@@ -13,8 +13,8 @@ pre { overflow-x: auto; padding: 1rem; }
 table { width: 100%; border-collapse: collapse; overflow-x: auto; }
 th, td { border: 1px solid var(--border); padding: .4rem .6rem; text-align: left; }
 
-/* Optional conventions used by article-summary and available to other producers. */
-.metadata, .footer { color: var(--muted); font-size: .9rem; }
+/* Optional conventions used by article and article-library, available to other producers. */
+.metadata, .footer, .nav { color: var(--muted); font-size: .9rem; }
 .lead-image { display: block; width: auto; max-height: 28rem; object-fit: contain; margin: 1.5rem auto; border-radius: .5rem; }
 .original { display: inline-block; margin: 1.5rem 0; padding: .65rem 1rem; border-radius: .4rem; background: var(--accent); color: var(--bg); font-weight: 700; text-decoration: none; }
 .copy-summary { margin-left: .6rem; padding: .65rem 1rem; border: 1px solid var(--border); border-radius: .4rem; background: var(--panel); color: var(--fg); font: inherit; font-weight: 700; cursor: pointer; }

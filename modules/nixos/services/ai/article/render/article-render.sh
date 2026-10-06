@@ -5,13 +5,14 @@ open=false
 output=""
 title=""
 default_style=true
+copy_file=""
 head_files=()
 header_files=()
 footer_files=()
 
 usage() {
   cat >&2 <<'EOF'
-usage: article-page [OPTIONS] MARKDOWN
+usage: article-render [OPTIONS] MARKDOWN
 
 Render a Markdown file as a standalone HTML5 page. Use - to read from stdin.
 
@@ -20,6 +21,7 @@ Render a Markdown file as a standalone HTML5 page. Use - to read from stdin.
       --head FILE     append HTML to <head> (may be repeated)
       --header FILE   insert HTML before the rendered Markdown (may be repeated)
       --footer FILE   insert HTML after the rendered Markdown (may be repeated)
+      --copy FILE     embed FILE with a "Copy Markdown" button (key: y)
       --no-default-style
                        omit the built-in responsive stylesheet
       --open           open the resulting page with xdg-open
@@ -37,7 +39,7 @@ while (($#)); do
     output=$2
     shift 2
     ;;
-  --title | --head | --header | --footer)
+  --title | --head | --header | --footer | --copy)
     (($# >= 2)) || {
       usage
       exit 2
@@ -47,6 +49,7 @@ while (($#)); do
     --head) head_files+=("$2") ;;
     --header) header_files+=("$2") ;;
     --footer) footer_files+=("$2") ;;
+    --copy) copy_file=$2 ;;
     esac
     shift 2
     ;;
@@ -76,7 +79,7 @@ if (($# != 1)); then
 fi
 markdown=$1
 if [[ $markdown != - && ! -f $markdown ]]; then
-  echo "article-page: Markdown file does not exist: $markdown" >&2
+  echo "article-render: Markdown file does not exist: $markdown" >&2
   exit 1
 fi
 if [[ -z $output ]]; then
@@ -90,7 +93,7 @@ fi
 
 pandoc_args=(--from=markdown-raw_html --to=html5 --standalone --output="$output")
 if [[ $default_style == true ]]; then
-  pandoc_args+=(--include-in-header="$ARTICLE_PAGE_DEFAULT_HEAD")
+  pandoc_args+=(--include-in-header="$ARTICLE_RENDER_DEFAULT_HEAD")
 fi
 for file in "${head_files[@]}"; do pandoc_args+=(--include-in-header="$file"); done
 for file in "${header_files[@]}"; do pandoc_args+=(--include-before-body="$file"); done
@@ -98,6 +101,7 @@ for file in "${footer_files[@]}"; do pandoc_args+=(--include-after-body="$file")
 if [[ -n $title ]]; then pandoc_args+=(--metadata "title=$title"); fi
 
 pandoc "${pandoc_args[@]}" "$markdown"
+if [[ -n $copy_file ]]; then python3 "$COPY_CONTROLS" "$output" "$copy_file"; fi
 printf '%s\n' "$output"
 
 if [[ $open == true ]]; then

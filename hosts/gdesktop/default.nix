@@ -194,7 +194,7 @@ in
     _custom.services.ai.reranker.modelSha256 =
       "941f7d1d1524251c026a797b803ac9575545c5d7aa19b26e0e49661d7720af49";
     _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
-    _custom.services.ai.enableArticleSummary = true;
+    _custom.services.ai.enableArticle = true;
     _custom.services.ai.agentsServer.enable = true;
     _custom.services.ai.briefing.enable = true;
     _custom.services.rsshub.enable = true;

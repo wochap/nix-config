@@ -351,8 +351,8 @@ in
   config = lib.mkIf (ai.enable && cfg.enable) {
     assertions = [
       {
-        assertion = ai.enableOmniRoute && ai.enableSupertonic && ai.enableArticleSummary;
-        message = "_custom.services.ai.briefing requires enableOmniRoute, enableSupertonic and enableArticleSummary.";
+        assertion = ai.enableOmniRoute && ai.enableSupertonic && ai.enableArticle;
+        message = "_custom.services.ai.briefing requires enableOmniRoute, enableSupertonic and enableArticle.";
       }
       {
         assertion = homeScreen.enable;

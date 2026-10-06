@@ -34,18 +34,19 @@ Output is a single JSON document on stdout:
 
 ```json
 {
-  "url": "https://example.com/post",
   "title": "...",
   "author": "...",
   "date": "...",
-  "content": "Markdown article body..."
+  "canonical_url": "https://example.com/post",
+  "image_url": "https://example.com/lead.jpg",
+  "body": "Markdown article body..."
 }
 ```
 
 Pipe the body into other tools with `jq`:
 
 ```sh
-article-scrape https://example.com/post | jq --raw-output .content
+article-scrape https://example.com/post | jq --raw-output .body
 ```
 
 Exit codes: `2` for a bad URL or arguments, `1` when fetching or extraction

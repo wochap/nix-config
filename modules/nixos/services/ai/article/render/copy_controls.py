@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Safely embed summary Markdown and its clipboard controls in rendered HTML."""
+"""Safely embed Markdown and its clipboard controls in a rendered page.
+
+The button goes after the page's `a.original` link when there is one,
+otherwise at the top of the body.
+"""
 
 import html
 import sys
@@ -24,9 +28,11 @@ controls = f"""
 
   if (original) {{
     original.insertAdjacentElement('afterend', button);
-    button.insertAdjacentElement('afterend', status);
-    button.hidden = false;
+  }} else {{
+    document.body.prepend(button);
   }}
+  button.insertAdjacentElement('afterend', status);
+  button.hidden = false;
 
   async function copyMarkdown() {{
     let method = 'Clipboard API';

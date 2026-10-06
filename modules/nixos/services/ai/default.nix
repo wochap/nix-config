@@ -26,9 +26,7 @@ in
     ./open-design
     ./comfyui
     ./asr
-    ./article-page
-    ./article-scrape
-    ./article-summary
+    ./article
     ./briefing
     ./course-notes
     ./supertonic
