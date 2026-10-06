@@ -2,6 +2,8 @@
 set -euo pipefail
 
 model="${OMNIROUTE_MODEL:-desktop-free}"
+# No reasoning by default; omniroute-chat reads this.
+export OMNIROUTE_REASONING_EFFORT="${OMNIROUTE_REASONING_EFFORT:-none}"
 
 notify() {
   notify-send \

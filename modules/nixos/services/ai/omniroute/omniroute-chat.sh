@@ -4,9 +4,10 @@ set -euo pipefail
 base_url="${OMNIROUTE_BASE_URL:-https://omniroute.wochap.local/v1}"
 model="${OMNIROUTE_MODEL:-desktop-free}"
 api_key_file="${OMNIROUTE_API_KEY_FILE:-/run/secrets/local-omniroute-secret-key}"
+effort="${OMNIROUTE_REASONING_EFFORT:-}"
 
 usage() {
-  echo "usage: omniroute-chat [--model MODEL] < OpenAI-chat-request.json" >&2
+  echo "usage: omniroute-chat [--model MODEL] [--reasoning-effort none|low|medium|high|xhigh|max|default] < OpenAI-chat-request.json" >&2
 }
 
 while (($#)); do
@@ -14,6 +15,11 @@ while (($#)); do
   --model)
     (($# >= 2)) || { usage; exit 2; }
     model=$2
+    shift 2
+    ;;
+  --reasoning-effort)
+    (($# >= 2)) || { usage; exit 2; }
+    effort=$2
     shift 2
     ;;
   --help | -h)
@@ -27,6 +33,17 @@ while (($#)); do
   esac
 done
 
+# Empty keeps the request's own reasoning_effort; "default" strips it so the
+# server picks. OmniRoute translates the level per model.
+case "$effort" in
+"" | none | low | medium | high | xhigh | max | default) ;;
+med) effort=medium ;;
+*)
+  echo "omniroute-chat: invalid reasoning effort: $effort (none|low|medium|high|xhigh|max|default)" >&2
+  exit 2
+  ;;
+esac
+
 if [[ -n ${OMNIROUTE_API_KEY:-} ]]; then
   api_key=$OMNIROUTE_API_KEY
 elif [[ -r $api_key_file ]]; then
@@ -39,9 +56,11 @@ fi
 work_dir=$(mktemp -d "${TMPDIR:-/tmp}/omniroute-chat.XXXXXX")
 trap 'rm -rf "$work_dir"' EXIT
 
-if ! jq -e --arg model "$model" '
+if ! jq -e --arg model "$model" --arg effort "$effort" '
   select(type == "object" and (.messages | type == "array")) |
-  .model = $model | .stream = false
+  .model = $model | .stream = false |
+  if $effort == "" then . elif $effort == "default" then del(.reasoning_effort)
+  else .reasoning_effort = $effort end
 ' >"$work_dir/request.json"; then
   echo "omniroute-chat: stdin must be an OpenAI chat request with a messages array" >&2
   exit 2

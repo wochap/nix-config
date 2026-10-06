@@ -138,7 +138,11 @@ def main():
     # Call omniroute-chat.
     try:
         result = subprocess.run(
-            ["omniroute-chat"],
+            [
+                "omniroute-chat",
+                "--reasoning-effort",
+                os.environ.get("OMNIROUTE_REASONING_EFFORT", "none"),
+            ],
             input=json.dumps(request),
             text=True,
             capture_output=True,

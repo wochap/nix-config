@@ -180,7 +180,13 @@ def llm(messages, *, model=None, temperature=0.4, max_tokens=None, retries=2, st
     request = {"messages": messages, "temperature": temperature}
     if max_tokens:
         request["max_tokens"] = max_tokens
-    command = ["omniroute-chat", "--model", model or os.environ.get("BRIEFING_MODEL", "desktop-free")]
+    command = [
+        "omniroute-chat",
+        "--model",
+        model or os.environ.get("BRIEFING_MODEL", "desktop-free"),
+        "--reasoning-effort",
+        os.environ.get("OMNIROUTE_REASONING_EFFORT", "none"),
+    ]
     last_error = ""
     for attempt in range(retries + 1):
         result = subprocess.run(command, input=json.dumps(request), capture_output=True, text=True, check=False)

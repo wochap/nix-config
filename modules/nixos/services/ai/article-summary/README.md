@@ -10,7 +10,7 @@ integrated with an RSS reader.
 | Component | Role |
 |-----------|------|
 | [article-scrape](../article-scrape/README.md) | URL → article JSON (static fetch with browser fallback) |
-| OmniRoute (`omniroute-chat`) | LLM summarization (default combo `desktop-free`) |
+| OmniRoute (`omniroute-chat`) | LLM summarization (default combo `desktop-free`, reasoning effort `none`) |
 | Pandoc + [article-page](../article-page/README.md) | Markdown summary → HTML page (`render.py`) |
 | Python 3 | Metadata injection and controls (`inject_controls.py`) |
 

@@ -3,6 +3,8 @@ set -euo pipefail
 
 format=raw
 model="${OMNIROUTE_MODEL:-desktop-free}"
+# No reasoning by default; omniroute-chat reads this.
+export OMNIROUTE_REASONING_EFFORT="${OMNIROUTE_REASONING_EFFORT:-none}"
 title=""
 max_input_tokens=6500
 preset=article

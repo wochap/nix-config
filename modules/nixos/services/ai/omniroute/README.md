@@ -57,6 +57,18 @@ OMNIROUTE_BASE_URL=http://127.0.0.1:20128/v1 \
     omniroute-chat --model desktop-free < request.json
 ```
 
+Set the reasoning effort with `--reasoning-effort` (or
+`OMNIROUTE_REASONING_EFFORT`):
+`none`, `low`, `medium` (alias `med`), `high`, `xhigh`, `max`, or
+`default`. OmniRoute translates the level per model. `default` removes
+`reasoning_effort` from the request so the server decides; without the
+flag, the request's own `reasoning_effort` (if any) is sent unchanged.
+
+```sh
+OMNIROUTE_REASONING_EFFORT=none clean-voice
+omniroute-chat --reasoning-effort high < request.json
+```
+
 ## Upgrade
 
 The image is pinned by tag and digest in `default.nix`

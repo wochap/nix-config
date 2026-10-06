@@ -2,6 +2,8 @@
 set -euo pipefail
 
 model="${OMNIROUTE_MODEL:-desktop-free}"
+# Summaries need no reasoning; omniroute-chat (via summary) reads this.
+export OMNIROUTE_REASONING_EFFORT="${OMNIROUTE_REASONING_EFFORT:-none}"
 cache_version="4"
 force=false
 debug=false
