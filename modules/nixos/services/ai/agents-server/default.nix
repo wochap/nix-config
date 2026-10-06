@@ -75,6 +75,8 @@ in
         );
         Restart = "on-failure";
         RestartSec = 2;
+        # SIGTERM exits 130 (term.ts), a normal stop.
+        SuccessExitStatus = 130;
         # sessiontap comes from the system profile; claude (npm) and pi (bun)
         # are global installs in home, see programs/dev/lang-web.
         Environment = [
