@@ -65,7 +65,7 @@ WrapperRectangle {
       SystemIcon {
         Layout.fillHeight: true
         icon: SPipewire.outputIcon
-        size: Styles.font.pixelSize.hugeass
+        size: 30
         enableColoriser: true
         color: SPipewire.outputIconColor
       }
