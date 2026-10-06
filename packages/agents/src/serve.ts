@@ -190,6 +190,8 @@ function spawn(p: Plan, cwd: string, noTools: boolean): Run {
       for (const line of lines) {
         const session = line.match(/^session: (\S+)/);
         if (session) resolveId(session[1]);
+        // The agent's own stderr (e.g. a launch failure) only shows up here.
+        else if (line.trim()) console.error(line);
         const error = line.match(/error: (.*)/);
         if (error) lastError = error[1];
       }

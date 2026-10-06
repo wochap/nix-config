@@ -75,8 +75,11 @@ in
         );
         Restart = "on-failure";
         RestartSec = 2;
-        # claude, pi and sessiontap come from the user profile.
-        Environment = [ "PATH=/etc/profiles/per-user/${userName}/bin:/run/current-system/sw/bin" ];
+        # sessiontap comes from the system profile; claude (npm) and pi (bun)
+        # are global installs in home, see programs/dev/lang-web.
+        Environment = [
+          "PATH=%h/.npm-packages/bin:%h/.cache/.bun/bin:/etc/profiles/per-user/${userName}/bin:/run/current-system/sw/bin"
+        ];
       }
       // lib._custom.userServiceHardening
       // {
