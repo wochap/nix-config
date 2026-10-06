@@ -2,12 +2,14 @@
 
 # Defines the usage instructions for the script.
 usage() {
-  echo "Usage: $0 [--listen | -h | --help]"
+  echo "Usage: $0 [--listen | --lock | --status | -h | --help]"
   echo
-  echo "Monitors D-Bus for screen lock and unlock signals."
+  echo "Monitors D-Bus for screen lock and unlock signals and drives the quickshell lock screen."
   echo
   echo "Options:"
   echo "  --listen      Listen for events and print 'true' for lock and 'false' for unlock."
+  echo "  --lock        Disable the idle inhibitor and lock the screen."
+  echo "  --status      Print 'true' when the screen is locked, 'false' otherwise."
   echo "  -h, --help    Display this help message and exit."
 }
 
@@ -31,6 +33,27 @@ listen() {
     done
 }
 
+lock_instance=(quickshell -p "$HOME/.config/quickshell/shell/lock.qml")
+
+lock() {
+  # disable idle inhibitor
+  shell_idle_status=$(shell-idle-inhibit --status)
+  if [[ "$shell_idle_status" == "true" ]]; then
+    shell-idle-inhibit --toggle
+  fi
+
+  "${lock_instance[@]}" ipc call lock lock
+}
+
+status() {
+  # an unreachable lock instance reads as unlocked
+  if [[ "$("${lock_instance[@]}" ipc call lock isLocked 2>/dev/null)" == "true" ]]; then
+    printf -- 'true\n'
+  else
+    printf -- 'false\n'
+  fi
+}
+
 # If no arguments are provided, show usage.
 if [ -z "$1" ]; then
   usage
@@ -41,6 +64,12 @@ fi
 case "$1" in
 --listen)
   listen
+  ;;
+--lock)
+  lock
+  ;;
+--status)
+  status
   ;;
 -h | --help)
   usage

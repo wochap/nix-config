@@ -29,7 +29,7 @@ elif [ "$1" = "--off" ]; then
 
   brightnessctl --save
 
-  if [[ -n "$(pgrep hyprlock)" ]]; then
+  if [[ "$(shell-lock --status)" == "true" ]]; then
     # decrease brightness to zero
     backlight "0%"
 

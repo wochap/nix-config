@@ -3,7 +3,8 @@ import qs.config
 import qs.widgets.common
 import qs.widgets.AuthPrompt
 
-// 32px dialog button: primary (filled, Enter), secondary (Esc), ghost (risky, never default)
+// 32px dialog button: primary (filled, Enter), secondary (Esc), ghost (risky, never default),
+// tinted (outlined `tint`, e.g. the lock screen's red confirm)
 FocusScope {
   id: root
 
@@ -11,8 +12,13 @@ FocusScope {
   property string kind: "secondary"
   property string keycap: ""
   property bool isBusy: false
+  property color tint: Theme.options.red
+  // focus ring color
+  property color ink: ConfigAuth.ink
+  property int labelSize: ConfigAuth.bodySize
   readonly property bool isPrimary: root.kind === "primary"
   readonly property bool isGhost: root.kind === "ghost"
+  readonly property bool isTinted: root.kind === "tinted"
   readonly property bool isHovered: mouseArea.containsMouse
   readonly property bool isPressed: mouseArea.pressed
 
@@ -34,7 +40,7 @@ FocusScope {
     visible: root.activeFocus
     radius: ConfigAuth.controlRadius + 4
     border.width: 2
-    border.color: ConfigAuth.ink
+    border.color: root.ink
   }
 
   StyledRect {
@@ -50,6 +56,9 @@ FocusScope {
       if (root.isGhost) {
         return root.isPressed ? Theme.options.surface1 : root.isHovered ? Theme.options.surface0 : "transparent";
       }
+      if (root.isTinted) {
+        return Theme.tint(Theme.options.base, String(root.tint), root.isPressed ? Styles.tint.selected : root.isHovered ? Styles.tint.hover : 0.12);
+      }
       return root.isPressed ? Theme.options.surface2 : root.isHovered ? Theme.options.surface1 : Theme.options.surface0;
     }
     border.color: {
@@ -58,6 +67,9 @@ FocusScope {
       }
       if (root.isGhost) {
         return Theme.options.surface1;
+      }
+      if (root.isTinted) {
+        return root.tint;
       }
       return root.isPressed || root.isHovered ? Theme.options.surface2 : Theme.options.surface1;
     }
@@ -95,8 +107,8 @@ FocusScope {
 
       anchors.verticalCenter: parent.verticalCenter
       text: root.label
-      color: root.isPrimary ? ConfigAuth.onInk : Theme.options.text
-      font.pixelSize: ConfigAuth.bodySize
+      color: root.isPrimary ? ConfigAuth.onInk : root.isTinted ? root.tint : Theme.options.text
+      font.pixelSize: root.labelSize
       font.weight: Font.Medium
     }
 
@@ -104,8 +116,8 @@ FocusScope {
       anchors.verticalCenter: parent.verticalCenter
       visible: root.keycap !== ""
       label: root.keycap
-      textColor: root.isPrimary ? ConfigAuth.onInk : ConfigAuth.subtext
-      border.color: root.isPrimary ? Theme.addAlpha(String(ConfigAuth.onInk), 0.45) : ConfigAuth.fieldBorder
+      textColor: root.isPrimary ? ConfigAuth.onInk : root.isTinted ? root.tint : ConfigAuth.subtext
+      border.color: root.isPrimary ? Theme.addAlpha(String(ConfigAuth.onInk), 0.45) : root.isTinted ? Theme.addAlpha(String(root.tint), 0.5) : ConfigAuth.fieldBorder
     }
   }
 

@@ -62,11 +62,12 @@
 
     _custom.desktop.cliphist.enable = true;
     _custom.desktop.electron-support.enable = true;
-    _custom.desktop.hyprlock.enable = lib.mkDefault true;
+    _custom.desktop.hyprlock.enable = lib.mkDefault false;
     _custom.desktop.hyprsunset.enable = lib.mkDefault false;
     _custom.desktop.kanshi.enable = true;
     _custom.desktop.quickshell.enable = lib.mkDefault true;
     _custom.desktop.quickshell.enableSystemd = lib.mkDefault true;
+    _custom.desktop.quickshell.lock.enable = lib.mkDefault true;
     _custom.desktop.idle.enable = lib.mkDefault true;
     _custom.desktop.awww.enable = true;
     _custom.desktop.tofi.enable = true;

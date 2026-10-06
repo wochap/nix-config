@@ -80,6 +80,13 @@ in
       type = lib.types.package;
       default = quickshell-final;
     };
+    # Lock screen rendered by a second, resident quickshell instance
+    # (dotfiles/shell/lock.qml), replaces hyprlock
+    lock = {
+      enable = lib.mkEnableOption { };
+      # fprintd in parallel to the password
+      fingerprint.enable = lib.mkEnableOption { };
+    };
     # Render polkit, gpg, ssh and gnome-keyring prompts in the shell
     # (widgets/AuthPrompt), stock agents stay as fallback
     authDialogs = {
@@ -141,6 +148,21 @@ in
     ];
 
     fonts.packages = with pkgs; [ nixpkgs-unstable.material-symbols ];
+
+    # read by SLockSession.qml (PamContext configs)
+    security.pam.services = lib.mkIf cfg.lock.enable (
+      {
+        quickshell-lock.text = ''
+          auth include login
+        '';
+      }
+      // lib.optionalAttrs cfg.lock.fingerprint.enable {
+        quickshell-lock-fprint.text = ''
+          auth required ${pkgs.fprintd}/lib/security/pam_fprintd.so
+        '';
+      }
+    );
+    services.fprintd.enable = lib.mkIf (cfg.lock.enable && cfg.lock.fingerprint.enable) true;
 
     # "lat,lon,City", read by SWeather.qml from /run/secrets/personal-weather-location,
     # falls back to IP geolocation when missing
@@ -220,6 +242,25 @@ in
             PassEnvironment = [ "HYPRLAND_INSTANCE_SIGNATURE" ];
             ExecStart = "${quickshell-final}/bin/quickshell -p ${hmConfig.xdg.configHome}/quickshell/shell";
             Restart = "on-failure";
+            KillMode = "mixed";
+          };
+        }
+      );
+
+      # resident lock instance, `shell-lock --lock` asks it to lock over ipc
+      systemd.user.services.shell-lock = lib.mkIf (cfg.enableSystemd && cfg.lock.enable) (
+        lib._custom.mkWaylandService {
+          Unit = {
+            Description = "Quickshell lock screen";
+            Documentation = "https://github.com/quickshell-mirror/quickshell";
+          };
+          Service = {
+            Environment = lib.optional cfg.lock.fingerprint.enable "QS_LOCK_FPRINT=1";
+            PassEnvironment = [ "HYPRLAND_INSTANCE_SIGNATURE" ];
+            ExecStart = "${quickshell-final}/bin/quickshell -p ${hmConfig.xdg.configHome}/quickshell/shell/lock.qml";
+            # a dead locker leaves the session locked with nothing to unlock it
+            Restart = "always";
+            RestartSec = 1;
             KillMode = "mixed";
           };
         }

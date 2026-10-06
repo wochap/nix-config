@@ -54,6 +54,7 @@ set_light_theme() {
 
   # quickshell
   quickshell -p ~/.config/quickshell/shell ipc call theme setMode light
+  quickshell -p ~/.config/quickshell/shell/lock.qml ipc call theme setMode light 2>/dev/null || true
 
   # zsh
   killall -USR1 zsh
@@ -112,6 +113,7 @@ set_dark_theme() {
 
   # quickshell
   quickshell -p ~/.config/quickshell/shell ipc call theme setMode dark
+  quickshell -p ~/.config/quickshell/shell/lock.qml ipc call theme setMode dark 2>/dev/null || true
 
   # zsh
   killall -USR1 zsh

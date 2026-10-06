@@ -11,6 +11,7 @@ import qs.services
 import qs.services.SNotifications
 import qs.widgets.common
 import qs.widgets.ControlCenter.widgets
+import qs.widgets.Media
 
 PanelWindow {
   id: root
