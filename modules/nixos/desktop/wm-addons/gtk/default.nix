@@ -177,7 +177,7 @@ in
       home.sessionVariables = lib.mkMerge [
         {
           # Hide dbus errors in GTK apps?
-          NO_AT_BRIDGE = "1";
+          # NO_AT_BRIDGE = "1";
 
           # TODO: do we need this?
           # ADW_DISABLE_PORTAL = "1";

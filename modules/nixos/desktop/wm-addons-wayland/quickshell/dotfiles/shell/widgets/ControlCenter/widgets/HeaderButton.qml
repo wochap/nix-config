@@ -29,6 +29,22 @@ Item {
     armTimer.stop();
   }
 
+  function press() {
+    if (root.needsConfirm && !root.isArmed) {
+      root.isArmed = true;
+      root.armedAt = Date.now();
+      armTimer.restart();
+      armProgressAnimation.restart();
+      root.armed();
+      return;
+    }
+    if (root.needsConfirm && Date.now() - root.armedAt < root.armGuard) {
+      return;
+    }
+    root.disarm();
+    root.activated();
+  }
+
   implicitWidth: root.isArmed ? armedRow.implicitWidth + 20 : ConfigControlCenter.headerButtonSize
   implicitHeight: ConfigControlCenter.headerButtonSize
 
@@ -136,20 +152,9 @@ Item {
     anchors.fill: parent
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
-    onClicked: {
-      if (root.needsConfirm && !root.isArmed) {
-        root.isArmed = true;
-        root.armedAt = Date.now();
-        armTimer.restart();
-        armProgressAnimation.restart();
-        root.armed();
-        return;
-      }
-      if (root.needsConfirm && Date.now() - root.armedAt < root.armGuard) {
-        return;
-      }
-      root.disarm();
-      root.activated();
-    }
+    onClicked: root.press()
+    Accessible.role: Accessible.Button
+    Accessible.name: root.isArmed ? `Confirm ${root.tooltip}` : root.tooltip
+    Accessible.onPressAction: root.press()
   }
 }

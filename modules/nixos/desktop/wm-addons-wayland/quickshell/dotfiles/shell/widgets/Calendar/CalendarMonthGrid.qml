@@ -55,6 +55,7 @@ ColumnLayout {
 
     CalendarIconButton {
       icon: "chevron_left"
+      accessibleName: "Previous month"
       onClicked: root.shiftMonth(-1)
     }
 
@@ -66,6 +67,7 @@ ColumnLayout {
 
     CalendarIconButton {
       icon: "chevron_right"
+      accessibleName: "Next month"
       onClicked: root.shiftMonth(1)
     }
   }

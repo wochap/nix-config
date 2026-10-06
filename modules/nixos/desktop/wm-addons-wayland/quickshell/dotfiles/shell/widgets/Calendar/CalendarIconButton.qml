@@ -8,6 +8,7 @@ StyledRect {
 
   property string icon: ""
   property string label: ""
+  property string accessibleName: root.label
   property bool isHovered: mouseArea.containsMouse
 
   signal clicked
@@ -43,5 +44,8 @@ StyledRect {
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
     onClicked: root.clicked()
+    Accessible.role: Accessible.Button
+    Accessible.name: root.accessibleName
+    Accessible.onPressAction: root.clicked()
   }
 }

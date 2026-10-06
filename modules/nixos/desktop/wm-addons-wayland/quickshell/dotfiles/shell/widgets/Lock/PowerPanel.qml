@@ -141,6 +141,12 @@ FocusScope {
 
         Layout.fillWidth: true
         Layout.preferredHeight: 36
+        Accessible.role: Accessible.Button
+        Accessible.name: row.modelData.label
+        Accessible.onPressAction: {
+          root.focusedIndex = row.index;
+          root.activate(row.modelData.action);
+        }
 
         // focus ring: 2px mantle gap + 2px ink
         StyledRect {

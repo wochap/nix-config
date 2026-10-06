@@ -51,6 +51,15 @@ StyledRect {
         Layout.fillHeight: true
         Layout.preferredWidth: 1
         radius: height / 2
+        Accessible.role: Accessible.RadioButton
+        Accessible.name: label.text
+        Accessible.checkable: true
+        Accessible.checked: segment.isSelected
+        Accessible.onPressAction: {
+          if (!segment.isSelected) {
+            SPowerProfiles.set(segment.modelData.profile);
+          }
+        }
         color: segment.isSelected ? Theme.addAlpha(Theme.options.primary, Styles.tint.hover) : mouseArea.containsMouse ? Theme.options.surface0 : "transparent"
         border {
           width: segment.isSelected ? 1 : 0

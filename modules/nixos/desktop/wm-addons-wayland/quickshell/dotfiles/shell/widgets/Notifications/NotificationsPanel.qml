@@ -303,6 +303,11 @@ PanelWindow {
       hoverEnabled: true
       cursorShape: Qt.PointingHandCursor
       onClicked: SNotifications.toggleIsSilent()
+      Accessible.role: Accessible.Button
+      Accessible.name: "Do not disturb"
+      Accessible.checkable: true
+      Accessible.checked: dnd.isOn
+      Accessible.onPressAction: SNotifications.toggleIsSilent()
     }
   }
 

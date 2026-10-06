@@ -346,6 +346,9 @@ FocusScope {
           hoverEnabled: true
           cursorShape: Qt.PointingHandCursor
           onClicked: root.toggleScan()
+          Accessible.role: Accessible.Button
+          Accessible.name: root.isScanning ? "Stop scanning" : "Scan for devices"
+          Accessible.onPressAction: root.toggleScan()
         }
       }
 
@@ -378,6 +381,11 @@ FocusScope {
           anchors.fill: parent
           cursorShape: Qt.PointingHandCursor
           onClicked: root.togglePower()
+          Accessible.role: Accessible.Button
+          Accessible.name: "Bluetooth"
+          Accessible.checkable: true
+          Accessible.checked: root.isOn
+          Accessible.onPressAction: root.togglePower()
         }
       }
     }

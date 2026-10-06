@@ -8,6 +8,7 @@ Loader {
   required property var clients
   property string fgColor: Theme.options.lavender
   property string icon: ""
+  property string label: ""
   property var bindingForClient: client => ""
   readonly property int count: root.clients.length
 
@@ -18,6 +19,9 @@ Loader {
       implicitWidth: module.implicitWidth
       implicitHeight: module.implicitHeight
       onClicked: popup.visible = !popup.visible
+      Accessible.role: Accessible.Button
+      Accessible.name: `${root.label}: ${root.count} ${root.count === 1 ? "window" : "windows"}`
+      Accessible.onPressAction: popup.visible = !popup.visible
 
       Module {
         id: module

@@ -55,6 +55,7 @@ FocusScope {
     id: button
 
     required property string icon
+    required property string label
     property bool isPrimary: false
     property bool canUse: true
     property bool hasFocusRing: false
@@ -64,6 +65,13 @@ FocusScope {
     implicitWidth: button.isPrimary ? 28 : 26
     implicitHeight: implicitWidth
     opacity: button.canUse ? 1 : Styles.tint.ring
+    Accessible.role: Accessible.Button
+    Accessible.name: button.label
+    Accessible.onPressAction: {
+      if (button.canUse) {
+        button.activated();
+      }
+    }
 
     // focus ring: 2px mantle gap + 2px ink
     StyledRect {
@@ -228,12 +236,14 @@ FocusScope {
 
             TransportButton {
               icon: "skip_previous"
+              label: "Previous track"
               canUse: root.player?.canGoPrevious ?? false
               onActivated: root.player.previous()
             }
 
             TransportButton {
               icon: root.player?.isPlaying ? "pause" : "play_arrow"
+              label: root.player?.isPlaying ? "Pause" : "Play"
               isPrimary: true
               hasFocusRing: root.panel && root.activeFocus
               canUse: root.player?.canTogglePlaying ?? false
@@ -242,6 +252,7 @@ FocusScope {
 
             TransportButton {
               icon: "skip_next"
+              label: "Next track"
               canUse: root.player?.canGoNext ?? false
               onActivated: root.player.next()
             }

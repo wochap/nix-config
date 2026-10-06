@@ -50,6 +50,12 @@ Item {
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
     onClicked: root.clicked()
+    Accessible.role: Accessible.Button
+    Accessible.name: root.label
+    Accessible.description: root.sublabel
+    Accessible.checkable: true
+    Accessible.checked: root.isActive
+    Accessible.onPressAction: root.clicked()
   }
 
   RowLayout {
@@ -156,6 +162,9 @@ Item {
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onClicked: root.chevronClicked()
+        Accessible.role: Accessible.Button
+        Accessible.name: `${root.label} settings`
+        Accessible.onPressAction: root.chevronClicked()
       }
     }
   }

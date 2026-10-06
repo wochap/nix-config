@@ -128,6 +128,11 @@ RowLayout {
         acceptedButtons: Qt.LeftButton
         cursorShape: Qt.PointingHandCursor
         onClicked: SCalendar.toggle()
+        Accessible.role: Accessible.Button
+        Accessible.name: `Calendar, ${Qt.formatDateTime(clockService.date, "dddd d MMMM HH:mm")}`
+        Accessible.checkable: true
+        Accessible.checked: SCalendar.isOpen
+        Accessible.onPressAction: SCalendar.toggle()
       }
 
       HoverHandler {

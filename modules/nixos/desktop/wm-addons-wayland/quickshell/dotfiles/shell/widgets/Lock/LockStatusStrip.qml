@@ -105,6 +105,7 @@ StyledRect {
     id: pillButton
 
     required property string icon
+    required property string label
     property bool canUse: true
 
     signal activated
@@ -113,6 +114,13 @@ StyledRect {
     implicitHeight: 24
     radius: 12
     opacity: pillButton.canUse ? 1 : ConfigLock.disabledOpacity
+    Accessible.role: Accessible.Button
+    Accessible.name: pillButton.label
+    Accessible.onPressAction: {
+      if (pillButton.canUse) {
+        pillButton.activated();
+      }
+    }
     color: buttonMouseArea.containsMouse ? Theme.options.surface0 : "transparent"
 
     MaterialIcon {
@@ -196,6 +204,9 @@ StyledRect {
       opacity: root.hasMedia ? 1 : 0
       radius: ConfigLock.pillHeight / 2
       activeFocusOnTab: root.hasMedia
+      Accessible.role: Accessible.Button
+      Accessible.name: `Media: ${root.player?.trackTitle || "Unknown title"}`
+      Accessible.onPressAction: root.mediaRequested()
       color: root.isMediaOpen ? Theme.addAlpha(String(ConfigLock.ink), ConfigLock.openTint) : mediaPill.isHovered ? Theme.options.surface0 : "transparent"
       border.width: root.isMediaOpen ? 1 : 0
       border.color: Theme.addAlpha(String(ConfigLock.ink), ConfigLock.openLine)
@@ -300,6 +311,7 @@ StyledRect {
 
         PillButton {
           icon: root.player?.isPlaying ? "pause" : "play_arrow"
+          label: root.player?.isPlaying ? "Pause" : "Play"
           canUse: root.player?.canTogglePlaying ?? false
           onActivated: root.player.togglePlaying()
         }
@@ -307,6 +319,7 @@ StyledRect {
         PillButton {
           Layout.leftMargin: -4
           icon: "skip_next"
+          label: "Next track"
           canUse: root.player?.canGoNext ?? false
           onActivated: root.player.next()
         }

@@ -7,6 +7,7 @@ HyprClientCount {
   property string tagPrefix: ""
   property string excludedTagPrefix: ""
   icon: "󱡀 "
+  label: "Harpoon"
 
   function hasTagPrefix(client, prefix) {
     return prefix.length > 0 && (client.tags ?? []).some(tag => tag.startsWith(prefix));
