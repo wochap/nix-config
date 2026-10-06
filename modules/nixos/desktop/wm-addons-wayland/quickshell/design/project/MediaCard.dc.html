@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>:root{--bg:#1e1e2e;--mantle:#181825;--crust:#11111b;--s0:#313244;--s1:#45475a;--s2:#585b70;--field-br:#6c7086;--ov:#9399b2;--text:#cdd6f4;--sub:#a6adc8;--accent:#cba6f7;--ink:#cba6f7;--ink-h:#d9bdfa;--ink-p:#b48ef0;--on-ink:#11111b;--red:#f38ba8;--peach:#fab387;--yellow:#f9e2af;--green:#a6e3a1;--sky:#89dceb;--blue:#89b4fa;--shadow:0 16px 40px rgba(17,17,27,.6),0 2px 8px rgba(17,17,27,.4)}html,body{background:#11111b}body{margin:0;font-family:'Iosevka Nerd Font','Iosevka',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}a{color:#cba6f7}a:hover{color:#d9bdfa}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}</style>
+</helmet>
+<div style="{{ root }}">
+  <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:4px;max-width:880px">
+      <span style="font-size:10px;letter-spacing:.12em;color:var(--accent)">COMPONENT · MediaCard</span>
+      <span style="font-size:22px;font-weight:500">Media card · lifted from ControlCenter</span>
+      <span style="font-size:12px;line-height:18px;color:var(--sub)">Geometry identical to the ControlCenter block, hexes moved onto tokens. The lock media panel = panel chrome + this card + the ControlCenter volume slider row + key hints.</span>
+    </div>
+  </sc-if>
+  <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+    <sc-for list="{{ cells }}" as="c" hint-placeholder-count="1">
+      <div style="{{ c.cell }}">
+        <sc-if value="{{ c.bg }}"><img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.55) brightness(.7)"><div style="position:absolute;inset:0;background:var(--crust);opacity:.5"></div></sc-if>
+        <sc-if value="{{ c.label }}"><div style="position:relative;align-self:stretch;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;font-weight:500;color:var(--text)">{{ c.label }}</span><span style="font-size:10px;line-height:14px;color:var(--sub)">{{ c.note }}</span></div></sc-if>
+        <div style="{{ c.wrap }}">
+          <sc-if value="{{ c.panel }}"><div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px"><span style="font-size:10px;line-height:12px;letter-spacing:.08em;color:var(--ov)">NOW PLAYING</span><span style="font-size:10px;line-height:12px;color:var(--sub)">mpd</span></div></sc-if>
+          <div style="display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:8px;background:var(--mantle);box-shadow:inset 0 0 0 1px var(--s0)">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:40px;height:40px;border-radius:4px;background:var(--s0);display:flex;align-items:center;justify-content:center;color:var(--ov);flex:none"><span class="material-symbols-rounded" style="font-size:20px">album</span></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Nightcall</div>
+                <div style="font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Kavinsky · mpd</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:2px;color:var(--sub)">
+                <span class="material-symbols-rounded" style="font-size:18px;width:26px;height:26px;display:flex;align-items:center;justify-content:center">skip_previous</span>
+                <span class="material-symbols-rounded" style="font-size:18px;width:28px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--crust);font-variation-settings:'FILL' 1;box-shadow:{{ c.playRing }}">{{ c.play }}</span>
+                <span class="material-symbols-rounded" style="font-size:18px;width:26px;height:26px;display:flex;align-items:center;justify-content:center">skip_next</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:10px;color:var(--ov)"><span>1:42</span><div style="flex:1;height:3px;border-radius:2px;background:var(--s1);position:relative"><div style="position:absolute;left:0;top:0;bottom:0;width:41%;border-radius:2px;background:var(--accent)"></div></div><span>4:18</span></div>
+          </div>
+          <sc-if value="{{ c.panel }}">
+            <div style="display:flex;align-items:center;gap:8px;height:28px">
+              <span style="width:28px;height:28px;border-radius:14px;background:var(--s0);color:var(--sub);display:flex;align-items:center;justify-content:center;flex:none"><span class="material-symbols-rounded" style="font-size:16px">volume_up</span></span>
+              <div style="flex:1;height:6px;border-radius:3px;background:var(--s1);position:relative">
+                <div style="position:absolute;left:0;top:0;bottom:0;width:20%;border-radius:3px;background:var(--accent)"></div>
+                <div style="position:absolute;top:-4px;left:20%;margin-left:-7px;width:14px;height:14px;border-radius:7px;background:var(--text);box-shadow:0 0 0 3px var(--mantle)"></div>
+              </div>
+              <span style="width:44px;text-align:right;font-size:12px;color:var(--text);font-variant-numeric:tabular-nums">20%</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px 10px;padding:8px 2px 0;box-shadow:inset 0 1px 0 var(--s0);font-size:10px;line-height:14px;color:var(--sub)">
+              <span style="display:flex;align-items:center;gap:4px"><span style="font-weight:500;padding:0 4px;border-radius:4px;border:1px solid var(--field-br)">Space</span>play/pause</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="font-weight:500;padding:0 4px;border-radius:4px;border:1px solid var(--field-br)">← →</span>prev/next</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="font-weight:500;padding:0 4px;border-radius:4px;border:1px solid var(--field-br)">↑ ↓</span>volume</span>
+              <span style="display:flex;align-items:center;gap:4px"><span style="font-weight:500;padding:0 4px;border-radius:4px;border:1px solid var(--field-br)">Esc</span>close</span>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:200px minmax(0,1fr);max-width:960px;border-top:1px solid var(--s0)">
+      <sc-for list="{{ specs }}" as="r" hint-placeholder-count="5"><div style="padding:6px 12px 6px 0;border-bottom:1px solid var(--s0);font-size:12px;line-height:18px;color:var(--sub)">{{ r.k }}</div><div style="padding:6px 0;border-bottom:1px solid var(--s0);font-size:12px;line-height:18px;color:var(--text);text-wrap:pretty">{{ r.v }}</div></sc-for>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000,&quot;height&quot;:900},&quot;sheet&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;panel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;paused&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;focusPlay&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  model(o) {
+    const panel = !!o.panel;
+    return { panel, play: o.paused ? 'play_arrow' : 'pause', playRing: o.focusPlay ? '0 0 0 2px var(--mantle),0 0 0 4px var(--ink)' : 'none',
+      wrap: panel ? { position: 'relative', width: 360, boxSizing: 'border-box', padding: 12, display: 'flex', flexDirection: 'column', gap: 10, background: 'var(--mantle)', borderRadius: 8, boxShadow: 'inset 0 0 0 1px var(--s0),var(--shadow)' }
+        : { position: 'relative', width: 356 } };
+  }
+  renderVals() {
+    const p = this.props, sheet = p.sheet ?? true, F = "'Iosevka Nerd Font','Iosevka',monospace";
+    if (!sheet) return { sheet, root: { display: 'flex', fontFamily: F, color: 'var(--text)' }, cells: [{ ...this.model(p), cell: { display: 'contents' }, bg: false, label: '' }], specs: [] };
+    const cell = { position: 'relative', overflow: 'hidden', borderRadius: 8, boxShadow: 'inset 0 0 0 1px var(--s0)', padding: '20px 24px 24px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, width: 408 };
+    const cells = [['Card · as in ControlCenter', 'Unchanged geometry', {}], ['Lock media panel', 'Opened from dock (Alt M) or the strip pill; play/pause focused', { panel: true, focusPlay: true }]]
+      .map(([label, note, o]) => ({ ...this.model(o), cell, bg: true, label, note }));
+    const specs = [
+      ['Card', 'Verbatim ControlCenter: padding 10 · r8 · --mantle · 1px --s0 · cover 40 r4 · title 12 500 · artist 10 --sub · prev/next 26 · play 28 r14 · progress 3px --s1 / --accent · times 10 --ov'],
+      ['Token mapping', '#7f849c (overlay1) → --ov · #bac2de (subtext1) → --sub · #45475a → --s1 · #cba6f7 → --accent · #11111b → --crust. Only visible change: two greys shift one step'],
+      ['Panel', '360w · padding 12 · gap 10 · --mantle · 1px --s0 inset · r8 · --shadow · anchored right 32 / bottom 80 · 150ms OutCubic + 8px rise / 120ms InCubic'],
+      ['Volume', 'ControlCenter slider row: button 28 r14 --s0 · track 6 --s1 · fill --accent · knob 14 --text with 3px --mantle ring · value 12 tabular'],
+      ['Keyboard', 'Opens with play/pause focused · Space play/pause · ← → prev/next · ↑ ↓ volume 5% · Tab cycles prev/play/next/slider · Esc closes'],
+      ['Shell', 'ControlCenter should import this file instead of its inline block, so both stay identical']
+    ].map(([k, v]) => ({ k, v }));
+    return { sheet, root: { display: 'flex', flexDirection: 'column', gap: 24, padding: 32, fontFamily: F, color: 'var(--text)', background: 'var(--crust)', maxWidth: 1000 }, cells, specs };
+  }
+}
+</script>
+</body>
+</html>

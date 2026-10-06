@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>:root{--bg:#1e1e2e;--mantle:#181825;--crust:#11111b;--s0:#313244;--s1:#45475a;--s2:#585b70;--field-br:#6c7086;--ov:#9399b2;--text:#cdd6f4;--sub:#a6adc8;--accent:#cba6f7;--ink:#cba6f7;--ink-h:#d9bdfa;--ink-p:#b48ef0;--on-ink:#11111b;--red:#f38ba8;--peach:#fab387;--yellow:#f9e2af;--green:#a6e3a1;--sky:#89dceb;--blue:#89b4fa;--shadow:0 16px 40px rgba(17,17,27,.6),0 2px 8px rgba(17,17,27,.4)}html,body{background:#11111b}body{margin:0;font-family:'Iosevka Nerd Font','Iosevka',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}a{color:#cba6f7}a:hover{color:#d9bdfa}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}</style>
+</helmet>
+<div style="{{ root }}">
+  <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:4px;max-width:880px">
+      <span style="font-size:10px;letter-spacing:.12em;color:var(--accent)">COMPONENT · PowerPanel</span>
+      <span style="font-size:22px;font-weight:500">Power panel</span>
+      <span style="font-size:12px;line-height:18px;color:var(--sub)">Outlined rows with keycaps; destructive ones in red tint. Same component the shell's session menu can use.</span>
+    </div>
+  </sc-if>
+  <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+    <sc-for list="{{ cells }}" as="c" hint-placeholder-count="1">
+      <div style="{{ c.cell }}">
+        <sc-if value="{{ c.bg }}"><img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.55) brightness(.7)"><div style="position:absolute;inset:0;background:var(--crust);opacity:.5"></div></sc-if>
+        <sc-if value="{{ c.label }}"><div style="position:relative;align-self:stretch;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;font-weight:500;color:var(--text)">{{ c.label }}</span><span style="font-size:10px;line-height:14px;color:var(--sub)">{{ c.note }}</span></div></sc-if>
+        <div role="menu" style="position:relative;width:260px;box-sizing:border-box;padding:6px;display:flex;flex-direction:column;gap:6px;background:var(--mantle);border-radius:8px;box-shadow:inset 0 0 0 1px var(--s0),var(--shadow)">
+          <div style="padding:6px 6px 0;font-size:10px;line-height:12px;letter-spacing:.08em;color:var(--ov)">POWER</div>
+          <sc-for list="{{ c.rows }}" as="r" hint-placeholder-count="5">
+            <div role="menuitem" style="height:36px;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:0 6px 0 10px;border-radius:6px;background:{{ r.bg }};border:1px solid {{ r.br }};box-shadow:{{ r.ring }};color:{{ r.fg }}">
+              <span class="material-symbols-rounded" style="font-size:18px">{{ r.icon }}</span>
+              <span style="flex:1;font-size:12px;line-height:16px">{{ r.label }}</span>
+              <span style="font-size:10px;line-height:14px;font-weight:500;padding:0 4px;border-radius:4px;border:1px solid {{ r.kbr }};color:{{ r.kfg }}">{{ r.key }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:200px minmax(0,1fr);max-width:960px;border-top:1px solid var(--s0)">
+      <sc-for list="{{ specs }}" as="r" hint-placeholder-count="6"><div style="padding:6px 12px 6px 0;border-bottom:1px solid var(--s0);font-size:12px;line-height:18px;color:var(--sub)">{{ r.k }}</div><div style="padding:6px 0;border-bottom:1px solid var(--s0);font-size:12px;line-height:18px;color:var(--text);text-wrap:pretty">{{ r.v }}</div></sc-for>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1060,&quot;height&quot;:900},&quot;sheet&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;focus&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;stay&quot;,&quot;sleep&quot;,&quot;restart&quot;,&quot;shutdown&quot;,&quot;logout&quot;],&quot;default&quot;:&quot;stay&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;hover&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;stay&quot;,&quot;sleep&quot;,&quot;restart&quot;,&quot;shutdown&quot;,&quot;logout&quot;],&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  model(o) {
+    const D = [['stay', 'lock', 'Stay locked', 'Esc'], ['sleep', 'bedtime', 'Sleep', 'S'], ['restart', 'restart_alt', 'Restart', 'R', 1], ['shutdown', 'power_settings_new', 'Shut down', 'P', 1], ['logout', 'logout', 'Log out', 'L']];
+    const focus = o.focus ?? 'stay', hover = o.hover ?? 'none';
+    const mix = (c, n) => `color-mix(in srgb, ${c} ${n}%, transparent)`;
+    return { rows: D.map(([k, icon, label, key, danger]) => {
+      const h = hover === k, f = focus === k;
+      return { icon, label, key,
+        bg: danger ? mix('var(--red)', h ? 16 : 8) : h ? 'var(--s0)' : 'transparent',
+        br: danger ? mix('var(--red)', 40) : 'var(--s1)', fg: danger ? 'var(--red)' : 'var(--text)',
+        kbr: danger ? mix('var(--red)', 50) : 'var(--field-br)', kfg: danger ? 'var(--red)' : 'var(--sub)',
+        ring: f ? '0 0 0 2px var(--mantle),0 0 0 4px var(--ink)' : 'none' };
+    }) };
+  }
+  renderVals() {
+    const p = this.props, sheet = p.sheet ?? true, F = "'Iosevka Nerd Font','Iosevka',monospace";
+    if (!sheet) return { sheet, root: { display: 'flex', fontFamily: F, color: 'var(--text)' }, cells: [{ ...this.model(p), cell: { display: 'contents' }, bg: false, label: '' }], specs: [] };
+    const cell = { position: 'relative', overflow: 'hidden', borderRadius: 8, boxShadow: 'inset 0 0 0 1px var(--s0)', padding: '20px 24px 24px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, width: 308 };
+    const cells = [['On open', 'Focus lands on the safe row', {}], ['Focus · Shut down', '↓↓↓', { focus: 'shutdown' }], ['Hover · Restart', 'Red tint 8% → 16%', { focus: 'none', hover: 'restart' }]]
+      .map(([label, note, o]) => ({ ...this.model(o), cell, bg: true, label, note }));
+    const specs = [
+      ['Panel', '260w · padding 6 · gap 6 · --mantle · 1px --s0 inset · r8 · --shadow · anchored right 32 / bottom 80 · enter 150ms OutCubic + 8px rise, exit 120ms InCubic'],
+      ['Label', '"POWER" 10/12 tracking .08em --ov · padding 6 6 0'],
+      ['Row', 'h36 · r6 · 1px --s1 outline, transparent · padding 0 6 0 10 · gap 10 · glyph 18 · label 12/16 --text · keycap 10/14 1px --field-br --sub. Hover --s0 · pressed --s1'],
+      ['Danger', 'Restart, Shut down: 1px red 40% · red 8% fill (hover 16%) · glyph + label --red · keycap red 50% border'],
+      ['Focus', '2px --ink ring with 2px --mantle gap (6px row gap leaves room). Opens on "Stay locked"'],
+      ['Keys', 'Esc / Enter on Stay locked closes · S sleeps immediately (systemctl suspend; session stays locked) · R, P, L open ConfirmDialog · ↑/↓ move · works with the panel open only, so single letters never fire from the password field']
+    ].map(([k, v]) => ({ k, v }));
+    return { sheet, root: { display: 'flex', flexDirection: 'column', gap: 24, padding: 32, fontFamily: F, color: 'var(--text)', background: 'var(--crust)', maxWidth: 1040 }, cells, specs };
+  }
+}
+</script>
+</body>
+</html>

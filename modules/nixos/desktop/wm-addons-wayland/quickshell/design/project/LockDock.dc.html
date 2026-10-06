@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>:root{--bg:#1e1e2e;--mantle:#181825;--crust:#11111b;--s0:#313244;--s1:#45475a;--s2:#585b70;--field-br:#6c7086;--ov:#9399b2;--text:#cdd6f4;--sub:#a6adc8;--accent:#cba6f7;--ink:#cba6f7;--ink-h:#d9bdfa;--ink-p:#b48ef0;--on-ink:#11111b;--red:#f38ba8;--peach:#fab387;--yellow:#f9e2af;--green:#a6e3a1;--sky:#89dceb;--blue:#89b4fa;--shadow:0 16px 40px rgba(17,17,27,.6),0 2px 8px rgba(17,17,27,.4)}html,body{background:#11111b}body{margin:0;font-family:'Iosevka Nerd Font','Iosevka',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}a{color:#cba6f7}a:hover{color:#d9bdfa}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}</style>
+</helmet>
+<div style="{{ root }}">
+  <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:4px;max-width:880px">
+      <span style="font-size:10px;letter-spacing:.12em;color:var(--accent)">COMPONENT · LockDock</span>
+      <span style="font-size:22px;font-weight:500">Tools dock · bottom-right</span>
+      <span style="font-size:12px;line-height:18px;color:var(--sub)">Three icon buttons on the strip's rail. Each toggles one panel anchored 8px above; only one open.</span>
+    </div>
+  </sc-if>
+  <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+    <sc-for list="{{ cells }}" as="c" hint-placeholder-count="1">
+      <div style="{{ c.cell }}">
+        <sc-if value="{{ c.bg }}"><img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.55) brightness(.7)"><div style="position:absolute;inset:0;background:var(--crust);opacity:.5"></div></sc-if>
+        <sc-if value="{{ c.label }}"><div style="position:relative;align-self:stretch;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;font-weight:500;color:var(--text)">{{ c.label }}</span><span style="font-size:10px;line-height:14px;color:var(--sub)">{{ c.note }}</span></div></sc-if>
+        <div style="position:relative;height:40px;box-sizing:border-box;display:flex;align-items:center;gap:4px;padding:0 4px;background:var(--mantle);border-radius:8px;box-shadow:inset 0 0 0 1px var(--s0)">
+          <sc-for list="{{ c.btns }}" as="b" hint-placeholder-count="3">
+            <div title="{{ b.label }}" style="position:relative;width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:{{ b.bg }};color:{{ b.fg }};box-shadow:{{ b.ring }};opacity:{{ b.op }}">
+              <span class="material-symbols-rounded" style="font-size:18px">{{ b.icon }}</span>
+              <sc-if value="{{ b.tip }}">
+                <div style="position:absolute;right:0;bottom:44px;display:flex;align-items:center;gap:8px;padding:4px 6px 4px 10px;border-radius:8px;background:var(--bg);box-shadow:inset 0 0 0 1px var(--s0),var(--shadow);white-space:nowrap;font-size:12px;line-height:16px;color:var(--text)">
+                  <span>{{ b.label }}</span>
+                  <span style="font-size:10px;line-height:14px;font-weight:500;padding:0 4px;border-radius:4px;border:1px solid var(--field-br);color:var(--sub)">{{ b.key }}</span>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:200px minmax(0,1fr);max-width:960px;border-top:1px solid var(--s0)">
+      <sc-for list="{{ specs }}" as="r" hint-placeholder-count="6"><div style="padding:6px 12px 6px 0;border-bottom:1px solid var(--s0);font-size:12px;line-height:18px;color:var(--sub)">{{ r.k }}</div><div style="padding:6px 0;border-bottom:1px solid var(--s0);font-size:12px;line-height:18px;color:var(--text);text-wrap:pretty">{{ r.v }}</div></sc-for>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1140,&quot;height&quot;:900},&quot;sheet&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;open&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;bt&quot;,&quot;media&quot;,&quot;power&quot;],&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;focus&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;bt&quot;,&quot;media&quot;,&quot;power&quot;],&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;hover&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;bt&quot;,&quot;media&quot;,&quot;power&quot;],&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;tip&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;noMedia&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  model(o) {
+    const D = [['bt', 'bluetooth', 'Bluetooth', 'Alt B'], ['media', 'music_note', 'Media', 'Alt M'], ['power', 'power_settings_new', 'Power', 'Alt P']];
+    return { btns: D.map(([k, icon, label, key]) => {
+      const open = o.open === k, hov = o.hover === k, foc = o.focus === k, dis = k === 'media' && o.noMedia;
+      return { icon, label, key, tip: foc && !!o.tip,
+        bg: open ? 'color-mix(in srgb, var(--accent) 16%, transparent)' : hov ? 'var(--s0)' : 'transparent',
+        fg: open ? 'var(--accent)' : k === 'power' ? 'var(--red)' : hov ? 'var(--text)' : 'var(--sub)',
+        ring: foc ? '0 0 0 2px var(--mantle),0 0 0 4px var(--ink)' : open ? 'inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent)' : 'none',
+        op: dis ? 0.45 : 1 };
+    }) };
+  }
+  renderVals() {
+    const p = this.props, sheet = p.sheet ?? true, F = "'Iosevka Nerd Font','Iosevka',monospace";
+    if (!sheet) return { sheet, root: { display: 'flex', fontFamily: F, color: 'var(--text)' }, cells: [{ ...this.model(p), cell: { display: 'contents' }, bg: false, label: '' }], specs: [] };
+    const cell = { position: 'relative', overflow: 'hidden', borderRadius: 8, boxShadow: 'inset 0 0 0 1px var(--s0)', padding: '20px 24px 24px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, width: 240, height: 170 };
+    const cells = [
+      ['Default', 'Power glyph always --red', {}], ['Hover', '--s0 fill, glyph → --text', { hover: 'bt' }],
+      ['Keyboard focus + tooltip', 'Tooltip on focus or 400ms hover', { focus: 'media', tip: true }],
+      ['Bluetooth open', 'Open = accent tint + 1px line', { open: 'bt' }], ['Power open', 'Same open state', { open: 'power' }],
+      ['No player', 'Media disabled 45%, skipped by Tab', { noMedia: true }]
+    ].map(([label, note, o]) => ({ ...this.model(o), cell, bg: true, label, note }));
+    const specs = [
+      ['Container', 'h40 · padding 0 4 · gap 4 · --mantle · 1px --s0 inset · r8 · anchored right 32 / bottom 32'],
+      ['Button', '32 × 32 · r6 · glyph 18 · --sub (power --red) · hover --s0 + --text · pressed --s1 · focus 2px --ink ring with 2px --mantle gap · disabled 45%'],
+      ['Open state', 'accent 16% fill · 1px accent 55% inset · glyph --accent (TopBar open-cluster treatment)'],
+      ['Tooltip', 'On keyboard focus or 400ms hover · --bg · 1px --s0 · r8 · padding 4 6 4 10 · label 12 --text + keycap 10/14 · right-aligned, 12px above the dock · 150ms fade'],
+      ['Shortcuts', 'Alt B · Alt M · Alt P toggle panels from anywhere (Alt chords never type into the field). Same key again or Esc closes and returns focus to the field'],
+      ['Panels', 'One at a time; switching = 120ms InCubic exit then 150ms OutCubic enter (opacity + 8px rise). Anchor: right 32, bottom 80 (dock top − 8). Focus moves into the panel on open and is trapped there']
+    ].map(([k, v]) => ({ k, v }));
+    return { sheet, root: { display: 'flex', flexDirection: 'column', gap: 24, padding: 32, fontFamily: F, color: 'var(--text)', background: 'var(--crust)', maxWidth: 1100 }, cells, specs };
+  }
+}
+</script>
+</body>
+</html>

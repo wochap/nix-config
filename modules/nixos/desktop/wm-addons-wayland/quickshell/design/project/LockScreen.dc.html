@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/500.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=block">
+<style>:root{--bg:#1e1e2e;--mantle:#181825;--crust:#11111b;--s0:#313244;--s1:#45475a;--s2:#585b70;--field-br:#6c7086;--ov:#9399b2;--text:#cdd6f4;--sub:#a6adc8;--accent:#cba6f7;--ink:#cba6f7;--ink-h:#d9bdfa;--ink-p:#b48ef0;--on-ink:#11111b;--red:#f38ba8;--peach:#fab387;--yellow:#f9e2af;--green:#a6e3a1;--sky:#89dceb;--blue:#89b4fa;--shadow:0 16px 40px rgba(17,17,27,.6),0 2px 8px rgba(17,17,27,.4)}html,body{background:#11111b}body{margin:0;min-width:max-content;font-family:'Iosevka Nerd Font','Iosevka',monospace;color:#cdd6f4;-webkit-font-smoothing:antialiased}a{color:#cba6f7;text-decoration:none}a:hover{color:#d9bdfa}.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 20;user-select:none}</style>
+</helmet>
+<header style="padding:48px 44px 32px;display:flex;flex-direction:column;gap:12px;box-shadow:inset 0 -1px 0 #313244;max-width:1400px">
+  <span style="font-size:10px;letter-spacing:.12em;color:#cba6f7">LOCK SCREEN · QUICKSHELL WlSessionLock · REPLACES HYPRLOCK</span>
+  <h1 style="margin:0;font-size:24px;font-weight:500">Lock screen</h1>
+  <p style="margin:0;font-size:12px;line-height:18px;color:#a6adc8;max-width:900px">Composites first (1a–1g), then each component's sheet + spec. Components: <a href="LockClock.dc.html">LockClock</a> · <a href="LockInput.dc.html">LockInput</a> · <a href="LockStatusStrip.dc.html">LockStatusStrip</a> · <a href="LockDock.dc.html">LockDock</a> · <a href="BluetoothPanel.dc.html">BluetoothPanel</a> · <a href="MediaCard.dc.html">MediaCard</a> · <a href="PowerPanel.dc.html">PowerPanel</a> · <a href="ConfirmDialog.dc.html">ConfirmDialog</a>. Related: <a href="Shell Components.dc.html">Shell Components</a> · <a href="Auth Prompts.dc.html">Auth Prompts</a></p>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;padding:16px 20px;background:#181825;border-radius:8px;box-shadow:inset 0 0 0 1px #313244">
+    <span style="font-size:10px;letter-spacing:.12em;color:#fab387">ASSUMPTIONS · things not already in the project</span>
+    <sc-for list="{{ assumptions }}" as="a" hint-placeholder-count="12">
+      <div style="display:flex;gap:10px;font-size:12px;line-height:18px"><span style="color:#9399b2;flex:none;width:20px">{{ a.n }}</span><span style="color:#cdd6f4;text-wrap:pretty">{{ a.t }}</span></div>
+    </sc-for>
+  </div>
+</header>
+
+<section style="padding:40px 44px;box-shadow:inset 0 -1px 0 #313244">
+  <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:24px"><span style="font-size:10px;font-weight:700;padding:4px 7px;background:#cba6f7;color:#11111b;border-radius:4px">1</span><span style="font-size:16px;font-weight:500">Composites · 1x</span><span style="font-size:12px;color:#a6adc8">1920 × 1080 focused output, 2560 × 1440 secondary</span></div>
+  <div style="display:flex;flex-wrap:wrap;gap:56px 64px;width:3904px">
+    <sc-for list="{{ screens }}" as="s" hint-placeholder-count="6">
+      <div id="{{ s.id }}" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:baseline;gap:10px"><a href="#{{ s.id }}" style="font-size:10px;font-weight:700;padding:3px 7px;background:#313244;color:#cdd6f4;border-radius:4px">{{ s.id }}</a><span style="font-size:14px;font-weight:500;color:#cdd6f4">{{ s.title }}</span><span style="font-size:12px;color:#a6adc8">{{ s.note }}</span></div>
+        <div data-screen-label="{{ s.id }} {{ s.title }}" style="position:relative;width:1920px;height:1080px;overflow:hidden;border-radius:8px;box-shadow:0 0 0 1px #313244">
+          <div style="{{ s.vars }}">
+            <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:{{ s.wpf }}">
+            <div style="position:absolute;inset:0;background:var(--crust);opacity:{{ s.scrim }}"></div>
+
+            <div style="position:absolute;right:32px;top:32px;display:flex;align-items:center;gap:10px;opacity:{{ s.dimOp }}">
+              <div style="display:flex;flex-direction:column;align-items:flex-end;font-size:12px;line-height:16px;color:var(--sub)">
+                <span style="color:var(--text);font-weight:500">gean@wochap</span>
+                <span>up 3h 12m</span>
+                <span style="display:flex;align-items:center;gap:4px"><span class="material-symbols-rounded" style="font-size:12px;font-variation-settings:'FILL' 1">lock</span>Locked 12:40</span>
+              </div>
+              <div style="width:32px;height:32px;border-radius:16px;background:var(--s0);box-shadow:inset 0 0 0 1px var(--s1);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--accent)">G</div>
+            </div>
+
+            <div style="position:absolute;left:0;right:0;top:332px;display:flex;flex-direction:column;align-items:center;gap:40px">
+              <dc-import name="LockClock" sheet="{{ false }}" dim="{{ s.dim }}" hint-size="560px,144px"></dc-import>
+              <dc-import name="LockInput" sheet="{{ false }}" state="{{ s.input }}" fp="{{ s.fp }}" layout="us" hint-size="360px,64px"></dc-import>
+            </div>
+
+            <div style="position:absolute;left:32px;bottom:32px;opacity:{{ s.dimOp }}">
+              <dc-import name="LockStatusStrip" sheet="{{ false }}" media-state="{{ s.mediaState }}" hint-size="760px,40px"></dc-import>
+            </div>
+            <div style="position:absolute;right:32px;bottom:32px;opacity:{{ s.dimOp }}">
+              <dc-import name="LockDock" sheet="{{ false }}" open="{{ s.dock }}" hint-size="112px,40px"></dc-import>
+            </div>
+
+            <sc-if value="{{ s.bt }}"><div style="position:absolute;right:32px;bottom:80px"><dc-import name="BluetoothPanel" sheet="{{ false }}" state="{{ s.btState }}" hint-size="360px,440px"></dc-import></div></sc-if>
+            <sc-if value="{{ s.media }}"><div style="position:absolute;right:32px;bottom:80px"><dc-import name="MediaCard" sheet="{{ false }}" panel="{{ true }}" focus-play="{{ true }}" hint-size="360px,220px"></dc-import></div></sc-if>
+            <sc-if value="{{ s.confirm }}">
+              <div style="position:absolute;inset:0;background:var(--crust);opacity:.6"></div>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><dc-import name="ConfirmDialog" sheet="{{ false }}" secs="{{ 10 }}" action="shutdown" hint-size="400px,240px"></dc-import></div>
+            </sc-if>
+            <sc-if value="{{ s.night }}"><div style="position:absolute;inset:0;background:#ffcea6;mix-blend-mode:multiply;pointer-events:none"></div></sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+
+    <div id="1g" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:baseline;gap:10px"><a href="#1g" style="font-size:10px;font-weight:700;padding:3px 7px;background:#313244;color:#cdd6f4;border-radius:4px">1g</a><span style="font-size:14px;font-weight:500;color:#cdd6f4">Secondary output · 2560 × 1440 · Mocha</span><span style="font-size:12px;color:#a6adc8">No input, strip or dock. Hint shown in its on-activity state (proposal: nothing at rest, hint for 4s when the pointer enters or a key is pressed here; arrow points to the focused output)</span></div>
+      <div data-screen-label="1g Secondary" style="position:relative;width:2560px;height:1440px;overflow:hidden;border-radius:8px;box-shadow:0 0 0 1px #313244">
+        <img src="assets/wallpaper.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.55) brightness(.7)">
+        <div style="position:absolute;inset:0;background:var(--crust);opacity:.5"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+          <dc-import name="LockClock" sheet="{{ false }}" hint="{{ true }}" hint-icon="arrow_back" hint-size="560px,200px"></dc-import>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:40px 44px;display:flex;flex-direction:column;gap:40px">
+  <div style="display:flex;align-items:baseline;gap:10px"><span style="font-size:10px;font-weight:700;padding:4px 7px;background:#cba6f7;color:#11111b;border-radius:4px">2</span><span style="font-size:16px;font-weight:500">Components · sheets &amp; specs</span><span style="font-size:12px;color:#a6adc8">Each is a standalone DC the shell can import too</span></div>
+  <div id="2a"><dc-import name="LockClock" sheet="{{ true }}" hint-size="1240px,900px"></dc-import></div>
+  <div id="2b"><dc-import name="LockInput" sheet="{{ true }}" hint-size="1500px,1500px"></dc-import></div>
+  <div id="2c"><dc-import name="LockStatusStrip" sheet="{{ true }}" hint-size="1060px,1000px"></dc-import></div>
+  <div id="2d"><dc-import name="LockDock" sheet="{{ true }}" hint-size="1100px,800px"></dc-import></div>
+  <div id="2e"><dc-import name="BluetoothPanel" sheet="{{ true }}" hint-size="1340px,1500px"></dc-import></div>
+  <div id="2f"><dc-import name="MediaCard" sheet="{{ true }}" hint-size="1000px,800px"></dc-import></div>
+  <div id="2g"><dc-import name="PowerPanel" sheet="{{ true }}" hint-size="1040px,800px"></dc-import></div>
+  <div id="2h"><dc-import name="ConfirmDialog" sheet="{{ true }}" hint-size="1000px,1100px"></dc-import></div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const abs = { position: 'absolute', inset: 0 };
+    const mocha = { ...abs };
+    const latte = { ...abs, '--bg': '#eff1f5', '--mantle': '#e6e9ef', '--crust': '#dce0e8', '--s0': '#ccd0da', '--s1': '#bcc0cc', '--s2': '#acb0be', '--field-br': '#7c7f93', '--ov': '#6c6f85', '--text': '#4c4f69', '--sub': '#5c5f77', '--accent': '#8839ef', '--ink': '#8839ef', '--ink-h': '#9a52f2', '--ink-p': '#7524d9', '--on-ink': '#eff1f5', '--red': '#d20f39', '--peach': '#fe640b', '--yellow': '#df8e1d', '--green': '#40a02b', '--sky': '#04a5e5', '--blue': '#1e66f5', '--shadow': '0 16px 40px rgba(76,79,105,.22),0 2px 8px rgba(76,79,105,.14)' };
+    const base = { vars: mocha, wpf: 'saturate(.55) brightness(.7)', scrim: 0.5, dimOp: 1, dim: false, input: 'empty', fp: 'idle', dock: 'none', mediaState: 'none', bt: false, btState: 'default', media: false, confirm: false, night: false };
+    const S = (o) => ({ ...base, ...o });
+    const screens = [
+      S({ id: '1a', title: 'Focused · Mocha', note: 'Default: empty field focused, fingerprint idle, media playing' }),
+      S({ id: '1b', title: 'Focused · Latte', note: 'Token swap only; wallpaper lifted, crust 60% scrim', vars: latte, wpf: 'saturate(.5) brightness(1.15)', scrim: 0.6 }),
+      S({ id: '1c', title: 'Focused · night light', note: 'hyprsunset ~4000K, simulated as a multiply overlay — the compositor applies it to the locker for free' , night: true }),
+      S({ id: '1d', title: 'Bluetooth panel open', note: 'Alt B · focus in panel, Keychron row selected, Enter connects', dock: 'bt', bt: true, input: 'blur', fp: 'off' }),
+      S({ id: '1e', title: 'Power → Shut down confirm · 10s', note: 'P from the power panel · crust 60% scrim over everything', dock: 'power', confirm: true, input: 'blur', fp: 'off' }),
+      S({ id: '1f', title: 'Idle-dimmed', note: '30s without input: 40% everywhere, field out; any key restores', dim: true, dimOp: 0.4, input: 'idle' })
+    ];
+    const assumptions = [
+      'Tokens: the locker sets --accent and --ink to mauve (Mocha #cba6f7, Latte #8839ef, 4.9:1 on Latte base). Auth Prompts keeps lavender. --ink-h / --ink-p for mauve (#d9bdfa / #b48ef0; Latte #9a52f2 / #7524d9) are derived — no existing value.',
+      'TopBar / ControlCenter / NotifCard hard-code Mocha hexes. Lock components use the token names so Latte works with no layout change. MediaCard is the ControlCenter block lifted 1:1 onto tokens (#7f849c → --ov, #bac2de → --sub); ControlCenter should import it.',
+      'MediaCard\'s play button is a filled mauve circle in ControlCenter. Kept as-is ("don\'t redesign") — the only accent fill on the screen. Flag if you want it outlined in both places.',
+      'Field reused from AuthParts at 36px; AuthParts\' Inter 13 / JetBrains Mono 11 map to Iosevka 14 / 10 (shell scale has no 13 or 11).',
+      'Caps Lock glyph is --peach per brief (AuthParts used --yellow).',
+      'ConfirmDialog keeps AuthDialog\'s structure but radius 12 → 8 (lock brief caps radii at 8) and its confirm button is outlined red, not AuthDialog\'s filled ink primary.',
+      'Panel surface is --mantle per brief (ControlCenter itself uses base).',
+      'Dock shortcuts Alt B / Alt M / Alt P and panel letter keys (S, T, R, P, L) are new; letters only act while a panel has focus, so they never collide with typing the password.',
+      'faillock deny=3, unlock_time=30s; fingerprint max-tries 3 (fprintd default). Weather = the Calendar card\'s provider (14°, Berlin).',
+      'Wallpaper: current wallpaper (assets/wallpaper.png), saturate .55 · brightness .7 + --crust 50% (Latte: saturate .5 · brightness 1.15 + --crust 60%). No blur, to stay cheap on 2 outputs.',
+      'Secondary hint: proposed "nothing at rest, hint on activity" — 1g shows the activity state.',
+      'Status strip order puts media last so its appear/disappear never shifts other modules. Media title + artist are shown (brief asks); add a privacy toggle if you want it hidden.'
+    ].map((t, i) => ({ n: String(i + 1).padStart(2, '0'), t }));
+    return { screens, assumptions };
+  }
+}
+</script>
+</body>
+</html>
