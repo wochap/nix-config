@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/classical-a1c8d4a2-290c-4c71-b37b-d35848d8c8d6/styles.css">
+<script src="_ds/classical-a1c8d4a2-290c-4c71-b37b-d35848d8c8d6/_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-900)}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid var(--color-divider);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:var(--color-text);color:var(--color-bg);border-radius:4px;text-decoration:none}.dv-tname{font:600 22px/1.2 var(--font-heading);color:var(--color-text)}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.07);color:var(--color-text);border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 12px/1.3 var(--font-body);color:var(--color-neutral-700)}.dv-card{max-width:100%;background:#fff;border:1px solid var(--color-divider);border-radius:6px;box-shadow:var(--shadow-sm);overflow:hidden}.dv-opt:target .dv-oid{background:var(--color-accent);color:#fff}.dv-next{margin:22px 0 0;font:13px/1.5 var(--font-body);color:var(--color-neutral-700)}</style>
+</helmet>
+
+<section class="dv-turn" id="t0" style="padding-top:56px">
+  <div style="max-width:880px;display:flex;flex-direction:column;gap:16px">
+    <div style="font:500 12px/1 var(--font-body);letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Design notes</div>
+    <h1 style="margin:0;font:400 48px/1.05 var(--font-heading)">Article summaries — reader</h1>
+    <p style="margin:0;font-size:16px;line-height:1.6;max-width:70ch;text-wrap:pretty">Every frame below is a live Pandoc-shaped page styled only by <a href="summaries.css">summaries.css</a>. Scroll inside any frame to try the sticky day headers. Source pages: <a href="sample/index.html">index</a>, <a href="sample/summary.html">summary</a>, <a href="sample/empty.html">empty</a>.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px 32px;margin-top:8px;font-size:14px;line-height:1.55">
+      <div style="border-top:1px solid var(--color-divider);padding-top:10px"><strong style="font-weight:600">Palette kept.</strong> Catppuccin Latte/Mocha via <code>light-dark()</code>, one token set. Latte blue (4.3:1) is deepened to <code>#1758d8</code> (5.4:1) for text links; Mocha blue is untouched.</div>
+      <div style="border-top:1px solid var(--color-divider);padding-top:10px"><strong style="font-weight:600">Reading type.</strong> Source Serif 4 at 17–19px, 1.65 leading, 68ch. IBM Plex Sans for meta and controls only; JetBrains Mono for code and domains. Charter/Noto/Georgia fallbacks.</div>
+      <div style="border-top:1px solid var(--color-divider);padding-top:10px"><strong style="font-weight:600">Index.</strong> Sticky day headers with counts; ≥1024px they move to a sticky left column. Whole row is clickable; visited titles dim slightly. Empty state is pure CSS.</div>
+      <div style="border-top:1px solid var(--color-divider);padding-top:10px"><strong style="font-weight:600">Pandoc title block.</strong> Set <code>title: "[All summaries](index.html)"</code> — Pandoc keeps the link, CSS turns it into a “← All summaries” breadcrumb.</div>
+      <div style="border-top:1px solid var(--color-divider);padding-top:10px"><strong style="font-weight:600">Markup additions (3).</strong> <code>{count="5"}</code> on each day heading; <code>[zed.dev]{.source}</code> and <code>[Author]{.author}</code> spans on items. Without them it still works, just less refined.</div>
+      <div style="border-top:1px solid var(--color-divider);padding-top:10px"><strong style="font-weight:600">Copy.</strong> The <kbd>y</kbd> hint is drawn by CSS inside the button and hidden on touch screens. Add <code>aria-live="polite"</code> to <code>.copy-status</code>.</div>
+    </div>
+  </div>
+</section>
+
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Screen 1 · Summary list</span></div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="1a"><div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Desktop 1440 · Latte (50%)</div>
+      <div class="dv-card" style="width:720px;height:500px"><iframe title="Index, desktop light" src="sample/index.html?theme=light" style="width:1440px;height:1000px;border:0;transform:scale(.5);transform-origin:0 0"></iframe></div></div>
+    <div class="dv-opt" id="1b"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Desktop 1440 · Mocha, scrolled (50%)</div>
+      <div class="dv-card" style="width:720px;height:500px"><iframe title="Index, desktop dark" src="sample/index.html?theme=dark&amp;scroll=640" style="width:1440px;height:1000px;border:0;transform:scale(.5);transform-origin:0 0"></iframe></div></div>
+    <div class="dv-opt" id="1c"><div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Mobile 360 · Latte</div>
+      <div class="dv-card" style="width:360px;height:760px"><iframe title="Index, mobile light" src="sample/index.html?theme=light" style="width:360px;height:760px;border:0"></iframe></div></div>
+    <div class="dv-opt" id="1d"><div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Mobile 360 · Mocha, sticky header</div>
+      <div class="dv-card" style="width:360px;height:760px"><iframe title="Index, mobile dark" src="sample/index.html?theme=dark&amp;scroll=760" style="width:360px;height:760px;border:0"></iframe></div></div>
+    <div class="dv-opt" id="1e"><div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>Empty state · Latte</div>
+      <div class="dv-card" style="width:360px;height:420px"><iframe title="Empty index" src="sample/empty.html?theme=light" style="width:360px;height:420px;border:0"></iframe></div></div>
+  </div>
+</section>
+
+<section class="dv-turn" id="t2">
+  <div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Screen 2 · Summary</span></div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="1f"><div class="dv-olabel"><a class="dv-oid" href="#1f">1f</a>Desktop 1440 · Latte (50%)</div>
+      <div class="dv-card" style="width:720px;height:600px"><iframe title="Summary, desktop light" src="sample/summary.html?theme=light" style="width:1440px;height:1200px;border:0;transform:scale(.5);transform-origin:0 0"></iframe></div></div>
+    <div class="dv-opt" id="1g"><div class="dv-olabel"><a class="dv-oid" href="#1g">1g</a>Desktop 1440 · Mocha, body + actions (50%)</div>
+      <div class="dv-card" style="width:720px;height:600px"><iframe title="Summary, desktop dark" src="sample/summary.html?theme=dark&amp;scroll=900&amp;copied=1" style="width:1440px;height:1200px;border:0;transform:scale(.5);transform-origin:0 0"></iframe></div></div>
+    <div class="dv-opt" id="1h"><div class="dv-olabel"><a class="dv-oid" href="#1h">1h</a>Mobile 360 · Latte</div>
+      <div class="dv-card" style="width:360px;height:760px"><iframe title="Summary, mobile light" src="sample/summary.html?theme=light" style="width:360px;height:760px;border:0"></iframe></div></div>
+    <div class="dv-opt" id="1i"><div class="dv-olabel"><a class="dv-oid" href="#1i">1i</a>Mobile 360 · Mocha, end of page</div>
+      <div class="dv-card" style="width:360px;height:760px"><iframe title="Summary, mobile dark" src="sample/summary.html?theme=dark&amp;scroll=99999&amp;copied=1" style="width:360px;height:760px;border:0"></iframe></div></div>
+  </div>
+</section>
+
+<section class="dv-turn" id="t3">
+  <div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Tokens</span></div>
+  <div class="dv-opts">
+    <div class="dv-opt" id="1j"><div class="dv-olabel"><a class="dv-oid" href="#1j">1j</a>Color roles · contrast vs. base</div>
+      <div class="dv-card" style="width:560px;padding:20px 24px">
+        <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:0 16px;font:500 11px/1 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700);padding-bottom:10px;border-bottom:1px solid var(--color-divider)"><span>Role</span><span>Latte</span><span>Mocha</span></div>
+        <sc-for list="{{ colors }}" as="c" hint-placeholder-count="10">
+          <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:0 16px;align-items:center;padding:9px 0;border-bottom:1px solid var(--color-divider);font-size:13px">
+            <div style="display:flex;flex-direction:column;gap:2px"><code style="font-size:12.5px">--{{ c.name }}</code><span style="font-size:11.5px;color:var(--color-neutral-700)">{{ c.use }}</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:4px;border:1px solid rgba(0,0,0,.12);background:{{ c.latte }}"></span><span style="display:flex;flex-direction:column;gap:1px"><code style="font-size:12px">{{ c.latte }}</code><span style="font-size:11px;color:var(--color-neutral-700)">{{ c.lc }}</span></span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:4px;border:1px solid rgba(0,0,0,.12);background:{{ c.mocha }}"></span><span style="display:flex;flex-direction:column;gap:1px"><code style="font-size:12px">{{ c.mocha }}</code><span style="font-size:11px;color:var(--color-neutral-700)">{{ c.mc }}</span></span></div>
+          </div>
+        </sc-for>
+      </div></div>
+    <div class="dv-opt" id="1k"><div class="dv-olabel"><a class="dv-oid" href="#1k">1k</a>Type scale (fluid 360 → 1440)</div>
+      <div class="dv-card" style="width:560px;padding:20px 24px;background:#eff1f5;color:#4c4f69">
+        <sc-for list="{{ type }}" as="t" hint-placeholder-count="7">
+          <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:baseline;padding:10px 0;border-bottom:1px solid #ccd0da">
+            <div style="display:flex;flex-direction:column;gap:2px;font:12px/1.3 'IBM Plex Sans',system-ui,sans-serif;color:#5c5f77"><code>--{{ t.name }}</code><span>{{ t.px }}</span></div>
+            <div style="font-family:{{ t.family }};font-size:{{ t.size }};font-weight:{{ t.weight }};line-height:1.2;letter-spacing:{{ t.ls }}">{{ t.sample }}</div>
+          </div>
+        </sc-for>
+        <div style="padding-top:12px;font:12px/1.5 'IBM Plex Sans',system-ui,sans-serif;color:#5c5f77">Body leading 1.65 · snug 1.35 · tight 1.15 · measure 68ch</div>
+      </div></div>
+    <div class="dv-opt" id="1l"><div class="dv-olabel"><a class="dv-oid" href="#1l">1l</a>Spacing · 4px base</div>
+      <div class="dv-card" style="width:300px;padding:20px 24px">
+        <sc-for list="{{ space }}" as="s" hint-placeholder-count="8">
+          <div style="display:grid;grid-template-columns:72px 44px 1fr;gap:10px;align-items:center;padding:6px 0;font-size:12px"><code>--{{ s.name }}</code><span style="color:var(--color-neutral-700)">{{ s.px }}</span><span style="height:10px;width:{{ s.w }};background:#1758d8;border-radius:2px"></span></div>
+        </sc-for>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--color-divider);font-size:12px;line-height:1.6;color:var(--color-neutral-700)">Gutter clamp(20px, 5vw, 48px) · radius 4 / 6px · controls 44px tall</div>
+      </div></div>
+  </div>
+  <div class="dv-opt" id="1m" style="margin-top:28px"><div class="dv-olabel"><a class="dv-oid" href="#1m">1m</a>Drop-in <code>:root</code> block (live from summaries.css)</div>
+    <pre style="margin:0;max-width:1100px;padding:20px 24px;background:#1e1e2e;color:#cdd6f4;border-radius:6px;font:12.5px/1.6 'JetBrains Mono',ui-monospace,monospace;overflow:auto;white-space:pre">{{ rootCss }}</pre>
+  </div>
+  <p class="dv-next">Try next: “try a sans reading face” · “denser index rows” · “add a search/filter field to the index”</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { rootCss: 'Loading summaries.css…' };
+  componentDidMount() {
+    fetch('summaries.css').then(r => r.text()).then(t => {
+      const s = t.indexOf(':root {'); const e = t.indexOf('\n}', s);
+      this.setState({ rootCss: s >= 0 ? t.slice(s, e + 2) : t });
+    }).catch(() => {});
+  }
+  lum(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    return 0.2126 * f(n >> 16) + 0.7152 * f((n >> 8) & 255) + 0.0722 * f(n & 255);
+  }
+  ratio(a, b) { const x = this.lum(a), y = this.lum(b); return ((Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05)).toFixed(1) + ':1'; }
+  renderVals() {
+    const L = '#eff1f5', M = '#1e1e2e';
+    const raw = [
+      ['bg', 'Page ground (base)', L, M, false],
+      ['bg-raised', 'Code, hovered rows (mantle)', '#e6e9ef', '#181825', false],
+      ['rule', 'Hairlines (surface0)', '#ccd0da', '#313244', false],
+      ['rule-strong', 'Control borders (surface1)', '#bcc0cc', '#45475a', false],
+      ['fg', 'Body text (text)', '#4c4f69', '#cdd6f4', true],
+      ['fg-muted', 'Meta, counts (subtext1)', '#5c5f77', '#bac2de', true],
+      ['accent', 'Links, primary button', '#1758d8', '#89b4fa', true],
+      ['accent-hover', 'Hover / pressed', '#0f45b0', '#b4cdfb', true],
+      ['focus', 'Focus ring (blue)', '#1e66f5', '#89b4fa', true],
+      ['success', '“Copied” status', '#2e7d1f', '#a6e3a1', true],
+    ];
+    const colors = raw.map(([name, use, latte, mocha, txt]) => ({
+      name, use, latte, mocha,
+      lc: txt ? this.ratio(latte, L) : (name === 'bg' ? 'ground' : this.ratio(latte, L) + ' · deco'),
+      mc: txt ? this.ratio(mocha, M) : (name === 'bg' ? 'ground' : this.ratio(mocha, M) + ' · deco'),
+    }));
+    const serif = "'Source Serif 4', Charter, Georgia, serif", sans = "'IBM Plex Sans', system-ui, sans-serif", mono = "'JetBrains Mono', ui-monospace, monospace";
+    const type = [
+      { name: 'step-4', px: '30 → 46 · article title', size: '40px', weight: 600, family: serif, ls: '-0.02em', sample: 'Why our editor renders text' },
+      { name: 'step-3', px: '28 → 38 · index title', size: '33px', weight: 600, family: serif, ls: '-0.015em', sample: 'Article summaries' },
+      { name: 'step-2', px: '22 → 26 · h2', size: '24px', weight: 600, family: serif, ls: '-0.01em', sample: 'Key points' },
+      { name: 'step-1', px: '19 → 21 · list items, h3', size: '20px', weight: 500, family: serif, ls: '0', sample: 'The quiet return of the personal website' },
+      { name: 'step-0', px: '17 → 19 · body', size: '18px', weight: 400, family: serif, ls: '0', sample: 'Calm, long-form reading at a 68ch measure.' },
+      { name: 'step--1', px: '14 · meta, buttons', size: '14px', weight: 400, family: sans, ls: '0', sample: 'Source: zed.dev · Author: Mara Lindqvist' },
+      { name: 'step--2', px: '13 · footer, kbd', size: '13px', weight: 400, family: mono, ls: '0', sample: '2026-09-17T15:28:16+00:00' },
+    ];
+    const space = [['space-1', 4], ['space-2', 8], ['space-3', 12], ['space-4', 16], ['space-5', 24], ['space-6', 32], ['space-7', 48], ['space-8', 72]]
+      .map(([name, px]) => ({ name, px: px + 'px', w: Math.round(px * 1.6) + 'px' }));
+    return { colors, type, space, rootCss: this.state.rootCss };
+  }
+}
+</script>
+</body>
+</html>
