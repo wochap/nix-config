@@ -1,8 +1,8 @@
 # Reranker
 
 A Qwen3-Reranker GGUF served by llama.cpp (`llama-server --rerank --pooling
-rank`) behind `/v1/rerank`. Shared by [GPT Researcher](../gpt-researcher/README.md)
-and [wosarcher](../wosarcher/README.md).
+rank`) behind `/v1/rerank`. Used by
+[wosarcher](../wosarcher/README.md).
 
 ```nix
 _custom.services.ai.reranker = {

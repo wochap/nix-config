@@ -187,13 +187,6 @@ in
     # the embedding KV cache shrinks by ~1.4 GB, and the Q4_K_M reranker
     # (~5.4 GB: 2.4 GB weights) leaves ~2.6 GB of headroom with both models
     # resident.
-    _custom.services.ai.gptResearcher.enable = true;
-    _custom.services.ai.gptResearcher.smartModel = "deepseek-v4-flash";
-    _custom.services.ai.gptResearcher.fastModel = "deepseek-v4-flash";
-    _custom.services.ai.gptResearcher.strategicModel = "deepseek-v4-flash";
-    _custom.services.ai.gptResearcher.embeddingContextTokens = 30720;
-    _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 32;
-    _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 16;
     _custom.services.ai.reranker.enable = true;
     _custom.services.ai.reranker.model = "Qwen/Qwen3-Reranker-4B";
     _custom.services.ai.reranker.modelUrl =

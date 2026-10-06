@@ -21,7 +21,6 @@ in
   imports = [
     ./omniroute
     ./firecrawl
-    ./gpt-researcher
     ./reranker
     ./open-design
     ./comfyui
@@ -50,7 +49,7 @@ in
       type = lib.types.str;
       default = "glegion-qwen3-embedding:4b";
       description = ''
-        Local Ollama model shared by Firecrawl and GPT Researcher for
+        Local Ollama model shared by Firecrawl for
         embeddings. Its Modelfile lives in ./ollama/models.
       '';
     };

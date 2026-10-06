@@ -121,8 +121,6 @@
     wt.flake = false;
     shotclip.url = "github:jq6l43d1/shotclip?rev=23b9ea386c40bc4d856320baa84fdeb81fc020c9";
     shotclip.flake = false;
-    gpt-researcher.url = "github:wochap/gpt-researcher";
-    gpt-researcher.flake = false;
     wosarcher.url = "github:wochap/wosarcher";
     wosarcher.flake = false;
     open-design.url = "github:wochap/open-design/open-design-v0.24.0-fork";

@@ -1080,22 +1080,6 @@
         "type": "github"
       }
     },
-    "gpt-researcher": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1790103528,
-        "narHash": "sha256-O3fnhZ/HeB3rkloJjtEMlAQQyigGtUzdIUR5OPaMODE=",
-        "owner": "wochap",
-        "repo": "gpt-researcher",
-        "rev": "6a82110c06bf3fdada10a591f1f4335d616b0392",
-        "type": "github"
-      },
-      "original": {
-        "owner": "wochap",
-        "repo": "gpt-researcher",
-        "type": "github"
-      }
-    },
     "handy": {
       "inputs": {
         "bun2nix": "bun2nix",
@@ -3344,7 +3328,6 @@
         "fi": "fi",
         "figlet-fonts": "figlet-fonts",
         "fuzzy-sys": "fuzzy-sys",
-        "gpt-researcher": "gpt-researcher",
         "handy": "handy",
         "home-manager": "home-manager_2",
         "hyprgrass": "hyprgrass",

@@ -169,13 +169,6 @@ in
     # reranker needs ~5.4 GB, so both cannot stay resident. The reranker stays
     # off; retrieval uses embedding order. The settings below are kept for
     # reference.
-    # _custom.services.ai.gptResearcher.enable = true;
-    _custom.services.ai.gptResearcher.smartModel = "glegion-cloud-smart";
-    _custom.services.ai.gptResearcher.fastModel = "glegion-cloud-fast";
-    _custom.services.ai.gptResearcher.strategicModel = "glegion-cloud-strategic";
-    _custom.services.ai.gptResearcher.embeddingContextTokens = 24576;
-    _custom.services.ai.gptResearcher.reranker.embeddingBatchSize = 16;
-    _custom.services.ai.gptResearcher.reranker.rerankBatchSize = 8;
     # _custom.services.ai.reranker.enable = true;
     _custom.services.ai.reranker.model = "Qwen/Qwen3-Reranker-4B";
     _custom.services.ai.reranker.modelUrl =

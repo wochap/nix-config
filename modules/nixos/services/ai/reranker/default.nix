@@ -13,7 +13,7 @@ let
   # A Qwen3-Reranker GGUF served by llama-server behind /v1/rerank. llama.cpp
   # allocates only weights plus KV cache, so the reranker and the Ollama
   # embedding model stay resident on the same GPU and need no phase
-  # scheduling. Shared by GPT Researcher and wosarcher.
+  # scheduling. Used by wosarcher.
   serviceName = "reranker";
   modelServiceName = "${serviceName}-model";
   proxy = config._custom.services.web-proxies.reranker;
