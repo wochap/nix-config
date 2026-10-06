@@ -60,7 +60,7 @@ let
     in
     {
       llm = {
-        provider = "llm";
+        provider = "openai";
         base_url = "${host}:${toString omniRouteProxy.publicPort}/v1";
         inherit (llm) model timeout;
         context_window = m.contextTokens;
@@ -270,10 +270,9 @@ in
         model = lib.mkDefault "research-smart";
         preset = lib.mkDefault "deepseek-v4-flash";
         timeout = lib.mkDefault 300;
-        # The gap step reads the best passages so far; with a 1M window it can
-        # read far more than wosarcher's 4000-token default. Switch to "auto"
-        # once wosarcher's query-handling change lands.
-        research.gap_context_tokens = lib.mkDefault 200000;
+        # The gap step reads the best passages so far; "auto" gives it all the
+        # room the 1M window leaves instead of wosarcher's 4000-token default.
+        research.gap_context_tokens = lib.mkDefault "auto";
       };
       # OmniRoute's desktop-free combo (free Gemma 4 31B, then Ollama Cloud,
       # then the local gdesktop-qwen3.5:9b). The combo can fall back to the

@@ -3932,11 +3932,11 @@
     "wosarcher": {
       "flake": false,
       "locked": {
-        "lastModified": 1791227334,
-        "narHash": "sha256-meqylT6t2rKgn1LO9QWYEl3M2Ns7GkgQdRvoCP47LrI=",
+        "lastModified": 1791308560,
+        "narHash": "sha256-qda9RzdmGqEubvcURiQpn4YIAdjew2DAhpdY639KhIQ=",
         "owner": "wochap",
         "repo": "wosarcher",
-        "rev": "207ed72197f7ae0a1fe7640bcb118101b5cc58b6",
+        "rev": "d750148ed60b3f81e15a62f86b833606ed864c28",
         "type": "github"
       },
       "original": {
