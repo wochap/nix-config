@@ -52,17 +52,6 @@ RowLayout {
   }
 
   RowLayout {
-    id: buttons
-
-    // only one destructive button armed at a time
-    function disarmOthers(button) {
-      for (const child of buttons.children) {
-        if (child !== button && child.disarm) {
-          child.disarm();
-        }
-      }
-    }
-
     spacing: 4
 
     HeaderButton {
@@ -77,35 +66,24 @@ RowLayout {
       onActivated: SControlCenter.runSessionAction("suspend")
     }
 
+    // the rest go through the countdown confirm dialog
     HeaderButton {
-      id: logoutButton
-
       icon: "system-log-out"
       tooltip: "Log out"
-      needsConfirm: true
-      onArmed: buttons.disarmOthers(logoutButton)
-      onActivated: SControlCenter.runSessionAction("logout")
+      onActivated: SControlCenter.requestSessionAction("logout")
     }
 
     HeaderButton {
-      id: rebootButton
-
       icon: "system-reboot"
       tooltip: "Reboot"
-      needsConfirm: true
-      onArmed: buttons.disarmOthers(rebootButton)
-      onActivated: SControlCenter.runSessionAction("reboot")
+      onActivated: SControlCenter.requestSessionAction("reboot")
     }
 
     HeaderButton {
-      id: powerButton
-
       icon: "system-shutdown"
       tooltip: "Power off"
       isDestructive: true
-      needsConfirm: true
-      onArmed: buttons.disarmOthers(powerButton)
-      onActivated: SControlCenter.runSessionAction("poweroff")
+      onActivated: SControlCenter.requestSessionAction("poweroff")
     }
   }
 }

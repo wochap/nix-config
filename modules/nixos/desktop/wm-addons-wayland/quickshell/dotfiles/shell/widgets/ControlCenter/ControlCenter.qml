@@ -12,6 +12,11 @@ Scope {
     component: ControlCenterContent {}
   }
 
+  LazyLoader {
+    active: SControlCenter.confirmAction !== ""
+    component: SessionConfirm {}
+  }
+
   IpcHandler {
     target: "control-center"
 

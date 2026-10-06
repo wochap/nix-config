@@ -14,6 +14,8 @@ FocusScope {
 
   // restart | shutdown | logout
   required property string action
+  // where the request came from, shown under the title
+  property string origin: "logind · from lock screen"
   readonly property var spec: ({
       shutdown: {
         icon: "power_settings_new",
@@ -153,7 +155,7 @@ FocusScope {
             }
 
             StyledText {
-              text: "logind · from lock screen"
+              text: root.origin
               color: ConfigLock.subtext
               font.pixelSize: Styles.font.pixelSize.small
             }

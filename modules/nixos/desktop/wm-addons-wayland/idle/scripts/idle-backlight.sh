@@ -4,6 +4,9 @@ if [ "$1" = "--on" ]; then
   # set the power mode of the output to on
   if [ "$XDG_SESSION_DESKTOP" = "Hyprland" ]; then
     hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'
+    # HACK: the cursor goes invisible after a dpms off/on cycle,
+    # reloading the cursor theme brings it back
+    hyprctl setcursor "${XCURSOR_THEME:-catppuccin-mocha-dark-cursors}" "${XCURSOR_SIZE:-24}"
   fi
 
   brightnessctl --restore
