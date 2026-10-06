@@ -1,4 +1,4 @@
-"""Stage enrich: fetch full article text for the top stories via `article-scrape`.
+"""Stage enrich: fetch full article text for the top stories via `article scrape`.
 
 usage: briefing-enrich --in stories.jsonl --out enriched.jsonl [--top N] [--max-chars 5000]
 
@@ -24,7 +24,7 @@ def scrape(url, timeout):
     if not url or any(host == h or host.endswith("." + h) for h in SKIP_HOSTS):
         return None
     try:
-        result = subprocess.run(["article-scrape", url], capture_output=True, text=True, timeout=timeout, check=False)
+        result = subprocess.run(["article", "scrape", url], capture_output=True, text=True, timeout=timeout, check=False)
     except subprocess.TimeoutExpired:
         log(STAGE, f"timeout: {url}")
         return None

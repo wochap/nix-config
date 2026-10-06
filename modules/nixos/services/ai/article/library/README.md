@@ -1,8 +1,13 @@
-# Article Library
+# Library
 
-`article-library` stores rendered HTML pages and keeps their list pages up
-to date. It is the only article tool with state; the others get a location
-back from it.
+The library stores rendered HTML pages and keeps their list pages up to
+date. `article URL` saves summaries in it and `article render` saves pages;
+`article index` rebuilds the lists by hand (saving already rebuilds them).
+
+## Internal tool
+
+`article-library` (`article-library.py`) is the only article tool with
+state; the others get a location back from it.
 
 ```sh
 article-library add --collection summaries --key https://example.com/post --meta page.json page.html

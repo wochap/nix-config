@@ -5,9 +5,9 @@
   ...
 }:
 
-# Article tools. Each package under ./<tool>/package.nix does one job and is
-# usable on its own; ./package.nix (`article`) only chains them. This module
-# wires them to the system: packages, the library server and its proxy.
+# `article` CLI. Each internal tool under ./<tool>/package.nix does one job;
+# ./package.nix (`article`) exposes them as subcommands and chains them. This
+# module wires them to the system: the command, the library server and its proxy.
 let
   cfg = config._custom.services.ai;
   proxy = config._custom.services.web-proxies.article-library;
@@ -41,13 +41,8 @@ in
       }
     ];
 
-    environment.systemPackages = [
-      article
-      article-scrape
-      article-summarize
-      article-render
-      article-library
-    ];
+    # Only the front command is public; the tools are its internals.
+    environment.systemPackages = [ article ];
 
     _custom.services.web-proxies.article-library = {
       enable = true;

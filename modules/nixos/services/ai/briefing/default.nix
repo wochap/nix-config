@@ -387,7 +387,7 @@ in
             StateDirectory = "briefing";
             Environment = [
               "BRIEFING_STATE_DIR=%S/briefing"
-              # omniroute-chat and article-scrape are system packages, newsboat a user one.
+              # omniroute-chat and article are system packages, newsboat a user one.
               "PATH=/run/current-system/sw/bin:/etc/profiles/per-user/${userName}/bin"
             ]
             ++ lib.optional (cfg.cover != null) "BRIEFING_COVER=${cfg.cover}";

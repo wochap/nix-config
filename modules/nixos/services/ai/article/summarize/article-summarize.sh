@@ -8,9 +8,9 @@ summary_args=()
 
 usage() {
   cat >&2 <<'USAGE'
-usage: article-summarize [--model MODEL] [--max-input-tokens TOKENS] [ARTICLE_JSON]
+usage: article summarize [--model MODEL] [--max-input-tokens TOKENS] [ARTICLE_JSON]
 
-Summarize an article-scrape JSON document (file, or stdin when omitted or -)
+Summarize article JSON from `article scrape` (file, or stdin when omitted or -)
 and print the summary as Markdown. Uses `summary` with the article preset.
 
   --model MODEL              OmniRoute model or combo (default: OMNIROUTE_MODEL or desktop-free)

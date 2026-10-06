@@ -1,29 +1,37 @@
 # Article
 
-Tools to scrape web articles, summarize them through OmniRoute, render
-Markdown as styled HTML pages, and keep those pages in a library served at
-`https://articles.wochap.local`.
+`article` scrapes web articles, summarizes them through OmniRoute, renders
+Markdown as styled HTML pages, and keeps those pages in a library served at
+`https://articles.wochap.local`. It is the only installed command.
 
 ```sh
-article https://example.com/long-post        # scrape → summarize → render → save → open
-article render notes.md                       # render and save; prints URL and path
+article https://example.com/long-post         # scrape → summarize → render → save → open
+article --force https://example.com/long-post # summarize again, no input limit
+article render notes.md                        # render and save; prints URL and path
+article render -o notes.html notes.md          # render only, to a file
 article scrape https://example.com/post | jq .title
-article index                                 # rebuild the list pages
+article scrape https://example.com/post | article summarize
+article index                                  # rebuild the list pages
 ```
+
+See [scrape](scrape/README.md), [summarize](summarize/README.md),
+[render](render/README.md) and [library](library/README.md) for each
+subcommand.
 
 ## Architecture
 
-Four single-purpose tools and one front command. Each tool reads files or
-stdin, writes stdout, and exits non-zero with a message on stderr. Only the
-library keeps state.
+Each subcommand is backed by an internal, single-purpose tool (a separate
+script and package, not on `PATH`). Each tool reads files or stdin, writes
+stdout, and exits non-zero with a message on stderr. Only the library keeps
+state.
 
-| Tool | Input → output | State |
-|------|----------------|-------|
-| [`article-scrape`](scrape/README.md) | URL → article JSON | none |
-| [`article-summarize`](summarize/README.md) | article JSON → summary Markdown | none |
-| [`article-render`](render/README.md) | Markdown → standalone HTML page | none |
-| [`article-library`](library/README.md) | HTML page + metadata → stored page, list pages | owns the library folder |
-| `article` (`article.sh`) | front command chaining the tools | none |
+| Subcommand | Internal tool | Input → output | State |
+|------------|---------------|----------------|-------|
+| `article scrape` | `article-scrape` | URL → article JSON | none |
+| `article summarize` | `article-summarize` | article JSON → summary Markdown | none |
+| `article render -o` | `article-render` | Markdown → standalone HTML page | none |
+| `article index` | `article-library` | HTML page + metadata → stored page, list pages | owns the library folder |
+| `article URL`, `article render` | `article.sh` | chains the tools | none |
 
 ```
 article URL:
@@ -40,7 +48,7 @@ Rules that keep it maintainable:
 - **One job per tool.** A tool never calls a sibling except through its
   documented contract. `article-library` uses `article-render` for its list
   pages; nothing else crosses over.
-- **`article` holds no logic.** It parses flags, chains tools, and turns
+- **`article.sh` holds no logic.** It parses flags, chains tools, and turns
   failures into a notification and an error page. Summary page layout lives
   in `compose_summary.py`; storage lives in `article-library`.
 - **The library is the only stateful part.** No other tool knows the
@@ -48,8 +56,8 @@ Rules that keep it maintainable:
   JSON from `article-library add|lookup`.
 - **Packages are plain functions.** Each `package.nix` is a `callPackage`
   function whose dependencies are explicit `runtimeInputs`. `default.nix` is
-  the only NixOS module: it builds the packages, installs them, and runs the
-  library server. `summary` and `omniroute-chat` come from the ai and
+  the only NixOS module: it builds the packages, installs `article`, and
+  runs the library server. `summary` and `omniroute-chat` come from the ai and
   omniroute modules.
 
 ## Layout
@@ -57,7 +65,7 @@ Rules that keep it maintainable:
 ```
 article/
   default.nix           NixOS module: packages, library server, proxy
-  package.nix           `article` front command
+  package.nix           `article` (article.sh), the only installed command
   article.sh
   compose_summary.py    summary page Markdown and its library metadata
   scrape/               article-scrape
@@ -67,9 +75,8 @@ article/
 ```
 
 To add a tool: create `<tool>/package.nix` and its script, build it in
-`default.nix` with `pkgs.callPackage`, add it to `environment.systemPackages`
-and, when `article` needs it, to `package.nix`'s inputs and a subcommand in
-`article.sh`.
+`default.nix` with `pkgs.callPackage`, pass it to `package.nix`'s inputs,
+and expose it as a subcommand in `article.sh`.
 
 ## Library and server
 

@@ -1,6 +1,6 @@
-# Article Scrape
+# article scrape
 
-`article-scrape` fetches a web page and extracts its article content as JSON
+`article scrape` fetches a web page and extracts its article content as JSON
 (title, metadata, and Markdown body). It first tries a static HTTP fetch and
 falls back to full browser rendering when the page needs JavaScript.
 
@@ -25,9 +25,9 @@ export ARTICLE_SCRAPE_BROWSER=$(which google-chrome-stable)
 ## Usage
 
 ```sh
-article-scrape https://example.com/post
-article-scrape --render https://spa-site.example.com/page   # skip static fetch, render directly
-article-scrape --debug --render https://example.com/post    # print the browser used
+article scrape https://example.com/post
+article scrape --render https://spa-site.example.com/page   # skip static fetch, render directly
+article scrape --debug --render https://example.com/post    # print the browser used
 ```
 
 Output is a single JSON document on stdout:
@@ -46,9 +46,11 @@ Output is a single JSON document on stdout:
 Pipe the body into other tools with `jq`:
 
 ```sh
-article-scrape https://example.com/post | jq --raw-output .body
+article scrape https://example.com/post | jq --raw-output .body
 ```
 
 Exit codes: `2` for a bad URL or arguments, `1` when fetching or extraction
 fails (errors from both the static and rendered attempts are combined on
 stderr).
+
+The internal tool is `article-scrape` (`article-scrape.sh`).

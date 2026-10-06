@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Front command for the article tools. It holds no logic of its own beyond
-# chaining them: article-scrape, article-summarize, article-render and
-# article-library each do one job and stay usable on their own.
+# The article CLI. Subcommands map to internal tools (article-scrape,
+# article-summarize, article-render, article-library), each doing one job;
+# this script holds no logic beyond exposing and chaining them.
 
 model="${OMNIROUTE_MODEL:-desktop-free}"
 
 usage() {
   cat >&2 <<'EOF'
 usage: article [--force] [--render] [--debug] [--no-open] URL
-       article render [--title TITLE] [--open] MARKDOWN
+       article render [--title TITLE] [--open] [-o FILE] MARKDOWN
        article scrape [--debug] [--render] URL
        article summarize [--model MODEL] [ARTICLE_JSON]
        article index
@@ -18,9 +18,10 @@ usage: article [--force] [--render] [--debug] [--no-open] URL
   URL        scrape, summarize, render and save the summary in the library,
              then open it (reuses the saved summary unless --force)
   render     render MARKDOWN, save it under the library's rendered pages
-             (not the summary list) and print its URL and file path
-  scrape     print the article as JSON (article-scrape)
-  summarize  print a Markdown summary of article JSON (article-summarize)
+             (not the summary list) and print its URL and file path;
+             with -o, only write the HTML page to FILE
+  scrape     print the article as JSON
+  summarize  print a Markdown summary of article JSON (stdin or file)
   index      rebuild the library's list pages and print the library URL
 
 Summary options:
@@ -53,15 +54,15 @@ open_url() {
 # --- article render ---------------------------------------------------------
 
 render_markdown() {
-  local title="" open=false markdown source location
+  local title="" open=false output="" markdown source location
   while (($#)); do
     case "$1" in
-    --title)
+    --title | -o | --output)
       (($# >= 2)) || {
         usage
         exit 2
       }
-      title=$2
+      if [[ $1 == --title ]]; then title=$2; else output=$2; fi
       shift 2
       ;;
     --open)
@@ -92,6 +93,13 @@ render_markdown() {
   if [[ -z $title ]]; then
     title=$(sed -n 's/^# \(.*\)/\1/p;T;q' "$source")
     [[ -n $title ]] || title=$(basename -- "${source%.*}")
+  fi
+
+  if [[ -n $output ]]; then
+    article-render --title "$title" --copy "$source" --output "$output" "$source" >/dev/null
+    printf 'path: %s\n' "$(realpath -- "$output")"
+    if [[ $open == true ]]; then open_url "$output"; fi
+    return
   fi
 
   article-render --title "$title" --copy "$source" --output "$work_dir/page.html" "$source" >/dev/null

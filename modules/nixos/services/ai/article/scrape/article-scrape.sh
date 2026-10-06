@@ -4,7 +4,7 @@ set -euo pipefail
 debug=false
 render=false
 
-usage() { echo "usage: article-scrape [--debug] [--render] URL" >&2; }
+usage() { echo "usage: article scrape [--debug] [--render] URL" >&2; }
 
 while (($#)); do
   case "$1" in

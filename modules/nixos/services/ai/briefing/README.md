@@ -11,7 +11,7 @@ sources ──► collect ──► dedup ──► rank ──► enrich ──
 ```
 
 Enable it with `_custom.services.ai.briefing.enable = true;`. It needs OmniRoute,
-Supertonic, article (for `article-scrape`) and the home-screen module.
+Supertonic, article (for `article scrape`) and the home-screen module.
 
 ## Commands
 
