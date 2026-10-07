@@ -166,6 +166,18 @@ in
       services.calibreWeb.enable = true;
       services.audiobookshelf.enable = true;
     };
+    # Media UIs other household members use, reachable from the LAN as
+    # https://<name>.wochap.home. Jellyfin/Audiobookshelf/Seerr are also used
+    # from their mobile/TV apps, which cannot complete the Basic Auth cookie
+    # dance, so leave `expose.gate = false` for those and rely on the app's own
+    # login. Admin UIs (sonarr, radarr, ...) stay loopback-only.
+    # _custom.services.web-proxies.jellyfin.expose.enable = true;
+    # _custom.services.web-proxies.jellyfin.expose.gate = false;
+    # _custom.services.web-proxies.seerr.expose.enable = true;
+    # _custom.services.web-proxies.seerr.expose.gate = false;
+    # _custom.services.web-proxies.audiobookshelf.expose.enable = true;
+    # _custom.services.web-proxies.audiobookshelf.expose.gate = false;
+    # _custom.services.web-proxies.calibre-web.expose.enable = true;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
     _custom.services.kdeconnect.enable = true;
