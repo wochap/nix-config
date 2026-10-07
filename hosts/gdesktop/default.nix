@@ -29,14 +29,13 @@ in
 
     # gui
     _custom.programs.dolphin.enable = true;
-    _custom.programs.dolphin.daemonEnable = true;
     _custom.programs.electron.enable = true;
     _custom.programs.gtk.enable = true;
-    # _custom.desktop.gtk.bookmarks = [ "file:///mnt/storage Storage" ];
     _custom.programs.imv.enable = true;
     _custom.programs.mongodb.enable = true;
     _custom.programs.obs-studio.enable = true;
     _custom.programs.thunar.enable = true;
+    _custom.programs.thunar.daemonEnable = true;
     _custom.programs.qt.enable = true;
     _custom.programs.zathura.enable = true;
     _custom.programs.fi.enable = true;
@@ -138,8 +137,8 @@ in
       remote.interfaces = [ "enp42s0" ];
     };
 
-    _custom.services.android.enable = true;
     # _custom.services.tailscale.enable = true;
+    _custom.services.android.enable = true;
     _custom.services.android.enableSdk = true;
     _custom.services.podman.enable = true;
     _custom.services.podman.rootless = true;
@@ -149,8 +148,8 @@ in
     _custom.services.ipwebcam.enable = false;
     _custom.services.kdeconnect.enable = true;
     _custom.services.ai.enable = true;
-    _custom.services.ai.enableHandy = true;
     _custom.services.ai.enableRocm = true;
+    _custom.services.ai.enableHandy = true;
     _custom.services.ai.enableOllama = true;
     _custom.services.ai.enableOllamaFlashAttention = true;
     _custom.services.ai.ocr.enable = true;
