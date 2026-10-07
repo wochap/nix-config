@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Effects
 import Quickshell
+import Quickshell.Hyprland
 import qs.config
 import qs.services
 import qs.widgets.common
@@ -139,6 +140,36 @@ FocusScope {
         root.closePanel();
       }
     }
+  }
+
+  // on wake Hyprland keeps keyboard focus off the lock surface until the
+  // pointer moves, warp it onto this output so the field takes keys again
+  function refocus() {
+    if (!root.isPrimary || !root.screen || SLockSession.isSuccess) {
+      return;
+    }
+    const x = Math.round(root.screen.x + root.screen.width / 2);
+    const y = Math.round(root.screen.y + root.screen.height / 2);
+    Hyprland.dispatch(`movecursor ${x} ${y}`);
+    if (root.openPanel === "") {
+      root.focusInput();
+    }
+  }
+
+  Connections {
+    target: SLockSession
+
+    function onWoke() {
+      // outputs come back from DPMS off a moment after logind's signal
+      refocusTimer.restart();
+    }
+  }
+
+  Timer {
+    id: refocusTimer
+
+    interval: 500
+    onTriggered: root.refocus()
   }
 
   Timer {

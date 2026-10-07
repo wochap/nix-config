@@ -50,6 +50,10 @@ Singleton {
   readonly property bool isLockedOut: root.state === "lockout"
   readonly property bool isSuccess: root.state === "success"
 
+  // PrepareForSleep(false) while locked, the compositor may not hand
+  // keyboard focus back to the lock surface on its own
+  signal woke
+
   property string _buffer: ""
   property int _fingerprintRetryDelay: root.fingerprintRetryMin
 
@@ -294,6 +298,7 @@ Singleton {
           root._fingerprintRetryDelay = root.fingerprintRetryMin;
           if (root.isLocked) {
             root.startFingerprint();
+            root.woke();
           }
         }
       }
