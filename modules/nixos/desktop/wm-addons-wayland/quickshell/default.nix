@@ -152,9 +152,14 @@ in
     # read by SLockSession.qml (PamContext configs)
     security.pam.services = lib.mkIf cfg.lock.enable (
       {
-        quickshell-lock.text = ''
-          auth include login
-        '';
+        # password only: `auth include login` would pull in the pam_fprintd
+        # rule nixos adds to every service when fprintd is enabled, and that
+        # rule blocks the password check until a finger is scanned
+        # (the fingerprint runs in its own context below)
+        quickshell-lock = {
+          fprintAuth = false;
+          unixAuth = true;
+        };
       }
       // lib.optionalAttrs cfg.lock.fingerprint.enable {
         quickshell-lock-fprint.text = ''

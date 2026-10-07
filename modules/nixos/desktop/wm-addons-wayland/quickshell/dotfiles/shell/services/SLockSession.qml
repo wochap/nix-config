@@ -23,8 +23,14 @@ Singleton {
   readonly property int successHold: 120
   readonly property int successFade: 250
   readonly property bool isFingerprintEnabled: Quickshell.env("QS_LOCK_FPRINT") === "1"
+  // pam_fprintd gives up after ~30s without a finger and fprintd refuses
+  // verifies while the system suspends, so a dead context is restarted
+  readonly property int fingerprintRetryMin: 2000
+  readonly property int fingerprintRetryMax: 30000
 
   property bool isLocked: false
+  // between logind PrepareForSleep(true) and PrepareForSleep(false)
+  property bool isSleeping: false
   // empty | typing | verifying | wrong | lockout | success
   property string state: "empty"
   // idle | scanning | matched | nomatch | off
@@ -45,9 +51,15 @@ Singleton {
   readonly property bool isSuccess: root.state === "success"
 
   property string _buffer: ""
+  property int _fingerprintRetryDelay: root.fingerprintRetryMin
 
   function lock() {
     if (root.isLocked) {
+      // a second lock-session while locked (sleep while locked) revives a
+      // dead fingerprint context
+      if (root.fp === "off") {
+        root.startFingerprint();
+      }
       return;
     }
     root.focusedScreen = Hyprland.focusedMonitor?.name ?? "";
@@ -145,6 +157,7 @@ Singleton {
     idleTimer.stop();
     lockoutTimer.stop();
     successTimer.stop();
+    fingerprintRetryTimer.stop();
     root.isIdleDimmed = false;
     root.isLocked = false;
     root.state = "empty";
@@ -155,12 +168,38 @@ Singleton {
   }
 
   function startFingerprint() {
+    fingerprintRetryTimer.stop();
     if (!root.isFingerprintEnabled || !root.isLocked || root.isLockedOut || root.isSuccess) {
       root.fp = "off";
       return;
     }
+    // fprintd fails to claim the reader while suspending, wake restarts
+    if (root.isSleeping) {
+      root.fp = "off";
+      return;
+    }
     root.fingerprintTriesLeft = root.maxFingerprintTries;
-    root.fp = fingerprintPam.start() ? "idle" : "off";
+    fingerprintPam.abort();
+    if (fingerprintPam.start()) {
+      root.fp = "idle";
+    } else {
+      root.fp = "off";
+      root.scheduleFingerprintRetry();
+    }
+  }
+
+  // a context that ended without a verdict (timeout, fprintd error) comes
+  // back with growing delays, a context that spent its tries stays off
+  function scheduleFingerprintRetry() {
+    if (!root.isFingerprintEnabled || !root.isLocked || root.isLockedOut || root.isSuccess || root.isSleeping) {
+      return;
+    }
+    if (root.fingerprintTriesLeft === 0) {
+      return;
+    }
+    fingerprintRetryTimer.interval = root._fingerprintRetryDelay;
+    fingerprintRetryTimer.restart();
+    root._fingerprintRetryDelay = Math.min(root._fingerprintRetryDelay * 2, root.fingerprintRetryMax);
   }
 
   PamContext {
@@ -203,6 +242,8 @@ Singleton {
         root.fingerprintTriesLeft = Math.max(0, root.fingerprintTriesLeft - 1);
         root.fp = root.fingerprintTriesLeft > 0 ? "nomatch" : "off";
       } else {
+        // the reader answered, fprintd is healthy again
+        root._fingerprintRetryDelay = root.fingerprintRetryMin;
         root.fp = "scanning";
       }
     }
@@ -212,9 +253,51 @@ Singleton {
         root.succeed();
       } else {
         root.fp = "off";
+        root.scheduleFingerprintRetry();
       }
     }
-    onError: () => root.fp = "off"
+    onError: () => {
+      root.fp = "off";
+      root.scheduleFingerprintRetry();
+    }
+  }
+
+  Timer {
+    id: fingerprintRetryTimer
+
+    interval: root.fingerprintRetryMin
+    onTriggered: {
+      if (root.isLocked && root.fp === "off") {
+        root.startFingerprint();
+      }
+    }
+  }
+
+  // logind PrepareForSleep: the context dies when the lock comes from
+  // before_sleep_cmd (fprintd refuses verifies mid-suspend) and a reader that
+  // slept through a long lock needs a fresh VerifyStart on wake
+  Process {
+    running: true
+    command: ["dbus-monitor", "--system", "type='signal',sender='org.freedesktop.login1',interface='org.freedesktop.login1.Manager',member='PrepareForSleep'"]
+    stdout: SplitParser {
+      onRead: data => {
+        const line = data.trim();
+        if (line === "boolean true") {
+          root.isSleeping = true;
+          fingerprintRetryTimer.stop();
+          fingerprintPam.abort();
+          if (root.fp !== "off") {
+            root.fp = "off";
+          }
+        } else if (line === "boolean false") {
+          root.isSleeping = false;
+          root._fingerprintRetryDelay = root.fingerprintRetryMin;
+          if (root.isLocked) {
+            root.startFingerprint();
+          }
+        }
+      }
+    }
   }
 
   Timer {
