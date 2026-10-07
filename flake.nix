@@ -93,6 +93,9 @@
     woints.inputs.nixpkgs.follows = "nixpkgs";
     tt.url = "github:wochap/tt";
     tt.inputs.nixpkgs.follows = "nixpkgs";
+    wobook.url = "github:wochap/wobook";
+    wobook.inputs.nixpkgs.follows = "nixpkgs";
+    wobook.inputs.home-manager.follows = "home-manager";
     fi.url = "github:wochap/fi";
     fi.inputs.nixpkgs.follows = "nixpkgs";
     tofi.url = "github:wochap/tofi/master-fork";

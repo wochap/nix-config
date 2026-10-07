@@ -648,6 +648,21 @@
         "type": "github"
       }
     },
+    "crane": {
+      "locked": {
+        "lastModified": 1790899423,
+        "narHash": "sha256-THGtz65UGJU+sonZidRboyCMk+9DclpMF7pwL4uDV4M=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "47b6b27ed9a3a9181415e4367d0c30ab2a0e0250",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -3405,6 +3420,7 @@
         "wayland-firewall": "wayland-firewall",
         "webscoop": "webscoop",
         "wluma": "wluma",
+        "wobook": "wobook",
         "woints": "woints",
         "wosarcher": "wosarcher",
         "wt": "wt",
@@ -3444,6 +3460,27 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "rev": "af76221b285a999ab7d9d77fce8ba1db028f9801",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_2": {
+      "inputs": {
+        "nixpkgs": [
+          "wobook",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791361643,
+        "narHash": "sha256-HMdfSb1ONHs1RbSkQtCXm+tWEsTikisWWtXDnv0aQ+I=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "8afee9fa8caa877a4feb65adc33e8d72f3747dc9",
         "type": "github"
       },
       "original": {
@@ -3982,6 +4019,31 @@
         "owner": "maximbaz",
         "repo": "wluma",
         "rev": "259a874af6b4d854073d340cccb1852f63635fd3",
+        "type": "github"
+      }
+    },
+    "wobook": {
+      "inputs": {
+        "crane": "crane",
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay_2"
+      },
+      "locked": {
+        "lastModified": 1791400027,
+        "narHash": "sha256-Nh8DM/Zwxb7cY3kvfHNsKhY16VEdprlhJFygv/dR95M=",
+        "owner": "wochap",
+        "repo": "wobook",
+        "rev": "5063e02e6b78b14a7052462a7623594388288668",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "wobook",
         "type": "github"
       }
     },

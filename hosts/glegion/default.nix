@@ -50,7 +50,7 @@ in
 
     # cli
     _custom.programs.bat.enable = true;
-    _custom.programs.buku.enable = true;
+    _custom.programs.buku.enable = false;
     _custom.programs.core-utils-extra.enable = true;
     _custom.programs.core-utils.enable = true;
     _custom.programs.dircolors.enable = true;
@@ -229,6 +229,7 @@ in
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
     _custom.services.webhook.enable = true;
+    _custom.services.wobook.enable = true;
 
     _custom.services.syncthing.enable = true;
     _custom.services.virt.enable = false;

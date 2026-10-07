@@ -110,6 +110,7 @@
     ./services/virt
     ./services/waydroid
     ./services/webhook
+    ./services/wobook
     ./services/web-proxies
 
     ./system/apple
