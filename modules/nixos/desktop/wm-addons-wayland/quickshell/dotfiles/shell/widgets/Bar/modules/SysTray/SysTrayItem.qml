@@ -17,6 +17,9 @@ MouseArea {
   acceptedButtons: Qt.LeftButton | Qt.RightButton
   implicitWidth: size
   implicitHeight: size
+  Accessible.role: Accessible.Button
+  Accessible.name: root.item.tooltipTitle || root.item.title || root.item.id
+  Accessible.onPressAction: root.item.activate()
   onClicked: event => {
     switch (event.button) {
     case Qt.LeftButton:

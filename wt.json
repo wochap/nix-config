@@ -2,7 +2,6 @@
   "default_branch": "main",
   "hooks": {
     "post_create": [
-      { "type": "symlink", "from": ".agents" },
       { "type": "symlink", "from": ".claude" },
       { "type": "symlink", "from": ".pi" },
       { "type": "symlink", "from": ".qwen" },

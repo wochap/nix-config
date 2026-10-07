@@ -33,7 +33,7 @@ a:hover{color:#cdd6f4}
         <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="12">
           <div style="display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:16px;color:var(--sub)"><span style="color:var(--text)">{{ t.n }}</span><span>{{ t.name }}</span></div>
-            <dc-import name="AuthDialog" variant="{{ t.v }}" state="{{ t.s }}" hint-size="440px,380px"></dc-import>
+            <dc-import name="AuthDialog" variant="{{ t.v }}" state="{{ t.s }}" fprint="{{ t.fp }}" fprint-note="{{ t.note }}" fprint-text="{{ t.txt }}" fprint-tries="{{ t.tries }}" who="{{ t.who }}" hint-size="440px,380px"></dc-import>
           </div>
         </sc-for>
       </div>
@@ -48,7 +48,7 @@ a:hover{color:#cdd6f4}
         <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="12">
           <div style="display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:16px;color:var(--sub)"><span style="color:var(--text)">{{ t.n }}</span><span>{{ t.name }}</span></div>
-            <dc-import name="AuthDialog" variant="{{ t.v }}" state="{{ t.s }}" hint-size="440px,380px"></dc-import>
+            <dc-import name="AuthDialog" variant="{{ t.v }}" state="{{ t.s }}" fprint="{{ t.fp }}" fprint-note="{{ t.note }}" fprint-text="{{ t.txt }}" fprint-tries="{{ t.tries }}" who="{{ t.who }}" hint-size="440px,380px"></dc-import>
           </div>
         </sc-for>
       </div>
@@ -126,6 +126,50 @@ windowrule = noblur, $prompt</div>
         <div style="text-wrap:pretty">Stock Latte lavender #7287fd is ≈2.9:1 on base — kept for the window border; primary fill, focus and checks use #3f53d9 (≈5.3:1). Field edges use overlay tones for ≥3:1. Yellow is never used for text.</div>
       </div>
     </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px;padding-top:8px">
+      <div style="display:flex;align-items:baseline;gap:12px"><span style="font-size:20px;font-weight:600">Fingerprint hint</span><span style="font-size:13px;color:#a6adc8">polkit · polkit-multi only — gpg, ssh-key, ssh-host, keyring, keyring-new, secret never show it · tiles 10a–10l</span></div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;font-size:13px;line-height:20px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#a6adc8">Placement — own row above the field</div>
+          <div style="text-wrap:pretty">The hint is a body row after the message / details / identity and 12px above the field, not a field adornment. The field's trailing slot already holds the eye; PAM strings run to ~60 characters and need a full line; and keeping the finger channel above the field leaves everything below it (error, caps lock, success, timeout rows) to the password. Reading order matches the copy: “touch the reader or enter your password”, then the field.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#a6adc8">Spacing — reserved, no jumps</div>
+          <div style="text-wrap:pretty">Row min-height 32 (two 16px lines), content centred, glyph 16 + gap 8, text Inter 12/16, clamped at 2 lines. It sits in the 12px body stack, so the dialog is exactly 44px taller than 10a whenever a reader + prints exist — and that height never changes between states. Off keeps the row (muted) for the life of the dialog instead of collapsing.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#a6adc8">Accessibility</div>
+          <div style="text-wrap:pretty">role=status + aria-live=polite (AT-SPI live region in QML); glyph aria-hidden, every state is its own sentence. Color is redundant: idle/scan/miss/off differ in words, matched also swaps the glyph. Reduced motion: no pulse, no pop, no shake — the text change carries it. The field keeps focus throughout; typing never waits on the reader.</div>
+        </div>
+      </div>
+      <table style="border-collapse:collapse;font-size:13px;line-height:20px;width:100%">
+        <thead>
+          <tr style="text-align:left;color:#a6adc8;font-size:12px">
+            <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500;width:110px">State</th>
+            <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500;width:400px">PAM / agent input</th>
+            <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500;width:440px">Copy</th>
+            <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500;width:260px">Glyph · color</th>
+            <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500;width:330px">Motion</th>
+            <th style="padding:8px 12px;border-bottom:1px solid #45475a;font-weight:500">Rest of the dialog</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:'JetBrains Mono',monospace;font-size:12px">off</td><td style="padding:8px 12px;border-bottom:1px solid #313244">No reader, or no enrolled prints for the identity (fprintd ListEnrolledFingers empty)</td><td style="padding:8px 12px;border-bottom:1px solid #313244;color:#a6adc8">— no row (10a, identical to 01)</td><td style="padding:8px 12px;border-bottom:1px solid #313244">—</td><td style="padding:8px 12px;border-bottom:1px solid #313244">—</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Unchanged</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:'JetBrains Mono',monospace;font-size:12px">idle</td><td style="padding:8px 12px;border-bottom:1px solid #313244">PAM_TEXT_INFO “Place your finger…” / “Swipe your … finger…” — also the start of every new attempt</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Place sensors: “Touch the fingerprint reader or enter your password”. Swipe sensors: the PAM string verbatim</td><td style="padding:8px 12px;border-bottom:1px solid #313244">fingerprint · subtext · text subtext</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Fade in 150ms OutCubic with the dialog</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Field focused, fully usable</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:'JetBrains Mono',monospace;font-size:12px">scanning</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Finger down / read in progress (fprintd VerifyStatus or a retry info such as “Center your finger…”, which is shown verbatim)</td><td style="padding:8px 12px;border-bottom:1px solid #313244">“Reading fingerprint…”</td><td style="padding:8px 12px;border-bottom:1px solid #313244">fingerprint · ink (#b4befe / #3f53d9) · text</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Glyph opacity 1↔.45 + scale 1↔.9, 1200ms InOutSine, loops — same as lock screen</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Unchanged</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:'JetBrains Mono',monospace;font-size:12px">nomatch</td><td style="padding:8px 12px;border-bottom:1px solid #313244">PAM_ERROR_MSG “Failed to match fingerprint”</td><td style="padding:8px 12px;border-bottom:1px solid #313244">“Fingerprint not recognized, try again · N tries left” (N = max-tries 3 − misses; “1 try left”)</td><td style="padding:8px 12px;border-bottom:1px solid #313244">fingerprint · peach · text, count subtext</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Text crossfade 150ms; no shake</td><td style="padding:8px 12px;border-bottom:1px solid #313244">No red border, no shake, field content kept</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:'JetBrains Mono',monospace;font-size:12px">off · gave up</td><td style="padding:8px 12px;border-bottom:1px solid #313244">“Verification timed out” · last miss (tries exhausted) · fprintd error</td><td style="padding:8px 12px;border-bottom:1px solid #313244">“Verification timed out — use your password” / “Fingerprint unavailable — use your password”</td><td style="padding:8px 12px;border-bottom:1px solid #313244">fingerprint · overlay · text subtext</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Crossfade 150ms; row keeps its height</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Plain password dialog</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:'JetBrains Mono',monospace;font-size:12px">matched</td><td style="padding:8px 12px;border-bottom:1px solid #313244">polkit completed(success) while the hint is idle / scanning / nomatch and no password was submitted</td><td style="padding:8px 12px;border-bottom:1px solid #313244">“Fingerprint recognized — closing”</td><td style="padding:8px 12px;border-bottom:1px solid #313244">check_circle · green · text</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Glyph pops scale .6→1 + fade, 200ms OutBack; hold 400ms, then the existing success close</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Badge → green check, field 55%, buttons 50%; no extra success row</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid #313244;font-family:'JetBrains Mono',monospace;font-size:12px">identity switch</td><td style="padding:8px 12px;border-bottom:1px solid #313244">polkit-multi picker change → agent cancels the session and starts one for the new identity</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Back to idle for that user; without prints: “No fingerprints enrolled for root — use the password”</td><td style="padding:8px 12px;border-bottom:1px solid #313244">As idle / as off</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Crossfade 150ms; tries reset to 3</td><td style="padding:8px 12px;border-bottom:1px solid #313244">Password cleared, focus to field</td></tr>
+          <tr><td style="padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:12px">password error</td><td style="padding:8px 12px">Password submitted and rejected while the reader still listens</td><td style="padding:8px 12px">Existing “Wrong password. 2 attempts left.” below the field</td><td style="padding:8px 12px">Hint keeps its own state</td><td style="padding:8px 12px">Existing shake (off under reduced motion)</td><td style="padding:8px 12px">Existing error treatment — 10h</td></tr>
+        </tbody>
+      </table>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:20px">
+        <div style="display:flex;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:20px;color:#f9e2af;font-variation-settings:'FILL' 1">warning</span><span style="text-wrap:pretty"><b style="font-weight:600">PAM strings arrive untyped.</b> The agent only gets showInfo / showError text from polkit-agent-helper-1 — mapping to states means matching pam_fprintd's (localized) messages; unknown strings render verbatim in the current state. Reader + enrolled check is a separate D-Bus query to net.reactivated.Fprint before the dialog maps.</span></div>
+        <div style="display:flex;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:18px;line-height:20px;color:#f9e2af;font-variation-settings:'FILL' 1">warning</span><span style="text-wrap:pretty"><b style="font-weight:600">Scanning may not be observable.</b> Many readers send no finger-down message; then the hint goes idle → nomatch / matched directly. Stock pam_fprintd also blocks until it gives up before pam_unix asks — concurrent password entry needs a parallel stack (e.g. pam-fprint-grosshack).</span></div>
+      </div>
+    </div>
   </div>
 </div>
 </x-dc>
@@ -145,8 +189,20 @@ class Component extends DCLogic {
         { n: '09a', name: 'State — verifying', v: 'polkit', s: 'loading' },
         { n: '09b', name: 'State — error (shake)', v: 'polkit', s: 'error' },
         { n: '09c', name: 'State — success', v: 'polkit', s: 'success' },
-        { n: '09d', name: 'State — timeout', v: 'polkit', s: 'timeout' }
-      ]
+        { n: '09d', name: 'State — timeout', v: 'polkit', s: 'timeout' },
+        { n: '10a', name: 'Polkit — no reader (unchanged)', v: 'polkit', s: 'default' },
+        { n: '10b', name: 'Fingerprint — idle', v: 'polkit', s: 'default', fp: 'idle' },
+        { n: '10c', name: 'Fingerprint — idle · PAM verbatim (swipe)', v: 'polkit', s: 'default', fp: 'idle', txt: 'Swipe your right index finger across the fingerprint reader' },
+        { n: '10d', name: 'Fingerprint — scanning', v: 'polkit', s: 'default', fp: 'scanning' },
+        { n: '10e', name: 'Fingerprint — no match · 2 left', v: 'polkit', s: 'default', fp: 'nomatch', tries: 2 },
+        { n: '10f', name: 'Fingerprint — off · timed out', v: 'polkit', s: 'default', note: 'timeout' },
+        { n: '10g', name: 'Fingerprint — matched → closing', v: 'polkit', s: 'default', fp: 'matched' },
+        { n: '10h', name: 'Wrong password · finger still listening', v: 'polkit', s: 'error', fp: 'idle' },
+        { n: '10i', name: 'Multi — gean · idle', v: 'polkit-multi', s: 'default', fp: 'idle' },
+        { n: '10j', name: 'Multi — switched to ops · reset to idle', v: 'polkit-multi', s: 'default', fp: 'idle', who: 'ops' },
+        { n: '10k', name: 'Multi — switched to root · no prints', v: 'polkit-multi', s: 'default', note: 'unenrolled', who: 'root' },
+        { n: '10l', name: 'Fingerprint — off · tries exhausted', v: 'polkit', s: 'default', note: 'exhausted' }
+      ].map(t => ({ fp: 'off', note: 'none', txt: '', tries: 2, who: 'gean', ...t }))
     };
   }
 }

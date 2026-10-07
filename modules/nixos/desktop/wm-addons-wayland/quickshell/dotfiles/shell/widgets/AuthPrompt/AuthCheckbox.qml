@@ -22,6 +22,12 @@ FocusScope {
   implicitHeight: row.implicitHeight
   activeFocusOnTab: root.enabled
   opacity: root.enabled ? 1 : ConfigAuth.disabledOpacity
+  Accessible.role: Accessible.CheckBox
+  Accessible.name: root.label
+  Accessible.checkable: true
+  Accessible.checked: root.checked
+  Accessible.onToggleAction: root.toggle()
+  Accessible.onPressAction: root.toggle()
 
   Keys.onSpacePressed: root.toggle()
 

@@ -120,6 +120,7 @@ in
     _custom.programs.youtube.enable = true;
     _custom.programs.zellij.enable = true;
     _custom.programs.ai-agents.enable = true;
+    _custom.programs.ai-agents.enableSkills = true;
     _custom.programs.ai-agents.cartridge.enable = true;
     # _custom.programs.ai-agents.llmBench.enable = true;
     _custom.programs.ai-agents.sessionTap = {
@@ -133,34 +134,38 @@ in
         sopsFile = ../../secrets-sops/local.yaml;
         sopsKey = "local-sessiontap-hub-token-sandbox";
       };
+      remote.interfaces = [ "wlan0" ];
     };
 
-    _custom.services.android.enable = true;
     # _custom.services.tailscale.enable = true;
+    _custom.services.android.enable = true;
     # _custom.services.android.enableSdk = true;
     _custom.services.podman.enable = true;
-    _custom.services.podman.dockerCompat = true;
     _custom.services.podman.rootless = true;
+    _custom.services.podman.dockerCompat = true;
     _custom.services.docker.enable = false;
-    _custom.services.flatpak.enable = false;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
     _custom.services.kdeconnect.enable = true;
     _custom.services.ai.enable = true;
+    _custom.services.ai.enableCuda = true;
     _custom.services.ai.enableHandy = true;
     _custom.services.ai.enableOllama = true;
     _custom.services.ai.enableOllamaFlashAttention = true;
     _custom.services.ai.ocr.enable = true;
     _custom.services.ai.pdfIngest.enable = true;
-    _custom.services.ai.enableCuda = true;
-    _custom.services.ai.enableNextjsOllamaLlmUi = false;
-    _custom.services.ai.enableOpenWebui = true;
+    # _custom.services.ai.enableNextjsOllamaLlmUi = false;
+    # _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;
     _custom.services.ai.asr.enable = true;
     # 8 GB VRAM: the 1.7B model in bf16 leaves room for two 240 s chunks.
     _custom.services.ai.asr.batchSize = 2;
     _custom.services.ai.enableOmniRoute = true;
     _custom.services.ai.enableFirecrawl = true;
+    _custom.services.ai.webscoop.enable = true;
+    _custom.services.ai.wosarcher.enable = true;
+    _custom.services.ai.wosarcher.jev.enable = true;
+    _custom.services.ai.wosarcher.profile = "embeddings-jev";
     # _custom.services.ai.openDesign.enable = true;
     # _custom.services.ai.comfyui.enable = true;
     _custom.services.ai.comfyui.extraPipPackages = [ "gguf>=0.13.0" ];

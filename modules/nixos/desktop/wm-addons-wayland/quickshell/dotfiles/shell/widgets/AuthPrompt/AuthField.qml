@@ -182,6 +182,11 @@ FocusScope {
 
       anchors.fill: parent
       enabled: !root.isBusy
+      Accessible.role: Accessible.Button
+      Accessible.name: root.isRevealed ? "Hide password" : "Show password"
+      Accessible.checkable: true
+      Accessible.checked: root.isRevealed
+      Accessible.onPressAction: root.isRevealed = !root.isRevealed
       hoverEnabled: true
       cursorShape: Qt.PointingHandCursor
       onClicked: {

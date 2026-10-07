@@ -72,6 +72,12 @@ Item {
     hoverEnabled: true
     cursorShape: tile.interactive ? Qt.PointingHandCursor : Qt.ArrowCursor
     onClicked: tile.clicked()
+    Accessible.role: Accessible.Button
+    Accessible.name: tile.entry?.title ?? ""
+    Accessible.description: tile.special ? (tile.entry?.specialName ?? "") : `Workspace ${tile.entry?.workspace ?? ""}`
+    Accessible.selectable: true
+    Accessible.selected: tile.selected
+    Accessible.onPressAction: tile.clicked()
   }
 
   ClippingRectangle {

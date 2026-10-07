@@ -21,6 +21,9 @@ Button {
   property var representativeClient: root.clients.find(client => client.address === root.workspace?.lastwindow) ?? root.clients[0] ?? null
   property bool hasRepresentativeClient: !!root.representativeClient
 
+  Accessible.name: `Workspace ${root.workspaceId}`
+  Accessible.checkable: true
+  Accessible.checked: root.isFocused
   onClicked: Hyprland.dispatch(`hl.dsp.focus({ workspace = ${workspaceId}, on_current_monitor = true })`)
   verticalPadding: 0
   horizontalPadding: root.isFocused && clients.length > 0 ? 3 : 6

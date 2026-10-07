@@ -33,6 +33,16 @@ FocusScope {
   implicitHeight: column.implicitHeight
   activeFocusOnTab: root.enabled
   z: root.isOpen ? 10 : 0
+  Accessible.role: Accessible.ComboBox
+  Accessible.name: "Authenticate as"
+  Accessible.description: root.identities[root.selectedIndex]?.name ?? ""
+  Accessible.onPressAction: {
+    if (root.isOpen) {
+      root.isOpen = false;
+    } else {
+      root.open();
+    }
+  }
 
   onActiveFocusChanged: {
     if (!root.activeFocus) {
@@ -211,6 +221,12 @@ FocusScope {
           width: list.width
           height: 32
           radius: ConfigAuth.chipRadius
+          Accessible.role: Accessible.ListItem
+          Accessible.name: option.modelData.name
+          Accessible.description: option.modelData.detail
+          Accessible.selectable: true
+          Accessible.selected: option.index === root.selectedIndex
+          Accessible.onPressAction: root.pick(option.index)
           color: option.isHighlighted ? Theme.options.surface0 : "transparent"
 
           RowLayout {

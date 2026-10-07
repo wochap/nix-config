@@ -23,6 +23,7 @@ RowLayout {
   property int overdriveFrom: -1
   property color fillColor: Theme.options.primary
   property bool isButtonInteractive: false
+  property string buttonLabel: ""
   readonly property bool isOverdriven: root.overdriveFrom >= 0 && slider.displayValue > root.overdriveFrom
 
   signal moved(int value)
@@ -68,6 +69,10 @@ RowLayout {
       hoverEnabled: true
       cursorShape: Qt.PointingHandCursor
       onClicked: root.buttonClicked()
+      Accessible.ignored: !root.isButtonInteractive
+      Accessible.role: Accessible.Button
+      Accessible.name: root.buttonLabel
+      Accessible.onPressAction: root.buttonClicked()
     }
   }
 

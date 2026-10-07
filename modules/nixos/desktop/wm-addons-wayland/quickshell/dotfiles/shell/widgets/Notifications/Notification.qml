@@ -83,6 +83,10 @@ Item {
 
       anchors.fill: parent
       acceptedButtons: Qt.LeftButton | Qt.RightButton
+      Accessible.role: Accessible.Button
+      Accessible.name: [root.notification?.appName, root.notification?.summary].filter(Boolean).join(": ")
+      Accessible.description: root.isExpanded ? "Expanded" : "Collapsed"
+      Accessible.onPressAction: root.isExpanded = !root.isExpanded
       onClicked: event => {
         if (!root.notification)
           return;
@@ -178,6 +182,7 @@ Item {
 
             anchors.centerIn: parent
             materialIcon: root.isExpanded ? "unfold_less" : "unfold_more"
+            Accessible.name: root.isExpanded ? "Collapse" : "Expand"
             onClicked: root.isExpanded = !root.isExpanded
           }
         }
@@ -191,6 +196,7 @@ Item {
 
             anchors.centerIn: parent
             materialIcon: "close"
+            Accessible.name: "Dismiss"
             onClicked: root.discardNotification()
           }
         }

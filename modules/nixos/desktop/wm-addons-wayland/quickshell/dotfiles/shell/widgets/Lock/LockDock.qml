@@ -40,6 +40,11 @@ StyledRect {
     implicitHeight: 32
     activeFocusOnTab: button.enabled
     opacity: button.enabled ? 1 : ConfigLock.disabledOpacity
+    Accessible.role: Accessible.Button
+    Accessible.name: button.label
+    Accessible.checkable: true
+    Accessible.checked: button.isOpen
+    Accessible.onPressAction: root.toggled(button.panel)
 
     Keys.onPressed: event => {
       if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter || event.key === Qt.Key_Space) {

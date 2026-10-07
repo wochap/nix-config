@@ -328,6 +328,7 @@ PanelWindow {
             tooltipText: `${displayValue}`
             fillColor: SHyprsunset.active ? Theme.options.peach : Theme.options.surface2
             isButtonInteractive: true
+            buttonLabel: SHyprsunset.active ? "Turn off night light" : "Turn on night light"
             onButtonClicked: SHyprsunset.toggle()
             onMoved: value => {
               if (value > 0) {
@@ -361,6 +362,7 @@ PanelWindow {
             isMuted: SPipewire.isOutputMuted
             valueText: SPipewire.isOutputMuted ? "muted" : `${displayValue}%`
             isButtonInteractive: true
+            buttonLabel: SPipewire.isOutputMuted ? "Unmute output" : "Mute output"
             onButtonClicked: {
               if (audio) {
                 audio.muted = !audio.muted;
@@ -382,6 +384,7 @@ PanelWindow {
             isMuted: SPipewire.isInputMuted
             valueText: SPipewire.isInputMuted ? "muted" : `${displayValue}%`
             isButtonInteractive: true
+            buttonLabel: SPipewire.isInputMuted ? "Unmute microphone" : "Mute microphone"
             onButtonClicked: {
               if (audio) {
                 audio.muted = !audio.muted;

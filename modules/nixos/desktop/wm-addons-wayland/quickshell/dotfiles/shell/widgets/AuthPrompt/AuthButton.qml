@@ -28,6 +28,9 @@ FocusScope {
   implicitHeight: ConfigAuth.buttonHeight
   activeFocusOnTab: root.enabled
   opacity: root.enabled ? 1 : 0.5
+  Accessible.role: Accessible.Button
+  Accessible.name: root.label
+  Accessible.onPressAction: root.clicked()
 
   Keys.onSpacePressed: root.clicked()
 

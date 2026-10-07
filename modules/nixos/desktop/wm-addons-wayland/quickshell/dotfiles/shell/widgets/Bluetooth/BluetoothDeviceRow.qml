@@ -59,6 +59,10 @@ Item {
     anchors.fill: parent
     hoverEnabled: true
     onClicked: root.clicked()
+    Accessible.role: Accessible.ListItem
+    Accessible.name: root.device?.name || root.device?.address || ""
+    Accessible.description: root.statusText()
+    Accessible.onPressAction: root.clicked()
   }
 
   RowLayout {
@@ -154,6 +158,9 @@ Item {
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onClicked: root.activated()
+        Accessible.role: Accessible.Button
+        Accessible.name: `${root.action} ${root.device?.name || root.device?.address || ""}`
+        Accessible.onPressAction: root.activated()
       }
     }
   }

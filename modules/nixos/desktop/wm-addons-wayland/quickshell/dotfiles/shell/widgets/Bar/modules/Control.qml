@@ -24,6 +24,11 @@ WrapperRectangle {
     MouseArea {
       anchors.fill: parent
       acceptedButtons: Qt.LeftButton
+      Accessible.role: Accessible.Button
+      Accessible.name: "Control center"
+      Accessible.checkable: true
+      Accessible.checked: SControlCenter.isOpen
+      Accessible.onPressAction: SControlCenter.toggle()
       onClicked: event => {
         switch (event.button) {
         case Qt.LeftButton:
