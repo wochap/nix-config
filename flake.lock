@@ -4008,11 +4008,11 @@
     "wosarcher": {
       "flake": false,
       "locked": {
-        "lastModified": 1791329062,
-        "narHash": "sha256-6bL5P9jkwHnrY8252Rq/Qs+UvVCYRTwZdSCQr0SOfGE=",
+        "lastModified": 1791339426,
+        "narHash": "sha256-WwZVKZAxjIegSn4Mnj+Ct5zmjJB1g8Nr+oArEc8dRY0=",
         "owner": "wochap",
         "repo": "wosarcher",
-        "rev": "e1e87d6d9960f408daf077157763abdaf6f6bc7e",
+        "rev": "ed91dbd3490f898d89044024abbf8c238bc48938",
         "type": "github"
       },
       "original": {
