@@ -140,7 +140,7 @@ in
             # 80 # Hypertext Transfer Protocol (HTTP)
             # 110 # Post Office Protocol (POP3)
             # 143 # Internet Message Access Protocol (IMAP)
-            443 # HTTP Secure (HTTPS)
+            # 443 # HTTPS: opened by web-proxies for exposed vhosts only
           ]
           ++ lib.optionals cfg.enablePixieCore [
             # TCP 8086 is the custom HTTP port you chose for Pixiecore

@@ -73,14 +73,28 @@ rec {
       timeoutStop ? 45,
       extra ? { },
     }:
-    lib.recursiveUpdate {
-      serviceConfig = {
-        Restart = "on-failure";
-        RestartSec = 2;
-        TimeoutStopSec = lib.mkForce timeoutStop;
-        ProtectHome = true;
-      };
-    } extra;
+    lib.mkMerge [
+      {
+        # Explicit ordering after multi-user.target drops the implicit
+        # After= that WantedBy adds, so boot and login never wait on image
+        # pulls. The stack still starts at boot on desktops and servers.
+        after = [
+          "multi-user.target"
+          "media-data-dirs.service"
+        ];
+        requires = [ "media-data-dirs.service" ];
+        # Stop retrying after repeated failures instead of looping forever.
+        startLimitBurst = 5;
+        startLimitIntervalSec = 300;
+        serviceConfig = {
+          Restart = "on-failure";
+          RestartSec = 10;
+          TimeoutStopSec = lib.mkForce timeoutStop;
+          ProtectHome = true;
+        };
+      }
+      extra
+    ];
 
   mkStateRule = name: "d ${stateDir name} 0750 ${toString cfg.uid} ${toString cfg.gid} -";
 

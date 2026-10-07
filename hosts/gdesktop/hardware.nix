@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -14,14 +15,17 @@
   ];
 
   config = {
-    # HDD_2B (NTFS). ntfs3 has no unix perms, so map ownership to gean (1000:100).
+    # HDD_2B (NTFS). ntfs3 has no unix perms, so ownership comes from mount
+    # options: owner gean, group media, group-writable so the media containers
+    # (uid/gid 2000) can write under media-server/. gean is in group media.
     fileSystems."/mnt/storage" = {
       device = "/dev/disk/by-uuid/2EAC625EAC622097";
       fsType = "ntfs3";
       options = [
         "uid=1000"
-        "gid=100"
-        "umask=022"
+        "gid=${toString config._custom.services.media.gid}"
+        "dmask=002"
+        "fmask=113"
         "nofail"
         "x-systemd.device-timeout=5s"
       ];

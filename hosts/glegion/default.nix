@@ -166,17 +166,23 @@ in
       services.calibreWeb.enable = true;
       services.audiobookshelf.enable = true;
     };
+    # LAN exposure follows the laptop: DDNS points *.glegion.geanmar.com at
+    # its current IP, and port 443 opens only on the trusted connections.
+    _custom.services.web-gate.domain = "glegion.geanmar.com";
+    _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/personal.yaml;
+    _custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
+    _custom.services.web-gate.ddns.enable = true;
+    _custom.services.web-gate.ddns.zone = "geanmar.com";
+    # TODO: NetworkManager connection names (`nmcli connection show`) of the
+    # home and friends' networks. Empty keeps every exposed vhost closed.
+    _custom.services.web-gate.trustedConnections = [ ];
     # Media UIs other household members use, reachable from the LAN as
-    # https://<name>.wochap.home. Jellyfin/Audiobookshelf/Seerr are also used
-    # from their mobile/TV apps, which cannot complete the Basic Auth cookie
-    # dance, so leave `expose.gate = false` for those and rely on the app's own
-    # login. Admin UIs (sonarr, radarr, ...) stay loopback-only.
+    # https://<name>.glegion.geanmar.com. They rely on the app's own login: their
+    # mobile/TV apps cannot complete the web-gate Basic Auth cookie dance.
+    # Admin UIs (sonarr, radarr, ...) stay loopback-only.
     # _custom.services.web-proxies.jellyfin.expose.enable = true;
-    # _custom.services.web-proxies.jellyfin.expose.gate = false;
     # _custom.services.web-proxies.seerr.expose.enable = true;
-    # _custom.services.web-proxies.seerr.expose.gate = false;
     # _custom.services.web-proxies.audiobookshelf.expose.enable = true;
-    # _custom.services.web-proxies.audiobookshelf.expose.gate = false;
     # _custom.services.web-proxies.calibre-web.expose.enable = true;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
@@ -201,9 +207,8 @@ in
     _custom.services.ai.wosarcher.enable = true;
     _custom.services.ai.wosarcher.jev.enable = true;
     _custom.services.ai.wosarcher.profile = "embeddings-jev";
-    # gdesktop's wosarcher, gated by its `web-gate`. TODO: replace with
-    # gdesktop's LAN IP (give it a DHCP reservation on the router).
-    # _custom.services.web-proxies-remote."192.168.0.CHANGEME" = [ "wosarcher" ];
+    # gdesktop's exposed services resolve through the public
+    # *.gdesktop.geanmar.com record, e.g. https://wosarcher.gdesktop.geanmar.com.
     # _custom.services.ai.openDesign.enable = true;
     # _custom.services.ai.comfyui.enable = true;
     _custom.services.ai.comfyui.extraPipPackages = [ "gguf>=0.13.0" ];

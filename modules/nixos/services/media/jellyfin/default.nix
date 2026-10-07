@@ -12,6 +12,14 @@ let
   svc = cfg.services.jellyfin;
   isVaapi = svc.hardwareAcceleration == "vaapi";
   isNvidia = svc.hardwareAcceleration == "nvidia";
+  proxy = config._custom.services.web-proxies.${name} or { };
+  # Clients learn this address from Jellyfin (discovery, Quick Connect), so
+  # prefer the LAN hostname when the proxy is exposed.
+  publishedUrl =
+    if proxy.expose.enable or false then
+      "https://${proxy.expose.host}"
+    else
+      "https://${name}.${common.domain}";
 in
 {
   config = lib.mkIf (cfg.enable && svc.enable) {
@@ -21,7 +29,7 @@ in
       networks = [ cfg.network.name ];
       ports = common.publish svc 8096;
       environment = common.umaskEnv // {
-        JELLYFIN_PublishedServerUrl = "https://${name}.${common.domain}";
+        JELLYFIN_PublishedServerUrl = publishedUrl;
       };
       volumes = [
         "${common.stateDir name}/config:/config:rw"

@@ -4,6 +4,14 @@ Request portal (formerly Jellyseerr). Users sign in with their Jellyfin account,
 
 State: `/var/lib/media-server/seerr`.
 
+## Connect Jellyfin
+
+Seerr runs in a container. It reaches Jellyfin over the `media` network, not through nginx. Inside the container, `jellyfin.wochap.local` resolves to the container's own loopback.
+
+1. Sign in with Jellyfin URL `media-jellyfin`, port `8096`, Use SSL off, URL Base empty.
+2. Go to Settings › Jellyfin, and set External URL to `https://jellyfin.gdesktop.geanmar.com`. Seerr uses this URL for the links it shows to users.
+3. Go to Settings › General, and set Application URL to `https://seerr.gdesktop.geanmar.com`.
+
 ## Upgrade
 
 Images are pinned by tag and digest in `_custom.services.media.images` (`../default.nix`). To move to a new version:

@@ -334,8 +334,30 @@ in
 
     systemd.tmpfiles.rules = [
       "d ${cfg.stateDir} 0750 ${toString cfg.uid} ${toString cfg.gid} -"
-      "d ${cfg.dataRoot} 2775 ${toString cfg.uid} ${toString cfg.gid} -"
-    ]
-    ++ map (d: "d ${cfg.dataRoot}/${d} 2775 ${toString cfg.uid} ${toString cfg.gid} -") dataSubdirs;
+    ];
+
+    # dataRoot often lives on a separate (nofail) disk. tmpfiles runs before
+    # such mounts and would create the tree on the root fs underneath them, so
+    # create it once the mount is up. chown/chmod are best effort: filesystems
+    # without unix permissions (ntfs3, exfat) take ownership from mount options.
+    systemd.services.media-data-dirs = {
+      description = "Create media stack data directories";
+      unitConfig.RequiresMountsFor = [ cfg.dataRoot ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = lib.concatMapStringsSep "\n" (
+        d:
+        let
+          path = lib.escapeShellArg "${cfg.dataRoot}${lib.optionalString (d != "") "/${d}"}";
+        in
+        ''
+          mkdir -p ${path}
+          chown ${toString cfg.uid}:${toString cfg.gid} ${path} || true
+          chmod 2775 ${path} || true
+        ''
+      ) ([ "" ] ++ dataSubdirs);
+    };
   };
 }

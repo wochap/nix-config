@@ -160,10 +160,15 @@ in
       services.audiobookshelf.enable = true;
     };
     # Media UIs other household members use, reachable from the LAN as
-    # https://<name>.wochap.home. Jellyfin/Audiobookshelf/Seerr are also used
-    # from their mobile/TV apps, which cannot complete the Basic Auth cookie
-    # dance, so leave `expose.gate = false` for those and rely on the app's own
-    # login. Admin UIs (sonarr, radarr, ...) stay loopback-only.
+    # https://<name>.gdesktop.geanmar.com. They rely on the app's own login: their
+    # mobile/TV apps cannot complete the web-gate Basic Auth cookie dance.
+    # Admin UIs (sonarr, radarr, ...) stay loopback-only.
+    _custom.services.web-gate.domain = "gdesktop.geanmar.com";
+    _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/personal.yaml;
+    _custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
+    # Fixed IP, but DDNS still creates and maintains the record.
+    _custom.services.web-gate.ddns.enable = true;
+    _custom.services.web-gate.ddns.zone = "geanmar.com";
     _custom.services.web-proxies.jellyfin.expose.enable = true;
     _custom.services.web-proxies.seerr.expose.enable = true;
     _custom.services.web-proxies.audiobookshelf.expose.enable = true;
@@ -196,8 +201,9 @@ in
     _custom.services.ai.wosarcher.jev.enable = true;
     # embeddings-rerank stays available for offline use.
     _custom.services.ai.wosarcher.profile = "embeddings-jev";
-    # Reachable from the LAN as https://wosarcher.wochap.home behind `web-gate`
+    # Reachable from the LAN as https://wosarcher.gdesktop.geanmar.com behind `web-gate`
     # _custom.services.web-proxies.wosarcher.expose.enable = true;
+    # _custom.services.web-proxies.wosarcher.expose.gate = true;
     _custom.services.ai.openDesign.enable = true;
     _custom.services.ai.comfyui.enable = true;
     # ComfyUI-GGUF (molbal fork) in ~/ComfyUI/custom_nodes; see comfyui/README.md.

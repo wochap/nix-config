@@ -7,10 +7,9 @@
 
 let
   # TODO: accept this as an option
-  inherit (pkgs._custom) wochap-ssc wochap-ssc-home;
+  inherit (pkgs._custom) wochap-ssc;
 
   gate = config._custom.services.web-gate;
-  remote = config._custom.services.web-proxies-remote;
 
   # Filter to only act on proxies that are explicitly enabled
   enabledProxies = lib.filterAttrs (name: proxy: proxy.enable) config._custom.services.web-proxies;
@@ -39,6 +38,35 @@ let
       );
     };
     text = builtins.readFile ./web-gate.sh;
+  };
+
+  # Opens the LAN port per trusted NetworkManager connection and keeps the
+  # DDNS record current. Called from the firewall script and from NM events.
+  lanChain = "web-gate-lan";
+  restrictLan = gate.trustedConnections != null;
+  lanSync = restrictLan || gate.ddns.enable;
+  web-gate-lan = pkgs.writeShellApplication {
+    name = "web-gate-lan";
+    runtimeInputs = with pkgs; [
+      coreutils
+      curl
+      gawk
+      iproute2
+      iptables
+      jq
+      networkmanager
+    ];
+    runtimeEnv = {
+      LAN_CHAIN = lanChain;
+      LAN_PORT = "443";
+      LAN_TRUSTED = if restrictLan then lib.concatStringsSep "\n" gate.trustedConnections else "*";
+      DDNS_ENABLE = if gate.ddns.enable then "1" else "0";
+      DDNS_ZONE = lib.optionalString gate.ddns.enable gate.ddns.zone;
+      DDNS_RECORD = "*.${gate.domain}";
+      DDNS_TTL = toString gate.ddns.ttl;
+      DDNS_TOKEN_FILE = config.sops.secrets.${gate.acme.credentialSecret.sopsKey}.path;
+    };
+    text = builtins.readFile ./web-gate-lan.sh;
   };
 
   # If lazy=true, Nginx hits publicPort (socket proxy).
@@ -88,9 +116,7 @@ let
     in
     {
       onlySSL = true;
-      sslTrustedCertificate = "${wochap-ssc-home}/rootCA.pem";
-      sslCertificateKey = "${wochap-ssc-home}/${wochap-ssc-home.meta.domain}+4-key.pem";
-      sslCertificate = "${wochap-ssc-home}/${wochap-ssc-home.meta.domain}+4.pem";
+      useACMEHost = gate.domain;
       listen = [
         {
           addr = gate.listenAddress;
@@ -118,7 +144,7 @@ let
         # add_header only applies to 2xx/3xx, so the 401 challenge never
         # leaks the cookie.
         "= ${gateLoginPath}".extraConfig = ''
-          auth_basic "wochap gate";
+          auth_basic "${gate.realm}";
           auth_basic_user_file ${gateHtpasswdFile};
           add_header Set-Cookie "${gate.cookieName}=$gate_token; Path=/; Max-Age=${
             toString (gate.cookieDays * 86400)
@@ -135,10 +161,7 @@ in
       lib.types.submodule (
         { name, config, ... }: {
           options = {
-            enable = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-            };
+            enable = lib.mkEnableOption { };
             subdomain = lib.mkOption {
               type = lib.types.str;
               default = name;
@@ -160,10 +183,7 @@ in
               default = null;
               description = "User that owns a user-scoped service.";
             };
-            lazy = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-            };
+            lazy = lib.mkEnableOption { };
             expose = {
               enable = lib.mkOption {
                 type = lib.types.bool;
@@ -172,7 +192,7 @@ in
               };
               gate = lib.mkOption {
                 type = lib.types.bool;
-                default = true;
+                default = false;
                 description = "Require the web-gate cookie (Basic Auth once) on the LAN vhost.";
               };
               host = lib.mkOption {
@@ -196,13 +216,71 @@ in
 
   options._custom.services.web-gate = {
     domain = lib.mkOption {
-      type = lib.types.str;
-      default = wochap-ssc-home.meta.domain;
-      description = "Domain for LAN-exposed proxies; must match the wochap-ssc-home certificate.";
+      type = lib.types.nonEmptyStr;
+      example = "home.example.com";
+      description = ''
+        Domain for LAN-exposed proxies. A public DNS record `*.<domain>` must
+        point at this host's LAN IP; nginx serves a Let's Encrypt wildcard
+        certificate for it, obtained through the DNS-01 challenge.
+      '';
+    };
+    acme = {
+      dnsProvider = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "cloudflare";
+        description = "lego DNS provider that answers the DNS-01 challenge.";
+      };
+      dnsResolver = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        # The local resolver may answer from cache; ask a public one whether
+        # the challenge record has propagated.
+        default = "1.1.1.1:53";
+        description = "Resolver lego uses to check challenge propagation.";
+      };
+      credentialSecret.sopsFile = lib.mkOption {
+        type = lib.types.path;
+        description = "SOPS file containing the DNS provider API token.";
+      };
+      credentialSecret.sopsKey = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "cloudflare-dns-api-token";
+        description = "Key containing the DNS provider API token in the SOPS file.";
+      };
+      credentialSecret.variable = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "CLOUDFLARE_DNS_API_TOKEN";
+        description = "lego environment variable the token feeds; it is passed as `<variable>_FILE`.";
+      };
     };
     listenAddress = lib.mkOption {
       type = lib.types.str;
       default = "0.0.0.0";
+    };
+    trustedConnections = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.nonEmptyStr);
+      default = null;
+      example = [
+        "Home WiFi"
+        "Wired connection 1"
+      ];
+      description = ''
+        NetworkManager connection names or UUIDs on which port 443 opens for
+        exposed proxies. On any other network the LAN vhosts stay unreachable.
+        null opens the port on every interface, for hosts that never move.
+      '';
+    };
+    ddns = {
+      enable = lib.mkEnableOption "updating the `*.<domain>` Cloudflare A record to this host's LAN IP on every network change";
+      zone = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        example = "example.com";
+        description = "Cloudflare zone that contains `domain`.";
+      };
+      ttl = lib.mkOption {
+        type = lib.types.ints.between 60 86400;
+        default = 60;
+        description = "TTL of the A record. Short, so clients follow the host between networks.";
+      };
     };
     cookieDays = lib.mkOption {
       type = lib.types.int;
@@ -211,7 +289,12 @@ in
     };
     cookieName = lib.mkOption {
       type = lib.types.str;
-      default = "wochap_gate";
+      default = "web_gate";
+    };
+    realm = lib.mkOption {
+      type = lib.types.str;
+      default = "web-gate";
+      description = "Basic Auth realm shown in the browser's login prompt.";
     };
     user = lib.mkOption {
       type = lib.types.str;
@@ -222,15 +305,6 @@ in
       type = lib.types.str;
       default = "/var/lib/web-gate";
     };
-  };
-
-  options._custom.services.web-proxies-remote = lib.mkOption {
-    type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-    default = { };
-    example = {
-      "192.168.0.10" = [ "wosarcher" ];
-    };
-    description = "LAN IP -> subdomains served by another host's web-gate; adds /etc/hosts entries and trusts its CA.";
   };
 
   config = lib.mkMerge [
@@ -341,14 +415,82 @@ in
 
     # 6. LAN gate for exposed proxies
     (lib.mkIf (exposedProxies != { }) {
+      sops.secrets.${gate.acme.credentialSecret.sopsKey}.sopsFile = gate.acme.credentialSecret.sopsFile;
+
+      # One wildcard certificate for every exposed vhost. DNS-01 needs no
+      # inbound port, so the host stays LAN-only.
+      security.acme = {
+        acceptTerms = true;
+        certs.${gate.domain} = {
+          domain = "*.${gate.domain}";
+          group = config.services.nginx.group;
+          inherit (gate.acme) dnsProvider dnsResolver;
+          credentialFiles."${gate.acme.credentialSecret.variable}_FILE" =
+            config.sops.secrets.${gate.acme.credentialSecret.sopsKey}.path;
+        };
+      };
+
       assertions = [
         {
-          assertion = gate.domain == wochap-ssc-home.meta.domain;
-          message = "web-gate.domain must match the wochap-ssc-home certificate domain (${wochap-ssc-home.meta.domain})";
+          assertion = !gate.ddns.enable || gate.acme.dnsProvider == "cloudflare";
+          message = "web-gate.ddns only supports Cloudflare (web-gate.acme.dnsProvider)";
+        }
+        {
+          assertion = !lanSync || config.networking.networkmanager.enable;
+          message = "web-gate.trustedConnections and web-gate.ddns need NetworkManager";
+        }
+        {
+          assertion = !restrictLan || !config.networking.nftables.enable;
+          message = "web-gate.trustedConnections supports the iptables firewall backend only";
         }
       ];
 
-      networking.firewall.allowedTCPPorts = [ 443 ];
+      networking.firewall =
+        if restrictLan then
+          {
+            # The chain is filled by web-gate-lan; jump to it before the final
+            # refuse rule. ACCEPT instead of nixos-fw-accept, so the chain never
+            # blocks the firewall from deleting its own chains on reload.
+            extraCommands = ''
+              ip46tables -N ${lanChain} 2>/dev/null || true
+              ip46tables -A nixos-fw -j ${lanChain}
+              ${lib.getExe web-gate-lan} firewall || true
+            '';
+            extraStopCommands = ''
+              ip46tables -F ${lanChain} 2>/dev/null || true
+            '';
+          }
+        else
+          {
+            allowedTCPPorts = [ 443 ];
+          };
+
+      systemd.services.web-gate-lan = lib.mkIf lanSync {
+        description = "Sync LAN exposure and DDNS with the active network";
+        after = [
+          "firewall.service"
+          "network-online.target"
+        ];
+        wants = [ "network-online.target" ];
+        # Also catches missed NM events and failed API calls.
+        startAt = "hourly";
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${lib.getExe web-gate-lan} sync";
+        };
+      };
+
+      networking.networkmanager.dispatcherScripts = lib.optional lanSync {
+        type = "basic";
+        source = pkgs.writeShellScript "web-gate-lan-dispatch" ''
+          # NetworkManager passes the interface as $1 and the action as $2.
+          case "$2" in
+            up | down | dhcp4-change | connectivity-change)
+              ${pkgs.systemd}/bin/systemctl restart --no-block web-gate-lan.service
+              ;;
+          esac
+        '';
+      };
 
       systemd.tmpfiles.rules = [ "d ${gate.stateDir} 0750 root nginx -" ];
 
@@ -369,13 +511,7 @@ in
         '';
       };
 
-      environment.systemPackages = [ web-gate ];
-    })
-
-    # 7. Client side: reach another host's exposed proxies
-    (lib.mkIf (remote != { }) {
-      networking.hosts = lib.mapAttrs (ip: subs: map (sub: "${sub}.${gate.domain}") subs) remote;
-      security.pki.certificateFiles = [ "${wochap-ssc-home}/rootCA.pem" ];
+      environment.systemPackages = [ web-gate ] ++ lib.optional lanSync web-gate-lan;
     })
   ];
 }
