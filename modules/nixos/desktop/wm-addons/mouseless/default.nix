@@ -2,19 +2,20 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
 let
   cfg = config._custom.desktop.mouseless;
 
-  hints-final = pkgs._custom.pythonPackages.hints;
+  woints = inputs.woints.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   options._custom.desktop.mouseless.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ hints-final ];
+    environment.systemPackages = [ woints ];
 
     environment.sessionVariables = {
       ACCESSIBILITY_ENABLED = "1";
@@ -26,8 +27,6 @@ in
     };
 
     services.gnome.at-spi2-core.enable = true;
-
-    _custom.user.extraGroups = [ "input" ];
 
     _custom.hm = {
       # gsettings toolkit-accessibility, required by GTK3 apps
@@ -45,13 +44,21 @@ in
         };
       };
 
-      # systemd.user.services.hintsd = lib._custom.mkWaylandService {
-      #   Unit.Description = "Hints daemon";
-      #   Service = {
-      #     Type = "simple";
-      #     ExecStart = "${hints-final}/bin/hintsd";
-      #   };
-      # };
+      systemd.user.services.wointsd = lib._custom.mkWaylandService {
+        Unit = {
+          Description = "woints hint daemon";
+          After = [
+            "graphical-session.target"
+            "a11y-enable.service"
+          ];
+          Wants = [ "a11y-enable.service" ];
+        };
+        Service = {
+          ExecStart = "${woints}/bin/wointsd";
+          Restart = "on-failure";
+          RestartSec = 2;
+        };
+      };
     };
   };
 }

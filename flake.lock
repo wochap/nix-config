@@ -3386,6 +3386,7 @@
         "wayland-firewall": "wayland-firewall",
         "webscoop": "webscoop",
         "wluma": "wluma",
+        "woints": "woints",
         "wosarcher": "wosarcher",
         "wt": "wt",
         "zen-browser": "zen-browser",
@@ -3927,6 +3928,26 @@
         "repo": "wluma",
         "rev": "259a874af6b4d854073d340cccb1852f63635fd3",
         "type": "github"
+      }
+    },
+    "woints": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791358193,
+        "narHash": "sha256-npA76k1WNCQu6WgtfKSX+7kos8lWD6YlAfHVqxLu1RU=",
+        "ref": "refs/heads/main",
+        "rev": "ab635a4f89ada9389ecad4354d3239e44c0b8fe5",
+        "revCount": 18,
+        "type": "git",
+        "url": "file:///home/gean/Sandboxes/sandbox/projects/woints"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/gean/Sandboxes/sandbox/projects/woints"
       }
     },
     "wosarcher": {

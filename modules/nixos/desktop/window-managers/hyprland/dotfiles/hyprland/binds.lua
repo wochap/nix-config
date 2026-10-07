@@ -371,6 +371,37 @@ hl.define_submap("group", "reset", function()
   hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
 end)
 
+--- MOUSELESS (woints)
+
+-- Hint focused window
+hl.bind(mod .. " + j", hl.dsp.exec_cmd("woints hints"), { description = "Hints" })
+
+-- Hint every visible window and layer
+hl.bind(mod .. " + SHIFT + j", hl.dsp.exec_cmd("woints hints --scope all"), { description = "Hints All" })
+
+local function woints_hints(args)
+  return function()
+    hl.dispatch(hl.dsp.exec_cmd("woints hints " .. args))
+    hl.dispatch(hl.dsp.submap("reset"))
+  end
+end
+
+hl.bind(mod .. " + u", hl.dsp.submap("woints"), { description = "+Hints" })
+hl.define_submap("woints", "reset", function()
+  hl.bind("f", woints_hints("--scope focused+layers"), { description = "Focused + Layers" })
+  hl.bind("l", woints_hints("--scope layers"), { description = "Layers" })
+  hl.bind("a", woints_hints("--scope all"), { description = "All" })
+  hl.bind("r", woints_hints("--action right"), { description = "Right Click" })
+  hl.bind("m", woints_hints("--action middle"), { description = "Middle Click" })
+  hl.bind("g", woints_hints("--action double"), { description = "Double Click" })
+  hl.bind("v", woints_hints("--action hover"), { description = "Hover" })
+  hl.bind("i", woints_hints("--action focus"), { description = "Focus" })
+  hl.bind("d", woints_hints("--action drag"), { description = "Drag" })
+  hl.bind("s", woints_hints("--action scroll"), { description = "Scroll" })
+  hl.bind("y", woints_hints("--action copy"), { description = "Copy" })
+  hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
+end)
+
 --- APPLICATION KEYBINDINGS (Super + Alt + Key)
 
 -- Open primary terminal

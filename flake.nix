@@ -89,6 +89,10 @@
     kb-hud.inputs.nixpkgs.follows = "nixpkgs";
     session-tap.url = "github:wochap/session-tap";
     session-tap.inputs.nixpkgs.follows = "nixpkgs";
+    woints.url = "git+file:///home/gean/Sandboxes/sandbox/projects/woints";
+    woints.inputs.nixpkgs.follows = "nixpkgs";
+    tt.url = "git+file:///home/gean/Sandboxes/sandbox/projects/tt";
+    tt.inputs.nixpkgs.follows = "nixpkgs";
     fi.url = "github:wochap/fi";
     fi.inputs.nixpkgs.follows = "nixpkgs";
     tofi.url = "github:wochap/tofi/master-fork";
