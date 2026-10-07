@@ -144,34 +144,30 @@ in
     _custom.services.podman.rootless = true;
     _custom.services.podman.dockerCompat = true;
     _custom.services.docker.enable = false;
-    # TODO: enable once a data disk is attached. RX 6800 XT transcodes via VAAPI.
-    # _custom.services.media = {
-    #   enable = true;
-    #   dataRoot = "/mnt/storage/media-server";
-    #   services.jellyfin.enable = true;
-    #   services.jellyfin.hardwareAcceleration = "vaapi";
-    #   services.seerr.enable = true;
-    #   services.sonarr.enable = true;
-    #   services.radarr.enable = true;
-    #   services.prowlarr.enable = true;
-    #   services.qbittorrent.enable = true;
-    #   services.bazarr.enable = true;
-    #   services.lazylibrarian.enable = true;
-    #   services.calibreWeb.enable = true;
-    #   services.audiobookshelf.enable = true;
-    # };
+    _custom.services.media = {
+      enable = true;
+      dataRoot = "/mnt/storage/media-server";
+      services.jellyfin.enable = true;
+      services.jellyfin.hardwareAcceleration = "vaapi";
+      services.seerr.enable = true;
+      services.sonarr.enable = true;
+      services.radarr.enable = true;
+      services.prowlarr.enable = true;
+      services.qbittorrent.enable = true;
+      services.bazarr.enable = true;
+      services.lazylibrarian.enable = true;
+      services.calibreWeb.enable = true;
+      services.audiobookshelf.enable = true;
+    };
     # Media UIs other household members use, reachable from the LAN as
     # https://<name>.wochap.home. Jellyfin/Audiobookshelf/Seerr are also used
     # from their mobile/TV apps, which cannot complete the Basic Auth cookie
     # dance, so leave `expose.gate = false` for those and rely on the app's own
     # login. Admin UIs (sonarr, radarr, ...) stay loopback-only.
-    # _custom.services.web-proxies.jellyfin.expose.enable = true;
-    # _custom.services.web-proxies.jellyfin.expose.gate = false;
-    # _custom.services.web-proxies.seerr.expose.enable = true;
-    # _custom.services.web-proxies.seerr.expose.gate = false;
-    # _custom.services.web-proxies.audiobookshelf.expose.enable = true;
-    # _custom.services.web-proxies.audiobookshelf.expose.gate = false;
-    # _custom.services.web-proxies.calibre-web.expose.enable = true;
+    _custom.services.web-proxies.jellyfin.expose.enable = true;
+    _custom.services.web-proxies.seerr.expose.enable = true;
+    _custom.services.web-proxies.audiobookshelf.expose.enable = true;
+    _custom.services.web-proxies.calibre-web.expose.enable = true;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
     _custom.services.kdeconnect.enable = true;
