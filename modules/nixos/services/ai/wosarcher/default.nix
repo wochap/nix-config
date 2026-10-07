@@ -333,9 +333,10 @@ in
         WOSARCHER_SERVER__MAX_CONCURRENT_RUNS = toString wcfg.maxConcurrentRuns;
         # The browser's Origin is the nginx virtual host, not the backend
         # address, so state-changing requests need it allowed explicitly.
-        WOSARCHER_AUTH__ALLOWED_ORIGINS = builtins.toJSON [
-          "https://${proxy.subdomain}.${wochap-ssc.meta.domain}"
-        ];
+        WOSARCHER_AUTH__ALLOWED_ORIGINS = builtins.toJSON (
+          [ "https://${proxy.subdomain}.${wochap-ssc.meta.domain}" ]
+          ++ lib.optional proxy.expose.enable "https://${proxy.expose.host}"
+        );
       };
       environmentFiles = [
         config.sops.templates."wosarcher.env".path

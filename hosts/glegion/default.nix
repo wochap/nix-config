@@ -166,6 +166,9 @@ in
     _custom.services.ai.wosarcher.enable = true;
     _custom.services.ai.wosarcher.jev.enable = true;
     _custom.services.ai.wosarcher.profile = "embeddings-jev";
+    # gdesktop's wosarcher, gated by its `web-gate`. TODO: replace with
+    # gdesktop's LAN IP (give it a DHCP reservation on the router).
+    # _custom.services.web-proxies-remote."192.168.0.CHANGEME" = [ "wosarcher" ];
     # _custom.services.ai.openDesign.enable = true;
     # _custom.services.ai.comfyui.enable = true;
     _custom.services.ai.comfyui.extraPipPackages = [ "gguf>=0.13.0" ];

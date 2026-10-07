@@ -18,6 +18,13 @@ let
       # NOTE: don't use 127.0.0.1 to prevent conflicts with localhost
       address = "127.0.1.1";
     };
+    # Separate CA/cert for services exposed on the LAN (see
+    # modules/nixos/services/web-proxies). Kept apart from wochap-ssc so adding
+    # the LAN domain does not rotate the .local CA every browser already trusts.
+    wochap-ssc-home = generate-ssc {
+      domain = "wochap.home";
+      address = "127.0.1.1";
+    };
     interception-both-shift-capslock = pkgs.callPackage ./interception-both-shift-capslock { };
     mailnotify = pkgs.callPackage ./mailnotify { };
     offlinemsmtp = inputs.offlinemsmtp.packages.${pkgs.system}.default;

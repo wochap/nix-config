@@ -171,6 +171,8 @@ in
     _custom.services.ai.wosarcher.jev.enable = true;
     # embeddings-rerank stays available for offline use.
     _custom.services.ai.wosarcher.profile = "embeddings-jev";
+    # Reachable from the LAN as https://wosarcher.wochap.home behind `web-gate`
+    # _custom.services.web-proxies.wosarcher.expose.enable = true;
     _custom.services.ai.openDesign.enable = true;
     _custom.services.ai.comfyui.enable = true;
     # ComfyUI-GGUF (molbal fork) in ~/ComfyUI/custom_nodes; see comfyui/README.md.
