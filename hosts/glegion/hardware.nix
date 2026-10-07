@@ -150,6 +150,30 @@
 
     boot.extraModulePackages = with config.boot.kernelPackages; [ lenovo-legion-module ];
 
+    # Kernel >= 6.17 ships upstream lenovo-wmi-{gamezone,other,capdata01,events}
+    # which claim the same WMI GUIDs as legion_laptop. On this model (82Y5,
+    # BIOS MACN) their firmware-attributes (ppt_pl*) return EINVAL even in the
+    # custom profile, so they add nothing and only risk a duplicate
+    # platform_profile handler. Keep legion_laptop (fan hwmon, rapidcharge used
+    # by quickshell/legion_cli) and blacklist the upstream ones, as LLL docs
+    # recommend. lenovo_wmi_hotkey_utilities is unrelated and stays.
+    # NOTE: cpu_oc/gpu_oc/*_powerlimit stay red in legion_gui: the GPU WMI
+    # method GUID (da7547f1) does not exist in this firmware and the CPU method
+    # (14afd777) returns an error, so those are unsupported by the BIOS itself.
+    boot.blacklistedKernelModules = [
+      "lenovo_wmi_gamezone"
+      "lenovo_wmi_other"
+      "lenovo_wmi_capdata01"
+      "lenovo_wmi_events"
+    ];
+
+    # sched_ext scheduler: lower latency under load (gaming/compiles) than EEVDF
+    # on this 8c/16t APU. Stock 6.18 kernel has CONFIG_SCHED_CLASS_EXT=y.
+    services.scx = {
+      enable = true;
+      scheduler = "scx_lavd";
+    };
+
     # install kernel 6.18.38
     boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_18;
     boot.kernelModules = [

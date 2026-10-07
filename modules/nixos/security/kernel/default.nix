@@ -4,13 +4,25 @@ let
   cfg = config._custom.security.kernel;
 in
 {
-  options._custom.security.kernel.enable = lib.mkEnableOption { };
+  options._custom.security.kernel = {
+    enable = lib.mkEnableOption { };
+    zeroOnFree = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Pass `init_on_free=1`. Zeroes every freed page/slab object, the most
+        expensive of the hardening params (memory-bandwidth bound, hurts
+        allocation-heavy workloads like games/compilers). Disable on hosts
+        where performance matters more than defense-in-depth; `init_on_alloc`
+        stays on and covers most of the info-leak surface.
+      '';
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     boot.kernelParams = [
       # Zero heap allocations on alloc/free (prevents info leaks from freed memory)
       "init_on_alloc=1"
-      "init_on_free=1"
       # Prevent slab merging (common exploit technique)
       "slab_nomerge"
       # Randomize kernel stack offset per syscall
@@ -19,7 +31,8 @@ in
       "vsyscall=none"
       # Disable debugfs (reduces attack surface)
       "debugfs=off"
-    ];
+    ]
+    ++ lib.optional cfg.zeroOnFree "init_on_free=1";
 
     boot.kernel.sysctl = {
       # Hide kernel pointers from all users (not just unprivileged)

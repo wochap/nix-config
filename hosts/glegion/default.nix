@@ -231,6 +231,8 @@ in
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
 
+    # init_on_free costs real throughput on this laptop; keep the rest of the hardening
+    _custom.security.kernel.zeroOnFree = false;
     _custom.security.gpg.enableLuksIntegration = true;
     _custom.security.gpg.enableGpgAgent = true;
     _custom.security.gnome-keyring.enable = true;
