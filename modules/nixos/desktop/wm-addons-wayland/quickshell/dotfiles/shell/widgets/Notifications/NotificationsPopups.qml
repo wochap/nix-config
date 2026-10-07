@@ -18,6 +18,8 @@ PanelWindow {
   property bool isFocusedClientFullScreen: (focusedClient?.fullscreen ?? null) === 2
 
   WlrLayershell.namespace: "quickshell:notifications-popups"
+  // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
+  readonly property string namespace: WlrLayershell.namespace
   WlrLayershell.layer: WlrLayer.Overlay
   anchors {
     top: true

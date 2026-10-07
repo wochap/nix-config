@@ -1,6 +1,7 @@
 import QtQuick
 import qs.config
 import qs.widgets.Bar.modules
+import qs.Woints
 
 Loader {
   id: root
@@ -22,6 +23,11 @@ Loader {
       Accessible.role: Accessible.Button
       Accessible.name: `${root.label}: ${root.count} ${root.count === 1 ? "window" : "windows"}`
       Accessible.onPressAction: popup.visible = !popup.visible
+
+      Hintable {
+        label: `${root.label}: ${root.count} ${root.count === 1 ? "window" : "windows"}`
+        onActivated: popup.visible = !popup.visible
+      }
 
       Module {
         id: module

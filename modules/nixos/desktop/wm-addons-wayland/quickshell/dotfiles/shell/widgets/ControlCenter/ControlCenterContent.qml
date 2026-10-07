@@ -28,6 +28,8 @@ PanelWindow {
 
   screen: root.focusedScreen
   WlrLayershell.namespace: "quickshell:control-center"
+  // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
+  readonly property string namespace: WlrLayershell.namespace
   WlrLayershell.layer: WlrLayer.Overlay
   WlrLayershell.keyboardFocus: SControlCenter.isOpen ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
   anchors {

@@ -19,6 +19,7 @@ import qs.widgets.WindowSwitcher
 import qs.widgets.WhichKeys
 import qs.widgets.VBar
 import qs.widgets.AuthPrompt
+import qs.Woints
 
 ShellRoot {
   id: root
@@ -39,8 +40,11 @@ ShellRoot {
   property bool renderAuthPrompt: true
 
   // started eagerly, the polkit agent and the auth socket must exist before
-  // the first prompt arrives
-  Component.onCompleted: SAuth.socketPath
+  // the first prompt arrives; SHints registers the `woints` IPC target
+  Component.onCompleted: {
+    SAuth.socketPath;
+    SHints.protocol;
+  }
 
   LazyLoader {
     active: root.renderBar && Theme.ready

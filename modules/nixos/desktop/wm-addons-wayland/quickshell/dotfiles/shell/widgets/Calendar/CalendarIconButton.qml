@@ -1,6 +1,7 @@
 import QtQuick
 import qs.config
 import qs.widgets.common
+import qs.Woints
 
 // 28px circular (or pill when `label` is set) header button
 StyledRect {
@@ -47,5 +48,10 @@ StyledRect {
     Accessible.role: Accessible.Button
     Accessible.name: root.accessibleName
     Accessible.onPressAction: root.clicked()
+
+    Hintable {
+      label: root.accessibleName
+      onActivated: root.clicked()
+    }
   }
 }

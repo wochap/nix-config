@@ -7,6 +7,7 @@ import qs.config
 import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
+import qs.Woints
 
 Button {
   id: root
@@ -33,6 +34,12 @@ Button {
   }
   contentItem: Loader {
     sourceComponent: root.isFocused && root.clients.length > 0 ? taskbar : number
+  }
+
+  Hintable {
+    target: root
+    label: root.Accessible.name
+    onActivated: root.clicked()
   }
 
   Component {

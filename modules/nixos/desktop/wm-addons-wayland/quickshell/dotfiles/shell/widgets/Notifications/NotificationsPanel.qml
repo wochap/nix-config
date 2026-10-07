@@ -24,6 +24,8 @@ PanelWindow {
   property real slideX: ConfigNotifications.notificationsPanelWidth
 
   WlrLayershell.namespace: "quickshell:notifications-panel"
+  // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
+  readonly property string namespace: WlrLayershell.namespace
   WlrLayershell.layer: WlrLayer.Overlay
   anchors {
     top: true

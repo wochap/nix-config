@@ -2,6 +2,7 @@ import QtQuick
 import qs.config
 import qs.widgets.common
 import qs.widgets.AuthPrompt
+import qs.Woints
 
 // 32px dialog button: primary (filled, Enter), secondary (Esc), ghost (risky, never default),
 // tinted (outlined `tint`, e.g. the lock screen's red confirm)
@@ -131,5 +132,10 @@ FocusScope {
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
     onClicked: root.clicked()
+
+    Hintable {
+      label: root.label
+      onActivated: root.clicked()
+    }
   }
 }

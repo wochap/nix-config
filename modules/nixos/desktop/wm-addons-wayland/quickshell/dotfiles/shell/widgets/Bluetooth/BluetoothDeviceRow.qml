@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell.Bluetooth
 import qs.config
 import qs.widgets.common
+import qs.Woints
 
 // 44px device row: tile, name + status, action button
 Item {
@@ -63,6 +64,11 @@ Item {
     Accessible.name: root.device?.name || root.device?.address || ""
     Accessible.description: root.statusText()
     Accessible.onPressAction: root.clicked()
+
+    Hintable {
+      label: root.device?.name || root.device?.address || ""
+      onActivated: root.clicked()
+    }
   }
 
   RowLayout {
@@ -161,6 +167,11 @@ Item {
         Accessible.role: Accessible.Button
         Accessible.name: `${root.action} ${root.device?.name || root.device?.address || ""}`
         Accessible.onPressAction: root.activated()
+
+        Hintable {
+          label: `${root.action} ${root.device?.name || root.device?.address || ""}`
+          onActivated: root.activated()
+        }
       }
     }
   }

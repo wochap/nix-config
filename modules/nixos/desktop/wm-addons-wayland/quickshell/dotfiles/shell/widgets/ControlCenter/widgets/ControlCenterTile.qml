@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import qs.config
 import qs.widgets.common
 import qs.widgets.ControlCenter
+import qs.Woints
 
 // 2-column toggle tile: icon well, label + optional sub-label, optional chevron zone
 Item {
@@ -56,6 +57,11 @@ Item {
     Accessible.checkable: true
     Accessible.checked: root.isActive
     Accessible.onPressAction: root.clicked()
+
+    Hintable {
+      label: root.label
+      onActivated: root.clicked()
+    }
   }
 
   RowLayout {
@@ -165,6 +171,11 @@ Item {
         Accessible.role: Accessible.Button
         Accessible.name: `${root.label} settings`
         Accessible.onPressAction: root.chevronClicked()
+
+        Hintable {
+          label: `${root.label} settings`
+          onActivated: root.chevronClicked()
+        }
       }
     }
   }

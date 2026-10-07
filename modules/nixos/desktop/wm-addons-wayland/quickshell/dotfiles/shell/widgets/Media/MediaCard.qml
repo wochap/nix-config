@@ -6,6 +6,7 @@ import Quickshell.Widgets
 import qs.config
 import qs.services
 import qs.widgets.common
+import qs.Woints
 
 // now playing card shared by ControlCenter and the lock screen, see design/project/MediaCard.dc.html
 // `panel` adds the lock panel chrome: header, volume row, key hints and keys.
@@ -108,6 +109,12 @@ FocusScope {
       hoverEnabled: true
       cursorShape: Qt.PointingHandCursor
       onClicked: button.activated()
+
+      Hintable {
+        enabled: button.canUse
+        label: button.label
+        onActivated: button.activated()
+      }
     }
   }
 

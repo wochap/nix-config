@@ -11,6 +11,8 @@ PanelWindow {
 
   screen: Quickshell.screens.find(s => s.name === SAuth.screenName) ?? null
   WlrLayershell.namespace: "quickshell:auth"
+  // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
+  readonly property string namespace: WlrLayershell.namespace
   WlrLayershell.layer: WlrLayer.Overlay
   WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
   anchors {

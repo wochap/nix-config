@@ -16,6 +16,8 @@ PanelWindow {
   readonly property int maxContainerWidth: 1920
 
   WlrLayershell.namespace: "quickshell:bar"
+  // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
+  readonly property string namespace: WlrLayershell.namespace
   WlrLayershell.layer: WlrLayer.Bottom
   anchors {
     top: true

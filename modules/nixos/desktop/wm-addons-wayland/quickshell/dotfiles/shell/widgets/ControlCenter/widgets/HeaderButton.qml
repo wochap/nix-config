@@ -2,6 +2,7 @@ import QtQuick
 import qs.config
 import qs.widgets.common
 import qs.widgets.ControlCenter
+import qs.Woints
 
 // 28px circle button; buttons with `needsConfirm` arm on the first click,
 // grow into a red "Label?" pill and only run on a second click while armed
@@ -156,5 +157,10 @@ Item {
     Accessible.role: Accessible.Button
     Accessible.name: root.isArmed ? `Confirm ${root.tooltip}` : root.tooltip
     Accessible.onPressAction: root.press()
+
+    Hintable {
+      label: mouseArea.Accessible.name
+      onActivated: root.press()
+    }
   }
 }

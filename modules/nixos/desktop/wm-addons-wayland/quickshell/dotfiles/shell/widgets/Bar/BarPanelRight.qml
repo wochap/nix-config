@@ -9,6 +9,7 @@ import qs.widgets.common
 import qs.widgets.Bar.config
 import qs.widgets.Bar.modules
 import qs.widgets.Bar.modules.SysTray
+import qs.Woints
 
 RowLayout {
   id: root
@@ -133,6 +134,11 @@ RowLayout {
         Accessible.checkable: true
         Accessible.checked: SCalendar.isOpen
         Accessible.onPressAction: SCalendar.toggle()
+
+        Hintable {
+          label: "Calendar"
+          onActivated: SCalendar.toggle()
+        }
       }
 
       HoverHandler {

@@ -6,6 +6,7 @@ import Qt5Compat.GraphicalEffects
 import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config
+import qs.Woints
 
 MouseArea {
   id: root
@@ -31,6 +32,20 @@ MouseArea {
       break;
     }
     event.accepted = true;
+  }
+
+  Hintable {
+    target: root
+    label: root.Accessible.name
+    actions: ["click", "right"]
+    onActivated: action => {
+      if (action === "right") {
+        if (root.item.hasMenu)
+          menu.open();
+      } else {
+        root.item.activate();
+      }
+    }
   }
 
   IconImage {

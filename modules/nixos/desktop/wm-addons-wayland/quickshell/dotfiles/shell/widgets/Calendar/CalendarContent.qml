@@ -21,6 +21,8 @@ PanelWindow {
 
   screen: root.focusedScreen
   WlrLayershell.namespace: "quickshell:calendar"
+  // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
+  readonly property string namespace: WlrLayershell.namespace
   WlrLayershell.layer: WlrLayer.Overlay
   WlrLayershell.keyboardFocus: SCalendar.isOpen ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
   anchors {

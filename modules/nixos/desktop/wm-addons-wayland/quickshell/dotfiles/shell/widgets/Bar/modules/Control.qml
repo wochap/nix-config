@@ -6,6 +6,7 @@ import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
 import qs.widgets.Bar.modules
+import qs.Woints
 
 WrapperRectangle {
   id: root
@@ -36,6 +37,11 @@ WrapperRectangle {
           break;
         }
         event.accepted = true;
+      }
+
+      Hintable {
+        label: "Control center"
+        onActivated: SControlCenter.toggle()
       }
     }
 

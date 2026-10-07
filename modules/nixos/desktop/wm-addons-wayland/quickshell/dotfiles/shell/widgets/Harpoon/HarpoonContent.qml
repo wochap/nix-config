@@ -60,6 +60,8 @@ PanelWindow {
   }
   visible: panelVisible
   WlrLayershell.namespace: "quickshell:harpoon"
+  // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
+  readonly property string namespace: WlrLayershell.namespace
   WlrLayershell.layer: WlrLayer.Overlay
   WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 

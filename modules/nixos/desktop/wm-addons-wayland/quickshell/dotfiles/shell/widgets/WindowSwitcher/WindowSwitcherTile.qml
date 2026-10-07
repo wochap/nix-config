@@ -4,6 +4,7 @@ import Quickshell.Widgets
 import QtQuick
 import qs.config
 import qs.widgets.common
+import qs.Woints
 
 // One window preview: a 16:10 capture, workspace badge and an icon + title row.
 // States: default, hovered, selected (2px ring + scale), urgent and special.
@@ -78,6 +79,12 @@ Item {
     Accessible.selectable: true
     Accessible.selected: tile.selected
     Accessible.onPressAction: tile.clicked()
+
+    Hintable {
+      enabled: tile.interactive
+      label: tile.entry?.title ?? ""
+      onActivated: tile.clicked()
+    }
   }
 
   ClippingRectangle {

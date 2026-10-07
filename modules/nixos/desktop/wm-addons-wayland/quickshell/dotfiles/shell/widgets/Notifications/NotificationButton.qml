@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import qs.config
 import qs.widgets.common
+import qs.Woints
 
 // Pill button: icon, text or both
 Button {
@@ -54,5 +55,11 @@ Button {
       font.weight: root.textWeight
       color: root.hovered ? root.hoverFg : root.fg
     }
+  }
+
+  Hintable {
+    target: root
+    label: root.text.length > 0 ? root.text : (root.Accessible.name || root.materialIcon)
+    onActivated: root.clicked()
   }
 }
