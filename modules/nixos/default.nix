@@ -10,6 +10,7 @@
 
     ./desktop/window-managers/hyprland
 
+    ./desktop/wm-addons/a11y
     ./desktop/wm-addons/audio
     ./desktop/wm-addons/backlight
     ./desktop/wm-addons/bluetooth
