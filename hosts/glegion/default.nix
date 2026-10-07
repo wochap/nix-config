@@ -144,6 +144,28 @@ in
     _custom.services.podman.rootless = true;
     _custom.services.podman.dockerCompat = true;
     _custom.services.docker.enable = false;
+    _custom.services.media = {
+      enable = false;
+      dataRoot = "/mnt/storage/media-server";
+      # AMD iGPU (PCI 06:00.0) is /dev/dri/renderD128; the dGPU stays off.
+      services.jellyfin.enable = true;
+      services.jellyfin.hardwareAcceleration = "vaapi";
+      services.seerr.enable = true;
+      services.sonarr.enable = true;
+      services.radarr.enable = true;
+      services.prowlarr.enable = true;
+      services.qbittorrent.enable = true;
+      # services.qbittorrent.vpn.enable = true;
+      # services.qbittorrent.vpn.environment = {
+      #   VPN_SERVICE_PROVIDER = "mullvad";
+      #   VPN_TYPE = "wireguard";
+      #   SERVER_COUNTRIES = "Netherlands";
+      # };
+      services.bazarr.enable = true;
+      services.lazylibrarian.enable = true;
+      services.calibreWeb.enable = true;
+      services.audiobookshelf.enable = true;
+    };
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
     _custom.services.kdeconnect.enable = true;

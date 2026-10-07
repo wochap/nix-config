@@ -99,6 +99,7 @@
     ./services/ipwebcam
     ./services/kdeconnect
     ./services/local-oci-images
+    ./services/media
     ./services/ms-intune
     ./services/rsshub
     ./services/searxng
