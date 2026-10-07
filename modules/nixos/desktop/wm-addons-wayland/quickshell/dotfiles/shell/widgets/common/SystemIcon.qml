@@ -41,6 +41,20 @@ IconImage {
     implicitWidth: 32
     implicitHeight: 32
     visible: false
+
+    // Recompute dominant color whenever the icon changes (e.g. battery-050 -> battery-050-charging),
+    // otherwise sourceColor stays stale and Coloriser stops matching the new icon
+    Connections {
+      target: root.backer
+
+      function onStatusChanged() {
+        if (root.backer.status === Image.Ready) {
+          canvas.retryCount = 0;
+          canvas.requestPaint();
+        }
+      }
+    }
+
     onPaint: {
       if (!root.layer.enabled)
         return;
