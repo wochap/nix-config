@@ -181,6 +181,7 @@ in
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
     _custom.services.kdeconnect.enable = true;
+    _custom.services.tt.enable = true;
     _custom.services.ai.enable = true;
     _custom.services.ai.enableCuda = true;
     _custom.services.ai.enableHandy = true;

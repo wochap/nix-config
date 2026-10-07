@@ -105,6 +105,7 @@
     ./services/searxng
     ./services/syncthing
     ./services/tailscale
+    ./services/tt
     ./services/virt
     ./services/waydroid
     ./services/webhook
