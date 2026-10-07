@@ -89,9 +89,9 @@
     kb-hud.inputs.nixpkgs.follows = "nixpkgs";
     session-tap.url = "github:wochap/session-tap";
     session-tap.inputs.nixpkgs.follows = "nixpkgs";
-    woints.url = "git+file:///home/gean/Sandboxes/sandbox/projects/woints";
+    woints.url = "github:wochap/woints";
     woints.inputs.nixpkgs.follows = "nixpkgs";
-    tt.url = "git+file:///home/gean/Sandboxes/sandbox/projects/tt";
+    tt.url = "github:wochap/tt";
     tt.inputs.nixpkgs.follows = "nixpkgs";
     fi.url = "github:wochap/fi";
     fi.inputs.nixpkgs.follows = "nixpkgs";
