@@ -14,6 +14,19 @@
   ];
 
   config = {
+    # HDD_2B (NTFS). ntfs3 has no unix perms, so map ownership to gean (1000:100).
+    fileSystems."/mnt/storage" = {
+      device = "/dev/disk/by-uuid/2EAC625EAC622097";
+      fsType = "ntfs3";
+      options = [
+        "uid=1000"
+        "gid=100"
+        "umask=022"
+        "nofail"
+        "x-systemd.device-timeout=5s"
+      ];
+    };
+
     environment.systemPackages = with pkgs; [
       amdgpu_top
       rocmPackages.rocm-smi
