@@ -94,6 +94,7 @@
     ./services/android
     ./services/docker
     ./services/podman
+    ./services/remote-desktop
     ./services/flatpak
     ./services/headscale
     ./services/interception-tools
