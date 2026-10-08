@@ -708,11 +708,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791321133,
-        "narHash": "sha256-e6dVtMKVwogqMbWmIhBh/yMetYcOwUl/CQUYeTEW70I=",
+        "lastModified": 1791398498,
+        "narHash": "sha256-br7SdfPUGgqtCmCWiI8kgSMO2pHySr4TVTI9Vuz8lDI=",
         "owner": "wochap",
         "repo": "fi",
-        "rev": "f920de8232382fa0c7d5dad42e95afae325a6018",
+        "rev": "ff5c64c50986a6335b0adcb7b56d072e37ca4617",
         "type": "github"
       },
       "original": {
@@ -2484,11 +2484,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787699611,
-        "narHash": "sha256-QjhnwcXC+fkvVumViCKO2i5xuKIy4vHnHj1j8kgJN/k=",
+        "lastModified": 1788055155,
+        "narHash": "sha256-fLgVvstYlXADfxfiWV/PMrFLqFJMWHcKpyUeBLF4MRo=",
         "owner": "wochap",
         "repo": "kb-hud",
-        "rev": "76869e36f3086c5fb496926606c0d4d1836311bf",
+        "rev": "c6838c8294702e10de71c5e7a7c454b98e9dd0ec",
         "type": "github"
       },
       "original": {
@@ -3872,11 +3872,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791381095,
-        "narHash": "sha256-raVyj755hkpuGA6yhkZjMLtxDpXTRsAuHRIp/r0tBtY=",
+        "lastModified": 1791391238,
+        "narHash": "sha256-j3aa3RC3z/lSBE7qR9pcYTnA76tSJsMPnJS9pFrYeFo=",
         "owner": "wochap",
         "repo": "tt",
-        "rev": "1226c12b61760bfe2718e835ac0920b0d72ae230",
+        "rev": "81f8b097009ac5c3ddf328a0eaadb8c427d98ed7",
         "type": "github"
       },
       "original": {
@@ -3953,11 +3953,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785452137,
-        "narHash": "sha256-sjZXJPWBMEWM8saTBxGdklUTxGpmLlmhisf+rSBQpSM=",
+        "lastModified": 1788455416,
+        "narHash": "sha256-Gl7N8vB2dmAU7rUPbM33p9xDoktfzWhjeg4s4VkQf+o=",
         "owner": "wochap",
         "repo": "wayland-firewall",
-        "rev": "a466a41d24310a8e4b9844897d2e4f0dbdcce1a9",
+        "rev": "bfa5f6367f5aa1fba104ecac48590dbe08227a37",
         "type": "github"
       },
       "original": {
@@ -4105,7 +4105,14 @@
       }
     },
     "wt": {
-      "flake": false,
+      "inputs": {
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
         "lastModified": 1791477472,
         "narHash": "sha256-Hay5GM4eleaHzLMyOP2YoPPs8Xm/Z/0DkXvO5kFjxIk=",

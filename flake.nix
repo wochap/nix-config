@@ -40,6 +40,36 @@
     hyprland-guiutils.url = "github:hyprwm/hyprland-guiutils?rev=c2e906261142f5dd1ee0bfc44abba23e2754c660"; # v0.2.1
     hyprland-guiutils.inputs.nixpkgs.follows = "prevstable-hyprland";
 
+    # my third party nixpkgs|overlays|modules
+    wodeo.url = "github:wochap/wodeo";
+    wodeo.inputs.nixpkgs.follows = "nixpkgs";
+    webscoop.url = "github:wochap/webscoop";
+    webscoop.inputs.nixpkgs.follows = "nixpkgs";
+    kb-hud.url = "github:wochap/kb-hud";
+    kb-hud.inputs.nixpkgs.follows = "nixpkgs";
+    session-tap.url = "github:wochap/session-tap";
+    session-tap.inputs.nixpkgs.follows = "nixpkgs";
+    woints.url = "github:wochap/woints";
+    woints.inputs.nixpkgs.follows = "nixpkgs";
+    woge.url = "github:wochap/woge";
+    woge.inputs.nixpkgs.follows = "nixpkgs";
+    tt.url = "github:wochap/tt";
+    tt.inputs.nixpkgs.follows = "nixpkgs";
+    wobook.url = "github:wochap/wobook";
+    wobook.inputs.nixpkgs.follows = "nixpkgs";
+    wobook.inputs.home-manager.follows = "home-manager";
+    fi.url = "github:wochap/fi";
+    fi.inputs.nixpkgs.follows = "nixpkgs";
+    tofi.url = "github:wochap/tofi/master-fork";
+    tofi.inputs.nixpkgs.follows = "nixpkgs";
+    wosarcher.url = "github:wochap/wosarcher";
+    wosarcher.flake = false;
+    wt.url = "github:wochap/wt";
+    wt.inputs.nixpkgs.follows = "nixpkgs";
+    wt.inputs.home-manager.follows = "home-manager";
+    wayland-firewall.url = "github:wochap/wayland-firewall";
+    wayland-firewall.inputs.nixpkgs.follows = "nixpkgs";
+
     # third party nixpkgs|overlays|modules
     chaotic.url = "github:chaotic-cx/nyx?rev=bb52c6c8936353a03000929d37146bc636f4673f"; # main (10 jul 2026)
     chaotic.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -56,10 +86,6 @@
     lobster.inputs.nixpkgs.follows = "nixpkgs";
     wayfreeze.url = "github:Jappie3/wayfreeze?rev=8f813abc5082e1375326ca0f888834f79f872006"; # master (10 jul 2026)
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
-    wodeo.url = "github:wochap/wodeo";
-    wodeo.inputs.nixpkgs.follows = "nixpkgs";
-    webscoop.url = "github:wochap/webscoop";
-    webscoop.inputs.nixpkgs.follows = "nixpkgs";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
     arkenfox.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
@@ -79,29 +105,10 @@
     rod.inputs.nixpkgs.follows = "nixpkgs";
     antigravity-nix.url = "github:jacopone/antigravity-nix";
     antigravity-nix.inputs.nixpkgs.follows = "nixpkgs";
-    wayland-firewall.url = "github:wochap/wayland-firewall";
-    wayland-firewall.inputs.nixpkgs.follows = "nixpkgs";
     handy.url = "github:cjpais/Handy";
     handy.inputs.nixpkgs.follows = "nixpkgs";
     offlinemsmtp.url = "github:sumnerevans/offlinemsmtp?rev=9f1cbeb31392e511ee8e17fba7a1448e9dd0bc90"; # master (22 jul 2026)
     offlinemsmtp.inputs.nixpkgs.follows = "nixpkgs";
-    kb-hud.url = "github:wochap/kb-hud";
-    kb-hud.inputs.nixpkgs.follows = "nixpkgs";
-    session-tap.url = "github:wochap/session-tap";
-    session-tap.inputs.nixpkgs.follows = "nixpkgs";
-    woints.url = "github:wochap/woints";
-    woints.inputs.nixpkgs.follows = "nixpkgs";
-    woge.url = "github:wochap/woge";
-    woge.inputs.nixpkgs.follows = "nixpkgs";
-    tt.url = "github:wochap/tt";
-    tt.inputs.nixpkgs.follows = "nixpkgs";
-    wobook.url = "github:wochap/wobook";
-    wobook.inputs.nixpkgs.follows = "nixpkgs";
-    wobook.inputs.home-manager.follows = "home-manager";
-    fi.url = "github:wochap/fi";
-    fi.inputs.nixpkgs.follows = "nixpkgs";
-    tofi.url = "github:wochap/tofi/master-fork";
-    tofi.inputs.nixpkgs.follows = "nixpkgs";
 
     # others
     easy-effects-presets.url = "github:JackHack96/EasyEffects-Presets";
@@ -126,13 +133,8 @@
     python-remind.flake = false;
     remind.url = "github:wochap/remind/06.02.10-fork";
     remind.flake = false;
-    wt.url = "github:wochap/wt";
-    wt.inputs.nixpkgs.follows = "nixpkgs";
-    wt.inputs.home-manager.follows = "home-manager";
     shotclip.url = "github:jq6l43d1/shotclip?rev=23b9ea386c40bc4d856320baa84fdeb81fc020c9";
     shotclip.flake = false;
-    wosarcher.url = "github:wochap/wosarcher";
-    wosarcher.flake = false;
     open-design.url = "github:wochap/open-design/open-design-v0.24.0-fork";
     open-design.flake = false;
     comfyui.url = "github:comfy-org/ComfyUI/v0.37.0";
