@@ -32,6 +32,8 @@ host=$(host_value address)
 app=$(host_value app)
 scale=$(host_value scale)
 max_fps=$(host_value maxFps)
+bitrate=$(host_value bitrate)
+mapfile -t extra_args < <(jq -r --arg name "$name" '.[$name].extraArgs[]' "$REMOTE_HOSTS_FILE")
 
 mode="mirror"
 resolution=""
@@ -145,9 +147,16 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM HUP
 
+# Super combos go to the host; Ctrl+Alt+Shift+Z still releases the grab.
+# 4:4:4 keeps text sharp where the host encoder supports it.
 stream=(moonlight stream "$host" "$app"
   --resolution "${width}x${height}" --fps "$fps"
-  --display-mode fullscreen --quit-after)
+  --display-mode fullscreen --quit-after
+  --capture-system-keys always --yuv444)
+if [[ "$bitrate" != "null" ]]; then
+  stream+=(--bitrate "$bitrate")
+fi
+stream+=("${extra_args[@]}")
 
 if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
   "${stream[@]}"

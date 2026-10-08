@@ -54,7 +54,7 @@ remote-desktop laptop headless
 hl.bind(mod .. " + R", hl.dsp.exec_cmd("remote-desktop laptop"), { description = "Remote laptop" })
 ```
 
-The local compositor still sees every key first, so its own binds act locally. Press Ctrl+Alt+Shift+Z in Moonlight to capture keyboard and mouse, which sends most combos to the host.
+Moonlight runs with `--capture-system-keys always`, so Super combos reach the host's compositor while the stream has focus. In a local compositor, binds that it grabs before any client sees them still act locally. Press Ctrl+Alt+Shift+Z to release or recapture keyboard and mouse. The stream also asks for YUV 4:4:4, which keeps text sharp; Moonlight falls back to 4:2:0 when the host's encoder lacks it.
 
 With no `WAYLAND_DISPLAY` (an X11 session), cage starts nested as a window. Pass `--backend eglfs` only from a TTY, because eglfs takes over the display.
 
@@ -88,6 +88,8 @@ _custom.services.remote-desktop.client = {
       commandName = "laptop-remote"; # optional short command
       # scale = 1;                   # scale the host uses for the stream, match the client monitor
       # maxFps = 120;
+      # bitrate = 50000;             # Kbps, null lets Moonlight pick (soft on a desktop)
+      # extraArgs = [ "--video-codec" "HEVC" ];
       # app = "Desktop";             # the host's host.app
     };
     desktop2.address = "192.168.0.20";

@@ -40,6 +40,8 @@ let
           app
           scale
           maxFps
+          bitrate
+          extraArgs
           ;
       }) cfg.client.hosts
     )
@@ -187,6 +189,20 @@ in
                 maxFps = lib.mkOption {
                   type = lib.types.ints.positive;
                   default = 120;
+                };
+                bitrate = lib.mkOption {
+                  type = lib.types.nullOr lib.types.ints.positive;
+                  default = 50000;
+                  description = "Stream bitrate in Kbps. null lets Moonlight pick from resolution and fps, which looks soft on a desktop.";
+                };
+                extraArgs = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  example = [
+                    "--video-codec"
+                    "HEVC"
+                  ];
+                  description = "Extra `moonlight stream` arguments.";
                 };
               };
             }
