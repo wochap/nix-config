@@ -74,6 +74,8 @@ apply)
   provider_apply "$mode" "$width" "$height" "$fps" "$scale"
   ;;
 restore)
+  # a dropped ssh connection or Ctrl+C on the client must not stop it halfway
+  trap '' HUP INT TERM
   if [[ ! -f "$state_file" ]]; then
     # nothing applied, or the other restore already ran
     exit 0

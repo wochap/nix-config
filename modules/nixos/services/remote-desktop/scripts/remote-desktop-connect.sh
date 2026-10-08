@@ -114,17 +114,28 @@ height="${resolution#*x}"
 
 echo "remote-desktop: $host $mode ${width}x${height}@${fps} scale $scale"
 
+# check pairing before touching the host's display, an unpaired stream fails
+# right away and `moonlight quit` hangs
+if ! QT_QPA_PLATFORM=offscreen timeout 20 moonlight list "$host" >/dev/null 2>&1; then
+  echo "remote-desktop: $host is not paired or not reachable, run 'moonlight pair $host' from a graphical session" >&2
+  exit 1
+fi
+
 ssh "${ssh_opts[@]}" "$host" remote-display apply \
   --mode "$mode" --width "$width" --height "$height" --fps "$fps" --scale "$scale"
 
 cleanup() {
-  trap - EXIT INT TERM HUP
-  QT_QPA_PLATFORM=offscreen moonlight quit "$host" >/dev/null 2>&1 || true
+  # finish the restore even when Ctrl+C is pressed again, ssh inherits this
+  trap '' INT TERM HUP
+  trap - EXIT
+  echo "remote-desktop: restoring $host"
   # retry so a short network drop does not leave the remote layout changed
   local attempt
   for attempt in 1 2 3 4 5 6 7 8 9 10; do
     if ssh "${ssh_opts[@]}" -o ConnectTimeout=5 "$host" remote-display restore; then
       ssh "${ssh_opts[@]}" -O exit "$host" >/dev/null 2>&1 || true
+      # end the Sunshine session, --quit-after already does it on a normal exit
+      QT_QPA_PLATFORM=offscreen timeout 10 moonlight quit "$host" >/dev/null 2>&1 || true
       return
     fi
     echo "remote-desktop: restore failed (attempt $attempt), retrying" >&2

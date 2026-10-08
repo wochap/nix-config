@@ -66,7 +66,7 @@ Moonlight shortcuts:
 - Ctrl+Alt+Shift+X: toggle fullscreen.
 - Ctrl+Alt+Shift+S: show stream stats.
 
-Quitting Moonlight, Ctrl+C in the shell, and closing the terminal all run restore.
+Quitting Moonlight, Ctrl+C in the shell, and closing the terminal all run restore. Restore ignores further Ctrl+C until it finishes (at most about 80 s of retries). The command refuses to start when the host is not paired, before it touches the host's display.
 
 ## Setup
 
