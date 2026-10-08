@@ -6,25 +6,26 @@ State: `/var/lib/media-server/prowlarr`.
 
 ## Setup
 
-Prowlarr is set up in two steps: indexers first, apps after Sonarr and Radarr exist.
+With `declarative.enable` ([Declarative configuration](../README.md#declarative-configuration)), `media-prowlarr-config` uses the documented v1 API to set the login (Forms, `admin.username` and the SOPS password) while no user exists, and to add each enabled app that Prowlarr does not have yet, with Sync Level `Full Sync`:
 
-1. Open `http://127.0.1.1:21121` on the host. Choose Authentication Method `Forms (Login Page)`, and create the admin user.
-2. Go to Indexers › Add Indexer. Search for the indexers you use, and fill in their settings:
+| App | Prowlarr Server | App Server | API Key |
+|---|---|---|---|
+| Sonarr | `http://media-prowlarr:9696` | `http://media-sonarr:8989` | from SOPS |
+| Radarr | `http://media-prowlarr:9696` | `http://media-radarr:7878` | from SOPS |
+| LazyLibrarian | `http://media-prowlarr:9696` | `http://media-lazylibrarian:5299` | from SOPS, copied from LazyLibrarian's UI |
+
+Prowlarr's own API key comes from SOPS (`PROWLARR__AUTH__APIKEY`). An app that already exists is left as is, even with an old key.
+
+Manual:
+
+1. Go to Indexers › Add Indexer. Search for the indexers you use, and fill in their settings:
    - Public indexers need no account.
    - Private indexers ask for credentials or an API key.
 
    Select **Test**, then **Save**. Some indexers sit behind a Cloudflare challenge and fail the test. Those need FlareSolverr, which this stack does not include.
-3. Set up [Sonarr](../sonarr/README.md#setup) and [Radarr](../radarr/README.md#setup). Copy their API keys.
-4. Go to Settings › Apps › **+**. Add each app:
+2. Prowlarr pushes its indexers to each app. Check in Sonarr › Settings › Indexers. Add or change indexers in Prowlarr only: Full Sync overwrites edits made in the apps.
 
-   | App | Prowlarr Server | App Server | API Key |
-   |---|---|---|---|
-   | Sonarr | `http://media-prowlarr:9696` | `http://media-sonarr:8989` | Sonarr's key |
-   | Radarr | `http://media-prowlarr:9696` | `http://media-radarr:7878` | Radarr's key |
-   | LazyLibrarian | `http://media-prowlarr:9696` | `http://media-lazylibrarian:5299` | LazyLibrarian's key |
-
-   Keep Sync Level `Full Sync`. Select **Test**, then **Save**.
-5. Prowlarr pushes its indexers to each app. Check in Sonarr › Settings › Indexers. Add or change indexers in Prowlarr only: Full Sync overwrites edits made in the apps.
+Without `declarative`, first open `http://127.0.1.1:21121` on the host, choose Authentication Method `Forms (Login Page)`, and create the admin user. After [Sonarr](../sonarr/README.md#setup) and [Radarr](../radarr/README.md#setup) are set up, go to Settings › Apps › **+**, and add each app from the table above with its API key. Select **Test**, then **Save**.
 
 ## Upgrade
 

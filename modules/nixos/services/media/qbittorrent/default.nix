@@ -15,6 +15,12 @@ let
   webPort = 8080;
   vpnService = "${common.serviceName vpnName}.service";
   vpnSopsSecret = "media-vpn-env";
+  categories = [
+    "movies"
+    "series"
+    "books"
+    "audiobooks"
+  ];
 in
 {
   config = lib.mkIf (cfg.enable && svc.enable) {
@@ -91,7 +97,18 @@ in
       ${common.serviceName vpnName} = lib.mkIf vpn.enable (
         common.mkSystemdService vpnName { timeoutStop = 30; }
       );
-    };
+    }
+    // lib.optionalAttrs common.declarative (
+      common.mkConfigUnit name ./config.sh {
+        env = {
+          QBT_URL = common.localUrl svc;
+          QBT_SUBNET = cfg.network.subnet;
+          QBT_MARKER = "${common.declarativeStateDir}/qbittorrent-login";
+          QBT_SAVE_PATH = "/data/torrents";
+          QBT_CATEGORIES = lib.concatMapStringsSep "\n" (c: "${c} /data/torrents/${c}") categories;
+        };
+      }
+    );
 
     systemd.tmpfiles.rules = [ (common.mkStateRule name) ];
     _custom.services.web-proxies.${name} = common.mkProxy name svc;

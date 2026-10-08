@@ -8,6 +8,14 @@ State: `/var/lib/media-server/jellyfin/{config,cache}`.
 
 ## Setup
 
+With `declarative.enable` ([Declarative configuration](../README.md#declarative-configuration)), `media-jellyfin-config` uses Jellyfin's public API (OpenAPI at `/api-docs/openapi.json`):
+
+- While the startup wizard is not completed: creates the admin `admin.username` with the SOPS password (`/Startup/User`), and completes the wizard (`/Startup/Complete`). Language and metadata settings keep Jellyfin's defaults; change them in the dashboard.
+- Signed in as that admin (`/Users/AuthenticateByName`): adds the libraries from step 3 when no library uses their folder (`/Library/VirtualFolders`), and sets hardware acceleration from `hardwareAcceleration` (`vaapi` with the first of `vaapiDevices`, or `nvenc`) while it is still `none` (`/System/Configuration/encoding`).
+- On a server set up by hand with another login, the admin login fails, and the unit leaves libraries and transcoding alone.
+
+Manual: the codecs the GPU decodes (step 5) and users (step 6). Without `declarative`, all steps:
+
 1. Open `https://jellyfin.wochap.local` on the host. From other LAN devices, use `https://jellyfin.<web-gate.domain>` (for example `https://jellyfin.gdesktop.geanmar.com`) when the proxy is exposed.
 2. In the wizard, choose the language and create the admin user.
 3. Add the libraries:

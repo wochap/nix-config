@@ -6,6 +6,15 @@ Download client. Writes to `/data/torrents/<category>`; the *arr apps hardlink f
 
 Do this first. Sonarr, Radarr and LazyLibrarian send their downloads here.
 
+With `declarative.enable` ([Declarative configuration](../README.md#declarative-configuration)), `media-qbittorrent-config` does all of it through the documented WebUI API:
+
+- Auth bypass for `10.90.0.0/24` (the `media` network), appended to the whitelist; other subnets stay. The unit itself gets in through the image's default whitelist (`10.0.0.0/8`; host requests arrive from the `media` gateway), or, when the bypass is off, by logging in with the shared admin.
+- Login: `admin.username` and the SOPS password, set once. The API cannot tell whether a password exists, so the unit sets it when the shared login does not work yet and then writes a marker in `/var/lib/media-declarative`; a password changed later in the UI is kept. A password set by hand before the first run is replaced.
+- Default Save Path `/data/torrents` with Automatic Torrent Management, while the save path is still the image's `/config/Downloads`.
+- The four categories below, when missing. Existing categories are not changed.
+
+Without it:
+
 1. Open `http://127.0.1.1:21131` on the host. The user is `admin`. qBittorrent prints a temporary password at first start:
 
    ```sh

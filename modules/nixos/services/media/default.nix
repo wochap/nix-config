@@ -70,6 +70,17 @@ let
         '';
       };
     };
+
+  # API keys the declarative layer uses. Sonarr, Radarr, Prowlarr and Seerr
+  # take theirs from SOPS through a documented env var. LazyLibrarian has no
+  # such route; its SOPS value is a copy of the key shown in its UI.
+  apiKeyServices = [
+    "sonarr"
+    "radarr"
+    "prowlarr"
+    "seerr"
+    "lazylibrarian"
+  ];
 in
 {
   imports = [
@@ -140,6 +151,54 @@ in
       gateway = lib.mkOption {
         type = lib.types.str;
         default = "10.90.0.1";
+      };
+    };
+
+    declarative = {
+      enable = lib.mkEnableOption ''
+        the declarative configuration layer: API keys and a shared admin
+        login from SOPS, and one media-<name>-config unit per enabled service
+        that wires it to the others through documented APIs. Only adds what is
+        missing; see README.md
+      '';
+      apiKeys = lib.genAttrs apiKeyServices (name: {
+        sopsFile = lib.mkOption {
+          type = lib.types.path;
+          description = "SOPS file containing the ${name} API key (see README.md, Secrets).";
+        };
+        sopsKey = lib.mkOption {
+          type = lib.types.nonEmptyStr;
+          default = "media-${name}-api-key";
+          description = "Key containing the ${name} API key in the SOPS file.";
+        };
+      });
+      admin = {
+        username = lib.mkOption {
+          type = lib.types.nonEmptyStr;
+          default = "admin";
+          description = ''
+            Admin login set on every app that has none yet: Sonarr, Radarr,
+            Prowlarr, qBittorrent, and the Jellyfin wizard (which Seerr signs
+            in with).
+          '';
+        };
+        passwordSecret.sopsFile = lib.mkOption {
+          type = lib.types.path;
+          description = "SOPS file containing the admin password (see README.md, Secrets).";
+        };
+        passwordSecret.sopsKey = lib.mkOption {
+          type = lib.types.nonEmptyStr;
+          default = "media-admin-password";
+          description = "Key containing the admin password in the SOPS file.";
+        };
+      };
+      seerr.qualityProfile = lib.mkOption {
+        type = lib.types.str;
+        default = "HD-1080p";
+        description = ''
+          Radarr/Sonarr quality profile Seerr requests with. Falls back to the
+          first profile when no profile has this name.
+        '';
       };
     };
 
@@ -335,6 +394,27 @@ in
     systemd.tmpfiles.rules = [
       "d ${cfg.stateDir} 0750 ${toString cfg.uid} ${toString cfg.gid} -"
     ];
+
+    # Raw values, read by the bootstrap units (root). The containers get the
+    # keys through the env file templates in each service module.
+    sops.secrets = lib.mkIf cfg.declarative.enable (
+      lib.listToAttrs (
+        map
+          (
+            secret:
+            lib.nameValuePair secret.sopsKey {
+              inherit (secret) sopsFile;
+              mode = "0400";
+            }
+          )
+          (
+            [ cfg.declarative.admin.passwordSecret ]
+            ++ map (name: cfg.declarative.apiKeys.${name}) (
+              lib.filter (name: cfg.services.${name}.enable) apiKeyServices
+            )
+          )
+      )
+    );
 
     # dataRoot often lives on a separate (nofail) disk. tmpfiles runs before
     # such mounts and would create the tree on the root fs underneath them, so

@@ -12,6 +12,8 @@ State: `/var/lib/media-server/lazylibrarian`.
 
 Set up [qBittorrent](../qbittorrent/README.md#setup) and [Prowlarr](../prowlarr/README.md#setup) first.
 
+Manual, also with `declarative.enable` ([Declarative configuration](../README.md#declarative-configuration)). The API key can only be preset by editing `config.ini`, and the API's `writeCFG` takes config names that are not documented, so the layer does not touch LazyLibrarian. It only adds LazyLibrarian as a Prowlarr app, with the key you copy into SOPS in step 5. After switching `services.qbittorrent.vpn.enable`, change the host in step 3 by hand.
+
 1. Open `http://127.0.1.1:21151` on the host.
 2. Go to Config › Interface, and set a username and password.
 3. Go to Config › Downloaders, and turn on qBittorrent:
@@ -21,7 +23,7 @@ Set up [qBittorrent](../qbittorrent/README.md#setup) and [Prowlarr](../prowlarr/
    - eBook destination folder: `/data/media/books/ingest`. [Calibre-Web Automated](../calibre-web/README.md#setup) imports from there.
    - AudioBook destination folder: `/data/media/audiobooks`. [Audiobookshelf](../audiobookshelf/README.md#setup) watches it.
    - Download directory: `/data/torrents/books`.
-5. Go to Config › Interface, and copy the API key. Add LazyLibrarian as an app in Prowlarr (Prowlarr setup, step 4), and Prowlarr pushes its indexers here. Alternative: under Config › Providers, add Torznab feeds at `http://media-prowlarr:9696/<id>/api` with Prowlarr's API key.
+5. Go to Config › Interface, turn on the API, generate a key, and save. With `declarative`, store that key in the SOPS secret `apiKeys.lazylibrarian` (see [Secrets](../README.md#secrets)); Prowlarr then adds LazyLibrarian and pushes its indexers here. Without it, add LazyLibrarian as an app in Prowlarr by hand. Alternative: under Config › Providers, add Torznab feeds at `http://media-prowlarr:9696/<id>/api` with Prowlarr's API key.
 
 ## Upgrade
 

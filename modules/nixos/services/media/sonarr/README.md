@@ -10,21 +10,35 @@ State: `/var/lib/media-server/sonarr`.
 
 Set up [qBittorrent](../qbittorrent/README.md#setup) first.
 
-1. Open `http://127.0.1.1:21101` on the host. Choose Authentication Method `Forms (Login Page)`, and create the admin user.
-2. Go to Settings › Media Management:
+With `declarative.enable` ([Declarative configuration](../README.md#declarative-configuration)), `media-sonarr-config` uses the documented v3 API to add, when missing:
+
+- Login: Forms, `admin.username` and the SOPS password, while no user exists (`config/host`).
+- Root folder `/data/media/series`.
+- A qBittorrent download client: host `media-qbittorrent` (`media-vpn` with the VPN; an existing client on either name follows the VPN setting), port `8080`, no credentials, category `series`.
+
+It warns in the journal when "Use Hardlinks instead of Copy" is off, but does not change it. The API key comes from SOPS through the documented `SONARR__AUTH__APIKEY` env var, so Prowlarr and Seerr get it without copying.
+
+Manual:
+
+1. Optional: Settings › Media Management › Rename Episodes for clean file names.
+2. Optional: Settings › Profiles. The default `HD-1080p` profile works for a start.
+3. Do not add indexers here. Prowlarr pushes them.
+4. [Bazarr](../bazarr/README.md#setup) needs the API key: copy it from Settings › General › Security.
+
+Without `declarative`, also:
+
+5. Open `http://127.0.1.1:21101` on the host. Choose Authentication Method `Forms (Login Page)`, and create the admin user.
+6. Go to Settings › Media Management:
    - Select **Show Advanced** at the top. Under Importing, check that "Use Hardlinks instead of Copy" is on.
    - Under Root Folders, select **Add Root Folder**, and choose `/data/media/series`.
-   - Optional: turn on Rename Episodes for clean file names.
-3. Go to Settings › Download Clients › **+** › qBittorrent:
+7. Go to Settings › Download Clients › **+** › qBittorrent:
    - Host: `media-qbittorrent` (`media-vpn` with the VPN enabled)
    - Port: `8080`
    - Username and Password: leave empty when qBittorrent bypasses auth for `10.90.0.0/24`. Otherwise use the qBittorrent login.
    - Category: `series`
 
    Select **Test**, then **Save**.
-4. Go to Settings › General › Security, and copy the API Key. [Prowlarr](../prowlarr/README.md#setup), [Bazarr](../bazarr/README.md#setup) and [Seerr](../seerr/README.md#setup) need it.
-5. Do not add indexers here. Prowlarr pushes them (Prowlarr setup, step 4).
-6. Optional: Settings › Profiles. The default `HD-1080p` profile works for a start.
+8. Go to Settings › General › Security, and copy the API Key. [Prowlarr](../prowlarr/README.md#setup) and [Seerr](../seerr/README.md#setup) need it.
 
 Files move from `/data/torrents/series` to `/data/media/series` as hardlinks, so qBittorrent keeps seeding without a second copy. Every container sees the same `/data` paths, so no Remote Path Mappings are needed.
 

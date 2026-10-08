@@ -6,6 +6,8 @@ State: `/var/lib/media-server/bazarr`.
 
 ## Setup
 
+All manual, also with `declarative.enable` ([Declarative configuration](../README.md#declarative-configuration)). Bazarr's settings endpoint is hidden from its API documentation (the UI uses it internally), and its API key cannot be preset, so there is no stable route to automate these steps.
+
 Set up [Sonarr](../sonarr/README.md#setup) and [Radarr](../radarr/README.md#setup) first.
 
 1. Open `http://127.0.1.1:21141` on the host. Go to Settings › General › Security, set Authentication to `Form`, choose a username and password, and save.

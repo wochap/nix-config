@@ -20,7 +20,7 @@ The cache serves every store path. Store paths can contain secrets, such as valu
 
 Every secret lives in a SOPS file that the host options point at (`<option>.sopsFile`), under the key in `<option>.sopsKey`. Generate each value as below, then paste it with `sops <sops-file>`. Write multi-line values as a YAML block scalar (`key: |`, then the lines indented).
 
-The examples use `<sops-file>` and the option defaults. This repo uses `secrets-sops/local.yaml` and prefixes every key with `local-`, so it sets each `sopsKey` explicitly.
+Each secret's `sopsFile` and `sopsKey` are up to you. The examples use the default keys.
 
 ### Signing key (one per cache server)
 

@@ -10,6 +10,18 @@ Seerr runs in a container. It reaches Jellyfin, Radarr and Sonarr over the `medi
 
 Set up [Jellyfin](../jellyfin/README.md#setup), [Sonarr](../sonarr/README.md#setup) and [Radarr](../radarr/README.md#setup) first. Seerr needs the Sonarr and Radarr API keys.
 
+With `declarative.enable` ([Declarative configuration](../README.md#declarative-configuration)), Seerr's API key comes from SOPS through its documented `API_KEY` env var, and `media-seerr-config` does steps 1–6 through Seerr's documented API (after `media-jellyfin-config`):
+
+- Steps 1–2, while Seerr has no admin and is not initialized: signs in with the shared Jellyfin admin (`admin.username`), server `media-jellyfin:8096`. If that login fails (Jellyfin set up with another login), finish steps 1–2 by hand, then run `systemctl restart media-seerr-config`.
+- Step 3: syncs the libraries and enables Movies and Shows while no library is enabled.
+- Step 4: adds Radarr and Sonarr with the values below while Seerr has none of that kind; Quality Profile `declarative.seerr.qualityProfile` (default `HD-1080p`, else the first profile).
+- Steps 5–6, while empty: Jellyfin External URL and Application URL, the `https://<name>.<web-gate.domain>` address when web-proxies exposes the service, else `https://<name>.wochap.local`.
+- Finishes the wizard when it did the sign-in itself. A wizard you started by hand stays open: check the pages, and select **Finish Setup**.
+
+Step 7 (users, permissions, approval rules) stays manual.
+
+Without `declarative`:
+
 1. Open `https://seerr.wochap.local` on the host, and choose **Jellyfin**.
 2. Sign In:
    - Jellyfin URL: `media-jellyfin`, Port `8096`, Use SSL off, URL Base empty.
