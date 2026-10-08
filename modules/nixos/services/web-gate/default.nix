@@ -112,9 +112,11 @@ let
         proxy_send_timeout 1h;
       ''
       # a variable makes nginx resolve per request through systemd-resolved
-      # (also mDNS), so it starts while the other machine is offline
+      # (also mDNS), so it starts while the other machine is offline. ipv6=off:
+      # resolved answers REFUSED to AAAA for mDNS hosts without IPv6, and nginx
+      # then fails the whole lookup
       + lib.optionalString remote ''
-        resolver 127.0.0.53 valid=30s;
+        resolver 127.0.0.53 valid=30s ipv6=off;
         set $web_gate_backend ${proxy.backendHost};
       '';
     };
