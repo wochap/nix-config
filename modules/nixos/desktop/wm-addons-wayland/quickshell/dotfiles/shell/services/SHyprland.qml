@@ -87,6 +87,38 @@ Singleton {
     root.updateAll();
   }
 
+  // Quickshell drops focusedMonitor when the focused output is removed (e.g.
+  // a headless output from remote-display) and only sets it again on a
+  // focusedmon event, which Hyprland skips when focus lands on the only
+  // monitor left. Re-query until a monitor is focused again.
+  Timer {
+    id: focusedMonitorRetry
+
+    property int attempts: 0
+
+    interval: 500
+    repeat: true
+    onTriggered: {
+      if (Hyprland.focusedMonitor !== null || attempts >= 20) {
+        stop();
+        return;
+      }
+      attempts += 1;
+      Hyprland.refreshMonitors();
+    }
+  }
+
+  Connections {
+    target: Hyprland
+
+    function onFocusedMonitorChanged() {
+      if (Hyprland.focusedMonitor === null && !focusedMonitorRetry.running) {
+        focusedMonitorRetry.attempts = 0;
+        focusedMonitorRetry.start();
+      }
+    }
+  }
+
   Connections {
     target: Hyprland
 
