@@ -56,8 +56,8 @@
     lobster.inputs.nixpkgs.follows = "nixpkgs";
     wayfreeze.url = "github:Jappie3/wayfreeze?rev=8f813abc5082e1375326ca0f888834f79f872006"; # master (10 jul 2026)
     wayfreeze.inputs.nixpkgs.follows = "nixpkgs";
-    video-trimmer.url = "github:wochap/video-trimmer";
-    video-trimmer.inputs.nixpkgs.follows = "nixpkgs";
+    wodeo.url = "github:wochap/wodeo";
+    wodeo.inputs.nixpkgs.follows = "nixpkgs";
     webscoop.url = "github:wochap/webscoop";
     webscoop.inputs.nixpkgs.follows = "nixpkgs";
     arkenfox.url = "github:dwarfmaster/arkenfox-nixos";

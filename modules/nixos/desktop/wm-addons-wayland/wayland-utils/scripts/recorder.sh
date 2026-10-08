@@ -101,7 +101,7 @@ notify_user() {
     xdg-open "$dest" &
     ;;
   "trim")
-    video-trimmer "$dest" &
+    wodeo "$dest" &
     ;;
   esac
 }

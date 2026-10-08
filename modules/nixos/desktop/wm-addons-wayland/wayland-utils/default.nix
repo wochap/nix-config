@@ -11,7 +11,7 @@ let
   inherit (config._custom.globals) isSandbox;
 
   wayfreeze = inputs.wayfreeze.packages.${pkgs.stdenv.hostPlatform.system}.wayfreeze;
-  video-trimmer = inputs.video-trimmer.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  wodeo = inputs.wodeo.packages.${pkgs.stdenv.hostPlatform.system}.default;
   woge = inputs.woge.packages.${pkgs.stdenv.hostPlatform.system}.default;
   hyprpicker = inputs.hyprpicker.packages.${pkgs.stdenv.hostPlatform.system}.hyprpicker;
   play-notification-sound = pkgs.writeScriptBin "play-notification-sound" (
@@ -87,7 +87,7 @@ in
           swaybg
           woge # screenshot and image editor
           wayfreeze # freeze display, only works on hyprland
-          video-trimmer # trim MP4s
+          wodeo # trim videos
           wdisplays # control display outputs
           wf-recorder # screen recorder utility
           wl-mirror # mirror outputs

@@ -3415,12 +3415,12 @@
         "tt": "tt",
         "ucodenix": "ucodenix",
         "vdirsyncer": "vdirsyncer",
-        "video-trimmer": "video-trimmer",
         "wayfreeze": "wayfreeze",
         "wayland-firewall": "wayland-firewall",
         "webscoop": "webscoop",
         "wluma": "wluma",
         "wobook": "wobook",
+        "wodeo": "wodeo",
         "woge": "woge",
         "woints": "woints",
         "wosarcher": "wosarcher",
@@ -3923,26 +3923,6 @@
         "type": "github"
       }
     },
-    "video-trimmer": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1790194840,
-        "narHash": "sha256-j3ROJETkI0M7a54BxEWOaN8I0KvvWNj8tGv6C3w5CnU=",
-        "owner": "wochap",
-        "repo": "video-trimmer",
-        "rev": "298521a40389991d8d0a0cc7d47d0e188f12002a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "wochap",
-        "repo": "video-trimmer",
-        "type": "github"
-      }
-    },
     "wayfreeze": {
       "inputs": {
         "nixpkgs": [
@@ -4045,6 +4025,26 @@
       "original": {
         "owner": "wochap",
         "repo": "wobook",
+        "type": "github"
+      }
+    },
+    "wodeo": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791477843,
+        "narHash": "sha256-DY+/dnVR64/K8srBFSh1g7rJhL0okLohpoZd0ieUoa8=",
+        "owner": "wochap",
+        "repo": "wodeo",
+        "rev": "a7b9456bd4e7e39ff5325633d0dbd71c622191d7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "wodeo",
         "type": "github"
       }
     },
