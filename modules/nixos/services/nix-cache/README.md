@@ -16,31 +16,82 @@ Current setup:
 
 The cache serves every store path. Store paths can contain secrets, such as values from `secrets-git-crypt` that the config inlines. The gate's cookie login does not work for Nix, so the vhost uses `expose.basicAuthFile`. Nix answers it from `netrc-file`.
 
+## Secrets
+
+Every secret lives in a SOPS file that the host options point at (`<option>.sopsFile`), under the key in `<option>.sopsKey`. Generate each value as below, then paste it with `sops <sops-file>`. Write multi-line values as a YAML block scalar (`key: |`, then the lines indented).
+
+The examples use `<sops-file>` and the option defaults. This repo uses `secrets-sops/local.yaml` and prefixes every key with `local-`, so it sets each `sopsKey` explicitly.
+
+### Signing key (one per cache server)
+
+Option `server.signingKey`, default key `nix-cache-<hostname>-signing-key`. The name before `-1` labels the key; use the host's `web-gate.domain`.
+
+```sh
+nix-store --generate-binary-cache-key cache.gdesktop.example.com-1 secret.key public.key
+cat secret.key   # one line, cache.gdesktop.example.com-1:<base64> -> SOPS value
+cat public.key   # one line -> other hosts' client.caches.<host>.publicKey
+rm secret.key
+```
+
+Keep the public key next to the host config, for example `hosts/<host>/nix-cache.pub`, and read it with `lib.fileContents`.
+
+### Cache password (shared)
+
+One user and password for every cache. Two secrets hold it:
+- `server.htpasswd` (default key `nix-cache-htpasswd`) holds the hash. nginx reads it.
+- `client.netrc` (default key `nix-cache-netrc`) holds the plain password. Nix reads it.
+
+```sh
+pass=$(openssl rand -hex 24)
+openssl passwd -apr1 "$pass" | sed 's/^/nix:/'   # one line -> htpasswd value
+echo "$pass"                                     # -> netrc value, see below
+unset pass
+```
+
+The netrc value has one line per cache server:
+
+```yaml
+nix-cache-netrc: |
+  machine cache.gdesktop.example.com login nix password <pass>
+  machine cache.glegion.example.com login nix password <pass>
+```
+
+### Remote build SSH key (build clients only)
+
+Option `remoteBuilds.sshKey`, default key `nix-remote-build-ssh-key`.
+
+```sh
+ssh-keygen -t ed25519 -N "" -C "nix-remote-build" -f build_key
+cat build_key       # multi-line -> SOPS value (block scalar)
+cat build_key.pub   # -> the builder's remoteBuilds.serve.authorizedKeys
+rm build_key
+```
+
+Keep the public key next to the client's host config, for example `hosts/<client>/nix-remote-build.pub`.
+
+### Adding a host
+
+1. Generate a signing key for the new host. Store it, and save its `nix-cache.pub`.
+2. Add a `machine cache.<new domain> ...` line, with the existing password, to the netrc value. The htpasswd stays the same.
+3. On the new host, enable `server` and list the other hosts in `client.caches`. On the other hosts, add the new host to `client.caches`.
+4. If the new host builds remotely, reuse the build SSH key, or generate a new one and add its public key to the builder's `authorizedKeys`.
+5. Rebuild every host whose config changed.
+
 ## Setup
 
-1. Generate the keys and credentials once, from the repository root. The script needs `sops`, `jq`, `openssl` and `ssh-keygen`, and it can decrypt `secrets-sops/personal.yaml` with the age key.
-
-   ```sh
-   modules/nixos/services/nix-cache/keygen.sh
-   git add hosts/*/nix-cache.pub hosts/glegion/nix-remote-build.pub
-   ```
-
-   - Private parts go into `secrets-sops/personal.yaml`: the per-host signing keys, the htpasswd, the netrc and the remote build SSH key.
-   - Public parts go into `hosts/<host>/nix-cache.pub` and `hosts/glegion/nix-remote-build.pub`, which the host configs read.
-   - Run the script once only. A second run replaces every key, and you must rebuild both hosts afterwards.
-
-2. Rebuild gdesktop, then glegion.
-3. On glegion, list its trusted networks in `web-gate.trustedConnections`. Until you do, its cache is closed to the LAN.
+1. Create the secrets above.
+2. Rebuild the cache servers, then the clients.
+3. On a laptop, list its trusted networks in `web-gate.trustedConnections`. Until you do, its cache is closed to the LAN.
 
 ## Check
 
 ```sh
 # cache answers, with credentials from the netrc
-sudo curl --netrc-file /run/secrets/personal-nix-cache-netrc https://cache.gdesktop.geanmar.com/nix-cache-info
+sudo curl --netrc-file /run/secrets/local-nix-cache-netrc https://cache.gdesktop.geanmar.com/nix-cache-info
 # substitution from the other host (root, because only root reads the netrc)
 sudo nix path-info --store https://cache.gdesktop.geanmar.com "$(readlink -f /run/current-system)"
 # remote build (on glegion)
-sudo nix store ping --store 'ssh-ng://nix-ssh@gdesktop.geanmar.com?ssh-key=/run/secrets/personal-nix-remote-build-ssh-key'
+sudo nix store ping --store 'ssh-ng://nix-ssh@gdesktop.geanmar.com?ssh-key=/run/secrets/local-nix-remote-build-ssh-key'
 nix build --rebuild nixpkgs#hello -L   # log shows "building ... on ssh-ng://gdesktop.geanmar.com"
 ```
 

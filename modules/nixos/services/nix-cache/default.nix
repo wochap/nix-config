@@ -32,7 +32,7 @@ in
         default = 21500;
         description = "web-proxies public port; harmonia listens on port + 1.";
       };
-      signingKey = sopsSecretOptions "harmonia signing key (nix-store --generate-binary-cache-key)" "nix-cache-signing-key";
+      signingKey = sopsSecretOptions "harmonia signing key (nix-store --generate-binary-cache-key)" "nix-cache-${config.networking.hostName}-signing-key";
       htpasswd = sopsSecretOptions "htpasswd file that guards the cache" "nix-cache-htpasswd";
     };
 
@@ -121,7 +121,16 @@ in
         default = { };
         description = "Remote builders this host offloads builds to over ssh-ng.";
       };
-      sshKey = sopsSecretOptions "root SSH private key used to reach the remote builders" "nix-remote-build-ssh-key";
+      sshKeyFile = lib.mkOption {
+        type = lib.types.str;
+        default = "/etc/ssh/ssh_host_ed25519_key";
+        description = ''
+          Private key the nix-daemon (root) uses to reach the builders. It
+          must have no passphrase, because the daemon has no ssh-agent. The
+          host key needs no extra secret; its .pub goes into the builder's
+          remoteBuilds.serve.authorizedKeys.
+        '';
+      };
     };
   };
 
@@ -180,7 +189,6 @@ in
     })
 
     (lib.mkIf (cfg.remoteBuilds.machines != { }) {
-      sops.secrets.${cfg.remoteBuilds.sshKey.sopsKey}.sopsFile = cfg.remoteBuilds.sshKey.sopsFile;
 
       nix = {
         distributedBuilds = true;
@@ -195,7 +203,7 @@ in
             ;
           protocol = "ssh-ng";
           sshUser = "nix-ssh";
-          sshKey = config.sops.secrets.${cfg.remoteBuilds.sshKey.sopsKey}.path;
+          sshKey = cfg.remoteBuilds.sshKeyFile;
         }) cfg.remoteBuilds.machines;
       };
 
