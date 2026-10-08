@@ -12,14 +12,9 @@ let
   svc = cfg.services.jellyfin;
   isVaapi = svc.hardwareAcceleration == "vaapi";
   isNvidia = svc.hardwareAcceleration == "nvidia";
-  proxy = config._custom.services.web-proxies.${name} or { };
   # Clients learn this address from Jellyfin (discovery, Quick Connect), so
   # prefer the LAN hostname when the proxy is exposed.
-  publishedUrl =
-    if proxy.expose.enable or false then
-      "https://${proxy.expose.host}"
-    else
-      "https://${name}.${common.domain}";
+  publishedUrl = common.publicUrl name;
 in
 {
   config = lib.mkIf (cfg.enable && svc.enable) {
@@ -53,12 +48,34 @@ in
 
     hardware.nvidia-container-toolkit.enable = lib.mkIf isNvidia true;
 
-    systemd.services.${common.serviceName name} = common.mkSystemdService name {
-      extra = {
-        wants = lib.optional isNvidia "nvidia-container-toolkit-cdi-generator.service";
-        after = lib.optional isNvidia "nvidia-container-toolkit-cdi-generator.service";
+    systemd.services = {
+      ${common.serviceName name} = common.mkSystemdService name {
+        extra = {
+          wants = lib.optional isNvidia "nvidia-container-toolkit-cdi-generator.service";
+          after = lib.optional isNvidia "nvidia-container-toolkit-cdi-generator.service";
+        };
       };
-    };
+    }
+    // lib.optionalAttrs common.declarative (
+      common.mkConfigUnit name ./config.sh {
+        env = {
+          JF_URL = common.localUrl svc;
+          JF_LIBRARIES = lib.concatStringsSep "\n" [
+            "Movies movies /data/media/movies"
+            "Shows tvshows /data/media/series"
+          ];
+          # Jellyfin's HardwareAccelerationType names.
+          JF_HWACCEL =
+            if isVaapi then
+              "vaapi"
+            else if isNvidia then
+              "nvenc"
+            else
+              "";
+          JF_VAAPI_DEVICE = lib.head (svc.vaapiDevices ++ [ "" ]);
+        };
+      }
+    );
 
     systemd.tmpfiles.rules = [
       (common.mkStateRule name)
