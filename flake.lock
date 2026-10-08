@@ -4107,11 +4107,11 @@
     "wt": {
       "flake": false,
       "locked": {
-        "lastModified": 1790100830,
-        "narHash": "sha256-0Qk32uDZ8z7NzSoIWKvRLtoOqTDNd+fkrgkGjBqMwlI=",
+        "lastModified": 1791477472,
+        "narHash": "sha256-Hay5GM4eleaHzLMyOP2YoPPs8Xm/Z/0DkXvO5kFjxIk=",
         "owner": "wochap",
         "repo": "wt",
-        "rev": "813a6f53ae60c6645e558a03094dbcadc8ab6d75",
+        "rev": "03292bc84054146280819e4698f6f28b907e5c4b",
         "type": "github"
       },
       "original": {

@@ -127,7 +127,8 @@
     remind.url = "github:wochap/remind/06.02.10-fork";
     remind.flake = false;
     wt.url = "github:wochap/wt";
-    wt.flake = false;
+    wt.inputs.nixpkgs.follows = "nixpkgs";
+    wt.inputs.home-manager.follows = "home-manager";
     shotclip.url = "github:jq6l43d1/shotclip?rev=23b9ea386c40bc4d856320baa84fdeb81fc020c9";
     shotclip.flake = false;
     wosarcher.url = "github:wochap/wosarcher";

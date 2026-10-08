@@ -15,7 +15,6 @@ let
     ;
   inherit (lib._custom) relativeSymlink;
   git-final = pkgs.gitFull;
-  wt = pkgs.writeScriptBin "wt" (builtins.readFile "${inputs.wt}/wt");
 in
 {
   options._custom.programs.git = {
@@ -37,6 +36,10 @@ in
     ];
 
     _custom.hm = {
+      imports = [ inputs.wt.homeManagerModules.default ];
+
+      programs.wt.enable = true;
+
       home.shellAliases = {
         wts = "wt switch";
         wtc = "wt clone";
@@ -55,7 +58,6 @@ in
         gh # github cli
         gitflow
         gut # alternative git cli
-        wt
       ];
 
       programs.bash.initExtra = lib.mkOrder 1000 (builtins.readFile "${inputs.wt}/wt.plugin.sh");
@@ -72,9 +74,6 @@ in
         }
         add-theme-hook _apply_delta_theme
         _apply_delta_theme $CURRENT_SCHEME
-
-        source ${inputs.wt}/wt.plugin.sh
-        zsh-defer source ${inputs.wt}/wt.completions.zsh
       '';
 
       programs.gh = {
