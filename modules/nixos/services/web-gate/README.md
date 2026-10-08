@@ -19,6 +19,8 @@ Declarative nginx vhosts for local services, set through `_custom.services.web-g
      subdomain = "myapp"; # default: the attribute name
      publicPort = 20940; # nginx or the socket listens here
      backendPort = 20941; # default: publicPort + 1
+     # backendHost = "laptop.local"; # default: 127.0.1.1, ignored with lazy
+     # backendScheme = "https"; # for TLS-only backends, certificate not verified
    };
    ```
 

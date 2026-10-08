@@ -86,19 +86,38 @@ let
 
   # If lazy=true, Nginx hits publicPort (socket proxy).
   # If lazy=false, Nginx hits backendPort (actual app directly).
-  mkProxyLocation = proxy: {
-    recommendedProxySettings = true;
-    proxyPass = "http://${sscAddress}:${
-      toString (if proxy.lazy then proxy.publicPort else proxy.backendPort)
-    }";
-    proxyWebsockets = true;
-    # nginx drops websockets idle for 60s by default; long jobs (e.g. ComfyUI
-    # model loads) stay silent longer than that
-    extraConfig = ''
-      proxy_read_timeout 1h;
-      proxy_send_timeout 1h;
-    '';
-  };
+  isRemoteBackend = proxy: !proxy.lazy && proxy.backendHost != sscAddress;
+  mkProxyLocation =
+    proxy:
+    let
+      remote = isRemoteBackend proxy;
+      host =
+        if remote then
+          "$web_gate_backend"
+        else if proxy.lazy then
+          sscAddress
+        else
+          proxy.backendHost;
+    in
+    {
+      recommendedProxySettings = true;
+      proxyPass = "${proxy.backendScheme}://${host}:${
+        toString (if proxy.lazy then proxy.publicPort else proxy.backendPort)
+      }";
+      proxyWebsockets = true;
+      # nginx drops websockets idle for 60s by default; long jobs (e.g. ComfyUI
+      # model loads) stay silent longer than that
+      extraConfig = ''
+        proxy_read_timeout 1h;
+        proxy_send_timeout 1h;
+      ''
+      # a variable makes nginx resolve per request through systemd-resolved
+      # (also mDNS), so it starts while the other machine is offline
+      + lib.optionalString remote ''
+        resolver 127.0.0.53 valid=30s;
+        set $web_gate_backend ${proxy.backendHost};
+      '';
+    };
 
   makeVirtualHost = proxy: {
     forceSSL = true;
@@ -347,6 +366,20 @@ in
                 type = lib.types.port;
                 default = config.publicPort + 1;
               };
+              backendHost = lib.mkOption {
+                type = lib.types.nonEmptyStr;
+                default = sscAddress;
+                defaultText = lib.literalExpression "certificate.meta.address";
+                description = "Host nginx forwards to when `lazy` is off, e.g. a service on another LAN machine.";
+              };
+              backendScheme = lib.mkOption {
+                type = lib.types.enum [
+                  "http"
+                  "https"
+                ];
+                default = "http";
+                description = "`https` for backends that only speak TLS; nginx does not verify their certificate.";
+              };
             };
           }
         )
@@ -357,10 +390,15 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf (enabledProxies != { }) {
-      assertions = lib.mapAttrsToList (name: proxy: {
-        assertion = proxy.serviceScope != "user" || proxy.userName != null;
-        message = "web-gate.proxies.${name}: userName is required for user-scoped services";
-      }) enabledProxies;
+      assertions =
+        lib.mapAttrsToList (name: proxy: {
+          assertion = proxy.serviceScope != "user" || proxy.userName != null;
+          message = "web-gate.proxies.${name}: userName is required for user-scoped services";
+        }) enabledProxies
+        ++ lib.mapAttrsToList (name: proxy: {
+          assertion = !(isRemoteBackend proxy) || config.services.resolved.enable;
+          message = "web-gate.proxies.${name}: a remote backendHost needs services.resolved";
+        }) enabledProxies;
 
       users.users = lib.foldl' lib.recursiveUpdate { } (
         lib.mapAttrsToList (

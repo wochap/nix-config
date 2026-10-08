@@ -85,6 +85,9 @@ let
     EOF
   '';
 
+  # Sunshine web UI, base port + 1; clients assume the default base port
+  webUiPort = 47990;
+
   # base port 47989, offsets from the nixpkgs sunshine module
   sunshinePorts = offsets: map (offset: sunshineCfg.settings.port + offset) offsets;
 in
@@ -100,6 +103,11 @@ in
         type = lib.types.nonEmptyStr;
         default = "Desktop";
         description = "Name of the Sunshine application clients start.";
+      };
+      webUi.subdomain = lib.mkOption {
+        type = lib.types.nullOr lib.types.nonEmptyStr;
+        default = "sunshine";
+        description = "web-gate subdomain for this host's Sunshine web UI (`https://<subdomain>.<certificate domain>`). null disables it.";
       };
       credentials = {
         sopsFile = lib.mkOption {
@@ -132,33 +140,42 @@ in
         '';
         description = "Hosts to control, run as `remote-desktop <name>`.";
         type = lib.types.attrsOf (
-          lib.types.submodule {
-            options = {
-              address = lib.mkOption {
-                type = lib.types.nonEmptyStr;
-                description = "Sunshine host, also the ssh destination for remote-display.";
+          lib.types.submodule (
+            { name, ... }:
+            {
+              options = {
+                address = lib.mkOption {
+                  type = lib.types.nonEmptyStr;
+                  description = "Sunshine host, also the ssh destination for remote-display.";
+                };
+                webUi.subdomain = lib.mkOption {
+                  type = lib.types.nullOr lib.types.nonEmptyStr;
+                  default = "sunshine-${name}";
+                  defaultText = lib.literalExpression ''"sunshine-''${name}"'';
+                  description = "web-gate subdomain on this machine for the host's Sunshine web UI. null disables it.";
+                };
+                commandName = lib.mkOption {
+                  type = lib.types.nullOr lib.types.nonEmptyStr;
+                  default = null;
+                  description = "Extra command that runs `remote-desktop <name>`.";
+                };
+                app = lib.mkOption {
+                  type = lib.types.nonEmptyStr;
+                  default = "Desktop";
+                  description = "Sunshine application to start, the host's `host.app`.";
+                };
+                scale = lib.mkOption {
+                  type = lib.types.numbers.positive;
+                  default = 1;
+                  description = "Scale the host uses on the streamed output, set to this monitor's scale.";
+                };
+                maxFps = lib.mkOption {
+                  type = lib.types.ints.positive;
+                  default = 120;
+                };
               };
-              commandName = lib.mkOption {
-                type = lib.types.nullOr lib.types.nonEmptyStr;
-                default = null;
-                description = "Extra command that runs `remote-desktop <name>`.";
-              };
-              app = lib.mkOption {
-                type = lib.types.nonEmptyStr;
-                default = "Desktop";
-                description = "Sunshine application to start, the host's `host.app`.";
-              };
-              scale = lib.mkOption {
-                type = lib.types.numbers.positive;
-                default = 1;
-                description = "Scale the host uses on the streamed output, set to this monitor's scale.";
-              };
-              maxFps = lib.mkOption {
-                type = lib.types.ints.positive;
-                default = 120;
-              };
-            };
-          }
+            }
+          )
         );
       };
     };
@@ -167,6 +184,16 @@ in
   config = lib.mkMerge [
     (lib.mkIf cfg.host.enable {
       environment.systemPackages = [ remote-display ];
+
+      # https://sunshine.wochap.local, pairing PINs without typing the port
+      _custom.services.web-gate.proxies.sunshine = lib.mkIf (cfg.host.webUi.subdomain != null) {
+        enable = true;
+        inherit (cfg.host.webUi) subdomain;
+        publicPort = sunshineCfg.settings.port + 1;
+        backendPort = sunshineCfg.settings.port + 1;
+        # Sunshine binds all addresses, the web UI is TLS only
+        backendScheme = "https";
+      };
 
       services.sunshine = {
         enable = true;
@@ -234,6 +261,19 @@ in
     })
 
     (lib.mkIf cfg.client.enable {
+      # https://sunshine-<name>.wochap.local, each host's web UI from this machine
+      _custom.services.web-gate.proxies = lib.mapAttrs' (
+        name: host:
+        lib.nameValuePair "sunshine-${name}" {
+          enable = true;
+          inherit (host.webUi) subdomain;
+          publicPort = webUiPort;
+          backendPort = webUiPort;
+          backendHost = host.address;
+          backendScheme = "https";
+        }
+      ) (lib.filterAttrs (_: host: host.webUi.subdomain != null) cfg.client.hosts);
+
       environment.systemPackages = [
         pkgs.moonlight-qt
         remote-desktop-connect
