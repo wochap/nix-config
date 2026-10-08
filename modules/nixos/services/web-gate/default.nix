@@ -441,7 +441,24 @@ in
         ) enabledProxies
         // lib.mapAttrs' (
           name: proxy: lib.nameValuePair proxy.expose.host (makeExternalVirtualHost proxy)
-        ) exposedProxies;
+        ) exposedProxies
+        # The wildcard DNS record and certificate cover every subdomain, so an
+        # unknown host would otherwise fall through to the first LAN vhost,
+        # which may have no gate. Refuse the TLS handshake instead.
+        // lib.optionalAttrs (exposedProxies != { }) {
+          web-gate-default = {
+            serverName = "_";
+            default = true;
+            rejectSSL = true;
+            listen = [
+              {
+                addr = gate.listenAddress;
+                port = 443;
+                ssl = true;
+              }
+            ];
+          };
+        };
 
       # 4. Networking hosts mapping
       networking.hosts.${sscAddress} = lib.mapAttrsToList (
