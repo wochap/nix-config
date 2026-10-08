@@ -138,6 +138,13 @@ in
     };
 
     # _custom.services.tailscale.enable = true;
+    _custom.services.remote-desktop.client = {
+      enable = true;
+      hosts.glegion = {
+        address = "glegion.local";
+        commandName = "glegion-remote";
+      };
+    };
     _custom.services.android.enable = true;
     _custom.services.android.enableSdk = true;
     _custom.services.podman.enable = true;

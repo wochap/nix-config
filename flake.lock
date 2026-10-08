@@ -3968,16 +3968,19 @@
     },
     "webscoop": {
       "inputs": {
+        "home-manager": [
+          "home-manager"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1791329780,
-        "narHash": "sha256-2XB1EVezkGO91soqZ4t+TqThrtfPt8vqRUURI+Wxzgw=",
+        "lastModified": 1791484403,
+        "narHash": "sha256-8Tn6GWOJoacRcAkXO+MDGZSjdSab8jX7ZOCtYoO+kZY=",
         "owner": "wochap",
         "repo": "webscoop",
-        "rev": "2b7ce0d10e1c0267d793a363f73a71429ffea60e",
+        "rev": "4b6a53491b14cbddfe5d2bc4f427c69772b74bee",
         "type": "github"
       },
       "original": {
