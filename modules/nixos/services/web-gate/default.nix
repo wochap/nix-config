@@ -9,7 +9,7 @@
 # socket-activation and an optional LAN gate (Let's Encrypt wildcard cert,
 # cookie gate, Cloudflare DDNS). Copy this folder plus
 # lib._custom.strictNetworkService, then set `certificate`, plus `domain` and
-# `acme.credentialFile` for LAN exposure.
+# `acme.credentialSecret` (sops-nix) for LAN exposure.
 # trustedConnections and ddns need NetworkManager and the iptables firewall.
 let
   gate = config._custom.services.web-gate;
@@ -20,6 +20,9 @@ let
   sscError = "web-gate.certificate must expose meta.address and meta.domain; build it with packages/generate-ssc";
   sscAddress = ssc.meta.address or (throw sscError);
   sscDomain = ssc.meta.domain or (throw sscError);
+
+  # DNS provider API token for lego and DDNS, decrypted by sops-nix.
+  tokenFile = config.sops.secrets.${gate.acme.credentialSecret.sopsKey}.path;
 
   # Filter to only act on proxies that are explicitly enabled
   enabledProxies = lib.filterAttrs (name: proxy: proxy.enable) gate.proxies;
@@ -76,7 +79,7 @@ let
         [ "*.${gate.domain}" ] ++ lib.optional gate.ddns.apex gate.domain
       );
       DDNS_TTL = toString gate.ddns.ttl;
-      DDNS_TOKEN_FILE = gate.acme.credentialFile;
+      DDNS_TOKEN_FILE = tokenFile;
     };
     text = builtins.readFile ./web-gate-lan.sh;
   };
@@ -208,16 +211,16 @@ in
         default = "1.1.1.1:53";
         description = "Resolver lego uses to check challenge propagation.";
       };
-      credentialFile = lib.mkOption {
-        type = lib.types.nonEmptyStr;
-        example = lib.literalExpression "config.sops.secrets.cloudflare-dns-api-token.path";
-        description = ''
-          Runtime path of the file with the DNS provider API token, used by
-          lego and DDNS. A string, not a path: a literal path would copy the
-          secret into the world-readable Nix store.
-        '';
+      credentialSecret.sopsFile = lib.mkOption {
+        type = lib.types.path;
+        description = "SOPS file containing the DNS provider API token.";
       };
-      credentialVariable = lib.mkOption {
+      credentialSecret.sopsKey = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "cloudflare-dns-api-token";
+        description = "Key containing the DNS provider API token in the SOPS file.";
+      };
+      credentialSecret.variable = lib.mkOption {
         type = lib.types.nonEmptyStr;
         default = "CLOUDFLARE_DNS_API_TOKEN";
         description = "lego environment variable the token feeds; it is passed as `<variable>_FILE`.";
@@ -459,6 +462,8 @@ in
 
     # 6. LAN gate for exposed proxies
     (lib.mkIf (exposedProxies != { }) {
+      sops.secrets.${gate.acme.credentialSecret.sopsKey}.sopsFile = gate.acme.credentialSecret.sopsFile;
+
       # One wildcard certificate for every exposed vhost. DNS-01 needs no
       # inbound port, so the host stays LAN-only.
       security.acme = {
@@ -467,7 +472,7 @@ in
           domain = "*.${gate.domain}";
           group = config.services.nginx.group;
           inherit (gate.acme) dnsProvider dnsResolver;
-          credentialFiles."${gate.acme.credentialVariable}_FILE" = gate.acme.credentialFile;
+          credentialFiles."${gate.acme.credentialSecret.variable}_FILE" = tokenFile;
         };
       };
 

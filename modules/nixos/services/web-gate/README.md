@@ -51,20 +51,21 @@ Declarative nginx vhosts for local services, set through `_custom.services.web-g
 Needed only for `expose.enable`. Local vhosts need no setup.
 
 1. Create the Cloudflare API token (see below). Skip it when another host already uses one: all hosts share it.
-2. Store the token in sops, once for all hosts:
+2. Store the token in the SOPS file under the key you set in `acme.credentialSecret` (step 3). Once for all hosts:
 
    ```sh
    sops secrets-sops/personal.yaml
    # add: personal-cloudflare-dns-api-token: <token>
    ```
 
+   The module declares the `sops.secrets` entry itself, so the token lands in `/run/secrets/<sopsKey>`.
+
 3. In `hosts/<host>/default.nix`, as on gdesktop:
 
    ```nix
    _custom.services.web-gate.domain = "gdesktop.geanmar.com";
-   sops.secrets.personal-cloudflare-dns-api-token.sopsFile = ../../secrets-sops/personal.yaml;
-   _custom.services.web-gate.acme.credentialFile =
-     config.sops.secrets.personal-cloudflare-dns-api-token.path;
+   _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/personal.yaml;
+   _custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
    _custom.services.web-gate.ddns.enable = true;
    _custom.services.web-gate.ddns.zone = "geanmar.com";
    # Laptop only: networks where port 443 opens (`nmcli connection show`).
@@ -88,7 +89,7 @@ Needed only for `expose.enable`. Local vhosts need no setup.
 
 5. When a proxy uses `expose.gate`, run `sudo web-gate` to get the password. The first boot seeds a random, unknown one.
 
-For another DNS provider, set `web-gate.acme.dnsProvider` and `web-gate.acme.credentialVariable` to the lego provider name and its token variable.
+For another DNS provider, set `web-gate.acme.dnsProvider` and `web-gate.acme.credentialSecret.variable` to the lego provider name and its token variable.
 
 Name resolution comes from a public DNS record that points at this host's LAN IP, so no LAN DNS server is needed. The certificate comes from the DNS-01 challenge, so no port is open to the internet.
 
