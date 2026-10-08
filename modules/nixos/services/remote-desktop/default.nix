@@ -85,6 +85,8 @@ let
     EOF
   '';
 
+  localDomain = config._custom.services.web-gate.certificate.meta.domain;
+
   # Sunshine web UI, base port + 1; clients assume the default base port
   webUiPort = 47990;
 
@@ -108,6 +110,19 @@ in
         type = lib.types.nullOr lib.types.nonEmptyStr;
         default = "sunshine";
         description = "web-gate subdomain for this host's Sunshine web UI (`https://<subdomain>.<certificate domain>`). null disables it.";
+      };
+      webUi.allowedOrigins = lib.mkOption {
+        type = lib.types.listOf lib.types.nonEmptyStr;
+        default =
+          lib.optional (cfg.host.webUi.subdomain != null) "https://${cfg.host.webUi.subdomain}.${localDomain}"
+          ++ [ "https://sunshine-${config.networking.hostName}.${localDomain}" ];
+        defaultText = lib.literalExpression ''
+          [
+            "https://<host.webUi.subdomain>.<certificate domain>"
+            "https://sunshine-<hostName>.<certificate domain>" # a client's proxy, client.hosts.<hostName>
+          ]
+        '';
+        description = "Origins Sunshine's CSRF check accepts besides localhost, i.e. the web-gate proxies in front of its web UI.";
       };
       credentials = {
         sopsFile = lib.mkOption {
@@ -205,6 +220,7 @@ in
           capture = "wlr";
           # matched by xdg_output name
           output_name = streamOutput;
+          csrf_allowed_origins = lib.concatStringsSep "," cfg.host.webUi.allowedOrigins;
         };
         applications.apps = [
           {

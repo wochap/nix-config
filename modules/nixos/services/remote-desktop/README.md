@@ -133,11 +133,13 @@ On the client, from a graphical session:
 
 ```sh
 moonlight pair laptop.local          # prints a PIN
-# open https://laptop.local:47990 -> PIN, enter it
+# open https://sunshine-laptop.wochap.local/pin, enter it
 moonlight list laptop.local          # shows "Desktop" when paired
 ```
 
-Repeat for each host. Moonlight stores the pairing in your user config, so the TTY session uses it too.
+Repeat for each host.
+
+The web UI is also at `https://sunshine.wochap.local` on the host itself, and at `https://<address>:47990` with Sunshine's own certificate. Sunshine's CSRF check rejects proxied origins it does not know ("CSRF Protection Error"). `host.webUi.allowedOrigins` defaults to the host's own proxy and `https://sunshine-<hostName>.<certificate domain>`, which matches a client entry named after the host's `networking.hostName`. Add the origin there when the client uses another name. Moonlight stores the pairing in your user config, so the TTY session uses it too.
 
 ## Troubleshooting
 
