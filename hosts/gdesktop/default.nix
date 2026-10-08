@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 let
   userName = "gean";
@@ -169,6 +169,25 @@ in
     # Fixed IP, but DDNS still creates and maintains the record.
     _custom.services.web-gate.ddns.enable = true;
     _custom.services.web-gate.ddns.zone = "geanmar.com";
+    # gdesktop.geanmar.com itself, for SSH and remote builds from glegion.
+    _custom.services.web-gate.ddns.apex = true;
+    # Binary caches in both directions plus remote builds from glegion.
+    # Secrets and the *.pub files come from nix-cache/keygen.sh.
+    _custom.services.nix-cache = {
+      server.enable = true;
+      server.signingKey.sopsFile = ../../secrets-sops/personal.yaml;
+      server.signingKey.sopsKey = "personal-nix-cache-gdesktop-signing-key";
+      server.htpasswd.sopsFile = ../../secrets-sops/personal.yaml;
+      server.htpasswd.sopsKey = "personal-nix-cache-htpasswd";
+      client.caches.glegion = {
+        url = "https://cache.glegion.geanmar.com";
+        publicKey = lib.fileContents ../glegion/nix-cache.pub;
+      };
+      client.netrc.sopsFile = ../../secrets-sops/personal.yaml;
+      client.netrc.sopsKey = "personal-nix-cache-netrc";
+      remoteBuilds.serve.enable = true;
+      remoteBuilds.serve.authorizedKeys = [ (lib.fileContents ../glegion/nix-remote-build.pub) ];
+    };
     _custom.services.web-proxies.jellyfin.expose.enable = true;
     _custom.services.web-proxies.seerr.expose.enable = true;
     _custom.services.web-proxies.audiobookshelf.expose.enable = true;

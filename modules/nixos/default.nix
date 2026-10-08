@@ -102,6 +102,7 @@
     ./services/local-oci-images
     ./services/media
     ./services/ms-intune
+    ./services/nix-cache
     ./services/rsshub
     ./services/searxng
     ./services/syncthing

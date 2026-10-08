@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   userName = "gean";
@@ -173,6 +178,27 @@ in
     _custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
     _custom.services.web-gate.ddns.enable = true;
     _custom.services.web-gate.ddns.zone = "geanmar.com";
+    # Binary caches in both directions; builds go to gdesktop when reachable.
+    # Secrets and the *.pub files come from nix-cache/keygen.sh.
+    _custom.services.nix-cache = {
+      server.enable = true;
+      server.signingKey.sopsFile = ../../secrets-sops/personal.yaml;
+      server.signingKey.sopsKey = "personal-nix-cache-glegion-signing-key";
+      server.htpasswd.sopsFile = ../../secrets-sops/personal.yaml;
+      server.htpasswd.sopsKey = "personal-nix-cache-htpasswd";
+      client.caches.gdesktop = {
+        url = "https://cache.gdesktop.geanmar.com";
+        publicKey = lib.fileContents ../gdesktop/nix-cache.pub;
+      };
+      client.netrc.sopsFile = ../../secrets-sops/personal.yaml;
+      client.netrc.sopsKey = "personal-nix-cache-netrc";
+      remoteBuilds.machines."gdesktop.geanmar.com" = {
+        hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF4oavrZfSqKG4W53MngsGk2iziSq6z+Kxs5hhBI0v0y";
+        maxJobs = 12;
+      };
+      remoteBuilds.sshKey.sopsFile = ../../secrets-sops/personal.yaml;
+      remoteBuilds.sshKey.sopsKey = "personal-nix-remote-build-ssh-key";
+    };
     # TODO: NetworkManager connection names (`nmcli connection show`) of the
     # home and friends' networks. Empty keeps every exposed vhost closed.
     _custom.services.web-gate.trustedConnections = [ ];
