@@ -14,7 +14,7 @@ let
   revision = source.rev or (throw "The open-design flake input must be locked to a Git revision");
   ociBackend = config.virtualisation.oci-containers.backend;
   serviceName = "${ociBackend}-open-design";
-  proxy = config._custom.services.web-proxies.open-design;
+  proxy = config._custom.services.web-gate.proxies.open-design;
   # The upstream image runs as USER open-design (1001:1001).
   uid = 1001;
   gid = 1001;
@@ -64,7 +64,7 @@ in
       dockerfile = "deploy/Dockerfile";
     };
 
-    _custom.services.web-proxies.open-design = {
+    _custom.services.web-gate.proxies.open-design = {
       enable = true;
       subdomain = "open-design";
       inherit serviceName;

@@ -8,7 +8,7 @@
 let
   cfg = config._custom.desktop.home-screen;
   inherit (pkgs._custom) wochap-ssc;
-  proxy = config._custom.services.web-proxies.home-screen;
+  proxy = config._custom.services.web-gate.proxies.home-screen;
   personalSopsFile = ../../../../../secrets-sops/personal.yaml;
   widgets = import ./widgets {
     inherit lib;
@@ -215,7 +215,7 @@ in
       ProtectProc = "invisible";
     };
 
-    _custom.services.web-proxies.home-screen = {
+    _custom.services.web-gate.proxies.home-screen = {
       enable = true;
       subdomain = "home-screen";
       serviceName = "glance";

@@ -8,7 +8,7 @@ Media server. Streams the movies and series in `/data/media/{movies,series}` (re
 |---|---|
 | `https://jellyfin.wochap.local` | This host |
 | `http://127.0.1.1:21001` | This host |
-| `https://jellyfin.<web-gate.domain>`, e.g. `https://jellyfin.gdesktop.geanmar.com` | LAN devices, when `web-proxies.jellyfin.expose.enable` |
+| `https://jellyfin.<web-gate.domain>`, e.g. `https://jellyfin.gdesktop.geanmar.com` | LAN devices, when `web-gate.proxies.jellyfin.expose.enable` |
 | `http://media-jellyfin:8096` | Other containers |
 
 ## Depends on / used by

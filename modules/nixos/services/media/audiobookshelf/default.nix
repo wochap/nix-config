@@ -42,6 +42,6 @@ in
       (common.mkStateRule "${name}/metadata")
     ];
 
-    _custom.services.web-proxies.${name} = common.mkProxy name svc;
+    _custom.services.web-gate.proxies.${name} = common.mkProxy name svc;
   };
 }

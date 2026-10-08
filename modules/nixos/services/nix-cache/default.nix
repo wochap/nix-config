@@ -9,7 +9,7 @@ let
   cfg = config._custom.services.nix-cache;
   inherit (pkgs._custom) wochap-ssc;
   gate = config._custom.services.web-gate;
-  proxy = config._custom.services.web-proxies.nix-cache;
+  proxy = config._custom.services.web-gate.proxies.nix-cache;
 
   sopsSecretOptions = description: defaultKey: {
     sopsFile = lib.mkOption {
@@ -30,7 +30,7 @@ in
       port = lib.mkOption {
         type = lib.types.port;
         default = 21500;
-        description = "web-proxies public port; harmonia listens on port + 1.";
+        description = "web-gate public port; harmonia listens on port + 1.";
       };
       signingKey = sopsSecretOptions "harmonia signing key (nix-store --generate-binary-cache-key)" "nix-cache-${config.networking.hostName}-signing-key";
       htpasswd = sopsSecretOptions "htpasswd file that guards the cache" "nix-cache-htpasswd";
@@ -150,7 +150,7 @@ in
 
       # Served at https://cache.<web-gate.domain> on the LAN. Plain Basic Auth,
       # because Nix sends netrc credentials but cannot follow the gate cookie.
-      _custom.services.web-proxies.nix-cache = {
+      _custom.services.web-gate.proxies.nix-cache = {
         enable = true;
         subdomain = "cache";
         serviceName = "harmonia";

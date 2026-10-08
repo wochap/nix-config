@@ -8,7 +8,7 @@
 let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
-  proxy = config._custom.services.web-proxies.firecrawl;
+  proxy = config._custom.services.web-gate.proxies.firecrawl;
 
   ports = {
     playwright = 20902;
@@ -185,7 +185,7 @@ in
   };
 
   config = lib.mkIf (cfg.enable && cfg.enableFirecrawl) {
-    _custom.services.web-proxies.firecrawl = {
+    _custom.services.web-gate.proxies.firecrawl = {
       enable = true;
       subdomain = "firecrawl";
       serviceName = "podman-firecrawl-api";
@@ -318,7 +318,7 @@ in
       mode = "0400";
       restartUnits = [ "podman-firecrawl-api.service" ];
       content = ''
-        OPENAI_BASE_URL=http://${address}:${toString config._custom.services.web-proxies.omniroute.publicPort}/v1
+        OPENAI_BASE_URL=http://${address}:${toString config._custom.services.web-gate.proxies.omniroute.publicPort}/v1
         OPENAI_API_KEY=${config.sops.placeholder.local-omniroute-secret-key}
         MODEL_NAME=${cfg.firecrawlModel}
         MODEL_EMBEDDING_NAME=${cfg.firecrawlEmbeddingModel}
@@ -389,7 +389,7 @@ in
     };
 
     _custom.hm.home.shellAliases = {
-      fcl = "firecrawl --api-url https://${config._custom.services.web-proxies.firecrawl.subdomain}.${wochap-ssc.meta.domain}";
+      fcl = "firecrawl --api-url https://${config._custom.services.web-gate.proxies.firecrawl.subdomain}.${wochap-ssc.meta.domain}";
     };
   };
 }

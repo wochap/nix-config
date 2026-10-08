@@ -24,14 +24,14 @@ let
   dataDir = "/var/lib/wosarcher";
   profilesDir = "${dataDir}/config/wosarcher/profiles";
 
-  proxy = config._custom.services.web-proxies.wosarcher;
-  searxProxy = config._custom.services.web-proxies.searxng;
-  omniRouteProxy = config._custom.services.web-proxies.omniroute;
+  proxy = config._custom.services.web-gate.proxies.wosarcher;
+  searxProxy = config._custom.services.web-gate.proxies.searxng;
+  omniRouteProxy = config._custom.services.web-gate.proxies.omniroute;
   firecrawlPublicPort = lib.attrByPath [
     "firecrawl"
     "publicPort"
-  ] 20900 config._custom.services.web-proxies;
-  rerankerProxy = config._custom.services.web-proxies.reranker;
+  ] 20900 config._custom.services.web-gate.proxies;
+  rerankerProxy = config._custom.services.web-gate.proxies.reranker;
   host = "http://${wochap-ssc.meta.address}";
 
   # Every provider goes through the host's proxies, so the container needs
@@ -302,7 +302,7 @@ in
       _: lib.mapAttrsRecursive (_: lib.mkDefault)
     ) generatedProfiles;
 
-    _custom.services.web-proxies.wosarcher = {
+    _custom.services.web-gate.proxies.wosarcher = {
       enable = true;
       subdomain = "wosarcher";
       inherit serviceName;

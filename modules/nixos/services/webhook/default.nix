@@ -7,7 +7,7 @@
 
 let
   cfg = config._custom.services.webhook;
-  proxy = config._custom.services.web-proxies.webhook;
+  proxy = config._custom.services.web-gate.proxies.webhook;
   inherit (pkgs._custom) wochap-ssc;
   inherit (config._custom.globals) userName;
   json = pkgs.formats.json { };
@@ -34,7 +34,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    _custom.services.web-proxies.webhook = {
+    _custom.services.web-gate.proxies.webhook = {
       enable = true;
       subdomain = "webhook";
       publicPort = 9099;

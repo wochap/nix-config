@@ -8,8 +8,8 @@
 let
   cfg = config._custom.services.searxng;
   inherit (pkgs._custom) wochap-ssc;
-  proxy = config._custom.services.web-proxies.searxng;
-  webhookProxy = config._custom.services.web-proxies.webhook;
+  proxy = config._custom.services.web-gate.proxies.searxng;
+  webhookProxy = config._custom.services.web-gate.proxies.webhook;
   aiCfg = config._custom.services.ai;
   webscoopWebhook = aiCfg.enable && aiCfg.webscoop.enable && aiCfg.webscoop.webhook.enable;
   mkWebscoopEngine =
@@ -186,7 +186,7 @@ in
       };
     };
 
-    _custom.services.web-proxies.searxng = {
+    _custom.services.web-gate.proxies.searxng = {
       enable = true;
       subdomain = "searxng";
       serviceName = "searx";

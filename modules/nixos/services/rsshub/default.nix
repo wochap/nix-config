@@ -7,7 +7,7 @@
 
 let
   cfg = config._custom.services.rsshub;
-  proxy = config._custom.services.web-proxies.rsshub;
+  proxy = config._custom.services.web-gate.proxies.rsshub;
 in
 {
   options._custom.services.rsshub.enable = lib.mkEnableOption { };
@@ -53,7 +53,7 @@ in
       };
     };
 
-    _custom.services.web-proxies.rsshub = {
+    _custom.services.web-gate.proxies.rsshub = {
       enable = true;
       subdomain = "rsshub";
       serviceName = "rsshub";

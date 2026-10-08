@@ -5,14 +5,45 @@
   ...
 }:
 
+# Declarative nginx vhosts for local services, with optional systemd
+# socket-activation and an optional LAN gate (Let's Encrypt wildcard cert,
+# cookie gate, Cloudflare DDNS). Self-contained: copy this folder and set
+# `certificate`, plus `domain` and `acme.credentialFile` for LAN exposure.
+# trustedConnections and ddns need NetworkManager and the iptables firewall.
 let
-  # TODO: accept this as an option
-  inherit (pkgs._custom) wochap-ssc;
-
   gate = config._custom.services.web-gate;
 
+  # Self-signed certificate package for the local vhosts, built by
+  # packages/generate-ssc (mkcert).
+  ssc = gate.certificate;
+  sscError = "web-gate.certificate must expose meta.address and meta.domain; build it with packages/generate-ssc";
+  sscAddress = ssc.meta.address or (throw sscError);
+  sscDomain = ssc.meta.domain or (throw sscError);
+
+  # Same as lib._custom.strictNetworkService, inlined to keep the module portable.
+  strictNetworkService = {
+    NoNewPrivileges = true;
+    PrivateDevices = true;
+    PrivateTmp = true;
+    ProtectSystem = "strict";
+    ProtectHome = true;
+    ProtectClock = true;
+    ProtectControlGroups = true;
+    ProtectHostname = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    LockPersonality = true;
+    CapabilityBoundingSet = "";
+    AmbientCapabilities = "";
+    SystemCallArchitectures = "native";
+    UMask = "0077";
+  };
+
   # Filter to only act on proxies that are explicitly enabled
-  enabledProxies = lib.filterAttrs (name: proxy: proxy.enable) config._custom.services.web-proxies;
+  enabledProxies = lib.filterAttrs (name: proxy: proxy.enable) gate.proxies;
   # Subset also served on the LAN under the web-gate domain
   exposedProxies = lib.filterAttrs (name: proxy: proxy.expose.enable) enabledProxies;
 
@@ -66,7 +97,7 @@ let
         [ "*.${gate.domain}" ] ++ lib.optional gate.ddns.apex gate.domain
       );
       DDNS_TTL = toString gate.ddns.ttl;
-      DDNS_TOKEN_FILE = config.sops.secrets.${gate.acme.credentialSecret.sopsKey}.path;
+      DDNS_TOKEN_FILE = gate.acme.credentialFile;
     };
     text = builtins.readFile ./web-gate-lan.sh;
   };
@@ -75,7 +106,7 @@ let
   # If lazy=false, Nginx hits backendPort (actual app directly).
   mkProxyLocation = proxy: {
     recommendedProxySettings = true;
-    proxyPass = "http://${wochap-ssc.meta.address}:${
+    proxyPass = "http://${sscAddress}:${
       toString (if proxy.lazy then proxy.publicPort else proxy.backendPort)
     }";
     proxyWebsockets = true;
@@ -89,18 +120,18 @@ let
 
   makeVirtualHost = proxy: {
     forceSSL = true;
-    sslTrustedCertificate = "${wochap-ssc}/rootCA.pem";
-    sslCertificateKey = "${wochap-ssc}/${wochap-ssc.meta.domain}+4-key.pem";
-    sslCertificate = "${wochap-ssc}/${wochap-ssc.meta.domain}+4.pem";
+    sslTrustedCertificate = "${ssc}/rootCA.pem";
+    sslCertificateKey = "${ssc}/${sscDomain}+4-key.pem";
+    sslCertificate = "${ssc}/${sscDomain}+4.pem";
     locations."/" = mkProxyLocation proxy;
     listen = [
       {
-        addr = wochap-ssc.meta.address;
+        addr = sscAddress;
         port = 443;
         ssl = true;
       }
       {
-        addr = wochap-ssc.meta.address;
+        addr = sscAddress;
         port = 80;
       }
     ];
@@ -158,7 +189,7 @@ let
     };
 in
 {
-  options._custom.services.web-proxies = lib.mkOption {
+  options._custom.services.web-gate.proxies = lib.mkOption {
     description = "Declarative web proxies with optional systemd lazy-loading.";
     type = lib.types.attrsOf (
       lib.types.submodule (
@@ -228,6 +259,23 @@ in
   };
 
   options._custom.services.web-gate = {
+    certificate = lib.mkOption {
+      type = lib.types.package;
+      example = lib.literalExpression ''
+        pkgs.callPackage ./generate-ssc { } {
+          domain = "example.local";
+          address = "127.0.1.1";
+        }
+      '';
+      description = ''
+        Self-signed certificate for the local vhosts, built by
+        packages/generate-ssc. The module reads `meta.address` (listen and
+        backend address, /etc/hosts entry), `meta.domain` (local vhosts are
+        `<subdomain>.<meta.domain>`) and the mkcert files `rootCA.pem`,
+        `<domain>+4.pem` and `<domain>+4-key.pem`. The `+4` suffix comes from
+        the 5 names generate-ssc passes to mkcert.
+      '';
+    };
     domain = lib.mkOption {
       type = lib.types.nonEmptyStr;
       example = "home.example.com";
@@ -250,16 +298,16 @@ in
         default = "1.1.1.1:53";
         description = "Resolver lego uses to check challenge propagation.";
       };
-      credentialSecret.sopsFile = lib.mkOption {
-        type = lib.types.path;
-        description = "SOPS file containing the DNS provider API token.";
-      };
-      credentialSecret.sopsKey = lib.mkOption {
+      credentialFile = lib.mkOption {
         type = lib.types.nonEmptyStr;
-        default = "cloudflare-dns-api-token";
-        description = "Key containing the DNS provider API token in the SOPS file.";
+        example = lib.literalExpression "config.sops.secrets.cloudflare-dns-api-token.path";
+        description = ''
+          Runtime path of the file with the DNS provider API token, used by
+          lego and DDNS. A string, not a path: a literal path would copy the
+          secret into the world-readable Nix store.
+        '';
       };
-      credentialSecret.variable = lib.mkOption {
+      credentialVariable = lib.mkOption {
         type = lib.types.nonEmptyStr;
         default = "CLOUDFLARE_DNS_API_TOKEN";
         description = "lego environment variable the token feeds; it is passed as `<variable>_FILE`.";
@@ -329,7 +377,7 @@ in
     (lib.mkIf (enabledProxies != { }) {
       assertions = lib.mapAttrsToList (name: proxy: {
         assertion = proxy.serviceScope != "user" || proxy.userName != null;
-        message = "web-proxies.${name}: userName is required for user-scoped services";
+        message = "web-gate.proxies.${name}: userName is required for user-scoped services";
       }) enabledProxies;
 
       users.users = lib.foldl' lib.recursiveUpdate { } (
@@ -348,7 +396,7 @@ in
           lib.mkIf proxy.lazy {
             description = "Socket for ${proxy.serviceName} proxy";
             wantedBy = [ "sockets.target" ];
-            listenStreams = [ "${wochap-ssc.meta.address}:${toString proxy.publicPort}" ];
+            listenStreams = [ "${sscAddress}:${toString proxy.publicPort}" ];
           }
         )
       ) enabledProxies;
@@ -368,15 +416,15 @@ in
                     ${pkgs.systemd}/bin/systemctl --machine=${lib.escapeShellArg "${proxy.userName}@"} --user start ${lib.escapeShellArg "${proxy.serviceName}.service"}
                   ''}
                   for attempt in {1..120}; do
-                    ${lib.getExe pkgs.netcat-openbsd} -z -w 1 ${wochap-ssc.meta.address} ${toString proxy.backendPort} && exit 0
+                    ${lib.getExe pkgs.netcat-openbsd} -z -w 1 ${sscAddress} ${toString proxy.backendPort} && exit 0
                     ${lib.getExe' pkgs.coreutils "sleep"} 0.5
                   done
                   echo "Timed out waiting for ${proxy.serviceName} on port ${toString proxy.backendPort}" >&2
                   exit 1
                 '';
-                ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${wochap-ssc.meta.address}:${toString proxy.backendPort}";
+                ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${sscAddress}:${toString proxy.backendPort}";
               }
-              // lib._custom.strictNetworkService
+              // strictNetworkService
               // {
                 RestrictAddressFamilies = [
                   "AF_INET"
@@ -407,16 +455,15 @@ in
       # 3. Nginx Virtual Hosts
       services.nginx.virtualHosts =
         lib.mapAttrs' (
-          name: proxy:
-          lib.nameValuePair "${proxy.subdomain}.${wochap-ssc.meta.domain}" (makeVirtualHost proxy)
+          name: proxy: lib.nameValuePair "${proxy.subdomain}.${sscDomain}" (makeVirtualHost proxy)
         ) enabledProxies
         // lib.mapAttrs' (
           name: proxy: lib.nameValuePair proxy.expose.host (makeExternalVirtualHost proxy)
         ) exposedProxies;
 
       # 4. Networking hosts mapping
-      networking.hosts.${wochap-ssc.meta.address} = lib.mapAttrsToList (
-        name: proxy: "${proxy.subdomain}.${wochap-ssc.meta.domain}"
+      networking.hosts.${sscAddress} = lib.mapAttrsToList (
+        name: proxy: "${proxy.subdomain}.${sscDomain}"
       ) enabledProxies;
 
       # 5. Core Nginx dependencies
@@ -428,13 +475,11 @@ in
 
       # NOTE: restart after changing certificate
       # you also might need to add certificate to your browsers
-      security.pki.certificateFiles = [ "${wochap-ssc}/rootCA.pem" ];
+      security.pki.certificateFiles = [ "${ssc}/rootCA.pem" ];
     })
 
     # 6. LAN gate for exposed proxies
     (lib.mkIf (exposedProxies != { }) {
-      sops.secrets.${gate.acme.credentialSecret.sopsKey}.sopsFile = gate.acme.credentialSecret.sopsFile;
-
       # One wildcard certificate for every exposed vhost. DNS-01 needs no
       # inbound port, so the host stays LAN-only.
       security.acme = {
@@ -443,15 +488,14 @@ in
           domain = "*.${gate.domain}";
           group = config.services.nginx.group;
           inherit (gate.acme) dnsProvider dnsResolver;
-          credentialFiles."${gate.acme.credentialSecret.variable}_FILE" =
-            config.sops.secrets.${gate.acme.credentialSecret.sopsKey}.path;
+          credentialFiles."${gate.acme.credentialVariable}_FILE" = gate.acme.credentialFile;
         };
       };
 
       assertions =
         lib.mapAttrsToList (name: proxy: {
           assertion = !(proxy.expose.gate && proxy.expose.basicAuthFile != null);
-          message = "web-proxies.${name}: expose.gate and expose.basicAuthFile are mutually exclusive";
+          message = "web-gate.proxies.${name}: expose.gate and expose.basicAuthFile are mutually exclusive";
         }) exposedProxies
         ++ [
           {

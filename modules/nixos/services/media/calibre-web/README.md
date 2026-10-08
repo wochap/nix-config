@@ -10,7 +10,7 @@ LinuxServer-based (s6-overlay) image: starts as root with a minimal capability s
 |---|---|
 | `https://calibre-web.wochap.local` | This host |
 | `http://127.0.1.1:21021` | This host |
-| `https://calibre-web.<web-gate.domain>`, e.g. `https://calibre-web.gdesktop.geanmar.com` | LAN devices, when `web-proxies.calibre-web.expose.enable` |
+| `https://calibre-web.<web-gate.domain>`, e.g. `https://calibre-web.gdesktop.geanmar.com` | LAN devices, when `web-gate.proxies.calibre-web.expose.enable` |
 | `http://media-calibre-web:8083` | Other containers |
 
 ## Depends on / used by

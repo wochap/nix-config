@@ -179,8 +179,9 @@ in
     # LAN exposure follows the laptop: DDNS points *.glegion.geanmar.com at
     # its current IP, and port 443 opens only on the trusted connections.
     _custom.services.web-gate.domain = "glegion.geanmar.com";
-    _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/personal.yaml;
-    _custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
+    sops.secrets.personal-cloudflare-dns-api-token.sopsFile = ../../secrets-sops/personal.yaml;
+    _custom.services.web-gate.acme.credentialFile =
+      config.sops.secrets.personal-cloudflare-dns-api-token.path;
     _custom.services.web-gate.ddns.enable = true;
     _custom.services.web-gate.ddns.zone = "geanmar.com";
     # Binary caches in both directions; builds go to gdesktop when reachable.
@@ -205,10 +206,10 @@ in
     # https://<name>.glegion.geanmar.com. They rely on the app's own login: their
     # mobile/TV apps cannot complete the web-gate Basic Auth cookie dance.
     # Admin UIs (sonarr, radarr, ...) stay loopback-only.
-    # _custom.services.web-proxies.jellyfin.expose.enable = true;
-    # _custom.services.web-proxies.seerr.expose.enable = true;
-    # _custom.services.web-proxies.audiobookshelf.expose.enable = true;
-    # _custom.services.web-proxies.calibre-web.expose.enable = true;
+    # _custom.services.web-gate.proxies.jellyfin.expose.enable = true;
+    # _custom.services.web-gate.proxies.seerr.expose.enable = true;
+    # _custom.services.web-gate.proxies.audiobookshelf.expose.enable = true;
+    # _custom.services.web-gate.proxies.calibre-web.expose.enable = true;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
     _custom.services.kdeconnect.enable = true;

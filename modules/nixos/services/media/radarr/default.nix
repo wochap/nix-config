@@ -32,7 +32,7 @@ in
     };
 
     systemd.tmpfiles.rules = [ (common.mkStateRule name) ];
-    _custom.services.web-proxies.${name} = common.mkProxy name svc;
+    _custom.services.web-gate.proxies.${name} = common.mkProxy name svc;
 
     sops.templates = lib.mkIf common.declarative (common.mkApiKeyEnv name "RADARR__AUTH__APIKEY");
     systemd.services = lib.mkMerge [

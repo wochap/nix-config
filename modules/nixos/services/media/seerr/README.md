@@ -8,7 +8,7 @@ Request portal (formerly Jellyseerr). Users sign in with their Jellyfin account 
 |---|---|
 | `https://seerr.wochap.local` | This host |
 | `http://127.0.1.1:21011` | This host |
-| `https://seerr.<web-gate.domain>`, e.g. `https://seerr.gdesktop.geanmar.com` | LAN devices, when `web-proxies.seerr.expose.enable` |
+| `https://seerr.<web-gate.domain>`, e.g. `https://seerr.gdesktop.geanmar.com` | LAN devices, when `web-gate.proxies.seerr.expose.enable` |
 | `http://media-seerr:5055` | Other containers |
 
 Inside the container, `*.wochap.local` and `127.0.1.1` point at the container itself. Seerr must reach the other services by container name.
@@ -54,7 +54,7 @@ Seerr's API key comes from SOPS (`API_KEY` env var). Automatic (`media-seerr-con
 - Steps 1–2, while Seerr has no admin: signs in with the shared Jellyfin admin.
 - Step 3, while no library is enabled.
 - Step 4, while Seerr has no Radarr or Sonarr server. Quality profile `declarative.seerr.qualityProfile`.
-- Steps 5–6, while empty: the LAN URL when web-proxies exposes the service, else `https://<name>.wochap.local`.
+- Steps 5–6, while empty: the LAN URL when web-gate exposes the service, else `https://<name>.wochap.local`.
 - Finishes the wizard when it did the sign-in itself. A wizard you started by hand stays open: check the pages, and select **Finish Setup**.
 
 Manual: step 7.

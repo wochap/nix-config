@@ -25,7 +25,7 @@ Self-hosted media server under `_custom.services.media`: request, download, orga
 |---|---|---|
 | Loopback port, `http://127.0.1.1:<port + 1>` | `http://127.0.1.1:21101` | This host only. Always on. |
 | Local vhost, `https://<name>.wochap.local` | `https://seerr.wochap.local` | This host only. On when `services.<svc>.proxy` is true (default for user apps). |
-| LAN vhost, `https://<name>.<web-gate.domain>` | `https://jellyfin.gdesktop.geanmar.com` | Any device on the LAN, on trusted connections only. On when `_custom.services.web-proxies.<name>.expose.enable` is true. See `../web-proxies/README.md`. |
+| LAN vhost, `https://<name>.<web-gate.domain>` | `https://jellyfin.gdesktop.geanmar.com` | Any device on the LAN, on trusted connections only. On when `_custom.services.web-gate.proxies.<name>.expose.enable` is true. See `../web-gate/README.md`. |
 | Container, `http://media-<name>:<port>` | `http://media-sonarr:8989` | Other containers on the `media` network only. Use this address when you connect one service to another. |
 
 gdesktop exposes Jellyfin, Seerr, Audiobookshelf and Calibre-Web on the LAN. Admin UIs never get a LAN vhost: they have no web-gate in front, so keep them on the host.
@@ -92,7 +92,7 @@ All under `_custom.services.media`. Defined in `default.nix`.
 | `declarative.apiKeys.<svc>.{sopsFile,sopsKey}` | required, `media-<svc>-api-key` | API keys of `sonarr`, `radarr`, `prowlarr`, `seerr`, `lazylibrarian`. Required only for enabled services. |
 | `declarative.seerr.qualityProfile` | `HD-1080p` | Profile Seerr requests with. Falls back to the first profile. |
 
-LAN exposure is set outside this module, with `_custom.services.web-proxies.<name>.expose.enable`.
+LAN exposure is set outside this module, with `_custom.services.web-gate.proxies.<name>.expose.enable`.
 
 Example, close to gdesktop (which names its LazyLibrarian key per host):
 
@@ -124,8 +124,8 @@ _custom.services.media = {
     });
   };
 };
-_custom.services.web-proxies.jellyfin.expose.enable = true;
-_custom.services.web-proxies.seerr.expose.enable = true;
+_custom.services.web-gate.proxies.jellyfin.expose.enable = true;
+_custom.services.web-gate.proxies.seerr.expose.enable = true;
 ```
 
 ## Setup order

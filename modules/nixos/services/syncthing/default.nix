@@ -8,14 +8,14 @@
 let
   cfg = config._custom.services.syncthing;
   inherit (pkgs._custom) wochap-ssc;
-  proxy = config._custom.services.web-proxies.syncthing;
+  proxy = config._custom.services.web-gate.proxies.syncthing;
 in
 {
   options._custom.services.syncthing.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
     # https://syncthing.wochap.local
-    _custom.services.web-proxies.syncthing = {
+    _custom.services.web-gate.proxies.syncthing = {
       enable = true;
       subdomain = "syncthing";
       publicPort = 8383;

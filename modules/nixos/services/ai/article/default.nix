@@ -10,7 +10,7 @@
 # module wires them to the system: the command, the library server and its proxy.
 let
   cfg = config._custom.services.ai;
-  proxy = config._custom.services.web-proxies.article-library;
+  proxy = config._custom.services.web-gate.proxies.article-library;
   inherit (pkgs._custom) wochap-ssc;
   inherit (config._custom.globals) userName;
 
@@ -51,7 +51,7 @@ in
       jetbrains-mono
     ];
 
-    _custom.services.web-proxies.article-library = {
+    _custom.services.web-gate.proxies.article-library = {
       enable = true;
       subdomain = "articles";
       publicPort = 20700;

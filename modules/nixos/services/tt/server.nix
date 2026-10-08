@@ -42,7 +42,7 @@ in
 
   config = lib.mkIf (cfg.enable && cfg.server.enable) {
     # Not lazy: the daemon keeps a sync websocket open all the time
-    _custom.services.web-proxies.tt = {
+    _custom.services.web-gate.proxies.tt = {
       enable = true;
       subdomain = "tt";
       inherit (cfg.server) publicPort backendPort;

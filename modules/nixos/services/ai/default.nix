@@ -78,7 +78,7 @@ in
       };
 
       # Register Web Proxies mapping configuration
-      _custom.services.web-proxies = {
+      _custom.services.web-gate.proxies = {
         # Make nextjs-ollama-llm-ui accessible at https://nolui.wochap.local
         nextjs-ollama-llm-ui = {
           enable = cfg.enableNextjsOllamaLlmUi;
@@ -99,7 +99,7 @@ in
         enable = true;
         package = pkgs.nextjs-ollama-llm-ui;
         hostname = wochap-ssc.meta.address;
-        port = config._custom.services.web-proxies.nextjs-ollama-llm-ui.backendPort;
+        port = config._custom.services.web-gate.proxies.nextjs-ollama-llm-ui.backendPort;
       };
 
       services.open-webui = lib.mkIf cfg.enableOpenWebui {
@@ -107,7 +107,7 @@ in
         package = pkgs.open-webui;
         openFirewall = false;
         host = wochap-ssc.meta.address;
-        port = config._custom.services.web-proxies.open-webui.backendPort;
+        port = config._custom.services.web-gate.proxies.open-webui.backendPort;
         environment = {
           WEBUI_AUTH = "False";
         };

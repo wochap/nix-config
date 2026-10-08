@@ -16,7 +16,7 @@ let
   revision = source.rev or (throw "The comfyui flake input must be locked to a Git revision");
   ociBackend = config.virtualisation.oci-containers.backend;
   serviceName = "${ociBackend}-comfyui";
-  proxy = config._custom.services.web-proxies.comfyui;
+  proxy = config._custom.services.web-gate.proxies.comfyui;
 
   # Upstream ships no Containerfile, so join the pinned source with ours.
   context = pkgs.runCommand "comfyui-context" { } ''
@@ -298,7 +298,7 @@ in
       };
     };
 
-    _custom.services.web-proxies.comfyui = {
+    _custom.services.web-gate.proxies.comfyui = {
       enable = true;
       subdomain = "comfyui";
       inherit serviceName;

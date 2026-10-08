@@ -1,11 +1,50 @@
-# Web proxies
+# web-gate
 
-Declarative nginx vhosts for local services, set through `_custom.services.web-proxies.<name>`.
+Declarative nginx vhosts for local services, set through `_custom.services.web-gate.proxies.<name>`, plus an optional LAN gate.
 
-- Every enabled proxy is served on this host only, at `https://<subdomain>.wochap.local` (`127.0.1.1`). It uses the self-signed `wochap-ssc` certificate.
+- Every enabled proxy is served on this host only, at `https://<subdomain>.<certificate.meta.domain>` (here `https://<subdomain>.wochap.local` on `127.0.1.1`). It uses the self-signed `web-gate.certificate`.
 - With `expose.enable = true`, the proxy is also served on the LAN at `https://<subdomain>.<web-gate.domain>`. nginx listens on `0.0.0.0:443` and uses a Let's Encrypt wildcard certificate.
 - With `expose.basicAuthFile`, the LAN vhost uses plain Basic Auth from that htpasswd file instead. Use it for clients that can send credentials but cannot follow the cookie redirect, such as Nix (see `../nix-cache`).
 - With `expose.gate = true`, the LAN vhost sits behind a cookie gate. A visitor enters Basic Auth once, then gets a cookie. `sudo web-gate` rotates the password and prints it. Leave the gate off for services used from mobile or TV apps: those apps cannot complete the login. They rely on the service's own login instead.
+
+## Use in another config
+
+The module folder is self-contained. It needs no overlay, custom lib or secret manager from this repo.
+
+1. Copy this folder and `packages/generate-ssc` into your config, and import the folder.
+2. Build the local certificate with `generate-ssc` and pass it to the module:
+
+   ```nix
+   _custom.services.web-gate.certificate = pkgs.callPackage ./generate-ssc { } {
+     domain = "example.local";
+     # Avoid 127.0.0.1, so the vhosts never clash with localhost services.
+     address = "127.0.1.1";
+   };
+   ```
+
+   The module reads `meta.address`, `meta.domain` and the files `rootCA.pem`, `<domain>+4.pem` and `<domain>+4-key.pem`. Build the certificate with `generate-ssc`: the `+4` suffix comes from the 5 names it passes to mkcert. Another package works only with the same `meta` attributes and file names.
+3. Declare proxies:
+
+   ```nix
+   _custom.services.web-gate.proxies.myapp = {
+     enable = true;
+     publicPort = 8080; # the app listens on publicPort + 1
+   };
+   ```
+
+4. For LAN exposure only: set `domain`, and pass the DNS API token as a runtime file path with `acme.credentialFile`. Use a string, not a Nix path: a path literal copies the secret into the world-readable Nix store.
+
+   ```nix
+   # sops-nix
+   sops.secrets.cloudflare-dns-api-token.sopsFile = ./secrets.yaml;
+   _custom.services.web-gate.acme.credentialFile = config.sops.secrets.cloudflare-dns-api-token.path;
+   # agenix
+   _custom.services.web-gate.acme.credentialFile = config.age.secrets.cloudflare-dns-api-token.path;
+   # plain file, managed outside Nix
+   _custom.services.web-gate.acme.credentialFile = "/var/lib/secrets/cloudflare-dns-api-token";
+   ```
+
+   `trustedConnections` and `ddns` also need NetworkManager and the iptables firewall backend.
 
 ## LAN setup (Cloudflare)
 
@@ -13,16 +52,19 @@ Host config, as on gdesktop:
 
 ```nix
 _custom.services.web-gate.domain = "gdesktop.geanmar.com";
-_custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/personal.yaml;
-_custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
+sops.secrets.personal-cloudflare-dns-api-token.sopsFile = ../../secrets-sops/personal.yaml;
+_custom.services.web-gate.acme.credentialFile =
+  config.sops.secrets.personal-cloudflare-dns-api-token.path;
 _custom.services.web-gate.ddns.enable = true;
 _custom.services.web-gate.ddns.zone = "geanmar.com";
-_custom.services.web-proxies.jellyfin.expose.enable = true;
+_custom.services.web-gate.proxies.jellyfin.expose.enable = true;
 ```
+
+In this repo, `../web-gate-config.nix` sets `certificate` to `pkgs._custom.wochap-ssc` for every host.
 
 Each host needs its own domain, because a wildcard certificate covers one label only. gdesktop uses `gdesktop.geanmar.com`, and glegion uses `glegion.geanmar.com`.
 
-For another DNS provider, set `web-gate.acme.dnsProvider` and `web-gate.acme.credentialSecret.variable` to the lego provider name and its token variable.
+For another DNS provider, set `web-gate.acme.dnsProvider` and `web-gate.acme.credentialVariable` to the lego provider name and its token variable.
 
 Name resolution comes from a public DNS record that points at this host's LAN IP, so no LAN DNS server is needed. The certificate comes from the DNS-01 challenge, so no port is open to the internet.
 
@@ -50,7 +92,7 @@ A token cannot be limited to some records. It can edit every DNS record in the z
 
 ### Host setup
 
-1. Store the token in `web-gate.acme.credentialSecret.sopsFile` under the key `web-gate.acme.credentialSecret.sopsKey`:
+1. Store the token in a secret file, and point `web-gate.acme.credentialFile` at its runtime path. In this repo, the token lives in sops:
 
    ```sh
    sops secrets-sops/personal.yaml

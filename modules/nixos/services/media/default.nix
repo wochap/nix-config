@@ -58,14 +58,14 @@ let
         default = port;
         description = ''
           Base port on bindAddress. The web UI is published on port + 1,
-          matching the web-proxies publicPort/backendPort convention.
+          matching the web-gate publicPort/backendPort convention.
         '';
       };
       proxy = lib.mkOption {
         type = lib.types.bool;
         default = !admin;
         description = ''
-          Register a web-proxies virtual host. Admin UIs default to false and
+          Register a web-gate virtual host. Admin UIs default to false and
           stay reachable only on the published loopback port.
         '';
       };

@@ -9,7 +9,7 @@ let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
   inherit (config._custom.globals) userName;
-  proxy = config._custom.services.web-proxies.agents-server;
+  proxy = config._custom.services.web-gate.proxies.agents-server;
 in
 {
   options._custom.services.ai.agentsServer = {
@@ -41,7 +41,7 @@ in
 
   config = lib.mkIf (cfg.enable && cfg.agentsServer.enable) {
     # https://agents.wochap.local/v1
-    _custom.services.web-proxies.agents-server = {
+    _custom.services.web-gate.proxies.agents-server = {
       enable = true;
       subdomain = "agents";
       publicPort = 20940;

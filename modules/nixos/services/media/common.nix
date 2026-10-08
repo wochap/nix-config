@@ -121,12 +121,12 @@ rec {
   # Bookkeeping of the bootstrap units, never an app's own state.
   declarativeStateDir = "/var/lib/media-declarative";
 
-  # URL users open for a service: the LAN host when web-proxies exposes it,
+  # URL users open for a service: the LAN host when web-gate exposes it,
   # else the .local name.
   publicUrl =
     name:
     let
-      proxy = config._custom.services.web-proxies.${name} or { };
+      proxy = config._custom.services.web-gate.proxies.${name} or { };
     in
     if proxy.expose.enable or false then
       "https://${proxy.expose.host}"

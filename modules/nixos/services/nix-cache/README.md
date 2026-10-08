@@ -2,7 +2,7 @@
 
 Share Nix stores between hosts on the LAN, and offload builds to a faster host.
 
-- `server`: [harmonia](https://github.com/nix-community/harmonia) serves this host's store, signed on the fly. web-proxies exposes it at `https://cache.<web-gate.domain>` with plain Basic Auth. The DNS name, the certificate and the trusted networks come from web-proxies (see `../web-proxies/README.md`).
+- `server`: [harmonia](https://github.com/nix-community/harmonia) serves this host's store, signed on the fly. web-gate exposes it at `https://cache.<web-gate.domain>` with plain Basic Auth. The DNS name, the certificate and the trusted networks come from web-gate (see `../web-gate/README.md`).
 - `client.caches`: substitutes from other hosts' caches before the public ones (priority 30, against 40 for cache.nixos.org). It sends the credentials from a netrc file. An unreachable cache costs `connectTimeout` seconds (default 3). Nix then skips it for the rest of the run.
 - `remoteBuilds.serve`: accepts builds over SSH as the trusted `nix-ssh` user (`nix.sshServe`, protocol `ssh-ng`).
 - `remoteBuilds.machines`: sends builds to those hosts. When the builder is unreachable, the build runs locally after a 3 s SSH timeout.

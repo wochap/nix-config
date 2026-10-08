@@ -18,7 +18,7 @@ in
   options._custom.services.ai.enableSupertonic = lib.mkEnableOption { };
 
   config = lib.mkIf (cfg.enable && cfg.enableSupertonic) {
-    _custom.services.web-proxies.supertonic = {
+    _custom.services.web-gate.proxies.supertonic = {
       enable = true;
       subdomain = "supertonic";
       publicPort = 7788;
@@ -42,7 +42,7 @@ in
           PartOf = [ "graphical-session.target" ];
         };
         Service = {
-          ExecStart = "${lib.getExe pkgs._custom.supertonic} serve --host ${wochap-ssc.meta.address} --port ${toString config._custom.services.web-proxies.supertonic.backendPort}";
+          ExecStart = "${lib.getExe pkgs._custom.supertonic} serve --host ${wochap-ssc.meta.address} --port ${toString config._custom.services.web-gate.proxies.supertonic.backendPort}";
           Restart = "on-failure";
           RestartSec = 2;
           # PERF: test those env vars

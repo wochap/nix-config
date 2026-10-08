@@ -8,7 +8,7 @@ Audiobook and podcast library and player, with mobile apps. Serves `/data/media/
 |---|---|
 | `https://audiobookshelf.wochap.local` | This host |
 | `http://127.0.1.1:21031` | This host |
-| `https://audiobookshelf.<web-gate.domain>`, e.g. `https://audiobookshelf.gdesktop.geanmar.com` | LAN devices, when `web-proxies.audiobookshelf.expose.enable` |
+| `https://audiobookshelf.<web-gate.domain>`, e.g. `https://audiobookshelf.gdesktop.geanmar.com` | LAN devices, when `web-gate.proxies.audiobookshelf.expose.enable` |
 | `http://media-audiobookshelf:13378` | Other containers |
 
 ## Depends on / used by

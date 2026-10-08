@@ -192,8 +192,9 @@ in
     # mobile/TV apps cannot complete the web-gate Basic Auth cookie dance.
     # Admin UIs (sonarr, radarr, ...) stay loopback-only.
     _custom.services.web-gate.domain = "gdesktop.geanmar.com";
-    _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/personal.yaml;
-    _custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
+    sops.secrets.personal-cloudflare-dns-api-token.sopsFile = ../../secrets-sops/personal.yaml;
+    _custom.services.web-gate.acme.credentialFile =
+      config.sops.secrets.personal-cloudflare-dns-api-token.path;
     # Fixed IP, but DDNS still creates and maintains the record.
     _custom.services.web-gate.ddns.enable = true;
     _custom.services.web-gate.ddns.zone = "geanmar.com";
@@ -214,10 +215,10 @@ in
       client.netrc.sopsFile = ../../secrets-sops/local.yaml;
       client.netrc.sopsKey = "local-nix-cache-netrc";
     };
-    _custom.services.web-proxies.jellyfin.expose.enable = true;
-    _custom.services.web-proxies.seerr.expose.enable = true;
-    _custom.services.web-proxies.audiobookshelf.expose.enable = true;
-    _custom.services.web-proxies.calibre-web.expose.enable = true;
+    _custom.services.web-gate.proxies.jellyfin.expose.enable = true;
+    _custom.services.web-gate.proxies.seerr.expose.enable = true;
+    _custom.services.web-gate.proxies.audiobookshelf.expose.enable = true;
+    _custom.services.web-gate.proxies.calibre-web.expose.enable = true;
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
     _custom.services.kdeconnect.enable = true;
@@ -247,8 +248,8 @@ in
     # embeddings-rerank stays available for offline use.
     _custom.services.ai.wosarcher.profile = "embeddings-jev";
     # Reachable from the LAN as https://wosarcher.gdesktop.geanmar.com behind `web-gate`
-    # _custom.services.web-proxies.wosarcher.expose.enable = true;
-    # _custom.services.web-proxies.wosarcher.expose.gate = true;
+    # _custom.services.web-gate.proxies.wosarcher.expose.enable = true;
+    # _custom.services.web-gate.proxies.wosarcher.expose.gate = true;
     _custom.services.ai.openDesign.enable = true;
     _custom.services.ai.comfyui.enable = true;
     # ComfyUI-GGUF (molbal fork) in ~/ComfyUI/custom_nodes; see comfyui/README.md.

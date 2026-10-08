@@ -113,7 +113,8 @@
     ./services/waydroid
     ./services/webhook
     ./services/wobook
-    ./services/web-proxies
+    ./services/web-gate
+    ./services/web-gate-config.nix
 
     ./system/apple
     ./system/boot

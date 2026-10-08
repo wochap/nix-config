@@ -16,7 +16,7 @@ let
   # scheduling. Used by wosarcher.
   serviceName = "reranker";
   modelServiceName = "${serviceName}-model";
-  proxy = config._custom.services.web-proxies.reranker;
+  proxy = config._custom.services.web-gate.proxies.reranker;
   isRocm = rcfg.accelerator == "rocm";
   modelDir = "/var/lib/reranker";
   modelPath = "${modelDir}/${rcfg.modelFile}";
@@ -299,7 +299,7 @@ in
       }
     ];
 
-    _custom.services.web-proxies.reranker = {
+    _custom.services.web-gate.proxies.reranker = {
       enable = true;
       subdomain = "reranker";
       inherit serviceName;
