@@ -4034,11 +4034,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1791400027,
-        "narHash": "sha256-Nh8DM/Zwxb7cY3kvfHNsKhY16VEdprlhJFygv/dR95M=",
+        "lastModified": 1791466725,
+        "narHash": "sha256-/zxlpm06SfdNpSOOZxY8wIrjHMPRVqUctYOZJtVFieY=",
         "owner": "wochap",
         "repo": "wobook",
-        "rev": "5063e02e6b78b14a7052462a7623594388288668",
+        "rev": "e27a02a4d66deb8225c68fb6fdd27910cc5d8b7f",
         "type": "github"
       },
       "original": {

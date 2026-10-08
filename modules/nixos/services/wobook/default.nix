@@ -11,7 +11,6 @@ in
 {
   options._custom.services.wobook = {
     enable = lib.mkEnableOption "wobook local-first bookmarks";
-    browsers.enable = lib.mkEnableOption "native messaging hosts for the browser extension";
     chromiumExtensionIds = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -33,7 +32,7 @@ in
         fzf.enable = true;
         deviceName = config.networking.hostName;
         hooks."pre-add.strip-utm" = "${inputs.wobook}/contrib/hooks/pre-add.strip-utm";
-        browsers = lib.mkIf cfg.browsers.enable {
+        browsers = {
           firefox.enable = true;
           brave.enable = cfg.chromiumExtensionIds != [ ];
           googleChrome.enable = cfg.chromiumExtensionIds != [ ];
