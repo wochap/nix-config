@@ -6,6 +6,13 @@ LinuxServer-based (s6-overlay) image: starts as root with the minimal capability
 
 State: `/var/lib/media-server/calibre-web`.
 
+## Setup
+
+1. Open `https://calibre-web.wochap.local` on the host. Sign in with `admin` / `admin123`, then change the password under Admin › Edit user.
+2. On the database prompt, set the library location to `/calibre-library`. The library starts empty.
+3. The ingest folder is `/cwa-book-ingest`. [LazyLibrarian](../lazylibrarian/README.md#setup) drops ebooks there, and CWA imports them.
+4. Optional: under Admin › Users, add one user per reader.
+
 ## Upgrade
 
 Images are pinned by tag and digest in `_custom.services.media.images` (`../default.nix`). To move to a new version:

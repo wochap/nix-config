@@ -8,6 +8,21 @@ LinuxServer tags are `version-<short sha>`; find the current one with `skopeo in
 
 State: `/var/lib/media-server/lazylibrarian`.
 
+## Setup
+
+Set up [qBittorrent](../qbittorrent/README.md#setup) and [Prowlarr](../prowlarr/README.md#setup) first.
+
+1. Open `http://127.0.1.1:21151` on the host.
+2. Go to Config › Interface, and set a username and password.
+3. Go to Config › Downloaders, and turn on qBittorrent:
+   - Host: `media-qbittorrent` (`media-vpn` with the VPN enabled), Port `8080`.
+   - Label: `books` for ebooks, `audiobooks` for audiobooks.
+4. Go to Config › Importing:
+   - eBook destination folder: `/data/media/books/ingest`. [Calibre-Web Automated](../calibre-web/README.md#setup) imports from there.
+   - AudioBook destination folder: `/data/media/audiobooks`. [Audiobookshelf](../audiobookshelf/README.md#setup) watches it.
+   - Download directory: `/data/torrents/books`.
+5. Go to Config › Interface, and copy the API key. Add LazyLibrarian as an app in Prowlarr (Prowlarr setup, step 4), and Prowlarr pushes its indexers here. Alternative: under Config › Providers, add Torznab feeds at `http://media-prowlarr:9696/<id>/api` with Prowlarr's API key.
+
 ## Upgrade
 
 Images are pinned by tag and digest in `_custom.services.media.images` (`../default.nix`). To move to a new version:

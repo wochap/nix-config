@@ -2,6 +2,33 @@
 
 Download client. Writes to `/data/torrents/<category>`; the *arr apps hardlink from there, so keep seeding without duplicating files. Admin UI, loopback only (`127.0.1.1:21131`). Container `media-qbittorrent`, web UI port 8080.
 
+## Setup
+
+Do this first. Sonarr, Radarr and LazyLibrarian send their downloads here.
+
+1. Open `http://127.0.1.1:21131` on the host. The user is `admin`. qBittorrent prints a temporary password at first start:
+
+   ```sh
+   journalctl -u podman-media-qbittorrent | grep -i password
+   ```
+
+2. Go to Tools › Options › Web UI › Authentication:
+   - Set your own username and password.
+   - Tick "Bypass authentication for clients in whitelisted IP subnets", and enter `10.90.0.0/24` (the `media` network). The other containers then connect without credentials.
+3. Go to Tools › Options › Downloads:
+   - Default Torrent Management Mode: `Automatic`. Each category then uses its own save path.
+   - Default Save Path: `/data/torrents`.
+4. In the left panel, right-click CATEGORIES › Add category. Add these four:
+
+   | Category | Save path |
+   |---|---|
+   | `movies` | `/data/torrents/movies` |
+   | `series` | `/data/torrents/series` |
+   | `books` | `/data/torrents/books` |
+   | `audiobooks` | `/data/torrents/audiobooks` |
+
+Other containers reach qBittorrent at host `media-qbittorrent`, port `8080`. With the VPN enabled, use host `media-vpn` instead (see below).
+
 ## VPN (optional)
 
 `services.qbittorrent.vpn.enable = true` starts a gluetun sidecar (`media-vpn`, image `docker.io/qmcgaw/gluetun`). qBittorrent then runs with `--network=container:media-vpn`: it has no interface of its own, so all its traffic goes through the tunnel and gluetun's firewall. Other containers reach the web UI at `media-vpn:8080`; the loopback port is published by gluetun. qBittorrent is `BindsTo` gluetun and restarts with it.

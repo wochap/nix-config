@@ -6,6 +6,27 @@ Hardware transcoding: `services.jellyfin.hardwareAcceleration = "vaapi"` passes 
 
 State: `/var/lib/media-server/jellyfin/{config,cache}`.
 
+## Setup
+
+1. Open `https://jellyfin.wochap.local` on the host. From other LAN devices, use `https://jellyfin.<web-gate.domain>` (for example `https://jellyfin.gdesktop.geanmar.com`) when the proxy is exposed.
+2. In the wizard, choose the language and create the admin user.
+3. Add the libraries:
+
+   | Content type | Folder |
+   |---|---|
+   | Movies | `/data/media/movies` |
+   | Shows | `/data/media/series` |
+
+4. Finish the wizard, and sign in.
+5. Go to Dashboard › Playback › Transcoding:
+   - `vaapi`: Hardware acceleration `Video Acceleration API (VAAPI)`, device `/dev/dri/renderD128`.
+   - `nvidia`: `Nvidia NVENC`.
+
+   Then turn on the codecs the GPU decodes, and save.
+6. Go to Dashboard › Users, and create one user per household member. [Seerr](../seerr/README.md#setup) signs people in with these accounts.
+
+In the mobile and TV apps, the server address is the LAN URL from step 1.
+
 ## Upgrade
 
 Images are pinned by tag and digest in `_custom.services.media.images` (`../default.nix`). To move to a new version:

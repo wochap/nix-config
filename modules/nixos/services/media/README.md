@@ -22,22 +22,24 @@ Admin, loopback only: sonarr 21101, radarr 21111, prowlarr 21121, qbittorrent 21
 
 Container-to-container addresses: `media-<name>:<port>` (jellyfin 8096, seerr 5055, sonarr 8989, radarr 7878, prowlarr 9696, qbittorrent 8080, bazarr 6767, lazylibrarian 5299, calibre-web 8083, audiobookshelf 13378). With the VPN enabled qBittorrent is reached as `media-vpn:8080`.
 
-## Post-deploy checklist
+## Setup
 
-Order matters; each step feeds API keys into the next.
+Order matters: each step produces an API key or a folder that a later step uses. Each service README has a Setup section with the details.
 
-1. **qBittorrent** `127.0.1.1:21131`. First password: `journalctl -u podman-media-qbittorrent | grep password`. Options > Web UI: set a password, tick "Bypass authentication for clients in whitelisted IP subnets" with `10.90.0.0/24` (or create a dedicated user). Options > Downloads: default save path `/data/torrents`, categories `movies`, `series`, `books`, `audiobooks` with save paths `/data/torrents/<category>`.
-2. **Prowlarr** `127.0.1.1:21121`. Create admin. Add indexers. Settings > General: copy API key.
-3. **Sonarr** `127.0.1.1:21101`. Root folder `/data/media/series`. Download client: qBittorrent, host `media-qbittorrent` (or `media-vpn` with VPN), port 8080, category `series`. Media Management: enable "Use Hardlinks instead of Copy". Settings > General: copy API key.
-4. **Radarr** `127.0.1.1:21111`. Same as Sonarr with `/data/media/movies` and category `movies`.
-5. **Prowlarr > Settings > Apps**: add Sonarr (`http://media-sonarr:8989`), Radarr (`http://media-radarr:7878`), LazyLibrarian (`http://media-lazylibrarian:5299`), each with its API key and Prowlarr server `http://media-prowlarr:9696`. Sync indexers.
-6. **Bazarr** `127.0.1.1:21141`. Settings > Sonarr: `media-sonarr`, 8989, API key. Settings > Radarr: `media-radarr`, 7878, API key. Add subtitle providers and languages.
-7. **Jellyfin** `https://jellyfin.wochap.local`. Wizard, create admin. Libraries: Movies at `/data/media/movies`, Shows at `/data/media/series`. Dashboard > Playback > Transcoding: VA-API, device `/dev/dri/renderD128`. Create one Jellyfin user per household member.
-8. **Seerr** `https://seerr.wochap.local`. Choose Jellyfin, server `http://media-jellyfin:8096`, sign in as the Jellyfin admin, sync libraries. Add Radarr (`media-radarr`, 7878, API key, root `/data/media/movies`, quality profile, mark default) and Sonarr (`media-sonarr`, 8989, root `/data/media/series`). Users > enable auto-approve or leave requests for admin approval.
-9. **Calibre-Web Automated** `https://calibre-web.wochap.local`. Login `admin`/`admin123`, change password. Library location `/calibre-library` (created empty on first start). Ingest folder is `/cwa-book-ingest`.
-10. **Audiobookshelf** `https://audiobookshelf.wochap.local`. Create root user. Library type Audiobooks, folder `/data/media/audiobooks`. Settings: enable folder watcher.
-11. **LazyLibrarian** `127.0.1.1:21151`. Config > Downloaders: qBittorrent host `media-qbittorrent` (or `media-vpn`), port 8080, label `books`/`audiobooks`. Config > Importing: eBook destination folder `/data/media/books/ingest`, AudioBook destination folder `/data/media/audiobooks`, download dir `/data/torrents/books`. Config > Providers: indexers come from Prowlarr sync (step 5) or add Torznab feeds pointing at `http://media-prowlarr:9696/<id>/api` with the Prowlarr API key.
-12. **VPN (later)**: add `local-media-vpn-env` to `secrets-sops/local.yaml` with the provider secrets, set `services.qbittorrent.vpn.environment` and `vpn.enable = true`, rebuild, then switch the qBittorrent host in Sonarr, Radarr and LazyLibrarian from `media-qbittorrent` to `media-vpn`. Check `journalctl -u podman-media-vpn` for the tunnel IP.
+Admin UIs (`127.0.1.1:<port>`) open only on the host. User-facing apps also open on the LAN at `https://<name>.<web-gate.domain>` when their proxy is exposed (see `../web-proxies/README.md`). Between containers, always use the container name, for example `media-sonarr:8989`.
+
+1. [qBittorrent](qbittorrent/README.md#setup): password, auth bypass for the `media` network, download categories.
+2. [Prowlarr](prowlarr/README.md#setup), steps 1–2: admin user and indexers.
+3. [Sonarr](sonarr/README.md#setup): root folder, download client, API key.
+4. [Radarr](radarr/README.md#setup): same as Sonarr, for movies.
+5. [Prowlarr](prowlarr/README.md#setup), steps 3–5: connect Sonarr, Radarr and LazyLibrarian, and sync indexers.
+6. [Bazarr](bazarr/README.md#setup): languages, subtitle providers, Sonarr and Radarr.
+7. [Jellyfin](jellyfin/README.md#setup): admin user, libraries, hardware transcoding, users.
+8. [Seerr](seerr/README.md#setup): Jellyfin sign-in, Radarr and Sonarr, external URLs, users.
+9. [Calibre-Web Automated](calibre-web/README.md#setup): password and library.
+10. [Audiobookshelf](audiobookshelf/README.md#setup): root user, library, folder watcher.
+11. [LazyLibrarian](lazylibrarian/README.md#setup): downloader, import folders, Prowlarr.
+12. Optional, later: [qBittorrent VPN](qbittorrent/README.md#vpn-optional). After enabling it, change the qBittorrent host in Sonarr, Radarr and LazyLibrarian from `media-qbittorrent` to `media-vpn`. To see the tunnel IP, run `journalctl -u podman-media-vpn`.
 
 ## Notes
 

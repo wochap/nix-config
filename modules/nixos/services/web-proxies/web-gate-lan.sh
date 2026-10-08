@@ -4,8 +4,9 @@
 #   firewall: opens LAN_PORT only on devices of trusted connections.
 #   sync:     firewall, then points the Cloudflare A record at this host's LAN
 #             IP (when DDNS is enabled).
-# LAN_* and DDNS_* come from the Nix module. LAN_TRUSTED holds one connection
-# name or UUID per line, or "*" to trust every connection.
+# LAN_* and DDNS_* come from the Nix module. DDNS_RECORDS is space separated.
+# LAN_TRUSTED holds one connection name or UUID per line, or "*" to trust
+# every connection.
 
 mode=${1:-sync}
 case "$mode" in
@@ -98,22 +99,30 @@ if [ -z "$zone_id" ]; then
   exit 1
 fi
 
-record_name=${DDNS_RECORD//\*/%2A}
-record=$(api "$base/zones/$zone_id/dns_records?type=A&name=$record_name")
-record_id=$(jq -r '.result[0].id // empty' <<<"$record")
-current=$(jq -r '.result[0].content // empty' <<<"$record")
+update_record() {
+  local name=$1 record record_id current body
+  record=$(api "$base/zones/$zone_id/dns_records?type=A&name=${name//\*/%2A}")
+  record_id=$(jq -r '.result[0].id // empty' <<<"$record")
+  current=$(jq -r '.result[0].content // empty' <<<"$record")
 
-if [ "$current" = "$addr" ]; then
-  echo "web-gate-lan: $DDNS_RECORD already points at $addr"
-  exit 0
-fi
+  if [ "$current" = "$addr" ]; then
+    echo "web-gate-lan: $name already points at $addr"
+    return 0
+  fi
 
-body=$(jq -n --arg name "$DDNS_RECORD" --arg addr "$addr" --argjson ttl "$DDNS_TTL" \
-  '{type: "A", name: $name, content: $addr, ttl: $ttl, proxied: false}')
+  body=$(jq -n --arg name "$name" --arg addr "$addr" --argjson ttl "$DDNS_TTL" \
+    '{type: "A", name: $name, content: $addr, ttl: $ttl, proxied: false}')
 
-if [ -n "$record_id" ]; then
-  api -X PUT "$base/zones/$zone_id/dns_records/$record_id" --data "$body" >/dev/null
-else
-  api -X POST "$base/zones/$zone_id/dns_records" --data "$body" >/dev/null
-fi
-echo "web-gate-lan: $DDNS_RECORD now points at $addr (was ${current:-unset})"
+  if [ -n "$record_id" ]; then
+    api -X PUT "$base/zones/$zone_id/dns_records/$record_id" --data "$body" >/dev/null
+  else
+    api -X POST "$base/zones/$zone_id/dns_records" --data "$body" >/dev/null
+  fi
+  echo "web-gate-lan: $name now points at $addr (was ${current:-unset})"
+}
+
+# read -a splits without glob expansion, so "*.<domain>" stays literal.
+read -r -a records <<<"$DDNS_RECORDS"
+for name in "${records[@]}"; do
+  update_record "$name"
+done

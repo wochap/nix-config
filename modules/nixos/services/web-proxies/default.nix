@@ -62,7 +62,9 @@ let
       LAN_TRUSTED = if restrictLan then lib.concatStringsSep "\n" gate.trustedConnections else "*";
       DDNS_ENABLE = if gate.ddns.enable then "1" else "0";
       DDNS_ZONE = lib.optionalString gate.ddns.enable gate.ddns.zone;
-      DDNS_RECORD = "*.${gate.domain}";
+      DDNS_RECORDS = lib.concatStringsSep " " (
+        [ "*.${gate.domain}" ] ++ lib.optional gate.ddns.apex gate.domain
+      );
       DDNS_TTL = toString gate.ddns.ttl;
       DDNS_TOKEN_FILE = config.sops.secrets.${gate.acme.credentialSecret.sopsKey}.path;
     };
@@ -117,6 +119,7 @@ let
     {
       onlySSL = true;
       useACMEHost = gate.domain;
+      basicAuthFile = proxy.expose.basicAuthFile;
       listen = [
         {
           addr = gate.listenAddress;
@@ -194,6 +197,16 @@ in
                 type = lib.types.bool;
                 default = false;
                 description = "Require the web-gate cookie (Basic Auth once) on the LAN vhost.";
+              };
+              basicAuthFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                description = ''
+                  htpasswd file, readable by nginx, that protects the LAN vhost
+                  with plain Basic Auth. For clients that cannot follow the
+                  gate's cookie redirect but can send credentials, such as Nix
+                  through a netrc file.
+                '';
               };
               host = lib.mkOption {
                 type = lib.types.str;
@@ -275,6 +288,11 @@ in
         type = lib.types.nonEmptyStr;
         example = "example.com";
         description = "Cloudflare zone that contains `domain`.";
+      };
+      apex = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Also point `<domain>` itself at this host, e.g. for SSH or remote builds.";
       };
       ttl = lib.mkOption {
         type = lib.types.ints.between 60 86400;
@@ -430,20 +448,25 @@ in
         };
       };
 
-      assertions = [
-        {
-          assertion = !gate.ddns.enable || gate.acme.dnsProvider == "cloudflare";
-          message = "web-gate.ddns only supports Cloudflare (web-gate.acme.dnsProvider)";
-        }
-        {
-          assertion = !lanSync || config.networking.networkmanager.enable;
-          message = "web-gate.trustedConnections and web-gate.ddns need NetworkManager";
-        }
-        {
-          assertion = !restrictLan || !config.networking.nftables.enable;
-          message = "web-gate.trustedConnections supports the iptables firewall backend only";
-        }
-      ];
+      assertions =
+        lib.mapAttrsToList (name: proxy: {
+          assertion = !(proxy.expose.gate && proxy.expose.basicAuthFile != null);
+          message = "web-proxies.${name}: expose.gate and expose.basicAuthFile are mutually exclusive";
+        }) exposedProxies
+        ++ [
+          {
+            assertion = !gate.ddns.enable || gate.acme.dnsProvider == "cloudflare";
+            message = "web-gate.ddns only supports Cloudflare (web-gate.acme.dnsProvider)";
+          }
+          {
+            assertion = !lanSync || config.networking.networkmanager.enable;
+            message = "web-gate.trustedConnections and web-gate.ddns need NetworkManager";
+          }
+          {
+            assertion = !restrictLan || !config.networking.nftables.enable;
+            message = "web-gate.trustedConnections supports the iptables firewall backend only";
+          }
+        ];
 
       networking.firewall =
         if restrictLan then

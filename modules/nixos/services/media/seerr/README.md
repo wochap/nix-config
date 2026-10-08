@@ -4,13 +4,42 @@ Request portal (formerly Jellyseerr). Users sign in with their Jellyfin account,
 
 State: `/var/lib/media-server/seerr`.
 
-## Connect Jellyfin
+## Setup
 
-Seerr runs in a container. It reaches Jellyfin over the `media` network, not through nginx. Inside the container, `jellyfin.wochap.local` resolves to the container's own loopback.
+Seerr runs in a container. It reaches Jellyfin, Radarr and Sonarr over the `media` network by container name, not through nginx. Inside the container, `*.wochap.local` and `127.0.1.1` point at the container itself.
 
-1. Sign in with Jellyfin URL `media-jellyfin`, port `8096`, Use SSL off, URL Base empty.
-2. Go to Settings › Jellyfin, and set External URL to `https://jellyfin.gdesktop.geanmar.com`. Seerr uses this URL for the links it shows to users.
-3. Go to Settings › General, and set Application URL to `https://seerr.gdesktop.geanmar.com`.
+Set up [Jellyfin](../jellyfin/README.md#setup), [Sonarr](../sonarr/README.md#setup) and [Radarr](../radarr/README.md#setup) first. Seerr needs the Sonarr and Radarr API keys.
+
+1. Open `https://seerr.wochap.local` on the host, and choose **Jellyfin**.
+2. Sign In:
+   - Jellyfin URL: `media-jellyfin`, Port `8096`, Use SSL off, URL Base empty.
+   - Email, Username, Password: the Jellyfin admin account.
+3. Configure Media Server: select **Sync Libraries**, and turn on Movies and Shows.
+4. Configure Services: add one Radarr server and one Sonarr server.
+
+   | Field | Radarr | Sonarr |
+   |---|---|---|
+   | Default Server | on | on |
+   | 4K Server | off | off |
+   | Server Name | `Radarr` | `Sonarr` |
+   | Hostname or IP Address | `media-radarr` | `media-sonarr` |
+   | Port | `7878` | `8989` |
+   | Use SSL | off | off |
+   | API Key | Radarr's key | Sonarr's key |
+   | URL Base | empty | empty |
+
+   Select **Test**. That fills the dropdowns. Then set:
+   - Quality Profile: for example `HD-1080p`.
+   - Root Folder: `/data/media/movies` for Radarr, `/data/media/series` for Sonarr.
+   - Minimum Availability (Radarr only): `Released`.
+   - Season Folders (Sonarr only): on.
+   - Enable Scan and Enable Automatic Search: on.
+   - External URL: empty. Radarr and Sonarr are admin-only.
+
+   If Radarr and Sonarr are not ready yet, select **Finish Setup**, and add them later under Settings › Services.
+5. Go to Settings › Jellyfin, and set External URL to `https://jellyfin.gdesktop.geanmar.com`. Seerr uses this URL for the links it shows to users.
+6. Go to Settings › General, and set Application URL to `https://seerr.gdesktop.geanmar.com`.
+7. Go to Users › **Import Jellyfin Users**. Under Settings › Users › Default Permissions, choose whether requests need approval. The Auto-Approve permissions skip approval.
 
 ## Upgrade
 

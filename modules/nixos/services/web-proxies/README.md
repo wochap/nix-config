@@ -4,6 +4,7 @@ Declarative nginx vhosts for local services, set through `_custom.services.web-p
 
 - Every enabled proxy is served on this host only, at `https://<subdomain>.wochap.local` (`127.0.1.1`). It uses the self-signed `wochap-ssc` certificate.
 - With `expose.enable = true`, the proxy is also served on the LAN at `https://<subdomain>.<web-gate.domain>`. nginx listens on `0.0.0.0:443` and uses a Let's Encrypt wildcard certificate.
+- With `expose.basicAuthFile`, the LAN vhost uses plain Basic Auth from that htpasswd file instead. Use it for clients that can send credentials but cannot follow the cookie redirect, such as Nix (see `../nix-cache`).
 - With `expose.gate = true`, the LAN vhost sits behind a cookie gate. A visitor enters Basic Auth once, then gets a cookie. `sudo web-gate` rotates the password and prints it. Leave the gate off for services used from mobile or TV apps: those apps cannot complete the login. They rely on the service's own login instead.
 
 ## LAN setup (Cloudflare)
@@ -73,6 +74,8 @@ Without `ddns.enable`, create the record by hand instead: in dash.cloudflare.com
 - on every NetworkManager `up`, `down`, `dhcp4-change` and `connectivity-change` event,
 - once an hour,
 - on demand with `sudo systemctl start web-gate-lan`.
+
+With `ddns.apex = true`, the service also points `<domain>` itself at the host, for SSH and remote builds.
 
 `web-gate.trustedConnections` lists the NetworkManager connection names or UUIDs (`nmcli connection show`) on which port 443 opens. On any other network the LAN vhosts stay unreachable, and the DNS record is left unchanged. The `web-gate-lan` chain in the iptables firewall holds the open ports. With the default `null`, port 443 is open on every interface, which suits a host that never moves.
 
