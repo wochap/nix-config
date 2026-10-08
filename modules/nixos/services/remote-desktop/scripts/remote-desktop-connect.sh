@@ -80,8 +80,15 @@ detect_mode() {
     cage -s -- sh -c 'wlr-randr --json > "$1"' _ "$randr_json" >/dev/null 2>&1 || true
   fi
 
+  # inside a session keep the current mode; cage starts in the monitor's
+  # preferred mode (often 60 Hz), so pick the largest, fastest one instead
+  local filter='.modes[] | select(.current)'
+  if [[ -z "${WAYLAND_DISPLAY:-}" ]]; then
+    filter='.modes | max_by([.width * .height, .refresh])'
+  fi
   local current
-  current=$(jq -r 'first(.[] | select(.enabled) | .modes[] | select(.current)) | "\(.width)x\(.height) \(.refresh | round)"' \
+  current=$(jq -r "first(.[] | select(.enabled) | {name, mode: ($filter)})
+    | \"\\(.mode.width)x\\(.mode.height) \\(.mode.refresh | round) \\(.name) \\(.mode.refresh)\"" \
     "$randr_json" 2>/dev/null || true)
   rm -f "$randr_json"
 
@@ -90,7 +97,7 @@ detect_mode() {
     local connector
     for connector in /sys/class/drm/card*-*; do
       if [[ "$(cat "$connector/status" 2>/dev/null)" == "connected" ]]; then
-        current="$(head -n 1 "$connector/modes") 60"
+        current="$(head -n 1 "$connector/modes") 60 - -"
         break
       fi
     done
@@ -103,10 +110,16 @@ detect_mode() {
   echo "$current"
 }
 
+# mode cage switches the monitor to, "-" when unknown
+cage_output="-"
+cage_mode="-"
 if [[ -z "$resolution" || -z "$fps" ]]; then
-  detected=$(detect_mode)
-  resolution="${resolution:-${detected% *}}"
-  fps="${fps:-${detected#* }}"
+  read -r detected_resolution detected_fps cage_output cage_refresh <<<"$(detect_mode)"
+  if [[ "$cage_output" != "-" ]]; then
+    cage_mode="${detected_resolution}@${cage_refresh}"
+  fi
+  resolution="${resolution:-$detected_resolution}"
+  fps="${fps:-$detected_fps}"
 fi
 if ((fps > max_fps)); then
   fps="$max_fps"
@@ -147,11 +160,13 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM HUP
 
+# borderless: SDL's exclusive fullscreen fakes a mode change on Wayland,
+# which scales the picture and leaves black bars.
 # Super combos go to the host; Ctrl+Alt+Shift+Z still releases the grab.
 # 4:4:4 keeps text sharp where the host encoder supports it.
 stream=(moonlight stream "$host" "$app"
   --resolution "${width}x${height}" --fps "$fps"
-  --display-mode fullscreen --quit-after
+  --display-mode borderless --quit-after
   --capture-system-keys always --yuv444)
 if [[ "$bitrate" != "null" ]]; then
   stream+=(--bitrate "$bitrate")
@@ -161,7 +176,12 @@ stream+=("${extra_args[@]}")
 if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
   "${stream[@]}"
 elif [[ "$backend" == "cage" ]]; then
-  cage -s -- "${stream[@]}"
+  # shellcheck disable=SC2016 # expanded by the inner sh
+  cage -s -- sh -c '
+    [ "$1" = - ] || wlr-randr --output "$1" --mode "$2" >/dev/null 2>&1 || true
+    shift 2
+    exec "$@"
+  ' _ "$cage_output" "$cage_mode" "${stream[@]}"
 elif [[ "$backend" == "eglfs" ]]; then
   QT_QPA_PLATFORM=eglfs QT_QPA_EGLFS_INTEGRATION=eglfs_kms "${stream[@]}"
 else

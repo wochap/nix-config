@@ -38,7 +38,7 @@ remote-desktop laptop --backend eglfs  # if cage shows no picture
 laptop-remote headless                 # same as remote-desktop laptop headless
 ```
 
-The command starts cage twice. The first run is brief and only reads the monitor mode. The second run holds Moonlight. The screen flickers once between them. You can switch to another VT while the stream keeps running (`cage -s` allows VT switching).
+The command starts cage twice. The first run is brief and only reads the monitor's modes. The second run switches the monitor to its largest, fastest mode (cage alone starts in the preferred mode, often 60 Hz), then runs Moonlight. The screen flickers once between them. Switching to another VT ends the stream: cage releases the display and Moonlight exits, which runs restore.
 
 ### From a compositor
 
