@@ -91,6 +91,8 @@
     session-tap.inputs.nixpkgs.follows = "nixpkgs";
     woints.url = "github:wochap/woints";
     woints.inputs.nixpkgs.follows = "nixpkgs";
+    woge.url = "github:wochap/woge";
+    woge.inputs.nixpkgs.follows = "nixpkgs";
     tt.url = "github:wochap/tt";
     tt.inputs.nixpkgs.follows = "nixpkgs";
     wobook.url = "github:wochap/wobook";

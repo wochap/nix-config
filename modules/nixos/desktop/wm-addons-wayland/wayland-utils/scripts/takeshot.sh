@@ -73,8 +73,7 @@ notify_user() {
 
   case $action in
   "edit")
-    # NOTE: satty doesn't support webp
-    satty -f "$grim_dest" -o "$dest" &
+    woge "$grim_dest" -o "$dest" &
     ;;
   "open")
     rm -f "$grim_dest"

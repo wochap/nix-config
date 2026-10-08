@@ -3421,6 +3421,7 @@
         "webscoop": "webscoop",
         "wluma": "wluma",
         "wobook": "wobook",
+        "woge": "woge",
         "woints": "woints",
         "wosarcher": "wosarcher",
         "wt": "wt",
@@ -4034,16 +4035,36 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1791466725,
-        "narHash": "sha256-/zxlpm06SfdNpSOOZxY8wIrjHMPRVqUctYOZJtVFieY=",
+        "lastModified": 1791472969,
+        "narHash": "sha256-S4lgnDLKybfta+V+SGOa7u2EAcC7nvem7Wq4srquYzg=",
         "owner": "wochap",
         "repo": "wobook",
-        "rev": "e27a02a4d66deb8225c68fb6fdd27910cc5d8b7f",
+        "rev": "b16657cc343a5e8053e4c704d9aa588169fc2cd0",
         "type": "github"
       },
       "original": {
         "owner": "wochap",
         "repo": "wobook",
+        "type": "github"
+      }
+    },
+    "woge": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791471804,
+        "narHash": "sha256-rE79PCZm1zOgnmuv26l+Qv5VyZ8MbyYLXqLlCUqfpqg=",
+        "owner": "wochap",
+        "repo": "woge",
+        "rev": "75e94b4eaf50b88e5022b724b044941be84d5dd6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "woge",
         "type": "github"
       }
     },

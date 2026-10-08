@@ -12,6 +12,7 @@ let
 
   wayfreeze = inputs.wayfreeze.packages.${pkgs.stdenv.hostPlatform.system}.wayfreeze;
   video-trimmer = inputs.video-trimmer.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  woge = inputs.woge.packages.${pkgs.stdenv.hostPlatform.system}.default;
   hyprpicker = inputs.hyprpicker.packages.${pkgs.stdenv.hostPlatform.system}.hyprpicker;
   play-notification-sound = pkgs.writeScriptBin "play-notification-sound" (
     builtins.readFile ./scripts/play-notification-sound.sh
@@ -84,6 +85,7 @@ in
           slurp # screenshoot utility
           satty # image editor
           swaybg
+          woge # screenshot and image editor
           wayfreeze # freeze display, only works on hyprland
           video-trimmer # trim MP4s
           wdisplays # control display outputs
