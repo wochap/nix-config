@@ -7,8 +7,9 @@
 
 # Declarative nginx vhosts for local services, with optional systemd
 # socket-activation and an optional LAN gate (Let's Encrypt wildcard cert,
-# cookie gate, Cloudflare DDNS). Self-contained: copy this folder and set
-# `certificate`, plus `domain` and `acme.credentialFile` for LAN exposure.
+# cookie gate, Cloudflare DDNS). Copy this folder plus
+# lib._custom.strictNetworkService, then set `certificate`, plus `domain` and
+# `acme.credentialFile` for LAN exposure.
 # trustedConnections and ddns need NetworkManager and the iptables firewall.
 let
   gate = config._custom.services.web-gate;
@@ -19,28 +20,6 @@ let
   sscError = "web-gate.certificate must expose meta.address and meta.domain; build it with packages/generate-ssc";
   sscAddress = ssc.meta.address or (throw sscError);
   sscDomain = ssc.meta.domain or (throw sscError);
-
-  # Same as lib._custom.strictNetworkService, inlined to keep the module portable.
-  strictNetworkService = {
-    NoNewPrivileges = true;
-    PrivateDevices = true;
-    PrivateTmp = true;
-    ProtectSystem = "strict";
-    ProtectHome = true;
-    ProtectClock = true;
-    ProtectControlGroups = true;
-    ProtectHostname = true;
-    ProtectKernelLogs = true;
-    ProtectKernelModules = true;
-    ProtectKernelTunables = true;
-    RestrictRealtime = true;
-    RestrictSUIDSGID = true;
-    LockPersonality = true;
-    CapabilityBoundingSet = "";
-    AmbientCapabilities = "";
-    SystemCallArchitectures = "native";
-    UMask = "0077";
-  };
 
   # Filter to only act on proxies that are explicitly enabled
   enabledProxies = lib.filterAttrs (name: proxy: proxy.enable) gate.proxies;
@@ -424,7 +403,7 @@ in
                 '';
                 ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${sscAddress}:${toString proxy.backendPort}";
               }
-              // strictNetworkService
+              // lib._custom.strictNetworkService
               // {
                 RestrictAddressFamilies = [
                   "AF_INET"

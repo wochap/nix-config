@@ -7,68 +7,94 @@ Declarative nginx vhosts for local services, set through `_custom.services.web-g
 - With `expose.basicAuthFile`, the LAN vhost uses plain Basic Auth from that htpasswd file instead. Use it for clients that can send credentials but cannot follow the cookie redirect, such as Nix (see `../nix-cache`).
 - With `expose.gate = true`, the LAN vhost sits behind a cookie gate. A visitor enters Basic Auth once, then gets a cookie. `sudo web-gate` rotates the password and prints it. Leave the gate off for services used from mobile or TV apps: those apps cannot complete the login. They rely on the service's own login instead.
 
-## Use in another config
+## How to use
 
-The module folder is self-contained. It needs no overlay, custom lib or secret manager from this repo.
+`../web-gate-config.nix` sets `certificate` to `pkgs._custom.wochap-ssc` for every host, so local vhosts work with no host config.
 
-1. Copy this folder and `packages/generate-ssc` into your config, and import the folder.
-2. Build the local certificate with `generate-ssc` and pass it to the module:
-
-   ```nix
-   _custom.services.web-gate.certificate = pkgs.callPackage ./generate-ssc { } {
-     domain = "example.local";
-     # Avoid 127.0.0.1, so the vhosts never clash with localhost services.
-     address = "127.0.1.1";
-   };
-   ```
-
-   The module reads `meta.address`, `meta.domain` and the files `rootCA.pem`, `<domain>+4.pem` and `<domain>+4-key.pem`. Build the certificate with `generate-ssc`: the `+4` suffix comes from the 5 names it passes to mkcert. Another package works only with the same `meta` attributes and file names.
-3. Declare proxies:
+1. In the service module, bind the app to `wochap-ssc.meta.address` (`127.0.1.1`) on `backendPort`, then register the proxy:
 
    ```nix
    _custom.services.web-gate.proxies.myapp = {
      enable = true;
-     publicPort = 8080; # the app listens on publicPort + 1
+     subdomain = "myapp"; # default: the attribute name
+     publicPort = 20940; # nginx or the socket listens here
+     backendPort = 20941; # default: publicPort + 1
    };
    ```
 
-4. For LAN exposure only: set `domain`, and pass the DNS API token as a runtime file path with `acme.credentialFile`. Use a string, not a Nix path: a path literal copies the secret into the world-readable Nix store.
+   The app is then at `https://myapp.wochap.local`.
+
+2. Optional, start the app on first request:
 
    ```nix
-   # sops-nix
-   sops.secrets.cloudflare-dns-api-token.sopsFile = ./secrets.yaml;
-   _custom.services.web-gate.acme.credentialFile = config.sops.secrets.cloudflare-dns-api-token.path;
-   # agenix
-   _custom.services.web-gate.acme.credentialFile = config.age.secrets.cloudflare-dns-api-token.path;
-   # plain file, managed outside Nix
-   _custom.services.web-gate.acme.credentialFile = "/var/lib/secrets/cloudflare-dns-api-token";
+   lazy = true; # socket on publicPort; the unit loses wantedBy
+   serviceName = "myapp"; # systemd unit to start; default: the attribute name
+   serviceScope = "user"; # for a user unit; then also set:
+   userName = "gean";
    ```
 
-   `trustedConnections` and `ddns` also need NetworkManager and the iptables firewall backend.
+3. Optional, serve it on the LAN, in the host config (needs the LAN setup below):
 
-## LAN setup (Cloudflare)
+   ```nix
+   _custom.services.web-gate.proxies.myapp.expose.enable = true;
+   # Pick at most one:
+   _custom.services.web-gate.proxies.myapp.expose.gate = true; # browsers: Basic Auth once, then cookie
+   _custom.services.web-gate.proxies.myapp.expose.basicAuthFile = "/run/secrets/htpasswd"; # clients like Nix
+   ```
 
-Host config, as on gdesktop:
+   The LAN URL is `https://myapp.<web-gate.domain>`. Other modules read it from `proxies.myapp.expose.host`, for example for allowed origins.
 
-```nix
-_custom.services.web-gate.domain = "gdesktop.geanmar.com";
-sops.secrets.personal-cloudflare-dns-api-token.sopsFile = ../../secrets-sops/personal.yaml;
-_custom.services.web-gate.acme.credentialFile =
-  config.sops.secrets.personal-cloudflare-dns-api-token.path;
-_custom.services.web-gate.ddns.enable = true;
-_custom.services.web-gate.ddns.zone = "geanmar.com";
-_custom.services.web-gate.proxies.jellyfin.expose.enable = true;
-```
+4. With the gate on, run `sudo web-gate` to rotate the password and print it with the URLs. Rotation logs out every browser.
 
-In this repo, `../web-gate-config.nix` sets `certificate` to `pkgs._custom.wochap-ssc` for every host.
+## LAN setup (once per host)
 
-Each host needs its own domain, because a wildcard certificate covers one label only. gdesktop uses `gdesktop.geanmar.com`, and glegion uses `glegion.geanmar.com`.
+Needed only for `expose.enable`. Local vhosts need no setup.
+
+1. Create the Cloudflare API token (see below). Skip it when another host already uses one: all hosts share it.
+2. Store the token in sops, once for all hosts:
+
+   ```sh
+   sops secrets-sops/personal.yaml
+   # add: personal-cloudflare-dns-api-token: <token>
+   ```
+
+3. In `hosts/<host>/default.nix`, as on gdesktop:
+
+   ```nix
+   _custom.services.web-gate.domain = "gdesktop.geanmar.com";
+   sops.secrets.personal-cloudflare-dns-api-token.sopsFile = ../../secrets-sops/personal.yaml;
+   _custom.services.web-gate.acme.credentialFile =
+     config.sops.secrets.personal-cloudflare-dns-api-token.path;
+   _custom.services.web-gate.ddns.enable = true;
+   _custom.services.web-gate.ddns.zone = "geanmar.com";
+   # Laptop only: networks where port 443 opens (`nmcli connection show`).
+   # Omit (null) on a host that never moves: port 443 opens everywhere.
+   _custom.services.web-gate.trustedConnections = [ "Home WiFi" ];
+   _custom.services.web-gate.proxies.jellyfin.expose.enable = true;
+   ```
+
+   Each host needs its own domain, because a wildcard certificate covers one label only. gdesktop uses `gdesktop.geanmar.com`, and glegion uses `glegion.geanmar.com`.
+
+4. Rebuild and switch. Then check the certificate and the DNS record:
+
+   ```sh
+   systemctl status acme-order-renew-gdesktop.geanmar.com
+   ls /var/lib/acme/gdesktop.geanmar.com
+   journalctl -u web-gate-lan
+   dig +short jellyfin.gdesktop.geanmar.com @1.1.1.1 # the host's LAN IP
+   ```
+
+   The NixOS ACME module renews the certificate on a timer.
+
+5. When a proxy uses `expose.gate`, run `sudo web-gate` to get the password. The first boot seeds a random, unknown one.
 
 For another DNS provider, set `web-gate.acme.dnsProvider` and `web-gate.acme.credentialVariable` to the lego provider name and its token variable.
 
 Name resolution comes from a public DNS record that points at this host's LAN IP, so no LAN DNS server is needed. The certificate comes from the DNS-01 challenge, so no port is open to the internet.
 
-### Cloudflare API token
+Without `ddns.enable`, create the record by hand instead: in dash.cloudflare.com, go to the zone › DNS › Records › Add record, with Type `A`, Name `*.gdesktop` (the domain without the zone), the host's fixed LAN IP, and Proxy status **DNS only** (grey cloud). Cloudflare cannot proxy a private IP.
+
+### Create the Cloudflare API token
 
 ACME and DDNS use one API token. All hosts can share it, because every host's record lives in the same zone.
 
@@ -89,26 +115,6 @@ ACME and DDNS use one API token. All hosts can share it, because every host's re
    ```
 
 A token cannot be limited to some records. It can edit every DNS record in the zone, so treat it like a password. To revoke it, delete it on the same API Tokens page.
-
-### Host setup
-
-1. Store the token in a secret file, and point `web-gate.acme.credentialFile` at its runtime path. In this repo, the token lives in sops:
-
-   ```sh
-   sops secrets-sops/personal.yaml
-   # personal-cloudflare-dns-api-token: <token>
-   ```
-
-2. Rebuild and switch. Then check that the certificate was issued:
-
-   ```sh
-   systemctl status acme-order-renew-gdesktop.geanmar.com
-   ls /var/lib/acme/gdesktop.geanmar.com
-   ```
-
-The NixOS ACME module renews the certificate on a timer.
-
-Without `ddns.enable`, create the record by hand instead: in dash.cloudflare.com, go to the zone › DNS › Records › Add record, with Type `A`, Name `*.gdesktop` (the domain without the zone), the host's fixed LAN IP, and Proxy status **DNS only** (grey cloud). Cloudflare cannot proxy a private IP.
 
 ## DDNS and trusted networks
 
