@@ -189,75 +189,6 @@ let
     };
 in
 {
-  options._custom.services.web-gate.proxies = lib.mkOption {
-    description = "Declarative web proxies with optional systemd lazy-loading.";
-    type = lib.types.attrsOf (
-      lib.types.submodule (
-        { name, config, ... }: {
-          options = {
-            enable = lib.mkEnableOption { };
-            subdomain = lib.mkOption {
-              type = lib.types.str;
-              default = name;
-            };
-            serviceName = lib.mkOption {
-              type = lib.types.str;
-              default = name;
-            };
-            serviceScope = lib.mkOption {
-              type = lib.types.enum [
-                "system"
-                "user"
-              ];
-              default = "system";
-              description = "Whether serviceName belongs to the system or user service manager.";
-            };
-            userName = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-              description = "User that owns a user-scoped service.";
-            };
-            lazy = lib.mkEnableOption { };
-            expose = {
-              enable = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = "Also serve this proxy on the LAN as <subdomain>.<web-gate.domain>.";
-              };
-              gate = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = "Require the web-gate cookie (Basic Auth once) on the LAN vhost.";
-              };
-              basicAuthFile = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default = null;
-                description = ''
-                  htpasswd file, readable by nginx, that protects the LAN vhost
-                  with plain Basic Auth. For clients that cannot follow the
-                  gate's cookie redirect but can send credentials, such as Nix
-                  through a netrc file.
-                '';
-              };
-              host = lib.mkOption {
-                type = lib.types.str;
-                default = "${config.subdomain}.${gate.domain}";
-                readOnly = true;
-                description = "Hostname of the LAN vhost, for other modules (e.g. allowed origins).";
-              };
-            };
-            publicPort = lib.mkOption { type = lib.types.port; };
-            backendPort = lib.mkOption {
-              type = lib.types.port;
-              default = config.publicPort + 1;
-            };
-          };
-        }
-      )
-    );
-    default = { };
-  };
-
   options._custom.services.web-gate = {
     certificate = lib.mkOption {
       type = lib.types.package;
@@ -370,6 +301,75 @@ in
     stateDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/web-gate";
+    };
+
+    proxies = lib.mkOption {
+      description = "Declarative web proxies with optional systemd lazy-loading.";
+      type = lib.types.attrsOf (
+        lib.types.submodule (
+          { name, config, ... }: {
+            options = {
+              enable = lib.mkEnableOption { };
+              subdomain = lib.mkOption {
+                type = lib.types.str;
+                default = name;
+              };
+              serviceName = lib.mkOption {
+                type = lib.types.str;
+                default = name;
+              };
+              serviceScope = lib.mkOption {
+                type = lib.types.enum [
+                  "system"
+                  "user"
+                ];
+                default = "system";
+                description = "Whether serviceName belongs to the system or user service manager.";
+              };
+              userName = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                description = "User that owns a user-scoped service.";
+              };
+              lazy = lib.mkEnableOption { };
+              expose = {
+                enable = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Also serve this proxy on the LAN as <subdomain>.<web-gate.domain>.";
+                };
+                gate = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Require the web-gate cookie (Basic Auth once) on the LAN vhost.";
+                };
+                basicAuthFile = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = ''
+                    htpasswd file, readable by nginx, that protects the LAN vhost
+                    with plain Basic Auth. For clients that cannot follow the
+                    gate's cookie redirect but can send credentials, such as Nix
+                    through a netrc file.
+                  '';
+                };
+                host = lib.mkOption {
+                  type = lib.types.str;
+                  default = "${config.subdomain}.${gate.domain}";
+                  readOnly = true;
+                  description = "Hostname of the LAN vhost, for other modules (e.g. allowed origins).";
+                };
+              };
+              publicPort = lib.mkOption { type = lib.types.port; };
+              backendPort = lib.mkOption {
+                type = lib.types.port;
+                default = config.publicPort + 1;
+              };
+            };
+          }
+        )
+      );
+      default = { };
     };
   };
 
