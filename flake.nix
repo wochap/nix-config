@@ -45,6 +45,7 @@
     wodeo.inputs.nixpkgs.follows = "nixpkgs";
     webscoop.url = "github:wochap/webscoop";
     webscoop.inputs.nixpkgs.follows = "nixpkgs";
+    webscoop.inputs.home-manager.follows = "home-manager";
     kb-hud.url = "github:wochap/kb-hud";
     kb-hud.inputs.nixpkgs.follows = "nixpkgs";
     session-tap.url = "github:wochap/session-tap";

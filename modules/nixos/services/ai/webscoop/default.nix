@@ -9,18 +9,9 @@
 let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
-  webscoopUnwrapped = inputs.webscoop.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  webscoop = inputs.webscoop.packages.${pkgs.stdenv.hostPlatform.system}.default;
   # Node ignores the system store, so trust the local CA used by omniroute.wochap.local
-  webscoop = pkgs.symlinkJoin {
-    name = "webscoop-wrapped";
-    paths = [ webscoopUnwrapped ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/webscoop \
-        --set NODE_EXTRA_CA_CERTS ${wochap-ssc}/rootCA.pem
-    '';
-    meta.mainProgram = "webscoop";
-  };
+  environment.NODE_EXTRA_CA_CERTS = "${wochap-ssc}/rootCA.pem";
 
   # Hyprland: keep the browser on a special workspace (webscoop adds the
   # window rule at run time) and bring it to the current one only when needed.
@@ -37,6 +28,7 @@ let
     # In "query", spaces become "+" so recipes build clean search URLs (q=a+b),
     # otherwise the engines redirect to a URL with extra tracking params.
     mapfile -d "" vars < <(${lib.getExe pkgs.jq} -j 'to_entries[] | .key as $k | (.value | tostring | if $k == "query" then gsub(" "; "+") else . end) as $v | "--var\u0000\($k)=\($v)\u0000"' <<<"$2")
+    export NODE_EXTRA_CA_CERTS=${environment.NODE_EXTRA_CA_CERTS}
     err=$(mktemp)
     trap 'rm -f "$err"' EXIT
     # webhook returns stdout+stderr together, keep stderr out of the JSON
@@ -87,31 +79,43 @@ in
   };
 
   config = lib.mkIf (cfg.enable && cfg.webscoop.enable) {
-    environment.systemPackages = [ webscoop ];
+    _custom.hm = {
+      imports = [ inputs.webscoop.homeManagerModules.webscoop ];
 
-    _custom.hm.xdg.configFile."webscoop/config.json".text = builtins.toJSON {
-      browser = {
-        driver = "patchright";
-        channel = "chrome";
-        timezone = "America/Panama";
-        locale = "en-US";
-        args = [ "--class=webscoop" ];
-      };
-      profiles.default = "default";
-      hooks = {
-        "browser.show" = windowCmd "show";
-        "browser.hide" = windowCmd "hide";
-        "browser.started" = ''case "$WEBSCOOP_COMMAND" in run|test) ${windowCmd "hide"} ;; esac'';
-        "run.failed" = windowCmd "show";
-        "attention.needed" = windowCmd "show";
-        "attention.resolved" = windowCmd "hide";
-      };
-      llm = lib.mkIf cfg.enableOmniRoute {
-        endpoint = "https://omniroute.wochap.local/v1";
-        model = "desktop-free";
-        apiKeyFile = config.sops.secrets.local-omniroute-secret-key.path;
-        contextTokens = 32768;
-        timeoutMs = 30000;
+      programs.webscoop = {
+        enable = true;
+        package = webscoop;
+        inherit environment;
+        settings = {
+          browser = {
+            driver = "patchright";
+            channel = "chrome";
+            timezone = "America/Panama";
+            locale = "en-US";
+            args = [ "--class=webscoop" ];
+          };
+          profiles.default = "default";
+          # Different search recipes run in parallel tabs, one run per recipe at a time.
+          daemon.concurrency = {
+            total = lib.mkDefault 10;
+            perRecipe = lib.mkDefault 2;
+          };
+          hooks = {
+            "browser.show" = windowCmd "show";
+            "browser.hide" = windowCmd "hide";
+            "browser.started" = ''case "$WEBSCOOP_COMMAND" in run|test) ${windowCmd "hide"} ;; esac'';
+            "run.failed" = windowCmd "show";
+            "attention.needed" = windowCmd "show";
+            "attention.resolved" = windowCmd "hide";
+          };
+          llm = lib.mkIf cfg.enableOmniRoute {
+            endpoint = "https://omniroute.wochap.local/v1";
+            model = "desktop-free";
+            apiKeyFile = config.sops.secrets.local-omniroute-secret-key.path;
+            contextTokens = 32768;
+            timeoutMs = 30000;
+          };
+        };
       };
     };
 
