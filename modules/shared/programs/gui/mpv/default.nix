@@ -10,6 +10,7 @@ let
   cfg = config._custom.programs.mpv;
   isWayland = config._custom.globals.displayServer == "wayland";
   inherit (config._custom.globals) themeColors;
+  wodeo = inputs.wodeo.packages.${pkgs.stdenv.hostPlatform.system}.default or null;
 in
 {
   options._custom.programs.mpv.enable = lib.mkEnableOption { };
@@ -55,6 +56,10 @@ in
           # enable hardware acceleration
           hwdec = "auto-safe";
           vo = "gpu";
+        };
+        bindings = lib.mkIf (wodeo != null) {
+          # open the current file in wodeo (video editor), paused here
+          e = ''set pause yes; run "${lib.getExe wodeo}" "''${path}"'';
         };
         profiles = {
           igpu-amd = {
