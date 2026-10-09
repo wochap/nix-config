@@ -176,6 +176,11 @@ if [[ "$bitrate" != "null" ]]; then
 fi
 stream+=("${extra_args[@]}")
 
+night_light="$REMOTE_NIGHT_LIGHT"
+if [[ -z "$night_light" ]]; then
+  night_light=$(hyprctl -i 0 hyprsunset temperature 2>/dev/null | grep -xE '[0-9]+' || true)
+fi
+
 run_stream() {
   if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
     "${stream[@]}"
@@ -191,6 +196,11 @@ run_stream() {
       exec "$@"
     ' _ "$cage_output" "$cage_mode" "${stream[@]}"
   elif [[ "$backend" == "eglfs" ]]; then
+    # no compositor keeps hyprsunset's color matrix here, so set it on the
+    # CRTC while nobody holds DRM master, right before Moonlight takes it
+    if [[ -n "$night_light" ]]; then
+      drm-night-light "$night_light" || echo "remote-desktop: night light not applied" >&2
+    fi
     QT_QPA_PLATFORM=eglfs QT_QPA_EGLFS_INTEGRATION=eglfs_kms "${stream[@]}"
   else
     usage

@@ -34,13 +34,13 @@ You need no compositor on the client. A graphical session on another VT can keep
 remote-desktop laptop                  # mirror, the host screen shows the stream
 remote-desktop laptop headless         # the host screen stays as it is
 remote-desktop laptop --fps 120        # if mode detection fell back to 60 fps
-remote-desktop laptop --backend eglfs  # Moonlight on KMS directly, no cage (loses the night light)
+remote-desktop laptop --backend eglfs  # Moonlight on KMS directly, no cage: sharpest picture
 laptop-remote headless                 # same as remote-desktop laptop headless
 ```
 
 The command starts cage twice. The first run is brief and only reads the monitor's modes. The second run switches the monitor to its largest, fastest mode (cage alone starts in the preferred mode, often 60 Hz), then runs Moonlight. The screen flickers once between them. cage runs with `-d`: without it, SDL draws its own libdecor frame, which shrinks the picture and leaves bars on the left, right and bottom.
 
-A night light set by a local Hyprland session (hyprsunset) carries over to the TTY with cage: hyprsunset sets the monitor's color matrix (CTM), and cage leaves it alone. eglfs resets it, so the tint is lost there.
+A night light set by a local Hyprland session (hyprsunset) carries over to the TTY with cage: hyprsunset sets the monitor's color matrix (CTM), and cage leaves it alone. eglfs resets it, so with eglfs the command sets it again just before Moonlight starts (`drm-night-light`, hyprsunset's formula on every CRTC's `CTM`). The temperature comes from `client.nightLight`, or from the local hyprsunset when that is null.
 
 Switching to another VT stops Moonlight, but not the session. The host keeps its layout and Sunshine keeps the app running. When you come back to the VT, the command reconnects. Ctrl+C on the TTY while it waits ends the session and runs restore.
 
@@ -86,6 +86,7 @@ _custom.services.remote-desktop.host = {
 # client, one entry per host to control
 _custom.services.remote-desktop.client = {
   enable = true;
+  # nightLight = 4000;               # eglfs night light, null follows hyprsunset
   hosts = {
     laptop = {
       address = "laptop.local";      # ssh destination and Moonlight host

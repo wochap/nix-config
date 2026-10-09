@@ -47,6 +47,10 @@ let
     )
   );
 
+  drm-night-light = pkgs.writers.writePython3Bin "drm-night-light" {
+    flakeIgnore = [ "E501" ];
+  } (builtins.readFile ./scripts/drm-night-light.py);
+
   remote-desktop-connect = pkgs.writeShellApplication {
     name = "remote-desktop";
     runtimeInputs = with pkgs; [
@@ -57,8 +61,13 @@ let
       moonlight-qt
       openssh
       wlr-randr
+      drm-night-light
     ];
-    runtimeEnv.REMOTE_HOSTS_FILE = hostsFile;
+    runtimeEnv = {
+      REMOTE_HOSTS_FILE = hostsFile;
+      REMOTE_NIGHT_LIGHT = if cfg.client.nightLight == null then "" else toString cfg.client.nightLight;
+      DRM_NIGHT_LIGHT_LIBDRM = "${pkgs.libdrm}/lib/libdrm.so.2";
+    };
     text = builtins.readFile ./scripts/remote-desktop-connect.sh;
     meta.description = "Stream a remote desktop through Moonlight, from a TTY or a Wayland session";
   };
@@ -145,6 +154,12 @@ in
 
     client = {
       enable = lib.mkEnableOption "the remote-desktop command, which streams a host's desktop through Moonlight";
+      nightLight = lib.mkOption {
+        type = lib.types.nullOr lib.types.ints.positive;
+        default = null;
+        example = 4000;
+        description = "Color temperature (K) for `--backend eglfs`, which has no compositor to keep a night light. null follows the local hyprsunset (`hyprctl -i 0 hyprsunset temperature`).";
+      };
       hosts = lib.mkOption {
         default = { };
         example = lib.literalExpression ''
