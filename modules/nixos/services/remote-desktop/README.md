@@ -34,11 +34,15 @@ You need no compositor on the client. A graphical session on another VT can keep
 remote-desktop laptop                  # mirror, the host screen shows the stream
 remote-desktop laptop headless         # the host screen stays as it is
 remote-desktop laptop --fps 120        # if mode detection fell back to 60 fps
-remote-desktop laptop --backend eglfs  # if cage shows no picture
+remote-desktop laptop --backend eglfs  # Moonlight on KMS directly, no cage (loses the night light)
 laptop-remote headless                 # same as remote-desktop laptop headless
 ```
 
-The command starts cage twice. The first run is brief and only reads the monitor's modes. The second run switches the monitor to its largest, fastest mode (cage alone starts in the preferred mode, often 60 Hz), then runs Moonlight. The screen flickers once between them. Switching to another VT ends the stream: cage releases the display and Moonlight exits, which runs restore.
+The command starts cage twice. The first run is brief and only reads the monitor's modes. The second run switches the monitor to its largest, fastest mode (cage alone starts in the preferred mode, often 60 Hz), then runs Moonlight. The screen flickers once between them. cage runs with `-d`: without it, SDL draws its own libdecor frame, which shrinks the picture and leaves bars on the left, right and bottom.
+
+A night light set by a local Hyprland session (hyprsunset) carries over to the TTY with cage: hyprsunset sets the monitor's color matrix (CTM), and cage leaves it alone. eglfs resets it, so the tint is lost there.
+
+Switching to another VT stops Moonlight, but not the session. The host keeps its layout and Sunshine keeps the app running. When you come back to the VT, the command reconnects. Ctrl+C on the TTY while it waits ends the session and runs restore.
 
 ### From a compositor
 
@@ -54,7 +58,7 @@ remote-desktop laptop headless
 hl.bind(mod .. " + R", hl.dsp.exec_cmd("remote-desktop laptop"), { description = "Remote laptop" })
 ```
 
-Moonlight runs with `--capture-system-keys always`, so Super combos reach the host's compositor while the stream has focus. In a local compositor, binds that it grabs before any client sees them still act locally. Press Ctrl+Alt+Shift+Z to release or recapture keyboard and mouse. The stream also asks for YUV 4:4:4, which keeps text sharp; Moonlight falls back to 4:2:0 when the host's encoder lacks it.
+Moonlight runs with `--capture-system-keys always`, so Super combos reach the host's compositor while the stream has focus. In a local compositor, binds that it grabs before any client sees them still act locally. Press Ctrl+Alt+Shift+Z to release or recapture keyboard and mouse. The stream uses AV1 with 4:2:0 color. Requesting 4:4:4 from a host whose encoder lacks it made Moonlight fall back to H.264, which looked soft. Override with `extraArgs`, for example `[ "--video-codec" "HEVC" ]`.
 
 With no `WAYLAND_DISPLAY` (an X11 session), cage starts nested as a window. Pass `--backend eglfs` only from a TTY, because eglfs takes over the display.
 
@@ -66,7 +70,7 @@ Moonlight shortcuts:
 - Ctrl+Alt+Shift+X: toggle fullscreen.
 - Ctrl+Alt+Shift+S: show stream stats.
 
-Quitting Moonlight, Ctrl+C in the shell, and closing the terminal all run restore. Restore ignores further Ctrl+C until it finishes (at most about 80 s of retries). The command refuses to start when the host is not paired, before it touches the host's display.
+Quitting Moonlight (while its VT is active), Ctrl+C in the shell, and closing the terminal all run restore and end the Sunshine app. Restore ignores further Ctrl+C until it finishes (at most about 80 s of retries). The command refuses to start when the host is not paired, before it touches the host's display.
 
 ## Setup
 
@@ -145,6 +149,6 @@ The web UI is also at `https://sunshine.wochap.local` on the host itself, and at
 
 ## Troubleshooting
 
-- No picture from the TTY: try `--backend eglfs`, or run the command inside a compositor to rule out cage.
+- No picture or wrong size from the TTY: try `--backend eglfs`, or run the command inside a compositor to rule out cage.
 - Wrong mode detected (falls back to 60 fps when cage cannot report it): pass `--resolution` and `--fps`.
 - Sunshine logs: `journalctl --user -u sunshine` on the host. The log lists the outputs it sees, and `HEADLESS-2` must be among them during a session.

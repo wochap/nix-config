@@ -149,7 +149,7 @@ cleanup() {
   for attempt in 1 2 3 4 5 6 7 8 9 10; do
     if ssh "${ssh_opts[@]}" -o ConnectTimeout=5 "$host" remote-display restore; then
       ssh "${ssh_opts[@]}" -O exit "$host" >/dev/null 2>&1 || true
-      # end the Sunshine session, --quit-after already does it on a normal exit
+      # end the Sunshine session
       QT_QPA_PLATFORM=offscreen timeout 10 moonlight quit "$host" >/dev/null 2>&1 || true
       return
     fi
@@ -163,27 +163,63 @@ trap cleanup EXIT INT TERM HUP
 # borderless: SDL's exclusive fullscreen fakes a mode change on Wayland,
 # which scales the picture and leaves black bars.
 # Super combos go to the host; Ctrl+Alt+Shift+Z still releases the grab.
-# 4:4:4 keeps text sharp where the host encoder supports it.
+# AV1 without 4:4:4: sharper than the H.264 fallback Moonlight picks when the
+# host encoder lacks 4:4:4.
+# No --quit-after: leaving the VT would end the Sunshine app, whose undo
+# restores the host; cleanup quits the app on a real exit instead.
 stream=(moonlight stream "$host" "$app"
   --resolution "${width}x${height}" --fps "$fps"
-  --display-mode borderless --quit-after
-  --capture-system-keys always --yuv444)
+  --display-mode borderless --capture-system-keys always
+  --no-yuv444 --video-codec AV1)
 if [[ "$bitrate" != "null" ]]; then
   stream+=(--bitrate "$bitrate")
 fi
 stream+=("${extra_args[@]}")
 
-if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-  "${stream[@]}"
-elif [[ "$backend" == "cage" ]]; then
-  # shellcheck disable=SC2016 # expanded by the inner sh
-  cage -s -- sh -c '
-    [ "$1" = - ] || wlr-randr --output "$1" --mode "$2" >/dev/null 2>&1 || true
-    shift 2
-    exec "$@"
-  ' _ "$cage_output" "$cage_mode" "${stream[@]}"
-elif [[ "$backend" == "eglfs" ]]; then
-  QT_QPA_PLATFORM=eglfs QT_QPA_EGLFS_INTEGRATION=eglfs_kms "${stream[@]}"
-else
-  usage
+run_stream() {
+  if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+    "${stream[@]}"
+  elif [[ "$backend" == "cage" ]]; then
+    # -d: no client-side decorations; SDL's libdecor fallback frame otherwise
+    # shrinks the picture and leaves bars on the left, right and bottom.
+    # cage leaves the CRTC's color matrix alone, so a night light set by the
+    # local Hyprland session (hyprsunset) stays on.
+    # shellcheck disable=SC2016 # expanded by the inner sh
+    cage -d -s -- sh -c '
+      [ "$1" = - ] || wlr-randr --output "$1" --mode "$2" >/dev/null 2>&1 || true
+      shift 2
+      exec "$@"
+    ' _ "$cage_output" "$cage_mode" "${stream[@]}"
+  elif [[ "$backend" == "eglfs" ]]; then
+    QT_QPA_PLATFORM=eglfs QT_QPA_EGLFS_INTEGRATION=eglfs_kms "${stream[@]}"
+  else
+    usage
+  fi
+}
+
+# from a TTY, switching VT makes cage or Moonlight exit. Keep the host
+# session, wait until this VT is active again and reconnect. Any exit while
+# the VT is active is a real quit.
+own_vt=""
+if [[ -z "${WAYLAND_DISPLAY:-}" ]]; then
+  own_vt=$(tty 2>/dev/null || true)
+  own_vt="${own_vt#/dev/}"
+  [[ "$own_vt" == tty[0-9]* ]] || own_vt=""
 fi
+
+vt_active() {
+  [[ "$(cat /sys/class/tty/tty0/active 2>/dev/null)" == "$own_vt" ]]
+}
+
+while true; do
+  run_stream || true
+  if [[ -z "$own_vt" ]] || vt_active; then
+    break
+  fi
+  echo "remote-desktop: left $own_vt, reconnecting when it is active again (Ctrl+C here to stop)"
+  until vt_active; do
+    sleep 1
+  done
+  # let logind hand the seat back first
+  sleep 1
+done
