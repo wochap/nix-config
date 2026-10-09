@@ -201,7 +201,22 @@ run_stream() {
     if [[ -n "$night_light" ]]; then
       drm-night-light "$night_light" || echo "remote-desktop: night light not applied" >&2
     fi
-    QT_QPA_PLATFORM=eglfs QT_QPA_EGLFS_INTEGRATION=eglfs_kms "${stream[@]}"
+    # Moonlight forwards Ctrl+Alt+Fn to the host and SDL mutes the console
+    # keyboard; vt-keys keeps those combos here and switches VT itself
+    local vt_keys_fd="" vt_keys_pid="" ready=""
+    if [[ -n "$own_vt" ]]; then
+      exec {vt_keys_fd}< <(exec remote-desktop-vt-keys "${own_vt#tty}")
+      vt_keys_pid=$!
+      read -r -t 5 -u "$vt_keys_fd" ready || true
+      [[ "$ready" == ready ]] || echo "remote-desktop: Ctrl+Alt+Fn goes to the host" >&2
+    fi
+    local status=0
+    QT_QPA_PLATFORM=eglfs QT_QPA_EGLFS_INTEGRATION=eglfs_kms "${stream[@]}" || status=$?
+    if [[ -n "$vt_keys_pid" ]]; then
+      kill "$vt_keys_pid" 2>/dev/null || true
+      exec {vt_keys_fd}<&-
+    fi
+    return "$status"
   else
     usage
   fi

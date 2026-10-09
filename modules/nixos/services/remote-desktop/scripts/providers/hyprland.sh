@@ -104,6 +104,16 @@ provider_restore() {
     fi
   done < <(jq -r '.workspaces[] | "\(.name)\t\(.monitor)"' "$state_file")
 
+  # workspaces opened on $output during the stream are not in the snapshot and
+  # stay orphaned (monitor "?"), unreachable until moved to a real output
+  local fallback
+  fallback=$(jq -r '.active.monitor' "$state_file")
+  grep -qxF "$fallback" <<<"$current_monitors" || fallback=$(head -n 1 <<<"$current_monitors")
+  while read -r workspace; do
+    hyprctl eval "hl.dispatch(hl.dsp.workspace.move({ workspace = \"$workspace\", monitor = \"$fallback\" }))" >/dev/null || true
+  done < <(hyprctl workspaces -j | jq -r --arg monitors "$current_monitors" \
+    '($monitors | split("\n")) as $names | .[] | select(.id > 0) | select(.monitor as $m | $names | index($m) | not) | .name')
+
   # the cursor was on the removed output, Hyprland stays without a focused
   # monitor ("unsafe state") until it lands on a real one
   local cursor

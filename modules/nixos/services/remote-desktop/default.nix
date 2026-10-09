@@ -51,6 +51,11 @@ let
     flakeIgnore = [ "E501" ];
   } (builtins.readFile ./scripts/drm-night-light.py);
 
+  vt-keys = pkgs.writers.writePython3Bin "remote-desktop-vt-keys" {
+    libraries = [ pkgs.python3Packages.evdev ];
+    flakeIgnore = [ "E501" ];
+  } (builtins.readFile ./scripts/vt-keys.py);
+
   remote-desktop-connect = pkgs.writeShellApplication {
     name = "remote-desktop";
     runtimeInputs = with pkgs; [
@@ -62,6 +67,7 @@ let
       openssh
       wlr-randr
       drm-night-light
+      vt-keys
     ];
     runtimeEnv = {
       REMOTE_HOSTS_FILE = hostsFile;
