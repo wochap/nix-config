@@ -200,7 +200,8 @@ StyledRect {
       Layout.preferredHeight: ConfigLock.pillHeight
       Layout.preferredWidth: root.hasMedia ? mediaRow.implicitWidth + 6 : 0
       visible: Layout.preferredWidth > 0
-      clip: true
+      // clip only while the width animates, else it cuts the focus ring
+      clip: width < mediaRow.implicitWidth + 6
       opacity: root.hasMedia ? 1 : 0
       radius: ConfigLock.pillHeight / 2
       activeFocusOnTab: root.hasMedia
