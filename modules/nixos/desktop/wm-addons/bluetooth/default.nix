@@ -53,6 +53,12 @@ in
     # Fix "ConfigurationDirectory 'bluetooth' already exists but the mode is different"
     systemd.services.bluetooth.serviceConfig.ConfigurationDirectoryMode = "0755";
 
+    # prevents bluetooth speaker disconnecting when switching to a fresh tty
+    # wireplumber releases bluez when no session of the user is active on the seat
+    services.pipewire.wireplumber.extraConfig."51-bluez-no-seat-monitoring" = {
+      "wireplumber.profiles".main."monitor.bluez.seat-monitoring" = "disabled";
+    };
+
     _custom.hm = {
       # prevents bluetooth speaker to turn off
       xdg.configFile."wireplumber/wireplumber.conf.d/51-disable-suspension.conf" = {
