@@ -16,11 +16,6 @@ in
         # Fix vscode delete
         sessionVariables.ELECTRON_TRASH = "trash-cli";
       };
-
-      xdg.configFile."electron-flags.conf".text = ''
-        --enable-features=UseOzonePlatform
-        --ozone-platform=wayland
-      '';
     };
   };
 }
