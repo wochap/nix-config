@@ -50,7 +50,6 @@ in
 
     # cli
     _custom.programs.bat.enable = true;
-    _custom.programs.buku.enable = false;
     _custom.programs.core-utils-extra.enable = true;
     _custom.programs.core-utils.enable = true;
     _custom.programs.dircolors.enable = true;
@@ -68,7 +67,6 @@ in
     _custom.programs.lazygit.enable = true;
     _custom.programs.lsd.enable = true;
     _custom.programs.ptsh.enable = true;
-    # _custom.programs.rod.enable = true;
     _custom.programs.texlive.enable = true;
     _custom.programs.zk.enable = true;
     _custom.programs.zoxide.enable = true;
@@ -112,7 +110,6 @@ in
     _custom.programs.neovim.enable = true;
     _custom.programs.newsboat.enable = true;
     _custom.programs.presenterm.enable = true;
-    _custom.programs.taskwarrior.enable = true;
     _custom.programs.tmux.enable = true;
     _custom.programs.tmux.enableSystemd = true;
     _custom.programs.urlscan.enable = true;
@@ -151,6 +148,7 @@ in
     _custom.services.podman.rootless = true;
     _custom.services.podman.dockerCompat = true;
     _custom.services.docker.enable = false;
+
     _custom.services.media = {
       enable = true;
       dataRoot = "/mnt/storage/media-server";
@@ -187,6 +185,11 @@ in
           };
       };
     };
+    _custom.services.web-gate.proxies.jellyfin.expose.enable = true;
+    _custom.services.web-gate.proxies.seerr.expose.enable = true;
+    _custom.services.web-gate.proxies.audiobookshelf.expose.enable = true;
+    _custom.services.web-gate.proxies.calibre-web.expose.enable = true;
+
     # Media UIs other household members use, reachable from the LAN as
     # https://<name>.gdesktop.geanmar.com. They rely on the app's own login: their
     # mobile/TV apps cannot complete the web-gate Basic Auth cookie dance.
@@ -199,6 +202,7 @@ in
     _custom.services.web-gate.ddns.zone = "geanmar.com";
     # gdesktop.geanmar.com itself, for SSH and remote builds from glegion.
     _custom.services.web-gate.ddns.apex = true;
+
     # Binary caches in both directions plus remote builds from glegion.
     # Secrets and *.pub files: see modules/nixos/services/nix-cache/README.md.
     _custom.services.nix-cache = {
@@ -214,14 +218,7 @@ in
       client.netrc.sopsFile = ../../secrets-sops/local.yaml;
       client.netrc.sopsKey = "local-nix-cache-netrc";
     };
-    _custom.services.web-gate.proxies.jellyfin.expose.enable = true;
-    _custom.services.web-gate.proxies.seerr.expose.enable = true;
-    _custom.services.web-gate.proxies.audiobookshelf.expose.enable = true;
-    _custom.services.web-gate.proxies.calibre-web.expose.enable = true;
-    _custom.services.interception-tools.enable = true;
-    _custom.services.ipwebcam.enable = false;
-    _custom.services.kdeconnect.enable = true;
-    # _custom.services.tt.enable = true;
+
     _custom.services.ai.enable = true;
     _custom.services.ai.enableRocm = true;
     _custom.services.ai.enableHandy = true;
@@ -229,8 +226,7 @@ in
     _custom.services.ai.enableOllamaFlashAttention = true;
     _custom.services.ai.ocr.enable = true;
     _custom.services.ai.pdfIngest.enable = true;
-    # _custom.services.ai.enableNextjsOllamaLlmUi = false;
-    # _custom.services.ai.enableOpenWebui = true;
+    _custom.services.ai.enableOpenWebui = true;
     _custom.services.ai.enableSupertonic = true;
     _custom.services.ai.asr.enable = true;
     # Attention memory grows with chunkSeconds^2 * batchSize; 480 s x 4 OOMs
@@ -281,10 +277,15 @@ in
       "pi/omniroute/desktop-free"
     ];
     _custom.services.ai.briefing.enable = true;
+
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
     _custom.services.webhook.enable = true;
     _custom.services.wobook.enable = true;
+    _custom.services.interception-tools.enable = true;
+    _custom.services.ipwebcam.enable = false;
+    _custom.services.kdeconnect.enable = true;
+    _custom.services.tt.enable = true;
 
     _custom.services.syncthing.enable = true;
     _custom.services.virt.enable = false;

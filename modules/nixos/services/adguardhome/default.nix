@@ -30,6 +30,9 @@ in
       };
     };
 
+    # resolved's stub on 127.0.0.53:53 blocks bind_host 0.0.0.0:53
+    services.resolved.enable = false;
+
     # DNS and web UI only reachable over the tailnet
     networking.firewall.interfaces.tailscale0 = {
       allowedTCPPorts = [

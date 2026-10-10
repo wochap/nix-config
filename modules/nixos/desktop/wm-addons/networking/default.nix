@@ -17,6 +17,19 @@ in
     enablePixieCore = lib.mkEnableOption { };
     enableWol = lib.mkEnableOption { };
     enableOpenSnitch = lib.mkEnableOption "OpenSnitch application firewall";
+    enableNetworkManager = lib.mkEnableOption { };
+    enableDevPorts = lib.mkEnableOption { };
+    enableAvahi = lib.mkEnableOption { };
+    enableIPv6 = lib.mkEnableOption { };
+    nameservers = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [
+        "1.1.1.1"
+        "1.0.0.1"
+        "8.8.8.8"
+        "8.8.4.4"
+      ];
+    };
     userUnitsOnConnect = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -35,16 +48,11 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
-      _custom.user.extraGroups = [ "networkmanager" ];
+      _custom.user.extraGroups = lib.mkIf cfg.enableNetworkManager [ "networkmanager" ];
 
       networking = {
-        nameservers = [
-          "1.1.1.1"
-          "1.0.0.1"
-          "8.8.8.8"
-          "8.8.4.4"
-        ];
-        enableIPv6 = false;
+        inherit (cfg) nameservers;
+        enableIPv6 = cfg.enableIPv6;
       };
     })
 
@@ -72,15 +80,13 @@ in
 
       # enable systemd-resolved
       services.resolved = {
-        enable = true;
+        enable = lib.mkDefault true;
         # configure systemd-resolved for DoT and DNSSEC
         settings.Resolve = {
           DNSOverTLS = "true";
           DNSSEC = "true";
         };
       };
-      networking.resolvconf.enable = false;
-
       networking = {
         # Disable wpa_supplicant
         wireless.enable = false;
@@ -107,7 +113,7 @@ in
         };
 
         # Enable NetworkManager
-        networkmanager = {
+        networkmanager = lib.mkIf cfg.enableNetworkManager {
           enable = true;
           # increase boot speed
           wifi.backend = lib.mkIf cfg.enableWifi "iwd";
@@ -116,7 +122,7 @@ in
         firewall = {
           enable = true;
           allowPing = true;
-          allowedTCPPortRanges = [
+          allowedTCPPortRanges = lib.optionals cfg.enableDevPorts [
             # servers
             {
               from = 8000;
@@ -160,7 +166,7 @@ in
       hardware.wirelessRegulatoryDatabase = true;
 
       # service discovery, airplay, chromecast, vnc, etc
-      services.avahi.enable = true;
+      services.avahi.enable = cfg.enableAvahi;
 
       programs.localsend = lib.mkIf cfg.enableLocalSend {
         enable = true;
@@ -168,7 +174,7 @@ in
       };
     })
 
-    (lib.mkIf (cfg.enable && cfg.userUnitsOnConnect != [ ]) {
+    (lib.mkIf (cfg.enable && cfg.enableNetworkManager && cfg.userUnitsOnConnect != [ ]) {
       networking.networkmanager.dispatcherScripts = [
         {
           type = "basic";

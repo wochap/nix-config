@@ -23,7 +23,6 @@
     _custom.security.network.enable = true;
     # _custom.security.pam.enable = true;
     # _custom.security.polkit.enable = true;
-    _custom.security.sops.enable = true;
     _custom.security.ssh.enable = true;
 
     # _custom.system.console.enable = true;
@@ -49,7 +48,7 @@
     # _custom.desktop.music.enable = true;
     _custom.desktop.networking.enable = true;
     # _custom.desktop.plymouth.enable = lib.mkDefault true;
-    _custom.desktop.power-management.enable = true;
+    _custom.desktop.power-management.enable = lib.mkDefault true;
     # _custom.desktop.qt.enable = true;
     # _custom.desktop.xdg.enable = true;
 

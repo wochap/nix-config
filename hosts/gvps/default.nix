@@ -17,43 +17,77 @@ in
     _custom.globals.configDirectory = configDirectory;
     _custom.globals.preferDark = true;
 
+    _custom.archetypes.server.enable = true;
+
     # cli
+    # _custom.programs.core-utils-extra-linux.enable = true;
     _custom.programs.core-utils-linux.enable = true;
+    _custom.programs.nix-direnv.enable = true;
+
+    # gui
+    # none
+
+    # tui
+    # none
+
+    # cli
     _custom.programs.bat.enable = true;
+    # _custom.programs.core-utils-extra.enable = true;
     _custom.programs.core-utils.enable = true;
     _custom.programs.dircolors.enable = true;
     _custom.programs.fzf.enable = true;
     _custom.programs.git.enable = true;
+    _custom.programs.git.settings = {
+      user = {
+        email = "gvps@localhost";
+        name = "gvps";
+      };
+    };
+    _custom.programs.lazygit.enable = true;
     _custom.programs.lsd.enable = true;
+    # _custom.programs.ptsh.enable = true;
+    # _custom.programs.texlive.enable = true;
+    _custom.programs.zk.enable = true;
     _custom.programs.zoxide.enable = true;
     _custom.programs.zsh.enable = true;
     _custom.programs.zsh.isDefault = false;
 
+    # dev
+    # none
+
+    # gui
+    # none
+
     # tui
+    # _custom.programs.amfora.enable = true;
     _custom.programs.btop.enable = true;
     _custom.programs.less.enable = true;
+    # _custom.programs.lynx.enable = true;
     _custom.programs.neovim.enable = true;
+    # _custom.programs.newsboat.enable = true;
+    # _custom.programs.presenterm.enable = true;
+    # _custom.programs.taskwarrior.enable = true;
     _custom.programs.tmux.enable = true;
+    # _custom.programs.tmux.enableSystemd = true;
+    # _custom.programs.urlscan.enable = true;
+    _custom.programs.yazi.enable = true;
+    # _custom.programs.youtube.enable = true;
+    # _custom.programs.zellij.enable = true;
+    # _custom.programs.ai-agents.enable = true;
 
-    _custom.archetypes.server.enable = true;
+    _custom.system.user.password = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
 
-    # never put the personal age key on a public VPS
-    _custom.security.sops.enable = lib.mkForce false;
+    # public network: plain DHCP, no NetworkManager, dev ports or mDNS
+    _custom.desktop.networking.enableIPv6 = true;
+    _custom.desktop.networking.nameservers = [ "9.9.9.9" ];
 
-    # desktop networking brings NetworkManager, dev port ranges and a resolved
-    # stub that clashes with AdGuard on :53
-    _custom.desktop.networking.enable = lib.mkForce false;
-    _custom.desktop.power-management.enable = lib.mkForce false;
-    networking.useDHCP = true;
-    networking.firewall.enable = true;
-    networking.nameservers = [ "9.9.9.9" ];
-    services.resolved.enable = false;
+    _custom.desktop.power-management.enable = false;
 
-    # TODO: replace with real domain
+    # hs: Cloudflare A record, DNS only. tail: MagicDNS suffix, no public record
     _custom.services.headscale = {
       enable = true;
-      domain = "hs.example.com";
-      baseDomain = "tail.example.com";
+      domain = "hs.geanmar.com";
+      baseDomain = "tail.geanmar.com";
     };
     _custom.services.tailscale = {
       enable = true;
@@ -61,9 +95,7 @@ in
     };
     _custom.services.adguardhome.enable = true;
 
-    _custom.system.user.password = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
-
-    time.timeZone = "America/Panama";
+    time.timeZone = "America/Toronto";
 
     system.stateVersion = "26.05";
     home-manager.users.${userName}.home.stateVersion = "26.05";

@@ -51,6 +51,9 @@
     # _custom.desktop.mouseless.enable = lib.mkDefault false;
     # _custom.desktop.music.enable = true;
     _custom.desktop.networking.enable = true;
+    _custom.desktop.networking.enableNetworkManager = true;
+    _custom.desktop.networking.enableDevPorts = true;
+    _custom.desktop.networking.enableAvahi = true;
     # _custom.desktop.plymouth.enable = lib.mkDefault true;
     # _custom.desktop.power-management.enable = true;
     _custom.desktop.qt.enable = true;
