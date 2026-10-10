@@ -182,10 +182,34 @@ if [[ -z "$night_light" ]]; then
   night_light=$(hyprctl -i 0 hyprsunset temperature 2>/dev/null | grep -xE '[0-9]+' || true)
 fi
 
+# from a TTY, local-keys keeps volume keys here (Moonlight drops them) and,
+# with --grab, Ctrl+Alt+Fn. It runs until the stream ends.
+local_keys_fd=""
+local_keys_pid=""
+start_local_keys() {
+  local ready=""
+  [[ -n "$own_vt" ]] || return 0
+  exec {local_keys_fd}< <(exec remote-desktop-local-keys "${own_vt#tty}" "$@")
+  local_keys_pid=$!
+  read -r -t 5 -u "$local_keys_fd" ready || true
+  [[ "$ready" == ready ]] || echo "remote-desktop: local keys not available (volume, Ctrl+Alt+Fn)" >&2
+}
+stop_local_keys() {
+  [[ -n "$local_keys_pid" ]] || return 0
+  kill "$local_keys_pid" 2>/dev/null || true
+  exec {local_keys_fd}<&-
+  local_keys_pid=""
+}
+
 run_stream() {
+  local status=0
   if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-    "${stream[@]}"
+    # the local compositor's volume binds need to bypass Moonlight's
+    # shortcut inhibitor (Hyprland: dont_inhibit)
+    "${stream[@]}" || status=$?
   elif [[ "$backend" == "cage" ]]; then
+    # cage switches VT itself, local-keys only reads the volume keys
+    start_local_keys
     # -d: no client-side decorations; SDL's libdecor fallback frame otherwise
     # shrinks the picture and leaves bars on the left, right and bottom.
     # cage leaves the CRTC's color matrix alone, so a night light set by the
@@ -195,7 +219,8 @@ run_stream() {
       [ "$1" = - ] || wlr-randr --output "$1" --mode "$2" >/dev/null 2>&1 || true
       shift 2
       exec "$@"
-    ' _ "$cage_output" "$cage_mode" "${stream[@]}"
+    ' _ "$cage_output" "$cage_mode" "${stream[@]}" || status=$?
+    stop_local_keys
   elif [[ "$backend" == "eglfs" ]]; then
     # no compositor keeps hyprsunset's color matrix here, so set it on the
     # CRTC while nobody holds DRM master, right before Moonlight takes it
@@ -203,24 +228,14 @@ run_stream() {
       drm-night-light "$night_light" || echo "remote-desktop: night light not applied" >&2
     fi
     # Moonlight forwards Ctrl+Alt+Fn to the host and SDL mutes the console
-    # keyboard; vt-keys keeps those combos here and switches VT itself
-    local vt_keys_fd="" vt_keys_pid="" ready=""
-    if [[ -n "$own_vt" ]]; then
-      exec {vt_keys_fd}< <(exec remote-desktop-vt-keys "${own_vt#tty}")
-      vt_keys_pid=$!
-      read -r -t 5 -u "$vt_keys_fd" ready || true
-      [[ "$ready" == ready ]] || echo "remote-desktop: Ctrl+Alt+Fn goes to the host" >&2
-    fi
-    local status=0
+    # keyboard; local-keys grabs the keyboards to keep those combos here
+    start_local_keys --grab
     QT_QPA_PLATFORM=eglfs QT_QPA_EGLFS_INTEGRATION=eglfs_kms "${stream[@]}" || status=$?
-    if [[ -n "$vt_keys_pid" ]]; then
-      kill "$vt_keys_pid" 2>/dev/null || true
-      exec {vt_keys_fd}<&-
-    fi
-    return "$status"
+    stop_local_keys
   else
     usage
   fi
+  return "$status"
 }
 
 # from a TTY, switching VT makes cage or Moonlight exit. Keep the host

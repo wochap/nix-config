@@ -23,6 +23,7 @@ let
       gnused
       coreutils
       gnugrep
+      socat
     ];
     runtimeEnv = {
       REMOTE_DISPLAY_PROVIDERS = ./scripts/providers;
@@ -73,10 +74,10 @@ let
     flakeIgnore = [ "E501" ];
   } (builtins.readFile ./scripts/drm-night-light.py);
 
-  vt-keys = pkgs.writers.writePython3Bin "remote-desktop-vt-keys" {
+  local-keys = pkgs.writers.writePython3Bin "remote-desktop-local-keys" {
     libraries = [ pkgs.python3Packages.evdev ];
     flakeIgnore = [ "E501" ];
-  } (builtins.readFile ./scripts/vt-keys.py);
+  } (builtins.readFile ./scripts/local-keys.py);
 
   remote-desktop-connect = pkgs.writeShellApplication {
     name = "remote-desktop";
@@ -88,7 +89,8 @@ let
       moonlight-qt
       wlr-randr
       drm-night-light
-      vt-keys
+      local-keys
+      wireplumber
     ];
     runtimeEnv = {
       REMOTE_HOSTS_FILE = hostsFile;

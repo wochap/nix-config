@@ -9,6 +9,10 @@
 #
 # kanshi would treat the new output as a profile change and
 # override the mode, so it stays stopped until restore.
+#
+# A config reload (Hyprland reloads on its own when a rebuild changes the
+# config) drops the runtime monitor rules: $output falls back to a default
+# mode and the mirrors end. provider_watch reapplies them.
 
 hypr_env() {
   # Sunshine's prep commands and ssh sessions may lack the compositor's environment
@@ -49,12 +53,16 @@ provider_apply() {
       '{ $monitors, $workspaces, $active, $mode }' >"$state_file.tmp"
     mv "$state_file.tmp" "$state_file"
 
-    if kanshi_present; then
-      systemctl --user stop kanshi.service
-    fi
-
     # leftover from other scripts or a crashed session
     hyprctl output remove "$output" >/dev/null || true
+  fi
+
+  # also on reapply: a rebuild may have started kanshi again
+  if kanshi_present; then
+    systemctl --user stop kanshi.service
+  fi
+
+  if ! hyprctl monitors all -j | jq -e --arg output "$output" 'any(.name == $output)' >/dev/null; then
     hyprctl output create headless "$output" >/dev/null
     sleep 0.2
   fi
@@ -132,6 +140,22 @@ provider_restore() {
     fi
     echo "remote-display: focus attempt $attempt failed" >&2
   done
+}
+
+provider_watch() {
+  local self="$1" event
+  hypr_env
+
+  # ends when Hyprland exits or restore stops the unit
+  while read -r event; do
+    if [[ "$event" == configreloaded* ]]; then
+      # a rebuild can reload several times, wait for it to settle
+      while read -r -t 1 event; do :; done
+      "$self" reapply --provider hyprland || true
+      # in case reapplying itself emits events
+      while read -r -t 1 event; do :; done
+    fi
+  done < <(socat -u "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" -)
 }
 
 provider_status() {

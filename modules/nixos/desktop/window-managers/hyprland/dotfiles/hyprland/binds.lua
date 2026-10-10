@@ -456,55 +456,57 @@ hl.bind(
 hl.bind(mod .. " + ALT + d", hl.dsp.exec_cmd(session_cmd("clean-voice")), { description = "Clean Voice" })
 
 --- MEDIA KEYBINDINGS
+-- dont_inhibit: also while a fullscreen client inhibits shortcuts (Moonlight
+-- drops these keys, so the stream's audio is controlled here)
 
 if not constants.is_kiosk then
   hl.bind(
     "XF86AudioRaiseVolume",
     hl.dsp.exec_cmd("shell-pipewire --volume-output 5%+"),
-    { locked = true, repeating = true, description = "Volume Up" }
+    { locked = true, dont_inhibit = true, repeating = true, description = "Volume Up" }
   )
   hl.bind(
     "XF86AudioLowerVolume",
     hl.dsp.exec_cmd("shell-pipewire --volume-output 5%-"),
-    { locked = true, repeating = true, description = "Volume Down" }
+    { locked = true, dont_inhibit = true, repeating = true, description = "Volume Down" }
   )
   hl.bind(
     "XF86AudioMute",
     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SINK@ toggle"),
-    { locked = true, description = "Mute" }
+    { locked = true, dont_inhibit = true, description = "Mute" }
   )
 
   hl.bind(
     "XF86AudioMicMute",
     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_SOURCE@ toggle"),
-    { locked = true, description = "Mic Mute" }
+    { locked = true, dont_inhibit = true, description = "Mic Mute" }
   )
 
-  hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true, description = "Next" })
-  hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true, description = "Previous" })
-  hl.bind("XF86AudioStop", hl.dsp.exec_cmd("playerctl pause"), { locked = true, description = "Pause" })
-  hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true, description = "Play" })
+  hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true, dont_inhibit = true, description = "Next" })
+  hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true, dont_inhibit = true, description = "Previous" })
+  hl.bind("XF86AudioStop", hl.dsp.exec_cmd("playerctl pause"), { locked = true, dont_inhibit = true, description = "Pause" })
+  hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true, dont_inhibit = true, description = "Play" })
 
   hl.bind(
     "XF86MonBrightnessUp",
     hl.dsp.exec_cmd("backlight 5%+"),
-    { locked = true, repeating = true, description = "Brighter" }
+    { locked = true, dont_inhibit = true, repeating = true, description = "Brighter" }
   )
   hl.bind(
     "XF86MonBrightnessDown",
     hl.dsp.exec_cmd("backlight 5%-"),
-    { locked = true, repeating = true, description = "Dimmer" }
+    { locked = true, dont_inhibit = true, repeating = true, description = "Dimmer" }
   )
 
   hl.bind(
     "XF86KbdBrightnessDown",
     hl.dsp.exec_cmd("kbd-backlight 5%-"),
-    { locked = true, repeating = true, description = "Keys Dimmer" }
+    { locked = true, dont_inhibit = true, repeating = true, description = "Keys Dimmer" }
   )
   hl.bind(
     "XF86KbdBrightnessUp",
     hl.dsp.exec_cmd("kbd-backlight 5%+"),
-    { locked = true, repeating = true, description = "Keys Brighter" }
+    { locked = true, dont_inhibit = true, repeating = true, description = "Keys Brighter" }
   )
 end
 

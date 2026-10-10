@@ -16,7 +16,9 @@ Sunshine keeps an app running when a client disconnects without quitting, and on
 
 If kanshi runs on the host, it is stopped during a session, because it would treat `HEADLESS-2` as a profile change. `restore` runs `hyprctl reload`, then starts kanshi again. It also moves workspaces back to their monitors and refocuses the workspace that was active before. Sunshine skips `undo` when it stops with an app running, so the service's `ExecStopPost` also runs `restore`. A lock serializes overlapping runs, and a restore with nothing applied exits 0.
 
-Manual recovery on the host: `remote-display status`, `remote-display restore`.
+A Hyprland config reload drops the session's monitor rules: `HEADLESS-2` falls back to a default mode and the mirrors end. Hyprland reloads on its own when `nixos-rebuild switch` changes its config, so rebuilding the host mid-session used to change the stream's resolution. `apply` therefore starts the user unit `remote-display-watch`, which waits for Hyprland's `configreloaded` event and runs `remote-display reapply`. That command sets the session's size, fps and scale again, stops kanshi again if the rebuild started it, and recreates `HEADLESS-2` if it is gone. `restore` stops the watcher before its own reload.
+
+Manual recovery on the host: `remote-display status`, `remote-display reapply`, `remote-display restore`. `reapply` also takes `--width`/`--height`, `--fps` and `--scale` to change the running session, for example `remote-display reapply --scale 1.25` for a different DPI. The mode (mirror or headless) stays.
 
 ## Usage
 
@@ -44,6 +46,8 @@ The command starts cage twice. The first run is brief and only reads the monitor
 
 A night light set by a local Hyprland session (hyprsunset) carries over to the TTY with cage: hyprsunset sets the monitor's color matrix (CTM), and cage leaves it alone. eglfs resets it, so with eglfs the command sets it again just before Moonlight starts (`drm-night-light`, hyprsunset's formula on every CRTC's `CTM`). The temperature comes from `client.nightLight`, or from the local hyprsunset when that is null.
 
+Volume keys (and mute, mic mute) change the volume on the client, which plays the stream's audio. Moonlight drops media keys instead of sending them to the host, so `remote-desktop-local-keys` reads the keyboards next to cage and runs `wpctl` on the default sink. With eglfs, where Moonlight reads the keyboards itself, it grabs them and passes everything else to Moonlight through uinput clones, which also keeps Ctrl+Alt+Fn local. Your user needs read access to `/dev/input` (the `input` group).
+
 Switching to another VT stops Moonlight, but not the session. The host keeps its layout and Sunshine keeps the app running. When you come back to the VT, the command reconnects. Ctrl+C on the TTY while it waits ends the session and runs restore.
 
 ### From a compositor
@@ -60,7 +64,7 @@ remote-desktop laptop headless
 hl.bind(mod .. " + R", hl.dsp.exec_cmd("remote-desktop laptop"), { description = "Remote laptop" })
 ```
 
-Moonlight runs with `--capture-system-keys always`, so Super combos reach the host's compositor while the stream has focus. In a local compositor, binds that it grabs before any client sees them still act locally. Press Ctrl+Alt+Shift+Z to release or recapture keyboard and mouse. The stream uses AV1 with 4:2:0 color. Requesting 4:4:4 from a host whose encoder lacks it made Moonlight fall back to H.264, which looked soft. Override with `extraArgs`, for example `[ "--video-codec" "HEVC" ]`.
+Moonlight runs with `--capture-system-keys always`, so Super combos reach the host's compositor while the stream has focus. In a local compositor, binds marked to bypass the inhibitor still act locally. Volume keys need such a bind, because Moonlight drops media keys: in Hyprland, add `dont_inhibit = true` (the `p` flag) to the volume binds, which this repo's Hyprland config does. Press Ctrl+Alt+Shift+Z to release or recapture keyboard and mouse. The stream uses AV1 with 4:2:0 color. Requesting 4:4:4 from a host whose encoder lacks it made Moonlight fall back to H.264, which looked soft. Override with `extraArgs`, for example `[ "--video-codec" "HEVC" ]`.
 
 With no `WAYLAND_DISPLAY` (an X11 session), cage starts nested as a window. Pass `--backend eglfs` only from a TTY, because eglfs takes over the display.
 
@@ -153,3 +157,4 @@ The web UI is also at `https://sunshine.wochap.local` on the host itself, and at
 - Sunshine logs: `journalctl --user -u sunshine` on the host. The log lists the outputs it sees, and `HEADLESS-2` must be among them during a session. Output of `remote-display apply` and `restore` lands there too, and a failed `apply` fails the launch.
 - "An app is already running" from another client: quit the running app from the client that started it, or from any paired client with `moonlight quit <host>`.
 - Host left mirrored after a client vanished: `remote-display restore` on the host.
+- Stream changed size after a rebuild or config reload on the host: `remote-display reapply` there. Check the watcher with `systemctl --user status remote-display-watch`.
