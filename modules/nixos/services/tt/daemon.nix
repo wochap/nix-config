@@ -26,6 +26,12 @@ in
         Wants = [ "network-online.target" ];
       };
       Service = {
+        # config.toml is unmanaged (`tt login` writes the token), so only set
+        # the CA key; `tt config set` never spawns a daemon. `-`: a broken
+        # config.toml must not keep the daemon down
+        ExecStartPre = lib.mkIf (
+          cfg.caCert != null
+        ) "-${lib.getExe cfg.package} config set server.ca_cert ${cfg.caCert}";
         ExecStart = "${lib.getExe cfg.package} daemon";
         Restart = "on-failure";
         RestartSec = 2;

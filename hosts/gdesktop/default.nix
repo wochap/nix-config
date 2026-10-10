@@ -221,7 +221,7 @@ in
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
     _custom.services.kdeconnect.enable = true;
-    _custom.services.tt.enable = true;
+    # _custom.services.tt.enable = true;
     _custom.services.ai.enable = true;
     _custom.services.ai.enableRocm = true;
     _custom.services.ai.enableHandy = true;

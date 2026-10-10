@@ -45,7 +45,8 @@ in
         Shell hooks, keyed by path under ~/.config/tt/hooks (e.g.
         `entry.started.d/20-foo`). The event JSON arrives on stdin, `TT_EVENT`,
         `TT_ORIGIN` and `TT_SEQ` in the environment; see docs/hooks.md in tt.
-        config.toml stays unmanaged: `tt login` writes the token into it.
+        config.toml stays unmanaged: `tt login` writes the token into it (the
+        daemon unit only sets `server.ca_cert`, see `caCert`).
       '';
     };
   };
