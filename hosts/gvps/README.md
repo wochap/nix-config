@@ -27,6 +27,11 @@ OVH VPS (Model 1: 2 vCore, 4 GB, 40 GB NVMe), installed with nixos-anywhere.
    ssh-keygen -R <ip>
    ssh gean@<ip>
    ```
+7. Setup home-manager
+```sh
+git clone https://github.com/wochap/nix-config.git ~/nix-config
+nh os switch . -H gvps
+```
 
 ## Headscale
 
