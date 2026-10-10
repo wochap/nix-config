@@ -88,6 +88,8 @@ in
       enable = true;
       domain = "hs.geanmar.com";
       baseDomain = "tail.geanmar.com";
+      # gvps tailnet IP (`tailscale ip -4`), runs AdGuard Home
+      nameservers = [ "100.64.0.4" ];
     };
     _custom.services.tailscale = {
       enable = true;

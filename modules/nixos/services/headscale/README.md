@@ -13,7 +13,11 @@ curl -I https://hs.geanmar.com/health   # 200 once Caddy has the cert
 sudo headscale users create gean # on server
 ```
 
-Register gvps **first**: it must get `100.64.0.1`, the AdGuard nameserver pushed to clients (`nameservers` option).
+Join gvps itself, then set `nameservers` to its `tailscale ip -4` (AdGuard, pushed to every client). Until then clients can't resolve anything while connected.
+
+```sh
+sudo tailscale up --login-server https://hs.geanmar.com --authkey <key> --accept-dns=false
+```
 
 ## Add a client
 
@@ -39,4 +43,13 @@ If DNS fails on Android, set Private DNS to Off/Automatic.
 ```sh
 sudo headscale nodes list
 sudo headscale nodes delete -i <id>
+```
+
+## Troubleshooting
+
+**Pages don't load ("server not found") while connected:** clients send all DNS to `nameservers`, so gvps must be in the tailnet and `nameservers` must match its IP.
+
+```sh
+tailscale ip -4                 # on gvps; NeedsLogin = not joined, see Setup
+dig @<that-ip> google.com       # from a client, should resolve
 ```

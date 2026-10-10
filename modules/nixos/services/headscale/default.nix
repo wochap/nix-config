@@ -21,7 +21,7 @@ in
     };
     nameservers = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      # gvps tailnet IP, runs AdGuard Home
+      # set per host to the tailnet IP of the node running AdGuard Home
       default = [ "100.64.0.1" ];
     };
   };
