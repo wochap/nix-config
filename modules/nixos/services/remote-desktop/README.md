@@ -1,18 +1,20 @@
 # Remote desktop
 
-Control a NixOS host's running Wayland session from another NixOS machine on the LAN, even from a bare TTY with no compositor. Sunshine streams the host's screen. Moonlight shows it fullscreen on the client. For the session, the host's desktop takes the client monitor's resolution and scale, then goes back to its own layout.
+Control a NixOS host's running Wayland session from any Moonlight client: another NixOS machine (even from a bare TTY with no compositor), or Moonlight on Android with a Bluetooth keyboard and mouse. Sunshine streams the host's screen. For the session, the host's desktop takes the resolution and frame rate the client asks for, then goes back to its own layout.
 
 Two roles, enabled per machine:
-- `host`: the machine you control. Sunshine captures the headless output `HEADLESS-2` (wlr capture, no `CAP_SYS_ADMIN`). Its ports are open only on `host.lanInterface`. The host also gets `remote-display`.
-- `client`: the machine you sit at. It gets Moonlight and the `remote-desktop` command for the hosts in `client.hosts`. The command reads this monitor's mode, runs `remote-display apply` on the host over ssh, and streams with Moonlight. On exit it runs `remote-display restore` and retries for about 30 s to cover short network drops.
+- `host`: the machine you control. Sunshine captures the headless output `HEADLESS-2` (wlr capture, no `CAP_SYS_ADMIN`). Its ports are open only on `host.interfaces`. The host also gets `remote-display`.
+- `client`: a NixOS machine you sit at. It gets Moonlight and the `remote-desktop` command for the hosts in `client.hosts`. The command reads this monitor's mode and streams with Moonlight. On exit it quits the Sunshine app, retrying for about 30 s to cover short network drops.
 
-`remote-display` sizes `HEADLESS-2` to the client (`client.hosts.<name>.scale`, frame rate capped at `client.hosts.<name>.maxFps`). `restore` puts the original layout back. Code that changes the display lives in `scripts/providers/<desktop>.sh`. Only `hyprland.sh` exists. To support another compositor, add a provider that defines `provider_apply`, `provider_restore` and `provider_status`.
+Sunshine does the display work for every client, through the app's prep commands: launching runs `remote-display apply` with the client's resolution and fps (`SUNSHINE_CLIENT_WIDTH`, `_HEIGHT`, `_FPS`), quitting runs `remote-display restore`. The scale comes from `host.scales`, keyed by client resolution (1 otherwise). Sunshine sends no client name, so two clients with the same resolution share a scale. Code that changes the display lives in `scripts/providers/<desktop>.sh`. Only `hyprland.sh` exists. To support another compositor, add a provider that defines `provider_apply`, `provider_restore` and `provider_status`.
 
-Modes:
-- `mirror`: physical outputs mirror `HEADLESS-2` and keep their own modes. Local keyboard and mouse on the host keep working. Workspaces move to `HEADLESS-2` for the session, and the local cursor lives in its coordinate space. A different aspect ratio gives black bars on the host screen.
-- `headless`: physical outputs stay untouched; the stream is a separate output.
+Modes, one Sunshine app each:
+- `mirror`, app `Desktop` (`host.app`): physical outputs mirror `HEADLESS-2` and keep their own modes. Local keyboard and mouse on the host keep working. Workspaces move to `HEADLESS-2` for the session, and the local cursor lives in its coordinate space. A different aspect ratio gives black bars on the host screen.
+- `headless`, app `Desktop Headless`: physical outputs stay untouched; the stream is a separate output.
 
-If kanshi runs on the host, it is stopped during a session, because it would treat `HEADLESS-2` as a profile change. `restore` runs `hyprctl reload`, then starts kanshi again. It also moves workspaces back to their monitors and refocuses the workspace that was active before. `restore` can run twice at once (Moonlight `--quit-after` triggers Sunshine's `undo`, and the client's trap also calls it). A lock serializes the two, and the second exits 0.
+Sunshine keeps an app running when a client disconnects without quitting, and only one app runs at a time. Reconnecting resumes it without running `apply` again, so the display keeps the size of the client that launched it. `remote-desktop` therefore quits any running app before it streams. Other clients must quit it themselves (see Android below).
+
+If kanshi runs on the host, it is stopped during a session, because it would treat `HEADLESS-2` as a profile change. `restore` runs `hyprctl reload`, then starts kanshi again. It also moves workspaces back to their monitors and refocuses the workspace that was active before. Sunshine skips `undo` when it stops with an app running, so the service's `ExecStopPost` also runs `restore`. A lock serializes overlapping runs, and a restore with nothing applied exits 0.
 
 Manual recovery on the host: `remote-display status`, `remote-display restore`.
 
@@ -23,7 +25,7 @@ remote-desktop <host> [mirror|headless] [--resolution WxH] [--fps N] [--backend 
 remote-desktop --list
 ```
 
-`<host>` is a name from `client.hosts`; shell completion knows them. A host with `commandName` also gets a short command, for example `laptop-remote` for `remote-desktop laptop`. Complete the setup below first: ssh access and pairing.
+`<host>` is a name from `client.hosts`; shell completion knows them. A host with `commandName` also gets a short command, for example `laptop-remote` for `remote-desktop laptop`. Pair first (see Setup).
 
 ### From a TTY
 
@@ -70,7 +72,15 @@ Moonlight shortcuts:
 - Ctrl+Alt+Shift+X: toggle fullscreen.
 - Ctrl+Alt+Shift+S: show stream stats.
 
-Quitting Moonlight (while its VT is active), Ctrl+C in the shell, and closing the terminal all run restore and end the Sunshine app. Restore ignores further Ctrl+C until it finishes (at most about 80 s of retries). The command refuses to start when the host is not paired, before it touches the host's display.
+Quitting Moonlight (while its VT is active), Ctrl+C in the shell, and closing the terminal all quit the Sunshine app, whose `undo` restores the host. The quit ignores further Ctrl+C until it finishes (at most about 2 min of retries). If the host stays unreachable longer, run `remote-display restore` on it. The command refuses to start when the host is not paired.
+
+### From Android
+
+Install Moonlight (Play Store or F-Droid), add the host by address and pair it (see Pairing). Start `Desktop` or `Desktop Headless`. A Bluetooth keyboard and mouse work; the mouse is captured as relative input. Android or Samsung DeX may keep the Meta key for themselves, so Super binds might not reach the host; DeX has a setting to pass Meta through.
+
+- Pick the resolution in Moonlight's settings. Mirroring the phone's screen to a monitor keeps the phone's aspect ratio (letterboxed); DeX or Android's desktop mode gives the monitor its own resolution.
+- Leaving the stream only disconnects: the host stays mirrored at the phone's size. To end the session, long-press the app in Moonlight and choose Quit, or start `remote-desktop` from a NixOS client, which quits it first.
+- Moonlight Android's default codec choice is fine. The NixOS client forces AV1, which a phone may not decode in hardware.
 
 ## Setup
 
@@ -80,7 +90,8 @@ Quitting Moonlight (while its VT is active), Ctrl+C in the shell, and closing th
 # host
 _custom.services.remote-desktop.host = {
   enable = true;
-  lanInterface = "wlan0";   # interface the client reaches the host on
+  interfaces = [ "wlan0" ];  # interfaces clients reach the host on, e.g. also "tailscale0"
+  # scales."3840x2160" = 1.5;  # scale per client resolution, 1 otherwise
 };
 
 # client, one entry per host to control
@@ -89,32 +100,19 @@ _custom.services.remote-desktop.client = {
   # nightLight = 4000;               # eglfs night light, null follows hyprsunset
   hosts = {
     laptop = {
-      address = "laptop.local";      # ssh destination and Moonlight host
+      address = "laptop.local";      # Moonlight host
       commandName = "laptop-remote"; # optional short command
-      # scale = 1;                   # scale the host uses for the stream, match the client monitor
       # maxFps = 120;
       # bitrate = 50000;             # Kbps, null lets Moonlight pick (soft on a desktop)
       # extraArgs = [ "--video-codec" "HEVC" ];
-      # app = "Desktop";             # the host's host.app
+      # app = "Desktop";             # the host's host.app, headless adds " Headless"
     };
     desktop2.address = "192.168.0.20";
   };
 };
 ```
 
-### SSH
-
-The command runs `ssh <address> remote-display ...` as the current user. The `.local` names in the examples resolve through avahi; any name or IP works. One ssh connection (`ControlMaster`, kept 10 min) carries both apply and restore. It prompts for a password at most once, on the TTY, before Moonlight starts. Key login is better, because restore after a network drop then works without a prompt:
-
-```sh
-# client
-ssh-copy-id laptop.local
-ssh laptop.local true   # accept the host key once
-```
-
-Repeat for each host.
-
-The host user must be the one logged in to the graphical session. `remote-display` finds that session through `systemctl --user show-environment`.
+The `.local` names in the examples resolve through avahi; any name or IP works, including a Tailscale address when `tailscale0` is in `host.interfaces`. Sunshine runs as the host user, which must be the one logged in to the graphical session. `remote-display` finds that session through `systemctl --user show-environment`.
 
 ### Sunshine web UI login (optional)
 
@@ -152,4 +150,6 @@ The web UI is also at `https://sunshine.wochap.local` on the host itself, and at
 
 - No picture or wrong size from the TTY: try `--backend eglfs`, or run the command inside a compositor to rule out cage.
 - Wrong mode detected (falls back to 60 fps when cage cannot report it): pass `--resolution` and `--fps`.
-- Sunshine logs: `journalctl --user -u sunshine` on the host. The log lists the outputs it sees, and `HEADLESS-2` must be among them during a session.
+- Sunshine logs: `journalctl --user -u sunshine` on the host. The log lists the outputs it sees, and `HEADLESS-2` must be among them during a session. Output of `remote-display apply` and `restore` lands there too, and a failed `apply` fails the launch.
+- "An app is already running" from another client: quit the running app from the client that started it, or from any paired client with `moonlight quit <host>`.
+- Host left mirrored after a client vanished: `remote-display restore` on the host.

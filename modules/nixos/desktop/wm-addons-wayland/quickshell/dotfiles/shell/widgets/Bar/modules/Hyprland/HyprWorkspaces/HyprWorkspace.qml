@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Effects
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Hyprland
 import qs.config
 import qs.services
@@ -91,6 +92,40 @@ Button {
             shadowEnabled: true
             shadowBlur: 0.25
             shadowColor: Theme.options.primary
+          }
+
+          MouseArea {
+            id: clientMouseArea
+
+            readonly property string label: modelData.title || modelData.class
+
+            // temporarily force cursor.no_warps so focusing doesn't move the cursor
+            function focusClient() {
+              const window = `"address:${modelData.address}"`;
+              const raise = modelData.floating ? `hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top", window = ${window} }))` : "";
+              Quickshell.execDetached(["hyprctl", "eval", `
+                local no_warps = hl.get_config("cursor.no_warps")
+                hl.config({ cursor = { no_warps = true } })
+                hl.dispatch(hl.dsp.focus({ window = ${window} }))
+                ${raise}
+                hl.config({ cursor = { no_warps = no_warps } })
+              `]);
+            }
+
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: clientMouseArea.focusClient()
+            Accessible.role: Accessible.Button
+            Accessible.name: clientMouseArea.label
+            Accessible.checkable: true
+            Accessible.checked: modelData.isFocused
+            Accessible.onPressAction: clientMouseArea.focusClient()
+
+            Hintable {
+              label: clientMouseArea.label
+              onActivated: clientMouseArea.focusClient()
+            }
           }
 
           // TODO: doesn't work

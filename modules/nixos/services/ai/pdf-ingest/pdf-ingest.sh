@@ -81,7 +81,7 @@ if ((${#positional[@]} == 2)); then
   output_dir=${positional[1]}
 else
   source_base=$(basename "$source_pdf")
-  output_dir="./${source_base%.*}"
+  output_dir="$(dirname "$source_pdf")/${source_base%.*}"
 fi
 
 if [[ -e $output_dir && ! -d $output_dir ]]; then

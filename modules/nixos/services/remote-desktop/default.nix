@@ -27,10 +27,33 @@ let
     runtimeEnv = {
       REMOTE_DISPLAY_PROVIDERS = ./scripts/providers;
       REMOTE_DISPLAY_OUTPUT = streamOutput;
+      REMOTE_DISPLAY_SCALES = builtins.toJSON cfg.host.scales;
     };
     text = builtins.readFile ./scripts/remote-display.sh;
     meta.description = "Fit the desktop to a Sunshine client's monitor and restore it afterwards";
   };
+
+  # one Sunshine app per mode, the client picks the mode by app name
+  sunshineApps = [
+    {
+      name = cfg.host.app;
+      mode = "mirror";
+    }
+    {
+      name = "${cfg.host.app} Headless";
+      mode = "headless";
+    }
+  ];
+
+  # Sunshine runs prep commands without a shell, and sets the client's mode
+  # in their environment only at launch
+  sunshineApply =
+    mode:
+    pkgs.writeShellScript "remote-display-apply-${mode}" ''
+      exec ${lib.getExe remote-display} apply --mode ${mode} \
+        --width "$SUNSHINE_CLIENT_WIDTH" --height "$SUNSHINE_CLIENT_HEIGHT" \
+        --fps "$SUNSHINE_CLIENT_FPS"
+    '';
 
   hostsFile = pkgs.writeText "remote-desktop-hosts.json" (
     builtins.toJSON (
@@ -38,7 +61,6 @@ let
         inherit (host)
           address
           app
-          scale
           maxFps
           bitrate
           extraArgs
@@ -64,7 +86,6 @@ let
       gnused
       jq
       moonlight-qt
-      openssh
       wlr-randr
       drm-night-light
       vt-keys
@@ -114,14 +135,27 @@ in
   options._custom.services.remote-desktop = {
     host = {
       enable = lib.mkEnableOption "streaming this host's desktop to Moonlight clients (Sunshine)";
-      lanInterface = lib.mkOption {
-        type = lib.types.nonEmptyStr;
-        description = "Only interface where Sunshine ports are open.";
+      interfaces = lib.mkOption {
+        type = lib.types.listOf lib.types.nonEmptyStr;
+        default = [ ];
+        example = [
+          "wlan0"
+          "tailscale0"
+        ];
+        description = "Only interfaces where Sunshine ports are open.";
       };
       app = lib.mkOption {
         type = lib.types.nonEmptyStr;
         default = "Desktop";
-        description = "Name of the Sunshine application clients start.";
+        description = "Name of the Sunshine application that mirrors the physical outputs. `<app> Headless` leaves them untouched.";
+      };
+      scales = lib.mkOption {
+        type = lib.types.attrsOf lib.types.numbers.positive;
+        default = { };
+        example = {
+          "3840x2160" = 1.5;
+        };
+        description = "Scale of the streamed output per client resolution (`WxH`), 1 otherwise. Sunshine sends no client name, so clients with the same resolution share a scale.";
       };
       webUi.subdomain = lib.mkOption {
         type = lib.types.nullOr lib.types.nonEmptyStr;
@@ -184,7 +218,7 @@ in
               options = {
                 address = lib.mkOption {
                   type = lib.types.nonEmptyStr;
-                  description = "Sunshine host, also the ssh destination for remote-display.";
+                  description = "Sunshine host.";
                 };
                 webUi.subdomain = lib.mkOption {
                   type = lib.types.nullOr lib.types.nonEmptyStr;
@@ -200,12 +234,7 @@ in
                 app = lib.mkOption {
                   type = lib.types.nonEmptyStr;
                   default = "Desktop";
-                  description = "Sunshine application to start, the host's `host.app`.";
-                };
-                scale = lib.mkOption {
-                  type = lib.types.numbers.positive;
-                  default = 1;
-                  description = "Scale the host uses on the streamed output, set to this monitor's scale.";
+                  description = "Sunshine application to start in mirror mode, the host's `host.app`. Headless mode starts `<app> Headless`.";
                 };
                 maxFps = lib.mkOption {
                   type = lib.types.ints.positive;
@@ -235,6 +264,13 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf cfg.host.enable {
+      assertions = [
+        {
+          assertion = cfg.host.interfaces != [ ];
+          message = "_custom.services.remote-desktop.host.interfaces must list the interfaces clients connect on.";
+        }
+      ];
+
       environment.systemPackages = [ remote-display ];
 
       # https://sunshine.wochap.local, pairing PINs without typing the port
@@ -259,23 +295,21 @@ in
           output_name = streamOutput;
           csrf_allowed_origins = lib.concatStringsSep "," cfg.host.webUi.allowedOrigins;
         };
-        applications.apps = [
-          {
-            name = cfg.host.app;
-            prep-cmd = [
-              {
-                do = "";
-                # last resort, Sunshine keeps the app running after a client
-                # drops, so this only runs on quit or on the next launch
-                undo = "${lib.getExe remote-display} restore";
-              }
-            ];
-            auto-detach = "true";
-          }
-        ];
+        # Sunshine keeps the app running after a client drops, so undo runs
+        # only on quit. A resume skips do, the display keeps its first size.
+        applications.apps = map (app: {
+          inherit (app) name;
+          prep-cmd = [
+            {
+              do = toString (sunshineApply app.mode);
+              undo = "${lib.getExe remote-display} restore";
+            }
+          ];
+          auto-detach = "true";
+        }) sunshineApps;
       };
 
-      networking.firewall.interfaces.${cfg.host.lanInterface} = {
+      networking.firewall.interfaces = lib.genAttrs cfg.host.interfaces (_: {
         allowedTCPPorts = sunshinePorts [
           (-5)
           0
@@ -289,7 +323,7 @@ in
           13
           21
         ];
-      };
+      });
 
       sops.secrets = lib.mkIf (cfg.host.credentials.sopsFile != null) {
         ${cfg.host.credentials.userKey} = {
@@ -302,15 +336,18 @@ in
         };
       };
 
-      systemd.user.services.sunshine.serviceConfig.ExecStartPre =
-        lib.mkIf (cfg.host.credentials.sopsFile != null)
-          (
-            pkgs.writeShellScript "sunshine-creds" ''
-              ${lib.getExe sunshineCfg.package} --creds \
-                "$(cat ${config.sops.secrets.${cfg.host.credentials.userKey}.path})" \
-                "$(cat ${config.sops.secrets.${cfg.host.credentials.passwordKey}.path})"
-            ''
-          );
+      systemd.user.services.sunshine.serviceConfig = {
+        ExecStartPre = lib.mkIf (cfg.host.credentials.sopsFile != null) (
+          pkgs.writeShellScript "sunshine-creds" ''
+            ${lib.getExe sunshineCfg.package} --creds \
+              "$(cat ${config.sops.secrets.${cfg.host.credentials.userKey}.path})" \
+              "$(cat ${config.sops.secrets.${cfg.host.credentials.passwordKey}.path})"
+          ''
+        );
+        # Sunshine skips undo when it stops with an app running. "-": the
+        # compositor may already be gone on logout
+        ExecStopPost = "-${lib.getExe remote-display} restore";
+      };
     })
 
     (lib.mkIf cfg.client.enable {

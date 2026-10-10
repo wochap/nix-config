@@ -1,0 +1,23 @@
+#compdef pdf-ingest
+
+_pdf-ingest() {
+  if [[ $words[2] == setup ]]; then
+    return
+  fi
+
+  _arguments -s \
+    '--dpi[initial render resolution]:dpi:' \
+    '--min-dpi[lowest resolution used after GPU OOM]:dpi:' \
+    '--batch-size[initial inference batch size]:size:' \
+    '(-h --help)'{-h,--help}'[show help]' \
+    '1:PDF or command:->first' \
+    '2:output directory:_directories'
+
+  if [[ $state == first ]]; then
+    _alternative \
+      'commands:command:((setup\:"pull the pinned inference image"))' \
+      'files:PDF:_files -g "*.(#i)pdf(-.)"'
+  fi
+}
+
+_pdf-ingest "$@"

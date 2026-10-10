@@ -11,7 +11,7 @@
 # override the mode, so it stays stopped until restore.
 
 hypr_env() {
-  # ssh sessions do not inherit the compositor's environment
+  # Sunshine's prep commands and ssh sessions may lack the compositor's environment
   if [[ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
     local session_env
     session_env=$(systemctl --user show-environment 2>/dev/null || true)

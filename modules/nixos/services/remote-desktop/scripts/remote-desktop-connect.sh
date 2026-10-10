@@ -1,10 +1,11 @@
 # remote-desktop-connect
 #
 # Streams a remote desktop through Moonlight, fullscreen on this machine. Works
-# from a bare TTY (starts cage) or from inside a Wayland session. The remote
-# host fits its desktop to this monitor for the session (remote-display) and
-# goes back to its own layout on exit. REMOTE_HOSTS_FILE (JSON, name ->
-# { address, app, scale, maxFps }) comes from the Nix module.
+# from a bare TTY (starts cage) or from inside a Wayland session. Sunshine's
+# prep commands fit the host's desktop to the requested mode for the session
+# (remote-display) and put its own layout back when the app quits.
+# REMOTE_HOSTS_FILE (JSON, name -> { address, app, maxFps, ... }) comes from
+# the Nix module.
 #
 #   remote-desktop <host> [mirror|headless] [--resolution WxH] [--fps N] [--backend cage|eglfs]
 #   remote-desktop --list
@@ -30,7 +31,6 @@ host_value() {
 }
 host=$(host_value address)
 app=$(host_value app)
-scale=$(host_value scale)
 max_fps=$(host_value maxFps)
 bitrate=$(host_value bitrate)
 mapfile -t extra_args < <(jq -r --arg name "$name" '.[$name].extraArgs[]' "$REMOTE_HOSTS_FILE")
@@ -60,13 +60,10 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-runtime_dir="${XDG_RUNTIME_DIR:-/tmp}"
-# one ssh login for apply and restore, password prompt (if any) stays on the TTY
-ssh_opts=(
-  -o ControlMaster=auto
-  -o "ControlPath=$runtime_dir/remote-desktop-%C"
-  -o ControlPersist=10m
-)
+# the host maps each mode to its own Sunshine app
+if [[ "$mode" == "headless" ]]; then
+  app="$app Headless"
+fi
 
 detect_mode() {
   local randr_json
@@ -127,33 +124,37 @@ fi
 width="${resolution%x*}"
 height="${resolution#*x}"
 
-echo "remote-desktop: $host $mode ${width}x${height}@${fps} scale $scale"
+echo "remote-desktop: $host $mode ${width}x${height}@${fps}"
 
-# check pairing before touching the host's display, an unpaired stream fails
-# right away and `moonlight quit` hangs
+# `moonlight quit` hangs on an unpaired host
 if ! QT_QPA_PLATFORM=offscreen timeout 20 moonlight list "$host" >/dev/null 2>&1; then
   echo "remote-desktop: $host is not paired or not reachable, run 'moonlight pair $host' from a graphical session" >&2
   exit 1
 fi
 
-ssh "${ssh_opts[@]}" "$host" remote-display apply \
-  --mode "$mode" --width "$width" --height "$height" --fps "$fps" --scale "$scale"
+moonlight_quit() {
+  QT_QPA_PLATFORM=offscreen timeout 10 moonlight quit "$host" >/dev/null 2>&1
+}
+
+# end a session another client left running (Moonlight on Android keeps the
+# app on disconnect): resuming it keeps its display size, and launching the
+# other mode's app fails while it runs. Quitting restores the host and the
+# launch below applies this monitor's mode.
+moonlight_quit || true
 
 cleanup() {
-  # finish the restore even when Ctrl+C is pressed again, ssh inherits this
+  # finish even when Ctrl+C is pressed again
   trap '' INT TERM HUP
   trap - EXIT
-  echo "remote-desktop: restoring $host"
-  # retry so a short network drop does not leave the remote layout changed
+  echo "remote-desktop: quitting the session on $host"
+  # Sunshine's undo restores the host's layout; retry so a short network
+  # drop does not leave it changed
   local attempt
   for attempt in 1 2 3 4 5 6 7 8 9 10; do
-    if ssh "${ssh_opts[@]}" -o ConnectTimeout=5 "$host" remote-display restore; then
-      ssh "${ssh_opts[@]}" -O exit "$host" >/dev/null 2>&1 || true
-      # end the Sunshine session
-      QT_QPA_PLATFORM=offscreen timeout 10 moonlight quit "$host" >/dev/null 2>&1 || true
+    if moonlight_quit; then
       return
     fi
-    echo "remote-desktop: restore failed (attempt $attempt), retrying" >&2
+    echo "remote-desktop: quit failed (attempt $attempt), retrying" >&2
     sleep 3
   done
   echo "remote-desktop: run 'remote-display restore' on $host" >&2
