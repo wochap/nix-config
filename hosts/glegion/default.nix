@@ -197,9 +197,8 @@ in
       client.netrc.sopsFile = ../../secrets-sops/local.yaml;
       client.netrc.sopsKey = "local-nix-cache-netrc";
     };
-    # TODO: NetworkManager connection names (`nmcli connection show`) of the
-    # home and friends' networks. Empty keeps every exposed vhost closed.
-    _custom.services.web-gate.trustedConnections = [ ];
+    # NetworkManager connection names where LAN vhosts open and DDNS updates.
+    _custom.services.web-gate.trustedConnections = config._custom.globals.secrets.networks.trustedConnections;
     # Media UIs other household members use, reachable from the LAN as
     # https://<name>.glegion.geanmar.com. They rely on the app's own login: their
     # mobile/TV apps cannot complete the web-gate Basic Auth cookie dance.
