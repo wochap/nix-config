@@ -29,7 +29,7 @@ RowLayout {
     Layout.leftMargin: ConfigBar.modulesSpacing
     Layout.rightMargin: 0
     spacing: 0
-    visible: isFocused && (capslock.isVisible || timewarrior.isVisible || tt.isVisible || idleInhibit.isVisible || agents.isVisible || mail.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible || notifications.isVisible)
+    visible: isFocused && (capslock.isVisible || tt.isVisible || idleInhibit.isVisible || agents.isVisible || mail.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible || notifications.isVisible)
 
     Capslock {
       id: capslock
