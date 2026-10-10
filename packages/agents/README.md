@@ -13,7 +13,7 @@ agents run -a pi "fix the failing test"      # pi, its default model
 agents run -a pi -m omniroute/desktop-free "fix the failing test"
 agents run -q -C ~/repo "summarize the repo" # final answer only
 agents run -r <id> "continue"                # resume headless
-agents ls                                    # list sessions
+agents ls                                    # sessions of the last 7 days, --full for all
 agents watch                                 # follow the latest running session
 agents attach <id>                           # take it over interactively
 agents last <id>                             # last agent message

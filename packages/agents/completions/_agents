@@ -33,6 +33,7 @@ _agents() {
     '--port[port]:port:' \
     '--models[comma-separated agent/model ids]:models:' \
     '--tool-events[stream tool calls]' \
+    '--full[list all sessions]' \
     '(-h --help)'{-h,--help}'[show help]' \
     '1:command:->command' \
     '*::arg:->args'

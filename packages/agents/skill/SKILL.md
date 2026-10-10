@@ -18,7 +18,7 @@ echo "<long prompt>" | agents run -q -   # prompt from stdin
 agents run -q -r <id> "<follow-up>"      # continue a session headless
 agents run -q --no-tools "<question>"    # answer only, no tools (pass again on -r)
 agents last <id>                         # last message of a session
-agents ls                                # list sessions
+agents ls                                # sessions of the last 7 days, --full for all
 ```
 
 - Agents: `claude` (default), `pi`. `-m` defaults to the chosen agent's model.

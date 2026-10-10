@@ -41,7 +41,8 @@ Commands:
     detaches back here while it keeps working, ctrl+t attaches again
   attach [<id>]      take over a session interactively (default: latest)
   last [<id>]        last agent message (default: latest)
-  ls                 list sessions
+  ls                 list sessions of the last 7 days, oldest first
+        --full           list all sessions
   watch [<id>]       follow a session (default: latest running, else latest)
   serve              OpenAI-compatible API: /v1/chat/completions, /v1/models
         --host <h>       listen address (default: 127.0.0.1)
@@ -72,6 +73,7 @@ const { values: opts, positionals } = parseArgs({
     models: { type: "string" },
     "tool-events": { type: "boolean" },
     "no-tools": { type: "boolean" },
+    full: { type: "boolean" },
     help: { type: "boolean", short: "h" },
   },
 });
@@ -256,9 +258,12 @@ async function last() {
   console.log(text);
 }
 
+// Last 7 days unless --full; oldest first so the newest ends up by the prompt.
 function ls() {
   const statusColor = { running: color.blue, done: color.dim, failed: color.yellow };
-  for (const s of store.listSessions()) {
+  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const sessions = store.listSessions().filter((s) => opts.full || s.startedAt >= since);
+  for (const s of sessions.reverse()) {
     const started = new Date(s.startedAt).toLocaleString("sv").slice(0, 16);
     const prompt = s.prompt.replace(/\s+/g, " ").slice(0, 60);
     console.log(
