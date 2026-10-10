@@ -30,13 +30,7 @@ OVH VPS (Model 1: 2 vCore, 4 GB, 40 GB NVMe), installed with nixos-anywhere.
 
 ## Headscale
 
-```sh
-curl -I https://hs.geanmar.com/health   # 200 once Caddy has the cert
-sudo headscale users create gean
-sudo headscale preauthkeys create --user gean
-# on each client
-sudo tailscale up --login-server https://hs.geanmar.com --authkey <key>
-```
+See [modules/nixos/services/headscale/README.md](../../modules/nixos/services/headscale/README.md).
 
 ## Update
 
