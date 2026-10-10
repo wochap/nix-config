@@ -16,7 +16,7 @@ let
   accelerator = if pdfIngestCfg.accelerator == "rocm" then "rocm" else "cuda";
   image = if adapter == null then null else adapter.image.${accelerator} or null;
 
-  pdf-ingest = pkgs.writeShellApplication {
+  pdf-ingest-unwrapped = pkgs.writeShellApplication {
     name = "pdf-ingest";
     runtimeInputs = [ python ];
     runtimeEnv =
@@ -38,6 +38,14 @@ let
       };
     text = builtins.readFile ../lib/container.sh + builtins.readFile ./pdf-ingest.sh;
     meta.description = "Extract a PDF into a portable canonical document directory";
+  };
+
+  pdf-ingest = pkgs.symlinkJoin {
+    inherit (pdf-ingest-unwrapped) name meta;
+    paths = [ pdf-ingest-unwrapped ];
+    postBuild = ''
+      install -Dm444 ${./_pdf-ingest} $out/share/zsh/site-functions/_pdf-ingest
+    '';
   };
 in
 {
