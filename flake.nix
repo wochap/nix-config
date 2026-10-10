@@ -64,7 +64,7 @@
     tofi.url = "github:wochap/tofi/master-fork";
     tofi.inputs.nixpkgs.follows = "nixpkgs";
     wosarcher.url = "github:wochap/wosarcher";
-    wosarcher.flake = false;
+    wosarcher.inputs.nixpkgs.follows = "nixpkgs";
     wt.url = "github:wochap/wt";
     wt.inputs.nixpkgs.follows = "nixpkgs";
     wt.inputs.home-manager.follows = "home-manager";
