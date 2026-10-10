@@ -296,6 +296,10 @@ in
           # matched by xdg_output name
           output_name = streamOutput;
           csrf_allowed_origins = lib.concatStringsSep "," cfg.host.webUi.allowedOrigins;
+          # require encrypted video/audio/control from every client, the LAN
+          # default leaves video in the clear
+          lan_encryption_mode = 2;
+          wan_encryption_mode = 2;
         };
         # Sunshine keeps the app running after a client drops, so undo runs
         # only on quit. A resume skips do, the display keeps its first size.
