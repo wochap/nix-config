@@ -6,6 +6,7 @@
 
 let
   cfg = config._custom.services.tailscale;
+  inherit (config._custom.globals) userName;
 in
 {
   options._custom.services.tailscale = {
@@ -19,6 +20,13 @@ in
       type = lib.types.bool;
       default = true;
     };
+    # lets the user run `tailscale up/down` without root (control center toggle)
+    enableOperator = lib.mkEnableOption { };
+    # false: tailscaled only runs once started by hand (control center toggle)
+    startOnBoot = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -27,7 +35,14 @@ in
       openFirewall = true;
       useRoutingFeatures = "client";
       extraUpFlags = [ "--login-server=${cfg.loginServer}" ];
+      extraSetFlags = lib.optionals cfg.enableOperator [ "--operator=${userName}" ];
     };
+
+    systemd.services.tailscaled.wantedBy = lib.mkIf (!cfg.startOnBoot) (lib.mkForce [ ]);
+    # reapply `tailscale set` flags whenever tailscaled starts, not only at boot
+    systemd.services.tailscaled-set.wantedBy = lib.mkIf (!cfg.startOnBoot) (
+      lib.mkForce [ "tailscaled.service" ]
+    );
 
     networking.firewall.checkReversePath = "loose";
     networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 22 ];

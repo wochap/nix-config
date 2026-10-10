@@ -134,7 +134,14 @@ in
       remote.interfaces = [ "enp42s0" ];
     };
 
-    # _custom.services.tailscale.enable = true;
+    _custom.services.tailscale = {
+      enable = true;
+      loginServer = "https://hs.geanmar.com";
+      enableOperator = true;
+      startOnBoot = false;
+      # keep ssh reachable on the LAN
+      sshOnlyTailnet = false;
+    };
     _custom.services.remote-desktop.client = {
       enable = true;
       hosts.glegion = {

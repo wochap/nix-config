@@ -51,6 +51,7 @@ PanelWindow {
     SSupertonic.getState();
     SSandbox.getState();
     SDocker.getState();
+    STailscale.getState();
     if (SUpower.available) {
       SLegionBatteryConservation.getState();
       SBatterySaver.getState();
@@ -312,6 +313,16 @@ PanelWindow {
             sublabel: SDocker.isActive ? "Running" : "Stopped"
             isActive: SDocker.isActive
             onClicked: SDocker.toggle()
+          }
+
+          ControlCenterTile {
+            Layout.fillWidth: true
+            visible: STailscale.available
+            icon: "vpn_lock"
+            label: "Tailnet"
+            sublabel: STailscale.needsLogin ? "Not logged in" : STailscale.isActive ? STailscale.ip : "Disconnected"
+            isActive: STailscale.isActive
+            onClicked: STailscale.toggle()
           }
         }
 

@@ -91,6 +91,7 @@ in
     };
     _custom.services.tailscale = {
       enable = true;
+      loginServer = "https://hs.geanmar.com";
       sshOnlyTailnet = false;
       # once gvps joined the tailnet and ssh over it works (KVM console is the fallback)
       # sshOnlyTailnet = true;
