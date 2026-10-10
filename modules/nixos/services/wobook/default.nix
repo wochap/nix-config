@@ -9,6 +9,9 @@ let
   cfg = config._custom.services.wobook;
 in
 {
+  # System firewall for sync (UDP 47390-47399) and mDNS (UDP 5353).
+  imports = [ inputs.wobook.nixosModules.wobook ];
+
   options._custom.services.wobook = {
     enable = lib.mkEnableOption "wobook local-first bookmarks";
     chromiumExtensionIds = lib.mkOption {
@@ -22,8 +25,11 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    _custom.hm = {
+  config = {
+    # Set unconditionally: openFirewall defaults to true in the upstream module.
+    services.wobook.openFirewall = cfg.enable;
+
+    _custom.hm = lib.mkIf cfg.enable {
       imports = [ inputs.wobook.homeManagerModules.wobook ];
 
       programs.wobook = {
