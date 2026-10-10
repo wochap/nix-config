@@ -18,6 +18,8 @@ export interface Session {
   cwd: string;
   /** First 200 chars of the first prompt. */
   prompt: string;
+  /** What started it when not a person, e.g. "serve"; `ls` hides those. */
+  via?: string;
   startedAt: string;
   endedAt?: string;
   status: Status;

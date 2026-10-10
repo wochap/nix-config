@@ -13,7 +13,7 @@ agents run -a pi "fix the failing test"      # pi, its default model
 agents run -a pi -m omniroute/desktop-free "fix the failing test"
 agents run -q -C ~/repo "summarize the repo" # final answer only
 agents run -r <id> "continue"                # resume headless
-agents ls                                    # sessions of the last 7 days, --full for all
+agents ls                                    # sessions of the last 7 days, --full for all, --all adds serve's
 agents watch                                 # follow the latest running session
 agents attach <id>                           # take it over interactively
 agents last <id>                             # last agent message
@@ -40,6 +40,14 @@ claude, `--no-tools` for pi. It applies to that run only, not to `-r` or
 `attach`. An adapter declares it with `noToolsFlags`; agents without it
 refuse `--no-tools`.
 
+`--system-file <f>` replaces the agent's system prompt with the file's text:
+`--system-prompt-file` for claude, `--system-prompt` for pi. An adapter
+declares it with `systemPromptFlags`; for agents without it the text goes
+at the top of the prompt. Per run, like `--no-tools`.
+
+Adapters pass the prompt on stdin, never as an argument: Linux caps one
+argv string at 128 KiB.
+
 `-e/--effort` (`low`, `medium`, `high`, `xhigh`, `max`) maps to the agent's
 own flag: `--effort` for claude, `--thinking` for pi. Unset, the agent uses
 its own setting. The session keeps it for `-r` and `attach`.
@@ -64,13 +72,24 @@ cat packages/agents/prompts/write-adapter.md "$report" | agents run -
 ## OpenAI-compatible server
 
 `agents serve` speaks `/v1/chat/completions` and `/v1/models`, so chat GUIs
-(open-webui, desktop clients, editors) can talk to the agents. Each request
-is one `agents run --json` in the `-C` directory (default: current).
+(open-webui, desktop clients, editors) and programs (wosarcher) can talk to
+the agents. Each request is one `agents run --json` in the `-C` directory
+(default: current).
 
 ```sh
-agents serve --port 20940 -C ~/work --no-tools \
-  --models 'claude/claude-opus-5-5[1m],pi/omniroute/desktop-free'
+agents serve --port 20940 -C ~/work --api-key-file ~/.config/agents/api-key \
+  --models 'claude/claude-sonnet-5-5,pi/omniroute/desktop-free'
 ```
+
+- Auth: `/v1/*` needs `Authorization: Bearer <key>`, the key coming from
+  `--api-key-file` or `AGENTS_API_KEY`; without either serve refuses to
+  start unless given `--no-auth`. `/health` is open.
+- No tools by default: every run gets `--no-tools`, so a prompt (a chat, or
+  web text a program forwards) cannot drive tools in the `-C` directory.
+  `--tools` turns them on; `--tool-events` then streams tool calls.
+- System messages replace the agent's system prompt (`--system-file`), so
+  the agent answers as the caller's prompt says, not as a coding agent.
+  The rest of the history is flattened into one prompt.
 
 - Model ids are `<agent>/<model>`, split at the first `/`
   (`pi/omniroute/desktop-free` is pi with `omniroute/desktop-free`). A bare
@@ -80,13 +99,16 @@ agents serve --port 20940 -C ~/work --no-tools \
 - Multi-turn: a request whose history (up to the last user message) matches
   a previous reply resumes that session with only the new message; otherwise
   a new session starts with the history flattened into one prompt. The map
-  lives in `${XDG_STATE_HOME:-~/.local/state}/agents/serve-conversations.json`.
-  Every chat is a normal session: `agents ls`, `watch`, `attach` work on it.
+  lives in `${XDG_STATE_HOME:-~/.local/state}/agents/serve-conversations.json`;
+  entries older than 30 days are dropped. Every chat is a normal session
+  marked as started by serve: `agents ls --all` lists them, `watch` and
+  `attach` work on them.
 - `stream: true` sends each agent message as it lands (not token by token);
   `--tool-events` adds tool calls as `_> label_` lines.
-- `--no-tools` passes `--no-tools` to every run, so chats only answer.
-- Any API key is accepted; bind to a local address only. Closing the
-  request stops the run.
+  `stream_options.include_usage` adds the usage chunk before `[DONE]`.
+- `usage` holds the run's tokens (cached prompt tokens included) when the
+  agent reports them.
+- Closing the request stops the run.
 
 ## Use from an agent
 

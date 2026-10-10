@@ -16,6 +16,7 @@ local-media-seerr-api-key: ENC[AES256_GCM,data:TUZJ8HSQqu/eCTPhT64HsRmU80b31qBQ7
 local-media-gdesktop-lazylibrarian-api-key: ENC[AES256_GCM,data:bqaGGlvFWJdprjIvaZs9NvkO6RB+9bWcNrKDuXrKsF0=,iv:mm37ZAjV9Idorr49fSRvd9/citUXS1IhnS9H4c3gxww=,tag:Rvl0wC/2TLK2Ida5kfa52g==,type:str]
 local-sunshine-user: ENC[AES256_GCM,data:DJIzNkpU,iv:OKSCWtDBXwKe0WluYzMd3HxcZx1okewDqVm9zsuS6wI=,tag:cf02HHOyCz+NCbsgqfBQ0g==,type:str]
 local-sunshine-password: ENC[AES256_GCM,data:Sirg0jZGjhQ=,iv:sNUClEtRE02D1k/6+kLYCF/TBfw1z/4BfozdpG4EWlE=,tag:NPlf12QuZA/0rjUsn97UXQ==,type:str]
+local-agents-server-api-key: ENC[AES256_GCM,data:lOsV+rLqKqrqKvVsZcMANgP9R4NypvRyFOgnxKsA8peuJsC3vDMw41dBuZP0LvHidy1xdvuPrJjnxtJd7T23+w==,iv:pdlFJDK8XyDym68w3/kzSWhJKTQVjPHokMN26oKskKg=,tag:WlaKGYeAzqY6w6vJn0PDdg==,type:str]
 sops:
     age:
         - enc: |
@@ -27,7 +28,7 @@ sops:
             odnCpmDB5Y8BfSBhg8a6WutgWQBW5vOkcnteCq+Z1ShjN/k3TK6VqA==
             -----END AGE ENCRYPTED FILE-----
           recipient: age182hl2gfu8zj2dxjdvtfktv9ay57htc20ugjrlmwmv8l806lntdxqgeje73
-    lastmodified: "2026-10-08T21:18:52Z"
-    mac: ENC[AES256_GCM,data:OeuqVJgq/0teWoL9PPWc/QUyKCXGE0VQGRkaU+9D2ZST92UqJesrmXsCFQjmgv/aNqCEkpiVwWzJFofXt/xDDHpRepTyHFXrYWkv2612LEO7ziiYkdMr6XMbqmyQs5kTGnrgQmmUIaA9JK8blmDuhBrA02OObPHtgIBIBCV7P3E=,iv:XLnGMSVGmQSugL9Lv6Dx3zVxTkzsuRO49YopIuVQt6M=,tag:Yk0jZqdZr+Dq9X+I4Q2qCA==,type:str]
+    lastmodified: "2026-10-10T22:33:26Z"
+    mac: ENC[AES256_GCM,data:iwH+tPMvEqlLLzAxeDTwDsCTLNWctPdTrzgb6xjmYzJafVRoivMUaN0ncYzICc+NJKT5vhJ8Ls5Bu2Geqd9xV7IN/lxhg/wtw9j4yFBRdW5y/heRG4+jhXcvdCgytxsmpIx2elblKEtoB0oqiimrOYwnTGSwe42/dNZItqxwZvw=,iv:rczDaemV+bHgkt0w0W9gU3btqdS71GhQTo7sTCFraqc=,tag:g+2kjq1ZQ3NeAiBbiF+YdQ==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.1

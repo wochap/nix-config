@@ -11,6 +11,16 @@ let
       contextTokens = 1048576;
       maxOutputTokens = 384000;
     };
+    # https://platform.claude.com/docs/en/about-claude/models (1M context,
+    # 128K max output); Claude Code reports the same limits for both.
+    claude-sonnet-5-5 = {
+      contextTokens = 1000000;
+      maxOutputTokens = 128000;
+    };
+    claude-haiku-5-5 = {
+      contextTokens = 1000000;
+      maxOutputTokens = 128000;
+    };
     # https://ai.google.dev/gemma/docs/core (256K context);
     # https://openrouter.ai/google/gemma-4-31b-it (32768 max completion)
     gemma4-31b = {

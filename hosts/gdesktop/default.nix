@@ -272,7 +272,7 @@ in
     _custom.services.ai.agentsServer.models = [
       "claude/claude-opus-5-5[1m]"
       "claude/claude-sonnet-5-5"
-      "claude/claude-haiku-4-5-20251001"
+      "claude/claude-haiku-5-5"
       "claude/claude-fable-5-1"
       "pi/omniroute/desktop-free"
     ];
