@@ -18,7 +18,9 @@ OVH VPS (Model 1: 2 vCore, 4 GB, 40 GB NVMe), installed with nixos-anywhere.
 5. Build locally, then install (wipes the disk):
    ```sh
    nix build .#nixosConfigurations.gvps.config.system.build.toplevel --no-link
-   nix run github:nix-community/nixos-anywhere -- --flake .#gvps --build-on local ubuntu@<ip>
+   # Ubuntu 26.04 (kernel 7.0) fails kexec_file_load ("Address not available"), force the legacy syscall
+   nix run github:nix-community/nixos-anywhere -- --flake .#gvps --build-on local \
+     --kexec-extra-flags "--kexec-syscall" ubuntu@<ip>
    ```
 6. Log in:
    ```sh
