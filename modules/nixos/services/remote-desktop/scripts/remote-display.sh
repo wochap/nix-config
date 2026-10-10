@@ -3,10 +3,11 @@
 # Fits this host's desktop to a remote client's monitor while it streams
 # through Sunshine, then puts the original layout back. Display work happens
 # in a provider (scripts/providers/<name>.sh) that defines provider_apply,
-# provider_restore and provider_status. REMOTE_DISPLAY_PROVIDERS and
-# REMOTE_DISPLAY_OUTPUT come from the Nix module.
+# provider_restore and provider_status. Sunshine runs apply and restore as
+# the app's prep commands. REMOTE_DISPLAY_PROVIDERS, REMOTE_DISPLAY_OUTPUT and
+# REMOTE_DISPLAY_SCALES (JSON, "WxH" -> scale) come from the Nix module.
 #
-#   remote-display apply --mode mirror|headless --width W --height H --fps F --scale S
+#   remote-display apply --mode mirror|headless --width W --height H --fps F [--scale S]
 #   remote-display restore
 #   remote-display status
 
@@ -21,8 +22,8 @@ state_file="$state_dir/state.json"
 output="$REMOTE_DISPLAY_OUTPUT"
 mkdir -p "$state_dir"
 
-# Sunshine's undo and the client's trap both call restore when a stream ends,
-# so every command runs under one lock
+# Sunshine's undo, its ExecStopPost and a manual restore can overlap, so
+# every command runs under one lock
 exec 9>"$state_dir/lock"
 flock 9
 
@@ -31,7 +32,7 @@ mode="mirror"
 width=""
 height=""
 fps="60"
-scale="1"
+scale=""
 
 command="${1:-}"
 [[ -n "$command" ]] || usage
@@ -71,10 +72,14 @@ case "$command" in
 apply)
   [[ "$mode" == "mirror" || "$mode" == "headless" ]] || usage
   [[ -n "$width" && -n "$height" ]] || usage
+  if [[ -z "$scale" ]]; then
+    scale=$(jq -r --arg resolution "${width}x${height}" '.[$resolution] // 1' <<<"$REMOTE_DISPLAY_SCALES")
+  fi
+  echo "remote-display: $mode ${width}x${height}@${fps} scale $scale" >&2
   provider_apply "$mode" "$width" "$height" "$fps" "$scale"
   ;;
 restore)
-  # a dropped ssh connection or Ctrl+C on the client must not stop it halfway
+  # a stopping Sunshine or Ctrl+C must not stop it halfway
   trap '' HUP INT TERM
   if [[ ! -f "$state_file" ]]; then
     # nothing applied, or the other restore already ran

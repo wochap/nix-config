@@ -144,7 +144,7 @@ in
     # _custom.services.tailscale.enable = true;
     _custom.services.remote-desktop.host = {
       enable = true;
-      lanInterface = "wlan0";
+      interfaces = [ "wlan0" ];
       credentials.sopsFile = ../../secrets-sops/local.yaml;
     };
     _custom.services.android.enable = true;
