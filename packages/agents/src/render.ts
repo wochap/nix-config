@@ -12,8 +12,14 @@ async function printMessage(text: string) {
     println(`\n${color.bold("⏺")} ${text}`);
     return;
   }
+  // glow queries the terminal and reads the reply from it. While we read
+  // stdin for keys (ctrl+t) the reply lands here instead and glow waits
+  // forever (e.g. inside a Neovim terminal), so stop reading meanwhile.
+  const reading = process.stdin.readableFlowing === true;
+  if (reading) process.stdin.pause();
   const p = Bun.spawn([glow, "-"], { stdin: new Blob([text]), stdout: out.fd, stderr: "inherit" });
   await p.exited;
+  if (reading) process.stdin.resume();
 }
 
 export const header = (agent: string, model: string, id: string) => log(`${agent} (${model}) ${id}`);
