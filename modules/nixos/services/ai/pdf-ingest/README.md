@@ -80,7 +80,7 @@ invoking host user; it still has all Linux capabilities dropped.
 ## Usage
 
 ```sh
-pdf-ingest report.pdf                 # writes ./report/
+pdf-ingest report.pdf                 # writes report/ next to report.pdf
 pdf-ingest report.pdf ./documents/r1  # explicit destination
 pdf-ingest --dpi 160 --min-dpi 120 report.pdf
 pdf-ingest --batch-size 2 report.pdf
