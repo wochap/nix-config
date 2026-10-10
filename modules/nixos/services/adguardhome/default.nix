@@ -27,6 +27,36 @@ in
             "149.112.112.112"
           ];
         };
+        # replaces lists added in the web UI on every restart, add them here
+        filters = [
+          {
+            id = 1;
+            enabled = true;
+            name = "AdGuard DNS filter";
+            url = "https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt";
+          }
+          {
+            id = 2;
+            enabled = true;
+            name = "HaGeZi's Pro Blocklist";
+            url = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/pro.txt";
+          }
+          {
+            id = 3;
+            enabled = true;
+            name = "HaGeZi's Threat Intelligence Feeds";
+            url = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt";
+          }
+        ];
+        querylog = {
+          enabled = true;
+          file_enabled = true;
+          interval = "168h"; # 7 days
+        };
+        statistics = {
+          enabled = true;
+          interval = "720h"; # 30 days
+        };
       };
     };
 
