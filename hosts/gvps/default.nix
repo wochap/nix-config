@@ -98,7 +98,15 @@ in
       # once gvps joined the tailnet and ssh over it works (KVM console is the fallback)
       # sshOnlyTailnet = true;
     };
-    _custom.services.adguardhome.enable = true;
+    _custom.services.adguardhome = {
+      enable = true;
+      users = [
+        {
+          name = "gean";
+          password = "$2y$10$GOC64JoPERX.iazSHXb.FOBDeql.WsTs9mE5j1AteJlQCOMWMwCxK";
+        }
+      ];
+    };
 
     time.timeZone = "America/Toronto";
 

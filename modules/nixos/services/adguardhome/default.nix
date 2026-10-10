@@ -10,7 +10,22 @@ let
   cfg = config._custom.services.adguardhome;
 in
 {
-  options._custom.services.adguardhome.enable = lib.mkEnableOption { };
+  options._custom.services.adguardhome = {
+    enable = lib.mkEnableOption { };
+    # web UI logins, password is a bcrypt hash:
+    # nix shell nixpkgs#apacheHttpd -c htpasswd -B -C 10 -n <name>
+    users = lib.mkOption {
+      type = lib.types.listOf (
+        lib.types.submodule {
+          options = {
+            name = lib.mkOption { type = lib.types.str; };
+            password = lib.mkOption { type = lib.types.str; };
+          };
+        }
+      );
+      default = [ ];
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     services.adguardhome = {
@@ -27,6 +42,7 @@ in
             "149.112.112.112"
           ];
         };
+        inherit (cfg) users;
         # replaces lists added in the web UI on every restart, add them here
         filters = [
           {
