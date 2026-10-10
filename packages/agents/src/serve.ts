@@ -10,9 +10,14 @@
 // the last user message is fingerprinted; a known fingerprint resumes its
 // session with only the last user message, an unknown one starts a new
 // session with the flattened history.
+//
+// System messages replace the agent's own system prompt (run --system-file).
+// Runs get no tools unless --tools: a prompt (say, scraped web text) must not
+// drive tools in the run's directory.
 
-import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import { createHash, timingSafeEqual } from "node:crypto";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { adapters, getAdapter } from "./adapters";
 import { EFFORTS, type Effort, type Event } from "./adapters/types";
@@ -26,8 +31,10 @@ export interface ServeOptions {
   models?: string[];
   /** Stream tool labels as italic lines. */
   toolEvents: boolean;
-  /** Every run gets --no-tools: the agents only answer. */
-  noTools: boolean;
+  /** Runs may use tools; otherwise every run gets --no-tools. */
+  tools: boolean;
+  /** Bearer token /v1/* requires; null accepts any request. */
+  apiKey: string | null;
   /** Working directory of every run. */
   cwd: string;
 }
@@ -60,11 +67,19 @@ function text(m: Message): string {
 }
 
 // Fingerprint -> session id; lets a GUI's next request resume the session.
+// Every one-shot request (a program calling the API) adds an entry, so
+// entries older than CONVERSATION_TTL are dropped.
+interface Conversation {
+  id: string;
+  /** Epoch ms of the reply. */
+  at: number;
+}
+const CONVERSATION_TTL = 30 * 24 * 60 * 60 * 1000;
 const conversationsPath = join(store.dir, "..", "serve-conversations.json");
-const conversations = new Map<string, string>(
+const conversations = new Map<string, Conversation>(
   (() => {
     try {
-      return Object.entries(JSON.parse(readFileSync(conversationsPath, "utf8")) as Record<string, string>);
+      return Object.entries(JSON.parse(readFileSync(conversationsPath, "utf8")) as Record<string, Conversation>);
     } catch {
       return [];
     }
@@ -72,7 +87,9 @@ const conversations = new Map<string, string>(
 );
 
 function remember(fingerprint: string, id: string) {
-  conversations.set(fingerprint, id);
+  const now = Date.now();
+  for (const [key, c] of conversations) if (!(now - c.at < CONVERSATION_TTL)) conversations.delete(key);
+  conversations.set(fingerprint, { id, at: now });
   writeFileSync(conversationsPath, `${JSON.stringify(Object.fromEntries(conversations))}\n`);
 }
 
@@ -82,15 +99,13 @@ const fp = (model: string, messages: Message[]) =>
     .update(JSON.stringify([model, messages.map((m) => [m.role, text(m).trim()])]))
     .digest("hex");
 
+const isSystem = (m: Message) => m.role === "system" || m.role === "developer";
+
 /** History as one prompt, for a conversation the server has not seen. */
 function flatten(messages: Message[]): string {
-  const system = messages.filter((m) => m.role === "system" || m.role === "developer");
   const turns = messages.filter((m) => m.role === "user" || m.role === "assistant");
-  if (system.length === 0 && turns.length === 1) return text(turns[0]);
-  return [
-    ...system.map((m) => `<system>\n${text(m)}\n</system>`),
-    ...turns.map((m) => `${m.role}: ${text(m)}`),
-  ].join("\n\n");
+  if (turns.length === 1) return text(turns[0]);
+  return turns.map((m) => `${m.role}: ${text(m)}`).join("\n\n");
 }
 
 interface Plan {
@@ -99,11 +114,15 @@ interface Plan {
   agentModel: string;
   effort?: Effort;
   prompt: string;
+  /** The request's system messages; replaces the agent's system prompt. */
+  system?: string;
   resume?: string;
   messages: Message[];
+  /** Send a usage chunk before [DONE] (stream_options.include_usage). */
+  streamUsage: boolean;
 }
 
-function plan(body: any, noTools: boolean): Plan {
+function plan(body: any, tools: boolean): Plan {
   if (typeof body?.model !== "string" || !body.model) throw new HttpError(400, "model is required");
   const model: string = body.model;
   const slash = model.indexOf("/");
@@ -114,7 +133,7 @@ function plan(body: any, noTools: boolean): Plan {
   } catch (err) {
     throw new HttpError(400, (err as Error).message);
   }
-  if (noTools && !adapter.noToolsFlags) throw new HttpError(400, `${adapter.name} cannot run without tools`);
+  if (!tools && !adapter.noToolsFlags) throw new HttpError(400, `${adapter.name} cannot run without tools`);
   const agentModel = slash === -1 ? adapter.defaultModel : model.slice(slash + 1);
 
   const rawEffort = body.reasoning_effort ?? body.reasoning?.effort;
@@ -132,13 +151,23 @@ function plan(body: any, noTools: boolean): Plan {
     throw new HttpError(400, "messages must end with a non-empty user message");
   }
 
+  const system = messages.filter(isSystem).map(text).join("\n\n").trim() || undefined;
+  const streamUsage = Boolean(body.stream_options?.include_usage);
+  const base = { model, agent: adapter.name, agentModel, effort, system, messages, streamUsage };
+
   const known = conversations.get(fp(model, messages.slice(0, -1)));
-  const prev = known ? store.readSession(known) : null;
+  const prev = known ? store.readSession(known.id) : null;
   if (prev?.status === "running") throw new HttpError(409, `session ${prev.id} is still running`);
-  if (prev && prev.agent === adapter.name) {
-    return { model, agent: adapter.name, agentModel, effort, prompt: text(lastMsg), resume: prev.id, messages };
-  }
-  return { model, agent: adapter.name, agentModel, effort, prompt: flatten(messages), messages };
+  if (prev && prev.agent === adapter.name) return { ...base, prompt: text(lastMsg), resume: prev.id };
+  return { ...base, prompt: flatten(messages) };
+}
+
+interface RunOutput {
+  id: string;
+  result: string;
+  status: store.Status;
+  inputTokens: number | null;
+  outputTokens: number | null;
 }
 
 interface Run {
@@ -146,13 +175,17 @@ interface Run {
   id: Promise<string | null>;
   exited: Promise<number>;
   /** Parsed --json line, after exit. */
-  output(): Promise<{ id: string; result: string; status: store.Status } | null>;
+  output(): Promise<RunOutput | null>;
   /** Last `error:` line on stderr. */
   error(): string;
   kill(): void;
 }
 
-function spawn(p: Plan, cwd: string, noTools: boolean): Run {
+function spawn(p: Plan, cwd: string, tools: boolean): Run {
+  // A file, not argv: system prompts can be long.
+  const systemDir = p.system ? mkdtempSync(join(tmpdir(), "agents-serve-")) : null;
+  const systemFile = systemDir ? join(systemDir, "system.md") : null;
+  if (systemFile) writeFileSync(systemFile, p.system ?? "");
   const proc = Bun.spawn(
     [
       process.execPath,
@@ -167,13 +200,17 @@ function spawn(p: Plan, cwd: string, noTools: boolean): Run {
       "-C",
       cwd,
       ...(p.resume ? ["-r", p.resume] : []),
-      ...(noTools ? ["--no-tools"] : []),
+      ...(tools ? [] : ["--no-tools"]),
+      ...(systemFile ? ["--system-file", systemFile] : []),
+      "--via",
+      "serve",
       "-",
     ],
     { stdin: "pipe", stdout: "pipe", stderr: "pipe", env: process.env },
   );
   proc.stdin.write(p.prompt);
   proc.stdin.end();
+  if (systemDir) proc.exited.then(() => rmSync(systemDir, { recursive: true, force: true }));
 
   let lastError = "";
   let resolveId: (id: string | null) => void = () => {};
@@ -227,8 +264,15 @@ function remembered(p: Plan, id: string, replies: string[]) {
   }
 }
 
+// OpenAI usage; agents that report none give zeros.
+function usage(out: RunOutput | null) {
+  const prompt_tokens = out?.inputTokens ?? 0;
+  const completion_tokens = out?.outputTokens ?? 0;
+  return { prompt_tokens, completion_tokens, total_tokens: prompt_tokens + completion_tokens };
+}
+
 async function complete(p: Plan, o: ServeOptions, signal: AbortSignal): Promise<Response> {
-  const run = spawn(p, o.cwd, o.noTools);
+  const run = spawn(p, o.cwd, o.tools);
   signal.addEventListener("abort", run.kill);
   const out = await run.output();
   if (!out) throw new HttpError(500, run.error() || "agents run printed no result");
@@ -240,14 +284,14 @@ async function complete(p: Plan, o: ServeOptions, signal: AbortSignal): Promise<
     created: now(),
     model: p.model,
     choices: [{ index: 0, message: { role: "assistant", content: out.result }, finish_reason: "stop" }],
-    usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+    usage: usage(out),
   });
 }
 
 function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
   // A resumed session already has events; follow only the new ones.
   let read = p.resume ? tail(store.eventsPath(p.resume), true) : null;
-  const run = spawn(p, o.cwd, o.noTools);
+  const run = spawn(p, o.cwd, o.tools);
   signal.addEventListener("abort", run.kill);
   const encoder = new TextEncoder();
   const created = now();
@@ -334,6 +378,11 @@ function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
         content(out?.result || run.error() || "agent failed");
       }
       chunk({}, "stop");
+      if (p.streamUsage) {
+        write(
+          `data: ${JSON.stringify({ id, object: "chat.completion.chunk", created, model: p.model, choices: [], usage: usage(out) })}\n\n`,
+        );
+      }
       write("data: [DONE]\n\n");
       if (!closed) controller.close();
     },
@@ -347,6 +396,14 @@ function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
   });
 }
 
+// Constant-time compare of the request's bearer token with the key.
+function authorized(req: Request, key: string): boolean {
+  const match = (req.headers.get("authorization") ?? "").match(/^Bearer\s+(.+)$/i);
+  if (!match) return false;
+  const digest = (s: string) => createHash("sha256").update(s).digest();
+  return timingSafeEqual(digest(match[1].trim()), digest(key));
+}
+
 export function serve(o: ServeOptions) {
   const models = o.models?.length ? o.models : Object.values(adapters).map((a) => `${a.name}/${a.defaultModel}`);
 
@@ -358,6 +415,7 @@ export function serve(o: ServeOptions) {
     async fetch(req) {
       const { pathname } = new URL(req.url);
       if (req.method === "GET" && pathname === "/health") return new Response("ok");
+      if (o.apiKey !== null && !authorized(req, o.apiKey)) return json(errorBody("invalid API key"), 401);
       if (req.method === "GET" && pathname === "/v1/models") {
         return json({
           object: "list",
@@ -371,7 +429,7 @@ export function serve(o: ServeOptions) {
         } catch {
           throw new HttpError(400, "invalid JSON body");
         }
-        const p = plan(body, o.noTools);
+        const p = plan(body, o.tools);
         return body.stream ? stream(p, o, req.signal) : complete(p, o, req.signal);
       }
       return json(errorBody(`no route ${req.method} ${pathname}`), 404);
@@ -381,5 +439,6 @@ export function serve(o: ServeOptions) {
       return json(errorBody(err.message), status);
     },
   });
-  console.error(`agents serve: http://${server.hostname}:${server.port}/v1 (cwd ${o.cwd}${o.noTools ? ", no tools" : ""})`);
+  const notes = [`cwd ${o.cwd}`, o.tools ? "tools" : "no tools", ...(o.apiKey === null ? ["no auth"] : [])];
+  console.error(`agents serve: http://${server.hostname}:${server.port}/v1 (${notes.join(", ")})`);
 }

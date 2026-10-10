@@ -134,7 +134,14 @@ in
       remote.interfaces = [ "enp42s0" ];
     };
 
-    # _custom.services.tailscale.enable = true;
+    _custom.services.tailscale = {
+      enable = true;
+      loginServer = "https://hs.geanmar.com";
+      enableOperator = true;
+      startOnBoot = false;
+      # keep ssh reachable on the LAN
+      sshOnlyTailnet = false;
+    };
     _custom.services.remote-desktop.client = {
       enable = true;
       hosts.glegion = {
@@ -272,7 +279,7 @@ in
     _custom.services.ai.agentsServer.models = [
       "claude/claude-opus-5-5[1m]"
       "claude/claude-sonnet-5-5"
-      "claude/claude-haiku-4-5-20251001"
+      "claude/claude-haiku-5-5"
       "claude/claude-fable-5-1"
       "pi/omniroute/desktop-free"
     ];
@@ -304,7 +311,7 @@ in
     _custom.system.apple.enable = false;
     _custom.system.windows.enable = true;
     _custom.system.windows.enableSamba = false;
-    _custom.system.user.password = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
+    _custom.system.user.password = "$y$j9T$GChzlCM7cdSrWM/gynZTB/$S6k/k6zVDWfl0HBBdJ0lRT1XfGKSQ8lIbtplYgQLgp2";
 
     _custom.desktop.gtk.bookmarks = [ "file:///mnt/storage Storage" ];
 

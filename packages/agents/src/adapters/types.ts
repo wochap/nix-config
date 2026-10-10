@@ -10,7 +10,15 @@ export type Event =
   | { type: "text"; text: string }
   /** Short tool-call label, never the raw command. */
   | { type: "tool"; label: string }
-  | { type: "result"; result: string; costUsd?: number; durationMs?: number }
+  | {
+      type: "result";
+      result: string;
+      costUsd?: number;
+      durationMs?: number;
+      /** Prompt tokens of the whole run, cached ones included. */
+      inputTokens?: number;
+      outputTokens?: number;
+    }
   | { type: "error"; message: string }
   /** The user took the session over interactively. */
   | { type: "takeover" }
@@ -37,6 +45,8 @@ export interface RunOptions {
   resume: boolean;
   /** True: the agent gets no tools (only with Adapter.noToolsFlags). */
   noTools?: boolean;
+  /** File whose text replaces the agent's system prompt (only with Adapter.systemPromptFlags). */
+  systemFile?: string;
   /** Path; the adapter appends its provider-native output here. */
   rawLog: string;
   /** Abort stops the agent with SIGINT, e.g. to take the session over. */
@@ -52,7 +62,15 @@ export interface Adapter {
    * only answers. Unset: the agent cannot run without tools.
    */
   noToolsFlags?: string[];
-  /** Headless run. Resolves with the final answer; rejects on non-zero exit. */
+  /**
+   * Flags that replace the agent's system prompt with a file's text. Unset:
+   * `run --system-file` puts the text at the top of the prompt instead.
+   */
+  systemPromptFlags?(file: string): string[];
+  /**
+   * Headless run. Resolves with the final answer; rejects on non-zero exit.
+   * The prompt goes on stdin: Linux caps one argv string at 128 KiB.
+   */
   run(opts: RunOptions): Promise<{ result: string }>;
   /**
    * Last agent message of a session, read from the native transcript so it

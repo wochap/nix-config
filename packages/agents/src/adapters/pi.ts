@@ -20,6 +20,8 @@ const EFFORT: Record<Effort, string> = { low: "low", medium: "medium", high: "hi
 const effortFlags = (effort?: Effort) => (effort ? ["--thinking", EFFORT[effort]] : []);
 // Built-in, extension and custom tools.
 const noToolsFlags = ["--no-tools"];
+// --system-prompt takes text or the path of an existing file.
+const systemPromptFlags = (file: string) => ["--system-prompt", file];
 
 // Short label for a tool call: the agent's own description when it gave
 // one, else tool name plus path. Never the command itself.
@@ -51,12 +53,15 @@ function toEvents(event: any, root: string, startedAt: number): Event[] {
     const assistant = (event.messages ?? []).filter((m: any) => m.role === "assistant");
     const final = assistant.at(-1);
     if (final?.stopReason === "error") return [];
+    const sum = (f: (u: any) => number) => assistant.reduce((total: number, m: any) => total + f(m.usage ?? {}), 0);
     return [
       {
         type: "result",
         result: texts(final).join("\n"),
-        costUsd: assistant.reduce((sum: number, m: any) => sum + (m.usage?.cost?.total ?? 0), 0),
+        costUsd: sum((u) => u.cost?.total ?? 0),
         durationMs: Date.now() - startedAt,
+        inputTokens: sum((u) => (u.input ?? 0) + (u.cacheRead ?? 0) + (u.cacheWrite ?? 0)),
+        outputTokens: sum((u) => u.output ?? 0),
       },
     ];
   }
@@ -104,18 +109,32 @@ export const pi: Adapter = {
 
   noToolsFlags,
 
+  systemPromptFlags,
+
   // pi takes a caller-chosen id: --session-id creates the session when
   // missing and continues it otherwise, so new and resumed runs match.
   // Sessions are looked up per cwd, hence cwd is always the session's.
-  async run({ id, prompt, model, effort, cwd, noTools, rawLog, signal, onEvent }: RunOptions) {
+  // -p without a message takes the prompt from stdin.
+  async run({ id, prompt, model, effort, cwd, noTools, systemFile, rawLog, signal, onEvent }: RunOptions) {
     const startedAt = Date.now();
     const child = track(
-      Bun.spawn([...cmd, "--session-id", id, "--model", model, ...effortFlags(effort), ...permFlags, ...(noTools ? noToolsFlags : []), "--mode", "json", "-p", prompt], {
-        cwd,
-        stdin: "ignore",
-        stdout: "pipe",
-        stderr: "inherit",
-      }),
+      Bun.spawn(
+        [
+          ...cmd,
+          "--session-id",
+          id,
+          "--model",
+          model,
+          ...effortFlags(effort),
+          ...permFlags,
+          ...(noTools ? noToolsFlags : []),
+          ...(systemFile ? systemPromptFlags(systemFile) : []),
+          "--mode",
+          "json",
+          "-p",
+        ],
+        { cwd, stdin: new Blob([prompt]), stdout: "pipe", stderr: "inherit" },
+      ),
     );
     signal?.addEventListener("abort", () => child.kill("SIGINT"));
     let result = "";

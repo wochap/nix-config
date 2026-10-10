@@ -29,11 +29,17 @@ _agents() {
     '(-q --quiet)--verbose[print live progress]' \
     '--json[print JSON result]' \
     '--no-tools[run the agent without tools]' \
+    '--system-file[replace the system prompt with a file]:file:_files' \
+    '--via[mark the session as started by a program]:name:' \
     '--host[listen address]:host:' \
     '--port[port]:port:' \
     '--models[comma-separated agent/model ids]:models:' \
+    '--api-key-file[bearer key for /v1/*]:file:_files' \
+    '--no-auth[accept any request]' \
+    '--tools[let serve runs use tools]' \
     '--tool-events[stream tool calls]' \
     '--full[list all sessions]' \
+    '--all[also list sessions started by a program]' \
     '(-h --help)'{-h,--help}'[show help]' \
     '1:command:->command' \
     '*::arg:->args'

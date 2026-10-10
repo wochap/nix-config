@@ -25,6 +25,7 @@ let
   # Secret files the daemon reads itself (`<x>_file` settings). The profiles
   # hold paths, never values, so they are safe in the Nix store.
   omnirouteKeyFile = config.sops.secrets.wosarcher-omniroute-api-key.path;
+  agentsKeyFile = config.sops.secrets.wosarcher-agents-api-key.path;
   jevKeyFile = config.sops.secrets.wosarcher-typesafe-api-key.path;
   searxProxy = config._custom.services.web-gate.proxies.searxng;
   omniRouteProxy = config._custom.services.web-gate.proxies.omniroute;
@@ -34,6 +35,21 @@ let
   ] 20900 config._custom.services.web-gate.proxies;
   rerankerProxy = config._custom.services.web-gate.proxies.reranker;
   host = "http://${wochap-ssc.meta.address}";
+
+  # The OpenAI-compatible servers an entry of `llms` can call.
+  endpoints = {
+    omniroute = {
+      base_url = "${host}:${toString omniRouteProxy.publicPort}/v1";
+      api_key_file = omnirouteKeyFile;
+    };
+    # agents serve (../agents-server): Claude Code and pi without tools; the
+    # request's system message replaces the agent's own system prompt.
+    agents = {
+      base_url = "${host}:${toString config._custom.services.web-gate.proxies.agents-server.publicPort}/v1";
+      api_key_file = agentsKeyFile;
+    };
+  };
+  usesAgents = lib.any (llm: llm.endpoint == "agents") (lib.attrValues wcfg.llms);
 
   # Every provider goes through the host's proxies. The reranker is reached
   # through its lazy socket proxy: the first rerank starts llama-server again
@@ -62,8 +78,7 @@ let
     {
       llm = {
         provider = "openai";
-        base_url = "${host}:${toString omniRouteProxy.publicPort}/v1";
-        api_key_file = omnirouteKeyFile;
+        inherit (endpoints.${llm.endpoint}) base_url api_key_file;
         inherit (llm) model timeout;
         context_window = m.contextTokens;
         max_output_tokens = lib.min models.maxOutputCap (lib.min m.maxOutputTokens (m.contextTokens / 2));
@@ -170,9 +185,20 @@ in
       type = lib.types.attrsOf (
         lib.types.submodule {
           options = {
+            endpoint = lib.mkOption {
+              type = lib.types.enum (lib.attrNames endpoints);
+              default = "omniroute";
+              description = ''
+                Server the profile's llm block calls: omniroute, or agents
+                (agents serve; needs agentsServer with tools off).
+              '';
+            };
             model = lib.mkOption {
               type = lib.types.str;
-              description = "OmniRoute model or combo the profile's llm block calls.";
+              description = ''
+                Model the endpoint serves: an OmniRoute model or combo, or an
+                agents <agent>/<model> id such as claude/claude-sonnet-5-5.
+              '';
             };
             preset = lib.mkOption {
               type = models.type;
@@ -225,7 +251,8 @@ in
         The generated profiles (embeddings-rerank, and with jev.enable
         embeddings-jev, bm25-jev and bm25-jev-wide, each once per entry of
         llms) are wired to this host's SearxNG,
-        Firecrawl, Ollama, OmniRoute and, when enabled, the shared reranker;
+        Firecrawl, Ollama, OmniRoute or agents serve and, when enabled, the
+        shared reranker;
         each of their keys can be overridden. Never put secret values here:
         they land in the Nix store. Point a `<x>_file` setting (for example
         llm.api_key_file) at a SOPS secret owned by the wosarcher user.
@@ -286,7 +313,34 @@ in
         timeout = lib.mkDefault 600;
         research.gap_context_tokens = lib.mkDefault 4000;
       };
+      # Claude through agents serve. Effort "none" (the write default) keeps
+      # Claude Code's own effort: high for Sonnet, medium for Haiku.
+      sonnet = lib.mkIf cfg.agentsServer.enable {
+        endpoint = lib.mkDefault "agents";
+        model = lib.mkDefault "claude/claude-sonnet-5-5";
+        preset = lib.mkDefault "claude-sonnet-5-5";
+        timeout = lib.mkDefault 900;
+        reasoning.plan = lib.mkDefault "low";
+        reasoning.gap = lib.mkDefault "low";
+      };
+      haiku = lib.mkIf cfg.agentsServer.enable {
+        endpoint = lib.mkDefault "agents";
+        model = lib.mkDefault "claude/claude-haiku-5-5";
+        preset = lib.mkDefault "claude-haiku-5-5";
+        timeout = lib.mkDefault 600;
+        reasoning.plan = lib.mkDefault "low";
+        reasoning.gap = lib.mkDefault "low";
+      };
     };
+
+    # The llm prompts carry scraped web text; with tools an agent could act
+    # on instructions planted in it.
+    assertions = [
+      {
+        assertion = !usesAgents || (cfg.agentsServer.enable && !cfg.agentsServer.tools);
+        message = "wosarcher: an llms entry with endpoint = \"agents\" needs agentsServer enabled with tools = false";
+      }
+    ];
 
     _custom.services.ai.wosarcher.profiles = lib.mapAttrs (
       _: lib.mapAttrsRecursive (_: lib.mkDefault)
@@ -334,6 +388,13 @@ in
     sops.secrets.wosarcher-omniroute-api-key = {
       sopsFile = ../../../../../secrets-sops/local.yaml;
       key = "local-omniroute-secret-key";
+      owner = "wosarcher";
+      group = "wosarcher";
+      mode = "0400";
+    };
+    sops.secrets.wosarcher-agents-api-key = lib.mkIf usesAgents {
+      sopsFile = ../../../../../secrets-sops/local.yaml;
+      key = "local-agents-server-api-key";
       owner = "wosarcher";
       group = "wosarcher";
       mode = "0400";

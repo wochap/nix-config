@@ -33,9 +33,14 @@ Commands:
     -r, --resume <id>    continue a session headless
         --no-tools       the agent gets no tools and only answers; per run,
                          not kept for -r or attach
+        --system-file <f>  replace the agent's system prompt with the file's
+                         text (agents that cannot: put it atop the prompt);
+                         per run, not kept for -r or attach
+        --via <name>     mark the session as started by <name>; ls hides it
     -q, --quiet          print only the final answer (default when stdout is not a TTY)
         --verbose        print live progress (default on a TTY)
-        --json           print {id,agent,model,result,costUsd,durationMs,status};
+        --json           print {id,agent,model,result,costUsd,durationMs,
+                         inputTokens,outputTokens,status};
                          progress goes to stderr when it is a TTY or with --verbose
     keys on a TTY: ctrl+t take over (the agent's TUI), ctrl+z inside it
     detaches back here while it keeps working, ctrl+t attaches again
@@ -43,6 +48,7 @@ Commands:
   last [<id>]        last agent message (default: latest)
   ls                 list sessions of the last 7 days, oldest first
         --full           list all sessions
+        --all            also list sessions started by a program (serve)
   watch [<id>]       follow a session (default: latest running, else latest)
   serve              OpenAI-compatible API: /v1/chat/completions, /v1/models
         --host <h>       listen address (default: 127.0.0.1)
@@ -50,8 +56,12 @@ Commands:
     -C, --cwd <dir>      working directory of every run (default: current)
         --models <list>  comma-separated <agent>/<model> ids for /v1/models
                          (default: each agent's default model)
-        --tool-events    stream tool calls as italic lines
-        --no-tools       pass --no-tools to every run
+        --api-key-file <f>  require "Authorization: Bearer <key>" on /v1/*
+                         (or AGENTS_API_KEY); one of them or --no-auth
+        --no-auth        accept any request
+        --tools          let runs use tools (default: --no-tools, so chats
+                         only answer and prompts cannot drive tools)
+        --tool-events    stream tool calls as italic lines (with --tools)
 
 Ids may be a unique prefix.
 Agents:   ${Object.keys(adapters).join(", ")}
@@ -73,7 +83,13 @@ const { values: opts, positionals } = parseArgs({
     models: { type: "string" },
     "tool-events": { type: "boolean" },
     "no-tools": { type: "boolean" },
+    "system-file": { type: "string" },
+    via: { type: "string" },
+    "api-key-file": { type: "string" },
+    "no-auth": { type: "boolean" },
+    tools: { type: "boolean" },
     full: { type: "boolean" },
+    all: { type: "boolean" },
     help: { type: "boolean", short: "h" },
   },
 });
@@ -151,10 +167,18 @@ async function run() {
       effort,
       cwd: opts.cwd ? resolve(opts.cwd) : process.cwd(),
       prompt,
+      via: opts.via,
     });
   }
   const agent = getAdapter(session.agent);
   const { id } = session;
+
+  // Absolute: the agent runs in the session's cwd.
+  const systemFile = opts["system-file"] ? resolve(opts["system-file"]) : undefined;
+  if (systemFile && !agent.systemPromptFlags) {
+    const system = (await Bun.file(systemFile).text()).trim();
+    if (system) prompt = `${system}\n\n${prompt}`;
+  }
 
   onInterruptCleanup(() => store.finishSession(id, "failed"));
 
@@ -187,6 +211,7 @@ async function run() {
         cwd: session.cwd,
         resume,
         noTools: Boolean(opts["no-tools"]),
+        systemFile: agent.systemPromptFlags ? systemFile : undefined,
         rawLog: store.rawPath(id),
         signal: stop.signal,
         async onEvent(e) {
@@ -235,6 +260,8 @@ async function run() {
         result,
         costUsd: done?.costUsd ?? null,
         durationMs: done?.durationMs ?? null,
+        inputTokens: done?.inputTokens ?? null,
+        outputTokens: done?.outputTokens ?? null,
         status,
       }),
     );
@@ -258,11 +285,14 @@ async function last() {
   console.log(text);
 }
 
-// Last 7 days unless --full; oldest first so the newest ends up by the prompt.
+// Last 7 days unless --full, people's sessions unless --all; oldest first so
+// the newest ends up by the prompt.
 function ls() {
   const statusColor = { running: color.blue, done: color.dim, failed: color.yellow };
   const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-  const sessions = store.listSessions().filter((s) => opts.full || s.startedAt >= since);
+  const sessions = store
+    .listSessions()
+    .filter((s) => (opts.full || s.startedAt >= since) && (opts.all || !s.via));
   for (const s of sessions.reverse()) {
     const started = new Date(s.startedAt).toLocaleString("sv").slice(0, 16);
     const prompt = s.prompt.replace(/\s+/g, " ").slice(0, 60);
@@ -289,6 +319,14 @@ async function watch() {
   }
 }
 
+// The key /v1/* requires; null only with --no-auth.
+async function apiKey(): Promise<string | null> {
+  if (opts["no-auth"]) return null;
+  const key = opts["api-key-file"] ? await Bun.file(opts["api-key-file"]).text() : process.env.AGENTS_API_KEY;
+  if (key?.trim()) return key.trim();
+  throw new Error("serve: give --api-key-file, AGENTS_API_KEY, or --no-auth");
+}
+
 async function serve() {
   // Lazy: loads the conversation map, only the server needs it.
   const { serve: startServer } = await import("./serve");
@@ -303,7 +341,8 @@ async function serve() {
       .map((m) => m.trim())
       .filter(Boolean),
     toolEvents: Boolean(opts["tool-events"]),
-    noTools: Boolean(opts["no-tools"]),
+    tools: Boolean(opts.tools),
+    apiKey: await apiKey(),
   });
 }
 

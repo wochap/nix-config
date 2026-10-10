@@ -19,6 +19,7 @@ const effortFlags = (effort?: Effort) => (effort ? ["--effort", EFFORT[effort]] 
 // --tools "" drops the built-in tools; --strict-mcp-config without
 // --mcp-config loads no MCP servers.
 const noToolsFlags = ["--tools", "", "--strict-mcp-config"];
+const systemPromptFlags = (file: string) => ["--system-prompt-file", file];
 
 // Short label for a tool call: the agent's own description when it gave
 // one, else tool name plus path. Never the command itself.
@@ -41,8 +42,17 @@ function toEvents(event: any, root: string): Event[] {
   }
   if (event.type === "result") {
     if (event.is_error && !event.result) return [{ type: "error", message: event.subtype ?? "error" }];
+    const usage = event.usage ?? {};
     return [
-      { type: "result", result: event.result ?? "", costUsd: event.total_cost_usd, durationMs: event.duration_ms },
+      {
+        type: "result",
+        result: event.result ?? "",
+        costUsd: event.total_cost_usd,
+        durationMs: event.duration_ms,
+        inputTokens:
+          (usage.input_tokens ?? 0) + (usage.cache_creation_input_tokens ?? 0) + (usage.cache_read_input_tokens ?? 0),
+        outputTokens: usage.output_tokens ?? 0,
+      },
     ];
   }
   return [];
@@ -79,25 +89,28 @@ export const claude: Adapter = {
 
   noToolsFlags,
 
-  async run({ id, prompt, model, effort, cwd, resume, noTools, rawLog, signal, onEvent }: RunOptions) {
+  systemPromptFlags,
+
+  // -p without a prompt argument reads it from stdin.
+  async run({ id, prompt, model, effort, cwd, resume, noTools, systemFile, rawLog, signal, onEvent }: RunOptions) {
     const child = track(
       Bun.spawn(
         [
           ...cmd,
           "-p",
-          prompt,
           "--model",
           model,
           ...effortFlags(effort),
           ...permFlags,
           ...(noTools ? noToolsFlags : []),
+          ...(systemFile ? systemPromptFlags(systemFile) : []),
           "--output-format",
           "stream-json",
           "--verbose",
           resume ? "--resume" : "--session-id",
           id,
         ],
-        { cwd, stdin: "ignore", stdout: "pipe", stderr: "inherit" },
+        { cwd, stdin: new Blob([prompt]), stdout: "pipe", stderr: "inherit" },
       ),
     );
     signal?.addEventListener("abort", () => child.kill("SIGINT"));
