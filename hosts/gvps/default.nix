@@ -75,7 +75,7 @@ in
     # _custom.programs.zellij.enable = true;
     # _custom.programs.ai-agents.enable = true;
 
-    _custom.system.user.password = "$6$rvioLchC4DiAN732$Me4ZmdCxRy3bacz/eGfyruh5sVVY2wK5dorX1ALUs2usXMKCIOQJYoGZ/qKSlzqbTAu3QHh6OpgMYgQgK92vn.";
+    _custom.system.user.password = "$y$j9T$GChzlCM7cdSrWM/gynZTB/$S6k/k6zVDWfl0HBBdJ0lRT1XfGKSQ8lIbtplYgQLgp2";
 
     # public network: plain DHCP, no NetworkManager, dev ports or mDNS
     _custom.desktop.networking.enableIPv6 = true;
@@ -92,6 +92,8 @@ in
     _custom.services.tailscale = {
       enable = true;
       sshOnlyTailnet = false;
+      # once gvps joined the tailnet and ssh over it works (KVM console is the fallback)
+      # sshOnlyTailnet = true;
     };
     _custom.services.adguardhome.enable = true;
 
