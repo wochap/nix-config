@@ -237,7 +237,7 @@ in
           Service = {
             Environment = [
               # NOTE: this or use `dbus-update-activation-environment --systemd <env_var_name>`
-              "TIMEWARRIORDB=${hmConfig.home.sessionVariables.TIMEWARRIORDB}"
+              # "TIMEWARRIORDB=${hmConfig.home.sessionVariables.TIMEWARRIORDB}"
             ]
             # SAuth.qml registers the polkit agent only when set, two agents race
             ++ lib.optional cfg.authDialogs.active.polkit "QS_AUTH_POLKIT=1"

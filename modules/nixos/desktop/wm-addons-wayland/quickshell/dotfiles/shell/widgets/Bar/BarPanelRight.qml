@@ -43,11 +43,11 @@ RowLayout {
       Layout.fillHeight: true
     }
 
-    Timewarrior {
-      id: timewarrior
-
-      Layout.fillHeight: true
-    }
+    // Timewarrior {
+    //   id: timewarrior
+    //
+    //   Layout.fillHeight: true
+    // }
 
     Tt {
       id: tt
