@@ -4093,11 +4093,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1791472969,
-        "narHash": "sha256-S4lgnDLKybfta+V+SGOa7u2EAcC7nvem7Wq4srquYzg=",
+        "lastModified": 1791651115,
+        "narHash": "sha256-Bcw6pXEHRUwSWcnjZLErh2j5H+GAmqtMuniKl+PPTmk=",
         "owner": "wochap",
         "repo": "wobook",
-        "rev": "b16657cc343a5e8053e4c704d9aa588169fc2cd0",
+        "rev": "6288591c516848f08df9c8993ded87021e3961e3",
         "type": "github"
       },
       "original": {
@@ -4176,11 +4176,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1791644855,
-        "narHash": "sha256-ZQ44P7STXJJBHgU6zYId1VDx9SpA1jwPsWgfDuu8kS0=",
+        "lastModified": 1791653950,
+        "narHash": "sha256-DrK6vXrtI3iH86MdaEmncCANu6kXHdTDwsukMbY+VG0=",
         "owner": "wochap",
         "repo": "wosarcher",
-        "rev": "0665384f2f3708090bc50732325a16465fdc649c",
+        "rev": "687bd75546e06b199abc958c7d10a76632b7a00d",
         "type": "github"
       },
       "original": {
