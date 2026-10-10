@@ -29,6 +29,8 @@ in
         {
           users = [ userName ];
           noPass = !cfg.requirePassword;
+          # remember the password for ~5 min per terminal
+          persist = cfg.requirePassword;
           keepEnv = true;
         }
       ];
