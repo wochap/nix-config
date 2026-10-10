@@ -150,6 +150,12 @@ Repeat for each host.
 
 The web UI is also at `https://sunshine.wochap.local` on the host itself, and at `https://<address>:47990` with Sunshine's own certificate. Sunshine's CSRF check rejects proxied origins it does not know ("CSRF Protection Error"). `host.webUi.allowedOrigins` defaults to the host's own proxy and `https://sunshine-<hostName>.<certificate domain>`, which matches a client entry named after the host's `networking.hostName`. Add the origin there when the client uses another name. Moonlight stores the pairing in your user config, so the TTY session uses it too.
 
+### Security
+
+Only paired clients can launch, resume or quit an app: every such request goes over HTTPS with the client certificate exchanged at pairing, and pairing needs a PIN entered in the web UI behind its login. Revoke a device under Clients in the web UI. A paired client's private key (Moonlight's config on Linux, the app's data on Android) is enough to connect, so treat it like an ssh key.
+
+Streams are always encrypted (`lan_encryption_mode` and `wan_encryption_mode` are 2, required); Sunshine's LAN default sends video in the clear. With hardware AES (any x86-64 or 64-bit ARM device) this costs no visible latency. A client that cannot encrypt, such as a very old Moonlight, is refused.
+
 ## Troubleshooting
 
 - No picture or wrong size from the TTY: try `--backend eglfs`, or run the command inside a compositor to rule out cage.
