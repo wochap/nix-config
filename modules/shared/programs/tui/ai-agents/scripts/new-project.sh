@@ -29,6 +29,7 @@ gitignore_entries=(
   '.direnv'
   '.pi'
   '.agents'
+  'result'
 )
 
 missing_entries=()
