@@ -161,7 +161,7 @@ Singleton {
       return;
     }
     if (!root.current) {
-      root.screenName = Hyprland.focusedMonitor?.name ?? "";
+      root.screenName = SHyprland.focusedMonitorName;
     }
     root._currentEntry = next;
     root.state = next.request.error ? "error" : "default";

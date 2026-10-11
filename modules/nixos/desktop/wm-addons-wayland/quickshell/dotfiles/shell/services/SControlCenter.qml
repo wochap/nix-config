@@ -50,7 +50,7 @@ Singleton {
 
   // closes the panel and asks for confirmation before running the action
   function requestSessionAction(action) {
-    root.confirmScreenName = Hyprland.focusedMonitor?.name ?? "";
+    root.confirmScreenName = SHyprland.focusedMonitorName;
     root.close();
     root.confirmAction = action;
   }

@@ -3,6 +3,7 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 import QtQuick
 import qs.config
+import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
 import qs.widgets.Bar.modules.Hyprland.HyprWorkspaces
@@ -12,7 +13,7 @@ PanelWindow {
 
   required property ShellScreen modelData
   property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(rectangle.QsWindow.window?.screen)
-  property bool isFocused: hyprlandMonitor?.id === Hyprland.focusedMonitor?.id
+  property bool isFocused: root.modelData?.name === SHyprland.focusedMonitorName
   readonly property int maxContainerWidth: 1920
 
   WlrLayershell.namespace: "quickshell:bar"

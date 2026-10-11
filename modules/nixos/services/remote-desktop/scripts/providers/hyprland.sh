@@ -84,10 +84,14 @@ provider_apply() {
 provider_restore() {
   hypr_env
 
-  hyprctl output remove "$output" >/dev/null || true
-  # drop the runtime monitor rules (mirror, custom modes)
+  # drop the runtime monitor rules (mirror, custom modes) while $output still
+  # exists. Removing it first leaves the mirrors without a real output: focus
+  # goes nowhere and no focusedmon event follows, so the shell's bar stays
+  # unfocused. Removed second, focus and its workspaces move to a real output.
   hyprctl reload >/dev/null || true
   sleep 0.5
+  hyprctl output remove "$output" >/dev/null || true
+  sleep 0.3
 
   if kanshi_present; then
     # kanshi picks the profile for the current hardware again

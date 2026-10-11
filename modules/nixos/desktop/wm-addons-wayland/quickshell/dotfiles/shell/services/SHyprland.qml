@@ -23,7 +23,12 @@ Singleton {
   property var monitorsByName: ({})
   property var monitorsById: ({})
   property string submap: ""
-  readonly property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
+  // Quickshell keeps no focused monitor after the focused output is removed
+  // (e.g. remote-display's headless output) until a focusedmon event, which
+  // Hyprland skips when focus lands on the only monitor left. Fall back to
+  // hyprctl's focused flag meanwhile. Use these instead of Hyprland.focusedMonitor.
+  readonly property string focusedMonitorName: Hyprland.focusedMonitor?.name ?? root.monitors.find(monitor => monitor.focused)?.name ?? ""
+  readonly property var focusedScreen: Quickshell.screens.find(s => s.name === root.focusedMonitorName) ?? null
   property int wsOffset: 0
   property bool clientsDirty: false
   property bool monitorsDirty: false
@@ -48,6 +53,15 @@ Singleton {
     root.activeWorkspaceDirty = root.activeWorkspaceDirty || activeWorkspace;
     root.activeWindowDirty = root.activeWindowDirty || activeWindow;
     debounceTimer.restart();
+  }
+
+  // hyprctl prints plain text instead of JSON while no monitor is focused
+  function parseJson(text, fallback) {
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      return fallback;
+    }
   }
 
   function updateAll() {
@@ -168,7 +182,7 @@ Singleton {
     stdout: StdioCollector {
       id: clientsCollector
       onStreamFinished: {
-        root.clients = JSON.parse(clientsCollector.text);
+        root.clients = root.parseJson(clientsCollector.text, root.clients);
         root.rebuildClientIndexes();
       }
     }
@@ -185,7 +199,7 @@ Singleton {
     stdout: StdioCollector {
       id: monitorsCollector
       onStreamFinished: {
-        root.monitors = JSON.parse(monitorsCollector.text);
+        root.monitors = root.parseJson(monitorsCollector.text, root.monitors);
         root.monitorsById = root.monitors.reduce((result, monitor) => (Object.assign(result, {
               [monitor.id]: monitor
             })), {});
@@ -207,7 +221,7 @@ Singleton {
     stdout: StdioCollector {
       id: workspacesCollector
       onStreamFinished: {
-        root.workspaces = JSON.parse(workspacesCollector.text);
+        root.workspaces = root.parseJson(workspacesCollector.text, root.workspaces);
         root.workspacesById = root.workspaces.reduce((result, workspace) => (Object.assign(result, {
               [workspace.id]: workspace
             })), {});
@@ -228,7 +242,7 @@ Singleton {
     stdout: StdioCollector {
       id: activeWorkspaceCollector
       onStreamFinished: {
-        const _activeWorkspace = JSON.parse(activeWorkspaceCollector.text);
+        const _activeWorkspace = root.parseJson(activeWorkspaceCollector.text, null);
         root.activeWorkspace = _activeWorkspace?.monitor ? _activeWorkspace : null;
       }
     }
@@ -245,7 +259,7 @@ Singleton {
     stdout: StdioCollector {
       id: activeWindowCollector
       onStreamFinished: {
-        const _activeWindow = JSON.parse(activeWindowCollector.text);
+        const _activeWindow = root.parseJson(activeWindowCollector.text, null);
         root.activeWindow = _activeWindow?.address ? _activeWindow : null;
       }
     }

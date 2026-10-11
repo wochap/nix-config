@@ -3,12 +3,13 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
 import qs.config
+import qs.services
 
 // Square status tile, bottom-center
 PanelWindow {
   id: root
 
-  property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
+  property var focusedScreen: SHyprland.focusedScreen
   property var service: null
   required property string serviceFlagKey
   property string namespace: ""

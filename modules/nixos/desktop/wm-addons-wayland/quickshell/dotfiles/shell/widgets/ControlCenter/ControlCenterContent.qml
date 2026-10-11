@@ -16,7 +16,7 @@ import qs.widgets.Media
 PanelWindow {
   id: root
 
-  property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? null
+  property var focusedScreen: SHyprland.focusedScreen
   property var hyprlandMonitor: SHyprland.monitorsByName?.[focusedScreen?.name] ?? null
   property var focusedWorkspace: SHyprland.workspacesById?.[hyprlandMonitor?.activeWorkspace?.id] ?? null
   property var focusedClient: SHyprland.clientsByAddress?.[focusedWorkspace?.lastwindow] ?? null
