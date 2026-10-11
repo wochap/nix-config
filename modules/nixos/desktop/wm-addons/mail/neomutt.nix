@@ -15,9 +15,6 @@ let
     preferDark
     ;
   hmConfig = config.home-manager.users.${userName};
-  aliasfile = "${hmConfig.xdg.configHome}/neomutt/aliases";
-  mailboxfile = "${hmConfig.xdg.configHome}/neomutt/mailboxes";
-  syncthingdir = "${hmConfig.home.homeDirectory}/Sync";
   maildirBasePath = hmConfig.accounts.email.maildirBasePath;
   sinceClause = lib.optionalString (cfg.querySince != null) " and date:${cfg.querySince}..";
 
@@ -116,11 +113,6 @@ in
         urlscan
         w3m
       ];
-
-      home.symlinks = {
-        "${aliasfile}" = "${syncthingdir}/.config/neomutt/aliases";
-        "${mailboxfile}" = "${syncthingdir}/.config/neomutt/mailboxes";
-      };
 
       xdg.configFile = {
         "neomutt/neomuttrc-theme" = {
@@ -302,7 +294,6 @@ in
 
         settings = {
           abort_key = "<Esc>";
-          alias_file = aliasfile;
           allow_ansi = "yes";
           ascii_chars = "no";
           beep = "no";
@@ -343,8 +334,6 @@ in
         };
 
         extraConfig = ''
-          source ${aliasfile}
-          source ${mailboxfile}
 
           # Global Notmuch virtual folders
           set nm_default_uri = "notmuch://${maildirBasePath}"
