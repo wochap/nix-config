@@ -178,6 +178,9 @@ in
     })
 
     (lib.mkIf cfg.remoteBuilds.serve.enable {
+      # Clients reach the builder at the bare <web-gate.domain>.
+      _custom.services.web-gate.ddns.apex = lib.mkDefault true;
+
       nix.sshServe = {
         enable = true;
         protocol = "ssh-ng";

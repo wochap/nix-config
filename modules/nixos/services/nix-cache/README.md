@@ -4,10 +4,12 @@ Share Nix stores between hosts on the LAN, and optionally offload builds.
 
 - `server`: [harmonia](https://github.com/nix-community/harmonia) serves the store, signed on the fly, at `https://cache.<web-gate.domain>` behind Basic Auth (DNS, TLS and trusted networks come from web-gate).
 - `client.caches`: substitutes from other hosts' caches first (priority 30, vs 40 for cache.nixos.org), with credentials from `netrc-file`. An unreachable cache is skipped after `connectTimeout` (3 s).
-- `remoteBuilds.serve`: accepts builds over `ssh-ng` as the trusted `nix-ssh` user.
+- `remoteBuilds.serve`: accepts builds over `ssh-ng` as the trusted `nix-ssh` user, and enables `web-gate.ddns.apex` so the bare `<web-gate.domain>` resolves to this host (needs `web-gate.ddns.enable`).
 - `remoteBuilds.machines`: offloads builds to those hosts; falls back to local after a 3 s SSH timeout.
 
-Current setup: gdesktop and glegion each serve a cache and read the other's. Remote builds are not enabled.
+Current setup: gdesktop and glegion each serve a cache and read the other's. glegion offloads builds to gdesktop.
+
+Remote builds off the LAN: `<web-gate.domain>` points at the builder's LAN IP, so glegion also lists gdesktop by its tailnet MagicDNS name (`gdesktop.tail.geanmar.com`, same `hostKey`, lower `speedFactor`). Nix skips whichever route is unreachable after 3 s; the tailnet route needs Tailscale up on both hosts (`startOnBoot = false`). When both routes answer, jobs on gdesktop can reach twice `maxJobs`. The binary cache stays LAN-only.
 
 Basic Auth, not the gate cookie: Nix can only send netrc credentials, and store paths may contain inlined secrets.
 
@@ -41,6 +43,15 @@ nix-cache-netrc: |
 ```
 
 **Remote builds** need no secret: the client's nix-daemon uses its host key (`remoteBuilds.sshKeyFile`, default `/etc/ssh/ssh_host_ed25519_key`). Put the client's `.pub` in the builder's `remoteBuilds.serve.authorizedKeys`, and the builder's host `.pub` in the client's `remoteBuilds.machines.<host>.hostKey`.
+
+Those `.pub` values live in `hosts/<host>/ssh-host.pub`: a copy of the host's `/etc/ssh/ssh_host_ed25519_key.pub`, without the trailing comment. The config doesn't generate it; sshd creates the key pair on first boot and keeps it. Reinstalling NixOS (or wiping `/etc/ssh`) makes a new key, so refresh the file and rebuild both ends:
+
+```sh
+# from another host (the file must be tracked by git, or flakes won't see it)
+ssh <host> cut -d' ' -f1,2 /etc/ssh/ssh_host_ed25519_key.pub > hosts/<host>/ssh-host.pub
+```
+
+Until then, the client rejects the builder's changed host key (or the builder rejects the client), and builds fall back to local after the 3 s timeout. To keep the key across reinstalls instead, back up `/etc/ssh/ssh_host_ed25519_key*` and restore them before the first boot.
 
 ## Adding a host
 
