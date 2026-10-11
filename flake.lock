@@ -4399,17 +4399,16 @@
     "zsh-vi-mode": {
       "flake": false,
       "locked": {
-        "lastModified": 1753539903,
-        "narHash": "sha256-OHkWpD3kY8hicxN/sn+4RxljgeKrMs+YzmF/iaVeaTs=",
+        "lastModified": 1791730426,
+        "narHash": "sha256-T6eZnKEQEntboi/ZfS8ihZbG1gQIYBAUY0gL9thJJr4=",
         "owner": "wochap",
         "repo": "zsh-vi-mode",
-        "rev": "425e4293e243bccf8da3439a25a7699fe4ab3b1b",
+        "rev": "89340f4322932fd59e449b7d951043b70f62035a",
         "type": "github"
       },
       "original": {
         "owner": "wochap",
         "repo": "zsh-vi-mode",
-        "rev": "425e4293e243bccf8da3439a25a7699fe4ab3b1b",
         "type": "github"
       }
     }

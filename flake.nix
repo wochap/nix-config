@@ -164,7 +164,7 @@
     zsh-history-substring-search.flake = false;
     zsh-auto-notify.url = "github:wochap/zsh-auto-notify";
     zsh-auto-notify.flake = false;
-    zsh-vi-mode.url = "github:wochap/zsh-vi-mode?rev=425e4293e243bccf8da3439a25a7699fe4ab3b1b"; # (26 jul 2025)
+    zsh-vi-mode.url = "github:wochap/zsh-vi-mode";
     zsh-vi-mode.flake = false;
     zsh-pnpm-shell-completion.url = "github:g-plane/pnpm-shell-completion";
     zsh-pnpm-shell-completion.flake = false;
