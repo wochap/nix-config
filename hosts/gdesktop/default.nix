@@ -212,8 +212,8 @@ in
     # mobile/TV apps cannot complete the web-gate Basic Auth cookie dance.
     # Admin UIs (sonarr, radarr, ...) stay loopback-only.
     _custom.services.web-gate.domain = "gdesktop.geanmar.com";
-    _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/personal.yaml;
-    _custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
+    _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/server.yaml;
+    _custom.services.web-gate.acme.credentialSecret.sopsKey = "server-cloudflare-dns-api-token";
     # Fixed IP, but DDNS still creates and maintains the record.
     _custom.services.web-gate.ddns.enable = true;
     _custom.services.web-gate.ddns.zone = "geanmar.com";

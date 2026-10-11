@@ -20,3 +20,9 @@ creation_rules:
     key_groups:
       - age:
           - *default
+
+  - path_regex: secrets-sops/server.yaml$
+    key_groups:
+      - age:
+          - *default
+          - *gvps

@@ -56,8 +56,8 @@ Needed only for `expose.enable`. Local vhosts need no setup.
 2. Store the token in the SOPS file under the key you set in `acme.credentialSecret` (step 3). Once for all hosts:
 
    ```sh
-   sops secrets-sops/personal.yaml
-   # add: personal-cloudflare-dns-api-token: <token>
+   sops secrets-sops/server.yaml
+   # add: server-cloudflare-dns-api-token: <token>
    ```
 
    The module declares the `sops.secrets` entry itself, so the token lands in `/run/secrets/<sopsKey>`.
@@ -66,8 +66,8 @@ Needed only for `expose.enable`. Local vhosts need no setup.
 
    ```nix
    _custom.services.web-gate.domain = "gdesktop.geanmar.com";
-   _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/personal.yaml;
-   _custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
+   _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/server.yaml;
+   _custom.services.web-gate.acme.credentialSecret.sopsKey = "server-cloudflare-dns-api-token";
    _custom.services.web-gate.ddns.enable = true;
    _custom.services.web-gate.ddns.zone = "geanmar.com";
    # Laptop only: networks where port 443 opens (`nmcli connection show`).

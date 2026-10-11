@@ -212,8 +212,8 @@ in
     # LAN exposure follows the laptop: DDNS points *.glegion.geanmar.com at
     # its current IP, and port 443 opens only on the trusted connections.
     _custom.services.web-gate.domain = "glegion.geanmar.com";
-    _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/personal.yaml;
-    _custom.services.web-gate.acme.credentialSecret.sopsKey = "personal-cloudflare-dns-api-token";
+    _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/server.yaml;
+    _custom.services.web-gate.acme.credentialSecret.sopsKey = "server-cloudflare-dns-api-token";
     _custom.services.web-gate.ddns.enable = true;
     _custom.services.web-gate.ddns.zone = "geanmar.com";
 
