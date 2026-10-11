@@ -85,6 +85,10 @@ zle -N custom-vi-edit
 # [Shift+Delete] - HACK: stop printing `~`
 bindkey -M viins '^[[3;2~' delete-char
 
+# [Ctrl+Insert] - HACK: stop printing `;5~` when there is nothing to copy
+# NOTE: in visual mode zsh-vi-mode yanks the selection
+multibindkey 'viins vicmd viopp' '^[[2;5~' redisplay
+
 # [Backspace] - delete backward char
 bindkey -M menuselect '^?' .backward-delete-char
 

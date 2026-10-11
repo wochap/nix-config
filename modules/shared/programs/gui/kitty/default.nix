@@ -146,6 +146,10 @@ in
           source = ./dotfiles/custom_pass_keys.py;
           executable = true;
         };
+        "kitty/copy_or_send_key.py" = {
+          source = ./dotfiles/copy_or_send_key.py;
+          executable = true;
+        };
 
         # required by smart-splits.nvim
         "kitty/neighboring_window.py" = {
