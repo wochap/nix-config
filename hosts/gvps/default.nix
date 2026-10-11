@@ -132,6 +132,29 @@ in
       tailnetOnly = true;
     };
 
+    # Always-online member that relays changes between gdesktop and glegion,
+    # web app at https://tt.gvps.geanmar.com for tailnet devices only.
+    # Certificate via Cloudflare DNS-01 (no public record); tailnet clients
+    # resolve the name to the tailnet IP below.
+    # Pair once: `tt-server peer invite` on gdesktop, then
+    # `tt-server peer join <code> --name gvps` here
+    _custom.services.tt = {
+      enable = true;
+      daemon.enable = false;
+      notify = false;
+      server.tailnetOnly = true;
+      server.tailnetDomain = "tt.gvps.geanmar.com";
+      server.cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
+      server.peer.advertise = [ "gvps.tail.geanmar.com:8772" ];
+    };
+    services.headscale.settings.dns.extra_records = [
+      {
+        name = "tt.gvps.geanmar.com";
+        type = "A";
+        value = "100.64.0.4";
+      }
+    ];
+
     time.timeZone = "America/Toronto";
 
     system.stateVersion = "26.05";
