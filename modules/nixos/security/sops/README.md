@@ -13,4 +13,5 @@ sops --encrypt --in-place path/to/secret.yaml
 
 # edit an encrypted YAML file
 sops path/to/secret.yaml
+# sops updatekeys secrets-sops/<...>.yaml
 ```

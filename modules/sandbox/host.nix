@@ -27,6 +27,8 @@ in
 
     _custom.archetypes.sandbox.enable = true;
 
+    _custom.security.sops.enablePersonalSecrets = true;
+
     # cli
     _custom.programs.core-utils-extra-linux.enable = true;
     _custom.programs.core-utils-linux.enable = true;

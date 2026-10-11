@@ -108,6 +108,11 @@ in
       ];
     };
 
+    _custom.services.syncthing = {
+      enable = true;
+      tailnetOnly = true;
+    };
+
     time.timeZone = "America/Toronto";
 
     system.stateVersion = "26.05";

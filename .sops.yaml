@@ -1,15 +1,22 @@
 keys:
   - &default age182hl2gfu8zj2dxjdvtfktv9ay57htc20ugjrlmwmv8l806lntdxqgeje73
   - &sandbox age14m8va53kyyzve9vedmq0rn052t8y2esjjr72q8y6gzpegq090ddqacquk5
+  - &gvps age1hryf55wm6ypwvw97e5f9gzczeesy5r0hcndgz2q2lulg8gpxqu2qxgeje9
 
 creation_rules:
-  - path_regex: secrets-sops/(local|shared).yaml$
+  - path_regex: secrets-sops/shared.yaml$
     key_groups:
       - age:
           - *default
           - *sandbox
 
-  - path_regex: secrets-sops/(local|personal).yaml$
+  - path_regex: secrets-sops/local.yaml$
+    key_groups:
+      - age:
+          - *default
+          - *gvps
+
+  - path_regex: secrets-sops/personal.yaml$
     key_groups:
       - age:
           - *default

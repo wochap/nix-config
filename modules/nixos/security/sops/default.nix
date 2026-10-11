@@ -17,7 +17,10 @@ in
 {
   imports = [ inputs.sops-nix.nixosModules.sops ];
 
-  options._custom.security.sops.enable = lib.mkEnableOption { };
+  options._custom.security.sops = {
+    enable = lib.mkEnableOption { };
+    enablePersonalSecrets = lib.mkEnableOption { };
+  };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ sops ];
@@ -29,51 +32,52 @@ in
       };
 
       # secrets land in /run/secrets/<name>, owned by the user, mode 0400
-      secrets = {
-        "personal-openrouter-api-key" = {
-          sopsFile = sharedSopsFile;
-          owner = userName;
+      secrets =
+        lib.optionalAttrs cfg.enablePersonalSecrets {
+          "personal-openrouter-api-key" = {
+            sopsFile = sharedSopsFile;
+            owner = userName;
+          };
+          "personal-a-qwen-token-plan-api-key" = {
+            sopsFile = sharedSopsFile;
+            owner = userName;
+          };
+          "personal-b-qwen-token-plan-api-key" = {
+            sopsFile = sharedSopsFile;
+            owner = userName;
+          };
+        }
+        // lib.optionalAttrs (cfg.enablePersonalSecrets && !isSandbox) {
+          # personal
+          "personal-deepseek-api-key" = {
+            owner = userName;
+            sopsFile = personalSopsFile;
+          };
+          "personal-google-ai-studio-api-key" = {
+            owner = userName;
+            sopsFile = personalSopsFile;
+          };
+          "personal-groq-api-key" = {
+            owner = userName;
+            sopsFile = personalSopsFile;
+          };
+          "personal-together-api-key" = {
+            owner = userName;
+            sopsFile = personalSopsFile;
+          };
+          "personal-unsplash-access-key" = {
+            owner = userName;
+            sopsFile = personalSopsFile;
+          };
+          "personal-unsplash-secret-key" = {
+            owner = userName;
+            sopsFile = personalSopsFile;
+          };
+          "personal-kansallisgalleria-token" = {
+            owner = userName;
+            sopsFile = personalSopsFile;
+          };
         };
-        "personal-a-qwen-token-plan-api-key" = {
-          sopsFile = sharedSopsFile;
-          owner = userName;
-        };
-        "personal-b-qwen-token-plan-api-key" = {
-          sopsFile = sharedSopsFile;
-          owner = userName;
-        };
-      }
-      // lib.optionalAttrs (!isSandbox) {
-        # personal
-        "personal-deepseek-api-key" = {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-        "personal-google-ai-studio-api-key" = {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-        "personal-groq-api-key" = {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-        "personal-together-api-key" = {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-        "personal-unsplash-access-key" = {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-        "personal-unsplash-secret-key" = {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-        "personal-kansallisgalleria-token" = {
-          owner = userName;
-          sopsFile = personalSopsFile;
-        };
-      };
     };
   };
 }

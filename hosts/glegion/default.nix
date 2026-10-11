@@ -24,6 +24,8 @@ in
 
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
+    _custom.security.sops.enablePersonalSecrets = true;
+
     _custom.programs.weeb.enable = true;
 
     # cli
@@ -54,7 +56,6 @@ in
 
     # cli
     _custom.programs.bat.enable = true;
-    _custom.programs.buku.enable = false;
     _custom.programs.core-utils-extra.enable = true;
     _custom.programs.core-utils.enable = true;
     _custom.programs.dircolors.enable = true;
@@ -116,7 +117,6 @@ in
     _custom.programs.neovim.enable = true;
     _custom.programs.newsboat.enable = true;
     _custom.programs.presenterm.enable = true;
-    _custom.programs.taskwarrior.enable = true;
     _custom.programs.tmux.enable = true;
     _custom.programs.tmux.enableSystemd = true;
     _custom.programs.urlscan.enable = true;

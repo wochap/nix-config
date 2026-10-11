@@ -20,6 +20,8 @@ in
 
     _custom.archetypes.wm-wayland-desktop.enable = true;
 
+    _custom.security.sops.enablePersonalSecrets = true;
+
     _custom.programs.weeb.enable = true;
 
     # cli
