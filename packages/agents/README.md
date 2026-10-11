@@ -45,6 +45,14 @@ refuse `--no-tools`.
 declares it with `systemPromptFlags`; for agents without it the text goes
 at the top of the prompt. Per run, like `--no-tools`.
 
+`--image <f>` (repeatable, png/jpeg/gif/webp, at most 20, 5 MiB base64
+each) attaches images to the prompt, which may then be empty. They reach
+the model without any tool, so they work with `--no-tools`: claude gets a
+`--input-format stream-json` user message with base64 image blocks, pi gets
+`@<file>` arguments it reads itself. An adapter declares it with `images`;
+agents without it refuse `--image`. Only the first attempt sends them, not
+a handback.
+
 Adapters pass the prompt on stdin, never as an argument: Linux caps one
 argv string at 128 KiB.
 
@@ -90,6 +98,10 @@ agents serve --port 20940 -C ~/work --api-key-file ~/.config/agents/api-key \
 - System messages replace the agent's system prompt (`--system-file`), so
   the agent answers as the caller's prompt says, not as a coding agent.
   The rest of the history is flattened into one prompt.
+- Images: `image_url` parts of the last user message go to `run --image`;
+  only base64 `data:` URLs are accepted (fetching a URL from this machine
+  would be an SSRF risk). Earlier turns' images become `[image]` in a
+  flattened history. Agents without image support get a 400.
 
 - Model ids are `<agent>/<model>`, split at the first `/`
   (`pi/omniroute/desktop-free` is pi with `omniroute/desktop-free`). A bare

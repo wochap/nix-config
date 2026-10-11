@@ -30,6 +30,7 @@ _agents() {
     '--json[print JSON result]' \
     '--no-tools[run the agent without tools]' \
     '--system-file[replace the system prompt with a file]:file:_files' \
+    '*--image[attach an image]:image:_files -g "*.(png|jpg|jpeg|gif|webp)"' \
     '--via[mark the session as started by a program]:name:' \
     '--host[listen address]:host:' \
     '--port[port]:port:' \

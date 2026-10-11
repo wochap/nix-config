@@ -23,6 +23,10 @@ const noToolsFlags = ["--no-tools"];
 // --system-prompt takes text or the path of an existing file.
 const systemPromptFlags = (file: string) => ["--system-prompt", file];
 
+// --mode json echoes the user message, base64 images included, in
+// message_end and agent_end; the raw log keeps a placeholder instead.
+const stripImages = (line: string) => line.replace(/"data":"[A-Za-z0-9+/=]{1024,}"/g, '"data":"<image>"');
+
 // Short label for a tool call: the agent's own description when it gave
 // one, else tool name plus path. Never the command itself.
 function toolLabel(block: any, root: string): string {
@@ -111,11 +115,14 @@ export const pi: Adapter = {
 
   systemPromptFlags,
 
+  images: true,
+
   // pi takes a caller-chosen id: --session-id creates the session when
   // missing and continues it otherwise, so new and resumed runs match.
   // Sessions are looked up per cwd, hence cwd is always the session's.
-  // -p without a message takes the prompt from stdin.
-  async run({ id, prompt, model, effort, cwd, noTools, systemFile, rawLog, signal, onEvent }: RunOptions) {
+  // -p without a message takes the prompt from stdin. pi itself reads @file
+  // images (absolute paths) and attaches them to that message, no tool.
+  async run({ id, prompt, model, effort, cwd, noTools, systemFile, images = [], rawLog, signal, onEvent }: RunOptions) {
     const startedAt = Date.now();
     const child = track(
       Bun.spawn(
@@ -132,6 +139,7 @@ export const pi: Adapter = {
           "--mode",
           "json",
           "-p",
+          ...(images.length ? ["--", ...images.map((f) => `@${f}`)] : []),
         ],
         { cwd, stdin: new Blob([prompt]), stdout: "pipe", stderr: "inherit" },
       ),
@@ -140,7 +148,7 @@ export const pi: Adapter = {
     let result = "";
 
     for await (const line of lines(child.stdout)) {
-      appendFileSync(rawLog, `${line}\n`);
+      appendFileSync(rawLog, `${images.length ? stripImages(line) : line}\n`);
       let event: any;
       try {
         event = JSON.parse(line);

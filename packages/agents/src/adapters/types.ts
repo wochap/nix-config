@@ -47,6 +47,8 @@ export interface RunOptions {
   noTools?: boolean;
   /** File whose text replaces the agent's system prompt (only with Adapter.systemPromptFlags). */
   systemFile?: string;
+  /** Image files sent with the prompt (only with Adapter.images); checked by image.ts readImage. */
+  images?: string[];
   /** Path; the adapter appends its provider-native output here. */
   rawLog: string;
   /** Abort stops the agent with SIGINT, e.g. to take the session over. */
@@ -67,6 +69,8 @@ export interface Adapter {
    * `run --system-file` puts the text at the top of the prompt instead.
    */
   systemPromptFlags?(file: string): string[];
+  /** True: run() sends RunOptions.images to the model without tools. */
+  images?: true;
   /**
    * Headless run. Resolves with the final answer; rejects on non-zero exit.
    * The prompt goes on stdin: Linux caps one argv string at 128 KiB.

@@ -7,6 +7,7 @@
 import { appendFileSync, existsSync, readdirSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { readImage } from "../image";
 import { track } from "../term";
 import { launcher } from "./launch";
 import type { Adapter, Effort, Event, RunOptions } from "./types";
@@ -20,6 +21,18 @@ const effortFlags = (effort?: Effort) => (effort ? ["--effort", EFFORT[effort]] 
 // --mcp-config loads no MCP servers.
 const noToolsFlags = ["--tools", "", "--strict-mcp-config"];
 const systemPromptFlags = (file: string) => ["--system-prompt-file", file];
+
+// With images, stdin is one stream-json user message (text and base64 image
+// blocks) instead of plain text; the model gets the bytes, no tool reads them.
+async function stdinFor(prompt: string, images: string[]): Promise<string> {
+  if (!images.length) return prompt;
+  const content: unknown[] = prompt ? [{ type: "text", text: prompt }] : [];
+  for (const f of images) {
+    const { type, base64 } = await readImage(f);
+    content.push({ type: "image", source: { type: "base64", media_type: type, data: base64 } });
+  }
+  return `${JSON.stringify({ type: "user", message: { role: "user", content } })}\n`;
+}
 
 // Short label for a tool call: the agent's own description when it gave
 // one, else tool name plus path. Never the command itself.
@@ -91,8 +104,11 @@ export const claude: Adapter = {
 
   systemPromptFlags,
 
+  images: true,
+
   // -p without a prompt argument reads it from stdin.
-  async run({ id, prompt, model, effort, cwd, resume, noTools, systemFile, rawLog, signal, onEvent }: RunOptions) {
+  async run({ id, prompt, model, effort, cwd, resume, noTools, systemFile, images = [], rawLog, signal, onEvent }: RunOptions) {
+    const stdin = await stdinFor(prompt, images);
     const child = track(
       Bun.spawn(
         [
@@ -104,13 +120,14 @@ export const claude: Adapter = {
           ...permFlags,
           ...(noTools ? noToolsFlags : []),
           ...(systemFile ? systemPromptFlags(systemFile) : []),
+          ...(images.length ? ["--input-format", "stream-json"] : []),
           "--output-format",
           "stream-json",
           "--verbose",
           resume ? "--resume" : "--session-id",
           id,
         ],
-        { cwd, stdin: new Blob([prompt]), stdout: "pipe", stderr: "inherit" },
+        { cwd, stdin: new Blob([stdin]), stdout: "pipe", stderr: "inherit" },
       ),
     );
     signal?.addEventListener("abort", () => child.kill("SIGINT"));

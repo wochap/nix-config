@@ -11,6 +11,11 @@
 // session with only the last user message, an unknown one starts a new
 // session with the flattened history.
 //
+// Images: image_url parts of the last user message, as data: URLs only
+// (fetching a GUI-given URL from this machine is an SSRF risk), go to
+// `run --image`; earlier turns' images become "[image]" in a flattened
+// history. Agents without Adapter.images get a 400.
+//
 // System messages replace the agent's own system prompt (run --system-file).
 // Runs get no tools unless --tools: a prompt (say, scraped web text) must not
 // drive tools in the run's directory.
@@ -21,6 +26,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { adapters, getAdapter } from "./adapters";
 import { EFFORTS, type Effort, type Event } from "./adapters/types";
+import { extension, IMAGE_TYPES, type ImageType, MAX_IMAGE_BASE64, MAX_IMAGES, sniff } from "./image";
 import * as store from "./store";
 import { tail } from "./tail";
 
@@ -66,6 +72,42 @@ function text(m: Message): string {
     .join("\n");
 }
 
+/** URLs of the image_url parts; clients send {url} or a bare string. */
+function imageUrls(m: Message): string[] {
+  if (!Array.isArray(m.content)) return [];
+  return m.content
+    .filter((p) => p?.type === "image_url")
+    .map((p) => (typeof p.image_url === "string" ? p.image_url : p.image_url?.url))
+    .filter((u): u is string => typeof u === "string");
+}
+
+/** Text with a marker per image, for turns whose images are not sent. */
+function textWithMarkers(m: Message): string {
+  const markers = imageUrls(m).map(() => "[image]");
+  return [text(m), ...markers].filter(Boolean).join("\n");
+}
+
+interface Image {
+  type: ImageType;
+  bytes: Uint8Array;
+}
+
+/** Decodes a base64 data: URL; the type comes from the bytes, not the URL. */
+function decodeImage(url: string): Image {
+  const match = url.match(/^data:[^;,]*(;[^,]*)?;base64,(.*)$/s);
+  if (!match) {
+    throw new HttpError(400, /^https?:/.test(url) ? "image_url: only base64 data: URLs are accepted" : "image_url: invalid data: URL");
+  }
+  const base64 = match[2].replace(/\s/g, "");
+  if (base64.length > MAX_IMAGE_BASE64) {
+    throw new HttpError(413, `image_url: image over ${MAX_IMAGE_BASE64 / 1024 / 1024} MiB base64`);
+  }
+  const bytes = new Uint8Array(Buffer.from(base64, "base64"));
+  const type = sniff(bytes);
+  if (!type) throw new HttpError(400, `image_url: not a ${IMAGE_TYPES.map(extension).join("/")} image`);
+  return { type, bytes };
+}
+
 // Fingerprint -> session id; lets a GUI's next request resume the session.
 // Every one-shot request (a program calling the API) adds an entry, so
 // entries older than CONVERSATION_TTL are dropped.
@@ -105,7 +147,9 @@ const isSystem = (m: Message) => m.role === "system" || m.role === "developer";
 function flatten(messages: Message[]): string {
   const turns = messages.filter((m) => m.role === "user" || m.role === "assistant");
   if (turns.length === 1) return text(turns[0]);
-  return turns.map((m) => `${m.role}: ${text(m)}`).join("\n\n");
+  // The last message's images are sent; earlier ones only marked.
+  const body = (m: Message) => (m === turns.at(-1) ? text(m) : textWithMarkers(m));
+  return turns.map((m) => `${m.role}: ${body(m)}`).join("\n\n");
 }
 
 interface Plan {
@@ -117,6 +161,8 @@ interface Plan {
   /** The request's system messages; replaces the agent's system prompt. */
   system?: string;
   resume?: string;
+  /** Images of the last user message. */
+  images: Image[];
   messages: Message[];
   /** Send a usage chunk before [DONE] (stream_options.include_usage). */
   streamUsage: boolean;
@@ -147,13 +193,17 @@ function plan(body: any, tools: boolean): Plan {
 
   const messages: Message[] = Array.isArray(body.messages) ? body.messages : [];
   const lastMsg = messages.at(-1);
-  if (!lastMsg || lastMsg.role !== "user" || !text(lastMsg).trim()) {
+  const urls = lastMsg ? imageUrls(lastMsg) : [];
+  if (!lastMsg || lastMsg.role !== "user" || !(text(lastMsg).trim() || urls.length)) {
     throw new HttpError(400, "messages must end with a non-empty user message");
   }
+  if (urls.length && !adapter.images) throw new HttpError(400, `${adapter.name} cannot take images`);
+  if (urls.length > MAX_IMAGES) throw new HttpError(400, `at most ${MAX_IMAGES} images per message`);
+  const images = urls.map(decodeImage);
 
   const system = messages.filter(isSystem).map(text).join("\n\n").trim() || undefined;
   const streamUsage = Boolean(body.stream_options?.include_usage);
-  const base = { model, agent: adapter.name, agentModel, effort, system, messages, streamUsage };
+  const base = { model, agent: adapter.name, agentModel, effort, system, images, messages, streamUsage };
 
   const known = conversations.get(fp(model, messages.slice(0, -1)));
   const prev = known ? store.readSession(known.id) : null;
@@ -182,35 +232,47 @@ interface Run {
 }
 
 function spawn(p: Plan, cwd: string, tools: boolean): Run {
-  // A file, not argv: system prompts can be long.
-  const systemDir = p.system ? mkdtempSync(join(tmpdir(), "agents-serve-")) : null;
-  const systemFile = systemDir ? join(systemDir, "system.md") : null;
-  if (systemFile) writeFileSync(systemFile, p.system ?? "");
-  const proc = Bun.spawn(
-    [
-      process.execPath,
-      join(import.meta.dir, "main.ts"),
-      "run",
-      "--json",
-      "-a",
-      p.agent,
-      "-m",
-      p.agentModel,
-      ...(p.effort ? ["-e", p.effort] : []),
-      "-C",
-      cwd,
-      ...(p.resume ? ["-r", p.resume] : []),
-      ...(tools ? [] : ["--no-tools"]),
-      ...(systemFile ? ["--system-file", systemFile] : []),
-      "--via",
-      "serve",
-      "-",
-    ],
-    { stdin: "pipe", stdout: "pipe", stderr: "pipe", env: process.env },
-  );
+  // Files, not argv: system prompts can be long, images are bytes. The
+  // agents read them at startup (claude via `run`, pi itself).
+  const tmp = p.system || p.images.length ? mkdtempSync(join(tmpdir(), "agents-serve-")) : null;
+  const cleanup = () => tmp && rmSync(tmp, { recursive: true, force: true });
+  const systemFile = tmp && p.system ? join(tmp, "system.md") : null;
+  if (systemFile) writeFileSync(systemFile, p.system ?? "", { mode: 0o600 });
+  const imageFiles = p.images.map((image, i) => {
+    const f = join(tmp ?? "", `image-${i}.${extension(image.type)}`);
+    writeFileSync(f, image.bytes, { mode: 0o600 });
+    return f;
+  });
+  const argv = [
+    process.execPath,
+    join(import.meta.dir, "main.ts"),
+    "run",
+    "--json",
+    "-a",
+    p.agent,
+    "-m",
+    p.agentModel,
+    ...(p.effort ? ["-e", p.effort] : []),
+    "-C",
+    cwd,
+    ...(p.resume ? ["-r", p.resume] : []),
+    ...(tools ? [] : ["--no-tools"]),
+    ...(systemFile ? ["--system-file", systemFile] : []),
+    ...imageFiles.flatMap((f) => ["--image", f]),
+    "--via",
+    "serve",
+    "-",
+  ];
+  let proc;
+  try {
+    proc = Bun.spawn(argv, { stdin: "pipe", stdout: "pipe", stderr: "pipe", env: process.env });
+  } catch (err) {
+    cleanup();
+    throw err;
+  }
   proc.stdin.write(p.prompt);
   proc.stdin.end();
-  if (systemDir) proc.exited.then(() => rmSync(systemDir, { recursive: true, force: true }));
+  proc.exited.then(cleanup);
 
   let lastError = "";
   let resolveId: (id: string | null) => void = () => {};
@@ -412,6 +474,8 @@ export function serve(o: ServeOptions) {
     port: o.port,
     // Runs take minutes; streams send a ping every 15 s.
     idleTimeout: 0,
+    // Room for MAX_IMAGES images plus history; larger bodies get a 413.
+    maxRequestBodySize: 32 * 1024 * 1024,
     async fetch(req) {
       const { pathname } = new URL(req.url);
       if (req.method === "GET" && pathname === "/health") return new Response("ok");

@@ -15,6 +15,7 @@ import { resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { adapters, getAdapter } from "./adapters";
 import { EFFORTS, type Effort, type Event } from "./adapters/types";
+import { IMAGE_TYPES, MAX_IMAGES, extension, readImage } from "./image";
 import { header, hint, render } from "./render";
 import * as store from "./store";
 import { tail } from "./tail";
@@ -36,6 +37,8 @@ Commands:
         --system-file <f>  replace the agent's system prompt with the file's
                          text (agents that cannot: put it atop the prompt);
                          per run, not kept for -r or attach
+        --image <f>      attach an image (${IMAGE_TYPES.map(extension).join(", ")}; up to ${MAX_IMAGES});
+                         repeatable; the prompt may then be empty
         --via <name>     mark the session as started by <name>; ls hides it
     -q, --quiet          print only the final answer (default when stdout is not a TTY)
         --verbose        print live progress (default on a TTY)
@@ -84,6 +87,7 @@ const { values: opts, positionals } = parseArgs({
     "tool-events": { type: "boolean" },
     "no-tools": { type: "boolean" },
     "system-file": { type: "string" },
+    image: { type: "string", multiple: true },
     via: { type: "string" },
     "api-key-file": { type: "string" },
     "no-auth": { type: "boolean" },
@@ -139,8 +143,13 @@ async function run() {
   const effort = opts.effort as Effort | undefined;
   if (effort && !EFFORTS.includes(effort)) throw new Error(`--effort: expected one of ${EFFORTS.join(", ")}`);
 
+  // Absolute: the agent runs in the session's cwd.
+  const images = (opts.image ?? []).map((f) => resolve(f));
+  if (images.length > MAX_IMAGES) throw new Error(`--image: at most ${MAX_IMAGES} images`);
+  for (const f of images) await readImage(f);
+
   let prompt = await readPrompt();
-  if (!prompt) {
+  if (!prompt && !images.length) {
     console.error(HELP);
     process.exit(1);
   }
@@ -150,6 +159,10 @@ async function run() {
   if (opts["no-tools"]) {
     const name = opts.resume ? store.resolveId(opts.resume).agent : (opts.agent ?? "claude");
     if (!getAdapter(name).noToolsFlags) throw new Error(`--no-tools: ${name} cannot run without tools`);
+  }
+  if (images.length) {
+    const name = opts.resume ? store.resolveId(opts.resume).agent : (opts.agent ?? "claude");
+    if (!getAdapter(name).images) throw new Error(`--image: ${name} cannot take images`);
   }
 
   let session: store.Session;
@@ -166,7 +179,7 @@ async function run() {
       model: opts.model ?? agent.defaultModel,
       effort,
       cwd: opts.cwd ? resolve(opts.cwd) : process.cwd(),
-      prompt,
+      prompt: images.length ? `${prompt} [${images.length} image${images.length > 1 ? "s" : ""}]`.trim() : prompt,
       via: opts.via,
     });
   }
@@ -194,6 +207,8 @@ async function run() {
   let status: store.Status = "done";
   let result = "";
   let resume = Boolean(opts.resume);
+  // Sent with the first attempt only; a handback must not resend them.
+  let attach = images;
   // Headless attempts; Ctrl-T stops one and hands the session to the user.
   while (true) {
     const stop = new AbortController();
@@ -212,6 +227,7 @@ async function run() {
         resume,
         noTools: Boolean(opts["no-tools"]),
         systemFile: agent.systemPromptFlags ? systemFile : undefined,
+        images: attach,
         rawLog: store.rawPath(id),
         signal: stop.signal,
         async onEvent(e) {
@@ -244,6 +260,7 @@ async function run() {
     }
     await onEvent({ type: "handback" });
     prompt = HANDBACK;
+    attach = [];
     resume = true;
   }
   keys.stop();
