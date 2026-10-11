@@ -5,9 +5,9 @@ Share Nix stores between hosts on the LAN, and optionally offload builds.
 - `server`: [harmonia](https://github.com/nix-community/harmonia) serves the store, signed on the fly, at `https://cache.<web-gate.domain>` behind Basic Auth (DNS, TLS and trusted networks come from web-gate).
 - `client.caches`: substitutes from other hosts' caches first (priority 30, vs 40 for cache.nixos.org), with credentials from `netrc-file`. An unreachable cache is skipped after `connectTimeout` (3 s).
 - `remoteBuilds.serve`: accepts builds over `ssh-ng` as the trusted `nix-ssh` user, and enables `web-gate.ddns.apex` so the bare `<web-gate.domain>` resolves to this host (needs `web-gate.ddns.enable`).
-- `remoteBuilds.machines`: offloads builds to those hosts; falls back to local after a 3 s SSH timeout.
+- `remoteBuilds.machines`: offloads builds to those hosts; falls back to local after a 3 s SSH timeout. With `substituter.enable`, also substitutes from the builder's store over `ssh-ng` (`trusted=true`, so its unsigned paths are accepted), after cache.nixos.org by default.
 
-Current setup: gdesktop and glegion each serve a cache and read the other's. glegion offloads builds to gdesktop.
+Current setup: gdesktop and glegion each serve a cache and read the other's. glegion offloads builds to gdesktop. gvps, off the LAN, builds on and substitutes from both over the tailnet (`*.tail.geanmar.com`), so it needs Tailscale up on them (glegion: `startOnBoot = false`).
 
 Remote builds off the LAN: `<web-gate.domain>` points at the builder's LAN IP, so glegion also lists gdesktop by its tailnet MagicDNS name (`gdesktop.tail.geanmar.com`, same `hostKey`, lower `speedFactor`). Nix skips whichever route is unreachable after 3 s; the tailnet route needs Tailscale up on both hosts (`startOnBoot = false`). When both routes answer, jobs on gdesktop can reach twice `maxJobs`. The binary cache stays LAN-only.
 

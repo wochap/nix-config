@@ -108,6 +108,25 @@ in
       ];
     };
 
+    # 2 vCores: build on gdesktop/glegion and substitute from their stores
+    # over the tailnet whenever they are online; locally otherwise. Each
+    # needs this host's ssh-host.pub in its remoteBuilds.serve.authorizedKeys.
+    _custom.services.nix-cache.remoteBuilds.machines = {
+      "gdesktop.tail.geanmar.com" = {
+        hostKey = lib.fileContents ../gdesktop/ssh-host.pub;
+        maxJobs = 12;
+        speedFactor = 4;
+        substituter.enable = true;
+      };
+      "glegion.tail.geanmar.com" = {
+        hostKey = lib.fileContents ../glegion/ssh-host.pub;
+        maxJobs = 8;
+        speedFactor = 3;
+        substituter.enable = true;
+        substituter.priority = 51;
+      };
+    };
+
     _custom.services.syncthing = {
       enable = true;
       tailnetOnly = true;

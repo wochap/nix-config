@@ -105,6 +105,15 @@ in
                   default = 2;
                   description = "Relative speed; the local host counts as 1.";
                 };
+                substituter = {
+                  # Paths need no signature: the builder is trusted with build outputs anyway.
+                  enable = lib.mkEnableOption "substituting from this builder's store over ssh-ng";
+                  priority = lib.mkOption {
+                    type = lib.types.int;
+                    default = 50;
+                    description = "Lower is preferred; cache.nixos.org uses 40, so by default only paths missing there come from the builder.";
+                  };
+                };
                 supportedFeatures = lib.mkOption {
                   type = lib.types.listOf lib.types.str;
                   default = [
@@ -196,6 +205,12 @@ in
       nix = {
         distributedBuilds = true;
         settings.builders-use-substitutes = true;
+        settings.substituters = lib.concatMap (
+          m:
+          lib.optional m.substituter.enable "ssh-ng://nix-ssh@${m.hostName}?ssh-key=${cfg.remoteBuilds.sshKeyFile}&trusted=true&priority=${toString m.substituter.priority}"
+        ) (lib.attrValues cfg.remoteBuilds.machines);
+        # Skip a substituter that is offline instead of failing the build.
+        settings.fallback = true;
         buildMachines = lib.mapAttrsToList (_: m: {
           inherit (m)
             hostName

@@ -246,6 +246,9 @@ in
         maxJobs = 8;
         speedFactor = 1;
       };
+      # gvps builds and substitutes here over the tailnet.
+      remoteBuilds.serve.enable = true;
+      remoteBuilds.serve.authorizedKeys = [ (lib.fileContents ../gvps/ssh-host.pub) ];
     };
 
     # NetworkManager connection names where LAN vhosts open and DDNS updates.

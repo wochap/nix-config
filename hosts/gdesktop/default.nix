@@ -233,7 +233,10 @@ in
       client.netrc.sopsFile = ../../secrets-sops/local.yaml;
       client.netrc.sopsKey = "local-nix-cache-netrc";
       remoteBuilds.serve.enable = true;
-      remoteBuilds.serve.authorizedKeys = [ (lib.fileContents ../glegion/ssh-host.pub) ];
+      remoteBuilds.serve.authorizedKeys = [
+        (lib.fileContents ../glegion/ssh-host.pub)
+        (lib.fileContents ../gvps/ssh-host.pub)
+      ];
     };
 
     # NetworkManager connection names where LAN vhosts open and DDNS updates.
