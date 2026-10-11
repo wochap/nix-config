@@ -73,6 +73,8 @@ Scope {
     const activeSubmap = root.submap;
     if (ConfigWhichKeys.onlyShowInSubmap && activeSubmap.length === 0)
       return [];
+    if (ConfigWhichKeys.ignoredSubmaps.includes(activeSubmap))
+      return [];
 
     const heldMask = root.heldModifierMask;
     const result = root.rawBindings.filter(binding => {

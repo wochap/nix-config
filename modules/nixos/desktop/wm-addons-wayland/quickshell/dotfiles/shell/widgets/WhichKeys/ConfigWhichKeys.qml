@@ -7,6 +7,7 @@ import QtQuick
 Singleton {
   property int holdDelay: 500
   property bool onlyShowInSubmap: true
+  property list<string> ignoredSubmaps: ["kb_inhibit"]
   property real bindingBackgroundOpacity: 0.9
   property real panelPadding: 16
   property real bottomMargin: 40
