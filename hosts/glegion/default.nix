@@ -233,14 +233,17 @@ in
       client.netrc.sopsKey = "local-nix-cache-netrc";
       # Same builder twice: LAN (DDNS) and tailnet (MagicDNS). The
       # unreachable one is skipped after 3 s; the lower speedFactor makes
-      # Nix prefer the LAN route when both answer.
+      # Nix prefer the LAN route when both answer. Nix offers every job to a
+      # builder first and builds locally only once its slots are full, so a
+      # small maxJobs leaves the overflow to glegion. Each job still gets all
+      # of gdesktop's cores (cores = 0).
       remoteBuilds.machines."gdesktop.geanmar.com" = {
         hostKey = lib.fileContents ../gdesktop/ssh-host.pub;
-        maxJobs = 12;
+        maxJobs = 8;
       };
       remoteBuilds.machines."gdesktop.tail.geanmar.com" = {
         hostKey = lib.fileContents ../gdesktop/ssh-host.pub;
-        maxJobs = 12;
+        maxJobs = 8;
         speedFactor = 1;
       };
     };
