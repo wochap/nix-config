@@ -79,7 +79,11 @@ in
 
     # public network: plain DHCP, no NetworkManager, dev ports or mDNS
     _custom.desktop.networking.enableIPv6 = true;
-    _custom.desktop.networking.nameservers = [ "9.9.9.9" ];
+    # resolved: tailscale adds MagicDNS (remote builders) on tailscale0
+    _custom.desktop.networking.nameservers = [
+      "9.9.9.9"
+      "149.112.112.112"
+    ];
 
     _custom.desktop.power-management.enable = false;
 
@@ -100,6 +104,11 @@ in
     };
     _custom.services.adguardhome = {
       enable = true;
+      # same tailnet IP as headscale.nameservers; resolved keeps 127.0.0.53
+      bindHosts = [
+        "100.64.0.4"
+        "127.0.0.1"
+      ];
       users = [
         {
           name = "gean";

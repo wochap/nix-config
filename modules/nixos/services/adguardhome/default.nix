@@ -25,6 +25,15 @@ in
       );
       default = [ ];
     };
+    # not 0.0.0.0, which collides with resolved's stub on 127.0.0.53
+    bindHosts = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ "127.0.0.1" ];
+      example = [
+        "100.64.0.4"
+        "127.0.0.1"
+      ];
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -34,8 +43,8 @@ in
       port = 3000;
       settings = {
         dns = {
-          # This ensures AdGuard Home listens for DNS queries on port 53
-          bind_host = "0.0.0.0";
+          # `bind_host` (pre-v0.106) is ignored, this is the live key
+          bind_hosts = cfg.bindHosts;
           # Upstream servers
           upstream_dns = [
             "9.9.9.9"
@@ -76,8 +85,12 @@ in
       };
     };
 
-    # resolved's stub on 127.0.0.53:53 blocks bind_host 0.0.0.0:53
-    services.resolved.enable = false;
+    # a tailnet IP in bindHosts only exists once tailscaled is up
+    boot.kernel.sysctl."net.ipv4.ip_nonlocal_bind" = 1;
+    systemd.services.adguardhome = {
+      after = [ "tailscaled.service" ];
+      wants = [ "tailscaled.service" ];
+    };
 
     # DNS and web UI only reachable over the tailnet
     networking.firewall.interfaces.tailscale0 = {
