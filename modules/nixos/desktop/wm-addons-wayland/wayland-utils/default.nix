@@ -35,6 +35,13 @@ let
   tui-wifi = pkgs.writeScriptBin "tui-wifi" (builtins.readFile ./scripts/tui-wifi.sh);
   theme-switch = pkgs.writeScriptBin "theme-switch" (builtins.readFile ./scripts/theme-switch.sh);
   color-scheme = pkgs.writeScriptBin "color-scheme" (builtins.readFile ./scripts/color-scheme.sh);
+  # desktop layout (Esc, Tab, Ctrl, Super, arrows, F-keys) instead of the mobile one
+  wvkbd = pkgs.wvkbd.overrideAttrs (oldAttrs: {
+    makeFlags = (oldAttrs.makeFlags or [ ]) ++ [ "LAYOUT=deskintl" ];
+    meta = oldAttrs.meta // {
+      mainProgram = "wvkbd-deskintl";
+    };
+  });
 in
 {
   options._custom.desktop.wayland-utils.enable = lib.mkEnableOption { };
@@ -95,6 +102,7 @@ in
           gpu-screen-recorder # screen recorder
           wlr-randr
           wlrctl # control keyboard, mouse and wm from cli
+          wvkbd # on-screen keyboard, toggled from the quickshell control center
           cage # wm
 
           play-notification-sound

@@ -298,6 +298,14 @@ PanelWindow {
 
           ControlCenterTile {
             Layout.fillWidth: true
+            icon: "keyboard"
+            label: "Keyboard"
+            isActive: SVirtualKeyboard.isActive
+            onClicked: SVirtualKeyboard.toggle()
+          }
+
+          ControlCenterTile {
+            Layout.fillWidth: true
             visible: SSandbox.available
             icon: "deployed_code"
             label: "Sandbox"
