@@ -142,6 +142,14 @@ in
       # keep ssh reachable on the LAN
       sshOnlyTailnet = false;
     };
+    _custom.services.remote-desktop.host = {
+      enable = true;
+      interfaces = [
+        "enp42s0"
+        "tailscale0"
+      ];
+      credentials.sopsFile = ../../secrets-sops/local.yaml;
+    };
     _custom.services.remote-desktop.client = {
       enable = true;
       hosts.glegion = {

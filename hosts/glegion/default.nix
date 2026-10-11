@@ -151,7 +151,10 @@ in
     };
     _custom.services.remote-desktop.host = {
       enable = true;
-      interfaces = [ "wlan0" ];
+      interfaces = [
+        "wlan0"
+        "tailscale0"
+      ];
       credentials.sopsFile = ../../secrets-sops/local.yaml;
     };
     _custom.services.android.enable = true;
