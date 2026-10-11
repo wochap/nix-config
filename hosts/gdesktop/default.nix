@@ -160,7 +160,7 @@ in
       };
     };
     _custom.services.android.enable = true;
-    _custom.services.android.enableSdk = true;
+    # _custom.services.android.enableSdk = true;
     _custom.services.podman.enable = true;
     _custom.services.podman.rootless = true;
     _custom.services.podman.dockerCompat = true;
@@ -217,8 +217,6 @@ in
     # Fixed IP, but DDNS still creates and maintains the record.
     _custom.services.web-gate.ddns.enable = true;
     _custom.services.web-gate.ddns.zone = "geanmar.com";
-    # gdesktop.geanmar.com itself, for SSH and remote builds from glegion.
-    _custom.services.web-gate.ddns.apex = true;
 
     # Binary caches in both directions plus remote builds from glegion.
     # Secrets and *.pub files: see modules/nixos/services/nix-cache/README.md.
@@ -234,7 +232,13 @@ in
       };
       client.netrc.sopsFile = ../../secrets-sops/local.yaml;
       client.netrc.sopsKey = "local-nix-cache-netrc";
+      remoteBuilds.serve.enable = true;
+      remoteBuilds.serve.authorizedKeys = [ (lib.fileContents ../glegion/ssh-host.pub) ];
     };
+
+    # NetworkManager connection names where LAN vhosts open and DDNS updates.
+    _custom.services.web-gate.trustedConnections =
+      config._custom.globals.secrets.networks.trustedConnections;
 
     _custom.services.ai.enable = true;
     _custom.services.ai.enableRocm = true;
