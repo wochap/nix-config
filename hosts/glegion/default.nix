@@ -306,7 +306,7 @@ in
     _custom.services.searxng.enable = true;
     _custom.services.webhook.enable = true;
     _custom.services.wobook.enable = true;
-    # _custom.services.wobook.chromiumExtensionIds = [ "ebfpmpkefhflcollelnidjebejlgbmji" ];
+    _custom.services.wobook.chromiumExtensionIds = [ "ebfpmpkefhflcollelnidjebejlgbmji" ];
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = true;
     _custom.services.kdeconnect.enable = true;
