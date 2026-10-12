@@ -114,6 +114,12 @@ in
             localAnnounceEnabled = false;
             # relays would let peers reach it around the tailnet-only firewall
             relaysEnabled = false;
+            # don't publish the public IP to (or query) discovery servers; peers
+            # set its tailnet address explicitly
+            globalAnnounceEnabled = false;
+            globalDiscoveryEnabled = false;
+            # no UPnP/NAT-PMP on the VPS
+            natEnabled = false;
           };
         };
         systemd.services.syncthing-init.serviceConfig.TimeoutStartSec = "60s";
