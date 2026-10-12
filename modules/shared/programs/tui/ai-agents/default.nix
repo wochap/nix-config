@@ -31,6 +31,18 @@ let
       lib.nameValuePair "${dir}/${name}" { source = lib._custom.relativeSymlink configDirectory path; }
     ) skills
     // lib.mapAttrs' (name: path: lib.nameValuePair "${dir}/${name}" { source = path; }) packageSkills;
+  # Global instructions file each agent reads; all point to one source of truth
+  instructionsTargets = [
+    ".claude/CLAUDE.md"
+    ".codex/AGENTS.md"
+    ".pi/agent/AGENTS.md"
+    ".qwen/QWEN.md"
+    ".config/opencode/AGENTS.md"
+    ".gemini/GEMINI.md"
+  ];
+  instructionsLinks = lib.genAttrs instructionsTargets (_: {
+    source = lib._custom.relativeSymlink configDirectory ./dotfiles/AGENTS.md;
+  });
 in
 {
   imports = [
@@ -42,6 +54,7 @@ in
   options._custom.programs.ai-agents = {
     enable = lib.mkEnableOption { };
     enableSkills = lib.mkEnableOption { };
+    enableInstructions = lib.mkEnableOption { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -68,6 +81,7 @@ in
           lib.optionalAttrs cfg.enableSkills (
             mkSkillLinks ".claude/skills" // mkSkillLinks ".pi/agent/skills"
           )
+          // lib.optionalAttrs cfg.enableInstructions instructionsLinks
           // {
             ".claude/statusline.sh" = {
               source = ./scripts/claude-statusline.sh;

@@ -120,6 +120,7 @@ in
     _custom.programs.zellij.enable = true;
     _custom.programs.ai-agents.enable = true;
     _custom.programs.ai-agents.enableSkills = true;
+    _custom.programs.ai-agents.enableInstructions = true;
     _custom.programs.ai-agents.cartridge.enable = true;
     _custom.programs.ai-agents.llmBench.enable = true;
     _custom.programs.ai-agents.sessionTap = {

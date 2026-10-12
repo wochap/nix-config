@@ -4,7 +4,7 @@ tmp
 /result
 __pycache__
 ignored
-AGENTS.md
+/AGENTS.md
 .qwen
 
 openspec/changes/archive
