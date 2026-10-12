@@ -38,6 +38,9 @@ let
   tmux-accordion = pkgs.writeScriptBin "tmux-accordion" (
     builtins.readFile ./scripts/tmux-accordion.sh
   );
+  tmux-restore-foot = pkgs.writeScriptBin "tmux-restore-foot" (
+    builtins.readFile ./scripts/tmux-restore-foot.sh
+  );
   start-tmux-server = pkgs.writeScriptBin "start-tmux-server" ''
     #!/usr/bin/env bash
 
@@ -97,6 +100,7 @@ in
       tmux-final
       tmux-kill-unattached-sessions
       tmux-kill-unnamed-sessions
+      tmux-restore-foot
       _custom.tmuxinator # session manager
       tmuxp # session manager
     ];
