@@ -1,1 +1,3 @@
-
+- never add co-authored message commits
+- ahen asking a question regarding, ideally provide options, and let me know what is his recomendation from the options
+- When asking me a question, ideally provide options and let me know which one you recommend.
