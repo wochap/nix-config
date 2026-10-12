@@ -73,12 +73,29 @@ in
           modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
         };
 
-        # permit login if user just presses Enter in tuigreet
+        # skip permit unless the luks passphrase is still cached (first login after boot),
+        # so later logins (e.g. after logout) fall through to the password prompt
+        systemd_loadkey_gate = {
+          enable = cfg.enableLuksIntegration;
+          order = 990;
+          control = "[success=ok default=1]";
+          modulePath = "${pkgs.systemd}/lib/security/pam_systemd_loadkey.so";
+        };
+
+        # permit login without password, luks passphrase already proved identity
         permit = {
-          enable = true;
+          enable = cfg.enableLuksIntegration;
           order = 999;
           control = "sufficient";
           modulePath = "${pkgs.linux-pam}/lib/security/pam_permit.so";
+        };
+
+        # unlock keyring with the typed password when luks passphrase is not cached
+        gnome_keyring_password = {
+          enable = cfg.enableLuksIntegration && config.security.pam.services.greetd.enableGnomeKeyring;
+          order = 11750; # after unix-early (prompts password)
+          control = "optional";
+          modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
         };
       };
     };
