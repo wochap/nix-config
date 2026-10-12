@@ -35,7 +35,12 @@ in
       openFirewall = true;
       useRoutingFeatures = "client";
       extraUpFlags = [ "--login-server=${cfg.loginServer}" ];
-      extraSetFlags = lib.optionals cfg.enableOperator [ "--operator=${userName}" ];
+      # MagicDNS names (e.g. remote builders), even if the host was brought
+      # up with --accept-dns=false
+      extraSetFlags = [
+        "--accept-dns=true"
+      ]
+      ++ lib.optionals cfg.enableOperator [ "--operator=${userName}" ];
     };
 
     systemd.services.tailscaled.wantedBy = lib.mkIf (!cfg.startOnBoot) (lib.mkForce [ ]);
