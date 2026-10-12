@@ -159,6 +159,14 @@ in
       server.cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
       server.peer.advertise = [ "gvps.tail.geanmar.com:8772" ];
     };
+    # Always-online wobook peer that relays bookmarks between gdesktop and
+    # glegion over the tailnet. Pair once: `wobook pair` on gdesktop, then
+    # `wobook pair --join -` here (paste the payload within ~2 min)
+    _custom.services.wobook = {
+      enable = true;
+      tailnetOnly = true;
+    };
+
     services.headscale.settings.dns.extra_records = [
       {
         name = "tt.gvps.geanmar.com";
