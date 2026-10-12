@@ -100,9 +100,8 @@ let
       : "''${BRIEFING_SPEED:=${toString cfg.speed}}"
       : "''${SUPERTONIC_URL:=https://supertonic.${wochap-ssc.meta.domain}}"
       : "''${BRIEFING_LISTEN_DIR=${lib.optionalString (cfg.listenDir != null) cfg.listenDir}}"
-      : "''${BRIEFING_LISTEN_KEEP_DAYS:=${toString cfg.listenKeepDays}}"
       export BRIEFING_STATE_DIR BRIEFING_OUT_DIR BRIEFING_MODEL BRIEFING_VOICE BRIEFING_SPEED SUPERTONIC_URL BRIEFING_PROMPTS
-      export BRIEFING_LISTEN_DIR BRIEFING_LISTEN_KEEP_DAYS
+      export BRIEFING_LISTEN_DIR
     ''
     + builtins.readFile ./briefing.sh;
   };
@@ -116,6 +115,11 @@ let
     maxStories = lib.mkOption {
       type = lib.types.int;
       default = defaults.maxStories;
+    };
+    keep = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = defaults.keep;
+      description = "How many ${mode} episodes to keep in outDir and listenDir; older ones are deleted.";
     };
     minStories = lib.mkOption {
       type = lib.types.int;
@@ -241,14 +245,9 @@ in
       type = lib.types.nullOr lib.types.str;
       default = "${cfg.outDir}/listen";
       description = ''
-        Flat folder that also gets each episode MP3 (kept listenKeepDays days).
+        Flat folder that also gets each episode MP3 (pruned like outDir, see <mode>.keep).
         Point AntennaPod's "add local folder" here; it does not scan subfolders.
       '';
-    };
-
-    listenKeepDays = lib.mkOption {
-      type = lib.types.int;
-      default = 14;
     };
 
     cover = lib.mkOption {
@@ -331,6 +330,7 @@ in
 
     daily = modeOptions "daily" {
       onCalendar = "*-*-* 06:30:00";
+      keep = 14;
       maxStories = 14;
       enrichTop = 12;
       words = 1500;
@@ -340,6 +340,7 @@ in
 
     weekly = modeOptions "weekly" {
       onCalendar = "Sun *-*-* 08:00:00";
+      keep = 3;
       maxStories = 24;
       enrichTop = 10;
       words = 3800;

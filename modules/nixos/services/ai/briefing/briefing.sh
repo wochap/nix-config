@@ -51,12 +51,19 @@ publish_dir="$BRIEFING_OUT_DIR/$episode"
 ledger="$BRIEFING_STATE_DIR/ledger.db"
 profile=$BRIEFING_PROFILE
 max_enrich=$(jq -r --arg m "$mode" '.[$m].enrichTop' "$profile")
+keep=$(jq -r --arg m "$mode" '.[$m].keep' "$profile")
 mkdir -p "$run"
 
 notify() {
   if command -v notify-send >/dev/null && [[ -n ${DBUS_SESSION_BUS_ADDRESS:-} ]]; then
     notify-send --app-name=briefing --app-icon=news-feed "$@" || true
   fi
+}
+
+# prune DIR SUFFIX: delete all but the newest $keep <date>-<mode>SUFFIX entries.
+prune() {
+  find "$1" -mindepth 1 -maxdepth 1 -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-$mode$2" -print0 |
+    sort -zr | tail -zn "+$((keep + 1))" | xargs -0r rm -rf --
 }
 
 failed_stage=""
@@ -158,8 +165,9 @@ do_publish() {
   if [[ -n ${BRIEFING_LISTEN_DIR:-} ]]; then
     mkdir -p "$BRIEFING_LISTEN_DIR"
     cp "$publish_dir/$episode.mp3" "$BRIEFING_LISTEN_DIR/"
-    find "$BRIEFING_LISTEN_DIR" -maxdepth 1 -name '*.mp3' -mtime "+${BRIEFING_LISTEN_KEEP_DAYS:-14}" -delete
+    prune "$BRIEFING_LISTEN_DIR" .mp3
   fi
+  prune "$BRIEFING_OUT_DIR" ""
   find "$BRIEFING_STATE_DIR/runs" -mindepth 1 -maxdepth 1 -type d -mtime +30 -exec rm -rf {} +
   touch "$run/published"
 }
