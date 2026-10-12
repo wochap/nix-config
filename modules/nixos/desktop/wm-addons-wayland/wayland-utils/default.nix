@@ -13,6 +13,7 @@ let
   wayfreeze = inputs.wayfreeze.packages.${pkgs.stdenv.hostPlatform.system}.wayfreeze;
   wodeo = inputs.wodeo.packages.${pkgs.stdenv.hostPlatform.system}.default;
   woge = inputs.woge.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  woice = inputs.woice.packages.${pkgs.stdenv.hostPlatform.system}.default;
   hyprpicker = inputs.hyprpicker.packages.${pkgs.stdenv.hostPlatform.system}.hyprpicker;
   play-notification-sound = pkgs.writeScriptBin "play-notification-sound" (
     builtins.readFile ./scripts/play-notification-sound.sh
@@ -93,6 +94,7 @@ in
           satty # image editor
           swaybg
           woge # screenshot and image editor
+          woice # trim audio
           wayfreeze # freeze display, only works on hyprland
           wodeo # trim videos
           wdisplays # control display outputs

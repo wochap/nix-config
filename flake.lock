@@ -3472,6 +3472,7 @@
         "wobook": "wobook",
         "wodeo": "wodeo",
         "woge": "woge",
+        "woice": "woice",
         "woints": "woints",
         "wosarcher": "wosarcher",
         "wt": "wt",
@@ -4143,6 +4144,26 @@
       "original": {
         "owner": "wochap",
         "repo": "woge",
+        "type": "github"
+      }
+    },
+    "woice": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791743837,
+        "narHash": "sha256-M1gyVr8vq9Uekm5oGdXKJoS4X6GsIZWWh6MxXWj9kxs=",
+        "owner": "wochap",
+        "repo": "woice",
+        "rev": "bc5bef6793227435ec4613fd2a1aa8d0cb5a62ed",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "woice",
         "type": "github"
       }
     },

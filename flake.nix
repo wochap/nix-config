@@ -54,6 +54,8 @@
     woints.inputs.nixpkgs.follows = "nixpkgs";
     woge.url = "github:wochap/woge";
     woge.inputs.nixpkgs.follows = "nixpkgs";
+    woice.url = "github:wochap/woice";
+    woice.inputs.nixpkgs.follows = "nixpkgs";
     tt.url = "github:wochap/tt";
     tt.inputs.nixpkgs.follows = "nixpkgs";
     wobook.url = "github:wochap/wobook";
