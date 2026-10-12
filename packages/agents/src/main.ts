@@ -52,6 +52,7 @@ Commands:
   ls                 list sessions of the last 7 days, oldest first
         --full           list all sessions
         --all            also list sessions started by a program (serve)
+        --via <name>     only sessions started by <name>, e.g. serve
   watch [<id>]       follow a session (default: latest running, else latest)
   serve              OpenAI-compatible API: /v1/chat/completions, /v1/models
         --host <h>       listen address (default: 127.0.0.1)
@@ -302,17 +303,17 @@ async function last() {
   console.log(text);
 }
 
-// Last 7 days unless --full, people's sessions unless --all; oldest first so
-// the newest ends up by the prompt.
+// Last 7 days unless --full, people's sessions unless --all (--via <name>:
+// only that program's); oldest first so the newest ends up by the prompt.
 function ls() {
   const statusColor = { running: color.blue, done: color.dim, failed: color.yellow };
   const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const sessions = store
     .listSessions()
-    .filter((s) => (opts.full || s.startedAt >= since) && (opts.all || !s.via));
+    .filter((s) => (opts.full || s.startedAt >= since) && (opts.via ? s.via === opts.via : opts.all || !s.via));
   for (const s of sessions.reverse()) {
     const started = new Date(s.startedAt).toLocaleString("sv").slice(0, 16);
-    const prompt = s.prompt.replace(/\s+/g, " ").slice(0, 60);
+    const prompt = (s.via && !opts.via ? `[${s.via}] ` : "") + s.prompt.replace(/\s+/g, " ").slice(0, 60);
     console.log(
       [s.id.slice(0, 8), s.agent.padEnd(6), statusColor[s.status](s.status.padEnd(7)), started, s.cwd, color.dim(prompt)].join("  "),
     );

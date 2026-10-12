@@ -31,7 +31,7 @@ _agents() {
     '--no-tools[run the agent without tools]' \
     '--system-file[replace the system prompt with a file]:file:_files' \
     '*--image[attach an image]:image:_files -g "*.(png|jpg|jpeg|gif|webp)"' \
-    '--via[mark the session as started by a program]:name:' \
+    '--via[run: mark the session as started by a program; ls: only its sessions]:name:(serve)' \
     '--host[listen address]:host:' \
     '--port[port]:port:' \
     '--models[comma-separated agent/model ids]:models:' \

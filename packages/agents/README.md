@@ -14,6 +14,7 @@ agents run -a pi -m omniroute/desktop-free "fix the failing test"
 agents run -q -C ~/repo "summarize the repo" # final answer only
 agents run -r <id> "continue"                # resume headless
 agents ls                                    # sessions of the last 7 days, --full for all, --all adds serve's
+agents ls --via serve                        # only the OpenAI-compatible API's sessions
 agents watch                                 # follow the latest running session
 agents attach <id>                           # take it over interactively
 agents last <id>                             # last agent message
@@ -113,7 +114,8 @@ agents serve --port 20940 -C ~/work --api-key-file ~/.config/agents/api-key \
   a new session starts with the history flattened into one prompt. The map
   lives in `${XDG_STATE_HOME:-~/.local/state}/agents/serve-conversations.json`;
   entries older than 30 days are dropped. Every chat is a normal session
-  marked as started by serve: `agents ls --all` lists them, `watch` and
+  marked as started by serve: `agents ls --via serve` lists only them,
+  `agents ls --all` mixes them in tagged `[serve]`, `watch` and
   `attach` work on them.
 - `stream: true` sends each agent message as it lands (not token by token);
   `--tool-events` adds tool calls as `_> label_` lines.
