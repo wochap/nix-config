@@ -376,6 +376,9 @@ end)
 -- Hint focused window
 hl.bind(mod .. " + j", hl.dsp.exec_cmd("woints hints"), { description = "Hints" })
 
+-- Hint every visible layer
+hl.bind(mod .. " + ALT + j", hl.dsp.exec_cmd("woints hints --scope layers"), { description = "Hints Layer" })
+
 -- Hint every visible window and layer
 hl.bind(mod .. " + SHIFT + j", hl.dsp.exec_cmd("woints hints --scope all"), { description = "Hints All" })
 
