@@ -167,6 +167,30 @@ in
       tailnetOnly = true;
     };
 
+    # Status page at https://status.gvps.geanmar.com for tailnet devices only,
+    # checks every service above plus the extra endpoints below
+    _custom.services.gatus = {
+      enable = true;
+      tailnetDomain = "status.gvps.geanmar.com";
+      cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
+      endpoints = [
+        {
+          name = "gdesktop";
+          group = "tailnet";
+          url = "icmp://gdesktop.tail.geanmar.com";
+          interval = "5m";
+          conditions = [ "[CONNECTED] == true" ];
+        }
+        {
+          name = "glegion";
+          group = "tailnet";
+          url = "icmp://glegion.tail.geanmar.com";
+          interval = "5m";
+          conditions = [ "[CONNECTED] == true" ];
+        }
+      ];
+    };
+
     services.headscale.settings.dns.extra_records = [
       {
         name = "tt.gvps.geanmar.com";
@@ -175,6 +199,11 @@ in
       }
       {
         name = "syncthing.gvps.geanmar.com";
+        type = "A";
+        value = "100.64.0.4";
+      }
+      {
+        name = "status.gvps.geanmar.com";
         type = "A";
         value = "100.64.0.4";
       }

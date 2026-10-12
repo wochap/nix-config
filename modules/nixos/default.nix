@@ -96,6 +96,7 @@
     ./services/podman
     ./services/remote-desktop
     ./services/flatpak
+    ./services/gatus
     ./services/headscale
     ./services/interception-tools
     ./services/ipwebcam
