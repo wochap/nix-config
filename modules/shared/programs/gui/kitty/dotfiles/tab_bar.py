@@ -1,5 +1,8 @@
 # source: https://github.com/kovidgoyal/kitty/blob/master/kitty/tab_bar.py
 
+import os
+from urllib.parse import urlparse
+
 from kitty.boss import get_boss
 from kitty.fast_data_types import Screen, get_options
 from kitty.tab_bar import (
@@ -10,6 +13,7 @@ from kitty.tab_bar import (
     color_as_int,
     draw_tab_with_separator,
 )
+from kitty.utils import get_hostname
 
 opts = get_options()
 
@@ -18,6 +22,9 @@ inactive_tab_foreground = as_rgb(color_as_int(opts.inactive_tab_foreground))
 tab_bar_background = as_rgb(color_as_int(opts.tab_bar_background))
 windows_icon = ""
 folder_icon = "󰉖"
+host_icon = "󰒋"
+# palette color18 (catppuccin red)
+host_fg_sgr = "38:5:18"
 default_layout_icon = ""
 layout_icon_by_name = {
     "fat": "",
@@ -234,14 +241,19 @@ def _draw_right_status(screen: Screen, max_width: int):
     )
     layout_icon = layout_icon_by_name.get(active_tab_layout_name) or default_layout_icon
     cells = []
+    host = _get_remote_hostname()
+    if host:
+        cells.append((host_fg_sgr, host_icon + " " + host + " "))
     if keyboard_mode and not keyboard_mode.startswith("__"):
         cells.append((active_tab_background, f" {keyboard_mode} "))
-    cells.extend([
-        (layout_fg, " " + layout_icon + " "),
-        (layout_fg, active_tab_layout_name + " "),
-        (inactive_tab_foreground, " " + windows_icon + " "),
-        (inactive_tab_foreground, str(active_tab_num_windows)),
-    ])
+    cells.extend(
+        [
+            (layout_fg, " " + layout_icon + " "),
+            (layout_fg, active_tab_layout_name + " "),
+            (inactive_tab_foreground, " " + windows_icon + " "),
+            (inactive_tab_foreground, str(active_tab_num_windows)),
+        ]
+    )
 
     total_width = sum(len(c) for _, c in cells)
 
@@ -250,7 +262,10 @@ def _draw_right_status(screen: Screen, max_width: int):
         if leading > 0:
             screen.draw(" " * leading)
         for fg, cell in cells:
-            screen.cursor.fg = fg
+            if isinstance(fg, str):
+                screen.apply_sgr(fg)
+            else:
+                screen.cursor.fg = fg
             screen.cursor.bg = tab_bar_background
             screen.draw(cell)
     else:
@@ -265,6 +280,55 @@ def _truncate_seg(s: str, max_len: int = 10) -> str:
         return s
     half = max_len // 2
     return s[:half] + "…" + s[-half:]
+
+
+# ssh options that consume the following argument
+_ssh_opts_with_arg = set("BbcDEeFIiJLlmOoPpQRSWw")
+
+
+def _ssh_destination(cmdline: list[str]) -> str:
+    """Host part of the destination argument of an ssh command line."""
+    args = iter(cmdline[1:])
+    for arg in args:
+        if arg == "--":
+            arg = next(args, "")
+        elif arg.startswith("-"):
+            if arg[-1] in _ssh_opts_with_arg and len(arg) == 2:
+                next(args, None)
+            continue
+        if arg.startswith("ssh://"):
+            arg = arg[len("ssh://") :]
+        return arg.rpartition("@")[2].partition(":")[0]
+    return ""
+
+
+def _get_remote_hostname() -> str:
+    """Hostname of the ssh session running in the active window, if any."""
+    tm = get_boss().active_tab_manager
+    w = tm.active_window if tm is not None else None
+    if w is None or not w.child_is_remote:
+        return ""
+
+    local = get_hostname()
+    # remote shell integration (e.g. kitten ssh) reports cwd as
+    # kitty-shell-cwd://host/path (kitty) or file://host/path (others)
+    reported = w.screen.last_reported_cwd
+    if reported:
+        if isinstance(reported, bytes):
+            reported = reported.decode("utf-8", "replace")
+        if reported.startswith(("file://", "kitty-shell-cwd://")):
+            host = urlparse(reported).netloc.partition(":")[0]
+            if host and host not in (local, "localhost"):
+                return host
+
+    # fall back to the destination passed to the ssh client
+    for p in w.child.foreground_processes:
+        cmdline = list(p["cmdline"] or ())
+        if cmdline and os.path.basename(cmdline[0]).lower() == "ssh":
+            host = _ssh_destination(cmdline)
+            if host and host not in (local, "localhost"):
+                return host
+    return ""
 
 
 def _get_parent_cwd() -> str:

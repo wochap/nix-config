@@ -50,8 +50,10 @@ let
     # tab bar in sync with the active dark/light theme.
     #   color16 = peach    (bell styling)
     #   color17 = lavender (active tab pill)
+    #   color18 = red      (ssh hostname in tab_bar.py)
     color16 ${themeColors.peach}
     color17 ${themeColors.lavender}
+    color18 ${themeColors.red}
   '';
   catppuccin-kitty-light-theme = mkKittyTheme themeColorsLight;
   catppuccin-kitty-dark-theme = mkKittyTheme themeColorsDark;
