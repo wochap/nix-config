@@ -139,6 +139,9 @@ in
     _custom.services.syncthing = {
       enable = true;
       tailnetOnly = true;
+      # https://syncthing.gvps.geanmar.com, tailnet devices only
+      tailnetDomain = "syncthing.gvps.geanmar.com";
+      cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
     };
 
     # Always-online member that relays changes between gdesktop and glegion,
@@ -159,6 +162,11 @@ in
     services.headscale.settings.dns.extra_records = [
       {
         name = "tt.gvps.geanmar.com";
+        type = "A";
+        value = "100.64.0.4";
+      }
+      {
+        name = "syncthing.gvps.geanmar.com";
         type = "A";
         value = "100.64.0.4";
       }
