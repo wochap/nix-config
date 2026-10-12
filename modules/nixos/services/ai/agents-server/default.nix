@@ -17,8 +17,8 @@ in
     enable = lib.mkEnableOption "OpenAI-compatible API over the agents CLI";
     cwd = lib.mkOption {
       type = lib.types.str;
-      default = "/home/${userName}";
-      description = "Working directory of every agent run.";
+      default = "/home/${userName}/agents";
+      description = "Working directory of every agent run; created on service start.";
     };
     models = lib.mkOption {
       type = lib.types.listOf lib.types.str;
@@ -72,6 +72,11 @@ in
       # requests to a dead port after a logout stopped it.
       Unit.Description = "OpenAI-compatible API over the agents CLI";
       Service = {
+        ExecStartPre = lib.escapeShellArgs [
+          "${pkgs.coreutils}/bin/mkdir"
+          "-p"
+          cfg.agentsServer.cwd
+        ];
         ExecStart = lib.escapeShellArgs (
           [
             (lib.getExe pkgs._custom.agents)

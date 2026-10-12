@@ -20,27 +20,6 @@ _agents() {
   )
 
   _arguments -C \
-    '(-a --agent)'{-a,--agent}'[agent]:agent:(claude pi)' \
-    '(-m --model)'{-m,--model}'[model]:model:' \
-    '(-e --effort)'{-e,--effort}'[effort]:effort:(low medium high xhigh max)' \
-    '(-C --cwd)'{-C,--cwd}'[working directory]:directory:_directories' \
-    '(-r --resume)'{-r,--resume}'[continue a session headless]:session:_agents_sessions' \
-    '(-q --quiet --verbose)'{-q,--quiet}'[print only the final answer]' \
-    '(-q --quiet)--verbose[print live progress]' \
-    '--json[print JSON result]' \
-    '--no-tools[run the agent without tools]' \
-    '--system-file[replace the system prompt with a file]:file:_files' \
-    '*--image[attach an image]:image:_files -g "*.(png|jpg|jpeg|gif|webp)"' \
-    '--via[run: mark the session as started by a program; ls: only its sessions]:name:(serve)' \
-    '--host[listen address]:host:' \
-    '--port[port]:port:' \
-    '--models[comma-separated agent/model ids]:models:' \
-    '--api-key-file[bearer key for /v1/*]:file:_files' \
-    '--no-auth[accept any request]' \
-    '--tools[let serve runs use tools]' \
-    '--tool-events[stream tool calls]' \
-    '--full[list all sessions]' \
-    '--all[also list sessions started by a program]' \
     '(-h --help)'{-h,--help}'[show help]' \
     '1:command:->command' \
     '*::arg:->args'
@@ -50,12 +29,44 @@ _agents() {
       _describe 'command' commands
       ;;
     args)
-      case ${line[1]} in
-        attach|last|watch)
-          (( CURRENT == 2 )) && _agents_sessions
-          ;;
+      # words now start at the subcommand, so each gets its own options.
+      curcontext=${curcontext%:*:*}:agents-${words[1]}:
+      case ${words[1]} in
         run)
-          _message 'prompt, or - for stdin'
+          _arguments \
+            '(-a --agent)'{-a,--agent}'[agent]:agent:(claude pi)' \
+            '(-m --model)'{-m,--model}'[model]:model:' \
+            '(-e --effort)'{-e,--effort}'[effort]:effort:(low medium high xhigh max)' \
+            '(-C --cwd)'{-C,--cwd}'[working directory]:directory:_directories' \
+            '(-r --resume)'{-r,--resume}'[continue a session headless]:session:_agents_sessions' \
+            '(-q --quiet --verbose)'{-q,--quiet}'[print only the final answer]' \
+            '(-q --quiet)--verbose[print live progress]' \
+            '--json[print JSON result]' \
+            '--no-tools[run the agent without tools]' \
+            '--system-file[replace the system prompt with a file]:file:_files' \
+            '*--image[attach an image]:image:_files -g "*.(png|jpg|jpeg|gif|webp)"' \
+            '--via[mark the session as started by a program]:name:(serve)' \
+            '1:prompt, or - for stdin:'
+          ;;
+        attach|last|watch)
+          _arguments '1:session:_agents_sessions'
+          ;;
+        ls)
+          _arguments \
+            '--full[list all sessions]' \
+            '(--via)--all[also list sessions started by a program]' \
+            '(--all)--via[only sessions started by a program]:name:(serve)'
+          ;;
+        serve)
+          _arguments \
+            '--host[listen address]:host:' \
+            '--port[port]:port:' \
+            '(-C --cwd)'{-C,--cwd}'[working directory of every run]:directory:_directories' \
+            '--models[comma-separated agent/model ids]:models:' \
+            '(--no-auth)--api-key-file[bearer key for /v1/*]:file:_files' \
+            '(--api-key-file)--no-auth[accept any request]' \
+            '--tools[let runs use tools]' \
+            '--tool-events[stream tool calls]'
           ;;
       esac
       ;;
