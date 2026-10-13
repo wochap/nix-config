@@ -30,12 +30,13 @@ Set up [qBittorrent](../qbittorrent/README.md#setup) and [Prowlarr](../prowlarr/
 3. Go to Config › Downloaders, and turn on qBittorrent:
    - Host `media-qbittorrent` (`media-vpn` with the VPN), Port `8080`.
    - Label `books` for ebooks, `audiobooks` for audiobooks.
-4. Go to Config › Importing:
+4. Go to Config › Importing or Processing:
    - eBook destination folder: `/data/media/books/ingest`.
    - AudioBook destination folder: `/data/media/audiobooks`.
    - Download directory: `/data/torrents/books`.
 5. Go to Config › Interface, turn on the API, generate a key, and save.
-6. Add LazyLibrarian as an app in Prowlarr ([Prowlarr](../prowlarr/README.md#a-without-declarative), step 2). Alternative: under Config › Providers, add Torznab feeds `http://media-prowlarr:9696/<id>/api` with Prowlarr's API key.
+6. Add LazyLibrarian as an app in Prowlarr ([Prowlarr](../prowlarr/README.md#a-without-declarative), step 2).
+   - Alternative (optional): under Config › Providers, add Torznab feeds `http://media-prowlarr:9696/<id>/api` with Prowlarr's API key.
 
 ### B) With declarative
 

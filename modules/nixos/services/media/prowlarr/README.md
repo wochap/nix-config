@@ -21,6 +21,15 @@ No LAN URL: admin UI.
 
 Set up [Sonarr](../sonarr/README.md#setup) and [Radarr](../radarr/README.md#setup) first. LazyLibrarian is optional.
 
+### Indexers
+
+| Need             | Indexers                                              |
+| ---------------- | ----------------------------------------------------- |
+| Movies           | YTS (small encodes) (flaresolverr), 1337x (flaresolverr), The Pirate Bay (fallback) |
+| Series           | EZTV, 1337x, TorrentGalaxy                            |
+| Anime            | Nyaa.si, Tokyo Toshokan, SubsPlease                   |
+| General fallback | Knaben (a meta-search)                                |
+
 ### A) Without declarative
 
 1. Open `http://127.0.1.1:21121` on the host. Choose Authentication Method `Forms (Login Page)`, and create the admin user.

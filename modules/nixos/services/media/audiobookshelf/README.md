@@ -21,7 +21,7 @@ Audiobook and podcast library and player, with mobile apps. Serves `/data/media/
 ### A) Without declarative
 
 1. Open `https://audiobookshelf.wochap.local` on the host, and create the root user.
-2. Go to Settings › Libraries › Add Library. Media type `Audiobooks`, folder `/data/media/audiobooks`.
+2. Go to Settings › Libraries › Add Library. Media type `Books` (Audiobookshelf has only Books and Podcasts; audiobooks are Books), name `Audiobooks`, metadata provider `Audible`, folder `/data/media/audiobooks`.
 3. Go to Settings, and turn on the folder watcher. Books that [LazyLibrarian](../lazylibrarian/README.md#setup) drops then appear on their own.
 4. Optional: under Settings › Users, add one user per listener.
 

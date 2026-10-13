@@ -21,6 +21,16 @@ No LAN URL: admin UI.
 
 Set up [Sonarr](../sonarr/README.md#setup) and [Radarr](../radarr/README.md#setup) first.
 
+### Providers
+
+- Embedded Subtitles
+- OpenSubtitles (account)
+- SubDL (api key)
+- ~Podnapisi~
+- Addic7ed (account)
+- Jimaku (api key)
+- ~Subdivx~
+
 ### A) Without declarative
 
 1. Open `http://127.0.1.1:21141` on the host. Go to Settings › General › Security, set Authentication to `Form`, choose a username and password, and save.
