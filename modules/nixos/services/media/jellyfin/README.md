@@ -55,7 +55,7 @@ On a server set up by hand with another login, the admin sign-in fails, and the 
 
 ## Mobile/TV clients
 
-Install the Jellyfin app (Android, iOS, Android TV, webOS, ...), or Findroid or Swiftfin. Server address: the LAN URL, for example `https://jellyfin.gdesktop.geanmar.com`. Sign in with the user's own Jellyfin account. The LAN vhost has no web-gate, because these apps cannot complete it.
+Install the Jellyfin app (Android, iOS, Android TV, webOS, ...), or Findroid or Streamyfin (Android), or Swiftfin (iOS). Server address: the LAN URL, for example `https://jellyfin.gdesktop.geanmar.com`. Sign in with the user's own Jellyfin account. The LAN vhost has no web-gate, because these apps cannot complete it.
 
 ## Troubleshooting
 

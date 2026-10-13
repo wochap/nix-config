@@ -31,7 +31,7 @@ Automatic: nothing. Do steps 1–4.
 
 ## Mobile/TV clients
 
-Audiobookshelf app (Android, iOS). Server address: the LAN URL, for example `https://audiobookshelf.gdesktop.geanmar.com`. Sign in with the user's own account. The LAN vhost has no web-gate, because the app cannot complete it.
+Audiobookshelf app (Android, iOS), or Plappa (Android). Server address: the LAN URL, for example `https://audiobookshelf.gdesktop.geanmar.com`. Sign in with the user's own account. The LAN vhost has no web-gate, because the app cannot complete it.
 
 ## Troubleshooting
 

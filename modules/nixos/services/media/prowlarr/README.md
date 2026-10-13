@@ -28,6 +28,7 @@ Set up [Sonarr](../sonarr/README.md#setup) and [Radarr](../radarr/README.md#setu
 | Movies           | YTS (small encodes) (flaresolverr), 1337x (flaresolverr), The Pirate Bay (fallback) |
 | Series           | EZTV, 1337x, TorrentGalaxy                            |
 | Anime            | Nyaa.si, Tokyo Toshokan, SubsPlease                   |
+| Books            | MyAnonamouse                                          |
 | General fallback | Knaben (a meta-search)                                |
 
 ### A) Without declarative

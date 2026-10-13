@@ -34,7 +34,7 @@ Automatic: nothing. Do steps 1–3. Change the default password before you expos
 
 ## Mobile/TV clients
 
-Any OPDS reader (KOReader, Moon+ Reader, ...): catalog URL `https://calibre-web.<web-gate.domain>/opds`, with the reader's Calibre-Web login. Or use the web reader in a mobile browser.
+Any OPDS reader (KOReader, Moon+ Reader, Readest, ...): catalog URL `https://calibre-web.<web-gate.domain>/opds`, with the reader's Calibre-Web login. Or use the web reader in a mobile browser.
 
 ## Troubleshooting
 

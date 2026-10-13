@@ -61,7 +61,7 @@ Manual: step 7.
 
 ## Mobile/TV clients
 
-No native app. Open the LAN URL in a mobile browser, and add it to the home screen (PWA). Users sign in with their Jellyfin account.
+No native app. Open the LAN URL in a mobile browser, and add it to the home screen (PWA). Streamyfin (Android) can also send requests. Users sign in with their Jellyfin account.
 
 ## Troubleshooting
 
