@@ -31,6 +31,8 @@ Hardware transcoding: `services.jellyfin.hardwareAcceleration = "vaapi"` passes 
    | Movies | `/data/media/movies` |
    | Shows | `/data/media/series` |
 
+   In each library, tick "Enable real-time monitoring", so files Sonarr and Radarr import show up without a scan.
+
 4. Finish the wizard, and sign in.
 5. Go to Dashboard › Playback › Transcoding:
    - `vaapi`: Hardware acceleration `Video Acceleration API (VAAPI)`, device `/dev/dri/renderD128`.
@@ -44,7 +46,7 @@ Hardware transcoding: `services.jellyfin.hardwareAcceleration = "vaapi"` passes 
 Automatic (`media-jellyfin-config`, Jellyfin OpenAPI at `/api-docs/openapi.json`):
 
 - Steps 2 and 4, while the wizard is not completed: creates the admin `admin.username` with the SOPS password, and completes the wizard. Language and metadata keep Jellyfin's defaults.
-- Step 3, signed in as that admin: adds each library whose folder no library uses yet.
+- Step 3, signed in as that admin: adds each library whose folder no library uses yet, with real-time monitoring on. Existing libraries are left as is.
 - Step 5, only the backend: sets `vaapi` (first of `vaapiDevices`) or `nvenc` while hardware acceleration is `none`.
 
 Manual: the codecs in step 5, and step 6.
@@ -59,7 +61,7 @@ Install the Jellyfin app (Android, iOS, Android TV, webOS, ...), or Findroid or 
 
 - Logs: `journalctl -u podman-media-jellyfin`, `journalctl -u media-jellyfin-config`.
 - Playback stutters or transcodes on the CPU: check Dashboard › Playback › Transcoding, and that `/dev/dri/renderD128` is the right GPU (`ls -l /dev/dri/by-path`).
-- New files do not appear: Dashboard › Libraries › Scan All Libraries.
+- New files do not appear: check that the library has "Enable real-time monitoring" ticked (Dashboard › Libraries › the library's menu › Manage library). Libraries created by `media-jellyfin-config` have it on; libraries created by hand need it ticked. To pick up files right away: Dashboard › Libraries › Scan All Libraries.
 
 ## Reset / backup
 

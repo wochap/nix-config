@@ -5,8 +5,9 @@
 #     admin ADMIN_USER, /Startup/Complete ends the wizard
 #   - as that admin (/Users/AuthenticateByName): adds the libraries in
 #     JF_LIBRARIES ("name collectionType path" per line) whose folder no
-#     library uses yet, and sets JF_HWACCEL (vaapi with JF_VAAPI_DEVICE, or
-#     nvenc) while hardware acceleration is still "none"
+#     library uses yet, with real-time monitoring on, and sets JF_HWACCEL
+#     (vaapi with JF_VAAPI_DEVICE, or nvenc) while hardware acceleration is
+#     still "none"
 # When the admin login does not work (the server was set up by hand with
 # another login), libraries and transcoding are left alone.
 
@@ -66,7 +67,7 @@ while read -r lib_name type path; do
   fi
   query=$(jq -rn --arg n "$lib_name" --arg t "$type" --arg p "$path" \
     '"name=\($n | @uri)&collectionType=\($t | @uri)&paths=\($p | @uri)&refreshLibrary=true"')
-  jf -X POST -o /dev/null --data '{"LibraryOptions": {}}' "$JF_URL/Library/VirtualFolders?$query"
+  jf -X POST -o /dev/null --data '{"LibraryOptions": {"EnableRealtimeMonitor": true}}' "$JF_URL/Library/VirtualFolders?$query"
   log "added library $lib_name ($type, $path)"
 done <<<"$JF_LIBRARIES"
 
