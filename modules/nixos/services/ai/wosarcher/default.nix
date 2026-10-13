@@ -168,7 +168,7 @@ let
       description = "SearXNG, Firecrawl, bm25 prefilter, Jev (strict) scoring, OmniRoute.";
       use = use // {
         prefilter = "bm25";
-        score = "jev-strict";
+        score = "jev";
       };
     };
   };
