@@ -210,6 +210,9 @@ in
     # _custom.services.web-gate.proxies.seerr.expose.enable = true;
     # _custom.services.web-gate.proxies.audiobookshelf.expose.enable = true;
     # _custom.services.web-gate.proxies.calibre-web.expose.enable = true;
+    # Also over the tailnet; needs the glegion records and "glegion:443" in
+    # the headscale policy, both commented out in hosts/gvps/default.nix.
+    # _custom.services.web-gate.tailnet.enable = true;
 
     # LAN exposure follows the laptop: DDNS points *.glegion.geanmar.com at
     # its current IP, and port 443 opens only on the trusted connections.

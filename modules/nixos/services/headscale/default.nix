@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -24,6 +25,15 @@ in
       # set per host to the tailnet IP of the node running AdGuard Home
       default = [ "100.64.0.1" ];
     };
+    policy = lib.mkOption {
+      type = lib.types.nullOr lib.types.attrs;
+      default = null;
+      description = ''
+        ACL policy (headscale/Tailscale policy format), written as JSON.
+        null allows all traffic between every node; a policy denies
+        everything it does not accept.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -46,6 +56,10 @@ in
         };
         prefixes.v4 = "100.64.0.0/10";
         logtail.enabled = false;
+        policy = lib.mkIf (cfg.policy != null) {
+          mode = "file";
+          path = pkgs.writeText "headscale-policy.json" (builtins.toJSON cfg.policy);
+        };
       };
     };
 

@@ -33,3 +33,14 @@ sudo headscale preauthkeys expire --user <user-id> <key>
 ```
 
 Then revoke whatever else it held: SSH keys in `authorized_keys`, Syncthing device (remove on every peer), Sunshine pairing (web UI → Clients → unpair).
+
+## Invite a friend
+
+The headscale policy (`hosts/gvps/default.nix`) gives `gean@` devices full access and `group:friends` only the media apps, tt and DNS. A user outside both reaches nothing.
+
+```bash
+ssh gvps
+sudo headscale users create <name>
+```
+
+Add `"<name>@"` to `groups."group:friends"`, rebuild gvps, then register their device under **their** user, never `gean` (a `gean` device gets full access).

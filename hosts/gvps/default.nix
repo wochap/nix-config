@@ -94,6 +94,39 @@ in
       baseDomain = "tail.geanmar.com";
       # gvps tailnet IP (`tailscale ip -4`), runs AdGuard Home
       nameservers = [ "100.64.0.4" ];
+      # My devices reach each other freely. Each friend gets their own
+      # headscale user (`headscale users create <name>`), listed in
+      # group:friends as "<name>@", and reaches only the media apps on
+      # gdesktop, tt here, and DNS (nameservers above).
+      policy = {
+        groups."group:friends" = [ ];
+        hosts = {
+          gdesktop = "100.64.0.2/32";
+          glegion = "100.64.0.3/32";
+          gvps = "100.64.0.4/32";
+        };
+        acls = [
+          {
+            action = "accept";
+            src = [ "gean@" ];
+            dst = [ "gean@:*" ];
+          }
+          {
+            action = "accept";
+            src = [ "group:friends" ];
+            dst = [
+              # web-gate: jellyfin, seerr, audiobookshelf, calibre-web
+              "gdesktop:443"
+              # glegion media server, once it exposes the same apps
+              # "glegion:443"
+              # Caddy: tt, but also syncthing (has a login) and status (none)
+              "gvps:443"
+              # AdGuard Home; without it friends' DNS breaks
+              "gvps:53"
+            ];
+          }
+        ];
+      };
     };
     _custom.services.tailscale = {
       enable = true;
@@ -226,6 +259,20 @@ in
           "audiobookshelf"
           "calibre-web"
         ];
+    # glegion's, once it serves media with web-gate.tailnet.enable;
+    # 100.64.0.3 is its tailnet IP.
+    # ++ map
+    #   (name: {
+    #     name = "${name}.glegion.geanmar.com";
+    #     type = "A";
+    #     value = "100.64.0.3";
+    #   })
+    #   [
+    #     "jellyfin"
+    #     "seerr"
+    #     "audiobookshelf"
+    #     "calibre-web"
+    #   ];
 
     time.timeZone = "America/Toronto";
 
