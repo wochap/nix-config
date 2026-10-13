@@ -14,6 +14,7 @@ let
   syncthingUserName = "wochap";
   guiPasswordFile = config.sops.secrets.local-syncthing-password.path;
   hasDomain = cfg.tailnetDomain != null;
+  dotfilesDirectory = "${homeDirectory}/Sync/dotfiles";
 in
 {
   options._custom.services.syncthing = {
@@ -21,6 +22,8 @@ in
     # headless host: system service (no lingering, no web-gate), GUI and sync
     # port only reachable over the tailnet
     tailnetOnly = lib.mkEnableOption { };
+    # symlink synced dotfiles (~/Sync/dotfiles) to their real places in $HOME
+    enableDotfiles = lib.mkEnableOption { };
     # tailnetOnly: Caddy vhost with a Let's Encrypt cert from the Cloudflare
     # DNS-01 challenge (no public record or open port); tailnet clients resolve
     # it to the tailnet IP (e.g. a headscale `dns.extra_records` entry)
@@ -87,6 +90,11 @@ in
           # before giving up; switch-to-configuration waits on it. Cap it.
           systemd.user.services.syncthing-init.Service.TimeoutStartSec = "60s";
         };
+      })
+
+      (lib.mkIf cfg.enableDotfiles {
+        _custom.hm.xdg.dataFile."webscoop/recipes".source =
+          lib._custom.mkOutOfStoreSymlink "${dotfilesDirectory}/.local/share/webscoop/recipes";
       })
 
       (lib.mkIf cfg.tailnetOnly {

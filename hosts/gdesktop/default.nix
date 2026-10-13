@@ -314,6 +314,7 @@ in
     _custom.services.tt.enable = true;
 
     _custom.services.syncthing.enable = true;
+    _custom.services.syncthing.enableDotfiles = true;
     _custom.services.virt.enable = false;
 
     _custom.gaming.emulators.enable = false;
