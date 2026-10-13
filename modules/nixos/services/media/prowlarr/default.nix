@@ -10,7 +10,7 @@ let
   inherit (common) cfg;
   name = "prowlarr";
   svc = cfg.services.prowlarr;
-  inherit (cfg.services) sonarr radarr lazylibrarian;
+  inherit (cfg.services) sonarr radarr lazylibrarian flaresolverr;
   # Container address of an app, or "" when it is disabled.
   appUrl =
     app: port:
@@ -50,6 +50,7 @@ in
             SONARR_API_KEY_FILE = lib.optionalString sonarr.enable (common.apiKeyFile "sonarr");
             RADARR_URL = appUrl "radarr" 7878;
             RADARR_API_KEY_FILE = lib.optionalString radarr.enable (common.apiKeyFile "radarr");
+            FLARESOLVERR_URL = appUrl "flaresolverr" 8191;
             LAZYLIBRARIAN_URL = appUrl "lazylibrarian" 5299;
             LAZYLIBRARIAN_API_KEY_FILE = lib.optionalString lazylibrarian.enable (
               common.apiKeyFile "lazylibrarian"
@@ -58,7 +59,8 @@ in
           # Apps added after their own bootstrap, so they already answer.
           after =
             lib.optional sonarr.enable "media-sonarr-config.service"
-            ++ lib.optional radarr.enable "media-radarr-config.service";
+            ++ lib.optional radarr.enable "media-radarr-config.service"
+            ++ lib.optional flaresolverr.enable "${common.serviceName "flaresolverr"}.service";
         }
       ))
     ];

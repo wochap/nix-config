@@ -176,6 +176,7 @@ in
       services.sonarr.enable = true;
       services.radarr.enable = true;
       services.prowlarr.enable = true;
+      services.flaresolverr.enable = true;
       services.qbittorrent.enable = true;
       services.bazarr.enable = true;
       services.lazylibrarian.enable = true;

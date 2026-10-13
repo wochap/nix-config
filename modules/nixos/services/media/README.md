@@ -16,6 +16,7 @@ Self-hosted media server under `_custom.services.media`: request, download, orga
 | [qBittorrent](qbittorrent/README.md) | Downloads torrents | admin | `http://127.0.1.1:21131` | no | `media-qbittorrent:8080` (`media-vpn:8080` with VPN) |
 | [Bazarr](bazarr/README.md) | Downloads subtitles | admin | `http://127.0.1.1:21141` | no | `media-bazarr:6767` |
 | [LazyLibrarian](lazylibrarian/README.md) | Finds ebooks and audiobooks | admin | `http://127.0.1.1:21151` | no | `media-lazylibrarian:5299` |
+| [FlareSolverr](flaresolverr/README.md) | Solves Cloudflare challenges for Prowlarr | admin (no UI) | `http://127.0.1.1:21161` | no | `media-flaresolverr:8191` |
 
 `<domain>` is `web-gate.domain`, for example `gdesktop.geanmar.com`. User apps also answer on their loopback port (`127.0.1.1:21001`, `21011`, `21021`, `21031`).
 
@@ -80,7 +81,7 @@ All under `_custom.services.media`. Defined in `default.nix`.
 | `bindAddress` | `127.0.1.1` | Host address the loopback ports are published on. |
 | `network.{name,interface,subnet,gateway}` | `media`, `podman-media`, `10.90.0.0/24`, `10.90.0.1` | Shared podman network. |
 | `images.<svc>` | pinned tag + digest | Container image. See [Upgrading images](#upgrading-images). |
-| `services.<svc>.enable` | `false` | Turns on one service. `<svc>` is `jellyfin`, `seerr`, `calibreWeb`, `audiobookshelf`, `sonarr`, `radarr`, `prowlarr`, `qbittorrent`, `bazarr` or `lazylibrarian`. |
+| `services.<svc>.enable` | `false` | Turns on one service. `<svc>` is `jellyfin`, `seerr`, `calibreWeb`, `audiobookshelf`, `sonarr`, `radarr`, `prowlarr`, `qbittorrent`, `bazarr`, `lazylibrarian` or `flaresolverr`. |
 | `services.<svc>.port` | per service | Base port. The web UI is published on `port + 1`. |
 | `services.<svc>.proxy` | `true` for user apps | Adds the `<name>.wochap.local` vhost. |
 | `services.jellyfin.hardwareAcceleration` | `null` | `"vaapi"` or `"nvidia"`. See [Jellyfin](jellyfin/README.md). |
@@ -106,6 +107,7 @@ _custom.services.media = {
   services.sonarr.enable = true;
   services.radarr.enable = true;
   services.prowlarr.enable = true;
+  services.flaresolverr.enable = true;
   services.qbittorrent.enable = true;
   services.bazarr.enable = true;
   services.lazylibrarian.enable = true;
@@ -133,13 +135,14 @@ _custom.services.web-gate.proxies.seerr.expose.enable = true;
 Each service README has a Setup section with two variants: **A) without declarative** (all manual) and **B) with declarative** (what the bootstrap unit does, and what stays manual). Follow this order. Each step produces an API key or a folder that a later step uses.
 
 0. With declarative: create the [secrets](#secrets), set `declarative`, rebuild, switch.
-1. [qBittorrent](qbittorrent/README.md#setup). B: automatic.
-2. [Sonarr](sonarr/README.md#setup) and [Radarr](radarr/README.md#setup). B: automatic, except optional profiles and renaming.
-3. [Prowlarr](prowlarr/README.md#setup). B: only the indexers.
-4. [Jellyfin](jellyfin/README.md#setup). B: only codecs and users.
-5. [Seerr](seerr/README.md#setup). B: only users and permissions.
-6. [Bazarr](bazarr/README.md#setup). All manual.
-7. [LazyLibrarian](lazylibrarian/README.md#setup). Mostly manual. B: copy its API key into SOPS for Prowlarr.
+1. [LazyLibrarian](lazylibrarian/README.md#setup). Mostly manual. B: copy its API key into SOPS for Prowlarr.
+2. [qBittorrent](qbittorrent/README.md#setup). B: automatic.
+3. [Sonarr](sonarr/README.md#setup) and [Radarr](radarr/README.md#setup). B: automatic, except optional profiles and renaming.
+4. [Prowlarr](prowlarr/README.md#setup). B: only the indexers.
+   Then [FlareSolverr](flaresolverr/README.md#setup). B: only tagging the Cloudflare-protected indexers.
+5. [Jellyfin](jellyfin/README.md#setup). B: only codecs and users.
+6. [Seerr](seerr/README.md#setup). B: only users and permissions.
+7. [Bazarr](bazarr/README.md#setup). All manual.
 8. [Calibre-Web Automated](calibre-web/README.md#setup). All manual.
 9. [Audiobookshelf](audiobookshelf/README.md#setup). All manual.
 10. Optional: [qBittorrent VPN](qbittorrent/README.md#vpn-optional).
@@ -158,7 +161,7 @@ Off by default, so hosts without the secrets still build. Only enabled services 
 |---|---|
 | `media-qbittorrent-config` | Auth bypass, login (once), save path, categories |
 | `media-sonarr-config`, `media-radarr-config` | Login, root folder, qBittorrent download client |
-| `media-prowlarr-config` | Login, Sonarr/Radarr/LazyLibrarian apps with Full Sync |
+| `media-prowlarr-config` | Login, Sonarr/Radarr/LazyLibrarian apps with Full Sync, FlareSolverr proxy and tag |
 | `media-jellyfin-config` | Startup wizard and admin, libraries, hardware acceleration |
 | `media-seerr-config` | Jellyfin sign-in, libraries, URLs, Radarr and Sonarr |
 
@@ -253,5 +256,5 @@ LazyLibrarian then generates a new API key: update its SOPS value (see [Secrets]
 
 ## Notes
 
-- Sonarr, Radarr, Prowlarr, Bazarr and qBittorrent use rootless home-operations images with `--read-only`. Jellyfin, Seerr, Audiobookshelf and gluetun use upstream images. LazyLibrarian and Calibre-Web Automated ship only as s6/PUID images: they start as root with a minimal capability set, then drop privileges.
+- Sonarr, Radarr, Prowlarr, Bazarr and qBittorrent use rootless home-operations images with `--read-only`. Jellyfin, Seerr, Audiobookshelf, FlareSolverr and gluetun use upstream images; FlareSolverr keeps the image's own user, since it patches its chromedriver in place. LazyLibrarian and Calibre-Web Automated ship only as s6/PUID images: they start as root with a minimal capability set, then drop privileges.
 - The desktop user is in group `media`. Containers run with `UMASK=002`, so library files stay group-writable.

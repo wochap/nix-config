@@ -14,7 +14,7 @@ No LAN URL: admin UI.
 
 ## Depends on / used by
 
-- Depends on: Sonarr (`media-sonarr:8989`), Radarr (`media-radarr:7878`), LazyLibrarian (`media-lazylibrarian:5299`), with their API keys. Indexer sites on the internet.
+- Depends on: Sonarr (`media-sonarr:8989`), Radarr (`media-radarr:7878`), LazyLibrarian (`media-lazylibrarian:5299`), with their API keys. Optionally [FlareSolverr](../flaresolverr/README.md) (`media-flaresolverr:8191`). Indexer sites on the internet.
 - Used by: the same three apps, which search through the indexers Prowlarr pushes.
 
 ## Setup
@@ -42,13 +42,14 @@ Prowlarr's API key comes from SOPS (`PROWLARR__AUTH__APIKEY`). Automatic (`media
 
 - Step 1: login, while no user exists.
 - Step 2: each enabled app that Prowlarr does not have yet, with the keys from SOPS. An existing app is left as is, even with an old key. LazyLibrarian is added only once its SOPS key is the real one ([Secrets](../README.md#secrets), step 4).
+- With `services.flaresolverr.enable`: the tag `flaresolverr` and the FlareSolverr indexer proxy ([FlareSolverr](../flaresolverr/README.md#setup)).
 
-Manual: steps 3–4.
+Manual: steps 3–4, and the `flaresolverr` tag on Cloudflare-protected indexers.
 
 ## Troubleshooting
 
 - Logs: `journalctl -u podman-media-prowlarr`, `journalctl -u media-prowlarr-config`.
-- An indexer fails the test behind a Cloudflare challenge: it needs FlareSolverr, which this stack does not include.
+- An indexer fails the test behind a Cloudflare challenge: enable `services.flaresolverr` and give the indexer the `flaresolverr` tag. See [FlareSolverr](../flaresolverr/README.md).
 - `LazyLibrarian app not added` in the journal: turn on LazyLibrarian's API, store its key in SOPS, rebuild, then `sudo systemctl restart media-prowlarr-config`.
 - An app has a stale key (for example after a reset): delete it under Settings › Apps, then restart `media-prowlarr-config`.
 

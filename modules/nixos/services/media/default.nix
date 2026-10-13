@@ -94,6 +94,7 @@ in
     ./lazylibrarian
     ./calibre-web
     ./audiobookshelf
+    ./flaresolverr
   ];
 
   options._custom.services.media = {
@@ -244,6 +245,10 @@ in
         type = lib.types.str;
         default = "ghcr.io/advplyr/audiobookshelf:2.37.1@sha256:581d68b2a6fc7ebf58d81c878a9f387cbbc0d88ac9d37b298b9cee10168af85b";
       };
+      flaresolverr = lib.mkOption {
+        type = lib.types.str;
+        default = "ghcr.io/flaresolverr/flaresolverr:v3.5.2@sha256:c80ae007ce2ccdcd217a12426e4f039ef763ff90738c808d38810c3e59323767";
+      };
       gluetun = lib.mkOption {
         type = lib.types.str;
         default = "docker.io/qmcgaw/gluetun:v3.41.3@sha256:fa19cc76b2af13d57a8d3dc3066f2ada061b1c761b8aecf989b3877c0486e027";
@@ -355,6 +360,11 @@ in
       lazylibrarian = mkServiceOptions {
         description = "LazyLibrarian";
         port = 21150;
+        admin = true;
+      };
+      flaresolverr = mkServiceOptions {
+        description = "FlareSolverr, a Cloudflare challenge solver for Prowlarr";
+        port = 21160;
         admin = true;
       };
     };

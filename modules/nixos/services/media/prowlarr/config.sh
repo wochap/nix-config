@@ -2,8 +2,8 @@
 #
 # Sets the admin login while Prowlarr has none, and registers Sonarr, Radarr
 # and LazyLibrarian as applications with Full Sync, so Prowlarr pushes its
-# indexers to them. An app that already exists is
-# left as is. PROWLARR_* and the per-app variables come from the Nix module;
+# indexers to them, and adds FlareSolverr as an indexer proxy under the tag
+# "flaresolverr". An app or proxy that already exists is left as is. PROWLARR_* and the per-app variables come from the Nix module;
 # an empty *_URL means the app is disabled.
 
 api_key=$(read_secret "$PROWLARR_API_KEY_FILE")
@@ -57,4 +57,26 @@ if [ -n "$LAZYLIBRARIAN_URL" ]; then
   # LazyLibrarian's API is on with that key, so this step only warns.
   ensure_app LazyLibrarian "$LAZYLIBRARIAN_URL" "$(read_secret "$LAZYLIBRARIAN_API_KEY_FILE")" ||
     warn "LazyLibrarian app not added: turn on its API and store its key (see lazylibrarian/README.md), then restart media-prowlarr-config"
+fi
+
+if [ -n "$FLARESOLVERR_URL" ]; then
+  # Prowlarr routes an indexer through the proxy only when they share a tag,
+  # so tag Cloudflare-protected indexers (1337x, ...) with "flaresolverr".
+  tag_id=$(api "$PROWLARR_URL/api/v1/tag" | jq -r 'first(.[] | select(.label == "flaresolverr") | .id) // empty')
+  if [ -z "$tag_id" ]; then
+    tag_id=$(api -X POST --data '{"label":"flaresolverr"}' "$PROWLARR_URL/api/v1/tag" | jq -r .id)
+    log "added tag flaresolverr"
+  fi
+  if api "$PROWLARR_URL/api/v1/indexerproxy" |
+    jq -e 'any(.[]; .implementation == "FlareSolverr")' >/dev/null; then
+    log "FlareSolverr proxy present, left as is"
+  else
+    api "$PROWLARR_URL/api/v1/indexerproxy/schema" |
+      jq --arg host "$FLARESOLVERR_URL/" --argjson tag "$tag_id" '
+        first(.[] | select(.implementation == "FlareSolverr"))
+        | . + {name: "FlareSolverr", tags: [$tag]}
+        | .fields |= map(if .name == "host" then .value = $host else . end)' |
+      api -X POST --data @- "$PROWLARR_URL/api/v1/indexerproxy?forceSave=true" >/dev/null
+    log "added FlareSolverr proxy ($FLARESOLVERR_URL, tag flaresolverr)"
+  fi
 fi
