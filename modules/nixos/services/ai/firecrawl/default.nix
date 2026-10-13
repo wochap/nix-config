@@ -10,6 +10,8 @@ let
   inherit (pkgs._custom) wochap-ssc;
   proxy = config._custom.services.web-gate.proxies.firecrawl;
 
+  nuqWorkerCount = 10;
+
   ports = {
     playwright = 20902;
     redis = 20903;
@@ -18,9 +20,12 @@ let
     extractWorker = 20906;
     worker = 20907;
     nuqWorker = 20908;
-    nuqWorkerStart = 20910;
-    nuqPrefetchWorker = 20915;
-    nuqReconcilerWorker = 20916;
+    # Each nuq-worker handles one job at a time, so nuqWorkerCount is the
+    # scrape concurrency. The harness assigns worker ports start..start+count-1,
+    # prefetch at start+count and reconciler at start+count+1.
+    nuqWorkerStart = 20921;
+    nuqPrefetchWorker = 20921 + nuqWorkerCount;
+    nuqReconcilerWorker = 20921 + nuqWorkerCount + 1;
     rabbitmqManagement = 20917;
     rabbitmqPrometheus = 20918;
     rabbitmqDistribution = 20919;
@@ -210,7 +215,9 @@ in
           WORKER_PORT = toString ports.worker;
           NUQ_WORKER_PORT = toString ports.nuqWorker;
           NUQ_WORKER_START_PORT = toString ports.nuqWorkerStart;
-          NUQ_WORKER_COUNT = "5";
+          NUQ_WORKER_COUNT = toString nuqWorkerCount;
+          MAX_CPU = "0.95";
+          MAX_RAM = "0.95";
           NUQ_PREFETCH_WORKER_PORT = toString ports.nuqPrefetchWorker;
           NUQ_RECONCILER_WORKER_PORT = toString ports.nuqReconcilerWorker;
           ENV = "local";
