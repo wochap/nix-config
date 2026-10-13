@@ -165,6 +165,9 @@ in
     _custom.services.wobook = {
       enable = true;
       tailnetOnly = true;
+      # shows up as apps/wobook on the gatus status page
+      statusPush.enable = true;
+      statusPush.tokenSecret.sopsFile = ../../secrets-sops/server.yaml;
     };
 
     # Status page at https://status.gvps.geanmar.com for tailnet devices only,

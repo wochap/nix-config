@@ -1,4 +1,5 @@
 server-cloudflare-dns-api-token: ENC[AES256_GCM,data:K1YaOaj9IFm0u8jAwsI7nIEMFQPOMQcfGCO71c09Qw7/Tf8xCDznk3Z7mHS33BM6sCnjvX4=,iv:KAN7tj6Vnt3w33v40+b55ZhRyGHmlUBDhQUceDqYxWg=,tag:6lkyhmWjzHP12Mr7/avSqg==,type:str]
+server-gatus-wobook-token: ENC[AES256_GCM,data:VMYmPEkVPmJD5VcI1VhH+59DPrhh99Lp2qLCSTf2WvTCv5xt6lYQ17OrJW5LdzdddJTtuZfGtEH3FNe7sAC77w==,iv:sQz+cbzIGPh+w+Jh+1ZWcdznGr4jolIF3XRu6WZWF6U=,tag:jVrVXpaCUr55vuOfAp92qQ==,type:str]
 sops:
     age:
         - enc: |
@@ -19,7 +20,7 @@ sops:
             P/ML6X+6z+AbclARuwUqIb4dxC6P8ALajB5bT+AXh6Mp5wztPBzYHA==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1hryf55wm6ypwvw97e5f9gzczeesy5r0hcndgz2q2lulg8gpxqu2qxgeje9
-    lastmodified: "2026-10-11T18:28:42Z"
-    mac: ENC[AES256_GCM,data:ko+0NL3MpXcIb9HsSD2DcqxQuwS2G/v5C5GlMdp9yh/g88w1HR0cURVuffexKDewILVDaIl/2x4JCrOcFRJQjcFcjdoHQ0GhSb8/olz3yI1UrTggibd2JucgAIVcn+5I1P7QILPPeg5a5BqMwZpfH5SW1OvR2BJMsin9rTZnezw=,iv:LDtwHhNoab65UuwEGM+0eXt7AEzm0OV7RvmfuHZMtng=,tag:oQ7/SlhjCx/0AMU4MOcTgQ==,type:str]
+    lastmodified: "2026-10-13T01:01:39Z"
+    mac: ENC[AES256_GCM,data:s934/MO+W5mB3iG3qps+X9bjI93G7HQnIIF+8GooB21IlEU+hrrOWSZ2heXv8y2ak/+xkQhVOa2IOaiRi5klKgS2svmiCa6nFUvZtKYTd6wtZTSZuRYWdqkeVjJ8A7UhrjNF7OwnjXZwstNfRwKz5Bvc9gdKWAUlBdquYfIHnAE=,iv:DK1UWdTxxkhMR4rSqdTE20WMshTa7p15HpcJAMJ8twg=,tag:tJL3i1k96bt4v7lQ21vQlg==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.1

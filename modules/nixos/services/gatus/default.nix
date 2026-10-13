@@ -67,15 +67,9 @@ let
         url = "tcp://127.0.0.1:${toString services.tt.server.peer.port}";
         conditions = [ "[CONNECTED] == true" ];
       }
-    ]
-    ++ lib.optionals (services.wobook.enable && services.wobook.syncPort != null) [
-      {
-        name = "wobook";
-        group = "apps";
-        url = "tcp://127.0.0.1:${toString services.wobook.syncPort}";
-        conditions = [ "[CONNECTED] == true" ];
-      }
     ];
+  # wobook pushes its own status (_custom.services.wobook.statusPush): its sync
+  # port is UDP (no reply to a probe) and its API a user unix socket
 in
 {
   options._custom.services.gatus = {
@@ -115,6 +109,21 @@ in
       default = [ ];
       description = "Extra gatus endpoints, see https://github.com/TwiN/gatus#endpoints";
     };
+    # pushed to POST /api/v1/endpoints/<group>_<name>/external with a bearer
+    # token; set heartbeat.interval or a dead pusher stays green forever
+    externalEndpoints = lib.mkOption {
+      type = lib.types.listOf (lib.types.attrsOf lib.types.anything);
+      default = [ ];
+      description = "Gatus external endpoints, see https://github.com/TwiN/gatus#external-endpoints";
+    };
+    # env var name -> sops secret name, reference them in settings as "\${VAR}"
+    secretEnv = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example = {
+        GATUS_WOBOOK_TOKEN = "server-gatus-wobook-token";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -139,11 +148,28 @@ in
               }
               // e
             ) (lib.optionals cfg.autoEndpoints autoEndpoints ++ cfg.endpoints);
+            external-endpoints = lib.mkIf (cfg.externalEndpoints != [ ]) cfg.externalEndpoints;
           };
+          environmentFile = lib.mkIf (cfg.secretEnv != { }) config.sops.templates."gatus.env".path;
         };
 
-        # icmp:// endpoints
-        systemd.services.gatus.serviceConfig.AmbientCapabilities = [ "CAP_NET_RAW" ];
+        sops.templates."gatus.env" = lib.mkIf (cfg.secretEnv != { }) {
+          mode = "0400";
+          restartUnits = [ "gatus.service" ];
+          content = lib.concatStrings (
+            lib.mapAttrsToList (var: secret: ''
+              ${var}=${config.sops.placeholder.${secret}}
+            '') cfg.secretEnv
+          );
+        };
+
+        systemd.services.gatus = {
+          # icmp:// endpoints
+          serviceConfig.AmbientCapabilities = [ "CAP_NET_RAW" ];
+          # first checks right after boot fail on tailnet names otherwise
+          after = lib.optional services.tailscale.enable "tailscaled.service";
+          wants = lib.optional services.tailscale.enable "tailscaled.service";
+        };
 
         networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
           (if hasDomain then 443 else cfg.port)
