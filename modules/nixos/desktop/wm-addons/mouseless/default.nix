@@ -10,6 +10,7 @@ let
   cfg = config._custom.desktop.mouseless;
 
   woints = inputs.woints.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  woints-hyprland = inputs.woints.packages.${pkgs.stdenv.hostPlatform.system}.hyprland-module;
 in
 {
   options._custom.desktop.mouseless.enable = lib.mkEnableOption { };
@@ -20,6 +21,9 @@ in
     _custom.desktop.a11y.enable = lib.mkDefault true;
 
     _custom.hm = {
+      # Key capture submap for Hyprland, loaded by `require("woints")` in binds.lua
+      xdg.configFile."hypr/woints.lua".source = "${woints-hyprland}/share/hypr/woints.lua";
+
       systemd.user.services.wointsd = lib._custom.mkWaylandService {
         Unit = {
           Description = "woints hint daemon";

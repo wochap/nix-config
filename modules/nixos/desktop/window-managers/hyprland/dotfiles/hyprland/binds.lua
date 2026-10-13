@@ -373,6 +373,12 @@ end)
 
 --- MOUSELESS (woints)
 
+-- Key capture submap for woints hints (installed by the mouseless module)
+local woints_ok, woints = pcall(require, "woints")
+if woints_ok then
+  woints.setup()
+end
+
 -- Hint focused window
 hl.bind(mod .. " + j", hl.dsp.exec_cmd("woints hints"), { description = "Hints" })
 
