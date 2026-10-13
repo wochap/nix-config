@@ -164,6 +164,13 @@ let
         score = "jev-strict";
       };
     };
+    quick = baseProfile // {
+      description = "SearXNG, Firecrawl, bm25 prefilter, Jev (strict) scoring, OmniRoute.";
+      use = use // {
+        prefilter = "bm25";
+        score = "jev-strict";
+      };
+    };
   };
 
   # Coverage over speed: up to 25 passages per sub-query, which fills more of
@@ -209,8 +216,8 @@ in
       type = lib.types.str;
       default = "default";
       description = ''
-        Profile selected through WOSARCHER_PROFILE: default, jev (with
-        jev.enable), or a name from `profiles`.
+        Profile selected through WOSARCHER_PROFILE: default, jev and quick
+        (with jev.enable), or a name from `profiles`.
       '';
     };
 
