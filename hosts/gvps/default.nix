@@ -210,7 +210,22 @@ in
         type = "A";
         value = "100.64.0.4";
       }
-    ];
+    ]
+    # gdesktop's web-gate.tailnet vhosts; 100.64.0.2 is its tailnet IP, which
+    # changes only if gdesktop registers as a new node (e.g. reinstall).
+    ++
+      map
+        (name: {
+          name = "${name}.gdesktop.geanmar.com";
+          type = "A";
+          value = "100.64.0.2";
+        })
+        [
+          "jellyfin"
+          "seerr"
+          "audiobookshelf"
+          "calibre-web"
+        ];
 
     time.timeZone = "America/Toronto";
 

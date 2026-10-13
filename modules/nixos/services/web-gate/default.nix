@@ -264,6 +264,11 @@ in
         null opens the port on every interface, for hosts that never move.
       '';
     };
+    tailnet.enable = lib.mkEnableOption ''
+      serving exposed proxies over the tailnet too, by opening port 443 on
+      tailscale0. Tailnet clients still need `<subdomain>.<domain>` to resolve
+      to this host's tailnet IP, e.g. a headscale `dns.extra_records` entry
+    '';
     ddns = {
       enable = lib.mkEnableOption "updating the `*.<domain>` Cloudflare A record to this host's LAN IP on every network change";
       zone = lib.mkOption {
@@ -553,25 +558,30 @@ in
           }
         ];
 
-      networking.firewall =
-        if restrictLan then
-          {
-            # The chain is filled by web-gate-lan; jump to it before the final
-            # refuse rule. ACCEPT instead of nixos-fw-accept, so the chain never
-            # blocks the firewall from deleting its own chains on reload.
-            extraCommands = ''
-              ip46tables -N ${lanChain} 2>/dev/null || true
-              ip46tables -A nixos-fw -j ${lanChain}
-              ${lib.getExe web-gate-lan} firewall || true
-            '';
-            extraStopCommands = ''
-              ip46tables -F ${lanChain} 2>/dev/null || true
-            '';
-          }
-        else
-          {
-            allowedTCPPorts = [ 443 ];
-          };
+      networking.firewall = lib.mkMerge [
+        # Independent of trustedConnections: the tailnet is trusted on any network.
+        (lib.mkIf gate.tailnet.enable { interfaces.tailscale0.allowedTCPPorts = [ 443 ]; })
+        (
+          if restrictLan then
+            {
+              # The chain is filled by web-gate-lan; jump to it before the final
+              # refuse rule. ACCEPT instead of nixos-fw-accept, so the chain never
+              # blocks the firewall from deleting its own chains on reload.
+              extraCommands = ''
+                ip46tables -N ${lanChain} 2>/dev/null || true
+                ip46tables -A nixos-fw -j ${lanChain}
+                ${lib.getExe web-gate-lan} firewall || true
+              '';
+              extraStopCommands = ''
+                ip46tables -F ${lanChain} 2>/dev/null || true
+              '';
+            }
+          else
+            {
+              allowedTCPPorts = [ 443 ];
+            }
+        )
+      ];
 
       systemd.services.web-gate-lan = lib.mkIf lanSync {
         description = "Sync LAN exposure and DDNS with the active network";

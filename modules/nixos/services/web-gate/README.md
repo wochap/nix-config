@@ -137,6 +137,8 @@ A laptop such as glegion lists its home and friends' networks. On those networks
 
 For those cases, use `http://<laptop-ip>:<port>` or Tailscale.
 
+`web-gate.tailnet.enable` also opens port 443 on `tailscale0`, on any network. Tailnet clients reach the same `https://<name>.<domain>` URLs once headscale points those names at the host's tailnet IP with `dns.extra_records` entries (see `hosts/gvps/default.nix`). MagicDNS answers tailnet clients with the tailnet IP, and public DNS keeps answering everyone else with the LAN IP. Headscale records match exact names, so add one per exposed proxy. With Tailscale on, a client gets the tailnet IP even at home, so the host's tailscaled must be running.
+
 To see the current state, run `sudo iptables -L web-gate-lan -n` and `journalctl -u web-gate-lan`.
 
 ## Troubleshooting

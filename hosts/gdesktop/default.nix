@@ -216,6 +216,8 @@ in
     _custom.services.web-gate.domain = "gdesktop.geanmar.com";
     _custom.services.web-gate.acme.credentialSecret.sopsFile = ../../secrets-sops/server.yaml;
     _custom.services.web-gate.acme.credentialSecret.sopsKey = "server-cloudflare-dns-api-token";
+    # Also over the tailnet; gvps's headscale points these names at gdesktop.
+    _custom.services.web-gate.tailnet.enable = true;
     # Fixed IP, but DDNS still creates and maintains the record.
     _custom.services.web-gate.ddns.enable = true;
     _custom.services.web-gate.ddns.zone = "geanmar.com";
@@ -242,8 +244,10 @@ in
     };
 
     # NetworkManager connection names where LAN vhosts open and DDNS updates.
+    # gdesktop sits on the wired connection, which the shared list lacks.
     _custom.services.web-gate.trustedConnections =
-      config._custom.globals.secrets.networks.trustedConnections;
+      config._custom.globals.secrets.networks.trustedConnections
+      ++ [ "Wired connection 1" ];
 
     _custom.services.ai.enable = true;
     _custom.services.ai.enableRocm = true;
