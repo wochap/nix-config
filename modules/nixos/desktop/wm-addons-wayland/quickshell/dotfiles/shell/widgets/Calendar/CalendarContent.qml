@@ -187,7 +187,6 @@ PanelWindow {
 
   Component.onCompleted: {
     SKhal.refresh();
-    if (!SWeather.available)
-      SWeather.refresh();
+    SWeather.refreshIfStale();
   }
 }

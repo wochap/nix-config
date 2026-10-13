@@ -40,10 +40,12 @@ ShellRoot {
   property bool renderAuthPrompt: true
 
   // started eagerly, the polkit agent and the auth socket must exist before
-  // the first prompt arrives; SHints registers the `woints` IPC target
+  // the first prompt arrives; SHints registers the `woints` IPC target;
+  // SWeather polls in the background so the calendar card is already filled
   Component.onCompleted: {
     SAuth.socketPath;
     SHints.protocol;
+    SWeather.available;
   }
 
   LazyLoader {

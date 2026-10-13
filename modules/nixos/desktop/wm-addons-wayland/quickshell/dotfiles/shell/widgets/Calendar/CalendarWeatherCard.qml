@@ -98,7 +98,34 @@ StyledRect {
       }
     }
 
-    // Forecast
+    // Hourly forecast
+    Item {
+      Layout.fillWidth: true
+      visible: SWeather.hourly.length > 0
+      implicitHeight: hourly.implicitHeight + 6
+
+      Rectangle {
+        anchors {
+          top: parent.top
+          left: parent.left
+          right: parent.right
+        }
+        height: 1
+        color: Theme.options.surface0
+      }
+
+      CalendarHourlyForecast {
+        id: hourly
+
+        anchors {
+          left: parent.left
+          right: parent.right
+          bottom: parent.bottom
+        }
+      }
+    }
+
+    // Daily forecast
     Item {
       Layout.fillWidth: true
       visible: SWeather.daily.length > 0

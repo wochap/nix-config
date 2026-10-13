@@ -18,6 +18,7 @@ Singleton {
   readonly property int refreshInterval: 15 * 60 * 1000
   readonly property int locationMaxAge: 24 * 60 * 60 * 1000
   readonly property int forecastDays: 5
+  readonly property int hourlyCount: 24
 
   // {lat, lon, city, source: "secret" | "ip"}
   property var location: null
@@ -25,6 +26,14 @@ Singleton {
   property var current: null
   // [{date, code, max, min, icon, iconColor}]
   property var daily: []
+  // every hour of the last response: [{time, date, hour, temperature, precipitation, isDay, code, icon, iconColor}]
+  property var allHourly: []
+  // seconds, location's UTC offset from the last response
+  property int utcOffset: 0
+  // next `hourlyCount` hours from now (re-sliced every minute, no refetch needed)
+  property var hourly: []
+  // the hour right after `hourly`, only used to draw the curve past its last point
+  property var hourlyNext: null
   property double fetchedAt: 0
   property bool loading: false
   property string error: ""
@@ -131,7 +140,16 @@ Singleton {
     return Theme.options.blue;
   }
 
+  // Called when the calendar opens: timers stop counting while suspended, so
+  // data can be hours old, and a failing fetch is not retried until its backoff expires.
+  function refreshIfStale() {
+    if (!root.loading && Date.now() - root.fetchedAt > root.refreshInterval)
+      root.refresh();
+  }
+
   function refresh() {
+    if (root.loading)
+      return;
     if (root.location) {
       root.fetchWeather();
     } else {
@@ -154,6 +172,8 @@ Singleton {
         onError(`${url} returned ${xhr.status}`);
       }
     };
+    xhr.timeout = 20000;
+    xhr.ontimeout = () => onError(`${url} timed out`);
     xhr.open("GET", url);
     xhr.send();
   }
@@ -178,7 +198,8 @@ Singleton {
     const cached = root.cachedLocation;
     const sameLocation = cached && Math.abs(cached.lat - root.location.lat) < 0.01 && Math.abs(cached.lon - root.location.lon) < 0.01;
     const age = Date.now() - root.fetchedAt;
-    if (sameLocation && age < root.refreshInterval) {
+    // caches written before the hourly forecast existed have to be refetched
+    if (sameLocation && age < root.refreshInterval && root.hourly.length > 0) {
       // cache is fresh, wait for it to expire
       refreshTimer.interval = root.refreshInterval - age;
       refreshTimer.restart();
@@ -229,7 +250,7 @@ Singleton {
   function fetchWeather() {
     const loc = root.location;
     root.loading = true;
-    const url = "https://api.open-meteo.com/v1/forecast" + `?latitude=${loc.lat}&longitude=${loc.lon}` + "&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation_probability,weather_code,is_day,wind_speed_10m" + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max" + `&timezone=auto&forecast_days=${root.forecastDays}`;
+    const url = "https://api.open-meteo.com/v1/forecast" + `?latitude=${loc.lat}&longitude=${loc.lon}` + "&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation_probability,weather_code,is_day,wind_speed_10m" + "&hourly=temperature_2m,precipitation_probability,weather_code,is_day" + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max" + `&timezone=auto&forecast_days=${root.forecastDays}`;
     root.request(url, data => {
       root.apply(data, Date.now());
       root.failures = 0;
@@ -269,7 +290,51 @@ Singleton {
           icon: root.icon(d.weather_code[i], true),
           iconColor: root.iconColor(d.weather_code[i], true)
         }));
+    root.utcOffset = data.utc_offset_seconds ?? 0;
+    root.allHourly = root.parseHourly(data);
+    root.updateHourly();
     root.fetchedAt = fetchedAt;
+  }
+
+  // Hours are "YYYY-MM-DDTHH:00" in the location's timezone (timezone=auto).
+  function parseHourly(data) {
+    const h = data.hourly;
+    if (!h?.time)
+      return [];
+    return h.time.map((time, i) => {
+      const code = h.weather_code[i];
+      const isDay = h.is_day[i] === 1;
+      return {
+        time,
+        date: new Date(`${time.slice(0, 10)}T00:00:00`),
+        hour: time.slice(11, 13),
+        temperature: Math.round(h.temperature_2m[i]),
+        precipitation: h.precipitation_probability[i] ?? 0,
+        isDay,
+        code,
+        icon: root.icon(code, isDay),
+        iconColor: root.iconColor(code, isDay)
+      };
+    });
+  }
+
+  // Current hour at the location, compared as strings against the hourly times
+  // so the system timezone is irrelevant. Uses the real clock, not the response's
+  // `current.time`, so a stale cache never labels old hours as "Now".
+  function currentHourKey() {
+    return `${new Date(Date.now() + root.utcOffset * 1000).toISOString().slice(0, 13)}:00`;
+  }
+
+  function updateHourly() {
+    const now = root.currentHourKey();
+    const start = root.allHourly.findIndex(h => h.time >= now);
+    if (start < 0) {
+      root.hourly = [];
+      root.hourlyNext = null;
+      return;
+    }
+    root.hourly = root.allHourly.slice(start, start + root.hourlyCount);
+    root.hourlyNext = root.allHourly[start + root.hourlyCount] ?? null;
   }
 
   // Theme colors are baked into current/daily, recompute them on theme change
@@ -333,6 +398,17 @@ Singleton {
         root.apply(c.data, c.fetchedAt);
         root.cachedLocation = c.location;
       } catch (e) {}
+    }
+  }
+
+  // moves the hourly window when the hour turns
+  Timer {
+    interval: 60 * 1000
+    running: root.allHourly.length > 0
+    repeat: true
+    onTriggered: {
+      if (root.hourly.length === 0 || root.hourly[0].time !== root.currentHourKey())
+        root.updateHourly();
     }
   }
 
