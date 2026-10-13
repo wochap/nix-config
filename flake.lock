@@ -4337,11 +4337,11 @@
     "zsh-auto-notify": {
       "flake": false,
       "locked": {
-        "lastModified": 1784000012,
-        "narHash": "sha256-o4IfNbrV6Cf0cf1zjgTxyCNfC4WuF9Obb3Wjazvs2fA=",
+        "lastModified": 1791646190,
+        "narHash": "sha256-Fg8WjCE/ruEov2h6QVQ2oY+BK8/yQGWoE4LiS+XCtok=",
         "owner": "wochap",
         "repo": "zsh-auto-notify",
-        "rev": "131dab4bf75554a0b4014456ee69050634d37822",
+        "rev": "d0f1a5772d159fd14352eacabd4c1972d7c29f53",
         "type": "github"
       },
       "original": {
