@@ -19,6 +19,9 @@ PanelWindow {
   property var focusedWorkspace: SHyprland.workspacesById?.[hyprlandMonitor?.activeWorkspace?.id] ?? null
   property var focusedClient: SHyprland.clientsByAddress?.[focusedWorkspace?.lastwindow] ?? null
   property bool isFocusedClientFullScreen: (focusedClient?.fullscreen ?? null) === 2
+  // space reserved by the bar, the window ignores exclusive zones so the
+  // backdrop also covers the bar and a click there closes the panel
+  readonly property real reservedTop: isFocusedClientFullScreen ? 0 : (hyprlandMonitor?.reserved?.[1] ?? 0)
   readonly property bool isEmpty: SNotifications.list.length === 0
   // horizontal offset of the sidebar, slides in from the right edge
   property real slideX: ConfigNotifications.notificationsPanelWidth
@@ -27,6 +30,7 @@ PanelWindow {
   // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
   readonly property string namespace: WlrLayershell.namespace
   WlrLayershell.layer: WlrLayer.Overlay
+  WlrLayershell.keyboardFocus: SNotifications.isPanelOpen ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
   anchors {
     top: true
     left: true
@@ -34,11 +38,27 @@ PanelWindow {
     right: true
   }
   screen: focusedScreen
-  exclusionMode: isFocusedClientFullScreen ? ExclusionMode.Ignore : ExclusionMode.Normal
-  exclusiveZone: 0
+  exclusionMode: ExclusionMode.Ignore
   color: "transparent"
+  // whole window while open so the backdrop catches outside clicks, only the
+  // sidebar while it slides out so clicks pass through
   mask: Region {
-    item: rectangle
+    item: SNotifications.isPanelOpen ? backdrop : rectangle
+  }
+
+  // click outside closes, including clicks on the bar (and on the bar
+  // button that opened it, so it never closes and reopens)
+  MouseArea {
+    id: backdrop
+
+    anchors.fill: parent
+    enabled: SNotifications.isPanelOpen
+    onClicked: SNotifications.closePanel()
+  }
+
+  Item {
+    focus: true
+    Keys.onEscapePressed: SNotifications.closePanel()
   }
 
   RectangularShadowLeft {
@@ -97,10 +117,16 @@ PanelWindow {
       top: parent.top
       bottom: parent.bottom
       right: parent.right
+      topMargin: root.reservedTop
       rightMargin: -root.slideX
     }
     implicitWidth: ConfigNotifications.notificationsPanelWidth
     color: Theme.options.backgroundOverlay
+
+    // swallow clicks so they don't reach the backdrop
+    MouseArea {
+      anchors.fill: parent
+    }
 
     // 1px left border
     Rectangle {

@@ -74,6 +74,10 @@ Singleton {
     root.isPanelOpen = !root.isPanelOpen;
   }
 
+  function closePanel() {
+    root.isPanelOpen = false;
+  }
+
   // called by the sidebar once its exit animation is done
   function finalizePanelClose() {
     if (!root.isPanelOpen)
