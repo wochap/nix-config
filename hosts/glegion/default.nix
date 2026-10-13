@@ -326,6 +326,13 @@ in
     _custom.security.gpg.enableGpgAgent = true;
     _custom.security.gnome-keyring.enable = true;
     _custom.security.gnome-keyring.enableSshAgent = true;
+
+    # `ssh gvps`; hs.geanmar.com is the Cloudflare DNS-only A record for gvps
+    programs.ssh.extraConfig = ''
+      Host gvps
+        HostName hs.geanmar.com
+        User gean
+    '';
     _custom.security.gnome-keyring.enableLuksIntegration = true;
     _custom.security.kwallet.enable = false;
 
