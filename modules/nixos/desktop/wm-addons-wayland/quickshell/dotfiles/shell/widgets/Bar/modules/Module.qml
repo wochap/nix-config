@@ -12,6 +12,7 @@ WrapperRectangle {
   property string fgColor: Theme.options.text
   property string bgColor: Theme.options.surface0
   property string label: ""
+  property real labelMaximumWidth: Infinity
   property string icon: ""
   property string materialIcon: ""
   property int iconSize
@@ -50,7 +51,9 @@ WrapperRectangle {
     }
 
     StyledText {
+      Layout.maximumWidth: root.labelMaximumWidth
       text: root.label
+      elide: Text.ElideMiddle
       visible: root.label.length > 0
       color: root.fgColor
       verticalAlignment: Text.AlignVCenter

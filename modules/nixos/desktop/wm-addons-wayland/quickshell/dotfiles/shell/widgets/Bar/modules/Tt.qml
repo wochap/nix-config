@@ -37,6 +37,7 @@ Loader {
             iconSystemSize: Styles.font.pixelSize.large
             iconSize: Styles.font.pixelSize.huge
             label: `${STt.title(chip.modelData)} ${STt.elapsed(chip.modelData)}`
+            labelMaximumWidth: 250
             paddingX: 0
             bgColor: "transparent"
             fgColor: Theme.options.green
