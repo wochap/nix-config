@@ -4197,11 +4197,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1791680842,
-        "narHash": "sha256-LYvliBbr6RbSLx/GiCeuWm9/an1geY/WWsO/4e8N3xg=",
+        "lastModified": 1791851247,
+        "narHash": "sha256-dpZL7hRaINHhGxBXDs24EKftKpvA3Vk/lReks71Bl5c=",
         "owner": "wochap",
         "repo": "wosarcher",
-        "rev": "5879ef3b920a0df6702e95aaa99e4895d83d4a3e",
+        "rev": "f38864bfe49070658f9d85b5b0d065552fc24a07",
         "type": "github"
       },
       "original": {

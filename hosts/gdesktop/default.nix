@@ -265,8 +265,8 @@ in
     _custom.services.ai.webscoop.enable = true;
     _custom.services.ai.wosarcher.enable = true;
     _custom.services.ai.wosarcher.jev.enable = true;
-    # embeddings-rerank stays available for offline use.
-    _custom.services.ai.wosarcher.profile = "embeddings-jev";
+    # The default profile (local reranker) stays available for offline use.
+    _custom.services.ai.wosarcher.profile = "jev";
     # Reachable from the LAN as https://wosarcher.gdesktop.geanmar.com behind `web-gate`
     # _custom.services.web-gate.proxies.wosarcher.expose.enable = true;
     # _custom.services.web-gate.proxies.wosarcher.expose.gate = true;

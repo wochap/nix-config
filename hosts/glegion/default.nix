@@ -274,7 +274,7 @@ in
     _custom.services.ai.webscoop.enable = true;
     _custom.services.ai.wosarcher.enable = true;
     _custom.services.ai.wosarcher.jev.enable = true;
-    _custom.services.ai.wosarcher.profile = "embeddings-jev";
+    _custom.services.ai.wosarcher.profile = "jev";
     # gdesktop's exposed services resolve through the public
     # *.gdesktop.geanmar.com record, e.g. https://wosarcher.gdesktop.geanmar.com.
     # _custom.services.ai.openDesign.enable = true;
