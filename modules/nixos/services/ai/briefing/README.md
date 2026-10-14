@@ -14,7 +14,7 @@ sources ──► collect ──► dedup ──► rank ──► enrich ──
 
 Enable it with `_custom.services.ai.briefing.enable = true;`. It needs OmniRoute,
 Supertonic, Firecrawl, SearXNG, Ollama (embeddings, `ai.ollamaEmbeddingModel`) and
-the home-screen module. The reranker and Jev are optional scorers.
+the home-screen module. The relevance scorer is the reranker or Jev (`briefing.scorer`).
 
 ## Services
 
@@ -22,7 +22,7 @@ the home-screen module. The reranker and Jev are optional scorers.
 |---|---|---|---|
 | dedup | Ollama embeddings | Drops items close (`similarity.dedup`) to a story told in the last `<mode>.dedupDays` days | URL and title hashes only |
 | rank | Ollama embeddings | Gives each item its nearest chapter topic, keeps the `<mode>.prefilter` closest | Every item is scored |
-| rank | Jev, reranker, LLM (`scorers`, first that works) | Relevance against `interests.md` | The LLM scores everything |
+| rank | `scorer`: reranker or Jev | Relevance against `interests.md` | The LLM scores the shortlist |
 | rank | LLM | Reviews only the top `maxStories * 3`: topic, hype, reason, newsworthiness | |
 | rank | Ollama embeddings | Groups items about the same story (`similarity.cluster`) | One LLM clustering call |
 | enrich | SearXNG + embeddings | Adds up to 2 outlets to the top `<mode>.corroborateTop` single-source stories (`similarity.corroborate`) | Stories keep their feed sources |
@@ -30,7 +30,7 @@ the home-screen module. The reranker and Jev are optional scorers.
 
 Jev scores are calibrated (0-3), so the final score averages Jev and the LLM.
 Reranker scores are not, so they only choose which items the LLM reviews and
-the LLM score is final. `briefing.jev.enable` sends item titles and snippets
+the LLM score is final. `scorer = "jev"` sends item titles and snippets
 to api.typesafe.ai with `personal-typesafe-api-key`.
 
 Embeddings are cached in `~/.local/state/briefing/embeddings.db` (unused vectors
@@ -158,7 +158,8 @@ To write a new adapter type, add a script under `briefing/adapters/` and list it
   (0.88, 0.82, 0.75). With qwen3-embedding, a reworded headline of the same story
   scores about 0.85-0.90 and unrelated stories about 0.55-0.70. The rank, dedup and
   enrich logs print every merge, drop and match with its similarity.
-- `briefing.scorers`: scorer order, e.g. `[ "rerank" "llm" ]` to keep news local.
+- `briefing.scorer`: `"jev"` (default: cloud, faster, calibrated; key `personal-typesafe-api-key`
+  in `personal.yaml`) or `"rerank"` (local reranker).
 - `briefing.{model,voice,speed,show,cover}`.
 - `prompts/*.md`: ranking, clustering, chapter and intro/outro prompts.
 

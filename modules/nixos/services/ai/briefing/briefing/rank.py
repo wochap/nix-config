@@ -4,8 +4,8 @@ usage: briefing-rank --profile profile.json --mode daily|weekly --in items.jsonl
 
 1. Embeddings: each item gets its nearest topic (chapter description) and only
    the `prefilter` items closest to any topic go on.
-2. Relevance: the first working scorer of $BRIEFING_SCORERS (jev, rerank, llm)
-   scores the shortlist against the interests.
+2. Relevance: $BRIEFING_SCORER (jev or rerank) scores the shortlist against
+   the interests; if it fails, the LLM scores the shortlist instead.
 3. Editor: the LLM sees only the top `maxStories * 3` and sets topic, hype,
    reason and a newsworthiness score. Jev is calibrated (0-3), so the final
    score averages both; reranker scores only order the shortlist, so the LLM
@@ -23,7 +23,7 @@ from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 
 from briefing.common import llm_json, log, read_jsonl, read_text, write_jsonl
-from briefing.services import TOPIC_INSTRUCT, ServiceError, item_text, jev_scores, rerank_scores, scorer_order, try_embedder
+from briefing.services import TOPIC_INSTRUCT, ServiceError, item_text, jev_scores, rerank_scores, scorer_name, try_embedder
 
 STAGE = "rank"
 # Scorers whose 0-1 values mean the same across runs; the others only rank.
@@ -78,19 +78,17 @@ def scorer_text(item):
 
 
 def relevance(items, interests):
-    """(scorer name, scores) from the first scorer that works; (llm, None) means use the LLM pass."""
+    """(scorer name, scores); (llm, None) when the scorer failed and the LLM must score."""
+    name = scorer_name()
     texts = [scorer_text(i) for i in items]
-    for name in scorer_order():
-        try:
-            if name == "jev":
-                return name, jev_scores(texts, interests)
-            if name == "rerank":
-                return name, rerank_scores(texts, f"News that a listener with these interests wants in their briefing:\n{interests}")
-            if name == "llm":
-                return name, None
-            log(STAGE, f"unknown scorer {name!r}, skipped")
-        except (ServiceError, KeyError, TypeError, ValueError) as error:
-            log(STAGE, f"scorer {name} failed, trying the next one: {error}")
+    try:
+        if name == "jev":
+            return name, jev_scores(texts, interests)
+        if name == "rerank":
+            return name, rerank_scores(texts, f"News that a listener with these interests wants in their briefing:\n{interests}")
+        log(STAGE, f"unknown scorer {name!r}, the LLM scores instead")
+    except (ServiceError, KeyError, TypeError, ValueError) as error:
+        log(STAGE, f"scorer {name} failed, the LLM scores instead: {error}")
     return "llm", None
 
 

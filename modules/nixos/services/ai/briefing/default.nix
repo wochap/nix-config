@@ -14,7 +14,8 @@ let
   proxies = config._custom.services.web-gate.proxies;
   host = "http://${wochap-ssc.meta.address}";
   # Secrets the stages read from the environment, through briefing.env.
-  needsEnvFile = homeScreen.finnhub.enable || homeScreen.fred.enable || cfg.jev.enable;
+  useJev = cfg.scorer == "jev";
+  needsEnvFile = homeScreen.finnhub.enable || homeScreen.fred.enable || useJev;
 
   python = pkgs.python3.withPackages (pythonPackages: [
     pythonPackages.feedparser
@@ -107,7 +108,7 @@ let
       : "''${BRIEFING_SPEED:=${toString cfg.speed}}"
       : "''${SUPERTONIC_URL:=https://supertonic.${wochap-ssc.meta.domain}}"
       : "''${BRIEFING_LISTEN_DIR=${lib.optionalString (cfg.listenDir != null) cfg.listenDir}}"
-      : "''${BRIEFING_SCORERS:=${lib.concatStringsSep " " cfg.scorers}}"
+      : "''${BRIEFING_SCORER:=${cfg.scorer}}"
       : "''${BRIEFING_EMBED_URL:=http://127.0.0.1:11434/v1}"
       : "''${BRIEFING_EMBED_MODEL:=${ai.ollamaEmbeddingModel}}"
       : "''${BRIEFING_RERANK_URL=${lib.optionalString ai.reranker.enable "${host}:${toString proxies.reranker.publicPort}/v1"}}"
@@ -116,7 +117,7 @@ let
       : "''${BRIEFING_SEARXNG_URL:=${host}:${toString proxies.searxng.publicPort}}"
       : "''${BRIEFING_FIRECRAWL_URL:=${host}:${toString proxies.firecrawl.publicPort}/v1}"
       export BRIEFING_STATE_DIR BRIEFING_OUT_DIR BRIEFING_MODEL BRIEFING_VOICE BRIEFING_SPEED SUPERTONIC_URL BRIEFING_PROMPTS
-      export BRIEFING_LISTEN_DIR BRIEFING_SCORERS BRIEFING_EMBED_URL BRIEFING_EMBED_MODEL BRIEFING_RERANK_URL
+      export BRIEFING_LISTEN_DIR BRIEFING_SCORER BRIEFING_EMBED_URL BRIEFING_EMBED_MODEL BRIEFING_RERANK_URL
       export BRIEFING_RERANK_MODEL BRIEFING_JEV_URL BRIEFING_SEARXNG_URL BRIEFING_FIRECRAWL_URL
     ''
     + builtins.readFile ./briefing.sh;
@@ -287,28 +288,19 @@ in
       description = "Optional cover image embedded in every episode.";
     };
 
-    scorers = lib.mkOption {
-      type = lib.types.listOf (
-        lib.types.enum [
-          "jev"
-          "rerank"
-          "llm"
-        ]
-      );
-      default =
-        lib.optional cfg.jev.enable "jev" ++ lib.optional ai.reranker.enable "rerank" ++ [ "llm" ];
-      defaultText = lib.literalMD "jev (with `jev.enable`), rerank (with the reranker), llm";
+    scorer = lib.mkOption {
+      type = lib.types.enum [
+        "jev"
+        "rerank"
+      ];
+      default = "jev";
       description = ''
-        Relevance scorers, tried in order until one works. With jev or rerank,
-        the LLM only reviews the top `maxStories * 3` items (topic, hype,
-        newsworthiness); with llm alone it scores the whole shortlist.
+        Relevance scorer. "jev" sends item titles and snippets (public news)
+        to TypeSafe Jev with personal-typesafe-api-key from personal.yaml;
+        "rerank" uses the local reranker. The LLM then reviews only the top
+        `maxStories * 3` items, and scores everything itself if the scorer fails.
       '';
     };
-
-    jev.enable = lib.mkEnableOption ''
-      TypeSafe Jev as a scorer. It sends item titles and snippets (public news)
-      to api.typesafe.ai and reads its key from personal-typesafe-api-key
-    '';
 
     similarity = {
       dedup = lib.mkOption {
@@ -434,6 +426,10 @@ in
         message = "_custom.services.ai.briefing requires enableOmniRoute, enableSupertonic and enableFirecrawl.";
       }
       {
+        assertion = cfg.scorer != "rerank" || ai.reranker.enable;
+        message = ''_custom.services.ai.briefing.scorer = "rerank" needs _custom.services.ai.reranker.enable; use "jev" otherwise.'';
+      }
+      {
         assertion = config._custom.services.searxng.enable;
         message = "_custom.services.ai.briefing corroborates stories through _custom.services.searxng.";
       }
@@ -447,10 +443,9 @@ in
       _: lib.mapAttrs (_: lib.mkDefault)
     ) defaultSources;
 
-    # Its own copy: wosarcher's secret is owned by the wosarcher user.
-    sops.secrets.briefing-typesafe-api-key = lib.mkIf cfg.jev.enable {
+    # Only rendered into the briefing.env template, so it keeps sops' default owner.
+    sops.secrets.personal-typesafe-api-key = lib.mkIf useJev {
       sopsFile = ../../../../../secrets-sops/personal.yaml;
-      key = "personal-typesafe-api-key";
     };
 
     # The market API key secrets are declared by the home-screen module.
@@ -464,8 +459,8 @@ in
         + lib.optionalString homeScreen.fred.enable ''
           FRED_API_KEY=${config.sops.placeholder.personal-fred-api-key}
         ''
-        + lib.optionalString cfg.jev.enable ''
-          JEV_API_KEY=${config.sops.placeholder.briefing-typesafe-api-key}
+        + lib.optionalString useJev ''
+          JEV_API_KEY=${config.sops.placeholder.personal-typesafe-api-key}
         '';
     };
 

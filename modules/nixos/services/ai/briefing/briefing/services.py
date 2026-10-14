@@ -6,7 +6,7 @@ Endpoints come from the environment (the `briefing` wrapper sets them):
   BRIEFING_JEV_URL, JEV_API_KEY                 TypeSafe Jev /systemone (calibrated 0-3)
   BRIEFING_SEARXNG_URL                          SearXNG JSON API
   BRIEFING_FIRECRAWL_URL                        Firecrawl /v1
-  BRIEFING_SCORERS                              scorer order, e.g. "jev rerank llm"
+  BRIEFING_SCORER                               jev or rerank (the LLM is the fallback)
 """
 
 import json
@@ -202,8 +202,8 @@ def rerank_scores(texts, query, *, batch=32):
     return values
 
 
-def scorer_order():
-    return env("BRIEFING_SCORERS", "llm").split()
+def scorer_name():
+    return env("BRIEFING_SCORER", "rerank")
 
 
 # --- search and fetch -------------------------------------------------------
