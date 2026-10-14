@@ -449,7 +449,13 @@ in
                   echo "Timed out waiting for ${proxy.serviceName} on port ${toString proxy.backendPort}" >&2
                   exit 1
                 '';
-                ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${sscAddress}:${toString proxy.backendPort}";
+                # A user service cannot be bound to this system unit, so when it
+                # stops (e.g. with the graphical session) the proxy would keep
+                # forwarding to a dead port. Exiting when idle makes the next
+                # connection run ExecStartPre again, which restarts it.
+                ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${
+                  lib.optionalString (proxy.serviceScope == "user") "--exit-idle-time=5min "
+                }${sscAddress}:${toString proxy.backendPort}";
               }
               // lib._custom.strictNetworkService
               // {
