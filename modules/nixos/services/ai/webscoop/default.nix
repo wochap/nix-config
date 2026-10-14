@@ -20,6 +20,24 @@ let
   );
   windowCmd = action: "${lib.getExe webscoopWindow} ${action}";
 
+  healthcheck = pkgs.writeShellApplication {
+    name = "webscoop-healthcheck";
+    runtimeInputs = [
+      webscoop
+      pkgs.jq
+      pkgs.libnotify
+    ];
+    runtimeEnv.NODE_EXTRA_CA_CERTS = environment.NODE_EXTRA_CA_CERTS;
+    text = builtins.readFile ./scripts/webscoop-healthcheck.sh;
+  };
+  healthcheckArgs = lib.escapeShellArgs (
+    [
+      (toString cfg.webscoop.healthcheck.tolerance)
+      cfg.webscoop.healthcheck.query
+    ]
+    ++ lib.mapAttrsToList (recipe: count: "${recipe}=${toString count}") cfg.webscoop.healthcheck.expected
+  );
+
   # GET /webscoop/<recipe>?a=1&b=2 -> webscoop run <recipe> --var a=1 --var b=2
   # Replies with the JSON array of rows.
   webscoopRun = pkgs.writeShellScript "webscoop-run" ''
@@ -60,6 +78,38 @@ in
 {
   options._custom.services.ai.webscoop = {
     enable = lib.mkEnableOption { };
+    healthcheck = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Run a daily canary that notifies when a search recipe returns a different number of results.";
+      };
+      onCalendar = lib.mkOption {
+        type = lib.types.str;
+        default = "*-*-* 09:00:00";
+        description = "systemd OnCalendar for the healthcheck.";
+      };
+      query = lib.mkOption {
+        type = lib.types.str;
+        default = "cats";
+        description = "Search query used by the healthcheck.";
+      };
+      tolerance = lib.mkOption {
+        type = lib.types.ints.unsigned;
+        default = 1;
+        description = "Allowed difference (+/-) between the expected and actual result count.";
+      };
+      expected = lib.mkOption {
+        type = lib.types.attrsOf lib.types.ints.positive;
+        # Snapshot taken 2026-10-14 with query "cats".
+        default = {
+          google-search-results = 8;
+          duckduckgo-search-results = 10;
+          bing-search-results = 8;
+        };
+        description = "Expected number of results per recipe; update when a search engine legitimately changes.";
+      };
+    };
     webhook = {
       enable = lib.mkOption {
         type = lib.types.bool;
@@ -81,6 +131,28 @@ in
   config = lib.mkIf (cfg.enable && cfg.webscoop.enable) {
     _custom.hm = {
       imports = [ inputs.webscoop.homeManagerModules.webscoop ];
+
+      home.packages = [ healthcheck ];
+
+      systemd.user.services.webscoop-healthcheck = lib.mkIf cfg.webscoop.healthcheck.enable {
+        Unit.Description = "Check webscoop search recipes still return the expected result count";
+        Service = {
+          Type = "oneshot";
+          # Timers catch up right after resume, before the network is back.
+          ExecStartPre = lib.optional config.networking.networkmanager.enable "${config.networking.networkmanager.package}/bin/nm-online -s -q -t 120";
+          ExecStart = "${lib.getExe healthcheck} ${healthcheckArgs}";
+          TimeoutStartSec = "15min";
+        };
+      };
+      systemd.user.timers.webscoop-healthcheck = lib.mkIf cfg.webscoop.healthcheck.enable {
+        Unit.Description = "Schedule the webscoop recipes healthcheck";
+        Timer = {
+          OnCalendar = cfg.webscoop.healthcheck.onCalendar;
+          Persistent = true;
+          Unit = "webscoop-healthcheck.service";
+        };
+        Install.WantedBy = [ "timers.target" ];
+      };
 
       programs.webscoop = {
         enable = true;
