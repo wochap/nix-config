@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract notes from class transcripts using omniroute-chat."""
+"""Extract notes from class transcripts with the agents CLI, agents-server or omniroute-chat."""
 
 import os
 import argparse
@@ -7,6 +7,8 @@ import json
 import re
 import subprocess
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 import tiktoken
 
@@ -42,6 +44,101 @@ def load_prompt(prompt_path: Path) -> str:
     return prompt_path.read_text(encoding="utf-8").strip()
 
 
+BACKENDS = ("agents", "agents-server", "omniroute")
+DEFAULT_MODELS = {
+    "agents": "claude/claude-sonnet-5-5",
+    "agents-server": "claude/claude-sonnet-5-5",
+    "omniroute": "desktop-free",
+}
+
+
+def fail(message: str, stderr: str = "") -> None:
+    print(f"Error: {message}", file=sys.stderr)
+    if stderr:
+        print(f"stderr: {stderr}", file=sys.stderr)
+    sys.exit(1)
+
+
+def run_command(cmd: list[str], stdin: str) -> str:
+    try:
+        result = subprocess.run(
+            cmd, input=stdin, text=True, capture_output=True, check=True
+        )
+    except FileNotFoundError:
+        fail(f"Command '{cmd[0]}' not found. Make sure it is available in your PATH.")
+    except subprocess.CalledProcessError as e:
+        fail(f"{cmd[0]} exited with {e.returncode}", e.stderr)
+    return result.stdout
+
+
+def chat_request(message: str, model: str, temperature: float) -> dict:
+    """An OpenAI-compatible chat request."""
+    return {
+        "model": model,
+        "messages": [{"role": "user", "content": message}],
+        "stream": False,
+        "temperature": temperature,
+    }
+
+
+def run_agents(message: str, model: str) -> str:
+    """One headless `agents run` without tools; the prompt goes on stdin."""
+    agent, _, agent_model = model.partition("/")
+    cmd = ["agents", "run", "-q", "--no-tools", "-a", agent]
+    if agent_model:
+        cmd += ["-m", agent_model]
+    return run_command(cmd + ["-"], message)
+
+
+def run_agents_server(message: str, model: str, temperature: float) -> str:
+    """POST to agents-server's /v1/chat/completions."""
+    url = os.environ.get("AGENTS_SERVER_URL", "https://agents.wochap.local/v1")
+    key_file = os.environ.get("AGENTS_SERVER_API_KEY_FILE")
+    key = os.environ.get("AGENTS_API_KEY")
+    if not key and key_file:
+        try:
+            key = Path(key_file).read_text(encoding="utf-8").strip()
+        except OSError as e:
+            fail(f"could not read agents-server API key: {e}")
+    if not key:
+        fail("set AGENTS_API_KEY or AGENTS_SERVER_API_KEY_FILE")
+
+    request = urllib.request.Request(
+        f"{url.rstrip('/')}/chat/completions",
+        data=json.dumps(chat_request(message, model, temperature)).encode(),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {key}",
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=1800) as response:
+            body = json.load(response)
+    except urllib.error.HTTPError as e:
+        fail(f"agents-server returned HTTP {e.code}", e.read().decode(errors="replace"))
+    except urllib.error.URLError as e:
+        fail(f"could not reach agents-server at {url}: {e.reason}")
+
+    try:
+        content = body["choices"][0]["message"]["content"]
+    except (KeyError, IndexError, TypeError):
+        content = None
+    if not content:
+        fail("agents-server returned no usable message content")
+    return content
+
+
+def run_omniroute(message: str, model: str, temperature: float) -> str:
+    return run_command(
+        [
+            "omniroute-chat",
+            "--reasoning-effort",
+            os.environ.get("OMNIROUTE_REASONING_EFFORT", "none"),
+        ],
+        json.dumps(chat_request(message, model, temperature)),
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(description="Extract notes from class transcripts")
 
@@ -59,17 +156,25 @@ def main():
     )
 
     parser.add_argument(
+        "--backend",
+        choices=BACKENDS,
+        default=os.environ.get("COURSE_NOTES_BACKEND", "agents"),
+        help="Where to generate the notes (default: COURSE_NOTES_BACKEND or agents)",
+    )
+
+    parser.add_argument(
         "--model",
         type=str,
         default=None,
-        help="Model to use (overrides OMNIROUTE_MODEL)",
+        help="Model to use; <agent>/<model> for agents and agents-server "
+        "(default: COURSE_NOTES_MODEL or the backend's default)",
     )
 
     parser.add_argument(
         "--temperature",
         type=float,
         default=0.1,
-        help="Generation temperature (default: 0.1)",
+        help="Generation temperature, agents-server and omniroute only (default: 0.1)",
     )
 
     args = parser.parse_args()
@@ -118,72 +223,27 @@ def main():
     # Build the user message.
     user_message = f"{prompt}\n\n--- TRANSCRIPT ---\n{cleaned}"
 
-    # Build the OpenAI-compatible request.
-    request = {
-        "model": args.model if args.model else "desktop-free",
-        "messages": [
-            {
-                "role": "user",
-                "content": user_message,
-            }
-        ],
-        "stream": False,
-        "temperature": args.temperature,
-    }
+    # COURSE_NOTES_MODEL belongs to COURSE_NOTES_BACKEND, not to a --backend override.
+    env_model = None
+    if args.backend == os.environ.get("COURSE_NOTES_BACKEND", "agents"):
+        env_model = os.environ.get("COURSE_NOTES_MODEL")
+    model = args.model or env_model or DEFAULT_MODELS[args.backend]
+    print(f"Backend: {args.backend}, model: {model}", file=sys.stderr)
 
     # Generate the output path next to the transcript.
     # Example: lecture.txt -> lecture_note.md
     output_file = args.transcript_file.with_name(f"{args.transcript_file.stem}_note.md")
 
-    # Call omniroute-chat.
-    try:
-        result = subprocess.run(
-            [
-                "omniroute-chat",
-                "--reasoning-effort",
-                os.environ.get("OMNIROUTE_REASONING_EFFORT", "none"),
-            ],
-            input=json.dumps(request),
-            text=True,
-            capture_output=True,
-            check=True,
-        )
+    if args.backend == "agents":
+        notes = run_agents(user_message, model)
+    elif args.backend == "agents-server":
+        notes = run_agents_server(user_message, model, args.temperature)
+    else:
+        notes = run_omniroute(user_message, model, args.temperature)
 
-        # Save the generated notes as a Markdown file.
-        output_file.write_text(
-            result.stdout.strip() + "\n",
-            encoding="utf-8",
-        )
-
-        print(
-            f"Notes saved to: {output_file}",
-            file=sys.stderr,
-        )
-
-    except subprocess.CalledProcessError as e:
-        print(
-            f"Error running omniroute-chat: {e}",
-            file=sys.stderr,
-        )
-
-        if e.stderr:
-            print(
-                f"stderr: {e.stderr}",
-                file=sys.stderr,
-            )
-
-        sys.exit(1)
-
-    except FileNotFoundError:
-        print(
-            "Error: Command 'omniroute-chat' not found.",
-            file=sys.stderr,
-        )
-        print(
-            "Make sure it is available in your PATH.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+    # Save the generated notes as a Markdown file.
+    output_file.write_text(notes.strip() + "\n", encoding="utf-8")
+    print(f"Notes saved to: {output_file}", file=sys.stderr)
 
 
 if __name__ == "__main__":
