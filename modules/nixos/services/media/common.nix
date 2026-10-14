@@ -116,6 +116,8 @@ rec {
   qbittorrentHost = containerName (
     if cfg.services.qbittorrent.vpn.enable then "vpn" else "qbittorrent"
   );
+  # slskd as the other containers see it.
+  slskdHost = containerName (if cfg.services.slskd.vpn then "vpn" else "slskd");
   apiKeyFile = name: config.sops.secrets.${cfg.declarative.apiKeys.${name}.sopsKey}.path;
   adminPasswordFile = config.sops.secrets.${cfg.declarative.admin.passwordSecret.sopsKey}.path;
   # Bookkeeping of the bootstrap units, never an app's own state.

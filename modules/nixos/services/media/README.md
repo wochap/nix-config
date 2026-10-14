@@ -1,6 +1,6 @@
 # Media stack
 
-Self-hosted media server under `_custom.services.media`: request, download, organize and stream movies, series, ebooks and audiobooks. Each service is a podman container. All containers run as the shared `media` user (2000:2000) on a shared `media` podman network with DNS. An optional declarative layer wires the services together from SOPS secrets.
+Self-hosted media server under `_custom.services.media`: request, download, organize and stream movies, series, music, ebooks and audiobooks. Each service is a podman container. All containers run as the shared `media` user (2000:2000) on a shared `media` podman network with DNS. An optional declarative layer wires the services together from SOPS secrets.
 
 ## Services
 
@@ -10,6 +10,7 @@ Self-hosted media server under `_custom.services.media`: request, download, orga
 | [Seerr](seerr/README.md) | Users request movies and series | user | `https://seerr.wochap.local` | `https://seerr.<domain>` | `media-seerr:5055` |
 | [Calibre-Web Automated](calibre-web/README.md) | Ebook library and reader | user | `https://calibre-web.wochap.local` | `https://calibre-web.<domain>` | `media-calibre-web:8083` |
 | [Audiobookshelf](audiobookshelf/README.md) | Audiobook library and player | user | `https://audiobookshelf.wochap.local` | `https://audiobookshelf.<domain>` | `media-audiobookshelf:13378` |
+| [Navidrome](navidrome/README.md) | Streams music (Subsonic API) | user | `https://navidrome.wochap.local` | `https://navidrome.<domain>` | `media-navidrome:4533` |
 | [Sonarr](sonarr/README.md) | Finds and imports series | admin | `http://127.0.1.1:21101` | no | `media-sonarr:8989` |
 | [Radarr](radarr/README.md) | Finds and imports movies | admin | `http://127.0.1.1:21111` | no | `media-radarr:7878` |
 | [Prowlarr](prowlarr/README.md) | Manages indexers for the others | admin | `http://127.0.1.1:21121` | no | `media-prowlarr:9696` |
@@ -17,8 +18,11 @@ Self-hosted media server under `_custom.services.media`: request, download, orga
 | [Bazarr](bazarr/README.md) | Downloads subtitles | admin | `http://127.0.1.1:21141` | no | `media-bazarr:6767` |
 | [LazyLibrarian](lazylibrarian/README.md) | Finds ebooks and audiobooks | admin | `http://127.0.1.1:21151` | no | `media-lazylibrarian:5299` |
 | [FlareSolverr](flaresolverr/README.md) | Solves Cloudflare challenges for Prowlarr | admin (no UI) | `http://127.0.1.1:21161` | no | `media-flaresolverr:8191` |
+| [Lidarr](lidarr/README.md) | Finds and imports music | admin | `http://127.0.1.1:21171` | no | `media-lidarr:8686` |
+| [slskd](slskd/README.md) | Downloads from Soulseek | admin | `http://127.0.1.1:21181` | no | `media-slskd:5030` (`media-vpn:5030` with VPN) |
+| [Soularr](soularr/README.md) | Searches Soulseek for albums Lidarr misses | admin (no UI) | none | no | none |
 
-`<domain>` is `web-gate.domain`, for example `gdesktop.geanmar.com`. User apps also answer on their loopback port (`127.0.1.1:21001`, `21011`, `21021`, `21031`).
+`<domain>` is `web-gate.domain`, for example `gdesktop.geanmar.com`. User apps also answer on their loopback port (`127.0.1.1:21001`, `21011`, `21021`, `21031`, `21041`).
 
 ### Who can reach which URL
 
@@ -29,7 +33,7 @@ Self-hosted media server under `_custom.services.media`: request, download, orga
 | LAN vhost, `https://<name>.<web-gate.domain>` | `https://jellyfin.gdesktop.geanmar.com` | Any device on the LAN, on trusted connections only. On when `_custom.services.web-gate.proxies.<name>.expose.enable` is true. See `../web-gate/README.md`. |
 | Container, `http://media-<name>:<port>` | `http://media-sonarr:8989` | Other containers on the `media` network only. Use this address when you connect one service to another. |
 
-gdesktop exposes Jellyfin, Seerr, Audiobookshelf and Calibre-Web on the LAN. Admin UIs never get a LAN vhost: they have no web-gate in front, so keep them on the host.
+gdesktop exposes Jellyfin, Seerr, Audiobookshelf, Calibre-Web and Navidrome on the LAN. Admin UIs never get a LAN vhost: they have no web-gate in front, so keep them on the host.
 
 ## Architecture
 
@@ -53,17 +57,27 @@ gdesktop exposes Jellyfin, Seerr, Audiobookshelf and Calibre-Web on the LAN. Adm
 
    LazyLibrarian moves ebooks     --> /data/media/books/ingest --> Calibre-Web Automated
    LazyLibrarian moves audiobooks --> /data/media/audiobooks    --> Audiobookshelf
+
+   Music:
+     Prowlarr --indexers--> Lidarr --grabs--> qBittorrent --> /data/torrents/music ----+
+     Lidarr <--wanted albums-- Soularr --searches--> slskd --> /data/soulseek/downloads -+
+                                  (then asks Lidarr to import the album folder)          |
+     Lidarr imports both into /data/media/music <----------------------------------------+
+     /data/media/music --> Navidrome --> listeners (web, Subsonic apps)
+                       --> slskd shares it read-only on Soulseek
 ```
 
 Storage. `dataRoot` is mounted at `/data` in every container with the same layout. Imports are hardlinks, so qBittorrent keeps seeding without a second copy, and no app needs remote path mappings.
 
 | Host | Container | Used by |
 |---|---|---|
-| `dataRoot/torrents/{movies,series,books,audiobooks}` | `/data/torrents/...` | qBittorrent categories |
+| `dataRoot/torrents/{movies,series,books,audiobooks,music}` | `/data/torrents/...` | qBittorrent categories |
 | `dataRoot/media/{movies,series}` | `/data/media/...` | Sonarr/Radarr write, Jellyfin and Bazarr read |
 | `dataRoot/media/books/ingest` | `/data/media/books/ingest` | LazyLibrarian writes, Calibre-Web Automated consumes |
 | `dataRoot/media/books/library` | `/data/media/books/library` | Calibre library |
 | `dataRoot/media/audiobooks` | `/data/media/audiobooks` | LazyLibrarian writes, Audiobookshelf watches |
+| `dataRoot/soulseek/{downloads,incomplete}` | `/data/soulseek/...` | slskd writes, Soularr sorts, Lidarr imports |
+| `dataRoot/media/music` | `/data/media/music` | Lidarr writes, Navidrome reads, slskd shares |
 | `stateDir/<svc>` (`/var/lib/media-server/<svc>`) | `/config` | Per-service state |
 
 `media-data-dirs.service` creates the `dataRoot` tree after the disk is mounted.
@@ -81,16 +95,20 @@ All under `_custom.services.media`. Defined in `default.nix`.
 | `bindAddress` | `127.0.1.1` | Host address the loopback ports are published on. |
 | `network.{name,interface,subnet,gateway}` | `media`, `podman-media`, `10.90.0.0/24`, `10.90.0.1` | Shared podman network. |
 | `images.<svc>` | pinned tag + digest | Container image. See [Upgrading images](#upgrading-images). |
-| `services.<svc>.enable` | `false` | Turns on one service. `<svc>` is `jellyfin`, `seerr`, `calibreWeb`, `audiobookshelf`, `sonarr`, `radarr`, `prowlarr`, `qbittorrent`, `bazarr`, `lazylibrarian` or `flaresolverr`. |
+| `services.<svc>.enable` | `false` | Turns on one service. `<svc>` is `jellyfin`, `seerr`, `calibreWeb`, `audiobookshelf`, `navidrome`, `sonarr`, `radarr`, `lidarr`, `prowlarr`, `qbittorrent`, `bazarr`, `lazylibrarian`, `flaresolverr`, `slskd` or `soularr`. |
 | `services.<svc>.port` | per service | Base port. The web UI is published on `port + 1`. |
 | `services.<svc>.proxy` | `true` for user apps | Adds the `<name>.wochap.local` vhost. |
 | `services.jellyfin.hardwareAcceleration` | `null` | `"vaapi"` or `"nvidia"`. See [Jellyfin](jellyfin/README.md). |
 | `services.jellyfin.vaapiDevices` | `[ "/dev/dri/renderD128" ]` | Render nodes for VAAPI. |
 | `services.qbittorrent.vpn.*` | off | gluetun sidecar. See [qBittorrent VPN](qbittorrent/README.md#vpn-optional). |
+| `services.slskd.vpn` | `false` | Run slskd in the same gluetun sidecar. See [slskd VPN](slskd/README.md#vpn-optional). |
+| `services.slskd.listenPort` | `50300` | Soulseek peer port. |
+| `services.slskd.credentials.{sopsFile,sopsKey}` | `null`, `media-soulseek-env` | Soulseek account as an env file. See [slskd](slskd/README.md#b-with-declarative). |
+| `services.soularr.interval` | `300` | Seconds between Soularr runs. Soularr has no port or proxy options. |
 | `declarative.enable` | `false` | Turns on the [declarative layer](#declarative-layer). |
 | `declarative.admin.username` | `admin` | Shared admin login. |
 | `declarative.admin.passwordSecret.{sopsFile,sopsKey}` | required, `media-admin-password` | Shared admin password. |
-| `declarative.apiKeys.<svc>.{sopsFile,sopsKey}` | required, `media-<svc>-api-key` | API keys of `sonarr`, `radarr`, `prowlarr`, `seerr`, `lazylibrarian`. Required only for enabled services. |
+| `declarative.apiKeys.<svc>.{sopsFile,sopsKey}` | required, `media-<svc>-api-key` | API keys of `sonarr`, `radarr`, `lidarr`, `prowlarr`, `seerr`, `lazylibrarian`, `slskd`. Required only for enabled services. |
 | `declarative.seerr.qualityProfile` | `HD-1080p` | Profile Seerr requests with. Falls back to the first profile. |
 
 LAN exposure is set outside this module, with `_custom.services.web-gate.proxies.<name>.expose.enable`.
@@ -137,7 +155,7 @@ Each service README has a Setup section with two variants: **A) without declarat
 0. With declarative: create the [secrets](#secrets), set `declarative`, rebuild, switch.
 1. [LazyLibrarian](lazylibrarian/README.md#setup). Mostly manual. B: copy its API key into SOPS for Prowlarr.
 2. [qBittorrent](qbittorrent/README.md#setup). B: automatic.
-3. [Sonarr](sonarr/README.md#setup) and [Radarr](radarr/README.md#setup). B: automatic, except optional profiles and renaming.
+3. [Sonarr](sonarr/README.md#setup), [Radarr](radarr/README.md#setup) and [Lidarr](lidarr/README.md#setup). B: automatic, except optional profiles and renaming.
 4. [Prowlarr](prowlarr/README.md#setup). B: only the indexers.
    Then [FlareSolverr](flaresolverr/README.md#setup). B: only tagging the Cloudflare-protected indexers.
 5. [Jellyfin](jellyfin/README.md#setup). B: only codecs and users.
@@ -145,7 +163,9 @@ Each service README has a Setup section with two variants: **A) without declarat
 7. [Bazarr](bazarr/README.md#setup). All manual.
 8. [Calibre-Web Automated](calibre-web/README.md#setup). All manual.
 9. [Audiobookshelf](audiobookshelf/README.md#setup). All manual.
-10. Optional: [qBittorrent VPN](qbittorrent/README.md#vpn-optional).
+10. [slskd](slskd/README.md#setup), then [Soularr](soularr/README.md#setup). B: automatic.
+11. [Navidrome](navidrome/README.md#setup). All manual.
+12. Optional: [qBittorrent VPN](qbittorrent/README.md#vpn-optional), shared by [slskd](slskd/README.md#vpn-optional).
 
 ## Declarative layer
 
@@ -153,25 +173,25 @@ Off by default, so hosts without the secrets still build. Only enabled services 
 
 **Rule:** automate only through a documented public API, config key or env var. Never write an app's database or config file. Never depend on a password hash format or an endpoint the UI uses internally. Steps without such a route stay manual.
 
-- **API keys** come from SOPS. sops-nix renders them into `/run/secrets/rendered/media-<name>.env`, which sets a documented env var: `SONARR__AUTH__APIKEY`, `RADARR__AUTH__APIKEY`, `PROWLARR__AUTH__APIKEY` ([Servarr docs](https://wiki.servarr.com/sonarr/environment-variables)), Seerr's `API_KEY`. A changed key restarts the container.
+- **API keys** come from SOPS. sops-nix renders them into `/run/secrets/rendered/media-<name>.env`, which sets a documented env var: `SONARR__AUTH__APIKEY`, `RADARR__AUTH__APIKEY`, `LIDARR__AUTH__APIKEY`, `PROWLARR__AUTH__APIKEY` ([Servarr docs](https://wiki.servarr.com/sonarr/environment-variables)), Seerr's `API_KEY`, slskd's `SLSKD_API_KEY`. Soularr gets the Lidarr and slskd keys the same way. A changed key restarts the container.
 - **Admin login**: `admin.username` with the SOPS password, set only on apps that have no login yet.
 - **Bootstrap units**: `media-<name>-config.service`, a oneshot that runs after `podman-media-<name>.service` and again whenever the container restarts. It waits up to 5 minutes for the API, adds what is missing, and never removes or edits what exists. Two exceptions: the qBittorrent host in Sonarr/Radarr follows `services.qbittorrent.vpn.enable`, and qBittorrent's auth bypass always includes the `media` subnet.
 
 | Unit | Configures |
 |---|---|
 | `media-qbittorrent-config` | Auth bypass, login (once), save path, categories |
-| `media-sonarr-config`, `media-radarr-config` | Login, root folder, qBittorrent download client |
-| `media-prowlarr-config` | Login, Sonarr/Radarr/LazyLibrarian apps with Full Sync, FlareSolverr proxy and tag |
+| `media-sonarr-config`, `media-radarr-config`, `media-lidarr-config` | Login, root folder, qBittorrent download client |
+| `media-prowlarr-config` | Login, Sonarr/Radarr/Lidarr/LazyLibrarian apps with Full Sync, FlareSolverr proxy and tag |
 | `media-jellyfin-config` | Startup wizard and admin, libraries, hardware acceleration |
 | `media-seerr-config` | Jellyfin sign-in, libraries, URLs, Radarr and Sonarr |
 
 Manual on purpose:
 
-- Users in Jellyfin, Seerr, Audiobookshelf and Calibre-Web. Seerr permissions and approval rules.
+- Users in Jellyfin, Seerr, Audiobookshelf, Calibre-Web and Navidrome. Seerr permissions and approval rules.
 - Indexers, quality profiles, renaming, Jellyfin codecs: personal choices or third-party accounts.
 - Bazarr: its settings endpoint is UI-internal, and its API key cannot be preset.
 - LazyLibrarian: its API key can be preset only by editing `config.ini`, and `writeCFG` takes undocumented config names.
-- Calibre-Web Automated and Audiobookshelf: not covered.
+- Calibre-Web Automated, Audiobookshelf and Navidrome: not covered (Navidrome has no documented way to create the first admin).
 
 ## Secrets
 
@@ -181,8 +201,8 @@ Each secret has a `sopsFile` (which file) and a `sopsKey` (which key, any name).
 
    ```sh
    openssl rand -base64 24 | tr -d '/+=' | head -c 24; echo   # admin password
-   openssl rand -hex 16                                        # Sonarr, Radarr, Prowlarr key
-   openssl rand -hex 32                                        # Seerr key
+   openssl rand -hex 16                                        # Sonarr, Radarr, Lidarr, Prowlarr key
+   openssl rand -hex 32                                        # Seerr, slskd key
    ```
 
 2. Add them to the SOPS file:
@@ -195,8 +215,13 @@ Each secret has a `sopsFile` (which file) and a `sopsKey` (which key, any name).
    local-media-admin-password: "q3VhY1bT9xKd0LwZpE7sRf2N"
    local-media-sonarr-api-key: "9c1f0e4b7a2d43f8a6e5b0c1d2e3f405"
    local-media-radarr-api-key: "..."
+   local-media-lidarr-api-key: "..."
    local-media-prowlarr-api-key: "..."
    local-media-seerr-api-key: "..."
+   local-media-slskd-api-key: "..."
+   local-media-soulseek-env: |
+     SLSKD_SLSK_USERNAME=myname
+     SLSKD_SLSK_PASSWORD=...
    local-media-lazylibrarian-api-key: "pending"
    ```
 
@@ -205,9 +230,11 @@ Each secret has a `sopsFile` (which file) and a `sopsKey` (which key, any name).
 
 | Secret | Format | Notes |
 |---|---|---|
-| Admin password | Letters and digits | Login on qBittorrent, Sonarr, Radarr, Prowlarr, Jellyfin; Seerr signs in to Jellyfin with it. Where an app already has a login, use that same username and password. |
-| Sonarr, Radarr, Prowlarr key | 32 lowercase hex | To keep an existing key: `grep -oP '(?<=<ApiKey>)[0-9a-f]{32}' /var/lib/media-server/sonarr/config.xml`. |
+| Admin password | Letters and digits | Login on qBittorrent, Sonarr, Radarr, Lidarr, Prowlarr, slskd, Jellyfin; Seerr signs in to Jellyfin with it. Where an app already has a login, use that same username and password. |
+| Sonarr, Radarr, Lidarr, Prowlarr key | 32 lowercase hex | To keep an existing key: `grep -oP '(?<=<ApiKey>)[0-9a-f]{32}' /var/lib/media-server/sonarr/config.xml`. |
 | Seerr key | Any string | Replaces the key Seerr generated. |
+| slskd key | 16 to 255 characters | Used by Soularr. |
+| Soulseek env | Env file | `SLSKD_SLSK_USERNAME`, `SLSKD_SLSK_PASSWORD`. Set through `services.slskd.credentials`, not `declarative`. |
 | LazyLibrarian key | 32 characters | Copy of the key in LazyLibrarian › Config › Interface. Per host. |
 
 A new key replaces the old one at the next container start. Clients outside this stack that used the old key need the new one.
@@ -256,5 +283,5 @@ LazyLibrarian then generates a new API key: update its SOPS value (see [Secrets]
 
 ## Notes
 
-- Sonarr, Radarr, Prowlarr, Bazarr and qBittorrent use rootless home-operations images with `--read-only`. Jellyfin, Seerr, Audiobookshelf, FlareSolverr and gluetun use upstream images; FlareSolverr keeps the image's own user, since it patches its chromedriver in place. LazyLibrarian and Calibre-Web Automated ship only as s6/PUID images: they start as root with a minimal capability set, then drop privileges.
+- Sonarr, Radarr, Lidarr, Prowlarr, Bazarr and qBittorrent use rootless home-operations images with `--read-only`. Jellyfin, Seerr, Audiobookshelf, Navidrome, slskd, Soularr, FlareSolverr and gluetun use upstream images; Navidrome and Soularr also run read-only, slskd cannot (its .NET binary unpacks itself at start); FlareSolverr keeps the image's own user, since it patches its chromedriver in place. LazyLibrarian and Calibre-Web Automated ship only as s6/PUID images: they start as root with a minimal capability set, then drop privileges.
 - The desktop user is in group `media`. Containers run with `UMASK=002`, so library files stay group-writable.

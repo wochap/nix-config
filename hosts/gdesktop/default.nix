@@ -182,6 +182,12 @@ in
       services.lazylibrarian.enable = true;
       services.calibreWeb.enable = true;
       services.audiobookshelf.enable = true;
+      services.navidrome.enable = true;
+      services.lidarr.enable = true;
+      services.slskd.enable = true;
+      services.slskd.credentials.sopsFile = ../../secrets-sops/local.yaml;
+      services.slskd.credentials.sopsKey = "local-media-soulseek-env";
+      services.soularr.enable = true;
       # API keys: see modules/nixos/services/media/README.md, "Secrets".
       declarative = {
         enable = true;
@@ -191,7 +197,7 @@ in
           sopsKey = "local-media-admin-password";
         };
         apiKeys =
-          lib.genAttrs [ "sonarr" "radarr" "prowlarr" "seerr" ] (name: {
+          lib.genAttrs [ "sonarr" "radarr" "lidarr" "prowlarr" "seerr" "slskd" ] (name: {
             sopsFile = ../../secrets-sops/local.yaml;
             sopsKey = "local-media-${name}-api-key";
           })
@@ -208,6 +214,7 @@ in
     _custom.services.web-gate.proxies.seerr.expose.enable = true;
     _custom.services.web-gate.proxies.audiobookshelf.expose.enable = true;
     _custom.services.web-gate.proxies.calibre-web.expose.enable = true;
+    _custom.services.web-gate.proxies.navidrome.expose.enable = true;
 
     # Media UIs other household members use, reachable from the LAN as
     # https://<name>.gdesktop.geanmar.com. They rely on the app's own login: their

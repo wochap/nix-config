@@ -36,6 +36,10 @@ let
     "torrents/series"
     "torrents/books"
     "torrents/audiobooks"
+    "torrents/music"
+    "soulseek"
+    "soulseek/downloads"
+    "soulseek/incomplete"
     "media"
     "media/movies"
     "media/series"
@@ -43,6 +47,7 @@ let
     "media/books/library"
     "media/books/ingest"
     "media/audiobooks"
+    "media/music"
   ];
 
   mkServiceOptions =
@@ -71,15 +76,18 @@ let
       };
     };
 
-  # API keys the declarative layer uses. Sonarr, Radarr, Prowlarr and Seerr
-  # take theirs from SOPS through a documented env var. LazyLibrarian has no
-  # such route; its SOPS value is a copy of the key shown in its UI.
+  # API keys the declarative layer uses. Sonarr, Radarr, Lidarr, Prowlarr,
+  # Seerr and slskd take theirs from SOPS through a documented env var.
+  # LazyLibrarian has no such route; its SOPS value is a copy of the key shown
+  # in its UI.
   apiKeyServices = [
     "sonarr"
     "radarr"
+    "lidarr"
     "prowlarr"
     "seerr"
     "lazylibrarian"
+    "slskd"
   ];
 in
 {
@@ -95,6 +103,10 @@ in
     ./calibre-web
     ./audiobookshelf
     ./flaresolverr
+    ./navidrome
+    ./lidarr
+    ./slskd
+    ./soularr
   ];
 
   options._custom.services.media = {
@@ -249,6 +261,22 @@ in
         type = lib.types.str;
         default = "ghcr.io/flaresolverr/flaresolverr:v3.5.2@sha256:c80ae007ce2ccdcd217a12426e4f039ef763ff90738c808d38810c3e59323767";
       };
+      navidrome = lib.mkOption {
+        type = lib.types.str;
+        default = "docker.io/deluan/navidrome:0.64.2@sha256:38dc2727bfcfd5ede290f8ada114fc90368146f265ae4701ddddbcbe2a44ee52";
+      };
+      lidarr = lib.mkOption {
+        type = lib.types.str;
+        default = "ghcr.io/home-operations/lidarr:3.1.6.5078@sha256:b4c60ae24ff264bcdfd8d5562982d99105c17b82c28a6986498f6fb215b7f42e";
+      };
+      slskd = lib.mkOption {
+        type = lib.types.str;
+        default = "docker.io/slskd/slskd:0.26.1@sha256:588af49abc3088d639c8f1174d3bfad6e92c093a275a593140e3ac9311ebf6c4";
+      };
+      soularr = lib.mkOption {
+        type = lib.types.str;
+        default = "docker.io/mrusse08/soularr:v1.2.2@sha256:c4f97924fabfce4e0de539d821ea7d20519b95c4815a707bacfc9d7212597f20";
+      };
       gluetun = lib.mkOption {
         type = lib.types.str;
         default = "docker.io/qmcgaw/gluetun:v3.41.3@sha256:fa19cc76b2af13d57a8d3dc3066f2ada061b1c761b8aecf989b3877c0486e027";
@@ -293,6 +321,10 @@ in
       audiobookshelf = mkServiceOptions {
         description = "Audiobookshelf";
         port = 21030;
+      };
+      navidrome = mkServiceOptions {
+        description = "Navidrome";
+        port = 21040;
       };
       sonarr = mkServiceOptions {
         description = "Sonarr";
@@ -367,6 +399,59 @@ in
         port = 21160;
         admin = true;
       };
+      lidarr = mkServiceOptions {
+        description = "Lidarr";
+        port = 21170;
+        admin = true;
+      };
+      slskd =
+        mkServiceOptions {
+          description = "slskd, a Soulseek client";
+          port = 21180;
+          admin = true;
+        }
+        // {
+          vpn = lib.mkEnableOption ''
+            routing slskd through the qBittorrent gluetun sidecar. Needs
+            services.qbittorrent.vpn.enable
+          '';
+          listenPort = lib.mkOption {
+            type = lib.types.port;
+            default = 50300;
+            description = ''
+              Soulseek peer port. Without the VPN it is published on all host
+              addresses, so other peers can connect in.
+            '';
+          };
+          credentials = {
+            sopsFile = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+              description = ''
+                SOPS file containing the Soulseek account as an env file
+                (SLSKD_SLSK_USERNAME, SLSKD_SLSK_PASSWORD). null leaves the
+                account to the slskd UI.
+              '';
+            };
+            sopsKey = lib.mkOption {
+              type = lib.types.nonEmptyStr;
+              default = "media-soulseek-env";
+              description = "Key containing the Soulseek env file in the SOPS file.";
+            };
+          };
+        };
+      soularr = {
+        enable = lib.mkEnableOption ''
+          Soularr, which searches Soulseek through slskd for the albums Lidarr
+          is missing and hands the downloads back to Lidarr. Needs the
+          declarative layer for the Lidarr and slskd API keys
+        '';
+        interval = lib.mkOption {
+          type = lib.types.ints.positive;
+          default = 300;
+          description = "Seconds between two runs.";
+        };
+      };
     };
   };
 
@@ -379,6 +464,18 @@ in
       {
         assertion = builtins.stringLength cfg.network.interface <= 15;
         message = "_custom.services.media.network.interface must be at most 15 characters.";
+      }
+      {
+        assertion =
+          !(cfg.services.slskd.enable && cfg.services.slskd.vpn)
+          || (cfg.services.qbittorrent.enable && cfg.services.qbittorrent.vpn.enable);
+        message = "_custom.services.media.services.slskd.vpn needs the qBittorrent VPN sidecar (services.qbittorrent.vpn.enable).";
+      }
+      {
+        assertion =
+          !cfg.services.soularr.enable
+          || (cfg.declarative.enable && cfg.services.lidarr.enable && cfg.services.slskd.enable);
+        message = "_custom.services.media.services.soularr needs lidarr, slskd and the declarative layer.";
       }
     ];
 

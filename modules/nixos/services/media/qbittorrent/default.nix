@@ -20,7 +20,12 @@ let
     "series"
     "books"
     "audiobooks"
+    "music"
   ];
+  # slskd can share this sidecar; gluetun then publishes its web UI too.
+  slskd = cfg.services.slskd;
+  slskdVpn = slskd.enable && slskd.vpn;
+  slskdWebPort = 5030;
 in
 {
   config = lib.mkIf (cfg.enable && svc.enable) {
@@ -56,12 +61,14 @@ in
       ${common.containerName vpnName} = lib.mkIf vpn.enable {
         image = cfg.images.gluetun;
         networks = [ cfg.network.name ];
-        ports = common.publish svc webPort;
+        ports = common.publish svc webPort ++ lib.optionals slskdVpn (common.publish slskd slskdWebPort);
         environment = {
           TZ = common.umaskEnv.TZ;
-          # Let the other containers reach the qBittorrent web UI through
-          # gluetun's firewall.
-          FIREWALL_INPUT_PORTS = toString webPort;
+          # Let the other containers reach the qBittorrent (and slskd) web UI
+          # through gluetun's firewall.
+          FIREWALL_INPUT_PORTS = lib.concatMapStringsSep "," toString (
+            [ webPort ] ++ lib.optional slskdVpn slskdWebPort
+          );
           FIREWALL_OUTBOUND_SUBNETS = cfg.network.subnet;
         }
         // vpn.environment;

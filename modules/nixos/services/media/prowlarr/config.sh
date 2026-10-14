@@ -1,7 +1,7 @@
 # media-prowlarr-config
 #
-# Sets the admin login while Prowlarr has none, and registers Sonarr, Radarr
-# and LazyLibrarian as applications with Full Sync, so Prowlarr pushes its
+# Sets the admin login while Prowlarr has none, and registers Sonarr, Radarr,
+# Lidarr and LazyLibrarian as applications with Full Sync, so Prowlarr pushes its
 # indexers to them, and adds FlareSolverr as an indexer proxy under the tag
 # "flaresolverr". An app or proxy that already exists is left as is. PROWLARR_* and the per-app variables come from the Nix module;
 # an empty *_URL means the app is disabled.
@@ -50,6 +50,9 @@ if [ -n "$SONARR_URL" ]; then
 fi
 if [ -n "$RADARR_URL" ]; then
   ensure_app Radarr "$RADARR_URL" "$(read_secret "$RADARR_API_KEY_FILE")"
+fi
+if [ -n "$LIDARR_URL" ]; then
+  ensure_app Lidarr "$LIDARR_URL" "$(read_secret "$LIDARR_API_KEY_FILE")"
 fi
 if [ -n "$LAZYLIBRARIAN_URL" ]; then
   # A copy of the key LazyLibrarian generated in its UI (no stable way to
