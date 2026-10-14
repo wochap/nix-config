@@ -11,8 +11,15 @@ let
   inherit (config._custom.globals) userName;
   inherit (pkgs._custom) wochap-ssc;
   homeScreen = config._custom.desktop.home-screen;
+  proxies = config._custom.services.web-gate.proxies;
+  host = "http://${wochap-ssc.meta.address}";
+  # Secrets the stages read from the environment, through briefing.env.
+  needsEnvFile = homeScreen.finnhub.enable || homeScreen.fred.enable || cfg.jev.enable;
 
-  python = pkgs.python3.withPackages (pythonPackages: [ pythonPackages.feedparser ]);
+  python = pkgs.python3.withPackages (pythonPackages: [
+    pythonPackages.feedparser
+    pythonPackages.numpy
+  ]);
   src = lib.fileset.toSource {
     root = ./.;
     fileset = ./briefing;
@@ -62,7 +69,7 @@ let
 
   profile = pkgs.writeText "briefing-profile.json" (
     builtins.toJSON {
-      inherit (cfg) show chapters;
+      inherit (cfg) show chapters similarity;
       interests = builtins.readFile cfg.interestsFile;
       daily = cfg.daily // {
         onCalendar = null;
@@ -100,8 +107,17 @@ let
       : "''${BRIEFING_SPEED:=${toString cfg.speed}}"
       : "''${SUPERTONIC_URL:=https://supertonic.${wochap-ssc.meta.domain}}"
       : "''${BRIEFING_LISTEN_DIR=${lib.optionalString (cfg.listenDir != null) cfg.listenDir}}"
+      : "''${BRIEFING_SCORERS:=${lib.concatStringsSep " " cfg.scorers}}"
+      : "''${BRIEFING_EMBED_URL:=http://127.0.0.1:11434/v1}"
+      : "''${BRIEFING_EMBED_MODEL:=${ai.ollamaEmbeddingModel}}"
+      : "''${BRIEFING_RERANK_URL=${lib.optionalString ai.reranker.enable "${host}:${toString proxies.reranker.publicPort}/v1"}}"
+      : "''${BRIEFING_RERANK_MODEL:=${ai.reranker.model}}"
+      : "''${BRIEFING_JEV_URL:=https://api.typesafe.ai/v1}"
+      : "''${BRIEFING_SEARXNG_URL:=${host}:${toString proxies.searxng.publicPort}}"
+      : "''${BRIEFING_FIRECRAWL_URL:=${host}:${toString proxies.firecrawl.publicPort}/v1}"
       export BRIEFING_STATE_DIR BRIEFING_OUT_DIR BRIEFING_MODEL BRIEFING_VOICE BRIEFING_SPEED SUPERTONIC_URL BRIEFING_PROMPTS
-      export BRIEFING_LISTEN_DIR
+      export BRIEFING_LISTEN_DIR BRIEFING_SCORERS BRIEFING_EMBED_URL BRIEFING_EMBED_MODEL BRIEFING_RERANK_URL
+      export BRIEFING_RERANK_MODEL BRIEFING_JEV_URL BRIEFING_SEARXNG_URL BRIEFING_FIRECRAWL_URL
     ''
     + builtins.readFile ./briefing.sh;
   };
@@ -128,7 +144,22 @@ let
     enrichTop = lib.mkOption {
       type = lib.types.int;
       default = defaults.enrichTop;
-      description = "How many top stories get their full article scraped.";
+      description = "How many top stories get their full article scraped (Firecrawl).";
+    };
+    prefilter = lib.mkOption {
+      type = lib.types.int;
+      default = defaults.prefilter;
+      description = "How many items closest to a chapter topic (embeddings) go on to scoring.";
+    };
+    corroborateTop = lib.mkOption {
+      type = lib.types.int;
+      default = defaults.corroborateTop;
+      description = "How many top single-source stories get extra sources from a SearXNG search.";
+    };
+    dedupDays = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = defaults.dedupDays;
+      description = "How far back the embedding dedup compares against stories already told.";
     };
     threshold = lib.mkOption {
       type = lib.types.float;
@@ -256,6 +287,47 @@ in
       description = "Optional cover image embedded in every episode.";
     };
 
+    scorers = lib.mkOption {
+      type = lib.types.listOf (
+        lib.types.enum [
+          "jev"
+          "rerank"
+          "llm"
+        ]
+      );
+      default =
+        lib.optional cfg.jev.enable "jev" ++ lib.optional ai.reranker.enable "rerank" ++ [ "llm" ];
+      defaultText = lib.literalMD "jev (with `jev.enable`), rerank (with the reranker), llm";
+      description = ''
+        Relevance scorers, tried in order until one works. With jev or rerank,
+        the LLM only reviews the top `maxStories * 3` items (topic, hype,
+        newsworthiness); with llm alone it scores the whole shortlist.
+      '';
+    };
+
+    jev.enable = lib.mkEnableOption ''
+      TypeSafe Jev as a scorer. It sends item titles and snippets (public news)
+      to api.typesafe.ai and reads its key from personal-typesafe-api-key
+    '';
+
+    similarity = {
+      dedup = lib.mkOption {
+        type = lib.types.float;
+        default = 0.88;
+        description = "Embedding cosine at which a new item counts as a story already told.";
+      };
+      cluster = lib.mkOption {
+        type = lib.types.float;
+        default = 0.82;
+        description = "Embedding cosine at which items are grouped into one story.";
+      };
+      corroborate = lib.mkOption {
+        type = lib.types.float;
+        default = 0.75;
+        description = "Embedding cosine a search result needs to join a story's sources.";
+      };
+    };
+
     interestsFile = lib.mkOption {
       type = lib.types.path;
       default = ./interests.md;
@@ -333,6 +405,9 @@ in
       keep = 14;
       maxStories = 14;
       enrichTop = 12;
+      prefilter = 120;
+      corroborateTop = 6;
+      dedupDays = 10;
       words = 1500;
       introWords = 110;
       outroWords = 140;
@@ -343,6 +418,9 @@ in
       keep = 3;
       maxStories = 24;
       enrichTop = 10;
+      prefilter = 160;
+      corroborateTop = 8;
+      dedupDays = 28;
       words = 3800;
       introWords = 160;
       outroWords = 260;
@@ -352,8 +430,12 @@ in
   config = lib.mkIf (ai.enable && cfg.enable) {
     assertions = [
       {
-        assertion = ai.enableOmniRoute && ai.enableSupertonic && ai.enableArticle;
-        message = "_custom.services.ai.briefing requires enableOmniRoute, enableSupertonic and enableArticle.";
+        assertion = ai.enableOmniRoute && ai.enableSupertonic && ai.enableFirecrawl;
+        message = "_custom.services.ai.briefing requires enableOmniRoute, enableSupertonic and enableFirecrawl.";
+      }
+      {
+        assertion = config._custom.services.searxng.enable;
+        message = "_custom.services.ai.briefing corroborates stories through _custom.services.searxng.";
       }
       {
         assertion = homeScreen.enable;
@@ -365,8 +447,14 @@ in
       _: lib.mapAttrs (_: lib.mkDefault)
     ) defaultSources;
 
-    # The API key secrets themselves are declared by the home-screen module.
-    sops.templates."briefing.env" = lib.mkIf (homeScreen.finnhub.enable || homeScreen.fred.enable) {
+    # Its own copy: wosarcher's secret is owned by the wosarcher user.
+    sops.secrets.briefing-typesafe-api-key = lib.mkIf cfg.jev.enable {
+      sopsFile = ../../../../../secrets-sops/personal.yaml;
+      key = "personal-typesafe-api-key";
+    };
+
+    # The market API key secrets are declared by the home-screen module.
+    sops.templates."briefing.env" = lib.mkIf needsEnvFile {
       mode = "0400";
       owner = userName;
       content =
@@ -375,6 +463,9 @@ in
         ''
         + lib.optionalString homeScreen.fred.enable ''
           FRED_API_KEY=${config.sops.placeholder.personal-fred-api-key}
+        ''
+        + lib.optionalString cfg.jev.enable ''
+          JEV_API_KEY=${config.sops.placeholder.briefing-typesafe-api-key}
         '';
     };
 
@@ -390,13 +481,11 @@ in
             StateDirectory = "briefing";
             Environment = [
               "BRIEFING_STATE_DIR=%S/briefing"
-              # omniroute-chat and article are system packages, newsboat a user one.
+              # omniroute-chat is a system package, newsboat a user one.
               "PATH=/run/current-system/sw/bin:/etc/profiles/per-user/${userName}/bin"
             ]
             ++ lib.optional (cfg.cover != null) "BRIEFING_COVER=${cfg.cover}";
-            EnvironmentFile = lib.optional (
-              homeScreen.finnhub.enable || homeScreen.fred.enable
-            ) config.sops.templates."briefing.env".path;
+            EnvironmentFile = lib.optional needsEnvFile config.sops.templates."briefing.env".path;
             TimeoutStartSec = "2h";
             Nice = 10;
           };

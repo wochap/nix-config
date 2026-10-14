@@ -51,6 +51,10 @@ publish_dir="$BRIEFING_OUT_DIR/$episode"
 ledger="$BRIEFING_STATE_DIR/ledger.db"
 profile=$BRIEFING_PROFILE
 max_enrich=$(jq -r --arg m "$mode" '.[$m].enrichTop' "$profile")
+corroborate_top=$(jq -r --arg m "$mode" '.[$m].corroborateTop' "$profile")
+dedup_days=$(jq -r --arg m "$mode" '.[$m].dedupDays' "$profile")
+dedup_similarity=$(jq -r '.similarity.dedup' "$profile")
+corroborate_similarity=$(jq -r '.similarity.corroborate' "$profile")
 keep=$(jq -r --arg m "$mode" '.[$m].keep' "$profile")
 mkdir -p "$run"
 
@@ -104,7 +108,7 @@ do_collect() {
 
 do_dedup() {
   briefing-ledger seen --ledger "$ledger" --mode "$mode" --exclude-episode "$episode" \
-    <"$run/collect/items.jsonl" >"$run/new.jsonl.tmp"
+    --similarity "$dedup_similarity" --days "$dedup_days" <"$run/collect/items.jsonl" >"$run/new.jsonl.tmp"
   sync "$run/new.jsonl.tmp"
   mv "$run/new.jsonl.tmp" "$run/new.jsonl"
 }
@@ -114,7 +118,11 @@ do_rank() {
 }
 
 do_enrich() {
-  briefing-enrich --in "$run/ranked.jsonl" --out "$run/enriched.jsonl" --top "$max_enrich"
+  # Most news engines cannot filter by day; the similarity check keeps results on-story.
+  local time_range=week
+  [[ $mode == weekly ]] && time_range=month
+  briefing-enrich --in "$run/ranked.jsonl" --out "$run/enriched.jsonl" --top "$max_enrich" \
+    --corroborate "$corroborate_top" --time-range "$time_range" --similarity "$corroborate_similarity"
 }
 
 do_write() {

@@ -14,7 +14,7 @@ import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 
-from briefing.common import llm, llm_json, log, read_json, read_jsonl, read_text, write_json, write_jsonl
+from briefing.common import canonical_url, llm, llm_json, log, read_json, read_jsonl, read_text, write_json, write_jsonl
 
 STAGE = "write"
 
@@ -47,12 +47,14 @@ def story_block(story, index, body_chars):
         lines.append("Editor flag: possible hype.")
     if story.get("reason"):
         lines.append(f"Why picked: {story['reason']}")
+    sources = [s for s in story.get("sources", []) if s.get("snippet")]
     if story.get("body"):
         lines.append(f"Article text: {story['body'][:body_chars]}")
+        # Other outlets' angle on the same story, for comparison and hype checks.
+        others = [s for s in sources if canonical_url(s.get("url", "")) != story.get("body_url")]
+        lines += [f"Also reported by {s['feed']}: {s['snippet'][:300]}" for s in others[:2]]
     else:
-        for source in story.get("sources", [])[:3]:
-            if source.get("snippet"):
-                lines.append(f"{source['feed']}: {source['snippet']}")
+        lines += [f"{s['feed']}: {s['snippet']}" for s in sources[:3]]
     return "\n".join(lines)
 
 

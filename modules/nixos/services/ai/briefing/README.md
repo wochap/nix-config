@@ -5,13 +5,37 @@ Syncthing for the phone.
 
 ```
 sources ──► collect ──► dedup ──► rank ──► enrich ──► write ──► tts ──► package ──► publish
-(adapters)  items+facts  ledger    LLM      article-   LLM per   Super-   MP3 +       ~/Sync/podcasts
-                                   score +  scrape     chapter   tonic    ID3 CHAP
-                                   cluster  (top N)
+(adapters)  items+facts  ledger    embed     SearXNG    LLM per   Super-   MP3 +       ~/Sync/podcasts
+                         hashes +  prefilter corrob. +  chapter   tonic    ID3 CHAP
+                         embeddings Jev/rerank Firecrawl
+                                   LLM editor (top N)
+                                   embed cluster
 ```
 
 Enable it with `_custom.services.ai.briefing.enable = true;`. It needs OmniRoute,
-Supertonic, article (for `article scrape`) and the home-screen module.
+Supertonic, Firecrawl, SearXNG, Ollama (embeddings, `ai.ollamaEmbeddingModel`) and
+the home-screen module. The reranker and Jev are optional scorers.
+
+## Services
+
+| Stage | Service | What it does | Without it |
+|---|---|---|---|
+| dedup | Ollama embeddings | Drops items close (`similarity.dedup`) to a story told in the last `<mode>.dedupDays` days | URL and title hashes only |
+| rank | Ollama embeddings | Gives each item its nearest chapter topic, keeps the `<mode>.prefilter` closest | Every item is scored |
+| rank | Jev, reranker, LLM (`scorers`, first that works) | Relevance against `interests.md` | The LLM scores everything |
+| rank | LLM | Reviews only the top `maxStories * 3`: topic, hype, reason, newsworthiness | |
+| rank | Ollama embeddings | Groups items about the same story (`similarity.cluster`) | One LLM clustering call |
+| enrich | SearXNG + embeddings | Adds up to 2 outlets to the top `<mode>.corroborateTop` single-source stories (`similarity.corroborate`) | Stories keep their feed sources |
+| enrich | Firecrawl | Full text of the top `<mode>.enrichTop` stories | Stories keep their snippets |
+
+Jev scores are calibrated (0-3), so the final score averages Jev and the LLM.
+Reranker scores are not, so they only choose which items the LLM reviews and
+the LLM score is final. `briefing.jev.enable` sends item titles and snippets
+to api.typesafe.ai with `personal-typesafe-api-key`.
+
+Embeddings are cached in `~/.local/state/briefing/embeddings.db` (unused vectors
+expire after 60 days). After changing `ai.ollamaEmbeddingModel`, run
+`briefing ledger rebuild` so the dedup vectors match the new model.
 
 ## Commands
 
@@ -128,8 +152,13 @@ To write a new adapter type, add a script under `briefing/adapters/` and list it
 - `briefing.chapters`: chapter order and descriptions. `kind = "stories"` chapters are
   also the topics the ranker assigns. The `kind = "hype"` chapter collects stories
   flagged as hype.
-- `briefing.{daily,weekly}`: `maxStories`, `enrichTop`, `threshold`, `words` (about 150
-  per minute), `introWords`, `outroWords`.
+- `briefing.{daily,weekly}`: `maxStories`, `enrichTop`, `prefilter`, `corroborateTop`,
+  `dedupDays`, `threshold`, `words` (about 150 per minute), `introWords`, `outroWords`.
+- `briefing.similarity.{dedup,cluster,corroborate}`: embedding cosine thresholds
+  (0.88, 0.82, 0.75). With qwen3-embedding, a reworded headline of the same story
+  scores about 0.85-0.90 and unrelated stories about 0.55-0.70. The rank, dedup and
+  enrich logs print every merge, drop and match with its similarity.
+- `briefing.scorers`: scorer order, e.g. `[ "rerank" "llm" ]` to keep news local.
 - `briefing.{model,voice,speed,show,cover}`.
 - `prompts/*.md`: ranking, clustering, chapter and intro/outro prompts.
 

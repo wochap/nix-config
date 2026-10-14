@@ -318,6 +318,7 @@ in
       "pi/omniroute/desktop-free"
     ];
     _custom.services.ai.briefing.enable = true;
+    _custom.services.ai.briefing.jev.enable = true;
 
     _custom.services.rsshub.enable = true;
     _custom.services.searxng.enable = true;
