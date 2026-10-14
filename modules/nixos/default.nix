@@ -52,6 +52,7 @@
     ./gaming/chaotic
     ./gaming/emulators
     ./gaming/steam
+    ./gaming/tweaks
     ./gaming/utils
 
     ./globals

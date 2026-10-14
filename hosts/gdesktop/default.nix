@@ -336,6 +336,7 @@ in
     _custom.gaming.emulators.enable = false;
     _custom.gaming.steam.enable = true;
     _custom.gaming.utils.enable = true;
+    # _custom.gaming.tweaks.enable = true;
 
     _custom.security.gpg.enableLuksIntegration = true;
     _custom.security.gpg.enableGpgAgent = true;
