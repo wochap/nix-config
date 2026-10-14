@@ -78,6 +78,13 @@ Singleton {
         easing.type: animation.easingType
       }
     }
+    // for targets that keep moving while animating, e.g. a size that is itself animated
+    property Component smoothedAnimation: Component {
+      SmoothedAnimation {
+        velocity: -1
+        duration: animation.duration
+      }
+    }
     property Component colorAnimation: Component {
       ColorAnimation {
         duration: animation.duration

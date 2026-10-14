@@ -19,14 +19,14 @@ Loader {
     MouseArea {
       implicitWidth: module.implicitWidth
       implicitHeight: module.implicitHeight
-      onClicked: popup.visible = !popup.visible
+      onClicked: popup.toggle()
       Accessible.role: Accessible.Button
       Accessible.name: `${root.label}: ${root.count} ${root.count === 1 ? "window" : "windows"}`
-      Accessible.onPressAction: popup.visible = !popup.visible
+      Accessible.onPressAction: popup.toggle()
 
       Hintable {
         label: `${root.label}: ${root.count} ${root.count === 1 ? "window" : "windows"}`
-        onActivated: popup.visible = !popup.visible
+        onActivated: popup.toggle()
       }
 
       Module {
