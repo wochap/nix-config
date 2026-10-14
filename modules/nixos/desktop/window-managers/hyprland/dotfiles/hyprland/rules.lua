@@ -109,8 +109,8 @@ hl.window_rule({
   no_blur = true,
   decorate = false,
   pin = true,
-  move = { "(monitor_w - 600) / 2", "monitor_h - window_h" },
-  size = { "600", "window_h" },
+  move = { "0", "monitor_h - window_h" },
+  size = { "monitor_w", "window_h" },
   no_initial_focus = true,
 })
 hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, float = true, persistent_size = true })
