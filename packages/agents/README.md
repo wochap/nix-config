@@ -14,6 +14,7 @@ agents run -a pi -m omniroute/desktop-free "fix the failing test"
 agents run -q -C ~/repo "summarize the repo" # final answer only
 agents run -r <id> "continue"                # resume headless
 agents ls                                    # sessions of the last 7 days, --full for all, --all adds serve's
+agents ls --json                             # the same as a JSON array of metadata, newest first
 agents ls --via serve                        # only the OpenAI-compatible API's sessions
 agents watch                                 # follow the latest running session
 agents attach <id>                           # take it over interactively
@@ -59,7 +60,12 @@ argv string at 128 KiB.
 
 `-e/--effort` (`low`, `medium`, `high`, `xhigh`, `max`) maps to the agent's
 own flag: `--effort` for claude, `--thinking` for pi. Unset, the agent uses
-its own setting. The session keeps it for `-r` and `attach`.
+its own setting. The session keeps it for `-r` and `attach`; `-r` with
+`-e` or `-m` changes it for the rest of the session.
+
+When the agent fails, `--json` adds `error` with the agent's own error text
+(for claude e.g. its usage-limit message) instead of only an exit code. A
+claude result marked as an error fails the run even when claude exits 0.
 
 Env: `CLAUDE_FLAGS` (default `--permission-mode auto`), `CLAUDE_CMD` (default
 `sessiontap claude`), `PI_FLAGS` (default none; `--approve` trusts

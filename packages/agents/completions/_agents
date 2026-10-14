@@ -55,7 +55,8 @@ _agents() {
           _arguments \
             '--full[list all sessions]' \
             '(--via)--all[also list sessions started by a program]' \
-            '(--all)--via[only sessions started by a program]:name:(serve)'
+            '(--all)--via[only sessions started by a program]:name:(serve)' \
+            '--json[print sessions as a JSON array]'
           ;;
         serve)
           _arguments \

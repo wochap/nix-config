@@ -22,6 +22,9 @@
 //   - no apply commit, tasks already done -> skip apply agent, commit code
 //   - no apply commit, tasks open         -> run apply (told to resume if
 //     uncommitted code changes exist from an interrupted run)
+// A step whose latest agents session failed (Ctrl-C, usage limit, crash)
+// resumes that session instead of starting a new one, with this run's
+// model and effort; --fresh starts over.
 //
 // Steps run through the agents CLI (agents.ts), claude only for now. On a
 // TTY, Ctrl-T takes a running step over, Ctrl-Z inside it detaches back.
@@ -56,10 +59,15 @@ Options:
       --auto-tries <n>      auto: headless resumes before stopping (default: 2)
       --resume <id>         continue this apply session (from a stop report)
       --answer <text>       message for the --resume session (default: "Continue.")
+      --fresh               start new step sessions instead of resuming the
+                              interrupted ones (Ctrl-C, usage limit, crash)
       --json                logs to stderr, one JSON result line on stdout
   -h, --help
 
 Exit codes: 0 done, 1 failed or quit, 3 needs input.
+
+A re-run resumes an interrupted step's session with this run's model and
+effort, so you can change them midway.
 
 On a TTY each step is an agents session (claude): ctrl+t takes a running
 step over, ctrl+z inside it detaches back. Sessions: agents ls`;
@@ -72,6 +80,9 @@ const STATUS_LINE = `When finished, end your final message with exactly one line
 '${STATUS_DONE}' if nothing needs the user, or
 '${STATUS_INPUT}' if you have questions, blockers, decisions for the user,
 or a needed action was denied by permissions.`;
+const CONTINUE =
+  "You were interrupted (stopped by the user, a usage limit or a crash). Check what you already did, " +
+  "then continue the task where you left off.";
 const AUTO_PROMPT = `No user is available. Resolve your open questions, blockers and decisions yourself:
 pick the most sensible option, state each assumption in your final message, and finish the
 remaining tasks. Leave manual smoke-test tasks unchecked. Use '${STATUS_INPUT}' only when you
@@ -93,6 +104,7 @@ const { values: opts, positionals: changes } = parseArgs({
     "auto-tries": { type: "string", default: "2" },
     resume: { type: "string" },
     answer: { type: "string" },
+    fresh: { type: "boolean" },
     json: { type: "boolean" },
     help: { type: "boolean", short: "h" },
   },
@@ -129,11 +141,17 @@ function finish(r: Omit<Result, "done">, code: number): never {
   process.exit(code);
 }
 
-// Expected failures print one line instead of a stack trace.
+// Expected failures print one line instead of a stack trace. A failed agent
+// reports its session; re-running the same command resumes it.
 const fail = (err: unknown) => {
   const message = err instanceof Error ? err.message : String(err);
   warn(`error: ${message}`);
-  finish({ status: "failed", change: current.change, step: current.step, reason: message }, 1);
+  const where = { status: "failed" as const, change: current.change, step: current.step };
+  if (err instanceof agents.AgentError) {
+    if (err.session) warn(`re-run the same command to resume session ${err.session}`);
+    finish({ ...where, session: err.session, reason: err.limit ? "usage_limit" : message, message }, 1);
+  }
+  finish({ ...where, reason: message }, 1);
 };
 process.on("uncaughtException", fail);
 process.on("unhandledRejection", fail);
@@ -163,6 +181,20 @@ async function runStep(step: Step, prompt: string, resume?: string) {
 const stepPrompt = (step: Step, change: string, instructions: string) =>
   `${agents.invoke(step, change)} — ${instructions}`;
 
+// The step's interrupted session to continue, unless --fresh.
+async function interrupted(step: Step, change: string) {
+  if (opts.fresh) return null;
+  const id = await agents.interrupted(step, change);
+  if (id) warn(`[${change}] ${step} was interrupted, resuming session ${id} (--fresh starts over)`);
+  return id;
+}
+
+// Runs a step, or continues its interrupted session.
+async function runOrResume(step: Step, change: string, instructions: string) {
+  const id = await interrupted(step, change);
+  return id ? runStep(step, `${CONTINUE} ${NO_ASK}`, id) : runStep(step, stepPrompt(step, change, instructions));
+}
+
 // Nothing open except manual checks.
 const tasksDone = (t: Tasks) => t.other.length === 0 && t.open.length <= maxOpen;
 
@@ -183,22 +215,27 @@ async function apply(change: string) {
       return;
     }
 
-    let resumeNote = "";
-    if (codeDirty()) {
-      warn(`[${change}] uncommitted code changes found, resuming an interrupted apply`);
-      resumeNote =
-        "A previous run of this apply was interrupted. Some tasks may already be implemented in the " +
-        "uncommitted changes; check them against tasks.md, fix task checkboxes if needed, then continue with the rest.\n";
-    }
+    const id = await interrupted("apply", change);
+    if (id) {
+      run = await runStep("apply", `${CONTINUE} ${NO_ASK}\n${STATUS_LINE}`, id);
+    } else {
+      let resumeNote = "";
+      if (codeDirty()) {
+        warn(`[${change}] uncommitted code changes found, resuming an interrupted apply`);
+        resumeNote =
+          "A previous run of this apply was interrupted. Some tasks may already be implemented in the " +
+          "uncommitted changes; check them against tasks.md, fix task checkboxes if needed, then continue with the rest.\n";
+      }
 
-    run = await runStep(
-      "apply",
-      stepPrompt(
+      run = await runStep(
         "apply",
-        change,
-        `Implement all tasks. Leave manual smoke-test tasks unchecked. ${NO_ASK}\n${resumeNote}${STATUS_LINE}`,
-      ),
-    );
+        stepPrompt(
+          "apply",
+          change,
+          `Implement all tasks. Leave manual smoke-test tasks unchecked. ${NO_ASK}\n${resumeNote}${STATUS_LINE}`,
+        ),
+      );
+    }
   }
 
   const { sessionId } = run;
@@ -294,13 +331,13 @@ for (const change of changes) {
 
     current.step = "sync";
     log(`[${change}] sync`);
-    await runStep("sync", stepPrompt("sync", change, NO_ASK));
+    await runOrResume("sync", change, NO_ASK);
     commitStep(`feat: spec sync ${change}`, ["openspec/specs"]);
   }
 
   current.step = "archive";
   log(`[${change}] archive`);
-  await runStep("archive", stepPrompt("archive", change, `Archive now. Incomplete tasks are fine; specs are already synced. ${NO_ASK}`));
+  await runOrResume("archive", change, `Archive now. Incomplete tasks are fine; specs are already synced. ${NO_ASK}`);
   done.push(change);
 }
 

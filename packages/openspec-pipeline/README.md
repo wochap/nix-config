@@ -22,12 +22,27 @@ openspec-pipeline --help
 
 After apply, `--gate <cmd>` commands (repeatable) must pass before the commit.
 
-Re-run the same command to resume after a crash, power cut or network loss.
-Progress comes from git and the filesystem, never from a state file: an
-existing `feat: spec sync <c>` commit skips to archive, an existing
-`feat: <c>` commit skips to sync, a missing `openspec/changes/<c>` means
-already archived. Uncommitted code from an interrupted apply is handed to the
-next apply agent to check and continue.
+Re-run the same command to resume after `ctrl+c`, a usage limit, a crash,
+power cut or network loss. Progress comes from git and the filesystem, never
+from a state file: an existing `feat: spec sync <c>` commit skips to archive,
+an existing `feat: <c>` commit skips to sync, a missing `openspec/changes/<c>`
+means already archived.
+
+The step it stopped in continues in the same agent session, so the agent
+keeps its context: when the newest `agents` session of that step and change
+in this repository failed (`ctrl+c`, usage limit, crash) after the agent
+replied at least once, the re-run resumes it (`agents run -r`) and tells it
+to continue. `--fresh` starts new sessions instead. Without such a session,
+uncommitted code from an interrupted apply is handed to a new apply agent to
+check and continue.
+
+A resumed step uses this run's `--<step>-model` and `--<step>-effort`, so
+stop it and re-run with other values to change them midway:
+
+```sh
+openspec-pipeline my-change                       # ctrl+c during apply
+openspec-pipeline --apply-effort xhigh my-change  # same apply session, xhigh
+```
 
 ## When apply needs attention
 
@@ -65,7 +80,14 @@ line on stdout:
 ```
 
 `status` is `done`, `needs_input` or `failed` (with `reason`). `done` lists
-the changes finished in this run. Exit codes: 0 done, 1 failed or quit, 3
+the changes finished in this run. When a step's agent failed, `session` is
+its session (the one a re-run resumes) and `message` the agent's error; a
+usage or rate limit gives `reason: "usage_limit"`:
+
+```json
+{"status":"failed","done":[],"change":"b","step":"apply","session":"f8ad...",
+ "reason":"usage_limit","message":"agent failed (session f8ad...): You've hit your session limit · resets 3:30pm"}
+``` Exit codes: 0 done, 1 failed or quit, 3
 needs input.
 
 ## Takeover

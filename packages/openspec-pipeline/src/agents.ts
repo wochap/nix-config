@@ -30,6 +30,21 @@ export const defaultEffort = (step: Step) => EFFORTS[step];
 /** Text that starts the OpenSpec skill, e.g. "/opsx:apply my-change". */
 export const invoke = (step: Step, change: string) => `/opsx:${step} ${change}`;
 
+// claude's usage or rate limit messages, e.g. "You've hit your session limit · resets 3:30pm".
+const LIMIT_RE = /hit your .*limit|usage limit|limit reached|rate limit|resets \d/i;
+
+/** A step's agent failed. Re-running the pipeline resumes `session`. */
+export class AgentError extends Error {
+  constructor(
+    message: string,
+    readonly session: string | undefined,
+    /** The agent hit a usage or rate limit. */
+    readonly limit: boolean,
+  ) {
+    super(message);
+  }
+}
+
 export interface RunOptions {
   /** Continue this session instead of starting a new one. */
   resume?: string;
@@ -51,14 +66,40 @@ export async function run(prompt: string, model: string, effort: string, o: RunO
   );
   const out = await new Response(child.stdout).text();
   const code = await child.exited;
-  let json: { id: string; result: string; status: string };
+  let json: { id: string; result: string; status: string; error?: string };
   try {
     json = JSON.parse(out.trim().split("\n").at(-1) ?? "");
   } catch {
-    throw new Error(`agents exited with code ${code}`);
+    throw new AgentError(`agents exited with code ${code}`, undefined, false);
   }
-  if (json.status !== "done") throw new Error(`agent failed (session ${json.id})`);
+  if (json.status !== "done") {
+    const error = json.error ?? "unknown error";
+    throw new AgentError(`agent failed (session ${json.id}): ${error}`, json.id, LIMIT_RE.test(error));
+  }
   return { sessionId: json.id, result: json.result };
+}
+
+/**
+ * The step's latest session in this directory when it was interrupted
+ * (Ctrl-C, usage limit, crash) after the agent wrote something, so a re-run
+ * continues it instead of starting over. Null when the latest one finished,
+ * or none exists in the last 7 days.
+ */
+export async function interrupted(step: Step, change: string): Promise<string | null> {
+  const child = Bun.spawn([...cmd, "ls", "--json"], { stdin: "ignore", stdout: "pipe", stderr: "ignore" });
+  const out = await new Response(child.stdout).text();
+  if ((await child.exited) !== 0) return null;
+  let sessions: { id: string; cwd: string; prompt: string; status: string }[];
+  try {
+    sessions = JSON.parse(out);
+  } catch {
+    return null;
+  }
+  // Newest first; the stored prompt is the first run's, e.g. "/opsx:apply <c> — ...".
+  const latest = sessions.find((s) => s.cwd === process.cwd() && s.prompt.startsWith(`${invoke(step, change)} `));
+  if (latest?.status !== "failed") return null;
+  // Killed before any reply: nothing to continue.
+  return (await last(latest.id)) === null ? null : latest.id;
 }
 
 /** Last agent message of a session, also after interactive turns. Null when unknown. */

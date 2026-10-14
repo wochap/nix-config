@@ -33,6 +33,7 @@ _openspec-pipeline() {
     '--auto-tries[headless resumes before stopping]:count:' \
     '--resume[continue this apply session]:session:_openspec_pipeline_sessions' \
     '--answer[message for the --resume session]:text:' \
+    '--fresh[start new step sessions instead of resuming interrupted ones]' \
     '--json[one JSON result line on stdout]' \
     '(- *)'{-h,--help}'[show help]' \
     '*:change:_openspec_pipeline_changes'

@@ -61,4 +61,16 @@ stdout is one line:
     tasks."`.
 - Exit 1, `status: failed`: show `reason`, `change` and `step`. A gate failure
   leaves the code uncommitted; fix it or tell the user, then re-run the same
-  command. Re-running is always safe: finished steps are skipped.
+  command. Re-running is always safe: finished steps are skipped, and the
+  step that failed continues in its own agent session (`session`), keeping
+  its context.
+  - `reason: "usage_limit"`: the step's agent hit a usage limit; `message`
+    says when it resets. Tell the user, and once it has reset (or when the
+    user says so) re-run the same command. Never run the step yourself or in
+    another agent, and never add `--fresh`: that throws away the agent's
+    context.
+  - To change a step's model or effort midway (for example a lower effort
+    after a limit), re-run with `--<step>-model` / `--<step>-effort`; the
+    resumed session uses them.
+  - `--fresh` only when the user asks to start the steps over, or the
+    resumed session keeps failing the same way.

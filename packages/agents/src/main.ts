@@ -43,7 +43,8 @@ Commands:
     -q, --quiet          print only the final answer (default when stdout is not a TTY)
         --verbose        print live progress (default on a TTY)
         --json           print {id,agent,model,result,costUsd,durationMs,
-                         inputTokens,outputTokens,status};
+                         inputTokens,outputTokens,status}, plus error
+                         (the agent's error text) when it failed;
                          progress goes to stderr when it is a TTY or with --verbose
     keys on a TTY: ctrl+t take over (the agent's TUI), ctrl+z inside it
     detaches back here while it keeps working, ctrl+t attaches again
@@ -53,6 +54,7 @@ Commands:
         --full           list all sessions
         --all            also list sessions started by a program (serve)
         --via <name>     only sessions started by <name>, e.g. serve
+        --json           print the sessions' metadata as one JSON array, newest first
   watch [<id>]       follow a session (default: latest running, else latest)
   serve              OpenAI-compatible API: /v1/chat/completions, /v1/models
         --host <h>       listen address (default: 127.0.0.1)
@@ -207,6 +209,7 @@ async function run() {
   let last: Extract<Event, { type: "result" }> | null = null;
   let status: store.Status = "done";
   let result = "";
+  let error: string | null = null;
   let resume = Boolean(opts.resume);
   // Sent with the first attempt only; a handback must not resend them.
   let attach = images;
@@ -242,6 +245,7 @@ async function run() {
       if (!stop.signal.aborted) {
         status = "failed";
         const message = err instanceof Error ? err.message : String(err);
+        error = message;
         const e: Event = { type: "error", message };
         store.appendEvent(id, e);
         if (progress) await render(e);
@@ -281,6 +285,7 @@ async function run() {
         inputTokens: done?.inputTokens ?? null,
         outputTokens: done?.outputTokens ?? null,
         status,
+        ...(error ? { error } : {}),
       }),
     );
   } else if (mode === "quiet" && result) {
@@ -305,12 +310,17 @@ async function last() {
 
 // Last 7 days unless --full, people's sessions unless --all (--via <name>:
 // only that program's); oldest first so the newest ends up by the prompt.
+// --json: the same sessions' metadata, newest first, for programs.
 function ls() {
   const statusColor = { running: color.blue, done: color.dim, failed: color.yellow };
   const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const sessions = store
     .listSessions()
     .filter((s) => (opts.full || s.startedAt >= since) && (opts.via ? s.via === opts.via : opts.all || !s.via));
+  if (opts.json) {
+    console.log(JSON.stringify(sessions));
+    return;
+  }
   for (const s of sessions.reverse()) {
     const started = new Date(s.startedAt).toLocaleString("sv").slice(0, 16);
     const prompt = (s.via && !opts.via ? `[${s.via}] ` : "") + s.prompt.replace(/\s+/g, " ").slice(0, 60);

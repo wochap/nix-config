@@ -132,6 +132,8 @@ export const claude: Adapter = {
     );
     signal?.addEventListener("abort", () => child.kill("SIGINT"));
     let result = "";
+    // claude's own error text, e.g. "Claude AI usage limit reached|<epoch>".
+    let error: string | null = null;
 
     for await (const line of lines(child.stdout)) {
       appendFileSync(rawLog, `${line}\n`);
@@ -141,6 +143,7 @@ export const claude: Adapter = {
       } catch {
         continue;
       }
+      if (event.type === "result" && event.is_error) error = String(event.result || event.subtype || "error");
       for (const e of toEvents(event, cwd)) {
         if (e.type === "result") result = e.result;
         await onEvent(e);
@@ -148,6 +151,7 @@ export const claude: Adapter = {
     }
 
     const code = await child.exited;
+    if (error) throw new Error(error);
     if (code !== 0) throw new Error(`claude exited with code ${code}`);
     return { result };
   },
