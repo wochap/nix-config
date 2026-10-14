@@ -339,7 +339,7 @@ open_gui() {
     ;;
   media)
     require mpv
-    launch mpv "$@"
+    launch mpv --player-operation-mode=pseudo-gui -- "$@"
     ;;
   office)
     if command -v libreoffice >/dev/null 2>&1; then
