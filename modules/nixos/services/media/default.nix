@@ -89,6 +89,65 @@ let
     "lazylibrarian"
     "slskd"
   ];
+
+  # media-ctl profiles. Units are listed dependents first (stop order); start
+  # and resume reverse it. Only enabled services appear.
+  enabledOnly = lib.filter (s: s.enabled);
+  ctlService = name: enabled: { inherit name enabled; };
+  ctlNames = list: map (s: s.name) (enabledOnly list);
+  ctlDownloads = [
+    (ctlService "soularr" cfg.services.soularr.enable)
+    (ctlService "slskd" cfg.services.slskd.enable)
+    (ctlService "qbittorrent" cfg.services.qbittorrent.enable)
+    (ctlService "vpn" (cfg.services.qbittorrent.enable && cfg.services.qbittorrent.vpn.enable))
+  ];
+  ctlAutomation = [
+    (ctlService "lazylibrarian" cfg.services.lazylibrarian.enable)
+    (ctlService "bazarr" cfg.services.bazarr.enable)
+    (ctlService "sonarr" cfg.services.sonarr.enable)
+    (ctlService "radarr" cfg.services.radarr.enable)
+    (ctlService "lidarr" cfg.services.lidarr.enable)
+    (ctlService "prowlarr" cfg.services.prowlarr.enable)
+    (ctlService "flaresolverr" cfg.services.flaresolverr.enable)
+  ];
+  ctlPublic = [
+    (ctlService "seerr" cfg.services.seerr.enable)
+    (ctlService "jellyfin" cfg.services.jellyfin.enable)
+    (ctlService "navidrome" cfg.services.navidrome.enable)
+    (ctlService "audiobookshelf" cfg.services.audiobookshelf.enable)
+    (ctlService "calibre-web" cfg.services.calibreWeb.enable)
+  ];
+  ctlProfiles = {
+    # Everything that moves bytes over the internet (torrents, Soulseek).
+    downloads = ctlNames ctlDownloads;
+    # The *arr apps and their helpers; they trigger new downloads.
+    automation = ctlNames ctlAutomation;
+    # Everything except the user-facing apps.
+    backend = ctlNames (ctlAutomation ++ ctlDownloads);
+    # The user-facing apps (streaming, requests, reading).
+    public = ctlNames ctlPublic;
+    all = ctlNames (ctlPublic ++ ctlAutomation ++ ctlDownloads);
+  };
+
+  mediaCtl = pkgs.writeShellApplication {
+    name = "media-ctl";
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.podman
+      pkgs.systemd
+    ];
+    runtimeEnv = {
+      MEDIA_UNIT_PREFIX = "podman-media-";
+      MEDIA_CTR_PREFIX = "media-";
+      MEDIA_PROFILES = lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (n: v: "${n}=${lib.concatStringsSep " " v}") ctlProfiles
+      );
+    };
+    text = ''
+      PATH=/run/wrappers/bin:$PATH
+    ''
+    + builtins.readFile ./scripts/media-ctl.sh;
+  };
 in
 {
   imports = [
@@ -478,6 +537,8 @@ in
         message = "_custom.services.media.services.soularr needs lidarr, slskd and the declarative layer.";
       }
     ];
+
+    environment.systemPackages = [ mediaCtl ];
 
     users.groups.media.gid = cfg.gid;
     users.users.media = {
