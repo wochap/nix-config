@@ -421,6 +421,7 @@ in
     _custom.desktop.home-screen.enable = true;
     _custom.desktop.home-screen.finnhub.enable = true;
     _custom.desktop.home-screen.fred.enable = true;
+    _custom.desktop.home-screen.etherscan.enable = true;
     _custom.desktop.audio.enableEasyeffects = true;
     _custom.desktop.audio.enableNoisetorch = true;
     _custom.desktop.mouseless.enable = true;

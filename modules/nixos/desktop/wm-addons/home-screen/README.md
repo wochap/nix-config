@@ -25,7 +25,7 @@ widgets/templates/   Go templates + shared styles.css
 
 - **Markets page**: three columns of built-in `markets` widgets (one per watchlist group), RSS, Fear & Greed, plus optional FRED rates and an earnings calendar.
 - **Charts page**: one `custom-api` card per symbol across `chartGroups` (deduplicated, first group wins). Each card pulls 1y of daily Yahoo data and renders 1M/3M/6M/1Y charts, technical signals and a buy-zone verdict. US equities with Finnhub enabled also get valuation, analyst ratings and news.
-- **Template vars**: `@TIP_*@` (glossary), `@FINNHUB_TOKEN@`, `@FRED_TOKEN@`. Token vars come out empty when their provider is disabled, because Glance won't start if a `${VAR}` is unset.
+- **Template vars**: `@TIP_*@` (glossary), `@FINNHUB_TOKEN@`, `@FRED_TOKEN@`, `@ETHERSCAN_TOKEN@`. Token vars come out empty when their provider is disabled, because Glance won't start if a `${VAR}` is unset.
 - **`data` option** (read-only): exposes market groups, RSS widgets, FRED series and earnings symbols so other modules (e.g. the briefing podcast) can reuse them.
 
 ## Providers
@@ -35,10 +35,12 @@ widgets/templates/   Go templates + shared styles.css
 | Yahoo Finance | `markets` widgets, chart cards | none |
 | Finnhub | fundamentals, analysts, news, earnings | `personal-finnhub-api-key` (`finnhub.enable`) |
 | FRED | Macro Rates | `personal-fred-api-key` (`fred.enable`) |
+| Tronscan | USDT supply (Tron) | none |
+| Etherscan | USDT supply (Ethereum) | `personal-etherscan-api-key` (`etherscan.enable`) |
 | CNN / alternative.me | Fear & Greed | none |
 | RSS feeds | news widgets | none |
 
-Before enabling `finnhub`/`fred`, add the key to `personal.yaml`. Otherwise sops activation fails.
+Before enabling `finnhub`/`fred`/`etherscan`, add the key to `personal.yaml`. Otherwise sops activation fails.
 
 ## Adding sources
 

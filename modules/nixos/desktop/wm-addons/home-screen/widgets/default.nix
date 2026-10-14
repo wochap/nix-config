@@ -5,6 +5,7 @@
 #   @TIP_<NAME>@      tooltip text from ./glossary.nix (name upper-cased)
 #   @FINNHUB_TOKEN@   Glance env reference, empty when Finnhub is disabled
 #   @FRED_TOKEN@      Glance env reference, empty when FRED is disabled
+#   @ETHERSCAN_TOKEN@ Glance env reference, empty when Etherscan is disabled
 #
 # Glance aborts at startup when a `${VAR}` reference is unset, so the env
 # references are only emitted when the matching API key is configured.
@@ -12,6 +13,7 @@
   lib,
   finnhub ? false,
   fred ? false,
+  etherscan ? false,
 }:
 
 let
@@ -29,6 +31,7 @@ let
     // {
       "@FINNHUB_TOKEN@" = lib.optionalString finnhub "\${FINNHUB_API_KEY}";
       "@FRED_TOKEN@" = lib.optionalString fred "\${FRED_API_KEY}";
+      "@ETHERSCAN_TOKEN@" = lib.optionalString etherscan "\${ETHERSCAN_API_KEY}";
     };
 
   readTemplate = name: builtins.readFile (./templates + "/${name}");
@@ -155,6 +158,15 @@ rec {
     url = "https://api.alternative.me/fng/";
     parameters.limit = "2";
     template = render { } "fear-greed.html";
+  };
+
+  # USDT supply per chain; Tron is keyless, Ethereum needs Etherscan.
+  usdtSupply = {
+    type = "custom-api";
+    title = "USDT Supply";
+    cache = "6h";
+    options.ethereum = etherscan;
+    template = render { } "usdt-supply.html";
   };
 
   # Upcoming earnings for every US equity in the watchlist.

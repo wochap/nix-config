@@ -14,7 +14,9 @@ let
     inherit lib;
     finnhub = cfg.finnhub.enable;
     fred = cfg.fred.enable;
+    etherscan = cfg.etherscan.enable;
   };
+  needsEnv = cfg.finnhub.enable || cfg.fred.enable || cfg.etherscan.enable;
   inherit (widgets) markets mkMarketsWidget;
 
   # Watchlist groups in display order (Charts page, briefing podcast).
@@ -44,6 +46,7 @@ in
     # the key exists there, otherwise sops-nix activation fails.
     finnhub.enable = lib.mkEnableOption "Finnhub valuation, analyst, news and earnings data (personal-finnhub-api-key)";
     fred.enable = lib.mkEnableOption "FRED macro rates (personal-fred-api-key)";
+    etherscan.enable = lib.mkEnableOption "Ethereum USDT supply (personal-etherscan-api-key)";
 
     # Dashboard data sources for other modules (e.g. the briefing podcast), so
     # they follow the dashboard instead of scraping it.
@@ -62,16 +65,14 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = (cfg.finnhub.enable || cfg.fred.enable) -> config._custom.security.sops.enable;
-        message = "home-screen: finnhub/fred need _custom.security.sops.enable";
+        assertion = needsEnv -> config._custom.security.sops.enable;
+        message = "home-screen: finnhub/fred/etherscan need _custom.security.sops.enable";
       }
     ];
 
     services.glance = {
       enable = true;
-      environmentFile = lib.mkIf (
-        cfg.finnhub.enable || cfg.fred.enable
-      ) config.sops.templates."glance.env".path;
+      environmentFile = lib.mkIf needsEnv config.sops.templates."glance.env".path;
       openFirewall = false;
       settings = {
         server = {
@@ -118,6 +119,7 @@ in
                 ++ [
                   (mkMarketsWidget markets.semiconductors)
                   (mkMarketsWidget markets.crypto)
+                  widgets.usdtSupply
                   (mkMarketsWidget markets.peru)
                   widgets.rss.fedSec
                 ];
@@ -190,9 +192,12 @@ in
       (lib.mkIf cfg.fred.enable {
         personal-fred-api-key.sopsFile = personalSopsFile;
       })
+      (lib.mkIf cfg.etherscan.enable {
+        personal-etherscan-api-key.sopsFile = personalSopsFile;
+      })
     ];
 
-    sops.templates."glance.env" = lib.mkIf (cfg.finnhub.enable || cfg.fred.enable) {
+    sops.templates."glance.env" = lib.mkIf needsEnv {
       mode = "0400";
       restartUnits = [ "glance.service" ];
       content =
@@ -201,6 +206,9 @@ in
         ''
         + lib.optionalString cfg.fred.enable ''
           FRED_API_KEY=${config.sops.placeholder.personal-fred-api-key}
+        ''
+        + lib.optionalString cfg.etherscan.enable ''
+          ETHERSCAN_API_KEY=${config.sops.placeholder.personal-etherscan-api-key}
         '';
     };
 

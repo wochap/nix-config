@@ -37,6 +37,8 @@
   fearGreedStock = "<b>Stock market Fear &amp; Greed</b> (CNN): combines momentum, new highs vs lows, put/call options, junk bond demand, volatility (VIX) and safe-haven demand.";
   fearGreedCrypto = "<b>Crypto Fear &amp; Greed</b> (alternative.me): combines volatility, volume, social media, Bitcoin dominance and search trends.";
 
+  usdtSupply = "<b>USDT supply</b>: Tether tokens issued on each chain, read from the token contracts. Rising supply means fresh dollars entering crypto, which often comes before buying pressure; shrinking supply means redemptions.";
+
   fedFunds = "<b>Fed funds rate</b>: the US central bank policy rate. Cuts usually help stocks (cheaper money); hikes usually hurt growth stocks most.";
   treasury10y = "<b>10-year Treasury yield</b>: the risk-free long-term rate. Rising yields make future profits worth less today, pressuring high-P/E stocks.";
   yieldCurve = "<b>Yield curve (10Y minus 2Y)</b>: below 0 is <i>inverted</i>, which has preceded most US recessions. Re-steepening after an inversion is often when the slowdown arrives.";

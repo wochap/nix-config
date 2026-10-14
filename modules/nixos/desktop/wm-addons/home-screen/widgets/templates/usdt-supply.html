@@ -1,0 +1,56 @@
+{{- /*
+  USDT total supply per chain, read from the token contracts. Tron comes from
+  Tronscan (no key); Ethereum comes from Etherscan and is skipped unless the
+  key is configured. Both APIs return raw integer strings with 6 decimals.
+  Options: ethereum (bool)
+*/ -}}
+{{- $tron := 0.0 }}
+{{- $tronRes := newRequest "https://apilist.tronscanapi.com/api/token_trc20"
+  | withParameter "contract" "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+  | withParameter "showAll" "1"
+  | getResponse }}
+{{- if $tronRes.JSON.Exists "trc20_tokens.0.total_supply_with_decimals" }}
+  {{- $tron = div ($tronRes.JSON.Float "trc20_tokens.0.total_supply_with_decimals") 1000000.0 }}
+{{- end }}
+{{- $eth := 0.0 }}
+{{- if .Options.BoolOr "ethereum" false }}
+  {{- $ethRes := newRequest "https://api.etherscan.io/v2/api"
+    | withParameter "chainid" "1"
+    | withParameter "module" "stats"
+    | withParameter "action" "tokensupply"
+    | withParameter "contractaddress" "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+    | withParameter "apikey" "@ETHERSCAN_TOKEN@"
+    | getResponse }}
+  {{- if eq ($ethRes.JSON.String "status") "1" }}
+    {{- $eth = div ($ethRes.JSON.Float "result") 1000000.0 }}
+  {{- end }}
+{{- end }}
+{{- $total := add $eth $tron }}
+<div class="size-h6 color-subdue cursor-help" style="width: fit-content" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
+  <div data-popover-html><p class="sc-tip">@TIP_USDTSUPPLY@</p></div>
+  Total supply by chain <span class="sc-i">ⓘ</span>
+</div>
+{{- if gt $total 0.0 }}
+<ul class="list list-gap-14 list-with-separator margin-top-10">
+  {{- if gt $eth 0.0 }}
+  <li class="fr-row">
+    <a class="color-highlight block text-truncate" href="https://etherscan.io/token/0xdAC17F958D2ee523a2206206994597C13D831ec7" target="_blank" rel="noreferrer">Ethereum (ERC-20)</a>
+    <div class="text-right shrink-0">
+      <div class="size-h4 color-highlight">{{ printf "$%.2fB" (div $eth 1000000000.0) }}</div>
+      <div class="size-h6">{{ printf "%.1f" (mul (div $eth $total) 100.0) }}%</div>
+    </div>
+  </li>
+  {{- end }}
+  {{- if gt $tron 0.0 }}
+  <li class="fr-row">
+    <a class="color-highlight block text-truncate" href="https://tronscan.org/#/token20/TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t" target="_blank" rel="noreferrer">Tron (TRC-20)</a>
+    <div class="text-right shrink-0">
+      <div class="size-h4 color-highlight">{{ printf "$%.2fB" (div $tron 1000000000.0) }}</div>
+      <div class="size-h6">{{ printf "%.1f" (mul (div $tron $total) 100.0) }}%</div>
+    </div>
+  </li>
+  {{- end }}
+</ul>
+{{- else }}
+<div class="color-subdue margin-top-10">USDT supply unavailable.</div>
+{{- end }}

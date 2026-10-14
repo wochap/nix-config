@@ -71,6 +71,19 @@
         symbol = "XMR-USD";
         name = "Monero";
       }
+      {
+        symbol = "ETH-USD";
+        name = "Ethereum";
+      }
+      {
+        symbol = "TRX-USD";
+        name = "Tron";
+      }
+      {
+        symbol = "USDT-USD";
+        name = "Tether";
+        signal = false;
+      }
     ];
   };
 
