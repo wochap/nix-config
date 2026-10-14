@@ -5,7 +5,8 @@
 #     admin ADMIN_USER, /Startup/Complete ends the wizard
 #   - as that admin (/Users/AuthenticateByName): adds the libraries in
 #     JF_LIBRARIES ("name collectionType path" per line) whose folder no
-#     library uses yet, with real-time monitoring on, and sets JF_HWACCEL
+#     library uses yet, with real-time monitoring on, sets the server name to
+#     JF_SERVER_NAME, and sets JF_HWACCEL
 #     (vaapi with JF_VAAPI_DEVICE, or nvenc) while hardware acceleration is
 #     still "none"
 # When the admin login does not work (the server was set up by hand with
@@ -55,6 +56,16 @@ fi
 if [ -z "$token" ]; then
   log "admin login $ADMIN_USER does not work; libraries and transcoding left to the dashboard"
   exit 0
+fi
+
+# Server name (defaults to the container hostname, a random id)
+config=$(jf "$JF_URL/System/Configuration")
+if [ "$(jq -r '.ServerName' <<<"$config")" = "$JF_SERVER_NAME" ]; then
+  log "server name $JF_SERVER_NAME present"
+else
+  jq --arg n "$JF_SERVER_NAME" '.ServerName = $n' <<<"$config" |
+    jf -X POST --data @- "$JF_URL/System/Configuration" >/dev/null
+  log "server name set to $JF_SERVER_NAME"
 fi
 
 # Libraries

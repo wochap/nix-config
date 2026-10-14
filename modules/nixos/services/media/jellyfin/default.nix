@@ -60,6 +60,7 @@ in
       common.mkConfigUnit name ./config.sh {
         env = {
           JF_URL = common.localUrl svc;
+          JF_SERVER_NAME = "Jellyfin";
           JF_LIBRARIES = lib.concatStringsSep "\n" [
             "Movies movies /data/media/movies"
             "Shows tvshows /data/media/series"
