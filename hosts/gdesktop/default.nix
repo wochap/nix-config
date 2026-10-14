@@ -215,6 +215,10 @@ in
     _custom.services.web-gate.proxies.audiobookshelf.expose.enable = true;
     _custom.services.web-gate.proxies.calibre-web.expose.enable = true;
     _custom.services.web-gate.proxies.navidrome.expose.enable = true;
+    # mpd (rmpc) plays ~/Music plus the Lidarr library, linked as
+    # ~/Music/library; the user is in group media.
+    _custom.desktop.music.extraDirectories.library =
+      "${config._custom.services.media.dataRoot}/media/music";
 
     # Media UIs other household members use, reachable from the LAN as
     # https://<name>.gdesktop.geanmar.com. They rely on the app's own login: their
