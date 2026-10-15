@@ -21,10 +21,13 @@ def count_tokens(text: str) -> int:
     return len(encoding.encode(text))
 
 
+# Timestamps such as [02:57.84].
+TIMESTAMP_RE = re.compile(r"\[\d{2}:\d{2}\.\d{2}\]")
+
+
 def clean_transcript(raw: str) -> str:
     """Remove timestamps from the transcript while preserving speaker labels."""
-    # Remove timestamps such as [02:57.84].
-    text = re.sub(r"\[\d{2}:\d{2}\.\d{2}\]\s*", "", raw)
+    text = re.sub(TIMESTAMP_RE.pattern + r"\s*", "", raw)
 
     # Collapse multiple consecutive blank lines.
     text = re.sub(r"\n{3,}", "\n\n", text)
@@ -177,6 +180,12 @@ def main():
         help="Generation temperature, agents-server and omniroute only (default: 0.1)",
     )
 
+    parser.add_argument(
+        "--require-timestamps",
+        action="store_true",
+        help="Skip the file (exit 0) unless it has [MM:SS.xx] timestamps",
+    )
+
     args = parser.parse_args()
 
     # Validate the transcript file.
@@ -189,6 +198,12 @@ def main():
 
     # Load and clean the transcript.
     raw_transcript = args.transcript_file.read_text(encoding="utf-8")
+    if args.require_timestamps and not TIMESTAMP_RE.search(raw_transcript):
+        print(
+            f"Skipped: no [MM:SS.xx] timestamps in {args.transcript_file}",
+            file=sys.stderr,
+        )
+        sys.exit(0)
     cleaned = clean_transcript(raw_transcript)
 
     # Count transcript tokens.

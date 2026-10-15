@@ -37,6 +37,16 @@ let
       exec ${notesPython}/bin/python ${./extract_notes.py} "$@"
     '';
   };
+  course-notes-dir = pkgs.writeShellApplication {
+    name = "course-notes-dir";
+    runtimeInputs = [
+      course-notes
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.coreutils
+    ];
+    text = builtins.readFile ./course-notes-dir.sh;
+  };
 in
 {
   options._custom.services.ai.courseNotes = {
@@ -72,6 +82,9 @@ in
       }
     ];
 
-    environment.systemPackages = [ course-notes ];
+    environment.systemPackages = [
+      course-notes
+      course-notes-dir
+    ];
   };
 }
