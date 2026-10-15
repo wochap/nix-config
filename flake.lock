@@ -4067,11 +4067,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792021631,
-        "narHash": "sha256-ATsi+1QA94bFN4R5Vwtyr+k/WSenbUgYmXgbJ4W+N3o=",
+        "lastModified": 1792107484,
+        "narHash": "sha256-JKC9YtDwFQ4bDgYT1461bcsIRSnWLt7FX/dbA1xY/uE=",
         "owner": "wochap",
         "repo": "webscoop",
-        "rev": "9c38739ed670200d4ff5581e54b8db4d05df8726",
+        "rev": "e9d9697bc27e3a7dadba1abcaf814638c987b419",
         "type": "github"
       },
       "original": {
@@ -4219,11 +4219,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1792086424,
-        "narHash": "sha256-Z+7N6IvwthZANwDBxfAmLMYpEyZrVn9JmxUyv94XhfQ=",
+        "lastModified": 1792101268,
+        "narHash": "sha256-V7UFp8WMmrTlDVsLdhkIEgT8+SLJgr74UrAZnrMkr0w=",
         "owner": "wochap",
         "repo": "wosarcher",
-        "rev": "9736eea35e586be175e0d0ef739ce5db63d9ac50",
+        "rev": "d2672f46c05d7fffc3d0128cd8e17e5cced15efe",
         "type": "github"
       },
       "original": {
