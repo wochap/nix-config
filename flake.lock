@@ -4219,11 +4219,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1792029768,
-        "narHash": "sha256-nJ7HwVVTUInKtk/CFxkOYUmWocpBfCYdcKZaJ0WheS4=",
+        "lastModified": 1792086424,
+        "narHash": "sha256-Z+7N6IvwthZANwDBxfAmLMYpEyZrVn9JmxUyv94XhfQ=",
         "owner": "wochap",
         "repo": "wosarcher",
-        "rev": "b21ed0b659834b3fad2fba38eafc26096843e405",
+        "rev": "9736eea35e586be175e0d0ef739ce5db63d9ac50",
         "type": "github"
       },
       "original": {
