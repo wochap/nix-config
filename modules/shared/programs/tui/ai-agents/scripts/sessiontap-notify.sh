@@ -43,7 +43,7 @@ provider_details() {
 notify_update() {
   local envelope=$1
   local status reason_kind reason_summary provider cwd branch session_name
-  local context_percent input_tokens output_tokens provider_display icon title event body meta location usage urgency
+  local model context_percent input_tokens output_tokens provider_display icon title event body meta location usage urgency
 
   status=$(jq -r '.view.status // empty' <<<"$envelope")
   reason_kind=$(jq -r '.view.reason.kind // empty' <<<"$envelope")
@@ -105,8 +105,13 @@ notify_update() {
   context_percent=$(jq -r '.view.usage.context_window_percent // empty' <<<"$envelope")
   input_tokens=$(jq -r '.view.usage.input_tokens // empty' <<<"$envelope")
   output_tokens=$(jq -r '.view.usage.output_tokens // empty' <<<"$envelope")
-  usage=""
-  [[ -n "$context_percent" ]] && usage="Context ${context_percent}%"
+  # prefer the provider's short label (e.g. sonnet-5.5), fall back to the full id
+  model=$(jq -r '.view.metadata.model_label // .view.metadata.model // empty' <<<"$envelope")
+  usage=$model
+  if [[ -n "$context_percent" ]]; then
+    [[ -n "$usage" ]] && usage+=" · "
+    usage+="Context ${context_percent}%"
+  fi
   if [[ -n "$input_tokens" ]]; then
     [[ -n "$usage" ]] && usage+=" · "
     usage+="In $(humanize "$input_tokens")"
