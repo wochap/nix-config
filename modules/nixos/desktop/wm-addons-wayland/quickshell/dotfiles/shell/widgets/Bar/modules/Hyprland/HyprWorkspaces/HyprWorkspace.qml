@@ -81,7 +81,8 @@ Button {
     Row {
       id: icons
 
-      anchors.horizontalCenter: parent.horizontalCenter
+      // rounded so the icon and number snap to the same pixel grid
+      x: Math.round((content.width - icons.width) / 2)
       y: Utils.lerp(content.collapsedTop, (content.height - icons.height) / 2, content.progress)
       spacing: 1.5 * content.othersProgress
 
@@ -156,7 +157,7 @@ Button {
     StyledText {
       id: numberText
 
-      anchors.horizontalCenter: parent.horizontalCenter
+      x: Math.round((content.width - numberText.implicitWidth) / 2)
       y: content.collapsedTop + (root.hasRepresentativeClient ? content.collapsedIconSize - content.overlap + content.collapsedExtra / 2 : 0)
       opacity: 1 - content.progress
       scale: 1 - 0.4 * content.progress
