@@ -21,6 +21,7 @@ local-syncthing-password: ENC[AES256_GCM,data:11Yx7II0BO4=,iv:oPP7QqKM+DkMQKGRF/
 local-media-lidarr-api-key: ENC[AES256_GCM,data:+KZt4EKgh9HyXSeko8cd7qnlxfhA0X3FMev4A8aoGYQ=,iv:fb3E7mM6hwmhV/6TIuNRibSFVjARNLoBtnBnLOJ7MlE=,tag:/69xu/jbM1TDfDDDUIYx+g==,type:str]
 local-media-slskd-api-key: ENC[AES256_GCM,data:x58+uBBDRCzOn0yYcEzdzN8mVnVn5vfQNsEJmIwwp3Z+vGokUaKTQwm7ZFYTqYflXjwrIEaY5YXKPWM7/WyOLQ==,iv:MoHCCIyvbLFxR4vm6yTS+vuHt41ZT5rK+yjy0J3p/kc=,tag:bTrI2r0KRhnvWStNdLZt7g==,type:str]
 local-media-soulseek-env: ENC[AES256_GCM,data:dGf0uslWmVBuLn/UDzJ3bWFfZB1TyHdAvEQxhlK3JRQ31OTfB3BPMBfVPVCgFe0RQwhogzzZAHc=,iv:Apy2Ims8HKgJLTyLXYKqOD8uqKbhjGeq/JmbcW1aubk=,tag:fnjL3yi1JevZXIGfTPkMOg==,type:str]
+local-wosarcher-password-hash: ENC[AES256_GCM,data:aQttKNLoHs47cJLFk2VsPxfP8YGnerAS5vrfR2mO5WcsSdV0+/8yjO/GlPMdSCoNuethtols+KLiaXzK/vIttwfA+rQldkDfN0T2qB/tTqI=,iv:EAzSTlu5bDTqdrA7hghuv12ILmFv/ktzZdUKypIjMUo=,tag:v70y1G36w6jok4mWitmS/w==,type:str]
 sops:
     age:
         - enc: |
@@ -41,7 +42,7 @@ sops:
             44HTlJUCetkY7a7utsoCb61VcsuLdip8we358v06rKy1zne0G36/Pw==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1hryf55wm6ypwvw97e5f9gzczeesy5r0hcndgz2q2lulg8gpxqu2qxgeje9
-    lastmodified: "2026-10-14T01:05:38Z"
-    mac: ENC[AES256_GCM,data:fawNG84GgwR9RJNUFjF3CI4FaSLSh7AKWVKHkYN4XURWbcmSGPtg+wR0A24kQJqIZzIdfOTJSlcaufBYKq0pVeAIdIRQYCJP4aebjFmSK5Sa2D25PIzNPht7I7S2IYvQZT42CQLwCyOmWGa6/Y8AKPOmiIUC8+5iYebAWFWl9VE=,iv:bjfjAX7DG3H7scAOGY9v/NxO5bwcSuTRlg7hxq+8M30=,tag:SpJrpa9ApDYB+q2wfQVkFA==,type:str]
+    lastmodified: "2026-10-15T02:01:34Z"
+    mac: ENC[AES256_GCM,data:F+pFBc1OLwRzzFPzHDVkWmeW8ZtBqBwsh3lHo5O9ILMeGP2DOGqiNBqEYtX4QfrjS2eRJ24lZFPN3c8UkG/8ae5DOs3u1dMFy4q7l0DV4aMjrqlQ0NhgooiRaTATLEgWYWkvk2hps1jSgnbeCff2MFzuDMdC7ZshoSaed7gyz4g=,iv:3jEGGCigqqLiA0C1VSTf44VgLXFTXDn/LuT6AVpnG3g=,tag:/Hx1cSOEnPEMUZt4sMsubw==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.1

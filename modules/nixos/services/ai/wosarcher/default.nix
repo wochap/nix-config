@@ -9,6 +9,7 @@
 let
   cfg = config._custom.services.ai;
   wcfg = cfg.wosarcher;
+  hashSecret = wcfg.passwordHashSecret;
   inherit (pkgs._custom) wochap-ssc;
   toml = pkgs.formats.toml { };
   # Total context window and largest completion per model (../model-presets.nix).
@@ -298,16 +299,22 @@ in
       secrets-sops/personal.yaml through api_key_file
     '';
 
-    passwordHashSecret = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      example = "wosarcher-password-hash";
-      description = ''
-        Name of a sops secret holding the admin password's scrypt hash (from
-        `wosarcherd auth set-password --print`), passed to the daemon as
-        auth.password_hash_file. Null keeps the hash the daemon stores itself
-        with `sudo -u wosarcher wosarcherd auth set-password`.
-      '';
+    passwordHashSecret = {
+      sopsFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = ''
+          SOPS file with the admin password's scrypt hash (from
+          `wosarcherd auth set-password --print`), passed to the daemon as
+          auth.password_hash_file. Null keeps the hash the daemon stores
+          itself with `sudo -u wosarcher wosarcherd auth set-password`.
+        '';
+      };
+      sopsKey = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "local-wosarcher-password-hash";
+        description = "Key containing the admin password hash in the SOPS file.";
+      };
     };
 
     environmentFile = lib.mkOption {
@@ -400,8 +407,8 @@ in
       environment = {
         WOSARCHER_PROFILE = wcfg.profile;
       }
-      // lib.optionalAttrs (wcfg.passwordHashSecret != null) {
-        WOSARCHER_AUTH__PASSWORD_HASH_FILE = config.sops.secrets.${wcfg.passwordHashSecret}.path;
+      // lib.optionalAttrs (hashSecret.sopsFile != null) {
+        WOSARCHER_AUTH__PASSWORD_HASH_FILE = config.sops.secrets.${hashSecret.sopsKey}.path;
       };
       environmentFile = wcfg.environmentFile;
       inherit (wcfg) profiles;
@@ -426,6 +433,12 @@ in
     sops.secrets.wosarcher-agents-api-key = lib.mkIf usesAgents {
       sopsFile = ../../../../../secrets-sops/local.yaml;
       key = "local-agents-server-api-key";
+      owner = "wosarcher";
+      group = "wosarcher";
+      mode = "0400";
+    };
+    sops.secrets.${hashSecret.sopsKey} = lib.mkIf (hashSecret.sopsFile != null) {
+      inherit (hashSecret) sopsFile;
       owner = "wosarcher";
       group = "wosarcher";
       mode = "0400";

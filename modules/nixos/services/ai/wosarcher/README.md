@@ -57,9 +57,10 @@ an environment file.
    ```
 
    To keep the hash in SOPS instead, store the output of
-   `wosarcherd auth set-password --print` as a sops secret and name it in
-   `passwordHashSecret`; the daemon then reads it through
-   `auth.password_hash_file`.
+   `wosarcherd auth set-password --print` under a SOPS key and point
+   `passwordHashSecret.sopsFile` and `passwordHashSecret.sopsKey` at it
+   (default key `local-wosarcher-password-hash`); the daemon then reads it
+   through `auth.password_hash_file`.
 
 5. Check every provider. When the reranker is enabled, `score` reports a
    `ReadTimeout` until `reranker-model` has finished downloading the GGUF

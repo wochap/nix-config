@@ -279,6 +279,8 @@ in
     _custom.services.ai.wosarcher.enable = true;
     _custom.services.ai.wosarcher.jev.enable = true;
     _custom.services.ai.wosarcher.profile = "jev";
+    _custom.services.ai.wosarcher.passwordHashSecret.sopsFile = ../../secrets-sops/local.yaml;
+    _custom.services.ai.wosarcher.passwordHashSecret.sopsKey = "local-wosarcher-password-hash";
     # gdesktop's exposed services resolve through the public
     # *.gdesktop.geanmar.com record, e.g. https://wosarcher.gdesktop.geanmar.com.
     # _custom.services.ai.openDesign.enable = true;

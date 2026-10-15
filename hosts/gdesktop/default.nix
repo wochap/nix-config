@@ -283,6 +283,8 @@ in
     _custom.services.ai.wosarcher.jev.enable = true;
     # The default profile (local reranker) stays available for offline use.
     _custom.services.ai.wosarcher.profile = "jev";
+    # _custom.services.ai.wosarcher.passwordHashSecret.sopsFile = ../../secrets-sops/local.yaml;
+    # _custom.services.ai.wosarcher.passwordHashSecret.sopsKey = "local-wosarcher-password-hash";
     # Reachable from the LAN as https://wosarcher.gdesktop.geanmar.com behind `web-gate`
     # _custom.services.web-gate.proxies.wosarcher.expose.enable = true;
     # _custom.services.web-gate.proxies.wosarcher.expose.gate = true;
