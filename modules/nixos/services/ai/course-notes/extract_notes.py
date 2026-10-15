@@ -7,6 +7,7 @@ import json
 import re
 import subprocess
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -137,6 +138,7 @@ def run_omniroute(message: str, model: str, temperature: float) -> str:
             "omniroute-chat",
             "--reasoning-effort",
             os.environ.get("OMNIROUTE_REASONING_EFFORT", "none"),
+            "--stream",
         ],
         json.dumps(chat_request(message, model, temperature)),
     )
@@ -181,6 +183,12 @@ def main():
     )
 
     parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Regenerate the notes even if the note file already exists",
+    )
+
+    parser.add_argument(
         "--require-timestamps",
         action="store_true",
         help="Skip the file (exit 0) unless it has [MM:SS.xx] timestamps",
@@ -195,6 +203,16 @@ def main():
             file=sys.stderr,
         )
         sys.exit(1)
+
+    # Generate the output path next to the transcript.
+    # Example: lecture.txt -> lecture_note.md
+    output_file = args.transcript_file.with_name(f"{args.transcript_file.stem}_note.md")
+    if output_file.exists() and not args.force:
+        print(
+            f"Exists, skipping: {output_file} (use --force to regenerate)",
+            file=sys.stderr,
+        )
+        sys.exit(0)
 
     # Load and clean the transcript.
     raw_transcript = args.transcript_file.read_text(encoding="utf-8")
@@ -245,16 +263,20 @@ def main():
     model = args.model or env_model or DEFAULT_MODELS[args.backend]
     print(f"Backend: {args.backend}, model: {model}", file=sys.stderr)
 
-    # Generate the output path next to the transcript.
-    # Example: lecture.txt -> lecture_note.md
-    output_file = args.transcript_file.with_name(f"{args.transcript_file.stem}_note.md")
-
+    print("Generating notes...", file=sys.stderr)
+    started = time.monotonic()
     if args.backend == "agents":
         notes = run_agents(user_message, model)
     elif args.backend == "agents-server":
         notes = run_agents_server(user_message, model, args.temperature)
     else:
         notes = run_omniroute(user_message, model, args.temperature)
+
+    elapsed = time.monotonic() - started
+    print(
+        f"Generated in {elapsed:.0f}s ({count_tokens(notes)} output tokens)",
+        file=sys.stderr,
+    )
 
     # Save the generated notes as a Markdown file.
     output_file.write_text(notes.strip() + "\n", encoding="utf-8")

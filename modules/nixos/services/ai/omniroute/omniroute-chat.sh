@@ -5,9 +5,11 @@ base_url="${OMNIROUTE_BASE_URL:-https://omniroute.wochap.local/v1}"
 model="${OMNIROUTE_MODEL:-desktop-free}"
 api_key_file="${OMNIROUTE_API_KEY_FILE:-/run/secrets/local-omniroute-secret-key}"
 effort="${OMNIROUTE_REASONING_EFFORT:-}"
+stream=0
+max_time=120
 
 usage() {
-  echo "usage: omniroute-chat [--model MODEL] [--reasoning-effort none|low|medium|high|xhigh|max|default] < OpenAI-chat-request.json" >&2
+  echo "usage: omniroute-chat [--model MODEL] [--reasoning-effort none|low|medium|high|xhigh|max|default] [--stream] < OpenAI-chat-request.json" >&2
 }
 
 while (($#)); do
@@ -21,6 +23,12 @@ while (($#)); do
     (($# >= 2)) || { usage; exit 2; }
     effort=$2
     shift 2
+    ;;
+  --stream)
+    # Server-sent events keep the connection alive through slow runs.
+    stream=1
+    max_time=1800
+    shift
     ;;
   --help | -h)
     usage
@@ -56,9 +64,9 @@ fi
 work_dir=$(mktemp -d "${TMPDIR:-/tmp}/omniroute-chat.XXXXXX")
 trap 'rm -rf "$work_dir"' EXIT
 
-if ! jq -e --arg model "$model" --arg effort "$effort" '
+if ! jq -e --arg model "$model" --arg effort "$effort" --argjson stream "$stream" '
   select(type == "object" and (.messages | type == "array")) |
-  .model = $model | .stream = false |
+  .model = $model | .stream = ($stream == 1) |
   if $effort == "" then . elif $effort == "default" then del(.reasoning_effort)
   else .reasoning_effort = $effort end
 ' >"$work_dir/request.json"; then
@@ -66,7 +74,7 @@ if ! jq -e --arg model "$model" --arg effort "$effort" '
   exit 2
 fi
 
-if ! http_code=$(curl --silent --show-error --connect-timeout 5 --max-time 120 \
+if ! http_code=$(curl --silent --show-error --connect-timeout 5 --max-time "$max_time" \
   --output "$work_dir/response.json" --write-out '%{http_code}' \
   --header 'Content-Type: application/json' \
   --header "Authorization: Bearer $api_key" \
@@ -81,6 +89,27 @@ if [[ $http_code != 2* ]]; then
   [[ -n $error ]] || error=$(head -c 500 "$work_dir/response.json")
   echo "omniroute-chat: OmniRoute returned HTTP $http_code: $error" >&2
   exit 1
+fi
+
+if ((stream)); then
+  # Concatenate the content deltas of the SSE events. The stream only counts
+  # when it ends with [DONE] and carries no error event.
+  sed -n 's/^data: *//p' "$work_dir/response.json" >"$work_dir/events.txt"
+  if ! grep -q '^\[DONE\]' "$work_dir/events.txt"; then
+    echo "omniroute-chat: OmniRoute stream ended without [DONE]" >&2
+    exit 1
+  fi
+  if ! content=$(grep -v '^\[DONE\]' "$work_dir/events.txt" |
+    jq -rj 'if .error then error(.error.message // .error | tostring) else .choices[0].delta.content? // empty end'); then
+    echo "omniroute-chat: OmniRoute stream failed: $(grep -v '^\[DONE\]' "$work_dir/events.txt" | jq -r '.error.message? // .error? // empty' 2>/dev/null | head -c 500)" >&2
+    exit 1
+  fi
+  if [[ -z $content ]]; then
+    echo "omniroute-chat: OmniRoute returned no usable message content" >&2
+    exit 1
+  fi
+  printf '%s\n' "$content"
+  exit 0
 fi
 
 if ! jq -er '.choices[0].message.content | select(type == "string" and length > 0)' \

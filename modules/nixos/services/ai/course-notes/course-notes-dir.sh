@@ -27,29 +27,43 @@ fi
 done_count=0
 skipped=0
 failed=()
+start=$SECONDS
 
 # -I skips binary files; generated notes are never transcripts.
+files=()
 while IFS= read -r -d '' file; do
-  note="${file%.*}_note.md"
-  if [[ $force -eq 0 && -e "$note" ]]; then
-    echo "Exists, skipping: $note" >&2
-    skipped=$((skipped + 1))
-    continue
-  fi
-
-  echo "==> $file" >&2
-  if course-notes --require-timestamps "$@" "$file"; then
-    done_count=$((done_count + 1))
-  else
-    failed+=("$file")
-  fi
+  files+=("$file")
 done < <(
   find "$dir" -type f ! -name '*_note.md' -print0 |
     xargs -0 -r grep -lIZE '\[[0-9]{2}:[0-9]{2}\.[0-9]{2}\]' |
     sort -z
 )
 
-echo "Done: $done_count generated, $skipped skipped, ${#failed[@]} failed" >&2
+total=${#files[@]}
+echo "Found $total transcript(s) under $dir" >&2
+
+i=0
+for file in "${files[@]}"; do
+  i=$((i + 1))
+  note="${file%.*}_note.md"
+  if [[ $force -eq 0 && -e "$note" ]]; then
+    echo "[$i/$total] Exists, skipping: $note" >&2
+    skipped=$((skipped + 1))
+    continue
+  fi
+
+  echo "[$i/$total] ==> $file" >&2
+  file_start=$SECONDS
+  if course-notes --force --require-timestamps "$@" "$file"; then
+    done_count=$((done_count + 1))
+    echo "[$i/$total] finished in $((SECONDS - file_start))s" >&2
+  else
+    failed+=("$file")
+    echo "[$i/$total] FAILED after $((SECONDS - file_start))s" >&2
+  fi
+done
+
+echo "Done in $((SECONDS - start))s: $done_count generated, $skipped skipped, ${#failed[@]} failed" >&2
 for file in "${failed[@]}"; do
   echo "  failed: $file" >&2
 done

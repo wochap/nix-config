@@ -333,21 +333,64 @@ function usage(out: RunOutput | null) {
   return { prompt_tokens, completion_tokens, total_tokens: prompt_tokens + completion_tokens };
 }
 
+// Runs longer than this answer with keepalive whitespace first, so a client
+// or proxy with a response-start timeout (OmniRoute: 30 s) does not give up and
+// kill the run. Faster runs keep their real HTTP status.
+const EARLY_HEADERS_MS = 10_000;
+
 async function complete(p: Plan, o: ServeOptions, signal: AbortSignal): Promise<Response> {
   const run = spawn(p, o.cwd, o.tools);
   signal.addEventListener("abort", run.kill);
-  const out = await run.output();
-  if (!out) throw new HttpError(500, run.error() || "agents run printed no result");
-  if (out.status !== "done") throw new HttpError(500, out.result || run.error() || "agent failed");
-  remembered(p, out.id, [out.result]);
-  return json({
-    id: completionId(out.id),
-    object: "chat.completion",
-    created: now(),
-    model: p.model,
-    choices: [{ index: 0, message: { role: "assistant", content: out.result }, finish_reason: "stop" }],
-    usage: usage(out),
+
+  const reply = async (): Promise<{ body: unknown; status: number }> => {
+    const out = await run.output();
+    if (!out) return { body: errorBody(run.error() || "agents run printed no result"), status: 500 };
+    if (out.status !== "done") return { body: errorBody(out.result || run.error() || "agent failed"), status: 500 };
+    remembered(p, out.id, [out.result]);
+    return {
+      status: 200,
+      body: {
+        id: completionId(out.id),
+        object: "chat.completion",
+        created: now(),
+        model: p.model,
+        choices: [{ index: 0, message: { role: "assistant", content: out.result }, finish_reason: "stop" }],
+        usage: usage(out),
+      },
+    };
+  };
+
+  const pending = reply();
+  const early = await Promise.race([pending, Bun.sleep(EARLY_HEADERS_MS).then(() => null)]);
+  if (early) return json(early.body, early.status);
+
+  // Headers go out now with a 200; a late failure is reported as an error
+  // object in the body. Leading whitespace is valid JSON.
+  const encoder = new TextEncoder();
+  let timer: ReturnType<typeof setInterval>;
+  const body = new ReadableStream({
+    async start(controller) {
+      controller.enqueue(encoder.encode(" "));
+      timer = setInterval(() => {
+        try {
+          controller.enqueue(encoder.encode(" "));
+        } catch {}
+      }, 15_000);
+      try {
+        const { body: result } = await pending;
+        controller.enqueue(encoder.encode(JSON.stringify(result)));
+        controller.close();
+      } catch {
+      } finally {
+        clearInterval(timer);
+      }
+    },
+    cancel() {
+      clearInterval(timer);
+      run.kill();
+    },
   });
+  return new Response(body, { headers: { "Content-Type": "application/json", "Cache-Control": "no-cache" } });
 }
 
 function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
@@ -386,6 +429,7 @@ function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
       let lastText = "";
       let sawText = false;
       let ended = false;
+      let failure: string | null = null;
       const content = (s: string) => {
         sent += s;
         chunk({ content: s });
@@ -399,7 +443,7 @@ function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
         } else if (e.type === "tool" && o.toolEvents) {
           content(`_> ${e.label}_\n\n`);
         } else if (e.type === "error") {
-          content(e.message);
+          failure = e.message;
           ended = true;
         } else if (e.type === "result") {
           if (!sawText && e.result && e.result !== lastText) content(e.result);
@@ -436,8 +480,15 @@ function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
       const out = await run.output();
       if (out?.status === "done") {
         remembered(p, out.id, [sent, out.result]);
-      } else if (!ended) {
-        content(out?.result || run.error() || "agent failed");
+      } else if (!ended || failure !== null) {
+        failure = failure ?? (out?.result || run.error() || "agent failed");
+      }
+      if (failure !== null && out?.status !== "done") {
+        // Not answer text: clients must be able to tell a failure from a reply.
+        write(`data: ${JSON.stringify(errorBody(failure))}\n\n`);
+        write("data: [DONE]\n\n");
+        if (!closed) controller.close();
+        return;
       }
       chunk({}, "stop");
       if (p.streamUsage) {
