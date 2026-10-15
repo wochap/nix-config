@@ -59,3 +59,6 @@ const compareOpenOrder = (a, b) => {
   const addressB = b?.address ?? "";
   return addressA < addressB ? -1 : addressA > addressB ? 1 : 0;
 };
+
+// linear interpolation from a to b, t in [0, 1]
+const lerp = (a, b, t) => a + (b - a) * t;
