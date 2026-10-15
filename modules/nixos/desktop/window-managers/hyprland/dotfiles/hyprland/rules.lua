@@ -177,19 +177,30 @@ hl.workspace_rule({ workspace = "f[1]", gaps_out = 0, border_size = 0, no_roundi
 
 ---- ANIMATION
 
-hl.animation({ leaf = "windows", enabled = true, speed = 2, bezier = "default" })
+-- same timing as the quickshell popovers (Styles.animation): enters 150ms
+-- OutCubic, exits 120ms InCubic, speed is in deciseconds
+hl.curve("enter", { type = "bezier", points = { { 0.33, 1 }, { 0.68, 1 } } })
+hl.curve("exit", { type = "bezier", points = { { 0.32, 0 }, { 0.67, 0 } } })
+
+hl.animation({ leaf = "windows", enabled = true, speed = 1.5, bezier = "enter" })
 hl.animation({ leaf = "windowsIn", enabled = false })
-hl.animation({ leaf = "layers", enabled = true, speed = 2, bezier = "default" })
+-- closing windows only fade out, no shrink
+hl.animation({ leaf = "windowsOut", enabled = false })
+hl.animation({ leaf = "layers", enabled = true, speed = 1.5, bezier = "enter" })
 hl.animation({ leaf = "layersIn", enabled = false })
-hl.animation({ leaf = "fade", enabled = true, speed = 2, bezier = "default" })
+hl.animation({ leaf = "layersOut", enabled = true, speed = 1.2, bezier = "exit" })
+hl.animation({ leaf = "fade", enabled = true, speed = 1.5, bezier = "enter" })
 hl.animation({ leaf = "fadeIn", enabled = false })
+hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.2, bezier = "exit" })
 hl.animation({ leaf = "fadeLayersIn", enabled = false })
+hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.2, bezier = "exit" })
 hl.animation({ leaf = "fadePopupsIn", enabled = false })
-hl.animation({ leaf = "border", enabled = true, speed = 2, bezier = "default" })
+hl.animation({ leaf = "fadePopupsOut", enabled = true, speed = 1.2, bezier = "exit" })
+hl.animation({ leaf = "border", enabled = true, speed = 1.5, bezier = "enter" })
 hl.animation({ leaf = "borderangle", enabled = false })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 2, bezier = "default" })
-hl.animation({ leaf = "workspacesIn", enabled = true, speed = 2, bezier = "default", style = "fade" })
-hl.animation({ leaf = "workspacesOut", enabled = true, speed = 2, bezier = "default", style = "fade" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1.5, bezier = "enter" })
+hl.animation({ leaf = "workspacesIn", enabled = true, speed = 1.5, bezier = "enter", style = "fade" })
+hl.animation({ leaf = "workspacesOut", enabled = true, speed = 1.2, bezier = "exit", style = "fade" })
 hl.animation({ leaf = "specialWorkspaceIn", enabled = false })
-hl.animation({ leaf = "monitorAdded", enabled = true, speed = 2, bezier = "default" })
+hl.animation({ leaf = "monitorAdded", enabled = true, speed = 1.5, bezier = "enter" })
 -- hl.animation({ leaf = "zoomFactor", enabled = true, speed = 2, bezier = "default" })
