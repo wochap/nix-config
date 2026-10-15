@@ -48,7 +48,7 @@ in
   };
 
   config = {
-    nixpkgs.config.permittedInsecurePackages = config._custom.permittedInsecurePackages;
+    nixpkgs.config.permittedInsecurePackages = lib.unique config._custom.permittedInsecurePackages;
 
     nixpkgs.overlays = sharedOverlays ++ [
       # Custom channels
