@@ -35,6 +35,15 @@ Item {
     return result;
   }
 
+  // a focus move between two workspaces, not the first placement once the
+  // monitor and workspaces resolve
+  onFocusedItemChanged: {
+    if (root.focusedItem && indicator.lastFocusedItem) {
+      indicator.isSliding = true;
+    }
+    indicator.lastFocusedItem = root.focusedItem;
+  }
+
   Component.onCompleted: {
     Quickshell.execDetached(["bash", "-c", `hyprctl eval 'require("hyprland.lib.ws_offset").emit()'`]);
   }
@@ -68,12 +77,17 @@ Item {
     width: root.focusedItem?.width ?? 0
     height: root.height
     opacity: root.focusedItem ? 1 : 0
+    // only slide once the focused workspace changes, so the first layout
+    // (bar created, workspace 6 focused) places it without sliding from the left
+    property bool isSliding: false
+    property Item lastFocusedItem: null
     color: Theme.options.surface0
     radius: ConfigBar.modulesRadius
 
     // x retargets while the workspaces before it morph, the width needs no
     // animation, the focused workspace already animates its own width
     Behavior on x {
+      enabled: indicator.isSliding
       animation: Styles.animations.smoothedAnimation.createObject(this)
     }
 

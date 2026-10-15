@@ -61,7 +61,21 @@ Button {
     readonly property real collapsedExtra: Math.max(0, content.height - content.collapsedHeight)
     readonly property real collapsedTop: root.hasRepresentativeClient ? content.collapsedExtra / 4 : content.collapsedExtra / 2
 
-    implicitWidth: Math.max(icons.implicitWidth, numberText.implicitWidth * (1 - content.progress))
+    // last non-empty taskbar width, so closing the last window shrinks from it
+    // instead of jumping to the number width
+    property real lastIconsWidth: 0
+
+    implicitWidth: Math.max(icons.implicitWidth, numberText.implicitWidth, root.clients.length === 0 ? Utils.lerp(numberText.implicitWidth, content.lastIconsWidth, content.progress) : 0)
+
+    Connections {
+      target: icons
+
+      function onImplicitWidthChanged() {
+        if (icons.implicitWidth > 0) {
+          content.lastIconsWidth = icons.implicitWidth;
+        }
+      }
+    }
     implicitHeight: Math.max(content.collapsedHeight, content.expandedIconSize)
 
     Row {
