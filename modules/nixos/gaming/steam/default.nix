@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config._custom.gaming.steam;
@@ -8,30 +13,6 @@ in
 
   # inspiration: https://www.reddit.com/r/NixOS/comments/15dokde/problems_with_steam_and_gamescope_in_hyprland/
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        steam = prev.steam.override {
-          extraPkgs =
-            pkgs: with pkgs; [
-              openssl
-              gamescope
-              mangohud
-
-              keyutils
-              libkrb5
-              libpng
-              libpulseaudio
-              libvorbis
-              stdenv.cc.cc.lib
-              libxscrnsaver
-              libxcursor
-              libxi
-              libxinerama
-            ];
-        };
-      })
-    ];
-
     _custom.gaming.utils.enable = lib.mkDefault true;
 
     environment.sessionVariables.STEAM_EXTRA_COMPAT_TOOLS_PATHS = [
@@ -40,6 +21,25 @@ in
 
     programs.steam = {
       enable = true;
+      package = pkgs.steam.override {
+        extraPkgs =
+          pkgs: with pkgs; [
+            openssl
+            gamescope
+            mangohud
+
+            keyutils
+            libkrb5
+            libpng
+            libpulseaudio
+            libvorbis
+            stdenv.cc.cc.lib
+            libxscrnsaver
+            libxcursor
+            libxi
+            libxinerama
+          ];
+      };
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
       gamescopeSession.enable = true;

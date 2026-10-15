@@ -12,7 +12,7 @@ in
   options._custom.programs.electron.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
+    _custom.overlays = [
       (final: prev: {
         bruno =
           prev.runCommand "bruno"
@@ -41,6 +41,9 @@ in
             '';
       })
     ];
+
+    # required by bitwarden-desktop
+    _custom.permittedInsecurePackages = [ "electron-39.8.10" ];
 
     environment.systemPackages = with pkgs; [
       bitwarden-desktop

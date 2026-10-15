@@ -14,7 +14,7 @@ in
   options._custom.programs.others-linux.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = lib.mkIf config._custom.security.gnome-keyring.enable [
+    _custom.overlays = lib.mkIf config._custom.security.gnome-keyring.enable [
       (final: prev: {
         brave =
           prev.runCommand "brave"

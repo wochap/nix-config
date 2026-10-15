@@ -18,9 +18,11 @@ in
     home-manager.enable = lib.mkEnableOption { };
 
     hm = lib.mkOption {
-      type = lib.types.attrs;
+      # deferredModule keeps the file location of each definition, so
+      # home-manager errors point at the module that set the value
+      type = lib.types.deferredModule;
       default = { };
-      description = "Options to pass directly to home-manager primary user.";
+      description = "home-manager module for the primary user.";
     };
 
     user = lib.mkOption {
@@ -60,7 +62,7 @@ in
     };
 
     # hm -> home-manager.users.<primary user>
-    home-manager.users.${userName} = lib.mkAliasDefinitions options._custom.hm;
+    home-manager.users.${userName}.imports = [ config._custom.hm ];
 
     # user -> users.users.<primary user>
     users.users.${userName} = lib.mkAliasDefinitions options._custom.user;

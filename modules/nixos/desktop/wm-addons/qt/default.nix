@@ -47,7 +47,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
+    _custom.overlays = [
       (final: prev: {
         catppuccin-qt5ct = prev.catppuccin-qt5ct.overrideAttrs (oldAttrs: {
           version = inputs.catppuccin-qt5ct.shortRev or "dirty";

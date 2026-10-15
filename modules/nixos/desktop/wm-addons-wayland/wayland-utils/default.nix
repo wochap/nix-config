@@ -65,7 +65,7 @@ in
     })
 
     (lib.mkIf (cfg.enable && (!isSandbox)) {
-      nixpkgs.overlays = [
+      _custom.overlays = [
         (final: prev: {
           showmethekey = prev.showmethekey.overrideAttrs (oldAttrs: rec {
             version = "v1.15.1+g${inputs.showmethekey.shortRev or "dirty"}";

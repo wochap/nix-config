@@ -52,7 +52,7 @@ let
 in
 {
   config = lib.mkIf (cfg.enable && cfg.accounts != { }) {
-    nixpkgs.overlays = [
+    _custom.overlays = [
       (_final: prev: {
         remind = prev.remind.overrideAttrs (_oldAttrs: {
           version = "06.02.10";

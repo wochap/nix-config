@@ -54,7 +54,7 @@ in
 
     services.gnome.at-spi2-core.enable = true;
 
-    nixpkgs.overlays = [
+    _custom.overlays = [
       (final: prev: {
         bitwarden-desktop = withRendererA11y prev prev.bitwarden-desktop "bitwarden";
         element-desktop = withRendererA11y prev prev.element-desktop "element-desktop";

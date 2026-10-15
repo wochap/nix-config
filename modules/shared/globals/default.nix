@@ -68,7 +68,11 @@ in
 
     # TODO: add a OLED variant
     # this is highly opinionated to catppuccin theme
-    preferDark = lib.mkEnableOption { default = true; };
+    preferDark = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Prefer the dark theme variant.";
+    };
     # TODO: remove themeColors or replace with prefered dark/light
     themeColors = lib.mkOption {
       type = lib.types.attrsOf (lib.types.nullOr lib.types.str);

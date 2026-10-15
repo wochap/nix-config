@@ -16,7 +16,7 @@ in
   options._custom.programs.buku.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
+    _custom.overlays = [
       (final: prev: {
         buku = prev.buku.overrideAttrs (oldAttrs: {
           version = "v5.1.1+g${inputs.buku.shortRev or "dirty"}";

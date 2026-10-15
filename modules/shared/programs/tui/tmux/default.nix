@@ -80,7 +80,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
+    _custom.overlays = [
       (final: prev: {
         # HACK: don't remove popup border
         fzf = prev.fzf.overrideAttrs (oldAttrs: rec {

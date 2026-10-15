@@ -33,6 +33,6 @@
       description = "Systemd target to bind to.";
     };
 
-    isSandbox = lib.mkEnableOption { };
+    isSandbox = lib.mkEnableOption "sandbox (container) mode";
   };
 }

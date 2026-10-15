@@ -12,7 +12,7 @@ in
   options._custom.programs.mongodb.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
+    _custom.overlays = [
       (final: prev: {
         mongodb-compass =
           prev.runCommand "mongodb-compass"

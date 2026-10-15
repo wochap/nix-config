@@ -102,7 +102,7 @@ let
 in
 {
   config = lib.mkIf active {
-    nixpkgs.overlays = [
+    _custom.overlays = [
       (_final: prev: {
         vdirsyncer = prev.vdirsyncer.overrideAttrs (oldAttrs: {
           version = "0.20.0+g${inputs.vdirsyncer.shortRev or "dirty"}";

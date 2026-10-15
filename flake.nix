@@ -256,13 +256,11 @@
             ./modules/nixos
             ./modules/sandbox
             ./modules/shared
-            ./packages
             (./. + "/hosts/${hostName}")
             {
               nixpkgs.config.allowUnfree = true;
-              nixpkgs.config.permittedInsecurePackages = [
+              _custom.permittedInsecurePackages = [
                 "electron-41.10.6"
-                "electron-39.8.10" # required by bitwarden-desktop
                 "nodejs-slim-20.20.2" # required by redisinsight
               ];
               networking.hostName = hostName;
@@ -270,13 +268,21 @@
           ];
           specialArgs = {
             inherit inputs;
-            inherit system;
             lib = mkLib pkgs system;
-            nixpkgs = pkgs;
           };
         };
     in
     {
+      # `pkgs._custom.*`, also applied to every host by ./overlays
+      overlays.default = import ./packages { inherit inputs; };
+
+      # home-manager generation of each host's primary user, to test
+      # dotfiles without a system switch: `nix build .#glegion && ./result/activate`
+      packages.x86_64-linux = builtins.mapAttrs (
+        _: host:
+        host.config.home-manager.users.${host.config._custom.globals.userName}.home.activationPackage
+      ) inputs.self.nixosConfigurations;
+
       nixosConfigurations = {
         gasus = mkNixosSystem inputs.nixpkgs "x86_64-linux" "gasus";
         gdesktop = mkNixosSystem inputs.nixpkgs "x86_64-linux" "gdesktop";

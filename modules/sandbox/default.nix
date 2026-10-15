@@ -11,7 +11,7 @@ let
   inherit (config._custom.globals) userName;
   sandboxName = "sandbox";
   enter-sandbox = pkgs.writeScriptBin "enter-sandbox" (builtins.readFile ./scripts/enter-sandbox.sh);
-  wayland-firewall = inputs.wayland-firewall.packages.${pkgs.system}.default;
+  wayland-firewall = inputs.wayland-firewall.packages.${pkgs.stdenv.hostPlatform.system}.default;
   # Proxy socket the sandbox binds to instead of the raw host Wayland socket
   waylandFirewallSocket = "/run/user/${toString cfg.hostUserUid}/wl-firewall/wayland-1";
   # Policy (mode + allowlist) lives in wayland-firewall.toml; only the uid-dependent
@@ -192,6 +192,7 @@ in
         { ... }:
         {
           imports = [
+            ../../overlays
             ../archetypes
             ../nixos
             ../shared
@@ -199,8 +200,13 @@ in
           ];
 
           config = {
-            # force sandbox to use same host pkgs
-            nixpkgs.pkgs = pkgs;
+            # NOTE: don't set `nixpkgs.pkgs = pkgs`, it forbids modules from
+            # setting `nixpkgs.config` (e.g. permittedInsecurePackages next to
+            # the package that needs it); hostPlatform is inherited from the host
+            # permittedInsecurePackages goes through `_custom` so the host's and
+            # sandbox's lists concatenate instead of overriding each other
+            nixpkgs.config = builtins.removeAttrs config.nixpkgs.config [ "permittedInsecurePackages" ];
+            _custom.permittedInsecurePackages = config._custom.permittedInsecurePackages;
 
             networking.hostName = sandboxName;
             networking.useHostResolvConf = lib.mkForce false;

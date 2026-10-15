@@ -68,7 +68,7 @@ in
   config = lib.mkIf cfg.enable {
     # Setup libadwaita without adwaita
     # so we can change gtk4 theme via gsettings, etc
-    nixpkgs.overlays = lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [
+    _custom.overlays = lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [
       (final: prev: {
         libadwaita-without-adwaita = prev.libadwaita.overrideAttrs (oldAttrs: {
           doCheck = false;

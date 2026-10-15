@@ -13,7 +13,7 @@ in
   options._custom.programs.lang-web.enable = lib.mkEnableOption { };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
+    _custom.overlays = [
       (final: prev: {
         bun = prev.bun.overrideAttrs (old: rec {
           version = "1.3.14";
