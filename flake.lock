@@ -663,6 +663,21 @@
         "type": "github"
       }
     },
+    "crane_2": {
+      "locked": {
+        "lastModified": 1791754810,
+        "narHash": "sha256-cN0Mgk+sQtCJcGWs9H4M0CnLRAuC4I8aCwiBTcBJs6E=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "bd63bf1d0a0f6dcacd7549c714a671ee63b0db6a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -3468,12 +3483,12 @@
         "wayfreeze": "wayfreeze",
         "wayland-firewall": "wayland-firewall",
         "webscoop": "webscoop",
-        "wluma": "wluma",
         "wobook": "wobook",
         "wodeo": "wodeo",
         "woge": "woge",
         "woice": "woice",
         "woints": "woints",
+        "woluma": "woluma",
         "wosarcher": "wosarcher",
         "wt": "wt",
         "zen-browser": "zen-browser",
@@ -4065,23 +4080,6 @@
         "type": "github"
       }
     },
-    "wluma": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1778247905,
-        "narHash": "sha256-va+y/dwJ4vTyuqn4VwVXQo8F2qWJPq6F6e9/7V4qDQQ=",
-        "owner": "maximbaz",
-        "repo": "wluma",
-        "rev": "259a874af6b4d854073d340cccb1852f63635fd3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "maximbaz",
-        "repo": "wluma",
-        "rev": "259a874af6b4d854073d340cccb1852f63635fd3",
-        "type": "github"
-      }
-    },
     "wobook": {
       "inputs": {
         "crane": "crane",
@@ -4184,6 +4182,30 @@
       "original": {
         "owner": "wochap",
         "repo": "woints",
+        "type": "github"
+      }
+    },
+    "woluma": {
+      "inputs": {
+        "crane": "crane_2",
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791840070,
+        "narHash": "sha256-3bLx1BSFYfZsJfED7gIhC3lL2JK92scA0n/5SMPqCJc=",
+        "owner": "wochap",
+        "repo": "woluma",
+        "rev": "0f645318e48db843afc136d5080c364a27f3e0a0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wochap",
+        "repo": "woluma",
         "type": "github"
       }
     },
