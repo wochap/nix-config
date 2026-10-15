@@ -1,7 +1,7 @@
 """Clients for the local AI services: embeddings, scorers, SearXNG and Firecrawl.
 
 Endpoints come from the environment (the `briefing` wrapper sets them):
-  BRIEFING_EMBED_URL, BRIEFING_EMBED_MODEL      OpenAI-style /embeddings (Ollama)
+  BRIEFING_EMBED_URL, BRIEFING_EMBED_MODEL      OpenAI-style /embeddings (OmniRoute, OMNIROUTE_API_KEY[_FILE])
   BRIEFING_RERANK_URL, BRIEFING_RERANK_MODEL    Cohere/Jina-style /rerank (llama-server)
   BRIEFING_JEV_URL, JEV_API_KEY                 TypeSafe Jev /systemone (calibrated 0-3)
   BRIEFING_SEARXNG_URL                          SearXNG JSON API
@@ -73,6 +73,16 @@ def get_json(url, params, **kwargs):
 # --- embeddings -------------------------------------------------------------
 
 
+def omniroute_headers():
+    """Bearer auth for OmniRoute, read the same way `omniroute-chat` does."""
+    key = os.environ.get("OMNIROUTE_API_KEY", "")
+    key_file = os.environ.get("OMNIROUTE_API_KEY_FILE", "/run/secrets/local-omniroute-secret-key")
+    if not key and os.access(key_file, os.R_OK):
+        with open(key_file) as handle:
+            key = handle.read().strip()
+    return {"Authorization": f"Bearer {key}"} if key else {}
+
+
 class Embedder:
     """Normalized embeddings with a SQLite cache, so reruns and later stages reuse vectors."""
 
@@ -81,6 +91,7 @@ class Embedder:
         self.model = model or env("BRIEFING_EMBED_MODEL")
         if not self.url:
             raise ServiceError("BRIEFING_EMBED_URL is not set")
+        self.headers = omniroute_headers()
         cache_path = cache_path or os.path.join(env("BRIEFING_STATE_DIR", os.path.expanduser("~/.local/state/briefing")), "embeddings.db")
         os.makedirs(os.path.dirname(cache_path), exist_ok=True)
         self.db = sqlite3.connect(cache_path)
@@ -121,7 +132,7 @@ class Embedder:
         if self.model:
             body["model"] = self.model
         # The first call may load the model into VRAM.
-        data = post_json(f"{self.url}/embeddings", body, timeout=300)
+        data = post_json(f"{self.url}/embeddings", body, headers=self.headers, timeout=300)
         items = sorted(data.get("data") or [], key=lambda item: int(item.get("index", 0)))
         if len(items) != len(texts):
             raise ServiceError(f"embeddings: sent {len(texts)} texts, got {len(items)} vectors")

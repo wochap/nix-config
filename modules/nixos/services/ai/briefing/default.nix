@@ -109,8 +109,8 @@ let
       : "''${SUPERTONIC_URL:=https://supertonic.${wochap-ssc.meta.domain}}"
       : "''${BRIEFING_LISTEN_DIR=${lib.optionalString (cfg.listenDir != null) cfg.listenDir}}"
       : "''${BRIEFING_SCORER:=${cfg.scorer}}"
-      : "''${BRIEFING_EMBED_URL:=http://127.0.0.1:11434/v1}"
-      : "''${BRIEFING_EMBED_MODEL:=${ai.ollamaEmbeddingModel}}"
+      : "''${BRIEFING_EMBED_URL:=${host}:${toString proxies.omniroute.publicPort}/v1}"
+      : "''${BRIEFING_EMBED_MODEL:=${cfg.embeddingModel}}"
       : "''${BRIEFING_RERANK_URL=${lib.optionalString ai.reranker.enable "${host}:${toString proxies.reranker.publicPort}/v1"}}"
       : "''${BRIEFING_RERANK_MODEL:=${ai.reranker.model}}"
       : "''${BRIEFING_JEV_URL:=https://api.typesafe.ai/v1}"
@@ -254,6 +254,12 @@ in
       type = lib.types.str;
       default = "desktop-free";
       description = "OmniRoute model or combo used for ranking and writing.";
+    };
+
+    embeddingModel = lib.mkOption {
+      type = lib.types.str;
+      default = "research-embedding";
+      description = "OmniRoute model or combo used for embeddings (dedup, prefilter, clustering, corroboration).";
     };
 
     voice = lib.mkOption {

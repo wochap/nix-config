@@ -13,18 +13,18 @@ sources ──► collect ──► dedup ──► rank ──► enrich ──
 ```
 
 Enable it with `_custom.services.ai.briefing.enable = true;`. It needs OmniRoute,
-Supertonic, Firecrawl, SearXNG, Ollama (embeddings, `ai.ollamaEmbeddingModel`) and
+Supertonic, Firecrawl, SearXNG, an OmniRoute embedding combo (`briefing.embeddingModel`) and
 the home-screen module. The relevance scorer is the reranker or Jev (`briefing.scorer`).
 
 ## Services
 
 | Stage | Service | What it does | Without it |
 |---|---|---|---|
-| dedup | Ollama embeddings | Drops items close (`similarity.dedup`) to a story told in the last `<mode>.dedupDays` days | URL and title hashes only |
-| rank | Ollama embeddings | Gives each item its nearest chapter topic, keeps the `<mode>.prefilter` closest | Every item is scored |
+| dedup | OmniRoute embeddings | Drops items close (`similarity.dedup`) to a story told in the last `<mode>.dedupDays` days | URL and title hashes only |
+| rank | OmniRoute embeddings | Gives each item its nearest chapter topic, keeps the `<mode>.prefilter` closest | Every item is scored |
 | rank | `scorer`: reranker or Jev | Relevance against `interests.md` | The LLM scores the shortlist |
 | rank | LLM | Reviews only the top `maxStories * 3`: topic, hype, reason, newsworthiness | |
-| rank | Ollama embeddings | Groups items about the same story (`similarity.cluster`) | One LLM clustering call |
+| rank | OmniRoute embeddings | Groups items about the same story (`similarity.cluster`) | One LLM clustering call |
 | enrich | SearXNG + embeddings | Adds up to 2 outlets to the top `<mode>.corroborateTop` single-source stories (`similarity.corroborate`) | Stories keep their feed sources |
 | enrich | Firecrawl | Full text of the top `<mode>.enrichTop` stories | Stories keep their snippets |
 
@@ -34,7 +34,7 @@ the LLM score is final. `scorer = "jev"` sends item titles and snippets
 to api.typesafe.ai with `personal-typesafe-api-key`.
 
 Embeddings are cached in `~/.local/state/briefing/embeddings.db` (unused vectors
-expire after 60 days). After changing `ai.ollamaEmbeddingModel`, run
+expire after 60 days). After changing `briefing.embeddingModel` or the model behind the combo, delete that file and run
 `briefing ledger rebuild` so the dedup vectors match the new model.
 
 ## Commands
