@@ -18,6 +18,7 @@ in
       cargo
       cargo-tauri
       clippy
+      (writeScriptBin "cargo-clean-all" (builtins.readFile ./scripts/cargo-clean-all.sh))
     ];
   };
 }
