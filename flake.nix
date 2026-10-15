@@ -67,6 +67,9 @@
     tofi.inputs.nixpkgs.follows = "nixpkgs";
     wosarcher.url = "github:wochap/wosarcher";
     wosarcher.inputs.nixpkgs.follows = "nixpkgs";
+    woluma.url = "github:wochap/woluma";
+    woluma.inputs.nixpkgs.follows = "nixpkgs";
+    woluma.inputs.home-manager.follows = "home-manager";
     wt.url = "github:wochap/wt";
     wt.inputs.nixpkgs.follows = "nixpkgs";
     wt.inputs.home-manager.follows = "home-manager";
@@ -120,8 +123,6 @@
     retroarch-shaders.flake = false;
     reversal-extra.url = "github:wochap/Reversal-Extra";
     reversal-extra.flake = false;
-    wluma.url = "github:maximbaz/wluma?rev=259a874af6b4d854073d340cccb1852f63635fd3"; # 4.11.1
-    wluma.flake = false;
     vdirsyncer.url = "github:wochap/vdirsyncer/v0.20.0-fork";
     vdirsyncer.flake = false;
     showmethekey.url = "github:AlynxZhou/showmethekey/v1.15.1";

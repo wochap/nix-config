@@ -149,7 +149,7 @@ in
     # _custom.desktop.udev-rules.enable = false;
     # _custom.desktop.udev-rules.canDisableGlegionKbd = false;
     # _custom.desktop.hyprsunset.enable = false;
-    # _custom.desktop.wluma.enable = false;
+    # _custom.desktop.woluma.enable = false;
     # _custom.desktop.hyprland.enable = false;
     # _custom.desktop.hyprland.isDefault = false;
     _custom.archetypes.server.enable = true;
