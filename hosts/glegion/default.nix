@@ -454,16 +454,33 @@ in
     _custom.desktop.udev-rules.enable = true;
     _custom.desktop.udev-rules.canDisableGlegionKbd = false;
     _custom.desktop.hyprsunset.enable = true;
-    _custom.desktop.wluma.enable = false;
-    # _custom.desktop.wluma.enableSystemd = true;
-    # _custom.desktop.wluma.config.als.none = { };
-    # _custom.desktop.wluma.config.output.backlight = [
-    #   {
-    #     name = "Samsung Display Corp. 0x4188 Unknown";
-    #     path = "/sys/class/backlight/amdgpu_bl1";
-    #     capturer = "wayland";
-    #   }
-    # ];
+    # TODO: test config for woluma, tune thresholds with `woluma watch --raw`
+    _custom.desktop.woluma.enable = true;
+    _custom.desktop.woluma.enableSystemd = true;
+    _custom.desktop.woluma.settings = {
+      general = {
+        settle = "2s";
+        transition = "400ms";
+        manual_override = "until-rule-change";
+      };
+      hysteresis.luma = 5;
+      outputs.eDP-1 = {
+        backlight = "amdgpu_bl1";
+        rules = [
+          {
+            name = "bright";
+            when.luma = ">= 70";
+            brightness = 40;
+            run = [ "notify-send \"woluma\" \"$WOLUMA_RULE on $WOLUMA_OUTPUT\"" ];
+          }
+          {
+            name = "default";
+            brightness = 70;
+            run = [ "notify-send \"woluma\" \"$WOLUMA_RULE on $WOLUMA_OUTPUT\"" ];
+          }
+        ];
+      };
+    };
     # fix blurry cursor on GTK 3 apps
     # update catppuccin cursor NOMINAL_SIZE
     # TODO: remove after updating gtk to 4.18
