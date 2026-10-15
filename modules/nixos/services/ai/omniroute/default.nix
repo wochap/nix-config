@@ -33,9 +33,14 @@ in
 
     virtualisation.oci-containers.containers.omniroute = {
       image = "ghcr.io/diegosouzapw/omniroute:3.8.51@sha256:8bd462c9f60d8eda79329cfbb6ea7ea723505fe7721beb944f3d43835409e218";
-      volumes = [ "/var/lib/omniroute:/app/data" ];
+      volumes = [
+        "/var/lib/omniroute:/app/data"
+        # Trust the local mkcert CA so providers on https://*.${wochap-ssc.meta.domain} verify.
+        "${wochap-ssc}/rootCA.pem:/certs/rootCA.pem:ro"
+      ];
       environment = {
         DATA_DIR = "/app/data";
+        NODE_EXTRA_CA_CERTS = "/certs/rootCA.pem";
         HOSTNAME = wochap-ssc.meta.address;
         PORT = toString config._custom.services.web-gate.proxies.omniroute.backendPort;
         NEXT_PUBLIC_BASE_URL = "https://${config._custom.services.web-gate.proxies.omniroute.subdomain}.${wochap-ssc.meta.domain}";
