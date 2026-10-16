@@ -43,19 +43,19 @@
   <sc-if value="{{ hasProgress }}"><div style="position:absolute;left:0;bottom:0;height:2px;width:{{ pct }};background:{{ barColor }};border-radius:0 2px 2px 0"></div></sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:400,&quot;height&quot;:160},&quot;n&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;toast&quot;,&quot;card&quot;],&quot;default&quot;:&quot;toast&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;hover&quot;,&quot;pressed&quot;,&quot;expanded&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;w&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:380,&quot;tsType&quot;:&quot;number&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:400,&quot;height&quot;:160},&quot;n&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;toast&quot;,&quot;card&quot;],&quot;default&quot;:&quot;toast&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;hover&quot;,&quot;pressed&quot;,&quot;expanded&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;urgency&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;low&quot;,&quot;normal&quot;,&quot;critical&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;w&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:380,&quot;tsType&quot;:&quot;number&quot;}}">
 class Component extends DCLogic {
   renderVals() {
     const p = this.props;
     const n = p.n ?? { app: 'Takeshot', icon: 'screenshot_region', iconColor: '#89b4fa', time: 'now', summary: 'Screenshot saved', body: '~/Pictures/Screenshots/2026-10-01_21-07-12.png · 2560×1440', image: 'assets/win2.png', actions: ['Open', 'Edit', 'Copy PNG'], urgency: 'normal', progress: 0.62 };
     const toast = (p.mode ?? 'toast') === 'toast';
     const st = p.state ?? 'default';
-    const u = n.urgency ?? 'normal', critical = u === 'critical', low = u === 'low';
+    const u = p.urgency && p.urgency !== 'auto' ? p.urgency : (n.urgency ?? 'normal'), critical = u === 'critical', low = u === 'low';
     const W = Number(p.w ?? 380);
     const border = critical ? 'rgba(243,139,168,.6)' : st === 'hover' || st === 'pressed' ? '#45475a' : '#313244';
     const card = { width: W, boxSizing: 'border-box', position: 'relative', overflow: 'hidden', borderRadius: 8, padding: '9px 10px 10px 12px',
       display: 'flex', flexDirection: 'column', gap: 6,
-      background: st === 'pressed' ? '#313244' : st === 'hover' ? '#28283a' : critical ? '#251e2c' : '#1e1e2e',
+      background: critical ? (st === 'pressed' ? '#382b3d' : st === 'hover' ? '#2f2738' : '#251e2c') : st === 'pressed' ? '#313244' : st === 'hover' ? '#28283a' : '#1e1e2e',
       boxShadow: [`inset 0 0 0 1px ${border}`, toast ? '0 10px 28px rgba(17,17,27,.55), 0 2px 6px rgba(17,17,27,.4)' : null].filter(Boolean).join(', '),
       opacity: low ? 0.92 : 1 };
     const btn = (on) => ({ width: 22, height: 22, borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center',
