@@ -27,7 +27,8 @@ in
 
     environment.systemPackages = with pkgs; [
       bun
-      corepack_24 # yarn, pnpm
+      pnpm_11
+      yarn-berry
       dart-sass
       deno
       hugo
