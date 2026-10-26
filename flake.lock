@@ -3938,11 +3938,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793048748,
-        "narHash": "sha256-+gim33YgrcyfA/bWTfu8hbV8Z/gkPEW5xSS8bz5gOwE=",
+        "lastModified": 1793050542,
+        "narHash": "sha256-9xkg7nu0kaS6nQmzd3SCEWe9E44RgT/SUoNYGbtpiEU=",
         "owner": "wochap",
         "repo": "tt",
-        "rev": "e628718fb4952e9bb055d078162ed8a108ab86cb",
+        "rev": "a4478e92f69c52bc09325165cf74bfd4b6dbe945",
         "type": "github"
       },
       "original": {
