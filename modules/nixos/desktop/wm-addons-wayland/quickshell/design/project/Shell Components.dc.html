@@ -490,12 +490,15 @@ class Component extends DCLogic {
     ];
     const T = (label, state, n) => ({ label, state, n });
     const base = { app: 'Takeshot', icon: 'screenshot_region', iconColor: '#89b4fa', time: 'now', summary: 'Screenshot saved', body: '~/Pictures/Screenshots/2026-10-01_21-07-12.png · 2560×1440 · 1.8 MB', image: 'assets/win2.png', actions: ['Open', 'Edit', 'Copy PNG'], progress: 0.62 };
+    const crit = { app: 'upower', icon: 'battery_alert', iconColor: '#f38ba8', time: 'now', urgency: 'critical', summary: 'Battery at 6%', body: 'About 9 minutes remaining. Plug in or the system will hibernate at 3%.', actions: ['Battery saver', 'Dismiss'] };
     const toasts = [
       T('NORMAL · IMAGE · ACTIONS · TIMEOUT', 'default', base),
-      T('LOW · NO ACTIONS', 'default', { app: 'Timewarrior', icon: 'timer', iconColor: '#a6e3a1', time: '2m', urgency: 'low', summary: 'Tracking started: shell-redesign', body: 'Tags: quickshell, design', progress: 0.3 }),
-      T('CRITICAL · PERSISTENT, NO TIMEOUT', 'default', { app: 'upower', icon: 'battery_alert', iconColor: '#f38ba8', time: 'now', urgency: 'critical', summary: 'Battery at 6%', body: 'About 9 minutes remaining. Plug in or the system will hibernate at 3%.', actions: ['Battery saver', 'Dismiss'] }),
+      T('CRITICAL · PERSISTENT, NO TIMEOUT', 'default', crit),
       T('HOVER · TIMEOUT PAUSED', 'hover', { ...base, progress: 0.62 }),
+      T('CRITICAL · HOVER', 'hover', crit),
       T('PRESSED', 'pressed', { app: 'sessiontap-notify', icon: 'asterisk', iconColor: '#fab387', time: '10m', summary: 'Automerge conflict resolution behavior', meta: 'Claude Code finished · ~/Sandboxes/sandbox/projects/fi · main', body: 'Mostly no. Facebook, Evernote and most mainstream apps do not use CRDTs like Automerge, or anything comparable, for sync.', progress: 0.8 }),
+      T('CRITICAL · PRESSED', 'pressed', crit),
+      T('LOW · NO ACTIONS', 'default', { app: 'Timewarrior', icon: 'timer', iconColor: '#a6e3a1', time: '2m', urgency: 'low', summary: 'Tracking started: shell-redesign', body: 'Tags: quickshell, design', progress: 0.3 }),
       T('EXPANDED · FULL BODY', 'expanded', { app: 'sessiontap-notify', icon: 'asterisk', iconColor: '#fab387', time: '14m', summary: 'Automerge conflict resolution behavior', meta: 'Claude Code finished · ~/Sandboxes/sandbox/projects/fi · main', body: 'By "shared documents" I mean the Google Docs or Notion model. There are many separate documents, and each one syncs independently — so conflicts stay local to a document rather than the whole store.', foot: 'In 2.1M · Out 20.9k', actions: ['Open session', 'Copy'], progress: 0.5 }),
     ];
     const frames = [{ t: '0ms', o: 0.05, x: 0, y: -8 }, { t: '50ms', o: 0.55, x: 0, y: -3 }, { t: '150ms rest', o: 1, x: 0, y: 0 }, { t: 'exit 120ms', o: 0.35, x: 24, y: 0 }];

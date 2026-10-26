@@ -64,7 +64,7 @@ Item {
     anchors.fill: parent
     implicitHeight: content.implicitHeight + ConfigNotifications.notificationPaddingTop + ConfigNotifications.notificationPaddingBottom
     radius: Styles.radius.windowRounding
-    color: root.isPressed ? Theme.options.surface0 : root.isHovered ? Theme.tint(Theme.options.base, Theme.options.surface0, 0.5) : root.isCritical ? Theme.tint(Theme.options.base, Theme.options.red, 0.04) : Theme.options.base
+    color: root.isCritical ? Theme.tint(Theme.options.base, Theme.options.red, root.isPressed ? 0.12 : root.isHovered ? 0.08 : 0.04) : root.isPressed ? Theme.options.surface0 : root.isHovered ? Theme.tint(Theme.options.base, Theme.options.surface0, 0.5) : Theme.options.base
     border {
       width: 1
       color: root.isCritical ? Theme.addAlpha(Theme.options.red, 0.6) : (root.isHovered || root.isPressed) ? Theme.options.surface1 : Theme.options.surface0
