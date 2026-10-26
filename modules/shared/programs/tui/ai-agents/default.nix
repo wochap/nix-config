@@ -87,6 +87,10 @@ in
               source = ./scripts/claude-statusline.sh;
               executable = true;
             };
+            ".gemini/antigravity-cli/statusline.sh" = {
+              source = ./scripts/agy-statusline.sh;
+              executable = true;
+            };
             ".gemini/antigravity-cli/hooks/agy-notify.sh" = {
               source = ./scripts/agy-notify.sh;
               executable = true;

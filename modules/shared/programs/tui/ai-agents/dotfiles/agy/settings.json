@@ -3,6 +3,8 @@
   "enableTelemetry": false,
   "notifications": true,
   "statusLine": {
+    "type": "command",
+    "command": "bash \"/home/gean/.gemini/antigravity-cli/statusline.sh\"",
     "enabled": true
   }
 }
