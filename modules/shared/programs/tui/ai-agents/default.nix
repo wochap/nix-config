@@ -79,7 +79,7 @@ in
 
         file =
           lib.optionalAttrs cfg.enableSkills (
-            mkSkillLinks ".claude/skills" // mkSkillLinks ".pi/agent/skills"
+            mkSkillLinks ".claude/skills" // mkSkillLinks ".agents/skills"
           )
           // lib.optionalAttrs cfg.enableInstructions instructionsLinks
           // {
