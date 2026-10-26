@@ -71,6 +71,14 @@ in
     _custom.overlays = lib.mkIf cfg.enableLibadwaitaWithoutAdwaita [
       (final: prev: {
         libadwaita-without-adwaita = prev.libadwaita.overrideAttrs (oldAttrs: {
+          version = "1.9.1";
+          src = prev.fetchFromGitLab {
+            domain = "gitlab.gnome.org";
+            owner = "GNOME";
+            repo = "libadwaita";
+            tag = "1.9.1";
+            hash = "sha256-Oy3WcsymNbbmAacm5hEOrorI1wKXjSp063mh4jCJRAE=";
+          };
           doCheck = false;
           patches = (oldAttrs.patches or [ ]) ++ [ "${libadwaitaWithoutAdwaitaAurRepo}/theming_patch.diff" ];
           mesonFlags = (oldAttrs.mesonFlags or [ ]) ++ [
