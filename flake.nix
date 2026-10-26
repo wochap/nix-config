@@ -1,16 +1,16 @@
 {
   inputs = {
     # channels
-    nixpkgs.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/6774f7bc253789b113a4f39285dc0fa100abeacc"; # nixos-unstable (21 sep 2026)
-    nixpkgs-master.url = "github:nixos/nixpkgs?rev=12ccf3e6a73accd6f85aaf857b909d1d63563064"; # master (10 jul 2026)
-    prevstable-mesa.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # mesa v26.1.4
-    prevstable-chrome.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
-    prevstable-neovim.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # neovim v0.12.3
+    nixpkgs.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (26 oct 2026)
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/d3b13ad75cc492690728f9307e443dec9ef9a20e"; # nixos-unstable (26 oct 2026)
+    nixpkgs-master.url = "github:nixos/nixpkgs/b9dca90ef10c643257e003adbb377d588039ac1e"; # master (10 jul 2026)
+    prevstable-mesa.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # mesa v26.1.4
+    prevstable-chrome.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (10 jul 2026)
+    prevstable-neovim.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # neovim v0.12.3
     prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
-    prevstable-gaming.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
-    prevstable-intune.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
-    prevstable-msedge.url = "github:nixos/nixpkgs?rev=0ad6f47ea4fe188f4bc8f0380f93ae8523337c6c"; # nixos-26.05 (10 jul 2026)
+    prevstable-gaming.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (10 jul 2026)
+    prevstable-intune.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (10 jul 2026)
+    prevstable-msedge.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (10 jul 2026)
     prevstable-hyprland.url = "github:nixos/nixpkgs?rev=0bb7ec54c8483066ec9d7720e780a5caa71f8612"; # nixos-unstable (10 jul 2026)
 
     # home-manager
@@ -44,6 +44,7 @@
     wodeo.url = "github:wochap/wodeo";
     wodeo.inputs.nixpkgs.follows = "nixpkgs";
     webscoop.url = "github:wochap/webscoop";
+    # webscoop.url = "github:wochap/webscoop/f1d40fd74fca432fcf5702ea0f08fa4d602e4c1a";
     webscoop.inputs.nixpkgs.follows = "nixpkgs";
     webscoop.inputs.home-manager.follows = "home-manager";
     kb-hud.url = "github:wochap/kb-hud";
@@ -66,6 +67,7 @@
     tofi.url = "github:wochap/tofi/master-fork";
     tofi.inputs.nixpkgs.follows = "nixpkgs";
     wosarcher.url = "github:wochap/wosarcher";
+    # wosarcher.url = "github:wochap/wosarcher/61b739cd1140c8833081d83aed857fb88b02110d";
     wosarcher.inputs.nixpkgs.follows = "nixpkgs";
     woluma.url = "github:wochap/woluma";
     woluma.inputs.nixpkgs.follows = "nixpkgs";
