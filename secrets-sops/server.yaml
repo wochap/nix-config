@@ -1,5 +1,6 @@
 server-cloudflare-dns-api-token: ENC[AES256_GCM,data:K1YaOaj9IFm0u8jAwsI7nIEMFQPOMQcfGCO71c09Qw7/Tf8xCDznk3Z7mHS33BM6sCnjvX4=,iv:KAN7tj6Vnt3w33v40+b55ZhRyGHmlUBDhQUceDqYxWg=,tag:6lkyhmWjzHP12Mr7/avSqg==,type:str]
 server-gatus-wobook-token: ENC[AES256_GCM,data:VMYmPEkVPmJD5VcI1VhH+59DPrhh99Lp2qLCSTf2WvTCv5xt6lYQ17OrJW5LdzdddJTtuZfGtEH3FNe7sAC77w==,iv:sQz+cbzIGPh+w+Jh+1ZWcdznGr4jolIF3XRu6WZWF6U=,tag:jVrVXpaCUr55vuOfAp92qQ==,type:str]
+server-bugsink-secret-key: ENC[AES256_GCM,data:jQUUpyaVOwkUdQ+EE7eQhdwoMba2jKL4+ZXks+A96e/CaU0gbUtGP3n2j1nff8+XWQxv7uAi6ieAGJN3ae0VLw==,iv:+V6agVW4vdKBCbnn1veYvlPdumfJSph08ZPs/nhVKw4=,tag:qCTNMDLjAM84Jc+UtsitIg==,type:str]
 sops:
     age:
         - enc: |
@@ -20,7 +21,7 @@ sops:
             P/ML6X+6z+AbclARuwUqIb4dxC6P8ALajB5bT+AXh6Mp5wztPBzYHA==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1hryf55wm6ypwvw97e5f9gzczeesy5r0hcndgz2q2lulg8gpxqu2qxgeje9
-    lastmodified: "2026-10-13T01:01:39Z"
-    mac: ENC[AES256_GCM,data:s934/MO+W5mB3iG3qps+X9bjI93G7HQnIIF+8GooB21IlEU+hrrOWSZ2heXv8y2ak/+xkQhVOa2IOaiRi5klKgS2svmiCa6nFUvZtKYTd6wtZTSZuRYWdqkeVjJ8A7UhrjNF7OwnjXZwstNfRwKz5Bvc9gdKWAUlBdquYfIHnAE=,iv:DK1UWdTxxkhMR4rSqdTE20WMshTa7p15HpcJAMJ8twg=,tag:tJL3i1k96bt4v7lQ21vQlg==,type:str]
+    lastmodified: "2026-10-27T19:59:47Z"
+    mac: ENC[AES256_GCM,data:QFev+jrETogpqU8A0/2zENZ0m+wYRHQ/DyyfGYuB+VXso/1o1st9eH7b3APe1Dn3jeofutm08kpT7zKt+Eb0seZKnL/zyhe/QD83aXS/7xGn/vcpd2CLu8zBF1k0kQqyTYH2tOPbsx/BrKHxtteCd11m2PSDwDS7Hn8jZfkkJ64=,iv:XEV8yEM/N0deaF848LhEeUxNLXZtlG8y+o49QG7kqmA=,tag:nDEVagl/WvN0QdB4qdaY9w==,type:str]
     unencrypted_suffix: _unencrypted
-    version: 3.13.1
+    version: 3.13.3
