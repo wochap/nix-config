@@ -203,6 +203,13 @@ in
       statusPush.tokenSecret.sopsFile = ../../secrets-sops/server.yaml;
     };
 
+    _custom.services.bugsink = {
+      enable = true;
+      tailnetDomain = "bugsink.gvps.geanmar.com";
+      secretKeySecret.sopsFile = ../../secrets-sops/server.yaml;
+      cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
+    };
+
     # Status page at https://status.gvps.geanmar.com for tailnet devices only,
     # checks every service above plus the extra endpoints below
     _custom.services.gatus = {
@@ -224,10 +231,22 @@ in
           interval = "5m";
           conditions = [ "[CONNECTED] == true" ];
         }
+        {
+          name = "bugsink";
+          group = "services";
+          url = "https://bugsink.gvps.geanmar.com/health/ready";
+          interval = "5m";
+          conditions = [ "[STATUS] == 200" ];
+        }
       ];
     };
 
     services.headscale.settings.dns.extra_records = [
+      {
+        name = "bugsink.gvps.geanmar.com";
+        type = "A";
+        value = "100.64.0.4";
+      }
       {
         name = "tt.gvps.geanmar.com";
         type = "A";

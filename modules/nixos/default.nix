@@ -93,6 +93,7 @@
     ./services/adguardhome
     ./services/ai
     ./services/android
+    ./services/bugsink
     ./services/docker
     ./services/podman
     ./services/remote-desktop
