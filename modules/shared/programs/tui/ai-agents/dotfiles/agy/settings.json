@@ -6,5 +6,8 @@
     "type": "command",
     "command": "bash \"/home/gean/.gemini/antigravity-cli/statusline.sh\"",
     "enabled": true
+  },
+  "permissions": {
+    "allow": ["command(rtk)", "command(regex:^(rtk )?python3? -c .*)"]
   }
 }
