@@ -49,6 +49,6 @@ M.chat_gpt_appid = "chrome-chat.openai.com__-Default"
 M.gemini_appid = "chrome-gemini.google.com__app-Default"
 M.openwebui_appid = "chrome-openwebui.wochap.local__-Default"
 M.ytmusic_appid = "chrome-music.youtube.com__-Default"
-M.bitwarden_appid = "Bitwarden"
+M.bitwarden_appid = "bitwarden"
 
 return M
