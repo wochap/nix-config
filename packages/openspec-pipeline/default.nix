@@ -4,6 +4,7 @@
   symlinkJoin,
   bun,
   agents,
+  defaultPreset ? "agy",
 }:
 
 # TypeScript run directly by Bun; no dependencies, so no package.json.
@@ -12,6 +13,7 @@ symlinkJoin {
   paths = [
     (writeShellScriptBin "openspec-pipeline" ''
       export AGENTS_CMD=${lib.getExe agents}
+      export OPENSPEC_PIPELINE_PRESET=''${OPENSPEC_PIPELINE_PRESET:-${defaultPreset}}
       exec ${lib.getExe bun} ${./src}/main.ts "$@"
     '')
   ];

@@ -8,7 +8,8 @@ it from the `openspec-pipeline` skill (`skill/SKILL.md`, install to
 
 ```sh
 openspec-pipeline export-formats-quality-config inspector-redesign
-openspec-pipeline --archive-model claude-opus-5-5 --gate 'npm test' my-change
+openspec-pipeline --preset claude --gate 'npm test' my-change
+openspec-pipeline --preset agy --apply-effort high my-change
 openspec-pipeline --help
 ```
 
@@ -92,15 +93,14 @@ needs input.
 
 ## Takeover
 
-Each step runs through the `agents` CLI (`packages/agents/`), claude only for
-now. On a TTY, `ctrl+t` takes a running step over in the claude TUI, which
-continues the step (`esc` stops it to steer). `ctrl+z` inside the TUI detaches
-back to the progress view while it keeps working; `ctrl+t` attaches again.
-When the agent finishes while you are detached, the step ends and the pipeline
-goes on. Exit the TUI yourself, then `c` continues headless or `d` finishes
-the step. `agents ls` lists the step sessions. For a headless run, follow a
-step with `agents watch <id>` or take it over with `agents attach <id>` from
-another terminal.
+Each step runs through the `agents` CLI (`packages/agents/`). On a TTY, `ctrl+t`
+takes a running step over in the agent's TUI (claude, agy), which continues the
+step (`esc` stops it to steer). `ctrl+z` inside the TUI detaches back to the
+progress view while it keeps working; `ctrl+t` attaches again. When the agent
+finishes while you are detached, the step ends and the pipeline goes on. Exit
+the TUI yourself, then `c` continues headless or `d` finishes the step. `agents
+ls` lists the step sessions. For a headless run, follow a step with `agents watch
+<id>` or take it over with `agents attach <id>` from another terminal.
 
 ## Use from an agent
 
@@ -120,21 +120,30 @@ Add instructions after the changes in plain words, e.g. `run unattended`
 (`--on-input auto`) or `gate with 'npm test'` (`--gate 'npm test'`). Do not
 edit the repository while it runs.
 
-## Models
+## Presets and Models
 
-| Step    | Default               | Flag              |
-| ------- | --------------------- | ----------------- |
-| apply   | `claude-opus-5-5[1m]` | `--apply-model`   |
-| sync    | `claude-opus-5-5[1m]` | `--sync-model`    |
-| archive | `claude-sonnet-5`     | `--archive-model` |
+Presets set the agent, models, and efforts for all steps at once. The default
+preset is configured in Nix via `defaultPreset` (default: `agy`), and can be
+overridden by the `OPENSPEC_PIPELINE_PRESET` environment variable or `--preset`.
 
-| Step    | Effort   | Flag               |
-| ------- | -------- | ------------------ |
-| apply   | `high`   | `--apply-effort`   |
-| sync    | `medium` | `--sync-effort`    |
-| archive | `low`    | `--archive-effort` |
+| Preset   | Agent    | Step    | Model                 | Effort   |
+| -------- | -------- | ------- | --------------------- | -------- |
+| `agy`    | `agy`    | apply   | `gemini-3.8-flash`    | `medium` |
+|          |          | sync    | `gemini-3.8-flash`    | `medium` |
+|          |          | archive | `gemini-3.8-flash`    | `low`    |
+| `claude` | `claude` | apply   | `claude-opus-5-5[1m]` | `medium` |
+|          |          | sync    | `claude-opus-5-5[1m]` | `medium` |
+|          |          | archive | `claude-sonnet-5`     | `low`    |
+
+Individual models and efforts can still be overridden with flags:
+
+- `--apply-model <m>`, `--sync-model <m>`, `--archive-model <m>`
+- `--apply-effort <e>`, `--sync-effort <e>`, `--archive-effort <e>`
+- `-a, --agent <a>` overrides the agent CLI directly
 
 Effort goes through `agents run --effort`: `low`, `medium`, `high`, `xhigh`,
 `max`.
 
-Env: `AGENTS_CMD` (agents binary, set by the package).
+Env:
+- `AGENTS_CMD`: agents binary path (set by the package).
+- `OPENSPEC_PIPELINE_PRESET`: default preset name (`agy` or `claude`).

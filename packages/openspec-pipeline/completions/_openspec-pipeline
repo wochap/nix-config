@@ -17,10 +17,14 @@ _openspec_pipeline_sessions() {
 }
 
 _openspec-pipeline() {
-  local -a efforts
+  local -a efforts presets agents_list
   efforts=(low medium high xhigh max)
+  presets=(agy claude)
+  agents_list=(agy claude pi)
 
   _arguments -s \
+    "--preset[preset for agent, models, efforts]:preset:($presets)" \
+    "(-a --agent)"{-a,--agent}'[agent to run]:agent:('"$agents_list"')' \
     '--apply-model[model for apply]:model:' \
     '--sync-model[model for sync]:model:' \
     '--archive-model[model for archive]:model:' \

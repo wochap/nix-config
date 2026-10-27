@@ -1,31 +1,63 @@
 // Every step runs through the agents CLI (packages/agents): headless with
-// live progress, Ctrl-T to take a running step over. Forced to claude for now.
+// live progress, Ctrl-T to take a running step over.
 //
 // Env: AGENTS_CMD="..." (default "agents", set by the package)
+//      OPENSPEC_PIPELINE_PRESET="..." (default "agy")
 
 export type Step = "apply" | "sync" | "archive";
 
+export interface Preset {
+  agent: string;
+  models: Record<Step, string>;
+  efforts: Record<Step, string>;
+}
+
+export const PRESETS: Record<string, Preset> = {
+  agy: {
+    agent: "agy",
+    models: {
+      apply: "gemini-3.8-flash",
+      sync: "gemini-3.8-flash",
+      archive: "gemini-3.8-flash",
+    },
+    efforts: {
+      apply: "medium",
+      sync: "medium",
+      archive: "low",
+    },
+  },
+  claude: {
+    agent: "claude",
+    models: {
+      apply: "claude-opus-5-5[1m]", // Opus 5.5, 1M context
+      sync: "claude-opus-5-5[1m]", // Opus 5.5, 1M context
+      archive: "claude-sonnet-5", // Sonnet 5
+    },
+    efforts: {
+      apply: "medium",
+      sync: "medium",
+      archive: "low",
+    },
+  },
+};
+
+export const DEFAULT_PRESET_NAME = process.env.OPENSPEC_PIPELINE_PRESET || "agy";
+
+export function getPreset(name: string = DEFAULT_PRESET_NAME): Preset {
+  const preset = PRESETS[name];
+  if (!preset) {
+    throw new Error(`unknown preset "${name}", available: ${Object.keys(PRESETS).join(", ")}`);
+  }
+  return preset;
+}
+
 const cmd = (process.env.AGENTS_CMD ?? "agents").split(/\s+/).filter(Boolean);
 
-const MODELS: Record<Step, string> = {
-  apply: "claude-opus-5-5[1m]", // Opus 5.5, 1M context
-  sync: "claude-opus-5-5[1m]", // Opus 5.5, 1M context
-  archive: "claude-sonnet-5", // Sonnet 5
-};
-
-// Passed as `agents run --effort`, so a step never inherits the caller's
-// CLAUDE_EFFORT or the user's effortLevel setting.
-const EFFORTS: Record<Step, string> = {
-  apply: "medium",
-  sync: "medium",
-  archive: "low",
-};
-
 /** Default model per step; overridden by --<step>-model. */
-export const defaultModel = (step: Step) => MODELS[step];
+export const defaultModel = (step: Step, presetName?: string) => getPreset(presetName).models[step];
 
 /** Default effort per step; overridden by --<step>-effort. */
-export const defaultEffort = (step: Step) => EFFORTS[step];
+export const defaultEffort = (step: Step, presetName?: string) => getPreset(presetName).efforts[step];
 
 /** Text that starts the OpenSpec skill, e.g. "/opsx:apply my-change". */
 export const invoke = (step: Step, change: string) => `/opsx:${step} ${change}`;
@@ -58,8 +90,14 @@ export interface RunOptions {
  * gets only "session: <id>". stdout carries agents' JSON result.
  * Rejects when the agent fails.
  */
-export async function run(prompt: string, model: string, effort: string, o: RunOptions): Promise<{ sessionId: string; result: string }> {
-  const target = o.resume ? ["-r", o.resume] : ["-a", "claude", "-C", process.cwd()];
+export async function run(
+  prompt: string,
+  model: string,
+  effort: string,
+  o: RunOptions,
+  agent: string = getPreset().agent,
+): Promise<{ sessionId: string; result: string }> {
+  const target = o.resume ? ["-r", o.resume] : ["-a", agent, "-C", process.cwd()];
   const child = Bun.spawn(
     [...cmd, "run", "--json", ...(o.tty ? ["--verbose"] : []), ...target, "-m", model, "-e", effort, prompt],
     { stdin: o.tty ? "inherit" : "ignore", stdout: "pipe", stderr: "inherit" },
@@ -85,18 +123,23 @@ export async function run(prompt: string, model: string, effort: string, o: RunO
  * continues it instead of starting over. Null when the latest one finished,
  * or none exists in the last 7 days.
  */
-export async function interrupted(step: Step, change: string): Promise<string | null> {
+export async function interrupted(step: Step, change: string, agent?: string): Promise<string | null> {
   const child = Bun.spawn([...cmd, "ls", "--json"], { stdin: "ignore", stdout: "pipe", stderr: "ignore" });
   const out = await new Response(child.stdout).text();
   if ((await child.exited) !== 0) return null;
-  let sessions: { id: string; cwd: string; prompt: string; status: string }[];
+  let sessions: { id: string; agent?: string; cwd: string; prompt: string; status: string }[];
   try {
     sessions = JSON.parse(out);
   } catch {
     return null;
   }
   // Newest first; the stored prompt is the first run's, e.g. "/opsx:apply <c> — ...".
-  const latest = sessions.find((s) => s.cwd === process.cwd() && s.prompt.startsWith(`${invoke(step, change)} `));
+  const latest = sessions.find(
+    (s) =>
+      s.cwd === process.cwd() &&
+      (!agent || s.agent === agent) &&
+      s.prompt.startsWith(`${invoke(step, change)} `),
+  );
   if (latest?.status !== "failed") return null;
   // Killed before any reply: nothing to continue.
   return (await last(latest.id)) === null ? null : latest.id;

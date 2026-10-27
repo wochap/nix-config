@@ -26,7 +26,7 @@
 // resumes that session instead of starting a new one, with this run's
 // model and effort; --fresh starts over.
 //
-// Steps run through the agents CLI (agents.ts), claude only for now. On a
+// Steps run through the agents CLI (agents.ts). On a
 // TTY, Ctrl-T takes a running step over, Ctrl-Z inside it detaches back.
 //
 // Exit codes: 0 done, 1 failed or quit, 3 needs input (stop).
@@ -36,41 +36,6 @@ import * as agents from "./agents";
 import type { Step } from "./agents";
 import { ask, bell, interactive, log, logToStderr, print, warn } from "./term";
 import { changeExists, codeDirty, commit, hasCommit, readTasks, repoRoot, type Tasks } from "./repo";
-
-const HELP = `Usage: openspec-pipeline [options] <change>...
-
-Runs apply -> sync -> archive for each change, in the given order.
-Re-run with the same arguments to resume after an interruption.
-
-Options:
-      --apply-model <m>     model for apply   (default: ${agents.defaultModel("apply")})
-      --sync-model <m>      model for sync    (default: ${agents.defaultModel("sync")})
-      --archive-model <m>   model for archive (default: ${agents.defaultModel("archive")})
-      --apply-effort <e>    effort for apply   (default: ${agents.defaultEffort("apply")})
-      --sync-effort <e>     effort for sync    (default: ${agents.defaultEffort("sync")})
-      --archive-effort <e>  effort for archive (default: ${agents.defaultEffort("archive")})
-                              low, medium, high, xhigh, max
-      --max-open <n>        open tasks above this need attention (default: 5)
-      --gate <cmd>          shell command that must pass after apply; repeatable
-      --on-input <mode>     when apply needs attention (default: ask on a TTY, else stop)
-                              ask   prompt you / hand you the session (needs a TTY)
-                              stop  exit 3 with a report
-                              auto  let the agent decide by itself, then stop
-      --auto-tries <n>      auto: headless resumes before stopping (default: 2)
-      --resume <id>         continue this apply session (from a stop report)
-      --answer <text>       message for the --resume session (default: "Continue.")
-      --fresh               start new step sessions instead of resuming the
-                              interrupted ones (Ctrl-C, usage limit, crash)
-      --json                logs to stderr, one JSON result line on stdout
-  -h, --help
-
-Exit codes: 0 done, 1 failed or quit, 3 needs input.
-
-A re-run resumes an interrupted step's session with this run's model and
-effort, so you can change them midway.
-
-On a TTY each step is an agents session (claude): ctrl+t takes a running
-step over, ctrl+z inside it detaches back. Sessions: agents ls`;
 
 const STEPS: Step[] = ["apply", "sync", "archive"];
 const STATUS_DONE = "PIPELINE_STATUS: DONE";
@@ -92,6 +57,8 @@ ${STATUS_LINE}`;
 const { values: opts, positionals: changes } = parseArgs({
   allowPositionals: true,
   options: {
+    preset: { type: "string" },
+    agent: { type: "string", short: "a" },
     "apply-model": { type: "string" },
     "sync-model": { type: "string" },
     "archive-model": { type: "string" },
@@ -109,6 +76,48 @@ const { values: opts, positionals: changes } = parseArgs({
     help: { type: "boolean", short: "h" },
   },
 });
+
+const presetName = opts.preset ?? agents.DEFAULT_PRESET_NAME;
+const preset = agents.getPreset(presetName);
+const agentName = opts.agent ?? preset.agent;
+
+const HELP = `Usage: openspec-pipeline [options] <change>...
+
+Runs apply -> sync -> archive for each change, in the given order.
+Re-run with the same arguments to resume after an interruption.
+
+Options:
+      --preset <p>          preset for agent, models, effort (default: ${agents.DEFAULT_PRESET_NAME})
+                              available: ${Object.keys(agents.PRESETS).join(", ")}
+  -a, --agent <a>           agent to run (default: ${preset.agent})
+      --apply-model <m>     model for apply   (default: ${preset.models.apply})
+      --sync-model <m>      model for sync    (default: ${preset.models.sync})
+      --archive-model <m>   model for archive (default: ${preset.models.archive})
+      --apply-effort <e>    effort for apply   (default: ${preset.efforts.apply})
+      --sync-effort <e>     effort for sync    (default: ${preset.efforts.sync})
+      --archive-effort <e>  effort for archive (default: ${preset.efforts.archive})
+                              low, medium, high, xhigh, max
+      --max-open <n>        open tasks above this need attention (default: 5)
+      --gate <cmd>          shell command that must pass after apply; repeatable
+      --on-input <mode>     when apply needs attention (default: ask on a TTY, else stop)
+                              ask   prompt you / hand you the session (needs a TTY)
+                              stop  exit 3 with a report
+                              auto  let the agent decide by itself, then stop
+      --auto-tries <n>      auto: headless resumes before stopping (default: 2)
+      --resume <id>         continue this apply session (from a stop report)
+      --answer <text>       message for the --resume session (default: "Continue.")
+      --fresh               start new step sessions instead of resuming the
+                              interrupted ones (Ctrl-C, usage limit, crash)
+      --json                logs to stderr, one JSON result line on stdout
+  -h, --help
+
+Exit codes: 0 done, 1 failed or quit, 3 needs input.
+
+A re-run resumes an interrupted step's session with this run's model and
+effort, so you can change them midway.
+
+On a TTY each step is an agents session (${agentName}): ctrl+t takes a running
+step over, ctrl+z inside it detaches back. Sessions: agents ls`;
 
 if (opts.help || changes.length === 0) {
   console.log(HELP);
@@ -165,15 +174,15 @@ if (opts.answer !== undefined && !opts.resume) throw new Error("--answer needs -
 const maxOpen = Number(opts["max-open"]);
 const autoTries = Number(opts["auto-tries"]);
 const models = {} as Record<Step, string>;
-for (const step of STEPS) models[step] = opts[`${step}-model`] ?? agents.defaultModel(step);
+for (const step of STEPS) models[step] = opts[`${step}-model`] ?? preset.models[step];
 const efforts = {} as Record<Step, string>;
-for (const step of STEPS) efforts[step] = opts[`${step}-effort`] ?? agents.defaultEffort(step);
+for (const step of STEPS) efforts[step] = opts[`${step}-effort`] ?? preset.efforts[step];
 
 process.chdir(repoRoot());
 
 async function runStep(step: Step, prompt: string, resume?: string) {
   log(`${step} (${models[step]}, ${efforts[step]})${resume ? ` resuming ${resume}` : ""}: ${prompt}`);
-  const run = await agents.run(prompt, models[step], efforts[step], { resume, tty });
+  const run = await agents.run(prompt, models[step], efforts[step], { resume, tty }, agentName);
   log(`[${current.change}] ${step} session: ${run.sessionId}`);
   return run;
 }
@@ -184,7 +193,7 @@ const stepPrompt = (step: Step, change: string, instructions: string) =>
 // The step's interrupted session to continue, unless --fresh.
 async function interrupted(step: Step, change: string) {
   if (opts.fresh) return null;
-  const id = await agents.interrupted(step, change);
+  const id = await agents.interrupted(step, change, agentName);
   if (id) warn(`[${change}] ${step} was interrupted, resuming session ${id} (--fresh starts over)`);
   return id;
 }
