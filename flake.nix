@@ -4,14 +4,14 @@
     nixpkgs.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (26 oct 2026)
     nixpkgs-unstable.url = "github:nixos/nixpkgs/d3b13ad75cc492690728f9307e443dec9ef9a20e"; # nixos-unstable (26 oct 2026)
     nixpkgs-master.url = "github:nixos/nixpkgs/b9dca90ef10c643257e003adbb377d588039ac1e"; # master (10 jul 2026)
-    prevstable-mesa.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # mesa v26.1.4
-    prevstable-chrome.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (10 jul 2026)
-    prevstable-neovim.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # neovim v0.12.3
-    prevstable-python.url = "github:nixos/nixpkgs?rev=6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
-    prevstable-gaming.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (10 jul 2026)
-    prevstable-intune.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (10 jul 2026)
-    prevstable-msedge.url = "github:nixos/nixpkgs?rev=1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (10 jul 2026)
-    prevstable-hyprland.url = "github:nixos/nixpkgs?rev=0bb7ec54c8483066ec9d7720e780a5caa71f8612"; # nixos-unstable (10 jul 2026)
+    prevstable-mesa.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # mesa v26.1.4
+    prevstable-chrome.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (26 oct 2026)
+    prevstable-neovim.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # neovim v0.12.4
+    prevstable-python.url = "github:nixos/nixpkgs/6c90912761c43e22b6fb000025ab96dd31c971ff"; # Python v3.11.11
+    prevstable-gaming.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (26 oct 2026)
+    prevstable-intune.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (26 oct 2026)
+    prevstable-msedge.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (26 oct 2026)
+    prevstable-hyprland.url = "github:nixos/nixpkgs/0bb7ec54c8483066ec9d7720e780a5caa71f8612"; # nixos-unstable (26 oct 2026)
 
     # home-manager
     home-manager.url = "github:nix-community/home-manager?rev=af2beae5f0fae0a4310cc0e6aef2572f56090353"; # release-26.05 (10 jul 2026)
