@@ -26,7 +26,7 @@ INPUT=$(cat)
   printf '%s' "$INPUT" | jq -r '
     (.model.display_name // .model.id // "?"),
     (.effort // .effort.level // ""),
-    (.permission_mode // .agent_mode // .agentMode // .mode // ""),
+    (.cycle_mode // .permission_mode // .mode // "default"),
     (.vim.mode // ""),
     (.agent_state // ""),
     (.cwd // .workspace.current_dir // "?"),
@@ -51,17 +51,8 @@ INPUT=$(cat)
     (if .subagents | type == "array" then (.subagents | length) else 0 end),
     (.task_count // 0),
     (.conversation_id // "")
-  ' 2>/dev/null || printf "?\n\n\n\n\n?\n\nfalse\n\n0\n0\n0\n0\n0\n\n"
+  ' 2>/dev/null || printf "?\n\ndefault\n\n\n?\n\nfalse\n\n0\n0\n0\n0\n0\n\n"
 )"
-
-# Fallback for MODE from settings if omitted in payload
-if [ -z "$MODE" ]; then
-  SETTINGS_FILE="$HOME/.gemini/antigravity-cli/settings.json"
-  if [ -f "$SETTINGS_FILE" ]; then
-    MODE=$(jq -r '.mode // empty' "$SETTINGS_FILE" 2>/dev/null || true)
-  fi
-  [ -z "$MODE" ] && MODE="auto"
-fi
 
 # Styling: Theme-matching muted grey and subtle accents
 RESET="\033[0m"
@@ -101,12 +92,13 @@ fi
 
 PARTS=()
 
-# 1. Permission / Execution Mode Badge
+# 1. Execution Mode Badge (cycled via Shift+Tab)
 if [ -n "$MODE" ]; then
   case "$MODE" in
     auto)         PARTS+=("${GREEN}[auto]${GREY}") ;;
     plan)         PARTS+=("${YELLOW}[plan]${GREY}") ;;
     accept-edits) PARTS+=("${MAGENTA}[accept-edits]${GREY}") ;;
+    default)      PARTS+=("${DARK_GREY}[default]${GREY}") ;;
     *)            PARTS+=("${DARK_GREY}[${MODE}]${GREY}") ;;
   esac
 fi
