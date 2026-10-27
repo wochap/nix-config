@@ -149,6 +149,7 @@ in
         cl = "sessiontap claude";
         cx = "sessiontap codex";
         qw = "sessiontap qwen";
+        ay = "sessiontap agy";
         sp = "sessiontap pi";
       };
 

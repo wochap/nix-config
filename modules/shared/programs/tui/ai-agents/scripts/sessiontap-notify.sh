@@ -28,6 +28,7 @@ provider_details() {
   *codex*) printf '%s\t%s\n' "Codex" "codex" ;;
   *claude*) printf '%s\t%s\n' "Claude Code" "claude-code" ;;
   *qwen*) printf '%s\t%s\n' "Qwen Code" "qwen-code" ;;
+  *agy*|*antigravity*) printf '%s\t%s\n' "Antigravity CLI" "agy-cli" ;;
   *)
     local display
     display=$(printf '%s' "$1" | tr '_-' '  ' | awk '{

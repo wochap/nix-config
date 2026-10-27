@@ -91,10 +91,6 @@ in
               source = ./scripts/agy-statusline.sh;
               executable = true;
             };
-            ".gemini/antigravity-cli/hooks/agy-notify.sh" = {
-              source = ./scripts/agy-notify.sh;
-              executable = true;
-            };
             ".gemini/antigravity-cli/hooks.json".source =
               lib._custom.relativeSymlink configDirectory ./dotfiles/agy/hooks.json;
             ".gemini/config/hooks.json".source =
