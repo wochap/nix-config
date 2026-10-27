@@ -51,6 +51,8 @@ export interface RunOptions {
   images?: string[];
   /** Path; the adapter appends its provider-native output here. */
   rawLog: string;
+  /** Sandbox mode (permissive, strict, or off). */
+  sandbox?: "permissive" | "strict" | "off";
   /** Abort stops the agent with SIGINT, e.g. to take the session over. */
   signal?: AbortSignal;
   onEvent(e: Event): void | Promise<void>;

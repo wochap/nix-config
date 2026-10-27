@@ -9,6 +9,7 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } fr
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { dir } from "../store";
+import { wrapCommand } from "../sandbox";
 import { track } from "../term";
 import { launcher } from "./launch";
 import type { Adapter, Effort, Event, RunOptions } from "./types";
@@ -162,26 +163,29 @@ export const agy: Adapter = {
   defaultModel: "gemini-3.8-flash",
   noToolsFlags,
 
-  async run({ id, prompt, model, effort, cwd, resume, noTools, rawLog, signal, onEvent }: RunOptions) {
+  async run({ id, prompt, model, effort, cwd, resume, noTools, systemFile, images, rawLog, signal, sandbox, onEvent }: RunOptions) {
     const effectivePrompt = noTools
       ? `IMPORTANT: Do not call or invoke any tools. Answer directly using plain text only.\n\n${prompt}`
       : prompt;
     const stdin = `${JSON.stringify({ event: "user", message: { role: "user", content: [{ type: "text", text: effectivePrompt }] } })}\n`;
     const child = track(
       Bun.spawn(
-        [
-          ...cmd,
-          "--input-format",
-          "stream-json",
-          "--output-format",
-          "stream-json",
-          "--model",
-          resolveModel(model, effort),
-          ...effortFlags(effort),
-          ...(noTools ? [] : permFlags),
-          ...(resume ? ["--conversation", readNativeId(id) ?? id] : []),
-          "-p=",
-        ],
+        wrapCommand(
+          [
+            ...cmd,
+            "--input-format",
+            "stream-json",
+            "--output-format",
+            "stream-json",
+            "--model",
+            resolveModel(model, effort),
+            ...effortFlags(effort),
+            ...(noTools ? [] : permFlags),
+            ...(resume ? ["--conversation", readNativeId(id) ?? id] : []),
+            "-p=",
+          ],
+          { mode: sandbox, cwd, agent: "agy", systemFile, images },
+        ),
         { cwd, stdin: new Blob([stdin]), stdout: "pipe", stderr: "inherit" },
       ),
     );

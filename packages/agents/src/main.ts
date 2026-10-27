@@ -17,6 +17,7 @@ import { adapters, getAdapter } from "./adapters";
 import { EFFORTS, type Effort, type Event } from "./adapters/types";
 import { IMAGE_TYPES, MAX_IMAGES, extension, readImage } from "./image";
 import { header, hint, render } from "./render";
+import { resolveSandboxMode, wrapCommand } from "./sandbox";
 import * as store from "./store";
 import { tail } from "./tail";
 import { askHandBack, CTRL_T, keys, takeOver } from "./takeover";
@@ -40,6 +41,7 @@ Commands:
         --image <f>      attach an image (${IMAGE_TYPES.map(extension).join(", ")}; up to ${MAX_IMAGES});
                          repeatable; the prompt may then be empty
         --via <name>     mark the session as started by <name>; ls hides it
+        --sandbox <mode> bubblewrap sandbox (permissive, strict, off; default: permissive)
     -q, --quiet          print only the final answer (default when stdout is not a TTY)
         --verbose        print live progress (default on a TTY)
         --json           print {id,agent,model,result,costUsd,durationMs,
@@ -68,6 +70,7 @@ Commands:
         --tools          let runs use tools (default: --no-tools, so chats
                          only answer and prompts cannot drive tools)
         --tool-events    stream tool calls as italic lines (with --tools)
+        --sandbox <mode> bubblewrap sandbox (permissive, strict, off; default: strict)
 
 Ids may be a unique prefix.
 Agents:   ${Object.keys(adapters).join(", ")}
@@ -81,6 +84,7 @@ const { values: opts, positionals } = parseArgs({
     effort: { type: "string", short: "e" },
     cwd: { type: "string", short: "C" },
     resume: { type: "string", short: "r" },
+    sandbox: { type: "string" },
     quiet: { type: "boolean", short: "q" },
     verbose: { type: "boolean" },
     json: { type: "boolean" },
@@ -213,6 +217,8 @@ async function run() {
   let resume = Boolean(opts.resume);
   // Sent with the first attempt only; a handback must not resend them.
   let attach = images;
+  const sandbox = resolveSandboxMode(opts.sandbox, "permissive");
+
   // Headless attempts; Ctrl-T stops one and hands the session to the user.
   while (true) {
     const stop = new AbortController();
@@ -234,6 +240,7 @@ async function run() {
         images: attach,
         rawLog: store.rawPath(id),
         signal: stop.signal,
+        sandbox,
         async onEvent(e) {
           // After Ctrl-T the agent only reports its own interruption.
           if (stop.signal.aborted) return;
@@ -257,7 +264,7 @@ async function run() {
     if (!stop.signal.aborted) break;
 
     await onEvent({ type: "takeover" });
-    const how = await takeOver({ agent, id, model: session.model, effort: session.effort, cwd: session.cwd, onEvent });
+    const how = await takeOver({ agent, id, model: session.model, effort: session.effort, cwd: session.cwd, sandbox, onEvent });
     if (how === "finished" || (await askHandBack()) === "done") {
       result = (await agent.lastResponse(id)) ?? "";
       last = null;
@@ -298,7 +305,12 @@ async function attach() {
   const s = pick(args[0], store.latest);
   if (s.status === "running") throw new Error(`session ${s.id} is still running`);
   const cmd = getAdapter(s.agent).takeOverCmd(s.id, s.model, s.effort);
-  await interactive(() => Bun.spawn(cmd, { cwd: s.cwd, stdio: ["inherit", "inherit", "inherit"] }).exited);
+  const sandboxedCmd = wrapCommand(cmd, {
+    mode: resolveSandboxMode(opts.sandbox, "permissive"),
+    cwd: s.cwd,
+    agent: s.agent,
+  });
+  await interactive(() => Bun.spawn(sandboxedCmd, { cwd: s.cwd, stdio: ["inherit", "inherit", "inherit"] }).exited);
 }
 
 async function last() {
@@ -371,6 +383,7 @@ async function serve() {
     toolEvents: Boolean(opts["tool-events"]),
     tools: Boolean(opts.tools),
     apiKey: await apiKey(),
+    sandbox: resolveSandboxMode(opts.sandbox, "strict"),
   });
 }
 

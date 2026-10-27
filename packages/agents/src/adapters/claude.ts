@@ -8,6 +8,7 @@ import { appendFileSync, existsSync, readdirSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { readImage } from "../image";
+import { wrapCommand } from "../sandbox";
 import { track } from "../term";
 import { launcher } from "./launch";
 import type { Adapter, Effort, Event, RunOptions } from "./types";
@@ -107,26 +108,29 @@ export const claude: Adapter = {
   images: true,
 
   // -p without a prompt argument reads it from stdin.
-  async run({ id, prompt, model, effort, cwd, resume, noTools, systemFile, images = [], rawLog, signal, onEvent }: RunOptions) {
+  async run({ id, prompt, model, effort, cwd, resume, noTools, systemFile, images = [], rawLog, signal, sandbox, onEvent }: RunOptions) {
     const stdin = await stdinFor(prompt, images);
     const child = track(
       Bun.spawn(
-        [
-          ...cmd,
-          "-p",
-          "--model",
-          model,
-          ...effortFlags(effort),
-          ...permFlags,
-          ...(noTools ? noToolsFlags : []),
-          ...(systemFile ? systemPromptFlags(systemFile) : []),
-          ...(images.length ? ["--input-format", "stream-json"] : []),
-          "--output-format",
-          "stream-json",
-          "--verbose",
-          resume ? "--resume" : "--session-id",
-          id,
-        ],
+        wrapCommand(
+          [
+            ...cmd,
+            "-p",
+            "--model",
+            model,
+            ...effortFlags(effort),
+            ...permFlags,
+            ...(noTools ? noToolsFlags : []),
+            ...(systemFile ? systemPromptFlags(systemFile) : []),
+            ...(images.length ? ["--input-format", "stream-json"] : []),
+            "--output-format",
+            "stream-json",
+            "--verbose",
+            resume ? "--resume" : "--session-id",
+            id,
+          ],
+          { mode: sandbox, cwd, agent: "claude", systemFile, images },
+        ),
         { cwd, stdin: new Blob([stdin]), stdout: "pipe", stderr: "inherit" },
       ),
     );

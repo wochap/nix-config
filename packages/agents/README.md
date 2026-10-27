@@ -67,11 +67,22 @@ When the agent fails, `--json` adds `error` with the agent's own error text
 (for claude e.g. its usage-limit message) instead of only an exit code. A
 claude result marked as an error fails the run even when claude exits 0.
 
+`--sandbox <permissive|strict|off>` isolates agent runs with bubblewrap (`bwrap`):
+- `permissive` (default for `run` & `attach`): read/write filesystem access, but
+  shields sensitive directories (`~/.ssh`, `~/.gnupg`, `~/.aws`, `~/.kube`, browser
+  profiles/cookies, `~/.netrc`, `~/.git-credentials`) using empty `tmpfs` mounts so credentials cannot be read or leaked.
+- `strict` (default for `serve`): root `/` is mounted read-only, `/tmp` is a clean `tmpfs`,
+  and `cwd` is an isolated temporary scratch folder (`tmpfs`) so incoming prompts/harnesses have zero
+  ability to touch the host filesystem.
+- `off`: disables sandboxing. When `bwrap` is missing from the system, it automatically falls back to `off`.
+Can also be set with `AGENTS_SANDBOX=permissive|strict|off`.
+
 Env: `CLAUDE_FLAGS` (default `--permission-mode auto`), `CLAUDE_CMD` (default
 `sessiontap claude`), `PI_FLAGS` (default none; `--approve` trusts
 project-local files), `PI_CMD` (default `sessiontap pi`), `AGY_FLAGS` (default
 `--dangerously-skip-permissions`), `AGY_CMD` (default `sessiontap agy`), `AGENTS_DTACH`
-(dtach binary, set by the package; default `dtach` on PATH).
+(dtach binary, set by the package; default `dtach` on PATH), `AGENTS_SANDBOX`
+(default `permissive` for run, `strict` for serve).
 
 To add an agent, implement `Adapter` (`src/adapters/types.ts`, emits
 normalized events) in `src/adapters/<name>.ts` and register it in

@@ -27,6 +27,7 @@ import { join } from "node:path";
 import { adapters, getAdapter } from "./adapters";
 import { EFFORTS, type Effort, type Event } from "./adapters/types";
 import { extension, IMAGE_TYPES, type ImageType, MAX_IMAGE_BASE64, MAX_IMAGES, sniff } from "./image";
+import type { SandboxMode } from "./sandbox";
 import * as store from "./store";
 import { tail } from "./tail";
 
@@ -43,6 +44,8 @@ export interface ServeOptions {
   apiKey: string | null;
   /** Working directory of every run. */
   cwd: string;
+  /** Bubblewrap sandbox mode (default: "strict"). */
+  sandbox?: SandboxMode;
 }
 
 interface Message {
@@ -231,7 +234,7 @@ interface Run {
   kill(): void;
 }
 
-function spawn(p: Plan, cwd: string, tools: boolean): Run {
+function spawn(p: Plan, cwd: string, tools: boolean, sandbox: SandboxMode = "strict"): Run {
   // Files, not argv: system prompts can be long, images are bytes. The
   // agents read them at startup (claude via `run`, pi itself).
   const tmp = p.system || p.images.length ? mkdtempSync(join(tmpdir(), "agents-serve-")) : null;
@@ -248,6 +251,8 @@ function spawn(p: Plan, cwd: string, tools: boolean): Run {
     join(import.meta.dir, "main.ts"),
     "run",
     "--json",
+    "--sandbox",
+    sandbox,
     "-a",
     p.agent,
     "-m",
@@ -339,7 +344,7 @@ function usage(out: RunOutput | null) {
 const EARLY_HEADERS_MS = 10_000;
 
 async function complete(p: Plan, o: ServeOptions, signal: AbortSignal): Promise<Response> {
-  const run = spawn(p, o.cwd, o.tools);
+  const run = spawn(p, o.cwd, o.tools, o.sandbox ?? "strict");
   signal.addEventListener("abort", run.kill);
 
   const reply = async (): Promise<{ body: unknown; status: number }> => {
@@ -396,7 +401,7 @@ async function complete(p: Plan, o: ServeOptions, signal: AbortSignal): Promise<
 function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
   // A resumed session already has events; follow only the new ones.
   let read = p.resume ? tail(store.eventsPath(p.resume), true) : null;
-  const run = spawn(p, o.cwd, o.tools);
+  const run = spawn(p, o.cwd, o.tools, o.sandbox ?? "strict");
   signal.addEventListener("abort", run.kill);
   const encoder = new TextEncoder();
   const created = now();

@@ -9,6 +9,7 @@
 import { appendFileSync, existsSync, readdirSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { wrapCommand } from "../sandbox";
 import { track } from "../term";
 import { launcher } from "./launch";
 import type { Adapter, Effort, Event, RunOptions } from "./types";
@@ -122,25 +123,28 @@ export const pi: Adapter = {
   // Sessions are looked up per cwd, hence cwd is always the session's.
   // -p without a message takes the prompt from stdin. pi itself reads @file
   // images (absolute paths) and attaches them to that message, no tool.
-  async run({ id, prompt, model, effort, cwd, noTools, systemFile, images = [], rawLog, signal, onEvent }: RunOptions) {
+  async run({ id, prompt, model, effort, cwd, noTools, systemFile, images = [], rawLog, signal, sandbox, onEvent }: RunOptions) {
     const startedAt = Date.now();
     const child = track(
       Bun.spawn(
-        [
-          ...cmd,
-          "--session-id",
-          id,
-          "--model",
-          model,
-          ...effortFlags(effort),
-          ...permFlags,
-          ...(noTools ? noToolsFlags : []),
-          ...(systemFile ? systemPromptFlags(systemFile) : []),
-          "--mode",
-          "json",
-          "-p",
-          ...(images.length ? ["--", ...images.map((f) => `@${f}`)] : []),
-        ],
+        wrapCommand(
+          [
+            ...cmd,
+            "--session-id",
+            id,
+            "--model",
+            model,
+            ...effortFlags(effort),
+            ...permFlags,
+            ...(noTools ? noToolsFlags : []),
+            ...(systemFile ? systemPromptFlags(systemFile) : []),
+            "--mode",
+            "json",
+            "-p",
+            ...(images.length ? ["--", ...images.map((f) => `@${f}`)] : []),
+          ],
+          { mode: sandbox, cwd, agent: "pi", systemFile, images },
+        ),
         { cwd, stdin: new Blob([prompt]), stdout: "pipe", stderr: "inherit" },
       ),
     );
