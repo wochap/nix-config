@@ -10,6 +10,12 @@ let
   ociBackend = config.virtualisation.oci-containers.backend;
   serviceName = "${ociBackend}-bugsink";
   hasDomain = cfg.tailnetDomain != null;
+  hasSopsEnv = cfg.secretKeySecret.sopsFile != null || cfg.admin.passwordSecret.sopsFile != null;
+  adminUsernameExpr =
+    if cfg.admin.usernameSecret.sopsFile != null then
+      config.sops.placeholder.${cfg.admin.usernameSecret.sopsKey}
+    else
+      cfg.admin.email;
 in
 {
   options._custom.services.bugsink = {
@@ -57,6 +63,40 @@ in
         type = lib.types.nonEmptyStr;
         default = "server-bugsink-secret-key";
         description = "Key name inside the SOPS file for Bugsink SECRET_KEY.";
+      };
+    };
+
+    admin = {
+      email = lib.mkOption {
+        type = lib.types.str;
+        default = "gean@geanmar.com";
+        example = "admin@geanmar.com";
+        description = "Superuser email (Bugsink uses email for login).";
+      };
+      usernameSecret = {
+        sopsFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Optional SOPS file holding the superuser email.";
+        };
+        sopsKey = lib.mkOption {
+          type = lib.types.nonEmptyStr;
+          default = "server-bugsink-admin-username";
+          description = "SOPS key holding the superuser email.";
+        };
+      };
+      passwordSecret = {
+        sopsFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          example = lib.literalExpression "../../secrets-sops/server.yaml";
+          description = "SOPS file holding the superuser password.";
+        };
+        sopsKey = lib.mkOption {
+          type = lib.types.nonEmptyStr;
+          default = "server-bugsink-admin-password";
+          description = "SOPS key holding the superuser password.";
+        };
       };
     };
 
@@ -174,7 +214,7 @@ in
             }
             // cfg.environment;
           environmentFiles =
-            lib.optional (cfg.secretKeySecret.sopsFile != null) config.sops.templates."bugsink.env".path
+            lib.optional hasSopsEnv config.sops.templates."bugsink.env".path
             ++ lib.optional (cfg.secretKeySecret.sopsFile == null) "${cfg.dataDir}/secret_key.env"
             ++ cfg.environmentFiles;
           extraOptions = [
@@ -211,13 +251,28 @@ in
         };
       }
 
-      (lib.mkIf (cfg.secretKeySecret.sopsFile != null) {
-        sops.secrets.${cfg.secretKeySecret.sopsKey}.sopsFile = cfg.secretKeySecret.sopsFile;
+      (lib.mkIf hasSopsEnv {
+        sops.secrets =
+          lib.optionalAttrs (cfg.secretKeySecret.sopsFile != null) {
+            ${cfg.secretKeySecret.sopsKey}.sopsFile = cfg.secretKeySecret.sopsFile;
+          }
+          // lib.optionalAttrs (cfg.admin.passwordSecret.sopsFile != null) {
+            ${cfg.admin.passwordSecret.sopsKey}.sopsFile = cfg.admin.passwordSecret.sopsFile;
+          }
+          // lib.optionalAttrs (cfg.admin.usernameSecret.sopsFile != null) {
+            ${cfg.admin.usernameSecret.sopsKey}.sopsFile = cfg.admin.usernameSecret.sopsFile;
+          };
+
         sops.templates."bugsink.env" = {
           mode = "0400";
           restartUnits = [ "${serviceName}.service" ];
           content = ''
-            SECRET_KEY=${config.sops.placeholder.${cfg.secretKeySecret.sopsKey}}
+            ${lib.optionalString (cfg.secretKeySecret.sopsFile != null) ''
+              SECRET_KEY=${config.sops.placeholder.${cfg.secretKeySecret.sopsKey}}
+            ''}
+            ${lib.optionalString (cfg.admin.passwordSecret.sopsFile != null) ''
+              CREATE_SUPERUSER=${adminUsernameExpr}:${config.sops.placeholder.${cfg.admin.passwordSecret.sopsKey}}
+            ''}
           '';
         };
       })

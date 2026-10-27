@@ -208,6 +208,10 @@ in
       tailnetDomain = "bugsink.gvps.geanmar.com";
       secretKeySecret.sopsFile = ../../secrets-sops/server.yaml;
       cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
+      admin = {
+        passwordSecret.sopsFile = ../../secrets-sops/server.yaml;
+        usernameSecret.sopsFile = ../../secrets-sops/server.yaml;
+      };
     };
 
     # Status page at https://status.gvps.geanmar.com for tailnet devices only,
