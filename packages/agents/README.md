@@ -72,9 +72,12 @@ claude result marked as an error fails the run even when claude exits 0.
   shields sensitive directories (`~/.ssh`, `~/.gnupg`, `~/.aws`, `~/.kube`, browser
   profiles/cookies, `~/.netrc`, `~/.git-credentials`) using empty `tmpfs` mounts so credentials cannot be read or leaked.
 - `strict` (default for `serve`): root `/` is mounted read-only, `/tmp` is a clean `tmpfs`,
-  and `cwd` is an isolated temporary scratch folder (`tmpfs`) so incoming prompts/harnesses have zero
-  ability to touch the host filesystem.
-- `off`: disables sandboxing. When `bwrap` is missing from the system, it automatically falls back to `off`.
+  sensitive directories (`~/.ssh`, credentials, keys) are masked with `tmpfs`/`/dev/null`,
+  `$XDG_RUNTIME_DIR` is unmounted, and `cwd` is an isolated temporary scratch folder (`tmpfs`).
+  Transient agent state is kept on ephemeral tmpfs while credentials remain read-only.
+  Strict mode fails closed: it refuses to run if `bwrap` is missing.
+  (Residual risk: network access is retained so agent CLIs can reach their model APIs).
+- `off`: disables sandboxing.
 Can also be set with `AGENTS_SANDBOX=permissive|strict|off`.
 
 Env: `CLAUDE_FLAGS` (default `--permission-mode auto`), `CLAUDE_CMD` (default
@@ -114,6 +117,12 @@ agents serve --port 20940 -C ~/work --api-key-file ~/.config/agents/api-key \
 - No tools by default: every run gets `--no-tools`, so a prompt (a chat, or
   web text a program forwards) cannot drive tools in the `-C` directory.
   `--tools` turns them on; `--tool-events` then streams tool calls.
+- External harness tools: supports standard OpenAI `tools`, `tool_choice`, and
+  `parallel_tool_calls` via prompt-emulated tool calling. When a request includes
+  `tools`, the agent's built-in tools are strictly disabled (`--no-tools`, and for
+  agy an unconditional PreToolUse deny hook in strict sandbox), and tool calls
+  are emitted with `finish_reason: "tool_calls"`. Harnesses can feed back
+  `role: "tool"` results in multi-turn loops. Tool mode runs statelessly.
 - System messages replace the agent's system prompt (`--system-file`), so
   the agent answers as the caller's prompt says, not as a coding agent.
   The rest of the history is flattened into one prompt.

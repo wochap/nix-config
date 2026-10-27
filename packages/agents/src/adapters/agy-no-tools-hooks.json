@@ -1,0 +1,21 @@
+{
+  "agents-no-tools": {
+    "PreInvocation": [
+      {
+        "command": "echo '{\"injectSteps\":[{\"ephemeralMessage\":\"Your built-in tools are unavailable in this session.\"}]}'",
+        "timeout": 5
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "command": "echo '{\"decision\":\"deny\",\"reason\":\"Tools are disabled in this session. Answer directly without calling any tool.\"}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

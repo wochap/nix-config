@@ -19,7 +19,6 @@ const permFlags = (process.env.AGY_FLAGS ?? "--dangerously-skip-permissions").sp
 const DEFAULT_EFFORT: Effort = "medium";
 const EFFORT: Record<Effort, string> = { low: "low", medium: "medium", high: "high", xhigh: "xhigh", max: "max" };
 const effortFlags = (effort: Effort = DEFAULT_EFFORT) => ["--effort", EFFORT[effort]];
-const noToolsFlags: string[] = [];
 
 // Antigravity's model catalog suffixes tiered models with -low/-medium/-high.
 // Map bare family names (e.g. "gemini-4-argon", "gemini-3.8-flash") using the
@@ -161,7 +160,7 @@ function transcriptEvents(entry: any, root: string): { events: Event[]; idle: bo
 export const agy: Adapter = {
   name: "agy",
   defaultModel: "gemini-3.8-flash",
-  noToolsFlags,
+  supportsNoTools: (sandbox) => sandbox === "strict" && Boolean(Bun.which("bwrap")),
 
   async run({ id, prompt, model, effort, cwd, resume, noTools, systemFile, images, rawLog, signal, sandbox, onEvent }: RunOptions) {
     const effectivePrompt = noTools
@@ -184,7 +183,14 @@ export const agy: Adapter = {
             ...(resume ? ["--conversation", readNativeId(id) ?? id] : []),
             "-p=",
           ],
-          { mode: sandbox, cwd, agent: "agy", systemFile, images },
+          {
+            mode: sandbox,
+            cwd,
+            agent: "agy",
+            systemFile,
+            images,
+            noToolsHook: noTools ? join(import.meta.dir, "agy-no-tools-hooks.json") : undefined,
+          },
         ),
         { cwd, stdin: new Blob([stdin]), stdout: "pipe", stderr: "inherit" },
       ),

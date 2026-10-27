@@ -28,6 +28,7 @@ export interface SandboxOptions {
   systemFile?: string;
   images?: string[];
   scratchDir?: string;
+  noToolsHook?: string;
 }
 
 export function resolveSandboxMode(requested?: string, defaultMode: SandboxMode = "permissive"): SandboxMode {
@@ -85,6 +86,9 @@ export function wrapCommand(cmd: string[], opts: SandboxOptions): string[] {
 
   const bwrap = Bun.which("bwrap");
   if (!bwrap) {
+    if (mode === "strict") {
+      throw new Error("sandbox: strict mode requires bubblewrap (bwrap)");
+    }
     // Graceful fallback when bwrap is not installed
     return cmd;
   }
@@ -120,6 +124,7 @@ export function wrapCommand(cmd: string[], opts: SandboxOptions): string[] {
   }
 
   if (mode === "strict") {
+    const { dirs, files } = getSensitivePaths();
     const args: string[] = [
       bwrap,
       "--ro-bind", "/", "/",
@@ -128,8 +133,21 @@ export function wrapCommand(cmd: string[], opts: SandboxOptions): string[] {
       "--tmpfs", "/tmp",
     ];
 
-    if (existsSync(runtimeDir)) {
-      args.push("--bind", runtimeDir, runtimeDir);
+    // Mask sensitive directories with empty tmpfs
+    for (const d of dirs) {
+      args.push("--tmpfs", d);
+    }
+
+    // Mask sensitive files with read-only /dev/null
+    for (const f of files) {
+      args.push("--ro-bind", "/dev/null", f);
+    }
+
+    // Do not bind runtimeDir read-write in strict mode. If sessiontap dir exists,
+    // isolate it with tmpfs so sessiontap can create per-run scratch tracking without host access.
+    const sessiontapDir = join(runtimeDir, "sessiontap");
+    if (existsSync(sessiontapDir)) {
+      args.push("--tmpfs", sessiontapDir);
     }
 
     // Ensure session tracking directory works so events & logs can be written
@@ -142,6 +160,11 @@ export function wrapCommand(cmd: string[], opts: SandboxOptions): string[] {
       args.push("--bind", opts.scratchDir, opts.cwd);
     } else {
       args.push("--tmpfs", opts.cwd);
+    }
+
+    // Per-run deny hook for disabling tools in strict mode
+    if (opts.noToolsHook && existsSync(opts.noToolsHook)) {
+      args.push("--dir", join(opts.cwd, ".agents"), "--ro-bind", opts.noToolsHook, join(opts.cwd, ".agents", "hooks.json"));
     }
 
     // Explicit read-only binds for systemFile and images (e.g. if stored under /tmp)
@@ -170,12 +193,29 @@ export function wrapCommand(cmd: string[], opts: SandboxOptions): string[] {
     const claudeDir = join(home, ".claude");
     if (existsSync(claudeDir)) {
       args.push("--tmpfs", claudeDir);
+      for (const f of [".credentials.json", "settings.json"]) {
+        const filePath = join(claudeDir, f);
+        if (existsSync(filePath)) {
+          args.push("--ro-bind", filePath, filePath);
+        }
+      }
     }
 
     // 3. Pi
     const piDir = join(home, ".pi");
     if (existsSync(piDir)) {
-      args.push("--tmpfs", piDir);
+      const piAgent = join(piDir, "agent");
+      if (existsSync(piAgent)) {
+        args.push("--tmpfs", piAgent);
+        for (const f of ["models.json", "auth.json", "settings.json", "trust.json"]) {
+          const filePath = join(piAgent, f);
+          if (existsSync(filePath)) {
+            args.push("--ro-bind", filePath, filePath);
+          }
+        }
+      } else {
+        args.push("--tmpfs", piDir);
+      }
     }
 
     return [...args, "--", ...cmd];

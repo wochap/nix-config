@@ -165,7 +165,14 @@ async function run() {
 
   if (opts["no-tools"]) {
     const name = opts.resume ? store.resolveId(opts.resume).agent : (opts.agent ?? "claude");
-    if (!getAdapter(name).noToolsFlags) throw new Error(`--no-tools: ${name} cannot run without tools`);
+    const agent = getAdapter(name);
+    const sandbox = resolveSandboxMode(opts.sandbox, "permissive");
+    if (!agent.supportsNoTools(sandbox)) {
+      if (agent.name === "agy" && sandbox !== "strict") {
+        throw new Error("agy: --no-tools requires --sandbox strict");
+      }
+      throw new Error(`--no-tools: ${name} cannot run without tools`);
+    }
   }
   if (images.length) {
     const name = opts.resume ? store.resolveId(opts.resume).agent : (opts.agent ?? "claude");

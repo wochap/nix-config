@@ -48,9 +48,23 @@ export interface ServeOptions {
   sandbox?: SandboxMode;
 }
 
-interface Message {
+export interface ToolCall {
+  id: string;
+  type: "function";
+  function: { name: string; arguments: string };
+}
+
+export interface ToolDef {
+  type: "function";
+  function: { name: string; description?: string; parameters?: Record<string, unknown> };
+}
+
+export interface Message {
   role: string;
   content: unknown;
+  name?: string;
+  tool_call_id?: string;
+  tool_calls?: ToolCall[];
 }
 
 class HttpError extends Error {
@@ -139,23 +153,170 @@ function remember(fingerprint: string, id: string) {
 }
 
 // Trimmed, since GUIs tend to trim what they echo back.
-const fp = (model: string, messages: Message[]) =>
+export const fp = (model: string, messages: Message[]) =>
   createHash("sha256")
-    .update(JSON.stringify([model, messages.map((m) => [m.role, text(m).trim()])]))
+    .update(
+      JSON.stringify([
+        model,
+        messages.map((m) => [
+          m.role,
+          text(m).trim(),
+          m.tool_call_id ?? "",
+          m.tool_calls ? m.tool_calls.map((c) => [c.id, c.function?.name, c.function?.arguments]) : [],
+        ]),
+      ]),
+    )
     .digest("hex");
 
 const isSystem = (m: Message) => m.role === "system" || m.role === "developer";
 
 /** History as one prompt, for a conversation the server has not seen. */
-function flatten(messages: Message[]): string {
-  const turns = messages.filter((m) => m.role === "user" || m.role === "assistant");
-  if (turns.length === 1) return text(turns[0]);
-  // The last message's images are sent; earlier ones only marked.
-  const body = (m: Message) => (m === turns.at(-1) ? text(m) : textWithMarkers(m));
-  return turns.map((m) => `${m.role}: ${body(m)}`).join("\n\n");
+export function flatten(messages: Message[]): string {
+  const toolNames = new Map<string, string>();
+  for (const m of messages) {
+    if (m.tool_calls) {
+      for (const tc of m.tool_calls) {
+        if (tc.id && tc.function?.name) toolNames.set(tc.id, tc.function.name);
+      }
+    }
+  }
+
+  const turns = messages.filter(
+    (m) => m.role === "user" || m.role === "assistant" || m.role === "tool" || m.role === "function",
+  );
+  if (turns.length === 1 && turns[0].role === "user") return text(turns[0]);
+
+  return turns
+    .map((m) => {
+      if (m.role === "user") {
+        const body = m === turns.at(-1) ? text(m) : textWithMarkers(m);
+        return `user: ${body}`;
+      }
+      if (m.role === "assistant") {
+        const parts: string[] = [];
+        const txt = text(m).trim();
+        if (txt) parts.push(txt);
+        if (m.tool_calls && m.tool_calls.length > 0) {
+          for (const tc of m.tool_calls) {
+            let argsObj: any;
+            try {
+              argsObj = typeof tc.function?.arguments === "string" ? JSON.parse(tc.function.arguments) : tc.function?.arguments;
+            } catch {
+              argsObj = tc.function?.arguments;
+            }
+            parts.push(`<tool_call>${JSON.stringify({ name: tc.function?.name, arguments: argsObj })}</tool_call>`);
+          }
+        }
+        return `assistant: ${parts.join("\n")}`;
+      }
+      if (m.role === "tool" || m.role === "function") {
+        const id = m.tool_call_id ?? "";
+        const name = (id ? toolNames.get(id) : undefined) ?? m.name ?? "";
+        const body = typeof m.content === "string" ? m.content : JSON.stringify(m.content);
+        return `<tool_result name="${name}" id="${id}">\n${body}\n</tool_result>`;
+      }
+      return `${m.role}: ${text(m)}`;
+    })
+    .join("\n\n");
 }
 
-interface Plan {
+export function buildToolInstructions(
+  tools: ToolDef[],
+  toolChoice: any,
+  parallel: boolean,
+  agentName: string,
+): string {
+  let effectiveTools = tools;
+  let choiceInstruction = "";
+  if (typeof toolChoice === "object" && toolChoice?.function?.name) {
+    effectiveTools = tools.filter((t) => t.function.name === toolChoice.function.name);
+    choiceInstruction = `\nYou MUST call function '${toolChoice.function.name}'.`;
+  } else if (toolChoice === "required") {
+    choiceInstruction = "\nYou MUST call at least one function.";
+  }
+  const parallelInstruction = !parallel ? "\nCall at most one function." : "";
+  const agyPrefix =
+    agentName === "agy" ? "Your built-in tools are disabled; use only the functions listed below.\n\n" : "";
+
+  return `${agyPrefix}You can call these external functions. They are executed by the user's system, not by you; you cannot see results until they are returned to you.
+<functions>
+${JSON.stringify(effectiveTools.map((t) => t.function), null, 2)}
+</functions>
+To call a function, output exactly:
+<tool_call>{"name": "<function_name>", "arguments": { ... }}</tool_call>
+You may write a short sentence before the call. To call several functions, output several <tool_call> blocks. After calling, stop and wait for <tool_result>. If no function is needed, answer normally.${choiceInstruction}${parallelInstruction}`;
+}
+
+export interface ParsedToolOutput {
+  content: string | null;
+  toolCalls: ToolCall[];
+}
+
+export function parseToolCalls(raw: string, declaredTools: ToolDef[], parallel: boolean = true): ParsedToolOutput {
+  const validNames = new Map(declaredTools.map((t) => [t.function.name, t]));
+  const toolCalls: ToolCall[] = [];
+
+  const toolCallRegex = /<tool_call>([\s\S]*?)(?:<\/tool_call>|$)/gi;
+  let match: RegExpExecArray | null;
+
+  while ((match = toolCallRegex.exec(raw)) !== null) {
+    let inner = match[1].trim();
+    if (!inner) continue;
+    const fenceMatch = inner.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+    if (fenceMatch) inner = fenceMatch[1].trim();
+
+    try {
+      const parsed = JSON.parse(inner);
+      if (parsed && typeof parsed.name === "string" && validNames.has(parsed.name)) {
+        const def = validNames.get(parsed.name)!;
+        let args = parsed.arguments;
+        if (typeof args === "string") {
+          try {
+            args = JSON.parse(args);
+          } catch {}
+        }
+        if (typeof args !== "object" || args === null) {
+          args = {};
+        }
+
+        const required = (def.function.parameters as any)?.required;
+        let valid = true;
+        if (Array.isArray(required)) {
+          for (const reqKey of required) {
+            if (typeof reqKey === "string" && !(reqKey in args)) {
+              valid = false;
+              break;
+            }
+          }
+        }
+        if (!valid) continue;
+
+        const id = `call_${crypto.randomUUID().replaceAll("-", "").slice(0, 24)}`;
+        toolCalls.push({
+          id,
+          type: "function",
+          function: {
+            name: parsed.name,
+            arguments: JSON.stringify(args),
+          },
+        });
+      }
+    } catch {}
+  }
+
+  if (toolCalls.length === 0) {
+    return { content: raw, toolCalls: [] };
+  }
+
+  const effectiveCalls = parallel ? toolCalls : toolCalls.slice(0, 1);
+  const stripped = raw.replace(/<tool_call>[\s\S]*?(?:<\/tool_call>|$)/gi, "").trim();
+  return {
+    content: stripped || null,
+    toolCalls: effectiveCalls,
+  };
+}
+
+export interface Plan {
   model: string;
   agent: string;
   agentModel: string;
@@ -169,9 +330,12 @@ interface Plan {
   messages: Message[];
   /** Send a usage chunk before [DONE] (stream_options.include_usage). */
   streamUsage: boolean;
+  tools: ToolDef[];
+  toolChoice?: any;
+  parallelToolCalls: boolean;
 }
 
-function plan(body: any, tools: boolean): Plan {
+export function plan(body: any, tools: boolean, sandbox: SandboxMode = "strict"): Plan {
   if (typeof body?.model !== "string" || !body.model) throw new HttpError(400, "model is required");
   const model: string = body.model;
   const slash = model.indexOf("/");
@@ -182,7 +346,58 @@ function plan(body: any, tools: boolean): Plan {
   } catch (err) {
     throw new HttpError(400, (err as Error).message);
   }
-  if (!tools && !adapter.noToolsFlags) throw new HttpError(400, `${adapter.name} cannot run without tools`);
+
+  const rawTools = body?.tools;
+  const toolsList: ToolDef[] = [];
+  if (rawTools !== undefined && rawTools !== null) {
+    if (!Array.isArray(rawTools)) throw new HttpError(400, "tools must be an array");
+    const seenNames = new Set<string>();
+    for (const t of rawTools) {
+      if (t?.type !== "function" || typeof t?.function?.name !== "string") {
+        throw new HttpError(400, "each tool must be {type: 'function', function: {name: string}}");
+      }
+      const name = t.function.name;
+      if (!/^[a-zA-Z0-9_-]{1,64}$/.test(name)) {
+        throw new HttpError(400, `invalid tool name "${name}": must match ^[a-zA-Z0-9_-]{1,64}$`);
+      }
+      if (seenNames.has(name)) {
+        throw new HttpError(400, `duplicate tool name "${name}"`);
+      }
+      seenNames.add(name);
+      toolsList.push({
+        type: "function",
+        function: {
+          name,
+          description: typeof t.function.description === "string" ? t.function.description : undefined,
+          parameters: typeof t.function.parameters === "object" && t.function.parameters !== null ? t.function.parameters : undefined,
+        },
+      });
+    }
+  }
+
+  let toolChoice = body?.tool_choice;
+  if (toolChoice !== undefined && toolChoice !== null) {
+    if (typeof toolChoice === "string") {
+      if (toolChoice !== "auto" && toolChoice !== "none" && toolChoice !== "required") {
+        throw new HttpError(400, `tool_choice: expected auto, none, required, or a function object (got "${toolChoice}")`);
+      }
+    } else if (typeof toolChoice === "object" && toolChoice?.type === "function" && typeof toolChoice?.function?.name === "string") {
+      const name = toolChoice.function.name;
+      if (!toolsList.some((t) => t.function.name === name)) {
+        throw new HttpError(400, `tool_choice specifies unknown tool "${name}"`);
+      }
+    } else {
+      throw new HttpError(400, "invalid tool_choice format");
+    }
+  }
+
+  const parallelToolCalls = body?.parallel_tool_calls !== false;
+  const hasHarnessTools = toolsList.length > 0;
+
+  if ((!tools || hasHarnessTools) && !adapter.supportsNoTools(sandbox)) {
+    throw new HttpError(400, `${adapter.name} cannot run without tools`);
+  }
+
   const agentModel = slash === -1 ? adapter.defaultModel : model.slice(slash + 1);
 
   const rawEffort = body.reasoning_effort ?? body.reasoning?.effort;
@@ -196,17 +411,80 @@ function plan(body: any, tools: boolean): Plan {
 
   const messages: Message[] = Array.isArray(body.messages) ? body.messages : [];
   const lastMsg = messages.at(-1);
-  const urls = lastMsg ? imageUrls(lastMsg) : [];
-  if (!lastMsg || lastMsg.role !== "user" || !(text(lastMsg).trim() || urls.length)) {
-    throw new HttpError(400, "messages must end with a non-empty user message");
+  if (!lastMsg) throw new HttpError(400, "messages must not be empty");
+
+  let isToolResultTurn = false;
+  if (lastMsg.role === "tool" || lastMsg.role === "function") {
+    isToolResultTurn = true;
+    let assistantIdx = -1;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === "assistant") {
+        assistantIdx = i;
+        break;
+      }
+    }
+    if (assistantIdx === -1 || !messages[assistantIdx].tool_calls || messages[assistantIdx].tool_calls!.length === 0) {
+      throw new HttpError(400, "tool result turn must be preceded by an assistant message with tool_calls");
+    }
+    const assistantCalls = messages[assistantIdx].tool_calls!;
+    const validCallIds = new Set(assistantCalls.map((tc) => tc.id));
+    const validCallNames = new Set(assistantCalls.map((tc) => tc.function?.name));
+
+    for (let i = assistantIdx + 1; i < messages.length; i++) {
+      const m = messages[i];
+      if (m.role !== "tool" && m.role !== "function") {
+        throw new HttpError(400, `unexpected ${m.role} message after assistant tool calls; expected tool results`);
+      }
+      if (m.tool_call_id) {
+        if (!validCallIds.has(m.tool_call_id)) {
+          throw new HttpError(400, `tool message has tool_call_id "${m.tool_call_id}" which does not match any preceding assistant tool_calls`);
+        }
+      } else if (m.name) {
+        if (!validCallNames.has(m.name)) {
+          throw new HttpError(400, `tool message has name "${m.name}" which does not match any preceding assistant tool_calls`);
+        }
+      } else {
+        throw new HttpError(400, "tool message must have tool_call_id (or name)");
+      }
+    }
+  } else if (lastMsg.role === "user") {
+    const urls = imageUrls(lastMsg);
+    if (!(text(lastMsg).trim() || urls.length)) {
+      throw new HttpError(400, "messages must end with a non-empty user message");
+    }
+  } else {
+    throw new HttpError(400, `messages must end with a user or tool message (got ${lastMsg.role})`);
   }
+
+  const urls = (!isToolResultTurn && lastMsg.role === "user") ? imageUrls(lastMsg) : [];
   if (urls.length && !adapter.images) throw new HttpError(400, `${adapter.name} cannot take images`);
   if (urls.length > MAX_IMAGES) throw new HttpError(400, `at most ${MAX_IMAGES} images per message`);
   const images = urls.map(decodeImage);
 
-  const system = messages.filter(isSystem).map(text).join("\n\n").trim() || undefined;
+  let system = messages.filter(isSystem).map(text).join("\n\n").trim() || undefined;
+  if (hasHarnessTools && toolChoice !== "none") {
+    const toolInstructions = buildToolInstructions(toolsList, toolChoice, parallelToolCalls, adapter.name);
+    system = system ? `${system}\n\n${toolInstructions}` : toolInstructions;
+  }
+
   const streamUsage = Boolean(body.stream_options?.include_usage);
-  const base = { model, agent: adapter.name, agentModel, effort, system, images, messages, streamUsage };
+  const base = {
+    model,
+    agent: adapter.name,
+    agentModel,
+    effort,
+    system,
+    images,
+    messages,
+    streamUsage,
+    tools: toolsList,
+    toolChoice,
+    parallelToolCalls,
+  };
+
+  if (hasHarnessTools || isToolResultTurn) {
+    return { ...base, prompt: flatten(messages) };
+  }
 
   const known = conversations.get(fp(model, messages.slice(0, -1)));
   const prev = known ? store.readSession(known.id) : null;
@@ -246,6 +524,7 @@ function spawn(p: Plan, cwd: string, tools: boolean, sandbox: SandboxMode = "str
     writeFileSync(f, image.bytes, { mode: 0o600 });
     return f;
   });
+  const effectiveTools = p.tools.length > 0 ? false : tools;
   const argv = [
     process.execPath,
     join(import.meta.dir, "main.ts"),
@@ -261,7 +540,7 @@ function spawn(p: Plan, cwd: string, tools: boolean, sandbox: SandboxMode = "str
     "-C",
     cwd,
     ...(p.resume ? ["-r", p.resume] : []),
-    ...(tools ? [] : ["--no-tools"]),
+    ...(effectiveTools ? [] : ["--no-tools"]),
     ...(systemFile ? ["--system-file", systemFile] : []),
     ...imageFiles.flatMap((f) => ["--image", f]),
     "--via",
@@ -348,10 +627,63 @@ async function complete(p: Plan, o: ServeOptions, signal: AbortSignal): Promise<
   signal.addEventListener("abort", run.kill);
 
   const reply = async (): Promise<{ body: unknown; status: number }> => {
-    const out = await run.output();
+    let out = await run.output();
     if (!out) return { body: errorBody(run.error() || "agents run printed no result"), status: 500 };
     if (out.status !== "done") return { body: errorBody(out.result || run.error() || "agent failed"), status: 500 };
-    remembered(p, out.id, [out.result]);
+
+    let parsed = p.tools.length > 0 ? parseToolCalls(out.result, p.tools, p.parallelToolCalls) : null;
+    const isNamedChoice = typeof p.toolChoice === "object" && Boolean(p.toolChoice?.function?.name);
+    const requiredSatisfied = parsed && (
+      isNamedChoice
+        ? parsed.toolCalls.some((tc) => tc.function.name === (p.toolChoice as any).function.name)
+        : parsed.toolCalls.length > 0
+    );
+
+    if (p.tools.length > 0 && (p.toolChoice === "required" || isNamedChoice) && !requiredSatisfied) {
+      const reminder = isNamedChoice
+        ? `You MUST call function '${(p.toolChoice as any).function.name}' using <tool_call> tags.`
+        : "You MUST call at least one function using <tool_call> tags.";
+      const retryPlan: Plan = {
+        ...p,
+        prompt: `${p.prompt}\n\nassistant: ${out.result}\n\nuser: ${reminder}`,
+      };
+      const retryRun = spawn(retryPlan, o.cwd, false, o.sandbox ?? "strict");
+      signal.addEventListener("abort", retryRun.kill);
+      const retryOut = await retryRun.output();
+      if (retryOut && retryOut.status === "done") {
+        out = retryOut;
+        parsed = parseToolCalls(out.result, p.tools, p.parallelToolCalls);
+      }
+    }
+
+    if (parsed && parsed.toolCalls.length > 0) {
+      return {
+        status: 200,
+        body: {
+          id: completionId(out.id),
+          object: "chat.completion",
+          created: now(),
+          model: p.model,
+          choices: [
+            {
+              index: 0,
+              message: {
+                role: "assistant",
+                content: parsed.content,
+                tool_calls: parsed.toolCalls,
+              },
+              finish_reason: "tool_calls",
+            },
+          ],
+          usage: usage(out),
+        },
+      };
+    }
+
+    if (p.tools.length === 0) {
+      remembered(p, out.id, [out.result]);
+    }
+
     return {
       status: 200,
       body: {
@@ -359,7 +691,13 @@ async function complete(p: Plan, o: ServeOptions, signal: AbortSignal): Promise<
         object: "chat.completion",
         created: now(),
         model: p.model,
-        choices: [{ index: 0, message: { role: "assistant", content: out.result }, finish_reason: "stop" }],
+        choices: [
+          {
+            index: 0,
+            message: { role: "assistant", content: parsed?.content ?? out.result },
+            finish_reason: "stop",
+          },
+        ],
         usage: usage(out),
       },
     };
@@ -405,6 +743,7 @@ function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
   signal.addEventListener("abort", run.kill);
   const encoder = new TextEncoder();
   const created = now();
+  const inToolMode = p.tools.length > 0;
 
   const body = new ReadableStream({
     async start(controller) {
@@ -429,7 +768,102 @@ function stream(p: Plan, o: ServeOptions, signal: AbortSignal): Response {
         );
       };
 
-      // What the GUI shows, and so echoes back next turn.
+      if (inToolMode) {
+        // Buffered mode for tool calls: do not forward intermediate text events
+        let exited = false;
+        run.exited.then(() => {
+          exited = true;
+        });
+        const sessionId = await run.id;
+        if (sessionId) id = completionId(sessionId);
+
+        while (!exited) {
+          if (Date.now() - lastWrite > 15_000) write(": ping\n\n");
+          await Bun.sleep(200);
+        }
+
+        let out = await run.output();
+        if (out?.status !== "done") {
+          const failure = out?.result || run.error() || "agent failed";
+          write(`data: ${JSON.stringify(errorBody(failure))}\n\n`);
+          write("data: [DONE]\n\n");
+          if (!closed) controller.close();
+          return;
+        }
+
+        let parsed = parseToolCalls(out.result, p.tools, p.parallelToolCalls);
+        const isNamedChoice = typeof p.toolChoice === "object" && Boolean(p.toolChoice?.function?.name);
+        const requiredSatisfied = (
+          isNamedChoice
+            ? parsed.toolCalls.some((tc) => tc.function.name === (p.toolChoice as any).function.name)
+            : parsed.toolCalls.length > 0
+        );
+
+        if ((p.toolChoice === "required" || isNamedChoice) && !requiredSatisfied) {
+          const reminder = isNamedChoice
+            ? `You MUST call function '${(p.toolChoice as any).function.name}' using <tool_call> tags.`
+            : "You MUST call at least one function using <tool_call> tags.";
+          const retryPlan: Plan = {
+            ...p,
+            prompt: `${p.prompt}\n\nassistant: ${out.result}\n\nuser: ${reminder}`,
+          };
+          const retryRun = spawn(retryPlan, o.cwd, false, o.sandbox ?? "strict");
+          signal.addEventListener("abort", retryRun.kill);
+          let retryExited = false;
+          retryRun.exited.then(() => {
+            retryExited = true;
+          });
+          while (!retryExited) {
+            if (Date.now() - lastWrite > 15_000) write(": ping\n\n");
+            await Bun.sleep(200);
+          }
+          const retryOut = await retryRun.output();
+          if (retryOut && retryOut.status === "done") {
+            out = retryOut;
+            parsed = parseToolCalls(out.result, p.tools, p.parallelToolCalls);
+          }
+        }
+
+        if (parsed.toolCalls.length > 0) {
+          if (parsed.content) {
+            chunk({ content: parsed.content }, null);
+          }
+          for (let i = 0; i < parsed.toolCalls.length; i++) {
+            const tc = parsed.toolCalls[i];
+            chunk(
+              {
+                tool_calls: [
+                  {
+                    index: i,
+                    id: tc.id,
+                    type: "function",
+                    function: {
+                      name: tc.function.name,
+                      arguments: tc.function.arguments,
+                    },
+                  },
+                ],
+              },
+              null,
+            );
+          }
+          chunk({}, "tool_calls");
+        } else {
+          chunk({ content: parsed.content ?? out.result }, null);
+          chunk({}, "stop");
+        }
+
+        if (p.streamUsage) {
+          write(
+            `data: ${JSON.stringify({ id, object: "chat.completion.chunk", created, model: p.model, choices: [], usage: usage(out) })}\n\n`,
+          );
+        }
+        write("data: [DONE]\n\n");
+        if (!closed) controller.close();
+        return;
+      }
+
+      // Non-tool mode: What the GUI shows, and so echoes back next turn.
       let sent = "";
       let lastText = "";
       let sawText = false;
@@ -523,6 +957,9 @@ function authorized(req: Request, key: string): boolean {
 }
 
 export function serve(o: ServeOptions) {
+  if ((o.sandbox ?? "strict") === "strict" && !Bun.which("bwrap")) {
+    throw new Error("serve: strict sandbox requires bubblewrap (bwrap)");
+  }
   const models = o.models?.length ? o.models : Object.values(adapters).map((a) => `${a.name}/${a.defaultModel}`);
 
   const server = Bun.serve({
@@ -549,7 +986,7 @@ export function serve(o: ServeOptions) {
         } catch {
           throw new HttpError(400, "invalid JSON body");
         }
-        const p = plan(body, o.tools);
+        const p = plan(body, o.tools, o.sandbox ?? "strict");
         return body.stream ? stream(p, o, req.signal) : complete(p, o, req.signal);
       }
       return json(errorBody(`no route ${req.method} ${pathname}`), 404);

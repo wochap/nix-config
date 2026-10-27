@@ -114,6 +114,8 @@ export const pi: Adapter = {
 
   noToolsFlags,
 
+  supportsNoTools: () => true,
+
   systemPromptFlags,
 
   images: true,

@@ -103,6 +103,8 @@ export const claude: Adapter = {
 
   noToolsFlags,
 
+  supportsNoTools: () => true,
+
   systemPromptFlags,
 
   images: true,

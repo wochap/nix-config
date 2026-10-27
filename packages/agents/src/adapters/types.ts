@@ -67,6 +67,10 @@ export interface Adapter {
    */
   noToolsFlags?: string[];
   /**
+   * Whether the adapter supports running without tools under the given sandbox mode.
+   */
+  supportsNoTools(sandbox: "permissive" | "strict" | "off"): boolean;
+  /**
    * Flags that replace the agent's system prompt with a file's text. Unset:
    * `run --system-file` puts the text at the top of the prompt instead.
    */
