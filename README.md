@@ -252,6 +252,23 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Rustup `ld-wrapper.sh: No such file or directory` or linking errors after Nixpkgs update
+
+  When updating `nixpkgs`, the Nix store path for `rustup` changes and older paths are garbage-collected. Any toolchains previously installed via `rustup` in `~/.rustup/toolchains` retain hardcoded references to the old `nix-support/ld-wrapper.sh` in their `gcc-ld/ld.lld` scripts, causing build failures when linking host binaries or proc macros.
+
+  To fix, delete the cached toolchains so rustup / cargokit re-downloads and re-patches them on the next build:
+
+  ```sh
+  rm -rf ~/.rustup/toolchains
+  ```
+
+  Alternatively, repair existing toolchains in place without re-downloading targets:
+
+  ```sh
+  LD_WRAPPER="$(dirname "$(dirname "$(realpath "$(which rustup)")")")/nix-support/ld-wrapper.sh"
+  find ~/.rustup/toolchains -name "ld.lld" -not -path "*-unwrapped*" -exec sed -i "s|/nix/store/.*-rustup-.*/nix-support/ld-wrapper.sh|$LD_WRAPPER|g" {} +
+  ```
+
 - Open WebUI returns `500 Internal Server Error` after an upgrade
 
   Check logs:
