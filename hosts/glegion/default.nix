@@ -306,6 +306,8 @@ in
       "claude/claude-haiku-5-5"
       "claude/claude-fable-5-1"
       "pi/omniroute/desktop-free"
+      "agy/gemini-4-argon"
+      "agy/gemini-3.8-flash"
     ];
     # _custom.services.ai.briefing.enable = true;
 

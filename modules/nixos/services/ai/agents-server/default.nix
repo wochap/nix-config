@@ -27,6 +27,8 @@ in
         "claude/claude-sonnet-5-5"
         "claude/claude-haiku-5-5"
         "pi/omniroute/desktop-free"
+        "agy/gemini-4-argon"
+        "agy/gemini-3.8-flash"
       ];
       description = "<agent>/<model> ids listed by /v1/models.";
     };
@@ -100,15 +102,15 @@ in
         RestartSec = 2;
         # SIGTERM exits 130 (term.ts), a normal stop.
         SuccessExitStatus = 130;
-        # sessiontap comes from the system profile; claude (npm) and pi (bun)
-        # are global installs in home, see programs/dev/lang-web.
+        # sessiontap comes from the system profile; claude (npm), pi (bun)
+        # and agy are in PATH, see programs/dev/lang-web.
         Environment = [
           "PATH=%h/.npm-packages/bin:%h/.cache/.bun/bin:/etc/profiles/per-user/${userName}/bin:/run/current-system/sw/bin"
         ];
       }
       // lib._custom.userServiceHardening
       // {
-        # The harnesses write ~/.claude, ~/.config/pi, ~/.local/state/agents
+        # The harnesses write ~/.claude, ~/.config/pi, ~/.gemini, ~/.local/state/agents
         # and the run's cwd, so home stays visible and writable.
         ReadWritePaths = [ "%h" ];
         BindReadOnlyPaths = [ apiKeyFile ];

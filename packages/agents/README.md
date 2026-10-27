@@ -1,6 +1,6 @@
 # agents
 
-One CLI over coding agent CLIs (`claude`, `pi`), for you and for agents. On
+One CLI over coding agent CLIs (`claude`, `pi`, `agy`), for you and for agents. On
 a TTY `run` shows live progress (rendered messages, tool lines, cost); piped,
 it prints only the final answer. Sessions live in
 `${XDG_STATE_HOME:-~/.local/state}/agents/sessions/`. Source:
@@ -32,13 +32,13 @@ last message, like a headless run. When you exit the TUI yourself, pick
 shows progress (and takes the keys) on stderr when stderr is a TTY or with
 `--verbose`, so a script can read the JSON while you watch.
 
-Pick the agent with `-a/--agent` (`claude` or `pi`, default `claude`); `-m`
-defaults to that agent's model. Resumed runs (`-r`), `attach` and `last` use
+Pick the agent with `-a/--agent` (`claude`, `pi` or `agy`, default `claude`); `-m`
+defaults to that agent's model (`gemini-3.8-flash` for agy). Resumed runs (`-r`), `attach` and `last` use
 the session's own agent, so they need no `-a`.
 
 `--no-tools` runs the agent with no tools at all (built-in, MCP,
 extensions), so it only answers: `--tools "" --strict-mcp-config` for
-claude, `--no-tools` for pi. It applies to that run only, not to `-r` or
+claude, `--no-tools` for pi, and a direct answer instruction for agy. It applies to that run only, not to `-r` or
 `attach`. An adapter declares it with `noToolsFlags`; agents without it
 refuse `--no-tools`.
 
@@ -59,7 +59,7 @@ Adapters pass the prompt on stdin, never as an argument: Linux caps one
 argv string at 128 KiB.
 
 `-e/--effort` (`low`, `medium`, `high`, `xhigh`, `max`) maps to the agent's
-own flag: `--effort` for claude, `--thinking` for pi. Unset, the agent uses
+own flag: `--effort` for claude and agy, `--thinking` for pi. Unset, the agent uses
 its own setting. The session keeps it for `-r` and `attach`; `-r` with
 `-e` or `-m` changes it for the rest of the session.
 
@@ -69,7 +69,8 @@ claude result marked as an error fails the run even when claude exits 0.
 
 Env: `CLAUDE_FLAGS` (default `--permission-mode auto`), `CLAUDE_CMD` (default
 `sessiontap claude`), `PI_FLAGS` (default none; `--approve` trusts
-project-local files), `PI_CMD` (default `sessiontap pi`), `AGENTS_DTACH`
+project-local files), `PI_CMD` (default `sessiontap pi`), `AGY_FLAGS` (default
+`--dangerously-skip-permissions`), `AGY_CMD` (default `sessiontap agy`), `AGENTS_DTACH`
 (dtach binary, set by the package; default `dtach` on PATH).
 
 To add an agent, implement `Adapter` (`src/adapters/types.ts`, emits

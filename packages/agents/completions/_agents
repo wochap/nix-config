@@ -34,7 +34,7 @@ _agents() {
       case ${words[1]} in
         run)
           _arguments \
-            '(-a --agent)'{-a,--agent}'[agent]:agent:(claude pi)' \
+            '(-a --agent)'{-a,--agent}'[agent]:agent:(claude pi agy)' \
             '(-m --model)'{-m,--model}'[model]:model:' \
             '(-e --effort)'{-e,--effort}'[effort]:effort:(low medium high xhigh max)' \
             '(-C --cwd)'{-C,--cwd}'[working directory]:directory:_directories' \

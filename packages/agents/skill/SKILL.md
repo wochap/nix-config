@@ -1,6 +1,6 @@
 ---
 name: agents
-description: Run a coding agent (claude, pi) headless via the agents CLI and get only its final answer; resume or hand a session to the user.
+description: Run a coding agent (claude, pi, agy) headless via the agents CLI and get only its final answer; resume or hand a session to the user.
 disable-model-invocation: true
 ---
 
@@ -14,6 +14,7 @@ agents run -q "<prompt>"                 # stdout: final answer only; stderr: "s
 agents run --json "<prompt>"             # stdout: {"id","agent","model","result","costUsd","durationMs","status"}
 agents run -q -C ~/repo -m claude-sonnet-5 -e high "<prompt>"
 agents run -q -a pi "<prompt>"           # another agent (default: claude)
+agents run -q -a agy "<prompt>"          # agy (default: gemini-3.8-flash)
 echo "<long prompt>" | agents run -q -   # prompt from stdin
 agents run -q -r <id> "<follow-up>"      # continue a session headless
 agents run -q --no-tools "<question>"    # answer only, no tools (pass again on -r)
@@ -21,7 +22,7 @@ agents last <id>                         # last message of a session
 agents ls                                # sessions of the last 7 days, --full for all
 ```
 
-- Agents: `claude` (default), `pi`. `-m` defaults to the chosen agent's model.
+- Agents: `claude` (default), `pi`, `agy` (default model `gemini-3.8-flash`). `-m` defaults to the chosen agent's model.
   `-e` (low, medium, high, xhigh, max) defaults to the agent's own setting.
   `-r`, `last` take the session's own agent; no `-a` needed.
 - Ids may be a unique prefix.

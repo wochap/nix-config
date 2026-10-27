@@ -1,5 +1,6 @@
 // Adapter registry. Add new agents here.
 
+import { agy } from "./agy";
 import { claude } from "./claude";
 import { pi } from "./pi";
 import type { Adapter } from "./types";
@@ -7,6 +8,7 @@ import type { Adapter } from "./types";
 export const adapters: Record<string, Adapter> = {
   claude,
   pi,
+  agy,
 };
 
 export function getAdapter(name: string): Adapter {

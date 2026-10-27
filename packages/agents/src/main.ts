@@ -1,4 +1,4 @@
-// agents — one CLI for coding agent CLIs (claude, ...), for humans and agents.
+// agents — one CLI for coding agent CLIs (claude, pi, agy), for humans and agents.
 //
 //   run     headless run; live rendered progress on a TTY, only the final
 //           answer when piped (what an agent calling this wants). On a TTY,
