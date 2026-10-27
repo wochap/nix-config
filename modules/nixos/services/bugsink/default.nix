@@ -204,9 +204,9 @@ in
             fi
           '';
           serviceConfig = {
-            Restart = "always";
+            Restart = "on-failure";
             RestartSec = 5;
-            TimeoutStopSec = 30;
+            TimeoutStopSec = lib.mkForce 45;
           };
         };
       }
