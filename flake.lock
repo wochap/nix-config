@@ -723,11 +723,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793125179,
-        "narHash": "sha256-ZVNpUiksoCLCwLatL5YuBhzsYK/3uaWBhSJLltGg2Uw=",
+        "lastModified": 1793137001,
+        "narHash": "sha256-XZ2uF8fQ6rxIQtSR1lHBS8vY9B4s+AMKPSHJuwNtjJ4=",
         "owner": "wochap",
         "repo": "fi",
-        "rev": "ef44670e146a8f35e6373bfb54b8f7bccb511c76",
+        "rev": "d03900c388e9ae4a9816b151a103477a5b8babb8",
         "type": "github"
       },
       "original": {
