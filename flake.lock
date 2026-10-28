@@ -2976,6 +2976,23 @@
         "type": "github"
       }
     },
+    "ollama": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793116038,
+        "narHash": "sha256-eNp7NHhfUFUwt7bU3hjNUfgmeM7cZLfBA/rCCT1uOaM=",
+        "owner": "ollama",
+        "repo": "ollama",
+        "rev": "f067033f9126993b6172bdfffa71a74ad693fda4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ollama",
+        "ref": "v0.40.12",
+        "repo": "ollama",
+        "type": "github"
+      }
+    },
     "open-design": {
       "flake": false,
       "locked": {
@@ -3453,6 +3470,7 @@
         "nixpkgs-wayland": "nixpkgs-wayland",
         "nur": "nur",
         "offlinemsmtp": "offlinemsmtp",
+        "ollama": "ollama",
         "open-design": "open-design",
         "powerlevel10k": "powerlevel10k",
         "prevstable-chrome": "prevstable-chrome",
