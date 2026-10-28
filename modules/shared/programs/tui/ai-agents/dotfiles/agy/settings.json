@@ -9,5 +9,16 @@
   },
   "permissions": {
     "allow": ["command(rtk)", "command(regex:^(rtk )?python3? -c .*)"]
-  }
+  },
+  "agentMode": "auto",
+  "allowNonWorkspaceAccess": true,
+  "altScreenMode": "always",
+  "artifactReviewPolicy": "agent-decides",
+  "editorMode": "vim",
+  "model": "Gemini 3.8 Flash (Medium)",
+  "queuedMessages": "send-immediately",
+  "seasonalThemesOptIn": "halloween-2026",
+  "toolPermission": "proceed-in-sandbox",
+  "trustedWorkspaces": ["/home/gean/nix-config"],
+  "vimInsertFirst": true
 }
