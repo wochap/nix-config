@@ -44,6 +44,8 @@ ollama create "glegion-qwen3-embedding:4b" -f ./glegion-qwen3-embedding:4b
 ollama create "gdesktop-minicpm:2b" -f ./gdesktop-minicpm:2b
 ollama create "gdesktop-qwen3-embedding:4b" -f ./gdesktop-qwen3-embedding:4b
 ollama create "gdesktop-qwen3.5:9b" -f ./gdesktop-qwen3.5:9b
+ollama create "gdesktop-lfm3-omni:2b" -f ./gdesktop-lfm3-omni:2b
+ollama create "gdesktop-lfm3-omni:2b-chat" -f ./gdesktop-lfm3-omni:2b-chat
 ```
 
 - `glegion-qwen3.5:4b` — final fallback target in the OmniRoute

@@ -1,0 +1,21 @@
+FROM lfm3-omni:2b
+
+# Context length: 32K tokens (input + output) as specified by Liquid AI
+PARAMETER num_ctx 32768
+
+# Offload all layers to GPU
+PARAMETER num_gpu 99
+
+# Conversational completion length
+PARAMETER num_predict 2048
+
+# Sampling parameters optimized for natural dialogue and expressive voice responses
+PARAMETER temperature 0.7
+PARAMETER top_p 0.95
+PARAMETER repeat_penalty 1.1
+
+SYSTEM """
+You are a friendly, natural, and expressive voice assistant. Respond in clear, conversational language suitable for spoken dialogue. Keep answers concise, helpful, and engaging.
+"""
+
+# vim: filetype=Dockerfile

@@ -1,0 +1,17 @@
+FROM lfm3-omni:2b
+
+# Context length: 32K tokens (input + output) as specified by Liquid AI
+PARAMETER num_ctx 32768
+
+# Offload all layers to GPU
+PARAMETER num_gpu 99
+
+# Allow full answers without cutoff (Ollama default is 128)
+PARAMETER num_predict 4096
+
+# Recommended sampling parameters for accurate multimodal QA, ASR, and tool calling
+PARAMETER temperature 0.2
+PARAMETER top_p 0.9
+PARAMETER repeat_penalty 1.05
+
+# vim: filetype=Dockerfile
