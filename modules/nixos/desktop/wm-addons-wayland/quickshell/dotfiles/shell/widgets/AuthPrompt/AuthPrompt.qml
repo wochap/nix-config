@@ -5,7 +5,8 @@ Scope {
   id: root
 
   LazyLoader {
-    active: SAuth.current !== null
+    // stays loaded while the exit animation runs
+    active: SAuth.isLoaded
     component: AuthPromptContent {}
   }
 }

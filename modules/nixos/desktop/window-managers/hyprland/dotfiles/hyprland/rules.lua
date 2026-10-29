@@ -170,6 +170,7 @@ hl.layer_rule({ match = { namespace = "quickshell:harpoon" }, ignore_alpha = 0.9
 hl.layer_rule({ match = { namespace = "quickshell:control-center" }, ignore_alpha = 0.1, no_anim = true })
 hl.layer_rule({ match = { namespace = "quickshell:notifications-panel" }, ignore_alpha = 0.1, no_anim = true })
 hl.layer_rule({ match = { namespace = "quickshell:calendar" }, ignore_alpha = 0.1, no_anim = true })
+hl.layer_rule({ match = { namespace = "quickshell:auth" }, ignore_alpha = 0.1, no_anim = true })
 hl.layer_rule({ match = { namespace = "quickshell:.*-osd" }, ignore_alpha = 0.1, no_anim = true })
 
 ---- WORKSPACE

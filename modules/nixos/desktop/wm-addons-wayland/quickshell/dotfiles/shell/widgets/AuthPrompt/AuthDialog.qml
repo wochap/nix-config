@@ -12,7 +12,10 @@ import qs.widgets.AuthPrompt
 FocusScope {
   id: root
 
-  readonly property var request: SAuth.current
+  property var retainedRequest: null
+  property var retainedFprint: null
+
+  readonly property var request: SAuth.current ?? root.retainedRequest
   readonly property int requestUid: root.request?.uid ?? 0
   readonly property string mode: root.request?.mode ?? "password"
   readonly property bool isNewPassword: root.mode === "new-password"
@@ -23,7 +26,7 @@ FocusScope {
   readonly property bool isLocked: root.isVerifying || root.isSuccess
   readonly property bool isPolkit: root.request?.source === "polkit"
   readonly property var identities: root.request?.identities ?? []
-  readonly property var fprint: SAuth.fprint
+  readonly property var fprint: SAuth.fprint ?? root.retainedFprint
   readonly property bool isFprintMatched: root.fprint?.state === "matched"
   // reserved for the whole dialog once a reader with prints is known
   readonly property bool showsFprint: root.isPolkit && root.fprint !== null && (SAuth.hasEnrolledFingers || root.fprint.isSeen)
@@ -76,7 +79,15 @@ FocusScope {
 
   // a new request replaces the content, a retry of the same one keeps it
   onRequestUidChanged: root.reset()
-  Component.onCompleted: root.reset()
+  Component.onCompleted: {
+    if (SAuth.current) {
+      root.retainedRequest = SAuth.current;
+    }
+    if (SAuth.fprint) {
+      root.retainedFprint = SAuth.fprint;
+    }
+    root.reset();
+  }
   Component.onDestruction: {
     passwordField.clear();
     confirmField.clear();
@@ -94,6 +105,18 @@ FocusScope {
 
   Connections {
     target: SAuth
+
+    function onCurrentChanged() {
+      if (SAuth.current) {
+        root.retainedRequest = SAuth.current;
+      }
+    }
+
+    function onFprintChanged() {
+      if (SAuth.fprint) {
+        root.retainedFprint = SAuth.fprint;
+      }
+    }
 
     function onErrorCountChanged() {
       passwordField.clear();

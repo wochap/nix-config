@@ -14,7 +14,7 @@ PanelWindow {
   // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
   readonly property string namespace: WlrLayershell.namespace
   WlrLayershell.layer: WlrLayer.Overlay
-  WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+  WlrLayershell.keyboardFocus: SAuth.isOpen ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
   anchors {
     top: true
     left: true
@@ -34,6 +34,7 @@ PanelWindow {
     // a stray click must not dismiss a password prompt
     MouseArea {
       anchors.fill: parent
+      enabled: SAuth.isOpen
     }
   }
 
@@ -47,6 +48,8 @@ PanelWindow {
   }
 
   ParallelAnimation {
+    id: enterAnimation
+
     running: true
 
     NumberAnimation {
@@ -62,6 +65,51 @@ PanelWindow {
       to: 1
       duration: Styles.animation.duration
       easing.type: Styles.animation.easingType
+    }
+  }
+
+  ParallelAnimation {
+    id: exitAnimation
+
+    NumberAnimation {
+      target: scrim
+      property: "opacity"
+      to: 0
+      duration: Styles.animation.exitDuration
+      easing.type: Styles.animation.exitEasingType
+    }
+    NumberAnimation {
+      target: dialog
+      property: "opacity"
+      to: 0
+      duration: Styles.animation.exitDuration
+      easing.type: Styles.animation.exitEasingType
+    }
+    NumberAnimation {
+      target: dialog
+      property: "scale"
+      to: 0.96
+      duration: Styles.animation.exitDuration
+      easing.type: Styles.animation.exitEasingType
+    }
+    onStopped: {
+      if (!SAuth.isOpen) {
+        SAuth.finalizeClose();
+      }
+    }
+  }
+
+  Connections {
+    target: SAuth
+
+    function onIsOpenChanged() {
+      if (SAuth.isOpen) {
+        exitAnimation.stop();
+        enterAnimation.start();
+      } else {
+        enterAnimation.stop();
+        exitAnimation.start();
+      }
     }
   }
 }

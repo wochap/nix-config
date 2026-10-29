@@ -21,6 +21,10 @@ Singleton {
 
   // normalized request of the visible dialog, null when idle
   property var current: null
+  // requested state, drives the enter/exit animation
+  property bool isOpen: false
+  // keeps the window alive until the exit animation finishes
+  property bool isLoaded: false
   // default | verifying | error | success
   property string state: "default"
   property string errorText: ""
@@ -115,6 +119,13 @@ Singleton {
     root.respond("cancel");
   }
 
+  // called by AuthPromptContent once the exit animation finishes
+  function finalizeClose() {
+    if (!root.isOpen) {
+      root.isLoaded = false;
+    }
+  }
+
   function selectIdentity(index) {
     const entry = root._currentEntry;
     if (!entry || entry.origin !== "polkit") {
@@ -158,6 +169,7 @@ Singleton {
     if (!next) {
       root.fprint = null;
       root.current = null;
+      root.isOpen = false;
       return;
     }
     if (!root.current) {
@@ -168,6 +180,8 @@ Singleton {
     root.errorText = next.request.error ?? "";
     root.fprint = next.fprint ?? null;
     root.current = next.request;
+    root.isLoaded = true;
+    root.isOpen = true;
   }
 
   // update a queued entry, e.g. a retry after a wrong password
