@@ -72,6 +72,10 @@ in
       home = {
         packages = with pkgs; [ bubblewrap ];
 
+        shellAliases = {
+          ai-sandbox = "agents-sandbox";
+        };
+
         sessionVariables = {
           OPENSPEC_TELEMETRY = "0";
           CAVEMAN_DEFAULT_MODE = "ultra";

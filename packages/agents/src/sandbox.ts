@@ -32,7 +32,7 @@ export interface SandboxOptions {
 }
 
 export function resolveSandboxMode(requested?: string, defaultMode: SandboxMode = "permissive"): SandboxMode {
-  const envVal = process.env.AGENTS_SANDBOX;
+  const envVal = process.env.AGENTS_SANDBOX ?? process.env.AI_SANDBOX;
   const raw = (requested ?? envVal)?.toLowerCase();
   if (!raw) return defaultMode;
   if (raw === "strict" || raw === "permissive" || raw === "off") return raw;

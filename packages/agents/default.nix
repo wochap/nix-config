@@ -15,6 +15,9 @@ symlinkJoin {
       export AGENTS_DTACH=${lib.getExe dtach}
       exec ${lib.getExe bun} ${./src}/main.ts "$@"
     '')
+    (writeShellScriptBin "agents-sandbox" ''
+      exec ${lib.getExe bun} ${./src}/sandbox-cli.ts "$@"
+    '')
   ];
   postBuild = ''
     install -Dm444 ${./completions/_agents} $out/share/zsh/site-functions/_agents
