@@ -21,6 +21,7 @@ Options:
   -y, --yes          actually pull changes without prompt (default: interactive selection)
   -d, --dry-run      only inspect repositories and report changes (dry run)
   -u, --user USER    GitHub user/organization to match (default: wochap)
+  -j, --jobs N       number of parallel fetch/inspection jobs (default: 8)
   -n, --no-fetch     skip git fetch (inspect against existing local/remote refs)
   -h, --help         show this help message
 EOF
@@ -30,6 +31,7 @@ APPLY_ALL=0
 DRY_RUN=0
 TARGET_USER="wochap"
 DO_FETCH=1
+MAX_JOBS=8
 ROOT="."
 
 while [[ $# -gt 0 ]]; do
@@ -38,6 +40,10 @@ while [[ $# -gt 0 ]]; do
   -d | --dry-run) DRY_RUN=1 ;;
   -u | --user)
     TARGET_USER="${2:?--user requires a username}"
+    shift
+    ;;
+  -j | --jobs)
+    MAX_JOBS="${2:?--jobs requires a number}"
     shift
     ;;
   -n | --no-fetch) DO_FETCH=0 ;;
@@ -57,6 +63,11 @@ done
 
 if ((APPLY_ALL && DRY_RUN)); then
   echo "error: --yes and --dry-run cannot be used together" >&2
+  exit 1
+fi
+
+if ! [[ "$MAX_JOBS" =~ ^[1-9][0-9]*$ ]]; then
+  echo "error: --jobs must be a positive integer" >&2
   exit 1
 fi
 
@@ -113,6 +124,8 @@ declare -A candidate_behind=()
 declare -A candidate_upstream=()
 declare -A candidate_has_upstream=()
 
+# Filter repositories matching target GitHub user
+MATCHING_REPOS=()
 for git_entry in "${GIT_ENTRIES[@]}"; do
   repo_dir=$(dirname "$git_entry")
   repo_dir="${repo_dir%/}"
@@ -131,49 +144,63 @@ for git_entry in "${GIT_ENTRIES[@]}"; do
     continue
   fi
 
-  repo_name="${BASH_REMATCH[5]}"
-  repo_name="${repo_name%.git}"
+  MATCHING_REPOS+=("$repo_dir")
+done
+
+tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/git-sync-all.XXXXXX")
+cleanup() {
+  local pids
+  pids=$(jobs -p 2>/dev/null || true)
+  if [[ -n "$pids" ]]; then
+    kill $pids 2>/dev/null || true
+  fi
+  rm -rf "$tmp_dir"
+}
+trap cleanup EXIT INT TERM
+
+inspect_repo_worker() {
+  local repo_dir="$1" out_file="$2"
 
   # Step 0: Check if repository is bare or has no working tree (e.g. worktree parent)
+  local is_bare is_worktree
   is_bare=$(git -C "$repo_dir" rev-parse --is-bare-repository 2>/dev/null || echo "false")
   is_worktree=$(git -C "$repo_dir" rev-parse --is-inside-work-tree 2>/dev/null || echo "false")
   if [[ "$is_bare" == "true" || "$is_worktree" != "true" ]]; then
-    list_skipped_other+=("$repo_dir (bare repository)")
-    printf "${C_YELLOW}[SKIPPED]${C_RESET}          %s ${C_DIM}(bare repository)${C_RESET}\n" "$repo_dir"
-    continue
+    printf "BARE\n\n\n\n\n\n\n\n" > "$out_file"
+    return 0
   fi
 
   # Step 1: Check if working tree is clean
+  local status_porcelain changed_count
   status_porcelain=$(git -C "$repo_dir" status --porcelain 2>/dev/null || true)
   if [[ -n "$status_porcelain" ]]; then
     changed_count=$(echo "$status_porcelain" | wc -l | tr -d ' ')
-    list_skipped_dirty+=("$repo_dir ($changed_count uncommitted change(s))")
-    printf "${C_YELLOW}[SKIPPED - DIRTY]${C_RESET}  %s ${C_DIM}(%s uncommitted changes)${C_RESET}\n" "$repo_dir" "$changed_count"
-    continue
+    printf "DIRTY\n\n\n\n\n\n%s\n\n" "$changed_count" > "$out_file"
+    return 0
   fi
 
   # Step 2: Fetch remote origin (if DO_FETCH is enabled)
   if ((DO_FETCH)); then
+    local fetch_err err_msg
     if ! fetch_err=$(git -C "$repo_dir" fetch --quiet origin 2>&1); then
       err_msg=$(echo "$fetch_err" | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g')
-      list_failed+=("$repo_dir (fetch failed: ${err_msg:-unknown error})")
-      printf "${C_RED}[FAILED]${C_RESET}           %s ${C_DIM}(git fetch origin failed)${C_RESET}\n" "$repo_dir"
-      continue
+      printf "FETCH_FAIL\n\n\n\n\n\n\n%s\n" "$err_msg" > "$out_file"
+      return 0
     fi
   fi
 
   # Step 3: Determine current branch
+  local branch head_commit
   branch=$(git -C "$repo_dir" symbolic-ref --short -q HEAD 2>/dev/null || true)
   if [[ -z "$branch" ]]; then
     head_commit=$(git -C "$repo_dir" rev-parse --short HEAD 2>/dev/null || echo "unknown")
-    list_skipped_other+=("$repo_dir (detached HEAD at $head_commit)")
-    printf "${C_YELLOW}[SKIPPED]${C_RESET}          %s ${C_DIM}(detached HEAD at %s)${C_RESET}\n" "$repo_dir" "$head_commit"
-    continue
+    printf "DETACHED\n\n\n\n\n\n%s\n\n" "$head_commit" > "$out_file"
+    return 0
   fi
 
   # Step 4: Resolve upstream branch
+  local upstream has_configured_upstream=1
   upstream=$(git -C "$repo_dir" rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null || true)
-  has_configured_upstream=1
   if [[ -z "$upstream" ]]; then
     has_configured_upstream=0
     if git -C "$repo_dir" rev-parse --verify --quiet "origin/$branch" >/dev/null 2>&1; then
@@ -182,26 +209,81 @@ for git_entry in "${GIT_ENTRIES[@]}"; do
   fi
 
   if [[ -z "$upstream" ]]; then
-    list_skipped_other+=("$repo_dir (branch '$branch' has no remote tracking branch on origin)")
-    printf "${C_YELLOW}[SKIPPED]${C_RESET}          %s ${C_DIM}(branch '%s' has no upstream)${C_RESET}\n" "$repo_dir" "$branch"
-    continue
+    printf "NO_UPSTREAM\n%s\n\n\n\n\n\n\n" "$branch" > "$out_file"
+    return 0
   fi
 
   # Step 5: Check ahead and behind counts
+  local behind ahead
   behind=$(git -C "$repo_dir" rev-list --count "HEAD..$upstream" 2>/dev/null || echo 0)
   ahead=$(git -C "$repo_dir" rev-list --count "$upstream..HEAD" 2>/dev/null || echo 0)
 
   if ((behind == 0 && ahead == 0)); then
+    printf "UP_TO_DATE\n%s\n0\n0\n%s\n%s\n\n\n" "$branch" "$upstream" "$has_configured_upstream" > "$out_file"
+  elif ((behind == 0 && ahead > 0)); then
+    printf "AHEAD\n%s\n0\n%s\n%s\n%s\n\n\n" "$branch" "$ahead" "$upstream" "$has_configured_upstream" > "$out_file"
+  elif ((behind > 0 && ahead > 0)); then
+    printf "DIVERGED\n%s\n%s\n%s\n%s\n%s\n\n\n" "$branch" "$behind" "$ahead" "$upstream" "$has_configured_upstream" > "$out_file"
+  else
+    printf "PULL_AVAILABLE\n%s\n%s\n%s\n%s\n%s\n\n\n" "$branch" "$behind" "$ahead" "$upstream" "$has_configured_upstream" > "$out_file"
+  fi
+}
+
+handle_inspection_result() {
+  local repo_dir="$1" out_file="$2"
+  if [[ ! -f "$out_file" ]]; then
+    list_failed+=("$repo_dir (inspection worker crashed)")
+    printf "${C_RED}[FAILED]${C_RESET}           %s ${C_DIM}(worker crashed)${C_RESET}\n" "$repo_dir"
+    return 0
+  fi
+
+  local res=()
+  mapfile -t res < "$out_file"
+  rm -f "$out_file"
+
+  local status="${res[0]:-}"
+  local branch="${res[1]:-}"
+  local behind="${res[2]:-0}"
+  local ahead="${res[3]:-0}"
+  local upstream="${res[4]:-}"
+  local has_configured_upstream="${res[5]:-0}"
+  local extra="${res[6]:-}"
+  local err_msg="${res[7]:-}"
+
+  case "$status" in
+  BARE)
+    list_skipped_other+=("$repo_dir (bare repository)")
+    printf "${C_YELLOW}[SKIPPED]${C_RESET}          %s ${C_DIM}(bare repository)${C_RESET}\n" "$repo_dir"
+    ;;
+  DIRTY)
+    list_skipped_dirty+=("$repo_dir ($extra uncommitted change(s))")
+    printf "${C_YELLOW}[SKIPPED - DIRTY]${C_RESET}  %s ${C_DIM}(%s uncommitted changes)${C_RESET}\n" "$repo_dir" "$extra"
+    ;;
+  FETCH_FAIL)
+    list_failed+=("$repo_dir (fetch failed: ${err_msg:-unknown error})")
+    printf "${C_RED}[FAILED]${C_RESET}           %s ${C_DIM}(git fetch origin failed)${C_RESET}\n" "$repo_dir"
+    ;;
+  DETACHED)
+    list_skipped_other+=("$repo_dir (detached HEAD at $extra)")
+    printf "${C_YELLOW}[SKIPPED]${C_RESET}          %s ${C_DIM}(detached HEAD at %s)${C_RESET}\n" "$repo_dir" "$extra"
+    ;;
+  NO_UPSTREAM)
+    list_skipped_other+=("$repo_dir (branch '$branch' has no remote tracking branch on origin)")
+    printf "${C_YELLOW}[SKIPPED]${C_RESET}          %s ${C_DIM}(branch '%s' has no upstream)${C_RESET}\n" "$repo_dir" "$branch"
+    ;;
+  UP_TO_DATE)
     list_skipped_uptodate+=("$repo_dir ($branch)")
     printf "${C_CYAN}[UP TO DATE]${C_RESET}       %s ${C_DIM}(%s)${C_RESET}\n" "$repo_dir" "$branch"
-  elif ((behind == 0 && ahead > 0)); then
+    ;;
+  AHEAD)
     list_skipped_uptodate+=("$repo_dir ($branch, ahead by $ahead commit(s))")
     printf "${C_CYAN}[UP TO DATE]${C_RESET}       %s ${C_DIM}(%s, ahead by %d)${C_RESET}\n" "$repo_dir" "$branch" "$ahead"
-  elif ((behind > 0 && ahead > 0)); then
+    ;;
+  DIVERGED)
     list_failed+=("$repo_dir (diverged on $branch: ahead $ahead, behind $behind)")
     printf "${C_RED}[DIVERGED]${C_RESET}         %s ${C_DIM}(%s: ahead %d, behind %d)${C_RESET}\n" "$repo_dir" "$branch" "$ahead" "$behind"
-  else
-    # behind > 0 && ahead == 0
+    ;;
+  PULL_AVAILABLE)
     candidate_repos+=("$repo_dir")
     candidate_branch["$repo_dir"]="$branch"
     candidate_behind["$repo_dir"]="$behind"
@@ -212,7 +294,46 @@ for git_entry in "${GIT_ENTRIES[@]}"; do
     else
       printf "${C_GREEN}[PULL AVAILABLE]${C_RESET}   %s ${C_DIM}(%s, %d new commit(s))${C_RESET}\n" "$repo_dir" "$branch" "$behind"
     fi
+    ;;
+  *)
+    list_failed+=("$repo_dir (unknown inspection error)")
+    printf "${C_RED}[FAILED]${C_RESET}           %s ${C_DIM}(unknown error)${C_RESET}\n" "$repo_dir"
+    ;;
+  esac
+}
+
+declare -A job_repo=()
+declare -A job_file=()
+running=0
+job_idx=0
+
+for repo_dir in "${MATCHING_REPOS[@]}"; do
+  out_file="$tmp_dir/job_$job_idx.out"
+  job_idx=$((job_idx + 1))
+
+  inspect_repo_worker "$repo_dir" "$out_file" &
+  pid=$!
+  job_repo["$pid"]="$repo_dir"
+  job_file["$pid"]="$out_file"
+  running=$((running + 1))
+
+  if ((running >= MAX_JOBS)); then
+    wait -n -p finished_pid
+    done_repo="${job_repo[$finished_pid]}"
+    done_file="${job_file[$finished_pid]}"
+    handle_inspection_result "$done_repo" "$done_file"
+    unset "job_repo[$finished_pid]" "job_file[$finished_pid]"
+    running=$((running - 1))
   fi
+done
+
+while ((running > 0)); do
+  wait -n -p finished_pid
+  done_repo="${job_repo[$finished_pid]}"
+  done_file="${job_file[$finished_pid]}"
+  handle_inspection_result "$done_repo" "$done_file"
+  unset "job_repo[$finished_pid]" "job_file[$finished_pid]"
+  running=$((running - 1))
 done
 
 interactive_prompted=0
