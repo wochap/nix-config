@@ -134,6 +134,15 @@ for git_entry in "${GIT_ENTRIES[@]}"; do
   repo_name="${BASH_REMATCH[5]}"
   repo_name="${repo_name%.git}"
 
+  # Step 0: Check if repository is bare or has no working tree (e.g. worktree parent)
+  is_bare=$(git -C "$repo_dir" rev-parse --is-bare-repository 2>/dev/null || echo "false")
+  is_worktree=$(git -C "$repo_dir" rev-parse --is-inside-work-tree 2>/dev/null || echo "false")
+  if [[ "$is_bare" == "true" || "$is_worktree" != "true" ]]; then
+    list_skipped_other+=("$repo_dir (bare repository)")
+    printf "${C_YELLOW}[SKIPPED]${C_RESET}          %s ${C_DIM}(bare repository)${C_RESET}\n" "$repo_dir"
+    continue
+  fi
+
   # Step 1: Check if working tree is clean
   status_porcelain=$(git -C "$repo_dir" status --porcelain 2>/dev/null || true)
   if [[ -n "$status_porcelain" ]]; then

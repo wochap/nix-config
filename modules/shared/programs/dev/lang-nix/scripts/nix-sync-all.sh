@@ -11,6 +11,7 @@ usage() {
 Usage: nix-sync-all [OPTIONS] [PATH]
 
 Recursively find git repositories with flake.nix under PATH (default: .)
+whose origin remote matches GitHub user 'wochap' (or specified user),
 and update inputs.nixpkgs.url to match the nixpkgs commit in flake.nix (line 4).
 
 By default, prompts interactively using gum to select which repositories to update.
@@ -19,6 +20,7 @@ Use --yes to update all without prompting, or --dry-run to only inspect.
 Options:
   -y, --yes          actually update flake.nix files without prompt (default: interactive selection)
   -d, --dry-run      only inspect repositories and report changes (dry run)
+  -u, --user USER    GitHub user/organization to match (default: wochap)
   -s, --source FILE  path to source flake.nix (default: auto-detected from nix-config)
   -l, --line LINE    explicit line to use for nixpkgs.url
   -u, --url URL      explicit URL to use for nixpkgs.url
@@ -29,6 +31,7 @@ EOF
 
 APPLY_ALL=0
 DRY_RUN=0
+TARGET_USER="wochap"
 SOURCE_ARG=""
 CUSTOM_LINE=""
 CUSTOM_URL=""
@@ -39,6 +42,10 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
   -y | --yes) APPLY_ALL=1 ;;
   -d | --dry-run) DRY_RUN=1 ;;
+  -u | --user)
+    TARGET_USER="${2:?--user requires a username}"
+    shift
+    ;;
   -s | --source)
     SOURCE_ARG="${2:?--source requires a file path}"
     shift
@@ -118,6 +125,8 @@ else
   SOURCE_CANDIDATES+=(
     "$HOME/nix-config/flake.nix"
     "/home/gean/nix-config/flake.nix"
+    "$HOME/Sandboxes/sandbox/projects/nix-config/main/flake.nix"
+    "$HOME/projects/nix-config/main/flake.nix"
     "/etc/nixos/flake.nix"
     "$HOME/.config/nixos/flake.nix"
     "./flake.nix"
@@ -160,12 +169,25 @@ if [[ -n "$SOURCE_FLAKE" ]]; then
 fi
 echo
 
+# Determine git-common-dir and remote origin of source flake (to detect worktrees/clones)
+SOURCE_COMMON_DIR=""
+SOURCE_ORIGIN_URL=""
+if [[ -n "$SOURCE_FLAKE" && -f "$SOURCE_FLAKE" ]]; then
+  source_flake_dir=$(dirname "$SOURCE_FLAKE")
+  SOURCE_COMMON_DIR=$(git -C "$source_flake_dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null || echo "")
+  SOURCE_ORIGIN_URL=$(git -C "$source_flake_dir" config --get remote.origin.url 2>/dev/null || echo "")
+fi
+
 # Find all .git directories/files while skipping common heavy caches and dependencies
 mapfile -d '' GIT_ENTRIES < <(
   find "$ROOT" \
     \( -name .direnv -o -name node_modules -o -name target -o -name .cache -o -name dist -o -name build \) -prune \
     -o -name .git -prune -print0 2>/dev/null
 )
+
+# Case-insensitive match for GitHub URLs
+shopt -s nocasematch
+pattern="^((https?|git|ssh)://)?(git@)?github\.com(:[0-9]+)?[:/]${TARGET_USER}/([^/]+?)(\.git)?/?$"
 
 list_succeeded=()
 list_would_update=()
@@ -190,16 +212,48 @@ for git_entry in "${GIT_ENTRIES[@]}"; do
     repo_dir="./${repo_dir#./}"
   fi
 
+  origin_url=$(git -C "$repo_dir" config --get remote.origin.url 2>/dev/null || true)
+  if [[ -z "$origin_url" ]]; then
+    continue
+  fi
+
+  if [[ ! "$origin_url" =~ $pattern ]]; then
+    continue
+  fi
+
+  # Step 0: Check if repository is bare or has no working tree
+  is_bare=$(git -C "$repo_dir" rev-parse --is-bare-repository 2>/dev/null || echo "false")
+  is_worktree=$(git -C "$repo_dir" rev-parse --is-inside-work-tree 2>/dev/null || echo "false")
+  if [[ "$is_bare" == "true" || "$is_worktree" != "true" ]]; then
+    continue
+  fi
+
   target_flake="$repo_dir/flake.nix"
   if [[ ! -f "$target_flake" ]]; then
     continue
   fi
 
-  # Skip if this is the source flake itself
+  # Skip if this is the source flake itself or a worktree/clone of the source repository
   if [[ -n "$SOURCE_FLAKE" && -f "$SOURCE_FLAKE" ]]; then
     target_real=$(realpath "$target_flake" 2>/dev/null || echo "")
     source_real=$(realpath "$SOURCE_FLAKE" 2>/dev/null || echo "")
+    is_source=0
     if [[ -n "$target_real" && "$target_real" == "$source_real" ]]; then
+      is_source=1
+    elif [[ -n "$SOURCE_COMMON_DIR" ]]; then
+      target_common_dir=$(git -C "$repo_dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null || echo "")
+      if [[ -n "$target_common_dir" && "$target_common_dir" == "$SOURCE_COMMON_DIR" ]]; then
+        is_source=1
+      fi
+    fi
+    if ((!is_source)) && [[ -n "$SOURCE_ORIGIN_URL" ]]; then
+      target_origin=$(git -C "$repo_dir" config --get remote.origin.url 2>/dev/null || echo "")
+      if [[ -n "$target_origin" && "$target_origin" == "$SOURCE_ORIGIN_URL" ]]; then
+        is_source=1
+      fi
+    fi
+
+    if ((is_source)); then
       list_skipped_other+=("$repo_dir (source repository)")
       printf "${C_CYAN}[SOURCE REPO]${C_RESET}       %s ${C_DIM}(source of nixpkgs.url)${C_RESET}\n" "$repo_dir"
       continue
@@ -408,7 +462,7 @@ total_matched=$(( ${#candidate_repos[@]} + ${#list_skipped_uptodate[@]} + ${#lis
 total_skipped=$(( ${#list_skipped_uptodate[@]} + ${#list_skipped_dirty[@]} + ${#list_skipped_other[@]} + ${#list_skipped_unselected[@]} ))
 echo
 if ((total_matched == 0)); then
-  echo "No git repositories with flake.nix found under $ROOT."
+  echo "No repositories matching GitHub user '$TARGET_USER' with flake.nix found under $ROOT."
 else
   if ((DRY_RUN)) || ((!APPLY_ALL && ${#selected_repos[@]} == 0 && ${#candidate_repos[@]} > 0 && !interactive_prompted)); then
     echo -e "${C_BOLD}Total:${C_RESET} $total_matched matching repo(s) (${#list_would_update[@]} to update, $total_skipped skipped, ${#list_failed[@]} failed)"
