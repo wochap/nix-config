@@ -13,10 +13,12 @@ Usage: nix-sync-all [OPTIONS] [PATH]
 Recursively find git repositories with flake.nix under PATH (default: .)
 and update inputs.nixpkgs.url to match the nixpkgs commit in flake.nix (line 4).
 
-Without --yes it only inspects repositories and reports what would be updated (dry run).
+By default, prompts interactively using gum to select which repositories to update.
+Use --yes to update all without prompting, or --dry-run to only inspect.
 
 Options:
-  -y, --yes          actually update flake.nix files (default: dry run)
+  -y, --yes          actually update flake.nix files without prompt (default: interactive selection)
+  -d, --dry-run      only inspect repositories and report changes (dry run)
   -s, --source FILE  path to source flake.nix (default: auto-detected from nix-config)
   -l, --line LINE    explicit line to use for nixpkgs.url
   -u, --url URL      explicit URL to use for nixpkgs.url
@@ -25,7 +27,8 @@ Options:
 EOF
 }
 
-APPLY=0
+APPLY_ALL=0
+DRY_RUN=0
 SOURCE_ARG=""
 CUSTOM_LINE=""
 CUSTOM_URL=""
@@ -34,7 +37,8 @@ ROOT="."
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-  -y | --yes) APPLY=1 ;;
+  -y | --yes) APPLY_ALL=1 ;;
+  -d | --dry-run) DRY_RUN=1 ;;
   -s | --source)
     SOURCE_ARG="${2:?--source requires a file path}"
     shift
@@ -61,6 +65,11 @@ while [[ $# -gt 0 ]]; do
   esac
   shift
 done
+
+if ((APPLY_ALL && DRY_RUN)); then
+  echo "error: --yes and --dry-run cannot be used together" >&2
+  exit 1
+fi
 
 # Expand leading tilde if present
 ROOT="${ROOT/#\~/$HOME}"
@@ -160,10 +169,17 @@ mapfile -d '' GIT_ENTRIES < <(
 
 list_succeeded=()
 list_would_update=()
+list_skipped_unselected=()
 list_skipped_uptodate=()
 list_skipped_dirty=()
 list_skipped_other=()
 list_failed=()
+
+candidate_repos=()
+declare -A candidate_flake=()
+declare -A candidate_linenum=()
+declare -A candidate_oldline=()
+declare -A candidate_newline=()
 
 for git_entry in "${GIT_ENTRIES[@]}"; do
   repo_dir=$(dirname "$git_entry")
@@ -195,7 +211,7 @@ for git_entry in "${GIT_ENTRIES[@]}"; do
   if [[ -n "$status_porcelain" && $ALLOW_DIRTY -eq 0 ]]; then
     changed_count=$(echo "$status_porcelain" | wc -l | tr -d ' ')
     list_skipped_dirty+=("$repo_dir ($changed_count uncommitted change(s))")
-    printf "${C_YELLOW}[SKIPPED - DIRTY]${C_RESET} %s ${C_DIM}(%s uncommitted changes)${C_RESET}\n" "$repo_dir" "$changed_count"
+    printf "${C_YELLOW}[SKIPPED - DIRTY]${C_RESET}  %s ${C_DIM}(%s uncommitted changes)${C_RESET}\n" "$repo_dir" "$changed_count"
     continue
   fi
 
@@ -232,43 +248,132 @@ for git_entry in "${GIT_ENTRIES[@]}"; do
     continue
   fi
 
-  if ((APPLY)); then
-    temp_file=$(mktemp "${repo_dir}/flake.nix.tmp.XXXXXX" 2>/dev/null || mktemp "/tmp/flake.nix.tmp.XXXXXX")
-    if awk -v n="$line_num" -v s="$new_line" 'NR == n { print s; next } { print }' "$target_flake" > "$temp_file" && mv "$temp_file" "$target_flake"; then
-      list_succeeded+=("$repo_dir")
-      printf "${C_GREEN}[UPDATED]${C_RESET}          %s\n" "$repo_dir"
-      printf "  ${C_DIM}old:${C_RESET} %s\n" "$current_line"
-      printf "  ${C_DIM}new:${C_RESET} %s\n" "$new_line"
-    else
-      rm -f "$temp_file"
-      list_failed+=("$repo_dir (failed to write flake.nix)")
-      printf "${C_RED}[FAILED]${C_RESET}          %s ${C_DIM}(write error)${C_RESET}\n" "$repo_dir"
-    fi
+  candidate_repos+=("$repo_dir")
+  candidate_flake["$repo_dir"]="$target_flake"
+  candidate_linenum["$repo_dir"]="$line_num"
+  candidate_oldline["$repo_dir"]="$current_line"
+  candidate_newline["$repo_dir"]="$new_line"
+
+  if ((DRY_RUN)); then
+    printf "${C_GREEN}[WOULD UPDATE]${C_RESET}     %s\n" "$repo_dir"
+    printf "  ${C_DIM}old:${C_RESET} %s\n" "$current_line"
+    printf "  ${C_DIM}new:${C_RESET} %s\n" "$new_line"
   else
-    list_would_update+=("$repo_dir")
-    printf "${C_GREEN}[WOULD UPDATE]${C_RESET}    %s\n" "$repo_dir"
+    printf "${C_GREEN}[UPDATE AVAILABLE]${C_RESET} %s\n" "$repo_dir"
     printf "  ${C_DIM}old:${C_RESET} %s\n" "$current_line"
     printf "  ${C_DIM}new:${C_RESET} %s\n" "$new_line"
   fi
 done
 
+interactive_prompted=0
+selected_repos=()
+
+if ((${#candidate_repos[@]} > 0)); then
+  if ((DRY_RUN)); then
+    for r in "${candidate_repos[@]}"; do
+      list_would_update+=("$r")
+    done
+  elif ((APPLY_ALL)); then
+    selected_repos=("${candidate_repos[@]}")
+  elif [[ -t 0 && -t 1 ]] && command -v gum >/dev/null 2>&1; then
+    interactive_prompted=1
+    choose_options=()
+    for r in "${candidate_repos[@]}"; do
+      choose_options+=("$r|$r")
+    done
+
+    echo
+    echo -e "${C_BOLD}Select repositories to update:${C_RESET}"
+    set +e
+    gum_selected=$(gum choose \
+      --no-limit \
+      --selected="*" \
+      --label-delimiter="|" \
+      --header="Space to toggle, Enter to confirm, Esc to abort" \
+      "${choose_options[@]}" < /dev/tty)
+    gum_status=$?
+    set -e
+
+    if ((gum_status != 0)); then
+      echo -e "${C_YELLOW}Update aborted by user.${C_RESET}"
+      selected_repos=()
+    else
+      mapfile -t selected_repos < <(echo "$gum_selected" | sed '/^[[:space:]]*$/d')
+    fi
+  else
+    # Non-interactive terminal or gum not available without --yes
+    if ! command -v gum >/dev/null 2>&1; then
+      echo
+      echo -e "${C_YELLOW}Note:${C_RESET} 'gum' is not installed. Skipping interactive selection."
+      echo -e "      Run with ${C_BOLD}--yes${C_RESET} to apply changes, or install gum."
+    else
+      echo
+      echo -e "${C_YELLOW}Note:${C_RESET} Non-interactive terminal detected. Skipping interactive selection."
+      echo -e "      Run with ${C_BOLD}--yes${C_RESET} to apply changes."
+    fi
+    for r in "${candidate_repos[@]}"; do
+      list_would_update+=("$r")
+    done
+  fi
+
+  if ((APPLY_ALL)) || ((interactive_prompted)); then
+    declare -A is_selected=()
+    for r in "${selected_repos[@]}"; do
+      is_selected["$r"]=1
+    done
+
+    if ((${#selected_repos[@]} > 0)); then
+      echo
+      echo -e "${C_BOLD}=== Updating Selected Repositories ===${C_RESET}"
+    fi
+
+    for repo_dir in "${candidate_repos[@]}"; do
+      if [[ -n "${is_selected[$repo_dir]:-}" ]]; then
+        target_flake="${candidate_flake[$repo_dir]}"
+        line_num="${candidate_linenum[$repo_dir]}"
+        new_line="${candidate_newline[$repo_dir]}"
+        current_line="${candidate_oldline[$repo_dir]}"
+
+        temp_file=$(mktemp "${repo_dir}/flake.nix.tmp.XXXXXX" 2>/dev/null || mktemp "/tmp/flake.nix.tmp.XXXXXX")
+        if awk -v n="$line_num" -v s="$new_line" 'NR == n { print s; next } { print }' "$target_flake" > "$temp_file" && mv "$temp_file" "$target_flake"; then
+          list_succeeded+=("$repo_dir")
+          printf "${C_GREEN}[UPDATED]${C_RESET}          %s\n" "$repo_dir"
+          printf "  ${C_DIM}old:${C_RESET} %s\n" "$current_line"
+          printf "  ${C_DIM}new:${C_RESET} %s\n" "$new_line"
+        else
+          rm -f "$temp_file"
+          list_failed+=("$repo_dir (failed to write flake.nix)")
+          printf "${C_RED}[FAILED]${C_RESET}           %s ${C_DIM}(write error)${C_RESET}\n" "$repo_dir"
+        fi
+      else
+        list_skipped_unselected+=("$repo_dir")
+      fi
+    done
+  fi
+fi
+
 echo
 echo -e "${C_BOLD}=== Summary ===${C_RESET}"
 
-if ((APPLY)); then
-  if ((${#list_succeeded[@]} > 0)); then
-    printf "${C_GREEN}Successfully updated (%d):${C_RESET}\n" "${#list_succeeded[@]}"
-    for item in "${list_succeeded[@]}"; do
-      echo "  ✓ $item"
-    done
-  fi
-else
-  if ((${#list_would_update[@]} > 0)); then
-    printf "${C_GREEN}Would update (%d):${C_RESET}\n" "${#list_would_update[@]}"
-    for item in "${list_would_update[@]}"; do
-      echo "  ➜ $item"
-    done
-  fi
+if ((${#list_succeeded[@]} > 0)); then
+  printf "${C_GREEN}Successfully updated (%d):${C_RESET}\n" "${#list_succeeded[@]}"
+  for item in "${list_succeeded[@]}"; do
+    echo "  ✓ $item"
+  done
+fi
+
+if ((${#list_would_update[@]} > 0)); then
+  printf "${C_GREEN}Would update (%d):${C_RESET}\n" "${#list_would_update[@]}"
+  for item in "${list_would_update[@]}"; do
+    echo "  ➜ $item"
+  done
+fi
+
+if ((${#list_skipped_unselected[@]} > 0)); then
+  printf "${C_YELLOW}Skipped - not selected (%d):${C_RESET}\n" "${#list_skipped_unselected[@]}"
+  for item in "${list_skipped_unselected[@]}"; do
+    echo "  - $item"
+  done
 fi
 
 if ((${#list_skipped_uptodate[@]} > 0)); then
@@ -299,18 +404,18 @@ if ((${#list_failed[@]} > 0)); then
   done
 fi
 
-total_matched=$(( ${#list_succeeded[@]} + ${#list_would_update[@]} + ${#list_skipped_uptodate[@]} + ${#list_skipped_dirty[@]} + ${#list_skipped_other[@]} + ${#list_failed[@]} ))
-total_skipped=$(( ${#list_skipped_uptodate[@]} + ${#list_skipped_dirty[@]} + ${#list_skipped_other[@]} ))
+total_matched=$(( ${#candidate_repos[@]} + ${#list_skipped_uptodate[@]} + ${#list_skipped_dirty[@]} + ${#list_skipped_other[@]} + ${#list_failed[@]} ))
+total_skipped=$(( ${#list_skipped_uptodate[@]} + ${#list_skipped_dirty[@]} + ${#list_skipped_other[@]} + ${#list_skipped_unselected[@]} ))
 echo
 if ((total_matched == 0)); then
   echo "No git repositories with flake.nix found under $ROOT."
 else
-  if ((APPLY)); then
-    echo -e "${C_BOLD}Total:${C_RESET} $total_matched matching repo(s) (${#list_succeeded[@]} updated, $total_skipped skipped, ${#list_failed[@]} failed)"
-  else
+  if ((DRY_RUN)) || ((!APPLY_ALL && ${#selected_repos[@]} == 0 && ${#candidate_repos[@]} > 0 && !interactive_prompted)); then
     echo -e "${C_BOLD}Total:${C_RESET} $total_matched matching repo(s) (${#list_would_update[@]} to update, $total_skipped skipped, ${#list_failed[@]} failed)"
     if ((${#list_would_update[@]} > 0)); then
-      echo -e "${C_YELLOW}Dry run complete.${C_RESET} Run with ${C_BOLD}--yes${C_RESET} to apply changes."
+      echo -e "${C_YELLOW}Dry run complete.${C_RESET} Run without ${C_BOLD}--dry-run${C_RESET} to select repositories or with ${C_BOLD}--yes${C_RESET} to apply all."
     fi
+  else
+    echo -e "${C_BOLD}Total:${C_RESET} $total_matched matching repo(s) (${#list_succeeded[@]} updated, $total_skipped skipped, ${#list_failed[@]} failed)"
   fi
 fi
