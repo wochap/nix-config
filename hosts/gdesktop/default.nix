@@ -370,7 +370,7 @@ in
     _custom.desktop.hyprland.enable = true;
     _custom.desktop.hyprland.isDefault = true;
     _custom.desktop.hyprland.settings = {
-      config.master.orientation = "centered";
+      config.master.orientation = "center";
     };
 
     _custom.desktop.quickshell.authDialogs.enable = true;
