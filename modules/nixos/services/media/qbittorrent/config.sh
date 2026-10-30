@@ -94,6 +94,23 @@ case "$save_path" in
     ;;
 esac
 
+# Exclude dangerous file extensions (*.exe, *.bat, *.cmd, *.scr, *.lnk)
+if jq -e '
+  .excluded_file_names_enabled
+  and (.excluded_file_names | test("\\*\\.exe"))' <<<"$prefs" >/dev/null; then
+  log "excluded file extensions present"
+else
+  set_prefs "$(jq -c '
+    .excluded_file_names_enabled = true
+    | .excluded_file_names = (
+        ((.excluded_file_names // "") | split("\n") | map(select(test("\\S"))))
+        + ["*.exe", "*.bat", "*.cmd", "*.scr", "*.lnk"]
+        | unique
+        | join("\n")
+      )' <<<"$prefs")"
+  log "excluded dangerous file extensions (*.exe, *.bat, *.cmd, *.scr, *.lnk)"
+fi
+
 # Categories
 categories=$(qbt "$QBT_URL/api/v2/torrents/categories")
 while read -r category path; do

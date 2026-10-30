@@ -50,7 +50,7 @@ Automatic (`media-qbittorrent-config`, WebUI API), all four steps:
 
 - Step 2 bypass: appends the `media` subnet to the whitelist. Other subnets stay.
 - Step 2 login: `admin.username` and the SOPS password, set once. The API cannot tell whether a password exists, so the unit sets it while the shared login fails, then writes `/var/lib/media-declarative/qbittorrent-login`. A password changed later in the UI is kept. A password set by hand before the first run is replaced.
-- Step 3, while the save path is still the image's `/config/Downloads`.
+- Step 3, while the save path is still the image's `/config/Downloads`. Also enables file exclusion for dangerous extensions (`*.exe`, `*.bat`, `*.cmd`, `*.scr`, `*.lnk`).
 - Step 4, for missing categories. Existing categories are not changed.
 
 Manual: nothing.

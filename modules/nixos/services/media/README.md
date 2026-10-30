@@ -72,7 +72,7 @@ Storage. `dataRoot` is mounted at `/data` in every container with the same layou
 | Host | Container | Used by |
 |---|---|---|
 | `dataRoot/torrents/{movies,series,books,audiobooks,music}` | `/data/torrents/...` | qBittorrent categories |
-| `dataRoot/media/{movies,series}` | `/data/media/...` | Sonarr/Radarr write, Jellyfin and Bazarr read |
+| `dataRoot/media/{movies,series}` | `/data/media/...` | Sonarr/Radarr/Bazarr, Jellyfin |
 | `dataRoot/media/books/ingest` | `/data/media/books/ingest` | LazyLibrarian writes, Calibre-Web Automated consumes |
 | `dataRoot/media/books/library` | `/data/media/books/library` | Calibre library |
 | `dataRoot/media/audiobooks` | `/data/media/audiobooks` | LazyLibrarian writes, Audiobookshelf watches |

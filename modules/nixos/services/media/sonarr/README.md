@@ -44,7 +44,7 @@ Do not add indexers here. Prowlarr pushes them.
 The API key comes from SOPS (`SONARR__AUTH__APIKEY`), so Prowlarr and Seerr get it without copying. Automatic (`media-sonarr-config`, v3 API), when missing:
 
 - Step 1: login with `admin.username` and the SOPS password.
-- Step 2: root folder. Warns in the journal when hardlinks are off, but does not change the setting.
+- Step 2: root folder. Enables unmonitoring of deleted episodes in Media Management. Blocks unwanted executable release extensions (`.exe`, `.bat`, etc.) via a release profile. Warns in the journal when hardlinks are off, but does not change the setting.
 - Step 3: download client. An existing client on `media-qbittorrent` or `media-vpn` follows the VPN setting.
 
 Manual: optional renaming and profiles, and copying the key into Bazarr.

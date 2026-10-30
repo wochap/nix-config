@@ -1,6 +1,6 @@
 # Jellyfin
 
-Media server. Streams the movies and series in `/data/media/{movies,series}` (read-only) to browsers and mobile/TV apps.
+Media server. Streams the movies and series in `/data/media/{movies,series}` to browsers and mobile/TV apps.
 
 ## URLs
 

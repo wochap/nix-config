@@ -48,9 +48,93 @@ else
   log "added root folder $ARR_ROOT_FOLDER"
 fi
 
-# Hardlinks are the default; only report when someone turned them off.
-if ! api "$base/config/mediamanagement" | jq -e '.copyUsingHardlinks' >/dev/null; then
+# Media management settings
+mm=$(api "$base/config/mediamanagement")
+if ! jq -e '.copyUsingHardlinks' <<<"$mm" >/dev/null; then
   warn "Use Hardlinks instead of Copy is off; imports will copy files"
+fi
+
+needs_mm_update=false
+if jq -e 'has("unmonitorDeletedEpisodes") and (.unmonitorDeletedEpisodes | not)' <<<"$mm" >/dev/null; then
+  mm=$(jq '.unmonitorDeletedEpisodes = true' <<<"$mm")
+  needs_mm_update=true
+fi
+if jq -e 'has("unmonitorDeletedMovies") and (.unmonitorDeletedMovies | not)' <<<"$mm" >/dev/null; then
+  mm=$(jq '.unmonitorDeletedMovies = true' <<<"$mm")
+  needs_mm_update=true
+fi
+
+if [ "$needs_mm_update" = true ]; then
+  mm_id=$(jq -r '.id // 1' <<<"$mm")
+  api -X PUT --data "$mm" "$base/config/mediamanagement/$mm_id" >/dev/null
+  log "enabled unmonitor deleted files in media management"
+fi
+
+# Block unwanted executable releases in Sonarr
+if [ "$ARR_NAME" = "Sonarr" ]; then
+  profiles=$(api "$base/releaseprofile")
+  if ! jq -e 'any(.[]; .name == "Block Executables")' <<<"$profiles" >/dev/null; then
+    jq -n '{
+      name: "Block Executables",
+      enabled: true,
+      indexerId: 0,
+      tags: [],
+      mustContain: "",
+      mustNotContain: ".exe, .bat, .cmd, .scr, .lnk, .iso",
+      ignored: []
+    }' | api -X POST --data @- "$base/releaseprofile" >/dev/null
+    log "added Block Executables release profile"
+  else
+    log "Block Executables release profile present"
+  fi
+fi
+
+# Block unwanted executable releases in Radarr via Custom Formats
+if [ "$ARR_NAME" = "Radarr" ]; then
+  cfs=$(api "$base/customformat")
+  cf_id=$(jq -r '.[] | select(.name == "Block Executables") | .id' <<<"$cfs")
+  if [ -z "$cf_id" ]; then
+    cf_resp=$(jq -n '{
+      name: "Block Executables",
+      includeCustomFormatWhenRenaming: false,
+      specifications: [
+        {
+          name: "Executable Extensions",
+          implementation: "ReleaseTitleSpecification",
+          negate: false,
+          required: false,
+          fields: {
+            value: "\\.(exe|bat|cmd|scr|lnk|iso)($|\\b)"
+          }
+        }
+      ]
+    }' | api -X POST --data @- "$base/customformat")
+    cf_id=$(jq -r '.id' <<<"$cf_resp")
+    log "added Block Executables custom format ($cf_id)"
+  else
+    log "Block Executables custom format present ($cf_id)"
+  fi
+
+  if [ -n "$cf_id" ] && [ "$cf_id" != "null" ]; then
+    qps=$(api "$base/qualityprofile")
+    while IFS= read -r qp; do
+      qp_id=$(jq -r .id <<<"$qp")
+      current_score=$(jq -r --argjson id "$cf_id" '.formatItems[]? | select(.format == $id) | .score' <<<"$qp")
+      if [ "$current_score" = "-10000" ]; then
+        log "quality profile $qp_id already has Block Executables score -10000"
+      else
+        updated_qp=$(jq --argjson id "$cf_id" '
+          .minFormatScore = (if .minFormatScore < 0 then 0 else .minFormatScore end)
+          | if any(.formatItems[]?; .format == $id) then
+              .formatItems |= map(if .format == $id then .score = -10000 else . end)
+            else
+              .formatItems += [{format: $id, name: "Block Executables", score: -10000}]
+            end' <<<"$qp")
+        api -X PUT --data "$updated_qp" "$base/qualityprofile/$qp_id" >/dev/null
+        log "updated quality profile $qp_id: Block Executables score -> -10000"
+      fi
+    done < <(jq -c '.[]' <<<"$qps")
+  fi
 fi
 
 # Download client

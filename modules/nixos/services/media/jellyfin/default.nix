@@ -29,8 +29,8 @@ in
       volumes = [
         "${common.stateDir name}/config:/config:rw"
         "${common.stateDir name}/cache:/cache:rw"
-        (common.dataMountRo "media/movies")
-        (common.dataMountRo "media/series")
+        (common.dataMount "media/movies")
+        (common.dataMount "media/series")
       ];
       devices = lib.optionals isVaapi svc.vaapiDevices;
       extraOptions =
