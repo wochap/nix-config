@@ -4,6 +4,13 @@
 //   AGY_FLAGS="..."   permission flags (default "--dangerously-skip-permissions")
 //   AGY_CMD="..."     launcher (default "sessiontap agy", see launch.ts)
 //   AGY_DATA_DIR="..." override for ~/.gemini/antigravity-cli
+//
+// Images / Vision note:
+//   `agy` does not declare `images: true` because the upstream `agy` CLI lacks
+//   an `--image` CLI option, and its `--input-format stream-json` mode only supports
+//   content blocks of type "text" (rejecting others with "stream input content block
+//   type ... is not supported (only \"text\")"). Additionally, passing binary image data
+//   or file mentions into Cloud Code's backend triggers an API 400 (INVALID_ARGUMENT).
 
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
@@ -157,6 +164,8 @@ function transcriptEvents(entry: any, root: string): { events: Event[]; idle: bo
   return { events: out, idle: entry.status === "DONE" && !(entry.tool_calls?.length > 0) };
 }
 
+// Note: `images: true` is omitted because `agy` lacks an `--image` CLI flag and
+// its stream-json input rejects non-text blocks ("only \"text\"").
 export const agy: Adapter = {
   name: "agy",
   defaultModel: "gemini-3.8-flash",

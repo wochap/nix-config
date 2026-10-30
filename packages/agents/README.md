@@ -52,7 +52,8 @@ each) attaches images to the prompt, which may then be empty. They reach
 the model without any tool, so they work with `--no-tools`: claude gets a
 `--input-format stream-json` user message with base64 image blocks, pi gets
 `@<file>` arguments it reads itself. An adapter declares it with `images`;
-agents without it refuse `--image`. Only the first attempt sends them, not
+agents without it (such as `agy`, which lacks an `--image` CLI flag and only accepts
+text in `stream-json`) refuse `--image`. Only the first attempt sends them, not
 a handback.
 
 Adapters pass the prompt on stdin, never as an argument: Linux caps one
