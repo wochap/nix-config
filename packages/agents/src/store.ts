@@ -16,7 +16,7 @@ export interface Session {
   model: string;
   effort?: Effort;
   cwd: string;
-  /** First 200 chars of the first prompt. */
+  /** Full prompt of the first turn. */
   prompt: string;
   /** What started it when not a person, e.g. "serve"; `ls` hides those. */
   via?: string;
@@ -32,6 +32,7 @@ export const dir = join(stateHome, "agents", "sessions");
 export const metaPath = (id: string) => join(dir, `${id}.json`);
 export const eventsPath = (id: string) => join(dir, `${id}.events.jsonl`);
 export const rawPath = (id: string) => join(dir, `${id}.raw.jsonl`);
+export const promptPath = (id: string) => join(dir, `${id}.prompt.txt`);
 
 function write(s: Session) {
   writeFileSync(metaPath(s.id), `${JSON.stringify(s, null, 2)}\n`);
@@ -39,8 +40,11 @@ function write(s: Session) {
 
 export function createSession(s: Omit<Session, "startedAt" | "status" | "pid">): Session {
   mkdirSync(dir, { recursive: true });
-  const session: Session = { ...s, prompt: s.prompt.slice(0, 200), startedAt: new Date().toISOString(), status: "running", pid: process.pid };
+  const session: Session = { ...s, startedAt: new Date().toISOString(), status: "running", pid: process.pid };
   write(session);
+  try {
+    writeFileSync(promptPath(session.id), s.prompt);
+  } catch {}
   return session;
 }
 
@@ -78,6 +82,16 @@ export function readSession(id: string): Session | null {
   } catch {
     return null;
   }
+}
+
+export function readPrompt(id: string): string | null {
+  const p = promptPath(id);
+  if (existsSync(p)) {
+    try {
+      return readFileSync(p, "utf8");
+    } catch {}
+  }
+  return readSession(id)?.prompt ?? null;
 }
 
 /** All sessions, newest first. */

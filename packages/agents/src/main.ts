@@ -16,7 +16,7 @@ import { parseArgs } from "node:util";
 import { adapters, getAdapter } from "./adapters";
 import { EFFORTS, type Effort, type Event } from "./adapters/types";
 import { IMAGE_TYPES, MAX_IMAGES, extension, readImage } from "./image";
-import { header, hint, render } from "./render";
+import { header, hint, prompt as renderPrompt, render } from "./render";
 import { resolveSandboxMode, wrapCommand } from "./sandbox";
 import * as store from "./store";
 import { tail } from "./tail";
@@ -353,6 +353,8 @@ function ls() {
 async function watch() {
   const s = pick(args[0], () => store.latestRunning() ?? store.latest());
   header(s.agent, s.model, s.id);
+  const promptText = store.readPrompt(s.id);
+  if (promptText?.trim()) renderPrompt(promptText);
   const read = tail(store.eventsPath(s.id));
   while (true) {
     const running = store.readSession(s.id)?.status === "running";

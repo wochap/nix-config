@@ -29,13 +29,52 @@ Options:
 If no command is specified, defaults to $SHELL (or /bin/bash).`);
 }
 
+function resolveShellAlias(name: string, maxDepth = 5): string[] | null {
+  if (!name || name.includes("/") || maxDepth <= 0) return null;
+  const shell = process.env.SHELL || "zsh";
+  try {
+    const isZsh = shell.endsWith("zsh");
+    const script = isZsh
+      ? `local a=\${aliases[$1]}; if [[ -n \$a ]]; then eval "local -a parts=( \${(z)a} )"; print -r -N -- "\${(Q@)parts}"; fi`
+      : `shopt -s expand_aliases; [[ -f ~/.bashrc ]] && source ~/.bashrc; a=$(alias "$1" 2>/dev/null); if [[ -n \$a ]]; then a="\${a#*=}"; a="\${a#\\'}"; a="\${a%\\'}"; eval "arr=( \$a )"; printf "%s\\0" "\${arr[@]}"; fi`;
+
+    const proc = Bun.spawnSync([shell, "-i", "-c", script, "_", name], {
+      stderr: "ignore",
+    });
+    if (proc.exitCode !== 0) return null;
+    const out = proc.stdout.toString();
+    if (!out) return null;
+    const parts = out.split("\0").filter((s) => s.length > 0);
+    if (parts.length === 0) return null;
+
+    if (parts[0] !== name) {
+      const nested = resolveShellAlias(parts[0], maxDepth - 1);
+      if (nested) {
+        return [...nested, ...parts.slice(1)];
+      }
+    }
+    return parts;
+  } catch {
+    return null;
+  }
+}
+
+function expandCommand(cmd: string[]): string[] {
+  if (cmd.length === 0) return cmd;
+  const expanded = resolveShellAlias(cmd[0]);
+  if (expanded && expanded.length > 0) {
+    return [...expanded, ...cmd.slice(1)];
+  }
+  return cmd;
+}
+
 const args = process.argv.slice(2);
 let requestedMode: string | undefined;
 let cwd = process.cwd();
 let scratchDir: string | undefined;
 let systemFile: string | undefined;
 const images: string[] = [];
-const command: string[] = [];
+let command: string[] = [];
 
 for (let i = 0; i < args.length; i++) {
   const arg = args[i];
@@ -117,7 +156,9 @@ for (let i = 0; i < args.length; i++) {
 }
 
 if (command.length === 0) {
-  command.push(process.env.SHELL || "/bin/bash");
+  command = [process.env.SHELL || "/bin/bash"];
+} else {
+  command = expandCommand(command);
 }
 
 let mode;

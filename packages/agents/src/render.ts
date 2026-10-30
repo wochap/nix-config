@@ -24,6 +24,9 @@ async function printMessage(text: string) {
 
 export const header = (agent: string, model: string, id: string) => log(`${agent} (${model}) ${id}`);
 
+/** Dimmed prompt text with a blank line after the header. */
+export const prompt = (text: string) => println(`\n${color.dim(text.trim())}`);
+
 /** Dim one-line hint, e.g. the keys that work right now. */
 export const hint = (text: string) => println(color.dim(text));
 
