@@ -432,7 +432,15 @@ in
     _custom.desktop.home-screen.etherscan.enable = true;
     _custom.desktop.audio.enableEasyeffects = true;
     _custom.desktop.audio.enableNoisetorch = true;
-    _custom.desktop.mouseless.enable = true;
+    _custom.desktop.mouseless = {
+      enable = true;
+      settings = {
+        keys = {
+          mode = "explicit";
+          alphabet = "arstneiogm";
+        };
+      };
+    };
     _custom.desktop.networking.enableWifi = true;
     _custom.desktop.networking.enableLocalSend = true;
     _custom.desktop.networking.enableOpenSnitch = true;
