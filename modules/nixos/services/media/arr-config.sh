@@ -73,19 +73,25 @@ fi
 # Block unwanted executable releases in Sonarr
 if [ "$ARR_NAME" = "Sonarr" ]; then
   profiles=$(api "$base/releaseprofile")
-  if ! jq -e 'any(.[]; .name == "Block Executables")' <<<"$profiles" >/dev/null; then
+  if jq -e 'any(.[]; (.ignored[]? // "") | test("exe"))' <<<"$profiles" >/dev/null; then
+    log "executable blocking release profile present"
+  else
     jq -n '{
       name: "Block Executables",
       enabled: true,
+      required: [],
+      ignored: [
+        "/\\.exe\\b/i",
+        "/\\.bat\\b/i",
+        "/\\.cmd\\b/i",
+        "/\\.scr\\b/i",
+        "/\\.lnk\\b/i",
+        "/\\.iso\\b/i"
+      ],
       indexerId: 0,
-      tags: [],
-      mustContain: "",
-      mustNotContain: ".exe, .bat, .cmd, .scr, .lnk, .iso",
-      ignored: []
+      tags: []
     }' | api -X POST --data @- "$base/releaseprofile" >/dev/null
     log "added Block Executables release profile"
-  else
-    log "Block Executables release profile present"
   fi
 fi
 
@@ -103,9 +109,12 @@ if [ "$ARR_NAME" = "Radarr" ]; then
           implementation: "ReleaseTitleSpecification",
           negate: false,
           required: false,
-          fields: {
-            value: "\\.(exe|bat|cmd|scr|lnk|iso)($|\\b)"
-          }
+          fields: [
+            {
+              name: "value",
+              value: "\\.(exe|bat|cmd|scr|lnk|iso)($|\\b)"
+            }
+          ]
         }
       ]
     }' | api -X POST --data @- "$base/customformat")
