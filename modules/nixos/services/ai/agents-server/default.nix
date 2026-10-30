@@ -119,6 +119,8 @@ in
           "AF_INET6"
           "AF_UNIX"
         ];
+        # Bubblewrap requires user and mount namespaces for agent sandboxing
+        RestrictNamespaces = false;
       };
     };
   };
