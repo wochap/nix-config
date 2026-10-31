@@ -264,12 +264,28 @@ export const agy: Adapter = {
             outputTokens: r.usage?.output_tokens ?? 0,
           });
         }
+        break;
       }
     }
 
-    const code = await child.exited;
-    if (error) throw new Error(error);
-    if (code !== 0) throw new Error(`agy exited with code ${code}`);
+    // Wait briefly for child to exit cleanly after result. If it hangs on exit, terminate it.
+    let code: number | null = await Promise.race([
+      child.exited,
+      Bun.sleep(1000).then(() => null),
+    ]);
+    if (code === null) {
+      child.kill("SIGTERM");
+      code = await Promise.race([
+        child.exited,
+        Bun.sleep(500).then(() => {
+          child.kill("SIGKILL");
+          return child.exited;
+        }),
+      ]);
+    }
+
+    if (error && !result) throw new Error(error);
+    if (code !== 0 && code !== null && !result) throw new Error(`agy exited with code ${code}`);
     return { result };
   },
 

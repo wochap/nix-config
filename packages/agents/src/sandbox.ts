@@ -181,11 +181,14 @@ export function wrapCommand(cmd: string[], opts: SandboxOptions): string[] {
     // 1. agy (Antigravity)
     const agyData = process.env.AGY_DATA_DIR || join(home, ".gemini", "antigravity-cli");
     if (existsSync(agyData)) {
-      for (const sub of ["brain", "conversations", "log", "cache", "annotations", "crashes", "bin", "scratch"]) {
-        const subPath = join(agyData, sub);
-        if (existsSync(subPath)) {
-          args.push("--tmpfs", subPath);
-        }
+      args.push("--tmpfs", agyData);
+      for (const item of ["settings.json", "installation_id", "jetski_state.pbtxt", "hooks.json", "statusline.sh"]) {
+        const p = join(agyData, item);
+        if (existsSync(p)) args.push("--ro-bind", p, p);
+      }
+      for (const dir of ["builtin", "skills", "plugin_data"]) {
+        const p = join(agyData, dir);
+        if (existsSync(p)) args.push("--ro-bind", p, p);
       }
     }
 
