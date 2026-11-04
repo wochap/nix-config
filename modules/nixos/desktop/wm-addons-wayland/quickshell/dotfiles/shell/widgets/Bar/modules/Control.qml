@@ -1,110 +1,110 @@
-import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 import qs.config
 import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
-import qs.widgets.Bar.modules
 import qs.Woints
 
-WrapperRectangle {
+Rectangle {
   id: root
 
   property bool isHovered: false
 
-  leftMargin: 2
-  rightMargin: root.leftMargin + 1
+  implicitWidth: controlContent.implicitWidth + 20
+  Layout.fillHeight: true
+  radius: height / 2
   color: root.isHovered ? Theme.options.surface1 : SControlCenter.isOpen ? Theme.options.surface0 : "transparent"
-  radius: ConfigBar.modulesRadius
+  border.width: SControlCenter.isOpen ? 1 : 0
+  border.color: Theme.options.primary
 
-  child: Item {
-    implicitWidth: controlContent.implicitWidth
-    implicitHeight: controlContent.implicitHeight
+  Behavior on color {
+    animation: Styles.animations.colorAnimation.createObject(this)
+  }
 
-    MouseArea {
-      anchors.fill: parent
-      acceptedButtons: Qt.LeftButton
-      Accessible.role: Accessible.Button
-      Accessible.name: "Control center"
-      Accessible.checkable: true
-      Accessible.checked: SControlCenter.isOpen
-      Accessible.onPressAction: SControlCenter.toggle()
-      onClicked: event => {
-        switch (event.button) {
-        case Qt.LeftButton:
-          SControlCenter.toggle();
-          break;
-        }
-        event.accepted = true;
-      }
+  RowLayout {
+    id: controlContent
 
-      Hintable {
-        label: "Control center"
-        onActivated: SControlCenter.toggle()
-      }
+    anchors.centerIn: parent
+    spacing: 6
+
+    SystemIcon {
+      icon: SBluetooth.icon
+      size: 22
+      enableColoriser: true
+      color: SBluetooth.iconColor
     }
 
-    HoverHandler {
-      onHoveredChanged: {
-        root.isHovered = hovered;
-      }
+    SystemIcon {
+      icon: SNetwork.icon
+      size: 22
+      enableColoriser: true
+      color: SNetwork.iconColor
+    }
+
+    SystemIcon {
+      icon: SPipewire.outputIcon
+      size: 22
+      enableColoriser: true
+      color: SPipewire.outputIconColor
+    }
+
+    SystemIcon {
+      icon: SPipewire.inputIcon
+      size: 22
+      enableColoriser: true
+      color: SPipewire.inputIconColor
+    }
+
+    SystemIcon {
+      icon: SPowerProfiles.icon
+      size: 22
+      enableColoriser: true
+      color: SPowerProfiles.iconColor
     }
 
     RowLayout {
-      id: controlContent
-
-      anchors.fill: parent
-      spacing: 0
+      visible: SUpower.available
+      spacing: 2
 
       SystemIcon {
-        enableColoriser: true
-        Layout.fillHeight: true
-        icon: SBluetooth.icon
-        size: Styles.font.pixelSize.hugeass
-        color: SBluetooth.iconColor
-      }
-
-      SystemIcon {
-        Layout.fillHeight: true
-        icon: SNetwork.icon
-        size: Styles.font.pixelSize.hugeass
-        enableColoriser: true
-        color: SNetwork.iconColor
-      }
-
-      SystemIcon {
-        Layout.fillHeight: true
-        icon: SPipewire.outputIcon
-        size: 30
-        enableColoriser: true
-        color: SPipewire.outputIconColor
-      }
-
-      SystemIcon {
-        Layout.fillHeight: true
-        icon: SPipewire.inputIcon
-        size: Styles.font.pixelSize.hugeass
-        enableColoriser: true
-        color: SPipewire.inputIconColor
-      }
-
-      SystemIcon {
-        enableColoriser: true
-        Layout.fillHeight: true
-        icon: SPowerProfiles.icon
-        color: SPowerProfiles.iconColor
-        size: Styles.font.pixelSize.hugeass
-      }
-
-      SystemIcon {
-        visible: SUpower.available
-        Layout.fillHeight: true
         icon: SUpower.batteryIcon
-        color: SUpower.batteryIconColor
-        size: 32
+        size: 22
         enableColoriser: true
+        color: SUpower.batteryIconColor
       }
+
+      StyledText {
+        text: Math.round(SUpower.percentage * 100).toString()
+        font.pixelSize: 10
+        color: Theme.options.text
+      }
+    }
+  }
+
+  HoverHandler {
+    onHoveredChanged: root.isHovered = hovered
+  }
+
+  MouseArea {
+    anchors.fill: parent
+    cursorShape: Qt.PointingHandCursor
+    acceptedButtons: Qt.LeftButton
+    Accessible.role: Accessible.Button
+    Accessible.name: "Control center"
+    Accessible.checkable: true
+    Accessible.checked: SControlCenter.isOpen
+    Accessible.onPressAction: SControlCenter.toggle()
+    onClicked: event => {
+      if (event.button === Qt.LeftButton) {
+        SControlCenter.toggle();
+      }
+      event.accepted = true;
+    }
+
+    Hintable {
+      label: "Control center"
+      onActivated: SControlCenter.toggle()
     }
   }
 }

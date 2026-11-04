@@ -16,5 +16,16 @@ Singleton {
   property real modulesSpacing: 8
   property real modulesPaddingX: 6
   property bool isBlurEnabled: Global.isBlurEnabled
-  property bool isBarAtBottom: false
+
+  // Status and client count modules
+  property int statusIconSize: 19
+  property int statusFontSize: 10
+
+  property real trayButtonWidth: 36
+  property real trayButtonHeight: 32
+  property real trayButtonRadius: 16
+  property real trayButtonIconSize: 18
+  property real trayItemSize: 28
+  property real trayItemRadius: 14
+  property real trayItemIconSize: 16
 }

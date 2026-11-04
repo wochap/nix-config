@@ -18,6 +18,8 @@ PanelWindow {
   // space reserved by the bar (same method as the control center), the window
   // ignores exclusive zones so the backdrop also covers the bar
   readonly property real reservedTop: isFocusedClientFullScreen ? 0 : (hyprlandMonitor?.reserved?.[1] ?? 0)
+  readonly property real reservedLeft: isFocusedClientFullScreen ? 0 : (hyprlandMonitor?.reserved?.[0] ?? 0)
+  readonly property bool isLeftBar: (root.reservedLeft > 0 && root.reservedTop === 0) || (Settings.options.renderVBar && !Settings.options.renderBar)
 
   screen: root.focusedScreen
   WlrLayershell.namespace: "quickshell:calendar"
@@ -55,20 +57,24 @@ PanelWindow {
     id: popover
 
     anchors {
-      top: parent.top
-      right: parent.right
+      top: root.isLeftBar ? undefined : parent.top
+      bottom: root.isLeftBar ? parent.bottom : undefined
+      left: root.isLeftBar ? parent.left : undefined
+      right: root.isLeftBar ? undefined : parent.right
       topMargin: root.reservedTop + ConfigCalendar.calendarMargin
+      bottomMargin: ConfigCalendar.calendarMargin
+      leftMargin: root.reservedLeft + ConfigCalendar.calendarMargin
       rightMargin: ConfigCalendar.calendarMargin
     }
     implicitWidth: panel.implicitWidth
     implicitHeight: panel.implicitHeight
-    transformOrigin: Item.TopRight
+    transformOrigin: root.isLeftBar ? Item.BottomLeft : Item.TopRight
     opacity: 0
     scale: 0.96
     transform: Translate {
       id: slide
 
-      y: -Styles.animation.slideDistance
+      y: root.isLeftBar ? Styles.animation.slideDistance : -Styles.animation.slideDistance
     }
 
     states: State {

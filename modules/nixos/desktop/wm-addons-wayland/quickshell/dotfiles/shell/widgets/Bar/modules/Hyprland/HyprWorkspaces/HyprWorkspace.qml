@@ -138,7 +138,10 @@ Button {
             anchors.fill: parent
             // collapsed clicks fall through to the workspace button
             enabled: root.isExpanded
-            onClicked: clientMouseArea.focusClient()
+            onClicked: {
+              tooltip.shown = false;
+              clientMouseArea.focusClient();
+            }
             Accessible.role: Accessible.Button
             Accessible.name: clientMouseArea.label
             Accessible.checkable: true
@@ -149,6 +152,50 @@ Button {
               label: clientMouseArea.label
               onActivated: clientMouseArea.focusClient()
             }
+          }
+
+          HoverHandler {
+            id: hoverHandler
+
+            onHoveredChanged: {
+              if (hovered) {
+                tooltipTimer.restart();
+              } else {
+                tooltipTimer.stop();
+                tooltip.shown = false;
+              }
+            }
+          }
+
+          Timer {
+            id: tooltipTimer
+
+            interval: 350
+            onTriggered: tooltip.shown = ((modelData.title ?? "") || (modelData.class ?? "")).length > 0
+          }
+
+          Item {
+            id: popupAnchor
+
+            parent: root
+            x: content.x + icons.x + client.x
+            y: 0
+            width: client.width
+            height: root.height
+          }
+
+          WindowTooltip {
+            id: tooltip
+
+            anchor.item: popupAnchor
+            anchor.edges: Edges.Bottom | Edges.Left
+            anchor.gravity: Edges.Bottom | Edges.Right
+            anchor.margins.left: -16
+            anchor.margins.top: -2
+            anchor.margins.bottom: 0
+            icon: modelData.customClass || Utils.mapAppId(modelData.class ?? "")
+            appId: modelData.class ?? ""
+            title: modelData.title ?? ""
           }
         }
       }

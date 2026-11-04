@@ -13,11 +13,21 @@ MouseArea {
 
   required property SystemTrayItem modelData
   required property SystemTrayItem item
-  property int size: Styles.font.pixelSize.small
+  property int size: 16
+  property int chipWidth: -1
+  property int chipHeight: -1
+  property int chipRadius: -1
+  property color defaultColor: "transparent"
+  property color hoverColor: Theme.options.surface0
+  property color pressedColor: Theme.options.surface1
+  property int menuEdges: Edges.Bottom | Edges.Left
+  property int menuOffsetY: 4
 
   acceptedButtons: Qt.LeftButton | Qt.RightButton
-  implicitWidth: size
-  implicitHeight: size
+  hoverEnabled: true
+  cursorShape: Qt.PointingHandCursor
+  implicitWidth: chipWidth > 0 ? chipWidth : 26
+  implicitHeight: chipHeight > 0 ? chipHeight : 24
   Accessible.role: Accessible.Button
   Accessible.name: root.item.tooltipTitle || root.item.title || root.item.id
   Accessible.onPressAction: root.item.activate()
@@ -32,6 +42,16 @@ MouseArea {
       break;
     }
     event.accepted = true;
+  }
+
+  Rectangle {
+    anchors.fill: parent
+    radius: root.chipRadius >= 0 ? root.chipRadius : height / 2
+    color: root.pressed ? root.pressedColor : root.containsMouse ? root.hoverColor : root.defaultColor
+
+    Behavior on color {
+      animation: Styles.animations.colorAnimation.createObject(this)
+    }
   }
 
   Hintable {
@@ -61,8 +81,8 @@ MouseArea {
       menu: root.item.menu
       anchor.item: trayIcon
       anchor.rect.x: 0
-      anchor.rect.y: trayIcon.y + trayIcon.height + 4
-      anchor.edges: ConfigBar.isBarAtBottom ? (Edges.Top | Edges.Left) : (Edges.Bottom | Edges.Left)
+      anchor.rect.y: trayIcon.y + trayIcon.height + root.menuOffsetY
+      anchor.edges: root.menuEdges
     }
   }
 }

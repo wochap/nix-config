@@ -4,12 +4,21 @@ import Quickshell.Hyprland
 import Quickshell.Wayland
 import qs.config
 import qs.services
+import qs.widgets.common
 
-// Vertical pill-in-pill progress OSD, left edge, vertically centered
+// Progress OSD: vertical pill on left edge (horizontal bar), or horizontal pill 6px off top (vertical bar)
 PanelWindow {
   id: root
 
   property var focusedScreen: SHyprland.focusedScreen
+  property var hyprlandMonitor: SHyprland.monitorsByName?.[focusedScreen?.name] ?? null
+  property var focusedWorkspace: SHyprland.workspacesById?.[hyprlandMonitor?.activeWorkspace?.id] ?? null
+  property var focusedClient: SHyprland.clientsByAddress?.[focusedWorkspace?.lastwindow] ?? null
+  property bool isFocusedClientFullScreen: (focusedClient?.fullscreen ?? null) === 2
+  readonly property real reservedTop: isFocusedClientFullScreen ? 0 : (hyprlandMonitor?.reserved?.[1] ?? 0)
+  readonly property real reservedLeft: isFocusedClientFullScreen ? 0 : (hyprlandMonitor?.reserved?.[0] ?? 0)
+  readonly property bool isHorizontal: Settings.options.renderVBar || (root.reservedLeft > 0 && root.reservedTop === 0)
+
   property var service: null
   required property string serviceValueKey
   property string serviceMutedKey: ""
@@ -79,7 +88,7 @@ PanelWindow {
     NumberAnimation {
       target: slide
       property: "y"
-      from: Styles.animation.slideDistance
+      from: root.isHorizontal ? -Styles.animation.slideDistance : Styles.animation.slideDistance
       to: 0
       duration: Styles.animation.duration
       easing.type: Styles.animation.easingType
@@ -110,9 +119,12 @@ PanelWindow {
   Item {
     id: osdContainer
 
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.left: parent.left
-    anchors.leftMargin: 8
+    anchors.horizontalCenter: root.isHorizontal ? parent.horizontalCenter : undefined
+    anchors.top: root.isHorizontal ? parent.top : undefined
+    anchors.topMargin: root.isHorizontal ? 6 : 0
+    anchors.verticalCenter: !root.isHorizontal ? parent.verticalCenter : undefined
+    anchors.left: !root.isHorizontal ? parent.left : undefined
+    anchors.leftMargin: !root.isHorizontal ? 8 : 0
     implicitWidth: osd.implicitWidth
     implicitHeight: osd.implicitHeight
     opacity: 0
@@ -131,9 +143,9 @@ PanelWindow {
       property int padding: 4
 
       anchors.fill: parent
-      implicitWidth: 44
-      implicitHeight: 180
-      radius: width / 2
+      implicitWidth: root.isHorizontal ? 180 : 44
+      implicitHeight: root.isHorizontal ? 44 : 180
+      radius: Math.min(width, height) / 2
       color: Theme.options.background
       border {
         width: 1
@@ -143,19 +155,27 @@ PanelWindow {
       Rectangle {
         id: progressBar
 
-        readonly property real trackHeight: osd.height - osd.padding * 2
+        readonly property real trackLength: (root.isHorizontal ? osd.width : osd.height) - osd.padding * 2
+        readonly property real capSize: (root.isHorizontal ? osd.height : osd.width) - osd.padding * 2
 
-        anchors {
-          left: parent.left
-          right: parent.right
-          bottom: parent.bottom
-          margins: osd.padding
-        }
-        radius: width / 2
+        anchors.top: root.isHorizontal ? parent.top : undefined
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: root.isHorizontal ? undefined : parent.right
+        anchors.margins: osd.padding
+        radius: capSize / 2
         color: root.isMuted ? Theme.options.surface2 : root.isOverflowing ? Theme.options.peach : root.fillColor
-        // 0% is the icon-sized circle, 100% fills the track
-        implicitHeight: width + Math.max(0, trackHeight - width) * root.percentage / 100
 
+        implicitWidth: root.isHorizontal
+          ? (capSize + Math.max(0, trackLength - capSize) * root.percentage / 100)
+          : capSize
+        implicitHeight: !root.isHorizontal
+          ? (capSize + Math.max(0, trackLength - capSize) * root.percentage / 100)
+          : capSize
+
+        Behavior on implicitWidth {
+          animation: Styles.animations.numberAnimation.createObject(this)
+        }
         Behavior on implicitHeight {
           animation: Styles.animations.numberAnimation.createObject(this)
         }
@@ -163,12 +183,13 @@ PanelWindow {
           animation: Styles.animations.colorAnimation.createObject(this)
         }
 
-        // square slot matching the bottom circle, so the icon stays centered in it
         Item {
           anchors.left: parent.left
-          anchors.right: parent.right
           anchors.bottom: parent.bottom
-          height: width
+          anchors.top: root.isHorizontal ? parent.top : undefined
+          anchors.right: !root.isHorizontal ? parent.right : undefined
+          width: progressBar.capSize
+          height: progressBar.capSize
 
           SystemIcon {
             enableColoriser: true

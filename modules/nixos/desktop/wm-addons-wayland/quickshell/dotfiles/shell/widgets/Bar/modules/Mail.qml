@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import qs.config
 import qs.services
 import qs.widgets.common
@@ -13,13 +14,22 @@ Loader {
   active: isVisible
   visible: isVisible
   sourceComponent: Component {
-    Module {
-      iconSystem: "mail-unread"
-      iconSystemSize: Styles.font.pixelSize.hugeass
-      label: root.unread.toString()
-      paddingX: 0
-      bgColor: "transparent"
-      fgColor: Theme.options.blue
+    RowLayout {
+      spacing: 4
+
+      MaterialIcon {
+        icon: "mail"
+        size: ConfigBar.statusIconSize
+        weight: Font.Normal
+        color: Theme.options.blue
+      }
+
+      StyledText {
+        text: root.unread.toString()
+        font.pixelSize: ConfigBar.statusFontSize
+        font.weight: 600
+        color: Theme.options.subtext1
+      }
     }
   }
 }

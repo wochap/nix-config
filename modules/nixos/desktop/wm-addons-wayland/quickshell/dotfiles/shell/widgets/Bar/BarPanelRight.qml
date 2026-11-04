@@ -28,7 +28,7 @@ RowLayout {
     // HACK: MaterialIcon offset
     Layout.leftMargin: ConfigBar.modulesSpacing
     Layout.rightMargin: 0
-    spacing: 0
+    spacing: ConfigBar.modulesSpacing
     visible: isFocused && (capslock.isVisible || tt.isVisible || idleInhibit.isVisible || agents.isVisible || mail.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible || notifications.isVisible)
 
     Capslock {
@@ -65,7 +65,7 @@ RowLayout {
       sourceComponent: Component {
         WoosIcon {
           icon: ""
-          size: Styles.font.pixelSize.larger
+          size: ConfigBar.statusIconSize
           color: Theme.options.red
         }
       }
@@ -108,48 +108,51 @@ RowLayout {
   }
 
   // Clock, opens the calendar popover
-  WrapperRectangle {
+  Rectangle {
     id: clock
 
     property bool isHovered: false
 
+    implicitWidth: clockText.implicitWidth + 20
     Layout.fillHeight: true
-    leftMargin: 4
-    rightMargin: 4
+    radius: height / 2
     color: clock.isHovered ? Theme.options.surface1 : SCalendar.isOpen ? Theme.options.surface0 : "transparent"
-    radius: ConfigBar.modulesRadius
+    border.width: SCalendar.isOpen ? 1 : 0
+    border.color: Theme.options.primary
 
-    child: Item {
-      implicitWidth: clockText.implicitWidth
-      implicitHeight: clockText.implicitHeight
+    Behavior on color {
+      animation: Styles.animations.colorAnimation.createObject(this)
+    }
 
-      StyledText {
-        id: clockText
+    StyledText {
+      id: clockText
 
-        anchors.fill: parent
-        text: Qt.formatDateTime(clockService.date, "ddd dd MMM HH:mm")
+      anchors.centerIn: parent
+      text: Qt.formatDateTime(clockService.date, "ddd dd MMM HH:mm")
+      font.pixelSize: 12
+      font.weight: 500
+      color: Theme.options.text
+    }
+
+    MouseArea {
+      anchors.fill: parent
+      acceptedButtons: Qt.LeftButton
+      cursorShape: Qt.PointingHandCursor
+      onClicked: SCalendar.toggle()
+      Accessible.role: Accessible.Button
+      Accessible.name: `Calendar, ${Qt.formatDateTime(clockService.date, "dddd d MMMM HH:mm")}`
+      Accessible.checkable: true
+      Accessible.checked: SCalendar.isOpen
+      Accessible.onPressAction: SCalendar.toggle()
+
+      Hintable {
+        label: "Calendar"
+        onActivated: SCalendar.toggle()
       }
+    }
 
-      MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton
-        cursorShape: Qt.PointingHandCursor
-        onClicked: SCalendar.toggle()
-        Accessible.role: Accessible.Button
-        Accessible.name: `Calendar, ${Qt.formatDateTime(clockService.date, "dddd d MMMM HH:mm")}`
-        Accessible.checkable: true
-        Accessible.checked: SCalendar.isOpen
-        Accessible.onPressAction: SCalendar.toggle()
-
-        Hintable {
-          label: "Calendar"
-          onActivated: SCalendar.toggle()
-        }
-      }
-
-      HoverHandler {
-        onHoveredChanged: clock.isHovered = hovered
-      }
+    HoverHandler {
+      onHoveredChanged: clock.isHovered = hovered
     }
 
     SystemClock {

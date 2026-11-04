@@ -7,7 +7,7 @@ import Quickshell
 Singleton {
   id: root
 
-  property bool isBlurEnabled: false
+  property bool isBlurEnabled: Settings.options.isBlurEnabled
 
   function formatTimeRemaining(totalSeconds) {
     // Ensure the input is a valid number, default to 0 if not.

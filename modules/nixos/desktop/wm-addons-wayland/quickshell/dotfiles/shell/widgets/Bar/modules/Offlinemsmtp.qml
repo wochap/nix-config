@@ -14,9 +14,10 @@ Loader {
   visible: isVisible
   sourceComponent: Component {
     MaterialIcon {
-      icon: "schedule_send"
-      size: 28
-      color: Theme.options.blue
+      icon: "outbox"
+      size: ConfigBar.statusIconSize
+      weight: Font.Normal
+      color: Theme.options.yellow
     }
   }
 }

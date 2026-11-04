@@ -380,6 +380,10 @@ in
     _custom.desktop.quickshell.authDialogs.prompter = true;
     _custom.desktop.quickshell.authDialogs.phraseSecret.sopsFile = ../../secrets-sops/local.yaml;
     _custom.desktop.quickshell.authDialogs.phraseSecret.sopsKey = "local-auth-phrase";
+    _custom.desktop.quickshell.settings = {
+      renderBar = false;
+      renderVBar = true;
+    };
 
     _custom.desktop.mail.enable = true;
     _custom.desktop.mail.accounts.personal = {

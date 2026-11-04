@@ -14,7 +14,6 @@ PanelWindow {
   required property ShellScreen modelData
   property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(rectangle.QsWindow.window?.screen)
   property bool isFocused: root.modelData?.name === SHyprland.focusedMonitorName
-  readonly property int maxContainerWidth: 1920
 
   WlrLayershell.namespace: "quickshell:bar"
   // read by qs.Woints SHints, the attached WlrLayershell is not reachable from JS
@@ -52,13 +51,7 @@ PanelWindow {
     Item {
       id: contentContainer
 
-      width: Math.min(parent.width, root.maxContainerWidth)
-      anchors {
-        top: parent.top
-        bottom: parent.bottom
-        // Center the content "margin: 0 auto"
-        horizontalCenter: parent.horizontalCenter
-      }
+      anchors.fill: parent
 
       BarPanelLeft {
         isFocused: root.isFocused

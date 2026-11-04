@@ -24,6 +24,8 @@ PanelWindow {
   // space reserved by the bar, the window ignores exclusive zones so the
   // backdrop also covers the bar and a click there closes the panel
   readonly property real reservedTop: isFocusedClientFullScreen ? 0 : (hyprlandMonitor?.reserved?.[1] ?? 0)
+  readonly property real reservedLeft: isFocusedClientFullScreen ? 0 : (hyprlandMonitor?.reserved?.[0] ?? 0)
+  readonly property bool isLeftBar: (root.reservedLeft > 0 && root.reservedTop === 0) || (Settings.options.renderVBar && !Settings.options.renderBar)
   readonly property string bluetoothDevice: Bluetooth.devices.values.find(d => d.connected)?.name ?? ""
 
   screen: root.focusedScreen
@@ -78,20 +80,24 @@ PanelWindow {
     id: container
 
     anchors {
-      top: parent.top
-      right: parent.right
+      top: root.isLeftBar ? undefined : parent.top
+      bottom: root.isLeftBar ? parent.bottom : undefined
+      left: root.isLeftBar ? parent.left : undefined
+      right: root.isLeftBar ? undefined : parent.right
       topMargin: root.reservedTop + ConfigControlCenter.controlCenterMargin
+      bottomMargin: ConfigControlCenter.controlCenterMargin
+      leftMargin: root.reservedLeft + ConfigControlCenter.controlCenterMargin
       rightMargin: ConfigControlCenter.controlCenterMargin
     }
     width: panel.width
     height: panel.height
-    transformOrigin: Item.TopRight
+    transformOrigin: root.isLeftBar ? Item.BottomLeft : Item.TopRight
     opacity: 0
     scale: 0.96
     transform: Translate {
       id: slide
 
-      y: -Styles.animation.slideDistance
+      y: root.isLeftBar ? Styles.animation.slideDistance : -Styles.animation.slideDistance
     }
 
     states: State {

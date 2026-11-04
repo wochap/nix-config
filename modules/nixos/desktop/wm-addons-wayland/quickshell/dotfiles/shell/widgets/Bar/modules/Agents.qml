@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.config
 import qs.services
+import qs.widgets.common
 import qs.widgets.Bar.config
 
 RowLayout {
@@ -11,38 +12,24 @@ RowLayout {
 
   property int runningCount: SAgents.runningCount
   property int blockedCount: SAgents.blockedCount
-  property bool isVisible: runningCount > 0 || blockedCount > 0
+  readonly property int total: root.runningCount + root.blockedCount
+  property bool isVisible: root.total > 0
 
   visible: isVisible
-  spacing: 0
+  spacing: 4
 
-  Loader {
-    active: root.runningCount > 0
-    visible: active
-    sourceComponent: Component {
-      Module {
-        materialIcon: "smart_toy"
-        iconSize: 24
-        label: root.runningCount > 1 ? root.runningCount.toString() : ""
-        paddingX: 0
-        bgColor: "transparent"
-        fgColor: Theme.options.green
-      }
-    }
+  MaterialIcon {
+    icon: root.blockedCount > 0 ? "pending_actions" : "smart_toy"
+    size: ConfigBar.statusIconSize
+    weight: Font.Normal
+    color: root.blockedCount > 0 ? Theme.options.yellow : Theme.options.mauve
   }
 
-  Loader {
-    active: root.blockedCount > 0
-    visible: active
-    sourceComponent: Component {
-      Module {
-        materialIcon: "pending_actions"
-        iconSize: Styles.font.pixelSize.huge
-        label: root.blockedCount > 1 ? root.blockedCount.toString() : ""
-        paddingX: 0
-        bgColor: "transparent"
-        fgColor: Theme.options.yellow
-      }
-    }
+  StyledText {
+    visible: root.total > 1
+    text: root.total.toString()
+    font.pixelSize: ConfigBar.statusFontSize
+    font.weight: 600
+    color: Theme.options.subtext1
   }
 }

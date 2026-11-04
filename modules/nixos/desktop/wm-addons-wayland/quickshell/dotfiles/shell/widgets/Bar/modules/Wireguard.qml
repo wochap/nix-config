@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import qs.config
 import qs.services
 import qs.widgets.common
@@ -14,14 +15,23 @@ Loader {
   active: isVisible
   visible: isVisible
   sourceComponent: Component {
-    Module {
-      iconSystem: "network-vpn"
-      iconSystemSize: Styles.font.pixelSize.huge
-      iconSize: Styles.font.pixelSize.huge
-      label: ip
-      paddingX: 0
-      bgColor: "transparent"
-      fgColor: Theme.options.mauve
+    RowLayout {
+      spacing: 4
+
+      MaterialIcon {
+        icon: "vpn_lock"
+        size: ConfigBar.statusIconSize
+        weight: Font.Normal
+        color: Theme.options.green
+      }
+
+      StyledText {
+        visible: root.ip.length > 0
+        text: root.ip
+        font.pixelSize: ConfigBar.statusFontSize
+        font.weight: 600
+        color: Theme.options.subtext1
+      }
     }
   }
 }

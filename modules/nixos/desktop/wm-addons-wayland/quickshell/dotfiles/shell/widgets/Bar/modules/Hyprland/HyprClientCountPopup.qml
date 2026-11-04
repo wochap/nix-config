@@ -1,10 +1,8 @@
 import Quickshell
-import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 import qs.config
 import qs.widgets.Bar.config
-import qs.widgets.ControlCenter
 import qs.widgets.common
 import "Utils.js" as Utils
 
@@ -14,24 +12,27 @@ PopupWindow {
   required property Item anchorItem
   required property var clients
   required property var bindingForClient
-  // requested state, drives the enter/exit animation, the window stays
-  // visible until the exit animation finishes
+  property string label: ""
   property bool isOpen: false
-  readonly property real slideDistance: Styles.animation.slideDistance
-  // same gap from the bar edge as the control center, the anchor item sits
-  // barPaddingY inside the bar
-  readonly property real barGap: ConfigBar.barPaddingY + ConfigControlCenter.controlCenterMargin
 
   function toggle() {
     root.isOpen = !root.isOpen;
   }
 
-  onIsOpenChanged: {
-    if (root.isOpen) {
-      root.visible = true;
-    }
+  function focusClient(client) {
+    if (!client?.address) return;
+    const window = `"address:${client.address}"`;
+    const raise = client.floating ? `hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top", window = ${window} }))` : "";
+    Quickshell.execDetached(["hyprctl", "eval", `
+      local no_warps = hl.get_config("cursor.no_warps")
+      hl.config({ cursor = { no_warps = true } })
+      hl.dispatch(hl.dsp.focus({ window = ${window} }))
+      ${raise}
+      hl.config({ cursor = { no_warps = no_warps } })
+    `]);
   }
-  // dismissed by the compositor (click outside)
+
+  visible: root.isOpen
   onVisibleChanged: {
     if (!root.visible) {
       root.isOpen = false;
@@ -39,119 +40,130 @@ PopupWindow {
   }
 
   anchor.item: root.anchorItem
-  anchor.edges: ConfigBar.isBarAtBottom ? (Edges.Top | Edges.Left) : (Edges.Bottom | Edges.Left)
-  anchor.gravity: ConfigBar.isBarAtBottom ? (Edges.Top | Edges.Right) : (Edges.Bottom | Edges.Right)
-  // the window is taller by slideDistance on the bar side, room for the slide
-  // so the content isn't clipped, the margins compensate for it
-  anchor.margins.top: ConfigBar.isBarAtBottom ? -(root.barGap - root.slideDistance) : 0
-  anchor.margins.bottom: ConfigBar.isBarAtBottom ? 0 : -(root.barGap - root.slideDistance)
-  implicitWidth: popupContent.implicitWidth
-  implicitHeight: popupContent.implicitHeight + root.slideDistance
+  anchor.edges: Edges.Bottom | Edges.Left
+  anchor.gravity: Edges.Bottom | Edges.Right
+  anchor.margins.left: -12
+  anchor.margins.top: Math.round(ConfigBar.barHeight - 6 - (ConfigBar.barPaddingY + root.anchorItem.height))
+  anchor.margins.bottom: 0
+
+  implicitWidth: popupCard.implicitWidth + 24
+  implicitHeight: popupCard.implicitHeight + 24
   grabFocus: true
   color: "transparent"
-  mask: Region {
-    item: popupContent
+  mask: Region {}
+
+  StyledRectangularShadow {
+    target: popupCard
+    elevation: Styles.elevation.e1
   }
 
-  WrapperRectangle {
-    id: popupContent
+  StyledRect {
+    id: popupCard
 
-    x: 0
-    y: ConfigBar.isBarAtBottom ? 0 : root.slideDistance
-    transformOrigin: ConfigBar.isBarAtBottom ? Item.BottomLeft : Item.TopLeft
-    opacity: 0
-    scale: 0.96
-    transform: Translate {
-      id: slide
-
-      // slides in from the bar
-      y: ConfigBar.isBarAtBottom ? root.slideDistance : -root.slideDistance
-    }
-
-    states: State {
-      name: "open"
-      when: root.isOpen
-
-      PropertyChanges {
-        popupContent.opacity: 1
-        popupContent.scale: 1
-        slide.y: 0
-      }
-    }
-
-    transitions: [
-      Transition {
-        to: "open"
-
-        NumberAnimation {
-          properties: "opacity,scale,y"
-          duration: Styles.animation.duration
-          easing.type: Styles.animation.easingType
-        }
-      },
-      Transition {
-        from: "open"
-
-        SequentialAnimation {
-          NumberAnimation {
-            properties: "opacity,scale,y"
-            duration: Styles.animation.exitDuration
-            easing.type: Styles.animation.exitEasingType
-          }
-
-          ScriptAction {
-            script: {
-              if (!root.isOpen) {
-                root.visible = false;
-              }
-            }
-          }
-        }
-      }
-    ]
-
-    margin: 8
-    color: Theme.options.backgroundOverlay
-    radius: ConfigBar.modulesRadius
+    anchors.centerIn: parent
+    implicitWidth: Math.max(140, cardCol.implicitWidth + 16)
+    implicitHeight: cardCol.implicitHeight + 16
+    radius: 8
+    color: Theme.options.base
+    border.width: 1
+    border.color: Theme.options.surface0
     focus: true
     Keys.onEscapePressed: root.isOpen = false
-    border {
-      width: 1
-      color: Theme.options.borderSecondary
-    }
 
     ColumnLayout {
-      spacing: 8
+      id: cardCol
+
+      x: 8
+      y: 8
+      spacing: 4
+
+      StyledText {
+        text: (root.label.length > 0 ? root.label.toUpperCase() : "WINDOWS") + ` · ${root.clients.length}`
+        font.pixelSize: 10
+        font.weight: 600
+        font.letterSpacing: 0.6
+        color: Theme.options.subtext0
+        Layout.leftMargin: 4
+        Layout.bottomMargin: 2
+      }
 
       Repeater {
         model: root.clients
 
-        RowLayout {
-          spacing: 6
+        Rectangle {
+          id: itemRow
 
-          StyledText {
-            id: bindingLabel
+          required property var modelData
 
-            Layout.alignment: Qt.AlignVCenter
-            text: root.bindingForClient(modelData)
-            visible: bindingLabel.text.length > 0
-            color: Theme.options.text
-            font.pixelSize: Styles.font.pixelSize.small
+          Layout.fillWidth: true
+          implicitWidth: rowLayout.implicitWidth + 12
+          implicitHeight: 28
+          radius: 6
+          color: itemMouseArea.pressed ? Theme.options.surface2 : itemMouseArea.containsMouse ? Theme.options.surface1 : "transparent"
+
+          Behavior on color {
+            animation: Styles.animations.colorAnimation.createObject(this)
           }
 
-          SystemIcon {
-            Layout.alignment: Qt.AlignVCenter
-            icon: Utils.mapAppId(modelData.class ?? "")
-            size: Styles.font.pixelSize.normal
+          MouseArea {
+            id: itemMouseArea
+
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: {
+              root.focusClient(itemRow.modelData);
+              root.isOpen = false;
+            }
           }
 
-          StyledText {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.maximumWidth: 140
-            text: modelData.class ?? ""
-            color: Theme.options.text
-            font.pixelSize: Styles.font.pixelSize.small
-            elide: Text.ElideMiddle
+          RowLayout {
+            id: rowLayout
+
+            anchors.fill: parent
+            anchors.leftMargin: 8
+            anchors.rightMargin: 8
+            spacing: 8
+
+            Rectangle {
+              id: keyBadge
+
+              readonly property string key: root.bindingForClient(itemRow.modelData)
+              visible: key.length > 0
+              Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+              implicitWidth: keyLabel.implicitWidth + 8
+              implicitHeight: 18
+              radius: 4
+              color: Theme.options.surface0
+
+              StyledText {
+                id: keyLabel
+
+                anchors.centerIn: parent
+                text: keyBadge.key
+                font.pixelSize: 10
+                font.weight: 600
+                color: Theme.options.primary
+              }
+            }
+
+            SystemIcon {
+              Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+              icon: Utils.mapAppId(itemRow.modelData.class ?? "")
+              size: 16
+            }
+
+            StyledText {
+              Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+              Layout.fillWidth: true
+              Layout.maximumWidth: 180
+              horizontalAlignment: Text.AlignLeft
+              text: itemRow.modelData.title || itemRow.modelData.class || ""
+              color: itemMouseArea.containsMouse ? Theme.options.text : Theme.options.subtext1
+              font.pixelSize: 11
+              font.weight: 500
+              elide: Text.ElideRight
+            }
           }
         }
       }

@@ -24,7 +24,7 @@ import qs.Woints
 ShellRoot {
   id: root
 
-  property bool renderBar: true
+  property bool renderBar: Settings.options.renderBar
   property bool renderBacklight: true
   property bool renderOutput: true
   property bool renderCapslock: true
@@ -36,7 +36,7 @@ ShellRoot {
   property bool renderHarpoon: true
   property bool renderWindowSwitcher: true
   property bool renderWhichKeys: true
-  property bool renderVBar: false
+  property bool renderVBar: Settings.options.renderVBar
   property bool renderAuthPrompt: true
 
   // started eagerly, the polkit agent and the auth socket must exist before
@@ -126,6 +126,14 @@ ShellRoot {
     function toggle() {
       // TODO: toggle per monitor
       root.renderBar = !root.renderBar;
+    }
+  }
+
+  IpcHandler {
+    target: "vbar"
+
+    function toggle() {
+      root.renderVBar = !root.renderVBar;
     }
   }
 }

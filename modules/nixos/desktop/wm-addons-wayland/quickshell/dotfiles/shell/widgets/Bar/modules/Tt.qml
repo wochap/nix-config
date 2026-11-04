@@ -26,21 +26,28 @@ Loader {
           required property var modelData
 
           Layout.fillHeight: true
-          implicitWidth: chipModule.implicitWidth
-          implicitHeight: chipModule.implicitHeight
+          implicitWidth: chipRow.implicitWidth
+          implicitHeight: chipRow.implicitHeight
 
-          Module {
-            id: chipModule
+          RowLayout {
+            id: chipRow
 
-            anchors.fill: parent
-            iconSystem: "appointment-soon-symbolic"
-            iconSystemSize: Styles.font.pixelSize.large
-            iconSize: Styles.font.pixelSize.huge
-            label: `${STt.title(chip.modelData)} ${STt.elapsed(chip.modelData)}`
-            labelMaximumWidth: 250
-            paddingX: 0
-            bgColor: "transparent"
-            fgColor: Theme.options.green
+            anchors.centerIn: parent
+            spacing: 4
+
+            MaterialIcon {
+              icon: "timer"
+              size: ConfigBar.statusIconSize
+              weight: Font.Normal
+              color: Theme.options.green
+            }
+
+            StyledText {
+              text: `${STt.title(chip.modelData)} ${STt.elapsed(chip.modelData)}`
+              font.pixelSize: ConfigBar.statusFontSize
+              font.weight: 600
+              color: Theme.options.subtext1
+            }
           }
 
           MouseArea {

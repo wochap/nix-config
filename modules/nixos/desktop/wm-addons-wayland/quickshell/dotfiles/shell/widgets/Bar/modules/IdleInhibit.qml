@@ -13,11 +13,12 @@ Loader {
   active: isVisible
   visible: isVisible
   sourceComponent: Component {
-    SystemIcon {
-      enableColoriser: true
-      icon: "caffeine-cup-full"
-      size: Styles.font.pixelSize.hugeass
-      color: Theme.options.maroon
+    MaterialIcon {
+      icon: "coffee"
+      size: ConfigBar.statusIconSize
+      weight: Font.Normal
+      fill: 1
+      color: Theme.options.peach
     }
   }
 

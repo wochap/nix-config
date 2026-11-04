@@ -123,6 +123,30 @@ in
           };
       };
     };
+
+    settings = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          renderBar = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Whether to render the horizontal top bar.";
+          };
+          renderVBar = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Whether to render the vertical left bar.";
+          };
+          isBlurEnabled = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Whether to enable blur on bars and panels.";
+          };
+        };
+      };
+      default = { };
+      description = "Quickshell settings written to ~/.config/quickshell/settings.json.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -213,6 +237,10 @@ in
 
       xdg.configFile = {
         "quickshell/shell".source = lib._custom.relativeSymlink configDirectory ./dotfiles/shell;
+        "quickshell/settings.json" = {
+          text = builtins.toJSON cfg.settings;
+          force = true;
+        };
         "quickshell/theme.json" = {
           source =
             if preferDark then
