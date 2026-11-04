@@ -9,7 +9,7 @@ import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
 import qs.Woints
-import "../Utils.js" as Utils
+import "../../../../common/HyprUtils.js" as Utils
 
 Button {
   id: root

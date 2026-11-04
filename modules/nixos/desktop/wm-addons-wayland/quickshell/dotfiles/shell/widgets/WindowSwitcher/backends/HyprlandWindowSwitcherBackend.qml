@@ -2,7 +2,7 @@ import Quickshell
 import Quickshell.Hyprland
 import QtQuick
 import qs.services
-import "../../Bar/modules/Hyprland/Utils.js" as Utils
+import "../../common/HyprUtils.js" as Utils
 import "../WindowEntry.js" as WindowEntry
 
 Scope {

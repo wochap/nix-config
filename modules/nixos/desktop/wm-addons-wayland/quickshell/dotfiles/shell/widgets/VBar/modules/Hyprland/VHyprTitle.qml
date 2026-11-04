@@ -7,7 +7,7 @@ import qs.services
 import qs.widgets.common
 import qs.widgets.VBar.config
 import qs.widgets.Bar.config
-import "Utils.js" as Utils
+import "../../../common/HyprUtils.js" as Utils
 import qs.Woints
 
 Item {

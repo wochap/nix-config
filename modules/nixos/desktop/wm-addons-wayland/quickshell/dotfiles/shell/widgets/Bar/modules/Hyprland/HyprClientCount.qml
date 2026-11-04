@@ -1,9 +1,9 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import qs.config
 import qs.widgets.common
 import qs.widgets.Bar.config
-import qs.Woints
 
 Loader {
   id: root
@@ -19,80 +19,38 @@ Loader {
   active: root.count > 0
   visible: root.count > 0
   sourceComponent: Component {
-    Rectangle {
+    BarChipButton {
       id: button
-
-      property bool isHovered: false
 
       implicitWidth: chip.implicitWidth + 16
       Layout.fillHeight: true
       radius: height / 2
-      color: button.isHovered ? Theme.options.surface1 : popup.isOpen ? Theme.options.surface0 : "transparent"
-      border.width: popup.isOpen ? 1 : 0
-      border.color: Theme.options.primary
+      active: popup.isOpen
+      accessibleName: `${root.label}: ${root.count} ${root.count === 1 ? "window" : "windows"}`
+      onClicked: popup.toggle()
 
-      Behavior on color {
-        animation: Styles.animations.colorAnimation.createObject(this)
-      }
-
-      HoverHandler {
-        onHoveredChanged: button.isHovered = hovered
-      }
-
-      MouseArea {
-        id: mouseArea
-
-        anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
-        onClicked: popup.toggle()
-        Accessible.role: Accessible.Button
-        Accessible.name: `${root.label}: ${root.count} ${root.count === 1 ? "window" : "windows"}`
-        Accessible.checkable: true
-        Accessible.checked: popup.isOpen
-        Accessible.onPressAction: popup.toggle()
-
-        Hintable {
-          label: `${root.label}: ${root.count} ${root.count === 1 ? "window" : "windows"}`
-          onActivated: popup.toggle()
-        }
-      }
-
-      RowLayout {
+      StatusBadge {
         id: chip
 
         anchors.centerIn: parent
-        spacing: 6
-
-        MaterialIcon {
-          Layout.alignment: Qt.AlignVCenter
-          icon: root.materialIcon
-          size: ConfigBar.statusIconSize
-          weight: Font.Normal
-          color: root.fgColor
-          visible: root.materialIcon.length > 0
-        }
-
-        WoosIcon {
-          Layout.alignment: Qt.AlignVCenter
-          icon: root.icon
-          size: ConfigBar.statusIconSize
-          color: root.fgColor
-          visible: root.icon.length > 0 && root.materialIcon.length === 0
-        }
-
-        StyledText {
-          Layout.alignment: Qt.AlignVCenter
-          text: root.count.toString()
-          font.pixelSize: ConfigBar.statusFontSize
-          font.weight: 600
-          color: Theme.options.subtext1
-        }
+        itemSpacing: 6
+        icon: root.materialIcon
+        woosIcon: root.icon
+        iconColor: root.fgColor
+        iconSize: ConfigBar.statusIconSize
+        text: root.count.toString()
+        fontSize: ConfigBar.statusFontSize
       }
 
-      HyprClientCountPopup {
+      HyprClientListPopup {
         id: popup
 
         anchorItem: button
+        anchor.edges: Edges.Bottom | Edges.Left
+        anchor.gravity: Edges.Bottom | Edges.Right
+        anchor.margins.left: -12
+        anchor.margins.top: Math.round(ConfigBar.barHeight - 6 - (ConfigBar.barPaddingY + button.height))
+        anchor.margins.bottom: 0
         label: root.label
         clients: root.clients
         bindingForClient: root.bindingForClient

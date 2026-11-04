@@ -6,16 +6,16 @@ import qs.widgets.common
 import qs.widgets.Bar.config
 
 // One chip per running tt entry. Left click stops it, middle click stops all.
-Loader {
+// Horizontal chips show "title elapsed", vertical chips only the elapsed time.
+StatusModule {
   id: root
 
-  property bool isVisible: STt.count > 0
-
-  active: isVisible
-  visible: isVisible
+  isVisible: STt.count > 0
   sourceComponent: Component {
-    RowLayout {
-      spacing: ConfigBar.modulesSpacing
+    GridLayout {
+      flow: root.vertical ? GridLayout.TopToBottom : GridLayout.LeftToRight
+      rowSpacing: 4
+      columnSpacing: ConfigBar.modulesSpacing
 
       Repeater {
         model: STt.running
@@ -25,29 +25,20 @@ Loader {
 
           required property var modelData
 
-          Layout.fillHeight: true
-          implicitWidth: chipRow.implicitWidth
-          implicitHeight: chipRow.implicitHeight
+          Layout.fillHeight: !root.vertical
+          implicitWidth: badge.implicitWidth
+          implicitHeight: badge.implicitHeight
 
-          RowLayout {
-            id: chipRow
+          StatusBadge {
+            id: badge
 
             anchors.centerIn: parent
-            spacing: 4
-
-            MaterialIcon {
-              icon: "timer"
-              size: ConfigBar.statusIconSize
-              weight: Font.Normal
-              color: Theme.options.green
-            }
-
-            StyledText {
-              text: `${STt.title(chip.modelData)} ${STt.elapsed(chip.modelData)}`
-              font.pixelSize: ConfigBar.statusFontSize
-              font.weight: 600
-              color: Theme.options.subtext1
-            }
+            vertical: root.vertical
+            icon: "timer"
+            iconColor: Theme.options.green
+            iconSize: root.iconSize
+            text: root.vertical ? STt.elapsed(chip.modelData) : `${STt.title(chip.modelData)} ${STt.elapsed(chip.modelData)}`
+            fontSize: root.fontSize
           }
 
           MouseArea {

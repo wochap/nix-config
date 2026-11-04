@@ -7,7 +7,7 @@ import qs.config
 import qs.services
 import qs.widgets.common
 import qs.widgets.Bar.config
-import "Utils.js" as Utils
+import "../../../common/HyprUtils.js" as Utils
 
 Item {
   id: root

@@ -5,19 +5,17 @@ import qs.config
 import qs.services
 import qs.widgets.common
 import qs.widgets.VBar.config
-import qs.Woints
 
-Rectangle {
+BarChipButton {
   id: root
-
-  property bool isHovered: false
 
   implicitWidth: 36
   implicitHeight: col.implicitHeight + 12
   radius: 18
-  color: root.isHovered ? Theme.options.surface1 : SControlCenter.isOpen ? Theme.options.surface0 : "transparent"
-  border.width: SControlCenter.isOpen ? 1 : 0
-  border.color: Theme.options.primary
+  active: SControlCenter.isOpen
+  animateColor: false
+  accessibleName: "Control center"
+  onClicked: SControlCenter.toggle()
 
   ColumnLayout {
     id: col
@@ -84,34 +82,6 @@ Rectangle {
         font.pixelSize: 10
         color: Theme.options.text
       }
-    }
-  }
-
-  HoverHandler {
-    onHoveredChanged: root.isHovered = hovered
-  }
-
-  MouseArea {
-    id: mouseArea
-
-    anchors.fill: parent
-    cursorShape: Qt.PointingHandCursor
-    acceptedButtons: Qt.LeftButton
-    Accessible.role: Accessible.Button
-    Accessible.name: "Control center"
-    Accessible.checkable: true
-    Accessible.checked: SControlCenter.isOpen
-    Accessible.onPressAction: SControlCenter.toggle()
-    onClicked: event => {
-      if (event.button === Qt.LeftButton) {
-        SControlCenter.toggle();
-      }
-      event.accepted = true;
-    }
-
-    Hintable {
-      label: "Control center"
-      onActivated: SControlCenter.toggle()
     }
   }
 }

@@ -1,21 +1,20 @@
 import Quickshell.Io
 import QtQuick
+import QtQuick.Layouts
 import qs.config
+import qs.services
 import qs.widgets.common
-import qs.widgets.Bar.config
 
-Loader {
+StatusModule {
   id: root
 
   property bool isIdleInhibit: false
-  property bool isVisible: isIdleInhibit
 
-  active: isVisible
-  visible: isVisible
+  isVisible: root.isIdleInhibit
   sourceComponent: Component {
     MaterialIcon {
       icon: "coffee"
-      size: ConfigBar.statusIconSize
+      size: root.iconSize
       weight: Font.Normal
       fill: 1
       color: Theme.options.peach

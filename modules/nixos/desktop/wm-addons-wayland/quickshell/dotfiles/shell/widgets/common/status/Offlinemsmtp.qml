@@ -1,21 +1,19 @@
 import QtQuick
+import QtQuick.Layouts
 import qs.config
 import qs.services
 import qs.widgets.common
-import qs.widgets.Bar.config
 
-Loader {
+StatusModule {
   id: root
 
   property bool isActive: SOfflinemsmtp.isActive
-  property bool isVisible: isActive
 
-  active: isVisible
-  visible: isVisible
+  isVisible: root.isActive
   sourceComponent: Component {
     MaterialIcon {
       icon: "outbox"
-      size: ConfigBar.statusIconSize
+      size: root.iconSize
       weight: Font.Normal
       color: Theme.options.yellow
     }

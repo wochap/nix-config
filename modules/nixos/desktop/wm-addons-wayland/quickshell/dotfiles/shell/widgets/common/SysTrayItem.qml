@@ -5,7 +5,6 @@ import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 import qs.config
 import qs.widgets.common
-import qs.widgets.Bar.config
 import qs.Woints
 
 MouseArea {
