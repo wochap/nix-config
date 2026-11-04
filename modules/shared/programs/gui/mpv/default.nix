@@ -46,6 +46,7 @@ in
           osd-shadow-color = themeColors.base;
 
           autofit-larger = "75%x75%";
+          drag-and-drop = "replace";
           gpu-context = lib.mkIf isWayland "wayland";
           hwdec-codecs = "all";
           keep-open = true;
