@@ -183,6 +183,7 @@ hl.config({
   master = {
     mfact = 0.5,
     new_status = "inherit",
+    new_on_top = false,
     new_on_active = "before",
     orientation = "left",
     slave_count_for_center_master = 0,
