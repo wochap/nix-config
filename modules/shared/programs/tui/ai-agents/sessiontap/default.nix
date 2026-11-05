@@ -111,6 +111,11 @@ in
         default = 8932;
         description = "Remote access TCP port.";
       };
+      discovery = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to announce the wildcard listener via DNS-SD / mDNS on the local network so paired devices automatically discover IP changes.";
+      };
     };
   };
 
@@ -125,6 +130,7 @@ in
     networking.firewall.interfaces = lib.mkIf remoteEnabled (
       lib.genAttrs remote.interfaces (_: {
         allowedTCPPorts = [ remote.port ];
+        allowedUDPPorts = lib.optional remote.discovery 5353;
       })
     );
 
@@ -191,6 +197,7 @@ in
               listen: ${builtins.toJSON [ (withPort "0.0.0.0") ]}
               advertise: ${builtins.toJSON (map withPort remote.advertise)}
               control: true
+              discovery: ${lib.boolToString remote.discovery}
           '';
         };
       };
