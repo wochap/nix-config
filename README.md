@@ -453,6 +453,7 @@ npm cache clean --force
   ```
   $ nix-collect-garbage -d
   $ sudo nix-collect-garbage -d
+  $ nix-store --optimise
   ```
 
 - [Delete nixos system profile](https://www.reddit.com/r/NixOS/comments/ekryty/help_deleting_old_profiles/)
