@@ -10,6 +10,7 @@ let
   yamlFormat = pkgs.formats.yaml { };
 
   inherit (config._custom.globals) userName;
+  hmConfig = config.home-manager.users.${userName};
   inherit (pkgs._custom) wochap-ssc;
   host = "http://${wochap-ssc.meta.address}";
   omniRouteProxy = config._custom.services.web-gate.proxies.omniroute;
@@ -104,6 +105,11 @@ in
     _custom.hm = {
       xdg.configFile."geancam/config.yaml".source =
         yamlFormat.generate "geancam-config.yaml" cfg.settings;
+
+      home.symlinks = {
+        "${hmConfig.home.homeDirectory}/Music/geancam" =
+          "${hmConfig.home.homeDirectory}/Sync/music/geancam";
+      };
     };
   };
 }
