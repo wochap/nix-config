@@ -252,6 +252,25 @@ $ sudo nixos-rebuild boot --flake .#gdesktop
 
 ## Troubleshooting
 
+- Thunar doesn't open
+
+```sh
+killall -9 gvfsd-metadata && systemctl --user restart thunar-server
+```
+
+- Free disk space
+
+```sh
+# NOTE: these delete containers
+podman system prune -a --volumes
+docker system prune -a --volumes
+
+uv cache clean
+rm -rf ~/.cache/google-chrome/Default/Cache/*
+pnpm store prune
+npm cache clean --force
+```
+
 - Rustup `ld-wrapper.sh: No such file or directory` or linking errors after Nixpkgs update
 
   When updating `nixpkgs`, the Nix store path for `rustup` changes and older paths are garbage-collected. Any toolchains previously installed via `rustup` in `~/.rustup/toolchains` retain hardcoded references to the old `nix-support/ld-wrapper.sh` in their `gcc-ld/ld.lld` scripts, causing build failures when linking host binaries or proc macros.
