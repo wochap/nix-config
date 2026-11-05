@@ -19,7 +19,9 @@ RowLayout {
   spacing: ConfigBar.modulesSpacing
 
   SysTray {
-    visible: isFocused
+    id: sysTray
+
+    visible: isFocused && sysTray.hasItems
     Layout.fillHeight: true
   }
 
