@@ -25,6 +25,10 @@ Singleton {
   // [{title, start: Date, allDay, color}]
   property var upcoming: []
   property bool available: true
+  property double fetchedAt: 0
+  readonly property bool loadingUpcoming: upcomingProcess.running
+  readonly property bool loadingRange: rangeProcess.running
+  readonly property bool loading: loadingUpcoming || loadingRange
 
   // range queries are serialized: a request made while one is running waits
   // here (deduplicated, in order), and results are always parsed against the range
@@ -117,6 +121,13 @@ Singleton {
     root.loadRange(start, end);
   }
 
+  // Called when the calendar opens: timers stop counting while suspended, so
+  // data can be hours old, and a failing fetch is not retried until its backoff expires.
+  function refreshIfStale() {
+    if (!root.loading && Date.now() - root.fetchedAt > root.refreshInterval)
+      root.refresh();
+  }
+
   function refresh() {
     if (!upcomingProcess.running) {
       const today = new Date();
@@ -140,6 +151,7 @@ Singleton {
           start: event.start.toISOString()
         }));
     cacheFile.setText(JSON.stringify({
+      fetchedAt: root.fetchedAt,
       eventsByDay: root.eventsByDay,
       upcoming
     }));
@@ -148,6 +160,7 @@ Singleton {
   function load(text) {
     try {
       const cached = JSON.parse(text);
+      root.fetchedAt = cached.fetchedAt ?? 0;
       root.eventsByDay = cached.eventsByDay ?? {};
       root.upcoming = (cached.upcoming ?? []).map(event => Object.assign({}, event, {
             start: new Date(event.start)
@@ -216,8 +229,12 @@ Singleton {
           });
         });
         root.upcoming = list.sort((a, b) => a.start - b.start).slice(0, root.upcomingCount);
+        root.fetchedAt = Date.now();
         saveTimer.restart();
       }
+    }
+    onExited: code => {
+      root.available = code === 0;
     }
   }
 
