@@ -20,6 +20,7 @@ let
   packageSkills =
     lib.optionalAttrs (aiCfg.enable && aiCfg.webscoop.enable) {
       webscoop-use-recipe = "${inputs.webscoop}/skills/webscoop-use-recipe";
+      webscoop-control-tab = "${inputs.webscoop}/skills/webscoop-control-tab";
     }
     // lib.optionalAttrs (aiCfg.enable && aiCfg.wosarcher.enable) {
       wosarcher = "${inputs.wosarcher}/skill";
