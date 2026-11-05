@@ -8,6 +8,7 @@
 let
   cfg = config._custom.programs.lang-nix;
   nix-sync-all = pkgs.writeScriptBin "nix-sync-all" (builtins.readFile ./scripts/nix-sync-all.sh);
+  nix-clean-results = pkgs.writeScriptBin "nix-clean-results" (builtins.readFile ./scripts/nix-clean-results.sh);
 in
 {
   options._custom.programs.lang-nix.enable = lib.mkEnableOption { };
@@ -19,6 +20,7 @@ in
       nixfmt # conform.nvim
       nixd # lsp server
       nix-sync-all
+      nix-clean-results
     ];
   };
 }
