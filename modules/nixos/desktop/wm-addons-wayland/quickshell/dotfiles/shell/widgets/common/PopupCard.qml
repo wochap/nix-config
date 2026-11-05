@@ -32,7 +32,9 @@ PopupWindow {
   implicitHeight: popupCard.implicitHeight + 24
   grabFocus: true
   color: "transparent"
-  mask: Region {}
+  mask: Region {
+    item: popupCard
+  }
 
   StyledRectangularShadow {
     target: popupCard
