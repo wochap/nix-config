@@ -588,8 +588,10 @@ function spawn(p: Plan, cwd: string, tools: boolean, sandbox: SandboxMode = "str
     exited: proc.exited,
     async output() {
       await proc.exited;
-      await stderrDone;
-      const line = (await stdout).trim().split("\n").at(-1);
+      // proc has exited; unblock even if an orphaned child keeps stdout or stderr open
+      await Promise.race([stderrDone, Bun.sleep(500)]);
+      const stdoutText = await Promise.race([stdout, Bun.sleep(500).then(() => "")]);
+      const line = stdoutText.trim().split("\n").at(-1);
       try {
         return line ? JSON.parse(line) : null;
       } catch {

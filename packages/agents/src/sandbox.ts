@@ -101,6 +101,7 @@ export function wrapCommand(cmd: string[], opts: SandboxOptions): string[] {
     const { dirs, files } = getSensitivePaths();
     const args: string[] = [
       bwrap,
+      "--die-with-parent",
       "--bind", "/", "/",
       "--dev", "/dev",
       "--proc", "/proc",
@@ -127,6 +128,7 @@ export function wrapCommand(cmd: string[], opts: SandboxOptions): string[] {
     const { dirs, files } = getSensitivePaths();
     const args: string[] = [
       bwrap,
+      "--die-with-parent",
       "--ro-bind", "/", "/",
       "--dev", "/dev",
       "--proc", "/proc",
