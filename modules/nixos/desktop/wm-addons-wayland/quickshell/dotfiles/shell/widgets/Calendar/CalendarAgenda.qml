@@ -83,7 +83,7 @@ StyledRect {
     StyledText {
       Layout.preferredHeight: 22
       visible: SKhal.upcoming.length === 0
-      text: SKhal.available ? `Nothing in the next ${SKhal.upcomingDays} days` : "khal unavailable"
+      text: !SKhal.available ? "khal unavailable" : (SKhal.loadingUpcoming ? "Loading events…" : `Nothing in the next ${SKhal.upcomingDays} days`)
       font.pixelSize: Styles.font.pixelSize.small
       color: Theme.options.overlay1
     }

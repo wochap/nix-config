@@ -192,7 +192,7 @@ PanelWindow {
   }
 
   Component.onCompleted: {
-    SKhal.refresh();
+    SKhal.refreshIfStale();
     SWeather.refreshIfStale();
   }
 }

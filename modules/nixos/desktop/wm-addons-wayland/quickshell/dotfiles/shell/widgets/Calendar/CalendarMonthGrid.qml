@@ -38,7 +38,6 @@ ColumnLayout {
 
   spacing: ConfigCalendar.calendarSpacing
   onViewMonthChanged: root.loadEvents()
-  Component.onCompleted: root.loadEvents()
 
   // Month header
   RowLayout {

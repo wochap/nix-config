@@ -41,11 +41,12 @@ ShellRoot {
 
   // started eagerly, the polkit agent and the auth socket must exist before
   // the first prompt arrives; SHints registers the `woints` IPC target;
-  // SWeather polls in the background so the calendar card is already filled
+  // SWeather and SKhal poll in the background so the calendar card and agenda are already filled
   Component.onCompleted: {
     SAuth.socketPath;
     SHints.protocol;
     SWeather.available;
+    SKhal.available;
   }
 
   LazyLoader {
