@@ -217,8 +217,7 @@ FocusScope {
       sourceSize.width: root.width
       sourceSize.height: root.height
       fillMode: Image.PreserveAspectCrop
-      asynchronous: true
-      cache: false
+      cache: true
       onStatusChanged: {
         if (wallpaper.status === Image.Error && wallpaper.source.toString() !== `file://${SWallpaper.fallback}`) {
           wallpaper.source = `file://${SWallpaper.fallback}`;

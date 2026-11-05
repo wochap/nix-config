@@ -14,11 +14,20 @@ Singleton {
   property var paths: ({})
 
   function refresh() {
-    queryProcess.running = true;
+    if (!queryProcess.running) {
+      queryProcess.running = true;
+    }
   }
 
   function pathFor(name) {
     return root.paths[name] ?? root.fallback;
+  }
+
+  Timer {
+    interval: 5000
+    repeat: true
+    running: true
+    onTriggered: root.refresh()
   }
 
   Process {
