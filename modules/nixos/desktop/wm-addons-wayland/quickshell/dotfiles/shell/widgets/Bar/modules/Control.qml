@@ -56,22 +56,12 @@ BarChipButton {
       color: SPowerProfiles.iconColor
     }
 
-    RowLayout {
+    SystemIcon {
       visible: SUpower.available
-      spacing: 2
-
-      SystemIcon {
-        icon: SUpower.batteryIcon
-        size: 22
-        enableColoriser: true
-        color: SUpower.batteryIconColor
-      }
-
-      StyledText {
-        text: Math.round(SUpower.percentage * 100).toString()
-        font.pixelSize: 10
-        color: Theme.options.text
-      }
+      icon: SUpower.batteryIcon
+      size: 28
+      enableColoriser: true
+      color: SUpower.batteryIconColor
     }
   }
 }
