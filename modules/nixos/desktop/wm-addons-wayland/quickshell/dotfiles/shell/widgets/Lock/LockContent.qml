@@ -184,12 +184,27 @@ FocusScope {
 
     anchors.fill: parent
     focus: true
+    opacity: 0
+
+    Component.onCompleted: enterAnimation.start()
 
     Keys.onPressed: event => root.handleKey(event)
+
+    NumberAnimation {
+      id: enterAnimation
+
+      target: content
+      property: "opacity"
+      from: 0
+      to: 1
+      duration: SLockSession.enterFade
+      easing.type: Easing.OutCubic
+    }
 
     // hold, then fade the whole surface before the lock drops
     SequentialAnimation {
       running: SLockSession.isSuccess
+      onStarted: enterAnimation.stop()
       onStopped: {
         if (!SLockSession.isSuccess) {
           content.opacity = 1;

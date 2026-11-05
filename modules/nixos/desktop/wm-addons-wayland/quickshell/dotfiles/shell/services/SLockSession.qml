@@ -20,6 +20,7 @@ Singleton {
   readonly property int idleDimDelay: 30000
   // spinner shows only when PAM takes longer, avoids flicker
   readonly property int spinnerDelay: 300
+  readonly property int enterFade: 250
   readonly property int successHold: 120
   readonly property int successFade: 250
   readonly property bool isFingerprintEnabled: Quickshell.env("QS_LOCK_FPRINT") === "1"
