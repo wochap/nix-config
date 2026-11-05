@@ -73,7 +73,8 @@ in
         packages = with pkgs; [ bubblewrap ];
 
         shellAliases = {
-          ai-sandbox = "agents-sandbox";
+          agents-sandbox = "agents-sandbox ";
+          ai-sandbox = "agents-sandbox ";
         };
 
         sessionVariables = {
