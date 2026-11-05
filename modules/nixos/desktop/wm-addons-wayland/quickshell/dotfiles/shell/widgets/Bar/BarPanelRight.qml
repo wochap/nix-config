@@ -29,7 +29,6 @@ RowLayout {
     Layout.fillHeight: true
     // HACK: MaterialIcon offset
     Layout.leftMargin: ConfigBar.modulesSpacing
-    Layout.rightMargin: 0
     spacing: ConfigBar.modulesSpacing
     visible: isFocused && (capslock.isVisible || tt.isVisible || idleInhibit.isVisible || agents.isVisible || mail.isVisible || offlinemsmtp.isVisible || recorder.isVisible || wireguard.isVisible || notifications.isVisible)
 
@@ -94,12 +93,17 @@ RowLayout {
     }
   }
 
-  Control {
-    visible: isFocused
+  RowLayout {
     Layout.fillHeight: true
-  }
+    spacing: 0
 
-  Clock {
-    Layout.fillHeight: true
+    Control {
+      visible: isFocused
+      Layout.fillHeight: true
+    }
+
+    Clock {
+      Layout.fillHeight: true
+    }
   }
 }
