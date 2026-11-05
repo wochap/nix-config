@@ -107,7 +107,10 @@ is_text_file() {
   local target=$1 encoding
 
   [[ -f $target ]] || return 1
-  encoding=$(file --brief --mime-encoding -- "$target")
+  if [[ ! -s $target ]]; then
+    return 0
+  fi
+  encoding=$(file -L --brief --mime-encoding -- "$target")
   [[ $encoding != binary ]]
 }
 
@@ -171,6 +174,9 @@ materialize_stdin() {
   image/gif) suffix=.gif ;;
   image/webp) suffix=.webp ;;
   text/calendar) suffix=.ics ;;
+  application/yaml | application/x-yaml | text/yaml | text/x-yaml) suffix=.yaml ;;
+  application/toml | application/x-toml) suffix=.toml ;;
+  application/json) suffix=.json ;;
   application/vnd.openxmlformats-officedocument.wordprocessingml.document) suffix=.docx ;;
   application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) suffix=.xlsx ;;
   application/vnd.openxmlformats-officedocument.presentationml.presentation) suffix=.pptx ;;
@@ -214,7 +220,7 @@ open_tui() {
     require lynx
     exec lynx "$target"
     ;;
-  text/* | application/json | application/xml | application/javascript)
+  text/* | application/json* | application/xml* | application/*javascript* | application/*typescript* | application/*yaml* | application/*toml* | application/*sql* | application/*graphql* | application/x-shellscript | application/x-sh | application/x-csh | application/x-fishscript | application/x-ruby | application/x-perl | application/x-php | application/x-python)
     require less
     exec less -- "$target"
     ;;
@@ -272,6 +278,12 @@ open_tui() {
       exec mpv --vo=kitty -- "$target"
       ;;
     esac
+    case "${target,,}" in
+    *.yaml | *.yml | *.toml | *.json | *.xml | *.txt | *.md | *.nix | *.sh | *.bash | *.zsh | *.fish | *.rs | *.js | *.mjs | *.cjs | *.ts | *.mts | *.cts | *.jsx | *.tsx | *.py | *.rb | *.go | *.c | *.h | *.cpp | *.hpp | *.cc | *.hh | *.java | *.kt | *.kts | *.scala | *.lua | *.zig | *.sql | *.graphql | *.gql | *.css | *.scss | *.sass | *.less | *.diff | *.patch | *.env | *.log | *.conf | *.cfg | *.ini)
+      require less
+      exec less -- "$target"
+      ;;
+    esac
     printf 'smart-open: no terminal opener for %s\n' "$mime" >&2
     return 1
     ;;
@@ -291,7 +303,7 @@ gui_handler() {
     ;;
   text/html | application/xhtml+xml) printf 'web\n' ;;
   inode/directory) printf 'directory\n' ;;
-  text/* | application/json | application/xml | application/javascript | application/x-subrip | application/x-srt) printf 'text\n' ;;
+  text/* | application/json* | application/xml* | application/*javascript* | application/*typescript* | application/*yaml* | application/*toml* | application/*sql* | application/*graphql* | application/x-shellscript | application/x-sh | application/x-csh | application/x-fishscript | application/x-ruby | application/x-perl | application/x-php | application/x-python | application/x-subrip | application/x-srt) printf 'text\n' ;;
   image/*) printf 'image\n' ;;
   application/pdf) printf 'pdf\n' ;;
   audio/* | video/*) printf 'media\n' ;;
@@ -302,7 +314,16 @@ gui_handler() {
     text) printf 'text\n' ;;
     image) printf 'image\n' ;;
     audio | video) printf 'media\n' ;;
-    *) printf 'fallback:%s\n' "$mime" ;;
+    *)
+      case "${target,,}" in
+      *.yaml | *.yml | *.toml | *.json | *.xml | *.txt | *.md | *.nix | *.sh | *.bash | *.zsh | *.fish | *.rs | *.js | *.mjs | *.cjs | *.ts | *.mts | *.cts | *.jsx | *.tsx | *.py | *.rb | *.go | *.c | *.h | *.cpp | *.hpp | *.cc | *.hh | *.java | *.kt | *.kts | *.scala | *.lua | *.zig | *.sql | *.graphql | *.gql | *.css | *.scss | *.sass | *.less | *.diff | *.patch | *.env | *.log | *.conf | *.cfg | *.ini)
+        printf 'text\n'
+        ;;
+      *)
+        printf 'fallback:%s\n' "$mime"
+        ;;
+      esac
+      ;;
     esac
     ;;
   esac
@@ -365,6 +386,7 @@ gui_handlers=()
 
 for original_target in "$@"; do
   target=$original_target
+  target=${target#file://}
   if [[ $target == - ]]; then
     target=$(materialize_stdin)
   fi
@@ -374,7 +396,7 @@ for original_target in "$@"; do
   elif [[ -d $target ]]; then
     mime=inode/directory
   elif [[ -e $target ]]; then
-    mime=${mime_override:-$(file --brief --mime-type -- "$target")}
+    mime=${mime_override:-$(file -L --brief --mime-type -- "$target")}
   else
     printf 'smart-open: target does not exist: %s\n' "$target" >&2
     exit 1

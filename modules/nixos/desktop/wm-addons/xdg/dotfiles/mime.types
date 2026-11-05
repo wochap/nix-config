@@ -371,7 +371,7 @@ application/resource-lists-diff+xml		rld
 application/rfc+xml				rfcxml
 application/riscos
 application/rlmi+xml
-application/rls-services+xml			rs
+application/rls-services+xml
 application/route-apd+xml			rapd
 application/route-s-tsid+xml			sls
 application/route-usd+xml			rusd
@@ -1636,6 +1636,7 @@ application/yang-data+json
 application/yang-data+xml
 application/yang-patch+json
 application/yang-patch+xml
+application/yaml				yaml yml
 application/yin+xml				yin
 application/zip					zip
 application/zlib
@@ -2175,6 +2176,25 @@ text/x-sh					sh
 text/x-tcl					tcl tk
 text/x-tex					tex ltx sty cls
 text/x-vcalendar				vcs
+text/x-yaml					yaml yml
+text/rust					rs
+text/typescript					ts mts cts
+text/jsx					jsx
+text/tsx					tsx
+text/x-nix					nix
+text/x-zig					zig
+text/x-lua					lua
+text/x-go					go
+text/x-kotlin					kt kts
+text/x-swift					swift
+text/x-clojure					clj cljs
+text/x-elixir					ex exs
+text/x-erlang					erl hrl
+text/x-ocaml					ml mli
+text/x-r					r
+text/x-cmake					cmake
+text/x-dockerfile				dockerfile
+text/x-toml					toml
 text/xml
 text/xml-dtd
 text/xml-external-parsed-entity
