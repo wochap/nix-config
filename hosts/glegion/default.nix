@@ -31,6 +31,8 @@ in
     # cli
     _custom.programs.core-utils-extra-linux.enable = true;
     _custom.programs.core-utils-linux.enable = true;
+    _custom.programs.geancam.enable = true;
+    _custom.programs.geancam.settings.render.profile = "glegion";
     _custom.programs.nix-direnv.enable = true;
 
     # gui

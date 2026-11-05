@@ -61,6 +61,7 @@
 
     ./programs/cli/core-utils-extra-linux
     ./programs/cli/core-utils-linux
+    ./programs/cli/geancam
 
     ./programs/gui/dolphin
     ./programs/gui/electron
