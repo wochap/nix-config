@@ -77,6 +77,8 @@
     wt.inputs.home-manager.follows = "home-manager";
     wayland-firewall.url = "github:wochap/wayland-firewall";
     wayland-firewall.inputs.nixpkgs.follows = "nixpkgs";
+    geancam.url = "git+ssh://git@github.com/wochap/geancam.git";
+    geancam.inputs.nixpkgs.follows = "nixpkgs";
 
     # third party nixpkgs|overlays|modules
     chaotic.url = "github:chaotic-cx/nyx?rev=bb52c6c8936353a03000929d37146bc636f4673f"; # main (10 jul 2026)

@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -19,6 +20,10 @@ in
 {
   options._custom.programs.geancam = {
     enable = lib.mkEnableOption { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = inputs.geancam.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    };
     settings = lib.mkOption {
       type = yamlFormat.type;
       default = { };
@@ -105,6 +110,8 @@ in
     _custom.hm = {
       xdg.configFile."geancam/config.yaml".source =
         yamlFormat.generate "geancam-config.yaml" cfg.settings;
+
+      home.packages = [ cfg.package ];
 
       home.symlinks = {
         "${hmConfig.home.homeDirectory}/Music/geancam" =
