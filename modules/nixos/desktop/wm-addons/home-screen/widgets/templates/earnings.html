@@ -32,7 +32,7 @@
     <div class="text-right cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="260px">
       <div data-popover-html><p class="sc-tip">@TIP_EPSESTIMATE@</p></div>
       <div class="size-h6">EPS est.</div>
-      <div class="color-highlight">{{ if ne (.String "epsEstimate") "" }}{{ printf "%.2f" (.Float "epsEstimate") }}{{ else }}&mdash;{{ end }}</div>
+      <div class="color-highlight">{{ if ne (.String "epsEstimate") "" }}{{ formatPrice (.Float "epsEstimate") }}{{ else }}&mdash;{{ end }}</div>
     </div>
   </li>
   {{- end }}

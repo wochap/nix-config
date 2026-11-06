@@ -69,7 +69,7 @@
 
   <div class="sc-head cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="280px">
     <div data-popover-html><p class="sc-tip">@TIP_PRICE@</p></div>
-    <div class="sc-price color-highlight">{{ printf "%.2f" $price }} <span class="sc-cur">{{ $currency }}</span></div>
+    <div class="sc-price color-highlight">{{ formatPrice $price }} <span class="sc-cur">{{ $currency }}</span></div>
     <div class="sc-day {{ if ge $dayChange 0.0 }}color-positive{{ else }}color-negative{{ end }}">{{ printf "%+.2f" $dayChange }}% today</div>
   </div>
 
@@ -114,7 +114,7 @@
       <div data-popover-html>
         <p class="sc-tip">@TIP_SMA200@</p>
         {{- if gt $sma200 0.0 }}
-        <p class="sc-now">Now: SMA 200 = {{ printf "%.2f" $sma200 }}, price is {{ printf "%+.1f" (percentChange $price $sma200) }}% &mdash; {{ if ge $price $sma200 }}long-term uptrend.{{ else }}long-term downtrend.{{ end }}</p>
+        <p class="sc-now">Now: SMA 200 = {{ formatPrice $sma200 }}, price is {{ printf "%+.1f" (percentChange $price $sma200) }}% &mdash; {{ if ge $price $sma200 }}long-term uptrend.{{ else }}long-term downtrend.{{ end }}</p>
         {{- else }}
         <p class="sc-now">Not enough history (needs 200 sessions).</p>
         {{- end }}
@@ -129,7 +129,7 @@
       <div data-popover-html>
         <p class="sc-tip">@TIP_TREND@</p>
         {{- if and (gt $sma50 0.0) (gt $sma200 0.0) }}
-        <p class="sc-now">Now: SMA 50 {{ printf "%.2f" $sma50 }} vs SMA 200 {{ printf "%.2f" $sma200 }}.</p>
+        <p class="sc-now">Now: SMA 50 {{ formatPrice $sma50 }} vs SMA 200 {{ formatPrice $sma200 }}.</p>
         {{- end }}
       </div>
       <div class="sc-label">Trend</div>
@@ -142,7 +142,7 @@
       <div data-popover-html>
         <p class="sc-tip">@TIP_DRAWDOWN@</p>
         {{- if gt $hi52 0.0 }}
-        <p class="sc-now">Now: 52w high {{ printf "%.2f" $hi52 }}, price {{ printf "%.1f" (percentChange $price $hi52) }}% from it.</p>
+        <p class="sc-now">Now: 52w high {{ formatPrice $hi52 }}, price {{ printf "%.1f" (percentChange $price $hi52) }}% from it.</p>
         {{- end }}
       </div>
       <div class="sc-label">From high</div>
@@ -155,14 +155,14 @@
     <div class="sc-stat sc-stat-wide cursor-help" data-popover-type="html" data-popover-position="above" data-popover-max-width="300px">
       <div data-popover-html>
         <p class="sc-tip">@TIP_WEEK52@</p>
-        <p class="sc-now">Now: low {{ printf "%.2f" $lo52 }}, high {{ printf "%.2f" $hi52 }}, price {{ printf "%.2f" $price }}.</p>
+        <p class="sc-now">Now: low {{ formatPrice $lo52 }}, high {{ formatPrice $hi52 }}, price {{ formatPrice $price }}.</p>
       </div>
       <div class="sc-label">52w range</div>
       {{- $pos := 50.0 }}
       {{- if gt $hi52 $lo52 }}{{ $pos = mul (div (sub $price $lo52) (sub $hi52 $lo52)) 100.0 }}{{ end }}
       {{- if lt $pos 0.0 }}{{ $pos = 0.0 }}{{ end }}{{ if gt $pos 100.0 }}{{ $pos = 100.0 }}{{ end }}
       <div class="sc-bar"><div class="sc-bar-dot" style="left: {{ printf "%.0f" $pos }}%"></div></div>
-      <div class="sc-bar-labels"><span>{{ printf "%.2f" $lo52 }}</span><span>{{ printf "%.2f" $hi52 }}</span></div>
+      <div class="sc-bar-labels"><span>{{ formatPrice $lo52 }}</span><span>{{ formatPrice $hi52 }}</span></div>
     </div>
   </div>
 

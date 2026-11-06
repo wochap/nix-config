@@ -7,7 +7,7 @@
     <polyline fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"
       points="{{ range $i, $c := $closes }}{{ $v := $c.Float "" }}{{ if and (ge $i $start@KEY@) (gt $v 0.0) }}{{ printf "%.1f,%.1f " (div (mul (sub $i $start@KEY@) 300.0) $span) (add 4.0 (mul (div (sub $max@KEY@ $v) $rng) 72.0)) }}{{ end }}{{ end }}"/>
   </svg>
-  <span class="sc-chart-max">{{ printf "%.2f" $max@KEY@ }}</span>
-  <span class="sc-chart-min">{{ printf "%.2f" $min@KEY@ }}</span>
+  <span class="sc-chart-max">{{ formatPrice $max@KEY@ }}</span>
+  <span class="sc-chart-min">{{ formatPrice $min@KEY@ }}</span>
   {{- end }}
 </div>
