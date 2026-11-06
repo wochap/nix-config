@@ -64,11 +64,13 @@ in
         };
       };
 
-      translation = {
-        provider = lib.mkDefault "omniroute";
+      secrets = {
+        openai_api_key = lib.mkDefault { file = config.sops.secrets.local-omniroute-secret-key.path; };
+      };
+
+      translate = {
         base_url = lib.mkDefault "${host}:${toString omniRoutePublicPort}/v1";
         model = lib.mkDefault "geancam";
-        api_key = lib.mkDefault { file = config.sops.secrets.local-omniroute-secret-key.path; };
         glossary = lib.mkDefault [
           "Tacna"
           "Tarata"
