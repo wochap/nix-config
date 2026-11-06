@@ -44,8 +44,11 @@ Singleton {
 
   // Whenever a state changes, re-evaluate the notification queue.
   onIsSilentChanged: {
-    if (!root.isSilent)
+    if (!root.isSilent) {
       root.silencedCount = 0;
+    } else {
+      root.timeoutAllPopups();
+    }
     processQueues();
   }
   onIsIdleChanged: {
@@ -151,10 +154,10 @@ Singleton {
   // The central "gatekeeper" function. It decides when to show notifications
   // from the incomingQueue based on the current system state.
   function processQueues() {
-    // DND: everything but critical notifications goes straight to history
-    if (root.isSilent && root.incomingQueue.some(notification => !notification.isCritical)) {
-      const silenced = root.incomingQueue.filter(notification => !notification.isCritical);
-      root.incomingQueue = root.incomingQueue.filter(notification => notification.isCritical);
+    // DND: all notifications go straight to history
+    if (root.isSilent && root.incomingQueue.length > 0) {
+      const silenced = root.incomingQueue;
+      root.incomingQueue = [];
       silenced.forEach(notification => root.silenceNotification(notification));
     }
 
