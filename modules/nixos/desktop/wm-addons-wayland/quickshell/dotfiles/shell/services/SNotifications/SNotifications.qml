@@ -338,6 +338,16 @@ Singleton {
     popups.forEach(popup => root.requestPopupRemoval(popup.notificationId, true));
   }
 
+  // Removes all currently visible popups and queued upcoming notifications without affecting history.
+  function discardAllPopupsAndQueued() {
+    const queued = [...root.incomingQueue];
+    root.incomingQueue = [];
+    queued.forEach(notification => root.disposeNotification(notification));
+
+    const popups = [...root.popupList];
+    popups.forEach(popup => root.requestPopupRemoval(popup.notificationId, true));
+  }
+
   // Moves all currently visible pop-ups to the history list.
   function timeoutAllPopups() {
     const popups = [...root.popupList];
@@ -347,6 +357,41 @@ Singleton {
       popup.popupExitHistoryOrder = index;
       root.requestPopupRemoval(popup.notificationId, false);
     });
+  }
+
+  // Moves all currently visible popups and queued upcoming notifications to the history list.
+  function dismissAllPopupsAndQueued() {
+    const queued = [...root.incomingQueue];
+    root.incomingQueue = [];
+
+    const nonTransientQueued = [];
+    queued.forEach(notification => {
+      if (notification.isTransient) {
+        root.disposeNotification(notification);
+      } else {
+        nonTransientQueued.push(notification);
+      }
+    });
+
+    const popups = [...root.popupList];
+    const batchId = ++root.popupExitBatchCounter;
+
+    const reversedQueued = nonTransientQueued.slice().reverse();
+    reversedQueued.forEach((item, index) => {
+      item.popupExitBatchId = batchId;
+      item.popupExitHistoryOrder = index;
+    });
+
+    popups.forEach((popup, index) => {
+      popup.popupExitBatchId = batchId;
+      popup.popupExitHistoryOrder = reversedQueued.length + index;
+      root.requestPopupRemoval(popup.notificationId, false);
+    });
+
+    if (reversedQueued.length > 0) {
+      root.setHistory([...reversedQueued, ...root.list]);
+      root.schedulePersist();
+    }
   }
 
   function attemptInvokeAction(id, actionIdentifier) {

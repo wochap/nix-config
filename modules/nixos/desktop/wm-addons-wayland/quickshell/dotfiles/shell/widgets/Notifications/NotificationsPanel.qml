@@ -227,6 +227,7 @@ PanelWindow {
       // empty state
       ColumnLayout {
         visible: root.isEmpty
+        Layout.alignment: Qt.AlignHCenter
         Layout.fillWidth: true
         Layout.fillHeight: true
         spacing: 6

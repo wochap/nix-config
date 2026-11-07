@@ -36,6 +36,14 @@ Scope {
       SNotifications.timeoutAllPopups();
     }
 
+    function dismissAllUpcoming() {
+      SNotifications.dismissAllPopupsAndQueued();
+    }
+
+    function discardAllUpcoming() {
+      SNotifications.discardAllPopupsAndQueued();
+    }
+
     function discard(id: int) {
       SNotifications.discardNotification(id);
     }

@@ -718,6 +718,16 @@ if not constants.is_kiosk then
       hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications discardPopups"),
       { description = "Discard" }
     )
+    hl.bind(
+      "a",
+      hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications dismissAllUpcoming"),
+      { description = "Dismiss All" }
+    )
+    hl.bind(
+      "SHIFT + A",
+      hl.dsp.exec_cmd("quickshell --path ~/.config/quickshell/shell ipc call notifications discardAllUpcoming"),
+      { description = "Discard All" }
+    )
     hl.bind("escape", hl.dsp.submap("reset"), { description = "+Exit" })
   end)
 end
