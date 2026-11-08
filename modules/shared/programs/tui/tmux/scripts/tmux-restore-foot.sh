@@ -6,6 +6,7 @@
 # Usage: tmux-restore-foot [OPTIONS]
 #   --save             Save current tmux sessions (tmux-resurrect) and Hyprland workspaces
 #   --restore          Restore tmux sessions (tmux-resurrect) and open/move footclients
+#   -y, --yes          Skip confirmation prompt
 #   -L <socket-name>   Specify tmux server socket name (default: "default")
 #   -h, --help         Show this help message
 
@@ -14,9 +15,10 @@ set -euo pipefail
 action="restore"
 restore_resurrect=0
 tmux_socket="default"
+skip_confirm=0
 
 show_help() {
-  sed -n '3,10p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '3,/^$/p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 while [[ $# -gt 0 ]]; do
@@ -28,6 +30,10 @@ while [[ $# -gt 0 ]]; do
   --restore)
     action="restore"
     restore_resurrect=1
+    shift
+    ;;
+  -y | --yes)
+    skip_confirm=1
     shift
     ;;
   -L)
@@ -79,6 +85,12 @@ if [[ "$action" == "save" ]]; then
   if ! tmux_cmd has-session 2>/dev/null; then
     echo "tmux-restore-foot: No running tmux session found for socket '$tmux_socket'." >&2
     exit 0
+  fi
+
+  if ((!skip_confirm)); then
+    if ! gum confirm "Save current tmux sessions?"; then
+      exit 0
+    fi
   fi
 
   # Trigger tmux-resurrect save
@@ -135,6 +147,23 @@ fi
 # ---------------------------------------------------------
 # RESTORE ACTION
 # ---------------------------------------------------------
+resurrect_dir="$(get_resurrect_dir)"
+last_file="$resurrect_dir/last"
+ws_file="$resurrect_dir/hyprland_workspaces"
+
+if ((restore_resurrect)); then
+  if [[ ! -e "$last_file" ]]; then
+    echo "No tmux-resurrect save found at $last_file" >&2
+    exit 1
+  fi
+
+  if ((!skip_confirm)); then
+    if ! gum confirm "Restore tmux sessions?"; then
+      exit 0
+    fi
+  fi
+fi
+
 restore_script="$HOME/.config/tmux/plugins/resurrect/scripts/restore.sh"
 
 # tmux-resurrect needs a running server to restore into
@@ -151,10 +180,6 @@ elif ! tmux_cmd has-session 2>/dev/null; then
   tmux_cmd new-session -d -s tmux-server
 fi
 
-resurrect_dir="$(get_resurrect_dir)"
-last_file="$resurrect_dir/last"
-ws_file="$resurrect_dir/hyprland_workspaces"
-
 declare -A session_workspaces=()
 if is_hyprland && [[ -f "$ws_file" ]]; then
   while IFS=$'\t' read -r s_name s_ws; do
@@ -163,11 +188,6 @@ if is_hyprland && [[ -f "$ws_file" ]]; then
 fi
 
 if ((restore_resurrect)); then
-  if [[ ! -e "$last_file" ]]; then
-    echo "No tmux-resurrect save found at $last_file" >&2
-    exit 1
-  fi
-
   # run-shell without -b blocks until the restore finishes
   tmux_cmd run-shell "$restore_script"
 
