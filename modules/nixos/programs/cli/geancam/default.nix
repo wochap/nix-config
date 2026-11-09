@@ -113,7 +113,7 @@ in
       xdg.configFile."geancam/config.yaml".source =
         yamlFormat.generate "geancam-config.yaml" cfg.settings;
 
-      home.packages = [ cfg.package ];
+      # home.packages = [ cfg.package ];
 
       home.symlinks = {
         "${hmConfig.home.homeDirectory}/Music/geancam" =
