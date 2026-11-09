@@ -9,9 +9,10 @@ for command_name in rtk openspec; do
   fi
 done
 
-# RTK's Codex integration creates the shared RTK instructions and references
-# them from AGENTS.md.
+# RTK's integration
+rtk init --agent pi
 rtk init --codex
+rtk init --agent antigravity
 
 openspec init --tools qwen,codex,pi,claude,antigravity
 
