@@ -1107,11 +1107,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794085444,
-        "narHash": "sha256-31ylqxsdrB+Sf7selzPAYudqFOlY+uTkvfY9kGPqkYE=",
+        "lastModified": 1794245577,
+        "narHash": "sha256-w7ILQYi9XtOznoGVFHwaiXiCL9dwa1yvsPoRxH7DprE=",
         "ref": "refs/heads/main",
-        "rev": "ae1fcf491bb9fee803929c3a3b0e2e53bd3e68cf",
-        "revCount": 55,
+        "rev": "36197ec41d2d9537e021d2606e0c454628e0d9a7",
+        "revCount": 103,
         "type": "git",
         "url": "ssh://git@github.com/wochap/geancam.git"
       },
@@ -3561,16 +3561,16 @@
     "rtk": {
       "flake": false,
       "locked": {
-        "lastModified": 1788532482,
-        "narHash": "sha256-6iktqnF+TgBpl02YAcGGR5637WXT2Ht9BPihAIrP4AQ=",
+        "lastModified": 1794134740,
+        "narHash": "sha256-dkMae+wh/W0qytr5AyRbibmrGMtIous88Asq13FLnjI=",
         "owner": "rtk-ai",
         "repo": "rtk",
-        "rev": "fde0a8f185945556f51718de0f4c430bb62b3df6",
+        "rev": "e288a18c04452fd26192f59132e5324a8bb6924d",
         "type": "github"
       },
       "original": {
         "owner": "rtk-ai",
-        "ref": "v0.48.0",
+        "ref": "v1.2.0",
         "repo": "rtk",
         "type": "github"
       }
@@ -4315,11 +4315,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791477472,
-        "narHash": "sha256-Hay5GM4eleaHzLMyOP2YoPPs8Xm/Z/0DkXvO5kFjxIk=",
+        "lastModified": 1794165830,
+        "narHash": "sha256-otpB8AGz8/gHYBRofKLsSJTWbh2dcnQVevulE9Sw2l8=",
         "owner": "wochap",
         "repo": "wt",
-        "rev": "03292bc84054146280819e4698f6f28b907e5c4b",
+        "rev": "d763570910042bd487c80c244904b913a715a9c4",
         "type": "github"
       },
       "original": {

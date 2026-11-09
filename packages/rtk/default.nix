@@ -10,7 +10,8 @@ rustPlatform.buildRustPackage {
 
   src = inputs.rtk;
 
-  cargoHash = "sha256-UzTZOHdh/NuWtraPaZ75xsLBcdLSWHQGcE6gSp3AHDY=";
+  # cargoHash = lib.fakeHash;
+  cargoHash = "sha256-0VUc3Se3MdmffCkbCw2esLnmht9ZhwnmVCqxjudElfA=";
 
   # Several tests require writable user state and external commands unavailable
   # in the isolated Nix build environment.

@@ -149,7 +149,7 @@
     comfyui.flake = false;
     ollama.url = "github:ollama/ollama/v0.40.12";
     ollama.flake = false;
-    rtk.url = "github:rtk-ai/rtk/v0.48.0";
+    rtk.url = "github:rtk-ai/rtk/v1.2.0";
     rtk.flake = false;
 
     # terminal tools
