@@ -26,8 +26,8 @@ Item {
   readonly property string appId: root.activeWindow?.class ?? ""
   readonly property string title: root.activeWindow?.title ?? ""
 
-  property int maxAppIdLength: 10
-  property int maxTitleLength: 18
+  property int maxAppIdLength: 32
+  property int maxTitleLength: 32
 
   function truncateMiddle(str, maxLen) {
     if (!str) return "";
