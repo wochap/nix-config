@@ -128,9 +128,9 @@ overridden by the `OPENSPEC_PIPELINE_PRESET` environment variable or `--preset`.
 
 | Preset   | Agent    | Step    | Model                 | Effort   |
 | -------- | -------- | ------- | --------------------- | -------- |
-| `agy`    | `agy`    | apply   | `gemini-3.8-flash`    | `medium` |
-|          |          | sync    | `gemini-3.8-flash`    | `medium` |
-|          |          | archive | `gemini-3.8-flash`    | `low`    |
+| `agy`    | `agy`    | apply   | `gemini-4-hydrogen`    | `medium` |
+|          |          | sync    | `gemini-4-hydrogen`    | `medium` |
+|          |          | archive | `gemini-4-hydrogen`    | `low`    |
 | `claude` | `claude` | apply   | `claude-opus-5-5[1m]` | `medium` |
 |          |          | sync    | `claude-opus-5-5[1m]` | `medium` |
 |          |          | archive | `claude-sonnet-5`     | `low`    |

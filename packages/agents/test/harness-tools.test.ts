@@ -291,7 +291,7 @@ describe("plan", () => {
 
   test("agy rejects --no-tools when sandbox is permissive", () => {
     const body = {
-      model: "agy/gemini-3.8-flash",
+      model: "agy/gemini-4-hydrogen",
       messages: [{ role: "user", content: "hello" }],
       tools: [
         {

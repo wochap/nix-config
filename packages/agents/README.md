@@ -33,7 +33,7 @@ shows progress (and takes the keys) on stderr when stderr is a TTY or with
 `--verbose`, so a script can read the JSON while you watch.
 
 Pick the agent with `-a/--agent` (`claude`, `pi` or `agy`, default `claude`); `-m`
-defaults to that agent's model (`gemini-3.8-flash` for agy). Resumed runs (`-r`), `attach` and `last` use
+defaults to that agent's model (`gemini-4-hydrogen` for agy). Resumed runs (`-r`), `attach` and `last` use
 the session's own agent, so they need no `-a`.
 
 `--no-tools` runs the agent with no tools at all (built-in, MCP,

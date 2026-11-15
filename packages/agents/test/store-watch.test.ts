@@ -49,7 +49,7 @@ describe("store prompt preservation and retrieval", () => {
       const session = store.createSession({
         id: "test-session-fallback",
         agent: "agy",
-        model: "gemini-3.8-flash",
+        model: "gemini-4-hydrogen",
         cwd: tmp,
         prompt: "Legacy prompt without file",
       });

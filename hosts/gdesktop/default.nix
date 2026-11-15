@@ -315,13 +315,12 @@ in
     _custom.services.ai.enableArticle = true;
     _custom.services.ai.agentsServer.enable = true;
     _custom.services.ai.agentsServer.models = [
+      "claude/claude-fable-5-1"
       "claude/claude-opus-5-5[1m]"
       "claude/claude-sonnet-5-5"
       "claude/claude-haiku-5-5"
-      "claude/claude-fable-5-1"
-      "pi/omniroute/desktop-free"
       "agy/gemini-4-argon"
-      "agy/gemini-3.8-flash"
+      "agy/gemini-4-hydrogen"
     ];
     _custom.services.ai.briefing.enable = true;
 

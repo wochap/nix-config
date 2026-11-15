@@ -28,9 +28,9 @@ const EFFORT: Record<Effort, string> = { low: "low", medium: "medium", high: "hi
 const effortFlags = (effort: Effort = DEFAULT_EFFORT) => ["--effort", EFFORT[effort]];
 
 // Antigravity's model catalog suffixes tiered models with -low/-medium/-high.
-// Map bare family names (e.g. "gemini-4-argon", "gemini-3.8-flash") using the
+// Map bare family names (e.g. "gemini-4-argon", "gemini-4-hydrogen") using the
 // requested effort (defaulting to "medium"), while leaving explicit IDs untouched.
-const TIERED_FAMILIES = new Set(["gemini-4-argon", "gemini-3.8-flash", "claude-opus-5-5", "claude-sonnet-5-5"]);
+const TIERED_FAMILIES = new Set(["gemini-4-argon", "gemini-4-hydrogen", "claude-opus-5-5", "claude-sonnet-5-5"]);
 const MODEL_TIER: Record<Effort, "low" | "medium" | "high"> = {
   low: "low",
   medium: "medium",
@@ -168,7 +168,7 @@ function transcriptEvents(entry: any, root: string): { events: Event[]; idle: bo
 // its stream-json input rejects non-text blocks ("only \"text\"").
 export const agy: Adapter = {
   name: "agy",
-  defaultModel: "gemini-3.8-flash",
+  defaultModel: "gemini-4-hydrogen",
   supportsNoTools: (sandbox) => sandbox === "strict" && Boolean(Bun.which("bwrap")),
 
   async run({ id, prompt, model, effort, cwd, resume, noTools, systemFile, images, rawLog, signal, sandbox, onEvent }: RunOptions) {

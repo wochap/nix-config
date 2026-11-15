@@ -176,7 +176,7 @@ describe("end-to-end serve tool calling", () => {
     expect(text).toContain("data: [DONE]");
   }, 60000);
 
-  test("tool call with agy (gemini-3.8-flash)", async () => {
+  test("tool call with agy (gemini-4-hydrogen)", async () => {
     const tools = [
       {
         type: "function",
@@ -196,7 +196,7 @@ describe("end-to-end serve tool calling", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "agy/gemini-3.8-flash",
+        model: "agy/gemini-4-hydrogen",
         messages: [{ role: "user", content: "What is the weather in Miami? Use get_weather." }],
         tools,
         tool_choice: "required",

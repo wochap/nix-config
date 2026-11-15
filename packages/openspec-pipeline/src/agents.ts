@@ -16,9 +16,9 @@ export const PRESETS: Record<string, Preset> = {
   agy: {
     agent: "agy",
     models: {
-      apply: "gemini-3.8-flash",
-      sync: "gemini-3.8-flash",
-      archive: "gemini-3.8-flash",
+      apply: "gemini-4-hydrogen",
+      sync: "gemini-4-hydrogen",
+      archive: "gemini-4-hydrogen",
     },
     efforts: {
       apply: "medium",
