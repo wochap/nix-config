@@ -156,7 +156,7 @@ Singleton {
   function processQueues() {
     // DND: all notifications go straight to history
     if (root.isSilent && root.incomingQueue.length > 0) {
-      const silenced = root.incomingQueue;
+      const silenced = [...root.incomingQueue];
       root.incomingQueue = [];
       silenced.forEach(notification => root.silenceNotification(notification));
     }
