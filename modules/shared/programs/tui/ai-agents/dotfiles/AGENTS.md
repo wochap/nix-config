@@ -1,3 +1,9 @@
+## Environment & Tooling
+- **NixOS & Flakes**: Assume project tools are not on global `PATH`. Check the repo root and target subproject folder (e.g., `web/`, `desktop/`, `mobile/`) for `README.md` and `flake.nix` (`devShells`), then wrap commands in the appropriate Nix shell:
+  - **Default shell**: `nix develop -c sh -c "<cmd>"`
+  - **Named shell**: `nix develop .#<shell> -c sh -c "<cmd>"`
+  - **Subfolder flake**: `nix develop ./<dir> -c sh -c "<cmd>"`
+
 ## Communication & Workflow
 - never add co-authored message commits
 - when asking a question, ideally provide options and state your recommendation.
