@@ -10,6 +10,7 @@ it from the `openspec-pipeline` skill (`skill/SKILL.md`, install to
 openspec-pipeline export-formats-quality-config inspector-redesign
 openspec-pipeline --preset claude --gate 'npm test' my-change
 openspec-pipeline --preset agy --apply-effort high my-change
+openspec-pipeline --send "Use postgres instead of sqlite" my-change
 openspec-pipeline --help
 ```
 

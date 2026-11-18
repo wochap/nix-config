@@ -17,6 +17,7 @@ agenttap run -q -a pi "<prompt>"           # another agent (default: claude)
 agenttap run -q -a agy "<prompt>"          # agy (default: gemini-4-hydrogen)
 echo "<long prompt>" | agenttap run -q -   # prompt from stdin
 agenttap run -q -r <id> "<follow-up>"      # continue a session headless
+agenttap send [<id>] "<message>"           # steer a running session live (-m/-e to switch model/effort)
 agenttap run -q --no-tools "<question>"    # answer only, no tools (pass again on -r)
 agenttap last <id>                         # last message of a session
 agenttap ls                                # sessions of the last 7 days, --full for all
@@ -28,6 +29,10 @@ agenttap ls                                # sessions of the last 7 days, --full
 - Ids may be a unique prefix.
 - Always pass `-q` or `--json`; the prompt must be self-contained (the agent has none of your context).
 - `agenttap run` blocks until the agent finishes; exit code 1 means the agent failed.
+- To steer a running background session without stopping it, use
+  `agenttap send [<id>] "<message>"` (with `-m` / `-e` to switch model/effort
+  live, or `-C <dir>` to target another worktree). Omitting `<id>` targets the
+  running session in the current directory.
 - Tell the user the session id: they can follow it live with `agenttap watch <id>`
   or take it over with `agenttap attach <id>`.
 - Never run `agenttap attach` or `agenttap watch` yourself; both are for the user's terminal.

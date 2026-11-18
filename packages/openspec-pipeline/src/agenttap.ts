@@ -156,3 +156,48 @@ export async function last(id: string): Promise<string | null> {
 export async function attach(id: string): Promise<void> {
   await Bun.spawn([...cmd, "attach", id], { stdio: ["inherit", "inherit", "inherit"] }).exited;
 }
+
+/**
+ * Latest running OpenSpec pipeline session in the current directory.
+ * When `change` is given, prefers `/opsx:apply <change>` and falls back to any step for `change`.
+ */
+export async function running(change?: string, agent?: string): Promise<string | null> {
+  const child = Bun.spawn([...cmd, "ls", "--json"], { stdin: "ignore", stdout: "pipe", stderr: "ignore" });
+  const out = await new Response(child.stdout).text();
+  if ((await child.exited) !== 0) return null;
+  let sessions: { id: string; agent?: string; cwd: string; prompt: string; status: string }[];
+  try {
+    sessions = JSON.parse(out);
+  } catch {
+    return null;
+  }
+  const here = sessions.filter((s) => s.status === "running" && s.cwd === process.cwd() && (!agent || s.agent === agent));
+  if (change) {
+    const apply = here.find((s) => s.prompt.startsWith(`${invoke("apply", change)} `));
+    if (apply) return apply.id;
+    const anyStep = here.find((s) => (["apply", "sync", "archive"] as Step[]).some((st) => s.prompt.startsWith(`${invoke(st, change)} `)));
+    return anyStep?.id ?? null;
+  }
+  return here.find((s) => s.prompt.startsWith("/opsx:"))?.id ?? null;
+}
+
+/** Sends a live steering message (and optional model/effort override) to a running session. */
+export async function send(id: string, message: string, model?: string, effort?: string): Promise<void> {
+  const args = [
+    ...cmd,
+    "send",
+    ...(model ? ["-m", model] : []),
+    ...(effort ? ["-e", effort] : []),
+    id,
+    message,
+  ];
+  const child = Bun.spawn(args, { stdin: "ignore", stdout: "pipe", stderr: "pipe" });
+  const [stdout, stderr, code] = await Promise.all([
+    new Response(child.stdout).text(),
+    new Response(child.stderr).text(),
+    child.exited,
+  ]);
+  if (code !== 0) {
+    throw new Error(stderr.trim() || stdout.trim() || `agenttap send exited with code ${code}`);
+  }
+}

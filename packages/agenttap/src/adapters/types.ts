@@ -23,7 +23,9 @@ export type Event =
   /** The user took the session over interactively. */
   | { type: "takeover" }
   /** The user handed the session back to a headless run. */
-  | { type: "handback" };
+  | { type: "handback" }
+  /** Live steering message or config update sent mid-run. */
+  | { type: "send"; text: string; model?: string; effort?: Effort };
 
 /**
  * Normalized reasoning effort. Each adapter maps every level to its agent's

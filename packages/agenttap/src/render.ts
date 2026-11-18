@@ -47,5 +47,10 @@ export async function render(e: Event) {
       return println(`\n${color.blue("⇄ you took over")}`);
     case "handback":
       return println(`\n${color.blue("⇄ handed back")}`);
+    case "send": {
+      const meta = [e.model, e.effort].filter(Boolean).join(", ");
+      const tag = meta ? ` (${meta})` : "";
+      return println(`\n${color.blue(`⇄ sent${tag}:`)} ${e.text || "(config update)"}`);
+    }
   }
 }

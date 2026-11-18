@@ -13,6 +13,7 @@ agenttap run -a pi "fix the failing test"      # pi, its default model
 agenttap run -a pi -m omniroute/desktop-free "fix the failing test"
 agenttap run -q -C ~/repo "summarize the repo" # final answer only
 agenttap run -r <id> "continue"                # resume headless
+agenttap send [<id>] "use barrel exports"      # steer a running session live (-m/-e to switch model/effort)
 agenttap ls                                    # sessions of the last 7 days, --full for all, --all adds serve's
 agenttap ls --json                             # the same as a JSON array of metadata, newest first
 agenttap ls --via serve                        # only the OpenAI-compatible API's sessions

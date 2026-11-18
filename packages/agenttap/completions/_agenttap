@@ -12,6 +12,7 @@ _agenttap() {
   local -a commands
   commands=(
     'run:headless run'
+    'send:steer a running session live'
     'attach:take over a session interactively'
     'last:last agent message of a session'
     'ls:list sessions'
@@ -50,6 +51,16 @@ _agenttap() {
           ;;
         attach|last|watch)
           _arguments '1:session:_agenttap_sessions'
+          ;;
+        send)
+          _arguments \
+            '(-s --session -r --resume)'{-s,--session,-r,--resume}'[target session id]:session:_agenttap_sessions' \
+            '(-C --cwd)'{-C,--cwd}'[target running session in directory]:directory:_directories' \
+            '(-m --model)'{-m,--model}'[switch model]:model:' \
+            '(-e --effort)'{-e,--effort}'[switch effort]:effort:(low medium high xhigh max)' \
+            '--json[print JSON result]' \
+            '1:session or message:_agenttap_sessions' \
+            '2:message, or - for stdin:'
           ;;
         ls)
           _arguments \

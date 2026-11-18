@@ -3,6 +3,7 @@
 //   run     headless run; live rendered progress on a TTY, only the final
 //           answer when piped (what an agent calling this wants). On a TTY,
 //           Ctrl-T takes the running session over (see takeover.ts)
+//   send    steer a running session live (message, --model, --effort)
 //   attach  resume a session interactively
 //   last    last agent message of a session (also after interactive turns)
 //   ls      list sessions
@@ -11,6 +12,7 @@
 //
 // Agents are adapters (adapters/); the core only sees normalized events.
 
+import { rmSync } from "node:fs";
 import { resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { adapters, getAdapter } from "./adapters";
@@ -50,6 +52,12 @@ Commands:
                          progress goes to stderr when it is a TTY or with --verbose
     keys on a TTY: ctrl+t take over (the agent's TUI), ctrl+z inside it
     detaches back here while it keeps working, ctrl+t attaches again
+  send [<id>] [<message>|-]  steer a running session live without stopping it
+    -s, --session <id>   target session id (default: running in cwd, else latest)
+    -C, --cwd <dir>      target running session in directory
+    -m, --model <m>      switch model for the next turn
+    -e, --effort <e>     switch effort for the next turn
+        --json           print {"status":"sent","id",...}
   attach [<id>]      take over a session interactively (default: latest)
   last [<id>]        last agent message (default: latest)
   ls                 list sessions of the last 7 days, oldest first
@@ -84,6 +92,7 @@ const { values: opts, positionals } = parseArgs({
     effort: { type: "string", short: "e" },
     cwd: { type: "string", short: "C" },
     resume: { type: "string", short: "r" },
+    session: { type: "string", short: "s" },
     sandbox: { type: "string" },
     quiet: { type: "boolean", short: "q" },
     verbose: { type: "boolean" },
@@ -138,6 +147,7 @@ async function readPrompt(): Promise<string> {
 
 // Told to the agent when a user hands a taken-over session back.
 const HANDBACK = "The user took over and handed back. Continue the original task.";
+const STEER_PREFIX = "The user sent a new instruction while you were working:";
 
 async function run() {
   type Mode = "json" | "quiet" | "verbose";
@@ -207,7 +217,10 @@ async function run() {
     if (system) prompt = `${system}\n\n${prompt}`;
   }
 
-  onInterruptCleanup(() => store.finishSession(id, "failed"));
+  onInterruptCleanup(() => {
+    rmSync(store.sendPath(id), { force: true });
+    store.finishSession(id, "failed");
+  });
 
   if (progress) header(agent.name, session.model, id);
   else process.stderr.write(`session: ${id}\n`);
@@ -222,65 +235,126 @@ async function run() {
   let result = "";
   let error: string | null = null;
   let resume = Boolean(opts.resume);
+  let hasStarted = Boolean(opts.resume);
   // Sent with the first attempt only; a handback must not resend them.
   let attach = images;
   const sandbox = resolveSandboxMode(opts.sandbox, "permissive");
 
-  // Headless attempts; Ctrl-T stops one and hands the session to the user.
-  while (true) {
-    const stop = new AbortController();
-    if (takeover) {
-      keys.start();
-      keys.on((key) => key === CTRL_T && stop.abort());
-      hint("ctrl+t take over");
+  const applySend = async (payload: store.SendPayload) => {
+    if (payload.model || payload.effort) {
+      session = store.updateSessionConfig(id, payload.model ?? session.model, payload.effort ?? session.effort);
     }
-    try {
-      ({ result } = await agent.run({
-        id,
-        prompt,
-        model: session.model,
-        effort: session.effort,
-        cwd: session.cwd,
-        resume,
-        noTools: Boolean(opts["no-tools"]),
-        systemFile: agent.systemPromptFlags ? systemFile : undefined,
-        images: attach,
-        rawLog: store.rawPath(id),
-        signal: stop.signal,
-        sandbox,
-        async onEvent(e) {
-          // After Ctrl-T the agent only reports its own interruption.
-          if (stop.signal.aborted) return;
-          if (e.type === "result") last = e;
-          await onEvent(e);
-        },
-      }));
-    } catch (err) {
-      if (!stop.signal.aborted) {
-        status = "failed";
-        const message = err instanceof Error ? err.message : String(err);
-        error = message;
-        const e: Event = { type: "error", message };
-        store.appendEvent(id, e);
-        if (progress) await render(e);
-        else warn(`error: ${message}`);
-        result = (last as Extract<Event, { type: "result" }> | null)?.result ?? "";
+    await onEvent({ type: "send", text: payload.message ?? "", model: payload.model, effort: payload.effort });
+    const started = hasStarted || Boolean(agent.transcriptPath(id));
+    if (started) {
+      prompt = payload.message
+        ? `${STEER_PREFIX}\n\n${payload.message}\n\nContinue the task with this instruction in mind.`
+        : "Continue the task where you left off.";
+      attach = [];
+      resume = true;
+    } else {
+      if (payload.message) {
+        prompt = `${prompt}\n\n${STEER_PREFIX}\n\n${payload.message}`;
       }
+      resume = false;
     }
-    keys.on(null);
-    if (!stop.signal.aborted) break;
+  };
 
-    await onEvent({ type: "takeover" });
-    const how = await takeOver({ agent, id, model: session.model, effort: session.effort, cwd: session.cwd, sandbox, onEvent });
-    if (how === "finished" || (await askHandBack()) === "done") {
-      result = (await agent.lastResponse(id)) ?? "";
-      last = null;
-      break;
+  let currentStop: AbortController | null = null;
+  let abortReason: "takeover" | "send" | null = null;
+  const onSigUsr1 = () => {
+    abortReason = "send";
+    currentStop?.abort();
+  };
+  process.on("SIGUSR1", onSigUsr1);
+
+  try {
+    // Headless attempts; Ctrl-T stops one and hands the session to the user,
+    // SIGUSR1 stops one and injects a live `send` steering message.
+    while (true) {
+      const prePending = store.consumeSend(id);
+      if (prePending) await applySend(prePending);
+
+      const stop = new AbortController();
+      currentStop = stop;
+      abortReason = null;
+      if (takeover) {
+        keys.start();
+        keys.on((key) => {
+          if (key === CTRL_T) {
+            abortReason = "takeover";
+            stop.abort();
+          }
+        });
+        hint("ctrl+t take over");
+      }
+      try {
+        ({ result } = await agent.run({
+          id,
+          prompt,
+          model: session.model,
+          effort: session.effort,
+          cwd: session.cwd,
+          resume,
+          noTools: Boolean(opts["no-tools"]),
+          systemFile: agent.systemPromptFlags ? systemFile : undefined,
+          images: attach,
+          rawLog: store.rawPath(id),
+          signal: stop.signal,
+          sandbox,
+          async onEvent(e) {
+            hasStarted = true;
+            // After Ctrl-T or send abort the agent only reports its own interruption.
+            if (stop.signal.aborted) return;
+            if (e.type === "result") last = e;
+            await onEvent(e);
+          },
+        }));
+      } catch (err) {
+        if (!stop.signal.aborted) {
+          status = "failed";
+          const message = err instanceof Error ? err.message : String(err);
+          error = message;
+          const e: Event = { type: "error", message };
+          store.appendEvent(id, e);
+          if (progress) await render(e);
+          else warn(`error: ${message}`);
+          result = (last as Extract<Event, { type: "result" }> | null)?.result ?? "";
+        }
+      }
+      currentStop = null;
+      keys.on(null);
+      if (!stop.signal.aborted) {
+        const postPending = store.consumeSend(id);
+        if (postPending) {
+          await applySend(postPending);
+          continue;
+        }
+        break;
+      }
+
+      if (abortReason === "send") {
+        const payload = store.consumeSend(id);
+        if (payload) await applySend(payload);
+        continue;
+      }
+
+      await onEvent({ type: "takeover" });
+      const how = await takeOver({ agent, id, model: session.model, effort: session.effort, cwd: session.cwd, sandbox, onEvent });
+      if (how === "finished" || (await askHandBack()) === "done") {
+        result = (await agent.lastResponse(id)) ?? "";
+        last = null;
+        break;
+      }
+      await onEvent({ type: "handback" });
+      hasStarted = true;
+      prompt = HANDBACK;
+      attach = [];
+      resume = true;
     }
-    await onEvent({ type: "handback" });
-    prompt = HANDBACK;
-    attach = [];
-    resume = true;
+  } finally {
+    process.off("SIGUSR1", onSigUsr1);
+    rmSync(store.sendPath(id), { force: true });
   }
   keys.stop();
   store.finishSession(id, status);
@@ -396,7 +470,87 @@ async function serve() {
   });
 }
 
-const commands: Record<string, () => unknown> = { run, attach, last, ls, watch, serve };
+async function send() {
+  const effort = opts.effort as Effort | undefined;
+  if (effort && !EFFORTS.includes(effort)) throw new Error(`--effort: expected one of ${EFFORTS.join(", ")}`);
+
+  const targetCwd = opts.cwd ? resolve(opts.cwd) : process.cwd();
+  const findRunning = () => {
+    const s = store.latestRunning(targetCwd) ?? (opts.cwd ? null : store.latestRunning());
+    if (!s) throw new Error(opts.cwd ? `no running session in ${targetCwd}` : "no running session");
+    return s;
+  };
+
+  let s: store.Session;
+  let message = "";
+
+  const explicitId = opts.session ?? opts.resume;
+  if (explicitId) {
+    s = store.resolveId(explicitId);
+    const arg = args.join(" ");
+    if (arg === "-" || (!arg && !process.stdin.isTTY)) message = (await Bun.stdin.text()).trim();
+    else message = arg;
+  } else if (args.length >= 2 || (args.length === 1 && !process.stdin.isTTY && args[0] !== "-")) {
+    let resolved: store.Session | null = null;
+    try {
+      resolved = store.resolveId(args[0]);
+    } catch {}
+    if (resolved) {
+      s = resolved;
+      const rest = args.slice(1).join(" ");
+      if (rest === "-" || (!rest && !process.stdin.isTTY)) message = (await Bun.stdin.text()).trim();
+      else message = rest;
+    } else {
+      s = findRunning();
+      message = args.join(" ");
+    }
+  } else if (args.length === 1) {
+    if (args[0] === "-") {
+      s = findRunning();
+      message = (await Bun.stdin.text()).trim();
+    } else if (opts.model || opts.effort) {
+      const matches = store.listSessions().filter((x) => x.status === "running" && x.id.startsWith(args[0]));
+      if (matches.length > 1) throw new Error(`ambiguous session "${args[0]}", ${matches.length} matches`);
+      if (matches.length === 1) {
+        s = matches[0];
+      } else {
+        s = findRunning();
+        message = args[0];
+      }
+    } else {
+      s = findRunning();
+      message = args[0];
+    }
+  } else {
+    s = findRunning();
+    if (!process.stdin.isTTY) message = (await Bun.stdin.text()).trim();
+  }
+
+  if (s.status !== "running") {
+    throw new Error(
+      `session ${s.id} is not running (status: ${s.status}); use "agenttap run -r ${s.id.slice(0, 8)} ..." to resume it`,
+    );
+  }
+  if (!message && !opts.model && !effort) {
+    throw new Error("send: provide a message, --model, or --effort");
+  }
+
+  store.enqueueSend(s.id, {
+    message: message || undefined,
+    model: opts.model,
+    effort,
+    sentAt: new Date().toISOString(),
+  });
+  process.kill(s.pid, "SIGUSR1");
+
+  if (opts.json) {
+    console.log(JSON.stringify({ status: "sent", id: s.id, ...(opts.model ? { model: opts.model } : {}), ...(effort ? { effort } : {}) }));
+  } else {
+    console.log(`sent to session ${s.id.slice(0, 8)}`);
+  }
+}
+
+const commands: Record<string, () => unknown> = { run, send, attach, last, ls, watch, serve };
 const fn = commands[command];
 if (!fn) {
   console.error(HELP);

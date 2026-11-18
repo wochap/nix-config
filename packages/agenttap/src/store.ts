@@ -3,9 +3,9 @@
 //   <id>.events.jsonl  normalized events, one per line (what `watch` tails)
 //   <id>.raw.jsonl     provider-native output (written by the adapter)
 
-import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import type { Effort, Event } from "./adapters/types";
 
 export type Status = "running" | "done" | "failed";
@@ -33,6 +33,14 @@ export const metaPath = (id: string) => join(dir, `${id}.json`);
 export const eventsPath = (id: string) => join(dir, `${id}.events.jsonl`);
 export const rawPath = (id: string) => join(dir, `${id}.raw.jsonl`);
 export const promptPath = (id: string) => join(dir, `${id}.prompt.txt`);
+export const sendPath = (id: string) => join(dir, `${id}.send.json`);
+
+export interface SendPayload {
+  message?: string;
+  model?: string;
+  effort?: Effort;
+  sentAt: string;
+}
 
 function write(s: Session) {
   writeFileSync(metaPath(s.id), `${JSON.stringify(s, null, 2)}\n`);
@@ -53,6 +61,51 @@ export function restartSession(s: Session, model: string, effort?: Effort): Sess
   const session: Session = { ...s, model, effort, status: "running", pid: process.pid, endedAt: undefined };
   write(session);
   return session;
+}
+
+/** Updates a running session's model/effort metadata in place. */
+export function updateSessionConfig(id: string, model: string, effort?: Effort): Session {
+  const s = readSession(id);
+  if (!s) throw new Error(`no session "${id}"`);
+  const session: Session = { ...s, model, effort };
+  write(session);
+  return session;
+}
+
+/** Queues a live steering payload atomically; merges with any unread payload. */
+export function enqueueSend(id: string, payload: SendPayload): void {
+  mkdirSync(dir, { recursive: true });
+  const target = sendPath(id);
+  let merged = payload;
+  if (existsSync(target)) {
+    try {
+      const prev: SendPayload = JSON.parse(readFileSync(target, "utf8"));
+      const messages = [prev.message, payload.message].filter((m): m is string => Boolean(m));
+      merged = {
+        message: messages.length ? messages.join("\n\n") : undefined,
+        model: payload.model ?? prev.model,
+        effort: payload.effort ?? prev.effort,
+        sentAt: payload.sentAt,
+      };
+    } catch {}
+  }
+  const tmp = `${target}.tmp`;
+  writeFileSync(tmp, `${JSON.stringify(merged, null, 2)}\n`);
+  renameSync(tmp, target);
+}
+
+/** Reads and deletes any pending live steering payload for `id`. */
+export function consumeSend(id: string): SendPayload | null {
+  const target = sendPath(id);
+  if (!existsSync(target)) return null;
+  try {
+    const payload: SendPayload = JSON.parse(readFileSync(target, "utf8"));
+    rmSync(target, { force: true });
+    return payload;
+  } catch {
+    rmSync(target, { force: true });
+    return null;
+  }
 }
 
 export function finishSession(id: string, status: Status) {
@@ -98,14 +151,21 @@ export function readPrompt(id: string): string | null {
 export function listSessions(): Session[] {
   if (!existsSync(dir)) return [];
   return readdirSync(dir)
-    .filter((f) => f.endsWith(".json"))
+    .filter((f) => f.endsWith(".json") && !f.endsWith(".send.json"))
     .map((f) => readSession(f.slice(0, -".json".length)))
     .filter((s): s is Session => s !== null)
     .sort((a, b) => b.startedAt.localeCompare(a.startedAt));
 }
 
 export const latest = (): Session | null => listSessions()[0] ?? null;
-export const latestRunning = (): Session | null => listSessions().find((s) => s.status === "running") ?? null;
+export function latestRunning(cwd?: string): Session | null {
+  const running = listSessions().filter((s) => s.status === "running");
+  if (cwd) {
+    const target = resolve(cwd);
+    return running.find((s) => s.cwd === target) ?? null;
+  }
+  return running[0] ?? null;
+}
 
 /** Session by full id or unique id prefix. */
 export function resolveId(prefix: string): Session {

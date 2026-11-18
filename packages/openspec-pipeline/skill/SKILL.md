@@ -14,6 +14,7 @@ session, so none of the work enters your context. You only read one JSON line.
 openspec-pipeline --json --on-input stop <change>... > "$out" 2> "$log"
 openspec-pipeline --json --on-input auto <change>... > "$out" 2> "$log"
 openspec-pipeline --json --on-input stop --resume <session> --answer "<reply>" <change>... > "$out" 2> "$log"
+openspec-pipeline --send "<instruction>" [<change>]
 ```
 
 ## How to run
@@ -33,6 +34,19 @@ openspec-pipeline --json --on-input stop --resume <session> --answer "<reply>" <
   over with `agenttap attach <id>`. Never run those two yourself.
 - Do not edit the repository while the pipeline runs; it commits with
   `git add -A`.
+
+## Steer a running pipeline
+
+When `openspec-pipeline` is running in the background and the user asks to
+tweak requirements, change model/effort (`--apply-model`, `--apply-effort`,
+`-m`, `-e`), or give extra guidance mid-run, run:
+
+```sh
+openspec-pipeline --send "<instruction>" [<change>]
+```
+
+Run this in the same repo/worktree without killing the background pipeline
+command, then continue waiting for the background command to finish.
 
 ## Pick a mode
 

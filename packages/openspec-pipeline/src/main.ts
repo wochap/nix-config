@@ -71,6 +71,9 @@ const { values: opts, positionals: changes } = parseArgs({
     "auto-tries": { type: "string", default: "2" },
     resume: { type: "string" },
     answer: { type: "string" },
+    send: { type: "string" },
+    model: { type: "string", short: "m" },
+    effort: { type: "string", short: "e" },
     fresh: { type: "boolean" },
     json: { type: "boolean" },
     help: { type: "boolean", short: "h" },
@@ -106,6 +109,9 @@ Options:
       --auto-tries <n>      auto: headless resumes before stopping (default: 2)
       --resume <id>         continue this apply session (from a stop report)
       --answer <text>       message for the --resume session (default: "Continue.")
+      --send <text>         steer a currently running pipeline session live
+  -m, --model <m>           model override when used with --send
+  -e, --effort <e>          effort override when used with --send
       --fresh               start new step sessions instead of resuming the
                               interrupted ones (Ctrl-C, usage limit, crash)
       --json                logs to stderr, one JSON result line on stdout
@@ -119,7 +125,7 @@ effort, so you can change them midway.
 On a TTY each step is an agenttap session (${agentName}): ctrl+t takes a running
 step over, ctrl+z inside it detaches back. Sessions: agenttap ls`;
 
-if (opts.help || changes.length === 0) {
+if (opts.help || (changes.length === 0 && opts.send === undefined)) {
   console.log(HELP);
   process.exit(opts.help ? 0 : 1);
 }
@@ -179,6 +185,16 @@ const efforts = {} as Record<Step, string>;
 for (const step of STEPS) efforts[step] = opts[`${step}-effort`] ?? preset.efforts[step];
 
 process.chdir(repoRoot());
+
+if (opts.send !== undefined) {
+  const targetId = opts.resume ?? (await agenttap.running(changes[0], opts.agent));
+  if (!targetId) throw new Error(`no running openspec-pipeline session found in ${process.cwd()}`);
+  const fullMessage = `${opts.send}\n\n${STATUS_LINE}`;
+  await agenttap.send(targetId, fullMessage, opts["apply-model"] ?? opts.model, opts["apply-effort"] ?? opts.effort);
+  if (opts.json) console.log(JSON.stringify({ status: "sent", session: targetId, ...(changes[0] ? { change: changes[0] } : {}) }));
+  else log(`sent to session ${targetId.slice(0, 8)}`);
+  process.exit(0);
+}
 
 async function runStep(step: Step, prompt: string, resume?: string) {
   log(`${step} (${models[step]}, ${efforts[step]})${resume ? ` resuming ${resume}` : ""}: ${prompt}`);
