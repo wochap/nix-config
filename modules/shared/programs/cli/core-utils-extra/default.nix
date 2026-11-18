@@ -16,6 +16,7 @@ in
     _custom.hm = {
 
       home.packages = with pkgs; [
+        util-linux # unmount
         crudini # edit ini files
         dos2unix # convert line breaks DOS - mac
         inetutils # network tools
