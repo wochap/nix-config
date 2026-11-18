@@ -8,7 +8,7 @@
 
 let
   cfg = config._custom.programs.ai-agents;
-  session-tap = inputs.session-tap.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  sessiontap = inputs.sessiontap.packages.${pkgs.stdenv.hostPlatform.system}.default;
   sessiontap-notify = pkgs.writeScriptBin "sessiontap-notify" (
     builtins.readFile ./scripts/sessiontap-notify.sh
   );
@@ -145,7 +145,7 @@ in
     );
 
     environment.systemPackages = [
-      session-tap
+      sessiontap
       sessiontap-notify
       sessiontap-notify-done
     ];
@@ -207,7 +207,7 @@ in
           Unit.Description = "SessionTap multi-source hub";
           Install.WantedBy = [ "default.target" ];
           Service = {
-            ExecStart = "${session-tap}/bin/sessiontap-hub";
+            ExecStart = "${sessiontap}/bin/sessiontap-hub";
             Restart = "on-failure";
             RestartSec = 2;
           };
@@ -235,7 +235,7 @@ in
           };
           Install.WantedBy = [ "default.target" ];
           Service = {
-            ExecStart = "${session-tap}/bin/sessiontapd";
+            ExecStart = "${sessiontap}/bin/sessiontapd";
             Restart = "on-failure";
             RestartSec = 2;
           };

@@ -49,8 +49,8 @@
     webscoop.inputs.home-manager.follows = "home-manager";
     kb-hud.url = "github:wochap/kb-hud";
     kb-hud.inputs.nixpkgs.follows = "nixpkgs";
-    session-tap.url = "github:wochap/session-tap";
-    session-tap.inputs.nixpkgs.follows = "nixpkgs";
+    sessiontap.url = "github:wochap/sessiontap";
+    sessiontap.inputs.nixpkgs.follows = "nixpkgs";
     woints.url = "github:wochap/woints";
     woints.inputs.nixpkgs.follows = "nixpkgs";
     woge.url = "github:wochap/woge";
