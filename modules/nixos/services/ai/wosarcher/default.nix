@@ -26,7 +26,6 @@ let
   # Secret files the daemon reads itself (`<x>_file` settings). Entries hold
   # paths, never values, so they are safe in the Nix store.
   omnirouteKeyFile = config.sops.secrets.wosarcher-omniroute-api-key.path;
-  agenttapKeyFile = config.sops.secrets.wosarcher-agenttap-api-key.path;
   jevKeyFile = config.sops.secrets.wosarcher-typesafe-api-key.path;
   searxProxy = config._custom.services.web-gate.proxies.searxng;
   omniRouteProxy = config._custom.services.web-gate.proxies.omniroute;
@@ -45,17 +44,9 @@ let
       base_url = "${host}:${toString omniRouteProxy.publicPort}/v1";
       api_key_file = omnirouteKeyFile;
     };
-    # agenttap serve (../agenttap-server): Claude Code and pi without tools; the
-    # request's system message replaces the agent's own system prompt.
-    agenttap = {
-      description = "agenttap serve: Claude Code and pi without tools.";
-      base_url = "${host}:${toString config._custom.services.web-gate.proxies.agenttap-server.publicPort}/v1";
-      api_key_file = agenttapKeyFile;
-    };
   };
   modelsOf = endpoint: lib.filterAttrs (_: m: m.endpoint == endpoint) wcfg.models;
   usedEndpoints = lib.filterAttrs (name: _: modelsOf name != { }) endpoints;
-  usesAgenttap = usedEndpoints ? agenttap;
 
   # One `models.<id>` table. context_window is the model's total window
   # (prompt plus completion): wosarcher subtracts the prompt reserve and the
@@ -224,7 +215,6 @@ in
 
     endpoints = {
       omniroute = endpointOption "omniroute" "research-smart" 600;
-      agenttap = endpointOption "agenttap" "claude/claude-sonnet-5-5" 900;
     };
 
     models = lib.mkOption {
@@ -235,8 +225,7 @@ in
               type = lib.types.enum (lib.attrNames endpoints);
               default = "omniroute";
               description = ''
-                llm entry that serves the model: omniroute, or agenttap (agenttap
-                serve; needs agenttapServer with tools off).
+                llm entry that serves the model (omniroute).
               '';
             };
             preset = lib.mkOption {
@@ -267,9 +256,8 @@ in
         }
       );
       description = ''
-        Models by id (an OmniRoute model or combo, or an agenttap
-        <agent>/<model> id). Each lands in the `models` table of its
-        endpoint's llm entry with its context window, output limit,
+        Models by id (an OmniRoute model or combo). Each lands in the `models`
+        table of its endpoint's llm entry with its context window, output limit,
         reasoning, and gap budget. A run may pick any model of an entry; one
         not listed gets wosarcher's 32768/8192 fallback.
       '';
@@ -347,29 +335,9 @@ in
       # of a large context on the local GPU is slow, hence omniroute's 600 s
       # timeout.
       desktop-free.preset = lib.mkDefault "qwen3-5-9b-local";
-      # Claude through agenttap serve. Effort "none" (the write default) keeps
-      # Claude Code's own effort: high for Sonnet, medium for Haiku.
-      "claude/claude-sonnet-5-5" = lib.mkIf cfg.agenttapServer.enable {
-        endpoint = lib.mkDefault "agenttap";
-        preset = lib.mkDefault "claude-sonnet-5-5";
-        reasoning.plan = lib.mkDefault "low";
-        reasoning.gap = lib.mkDefault "low";
-      };
-      "claude/claude-haiku-5-5" = lib.mkIf cfg.agenttapServer.enable {
-        endpoint = lib.mkDefault "agenttap";
-        preset = lib.mkDefault "claude-haiku-5-5";
-        reasoning.plan = lib.mkDefault "low";
-        reasoning.gap = lib.mkDefault "low";
-      };
     };
 
     assertions = [
-      # The llm prompts carry scraped web text; with tools an agent could act
-      # on instructions planted in it.
-      {
-        assertion = !usesAgenttap || (cfg.agenttapServer.enable && !cfg.agenttapServer.tools);
-        message = "wosarcher: a model with endpoint = \"agenttap\" needs agenttapServer enabled with tools = false";
-      }
       {
         assertion = wcfg.profiles ? ${wcfg.profile};
         message = "wosarcher: profile \"${wcfg.profile}\" is not one of: ${lib.concatStringsSep ", " (lib.attrNames wcfg.profiles)}";
@@ -426,13 +394,6 @@ in
     sops.secrets.wosarcher-omniroute-api-key = {
       sopsFile = ../../../../../secrets-sops/local.yaml;
       key = "local-omniroute-secret-key";
-      owner = "wosarcher";
-      group = "wosarcher";
-      mode = "0400";
-    };
-    sops.secrets.wosarcher-agenttap-api-key = lib.mkIf usesAgenttap {
-      sopsFile = ../../../../../secrets-sops/local.yaml;
-      key = "local-agenttap-server-api-key";
       owner = "wosarcher";
       group = "wosarcher";
       mode = "0400";

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract notes from class transcripts with the agenttap CLI, agenttap-server or omniroute-chat."""
+"""Extract notes from class transcripts with omniroute-chat."""
 
 import os
 import argparse
@@ -8,8 +8,6 @@ import re
 import subprocess
 import sys
 import time
-import urllib.error
-import urllib.request
 from pathlib import Path
 import tiktoken
 
@@ -48,12 +46,7 @@ def load_prompt(prompt_path: Path) -> str:
     return prompt_path.read_text(encoding="utf-8").strip()
 
 
-BACKENDS = ("agenttap", "agenttap-server", "omniroute")
-DEFAULT_MODELS = {
-    "agenttap": "claude/claude-sonnet-5-5",
-    "agenttap-server": "claude/claude-sonnet-5-5",
-    "omniroute": "desktop-free",
-}
+DEFAULT_MODEL = "desktop-free"
 
 
 def fail(message: str, stderr: str = "") -> None:
@@ -85,53 +78,6 @@ def chat_request(message: str, model: str, temperature: float) -> dict:
     }
 
 
-def run_agenttap(message: str, model: str) -> str:
-    """One headless `agenttap run` without tools; the prompt goes on stdin."""
-    agent, _, agent_model = model.partition("/")
-    cmd = ["agenttap", "run", "-q", "--no-tools", "-a", agent]
-    if agent_model:
-        cmd += ["-m", agent_model]
-    return run_command(cmd + ["-"], message)
-
-
-def run_agenttap_server(message: str, model: str, temperature: float) -> str:
-    """POST to agenttap-server's /v1/chat/completions."""
-    url = os.environ.get("AGENTTAP_SERVER_URL", "https://agenttap.wochap.local/v1")
-    key_file = os.environ.get("AGENTTAP_SERVER_API_KEY_FILE")
-    key = os.environ.get("AGENTTAP_API_KEY")
-    if not key and key_file:
-        try:
-            key = Path(key_file).read_text(encoding="utf-8").strip()
-        except OSError as e:
-            fail(f"could not read agenttap-server API key: {e}")
-    if not key:
-        fail("set AGENTTAP_API_KEY or AGENTTAP_SERVER_API_KEY_FILE")
-
-    request = urllib.request.Request(
-        f"{url.rstrip('/')}/chat/completions",
-        data=json.dumps(chat_request(message, model, temperature)).encode(),
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {key}",
-        },
-    )
-    try:
-        with urllib.request.urlopen(request, timeout=1800) as response:
-            body = json.load(response)
-    except urllib.error.HTTPError as e:
-        fail(f"agenttap-server returned HTTP {e.code}", e.read().decode(errors="replace"))
-    except urllib.error.URLError as e:
-        fail(f"could not reach agenttap-server at {url}: {e.reason}")
-
-    try:
-        content = body["choices"][0]["message"]["content"]
-    except (KeyError, IndexError, TypeError):
-        content = None
-    if not content:
-        fail("agenttap-server returned no usable message content")
-    return content
-
-
 def run_omniroute(message: str, model: str, temperature: float) -> str:
     return run_command(
         [
@@ -161,25 +107,17 @@ def main():
     )
 
     parser.add_argument(
-        "--backend",
-        choices=BACKENDS,
-        default=os.environ.get("COURSE_NOTES_BACKEND", "agenttap"),
-        help="Where to generate the notes (default: COURSE_NOTES_BACKEND or agenttap)",
-    )
-
-    parser.add_argument(
         "--model",
         type=str,
         default=None,
-        help="Model to use; <agent>/<model> for agenttap and agenttap-server "
-        "(default: COURSE_NOTES_MODEL or the backend's default)",
+        help="Model to use (default: COURSE_NOTES_MODEL or desktop-free)",
     )
 
     parser.add_argument(
         "--temperature",
         type=float,
         default=0.1,
-        help="Generation temperature, agenttap-server and omniroute only (default: 0.1)",
+        help="Generation temperature (default: 0.1)",
     )
 
     parser.add_argument(
@@ -256,21 +194,12 @@ def main():
     # Build the user message.
     user_message = f"{prompt}\n\n--- TRANSCRIPT ---\n{cleaned}"
 
-    # COURSE_NOTES_MODEL belongs to COURSE_NOTES_BACKEND, not to a --backend override.
-    env_model = None
-    if args.backend == os.environ.get("COURSE_NOTES_BACKEND", "agenttap"):
-        env_model = os.environ.get("COURSE_NOTES_MODEL")
-    model = args.model or env_model or DEFAULT_MODELS[args.backend]
-    print(f"Backend: {args.backend}, model: {model}", file=sys.stderr)
+    model = args.model or os.environ.get("COURSE_NOTES_MODEL") or DEFAULT_MODEL
+    print(f"Model: {model}", file=sys.stderr)
 
     print("Generating notes...", file=sys.stderr)
     started = time.monotonic()
-    if args.backend == "agenttap":
-        notes = run_agenttap(user_message, model)
-    elif args.backend == "agenttap-server":
-        notes = run_agenttap_server(user_message, model, args.temperature)
-    else:
-        notes = run_omniroute(user_message, model, args.temperature)
+    notes = run_omniroute(user_message, model, args.temperature)
 
     elapsed = time.monotonic() - started
     print(
