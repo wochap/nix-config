@@ -3,7 +3,7 @@
   writeShellScriptBin,
   symlinkJoin,
   bun,
-  agents,
+  agenttap,
   defaultPreset ? "agy",
 }:
 
@@ -12,7 +12,7 @@ symlinkJoin {
   name = "openspec-pipeline";
   paths = [
     (writeShellScriptBin "openspec-pipeline" ''
-      export AGENTS_CMD=${lib.getExe agents}
+      export AGENTTAP_CMD=${lib.getExe agenttap}
       export OPENSPEC_PIPELINE_PRESET=''${OPENSPEC_PIPELINE_PRESET:-${defaultPreset}}
       exec ${lib.getExe bun} ${./src}/main.ts "$@"
     '')

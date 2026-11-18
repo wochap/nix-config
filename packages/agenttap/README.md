@@ -1,24 +1,24 @@
-# agents
+# agenttap
 
 One CLI over coding agent CLIs (`claude`, `pi`, `agy`), for you and for agents. On
 a TTY `run` shows live progress (rendered messages, tool lines, cost); piped,
 it prints only the final answer. Sessions live in
-`${XDG_STATE_HOME:-~/.local/state}/agents/sessions/`. Source:
-`packages/agents/src/`. Agents learn it from the `agents` skill
-(`~/.agents/skills/agents/SKILL.md`).
+`${XDG_STATE_HOME:-~/.local/state}/agenttap/sessions/`. Source:
+`packages/agenttap/src/`. Agents learn it from the `agenttap` skill
+(`~/.agents/skills/agenttap/SKILL.md`).
 
 ```sh
-agents run "fix the failing test"            # live progress, claude
-agents run -a pi "fix the failing test"      # pi, its default model
-agents run -a pi -m omniroute/desktop-free "fix the failing test"
-agents run -q -C ~/repo "summarize the repo" # final answer only
-agents run -r <id> "continue"                # resume headless
-agents ls                                    # sessions of the last 7 days, --full for all, --all adds serve's
-agents ls --json                             # the same as a JSON array of metadata, newest first
-agents ls --via serve                        # only the OpenAI-compatible API's sessions
-agents watch                                 # follow the latest running session
-agents attach <id>                           # take it over interactively
-agents last <id>                             # last agent message
+agenttap run "fix the failing test"            # live progress, claude
+agenttap run -a pi "fix the failing test"      # pi, its default model
+agenttap run -a pi -m omniroute/desktop-free "fix the failing test"
+agenttap run -q -C ~/repo "summarize the repo" # final answer only
+agenttap run -r <id> "continue"                # resume headless
+agenttap ls                                    # sessions of the last 7 days, --full for all, --all adds serve's
+agenttap ls --json                             # the same as a JSON array of metadata, newest first
+agenttap ls --via serve                        # only the OpenAI-compatible API's sessions
+agenttap watch                                 # follow the latest running session
+agenttap attach <id>                           # take it over interactively
+agenttap last <id>                             # last agent message
 ```
 
 Take over a running session from its `run` view: `ctrl+t` stops the headless
@@ -79,41 +79,41 @@ claude result marked as an error fails the run even when claude exits 0.
   Strict mode fails closed: it refuses to run if `bwrap` is missing.
   (Residual risk: network access is retained so agent CLIs can reach their model APIs).
 - `off`: disables sandboxing.
-Can also be set with `AGENTS_SANDBOX=permissive|strict|off`.
+Can also be set with `AGENTTAP_SANDBOX=permissive|strict|off`.
 
 Env: `CLAUDE_FLAGS` (default `--permission-mode auto`), `CLAUDE_CMD` (default
 `sessiontap claude`), `PI_FLAGS` (default none; `--approve` trusts
 project-local files), `PI_CMD` (default `sessiontap pi`), `AGY_FLAGS` (default
-`--dangerously-skip-permissions`), `AGY_CMD` (default `sessiontap agy`), `AGENTS_DTACH`
-(dtach binary, set by the package; default `dtach` on PATH), `AGENTS_SANDBOX`
+`--dangerously-skip-permissions`), `AGY_CMD` (default `sessiontap agy`), `AGENTTAP_DTACH`
+(dtach binary, set by the package; default `dtach` on PATH), `AGENTTAP_SANDBOX`
 (default `permissive` for run, `strict` for serve).
 
 To add an agent, implement `Adapter` (`src/adapters/types.ts`, emits
 normalized events) in `src/adapters/<name>.ts` and register it in
-`src/adapters/index.ts`. Two prompts in `packages/agents/prompts/` do this
-with agents:
+`src/adapters/index.ts`. Two prompts in `packages/agenttap/prompts/` do this
+with agenttap:
 
 ```sh
 # 1. in the agent CLI's source repo: writes <cli>_adapter_report.md there, prints its path
-report=$(agents run -q -C ~/src/codex - < packages/agents/prompts/extract-adapter-info.md)
+report=$(agenttap run -q -C ~/src/codex - < packages/agenttap/prompts/extract-adapter-info.md)
 # 2. here: write the adapter from the report
-cat packages/agents/prompts/write-adapter.md "$report" | agents run -
+cat packages/agenttap/prompts/write-adapter.md "$report" | agenttap run -
 ```
 
 ## OpenAI-compatible server
 
-`agents serve` speaks `/v1/chat/completions` and `/v1/models`, so chat GUIs
+`agenttap serve` speaks `/v1/chat/completions` and `/v1/models`, so chat GUIs
 (open-webui, desktop clients, editors) and programs (wosarcher) can talk to
-the agents. Each request is one `agents run --json` in the `-C` directory
+the agents. Each request is one `agenttap run --json` in the `-C` directory
 (default: current).
 
 ```sh
-agents serve --port 20940 -C ~/work --api-key-file ~/.config/agents/api-key \
+agenttap serve --port 20940 -C ~/work --api-key-file ~/.config/agenttap/api-key \
   --models 'claude/claude-sonnet-5-5,pi/omniroute/desktop-free'
 ```
 
 - Auth: `/v1/*` needs `Authorization: Bearer <key>`, the key coming from
-  `--api-key-file` or `AGENTS_API_KEY`; without either serve refuses to
+  `--api-key-file` or `AGENTTAP_API_KEY`; without either serve refuses to
   start unless given `--no-auth`. `/health` is open.
 - No tools by default: every run gets `--no-tools`, so a prompt (a chat, or
   web text a program forwards) cannot drive tools in the `-C` directory.
@@ -140,10 +140,10 @@ agents serve --port 20940 -C ~/work --api-key-file ~/.config/agents/api-key \
 - Multi-turn: a request whose history (up to the last user message) matches
   a previous reply resumes that session with only the new message; otherwise
   a new session starts with the history flattened into one prompt. The map
-  lives in `${XDG_STATE_HOME:-~/.local/state}/agents/serve-conversations.json`;
+  lives in `${XDG_STATE_HOME:-~/.local/state}/agenttap/serve-conversations.json`;
   entries older than 30 days are dropped. Every chat is a normal session
-  marked as started by serve: `agents ls --via serve` lists only them,
-  `agents ls --all` mixes them in tagged `[serve]`, `watch` and
+  marked as started by serve: `agenttap ls --via serve` lists only them,
+  `agenttap ls --all` mixes them in tagged `[serve]`, `watch` and
   `attach` work on them.
 - `stream: true` sends each agent message as it lands (not token by token);
   `--tool-events` adds tool calls as `_> label_` lines.
@@ -154,16 +154,16 @@ agents serve --port 20940 -C ~/work --api-key-file ~/.config/agents/api-key \
 
 ## Use from an agent
 
-`skill/SKILL.md` teaches an agent to delegate a task with `agents run` and read
+`skill/SKILL.md` teaches an agent to delegate a task with `agenttap run` and read
 only the final answer. It is linked into `~/.claude/skills` and
 `~/.pi/agent/skills` when `_custom.programs.ai-agents.enableSkills` is on. The
 skill sets `disable-model-invocation: true`, so it never enters the agent's
 context until you call it:
 
 ```text
-/agents <task>          # Claude Code
-/skill:agents <task>    # pi
+/agenttap <task>          # Claude Code
+/skill:agenttap <task>    # pi
 ```
 
 Name the agent, model or directory in the task if needed, e.g.
-`/agents ask pi in ~/src/foo why the build fails`.
+`/agenttap ask pi in ~/src/foo why the build fails`.

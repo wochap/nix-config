@@ -93,7 +93,7 @@ needs input.
 
 ## Takeover
 
-Each step runs through the `agents` CLI (`packages/agents/`). On a TTY, `ctrl+t`
+Each step runs through the `agenttap` CLI (`packages/agenttap/`). On a TTY, `ctrl+t`
 takes a running step over in the agent's TUI (claude, agy), which continues the
 step (`esc` stops it to steer). `ctrl+z` inside the TUI detaches back to the
 progress view while it keeps working; `ctrl+t` attaches again. When the agent
@@ -145,5 +145,5 @@ Effort goes through `agents run --effort`: `low`, `medium`, `high`, `xhigh`,
 `max`.
 
 Env:
-- `AGENTS_CMD`: agents binary path (set by the package).
+- `AGENTTAP_CMD`: agenttap binary path (set by the package).
 - `OPENSPEC_PIPELINE_PRESET`: default preset name (`agy` or `claude`).

@@ -5,10 +5,10 @@
 import { resolveSandboxMode, wrapCommand } from "./sandbox";
 
 function printUsage(): void {
-  console.log(`Usage: agents-sandbox [options] [--] [command [args...]]
+  console.log(`Usage: agenttap-sandbox [options] [--] [command [args...]]
 
 Bubblewrap sandbox wrapper for AI agents and commands.
-Reuses the exact sandbox configuration from packages/agents.
+Reuses the exact sandbox configuration from packages/agenttap.
 
 Modes:
   permissive (default)  Read/write across filesystem, but shields sensitive
@@ -19,7 +19,7 @@ Modes:
 
 Options:
   -s, --sandbox <mode>    Sandbox mode: permissive, strict, off (default: permissive)
-                          Can also be set via AGENTS_SANDBOX or AI_SANDBOX env var.
+                          Can also be set via AGENTTAP_SANDBOX or AI_SANDBOX env var.
   -C, --cwd <dir>         Working directory to isolate/chdir into (default: current directory)
       --scratch-dir <dir> Scratch directory to bind into cwd in strict mode
       --system-file <f>   Extra system file to ro-bind
@@ -88,7 +88,7 @@ for (let i = 0; i < args.length; i++) {
   }
   if (arg === "-s" || arg === "--sandbox") {
     if (i + 1 >= args.length) {
-      console.error("agents-sandbox: --sandbox requires an argument");
+      console.error("agenttap-sandbox: --sandbox requires an argument");
       process.exit(1);
     }
     requestedMode = args[++i];
@@ -100,7 +100,7 @@ for (let i = 0; i < args.length; i++) {
   }
   if (arg === "-C" || arg === "--cwd") {
     if (i + 1 >= args.length) {
-      console.error("agents-sandbox: --cwd requires an argument");
+      console.error("agenttap-sandbox: --cwd requires an argument");
       process.exit(1);
     }
     cwd = args[++i];
@@ -112,7 +112,7 @@ for (let i = 0; i < args.length; i++) {
   }
   if (arg === "--scratch-dir" || arg === "--scratch") {
     if (i + 1 >= args.length) {
-      console.error(`agents-sandbox: ${arg} requires an argument`);
+      console.error(`agenttap-sandbox: ${arg} requires an argument`);
       process.exit(1);
     }
     scratchDir = args[++i];
@@ -124,7 +124,7 @@ for (let i = 0; i < args.length; i++) {
   }
   if (arg === "--system-file") {
     if (i + 1 >= args.length) {
-      console.error("agents-sandbox: --system-file requires an argument");
+      console.error("agenttap-sandbox: --system-file requires an argument");
       process.exit(1);
     }
     systemFile = args[++i];
@@ -136,7 +136,7 @@ for (let i = 0; i < args.length; i++) {
   }
   if (arg === "--image") {
     if (i + 1 >= args.length) {
-      console.error("agents-sandbox: --image requires an argument");
+      console.error("agenttap-sandbox: --image requires an argument");
       process.exit(1);
     }
     images.push(args[++i]);
@@ -147,7 +147,7 @@ for (let i = 0; i < args.length; i++) {
     continue;
   }
   if (arg.startsWith("-")) {
-    console.error(`agents-sandbox: unknown option: ${arg}`);
+    console.error(`agenttap-sandbox: unknown option: ${arg}`);
     process.exit(1);
   }
   // First non-flag argument starts the command
@@ -165,7 +165,7 @@ let mode;
 try {
   mode = resolveSandboxMode(requestedMode, "permissive");
 } catch (err: any) {
-  console.error(`agents-sandbox: ${err?.message ?? err}`);
+  console.error(`agenttap-sandbox: ${err?.message ?? err}`);
   process.exit(1);
 }
 

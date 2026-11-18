@@ -21,7 +21,7 @@ import * as store from "./store";
 import { tail } from "./tail";
 import { bell, interrupt, out, println, track } from "./term";
 
-const dtach = process.env.AGENTS_DTACH ?? Bun.which("dtach");
+const dtach = process.env.AGENTTAP_DTACH ?? Bun.which("dtach");
 
 const CTRL_C = "\x03";
 export const CTRL_T = "\x14";

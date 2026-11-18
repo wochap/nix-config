@@ -12,7 +12,7 @@ let
   hmConfig = config.home-manager.users.${userName};
   new-project = pkgs.writeScriptBin "new-project" (builtins.readFile ./scripts/new-project.sh);
   skills = {
-    agents = ../../../../../packages/agents/skill;
+    agenttap = ../../../../../packages/agenttap/skill;
     openspec-pipeline = ../../../../../packages/openspec-pipeline/skill;
   };
   # Skills shipped inside packages, linked from the Nix store
@@ -67,7 +67,7 @@ in
       inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.google-antigravity-cli # CLI
       new-project
       _custom.openspec-pipeline
-      _custom.agents
+      _custom.agenttap
     ];
 
     _custom.hm = {
@@ -75,8 +75,8 @@ in
         packages = with pkgs; [ bubblewrap ];
 
         shellAliases = {
-          agents-sandbox = "agents-sandbox ";
-          ai-sandbox = "agents-sandbox ";
+          agenttap-sandbox = "agenttap-sandbox ";
+          ai-sandbox = "agenttap-sandbox ";
         };
 
         sessionVariables = {

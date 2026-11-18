@@ -9,15 +9,15 @@ let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
   inherit (config._custom.globals) userName;
-  proxy = config._custom.services.web-gate.proxies.agents-server;
-  apiKeyFile = config.sops.secrets.agents-server-api-key.path;
+  proxy = config._custom.services.web-gate.proxies.agenttap-server;
+  apiKeyFile = config.sops.secrets.agenttap-server-api-key.path;
 in
 {
-  options._custom.services.ai.agentsServer = {
-    enable = lib.mkEnableOption "OpenAI-compatible API over the agents CLI";
+  options._custom.services.ai.agenttapServer = {
+    enable = lib.mkEnableOption "OpenAI-compatible API over the agenttap CLI";
     cwd = lib.mkOption {
       type = lib.types.str;
-      default = "/home/${userName}/agents";
+      default = "/home/${userName}/agenttap";
       description = "Working directory of every agent run; created on service start.";
     };
     models = lib.mkOption {
@@ -35,7 +35,7 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Let runs use tools (agents serve --tools). Off, every run gets
+        Let runs use tools (agenttap serve --tools). Off, every run gets
         --no-tools, so a prompt cannot drive tools in cwd; wosarcher, which
         forwards scraped web text, requires it off.
       '';
@@ -47,19 +47,19 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable && cfg.agentsServer.enable) {
+  config = lib.mkIf (cfg.enable && cfg.agenttapServer.enable) {
     # Clients send it as "Authorization: Bearer <key>".
-    sops.secrets.agents-server-api-key = {
+    sops.secrets.agenttap-server-api-key = {
       sopsFile = ../../../../../secrets-sops/local.yaml;
-      key = "local-agents-server-api-key";
+      key = "local-agenttap-server-api-key";
       owner = userName;
       mode = "0400";
     };
 
-    # https://agents.wochap.local/v1
-    _custom.services.web-gate.proxies.agents-server = {
+    # https://agenttap.wochap.local/v1
+    _custom.services.web-gate.proxies.agenttap-server = {
       enable = true;
-      subdomain = "agents";
+      subdomain = "agenttap";
       publicPort = 20940;
       backendPort = 20941;
       lazy = true;
@@ -67,34 +67,34 @@ in
       inherit userName;
     };
 
-    _custom.hm.systemd.user.services.agents-server = {
+    _custom.hm.systemd.user.services.agenttap-server = {
       # Not tied to the graphical session: the lazy socket starts it in the
       # lingering user manager, and the socket proxy would keep sending
       # requests to a dead port after a logout stopped it.
-      Unit.Description = "OpenAI-compatible API over the agents CLI";
+      Unit.Description = "OpenAI-compatible API over the agenttap CLI";
       Service = {
         ExecStartPre = lib.escapeShellArgs [
           "${pkgs.coreutils}/bin/mkdir"
           "-p"
-          cfg.agentsServer.cwd
+          cfg.agenttapServer.cwd
         ];
         ExecStart = lib.escapeShellArgs (
           [
-            (lib.getExe pkgs._custom.agents)
+            (lib.getExe pkgs._custom.agenttap)
             "serve"
             "--host"
             wochap-ssc.meta.address
             "--port"
             (toString proxy.backendPort)
             "-C"
-            cfg.agentsServer.cwd
+            cfg.agenttapServer.cwd
             "--models"
-            (lib.concatStringsSep "," cfg.agentsServer.models)
+            (lib.concatStringsSep "," cfg.agenttapServer.models)
             "--api-key-file"
             apiKeyFile
           ]
-          ++ lib.optionals cfg.agentsServer.tools (
-            [ "--tools" ] ++ lib.optional cfg.agentsServer.toolEvents "--tool-events"
+          ++ lib.optionals cfg.agenttapServer.tools (
+            [ "--tools" ] ++ lib.optional cfg.agenttapServer.toolEvents "--tool-events"
           )
         );
         Restart = "always";
@@ -109,7 +109,7 @@ in
       }
       // lib._custom.userServiceHardening
       // {
-        # The harnesses write ~/.claude, ~/.config/pi, ~/.gemini, ~/.local/state/agents
+        # The harnesses write ~/.claude, ~/.config/pi, ~/.gemini, ~/.local/state/agenttap
         # and the run's cwd, so home stays visible and writable.
         ReadWritePaths = [ "%h" ];
         BindReadOnlyPaths = [ apiKeyFile ];

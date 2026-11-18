@@ -313,8 +313,8 @@ in
       "941f7d1d1524251c026a797b803ac9575545c5d7aa19b26e0e49661d7720af49";
     _custom.services.ai.ollamaEmbeddingModel = "gdesktop-qwen3-embedding:4b";
     _custom.services.ai.enableArticle = true;
-    _custom.services.ai.agentsServer.enable = true;
-    _custom.services.ai.agentsServer.models = [
+    _custom.services.ai.agenttapServer.enable = true;
+    _custom.services.ai.agenttapServer.models = [
       "claude/claude-fable-5-1"
       "claude/claude-opus-5-5[1m]"
       "claude/claude-sonnet-5-5"

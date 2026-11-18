@@ -38,7 +38,7 @@ describe("end-to-end serve tool calling", () => {
     serverProc = Bun.spawn(
       [
         process.execPath,
-        "packages/agents/src/main.ts",
+        "packages/agenttap/src/main.ts",
         "serve",
         "--port",
         String(port),

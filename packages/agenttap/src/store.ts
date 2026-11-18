@@ -1,4 +1,4 @@
-// Session store: ${XDG_STATE_HOME:-~/.local/state}/agents/sessions/
+// Session store: ${XDG_STATE_HOME:-~/.local/state}/agenttap/sessions/
 //   <id>.json          metadata (Session)
 //   <id>.events.jsonl  normalized events, one per line (what `watch` tails)
 //   <id>.raw.jsonl     provider-native output (written by the adapter)
@@ -27,7 +27,7 @@ export interface Session {
 }
 
 const stateHome = process.env.XDG_STATE_HOME ?? join(homedir(), ".local", "state");
-export const dir = join(stateHome, "agents", "sessions");
+export const dir = join(stateHome, "agenttap", "sessions");
 
 export const metaPath = (id: string) => join(dir, `${id}.json`);
 export const eventsPath = (id: string) => join(dir, `${id}.events.jsonl`);

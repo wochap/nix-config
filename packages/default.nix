@@ -35,8 +35,8 @@ in
     rtk = final.callPackage ./rtk { inherit inputs; };
     shell-auth = final.callPackage ./shell-auth { };
     libfprint-fpcmoh = final.callPackage ./libfprint-fpcmoh { };
-    openspec-pipeline = final.callPackage ./openspec-pipeline { inherit agents; };
-    agents = final.callPackage ./agents { };
+    openspec-pipeline = final.callPackage ./openspec-pipeline { inherit agenttap; };
+    agenttap = final.callPackage ./agenttap { };
     pythonPackages = lib.dontRecurseIntoAttrs (
       final.callPackage ./python-packages { inherit inputs; }
     );

@@ -29,8 +29,8 @@ openspec-pipeline --json --on-input stop --resume <session> --answer "<reply>" <
   only its tail.
 - Pass the changes in the order the user gave. Add `--gate '<cmd>'` for the
   project's test or build command when the user wants checks before commits.
-- Tell the user they can follow a step with `agents watch <id>` or take it
-  over with `agents attach <id>`. Never run those two yourself.
+- Tell the user they can follow a step with `agenttap watch <id>` or take it
+  over with `agenttap attach <id>`. Never run those two yourself.
 - Do not edit the repository while the pipeline runs; it commits with
   `git add -A`.
 
@@ -55,7 +55,7 @@ stdout is one line:
     in your reply to the user what you decided.
   - The answer is a product decision, a secret, or a permission only the user
     can give: show the user the questions (short) and the session id, then
-    re-run with their answer. The user can also run `agents attach <session>`
+    re-run with their answer. The user can also run `agenttap attach <session>`
     to resolve it in the TUI; then re-run without `--resume`.
   - Only a few open tasks and no question: `--answer "Finish the remaining
     tasks."`.

@@ -1,13 +1,13 @@
-#compdef agents
+#compdef agenttap
 
-_agents_sessions() {
-  local dir=${XDG_STATE_HOME:-$HOME/.local/state}/agents/sessions
+_agenttap_sessions() {
+  local dir=${XDG_STATE_HOME:-$HOME/.local/state}/agenttap/sessions
   local -a ids
   ids=($dir/*.json(N:t:r))
   _describe 'session' ids
 }
 
-_agents() {
+_agenttap() {
   local curcontext=$curcontext state line
   local -a commands
   commands=(
@@ -30,7 +30,7 @@ _agents() {
       ;;
     args)
       # words now start at the subcommand, so each gets its own options.
-      curcontext=${curcontext%:*:*}:agents-${words[1]}:
+      curcontext=${curcontext%:*:*}:agenttap-${words[1]}:
       case ${words[1]} in
         run)
           _arguments \
@@ -38,7 +38,7 @@ _agents() {
             '(-m --model)'{-m,--model}'[model]:model:' \
             '(-e --effort)'{-e,--effort}'[effort]:effort:(low medium high xhigh max)' \
             '(-C --cwd)'{-C,--cwd}'[working directory]:directory:_directories' \
-            '(-r --resume)'{-r,--resume}'[continue a session headless]:session:_agents_sessions' \
+            '(-r --resume)'{-r,--resume}'[continue a session headless]:session:_agenttap_sessions' \
             '(-q --quiet --verbose)'{-q,--quiet}'[print only the final answer]' \
             '(-q --quiet)--verbose[print live progress]' \
             '--json[print JSON result]' \
@@ -49,7 +49,7 @@ _agents() {
             '1:prompt, or - for stdin:'
           ;;
         attach|last|watch)
-          _arguments '1:session:_agents_sessions'
+          _arguments '1:session:_agenttap_sessions'
           ;;
         ls)
           _arguments \
@@ -74,4 +74,4 @@ _agents() {
   esac
 }
 
-_agents "$@"
+_agenttap "$@"

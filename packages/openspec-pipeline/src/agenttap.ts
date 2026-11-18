@@ -1,7 +1,7 @@
-// Every step runs through the agents CLI (packages/agents): headless with
+// Every step runs through the agenttap CLI (packages/agenttap): headless with
 // live progress, Ctrl-T to take a running step over.
 //
-// Env: AGENTS_CMD="..." (default "agents", set by the package)
+// Env: AGENTTAP_CMD="..." (default "agenttap", set by the package)
 //      OPENSPEC_PIPELINE_PRESET="..." (default "agy")
 
 export type Step = "apply" | "sync" | "archive";
@@ -51,7 +51,7 @@ export function getPreset(name: string = DEFAULT_PRESET_NAME): Preset {
   return preset;
 }
 
-const cmd = (process.env.AGENTS_CMD ?? "agents").split(/\s+/).filter(Boolean);
+const cmd = (process.env.AGENTTAP_CMD ?? "agenttap").split(/\s+/).filter(Boolean);
 
 /** Default model per step; overridden by --<step>-model. */
 export const defaultModel = (step: Step, presetName?: string) => getPreset(presetName).models[step];

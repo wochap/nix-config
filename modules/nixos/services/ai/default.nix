@@ -19,7 +19,7 @@ let
 in
 {
   imports = [
-    ./agents-server
+    ./agenttap-server
     ./omniroute
     ./firecrawl
     ./reranker

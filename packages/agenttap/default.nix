@@ -9,22 +9,22 @@
 
 # TypeScript run directly by Bun; no dependencies, so no package.json.
 # dtach runs a taken-over session's TUI so Ctrl-Z can detach from it.
-# bubblewrap provides sandbox isolation for agents and agents-sandbox.
+# bubblewrap provides sandbox isolation for agenttap and agenttap-sandbox.
 symlinkJoin {
-  name = "agents";
+  name = "agenttap";
   paths = [
-    (writeShellScriptBin "agents" ''
-      export AGENTS_DTACH=${lib.getExe dtach}
+    (writeShellScriptBin "agenttap" ''
+      export AGENTTAP_DTACH=${lib.getExe dtach}
       export PATH="${lib.makeBinPath [ bubblewrap ]}:$PATH"
       exec ${lib.getExe bun} ${./src}/main.ts "$@"
     '')
-    (writeShellScriptBin "agents-sandbox" ''
+    (writeShellScriptBin "agenttap-sandbox" ''
       export PATH="${lib.makeBinPath [ bubblewrap ]}:$PATH"
       exec ${lib.getExe bun} ${./src}/sandbox-cli.ts "$@"
     '')
   ];
   postBuild = ''
-    install -Dm444 ${./completions/_agents} $out/share/zsh/site-functions/_agents
+    install -Dm444 ${./completions/_agenttap} $out/share/zsh/site-functions/_agenttap
   '';
-  meta.mainProgram = "agents";
+  meta.mainProgram = "agenttap";
 }

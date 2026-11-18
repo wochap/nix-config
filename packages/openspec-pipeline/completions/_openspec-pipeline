@@ -10,7 +10,7 @@ _openspec_pipeline_changes() {
 }
 
 _openspec_pipeline_sessions() {
-  local dir=${XDG_STATE_HOME:-$HOME/.local/state}/agents/sessions
+  local dir=${XDG_STATE_HOME:-$HOME/.local/state}/agenttap/sessions
   local -a ids
   ids=($dir/*.json(N:t:r))
   _describe 'session' ids

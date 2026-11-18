@@ -5,7 +5,7 @@ import { join } from "node:path";
 
 describe("store prompt preservation and retrieval", () => {
   test("createSession stores the full untruncated prompt and writes .prompt.txt", async () => {
-    const tmp = mkdtempSync(join(tmpdir(), "agents-store-test-"));
+    const tmp = mkdtempSync(join(tmpdir(), "agenttap-store-test-"));
     const prevEnv = process.env.XDG_STATE_HOME;
     process.env.XDG_STATE_HOME = tmp;
 
@@ -40,7 +40,7 @@ describe("store prompt preservation and retrieval", () => {
   });
 
   test("readPrompt falls back to session.prompt if .prompt.txt does not exist", async () => {
-    const tmp = mkdtempSync(join(tmpdir(), "agents-store-test-"));
+    const tmp = mkdtempSync(join(tmpdir(), "agenttap-store-test-"));
     const prevEnv = process.env.XDG_STATE_HOME;
     process.env.XDG_STATE_HOME = tmp;
 

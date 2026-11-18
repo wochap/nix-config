@@ -26,7 +26,7 @@ let
   # Secret files the daemon reads itself (`<x>_file` settings). Entries hold
   # paths, never values, so they are safe in the Nix store.
   omnirouteKeyFile = config.sops.secrets.wosarcher-omniroute-api-key.path;
-  agentsKeyFile = config.sops.secrets.wosarcher-agents-api-key.path;
+  agenttapKeyFile = config.sops.secrets.wosarcher-agenttap-api-key.path;
   jevKeyFile = config.sops.secrets.wosarcher-typesafe-api-key.path;
   searxProxy = config._custom.services.web-gate.proxies.searxng;
   omniRouteProxy = config._custom.services.web-gate.proxies.omniroute;
@@ -45,17 +45,17 @@ let
       base_url = "${host}:${toString omniRouteProxy.publicPort}/v1";
       api_key_file = omnirouteKeyFile;
     };
-    # agents serve (../agents-server): Claude Code and pi without tools; the
+    # agenttap serve (../agenttap-server): Claude Code and pi without tools; the
     # request's system message replaces the agent's own system prompt.
-    agents = {
-      description = "agents serve: Claude Code and pi without tools.";
-      base_url = "${host}:${toString config._custom.services.web-gate.proxies.agents-server.publicPort}/v1";
-      api_key_file = agentsKeyFile;
+    agenttap = {
+      description = "agenttap serve: Claude Code and pi without tools.";
+      base_url = "${host}:${toString config._custom.services.web-gate.proxies.agenttap-server.publicPort}/v1";
+      api_key_file = agenttapKeyFile;
     };
   };
   modelsOf = endpoint: lib.filterAttrs (_: m: m.endpoint == endpoint) wcfg.models;
   usedEndpoints = lib.filterAttrs (name: _: modelsOf name != { }) endpoints;
-  usesAgents = usedEndpoints ? agents;
+  usesAgenttap = usedEndpoints ? agenttap;
 
   # One `models.<id>` table. context_window is the model's total window
   # (prompt plus completion): wosarcher subtracts the prompt reserve and the
@@ -224,7 +224,7 @@ in
 
     endpoints = {
       omniroute = endpointOption "omniroute" "research-smart" 600;
-      agents = endpointOption "agents" "claude/claude-sonnet-5-5" 900;
+      agenttap = endpointOption "agenttap" "claude/claude-sonnet-5-5" 900;
     };
 
     models = lib.mkOption {
@@ -235,8 +235,8 @@ in
               type = lib.types.enum (lib.attrNames endpoints);
               default = "omniroute";
               description = ''
-                llm entry that serves the model: omniroute, or agents (agents
-                serve; needs agentsServer with tools off).
+                llm entry that serves the model: omniroute, or agenttap (agenttap
+                serve; needs agenttapServer with tools off).
               '';
             };
             preset = lib.mkOption {
@@ -267,7 +267,7 @@ in
         }
       );
       description = ''
-        Models by id (an OmniRoute model or combo, or an agents
+        Models by id (an OmniRoute model or combo, or an agenttap
         <agent>/<model> id). Each lands in the `models` table of its
         endpoint's llm entry with its context window, output limit,
         reasoning, and gap budget. A run may pick any model of an entry; one
@@ -347,16 +347,16 @@ in
       # of a large context on the local GPU is slow, hence omniroute's 600 s
       # timeout.
       desktop-free.preset = lib.mkDefault "qwen3-5-9b-local";
-      # Claude through agents serve. Effort "none" (the write default) keeps
+      # Claude through agenttap serve. Effort "none" (the write default) keeps
       # Claude Code's own effort: high for Sonnet, medium for Haiku.
-      "claude/claude-sonnet-5-5" = lib.mkIf cfg.agentsServer.enable {
-        endpoint = lib.mkDefault "agents";
+      "claude/claude-sonnet-5-5" = lib.mkIf cfg.agenttapServer.enable {
+        endpoint = lib.mkDefault "agenttap";
         preset = lib.mkDefault "claude-sonnet-5-5";
         reasoning.plan = lib.mkDefault "low";
         reasoning.gap = lib.mkDefault "low";
       };
-      "claude/claude-haiku-5-5" = lib.mkIf cfg.agentsServer.enable {
-        endpoint = lib.mkDefault "agents";
+      "claude/claude-haiku-5-5" = lib.mkIf cfg.agenttapServer.enable {
+        endpoint = lib.mkDefault "agenttap";
         preset = lib.mkDefault "claude-haiku-5-5";
         reasoning.plan = lib.mkDefault "low";
         reasoning.gap = lib.mkDefault "low";
@@ -367,8 +367,8 @@ in
       # The llm prompts carry scraped web text; with tools an agent could act
       # on instructions planted in it.
       {
-        assertion = !usesAgents || (cfg.agentsServer.enable && !cfg.agentsServer.tools);
-        message = "wosarcher: a model with endpoint = \"agents\" needs agentsServer enabled with tools = false";
+        assertion = !usesAgenttap || (cfg.agenttapServer.enable && !cfg.agenttapServer.tools);
+        message = "wosarcher: a model with endpoint = \"agenttap\" needs agenttapServer enabled with tools = false";
       }
       {
         assertion = wcfg.profiles ? ${wcfg.profile};
@@ -430,9 +430,9 @@ in
       group = "wosarcher";
       mode = "0400";
     };
-    sops.secrets.wosarcher-agents-api-key = lib.mkIf usesAgents {
+    sops.secrets.wosarcher-agenttap-api-key = lib.mkIf usesAgenttap {
       sopsFile = ../../../../../secrets-sops/local.yaml;
-      key = "local-agents-server-api-key";
+      key = "local-agenttap-server-api-key";
       owner = "wosarcher";
       group = "wosarcher";
       mode = "0400";

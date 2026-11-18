@@ -1,4 +1,4 @@
-// agents — one CLI for coding agent CLIs (claude, pi, agy), for humans and agents.
+// agenttap — one CLI for coding agent CLIs (claude, pi, agy), for humans and agents.
 //
 //   run     headless run; live rendered progress on a TTY, only the final
 //           answer when piped (what an agent calling this wants). On a TTY,
@@ -23,7 +23,7 @@ import { tail } from "./tail";
 import { askHandBack, CTRL_T, keys, takeOver } from "./takeover";
 import { bell, color, interactive, onInterruptCleanup, progressToStderr, warn } from "./term";
 
-const HELP = `Usage: agents <command> [options]
+const HELP = `Usage: agenttap <command> [options]
 
 Commands:
   run [<prompt>|-]   headless run; prompt from stdin when "-" or piped
@@ -65,7 +65,7 @@ Commands:
         --models <list>  comma-separated <agent>/<model> ids for /v1/models
                          (default: each agent's default model)
         --api-key-file <f>  require "Authorization: Bearer <key>" on /v1/*
-                         (or AGENTS_API_KEY); one of them or --no-auth
+                         (or AGENTTAP_API_KEY); one of them or --no-auth
         --no-auth        accept any request
         --tools          let runs use tools (default: --no-tools, so chats
                          only answer and prompts cannot drive tools)
@@ -371,9 +371,9 @@ async function watch() {
 // The key /v1/* requires; null only with --no-auth.
 async function apiKey(): Promise<string | null> {
   if (opts["no-auth"]) return null;
-  const key = opts["api-key-file"] ? await Bun.file(opts["api-key-file"]).text() : process.env.AGENTS_API_KEY;
+  const key = opts["api-key-file"] ? await Bun.file(opts["api-key-file"]).text() : process.env.AGENTTAP_API_KEY;
   if (key?.trim()) return key.trim();
-  throw new Error("serve: give --api-key-file, AGENTS_API_KEY, or --no-auth");
+  throw new Error("serve: give --api-key-file, AGENTTAP_API_KEY, or --no-auth");
 }
 
 async function serve() {

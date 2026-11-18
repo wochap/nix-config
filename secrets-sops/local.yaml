@@ -16,7 +16,7 @@ local-media-seerr-api-key: ENC[AES256_GCM,data:TUZJ8HSQqu/eCTPhT64HsRmU80b31qBQ7
 local-media-gdesktop-lazylibrarian-api-key: ENC[AES256_GCM,data:LTfPlwe4JRzd95zfOMI0HeERc8AYyC/4rLWfKeCKUy0=,iv:o29E/2qTTcEBo0bVnsD7afDx1sXsMuMZKmnRrYzk/ns=,tag:MENJ8YbdOAlSScEo5B5xyA==,type:str]
 local-sunshine-user: ENC[AES256_GCM,data:DJIzNkpU,iv:OKSCWtDBXwKe0WluYzMd3HxcZx1okewDqVm9zsuS6wI=,tag:cf02HHOyCz+NCbsgqfBQ0g==,type:str]
 local-sunshine-password: ENC[AES256_GCM,data:Sirg0jZGjhQ=,iv:sNUClEtRE02D1k/6+kLYCF/TBfw1z/4BfozdpG4EWlE=,tag:NPlf12QuZA/0rjUsn97UXQ==,type:str]
-local-agents-server-api-key: ENC[AES256_GCM,data:lOsV+rLqKqrqKvVsZcMANgP9R4NypvRyFOgnxKsA8peuJsC3vDMw41dBuZP0LvHidy1xdvuPrJjnxtJd7T23+w==,iv:pdlFJDK8XyDym68w3/kzSWhJKTQVjPHokMN26oKskKg=,tag:WlaKGYeAzqY6w6vJn0PDdg==,type:str]
+local-agenttap-server-api-key: ENC[AES256_GCM,data:de4vjZmtJ2hrqYhanh4zuQbFCZVNBJge5gZDvSSEGgFrNl6QHAXZIuYiv1fko4fYBXqb/+z87aiYmFn2vbw/+A==,iv:Plg12p8ymsCWtR6ylHHeCaq18NMH+nSdqW1Plq4TBJg=,tag:fnUotz/8ylhYoeaYQG4CZA==,type:str]
 local-syncthing-password: ENC[AES256_GCM,data:11Yx7II0BO4=,iv:oPP7QqKM+DkMQKGRF/C+OWpIRUZ5JcNXrFPoVhX+tkM=,tag:iL/3ZrKhNJNLK0E3J18m5g==,type:str]
 local-media-lidarr-api-key: ENC[AES256_GCM,data:+KZt4EKgh9HyXSeko8cd7qnlxfhA0X3FMev4A8aoGYQ=,iv:fb3E7mM6hwmhV/6TIuNRibSFVjARNLoBtnBnLOJ7MlE=,tag:/69xu/jbM1TDfDDDUIYx+g==,type:str]
 local-media-slskd-api-key: ENC[AES256_GCM,data:x58+uBBDRCzOn0yYcEzdzN8mVnVn5vfQNsEJmIwwp3Z+vGokUaKTQwm7ZFYTqYflXjwrIEaY5YXKPWM7/WyOLQ==,iv:MoHCCIyvbLFxR4vm6yTS+vuHt41ZT5rK+yjy0J3p/kc=,tag:bTrI2r0KRhnvWStNdLZt7g==,type:str]
@@ -42,7 +42,7 @@ sops:
             44HTlJUCetkY7a7utsoCb61VcsuLdip8we358v06rKy1zne0G36/Pw==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1hryf55wm6ypwvw97e5f9gzczeesy5r0hcndgz2q2lulg8gpxqu2qxgeje9
-    lastmodified: "2026-10-15T02:04:54Z"
-    mac: ENC[AES256_GCM,data:sMP2X3zGjVvQnHgEBO3dldqugtVj+S7bZ43MDyCidgBzw90jre4/78YFhjPWDVxFVv3kpp2oAe94MaPGg9QCgIwcN36k/gn3/4C9/jz4r55dBIO9E+ttGiDPMDhKCppDm72kMnWprBV3fIcidTqE2vGs/B1QaZhIq7mqlRBBUMI=,iv:XadCZt5+ZN5s5mM99MbCH2vygRyHSqfYyCc3e6XfIA8=,tag:43DJUgmnIVb9XEt3WbATMw==,type:str]
+    lastmodified: "2026-11-18T15:13:50Z"
+    mac: ENC[AES256_GCM,data:j8p/lC3Oefco0PnI/ZDhwL8dDrLOGT2wzZzHPbvjrGYv5mN0K49R9B1qUJ9lsYmeRrgwVWyBJBBAITeovYuIX/Keu57EdrRxyp1888nGn4wb0cT+ymo19TpS7bSqU7dHHOVGJJFUNQQG80C5NBg/YGLimKlVPXKHFp2f3zfFgsg=,iv:ckd0GoFxjggwrkFfuYP2Jn1MUBEp25IYwRC+A/F152M=,tag:VHKvFlszOR+7CjJrCzyoVw==,type:str]
     unencrypted_suffix: _unencrypted
-    version: 3.13.1
+    version: 3.13.3
