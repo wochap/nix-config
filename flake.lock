@@ -3529,7 +3529,7 @@
         "reversal-extra": "reversal-extra",
         "rod": "rod",
         "rtk": "rtk",
-        "session-tap": "session-tap",
+        "sessiontap": "sessiontap",
         "shotclip": "shotclip",
         "showmethekey": "showmethekey",
         "smart-splits-nvim": "smart-splits-nvim",
@@ -3614,7 +3614,7 @@
         "type": "github"
       }
     },
-    "session-tap": {
+    "sessiontap": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
@@ -3624,13 +3624,13 @@
         "lastModified": 1793368345,
         "narHash": "sha256-BFu5DmHIiCkbAFuXqmybMz4ALKyk3PbOfTrq7Tvi1UY=",
         "owner": "wochap",
-        "repo": "session-tap",
+        "repo": "sessiontap",
         "rev": "85a54b451cceecd7080ee162de71a14145ff16b2",
         "type": "github"
       },
       "original": {
         "owner": "wochap",
-        "repo": "session-tap",
+        "repo": "sessiontap",
         "type": "github"
       }
     },
