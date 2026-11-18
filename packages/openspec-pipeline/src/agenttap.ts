@@ -87,7 +87,7 @@ export interface RunOptions {
 /**
  * Headless run in the current directory. With a TTY, progress and the
  * takeover keys stay on the terminal (stdin, stderr); without one, stderr
- * gets only "session: <id>". stdout carries agents' JSON result.
+ * gets only "session: <id>". stdout carries agenttap's JSON result.
  * Rejects when the agent fails.
  */
 export async function run(
@@ -108,7 +108,7 @@ export async function run(
   try {
     json = JSON.parse(out.trim().split("\n").at(-1) ?? "");
   } catch {
-    throw new AgentError(`agents exited with code ${code}`, undefined, false);
+    throw new AgentError(`agenttap exited with code ${code}`, undefined, false);
   }
   if (json.status !== "done") {
     const error = json.error ?? "unknown error";

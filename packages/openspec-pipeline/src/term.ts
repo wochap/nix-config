@@ -44,7 +44,7 @@ export async function ask<T extends string>(question: string, answers: readonly 
   }
 }
 
-// Ctrl-C stops the whole run; the running agents child gets it from the
+// Ctrl-C stops the whole run; the running agenttap child gets it from the
 // terminal too and cleans up after itself. While the user is inside a
 // taken-over interactive session, Ctrl-C belongs to that agent and is ignored
 // here.
@@ -61,7 +61,7 @@ export async function interactive<T>(fn: () => Promise<T>): Promise<T> {
 
 function onInterrupt() {
   if (inTakeover) return;
-  process.stderr.write(`\n${color.yellow("==> interrupted, stopping agents")}\n`);
+  process.stderr.write(`\n${color.yellow("==> interrupted, stopping agenttap")}\n`);
   process.exit(130);
 }
 process.on("SIGINT", onInterrupt);

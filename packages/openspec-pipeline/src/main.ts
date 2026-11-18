@@ -22,18 +22,18 @@
 //   - no apply commit, tasks already done -> skip apply agent, commit code
 //   - no apply commit, tasks open         -> run apply (told to resume if
 //     uncommitted code changes exist from an interrupted run)
-// A step whose latest agents session failed (Ctrl-C, usage limit, crash)
+// A step whose latest agenttap session failed (Ctrl-C, usage limit, crash)
 // resumes that session instead of starting a new one, with this run's
 // model and effort; --fresh starts over.
 //
-// Steps run through the agents CLI (agents.ts). On a
+// Steps run through the agenttap CLI (agenttap.ts). On a
 // TTY, Ctrl-T takes a running step over, Ctrl-Z inside it detaches back.
 //
 // Exit codes: 0 done, 1 failed or quit, 3 needs input (stop).
 
 import { parseArgs } from "node:util";
-import * as agents from "./agents";
-import type { Step } from "./agents";
+import * as agenttap from "./agenttap";
+import type { Step } from "./agenttap";
 import { ask, bell, interactive, log, logToStderr, print, warn } from "./term";
 import { changeExists, codeDirty, commit, hasCommit, readTasks, repoRoot, type Tasks } from "./repo";
 
@@ -77,8 +77,8 @@ const { values: opts, positionals: changes } = parseArgs({
   },
 });
 
-const presetName = opts.preset ?? agents.DEFAULT_PRESET_NAME;
-const preset = agents.getPreset(presetName);
+const presetName = opts.preset ?? agenttap.DEFAULT_PRESET_NAME;
+const preset = agenttap.getPreset(presetName);
 const agentName = opts.agent ?? preset.agent;
 
 const HELP = `Usage: openspec-pipeline [options] <change>...
@@ -87,8 +87,8 @@ Runs apply -> sync -> archive for each change, in the given order.
 Re-run with the same arguments to resume after an interruption.
 
 Options:
-      --preset <p>          preset for agent, models, effort (default: ${agents.DEFAULT_PRESET_NAME})
-                              available: ${Object.keys(agents.PRESETS).join(", ")}
+      --preset <p>          preset for agent, models, effort (default: ${agenttap.DEFAULT_PRESET_NAME})
+                              available: ${Object.keys(agenttap.PRESETS).join(", ")}
   -a, --agent <a>           agent to run (default: ${preset.agent})
       --apply-model <m>     model for apply   (default: ${preset.models.apply})
       --sync-model <m>      model for sync    (default: ${preset.models.sync})
@@ -116,8 +116,8 @@ Exit codes: 0 done, 1 failed or quit, 3 needs input.
 A re-run resumes an interrupted step's session with this run's model and
 effort, so you can change them midway.
 
-On a TTY each step is an agents session (${agentName}): ctrl+t takes a running
-step over, ctrl+z inside it detaches back. Sessions: agents ls`;
+On a TTY each step is an agenttap session (${agentName}): ctrl+t takes a running
+step over, ctrl+z inside it detaches back. Sessions: agenttap ls`;
 
 if (opts.help || changes.length === 0) {
   console.log(HELP);
@@ -156,7 +156,7 @@ const fail = (err: unknown) => {
   const message = err instanceof Error ? err.message : String(err);
   warn(`error: ${message}`);
   const where = { status: "failed" as const, change: current.change, step: current.step };
-  if (err instanceof agents.AgentError) {
+  if (err instanceof agenttap.AgentError) {
     if (err.session) warn(`re-run the same command to resume session ${err.session}`);
     finish({ ...where, session: err.session, reason: err.limit ? "usage_limit" : message, message }, 1);
   }
@@ -182,18 +182,18 @@ process.chdir(repoRoot());
 
 async function runStep(step: Step, prompt: string, resume?: string) {
   log(`${step} (${models[step]}, ${efforts[step]})${resume ? ` resuming ${resume}` : ""}: ${prompt}`);
-  const run = await agents.run(prompt, models[step], efforts[step], { resume, tty }, agentName);
+  const run = await agenttap.run(prompt, models[step], efforts[step], { resume, tty }, agentName);
   log(`[${current.change}] ${step} session: ${run.sessionId}`);
   return run;
 }
 
 const stepPrompt = (step: Step, change: string, instructions: string) =>
-  `${agents.invoke(step, change)} — ${instructions}`;
+  `${agenttap.invoke(step, change)} — ${instructions}`;
 
 // The step's interrupted session to continue, unless --fresh.
 async function interrupted(step: Step, change: string) {
   if (opts.fresh) return null;
-  const id = await agents.interrupted(step, change, agentName);
+  const id = await agenttap.interrupted(step, change, agentName);
   if (id) warn(`[${change}] ${step} was interrupted, resuming session ${id} (--fresh starts over)`);
   return id;
 }
@@ -253,7 +253,7 @@ async function apply(change: string) {
   let tries = 0;
 
   while (true) {
-    const resp = (await agents.last(sessionId)) ?? fallback;
+    const resp = (await agenttap.last(sessionId)) ?? fallback;
     log(`[${change}] apply agent last response:`);
     print(resp);
 
@@ -296,7 +296,7 @@ async function apply(change: string) {
     }
     warn(`taking over apply session ${sessionId} — resolve it, then exit the agent to re-check`);
     bell();
-    await interactive(() => agents.attach(sessionId));
+    await interactive(() => agenttap.attach(sessionId));
     tookOver = true;
     fallback = "";
   }
