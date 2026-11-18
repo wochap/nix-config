@@ -406,6 +406,12 @@ npm cache clean --force
 
   disable fast startup in windows
 
+- Fix nfts partition
+
+  ```
+  $ sudo ntfsfix -d /dev/disk/by-uuid/2EAC625EAC622097
+  ```
+
 - [Search a package version in nixpkgs](https://lazamar.co.uk/nix-versions/)
 
 - Generate Nix fetcher calls from repository URLs
