@@ -5,6 +5,8 @@
 #   - the admin login, once (see below)
 #   - default save path QBT_SAVE_PATH with Automatic Torrent Management,
 #     while the save path is still the image's /config/Downloads
+#   - dangerous file extension exclusions (*.exe, *.bat, *.cmd, *.scr, *.lnk)
+#   - seeding limit: stop torrent when ratio reaches 0
 #   - the categories in QBT_CATEGORIES ("name path" per line), when missing
 #
 # Access: host requests through the published port arrive from the media
@@ -109,6 +111,17 @@ else
         | join("\n")
       )' <<<"$prefs")"
   log "excluded dangerous file extensions (*.exe, *.bat, *.cmd, *.scr, *.lnk)"
+fi
+
+# Stop seeding once download completes (ratio >= 0 -> stop torrent)
+if jq -e '
+  .max_ratio_enabled
+  and .max_ratio == 0
+  and .max_ratio_act == 0' <<<"$prefs" >/dev/null; then
+  log "seeding limit (ratio 0 -> stop) present"
+else
+  set_prefs "$(jq -nc '{max_ratio_enabled: true, max_ratio: 0, max_ratio_act: 0}')"
+  log "seeding limit set: ratio 0 -> stop torrent"
 fi
 
 # Categories
