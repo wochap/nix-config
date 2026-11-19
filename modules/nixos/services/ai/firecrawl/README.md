@@ -9,6 +9,7 @@ API, exposed at <https://firecrawl.wochap.local>.
 |-----------|------|
 | Firecrawl API + worker containers | Scrape/crawl/extract endpoints (pinned images) |
 | Playwright service container | Headless page rendering |
+| Playwright fallback proxy | Patchright + Chrome persistent-profile fallback (`403`/`429`/`503`) |
 | Redis 7 container | Queue/cache |
 | RabbitMQ container | Job broker |
 | NuQ PostgreSQL container | Persistence |
@@ -57,6 +58,23 @@ firecrawl config --api-url https://firecrawl.wochap.local
 The unversioned npm command installs the current CLI release. Pin a tested
 `firecrawl-cli` version in this command if the CLI itself must be
 reproducible.
+
+## Fallback Browser Profile
+
+When the primary `podman-firecrawl-playwright` container fails or returns a
+bot-block status (`403`, `429`, `503`), `firecrawl-playwright-fallback.service`
+retries the request with headless `patchright` + Google Chrome using a
+persistent profile at `/var/lib/firecrawl/browser-profile`.
+
+For sites that still present a one-time interactive challenge (such as DataDome
+CAPTCHAs), you can seed the profile manually in a browser session:
+
+```sh
+sudo systemctl stop firecrawl-playwright-fallback.service
+sudo google-chrome --no-sandbox --user-data-dir=/var/lib/firecrawl/browser-profile
+# Solve the challenge in Chrome, then close the browser
+sudo systemctl start firecrawl-playwright-fallback.service
+```
 
 ## Upgrade
 

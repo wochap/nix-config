@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -9,11 +10,14 @@ let
   cfg = config._custom.services.ai;
   inherit (pkgs._custom) wochap-ssc;
   proxy = config._custom.services.web-gate.proxies.firecrawl;
+  webscoop = inputs.webscoop.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  fallbackProfileDir = "/var/lib/firecrawl/browser-profile";
 
   nuqWorkerCount = 10;
 
   ports = {
     playwright = 20902;
+    playwrightUpstream = 20912;
     redis = 20903;
     rabbitmq = 20904;
     postgres = 20905;
@@ -107,6 +111,7 @@ let
 
   dependencyUnits = [
     "podman-firecrawl-playwright.service"
+    "firecrawl-playwright-fallback.service"
     "podman-firecrawl-redis.service"
     "podman-firecrawl-rabbitmq.service"
     "podman-firecrawl-postgres.service"
@@ -247,9 +252,9 @@ in
 
       firecrawl-playwright = {
         image = cfg.firecrawlPlaywrightImage;
-        ports = [ "${address}:${toString ports.playwright}:${toString ports.playwright}" ];
+        ports = [ "${address}:${toString ports.playwrightUpstream}:${toString ports.playwrightUpstream}" ];
         environment = {
-          PORT = toString ports.playwright;
+          PORT = toString ports.playwrightUpstream;
           MAX_CONCURRENT_PAGES = "10";
         };
         # The upstream service always listens on all container interfaces, so
@@ -334,6 +339,7 @@ in
 
     systemd.tmpfiles.rules = [
       "d /var/lib/firecrawl 0750 root root -"
+      "d ${fallbackProfileDir} 0700 root root -"
       "d /var/lib/firecrawl/postgres 0700 999 999 -"
       "d /var/lib/firecrawl/redis 0700 999 999 -"
       "d /var/lib/firecrawl/rabbitmq 0700 100 101 -"
@@ -360,6 +366,30 @@ in
           Restart = "on-failure";
           RestartSec = 2;
           TimeoutStopSec = lib.mkForce 45;
+          ProtectHome = true;
+        };
+      };
+
+      firecrawl-playwright-fallback = {
+        wantedBy = [ ];
+        requires = [ "podman-firecrawl-playwright.service" ];
+        after = [ "podman-firecrawl-playwright.service" ];
+        environment = {
+          HOST = address;
+          PORT = toString ports.playwright;
+          UPSTREAM_URL = "http://${address}:${toString ports.playwrightUpstream}";
+          PROFILE_DIR = fallbackProfileDir;
+          CHROME_EXECUTABLE = lib.getExe pkgs.google-chrome;
+          MAX_CONCURRENT_PAGES = "4";
+          NODE_PATH = "${webscoop}/lib/webscoop/node_modules";
+          HOME = "/run/firecrawl-playwright-fallback";
+        };
+        serviceConfig = {
+          ExecStart = "${lib.getExe pkgs.nodejs_22} ${./fallback-proxy.cjs}";
+          RuntimeDirectory = "firecrawl-playwright-fallback";
+          Restart = "on-failure";
+          RestartSec = 2;
+          TimeoutStopSec = 30;
           ProtectHome = true;
         };
       };
