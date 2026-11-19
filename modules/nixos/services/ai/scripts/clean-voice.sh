@@ -8,7 +8,7 @@ export OMNIROUTE_REASONING_EFFORT="${OMNIROUTE_REASONING_EFFORT:-none}"
 notify() {
   notify-send \
     --app-name="clean-voice" \
-    --app-icon="audio-input-microphone" \
+    --app-icon="preferences-desktop-text-to-speech" \
     --hint=int:transient:1 \
     "$1" \
     "${2:-}" || true
