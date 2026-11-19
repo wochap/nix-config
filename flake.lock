@@ -1107,11 +1107,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794245577,
-        "narHash": "sha256-w7ILQYi9XtOznoGVFHwaiXiCL9dwa1yvsPoRxH7DprE=",
+        "lastModified": 1795032603,
+        "narHash": "sha256-bhyDSTO+LzZ8h88erXrngO39a4gyVH4i3HhiUdNPGdM=",
         "ref": "refs/heads/main",
-        "rev": "36197ec41d2d9537e021d2606e0c454628e0d9a7",
-        "revCount": 103,
+        "rev": "abfedc5fd1f42c050663f3a385198cb318f6ab79",
+        "revCount": 157,
         "type": "git",
         "url": "ssh://git@github.com/wochap/geancam.git"
       },
@@ -4292,11 +4292,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1793915340,
-        "narHash": "sha256-0BpQbwFoL0fjHcNh2EDVE0sFCv54P1EXQjnqFrSpaQk=",
+        "lastModified": 1795104193,
+        "narHash": "sha256-xoSnaH8q+XoyLalx5YgOBrgbO1J083YRRURl8n/cEfI=",
         "owner": "wochap",
         "repo": "wosarcher",
-        "rev": "87b41f510604f03f00d1bfb11461c59b81552581",
+        "rev": "d7c18284761f1d56591e946491c1c6ab8021bc5f",
         "type": "github"
       },
       "original": {
