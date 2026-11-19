@@ -14,7 +14,7 @@ agenttap run -q "<prompt>"                 # stdout: final answer only; stderr: 
 agenttap run --json "<prompt>"             # stdout: {"id","agent","model","result","costUsd","durationMs","status"}
 agenttap run -q -C ~/repo -m claude-sonnet-5 -e high "<prompt>"
 agenttap run -q -a pi "<prompt>"           # another agent (default: claude)
-agenttap run -q -a agy "<prompt>"          # agy (default: gemini-4-hydrogen)
+agenttap run -q -a agy "<prompt>"          # agy (default: gemini-4-neon)
 echo "<long prompt>" | agenttap run -q -   # prompt from stdin
 agenttap run -q -r <id> "<follow-up>"      # continue a session headless
 agenttap send [<id>] "<message>"           # steer a running session live (-m/-e to switch model/effort)
@@ -23,7 +23,7 @@ agenttap last <id>                         # last message of a session
 agenttap ls                                # sessions of the last 7 days, --full for all
 ```
 
-- Agents: `claude` (default), `pi`, `agy` (default model `gemini-4-hydrogen`). `-m` defaults to the chosen agent's model.
+- Agents: `claude` (default), `pi`, `agy` (default model `gemini-4-neon`). `-m` defaults to the chosen agent's model.
   `-e` (low, medium, high, xhigh, max) defaults to the agent's own setting.
   `-r`, `last` take the session's own agent; no `-a` needed.
 - Ids may be a unique prefix.

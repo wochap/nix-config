@@ -320,6 +320,7 @@ in
       "claude/claude-sonnet-5-5"
       "claude/claude-haiku-5-5"
       "agy/gemini-4-argon"
+      "agy/gemini-4-neon"
       "agy/gemini-4-hydrogen"
     ];
     _custom.services.ai.briefing.enable = true;
