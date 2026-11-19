@@ -26,6 +26,7 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
+      cloudflared
       bun
       pnpm_11
       yarn-berry
