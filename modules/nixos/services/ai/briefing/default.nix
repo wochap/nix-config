@@ -19,6 +19,7 @@ let
 
   python = pkgs.python3.withPackages (pythonPackages: [
     pythonPackages.feedparser
+    pythonPackages.mutagen
     pythonPackages.numpy
   ]);
   src = lib.fileset.toSource {

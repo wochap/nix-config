@@ -141,6 +141,7 @@ do_package() {
   local show
   show=$(jq -r '.show' "$profile")
   briefing-package --chapters "$run/script/chapters.json" --audio "$run/audio" \
+    --stories "$run/script/stories.jsonl" \
     --out "$run/episode.mp3" --title "$show ${mode^} $date" --album "$show" --date "$date" \
     ${BRIEFING_COVER:+--cover "$BRIEFING_COVER"}
 }

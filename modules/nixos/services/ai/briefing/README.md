@@ -63,7 +63,7 @@ the computer was off runs at the next boot). Change them with
 
 | File | Content |
 |---|---|
-| `<date>-<mode>.mp3` | Episode with chapters |
+| `<date>-<mode>.mp3` | Episode with chapters and HTML shownotes |
 | `script.md` | Script with the stories behind each chapter |
 | `chapters.json` | Chapter texts |
 | `stories.jsonl` | Ranked stories (score, topic, sources, article text, `used`) |
