@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>@hostName@ status</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1120;
+      --surface: #111827;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --blue: #38bdf8;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sysbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: grid;
+      grid-template-columns: auto minmax(180px, 1fr) minmax(210px, 1.15fr) minmax(230px, 1.25fr);
+      gap: 12px;
+      align-items: stretch;
+      flex-shrink: 0;
+    }
+    .host-card, .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 5px;
+      min-width: 0;
+    }
+    .host-card {
+      justify-content: center;
+      padding: 8px 14px;
+    }
+    .host-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.01em;
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--muted);
+      box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.2);
+      flex-shrink: 0;
+    }
+    .dot.live {
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+    }
+    .dot.stale {
+      background: var(--amber);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+    .dot.err {
+      background: var(--red);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
+    .stat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .stat-label {
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 11px;
+    }
+    .stat-val {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .bar-track {
+      width: 100%;
+      height: 6px;
+      background: #0f172a;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: var(--green);
+      transition: width 0.35s ease, background-color 0.25s ease;
+    }
+    .bar-fill.amber { background: var(--amber); }
+    .bar-fill.red { background: var(--red); }
+    .stat-sub {
+      color: var(--muted);
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .net-rates {
+      display: flex;
+      gap: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .rx { color: var(--blue); }
+    .tx { color: var(--green); }
+    iframe {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      border: 0;
+      background: var(--bg);
+    }
+    @media (max-width: 900px) {
+      body {
+        height: auto;
+        min-height: 100vh;
+        overflow: auto;
+      }
+      .sysbar {
+        grid-template-columns: 1fr 1fr;
+      }
+      iframe {
+        min-height: 75vh;
+      }
+    }
+    @media (max-width: 560px) {
+      .sysbar {
+        grid-template-columns: 1fr;
+        padding: 8px 10px;
+        gap: 8px;
+      }
+    }
+  </style>
+  <script>
+    if (window.self !== window.top) {
+      window.location.replace("/?gatus=1");
+    }
+  </script>
+</head>
+<body>
+  <header class="sysbar" aria-label="Live system usage">
+    <div class="host-card">
+      <div class="host-top">
+        <span id="status-dot" class="dot" title="Collector status"></span>
+        <span id="host-name">@hostName@</span>
+      </div>
+      <div id="uptime" class="stat-sub">loading...</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-head">
+        <span class="stat-label">CPU</span>
+        <span id="cpu-val" class="stat-val">--%</span>
+      </div>
+      <div class="bar-track"><div id="cpu-bar" class="bar-fill"></div></div>
+      <div id="cpu-sub" class="stat-sub">-- cores · load --</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-head">
+        <span class="stat-label">Memory</span>
+        <span id="mem-val" class="stat-val">-- / -- GiB</span>
+      </div>
+      <div class="bar-track"><div id="mem-bar" class="bar-fill"></div></div>
+      <div id="mem-sub" class="stat-sub">avail -- · swap --</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-head">
+        <span class="stat-label">Network</span>
+        <div class="net-rates">
+          <span id="net-rx" class="rx">↓ --</span>
+          <span id="net-tx" class="tx">↑ --</span>
+        </div>
+      </div>
+      <div id="net-tot" class="stat-sub">total ↓ -- · ↑ --</div>
+      <div id="net-ts" class="stat-sub">tailnet ↓ -- · ↑ --</div>
+    </div>
+  </header>
+
+  <iframe src="/?gatus=1" title="Gatus Status"></iframe>
+
+  <script>
+    (function () {
+      var pollMs = @interval@ * 1000;
+      var dotEl = document.getElementById("status-dot");
+      var hostEl = document.getElementById("host-name");
+      var uptimeEl = document.getElementById("uptime");
+      var cpuValEl = document.getElementById("cpu-val");
+      var cpuBarEl = document.getElementById("cpu-bar");
+      var cpuSubEl = document.getElementById("cpu-sub");
+      var memValEl = document.getElementById("mem-val");
+      var memBarEl = document.getElementById("mem-bar");
+      var memSubEl = document.getElementById("mem-sub");
+      var netRxEl = document.getElementById("net-rx");
+      var netTxEl = document.getElementById("net-tx");
+      var netTotEl = document.getElementById("net-tot");
+      var netTsEl = document.getElementById("net-ts");
+
+      function fmtBytes(b) {
+        if (!isFinite(b) || b < 0) return "--";
+        var units = ["B", "KiB", "MiB", "GiB", "TiB"];
+        var i = 0;
+        while (b >= 1024 && i < units.length - 1) {
+          b /= 1024;
+          i++;
+        }
+        var dec = i === 0 ? 0 : (b >= 100 ? 0 : (b >= 10 ? 1 : 2));
+        return b.toFixed(dec) + " " + units[i];
+      }
+
+      function fmtRate(bps) {
+        return fmtBytes(bps) + "/s";
+      }
+
+      function fmtGiB(b) {
+        return (b / (1024 * 1024 * 1024)).toFixed(2);
+      }
+
+      function fmtUptime(sec) {
+        if (!isFinite(sec) || sec < 0) return "up --";
+        var d = Math.floor(sec / 86400);
+        var h = Math.floor((sec % 86400) / 3600);
+        var m = Math.floor((sec % 3600) / 60);
+        if (d > 0) return "up " + d + "d " + h + "h " + m + "m";
+        if (h > 0) return "up " + h + "h " + m + "m";
+        return "up " + m + "m " + Math.floor(sec % 60) + "s";
+      }
+
+      function setBar(el, pct) {
+        var clamped = Math.max(0, Math.min(100, pct));
+        el.style.width = clamped.toFixed(1) + "%";
+        el.className = "bar-fill" + (clamped >= 85 ? " red" : (clamped >= 70 ? " amber" : ""));
+      }
+
+      function refresh() {
+        fetch("/api/sysinfo", { cache: "no-store" })
+          .then(function (res) {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+          })
+          .then(function (d) {
+            var ageSec = Math.floor(Date.now() / 1000) - d.timestamp;
+            dotEl.className = "dot " + (ageSec > 15 ? "stale" : "live");
+            dotEl.title = ageSec > 15 ? ("Stale (" + ageSec + "s ago)") : "Live";
+
+            if (d.host) hostEl.textContent = d.host;
+            uptimeEl.textContent = fmtUptime(d.uptime_sec);
+
+            cpuValEl.textContent = d.cpu_pct.toFixed(1) + "%";
+            setBar(cpuBarEl, d.cpu_pct);
+            cpuSubEl.textContent =
+              d.cpu_cores + " cores \u00b7 load " +
+              d.load1.toFixed(2) + " " + d.load5.toFixed(2) + " " + d.load15.toFixed(2);
+
+            memValEl.textContent =
+              fmtGiB(d.mem_used_bytes) + " / " + fmtGiB(d.mem_total_bytes) +
+              " GiB (" + d.mem_pct.toFixed(1) + "%)";
+            setBar(memBarEl, d.mem_pct);
+            var swapText = d.swap_total_bytes > 0
+              ? (fmtBytes(d.swap_used_bytes) + " / " + fmtBytes(d.swap_total_bytes))
+              : "off";
+            memSubEl.textContent =
+              "avail " + fmtBytes(d.mem_avail_bytes) + " \u00b7 swap " + swapText;
+
+            netRxEl.textContent = "\u2193 " + fmtRate(d.net.rx_bps);
+            netTxEl.textContent = "\u2191 " + fmtRate(d.net.tx_bps);
+            netTotEl.textContent =
+              "total \u2193 " + fmtBytes(d.net.rx_bytes) + " \u00b7 \u2191 " + fmtBytes(d.net.tx_bytes);
+            netTsEl.textContent =
+              "tailnet \u2193 " + fmtRate(d.net.ts_rx_bps) + " \u00b7 \u2191 " + fmtRate(d.net.ts_tx_bps);
+          })
+          .catch(function () {
+            dotEl.className = "dot err";
+            dotEl.title = "Collector unreachable";
+          })
+          .finally(function () {
+            window.setTimeout(refresh, pollMs);
+          });
+      }
+
+      refresh();
+    })();
+  </script>
+</body>
+</html>

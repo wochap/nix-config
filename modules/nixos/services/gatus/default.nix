@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -8,6 +9,18 @@ let
   cfg = config._custom.services.gatus;
   services = config._custom.services;
   hasDomain = cfg.tailnetDomain != null;
+
+  sysinfoAwk = pkgs.replaceVars ./gatus-sysinfo.awk {
+    interval = toString cfg.systemStats.interval;
+    host = config.networking.hostName;
+    out = "/run/gatus-sysinfo/metrics.json";
+    mvBin = lib.getExe' pkgs.coreutils "mv";
+  };
+
+  sysinfoIndexHtml = pkgs.replaceVars ./index.html {
+    hostName = config.networking.hostName;
+    interval = toString cfg.systemStats.interval;
+  };
 
   # checks for the _custom services enabled on this host, against their
   # loopback backends (tailnet-only vhosts may not resolve from the host)
@@ -124,6 +137,14 @@ in
         GATUS_WOBOOK_TOKEN = "server-gatus-wobook-token";
       };
     };
+    systemStats = {
+      enable = lib.mkEnableOption "live CPU, memory, and network usage bar at the top of the status page";
+      interval = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 2;
+        description = "Sampling interval in seconds for /proc CPU, memory, and network metrics.";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -205,11 +226,68 @@ in
           enable = true;
           virtualHosts.${cfg.tailnetDomain} = {
             useACMEHost = cfg.tailnetDomain;
-            extraConfig = ''
-              @outside not remote_ip 100.64.0.0/10 fd7a:115c:a1e0::/48
-              abort @outside
-              reverse_proxy 127.0.0.1:${toString cfg.port}
-            '';
+            extraConfig =
+              if cfg.systemStats.enable then
+                ''
+                  @outside not remote_ip 100.64.0.0/10 fd7a:115c:a1e0::/48
+                  abort @outside
+                  handle /api/sysinfo {
+                    header Content-Type application/json
+                    header Cache-Control "no-store, no-cache, must-revalidate"
+                    root * /run/gatus-sysinfo
+                    rewrite * /metrics.json
+                    file_server
+                  }
+                  @rootWrapper {
+                    path /
+                    not query gatus=1
+                    not header Sec-Fetch-Dest iframe
+                  }
+                  handle @rootWrapper {
+                    header Content-Type "text/html; charset=utf-8"
+                    header Cache-Control "no-cache"
+                    root * /
+                    rewrite * ${sysinfoIndexHtml}
+                    file_server
+                  }
+                  handle {
+                    reverse_proxy 127.0.0.1:${toString cfg.port} {
+                      header_down -X-Frame-Options
+                      header_down -Content-Security-Policy
+                    }
+                  }
+                ''
+              else
+                ''
+                  @outside not remote_ip 100.64.0.0/10 fd7a:115c:a1e0::/48
+                  abort @outside
+                  reverse_proxy 127.0.0.1:${toString cfg.port}
+                '';
+          };
+        };
+      })
+
+      (lib.mkIf cfg.systemStats.enable {
+        assertions = [
+          {
+            assertion = hasDomain;
+            message = "_custom.services.gatus.systemStats.enable needs tailnetDomain";
+          }
+        ];
+
+        systemd.services.gatus-sysinfo = {
+          description = "Lightweight /proc system stats collector for Gatus status page";
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "simple";
+            DynamicUser = true;
+            RuntimeDirectory = "gatus-sysinfo";
+            RuntimeDirectoryMode = "0755";
+            UMask = "0022";
+            ExecStart = "${lib.getExe pkgs.gawk} -f ${sysinfoAwk}";
+            Restart = "always";
+            RestartSec = 2;
+            MemoryMax = "16M";
           };
         };
       })
