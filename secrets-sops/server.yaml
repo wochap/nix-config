@@ -8,7 +8,7 @@ server-traccar-admin-email: ENC[AES256_GCM,data:N6f23wxR356OWPUs0r+T61UNUFBqywjA
 server-traccar-admin-password: ENC[AES256_GCM,data:FJLaBbQYN75MpaKOHoRVwvKK+Tg2enndBl53biUKJ24=,iv:Ff1xj4Tul95o0mn+lGJ5G5lKCgdDMeVcHwdk8T09tdI=,tag:7BGZ2XuD8A7ie0+qmyCnfg==,type:str]
 server-traccar-watchdog-webhook-token: ENC[AES256_GCM,data:JtF2t1gTP9dOyROs0348GmjzhJKItWGlpRAHK/2PF/k=,iv:HCDYZud/Pl/H90FcQYBLFQnQeLqaw2JSkq0U+aefB4s=,tag:FTp0bJZWHc3Vp2dc8A7Dcw==,type:str]
 server-traccar-watchdog-telegram-bot-token: ENC[AES256_GCM,data:tuHgWYSHSK9AmtKBjDT/VVH43xjfvdnzQI0Dc8iu9Df/CGIOrVqsNskITK4+ng==,iv:P5L6AHLxkuibveOTy/G1U4o6TtpvmL8HsNn8sImQE2Y=,tag:3kEugNu/koUhK+9v0imw5w==,type:str]
-server-traccar-watchdog-telegram-chat-id: ENC[AES256_GCM,data:WCrHWWCYiQ85ag==,iv:UzT5h9wA3fmwOAOBI3hUI49Dt+WCEgURNWoxGiEY540=,tag:PgSqF/n2dN6pZ6nV/6MKWw==,type:int]
+server-traccar-watchdog-telegram-chat-id: ENC[AES256_GCM,data:I7tXNvLsGcOiew==,iv:a9nfcZu5Xy4kz+eRAybAxyH6+t18mmC9L7wN2Fh/oVw=,tag:XNnypyuk4v0WtnwpllizdA==,type:str]
 sops:
     age:
         - enc: |
@@ -29,7 +29,7 @@ sops:
             P/ML6X+6z+AbclARuwUqIb4dxC6P8ALajB5bT+AXh6Mp5wztPBzYHA==
             -----END AGE ENCRYPTED FILE-----
           recipient: age1hryf55wm6ypwvw97e5f9gzczeesy5r0hcndgz2q2lulg8gpxqu2qxgeje9
-    lastmodified: "2026-11-23T19:55:16Z"
-    mac: ENC[AES256_GCM,data:cgZLk9GEQ75MiHJ4QXr4AiGmMG0/KhrJBHo7URheuU+a1brsd0uQcJ7h1JHYNK8aqBmHcK5JICboWqxw8N7rZjE1rhtL1u74drGKxpwH6pECUcu8KVRVNDZp1N2QwTa+s84Y2rQBTe/QX/7AUNa/nf5b5nCU8okjsV4aRjYQTyA=,iv:2XooWwhz37DYEEN09nfiK4+87cxIdEmS/GjBk0vOn3I=,tag:Sgeg5aRwSQj9IH2VxpRCqg==,type:str]
+    lastmodified: "2026-11-23T20:08:23Z"
+    mac: ENC[AES256_GCM,data:auMx0QdETyMJR81a0TzZw7ZfVchZjnRBlrIqtj6x2pvV9eFneqqbZRpJPHey2GAmb+M59fvX4Jmw3N4Us7AZG6/k9Mb8XEXWlSYcwrqA9I2turPTB7V2K7vO4w8H+qTuG/1IssRfzWxCyLAZLFIs1CuFmFGObrIimyRN/tJ48RM=,iv:igTCrc+1zeq/YIMeut0mnD3xkFhMTuydWepJgE1vvq0=,tag:nibdJNDMFqIotbx89QeuRQ==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.13.3
