@@ -66,12 +66,16 @@ def maps_url(lat: float, lon: float) -> str:
     return f"https://maps.google.com/?q={lat:.6f},{lon:.6f}"
 
 
+class DeviceNotFoundError(LookupError):
+    """Raised when a requested Traccar device cannot be found."""
+
+
 @dataclass(frozen=True)
 class WatchdogConfig:
     traccar_url: str
     traccar_email: str
     traccar_password: str
-    traccar_device_unique_id: str
+    traccar_default_device: str
     auto_bootstrap_admin: bool
     telegram_bot_token: str
     telegram_chat_id: str
@@ -90,11 +94,15 @@ class WatchdogConfig:
     def from_env(cls) -> "WatchdogConfig":
         state_dir = os.environ.get("STATE_DIRECTORY", "/var/lib/traccar-watchdog")
         default_state = str(Path(state_dir) / "state.json")
+        default_dev = (
+            os.environ.get("TRACCAR_DEFAULT_DEVICE")
+            or os.environ.get("TRACCAR_DEVICE_UNIQUE_ID", "")
+        ).strip()
         return cls(
             traccar_url=os.environ.get("TRACCAR_URL", "http://127.0.0.1:8082").rstrip("/"),
             traccar_email=_require_env("TRACCAR_EMAIL"),
             traccar_password=_require_env("TRACCAR_PASSWORD"),
-            traccar_device_unique_id=os.environ.get("TRACCAR_DEVICE_UNIQUE_ID", "").strip(),
+            traccar_default_device=default_dev,
             auto_bootstrap_admin=_parse_bool(
                 os.environ.get("AUTO_BOOTSTRAP_ADMIN"), default=True
             ),
@@ -133,13 +141,14 @@ class WatchdogConfig:
 
 
 @dataclass
-class WatchdogState:
+class DeviceState:
+    device_id: int
+    device_name: str = ""
+    unique_id: str = ""
     armed: bool = False
     anchor_lat: float | None = None
     anchor_lon: float | None = None
     armed_at: float | None = None
-    device_id: int | None = None
-    device_name: str | None = None
     last_lat: float | None = None
     last_lon: float | None = None
     last_valid: bool | None = None
@@ -152,6 +161,21 @@ class WatchdogState:
     last_alert_at: dict[str, float] = field(default_factory=dict)
 
     @classmethod
+    def from_dict(cls, device_id: int, raw: dict[str, Any]) -> "DeviceState":
+        known = {f.name for f in cls.__dataclass_fields__.values()}
+        filtered = {k: v for k, v in raw.items() if k in known}
+        filtered["device_id"] = int(device_id)
+        if not isinstance(filtered.get("last_alert_at"), dict):
+            filtered["last_alert_at"] = {}
+        return cls(**filtered)
+
+
+@dataclass
+class WatchdogState:
+    default_device_id: int | None = None
+    devices: dict[str, DeviceState] = field(default_factory=dict)
+
+    @classmethod
     def load(cls, path: Path) -> "WatchdogState":
         if not path.exists():
             return cls()
@@ -160,17 +184,39 @@ class WatchdogState:
         except (OSError, json.JSONDecodeError) as exc:
             log.warning("Failed to load %s (%s); starting with fresh state", path, exc)
             return cls()
-        known = {f.name for f in cls.__dataclass_fields__.values()}
-        filtered = {k: v for k, v in raw.items() if k in known}
-        state = cls(**filtered)
-        if not isinstance(state.last_alert_at, dict):
-            state.last_alert_at = {}
-        return state
+        if not isinstance(raw, dict):
+            return cls()
+
+        if isinstance(raw.get("devices"), dict):
+            devices: dict[str, DeviceState] = {}
+            for key, item in raw["devices"].items():
+                if not isinstance(item, dict):
+                    continue
+                try:
+                    dev_id = int(item.get("device_id", key))
+                except (TypeError, ValueError):
+                    continue
+                devices[str(dev_id)] = DeviceState.from_dict(dev_id, item)
+            raw_default = raw.get("default_device_id")
+            default_id = int(raw_default) if isinstance(raw_default, int) else None
+            return cls(default_device_id=default_id, devices=devices)
+
+        if isinstance(raw.get("device_id"), int):
+            dev_id = int(raw["device_id"])
+            return cls(
+                default_device_id=dev_id,
+                devices={str(dev_id): DeviceState.from_dict(dev_id, raw)},
+            )
+        return cls()
 
     def save(self, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_name(f".{path.name}.{os.getpid()}.tmp")
-        payload = json.dumps(asdict(self), indent=2, sort_keys=True) + "\n"
+        serializable = {
+            "default_device_id": self.default_device_id,
+            "devices": {k: asdict(v) for k, v in self.devices.items()},
+        }
+        payload = json.dumps(serializable, indent=2, sort_keys=True) + "\n"
         tmp.write_text(payload, encoding="utf-8")
         os.replace(tmp, path)
 
@@ -562,7 +608,7 @@ class TelegramBot:
 
 
 class WatchdogEngine:
-    """Core Stationary Watchdog state machine, alert evaluator, and command handler."""
+    """Multi-device Stationary Watchdog state machine, alert evaluator, and command handler."""
 
     def __init__(
         self, cfg: WatchdogConfig, traccar: TraccarClient, telegram: TelegramBot
@@ -572,108 +618,202 @@ class WatchdogEngine:
         self.telegram = telegram
         self.state = WatchdogState.load(cfg.state_file)
         self._state_lock = asyncio.Lock()
-        self._ignition_task: asyncio.Task[None] | None = None
+        self._ignition_tasks: dict[int, asyncio.Task[None]] = {}
 
-    def toggle_keyboard(self) -> dict[str, Any]:
-        btn = (
-            {"text": "🔓 Disarm Watchdog", "callback_data": "watchdog:disarm"}
-            if self.state.armed
-            else {"text": "🛡️ Arm Watchdog", "callback_data": "watchdog:arm"}
+    @staticmethod
+    def _device_label(dev: DeviceState | None) -> str:
+        if dev is None:
+            return "Device"
+        return html.escape(dev.device_name or dev.unique_id or f"Device {dev.device_id}")
+
+    @staticmethod
+    def _plain_device_name(dev: DeviceState) -> str:
+        return dev.device_name or dev.unique_id or f"Device {dev.device_id}"
+
+    @staticmethod
+    def _format_pin(lat: float | None, lon: float | None) -> str:
+        if lat is None or lon is None:
+            return "Unavailable"
+        url = maps_url(lat, lon)
+        return f'<a href="{url}">{lat:.6f}, {lon:.6f}</a>'
+
+    @staticmethod
+    def _anchor_dict(dev: DeviceState | None) -> dict[str, float] | None:
+        if dev and dev.anchor_lat is not None and dev.anchor_lon is not None:
+            return {"lat": dev.anchor_lat, "lon": dev.anchor_lon}
+        return None
+
+    def _device_status_dict(self, dev: DeviceState) -> dict[str, Any]:
+        return {
+            "armed": dev.armed,
+            "anchor": self._anchor_dict(dev),
+            "device_id": dev.device_id,
+            "device_name": dev.device_name,
+            "unique_id": dev.unique_id,
+            "device_status": dev.device_status,
+        }
+
+    def _ordered_devices_locked(
+        self, primary_device_id: int | None = None
+    ) -> list[DeviceState]:
+        lead_id = (
+            primary_device_id
+            if primary_device_id is not None
+            else self.state.default_device_id
         )
-        return {"inline_keyboard": [[btn]]}
+        devices = sorted(self.state.devices.values(), key=lambda d: d.device_id)
+        if lead_id is None:
+            return devices
+        lead = [d for d in devices if d.device_id == lead_id]
+        rest = [d for d in devices if d.device_id != lead_id]
+        return lead + rest
 
-    def alert_keyboard(self) -> dict[str, Any]:
+    def _device_toggle_button(self, dev: DeviceState) -> dict[str, str]:
+        name = self._plain_device_name(dev)
+        if dev.armed:
+            return {
+                "text": f"🔓 Disarm {name}",
+                "callback_data": f"watchdog:disarm:{dev.device_id}",
+            }
+        return {
+            "text": f"🛡️ Arm {name}",
+            "callback_data": f"watchdog:arm:{dev.device_id}",
+        }
+
+    def toggle_keyboard(self, primary_device_id: int | None = None) -> dict[str, Any]:
+        devices = self._ordered_devices_locked(primary_device_id)
+        rows = [[self._device_toggle_button(d)] for d in devices]
+        return {"inline_keyboard": rows}
+
+    def alert_keyboard(self, device_id: int) -> dict[str, Any]:
+        dev = self.state.devices.get(str(device_id))
         toggle_btn = (
-            {"text": "🔓 Disarm Watchdog", "callback_data": "watchdog:disarm"}
-            if self.state.armed
-            else {"text": "🛡️ Arm Watchdog", "callback_data": "watchdog:arm"}
+            self._device_toggle_button(dev)
+            if dev is not None
+            else {"text": "🔓 Disarm Watchdog", "callback_data": f"watchdog:disarm:{device_id}"}
         )
         return {
             "inline_keyboard": [
                 [
-                    {"text": "✂️ Cut Gas", "callback_data": "gas:cut_prompt"},
-                    {"text": "✅ Restore Gas", "callback_data": "gas:restore"},
+                    {"text": "✂️ Cut Gas", "callback_data": f"gas:cut_prompt:{device_id}"},
+                    {"text": "✅ Restore Gas", "callback_data": f"gas:restore:{device_id}"},
                 ],
                 [toggle_btn],
             ]
         }
 
-    def confirm_cut_keyboard(self) -> dict[str, Any]:
+    def confirm_cut_keyboard(self, device_id: int) -> dict[str, Any]:
+        dev = self.state.devices.get(str(device_id))
         toggle_btn = (
-            {"text": "🔓 Disarm Watchdog", "callback_data": "watchdog:disarm"}
-            if self.state.armed
-            else {"text": "🛡️ Arm Watchdog", "callback_data": "watchdog:arm"}
+            self._device_toggle_button(dev)
+            if dev is not None
+            else {"text": "🔓 Disarm Watchdog", "callback_data": f"watchdog:disarm:{device_id}"}
         )
         return {
             "inline_keyboard": [
                 [
                     {
                         "text": "⚠️ CONFIRM Cut Gas (RELAY,1#)",
-                        "callback_data": "gas:cut_confirm",
+                        "callback_data": f"gas:cut_confirm:{device_id}",
                     },
-                    {"text": "↩️ Cancel", "callback_data": "gas:cut_cancel"},
+                    {"text": "↩️ Cancel", "callback_data": f"gas:cut_cancel:{device_id}"},
                 ],
                 [toggle_btn],
             ]
         }
 
-    def _select_device(self, devices: list[dict[str, Any]]) -> dict[str, Any] | None:
-        if not devices:
+    def _match_device_locked(self, query: str) -> DeviceState | None:
+        q = query.strip()
+        if not q:
             return None
-        if self.cfg.traccar_device_unique_id:
-            for dev in devices:
-                if str(dev.get("uniqueId", "")) == self.cfg.traccar_device_unique_id:
-                    return dev
-            return None
-        if self.state.device_id is not None:
-            for dev in devices:
-                if dev.get("id") == self.state.device_id:
-                    return dev
-        if len(devices) > 1:
-            log.warning(
-                "Multiple Traccar devices found (%d); picking first (%s). Set deviceUniqueId to pin one.",
-                len(devices),
-                devices[0].get("uniqueId"),
-            )
-        return devices[0]
+        if q in self.state.devices:
+            return self.state.devices[q]
+        q_low = q.lower()
+        ordered = sorted(self.state.devices.values(), key=lambda d: d.device_id)
+        for dev in ordered:
+            if dev.device_name.lower() == q_low or dev.unique_id.lower() == q_low:
+                return dev
+        for dev in ordered:
+            if q_low in dev.device_name.lower() or q_low in dev.unique_id.lower():
+                return dev
+        return None
+
+    def _resolve_default_device_locked(self) -> DeviceState | None:
+        if self.state.default_device_id is not None:
+            existing = self.state.devices.get(str(self.state.default_device_id))
+            if existing is not None:
+                return existing
+        if self.cfg.traccar_default_device:
+            matched = self._match_device_locked(self.cfg.traccar_default_device)
+            if matched is not None:
+                self.state.default_device_id = matched.device_id
+                return matched
+        ordered = sorted(self.state.devices.values(), key=lambda d: d.device_id)
+        if ordered:
+            self.state.default_device_id = ordered[0].device_id
+            return ordered[0]
+        return None
+
+    def _find_device_locked(self, query: str | None) -> DeviceState | None:
+        if query is None or not query.strip():
+            return self._resolve_default_device_locked()
+        return self._match_device_locked(query)
 
     def _save_state(self) -> None:
         self.state.save(self.cfg.state_file)
 
-    def _cancel_ignition_timer(self) -> None:
-        if self._ignition_task and not self._ignition_task.done():
-            self._ignition_task.cancel()
-        self._ignition_task = None
+    def _cancel_ignition_timer(self, device_id: int) -> None:
+        task = self._ignition_tasks.pop(device_id, None)
+        if task and not task.done():
+            task.cancel()
+
+    def _upsert_device_locked(
+        self, raw_dev: dict[str, Any], now: float, from_ws: bool = False
+    ) -> DeviceState:
+        dev_id = int(raw_dev["id"])
+        key = str(dev_id)
+        dev = self.state.devices.get(key)
+        if dev is None:
+            dev = DeviceState(device_id=dev_id)
+            self.state.devices[key] = dev
+
+        dev.unique_id = str(raw_dev.get("uniqueId") or dev.unique_id or "")
+        dev.device_name = str(raw_dev.get("name") or dev.unique_id or dev_id)
+        status = raw_dev.get("status")
+        dev.device_status = str(status) if status is not None else None
+        if from_ws:
+            dev.last_packet_at = now
+        if dev.device_status in ("offline", "unknown"):
+            if dev.status_lost_at is None:
+                dev.status_lost_at = now
+        else:
+            dev.status_lost_at = None
+        return dev
 
     async def sync_from_traccar(self) -> None:
         devices = await self.traccar.fetch_devices()
-        target = self._select_device(devices)
         positions = await self.traccar.fetch_positions()
+
+        latest_pos_by_id: dict[int, dict[str, Any]] = {}
+        for pos in positions:
+            dev_id = pos.get("deviceId")
+            if dev_id is not None:
+                latest_pos_by_id[int(dev_id)] = pos
 
         async with self._state_lock:
             now = time.time()
-            if target is not None:
-                self.state.device_id = int(target["id"])
-                self.state.device_name = str(
-                    target.get("name") or target.get("uniqueId") or target["id"]
-                )
-                status = target.get("status")
-                self.state.device_status = str(status) if status is not None else None
-                if self.state.device_status in ("offline", "unknown"):
-                    if self.state.status_lost_at is None:
-                        self.state.status_lost_at = now
-                else:
-                    self.state.status_lost_at = None
-
-            if self.state.device_id is not None:
-                matching = [p for p in positions if p.get("deviceId") == self.state.device_id]
-                if matching:
-                    pos = matching[-1]
-                    self._apply_position_locked(pos, now=now, from_sync=True)
+            for raw_dev in devices:
+                if raw_dev.get("id") is None:
+                    continue
+                dev = self._upsert_device_locked(raw_dev, now=now, from_ws=False)
+                pos = latest_pos_by_id.get(dev.device_id)
+                if pos is not None:
+                    self._apply_position_locked(dev, pos, now=now, from_sync=True)
+            self._resolve_default_device_locked()
             self._save_state()
 
     def _apply_position_locked(
-        self, pos: dict[str, Any], now: float, from_sync: bool = False
+        self, dev: DeviceState, pos: dict[str, Any], now: float, from_sync: bool = False
     ) -> dict[str, Any]:
         lat = pos.get("latitude")
         lon = pos.get("longitude")
@@ -681,28 +821,28 @@ class WatchdogEngine:
         attrs = pos.get("attributes") if isinstance(pos.get("attributes"), dict) else {}
         ignition = attrs.get("ignition")
 
-        if not from_sync or self.state.last_packet_at is None:
-            self.state.last_packet_at = now
+        if not from_sync or dev.last_packet_at is None:
+            dev.last_packet_at = now
 
         has_coords = lat is not None and lon is not None and not (
             float(lat) == 0.0 and float(lon) == 0.0 and valid is False
         )
         if valid is True and lat is not None and lon is not None:
-            self.state.last_lat = float(lat)
-            self.state.last_lon = float(lon)
-            self.state.last_valid = True
-            self.state.last_valid_at = now
-            if self.state.armed and self.state.anchor_lat is None:
-                self.state.anchor_lat = self.state.last_lat
-                self.state.anchor_lon = self.state.last_lon
+            dev.last_lat = float(lat)
+            dev.last_lon = float(lon)
+            dev.last_valid = True
+            dev.last_valid_at = now
+            if dev.armed and dev.anchor_lat is None:
+                dev.anchor_lat = dev.last_lat
+                dev.anchor_lon = dev.last_lon
         elif valid is False:
-            self.state.last_valid = False
-        elif has_coords and self.state.last_lat is None:
-            self.state.last_lat = float(lat)
-            self.state.last_lon = float(lon)
+            dev.last_valid = False
+        elif has_coords and dev.last_lat is None:
+            dev.last_lat = float(lat)
+            dev.last_lon = float(lon)
 
         if "ignition" in attrs and ignition is not None:
-            self.state.last_ignition = bool(ignition)
+            dev.last_ignition = bool(ignition)
 
         return {
             "valid": valid,
@@ -711,154 +851,320 @@ class WatchdogEngine:
             "ignition": bool(ignition) if "ignition" in attrs and ignition is not None else None,
         }
 
-    def _can_fire_alert_locked(self, key: str, now: float) -> bool:
-        last = self.state.last_alert_at.get(key)
+    def _can_fire_alert_locked(self, dev: DeviceState, key: str, now: float) -> bool:
+        last = dev.last_alert_at.get(key)
         if last is not None and (now - last) < self.cfg.alert_cooldown_seconds:
             return False
-        self.state.last_alert_at[key] = now
+        dev.last_alert_at[key] = now
         return True
 
-    def _format_pin(self, lat: float | None, lon: float | None) -> str:
-        if lat is None or lon is None:
-            return "Unavailable"
-        url = maps_url(lat, lon)
-        return f'<a href="{url}">{lat:.6f}, {lon:.6f}</a>'
-
-    def _device_label(self) -> str:
-        return html.escape(self.state.device_name or "GS900")
-
-    async def _send_alert(self, title: str, details: str, lat: float | None, lon: float | None) -> None:
+    async def _send_alert(
+        self,
+        dev_id: int,
+        dev_label: str,
+        title: str,
+        details: str,
+        lat: float | None,
+        lon: float | None,
+    ) -> None:
         pin = self._format_pin(lat, lon)
         text = (
             f"🚨 <b>WATCHDOG ALERT: {html.escape(title)}</b>\n"
-            f"Device: <b>{self._device_label()}</b>\n"
+            f"Device: <b>{dev_label}</b>\n"
             f"{details}\n"
             f"Location: {pin}"
         )
-        await self.telegram.send_message(text, reply_markup=self.alert_keyboard())
+        await self.telegram.send_message(text, reply_markup=self.alert_keyboard(dev_id))
 
-    async def _ignition_grace_worker(self) -> None:
+    async def _ignition_grace_worker(self, device_id: int) -> None:
         try:
             await asyncio.sleep(self.cfg.ignition_grace_seconds)
             async with self._state_lock:
-                if not self.state.armed:
+                dev = self.state.devices.get(str(device_id))
+                if dev is None or not dev.armed:
                     return
                 now = time.time()
-                if not self._can_fire_alert_locked("ignition", now):
+                if not self._can_fire_alert_locked(dev, "ignition", now):
                     return
-                lat, lon = self.state.last_lat, self.state.last_lon
+                lat, lon = dev.last_lat, dev.last_lon
                 if lat is None or lon is None:
-                    lat, lon = self.state.anchor_lat, self.state.anchor_lon
+                    lat, lon = dev.anchor_lat, dev.anchor_lon
+                dev_label = self._device_label(dev)
                 self._save_state()
 
             await self._send_alert(
+                device_id,
+                dev_label,
                 "Ignition ON",
                 f"Ignition remained ON past {int(self.cfg.ignition_grace_seconds)}s grace period.",
                 lat,
                 lon,
             )
         except asyncio.CancelledError:
-            log.info("Pending ignition alert cancelled (watchdog disarmed)")
+            log.info("Pending ignition alert cancelled for device %d (watchdog disarmed)", device_id)
             raise
 
-    async def arm(self, source: str) -> dict[str, Any]:
-        try:
-            await self.sync_from_traccar()
-        except Exception as exc:
-            log.warning("Pre-arm Traccar sync failed (%s); using cached coordinates", exc)
+    async def _resolve_device_for_action(
+        self,
+        device_query: str | None = None,
+        device_id: int | None = None,
+        sync: bool = False,
+    ) -> DeviceState:
+        if sync or not self.state.devices:
+            try:
+                await self.sync_from_traccar()
+            except Exception as exc:
+                log.warning("Traccar sync failed (%s); using cached state", exc)
 
         async with self._state_lock:
+            dev = (
+                self.state.devices.get(str(device_id))
+                if device_id is not None
+                else self._find_device_locked(device_query)
+            )
+            if dev is None:
+                target_desc = device_query or (str(device_id) if device_id is not None else "default")
+                raise DeviceNotFoundError(f"Traccar device not found: {target_desc}")
+            return dev
+
+    async def arm(
+        self,
+        source: str,
+        device_query: str | None = None,
+        device_id: int | None = None,
+    ) -> dict[str, Any]:
+        await self._resolve_device_for_action(
+            device_query=device_query, device_id=device_id, sync=True
+        )
+
+        async with self._state_lock:
+            dev = (
+                self.state.devices.get(str(device_id))
+                if device_id is not None
+                else self._find_device_locked(device_query)
+            )
+            if dev is None:
+                raise DeviceNotFoundError(f"Traccar device not found: {device_query or device_id}")
             now = time.time()
-            self._cancel_ignition_timer()
-            self.state.armed = True
-            self.state.armed_at = now
-            self.state.in_signal_loss_alert = False
-            self.state.last_alert_at = {}
-            if self.state.last_lat is not None and self.state.last_lon is not None:
-                self.state.anchor_lat = self.state.last_lat
-                self.state.anchor_lon = self.state.last_lon
+            self._cancel_ignition_timer(dev.device_id)
+            dev.armed = True
+            dev.armed_at = now
+            dev.in_signal_loss_alert = False
+            dev.last_alert_at = {}
+            if dev.last_lat is not None and dev.last_lon is not None:
+                dev.anchor_lat = dev.last_lat
+                dev.anchor_lon = dev.last_lon
             else:
-                self.state.anchor_lat = None
-                self.state.anchor_lon = None
-            if self.state.device_status in ("offline", "unknown"):
-                self.state.status_lost_at = now
+                dev.anchor_lat = None
+                dev.anchor_lon = None
+            if dev.device_status in ("offline", "unknown"):
+                dev.status_lost_at = now
             self._save_state()
-            anchor_lat, anchor_lon = self.state.anchor_lat, self.state.anchor_lon
+            anchor_lat, anchor_lon = dev.anchor_lat, dev.anchor_lon
+            dev_label = self._device_label(dev)
+            dev_id = dev.device_id
 
         pin = self._format_pin(anchor_lat, anchor_lon)
         msg = (
             f"🛡️ <b>Watchdog ARMED</b> ({html.escape(source)})\n"
-            f"Device: <b>{self._device_label()}</b>\n"
+            f"Device: <b>{dev_label}</b>\n"
             f"Parked Anchor: {pin}"
         )
-        await self.telegram.send_message(msg, reply_markup=self.toggle_keyboard())
-        return self.status_payload()
+        await self.telegram.send_message(msg, reply_markup=self.toggle_keyboard(dev_id))
+        return self.status_payload(device_id=dev_id)
 
-    async def disarm(self, source: str) -> dict[str, Any]:
+    async def disarm(
+        self,
+        source: str,
+        device_query: str | None = None,
+        device_id: int | None = None,
+    ) -> dict[str, Any]:
+        await self._resolve_device_for_action(
+            device_query=device_query, device_id=device_id, sync=False
+        )
+
         async with self._state_lock:
-            self._cancel_ignition_timer()
-            self.state.armed = False
-            self.state.in_signal_loss_alert = False
-            self.state.last_alert_at = {}
+            dev = (
+                self.state.devices.get(str(device_id))
+                if device_id is not None
+                else self._find_device_locked(device_query)
+            )
+            if dev is None:
+                raise DeviceNotFoundError(f"Traccar device not found: {device_query or device_id}")
+            self._cancel_ignition_timer(dev.device_id)
+            dev.armed = False
+            dev.in_signal_loss_alert = False
+            dev.last_alert_at = {}
             self._save_state()
+            dev_label = self._device_label(dev)
+            dev_id = dev.device_id
 
         msg = (
             f"🔓 <b>Watchdog DISARMED</b> ({html.escape(source)})\n"
-            f"Device: <b>{self._device_label()}</b>"
+            f"Device: <b>{dev_label}</b>"
         )
-        await self.telegram.send_message(msg, reply_markup=self.toggle_keyboard())
-        return self.status_payload()
+        await self.telegram.send_message(msg, reply_markup=self.toggle_keyboard(dev_id))
+        return self.status_payload(device_id=dev_id)
 
-    async def toggle(self, source: str) -> dict[str, Any]:
-        if self.state.armed:
-            return await self.disarm(source)
-        return await self.arm(source)
-
-    def status_payload(self) -> dict[str, Any]:
-        anchor = (
-            {"lat": self.state.anchor_lat, "lon": self.state.anchor_lon}
-            if self.state.anchor_lat is not None and self.state.anchor_lon is not None
-            else None
+    async def toggle(
+        self,
+        source: str,
+        device_query: str | None = None,
+        device_id: int | None = None,
+    ) -> dict[str, Any]:
+        dev = await self._resolve_device_for_action(
+            device_query=device_query, device_id=device_id, sync=False
         )
+        if dev.armed:
+            return await self.disarm(source, device_id=dev.device_id)
+        return await self.arm(source, device_id=dev.device_id)
+
+    def status_payload(
+        self, device_id: int | None = None, device_query: str | None = None
+    ) -> dict[str, Any]:
+        if device_id is not None:
+            target = self.state.devices.get(str(device_id))
+            if target is None:
+                raise DeviceNotFoundError(f"Traccar device not found: {device_id}")
+        elif device_query is not None and device_query.strip():
+            target = self._match_device_locked(device_query)
+            if target is None:
+                raise DeviceNotFoundError(f"Traccar device not found: {device_query}")
+        else:
+            target = self._resolve_default_device_locked()
+
         return {
             "ok": True,
-            "armed": self.state.armed,
-            "anchor": anchor,
-            "device_id": self.state.device_id,
-            "device_name": self.state.device_name,
-            "device_status": self.state.device_status,
+            "armed": target.armed if target else False,
+            "anchor": self._anchor_dict(target),
+            "device_id": target.device_id if target else None,
+            "device_name": target.device_name if target else None,
+            "device_status": target.device_status if target else None,
+            "default_device_id": self.state.default_device_id,
+            "devices": {
+                k: self._device_status_dict(d)
+                for k, d in sorted(self.state.devices.items(), key=lambda item: int(item[0]))
+            },
         }
 
-    def status_text(self) -> str:
-        badge = "🛡️ <b>ARMED</b>" if self.state.armed else "🔓 <b>DISARMED</b>"
+    def device_status_text(self, dev: DeviceState, show_default_badge: bool = False) -> str:
+        badge = "🛡️ <b>ARMED</b>" if dev.armed else "🔓 <b>DISARMED</b>"
+        is_default = self.state.default_device_id == dev.device_id
+        default_tag = " ⭐ default" if (show_default_badge and is_default) else ""
         lines = [
             f"Status: {badge}",
-            f"Device: <b>{self._device_label()}</b> ({html.escape(self.state.device_status or 'unknown')})",
-            f"Last Position: {self._format_pin(self.state.last_lat, self.state.last_lon)}",
+            f"Device: <b>{self._device_label(dev)}</b> ({html.escape(dev.device_status or 'unknown')}){default_tag}",
+            f"Last Position: {self._format_pin(dev.last_lat, dev.last_lon)}",
         ]
-        if self.state.armed:
+        if dev.armed:
             lines.append(
-                f"Parked Anchor: {self._format_pin(self.state.anchor_lat, self.state.anchor_lon)}"
+                f"Parked Anchor: {self._format_pin(dev.anchor_lat, dev.anchor_lon)}"
             )
             if (
-                self.state.anchor_lat is not None
-                and self.state.anchor_lon is not None
-                and self.state.last_lat is not None
-                and self.state.last_lon is not None
+                dev.anchor_lat is not None
+                and dev.anchor_lon is not None
+                and dev.last_lat is not None
+                and dev.last_lon is not None
             ):
                 dist = haversine_meters(
-                    self.state.anchor_lat,
-                    self.state.anchor_lon,
-                    self.state.last_lat,
-                    self.state.last_lon,
+                    dev.anchor_lat,
+                    dev.anchor_lon,
+                    dev.last_lat,
+                    dev.last_lon,
                 )
                 lines.append(f"Drift from Anchor: <b>{dist:.1f} m</b>")
         return "\n".join(lines)
 
-    async def send_status(self) -> None:
-        await self.telegram.send_message(
-            self.status_text(), reply_markup=self.toggle_keyboard()
-        )
+    def _available_devices_summary(self) -> str:
+        devices = self._ordered_devices_locked()
+        if not devices:
+            return "None registered in Traccar yet."
+        parts = []
+        for dev in devices:
+            icon = "🛡️" if dev.armed else "🔓"
+            star = " ⭐" if self.state.default_device_id == dev.device_id else ""
+            parts.append(f"{icon} <b>{self._device_label(dev)}</b>{star}")
+        return ", ".join(parts)
+
+    async def send_status(self, device_query: str | None = None) -> None:
+        try:
+            await self.sync_from_traccar()
+        except Exception as exc:
+            log.warning("Status sync failed (%s); showing cached state", exc)
+
+        async with self._state_lock:
+            devices = self._ordered_devices_locked()
+            if not devices:
+                text = "No Traccar devices registered yet. Add a device in Traccar and run /start again."
+                markup = None
+            elif device_query and device_query.strip().lower() == "all":
+                blocks = [
+                    self.device_status_text(d, show_default_badge=len(devices) > 1)
+                    for d in devices
+                ]
+                text = "\n\n".join(blocks)
+                markup = self.toggle_keyboard()
+            elif device_query and device_query.strip():
+                dev = self._find_device_locked(device_query)
+                if dev is None:
+                    text = (
+                        f"⚠️ Device <b>{html.escape(device_query.strip())}</b> not found.\n"
+                        f"Available devices: {self._available_devices_summary()}"
+                    )
+                    markup = self.toggle_keyboard()
+                else:
+                    text = self.device_status_text(dev, show_default_badge=len(devices) > 1)
+                    markup = self.toggle_keyboard(dev.device_id)
+            else:
+                dev = self._resolve_default_device_locked()
+                assert dev is not None
+                text = self.device_status_text(dev, show_default_badge=len(devices) > 1)
+                if len(devices) > 1:
+                    others = [d for d in devices if d.device_id != dev.device_id]
+                    other_str = ", ".join(
+                        f"{'🛡️' if d.armed else '🔓'} <b>{self._device_label(d)}</b>"
+                        for d in others
+                    )
+                    text += (
+                        f"\n\nOther devices: {other_str}\n"
+                        "Commands: <code>/start &lt;device&gt;</code>, <code>/devices</code>, "
+                        "<code>/default &lt;device&gt;</code>"
+                    )
+                markup = self.toggle_keyboard(dev.device_id)
+
+        await self.telegram.send_message(text, reply_markup=markup)
+
+    async def set_default_device(self, device_query: str | None) -> None:
+        try:
+            await self.sync_from_traccar()
+        except Exception as exc:
+            log.warning("Pre-/default sync failed (%s); using cached devices", exc)
+
+        async with self._state_lock:
+            if not device_query or not device_query.strip():
+                cur = self._resolve_default_device_locked()
+                cur_str = self._device_label(cur) if cur else "None"
+                text = (
+                    f"Current default device: <b>{cur_str}</b>\n"
+                    f"Available devices: {self._available_devices_summary()}\n"
+                    "Usage: <code>/default &lt;device name&gt;</code>"
+                )
+                markup = self.toggle_keyboard(cur.device_id if cur else None)
+            else:
+                dev = self._match_device_locked(device_query)
+                if dev is None:
+                    text = (
+                        f"⚠️ Device <b>{html.escape(device_query.strip())}</b> not found.\n"
+                        f"Available devices: {self._available_devices_summary()}"
+                    )
+                    markup = self.toggle_keyboard()
+                else:
+                    self.state.default_device_id = dev.device_id
+                    self._save_state()
+                    text = f"⭐ Default device set to <b>{self._device_label(dev)}</b>"
+                    markup = self.toggle_keyboard(dev.device_id)
+
+        await self.telegram.send_message(text, reply_markup=markup)
 
     async def handle_ws_message(self, payload: dict[str, Any]) -> None:
         devices = payload.get("devices")
@@ -871,118 +1177,115 @@ class WatchdogEngine:
             for pos in positions:
                 await self._on_position(pos)
 
-    async def _on_device(self, dev: dict[str, Any]) -> None:
-        restored_coords: tuple[float | None, float | None] | None = None
+    async def _on_device(self, raw_dev: dict[str, Any]) -> None:
+        if raw_dev.get("id") is None:
+            return
+        restored: tuple[int, str, float | None, float | None] | None = None
         async with self._state_lock:
             now = time.time()
-            if self.state.device_id is None:
-                if (
-                    not self.cfg.traccar_device_unique_id
-                    or str(dev.get("uniqueId", "")) == self.cfg.traccar_device_unique_id
-                ):
-                    self.state.device_id = int(dev["id"])
-                else:
-                    return
-            elif dev.get("id") != self.state.device_id:
-                return
-
-            self.state.device_name = str(
-                dev.get("name") or dev.get("uniqueId") or dev["id"]
-            )
-            self.state.device_status = (
-                str(dev["status"]) if dev.get("status") is not None else None
-            )
-            self.state.last_packet_at = now
-            if self.state.device_status in ("offline", "unknown"):
-                if self.state.status_lost_at is None:
-                    self.state.status_lost_at = now
-            else:
-                self.state.status_lost_at = None
-                if (
-                    self.state.armed
-                    and self.state.in_signal_loss_alert
-                    and self.state.last_valid is not False
-                ):
-                    self.state.in_signal_loss_alert = False
-                    restored_coords = (self.state.last_lat, self.state.last_lon)
+            dev = self._upsert_device_locked(raw_dev, now=now, from_ws=True)
+            if self.state.default_device_id is None:
+                self._resolve_default_device_locked()
+            if (
+                dev.armed
+                and dev.in_signal_loss_alert
+                and dev.device_status not in ("offline", "unknown")
+                and dev.last_valid is not False
+            ):
+                dev.in_signal_loss_alert = False
+                restored = (dev.device_id, self._device_label(dev), dev.last_lat, dev.last_lon)
             self._save_state()
 
-        if restored_coords is not None:
+        if restored is not None:
+            dev_id, dev_label, lat, lon = restored
             await self.telegram.send_message(
-                f"📡 <b>Signal Restored</b>\nDevice: <b>{self._device_label()}</b>\n"
-                f"Location: {self._format_pin(*restored_coords)}",
-                reply_markup=self.toggle_keyboard(),
+                f"📡 <b>Signal Restored</b>\nDevice: <b>{dev_label}</b>\n"
+                f"Location: {self._format_pin(lat, lon)}",
+                reply_markup=self.toggle_keyboard(dev_id),
             )
 
     async def _on_position(self, pos: dict[str, Any]) -> None:
-        movement_alert: tuple[float, float, float] | None = None
-        restored_coords: tuple[float | None, float | None] | None = None
+        raw_id = pos.get("deviceId")
+        if raw_id is None:
+            return
+        dev_id = int(raw_id)
+        movement_alert: tuple[int, str, float, float, float] | None = None
+        restored: tuple[int, str, float | None, float | None] | None = None
 
         async with self._state_lock:
-            if self.state.device_id is None and pos.get("deviceId") is not None:
-                self.state.device_id = int(pos["deviceId"])
-            elif pos.get("deviceId") != self.state.device_id:
-                return
+            key = str(dev_id)
+            dev = self.state.devices.get(key)
+            if dev is None:
+                dev = DeviceState(device_id=dev_id, device_name=f"Device {dev_id}")
+                self.state.devices[key] = dev
 
             now = time.time()
-            info = self._apply_position_locked(pos, now=now, from_sync=False)
+            info = self._apply_position_locked(dev, pos, now=now, from_sync=False)
 
-            if self.state.armed:
+            if dev.armed:
                 if (
                     info["valid"] is True
-                    and self.state.anchor_lat is not None
-                    and self.state.anchor_lon is not None
-                    and self.state.last_lat is not None
-                    and self.state.last_lon is not None
+                    and dev.anchor_lat is not None
+                    and dev.anchor_lon is not None
+                    and dev.last_lat is not None
+                    and dev.last_lon is not None
                 ):
                     dist = haversine_meters(
-                        self.state.anchor_lat,
-                        self.state.anchor_lon,
-                        self.state.last_lat,
-                        self.state.last_lon,
+                        dev.anchor_lat,
+                        dev.anchor_lon,
+                        dev.last_lat,
+                        dev.last_lon,
                     )
                     if dist > self.cfg.movement_threshold_meters and self._can_fire_alert_locked(
-                        "movement", now
+                        dev, "movement", now
                     ):
-                        movement_alert = (dist, self.state.last_lat, self.state.last_lon)
+                        movement_alert = (
+                            dev_id,
+                            self._device_label(dev),
+                            dist,
+                            dev.last_lat,
+                            dev.last_lon,
+                        )
 
                 if info["ignition"] is True:
-                    last_ign = self.state.last_alert_at.get("ignition")
+                    last_ign = dev.last_alert_at.get("ignition")
                     in_cooldown = (
                         last_ign is not None
                         and (now - last_ign) < self.cfg.alert_cooldown_seconds
                     )
-                    if not in_cooldown and (
-                        self._ignition_task is None or self._ignition_task.done()
-                    ):
-                        self._ignition_task = asyncio.create_task(
-                            self._ignition_grace_worker()
+                    existing_task = self._ignition_tasks.get(dev_id)
+                    if not in_cooldown and (existing_task is None or existing_task.done()):
+                        self._ignition_tasks[dev_id] = asyncio.create_task(
+                            self._ignition_grace_worker(dev_id)
                         )
 
                 if (
-                    self.state.in_signal_loss_alert
+                    dev.in_signal_loss_alert
                     and info["valid"] is True
-                    and self.state.device_status not in ("offline", "unknown")
+                    and dev.device_status not in ("offline", "unknown")
                 ):
-                    self.state.in_signal_loss_alert = False
-                    restored_coords = (self.state.last_lat, self.state.last_lon)
+                    dev.in_signal_loss_alert = False
+                    restored = (dev_id, self._device_label(dev), dev.last_lat, dev.last_lon)
 
             self._save_state()
 
         if movement_alert is not None:
-            dist, lat, lon = movement_alert
+            dev_id, dev_label, dist, lat, lon = movement_alert
             await self._send_alert(
+                dev_id,
+                dev_label,
                 "Movement Detected",
                 f"Moved <b>{dist:.1f} m</b> from parked anchor (limit: {self.cfg.movement_threshold_meters:.0f} m).",
                 lat,
                 lon,
             )
 
-        if restored_coords is not None:
+        if restored is not None:
+            dev_id, dev_label, lat, lon = restored
             await self.telegram.send_message(
-                f"📡 <b>Signal Restored</b>\nDevice: <b>{self._device_label()}</b>\n"
-                f"Location: {self._format_pin(*restored_coords)}",
-                reply_markup=self.toggle_keyboard(),
+                f"📡 <b>Signal Restored</b>\nDevice: <b>{dev_label}</b>\n"
+                f"Location: {self._format_pin(lat, lon)}",
+                reply_markup=self.toggle_keyboard(dev_id),
             )
 
     async def signal_loss_loop(self, stop_event: asyncio.Event) -> None:
@@ -995,60 +1298,80 @@ class WatchdogEngine:
             except asyncio.TimeoutError:
                 pass
 
-            reason: str | None = None
-            lat: float | None = None
-            lon: float | None = None
+            pending_alerts: list[tuple[int, str, str, float | None, float | None]] = []
 
             async with self._state_lock:
-                if not self.state.armed:
-                    continue
                 now = time.time()
-                armed_at = self.state.armed_at or now
                 timeout = self.cfg.signal_loss_seconds
+                dirty = False
 
-                if self.state.device_status in ("offline", "unknown"):
-                    since = max(self.state.status_lost_at or armed_at, armed_at)
-                    elapsed = now - since
-                    if elapsed > timeout:
-                        reason = (
-                            f"Device status is <b>{html.escape(self.state.device_status)}</b> "
-                            f"for {int(elapsed)}s."
-                        )
+                for dev in self.state.devices.values():
+                    if not dev.armed:
+                        continue
+                    reason: str | None = None
+                    armed_at = dev.armed_at or now
 
-                if reason is None:
-                    last_pkt = max(self.state.last_packet_at or 0.0, armed_at)
-                    pkt_elapsed = now - last_pkt
-                    if pkt_elapsed > timeout:
-                        reason = f"No tracker packet received for {int(pkt_elapsed)}s."
+                    if dev.device_status in ("offline", "unknown"):
+                        since = max(dev.status_lost_at or armed_at, armed_at)
+                        elapsed = now - since
+                        if elapsed > timeout:
+                            reason = (
+                                f"Device status is <b>{html.escape(dev.device_status)}</b> "
+                                f"for {int(elapsed)}s."
+                            )
 
-                if reason is None and self.state.last_valid is False:
-                    since_valid = max(self.state.last_valid_at or 0.0, armed_at)
-                    invalid_elapsed = now - since_valid
-                    if invalid_elapsed > timeout:
-                        reason = f"Invalid GPS fix persisted for {int(invalid_elapsed)}s."
+                    if reason is None:
+                        last_pkt = max(dev.last_packet_at or 0.0, armed_at)
+                        pkt_elapsed = now - last_pkt
+                        if pkt_elapsed > timeout:
+                            reason = f"No tracker packet received for {int(pkt_elapsed)}s."
 
-                if reason is not None:
-                    self.state.in_signal_loss_alert = True
-                    if self._can_fire_alert_locked("signal_loss", now):
-                        lat = self.state.last_lat or self.state.anchor_lat
-                        lon = self.state.last_lon or self.state.anchor_lon
-                        self._save_state()
-                    else:
-                        reason = None
+                    if reason is None and dev.last_valid is False:
+                        since_valid = max(dev.last_valid_at or 0.0, armed_at)
+                        invalid_elapsed = now - since_valid
+                        if invalid_elapsed > timeout:
+                            reason = f"Invalid GPS fix persisted for {int(invalid_elapsed)}s."
 
-            if reason is not None:
-                await self._send_alert("GPS / Signal Loss", reason, lat, lon)
+                    if reason is not None:
+                        dev.in_signal_loss_alert = True
+                        dirty = True
+                        if self._can_fire_alert_locked(dev, "signal_loss", now):
+                            lat = dev.last_lat or dev.anchor_lat
+                            lon = dev.last_lon or dev.anchor_lon
+                            pending_alerts.append(
+                                (dev.device_id, self._device_label(dev), reason, lat, lon)
+                            )
 
-    async def execute_gas_command(self, cut: bool) -> str:
-        device_id = self.state.device_id
-        if device_id is None:
-            await self.sync_from_traccar()
-            device_id = self.state.device_id
-        if device_id is None:
-            raise RuntimeError("No Traccar device selected yet")
+                if dirty:
+                    self._save_state()
+
+            for dev_id, dev_label, reason, lat, lon in pending_alerts:
+                await self._send_alert(dev_id, dev_label, "GPS / Signal Loss", reason, lat, lon)
+
+    async def execute_gas_command(self, cut: bool, device_id: int | None = None) -> tuple[DeviceState, str]:
+        dev = await self._resolve_device_for_action(device_id=device_id, sync=False)
         cmd = "RELAY,1#" if cut else "RELAY,0#"
-        await self.traccar.send_command(device_id, cmd)
-        return cmd
+        await self.traccar.send_command(dev.device_id, cmd)
+        return dev, cmd
+
+    @staticmethod
+    def _parse_callback_data(data: str) -> tuple[str, int | None]:
+        parts = data.split(":", 2)
+        if len(parts) == 3 and parts[2].isdigit():
+            return f"{parts[0]}:{parts[1]}", int(parts[2])
+        if len(parts) >= 2:
+            return f"{parts[0]}:{parts[1]}", None
+        return data, None
+
+    async def _send_device_not_found(self, query: str | None) -> None:
+        async with self._state_lock:
+            avail = self._available_devices_summary()
+            markup = self.toggle_keyboard()
+        await self.telegram.send_message(
+            f"⚠️ Device <b>{html.escape((query or '').strip())}</b> not found.\n"
+            f"Available devices: {avail}",
+            reply_markup=markup,
+        )
 
     async def handle_telegram_update(self, update: dict[str, Any]) -> None:
         expected_chat = str(self.cfg.telegram_chat_id)
@@ -1060,13 +1383,26 @@ class WatchdogEngine:
                 log.warning("Ignoring Telegram message from unauthorized chat_id=%s", chat_id)
                 return
             text = str(msg.get("text", "")).strip()
-            cmd = text.split()[0].split("@")[0].lower() if text else ""
+            parts = text.split(maxsplit=1)
+            cmd = parts[0].split("@")[0].lower() if parts else ""
+            arg = parts[1].strip() if len(parts) > 1 else None
+
             if cmd in ("/start", "/status"):
-                await self.send_status()
+                await self.send_status(arg)
+            elif cmd == "/devices":
+                await self.send_status("all")
+            elif cmd == "/default":
+                await self.set_default_device(arg)
             elif cmd == "/arm":
-                await self.arm("telegram")
+                try:
+                    await self.arm("telegram", device_query=arg)
+                except DeviceNotFoundError:
+                    await self._send_device_not_found(arg)
             elif cmd == "/disarm":
-                await self.disarm("telegram")
+                try:
+                    await self.disarm("telegram", device_query=arg)
+                except DeviceNotFoundError:
+                    await self._send_device_not_found(arg)
             return
 
         if "callback_query" in update and isinstance(update["callback_query"], dict):
@@ -1080,60 +1416,75 @@ class WatchdogEngine:
                 log.warning("Ignoring Telegram callback from unauthorized chat_id=%s", chat_id)
                 return
 
-            data = str(cb.get("data", ""))
+            action, target_id = self._parse_callback_data(str(cb.get("data", "")))
             message_id = msg.get("message_id")
+            if target_id is None:
+                async with self._state_lock:
+                    default_dev = self._resolve_default_device_locked()
+                    target_id = default_dev.device_id if default_dev else None
 
-            if data == "watchdog:arm":
+            if action == "watchdog:arm":
                 await self.telegram.answer_callback(cb_id, "Arming watchdog...")
-                await self.arm("telegram")
-            elif data == "watchdog:disarm":
+                try:
+                    await self.arm("telegram", device_id=target_id)
+                except DeviceNotFoundError:
+                    await self._send_device_not_found(str(target_id or ""))
+            elif action == "watchdog:disarm":
                 await self.telegram.answer_callback(cb_id, "Disarming watchdog...")
-                await self.disarm("telegram")
-            elif data == "watchdog:toggle":
+                try:
+                    await self.disarm("telegram", device_id=target_id)
+                except DeviceNotFoundError:
+                    await self._send_device_not_found(str(target_id or ""))
+            elif action == "watchdog:toggle":
                 await self.telegram.answer_callback(cb_id, "Toggling watchdog...")
-                await self.toggle("telegram")
-            elif data == "gas:cut_prompt":
+                try:
+                    await self.toggle("telegram", device_id=target_id)
+                except DeviceNotFoundError:
+                    await self._send_device_not_found(str(target_id or ""))
+            elif action == "gas:cut_prompt" and target_id is not None:
                 await self.telegram.answer_callback(
                     cb_id, "Tap CONFIRM to send RELAY,1#", show_alert=False
                 )
                 if message_id is not None:
                     await self.telegram.edit_reply_markup(
-                        chat_id, int(message_id), self.confirm_cut_keyboard()
+                        chat_id, int(message_id), self.confirm_cut_keyboard(target_id)
                     )
-            elif data == "gas:cut_cancel":
+            elif action == "gas:cut_cancel" and target_id is not None:
                 await self.telegram.answer_callback(cb_id, "Cancelled")
                 if message_id is not None:
                     await self.telegram.edit_reply_markup(
-                        chat_id, int(message_id), self.alert_keyboard()
+                        chat_id, int(message_id), self.alert_keyboard(target_id)
                     )
-            elif data == "gas:cut_confirm":
+            elif action == "gas:cut_confirm" and target_id is not None:
                 try:
-                    cmd = await self.execute_gas_command(cut=True)
+                    dev, cmd = await self.execute_gas_command(cut=True, device_id=target_id)
                     await self.telegram.answer_callback(cb_id, f"Sent {cmd}")
                     if message_id is not None:
                         await self.telegram.edit_reply_markup(
-                            chat_id, int(message_id), self.alert_keyboard()
+                            chat_id, int(message_id), self.alert_keyboard(dev.device_id)
                         )
                     await self.telegram.send_message(
                         f"✂️ <b>Fuel Cut Command Dispatched</b> (<code>{cmd}</code>)\n"
-                        f"Device: <b>{self._device_label()}</b>",
-                        reply_markup=self.alert_keyboard(),
+                        f"Device: <b>{self._device_label(dev)}</b>",
+                        reply_markup=self.alert_keyboard(dev.device_id),
                     )
                 except Exception as exc:
                     log.error("Failed to send RELAY,1#: %s", exc)
                     await self.telegram.answer_callback(cb_id, f"Error: {exc}", show_alert=True)
-            elif data == "gas:restore":
+            elif action == "gas:restore" and target_id is not None:
                 try:
-                    cmd = await self.execute_gas_command(cut=False)
+                    dev, cmd = await self.execute_gas_command(cut=False, device_id=target_id)
                     await self.telegram.answer_callback(cb_id, f"Sent {cmd}")
                     await self.telegram.send_message(
                         f"✅ <b>Fuel Restore Command Dispatched</b> (<code>{cmd}</code>)\n"
-                        f"Device: <b>{self._device_label()}</b>",
-                        reply_markup=self.toggle_keyboard(),
+                        f"Device: <b>{self._device_label(dev)}</b>",
+                        reply_markup=self.toggle_keyboard(dev.device_id),
                     )
                 except Exception as exc:
                     log.error("Failed to send RELAY,0#: %s", exc)
                     await self.telegram.answer_callback(cb_id, f"Error: {exc}", show_alert=True)
+            else:
+                await self.telegram.answer_callback(cb_id, "No target device selected", show_alert=True)
 
 
 async def telegram_poll_loop(
@@ -1196,15 +1547,18 @@ async def traccar_ws_loop(
             backoff = min(backoff * 2.0, 30.0)
 
 
-def _normalize_webhook_path(raw_target: str) -> str:
-    path = urllib.parse.urlsplit(raw_target).path or "/"
+def _normalize_webhook_target(raw_target: str) -> tuple[str, str | None]:
+    parsed = urllib.parse.urlsplit(raw_target)
+    path = parsed.path or "/"
     if path == "/watchdog":
         path = "/"
     elif path.startswith("/watchdog/"):
         path = path[len("/watchdog") :]
     if len(path) > 1:
         path = path.rstrip("/")
-    return path
+    qs = urllib.parse.parse_qs(parsed.query)
+    device_query = qs.get("device", [None])[0]
+    return path, device_query
 
 
 def _http_json_response(status: int, reason: str, payload: dict[str, Any]) -> bytes:
@@ -1234,7 +1588,7 @@ async def handle_webhook_client(
             await writer.drain()
             return
         method = parts[0].upper()
-        path = _normalize_webhook_path(parts[1])
+        path, device_query = _normalize_webhook_target(parts[1])
 
         headers: dict[str, str] = {}
         for line in lines[1:]:
@@ -1247,7 +1601,11 @@ async def handle_webhook_client(
             await asyncio.wait_for(reader.readexactly(content_len), timeout=5.0)
 
         if method == "GET" and path == "/health":
-            writer.write(_http_json_response(200, "OK", engine.status_payload()))
+            try:
+                payload = engine.status_payload(device_query=device_query)
+                writer.write(_http_json_response(200, "OK", payload))
+            except DeviceNotFoundError as exc:
+                writer.write(_http_json_response(404, "Not Found", {"ok": False, "error": str(exc)}))
             await writer.drain()
             return
 
@@ -1272,13 +1630,16 @@ async def handle_webhook_client(
             await writer.drain()
             return
 
-        if path == "/arm":
-            res = await engine.arm("webhook")
-        elif path == "/disarm":
-            res = await engine.disarm("webhook")
-        else:
-            res = await engine.toggle("webhook")
-        writer.write(_http_json_response(200, "OK", res))
+        try:
+            if path == "/arm":
+                res = await engine.arm("webhook", device_query=device_query)
+            elif path == "/disarm":
+                res = await engine.disarm("webhook", device_query=device_query)
+            else:
+                res = await engine.toggle("webhook", device_query=device_query)
+            writer.write(_http_json_response(200, "OK", res))
+        except DeviceNotFoundError as exc:
+            writer.write(_http_json_response(404, "Not Found", {"ok": False, "error": str(exc)}))
         await writer.drain()
     except Exception as exc:
         log.debug("Webhook request error: %s", exc)

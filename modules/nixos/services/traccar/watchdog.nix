@@ -61,8 +61,15 @@ in
     deviceUniqueId = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      example = "864180051234567";
-      description = "Optional Traccar device uniqueId (IMEI). When null, selects the first device in Traccar.";
+      example = "999999999999999";
+      description = "Fallback alias for defaultDevice (IMEI or uniqueId of the default Traccar device).";
+    };
+
+    defaultDevice = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "GS900";
+      description = "Default Traccar device name or uniqueId (IMEI) used when running /start, /status, /arm, or /disarm without a device argument.";
     };
 
     movementThresholdMeters = lib.mkOption {
@@ -146,8 +153,9 @@ in
             AUTO_BOOTSTRAP_ADMIN = lib.boolToString cfg.autoBootstrapAdmin;
             PYTHONUNBUFFERED = "1";
           }
-          // lib.optionalAttrs (cfg.deviceUniqueId != null) {
-            TRACCAR_DEVICE_UNIQUE_ID = cfg.deviceUniqueId;
+          // lib.optionalAttrs (cfg.defaultDevice != null || cfg.deviceUniqueId != null) {
+            TRACCAR_DEFAULT_DEVICE =
+              if cfg.defaultDevice != null then cfg.defaultDevice else cfg.deviceUniqueId;
           };
           serviceConfig = {
             DynamicUser = true;
