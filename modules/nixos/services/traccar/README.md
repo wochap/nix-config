@@ -77,7 +77,7 @@ Pass an optional **`?device=<name_or_imei>`** query parameter to target a specif
 | --- | --- | --- | --- |
 | `/watchdog/arm[?device=...]` | `POST` | Bearer token | Arms target/default device & captures parked anchor |
 | `/watchdog/disarm[?device=...]` | `POST` | Bearer token | Disarms target/default device & cancels ignition timer |
-| `/watchdog/toggle[?device=...]` | `POST` | Bearer token | Flips target/default device between `ARMED` and `DISARMED` |
+| `/watchdog/toggle[?device=...]` | `POST` | Bearer token | Flips target/default device between `ARMED` and `DISARMED` (debounced `3 s` by default via `toggleDebounceSeconds`; set `0` to disable) |
 | `/watchdog/health[?device=...]` | `GET` | None (tailnet-only) | Returns JSON status for target/default device plus all devices under `devices` |
 
 ### `curl` Examples (from any Tailnet device)

@@ -88,6 +88,7 @@ class WatchdogConfig:
     ignition_grace_seconds: float
     signal_loss_seconds: float
     alert_cooldown_seconds: float
+    toggle_debounce_seconds: float
     signal_check_interval_seconds: float
 
     @classmethod
@@ -124,6 +125,9 @@ class WatchdogConfig:
             signal_loss_seconds=float(os.environ.get("SIGNAL_LOSS_SECONDS", "120")),
             alert_cooldown_seconds=float(
                 os.environ.get("ALERT_COOLDOWN_SECONDS", "300")
+            ),
+            toggle_debounce_seconds=max(
+                0.0, float(os.environ.get("TOGGLE_DEBOUNCE_SECONDS", "3"))
             ),
             signal_check_interval_seconds=float(
                 os.environ.get("SIGNAL_CHECK_INTERVAL_SECONDS", "1.0")
@@ -619,6 +623,7 @@ class WatchdogEngine:
         self.state = WatchdogState.load(cfg.state_file)
         self._state_lock = asyncio.Lock()
         self._ignition_tasks: dict[int, asyncio.Task[None]] = {}
+        self._last_toggle_at: dict[int, float] = {}
 
     @staticmethod
     def _device_label(dev: DeviceState | None) -> str:
@@ -1015,9 +1020,27 @@ class WatchdogEngine:
         dev = await self._resolve_device_for_action(
             device_query=device_query, device_id=device_id, sync=False
         )
-        if dev.armed:
-            return await self.disarm(source, device_id=dev.device_id)
-        return await self.arm(source, device_id=dev.device_id)
+        async with self._state_lock:
+            debounce = self.cfg.toggle_debounce_seconds
+            if debounce > 0.0:
+                now_mono = time.monotonic()
+                last = self._last_toggle_at.get(dev.device_id)
+                if last is not None and (now_mono - last) < debounce:
+                    log.info(
+                        "Debounced duplicate toggle for device %d (%.2fs < %.2fs)",
+                        dev.device_id,
+                        now_mono - last,
+                        debounce,
+                    )
+                    payload = self.status_payload(device_id=dev.device_id)
+                    payload["debounced"] = True
+                    return payload
+                self._last_toggle_at[dev.device_id] = now_mono
+            currently_armed = dev.armed
+            target_id = dev.device_id
+        if currently_armed:
+            return await self.disarm(source, device_id=target_id)
+        return await self.arm(source, device_id=target_id)
 
     def status_payload(
         self, device_id: int | None = None, device_query: str | None = None

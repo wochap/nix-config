@@ -225,6 +225,7 @@ in
       gt06Port = 15023;
       trackerHardening.enable = true;
       watchdog.enable = true;
+      watchdog.toggleDebounceSeconds = 2;
       dbPasswordSecret.sopsFile = ../../secrets-sops/server.yaml;
       cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
     };

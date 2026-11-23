@@ -96,6 +96,12 @@ in
       description = "Minimum seconds between repeated alerts of the same trigger type while armed.";
     };
 
+    toggleDebounceSeconds = lib.mkOption {
+      type = lib.types.ints.unsigned;
+      default = 3;
+      description = "Minimum seconds between consecutive /toggle actions for the same device (0 disables debouncing).";
+    };
+
     autoBootstrapAdmin = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -150,6 +156,7 @@ in
             IGNITION_GRACE_SECONDS = toString cfg.ignitionGraceSeconds;
             SIGNAL_LOSS_SECONDS = toString cfg.signalLossSeconds;
             ALERT_COOLDOWN_SECONDS = toString cfg.alertCooldownSeconds;
+            TOGGLE_DEBOUNCE_SECONDS = toString cfg.toggleDebounceSeconds;
             AUTO_BOOTSTRAP_ADMIN = lib.boolToString cfg.autoBootstrapAdmin;
             PYTHONUNBUFFERED = "1";
           }
