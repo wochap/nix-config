@@ -70,6 +70,18 @@ in
       description = "TCP port for incoming GT06 protocol tracker connections and GPRS commands (WanWay GS900).";
     };
 
+    enableOsmand = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable the OsmAnd HTTP protocol listener for mobile Traccar Client apps.";
+    };
+
+    osmandPort = lib.mkOption {
+      type = lib.types.port;
+      default = 5055;
+      description = "HTTP port for the OsmAnd protocol listener (bound to 127.0.0.1 and routed via Caddy when tailnetDomain is set).";
+    };
+
     trackerHardening = {
       enable = lib.mkEnableOption "iptables connection/rate limiting and idle timeout for the public GT06 tracker port";
 
@@ -153,12 +165,20 @@ in
               // lib.optionalAttrs hasDomain {
                 url = "https://${cfg.tailnetDomain}";
               };
-              protocols.enable = "gt06";
+              protocols.enable = lib.concatStringsSep "," (
+                [ "gt06" ] ++ lib.optional cfg.enableOsmand "osmand"
+              );
               gt06 = {
                 port = toString cfg.gt06Port;
               }
               // lib.optionalAttrs cfg.trackerHardening.enable {
                 timeout = toString cfg.trackerHardening.idleTimeout;
+              };
+            }
+            // lib.optionalAttrs cfg.enableOsmand {
+              osmand = {
+                address = if hasDomain then "127.0.0.1" else "0.0.0.0";
+                port = toString cfg.osmandPort;
               };
             }
           ) cfg.settings;
@@ -180,6 +200,7 @@ in
         networking.firewall = {
           allowedTCPPorts =
             lib.optional (!cfg.trackerHardening.enable) cfg.gt06Port
+            ++ lib.optional (cfg.enableOsmand && !hasDomain) cfg.osmandPort
             ++ lib.optional (!hasDomain) cfg.port
             ++ lib.optional (hasDomain && !cfg.tailnetOnly) 443;
           extraCommands = lib.mkIf cfg.trackerHardening.enable ''
@@ -254,11 +275,38 @@ in
             extraConfig = ''
               ${lib.optionalString cfg.tailnetOnly ''
                 @outside not remote_ip 100.64.0.0/10 fd7a:115c:a1e0::/48
-                abort @outside
+                handle @outside {
+                  abort
+                }
               ''}
               ${lib.optionalString cfg.watchdog.enable ''
                 handle_path /watchdog/* {
                   reverse_proxy 127.0.0.1:${toString cfg.watchdog.port} {
+                    header_up X-Real-IP {remote_host}
+                  }
+                }
+              ''}
+              ${lib.optionalString cfg.enableOsmand ''
+                handle_path /osmand* {
+                  reverse_proxy 127.0.0.1:${toString cfg.osmandPort} {
+                    header_up X-Real-IP {remote_host}
+                  }
+                }
+                @osmand_post {
+                  method POST
+                  path /
+                }
+                handle @osmand_post {
+                  reverse_proxy 127.0.0.1:${toString cfg.osmandPort} {
+                    header_up X-Real-IP {remote_host}
+                  }
+                }
+                @osmand_query {
+                  path /
+                  query id=*
+                }
+                handle @osmand_query {
+                  reverse_proxy 127.0.0.1:${toString cfg.osmandPort} {
                     header_up X-Real-IP {remote_host}
                   }
                 }
