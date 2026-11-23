@@ -112,6 +112,7 @@
     ./services/searxng
     ./services/syncthing
     ./services/tailscale
+    ./services/traccar
     ./services/tt
     ./services/virt
     ./services/waydroid

@@ -219,11 +219,22 @@ in
       };
     };
 
+    _custom.services.traccar = {
+      enable = true;
+      tailnetDomain = "traccar.gvps.geanmar.com";
+      gt06Port = 15023;
+      trackerHardening.enable = true;
+      watchdog.enable = true;
+      dbPasswordSecret.sopsFile = ../../secrets-sops/server.yaml;
+      cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
+    };
+
     # Status page at https://status.gvps.geanmar.com for tailnet devices only,
     # checks every service above plus the extra endpoints below
     _custom.services.gatus = {
       enable = true;
       tailnetDomain = "status.gvps.geanmar.com";
+      systemStats.enable = true;
       cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
       endpoints = [
         {
@@ -247,12 +258,24 @@ in
           interval = "5m";
           conditions = [ "[STATUS] == 200" ];
         }
+        {
+          name = "traccar";
+          group = "services";
+          url = "https://traccar.gvps.geanmar.com/api/server";
+          interval = "5m";
+          conditions = [ "[STATUS] == 200" ];
+        }
       ];
     };
 
     services.headscale.settings.dns.extra_records = [
       {
         name = "bugsink.gvps.geanmar.com";
+        type = "A";
+        value = "100.64.0.4";
+      }
+      {
+        name = "traccar.gvps.geanmar.com";
         type = "A";
         value = "100.64.0.4";
       }
