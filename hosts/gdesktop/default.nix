@@ -1,3 +1,7 @@
+# Micro-Star International Co., Ltd. Type MS-7C91
+# AMD Ryzen 9 5900X (24) @ 5.08 GHz
+# AMD Radeon RX 6800 XT [Discrete]
+# RAM: 31.27 GiB
 { config, lib, ... }:
 
 let

@@ -1,3 +1,8 @@
+# OpenStack Foundation Virtual Machine Type OpenStack Nova
+# 2 x Intel Core (Haswell, no TSX) (2) @ 2.40 GHz
+# Cirrus Logic GD 5446
+# Disk space: 38.59 GiB
+# RAM: 3.73 GiB
 { config, lib, ... }:
 
 let
