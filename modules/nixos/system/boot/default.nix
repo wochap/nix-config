@@ -24,7 +24,7 @@ in
       systemd-boot = {
         enable = lib.mkDefault true;
         configurationLimit = 10;
-        consoleMode = "keep";
+        consoleMode = lib.mkDefault "keep";
       };
 
       efi.canTouchEfiVariables = true;

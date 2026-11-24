@@ -72,6 +72,10 @@
     # enable ROCm
     boot.initrd.kernelModules = [ "amdgpu" ];
 
+    # Compact centered text mode in the systemd-boot menu on the ultrawide
+    # (firmware default mode 2 is oversized/clipped; mode 0 is preferred).
+    boot.loader.systemd-boot.consoleMode = "0";
+
     # Boot Windows 11 from its separate ESP on /dev/nvme0n1p3 (WD Black SN770).
     boot.loader.systemd-boot.windows."11" = {
       title = "Windows 11";
