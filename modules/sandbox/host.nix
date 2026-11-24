@@ -27,6 +27,30 @@ in
 
     _custom.archetypes.sandbox.enable = true;
 
+    # Host's ~/.config/dconf/user is bind-mounted read-only into the sandbox,
+    # so Home Manager must not try to create ~/.config/dconf/.keep or run dconf load.
+    _custom.hm.dconf.enable = lib.mkForce false;
+
+    # DBUS_SESSION_BUS_ADDRESS points to the filtered host xdg-dbus-proxy so GUI
+    # notifications/portals reach the host, which prevents systemd --user from
+    # registering org.freedesktop.systemd1 on /run/user/<uid>/bus and causes
+    # sd-switch to hang during container boot.
+    _custom.hm.systemd.user.startServices = false;
+
+    # envfs requires FUSE (/dev/fuse), which is blocked by the container's
+    # DevicePolicy=closed; when enabled it suppresses NixOS's built-in /usr/bin/env
+    # symlink while its mount fails, breaking #!/usr/bin/env scripts.
+    services.envfs.enable = false;
+
+    # systemd-nspawn auto-creates missing parent directories for bind mounts
+    # (e.g. ~/.config/dconf/user and ~/Sandboxes/sandbox) as root:root 0755.
+    # Fix their ownership during sysinit before home-manager-gean.service runs.
+    systemd.tmpfiles.rules = [
+      "d /home/${userName}/.config 0755 ${userName} users -"
+      "d /home/${userName}/.config/dconf 0755 ${userName} users -"
+      "d /home/${userName}/Sandboxes 0755 ${userName} users -"
+    ];
+
     _custom.security.sops.enablePersonalSecrets = true;
 
     # cli

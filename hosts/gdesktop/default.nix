@@ -472,7 +472,8 @@ in
     _custom.desktop.cursor.name = "catppuccin-mocha-dark-cursors";
     _custom.desktop.cursor.size = 24;
 
-    _custom.sandbox.enable = false;
+    _custom.sandbox.enable = true;
+    _custom.sandbox.internetInterface = "enp42s0";
 
     # Setup keyboard
     services.xserver.xkb = {
