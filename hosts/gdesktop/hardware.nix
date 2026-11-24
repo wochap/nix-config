@@ -72,10 +72,11 @@
     # enable ROCm
     boot.initrd.kernelModules = [ "amdgpu" ];
 
-    # Temporary: boot into "EDK2 UEFI Shell" and run `map -c` to find the
-    # consistent handle for Windows 11's ESP (/dev/nvme0n1p3), then replace
-    # this with `boot.loader.systemd-boot.windows."11"`.
-    boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
+    # Boot Windows 11 from its separate ESP on /dev/nvme0n1p3 (WD Black SN770).
+    boot.loader.systemd-boot.windows."11" = {
+      title = "Windows 11";
+      efiDeviceHandle = "HD0d";
+    };
 
     networking = {
       # enable wol 2C:F0:5D:73:55:AB
