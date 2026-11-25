@@ -337,6 +337,7 @@ in
     _custom.services.interception-tools.enable = true;
     _custom.services.ipwebcam.enable = false;
     _custom.services.kdeconnect.enable = true;
+    _custom.services.pcscd.enable = true;
     _custom.services.tt.enable = true;
 
     _custom.services.syncthing.enable = true;

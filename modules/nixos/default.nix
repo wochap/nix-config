@@ -108,6 +108,7 @@
     ./services/media
     ./services/ms-intune
     ./services/nix-cache
+    ./services/pcscd
     ./services/rsshub
     ./services/searxng
     ./services/syncthing
