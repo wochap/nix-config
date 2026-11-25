@@ -2,7 +2,7 @@
   inputs = {
     # channels
     nixpkgs.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (26 oct 2026)
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/d3b13ad75cc492690728f9307e443dec9ef9a20e"; # nixos-unstable (26 oct 2026)
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/2786a2a72088ecf32aea5b3ec52099e6a7cff78f"; # nixos-unstable (25 nov 2026)
     nixpkgs-master.url = "github:nixos/nixpkgs/b9dca90ef10c643257e003adbb377d588039ac1e"; # master (10 jul 2026)
     prevstable-mesa.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # mesa v26.1.4
     prevstable-chrome.url = "github:nixos/nixpkgs/1f607aa79b6356ed45d3cd3c8079c196e79efa2c"; # nixos-26.05 (26 oct 2026)

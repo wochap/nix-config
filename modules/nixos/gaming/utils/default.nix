@@ -9,6 +9,16 @@
 let
   cfg = config._custom.gaming.utils;
   inherit (config._custom.globals) configDirectory;
+
+  sunat-pdt = pkgs.writeShellApplication {
+    name = "sunat-pdt";
+    runtimeInputs = with pkgs; [
+      curl
+      prevstable-gaming.wineWow64Packages.waylandFull
+      prevstable-gaming.winetricks
+    ];
+    text = builtins.readFile ./scripts/sunat-pdt.sh;
+  };
 in
 {
   imports = [ inputs.nix-gaming.nixosModules.pipewireLowLatency ];
@@ -28,6 +38,7 @@ in
       # winetricks
       prevstable-gaming.winetricks
       prevstable-gaming.wineWow64Packages.waylandFull
+      sunat-pdt
 
       bottles
     ];
@@ -57,6 +68,17 @@ in
     _custom.hm = {
       xdg.configFile."MangoHud".source =
         lib._custom.relativeSymlink configDirectory ./dotfiles/MangoHud.conf;
+
+      xdg.desktopEntries.sunat-pdt = {
+        name = "SUNAT PDT";
+        comment = "Programa de Declaración Telemática (SUNAT)";
+        exec = "sunat-pdt";
+        icon = "wine";
+        categories = [
+          "Office"
+          "Finance"
+        ];
+      };
     };
   };
 }

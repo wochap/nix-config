@@ -47,6 +47,7 @@ in
       # NOTE: alt+f12 -> View -> Icon Theme
       # NOTE: alt+f12 -> Appearance
       libreoffice-qt6-fresh
+      nixpkgs-unstable.gridcraft
     ];
 
     # required by libreoffice
