@@ -224,6 +224,15 @@ in
       tailnetDomain = "traccar.gvps.geanmar.com";
       gt06Port = 15023;
       trackerHardening.enable = true;
+      computedAttributes = [
+        {
+          description = "Ignition from Speed";
+          attribute = "ignition";
+          expression = "speed > 0";
+          type = "boolean";
+          devices = [ "865190070191278" ];
+        }
+      ];
       watchdog.enable = true;
       watchdog.toggleDebounceSeconds = 2;
       dbPasswordSecret.sopsFile = ../../secrets-sops/server.yaml;

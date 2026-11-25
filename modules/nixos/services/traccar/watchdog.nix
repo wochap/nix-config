@@ -81,7 +81,13 @@ in
     ignitionGraceSeconds = lib.mkOption {
       type = lib.types.ints.positive;
       default = 15;
-      description = "Grace period in seconds after ignition ON before alerting (allows Bluetooth /disarm webhook to cancel).";
+      description = "Grace period in seconds after ignition ON before alerting (allows Bluetooth /disarm webhook or transient speed jitter to cancel).";
+    };
+
+    alertOnIgnition = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to send Telegram alerts when attributes.ignition becomes true while armed.";
     };
 
     signalLossSeconds = lib.mkOption {
@@ -154,6 +160,7 @@ in
             STATE_FILE = "/var/lib/traccar-watchdog/state.json";
             MOVEMENT_THRESHOLD_METERS = toString cfg.movementThresholdMeters;
             IGNITION_GRACE_SECONDS = toString cfg.ignitionGraceSeconds;
+            ALERT_ON_IGNITION = lib.boolToString cfg.alertOnIgnition;
             SIGNAL_LOSS_SECONDS = toString cfg.signalLossSeconds;
             ALERT_COOLDOWN_SECONDS = toString cfg.alertCooldownSeconds;
             TOGGLE_DEBOUNCE_SECONDS = toString cfg.toggleDebounceSeconds;
@@ -163,6 +170,11 @@ in
           // lib.optionalAttrs (cfg.defaultDevice != null || cfg.deviceUniqueId != null) {
             TRACCAR_DEFAULT_DEVICE =
               if cfg.defaultDevice != null then cfg.defaultDevice else cfg.deviceUniqueId;
+          }
+          // lib.optionalAttrs (traccarCfg.computedAttributes != [ ]) {
+            TRACCAR_COMPUTED_ATTRIBUTES_FILE = toString (
+              pkgs.writeText "traccar-computed-attributes.json" (builtins.toJSON traccarCfg.computedAttributes)
+            );
           };
           serviceConfig = {
             DynamicUser = true;

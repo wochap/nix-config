@@ -86,10 +86,12 @@ class WatchdogConfig:
     state_file: Path
     movement_threshold_meters: float
     ignition_grace_seconds: float
+    alert_on_ignition: bool
     signal_loss_seconds: float
     alert_cooldown_seconds: float
     toggle_debounce_seconds: float
     signal_check_interval_seconds: float
+    computed_attributes_file: Path | None
 
     @classmethod
     def from_env(cls) -> "WatchdogConfig":
@@ -122,6 +124,9 @@ class WatchdogConfig:
             ignition_grace_seconds=float(
                 os.environ.get("IGNITION_GRACE_SECONDS", "15")
             ),
+            alert_on_ignition=_parse_bool(
+                os.environ.get("ALERT_ON_IGNITION"), default=True
+            ),
             signal_loss_seconds=float(os.environ.get("SIGNAL_LOSS_SECONDS", "120")),
             alert_cooldown_seconds=float(
                 os.environ.get("ALERT_COOLDOWN_SECONDS", "300")
@@ -131,6 +136,11 @@ class WatchdogConfig:
             ),
             signal_check_interval_seconds=float(
                 os.environ.get("SIGNAL_CHECK_INTERVAL_SECONDS", "1.0")
+            ),
+            computed_attributes_file=(
+                Path(raw_ca)
+                if (raw_ca := os.environ.get("TRACCAR_COMPUTED_ATTRIBUTES_FILE", "").strip())
+                else None
             ),
         )
 
@@ -327,6 +337,17 @@ class TraccarClient:
             _, data = await self._http("GET", path)
             return data
 
+    async def _authed_json(self, method: str, path: str, payload: dict[str, Any]) -> Any:
+        body = json.dumps(payload).encode("utf-8")
+        headers = {"Content-Type": "application/json"}
+        try:
+            _, data = await self._http(method, path, body=body, headers=headers)
+            return data
+        except TraccarAuthError:
+            await self.login()
+            _, data = await self._http(method, path, body=body, headers=headers)
+            return data
+
     async def fetch_devices(self) -> list[dict[str, Any]]:
         data = await self._authed_get("/api/devices")
         return data if isinstance(data, list) else []
@@ -334,6 +355,35 @@ class TraccarClient:
     async def fetch_positions(self) -> list[dict[str, Any]]:
         data = await self._authed_get("/api/positions")
         return data if isinstance(data, list) else []
+
+    async def fetch_computed_attributes(
+        self, device_id: int | None = None
+    ) -> list[dict[str, Any]]:
+        path = (
+            f"/api/attributes/computed?deviceId={device_id}"
+            if device_id is not None
+            else "/api/attributes/computed?all=true"
+        )
+        data = await self._authed_get(path)
+        return data if isinstance(data, list) else []
+
+    async def create_computed_attribute(self, payload: dict[str, Any]) -> dict[str, Any]:
+        data = await self._authed_json("POST", "/api/attributes/computed", payload)
+        return data if isinstance(data, dict) else {}
+
+    async def update_computed_attribute(
+        self, attr_id: int, payload: dict[str, Any]
+    ) -> dict[str, Any]:
+        body = dict(payload, id=attr_id)
+        data = await self._authed_json("PUT", f"/api/attributes/computed/{attr_id}", body)
+        return data if isinstance(data, dict) else {}
+
+    async def link_device_attribute(self, device_id: int, attribute_id: int) -> None:
+        await self._authed_json(
+            "POST",
+            "/api/permissions",
+            {"deviceId": device_id, "attributeId": attribute_id},
+        )
 
     async def send_command(self, device_id: int, command_data: str) -> Any:
         payload = json.dumps(
@@ -624,6 +674,20 @@ class WatchdogEngine:
         self._state_lock = asyncio.Lock()
         self._ignition_tasks: dict[int, asyncio.Task[None]] = {}
         self._last_toggle_at: dict[int, float] = {}
+        self._computed_specs = self._load_computed_specs(cfg.computed_attributes_file)
+        self._reconciled_attrs: dict[str, int] = {}
+        self._reconciled_links: set[tuple[int, int]] = set()
+
+    @staticmethod
+    def _load_computed_specs(path: Path | None) -> list[dict[str, Any]]:
+        if path is None:
+            return []
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            log.error("Failed to load computed attributes file %s: %s", path, exc)
+            return []
+        return [item for item in raw if isinstance(item, dict)] if isinstance(raw, list) else []
 
     @staticmethod
     def _device_label(dev: DeviceState | None) -> str:
@@ -795,9 +859,88 @@ class WatchdogEngine:
             dev.status_lost_at = None
         return dev
 
+    async def _reconcile_computed_attributes(self, devices: list[dict[str, Any]]) -> None:
+        if not self._computed_specs:
+            return
+
+        need_attr_sync = any(
+            str(s.get("description", "")) not in self._reconciled_attrs
+            for s in self._computed_specs
+        )
+        if need_attr_sync:
+            existing = await self.traccar.fetch_computed_attributes()
+            by_desc = {
+                str(a.get("description", "")): a for a in existing if a.get("id") is not None
+            }
+            for spec in self._computed_specs:
+                desc = str(spec["description"])
+                payload = {
+                    "description": desc,
+                    "attribute": str(spec["attribute"]),
+                    "expression": str(spec["expression"]),
+                    "type": str(spec.get("type", "boolean")),
+                    "priority": int(spec.get("priority", 0)),
+                }
+                cur = by_desc.get(desc)
+                if cur is None:
+                    created = await self.traccar.create_computed_attribute(payload)
+                    attr_id = int(created["id"])
+                    log.info("Created Traccar computed attribute %r (id=%d)", desc, attr_id)
+                else:
+                    attr_id = int(cur["id"])
+                    changed = any(
+                        cur.get(k) != payload[k]
+                        for k in ("attribute", "expression", "type", "priority")
+                    )
+                    if changed:
+                        await self.traccar.update_computed_attribute(attr_id, payload)
+                        log.info("Updated Traccar computed attribute %r (id=%d)", desc, attr_id)
+                self._reconciled_attrs[desc] = attr_id
+
+        device_attr_cache: dict[int, set[int]] = {}
+        for spec in self._computed_specs:
+            desc = str(spec["description"])
+            attr_id = self._reconciled_attrs.get(desc)
+            if attr_id is None:
+                continue
+            filters = [str(f).strip().lower() for f in spec.get("devices", []) if str(f).strip()]
+            for raw_dev in devices:
+                if raw_dev.get("id") is None:
+                    continue
+                dev_id = int(raw_dev["id"])
+                if filters:
+                    dev_name = str(raw_dev.get("name") or "").strip().lower()
+                    dev_uid = str(raw_dev.get("uniqueId") or "").strip().lower()
+                    if dev_name not in filters and dev_uid not in filters:
+                        continue
+                if (dev_id, attr_id) in self._reconciled_links:
+                    continue
+                if dev_id not in device_attr_cache:
+                    dev_attrs = await self.traccar.fetch_computed_attributes(device_id=dev_id)
+                    device_attr_cache[dev_id] = {
+                        int(a["id"]) for a in dev_attrs if a.get("id") is not None
+                    }
+                if attr_id not in device_attr_cache[dev_id]:
+                    await self.traccar.link_device_attribute(dev_id, attr_id)
+                    device_attr_cache[dev_id].add(attr_id)
+                    log.info(
+                        "Linked computed attribute %r (id=%d) to device %s (id=%d)",
+                        desc,
+                        attr_id,
+                        raw_dev.get("name") or raw_dev.get("uniqueId") or dev_id,
+                        dev_id,
+                    )
+                self._reconciled_links.add((dev_id, attr_id))
+
     async def sync_from_traccar(self) -> None:
         devices = await self.traccar.fetch_devices()
         positions = await self.traccar.fetch_positions()
+
+        if self._computed_specs:
+            try:
+                await self._reconcile_computed_attributes(devices)
+            except Exception as exc:
+                log.warning("Computed attribute reconciliation failed: %s", exc)
 
         latest_pos_by_id: dict[int, dict[str, Any]] = {}
         for pos in positions:
@@ -886,7 +1029,7 @@ class WatchdogEngine:
             await asyncio.sleep(self.cfg.ignition_grace_seconds)
             async with self._state_lock:
                 dev = self.state.devices.get(str(device_id))
-                if dev is None or not dev.armed:
+                if dev is None or not dev.armed or dev.last_ignition is not True:
                     return
                 now = time.time()
                 if not self._can_fire_alert_locked(dev, "ignition", now):
@@ -1270,17 +1413,20 @@ class WatchdogEngine:
                             dev.last_lon,
                         )
 
-                if info["ignition"] is True:
-                    last_ign = dev.last_alert_at.get("ignition")
-                    in_cooldown = (
-                        last_ign is not None
-                        and (now - last_ign) < self.cfg.alert_cooldown_seconds
-                    )
-                    existing_task = self._ignition_tasks.get(dev_id)
-                    if not in_cooldown and (existing_task is None or existing_task.done()):
-                        self._ignition_tasks[dev_id] = asyncio.create_task(
-                            self._ignition_grace_worker(dev_id)
+                if self.cfg.alert_on_ignition:
+                    if info["ignition"] is True:
+                        last_ign = dev.last_alert_at.get("ignition")
+                        in_cooldown = (
+                            last_ign is not None
+                            and (now - last_ign) < self.cfg.alert_cooldown_seconds
                         )
+                        existing_task = self._ignition_tasks.get(dev_id)
+                        if not in_cooldown and (existing_task is None or existing_task.done()):
+                            self._ignition_tasks[dev_id] = asyncio.create_task(
+                                self._ignition_grace_worker(dev_id)
+                            )
+                    elif info["ignition"] is False:
+                        self._cancel_ignition_timer(dev_id)
 
                 if (
                     dev.in_signal_loss_alert

@@ -121,6 +121,51 @@ in
       default = { };
       description = "Extra settings merged into services.traccar.settings (all leaf values must be strings).";
     };
+
+    computedAttributes = lib.mkOption {
+      type = lib.types.listOf (
+        lib.types.submodule {
+          options = {
+            description = lib.mkOption {
+              type = lib.types.nonEmptyStr;
+              description = "Unique description for the Traccar computed attribute (used as idempotent key).";
+            };
+            attribute = lib.mkOption {
+              type = lib.types.nonEmptyStr;
+              example = "ignition";
+              description = "Target Traccar attribute name (e.g., ignition, power, valid).";
+            };
+            expression = lib.mkOption {
+              type = lib.types.nonEmptyStr;
+              example = "speed > 0";
+              description = "JEXL expression evaluated by Traccar on incoming positions.";
+            };
+            type = lib.mkOption {
+              type = lib.types.enum [
+                "string"
+                "number"
+                "boolean"
+              ];
+              default = "boolean";
+              description = "Computed attribute value type.";
+            };
+            priority = lib.mkOption {
+              type = lib.types.int;
+              default = 0;
+              description = "Evaluation priority (< 0 runs early, >= 0 runs late).";
+            };
+            devices = lib.mkOption {
+              type = lib.types.listOf lib.types.nonEmptyStr;
+              default = [ ];
+              example = [ "865190070191278" ];
+              description = "Device names or uniqueIds (IMEIs) to attach this attribute to. Empty list attaches to all devices.";
+            };
+          };
+        }
+      );
+      default = [ ];
+      description = "Declarative Traccar computed attributes reconciled automatically by traccar-watchdog.";
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -134,6 +179,10 @@ in
           {
             assertion = !cfg.trackerHardening.enable || !config.networking.nftables.enable;
             message = "_custom.services.traccar.trackerHardening requires the iptables firewall backend (networking.nftables.enable = false)";
+          }
+          {
+            assertion = cfg.computedAttributes == [ ] || cfg.watchdog.enable;
+            message = "_custom.services.traccar.computedAttributes requires _custom.services.traccar.watchdog.enable = true";
           }
         ];
 

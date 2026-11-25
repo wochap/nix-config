@@ -49,7 +49,8 @@ You can pick the default device used by `/start` (with no arguments) in either o
 While a device is **`🛡️ ARMED`**, `traccar-watchdog` monitors its live WebSocket events and sends high-priority Telegram alerts with a Google Maps pin if any rule triggers (each trigger type has a `300s` per-device cooldown):
 
 1. **Movement Detected:** Haversine drift from that device's parked anchor exceeds **`35 m`** (`movementThresholdMeters`).
-2. **Ignition ON:** `attributes.ignition == true` persists past the **`15 s`** grace period (`ignitionGraceSeconds`). Disarming that device within 15 seconds (e.g., via phone Bluetooth webhook) cancels its alert silently.
+2. **Ignition ON:** `attributes.ignition == true` persists past the **`15 s`** grace period (`ignitionGraceSeconds`). Disarming that device or `ignition` returning to `false` within 15 seconds cancels its alert silently. Can be disabled with `watchdog.alertOnIgnition = false`.
+   - For trackers whose Orange ACC wire is tied to Constant 12V, declare a computed attribute via `_custom.services.traccar.computedAttributes` (e.g., `attribute = "ignition"; expression = "speed > 0";`) — `traccar-watchdog` creates/updates it and links it to the configured device IMEI(s) automatically.
 3. **GPS / Signal Loss:** Device becomes `offline`/`unknown`, stops sending packets, or keeps `valid == false` for more than **`120 s`** (`signalLossSeconds`). When connectivity returns while still armed, the bot sends **`📡 Signal Restored`**.
 
 ### Emergency Relay Buttons (Alert-Only — Never Auto-Cut)
