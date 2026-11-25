@@ -221,8 +221,10 @@ in
 
     _custom.services.traccar = {
       enable = true;
+      tailnetOnly = true;
       tailnetDomain = "traccar.gvps.geanmar.com";
       gt06Port = 15023;
+      enableOsmand = true;
       trackerHardening.enable = true;
       computedAttributes = [
         {
@@ -233,8 +235,12 @@ in
           devices = [ "865190070191278" ];
         }
       ];
-      watchdog.enable = true;
-      watchdog.toggleDebounceSeconds = 2;
+      watchdog = {
+        enable = true;
+        alertOnIgnition = true;
+        autoBootstrapAdmin = true;
+        toggleDebounceSeconds = 2;
+      };
       dbPasswordSecret.sopsFile = ../../secrets-sops/server.yaml;
       cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
     };

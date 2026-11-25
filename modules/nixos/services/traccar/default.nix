@@ -20,7 +20,7 @@ in
 
     tailnetOnly = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Restrict Caddy reverse proxy to tailnet clients (100.64.0.0/10, fd7a:115c:a1e0::/48).";
     };
 
@@ -72,7 +72,7 @@ in
 
     enableOsmand = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Enable the OsmAnd HTTP protocol listener for mobile Traccar Client apps.";
     };
 

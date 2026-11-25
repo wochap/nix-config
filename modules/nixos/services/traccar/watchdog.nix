@@ -86,7 +86,7 @@ in
 
     alertOnIgnition = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Whether to send Telegram alerts when attributes.ignition becomes true while armed.";
     };
 
@@ -110,7 +110,7 @@ in
 
     autoBootstrapAdmin = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Automatically create the initial Traccar admin account via POST /api/users if login fails on a fresh DB.";
     };
 
