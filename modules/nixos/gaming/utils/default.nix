@@ -14,7 +14,7 @@ let
     name = "sunat-pdt";
     runtimeInputs = with pkgs; [
       curl
-      prevstable-gaming.wineWow64Packages.waylandFull
+      prevstable-gaming.winePackages.stableFull
       prevstable-gaming.winetricks
     ];
     text = builtins.readFile ./scripts/sunat-pdt.sh;

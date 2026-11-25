@@ -1,7 +1,9 @@
 # shellcheck shell=bash
 set -euo pipefail
 
-export WINEPREFIX="${WINEPREFIX:-$HOME/.wine-sunat}"
+export WAYLAND_DISPLAY=""
+export WINEARCH=win32
+export WINEPREFIX="${WINEPREFIX:-$HOME/.wine-sunat32}"
 DOWNLOAD_DIR="${SUNAT_PDT_DOWNLOAD_DIR:-$HOME/Downloads/sunat-pdt}"
 PDT_DIR="$WINEPREFIX/drive_c/SUNATPDT"
 WINE_BIN="$(command -v wine)"
@@ -16,7 +18,7 @@ Usage: sunat-pdt [command]
 
 Commands:
   (none), launch     Launch SUNAT PDT (pdt00.exe)
-  setup              Download installers, initialize Wine prefix, install Integrador + PDT 0616 + UIT
+  setup              Download installers, initialize 32-bit Wine prefix, install Integrador + PDT 0616 + UIT
   install <file.exe> Install an additional SUNAT PDT .exe module into the prefix
   update-uit         Download and install the latest SUNAT UIT updater
   kill               Stop all running Wine processes in the SUNAT prefix
@@ -25,12 +27,12 @@ EOF
 }
 
 init_prefix() {
-  echo "==> Initializing Wine prefix at $WINEPREFIX..."
+  echo "==> Initializing 32-bit Wine prefix at $WINEPREFIX..."
   WINEDLLOVERRIDES="mscoree,mshtml=" wineboot --init
   wineserver -w || true
 
-  echo "==> Installing VB6/VC6 runtimes and switching to Windows XP..."
-  WINE="$WINE_BIN" WINE64="$WINE_BIN" winetricks -q vb6run vcrun6 winxp
+  echo "==> Installing VB6/VC6/Jet/MDAC runtimes and switching to Windows XP..."
+  WINE="$WINE_BIN" winetricks -q vb6run vcrun6 jet40 mdac28 winxp
 
   echo "==> Configuring Peru regional settings for SUNAT PDT..."
   WINEDEBUG=-all wine reg add "HKCU\\Control Panel\\International" /v sShortDate /t REG_SZ /d "dd/MM/yyyy" /f
@@ -54,8 +56,8 @@ register_ocx() {
     dao350.dll
   )
   for dll in "${dlls[@]}"; do
-    if [[ -f "$WINEPREFIX/drive_c/windows/syswow64/$dll" ]]; then
-      WINEDEBUG=-all wine regsvr32 /s "C:\\windows\\syswow64\\$dll" || true
+    if [[ -f "$WINEPREFIX/drive_c/windows/system32/$dll" ]]; then
+      WINEDEBUG=-all wine regsvr32 /s "C:\\windows\\system32\\$dll" || true
     fi
   done
 }
