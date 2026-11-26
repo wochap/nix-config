@@ -72,14 +72,14 @@ Lieer syncs through the Gmail API using OAuth, while `goimapnotify` watches IMAP
    ```sh
    notmuch new
    ```
-7. Authorize lieer for the first time. Since Home Manager already "initialized" the repo with the config file and you created the maildir folders, you only need to run the OAuth flow:
+7. Authorize lieer for the first time. Since Home Manager already "initialized" the repo with the config file and you created the maildir folders, you only need to run the OAuth flow with your own Google Cloud OAuth 2.0 Desktop client JSON (Lieer's default upstream OAuth client was deleted by Google):
 
    ```sh
    cd ~/Mail/<AccountName>
-   gmi auth
+   gmi auth -c /path/to/client_secret.json
    ```
 
-   This will open your browser and request OAuth access. The access token is stored in `.credentials.gmailieer.json`.
+   This will open your browser and request OAuth access. The client credentials and access token are stored in `.credentials.gmailieer.json` (subsequent syncs do not need `-c`). The branding homepage and privacy policy used by the Google OAuth consent screen are served by `_custom.desktop.mail.lieerBrandingPage` (see [`lieer-branding-page/default.nix`](./lieer-branding-page/default.nix)).
 
    Note that `.gmailieer.json` is managed by Home Manager (a symlink into the
    Nix store), so do not edit it by hand or with `gmi set` — change

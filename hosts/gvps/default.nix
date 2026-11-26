@@ -245,6 +245,17 @@ in
       cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
     };
 
+    # Public static homepage & privacy policy for Lieer's Google OAuth branding
+    # (https://lieer.geanmar.com and https://lieer.geanmar.com/privacy).
+    # Cloudflare DNS: A record for `lieer` -> gvps IP, Proxied (orange cloud)
+    # with SSL/TLS Full (strict) for DDoS protection and edge caching.
+    _custom.desktop.mail.lieerBrandingPage = {
+      enable = true;
+      domain = "lieer.geanmar.com";
+      contactEmail = "gean.marroquin@gmail.com";
+      cloudflareTokenSecret.sopsFile = ../../secrets-sops/server.yaml;
+    };
+
     # Status page at https://status.gvps.geanmar.com for tailnet devices only,
     # checks every service above plus the extra endpoints below
     _custom.services.gatus = {

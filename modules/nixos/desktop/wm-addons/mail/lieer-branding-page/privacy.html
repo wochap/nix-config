@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Privacy Policy — @appName@</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 40rem;
+        margin: 4rem auto;
+        padding: 0 1.25rem;
+        line-height: 1.6;
+      }
+      a { color: inherit; }
+      footer { margin-top: 2.5rem; font-size: 0.9rem; opacity: 0.8; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Privacy Policy</h1>
+      <p>
+        <strong>@appName@</strong> (<code>@domain@</code>) is a private,
+        self-hosted Google OAuth client used exclusively by its owner to
+        synchronize Gmail messages and labels locally via Lieer and Notmuch.
+      </p>
+
+      <h2>Data Accessed</h2>
+      <p>
+        The application requests the Gmail API scopes required by Lieer
+        (<code>gmail.readonly</code>, <code>gmail.labels</code>, and
+        <code>gmail.modify</code>) solely to download messages and synchronize
+        label state between Gmail and the owner's local mail store.
+      </p>
+
+      <h2>Data Storage &amp; Sharing</h2>
+      <ul>
+        <li>
+          Email data and OAuth tokens are stored exclusively on the owner's
+          personal devices and are never transmitted to this web server.
+        </li>
+        <li>
+          No Google user data is sold, shared with third parties, or used for
+          advertising, analytics, or AI/ML model training.
+        </li>
+      </ul>
+
+      <h2>Revocation &amp; Deletion</h2>
+      <p>
+        Access can be revoked at any time from your
+        <a href="https://myaccount.google.com/permissions" rel="noopener noreferrer">Google Account permissions</a>,
+        and local copies can be deleted directly from the local mail directory.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions regarding this policy can be directed to
+        <a href="mailto:@contactEmail@">@contactEmail@</a>.
+      </p>
+    </main>
+    <footer>
+      <a href="/">Home</a>
+    </footer>
+  </body>
+</html>

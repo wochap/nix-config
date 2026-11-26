@@ -26,6 +26,7 @@ in
     ./hooks.nix
     ./imapnotify.nix
     ./lieer.nix
+    ./lieer-branding-page
     ./mailcap
     ./mailnotify.nix
     ./mbsync.nix
