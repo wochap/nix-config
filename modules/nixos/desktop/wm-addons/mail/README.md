@@ -79,7 +79,7 @@ Lieer syncs through the Gmail API using OAuth, while `goimapnotify` watches IMAP
    gmi auth -c /path/to/client_secret.json
    ```
 
-   This will open your browser and request OAuth access. The client credentials and access token are stored in `.credentials.gmailieer.json` (subsequent syncs do not need `-c`). The branding homepage and privacy policy used by the Google OAuth consent screen are served by `_custom.desktop.mail.lieerBrandingPage` (see [`lieer-branding-page/default.nix`](./lieer-branding-page/default.nix)).
+   This will open your browser and request OAuth access. The client credentials and access token are stored in `.credentials.gmailieer.json` (subsequent syncs do not need `-c`). For hosting the branding homepage and privacy policy required by Google Auth Platform on Cloudflare Workers, see [`lieer-branding-page/README.md`](./lieer-branding-page/README.md).
 
    Note that `.gmailieer.json` is managed by Home Manager (a symlink into the
    Nix store), so do not edit it by hand or with `gmi set` — change
