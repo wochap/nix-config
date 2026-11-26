@@ -76,7 +76,7 @@ Lieer syncs through the Gmail API using OAuth, while `goimapnotify` watches IMAP
 
    ```sh
    cd ~/Mail/<AccountName>
-   gmi auth -c /path/to/client_secret.json
+   gmi auth -f -c /path/to/client_secret.json
    ```
 
    This will open your browser and request OAuth access. The client credentials and access token are stored in `.credentials.gmailieer.json` (subsequent syncs do not need `-c`). For hosting the branding homepage and privacy policy required by Google Auth Platform on Cloudflare Workers, see [`lieer-branding-page/README.md`](./lieer-branding-page/README.md).
