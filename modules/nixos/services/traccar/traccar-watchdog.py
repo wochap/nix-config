@@ -33,6 +33,16 @@ log = logging.getLogger("traccar-watchdog")
 
 WS_GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 
+BOT_COMMANDS: tuple[tuple[str, str, str], ...] = (
+    ("start", "[device|all]", "Show status & controls for default or named device"),
+    ("status", "[device|all]", "Alias for /start"),
+    ("devices", "", "Show status for all registered devices"),
+    ("arm", "[device]", "Arm watchdog & set parked anchor"),
+    ("disarm", "[device]", "Disarm watchdog & pause alerts"),
+    ("default", "[device]", "Show or set the default device"),
+    ("help", "", "Show available commands"),
+)
+
 
 def _parse_bool(value: str | None, default: bool = False) -> bool:
     if value is None or value == "":
@@ -659,6 +669,14 @@ class TelegramBot:
             await self.call("answerCallbackQuery", payload)
         except Exception as exc:
             log.debug("Failed to answer callback query: %s", exc)
+
+    async def set_my_commands(self, commands: list[dict[str, str]]) -> None:
+        if not self.enabled:
+            return
+        try:
+            await self.call("setMyCommands", {"commands": commands})
+        except Exception as exc:
+            log.debug("Failed to register Telegram bot commands: %s", exc)
 
 
 class WatchdogEngine:
@@ -1542,6 +1560,13 @@ class WatchdogEngine:
             reply_markup=markup,
         )
 
+    async def send_help(self) -> None:
+        lines = ["📖 <b>Watchdog Commands</b>", ""]
+        for name, arg_spec, desc in BOT_COMMANDS:
+            usage = f"/{name} {arg_spec}" if arg_spec else f"/{name}"
+            lines.append(f"• <code>{html.escape(usage)}</code> — {html.escape(desc)}")
+        await self.telegram.send_message("\n".join(lines))
+
     async def handle_telegram_update(self, update: dict[str, Any]) -> None:
         expected_chat = str(self.cfg.telegram_chat_id)
 
@@ -1572,6 +1597,8 @@ class WatchdogEngine:
                     await self.disarm("telegram", device_query=arg)
                 except DeviceNotFoundError:
                     await self._send_device_not_found(arg)
+            elif cmd == "/help":
+                await self.send_help()
             return
 
         if "callback_query" in update and isinstance(update["callback_query"], dict):
@@ -1662,6 +1689,10 @@ async def telegram_poll_loop(
     if not bot.enabled:
         await stop_event.wait()
         return
+
+    await bot.set_my_commands(
+        [{"command": name, "description": desc} for name, _, desc in BOT_COMMANDS]
+    )
 
     offset = 0
     backoff = 1.0

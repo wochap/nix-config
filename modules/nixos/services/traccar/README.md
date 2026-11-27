@@ -18,6 +18,7 @@ All Telegram interactions are strictly locked to the configured `TELEGRAM_CHAT_I
 | **`/arm [<device>]`** or **`🛡️ Arm <Device>`** | **Arms Stationary Watchdog mode** for that device (defaults to the default device if `<device>` is omitted). Captures that device's latest valid coordinates as its Parked Anchor and persists state across restarts. |
 | **`/disarm [<device>]`** or **`🔓 Disarm <Device>`** | **Pauses monitoring** for that device. Stops its alerts and cancels any pending `15 s` ignition grace timer while leaving other devices untouched. |
 | **`/default [<device name>]`** | Shows or changes which device `/start`, `/arm`, `/disarm`, and webhooks target when no device argument is passed (persists in `state.json`). |
+| `/help` | Prints all available bot commands with brief descriptions (also registered in Telegram's `/` command menu on startup). |
 
 > [!TIP]
 > Because each device is armed/disarmed independently, you can arm **only** your car's GS900 without your phone client triggering false movement alerts — or arm only your phone client while testing.
