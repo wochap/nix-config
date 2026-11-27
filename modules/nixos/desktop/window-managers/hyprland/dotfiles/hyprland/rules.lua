@@ -93,6 +93,9 @@ hl.window_rule({
   opacity = "0.0",
 })
 hl.window_rule({ match = { class = "^(org.gnome.Calculator)$" }, float = true })
+hl.window_rule({ match = { class = "^(pm616.exe)$" }, float = true })
+hl.window_rule({ match = { class = "^(pdt00.exe)$" }, float = true })
+hl.window_rule({ match = { class = "^(pdtenvio.exe)$" }, float = true })
 hl.window_rule({
   match = { class = "^(showmethekey-gtk)$" },
   float = true,

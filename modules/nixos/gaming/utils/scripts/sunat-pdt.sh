@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 set -euo pipefail
 
-export WAYLAND_DISPLAY=""
+export DISPLAY=""
 export WINEARCH=win32
 export WINEPREFIX="${WINEPREFIX:-$HOME/.wine-sunat32}"
 DOWNLOAD_DIR="${SUNAT_PDT_DOWNLOAD_DIR:-$HOME/Downloads/sunat-pdt}"
