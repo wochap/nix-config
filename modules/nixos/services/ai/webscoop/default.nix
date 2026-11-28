@@ -158,6 +158,10 @@ in
         enable = true;
         package = webscoop;
         inherit environment;
+        nativeMessaging = {
+          firefox = true;
+          chrome = true;
+        };
         settings = {
           browser = {
             driver = "patchright";

@@ -4140,11 +4140,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795369601,
-        "narHash": "sha256-SVhQSFtE29kGkI7wz5v3D1LKLlTE+3Fb9e7M/WoBH10=",
+        "lastModified": 1795822182,
+        "narHash": "sha256-EJBxQTSHPslaue7hCMyYO4HMCSpv5rC3xpszutvPl38=",
         "owner": "wochap",
         "repo": "webscoop",
-        "rev": "2068742231b3bf58e9a2bd8885fe031802458fd9",
+        "rev": "da7cfdb1ff3e0a84284d79226bbebdaa9460dd5b",
         "type": "github"
       },
       "original": {
@@ -4165,11 +4165,11 @@
         "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1792006197,
-        "narHash": "sha256-LtGSpd9RP1bzPBNXUoiwqh+zlxrK221VcI3Q5CAR2PQ=",
+        "lastModified": 1795801857,
+        "narHash": "sha256-6G7Q0VRIU9RY3nDTEPHvLhAf6YDn1IKZ834hDhTLOMI=",
         "owner": "wochap",
         "repo": "wobook",
-        "rev": "057dd56fb3946c2049f5231ad96379aec418ff5e",
+        "rev": "9205658a068ad173c6c6d30e45d8d34e246d651a",
         "type": "github"
       },
       "original": {
